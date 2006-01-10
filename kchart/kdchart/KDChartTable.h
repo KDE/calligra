@@ -34,14 +34,7 @@
 
 #include <KDChartListTable.h>
 #if COMPAT_QT_VERSION >= 0x030000
-#ifdef Q_WS_WIN
-#pragma message( "*** KDChartTable.h: Including KDChartVectorTable.h ***" )
-#endif
 #include <KDChartVectorTable.h>
-#else
-#ifdef Q_WS_WIN
-#pragma message( "*** KDChartTable.h:  N O T  including KDChartVectorTable.h ***" )
-#endif
 #endif
 
 #if COMPAT_QT_VERSION >= 0x030000

@@ -402,7 +402,8 @@ void KChartView::pieChart()
 
 void KChartView::forceAxisParams(bool lineMode) {
     KChartParams  *params = ((KChartPart*)koDocument())->params();
-    KDChartAxisParams  axisParams = params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams  axisParams;
+    axisParams = params->axisParams( KDChartAxisParams::AxisPosLeft );
     if(params->chartType() == KDChartParams::Line)
         m_logarithmicScale = axisParams.axisCalcMode();
     if(lineMode) {
@@ -717,7 +718,7 @@ void KChartView::importData()
 		 || ( col == 0 && hasColHeaders ) ) {
 		kdDebug(35001) << "Setting header (" << row << "," << col
 			       << ") to value " << tmp << endl;
-		data.setCell( row, col, KoChart::Value( tmp ) );
+		data.setCell( row, col, tmp );
 	    }
 	    else {
 		val = tmp.toDouble(&ok);
@@ -728,7 +729,7 @@ void KChartView::importData()
 			       << ") to value " << val << endl;
 
 		// and do the actual setting.
-		data.setCell( row, col, KoChart::Value( val ) );
+		data.setCell( row, col, val );
 	    }
 	}
     }

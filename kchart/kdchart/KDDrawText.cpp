@@ -30,7 +30,7 @@
 #include <qbitmap.h>
 #include <qpixmap.h>
 #include <math.h>
-#include <climits>
+#include <limits.h>
 
 #include <KDDrawText.h>
 
@@ -122,8 +122,10 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
         KDDrawTextRegionAndTrueRect* infos,
         int addPercentOfHeightToRegion )
 {
-//qDebug("\nanchor: "+QString::number(anchor.x())
-//             +" / "+QString::number(anchor.y()));
+ 
+//    showAnchor=true;
+  //qDebug("\nanchor: "+ text + " / "+QString::number(anchor.x())
+  //         +" / "+QString::number(anchor.y()));
     bool useInfos = doNotCalculate && infos;
     bool fontChanged = ( 0 != font );
     QFont oldFont;
@@ -142,6 +144,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
     }
 
     QPoint pos = useInfos ? infos->pos : painter->xFormDev( anchor );
+
     if( useInfos )
     {
         txtWidth  = infos->width;
@@ -149,9 +152,17 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
     }
     else
     {
-        QFontMetrics* pFM = fontMet
-            ? (QFontMetrics*)fontMet
-            : new QFontMetrics( painter->font() );
+        int newHeight=0;
+
+        // a bug in the AIX 5.2 compiler means using (?:) syntax doesn't work here
+        // therefor we do it the following way:
+        QFontMetrics* pFM=0;
+        if( ! pFM ) {
+            pFM = new QFontMetrics( painter->fontMetrics() );
+        } else {
+            pFM = const_cast<QFontMetrics*>(fontMet);
+        }
+
         int nLF = text.contains('\n');
         if( INT_MAX == txtWidth ) {
             if( nLF ){
@@ -160,29 +171,39 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                 int i0  = 0;
                 int iLF = text.find('\n');
                 while( -1 != iLF ){
-                    tw = pFM->width( text.mid(i0, iLF-i0) );
+                    const QRect r(pFM->boundingRect( text.mid(i0, iLF-i0) ));
+                    tw = r.width()+ 2;
+                    newHeight = r.height();
                     if( tw > txtWidth )
                         txtWidth = tw;
                     i0 = iLF+1;
                     iLF = text.find('\n', i0);
                 }
                 if( iLF < (int)text.length() ){
-                    tw = pFM->width( text.mid( i0 ) );
+                    const QRect r(pFM->boundingRect( text.mid( i0 ) ));
+                    tw = r.width()+2;
+                    newHeight = r.height();
                     if( tw > txtWidth )
                         txtWidth = tw;
                     i0 = iLF+1;
                 }
-            } else
-                txtWidth = pFM->width( text );
+            }else{
+                const QRect r(painter->boundingRect( 0,0,1,1, Qt::AlignAuto, text ));
+                // correct width and height before painting with 2 unit to avoid truncating.
+                // PENDING Michel - improve
+                txtWidth  = r.width()+2;
+                newHeight = r.height()+2;
+            }
         }
         if( INT_MAX == txtWidth || INT_MAX == txtHeight ) {
-            txtHeight = pFM->height() * (1+nLF);
+            txtHeight = newHeight ? newHeight : pFM->height() * (1+nLF);
         }
         if( pFM != fontMet )
             delete pFM;
         if( infos ) {
             infos->pos    = pos;
-            infos->width  = txtWidth;
+            // PENDING infos
+            infos->width = txtWidth;
             infos->height = txtHeight;
         }
     }
@@ -198,13 +219,19 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
     }
     int x = useInfos ? infos->x : pos.x();
     int y = useInfos ? infos->y : pos.y();
-//qDebug("1.:     (x / y) : "+QString::number(x)
-//             +" / "+QString::number(y));
+    //qDebug("1.:     (x / y) :" +  text + " / "+QString::number(x)
+    //       +" / "+QString::number(y));
+    //qDebug("2.:     (posx / posy) :" +  text );
+    // qDebug ( "%d", pos.x() ); qDebug ( "%d", pos.y() );
+    //qDebug("3.:     (infosx / infosy) :" +  text + " / "+QString::number(infos->x)
+    //           +" / "+QString::number(infos->y));
+
     if( !useInfos && !optimizeOutputForScreen ) {
         switch( align & ( Qt::AlignLeft | Qt::AlignRight | Qt::AlignHCenter ) ) {
-            case Qt::AlignLeft:
+              case Qt::AlignLeft:
                 break;
             case Qt::AlignRight:
+//qDebug( QPaintDeviceMetrics::logicalDpiX() );
                 x -= txtWidth;
                 break;
             case Qt::AlignHCenter:
@@ -223,16 +250,27 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
         }
     }
     if( infos && !useInfos ) {
-        infos->x = x;
-        infos->y = y;
+         painter->xForm( pos );
+        infos->x = x - 4;
+        infos->y = y - 4;
+        //PENDING Michel updating info using x , y from pos 
+        //qDebug("4.:     (infosx / infosy) :" +  text + " / "+QString::number(infos->x)
+	//+" / "+QString::number(infos->y));
+        //qDebug("5.:  (x / y) :" +  text + " / "+QString::number(x)
+	//   +" / "+QString::number(y));
+	//qDebug("6.:  (anchorx /anchory) :" +  text + " / "+QString::number(x)
+	//   +" / "+QString::number(y));
         QRect rect( painter->boundingRect( x, y,
                     txtWidth, txtHeight,
                     Qt::AlignLeft + Qt::AlignTop,
                     text ) );
+        //painter->fillRect (rect, Qt::blue );
+        
         QPoint topLeft(     painter->xForm( rect.topLeft()     ) );
         QPoint topRight(    painter->xForm( rect.topRight()    ) );
         QPoint bottomRight( painter->xForm( rect.bottomRight() ) );
         QPoint bottomLeft(  painter->xForm( rect.bottomLeft()  ) );
+      
         int additor = addPercentOfHeightToRegion * txtHeight / 100;
         QPointArray points;
         points.setPoints( 4, topLeft.x()-additor,     topLeft.y()-additor,
@@ -255,13 +293,15 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                                x+d, y );
             painter->setPen( QColor( Qt::darkGreen ) );
             painter->drawRect(x,y,txtWidth,txtHeight);
+            //painter->drawText( x, y-d, text);           
+        
+/*
         }else{
-#if 0
             // Working around a strange Qt bug: Rotated painter must be
             // initialized by drawing before text can be painted there.
             painter->setPen( QColor( Qt::white ) );
             painter->drawLine( 30000,0,30001,0 );
-#endif
+*/
         }
         painter->setPen( savePen );
     }
@@ -272,12 +312,25 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
     }
 
     if( !calculateOnly ){
-        if( !optimizeOutputForScreen )
+        //qDebug("txtWidth: %i  txtHeight: %i", txtWidth, txtHeight);
+        if( !optimizeOutputForScreen ){
+/*
             painter->drawText( x, y,
                                txtWidth, txtHeight,
                                Qt::AlignLeft + Qt::AlignTop,
                                text );
-        else{
+*/
+            painter->drawText( x, y,
+                               txtWidth, txtHeight,
+                               Qt::AlignLeft + Qt::AlignTop,
+                               text );
+/*
+            painter->drawText( x, y,
+                               text,
+                               -1,
+                               Qt::AlignRight + Qt::AlignTop );
+*/
+        }else{
             // new code (rotating the text ourselves for better quality on screens)
             QPixmap pm( txtWidth+2, txtHeight+2, 1 );
             // note: When using colored axis labels it will be necessary
@@ -296,6 +349,12 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
             p.drawText( 0, 0, txtWidth, txtHeight,
                         Qt::AlignLeft + Qt::AlignTop,
                         text );
+/*
+            p.drawText( 0,0,
+                        text,
+                       -1,
+                        Qt::AlignLeft + Qt::AlignTop );
+*/
 
             QBitmap mask;
             mask = pm;
@@ -405,8 +464,8 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                     }
                     break;
             }
-//qDebug("2.:     (x / y) : "+QString::number(x)
-//             +" / "+QString::number(y));
+	    //qDebug("2.:     (x / y) : "+QString::number(x)
+	    //             +" / "+QString::number(y));
             painter->drawPixmap( QPoint( x - pixPoint.x(),
                                          y - pixPoint.y() ),
                                  theRotatedPixmap );

@@ -160,15 +160,19 @@ int KDChartLinesPainter::clipShiftUp( bool, double ) const
 class MyPoint
 {
     public:
-        MyPoint() : bValid( false ), cellValue( 0.0 ) {}
+        MyPoint() : bValid( false ), bSkipThis( false ), cellValue( 0.0 ) {}
         void set( int x, int y, double value ) {
             bValid = true;
             p.setX( x );
             p.setY( y );
             cellValue = value;
         }
+        void setSkipThis( bool skipThis ) {
+            bSkipThis = skipThis;
+        }
         QPoint p;
         bool   bValid;
+        bool   bSkipThis;
         double cellValue;
 };
 
@@ -202,6 +206,9 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                             ai );
     mCenterThePoints = ai.bCenterThePoints;
 
+    bool bOrdinateDecreasing = ordinatePara
+                                ? ordinatePara->axisValuesDecreasing()
+                                : false;
     bool bOrdinateIsLogarithmic
         = ordinatePara
         ? (KDChartAxisParams::AxisCalcLogarithmic == ordinatePara->axisCalcMode())
@@ -289,17 +296,23 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
 
     for( dataset = datasetEnd; ( dataset >= (int)datasetStart && dataset >= 0 ); --dataset ) {
 
+        int prevPointX = -1;
+        int prevPointY = -1;
+
         const KDChartParams::LineMarkerStyle
             defaultMarkerStyle = params()->lineMarkerStyle( dataset );
         const QPen default2DPen(   params()->lineColor().isValid()
                                  ? params()->lineColor()
                                  : params()->dataColor( dataset ),
                                  params()->lineWidth(),
-                                 params()->lineStyle() );
+                                 params()->lineStyle( dataset ) );
 
         if( ai.bAbscissaHasTrueAxisDtValues )
             ai.numValues = data->cols();
 
+        QVariant vValY;
+        QVariant vValX;
+        int cellPropID;
         for( int value = 0; value < ai.numValues; ++value ) {
         //if ( mode == Percent )
         //    valueTotal = data->colAbsSum( value );
@@ -310,19 +323,20 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                 for ( uint dataset2  = datasetStart;
                         dataset2 <= datasetEnd;
                         ++dataset2 ) {
-                    if( data->cell( dataset2, value ).isDouble() )
-                        valueTotal += data->cell( dataset2, value ).doubleValue();
+                    if( data->cellCoord( dataset2, value, vValY, 1 ) &&
+                        QVariant::Double == vValY.type() )
+                        valueTotal += vValY.toDouble();
                 }
             }
 
-            const KDChartData& cell = data->cell( dataset, value );
-
-            if(    cell.isDouble()
-                && ( !ai.bCellsHaveSeveralCoordinates || cell.hasValue( 2 ) ) ) {
+            if( data->cellContent( dataset, value, vValY, vValX, cellPropID ) &&
+                QVariant::Double == vValY.type() &&
+                ( !ai.bCellsHaveSeveralCoordinates || QVariant::Invalid != vValX.type() ) ){
+//qDebug("a. cellPropID: %i",cellPropID);
 
                 // calculate Ordinate axis value
                 // -----------------------------
-                double cellValue = cell.doubleValue();
+                double cellValue = vValY.toDouble();
                 double drawValue = 0.0;
                 // PENDING(kalle) This does not work for AreaPercent yet
                 if ( mode == Stacked )
@@ -332,11 +346,14 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                 else {
                     // LineNormal or AreaNormal
                     if( bOrdinateIsLogarithmic ){
-                        drawValue = log10(cellValue) * ordinatePixelsPerUnit;
+                        if( 0.0 < cellValue )
+                            drawValue = log10( cellValue ) * ordinatePixelsPerUnit;
+                        else
+                            drawValue = -10250.0;
                         //qDebug("\nlogarithmic calc  -  cellValue: %f   drawValue: %f",
                         //        cellValue, drawValue );
                     }else{
-                        drawValue = cellValue * ordinatePixelsPerUnit;
+                        drawValue = cellValue * ordinatePixelsPerUnit * (bOrdinateDecreasing ? -1.0 : 1.0);
                         //qDebug("\nlinear calc  -  cellValue: %f\n             -  drawValue: %f",
                         //        cellValue, drawValue );
                     }
@@ -346,7 +363,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                 // calculate Abscissa axis value
                 // -----------------------------
                 double xValue;
-                bool skipMe = !calculateAbscissaAxisValue( cell, ai, value,
+                bool skipMe = !calculateAbscissaAxisValue( vValX, ai, value,
                                                            xValue );
 
 
@@ -363,46 +380,64 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                     int myPointX = static_cast < int > ( xValue ) + xShift;
                     int myPointY = static_cast < int > ( pY );
 
-                    // use typecast to make it compile on windows using qt232
-                    allPoints[   static_cast < int > ( datasetEnd-dataset )
-                               * arrayNumValues + value ].set( myPointX, myPointY, cellValue );
-
-
-                    // make sure any extra horiz. and/or vert. lines and/or markers
-                    // are drawn *before* the data lines and/or markers are painted
-                    if( mChartType == KDChartParams::Line ){
+                    if( cellPropID == curPropSetId &&
+                        myPointX == prevPointX &&
+                        myPointY == prevPointY ){
+                        allPoints[   static_cast < int > ( datasetEnd-dataset )
+                                   * arrayNumValues + value ].setSkipThis( true );
+                        skipMe = true;
+//qDebug("skipped");
+                    }else{
+                        // use typecast to make it compile on windows using qt232
+                        allPoints[   static_cast < int > ( datasetEnd-dataset )
+                                   * arrayNumValues + value ].set( myPointX, myPointY, cellValue );
+//qDebug("ok");
+                    }
+                    if( !skipMe ){
                         // --------------------------------------------------------
                         // determine any 'extra' properties assigned to this cell
                         // by traversing the property set chain (if necessary)
                         // --------------------------------------------------------
-                        const KDChartData& cell = data->cell( dataset, value );
-                        if( cell.propertySet() != curPropSetId ){
-                            if( cell.propertySet() != KDChartPropertySet::UndefinedID &&
-                                params()->calculateProperties( cell.propertySet(),
-                                                               curPropSet ) )
-                                curPropSetId = cell.propertySet();
-                            else
+                        if( cellPropID != curPropSetId ){
+//qDebug("b. ( curPropSetId: %i )",curPropSetId);
+//qDebug("b. cellPropID: %i",cellPropID);
+//qDebug(curPropSet.name().latin1());
+                            if( cellPropID != KDChartPropertySet::UndefinedID &&
+                                params()->calculateProperties( cellPropID,
+                                                               curPropSet ) ){
+                                curPropSetId = cellPropID;
+//qDebug("c. curPropSetId: %i",curPropSetId);
+//qDebug(curPropSet.name().latin1());
+                            }else{
                                 curPropSetId = KDChartPropertySet::UndefinedID;
+                            }
                         }
-                        if( curPropSetId != KDChartPropertySet::UndefinedID )
-                            drawExtraLinesAndMarkers(
-                                curPropSet,
-                                default2DPen,
-                                defaultMarkerStyle,
-                                myPointX, myPointY,
-                                painter,
-                                ai.abscissaPara,
-                                ordinatePara,
-                                logWidth/1000.0,
-                                logHeight/1000.0,
-                                false );
+                        // make sure any extra horiz. and/or vert. lines and/or markers
+                        // are drawn *before* the data lines and/or markers are painted
+                        if( mChartType == KDChartParams::Line ){
+                            if( curPropSetId != KDChartPropertySet::UndefinedID ){
+                                drawExtraLinesAndMarkers(
+                                    curPropSet,
+                                    default2DPen,
+                                    defaultMarkerStyle,
+                                    myPointX, myPointY,
+                                    painter,
+                                    ai.abscissaPara,
+                                    ordinatePara,
+                                    logWidth/1000.0,
+                                    logHeight/1000.0,
+                                    false );
+                            }
+                        }
+                        prevPointX = myPointX;
+                        prevPointY = myPointY;
                     }
                 }
                 // calculate running sum for stacked and percent
                 if ( mode == Stacked || mode == Percent ) {
-                        if( cellValue == POS_INFINITE )
-                            currentValueSums[ value ] = POS_INFINITE;
-                        else if( currentValueSums[ value ] != POS_INFINITE )
+                    if( cellValue == KDCHART_POS_INFINITE )
+                        currentValueSums[ value ] = KDCHART_POS_INFINITE;
+                    else if( currentValueSums[ value ] != KDCHART_POS_INFINITE )
                         currentValueSums[ value ] += cellValue;
                 }
             }
@@ -430,7 +465,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                 ? params()->lineColor()
                 : params()->dataColor( dataset ),
                 params()->lineWidth(),
-                params()->lineStyle() );
+                params()->lineStyle( dataset ) );
         bool currentDrawMarkers = defaultDrawMarkers;
         const KDChartParams::LineMarkerStyle markerStyle = params()->lineMarkerStyle( dataset );
 
@@ -451,12 +486,13 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
             // determine and store marker properties assigned to this cell
             // -----------------------------------------------------------
             currentDrawMarkers = defaultDrawMarkers;
-            const KDChartData& cell = data->cell( dataset, value );
-            if( cell.propertySet() != curPropSetId ){
-                if( cell.propertySet() != KDChartPropertySet::UndefinedID &&
-                    params()->calculateProperties( cell.propertySet(),
+            int cellPropID;
+            if( data->cellProp( dataset, value, cellPropID ) &&
+                cellPropID != curPropSetId ){
+                if( cellPropID != KDChartPropertySet::UndefinedID &&
+                    params()->calculateProperties( cellPropID,
                                                    curPropSet ) )
-                    curPropSetId = cell.propertySet();
+                    curPropSetId = cellPropID;
                 else
                     curPropSetId = KDChartPropertySet::UndefinedID;
             }
@@ -470,7 +506,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
 
 
             int iVec = static_cast < int > ( datasetEnd-dataset ) * arrayNumValues + value;
-            if( allPoints[ iVec ].bValid ){
+            if( allPoints[ iVec ].bValid && !allPoints[ iVec ].bSkipThis ){
                 const MyPoint& mp = allPoints[iVec];
                 //qDebug("\np.x() %i        p.y() %i", p.x(), p.y() );
 
@@ -478,10 +514,13 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                 // behind each other on the Z axis). For 2D lines and
                 // areas, we need only one point.
                 if( showThreeDLines ) {
-                    points[0]->setPoint( point, project( mp.p.x(), mp.p.y(),
-                                (datasetStart+dataset)*params()->threeDLineDepth() ) );
-                    points[1]->setPoint( point, project( mp.p.x(), mp.p.y(),
-                                (datasetStart+dataset+1)*params()->threeDLineDepth() ) );
+                  //Pending Michel fix
+		  //points[0]->setPoint( point, project( mp.p.x(), mp.p.y(),
+		  //            (datasetStart+dataset)*params()->threeDLineDepth() ) );
+		  points[0]->setPoint( point,  mp.p.x(), mp.p.y() );
+                  points[1]->setPoint( point, project( mp.p.x(), mp.p.y(),
+							 (datasetStart+dataset+1)*params()->threeDLineDepth() ) );
+                    
                 } else
                     // 2D lines or areas
                     points[0]->setPoint( point, mp.p );
@@ -493,21 +532,51 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                         0);
                 bool markerIsOutside = y != mp.p.y();
                 // draw the marker and store the region
-                if ( currentDrawMarkers )
+                if ( currentDrawMarkers ){
+                    uint   theAlignment = Qt::AlignCenter;
+                    bool   hasOwnSize = false;
+                    int    theWidth  = 0;
+                    int    theHeight = 0;
+                    QColor theColor(params()->dataColor( dataset ));
+                    int    theStyle = markerStyle;
+                    if( curPropSetId != KDChartPropertySet::UndefinedID ){
+                        // we can safely call the following functions and ignore their
+                        // return values since they will touch the parameters' values
+                        // if the propSet *contains* corresponding own values only.
+                        int iDummy;
+                        curPropSet.hasOwnMarkerAlign( iDummy, theAlignment );
+                        curPropSet.hasOwnMarkerColor( iDummy, theColor );
+                        curPropSet.hasOwnMarkerStyle( iDummy, theStyle );
+                        QSize size(theWidth, theHeight);
+                        hasOwnSize = curPropSet.hasOwnMarkerSize(iDummy, size);
+                        if( hasOwnSize ){
+                            theWidth  = size.width();
+                            theHeight = size.height();
+                        }
+                    }
+
                     drawMarker( painter,
-                            markerIsOutside
-                            ? KDChartParams::LineMarker1Pixel
-                            : markerStyle,
-                            params()->dataColor( dataset ), QPoint(x,y),
-                            dataset, value, chart, regions );
+                                params(),
+                                _areaWidthP1000, _areaHeightP1000,
+                                _dataRect.x(),
+                                _dataRect.y(),
+                                  markerIsOutside
+                                ? KDChartParams::LineMarker1Pixel
+                                : theStyle,
+                                theColor,
+                                QPoint(x,y),
+                                dataset, value, chart, regions,
+                                hasOwnSize ? &theWidth  : 0,
+                                hasOwnSize ? &theHeight : 0,
+                                theAlignment );
+
+                }
                 // store the region
                 else if( regions ) {
                     QRect rect( QPoint( x-1, y-1 ), QPoint( x+1, y+1 ) );
                     rect.moveBy( _dataRect.x(), _dataRect.y() );
-                    regions->append( new KDChartDataRegion( QRegion( rect ),
-                                dataset,
-                                value,
-                                chart ) );
+                    regions->append(
+                        new KDChartDataRegion(dataset, value, chart, rect) );
                 }
 
             }
@@ -520,8 +589,10 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                 // dataset or with the previous points reversed for all other
                 // datasets.
                 painter->setPen( QPen( Qt::NoPen ) );
-                painter->setBrush( QBrush( params()->dataColor( dataset ),
-                            Qt::SolidPattern ) );
+                const QBrush datasetBrush( params()->dataColor( dataset ), Qt::SolidPattern );
+                painter->setBrush( datasetBrush );
+                QBrush currentBrush( datasetBrush );
+
                 if ( mode == Normal || dataset == (int)datasetEnd ) {
                     /// first dataset (or any dataset in normal mode, where
                     /// the datasets overwrite each other)
@@ -540,6 +611,8 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                     else
                         yCoord = static_cast<int>(axisYOffset);
 
+                    // old: draw the complete area in on go:
+                    /*
                     // no 3d handling for areas yet
                     points[0]->setPoint( point, lastPoint.x(), yCoord );
                     point++;
@@ -547,11 +620,55 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                     QPoint firstPoint = points[0]->point( 0 );
                     points[0]->setPoint( point, firstPoint.x(), yCoord );
                     point++;
+
                     painter->drawPolygon( *points[0], false, 0, point );
+                    */
+
+                    // new: draw individual area segments:
+                    curPropSetId = KDChartPropertySet::UndefinedID;
+                    for( int value = 0; value < point-1; ++value ) {
+
+                        int cellPropID;
+                        if( data->cellProp( dataset, value, cellPropID ) &&
+                            cellPropID != curPropSetId ){
+
+                            if( cellPropID != KDChartPropertySet::UndefinedID &&
+                                params()->calculateProperties( cellPropID,
+                                                              curPropSet ) ){
+                                curPropSetId = cellPropID;
+                            }else{
+                                curPropSetId = KDChartPropertySet::UndefinedID;
+                            }
+                            // preset with default value
+                            QBrush theAreaBrush = datasetBrush;
+
+                            if( curPropSetId != KDChartPropertySet::UndefinedID ){
+                                // we can safely call the following functions and ignore their
+                                // return values since they will touch the parameters' values
+                                // if the propSet *contains* corresponding own values only.
+                                int iDummy;
+                                curPropSet.hasOwnAreaBrush( iDummy, theAreaBrush );
+                            }
+                            painter->setBrush( theAreaBrush );
+
+                        }
+                        QPointArray segment( 4 );
+                        segment.setPoint( 0, points[0]->point( value                 ) );
+                        segment.setPoint( 1, points[0]->point( value+1               ) );
+                        segment.setPoint( 2, points[0]->point( value+1 ).x(), yCoord );
+                        segment.setPoint( 3, points[0]->point( value   ).x(), yCoord );
+                        //Pending Michel: drawing a segment
+                        painter->drawPolygon( segment );
+                    }
+
+                    // old: draw the complete area in on go:
+                    /*
                     // remove the last two points added
                     point -= 2;
+                    */
                     //qDebug("\n111");
-                } else {
+                } //  if ( mode == Normal || dataset == (int)datasetEnd )
+		else {
                     // don't mess around with the original array; we'll need
                     // that for the next time through.
 
@@ -569,12 +686,13 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                         //qDebug("\nx: %i",previousPoints.point( previousPoints.size() - i - 1 ).x());
                         //qDebug("y: %i",previousPoints.point( previousPoints.size() - i - 1 ).y());
                     }
+                    //Pending Michel: Drawing a section
                     painter->drawPolygon( thisSection );
                 }
                 // draw the line with no brush and outline color
                 painter->setBrush( Qt::NoBrush );
                 painter->setPen( QPen( params()->outlineDataColor(),
-                            params()->outlineDataLineWidth() ) );
+                                 params()->outlineDataLineWidth() ) );
             } else {
                 // line
                 if( showThreeDLines ) {
@@ -608,6 +726,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                         segment.setPoint( 1, points[0]->point( value+1 ) );
                         segment.setPoint( 2, points[1]->point( value+1 ) );
                         segment.setPoint( 3, points[1]->point( value ) );
+                        //PENDING Michel drawing a segment with showThreeDLines                       
                         painter->drawPolygon( segment );
                         //          } else
                         //              qDebug( "Can't draw a segment in dataset %d from %d to %d", dataset, value, value+1 );
@@ -629,14 +748,16 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                         // Determine properties assigned to this cell
                         // and change the painter if necessarry:
                         currentDrawMarkers = defaultDrawMarkers;
-                        const KDChartData& cell = data->cell( dataset, value );
-                        if( cell.propertySet() != curPropSetId ){
-                            if( cell.propertySet() != KDChartPropertySet::UndefinedID &&
-                                params()->calculateProperties( cell.propertySet(),
-                                                               curPropSet ) )
-                                curPropSetId = cell.propertySet();
-                            else
+                        int cellPropID;
+                        if( data->cellProp( dataset, value, cellPropID ) &&
+                            cellPropID != curPropSetId ){
+                            if( cellPropID != KDChartPropertySet::UndefinedID &&
+                                params()->calculateProperties( cellPropID,
+                                                               curPropSet ) ){
+                                curPropSetId = cellPropID;
+                            }else{
                                 curPropSetId = KDChartPropertySet::UndefinedID;
+                            }
                             // preset with default values
                             int          theLineWidth = default2DPen.width();
                             QColor       theLineColor = default2DPen.color();
@@ -652,11 +773,12 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                                 curPropSet.hasOwnShowMarker( iDummy, currentDrawMarkers );
                             }
                             painter->setPen( QPen( theLineColor,
-                                                   theLineWidth,
-                                                   theLineStyle ) );
+                                                              theLineWidth,
+                                                              theLineStyle ) );
                         }
 
                         if( !currentDrawMarkers ){
+			  //PENDING Michel: drawing a line - not currentMarkers
                             painter->drawLine( p1, p2 );
                         }else{
                             int dx = p2.x() - p1.x();
@@ -702,6 +824,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                                     p1.rx() += dxx; p1.ry() += dyy;
                                     p2.rx() -= dxx; p2.ry() -= dyy;
                                 }
+                                 //PENDING Michel: drawing a line - currentMarkers
                                 painter->drawLine( p1, p2 );
                             }
                         }
@@ -728,7 +851,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                                     ? params()->lineColor()
                                     : params()->dataColor( dataset ),
                                     params()->lineWidth(),
-                                    params()->lineStyle() );
+                                    params()->lineStyle( dataset ) );
 
             if( ai.bAbscissaHasTrueAxisDtValues )
                 ai.numValues = data->cols();
@@ -743,16 +866,17 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                     // determine any 'extra' properties assigned to this cell
                     // by traversing the property set chain (if necessary)
                     // --------------------------------------------------------
-                    const KDChartData& cell = data->cell( dataset, value );
-                    if( cell.propertySet() != curPropSetId ){
-                        if( cell.propertySet() != KDChartPropertySet::UndefinedID &&
-                            params()->calculateProperties( cell.propertySet(),
+                    int cellPropID;
+                    if( data->cellProp( dataset, value, cellPropID ) &&
+                        cellPropID != curPropSetId ){
+                        if( cellPropID != KDChartPropertySet::UndefinedID &&
+                            params()->calculateProperties( cellPropID,
                                                            curPropSet ) )
-                            curPropSetId = cell.propertySet();
+                            curPropSetId = cellPropID;
                         else
                             curPropSetId = KDChartPropertySet::UndefinedID;
                     }
-                    if( curPropSetId != KDChartPropertySet::UndefinedID )
+                    if( curPropSetId != KDChartPropertySet::UndefinedID ){
                         drawExtraLinesAndMarkers(
                             curPropSet,
                             default2DPen,
@@ -764,8 +888,14 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                             logWidth/1000.0,
                             logHeight/1000.0,
                             true );
+                    }
                 }
             }
         }
     }
+//qDebug(const_cast < KDChartParams* > ( params() )->properties( KDCHART_PROPSET_NORMAL_DATA )->name().latin1());
+//qDebug(const_cast < KDChartParams* > ( params() )->properties( KDCHART_PROPSET_TRANSPARENT_DATA )->name().latin1());
+//qDebug(const_cast < KDChartParams* > ( params() )->properties( KDCHART_PROPSET_HORI_LINE )->name().latin1());
+//qDebug(const_cast < KDChartParams* > ( params() )->properties( KDCHART_PROPSET_VERT_LINE )->name().latin1());
+//qDebug("--");
 }

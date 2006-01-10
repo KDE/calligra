@@ -33,6 +33,7 @@
 #include <qpointarray.h>
 
 #include "KDChartGlobal.h"
+#include <qobject.h>
 
 /** \file KDChartEnums.h
   \brief Definition of global enums.
@@ -42,8 +43,13 @@
   Project global class providing some enums needed both by KDChartParams
   and by KDChartCustomBox.
   */
-class KDChartEnums
+class KDCHART_EXPORT KDChartEnums :public QObject
 {
+    Q_OBJECT
+    Q_ENUMS( TextLayoutPolicy )
+    Q_ENUMS( AreaName )
+    Q_ENUMS( PositionFlag )
+
     public:
         /**
           Text layout policy: what to do if text that is to be drawn would

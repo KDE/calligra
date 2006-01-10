@@ -86,20 +86,20 @@ class KDChartAxesPainter : public KDChartPainter
                 uint datasetEnd ) = 0;
 
         virtual bool calculateAllAxesLabelTextsAndCalcValues(
+                          QPainter* painter,
                           KDChartTableDataBase* data,
                           double areaWidthP1000,
                           double areaHeightP1000,
                           double& delimLen );
 
     private:
-        int axisGapX( int axis );
-        int axisGapY( int axis );
     public:
         // special infos needed by the different painters' implementations
         // of the specificPaintData() function
         struct abscissaInfos{
             const KDChartAxisParams* abscissaPara;
             bool bCenterThePoints;
+            bool bAbscissaDecreasing;
             bool bAbscissaIsLogarithmic;
             bool bCellsHaveSeveralCoordinates;
             int numValues;
@@ -129,7 +129,7 @@ class KDChartAxesPainter : public KDChartPainter
                 double logWidth,
                 const QRect& dataRect,
                 abscissaInfos& infos );
-        static bool calculateAbscissaAxisValue( const KDChartData& cell,
+        static bool calculateAbscissaAxisValue( const QVariant& value,
                                                 abscissaInfos& ai,
                                                 int colNumber,
                                                 double& xValue );
@@ -138,7 +138,9 @@ class KDChartAxesPainter : public KDChartPainter
                 QPoint pA,
                 QPoint pZ,
                 QPen pen );
-        static void calculateLabelTexts( const KDChartTableDataBase& data,
+        static void calculateLabelTexts(
+                QPainter* painter,
+                const KDChartTableDataBase& data,
                 const KDChartParams& params,
                 uint axisNumber,
                 double averageValueP1000,

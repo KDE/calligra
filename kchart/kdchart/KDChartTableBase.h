@@ -1,6 +1,6 @@
 /* -*- Mode: C++ -*-
    KDChart - a multi-platform charting engine
-   */
+*/
 
 /****************************************************************************
  ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
@@ -29,710 +29,450 @@
 #ifndef __KDCHARTTABLEINTERFACE_H__
 #define __KDCHARTTABLEINTERFACE_H__
 
-#include <KDChartData.h>
 
-#include <math.h>
-#include <limits.h>
+class QTable;
+
+#include <qvariant.h>
+#include <qobject.h>
+#include <qdatetime.h>
+
+#include <kdchart_export.h>
+
+#if defined( SUN7 ) || defined (_SGIAPI)
+  #include <float.h>
+  #include <limits.h>
+#else
+  #include <cfloat>
+  #include <climits>
+#endif
+
 
 /**
-  \file KDChartTableBase.h
+    Use special value KDCHART_POS_INFINITE to indicate positive infinite values.
 
-  \brief Provides a table class holding all data values
-  that are to be used in a chart.
-  */
+    If your own table class (derived from KDChartTableDataBase) does
+    not store your positive infinite values as KDCHART_POS_INFINITE
+    please make sure to reimplement \sa isPosInfinite() accordingly.
+
+    \sa isPosInfinite, isNegInfinite
+*/
+#define KDCHART_POS_INFINITE DBL_MAX
+
+/**
+    Use special value KDCHART_NEG_INFINITE to indicate negative infinite values.
+
+    If your own table class (derived from KDChartTableDataBase) does
+    not store your negative infinite values as KDCHART_NEG_INFINITE
+    please make sure to reimplement \sa isNegInfinite() accordingly.
+
+    \sa isNegInfinite, isPosInfinite
+*/
+#define KDCHART_NEG_INFINITE -DBL_MAX
 
 
 /**
-  \brief Encapsulates all data values that are to be used in a chart.
+   \file KDChartTableBase.h
 
-  \note To create your data table you would <em>not</em> use a
-  \c KDChartTableDataBase but instantiate the class \c KDChartTableData.
-  The \c KDChartTableData class is an auxiliary class: depending on your
-  Qt version it will be mapped onto a \c KDChartVectorTableData or onto
-  a \c KDChartListTableData both of which are derived from
-  \c KDChartTableDataBase and implement all of its functions.
-  Thus you would create a table of 3 datasets with 25 cells each like this:
-  \verbatim
+   \brief Provides a table class holding all data values
+   that are to be used in a chart.
 
-        KDChartTableData myData( 3, 25 );
+   By subclassing KDChartTableDataBase you may provide your own
+   methods to access data stored somewhere else instead of
+   using the setCell function to move them into KD Chart's cells.
 
-  \endverbatim
+   \note See the files in doc/tutorial/step07/ for a sample implementation you might want to use as starting-point for your own data handling class.
+*/
 
-  Data values are of type KDChartData.
+///KD Chart's build-in table data for an easy way of storing data values.
+class KDCHART_EXPORT KDChartTableDataBase :public QObject
+{
+    Q_OBJECT
+public:
+    /**
+      Default constructor.
 
-  You may adjust or modify your table like this:
+      Creates an empty table and sets the sorted flag to false.
+      */
+    KDChartTableDataBase() :
+        QObject( 0 ),
+        _sorted(false),
+        _useUsedRows(false),
+        _useUsedCols(false) {}
+    /**
+      Default copy constructor.
 
-  \li Entering the data can be done either manually using \c setCell()
-  or by passing a QTable to the \c importFromQTable() function.
+      Just initializes the QObject part of this class and copies the sorted flag.
+      */
+    KDChartTableDataBase( const KDChartTableDataBase& other ) :QObject(0)
+    {
+        _sorted      = other._sorted;
+        _useUsedRows = other._useUsedRows;
+        _useUsedCols = other._useUsedCols;
+        _usedRows    = other._usedRows;
+        _usedCols    = other._usedCols;
+    }
+    /**
+      Default destructor.
 
-  \li Performance of KD Chart can be increased by specifying the number
-  of rows and or the number of columns actually used: \c setUsedRows()
-  and/or \c setUsedCols() prevents KD Chart from iterating over thousands
-  of empty rows/cols that might follow your data cells in case your
-  table is much bigger than needed.
+      Does nothing, only defined to have it virtual.
+      */
+    virtual ~KDChartTableDataBase() {}
 
-  \li In case you want to increase your table's size without using the
-  data stored in it please call the \c expand() function with the new
-  total number of rows and cells.
+public slots:
+    /**
+      Returns the number of rows in the table.
 
-  \li Accessing one data cell is possible by the \c cell() method,
-  see the KDChartData documentation for details on the available functions,
-  e.g. you might assign a special property set ID to all cells with a
-  future absicssa axis value:
-  \verbatim
+      \note This pure-virtual function has to be implemented by
+      each class derived from KDChartTableDataBase.
 
-    const QDateTime currentTime( QDateTime::currentDateTime() );
-    for( int iCell = 0;  iCell < usedValues;  ++iCell ){
-        KDChartData& cell = myData.cell( 0, iCell );
-        // assign special property set ID if X value is in the future
-        if( cell.isDateTime( 2 ) && cell.dateTimeValue( 2 ) > currentTime )
-            cell.setPropertySet( idProp_FutureValues );
+      \returns the number of rows in the table.
+
+      \sa setRows, usedRows, cols
+      */
+    virtual uint rows() const = 0;
+    /**
+      Returns the number of cols in the table.
+
+      \note This pure-virtual function has to be implemented by
+      each class derived from KDChartTableDataBase.
+
+      \returns the number of cols in the table.
+
+      \sa setCols, usedCols, rows
+      */
+    virtual uint cols() const = 0;
+
+    /**
+      Stores data in a cell.
+
+      \note This pure-virtual function has to be implemented by
+      each class derived from KDChartTableDataBase.
+
+      \param _row the row number of the cell to store the data object into.
+      \param _col the column number of the cell to store the data object into.
+      \param _value1 the first value to be stored, normally the Y value, possible types: int, double, QString
+      QString might be used in case you want to use this cell's content for axis label
+      \param _value2 the second value to be stored, normally the X value (if any), possible types: int, double, QDateTime
+
+      \sa cellCoords, cellContent, setProp
+      */
+    virtual void setCell( uint _row, uint _col,
+                          const QVariant& _value1,
+                          const QVariant& _value2=QVariant() ) = 0;
+    /**
+      Specifies the property set ID for a cell.
+
+      \note This pure-virtual function has to be implemented by
+      each class derived from KDChartTableDataBase.
+    
+      \param _row the row number of the cell.
+      \param _col the column number of the cell.
+      \param _propSet the property set ID to be stored for this data cell, defaults to zero for normal data.
+    
+      \sa cellProp, cellContent, setCell
+      */
+    virtual void setProp( uint _row, uint _col,
+                          int _propSet=0 ) = 0;
+
+    /**
+      Returns one of the coordinate data value(s) stored in a cell.
+
+      \note This pure-virtual function has to be implemented by
+      each class derived from KDChartTableDataBase.
+
+      \param _row the row number of the cell to be retrieved.
+      \param _col the column number of the cell to be retrieved.
+      \param _value the coordinate variable to be filled by this method.
+      \param coordinate the number of the coordinate to be retrieved, normally
+      1 is the Y value and 2 is the X value.
+
+      \returns TRUE if the row and col are addressing a cell in the table.
+
+      \sa cellCoords, cellProp, cellContent, cellVal, setCell, setProp
+      */
+    virtual bool cellCoord( uint _row, uint _col,
+                            QVariant& _value,
+                            int coordinate=1 ) const = 0;
+
+    /**
+      Returns one of the coordinate data value(s) stored in a cell.
+
+      This convenience method calls the bool cellCoord() function and returns
+      the result if it returned successfully - otherwise it returns an invalid QVariant.
+
+      \note If you \em know that a cell is containing valid double data
+      you may quickly access them like this:
+\verbatim const double yVal = data.cellVal( r, c    ).toDouble();
+const double xVal = data.cellVal( r, c, 2 ).toDouble(); \endverbatim
+
+      \param _row the row number of the cell to be retrieved.
+      \param _col the column number of the cell to be retrieved.
+      \param coordinate the number of the coordinate to be retrieved, normally
+      1 is the Y value and 2 is the X value.
+
+      \returns cell contens if the row and col are addressing a cell in the
+      table, otherwise an invalid QVariant is returned.
+
+      \sa cellCoords, cellProp, cellContent, setCell, setProp
+      */
+    virtual QVariant cellVal( uint _row, uint _col, int coordinate=1 ) const {
+        QVariant value;
+        if( cellCoord( _row, _col, value, coordinate ) )
+            return value;
+        else
+            return QVariant();
     }
 
-  \endverbatim
+    /**
+      Returns the property set ID stored in a cell.
 
-  \note All of the other functions provided by KDChartTableDataBase are
-  either used internally by KD Chart or they are const methods
-  returning some usefull figures like the sum of all values in a row...
-  */
-class KDChartTableDataBase
-{
-    public:
-        KDChartTableDataBase() : _sorted(false) {}
-        virtual ~KDChartTableDataBase() {}
+      \note This pure-virtual function has to be implemented by
+      each class derived from KDChartTableDataBase.
 
-        // PCH: I need these to be virtual so I can override them!
-        // Other methods should also be virtual, but this is the
-        // MINIMUM I need right now.
-        virtual double maxValue( int coordinate=1 ) const;
-        virtual double minValue( int coordinate=1 ) const;
+      \param _prop the property set ID of the cell to be retrieved.
 
-        QDateTime maxDtValue( int coordinate=1 ) const;
-        QDateTime minDtValue( int coordinate=1 ) const;
-        double maxColSum() const;
-        double minColSum() const;
-        double maxColSum( uint row, uint row2 ) const;
-        double minColSum( uint row, uint row2 ) const;
-        double colSum( uint col ) const;
-        double colAbsSum( uint col ) const;
-        double maxRowSum() const;
-        double minRowSum() const;
-        double rowSum( uint row ) const;
-        double rowAbsSum( uint row ) const;
-        double maxInColumn( uint col ) const;
-        double minInColumn( uint col ) const;
-        double maxInRow( uint row ) const;
-        double minInRow( uint row ) const;
-        double maxInRows( uint row, uint row2, int coordinate=1 ) const;
-        double minInRows( uint row, uint row2, int coordinate=1 ) const;
-        QDateTime maxDtInRows( uint row, uint row2, int coordinate=1 ) const;
-        QDateTime minDtInRows( uint row, uint row2, int coordinate=1 ) const;
-        uint lastPositiveCellInColumn( uint col ) const;
-        bool cellsHaveSeveralCoordinates(KDChartData::ValueType* type2Ref) const;
-        bool cellsHaveSeveralCoordinates(uint row1=0, uint row2=UINT_MAX,
-                KDChartData::ValueType* type2Ref=NULL) const;
-        KDChartData::ValueType cellsValueType( uint row1=0, uint row2=UINT_MAX,
-                int coordinate=1 ) const;
-        KDChartData::ValueType cellsValueType( int coordinate=1 ) const;
-        void importFromQTable( QTable* table );
-        void setSorted(bool sorted);
-        bool sorted() const;
-        virtual uint rows() const = 0;
-        virtual uint cols() const = 0;
-        virtual void setUsedRows( uint _rows ) = 0;
-        virtual uint usedRows() const = 0;
-        virtual void setUsedCols( uint _cols ) = 0;
-        virtual uint usedCols() const = 0;
-        virtual void setCell( uint _row, uint _col,
-                const KDChartData& _element ) = 0;
-        virtual const KDChartData& cell( uint _row, uint _col ) const = 0;
-        virtual void expand( uint _rows, uint _cols ) = 0;
-    private:
-        bool _sorted;
+      \returns TRUE if the row and col are addressing a cell in the table.
+
+      \sa cellCoord, cellCoords, cellContent, setCell, setProp
+      */
+    virtual bool cellProp( uint _row, uint _col,
+                           int& _prop ) const = 0;
+
+    /**
+      Increases the number of rows (and/or columns, resp.) stored in this table.
+
+      \note This pure-virtual function has to be implemented by
+      each class derived from KDChartTableDataBase.
+
+      \note The old content of the table must be preserved (e.g. by copying
+      the data into the cells of the new table).
+
+      \param _row the new number of rows.
+      \param _col the new number of columns.
+
+      \sa cell
+      */
+    virtual void expand( uint _rows, uint _cols ) = 0;
+
+
+
+    //  E N D   O F   pure-virtual function declarations
+
+
+
+    /**
+      \note To improve runtime speed this virtual function
+      may be reimplemented by classes derived from KDChartTableDataBase.
+
+      \sa cellCoords, cellProp, setCell, setProp
+      */
+    virtual bool cellContent( uint _row, uint _col,
+                              QVariant& _value1,
+                              QVariant& _value2,
+                              int&      _prop ) const
+    {
+        return cellCoords(_row,_col, _value1,_value2) &&
+               cellProp(_row,_col, _prop);
+    }
+    /**
+      \note To improve runtime speed this virtual function
+      may be reimplemented by classes derived from KDChartTableDataBase.
+
+      \sa cellCoord, cellProp, cellContent, setCell, setProp
+      */
+    virtual bool cellCoords( uint _row, uint _col,
+                             QVariant& _value1,
+                             QVariant& _value2 ) const
+    {
+        return cellCoord(_row,_col, _value1, 1) &&
+               cellCoord(_row,_col, _value2, 2);
+    }
+
+
+    /**
+      Sets the number of rows in the table that actually contain data.
+
+      \note You might want to re-implement this function in derived classes,
+      the default implementation just stores the new number of used rows.
+
+      \param _rows the number of rows in the table that actually contain data.
+    
+      \sa usedRows, rows, cols
+      */
+    virtual void setUsedRows( uint _rows );
+    /**
+      Returns the number of rows in the table that actually contain data.
+    
+      \returns the number of rows in the table that actually contain data.
+
+      \sa setUsedRows, rows, cols
+      */
+    virtual uint usedRows() const;
+
+    /**
+      Sets the number of cols in the table that actually contain data.
+
+      \note You might want to re-implement this function in derived classes,
+      the default implementation just stores the new number of used cols.
+
+      \param _cols the number of cols in the table that actually contain data.
+
+      \sa usedCols, rows, cols
+      */
+    virtual void setUsedCols( uint _cols );
+    /**
+      Returns the number of cols in the table that actually contain data.
+
+      \returns the number of cols in the table that actually contain data.
+
+      \sa setUsedCols, rows, cols
+      */
+    virtual uint usedCols() const;
+
+
+    /**
+      Returns the number of cols the table has been scrolled by.
+
+      Default implementation of this always returns zero, so make sure
+      to return the appropriate value if your class derived from KDChartTableDataBase
+      is supporting internal data scrolling technics.
+
+      See the KD Chart Programmers Manual for details described in the
+      Data Scrolling chapter.
+
+      \returns the number of cols the table has been scrolled by.
+
+      \sa cols, rows
+      */
+    virtual uint colsScrolledBy() const
+    {
+        return 0;
+    }
+
+
+    /**
+      Specified whether the table is sorted.
+
+      \sa sorted
+    */
+    virtual void setSorted(bool sorted);
+    /**
+      Returns whether the table is sorted.
+
+      \sa setSorted
+    */
+    virtual bool sorted() const;
+    
+    /**
+        Returns true if the given value represents a positive infinite value.
+        
+        \note This virtual function may be implemented by
+        classes derived from KDChartTableDataBase.
+        This should be done if your data are not stored as
+        special value KDCHART_POS_INFINITE
+        to indicate positive infinite values
+
+        \returns TRUE if the value given is a positive infinite value.
+    */
+    virtual bool isPosInfinite( double value ) const
+    {
+        return value == KDCHART_POS_INFINITE;
+    }
+    
+    /**
+        Returns true if the given value represents a negative infinite value.
+        
+        \note This virtual function may be implemented by
+        classes derived from KDChartTableDataBase.
+        This should be done if your data are not stored as
+        special value KDCHART_NEG_INFINITE
+        to indicate negative infinite values
+        
+        \returns TRUE if the value given is a negative infinite value.
+    */
+    virtual bool isNegInfinite( double value ) const
+    {
+        return value == KDCHART_NEG_INFINITE;
+    }
+
+    /**
+        Returns true if the given value represents a normal double value.
+
+        Normal double values are defined as values that are neither positive infinite
+        nor negative infinite.  This method is provided to let derived classed use
+        their own way to determine when a double value is to be threated as normal.
+
+        \note To improve runtime speed this virtual function
+        may be reimplemented by classes derived from KDChartTableDataBase.
+
+        \returns TRUE if the value given is neither positive infinite nor negativr infinite.
+    */
+    virtual bool isNormalDouble( double value ) const
+    {
+        return !isPosInfinite( value ) && !isNegInfinite( value );
+    }
+
+    /**
+        Returns true if the given QVariant value represents a normal double value.
+
+        This method tests if \c value has type QVariant::Double: if no, it returns false;
+        if yes, it sets \c dVal accordingly and calls the virtual method
+        isNormalDouble( double value ).
+
+        \param value The QVariant value to be tested and converted.
+        \param dVal Points to the double variable to be filled with the converted value.
+
+        \returns TRUE if the value given is neither positive infinite nor negative
+        infinite, \c value is set to the converted value if the type of \c value
+        is QVariant::Double, otherwise it is not modified.
+    */
+    bool isNormalDouble( QVariant value, double& dVal ) const
+    {
+        if( QVariant::Double != value.type() )
+            return false;
+        dVal = value.toDouble();
+        return isNormalDouble( dVal );
+    }
+
+    virtual void importFromQTable( QTable* table );
+
+    virtual double maxValue( int coordinate=1 ) const;
+    virtual double minValue( int coordinate=1, bool bOnlyGTZero=false ) const;
+
+    virtual QDateTime maxDtValue( int coordinate=1 ) const;
+    virtual QDateTime minDtValue( int coordinate=1 ) const;
+
+    virtual double maxColSum( int coordinate=1 ) const;
+    virtual double minColSum( int coordinate=1 ) const;
+    virtual double maxColSum( uint row, uint row2, int coordinate=1 ) const;
+    virtual double minColSum( uint row, uint row2, int coordinate=1 ) const;
+    virtual double colSum( uint col, int coordinate=1 ) const;
+    virtual double colAbsSum( uint col, int coordinate=1 ) const;
+    virtual double maxRowSum( int coordinate=1 ) const;
+    virtual double minRowSum( int coordinate=1 ) const;
+    virtual double rowSum( uint row, int coordinate=1 ) const;
+    virtual double rowAbsSum( uint row, int coordinate=1 ) const;
+    virtual double maxInColumn( uint col, int coordinate=1 ) const;
+    virtual double minInColumn( uint col, int coordinate=1 ) const;
+    virtual double maxInRow( uint row, int coordinate=1 ) const;
+    virtual double minInRow( uint row, int coordinate=1 ) const;
+    virtual double maxInRows( uint row, uint row2, int coordinate=1 ) const;
+    virtual double minInRows( uint row, uint row2, int coordinate=1, bool bOnlyGTZero=false ) const;
+    virtual QDateTime maxDtInRows( uint row, uint row2, int coordinate=1 ) const;
+    virtual QDateTime minDtInRows( uint row, uint row2, int coordinate=1 ) const;
+    virtual uint lastPositiveCellInColumn( uint col, int coordinate=1 ) const;
+    virtual bool cellsHaveSeveralCoordinates(QVariant::Type* type2Ref) const;
+    virtual bool cellsHaveSeveralCoordinates(uint row1=0, uint row2=UINT_MAX,
+                                             QVariant::Type* type2Ref=NULL) const;
+    virtual QVariant::Type cellsValueType( uint row1, uint row2=UINT_MAX,
+                                           int coordinate=1 ) const;
+    virtual QVariant::Type cellsValueType( int coordinate=1 ) const;
+private:
+    bool _sorted;
+protected:
+    bool _useUsedRows, _useUsedCols;
+private:
+    uint _usedRows, _usedCols;
 };
-
-
-inline bool KDChartTableDataBase::cellsHaveSeveralCoordinates(
-        KDChartData::ValueType* type2Ref ) const
-{
-    return cellsHaveSeveralCoordinates( 0, UINT_MAX, type2Ref );
-}
-
-
-inline bool KDChartTableDataBase::cellsHaveSeveralCoordinates(
-        uint row1,
-        uint row2,
-        KDChartData::ValueType* type2Ref ) const
-{
-    // return true if all wanted datasets have at least two coordinates
-    // stored in all of their cells - BUT only if these coordinates are
-    // of equal type for each of the cells
-    // note: We skip cells that are empty, this means having
-    //       set neither coordinate #1 nor coordinate #2.
-    bool severalCoordinates = row1 < usedRows();
-    if( severalCoordinates ) {
-        severalCoordinates = false;
-        KDChartData::ValueType testType = KDChartData::NoValue;
-        uint r2 = (UINT_MAX == row2)
-            ? (usedRows()-1)
-            : QMIN( row2, usedRows()-1 );
-        for ( uint row = row1; row <= r2; ++row ){
-            for ( uint col = 0; col < usedCols(); ++col ){
-                const KDChartData& d = cell( row, col );
-                if( d.hasValue( 2 ) ){
-                    if( (KDChartData::NoValue != testType) &&
-                            (d.valueType( 2 )     != testType) ){
-                        severalCoordinates = false;
-                        break;
-                    }else{
-                        testType = d.valueType( 2 );
-                        if( NULL != type2Ref )
-                            *type2Ref = testType;
-                        severalCoordinates = true;
-                    }
-                }else if( d.hasValue( 1 ) ){
-                    severalCoordinates = false;
-                    break;
-                }
-            }
-        }
-    }
-    return severalCoordinates;
-}
-
-
-inline KDChartData::ValueType KDChartTableDataBase::cellsValueType(
-        uint row1,
-        uint row2,
-        int coordinate ) const
-{
-    uint r2 = (UINT_MAX == row2)
-        ? (usedRows()-1)
-        : QMIN( row2, usedRows()-1 );
-    for ( uint row = row1; row <= r2; ++row )
-        for ( uint col = 0; col < usedCols(); ++col ) {
-            const KDChartData& d = cell( row, col );
-            if( d.hasValue( coordinate ) )
-                return d.valueType( coordinate );
-        }
-    return KDChartData::NoValue;
-}
-
-
-inline KDChartData::ValueType KDChartTableDataBase::cellsValueType(
-        int coordinate ) const
-{
-    return cellsValueType( 0, UINT_MAX, coordinate );
-}
-
-
-inline double KDChartTableDataBase::maxValue( int coordinate ) const
-{
-    double maxValue = 0.0;
-    bool bStart = true;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        for ( uint col = 0; col < usedCols(); col++ ) {
-            const KDChartData& d = cell( row, col );
-            if ( d.isNormalDouble( coordinate ) ) {
-                if ( bStart ) {
-                    maxValue = d.doubleValue( coordinate );
-                    bStart = false;
-                } else
-                    maxValue = QMAX( maxValue, d.doubleValue( coordinate ) );
-            }
-        }
-    }
-    return maxValue;
-}
-
-
-
-inline double KDChartTableDataBase::minValue( int coordinate ) const
-{
-    double minValue = 0.0;
-    bool bStart = true;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        for ( uint col = 0; col < usedCols(); col++ ) {
-            const KDChartData& d = cell( row, col );
-            if ( d.isNormalDouble( coordinate ) ) {
-                if ( bStart ) {
-                    minValue = d.doubleValue( coordinate );
-                    bStart = false;
-                } else
-                    minValue = QMIN( minValue, d.doubleValue( coordinate ) );
-            }
-        }
-    }
-    return minValue;
-}
-
-
-inline QDateTime KDChartTableDataBase::maxDtValue( int coordinate ) const
-{
-    QDateTime maxValue = QDateTime( QDate(1970,1,1) );
-    bool bStart = true;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        for ( uint col = 0; col < usedCols(); col++ ) {
-            const KDChartData& d = cell( row, col );
-            if ( d.isDateTime( coordinate ) ) {
-                if ( bStart ) {
-                    maxValue = d.dateTimeValue( coordinate );
-                    bStart = false;
-                } else
-                    maxValue = QMAX(maxValue, d.dateTimeValue( coordinate ));
-            }
-        }
-    }
-    return maxValue;
-}
-
-
-
-inline QDateTime KDChartTableDataBase::minDtValue( int coordinate ) const
-{
-    QDateTime minValue = QDateTime( QDate(1970,1,1) );
-    bool bStart = true;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        for ( uint col = 0; col < usedCols(); col++ ) {
-            const KDChartData& d = cell( row, col );
-            if ( d.isDateTime( coordinate ) ) {
-                if ( bStart ) {
-                    minValue = d.dateTimeValue( coordinate );
-                    bStart = false;
-                } else
-                    minValue = QMIN(minValue, d.dateTimeValue( coordinate ));
-            }
-        }
-    }
-    return minValue;
-}
-
-
-inline double KDChartTableDataBase::maxColSum() const
-{
-    double maxValue = 0.0;
-    bool bStart = true;
-    for ( uint col = 0; col < usedCols(); col++ ) {
-        double colValue = colSum( col );
-        if ( bStart ) {
-            maxValue = colValue;
-            bStart = false;
-        } else
-            maxValue = QMAX( maxValue, colValue );
-    }
-    return maxValue;
-}
-
-
-inline double KDChartTableDataBase::minColSum() const
-{
-    double minValue = 0.0;
-    bool bStart = true;
-    for ( uint col = 0; col < usedCols(); col++ ) {
-        double colValue = colSum( col );
-        if ( bStart ) {
-            minValue = colValue;
-            bStart = false;
-        } else
-            minValue = QMIN( minValue, colValue );
-    }
-
-    return minValue;
-}
-
-
-inline double KDChartTableDataBase::maxColSum( uint row, uint row2 ) const
-{
-    double maxValue = 0;
-    bool bStart = true;
-    if ( 0 < usedRows() ) {
-        uint a = row;
-        uint z = row2;
-        if ( usedRows() <= a )
-            a = usedRows() - 1;
-        if ( usedRows() <= z )
-            z = usedRows() - 1;
-        for ( uint col = 0; col < usedCols(); col++ ) {
-            double valueValue = 0.0;
-            for ( uint row = a; row <= z; row++ ) {
-                const KDChartData& d = cell( row, col );
-                if ( d.isNormalDouble() )
-                    valueValue += d.doubleValue();
-            }
-            if ( bStart ) {
-                maxValue = valueValue;
-                bStart = false;
-            } else
-                maxValue = QMAX( maxValue, valueValue );
-        }
-    }
-    return maxValue;
-}
-
-
-inline double KDChartTableDataBase::minColSum( uint row, uint row2 ) const
-{
-    double minValue = 0;
-    bool bStart = true;
-    if ( 0 < usedRows() ) {
-        uint a = row;
-        uint z = row2;
-        if ( usedRows() <= a )
-            a = usedRows() - 1;
-        if ( usedRows() <= z )
-            z = usedRows() - 1;
-        for ( uint col = 0; col < usedCols(); col++ ) {
-            double valueValue = 0.0;
-            for ( uint row = a; row <= z; row++ ) {
-                const KDChartData& d = cell( row, col );
-                if ( d.isNormalDouble() )
-                    valueValue += d.doubleValue();
-            }
-            if ( bStart ) {
-                minValue = valueValue;
-                bStart = false;
-            } else
-                minValue = QMIN( minValue, valueValue );
-        }
-    }
-    return minValue;
-}
-
-
-inline double KDChartTableDataBase::colSum( uint col ) const
-{
-    double sum = 0.0;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        const KDChartData& d = cell( row, col );
-        if ( d.isNormalDouble() )
-            sum += d.doubleValue();
-    }
-
-    return sum;
-}
-
-
-inline double KDChartTableDataBase::colAbsSum( uint col ) const
-{
-    double sum = 0.0;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        const KDChartData& d = cell( row, col );
-        if ( d.isNormalDouble() )
-            sum += fabs( d.doubleValue() );
-    }
-
-    return sum;
-}
-
-
-inline double KDChartTableDataBase::maxRowSum() const
-{
-    double maxValue = 0.0;
-    bool bStart = true;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        double rowValue = rowSum( row );
-        if ( bStart ) {
-            maxValue = rowValue;
-            bStart = false;
-        } else
-            maxValue = QMAX( maxValue, rowValue );
-    }
-    return maxValue;
-}
-
-
-inline double KDChartTableDataBase::minRowSum() const
-{
-    double minValue = 0.0;
-    bool bStart = true;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        double rowValue = rowSum( row );
-        if ( bStart ) {
-            minValue = rowValue;
-            bStart = false;
-        } else
-            minValue = QMIN( minValue, rowValue );
-    }
-
-    return minValue;
-}
-
-
-inline double KDChartTableDataBase::rowSum( uint row ) const
-{
-    double sum = 0.0;
-    for ( uint col = 0; col < usedCols(); col++ ) {
-        const KDChartData& d = cell( row, col );
-        if ( d.isNormalDouble() )
-            sum += d.doubleValue();
-    }
-    return sum;
-}
-
-
-inline double KDChartTableDataBase::rowAbsSum( uint row ) const
-{
-    double sum = 0.0;
-    for ( uint col = 0; col < usedCols(); col++ ) {
-        const KDChartData& d = cell( row, col );
-        if ( d.isNormalDouble() )
-            sum += fabs( d.doubleValue() );
-    }
-    return sum;
-}
-
-
-inline double KDChartTableDataBase::maxInColumn( uint col ) const
-{
-    double maxValue = 0.0;
-    bool bStart = true;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        const KDChartData& d = cell( row, col );
-        if ( d.isNormalDouble() ) {
-            double cellValue = d.doubleValue();
-            if ( bStart ) {
-                maxValue = cellValue;
-                bStart = false;
-            } else
-                maxValue = QMAX( maxValue, cellValue );
-        }
-    }
-
-    return maxValue;
-}
-
-
-inline double KDChartTableDataBase::minInColumn( uint col ) const
-{
-    double minValue = 0.0;
-    bool bStart = true;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        const KDChartData& d = cell( row, col );
-        if ( d.isNormalDouble() ) {
-            double cellValue = d.doubleValue();
-            if ( bStart ) {
-                minValue = cellValue;
-                bStart = false;
-            } else
-                minValue = QMIN( minValue, cellValue );
-        }
-    }
-
-    return minValue;
-}
-
-
-inline double KDChartTableDataBase::maxInRow( uint row ) const
-{
-    double maxValue = DBL_MIN;
-    bool bStart = true;
-    if ( UINT_MAX > row ) {
-        for ( uint col = 0; col < usedCols(); col++ ) {
-            const KDChartData& d = cell( row, col );
-            if ( d.isNormalDouble() ) {
-                double cellValue = d.doubleValue();
-                if ( bStart ) {
-                    maxValue = cellValue;
-                    bStart = false;
-                } else
-                    maxValue = QMAX( maxValue, cellValue );
-            }
-        }
-    }
-    return maxValue;
-}
-
-
-inline double KDChartTableDataBase::minInRow( uint row ) const
-{
-    double minValue = DBL_MAX;
-    bool bStart = true;
-    if ( UINT_MAX > row ) {
-        for ( uint col = 0; col < usedCols(); col++ ) {
-            const KDChartData& d = cell( row, col );
-            if ( d.isNormalDouble() ) {
-                double cellValue = d.doubleValue();
-                if ( bStart ) {
-                    minValue = cellValue;
-                    bStart = false;
-                } else
-                    minValue = QMIN( minValue, cellValue );
-            }
-        }
-    }
-    return minValue;
-}
-
-
-inline double KDChartTableDataBase::maxInRows( uint row, uint row2, int coordinate ) const
-{
-    double maxValue = 0.0;
-    bool bStart = true;
-    if ( 0 < usedRows() ) {
-        uint a = row;
-        uint z = row2;
-        // qDebug("KDChartTableDataBase::maxInRows()   (1)     a: %u     z: %u", a, z);
-        if ( usedRows() <= a )
-            a = usedRows() - 1;
-        if ( usedRows() <= z )
-            z = usedRows() - 1;
-        // qDebug("KDChartTableDataBase::maxInRows()   (2)     a: %u     z: %u", a, z);
-        for ( uint row = a; row <= z; ++row ) {
-            for ( uint col = 0; col < usedCols(); ++col ) {
-                const KDChartData& d = cell( row, col );
-                if ( d.isNormalDouble( coordinate ) ) {
-                    double cellValue = d.doubleValue( coordinate );
-                    if ( bStart ) {
-                        maxValue = cellValue;
-                        bStart = false;
-                    } else
-                        maxValue = QMAX( maxValue, cellValue );
-                }
-            }
-        }
-    }
-    return maxValue;
-}
-
-
-inline double KDChartTableDataBase::minInRows( uint row, uint row2, int coordinate ) const
-{
-    double minValue = 0.0;
-    bool bStart = true;
-    if ( 0 < usedRows() ) {
-        uint a = row;
-        uint z = row2;
-        // qDebug("KDChartTableDataBase::minInRows()   (1)     a: %u     z: %u", a, z);
-        if ( usedRows() <= a )
-            a = usedRows() - 1;
-        if ( usedRows() <= z )
-            z = usedRows() - 1;
-        //qDebug("KDChartTableDataBase::minInRows()   (2)     a: %u     z: %u", a, z);
-        for ( uint row = a; row <= z; ++row ) {
-            for ( uint col = 0; col < usedCols(); ++col ) {
-                const KDChartData& d = cell( row, col );
-                if ( d.isNormalDouble( coordinate ) ) {
-                    double cellValue = d.doubleValue( coordinate );
-                    if ( bStart ) {
-                        minValue = cellValue;
-                        bStart = false;
-                    } else
-                        minValue = QMIN( minValue, cellValue );
-                }
-            }
-        }
-    }
-    return minValue;
-}
-
-
-inline QDateTime KDChartTableDataBase::maxDtInRows( uint row, uint row2,
-        int coordinate ) const
-{
-    QDateTime maxValue = QDateTime( QDate(1970,1,1) );
-    bool bStart = true;
-    if ( 0 < usedRows() ) {
-        uint a = row;
-        uint z = row2;
-        if ( usedRows() <= a )
-            a = usedRows() - 1;
-        if ( usedRows() <= z )
-            z = usedRows() - 1;
-        for ( uint row = a; row <= z; ++row ) {
-            for ( uint col = 0; col < usedCols(); ++col ) {
-                const KDChartData& d = cell( row, col );
-                if ( d.isDateTime( coordinate ) ) {
-                    QDateTime cellValue = d.dateTimeValue( coordinate );
-                    if ( bStart ) {
-                        maxValue = cellValue;
-                        bStart = false;
-                    } else
-                        maxValue = QMAX( maxValue, cellValue );
-                }
-            }
-        }
-    }
-    return maxValue;
-}
-
-
-inline QDateTime KDChartTableDataBase::minDtInRows( uint row, uint row2,
-        int coordinate ) const
-{
-    QDateTime minValue = QDateTime( QDate(1970,1,1) );
-    bool bStart = true;
-    if ( 0 < usedRows() ) {
-        uint a = row;
-        uint z = row2;
-        if ( usedRows() <= a )
-            a = usedRows() - 1;
-        if ( usedRows() <= z )
-            z = usedRows() - 1;
-        for ( uint row = a; row <= z; ++row ) {
-            for ( uint col = 0; col < usedCols(); ++col ) {
-                const KDChartData& d = cell( row, col );
-                if ( d.isDateTime( coordinate ) ) {
-                    QDateTime cellValue = d.dateTimeValue( coordinate );
-                    if ( bStart ) {
-                        minValue = cellValue;
-                        bStart = false;
-                    } else
-                        minValue = QMIN( minValue, cellValue );
-                }
-            }
-        }
-    }
-    return minValue;
-}
-
-
-inline uint KDChartTableDataBase::lastPositiveCellInColumn( uint col ) const
-{
-    uint ret = UINT_MAX;
-    for ( uint row = 0; row < usedRows(); row++ ) {
-        const KDChartData& d = cell( row, col );
-        if ( d.isDouble() && d.doubleValue() > 0 )
-            ret = row;
-    }
-    return ret;
-}
-
-
-inline void KDChartTableDataBase::importFromQTable( QTable* table )
-{
-    if( table->numRows() > (int)rows() ||
-            table->numCols() > (int)cols() )
-        expand( table->numRows(), table->numCols() );
-    setUsedRows( table->numRows() );
-    setUsedCols( table->numCols() );
-    for( int row = 0; row < table->numRows(); row++ )
-        for( int col = 0; col < table->numCols(); col++ ) {
-            QString cellContents = table->text( row, col );
-            if( !cellContents.isEmpty() ) {
-                // First try to parse a double
-                bool ok = false;
-                double value = cellContents.toDouble( &ok );
-                if( ok ) {
-                    // there was a double
-                    setCell( row, col, KDChartData( value ) );
-                } else {
-                    // no double, but at least a string
-                    setCell( row, col, KDChartData( cellContents ) );
-                }
-            } // don't do anything if no contents
-        }
-    setSorted( false );
-}
-
-
-inline void KDChartTableDataBase::setSorted(bool sorted)
-{
-    _sorted = sorted;
-}
-inline bool KDChartTableDataBase::sorted() const
-{
-    return _sorted;
-}
-
 
 #endif

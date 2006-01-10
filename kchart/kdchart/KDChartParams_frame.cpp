@@ -28,7 +28,6 @@
  **********************************************************************/
 
 #include "KDChartParams.h"
-#include "KDXMLTools.h"
 
 
 /**
@@ -51,7 +50,8 @@ KDChartParams::KDChartFrameSettings::KDChartFrameSettings()
     _dataRow = 0;
     _dataCol = 0;
     _data3rd = 0;
-    _frame.clearAll();
+    _frame   = 0;
+    resetFrame();
     _outerGapX = 0;
     _outerGapY = 0;
     _innerGapX = 0;
@@ -88,14 +88,17 @@ KDChartParams::KDChartFrameSettings::KDChartFrameSettings(
   : _dataRow( dataRow ),
     _dataCol( dataCol ),
     _data3rd( data3rd ),
-    _frame( frame ),
+    _frame( 0 ),
     _outerGapX( outerGapX ),
     _outerGapY( outerGapY ),
     _innerGapX( innerGapX ),
     _innerGapY( innerGapY ),
     _addFrameWidthToLayout(  addFrameWidthToLayout ),
 _addFrameHeightToLayout( addFrameHeightToLayout )
-{}
+{
+    resetFrame();
+    KDFrame::deepCopy(*_frame, frame);
+}
 
 
 
@@ -104,7 +107,7 @@ _addFrameHeightToLayout( addFrameHeightToLayout )
   */
 KDChartParams::KDChartFrameSettings::~KDChartFrameSettings()
 {
-    // Intentionally left blank for now.
+    delete _frame;
 }
 
 /**
@@ -163,7 +166,9 @@ bool KDChartParams::KDChartFrameSettings::readFrameSettingsNode( const QDomEleme
     }
 
     if( ok ) {
-        settings._frame = tempFrame;
+        settings.resetFrame();
+        KDFrame::deepCopy(*settings._frame, tempFrame);
+
         settings._dataRow   = tempDataRow;
         settings._dataCol   = tempDataCol;
         settings._data3rd   = tempData3rd;
@@ -254,8 +259,9 @@ void KDChartParams::KDChartFrameSettings::createFrameSettingsNode( QDomDocument&
 {
     QDomElement frameSettingsElement = document.createElement( elementName );
     parent.appendChild( frameSettingsElement );
-    KDFrame::createFrameNode( document, frameSettingsElement, "Frame",
-            settings->_frame );
+    if( settings->_frame )
+        KDFrame::createFrameNode( document, frameSettingsElement, "Frame",
+                                  *settings->_frame );
     KDXML::createIntNode( document, frameSettingsElement, "AreaId",
             areaId );
     KDXML::createIntNode( document, frameSettingsElement, "DataRow",

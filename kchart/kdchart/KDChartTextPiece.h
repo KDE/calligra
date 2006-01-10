@@ -33,24 +33,52 @@
 #include <qfont.h>
 #include <qregion.h>
 #include <qpalette.h>
+#include <qobject.h>
+#include <kdchart_export.h>
 
 class QBrush;
 class QPainter;
 class QSimpleRichText;
 class QFontMetrics;
 
-class KDChartTextPiece
+class KDCHART_EXPORT KDChartTextPiece :public QObject
 {
-    public:
-        KDChartTextPiece( const QString& text, const QFont& font );
-        KDChartTextPiece( const KDChartTextPiece& src );
-        KDChartTextPiece& operator=( const KDChartTextPiece& src );
-        virtual ~KDChartTextPiece();
+    Q_OBJECT
 
+    public:
+        KDChartTextPiece();
+        KDChartTextPiece( const QString& text, const QFont& font );
+        KDChartTextPiece( QPainter* painter, const QString& text, const QFont& font );
+        virtual ~KDChartTextPiece();
+        /**
+          Copy the settings of text piece \c source into this box.
+
+          \note Use this method instead of using the assignment operator.
+
+          \sa clone
+          */
+        void deepCopy( const KDChartTextPiece* source );
+
+
+        /**
+          Create a new text piece on the heap, copy the settings stored by
+          this text piece into the newly created text piece and return
+          the pointer to the new text piece.
+
+          \note Use this method instead of using the copy constructor.
+
+          \sa deepCopy
+          */
+        const KDChartTextPiece* clone() const;
+
+    private:
+        KDChartTextPiece( const KDChartTextPiece& ) : QObject(0) {}
+
+    public slots:
         virtual int width() const;
         virtual int height() const;
         virtual int fontLeading() const;
-
+        virtual QRect rect( QPainter *p, const QRect& clipRect) const;
         virtual void draw( QPainter *p, int x, int y, const QRect& clipRect,
                 const QColor& color, const QBrush* paper = 0 ) const;
         virtual void draw( QPainter *p, int x, int y, const QRegion& clipRegion,
@@ -59,6 +87,7 @@ class KDChartTextPiece
         QString text() const;
         QFont font() const;
         bool isRichText() const;
+        
 
     protected:
         bool _isRichText;
@@ -66,6 +95,7 @@ class KDChartTextPiece
         QString _text; // used when _isRichText == false
         QFont _font; // used when _isRichText == false
         QFontMetrics* _metrics;
+        bool _dirtyMetrics;
 };
 
 #endif

@@ -27,9 +27,8 @@
  **
  **********************************************************************/
 #include "KDChartParams.h"
-#include "KDXMLTools.h"
 
-#include <klocale.h>
+#include <qintdict.h>
 
 /**
   \fn QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
@@ -47,6 +46,288 @@ QTextStream& operator<<( QTextStream& s, const KDChartParams& p )
 
     return s;
 }
+
+/**
+  Helper method saving the axis parameters to an XML file,
+  this is called by saveXML() only.
+*/
+void KDChartParams::saveAxesToXML(QDomDocument& doc, QDomElement& docRoot) const
+{
+    // the AxisSettings elements
+    for( int axis = 0; axis < 13; axis++ ) {
+        QDomElement axisSettingsElement =
+            doc.createElement( "AxisSettings" );
+        docRoot.appendChild( axisSettingsElement );
+        axisSettingsElement.setAttribute( "Dataset",
+                _axisSettings[axis].dataset );
+        axisSettingsElement.setAttribute( "Dataset2",
+                _axisSettings[axis].dataset2 );
+        axisSettingsElement.setAttribute( "Chart",
+                _axisSettings[axis].chart );
+        {
+            // the Type element
+            KDXML::createStringNode( doc, axisSettingsElement, "Type",
+                    KDChartAxisParams::axisTypeToString( _axisSettings[axis].params._axisType ) );
+
+            // the Visible element
+            KDXML::createBoolNode( doc, axisSettingsElement, "Visible",
+                    _axisSettings[axis].params._axisVisible );
+
+            // the LabelsTouchEdges element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsTouchEdges",
+                    _axisSettings[axis].params._axisLabelsTouchEdges );
+
+            // the AreaMode element
+            KDXML::createStringNode( doc, axisSettingsElement, "AreaMode",
+                    KDChartAxisParams::axisAreaModeToString( _axisSettings[axis].params._axisAreaMode ) );
+
+            // the UseAvailableSpaceFrom element
+            KDXML::createIntNode( doc, axisSettingsElement, "UseAvailableSpaceFrom",
+                    _axisSettings[axis].params._axisUseAvailableSpaceFrom );
+
+            // the UseAvailableSpaceTo element
+            KDXML::createIntNode( doc, axisSettingsElement, "UseAvailableSpaceTo",
+                    _axisSettings[axis].params._axisUseAvailableSpaceTo );
+
+            // the IsometricReferenceAxis element
+            KDXML::createIntNode( doc, axisSettingsElement, "IsometricReferenceAxis",
+                    _axisSettings[axis].params._axisIsoRefAxis );
+
+            // the AreaMin element
+            KDXML::createIntNode( doc, axisSettingsElement, "AreaMin",
+                    _axisSettings[axis].params._axisAreaMin );
+
+            // the AreaMax element
+            KDXML::createIntNode( doc, axisSettingsElement, "AreaMax",
+                    _axisSettings[axis].params._axisAreaMax );
+
+            // the CalcMode element
+            KDXML::createStringNode( doc, axisSettingsElement, "CalcMode",
+                    KDChartAxisParams::axisCalcModeToString( _axisSettings[axis].params._axisCalcMode ) );
+
+            // the TrueAreaSize element
+            KDXML::createIntNode( doc, axisSettingsElement, "TrueAreaSize",
+                    _axisSettings[axis].params._axisTrueAreaSize );
+
+            // the TrueAreaRect element
+            KDXML::createRectNode( doc, axisSettingsElement, "TrueAreaRect",
+                    _axisSettings[axis].params._axisTrueAreaRect );
+
+            // the ShowSubDelimiters element
+            KDXML::createBoolNode( doc, axisSettingsElement, "ShowSubDelimiters",
+                    _axisSettings[axis].params._axisShowSubDelimiters );
+
+            // the LineVisible element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LineVisible",
+                    _axisSettings[axis].params._axisLineVisible );
+
+            // the LineWidth element
+            KDXML::createIntNode( doc, axisSettingsElement, "LineWidth",
+                    _axisSettings[axis].params._axisLineWidth );
+
+            // the TrueLineWidth element
+            KDXML::createIntNode( doc, axisSettingsElement, "TrueLineWidth",
+                    _axisSettings[axis].params._axisTrueLineWidth );
+
+            // the LineColor element
+            KDXML::createColorNode( doc, axisSettingsElement, "LineColor",
+                    _axisSettings[axis].params._axisLineColor );
+
+            // the ShowGrid element
+            KDXML::createBoolNode( doc, axisSettingsElement, "ShowGrid",
+                    _axisSettings[axis].params._axisShowGrid );
+
+            // the GridColor element
+            KDXML::createColorNode( doc, axisSettingsElement, "GridColor",
+                    _axisSettings[axis].params._axisGridColor );
+
+            // the GridLineWidth element
+            KDXML::createIntNode( doc, axisSettingsElement, "GridLineWidth",
+                    _axisSettings[axis].params._axisGridLineWidth );
+
+            // the GridStyle element
+            KDXML::createStringNode( doc, axisSettingsElement, "GridStyle",
+                    KDXML::penStyleToString( _axisSettings[axis].params._axisGridStyle ) );
+
+            // the GridSubColor element
+            KDXML::createColorNode( doc, axisSettingsElement, "GridSubColor",
+                    _axisSettings[axis].params._axisGridSubColor );
+
+            // the GridSubLineWidth element
+            KDXML::createIntNode( doc, axisSettingsElement, "GridSubLineWidth",
+                    _axisSettings[axis].params._axisGridSubLineWidth );
+
+            // the GridSubStyle element
+            KDXML::createStringNode( doc, axisSettingsElement, "GridSubStyle",
+                    KDXML::penStyleToString( _axisSettings[axis].params._axisGridSubStyle ) );
+
+            // the ZeroLineColor element
+            KDXML::createColorNode( doc, axisSettingsElement, "ZeroLineColor",
+                    _axisSettings[axis].params._axisZeroLineColor );
+
+            // the LabelsVisible element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsVisible",
+                    _axisSettings[axis].params._axisLabelsVisible );
+
+            // the LabelsFont element
+            createChartFontNode( doc, axisSettingsElement, "LabelsFont",
+                    _axisSettings[axis].params._axisLabelsFont,
+                    _axisSettings[axis].params._axisLabelsFontUseRelSize,
+                    _axisSettings[axis].params._axisLabelsFontRelSize,
+                    _axisSettings[axis].params._axisLabelsFontMinSize );
+
+            // the LabelsDontShrinkFont element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsDontShrinkFont",
+                    _axisSettings[axis].params._axisLabelsDontShrinkFont );
+
+            // the LabelsDontAutoRotate element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsDontAutoRotate",
+                    _axisSettings[axis].params._axisLabelsDontAutoRotate );
+
+            // the LabelsRotation element
+            KDXML::createIntNode( doc, axisSettingsElement, "LabelsRotation",
+                    _axisSettings[axis].params._axisLabelsRotation );
+
+            // the LabelsLeaveOut element
+            KDXML::createIntNode( doc, axisSettingsElement, "LabelsLeaveOut",
+                    _axisSettings[axis].params._axisValueLeaveOut );
+
+            // the LabelsColor element
+            KDXML::createColorNode( doc, axisSettingsElement, "LabelsColor",
+                    _axisSettings[axis].params._axisLabelsColor );
+
+            // the SteadyValueCalc element
+            KDXML::createBoolNode( doc, axisSettingsElement, "SteadyValueCalc",
+                    _axisSettings[axis].params._axisSteadyValueCalc );
+
+            // the ValueStart element
+            if( ! ( KDCHART_AXIS_LABELS_AUTO_LIMIT == _axisSettings[axis].params._axisValueStart ))
+                createChartValueNode( doc, axisSettingsElement, "ValueStart",
+                        _axisSettings[axis].params._axisValueStart,
+                        0.0,
+                        0 );
+
+            // the ValueStartIsExact element
+            KDXML::createBoolNode( doc, axisSettingsElement, "ValueStartIsExact",
+                    _axisSettings[axis].params._axisValueStartIsExact );
+
+            // the ValueEnd element
+            if( ! ( KDCHART_AXIS_LABELS_AUTO_LIMIT == _axisSettings[axis].params._axisValueEnd ))
+                createChartValueNode( doc, axisSettingsElement, "ValueEnd",
+                        _axisSettings[axis].params._axisValueEnd,
+                        0.0,
+                        0 );
+
+            // the ValueDelta element
+            if( ! ( KDCHART_AXIS_LABELS_AUTO_DELTA == _axisSettings[axis].params._axisValueDelta ))
+                KDXML::createDoubleNode( doc, axisSettingsElement, "ValueDelta",
+                        _axisSettings[axis].params._axisValueDelta );
+            KDXML::createIntNode( doc, axisSettingsElement, "ValueDeltaScale",
+                    _axisSettings[axis].params._axisValueDeltaScale );
+
+            // the ValuesDecreasing element
+            KDXML::createBoolNode( doc, axisSettingsElement, "ValuesDecreasing",
+                    _axisSettings[axis].params._axisValuesDecreasing );
+
+            // the TrueLow element
+            KDXML::createDoubleNode( doc, axisSettingsElement, "TrueLow",
+                    _axisSettings[axis].params._trueLow );
+
+            // the TrueHigh element
+            KDXML::createDoubleNode( doc, axisSettingsElement, "TrueHigh",
+                    _axisSettings[axis].params._trueHigh );
+
+            // the TrueDelta element
+            KDXML::createDoubleNode( doc, axisSettingsElement, "TrueDelta",
+                    _axisSettings[axis].params._trueDelta );
+
+            // the ZeroLineStart element
+            QDomElement zeroLineStartElement = doc.createElement( "ZeroLineStart" );
+            axisSettingsElement.appendChild( zeroLineStartElement );
+            zeroLineStartElement.setAttribute( "X", _axisSettings[axis].params._axisZeroLineStartX );
+            zeroLineStartElement.setAttribute( "Y", _axisSettings[axis].params._axisZeroLineStartY );
+
+            // the DigitsBehindComma element
+            KDXML::createIntNode( doc, axisSettingsElement, "DigitsBehindComma",
+                    _axisSettings[axis].params._axisDigitsBehindComma );
+
+            // the LabelsDateTimeFormat element
+            KDXML::createStringNode( doc, axisSettingsElement, "LabelsDateTimeFormat",
+                    _axisSettings[axis].params._axisLabelsDateTimeFormat );
+
+            // the MaxEmptyInnerSpan element
+            KDXML::createIntNode( doc, axisSettingsElement, "MaxEmptyInnerSpan",
+                    _axisSettings[axis].params._axisMaxEmptyInnerSpan );
+
+            // the LabelsFromDataRow element
+            KDXML::createStringNode( doc, axisSettingsElement, "LabelsFromDataRow",
+                    KDChartAxisParams::labelsFromDataRowToString( _axisSettings[axis].params._takeLabelsFromDataRow ) );
+
+            // the TextsDataRow element
+            KDXML::createIntNode( doc, axisSettingsElement, "TextsDataRow",
+                    _axisSettings[axis].params._labelTextsDataRow );
+
+            // the LabelString elements
+            KDXML::createStringListNodes( doc, axisSettingsElement, "LabelString",
+                    &_axisSettings[axis].params._axisLabelStringList );
+
+            // the ShortLabelString elements
+            KDXML::createStringListNodes( doc, axisSettingsElement, "ShortLabelString",
+                    &_axisSettings[axis].params._axisShortLabelsStringList );
+
+            // the LabelText elements
+            KDXML::createStringListNodes( doc, axisSettingsElement, "LabelText",
+                    &_axisSettings[axis].params._axisLabelTexts );
+
+            // the LabelTextsDirty element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LabelTextsDirty",
+                    _axisSettings[axis].params._axisLabelTextsDirty );
+
+            // labels formatting:
+
+            // the extra FirstLabelText element
+            KDXML::createStringNode( doc, axisSettingsElement, "FirstLabelReplacementText",
+                    _axisSettings[axis].params._axisFirstLabelText );
+
+            // the extra LastLabelText element
+            KDXML::createStringNode( doc, axisSettingsElement, "LastLabelReplacementText",
+                    _axisSettings[axis].params._axisLastLabelText );
+
+            // the LabelsDivPow10 element
+            KDXML::createIntNode( doc, axisSettingsElement, "LabelsDivPow10",
+                    _axisSettings[axis].params._axisLabelsDivPow10 );
+
+            // the LabelsDecimalPoint element
+            KDXML::createStringNode( doc, axisSettingsElement, "LabelsDecimalPoint",
+                    _axisSettings[axis].params._axisLabelsDecimalPoint );
+
+            // the LabelsThousandsPoint element
+            KDXML::createStringNode( doc, axisSettingsElement, "LabelsThousandsPoint",
+                    _axisSettings[axis].params._axisLabelsThousandsPoint );
+
+            // the LabelsPrefix element
+            KDXML::createStringNode( doc, axisSettingsElement, "LabelsPrefix",
+                    _axisSettings[axis].params._axisLabelsPrefix );
+
+            // the LabelsPostfix element
+            KDXML::createStringNode( doc, axisSettingsElement, "LabelsPostfix",
+                    _axisSettings[axis].params._axisLabelsPostfix );
+
+            // the LabelsTotalLen element
+            KDXML::createIntNode( doc, axisSettingsElement, "LabelsTotalLen",
+                    _axisSettings[axis].params._axisLabelsTotalLen );
+
+            // the LabelsPadFill element
+            KDXML::createStringNode( doc, axisSettingsElement, "LabelsPadFill",
+                    _axisSettings[axis].params._axisLabelsPadFill );
+
+            // the LabelsBlockAlign element
+            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsBlockAlign",
+                    _axisSettings[axis].params._axisLabelsBlockAlign );
+        }
+    }
+}
+
 
 /**
   Saves the parameters to an XML document.
@@ -104,10 +385,9 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
     QDomElement propertySetMapElement =
         doc.createElement( "PropertySetMap" );
     docRoot.appendChild( propertySetMapElement );
-    for( KDChartPropertySetList::ConstIterator it2 = _propertySetList.begin();
-            it2 != _propertySetList.end();
-            ++it2 )
-        propertySetMapElement.appendChild( it2.data().saveXML( doc ) );
+    QIntDictIterator<KDChartPropertySet> it2( _propertySetList );
+    for( ; it2.current(); ++it2 )
+        propertySetMapElement.appendChild( it2.current()->saveXML( doc ) );
 
     KDXML::createBoolNode( doc, docRoot, "ChartSourceModeWasUsed",
             _setChartSourceModeWasUsed );
@@ -203,6 +483,9 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                 "ValueBlockGapIsRelative",
                 _valueBlockGapIsRelative );
 
+        KDXML::createIntNode( doc, barSettingsElement,
+                "BarWidth", _barWidth );
+
         KDXML::createBoolNode( doc, barSettingsElement,
                 "SolidExcessArrows", _solidExcessArrows );
     }
@@ -223,13 +506,13 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                 "Marker", _lineMarker );
 
         // the MarkerStyles elements
-        for( QMap<uint,KDChartParams::LineMarkerStyle>::ConstIterator it = _lineMarkerStyles.begin();
+        {for( QMap<uint,KDChartParams::LineMarkerStyle>::ConstIterator it = _lineMarkerStyles.begin();
                 it != _lineMarkerStyles.end(); ++it ) {
             QDomElement markerStyleElement = doc.createElement( "MarkerStyle" );
             lineSettingsElement.appendChild( markerStyleElement );
             markerStyleElement.setAttribute( "Dataset", it.key() );
             markerStyleElement.setAttribute( "Style", KDChartParams::lineMarkerStyleToString( it.data() ) );
-        }
+        }}
 
         // the MarkerSize element
         KDXML::createSizeNode( doc, lineSettingsElement,
@@ -240,9 +523,9 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                 "LineWidth", _lineWidth );
 
         // the LineColor element
-	if ( _lineColor.isValid() )
-	    KDXML::createColorNode( doc, lineSettingsElement,
-				    "LineColor", _lineColor );
+        KDXML::createColorNode( doc, lineSettingsElement,
+                "LineColor",
+                _lineColor );
 
         // the LineStyle element
         QDomElement lineStyleElement =
@@ -250,6 +533,15 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         lineSettingsElement.appendChild( lineStyleElement );
         lineStyleElement.setAttribute( "Style",
                 KDXML::penStyleToString( _lineStyle ) );
+
+        // the DatasetLineStyles elements
+        {for( QMap<uint,  PenStyle>::ConstIterator it = _datasetLineStyles.begin();
+                it != _datasetLineStyles.end(); ++it ) {
+            QDomElement lineStyleElement = doc.createElement( "DatasetLineStyle" );
+            lineSettingsElement.appendChild( lineStyleElement );
+            lineStyleElement.setAttribute( "Dataset", it.key() );
+            lineStyleElement.setAttribute( "Style", KDXML::penStyleToString( it.data() ) );
+        }}
 
         // the ThreeD element
         KDXML::createBoolNode( doc, lineSettingsElement,
@@ -487,6 +779,14 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         KDXML::createStringNode( doc, legendSettingsElement, "Position",
                 KDChartParams::legendPositionToString( _legendPosition ) );
 
+        // the Orientation element
+        KDXML::createOrientationNode( doc, legendSettingsElement,
+                                      "Orientation", _legendOrientation );
+
+        // the ShowLines element
+        KDXML::createBoolNode( doc, legendSettingsElement,
+                                    "ShowLines", _legendShowLines );
+
         // the Source element
         KDXML::createStringNode( doc, legendSettingsElement, "Source",
                 KDChartParams::legendSourceToString( _legendSource ) );
@@ -529,264 +829,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
                 _legendSpacing );
     }
 
-    // the AxisSettings elements
-    for( int axis = 0; axis < 13; axis++ ) {
-        QDomElement axisSettingsElement =
-            doc.createElement( "AxisSettings" );
-        docRoot.appendChild( axisSettingsElement );
-        axisSettingsElement.setAttribute( "Dataset",
-                _axisSettings[axis].dataset );
-        axisSettingsElement.setAttribute( "Dataset2",
-                _axisSettings[axis].dataset2 );
-        axisSettingsElement.setAttribute( "Chart",
-                _axisSettings[axis].chart );
-        {
-            // the Type element
-            KDXML::createStringNode( doc, axisSettingsElement, "Type",
-                    KDChartAxisParams::axisTypeToString( _axisSettings[axis].params._axisType ) );
-
-            // the Visible element
-            KDXML::createBoolNode( doc, axisSettingsElement, "Visible",
-                    _axisSettings[axis].params._axisVisible );
-
-            // the LabelsTouchEdges element
-            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsTouchEdges",
-                    _axisSettings[axis].params._axisLabelsTouchEdges );
-
-            // the AreaMode element
-            KDXML::createStringNode( doc, axisSettingsElement, "AreaMode",
-                    KDChartAxisParams::axisAreaModeToString( _axisSettings[axis].params._axisAreaMode ) );
-
-            // the UseAvailableSpaceFrom element
-            KDXML::createIntNode( doc, axisSettingsElement, "UseAvailableSpaceFrom",
-                    _axisSettings[axis].params._axisUseAvailableSpaceFrom );
-
-            // the UseAvailableSpaceTo element
-            KDXML::createIntNode( doc, axisSettingsElement, "UseAvailableSpaceTo",
-                    _axisSettings[axis].params._axisUseAvailableSpaceTo );
-
-            // the IsometricReferenceAxis element
-            KDXML::createIntNode( doc, axisSettingsElement, "IsometricReferenceAxis",
-                    _axisSettings[axis].params._axisIsoRefAxis );
-
-            // the AreaMin element
-            KDXML::createIntNode( doc, axisSettingsElement, "AreaMin",
-                    _axisSettings[axis].params._axisAreaMin );
-
-            // the AreaMax element
-            KDXML::createIntNode( doc, axisSettingsElement, "AreaMax",
-                    _axisSettings[axis].params._axisAreaMax );
-
-            // the CalcMode element
-            KDXML::createStringNode( doc, axisSettingsElement, "CalcMode",
-                    KDChartAxisParams::axisCalcModeToString( _axisSettings[axis].params._axisCalcMode ) );
-
-            // the TrueAreaSize element
-            KDXML::createIntNode( doc, axisSettingsElement, "TrueAreaSize",
-                    _axisSettings[axis].params._axisTrueAreaSize );
-
-            // the TrueAreaRect element
-            KDXML::createRectNode( doc, axisSettingsElement, "TrueAreaRect",
-                    _axisSettings[axis].params._axisTrueAreaRect );
-
-            // the ShowSubDelimiters element
-            KDXML::createBoolNode( doc, axisSettingsElement, "ShowSubDelimiters",
-                    _axisSettings[axis].params._axisShowSubDelimiters );
-
-            // the LineVisible element
-            KDXML::createBoolNode( doc, axisSettingsElement, "LineVisible",
-                    _axisSettings[axis].params._axisLineVisible );
-
-            // the LineWidth element
-            KDXML::createIntNode( doc, axisSettingsElement, "LineWidth",
-                    _axisSettings[axis].params._axisLineWidth );
-
-            // the TrueLineWidth element
-            KDXML::createIntNode( doc, axisSettingsElement, "TrueLineWidth",
-                    _axisSettings[axis].params._axisTrueLineWidth );
-
-            // the LineColor element
-            KDXML::createColorNode( doc, axisSettingsElement, "LineColor",
-                    _axisSettings[axis].params._axisLineColor );
-
-            // the ShowGrid element
-            KDXML::createBoolNode( doc, axisSettingsElement, "ShowGrid",
-                    _axisSettings[axis].params._axisShowGrid );
-
-            // the GridColor element
-            KDXML::createColorNode( doc, axisSettingsElement, "GridColor",
-                    _axisSettings[axis].params._axisGridColor );
-
-            // the GridLineWidth element
-            KDXML::createIntNode( doc, axisSettingsElement, "GridLineWidth",
-                    _axisSettings[axis].params._axisGridLineWidth );
-
-            // the GridStyle element
-            KDXML::createStringNode( doc, axisSettingsElement, "GridStyle",
-                    KDXML::penStyleToString( _axisSettings[axis].params._axisGridStyle ) );
-
-            // the GridSubColor element
-            KDXML::createColorNode( doc, axisSettingsElement, "GridSubColor",
-                    _axisSettings[axis].params._axisGridSubColor );
-
-            // the GridSubLineWidth element
-            KDXML::createIntNode( doc, axisSettingsElement, "GridSubLineWidth",
-                    _axisSettings[axis].params._axisGridSubLineWidth );
-
-            // the GridSubStyle element
-            KDXML::createStringNode( doc, axisSettingsElement, "GridSubStyle",
-                    KDXML::penStyleToString( _axisSettings[axis].params._axisGridSubStyle ) );
-
-            // the ZeroLineColor element
-            KDXML::createColorNode( doc, axisSettingsElement, "ZeroLineColor",
-                    _axisSettings[axis].params._axisZeroLineColor );
-
-            // the LabelsVisible element
-            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsVisible",
-                    _axisSettings[axis].params._axisLabelsVisible );
-
-            // the LabelsFont element
-            createChartFontNode( doc, axisSettingsElement, "LabelsFont",
-                    _axisSettings[axis].params._axisLabelsFont,
-                    _axisSettings[axis].params._axisLabelsFontUseRelSize,
-                    _axisSettings[axis].params._axisLabelsFontRelSize );
-
-            // the LabelsDontShrinkFont element
-            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsDontShrinkFont",
-                    _axisSettings[axis].params._axisLabelsDontShrinkFont );
-
-            // the LabelsDontAutoRotate element
-            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsDontAutoRotate",
-                    _axisSettings[axis].params._axisLabelsDontAutoRotate );
-
-            // the LabelsRotation element
-            KDXML::createIntNode( doc, axisSettingsElement, "LabelsRotation",
-                    _axisSettings[axis].params._axisLabelsRotation );
-
-            // the LabelsLeaveOut element
-            KDXML::createIntNode( doc, axisSettingsElement, "LabelsLeaveOut",
-                    _axisSettings[axis].params._axisValueLeaveOut );
-
-            // the LabelsColor element
-            KDXML::createColorNode( doc, axisSettingsElement, "LabelsColor",
-                    _axisSettings[axis].params._axisLabelsColor );
-
-            // the SteadyValueCalc element
-            KDXML::createBoolNode( doc, axisSettingsElement, "SteadyValueCalc",
-                    _axisSettings[axis].params._axisSteadyValueCalc );
-
-            // the ValueStart element
-            if( ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == _axisSettings[axis].params._axisValueStart ))
-                createChartValueNode( doc, axisSettingsElement, "ValueStart",
-                        _axisSettings[axis].params._axisValueStart );
-
-            // the ValueEnd element
-            if( ! ( KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT == _axisSettings[axis].params._axisValueEnd ))
-                createChartValueNode( doc, axisSettingsElement, "ValueEnd",
-                        _axisSettings[axis].params._axisValueEnd );
-
-            // the ValueDelta element
-            if( ! ( KDChartAxisParams::AXIS_LABELS_AUTO_DELTA == _axisSettings[axis].params._axisValueDelta ))
-                KDXML::createDoubleNode( doc, axisSettingsElement, "ValueDelta",
-                        _axisSettings[axis].params._axisValueDelta );
-            KDXML::createIntNode( doc, axisSettingsElement, "ValueDeltaScale",
-                    _axisSettings[axis].params._axisValueDeltaScale );
-
-            // the TrueLow element
-            KDXML::createDoubleNode( doc, axisSettingsElement, "TrueLow",
-                    _axisSettings[axis].params._trueLow );
-
-            // the TrueHigh element
-            KDXML::createDoubleNode( doc, axisSettingsElement, "TrueHigh",
-                    _axisSettings[axis].params._trueHigh );
-
-            // the TrueDelta element
-            KDXML::createDoubleNode( doc, axisSettingsElement, "TrueDelta",
-                    _axisSettings[axis].params._trueDelta );
-
-            // the ZeroLineStart element
-            QDomElement zeroLineStartElement = doc.createElement( "ZeroLineStart" );
-            axisSettingsElement.appendChild( zeroLineStartElement );
-            zeroLineStartElement.setAttribute( "X", _axisSettings[axis].params._axisZeroLineStartX );
-            zeroLineStartElement.setAttribute( "Y", _axisSettings[axis].params._axisZeroLineStartY );
-
-            // the DigitsBehindComma element
-            KDXML::createIntNode( doc, axisSettingsElement, "DigitsBehindComma",
-                    _axisSettings[axis].params._axisDigitsBehindComma );
-
-            // the LabelsDateTimeFormat element
-            KDXML::createStringNode( doc, axisSettingsElement, "LabelsDateTimeFormat",
-                    _axisSettings[axis].params._axisLabelsDateTimeFormat );
-
-            // the MaxEmptyInnerSpan element
-            KDXML::createIntNode( doc, axisSettingsElement, "MaxEmptyInnerSpan",
-                    _axisSettings[axis].params._axisMaxEmptyInnerSpan );
-
-            // the LabelsFromDataRow element
-            KDXML::createStringNode( doc, axisSettingsElement, "LabelsFromDataRow",
-                    KDChartAxisParams::labelsFromDataRowToString( _axisSettings[axis].params._takeLabelsFromDataRow ) );
-
-            // the TextsDataRow element
-            KDXML::createIntNode( doc, axisSettingsElement, "TextsDataRow",
-                    _axisSettings[axis].params._labelTextsDataRow );
-
-            // the LabelString elements
-            KDXML::createStringListNodes( doc, axisSettingsElement, "LabelString",
-                    &_axisSettings[axis].params._axisLabelStringList );
-
-            // the ShortLabelString elements
-            KDXML::createStringListNodes( doc, axisSettingsElement, "ShortLabelString",
-                    &_axisSettings[axis].params._axisShortLabelsStringList );
-
-            // the LabelText elements
-            KDXML::createStringListNodes( doc, axisSettingsElement, "LabelText",
-                    &_axisSettings[axis].params._axisLabelTexts );
-
-            // the LabelTextsDirty element
-            KDXML::createBoolNode( doc, axisSettingsElement, "LabelTextsDirty",
-                    _axisSettings[axis].params._axisLabelTextsDirty );
-
-            // the extra FirstLabelText element
-            KDXML::createStringNode( doc, axisSettingsElement, "FirstLabelReplacementText",
-                    _axisSettings[axis].params._axisFirstLabelText );
-
-            // the extra LastLabelText element
-            KDXML::createStringNode( doc, axisSettingsElement, "LastLabelReplacementText",
-                    _axisSettings[axis].params._axisLastLabelText );
-
-            // the LabelsDivPow10 element
-            KDXML::createIntNode( doc, axisSettingsElement, "LabelsDivPow10",
-                    _axisSettings[axis].params._axisLabelsDivPow10 );
-
-            // the LabelsDecimalPoint element
-            KDXML::createStringNode( doc, axisSettingsElement, "LabelsDecimalPoint",
-                    _axisSettings[axis].params._axisLabelsDecimalPoint );
-
-            // the LabelsThousandsPoint element
-            KDXML::createStringNode( doc, axisSettingsElement, "LabelsThousandsPoint",
-                    _axisSettings[axis].params._axisLabelsThousandsPoint );
-
-            // the LabelsPrefix element
-            KDXML::createStringNode( doc, axisSettingsElement, "LabelsPrefix",
-                    _axisSettings[axis].params._axisLabelsPrefix );
-
-            // the LabelsPostfix element
-            KDXML::createStringNode( doc, axisSettingsElement, "LabelsPostfix",
-                    _axisSettings[axis].params._axisLabelsPostfix );
-
-            // the LabelsTotalLen element
-            KDXML::createIntNode( doc, axisSettingsElement, "LabelsTotalLen",
-                    _axisSettings[axis].params._axisLabelsTotalLen );
-
-            // the LabelsPadFill element
-            KDXML::createStringNode( doc, axisSettingsElement, "LabelsPadFill",
-                    _axisSettings[axis].params._axisLabelsPadFill );
-
-            // the LabelsBlockAlign element
-            KDXML::createBoolNode( doc, axisSettingsElement, "LabelsBlockAlign",
-                    _axisSettings[axis].params._axisLabelsBlockAlign );
-        }
-    }
+    saveAxesToXML(doc, docRoot);
 
     // the HeaderFooterSettings elements
     for( int hf = 0; hf < 18; hf++ ) {
@@ -805,8 +848,6 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         }
     }
 
-
-            // labels formatting:
 
     // the GlobalLeading element
     QDomElement globalLeadingElement =
@@ -958,12 +999,12 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         doc.createElement( "AreaMap" );
     docRoot.appendChild( areaMapElement );
     {
-        for( QMap<QString,KDChartFrameSettings>::ConstIterator it = _areaMap.begin();
-                it != _areaMap.end(); ++it ) {
+        QDictIterator<KDChartFrameSettings> it( _areaDict );
+        for( ; it.current(); ++it ){
             KDChartFrameSettings::createFrameSettingsNode( doc, areaMapElement,
                     "FrameSettings",
-                    &(it.data()),
-                    it.key().left(5).stripWhiteSpace().toUInt() );
+                    it.current(),
+                    it.currentKey().left(5).stripWhiteSpace().toUInt() );
         }
     }
 
@@ -972,11 +1013,11 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
         doc.createElement( "CustomBoxMap" );
     docRoot.appendChild( customBoxMapElement );
     {
-        for( QMap<uint,KDChartCustomBox>::ConstIterator it = _customBoxMap.begin();
-                it != _customBoxMap.end(); ++it ) {
-            KDXML::createIntNode( doc, customBoxMapElement, "Number", it.key() );
+        QIntDictIterator<KDChartCustomBox> it( _customBoxDict );
+        for( ; it.current(); ++it ){
+            KDXML::createIntNode( doc, customBoxMapElement, "Number", it.currentKey() );
             KDChartCustomBox::createCustomBoxNode( doc, customBoxMapElement,
-                    "CustomBox", &(it.data()) );
+                    "CustomBox", it );
         }
     }
 
@@ -1005,6 +1046,296 @@ QTextStream& operator>>( QTextStream& s, KDChartParams& p )
     p.loadXML( doc );
 
     return s;
+}
+
+
+/**
+  Helper method called by loadXML() only.
+  */
+void KDChartParams::loadAxesFormXML(int& curAxisSettings, QDomElement& element)
+{
+    KDChartAxisParams* axisSettings =
+        &( _axisSettings[ curAxisSettings ].params );
+    QDomNode node = element.firstChild();
+    while( !node.isNull() ) {
+        QDomElement element = node.toElement();
+        if( !element.isNull() ) { // was really an element
+            QString tagName = element.tagName();
+            if( tagName == "Type" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_axisType = KDChartAxisParams::stringToAxisType( string );
+            } else if( tagName == "Visible" ) {
+                bool visible;
+                if( KDXML::readBoolNode( element, visible ) )
+                    axisSettings->_axisVisible = visible;
+            } else if( tagName == "LabelsTouchEdges" ) {
+                bool labelsTouchEdges;
+                if( KDXML::readBoolNode( element, labelsTouchEdges ) )
+                    axisSettings->_axisLabelsTouchEdges = labelsTouchEdges;
+            } else if( tagName == "AreaMode" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_axisAreaMode = KDChartAxisParams::stringToAxisAreaMode( string );
+            } else if( tagName == "UseAvailableSpaceFrom" ) {
+                int spaceFrom;
+                if( KDXML::readIntNode( element, spaceFrom ) )
+                    axisSettings->_axisUseAvailableSpaceFrom = spaceFrom;
+            } else if( tagName == "UseAvailableSpaceTo" ) {
+                int spaceTo;
+                if( KDXML::readIntNode( element, spaceTo ) )
+                    axisSettings->_axisUseAvailableSpaceTo = spaceTo;
+            } else if( tagName == "IsometricReferenceAxis" ) {
+                int isoRefAxis;
+                if( KDXML::readIntNode( element,    isoRefAxis ) )
+                    axisSettings->_axisIsoRefAxis = isoRefAxis;
+            } else if( tagName == "AreaMin" ) {
+                int areaMin;
+                if( KDXML::readIntNode( element, areaMin ) )
+                    axisSettings->_axisAreaMin = areaMin;
+            } else if( tagName == "AreaMax" ) {
+                int areaMax;
+                if( KDXML::readIntNode( element, areaMax ) )
+                    axisSettings->_axisAreaMax = areaMax;
+            } else if( tagName == "CalcMode" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_axisCalcMode = KDChartAxisParams::stringToAxisCalcMode( string );
+            } else if( tagName == "TrueAreaSize" ) {
+                int trueAreaSize;
+                if( KDXML::readIntNode( element, trueAreaSize ) )
+                    axisSettings->_axisTrueAreaSize = trueAreaSize;
+            } else if( tagName == "TrueAreaRect" ) {
+                QRect trueAreaRect;
+                if( KDXML::readRectNode( element, trueAreaRect ) )
+                    axisSettings->_axisTrueAreaRect = trueAreaRect;
+            } else if( tagName == "ShowSubDelimiters" ) {
+                bool showSubDelimiters;
+                if( KDXML::readBoolNode( element, showSubDelimiters ) )
+                    axisSettings->_axisShowSubDelimiters = showSubDelimiters;
+            } else if( tagName == "LineVisible" ) {
+                bool lineVisible;
+                if( KDXML::readBoolNode( element, lineVisible ) )
+                    axisSettings->_axisLineVisible = lineVisible;
+            } else if( tagName == "LineWidth" ) {
+                int lineWidth;
+                if( KDXML::readIntNode( element, lineWidth ) )
+                    axisSettings->_axisLineWidth = lineWidth;
+            } else if( tagName == "TrueLineWidth" ) {
+                int trueLineWidth;
+                if( KDXML::readIntNode( element, trueLineWidth ) )
+                    axisSettings->_axisTrueLineWidth = trueLineWidth;
+            } else if( tagName == "LineColor" ) {
+                QColor color;
+                if( KDXML::readColorNode( element, color ) )
+                    axisSettings->_axisLineColor = color;
+            } else if( tagName == "ShowGrid" ) {
+                bool showGrid;
+                if( KDXML::readBoolNode( element, showGrid ) )
+                    axisSettings->_axisShowGrid = showGrid;
+            } else if( tagName == "GridColor" ) {
+                QColor color;
+                if( KDXML::readColorNode( element, color ) )
+                    axisSettings->_axisGridColor = color;
+            } else if( tagName == "GridLineWidth" ) {
+                int gridLineWidth;
+                if( KDXML::readIntNode( element, gridLineWidth ) )
+                    axisSettings->_axisGridLineWidth = gridLineWidth;
+            } else if( tagName == "GridStyle" ) {
+                if( element.hasAttribute( "Style" ) )
+                    axisSettings->_axisGridStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
+            } else if( tagName == "GridSubColor" ) {
+                QColor color;
+                if( KDXML::readColorNode( element, color ) )
+                    axisSettings->_axisGridSubColor = color;
+            } else if( tagName == "GridSubLineWidth" ) {
+                int gridSubLineWidth;
+                if( KDXML::readIntNode( element, gridSubLineWidth ) )
+                    axisSettings->_axisGridSubLineWidth = gridSubLineWidth;
+            } else if( tagName == "GridSubStyle" ) {
+                if( element.hasAttribute( "Style" ) )
+                    axisSettings->_axisGridSubStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
+            } else if( tagName == "ZeroLineColor" ) {
+                QColor color;
+                if( KDXML::readColorNode( element, color ) )
+                    axisSettings->_axisZeroLineColor = color;
+            } else if( tagName == "LabelsVisible" ) {
+                bool labelsVisible;
+                if( KDXML::readBoolNode( element, labelsVisible ) )
+                    axisSettings->_axisLabelsVisible = labelsVisible;
+            } else if( tagName == "LabelsFont" ) {
+                readChartFontNode( element,
+                        axisSettings->_axisLabelsFont,
+                        axisSettings->_axisLabelsFontUseRelSize,
+                        axisSettings->_axisLabelsFontRelSize,
+                        &axisSettings->_axisLabelsFontMinSize );
+            } else if( tagName == "LabelsDontShrinkFont" ) {
+                bool dontShrink;
+                if( KDXML::readBoolNode( element, dontShrink ) )
+                    axisSettings->_axisLabelsDontShrinkFont = dontShrink;
+            } else if( tagName == "LabelsDontAutoRotate" ) {
+                bool dontRotate;
+                if( KDXML::readBoolNode( element, dontRotate ) )
+                    axisSettings->_axisLabelsDontAutoRotate = dontRotate;
+            } else if( tagName == "LabelsRotation" ) {
+                int rotation;
+                if( KDXML::readIntNode( element, rotation ) )
+                    axisSettings->_axisLabelsRotation = rotation;
+            } else if( tagName == "LabelsLeaveOut" ) {
+                int leaveOut;
+                if( KDXML::readIntNode( element, leaveOut ) )
+                    axisSettings->_axisValueLeaveOut = leaveOut;
+            } else if( tagName == "LabelsColor" ) {
+                QColor color;
+                if( KDXML::readColorNode( element, color ) )
+                    axisSettings->_axisLabelsColor = color;
+            } else if( tagName == "SteadyValueCalc" ) {
+                bool steadyValueCalc;
+                if( KDXML::readBoolNode( element, steadyValueCalc ) )
+                    axisSettings->_axisSteadyValueCalc = steadyValueCalc;
+            } else if( tagName == "ValueStart" ) {
+                QVariant valX, valY;
+                int propID;
+                if( readChartValueNode( element, valY, valX, propID ) &&
+                    QVariant::Double == valY.type() )
+                    axisSettings->_axisValueStart = valY.toDouble();
+            } else if( tagName == "ValueStartIsExact" ) {
+                bool isExactValue;
+                if( KDXML::readBoolNode( element, isExactValue ) )
+                    axisSettings->_axisValueStartIsExact = isExactValue;
+            } else if( tagName == "ValueEnd" ) {
+                QVariant valX, valY;
+                int propID;
+                if( readChartValueNode( element, valY, valX, propID ) &&
+                    QVariant::Double == valY.type()  )
+                    axisSettings->_axisValueEnd = valY.toDouble();
+            } else if( tagName == "ValueDelta" ) {
+                double valueDelta;
+                if( KDXML::readDoubleNode( element, valueDelta ) )
+                    axisSettings->_axisValueDelta = valueDelta;
+            } else if( tagName == "ValueDeltaScale" ) {
+                int valueDeltaScale;
+                if( KDXML::readIntNode( element, valueDeltaScale ) )
+                    axisSettings->_axisValueDeltaScale = (KDChartAxisParams::ValueScale)valueDeltaScale;
+            } else if( tagName == "ValuesDecreasing" ) {
+                bool decreasing;
+                if( KDXML::readBoolNode( element, decreasing ) )
+                    axisSettings->_axisValuesDecreasing = decreasing;
+            } else if( tagName == "TrueLow" ) {
+                double trueLow;
+                if( KDXML::readDoubleNode( element, trueLow ) )
+                    axisSettings->_trueLow  = trueLow;
+            } else if( tagName == "TrueHigh" ) {
+                double trueHigh;
+                if( KDXML::readDoubleNode( element, trueHigh ) )
+                    axisSettings->_trueHigh  = trueHigh;
+            } else if( tagName == "TrueDelta" ) {
+                double trueDelta;
+                if( KDXML::readDoubleNode( element, trueDelta ) )
+                    axisSettings->_trueDelta  = trueDelta;
+            } else if( tagName == "ZeroLineStart" ) {
+                double x = 0.0;
+                double y = 0.0;
+                bool ok = true;
+                if( element.hasAttribute( "X" ) &&
+                        element.hasAttribute( "Y" ) ) {
+                    x = element.attribute( "X" ).toDouble( &ok );
+                    if( ok )
+                        y = element.attribute( "Y" ).toDouble( &ok );
+                } else
+                    ok = false;
+
+                if( ok ) {
+                    axisSettings->_axisZeroLineStartX = x;
+                    axisSettings->_axisZeroLineStartY = y;
+                }
+            } else if( tagName == "DigitsBehindComma" ) {
+                int digitsBehindComma;
+                if( KDXML::readIntNode( element, digitsBehindComma ) )
+                    axisSettings->_axisDigitsBehindComma = digitsBehindComma;
+            } else if( tagName == "LabelsDateTimeFormat" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_axisLabelsDateTimeFormat = string;
+            } else if( tagName == "MaxEmptyInnerSpan" ) {
+                int maxEmptyInnerSpan;
+                if( KDXML::readIntNode( element, maxEmptyInnerSpan ) )
+                    axisSettings->_axisMaxEmptyInnerSpan = maxEmptyInnerSpan;
+            } else if( tagName == "LabelsFromDataRow" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_labelTextsDataRow = KDChartAxisParams::stringToLabelsFromDataRow( string );
+            } else if( tagName == "TextsDataRow" ) {
+                int textsDataRow;
+                if( KDXML::readIntNode( element, textsDataRow ) )
+                    axisSettings->_labelTextsDataRow = textsDataRow;
+            } else if( tagName == "LabelString" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_axisLabelStringList << string;
+            } else if( tagName == "ShortLabelString" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_axisShortLabelsStringList << string;
+            } else if( tagName == "LabelText" ) {
+                QString string;
+                if( KDXML::readStringNode( element, string ) )
+                    axisSettings->_axisLabelTexts = string;
+            } else if( tagName == "LabelTextsDirty" ) {
+                bool labelTextsDirty;
+                if( KDXML::readBoolNode( element, labelTextsDirty ) )
+                    axisSettings->_axisLabelTextsDirty = labelTextsDirty;
+            } else if( tagName == "FirstLabelReplacementText" ) {
+                QString value;
+                if( KDXML::readStringNode( element, value ) )
+                    axisSettings->_axisFirstLabelText = value;
+            } else if( tagName == "LastLabelReplacementText" ) {
+                QString value;
+                if( KDXML::readStringNode( element, value ) )
+                    axisSettings->_axisLastLabelText = value;
+            } else if( tagName == "LabelsDivPow10" ) {
+                int divPow10;
+                if( KDXML::readIntNode( element, divPow10 ) )
+                    axisSettings->_axisLabelsDivPow10 = divPow10;
+            } else if( tagName == "LabelsDecimalPoint" ) {
+                QString value;
+                if( KDXML::readStringNode( element, value ) )
+                    axisSettings->_axisLabelsDecimalPoint = value;
+            } else if( tagName == "LabelsThousandsPoint" ) {
+                QString value;
+                if( KDXML::readStringNode( element, value ) )
+                    axisSettings->_axisLabelsThousandsPoint = value;
+            } else if( tagName == "LabelsPrefix" ) {
+                QString value;
+                if( KDXML::readStringNode( element, value ) )
+                    axisSettings->_axisLabelsPrefix = value;
+            } else if( tagName == "LabelsPostfix" ) {
+                QString value;
+                if( KDXML::readStringNode( element, value ) )
+                    axisSettings->_axisLabelsPostfix = value;
+            } else if( tagName == "LabelsTotalLen" ) {
+                int totalLen;
+                if( KDXML::readIntNode( element, totalLen ) )
+                    axisSettings->_axisLabelsTotalLen = totalLen;
+            } else if( tagName == "LabelsPadFill" ) {
+                QString value;
+                if( KDXML::readStringNode( element, value ) ){
+                    if( value.isEmpty() )
+                        axisSettings->_axisLabelsPadFill = ' ';
+                    else
+                        axisSettings->_axisLabelsPadFill = value.at(0);
+                }
+            } else if( tagName == "LabelsBlockAlign" ) {
+                bool blockAlign;
+                if( KDXML::readBoolNode( element, blockAlign ) )
+                    axisSettings->_axisLabelsBlockAlign = blockAlign;
+            } else {
+                qDebug( "Unknown subelement of AxisSettings found: %s", tagName.latin1() );
+            }
+        }
+        node = node.nextSibling();
+    }
+    curAxisSettings++; // one axis settings entry finished
 }
 
 
@@ -1161,6 +1492,10 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             bool valueBlockGapIsRelative;
                             if( KDXML::readBoolNode( element, valueBlockGapIsRelative ) )
                                 _valueBlockGapIsRelative = valueBlockGapIsRelative;
+                         } else if( tagName == "BarWidth" ) {
+                            int barWidth;
+                            if( KDXML::readIntNode( element, barWidth ) )
+                                _barWidth = barWidth;
                         } else if( tagName == "SolidExcessArrows" ) {
                             bool solidExcessArrows;
                             if( KDXML::readBoolNode( element, solidExcessArrows ) )
@@ -1203,7 +1538,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             int height= 1;
                             bool ok = true;
                             if( element.hasAttribute( "Width" ) &&
-                                    element.hasAttribute( "Height" ) ) {
+                                element.hasAttribute( "Height" ) ) {
                                 width = element.attribute( "Width" ).toInt( &ok );
                                 if( ok )
                                     height = element.attribute( "Height" ).toInt( &ok );
@@ -1225,6 +1560,19 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         } else if( tagName == "LineStyle" ) {
                             if( element.hasAttribute( "Style" ) )
                                 _lineStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
+                        } else if( tagName == "DatasetLineStyle" ) {
+                            bool ok = true;
+                            uint dataset;
+                            PenStyle style = Qt::SolidLine;
+                            if( element.hasAttribute( "Dataset" ) &&
+                                element.hasAttribute( "Style" ) ) {
+                                dataset = element.attribute( "Dataset" ).toUInt( &ok );
+                                if( ok )
+                                    style = KDXML::stringToPenStyle( element.attribute( "Style" ) );
+                            } else
+                                ok = false;
+                            if( ok )
+                                _datasetLineStyles[dataset] = style;
                         } else if( tagName == "ThreeD" ) {
                             bool threeD;
                             if( KDXML::readBoolNode( element, threeD ) )
@@ -1522,6 +1870,14 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                             QString string;
                             if( KDXML::readStringNode( element, string ) )
                                 _legendPosition = KDChartParams::stringToLegendPosition( string );
+                        } else if( tagName == "Orientation" ) {
+                            Qt::Orientation value=Qt::Vertical;
+                            if( KDXML::readOrientationNode( element, value ) )
+                                _legendOrientation = value;
+                        } else if( tagName == "ShowLines" ) {
+                            bool showLines;
+                            if( KDXML::readBoolNode( element, showLines ) )
+                                _legendShowLines = showLines;
                         } else if( tagName == "Source" ) {
                             QString string;
                             if( KDXML::readStringNode( element, string ) )
@@ -1572,275 +1928,9 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                     node = node.nextSibling();
                 }
             } else if( tagName == "AxisSettings" ) {
-                KDChartAxisParams* axisSettings =
-                    &( _axisSettings[ curAxisSettings ].params );
-                QDomNode node = element.firstChild();
-                while( !node.isNull() ) {
-                    QDomElement element = node.toElement();
-                    if( !element.isNull() ) { // was really an element
-                        QString tagName = element.tagName();
-                        if( tagName == "Type" ) {
-                            QString string;
-                            if( KDXML::readStringNode( element, string ) )
-                                axisSettings->_axisType = KDChartAxisParams::stringToAxisType( string );
-                        } else if( tagName == "Visible" ) {
-                            bool visible;
-                            if( KDXML::readBoolNode( element, visible ) )
-                                axisSettings->_axisVisible = visible;
-                        } else if( tagName == "LabelsTouchEdges" ) {
-                            bool labelsTouchEdges;
-                            if( KDXML::readBoolNode( element, labelsTouchEdges ) )
-                                axisSettings->_axisLabelsTouchEdges = labelsTouchEdges;
-                        } else if( tagName == "AreaMode" ) {
-                            QString string;
-                            if( KDXML::readStringNode( element, string ) )
-                                axisSettings->_axisAreaMode = KDChartAxisParams::stringToAxisAreaMode( string );
-                        } else if( tagName == "UseAvailableSpaceFrom" ) {
-                            int spaceFrom;
-                            if( KDXML::readIntNode( element, spaceFrom ) )
-                                axisSettings->_axisUseAvailableSpaceFrom = spaceFrom;
-                        } else if( tagName == "UseAvailableSpaceTo" ) {
-                            int spaceTo;
-                            if( KDXML::readIntNode( element, spaceTo ) )
-                                axisSettings->_axisUseAvailableSpaceTo = spaceTo;
-                        } else if( tagName == "IsometricReferenceAxis" ) {
-                            int isoRefAxis;
-                            if( KDXML::readIntNode( element,    isoRefAxis ) )
-                                axisSettings->_axisIsoRefAxis = isoRefAxis;
-                        } else if( tagName == "AreaMin" ) {
-                            int areaMin;
-                            if( KDXML::readIntNode( element, areaMin ) )
-                                axisSettings->_axisAreaMin = areaMin;
-                        } else if( tagName == "AreaMax" ) {
-                            int areaMax;
-                            if( KDXML::readIntNode( element, areaMax ) )
-                                axisSettings->_axisAreaMax = areaMax;
-                        } else if( tagName == "CalcMode" ) {
-                            QString string;
-                            if( KDXML::readStringNode( element, string ) )
-                                axisSettings->_axisCalcMode = KDChartAxisParams::stringToAxisCalcMode( string );
-                        } else if( tagName == "TrueAreaSize" ) {
-                            int trueAreaSize;
-                            if( KDXML::readIntNode( element, trueAreaSize ) )
-                                axisSettings->_axisTrueAreaSize = trueAreaSize;
-                        } else if( tagName == "TrueAreaRect" ) {
-                            QRect trueAreaRect;
-                            if( KDXML::readRectNode( element, trueAreaRect ) )
-                                axisSettings->_axisTrueAreaRect = trueAreaRect;
-                        } else if( tagName == "ShowSubDelimiters" ) {
-                            bool showSubDelimiters;
-                            if( KDXML::readBoolNode( element, showSubDelimiters ) )
-                                axisSettings->_axisShowSubDelimiters = showSubDelimiters;
-                        } else if( tagName == "LineVisible" ) {
-                            bool lineVisible;
-                            if( KDXML::readBoolNode( element, lineVisible ) )
-                                axisSettings->_axisLineVisible = lineVisible;
-                        } else if( tagName == "LineWidth" ) {
-                            int lineWidth;
-                            if( KDXML::readIntNode( element, lineWidth ) )
-                                axisSettings->_axisLineWidth = lineWidth;
-                        } else if( tagName == "TrueLineWidth" ) {
-                            int trueLineWidth;
-                            if( KDXML::readIntNode( element, trueLineWidth ) )
-                                axisSettings->_axisTrueLineWidth = trueLineWidth;
-                        } else if( tagName == "LineColor" ) {
-                            QColor color;
-                            if( KDXML::readColorNode( element, color ) )
-                                axisSettings->_axisLineColor = color;
-                        } else if( tagName == "ShowGrid" ) {
-                            bool showGrid;
-                            if( KDXML::readBoolNode( element, showGrid ) )
-                                axisSettings->_axisShowGrid = showGrid;
-                        } else if( tagName == "GridColor" ) {
-                            QColor color;
-                            if( KDXML::readColorNode( element, color ) )
-                                axisSettings->_axisGridColor = color;
-                        } else if( tagName == "GridLineWidth" ) {
-                            int gridLineWidth;
-                            if( KDXML::readIntNode( element, gridLineWidth ) )
-                                axisSettings->_axisGridLineWidth = gridLineWidth;
-                        } else if( tagName == "GridStyle" ) {
-                            if( element.hasAttribute( "Style" ) )
-                                axisSettings->_axisGridStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
-                        } else if( tagName == "GridSubColor" ) {
-                            QColor color;
-                            if( KDXML::readColorNode( element, color ) )
-                                axisSettings->_axisGridSubColor = color;
-                        } else if( tagName == "GridSubLineWidth" ) {
-                            int gridSubLineWidth;
-                            if( KDXML::readIntNode( element, gridSubLineWidth ) )
-                                axisSettings->_axisGridSubLineWidth = gridSubLineWidth;
-                        } else if( tagName == "GridSubStyle" ) {
-                            if( element.hasAttribute( "Style" ) )
-                                axisSettings->_axisGridSubStyle = KDXML::stringToPenStyle( element.attribute( "Style" ) );
-                        } else if( tagName == "ZeroLineColor" ) {
-                            QColor color;
-                            if( KDXML::readColorNode( element, color ) )
-                                axisSettings->_axisZeroLineColor = color;
-                        } else if( tagName == "LabelsVisible" ) {
-                            bool labelsVisible;
-                            if( KDXML::readBoolNode( element, labelsVisible ) )
-                                axisSettings->_axisLabelsVisible = labelsVisible;
-                        } else if( tagName == "LabelsFont" ) {
-                            readChartFontNode( element,
-                                    axisSettings->_axisLabelsFont,
-                                    axisSettings->_axisLabelsFontUseRelSize,
-                                    axisSettings->_axisLabelsFontRelSize );
-                        } else if( tagName == "LabelsDontShrinkFont" ) {
-                            bool dontShrink;
-                            if( KDXML::readBoolNode( element, dontShrink ) )
-                                axisSettings->_axisLabelsDontShrinkFont = dontShrink;
-                        } else if( tagName == "LabelsDontAutoRotate" ) {
-                            bool dontRotate;
-                            if( KDXML::readBoolNode( element, dontRotate ) )
-                                axisSettings->_axisLabelsDontAutoRotate = dontRotate;
-                        } else if( tagName == "LabelsRotation" ) {
-                            int rotation;
-                            if( KDXML::readIntNode( element, rotation ) )
-                                axisSettings->_axisLabelsRotation = rotation;
-                        } else if( tagName == "LabelsLeaveOut" ) {
-                            int leaveOut;
-                            if( KDXML::readIntNode( element, leaveOut ) )
-                                axisSettings->_axisValueLeaveOut = leaveOut;
-                        } else if( tagName == "LabelsColor" ) {
-                            QColor color;
-                            if( KDXML::readColorNode( element, color ) )
-                                axisSettings->_axisLabelsColor = color;
-                        } else if( tagName == "SteadyValueCalc" ) {
-                            bool steadyValueCalc;
-                            if( KDXML::readBoolNode( element, steadyValueCalc ) )
-                                axisSettings->_axisSteadyValueCalc = steadyValueCalc;
-                        } else if( tagName == "ValueStart" ) {
-                            KDChartData value;
-                            if( readChartValueNode( element, value ) )
-                                axisSettings->_axisValueStart = value;
-                        } else if( tagName == "ValueEnd" ) {
-                            KDChartData value;
-                            if( readChartValueNode( element, value ) )
-                                axisSettings->_axisValueEnd = value;
-                        } else if( tagName == "ValueDelta" ) {
-                            double valueDelta;
-                            if( KDXML::readDoubleNode( element, valueDelta ) )
-                                axisSettings->_axisValueDelta = valueDelta;
-                        } else if( tagName == "ValueDeltaScale" ) {
-                            int valueDeltaScale;
-                            if( KDXML::readIntNode( element, valueDeltaScale ) )
-                                axisSettings->_axisValueDeltaScale = (KDChartAxisParams::ValueScale)valueDeltaScale;
-                        } else if( tagName == "TrueLow" ) {
-                            double trueLow;
-                            if( KDXML::readDoubleNode( element, trueLow ) )
-                                axisSettings->_trueLow  = trueLow;
-                        } else if( tagName == "TrueHigh" ) {
-                            double trueHigh;
-                            if( KDXML::readDoubleNode( element, trueHigh ) )
-                                axisSettings->_trueHigh  = trueHigh;
-                        } else if( tagName == "TrueDelta" ) {
-                            double trueDelta;
-                            if( KDXML::readDoubleNode( element, trueDelta ) )
-                                axisSettings->_trueDelta  = trueDelta;
-                        } else if( tagName == "ZeroLineStart" ) {
-                            double x = 0.0;
-                            double y = 0.0;
-                            bool ok = true;
-                            if( element.hasAttribute( "X" ) &&
-                                    element.hasAttribute( "Y" ) ) {
-                                x = element.attribute( "X" ).toDouble( &ok );
-                                if( ok )
-                                    y = element.attribute( "Y" ).toDouble( &ok );
-                            } else
-                                ok = false;
 
-                            if( ok ) {
-                                axisSettings->_axisZeroLineStartX = x;
-                                axisSettings->_axisZeroLineStartY = y;
-                            }
-                        } else if( tagName == "DigitsBehindComma" ) {
-                            int digitsBehindComma;
-                            if( KDXML::readIntNode( element, digitsBehindComma ) )
-                                axisSettings->_axisDigitsBehindComma = digitsBehindComma;
-                        } else if( tagName == "LabelsDateTimeFormat" ) {
-                            QString string;
-                            if( KDXML::readStringNode( element, string ) )
-                                axisSettings->_axisLabelsDateTimeFormat = string;
-                        } else if( tagName == "MaxEmptyInnerSpan" ) {
-                            int maxEmptyInnerSpan;
-                            if( KDXML::readIntNode( element, maxEmptyInnerSpan ) )
-                                axisSettings->_axisMaxEmptyInnerSpan = maxEmptyInnerSpan;
-                        } else if( tagName == "LabelsFromDataRow" ) {
-                            QString string;
-                            if( KDXML::readStringNode( element, string ) )
-                                axisSettings->_labelTextsDataRow = KDChartAxisParams::stringToLabelsFromDataRow( string );
-                        } else if( tagName == "TextsDataRow" ) {
-                            int textsDataRow;
-                            if( KDXML::readIntNode( element, textsDataRow ) )
-                                axisSettings->_labelTextsDataRow = textsDataRow;
-                        } else if( tagName == "LabelString" ) {
-                            QString string;
-                            if( KDXML::readStringNode( element, string ) )
-                                axisSettings->_axisLabelStringList << string;
-                        } else if( tagName == "ShortLabelString" ) {
-                            QString string;
-                            if( KDXML::readStringNode( element, string ) )
-                                axisSettings->_axisShortLabelsStringList << string;
-                        } else if( tagName == "LabelText" ) {
-                            QString string;
-                            if( KDXML::readStringNode( element, string ) )
-                                axisSettings->_axisLabelTexts = string;
-                        } else if( tagName == "LabelTextsDirty" ) {
-                            bool labelTextsDirty;
-                            if( KDXML::readBoolNode( element, labelTextsDirty ) )
-                                axisSettings->_axisLabelTextsDirty = labelTextsDirty;
-                        } else if( tagName == "FirstLabelReplacementText" ) {
-                            QString value;
-                            if( KDXML::readStringNode( element, value ) )
-                                axisSettings->_axisFirstLabelText = value;
-                        } else if( tagName == "LastLabelReplacementText" ) {
-                            QString value;
-                            if( KDXML::readStringNode( element, value ) )
-                                axisSettings->_axisLastLabelText = value;
-                        } else if( tagName == "LabelsDivPow10" ) {
-                            int divPow10;
-                            if( KDXML::readIntNode( element, divPow10 ) )
-                                axisSettings->_axisLabelsDivPow10 = divPow10;
-                        } else if( tagName == "LabelsDecimalPoint" ) {
-                            QString value;
-                            if( KDXML::readStringNode( element, value ) )
-                                axisSettings->_axisLabelsDecimalPoint = value;
-                        } else if( tagName == "LabelsThousandsPoint" ) {
-                            QString value;
-                            if( KDXML::readStringNode( element, value ) )
-                                axisSettings->_axisLabelsThousandsPoint = value;
-                        } else if( tagName == "LabelsPrefix" ) {
-                            QString value;
-                            if( KDXML::readStringNode( element, value ) )
-                                axisSettings->_axisLabelsPrefix = value;
-                        } else if( tagName == "LabelsPostfix" ) {
-                            QString value;
-                            if( KDXML::readStringNode( element, value ) )
-                                axisSettings->_axisLabelsPostfix = value;
-                        } else if( tagName == "LabelsTotalLen" ) {
-                            int totalLen;
-                            if( KDXML::readIntNode( element, totalLen ) )
-                                axisSettings->_axisLabelsTotalLen = totalLen;
-                        } else if( tagName == "LabelsPadFill" ) {
-                            QString value;
-                            if( KDXML::readStringNode( element, value ) ){
-                                if( value.isEmpty() )
-                                    axisSettings->_axisLabelsPadFill = ' ';
-                                else
-                                    axisSettings->_axisLabelsPadFill = value.at(0);
-                            }
-                        } else if( tagName == "LabelsBlockAlign" ) {
-                            bool blockAlign;
-                            if( KDXML::readBoolNode( element, blockAlign ) )
-                                axisSettings->_axisLabelsBlockAlign = blockAlign;
-                        } else {
-                            qDebug( "Unknown subelement of AxisSettings found: %s", tagName.latin1() );
-                        }
-                    }
-                    node = node.nextSibling();
-                }
-                curAxisSettings++; // one axis settings entry finished
+                loadAxesFormXML(curAxisSettings, element);
+
             } else if( tagName == "HeaderFooterSettings" ) {
                 KDChartParams::HdFtParams* hfSettings =
                     &( _hdFtParams[ curHFSettings ] );
@@ -2088,20 +2178,20 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                     if( !element.isNull() ) { // was really an element
                         QString tagName = element.tagName();
                         if( tagName == "FrameSettings" ) {
-                            KDChartFrameSettings frameSettings;
+                            KDChartFrameSettings* frameSettings = new KDChartFrameSettings;
                             uint areaId = KDChartEnums::AreaUNKNOWN;
                             if( KDChartFrameSettings::readFrameSettingsNode(
-                                        element, frameSettings, areaId ) ) {
+                                        element, *frameSettings, areaId ) ) {
                                 QString str;
                                 if(areaId == KDChartEnums::AreaChartDataRegion)
                                     str = QString( "%1/%2/%3/%4" )
                                               .arg( areaId, 5 )
-                                              .arg( frameSettings.dataRow(), 5 )
-                                              .arg( frameSettings.dataCol(), 5 )
-                                              .arg( 0, 5 );//frameSettings.data3rd(), 5 );
+                                              .arg( frameSettings->dataRow(), 5 )
+                                              .arg( frameSettings->dataCol(), 5 )
+                                              .arg( 0, 5 );//frameSettings->data3rd(), 5 );
                                 else
                                     str = QString( "%1/-----/-----/-----" ).arg( areaId, 5 );
-                                _areaMap.insert( str, frameSettings );
+                                _areaDict.insert( str, frameSettings );
                             }
                         }
                         else
@@ -2119,12 +2209,12 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                         QString tagName = element.tagName();
                         if( tagName == "Number" ) {
                             KDXML::readIntNode( element, curNumber );
-                         } else if( tagName == "CustomBox" /*"FrameSettings"*/ ) {
+                        } else if( tagName == "FrameSettings" ) {
                             Q_ASSERT( curNumber != -1 ); // there was a Dataset tag before
                             KDChartCustomBox customBox;
                             KDChartCustomBox::readCustomBoxNode( element,
                                     customBox );
-                            _customBoxMap.insert( curNumber, customBox );
+                            _customBoxDict.insert( curNumber, customBox.clone() );
                         }
                         else
                             qDebug( "Unknown tag in CustomBoxMap found: %s", tagName.latin1() );
@@ -2203,6 +2293,19 @@ void KDChartParams::createDoubleMapNode( QDomDocument& doc, QDomNode& parent,
 }
 
 
+void dataCoordToElementAttr(const QVariant& val, QDomElement& element, const QString& postfix)
+{
+    if( QVariant::Double == val.type() )
+        element.setAttribute( "DoubleValue"+postfix,
+                              QString::number( val.toDouble() ) );
+    else if( QVariant::String == val.type() )
+        element.setAttribute( "StringValue"+postfix, val.toString() );
+    else if( QVariant::DateTime == val.type() )
+        element.setAttribute( "DateTimeValue"+postfix,
+                              val.toDateTime().toString( Qt::ISODate ) );
+    else
+        element.setAttribute( "NoValue"+postfix, "true" );
+}
 
 /**
   Creates a DOM element node that represents a
@@ -2215,18 +2318,18 @@ void KDChartParams::createDoubleMapNode( QDomDocument& doc, QDomNode& parent,
   */
 void KDChartParams::createChartValueNode( QDomDocument& doc, QDomNode& parent,
         const QString& elementName,
-        const KDChartData& data )
+        const QVariant& valY,
+        const QVariant& valX,
+        const int& propID )
 {
     QDomElement element = doc.createElement( elementName );
     parent.appendChild( element );
-    if( data.isDouble() )
-        element.setAttribute( "DoubleValue",
-                QString::number( data.doubleValue() ) );
-    else if( data.isString() )
-        element.setAttribute( "StringValue", data.stringValue() );
-    else
-        element.setAttribute( "NoValue", "true" );
+    dataCoordToElementAttr( valY, element, "" ); // no postfix for Y value: backwards compat.
+    dataCoordToElementAttr( valX, element, "X" );
+    element.setAttribute( "PropertySetID",
+                          QString::number( propID ) );
 }
+
 
 
 /**
@@ -2240,11 +2343,13 @@ void KDChartParams::createChartValueNode( QDomDocument& doc, QDomNode& parent,
   \param useRelFont the specification whether the font size
   is relative
   \param relFont the relative font size
+  \param minFont the minimal font size in points, leave this parameter out if not needed
   */
 void KDChartParams::createChartFontNode( QDomDocument& doc, QDomNode& parent,
         const QString& elementName,
         const QFont& font, bool useRelFont,
-        int relFont )
+        int relFont,
+        int minFont )
 {
     QDomElement chartFontElement = doc.createElement( elementName );
     parent.appendChild( chartFontElement );
@@ -2252,6 +2357,8 @@ void KDChartParams::createChartFontNode( QDomDocument& doc, QDomNode& parent,
     KDXML::createBoolNode( doc, chartFontElement, "UseRelFontSize",
             useRelFont );
     KDXML::createIntNode( doc, chartFontElement, "RelFontSize", relFont );
+    if( 0 <= minFont )
+        KDXML::createIntNode( doc, chartFontElement, "MinFontSize", minFont );
 }
 
 
@@ -2342,12 +2449,14 @@ bool KDChartParams::readDoubleMapNode( const QDomElement& element,
 bool KDChartParams::readChartFontNode( const QDomElement& element,
         QFont& font,
         bool& useRelFont,
-        int& relFontSize )
+        int& relFontSize,
+        int* minFontSize )
 {
     bool ok = true;
     QFont tempFont;
     bool tempRelFont;
     int tempRelFontSize;
+    int tempMinFontSize=-1;
     QDomNode node = element.firstChild();
     while( !node.isNull() ) {
         QDomElement element = node.toElement();
@@ -2359,6 +2468,8 @@ bool KDChartParams::readChartFontNode( const QDomElement& element,
                 ok = ok & KDXML::readBoolNode( element, tempRelFont );
             } else if( tagName == "RelFontSize" ) {
                 ok = ok & KDXML::readIntNode( element, tempRelFontSize );
+            } else if( tagName == "MinFontSize" ) {
+                ok = ok & KDXML::readIntNode( element, tempMinFontSize );
             } else {
                 qDebug( "Unknown tag in color map" );
             }
@@ -2370,12 +2481,30 @@ bool KDChartParams::readChartFontNode( const QDomElement& element,
         font = tempFont;
         useRelFont = tempRelFont;
         relFontSize = tempRelFontSize;
+        if( minFontSize && 0 <= tempMinFontSize )
+            *minFontSize = tempMinFontSize;
     }
 
     return ok;
 }
 
 
+bool foundCoordAttribute( const QDomElement& element, const QString& postfix,
+                          QVariant& val )
+{
+    if( element.hasAttribute( "NoValue"+postfix ) )
+        val = QVariant();
+    else if( element.hasAttribute( "DoubleValue"+postfix ) )
+        val = element.attribute(   "DoubleValue"+postfix );
+    else if( element.hasAttribute( "DateTimeValue"+postfix ) )
+        val = element.attribute(   "DateTimeValue"+postfix );
+    else if( element.hasAttribute( "StringValue"+postfix ) )
+        val = element.attribute(   "StringValue"+postfix );
+    else
+        return false;
+
+    return true;
+}
 
 // PENDING(kalle) Support DateTime values, even when writing.
 /**
@@ -2386,21 +2515,26 @@ bool KDChartParams::readChartFontNode( const QDomElement& element,
   \param value the chart data object to read the data into
   */
 bool KDChartParams::readChartValueNode( const QDomElement& element,
-        KDChartData& value )
+        QVariant& valY,
+        QVariant& valX,
+        int& propID )
 {
-    bool ok = true;
-    if( element.hasAttribute( "NoValue" ) )
-        value = KDChartData();
-    else if( element.hasAttribute( "DoubleValue" ) ) {
-        double d = element.attribute( "DoubleValue" ).toDouble( &ok );
-        if( ok )
-            value = KDChartData( d );
-    } else if( element.hasAttribute( "StringValue" ) )
-        value = KDChartData( element.attribute( "StringValue" ) );
-    else // should not happen
-        ok = false;
+    if( foundCoordAttribute( element, "",  valY ) ||
+        foundCoordAttribute( element, "Y", valY ) ){  // valY must be there
+        if( !foundCoordAttribute( element, "X", valX ) ){
+            valX = QVariant();
+        }
+        propID = 0;
+        if( element.hasAttribute( "PropertySetID" ) ) {
+            bool ok;
+            int i = element.attribute( "PropertySetID" ).toInt( &ok );
+            if( ok )
+                propID = i;
+        }
+        return true;  // if Y value found everything is OK
+    }
 
-    return ok;
+    return false;
 }
 
 
@@ -2466,6 +2600,101 @@ KDChartParams::ChartType KDChartParams::stringToChartType( const QString& string
     else // default, should not happen
         return NoType;
 }
+
+
+
+QString KDChartParams::markerStyleToString( int style )
+{
+    switch( style ) {
+        case LineMarkerSquare:
+            return "Square";
+        case LineMarkerDiamond:
+            return "Diamond";
+        case LineMarkerCircle:
+            return "Circle";
+        case LineMarker1Pixel:
+            return "one Pixel";
+        case LineMarker4Pixels:
+            return "four Pixels";
+        case LineMarkerRing:
+            return "Ring";
+        case LineMarkerCross:
+            return "Cross";
+        case LineMarkerFastCross:
+            return "fast Cross";
+        default: // should not happen
+            qDebug( "Unknown marker style" );
+            return "Circle";
+    }
+}
+QString KDChartParams::markerStyleToStringTr( int style )
+{
+    switch( style ) {
+        case LineMarkerSquare:
+            return tr( "Square" );
+        case LineMarkerDiamond:
+            return tr( "Diamond" );
+        case LineMarkerCircle:
+            return tr( "Circle" );
+        case LineMarker1Pixel:
+            return tr( "One pixel" );
+        case LineMarker4Pixels:
+            return tr( "Four pixels" );
+        case LineMarkerRing:
+            return tr( "Ring" );
+        case LineMarkerCross:
+            return tr( "Cross" );
+        case LineMarkerFastCross:
+            return tr( "fast Cross" );
+        default: // should not happen
+            qDebug( "Unknown line marker style!" );
+            return tr( "Circle" );
+    }
+}
+int KDChartParams::stringToMarkerStyle( const QString& string )
+{
+    if( string == "Square" )
+        return LineMarkerSquare;
+    else if( string == "Diamond" )
+        return LineMarkerDiamond;
+    else if( string == "Circle" )
+        return LineMarkerCircle;
+    else if( string == "one Pixel" )
+        return LineMarker1Pixel;
+    else if( string == "four Pixels" )
+        return LineMarker4Pixels;
+    else if( string == "Ring" )
+        return LineMarkerRing;
+    else if( string == "Cross" )
+        return LineMarkerCross;
+    else if( string == "fast Cross" )
+        return LineMarkerFastCross;
+    else // default, should not happen
+        return LineMarkerCircle;
+}
+int KDChartParams::stringToMarkerStyleTr( const QString& string )
+{
+    if( string == tr( "Square" ) )
+        return LineMarkerSquare;
+    else if( string == tr( "Diamond" ) )
+        return LineMarkerDiamond;
+    else if( string == tr( "Circle" ) )
+        return LineMarkerCircle;
+    else if( string == tr( "One pixel" ) )
+        return LineMarker1Pixel;
+    else if( string == tr( "Four pixels" ) )
+        return LineMarker4Pixels;
+    else if( string == tr( "Ring" ) )
+        return LineMarkerRing;
+    else if( string == tr( "Cross" ) )
+        return LineMarkerCross;
+    else if( string == tr( "fast Cross" ) )
+        return LineMarkerFastCross;
+    else // default, should not happen
+        return LineMarkerCircle;
+}
+
+
 
 /**
   Converts the specified bar chart subtype enum to a string representation.
@@ -2558,26 +2787,9 @@ QString KDChartParams::lineChartSubTypeToString( LineChartSubType type ) {
   \param type the type enum to convert
   \return the string representation of the type enum
   */
-QString KDChartParams::lineMarkerStyleToString( LineMarkerStyle style ) {
-    switch( style ) {
-        case LineMarkerSquare:
-            return "Square";
-        case LineMarkerDiamond:
-            return "Diamond";
-        case LineMarkerCircle:
-            return "Circle";
-        case LineMarker1Pixel:
-            return "one Pixel";
-        case LineMarker4Pixels:
-            return "four Pixels";
-        case LineMarkerRing:
-            return "Ring";
-        case LineMarkerCross:
-            return "Cross";
-        default: // should not happen
-            qDebug( "Unknown line marker style" );
-            return "Circle";
-    }
+QString KDChartParams::lineMarkerStyleToString( LineMarkerStyle style )
+{
+    return markerStyleToString( style );
 }
 
 
@@ -2588,29 +2800,10 @@ QString KDChartParams::lineMarkerStyleToString( LineMarkerStyle style ) {
   \param type the type enum to convert
   \return the localized string representation of the type enum
   */
-QString KDChartParams::lineMarkerStyleToStringTr( LineMarkerStyle style ) {
-    switch( style ) {
-        case LineMarkerSquare:
-            return i18n( "Square" );
-        case LineMarkerDiamond:
-            return i18n( "Diamond" );
-        case LineMarkerCircle:
-            return i18n( "Circle" );
-        case LineMarker1Pixel:
-            return i18n( "One pixel" );
-        case LineMarker4Pixels:
-            return i18n( "Four pixels" );
-        case LineMarkerRing:
-            return i18n( "Ring" );
-        case LineMarkerCross:
-            return i18n( "Cross" );
-        default: // should not happen
-            qDebug( "Unknown line marker style!" );
-            return i18n( "Circle" );
-    }
+QString KDChartParams::lineMarkerStyleToStringTr( LineMarkerStyle style )
+{
+    return markerStyleToStringTr( style );
 }
-
-
 
 
 /**
@@ -2619,25 +2812,10 @@ QString KDChartParams::lineMarkerStyleToStringTr( LineMarkerStyle style ) {
   \param string the string to convert
   \return the line marker style enum value
   */
-KDChartParams::LineMarkerStyle KDChartParams::stringToLineMarkerStyle( const QString& string ) {
-    if( string == "Square" )
-        return LineMarkerSquare;
-    else if( string == "Diamond" )
-        return LineMarkerDiamond;
-    else if( string == "Circle" )
-        return LineMarkerCircle;
-    else if( string == "one Pixel" )
-        return LineMarker1Pixel;
-    else if( string == "four Pixels" )
-        return LineMarker4Pixels;
-    else if( string == "Ring" )
-        return LineMarkerRing;
-    else if( string == "Cross" )
-        return LineMarkerCross;
-    else // default, should not happen
-        return LineMarkerCircle;
+KDChartParams::LineMarkerStyle KDChartParams::stringToLineMarkerStyle( const QString& string )
+{
+    return static_cast<KDChartParams::LineMarkerStyle>(stringToMarkerStyle( string ));
 }
-
 
 /**
   Converts the specified localized string to a line marker style
@@ -2646,23 +2824,9 @@ KDChartParams::LineMarkerStyle KDChartParams::stringToLineMarkerStyle( const QSt
   \param string the string to convert
   \return the line marker style enum value
   */
-KDChartParams::LineMarkerStyle KDChartParams::stringToLineMarkerStyleTr( const QString& string ) {
-    if( string == i18n( "Square" ) )
-        return LineMarkerSquare;
-    else if( string == i18n( "Diamond" ) )
-        return LineMarkerDiamond;
-    else if( string == i18n( "Circle" ) )
-        return LineMarkerCircle;
-    else if( string == i18n( "One pixel" ) )
-        return LineMarker1Pixel;
-    else if( string == i18n( "Four pixels" ) )
-        return LineMarker4Pixels;
-    else if( string == i18n( "Ring" ) )
-        return LineMarkerRing;
-    else if( string == i18n( "Cross" ) )
-        return LineMarkerCross;
-    else // default, should not happen
-        return LineMarkerCircle;
+KDChartParams::LineMarkerStyle KDChartParams::stringToLineMarkerStyleTr( const QString& string )
+{
+    return static_cast<KDChartParams::LineMarkerStyle>(stringToMarkerStyleTr( string ));
 }
 
 
@@ -2786,18 +2950,9 @@ QString KDChartParams::polarChartSubTypeToString( PolarChartSubType type ) {
   \param type the type enum to convert
   \return the string representation of the type enum
   */
-QString KDChartParams::polarMarkerStyleToString( PolarMarkerStyle style ) {
-    switch( style ) {
-        case PolarMarkerSquare:
-            return "Square";
-        case PolarMarkerDiamond:
-            return "Diamond";
-        case PolarMarkerCircle:
-            return "Circle";
-        default: // should not happen
-            qDebug( "Unknown polar marker style" );
-            return "Circle";
-    }
+QString KDChartParams::polarMarkerStyleToString( PolarMarkerStyle style )
+{
+    return markerStyleToString( style );
 }
 
 
@@ -2808,18 +2963,9 @@ QString KDChartParams::polarMarkerStyleToString( PolarMarkerStyle style ) {
   \param type the type enum to convert
   \return the localized string representation of the type enum
   */
-QString KDChartParams::polarMarkerStyleToStringTr( PolarMarkerStyle style ) {
-    switch( style ) {
-        case PolarMarkerSquare:
-            return i18n( "Square" );
-        case PolarMarkerDiamond:
-            return i18n( "Diamond" );
-        case PolarMarkerCircle:
-            return i18n( "Circle" );
-        default: // should not happen
-            qDebug( "Unknown polar marker style" );
-            return i18n( "Circle" );
-    }
+QString KDChartParams::polarMarkerStyleToStringTr( PolarMarkerStyle style )
+{
+    return markerStyleToStringTr( style );
 }
 
 
@@ -2829,15 +2975,9 @@ QString KDChartParams::polarMarkerStyleToStringTr( PolarMarkerStyle style ) {
   \param string the string to convert
   \return the polar marker style enum value
   */
-KDChartParams::PolarMarkerStyle KDChartParams::stringToPolarMarkerStyle( const QString& string ) {
-    if( string == "Square" )
-        return PolarMarkerSquare;
-    else if( string == "Diamond" )
-        return PolarMarkerDiamond;
-    else if( string == "Circle" )
-        return PolarMarkerCircle;
-    else // default, should not happen
-        return PolarMarkerCircle;
+KDChartParams::PolarMarkerStyle KDChartParams::stringToPolarMarkerStyle( const QString& string )
+{
+    return static_cast<KDChartParams::PolarMarkerStyle>(stringToMarkerStyle( string ));
 }
 
 
@@ -2848,15 +2988,9 @@ KDChartParams::PolarMarkerStyle KDChartParams::stringToPolarMarkerStyle( const Q
   \param string the string to convert
   \return the polar marker style enum value
   */
-KDChartParams::PolarMarkerStyle KDChartParams::stringToPolarMarkerStyleTr( const QString& string ) {
-    if( string == i18n( "Square" ) )
-        return PolarMarkerSquare;
-    else if( string == i18n( "Diamond" ) )
-        return PolarMarkerDiamond;
-    else if( string == i18n( "Circle" ) )
-        return PolarMarkerCircle;
-    else // default, should not happen
-        return PolarMarkerCircle;
+KDChartParams::PolarMarkerStyle KDChartParams::stringToPolarMarkerStyleTr( const QString& string )
+{
+    return static_cast<KDChartParams::PolarMarkerStyle>(stringToMarkerStyle( string ));
 }
 
 

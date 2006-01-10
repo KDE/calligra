@@ -45,17 +45,26 @@ class KDChartPolarPainter : public KDChartPainter
             KDChartTableDataBase* data,
             bool paint2nd,
             KDChartDataRegionList* regions = 0 );
-    void drawMarker( QPainter* painter,
+/*    void drawMarker( QPainter* painter,
             KDChartParams::PolarMarkerStyle style,
             const QColor& color, const QPoint& p,
             uint dataset, uint value, uint chart,
             double minSizeP1000,
-            QRegion & region );
+            QRegion & region );*/
     virtual QString fallbackLegendText( uint dataset ) const;
     virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
 
     private:
     QPoint polarToXY( int radius, int angle );
+    void paintAxisLabels( QPainter* painter,
+            QStringList& labelTexts,
+            double radiusDelta,
+            const QRect& position,
+            const QPoint& center,
+            double radiusPPU,
+            double& currentRadiusPPU,
+            const KDChartAxisParams & paraCircular,
+            double minSizeP1000 );
     void paintCircularAxisLabel( QPainter* painter,
             bool rotate,
             int txtAngle,

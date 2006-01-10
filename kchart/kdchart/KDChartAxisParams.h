@@ -35,11 +35,92 @@
 #include <qobject.h>
 #include <qtextstream.h>
 #include <qstringlist.h>
+#include <qdatetime.h>
+#include <qvariant.h>
 
 #include "KDChartGlobal.h"
-#include "KDChartData.h"
-#include <koffice_export.h>
+
 class KDChartParams;
+
+/**
+  Use this to specify that the axis label limits
+  are to be calculated automatically.
+
+  \sa setAxisValues
+  */
+#define KDCHART_AXIS_LABELS_AUTO_LIMIT QVariant( 140319.64 )
+// If you edit the above, also edit KD Chart.cpp
+
+/**
+  Use this to specify that the step-width from one label
+  to the other shall be calculated automatically.
+
+  \sa setAxisValues
+  */
+#define KDCHART_AXIS_LABELS_AUTO_DELTA 140319.64
+
+/**
+  Use this to specify that an automatically computed amount of
+  axis labels are to be skipped if there is not enough space
+  for displaying all of them.
+  This is usefull in case you have lots of entries in one dataset.
+
+  \sa setAxisValues
+  */
+#define KDCHART_AXIS_LABELS_AUTO_LEAVEOUT 14364
+
+/**
+  Use this to specify that date/time format to be used for
+  displaying the axis labels is to be determined automatically.
+  */
+#define KDCHART_AXIS_LABELS_AUTO_DATETIME_FORMAT "AUTO"
+
+/**
+  Use this to specify that the number of digits to be shown
+  on the axis labels behind the comma is to be calculated
+  automatically.
+
+  \sa setAxisValues
+  */
+#define KDCHART_AXIS_LABELS_AUTO_DIGITS 14364
+
+/**
+  Use this to reset the grid colour to its default value
+  for re-doing changes made by calling \c setAxisGridColor().
+
+  \sa setAxisGridColor
+  */
+
+
+#define KDCHART_DEFAULT_AXIS_GRID_COLOR QColor( 0xA0, 0xA0, 0xA0 )
+
+/**
+  Use this to specify that the width of the axis grid lines
+  shall be equal to the width of the axis line.
+
+  \sa setAxisGridLineWidth
+  */
+#define KDCHART_AXIS_GRID_AUTO_LINEWIDTH 14364
+
+/**
+  Use this to specify that the zero-line shall NOT be omitted
+  in case all of the data are grouped far away from zero.
+
+  \sa setAxisValues
+  */
+#define KDCHART_AXIS_IGNORE_EMPTY_INNER_SPAN 1
+
+/**
+  Use this to prevent \c setAxisValues from changing the current
+  setting of _axisMaxEmptyInnerSpan.
+
+  \sa setAxisValues
+  */
+
+#define KDCHART_DONT_CHANGE_EMPTY_INNER_SPAN_NOW -2
+
+
+
 
 /** \file KDChartAxisParams.h
   \brief Provide access to the chart axis parameters.
@@ -49,27 +130,25 @@ class KDChartParams;
 
 class KDCHART_EXPORT KDChartAxisParams : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+    Q_ENUMS(AxisType)
+    Q_ENUMS(AxisPos)
+    Q_ENUMS(AxisAreaMode)
+    Q_ENUMS(AxisCalcMode)
+    Q_ENUMS(LabelsFromDataRow)
+    Q_ENUMS(ValueScale)
+
+    // Neede by QSA
+    Q_ENUMS( PenStyle )
 
 public:
-
-    static KDChartData AXIS_LABELS_AUTO_LIMIT;
-    static const double AXIS_LABELS_AUTO_DELTA;
-    static const int AXIS_LABELS_AUTO_LEAVEOUT;
-    static const QString AXIS_LABELS_AUTO_DATETIME_FORMAT;
-    static const int AXIS_LABELS_AUTO_DIGITS;
-    static const QColor DEFAULT_AXIS_GRID_COLOR;
-    static const int AXIS_GRID_AUTO_LINEWIDTH;
-    static const int AXIS_IGNORE_EMPTY_INNER_SPAN;
-    static const int DONT_CHANGE_EMPTY_INNER_SPAN_NOW;
-
 
     enum AxisType { AxisTypeUnknown,
                     AxisTypeEAST,
                     AxisTypeNORTH,
                     AxisUP };
 
-
+public slots:  // PENDING(blackie) Go through this file and reorder, so all slots are in one section
     void setAxisType( AxisType axisType );
 
 
@@ -77,8 +156,10 @@ public:
     static QString axisTypeToString( AxisType type );
     static AxisType stringToAxisType( const QString& type );
 
-    // Achtung: Wird AxisPos erweitert, sind auch MAX_AXES
-    //          und AxisPosEND zu erhoehen
+public:
+
+    // Attention: In case you extent AxisPos, make sure to also
+    //            increase MAX_AXES and AxisPosEND.
     enum AxisPos { AxisPosSTART = 0,
 
                    AxisPosBottom         = 0,
@@ -103,19 +184,21 @@ public:
                    AxisPosTop2 = 9,
                    AxisPosRight2 = 10,
                    AxisPosLowerLeftEdge2 = 11,
-
                    // auch diese Markierung muss jeweils mitgepflegt werden,
                    // wenn AxisPos erweitert werden sollte.
                    AxisPosEND = 11 };
 
+public slots:
     static AxisPos basicAxisPos( uint pos );
     void setAxisVisible( bool axisVisible );
     bool axisVisible() const;
 
+public:
     enum AxisAreaMode { AxisAreaModeFixedSize,
                         AxisAreaModeAutoSize,
                         AxisAreaModeMinMaxSize };
 
+public slots:
     void setAxisAreaMode( AxisAreaMode axisAreaMode );
     AxisAreaMode axisAreaMode() const;
     static QString axisAreaModeToString( AxisAreaMode mode );
@@ -134,8 +217,10 @@ public:
                       int axisAreaMin,
                       int axisAreaMax );
 
+public:
     enum AxisCalcMode { AxisCalcLinear, AxisCalcLogarithmic };
 
+public slots:
     void setAxisCalcMode( AxisCalcMode axisCalcMode );
     AxisCalcMode axisCalcMode() const { return _axisCalcMode; }
     static QString axisCalcModeToString( AxisCalcMode mode );
@@ -155,6 +240,8 @@ public:
     void setAxisLineColor( QColor axisLineColor );
     QColor axisLineColor() const { return _axisLineColor; }
     // main grid:
+    void setAxisShowFractionalValuesDelimiters( bool axisShowFractValDelim );
+    bool axisShowFractionalValuesDelimiters() const { return _axisShowFractionalValuesDelimiters; }
     void setAxisShowGrid( bool axisShowGrid );
     bool axisShowGrid() const { return _axisShowGrid; }
     void setAxisGridStyle( PenStyle axisGridStyle );
@@ -186,6 +273,8 @@ public:
     bool axisLabelsFontUseRelSize() const { return _axisLabelsFontUseRelSize; }
     void setAxisLabelsFontRelSize( int axisLabelsFontRelSize );
     int axisLabelsFontRelSize() const { return _axisLabelsFontRelSize;  }
+    void setAxisLabelsFontMinSize( int axisLabelsFontMinSize ) { _axisLabelsFontMinSize = axisLabelsFontMinSize; }
+    int axisLabelsFontMinSize() const { return _axisLabelsFontMinSize;  }
     void setAxisLabelsDontShrinkFont( bool labelsDontShrinkFont ) { _axisLabelsDontShrinkFont = labelsDontShrinkFont; }
     bool axisLabelsDontShrinkFont() const { return _axisLabelsDontShrinkFont; }
     void setAxisLabelsDontAutoRotate( bool labelsDontAutoRotate ) { _axisLabelsDontAutoRotate = labelsDontAutoRotate; }
@@ -195,13 +284,35 @@ public:
     void setAxisLabelsColor( QColor axisLabelsColor );
     QColor axisLabelsColor() const { return _axisLabelsColor; }
 
+    void setAxisLabelsCalc( int divPow10 = 0,
+                            int digitsBehindComma = KDCHART_AXIS_LABELS_AUTO_DIGITS );
+    int axisLabelsDivPow10()          const { return _axisLabelsDivPow10; }
+    int axisLabelsDigitsBehindComma() const { return _axisDigitsBehindComma; }
+    void setAxisLabelsRadix( const QString& decimalPoint,
+                             const QString& thousandsPoint );
+    QString axisLabelsDecimalPoint()   const { return _axisLabelsDecimalPoint; }
+    QString axisLabelsThousandsPoint() const { return _axisLabelsThousandsPoint; }
+    void setAxisLabelsFormat( const QString& prefix = "",
+                              const QString& postfix = "",
+                              const int&     totalLen = 0,
+                              const QChar&   padFill = ' ',
+                              const bool&    blockAlign = true );
+    QString axisLabelsPrefix()         const { return _axisLabelsPrefix; }
+    QString axisLabelsPostfix()        const { return _axisLabelsPostfix; }
+    int axisLabelsTotalLen()           const { return _axisLabelsTotalLen; }
+    QChar axisLabelsPadFill()          const { return _axisLabelsPadFill; }
+    bool axisLabelsBlockAlign()        const { return _axisLabelsBlockAlign; }
+
+public:
     enum LabelsFromDataRow { LabelsFromDataRowYes,
                              LabelsFromDataRowNo,
                              LabelsFromDataRowGuess };
 
+public slots:
     static QString labelsFromDataRowToString( LabelsFromDataRow mode );
     static LabelsFromDataRow stringToLabelsFromDataRow( const QString& type );
 
+public:
     enum ValueScale { ValueScaleNumerical =   0, // have gaps here to allow specifying of additional scaling steps in between
                       ValueScaleSecond    =  20,
                       ValueScaleMinute    =  30,
@@ -212,30 +323,38 @@ public:
                       ValueScaleQuarter   =  80,
                       ValueScaleYear      =  90 };
 
+public slots:
     void setAxisValues( bool axisSteadyValueCalc = true,
-                        KDChartData axisValueStart = AXIS_LABELS_AUTO_LIMIT,
-                        KDChartData axisValueEnd = AXIS_LABELS_AUTO_LIMIT,
-                        double axisValueDelta = AXIS_LABELS_AUTO_DELTA,
-                        int axisDigitsBehindComma = AXIS_LABELS_AUTO_DIGITS,
-                        int axisMaxEmptyInnerSpan = DONT_CHANGE_EMPTY_INNER_SPAN_NOW,
+                        const QVariant& axisValueStart = KDCHART_AXIS_LABELS_AUTO_LIMIT,
+                        const QVariant& axisValueEnd = KDCHART_AXIS_LABELS_AUTO_LIMIT,
+                        double axisValueDelta = KDCHART_AXIS_LABELS_AUTO_DELTA,
+                        int axisDigitsBehindComma = KDCHART_AXIS_LABELS_AUTO_DIGITS,
+                        int axisMaxEmptyInnerSpan = KDCHART_DONT_CHANGE_EMPTY_INNER_SPAN_NOW,
                         LabelsFromDataRow takeLabelsFromDataRow = LabelsFromDataRowNo,
                         int labelTextsDataRow = 0,
                         QStringList* axisLabelStringList = 0,
                         QStringList* axisShortLabelsStringList = 0,
-                        int axisValueLeaveOut = AXIS_LABELS_AUTO_LEAVEOUT,
+                        int axisValueLeaveOut = KDCHART_AXIS_LABELS_AUTO_LEAVEOUT,
                         ValueScale axisValueDeltaScale = ValueScaleNumerical );
 
 
-    void setAxisValueStart( const KDChartData axisValueStart ) { _axisValueStart = axisValueStart; }
-    KDChartData axisValueStart() const { return _axisValueStart; }
-    void setAxisValueEnd( const KDChartData axisValueEnd ) { _axisValueEnd = axisValueEnd; }
-    KDChartData axisValueEnd() const { return _axisValueEnd; }
+    void setAxisValueStartIsExact( bool isExactValue=true ) { _axisValueStartIsExact = isExactValue; }
+    bool axisValueStartIsExact() const { return _axisValueStartIsExact; }
+    void setAxisValueStart( const QVariant& axisValueStart ) { _axisValueStart = axisValueStart; }
+    QVariant axisValueStart() const { return _axisValueStart; }
+  void setAxisValueEnd( const QVariant& axisValueEnd ) {_axisValueEnd = axisValueEnd; }
+    QVariant axisValueEnd() const { return _axisValueEnd; }
     void setAxisValueDelta( const double axisValueDelta,
                             ValueScale scale = ValueScaleNumerical );
     double axisValueDelta() const { return _axisValueDelta; }
     ValueScale axisValueDeltaScale() const { return _axisValueDeltaScale; }
     void setAxisValueLeaveOut( const int leaveOut ) { _axisValueLeaveOut = leaveOut; }
     int axisValueLeaveOut() const { return _axisValueLeaveOut; }
+    void setAxisValuesDecreasing( bool valuesDecreasing = true )
+    {
+        _axisValuesDecreasing = valuesDecreasing;
+    }
+    bool axisValuesDecreasing() const { return _axisValuesDecreasing; }
     void setTrueAxisDeltaPixels( double nDeltaPixels ) { _trueAxisDeltaPixels = nDeltaPixels; }
     double trueAxisDeltaPixels() const { return _trueAxisDeltaPixels; }
     void setTrueAxisLowHighDelta( double nLow, double nHigh, double nDelta );
@@ -280,25 +399,6 @@ public:
     void setAxisLabelTexts( const QStringList* axisLabelTexts );
     void setAxisLabelTextsDirty( bool axisLabelTextsDirty ) { _axisLabelTextsDirty = axisLabelTextsDirty; }
     bool axisLabelTextsDirty() const { return _axisLabelTextsDirty; }
-    void setAxisLabelsCalc( int divPow10 = 0,
-                            int digitsBehindComma = AXIS_LABELS_AUTO_DIGITS );
-    int axisLabelsDivPow10()          const { return _axisLabelsDivPow10; }
-    int axisLabelsDigitsBehindComma() const { return _axisDigitsBehindComma; }
-    void setAxisLabelsRadix( const QString& decimalPoint,
-                             const QString& thousandsPoint );
-    QString axisLabelsDecimalPoint()   const { return _axisLabelsDecimalPoint; }
-    QString axisLabelsThousandsPoint() const { return _axisLabelsThousandsPoint; }
-    void setAxisLabelsFormat( const QString& prefix = "",
-                              const QString& postfix = "",
-                              const int&     totalLen = 0,
-                              const QChar&   padFill = ' ',
-                              const bool&    blockAlign = true );
-    QString axisLabelsPrefix()         const { return _axisLabelsPrefix; }
-    QString axisLabelsPostfix()        const { return _axisLabelsPostfix; }
-    int axisLabelsTotalLen()           const { return _axisLabelsTotalLen; }
-    QChar axisLabelsPadFill()          const { return _axisLabelsPadFill; }
-    bool axisLabelsBlockAlign()        const { return _axisLabelsBlockAlign; }
-
     void setAxisFirstLabelText( const QString& axisFirstLabelText = QString() );
     void setAxisLastLabelText(  const QString& axisLastLabelText  = QString() );
     QString axisFirstLabelText() const { return _axisFirstLabelText; }
@@ -307,9 +407,10 @@ public:
     bool hasAxisLastLabelText()  const { return !_axisLastLabelText.isNull(); }
     void setAxisSteadyValueCalc( bool axisSteadyValueCalc ) { _axisSteadyValueCalc = axisSteadyValueCalc; }
     bool axisSteadyValueCalc() const { return _axisSteadyValueCalc; }
+
+public:
     KDChartAxisParams();
     virtual ~KDChartAxisParams();
-    KDChartAxisParams( const KDChartAxisParams& R ) : QObject() { deepCopy( *this, R ); }
     KDChartAxisParams& operator=( const KDChartAxisParams& R );
     static void deepCopy( KDChartAxisParams& D, const KDChartAxisParams& R );
     friend QTextStream& operator<<( QTextStream& s, const KDChartParams& p );
@@ -340,6 +441,7 @@ private:
     int _axisTrueLineWidth;
     QColor _axisLineColor;
 
+    bool     _axisShowFractionalValuesDelimiters;
     bool     _axisShowGrid;
     QColor   _axisGridColor;
     int      _axisGridLineWidth;
@@ -355,16 +457,20 @@ private:
     QFont _axisLabelsFont;
     bool _axisLabelsFontUseRelSize;
     int _axisLabelsFontRelSize;
+    int _axisLabelsFontMinSize;
     bool _axisLabelsDontShrinkFont;
     bool _axisLabelsDontAutoRotate;
     int _axisLabelsRotation;
     QColor _axisLabelsColor;
-    bool _axisSteadyValueCalc;
-    KDChartData _axisValueStart;
-    KDChartData _axisValueEnd;
-    double _axisValueDelta;
+
+    bool     _axisSteadyValueCalc;
+    bool     _axisValueStartIsExact;
+    QVariant _axisValueStart;
+    QVariant _axisValueEnd;
+    double   _axisValueDelta;
     ValueScale _axisValueDeltaScale;
     int _axisValueLeaveOut;
+    bool _axisValuesDecreasing;
     double _trueAxisDeltaPixels;
     double _trueLow;
     double _trueHigh;

@@ -34,8 +34,6 @@
 
 #include <stdlib.h>
 
-#include <klocale.h>
-
 /**
   \class KDChartHiLoPainter KDChartHiLoPainter.h
 
@@ -79,7 +77,7 @@ KDChartHiLoPainter::~KDChartHiLoPainter()
   */
 QString KDChartHiLoPainter::fallbackLegendText( uint dataset ) const
 {
-    return i18n( "Value %1" ).arg( dataset + 1 );
+    return QObject::tr( "Value " ) + QString::number( dataset + 1 );
 }
 
 
@@ -175,16 +173,20 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
             ++dataset ) {
         // The first and the second col are always high and low; we sort them
         // accordingly.
+        QVariant valueA;
+        QVariant valueB;
         if( dataset >= datasetStart &&
-                dataset <= datasetEnd &&
-                data->cell( dataset, 0 ).isDouble() &&
-                data->cell( dataset, 1 ).isDouble() ) {
-            double cellValue1 = data->cell( dataset, 0 ).doubleValue();
-            double cellValue2 = data->cell( dataset, 1 ).doubleValue();
-            double lowValue = QMIN( cellValue1, cellValue2 );
-            double highValue = QMAX( cellValue1, cellValue2 );
-            double lowDrawValue = lowValue * pixelsPerUnit;
-            double highDrawValue = highValue * pixelsPerUnit;
+            dataset <= datasetEnd &&
+            data->cellCoord( dataset, 0, valueA, 1 ) &&
+            data->cellCoord( dataset, 1, valueB, 1 ) &&
+            QVariant::Double == valueA.type() &&
+            QVariant::Double == valueB.type() ){
+            const double cellValue1 = valueA.toDouble();
+            const double cellValue2 = valueB.toDouble();
+            const double lowValue  = QMIN( cellValue1, cellValue2 );
+            const double highValue = QMAX( cellValue1, cellValue2 );
+            const double lowDrawValue = lowValue * pixelsPerUnit;
+            const double highDrawValue = highValue * pixelsPerUnit;
 
             painter->setPen( QPen( params()->dataColor( dataset ),
                              nLineWidth ) );
@@ -209,9 +211,10 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
             // if we have an open/close chart, show the open value
             if( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) {
                 // Only do this if there is a value in the third col.
-                if( data->cell( dataset, 2 ).isDouble() ) {
+                if( data->cellCoord( dataset, 2, valueA, 1 ) &&
+                    QVariant::Double == valueA.type() ) {
                     hasOpen = true;
-                    openValue = data->cell( dataset, 2 ).doubleValue();
+                    openValue = valueA.toDouble();
                     openDrawValue = openValue * pixelsPerUnit;
                     painter->drawLine( xpos - openCloseTickLength,
                             static_cast<int>( zeroXAxisI - openDrawValue ),
@@ -225,13 +228,15 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
             // corresponding column (2 for HiLoClose, 3 for
             // HiLoOpenClose).
             if( ( params()->hiLoChartSubType() == KDChartParams::HiLoClose &&
-                  data->cell( dataset, 2 ).isDouble() ) ||
+                  data->cellCoord( dataset, 2, valueA, 1 ) &&
+                  QVariant::Double == valueA.type() ) ||
                 ( params()->hiLoChartSubType() == KDChartParams::HiLoOpenClose &&
-                  data->cell( dataset, 3 ).isDouble() ) ) {
+                  data->cellCoord( dataset, 3, valueB, 1 ) &&
+                  QVariant::Double == valueB.type() ) ) {
                 hasClose = true;
-                closeValue = ( params()->hiLoChartSubType() == KDChartParams::HiLoClose ) ?
-                    data->cell( dataset, 2 ).doubleValue() :
-                    data->cell( dataset, 3 ).doubleValue();
+                closeValue = ( params()->hiLoChartSubType() == KDChartParams::HiLoClose )
+                           ? valueA.toDouble() 
+                           : valueB.toDouble();
                 closeDrawValue = closeValue * pixelsPerUnit;
                 painter->drawLine( xpos,
                         static_cast<int>( zeroXAxisI - closeDrawValue ),
@@ -249,7 +254,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                                 * averageValueP1000 );
                     theFont.setPointSizeFloat( nTxtHeight );
                 }
-                KDChartTextPiece lowText( QString::number( lowValue ),
+                KDChartTextPiece lowText( painter, QString::number( lowValue ),
                         theFont );
                 int width = lowText.width();
                 int height = lowText.height();
@@ -291,7 +296,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                                 * averageValueP1000 );
                     theFont.setPointSizeFloat( nTxtHeight );
                 }
-                KDChartTextPiece highText( QString::number( highValue ),
+                KDChartTextPiece highText( painter, QString::number( highValue ),
                         theFont );
                 int width = highText.width();
                 int height = highText.height();
@@ -332,7 +337,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                                 * averageValueP1000 );
                     theFont.setPointSizeFloat( nTxtHeight );
                 }
-                KDChartTextPiece openText( QString::number( openValue ),
+                KDChartTextPiece openText( painter, QString::number( openValue ),
                         theFont );
                 int width = openText.width();
                 int height = openText.height();
@@ -361,7 +366,7 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
                                 * averageValueP1000 );
                     theFont.setPointSizeFloat( nTxtHeight );
                 }
-                KDChartTextPiece closeText( QString::number( closeValue ),
+                KDChartTextPiece closeText( painter, QString::number( closeValue ),
                         theFont );
                 //int width = closeText.width();
                 int height = closeText.height();

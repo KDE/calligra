@@ -1,48 +1,39 @@
 /* -*- Mode: C++ -*-
-   KDChart - a multi-platform charting engine
-   */
+   KD Tools - a set of useful widgets for Qt
+*/
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
- **
- ** This file is part of the KDChart library.
- **
- ** This file may be distributed and/or modified under the terms of the
- ** GNU General Public License version 2 as published by the Free Software
- ** Foundation and appearing in the file LICENSE.GPL included in the
- ** packaging of this file.
- **
- ** Licensees holding valid commercial KDChart licenses may use this file in
- ** accordance with the KDChart Commercial License Agreement provided with
- ** the Software.
- **
- ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
- **
- ** See http://www.klaralvdalens-datakonsult.se/?page=products for
- **   information about KDChart Commercial License Agreements.
- **
- ** Contact info@klaralvdalens-datakonsult.se if any conditions of this
- ** licensing are not clear to you.
- **
- **********************************************************************/
+** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+**
+** This file is part of the KD Tools library.
+**
+** This file may be distributed and/or modified under the terms of the
+** GNU General Public License version 2 as published by the Free Software
+** Foundation and appearing in the file LICENSE.GPL included in the
+** packaging of this file.
+**
+** Licensees holding valid commercial KD Tools licenses may use this file in
+** accordance with the KD Tools Commercial License Agreement provided with
+** the Software.
+**
+** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+**
+** See http://www.klaralvdalens-datakonsult.se/?page=products for
+**   information about KD Tools Commercial License Agreements.
+**
+** Contact info@klaralvdalens-datakonsult.se if any conditions of this
+** licensing are not clear to you.
+**
+**********************************************************************/
+
 #include <qpainter.h>
 #include <qbrush.h>
 
 #include <KDFrame.h>
 #include <KDFrameProfileSection.h>
 #include <KDXMLTools.h>
-#ifndef KDCHART_MASTER_CVS
-#include "KDFrame.moc"
-#endif
 
-// internal note:
-//
-// Yes, the following statement appears in KDChartParams.h as well.
-//
-// The reason is that KDFrame is a class completely separated
-// from the rest of the KDChart project.
-//
 #if defined( SUN7 ) || defined( _SGIAPI )
 #include <math.h>
 #else
@@ -55,7 +46,7 @@
 
 KDFrame::~KDFrame()
 {
-    // Intentionally left blank for now.
+    _profileSections.clear(); // is ignored if auto-deletion is disabled
 }
 
 KDFrame::KDFrameCorner::~KDFrameCorner()
@@ -119,22 +110,25 @@ void KDFrame::paintBackground( QPainter& painter, const QRect& innerRect ) const
 
 
 void KDFrame::paintEdges( QPainter& painter, const QRect& innerRect ) const
-{
+    {
 
 /*
     Note: The following code OF COURSE is only dummy-code and will be replaced.
-          At the moment it is used to draw a simple rectangular frame.
+
+          At the moment it is used to draw the simple frames which were set by
+          the setSimpleFrame() function.
 */
     if( !_topProfile.isEmpty() ){
-        KDFrameProfileSection* firstSect = _topProfile.getFirst();
-        if( firstSect ){
+
+        KDFrameProfileSection* section;
+        for ( section = ((KDFrameProfile)_topProfile).last(); section; section = ((KDFrameProfile)_topProfile).prev() ){
             const QPen   oldPen   = painter.pen();
             const QBrush oldBrush = painter.brush();
             QPen thePen;
-            thePen = firstSect->pen();
-            int penWidth = QMAX(thePen.width(), 1) * QMAX(firstSect->width(), 1);
+            thePen = section->pen();
+            int penWidth = QMAX(thePen.width(), 1) * QMAX(section->width(), 1);
 //qDebug("paintEdges: thePen.width() = %i", thePen.width());
-//qDebug("paintEdges: firstSect->width() = %i", firstSect->width());
+//qDebug("paintEdges: section->width() = %i", section->width());
 //qDebug("paintEdges: penWidth = %i", penWidth);
             thePen.setWidth( penWidth );
             painter.setPen( thePen );
@@ -152,6 +146,9 @@ void KDFrame::paintEdges( QPainter& painter, const QRect& innerRect ) const
 
 void KDFrame::paintCorners( QPainter& /*painter*/, const QRect& /*innerRect*/ ) const
 {
+    // At the moment nothing is done here since the setSimpleFrame() function
+    // does not allow specifying corners: all predefined frames have normal
+    // (default) corners.
     ;
 }
 
@@ -381,17 +378,17 @@ void KDFrame::setSimpleFrame( SimpleFrame frame,
                                     KDFrameProfileSection* newsection;
                                     newsection = new KDFrameProfileSection( KDFrameProfileSection::DirRaising,
                                             KDFrameProfileSection::CvtConvex,
-                                            lineWidth/2, pen );
+                                            lineWidth, pen );
                                     _profileSections.append( newsection );
                                     _topProfile.append( newsection );
                                     newsection =  new KDFrameProfileSection( KDFrameProfileSection::DirPlain,
                                             KDFrameProfileSection::CvtPlain,
-                                            lineWidth-2*(lineWidth/2), pen );
+                                            midLineWidth, pen );
                                     _profileSections.append( newsection );
                                     _topProfile.append( newsection );
                                     newsection = new KDFrameProfileSection( KDFrameProfileSection::DirSinking,
                                             KDFrameProfileSection::CvtConcave,
-                                            lineWidth/2, pen );
+                                            lineWidth, pen );
                                     _profileSections.append( newsection );
                                     _topProfile.append( newsection );
                                 }
@@ -479,10 +476,10 @@ bool KDFrame::readFrameNode( const QDomElement& element, KDFrame& frame )
 {
     bool ok = true;
     int tempShadowWidth;
-    CornerName tempCornerName;
+    CornerName tempCornerName=CornerTopLeft;
     QBrush tempBackground;
     QPixmap tempBackPixmap;
-    BackPixmapMode tempBackPixmapMode;
+    BackPixmapMode tempBackPixmapMode=PixStretched;
     QRect tempInnerRect;
     KDFrameProfile tempTopProfile, tempRightProfile,
     tempBottomProfile, tempLeftProfile;
@@ -585,7 +582,7 @@ bool KDFrame::KDFrameCorner::readFrameCornerNode( const QDomElement& element,
         KDFrameCorner& corner )
 {
     bool ok = true;
-    CornerStyle tempStyle;
+    CornerStyle tempStyle=CornerNormal;
     int tempWidth;
     KDFrameProfile tempProfile;
     QDomNode node = element.firstChild();

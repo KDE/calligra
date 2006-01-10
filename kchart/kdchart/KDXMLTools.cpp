@@ -27,7 +27,6 @@
  **
  **********************************************************************/
 #include "KDXMLTools.h"
-#include <qbrush.h>
 #include <qbuffer.h>
 #include <qimage.h>
 #include <zlib.h>
@@ -42,6 +41,18 @@ namespace KDXML {
         parent.appendChild( newElement );
         QDomText elementContent =
             doc.createTextNode( value ? "true" : "false" );
+        newElement.appendChild( elementContent );
+    }
+
+
+    void createOrientationNode( QDomDocument& doc, QDomNode& parent,
+            const QString& elementName, Qt::Orientation value )
+    {
+        QDomElement newElement =
+            doc.createElement( elementName );
+        parent.appendChild( newElement );
+        QDomText elementContent =
+            doc.createTextNode( (Qt::Vertical == value) ? "vertical" : "horizontal" );
         newElement.appendChild( elementContent );
     }
 
@@ -369,6 +380,19 @@ namespace KDXML {
     }
 
 
+    bool readOrientationNode( const QDomElement& element, Qt::Orientation& value )
+    {
+        if( element.text() == "vertical" ) {
+            value = Qt::Vertical;
+            return true;
+        } else if( element.text() == "horizontal" ) {
+            value = Qt::Horizontal;
+            return true;
+        } else
+            return false;
+    }
+
+
     bool readSizeNode( const QDomElement& element, QSize& value )
     {
         bool ok = false;
@@ -390,7 +414,7 @@ namespace KDXML {
     bool readColorNode( const QDomElement& element, QColor& value )
     {
         bool ok = true;
-        int red, green, blue;
+        int red=0, green=0, blue=0;
         if( element.hasAttribute( "Red" ) ) {
             bool redOk = false;
             red = element.attribute( "Red" ).toInt( &redOk );
@@ -418,7 +442,7 @@ namespace KDXML {
     {
         bool ok = true;
         QColor tempColor;
-        Qt::BrushStyle tempStyle;
+        Qt::BrushStyle tempStyle=Qt::SolidPattern;
         QPixmap tempPixmap;
         QDomNode node = element.firstChild();
         while( !node.isNull() ) {
@@ -524,7 +548,7 @@ namespace KDXML {
         bool ok = true;
         int tempWidth;
         QColor tempColor;
-        Qt::PenStyle tempStyle;
+        Qt::PenStyle tempStyle=Qt::SolidLine;
         QDomNode node = element.firstChild();
         while( !node.isNull() ) {
             QDomElement element = node.toElement();
@@ -666,7 +690,7 @@ namespace KDXML {
     bool readDateNode( const QDomElement& element, QDate& value )
     {
         bool ok = true;
-        int year, month, day;
+        int year=0, month=0, day=0;
         if( element.hasAttribute( "Year" ) ) {
             bool yearOk = false;
             year = element.attribute( "Year" ).toInt( &yearOk );
@@ -694,7 +718,7 @@ namespace KDXML {
     bool readTimeNode( const QDomElement& element, QTime& value )
     {
         bool ok = true;
-        int hour, minute, second, msec;
+        int hour=0, minute=0, second=0, msec=0;
         if( element.hasAttribute( "Hour" ) ) {
             bool hourOk = false;
             hour = element.attribute( "Hour" ).toInt( &hourOk );

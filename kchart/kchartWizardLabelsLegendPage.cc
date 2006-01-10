@@ -25,8 +25,10 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
     ytitle2=true;
 #endif
 
-    KDChartAxisParams leftparams( _chart->params()->axisParams( KDChartAxisParams::AxisPosLeft ) );
-    KDChartAxisParams bottomparams( _chart->params()->axisParams( KDChartAxisParams::AxisPosBottom ) );
+    KDChartAxisParams leftparams;
+    leftparams = _chart->params()->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams bottomparams;
+    bottomparams = _chart->params()->axisParams( KDChartAxisParams::AxisPosBottom );
     x_color=bottomparams.axisLineColor();
     y_color=leftparams.axisLineColor();
     xlabel=bottomparams.axisLabelsFont();
@@ -309,8 +311,10 @@ void KChartWizardLabelsLegendPage::apply(  )
     _chart->params()->setLegendTextColor(_legendTextColor);
     _chart->params()->setLegendFont( _legendTextFont,true);
 
-    KDChartAxisParams leftparams = _chart->params()->axisParams( KDChartAxisParams::AxisPosLeft );
-    KDChartAxisParams bottomparams = _chart->params()->axisParams( KDChartAxisParams::AxisPosBottom );
+    KDChartAxisParams leftparams;
+    leftparams   = _chart->params()->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams bottomparams;
+    bottomparams = _chart->params()->axisParams( KDChartAxisParams::AxisPosBottom );
     if( x_color.isValid() )
         bottomparams.setAxisLineColor( x_color );
     if( y_color.isValid() )

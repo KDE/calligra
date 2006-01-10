@@ -38,7 +38,6 @@
 // - Implement a QValueVector interface
 
 #include "KDChartBaseSeries.h"
-#include "KDChartData.h"
 #if COMPAT_QT_VERSION >= 0x030000
 #include <qvaluevector.h>
 #else
@@ -48,7 +47,7 @@ class KDChartSeriesCollection;
 
 
 
-class KDChartVectorSeries : public KDChartBaseSeries, 
+class KDCHART_EXPORT KDChartVectorSeries : public KDChartBaseSeries, 
 #if COMPAT_QT_VERSION >= 0x030000
     public QValueVector<KDChartData>
 #else

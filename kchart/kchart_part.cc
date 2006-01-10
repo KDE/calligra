@@ -11,6 +11,7 @@
 #include "kchartWizard.h"
 #include "kchart_params.h"
 #include "kdchart/KDChart.h"
+#include "kdchart/KDChartTable.h"
 
 #include <koTemplateChooseDia.h>
 #include <kodom.h>
@@ -203,9 +204,10 @@ void KChartPart::generateBarChartTemplate()
         m_currentData.setUsedCols( 4 );
         for (row = 0; row < 4; row++) {
             for (col = 0; col < 4; col++) {
-                KoChart::Value t( (double) row + col );
+                // line commented out by khz: KoChart::Value t( (double) row + col );
                 // kdDebug(35001) << "Set cell for " << row << "," << col << endl;
-                m_currentData.setCell(row, col, t);
+                // line commented out by khz: m_currentData.setCell(row, col, t);
+                m_currentData.setCell(row, col, static_cast <double> (row + col));
 
 		// Fill column label, but only on the first iteration.
 		if (row == 0) {
@@ -236,7 +238,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // If params is 0, initDoc() has not been called.
     Q_ASSERT( m_params != 0 );
 
-    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    KDChartAxisParams  bottomparms;
+    bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
     // Handle data in rows or columns.
     //
@@ -288,12 +291,18 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	m_displayData.expand(m_currentData.usedCols(),
 			     m_currentData.usedRows());
 
-	// Copy data and transpose it.
-	for (uint row = 0; row < m_currentData.usedCols(); row++) {
-	    for (uint col = 0; col < m_currentData.usedRows(); col++) {
-		m_displayData.setCell(row, col, m_currentData.cell(col, row));
-	    }
-	}
+          // Copy data and transpose it.
+          QVariant value1;
+          QVariant value2;
+          int prop;
+          for (uint row = 0; row < m_currentData.usedCols(); row++) {
+              for (uint col = 0; col < m_currentData.usedRows(); col++) {
+                if( m_currentData.cellContent( col, row, value1, value2, prop ) ){
+                  m_displayData.setCell(row, col, value1, value2);
+                  m_displayData.setProp(row, col, prop);
+                }
+              }
+          }
 
 	// Set X axis labels from row headers.
 	for ( uint row = 0; row < m_currentData.rows(); row++ ) {
@@ -322,18 +331,18 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
 	    // Calculate min and max for this row.
 	    for (uint col = 0; col < tmpData.usedCols(); col++) {
-		double  data = tmpData.cell(row, col).doubleValue();
+		double  data = tmpData.cellVal(row, col).toDouble();
 
 		if (data < minVal)
 		    minVal = data;
 		if (data > maxVal)
 		    maxVal = data;
 	    }
-	    m_displayData.setCell(row, 0, KoChart::Value(minVal)); // min
-	    m_displayData.setCell(row, 1, KoChart::Value(maxVal)); // max
-	    m_displayData.setCell(row, 2, tmpData.cell(row, 0));   // open
+	    m_displayData.setCell(row, 0, minVal); // min
+	    m_displayData.setCell(row, 1, maxVal); // max
+	    m_displayData.setCell(row, 2, tmpData.cellVal(row, 0).toDouble());   // open
 	    m_displayData.setCell(row, 3,                          // close
-				  tmpData.cell(row, tmpData.usedCols() - 1));
+				  tmpData.cellVal(row, tmpData.usedCols() - 1).toDouble());
 	}
 
 	// Set the correct X axis labels and legend.
@@ -386,12 +395,12 @@ void KChartPart::setData( const KoChart::Data& data )
     //m_currentData = data;
 
     // Does the top/left cell contain a string?
-    bool isStringTopLeft = data.cell( 0, 0 ).isString();
+    bool isStringTopLeft = data.cellVal( 0, 0 ).type() == QVariant::String;
 
     // Does the first row (without first cell) contain only strings?
     bool isStringFirstRow = TRUE;
     for ( uint col = 1; isStringFirstRow && col < data.cols(); col++ ) {
-        isStringFirstRow = data.cell( 0, col ).isString();
+        isStringFirstRow = data.cellVal( 0, col ).type() == QVariant::String;
     }
 
     // Just in case, we only have 1 row, we never use it for label text.
@@ -402,7 +411,7 @@ void KChartPart::setData( const KoChart::Data& data )
     // Does the first column (without first cell) contain only strings?
     bool isStringFirstCol = TRUE;
     for ( uint row = 1; isStringFirstCol && row < data.rows(); row++ ) {
-        isStringFirstCol = data.cell( row, 0 ).isString();
+        isStringFirstCol = data.cellVal( row, 0 ).type() == QVariant::String;
     }
 
     // Just in case, we only have 1 column, we never use it for axis
@@ -445,7 +454,7 @@ void KChartPart::doSetData( const KoChart::Data&  data,
     m_rowLabels.clear();
     if ( hasColHeader ) {
         for( row = rowStart; row < data.rows(); row++ )
-	    m_rowLabels << data.cell( row, 0 ).stringValue();
+	    m_rowLabels << data.cellVal( row, 0 ).toString();
     }
     else
         m_params->setLegendSource( KDChartParams::LegendAutomatic );
@@ -454,7 +463,7 @@ void KChartPart::doSetData( const KoChart::Data&  data,
     m_colLabels.clear();
     if ( hasRowHeader ) {
         for( col = colStart; col < data.cols(); col++ )
-	    m_colLabels << data.cell( 0, col ).stringValue();
+	    m_colLabels << data.cellVal( 0, col ).toString();
     }
 
     // If there is a row header and/or a column header, then generate
@@ -466,7 +475,7 @@ void KChartPart::doSetData( const KoChart::Data&  data,
         for ( col = colStart; col < data.cols(); col++ ) {
             for ( row = rowStart; row < data.rows(); row++ ) {
                 matrix.setCell( row - rowStart, col - colStart,
-				KoChart::Value( data.cell( row, col ).doubleValue() ) );
+                  data.cellVal( row, col ).toDouble() );
             }
         }
         m_currentData = matrix;
@@ -511,8 +520,8 @@ void KChartPart::setChartDefaults()
   //
   // Settings for the Y axis.
   //
-  KDChartAxisParams  yAxis
-    = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+  KDChartAxisParams  yAxis;
+  yAxis = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
 
   // decimal symbol and thousands separator
   yAxis.setAxisLabelsRadix( KGlobal::locale()->decimalSymbol(),
@@ -523,8 +532,8 @@ void KChartPart::setChartDefaults()
   //
   // Settings for the X axis.
   //
-  KDChartAxisParams  xAxis
-    = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+  KDChartAxisParams  xAxis;
+  xAxis = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
   // These two shouldn't be necessary to set.
   xAxis.setAxisFirstLabelText();
@@ -588,9 +597,12 @@ void KChartPart::loadConfig( KConfig *conf )
     m_params->setThreeDBarAngle( conf->readNumEntry( "_3d_angle",
 						     m_params->threeDBarAngle() ) );
 
-    KDChartAxisParams leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
-    KDChartAxisParams rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
-    KDChartAxisParams bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    KDChartAxisParams leftparams;
+    leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams rightparams;
+    rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams bottomparams;
+    bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
     bottomparams.setAxisLineColor( conf->readColorEntry( "XTitleColor", 0 ) );
     leftparams.setAxisLineColor( conf->readColorEntry( "YTitleColor", 0 ) );
@@ -684,9 +696,12 @@ void KChartPart::saveConfig( KConfig *conf )
     conf->writeEntry( "_3d_depth", m_params->threeDBarDepth() );
     conf->writeEntry( "_3d_angle", m_params->threeDBarAngle() );
 
-    KDChartAxisParams leftparams   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
-    KDChartAxisParams rightparams  = m_params->axisParams( KDChartAxisParams::AxisPosRight );
-    KDChartAxisParams bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    KDChartAxisParams leftparams;
+    leftparams   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams rightparams;
+    rightparams  = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams bottomparams;
+    bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
     conf->writeEntry( "LineColor",    m_params->outlineDataColor() );
     conf->writeEntry( "XTitleColor",  bottomparams.axisLineColor() );
     conf->writeEntry( "YTitleColor",  leftparams.axisLineColor() );
@@ -775,12 +790,12 @@ QDomDocument KChartPart::saveXML()
             QDomElement e = doc.createElement( "cell" );
             data.appendChild( e );
             QString valType;
-            KoChart::Value & cell( m_currentData.cell( i,j ) );
-            switch ( cell.valueType() ) {
-                case KoChart::Value::NoValue:  valType = "NoValue";   break;
-                case KoChart::Value::String:   valType = "String";    break;
-                case KoChart::Value::Double:   valType = "Double";    break;
-                case KoChart::Value::DateTime: valType = "DateTime";  break;
+            QVariant value( m_currentData.cellVal( i,j ) );
+            switch ( value.type() ) {
+                case QVariant::Invalid:  valType = "NoValue";   break;
+                case QVariant::String:   valType = "String";    break;
+                case QVariant::Double:   valType = "Double";    break;
+                case QVariant::DateTime: valType = "DateTime";  break;
                 default: {
                     valType = "(unknown)";
                     kdDebug(35001) << "ERROR: cell " << i << "," << j
@@ -791,16 +806,16 @@ QDomDocument KChartPart::saveXML()
             e.setAttribute( "valType", valType );
             //kdDebug(35001) << "      cell " << i << "," << j
 	    //	   << " saved with type '" << valType << "'." << endl;
-            switch ( cell.valueType() ) {
-                case KoChart::Value::String:  e.setAttribute( "value", cell.stringValue() );
+            switch ( value.type() ) {
+                case QVariant::String:  e.setAttribute( "value", value.toString() );
                               break;
-                case KoChart::Value::Double:  e.setAttribute( "value", QString::number( cell.doubleValue() ) );
+                case QVariant::Double:  e.setAttribute( "value", QString::number( value.toDouble() ) );
                               break;
-                case KoChart::Value::DateTime:e.setAttribute( "value", "" );
+                case QVariant::DateTime:e.setAttribute( "value", "" );
                               break;
                 default: {
                     e.setAttribute( "value", "" );
-                    if( KoChart::Value::NoValue != cell.valueType() )
+                    if( QVariant::Invalid != value.type() )
                         kdDebug(35001) << "ERROR: cell " << i << "," << j
 				       << " has unknown type." << endl;
                 }
@@ -1003,9 +1018,9 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 
     // If everything is OK, then get the headers from the KDChart parameters.
     if (result) {
-	QStringList        legendLabels;
-	KDChartAxisParams  params
-	    = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+        QStringList        legendLabels;
+        KDChartAxisParams  params;
+        params = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
 	// Get the legend.
 	QString  str;
@@ -1123,30 +1138,29 @@ bool KChartPart::loadData( const QDomDocument& doc,
             QDomElement e = n.toElement();
             if ( !e.isNull() && e.tagName() == "cell" ) {
                 // add the cell to the corresponding place...
-                KoChart::Value t;
+                QVariant t;
                 if ( e.hasAttribute("value") && e.hasAttribute("valType") ) {
                     QString valueType = e.attribute("valType").lower();
                     if ( "string" == valueType ) {
-                        QString strVal = e.attribute("value");
-                        t = KoChart::Value( strVal );
+                        t = e.attribute("value");
                     }
                     else if ( "double" == valueType ) {
                         bool bOk;
                         double val = e.attribute("value").toDouble(&bOk);
                         if ( !bOk )
                             val = 0.0;
-                        t = KoChart::Value( val );
+                        t = val;
                     /*
                     } else if ( "datetime" == valueType ) {
                         t = . . .
                     */
                     } else {
-                        t.clearValue();
+                        t.clear();
                         if ( "novalue" != valueType )
                             kdDebug(35001) << "ERROR: cell " << i << "," << j << " has unknown type '" << valueType << "'." << endl;
                     }
                 } else
-                    t.clearValue();
+                    t.clear();
 
                 m_currentData.setCell(i,j, t );
 

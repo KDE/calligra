@@ -34,8 +34,6 @@
 
 #include <stdlib.h>
 
-#include <klocale.h>
-
 #define DEGTORAD(d) (d)*M_PI/180
 
 /**
@@ -189,11 +187,13 @@ void KDChartRingPainter::paintData( QPainter* painter,
         //int sectorsPerValueI = static_cast<int>( sectorsPerValue );
         double currentstartpos = (double)params()->ringStart() * 16.0;
         // Loop through all the values; each value is one piece on the ring.
+        QVariant vValY;
         for( int value = 0; value < _numValues; value++ ) {
             // is there anything at all at this value?
             double cellValue = 0.0;
-            if( data->cell( dataset, value ).isDouble() ) {
-                cellValue = fabs( data->cell( dataset, value ).doubleValue() );
+            if( data->cellCoord( dataset, value, vValY, 1 ) &&
+                QVariant::Double == vValY.type() ){
+                cellValue = fabs( vValY.toDouble() );
                 // Explosion: Only explode if explosion is turned on generally
                 // and we are on the first ring. Besides, if there is a list
                 // of explodeable values, the current value must be on this
@@ -294,10 +294,10 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
 
     painter->drawPolygon( innerArc );
     if ( regions /* && ( innerArc.size() > 2 )*/ ) {
-        KDChartDataRegion* datReg = new KDChartDataRegion( QRegion( innerArc ),
-                dataset,
-                value,
-                chart );
+        KDChartDataRegion* datReg = new KDChartDataRegion( dataset,
+                                                           value,
+                                                           chart,
+                                                           innerArc );
 
         const int aA = static_cast<int>( startAngle );
         const int aM = static_cast<int>( startAngle + angles / 2.0 );
@@ -381,7 +381,7 @@ void KDChartRingPainter::drawOneSegment( QPainter* painter,
   */
 QString KDChartRingPainter::fallbackLegendText( uint dataset ) const
 {
-    return i18n( "Item %1" ).arg( dataset + 1 );
+    return QObject::tr( "Item " ) + QString::number( dataset + 1 );
 }
 
 

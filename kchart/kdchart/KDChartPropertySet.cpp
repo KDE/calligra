@@ -28,7 +28,6 @@
  **********************************************************************/
 #include "KDChartRingPainter.h"
 #include "KDChartParams.h"
-#include "KDXMLTools.h"
 
 #include <qpainter.h>
 #include <qvaluestack.h>
@@ -41,32 +40,76 @@
   \brief Implementation of property settings of a single KDChart data cell.
   */
 
-/**
-  Copy Constructor.
-  */
-KDChartPropertySet& KDChartPropertySet::operator=( const KDChartPropertySet& R )
+void KDChartPropertySet::deepCopy( const KDChartPropertySet* source )
 {
-    mOwnID = R.mOwnID;
-    mName  = R.mName;
-    mIdShowBar           = R.mIdShowBar;           mShowBar           = R.mShowBar;
-    mIdBarColor          = R.mIdBarColor;          mBarColor          = R.mBarColor;
-    mIdLineWidth         = R.mIdLineWidth;         mLineWidth         = R.mLineWidth;
-    mIdLineColor         = R.mIdLineColor;         mLineColor         = R.mLineColor;
-    mIdLineStyle         = R.mIdLineStyle;         mLineStyle         = R.mLineStyle;
-    mIdShowMarker        = R.mIdShowMarker;        mShowMarker        = R.mShowMarker;
-    mIdExtraLinesAlign   = R.mIdExtraLinesAlign;   mExtraLinesAlign   = R.mExtraLinesAlign;
-    mIdExtraLinesInFront = R.mIdExtraLinesInFront; mExtraLinesInFront = R.mExtraLinesInFront;
-    mIdExtraLinesLength  = R.mIdExtraLinesLength;  mExtraLinesLength  = R.mExtraLinesLength;
-    mIdExtraLinesWidth   = R.mIdExtraLinesWidth;   mExtraLinesWidth   = R.mExtraLinesWidth;
-    mIdExtraLinesColor   = R.mIdExtraLinesColor;   mExtraLinesColor   = R.mExtraLinesColor;
-    mIdExtraLinesStyle   = R.mIdExtraLinesStyle;   mExtraLinesStyle   = R.mExtraLinesStyle;
-    mIdExtraMarkersAlign = R.mIdExtraMarkersAlign; mExtraMarkersAlign = R.mExtraMarkersAlign;
-    mIdExtraMarkersSize  = R.mIdExtraMarkersSize;  mExtraMarkersSize  = R.mExtraMarkersSize;
-    mIdExtraMarkersColor = R.mIdExtraMarkersColor; mExtraMarkersColor = R.mExtraMarkersColor;
-    mIdExtraMarkersStyle = R.mIdExtraMarkersStyle; mExtraMarkersStyle = R.mExtraMarkersStyle;
-    return *this;
+    if( !source || this == source )
+        return;
+    mOwnID = source->mOwnID;
+    mName  = source->mName;
+    mIdShowBar           = source->mIdShowBar;           mShowBar           = source->mShowBar;
+    mIdBarColor          = source->mIdBarColor;          mBarColor          = source->mBarColor;
+    mIdAreaBrush         = source->mIdAreaBrush;         mAreaBrush         = source->mAreaBrush;
+    mIdLineWidth         = source->mIdLineWidth;         mLineWidth         = source->mLineWidth;
+    mIdLineColor         = source->mIdLineColor;         mLineColor         = source->mLineColor;
+    mIdLineStyle         = source->mIdLineStyle;         mLineStyle         = source->mLineStyle;
+    mIdShowMarker        = source->mIdShowMarker;        mShowMarker        = source->mShowMarker;
+    mIdMarkerSize        = source->mIdMarkerSize;        mMarkerSize        = source->mMarkerSize;
+    mIdMarkerColor       = source->mIdMarkerColor;       mMarkerColor       = source->mMarkerColor;
+    mIdMarkerStyle       = source->mIdMarkerStyle;       mMarkerStyle       = source->mMarkerStyle;
+    mIdMarkerAlign       = source->mIdMarkerAlign;       mMarkerAlign       = source->mMarkerAlign;
+    mIdExtraLinesAlign   = source->mIdExtraLinesAlign;   mExtraLinesAlign   = source->mExtraLinesAlign;
+    mIdExtraLinesInFront = source->mIdExtraLinesInFront; mExtraLinesInFront = source->mExtraLinesInFront;
+    mIdExtraLinesLength  = source->mIdExtraLinesLength;  mExtraLinesLength  = source->mExtraLinesLength;
+    mIdExtraLinesWidth   = source->mIdExtraLinesWidth;   mExtraLinesWidth   = source->mExtraLinesWidth;
+    mIdExtraLinesColor   = source->mIdExtraLinesColor;   mExtraLinesColor   = source->mExtraLinesColor;
+    mIdExtraLinesStyle   = source->mIdExtraLinesStyle;   mExtraLinesStyle   = source->mExtraLinesStyle;
+    mIdExtraMarkersAlign = source->mIdExtraMarkersAlign; mExtraMarkersAlign = source->mExtraMarkersAlign;
+    mIdExtraMarkersSize  = source->mIdExtraMarkersSize;  mExtraMarkersSize  = source->mExtraMarkersSize;
+    mIdExtraMarkersColor = source->mIdExtraMarkersColor; mExtraMarkersColor = source->mExtraMarkersColor;
+    mIdExtraMarkersStyle = source->mIdExtraMarkersStyle; mExtraMarkersStyle = source->mExtraMarkersStyle;
 }
 
+const KDChartPropertySet* KDChartPropertySet::clone() const
+{
+    KDChartPropertySet* newSet = new KDChartPropertySet();
+    newSet->deepCopy( this );
+    return newSet;
+}
+
+void KDChartPropertySet::quickReset( const QString& name, int idParent )
+{
+    // set the name
+    mName = name;
+    // fill with idParent
+    mOwnID =               idParent;
+    mIdLineWidth =         idParent;
+    mIdLineColor =         idParent;
+    mIdLineStyle =         idParent;
+    mIdShowMarker =        idParent;
+    mIdMarkerSize =        idParent;
+    mIdMarkerColor =       idParent;
+    mIdMarkerStyle =       idParent;
+    mIdMarkerAlign =       idParent;
+    mIdExtraLinesAlign =   idParent;
+    mIdExtraLinesInFront = idParent;
+    mIdExtraLinesLength =  idParent;
+    mIdExtraLinesWidth =   idParent;
+    mIdExtraLinesColor =   idParent;
+    mIdExtraLinesStyle =   idParent;
+    mIdExtraMarkersAlign = idParent;
+    mIdExtraMarkersSize =  idParent;
+    mIdExtraMarkersColor = idParent;
+    mIdExtraMarkersStyle = idParent;
+    mIdShowBar =           idParent;
+    mIdBarColor =          idParent;
+    mIdAreaBrush =         idParent;
+}
+
+void KDChartPropertySet::fullReset( const QString& name, int idParent )
+{
+    quickReset( name, idParent );
+    fillValueMembersWithDummyValues();
+}
 
 void KDChartPropertySet::fillValueMembersWithDummyValues()
 {
@@ -75,6 +118,10 @@ void KDChartPropertySet::fillValueMembersWithDummyValues()
     mLineColor         = Qt::black;
     mLineStyle         = Qt::SolidLine;
     mShowMarker        = true;
+    mMarkerAlign       = Qt::AlignCenter;
+    mMarkerSize        = QSize(6,6);
+    mMarkerColor       = Qt::black;
+    mMarkerStyle       = 0;
     mExtraLinesAlign   = Qt::AlignLeft|Qt::AlignTop;
     mExtraLinesInFront = false;
     mExtraLinesLength  = -20;
@@ -87,6 +134,7 @@ void KDChartPropertySet::fillValueMembersWithDummyValues()
     mExtraMarkersStyle = 0;
     mShowBar           = true;
     mBarColor          = Qt::black;
+    mAreaBrush         = QBrush( Qt::blue );
 }
 
 
@@ -100,6 +148,9 @@ QDomElement KDChartPropertySet::saveXML(QDomDocument& doc) const
     KDXML::createBoolNode(   doc, propertySetElement,   "ShowBar",      mShowBar   );
     KDXML::createIntNode(    doc, propertySetElement, "IDBarColor",   mIdBarColor  );
     KDXML::createColorNode(  doc, propertySetElement,   "BarColor",     mBarColor  );
+    // normal area properties:
+    KDXML::createIntNode(    doc, propertySetElement, "IDAreaBrush",  mIdAreaBrush );
+    KDXML::createBrushNode(  doc, propertySetElement,   "AreaBrush",    mAreaBrush );
     // normal line properties:
     KDXML::createIntNode(    doc, propertySetElement, "IDLineWidth",  mIdLineWidth );
     KDXML::createIntNode(    doc, propertySetElement,   "LineWidth",    mLineWidth );
@@ -110,8 +161,19 @@ QDomElement KDChartPropertySet::saveXML(QDomDocument& doc) const
     propertySetElement.appendChild( lineStyleElement );
     lineStyleElement.setAttribute( "Style", KDXML::penStyleToString(    mLineStyle));
     // normal marker properties:
-    KDXML::createIntNode(    doc, propertySetElement, "IDShowMarker", mIdShowMarker);
-    KDXML::createBoolNode(   doc, propertySetElement,   "ShowMarker",   mShowMarker);
+    KDXML::createIntNode(    doc, propertySetElement, "IDShowMarker",  mIdShowMarker);
+    KDXML::createBoolNode(   doc, propertySetElement,   "ShowMarker",    mShowMarker);
+    KDXML::createIntNode(    doc, propertySetElement, "IDMarkerAlign", mIdMarkerAlign );
+    KDXML::createIntNode(    doc, propertySetElement,   "MarkerAlign",   mMarkerAlign );
+    KDXML::createIntNode(    doc, propertySetElement, "IDMarkerSize",  mIdMarkerSize   );
+    KDXML::createSizeNode(   doc, propertySetElement,   "MarkerSize",    mMarkerSize  );
+    KDXML::createIntNode(    doc, propertySetElement, "IDMarkerColor", mIdMarkerColor );
+    KDXML::createColorNode(  doc, propertySetElement,   "MarkerColor",   mMarkerColor );
+    KDXML::createIntNode(    doc, propertySetElement, "IDMarkerStyle", mIdMarkerStyle );
+    QDomElement markerStElem = doc.createElement(       "MarkerStyle" );
+    propertySetElement.appendChild( markerStElem );
+    markerStElem.setAttribute("Style",
+            KDChartParams::lineMarkerStyleToString( (KDChartParams::LineMarkerStyle)mMarkerStyle));
     // extra lines:
     KDXML::createIntNode(    doc, propertySetElement, "IDExtraLinesAlign",  mIdExtraLinesAlign );
     KDXML::createIntNode(    doc, propertySetElement,   "ExtraLinesAlign",    mExtraLinesAlign );
@@ -147,11 +209,12 @@ bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet
     bool bOwnIDFound = false;
     QString s;
     QColor color;
+    QBrush brush;
     QSize size;
     bool bValue;
     int i;
     // initialize the property set with default values
-    set = KDChartPropertySet("");
+    set.fillValueMembersWithDummyValues();
     // parse the element
     if( element.hasAttribute("OwnID") ){
         i = element.attribute( "OwnID" ).toInt( &bOwnIDFound );
@@ -180,6 +243,14 @@ bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet
                         if( KDXML::readColorNode( element, color ) )
                             set.mBarColor = color;
                     } else
+                    // normal area properties:
+                           if( tagName == "IDAreaBrush" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdAreaBrush = i;
+                    } else if( tagName ==   "AreaBrush" ) {
+                        if( KDXML::readBrushNode( element, brush ) )
+                            set.mAreaBrush = color;
+                    } else
                     // normal line properties:
                         if( tagName == "IDLineWidth" ) {
                         if( KDXML::readIntNode( element, i ) )
@@ -207,6 +278,31 @@ bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet
                     } else if( tagName ==   "ShowMarker" ) {
                         if( KDXML::readBoolNode( element, bValue ) )
                             set.mShowMarker = bValue;
+                    } else if( tagName == "IDMarkerAlign" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdMarkerAlign = i;
+                    } else if( tagName ==   "MarkerAlign" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mMarkerAlign = i;
+                    } else if( tagName == "IDMarkerSize" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdMarkerSize = i;
+                    } else if( tagName ==   "MarkerSize" ) {
+                        if( KDXML::readSizeNode( element, size ) )
+                            set.mMarkerSize = size;
+                    } else if( tagName == "IDMarkerColor" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdMarkerColor = i;
+                    } else if( tagName ==   "MarkerColor" ) {
+                        if( KDXML::readColorNode( element, color ) )
+                            set.mMarkerColor = color;
+                    } else if( tagName == "IDMarkerStyle" ) {
+                        if( KDXML::readIntNode( element, i ) )
+                            set.mIdMarkerStyle = i;
+                    } else if( tagName ==   "MarkerStyle" ) {
+                        if( element.hasAttribute( "Style" ) )
+                            set.mMarkerStyle
+                                = KDChartParams::stringToLineMarkerStyle( element.attribute( "Style" ) );
                     } else
                         // extra lines:
                         if( tagName == "IDExtraLinesAlign" ) {
@@ -282,4 +378,3 @@ bool KDChartPropertySet::loadXML( const QDomElement& element, KDChartPropertySet
     }
     return bOwnIDFound;
 }
-

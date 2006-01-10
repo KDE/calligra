@@ -34,22 +34,20 @@
 
 #include <qpainter.h>
 
-#include <klocale.h>
-
 /**
   \class KDChartPolarPainter KDChartPolarPainter.h
 
   \brief A chart painter implementation that can paint polar charts.
-  */
+*/
 
 /**
   Constructor. Sets up internal data structures as necessary.
 
   \param params the KDChartParams structure that defines the chart
   \param data the data that will be displayed as a chart
-  */
-    KDChartPolarPainter::KDChartPolarPainter( KDChartParams* params ) :
-KDChartPainter( params )
+*/
+KDChartPolarPainter::KDChartPolarPainter( KDChartParams* params ) :
+    KDChartPainter( params )
 {
     // This constructor intentionally left blank so far; we cannot setup the
     // geometry yet since we do not know the size of the painter.
@@ -58,7 +56,7 @@ KDChartPainter( params )
 
 /**
   Destructor.
-  */
+*/
 KDChartPolarPainter::~KDChartPolarPainter()
 {
     // intentionally left blank
@@ -75,11 +73,11 @@ KDChartPolarPainter::~KDChartPolarPainter()
   \param paint2nd specifies whether the main chart or the additional chart is to be drawn now
   \param regions a pointer to a list of regions that will be filled
   with regions representing the data segments, if not null
-  */
+*/
 void KDChartPolarPainter::paintData( QPainter* painter,
-        KDChartTableDataBase* data,
-        bool paint2nd,
-        KDChartDataRegionList* regions )
+                                     KDChartTableDataBase* data,
+                                     bool paint2nd,
+                                     KDChartDataRegionList* regions )
 {
     uint chart = paint2nd ? 1 : 0;
 
@@ -103,31 +101,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
 
 
     uint datasetStart, datasetEnd;
-    if(    params()->neverUsedSetChartSourceMode()
-            || !params()->findDataset( KDChartParams::DataEntry,
-                datasetStart,
-                datasetEnd,
-                chart ) ) {
-        int maxRow, maxRowMinus1;
-        switch ( data->usedRows() ) {
-            case 0:
-                return ;
-            case 1:
-                maxRow = 0;
-                maxRowMinus1 = 0;
-                break;
-            default:
-                maxRow = data->usedRows() - 1;
-                maxRowMinus1 = maxRow - 1;
-        }
-        datasetStart = paint2nd ? maxRow
-            : 0;
-        datasetEnd = paint2nd ? maxRow
-            : ( ( KDChartParams::NoType
-                        == params()->additionalChartType() )
-                    ? maxRow
-                    : maxRowMinus1 );
-    }
+    findChartDatasets( data, paint2nd, chart, datasetStart, datasetEnd );
 
 
     painter->translate( _dataRect.x(), _dataRect.y() );
@@ -151,7 +125,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
     QRect position( x, y, size, size );
 
     QPoint center( position.width() / 2 + position.x(),
-            position.height() / 2 + position.y() );
+                   position.height() / 2 + position.y() );
 
 
     double maxValue;
@@ -195,7 +169,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
                 * minSizeP1000 );
     ( ( KDChartAxisParams& ) paraSagittal ).setAxisTrueLineWidth( sagittalLineWidth );
     int sagittalGridLineWidth
-        = (    KDChartAxisParams::AXIS_GRID_AUTO_LINEWIDTH
+        = (    KDCHART_AXIS_GRID_AUTO_LINEWIDTH
                 == paraSagittal.axisGridLineWidth() )
         ? sagittalLineWidth
         : (   ( 0 <= paraSagittal.axisGridLineWidth() )
@@ -209,7 +183,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
                 * minSizeP1000 );
     ( ( KDChartAxisParams& ) paraCircular ).setAxisTrueLineWidth( circularLineWidth );
     int circularGridLineWidth
-        = (    KDChartAxisParams::AXIS_GRID_AUTO_LINEWIDTH
+        = (    KDCHART_AXIS_GRID_AUTO_LINEWIDTH
                 == paraCircular.axisGridLineWidth() )
         ? circularLineWidth
         : (   ( 0 <= paraCircular.axisGridLineWidth() )
@@ -248,13 +222,15 @@ void KDChartPolarPainter::paintData( QPainter* painter,
         double pTextsW = 0.0;
         double pTextsH = 0.0;
         int textAlign = Qt::AlignHCenter | Qt::AlignVCenter;
-        bool isLogarithmic = false; // value not used for KD Chart 1.0.0
+        bool isLogarithmic = false;
         bool isDateTime = false;
         bool autoDtLabels = false;
         QDateTime dtLow;
         QDateTime dtHigh;
         KDChartAxisParams::ValueScale dtDeltaScale;
-        KDChartAxesPainter::calculateLabelTexts( *data,
+        KDChartAxesPainter::calculateLabelTexts(
+                painter,
+                *data,
                 *params(),
                 KDChartAxisParams::AxisPosCircular,
                 minSizeP1000,
@@ -279,12 +255,226 @@ void KDChartPolarPainter::paintData( QPainter* painter,
                 dtHigh,
                 dtDeltaScale );
                 labelTexts = ( QStringList* ) paraCircular.axisLabelTexts();
-                if( paraCircular.axisLabelsVisible() ) {
+        if( paraCircular.axisLabelsVisible() ) {
 //qDebug("\nnTxtHeight: "+QString::number(nTxtHeight));
-                    // calculate font size
-                    actFont = paraCircular.axisLabelsFont();
-                    if ( paraCircular.axisLabelsFontUseRelSize() ) {
+            // calculate font size
+            actFont = paraCircular.axisLabelsFont();
+            if ( paraCircular.axisLabelsFontUseRelSize() ) {
 //qDebug("paraCircular.axisLabelsFontUseRelSize() is TRUE");
+                actFont.setPointSizeFloat( nTxtHeight );
+            }
+            QFontMetrics fm( actFont );
+            QString strMax;
+            int maxLabelsWidth = 0;
+            for ( QStringList::Iterator it = labelTexts->begin();
+                    it != labelTexts->end();
+                    ++it ) {
+                if ( fm.width( *it ) > maxLabelsWidth ) {
+                    maxLabelsWidth = fm.width( *it );
+                    strMax = *it;
+                }
+            }
+            while ( fm.width( strMax ) > pTextsW
+                    && 6.0 < nTxtHeight ) {
+                nTxtHeight -= 0.5;
+                actFont.setPointSizeFloat( nTxtHeight );
+                fm = QFontMetrics( actFont );
+            }
+            painter->setFont( actFont );
+        }
+
+        double radiusDelta = pDelimDelta;
+
+        labels = labelTexts
+            ? labelTexts->count()
+            : 0;
+        if( labels )
+            currentRadiusPPU = -radiusDelta;
+        for( int iLabel = 0; iLabel < labels; ++iLabel ) {
+            //while( currentRadius < maxValue ) {
+            //double currentRadiusPPU = currentRadius;
+            currentRadiusPPU += radiusDelta;
+            double currentRadiusPPU2 = currentRadiusPPU * 2;
+            int circularAxisAngle = ( currentRadiusPPU != 0.0 ) ? ( static_cast < int > (4.0 * radiusPPU / currentRadiusPPU) ) : 0;
+            if( paraCircular.axisShowGrid() ) {
+                painter->setPen( QPen( paraCircular.axisGridColor(),
+                            circularGridLineWidth ) );
+                painter->drawEllipse( static_cast<int>( center.x() - currentRadiusPPU ),
+                        static_cast<int>( center.y() - currentRadiusPPU ),
+                        static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ) );
+            }
+            if( paraCircular.axisVisible() ) {
+                painter->setPen( QPen( paraCircular.axisLineColor(),
+                            circularLineWidth ) );
+                if( params()->polarDelimAtPos( KDChartEnums::PosTopCenter ) )
+                    painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
+                            static_cast<int>( center.y() - currentRadiusPPU ),
+                            static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
+                            (90 - circularAxisAngle/2) * 16,
+                            circularAxisAngle * 16 );
+                if( params()->polarDelimAtPos( KDChartEnums::PosBottomCenter ) )
+                    painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
+                            static_cast<int>( center.y() - currentRadiusPPU ),
+                            static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
+                            (270 - circularAxisAngle/2) * 16,
+                            circularAxisAngle * 16 );
+
+                if( params()->polarDelimAtPos( KDChartEnums::PosCenterRight ) )
+                    painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
+                            static_cast<int>( center.y() - currentRadiusPPU ),
+                            static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
+                            (0 - circularAxisAngle/2) * 16,
+                            circularAxisAngle * 16 );
+                if( params()->polarDelimAtPos( KDChartEnums::PosCenterLeft ) )
+                    painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
+                            static_cast<int>( center.y() - currentRadiusPPU ),
+                            static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
+                            (180 - circularAxisAngle/2) * 16,
+                            circularAxisAngle * 16 );
+
+                if( params()->polarDelimAtPos( KDChartEnums::PosTopRight ) )
+                    painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
+                            static_cast<int>( center.y() - currentRadiusPPU ),
+                            static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
+                            (45 - circularAxisAngle/2) * 16,
+                            circularAxisAngle * 16 );
+                if( params()->polarDelimAtPos( KDChartEnums::PosBottomLeft ) )
+                    painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
+                            static_cast<int>( center.y() - currentRadiusPPU ),
+                            static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
+                            (225 - circularAxisAngle/2) * 16,
+                            circularAxisAngle * 16 );
+
+                if( params()->polarDelimAtPos( KDChartEnums::PosBottomRight ) )
+                    painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
+                            static_cast<int>( center.y() - currentRadiusPPU ),
+                            static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
+                            (315 - circularAxisAngle/2) * 16,
+                            circularAxisAngle * 16 );
+                if( params()->polarDelimAtPos( KDChartEnums::PosTopLeft ) )
+                    painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
+                            static_cast<int>( center.y() - currentRadiusPPU ),
+                            static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
+                            (135 - circularAxisAngle/2) * 16,
+                            circularAxisAngle * 16 );
+            }
+            if( paraCircular.axisLabelsVisible() ) {
+                const bool rotate = params()->polarRotateCircularLabels();
+                painter->setPen( QPen( paraCircular.axisLabelsColor(),
+                                       circularLineWidth ) );
+                const QString& txt = (*labelTexts)[ iLabel ];
+                if( params()->polarLabelsAtPos( KDChartEnums::PosTopCenter ) )
+                    paintCircularAxisLabel( painter, rotate, 90, center, currentRadiusPPU, txt,
+                            Qt::AlignBottom | Qt::AlignHCenter, iLabel );
+
+                if( params()->polarLabelsAtPos( KDChartEnums::PosBottomCenter ) )
+                    paintCircularAxisLabel( painter, rotate, 270, center, currentRadiusPPU, txt,
+                            Qt::AlignTop | Qt::AlignHCenter, iLabel );
+
+                if( params()->polarLabelsAtPos( KDChartEnums::PosCenterRight ) )
+                    paintCircularAxisLabel( painter, rotate,   0, center, currentRadiusPPU, txt,
+                            Qt::AlignVCenter | Qt::AlignRight, iLabel );
+
+                if( params()->polarLabelsAtPos( KDChartEnums::PosCenterLeft ) )
+                    paintCircularAxisLabel( painter, rotate, 180, center, currentRadiusPPU, txt,
+                            Qt::AlignVCenter | Qt::AlignLeft, iLabel );
+
+                if( params()->polarLabelsAtPos( KDChartEnums::PosTopRight ) )
+                    paintCircularAxisLabel( painter, rotate,  45, center, currentRadiusPPU, txt,
+                            Qt::AlignBottom | Qt::AlignRight, iLabel );
+
+                if( params()->polarLabelsAtPos( KDChartEnums::PosBottomLeft ) )
+                    paintCircularAxisLabel( painter, rotate, 225, center, currentRadiusPPU, txt,
+                            Qt::AlignTop | Qt::AlignLeft, iLabel );
+
+                if( params()->polarLabelsAtPos( KDChartEnums::PosBottomRight ) )
+                    paintCircularAxisLabel( painter, rotate, 315, center, currentRadiusPPU, txt,
+                            Qt::AlignTop | Qt::AlignRight, iLabel );
+
+                if( params()->polarLabelsAtPos( KDChartEnums::PosTopLeft ) )
+                    paintCircularAxisLabel( painter, rotate, 135, center, currentRadiusPPU, txt,
+                            Qt::AlignBottom | Qt::AlignLeft, iLabel );
+            }
+        }
+    }
+
+
+    double circularSpan = params()->polarChartSubType() == KDChartParams::PolarPercent
+        ? 100.0
+        : paraCircular.trueAxisHigh() - paraCircular.trueAxisLow();
+    double radius = currentRadiusPPU;
+    if(    !labels
+            || params()->polarChartSubType() == KDChartParams::PolarPercent )
+        radius = (position.width() / 2.0) * 1000.0 / 1250.0;
+
+    if( params()->polarChartSubType() != KDChartParams::PolarPercent )
+        pixelsPerUnit = labels ? currentRadiusPPU / circularSpan
+            : (position.height() / maxValue / 2.0) * 1000.0 / 1250.0;
+    else
+        pixelsPerUnit = (position.height() / 100.0 / 2.0) * 1000.0 / 1250.0;
+
+    // draw the sagittal grid and axis lines
+    if(    paraSagittal.axisShowGrid()
+            || paraSagittal.axisVisible()
+            || paraSagittal.axisLabelsVisible() ) {
+
+        // calculate label texts
+        QStringList* labelTexts = 0;
+        bool onlyDefaultLabels = true;
+        if( paraSagittal.axisLabelsVisible() ) {
+            ((KDChartParams*)params())->setAxisArea( KDChartAxisParams::AxisPosSagittal,
+                                                    QRect( 0,
+                                                        0,
+                                                        static_cast < int > ( 2.0 * M_PI * radius ),
+                                                        static_cast < int > ( 0.5 * radius ) ) );
+            double delimLen = 20.0 * minSizeP1000; // per mille of area
+            KDChartAxisParams::AxisPos basicPos;
+            QPoint orig, dest;
+            double dDummy;
+            double nSubDelimFactor = 0.0;
+            double pDelimDelta = 0.0;
+            double nTxtHeight = 0.0;
+            double pTextsX = 0.0;
+            double pTextsY = 0.0;
+            double pTextsW = 0.0;
+            double pTextsH = 0.0;
+            int textAlign = Qt::AlignCenter;
+            bool isLogarithmic = false;
+            bool isDateTime = false;
+            bool autoDtLabels = false;
+            QDateTime dtLow;
+            QDateTime dtHigh;
+            KDChartAxisParams::ValueScale dtDeltaScale;
+            KDChartAxesPainter::calculateLabelTexts(
+                    painter,
+                    *data,
+                    *params(),
+                    KDChartAxisParams::AxisPosSagittal,
+                    minSizeP1000,
+                    delimLen,
+                    // start of reference parameters
+                    basicPos,
+                    orig,
+                    dest,
+                    dDummy,dDummy,dDummy,dDummy,
+                    nSubDelimFactor,
+                    pDelimDelta,
+                    nTxtHeight,
+                    pTextsX,
+                    pTextsY,
+                    pTextsW,
+                    pTextsH,
+                    textAlign,
+                    isLogarithmic,
+                    isDateTime,
+                    autoDtLabels,
+                    dtLow,
+                    dtHigh,
+                    dtDeltaScale );
+                    labelTexts = ( QStringList* ) paraSagittal.axisLabelTexts();
+                    // calculate font size
+                    actFont = paraSagittal.axisLabelsFont();
+                    if ( paraSagittal.axisLabelsFontUseRelSize() ) {
                         actFont.setPointSizeFloat( nTxtHeight );
                     }
                     QFontMetrics fm( actFont );
@@ -297,506 +487,319 @@ void KDChartPolarPainter::paintData( QPainter* painter,
                             maxLabelsWidth = fm.width( *it );
                             strMax = *it;
                         }
+                        if ( !(*it).startsWith( "Item ") )
+                            onlyDefaultLabels = false;
                     }
-                    while ( fm.width( strMax ) > pTextsW
-                            && 6.0 < nTxtHeight ) {
+                    while ( fm.width( strMax ) > pTextsW && 6.0 < nTxtHeight ) {
                         nTxtHeight -= 0.5;
                         actFont.setPointSizeFloat( nTxtHeight );
                         fm = QFontMetrics( actFont );
                     }
                     painter->setFont( actFont );
-                }
+        }
 
-                double radiusDelta = pDelimDelta;
+        int currentAngle = params()->polarZeroDegreePos();
+        if(    -360 > currentAngle
+                ||  360 < currentAngle )
+            currentAngle = 0;
+        if( 0 > currentAngle )
+            currentAngle += 360;
+        int r1 = static_cast < int > ( radius * 1050 / 1000 );
+        int r2 = static_cast < int > ( radius * 1100 / 1000 );
+        int r3 = static_cast < int > ( radius * 1175 / 1000 );
+        QPoint pt1, pt2, pt3;
+        uint nLabels = labelTexts->count();
+        int angleBetweenRays = 360 / nLabels;
+        for( uint value = 0; value < nLabels; ++value ) {
+            pt1 = center + polarToXY( r1, currentAngle );
+            pt2 = center + polarToXY( r2, currentAngle );
+            pt3 = center + polarToXY( r3, currentAngle );
 
-                labels = labelTexts
-                    ? labelTexts->count()
-                    : 0;
-                if( labels )
-                    currentRadiusPPU = -radiusDelta;
-                for( int iLabel = 0; iLabel < labels; ++iLabel ) {
-                    //while( currentRadius < maxValue ) {
-                    //double currentRadiusPPU = currentRadius;
-                    currentRadiusPPU += radiusDelta;
-                    double currentRadiusPPU2 = currentRadiusPPU * 2;
-                    int circularAxisAngle = ( currentRadiusPPU != 0.0 ) ? ( static_cast < int > (4.0 * radiusPPU / currentRadiusPPU) ) : 0;
-                    if( paraCircular.axisShowGrid() ) {
-                        painter->setPen( QPen( paraCircular.axisGridColor(),
-                                    circularGridLineWidth ) );
-                        painter->drawEllipse( static_cast<int>( center.x() - currentRadiusPPU ),
-                                static_cast<int>( center.y() - currentRadiusPPU ),
-                                static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ) );
-                    }
-                    if( paraCircular.axisVisible() ) {
-                        painter->setPen( QPen( paraCircular.axisLineColor(),
-                                    circularLineWidth ) );
-                        if( params()->polarDelimAtPos( KDChartEnums::PosTopCenter ) )
-                            painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
-                                    static_cast<int>( center.y() - currentRadiusPPU ),
-                                    static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
-                                    (90 - circularAxisAngle/2) * 16,
-                                    circularAxisAngle * 16 );
-                        if( params()->polarDelimAtPos( KDChartEnums::PosBottomCenter ) )
-                            painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
-                                    static_cast<int>( center.y() - currentRadiusPPU ),
-                                    static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
-                                    (270 - circularAxisAngle/2) * 16,
-                                    circularAxisAngle * 16 );
+            //pt3 = painter->worldMatrix().map( pt3 );
 
-                        if( params()->polarDelimAtPos( KDChartEnums::PosCenterRight ) )
-                            painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
-                                    static_cast<int>( center.y() - currentRadiusPPU ),
-                                    static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
-                                    (0 - circularAxisAngle/2) * 16,
-                                    circularAxisAngle * 16 );
-                        if( params()->polarDelimAtPos( KDChartEnums::PosCenterLeft ) )
-                            painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
-                                    static_cast<int>( center.y() - currentRadiusPPU ),
-                                    static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
-                                    (180 - circularAxisAngle/2) * 16,
-                                    circularAxisAngle * 16 );
+            if( paraSagittal.axisShowGrid() ) {
+                painter->setPen( QPen( paraSagittal.axisGridColor(),
+                            sagittalGridLineWidth ) );
+                painter->drawLine( center, pt1 );
+            }
+            if( paraSagittal.axisVisible() ) {
+                painter->setPen( QPen( paraSagittal.axisLineColor(),
+                            sagittalLineWidth ) );
+                painter->drawLine( pt1, pt2 );
+            }
+            if(    paraSagittal.axisLabelsVisible()
+                    && labelTexts
+                    && labelTexts->count() > value ) {
+                painter->setPen( QPen( paraSagittal.axisLabelsColor(),
+                            sagittalLineWidth ) );
+                QString label(   onlyDefaultLabels
+                        ? QString::number( currentAngle )
+                        : (*labelTexts)[ value ] );
 
-                        if( params()->polarDelimAtPos( KDChartEnums::PosTopRight ) )
-                            painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
-                                    static_cast<int>( center.y() - currentRadiusPPU ),
-                                    static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
-                                    (45 - circularAxisAngle/2) * 16,
-                                    circularAxisAngle * 16 );
-                        if( params()->polarDelimAtPos( KDChartEnums::PosBottomLeft ) )
-                            painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
-                                    static_cast<int>( center.y() - currentRadiusPPU ),
-                                    static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
-                                    (225 - circularAxisAngle/2) * 16,
-                                    circularAxisAngle * 16 );
-
-                        if( params()->polarDelimAtPos( KDChartEnums::PosBottomRight ) )
-                            painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
-                                    static_cast<int>( center.y() - currentRadiusPPU ),
-                                    static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
-                                    (315 - circularAxisAngle/2) * 16,
-                                    circularAxisAngle * 16 );
-                        if( params()->polarDelimAtPos( KDChartEnums::PosTopLeft ) )
-                            painter->drawArc( static_cast<int>( center.x() - currentRadiusPPU ),
-                                    static_cast<int>( center.y() - currentRadiusPPU ),
-                                    static_cast<int>( currentRadiusPPU2 ), static_cast<int>( currentRadiusPPU2 ),
-                                    (135 - circularAxisAngle/2) * 16,
-                                    circularAxisAngle * 16 );
-                    }
-                    if( paraCircular.axisLabelsVisible() ) {
-                        const bool rotate = params()->polarRotateCircularLabels();
-                        QPoint shiftCenter = center + _dataRect.topLeft();
-                        painter->setPen( QPen( paraCircular.axisLabelsColor(),
-                                    circularLineWidth ) );
-                        const QString& txt = (*labelTexts)[ iLabel ];
-                        if( params()->polarLabelsAtPos( KDChartEnums::PosTopCenter ) )
-                            paintCircularAxisLabel( painter, rotate, 90, shiftCenter, currentRadiusPPU, txt,
-                                    Qt::AlignBottom | Qt::AlignHCenter, iLabel );
-
-                        if( params()->polarLabelsAtPos( KDChartEnums::PosBottomCenter ) )
-                            paintCircularAxisLabel( painter, rotate, 270, shiftCenter, currentRadiusPPU, txt,
-                                    Qt::AlignTop | Qt::AlignHCenter, iLabel );
-
-                        if( params()->polarLabelsAtPos( KDChartEnums::PosCenterRight ) )
-                            paintCircularAxisLabel( painter, rotate,   0, shiftCenter, currentRadiusPPU, txt,
-                                    Qt::AlignVCenter | Qt::AlignRight, iLabel );
-
-                        if( params()->polarLabelsAtPos( KDChartEnums::PosCenterLeft ) )
-                            paintCircularAxisLabel( painter, rotate, 180, shiftCenter, currentRadiusPPU, txt,
-                                    Qt::AlignVCenter | Qt::AlignLeft, iLabel );
-
-                        if( params()->polarLabelsAtPos( KDChartEnums::PosTopRight ) )
-                            paintCircularAxisLabel( painter, rotate,  45, shiftCenter, currentRadiusPPU, txt,
-                                    Qt::AlignBottom | Qt::AlignRight, iLabel );
-
-                        if( params()->polarLabelsAtPos( KDChartEnums::PosBottomLeft ) )
-                            paintCircularAxisLabel( painter, rotate, 225, shiftCenter, currentRadiusPPU, txt,
-                                    Qt::AlignTop | Qt::AlignLeft, iLabel );
-
-                        if( params()->polarLabelsAtPos( KDChartEnums::PosBottomRight ) )
-                            paintCircularAxisLabel( painter, rotate, 315, shiftCenter, currentRadiusPPU, txt,
-                                    Qt::AlignTop | Qt::AlignRight, iLabel );
-
-                        if( params()->polarLabelsAtPos( KDChartEnums::PosTopLeft ) )
-                            paintCircularAxisLabel( painter, rotate, 135, shiftCenter, currentRadiusPPU, txt,
-                                    Qt::AlignBottom | Qt::AlignLeft, iLabel );
-                    }
-                }
-                }
+                KDDrawText::drawRotatedText( painter,
+                        currentAngle+90,
+                        painter->worldMatrix().map(pt3),
+                        label,
+                        0,
+                        Qt::AlignCenter );
+            }
+            currentAngle += angleBetweenRays;
+        }
+    }
 
 
-                double circularSpan = params()->polarChartSubType() == KDChartParams::PolarPercent
-                    ? 100.0
-                    : paraCircular.trueAxisHigh() - paraCircular.trueAxisLow();
-                double radius = currentRadiusPPU;
-                if(    !labels
-                        || params()->polarChartSubType() == KDChartParams::PolarPercent )
-                    radius = (position.width() / 2.0) * 1000.0 / 1250.0;
+    // Now draw the data
+    int dataLinesWidth = 0 <= params()->polarLineWidth()
+        ? params()->polarLineWidth()
+        : -1 * static_cast < int > (   params()->polarLineWidth()
+                * minSizeP1000 );
+    painter->setBrush( Qt::NoBrush );
+    for ( unsigned int dataset = datasetStart; dataset <= datasetEnd; dataset++ ) {
+        painter->setPen( QPen( params()->dataColor( dataset ),
+                    dataLinesWidth ) );
+        QPointArray points( numValues );
+        int totalPoints = 0;
+        double valueTotal = 0.0; // Will only be used for Percent
+        int angleBetweenRays = 360 / numValues;
+        QVariant vValY;
+        for ( int value = 0; value < numValues; value++ ) {
+            if( params()->polarChartSubType() == KDChartParams::PolarPercent )
+                valueTotal = data->colAbsSum( value );
+            // the value determines the angle, the dataset only the color
+            if( data->cellCoord( dataset, value, vValY, 1 ) &&
+                QVariant::Double == vValY.type() ){
+                const double cellValue = vValY.toDouble();
+                double drawValue;
+                if ( params()->polarChartSubType() == KDChartParams::PolarStacked )
+                    drawValue = ( cellValue + currentValueSums[ value ] ) * pixelsPerUnit;
+                else if( params()->polarChartSubType() == KDChartParams::PolarPercent ) {
+                    drawValue = (   ( cellValue + currentValueSums[ value ] )
+                            / valueTotal * static_cast<double>( radius ) );
+                } else
+                    drawValue = cellValue * pixelsPerUnit;
 
-                if( params()->polarChartSubType() != KDChartParams::PolarPercent )
-                    pixelsPerUnit = labels ? currentRadiusPPU / circularSpan
-                        : (position.height() / maxValue / 2.0) * 1000.0 / 1250.0;
-                else
-                    pixelsPerUnit = (position.height() / 100.0 / 2.0) * 1000.0 / 1250.0;
-
-                // draw the sagittal grid and axis lines
-                if(    paraSagittal.axisShowGrid()
-                        || paraSagittal.axisVisible()
-                        || paraSagittal.axisLabelsVisible() ) {
-
-                    // calculate label texts
-                    QStringList* labelTexts = 0;
-                    bool onlyDefaultLabels = true;
-                    if( paraSagittal.axisLabelsVisible() ) {
-                        ((KDChartParams*)params())->setAxisArea( KDChartAxisParams::AxisPosSagittal,
-                                                                 QRect( 0,
-                                                                     0,
-                                                                     static_cast < int > ( 2.0 * M_PI * radius ),
-                                                                     static_cast < int > ( 0.5 * radius ) ) );
-                        double delimLen = 20.0 * minSizeP1000; // per mille of area
-                        KDChartAxisParams::AxisPos basicPos;
-                        QPoint orig, dest;
-                        double dDummy;
-                        double nSubDelimFactor = 0.0;
-                        double pDelimDelta = 0.0;
-                        double nTxtHeight = 0.0;
-                        double pTextsX = 0.0;
-                        double pTextsY = 0.0;
-                        double pTextsW = 0.0;
-                        double pTextsH = 0.0;
-                        int textAlign = Qt::AlignCenter;
-                        bool isLogarithmic = false; // value not used for KD Chart 1.0.0
-                        bool isDateTime = false;
-                        bool autoDtLabels = false;
-                        QDateTime dtLow;
-                        QDateTime dtHigh;
-                        KDChartAxisParams::ValueScale dtDeltaScale;
-                        KDChartAxesPainter::calculateLabelTexts( *data,
-                                *params(),
-                                KDChartAxisParams::AxisPosSagittal,
-                                minSizeP1000,
-                                delimLen,
-                                // start of reference parameters
-                                basicPos,
-                                orig,
-                                dest,
-                                dDummy,dDummy,dDummy,dDummy,
-                                nSubDelimFactor,
-                                pDelimDelta,
-                                nTxtHeight,
-                                pTextsX,
-                                pTextsY,
-                                pTextsW,
-                                pTextsH,
-                                textAlign,
-                                isLogarithmic,
-                                isDateTime,
-                                autoDtLabels,
-                                dtLow,
-                                dtHigh,
-                                dtDeltaScale );
-                                labelTexts = ( QStringList* ) paraSagittal.axisLabelTexts();
-                                // calculate font size
-                                actFont = paraSagittal.axisLabelsFont();
-                                if ( paraSagittal.axisLabelsFontUseRelSize() ) {
-                                    actFont.setPointSizeFloat( nTxtHeight );
-                                }
-                                QFontMetrics fm( actFont );
-                                QString strMax;
-                                int maxLabelsWidth = 0;
-                                for ( QStringList::Iterator it = labelTexts->begin();
-                                        it != labelTexts->end();
-                                        ++it ) {
-                                    if ( fm.width( *it ) > maxLabelsWidth ) {
-                                        maxLabelsWidth = fm.width( *it );
-                                        strMax = *it;
-                                    }
-                                    if ( !(*it).startsWith( "Item ") )
-                                        onlyDefaultLabels = false;
-                                }
-                                while ( fm.width( strMax ) > pTextsW && 6.0 < nTxtHeight ) {
-                                    nTxtHeight -= 0.5;
-                                    actFont.setPointSizeFloat( nTxtHeight );
-                                    fm = QFontMetrics( actFont );
-                                }
-                                painter->setFont( actFont );
-                    }
-
-                    int currentAngle = params()->polarZeroDegreePos();
-                    if(    -360 > currentAngle
-                            ||  360 < currentAngle )
-                        currentAngle = 0;
-                    if( 0 > currentAngle )
-                        currentAngle += 360;
-                    int r1 = static_cast < int > ( radius * 1050 / 1000 );
-                    int r2 = static_cast < int > ( radius * 1100 / 1000 );
-                    int r3 = static_cast < int > ( radius * 1175 / 1000 );
-                    QPoint pt1, pt2, pt3;
-                    uint nLabels = labelTexts->count();
-                    int angleBetweenRays = 360 / nLabels;
-                    for( uint value = 0; value < nLabels; ++value ) {
-                        pt1 = center + polarToXY( r1, currentAngle );
-                        pt2 = center + polarToXY( r2, currentAngle );
-                        pt3 = center + polarToXY( r3, currentAngle );
-                        if( paraSagittal.axisShowGrid() ) {
-                            painter->setPen( QPen( paraSagittal.axisGridColor(),
-                                        sagittalGridLineWidth ) );
-                            painter->drawLine( center, pt1 );
-                        }
-                        if( paraSagittal.axisVisible() ) {
-                            painter->setPen( QPen( paraSagittal.axisLineColor(),
-                                        sagittalLineWidth ) );
-                            painter->drawLine( pt1, pt2 );
-                        }
-                        if(    paraSagittal.axisLabelsVisible()
-                                && labelTexts
-                                && labelTexts->count() > value ) {
-                            painter->setPen( QPen( paraSagittal.axisLabelsColor(),
-                                        sagittalLineWidth ) );
-                            QString label(   onlyDefaultLabels
-                                    ? QString::number( currentAngle )
-                                    : (*labelTexts)[ value ] );
-
-                            KDDrawText::drawRotatedText( painter,
-                                    currentAngle+90,
-                                    pt3 + _dataRect.topLeft(),
-                                    label,
-                                    0,
-                                    Qt::AlignCenter );
-                        }
-                        currentAngle += angleBetweenRays;
-                    }
-                }
-
-
-                // Now draw the data
-                int dataLinesWidth = 0 <= params()->polarLineWidth()
-                    ? params()->polarLineWidth()
-                    : -1 * static_cast < int > (   params()->polarLineWidth()
-                            * minSizeP1000 );
-                painter->setBrush( Qt::NoBrush );
-                for ( unsigned int dataset = datasetStart; dataset <= datasetEnd; dataset++ ) {
-                    painter->setPen( QPen( params()->dataColor( dataset ),
-                                dataLinesWidth ) );
-                    QPointArray points( numValues );
-                    int totalPoints = 0;
-                    double valueTotal = 0.0; // Will only be used for Percent
-                    int angleBetweenRays = 360 / numValues;
-                    for ( int value = 0; value < numValues; value++ ) {
-                        if( params()->polarChartSubType() == KDChartParams::PolarPercent )
-                            valueTotal = data->colAbsSum( value );
-                        // the value determines the angle, the dataset only the color
-                        if ( data->cell( dataset, value ).isDouble() ) {
-                            double cellValue = data->cell( dataset, value ).doubleValue();
-                            double drawValue;
-                            if ( params()->polarChartSubType() == KDChartParams::PolarStacked )
-                                drawValue = ( cellValue + currentValueSums[ value ] ) * pixelsPerUnit;
-                            else if( params()->polarChartSubType() == KDChartParams::PolarPercent ) {
-                                drawValue = (   ( cellValue + currentValueSums[ value ] )
-                                        / valueTotal * static_cast<double>( radius ) );
-                            } else
-                                drawValue = cellValue * pixelsPerUnit;
-
-                            // record the point for drawing the polygon later
-                            int drawAngle = value * angleBetweenRays;
-                            QPoint drawPoint( center + polarToXY( static_cast<int>( drawValue ),
-                                        drawAngle ) );
-                            points.setPoint( totalPoints, drawPoint );
-                            totalPoints++;
-                            QRegion region;
-                            // the marker can be drawn now
-                            if( params()->polarMarker() ) {
-                                drawMarker( painter, params()->polarMarkerStyle( dataset ),
+                // record the point for drawing the polygon later
+                int drawAngle = value * angleBetweenRays;
+                QPoint drawPoint( center + polarToXY( static_cast<int>( drawValue ),
+                                  drawAngle ) );
+                points.setPoint( totalPoints, drawPoint );
+                totalPoints++;
+                KDChartDataRegion* datReg = 0;
+                // the marker can be drawn now
+                if( params()->polarMarker() ) {
+                    int xsize = params()->polarMarkerSize().width();
+                    int ysize = params()->polarMarkerSize().height();
+                    datReg = drawMarker( painter,
+                                        params(),
+                                        _areaWidthP1000, _areaHeightP1000,
+                                        _dataRect.x(), _dataRect.y(),
+                                        params()->polarMarkerStyle( dataset ),
                                         params()->dataColor( dataset ),
                                         drawPoint,
-                                        dataset, value, chart, minSizeP1000, region );
-                                painter->setPen( QPen( params()->dataColor( dataset ),
-                                            dataLinesWidth ) );
-                            }
-                            if ( regions ) {
-                                KDChartDataRegion* datReg = new KDChartDataRegion( region,
-                                        dataset,
-                                        value,
-                                        chart );
-                                datReg->points[ KDChartEnums::PosTopLeft ] =
-                                    drawPoint + _dataRect.topLeft();
-
-                                datReg->points[     KDChartEnums::PosTopCenter ]    =
-                                    datReg->points[ KDChartEnums::PosTopLeft ];
-                                datReg->points[     KDChartEnums::PosTopRight ]     =
-                                    datReg->points[ KDChartEnums::PosTopLeft ];
-                                datReg->points[     KDChartEnums::PosBottomLeft ]   =
-                                    datReg->points[ KDChartEnums::PosTopLeft ];
-                                datReg->points[     KDChartEnums::PosBottomCenter ] =
-                                    datReg->points[ KDChartEnums::PosTopLeft ];
-                                datReg->points[     KDChartEnums::PosBottomRight ]  =
-                                    datReg->points[ KDChartEnums::PosTopLeft ];
-                                datReg->points[     KDChartEnums::PosCenterLeft ]   =
-                                    datReg->points[ KDChartEnums::PosTopLeft ];
-                                datReg->points[     KDChartEnums::PosCenter ]       =
-                                    datReg->points[ KDChartEnums::PosTopLeft ];
-                                datReg->points[     KDChartEnums::PosCenterRight ]  =
-                                    datReg->points[ KDChartEnums::PosTopLeft ];
-                                /*
-                                // test the center positions:
-                                painter->drawEllipse( datReg->points[ KDChartEnums::PosCenterLeft ].x() - 2,
-                                datReg->points[ KDChartEnums::PosCenterLeft ].y() - 2,  5, 5);
-                                */
-                                datReg->startAngle = drawAngle;
-                                datReg->angleLen   = drawAngle;
-                                regions->append( datReg );
-                            }
-                            // calculate running sum for stacked and percent
-                            if ( params()->polarChartSubType() == KDChartParams::PolarStacked ||
-                                    params()->polarChartSubType() == KDChartParams::PolarPercent )
-                                currentValueSums[ value ] += cellValue;
-                        }
-                    }
-                    painter->drawPolygon( points );
+                                        dataset, value, chart,
+                                        regions,
+                                        xsize ? &xsize : 0,
+                                        ysize ? &ysize : 0 );
+                    painter->setPen( QPen( params()->dataColor( dataset ),
+                                    dataLinesWidth ) );
                 }
+                if ( regions ) {
+                    bool bMustAppendDatReg = 0 == datReg;
+                    if( bMustAppendDatReg ){
+                        QRect rect( QPoint( drawPoint.x() - 1,
+                                            drawPoint.y() - 1 ),
+                                    QSize( 3, 3 ) );
+                        datReg = new KDChartDataRegion( dataset,
+                                                        value,
+                                                        chart,
+                                                        rect );
+                    }
+                    datReg->points[ KDChartEnums::PosTopLeft ] =
+                        drawPoint + _dataRect.topLeft();
 
-                painter->translate( -_dataRect.x(), -_dataRect.y() );
+                    datReg->points[     KDChartEnums::PosTopCenter ]    =
+                        datReg->points[ KDChartEnums::PosTopLeft ];
+                    datReg->points[     KDChartEnums::PosTopRight ]     =
+                        datReg->points[ KDChartEnums::PosTopLeft ];
+                    datReg->points[     KDChartEnums::PosBottomLeft ]   =
+                        datReg->points[ KDChartEnums::PosTopLeft ];
+                    datReg->points[     KDChartEnums::PosBottomCenter ] =
+                        datReg->points[ KDChartEnums::PosTopLeft ];
+                    datReg->points[     KDChartEnums::PosBottomRight ]  =
+                        datReg->points[ KDChartEnums::PosTopLeft ];
+                    datReg->points[     KDChartEnums::PosCenterLeft ]   =
+                        datReg->points[ KDChartEnums::PosTopLeft ];
+                    datReg->points[     KDChartEnums::PosCenter ]       =
+                        datReg->points[ KDChartEnums::PosTopLeft ];
+                    datReg->points[     KDChartEnums::PosCenterRight ]  =
+                        datReg->points[ KDChartEnums::PosTopLeft ];
+                    /*
+                    // test the center positions:
+                    painter->drawEllipse( datReg->points[ KDChartEnums::PosCenterLeft ].x() - 2,
+                    datReg->points[ KDChartEnums::PosCenterLeft ].y() - 2,  5, 5);
+                    */
+                    datReg->startAngle = drawAngle;
+                    datReg->angleLen   = drawAngle;
+                    if( bMustAppendDatReg )
+                        regions->append( datReg );
+                }
+                // calculate running sum for stacked and percent
+                if ( params()->polarChartSubType() == KDChartParams::PolarStacked ||
+                        params()->polarChartSubType() == KDChartParams::PolarPercent )
+                    currentValueSums[ value ] += cellValue;
+            }
+        }
+        painter->drawPolygon( points );
     }
 
-
-    /*
-       Helper methode being called by KDChartPolarPainter::paintData()
-       */
-    void KDChartPolarPainter::paintCircularAxisLabel( QPainter* painter,
-            bool rotate,
-            int txtAngle,
-            QPoint center,
-            double currentRadiusPPU,
-            const QString& txt,
-            int align,
-            int step )
-    {
-        if( !rotate && (0 != (align & (Qt::AlignLeft | Qt::AlignRight) ) ) )
-            currentRadiusPPU += center.x()*0.01;
-        KDDrawText::drawRotatedText(
-                painter,
-                rotate ? txtAngle - 90 : 0,
-                step ? center - polarToXY( static_cast<int>( currentRadiusPPU ), txtAngle )
-                : center,
-                txt,
-                0,
-                step ? (rotate ? Qt::AlignBottom | Qt::AlignHCenter : align)
-                : Qt::AlignCenter );
-    }
+    painter->translate( -_dataRect.x(), -_dataRect.y() );
+}
 
 
-    /*!
-      Draws the marker for one data point according to the specified style.
+/*
+  Helper methode being called by KDChartPolarPainter::paintData()
+*/
+void KDChartPolarPainter::paintCircularAxisLabel( QPainter* painter,
+        bool rotate,
+        int txtAngle,
+        QPoint center,
+        double currentRadiusPPU,
+        const QString& txt,
+        int align,
+        int step )
+{
+    if( !rotate && (0 != (align & (Qt::AlignLeft | Qt::AlignRight) ) ) )
+        currentRadiusPPU += center.x()*0.01;
+    KDDrawText::drawRotatedText(
+            painter,
+            rotate ? txtAngle - 90 : 0,
+            painter->worldMatrix().map(center - polarToXY( static_cast<int>( currentRadiusPPU ), txtAngle )),
+            txt,
+            0,
+            step
+            ? (rotate ? Qt::AlignBottom | Qt::AlignHCenter : align)
+            : Qt::AlignCenter,
+            false,0,false,
+            false );
+}
 
-      \param painter the painter to draw on
-      \param style what kind of marker is drawn (square, diamond or circle)
-      \param color the color in which to draw the marker
-      \param p the center of the marker
-      \param dataset the dataset which this marker represents
-      \param value the value which this marker represents
-      \param regions a list of regions for data points, a new region for the new
-      marker will be appended to this list if it is not 0
-      */
-    void KDChartPolarPainter::drawMarker( QPainter* painter,
-            KDChartParams::PolarMarkerStyle style,
-            const QColor& color, const QPoint& p,
-            uint /*dataset*/, uint /*value*/, uint /*chart*/,
-            double minSizeP1000,
-            QRegion& region )
-    {
-        int xsize = params()->polarMarkerSize().width();
-        if ( 0 > xsize )
-            xsize = -1 * static_cast < int > ( xsize * minSizeP1000 );
-        int ysize = params()->polarMarkerSize().height();
-        if ( 0 > ysize )
-            ysize = -1 * static_cast < int > ( ysize * minSizeP1000 );
-        int xsize2 = xsize / 2;
-        int ysize2 = ysize / 2;
-        painter->setPen( color );
-        switch ( style ) {
-            case KDChartParams::PolarMarkerSquare: {
-                                                       painter->save();
-                                                       painter->setBrush( color );
-                                                       QRect rect( QPoint( p.x() - xsize2, p.y() - ysize2 ), QPoint( p.x() + xsize2, p.y() + ysize2 ) );
-                                                       painter->drawRect( rect );
-                                                       // Don't use rect for drawing after this!
-                                                       rect.moveBy( _dataRect.x(), _dataRect.y() );
-                                                       region = QRegion( rect );
-                                                       painter->restore();
-                                                       break;
-                                                   }
-            case KDChartParams::PolarMarkerDiamond: {
-                                                        painter->save();
-                                                        painter->setBrush( color );
-                                                        QPointArray points( 4 );
-                                                        points.setPoint( 0, p.x() - xsize2, p.y() );
-                                                        points.setPoint( 1, p.x(), p.y() - ysize2 );
-                                                        points.setPoint( 2, p.x() + xsize2, p.y() );
-                                                        points.setPoint( 3, p.x(), p.y() + ysize2 );
-                                                        painter->drawPolygon( points );
-                                                        // Don't use points for drawing after this!
-                                                        points.translate( _dataRect.x(), _dataRect.y() );
-                                                        region = QRegion( points );
-                                                        painter->restore();
-                                                        break;
-                                                    }
-            case KDChartParams::PolarMarkerCircle:
-            default: {
-                         painter->save();
-                         painter->setBrush( color );
-                         painter->drawEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
-                         QPointArray points;
-                         points.makeEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
-                         // Don't use points for drawing after this!
-                         points.translate( _dataRect.x(), _dataRect.y() );
-                         if( points.size() > 0 )
-                             region = QRegion( points );
-                         else
-                             region = QRegion();
-                         painter->restore();
-                     }
-        };
-    }
+
+/*!
+  Draws the marker for one data point according to the specified style.
+
+  \param painter the painter to draw on
+  \param style what kind of marker is drawn (square, diamond or circle)
+  \param color the color in which to draw the marker
+  \param p the center of the marker
+  \param dataset the dataset which this marker represents
+  \param value the value which this marker represents
+  \param regions a list of regions for data points, a new region for the new
+  marker will be appended to this list if it is not 0
+*//*
+void KDChartPolarPainter::drawMarker( QPainter* painter,
+        KDChartParams::PolarMarkerStyle style,
+        const QColor& color,
+        const QPoint& p,
+        uint, //dataset,
+        uint, //value,
+        uint, //chart,
+        double minSizeP1000,
+        QRegion& region )
+{
+    int xsize = params()->polarMarkerSize().width();
+    if ( 0 > xsize )
+        xsize = -1 * static_cast < int > ( xsize * minSizeP1000 );
+    int ysize = params()->polarMarkerSize().height();
+    if ( 0 > ysize )
+        ysize = -1 * static_cast < int > ( ysize * minSizeP1000 );
+    int xsize2 = xsize / 2;
+    int ysize2 = ysize / 2;
+    painter->setPen( color );
+    switch ( style ) {
+        case KDChartParams::PolarMarkerSquare: {
+                                                  painter->save();
+                                                  painter->setBrush( color );
+                                                  QRect rect( QPoint( p.x() - xsize2, p.y() - ysize2 ), QPoint( p.x() + xsize2, p.y() + ysize2 ) );
+                                                  painter->drawRect( rect );
+                                                  // Don't use rect for drawing after this!
+                                                  rect.moveBy( _dataRect.x(), _dataRect.y() );
+                                                  region = QRegion( rect );
+                                                  painter->restore();
+                                                  break;
+                                              }
+        case KDChartParams::PolarMarkerDiamond: {
+                                                    painter->save();
+                                                    painter->setBrush( color );
+                                                    QPointArray points( 4 );
+                                                    points.setPoint( 0, p.x() - xsize2, p.y() );
+                                                    points.setPoint( 1, p.x(), p.y() - ysize2 );
+                                                    points.setPoint( 2, p.x() + xsize2, p.y() );
+                                                    points.setPoint( 3, p.x(), p.y() + ysize2 );
+                                                    painter->drawPolygon( points );
+                                                    // Don't use points for drawing after this!
+                                                    points.translate( _dataRect.x(), _dataRect.y() );
+                                                    region = QRegion( points );
+                                                    painter->restore();
+                                                    break;
+                                                }
+        case KDChartParams::PolarMarkerCircle:
+        default: {
+                    painter->save();
+                    painter->setBrush( color );
+                    painter->drawEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
+                    QPointArray points;
+                    points.makeEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
+                    // Don't use points for drawing after this!
+                    points.translate( _dataRect.x(), _dataRect.y() );
+                    if( points.size() > 0 )
+                        region = QRegion( points );
+                    else
+                        region = QRegion();
+                    painter->restore();
+                }
+    };
+}*/
 
 #define DEGTORAD(d) (d)*M_PI/180
 
-    QPoint KDChartPolarPainter::polarToXY( int radius, int angle )
-    {
-        double anglerad = DEGTORAD( static_cast<double>( angle ) );
-        QPoint ret( static_cast<int>( cos( anglerad ) * radius ),
-                static_cast<int>( sin( anglerad ) * radius ) );
-        return ret;
-    }
+QPoint KDChartPolarPainter::polarToXY( int radius, int angle )
+{
+    double anglerad = DEGTORAD( static_cast<double>( angle ) );
+    QPoint ret( static_cast<int>( cos( anglerad ) * radius ),
+            static_cast<int>( sin( anglerad ) * radius ) );
+    return ret;
+}
 
 
-    /**
-      This method is a specialization that returns a fallback legend text
-      appropriate for polar charts where the fallbacks should come from
-      the values, not from the datasets.
+/**
+  This method is a specialization that returns a fallback legend text
+  appropriate for polar charts where the fallbacks should come from
+  the values, not from the datasets.
 
-      This method is only used when automatic legends are used, because
-      manual and first-column legends do not need fallback texts.
+  This method is only used when automatic legends are used, because
+  manual and first-column legends do not need fallback texts.
 
-      \param uint dataset the dataset number for which to generate a
-      fallback text
-      \return the fallback text to use for describing the specified
-      dataset in the legend
-      */
-    QString KDChartPolarPainter::fallbackLegendText( uint dataset ) const
-    {
-        return i18n( "Series %1" ).arg( dataset + 1 );
-    }
+  \param uint dataset the dataset number for which to generate a
+  fallback text
+  \return the fallback text to use for describing the specified
+  dataset in the legend
+*/
+QString KDChartPolarPainter::fallbackLegendText( uint dataset ) const
+{
+    return QObject::tr( "Series " ) + QString::number( dataset + 1 );
+}
 
 
-    /**
-      This methods returns the number of elements to be shown in the
-      legend in case fallback texts are used.
+/**
+  This methods returns the number of elements to be shown in the
+  legend in case fallback texts are used.
 
-      This method is only used when automatic legends are used, because
-      manual and first-column legends do not need fallback texts.
+  This method is only used when automatic legends are used, because
+  manual and first-column legends do not need fallback texts.
 
-      \return the number of fallback texts to use
-      */
-    uint KDChartPolarPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
-    {
-        return data->usedRows();
-    }
+  \return the number of fallback texts to use
+*/
+uint KDChartPolarPainter::numLegendFallbackTexts( KDChartTableDataBase* data ) const
+{
+    return data->usedRows();
+}

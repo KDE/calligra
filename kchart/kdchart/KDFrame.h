@@ -40,8 +40,7 @@
 #include <qdom.h>
 
 #include <KDFrameProfileSection.h>
-#include <koffice_export.h>
-class QBrush;
+
 
 /** \file KDFrame.h
   \brief Header of the KDFrame class providing highly configurable rectangular frame drawing.
@@ -63,8 +62,10 @@ class QBrush;
   \endif
   */
 
+
 /**
-  The main class of KDFrame.
+  \brief The main class of KDFrame.
+
   KDFrame is made for highly configurable rectangular frame drawing.
 
   A frame may consist of an (optional) border and/or an (optional) background.
@@ -86,6 +87,12 @@ class QBrush;
 class KDCHART_EXPORT KDFrame : public QObject
 {
     Q_OBJECT
+    Q_ENUMS( BackPixmapMode )
+    Q_ENUMS( SimpleFrame )
+    Q_ENUMS( ProfileName )
+    Q_ENUMS( CornerName )
+    Q_ENUMS( CornerStyle )
+    Q_ENUMS( KDFramePaintSteps )
 
 public:
     //// GENERAL
@@ -100,6 +107,7 @@ public:
     */
     enum BackPixmapMode { PixCentered, PixScaled, PixStretched };
 
+public slots:
 
     /**
     Converts the specified background pixmap mode enum to a string
@@ -115,8 +123,6 @@ public:
             case PixScaled:
                 return "Scaled";
             case PixStretched:
-                return "Stretched";
-            default: // should not happen
                 return "Stretched";
         }
 
@@ -137,19 +143,15 @@ public:
             return PixScaled;
         else if( string == "Stretched" )
             return PixStretched;
-        else // default, should not happen
-            return PixStretched;
 
         return PixStretched;
     }
 
 
+public:
 
 
     /**
-    \ifnot v200
-    \deprecated Feature scheduled for future release, at present not implemented.
-    \else
     These simple frames are pre-defined for your convenience
 
     \li \c FrameFlat a flat rectangular frame
@@ -160,9 +162,13 @@ public:
     \li \c FramePanelSunken a sunken panel
     \li \c FrameSemicircular a raised box with round edges
 
-    All pre-defined frames have normal corners but of course you may
-    specify differently looking corners by calling setCorners() (or setCorner(), resp.)
-    after having called setSimpleFrame()
+    \ifnot v200
+    All pre-defined frames have normal corners.
+    \else
+    All pre-defined frames have normal corners but
+    of course you may specify differently looking corners by
+    calling setCorners() (or setCorner(), resp.) after having
+    called setSimpleFrame()
 
     \sa setSimpleFrame
     \endif
@@ -172,6 +178,7 @@ public:
         FramePanelRaized, FramePanelSunken,
         FrameSemicircular };
 
+public slots:
 
     /**
     \ifnot v200
@@ -182,7 +189,7 @@ public:
     addProfileSection multiple times specifying the appropriate parameters and finally
     setting the corners to \c CornerNormal
 
-    \note When using ProfElegance the midLineWidth value will be ignored since
+    \note When using FrameElegance the midLineWidth value will be ignored since
     in this special case the lineValue will indicate the <b>total width</b> of the frame.
     FrameElegance frames look best when lineWidth is 16 or the multiple of 16.
 
@@ -192,9 +199,9 @@ public:
     See setProfile for a short example using this method.
 
     \param frame one of the values defined for enum \c SimpleFrame
-    \param lineWidth for frames with 1-line edges: the width of the line;
-        for frames with 2-line edges: the width of each of the lines;
-        for frames with 3-line edges: the width of the outer and the
+    \param lineWidth for FrameFlat and FrameElegance: the complete frame width;
+        for frames with 2-line edges (FramePanelRaized, FramePanelSunken): the width of each of the lines;
+        for frames with 3-line edges (FrameBoxRaized, FrameBoxSunken, FrameSemicircular): the width of the outer and the
         width of the inner line.
     \param midLineWidth only used for frames with 3-line edges: the width
         of the middle line.
@@ -215,6 +222,7 @@ public:
             const QPixmap* backPixmap     = 0,
             BackPixmapMode backPixmapMode = PixStretched );
 
+public:
     /**
     \ifnot v200
     \deprecated Feature scheduled for future release, at present not implemented.
@@ -232,6 +240,7 @@ public:
     enum ProfileName { ProfileTop,    ProfileRight,
         ProfileBottom, ProfileLeft };
 
+public slots:
     /**
     \ifnot v200
     \deprecated Feature scheduled for future release, at present not implemented.
@@ -267,7 +276,7 @@ public:
     void addProfileSection( ProfileName      name,
             int              wid,
             QPen             pen,
-            KDFrameProfileSection::Direction dir  = KDFrameProfileSection::DirPlain,
+            KDFrameProfileSection::Direction dir  = KDFrameProfileSection::DirPlain, // PENDING(blackie) possible enum problem
             KDFrameProfileSection::Curvature curv = KDFrameProfileSection::CvtPlain );
 
     /**
@@ -320,7 +329,7 @@ public:
     */
     const KDFrameProfile& profile( ProfileName name ) const;
 
-
+public:
 
     /**
     \ifnot v200
@@ -342,6 +351,7 @@ public:
         CornerBottomRight,
         CornerUNKNOWN };
 
+public slots:
     /**
     \ifnot v200
     \deprecated Feature scheduled for future release, at present not implemented.
@@ -363,8 +373,6 @@ public:
             case CornerBottomRight:
                 return "BottomRight";
             case CornerUNKNOWN:
-                return "UNKNOWN";
-            default: // should not happen
                 return "UNKNOWN";
         }
 
@@ -393,13 +401,11 @@ public:
             return CornerBottomRight;
         else if( string == "UNKNOWN" )
             return CornerUNKNOWN;
-        else // default, should not happen
-            return CornerUNKNOWN;
 
         return CornerUNKNOWN;
     }
 
-
+public:
 
 
     /**
@@ -419,6 +425,7 @@ public:
         CornerRound,
         CornerOblique };
 
+public slots:
         /**
         \ifnot v200
         \deprecated Feature scheduled for future release, at present not implemented.
@@ -437,8 +444,6 @@ public:
                     return "Round";
                 case CornerOblique:
                     return "Oblique";
-                default: // should not happen
-                    return "Normal";
             }
 
             return "Normal";
@@ -462,13 +467,14 @@ public:
                 return CornerRound;
             else if( string == "Oblique" )
                 return CornerOblique;
-            else // default, should not happen
-                return CornerNormal;
 
             return CornerNormal;
         }
 
 
+public:
+
+// MOC_SKIP_BEGIN
         /**
         \ifnot v200
         \deprecated Feature scheduled for future release, at present not implemented.
@@ -481,7 +487,7 @@ public:
         \sa setCorners, setCorner, cornerStyle, cornerWidth, cornerProfile, CornerName, CornerStyle
         \endif
         */
-        class KDCHART_EXPORT KDFrameCorner
+    class KDCHART_EXPORT KDFrameCorner
         {
             friend class KDFrame;
             public:
@@ -500,7 +506,6 @@ public:
             Destructor. Only defined to have it virtual.
             */
             virtual ~KDFrameCorner();
-
 
             /**
             \ifnot v200
@@ -564,6 +569,9 @@ public:
             KDFrameProfile _profile;
         };
 
+// MOC_SKIP_END
+
+public slots:
         /**
         \ifnot v200
         \deprecated Feature scheduled for future release, at present not implemented.
@@ -627,17 +635,12 @@ public:
         {
             switch( name ) {
                 case CornerTopLeft:     return _cornerTL.style();
-                                        break;
                 case CornerTopRight:    return _cornerTR.style();
-                                        break;
                 case CornerBottomLeft:  return _cornerBL.style();
-                                        break;
                 case CornerBottomRight: return _cornerBR.style();
-                                        break;
-                default:
-                                        break;
+                case CornerUNKNOWN:
+                default:                return CornerNormal;
             }
-            return CornerNormal;
         }
 
         /**
@@ -653,17 +656,12 @@ public:
         {
             switch( name ) {
                 case CornerTopLeft:     return _cornerTL.width();
-                                        break;
                 case CornerTopRight:    return _cornerTR.width();
-                                        break;
                 case CornerBottomLeft:  return _cornerBL.width();
-                                        break;
                 case CornerBottomRight: return _cornerBR.width();
-                                        break;
-                default:
-                                        break;
+                case CornerUNKNOWN:
+                default:                return 0;
             }
-            return 0;
         }
 
         /**
@@ -678,18 +676,13 @@ public:
         const KDFrameProfile& cornerProfile( CornerName name ) const
         {
             switch( name ) {
+                case CornerUNKNOWN:
                 case CornerTopLeft:     return _cornerTL.profile();
-                                        break;
                 case CornerTopRight:    return _cornerTR.profile();
-                                        break;
                 case CornerBottomLeft:  return _cornerBL.profile();
-                                        break;
                 case CornerBottomRight: return _cornerBR.profile();
-                                        break;
-                default:
-                                        break;
+                default: return _cornerTL.profile();
             }
-            return _cornerTL.profile();
         }
 
 
@@ -832,6 +825,7 @@ public:
         virtual void paintCorners( QPainter& painter, const QRect& innerRect ) const;
 
 
+public:
         /**
         The different steps taken to paint the frame:
         first paint the background then the edges then the corners.
@@ -847,6 +841,7 @@ public:
         */
         enum KDFramePaintSteps { PaintBackground, PaintEdges, PaintCorners, PaintBorder, PaintAll };
 
+public slots:
 
         /**
         Paint methode actually drawing the frame.
@@ -867,7 +862,7 @@ public:
         use KDFrame::PaintCorners to draw only the corners.
         \param innerRect The area inside the frame. Use this parameter to temporarily override the \c innerRect set by
         the constructor of KDFrame or by setInnerRect(). This approach can be usefull if you want to draw several
-        frames that differ only regarding to their position and size but share the same edges/corners/bachgrouns settings.
+        frames that differ only regarding to their position and size but share the same edges/corners/background settings.
         In this case you could decide to instantiate only one KDFrame set up the desired settings and just call
         its paint() methode several time - giving it the appropriate innerRect for each frame. This would result in
         less memory usage since you could use that single KDFrame object as kind of a shared ressource.
@@ -898,101 +893,90 @@ public:
             _cornerBR.setAll( CornerNormal, 0, 0 );
         }
 
+public:
 
-        /**
-        Default Constructor. Defines default values.
+    /**
+    Default Constructor. Defines default values.
 
-        The constructor does *not* have a \c parent parameter since drawing
-        of the frame is not done transparently but by (one or more) explicit
-        calls of the frames paint() methode.  See explanation given there
-        to learn about the why and how of this...
+    The constructor does *not* have a \c parent parameter since drawing
+    of the frame is not done transparently but by (one or more) explicit
+    calls of the frames paint() methode.  See explanation given there
+    to learn about the why and how of this...
 
-        \note The rectangle applies to the <b>inner</b> area of the frame.
-        The Frame is drawn around this area: touching it but not covering it.
-        The outer size of the frame and the position of its outer left corner
-        depends from the frame profile width.
+    \note The rectangle applies to the <b>inner</b> area of the frame.
+    The Frame is drawn around this area: touching it but not covering it.
+    The outer size of the frame and the position of its outer left corner
+    depends from the frame profile width.
 
-        \Note To have a 'tiled' background image do not specify a backPixmap
-        but use a background <b>brush</b> holding this pixmap.
+    \Note To have a 'tiled' background image do not specify a backPixmap
+    but use a background <b>brush</b> holding this pixmap.
 
-        \sa rect, setInnerRect, setProfile
-        */
-        KDFrame( QRect          innerRect      = QRect(0,0,0,0),
-                 SimpleFrame    frame          = FrameFlat,
-                 int            lineWidth      = 1,
-                 int            midLineWidth   = 0,
-                 QPen           pen            = QPen(),   // solid black line with 0 width
-                 QBrush         background     = QBrush(), // no brush
-                 const QPixmap* backPixmap     = 0,        // no pixmap
-                 BackPixmapMode backPixmapMode = PixStretched,
-                 int            shadowWidth    = 0,
-                 CornerName     sunPos         = CornerTopLeft )
-        {
-            _profileSections.setAutoDelete( true );
-            _innerRect = innerRect;
-            setSimpleFrame( frame,
-                            lineWidth,
-                            midLineWidth,
-                            pen,
-                            background,
-                            backPixmap,
-                            backPixmapMode );
-            _shadowWidth = shadowWidth;
-            _sunPos      = sunPos;
-        }
-
-        /**
-        Constructor. Set up a frame by copying settings of another frame.
-
-        The constructor does *not* have a \c parent parameter since drawing
-        of the frame is not done transparently but by (one or more) explicit
-        calls of the frames paint() methode.  See explanation given there
-        to learn about the why and how of this...
-
-        \note The rectangle applies to the <b>inner</b> area of the frame.
-        The Frame is drawn around this area: touching it but not covering it.
-        The outer size of the frame and the position of its outer left corner
-        depends from the frame profile width.
-
-        \sa rect, setInnerRect, setProfile
-        */
-        KDFrame( QRect innerRect,
-                 const KDFrame& R,
-                 CornerName sunPos = CornerUNKNOWN ) : QObject()
-        {
-            deepCopy( *this, R );
-            if( innerRect.isValid() )
-                _innerRect = innerRect;
-            if( CornerUNKNOWN != sunPos )
-                _sunPos = sunPos;
-
-            _profileSections.setAutoDelete( true );
-        }
-
-        /**
-        Destructor. Only defined to have it virtual.
-        */
-        virtual ~KDFrame();
-
-        /*
-        Copy-c'tor: durch Aufruf der Kopiermethode,
-        siehe auch Zuweisungsoperators.
-        */
-        KDFrame( const KDFrame& R ) : QObject()
-        {
-            deepCopy( *this, R );
-        }
-
-    /*
-        Zuweisungsoperator: durch Aufruf der Kopiermethode,
-        siehe auch Copy-c'tor.
+    \sa rect, setInnerRect, setProfile
     */
-    KDFrame& operator=( const KDFrame& R )
+    KDFrame( QRect          innerRect      = QRect(0,0,0,0),
+            SimpleFrame    frame          = FrameFlat,
+            int            lineWidth      = 1,
+            int            midLineWidth   = 0,
+            QPen           pen            = QPen(),   // solid black line with 0 width
+            QBrush         background     = QBrush(), // no brush
+            const QPixmap* backPixmap     = 0,        // no pixmap
+            BackPixmapMode backPixmapMode = PixStretched,
+            int            shadowWidth    = 0,
+            CornerName     sunPos         = CornerTopLeft )
     {
-        if ( this != &R )
-            deepCopy( *this, R );
-        return *this;
+        _profileSections.setAutoDelete( true );
+        _innerRect = innerRect;
+        setSimpleFrame( frame,
+                        lineWidth,
+                        midLineWidth,
+                        pen,
+                        background,
+                        backPixmap,
+                        backPixmapMode );
+        _shadowWidth = shadowWidth;
+        _sunPos      = sunPos;
     }
+
+
+/*
+    Constructor. Set up a frame by copying settings of another frame.
+
+    The constructor does *not* have a \c parent parameter since drawing
+    of the frame is not done transparently but by (one or more) explicit
+    calls of the frames paint() methode.  See explanation given there
+    to learn about the why and how of this...
+
+    \note The rectangle applies to the <b>inner</b> area of the frame.
+    The Frame is drawn around this area: touching it but not covering it.
+    The outer size of the frame and the position of its outer left corner
+    depends from the frame profile width.
+
+    \sa rect, setInnerRect, setProfile
+
+    KDFrame( QRect innerRect,
+            const KDFrame& R,
+            CornerName sunPos = CornerUNKNOWN )
+    {
+        deepCopy( *this, R );
+        if( innerRect.isValid() )
+            _innerRect = innerRect;
+        if( CornerUNKNOWN != sunPos )
+            _sunPos = sunPos;
+
+        _profileSections.setAutoDelete( true );
+    }
+*/
+private:
+    KDFrame( const KDFrame& ) : QObject(0) {}
+    KDFrame& operator=( const KDFrame& ){return *this;}
+
+
+
+public:
+    /**
+    Destructor. Only defined to have it virtual.
+    */
+    virtual ~KDFrame();
 
     /*
     Kopierroutine, aufgerufen im Copy-C'tor und im Zuweisungs-Operator
@@ -1013,6 +997,7 @@ public:
         D._cornerTR       = R._cornerTR;
         D._cornerBL       = R._cornerBL;
         D._cornerBR       = R._cornerBR;
+        D._profileSections= R._profileSections;
         D._profileSections.setAutoDelete( true );
         R.setProfileSectionsAutoDelete( false );
     }

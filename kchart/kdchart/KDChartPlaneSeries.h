@@ -31,10 +31,9 @@
 
 
 #include "KDChartBaseSeries.h"
-#include "KDChartData.h"
 
 
-class KDChartPlaneSeries : public KDChartBaseSeries
+class KDCHART_EXPORT KDChartPlaneSeries : public KDChartBaseSeries
 {
     public:
         KDChartPlaneSeries( bool isX = false, double location = 0 );

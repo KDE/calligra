@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2003 Klarï¿½vdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -34,10 +34,16 @@
 #include <float.h>
 
 #if defined(unix) || defined(__unix__) || defined(Q_WS_MAC) || defined(Q_WS_LINUX)
-#include  <limits.h>
+#include <limits.h>
 #else
-#define  MINDOUBLE DBL_MIN
+#define MINDOUBLE DBL_MIN
+#define MAXDOUBLE DBL_MAX
 #endif
+
+#if defined(_MSC_VER)
+#pragma warning(disable: 4251)
+#endif
+#include <kdchart_export.h>
 
 
 /* \file KDChartGlobal.h
@@ -46,8 +52,10 @@
 
 
 
-#ifdef Q_WS_WIN
+#if defined(_MSC_VER)
+#ifndef QT_NO_STL
 #define QT_NO_STL // Avoid a name clash
+#endif
 #endif
 
 
@@ -107,7 +115,7 @@
 #endif
 #if QT_VERSION == 232
 #define COMPAT_QT_VERSION 0x020302
-#ifdef Q_WS_WIN
+#if defined(_MSC_VER)
 #pragma message( "using Qt 2.3.2" )
 #endif
 #endif
@@ -134,7 +142,7 @@
 #endif
 // --- new format since Qt 3.0.0 or since 3.0.4 ???
 #ifndef COMPAT_QT_VERSION
-#ifdef Q_WS_WIN
+#if defined(_MSC_VER)
 #pragma message( "using Qt > 2.3.2" )
 #endif
 #define COMPAT_QT_VERSION QT_VERSION
@@ -143,7 +151,7 @@
 // since Qt 3.1 they do /not/ include limits.h or climits on windows anymore
 // so we must include that manually
 #if COMPAT_QT_VERSION > 0x030099
-#ifdef Q_WS_WIN
+#if defined(_MSC_VER)
 #include <climits>
 #endif
 #endif

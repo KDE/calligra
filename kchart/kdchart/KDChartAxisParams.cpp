@@ -36,11 +36,11 @@
   \class KDChartAxisParams KDChartAxisParams.h
   \brief access the chart axis parameters.
 
-  To be used in combination with the axis access methods in 
-  \class KDChartParams.
+  To be used in combination with the axis access methods in
+  class KDChartParams.
 
 
-  \see KDChartParams.h 
+  \see KDChartParams.h
   \see KDChartParams.cpp
 
   Bundles all parameters of one axis including the type except the
@@ -50,82 +50,6 @@
 */
 
 
-/**
-  Use this to specify that the axis label limits
-  are to be calculated automatically.
-
-  \sa setAxisValues
-  */
-KDChartData KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT( 140319.64 );
-
-/**
-  Use this to specify that the step-width from one label
-  to the other shall be calculated automatically.
-
-  \sa setAxisValues
-  */
-const double KDChartAxisParams::AXIS_LABELS_AUTO_DELTA = 140319.64;
-
-
-/**
-  Use this to specify that an automatically computed amount of
-  axis labels are to be skipped if there is not enough space
-  for displaying all of them.
-  This is usefull in case you have lots of entries in one dataset.
-
-  \sa setAxisValues
-  */
-const int KDChartAxisParams::AXIS_LABELS_AUTO_LEAVEOUT = 14364;
-
-/**
-  Use this to specify that date/time format to be used for
-  displaying the axis labels is to be determined automatically.
-  */
-const QString KDChartAxisParams::AXIS_LABELS_AUTO_DATETIME_FORMAT = "AUTO";
-
-/**
-  Use this to specify that the number of digits to be shown
-  on the axis labels behind the comma is to be calculated
-  automatically.
-
-  \sa setAxisValues
-  */
-const int KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS = 14364;
-
-/**
-  Use this to reset the grid colour to its default value
-  for re-doing changes made by calling \c setAxisGridColor().
-
-  \sa setAxisGridColor
-  */
-
-
-const QColor KDChartAxisParams::DEFAULT_AXIS_GRID_COLOR = QColor( 0xA0, 0xA0, 0xA0 );
-
-/**
-  Use this to specify that the width of the axis grid lines
-  shall be equal to the width of the axis line.
-
-  \sa setAxisGridLineWidth
-  */
-const int KDChartAxisParams::AXIS_GRID_AUTO_LINEWIDTH = 14364;
-
-/**
-  Use this to specify that the zero-line shall NOT be omitted
-  in case all of the data are grouped far away from zero.
-
-  \sa setAxisValues
-  */
-const int KDChartAxisParams::AXIS_IGNORE_EMPTY_INNER_SPAN = -1;
-
-/**
-  Use this to prevent \c setAxisValues from changing the current
-  setting of _axisMaxEmptyInnerSpan.
-
-  \sa setAxisValues
-  */
-
-const int KDChartAxisParams::DONT_CHANGE_EMPTY_INNER_SPAN_NOW = -2;
 
 
 
@@ -216,7 +140,7 @@ KDChartAxisParams::KDChartAxisParams()
     _axisAreaMin = -100;
     _axisAreaMax = 0;
     _axisCalcMode = AxisCalcLinear;
-    _axisIsoRefAxis = UINT_MAX; // == KDChartParams::KDCHART_NO_AXIS, see KDChartParams.cpp
+    _axisIsoRefAxis = UINT_MAX; // == KDCHART_NO_AXIS, see KDChartParams.cpp
     _axisTrueAreaSize = 0;
     _axisZeroLineStartX = 0.0;
     _axisZeroLineStartY = 0.0;
@@ -230,14 +154,15 @@ KDChartAxisParams::KDChartAxisParams()
     _axisLineVisible = true;
     _axisLineColor = QColor( 0, 0, 0 );
 
+    _axisShowFractionalValuesDelimiters = true;
     _axisShowGrid      = false;
-    _axisGridColor     = DEFAULT_AXIS_GRID_COLOR;
-    _axisGridLineWidth = AXIS_GRID_AUTO_LINEWIDTH;
+    _axisGridColor     = KDCHART_DEFAULT_AXIS_GRID_COLOR;
+    _axisGridLineWidth = KDCHART_AXIS_GRID_AUTO_LINEWIDTH;
     _axisGridStyle     = Qt::SolidLine;
 
     _axisShowSubDelimiters = true;
-    _axisGridSubColor      = DEFAULT_AXIS_GRID_COLOR;
-    _axisGridSubLineWidth  = AXIS_GRID_AUTO_LINEWIDTH;
+    _axisGridSubColor      = KDCHART_DEFAULT_AXIS_GRID_COLOR;
+    _axisGridSubLineWidth  = KDCHART_AXIS_GRID_AUTO_LINEWIDTH;
     _axisGridSubStyle      = Qt::DotLine;
 
     _axisZeroLineColor = QColor( 0x00, 0x00, 0x80 );
@@ -246,22 +171,25 @@ KDChartAxisParams::KDChartAxisParams()
     _axisLabelsFont = QFont( "helvetica", 12,
                              QFont::Normal, false );
     _axisLabelsFontUseRelSize = true;
-    _axisLabelsFontRelSize = 24;
+    _axisLabelsFontRelSize = 17;
+    _axisLabelsFontMinSize = 10;
     _axisLabelsDontShrinkFont = false;
     _axisLabelsDontAutoRotate = false;
     _axisLabelsRotation = 0;
     _axisLabelsColor = QColor( 0, 0, 0 );
 
     _axisSteadyValueCalc = true;
-    _axisValueStart = AXIS_LABELS_AUTO_LIMIT;
-    _axisValueEnd = AXIS_LABELS_AUTO_LIMIT;
-    _axisValueDelta = AXIS_LABELS_AUTO_DELTA;
+    _axisValueStartIsExact = true;
+    _axisValueStart        = KDCHART_AXIS_LABELS_AUTO_LIMIT;
+    _axisValueEnd          = KDCHART_AXIS_LABELS_AUTO_LIMIT;
+    _axisValueDelta = KDCHART_AXIS_LABELS_AUTO_DELTA;
     _axisValueDeltaScale = ValueScaleNumerical;
-    _axisValueLeaveOut = AXIS_LABELS_AUTO_LEAVEOUT;
+    _axisValueLeaveOut = KDCHART_AXIS_LABELS_AUTO_LEAVEOUT;
+    _axisValuesDecreasing = false;
 
     // First we used "h:mm:ss\nd.MM.yyyy" but now we calculate the
     // format automatically - based on the time span to be displayed.
-    _axisLabelsDateTimeFormat = AXIS_LABELS_AUTO_DATETIME_FORMAT;
+    _axisLabelsDateTimeFormat = KDCHART_AXIS_LABELS_AUTO_DATETIME_FORMAT;
 
     _axisMaxEmptyInnerSpan = 90;
     _takeLabelsFromDataRow = LabelsFromDataRowNo;
@@ -277,7 +205,7 @@ KDChartAxisParams::KDChartAxisParams()
     setTrueAxisDtLowHighDeltaScale( QDateTime(), QDateTime(), ValueScaleDay );
 
     _axisLabelsDivPow10 = 0;
-    _axisDigitsBehindComma = AXIS_LABELS_AUTO_DIGITS;
+    _axisDigitsBehindComma = KDCHART_AXIS_LABELS_AUTO_DIGITS;
     _axisLabelsDecimalPoint = ".";
     _axisLabelsThousandsPoint = ",";
     _axisLabelsPrefix = "";
@@ -501,11 +429,12 @@ bool  KDChartAxisParams::axisVisible() const
   one, resp.) or the height of the top axis area (or the bottom one,
   resp.).
   \li \c AxisAreaModeFixedSize (default) value will be taken
-  from \c AxisAreaMinSize()
-  \li \c AxisAreaModeAutoSize will be calculated automatically based on
-  the size of the labels to be drawn
+  from \c AxisAreaMinSize() or \c AxisAreaMaxSize() - whichever
+  returns the smaller value
+  \li \c AxisAreaModeAutoSize (default) will be calculated
+  automatically based on the size of the labels to be drawn
   \li \c AxisAreaModeMinMaxSize will be calculated automatically but
-  bearing user defined limits in mind
+  bearing user defined limits in mind (this is not implemented yet)
 
   \sa setAxisAreaMode, axisAreaMode, AxisAreaMode
   \sa setAxisAreaMin, setAxisAreaMax, setAxisArea
@@ -585,8 +514,9 @@ KDChartAxisParams::AxisAreaMode KDChartAxisParams::stringToAxisAreaMode( const Q
   of the size of the printable area to
   be used. This will make the axis look the same even if scaled
   to very different size.
-Note: This value will be used for AxisAreaModeFixedSize charts
-as well.
+
+  Note: It AxisAreaModeFixedSize is set the smaller value of
+  axisAreaMax and axisAreaMin is used for the area size.
 
 \sa axisAreaMin, axisAreaMax, setAxisAreaMode, setAxisAreaMax
 \sa setAxisArea
@@ -660,7 +590,7 @@ void  KDChartAxisParams::setAxisUseAvailableSpace( int axisUseAvailableSpaceFrom
   be used by this axis.
 
   \sa setAxisUseAvailableSpace, axisUseAvailableSpaceTo
-  */ 
+  */
 
 
 /**
@@ -680,7 +610,9 @@ void  KDChartAxisParams::setAxisUseAvailableSpace( int axisUseAvailableSpaceFrom
   of the size of the printable area to
   be used. This will make the axis look the same even if scaled
   to very different size.
-Note: This value will be ignored for AxisAreaModeFixedSize charts.
+
+  Note: If AxisAreaModeFixedSize is set the smaller value of
+  axisAreaMax and axisAreaMin is used for the area size.
 
 \sa axisAreaMax, axisAreaMin, setAxisAreaMode, setAxisAreaMin
 \sa setAxisArea
@@ -691,7 +623,7 @@ void  KDChartAxisParams::setAxisAreaMax( int axisAreaMax )
     emit changed();
 }
 /**
-  \fn int  KDChartAxisParams::axisAreaMax() const 
+  \fn int  KDChartAxisParams::axisAreaMax() const
   Returns the axis area maximum width (or height, resp.).
 
   \return the axis area maximum width (or height, resp.).
@@ -703,6 +635,9 @@ void  KDChartAxisParams::setAxisAreaMax( int axisAreaMax )
   minimum and maximum width (or height, resp.) of the area.
   This method is here for convenience, see \c setAxisAreaMode,
   \c setAreaMin and \c setAreaMax for details.
+
+  Note: Is AxisAreaModeFixedSize is set the smaller value of
+  axisAreaMax and axisAreaMin is used for the area size.
 
   \param axisAreaMode the way how to find out the
   size of the area where the axis shall be drawn.
@@ -737,11 +672,9 @@ void  KDChartAxisParams::setAxisArea( AxisAreaMode axisAreaMode,
   in detail these settings will become valid:
 
   \li steady-value-calculation mode is activated
-  \li Start value is 1 (start of the integral values' log10 scale)
-  \li End value will be calculated according to the highest
-  entry in the associated dataset(s)
-  \li Delta width will be 1 logarithmical step
-  \li no Digits will be shown behind the comma.
+  \li automatic limit calculation will be set for the begin and the end of the axis
+  \li logarithmical step width will be calculated automatically: 0.001, 0.01, 0.1, 1, 10, ..
+  \li number of Digits shown behind the comma will be calculated automatically.
 
   This is done by implicitely calling setAxisValues(),
   so you don't need to explicitely call that function,
@@ -750,11 +683,14 @@ void  KDChartAxisParams::setAxisArea( AxisAreaMode axisAreaMode,
   \verbatim
   if( AxisCalcLogarithmic == axisCalcMode )
   setAxisValues( true,
-  0.0,
-  KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
-  1.0,
-  0 );
+                 KDCHART_AXIS_LABELS_AUTO_LIMIT,
+                 KDCHART_AXIS_LABELS_AUTO_LIMIT,
+                 1.0,
+                 KDCHART_AXIS_LABELS_AUTO_DIGITS );
   \endverbatim
+
+  You may override these setting by making an extra setAxisValues()
+  call AFTER calling setAxisCalcMode( AxisCalcLogarithmic ).
 
   \param axisCalcMode the axis calculation mode to be used.
   \sa axisCalcMode, AxisCalcMode
@@ -765,10 +701,10 @@ void  KDChartAxisParams::setAxisCalcMode( AxisCalcMode axisCalcMode )
     _axisCalcMode = axisCalcMode;
     if( AxisCalcLogarithmic == axisCalcMode ){
         setAxisValues( true,
-                0.0,
-                KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                KDCHART_AXIS_LABELS_AUTO_LIMIT,
+                KDCHART_AXIS_LABELS_AUTO_LIMIT,
                 1.0,
-                0 );
+                KDCHART_AXIS_LABELS_AUTO_DIGITS );
     }
     emit changed();
 }
@@ -845,11 +781,11 @@ KDChartAxisParams::AxisCalcMode KDChartAxisParams::stringToAxisCalcMode( const Q
   using more axes than these two ones - the resulting chart will be true
   to scale.
 
-  \note Use special value KDChartParams::KDCHART_ALL_AXES if your chart
+  \note Use special value KDCHART_ALL_AXES if your chart
   has got more than two axes and all of them shall use the same scale, specifying
   this for one of the axes is enough, there is no need to set it several times.
 
-  Use special value KDChartParams::KDCHART_NO_AXIS to undo any previous setting
+  Use special value KDCHART_NO_AXIS to undo any previous setting
   that was specified for this axis, this has to be called for any axis that was
   modified by previous calls.
 
@@ -865,7 +801,7 @@ void  KDChartAxisParams::setIsometricReferenceAxis( uint isoRefAxis )
   \fn uint  KDChartAxisParams::isometricReferenceAxis() const
   Returns which axis this axis shall be isometric with, this will
   be either the axis position - see KDChartAxisParams::AxisPos - or one of the special
-  values KDChartParams::KDCHART_ALL_AXES and KDChartParams::KDCHART_NO_AXIS.
+  values KDCHART_ALL_AXES and KDCHART_NO_AXIS.
 
   \return which axis this axis shall be isometric with.
 
@@ -941,6 +877,26 @@ void  KDChartAxisParams::setAxisShowSubDelimiters( bool axisShowSubDelimiters )
     _axisShowSubDelimiters = axisShowSubDelimiters;
     emit changed();
 }
+
+/**
+  Specifies whether the delimiters should be drawn at the position for the fractional values.
+  
+  \note This can be useful if you want to force only painting non fractional values on the axis and 
+  do not want the delimiters and grid lines to be drawn at the position where some fractional values 
+  (auto calculation) were meant to be displayed. It will have no effect in case fractional values labels 
+  are painted.
+  In order to force painting only non fractional values you need to call setAxisBehindDigitsComma(0).
+  \param axisShowFracValDelim if false delimiters and grid line will not be drawn on this axis at the positon 
+  where fractional values were meant to be drawn.
+  \sa setAxisDigitBehindComma
+*/
+
+void  KDChartAxisParams::setAxisShowFractionalValuesDelimiters( bool axisShowFracValDelim )
+{
+    _axisShowFractionalValuesDelimiters = axisShowFracValDelim;
+    emit changed();
+}
+
 
 /**
   \fn bool  KDChartAxisParams::axisShowSubDelimiters() const
@@ -1074,7 +1030,7 @@ void  KDChartAxisParams::setAxisShowGrid( bool axisShowGrid )
   Specifies the axis grid colour.
 
   To reset the color to the built-in default value
-  please call \c setAxisGridColor( DEFAULT_AXIS_GRID_COLOR )
+  please call \c setAxisGridColor( KDCHART_DEFAULT_AXIS_GRID_COLOR )
 
   \param axisGridColor the axis grid color.
   \sa axisGridColor, setAxisShowGrid
@@ -1099,7 +1055,7 @@ void  KDChartAxisParams::setAxisGridColor( QColor axisGridColor )
   normal axis grid lines.
 
   To reset the color to the built-in default value
-  please call \c setAxisGridSubColor( DEFAULT_AXIS_GRID_COLOR )
+  please call \c setAxisGridSubColor( KDCHART_DEFAULT_AXIS_GRID_COLOR )
 
   \param axisGridSubColor the axis grid sub color.
   \sa axisGridSubColor, setAxisGridColor, setAxisShowGrid, setAxisShowSubDelimiters
@@ -1135,7 +1091,7 @@ thus avoiding the dotted sub-grid lines or to set their
 style to Qt::NoPen to get sub-delimiters on the axis
 but no sub-grid lines.
 
-You may use setAxisGridLineWidth( AXIS_GRID_AUTO_LINEWIDTH )
+You may use setAxisGridLineWidth( KDCHART_AXIS_GRID_AUTO_LINEWIDTH )
 to reset the value to its default: being automatically
 adjusted to the width of the axis line.
 
@@ -1165,7 +1121,7 @@ void  KDChartAxisParams::setAxisGridLineWidth( int axisGridLineWidth )
   Specifies the width of the thin lines between the
   normal axis grid lines.
 
-  You may use setAxisGridSubLineWidth( AXIS_GRID_AUTO_LINEWIDTH )
+  You may use setAxisGridSubLineWidth( KDCHART_AXIS_GRID_AUTO_LINEWIDTH )
   to reset the value to its default: being automatically
   adjusted to the width of the axis line.
 
@@ -1280,6 +1236,19 @@ void  KDChartAxisParams::setAxisLabelsVisible( bool axisLabelsVisible )
   \return whether the axis labels should be drawn.
   \sa setAxisLabelsVisible
   */
+
+
+/**
+  \fn void KDChartAxisParams::setAxisLabelsFontMinSize( int axisLabelsFontMinSize )
+
+  Specifies the minimal font size to be used for displaying the axis labels.
+
+  Use this to specify the minimal font size to be used for axis labels,
+  in case KD Chart is calculating the axis labels fonts dynamically. Default value is 10 points.
+
+  \sa setAxisLabelsFont, setAxisLabelsFontUseRelSize, setAxisLabelsFontRelSize
+  */
+
 
 
 /**
@@ -1486,7 +1455,7 @@ void KDChartAxisParams::setAxisLabelsColor( QColor axisLabelsColor )
     and 0 (by definition) would result in multiplying by 1.
   \param digitsBehindComma The number of digits to show behind the comma,
     to have this calculated automatically just use the default value
-    AXIS_LABELS_AUTO_DIGITS.
+    KDCHART_DATA_VALUE_AUTO_DIGITS.
   \sa setAxisLabelsFormat, axisLabelsDivPow10, axisLabelsDigitsBehindComma
   */
 void KDChartAxisParams::setAxisLabelsCalc( int divPow10,
@@ -1523,9 +1492,11 @@ void KDChartAxisParams::setAxisLabelsRadix( const QString& decimalPoint,
     after inserting the decimalPoint and the thousandsPoint.
   \param postfix The character (or text, resp.) to be appended to the string
     after adding decimalPoint, thousandsPoint, prefix.
-  \param totalLen The desired size of the string after adding decimalPoint,
+  \param totalLen The forced size of the string after adding decimalPoint,
     thousandsPoint, prefix, postfix. If this parameter is set to zero
     (default) no padding will be performed.
+    If the string has more characters than the (non-zero) value of totalLen,
+    the respective number of characters will be cut off at the right side.
   \param padFill The padding character to be prepended before the string
     (or inserted into the string, resp.) when increasing its length until
     the totalLen is reached.
@@ -1708,7 +1679,7 @@ By using negative numbers you can specify backward stepping.
   In case the start value is not contained in the
   \c axisLabelStringList list it will be ignored and labelling
   will be done as if you had specified
-  AXIS_LABELS_AUTO_LIMIT as start value (see below).
+  KDCHART_AXIS_LABELS_AUTO_LIMIT as start value (see below).
   <br>
   In case you specify a non-zero integer value for
   \c axisValueDelta the width and direction
@@ -1724,7 +1695,7 @@ By using negative numbers you can specify backward stepping.
   By using negative numbers you can specify backward stepping.
   <br>
   (Of course all non-integer values will be ignored here.)
-  \li \b or pass <b>AXIS_LABELS_AUTO_LIMIT</b> as start value
+  \li \b or pass <b>KDCHART_AXIS_LABELS_AUTO_LIMIT</b> as start value
   <br>
   In this case the first label text <br>
   <i>either</i> will be calculated
@@ -1739,7 +1710,7 @@ By using negative numbers you can specify backward stepping.
   <br>
   In this case the first label text will be set to that value.
   <br>
-  <b>In either case</b> (AXIS_LABELS_AUTO_LIMIT or numerical value)
+  <b>In either case</b> (KDCHART_AXIS_LABELS_AUTO_LIMIT or numerical value)
   the \c axisValueDelta may be used to specify the value to be
   added to obtain the next values:
   <br>
@@ -1795,7 +1766,7 @@ It will show two digits behind the comma.
 
 \verbatim
 setAxisValues( false,
-        KDChartData( 1964.0 ), AXIS_LABELS_AUTO_LIMIT, 1, 0 );
+        KDChartData( 1964.0 ), KDCHART_AXIS_LABELS_AUTO_LIMIT, 1, 0 );
 \endverbatim
 This would specify a default abscissa-axis starting with value 1964 and
 adding 1 to get the next value.
@@ -1815,9 +1786,9 @@ abscissaShortNames << "Sun" << "Mon" << "Tue" << "Wed"
 
 pa.setAxisValues( false,
         KDChartData( "Monday" ),
-        AXIS_LABELS_AUTO_LIMIT,
-        AXIS_LABELS_AUTO_DELTA,
-        AXIS_LABELS_AUTO_DIGITS,
+        KDCHART_AXIS_LABELS_AUTO_LIMIT,
+        KDCHART_AXIS_LABELS_AUTO_DELTA,
+        KDCHART_AXIS_LABELS_AUTO_DIGITS,
         KDChartAxisParams::LabelsFromDataRowNo,
         0,
         &abscissaNames,
@@ -1844,20 +1815,20 @@ texts.
 \param axisValueEnd specifies the last label value to be written.
 \param axisValueDelta specifies the length of the steps to be taken from one label text to the next one.
 \param axisDigitsBehindComma specifies how many digits are to be shown behind the axis label texts comma.
-\param axisMaxEmptyInnerSpan specifies the percentage of the y-axis range that may to contain NO data entries, if - and only if - axisValueStart (or axisValueEnd, resp.) is set to AXIS_LABELS_AUTO_LIMIT. To prevent \c setAxisValues from changing the current setting you may specify DONT_CHANGE_EMPTY_INNER_SPAN_NOW here, to deactivate taking into account the inner span entirely just use AXIS_IGNORE_EMPTY_INNER_SPAN.
+\param axisMaxEmptyInnerSpan specifies the percentage of the y-axis range that may to contain NO data entries, if - and only if - axisValueStart (or axisValueEnd, resp.) is set to KDCHART_AXIS_LABELS_AUTO_LIMIT. To prevent \c setAxisValues from changing the current setting you may specify KDCHART_DONT_CHANGE_EMPTY_INNER_SPAN_NOW here, to deactivate taking into account the inner span entirely just use KDCHART_AXIS_IGNORE_EMPTY_INNER_SPAN.
 \param takeLabelsFromDataRow specifies whether the labels texts shall be taken from a special row (reserved for this in each dataset) or not.
 \param axisLabelStringList points to a \c QStringList containing the label texts to be used.
 \param axisShortLabelsStringList points to a \c QStringList containing the label texts to be used in case their full-size counterparts cannot be shown due to limited axis area size.
-\param axisValueLeaveOut is used for horizontal (top or bottom) axes only; it specifies whether some of the axis labels are to be skipped if there is not enough room for drawing them all without overlapping - this parameter may be set to AXIS_LABELS_AUTO_LEAVEOUT or to zero or to another positive value.
+\param axisValueLeaveOut is used for horizontal (top or bottom) axes only; it specifies whether some of the axis labels are to be skipped if there is not enough room for drawing them all without overlapping - this parameter may be set to KDCHART_AXIS_LABELS_AUTO_LEAVEOUT or to zero or to another positive value.
 \param axisValueDeltaScale is used to specify the scaling mode of \c axisValueDelta - either just ValueScaleNumbers of a special time scale indicator.
-\sa setAxisValueStart, setAxisValueEnd, setAxisValueDelta
+\sa setAxisValueStart, setAxisValueEnd, setAxisValueDelta, setAxisValuesDecreasing
 \sa axisValueStart axisValueEnd, axisValueDelta, ValueScale
 \sa LabelsFromDataRow, axisLabelTextsFormDataRow, axisLabelTexts
 \sa axisSteadyValueCalc, setAxisValueLeaveOut
 */
 void  KDChartAxisParams::setAxisValues( bool axisSteadyValueCalc,
-        KDChartData axisValueStart,
-        KDChartData axisValueEnd,
+        const QVariant& axisValueStart,
+        const QVariant& axisValueEnd,
         double axisValueDelta,
         int axisDigitsBehindComma,
         int axisMaxEmptyInnerSpan,
@@ -1870,15 +1841,15 @@ void  KDChartAxisParams::setAxisValues( bool axisSteadyValueCalc,
 {
     _axisSteadyValueCalc = axisSteadyValueCalc;
     _axisValueStart = axisValueStart;
-    _axisValueEnd = axisValueEnd;
+    _axisValueEnd   = axisValueEnd;
     _axisValueLeaveOut = axisValueLeaveOut;
     _axisValueDelta = axisValueDelta;
     _axisValueDeltaScale = axisValueDeltaScale;
     _axisDigitsBehindComma = axisDigitsBehindComma;
-    if ( DONT_CHANGE_EMPTY_INNER_SPAN_NOW != axisMaxEmptyInnerSpan ) {
+    if ( KDCHART_DONT_CHANGE_EMPTY_INNER_SPAN_NOW != axisMaxEmptyInnerSpan ) {
         if ( 100 < axisMaxEmptyInnerSpan
                 || 1 > axisMaxEmptyInnerSpan )
-            _axisMaxEmptyInnerSpan = AXIS_IGNORE_EMPTY_INNER_SPAN;
+            _axisMaxEmptyInnerSpan = KDCHART_AXIS_IGNORE_EMPTY_INNER_SPAN;
         else
             _axisMaxEmptyInnerSpan = axisMaxEmptyInnerSpan;
     }
@@ -1906,7 +1877,8 @@ void  KDChartAxisParams::setAxisValues( bool axisSteadyValueCalc,
 
   \param axisValueStart the lower limit for the axis labels: the start
   value.
-  \sa setAxisValues, setAxisValueEnd, setAxisValueDelta
+  \sa setAxisValues, setAxisValueStartIsExact
+  \sa setAxisValueEnd, setAxisValueDelta
   \sa axisValueStart, axisValueEnd, axisValueDelta
   \sa axisLabelsFromDataRow, axisLabelTexts
   \sa axisLabelStringList, axisShortLabelsStringList
@@ -1917,11 +1889,53 @@ void  KDChartAxisParams::setAxisValues( bool axisSteadyValueCalc,
   Returns the lower limit for the axis labels: the start value.
 
   \return the lower limit for the axis labels: the start value.
-  \sa setAxisValues, setAxisValueStart, setAxisValueEnd, setAxisValueDelta
+  \sa setAxisValues, setAxisValueStart, setAxisValueStartIsExact
+  \sa setAxisValueEnd, setAxisValueDelta
   \sa axisValueEnd, axisValueDelta
   \sa axisLabelsFromDataRow, axisLabelTexts
   \sa axisLabelStringList, axisShortLabelsStringList
   */
+
+/**
+  \fn  void setAxisValueStartIsExact( bool isExactValue )
+  Specifies whether the lower limit for the axis labels that
+  is specified via setAxisValueStart() is to be used as the
+  axis start value even if this will not look very nice: this is
+  the default, KD Chart just takes the value specified by you, e.g.
+  if you specify 75003.00 as start value you will get exactly this.
+
+  By setting this flag to FALSE you let KD Chart find a better
+  value for you: if your value is not Zero the axis will start
+  with the next value lower than your start value that can be
+  divided by the delta factor.
+
+  \param isExactValue set this to FALSE if KD Chart shall find
+  a better value than the one you have specified by setAxisValueStart()
+  \sa setAxisValues, setAxisValueEnd, setAxisValueDelta
+  \sa axisValueStartIsExact, axisValueStart
+  \sa axisValueEnd, axisValueDelta
+  \sa axisLabelsFromDataRow, axisLabelTexts
+  \sa axisLabelStringList, axisShortLabelsStringList
+  */
+
+/**
+  \fn  bool axisValueStartIsExact() const
+  Returns whether the lower limit for the axis labels that
+  is specified via setAxisValueStart() is to be used as the
+  axis start value even if this will not look very nice: this is
+  the default, KD Chart just takes the value specified by you, e.g.
+  if you specify 75003.00 as start value you will get exactly this.
+
+  \return whether the lower limit for the axis labels that
+  is specified via setAxisValueStart() is to be used as the
+  axis start value even if this will not look very nice.
+  \sa setAxisValues, setAxisValueStartIsExact, setAxisValueStart
+  \sa setAxisValueEnd, setAxisValueDelta
+  \sa axisValueEnd, axisValueDelta
+  \sa axisLabelsFromDataRow, axisLabelTexts
+  \sa axisLabelStringList, axisShortLabelsStringList
+  */
+
 
 /**
   \fn  void  KDChartAxisParams::setAxisValueEnd( const KDChartData axisValueEnd )
@@ -1929,19 +1943,20 @@ void  KDChartAxisParams::setAxisValues( bool axisSteadyValueCalc,
 
   \param axisValueStart the upper limit for the axis labels: the end
   value.
-  \sa setAxisValues, setAxisValueStart, setAxisValueDelta
+  \sa setAxisValues, setAxisValueStart, setAxisValueStartIsExact
+  \sa setAxisValueDelta
   \sa axisValueStart, axisValueEnd, axisValueDelta
   \sa axisLabelsFromDataRow, axisLabelTexts
   \sa axisLabelStringList, axisShortLabelsStringList
   */
-
 
 /**
   \fn  KDChartData  KDChartAxisParams::axisValueEnd() const
   Returns the upper limit for the axis labels: the end value.
 
   \return the upper limit for the axis labels: the end value.
-  \sa setAxisValues, setAxisValueStart, setAxisValueEnd, setAxisValueDelta
+  \sa setAxisValues, setAxisValueStart, setAxisValueStartIsExact
+  \sa setAxisValueEnd, setAxisValueDelta
   \sa axisValueStart, axisValueDelta
   \sa axisLabelsFromDataRow, axisLabelTexts
   \sa axisLabelStringList, axisShortLabelsStringList
@@ -1957,7 +1972,8 @@ void  KDChartAxisParams::setAxisValues( bool axisSteadyValueCalc,
   \param scale the scaling of the DELTA value
   \sa ValueScale
   \sa setAxisValues
-  \sa setAxisValueStart, setAxisValueEnd, setAxisValueDelta
+  \sa setAxisValueStart, setAxisValueStartIsExact
+  \sa setAxisValueEnd, setAxisValueDelta
   \sa axisValueStart, axisValueEnd, axisValueDelta
   \sa axisLabelsFromDataRow, axisLabelTexts
   \sa axisLabelStringList, axisShortLabelsStringList
@@ -2003,6 +2019,26 @@ void  KDChartAxisParams::setAxisValueDelta( const double axisValueDelta,
   if there is not enough space for displaying all of them.
 
   \sa setAxisValueLeaveOut
+  */
+
+/**
+  \fn  void  KDChartAxisParams::setAxisValuesDecreasing( bool valuesDecreasing )
+  Specifies whether axis values should be printed in reverted order: starting
+  with the highest label and decreasing until the lowest label is reached.
+
+  \note This feature is supported for LINE charts only.
+
+  \sa setAxisValues
+*/
+
+/**
+  \fn bool  KDChartAxisParams::axisValuesDecreasing() const
+  Returns whether axis values should be printed in reverted order: starting
+  with the highest label and decreasing until the lowest label is reached.
+
+  \note This feature is supported for LINE charts only.
+
+  \sa setAxisValuesDecreasing
   */
 
 /**
@@ -2289,7 +2325,7 @@ void  KDChartAxisParams::setAxisDtHighPos( double x, double y )
 
   To calculate the format automatically (based on the
   time span to be displayed) use the special value
-  \c AXIS_LABELS_AUTO_DATETIME_FORMAT - this is the default setting.
+  \c KDCHART_AXIS_LABELS_AUTO_DATETIME_FORMAT - this is the default setting.
 
   See Qt documentation on the format to be used here:
 
@@ -2313,11 +2349,11 @@ void  KDChartAxisParams::setAxisDtHighPos( double x, double y )
   \fn  void  KDChartAxisParams::setAxisMaxEmptyInnerSpan( const int maxEmpty )
   Specifies the percentage of the y-axis range that may to contain NO
   data entries, if - and only if - axisValueStart (or axisValueEnd,
-  resp.) is set to AXIS_LABELS_AUTO_LIMIT.
+  resp.) is set to KDCHART_AXIS_LABELS_AUTO_LIMIT.
 
   \param maxEmpty the percentage of the y-axis range that may to contain NO
   data entries, if - and only if - axisValueStart (or axisValueEnd,
-  resp.) is set to AXIS_LABELS_AUTO_LIMIT.
+  resp.) is set to KDCHART_AXIS_LABELS_AUTO_LIMIT.
 
   \sa axisMaxEmptyInnerSpan
   */
@@ -2326,7 +2362,7 @@ void  KDChartAxisParams::setAxisDtHighPos( double x, double y )
   \fn  int  KDChartAxisParams::axisMaxEmptyInnerSpan() const
   Returns the percentage of the y-axis range that may to contain NO
   data entries, if - and only if - axisValueStart (or axisValueEnd,
-  resp.) is set to AXIS_LABELS_AUTO_LIMIT.
+  resp.) is set to KDCHART_AXIS_LABELS_AUTO_LIMIT.
 
   \note If more space is empty the zero-line will not be included info the chart but the lowest (or highest, resp.) entry of the axis will be shifted accordingly.
   \sa setAxisValues
@@ -2432,7 +2468,7 @@ void  KDChartAxisParams::setLabelTextsFormDataRow( int row, LabelsFromDataRow mo
 
 
   \param QStringList* axisLabelStringList points to the list of labels to be displayed
-  \param  QStringList* axisShortLabelStringList points to 
+  \param  QStringList* axisShortLabelStringList points to
   an alternative list of short names to be displayed if the long labels take too much place
   \param QString valueStart ( default null ) the label to begin with
   \param QString valueEnd ( default null ) the label to end with
@@ -2444,30 +2480,33 @@ void  KDChartAxisParams::setLabelTextsFormDataRow( int row, LabelsFromDataRow mo
   */
 void  KDChartAxisParams::setAxisLabelStringLists( QStringList*   axisLabelStringList,
         QStringList*   axisShortLabelStringList,
-        const QString& valueStart, 
+        const QString& valueStart,
         const QString& valueEnd )
 {
-    KDChartData axisValueStart, axisValueEnd; 
+    QVariant axisValueStart, axisValueEnd;
 
-    axisValueStart = valueStart.isNull()
-        ? AXIS_LABELS_AUTO_LIMIT
-        : KDChartData( valueStart );
+    if( valueStart.isNull() )
+        axisValueStart = KDCHART_AXIS_LABELS_AUTO_LIMIT;
+    else
+        axisValueStart = valueStart;
 
-    axisValueEnd = valueEnd.isNull()
-        ? AXIS_LABELS_AUTO_LIMIT
-        : KDChartData( valueEnd );
+    if( valueEnd.isNull() )
+        axisValueEnd = KDCHART_AXIS_LABELS_AUTO_LIMIT;
+    else
+        axisValueEnd = valueEnd;
 
     setAxisValues( false,
             axisValueStart,
             axisValueEnd,
-            AXIS_LABELS_AUTO_DELTA,
-            AXIS_LABELS_AUTO_DIGITS,
-            AXIS_IGNORE_EMPTY_INNER_SPAN,
-            LabelsFromDataRowNo, 
+            KDCHART_AXIS_LABELS_AUTO_DELTA,
+            KDCHART_AXIS_LABELS_AUTO_DIGITS,
+            KDCHART_AXIS_IGNORE_EMPTY_INNER_SPAN,
+            LabelsFromDataRowNo,
             0,
             axisLabelStringList,
             axisShortLabelStringList,
-            AXIS_LABELS_AUTO_LEAVEOUT );
+            KDCHART_AXIS_LABELS_AUTO_LEAVEOUT );
+
 }
 
 
@@ -2682,14 +2721,19 @@ void  KDChartAxisParams::setAxisLastLabelText( const QString& axisLastLabelText 
 
 /**
   \fn  void  KDChartAxisParams::setAxisSteadyValueCalc( bool axisSteadyValueCalc )
-  Specifies whether label values shall be calculataed based upon the associated dataset values (normally this is true for ordinate axes) or based upon some string list (as you might expect it for abscissa labels).
+  Specifies whether label values shall be calculated based upon the
+  associated dataset values (normally this is true for ordinate axes)
+  or based upon some string list (as you might expect it for abscissa
+  labels).
 
   \sa setAxisValues
   */
 
 /**
   \fn  bool  KDChartAxisParams::axisSteadyValueCalc() const
-  Returns whether label values shall be calculataed based upon the associated dataset values (normally this is true for ordinate axes) or based upon some string list (as you might expect it for abscissa labels).
+  Returns whether label values shall be calculataed based upon the associated
+  dataset values (normally this is true for ordinate axes) or based upon some
+  string list (as you might expect it for abscissa labels).
 
   \sa setAxisValues
   */
@@ -2702,7 +2746,7 @@ void  KDChartAxisParams::setAxisLastLabelText( const QString& axisLastLabelText 
 
 
 /**
-  Assignment operator: By calling the copy method, 
+  Assignment operator: By calling the copy method,
   see also the copy constructor.
   */
 
@@ -2737,6 +2781,7 @@ void KDChartAxisParams::deepCopy( KDChartAxisParams& D, const KDChartAxisParams&
     D._axisTrueLineWidth = R._axisTrueLineWidth;
     D._axisLineColor = R._axisLineColor;
     // main grid:
+    D._axisShowFractionalValuesDelimiters = R._axisShowFractionalValuesDelimiters;
     D._axisShowGrid      = R._axisShowGrid;
     D._axisGridColor     = R._axisGridColor;
     D._axisGridLineWidth = R._axisGridLineWidth;
@@ -2755,22 +2800,34 @@ void KDChartAxisParams::deepCopy( KDChartAxisParams& D, const KDChartAxisParams&
     D._axisLabelsDontAutoRotate = R._axisLabelsDontAutoRotate;
     D._axisLabelsRotation = R._axisLabelsRotation;
     D._axisLabelsFontRelSize = R._axisLabelsFontRelSize;
+    D._axisLabelsFontMinSize = R._axisLabelsFontMinSize;
     D._axisLabelsColor = R._axisLabelsColor;
 
-    D._axisSteadyValueCalc = R._axisSteadyValueCalc;
-    D._axisValueStart = R._axisValueStart;
-    D._axisValueEnd = R._axisValueEnd;
-    D._axisValueDelta = R._axisValueDelta;
-    D._axisValueDeltaScale = R._axisValueDeltaScale;
-    D._axisValueLeaveOut = R._axisValueLeaveOut;
+    D._axisSteadyValueCalc   = R._axisSteadyValueCalc;
+    D._axisValueStartIsExact = R._axisValueStartIsExact;
+    D._axisValueStart        = R._axisValueStart;
+    D._axisValueEnd          = R._axisValueEnd;
+    D._axisValueDelta        = R._axisValueDelta;
+    D._axisValueDeltaScale   = R._axisValueDeltaScale;
+    D._axisValueLeaveOut     = R._axisValueLeaveOut;
+    D._axisValuesDecreasing  = R._axisValuesDecreasing;
     D._axisDigitsBehindComma = R._axisDigitsBehindComma;
     D._axisLabelsDateTimeFormat = R._axisLabelsDateTimeFormat;
     D._axisMaxEmptyInnerSpan = R._axisMaxEmptyInnerSpan;
     D._takeLabelsFromDataRow = R._takeLabelsFromDataRow;
-    D._labelTextsDataRow = R._labelTextsDataRow;
-    D._axisLabelStringList = R._axisLabelStringList;
+    D._labelTextsDataRow     = R._labelTextsDataRow;
+    D._axisLabelStringList   = R._axisLabelStringList;
     D._axisShortLabelsStringList = R._axisShortLabelsStringList;
-    D._axisLabelTextsDirty = R._axisLabelTextsDirty;
+    D._axisLabelTextsDirty   = R._axisLabelTextsDirty;
+
+    D._axisLabelsDivPow10      = R._axisLabelsDivPow10;
+    D._axisLabelsDecimalPoint  = R._axisLabelsDecimalPoint;
+    D._axisLabelsThousandsPoint= R._axisLabelsThousandsPoint;
+    D._axisLabelsPrefix        = R._axisLabelsPrefix;
+    D._axisLabelsPostfix       = R._axisLabelsPostfix;
+    D._axisLabelsTotalLen      = R._axisLabelsTotalLen;
+    D._axisLabelsPadFill       = R._axisLabelsPadFill;
+    D._axisLabelsBlockAlign    = R._axisLabelsBlockAlign;
 
     D._axisFirstLabelText = R._axisFirstLabelText;
     D._axisLastLabelText = R._axisLastLabelText;
@@ -2783,15 +2840,6 @@ void KDChartAxisParams::deepCopy( KDChartAxisParams& D, const KDChartAxisParams&
     D._trueDtLow = R._trueDtLow;
     D._trueDtHigh = R._trueDtHigh;
     D._trueDtDeltaScale = R._trueDtDeltaScale;
-
-    D._axisLabelsDivPow10      = R._axisLabelsDivPow10;
-    D._axisLabelsDecimalPoint  = R._axisLabelsDecimalPoint;
-    D._axisLabelsThousandsPoint= R._axisLabelsThousandsPoint;
-    D._axisLabelsPrefix        = R._axisLabelsPrefix;
-    D._axisLabelsPostfix       = R._axisLabelsPostfix;
-    D._axisLabelsTotalLen      = R._axisLabelsTotalLen;
-    D._axisLabelsPadFill       = R._axisLabelsPadFill;
-    D._axisLabelsBlockAlign    = R._axisLabelsBlockAlign;
 }
 
 
@@ -2957,7 +3005,7 @@ KDChartAxisParams::AxisType KDChartAxisParams::stringToAxisType( const QString& 
   */
 
 /**
-  \var  int _axisLineWidth 
+  \var  int _axisLineWidth
   Specifies the axis line width.
 
   \sa setAxisLineWidth
@@ -3021,7 +3069,7 @@ KDChartAxisParams::AxisType KDChartAxisParams::stringToAxisType( const QString& 
   */
 
 /**
-  \var PenStyle _axisGridSubStyle 
+  \var PenStyle _axisGridSubStyle
   Specifies the axis grid line pattern for sub-delimiter grid lines.
 
   \sa setAxisGridSubStyle, setAxisGridStyle, setAxisShowGrid
@@ -3089,7 +3137,15 @@ KDChartAxisParams::AxisType KDChartAxisParams::stringToAxisType( const QString& 
   */
 
 /**
-  \var KDChartData _axisValueEnd 
+  \var  bool _axisValueStartIsExact;
+  Specifies whether the lower limit for the axis labels is
+  to be used the start value even if this might not look good.
+
+  \sa setAxisValueStartIsExact
+  */
+
+/**
+  \var KDChartData _axisValueEnd
   Specifies the higher limit for the axis labels: the end value.
 
   \sa setAxisValues
@@ -3116,6 +3172,14 @@ KDChartAxisParams::AxisType KDChartAxisParams::stringToAxisType( const QString& 
 
   \sa setAxisValues
   */
+
+/**
+  \var  bool _axisValuesDecreasing;
+  Stores whether the axis labels are printed in reverted order.
+
+  \sa setAxisValuesDecreasing
+  */
+
 /**
   \var double _trueAxisDeltaPixels
   Stores the <b>true</b> delimiter delta pixel value of the axis labels
@@ -3175,7 +3239,7 @@ KDChartAxisParams::AxisType KDChartAxisParams::stringToAxisType( const QString& 
   \var  int _axisMaxEmptyInnerSpan
   Specifies the percentage of the y-axis range that may to contain NO
   data entries, if - and only if - axisValueStart (or axisValueEnd,
-  resp.) is set to AXIS_LABELS_AUTO_LIMIT.
+  resp.) is set to KDCHART_AXIS_LABELS_AUTO_LIMIT.
 
   \sa setAxisValues
   */

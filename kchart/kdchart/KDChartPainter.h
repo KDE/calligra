@@ -54,6 +54,7 @@ struct internal__KDChart__CalcValues {
     bool processThisAxis;
     bool bSteadyCalc;
     bool bLogarithmic;
+    bool bDecreasing;
     KDChartAxisParams::AxisPos basicPos;
     QPoint orig;
     QPoint dest;
@@ -78,10 +79,12 @@ struct internal__KDChart__CalcValues {
     double nHigh;
     double nDelta;
     double nDeltaPix;
+    double pLastX;
+    double pLastY;
 };
 
 
-class KDChartPainter
+class KDCHART_EXPORT KDChartPainter
 {
     public:
         static KDChartPainter* create( KDChartParams* params,
@@ -93,11 +96,25 @@ class KDChartPainter
                                      KDChartPainter* painter );
         static void unregisterPainter( const QString& painterName );
 
+        virtual void setupGeometry ( QPainter* painter,
+                                     KDChartTableDataBase* data,
+                                     const QRect& rect );
+
         virtual void paint( QPainter* painter, KDChartTableDataBase* data,
                             bool paintFirst,
                             bool paintLast,
                             KDChartDataRegionList* regions = 0,
-                            const QRect* rect = 0 );
+                            const QRect* rect = 0,
+                            bool mustCalculateGeometry = true );
+
+        virtual QRect outermostRect() const { return _outermostRect; }
+
+        static void drawMarker( QPainter* painter,
+                                 int style,
+                                 const QColor& color,
+                                 const QPoint& p,
+                                 const QSize& size,
+                                 uint align = Qt::AlignCenter );
 
     protected:
         KDChartPainter( KDChartParams* );
@@ -129,20 +146,20 @@ class KDChartPainter
         virtual void paintAxes( QPainter* painter,
                                 KDChartTableDataBase* data );
         virtual void paintLegend( QPainter* painter,
-                                  KDChartTableDataBase* data,
-                                  const QFont& actLegendFont,
-                                  const QFont& actLegendTitleFont );
+                                  KDChartTableDataBase* data );
         virtual void paintHeaderFooter( QPainter* painter,
                                         KDChartTableDataBase* data );
         virtual bool axesOverlapping( int axis1, int axis2 );
 
-        virtual void calculateAllAxesRects( bool finalPrecision,
+        virtual void findChartDatasets( KDChartTableDataBase* data,
+                                        bool paint2nd,
+                                        uint chart,
+                                        uint& chartDatasetStart,
+                                        uint& chartDatasetEnd );
+
+        virtual void calculateAllAxesRects( QPainter* painter,
+                                            bool finalPrecision,
                                             KDChartTableDataBase* data );
-        virtual void setupGeometry ( QPainter* painter,
-                                     KDChartTableDataBase* data,
-                                     QFont& actLegendFont,
-                                     QFont& actLegendTitleFont,
-                                     const QRect* rect = 0 );
 
         virtual QPoint calculateAnchor( const KDChartCustomBox & box,
                 KDChartDataRegionList* regions = 0 ) const;
@@ -156,7 +173,7 @@ class KDChartPainter
         virtual QString fallbackLegendText( uint dataset ) const;
         virtual uint numLegendFallbackTexts( KDChartTableDataBase* data ) const;
 
-        static QPoint pointOnCircle( const QRect& rect, int angle );
+        static QPoint pointOnCircle( const QRect& rect, double angle );
         static void makeArc( QPointArray& points,
                              const QRect& rect,
                              double startAngle, double angles );
@@ -207,19 +224,12 @@ class KDChartPainter
 
         internal__KDChart__CalcValues calcVal[ KDCHART_MAX_AXES ];
         virtual bool calculateAllAxesLabelTextsAndCalcValues(
+                        QPainter* painter,
                         KDChartTableDataBase* data,
                         double areaWidthP1000,
                         double areaHeightP1000,
                         double& delimLen );
 
-        virtual void drawMarker( QPainter* painter,
-                        KDChartParams::LineMarkerStyle style,
-                        const QColor& color,
-                        const QPoint& p,
-                        uint dataset, uint value, uint chart,
-                        KDChartDataRegionList* regions = 0,
-                        int* width = 0,
-                        int* height = 0 );
         virtual void drawExtraLinesAndMarkers(
                         KDChartPropertySet& propSet,
                         const QPen& defaultPen,
@@ -233,6 +243,21 @@ class KDChartPainter
                         const double areaHeightP1000,
                         bool bDrawInFront = FALSE );
 
+        static KDChartDataRegion* drawMarker( QPainter* painter,
+                                               const KDChartParams* params,
+                                               double areaWidthP1000,
+                                               double areaHeightP1000,
+                                               int deltaX,
+                                               int deltaY,
+                                               int style,
+                                               const QColor& color,
+                                               const QPoint& p,
+                                               uint dataset, uint value, uint chart,
+                                               KDChartDataRegionList* regions = 0,
+                                               int* width = 0,
+                                               int* height = 0,
+                                               uint align = Qt::AlignCenter );
+
     private:
         // disallow copy-construction and assignment
         KDChartPainter( const KDChartPainter& );
@@ -245,14 +270,24 @@ class KDChartPainter
         QRect trueFrameRect( const QRect& orgRect,
                              const KDChartParams::KDChartFrameSettings* settings ) const;
 
+        int legendTitleVertGap() const;
+        QFont trueLegendFont() const;
+        void calculateHorizontalLegendSize( QPainter* painter,
+                                            QSize& size,
+                                            bool& legendNewLinesStartAtLeft ) const;
+        bool mustDrawVerticalLegend() const;
         void findLegendTexts( KDChartTableDataBase* );
-        int calculateHdFtRects( double averageValueP1000,
+        int calculateHdFtRects( QPainter* painter,
+                                double averageValueP1000,
                                 int  xposLeft,
                                 int  xposRight,
                                 bool bHeader,
                                 int& yposTop,
                                 int& yposBottom );
-        int _legendTitleHeight; // the font height in the legend title font
+        bool _legendNewLinesStartAtLeft;
+        int _legendTitleHeight;
+        int _legendTitleWidth;
+        int _legendTitleMetricsHeight; // the font height in the legend title font
         int _hdLeading;
         int _ftLeading;
 };

@@ -45,6 +45,16 @@
   Simply create a KChartWidget in your application and put it where
   you want in your widget hierarchy and create a KChartParams object
   that specifies how the chart should be drawn.
+
+  \note If for some reason you are NOT using the
+  KDChartWidget class but calling the painting methods of KDChart directly,
+  you probably will also use the KDChartDataRegionList class:
+  This class is derived from QPtrList, so all of the Qt documentation
+  for this class is valid for KDChartDataRegionList too, e.g. freeing
+  of the pointers stored can either be done automatically or
+  manually - so PLEASE take the time to read the reference information for this class!
+
+  \sa KDChart, KDChartDataRegionList
   */
 
 
@@ -56,7 +66,7 @@
   default bar chart will be shown.
 
   \param parent the widget parent; passed on to QWidget
-  \param the widget name; passed on to QWidget
+  \param name the widget name; passed on to QWidget
   */
 
 KDChartWidget::KDChartWidget( QWidget* parent, const char* name ) :
@@ -68,6 +78,7 @@ _mousePressedOnRegion( 0 )
 {
     _dataRegions.setAutoDelete( true );
     setDoubleBuffered( true );
+    setBackgroundMode( Qt::NoBackground );
 }
 
 
@@ -77,7 +88,7 @@ _mousePressedOnRegion( 0 )
   \param params the specification of the chart
   \param data the data to be displayed as a chart
   \param parent the widget parent; passed on to QWidget
-  \param the widget name; passed on to QWidget
+  \param name the widget name; passed on to QWidget
   */
 
 KDChartWidget::KDChartWidget( KDChartParams* params,
@@ -91,6 +102,7 @@ _mousePressedOnRegion( 0 )
 {
     _dataRegions.setAutoDelete( true );
     setDoubleBuffered( true );
+    setBackgroundMode( Qt::NoBackground );
 }
 
 
@@ -101,6 +113,7 @@ KDChartWidget::~KDChartWidget()
 {
     // delete any regions that might still be registered
     _dataRegions.clear();
+    KDChartAutoColor::freeInstance();
 }
 
 void KDChartWidget::paintTo( QPainter& painter,
@@ -152,21 +165,22 @@ void KDChartWidget::mousePressEvent( QMouseEvent* event )
 
     _mousePressedOnRegion = 0;
     KDChartDataRegion* current = 0;
-    QPtrListIterator < KDChartDataRegion > it( _dataRegions );
-    while ( ( current = it.current() ) ) {
-        ++it;
-        if ( current->region.contains( event->pos() ) ) {
+    //QPtrListIterator < KDChartDataRegion > it( _dataRegions );
+    for( current = _dataRegions.last(); current; current = _dataRegions.prev() ){
+    //while ( ( current = it.current() ) ) {
+        if ( current->region().contains( event->pos() ) ) {
             _mousePressedOnRegion = current;
-            if ( event->button() == LeftButton )
-                emit dataLeftPressed( current->row,
-                        current->col );
-            else if ( event->button() == MidButton )
-                emit dataMiddlePressed( current->row,
-                        current->col );
-            else
-                emit dataRightPressed( current->row,
-                        current->col );
-            break;
+            if ( event->button() == LeftButton ){
+                emit dataLeftPressed( current->row, current->col );
+                emit dataLeftPressed( event->pos() );
+            }else if ( event->button() == MidButton ){
+                emit dataMiddlePressed( current->row, current->col );
+                emit dataMiddlePressed( event->pos() );
+            }else{
+                emit dataRightPressed( current->row, current->col );
+                emit dataRightPressed( event->pos() );
+            }
+            return;
         }
     }
 }
@@ -184,25 +198,28 @@ void KDChartWidget::mouseReleaseEvent( QMouseEvent* event )
     QPtrListIterator < KDChartDataRegion > it( _dataRegions );
     while ( ( current = it.current() ) ) {
         ++it;
-        if ( current->region.contains( event->pos() ) ) {
+        if ( current->region().contains( event->pos() ) ) {
             if ( event->button() == LeftButton ) {
-                emit dataLeftReleased( current->row,
-                        current->col );
-                if ( _mousePressedOnRegion == current )
-                    emit dataLeftClicked( current->row,
-                            current->col );
+                emit dataLeftReleased( current->row, current->col );
+                emit dataLeftReleased( event->pos() );
+                if ( _mousePressedOnRegion == current ){
+                    emit dataLeftClicked( current->row, current->col );
+                    emit dataLeftClicked( event->pos() );
+                }
             } else if ( event->button() == MidButton ) {
-                emit dataMiddleReleased( current->row,
-                        current->col );
-                if ( _mousePressedOnRegion == current )
-                    emit dataMiddleClicked( current->row,
-                            current->col );
+                emit dataMiddleReleased( current->row, current->col );
+                emit dataMiddleReleased( event->pos() );
+                if ( _mousePressedOnRegion == current ){
+                    emit dataMiddleClicked( current->row, current->col );
+                    emit dataMiddleClicked( event->pos() );
+                }
             } else {
-                emit dataRightReleased( current->row,
-                        current->col );
-                if ( _mousePressedOnRegion == current )
-                    emit dataRightClicked( current->row,
-                            current->col );
+                emit dataRightReleased( current->row, current->col );
+                emit dataRightReleased( event->pos() );
+                if ( _mousePressedOnRegion == current ){
+                    emit dataRightClicked( current->row, current->col );
+                    emit dataRightClicked( event->pos() );
+                }
             }
         }
     }
@@ -330,3 +347,92 @@ KDChartTableDataBase* KDChartWidget::data() const
 {
     return _data;
 }
+
+/**
+  \fn void KDChartWidget::barsDisplayed( int barsDisplayed, int barsLeft )
+
+  This signal is emitted when drawing of a bar chart is done.
+  Use it to determine if all bars have been drawn: in case
+  you specified both the bar width and the value block gap width
+  it might be that KD Chart is not able to display all bars since
+  they do not fit into the available horizontal space.
+
+  The value of barsLeft indicates how many bars could not be
+  drawn because the data area was not wide enough.
+
+  \sa KDChartParams::numBarsDisplayed, KDChartParams::numBarsLeft
+  */
+
+/**
+  \fn void KDChartWidget::dataLeftClicked( uint row, uint col )
+
+  This signal is emitted when a data item was clicked onto with the left mouse button.
+
+  The values of row / col indicate the respective dataset (row) and item (col).
+
+  \note There is another signal sent simultaneously: reporting the screen coordinates clicked onto.
+
+  \sa dataLeftReleased
+  \sa dataRightClicked, dataMiddleClicked
+  */
+/**
+  \fn void KDChartWidget::dataRightClicked( uint row, uint col )
+
+  This signal is emitted when a data item was clicked onto with the right mouse button.
+
+  The values of row / col indicate the respective dataset (row) and item (col).
+
+  \note There is another signal sent simultaneously: reporting the screen coordinates clicked onto.
+
+  \sa dataRightReleased
+  \sa dataLeftClicked, dataMiddleClicked
+  */
+/**
+  \fn void KDChartWidget::dataMiddleClicked( uint row, uint col )
+
+  This signal is emitted when a data item was clicked onto with the middle mouse button.
+
+  The values of row / col indicate the respective dataset (row) and item (col).
+
+  \note There is another signal sent simultaneously: reporting the screen coordinates clicked onto.
+
+  \sa dataMiddleReleased
+  \sa dataLeftClicked, dataRightClicked
+  */
+
+/**
+  \fn void KDChartWidget::dataLeftClicked( const QPoint & pnt )
+
+  This signal is emitted when a data item was clicked onto with the left mouse button.
+
+  The value of pnt indicates the screen coordinates in relation to the origin of the data area.
+
+  \note There is another signal sent simultaneously: reporting which data item was clicked onto.
+
+  \sa dataLeftReleased
+  \sa dataRightClicked, dataMiddleClicked
+  */
+/**
+  \fn void KDChartWidget::dataRightClicked( const QPoint & pnt )
+
+  This signal is emitted when a data item was clicked onto with the right mouse button.
+
+  The values of row / col indicate the screen coordinates in relation to the origin of the data area.
+
+  \note There is another signal sent simultaneously: reporting which data item was clicked onto.
+
+  \sa dataRightReleased
+  \sa dataLeftClicked, dataMiddleClicked
+  */
+/**
+  \fn void KDChartWidget::dataMiddleClicked( const QPoint & pnt )
+
+  This signal is emitted when a data item was clicked onto with the middle mouse button.
+
+  The values of row / col indicate the screen coordinates in relation to the origin of the data area.
+
+  \note There is another signal sent simultaneously: reporting which data item was clicked onto.
+
+  \sa dataMiddleReleased
+  \sa dataLeftClicked, dataRightClicked
+  */

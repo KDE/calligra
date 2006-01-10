@@ -225,9 +225,12 @@ void KChartFontConfigPage::changeLabelFont()
 
 void KChartFontConfigPage::init()
 {
-    KDChartAxisParams  leftparms   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
-    KDChartAxisParams  rightparms  = m_params->axisParams( KDChartAxisParams::AxisPosRight );
-    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    KDChartAxisParams  leftparms;
+    leftparms   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams  rightparms;
+    rightparms  = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams  bottomparms;
+    bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
     xAxis           = bottomparms.axisLabelsFont();
     xAxisIsRelative = bottomparms.axisLabelsFontUseRelSize() 
@@ -264,9 +267,12 @@ void KChartFontConfigPage::init()
 void KChartFontConfigPage::apply()
 {
     // PENDING(kalle) Adapt
-    KDChartAxisParams  leftparms   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
-    KDChartAxisParams  rightparms  = m_params->axisParams( KDChartAxisParams::AxisPosRight );
-    KDChartAxisParams  bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+    KDChartAxisParams  leftparms;
+    leftparms   = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+    KDChartAxisParams  rightparms;
+    rightparms  = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+    KDChartAxisParams  bottomparms;
+    bottomparms = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
     leftparms.setAxisLabelsFont( yAxis, QButton::Off == yAxisIsRelative );
     if ( QButton::On == yAxisIsRelative )

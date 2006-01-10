@@ -306,15 +306,16 @@ void kchartDataEditor::setData( KoChart::Data* dat )
     // Fill the data from the chart into the editor.
     for (unsigned int row = headerRows(); row < rowsCount; row++) {
         for (unsigned int col = headerCols(); col < colsCount; col++) {
-            KoChart::Value t = dat->cell(row-headerRows(), col-headerCols());
+            QVariant t = dat->cellVal(row-headerRows(), col-headerCols());
+
 
             // Fill it in from the part.
-            if (t.hasValue()) {
-                if ( t.isDouble() ) {
+            if (t.isValid()) {
+                if ( t.type() == QVariant::Double ) {
 		    m_table->setText(row, col, 
-				     QString("%1").arg(t.doubleValue()));
+				     QString("%1").arg(t.toDouble()));
 		}
-                else if ( t.isString() )
+                else if ( t.type() == QVariant::String )
                     kdDebug(35001) << "I cannot handle strings in the table yet"
                                    << endl;
                 else
@@ -364,19 +365,16 @@ void kchartDataEditor::getData( KoChart::Data* dat )
     // Get all the data.
     for (int row = labelRows ; row < (numRows+labelRows); row++) {
         for (int col = labelCols ; col < (numCols+labelCols); col++) {
-            KoChart::Value t;
 
-	    // Get the text and convert to double.
-	    QString tmp = m_table->text(row, col);
-         
-	    bool    ok;
-	    double  val = tmp.toDouble(&ok);
-	    if (!ok)
-		val = 0.0;
-
-	    // and do the actual setting.
-	    t = KoChart::Value( val );
-            dat->setCell(row-labelRows,col-labelCols,t);
+            // Get the text and convert to double.
+            QString tmp = m_table->text(row, col);
+            bool   bOk;
+            double val = tmp.toDouble( &bOk );
+            if (!bOk)
+              val = 0.0;
+            // and do the actual setting.
+            //t = KoChart::Value( val );
+            dat->setCell(row-labelRows,col-labelCols, val);
         }
     }
 }
@@ -397,7 +395,7 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 	rowHeader->setLabel(row, rowLabels[row]);
     }*/
 
-    for (int i=0;i<rowLabels.count();i++)
+    for (unsigned int i=0;i<rowLabels.count();i++)
     {
         m_table->setText(i+headerRows(),0,rowLabels[i]);    
     }
@@ -451,7 +449,7 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 	colHeader->setLabel(col, colLabels[col]);
     }*/
 
-    for (int i=0;i<colLabels.count();i++)
+    for (unsigned int i=0;i<colLabels.count();i++)
     {
         m_table->setText(0,i+headerCols(),colLabels[i]);
     }

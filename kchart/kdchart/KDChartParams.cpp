@@ -37,8 +37,6 @@
 #include "KDChartParams.moc"
 #endif
 
-#include <klocale.h>
-
 class KDChartData;
 
 //#include <qdom.h>
@@ -53,47 +51,59 @@ class KDChartData;
   */
 
 
-const uint KDChartParams::KDCHART_ALL_AXES = UINT_MAX-1;
 
-// Note: The following specification matches the UINT_MAX value used
-//       in KDChartAxisParams::KDChartAxisParams() to initialize the
-//       axis' _axisIsoRefAxis member.
-//       OK, this is a dirty hack but is avoids circular dependency
-//       between KDChartParams and KDChartAxisParams
-const uint KDChartParams::KDCHART_NO_AXIS = UINT_MAX;
+//QColor  KDChartParams::_internalPointer_DataValueAutoColor = QColor( 0,1,0 );
 
-const uint KDChartParams::KDCHART_ALL_DATASETS = UINT_MAX - 1;
-const uint KDChartParams::KDCHART_NO_DATASET = UINT_MAX;
-const uint KDChartParams::KDCHART_UNKNOWN_CHART = UINT_MAX - 2;
-const uint KDChartParams::KDCHART_ALL_CHARTS = UINT_MAX - 1;
-const uint KDChartParams::KDCHART_NO_CHART = UINT_MAX;
-const int KDChartParams::DATA_VALUE_AUTO_DIGITS = INT_MAX;
-const int KDChartParams::SAGITTAL_ROTATION   = INT_MAX;
-const int KDChartParams::TANGENTIAL_ROTATION = INT_MAX - 1;
-const int KDChartParams::KDCHART_PROPSET_NORMAL_DATA      = 0;
-const int KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA = 1;
-const int KDChartParams::KDCHART_PROPSET_HORI_LINE        = 2;
-const int KDChartParams::KDCHART_PROPSET_VERT_LINE        = 3;
+KDChartAutoColor* KDChartAutoColor::mInstance = NULL;
 
-QColor  KDChartParams::_internalPointer_DataValueAutoColor = QColor( 0,1,0 );
-QColor* const KDChartParams::DATA_VALUE_AUTO_COLOR = &_internalPointer_DataValueAutoColor;
+KDChartAutoColor::KDChartAutoColor()
+{
+}
+
+KDChartAutoColor::KDChartAutoColor( KDChartAutoColor const& )
+{
+}
+
+KDChartAutoColor::~KDChartAutoColor()
+{
+}
+
+const KDChartAutoColor* KDChartAutoColor::instance()
+{
+    if( mInstance == 0 )
+        mInstance = new KDChartAutoColor();
+    return mInstance;
+}
+
+void KDChartAutoColor::freeInstance()
+{
+    if( mInstance )
+        delete mInstance;
+    mInstance = 0;
+}
 
 
-/* we must keep this wrongly spelled value for backward compatibility reasons */
-const int KDChartParams::SAGGITAL_ROTATION = INT_MAX;
-
+/*
+static QColor defaultColor;
+QT_STATIC_CONST_IMPL QColor & KDChartParams_AutoColor = defaultColor;
+*/
 
 /**
   Constructor. Defines default values.
   */
 KDChartParams::KDChartParams()
 {
+    tempPropSetA = new KDChartPropertySet();
+    tempPropSetB = new KDChartPropertySet();
+
     // GENERAL
 
     // Avoid Purify UMR
-    _maxDatasetColor = 0;
+    _maxDatasetColor = 1;
     _maxDatasetSourceMode = 0;
     _setChartSourceModeWasUsed = false;
+
+    _customBoxDictMayContainHoles = false;
 
     // Set the default font params flag for data value texts
     // but do *not* call setPrintDataValues() there since
@@ -104,7 +114,11 @@ KDChartParams::KDChartParams()
 
     setAllowOverlappingDataValueTexts( false );
 
+#if COMPAT_QT_VERSION >= 0x030100
+    setOptimizeOutputForScreen( false );
+#else
     setOptimizeOutputForScreen( true );
+#endif
 
     setGlobalLeading( 0,0,0,0 );
 
@@ -124,7 +138,7 @@ KDChartParams::KDChartParams()
     _noFrame.clearAll();
 
     // The default frame settings: no inner gap, no outer gap and use the _noFrame
-    _noFrameSettings = KDChartFrameSettings();
+    // *** no need to initialize _noFrameSettings: it is initialized by a default c'tor!
 
     // The default brightness of shadow colors (needs to be set
     // before the data colors to avoid an UMR).
@@ -147,6 +161,9 @@ KDChartParams::KDChartParams()
 
     // END GENERAL
 
+
+    setDataArea(  QRect( QPoint(0,0), QSize(0,0)) );
+    setLegendArea(QRect( QPoint(0,0), QSize(0,0)) );
 
 
     // BAR CHART-SPECIFIC
@@ -173,6 +190,14 @@ KDChartParams::KDChartParams()
     // Default gap between value blocks is 24 per mille of chart data area.
     setValueBlockGap( 24 );
     setValueBlockGapIsRelative( true );
+
+    // Default is to have the bar width's calculated indiidually
+    setBarWidth( KDCHART_AUTO_SIZE );
+    // reset the special indicator members storing the number
+    // of bars that were drawn last time / could not be drawn
+    // due to too less horizontal space
+    setBarsDisplayed( 0 );
+    setBarsLeft( 0 );
 
     // By default, excess arrows are drawn in a split fashion
     setDrawSolidExcessArrows( false );
@@ -207,7 +232,7 @@ KDChartParams::KDChartParams()
 
     // 3D line settings
     setThreeDLines( false );
-    setThreeDLineDepth( 20 );
+    setThreeDLineDepth( 10 );
     /* temporary disabled:
        setThreeDLineXRotation( 30 );
        setThreeDLineYRotation( 30 );
@@ -314,6 +339,11 @@ KDChartParams::KDChartParams()
     setLegendSpacing( 20 );
     // Position of the legend
     setLegendPosition( LegendRight );
+    // Orientation of the legend
+    setLegendOrientation( Qt::Vertical );
+    // Whether the legend shall show lines or just
+    // show the markers (or squares, resp.)
+    setLegendShowLines( false );
     // Where the legend labels come from
     setLegendSource( LegendAutomatic );
     // legend texts are drawn in black by default
@@ -323,9 +353,9 @@ KDChartParams::KDChartParams()
     // legend font size is calculated dynamically:
     //                    20 / 1000 of the average value of
     //                                 the printable area height and width
-    setLegendFontRelSize( 22 );
+    setLegendFontRelSize( 16 );
     // the default legend title is "Legend"
-    setLegendTitleText( i18n( "Legend" ) );
+    setLegendTitleText( tr( "Legend" ) );
     // legend title is drawn in black by default
     setLegendTitleTextColor( Qt::black );
     // legend title font size is calculated dynamically, but ignore
@@ -334,7 +364,7 @@ KDChartParams::KDChartParams()
     // legend title font size is calculated dynamically:
     //                    25 / 1000 of the average value of
     //                                 the printable area height and width
-    setLegendTitleFontRelSize( 28 );
+    setLegendTitleFontRelSize( 20 );
     // END LEGEND
 
 
@@ -352,13 +382,13 @@ KDChartParams::KDChartParams()
     // Set a default font for all sections not taking the build-in
     // defaults from c'tor KDChartParams::HdFtParams::HdFtParams()
     QFont defaultHdFtFont( "helvetica", 14, QFont::Normal, false );
-    int relHd0Size = 18;
-    int relHdSize  = 30;
-    int relHd2Size = 24;
+    int relHd0Size = 15;
+    int relHdSize  = 22;
+    int relHd2Size = 19;
 
-    int relFt0Size = 18;
-    int relFtSize  = 24;
-    int relFt2Size = 16;
+    int relFt0Size = 15;
+    int relFtSize  = 19;
+    int relFt2Size = 12;
     setHeaderFooterFont( KDChartParams::HdFtPosHeader0,
             defaultHdFtFont, true, relHd0Size );
     setHeaderFooterFont( KDChartParams::HdFtPosHeader0L,
@@ -399,21 +429,21 @@ KDChartParams::KDChartParams()
     // END HEADERS/FOOTERS
 
     // PROPERTY SETS
-    KDChartPropertySet set("normal data");
-    setProperties(KDCHART_PROPSET_NORMAL_DATA, set);
+    tempPropSetA->fullReset("normal data");
+    setProperties(KDCHART_PROPSET_NORMAL_DATA, *tempPropSetA);
     // don't show the line, don't show the marker
-    set.setName("transparent data");
-    set.setLineStyle(  KDChartPropertySet::OwnID, Qt::NoPen );
-    set.setShowMarker( KDChartPropertySet::OwnID, false );
-    setProperties(KDCHART_PROPSET_TRANSPARENT_DATA, set);
+    tempPropSetA->setName("transparent data");
+    tempPropSetA->setLineStyle(  KDChartPropertySet::OwnID, Qt::NoPen );
+    tempPropSetA->setShowMarker( KDChartPropertySet::OwnID, false );
+    setProperties(KDCHART_PROPSET_TRANSPARENT_DATA, *tempPropSetA);
     // don't show line nor marker, but do show the horizontal line
-    set.setName("horizontal line");
-    set.setExtraLinesAlign(  KDChartPropertySet::OwnID, Qt::AlignLeft | Qt::AlignRight );
-    setProperties(KDCHART_PROPSET_HORI_LINE, set);
+    tempPropSetA->setName("horizontal line");
+    tempPropSetA->setExtraLinesAlign(  KDChartPropertySet::OwnID, Qt::AlignLeft | Qt::AlignRight );
+    setProperties(KDCHART_PROPSET_HORI_LINE, *tempPropSetA);
     // don't show line nor marker, but do show the vertical line
-    set.setName("vertical line");
-    set.setExtraLinesAlign(  KDChartPropertySet::OwnID, Qt::AlignTop | Qt::AlignBottom );
-    setProperties(KDCHART_PROPSET_VERT_LINE, set);
+    tempPropSetA->setName("vertical line");
+    tempPropSetA->setExtraLinesAlign(  KDChartPropertySet::OwnID, Qt::AlignTop | Qt::AlignBottom );
+    setProperties(KDCHART_PROPSET_VERT_LINE, *tempPropSetA);
     // END PROPERTY SETS
 }
 
@@ -423,7 +453,9 @@ KDChartParams::KDChartParams()
   */
 KDChartParams::~KDChartParams()
 {
-    // Intentionally left blank for now.
+    KDChartAutoColor::freeInstance();
+    delete tempPropSetA;
+    delete tempPropSetB;
 }
 
 
@@ -437,7 +469,7 @@ KDChartParams::~KDChartParams()
 
 /**
   Stores a new property set: data are stored by value so you may
-  use your \c aSet instance for other purpose later...
+  use your \c rSet instance for other purpose later...
 
   \returns The property set's ID to be used for later retrieving
   the property information by calling the properties() function
@@ -458,8 +490,9 @@ KDChartParams::~KDChartParams()
   */
 int KDChartParams::registerProperties( KDChartPropertySet& rSet )
 {
+    _propertySetList.setAutoDelete( true );
     rSet.mOwnID = _propertySetList.count();
-    _propertySetList[ rSet.mOwnID ] = rSet;
+    _propertySetList.insert( rSet.mOwnID, rSet.clone() );
     return rSet.mOwnID;
 }
 
@@ -481,15 +514,11 @@ int KDChartParams::registerProperties( KDChartPropertySet& rSet )
   \sa KDChartData::setPropertySet
   \sa removeProperties
   */
-bool KDChartParams::setProperties( int id, KDChartPropertySet& rSet )
+void KDChartParams::setProperties( int id, KDChartPropertySet& rSet )
 {
+    _propertySetList.setAutoDelete( true );
     rSet.mOwnID = id;
-    bool found = _propertySetList.find( id ) != _propertySetList.end();
-    if( found )
-        _propertySetList.replace( rSet.mOwnID, rSet );
-    else
-        _propertySetList[ rSet.mOwnID ] = rSet;
-    return found;
+    _propertySetList.replace( rSet.mOwnID, rSet.clone() );
 }
 
 /**
@@ -497,25 +526,22 @@ bool KDChartParams::setProperties( int id, KDChartPropertySet& rSet )
   that was registered via registerProperties().
 
   \note It is not possible to remove the build-in default property set:
-  function calls using KDChartParams::KDCHART_PROPSET_NORMAL_DATA as ID
+  function calls using KDCHART_PROPSET_NORMAL_DATA as ID
   will be ignored.
 
   \returns TRUE if the property set was found and removed, or FALSE
-  if the set was not found or KDChartParams::KDCHART_PROPSET_NORMAL_DATA
+  if the set was not found or KDCHART_PROPSET_NORMAL_DATA
   was specified as ID value.
 
   \sa registerProperties, setProperties
   */
 bool KDChartParams::removeProperties( int id )
 {
+    _propertySetList.setAutoDelete( true );
     // Removing the default property set is not allowed!
-    if( KDChartParams::KDCHART_PROPSET_NORMAL_DATA == id )
+    if( KDCHART_PROPSET_NORMAL_DATA == id )
         return false;
-
-    bool found = _propertySetList.find( id ) != _propertySetList.end();
-    if( found )
-        _propertySetList.remove( id );
-    return found;
+    return _propertySetList.remove( id );
 }
 
 
@@ -542,10 +568,39 @@ bool KDChartParams::removeProperties( int id )
   */
 bool KDChartParams::properties( int id, KDChartPropertySet& rSet ) const
 {
-    bool found = _propertySetList.find( id ) != _propertySetList.end();
-    if( found )
-        rSet = _propertySetList[ id ];
-    return found;
+    const KDChartPropertySet* R = _propertySetList.find( id );
+    const bool bFound = (0 != R);
+    if( bFound )
+        rSet.deepCopy( R );
+    return bFound;
+}
+
+
+/**
+  Retrieves the internal property set object that
+  created when you called registerProperties().
+
+  Use this function to access a property set for modifying it directly.
+
+  Don't use this function to retrieve the properties that are
+  valid for a given data cell but use KDChartParams::calculateProperties()
+  instead.
+
+  \note This function <b>does</b> return a pointer
+  to the property set itself, so you can directly modify its contents.
+  <b>However</b> you have to make sure NOT to delete this pointer,
+  since KDChartParams is owning it, so it would try to free
+  the pointer again later, most likely resulting in a program crash.
+  To delete a stored property set you may use the removeProperties() function.
+
+  \returns A pointer to the internally stored property set if the property set was found,
+  Zero if no property set was registred with this ID.
+
+  \sa registerProperties, removeProperties, KDChartData::setPropertySet
+  */
+KDChartPropertySet* KDChartParams::properties( int id )
+{
+    return _propertySetList.find( id );
 }
 
 
@@ -568,9 +623,14 @@ bool KDChartParams::properties( int id, KDChartPropertySet& rSet ) const
   */
 bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet ) const
 {
-    KDChartPropertySet startSet;
+    KDChartPropertySet& startSet = *tempPropSetA;
+    startSet.quickReset("");
 
-    rSet = startSet; // reset all properties of rSet to the default !!
+    rSet.deepCopy( &startSet ); // reset all properties of rSet to the default !!
+
+//qDebug("in KDChartParams::calculateProperties():");
+//qDebug("   startId: %i",startId);
+//qDebug("   startSet: %s",startSet.name().latin1());
 
     bool bOk = properties(startId, startSet);
     if( bOk ){
@@ -578,6 +638,10 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
         QColor       lineColor;
         Qt::PenStyle lineStyle;
         bool         showMarker;
+        uint         markerAlign;
+        QSize        markerSize;
+        QColor       markerColor;
+        int          markerStyle;
         uint         extraLinesAlign;
         bool         extraLinesInFront;
         int          extraLinesLength;
@@ -590,8 +654,10 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
         int          extraMarkersStyle;
         bool         showBar;
         QColor       barColor;
+        QBrush       areaBrush;
         // c'tor sets all IDs to unknown by default
-        KDChartPropertySet propSet;
+        KDChartPropertySet& propSet = *tempPropSetB;
+        propSet.quickReset("");
         // PENDING(khz) replace the rustic depth counter i by a smart way
         // to quickly and safely recognize forbidden circular ID dependencies
         // *without* using this artificial maximal tree depth limitation.
@@ -599,7 +665,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
         int i;
         int id;
         // retrieve lineWidth
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnLineWidth( id, lineWidth ) ){
                 rSet.setLineWidth( KDChartPropertySet::OwnID, lineWidth );
@@ -609,7 +675,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve lineColor
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnLineColor( id, lineColor ) ){
                 rSet.setLineColor( KDChartPropertySet::OwnID, lineColor );
@@ -619,7 +685,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve lineStyle
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnLineStyle( id, lineStyle ) ){
                 rSet.setLineStyle( KDChartPropertySet::OwnID, lineStyle );
@@ -628,11 +694,54 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
                 break;
             ++i;
         }while( properties(id, propSet) );
+
+        // markers at cell value position:
+
         // retrieve showMarker
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnShowMarker( id, showMarker ) ){
                 rSet.setShowMarker( KDChartPropertySet::OwnID, showMarker );
+                break;
+            }else if( KDChartPropertySet::UndefinedID == id || maxDepth < i )
+                break;
+            ++i;
+        }while( properties(id, propSet) );
+        // retrieve marker alignment
+        propSet.deepCopy( &startSet ); i=0;
+        do{
+            if( propSet.hasOwnMarkerAlign( id, markerAlign ) ){
+                rSet.setMarkerAlign( KDChartPropertySet::OwnID, markerAlign );
+                break;
+            }else if( KDChartPropertySet::UndefinedID == id || maxDepth < i )
+                break;
+            ++i;
+        }while( properties(id, propSet) );
+        // retrieve marker size
+        propSet.deepCopy( &startSet ); i=0;
+        do{
+            if( propSet.hasOwnMarkerSize( id, markerSize ) ){
+                rSet.setMarkerSize( KDChartPropertySet::OwnID, markerSize );
+                break;
+            }else if( KDChartPropertySet::UndefinedID == id || maxDepth < i )
+                break;
+            ++i;
+        }while( properties(id, propSet) );
+        // retrieve marker color
+        propSet.deepCopy( &startSet ); i=0;
+        do{
+            if( propSet.hasOwnMarkerColor( id, markerColor ) ){
+                rSet.setMarkerColor( KDChartPropertySet::OwnID, markerColor );
+                break;
+            }else if( KDChartPropertySet::UndefinedID == id || maxDepth < i )
+                break;
+            ++i;
+        }while( properties(id, propSet) );
+        // retrieve marker style
+        propSet.deepCopy( &startSet ); i=0;
+        do{
+            if( propSet.hasOwnMarkerStyle( id, markerStyle ) ){
+                rSet.setMarkerStyle( KDChartPropertySet::OwnID, markerStyle );
                 break;
             }else if( KDChartPropertySet::UndefinedID == id || maxDepth < i )
                 break;
@@ -642,7 +751,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
         // extra lines:
 
         // retrieve alignment of extra lines
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraLinesAlign( id, extraLinesAlign ) ){
                 rSet.setExtraLinesAlign( KDChartPropertySet::OwnID, extraLinesAlign );
@@ -652,7 +761,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve whether the extra lines shall be printed in front of the normal lines
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraLinesInFront( id, extraLinesInFront ) ){
                 rSet.setExtraLinesInFront( KDChartPropertySet::OwnID, extraLinesInFront );
@@ -662,7 +771,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve lineLength
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraLinesLength( id, extraLinesLength ) ){
                 rSet.setExtraLinesLength( KDChartPropertySet::OwnID, extraLinesLength );
@@ -672,7 +781,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve lineWidth
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraLinesWidth( id, extraLinesWidth ) ){
                 rSet.setExtraLinesWidth( KDChartPropertySet::OwnID, extraLinesWidth );
@@ -682,7 +791,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve lineColor
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraLinesColor( id, extraLinesColor ) ){
                 rSet.setExtraLinesColor( KDChartPropertySet::OwnID, extraLinesColor );
@@ -692,7 +801,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve lineStyle
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraLinesStyle( id, extraLinesStyle ) ){
                 rSet.setExtraLinesStyle( KDChartPropertySet::OwnID, extraLinesStyle );
@@ -705,7 +814,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
         // markers at the ends of the extra lines:
 
         // retrieve marker alignment
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraMarkersAlign( id, extraMarkersAlign ) ){
                 rSet.setExtraMarkersAlign( KDChartPropertySet::OwnID, extraMarkersAlign );
@@ -715,7 +824,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve marker size
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraMarkersSize( id, extraMarkersSize ) ){
                 rSet.setExtraMarkersSize( KDChartPropertySet::OwnID, extraMarkersSize );
@@ -725,7 +834,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve marker color
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraMarkersColor( id, extraMarkersColor ) ){
                 rSet.setExtraMarkersColor( KDChartPropertySet::OwnID, extraMarkersColor );
@@ -735,7 +844,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve marker style
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnExtraMarkersStyle( id, extraMarkersStyle ) ){
                 rSet.setExtraMarkersStyle( KDChartPropertySet::OwnID, extraMarkersStyle );
@@ -746,7 +855,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
         }while( properties(id, propSet) );
 
         // retrieve showBar
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnShowBar( id, showBar ) ){
                 rSet.setShowBar( KDChartPropertySet::OwnID, showBar );
@@ -756,10 +865,21 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
             ++i;
         }while( properties(id, propSet) );
         // retrieve barColor
-        propSet = startSet; i=0;
+        propSet.deepCopy( &startSet ); i=0;
         do{
             if( propSet.hasOwnBarColor( id, barColor ) ){
                 rSet.setBarColor( KDChartPropertySet::OwnID, barColor );
+                break;
+            }else if( KDChartPropertySet::UndefinedID == id || maxDepth < i )
+                break;
+            ++i;
+        }while( properties(id, propSet) );
+
+        // retrieve areaBrush
+        propSet.deepCopy( &startSet ); i=0;
+        do{
+            if( propSet.hasOwnAreaBrush( id, areaBrush ) ){
+                rSet.setAreaBrush( KDChartPropertySet::OwnID, areaBrush );
                 break;
             }else if( KDChartPropertySet::UndefinedID == id || maxDepth < i )
                 break;
@@ -812,19 +932,19 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
   <b>reset</b> the respective font size and colour and position
   parameters (but not the QFont itself) and <b>activate</b> printing
   of the values for the \c chart speficied (or for all charts by
-  using \c KDChartParams::KDCHART_ALL_CHARTS, resp.).
+  using \c KDCHART_ALL_CHARTS, resp.).
 
   \param active specifies whether the value texts are to be printed or not.
   \param chart The number of the chart: 0 for the first chart, 1 for
   the second chart in case there are two charts to be drawn sharing the
-  same data area.  Use the special value KDChartParams::KDCHART_ALL_CHARTS
+  same data area.  Use the special value KDCHART_ALL_CHARTS
   to specify that your settings are to be taken for both charts.
   \param divPow10 The power of 10 which the data value is to be divided by.
   A value of 2 means divide by 100, a value of  -3 means multiply by 1000,
   and 0 (by definition) would result in multiplying by 1.
   \param digitsBehindComma The number of digits to show behind the comma,
   to have this calculated automatically just use the default value
-  KDChartParams::DATA_VALUE_AUTO_DIGITS.
+  KDCHART_DATA_VALUE_AUTO_DIGITS.
   \param font a Pointer to the font to be used, if zero the default data value
   texts font will be taken (this is a Times font since small Times digits are
   clearer than small Helvetica digits).
@@ -844,7 +964,7 @@ bool KDChartParams::calculateProperties( int startId, KDChartPropertySet& rSet )
   \param color the color to be used when printing the values.
   To have the color calculated automatically - useful when printing
   inside the bars (or pie slices, areas, ... resp.) - please use
-  \c DATA_VALUE_AUTO_COLOR instead of a QColor*.
+  \c KDCHART_DATA_VALUE_AUTO_COLOR instead of a QColor*.
   You may use setPrintDataValuesColor to change this parameter setting
   without affecting the other ones.
 
@@ -879,8 +999,8 @@ size of the chart and the specification made via parameter \c size.
         360 degrees) taken to rotate the text. Positive values rotate
 clockwise, negative values rotate counter-clockwise.  There are two
 special values that you might find usefull for Pie charts or for
-Ring charts: \c KDChartParams::SAGGITAL_ROTATION and \c
-KDChartParams::TANGENTIAL_ROTATION both leading to individual
+Ring charts: \c KDCHART_SAGGITAL_ROTATION and \c
+KDCHART_TANGENTIAL_ROTATION both leading to individual
 calculation of appropriate rotation for each data value.  Rotation
 will be performed around the internal <b>alignment point</b> of the
 text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
@@ -915,8 +1035,8 @@ size of the chart and the specification made via parameter \c size.
         360 degrees) taken to rotate the text. Positive values rotate
 clockwise, negative values rotate counter-clockwise.  There are two
 special values that you might find usefull for Pie charts or for
-Ring charts: \c KDChartParams::SAGGITAL_ROTATION and \c
-KDChartParams::TANGENTIAL_ROTATION both leading to individual
+Ring charts: \c KDCHART_SAGGITAL_ROTATION and \c
+KDCHART_TANGENTIAL_ROTATION both leading to individual
 calculation of appropriate rotation for each data value.  Rotation
 will be performed around the internal <b>alignment point</b> of the
 text -- specified by \c negativeAlign (or \c positiveAlign, resp.).
@@ -946,7 +1066,7 @@ void KDChartParams::setPrintDataValues( bool active,
         int digitsBehindComma,
         QFont* font,
         uint size,
-        QColor* color,
+        const QColor* color,
         KDChartEnums::PositionFlag negativePosition,
         uint negativeAlign,
         int  negativeDeltaX,
@@ -985,7 +1105,7 @@ void KDChartParams::setPrintDataValues( bool active,
                               else
                                   settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
                               settings->_dataValuesUseFontRelSize = true;
-                              settings->_dataValuesFontRelSize = 22;
+                              settings->_dataValuesFontRelSize = 16;
                               settings->_dataValuesAutoColor            = false;  //  !!!
                               settings->_dataValuesColor = QColor( Qt::darkBlue );
                               settings->_dataValuesBrush = QBrush( Qt::NoBrush );
@@ -1011,7 +1131,7 @@ void KDChartParams::setPrintDataValues( bool active,
                                else
                                    settings->_dataValuesFont = QFont( "times", 1, QFont::Normal );
                                settings->_dataValuesUseFontRelSize = true;
-                               settings->_dataValuesFontRelSize = 22;
+                               settings->_dataValuesFontRelSize = 16;
                                settings->_dataValuesAutoColor            = false;  //  !!!
                                settings->_dataValuesColor = QColor( Qt::darkBlue );
                                settings->_dataValuesBrush = QBrush( Qt::NoBrush );
@@ -1037,7 +1157,7 @@ void KDChartParams::setPrintDataValues( bool active,
                                else
                                    settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
                                settings->_dataValuesUseFontRelSize = true;
-                               settings->_dataValuesFontRelSize = 29;
+                               settings->_dataValuesFontRelSize = 21;
                                settings->_dataValuesAutoColor              = true;  //  !!!
                                settings->_dataValuesColor = QColor( Qt::black );
                                settings->_dataValuesBrush = QBrush( Qt::white );
@@ -1073,7 +1193,7 @@ void KDChartParams::setPrintDataValues( bool active,
                               else
                                   settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
                               settings->_dataValuesUseFontRelSize = true;
-                              settings->_dataValuesFontRelSize = 35;
+                              settings->_dataValuesFontRelSize = 25;
                               settings->_dataValuesAutoColor            = true;  //  !!!
                               settings->_dataValuesColor = QColor( Qt::black );
                               settings->_dataValuesBrush = QBrush( Qt::NoBrush );
@@ -1082,13 +1202,13 @@ void KDChartParams::setPrintDataValues( bool active,
                               settings->_dataValuesAnchorNegativeAlign    = Qt::AlignTop + Qt::AlignHCenter;
                               settings->_dataValuesAnchorNegativeDeltaX   =  0;
                               settings->_dataValuesAnchorNegativeDeltaY   = 50;
-                              settings->_dataValuesNegativeRotation       = TANGENTIAL_ROTATION;
+                              settings->_dataValuesNegativeRotation       = KDCHART_TANGENTIAL_ROTATION;
                               // for values greater/equal zero:
                               settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosTopCenter;
                               settings->_dataValuesAnchorPositiveAlign    = Qt::AlignTop + Qt::AlignHCenter;
                               settings->_dataValuesAnchorPositiveDeltaX   =  0;
                               settings->_dataValuesAnchorPositiveDeltaY   = 50;
-                              settings->_dataValuesPositiveRotation       = TANGENTIAL_ROTATION;
+                              settings->_dataValuesPositiveRotation       = KDCHART_TANGENTIAL_ROTATION;
 
                               settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
                           }
@@ -1099,7 +1219,7 @@ void KDChartParams::setPrintDataValues( bool active,
                                else
                                    settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
                                settings->_dataValuesUseFontRelSize = true;
-                               settings->_dataValuesFontRelSize = 35;
+                               settings->_dataValuesFontRelSize = 25;
                                settings->_dataValuesAutoColor            = true;  //  !!!
                                settings->_dataValuesColor = QColor( Qt::black );
                                settings->_dataValuesBrush = QBrush( Qt::NoBrush );
@@ -1108,35 +1228,36 @@ void KDChartParams::setPrintDataValues( bool active,
                                settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
                                settings->_dataValuesAnchorNegativeDeltaX   = 0;
                                settings->_dataValuesAnchorNegativeDeltaY   = 10;
-                               settings->_dataValuesNegativeRotation       = TANGENTIAL_ROTATION;
+                               settings->_dataValuesNegativeRotation       = KDCHART_TANGENTIAL_ROTATION;
                                // for values greater/equal zero:
                                settings->_dataValuesAnchorPositivePosition = KDChartEnums::PosCenter;
                                settings->_dataValuesAnchorPositiveAlign    = Qt::AlignCenter;
                                settings->_dataValuesAnchorPositiveDeltaX   = 0;
                                settings->_dataValuesAnchorPositiveDeltaY   = 10;
-                               settings->_dataValuesPositiveRotation       = TANGENTIAL_ROTATION;
+                               settings->_dataValuesPositiveRotation       = KDCHART_TANGENTIAL_ROTATION;
 
                                settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyRotate;
                            }
                            break;
 
                 case Polar: {
+                                settings->_dataValuesFontRelSize = 18;
                                 if ( font )
-                                        settings->_dataValuesFont = *font;
+                                    settings->_dataValuesFont = *font;
                                 else
-                                        settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
+                                    settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
                                 settings->_dataValuesUseFontRelSize = true;
                                 settings->_dataValuesFontRelSize = 26;
                                 settings->_dataValuesAutoColor   = polarMarker();  //  !!!
                                 settings->_dataValuesColor = QColor( Qt::black );
                                 settings->_dataValuesBrush = QBrush( Qt::NoBrush );
+
                                 // for values below zero:
                                 settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
                                 settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
                                 settings->_dataValuesAnchorNegativeDeltaX   = 0;
                                 settings->_dataValuesAnchorNegativeDeltaY   = 0;
                                 settings->_dataValuesNegativeRotation       = 0;
-
                                 // for values greater/equal zero:
                                 settings->_dataValuesAnchorNegativePosition = KDChartEnums::PosCenter;
                                 settings->_dataValuesAnchorNegativeAlign    = Qt::AlignCenter;
@@ -1145,7 +1266,7 @@ void KDChartParams::setPrintDataValues( bool active,
                                 settings->_dataValuesNegativeRotation       = 0;
 
                                 //settings->_dataValuesLayoutPolicy = KDChartEnums::LayoutPolicyShrinkFontSize;
-				//settings->_dataValuesFontRelSize = 26;
+                                //settings->_dataValuesFontRelSize = 26;
                                 //setDefaultAxesTypes();
                                 //finished = false;  // use build-in default params, see KDChartParams.h::setPrintDataValues()
                             }
@@ -1165,10 +1286,10 @@ void KDChartParams::setPrintDataValues( bool active,
             else
                 settings->_dataValuesFont = QFont( "times", 1, QFont::Bold );
 
-            uint theSize( UINT_MAX == size ? 20 : size );
+            uint theSize( UINT_MAX == size ? 14 : size );
             settings->_dataValuesUseFontRelSize = ( 0 < theSize );
             settings->_dataValuesFontRelSize = theSize;
-            if (    DATA_VALUE_AUTO_COLOR == color
+            if (    KDCHART_DATA_VALUE_AUTO_COLOR == color
                  && ( Polar != cType || polarMarker() ) ) {
                 settings->_dataValuesAutoColor = true;  //  !!!
                 settings->_dataValuesColor = QColor( Qt::black );
@@ -1746,6 +1867,18 @@ QColor KDChartParams::dataColor( uint dataset ) const
 }
 
 
+QString KDChartParams::dataRegionFrameAreaName( uint dataRow,
+                             uint dataCol,
+                             uint data3rd )
+{
+    return QString( "%1/%2/%3/%4" )
+            .arg( KDChartEnums::AreaChartDataRegion, 5 )
+            .arg( dataRow, 5 )
+            .arg( dataCol, 5 )
+            .arg( data3rd, 5 );
+}
+
+
 /**
   Recomputes the shadow colors by iterating over all configured
   data colors and reassigning the data colors with exactly the
@@ -1920,19 +2053,19 @@ void KDChartParams::setDefaultAxesTypes()
             // and dont show any Digits behind the comma.
             setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom, false,
                     1.0,
-                    KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                    KDCHART_AXIS_LABELS_AUTO_LIMIT,
                     1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosTop, false,
                     1.0,
-                    KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                    KDCHART_AXIS_LABELS_AUTO_LIMIT,
                     1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom2, false,
                     1.0,
-                    KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                    KDCHART_AXIS_LABELS_AUTO_LIMIT,
                     1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosTop2, false,
                     1.0,
-                    KDChartAxisParams::AXIS_LABELS_AUTO_LIMIT,
+                    KDCHART_AXIS_LABELS_AUTO_LIMIT,
                     1.0, 0 );
 
             // no need to specify numbering information for
@@ -1985,28 +2118,28 @@ void KDChartParams::setDefaultAxesTypes()
             // Delta value 1.0
             // and don't show any Digits behind the comma.
             setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom,  false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosTop,     false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerRightEdge,
             false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerLeftEdge,
             false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosBottom2, false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosTop2,    false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
             setAxisLabelTextParams(KDChartAxisParams::AxisPosLowerRightEdge2,
             false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
             setAxisLabelTextParams( KDChartAxisParams::AxisPosLowerLeftEdge2,
             false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
 
             false,
-            1.0, AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
+            1.0, KDCHART_AXIS_LABELS_AUTO_LIMIT, 1.0, 0 );
 
             // no need to specify numbering information for
             // the ordinate-axes since the default auto-calc
@@ -2027,12 +2160,12 @@ void KDChartParams::setDefaultAxesTypes()
             setAxisLabelsVisible( KDChartAxisParams::AxisPosSaggital, true );
             setAxisLabelsFont( KDChartAxisParams::AxisPosSaggital,
                                QFont( "helvetica", 1, QFont::Bold ),
-                               -40,
+                               -30,
                                Qt::darkBlue );
             setAxisLabelsVisible( KDChartAxisParams::AxisPosCircular, true );
             setAxisLabelsFont( KDChartAxisParams::AxisPosCircular,
                                QFont( "helvetica", 1, QFont::Bold ),
-                               -29,
+                               -22,
                                Qt::darkBlue );
             setPolarRotateCircularLabels( false );
             break;
@@ -2408,7 +2541,57 @@ void KDChartParams::setGlobalLeading( int left, int top, int right, int bottom )
 
 
 /**
-  \var KDChartParams::CustomBoxMap
+  \fn bool KDChartParams::moveDataRegionFrame( uint, uint, uint, uint, uint, uint )
+
+  Move a frame that was previously specified using setDataRegionFrame
+  to another location: moves the frame from cell[ oldDataRow, oldDataCol ]
+  to cell[ newDataRow, newDataCol ] without changing looking of the frame,
+  or just removes the frame entirely.
+
+  \param oldDataRow The table row of the frame to be removed.
+  \param oldDataCol The table column of the frame to be removed.
+  \param oldData3rd The third table coordinate of the old cell (parameter not used, its value will be ignored, set to 0, reserved for future use).
+  \param newDataRow The table row of the cell to be framed instead, or KDCHART_NO_DATASET if the frame is to be removed
+  without framing another cell then.
+  \param newDataCol The table column of the cell to be framed instead.
+  \param newData3rd The third table coordinate of the new cell (parameter not used, its value will be ignored, set to 0, reserved for future use).
+
+  \note Using KDCHART_NO_DATASET for the newDataRow parameter will not
+  result in returning FALSE because it is an allowed action: the frame is just removed then.
+
+  \return TRUE if the frame could be moved or was removed; FALSE if either there was no frame around the old cell or the target cell does not exist.
+  */
+bool KDChartParams::moveDataRegionFrame( uint oldDataRow,
+                             uint oldDataCol,
+                             uint, // important: we ignore the data3rd parameter for now!
+                             uint newDataRow,
+                             uint newDataCol,
+                             uint// important: we ignore the data3rd parameter for now!
+                             )
+{
+    const QString oldKey( dataRegionFrameAreaName( oldDataRow, oldDataCol, 0 ) ); // oldData3rd ) );
+    KDChartFrameSettings* it = _areaDict.find( oldKey );
+    bool bFound = ( it != 0 );
+    if( bFound ){
+        if( KDCHART_NO_DATASET != newDataRow ){
+            KDChartFrameSettings* frame = new KDChartFrameSettings;
+            KDChartFrameSettings::deepCopy( *frame, *it );
+            frame->setDataRow( newDataRow );
+            frame->setDataCol( newDataCol );
+            frame->setData3rd( 0 ); // newData3rd );
+            _areaDict.setAutoDelete( TRUE );
+            _areaDict.insert(
+                dataRegionFrameAreaName( newDataRow, newDataCol, 0 ), //data3rd 5 ),
+                frame );
+        }
+        _areaDict.remove( oldKey );
+        emit changed();
+    }
+    return bFound;
+}
+
+/**
+  \var KDChartParams::CustomBoxDict
 
   The type that stores the custom boxes in a chart.
   */
@@ -2424,18 +2607,18 @@ const KDChartParams::KDChartFrameSettings* KDChartParams::frameSettings( uint ar
 {
     if( pIterIdx )
         *pIterIdx = 0;
-    QString key( QString( "%1/-----/-----/-----" ).arg( area, 5 ) );
-    AreaMap::ConstIterator it;
-    it = _areaMap.find( key );
-    bFound = it != _areaMap.end();
+    const QString key( QString( "%1/-----/-----/-----" ).arg( area, 5 ) );
+    KDChartFrameSettings* it = _areaDict.find( key );
+    bFound = ( it != 0 );
     if( bFound )
-        return &it.data();
+        return it;
     else if( pIterIdx ){
         QString keyStart( key.left(6) );
-        for( it = _areaMap.begin(); it != _areaMap.end(); ++it ){
-            if( it.key().startsWith( keyStart ) ){
+        QDictIterator<KDChartFrameSettings> it2( _areaDict );
+        for( ; it2.current(); ++it2 ){
+            if( it2.currentKey().startsWith( keyStart ) ){
                 bFound = true;
-                return &it.data();
+                return it2.current();
             }
             ++*pIterIdx;
         }
@@ -2456,21 +2639,21 @@ const KDChartParams::KDChartFrameSettings* KDChartParams::nextFrameSettings( boo
 {
     bFound = false;
     if( pIterIdx ){
-        AreaMap::ConstIterator it;
         int i=0;
-        for( it = _areaMap.begin(); it != _areaMap.end(); ++it ){
+        QDictIterator<KDChartFrameSettings> it( _areaDict );
+        for( ; it.current(); ++it ){
             if( *pIterIdx == i )
                 break;
             ++i;
         }
         if( *pIterIdx == i ){
-            QString keyStart( it.key().left(6) );
+            QString keyStart( it.currentKey().left(6) );
             ++it;
-            for( ; it != _areaMap.end(); ++it ){
+            for( ; it.current(); ++it ){
                 ++*pIterIdx;
-                if( it.key().startsWith( keyStart ) ){
+                if( it.currentKey().startsWith( keyStart ) ){
                     bFound = true;
-                    return &it.data();
+                    return it.current();
                 }
             }
         }
@@ -2488,15 +2671,23 @@ const KDChartParams::KDChartFrameSettings* KDChartParams::nextFrameSettings( boo
   */
 uint KDChartParams::insertCustomBox( const KDChartCustomBox & box )
 {
-    uint maxIndex = maxCustomBoxIdx();
-    uint newIdx = 1 + maxIndex;
-    for( uint idx = 0; idx <= maxIndex; ++idx ) {
-        if( _customBoxMap.find( idx ) == _customBoxMap.end() ) {
-            newIdx = idx;
-            break;
+    _customBoxDict.setAutoDelete( true );
+    uint newIdx;
+    if( _customBoxDictMayContainHoles ){
+        _customBoxDictMayContainHoles = false;
+        const uint maxIndex = maxCustomBoxIdx();
+        newIdx = 1 + maxIndex;
+        for( uint idx = 0; idx <= maxIndex; ++idx ) {
+            if( ! _customBoxDict.find( idx ) ) {
+                newIdx = idx;
+                _customBoxDictMayContainHoles = true; // we found a hole, so there might be more of them
+                break;
+            }
         }
+    }else{
+        newIdx = _customBoxDict.count();
     }
-    _customBoxMap.insert( newIdx, box );
+    _customBoxDict.insert( newIdx, box.clone() );
     emit changed();
     return newIdx;
 }
@@ -2511,11 +2702,8 @@ uint KDChartParams::insertCustomBox( const KDChartCustomBox & box )
   */
 bool KDChartParams::removeCustomBox( const uint & idx )
 {
-    CustomBoxMap::Iterator it;
-    it = _customBoxMap.find( idx );
-    bool bFound = it != _customBoxMap.end();
-    if( bFound )
-        _customBoxMap.remove( it );
+    const bool bFound = _customBoxDict.remove( idx );
+    _customBoxDictMayContainHoles = true;
     emit changed();
     return bFound;
 }
@@ -2535,16 +2723,13 @@ bool KDChartParams::removeCustomBox( const uint & idx )
   that was returned by insertCustomBox, or you may use a numerical value,
   e.g. when iterating from zero up to maxCustomBoxIdx().
 
+  \return Zero if the custom box has been removed by calling removeCustomBox.
+
   \sa insertCustomBox customBoxRef, removeCustomBox, removeAllCustomBoxes, maxCustomBoxIdx
   */
 const KDChartCustomBox* KDChartParams::customBox( uint box ) const
 {
-    CustomBoxMap::ConstIterator it;
-    it = _customBoxMap.find( box );
-    if(  _customBoxMap.end() == it )
-        return 0;
-    else
-        return &it.data();
+    return _customBoxDict.find( box );
 }
 
 /**
@@ -2556,32 +2741,29 @@ const KDChartCustomBox* KDChartParams::customBox( uint box ) const
   \note The reference returned by this method may be used to directly
   modify the properties of the respective box.
 
+  \return Zero if the custom box has been removed by calling removeCustomBox.
+
   \sa insertCustomBox customBox, removeCustomBox, removeAllCustomBoxes, maxCustomBoxIdx
   */
 KDChartCustomBox* KDChartParams::customBoxRef( uint box )
 {
-    CustomBoxMap::Iterator it;
-    it = _customBoxMap.find( box );
-    if(  _customBoxMap.end() == it )
-        return 0;
-    else
-        return &it.data();
+    return _customBoxDict.find( box );
 }
 
 /**
-  Retrieve the number of custom boxes
+  Retrieve the biggest custom boxes ID used.
 
   \sa insertCustomBox, removeCustomBox, removeAllCustomBoxes, customBox
   */
 uint KDChartParams::maxCustomBoxIdx() const
 {
-    uint cnt( _customBoxMap.count() );
+    uint cnt( _customBoxDict.count() );
     if( cnt ) {
-        uint maxIndex = cnt-1;
-        CustomBoxMap::ConstIterator it;
-        for( it = _customBoxMap.begin(); it != _customBoxMap.end(); ++it )
-            if( it.key() > maxIndex )
-                maxIndex = it.key();
+        int maxIndex = cnt-1;
+        QIntDictIterator<KDChartCustomBox> it( _customBoxDict );
+        for( ; it.current(); ++it )
+            if( it.currentKey() > maxIndex )
+                maxIndex = it.currentKey();
         return maxIndex;
     }
     return 0;
@@ -2744,7 +2926,7 @@ void KDChartParams::setChartType( ChartType chartType )
   \verbatim
   setAxisDatasets( KDChartAxisParams::AxisPosLeft2, 3,4, 1 );
   setAxisDatasets( KDChartAxisParams::AxisPosRight,
-  KDChartParams::KDCHART_NO_DATASET );
+  KDCHART_NO_DATASET );
   \endverbatim
 
   Often your additional chart will look better when not overlapping with
@@ -2914,8 +3096,10 @@ void KDChartParams::setAdditionalChartType( ChartType chartType )
   Specifies a color for the outlines of data displays. The default is
   black.
 
+  \note Use setOutlineDataLineStyle( Qt::NoPen ) to hide the line.
+
   \param color the color to use for the outlines
-  \sa outlineDataColor
+  \sa outlineDataColor, setOutlineDataLineStyle, setOutlineDataLineWidth
   */
 
 
@@ -2935,8 +3119,10 @@ void KDChartParams::setAdditionalChartType( ChartType chartType )
   Specifies the width of the outlines of data displays. The default is 1
   pixel.
 
+  \note Use setOutlineDataLineStyle( Qt::NoPen ) to hide the line.
+
   \param width the line width to use for the outlines
-  \sa outlineDataLineWidth
+  \sa outlineDataLineWidth, setOutlineDataLineStyle, setOutlineDataColor
   */
 
 
@@ -2959,7 +3145,7 @@ void KDChartParams::setAdditionalChartType( ChartType chartType )
   than 1, due to a bug in the operating system.
 
   \param width the line style to use for the outlines
-  \sa outlineDataLineStyle
+  \sa outlineDataLineStyle, setOutlineDataColor, setOutlineDataLineWidth
   */
 
 
@@ -3144,7 +3330,7 @@ void KDChartParams::setDataValuesPlacing( KDChartEnums::PositionFlag position,
 
   To have the color calculated automatically - useful when printing
   inside the bars (or pie slices, areas, ... resp.) - please use
-  \c DATA_VALUE_AUTO_COLOR instead of a QColor*.
+  \c KDCHART_DATA_VALUE_AUTO_COLOR instead of a QColor*.
 
   Setting the background is normally not needed since reasonable
   settings are done by default: Area charts have a white background
@@ -3202,7 +3388,7 @@ void KDChartParams::setDataValuesPolicy(
 
 /**
   Specifies whether data value texts should be printed even if the
-  value is KDChartData::POS_INFINITE (or KDChartData::NEG_INFINITE).
+  value is KDCHART_POS_INFINITE (or KDCHART_NEG_INFINITE).
 
   Printing of an infinite symbol (lemniskate) is done by default,
   ou may use this function to disable it.
@@ -3236,7 +3422,7 @@ void KDChartParams::setPrintDataValuesColor( uint chart, const QColor* color )
         ? &_printDataValuesSettings
         : &_printDataValuesSettings2;
     for ( uint i = 0; i < count; ++i ) {
-        if ( DATA_VALUE_AUTO_COLOR == color ) {
+        if ( KDCHART_DATA_VALUE_AUTO_COLOR == color ) {
             settings->_dataValuesAutoColor            = true;  //  !!!
             settings->_dataValuesColor = QColor( Qt::black );
         }
@@ -3258,7 +3444,7 @@ void KDChartParams::setPrintDataValuesColor( uint chart, const QColor* color )
 /**
   Specifies the dynamic font size to be used for printing the data
   value texts.  To change settings for all charts specify \c
-  KDChartParams::KDCHART_ALL_CHARTS as \chart parameter.
+  KDCHART_ALL_CHARTS as \chart parameter.
 
   This methode is provided for your convenience, to learn how to set the
   other text parameters please have a look at setPrintDataValues.
@@ -3272,7 +3458,7 @@ void KDChartParams::setPrintDataValuesFontRelSize( uint chart, uint size )
     PrintDataValuesSettings * settings =    (( 1 < count ) || ( 0 == chart ))
         ? &_printDataValuesSettings
         : &_printDataValuesSettings2;
-    uint theSize( UINT_MAX == size ? 22 : size );
+    uint theSize( UINT_MAX == size ? 16 : size );
     for ( uint i = 0; i < count; ++i ) {
         settings->_dataValuesUseFontRelSize = ( 0 < theSize );
         settings->_dataValuesFontRelSize = theSize;
@@ -3626,7 +3812,7 @@ int KDChartParams::dataValuesRotation( uint chart, bool negative ) const
   */
 
 /**
-  \var static const int KDChartParams::KDCHART_PROPSET_NORMAL_DATA;
+  \var static const int KDCHART_PROPSET_NORMAL_DATA;
 
   Default (built-in) property ID, used for data cells
   without any special properties.
@@ -3649,7 +3835,7 @@ int KDChartParams::dataValuesRotation( uint chart, bool negative ) const
   */
 
 /**
-  \var static const int KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA;
+  \var static const int KDCHART_PROPSET_TRANSPARENT_DATA;
 
   Predefined (build-in) property ID. used to specify a cell that should be displayed
   using a null pen: neither the data representation nor
@@ -3671,12 +3857,12 @@ int KDChartParams::dataValuesRotation( uint chart, bool negative ) const
   \verbatim
   KDChartPropertySet transpProps;
   bool bDummy;
-  if( properties(KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA,
+  if( properties(KDCHART_PROPSET_TRANSPARENT_DATA,
   transpProps) ){
 // build-in property was found, let's modify it a bit:
 transpProps.setShowMarker(
-KDChartParams::KDCHART_PROPSET_NORMAL_DATA, bDummy );
-setProperties(KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA,
+KDCHART_PROPSET_NORMAL_DATA, bDummy );
+setProperties(KDCHART_PROPSET_TRANSPARENT_DATA,
 transpProps);
 }else{
 // Ooops? The build-in property was NOT found!
@@ -3684,8 +3870,8 @@ transpProps);
 transpProps.setName("transparent data");
 transpProps.setLineStyle(KDChartPropertySet::OwnID, Qt::NoPen);
 transpProps.setShowMarker(
-KDChartParams::KDCHART_PROPSET_NORMAL_DATA, bDummy);
-setProperties(KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA,
+KDCHART_PROPSET_NORMAL_DATA, bDummy);
+setProperties(KDCHART_PROPSET_TRANSPARENT_DATA,
 transpProps);
 }
 \endverbatim
@@ -3695,7 +3881,7 @@ define a property set. This is the right way for build-in property sets,
 but it is not recomended for your additional user-defined property sets:
 these should be registered with the registerProperties function
 to initially obtain a unique ID number for your new property set,
-see the second example given with \c KDChartParams::KDCHART_PROPSET_VERT_LINE.
+see the second example given with \c KDCHART_PROPSET_VERT_LINE.
 
 \sa KDCHART_PROPSET_NORMAL_DATA
 \sa KDCHART_PROPSET_HORI_LINE, KDCHART_PROPSET_VERT_LINE
@@ -3704,7 +3890,7 @@ see the second example given with \c KDChartParams::KDCHART_PROPSET_VERT_LINE.
 */
 
 /**
-  \var static const int KDChartParams::KDCHART_PROPSET_HORI_LINE;
+  \var static const int KDCHART_PROPSET_HORI_LINE;
 
   Predefined (build-in) property ID. may be used to specify a special cell
   which is not part of the normal data but to be used for positioning
@@ -3726,13 +3912,13 @@ see the second example given with \c KDChartParams::KDCHART_PROPSET_VERT_LINE.
 
   \verbatim
   KDChartPropertySet horiProps;
-  if( properties(KDChartParams::KDCHART_PROPSET_HORI_LINE,
+  if( properties(KDCHART_PROPSET_HORI_LINE,
   horiProps) ){
 // build-in property was found, let's modify it a bit:
 horiProps.setExtraMarkersAlign(
 KDChartPropertySet::OwnID,
 Qt::AlignLeft | Qt::AlignRight );
-setProperties(KDChartParams::KDCHART_PROPSET_HORI_LINE,
+setProperties(KDCHART_PROPSET_HORI_LINE,
 horiProps);
 }else{
 // Ooops? The build-in property was NOT found!
@@ -3745,7 +3931,7 @@ Qt::AlignLeft | Qt::AlignRight );
 horiProps.setExtraMarkersAlign(
 KDChartPropertySet::OwnID,
 Qt::AlignLeft | Qt::AlignRight );
-setProperties(KDChartParams::KDCHART_PROPSET_HORI_LINE,
+setProperties(KDCHART_PROPSET_HORI_LINE,
 horiProps);
 }
 \endverbatim
@@ -3755,7 +3941,7 @@ define a property set. This is the right way for build-in property sets,
 but it is not recomended for your additional user-defined property sets:
 these should be registered with the registerProperties function
 to initially obtain a unique ID number for your new property set,
-see the second example given with \c KDChartParams::KDCHART_PROPSET_VERT_LINE.
+see the second example given with \c KDCHART_PROPSET_VERT_LINE.
 
 \sa KDCHART_PROPSET_NORMAL_DATA
 \sa KDCHART_PROPSET_VERT_LINE
@@ -3764,7 +3950,7 @@ see the second example given with \c KDChartParams::KDCHART_PROPSET_VERT_LINE.
 */
 
 /**
-  \var static const int KDChartParams::KDCHART_PROPSET_VERT_LINE;
+  \var static const int KDCHART_PROPSET_VERT_LINE;
 
   Predefined (build-in) property ID. may be used to specify a special cell
   which is not part of the normal data but to be used for positioning
@@ -3789,12 +3975,12 @@ see the second example given with \c KDChartParams::KDCHART_PROPSET_VERT_LINE.
 
   \verbatim
   KDChartPropertySet vertProps;
-  if( properties(KDChartParams::KDCHART_PROPSET_VERT_LINE,
+  if( properties(KDCHART_PROPSET_VERT_LINE,
   vertProps) ){
 // build-in property was found, let's modify it a bit:
 vertProps.setExtraMarkersAlign(
 KDChartPropertySet::OwnID, Qt::AlignTop );
-setProperties(KDChartParams::KDCHART_PROPSET_VERT_LINE,
+setProperties(KDCHART_PROPSET_VERT_LINE,
 vertProps);
 }else{
 // Ooops? The build-in property was NOT found!
@@ -3807,7 +3993,7 @@ Qt::AlignTop );
 vertProps.setExtraMarkersAlign(
 KDChartPropertySet::OwnID,
 Qt::AlignTop );
-setProperties(KDChartParams::KDCHART_PROPSET_VERT_LINE,
+setProperties(KDCHART_PROPSET_VERT_LINE,
 vertProps);
 }
 \endverbatim
@@ -3869,17 +4055,12 @@ d->cell( 2, 5 ).setPropertySet( idDataWithTopLineProps );
 */
 
 
-/**
-  Our charts may have up to 4 ordinate axes:
-  2 left ones and 2 right ones
-  */
-const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
 
 //@}
 // END GENERAL
 
 // START BARCHART
-/** @name Barchart-specific methods.
+/** @name Bar chart-specific methods.
 
   These methods query and set barchart-specific parameters.
   */
@@ -3896,8 +4077,9 @@ const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
 
 /**
   \fn void KDChartParams::setBarChartSubType( BarChartSubType barChartSubType )
-  Specifies the bar chart subtype. Only used if chartType() ==
-  Bar
+  Specifies the bar chart subtype.
+
+  This setting only has an effect in bar charts.
 
   \param barChartSubType the bar chart subtype
   \sa barChartSubType, BarChartSubType, setChartType, chartType
@@ -3907,8 +4089,9 @@ const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
 /**
   \fn KDChartParams::BarChartSubType KDChartParams::barChartSubType() const
 
-  Returns the bar chart subtype. Only used if chartType() ==
-  Bar.
+  Returns the bar chart subtype.
+
+  This setting only has an effect in bar charts.
 
   \return the bar chart sub type
   \sa setBarChartSubType, BarChartSubType, setChartType, chartType
@@ -3919,8 +4102,9 @@ const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
 /**
   \fn void KDChartParams::setThreeDBars( bool threeDBars )
 
-  Specifies whether the engine should draw the bars in 3D. Only
-  used if chartType() == Bar.
+  Specifies whether the engine should draw the bars in 3D.
+
+  This setting only has an effect in bar charts.
 
   \param threeDBars true if bars should be drawn with a 3D effect
   \sa threeDBars, setThreeDBarAngle, threeDBarAngle
@@ -3930,8 +4114,9 @@ const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
 /**
   \fn bool KDChartParams::threeDBars() const
 
-  Returns whether the engine should draw any bars in 3D. Only
-  used if chartType() == Bar.
+  Returns whether the engine should draw any bars in 3D.
+
+  This setting only has an effect in bar charts.
 
   \return true if bars should be draws with a 3D effect, false
   otherwise
@@ -3943,8 +4128,9 @@ const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
   \obsolete
   Specifies whether the engine should draw the sides and tops of 3D bars
   in shadowed versions of the data colors or in the data colors
-  themselves. Only used if chartType() == Bar and threeDBars() ==
-  true. The default is true.
+  themselves. Only used if threeDBars() == true. The default is true.
+
+  This setting only has an effect in bar charts.
 
   This method is obsolete; use setThreeDShadowColors instead
 
@@ -3958,8 +4144,9 @@ const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
   \obsolete
   Returns whether the engine should draw the sides and tops of 3D bars in
   shadowed versions of the data colors or in the data colors
-  themselves. Only used if chartType() == Bar and threeDBars() ==
-  true. The default is true.
+  themselves. Only used if threeDBars() == true. The default is true.
+
+  This setting only has an effect in bar charts.
 
   This method is obsolete; use threeDShadowColors instead
 
@@ -3969,8 +4156,9 @@ const int KDChartParams::KDCHART_CNT_ORDINATES = 4;
 
 
 /**
-  Specifies the angle used for 3D bars. Only used if chartType()
-  == Bar and threeDBars() == true.
+  Specifies the angle used for 3D bars. Only used if threeDBars() == true.
+
+  This setting only has an effect in bar charts.
 
   \param angle the angle in degrees. The default (and most useful
   value) is 45. Angle can be between 0 and 90, all other values
@@ -3996,8 +4184,9 @@ void KDChartParams::setThreeDBarAngle( uint angle )
 /**
   \fn uint KDChartParams::threeDBarAngle() const
 
-  Returns the angle in degrees used for 3D bars. Only used if chartType() ==
-  Bar and threeDBars() == true.
+  Returns the angle in degrees used for 3D bars. Only used if threeDBars() == true.
+
+  This setting only has an effect in bar charts.
 
   \return the angle in degrees used for 3D bars, always between 0 and 90.
   \sa setThreeDBars, threeDBars
@@ -4010,7 +4199,9 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   \fn double KDChartParams::cosThreeDBarAngle() const
 
   Returns the cosine in rad of the angle used for 3D bars. Only used
-  if chartType() == Bar and threeDBars() == true.
+  if threeDBars() == true.
+
+  This setting only has an effect in bar charts.
 
   \return the cosine in rad of the angle used for 3D bars, always
   between 0 and 90.  \sa setThreeDBars, threeDBars \sa
@@ -4023,7 +4214,9 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   \fn void KDChartParams::setThreeDBarDepth( double depth )
 
   Specifies the depth of the 3D Effect used for 3D bars.
-  Only used if chartType() == Bar and threeDBars() == true.
+  Only used if threeDBars() == true.
+
+  This setting only has an effect in bar charts.
 
   \param depth the depth of the 3D Effect in relation to
   the bar width. The default (and most useful) value of
@@ -4038,7 +4231,9 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   \fn double KDChartParams::threeDBarDepth() const
 
   Returns the depth of the 3D Effect used for 3D bars.
-  Only used if chartType() == Bar and threeDBars() == true.
+  Only used if threeDBars() == true.
+
+  This setting only has an effect in bar charts.
 
   \return the depth of the 3D Effect in relation to the bar width.
   \sa setThreeDBarDepth
@@ -4051,16 +4246,23 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   \fn void KDChartParams::setDatasetGap( int gap )
 
   Specifies the number of pixels between two dataset values.
+  In addition you might want to use \c setOutlineDataLineStyle( Qt::NoPen ) to hide the line.
+
+  Also the method \c setValueBlockGap might be usefull, please read the information given there ...
+
+  This setting only has an effect in bar charts: if there is more than one dataset shown by your chart.
 
   \note Use negative values for overlaps, use \c
-  setDatasetGapIsRelative to specify that the \gap
+  setDatasetGapIsRelative to specify that the \c gap
   value is a per mille value of the chart data area width.
 
   The default is 6 per mille of the data area of the chart.
 
   \param gap the number of pixels between two dataset values.
+  \sa setValueBlockGap
   \sa datasetGap
   \sa datasetGapIsRelative, setDatasetGapIsRelative
+  \sa setOutlineDataLineStyle
   */
 
 
@@ -4068,6 +4270,8 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   \fn int KDChartParams::datasetGap() const
 
   Returns the number of pixels between two dataset values.
+
+  This setting only has an effect in bar charts.
 
   \note Negative values signify overlaps, use \c datasetGapIsRelative
   to find out if the \datasetGap value is a per mille value of the
@@ -4085,6 +4289,8 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   Specifies if the value set by \c setDatasetGap is a
   per mille value of the chart data area width.
 
+  This setting only has an effect in bar charts.
+
   \param gapIsRelative specifies if the value set by \c setDatasetGap
   is a per mille value of the chart data area width.
   \sa datasetGapIsRelative, datasetGap, setDatasetGap
@@ -4097,6 +4303,8 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   Returns if the value set by \c setDatasetGap
   is a per mille value of the chart data area width.
 
+  This setting only has an effect in bar charts.
+
   \return if the value set by \c setDatasetGap
   is a per mille value of the chart data area width.
   \sa setDatasetGap, setDatasetGapIsRelative, datasetGap, setDatasetGap
@@ -4107,16 +4315,39 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   \fn void KDChartParams::setValueBlockGap( int gap )
 
   Specifies the number of pixels between each value block.
+  If there is only one dataset shown this gap is appearing between each of the bars, otherwise it is appearing between each of the bar blocks.
+  In addition you might want to use \c setOutlineDataLineStyle( Qt::NoPen ) to hide the line.
 
-  \note Use negative values for overlaps (which might look strange),
-  use \c setValueBlockGapIsRelative to specify that the \gap
+  Also the method \c setDatasetGap might be usefull, please read the information given there ...
+
+  This setting only has an effect in bar charts.
+
+  Use negative values for overlaps (which might look strange),
+  use \c setValueBlockGapIsRelative to specify that the \c gap
   value is a per mille value of the chart data area width.
 
   The default is 15 per mille of the data area of the chart.
 
+  \note Specifying a value block gap width AND a bar width
+  may result in KD Chart not being able to display all bars
+  if the data area is not wide enough. To make your
+  application notice when this
+  happens you should consider connecting the
+  barsDisplayed() signal emitted by your KDChartWidget object
+  to an appropriate slot function.  Additionally (or in case
+  you are not using the KDChartWidget class, resp.)
+  you may access the number of actually displayed/not displayed
+  bars by the KDChartParams functions numBarsDisplayed
+  and numBarsLeft, the return value of these functions
+  are not not defined if they are called before drawing is done.
+
   \param gap the number of pixels between each value block.
-  \sa valueBlockGap
+  \sa setDatasetGap
+  \sa setBarWidth, valueBlockGap
+  \sa KDChartWidget::barsDisplayed, KDChart::barsDisplayed
+  \sa numBarsDisplayed, numBarsLeft
   \sa valueBlockGapIsRelative, setValueBlockGapIsRelative
+  \sa setOutlineDataLineStyle
   */
 
 
@@ -4124,6 +4355,8 @@ void KDChartParams::setThreeDBarAngle( uint angle )
   \fn int KDChartParams::valueBlockGap() const
 
   Returns the number of pixels between each value block.
+
+  This setting only has an effect in bar charts.
 
   \note Negative values signify overlaps, use \c valueBlockGapIsRelative
   to find out if the \valueBlockGap value is a per mille value of the
@@ -4136,13 +4369,147 @@ void KDChartParams::setThreeDBarAngle( uint angle )
 
 
 /**
+  \fn void KDChartParams::setBarWidth( int width )
+
+  Specifies the width of one bar: makes sure that all of
+  the bars have exactly the same width.
+
+  This setting only has an effect in bar charts.
+
+  \note Use negative values for to specify that the \c width
+  value is a per mille value of the chart data area width,
+  use no value or the default KDCHART_AUTO_SIZE
+  to (re)activate normal calculation mode making sure that all
+  bars fit into the available space but might not look so nice
+  if many bars are there.
+
+  \note Specifying a bar width AND a value block gap width
+  may result in KD Chart not being able to display all bars
+  if the data area is not wide enough. To make your
+  application notice when this
+  happens you should consider connecting the
+  barsDisplayed() signal emitted by your KDChartWidget object
+  to an appropriate slot function.  Additionally (or in case
+  you are not using the KDChartWidget class)
+  you may access the number of actually displayed/not displayed
+  bars by the KDChartParams functions numBarsDisplayed
+  and numBarsLeft, the return value of these functions
+  are not not defined if they are called before drawing is done.
+
+  \param width the width of one bar.
+  \sa KDChartWidget::barsDisplayed, KDChart::barsDisplayed
+  \sa numBarsDisplayed, numBarsLeft
+  \sa setValueBlockGap
+  */
+
+/**
+  \fn int KDChartParams::barWidth() const
+
+  Returns the width of one bar as set by setBarWidth
+  or KDCHART_AUTO_SIZE if setBarWidth
+  was never called.
+
+  This setting only has an effect in bar charts.
+
+  \note Negative values signify that the bar width is
+  a per mille value of the chart data area width.
+
+  \return the width of one bar as set by setBarWidth
+  or KDCHART_AUTO_SIZE if setBarWidth
+  was never called.
+  \sa setBarWidth
+  */
+
+/**
+  \fn int KDChartParams::numBarsDisplayed() const
+
+  Returns the number of bars that were displayed last
+  time your bar chart was drawn.
+
+  This setting only has an effect in bar charts.
+
+  This can be different from the number of bars you
+  actually wanted to display: by specifying both
+  the bar width and the value block gap width you
+  may controll your chart very well but take the risk
+  of not getting all bars drawn if there is not enough
+  horizontal space to display them with the given width
+  and gap width.
+
+  To quickly determine if all bars were drawn just check
+  if the numBarsLeft() function returns a zero value.
+
+  \return the number of bars that were drawn.
+  \sa KDChartWidget::barsDisplayed, KDChart::barsDisplayed
+  \sa numBarsLeft
+  \sa setBarWidth, setValueBlockGap
+  */
+
+/**
+  \fn int KDChartParams::numBarsLeft() const
+
+  Returns the number of bars that could NOT be painted
+  last time your bar chart was drawn.
+
+  This setting only has an effect in bar charts.
+
+  If this value is greater than zero, the bar chart
+  shows less bars than you
+  actually wanted to display: by specifying both
+  the bar width and the value block gap width you
+  may controll your chart very well but take the risk
+  of not getting all bars drawn if there is not enough
+  horizontal space to display them with the given width
+  and gap width.
+
+  You may call the numBarsDisplayed() function to see
+  how many bars were drawn.
+
+  \return the number of bars that could not be drawn.
+  \sa KDChartWidget::barsDisplayed, KDChart::barsDisplayed
+  \sa numBarsDisplayed
+  \sa setBarWidth, setValueBlockGap
+  */
+
+/**
+  \fn void KDChartParams::setValueBlockGapIsRelative( bool gapIsRelative )
+
+  Specifies if the value set by \c setValueBlockGap is a
+  per mille value of the chart data area width.
+
+  This setting only has an effect in bar charts.
+
+  \param gapIsRelative specifies if the value set by \c setValueBlockGap
+  is a per mille value of the chart data area width.
+  \sa valueBlockGapIsRelative, valueBlockGap, setValueBlockGap
+  */
+
+
+/**
+  \fn bool KDChartParams::valueBlockGapIsRelative() const
+
+  Returns if the value set by \c setValueBlockGap
+  is a per mille value of the chart data area width.
+
+  This setting only has an effect in bar charts.
+
+  \return if the value set by \c setValueBlockGap
+  is a per mille value of the chart data area width.
+  \sa setValueBlockGapIsRelative, setValueBlockGap, valueBlockGap
+  \sa setValueBlockGap
+  */
+
+
+/**
    \fn void KDChartParams::setDrawSolidExcessArrows( bool solidArrows )
 
    Specifies whether arrows showing excess values in bar charts should
    be drawn solidly or split.
 
+  This setting only has an effect in bar charts.
+
    If \a solidArrows is true, the bars with excess values (like
-   infinity, or any other value that exceeds the y-axis labeling) will
+   infinity, or any other value that exceeds the y-axis labelling) will
    have an integrated arrow head. If \a solidArrows is false, they will
    still have an integrated arrow head at a lower position, but also
    two flat arrows on top of them to better indicate that there could
@@ -4170,31 +4537,6 @@ void KDChartParams::setThreeDBarAngle( uint angle )
    split
    \sa setDrawSolidExcessArrows
 */
-
-
-/**
-  \fn void KDChartParams::setValueBlockGapIsRelative( bool gapIsRelative )
-
-  Specifies if the value set by \c setValueBlockGap is a
-  per mille value of the chart data area width.
-
-  \param gapIsRelative specifies if the value set by \c setValueBlockGap
-  is a per mille value of the chart data area width.
-  \sa valueBlockGapIsRelative, valueBlockGap, setValueBlockGap
-  */
-
-
-/**
-  \fn bool KDChartParams::valueBlockGapIsRelative() const
-
-  Returns if the value set by \c setValueBlockGap
-  is a per mille value of the chart data area width.
-
-  \return if the value set by \c setValueBlockGap
-  is a per mille value of the chart data area width.
-  \sa setValueBlockGapIsRelative, setValueBlockGap, valueBlockGap
-  \sa setValueBlockGap
-  */
 
 
 //@}
@@ -4472,27 +4814,59 @@ void KDChartParams::setLineMarkerStyles( LineMarkerStyleMap map ) {
 
 
 /**
-  \fn void KDChartParams::setLineStyle( PenStyle style )
+  Specifies a line style to be used for line charts.
 
-  Specifies the line style of the lines in line charts. The default
-  is a solid line. Warning: On Windows 95/98, the style setting (other
+  The dataset parameter is optional, by default saying
+  KDCHART_GLOBAL_LINE_STYLE, you may use it to
+  set a  dataset specific line style for one the lines.
+
+  Global and dataset specific line styles may be used
+  simultaneously: If no dataset specific style is
+  defined the global style is used which by default
+  is Qt::SolidLine.
+
+  Warning: On Windows 95/98, the style setting (other
   than NoPen and SolidLine) has no effect for lines with width greater
   than 1, due to a bug in the operating system.
 
-  \param width the line style of the lines in line charts
+  \param style the line style of the line
+  \param dataset the number of the dataset controlling the respective line
   \sa lineStyle, setLineWidth, setLineColor
   \sa setLineMarker, setLineMarkerSize, setLineMarkerStyle
   */
-
+void KDChartParams::setLineStyle( Qt::PenStyle style, uint dataset )
+{
+    if( KDCHART_GLOBAL_LINE_STYLE == dataset )
+        _lineStyle = style;
+    else
+        _datasetLineStyles[ dataset ] = style;
+    emit changed();
+}
 
 /**
-  \fn KDChartParams::PenStyle KDChartParams::lineStyle() const
+  Returns the line style of one of the lines in a line chart
+  or the global line style if no style was specified for the
+  dataset or if the optional dataset parameter has its default
+  value KDCHART_GLOBAL_LINE_STYLE.
 
-  Returns the line style of the lines in line charts.
+  Warning: On Windows 95/98, the style setting (other than NoPen and
+  SolidLine) has no effect for lines with width greater than 1, due
+  to a bug in the operating system.
 
-  \param line style of the lines in line charts
-  \sa setLineStyle
+  \param dataset the dataset for which to return the line style
+  \return the line style for the specified data set
+  \sa setLineStyle, setLineMarkerStyle
   */
+Qt::PenStyle KDChartParams::lineStyle( uint dataset ) const
+{
+    if( KDCHART_GLOBAL_LINE_STYLE == dataset )
+        // global line style
+        return _lineStyle;
+    else if( _datasetLineStyles.find( dataset ) == _datasetLineStyles.end() )
+        return lineStyle();
+    else
+        return _datasetLineStyles[ dataset ];
+}
 
 
 /**
@@ -4951,7 +5325,7 @@ void KDChartParams::setPolarDelimsAndLabelsAtPos( KDChartEnums::PositionFlag pos
         bool showDelimiters,
         bool showLabels )
 {
-    if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos ) {
+    if( KDCHART_MAX_POLAR_DELIMS_AND_LABELS_POS >= pos ) {
         _polarDelimsAndLabels[ pos ].showDelimiters = showDelimiters;
         _polarDelimsAndLabels[ pos ].showLabels     = showLabels;
     }
@@ -4965,7 +5339,7 @@ void KDChartParams::setPolarDelimsAndLabelsAtPos( KDChartEnums::PositionFlag pos
   */
 bool KDChartParams::polarDelimAtPos( KDChartEnums::PositionFlag pos ) const
 {
-    if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos )
+    if( KDCHART_MAX_POLAR_DELIMS_AND_LABELS_POS >= pos )
         return _polarDelimsAndLabels[ pos ].showDelimiters;
     else
         return false;
@@ -4979,7 +5353,7 @@ bool KDChartParams::polarDelimAtPos( KDChartEnums::PositionFlag pos ) const
   */
 bool KDChartParams::polarLabelsAtPos( KDChartEnums::PositionFlag pos ) const
 {
-    if( MAX_POLAR_DELIMS_AND_LABELS_POS >= pos )
+    if( KDCHART_MAX_POLAR_DELIMS_AND_LABELS_POS >= pos )
         return _polarDelimsAndLabels[ pos ].showLabels;
     else
         return false;
@@ -6251,7 +6625,7 @@ void KDChartParams::setBWChartPrintStatistics( BWStatVal statValue,
   right to the data display.
 
   \param the position for the legend
-  \sa LegendPosition, legendPosition
+  \sa LegendPosition, legendPosition, setLegendOrientation, setLegendShowLines
   */
 
 
@@ -6261,7 +6635,59 @@ void KDChartParams::setBWChartPrintStatistics( BWStatVal statValue,
   Returns where the legend will be shown.
 
   \return where the legend will be shown
-  \sa LegendPosition, setLegendPosition
+  \sa LegendPosition, setLegendPosition, setLegendShowLines
+  */
+
+
+/**
+  \fn void KDChartParams::setLegendOrientation( Qt::Orientation orientation )
+
+  Specifies how the legend should be printed. Qt::Vertical (the default)
+  prints the legend entries below each other, Qt::Horizontal prints them
+  aside each other.
+
+  \note Horizontal orientation is only possible if the chart is NOT making
+        room in horizontal direction, this means you may specify horizontal
+        orientation if the legend position in one of the following values
+        only: LegendTop, LegendBottom, LegendTopLeftTop, LegendTopRightTop,
+        LegendBottomLeftBottom, LegendBottomRightBottom
+
+  \param the orientation for the legend
+  \sa legendOrientation, setLegendPosition, setLegendShowLines
+  */
+
+
+/**
+  \fn Qt::Orientation KDChartParams::legendOrientation() const
+
+  Returns how the legend will be printed.
+
+  \return how the legend will be printed.
+  \sa setLegendOrientation, setLegendPosition, setLegendShowLines
+  */
+
+/**
+  \fn void KDChartParams::setLegendShowLines( bool legendShowLines )
+
+  Specifies whether the legend shall show lines or just
+  show the markers (or squares, resp.).
+
+  \note By default no lines are drawn but just the markers are shown,
+        for Line charts you might want to set this flag to true.
+
+  \param flag whether lines are drawn or only the markers
+  \sa legendShowLines, setLegendOrientation, setLegendPosition
+  */
+
+
+/**
+  \fn bool KDChartParams::legendShowLines() const
+
+  Returns whether the legend shows lines or just
+  the markers (or squares, resp.).
+
+  \return  whether the legend shows lines or just the markers (or squares, resp.).
+  \sa setLegendShowLines, setLegendOrientation, setLegendPosition
   */
 
 
@@ -6446,7 +6872,7 @@ void KDChartParams::setBWChartPrintStatistics( BWStatVal statValue,
 
 
 
-/** 
+/**
   \fn QString KDChartParams::legendTitleText() const
 
   Returns the text that is shown as the title of the legend.
@@ -6785,12 +7211,54 @@ bool KDChartParams::chartAxes( uint chart, uint& cnt, AxesArray& axes ) const
 
 
 /**
+  \fn QRect KDChartParams::axisArea( const uint n ) const
+
+  Returns the true axis area rectangle as it was was calculate
+  by KD Chart.
+
+  \param n the number of the axis
+
+  \note This special function may be called *after* calling
+  KDChart::setupGeometry().  Normally you don't need to call
+  it at all, its only purpose is to provide you with a way to
+  retrieve the true position and size of an axis area.
+
+  \sa dataArea
+  */
+
+/**
+  \fn QRect KDChartParams::legendArea() const
+
+  Returns the true legend area rectangle as it was was calculate
+  by KD Chart.
+
+  \note This special function may be called *after* calling
+  KDChart::setupGeometry().  Normally you don't need to call
+  it at all, its only purpose is to provide you with a way to
+  retrieve the true position and size of an legend area.
+
+  \sa dataArea
+  */
+
+/**
+  \fn QRect KDChartParams::dataArea() const
+
+  Returns the true data area rectangle as it was was calculate
+  by KD Chart.
+
+  \note This special function may be called *after* calling
+  KDChart::setupGeometry().  Normally you don't need to call
+  it at all, its only purpose is to provide you with a way to
+  retrieve the true position and size of the data area.
+
+  \sa axisArea
+  */
+
+
+/**
   \fn void KDChartParams::setAxisArea( const uint n, const QRect& areaRect )
 
   Specifies the true axis area rectangle.
-
-  \param axisAreaMax the true axis area rectangle
-  as it was calculated and drawn.
 
   \note Do <b>not call</b> this function unless you are knowing
   exactly what you are doing. \c setAxisTrueAreaRect is normally
@@ -6852,6 +7320,8 @@ bool KDChartParams::chartAxes( uint chart, uint& cnt, AxesArray& axes ) const
   \param axisLabelsColor the axis labels colour.
 
   \sa setAxisLabelsVisible
+  \sa setAxisLabelsFontUseRelSize, setAxisLabelsFontRelSize
+  \sa KDChartAxisParams::setAxisLabelsFontMinSize
   */
 void KDChartParams::setAxisLabelsFont( uint n,
                                        QFont axisLabelsFont,
@@ -7111,7 +7581,7 @@ void KDChartParams::setAxisParams( uint n,
 /**
   \enum KDChartParams::HdFtPosHeaderR
 
-  yet another main header, by default right-aligned   
+  yet another main header, by default right-aligned
   */
 
 /**
@@ -7129,7 +7599,7 @@ void KDChartParams::setAxisParams( uint n,
 /**
   \enum KDChartParams::HdFtPosHeader2R
 
-  yet another additional header, by default right-aligned   
+  yet another additional header, by default right-aligned
   */
 
 /**
@@ -7845,7 +8315,7 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
   */
 
 /**
-  \var CustomBoxMap KDChartParams::_customBoxMap;
+  \var CustomBoxMap KDChartParams::_customBoxDict;
 
   Stores the settings for all of the custom boxes.
   */
@@ -8256,7 +8726,7 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
   */
 
 /**
-  \var _polarDelimsAndLabelStruct KDChartParams::_polarDelimsAndLabels[ 1 + MAX_POLAR_DELIMS_AND_LABELS_POS ];
+  \var _polarDelimsAndLabelStruct KDChartParams::_polarDelimsAndLabels[ 1 + KDCHART_MAX_POLAR_DELIMS_AND_LABELS_POS ];
 
   Stores where to show circular delimiters and labels in polar charts.
   */
@@ -8487,7 +8957,7 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
   Stores the Box And Whisker subtype.
   */
 
-/** 
+/**
   \struct BWChartStatistics KDChartParams.h
 
   Stores the statistical data for a box-and-whisker chart
@@ -8667,13 +9137,11 @@ int KDChartParams::headerFooterFontRelSize( uint pos ) const
   */
 bool KDChartParams::findFirstAxisCustomBoxID( uint n, uint& boxID ) const
 {
-    if( _customBoxMap.count() ){
-        CustomBoxMap::ConstIterator it;
-        for( it = _customBoxMap.begin(); it != _customBoxMap.end(); ++it ){
-            if( it.data().anchorArea() == KDChartEnums::AreaAxisBASE + n ){
-                boxID = it.key();
-                return true;
-            }
+    QIntDictIterator<KDChartCustomBox> it( _customBoxDict );
+    for( ; it.current(); ++it ){
+        if( (*it).anchorArea() == KDChartEnums::AreaAxisBASE + n ){
+            boxID = it.currentKey();
+            return true;
         }
     }
     return false;
@@ -8692,44 +9160,64 @@ void KDChartParams::insertDefaultAxisTitleBox( uint n,
     switch( KDChartAxisParams::basicAxisPos( n ) ){
         case KDChartAxisParams::AxisPosLeft:
         case KDChartAxisParams::AxisPosRight:
+        case KDChartAxisParams::AxisPosLeft2:
+        case KDChartAxisParams::AxisPosRight2:
             bVert = true;
             break;
         case KDChartAxisParams::AxisPosTop:
         case KDChartAxisParams::AxisPosBottom:
+        case KDChartAxisParams::AxisPosTop2:
+        case KDChartAxisParams::AxisPosBottom2:
             bHorz = true;
             break;
         default:
             b3rd = true;
             break;
     }
-    const QString defaultString("<qt><center> </center></qt>");
     const QFont defaultFont( "helvetica", 6, QFont::Normal, false );
-    KDChartTextPiece textPiece( setTitle ? axisTitle     : defaultString,
-                                setFont  ? axisTitleFont : defaultFont );
 
+    // SGI IRIX: Compiling error.
+    // QString titleString( setTitle ? axisTitle : "<qt><center> </center></qt>" );
+    QString titleString;
+    if( setTitle )
+       titleString = axisTitle;
+    else
+       titleString = "<qt><center> </center></qt>";
+
+
+    const QString stripTitleString( titleString.simplifyWhiteSpace().upper() );
+    if( setTitle ){
+        if( !stripTitleString.startsWith("<QT>" ) )
+            titleString.prepend("<qt><center>");
+        if( !stripTitleString.endsWith("</QT>" ) )
+            titleString.append("</center></qt>");
+    }
+
+    KDChartTextPiece textPiece( titleString, setFont  ? axisTitleFont : defaultFont );
     int fixedFontSize = textPiece.font().pointSize();
     if( -1 == fixedFontSize )
         fixedFontSize = textPiece.font().pixelSize();
     if( -1 == fixedFontSize )
-        fixedFontSize = 10;
+        fixedFontSize = 15;
     int relFontSize = setFontRelSize ? -axisTitleFontRelSize : -18;
-    insertCustomBox(
-        KDChartCustomBox( bVert ? -90 : 0,
-                          textPiece,
-                          setFontUseRelSize
-                          ? ( axisTitleFontUseRelSize ? relFontSize : fixedFontSize )
-                          : relFontSize,
-                          true,
-                          0,     bVert ?  /*-40*/-100 : bHorz ?  /* 0*/-200 : 0,
-                          -2000, bVert ? -200 : bHorz ? /*29*/-100 : 0,
-                          setColor ? axisTitleColor : Qt::darkBlue,
-                          Qt::NoBrush,
-                          KDChartEnums::AreaAxisBASE + n,
-                          bVert ? KDChartEnums::PosCenterLeft      : KDChartEnums::PosBottomCenter,
-                          bVert ? Qt::AlignTop + Qt::AlignHCenter  : Qt::AlignBottom + Qt::AlignHCenter,
-                          0,0,0,
-                          bVert ? Qt::AlignBottom + Qt::AlignRight : Qt::AlignTop + Qt::AlignHCenter,
-                          false ) );
+
+    KDChartCustomBox customBox( bVert ? -90 : 0,
+                                textPiece,
+                                setFontUseRelSize
+                                ? ( axisTitleFontUseRelSize ? relFontSize : fixedFontSize )
+                                : relFontSize,
+                                true,
+                                0,     bVert ?  -40 : (bHorz ?   0 : 0),
+                                -2000, bVert ? -200 : (bHorz ? -45 : 0),
+                                setColor ? axisTitleColor : Qt::darkBlue,
+                                Qt::NoBrush,
+                                KDChartEnums::AreaAxisBASE + n,
+                                bVert ? KDChartEnums::PosCenterLeft        : KDChartEnums::PosBottomCenter,
+                                bVert ? (Qt::AlignTop + Qt::AlignHCenter)  : (Qt::AlignBottom + Qt::AlignHCenter),
+                                0,0,0,
+                                bVert ? (Qt::AlignBottom + Qt::AlignRight) : (Qt::AlignTop + Qt::AlignHCenter),
+                                false );
+    insertCustomBox( customBox );
 }
 
 /**
@@ -8748,18 +9236,30 @@ void KDChartParams::setAxisTitle( uint n, const QString& axisTitle )
     if( findFirstAxisCustomBoxID( n, boxID ) ){
         KDChartCustomBox* box = (KDChartCustomBox*)customBox( boxID );
         if( box ){
-            box->setContent( KDChartTextPiece( axisTitle,
-                                               box->content().font() ) );
-            bDone = true;
+	  QString title = axisTitle;
+	  const QString stripTitleString( title.simplifyWhiteSpace().upper() );
+	  if( !stripTitleString.startsWith("<QT>" ) )
+	    title.prepend("<qt><center>");
+	  if( !stripTitleString.endsWith("</QT>" ) )
+	    title.append("</center></qt>");
+	  
+	  KDChartTextPiece textPiece( 0, title,
+				      box->content().font() );
+	  
+	  box->setContent( textPiece );            
+          //qDebug ("old Axis Title updated");
+	  bDone = true;
         }
     }
-    if( !bDone )
+    if( !bDone ){
         insertDefaultAxisTitleBox( n,
                                    true,  axisTitle,
                                    false, QColor(),
                                    false, QFont(),
                                    false, false,
                                    false, 0 );
+        //qDebug("new Axis Title Box inserted");
+    }
     emit changed();
 }
 /**
@@ -8840,8 +9340,9 @@ void  KDChartParams::setAxisTitleFont( uint n,
     if( findFirstAxisCustomBoxID( n, boxID ) ){
         KDChartCustomBox* box = (KDChartCustomBox*)customBox( boxID );
         if( box ){
-            box->setContent( KDChartTextPiece( box->content().text(),
-                                               axisTitleFont ) );
+            KDChartTextPiece textPiece( 0, box->content().text(),
+                                        axisTitleFont );
+            box->setContent( textPiece );
             bDone = true;
         }
     }
@@ -8854,6 +9355,50 @@ void  KDChartParams::setAxisTitleFont( uint n,
                                    false, 0 );
     emit changed();
 }
+
+/**
+  Specifies the font and the size of the default axis title text.
+ \param axisTitleFont the font of the axis title text - by default the font will be relative 
+ \param useFixedFontSize flag indicating whether the font's size is to be used as fixed or calculated  as per mil value. 
+  \param axisTitleFontRelSize the size to be used if \c useFixedFontSize is false, this is interpreted as per mil value of the printable area size
+  \sa setAxisTitle, setAxisTitleColor, setAxisTitleFont, setAxisTitleFontUseRelSize, setAxisTitleFontRelSize
+  \sa axisTitle, axisTitleColor, axisTitleFont, axisTitleFontUseRelSize, axisTitleFontRelSize
+  */
+
+void KDChartParams::setAxisTitleFont( uint n,
+				      QFont axisTitleFont,
+                                      bool useFixedFontSize )
+{
+
+  bool bDone = false;
+  uint boxID;
+  if( findFirstAxisCustomBoxID( n, boxID ) ){
+    KDChartCustomBox* box = (KDChartCustomBox*)customBox( boxID );
+    if( box ){
+      KDChartTextPiece textPiece( 0, box->content().text(),
+				  axisTitleFont );
+      int fixedFontSize = textPiece.font().pointSize();
+      setAxisTitleFontRelSize( n, fixedFontSize );
+      box->setContent( textPiece );
+      bDone = true;
+    }
+  }
+  if( !bDone )
+    insertDefaultAxisTitleBox( n,
+			       false, QString(),
+			       false, QColor(),
+			       true,  axisTitleFont,
+			       false, false,
+			       false, 0 );
+
+  emit changed();
+    
+  if ( useFixedFontSize ) 
+    setAxisTitleFontUseRelSize( n, false);
+    
+}
+
+
 /**
   Returns the font of the default axis title text.
 
@@ -8886,8 +9431,15 @@ void  KDChartParams::setAxisTitleFontUseRelSize( uint n,
     if( findFirstAxisCustomBoxID( n, boxID ) ){
         KDChartCustomBox* box = (KDChartCustomBox*)customBox( boxID );
         if( box ){
-            if( 0 <= box->fontSize() )
-                box->setFontSize( -18, true );
+          if ( !axisTitleFontUseRelSize ) {
+            if ( box->fontSize() < 0 )
+	      box->setFontSize( -(box->fontSize()), true );
+	  } else {
+	    if( 0 <= box->fontSize() ) {
+	      box->setFontSize( -(box->fontSize()), true );
+	    } else
+              box->setFontSize( box->fontSize(), true);
+	  }
             bDone = true;
         }
     }

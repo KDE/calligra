@@ -38,8 +38,6 @@
 
 #include <math.h>
 
-#include <klocale.h>
-
 /**
   \class KDChartPiePainter KDChartPiePainter.h
 
@@ -69,6 +67,7 @@ KDChartPiePainter::~KDChartPiePainter()
     // intentionally left blank
 }
 
+//static bool bHelp=true;
 
 /**
   Paints the actual data area.
@@ -84,9 +83,11 @@ void KDChartPiePainter::paintData( QPainter* painter,
         bool paint2nd,
         KDChartDataRegionList* regions )
 {
+//bHelp=true;
     uint chart = paint2nd ? 1 : 0;
 
     QRect ourClipRect( _dataRect );
+    ourClipRect.addCoords( -1,-1,1,1 );
 
     const QWMatrix & world = painter->worldMatrix();
     ourClipRect =
@@ -106,7 +107,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
         return ; // nothing to draw
     }
 
-    if ( dataset == KDChartParams::KDCHART_ALL_DATASETS )
+    if ( dataset == KDCHART_ALL_DATASETS )
         // setChartSourceMode() has not been used (or all datasets have been
         // configured to be used); use the first dataset by
         // default
@@ -163,19 +164,21 @@ void KDChartPiePainter::paintData( QPainter* painter,
     }
 
     double sum = data->rowAbsSum( dataset );
-	if (sum==0) //nothing to draw
-		return;
+    if( sum==0 ) //nothing to draw
+        return;
     double sectorsPerValue = 5760.0 / sum; // 5760 == 16*360, number of sections in Qt circle
 
     int currentValue = params()->pieStart() * 16;
     bool atLeastOneValue = false; // guard against completely empty tables
+    QVariant vValY;
     for ( int value = 0; value < _numValues; value++ ) {
         // is there anything at all at this value
         /* see above for meaning of 16 */
 
-        if ( data->cell( dataset, value ).isDouble() ) {
+        if( data->cellCoord( dataset, value, vValY, 1 ) &&
+            QVariant::Double == vValY.type() ){
             _startAngles[ value ] = currentValue;
-            double cellValue = fabs( data->cell( dataset, value ).doubleValue() );
+            const double cellValue = fabs( vValY.toDouble() );
             _angleLens[ value ] = ( int ) floor( cellValue * sectorsPerValue + 0.5 );
             atLeastOneValue = true;
         } else { // mark as non-existent
@@ -289,7 +292,6 @@ void KDChartPiePainter::paintData( QPainter* painter,
 }
 
 
-
 /**
   Internal method that draws one of the pies in a pie chart.
 
@@ -313,8 +315,11 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
 
         KDChartDataRegion* datReg = 0;
         QRegion* region = 0;
-        if ( regions )
+        bool mustDeleteRegion = false;
+        if ( regions ){
             region = new QRegion();
+            mustDeleteRegion = true;
+        }
 
         QRect drawPosition = _position;
         if ( params()->explode() ) {
@@ -347,8 +352,8 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
         // otherwise partly hide the pie itself.
         if ( params()->threeDPies() ) {
             draw3DEffect( painter, drawPosition, dataset, pie, chart,
-                    threeDPieHeight,
-                    params()->explode(), region );
+                          threeDPieHeight,
+                          params()->explode(), region );
         }
 
         painter->setBrush( params()->dataColor( pie ) );
@@ -358,12 +363,12 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
             if ( regions ) {
                 QPointArray hitregion;
                 hitregion.makeEllipse( drawPosition.x(), drawPosition.y(),
-                        drawPosition.width(),
-                        drawPosition.height() );
+                                       drawPosition.width(),
+                                       drawPosition.height() );
                 datReg = new KDChartDataRegion( region->unite( QRegion( hitregion ) ),
-                        dataset,
-                        pie,
-                        chart );
+                                                dataset,
+                                                pie,
+                                                chart );
                 datReg->points[ KDChartEnums::PosCenter ]
                     = drawPosition.center();
                 datReg->points[ KDChartEnums::PosCenterRight ]
@@ -387,7 +392,28 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
                 regions->append( datReg );
             }
         } else {
-            painter->drawPie( drawPosition, ( int ) startAngle, ( int ) angleLen );
+            // draw the top of this piece
+            // Start with getting the points for the arc.
+            const int arcPoints = angleLen;
+            QPointArray collect(arcPoints+2);
+            int i=0;
+            for ( ; i<=angleLen; ++i){
+                collect.setPoint(i, pointOnCircle( drawPosition, startAngle+i ));
+            }
+            // Adding the center point of the piece.
+            collect.setPoint(i, drawPosition.center() );
+
+
+
+            painter->drawPolygon( collect );
+
+//if( bHelp ){
+//              painter->drawPolyline( collect );
+//bHelp=false;
+//}
+
+
+
             if ( regions ) {
                 QPointArray hitregion;
                 hitregion.makeArc( drawPosition.x(), drawPosition.y(),
@@ -398,9 +424,9 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
                 hitregion.setPoint( hitregion.size() - 1,
                         drawPosition.center() );
                 datReg = new KDChartDataRegion( region->unite( QRegion( hitregion ) ),
-                        dataset,
-                        pie,
-                        chart );
+                                                dataset,
+                                                pie,
+                                                chart );
 
                 datReg->points[ KDChartEnums::PosTopLeft ]
                     = pointOnCircle( drawPosition, startAngle + angleLen );
@@ -436,6 +462,8 @@ void KDChartPiePainter::drawOnePie( QPainter* painter,
                 regions->append( datReg );
             }
         }
+        if( mustDeleteRegion )
+            delete region;
     }
 }
 
@@ -491,23 +519,23 @@ void KDChartPiePainter::draw3DEffect( QPainter* painter,
             if ( startAngle <= endAngle ) {
                 /// starts and ends in first quadrant, less than 1/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                        pie, chart, threeDHeight, startAngle,
-                        region );
+                                           pie, chart, threeDHeight, startAngle,
+                                           region );
             } else {
                 /// starts and ends in first quadrant, more than 3/4
                 drawStraightEffectSegment( painter, drawPosition, dataset,
-                        pie, chart, threeDHeight, startAngle,
-                        region );
+                                           pie, chart, threeDHeight, startAngle,
+                                           region );
                 drawArcEffectSegment( painter, drawPosition, dataset, pie, chart,
-                        threeDHeight, 2880, 5760, region );
+                                      threeDHeight, 2880, 5760, region );
             }
         } else if ( endAngle <= 180 * 16 ) {
             /// starts in first quadrant, ends in second quadrant,
             /// less than 1/2
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                    threeDHeight, startAngle, region );
+                                       threeDHeight, startAngle, region );
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
-                    threeDHeight, endAngle, region );
+                                       threeDHeight, endAngle, region );
         } else if ( endAngle <= 270 * 16 ) {
             /// starts in first quadrant, ends in third quadrant
             drawStraightEffectSegment( painter, drawPosition, dataset, pie, chart,
@@ -691,16 +719,17 @@ void KDChartPiePainter::drawArcEffectSegment( QPainter* painter,
         QRegion* region )
 {
     // Start with getting the points for the inner arc.
-    QPointArray collect;
-    collect.makeArc( rect.x(), rect.y(),
-            rect.width(), rect.height(),
-            startAngle, endAngle - startAngle + 1 );
+    const int startA = QMIN(startAngle, endAngle);
+    const int endA   = QMAX(startAngle, endAngle);
+    const int arcPoints = endA-startA+1;
+    QPointArray collect(arcPoints * 2);
+    for ( int angle=endA; angle>=startA; --angle){
+        collect.setPoint(endA-angle, pointOnCircle( rect, angle ));
+    }
 
     // Now copy these arcs again into the same array, but in the
     // opposite direction and moved down by the 3D height.
-    int arcPoints = collect.size();
-    collect.resize( arcPoints * 2 );
-    for ( int i = arcPoints - 1; i >= 0; i-- ) {
+    for ( int i = arcPoints - 1; i >= 0; --i ) {
         QPoint pointOnFirstArc = collect.point( i );
         pointOnFirstArc.setY( pointOnFirstArc.y() + threeDHeight );
         collect.setPoint( arcPoints * 2 - i - 1, pointOnFirstArc );
@@ -783,7 +812,7 @@ uint KDChartPiePainter::findRightPie( uint pie )
   */
 QString KDChartPiePainter::fallbackLegendText( uint dataset ) const
 {
-    return i18n( "Item %1" ).arg( dataset + 1 );
+    return QObject::tr( "Item " ) + QString::number( dataset + 1 );
 }
 
 

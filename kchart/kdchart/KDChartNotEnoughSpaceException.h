@@ -39,7 +39,7 @@
   This exception is thrown when there is not enough space for
   drawing all selected parts of a chart.
   */
-class KDChartNotEnoughSpaceException
+class KDCHART_EXPORT KDChartNotEnoughSpaceException
 {
     public:
         KDChartNotEnoughSpaceException();

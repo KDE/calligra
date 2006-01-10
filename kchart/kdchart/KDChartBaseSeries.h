@@ -32,7 +32,7 @@
 // A single data series abstracted.
 // Is included in a DataSeriesBag.
 // Will be a base class for other series objects, such as DataVectorSeries,
-// and my DataQuerySeries.
+// and DataQuerySeries.
 //
 // Requirements:
 // - Able to handle its own parameters, colours, legend texts, etc.
@@ -40,12 +40,11 @@
 // - Almost completely abstract, so we can inherit it from other classes.
 //   Implement things like hide and show here tho.
 
-#include "KDChartData.h"
+#include "KDChartDataIntern.h"
 
-class KDChartBaseSeries
+class KDCHART_EXPORT KDChartBaseSeries
 {
     public:
-		virtual ~KDChartBaseSeries(){}
         virtual uint rows() const = 0;
         virtual const KDChartData& cell( uint row ) const = 0;
         virtual void setCell( uint row, const KDChartData& element) = 0;

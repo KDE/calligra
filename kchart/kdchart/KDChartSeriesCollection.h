@@ -44,7 +44,7 @@ class KDChartParams;
 
 // takes ownership of any series passed to it, and will delete
 // them when it is deleted.
-class KDChartSeriesCollection : public KDChartTableDataBase,
+class KDCHART_EXPORT KDChartSeriesCollection : public KDChartTableDataBase,
 #if COMPAT_QT_VERSION >= 0x030000
     public QValueVector<KDChartBaseSeries *>
 #else
@@ -78,9 +78,9 @@ class KDChartSeriesCollection : public KDChartTableDataBase,
         virtual void setLegendText( KDChartBaseSeries *series, QString text );
         virtual QString legendText( KDChartBaseSeries *series );
 
-        virtual void setYaxis( KDChartBaseSeries *series, 
-                KDChartAxisParams::AxisPos axis );
-        virtual KDChartAxisParams::AxisPos yAxis( KDChartBaseSeries *series );
+        virtual void setYaxis( KDChartBaseSeries *series,
+                KDChartAxisParams::AxisPos axis );// PENDING(blackie) possible enum problem
+        virtual KDChartAxisParams::AxisPos yAxis( KDChartBaseSeries *series );// PENDING(blackie) possible enum problem
 
         virtual unsigned int indexOf( KDChartBaseSeries *series );
 

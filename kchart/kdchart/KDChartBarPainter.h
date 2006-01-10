@@ -44,7 +44,7 @@ class KDChartBarPainter : public KDChartAxesPainter, public Qt
     virtual ~KDChartBarPainter();
 
     /*
-       virtual void paintData( QPainter* painter, 
+       virtual void paintData( QPainter* painter,
        KDChartTableDataBase* data,
        bool paint2nd,
        KDChartDataRegionList* regions );
@@ -69,6 +69,9 @@ class KDChartBarPainter : public KDChartAxesPainter, public Qt
                                     uint chartDatasetEnd,
                                     uint datasetStart,
                                     uint datasetEnd );
+    virtual void calculateXFront1_2( bool bNormalMode, bool bIsVeryFirstBar, bool bIsFirstDataset, bool _bThreeDBars,
+                                     double xpos, double valueBlockGap, double datasetGap, double frontBarWidth,
+                                     int& frontX1, int& frontX2, int& previousFrontX2 );
     private:
     void initMyPainter( QPainter* painter );
     void shiftMyPainter( double dx, double dy );
@@ -77,6 +80,7 @@ class KDChartBarPainter : public KDChartAxesPainter, public Qt
     double _painterDX;
     double _painterDY;
     bool _bThreeDBars;
+  double _areaP1000;
 };
 
 #endif

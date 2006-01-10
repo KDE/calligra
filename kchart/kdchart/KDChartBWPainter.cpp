@@ -40,8 +40,6 @@
 
 #include <stdlib.h>
 
-#include <klocale.h>
-
 /**
   \class KDChartBWPainter KDChartBWPainter.h
 
@@ -98,22 +96,26 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
     int nUsed = 0;
     QMemArray<double> values( nMax );
     double sum = 0.0;
+    QVariant vVal;
     if( data.sorted() ){
-        for( uint i=0; i<nMax; ++i)
-            if( data.cell(dataset, i).isDouble(1) ){
-                values[nUsed] = data.cell(dataset, i).doubleValue(1);
+        for( uint i=0; i<nMax; ++i){
+            if( data.cellCoord( dataset, i, vVal, 1 ) &&
+                QVariant::Double == vVal.type() ) {
+                values[nUsed] = vVal.toDouble();
                 sum += values[nUsed];
                 ++nUsed;
             }
+        }
     }else{
         // make copy of the dataset and look if it is sorted
         bool sorted = true;
         double last = 0.0; //  <--  avoids an annoying compile-time warning
         for( uint i=0; i<nMax; ++i){
-            if( data.cell(dataset, i).isDouble(1) ){
-                values[nUsed] = data.cell(dataset, i).doubleValue(1);
+            if( data.cellCoord( dataset, i, vVal, 1 ) &&
+                QVariant::Double == vVal.type() ) {
+                values[nUsed] = vVal.toDouble();
                 if(    nUsed // skip 1st value
-                        && last > values[nUsed] )
+                    && last > values[nUsed] )
                     sorted = false;
                 last = values[nUsed];
                 sum += last;
@@ -210,7 +212,7 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
   */
 QString KDChartBWPainter::fallbackLegendText( uint dataset ) const
 {
-    return i18n( "Series %1" ).arg( dataset + 1 );
+    return QObject::tr( "Series " ) + QString::number( dataset + 1 );
 }
 
 
@@ -370,10 +372,11 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
             if( drawOutliers ){
                 const uint nMax = data->usedCols();
                 int drawVal;
+                QVariant vVal;
                 for( uint i=0; i<nMax; ++i)
-                    if( data->cell(dataset, i).isDouble(1) ) {
-                        drawVal = static_cast<int>( pixelsPerUnit *
-                                data->cell(dataset, i).doubleValue(1) );
+                    if( data->cellCoord( dataset, i, vVal, 1 ) &&
+                        QVariant::Double == vVal.type() ) {
+                        drawVal = static_cast<int>( pixelsPerUnit * vVal.toDouble() );
                         if( drawLOF > drawVal || drawUOF < drawVal ) {
                             painter->setPen( Qt::NoPen );
                             painter->drawChord( xPos2 - markWidthD2,
@@ -450,7 +453,7 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
                         statFont.setPointSizeFloat( nTxtHeight );
                     }
                     double drawStat = pixelsPerUnit * stats[i];
-                    KDChartTextPiece statText( QString::number( stats[i] ),
+                    KDChartTextPiece statText( painter, QString::number( stats[i] ),
                             statFont );
                     int tw = statText.width();
                     int xDelta = (    KDChartParams::MaxValue  == i
@@ -464,7 +467,7 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
                     painter->drawRect( xPos + xDelta - 1,
                             y,
                             tw + 2,
-                                       static_cast<int>( QMAX(nTxtHeight, 8) + 1 ) );
+                            QMAX(static_cast < int > ( nTxtHeight ), 8) + 1 );
                     statText.draw( painter,
                             xPos + xDelta,
                             y,

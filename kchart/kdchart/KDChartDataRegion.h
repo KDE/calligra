@@ -37,29 +37,102 @@
 /*!
   \internal
   */
-struct KDChartDataRegion
+struct KDCHART_EXPORT KDChartDataRegion
 {
-    KDChartDataRegion( QRegion reg, uint r, uint c, uint ch )
+    KDChartDataRegion()
     {
-        region = reg;
-        row    = r;
-        col    = c;
-        chart  = ch;
+        init();
+    }
+
+    KDChartDataRegion( QRegion region, uint r, uint c, uint ch )
+    {
+        init();
+        pRegion = new QRegion( region );
+        row     = r;
+        col     = c;
+        chart   = ch;
+    }
+
+    KDChartDataRegion( uint r, uint c, uint ch, QPointArray array )
+    {
+        init();
+        pArray = new QPointArray( array );
+        row     = r;
+        col     = c;
+        chart   = ch;
+    }
+
+    KDChartDataRegion( uint r, uint c, uint ch, QRect rect )
+    {
+        init();
+        pRect = new QRect( rect );
+        row   = r;
+        col   = c;
+        chart = ch;
+    }
+
+    ~KDChartDataRegion()
+    {
+        //qDebug ("~KDChartDataRegion");
+        if( pRegion )
+            delete pRegion;
+        if( pArray )
+            delete pArray;
+        if( pRect )
+            delete pRect;
+        if( pTextRegion )
+            delete pTextRegion;
+    }
+
+    QRegion region() const
+    {
+        if( pRegion )
+            return *pRegion;
+        if( pArray )
+            return QRegion( *pArray );
+        if( pRect )
+            return QRegion( *pRect );
+        return QRegion();
+    }
+
+    QRect rect() const
+    {
+        if( pRegion )
+            return pRegion->boundingRect();
+        if( pArray )
+            return pArray->boundingRect();
+        if( pRect )
+            return *pRect;
+        return QRect();
+    }
+
+    void init()
+    {
+        pRegion     = 0;
+        pArray      = 0;
+        pRect       = 0;
+        pTextRegion = 0;
+        row    = 0;
+        col    = 0;
+        chart  = 0;
         negative = false; // default value (useful if value is a string)
         points.resize( 9 );
         startAngle = 1440;
         angleLen   =    1;
     }
 
-    QRegion region;
+    QRegion*     pRegion;
+    QPointArray* pArray;
+    QRect*       pRect;
+    QRegion*     pTextRegion;  // for the data values text
 
     // For rectangular data representation  (bar, line, area, point, ...)
-    // we use the bounding rect of the above declared 'region'.
+    // we use the above declared 'pRect'.
     // For curved data representations (pie slice, ring segment, ...)
     // we store the following additional anchor information:
 
-    QPointArray points;  // stores 9 elements: one for each
-    // value of KDChartEnums::PositionFlag
+    // store 9 elements: one for each value of KDChartEnums::PositionFlag
+    QPointArray points;
 
     int startAngle; // Note: 5760 makes a full circle, 2880 is left 'corner'.
     int angleLen;
@@ -68,12 +141,30 @@ struct KDChartDataRegion
     uint col;
     // members needed for calculation of data values texts
     uint chart;
-    QRegion textRegion;  // for the data values text
     QString text;        // the data values text
     bool    negative;    // stores whether the data value is less than zero
 };
 
 
+/**
+  \class KDChartDataRegionList KDChartDataRegion.h
+
+  \brief The collection class used by KD Chart to store data region information.
+
+  This class is derived from QPtrList, so all of the Qt documentation for this class
+  is valid for KDChartDataRegionList too.
+
+  \note Normally there is no need to use this class yourself, since it
+  is instantiated by the KDChartWidget. If however you are not using the
+  KDChartWidget class but calling the painting methods of KDChart directly,
+  make sure to either free the pointer stored in KDChartDataRegionList manually,
+  or to call setAutoDelete( true ) to let your KDChartDataRegionList own these pointers:
+  in this case please also make sure to call the clear() method whenever you want
+  your KDChartDataRegionList to free these pointers.
+  Note that all of this ONLY applies in case of NOT using the KDChartWidget.
+
+  \sa KDChart, KDChartWidget
+  */
 typedef QPtrList < KDChartDataRegion > KDChartDataRegionList;
 
 #endif

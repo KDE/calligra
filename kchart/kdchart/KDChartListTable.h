@@ -33,10 +33,10 @@
 #include <qshared.h>
 #include <qtable.h>
 
-#include <KDChartData.h>
+#include <KDChartDataIntern.h>
 #include <KDChartTableBase.h>
 
-class KDChartListTablePrivate : public QShared
+class KDCHART_EXPORT KDChartListTablePrivate : public QShared
 {
     public:
         KDChartListTablePrivate() : QShared() {
@@ -84,17 +84,21 @@ class KDChartListTablePrivate : public QShared
             }
         }
 
-        KDChartData& cell( uint _row, uint _col ) {
+        const KDChartData& cell( uint _row, uint _col ) const
+        {
             Q_ASSERT( _row < row_count && _col < col_count );
             return matrix[ static_cast < int > ( _row * col_count + _col ) ];
         }
-        const KDChartData& cell( uint _row, uint _col ) const {
+        KDChartData& cell( uint _row, uint _col )
+        {
             Q_ASSERT( _row < row_count && _col < col_count );
             return matrix[ static_cast < int > ( _row * col_count + _col ) ];
         }
-        void setCell( uint _row, uint _col, const KDChartData& _element ) {
+        
+        void setCell( uint _row, uint _col, const KDChartData& _element )
+        {
             Q_ASSERT( _row < row_count && _col < col_count );
-            matrix[ static_cast < int > ( _row * col_count + _col ) ] = _element;
+            matrix[ static_cast < int > ( _row * col_count + _col ) ].setAll( _element );
         }
 
         void clearCell( uint _row, uint _col ) {
@@ -219,13 +223,15 @@ class KDChartListTableData : public KDChartTableDataBase
          * API
          */
         KDChartListTableData() :
-            KDChartTableDataBase() {
+            KDChartTableDataBase()
+            {
                 sh = new Priv;
                 _usedCols = 0;
                 _usedRows = 0;
             }
         KDChartListTableData( uint _rows, uint _cols ) :
-            KDChartTableDataBase() {
+            KDChartTableDataBase()
+            {
                 sh = new Priv( _rows, _cols );
                 _usedRows = _rows;
                 _usedCols = _cols;
@@ -233,6 +239,8 @@ class KDChartListTableData : public KDChartTableDataBase
 
         KDChartListTableData( const KDChartListTableData& _t ) :
             KDChartTableDataBase( _t ) {
+                _useUsedRows = _t._useUsedRows;
+                _useUsedCols = _t._useUsedCols;
                 _usedRows = _t._usedRows;
                 _usedCols = _t._usedCols;
                 sh = _t.sh;
@@ -248,6 +256,8 @@ class KDChartListTableData : public KDChartTableDataBase
         KDChartListTableData& operator=( const KDChartListTableData& t ) {
             if ( &t == this )
                 return * this;
+            _useUsedRows = t._useUsedRows;
+            _useUsedCols = t._useUsedCols;
             _usedRows = t._usedRows;
             _usedCols = t._usedCols;
             t.sh->ref();
@@ -319,20 +329,40 @@ class KDChartListTableData : public KDChartTableDataBase
             return sh->row_count;
         }
 
-        KDChartData& cell( uint _row, uint _col ) {
+        virtual bool cellCoord( uint _row, uint _col,
+                                QVariant& _value,
+                                int coordinate=1 ) const
+        {
+            if( _row >= sh->row_count || _col >= sh->col_count )
+                return false;
+            _value = sh->cell( _row, _col ).value( coordinate );
+            return true;
+        }
+
+        virtual bool cellProp( uint _row, uint _col,
+                               int& _prop ) const
+        {
+            if( _row >= sh->row_count || _col >= sh->col_count )
+                return false;
+            _prop = sh->cell( _row, _col ).propertySet();
+            return true;
+        }
+
+        virtual void setCell( uint _row, uint _col,
+                              const QVariant& _value1,
+                              const QVariant& _value2=QVariant() )
+        {
             detach();
-            return sh->cell( _row, _col );
+            const KDChartData element( _value1, _value2 );
+            sh->setCell( _row, _col, element );
         }
 
-        const KDChartData& cell( uint _row, uint _col ) const {
-            return sh->cell( _row, _col );
+        virtual void setProp( uint _row, uint _col,
+                              int _propSet=0 )
+        {
+            sh->cell( _row, _col ).setPropertySet( _propSet );
         }
-
-        void setCell( uint _row, uint _col, const KDChartData& _element ) {
-            detach();
-            sh->setCell( _row, _col, _element );
-        }
-
+        
         void clearCell( uint _row, uint _col ) {
             detach();
             sh->clearCell( _row, _col );
@@ -406,24 +436,26 @@ class KDChartListTableData : public KDChartTableDataBase
 
         void setUsedRows( uint _rows ) {
             Q_ASSERT( _rows <= rows() );
-            if( _usedRows < _rows )    
+            if( _usedRows < _rows )
                 setSorted( false );
             _usedRows = _rows;
+            _useUsedRows = true;
         }
 
         uint usedRows() const {
-            return _usedRows;
+            return _useUsedRows ? _usedRows : rows();
         }
 
         void setUsedCols( uint _cols ) {
             Q_ASSERT( _cols <= cols() );
-            if( _usedCols < _cols )    
+            if( _usedCols < _cols )
                 setSorted( false );
             _usedCols = _cols;
+            _useUsedCols = true;
         }
 
         uint usedCols() const {
-            return _usedCols;
+            return _useUsedCols ? _usedCols : cols();
         }
 
     private:

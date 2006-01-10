@@ -30,8 +30,9 @@
 #define __KDCHARTPROPERTYSET__
 
 
+#include <KDXMLTools.h>
 #include <KDChartEnums.h>
-
+#include <kdchart_export.h>
 
 /**
   \file KDChartPropertySet.h
@@ -57,11 +58,17 @@ instance: If the later the value of that instance is used
 instead of the value that is stored locally.
 
 \sa KDChartData::setPropertySet
-\sa KDChartParams::KDCHART_PROPSET_NORMAL_DATA, KDChartParams::KDCHART_PROPSET_TRANSPARENT_DATA
+\sa KDCHART_PROPSET_NORMAL_DATA, KDCHART_PROPSET_TRANSPARENT_DATA
 \sa KDChartParams::registerProperties
 */
-class KDChartPropertySet
+class KDCHART_EXPORT KDChartPropertySet :public QObject
 {
+    Q_OBJECT
+    Q_ENUMS( SpecialDataPropertyID )
+
+    // Required by QSA
+    Q_ENUMS( PenStyle )
+
     friend class KDChartParams;
 
     public:
@@ -84,401 +91,81 @@ class KDChartPropertySet
 
     /**
       default constructor setting all values to undefined
-      and name to empty string (default for QString)
+      and name to empty string
       */
     KDChartPropertySet() :
-        mOwnID(               UndefinedID ),
-        mIdLineWidth(         UndefinedID ),
-        mIdLineColor(         UndefinedID ),
-        mIdLineStyle(         UndefinedID ),
-        mIdShowMarker(        UndefinedID ),
-        mIdExtraLinesAlign(   UndefinedID ),
-        mIdExtraLinesInFront( UndefinedID ),
-        mIdExtraLinesLength(  UndefinedID ),
-        mIdExtraLinesWidth(   UndefinedID ),
-        mIdExtraLinesColor(   UndefinedID ),
-        mIdExtraLinesStyle(   UndefinedID ),
-        mIdExtraMarkersAlign( UndefinedID ),
-        mIdExtraMarkersSize(  UndefinedID ),
-        mIdExtraMarkersColor( UndefinedID ),
-        mIdExtraMarkersStyle( UndefinedID ),
-        mIdShowBar(           UndefinedID ),
-        mIdBarColor(          UndefinedID )
-    { fillValueMembersWithDummyValues(); }
+        mOwnID( UndefinedID )
+    { fullReset(""); }
 
-    /**
-      Constructor setting all values to undefined.
-
-      This constructor may be used to initialize a property set
-      specifying neither property IDs nor special property values
-
-      \param name (may be empty) a name describing this property set.
-      */
-    KDChartPropertySet( const QString& name ) :
-        mOwnID( UndefinedID ),
-        mName( name ),
-        mIdLineWidth(         UndefinedID ),
-        mIdLineColor(         UndefinedID ),
-        mIdLineStyle(         UndefinedID ),
-        mIdShowMarker(        UndefinedID ),
-        mIdExtraLinesAlign(   UndefinedID ),
-        mIdExtraLinesInFront( UndefinedID ),
-        mIdExtraLinesLength(  UndefinedID ),
-        mIdExtraLinesWidth(   UndefinedID ),
-        mIdExtraLinesColor(   UndefinedID ),
-        mIdExtraLinesStyle(   UndefinedID ),
-        mIdExtraMarkersAlign( UndefinedID ),
-        mIdExtraMarkersSize(  UndefinedID ),
-        mIdExtraMarkersColor( UndefinedID ),
-        mIdExtraMarkersStyle( UndefinedID ),
-        mIdShowBar(           UndefinedID ),
-        mIdBarColor(          UndefinedID )
-    { fillValueMembersWithDummyValues(); }
 
     /**
       Constructor setting all Property Set IDs to the same ID value.
 
       This constructor may be used to initialize a property set
-      specifying and have all property IDs set to a specific value,
-      e.g. you might pass KDChartParams::KDCHART_PROPSET_NORMAL_DATA
+      and let it have all property IDs set to a specific value,
+      e.g. you might pass KDCHART_PROPSET_NORMAL_DATA
       as ID to make the default property set the parent of all
       values.
 
       \param name (may be empty) a name describing this property set.
-      \param idParent the ID of the parent property set.
+      \param idParent the ID of the parent property set. Skip this paramter
+      to define a property set without specifying a parent.
       */
-    KDChartPropertySet( const QString& name, int idParent ) :
-        mOwnID( UndefinedID ),
-        mName( name ),
-        mIdLineWidth(         idParent ),
-        mIdLineColor(         idParent ),
-        mIdLineStyle(         idParent ),
-        mIdShowMarker(        idParent ),
-        mIdExtraLinesAlign(   idParent ),
-        mIdExtraLinesInFront( idParent ),
-        mIdExtraLinesLength(  idParent ),
-        mIdExtraLinesWidth(   idParent ),
-        mIdExtraLinesColor(   idParent ),
-        mIdExtraLinesStyle(   idParent ),
-        mIdExtraMarkersAlign( idParent ),
-        mIdExtraMarkersSize(  idParent ),
-        mIdExtraMarkersColor( idParent ),
-        mIdExtraMarkersStyle( idParent ),
-        mIdShowBar(           idParent ),
-        mIdBarColor(          idParent )
-    { fillValueMembersWithDummyValues(); }
+    KDChartPropertySet( const QString& name, int idParent=KDChartPropertySet::UndefinedID ) :
+        mOwnID( UndefinedID )
+    { fullReset( name, idParent ); }
+
 
     /**
-      Constructor.
+      Copy the settings stored by property set \c source into this property set.
 
-      \param name (may be empty) a name describing this property set.
+      \note Use this method instead of using the assignment operator.
 
-      \param idLineWidth (for Line Charts only) ID of the property set
-      specifying the line width to be used for drawing
-      a line from this data point to the next one.
-      Use special value KDChartPropertySet::UndefinedID
-      to specify neither another property set's ID
-      nor an own value for the line width.
-      Use special value KDChartPropertySet::OwnID
-      if you want to specify the line width by using
-      the following parameter.
+      \sa clone, quickReset, fullReset
+      */
+    void deepCopy( const KDChartPropertySet* source );
 
-      \param lineWidth (for Line Charts only) the line width to be used
-      for drawing a line from this data point to the
-      next one.  If \c lineWidth is negative it is
-      interpreted as per-mille value of the chart's
-      drawing  area, the true line width will then be
-      calculated dynamically at drawing time.
-      This parameter is stored but ignored if the
-      previous parameter is not set to KDChartPropertySet::OwnID.
 
-      \param idLineColor (for Line Charts only) ID of the property set
-      specifying the QColor to be used for drawing
-      a line from this data point to the next one.
-      Use special value KDChartPropertySet::UndefinedID
-      to specify neither another property set's ID
-      nor an own value for the line color.
-      Use special value KDChartPropertySet::OwnID
-      if you want to specify the line color by using
-      the following parameter.
+    /**
+      Create a new property set on the heap, copy the settings stored by
+      this property set into the newly created property set and return
+      the pointer to the new property set.
 
-      \param lineColor (for Line Charts only) the QColor to be used
-      for drawing a line from this data point to the
-      next one.  This parameter is stored but ignored if the
-      previous parameter is not set to KDChartPropertySet::OwnID.
+      \note Use this method instead of using the copy constructor.
 
-      \param idLineStyle (for Line Charts only) ID of the property set
-      specifying the Qt::PenStyle to be used for drawing
-      a line from this data point to the next one.
-      Use special value KDChartPropertySet::UndefinedID
-      to specify neither another property set's ID
-      nor an own value for the line style.
-      Use special value KDChartPropertySet::OwnID
-      if you want to specify the line style by using
-      the following parameter.
+      \sa deepCopy, quickReset, fullReset
+      */
+    const KDChartPropertySet* clone() const;
 
-      \param lineStyle (for Line Charts only) the Qt::PenStyle to be used
-      for drawing a line from this data point to the
-      next one.  This parameter is stored but ignored if the
-      previous parameter is not set to KDChartPropertySet::OwnID.
 
-      \param idShowMarker (for Line Charts only) ID of the property set
-      specifying the showMarker flag saying whether
-      a marker is to be shown for this cell's data value.
-      Use special value KDChartPropertySet::UndefinedID
-      to specify neither another property set's ID
-      nor an own value for this flag.
-      Use special value KDChartPropertySet::OwnID
-      if you want to specify the flag by using
-      the following parameter.
+    /**
+      Set the name,
+      set all of the ID settings to idParent,
+      but do NOT change the value settings,
+      and do NOT modify mOwnID.
 
-      \param showMarker (for Line Charts only) flag indicating whether
-      a marker is to be shown for this cell's data value.
-      This parameter is stored but ignored if the
-      previous parameter is not set to KDChartPropertySet::OwnID.
+      \note Use this to quickly reset the ID settings: in most cases this should
+      be sufficient for resetting the property set.
 
-      \param idExtraLinesAlign (for Line or Bar Charts only) ID of the property set
-      specifying the alignment of extra horizontal or vertical
-      lines to be drawn through this point, see param \c
-      extraLinesAlign for details.
+      \sa clone, fullReset
+      */
+    void quickReset( const QString& name, int idParent=KDChartPropertySet::UndefinedID );
 
-      \param extraLinesAlign (for Line or Bar Charts only) the alignment of extra
-      horizontal or vertical lines to be drawn through this point.
-      These extra lines connect the point with the chart's axes,
-      or they reach from the point to the left and right
-      and/or towards the top and bottom without touching the axes.
-      Use either \c 0 (to surpress drawing of extra lines) or any
-      <b>OR</b> combination of the following bit flags to specify
-      which of the 4 possible lines are to be drawn.
-      Do <b>not</b> use any of the other flags defined with
-      Qt::AlignmentFlags: all values not listed here are reserved
-      for KDChart's further extensions and will be ignored.
-      \li \c Qt::AlignLeft horizontal line from this point to the left axis
-      \li \c Qt::AlignRight horizontal line to the right axis
-      \li \c Qt::AlignHCenter horizontal line of \c extraLinesLength
-      \li \c Qt::AlignTop vertical line to the top axis
-      \li \c Qt::AlignBottom vertical line to the bottom axis
-      \li \c Qt::AlignVCenter vertical line of \c extraLinesLength
-      \li \c Qt::AlignCenter horizontal and vertical lines of \c extraLinesLength
 
-    \param idExtraLinesInFront (for Line or Bar Charts only) ID of the property set
-    specifying whether the extra horizontal or vertical
-    lines (and their respective extra markers) to be drawn in front of
-    the normal lines (and/or in front of the normal markers, resp.).
-    This parameter will be ignored if extraLinesAlign is zero
-    (or idExtraLinesAlign points to a property set specifying
-    zero extraLinesAlign, resp.).
+    /**
+      Set the name,
+      set all of the ID settings to idParent,
+      set all of the value settings back to their default value,
+      but do NOT modify mOwnID.
 
-    \param extraLinesInFront (for Line or Bar Charts only) specifying whether
-    the extra horizontal or vertical lines (and their respective extra
-    markers) to be drawn in front of the normal lines (and/or in front
-    of the normal markers, resp.): by default they are drawn behind.
-    This parameter will be ignored if extraLinesAlign is zero
-    (or idExtraLinesAlign points to a property set specifying
-    zero extraLinesAlign, resp.).
+      \note Use this to entirely reset both the ID values and the value settings: one of
+      the very few reasons why you might want to do that might be your saving this property set
+      into a data stream. In most other cases just calling quickReset should be sufficient.
 
-    \param idExtraLinesLength (for Line or Bar Charts only) ID of the property set
-    specifying the length of the extra horizontal or vertical
-    lines to be drawn through this point.  This parameter will
-    be ignored if extraLinesAlign is <b>not</b> Qt::AlignHCenter nor
-    Qt::AlignVCenter (or idExtraLinesAlign points to a property
-    set not specifying such alignment, resp.).
+      \sa clone, quickReset
+      */
+    void fullReset( const QString& name, int idParent=KDChartPropertySet::UndefinedID );
 
-    \param extraLinesLength (for Line or Bar Charts only) the length
-    of the extra horizontal or vertical lines to be drawn through
-    this point.  If \c extraLinesLength is negative it is interpreted
-    as per-mille value of the data area's size, the true line length
-    will then be calculated dynamically at drawing time.
-    This parameter will be ignored if extraLinesAlign is <b>not</b> Qt::AlignHCenter
-    nor Qt::AlignVCenter (or idExtraLinesAlign points to a property set
-    not specifying such alignment, resp.)
-
-    \param idExtraLinesWidth (for Line or Bar Charts only) ID of the property set
-    specifying the width of the extra horizontal or vertical
-    lines to be drawn through this point.  This parameter will be
-    ignored if extraLinesAlign is zero (or idExtraLinesAlign
-    points to a property set specifying zero extraLinesAlign, resp.).
-
-    \param extraLinesWidth (for Line or Bar Charts only) the width of the extra horizontal
-    or vertical lines to be drawn through this point.
-    If \c extraLinesWidth is negative it is interpreted as per-mille
-    value of the chart's drawing area, the true line width will then
-    be calculated dynamically at drawing time.
-    This parameter will be ignored if extraLinesAlign is zero
-    (or idExtraLinesAlign points to a property set specifying
-    zero extraLinesAlign, resp.).
-
-    \param idExtraLinesColor (for Line or Bar Charts only) ID of the property set
-    specifying the QColor of the extra horizontal or vertical
-    lines to be drawn through this point.  This parameter will
-    be ignored if extraLinesAlign is zero (or idExtraLinesAlign
-            points to a property set specifying zero extraLinesAlign, resp.).
-
-    \param extraLinesColor (for Line or Bar Charts only) the QColor of the extra horizontal
-    or vertical lines to be drawn through this point.  This parameter
-    will be ignored if extraLinesAlign is zero (or
-            idExtraLinesAlign points to a property set specifying zero
-            extraLinesAlign, resp.).
-
-    \param idExtraLinesStyle (for Line or Bar Charts only) ID of the property set
-    specifying the Qt::PenStyle of the extra horizontal or vertical
-    lines to be drawn through this point.  This parameter will
-    be ignored if extraLinesAlign is zero (or idExtraLinesAlign
-            points to a property set specifying zero extraLinesAlign, resp.).
-
-    \param extraLinesStyle (for Line or Bar Charts only) the Qt::PenStyle of the extra horizontal
-    or vertical lines to be drawn through this point.  This parameter
-    will be ignored if extraLinesAlign is zero (or
-            idExtraLinesAlign points to a property set specifying zero
-            extraLinesAlign, resp.).
-
-    \param idExtraMarkersAlign (for Line or Bar Charts only) ID of the property set
-    specifying the vertical and/or horizontal position of markers
-    to be drawn at the end(s) of extra horizontal or vertical
-    lines which are drawn through this point, see parameter \c
-    extraMarkersAlign for details.
-
-    \param extraMarkersAlign (for Line or Bar Charts only) the vertical and/or horizontal
-    position of markers to be drawn at the end(s) of extra
-    horizontal or vertical lines which are drawn through this point.
-    These markers can be drawn at the end(s) of one or both
-    extra lines, use either \c 0 (to surpress drawing of the
-            markers) or any <b>OR</b> combination of the following bit
-    flags to specify which of the markers are to be drawn.
-    Do <b>not</b> use any of the other flags defined with
-    Qt::AlignmentFlags: all values not listed here are reserved
-    for KDChart's further extensions and will be ignored.
-    \li \c Qt::AlignLeft marker will be drawn at the left end of
-    the horizontal line.
-    \li \c Qt::AlignRight marker will be drawn at the right end of
-    the horizontal line, this flag and the \c Qt::AlignLeft flag will
-    be ignored if no horizontal line is drawn but they will
-    <b>not</b> be ignored if the line is drawn using a \c Qt::NoPen
-    line style.
-    \li \c Qt::AlignTop marker will be drawn at the top end of
-    the vertical line.
-    \li \c Qt::AlignBottom marker will be drawn at the bottom end of
-    the vertical line, this flag and the \c Qt::AlignTop flag will
-    be ignored if no vertical line is drawn but they will
-    <b>not</b> be ignored if the line is drawn using a \c Qt::NoPen
-    line style.
-
-    \param idExtraMarkersSize (for Line or Bar Charts only) ID of the property set
-    specifying the size of the markers to be drawn at the end(s)
-    of extra horizontal or vertical lines which are drawn through
-    this point.
-    This parameter will be ignored if no markers are drawn, see
-    parameter \c extraMarkersAlign for details.
-
-    \param extraMarkersSize (for Line or Bar Charts only) the size of the markers
-    to be drawn at the end(s) of extra horizontal or vertical
-    lines which are drawn through this point.
-    Negative values for \c extraMarkersSize.width() or
-    \c extraMarkersSize.height() are interpreted as per-mille
-    values of the chart's drawing area, the true marker size will
-    then be calculated dynamically at drawing time.
-    This parameter will be ignored if no markers are drawn, see
-    parameter \c extraMarkersAlign for details.
-
-    \param idExtraMarkersColor (for Line or Bar Charts only) ID of the property set
-    specifying a QColor for the markers to be drawn at the end(s)
-    of extra horizontal or vertical lines which are drawn through
-    this point.
-    This parameter will be ignored if no markers are drawn, see
-    parameter \c extraMarkersAlign for details.
-
-    \param extraMarkersSize (for Line or Bar Charts only) a QColor for the markers
-    to be drawn at the end(s) of extra horizontal or vertical
-    lines which are drawn through this point.
-    This parameter will be ignored if no markers are drawn, see
-    parameter \c extraMarkersAlign for details.
-
-    \param idExtraMarkersColor (for Line or Bar Charts only) ID of the property set
-    specifying a KDChartParams::LineMarkerStyle for the markers
-    to be drawn at the end(s) of extra horizontal or vertical
-    lines which are drawn through this point.
-    This parameter will be ignored if no markers are drawn, see
-    parameter \c extraMarkersAlign for details.
-
-    \param extraMarkersSize (for Line or Bar Charts only) a KDChartParams::LineMarkerStyle
-    for the markers to be drawn at the end(s) of extra horizontal
-    or vertical lines which are drawn through this point.
-    This parameter will be ignored if no markers are drawn, see
-    parameter \c extraMarkersAlign for details.
-
-    \param idShowBar (for Bar Charts only) ID of the property set
-    specifying the showBar flag saying whether
-    this cell's bar is to be painted.
-    Use special value KDChartPropertySet::UndefinedID
-    to specify neither another property set's ID
-    nor an own value for this flag.
-    Use special value KDChartPropertySet::OwnID
-    if you want to specify the flag by using
-    the following parameter.
-
-    \param showBar (for Bar Charts only) flag indicating whether
-    this cell's bar is to be painted.
-    This parameter is stored but ignored if the
-    previous parameter is not set to KDChartPropertySet::OwnID.
-
-    \param idBarColor (for Bar Charts only) ID of the property set
-    specifying the QColor to be used for drawing
-    this cell's bar.
-    Use special value KDChartPropertySet::UndefinedID
-    to specify neither another property set's ID
-    nor an own value for the bar color.
-    Use special value KDChartPropertySet::OwnID
-    if you want to specify the bar color by using
-    the following parameter.
-
-    \param barColor (for Bar Charts only) the QColor to be used
-    for drawing this cell's bar.  This parameter is stored
-    but ignored if the previous parameter is not set to
-    KDChartPropertySet::OwnID.
-
-    \sa name
-    \sa setLineWidth, setLineColor, setLineStyle, setShowMarker
-    \sa hasOwnLineWidth, hasOwnLineColor, hasOwnLineStyle, hasOwnShowMarker
-*/
-        KDChartPropertySet( const QString& name,
-                int idLineWidth,        int lineWidth,
-                int idLineColor,        const QColor& lineColor,
-                int idLineStyle,        const Qt::PenStyle& lineStyle,
-                int idShowMarker,       bool showMarker,
-                int idExtraLinesAlign,  uint                extraLinesAlign,
-                int idExtraLinesInFront,bool                extraLinesInFront,
-                int idExtraLinesLength, int                 extraLinesLength,
-                int idExtraLinesWidth,  int                 extraLinesWidth,
-                int idExtraLinesColor,  const QColor&       extraLinesColor,
-                int idExtraLinesStyle,  const Qt::PenStyle& extraLinesStyle,
-                int idExtraMarkersAlign,uint                extraMarkersAlign,
-                int idExtraMarkersSize, const QSize&        extraMarkersSize,
-                int idExtraMarkersColor,const QColor&       extraMarkersColor,
-                int idExtraMarkersStyle,int                 extraMarkersStyle,
-                int idShowBar,          bool showBar,
-                int idBarColor,         const QColor& barColor
-                ) :
-        mOwnID( UndefinedID ),
-        mName( name ),
-        mIdLineWidth(         idLineWidth ),         mLineWidth(         lineWidth  ),
-        mIdLineColor(         idLineColor ),         mLineColor(         lineColor  ),
-        mIdLineStyle(         idLineStyle ),         mLineStyle(         lineStyle  ),
-        mIdShowMarker(        idShowMarker ),        mShowMarker(        showMarker ),
-        mIdExtraLinesAlign(   idExtraLinesAlign ),   mExtraLinesAlign(   extraLinesAlign ),
-        mIdExtraLinesInFront( idExtraLinesInFront ), mExtraLinesInFront( extraLinesInFront ),
-        mIdExtraLinesLength(  idExtraLinesLength ),  mExtraLinesLength(  extraLinesLength ),
-        mIdExtraLinesWidth(   idExtraLinesWidth ),   mExtraLinesWidth(   extraLinesWidth ),
-        mIdExtraLinesColor(   idExtraLinesColor ),   mExtraLinesColor(   extraLinesColor ),
-        mIdExtraLinesStyle(   idExtraLinesStyle ),   mExtraLinesStyle(   extraLinesStyle ),
-        mIdExtraMarkersAlign( idExtraMarkersAlign ), mExtraMarkersAlign( extraMarkersAlign ),
-        mIdExtraMarkersSize(  idExtraMarkersSize  ), mExtraMarkersSize(  extraMarkersSize ),
-        mIdExtraMarkersColor( idExtraMarkersColor ), mExtraMarkersColor( extraMarkersColor ),
-        mIdExtraMarkersStyle( idExtraMarkersStyle ), mExtraMarkersStyle( extraMarkersStyle ),
-        mIdShowBar(           idShowBar ),           mShowBar(           showBar ),
-        mIdBarColor(          idBarColor ),          mBarColor(          barColor )
-        {}
-
-    KDChartPropertySet& operator=( const KDChartPropertySet& R );
 
     /**
       Save this property set's settings in a stream,
@@ -503,7 +190,7 @@ class KDChartPropertySet
       */
     static bool loadXML( const QDomElement& element, KDChartPropertySet& set );
 
-
+public slots:
     /**
       Returns the name of this property set.
       */
@@ -669,6 +356,7 @@ class KDChartPropertySet
         return false;
     }
 
+
     /**
       Specify the ID of the property set specifying the line width
       to be used for drawing a line from this data point to the next one
@@ -830,7 +518,7 @@ class KDChartPropertySet
       \sa setLineWidth, setLineColor, setShowMarker
       \sa hasOwnLineWidth, hasOwnLineColor, hasOwnLineStyle, hasOwnShowMarker
       */
-    void setLineStyle( int idLineStyle, const Qt::PenStyle& lineStyle )
+    void setLineStyle( int idLineStyle, const PenStyle& lineStyle )
     {
         mIdLineStyle = idLineStyle;
         mLineStyle =   lineStyle;
@@ -868,7 +556,7 @@ class KDChartPropertySet
       \sa setLineWidth, setLineColor, setLineStyle, setShowMarker
       \sa hasOwnLineWidth, hasOwnLineColor, hasOwnShowMarker
       */
-    bool hasOwnLineStyle( int& idLineStyle, Qt::PenStyle& lineStyle )
+    bool hasOwnLineStyle( int& idLineStyle, PenStyle& lineStyle )
     {
         idLineStyle = mIdLineStyle;
         if( OwnID == mIdLineStyle ){
@@ -877,6 +565,81 @@ class KDChartPropertySet
         }
         return false;
     }
+
+
+
+    /**
+      Specify the ID of the property set specifying the area brush
+      to be used for this cell
+      <b>or</b> specify the area brush directly.
+
+      \note This function should be used for Area Charts in <b>Normal</b> mode
+      only, otherwise the settings specified here will be ignored.
+
+      \param idAreaBrush ID of the property set specifying the area brush.
+      Use special value KDChartPropertySet::UndefinedID
+      to specify neither another property set's ID
+      nor an own value for the area brush.
+      Use special value KDChartPropertySet::OwnID
+      if you do NOT want to inherit another property set's
+      settings but want to specify the area brush by using
+      the following parameter.
+      \param areaBrush   The area brush to be used.
+      This parameter is stored but ignored if the previous parameter
+      is not set to KDChartPropertySet::OwnID.
+
+      \sa hasOwnAreaBrush
+      */
+    void setAreaBrush( int idAreaBrush, const QBrush& areaBrush )
+    {
+        mIdAreaBrush = idAreaBrush;
+        mAreaBrush = areaBrush;
+    }
+
+    /**
+      Returns whether this property set is specifying it's own area brush settings.
+
+      \note This function should be used for Area Charts in <b>Normal</b> mode
+      only, otherwise the settings specified here will be ignored.
+
+      \returns TRUE if this property set is specifying it's own area brush settings,
+      FALSE if the settings of another property set are to be used instead.
+
+      \note The return value will also be FALSE if the 'default' properties
+      are to be used: in this case idAreaBrush will be KDChartParams::NormalData
+
+      \param idAreaBrush to be ignored if return value is TRUE.
+      If idAreaBrush is KDChartPropertySet::UndefinedID
+      then neither a property set ID
+      nor an own area brush were specified (so no special
+      area brush is associated to the respective data cell),
+      else idAreaBrush contains the ID of another property set
+      that is specifying the area brush to be used.
+      \param areaBrush   this parameter's value is not modified if return value is FALSE.
+      Parameter areaBrush contains the area brush value
+      associated with the respective data cell.
+      If return value is FALSE the areaBrush
+      value is not set (so the parameter keeps its previous value)
+      but this is to be overridden by the respective value
+      of another property set that is indicated
+      by the idAreaBrush parameter - unless this has the special
+      value KDChartPropertySet::UndefinedID as decribed above.
+
+      \sa setAreaBrush
+      */
+    bool hasOwnAreaBrush( int& idAreaBrush, QBrush& areaBrush )
+    {
+        idAreaBrush = mIdAreaBrush;
+        if( OwnID == mIdAreaBrush ){
+            areaBrush = mAreaBrush;
+            return true;
+        }
+        return false;
+    }
+
+
+
+
 
     /**
       Specify the ID of the property set specifying a boolean flag indicating
@@ -900,8 +663,8 @@ class KDChartPropertySet
       is not set to KDChartPropertySet::OwnID.
 
       \sa hasOwnShowMarker
+      \sa setMarkerAlign, setMarkerSize, setMarkerColor, setMarkerStyle
       \sa setLineWidth, setLineColor, setLineStyle
-      \sa hasOwnLineWidth, hasOwnLineColor, hasOwnLineStyle
       */
     void setShowMarker( int idShowMarker, bool showMarker )
     {
@@ -941,7 +704,7 @@ class KDChartPropertySet
       value KDChartPropertySet::UndefinedID as decribed above.
 
       \sa setShowMarker
-      \sa setLineWidth, setLineColor, setLineStyle
+      \sa hasOwnMarkerAlign, hasOwnMarkerSize, hasOwnMarkerColor, hasOwnMarkerStyle
       \sa hasOwnLineWidth, hasOwnLineColor, hasOwnLineStyle
       */
     bool hasOwnShowMarker( int& idShowMarker, bool& showMarker )
@@ -953,7 +716,94 @@ class KDChartPropertySet
         }
         return false;
     }
+    
+    /**
+      Specify the ID of the property set specifying the alignment of the
+      Marker to be displayed for this data value
+      <b>or</b> specifying this flag directly.
 
+      \note This function should be used for Line Charts only, otherwise
+      the settings specified here will be ignored.
+
+      \param idMarkerAlign ID of the property set specifying the alignment
+      of the Marker to be shown.
+      Use special value KDChartPropertySet::UndefinedID
+      to specify neither another property set's ID
+      nor an own value for this flag.
+      Use special value KDChartPropertySet::OwnID
+      if you do NOT want to inherit another property set's
+      settings but want to specify the flag by using
+      the following parameter.
+      \param markerAlign  The alignment of the marker to be shown.
+      This parameter is stored but ignored if the previous parameter
+      is not set to KDChartPropertySet::OwnID.
+
+      \sa hasOwnShowMarker
+      \sa setMarkerAlign, setMarkerSize, setMarkerColor, setMarkerStyle
+      \sa setLineWidth, setLineColor, setLineStyle
+      */
+    void setMarkerAlign( int idMarkerAlign, uint markerAlign )
+    {
+        mIdMarkerAlign = idMarkerAlign;
+        mMarkerAlign =   markerAlign;
+    }
+    bool hasOwnMarkerAlign( int& idMarkerAlign, uint& markerAlign )
+    {
+        idMarkerAlign = mIdMarkerAlign;
+        if( OwnID == idMarkerAlign ){
+            markerAlign = mMarkerAlign;
+            return true;
+        }
+        return false;
+    }
+    void setMarkerSize( int idMarkerSize, const QSize& markerSize )
+    {
+        mIdMarkerSize = idMarkerSize;
+        mMarkerSize =   markerSize;
+    }
+    bool hasOwnMarkerSize( int& idMarkerSize, QSize& markerSize )
+    {
+        idMarkerSize = mIdMarkerSize;
+        if( OwnID == idMarkerSize ){
+            markerSize = mMarkerSize;
+            return true;
+        }
+        return false;
+    }
+    void setMarkerColor( int idMarkerColor, const QColor& markerColor )
+    {
+        mIdMarkerColor = idMarkerColor;
+        mMarkerColor =   markerColor;
+    }
+    bool hasOwnMarkerColor( int& idMarkerColor, QColor& markerColor )
+    {
+        idMarkerColor = mIdMarkerColor;
+        if( OwnID == idMarkerColor ){
+            markerColor = mMarkerColor;
+            return true;
+        }
+        return false;
+    }
+    void setMarkerStyle( int idMarkerStyle, int markerStyle )
+    {
+        mIdMarkerStyle = idMarkerStyle;
+        mMarkerStyle =   markerStyle;
+    }
+    bool hasOwnMarkerStyle( int& idMarkerStyle, int& markerStyle )
+    {
+        idMarkerStyle = mIdMarkerStyle;
+        if( OwnID == idMarkerStyle ){
+            markerStyle = mMarkerStyle;
+            return true;
+        }
+        return false;
+    }
+
+    
+    
+
+
+    
     void setExtraLinesAlign( int idExtraLinesAlign, uint extraLinesAlign )
     {
         mIdExtraLinesAlign = idExtraLinesAlign;
@@ -1024,12 +874,12 @@ class KDChartPropertySet
         }
         return false;
     }
-    void setExtraLinesStyle( int idExtraLinesStyle, const Qt::PenStyle extraLinesStyle )
+    void setExtraLinesStyle( int idExtraLinesStyle, const PenStyle extraLinesStyle )
     {
         mIdExtraLinesStyle = idExtraLinesStyle;
         mExtraLinesStyle =   extraLinesStyle;
     }
-    bool hasOwnExtraLinesStyle( int& idExtraLinesStyle, Qt::PenStyle& extraLinesStyle )
+    bool hasOwnExtraLinesStyle( int& idExtraLinesStyle, PenStyle& extraLinesStyle )
     {
         idExtraLinesStyle = mIdExtraLinesStyle;
         if( OwnID == idExtraLinesStyle ){
@@ -1096,18 +946,24 @@ class KDChartPropertySet
         return false;
     }
 
-    protected:
+protected:
     // the following member only to be set internally by KDChartParams::registerProperties
     // and by KDChartParams::setProperties
     int mOwnID;
 
-    private:
+private:
+    KDChartPropertySet( const KDChartPropertySet& ) : QObject(0) {}
+
     QString mName;
     // IDs:                     values used if ID == OwnID:
     int mIdLineWidth;         int          mLineWidth;
     int mIdLineColor;         QColor       mLineColor;
     int mIdLineStyle;         Qt::PenStyle mLineStyle;
     int mIdShowMarker;        bool         mShowMarker;
+    int mIdMarkerSize;        QSize        mMarkerSize;
+    int mIdMarkerColor;       QColor       mMarkerColor;
+    int mIdMarkerStyle;       int          mMarkerStyle;
+    int mIdMarkerAlign;       uint         mMarkerAlign;
     int mIdExtraLinesAlign;   uint         mExtraLinesAlign;
     int mIdExtraLinesInFront; bool         mExtraLinesInFront;
     int mIdExtraLinesLength;  int          mExtraLinesLength;
@@ -1120,6 +976,7 @@ class KDChartPropertySet
     int mIdExtraMarkersStyle; int          mExtraMarkersStyle;
     int mIdShowBar;           bool         mShowBar;
     int mIdBarColor;          QColor       mBarColor;
+    int mIdAreaBrush;         QBrush       mAreaBrush;
     void fillValueMembersWithDummyValues();
 };
 

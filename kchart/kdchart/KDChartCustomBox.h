@@ -40,6 +40,9 @@
 
 class KDFrame;
 
+// needed because there was no AlignAuto before Qt 3.0
+#define KDCHART_AlignAuto 0
+
 
 /** \file KDChartCustomBox.h
   \brief Definition of a class for specifying and drawing custom boxes.
@@ -48,12 +51,12 @@ class KDFrame;
 /**
   Class for specifying and drawing custom boxes.
   */
-class KDChartCustomBox
+class KDCHART_EXPORT KDChartCustomBox :public QObject
 {
+    Q_OBJECT
     friend class KDChartPainter;
 
 public:
-    static const uint AlignAuto; // needed because there was no AlignAuto before Qt 3.0
 
     /**
       Constructor.
@@ -61,8 +64,6 @@ public:
       */
     KDChartCustomBox() :
         _rotation( 0 ),
-        _content( KDChartTextPiece( "", QFont( "helvetica",
-                        8, QFont::Normal, false ) ) ),
         _fontSize( -10 ),
         _fontScaleGlobal( true ),
         _deltaX( 0 ),
@@ -77,21 +78,24 @@ public:
         _dataRow( 0 ),
         _dataCol( 0 ),
         _data3rd( 0 ),
-        _deltaAlign( AlignAuto ),
+        _deltaAlign( KDCHART_AlignAuto ),
         _deltaScaleGlobal( true ),
-        _anchorBeingCalculated( false ){}
+        _anchorBeingCalculated( false )
+    {
+        const KDChartTextPiece piece( 0, "", QFont( "helvetica", 8, QFont::Normal, false ) );
+        _content.deepCopy( &piece );
+    }
 
     /**
       Constructor.
       Set content and font size but no position/size parameters.
 
-      \note If \c fontSize value is greater 0, the value is taken as exact size,
-      if \c fontSize is less than 0 it is interpreted as being a per-mille value
-      of the size of the drawing area (or of the height of the box in case
-      \c fontScaleGlobal is set to false, resp.).
-      Normally the actual font size is calculated dynamically in methode paint.
-      <b>However</b> if fontSize is zero no calculating will take place but the
-      size of the content font is used.
+      \note If \c fontScaleGlobal is set to true it is not necessary to
+      specify the size of the box: if both \c width and \c height are zero
+      and \c fontScaleGlobal is true the size of the box will be calculated
+      automatically based upon the content size.  In this case the content
+      size is interpreted as rich text string - even if the text is NOT
+      framed by <tt><qt></tt> and <tt></qt></tt>.
 
       \param content The string or rich text string to be written into the box.
       \param fontSize The size of the font to be used, see explanation above.
@@ -103,7 +107,6 @@ public:
                       int fontSize,
                       bool fontScaleGlobal = true ) :
         _rotation( 0 ),
-        _content( content ),
         _fontSize( fontSize ),
         _fontScaleGlobal( fontScaleGlobal ),
         _deltaX( 0 ),
@@ -118,14 +121,24 @@ public:
         _dataRow( 0 ),
         _dataCol( 0 ),
         _data3rd( 0 ),
-        _deltaAlign( AlignAuto ),
+        _deltaAlign( KDCHART_AlignAuto ),
         _deltaScaleGlobal( true ),
-        _anchorBeingCalculated( false ){}
+        _anchorBeingCalculated( false )
+    {
+        _content.deepCopy( &content );
+    }
 
 
     /**
       Constructor.
       Set content and position/size parameters and the color and brush to be used.
+
+      \note If \c fontScaleGlobal is set to true it is not necessary to
+      specify the size of the box: if both \c width and \c height are zero
+      and \c fontScaleGlobal is true the size of the box will be calculated
+      automatically based upon the content size.  In this case the content
+      size is interpreted as rich text string - even if the text is NOT
+      framed by <tt><qt></tt> and <tt></qt></tt>.
 
       \param content The text piece to be displayed.
       \param fontSize If \c fontSize value is greater 0, the value is taken as exact size,
@@ -162,14 +175,14 @@ public:
       as anchor area. This parameter is ignored if \c area is not \c AreaChartDataRegion
       or if there is no 3-dimensional data structure.
       \param deltaAlign The way how \c deltaX and \deltaY affect the position of the box.
-      Leave this parameter to its default value KDChartCustomBox::AlignAuto to have the delta values
+      Leave this parameter to its default value KDCHART_AlignAuto to have the delta values
       used according to the box's main \c align settings, otherwise specify your own
       alignment settings: e.g. right means there will be a gap between the right side of
       the box and its anchor point - if the main \c align parameter is set to right too
       the anchor point will to be outside of the box / if \c align is set to left
       (but the \c deltaAlign to right) the anchor point will be inside the box.
       Possible values for \c deltaAlign are:
-      \li \c KDChartCustomBox::AlignAuto
+      \li \c KDCHART_AlignAuto
       \li \c Qt::AlignLeft | Qt::AlignTop
       \li \c Qt::AlignLeft | Qt::AlignBottom
       \li \c Qt::AlignRight | Qt::AlignTop
@@ -197,10 +210,9 @@ public:
                       uint dataRow = 0,
                       uint dataCol = 0,
                       uint data3rd = 0,
-                      uint deltaAlign = AlignAuto,
+                      uint deltaAlign = KDCHART_AlignAuto,
                       bool deltaScaleGlobal = true )
         : _rotation( 0 ),
-          _content( content ),
           _fontSize( fontSize ),
           _fontScaleGlobal( fontScaleGlobal ),
           _deltaX( deltaX ),
@@ -217,7 +229,10 @@ public:
           _data3rd( data3rd ),
           _deltaAlign( deltaAlign ),
           _deltaScaleGlobal( deltaScaleGlobal ),
-          _anchorBeingCalculated( false ){}
+          _anchorBeingCalculated( false )
+    {
+        _content.deepCopy( &content );
+    }
 
 
     /**
@@ -225,6 +240,13 @@ public:
       Use this special constructor to specify a <b>rotated</b> box, reference
       point of the rotation is the anchor specified by the \c area and the
       \c position parameters.
+
+      \note If \c fontScaleGlobal is set to true it is not necessary to
+      specify the size of the box: if both \c width and \c height are zero
+      and \c fontScaleGlobal is true the size of the box will be calculated
+      automatically based upon the content size.  In this case the content
+      size is interpreted as rich text string - even if the text is NOT
+      framed by <tt><qt></tt> and <tt></qt></tt>.
 
       \param rotation The box's rotation angle in degrees (0 .. 360).
       \param content The text piece to be displayed.
@@ -267,7 +289,7 @@ public:
       as anchor area. This parameter is ignored if \c area is not \c AreaChartDataRegion
       or if there is no 3-dimensional data structure.
       \param deltaAlign The way how \c deltaX and \deltaY affect the position of the box.
-      Leave this parameter to its default value KDChartCustomBox::AlignAuto to have the delta values
+      Leave this parameter to its default value KDCHART_AlignAuto to have the delta values
       used according to the box's main \c align settings, otherwise specify your own
       alignment settings: e.g. Qt::AlignRight means the box will be moved to the left
       (by the amount calculated using the \c deltaX value), so there will be a gap
@@ -276,7 +298,7 @@ public:
       box then. However if the main \c align flag is set to Qt::AlignLeft the anchor
       point will be inside the box.
       Possible values for \c deltaAlign are:
-      \li \c KDChartCustomBox::AlignAuto
+      \li \c KDCHART_AlignAuto
       \li \c Qt::AlignLeft | Qt::AlignTop
       \li \c Qt::AlignLeft | Qt::AlignBottom
       \li \c Qt::AlignRight | Qt::AlignTop
@@ -308,10 +330,9 @@ public:
                       uint dataRow = 0,
                       uint dataCol = 0,
                       uint data3rd = 0,
-                      uint deltaAlign = AlignAuto,
+                      uint deltaAlign = KDCHART_AlignAuto,
                       bool deltaScaleGlobal = true )
         : _rotation( rotation ),
-          _content( content ),
           _fontSize( fontSize ),
           _fontScaleGlobal( fontScaleGlobal ),
           _deltaX( deltaX ),
@@ -328,7 +349,10 @@ public:
           _data3rd( data3rd ),
           _deltaAlign( deltaAlign ),
           _deltaScaleGlobal( deltaScaleGlobal ),
-          _anchorBeingCalculated( false ){}
+          _anchorBeingCalculated( false )
+    {
+        _content.deepCopy( &content );
+    }
 
 
     /**
@@ -355,6 +379,7 @@ public:
     static bool readCustomBoxNode( const QDomElement& element,
                                    KDChartCustomBox& custombox );
 
+public slots: // PENDING(blackie) merge slots sections.
 
     float trueFontSize( double areaWidthP1000,
                         double areaHeightP1000,
@@ -364,8 +389,8 @@ public:
                              int rectHeight ) const;
     int trueRectAlignX(const QRect& rect) const;
     int trueRectAlignY(const QRect& rect) const;
-    void getTrueShift( double averageWidthP1000,
-                       double averageHeightP1000,
+    void getTrueShift( double areaWidthP1000,
+                       double areaHeightP1000,
                        int rectHeight,
                        int& dX,
                        int& dY )const;
@@ -378,14 +403,15 @@ public:
       This can be any point within the painter drawing area but you
       will probably compute a point using anchorArea(), anchorPosition(), anchorAlign()
       (and dataRow(), dataCol(), data3rd() when dealing with KDChart data regions, resp.)
-      \param averageWidthP1000 The thousands part of the logical width
+      \param areaWidthP1000 The thousands part of the logical width
       of the area to be used for drawing.
-      \param averageHeightP1000 The thousands part of the logical height
+      \param areaHeightP1000 The thousands part of the logical height
       of the area to be used for drawing.
       */
+
     virtual QRect trueRect( QPoint anchor,
-                            double averageWidthP1000,
-                            double averageHeightP1000 ) const ;
+                            double areaWidthP1000,
+                            double areaHeightP1000 ) const ;
 
     /**
       Paints the box.
@@ -426,11 +452,18 @@ public:
       */
     void setContent( const KDChartTextPiece & content )
     {
-        _content = content;
+        _content.deepCopy( &content );
     }
 
     /**
       Specifies the font size to be used.
+
+      \note If \c fontScaleGlobal is set to true it is not necessary to
+      specify the size of the box: if both \c width and \c height are zero
+      and \c fontScaleGlobal is true the size of the box will be calculated
+      automatically based upon the content size.  In this case the content
+      size is interpreted as rich text string - even if the text is NOT
+      framed by <tt><qt></tt> and <tt></qt></tt>.
 
       \param fontSize If \c fontSize value is greater 0, the value is taken as exact size,
       if \c fontSize is less than 0 it is interpreted as being a per-mille value
@@ -464,6 +497,7 @@ public:
       */
     void setAnchorPosition( KDChartEnums::PositionFlag position )
     {
+        // Note if you change the parameters here, then you must also change them in wrappers/KDChartCustomBoxWrapper.h
         _anchorPos = position;
     }
 
@@ -529,7 +563,7 @@ public:
                              int deltaY,
                              int width,
                              int height,
-                             uint deltaAlign = AlignAuto,
+                             uint deltaAlign = KDCHART_AlignAuto,
                              bool deltaScaleGlobal = true )
     {
         _deltaX = deltaX;
@@ -542,6 +576,13 @@ public:
 
     /**
       Specifies the distance between the box and the anchor point.
+
+      \note If \c fontScaleGlobal is set to true it is not necessary to
+      specify the size of the box: if both \c width and \c height are zero
+      and \c fontScaleGlobal is true the size of the box will be calculated
+      automatically based upon the content size.  In this case the content
+      size is interpreted as rich text string - even if the text is NOT
+      framed by <tt><qt></tt> and <tt></qt></tt>.
 
       \param deltaX The X distance between the box and its anchor.
       <b>Note: </b> If greater 0, the value is taken as exact offset,
@@ -561,7 +602,7 @@ public:
       */
     void setDistance( int deltaX,
                       int deltaY,
-                      uint align = AlignAuto,
+                      uint align = KDCHART_AlignAuto,
                       bool deltaScaleGlobal = true )
     {
         _deltaX = deltaX;
@@ -574,14 +615,14 @@ public:
       Specifies the way how the values specified for deltaX and/or deltaY
       affect the position of the box.
 
-      Set this to KDChartCustomBox::AlignAuto to have the delta values
+      Set this to KDHART_KDCHART_AlignAuto to have the delta values
       used according to the box's main \c align settings, otherwise specify your own
       alignment settings: e.g. right means there will be a gap between the right side of
       the box and its anchor point - if the main \c align parameter is set to right too
       the anchor point will to be outside of the box / if \c align is set to left
       (but the \c deltaAlign to right) the anchor point will be inside the box.
       Possible values for \c deltaAlign are:
-      \li \c KDChartCustomBox::AlignAuto
+      \li \c KDCHART_AlignAuto
       \li \c Qt::AlignLeft | Qt::AlignTop
       \li \c Qt::AlignLeft | Qt::AlignBottom
       \li \c Qt::AlignRight | Qt::AlignTop
@@ -624,6 +665,13 @@ public:
 
     /**
       Specifies the size of the box.
+
+      \note If \c fontScaleGlobal is set to true it is not necessary to
+      specify the size of the box: if both \c width and \c height are zero
+      and \c fontScaleGlobal is true the size of the box will be calculated
+      automatically based upon the content size.  In this case the content
+      size is interpreted as rich text string - even if the text is NOT
+      framed by <tt><qt></tt> and <tt></qt></tt>.
 
       \param width The width of the box.
       <b>Note:</b> If greater 0, the value is taken as exact offset,
@@ -850,10 +898,36 @@ public:
     {
         return _paper;
     }
+
+public:
     /**
       Destructor. Only defined to have it virtual.
       */
     virtual ~KDChartCustomBox();
+
+    /**
+      Copy the settings of box \c source into this box.
+
+      \note Use this method instead of using the assignment operator.
+
+      \sa clone
+      */
+    void deepCopy( const KDChartCustomBox* source );
+
+
+    /**
+      Create a new box on the heap, copy the settings stored by
+      this box into the newly created box and return
+      the pointer to the new box.
+
+      \note Use this method instead of using the copy constructor.
+
+      \sa deepCopy
+      */
+    const KDChartCustomBox* clone() const;
+
+private:
+    KDChartCustomBox( const KDChartCustomBox& ) : QObject(0) {}
 
 protected:
     /**

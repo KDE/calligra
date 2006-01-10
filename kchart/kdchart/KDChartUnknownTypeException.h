@@ -39,7 +39,7 @@
   This exception is thrown when it is attempted to create a chart of
   non-registered user-defined type.
   */
-class KDChartUnknownTypeException
+class KDCHART_EXPORT KDChartUnknownTypeException
 {
     public:
         KDChartUnknownTypeException( const QString& type ) :

@@ -36,7 +36,6 @@
 #include <qscrollview.h>
 #include <qpixmap.h>
 
-
 /**
   \file KDChartWidget.h
 
@@ -46,7 +45,7 @@
 
 class KDChartParams;
 
-class KDChartWidget : public QWidget
+class KDCHART_EXPORT KDChartWidget : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY( bool activeData READ isActiveData WRITE setActiveData )
@@ -59,6 +58,7 @@ public:
                    QWidget* parent = 0, const char* name = 0 );
     ~KDChartWidget();
 
+public slots:
     bool isActiveData() const;
     bool isDoubleBuffered() const;
 
@@ -67,7 +67,6 @@ public:
 
     const KDChartDataRegionList* dataRegions() const { return &_dataRegions; }
 
-public slots:
     void setActiveData( bool active );
     void setDoubleBuffered( bool doublebuffered );
     void setParams( KDChartParams* params );
@@ -83,14 +82,24 @@ public slots:
 
 signals:
     void dataLeftClicked( uint row, uint col );
+    void dataLeftClicked( const QPoint & pnt );
     void dataMiddleClicked( uint row, uint col );
+    void dataMiddleClicked( const QPoint & pnt );
     void dataRightClicked( uint row, uint col );
+    void dataRightClicked( const QPoint & pnt );
     void dataLeftPressed( uint row, uint col );
+    void dataLeftPressed( const QPoint & pnt );
     void dataMiddlePressed( uint row, uint col );
+    void dataMiddlePressed( const QPoint & pnt );
     void dataRightPressed( uint row, uint col );
+    void dataRightPressed( const QPoint & pnt );
     void dataLeftReleased( uint row, uint col );
+    void dataLeftReleased( const QPoint & pnt );
     void dataMiddleReleased( uint row, uint col );
+    void dataMiddleReleased( const QPoint & pnt );
     void dataRightReleased( uint row, uint col );
+    void dataRightReleased( const QPoint & pnt );
+    void barsDisplayed( int barsDisplayed, int barsLeft );
 
 protected:
     virtual void paintEvent( QPaintEvent* event );

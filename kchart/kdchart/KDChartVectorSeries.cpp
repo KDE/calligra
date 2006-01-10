@@ -45,12 +45,14 @@ uint KDChartVectorSeries::rows() const
 const KDChartData& KDChartVectorSeries::cell( uint row ) const
 {
     Q_ASSERT( row < size() );
+    // make it compile on windows using qt232
     return this->at(row);
 }
 
 void KDChartVectorSeries::setCell( uint row, const KDChartData& element)
 {
     Q_ASSERT( row < size() );
+    // make it compile on windows using qt232
     this->at(row) = element;
 }
 
@@ -72,7 +74,7 @@ double KDChartVectorSeries::maxValue( int coordinate, bool &ok ) const
     KDChartVectorSeries::ConstIterator i;
 #endif
 
-    for ( i = begin(); i != end(); ++i )
+    for ( i = begin(); i != end(); i ++ )
     {
         const KDChartData& d = *i;
         if ( d.isDouble( coordinate ) )
@@ -104,7 +106,7 @@ double KDChartVectorSeries::minValue( int coordinate, bool &ok ) const
     KDChartVectorSeries::ConstIterator i;
 #endif
 
-    for ( i = begin(); i != end(); ++i )
+    for ( i = begin(); i != end(); i ++ )
     {
         const KDChartData& d = *i;
         if ( d.isDouble( coordinate ) ) 

@@ -203,9 +203,12 @@ void KChartConfigDialog::init()
     // Color page
     if (_colorpage) {
         _colorpage->setLineColor( m_params->outlineDataColor() );
-        KDChartAxisParams leftparams( m_params->axisParams( KDChartAxisParams::AxisPosLeft ) );
-        KDChartAxisParams rightparams( m_params->axisParams( KDChartAxisParams::AxisPosRight ) );
-        KDChartAxisParams bottomparams( m_params->axisParams( KDChartAxisParams::AxisPosBottom ) );
+        KDChartAxisParams leftparams;
+        leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+        KDChartAxisParams rightparams;
+        rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+        KDChartAxisParams bottomparams;
+        bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
         _colorpage->setGridColor( leftparams.axisGridColor() );
         _colorpage->setXTitleColor( m_params->axisTitleColor( KDChartAxisParams::AxisPosLeft ) );
         _colorpage->setYTitleColor( m_params->axisTitleColor( KDChartAxisParams::AxisPosBottom ) );
@@ -289,11 +292,14 @@ void KChartConfigDialog::apply()
 
     if (_colorpage) {
 
-        KDChartAxisParams leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
+        KDChartAxisParams leftparams;
+        leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
         leftparams.setAxisGridColor( _colorpage->gridColor() );
         m_params->setOutlineDataColor( _colorpage->lineColor() );
-        KDChartAxisParams rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
-        KDChartAxisParams bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
+        KDChartAxisParams rightparams;
+        rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
+        KDChartAxisParams bottomparams;
+        bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
         if( _colorpage->xTitleColor().isValid() )
             m_params->setAxisTitleColor( KDChartAxisParams::AxisPosBottom, _colorpage->xTitleColor() );
         else

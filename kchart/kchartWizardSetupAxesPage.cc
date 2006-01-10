@@ -239,7 +239,8 @@ void KChartWizardSetupAxesPage::apply()
     _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,grid->isChecked() );
     _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,grid->isChecked() );
 
-    KDChartAxisParams leftparams( _chart->params()->axisParams( KDChartAxisParams::AxisPosLeft ) );
+    KDChartAxisParams leftparams;
+    leftparams = _chart->params()->axisParams( KDChartAxisParams::AxisPosLeft );
 /*    if( !y_max->text().isEmpty())
     {
         leftparams.setAxisAreaMode(KDChartAxisParams::AxisAreaModeMinMaxSize);

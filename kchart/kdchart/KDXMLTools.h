@@ -36,6 +36,7 @@
 #include <qdom.h>
 #include <qstring.h>
 #include <qcolor.h>
+#include <qbrush.h>
 #include <qsize.h>
 #include <qrect.h>
 #include <qfont.h>
@@ -50,6 +51,8 @@ namespace KDXML {
 
     void createBoolNode( QDomDocument& doc, QDomNode& parent,
             const QString& elementName, bool value );
+    void createOrientationNode( QDomDocument& doc, QDomNode& parent,
+            const QString& elementName, Qt::Orientation value );
     void createSizeNode( QDomDocument& doc, QDomNode& parent,
             const QString& elementName, const QSize& value );
     void createIntNode( QDomDocument& doc, QDomNode& parent,
@@ -76,7 +79,7 @@ namespace KDXML {
     void createPenNode( QDomDocument& doc, QDomNode& parent,
             const QString& elementName, const QPen& pen );
     void createDateTimeNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, 
+            const QString& elementName,
             const QDateTime& datetime );
     void createDateNode( QDomDocument& doc, QDomNode& parent,
             const QString& elementName, const QDate& date );
@@ -86,6 +89,7 @@ namespace KDXML {
     bool readStringNode( const QDomElement& element, QString& value );
     bool readDoubleNode( const QDomElement& element, double& value );
     bool readBoolNode( const QDomElement& element, bool& value );
+    bool readOrientationNode( const QDomElement& element, Qt::Orientation& value );
     bool readSizeNode( const QDomElement& element, QSize& value );
     bool readColorNode( const QDomElement& element, QColor& value );
     bool readBrushNode( const QDomElement& element, QBrush& brush );

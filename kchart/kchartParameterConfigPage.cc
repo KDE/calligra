@@ -248,7 +248,7 @@ void KChartParameterConfigPage::init()
 	log->setChecked(true);
     
      if ( _params->axisParams( KDChartAxisParams::AxisPosLeft ).axisDigitsBehindComma() ==
-            KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS )
+            KDCHART_AXIS_LABELS_AUTO_DIGITS )
         maximum_length->setEnabled(false);
     else
     {
@@ -321,8 +321,8 @@ void KChartParameterConfigPage::apply()
 
     // Set the scale for the Y axis (linear / logarithmic)
     {
-	KDChartAxisParams  params
-	    = _params->axisParams( KDChartAxisParams::AxisPosLeft );
+        KDChartAxisParams  params;
+        params = _params->axisParams( KDChartAxisParams::AxisPosLeft );
 
         if (lin->isChecked())
             params.setAxisCalcMode(KDChartAxisParams::AxisCalcLinear);
@@ -340,7 +340,7 @@ void KChartParameterConfigPage::apply()
         if ( maximum_length->isEnabled() )
             params.setAxisDigitsBehindComma( maximum_length->value() );
         else
-            params.setAxisDigitsBehindComma(KDChartAxisParams::AXIS_LABELS_AUTO_DIGITS );
+            params.setAxisDigitsBehindComma( KDCHART_AXIS_LABELS_AUTO_DIGITS );
 
         _params->setAxisParams( KDChartAxisParams::AxisPosLeft, params );
     }

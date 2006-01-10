@@ -29,23 +29,27 @@
 #ifndef __KDCHART_H__
 #define __KDCHART_H__
 
+#ifdef QSA
+#include <qsproject.h>
+#endif // QSA
+
 #include "KDChartGlobal.h"
 #include "KDChartTable.h"
 #include "KDChartUnknownTypeException.h"
 #include "KDChartParams.h"
 #include "KDChartDataRegion.h"
-#include <koffice_export.h>
 
 /** \file KDChart.h
   \brief Definition of a single entry-point to the charting engine for
   applications that wish to provide their own QPainter.
 
-  It is not useful to instantiate the KDChart class as it contains static
-  methods only.
+  It is not useful to instantiate the KDChart class as it only contains
+  static methods.
   */
 
 class KDChartPainter;
 class QPainter;
+class QSInterpreter;
 
 
 class KDCHART_EXPORT KDChart
@@ -53,12 +57,27 @@ class KDCHART_EXPORT KDChart
     friend void cleanupPainter();
 
     public:
+    static bool setupGeometry( QPainter*             painter,
+                               KDChartParams*        params,
+                               KDChartTableDataBase* data,
+                               const QRect&          drawRect );
+
+    static bool painterToDrawRect( QPainter* painter, QRect& drawRect );
+
     static void paint( QPainter*, KDChartParams*, KDChartTableDataBase*,
             KDChartDataRegionList* regions = 0,
-            const QRect* rect = 0 );
+            const QRect* rect = 0,
+            bool mustCalculateGeometry = true );
+
     static void print( QPainter*, KDChartParams*, KDChartTableDataBase*,
             KDChartDataRegionList* regions = 0,
-            const QRect* rect = 0 );
+            const QRect* rect = 0,
+            bool mustCalculateGeometry = true );
+
+#ifdef QSA
+    static void initInterpreter( QSInterpreter* );
+    static void initProject( QSProject* );
+#endif
 
     private:
     KDChart(); // prevent instantiations
@@ -68,6 +87,11 @@ class KDCHART_EXPORT KDChart
     static KDChartPainter* cpainter2;
     static KDChartParams::ChartType cpainterType;
     static KDChartParams::ChartType cpainterType2;
+
+#ifdef QSA
+    static QString globals();
+    static void privateInitInterpreter( QSInterpreter* interpreter );
+#endif
 };
 
 #endif
