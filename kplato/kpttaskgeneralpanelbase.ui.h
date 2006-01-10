@@ -11,7 +11,7 @@
 *****************************************************************************/
 
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -166,7 +166,7 @@ void TaskGeneralPanelBase::setEstimateFields( int mask )
 }
 
 
-void TaskGeneralPanelBase::setEstimateScales( int day )
+void TaskGeneralPanelBase::setEstimateScales( double day )
 {
     estimate->setFieldScale(0, day);
     estimate->setFieldRightscale(0, day);

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,13 +70,13 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     
     setEstimateFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
     if (workTime) {
-        kdDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours()<<endl;
-        m_dayLength = workTime->durationDay().hours();
+        //kdDebug()<<k_funcinfo<<"daylength="<<workTime->day()<<endl;
+        m_dayLength = workTime->day();
         setEstimateScales(m_dayLength);
     }
-    setEstimateFieldUnit(0, i18n("days"));
-    setEstimateFieldUnit(1, i18n("hours"));
-    setEstimateFieldUnit(2, i18n("minutes"));
+    setEstimateFieldUnit(0, i18n("days", "d"));
+    setEstimateFieldUnit(1, i18n("hours", "h"));
+    setEstimateFieldUnit(2, i18n("minutes", "m"));
     setEstimateType(task.effort()->type());
     
     setSchedulingType(task.constraint());
@@ -91,7 +91,7 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     } else {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime())); 
     }
-    kdDebug()<<k_funcinfo<<"Effort: "<<task.effort()->expected().toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"Effort: "<<task.effort()->expected().toString()<<endl;
     setEstimate(task.effort()->expected()); 
     setOptimistic(task.effort()->optimisticRatio());
     setPessimistic(task.effort()->pessimisticRatio());

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPlato::DurationWidget</class>
 <widget class="QWidget">
     <property name="name">
@@ -401,13 +401,20 @@
 <functions>
     <function access="private">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
+    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueMilliseconds( Q_INT64 milliseconds )</function>
+    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueSeconds( Q_INT64 seconds )</function>
+    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueMinutes( Q_INT64 mins )</function>
+    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueHours( Q_INT64 mins )</function>
+    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueDays( Q_INT64 mins )</function>
     <function returnType="Duration">value() const</function>
     <function>setVisibleFields( int fieldMask )</function>
     <function returnType="int">visibleFields()</function>
-    <function>setFieldLeftscale( int f, unsigned ls )</function>
-    <function>setFieldRightscale( int f, unsigned rs )</function>
-    <function>setFieldScale( int f, unsigned scale )</function>
+    <function>setFieldLeftscale( int f, double ls )</function>
+    <function>setFieldRightscale( int f, double rs )</function>
+    <function>setFieldScale( int f, double scale )</function>
     <function>setFieldUnit( int f, QString unit )</function>
+    <function access="private" specifier="non virtual" returnType="double">power( double m, int e )</function>
+    <function access="private" specifier="non virtual" returnType="double">fraction( QString number, int * exp )</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

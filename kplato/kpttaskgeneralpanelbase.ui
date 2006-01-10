@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>635</width>
+            <width>653</width>
             <height>401</height>
         </rect>
     </property>
@@ -572,7 +572,7 @@
     <slot>setEstimateType( int type )</slot>
     <slot>checkAllFieldsFilled()</slot>
     <slot>setEstimateFields( int mask )</slot>
-    <slot>setEstimateScales( int day )</slot>
+    <slot>setEstimateScales( double day )</slot>
     <slot>setEstimateFieldUnit( int field, QString unit )</slot>
     <slot>startDateChanged()</slot>
     <slot>startTimeChanged( const QTime &amp; time )</slot>
@@ -602,9 +602,13 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
-    <includehint>ktextedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>kptdurationwidget.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>kdatewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>kplato::durationwidget.h</includehint>
+    <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>

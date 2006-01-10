@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004 - 2006 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -105,7 +105,8 @@ class Duration {
         QString toString(Format format = Format_DayTime) const;
         static Duration fromString(const QString &s, Format format = Format_DayTime, bool *ok=0);
         
-        enum Unit { Unit_ms, Unit_s, Unit_m, Unit_h, Unit_d };
+        //NOTE: These must match fieldnumbers in duration widget!
+        enum Unit { Unit_d, Unit_h, Unit_m, Unit_s, Unit_ms };
         double toDouble(Unit u=Unit_ms) const { 
             if (u == Unit_ms) return (double)m_ms;
             else if (u == Unit_s) return (double)m_ms/1000.0;
