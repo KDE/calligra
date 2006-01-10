@@ -1470,11 +1470,60 @@ bool KoDocument::openFile()
         if ( status != KoFilter::OK )
         {
             QApplication::restoreOverrideCursor();
-            if ( status != KoFilter::UserCancelled &&
-                 status != KoFilter::BadConversionGraph &&
-                 d->m_autoErrorHandlingEnabled )
-                // ### TODO Any way of passing a better error message from the filter?
-                KMessageBox::error( 0L, i18n( "Could not open\n%1" ).arg( url().prettyURL( 0, KURL::StripFileProtocol ) ) );
+            
+            QString msg;
+            switch( status )
+            {
+                case KoFilter::OK: break;
+                
+                case KoFilter::CreationError:
+                    msg = i18n( "creation error" ); break;
+                    
+                case KoFilter::FileNotFound:
+                    msg = i18n( "file not found" ); break;
+                    
+                case KoFilter::StorageCreationError:
+                    msg = i18n( "can not create storage" ); break;
+                
+                case KoFilter::BadMimeType:
+                    msg = i18n( "bad MIME type" ); break;
+                
+                case KoFilter::EmbeddedDocError:
+                    msg = i18n( "error in embedded document" ); break;
+                
+                case KoFilter::WrongFormat:
+                    msg = i18n( "format is not recognized" ); break;
+                
+                case KoFilter::NotImplemented:
+                    msg = i18n( "not impelemented" ); break;
+                
+                case KoFilter::ParsingError:
+                    msg = i18n( "parsing error" ); break;
+                
+                case KoFilter::InternalError:
+                case KoFilter::UnexpectedEOF:
+                case KoFilter::UnexpectedOpcode:
+                case KoFilter::StupidError: // ?? what is this ??
+                case KoFilter::UsageError:
+                    msg = i18n( "internal error" ); break;
+                
+                case KoFilter::OutOfMemory:
+                    msg = i18n( "Out of Memory" ); break;
+
+                case KoFilter::UserCancelled:
+                case KoFilter::BadConversionGraph:
+                    // intentionally we do not prompt the error message here
+                    break;
+                    
+                default: msg = i18n( "unknown error" ); break;
+            } 
+            
+            if( d->m_autoErrorHandlingEnabled && !msg.isEmpty())
+            {
+                QString errorMsg( i18n( "Could not open\n%1\nReason: %2" ) );
+                QString docUrl = url().prettyURL( 0, KURL::StripFileProtocol );
+                KMessageBox::error( 0L, errorMsg.arg(docUrl).arg(msg) );
+            }
 
             d->m_bLoading = false;
             return false;
