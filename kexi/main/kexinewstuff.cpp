@@ -60,6 +60,9 @@ KexiNewStuff::install(const QString &fileName)
 	archiveDir->copyTo(destDir);
 	archive.close();
 
+	// Prevent GHNS to deny downloading a second time.
+	KGlobal::config()->deleteGroup("KNewStuffStatus");
+
 	return true;
 }
 
