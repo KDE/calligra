@@ -54,9 +54,9 @@ class KARBONBASE_EXPORT VTool : public QObject
 
 public:
 	/**
-	 * Constructs a new tool connected to the specified karbon part.
+	 * Constructs a new tool connected to the specified karbon view.
 	 * 
-	 * @param part the karbon part the tool is connected to
+	 * @param view the karbon view the tool is connected to
 	 * @param name unused
 	 */
 	VTool( KarbonView *view, const char* name );
