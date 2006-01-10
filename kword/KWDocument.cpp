@@ -3282,12 +3282,7 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
     saveOasisCustomFied( writer );
     if ( m_processingType == WP ) {
 
-        // Write out the main text frameset's contents
-        KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
-        if ( frameset ) {
-            frameset->saveOasisContent( writer, context );
-        }
-        // Write out the other (non-inline) framesets
+        // Write out the non-inline framesets first; OOo wants it that way...
         QPtrListIterator<KWFrameSet> fit = framesetsIterator();
         ++fit; // skip main text frameset
         for ( ; fit.current() ; ++fit ) {
@@ -3299,6 +3294,12 @@ void KWDocument::saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) 
             {
                 fs->saveOasis( writer, context, true );
             }
+        }
+
+        // Write out the main text frameset's contents
+        KWTextFrameSet *frameset = dynamic_cast<KWTextFrameSet *>( m_lstFrameSet.getFirst() );
+        if ( frameset ) {
+            frameset->saveOasisContent( writer, context );
         }
 
     } else { // DTP mode: all framesets are equal
