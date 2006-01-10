@@ -31,12 +31,14 @@ class Workbook::Private
 public:
   std::vector<Sheet*> sheets;
   bool autoCalc;
+  bool passwordProtected;
 };
 
 Workbook::Workbook()
 {
   d = new Workbook::Private();
   d->autoCalc = true;
+  d->passwordProtected = false;
 }
 
 Workbook::~Workbook()
@@ -94,4 +96,17 @@ void Workbook::setAutoCalc( bool a )
 {
   d->autoCalc = a;
 }
+
+bool Workbook::isPasswordProtected() const
+{
+  return d->passwordProtected;
+}
+
+void Workbook::setPasswordProtected( bool p )
+{
+  d->passwordProtected = p;
+}
+
+
+
 

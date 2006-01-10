@@ -82,6 +82,10 @@ public:
    * Sets the automatic calculation.
    */
   void setAutoCalc( bool a );
+
+  
+  bool isPasswordProtected() const;  
+  void setPasswordProtected( bool p );
   
 private:
   // no copy or assign
