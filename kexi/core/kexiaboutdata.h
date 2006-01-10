@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,8 +41,8 @@ KAboutData *newKexiAboutData()
 {
 	KAboutData *aboutData=new KAboutData( "kexi", KEXI_APP_NAME,
 		KEXI_VERSION_STRING, description, KAboutData::License_LGPL_V2,
-		I18N_NOOP(	"(c) 2002-2005, Kexi Team\n"
-					"(c) 2003-2005, OpenOffice Polska Ltd.\n"),
+		I18N_NOOP(	"(c) 2002-2006, Kexi Team\n"
+					"(c) 2003-2006, OpenOffice Polska Ltd.\n"),
 		I18N_NOOP(	"This software is developed by Kexi Team - an international group\n"
 					"of independent developers, with additional assistance and support\n"
 					"from the OpenOffice Polska company.\n\n"
