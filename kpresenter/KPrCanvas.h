@@ -592,6 +592,13 @@ protected:
     //void drawCubicBezierCurve( int _dx, int _dy );
     void endDrawCubicBezierCurve();
 
+    /**
+     * @brief Redraw the curve defined in m_pointArray
+     *
+     * @param p painter used for drawing
+     */
+    void redrawCubicBezierCurve( QPainter &p );
+
 
 #ifndef NDEBUG
     void printRTDebug( int info );
@@ -708,6 +715,20 @@ private:
      * @param pointArray the points in coordinate position
      */
     KoPointArray getObjectPoints( const KoPointArray &pointArray );
+
+
+    /**
+     * @brief Update m_insertRect 
+     *
+     * This will set the bottom right corner of the insert rect to
+     * the given point. If the AltButton is pressed the insert rect 
+     * is moved with its bottom right to the given point.
+     *
+     * @param point the bottom right point of the inserted object
+     * @param The state of the mouse and modifier buttons
+     *
+     */
+    void updateInsertRect( const KoPoint &point, Qt::ButtonState state );
 
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
