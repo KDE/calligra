@@ -112,6 +112,9 @@ public:
 	 */
 	virtual uint priority() { return 0; }
 
+	/**
+	 * The tool icon name.
+	 */
 	QString icon() { return m_action->icon(); }
 
 	/**
@@ -133,14 +136,25 @@ public:
 	 */
 	virtual void refreshUnit() {}
 
+	/**
+	 * Called after tool creation. A tool is supposed to hook its associated action 
+	 * into the specified action collection here.
+	 */
 	virtual void setup(KActionCollection *) {}
 
+	/**
+	 * Returns the tool's associated action object.
+	 *
+	 * @return the associated action
+	 */
 	KRadioAction *action() const { return m_action; }
 
 	/**
 	 * Draws the actual tool state.
+	 *
+	 * @param painter the painter on which to paint
 	 */
-	virtual void draw( VPainter* painter ) {}
+	virtual void draw( VPainter* painter ) { Q_UNUSED( painter ); }
 
 public slots:
 	/**
@@ -290,8 +304,10 @@ protected:
 	 */
 	bool altPressed() const { return m_altPressed; }
 
+	/** The tool's action object. */
 	KRadioAction *m_action;
 
+	/** Helper function. Returns the parent view's toolcontroller. */
 	VToolController *toolController() const;
 
 private:
