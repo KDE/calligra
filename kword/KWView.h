@@ -367,6 +367,7 @@ public slots:
     void frameSelectedChanged();
     void docStructChanged(int type);
     void documentModified( bool );
+    void changeOverwriteMode( bool );
     void slotHRulerDoubleClicked();
     void slotHRulerDoubleClicked( double );
     void slotUnitChanged(KoUnit::Unit);
@@ -777,6 +778,7 @@ private: // variables
     KStatusBarLabel* m_sbPageLabel; ///< 'Current page number and page count' label
     KStatusBarLabel* m_sbModifiedLabel;
     KStatusBarLabel* m_sbFramesLabel; ///< Info about selected frames
+    KStatusBarLabel* m_sbOverwriteLabel;
     KStatusBarLabel* m_sbUnitLabel;
     KStatusBarLabel* m_sbZoomLabel;
 

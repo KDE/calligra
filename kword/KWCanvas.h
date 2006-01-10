@@ -263,6 +263,8 @@ signals:
     // Emitted when the document structure has changed
     // ### DF: IMHO this should be only emitted by KWDocument (e.g. addFrameSet)
     void docStructChanged(int _type);
+    // Emitted when the insert key is pressed
+    void overwriteModeChanged( bool m_overwriteMode );
 
     void updateRuler();
 

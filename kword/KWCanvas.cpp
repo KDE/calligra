@@ -1813,8 +1813,10 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 else if ( keyev->key() == Key_Insert && keyev->state() == 0 ) {
                     m_overwriteMode = !m_overwriteMode;
                     KWTextFrameSetEdit *edit = currentTextEdit();
-                    if ( edit )
+                    if ( edit ) {
                         edit->setOverwriteMode( m_overwriteMode );
+                        emit overwriteModeChanged( m_overwriteMode );
+                    }
                     kdDebug()<<"Insert is pressed, overwrite mode: "<< m_overwriteMode << endl;
                 }
                 else // normal key processing

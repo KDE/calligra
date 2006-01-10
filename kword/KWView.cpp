@@ -280,6 +280,7 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_sbPageLabel = 0;
     m_sbModifiedLabel = 0;
     m_sbFramesLabel = 0;
+    m_sbOverwriteLabel = 0;
     m_sbZoomLabel = 0;
     m_sbUnitLabel = 0;
     if ( KStatusBar* sb = statusBar() ) // No statusbar in e.g. konqueror
@@ -295,6 +296,10 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
         m_sbFramesLabel = new KStatusBarLabel( QString::null, 0, sb );
         m_sbFramesLabel->setAlignment( AlignLeft | AlignVCenter );
         addStatusBarItem( m_sbFramesLabel, 1 );
+
+        m_sbOverwriteLabel = new KStatusBarLabel( ' ' + i18n( "INSRT" ) + ' ', 0, sb );
+        m_sbOverwriteLabel->setAlignment( AlignHCenter | AlignVCenter );
+        addStatusBarItem( m_sbOverwriteLabel, 0 );
 
         m_sbZoomLabel = new KStatusBarLabel( ' ' + QString::number( m_doc->zoom() ) + "% ", 0, sb );
         m_sbZoomLabel->setAlignment( AlignHCenter | AlignVCenter );
@@ -337,6 +342,9 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
 
     connect( m_gui->canvasWidget(), SIGNAL( currentMouseModeChanged(int) ),
              this, SLOT( showMouseMode(int) ) );
+
+    connect( m_gui->canvasWidget(), SIGNAL( overwriteModeChanged( bool ) ),
+             this, SLOT( changeOverwriteMode( bool ) ) );
 
     // Cut and copy are directly connected to the selectionChanged signal
     if ( m_doc->isReadWrite() )
@@ -5960,6 +5968,17 @@ void KWView::documentModified( bool b )
         m_sbModifiedLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "action-modified", KIcon::Small ) );
     else
         m_sbModifiedLabel->setText( "   " );
+}
+
+void KWView::changeOverwriteMode( bool b )
+{
+    if ( !statusBar() )
+        return;
+
+    if ( b )
+        m_sbOverwriteLabel->setText( ' ' + i18n( "OVER" ) + ' ' );
+    else
+        m_sbOverwriteLabel->setText( ' ' + i18n( "INSRT" ) + ' ' );
 }
 
 void KWView::setViewFrameBorders(bool b)
