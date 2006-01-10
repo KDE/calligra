@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,16 +44,16 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 	
 
 	protected slots:
-		void slotComboHighlighted(int);
+		void slotActionTypeSelected(int);
 		void slotOk();
 		void closeDialog();
 
-	private:
+	protected:
+		void showKActionListView();
+		void showScriptListView();
+
 		class KexiActionSelectionDialogPrivate;
 		KexiActionSelectionDialogPrivate* d;
-
-		void setActionView();
-		void setScriptView();
 };
 
 #endif

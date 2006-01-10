@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -103,16 +103,29 @@ class KexiActionSelectionDialog::KexiActionSelectionDialogPrivate
 {
 public:
 	KexiMainWindow* mainWin;
-	KListView* listview;
+	KListView* kactionListView;
+	KListView* scriptListView;
 	QVBox *mainbox;
 	QString currentActionName;
-	KexiActionSelectionDialogPrivate() : listview(0) {}
+	KexiActionSelectionDialogPrivate() 
+		: kactionListView(0), scriptListView(0) 
+	{}
 };
+
+//-------------------------------------
+
+//! actions IDs for the combo box
+#define ACTION_TYPE_NO_ACTION_ID 0
+#define ACTION_TYPE_KACTION_ID 1
+#define ACTION_TYPE_SCRIPT_ID 2
+
+//-------------------------------------
 
 KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
 	const QString& _currentActionName, const QCString& actionWidgetName)
 
-	: KDialogBase(parent, "actionSelectorDialog", true, QString::null, KDialogBase::Ok | KDialogBase::Cancel )
+	: KDialogBase(parent, "actionSelectorDialog", true, i18n("Assigning Action to Command Button"), 
+		KDialogBase::Ok | KDialogBase::Cancel )
 	, d( new KexiActionSelectionDialogPrivate() )
 {
 	d->mainWin = mainWin;
@@ -120,12 +133,19 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 
 	QVBox* box = makeVBoxMainWidget();
 
-	QLabel *lbl = new QLabel(i18n("Select Action to be executed after clicking \"%1\" button:").arg(actionWidgetName), box);
+	QLabel *lbl = new QLabel(i18n("Select Action to be executed after clicking \"%1\" button.")
+		.arg(actionWidgetName), box);
 	lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::WordBreak);
 
-	QComboBox* combobox = new QComboBox(box);
+	QWidget *w = new QWidget(box);
+	QHBoxLayout *lyr = new QHBoxLayout(w, 0, KDialogBase::spacingHint());
+	QComboBox* combobox = new QComboBox(w);
 	combobox->insertItem( i18n("No Action") );
-	combobox->insertItem( i18n("Actions") );
+	combobox->insertItem( i18n("Application") );
+	lbl = new QLabel(combobox, i18n("Action type:").arg(actionWidgetName), w);
+	lyr->addWidget(lbl);
+	lyr->addWidget(combobox);
+	lyr->addStretch(1);
 	
 	// We use the scriptpart to determinate if the Kexi ScriptPart-plugin is
 	// installed and if we like to show it in our list of actions.
@@ -141,18 +161,17 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 
 	if (d->currentActionName.startsWith("script:")) {
 		if(scriptinfo) {
-			combobox->setCurrentItem(2);
-			slotComboHighlighted(2);
+			combobox->setCurrentItem(ACTION_TYPE_SCRIPT_ID);
+			slotActionTypeSelected(ACTION_TYPE_SCRIPT_ID);
 		}
 		
 	}
 	else if (d->currentActionName.startsWith("kaction:")) {
-		combobox->setCurrentItem(1);
-		slotComboHighlighted(1);
+		combobox->setCurrentItem(ACTION_TYPE_KACTION_ID);
+		slotActionTypeSelected(ACTION_TYPE_KACTION_ID);
 	}
 	//else "No Action"
-
-	connect(combobox, SIGNAL(highlighted(int)), this, SLOT(slotComboHighlighted(int)));
+	connect(combobox, SIGNAL(activated(int)), this, SLOT(slotActionTypeSelected(int)));
 	connect(this, SIGNAL(finished()), SLOT(closeDialog()));
 }
 
@@ -161,29 +180,42 @@ KexiActionSelectionDialog::~KexiActionSelectionDialog()
 	delete d;
 }
 
-void KexiActionSelectionDialog::setActionView()
+void KexiActionSelectionDialog::showKActionListView()
 {
-	delete d->listview;
-	d->listview = new ActionsListView(d->mainbox, this);
-	d->listview->show();
+	if (d->scriptListView)
+		d->scriptListView->hide();
+	if (!d->kactionListView) {
+		d->kactionListView = new ActionsListView(d->mainbox, this);
+	}
+	d->kactionListView->show();
 }
 
-void KexiActionSelectionDialog::setScriptView()
+void KexiActionSelectionDialog::showScriptListView()
 {
-	delete d->listview;
-	d->listview = new ScriptsListView(d->mainbox, this);
-	d->listview->show();
+	if (d->kactionListView)
+		d->kactionListView->hide();
+	if (!d->kactionListView) {
+		d->scriptListView = new ScriptsListView(d->mainbox, this);
+	}
+	d->scriptListView->show();
 }
 
-void KexiActionSelectionDialog::slotComboHighlighted(int index)
+void KexiActionSelectionDialog::slotActionTypeSelected(int index)
 {
 	switch(index) {
-		case 1: setActionView(); break;
-		case 2: setScriptView(); break;
-		default: // "No Action"
-			delete d->listview;
-			d->listview = 0;
+		case ACTION_TYPE_NO_ACTION_ID:
+			if (d->kactionListView)
+				d->kactionListView->hide();
+			if (d->scriptListView)
+				d->scriptListView->hide();
 			break;
+		case ACTION_TYPE_KACTION_ID:
+			showKActionListView();
+			break;
+		case ACTION_TYPE_SCRIPT_ID:
+			showScriptListView();
+			break;
+		default:;
 	}
 }
 
@@ -199,13 +231,15 @@ QString KexiActionSelectionDialog::currentActionName() const
 
 void KexiActionSelectionDialog::slotOk()
 {
-	if(d->listview && d->listview->selectedItem()) {
-		ActionSelectorDialogListItem *item = static_cast<ActionSelectorDialogListItem*>( d->listview->selectedItem() );
-		if(item)
-			d->currentActionName = item->data;
+	QListViewItem *item = 
+		(d->kactionListView && d->kactionListView->isVisible()) ? d->kactionListView->selectedItem() : 0;
+	if (!item)
+		item = (d->scriptListView && d->scriptListView->isVisible()) ? d->scriptListView->selectedItem() : 0;
+	if (item) {
+		d->currentActionName = dynamic_cast<ActionSelectorDialogListItem*>( item )->data;
 	}
 	else {
-		d->currentActionName = ""; // "No Action"
+		d->currentActionName = QString::null; // "No Action"
 	}
 	KDialogBase::slotOk();
 }
