@@ -41,7 +41,7 @@
 </copyright>
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-07-13</date>
+<date>2006-01-10</date>
 <releaseinfo>1.4.88</releaseinfo>
 
 <abstract>
@@ -186,7 +186,7 @@ is shown below.
 <title>Command Reference</title>
 
 <sect1 id="kformula-mainwindow">
-<title>The main &kformula; window</title>
+<title>The Main &kformula; Window</title>
 
 <sect2>
 <title>The <guimenu>File</guimenu> Menu</title>
@@ -269,6 +269,15 @@ document.</action></para></listitem>
 
 <varlistentry>
 <term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Invokes &kmail; so you can email the file.
+Note: You still have to attach the file to the email.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
 </shortcut>
@@ -293,15 +302,6 @@ document.</action></para></listitem>
 </menuchoice></term>
 <listitem><para><action>Provides a dialog box where you can enter your name,
 email address and a short description about the document.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>File</guimenu>
-<guimenuitem>Mail...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Invokes &kmail; so you can email the file.
-Note: You still have to attach the file to the email.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -408,7 +408,7 @@ either Cut or Copy.</action></para></listitem>
 <keycombo action="simul">&Ctrl;<keycap>R</keycap></keycombo>
 </shortcut>
 <guimenu>Edit</guimenu>
-<guimenuitem>Remove enclosing element</guimenuitem>
+<guimenuitem>Remove Enclosing Element</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Removes enclosing braces, brackets or absolute value bars.
 This action takes place on the braces just outside the cursor.</action></para></listitem>
@@ -428,7 +428,7 @@ This action takes place on the braces just outside the cursor.</action></para></
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
-<guimenuitem>Edit Formula String</guimenuitem>
+<guimenuitem>Edit Formula String...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Brings up an editor where you can edit the existing formula.</action></para></listitem>
 </varlistentry>
@@ -447,9 +447,6 @@ section for details.</para>
 
 <varlistentry>
 <term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>2</keycap></keycombo>
-</shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Root</guimenuitem>
@@ -459,9 +456,6 @@ section for details.</para>
 
 <varlistentry>
 <term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>3</keycap></keycombo>
-</shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Fraction</guimenuitem>
@@ -481,9 +475,6 @@ type ( to insert a pair of brackets.</action></para></listitem>
 
 <varlistentry>
 <term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>5</keycap></keycombo>
-</shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Integral</guimenuitem>
@@ -493,9 +484,6 @@ type ( to insert a pair of brackets.</action></para></listitem>
 
 <varlistentry>
 <term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>7</keycap></keycombo>
-</shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Sum</guimenuitem>
@@ -506,9 +494,6 @@ type ( to insert a pair of brackets.</action></para></listitem>
 
 <varlistentry>
 <term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>4</keycap></keycombo>
-</shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Product</guimenuitem>
@@ -518,9 +503,6 @@ type ( to insert a pair of brackets.</action></para></listitem>
 
 <varlistentry>
 <term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Ctrl;<keycap>8</keycap></keycombo>
-</shortcut>
 <guimenu>Element</guimenu>
 <guisubmenu>Add</guisubmenu>
 <guimenuitem>Add Matrix...</guimenuitem>
@@ -812,7 +794,7 @@ icons that pertain to matrix creation and editing.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guimenuitem>Syntax highlighting</guimenuitem>
+<guimenuitem>Syntax Highlighting</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Checking this item determines if the numbers will be 
 displayed in color.</action></para></listitem>
@@ -909,7 +891,7 @@ is used to add additional buttons to the toolbars.</para>
 </screenshot>
 
 <para>  make sure <guilabel>File
-  &lt;KOfficeShell&gt;</guilabel> is displayed in the top combo box.
+  &lt;&koffice;&gt;</guilabel> is displayed in the top combo box.
 </para></listitem>
 
 <listitem><para>
@@ -944,17 +926,12 @@ click on <userinput><guilabel>OK</guilabel></userinput>.
 <para>The <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure
 &kformula;...</guimenuitem></menuchoice> is where the font sizes are
-selected and additional fonts are installed.</para>
+selected.</para>
 
 <itemizedlist>
 <listitem>
 <para>The <guilabel>Formula</guilabel> section allows you to select fonts
 and font highlight colors.</para>
-</listitem>
-<listitem>
-
-<para>The <link linkend="fonts"><guilabel>Fonts</guilabel></link> section allows you to install
-additional fonts. </para>
 </listitem>
 </itemizedlist>
 </sect2>
@@ -1232,11 +1209,11 @@ http://www.w3.org/Amaya/Distribution/esstix.tar.gz</ulink>
 After downloading the fonts, install them into a folder called
 <filename class="directory">esstix</filename>. You can unpack them with 
 the &kde; application &ark;. <mousebutton>Right</mousebutton> click on
-<filename>esstix.tar.gz</filename> and select <guimenuitem>Extract
-here...</guimenuitem>.   
+<filename>esstix.tar.gz</filename> and select <menuchoice><guimenu>Extract</guimenu>
+<guimenuitem>Extract Here</guimenuitem></menuchoice>.   
 Then start the &kde; font installer by going to the K menu and
 selecting the command <menuchoice><guimenu>Control 
-Center</guimenu><guimenuitem>System</guimenuitem><guimenuitem>
+Center</guimenu><guimenuitem>System Administration</guimenuitem><guimenuitem>
 Font Installer</guimenuitem></menuchoice> You should get the following
 screen:</para>
 
@@ -1327,7 +1304,7 @@ fonts</phrase></textobject>
 	</mediaobject>
 </screenshot>
 
-<para>The <guilabel>Symbol font type</guilabel> are fonts named Symbol shipped with most distributions and the <guilabel>Computer modern (TeX) style</guilabel> fonts are the bakoma fonts mentionned above.
+<para>The <guilabel>Symbol font style</guilabel> are fonts named Symbol shipped with most distributions and the <guilabel>Computer modern (TeX) style</guilabel> fonts are the bakoma fonts mentionned above.
 </para>
 
 </sect1>

@@ -34,7 +34,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-12-02</date>
+<date>2006-01-10</date>
 <releaseinfo>1.5.0</releaseinfo>
 
 <abstract>
@@ -119,7 +119,7 @@ chart with a file dialog.
 <para>
 For now we will start with the default template. Select
 <guimenu>Charts</guimenu> in the left area and then select
-<guimenu>Bar chart</guimenu> in the main template area. Normally
+<guimenu>Bar Chart</guimenu> in the main template area. Normally
 this template should already be selected after choosing
 <guimenu>Charts</guimenu>. 
 </para>
@@ -334,8 +334,8 @@ type by clicking on the <inlinemediaobject><imageobject>
 </para>
 <para>
 To get to the chart configuration dialog, select <menuchoice>
-<guimenu>Edit</guimenu><guisubmenu>Chart</guisubmenu>
-<guimenuitem>Configure Chart...</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Chart...</guimenuitem>
 </menuchoice> from the menu or click on the
 <inlinemediaobject><imageobject>
 <imagedata fileref="cr22-action-options.png" format="PNG"/>
@@ -384,9 +384,9 @@ the subtype can be set through this configuration dialog.
 </para>
 </sect2>
 <sect2 id="config-titlefooter">
-<title>Title and Footer</title>
+<title>Header and Footer</title>
 <screenshot>
-<screeninfo>Configuration page 3 - Title and Footer</screeninfo>
+<screeninfo>Configuration page 3 - Header and Footer</screeninfo>
   <mediaobject>
     <imageobject>
       <imagedata fileref="kchart-config3.png" format="PNG"/>
@@ -863,11 +863,11 @@ graph. It also determines the size of the slices in a pie chart.
 <title>Command Reference</title>
 
 <sect1 id="kchart-menus">
-<title>The main &kchart; window</title>
+<title>The Main &kchart; Window</title>
 
 <sect2>
 <title>The <guimenu>File</guimenu> Menu</title>
-<para>
+
 <variablelist>
 <varlistentry>
 <term><menuchoice>
@@ -879,6 +879,7 @@ graph. It also determines the size of the slices in a pie chart.
 </menuchoice></term>
 <listitem><para><action>Creates a new document</action></para></listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <shortcut>
@@ -888,6 +889,7 @@ graph. It also determines the size of the slices in a pie chart.
 <guimenuitem>Open...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens a document</action></para></listitem>
+
 </varlistentry>
 <varlistentry>
 <term><menuchoice>
@@ -896,6 +898,7 @@ graph. It also determines the size of the slices in a pie chart.
 </menuchoice></term>
 <listitem><para><action>Opens a recently saved document</action></para></listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <shortcut>
@@ -907,10 +910,11 @@ graph. It also determines the size of the slices in a pie chart.
 <listitem><para><action>Saves the chart to the current file.</action> If the chart
 has not yet been saved the file dialog is shown.</para></listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Save As</guimenuitem>
+<guimenuitem>Save As...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Saves the document, the file dialog is used.</action></para></listitem>
 </varlistentry>
@@ -948,6 +952,14 @@ among many image formats like PNG, SVG, &krita;, Gimp or JPG.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Sends the chart as an email attachment.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
 <guimenuitem>Import Data...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Imports values from a CSV (Comma Separated Values) file, much like
@@ -972,26 +984,27 @@ based on this document.
 <keycombo action="simul">&Ctrl;<keycap>P</keycap></keycombo>
 </shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Print</guimenuitem>
+<guimenuitem>Print...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Prints the document</action></para>
 <important><para>Make sure the proper print system is selected in the
 <quote>Print system currently used:</quote> section. This option can
-be seen after clicking on the <guimenu>Expand</guimenu> button.</para></important></listitem>
-
+be seen after clicking on the <guimenu>Options>></guimenu> button.</para></important></listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Print preview</guimenuitem>
+<guimenuitem>Print Preview...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Displays a preview of what the printed
 document will look like.</action></para></listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Document Information...</guimenuitem>
+<guimenuitem>Document Information</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens a dialog box</action> where you can enter
 information about your chart.</para>
@@ -1000,13 +1013,7 @@ displayed in the &konqueror; file browser as a tooltip. The tooltips
 are pop-ups that show the contents of a file when you move your mouse over
 the file icon.</para></note></listitem>
 </varlistentry>
-<varlistentry>
-<term><menuchoice>
-<guimenu>File</guimenu>
-<guimenuitem>Mail...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Sends the chart as an email attachment.</action></para></listitem>
-</varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <shortcut>
@@ -1017,6 +1024,7 @@ the file icon.</para></note></listitem>
 </menuchoice></term>
 <listitem><para><action>Closes the current chart.</action></para></listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
 <shortcut>
@@ -1027,54 +1035,78 @@ the file icon.</para></note></listitem>
 </menuchoice></term>
 <listitem><para><action>Quits</action> &kchart;</para></listitem>
 </varlistentry>
+
 </variablelist>
-</para>
 </sect2>
 
 <sect2>
 <title>The <guimenu>Edit</guimenu> Menu</title>
-<para>
+
 <variablelist>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
 <guimenuitem>Edit Data...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the &dataeditor;.</action></para>
-</listitem>
+<listitem><para><action>Opens the &dataeditor;.</action></para></listitem>
 </varlistentry>
+</variablelist>
+</sect2>
+
+<sect2>
+<title>The <guimenu>Format</guimenu> Menu</title>
+
+<variablelist>
 <varlistentry>
 <term><menuchoice>
-<guimenu>Edit</guimenu>
-<guimenuitem>Configure...</guimenuitem>
+<guimenu>Format</guimenu>
+<guimenuitem>Chart...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Dialogs for configuring the
-chart.</action></para>
+<listitem><para><action>Opens</action> the <link linkend="configurationinterface">&kchart; Configuration</link>
+dialog.</para>
 </listitem>
 </varlistentry>
 </variablelist>
-</para>
+
 <sect3>
 <title>The Configure Tabs</title>
 <variablelist>
 <varlistentry>
 <term><menuchoice>
-<guimenu>Data Format</guimenu>
+<guimenu>Data Format...</guimenu>
 </menuchoice></term>
 <listitem><para><action>Swap row and colums (x/y flipping).</action></para>
 </listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
-<guimenu>Colors</guimenu>
+<guimenu>Chart Sub-type...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Changes the arrangement of bar graphs.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Header &amp; Footer...</guimenu>
+</menuchoice></term>
+<listitem><para><action>Enter the titles you want for your graph here.</action></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Colors...</guimenu>
 </menuchoice></term>
 <listitem><para><action>Select graph colors</action>, grid colors and
 title colors here.</para>
 </listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
-<guimenu>Font</guimenu>
+<guimenu>Font...</guimenu>
 </menuchoice></term>
 <listitem><para><action>Select font style and size</action> here. The
 series colors can be selected here also. The series refer to the
@@ -1084,53 +1116,32 @@ individual graphs. Each graphed set of data is a series.</para>
 
 <varlistentry>
 <term><menuchoice>
-<guimenu>Background</guimenu>
+<guimenu>Background...</guimenu>
 </menuchoice></term>
 <listitem><para><action>Select the background color</action> for your
 graph.</para>
 <note><para>The picture backgrounds do not work at this time.</para></note>
 </listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
-<guimenu>Legend</guimenu>
+<guimenu>Legend...</guimenu>
 </menuchoice></term>
 <listitem><para><action>Change the location of the legend</action> box. The
 color of the legend box can be changed also. The legend box contains
 the color key to the graph series.</para>
 </listitem>
 </varlistentry>
+
 <varlistentry>
 <term><menuchoice>
-<guimenu>Axes</guimenu>
+<guimenu>Page Layout...</guimenu>
 </menuchoice></term>
-<listitem><para><action>The axes can be turned on</action> or off
-here.</para>
-<note><para>Not all the features work here.</para></note>
+<listitem><para><action>Set the <guilabel>Margins</guilabel> of the page</action> here.</para>
 </listitem>
 </varlistentry>
-<varlistentry>
-<term><menuchoice>
-<guimenu>3D Parameters</guimenu>
-</menuchoice></term>
-<listitem><para><action>The perspective for the 3d bar graphs can be
-set here. </action></para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<guimenu>Chart Subtype</guimenu>
-</menuchoice></term>
-<listitem><para><action>Changes the arrangement of bar graphs.</action></para>
-</listitem>
-</varlistentry>
-<varlistentry>
-<term><menuchoice>
-<guimenu>Header/Footer</guimenu>
-</menuchoice></term>
-<listitem><para><action>Enter the titles you want for your graph here.</action></para>
-</listitem>
-</varlistentry>
+
 </variablelist>
 </sect3>
 </sect2>
@@ -1145,7 +1156,8 @@ set here. </action></para>
 <guimenu>Settings</guimenu>
 <guimenuitem>Toolbars</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Show/Hide various Toolbars.</action></para></listitem>
+<listitem><para><action>Show/Hide various toolbars</action> (<guimenuitem>File</guimenuitem>,
+<guimenuitem>Actions</guimenuitem> and <guimenuitem>Types</guimenuitem>).</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1166,6 +1178,13 @@ set here. </action></para>
 
 </variablelist>
 </para>
+
+</sect2>
+
+<sect2>
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
 
 </sect2>
 
@@ -1195,7 +1214,7 @@ Click on the <guilabel>Custom</guilabel> button.
 </para></listitem>
 
 <listitem><para>
-Next click on the <guilabel>Primary Shortcut</guilabel> button.
+Next click on the <guilabel>Primary shortcut:</guilabel> button.
 </para></listitem>
 
 <listitem><para>
@@ -1242,7 +1261,7 @@ is used to add additional buttons to the toolbars.</para>
 </screenshot>
 
 <para>  make sure <guilabel>File
-  &lt;KOfficeShell&gt;</guilabel> is displayed in the top combo box.
+  &lt;&koffice;&gt;</guilabel> is displayed in the top combo box.
 </para></listitem>
 
 <listitem><para>
@@ -1269,17 +1288,8 @@ click on <userinput><guilabel>OK</guilabel></userinput>
 
 </sect2>
 
-
-<sect2>
-<title>The <guimenu>Help</guimenu> Menu</title>
-
-&help.menu.documentation;
-
-</sect2>
-
 </sect1>
 </chapter>
-
 
 <chapter id="credits">
 <title>Credits and License</title>
