@@ -65,7 +65,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
     format = "PNG";
   } else if(to == "image/jpeg") {
     format = "JPEG";
-  } else if(to == "image/bmp") {
+  } else if(to == "image/x-bmp") {
     format = "BMP";
   } else if(to == "image/x-eps") {
     format = "EPS";
@@ -83,9 +83,9 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
     format = "TGA";
   } else if(to == "image/x-xbitmap") {
     format = "XBM";
-  } else if(to == "image/x-xpixmap") {
+  } else if(to == "image/x-xpm") {
     format = "XPM";
-  } else if(to == "image/jpeg2000") {
+  } else if(to == "image/jp2") {
     format = "JP2";
   } else {
     return KoFilter::BadMimeType;
