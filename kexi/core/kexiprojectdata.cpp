@@ -76,6 +76,7 @@ KexiProjectData::KexiProjectData( const KexiProjectData& pdata )
  , d( 0 )
 {
 	*this = pdata;
+	autoopenObjects = pdata.autoopenObjects;
 /*
 	d->connData = *pdata.connectionData();
 	setDatabaseName(pdata.databaseName());
