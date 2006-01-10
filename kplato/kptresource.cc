@@ -374,7 +374,7 @@ QPtrList<Appointment> Resource::appointments() {
     QPtrList<Appointment> lst;
     if (m_currentSchedule)
         lst = m_currentSchedule->appointments();
-    kdDebug()<<k_funcinfo<<lst.count()<<endl;
+    //kdDebug()<<k_funcinfo<<lst.count()<<endl;
     return lst;
 }
 
@@ -403,7 +403,7 @@ bool Resource::addAppointment(Appointment *appointment, Schedule &sch) {
 }
 
 void Resource::addAppointment(NodeSchedule *node, DateTime &start, DateTime &end, double load) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     ResourceSchedule *s = findSchedule(node->id());
     if (s == 0) {
         s = createSchedule(node->name(), node->type(), node->id());
@@ -441,7 +441,7 @@ ResourceSchedule *Resource::createSchedule(QString name, int type, int id) {
 }
 
 void Resource::makeAppointment(NodeSchedule *node) {
-    kdDebug()<<k_funcinfo<<m_name<< ": "<<node->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<< ": "<<node->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
     Calendar *cal = calendar();
     if (!cal) {
         kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
@@ -451,7 +451,7 @@ void Resource::makeAppointment(NodeSchedule *node) {
     DateTime time = node->startTime;
     DateTime end = node->startTime+node->duration;
     while (time < end) {
-        kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
+        //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
         if (!cal->hasInterval(time, end)) {
             //kdDebug()<<time.toString()<<" to "<<end.toString()<<": No (more) interval(s)"<<endl;
             return; // nothing more to do
@@ -465,18 +465,28 @@ void Resource::makeAppointment(NodeSchedule *node) {
 }
 
 // the amount of effort we can do within the duration
-Duration Resource::effort(const DateTime &start, const Duration &duration, bool *ok) const {
+Duration Resource::effort(const DateTime &start, const Duration &duration, bool backward, bool *ok) const {
     //kdDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(Duration::Format_Day)<<endl;
     bool sts=false;
     Duration e;
-    if (availableAfter(start).isValid()) {
-        Calendar *cal = calendar();
-        if (cal && cal->hasIntervalAfter(start)) {
-            sts = true;
-            e = (cal->effort(start, duration) * m_units)/100;
+    if (backward) {
+        if (availableBefore(start+duration).isValid()) {
+            Calendar *cal = calendar();
+            if (cal && cal->hasIntervalBefore(start+duration)) {
+                sts = true;
+                e = (cal->effort(start, duration) * m_units)/100;
+            }
+        }
+    } else {
+        if (availableAfter(start).isValid()) {
+            Calendar *cal = calendar();
+            if (cal && cal->hasIntervalAfter(start)) {
+                sts = true;
+                e = (cal->effort(start, duration) * m_units)/100;
+            }
         }
     }
-    kdDebug()<<k_funcinfo<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
     if (ok) *ok = sts;
     return e;
 }
@@ -715,13 +725,13 @@ int ResourceGroupRequest::workUnits() const {
 }
 
 //TODO: handle nonspecific resources
-Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &duration, bool *ok) const {
+Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &duration, bool backward, bool *ok) const {
     Duration e;
     bool sts=false;
     if (ok) *ok = sts;
     QPtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
-        e += it.current()->resource()->effort(time, duration, &sts);
+        e += it.current()->resource()->effort(time, duration, backward, &sts);
         if (sts && ok) *ok = sts;
         //kdDebug()<<k_funcinfo<<it.current()->resource()->name()<<" e="<<e.toString()<<endl;
     }
@@ -764,8 +774,8 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i <= nDays && sts; ++i) {
         // days
         end = end.addDays(inc);
-        e1 = backward ? effort(end, start - end, &sts) 
-                      : effort(start, end - start, &sts);
+        e1 = backward ? effort(end, start - end, backward, &sts) 
+                      : effort(start, end - start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             if (!sts)
@@ -780,7 +790,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
         //kdDebug()<<"duration(d)["<<i<<"] "<<(backward?"backward":"forward:")<<"  date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
     for (int i=0; !match && i < 24 && sts; ++i) {
         // hours
         end = end.addSecs(inc*60*60);
@@ -895,7 +905,7 @@ DateTime ResourceGroupRequest::availableBefore(const DateTime &time) {
 }
 
 void ResourceGroupRequest::makeAppointments(NodeSchedule *schedule) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         it.current()->makeAppointment(schedule);
@@ -1035,7 +1045,7 @@ DateTime ResourceRequestCollection::availableBefore(const DateTime &time) {
 
 
 void ResourceRequestCollection::makeAppointments(NodeSchedule *schedule) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         it.current()->makeAppointments(schedule);

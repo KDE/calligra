@@ -283,7 +283,7 @@ public:
     const QPtrList<ResourceRequest> &requests() const
         { return m_requests; }
         
-    Duration effort(const DateTime &start, const Duration &duration, bool *ok=0) const;
+    Duration effort(const DateTime &start, const Duration &duration, bool backward, bool *ok=0) const;
 
     /**
      * Find the first available time after time.
@@ -454,7 +454,7 @@ class ResourceGroupRequest {
         */
         int workUnits() const;
     
-        Duration effort(const DateTime &time, const Duration &duration, bool *ok=0) const;
+        Duration effort(const DateTime &time, const Duration &duration, bool backward, bool *ok=0) const;
         
         int numDays(const DateTime &time, bool backward) const;
         
