@@ -1460,6 +1460,9 @@ Record* Record::create( unsigned type )
   if( type == ExternNameRecord::id )
     record = new ExternNameRecord();
     
+  else if( type == FilepassRecord::id )
+    record = new FilepassRecord();
+    
   else if( type == FontRecord::id )
     record = new FontRecord();
     
@@ -2348,6 +2351,29 @@ void ExternNameRecord::setData( unsigned size, const unsigned char* data )
 
 void ExternNameRecord::dump( std::ostream& out ) const
 {
+}
+
+// ========== FILEPASS ========== 
+
+const unsigned int FilepassRecord::id = 0x002f;
+
+FilepassRecord::FilepassRecord():
+  Record()
+{
+}
+
+FilepassRecord::~FilepassRecord()
+{
+}
+
+void FilepassRecord::setData( unsigned,  const unsigned char* )
+{
+  // TODO
+}
+
+void FilepassRecord::dump( std::ostream& out ) const
+{
+  out << "FILEPASS" << std::endl;
 }
 
 // ========== FONT ========== 
@@ -4425,6 +4451,10 @@ public:
 
   // the workbook
   Workbook* workbook;
+  
+  // password protection flag
+  // TODO: password hash for record decryption
+  bool passwordProtected;
 
   // active sheet, all cell records will be stored here
   Sheet* activeSheet;
@@ -4465,6 +4495,8 @@ ExcelReader::ExcelReader()
   d->workbook    = 0;
   d->activeSheet = 0;
   d->formulaCell = 0;
+  
+  d->passwordProtected = false;
   
   // initialize palette
   static const char *const default_palette[64-8] =	// default palette for all but the first 8 colors
@@ -4523,10 +4555,22 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
   workbook->clear();  
   d->workbook = workbook;
   
+  d->passwordProtected = false;
+  
   // assume
 
   while( stream->tell() < stream_size )
   {
+  
+    // this is set by FILEPASS record
+    // subsequent records will need to be decrypted
+    // since we do not support it yet, we have to bail out
+    if(d->passwordProtected)
+    {
+      d->workbook->setPasswordProtected( true );
+      break;
+    }
+  
     // get record type and data size
     unsigned long pos = stream->tell();
     unsigned bytes_read = stream->read( buffer, 4 );
@@ -4665,6 +4709,8 @@ void ExcelReader::handleRecord( Record* record )
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
     case ExternNameRecord::id: 
       handleExternName( static_cast<ExternNameRecord*>( record ) ); break;
+    case FilepassRecord::id: 
+      handleFilepass( static_cast<FilepassRecord*>( record ) ); break;
     case FormatRecord::id: 
       handleFormat( static_cast<FormatRecord*>( record ) ); break;
     case FormulaRecord::id: 
@@ -4912,6 +4958,13 @@ void ExcelReader::handleExternName( ExternNameRecord* record )
   if( !record ) return;
 
   d->nameTable.push_back( record->externName() );
+}
+
+void ExcelReader::handleFilepass( FilepassRecord* record )
+{
+  if( !record ) return;
+  
+  d->passwordProtected = true;
 }
 
 void ExcelReader::handleFont( FontRecord* record )

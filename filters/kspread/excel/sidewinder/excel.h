@@ -1183,6 +1183,38 @@ private:
    EOFRecord& operator=( const EOFRecord& );
 };
 
+class FilepassRecord : public Record
+{
+public:
+
+  static const unsigned int id;
+
+  unsigned int rtti(){
+    return this->id;
+  }
+
+  /**
+   * Creates a new FILEPASS record.
+   */
+  FilepassRecord();
+
+  /**
+   * Destroy the record.
+   */
+  virtual ~FilepassRecord();
+  
+  virtual void setData( unsigned size, const unsigned char* data );
+
+  virtual const char* name(){ return "FILEPASS"; }
+
+  virtual void dump( std::ostream& out ) const;
+
+private:
+   // no copy or assign
+   FilepassRecord( const FilepassRecord& );
+   FilepassRecord& operator=( const FilepassRecord& );
+};
+
 /**
   \brief Font information.
   
@@ -3062,6 +3094,7 @@ private:
   void handleDateMode( DateModeRecord* record );
   void handleDimension( DimensionRecord* record );
   void handleExternName( ExternNameRecord* record );
+  void handleFilepass( FilepassRecord* record );
   void handleFormat( FormatRecord* record );
   void handleFormula( FormulaRecord* record );
   void handleFont( FontRecord* record );
