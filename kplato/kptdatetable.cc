@@ -427,7 +427,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         return;
     }
     if (col == 0) { // user clicked on week numbers
-        updateSelectedCells();
+/*        updateSelectedCells();
         m_selectedWeekdays.clear();
         m_selectedDates.clear();
         if (e->state() & ShiftButton) {
@@ -444,7 +444,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         updateSelectedCells();
         repaintContents(false);
         if (m_enabled)
-            emit weekSelected(m_weeks[row].first, m_weeks[row].second);
+            emit weekSelected(m_weeks[row].first, m_weeks[row].second);*/
         return;
     }
     if (row==0 && col>=0) { // the user clicked on weekdays
@@ -481,7 +481,8 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             m_selectedDates.toggle(date);
             //kdDebug()<<k_funcinfo<<"toggle date: "<<date.toString()<<" state="<<m_selectedDates.state(date)<<endl;
         } else {
-            // toggle select this, clear all others
+            // Select this, clear all others
+            m_selectedDates.clear();
             m_selectedDates.toggleClear(date);
             //kdDebug()<<k_funcinfo<<"toggleClear date: "<<date.toString()<<" state="<<m_selectedDates.state(date)<<endl;
         }
@@ -513,7 +514,6 @@ bool DateTable::selectDate(const QDate& date_) {
         date=date_;
         changed=true;
     }
-    m_selectedDates.clear();
 
     temp.setYMD(date.year(), date.month(), 1);
     firstday=temp.dayOfWeek();
