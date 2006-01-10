@@ -150,7 +150,8 @@ void ResourceDialog::slotOk() {
     m_resource.setNormalRate(KGlobal::locale()->readMoney(dia->rateEdit->text()));
     m_resource.setOvertimeRate(KGlobal::locale()->readMoney(dia->overtimeEdit->text()));
     m_resource.setCalendar(m_calendars[dia->calendarList->currentItem()]);
-    
+    m_resource.setAvailableFrom(dia->availableFrom->dateTime());
+    m_resource.setAvailableUntil(dia->availableUntil->dateTime());
     accept();
 }
 
