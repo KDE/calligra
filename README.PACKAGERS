@@ -1,17 +1,121 @@
-TODO for 1.5
+Packaging Information for KOffice.
+----------------------------------
 
-Name: Krita development
-Location: koffice/krita/core, koffice/krita/sdk, koffice/krita/kritacolor, koffice/krita/ui
-Description: These directories contain header files that are installed and can be used
-             by plugin developers to extend Krita with new tools, colorspaces, paintops
-             and more. If your distribution packaged development packages separately,
-             it may be a good idea to make a krita-dev package.
+We recommend building several binary packages from the KOffice source.
+
+Splitting KOffice into packages: 
+ * gives users a better choice of which components they have
+   installed;
+ * allows users to install just the applications without unnecessary
+   dependencies;
+ * helps to reduce packaging conflicts for users with non-standard
+   package selections.
 
 
-Name: Kross
-Location: koffice/lib/kross
-Configure-flag: --enable-scripting
-State: Experimental and disabled by default.
-Usage: koffice/kexi, koffice/krita
-Description: The Kross scripting library provides abstract access to scripting languages to an application.
-Dependencies: Kross provides access to the python and ruby scripting languages by the dynamic loadable plugins koffice/lib/kross/python and koffice/lib/kross/ruby. At runtime Kross detects if they are installed and if that's the case provides access to the scripting language. Kross itself doesn't direct depend on any scripting interpreter. It is recommed to put both Kross interpreter plugins into a separate package and to let the user decide if he likes to have support for e.g. python.
+Development files
+-----------------
+
+* Kexi development files
+Location: koffice/kexi/kexiutils, koffice/kexi/kexidb, koffice/kexi/migration
+
+Kexi installs some development headers which are required for building
+external plugins, such as the MS Access import plugin described below.
+
+We recommend providing Kexi development headers in a separate
+package. Note that all headers from the above directories are
+installed under:
+  ${prefix}/include/kexidb
+
+The installation can be tested by building the MS Access import plugin
+as described in the Microsoft Access import plugin section below.
+
+* Krita development files 
+
+Location: koffice/krita/core, koffice/krita/sdk,
+koffice/krita/kritacolor, koffice/krita/ui
+
+These directories contain header files that are installed and can be
+used by plugin developers to extend Krita with new tools, colorspaces,
+paint-ops and more.  If your distribution packages development files
+separately, it may be a good idea to make a package with these headers.
+
+
+Scripting support
+-----------------
+
+Preliminary support for Ruby and Python scripting is available for
+Krita and Kexi.
+It can be disabled by passing the '--disable-scripting' option to
+'configure'.
+
+The 'Kross' scripting library (koffice/lib/kross) provides access to
+the Python and Ruby scripting languages by the dynamically loaded
+plugins.
+
+Build time dependencies:
+  Python and Ruby development packages need to be installed in order
+  to build KOffice with full scripting support.  In addition, the Ruby
+  interpreter is also required at build time.
+
+Run time dependencies:
+  Kross detects which of these libraries is installed dynamically, at
+  run-time.  Therefore, KOffice packages should not have any run-time
+  dependencies on any scripting interpreter.
+
+The scripting language plugins can be found in:
+  koffice/lib/kross/python; and
+  koffice/lib/kross/ruby.
+They install as:
+  ${prefix}/lib/kde3/krosspython.{la,so}; and
+  ${prefix}/lib/kde3/krossruby.{la,so}
+
+It is recommended to put each interpreter plugin into a separate
+package, and the user decide if they would like support for each
+language individually.
+
+For example, the Python scripting package may contain:
+  lib/kde3/krosspython.so
+  lib/kde3/krosspython.la
+  share/apps/kexi/scripts/exportxhtml/ExportXHTML.py
+  share/apps/kexi/scripts/exportxhtml/ExportXHTML.rc
+  share/apps/kexi/scripts/importxhtml/ImportXHTML.py
+  share/apps/kexi/scripts/importxhtml/ImportXHTML.rc
+  share/apps/kexi/scripts/projectdocumentor/ProjectDocumentor.py
+  share/apps/kexi/scripts/projectdocumentor/ProjectDocumentor.rc
+  share/apps/krita/scripts/invert.py
+  share/apps/krita/scripts/reshapehisto.py
+
+and the Ruby scripting package may contain:
+  lib/kde3/krossruby.so
+  lib/kde3/krossruby.la
+  share/apps/krita/scripts/ruby/invert.rb
+  share/apps/krita/scripts/ruby/changecs.rb
+  share/apps/krita/scripts/ruby/randompaint.rb
+
+
+Microsoft Access Import (optional)
+----------------------------------
+
+A plugin to allow the import of MS Access (.mdb) files is available
+for packaging separately.  It is called KexiMDB.
+
+This package is based on a stripped-down and modified version of
+mdbtools: http://mdbtools.sf.net/
+The package should be built after KOffice.  It requires GLib, and the
+Kexi development files as described above.
+
+The version of the plugin for use with KOffice 1.5 should be available
+from:
+ftp://ftp.kde.org/pub/kde/stable/apps/KDE3.x/database/keximdb-1.0.tar.gz
+
+Alternatively, it can be found in the KDE Subversion repository.  It
+can be build as follows:
+  svn svn://svn.kde.org/home/kde/branches/work/keximdb/1.0/keximdb
+  make -f Makefile.cvs
+  ./configure --enable-debug=full
+  make
+  make install
+
+Configure may need to be informed of the location of the KexiDB
+headers using the --with-kexidb-includes=... and the
+--with-kexidb-libraries=... options.

@@ -1,13 +1,12 @@
-if test -z "$RUBY_LIBDIR"; then
+if test -z "$RUBY_LIBDIR" -a "x$compile_kross" = "xyes" ; then
   echo ""
   echo "Ruby developement files were not found, Ruby scripting support for"
   echo "KOffice will not be built. If you don't need Ruby scripting, you"
   echo "can ignore this message."
   echo ""
-
 fi
 
-if test -z "$LIBPYTHON" && test -z "$PYTHONINC"; then
+if test -z "$LIBPYTHON" -a -z "$PYTHONINC" -a $"x$compile_kross" = "xyes"; then
   echo ""
   echo "Python developement files were not found, Python scripting support for"
   echo "KOffice will not be built. If you don't need Python scripting, you"
