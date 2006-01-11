@@ -21,11 +21,14 @@
 #define KPTRESOURCEDIALOG_H
 
 #include "resourcedialogbase.h"
+#include "kptresource.h"
 
 #include <kdialogbase.h>
 
 #include <qmap.h>
 #include <qcombobox.h>
+
+class KCommand;
 
 class QTime;
 class QString;
@@ -33,6 +36,7 @@ class QString;
 namespace KPlato
 {
 
+class Part;
 class Project;
 class Resource;
 class Calendar;
@@ -60,6 +64,9 @@ public:
     bool calculationNeeded() {  return m_calculationNeeded; }
 
     Calendar *calendar() { return m_calendars[dia->calendarList->currentItem()]; }
+    KCommand *buildCommand(Part *part = 0);
+    
+    static KCommand *buildCommand(Resource *original, Resource &resource, Part *part);
     
 protected slots:
     void enableButtonOk();
@@ -68,7 +75,8 @@ protected slots:
     void slotCalendarChanged(int);
 
 private:
-    Resource &m_resource;
+    Resource &m_original;
+    Resource m_resource;
     ResourceDialogImpl *dia;
     bool m_calculationNeeded;
     

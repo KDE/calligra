@@ -932,8 +932,11 @@ void View::slotEditResource() {
     if (!r)
         return;
     ResourceDialog *dia = new ResourceDialog(getProject(), *r);
-    if (dia->exec())
-        slotUpdate(true); //FIXME: just refresh the view
+    if (dia->exec()) {
+        KCommand *cmd = dia->buildCommand(getPart());
+        if (cmd)
+            getPart()->addCommand(cmd);
+    }
     delete dia;
 }
 

@@ -18,6 +18,8 @@
 */
 
 #include "kptresourcedialog.h"
+#include "kptcommand.h"
+#include "kptpart.h"
 #include "kptproject.h"
 #include "kptresource.h"
 #include "kptcalendar.h"
@@ -37,6 +39,7 @@
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
+#include <kcommand.h>
 #include <kdatetimewidget.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -95,6 +98,7 @@ void ResourceDialogImpl::slotChooseResource()
 
 ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Resource Settings"), Ok|Cancel, Ok, parent, name, true, true),
+      m_original(resource),
       m_resource(resource),
       m_calculationNeeded(false)
 {
@@ -158,6 +162,53 @@ void ResourceDialog::slotOk() {
 
 void ResourceDialog::slotCalendarChanged(int cal) {
     
+}
+
+KCommand *ResourceDialog::buildCommand(Part *part) {
+    return buildCommand(&m_original, m_resource, part);
+}
+
+// static
+KCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource, Part *part) {
+    KMacroCommand *m=0;
+    QString n = i18n("Modify resource");
+    if (resource.name() != original->name()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceNameCmd(part, original, resource.name()));
+    }
+    if (resource.initials() != original->initials()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceInitialsCmd(part, original, resource.initials()));
+    }
+    if (resource.email() != original->email()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceEmailCmd(part, original, resource.email()));
+    }
+    if (resource.type() != original->type()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceTypeCmd(part, original, resource.type()));
+    }
+    if (resource.availableFrom() != original->availableFrom()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceAvailableFromCmd(part, original, resource.availableFrom()));
+    }
+    if (resource.availableUntil() != original->availableUntil()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceAvailableUntilCmd(part, original, resource.availableUntil()));
+    }
+    if (resource.normalRate() != original->normalRate()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceNormalRateCmd(part, original, resource.normalRate()));
+    }
+    if (resource.overtimeRate() != original->overtimeRate()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceOvertimeRateCmd(part, original, resource.overtimeRate()));
+    }
+    if (resource.calendar(true) != original->calendar(true)) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceCalendarCmd(part, original, resource.calendar(true)));
+    }
+    return m;
 }
 
 }  //KPlato namespace

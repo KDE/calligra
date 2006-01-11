@@ -95,34 +95,10 @@ KCommand *ResourcesPanelResourceItem::saveResource(Part *part, ResourceGroup *gr
         m->addCommand(new AddResourceCmd(part, group, takeResource()));
     } else if (m_state == Modified) {
         //kdDebug()<<k_funcinfo<<"Modify resource: "<<m_originalResource->name()<<endl;
-        if (!m) m = new KMacroCommand("Modify resource");
-        
-        if (m_resource->name() != m_originalResource->name()) {
-            m->addCommand(new ModifyResourceNameCmd(part, m_originalResource, m_resource->name()));
-        }
-        if (m_resource->initials() != m_originalResource->initials()) {
-            m->addCommand(new ModifyResourceInitialsCmd(part, m_originalResource, m_resource->initials()));
-        }
-        if (m_resource->email() != m_originalResource->email()) {
-            m->addCommand(new ModifyResourceEmailCmd(part, m_originalResource, m_resource->email()));
-        }
-        if (m_resource->type() != m_originalResource->type()) {
-            m->addCommand(new ModifyResourceTypeCmd(part, m_originalResource, m_resource->type()));
-        }
-        if (m_resource->availableFrom() != m_originalResource->availableFrom()) {
-            m->addCommand(new ModifyResourceAvailableFromCmd(part, m_originalResource, m_resource->availableFrom()));
-        }
-        if (m_resource->availableUntil() != m_originalResource->availableUntil()) {
-            m->addCommand(new ModifyResourceAvailableUntilCmd(part, m_originalResource, m_resource->availableUntil()));
-        }
-        if (m_resource->normalRate() != m_originalResource->normalRate()) {
-            m->addCommand(new ModifyResourceNormalRateCmd(part, m_originalResource, m_resource->normalRate()));
-        }
-        if (m_resource->overtimeRate() != m_originalResource->overtimeRate()) {
-            m->addCommand(new ModifyResourceOvertimeRateCmd(part, m_originalResource, m_resource->overtimeRate()));
-        }
-        if (m_resource->calendar(true) != m_originalResource->calendar(true)) {
-            m->addCommand(new ModifyResourceCalendarCmd(part, m_originalResource, m_resource->calendar(true)));
+        KCommand *cmd = ResourceDialog::buildCommand(m_originalResource, *m_resource, part);
+        if (cmd) {
+            if (!m) m = new KMacroCommand("Modify resource");
+            m->addCommand(cmd);
         }
     }
     return m;
@@ -365,6 +341,11 @@ void ResourcesPanel::slotEditResource() {
     Resource *r = item->m_resourceItem->m_resource;
     ResourceDialog *dia = new ResourceDialog(*project, *r);
     if (dia->exec()) {
+        KCommand *cmd = dia->buildCommand();
+        if (cmd) {
+            cmd->execute(); // modifications -> r
+            delete cmd;
+        }
         resourceName->setText(r->name());
         item->m_resourceItem->setState(ResourcesPanelResourceItem::Modified);
         item->setName(r->name()); // refresh list
