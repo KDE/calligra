@@ -180,14 +180,14 @@ void KivioLayerPanel::upItem()
 
   int pos = page->layers()->find(layer);
   // It's already the top layer... return
-  if(pos == 0)
+  if(pos == (static_cast<int>(page->layers()->count()) - 1))
     return;
 
   layer = page->layers()->take();
   if( !layer )
     return;
 
-  page->layers()->insert(pos-1, layer);
+  page->layers()->insert(pos + 1, layer);
 
   QString t = above->text(5);
   above->setText(5,item->text(5));
@@ -216,14 +216,14 @@ void KivioLayerPanel::downItem()
 
   int pos = page->layers()->find(layer);
   // It's already the bottom layer... return
-  if (pos == (int)page->layers()->count()-1)
+  if (pos == 0)
     return;
 
   layer = page->layers()->take();
   if( !layer )
     return;
 
-  page->layers()->insert(pos+1, layer);
+  page->layers()->insert(pos - 1, layer);
 
   QString t = below->text(5);
   below->setText(5,item->text(5));
