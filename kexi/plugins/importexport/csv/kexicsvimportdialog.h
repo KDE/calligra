@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
-   This is temporary solution for Kexi CSV support,
-   based on kspread/dialogs/kspread_dlg_csv.h
+   This work is based on kspread/dialogs/kspread_dlg_csv.cc
+   and will be merged back with KOffice libraries.
 
    Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
 			 (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
@@ -36,6 +36,9 @@
 
 #include <kdialogbase.h>
 
+#include <kexiutils/tristate.h>
+#include <kexidb/connection.h>
+
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
@@ -46,12 +49,15 @@ class QLineEdit;
 class QPushButton;
 class QRadioButton;
 class QTable;
+class QFile;
 class KComboBox;
 class KIntSpinBox;
+class KProgressDialog;
 
 class KexiMainWindow;
 class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
+class KexiCSVInfoLabel;
 
 /**
  * @short Kexi CSV import dialog
@@ -86,35 +92,18 @@ class KexiCSVImportDialog : public KDialogBase
   virtual bool eventFilter ( QObject * watched, QEvent * e );
 
  protected:
-  bool loadData();
+  bool openData();
   virtual void accept();
 
 
  private:
-//  KexiView* m_pView;
-
   QGridLayout* MyDialogLayout;
   QHBoxLayout* Layout1;
-//  QGridLayout* m_delimiterBoxLayout;
-//  QGridLayout* m_formatBoxLayout;
   QTable* m_table;
   KexiCSVDelimiterWidget* m_delimiterWidget;
-/*  QButtonGroup* m_delimiterBox;
-  QRadioButton* m_radioComma;
-  QRadioButton* m_radioSemicolon;
-  QRadioButton* m_radioTab;
-  QRadioButton* m_radioSpace;
-  QRadioButton* m_radioOther;*/
-//  QLineEdit* m_delimiterEdit;
-//  QButtonGroup* m_formatBox;
   QString m_formatComboText;
   QLabel* m_formatLabel;
   KComboBox* m_formatCombo;
-/*  QRadioButton* m_radioNumber;
-  QRadioButton* m_radioText;
-  QRadioButton* m_radioCurrency;
-  QRadioButton* m_radioDate;*/
-//  KComboBox* m_comboLine;
   KIntSpinBox *m_startAtLineSpinBox;
   KexiCSVTextQuoteComboBox* m_comboQuote;
   QLabel* m_startAtLineLabel;
@@ -125,54 +114,70 @@ class KexiCSVImportDialog : public KDialogBase
 
   KexiMainWindow* m_mainWin;
 
-  void fillTable();
-//  void fillComboBox();
   void detectTypeAndUniqueness(int row, int col, const QString& text);
-  void setText(int row, int col, const QString& text);
+  void setText(int row, int col, const QString& text, bool inGUI);
+
+  /*! Called after the first fillTable() when number of rows is unknown. */
   void adjustRows(int iRows);
+
   int  getHeader(int col);
   QString getText(int row, int col);
   void updateColumnText(int col);
+  void updateRowCountInfo();
+  tristate loadRows(QString &field, int &row, int &columnm, int &maxColumn, bool inGUI);
+
+  /*! Callback, called whenever row is loaded in loadRows(). When inGUI is true, 
+   nothing is performed, else database buffer is written back to the database. */
+  bool saveRow(bool inGUI);
 
   bool m_cancelled;
-  int   m_adjustRows;
-  int   m_startline;
+  int m_adjustRows;
+  int m_startline;
   QChar m_textquote;
-//  QString m_delimiter;
   QString m_data;
   QByteArray m_fileArray;
-//  QRect m_targetRect;
 	Mode m_mode;
 	int m_prevSelectedCol;
 
-	//vector of detected types, 0==text (the default), 1==number, 2==date
-//! @todo ...
+	//! vector of detected types, 0==text (the default), 1==number, 2==date
+//! @todo more types
 	QValueVector<int> m_detectedTypes;
+
 	//! m_detectedUniqueColumns[i]==true means that i-th column has unique values
 	//! (only for numeric type)
-//	QBitArray m_detectedUniqueColumns;
 	QPtrVector< QValueList<int> > m_uniquenessTest;
-//! @todo tmp
+
 	QRegExp m_dateRegExp1, m_dateRegExp2, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp;
 	QValueVector<QString> m_typeNames, m_columnNames;
 	QBitArray m_changedColumnNames;
 	bool m_columnsAdjusted : 1; //only once
 	bool m_1stRowForFieldNamesDetected : 1; //!< used to force rerun fillTable() after 1st row
 	bool m_firstFillTableCall : 1; //!< used to know whether it's 1st fillTable() call
+	bool m_blockUserEvents : 1;
 	int m_primaryKeyColumn; //!< index of column with PK assigned (-1 if none)
+	int m_maximumRowsForPreview;
 	QPixmap m_pkIcon;
-
 	QString m_fname;
+	QFile* m_file;
+	QTextStream *m_inputStream; //!< used in loadData()
 	QString m_encoding;
+	KProgressDialog *m_loadingProgressDlg, *m_importingProgressDlg;
+	bool m_dialogCancelled;
+	KexiCSVInfoLabel *m_infoLbl;
+	KexiDB::Connection *m_conn; //!< (temp) database connection used for importing
+	KexiDB::TableSchema *m_destinationTableSchema;  //!< (temp) dest. table schema used for importing
+	KexiDB::PreparedStatement::Ptr m_importingStatement;
+	QValueList<QVariant> m_dbRowBuffer; //!< (temp) used for importing
+	bool m_implicitPrimaryKeyAdded; //! (temp) used for importing
 
  private slots:
-//  void returnPressed();
+  void fillTable();
+  void initLater();
   void formatChanged(int id);
   void delimiterChanged(const QString& delimiter);
   void startlineSelected(int line);
   void textquoteSelected(int);
   void currentCellChanged(int, int col);
-//  void textChanged ( const QString & );
   void ignoreDuplicatesChanged(int);
   void slot1stRowForFieldNamesChanged(int);
   void cellValueChanged(int row,int col);

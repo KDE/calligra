@@ -31,8 +31,8 @@ using namespace KexiUtils;
 DelayedCursorHandler::DelayedCursorHandler() {
 	connect(&timer, SIGNAL(timeout()), this, SLOT(show()));
 }
-void DelayedCursorHandler::start() {
-	timer.start(1000, true);
+void DelayedCursorHandler::start(bool noDelay) {
+	timer.start(noDelay ? 0 : 1000, true);
 }
 void DelayedCursorHandler::stop() {
 	timer.stop();
@@ -44,18 +44,18 @@ void DelayedCursorHandler::show() {
 
 DelayedCursorHandler _delayedCursorHandler;
 
-void KexiUtils::setWaitCursor() {
+void KexiUtils::setWaitCursor(bool noDelay) {
 	if (kapp->guiEnabled())
-		_delayedCursorHandler.start();
+		_delayedCursorHandler.start(noDelay);
 }
 void KexiUtils::removeWaitCursor() {
 	if (kapp->guiEnabled())
 		_delayedCursorHandler.stop();
 }
 
-WaitCursor::WaitCursor()
+WaitCursor::WaitCursor(bool noDelay)
 {
-	setWaitCursor();
+	setWaitCursor(noDelay);
 }
 
 WaitCursor::~WaitCursor()

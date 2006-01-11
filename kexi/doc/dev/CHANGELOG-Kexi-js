@@ -11,7 +11,35 @@ For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
 
-TODO: test kexi1 db!!
+TODO: entering table/wuery name by hand doesn't work in 'form data source' combo
+
+2006-01-11
+Migration
+- fixed opening project after import if user wanted this
+
+2006-01-09
+Form Designer
+- infinite loop removed when updating multiple selection
+0.9: backported
+0.8: backported
+- "Assign Action" dialog cleaned
+KexiDB
+- generate cleaner query statements:
+  if there's single table in query schema, skip "table." prefix in resulting 
+  SQL string, e.g. build "SELECT a, b FROM t" instead of "SELECT t.a, t.b from t".
+Query Designer
+- "Totals" column hidden as it is not implemented
+
+2006-01-05..6, 10
+CSV Import Dialog
+- optimalization for large data: only about 100 rows are loaded for preview
+- progress dialog added on dialog creation (opening can be cancelled)
+- layout fixes
+- missing column with primary key is added if user wants it
+- optimized importing large (many thousands of rows) tables: 
+  GUI is not used to store entire table before importing;
+  only current record is kept in memory buffer
+- progress dialog added on importing (importing can be cancelled)
 
 2006-01-02..04
 Startup
@@ -33,7 +61,7 @@ Migration
 - Project Migration Wizard is proposed if a server-based database
   is incompatible with Kexi and cannot be opened
 - if a destination for imported project is a server, it is also 
-  opened after imported, if user wanted this
+  opened after import, if user wanted this
 
 2005-12-23, 29
 General
@@ -51,7 +79,6 @@ Simple Printouts
 - "Page Setup" action added; 
    now it's window is only presented when user really wants this
 - text of the page title properly updated
-
 
 2005-12-12..22
 Simple Printouts

@@ -1075,6 +1075,7 @@ BaseExpr *QuerySchema::whereExpression() const
 
 void QuerySchema::setOrderByColumnList(const QStringList& columnNames)
 {
+	Q_UNUSED(columnNames);
 //! @todo implement this:
 // all field names should be fooun, exit otherwise ..........
 
@@ -1087,6 +1088,11 @@ void QuerySchema::setOrderByColumnList(const QStringList& columnNames)
 void QuerySchema::setOrderByColumnList(const QString& column1, const QString& column2, 
 	const QString& column3, const QString& column4, const QString& column5)
 {
+	Q_UNUSED(column1);
+	Q_UNUSED(column2);
+	Q_UNUSED(column3);
+	Q_UNUSED(column4);
+	Q_UNUSED(column5);
 //! @todo implement this, like above
 //! @todo add ORDER BY info to debugString()
 }

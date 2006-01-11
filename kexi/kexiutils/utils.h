@@ -73,9 +73,9 @@ namespace KexiUtils
 		return QDateTime( QDate(0,1,2), QTime::fromString( s, Qt::ISODate ) );
 	}
 
-	/*! Sets "wait" cursor with 1 second delay. 
+	/*! Sets "wait" cursor with 1 second delay (or 0 seconds if noDelay is true).
 	 Does nothing if GUI is not GUI-aware. (see KApplication::guiEnabled()) */
-	KEXIUTILS_EXPORT void setWaitCursor();
+	KEXIUTILS_EXPORT void setWaitCursor(bool noDelay = false);
 
 	/*! Remove "wait" cursor previously set with \a setWaitCursor(), 
 	 even if it's not yet visible.
@@ -92,7 +92,7 @@ namespace KexiUtils
 	class KEXIUTILS_EXPORT WaitCursor
 	{
 		public:
-			WaitCursor();
+			WaitCursor(bool noDelay = false);
 			~WaitCursor();
 	};
 

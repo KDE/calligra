@@ -29,7 +29,7 @@ class DelayedCursorHandler : public QObject
 	Q_OBJECT
 	public:
 		DelayedCursorHandler();
-		void start();
+		void start(bool noDelay);
 		void stop();
 	protected slots:
 		void show();

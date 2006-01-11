@@ -490,6 +490,9 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
   and use it after being idle for a while (eg. call it every minute; also add an option for the delay)
 - Move ObjectStatus to kexidb. Merge with Object.
 
+=== KexiDB MySQL Driver TODO ===
+- use InnoDB instead of MyISAM tables because of transactions support
+
 === KexiDB Parser TODO ===
 - add a method for replacing a single given table name in the statement (useful on table renames)
 - add clever query relatins parsing 
@@ -813,3 +816,6 @@ General TODO:
 TODO:
 - BUG! "edit->clear table" actions does not repaints tableview when it's in spreadsheet mode 
   (e.g. in table/query designer)
+
+TODO:
+- on opening detect whether a table exists (empty table view should not be displayed)

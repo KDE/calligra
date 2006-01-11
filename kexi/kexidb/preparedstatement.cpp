@@ -32,6 +32,7 @@ PreparedStatement::PreparedStatement(StatementType type, ConnectionInternal& con
  , m_where(where.isEmpty() ? new QStringList(where) : 0)
  , m_whereFields(0)
 {
+	Q_UNUSED(conn);
 }
 
 PreparedStatement::~PreparedStatement()
