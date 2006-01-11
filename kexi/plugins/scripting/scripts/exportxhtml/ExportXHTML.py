@@ -21,7 +21,7 @@ class Datasource:
 		except:
 			raise "No connection established. Please open a project before."
 
-		self.queryschema = None
+		self.schema = None
 
 	def getSources(self):
 		sources = []
@@ -35,27 +35,30 @@ class Datasource:
 	def setSource(self, source):
 		s = source.split("/",1)
 		if s[0] == "Tables":
-			self.queryschema = self.connection.tableSchema( s[1] )
-			if self.queryschema != None: # we need a queryschema not a tableschema
-				self.queryschema = self.queryschema.query() # "select * from table"-query
+			self.schema = self.connection.tableSchema( s[1] )
+			self.queryschema = self.schema.query()
 		elif s[0] == "Queries":
-			self.queryschema = self.connection.querySchema( s[1] )
+			self.schema = self.connection.querySchema( s[1] )
+			self.queryschema = self.schema
 		self.cursor = None
-		return self.queryschema != None
+		return self.schema != None
 
 	def name(self):
-		return self.queryschema.name()
+		return self.schema.name()
 
 	def caption(self):
-		return self.queryschema.caption()
+		return self.schema.caption()
 
 	def description(self):
-		return self.queryschema.description()
+		return self.schema.description()
 
 	def header(self):
 		h = []
-		for field in self.queryschema.fieldlist().fields():
-			h.append( field.name() ) #field.caption()
+		for field in self.schema.fieldlist().fields():
+			s = field.caption()
+			if s == None or s == "":
+				s = field.name()
+			h.append(s)
 		return h
 
 	def getNext(self):
@@ -118,10 +121,10 @@ class HtmlExporter:
 
 		output.write("<table border='1'>\n")
 
-		#output.write("<tr>")
-		#for h in self.datasource.header():
-		#	output.write("<th>%s</th>" % h)
-		#output.write("</tr>")
+		output.write("<tr>")
+		for h in self.datasource.header():
+			output.write("<th>%s</th>" % h)
+		output.write("</tr>")
 
 		while 1 == 1:
 			items = self.datasource.getNext()

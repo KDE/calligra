@@ -199,7 +199,7 @@ namespace Kross { namespace Api {
             {
                 T* t = (T*) object.data();
                 if(! t)
-                    throw KSharedPtr<Exception>( new Exception(QString("Object \"%1\" invalid.").arg(object->getClassName())) );
+                    throw KSharedPtr<Exception>( new Exception(QString("Object \"%1\" invalid.").arg(object ? object->getClassName() : "")) );
                 return t;
             }
 
