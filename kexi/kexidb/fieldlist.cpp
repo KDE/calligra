@@ -170,6 +170,16 @@ FieldList* FieldList::subList(const QString& n1, const QString& n2,
 	return fl;
 }
 
+FieldList* FieldList::subList(const QStringList& list)
+{
+        Field *f;
+	FieldList *fl = new FieldList(false);
+	for(QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
+		_ADD_FIELD( QString(*it) );
+	}
+	return fl;
+}
+
 QStringList FieldList::names() const
 {
 	QStringList r;

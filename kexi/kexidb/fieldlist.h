@@ -122,6 +122,9 @@ class KEXI_DB_EXPORT FieldList
 			const QString& n15 = QString::null, const QString& n16 = QString::null,
 			const QString& n17 = QString::null, const QString& n18 = QString::null
 		);
+
+		/*! Like above, but with a QStringList */
+		FieldList* subList(const QStringList& list);
 	
 		/*! \return a string that is a result of all field names concatenated 
 		 and with "," between. This is usable e.g. as argument like "field1,field2" 
