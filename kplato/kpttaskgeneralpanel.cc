@@ -37,6 +37,7 @@
 #include <kcommand.h>
 
 #include <qlayout.h>
+#include <qlabel.h>
 #include <qdatetime.h> 
 #include <qdatetimeedit.h> 
 #include <qgroupbox.h> 

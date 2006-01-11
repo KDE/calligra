@@ -87,18 +87,12 @@
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QLineEdit">
+                                <widget class="QLabel">
                                     <property name="name">
                                         <cstring>wbsfield</cstring>
                                     </property>
-                                    <property name="acceptDrops">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="dragEnabled">
-                                        <bool>false</bool>
-                                    </property>
-                                    <property name="readOnly">
-                                        <bool>true</bool>
+                                    <property name="text">
+                                        <string></string>
                                     </property>
                                 </widget>
                                 <spacer>
