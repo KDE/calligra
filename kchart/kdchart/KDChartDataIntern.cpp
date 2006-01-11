@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2003 Klarï¿½vdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -29,7 +29,7 @@
 #include <KDChartDataIntern.h>
 
 /**
-  \class KDChartData KDChartData.h
+  \class KDChartData KDChartDataIntern.h
 
   \brief Encapsulates one data cell in a chart.
 
