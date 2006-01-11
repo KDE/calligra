@@ -154,9 +154,37 @@ QString Duration::toString(Format format) const {
             result.sprintf("%u %02u:%02u:%02u.%u", (unsigned)days, hours, minutes, seconds, (unsigned)ms);
             break;
         case Format_HourFraction:
-            f = (double)m_ms;
-            result = KGlobal::locale()->formatNumber(f/(1000 * 60 * 60), 2);
-            //result = QString("%1").arg(f/(1000 * 60 * 60), 0, 'f', 2);
+            result = KGlobal::locale()->formatNumber(toDouble(Unit_h), 2);
+            break;
+        // i18n
+        case Format_i18nHour:
+            ms = m_ms;
+            hours = ms / (1000 * 60 * 60);
+            ms -= (Q_INT64)hours * (1000 * 60 * 60);
+            minutes = ms / (1000 * 60);
+            result = i18n("<hours>h:<minutes>m", "%1h:%2m").arg(hours).arg(minutes);
+            break;
+        case Format_i18nDay:
+            result = KGlobal::locale()->formatNumber(toDouble(Unit_d), 2);
+            break;
+        case Format_i18nDayTime:
+            ms = m_ms;
+            days = m_ms / (1000 * 60 * 60 * 24);
+            ms -= (Q_INT64)days * (1000 * 60 * 60 * 24);
+            hours = ms / (1000 * 60 * 60);
+            ms -= (Q_INT64)hours * (1000 * 60 * 60);
+            minutes = ms / (1000 * 60);
+            ms -= minutes * (1000 * 60);
+            seconds = ms / (1000);
+            ms -= seconds * (1000);
+            if (days == 0) {
+                result = toString(Format_i18nHour);
+            } else {
+                result = i18n("<days>d <hours>h:<minutes>m", "%1d %2h:%3m").arg(days).arg(hours).arg(minutes);
+            }
+            break;
+        case Format_i18nHourFraction:
+            result = KGlobal::locale()->formatNumber(toDouble(Unit_h), 2);
             break;
         default:
             kdFatal()<<k_funcinfo<<"Unknown format"<<endl;

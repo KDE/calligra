@@ -495,8 +495,9 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         if (m_showProgress) {
             w += "\n"; w += i18n("Completion: %1%").arg(task->progress().percentFinished);
         }
-        w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_Hour)); //FIXME
-    
+        if (task->positiveFloat() > Duration::zeroDuration) {
+            w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_i18nDayTime));
+        }
         if (task->inCriticalPath()) {
             w += "\n" + i18n("Critical path");
         } else if (task->isCritical()) {
@@ -577,8 +578,9 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
     if (!task->notScheduled()) {
         w += "\n" + i18n("Time: %1").arg(locale->formatDateTime(task->startTime()));
         
-        w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_Hour)); //FIXME
-    
+        if (task->positiveFloat() > Duration::zeroDuration) {
+            w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_i18nDayTime));
+        }
         if (task->inCriticalPath()) {
             w += "\n" + i18n("Critical path");
         } else if (task->isCritical()) {
@@ -917,12 +919,12 @@ void GanttView::print(KPrinter &prt) {
     
     // Make a simple header
     p.drawRect(0,0,metrics.width(),metrics.height());
-    QString text = i18n("Project: ") + m_mainview->getPart()->getProject().name();
+    QString text = i18n("Project: %1").arg(m_mainview->getPart()->getProject().name());
     QRect r = p.boundingRect(1,0,0,0, Qt::AlignLeft, text );
     p.drawText( r, Qt::AlignLeft, text );
     int hei = r.height();
     //kdDebug()<<"Project r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
-    text = QDateTime::currentDateTime().toString();
+    text = KGlobal::locale()->formatDateTime(QDateTime::currentDateTime());
     r = p.boundingRect(metrics.width()-1,0,0,0, Qt::AlignRight, text );
     p.drawText( r, Qt::AlignRight, text );
     hei = QMAX(hei, r.height());

@@ -39,7 +39,7 @@ class Duration {
          * Hour     = hh:mm
          * HourFraction = h.fraction of an hour
          */
-        enum Format { Format_DayTime, Format_Day, Format_Hour, Format_HourFraction };
+        enum Format { Format_DayTime, Format_Day, Format_Hour, Format_HourFraction, Format_i18nDayTime, Format_i18nDay, Format_i18nHour, Format_i18nHourFraction };
 
         Duration();
         Duration(const Duration &d);
