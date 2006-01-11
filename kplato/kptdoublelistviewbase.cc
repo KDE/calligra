@@ -83,7 +83,8 @@ void DoubleListViewBase::SlaveListItem::clearColumn(int col) {
 }
 void DoubleListViewBase::SlaveListItem::setColumn(int col, double value) {
     if (col < listView()->columns()) {
-        setText(col, QString("%1").arg(value, m_fieldwidth, m_fmt, m_prec));
+        //setText(col, QString("%1").arg(value, m_fieldwidth, m_fmt, m_prec));
+        setText(col, KGlobal::locale()->formatNumber(value, m_prec));
         m_valueMap.replace(col, value);
         //kdDebug()<<k_funcinfo<<m_masterItem->text(0)<<": column["<<col<<"]="<<value<<endl;
     }
@@ -194,13 +195,15 @@ void DoubleListViewBase::MasterListItem::slaveItemDeleted() {
 
 void DoubleListViewBase::MasterListItem::setTotal(double tot) {
     m_value = tot;
-    setText(1, QString("%1").arg(tot, m_fieldwidth, m_fmt, m_prec));
+    //setText(1, QString("%1").arg(tot, m_fieldwidth, m_fmt, m_prec));
+    setText(1, KGlobal::locale()->formatNumber(tot, m_prec));
     //kdDebug()<<k_funcinfo<<text(0)<<"="<<tot<<endl;
 }
 
 void DoubleListViewBase::MasterListItem::addToTotal(double v) {
     m_value += v;
-    setText(1, QString("%1").arg(m_value, m_fieldwidth, m_fmt, m_prec));
+    //setText(1, QString("%1").arg(m_value, m_fieldwidth, m_fmt, m_prec));
+    setText(1, KGlobal::locale()->formatNumber(m_value, m_prec));
 }
 
 double DoubleListViewBase::MasterListItem::calcTotal() {

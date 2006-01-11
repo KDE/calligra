@@ -196,10 +196,8 @@ void AccountsView::slotUpdate() {
     if (m_cumulative) {
         t += " <b>" + i18n("Cumulative") + "</b>  ";
     }
-    t += i18n("Cut-off date:");
-    t += "<b>" + locale->formatDate(m_date, true) + "</b>";
-    t += " " + i18n("Periodicity:");
-    t += "<b>" + periodText(m_period) + "</b>";
+    t += i18n("Cut-off date:%1").arg("<b>" + locale->formatDate(m_date, true) + "</b>");
+    t += " " + i18n("Periodicity:%1").arg("<b>" + periodText(m_period) + "</b>");
     m_label->setText(t);
     
     // Add columns for selected period/periods
@@ -240,7 +238,7 @@ void AccountsView::slotUpdate() {
         for (; pend <= end; pend = cal->addDays(pend, 7), ++c) {
             int y;
             int w = cal->weekNumber(dt, &y);
-            QString t = QString("%1-%2").arg(w).arg(y);
+            QString t = i18n("<week>-<year>", "%1-%2").arg(w).arg(y);
             m_dlv->addSlaveColumn(t);
             dt = pend.addDays(1);
         }

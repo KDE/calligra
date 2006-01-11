@@ -77,6 +77,7 @@ public:
     }
 
     QString getData(QString tag) const {
+        KLocale *l = KGlobal::locale();
         if (!tag.contains('.'))
             return QString::null;
 
@@ -90,15 +91,15 @@ public:
             if (tag.section(".", 1, 1) == "name")
                 return (m_task ? m_task->name() : QString::null);
             else if (tag.section(".", 1, 1) == "start")
-                return (m_task ? m_task->startTime().toString() : QString::null);
+                return (m_task ? l->formatDateTime(m_task->startTime()) : QString::null);
             else if (tag.section(".", 1, 1) == "starttime")
-                return (m_task ? m_task->startTime().time().toString() : QString::null);
+                return (m_task ? l->formatTime(m_task->startTime().time()) : QString::null);
             else if (tag.section(".", 1, 1) == "startdate")
-                return (m_task ? m_task->startTime().date().toString() : QString::null);
+                return (m_task ? l->formatDate(m_task->startTime().date(), true) : QString::null);
             else if (tag.section(".", 1, 1) == "duration") {
                 if (m_task) {
                     Duration *d = m_task->getExpectedDuration();
-                    QString s = d->toString(Duration::Format_Hour);
+                    QString s = d->toString(Duration::Format_i18nHour);
                     delete d;
                     return s;
                 }
