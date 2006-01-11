@@ -148,7 +148,7 @@ ReportView::ReportView(View *view, QWidget *parent)
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_reportList = new KListView(this);
-    m_reportList->addColumn(i18n("Name"));
+    m_reportList->addColumn(i18n("Report Template"));
     m_reportList->header()->setStretchEnabled(true, 0);
     
     m_reportview = new Kugar::MReportViewer(this);
