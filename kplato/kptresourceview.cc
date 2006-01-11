@@ -42,25 +42,25 @@
 namespace KPlato
 {
 
-class ResourceItemPrivate : public QListViewItem {
+class ResourceItemPrivate : public KListViewItem {
 public:
     ResourceItemPrivate(Resource *r, QListViewItem *parent)
-        : QListViewItem(parent, r->name()),
+        : KListViewItem(parent, r->name()),
         resource(r) {}
 
     Resource *resource;
 };
 
-class NodeItemPrivate : public QListViewItem {
+class NodeItemPrivate : public KListViewItem {
 public:
     NodeItemPrivate(Task *n, QListView *parent)
-    : QListViewItem(parent, n->name()),
+    : KListViewItem(parent, n->name()),
       node(n) {
         init();
     }
 
     NodeItemPrivate(QString name, QListView *parent)
-    : QListViewItem(parent, name),
+    : KListViewItem(parent, name),
       node(0) {
         init();
     }
@@ -85,7 +85,7 @@ public:
         if (columnPrio.contains(column)) {
             g.setColor(QColorGroup::Base, prioColors[columnPrio[column]]);
         }
-        QListViewItem::paintCell(p, g, column, width, align);
+        KListViewItem::paintCell(p, g, column, width, align);
     }
     
     Task *node;
@@ -100,10 +100,10 @@ private:
     QMap<int, int> columnPrio;
 };
 
-class AppointmentItem : public QListViewItem {
+class AppointmentItem : public KListViewItem {
 public:
     AppointmentItem(Appointment *a, QDate &d, QListViewItem *parent)
-        : QListViewItem(parent),
+        : KListViewItem(parent),
         appointment(a),
         date(d) {}
 
@@ -125,9 +125,17 @@ ResourceView::ResourceView(View *view, QWidget *parent)
     resList->addColumn(i18n("Name"));
     resList->setColumnAlignment(1, AlignHCenter);
     resList->addColumn(i18n("Type"));
-    resList->setColumnAlignment(2, AlignRight);
-    resList->addColumn(i18n("Normal Rate"));
+    resList->setColumnAlignment(2, AlignHCenter);
+    resList->addColumn(i18n("Initials"));
     resList->setColumnAlignment(3, AlignRight);
+    resList->addColumn(i18n("E-mail"));
+    resList->setColumnAlignment(4, AlignRight);
+    resList->addColumn(i18n("Available From"));
+    resList->setColumnAlignment(5, AlignRight);
+    resList->addColumn(i18n("Available Until"));
+    resList->setColumnAlignment(6, AlignRight);
+    resList->addColumn(i18n("Normal Rate"));
+    resList->setColumnAlignment(7, AlignRight);
     resList->addColumn(i18n("Overtime Rate"));
 
     m_appview = new ResourceAppointmentsView(view, this);
@@ -159,7 +167,7 @@ void ResourceView::draw(Project &project)
 
     QPtrListIterator<ResourceGroup> it(project.resourceGroups());
     for (; it.current(); ++it) {
-        QListViewItem *item = new QListViewItem(resList, it.current()->name());
+        KListViewItem *item = new KListViewItem(resList, it.current()->name());
         item->setOpen(true);
         drawResources(item, it.current());
     }
@@ -188,8 +196,12 @@ void ResourceView::drawResources(QListViewItem *parent, ResourceGroup *group)
                 item->setText(1, i18n("Undefined"));
                 break;
         }
-        item->setText(2, KGlobal::locale()->formatMoney(r->normalRate()));
-        item->setText(3, KGlobal::locale()->formatMoney(r->overtimeRate()));
+        item->setText(2, r->initials());
+        item->setText(3, r->email());
+        item->setText(4, KGlobal::locale()->formatDateTime(r->availableFrom()));
+        item->setText(5, KGlobal::locale()->formatDateTime(r->availableUntil()));
+        item->setText(6, KGlobal::locale()->formatMoney(r->normalRate()));
+        item->setText(7, KGlobal::locale()->formatMoney(r->overtimeRate()));
         if (!m_selectedItem) {
             m_selectedItem = item;
         }
