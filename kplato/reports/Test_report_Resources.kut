@@ -96,7 +96,7 @@
 		   DrawRight="false" DrawBottom="false" FontSize="11" />
 		<Field VAlignment="1" HAlignment="1"
 		   CommaSeparator="48" BorderStyle="1" WordWrap="0"
-		   DrawLeft="false" Field="Fixedcost" X="482" Property="fixedcost"
+		   DrawLeft="false" Field="Fixedcost" X="482" Property="overtimerate"
 		   Y="-5" ForegroundColor="0,0,0" NegValueColor="255,0,0"
 		   Text="" DataType="0" BorderColor="0,0,0"
 		   DateFormat="0" FontFamily="Helvetica" DrawTop="false"
@@ -106,7 +106,7 @@
 		   DrawRight="false" DrawBottom="false" FontSize="11" />
 		<Field VAlignment="1" HAlignment="1"
 		   CommaSeparator="52" BorderStyle="1" WordWrap="0"
-		   DrawLeft="false" Field="Overtimerate" X="392" Property="overtimerate"
+		   DrawLeft="false" Field="Overtimerate" X="392" Property="normalrate"
 		   Y="-5" ForegroundColor="0,0,0" NegValueColor="0,0,0"
 		   Text="" DataType="0" BorderColor="0,0,0"
 		   DateFormat="11" FontFamily="Times New Roman" DrawTop="false"
