@@ -28,18 +28,14 @@ PreparedStatement::PreparedStatement(StatementType type, ConnectionInternal& con
 	TableSchema& tableSchema, const QStringList& where)
  : KShared()
  , m_type(type)
-// , m_conn(&conn)
  , m_fields(&tableSchema)
  , m_where(where.isEmpty() ? new QStringList(where) : 0)
  , m_whereFields(0)
 {
-//	m_int = m_conn->drv_createNewPreparedStatement(this);
 }
 
 PreparedStatement::~PreparedStatement()
 {
-//	delete m_int;
-	//m_conn->drv_clearArgumentdForPreparedStatement(this);
 	delete m_where;
 	delete m_whereFields;
 }

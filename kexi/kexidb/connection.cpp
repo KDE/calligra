@@ -1705,7 +1705,7 @@ bool Connection::rollbackAutoCommitTransaction(const Transaction& trans)
 
 Transaction Connection::beginTransaction()
 {
-	if (!isDatabaseUsed())
+	if (!checkIsDatabaseUsed())
 		return Transaction::null;
 	Transaction trans;
 	if (m_driver->d->features & Driver::IgnoreTransactions) {
@@ -1743,7 +1743,7 @@ Transaction Connection::beginTransaction()
 
 bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive)
 {
-	if (!isDatabaseUsed())
+	if (!checkIsDatabaseUsed())
 		return false;
 	if ( !m_driver->transactionsSupported()
 		&& !(m_driver->d->features & Driver::IgnoreTransactions))
@@ -1777,7 +1777,7 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 
 bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inactive)
 {
-	if (!isDatabaseUsed())
+	if (!checkIsDatabaseUsed())
 		return false;
 	if ( !m_driver->transactionsSupported()
 		&& !(m_driver->d->features & Driver::IgnoreTransactions))
