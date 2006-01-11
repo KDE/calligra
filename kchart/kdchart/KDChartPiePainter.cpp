@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2003 KlarÃ¤lvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -198,10 +198,10 @@ void KDChartPiePainter::paintData( QPainter* painter,
         return;
 
 
-    // Find the backmost pie which is at +90° and needs to be drawn
+    // Find the backmost pie which is at +90Â° and needs to be drawn
     // first
     int backmostpie = findPieAt( 90 * 16 );
-    // Find the frontmost pie (at -90°/+270°) that should be drawn last
+    // Find the frontmost pie (at -90Â°/+270Â°) that should be drawn last
     int frontmostpie = findPieAt( 270 * 16 );
     // and put the backmost pie on the TODO stack to initialize it,
     // but only if it is not the frontmostpie
