@@ -295,12 +295,20 @@ Kross::Api::Object::Ptr KexiDBConnection::insertRecord(Kross::Api::List::Ptr arg
     for(QValueList<QVariant>::Iterator it = values.begin(); it != values.end(); ++it)
         kdDebug()<<"  value="<< (*it).toString() << " type=" << (*it).typeName() << endl;
     */
+
+    Kross::Api::Object::Ptr obj = args->item(0);
+    if(obj->getClassName() == "Kross::KexiDB::KexiDBFieldList") {
+        return new Kross::Api::Variant(
+                   QVariant(connection()->insertRecord(
+                       *Kross::Api::Object::fromObject<KexiDBFieldList>(obj)->fieldlist(),
+                       values
+                   ), 0));
+    }
     return new Kross::Api::Variant(
-               bool(connection()->insertRecord(
-                   *Kross::Api::Object::fromObject<KexiDBTableSchema>(args->item(0))->tableschema(),
+               QVariant(connection()->insertRecord(
+                   *Kross::Api::Object::fromObject<KexiDBTableSchema>(obj)->tableschema(),
                    values
-               )),
-               "Kross::KexiDB::Connection::insertRecord::Bool");
+               ), 0));
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::createDatabase(Kross::Api::List::Ptr args)

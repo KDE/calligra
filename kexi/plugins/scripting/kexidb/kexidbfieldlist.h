@@ -75,6 +75,9 @@ namespace Kross { namespace KexiDB {
             Kross::Api::Object::Ptr removeField(Kross::Api::List::Ptr);
             /// Removes all KexiDBField objects from the fieldlist.
             Kross::Api::Object::Ptr clear(Kross::Api::List::Ptr);
+
+            /// Creates and returns list that contain fields selected by name.
+            Kross::Api::Object::Ptr subList(Kross::Api::List::Ptr);
     };
 
 }}
