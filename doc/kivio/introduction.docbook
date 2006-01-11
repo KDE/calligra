@@ -27,7 +27,7 @@
 
 <sect1 id="contributing">
 <title>Contributing to &kivio;</title>
-<para>&kivio; is a volunteer project. Your contributions are welcome. If you find a bug whilst using the software please report it by selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>Report a Bug</guimenuitem></menuchoice>.</para>
+<para>&kivio; is a volunteer project. Your contributions are welcome. If you find a bug whilst using the software please report it by selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>Report Bug...</guimenuitem></menuchoice>.</para>
 <para>Contributions to the documentation, stencils, translations into other languages and the code itself are welcome. Please see the &koffice; website for more information about how to contribute.</para>
 </sect1>
 </chapter>
