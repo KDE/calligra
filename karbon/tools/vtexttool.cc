@@ -45,6 +45,7 @@
 #include <core/vfill.h>
 #include <core/vgroup.h>
 #include <core/vstroke.h>
+#include <core/vcursor.h>
 #include <render/vpainterfactory.h>
 #include <render/vkopainter.h>
 #include "vtexttool.h"
@@ -590,12 +591,14 @@ VTextTool::VTextTool( KarbonView *view )
 	m_text = 0L;
 	m_editedText = 0L;
 	registerTool( this );
+	m_cursor = new QCursor( VCursor::createCursor( VCursor::CrossHair ) );
 }
 
 VTextTool::~VTextTool()
 {
 	delete m_optionsWidget;
 	delete m_editedText;
+	delete m_cursor;
 }
 
 QString VTextTool::contextHelp()
@@ -614,7 +617,7 @@ VTextTool::activate()
 {
 	VTool::activate();
 	view()->statusMessage()->setText( i18n( "Text Tool" ) );
-	view()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( *m_cursor );
 
 	m_creating = true;
 	m_text = 0L;

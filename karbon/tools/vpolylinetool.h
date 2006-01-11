@@ -33,7 +33,7 @@
 class QLabel;
 class QWidget;
 class VPath;
-
+class QCursor;
 
 /**
  * The polyline tool.
@@ -106,6 +106,9 @@ class VPolylineTool : public VTool
 		 * Indicates if the polyline is to close.
 		 */
 		bool m_close;
+
+	private:
+		QCursor* m_crossCursor;
 };
 
 #endif

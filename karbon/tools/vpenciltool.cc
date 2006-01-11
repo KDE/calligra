@@ -41,6 +41,7 @@
 #include <core/vstroke.h>
 #include <core/vglobal.h>
 #include <core/vselection.h>
+#include <core/vcursor.h>
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>
 #include "vpenciltool.h"
@@ -146,10 +147,12 @@ VPencilTool::VPencilTool( KarbonView *view )
 	m_mode = CURVE;
 	m_optimize = true;
 	m_combineAngle = 3.0f;
+	m_cursor = new QCursor( VCursor::createCursor( VCursor::CrossHair ) );
 }
 
 VPencilTool::~VPencilTool()
 {
+	delete m_cursor;
 }
 
 QString
@@ -167,7 +170,7 @@ VPencilTool::activate()
 {
 	VTool::activate();
 	view()->statusMessage()->setText( i18n( "Pencil Tool" ) );
-	view()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( *m_cursor );
 	view()->part()->document().selection()->showHandle( false );
 
 	m_Points.clear();

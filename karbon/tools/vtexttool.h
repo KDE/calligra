@@ -43,7 +43,7 @@ class QPushButton;
 class QTabWidget;
 class ShadowWidget;
 class VTextTool;
-
+class QCursor;
 
 class ShadowPreview : public QWidget
 {
@@ -280,6 +280,7 @@ private:
 	bool m_creating;
 	// are we dragging in 45 degree steps?
 	bool m_stepwise;
+	QCursor* m_cursor;
 };
 
 #endif

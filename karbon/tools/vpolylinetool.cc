@@ -31,6 +31,7 @@
 #include <core/vfill.h>
 #include <core/vstroke.h>
 #include <core/vglobal.h>
+#include <core/vcursor.h>
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>
 #include "vpolylinetool.h"
@@ -42,10 +43,12 @@ VPolylineTool::VPolylineTool( KarbonView *view )
 {
 	m_bezierPoints.setAutoDelete( true );
 	registerTool( this );
+	m_crossCursor = new QCursor( VCursor::createCursor( VCursor::CrossHair ) );
 }
 
 VPolylineTool::~VPolylineTool()
 {
+	delete m_crossCursor;
 }
 
 QString
@@ -67,7 +70,7 @@ VPolylineTool::activate()
 {
 	VTool::activate();
 	view()->statusMessage()->setText( i18n( "Polyline Tool" ) );
-	view()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->setCursor( *m_crossCursor );
 
 	m_bezierPoints.clear();
 	m_close = false;

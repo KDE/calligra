@@ -31,7 +31,8 @@ noinst_HEADERS = \
 	vlayer_iface.h \
 	vtext.h \
 	vtext_iface.h \
-	vclipgroup.h
+	vclipgroup.h \
+	vcursor.h
 
 libkarboncore_la_SOURCES = \
 	vcolor.cc \
@@ -63,7 +64,9 @@ libkarboncore_la_SOURCES = \
 	vtext.cc \
 	vtext_iface.cc \
 	vtext_iface.skel \
-	vclipgroup.cc
+	vclipgroup.cc \
+	vcursor.cc
+
 libkarboncore_la_LIBADD = $(LIBFONTCONFIG_LIBS)
 
 libkarboncore_la_METASOURCES = \

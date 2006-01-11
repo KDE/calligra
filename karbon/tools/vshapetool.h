@@ -28,7 +28,7 @@
 
 
 class VPath;
-
+class VCursor;
 
 class VShapeTool : public VTool
 {
@@ -56,7 +56,7 @@ protected:
 	virtual void cancel();
 
 	// Make it "abstract":
-	virtual ~VShapeTool() {}
+	virtual ~VShapeTool();
 
 	virtual VPath* shape( bool interactive = false ) const = 0;
 
@@ -76,6 +76,8 @@ private:
 	/// States:
 	bool m_isSquare;
 	bool m_isCentered;
+
+	QCursor* m_cursor;
 };
 
 #endif

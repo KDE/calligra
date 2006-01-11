@@ -31,13 +31,21 @@
 #include "vshapecmd.h"
 #include "vshapetool.h"
 #include "vselection.h"
+#include "vcursor.h"
 
 VShapeTool::VShapeTool( KarbonView *view, const char *name, bool polar )
 	: VTool( view, name )
 {
+	m_cursor = new QCursor( VCursor::createCursor( VCursor::CrossHair ) );
+
 	m_isPolar = polar;
 	m_isSquare   = false;
 	m_isCentered = false;
+}
+
+VShapeTool::~VShapeTool()
+{
+	delete m_cursor;
 }
 
 QString
@@ -53,7 +61,7 @@ void
 VShapeTool::activate()
 {
 	VTool::activate();
-	view()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( *m_cursor );
 	view()->part()->document().selection()->showHandle( true );
 }
 

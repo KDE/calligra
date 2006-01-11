@@ -40,7 +40,8 @@ class QCheckBox;
 class QWidgetStack;
 class QComboBox;
 class KDoubleNumInput;
-		
+class QCursor;
+
 class VPencilOptionsWidget : public KDialogBase
 {
 	Q_OBJECT
@@ -151,6 +152,9 @@ class VPencilTool : public VTool
 		float m_combineAngle;
 
 		VPencilOptionsWidget *m_optionWidget;
+
+	private:
+		QCursor* m_cursor;
 };
 
 #endif
