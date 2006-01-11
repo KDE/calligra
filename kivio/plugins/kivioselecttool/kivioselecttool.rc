@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KivioSelectTool" library="libkivioselecttool" version="6">
+<kpartgui name="KivioSelectTool" library="libkivioselecttool" version="7">
   <MenuBar>
     <Menu name="Tools">
       <Action name="select" />
@@ -12,7 +12,6 @@
   <Menu name="StencilPopup">
     <Action name="editText" />
     <Separator />
-    <Action name="formatText" />
     <Action name="formatStencil" />
     <Action name="formatConnector" />
   </Menu>

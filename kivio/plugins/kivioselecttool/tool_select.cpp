@@ -59,8 +59,6 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
 
   m_textEditAction = new KAction(i18n("&Edit Text..."), "text", Key_F2,
                                  this, SLOT(editStencilText()), actionCollection(), "editText");
-  m_textFormatAction = new KAction(i18n("Format &Text..."), 0, 0,
-                                   view(), SLOT(textFormat()), actionCollection(), "formatText");
   (void) new KAction(i18n("Format &Stencils && Connectors..."), 0, 0, view(), SLOT(stencilFormat()),
                           actionCollection(), "formatStencil");
   m_arrowHeadAction = new KAction(i18n("Format &Arrowheads..."), 0, 0, view(), SLOT(arrowHeadFormat()),
@@ -1103,10 +1101,8 @@ void SelectTool::showPopupMenu( const QPoint &pos )
 
     if(view()->activePage()->checkForTextBoxesInSelection()) {
       m_textEditAction->setEnabled(true);
-      m_textFormatAction->setEnabled(true);
     } else {
       m_textEditAction->setEnabled(false);
-      m_textFormatAction->setEnabled(false);
     }
   }
 

@@ -127,7 +127,6 @@ class SelectTool : public Kivio::MouseTool
     KRadioAction* m_selectAction;
     KAction* m_arrowHeadAction;
     KAction* m_textEditAction;
-    KAction* m_textFormatAction;
 
     bool m_firstTime;
 };
