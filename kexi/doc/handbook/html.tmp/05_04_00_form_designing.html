@@ -14,16 +14,16 @@
  <li><b>Form widget</b> - form's element. Main widget types are:
  <ul>
  <li>Widgets displaying information, e.g. text box or image box. Each widget of this type can be <em>bound</em> to a data source field (a table or a query column). Therefore, such widgets are called in short <em>form fields</em>.</li>
- <li>Widgets able to perform a specified action, e.g. a push button that can close the current form. Within other applications this widget type is sometimes called as a <em>form controls</em> because they can perform previously defined action controlling your database application.
- umo¿liwiaj±ce wykonanie okre¶lonej akcji, np. przycisk; niekiedy s± one zwane kontrolkami, gdy¿ w pewnej mierze umo¿liwiaj± u¿ytkownikowi kontrolowanie pracy aplikacji</li>
- <li>inne wid¿ety, umo¿liwiaj±ce wzbogacenie wygl±du formularza, np. za pomoc± wid¿etu &quot;linii prostej&quot; mo¿na oddzieliæ od siebie dwa obszary formularza.</li>
+ <li>Widgets able to perform a specified action, e.g. a push button that can close the current form. Within other applications this widget type is sometimes called <em>form control</em> because it can perform previously defined action of <b>controlling</b> your database application's behaviour.</li>
+ <li>Other widgets allowing to enrich form's appearance, e.g. &quot;line widget&quot; can visually separate two form areas.</li>
  </ul>
 </li>
 <li><p>
 <a name="widget_containers"></a>
-<b>Wid¿et kontenera</b> - wid¿et wewn±trz którego mo¿na wstawiaæ inne wid¿ety. Przyk³ad wid¿etu kontenera to wid¿et ramki lub zak³adki. Sama powierzchnia g³ówna okna te¿ jest kontenerem. Natomiast przycisk polecenia nie jest kontenerem, gdy¿ nie mo¿na wstawiæ do jego wnêtrza innego wid¿etu. Wid¿et kontenera mo¿e zawieraæ inny wid¿et kontenera, co jest zwane zagnie¿d¿eniem.
+<b>Container widget</b> - a widget taht can <b>contain</b> other widgets within its area. For example, frame widget or tab widget are containers. Form's surface itself is a container as well. Command button cannot be called as container because it is not possible to insert a widget inside it. In more complex cases, container widget can inserted inside a container, so nesting is possible.
+
  <br><img src="img/05_04_01_widget_containers.png">
- <br>Przyk³adowe wid¿ety kontenerów<br><br>
+ <br>Example container widgets<br><br>
 </p>
 </li>
 </ul>
@@ -31,58 +31,63 @@
 
 
 <a name="forms_and_tables"></a>
-<H3>5.4.2. Formularze a tabele</H3>
+<H3>5.4.2. Forms versus tables</H3>
 <p>
-W rozdziale <a href="05_02_00_entering_data_into_tables.html">5.2</a> pozna³e¶ jak mo¿na wprowadzaæ dane wprost do tabeli. Istniej± jednak sytuacje, gdy przy wprowadzaniu lepiej sprawdza siê formularz:
+In chapter <a href="05_02_00_entering_data_into_tables.html">5.2</a> you learned about how to enter data directly into tables using their data sheet view. However, in many cases forms are better suited for data entry:
 <ul>
-<li>Tabela mo¿e mieæ zbyt wiele kolumn, by mog³y siê zmie¶ciæ na ekranie. U¿ycie formularza umo¿liwia umieszczenie danych w wielu rzêdach.</li>
-<li>Formularz pozwala na wizualne oddzielanie pól w postaci grup, co mo¿e zwiêkszyæ czytelno¶æ formularza. Mo¿na te¿ wstawiaæ dodatkowe etykiety z tekstem pomocnym w u¿ytkowaniu formularza.</li>
-<li>W widoku tabelarycznym nie jest ³atwo wy¶wietliæ wielowierszowych pól z tekstem oraz obrazków.</li>
+<li>Table can contain too many columns to display them on your screen. Form can display such data using multiple rows.</li>
+<li>Form allows to visually split data fields into logical groups, thus increasing readability.
+Labels with additional infromation can be inserted to give users more hints how to use the form or what given data fields mean.</li>
+<li>Command buttons can be used within forms for commonly used commands so users can use forms in a similar way as standalone applications they know.</li>
+<li>In data sheet view displaying multi-row data text fields or images is as easy as within forms.</li>
 </ul>
 </p>
 
 <a name="design"></a>
-<H3>5.4.3. Praca z projektem formularza</H3>
+<H3>5.4.3. Working with form design</H3>
 <p>
-Podobnie jak przy projektowaniu tabel i zapytañ, masz do dyspozycji widok danych oraz widok projektu. Tworzenie projektu formularza przebiega w widoku projektu.
+As with table or query design, you are able to use <em>Data View</em> and <em>Design View</em>. Form designing is performed in <em>Design View</em>. We will ofter refer to form design window as to <em>Form Designer</em>.
 </p>
 <ol>
 <li>
-Aby utworzyæ pusty formularz, z menu <em>Wstaw</eM> wybierz <nobr><img src="icons/form_newobj.png" class="icon"> <em>Formularz</em></nobr>. Mo¿esz te¿ w nawigatorze projektu wskazaæ grupê &quot;Formularze&quot;, po czym u¿yæ przycisku <nobr><img src="icons/form_newobj.png" class="icon"> <em>Nowy formularz</em></nobr> na pasku narzêdzi nawigatora projektu.
+To create a new empty form, select <em>Insert</em> -&gt; <nobr><img src="icons/form_newobj.png" class="icon"> <em>Form</em></nobr> from the menubar. Optionally, you can use <nobr><img src="icons/form_newobj.png" class="icon"> <em>New Form</em></nobr> command from drop-down button on the Project Navigator's toolbar.
 </li>
 <li>
-Pojawi siê okno z pust± prostok±tn± powierzchni± nowego formularza. Poza powierzchni± znajduje siê obszar zewnêtrzny oddzielony krawêdziami. Mo¿esz przesuwaæ te krawêdzie, aby zmieniaæ rozmiar formularza.
+A new window with empty rectangular from surface will appear. Beyond the surface outer area is placed, separated from the surface using borders. You can move the borders to resize the form surface.
  <br><img src="img/05_04_03_new_empty_form.png">
- <br>Okno z projektem nowego, pustego formularza<br><br>
-Podobnie, jak przy projektowaniu tabel lub zapytañ, projektowi formularza towarzyszy panel w³a¶ciwo¶ci. Zawiera on w³a¶ciwo¶ci aktualnie wskazanego wid¿etu lub powierzchni samego formularza. Masz te¿ do dyspozycji dodatkowe paski narzêdzi:
+ <br>A window with a new form's design<br><br>
+As with table design, Form Designer provides property pane containing properties of the currently selected widget or the form surface. Aditional tools are available:
  <ul>
- <li>pasek <em>Wid¿ety</em> u¿ywany przy wstawianiu wid¿etów do formularza</li>
- <li>pasek <em>Format</em> u¿ywany przy formatowaniu elementów formularza (zmiana rozmiaru wid¿etów, itd). Wiêcej na temat poleceñ formatowania formularza dowiesz siê z dodatku <a href="aa_05_00_menu.html#menu_format">A.6. Menu Format</a>.</li>
+ <li><em>Widgets</em> toolbar used for inserting new widgets into the form</li>
+ <li><em>Format</em> toolbar used to format form's elements (e.g. adjusting widget's size, groupping). Formatting commands are also available in <em>Format</em> menu. More about these commands can be found in appendix <a href="aa_05_00_menu.html#menu_format">A.6. Format Menu</a>.</li>
  </ul>
 </li>
 </ol>
 
 <a name="fields_inserting"></a>
-<H3>5.4.4. Wstawianie pól tekstowych</H3>
-
-<p>Zak³adamy, ¿e tworzysz formularz przedstawiaj±cy osoby, czyli korzystaj±cy z tabeli <em>Osoby</em>.
+<H3>5.4.4. Inserting fields</H3>
+<p>Let's create a form providing infromation about persons, i.e. a form connected it with <em>Persons</em> table.
+</p>
 <p>
-Je¶li projektowany przez Ciebie formularz ma udostêpniaæ dane z bazy, musisz umie¶ciæ na nim odpowiednie <em>pola</em>. U¿ywa siê do tego paska narzêdzi, zawieraj±cego przyciski prze³±czników: ka¿dy odpowiada jednemu typowi wid¿etu.
+If the form being designed should present data obtained from the database, you need to place appropriate <em>fields</em> on it. To do this, use <em>Widgets</em> toolbar containing a set of toggleable buttons. Each button corresponds with a single widget type.
 </p>
 
 <p>
 <ol>
-<li>Na pasku narzêdzi <em>Wid¿ety</em> kliknij przycisk <nobr><img src="icons/lineedit.png" class="icon"> <em>Pole tekstowe</em></nobr>.</li>
-<li>Kliknij na powierzchni formularza. Nowe pole tekstowe zostanie umieszczone w punkcie klikniêcia. Mo¿esz te¿ przeci±gn±æ mysz± tak, jak siê rysuje prostok±t, aby wstawiæ pole tekstowe o zadanym rozmiarze.</li>
-<li>Je¶li konieczne, przesuñ pole tekstowe za pomoc± przeci±gniêcia mysz± do ¿±danego po³o¿enia. Mo¿esz te¿ zmieniæ rozmiar pola tekstowego poprzez przeci±gniêcie jednego z kwadracików znajduj±cych siê wokó³ jego krawêdzi.</li>
-<li>Ponownie kliknij przycisk <em>Pole tekstowe</em> na pasku narzêdzi i wstaw kolejne pole. Postêpuj tak a¿ otrzymasz trzy pola tekstowe na formularzu (dla uproszczenia ograniczamy sie obecnie do trzech pól).</li>
+<li>
+Click <nobr><img src="icons/lineedit.png" class="icon"> <em>Text Box</em></nobr> button on the <em>Widgets</em> toolbar.</li>
+<li>Click on the form surface with &LMB;. New text box widget will be palced in the place when you clicked. Before you release &LMB; you can drag your mouse to specify a desred size for the widget.</li>
+<li>If needed, move the inserted widget using drag &amp; drop to a desired position. You can resize the widget afterwards by dragging one of the small boxes appearing near its corners. Note that the boxes are only visible when the widget is selected. If you deselect the widget by clicking another widget or the form surface, the boxes disappear.</li>
+<li>Click <em>Text Box</em> toolbar button again and click on the form surface to insert another widget. Repeat this action once again until you get three text boxes inserted in yourto form. For sake of simplicity we will limit ourselves to three data fields.</li>
 </ol>
 </p>
 
 <a name="data_sources"></a>
-<H3>5.4.5. Ustalanie ¼róde³ danych</H3>
+<H3>5.4.5. Assigning data sources</H3>
 
 <p>
+******TODO update polish docs for data source pane, first***********
+
 Wstawione przez Ciebie pola formularza nie maj± jeszcze przypisanych <em>¼róde³ danych</em>, zatem nie s± w stanie wy¶wietliæ informacji z bazy danych. Do ustalania ¼róde³ danych u¿ywa siê panelu w³a¶ciwo¶ci.
 </p>
 
@@ -125,7 +130,7 @@ Kliknij przycisk <nobr><img src="icons/state_data.png" class="icon"> <em>Prze³±c
 <a name="text_labels"></a>
 <H3>5.4.6. Wstawianie etykiet tekstowych</H3>
 <p>
-Aby u¿ytkownik formularza by³ w stanie okre¶liæ przeznaczenie ka¿dego pola, powinny one mieæ do³±czone etykiety z tytu³ami pól. Do wykonania etykiet u¿ywa siê wid¿etu <nobr><img src="icons/filesave.png" class="icon"> <em>etykiety tekstowej</em></nobr>.
+Aby u¿ytkownik formularza by³ w stanie okre¶liæ przeznaczenie ka¿dego pola, powinny one mieæ do³±czone etykiety z tytu³ami pól. Do wykonania etykiet u¿ywa siê wid¿etu <nobr><img src="icons/label.png" class="icon"> <em>etykiety tekstowej</em></nobr>.
 </p>
 <p>
 Wstaw trzy etykiety tekstowe do formularza, umieszczaj±c je po lewych stronach pól tekstowych. Przy wstawianiu ka¿dej nowej etykiety pojawia siê wewn±trz niej kursor, za pomoc± którego mo¿esz wpisaæ ¿±dany tytu³, czyli kolejno: <em>imiê</em>, <em>nazwisko</em> oraz <em>ulica</em>. Dodatkowo, na górze formularza wstaw etykietê tekstow± z jego nazw±, czyli ,,Osoby''. Powiêksz czcionkê w tej etykiecie za pomoc± polecenia <a href="aa_05_00_menu.html#menu_format_font">Czcionka</a> w menu <em>Format</em>.

@@ -4,6 +4,12 @@ Contents:
   Docbook view of the manual as per SVN.
 -----------------------------------------------------
 
+Changelog:
+2005-12-05 mart
+ initial checkin
+2006-01-11 jstaniek
+ update for chapter numbers, more TODOs added
+
 HTML view of the Manual:
 
 The chapter numbers in section headings here refer to
@@ -18,12 +24,11 @@ http://www.iidea.pl/~js/kexi/manual/en/kexi-docs-03.zip
 
 Chapter numbers in each descriptions refers to docbook version.
 
-Chapter 1:
+HTML Chapter 1:
 Has moved to Appendix A.
 Needs writing.
 
-
-Chapter 2:
+HTML Chapter 2:
 Largely irrelevant marketing.
 
 Useful parts are now in Chapter 1
@@ -33,11 +38,26 @@ Last Section (Different datatypes) is now moved to Appendix B.
 (There are some discrepancies between HTML and reality, take 
 care when editting)
 
-Chapter 4:
+HTML Chapter 4:
 Has become Chapter 2.
 
-Chapter 8:
+HTML Chapter 5:
 Has become Chapter 3.
+
+HTML Chapter 6:
+Will become Chapter 4.
+
+HTML Chapter 7:
+Will become Chapter 5.
+
+HTML Chapter 8:
+Has become Chapter 6.
+
+HTML Appendix A. Menu items + B. Keyboard Shortcuts
+Will become Chapter 7.
+
+HTML Appendix C, D, E:
+Will become Appendix C, D, E.
 
 
 -----------------------------------------------------
@@ -76,16 +96,33 @@ The Kexi main window stuff is text I've written can be mered with 4.6 in HTML
 04_06_02_object_windows.html    Done.
 04_06_03_property_editor.html   Done.
 
-Chapter 3: Configuring Kexi (Martin):
+Chapter 3: Building Simple Databases (Raphael)
+05_00_00_idx_building_simple_database.html  Ready for conversion
+05_01_00_table_designing.html               Ready for conversion
+05_02_00_entering_data_into_tables.html     Ready for conversion
+05_03_00_query_designing.html               Ready for conversion
+05_04_00_form_designing.html                NOT READY FOR CONVERSION YET
+
+Chapter 4. Advanced database topics
+NOT READY FOR CONVERSION YET
+
+Chapter 5. Work with external data
+NOT READY FOR CONVERSION YET
+
+Chapter 6: Configuring Kexi (Martin):
 08_00_00_kexi_tuning.html     Removed. (It's basically a chapter TOC)
 08_01_00_mdi.html             Done.
 08_02_00_dock_undock.html     Done.
 08_03_00_conf_keys.html       TODO
 
-Chapter 4: Command Reference
+Chapter 7: Command Reference
+aa_00_00_menu.html                NOT READY FOR CONVERSION YET
+aa_05_00_menu.html                NOT READY FOR CONVERSION YET
+ab_00_00_shortcuts.html           NOT READY FOR CONVERSION YET
+
 Anne-Marie wrote this text, since the Polish version has
 not been translated into English yet.
-
+WILL BE REPALCED BY HTML Appendix A. and B.
 
 Appendix A (Raphael):
 01_01_00_what_is_db.html     Done.
@@ -96,3 +133,15 @@ Appendix A (Raphael):
 
 Appendix B:
 02_04_00_differences.html     1/2 Done.  Another table to go.
+
+Appendix C: Widgets Reference
+ac_00_00_widgets.html                    NOT READY FOR CONVERSION YET
+TODO
+
+Appendix D: Form Widgets Reference
+ad_00_00_specs.html                      NOT READY FOR CONVERSION YET
+TODO
+
+Appendix E: Example database projects
+ae_00_00_example_projects.html           NOT READY FOR CONVERSION YET
+TODO

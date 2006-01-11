@@ -50,12 +50,12 @@ DONE    5.1. Designing database tables
 DONE      5.1.1. Table Designer window
 DONE  5.2. Entering data into tables
 DONE  5.3. Designing database queries
-  5.4. Designing forms
-    5.4.1. Most important terms
-    5.4.2. Forms versus tables
-    5.4.3. Working with form design
-    5.4.4. Inserting fields
-    5.4.5. Assigning data sources
+DONE  5.4. Designing forms
+DONE    5.4.1. Most important terms
+DONE    5.4.2. Forms versus tables
+DONE    5.4.3. Working with form design
+DONE    5.4.4. Inserting fields
+DONE    5.4.5. Assigning data sources
     5.4.6. Inserting text labels
     5.4.7. Actions
       * Assigning actions to form buttons
