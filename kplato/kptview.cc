@@ -145,6 +145,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     connect(m_ganttview, SIGNAL(modifyRelation(Relation*, int)), SLOT(slotModifyRelation(Relation*, int)));
     connect(m_ganttview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
     connect(m_ganttview, SIGNAL(itemDoubleClicked()), SLOT(slotOpenNode()));
+    connect(m_resourceview, SIGNAL(itemDoubleClicked()), SLOT(slotEditResource()));
 
 	// The menu items
     // ------ Edit

@@ -69,9 +69,13 @@ class ResourceItemPrivate;
     virtual bool setContext(Context::Resourceview &context);
     virtual void getContext(Context::Resourceview &context) const;
 
+signals:
+    void itemDoubleClicked();
+    
 protected slots:
     void resSelectionChanged();
     void resSelectionChanged(QListViewItem *item);
+    void slotItemDoubleClicked(QListViewItem*);
     void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);
 
 private:

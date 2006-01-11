@@ -74,7 +74,7 @@ ResourceAppointmentsView::ResourceAppointmentsView(View *view, QWidget *parent)
       m_availItem(0),
       m_totalItem(0) {
     
-    setNameHeader(i18n("Resource"));
+    setNameHeader(i18n("Task"));
     
     
     QValueList<int> list = sizes();

@@ -127,7 +127,7 @@ ResourceView::ResourceView(View *view, QWidget *parent)
     resList->addColumn(i18n("Type"));
     resList->setColumnAlignment(2, AlignHCenter);
     resList->addColumn(i18n("Initials"));
-    resList->setColumnAlignment(3, AlignRight);
+    resList->setColumnAlignment(3, AlignLeft);
     resList->addColumn(i18n("E-mail"));
     resList->setColumnAlignment(4, AlignRight);
     resList->addColumn(i18n("Available From"));
@@ -145,6 +145,8 @@ ResourceView::ResourceView(View *view, QWidget *parent)
     //connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
     connect(resList, SIGNAL(selectionChanged()), SLOT(resSelectionChanged()));
     connect(resList, SIGNAL( contextMenuRequested(QListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(QListViewItem*, const QPoint&, int)));
+    //NOTE: using doubleClicked, not executed() to be consistent with ganttview
+    connect(resList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), SLOT(slotItemDoubleClicked(QListViewItem*)));
 
 }
 
@@ -226,6 +228,10 @@ void ResourceView::resSelectionChanged(QListViewItem *item) {
     m_appview->clear();
 }
 
+
+void ResourceView::slotItemDoubleClicked(QListViewItem*) {
+    emit itemDoubleClicked();
+}
 
 void ResourceView::popupMenuRequested(QListViewItem* item, const QPoint & pos, int)
 {
