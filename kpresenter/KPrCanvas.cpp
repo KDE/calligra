@@ -438,7 +438,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
                 }
                 break;
             case INS_POLYGON:
-                drawPolygon( m_insertRect );
+                drawPolygon( topPainter, m_insertRect );
                 break;
             default:
                 break;
@@ -1774,12 +1774,18 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 mouseSelectedObject = true;
             } break;
             case INS_POLYGON: {
+                QPainter p( this );
+                p.setPen( QPen( black, 1, SolidLine ) );
+                p.setBrush( NoBrush );
+                p.setRasterOp( NotROP );
+                p.translate( -diffx(), -diffy() );
+
                 KoPoint sp( snapPoint( docPoint ) );
                 // erase old
-                drawPolygon( m_insertRect );
+                drawPolygon( p, m_insertRect );
                 updateInsertRect( sp, e->state() );
                 // print new
-                drawPolygon( m_insertRect );
+                drawPolygon( p, m_insertRect );
 
                 mouseSelectedObject = true;
             } break;
@@ -3726,8 +3732,8 @@ void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
         KoPointArray points( _pointArray );
         KoPointArray bezierPoints( KPrBezierCurveObject::bezier2polyline( _pointArray ) );
         KoRect rect = bezierPoints.boundingRect();
-        points.translate( -rect.x(), -rect.y() );
-        bezierPoints.translate( -rect.x(), -rect.y() );
+        points = getObjectPoints( points );
+        bezierPoints = getObjectPoints( bezierPoints );
 
         if ( toolEditMode == INS_CUBICBEZIERCURVE )
         {
@@ -5039,18 +5045,12 @@ void KPrCanvas::redrawCubicBezierCurve( QPainter &p )
 }
 
 
-void KPrCanvas::drawPolygon( const KoRect &rect )
+void KPrCanvas::drawPolygon( QPainter &p, const KoRect &rect )
 {
     KoRect nRect = rect.normalize();
     bool checkConcavePolygon = m_view->getCheckConcavePolygon();
     int cornersValue = m_view->getCornersValue();
     int sharpnessValue = m_view->getSharpnessValue();
-
-    QPainter p;
-    p.begin( this );
-    p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
-    p.setRasterOp( Qt::NotROP );
-    p.translate( -diffx(), -diffy() );
 
     KoRect _rect( 0, 0, nRect.width(), nRect.height() );
     double angle = 2 * M_PI / cornersValue;
@@ -5117,8 +5117,6 @@ void KPrCanvas::drawPolygon( const KoRect &rect )
     }
     p.drawPolygon( tmpPoints.zoomPointArray( m_view->zoomHandler() ) );
     m_pointArray = tmpPoints;
-    p.end();
-
 }
 
 

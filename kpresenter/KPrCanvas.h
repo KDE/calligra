@@ -664,7 +664,7 @@ private:
     bool m_setPageTimer;
 
     /// Helper function to draw a polygon
-    void drawPolygon( const KoRect &rect );
+    void drawPolygon( QPainter &p, const KoRect &rect );
 
     /// Helper function to draw a pie/arc/chord
     void drawPieObject( QPainter *p,  const KoRect &rect );
