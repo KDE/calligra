@@ -9,23 +9,113 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>680</width>
-            <height>234</height>
+            <width>553</width>
+            <height>265</height>
         </rect>
     </property>
     <property name="caption">
         <string>ResourceDialogBase</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QLayoutWidget" row="1" column="0">
+        <widget class="QFrame">
             <property name="name">
-                <cstring>layout15</cstring>
+                <cstring>frame3</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Raised</enum>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>initialsEdit</cstring>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>100</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="2">
+                    <property name="name">
+                        <cstring>textLabel1_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&lt;p align="right"&gt;Email:&lt;/p&gt;</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>emailEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="3" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>emailEdit</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="3">
+                    <property name="name">
+                        <cstring>nameEdit</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="4">
+                    <property name="name">
+                        <cstring>chooseBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Choose...</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Choose resource from addressbook</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Name:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>nameEdit</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Initials:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>initialsEdit</cstring>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout7</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -75,15 +165,15 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QLayoutWidget" row="2" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout4</cstring>
+                <cstring>layout6</cstring>
             </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>textLabel3</cstring>
                     </property>
@@ -94,18 +184,12 @@
                         <cstring>units</cstring>
                     </property>
                 </widget>
-                <widget class="QSpinBox">
+                <widget class="KDateTimeWidget" row="1" column="3">
                     <property name="name">
-                        <cstring>units</cstring>
-                    </property>
-                    <property name="suffix">
-                        <string>%</string>
-                    </property>
-                    <property name="maxValue">
-                        <number>9999</number>
+                        <cstring>availableUntil</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="0" column="2">
                     <property name="name">
                         <cstring>textLabel1_3</cstring>
                     </property>
@@ -116,12 +200,38 @@
                         <cstring>availableFrom</cstring>
                     </property>
                 </widget>
-                <widget class="QDateTimeEdit">
+                <widget class="QSpinBox" row="0" column="1">
                     <property name="name">
-                        <cstring>availableFrom</cstring>
+                        <cstring>units</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                        <string>%</string>
+                    </property>
+                    <property name="maxValue">
+                        <number>9999</number>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <spacer row="1" column="0">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="1" column="2">
                     <property name="name">
                         <cstring>textLabel1_3_2</cstring>
                     </property>
@@ -132,14 +242,14 @@
                         <cstring>availableUntil</cstring>
                     </property>
                 </widget>
-                <widget class="QDateTimeEdit">
+                <widget class="KDateTimeWidget" row="0" column="3">
                     <property name="name">
-                        <cstring>availableUntil</cstring>
+                        <cstring>availableFrom</cstring>
                     </property>
                 </widget>
-            </hbox>
+            </grid>
         </widget>
-        <widget class="QGroupBox" row="3" column="0">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox3_2</cstring>
             </property>
@@ -212,107 +322,17 @@
                 </spacer>
             </grid>
         </widget>
-        <widget class="QFrame" row="0" column="0">
-            <property name="name">
-                <cstring>frame3</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Raised</enum>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>nameEdit</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                </widget>
-                <widget class="QPushButton" row="0" column="2">
-                    <property name="name">
-                        <cstring>chooseBtn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Choose...</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Choose resource from addressbook</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Name:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>nameEdit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel1_2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Initials:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>initialsEdit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="1" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>layout6</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>initialsEdit</cstring>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>100</width>
-                                    <height>32767</height>
-                                </size>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_2_2</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&lt;p align="right"&gt;Email:&lt;/p&gt;</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>emailEdit</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>emailEdit</cstring>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </grid>
-        </widget>
-    </grid>
+    </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kdatetimewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>ktimewidget.h</includehint>
+    <includehint>kdatetimewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>ktimewidget.h</includehint>
+</includehints>
 </UI>

@@ -37,6 +37,7 @@
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
+#include <kdatetimewidget.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kglobal.h>

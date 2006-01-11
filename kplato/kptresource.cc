@@ -341,6 +341,8 @@ bool Resource::load(QDomElement &element) {
     m_email = element.attribute("email");
     setType(element.attribute("type"));
     m_calendar = findCalendar(element.attribute("calendar-id"));
+    m_availableFrom = QDateTime::fromString(element.attribute("available-from"));
+    m_availableUntil = QDateTime::fromString(element.attribute("available-until"));
     return true;
 }
 
@@ -356,6 +358,8 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("initials", m_initials);
     me.setAttribute("email", m_email);
     me.setAttribute("type", typeToString());
+    me.setAttribute("available-from", m_availableFrom.toString());
+    me.setAttribute("available-until", m_availableUntil.toString());
 }
 
 bool Resource::isAvailable(Task *task) {
