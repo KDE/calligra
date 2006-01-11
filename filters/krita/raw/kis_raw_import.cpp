@@ -116,7 +116,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
     QApplication::restoreOverrideCursor();
 
     // Prepare image
-    KisColorSpace *cs;// = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("", ""),"" );
+    KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("", ""),"" );
 
     if (cs == 0) {
         return KoFilter::InternalError;
@@ -124,7 +124,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
 
     doc -> undoAdapter() -> setUndo(false);
 
-    int imageWidth, imageHeight = 0;
+    int imageWidth = 0, imageHeight = 0;
     QString imageName = "";
     KisImageSP image = new KisImage(doc->undoAdapter(), imageWidth, imageHeight, cs, imageName);
 
