@@ -24,6 +24,7 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDChartTableBase.cpp \
 			KDChartTextPiece.cpp	\
 			KDChartVectorSeries.cpp \
+			KDChartVectorTable.cpp \
 			KDChartWidget.cpp 	\
 			KDDrawText.cpp		\
 			KDFrame.cpp 		\

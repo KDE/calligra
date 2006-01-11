@@ -161,10 +161,7 @@ public:
         setSorted( _t.sorted() );
     }
 
-    virtual ~KDChartVectorTableData() {
-        if ( sh->deref() )
-            delete sh;
-    }
+    virtual ~KDChartVectorTableData();
 
     KDChartVectorTableData& operator=( const KDChartVectorTableData& t ) {
         if ( &t == this )
