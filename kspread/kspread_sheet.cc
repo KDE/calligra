@@ -78,7 +78,9 @@
 #include <kmdcodec.h>
 #include <assert.h>
 
+#if 0  //FIXME: Enable after the new kdchart API is fixed.
 #include <koChart.h>
+#endif
 #include "kspread_sheet.moc"
 
 #define NO_MODIFICATION_POSSIBLE \
@@ -140,6 +142,7 @@ ChartBinding::~ChartBinding()
 
 void ChartBinding::cellChanged( Cell* )
 {
+#if 0  //FIXME: Enable after the new kdchart API is fixed.
     kdDebug(36001) << "######### void ChartBinding::cellChanged( Cell* )" << endl;
 
     if ( m_bIgnoreChanges )
@@ -177,6 +180,7 @@ void ChartBinding::cellChanged( Cell* )
 
     /** TODO - replace the call below with something that will repaint this chart */
 //    sheet()->emit_polygonInvalidated( m_child->framePointArray() );
+#endif
 }
 
 /******************************************************************/
@@ -7607,6 +7611,7 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 
 void Sheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
 {
+#if 0  //FIXME: Enable after the new kdchart API is fixed.
     kdDebug(36001) << "Creating document" << endl;
     KoDocument* dd = _e.createDoc();
     kdDebug(36001) << "Created" << endl;
@@ -7635,6 +7640,7 @@ void Sheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _
       ch->setDeleted(true);
         delete ch;
     }
+#endif
 }
 
 void Sheet::insertChild( const QRect& _rect, KoDocumentEntry& _e )
@@ -8077,12 +8083,16 @@ bool ChartChild::loadDocument( KoStore* _store )
 
     update();
 
+#if 0  //FIXME: Enable after the new kdchart API is fixed.
     chart()->setCanChangeValue( false  );
+#endif
     return true;
 }
 
 KoChart::Part* ChartChild::chart()
 {
+#if 0  //FIXME: Enable after the new kdchart API is fixed.
     assert( document()->inherits( "KoChart::Part" ) );
     return static_cast<KoChart::Part *>( document() );
+#endif
 }
