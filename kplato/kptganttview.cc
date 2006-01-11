@@ -417,6 +417,8 @@ void GanttView::modifyProject(KDGanttViewItem *item, Node *node)
 void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
+    KLocale *locale = KGlobal::locale();
+    
     item->setListViewText(task->name());
     item->setListViewText(1, task->wbs());
     Duration dur = task->duration();
@@ -428,12 +430,25 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
     } else {
         item->setText(QString());
     }    
+    QString w = i18n("Name: %1").arg(task->name());
+    if (!task->notScheduled()) {
+        w += "\n" + i18n("Start: %1").arg(locale->formatDateTime(task->startTime()));
+        w += "\n" + i18n("End: %1").arg(locale->formatDateTime(task->endTime()));
+    }
+    QString sts;
+    bool ok = true;
+    if (task->notScheduled()) {
+        sts += "\n" + i18n("Not scheduled");
+        ok = false;
+    }
     setDrawn(item, true);
 }
 
 void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
+    KLocale *locale = KGlobal::locale();
+
     item->setListViewText(task->name());
     item->setListViewText(1, task->wbs());
     item->setStartTime(task->startTime());
@@ -473,43 +488,41 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         item->setFloatStartTime(QDateTime());
         item->setFloatEndTime(QDateTime());
     }
-    //TODO i18n
-    QString w="Name: " + task->name();
+    QString w = i18n("Name: %1").arg(task->name());
     if (!task->notScheduled()) {
-    
-        w += "\n"; w += "Start: "  + task->startTime().toString();
-        w += "\n"; w += "End  : " + task->endTime().toString();
+        w += "\n"; w += i18n("Start: %1").arg(locale->formatDateTime(task->startTime()));
+        w += "\n"; w += i18n("End: %1").arg(locale->formatDateTime(task->endTime()));
         if (m_showProgress) {
-            w += "\n"; w += "Progress (%): " + QString().setNum(task->progress().percentFinished);
+            w += "\n"; w += i18n("Completion: %1%").arg(task->progress().percentFinished);
         }
-        w += "\n"; w += "Float: " + task->positiveFloat().toString(Duration::Format_Hour);
+        w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_Hour)); //FIXME
     
         if (task->inCriticalPath()) {
-            w += "\n"; w += "Critical path";
+            w += "\n" + i18n("Critical path");
         } else if (task->isCritical()) {
-            w += "\n"; w += "Critical";
+            w += "\n" + i18n("Critical");
         }
     }
     QString sts;
     bool ok = true;
     if (task->notScheduled()) {
-        sts += "\n"; sts += "Not scheduled";
+        sts += "\n" + i18n("Not scheduled");
         ok = false;
     } else {
         if (task->resourceError()) {
-            sts += "\n"; sts += "No resource assigned";
+            sts += "\n" + i18n("No resource assigned");
             ok = false;
         }
         if (task->resourceOverbooked()) {
-            sts += "\n"; sts += "Resource overbooked";
+            sts += "\n" + i18n("Resource overbooked");
             ok = false;
         }
         if (task->resourceNotAvailable()) {
-            sts += "\n"; sts += "Resource not available";
+            sts += "\n" + i18n("Resource not available");
             ok = false;
         }
         if (task->schedulingError()) {
-            sts += "\n"; sts += "Scheduling conflict";
+            sts += "\n" + i18n("Scheduling conflict");
             ok = false;
         }
     }
@@ -535,6 +548,8 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
 void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
+    KLocale *locale = KGlobal::locale();
+    
     item->setListViewText(task->name());
     item->setListViewText(1, task->wbs());
     item->setStartTime(task->startTime());
@@ -558,27 +573,25 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
     }
     //TODO: Show progress
     
-    //TODO i18n
-    QString w="Name: " + task->name();
+    QString w = i18n("Name: %1").arg(task->name());
     if (!task->notScheduled()) {
-        w += "\n"; w += "Time: ";
-        w += task->startTime().toString();
+        w += "\n" + i18n("Time: %1").arg(locale->formatDateTime(task->startTime()));
         
-        w += "\n"; w += "Float: " + task->positiveFloat().toString(Duration::Format_Hour);
+        w += "\n" + i18n("Float: %1").arg(task->positiveFloat().toString(Duration::Format_Hour)); //FIXME
     
         if (task->inCriticalPath()) {
-            w += "\n"; w += "Critical path";
+            w += "\n" + i18n("Critical path");
         } else if (task->isCritical()) {
-            w += "\n"; w += "Critical";
+            w += "\n" + i18n("Critical");
         }
     }
     bool ok = true;
     if (task->notScheduled()) {
-        w += "\n"; w += "Not scheduled";
+        w += "\n" + i18n("Not scheduled");
         ok = false;
     } else {
         if (task->schedulingError()) {
-            w += "\n"; w += "Scheduling conflict";
+            w += "\n" + i18n("Scheduling conflict");
             ok = false;
         }
     }
@@ -904,7 +917,7 @@ void GanttView::print(KPrinter &prt) {
     
     // Make a simple header
     p.drawRect(0,0,metrics.width(),metrics.height());
-    QString text = "Project: " + m_mainview->getPart()->getProject().name();
+    QString text = i18n("Project: ") + m_mainview->getPart()->getProject().name();
     QRect r = p.boundingRect(1,0,0,0, Qt::AlignLeft, text );
     p.drawText( r, Qt::AlignLeft, text );
     int hei = r.height();

@@ -23,6 +23,7 @@
 #include "kptpertcanvas.h"
 #include "kptganttview.h"
 
+#include <klocale.h>
 #include <qpainter.h>
 #include <qpointarray.h>
 #include <qptrlist.h>
@@ -707,9 +708,9 @@ void GanttViewSummaryItem::insertRelations(GanttView *view)
         {
             KDGanttViewTaskLink *link = new KDGanttViewTaskLink(this, child, kdLinkType(it.current()->type()));
             //TODO i18n
-            QString t = QString("From: %1").arg(this->listViewText(0));
-            t += QString("\nTo: %1").arg(child->listViewText(0));
-            t += QString("\nLag: %1").arg(it.current()->lag().toString(Duration::Format_Hour));
+            QString t = i18n("From: %1").arg(this->listViewText(0));
+            t += "\n" + i18n("To: %1").arg(child->listViewText(0));
+            t += "\n" + i18n("Lag: %1").arg(it.current()->lag().toString(Duration::Format_Hour));
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
