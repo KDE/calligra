@@ -67,10 +67,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
         {
             parag = static_cast<KWTextParag *>(textdoc->createParag( textdoc, prevTOCParag /*prev*/, body /*next*/, true ));
             parag->setPartOfTableOfContents( true );
-            QString txt = p->string()->toString();
-            txt = txt.left( txt.length() - 1 ); // remove trailing space
-            if ( p->counter() )
-                txt.prepend( p->counter()->text(p) );
+            QString txt = p->toString(); // includes the heading number, if any
             parag->append( txt );
             prevTOCParag = parag;
 
