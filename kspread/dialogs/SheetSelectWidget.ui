@@ -115,8 +115,8 @@
             </property>
             <property name="whatsThis" stdset="0">
                 <string>&lt;b&gt;List of all available sheets.&lt;/b&gt;&lt;br&gt;
-To print a sheet you have to select one or more sheets in this list and use the buttons to insert the selected sheet(s) in the right list, which lists all sheets that are printed.&lt;br&gt;
-You can insert a sheet as often as you like, this way it will be printed multiple times. This is useful for dividers or title pages for example.</string>
+To print a sheet you have to select one or more sheets in this list and use the buttons to insert the selected sheet(s) in the right-hand list, which lists all sheets that are printed.&lt;br&gt;
+You can insert a sheet as often as you like, this way it will be printed multiple times. This is useful for dividers or title pages, for example.</string>
             </property>
         </widget>
         <widget class="KPushButton" row="0" column="3">
