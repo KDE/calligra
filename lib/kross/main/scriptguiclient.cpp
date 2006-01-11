@@ -316,7 +316,7 @@ bool ScriptGUIClient::executeScriptAction(ScriptAction::Ptr action)
 
 void ScriptGUIClient::showScriptManager()
 {
-    KDialogBase* dialog = new KDialogBase(d->parent, "", true, i18n("Script Manager"), KDialogBase::Close);
+    KDialogBase* dialog = new KDialogBase(d->parent, "", true, i18n("Scripts Manager"), KDialogBase::Close);
     WdgScriptsManager* wsm = new WdgScriptsManager(this, dialog);
     dialog->setMainWidget(wsm);
     dialog->show();
