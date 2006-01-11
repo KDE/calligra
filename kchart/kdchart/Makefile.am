@@ -28,7 +28,8 @@ libkdchart_la_SOURCES = KDChart.cpp 		\
 			KDDrawText.cpp		\
 			KDFrame.cpp 		\
 			KDFrameProfileSection.cpp \
-			KDXMLTools.cpp 
+			KDXMLTools.cpp          \
+                        KDChartEnums.cpp
 
 libkdchart_la_LDFLAGS = $(all_libraries) -no-undefined
 libkdchart_la_LIBADD = $(LIB_QT) $(LIB_KDECORE)
