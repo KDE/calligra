@@ -69,7 +69,7 @@ KoFilter::ConversionStatus KisTIFFImport::convert(const QCString&, const QCStrin
         KisTIFFConverter ib(doc, doc -> undoAdapter());
 
         if (view != 0)
-            view -> getCanvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
+            view -> canvasSubject() ->  progressDisplay() -> setSubject(&ib, false, true);
 
         switch (ib.buildImage(url)) {
             case KisImageBuilder_RESULT_UNSUPPORTED:

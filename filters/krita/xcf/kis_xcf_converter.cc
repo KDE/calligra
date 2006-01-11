@@ -45,7 +45,6 @@
 #include "kis_colorspace_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_paint_device.h"
 #include "kis_profile.h"
 #include "kis_annotation.h"
 
@@ -112,11 +111,11 @@ KisImageBuilder_Result KisXCFConverter::decode(const KURL& uri)
     m_img = 0;
 
     // Decode the xcf file
-    
+
 
 
     emit notifyProgressDone(this);
-    
+
     return KisImageBuilder_RESULT_OK;
 
 }
@@ -132,7 +131,7 @@ KisImageBuilder_Result KisXCFConverter::buildImage(const KURL& uri)
 
     // We're not set up to handle asynchronous loading at the moment.
     KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
-    
+
     QString tmpFile;
 
     if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {

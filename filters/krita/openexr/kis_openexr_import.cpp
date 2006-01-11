@@ -44,7 +44,6 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_paint_device.h"
 #include "kis_rgb_f32_colorspace.h"
 #include "kis_rgb_f16half_colorspace.h"
 
@@ -100,7 +99,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
     int dataHeight = dataWindow.max.y - dataWindow.min.y + 1;
 
     KisRgbF16HalfColorSpace *cs = static_cast<KisRgbF16HalfColorSpace *>((KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("RGBAF16HALF", ""),"")));
-         
+
     if (cs == 0) {
         return KoFilter::InternalError;
     }

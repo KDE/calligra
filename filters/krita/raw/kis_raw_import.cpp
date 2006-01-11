@@ -54,13 +54,13 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_paint_device.h"
+#include "kis_paint_device_impl.h"
 #include "wdgrawimport.h"
 
 typedef KGenericFactory<KisRawImport, KoFilter> KisRawImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_raw_import, KisRawImportFactory("kofficefilters"))
 
-KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&) 
+KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&)
     : KoFilter()
     , m_data(0)
     , m_process(0)
@@ -149,7 +149,7 @@ void KisRawImport::slotUpdatePreview()
 {
     QApplication::setOverrideCursor(Qt::waitCursor);
     getImageData(createArgumentList(true));
-    
+
     kdDebug(41008) << "Retrieved " << m_data->size() << " bytes of image data\n";
 
     if (m_data->isNull()) return;
@@ -166,8 +166,8 @@ void KisRawImport::slotUpdatePreview()
         Q_UINT32 startOfImagedata;
         QSize sz = determineSize(&startOfImagedata);
 
-        kdDebug(41008) << "Total bytes: " << m_data->size() 
-                  << "\n start of image data: " << startOfImagedata 
+        kdDebug(41008) << "Total bytes: " << m_data->size()
+                  << "\n start of image data: " << startOfImagedata
                   << "\n bytes for pixels left: " << m_data->size() - startOfImagedata
                   << "\n total pixels: " << sz.width() * sz.height()
                   << "\n total pixel bytes: " << sz.width() * sz.height() * 6
@@ -175,7 +175,7 @@ void KisRawImport::slotUpdatePreview()
                   << "\n";
 
         char * data = m_data->data() + startOfImagedata;
-        
+
         KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
         KisPaintDeviceImpl * dev = new KisPaintDeviceImpl(cs, "preview");
 
@@ -216,7 +216,7 @@ void KisRawImport::getImageData( QStringList arguments )
     connect(&process, SIGNAL(receivedStdout(KProcess *, char *, int)), this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
     connect(&process, SIGNAL(receivedStderr(KProcess *, char *, int)), this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
     connect(&process, SIGNAL(processExited(KProcess *)), this, SLOT(slotProcessDone()));
-    
+
 
     kdDebug(41008) << "Starting process\n";
 
@@ -275,14 +275,14 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     if (forPreview) {
         args.append("-h"); // Fast, half size image
     }
-    
+
     if (m_page->radio8->isChecked()) {
         args.append("-2"); // 8 bits
     }
     else {
         args.append("-4"); // 16 bits
     }
-    
+
     if (m_page->radioGray->isChecked()) {
         args.append("-d"); // Create grayscale image
     }
@@ -306,7 +306,7 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     if (!m_page->chkClip->isChecked()) {
         args.append("-n"); // Do not clip colors
     }
-    
+
     args.append("-b " + QString::number(m_page->dblBrightness->value()));
     args.append("-k " + QString::number(m_page->dblBlackpoint->value()));
 
@@ -349,7 +349,7 @@ QSize KisRawImport::determineSize(Q_UINT32 * startOfImageData)
         }
         ++i;
     }
-        
+
     QString size = QStringList::split("\n", QString::fromAscii(m_data->data(), i))[1];
     kdDebug(41008) << "Header: " << QString::fromAscii(m_data->data(), i) << "\n";
     QStringList sizelist = QStringList::split(" ", size);
@@ -358,7 +358,7 @@ QSize KisRawImport::determineSize(Q_UINT32 * startOfImageData)
 
     *startOfImageData = i;
     return QSize(w, h);
-    
+
 }
 
 KisProfile * KisRawImport::profile()
@@ -369,7 +369,7 @@ KisProfile * KisRawImport::profile()
 void KisRawImport::slotFillCmbProfiles()
 {
     KisID s = getColorSpace();
-    
+
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     m_page -> cmbProfile -> clear();
     QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );

@@ -23,7 +23,6 @@
 #include <kis_colorspace.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
-#include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_types.h>
 
@@ -51,10 +50,10 @@ namespace {
             color_type = PHOTOMETRIC_CIELAB;
             return true;
         }
-    
+
         kdDebug() << "Cannot export images in " + cs->id().name() + " yet.\n";
         return false;
-    
+
     }
 }
 

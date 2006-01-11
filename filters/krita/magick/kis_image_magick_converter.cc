@@ -46,11 +46,11 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_colorspace.h"
-#include "kis_paint_device.h"
 #include "kis_profile.h"
 #include "kis_annotation.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
+#include "kis_paint_device_impl.h"
 
 #include "../../../config.h"
 
@@ -244,8 +244,8 @@ namespace {
         }
 #endif
     }
-    
-    
+
+
     void InitGlobalMagick()
     {
         static bool init = false;
@@ -565,7 +565,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                 }
                 layer->paintDevice()->move(x_offset, y_offset);
             }
-            
+
             emit notifyProgressDone();
             CloseCacheView(vi);
             DestroyImage(image);
