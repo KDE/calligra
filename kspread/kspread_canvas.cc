@@ -1414,7 +1414,6 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       if ( d->view->koDocument()->isReadWrite() && !sheet->isProtected() )
       {
         (d->chooseCell ? choice() : selectionInfo())->initialize( QPoint( col, row ), activeSheet() );
-        // TODO Stefan: adapt to non-cont. selection
         sheet->paste( QRect(marker(), marker()) );
         sheet->setRegionPaintDirty(*selectionInfo());
       }
@@ -3628,6 +3627,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
     return;
   }
 
+  QValueList<QColor> colors = choice()->colors();
   QBrush nullBrush;
   int index = 0;
   Region::ConstIterator end(choice()->constEnd());
@@ -3638,7 +3638,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		if ( (*it)->sheet() != activeSheet())
 			continue;
 
-    QRect region= (*it)->rect().normalize();
+    QRect region = (*it)->rect().normalize();
 
 		//double positions[4];
 		//bool paintSides[4];
@@ -3648,11 +3648,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		//Convert region from sheet coordinates to canvas coordinates for use with the painter
 		//retrieveMarkerInfo(region,viewRect,positions,paintSides);
 
-  if ( !d->cellEditor || !d->cellEditor->inherits("KSpread::TextEditor") )
-    return;
-
-  QValueList<QColor> colors = static_cast<TextEditor*>(d->cellEditor)->colors();
-  QPen highlightPen( colors[(index) % colors.size()] ); // Qt::red ); //(*iter)->color() );
+    QPen highlightPen( colors[(index) % colors.size()] ); // (*it)->color() );
 		painter.setPen(highlightPen);
 
 		//Adjust the canvas coordinate - rect to take account of zoom level
@@ -3679,7 +3675,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		//click and drag to resize the region)
 
 
-  QBrush sizeGripBrush( colors[(index++) % colors.size()] ); //  Qt::red ); //(*iter)->color());
+    QBrush sizeGripBrush( colors[(index++) % colors.size()] ); // (*it)->color());
 		QPen   sizeGripPen(Qt::white);
 
 		painter.setPen(sizeGripPen);
@@ -3693,7 +3689,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 {
   if( d->chooseCell )
-    	return;
+	return;
 
   if (d->cellEditor)
 	return;

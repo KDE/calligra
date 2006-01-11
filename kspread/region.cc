@@ -78,7 +78,7 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
       {
         sheet = filterSheetName(sRegion);
       }
-      Range* range = new Range(sRegion);
+      Range* range = createRange(sRegion);
       range->setSheet(sheet);
       d->cells.append(range);
     }
@@ -90,7 +90,7 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
       {
         sheet = filterSheetName(sRegion);
       }
-      Point* point = new Point(sRegion);
+      Point* point = createPoint(sRegion);
       point->setSheet(sheet);
       d->cells.append(point);
     }
@@ -133,12 +133,12 @@ Region::Region(const Region& list)
     if (element->type() == Element::Point)
     {
       Point* point = static_cast<Point*>(element);
-      d->cells.append(new Point(*point));
+      d->cells.append(createPoint(*point));
     }
     else
     {
       Range* range = static_cast<Range*>(element);
-      d->cells.append(new Range(*range));
+      d->cells.append(createRange(*range));
     }
   }
 }
@@ -228,12 +228,12 @@ QString Region::name(Sheet* originSheet) const
   return names.isEmpty() ? "" : names.join(";");
 }
 
-void Region::add(const QPoint& point, Sheet* sheet)
+Region::Element* Region::add(const QPoint& point, Sheet* sheet)
 {
 //   kdDebug() << k_funcinfo << endl;
   if (point.x() < 1 || point.y() < 1)
   {
-    return;
+    return 0;
   }
 
   bool containsPoint = false;
@@ -252,7 +252,6 @@ void Region::add(const QPoint& point, Sheet* sheet)
     {
       containsPoint = true;
       break;
-      //return;
     }
     else
     {
@@ -268,22 +267,23 @@ void Region::add(const QPoint& point, Sheet* sheet)
   }
   if ( !containsPoint )
   {
-    Point* rpoint = new Point(point);
+    Point* rpoint = createPoint(point);
     rpoint->setSheet(sheet);
     d->cells.append(rpoint);
+    return rpoint;
   }
+  return 0;
 }
 
-void Region::add(const QRect& range, Sheet* sheet)
+Region::Element* Region::add(const QRect& range, Sheet* sheet)
 {
   if (range.width() == 0 || range.height() == 0)
   {
-    return;
+    return 0;
   }
   if (range.size() == QSize(1,1))
   {
-    add(range.topLeft(), sheet);
-    return;
+    return add(range.topLeft(), sheet);
   }
 
   bool containsRange = false;
@@ -311,23 +311,22 @@ void Region::add(const QRect& range, Sheet* sheet)
   }
   if ( !containsRange )
   {
-    Range* rrange = new Range(range);
+    Range* rrange = createRange(range);
     rrange->setSheet(sheet);
     d->cells.append(rrange);
-    if (isValid())
-    {
-//       kdDebug() << name() << endl;
-    }
+    return rrange;
   }
+  return 0;
 }
 
-void Region::add(const Region& region)
+Region::Element* Region::add(const Region& region)
 {
   ConstIterator endOfList(region.d->cells.constEnd());
   for (ConstIterator it = region.d->cells.constBegin(); it != endOfList; ++it)
   {
     add((*it)->rect(), (*it)->sheet());
   }
+  return d->cells.isEmpty() ? 0 : d->cells.last();
 }
 
 void Region::sub(const QPoint& point)
@@ -378,7 +377,7 @@ void Region::sub(const Region& region)
   }
 }
 
-void Region::eor(const QPoint& point, Sheet* sheet)
+Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
 {
   bool containsPoint = false;
 
@@ -422,12 +421,14 @@ void Region::eor(const QPoint& point, Sheet* sheet)
     width = fullRange.width();
     height = QMAX(0, fullRange.bottom() - y);
     insert(it, QRect(left, top, width, height), sheet);
+    return *it;
   }
 
   if (!containsPoint)
   {
-    add(point, sheet);
+    return add(point, sheet);
   }
+  return 0;
 }
 
 void Region::insert(Region::Iterator pos, const QPoint& point, Sheet* sheet)
@@ -436,7 +437,7 @@ void Region::insert(Region::Iterator pos, const QPoint& point, Sheet* sheet)
   {
     return;
   }
-  Point* rpoint = new Point(point);
+  Point* rpoint = createPoint(point);
   rpoint->setSheet(sheet);
   d->cells.insert(pos, 1, rpoint);
 }
@@ -452,7 +453,7 @@ void Region::insert(Region::Iterator pos, const QRect& range, Sheet* sheet)
     insert(pos, range.topLeft(), sheet);
     return;
   }
-  Range* rrange = new Range(range);
+  Range* rrange = createRange(range);
   rrange->setSheet(sheet);
   d->cells.insert(pos, 1, rrange);
 }
@@ -643,12 +644,12 @@ void Region::operator=(const Region& other)
     if (element->type() == Element::Point)
     {
       Point* point = static_cast<Point*>(element);
-      d->cells.append(new Point(*point));
+      d->cells.append(createPoint(*point));
     }
     else
     {
       Range* range = static_cast<Range*>(element);
-      d->cells.append(new Range(*range));
+      d->cells.append(createRange(*range));
     }
   }
 }
@@ -672,6 +673,35 @@ Sheet* Region::filterSheetName(QString& sRegion)
   return sheet;
 }
 
+Region::Point* Region::createPoint(const QPoint& point) const
+{
+  return new Point(point);
+}
+
+Region::Point* Region::createPoint(const QString& string) const
+{
+  return new Point(string);
+}
+
+Region::Point* Region::createPoint(const Point& point) const
+{
+  return new Point(point);
+}
+
+Region::Range* Region::createRange(const QRect& rect) const
+{
+  return new Range(rect);
+}
+
+Region::Range* Region::createRange(const QString& string) const
+{
+  return new Range(string);
+}
+
+Region::Range* Region::createRange(const Range& range) const
+{
+  return new Range(range);
+}
 
 /***************************************************************************
   class Element
@@ -691,34 +721,22 @@ Region::Element::~Element()
   class Point
 ****************************************************************************/
 
-Region::Point::Point()
-  : Region::Element(),
-    m_point(),
-    m_columnFixed(false),
-    m_rowFixed(false)
-{
-}
-
 Region::Point::Point(const QPoint& point)
   : Region::Element(),
-    m_point(point),
-    m_columnFixed(false),
-    m_rowFixed(false)
+    m_point(point)
 {
 }
 
 Region::Point::Point(const QString& sCell)
   : Region::Element(),
-    m_point(),
-    m_columnFixed(false),
-    m_rowFixed(false)
+    m_point()
 {
     uint length = sCell.length();
 
     if (length == 0)
     {
-        kdDebug(36001) << "Point::init: length = 0" << endl;
-        return;
+      kdDebug(36001) << "Region::Point::init: length = 0" << endl;
+      return;
     }
 
     QString string = sCell;//Region::filterSheetName(sCell);
@@ -728,14 +746,13 @@ Region::Point::Point(const QString& sCell)
     // Fixed ?
     if (string[0] == '$')
     {
-        m_columnFixed = true;
         p++;
     }
 
     // Malformed ?
     if (p == length)
     {
-        kdDebug(36001) << "Point::init: no point after '$' (string: '" << string.mid(p) << "'" << endl;
+      kdDebug(36001) << "Region::Point::init: no point after '$' (string: '" << string.mid(p) << "'" << endl;
         return;
     }
 
@@ -743,7 +760,7 @@ Region::Point::Point(const QString& sCell)
     {
         if (string[p] < 'a' || string[p] > 'z')
         {
-            kdDebug(36001) << "Point::init: wrong first character in point (string: '" << string.mid(p) << "'" << endl;
+          kdDebug(36001) << "Region::Point::init: wrong first character in point (string: '" << string.mid(p) << "'" << endl;
             return;
         }
     }
@@ -759,7 +776,7 @@ Region::Point::Point(const QString& sCell)
     }
     else  // If there isn't any, then this is not a point -> return
     {
-        kdDebug(36001) << "Point::init: no number in string (string: '" << string.mid( p, result ) << "'" << endl;
+      kdDebug(36001) << "Region::Point::init: no number in string (string: '" << string.mid( p, result ) << "'" << endl;
         return;
     }
     p = result;
@@ -767,25 +784,24 @@ Region::Point::Point(const QString& sCell)
     //limit is KS_colMax
     if ( x > KS_colMax )
     {
-        kdDebug(36001) << "Point::init: column value too high (col: " << x << ")" << endl;
+      kdDebug(36001) << "Region::Point::init: column value too high (col: " << x << ")" << endl;
         return;
     }
 
     // Malformed ?
     if (p == length)
     {
-        kdDebug(36001) << "Point::init: p==length after cols" << endl;
+        kdDebug(36001) << "Region::Point::init: p==length after cols" << endl;
         return;
     }
 
     if (string[p] == '$')
     {
-        m_rowFixed = true;
         p++;
   // Malformed ?
         if ( p == length )
         {
-            kdDebug(36001) << "Point::init: p==length after $ of row" << endl;
+            kdDebug(36001) << "Region::Point::init: p==length after $ of row" << endl;
             return;
         }
     }
@@ -795,7 +811,7 @@ Region::Point::Point(const QString& sCell)
     {
         if (!QChar(string[p++]).isDigit())
         {
-            kdDebug(36001) << "Point::init: no number" << endl;
+            kdDebug(36001) << "Region::Point::init: no number" << endl;
             return;
         }
     }
@@ -804,17 +820,17 @@ Region::Point::Point(const QString& sCell)
     int y = string.mid( p2, p-p2 ).toInt( &ok );
     if ( !ok )
     {
-        kdDebug(36001) << "Point::init: Invalid number (string: '" << string.mid( p2, p-p2 ) << "'" << endl;
+        kdDebug(36001) << "Region::Point::init: Invalid number (string: '" << string.mid( p2, p-p2 ) << "'" << endl;
         return;
     }
     if ( y > KS_rowMax )
     {
-        kdDebug(36001) << "Point::init: row value too high (row: " << y << ")" << endl;
+        kdDebug(36001) << "Region::Point::init: row value too high (row: " << y << ")" << endl;
         return;
     }
     if ( y <= 0 )
     {
-        kdDebug(36001) << "Point::init: y <= 0" << endl;
+        kdDebug(36001) << "Region::Point::init: y <= 0" << endl;
         return;
     }
 
@@ -850,33 +866,15 @@ bool Region::Point::contains(const QRect& range) const
   class Range
 ****************************************************************************/
 
-Region::Range::Range()
-  : Region::Element(),
-      m_range(),
-      m_leftFixed(false),
-      m_rightFixed(false),
-      m_topFixed(false),
-      m_bottomFixed(false)
-{
-}
-
 Region::Range::Range(const QRect& rect)
   : Region::Element(),
-      m_range(rect),
-      m_leftFixed(false),
-      m_rightFixed(false),
-      m_topFixed(false),
-      m_bottomFixed(false)
+      m_range(rect)
 {
 }
 
 Region::Range::Range(const QString& sRange)
   : Region::Element(),
-      m_range(),
-      m_leftFixed(false),
-      m_rightFixed(false),
-      m_topFixed(false),
-      m_bottomFixed(false)
+      m_range()
 {
     int delimiterPos = sRange.find(':');
     if (delimiterPos == -1)
@@ -894,10 +892,6 @@ Region::Range::Range(const QString& sRange)
       return;
     }
     m_range = QRect(ul.pos(), lr.pos());
-    m_leftFixed = ul.columnFixed();
-    m_rightFixed = lr.columnFixed();
-    m_topFixed = ul.rowFixed();
-    m_bottomFixed = lr.rowFixed();
 }
 
 Region::Range::~Range()

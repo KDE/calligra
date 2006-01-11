@@ -41,6 +41,11 @@ class View;
  */
 class KSPREAD_EXPORT Region
 {
+protected:
+  class Element;
+  class Point;
+  class Range;
+
 public:
   /**
    * Constructor.
@@ -187,18 +192,18 @@ public:
    * @param point the point's location
    * @param sheet the sheet the point belongs to
    */
-  void add(const QPoint& point, Sheet* sheet = 0);
+  Element* add(const QPoint& point, Sheet* sheet = 0);
   /**
    * Adds the range @p range to this region.
    * @param range the range's location
    * @param sheet the sheet the range belongs to
    */
-  void add(const QRect& range, Sheet* sheet = 0);
+  Element* add(const QRect& range, Sheet* sheet = 0);
   /**
    * Adds the region @p region to this region.
    * @param region the range's location
    */
-  void add(const Region& region);
+  Element* add(const Region& region);
 
   /* TODO Stefan #3: Improve! */
   /**
@@ -221,7 +226,7 @@ public:
    * @param point the point's location
    * @param sheet the sheet the point belongs to
    */
-  virtual void eor(const QPoint& point, Sheet* sheet = 0);
+  virtual Element* eor(const QPoint& point, Sheet* sheet = 0);
 
   /**
    * Deletes all elements of the region. The result is an empty region.
@@ -257,35 +262,7 @@ public:
    */
   void setView(View*);
 
-protected:
-  /* TODO Stefan #4:
-      Move the bits for fixing Points/Ranges to derived classes
-      FixablePoint/FixableRange as they are needed for Selections only.
-      This would save 4 bytes for each Element!
-  */
-  class Element;
-  class Point;
-  class Range;
 
-  /**
-   * @return the list of elements
-   */
-  QValueList<Element*>& cells() const;
-
-private:
-  /* TODO Stefan #5:
-      Elaborate, if Private data class is really nescessary. A direct
-      access to the list of Elements could make sense for derived
-      classes (Selection!, Manipulator?)
-  */
-  class Private;
-  Private *d;
-
-public:
-  /* TODO Stefan #6:
-  Remove these typedefs/iterators. Create a manipulator or whatever for
-  the cases, in which they are used.
-  */
   typedef QValueList<Element*>::Iterator      Iterator;
   typedef QValueList<Element*>::ConstIterator ConstIterator;
 
@@ -293,8 +270,24 @@ public:
   ConstIterator constEnd() const;
 
 protected:
+  /**
+   * @return the list of elements
+   */
+  QValueList<Element*>& cells() const;
+
   void insert(Iterator, const QPoint&, Sheet*);
   void insert(Iterator, const QRect&, Sheet*);
+
+  virtual Point* createPoint(const QPoint&) const;
+  virtual Point* createPoint(const QString&) const;
+  virtual Point* createPoint(const Point&) const;
+  virtual Range* createRange(const QRect&) const;
+  virtual Range* createRange(const QString&) const;
+  virtual Range* createRange(const Range&) const;
+
+private:
+  class Private;
+  Private *d;
 };
 
 
@@ -328,6 +321,7 @@ public:
 
   virtual QString name(Sheet* = 0) const { return QString(""); }
   virtual QRect rect() const { return QRect(); }
+  virtual const QColor& color() const { return Qt::black; }
 
   Sheet* sheet() const { return m_sheet; }
   void setSheet(Sheet* sheet) { m_sheet = sheet; }
@@ -353,13 +347,11 @@ protected:
  * m_sheet: 4 bytes
  * vtable: 4 bytes
  * m_point: 8 bytes
- * bitmask: 4 bytes
- * sum: 20 bytes
+ * sum: 16 bytes
  */
 class Region::Point : public Region::Element
 {
 public:
-  Point();
   Point(const QPoint&);
   Point(const QString&);
   virtual ~Point();
@@ -378,14 +370,8 @@ public:
 
   QPoint pos() const { return m_point; }
 
-  bool columnFixed() const { return m_columnFixed; }
-  bool rowFixed() const { return m_rowFixed; }
-
 private:
   QPoint m_point;
-  /* TODO Stefan #4 */
-  bool m_columnFixed : 1;
-  bool m_rowFixed    : 1;
 };
 
 
@@ -401,13 +387,11 @@ private:
  * m_sheet: 4 bytes
  * vtable: 4 bytes
  * m_range: 16 bytes
- * bitmask: 4 bytes
- * sum: 28 bytes
+ * sum: 24 bytes
  */
 class Region::Range : public Region::Element
 {
 public:
-  Range();
   Range(const QRect&);
   Range(const QString&);
   virtual ~Range();
@@ -429,11 +413,6 @@ public:
 
 private:
   QRect m_range;
-  /* TODO Stefan #4 */
-  bool m_leftFixed   : 1;
-  bool m_rightFixed  : 1;
-  bool m_topFixed    : 1;
-  bool m_bottomFixed : 1;
 };
 
 } // namespace KSpread

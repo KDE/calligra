@@ -78,7 +78,7 @@ public:
    * @param point the point's location
    * @param sheet the sheet the point belongs to
    */
-  virtual void eor(const QPoint& point, Sheet* sheet = 0);
+  virtual Element* eor(const QPoint& point, Sheet* sheet = 0);
 
   /**
    * The anchor is the starting point of a range. For points marker and anchor are the same
@@ -115,6 +115,7 @@ public:
   QRect lastRange(bool extend = true) const;
   QRect extendToMergedAreas(QRect area) const;
 
+  const QValueList<QColor>& colors() const;
 
   // TODO Stefan #2: replace this
   QRect selection(bool extend = true) const;
@@ -126,32 +127,65 @@ protected:
   class Point;
   class Range;
 
+  virtual Region::Point* createPoint(const QPoint&) const;
+  virtual Region::Point* createPoint(const QString&) const;
+  virtual Region::Point* createPoint(const Point&) const;
+  virtual Region::Range* createRange(const QRect&) const;
+  virtual Region::Range* createRange(const QString&) const;
+  virtual Region::Range* createRange(const Range&) const;
+
 private:
   class Private;
   Private *d;
 };
 
-// TODO Stefan: "virtual class Foo;" is not valid :(
-//              find a way around it. maybe:
-//              virtual class Point* Region::createPoint() { return new Region::Point; }
-//              virtual class Point* Selection::createPoint() { return new Selection::Point; }
+/***************************************************************************
+  class Selection::Point
+****************************************************************************/
+
 class Selection::Point : public Region::Point
 {
 public:
+  Point(const QPoint& point);
+  Point(const QString& string);
+
+  void setColor(const QColor& color) { m_color = color; }
+  virtual const QColor& color() const { return m_color; }
+
+  bool columnFixed() const { return m_columnFixed; }
+  bool rowFixed() const { return m_rowFixed; }
 
 protected:
+
 private:
   QColor m_color;
+  bool m_columnFixed : 1;
+  bool m_rowFixed    : 1;
 };
 
-// TODO Stefan
+/***************************************************************************
+  class Selection::Range
+****************************************************************************/
+
 class Selection::Range : public Region::Range
 {
 public:
-  Range() : Region::Range() { kdDebug() << k_funcinfo << endl; }
+  Range(const QRect& rect);
+  Range(const QString& string);
+
+  virtual bool isColorizable() const { return true; }
+
+  void setColor(const QColor& color) { m_color = color; }
+  const QColor& color() const { return m_color; }
+
 protected:
+
 private:
   QColor m_color;
+  bool m_leftFixed   : 1;
+  bool m_rightFixed  : 1;
+  bool m_topFixed    : 1;
+  bool m_bottomFixed : 1;
 };
 
 } // namespace KSpread

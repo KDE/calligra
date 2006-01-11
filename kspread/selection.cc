@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qregexp.h>
+
 #include <kdebug.h>
 
 #include "kspread_canvas.h"
@@ -47,6 +49,15 @@ public:
     anchor = QPoint(1,1);
     cursor = QPoint(1,1);
     marker = QPoint(1,1);
+
+    colors.push_back(Qt::red);
+    colors.push_back(Qt::blue);
+    colors.push_back(Qt::magenta);
+    colors.push_back(Qt::darkRed);
+    colors.push_back(Qt::darkGreen);
+    colors.push_back(Qt::darkMagenta);
+    colors.push_back(Qt::darkCyan);
+    colors.push_back(Qt::darkYellow);
   }
 
   View*  view;
@@ -54,8 +65,8 @@ public:
   QPoint anchor;
   QPoint cursor;
   QPoint marker;
+  QValueList<QColor> colors;
 };
-
 
 /***************************************************************************
   class Selection
@@ -109,7 +120,17 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
   d->marker = topLeft;
 
   clear();
-  add(topLeft, sheet);
+  Element* element = add(topLeft, sheet);
+  if (element && element->type() == Element::Point)
+  {
+    Point* point = static_cast<Point*>(element);
+    point->setColor(d->colors[cells().size() % d->colors.size()]);
+  }
+  else if (element && element->type() == Element::Range)
+  {
+    Range* range = static_cast<Range*>(element);
+    range->setColor(d->colors[cells().size() % d->colors.size()]);
+  }
 
   if (changedRegion == *this)
   {
@@ -158,7 +179,17 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
   d->marker = bottomRight;
 
   clear();
-  add(QRect(topLeft, bottomRight), sheet);
+  Element* element = add(QRect(topLeft, bottomRight), sheet);
+  if (element && element->type() == Element::Point)
+  {
+    Point* point = static_cast<Point*>(element);
+    point->setColor(d->colors[cells().size() % d->colors.size()]);
+  }
+  else if (element && element->type() == Element::Range)
+  {
+    Range* range = static_cast<Range*>(element);
+    range->setColor(d->colors[cells().size() % d->colors.size()]);
+  }
 
   if (changedRegion == *this)
   {
@@ -188,7 +219,17 @@ void Selection::initialize(const Region& region, Sheet* sheet)
 
   // TODO Stefan: handle obscured cells correctly
   clear();
-  add(region);
+  Element* element = add(region);
+  if (element && element->type() == Element::Point)
+  {
+    Point* point = static_cast<Point*>(element);
+    point->setColor(d->colors[cells().size() % d->colors.size()]);
+  }
+  else if (element && element->type() == Element::Range)
+  {
+    Range* range = static_cast<Range*>(element);
+    range->setColor(d->colors[cells().size() % d->colors.size()]);
+  }
 
   QPoint topLeft(cells().last()->rect().normalize().topLeft());
   Cell* cell = d->view->activeSheet()->cellAt(topLeft);
@@ -225,6 +266,12 @@ void Selection::update()
 
 void Selection::update(const QPoint& point)
 {
+  if (cells().isEmpty())
+  {
+    add(point);
+    return;
+  }
+
   Sheet* sheet = cells().last()->sheet();
   if (sheet != d->view->activeSheet())
   {
@@ -389,7 +436,17 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   d->cursor = topLeft;
   d->marker = bottomRight;
 
-  add(extendToMergedAreas(QRect(topLeft, bottomRight)).normalize(), sheet);
+  Element* element = add(extendToMergedAreas(QRect(topLeft, bottomRight)).normalize(), sheet);
+  if (element && element->type() == Element::Point)
+  {
+    Point* point = static_cast<Point*>(element);
+    point->setColor(d->colors[cells().size() % d->colors.size()]);
+  }
+  else if (element && element->type() == Element::Range)
+  {
+    Range* range = static_cast<Range*>(element);
+    range->setColor(d->colors[cells().size() % d->colors.size()]);
+  }
 
   emit changed(*this);
 }
@@ -400,7 +457,7 @@ void Selection::extend(const Region& region)
   for (ConstIterator it = region.constBegin(); it != end; ++it)
   {
     Element *element = *it;
-    if (element->type() == Element::Point)
+    if (element && element->type() == Element::Point)
     {
       Point* point = static_cast<Point*>(element);
       extend(point->pos(), element->sheet());
@@ -412,14 +469,13 @@ void Selection::extend(const Region& region)
   }
 }
 
-void Selection::eor(const QPoint& point, Sheet* sheet)
+Selection::Element* Selection::eor(const QPoint& point, Sheet* sheet)
 {
   if (isSingular())
   {
-    Region::add(point, sheet);
-    return;
+    return Region::add(point, sheet);
   }
-  Region::eor(point, sheet);
+  return Region::eor(point, sheet);
 }
 
 const QPoint& Selection::anchor() const
@@ -508,6 +564,10 @@ void Selection::setActive(const QPoint& point)
   cells().append(element); // TODO Stefan: avoid the move to the end
 }
 
+const QValueList<QColor>& Selection::colors() const
+{
+  return d->colors;
+}
 
 QRect Selection::lastRange(bool extend) const
 {
@@ -570,6 +630,120 @@ QRect Selection::extendToMergedAreas(QRect area) const
     area.setCoords(left,top,right,bottom);
   }
   return area;
+}
+
+Selection::Region::Point* Selection::createPoint(const QPoint& point) const
+{
+  return new Point(point);
+}
+
+Selection::Region::Point* Selection::createPoint(const QString& string) const
+{
+  return new Point(string);
+}
+
+Selection::Region::Point* Selection::createPoint(const Point& point) const
+{
+  return new Point(point);
+}
+
+Selection::Region::Range* Selection::createRange(const QRect& rect) const
+{
+  return new Range(rect);
+}
+
+Selection::Region::Range* Selection::createRange(const QString& string) const
+{
+  return new Range(string);
+}
+
+Selection::Region::Range* Selection::createRange(const Range& range) const
+{
+  return new Range(range);
+}
+
+/***************************************************************************
+  class Point
+****************************************************************************/
+
+Selection::Point::Point(const QPoint& point)
+  : Region::Point(point),
+    m_color(Qt::black),
+    m_columnFixed(false),
+    m_rowFixed(false)
+{
+}
+
+Selection::Point::Point(const QString& string)
+  : Region::Point(string),
+    m_color(Qt::black),
+    m_columnFixed(false),
+    m_rowFixed(false)
+{
+  if (!isValid())
+  {
+    return;
+  }
+
+  uint p = 0;
+  // Fixed?
+  if (string[p++] == '$')
+  {
+    m_columnFixed = true;
+  }
+
+  //search for the first character != text
+  int result = string.find( QRegExp("[^A-Za-z]+"), p );
+  if (string[result] == '$')
+  {
+    m_rowFixed = true;
+  }
+}
+
+/***************************************************************************
+  class Range
+****************************************************************************/
+
+Selection::Range::Range(const QRect& range)
+  : Region::Range(range),
+    m_color(Qt::black),
+    m_leftFixed(false),
+    m_rightFixed(false),
+    m_topFixed(false),
+    m_bottomFixed(false)
+{
+}
+
+Selection::Range::Range(const QString& string)
+  : Region::Range(string),
+    m_color(Qt::black),
+    m_leftFixed(false),
+    m_rightFixed(false),
+    m_topFixed(false),
+    m_bottomFixed(false)
+{
+  if (!isValid())
+  {
+    return;
+  }
+
+  int delimiterPos = string.find(':');
+  if (delimiterPos == -1)
+  {
+    return;
+  }
+
+  Selection::Point ul(string.left(delimiterPos));
+  Selection::Point lr(string.mid(delimiterPos + 1));
+
+  if (!ul.isValid() || !lr.isValid())
+  {
+    return;
+  }
+  m_leftFixed = ul.columnFixed();
+  m_rightFixed = lr.columnFixed();
+  m_topFixed = ul.rowFixed();
+  m_bottomFixed = lr.rowFixed();
 }
 
 #include "selection.moc"
