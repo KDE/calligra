@@ -3692,7 +3692,6 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 
 void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 {
-
   if( d->chooseCell )
     	return;
 
@@ -3702,23 +3701,16 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
   double positions[4];
   bool paintSides[4];
 
-/*  Region::ConstIterator end(selectionInfo()->constEnd());
+  Region::ConstIterator end(selectionInfo()->constEnd());
   for (Region::ConstIterator it = selectionInfo()->constBegin(); it != end; ++it)
   {
-    QRect marker = (*it)->rect();
+    QRect range = (*it)->rect().normalize();
 
-    bool current = (selectionInfo()->marker() == marker.bottomRight()) &&
-                   (selectionInfo()->anchor() == marker.topLeft());
-    marker = marker.normalize();
-    QPen pen( Qt::black, (current ? 3 : 1 ) );*/
-    QRect marker = selectionInfo()->lastRange();
-
+    bool current = QRect(selectionInfo()->anchor(), selectionInfo()->marker()).normalize() == range;
     QPen pen( Qt::black, 3 );
     painter.setPen( pen );
 
-    retrieveMarkerInfo( marker, viewRect, positions, paintSides );
-
-    painter.setPen( pen );
+    retrieveMarkerInfo( range, viewRect, positions, paintSides );
 
     double left =   positions[0];
     double top =    positions[1];
@@ -3750,7 +3742,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
         painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
                           d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
       }
-      if ( paintLeft && paintBottom )
+      if ( paintLeft && paintBottom && current )
       {
         /* then the 'handle' in the bottom left corner is visible. */
         painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
@@ -3774,14 +3766,14 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
         }
       }
     }
-    else
+    else // activeSheet()->layoutDirection()==Sheet::LeftToRight
     {
       if ( paintLeft )
       {
         painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
                           d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) );
       }
-      if ( paintRight && paintBottom )
+      if ( paintRight && paintBottom && current )
       {
         /* then the 'handle' in the bottom right corner is visible. */
         painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
@@ -3801,11 +3793,11 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
         if ( paintBottom )
         {
           painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
-                            d->view->doc()->zoomItX( right ) + l, d->view->doc()->zoomItY( bottom ) );
+                            d->view->doc()->zoomItX( right ) + l + 1, d->view->doc()->zoomItY( bottom ) );
         }
       }
     }
-/*  }*/
+  }
 }
 
 void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
