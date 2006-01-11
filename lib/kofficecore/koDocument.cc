@@ -1477,53 +1477,53 @@ bool KoDocument::openFile()
                 case KoFilter::OK: break;
                 
                 case KoFilter::CreationError:
-                    msg = i18n( "creation error" ); break;
+                    msg = i18n( "Creation error" ); break;
                     
                 case KoFilter::FileNotFound:
-                    msg = i18n( "file not found" ); break;
+                    msg = i18n( "File not found" ); break;
                     
                 case KoFilter::StorageCreationError:
-                    msg = i18n( "can not create storage" ); break;
+                    msg = i18n( "Cannot create storage" ); break;
                 
                 case KoFilter::BadMimeType:
-                    msg = i18n( "bad MIME type" ); break;
+                    msg = i18n( "Bad MIME type" ); break;
                 
                 case KoFilter::EmbeddedDocError:
-                    msg = i18n( "error in embedded document" ); break;
+                    msg = i18n( "Error in embedded document" ); break;
                 
                 case KoFilter::WrongFormat:
-                    msg = i18n( "format is not recognized" ); break;
+                    msg = i18n( "Format not recognized" ); break;
                 
                 case KoFilter::NotImplemented:
-                    msg = i18n( "not implemented" ); break;
+                    msg = i18n( "Not implemented" ); break;
                 
                 case KoFilter::ParsingError:
-                    msg = i18n( "parsing error" ); break;
+                    msg = i18n( "Parsing error" ); break;
                 
                 case KoFilter::PasswordProtected:
-                    msg = i18n( "document is password protected" ); break;
+                    msg = i18n( "Document password protected" ); break;
                 
                 case KoFilter::InternalError:
                 case KoFilter::UnexpectedEOF:
                 case KoFilter::UnexpectedOpcode:
                 case KoFilter::StupidError: // ?? what is this ??
                 case KoFilter::UsageError:
-                    msg = i18n( "internal error" ); break;
+                    msg = i18n( "Internal error" ); break;
                 
                 case KoFilter::OutOfMemory:
-                    msg = i18n( "Out of Memory" ); break;
+                    msg = i18n( "Out of memory" ); break;
 
                 case KoFilter::UserCancelled:
                 case KoFilter::BadConversionGraph:
                     // intentionally we do not prompt the error message here
                     break;
                     
-                default: msg = i18n( "unknown error" ); break;
+                default: msg = i18n( "Unknown error" ); break;
             } 
             
             if( d->m_autoErrorHandlingEnabled && !msg.isEmpty())
             {
-                QString errorMsg( i18n( "Could not open\n%1\nReason: %2" ) );
+                QString errorMsg( i18n( "Could not open\n%1.\nReason: %2" ) );
                 QString docUrl = url().prettyURL( 0, KURL::StripFileProtocol );
                 KMessageBox::error( 0L, errorMsg.arg(docUrl).arg(msg) );
             }
