@@ -94,8 +94,8 @@ format among the choices below.</para>
 <term><guilabel>Number</guilabel></term>
 <listitem><para>The number notation uses the notation you globally choose in
 &kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
-Accessibility</guimenu><guimenuitem>Numbers</guimenuitem></menuchoice>. Numbers
-are right justified by default.</para>
+Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Numbers</guimenuitem></menuchoice>.
+Numbers are right justified by default.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -116,7 +116,7 @@ Toolbar: <inlinemediaobject><imageobject>
 <term><guilabel>Money</guilabel></term>
 <listitem><para>The Money format converts your number into money notation using
 the settings globally fixed in &kcontrolcenter; in <menuchoice><guimenu>Regional
-&amp; Accessibility</guimenu><guimenuitem>Money</guimenuitem></menuchoice>. The
+&amp; Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Money</guimenuitem></menuchoice>. The
 currency symbol will be displayed and the precision will be the one set in
 &kcontrolcenter;.</para>
 <para>You can also use the Currency icon in the Format Toolbar to set the
@@ -153,7 +153,7 @@ fraction.</para>
 <term><guilabel>Date format</guilabel></term>
 <listitem><para>To enter a date, you should enter it in one of the formats set
 in &kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
-Accessibility</guimenu><guimenuitem>Time &amp;
+Accessibility</guimenu><guisubmenu>Country/Region &amp; Language</guisubmenu><guimenuitem>Time &amp;
 Dates</guimenuitem></menuchoice>.There are two formats set here: the date format
 and the short date format.</para>
 <para>A random natural number NN will be transformed in the date from 30st
@@ -175,7 +175,8 @@ better-->
 <term><guilabel>Time format</guilabel></term>
 <listitem><para>This formats your cell content as a time. To enter a time, you
 should enter it in the <guilabel>Time format</guilabel> set in &kcontrolcenter;
-in <menuchoice><guimenu>Regional &amp; Accessibility</guimenu><guimenuitem>Time
+in <menuchoice><guimenu>Regional &amp; Accessibility</guimenu><guisubmenu>Country/Region &amp; 
+Language</guisubmenu><guimenuitem>Time
 &amp; Dates</guimenuitem></menuchoice>. In the <guilabel>Cell Format</guilabel>
 dialog box you can set how the time should be displayed by choosing one of the
 available time format options. The default format is the system format set in
@@ -201,8 +202,8 @@ change the way the cell is justified.</para>
 </variablelist>
 
 <para>The lower part of the <guilabel>Data Format</guilabel> page lets you add 
-a <guilabel>Prefix</guilabel> such as a $ symbol at the start of each item or 
-a <guilabel>Postfix</guilabel> such as $HK to the end. You can also control 
+a <guilabel>Prefix:</guilabel> such as a $ symbol at the start of each item or 
+a <guilabel>Postfix:</guilabel> such as $HK to the end. You can also control 
 how many digits are displayed after the decimal point for numeric values, 
 whether positive values are displayed with a leading + sign and whether 
 negative values are shown in red.
@@ -231,11 +232,11 @@ The lower part of the page gives a preview of the selected text format.</para>
 Manager</guimenuitem></menuchoice> menu with the currently used style.</para>
 <!--annma-->
 <variablelist>
-<varlistentry>
+<!--varlistentry>
 <term><guilabel>Family List box</guilabel></term>
 <listitem><para>Allows you to choose a new font family.</para>
 </listitem>
-</varlistentry>
+</varlistentry-->
 <varlistentry>
 <term><guilabel>Style:</guilabel></term>
 <listitem><para>Choose the style for your font for the currently selected cells.
@@ -329,7 +330,7 @@ cell.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Text option</guilabel></term>
+<term><guilabel>Text Option</guilabel></term>
 <listitem><para>This is only available when the rotation is 0°. 
 Wrap text wraps the text so it fits in the previous cell size. If this is not
 checked, the text will stay on one line.</para>
@@ -344,7 +345,7 @@ clockwise.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Merge cells</guilabel></term>
+<term><guilabel>Merge Cells</guilabel></term>
 <listitem><para>When checked, this has the same effect
 as <menuchoice><guimenu>Data</guimenu><guimenuitem>Merge
 Cells</guimenuitem></menuchoice>. You need to have at least two
@@ -366,7 +367,7 @@ Indent</guimenuitem></menuchoice> menus.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Size of cell</guilabel></term>
+<term><guilabel>Size Of Cell</guilabel></term>
 <listitem><para>You set here the size of the cell, either a custom width and
 height or choose the default width and height.</para>
 </listitem>
@@ -430,7 +431,7 @@ cell background.</para>
 </mediaobject>
 </para>
 <para>You can change the way the content of a cell is protected in the
-<guilabel>Cell protection</guilabel> page.</para>
+<guilabel>Cell Protection</guilabel> page.</para>
 <para>All cells are protected by default (that means cell content cannot be
 changed) and for the cell protection to be active you also need to protect the
 sheet using the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect

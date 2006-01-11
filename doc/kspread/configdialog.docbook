@@ -50,20 +50,20 @@ button on this page will update it to conform to your locale settings as they ar
     </mediaobject>
 </para>
 <para>This page of &kspread;'s configuration dialog box (obtained by selecting 
-<guimenuitem>Configure Kspread...</guimenuitem> from the <guimenu>Settings
+<guimenuitem>Configure &kspread;...</guimenuitem> from the <guimenu>Settings
 </guimenu> menu) controls some more &kspread; features:</para>
 
 <para><variablelist>
 <varlistentry>
 <term><guilabel>Number of sheets open at the beginning:</guilabel></term>
 <listitem><para>Controls how many worksheets will be created if the 
-option <guilabel>Start with an empty document</guilabel> is chosen when 
+option <guilabel>Blank Worksheet</guilabel> is chosen when 
 &kspread; is started.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Number of recent files:</guilabel></term>
+<term><guilabel>Number of files to show in Recent Files list:</guilabel></term>
 <listitem><para>Controls the maximum number of filenames that are shown
 when you select <menuchoice><guimenu>File</guimenu><guimenuitem>
 Open Recent</guimenuitem></menuchoice>.
@@ -79,53 +79,53 @@ this feature altogether by choosing <guilabel>Do not save automatically</guilabe
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Create Backup Files</guilabel></term>
+<term><guilabel>Create backup files</guilabel></term>
 <listitem><para>Check this box if you want some backup files created. This is checked per default.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show Vertical Scrollbar</guilabel></term>
+<term><guilabel>Show vertical scrollbar</guilabel></term>
 <listitem><para>Check or uncheck this box to show or hide the vertical 
 scrollbar in all sheets.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show Horizontal Scrollbar</guilabel></term>
+<term><guilabel>Show horizontal scrollbar</guilabel></term>
 <listitem><para>Check or uncheck this box to show or hide the horizontal 
 scrollbar in all sheets.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show Column Header</guilabel></term>
+<term><guilabel>Show column header</guilabel></term>
 <listitem><para>Check this box to show the column letters across the top of each 
 worksheet.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show Row Header</guilabel></term>
+<term><guilabel>Show row header</guilabel></term>
 <listitem><para>Check this box to show the row numbers down the left side.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show Tabs</guilabel></term>
+<term><guilabel>Show tabs</guilabel></term>
 <listitem><para>This check box controls whether the sheet tabs are shown 
 at the bottom of the worksheet.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show Formula toolbar</guilabel></term>
+<term><guilabel>Show formula toolbar</guilabel></term>
 <listitem><para>Here is where you can choose to show or hide the Formula bar.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show Statusbar</guilabel></term>
+<term><guilabel>Show status bar</guilabel></term>
 <listitem><para>Uncheck this box if you want to hide the status bar.
 </para></listitem>
 </varlistentry>
@@ -174,18 +174,18 @@ calculation performed by the <link linkend="statusbarsum">Statusbar Summary
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Indentation step:</guilabel></term>
+<term><guilabel>Indentation step (cm):</guilabel></term>
 <listitem><para>Lets you define the amount of indenting used by the 
-<guimenuitem>Increase indent</guimenuitem> option in the <guimenu>Format
+<guimenuitem>Increase Indent</guimenuitem> option in the <guimenu>Format
 </guimenu> menu.
 </para>
 <para>The unit taken here is the one you fixe in the Configure
 &kspread; dialog, in the Page Layout tab in the <guilabel>Default page
-units</guilabel> setting. </para></listitem>
+unit:</guilabel> setting. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show error message for invalid formulas</guilabel></term>
+<term><guilabel>Show error message for invalid formulae</guilabel></term>
 <listitem><para>If this box is checked a message box will pop up when what 
 you have entered into a cell cannot be understood by &kspread;.
 </para></listitem>
@@ -277,7 +277,7 @@ Layout...</guimenuitem></menuchoice> dialog.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Default page units:</guilabel></term>
+<term><guilabel>Default page unit:</guilabel></term>
 <listitem><para>Choose the default unit that will be used in your all your sheets. Note that you can overwrite the unit for the current sheet using the <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice> dialog.
 </para></listitem>
 </varlistentry>

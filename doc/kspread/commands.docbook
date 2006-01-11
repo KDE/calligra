@@ -14,7 +14,7 @@
 <title>Command Reference</title>
 
 <sect1 id="filemenu">
-<title>The File Menu</title>
+<title>The <guimenu>File</guimenu> Menu</title>
 <para>
 <variablelist>
 <varlistentry>
@@ -138,7 +138,7 @@ based on this document.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Document information</guimenuitem>
+<guimenuitem>Document Information</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>View or enter information about the document and 
 author.</action></para>
@@ -173,7 +173,7 @@ author.</action></para>
 </sect1>
 
 <sect1 id="editmenu">
-<title>The Edit Menu</title>
+<title>The <guimenu>Edit</guimenu> Menu</title>
 <para>
 <variablelist>
 
@@ -397,7 +397,7 @@ Validity Checking</link> for more details.
 </sect1>
 
 <sect1 id="viewmenu">
-<title>The View Menu</title>
+<title>The <guimenu>View</guimenu> Menu</title>
 <para>
 <variablelist>
 
@@ -413,6 +413,9 @@ with the same document.</action>
 
 <varlistentry>
 <term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>W</keycap></keycombo>
+</shortcut>
 <guimenu>View</guimenu>
 <guimenuitem>Close All Views</guimenuitem>
 </menuchoice></term>
@@ -444,7 +447,7 @@ contains two or more views)
 <guimenu>View</guimenu>
 <guimenuitem>Splitter Orientation</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Change view split to horizontal or vertical.</action>
+<listitem><para><action>Change view split to <guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>.</action>
 </para></listitem>
 </varlistentry>
 
@@ -467,7 +470,7 @@ with red lines.
 </action>
 </para></listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
@@ -478,7 +481,7 @@ If a cell contains a comment and this option is selected, a small red triangle
 is shown in the upper right corner of the cell.
 </para></listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
@@ -496,7 +499,7 @@ the spreadsheet. Range from 33% to 500%.
 
 
 <sect1 id="insertmenu">
-<title>The Insert Menu</title>
+<title>The <guimenu>Insert</guimenu> Menu</title>
 <para>
 <variablelist>
 
@@ -514,7 +517,7 @@ the spreadsheet. Range from 33% to 500%.
 <guimenu>Insert</guimenu>
 <guimenuitem>Cell Comment</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Add, modify or remove cell comment.</action>
+<listitem><para><action><guilabel>Add/Modify Comment...</guilabel> or <guilabel>Remove Comment</guilabel>.</action>
 </para></listitem>
 </varlistentry>
 
@@ -582,8 +585,8 @@ See the section
 <guimenu>Insert</guimenu>
 <guimenuitem>External Data</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Insert data from a text file, database or from the 
-clipboard.</action> See the section <link linkend="insertdata">Inserting 
+<listitem><para><action>Insert data <guilabel>From Text File...</guilabel>, <guilabel>From Database...</guilabel> or <guilabel>From 
+Clipboard...</guilabel>.</action> See the section <link linkend="insertdata">Inserting 
 External Data</link> for more details.
 </para></listitem>
 </varlistentry>
@@ -593,7 +596,7 @@ External Data</link> for more details.
 </sect1>
 
 <sect1 id="formatmenu">
-<title>The Format Menu</title>
+<title>The <guimenu>Format</guimenu> Menu</title>
 <para><variablelist>
 
 <varlistentry>
@@ -708,7 +711,7 @@ advanced sheet properties.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Style Manager...</guimenuitem>
+<guimenuitem>Style Manager</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Create, Modify or delete cell format styles.</action>
 </para></listitem>
@@ -729,7 +732,7 @@ To manage styles use <menuchoice>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Create Style Form Cell...</guimenuitem>
+<guimenuitem>Create Style From Cell...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Create a new style from the format of the
 selected cell.</action>
@@ -761,7 +764,7 @@ To manage styles use <menuchoice>
 </sect1>
 
 <sect1 id="datamenu">
-<title>The Data Menu</title>
+<title>The <guimenu>Data</guimenu> Menu</title>
 <para><variablelist>
 
 <varlistentry>
@@ -905,7 +908,7 @@ database.</action>
 </sect1>
 
 <sect1 id="toolsmenu">
-<title>The Tools Menu</title>
+<title>The <guimenu>Tools</guimenu> Menu</title>
 <para><variablelist>
 
 <varlistentry>
@@ -991,7 +994,7 @@ is protected.</action>
 </sect1>
 
 <sect1 id="settingsmenu">
-<title>The Settings Menu</title>
+<title>The <guimenu>Settings</guimenu> Menu</title>
 <para><variablelist>
 
 <varlistentry>
@@ -1030,7 +1033,7 @@ The Formula Bar can be used to edit the content of the selected cell.
 <guimenu>Settings</guimenu>
 <guimenuitem>Toolbars</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Show or hide the toolbars: File, Edit, Math,
+<listitem><para><action>Show or hide the toolbars: File, Edit,
 Navigation, Format and Color/Border.</action>
 </para></listitem>
 </varlistentry>
@@ -1150,7 +1153,7 @@ Paste</link> for more details.
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Paste with Insertion...</guimenuitem>
+<guimenuitem>Paste with Insertion</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Paste from the clipboard to the selected cell(s), moving the 
 previous cell(s) to make room.</action>
@@ -1167,7 +1170,7 @@ previous cell(s) to make room.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Adjust Row and Column</guimenuitem>
+<guimenuitem>Adjust Row &amp; Column</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Change size of row and column to display selected 
 cell(s) completely.</action>
@@ -1227,7 +1230,7 @@ completely.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Insert Cell(s)...</guimenuitem>
+<guimenuitem>Insert Cells...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Insert new cell(s) at selected location, moving 
 existing cell(s) to make room.</action>
@@ -1236,7 +1239,7 @@ existing cell(s) to make room.</action>
 
 <varlistentry>
 <term><menuchoice>
-<guimenuitem>Remove Cell(s)...</guimenuitem>
+<guimenuitem>Remove Cells...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Remove selected cell(s), moving other cell(s) to 
 occupy the space left by the removed cell(s).</action>

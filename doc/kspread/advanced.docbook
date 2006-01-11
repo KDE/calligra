@@ -240,8 +240,8 @@ possible to a target value.</para>
 <para>It is invoked by selecting <guimenuitem>Goal Seek</guimenuitem> from 
 the <guimenu>Data</guimenu> menu. This brings up a dialog box in which you 
 should enter the reference of the target value cell (<userinput>A1</userinput> 
-in this case) into the <guilabel>Set cell</guilabel> box, the target value 
-itself (<userinput>4</userinput>) into the <guilabel>To value</guilabel> box 
+in this case) into the <guilabel>Set cell:</guilabel> box, the target value 
+itself (<userinput>4</userinput>) into the <guilabel>To value:</guilabel> box 
 and the reference of the cell that is to be changed 
 (<userinput>A2</userinput>) into the <guilabel>By changing cell</guilabel> 
 box. Note that you need to have entered some initial value into the cell that 
@@ -257,7 +257,7 @@ calculation. When it finishes and if it has found a solution press the
 <title>Using more than one Worksheet</title>
 <para>When you start a new, empty, document with &kspread; it will create a 
 number of blank worksheets. The number of sheets it creates is determined 
-by the <guilabel>Number of pages open at the beginning</guilabel> setting in 
+by the <guilabel>Number of sheets open at the beginning:</guilabel> setting in 
 the <guilabel>Interface</guilabel> page of &kspread;'s 
 <link linkend="configinterface">configuration</link> dialog box.</para>
 <para><menuchoice><guimenu>Insert</guimenu><guimenuitem>Sheet</guimenuitem>
@@ -302,15 +302,15 @@ Consolidate...</guimenuitem> item from the <guimenu>Data</guimenu> menu.</para>
 <para>Selecting this option brings up the <guilabel>Consolidate</guilabel>
 dialog box.</para>
 <para>For each of the source sheets, enter a reference to the desired data area
-in the <guilabel>Reference</guilabel> box. Press <guibutton>Add</guibutton> to
-transfer it to the <guilabel>Entered References</guilabel> box. The reference
+in the <guilabel>Reference:</guilabel> box. Press <guibutton>Add</guibutton> to
+transfer it to the <guilabel>Entered references:</guilabel> box. The reference
 should include the name of the sheet containing the source data, such as
 <userinput>January!A1:A10</userinput>, and can be entered automatically by
 selecting the area in the appropriate sheet.</para>
 <para>After entering the references for all of the source data sheets 
 select the cell in the target sheet where you want the top left corner of the 
 consolidated results to appear. Then choose the appropriate function from
-the <guilabel>Function</guilabel> combo box and press the
+the <guilabel>Function:</guilabel> combo box and press the
 <guibutton>OK</guibutton> button.</para>
 <para>If you check the <guilabel>Copy data</guilabel> box in the <guilabel>
 Consolidate</guilabel> dialog the values resulting from the consolidation will 
@@ -354,7 +354,7 @@ and with a small black square at each corner and in the middle of each edge.
 to a double headed arrow. You can resize the chart by dragging one of these 
 squares with the <mousebutton>left</mousebutton> mouse button pressed. To 
 delete the chart <mousebutton>right</mousebutton> click on one of the 
-squares and select <guimenuitem>Delete embedded document</guimenuitem>.</para>
+squares and select <guimenuitem>Delete Embedded Document</guimenuitem>.</para>
 <para>To move the chart move the cursor so that it is over one of the 
 hatched borders. The cursor should then change to a hand, press the 
 <mousebutton>left</mousebutton> mouse button and you will be able to drag the 
@@ -776,8 +776,8 @@ should be enclosed in single quotation marks.</para>
 <title>Cell Comments</title>
 <para>A cell can contain a text comment that can be viewed when working on 
 the spreadsheet but which is not printed and not normally seen.</para>
-<para>To add a comment select the cell and choose <guimenuitem>Add/modify 
-comment...</guimenuitem> from the <mousebutton>right</mousebutton> mouse 
+<para>To add a comment select the cell and choose <guimenuitem>Add/Modify 
+Comment...</guimenuitem> from the <mousebutton>right</mousebutton> mouse 
 button menu or from the <menuchoice><guimenu>Insert</guimenu><guisubmenu>
 Comment</guisubmenu></menuchoice> menu and type your comment into the 
 resulting <guilabel>Cell Comment</guilabel> dialog box.</para>

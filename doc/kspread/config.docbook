@@ -78,7 +78,7 @@ combination will make the menu appear then pressing a second key, or using the
 <keysym>Enter</keysym>, will select an item from it.</para>
 <para>To do this add a <guilabel>Custom</guilabel> shortcut for each of the 
 actions you want to appear in the menu and in the <guilabel>Define Shortcut
-</guilabel> dialog check the <guilabel>Multi-Key</guilabel> box, press the 
+</guilabel> dialog check the <guilabel>Multi-key mode</guilabel> box, press the 
 key combination that you want to bring up your new menu then, separately, 
 press the key that will choose that item from the menu.</para>
 </sect2>
