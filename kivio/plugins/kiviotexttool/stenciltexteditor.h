@@ -41,8 +41,6 @@ class StencilTextEditor : public KDialogBase
     void setFont(const QFont& font);
     void setFontColor(const QColor& color);
     void setBackgroundColor(const QColor& color);
-    void setHorizontalAlign(Qt::AlignmentFlags flag);
-    void setVerticalAlign(Qt::AlignmentFlags flag);
 
     QFont font() const;
     QColor fontColor() const;
@@ -52,11 +50,18 @@ class StencilTextEditor : public KDialogBase
     void setText(const QString& text);
     QString text() const;
 
+  public slots:
+    void setHorizontalAlign(int flag);
+    void setVerticalAlign(int flag);
+
   protected slots:
     void updateFormating();
 
   private:
     StencilTextEditorUI* m_mainWidget;
+
+    int m_hAlign;
+    int m_vAlign;
 };
 
 }

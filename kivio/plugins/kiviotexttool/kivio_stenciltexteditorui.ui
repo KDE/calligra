@@ -30,65 +30,7 @@ You should have received a copy of the GNU General Public License along with thi
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QToolButton" row="2" column="0">
-            <property name="name">
-                <cstring>m_alignTopButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>4</hsizetype>
-                    <vsizetype>4</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Align Top</string>
-            </property>
-        </widget>
-        <widget class="QToolButton" row="4" column="0">
-            <property name="name">
-                <cstring>m_alignBottomButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>4</hsizetype>
-                    <vsizetype>4</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Align Bottom</string>
-            </property>
-        </widget>
-        <widget class="QToolButton" row="0" column="7">
-            <property name="name">
-                <cstring>m_alignCenterButton</cstring>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Align Horizontal Center</string>
-            </property>
-        </widget>
-        <widget class="QToolButton" row="0" column="3">
+        <widget class="QToolButton" row="0" column="2">
             <property name="name">
                 <cstring>m_boldButton</cstring>
             </property>
@@ -102,35 +44,7 @@ You should have received a copy of the GNU General Public License along with thi
                 <string>Bold</string>
             </property>
         </widget>
-        <widget class="QToolButton" row="0" column="6">
-            <property name="name">
-                <cstring>m_alignLeftButton</cstring>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Align Left</string>
-            </property>
-        </widget>
-        <widget class="QToolButton" row="0" column="8">
-            <property name="name">
-                <cstring>m_alignRightButton</cstring>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Align Right</string>
-            </property>
-        </widget>
-        <widget class="KComboBox" row="0" column="2">
+        <widget class="KComboBox" row="0" column="1">
             <item>
                 <property name="text">
                     <string>6</string>
@@ -228,12 +142,12 @@ You should have received a copy of the GNU General Public License along with thi
                 <bool>true</bool>
             </property>
         </widget>
-        <widget class="KFontCombo" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="KFontCombo" row="0" column="0">
             <property name="name">
                 <cstring>m_fontCombo</cstring>
             </property>
         </widget>
-        <widget class="QToolButton" row="0" column="4">
+        <widget class="QToolButton" row="0" column="3">
             <property name="name">
                 <cstring>m_italicsButton</cstring>
             </property>
@@ -247,7 +161,7 @@ You should have received a copy of the GNU General Public License along with thi
                 <string>Italics</string>
             </property>
         </widget>
-        <widget class="QToolButton" row="0" column="5">
+        <widget class="QToolButton" row="0" column="4">
             <property name="name">
                 <cstring>m_underLineButton</cstring>
             </property>
@@ -261,20 +175,7 @@ You should have received a copy of the GNU General Public License along with thi
                 <string>Underline</string>
             </property>
         </widget>
-        <widget class="KColorButton" row="0" column="9">
-            <property name="name">
-                <cstring>m_textColorButton</cstring>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-        </widget>
-        <widget class="KTextEdit" row="1" column="1" rowspan="5" colspan="10">
-            <property name="name">
-                <cstring>m_textArea</cstring>
-            </property>
-        </widget>
-        <spacer row="0" column="10">
+        <spacer row="0" column="8">
             <property name="name">
                 <cstring>spacer1</cstring>
             </property>
@@ -286,67 +187,52 @@ You should have received a copy of the GNU General Public License along with thi
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>100</width>
+                    <width>110</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QToolButton" row="3" column="0">
+        <widget class="KColorButton" row="0" column="7">
             <property name="name">
-                <cstring>m_alignVCenterButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>4</hsizetype>
-                    <vsizetype>4</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
+                <cstring>m_textColorButton</cstring>
             </property>
             <property name="text">
                 <string></string>
             </property>
-            <property name="toggleButton">
-                <bool>true</bool>
+        </widget>
+        <widget class="QToolButton" row="0" column="5">
+            <property name="name">
+                <cstring>m_hAlignButton</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="popupDelay">
+                <number>1</number>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Align Vertical Center</string>
+                <string>Horizontal Alignment</string>
             </property>
         </widget>
-        <spacer row="1" column="0">
+        <widget class="QToolButton" row="0" column="6">
             <property name="name">
-                <cstring>spacer8</cstring>
+                <cstring>m_vAlignButton</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
+            <property name="text">
+                <string></string>
             </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
+            <property name="popupDelay">
+                <number>1</number>
             </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>91</height>
-                </size>
+            <property name="toolTip" stdset="0">
+                <string>Vertical Alignment</string>
             </property>
-        </spacer>
-        <spacer row="5" column="0">
+        </widget>
+        <widget class="KTextEdit" row="1" column="0" rowspan="1" colspan="9">
             <property name="name">
-                <cstring>spacer9</cstring>
+                <cstring>m_textArea</cstring>
             </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>101</height>
-                </size>
-            </property>
-        </spacer>
+        </widget>
     </grid>
 </widget>
 <customwidgets>

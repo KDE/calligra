@@ -21,13 +21,15 @@
 #include <qtoolbutton.h>
 #include <qfont.h>
 #include <qcolor.h>
-#include <qbuttongroup.h>
+#include <qpopupmenu.h>
 
 #include <kiconloader.h>
 #include <ktextedit.h>
 #include <kfontcombo.h>
 #include <kcolorbutton.h>
 #include <kdebug.h>
+#include <klocale.h>
+#include <karrowbutton.h>
 
 #include "kivio_stenciltexteditorui.h"
 
@@ -36,6 +38,8 @@ namespace Kivio {
 StencilTextEditor::StencilTextEditor(const QString& caption, QWidget *parent, const char *name)
   : KDialogBase(parent, name, true, caption, KDialogBase::Ok|KDialogBase::Cancel)
 {
+  m_hAlign = -1;
+  m_vAlign = -1;
   m_mainWidget = new StencilTextEditorUI(this);
   setMainWidget(m_mainWidget);
 
@@ -43,32 +47,24 @@ StencilTextEditor::StencilTextEditor(const QString& caption, QWidget *parent, co
   m_mainWidget->m_italicsButton->setIconSet(SmallIconSet("text_italic", 16));
   m_mainWidget->m_underLineButton->setIconSet(SmallIconSet("text_under", 16));
 
-  m_mainWidget->m_alignLeftButton->setIconSet(SmallIconSet("text_left", 16));
-  m_mainWidget->m_alignCenterButton->setIconSet(SmallIconSet("text_center", 16));
-  m_mainWidget->m_alignRightButton->setIconSet(SmallIconSet("text_right", 16));
+  QPopupMenu* menu = new QPopupMenu(m_mainWidget->m_hAlignButton, "hAlignMenu");
+  menu->setCheckable(true);
+  menu->insertItem(SmallIconSet("text_left", 16), i18n("Align Left"), Qt::AlignLeft);
+  menu->insertItem(SmallIconSet("text_center", 16), i18n("Align Center"), Qt::AlignHCenter);
+  menu->insertItem(SmallIconSet("text_right", 16), i18n("Align Right"), Qt::AlignRight);
+  m_mainWidget->m_hAlignButton->setPopup(menu);
+  connect(menu, SIGNAL(activated(int)), this, SLOT(setHorizontalAlign(int)));
 
-  QButtonGroup* hAlignBtnGrp = new QButtonGroup(m_mainWidget);
-  hAlignBtnGrp->hide();
-  hAlignBtnGrp->setExclusive(true);
-  hAlignBtnGrp->insert(m_mainWidget->m_alignLeftButton);
-  hAlignBtnGrp->insert(m_mainWidget->m_alignCenterButton);
-  hAlignBtnGrp->insert(m_mainWidget->m_alignRightButton);
-
-  m_mainWidget->m_alignTopButton->setIconSet(SmallIconSet("align_top", 16));
-  m_mainWidget->m_alignVCenterButton->setIconSet(SmallIconSet("align_vcenter", 16));
-  m_mainWidget->m_alignBottomButton->setIconSet(SmallIconSet("align_bottom", 16));
-
-  QButtonGroup* vAlignBtnGrp = new QButtonGroup(m_mainWidget);
-  vAlignBtnGrp->hide();
-  vAlignBtnGrp->setExclusive(true);
-  vAlignBtnGrp->insert(m_mainWidget->m_alignTopButton);
-  vAlignBtnGrp->insert(m_mainWidget->m_alignVCenterButton);
-  vAlignBtnGrp->insert(m_mainWidget->m_alignBottomButton);
+  menu = new QPopupMenu(m_mainWidget->m_vAlignButton, "hAlignMenu");
+  menu->setCheckable(true);
+  menu->insertItem(SmallIconSet("align_top", 16), i18n("Align Top"), Qt::AlignTop);
+  menu->insertItem(SmallIconSet("align_vcenter", 16), i18n("Align Vertical Center"), Qt::AlignVCenter);
+  menu->insertItem(SmallIconSet("align_bottom", 16), i18n("Align Bottom"), Qt::AlignBottom);
+  m_mainWidget->m_vAlignButton->setPopup(menu);
+  connect(menu, SIGNAL(activated(int)), this, SLOT(setVerticalAlign(int)));
 
   connect(m_mainWidget->m_fontCombo, SIGNAL(activated(int)), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_fontSizeCombo, SIGNAL(activated(int)), this, SLOT(updateFormating()));
-  connect(hAlignBtnGrp, SIGNAL(clicked(int)), this, SLOT(updateFormating()));
-  connect(vAlignBtnGrp, SIGNAL(clicked(int)), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_boldButton, SIGNAL(clicked()), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_italicsButton, SIGNAL(clicked()), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_underLineButton, SIGNAL(clicked()), this, SLOT(updateFormating()));
@@ -102,52 +98,28 @@ void StencilTextEditor::setBackgroundColor(const QColor& color)
   m_mainWidget->m_textArea->setPaletteBackgroundColor(color);
 }
 
-void StencilTextEditor::setHorizontalAlign(Qt::AlignmentFlags flag)
+void StencilTextEditor::setHorizontalAlign(int flag)
 {
-  switch(flag) {
-    case Qt::AlignRight:
-      m_mainWidget->m_alignLeftButton->setOn(false);
-      m_mainWidget->m_alignCenterButton->setOn(false);
-      m_mainWidget->m_alignRightButton->setOn(true);
-      break;
-    case Qt::AlignHCenter:
-      m_mainWidget->m_alignLeftButton->setOn(false);
-      m_mainWidget->m_alignCenterButton->setOn(true);
-      m_mainWidget->m_alignRightButton->setOn(false);
-      break;
-    case Qt::AlignLeft:
-    default:
-      m_mainWidget->m_alignLeftButton->setOn(true);
-      m_mainWidget->m_alignCenterButton->setOn(false);
-      m_mainWidget->m_alignRightButton->setOn(false);
-      break;
+  if(m_hAlign >= 0) {
+    m_mainWidget->m_hAlignButton->popup()->setItemChecked(m_hAlign, false);
   }
 
+  m_mainWidget->m_hAlignButton->popup()->setItemChecked(flag, true);
+  m_mainWidget->m_hAlignButton->setIconSet(*(m_mainWidget->m_hAlignButton->popup()->iconSet(flag)));
   m_mainWidget->m_textArea->setAlignment(flag|verticalAlignment());
+  m_hAlign = flag;
 }
 
-void StencilTextEditor::setVerticalAlign(Qt::AlignmentFlags flag)
+void StencilTextEditor::setVerticalAlign(int flag)
 {
-  switch(flag) {
-    case Qt::AlignTop:
-      m_mainWidget->m_alignTopButton->setOn(true);
-      m_mainWidget->m_alignVCenterButton->setOn(false);
-      m_mainWidget->m_alignBottomButton->setOn(false);
-      break;
-    case Qt::AlignBottom:
-      m_mainWidget->m_alignTopButton->setOn(false);
-      m_mainWidget->m_alignVCenterButton->setOn(false);
-      m_mainWidget->m_alignBottomButton->setOn(true);
-      break;
-    case Qt::AlignVCenter:
-    default:
-      m_mainWidget->m_alignTopButton->setOn(false);
-      m_mainWidget->m_alignVCenterButton->setOn(true);
-      m_mainWidget->m_alignBottomButton->setOn(false);
-      break;
+  if(m_vAlign >= 0) {
+    m_mainWidget->m_vAlignButton->popup()->setItemChecked(m_vAlign, false);
   }
 
+  m_mainWidget->m_vAlignButton->popup()->setItemChecked(flag, true);
+  m_mainWidget->m_vAlignButton->setIconSet(*(m_mainWidget->m_vAlignButton->popup()->iconSet(flag)));
   m_mainWidget->m_textArea->setAlignment(flag|horizontalAlignment());
+  m_vAlign = flag;
 }
 
 QFont StencilTextEditor::font() const
@@ -169,28 +141,12 @@ QColor StencilTextEditor::fontColor() const
 
 Qt::AlignmentFlags StencilTextEditor::horizontalAlignment() const
 {
-  Qt::AlignmentFlags flag = Qt::AlignLeft;
-
-  if(m_mainWidget->m_alignCenterButton->isOn()) {
-    flag = Qt::AlignHCenter;
-  } else if(m_mainWidget->m_alignRightButton->isOn()) {
-    flag = Qt::AlignRight;
-  }
-
-  return flag;
+  return static_cast<Qt::AlignmentFlags>(m_hAlign);
 }
 
 Qt::AlignmentFlags StencilTextEditor::verticalAlignment() const
 {
-  Qt::AlignmentFlags flag = Qt::AlignTop;
-
-  if(m_mainWidget->m_alignVCenterButton->isOn()) {
-    flag = Qt::AlignVCenter;
-  } else if(m_mainWidget->m_alignBottomButton->isOn()) {
-    flag = Qt::AlignBottom;
-  }
-
-  return flag;
+  return static_cast<Qt::AlignmentFlags>(m_vAlign);
 }
 
 void StencilTextEditor::setText(const QString& text)
