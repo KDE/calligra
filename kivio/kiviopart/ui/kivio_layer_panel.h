@@ -35,6 +35,8 @@ class KivioLayerItem: public QListViewItem
     KivioLayerItem(QListView* parent, KivioLayer*, int id);
     ~KivioLayerItem();
 
+    KivioLayer* layer() const { return data; }
+
   protected:
     void update();
 

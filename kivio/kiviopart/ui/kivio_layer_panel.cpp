@@ -24,6 +24,7 @@
 #include "kivio_layer.h"
 #include "kivio_factory.h"
 #include "kivio_command.h"
+#include "layerlisttooltip.h"
 
 #include <qheader.h>
 #include <qlayout.h>
@@ -87,6 +88,8 @@ KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* n
   bar->insertSeparator();
   actUp->plug(bar);
   actDown->plug(bar);
+
+  new Kivio::LayerListToolTip(list->viewport(), list);
 }
 
 KivioLayerPanel::~KivioLayerPanel()
