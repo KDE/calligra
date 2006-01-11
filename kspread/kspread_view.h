@@ -491,6 +491,9 @@ public slots:
      * \sa dissociateCell
      */
     void mergeCell();
+    void mergeCellHorizontal();
+    void mergeCellVertical();
+    
 
     /**
      * Breaks merged cell. Obviously this can be done only on merged cells.

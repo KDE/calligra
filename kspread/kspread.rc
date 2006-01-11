@@ -223,6 +223,8 @@
  <Separator/>
  <Action name="dissociatecell"/>
  <Action name="mergecell"/>
+ <Action name="mergecellHorizontal"/>
+ <Action name="mergecellVertical"/>
  <Separator/>
  <Action name="textColor"/>
  <Action name="backgroundColor"/>

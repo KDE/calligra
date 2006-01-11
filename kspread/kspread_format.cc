@@ -1324,7 +1324,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
             setAlignY( Format::Top );
     }
     else
-        setAlignY( Format::Bottom ); //default into ooimpress
+        setAlignY( Format::Bottom ); //default in ooimpress
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" ) )
     {
@@ -1400,7 +1400,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
                 setBackGroundBrushColor( brush.color() );
             }
             else
-                kdDebug()<<" fill style not supported into kspread : "<<fill<<endl;
+                kdDebug()<<" fill style not supported by kspread : "<<fill<<endl;
         }
     }
 

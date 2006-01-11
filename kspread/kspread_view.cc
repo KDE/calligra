@@ -325,6 +325,8 @@ public:
     KAction* removeCell;
     KAction* deleteCell;
     KAction* mergeCell;
+    KAction* mergeCellHorizontal;
+    KAction* mergeCellVertical;
     KAction* dissociateCell;
     KAction* clearText;
     KAction* conditional;
@@ -668,6 +670,14 @@ void View::Private::initActions()
   actions->mergeCell = new KAction( i18n("Merge Cells"),"mergecell",
       0, view, SLOT( mergeCell() ), ac, "mergecell" );
   actions->mergeCell->setToolTip(i18n("Merge the selected region into one large cell."));
+
+  actions->mergeCellHorizontal = new KAction( i18n("Merge Cells Horizontally"),"mergecell-horizontal",
+      0, view, SLOT( mergeCellHorizontal() ), ac, "mergecellHorizontal" );
+  actions->mergeCell->setToolTip(i18n("Merge the selected region horizontally."));
+
+  actions->mergeCellVertical = new KAction( i18n("Merge Cells Vertically"),"mergecell-vertical",
+      0, view, SLOT( mergeCellVertical() ), ac, "mergecellVertical" );
+  actions->mergeCell->setToolTip(i18n("Merge the selected region vertically."));
 
   actions->dissociateCell = new KAction( i18n("Dissociate Cells"),"dissociatecell",
       0, view, SLOT( dissociateCell() ), ac, "dissociatecell" );
@@ -1221,6 +1231,8 @@ void View::Private::adjustActions( bool mode )
   actions->autoFormat->setEnabled( false );
   actions->sort->setEnabled( false );
   actions->mergeCell->setEnabled( false );
+  actions->mergeCellHorizontal->setEnabled( false );
+  actions->mergeCellVertical->setEnabled( false );
   actions->insertChartFrame->setEnabled( false );
   actions->sortDec->setEnabled( false );
   actions->sortInc->setEnabled( false );
@@ -2613,6 +2625,8 @@ void View::initialPosition()
     d->actions->autoFormat->setEnabled(false);
     d->actions->sort->setEnabled(false);
     d->actions->mergeCell->setEnabled(false);
+    d->actions->mergeCellHorizontal->setEnabled(false);
+    d->actions->mergeCellVertical->setEnabled(false);
     d->actions->createStyle->setEnabled(false);
 
     d->actions->fillUp->setEnabled( false );
@@ -4014,6 +4028,22 @@ void View::mergeCell()
   if( !d->activeSheet )
     return;
   d->activeSheet->mergeCells(*selectionInfo());
+}
+
+void View::mergeCellHorizontal()
+{
+//   // sanity check
+//   if( !d->activeSheet )
+//     return;
+//   d->activeSheet->mergeCells(*selectionInfo());
+}
+
+void View::mergeCellVertical()
+{
+//   // sanity check
+//   if( !d->activeSheet )
+//     return;
+//   d->activeSheet->mergeCells(*selectionInfo());
 }
 
 void View::dissociateCell()
@@ -6516,6 +6546,8 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     d->actions->autoFormat->setEnabled( !simpleSelection );
     d->actions->sort->setEnabled( !simpleSelection );
     d->actions->mergeCell->setEnabled( !simpleSelection );
+    d->actions->mergeCellHorizontal->setEnabled( !simpleSelection );
+    d->actions->mergeCellVertical->setEnabled( !simpleSelection );
     d->actions->fillRight->setEnabled( !simpleSelection );
     d->actions->fillUp->setEnabled( !simpleSelection );
     d->actions->fillDown->setEnabled( !simpleSelection );
