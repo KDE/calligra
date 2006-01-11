@@ -175,7 +175,7 @@ FieldList* FieldList::subList(const QStringList& list)
         Field *f;
 	FieldList *fl = new FieldList(false);
 	for(QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
-		_ADD_FIELD( QString(*it) );
+		_ADD_FIELD( (*it) );
 	}
 	return fl;
 }
