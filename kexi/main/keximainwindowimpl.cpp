@@ -932,8 +932,13 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 				0, KGuiItem(i18n("Import Database", "&Import..."), "database_import"),
 				KStdGuiItem::quit()))
 			{
-				showProjectMigrationWizard("application/x-kexi-connectiondata", 
+				const bool anotherProjectAlreadyOpened = d->prj;
+				tristate res = showProjectMigrationWizard("application/x-kexi-connectiondata", 
 					projectData.databaseName(), projectData.constConnectionData());
+				
+				if (!anotherProjectAlreadyOpened) //the project could have been opened within this instance
+					return res;
+
 				//always return cancelled because even if migration succeeded, new Kexi instance 
 				//will be started if user wanted to open the imported db
 				return cancelled;
@@ -3682,8 +3687,10 @@ tristate KexiMainWindowImpl::showProjectMigrationWizard(
 			fileName = destinationDatabaseName;
 			destinationDatabaseName = QString::null;
 		}
-		return openProject(fileName, destinationConnectionShortcut, 
+		tristate res = openProject(fileName, destinationConnectionShortcut, 
 			destinationDatabaseName);
+		raise();
+		return res;
 //			KexiDB::ConnectionData *connData = new KexiDB::ConnectionData();
 //			KexiDB::fromMap( KexiUtils::deserializeMap( args["destinationConnectionData"] ), *connData );
 //		return openProject(destinationFileName, 0);
