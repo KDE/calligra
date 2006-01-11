@@ -809,7 +809,7 @@ tristate ImportWizard::import()
 
 	if (!result.error() && acceptingNeeded && KMessageBox::Yes != KMessageBox::questionYesNo(this,
 		"<qt>"+i18n("Database %1 already exists."
-		"<p>Do you want to replace it and with a new one?")
+		"<p>Do you want to replace it with a new one?")
 		.arg(sourceDriver->data()->destination->infoString()),
 		0, KGuiItem(i18n("&Replace")), KGuiItem(i18n("No"))))
 	{
