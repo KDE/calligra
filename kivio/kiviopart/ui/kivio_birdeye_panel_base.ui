@@ -24,7 +24,7 @@
     </property>
     <property name="layoutSpacing" stdset="0">
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
@@ -34,7 +34,7 @@
         <property name="spacing">
             <number>0</number>
         </property>
-        <widget class="KToolBar" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="KToolBar">
             <property name="name">
                 <cstring>bar</cstring>
             </property>
@@ -53,7 +53,7 @@
                 </size>
             </property>
         </widget>
-        <widget class="QFrame" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QFrame">
             <property name="name">
                 <cstring>canvas</cstring>
             </property>
@@ -67,44 +67,7 @@
                 <enum>Raised</enum>
             </property>
         </widget>
-        <widget class="QSlider" row="2" column="0">
-            <property name="name">
-                <cstring>slider</cstring>
-            </property>
-            <property name="minValue">
-                <number>5</number>
-            </property>
-            <property name="maxValue">
-                <number>500</number>
-            </property>
-            <property name="value">
-                <number>100</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QSpinBox" row="2" column="1">
-            <property name="name">
-                <cstring>zoomBox</cstring>
-            </property>
-            <property name="suffix">
-                <string>%</string>
-            </property>
-            <property name="buttonSymbols">
-                <enum>PlusMinus</enum>
-            </property>
-            <property name="maxValue">
-                <number>10000</number>
-            </property>
-            <property name="minValue">
-                <number>5</number>
-            </property>
-            <property name="value">
-                <number>100</number>
-            </property>
-        </widget>
-    </grid>
+    </vbox>
 </widget>
 <customwidgets>
     <customwidget>
@@ -129,20 +92,6 @@
         <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
     </image>
 </images>
-<connections>
-    <connection>
-        <sender>slider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KivioBirdEyePanelBase</receiver>
-        <slot>zoomChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>zoomBox</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>KivioBirdEyePanelBase</receiver>
-        <slot>zoomChanged(int)</slot>
-    </connection>
-</connections>
 <includes>
     <include location="local" impldecl="in declaration">kiconloader.h</include>
 </includes>

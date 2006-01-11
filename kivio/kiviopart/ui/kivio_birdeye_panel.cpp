@@ -38,8 +38,8 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   connect( m_pView, SIGNAL(zoomChanged(int)), SLOT(canvasZoomChanged()));
   connect( m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateVisibleArea()));
 
-  zoomIn = new KAction( i18n("Zoom In"), "viewmag+", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
-  zoomOut = new KAction( i18n("Zoom Out"), "viewmag-", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
+  zoomIn = new KAction( i18n("Zoom In 25%"), "viewmag+", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
+  zoomOut = new KAction( i18n("Zoom Out 25%"), "viewmag-", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
 
   zoomIn->plug(bar);
   zoomOut->plug(bar);
@@ -71,17 +71,6 @@ void KivioBirdEyePanel::zoomPlus()
 
 void KivioBirdEyePanel::canvasZoomChanged()
 {
-  int iz = m_pView->zoomHandler()->zoom();
-  slider->blockSignals(true);
-  zoomBox->blockSignals(true);
-
-  zoomBox->setValue(iz);
-  slider->setMaxValue(QMAX(iz,500));
-  slider->setValue(iz);
-
-  zoomBox->blockSignals(false);
-  slider->blockSignals(false);
-
   slotUpdateView(m_pView->activePage());
 }
 
