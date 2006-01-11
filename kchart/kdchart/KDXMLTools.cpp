@@ -478,7 +478,7 @@ namespace KDXML {
     bool readPixmapNode( const QDomElement& element, QPixmap& pixmap )
     {
         bool ok = true;
-        int tempLength;
+        unsigned long tempLength;
         QString tempData;
         QDomNode node = element.firstChild();
         while( !node.isNull() ) {
@@ -493,7 +493,9 @@ namespace KDXML {
                         qDebug( "Unsupported pixmap format in XML file" );
 #endif
                 } else if( tagName == "Length" ) {
-                    ok = ok & readIntNode( element, tempLength );
+                    int itempLength;
+                    ok = ok & readIntNode( element, itempLength );
+                    tempLength = itempLength;
                 } else if( tagName == "Data" ) {
                     ok = ok & readStringNode( element, tempData );
                 } else {
@@ -526,7 +528,7 @@ namespace KDXML {
                 if( tempLength < (int)tempData.length() * 5 )
                     tempLength = tempData.length() * 5;
                 QByteArray baunzip( tempLength );
-                ::uncompress( (uchar*) baunzip.data(), (ulong*)&tempLength,
+                ::uncompress( (uchar*) baunzip.data(), &tempLength,
                         (uchar*) ba, tempData.length()/2 );
                 QImage image;
                 image.loadFromData( (const uchar*)baunzip.data(), tempLength, "XPM" );

@@ -318,8 +318,9 @@ void kchartDataEditor::setData( KoChart::Data* dat )
                 else if ( t.type() == QVariant::String )
                     kdDebug(35001) << "I cannot handle strings in the table yet"
                                    << endl;
-                else
-                    ; // nothing on purpose
+                else {
+                    // nothing on purpose
+                }
             }
         }
     }
