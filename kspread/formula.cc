@@ -159,9 +159,6 @@ static Token::Op matchOperator( const QString& text )
     if( text == "<>" ) result = Token::NotEqual;
     if( text == "<=" ) result = Token::LessEqual;
     if( text == ">=" ) result = Token::GreaterEqual;
-
-    // This is for old KScript backward compatibility
-    // Remove in KOffice 2.0
     if( text == "==" ) result = Token::Equal;
   }
 
@@ -1299,9 +1296,7 @@ Value Formula::eval() const
       // comparison
       case Opcode::Equal:
         val1 = stack.pop().val;
-        if( val1.isError() ) return Value::errorVALUE();
         val2 = stack.pop().val;
-        if( val2.isError() ) return Value::errorVALUE();
         if( !val1.allowComparison( val2 ) )
           return Value::errorVALUE();
         if( val2.compare( val1 ) == 0 )
@@ -1316,9 +1311,7 @@ Value Formula::eval() const
       // less than
       case Opcode::Less:
         val1 = stack.pop().val;
-        if( val1.isError() ) return Value::errorVALUE();
         val2 = stack.pop().val;
-        if( val2.isError() ) return Value::errorVALUE();
         if( !val1.allowComparison( val2 ) )
           return Value::errorVALUE();
         if( val2.compare( val1 ) < 0 )
@@ -1333,9 +1326,7 @@ Value Formula::eval() const
       // greater than
       case Opcode::Greater:
         val1 = stack.pop().val;
-        if( val1.isError() ) return Value::errorVALUE();
         val2 = stack.pop().val;
-        if( val2.isError() ) return Value::errorVALUE();
         if( !val1.allowComparison( val2 ) )
           return Value::errorVALUE();
         if( val2.compare( val1 ) > 0 )

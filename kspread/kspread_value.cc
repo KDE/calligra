@@ -785,6 +785,9 @@ bool Value::allowComparison( const Value& v ) const
   if( ( t1 == String ) && ( t2 == Float ) ) return true;
   if( ( t1 == String ) && ( t2 == String ) ) return true;
   
+  // errors can be compared too ...
+  if ((t1 == Error) && (t2 == Error)) return true;
+  
   return false;
 }
 

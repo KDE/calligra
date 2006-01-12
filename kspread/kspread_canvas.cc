@@ -3455,7 +3455,7 @@ void Canvas::paintUpdates()
         cell = sheet->cellAt( x, y );
 
         // recalc and relayout only for non default cells
-        if( !cell->isDefault() )
+        if ((!cell->isDefault()) && cell->layoutDirtyFlag())
         {
           cell->calc();
           cell->makeLayout( painter, x, y );
