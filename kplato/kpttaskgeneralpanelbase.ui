@@ -382,6 +382,11 @@ This is not limited to persons available in a resource group but can be anyone. 
                     </hbox>
                 </widget>
             </grid>
+            <property name="whatsThis" stdset="0">
+              <string>Scheduling Configuration. These settings affect the actual scheduling of the task.
+              
+              The estimation can be either effort based or duration based. If it is effort based, the final duration will depend on the resources assigned to the task. For duration based estimation, the assigned resources don't affect the fixed duration of the task, but only the costs.</string>
+            </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
