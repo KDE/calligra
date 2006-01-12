@@ -2669,12 +2669,14 @@ void KPrView::setupActions()
     connect( kPresenterDoc(), SIGNAL( unitChanged( KoUnit::Unit ) ),
              actionExtraPenWidth, SLOT( setUnit( KoUnit::Unit ) ) );
 
-    actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 0,
+    actionExtraGroup = new KAction( i18n( "&Group Objects" ), "group", 
+                                    QKeySequence( "Ctrl+G" ),
                                     this, SLOT( extraGroup() ),
                                     actionCollection(), "extra_group" );
 
-    actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ),
-                                      "ungroup", 0, this, SLOT( extraUnGroup() ),
+    actionExtraUnGroup = new KAction( i18n( "&Ungroup Objects" ), "ungroup", 
+                                      QKeySequence( "Ctrl+Shift+G" ),
+                                      this, SLOT( extraUnGroup() ),
                                       actionCollection(), "extra_ungroup" );
 
     // ----------------- slideshow actions
