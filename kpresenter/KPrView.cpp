@@ -3064,7 +3064,7 @@ void KPrView::setupActions()
     actionDisplayBackgroundPage = new KToggleAction( i18n( "Hide Background" ), 0,
                                          this, SLOT( displayBackground() ),
                                          actionCollection(), "display_background" );
-    actionDisplayBackgroundPage->setCheckedState(i18n("Display Backgound"));
+    actionDisplayBackgroundPage->setCheckedState(i18n("Display Background"));
 }
 
 void KPrView::displayObjectFromMasterPage()

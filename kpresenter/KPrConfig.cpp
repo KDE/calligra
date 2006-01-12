@@ -463,7 +463,7 @@ KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, cha
 
     m_cbPrintNotes=new QCheckBox(i18n("Print slide notes"),tmpQGroupBox);
     m_cbPrintNotes->setChecked(m_printNotes);
-    QWhatsThis::add(m_cbPrintNotes, i18n( "If checked, all notes will be printed on paper. The notes will all be printed on a separate last page, from slide one to the last slide and fifnishing with the Master Page Note. You can see the notes for each slide using the View->Show notebar menu." ) );
+    QWhatsThis::add(m_cbPrintNotes, i18n( "If checked, all notes will be printed on paper. The notes will all be printed separately on the last page, from the first slide to the last and finally the Master Page Note. You can see the notes for each slide using the View->Show notebar menu." ) );
     grid->addWidget(m_cbPrintNotes,7,0);
 
     box->addWidget(tmpQGroupBox);
@@ -629,7 +629,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     fontName->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
 
     QPushButton *chooseButton = new QPushButton(i18n("Choose..."), fontContainer);
-    QWhatsThis::add(chooseButton, i18n( "Click there if you want to set a new font. The KDE default Select Font dialog will then be displayed." ) );
+    QWhatsThis::add(chooseButton, i18n( "Click here if you want to set a new font. The KDE default Select Font dialog will then be displayed." ) );
     connect(chooseButton, SIGNAL(clicked()), this, SLOT(selectNewDefaultFont()));
 
     fontLayout->addWidget(fontTitle, 0, 0);
@@ -653,7 +653,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     languageLayout->addWidget(m_globalLanguage, 0, 1);
 
     m_autoHyphenation = new QCheckBox( i18n("Automatic hyphenation"), gbDocumentDefaults);
-    QWhatsThis::add(m_autoHyphenation, i18n( "Check this box if you want KPresenter to automatically hyphenate long words when it determines the word wrap in text frames. This is not set as default." ) );
+    QWhatsThis::add(m_autoHyphenation, i18n( "Check this box if you want KPresenter to automatically hyphenate long words when it determines the word wrap in text frames. This is not set by default." ) );
     m_autoHyphenation->setChecked( m_oldHyphenation );
 
     box->addWidget(gbDocumentDefaults);
@@ -663,7 +663,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
     m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
-    QWhatsThis::add(m_createBackupFile, i18n( "If checked, this will create a .<name>.kpr.autosave.kpr in the dir where your file is. This backup file can then be used in case of a problem.\nThe backup file is updated everytime you save your document or everytime there is an autosave." ) );
+    QWhatsThis::add(m_createBackupFile, i18n( "If checked, this will create a .<name>.kpr.autosave.kpr in the folder where your file is. This backup file can then be used in case of a problem.\nThe backup file is updated every time you save your document or every time there is an autosave." ) );
     m_createBackupFile->setChecked( m_oldBackupFile );
 
 
@@ -672,14 +672,14 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
     autoSave->setLabel( i18n("Autosave (min):") );
     autoSave->setSpecialValueText( i18n("No autosave") );
     autoSave->setSuffix( i18n("min") );
-    QWhatsThis::add(autoSave, i18n( "You can use this to adjust how often KPresenter saves a temporary file. If you set this value to No autosave, KPresenter will not autosave. You can adjust the autosave from 1 minute to 60 minutes." ) );
+    QWhatsThis::add(autoSave, i18n( "You can use this to adjust how often KPresenter saves a temporary file. If you set this value to No autosave, KPresenter will not autosave. You can adjust the autosave from 1 to 60 minutes." ) );
 
     new QLabel(i18n("Starting page number:"), gbDocumentSettings);
     m_oldStartingPage=doc->getVariableCollection()->variableSetting()->startingPageNumber();
     m_variableNumberOffset=new KIntNumInput(gbDocumentSettings);
     m_variableNumberOffset->setRange(1, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
-    QWhatsThis::add(m_variableNumberOffset, i18n( "You can change here the number for the first page. It is set to 1 per default.\nTip: this is helpful if you have split a single document into multiple files." ) );
+    QWhatsThis::add(m_variableNumberOffset, i18n( "Here you can change the number for the first page. It is set to 1 by default.\nTip: this is helpful if you have split a single document into multiple files." ) );
 
     new QLabel(i18n("Tab stop:"), gbDocumentSettings);
     m_oldTabStopWidth = doc->tabStopValue();
@@ -688,7 +688,7 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
 
     m_tabStopWidth->setUnit( doc->unit() );
 
-    QWhatsThis::add(m_tabStopWidth, i18n( "Each KPresenter document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default tabstops. You can use this text box to define the spacing between default tab stops. As an example, if you enter 1.5 in this text box, and the unit of measure is in centimeters, then the first default tab stop will be located 1.5 cm to the right of the left margin of the frame. The second default tab stop will be located at 3 cm from the left margin, etc." ) );
+    QWhatsThis::add(m_tabStopWidth, i18n( "Each KPresenter document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default ones. You can use this text box to define the spacing between default tab stops. As an example, if you enter 1.5 in this text box, and the unit of measurement is in centimeters, the first default tab stop will be located 1.5 cm to the right of the frame's left-hand margin. The second default tab stop will be located at 3 cm from the left-hand margin, and so on." ) );
 
     box->addWidget(gbDocumentSettings);
     QVGroupBox* gbDocumentCursor = new QVGroupBox( i18n("Cursor"), this );
@@ -697,11 +697,11 @@ KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *
 
     m_cursorInProtectedArea= new QCheckBox(i18n("Cursor in protected area"),gbDocumentCursor);
     m_cursorInProtectedArea->setChecked(doc->cursorInProtectedArea());
-    QWhatsThis::add(m_cursorInProtectedArea, i18n( "When this box is checked and you click in a protected frame of your document, a cursor appears. When the mark is removed from this check box, and you click in a protected frame, there is no cursor visible." ) );
+    QWhatsThis::add(m_cursorInProtectedArea, i18n( "When this box is checked and you click in a protected frame within your document, a cursor will appear. When this box is unchecked, and you click in a protected frame, no cursor will be visible." ) );
 
     m_directInsertCursor= new QCheckBox(i18n("Direct insert cursor"),gbDocumentCursor);
     m_directInsertCursor->setChecked(doc->insertDirectCursor());
-    QWhatsThis::add(m_directInsertCursor, i18n( "When this box is checked then you can select a section of text using your mouse. Move the mouse to a new place in your document and click once with the middle mouse button and a copy of the selected text is copied and pasted to the new location in the document.\nWhen there is no mark in this checkbox, in order to copy text from one section to another, you must select the text, manually copy the text in to the clipboard, then manually paste the text in the new location." ) );
+    QWhatsThis::add(m_directInsertCursor, i18n( "When this box is checked, you can select a section of text using your mouse. Move the mouse to a new area in your document and click once with the middle mouse button and a copy of the selected text will be copied and pasted to the new location in the document.\nWhen this box is unchecked, in order to copy text from one section to another, you must select the text, manually copy the text to the clipboard, then manually paste the text in the new location." ) );
     box->addWidget(gbDocumentCursor);
 
     QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -945,7 +945,7 @@ KPrConfigurePathPage::KPrConfigurePathPage( KPrView *_view, QWidget *parent, cha
     m_pPathView->addColumn( i18n( "Path" ) );
     (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
     (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
-    QWhatsThis::add(m_pPathView, i18n( "There are two paths that are set here, the Backup Path and the Picture Path. The Backup path is the directory where your backup files are saved and the Picture Path is the directory where your pictures are saved." ) );
+    QWhatsThis::add(m_pPathView, i18n( "There are two paths that are set here: the Backup Path and the Picture Path. The Backup path is the folder where your backup files are saved and the Picture Path is the folder where your pictures are saved." ) );
     box->addWidget(m_pPathView);
 
     m_modifyPath = new QPushButton( i18n("Modify Path..."), this);
@@ -955,7 +955,7 @@ KPrConfigurePathPage::KPrConfigurePathPage( KPrView *_view, QWidget *parent, cha
     connect( m_pPathView, SIGNAL( selectionChanged ( QListViewItem * )),
              this, SLOT( slotSelectionChanged(QListViewItem * )));
     slotSelectionChanged(m_pPathView->currentItem());
-    QWhatsThis::add(m_modifyPath, i18n( "When you click this button, a small dialog appears and if you uncheck Default path, you will be able either to enter a path yourself or to choose one with the standard KDE file dialog.." ) );
+    QWhatsThis::add(m_modifyPath, i18n( "When you click this button, a small dialog will appear and, if Default path is unchecked, you can either enter a path yourself or choose one using the standard KDE file dialog." ) );
     box->addWidget(m_modifyPath);
 
 }
@@ -1052,7 +1052,7 @@ KPrConfigureTTSPage::KPrConfigureTTSPage( KPrView *_view, QWidget *parent, char 
     m_gbScreenReaderOptions->setMargin( KDialog::marginHint() );
     m_gbScreenReaderOptions->setInsideSpacing( KDialog::spacingHint() );
     m_cbSpeakTooltips = new QCheckBox(i18n("Speak &tool tips"), m_gbScreenReaderOptions);
-    m_cbSpeakWhatsThis = new QCheckBox(i18n("Speak &What's This"), m_gbScreenReaderOptions);
+    m_cbSpeakWhatsThis = new QCheckBox(i18n("Speak &What's This?"), m_gbScreenReaderOptions);
     m_cbSpeakDisabled = new QCheckBox(i18n("Verbal indication if widget is disabled (grayed)",
         "&Say whether disabled"), m_gbScreenReaderOptions);
     m_cbSpeakAccelerators = new QCheckBox(i18n("Spea&k accelerators"), m_gbScreenReaderOptions);
