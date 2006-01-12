@@ -45,7 +45,7 @@ public slots:
 
 protected slots:
   void updateVisibleArea();
-  void canvasZoomChanged();
+  void canvasZoomChanged(int zoom);
   void slotUpdateView(KivioPage*);
 
 protected:

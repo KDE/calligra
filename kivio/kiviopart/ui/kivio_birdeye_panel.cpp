@@ -23,6 +23,7 @@
 #include <qspinbox.h>
 #include <qframe.h>
 #include <qcursor.h>
+#include <qtoolbutton.h>
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)child(X))
 
@@ -35,16 +36,16 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   m_zoomHandler = new KoZoomHandler;
 
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*)), SLOT(slotUpdateView(KivioPage*)) );
-  connect( m_pView, SIGNAL(zoomChanged(int)), SLOT(canvasZoomChanged()));
+  connect( m_pView, SIGNAL(zoomChanged(int)), SLOT(canvasZoomChanged(int)));
   connect( m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateVisibleArea()));
 
-  zoomIn = new KAction( i18n("Zoom In 25%"), "viewmag+", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
-  zoomOut = new KAction( i18n("Zoom Out 25%"), "viewmag-", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
+  m_zoomOutButton->setIconSet(SmallIconSet("viewmag-", 16));
+  m_zoomInButton->setIconSet(SmallIconSet("viewmag+", 16));
+  connect(m_zoomOutButton, SIGNAL(clicked()), this, SLOT(zoomMinus()));
+  connect(m_zoomInButton, SIGNAL(clicked()), this, SLOT(zoomPlus()));
+  connect(m_zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomChanged(int)));
 
-  zoomIn->plug(bar);
-  zoomOut->plug(bar);
-
-  canvasZoomChanged();
+  canvasZoomChanged(m_pView->zoomHandler()->zoom());
 }
 
 KivioBirdEyePanel::~KivioBirdEyePanel()
@@ -55,22 +56,26 @@ KivioBirdEyePanel::~KivioBirdEyePanel()
 
 void KivioBirdEyePanel::zoomChanged(int z)
 {
-//  debug(QString("zoomChanged %1 %2").arg(z).arg((double)(z/100.0)));
   m_pView->viewZoom(z);
 }
 
 void KivioBirdEyePanel::zoomMinus()
 {
-  m_pCanvas->zoomOut(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
+  m_pCanvas->zoomOut(QPoint(m_pCanvas->width() / 2, m_pCanvas->height() / 2));
 }
 
 void KivioBirdEyePanel::zoomPlus()
 {
-  m_pCanvas->zoomIn(QPoint(m_pCanvas->width()/2, m_pCanvas->height()/2));
+  m_pCanvas->zoomIn(QPoint(m_pCanvas->width() / 2, m_pCanvas->height() / 2));
 }
 
-void KivioBirdEyePanel::canvasZoomChanged()
+void KivioBirdEyePanel::canvasZoomChanged(int zoom)
 {
+  m_zoomSlider->blockSignals(true);
+  m_zoomSlider->setValue(zoom);
+  m_zoomSlider->blockSignals(false);
+  m_zoomOutButton->setEnabled(zoom > 25);
+  m_zoomInButton->setEnabled(zoom < 2000);
   slotUpdateView(m_pView->activePage());
 }
 
