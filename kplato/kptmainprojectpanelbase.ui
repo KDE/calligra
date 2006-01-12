@@ -43,6 +43,9 @@
                             <property name="name">
                                 <cstring>leaderfield</cstring>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The project leader.</string>
+                            </property>
                         </widget>
                         <widget class="QPushButton">
                             <property name="name">
@@ -50,6 +53,12 @@
                             </property>
                             <property name="text">
                                 <string>&amp;Choose...</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+C</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Choose a project leader from your address book.</string>
                             </property>
                         </widget>
                     </hbox>
@@ -64,6 +73,9 @@
                     <property name="buddy" stdset="0">
                         <cstring>namefield</cstring>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The project name.</string>
+                    </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
@@ -75,15 +87,24 @@
                     <property name="buddy" stdset="0">
                         <cstring>namefield</cstring>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The unique project identification</string>
+                    </property>
                 </widget>
                 <widget class="KLineEdit" row="1" column="1">
                     <property name="name">
                         <cstring>idfield</cstring>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The unique project identification</string>
+                    </property>
                 </widget>
                 <widget class="KLineEdit" row="0" column="1">
                     <property name="name">
                         <cstring>namefield</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The project name.</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="2" column="0">
@@ -99,6 +120,9 @@
                     <property name="buddy" stdset="0">
                         <cstring>leaderfield</cstring>
                     </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>The project leader.</string>
+                    </property>
                 </widget>
             </grid>
         </widget>
@@ -111,6 +135,11 @@
             </property>
             <property name="title">
                 <string>Scheduling</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Here you can define the overal schedule of the project.
+
+The project is scheduled within the given start and end dates.</string>
             </property>
             <grid>
                 <property name="name">
@@ -170,10 +199,20 @@
             <property name="buddy" stdset="0">
                 <cstring>descriptionfield</cstring>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>Various notes associated with the project or a project summary.
+
+Here you can enter any additional text you want to be stored with the project. This can for example be a short summary of the project or various notes.</string>
+            </property>
         </widget>
         <widget class="KTextEdit">
             <property name="name">
                 <cstring>descriptionfield</cstring>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Various notes associated with the project or a project summary.
+
+Here you can enter any additional text you want to be stored with the project. This can for example be a short summary of the project or various notes.</string>
             </property>
         </widget>
     </vbox>
