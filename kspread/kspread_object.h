@@ -28,8 +28,8 @@
 #include <koPictureCollection.h>
 #include <koRect.h>
 #include <koSize.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <koxmlns.h>
 
 

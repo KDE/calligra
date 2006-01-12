@@ -63,9 +63,9 @@
 
 #include <koOasisStore.h>
 #include <KoSpeaker.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <KoStoreDrag.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koDocumentChild.h>
 #include <KoRect.h>
 
