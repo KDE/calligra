@@ -33,6 +33,7 @@
 #include <qdialog.h>
 #include <assert.h>
 #include <qlayout.h>
+#include <qvaluelist.h>
 #include <kglobalsettings.h>
 
 #include <kdebug.h>
@@ -427,10 +428,10 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         return;
     }
     if (col == 0) { // user clicked on week numbers
-/*        updateSelectedCells();
+        updateSelectedCells();
         m_selectedWeekdays.clear();
         m_selectedDates.clear();
-        if (e->state() & ShiftButton) {
+/*        if (e->state() & ShiftButton) {
             //TODO
         } else if (e->state() & ControlButton) {
             // toggle select this week
@@ -440,20 +441,42 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             // toggle select this, clear all others
             m_selectedWeeks.toggleClear(m_weeks[row]);
             //kdDebug()<<k_funcinfo<<"toggleClear row: "<<row<<" state="<<m_selectedWeeks.state(m_weeks[row])<<endl;
-        }
+        }*/
         updateSelectedCells();
         repaintContents(false);
-        if (m_enabled)
+/*        if (m_enabled)
             emit weekSelected(m_weeks[row].first, m_weeks[row].second);*/
         return;
     }
-    if (row==0 && col>=0) { // the user clicked on weekdays
+    if (row==0 && col>0) { // the user clicked on weekdays
         updateSelectedCells();
         m_selectedDates.clear();
         m_selectedWeeks.clear();;
         int day = weekday(col);
         if (e->state() & ShiftButton) {
-            //TODO
+            // select all days between this and the furthest away selected day,
+            // check first down - then up, clear all others
+            bool select = false;
+            for(int i=0; i < col; ++i) {
+                if (m_selectedWeekdays.contains(i)) {
+                    select = true;
+                } else if (select) {
+                    m_selectedWeekdays.toggle(i); // select
+                }
+            }
+            bool selected = select;
+            select = false;
+            for(int i=7; i > col; --i) {
+                if (m_selectedWeekdays.contains(i)) {
+                    if (selected) m_selectedWeekdays.toggle(i); // deselect
+                    else select = true;
+                } else if (select) {
+                    m_selectedWeekdays.toggle(i); // select
+                }
+            }
+            if (!m_selectedWeekdays.contains(col)) {
+                m_selectedWeekdays.toggle(col); // always select
+            }
         } else if (e->state() & ControlButton) {
             // toggle select this date
             m_selectedWeekdays.toggle(day);
@@ -475,7 +498,32 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         m_selectedWeekdays.clear();
         m_selectedWeeks.clear();
         if (e->state() & ShiftButton) {
-            //TODO
+            // find first&last date
+            QDate first;
+            QDate last;
+            DateMap::ConstIterator it;
+            for (it = m_selectedDates.constBegin(); it != m_selectedDates.constEnd(); ++it) {
+                //kdDebug()<<k_funcinfo<<it.key()<<endl;
+                QDate d = QDate::fromString(it.key(), Qt::ISODate);
+                if (!d.isValid())
+                    continue;
+                if (!first.isValid() || first > d)
+                    first = d;
+                if (!last.isValid() || last < d)
+                    last = d;
+            }
+            // select between anchor and pressed date inclusive
+            m_selectedDates.clear();
+            if (first.isValid() && last.isValid()) {
+                QDate anchor = first < date ? first : last;
+                int i = anchor > date ? -1 : 1;
+                while (anchor != date) {
+                    //kdDebug()<<k_funcinfo<<anchor.toString(Qt::ISODate)<<endl;
+                    m_selectedDates.toggle(anchor);
+                    anchor = anchor.addDays(i);
+                }
+            }
+            m_selectedDates.toggle(date);
         } else if (e->state() & ControlButton) {
             // toggle select this date
             m_selectedDates.toggle(date);
@@ -549,7 +597,7 @@ bool DateTable::setDate(const QDate& date_, bool repaint) {
         date=date_;
         changed=true;
     }
-    m_selectedDates.clear();
+    //m_selectedDates.clear();
 
     temp.setYMD(date.year(), date.month(), 1);
     firstday=temp.dayOfWeek();
@@ -564,12 +612,12 @@ bool DateTable::setDate(const QDate& date_, bool repaint) {
         QDate d(date.year(), date.month()-1,1);
         setWeekNumbers(d.addDays(d.daysInMonth()-1));
     }
-    if (m_selectedWeeks.isEmpty() && m_selectedWeekdays.isEmpty() &&
+/*    if (m_selectedWeeks.isEmpty() && m_selectedWeekdays.isEmpty() &&
         !m_selectedDates.isEmpty() && !m_selectedDates.contains(date))
     {
         //kdDebug()<<k_funcinfo<<"date inserted"<<endl;
         m_selectedDates.insert(date);
-    }
+    }*/
     numDaysPrevMonth=temp.daysInMonth();
     if(changed && repaint) {
         repaintContents(false);
