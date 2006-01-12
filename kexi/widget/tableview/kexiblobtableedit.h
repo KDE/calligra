@@ -68,15 +68,8 @@ class KexiBlobTableEdit : public KexiTableEdit
 		QTextEdit *m_content;
 };
 
-class KexiBlobEditorFactoryItem : public KexiCellEditorFactoryItem
-{
-	public:
-		KexiBlobEditorFactoryItem();
-		virtual ~KexiBlobEditorFactoryItem();
+KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)
 
-	protected:
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
-};
 
 //=======================
 //This class is temporarily here:
@@ -122,15 +115,6 @@ class KEXIDATATABLE_EXPORT KexiKIconTableEdit : public KexiTableEdit
 		QCache<QPixmap> m_pixmapCache;
 };
 
-class KexiKIconTableEditorFactoryItem : public KexiCellEditorFactoryItem
-{
-	public:
-		KexiKIconTableEditorFactoryItem();
-		virtual ~KexiKIconTableEditorFactoryItem();
-
-	protected:
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
-};
-
+KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiKIconTableEditorFactoryItem)
 
 #endif

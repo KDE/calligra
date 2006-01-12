@@ -819,3 +819,7 @@ TODO:
 
 TODO:
 - on opening detect whether a table exists (empty table view should not be displayed)
+- Another Kexi instance started from KexiMainWindow using QProcess freezes after opening
+  3rd table or so. Move to KProcess on Linux.
+
+TODO: entering table/query name by hand doesn't work in 'form data source' combo

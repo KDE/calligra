@@ -32,6 +32,7 @@
 #include <kpushbutton.h>
 #include <klineedit.h>
 
+//! @internal
 class KDownArrowPushButton : public KPushButton
 {
 	public:
@@ -152,8 +153,9 @@ KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
 	delete d;
 }
 
-void KexiComboBoxTableEdit::setValueInternal(const QVariant& add_, bool /*removeOld*/)
+void KexiComboBoxTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
+	Q_UNUSED(removeOld);
 	d->mouseBtnPressedWhenPopupVisible = false;
 //	m_combo->setCurrentItem(m_origValue.toInt() - 1);
 	QString add(add_.toString());

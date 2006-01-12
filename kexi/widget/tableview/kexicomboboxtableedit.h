@@ -115,14 +115,6 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		Private *d;
 };
 
-class KexiComboBoxEditorFactoryItem : public KexiCellEditorFactoryItem
-{
-	public:
-		KexiComboBoxEditorFactoryItem();
-		virtual ~KexiComboBoxEditorFactoryItem();
-
-	protected:
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
-};
+KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiComboBoxEditorFactoryItem)
 
 #endif

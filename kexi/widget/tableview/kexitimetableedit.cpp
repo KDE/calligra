@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +18,6 @@
  */
 
 #include "kexitimetableedit.h"
-#include "kexidatetimeeditor_p.h"
 
 #include <qapplication.h>
 #include <qpainter.h>
@@ -45,57 +44,166 @@
 
 #include <kexiutils/utils.h>
 
-KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent)
- : KexiTableEdit(column, parent,"KexiTimeTableEdit")
+KexiTimeFormatter::KexiTimeFormatter()
+ : m_hmsRegExp("(\\d*):(\\d*):(\\d*).*")//.*(am|pm|)")
+ , m_hmRegExp("(\\d*):(\\d*)")//.*(am|pm|)")
 {
-	m_sentEvent = false;
-	setViewWidget( m_edit = new QTimeEdit(this) );
-	m_edit->setAutoAdvance(true);
-	m_edit->installEventFilter(this);
-	m_cleared = false;
-	m_setNumberOnFocus = -1;
+	QString tf( KGlobal::locale()->timeFormat() );
+	//m_hourpos, m_minpos, m_secpos; are result of tf.find()
+	QString hourVariable, minVariable, secVariable;
 
-	m_dte_time_obj = KexiUtils::findFirstChild<QObject>(m_edit, "QDateTimeEditor");
-	if (m_dte_time_obj)
-		m_dte_time_obj->installEventFilter(this);
-	
-#ifdef QDateTimeEditor_HACK
-	m_dte_time = dynamic_cast<QDateTimeEditor*>(m_dte_time_obj);
-#else
-	m_dte_time = 0;
-#endif
+	//detect position of HOUR section: find %H or %k or %I or %l
+	m_24h = true;
+	m_hoursWithLeadingZero = true;
+	m_hourpos = tf.find("%H", 0, true);
+	if (m_hourpos>=0) {
+		m_24h = true;
+		m_hoursWithLeadingZero = true;
+	}
+	else {
+		m_hourpos = tf.find("%k", 0, true);
+		if (m_hourpos>=0) {
+			m_24h = true;
+			m_hoursWithLeadingZero = false;
+		}
+		else {
+			m_hourpos = tf.find("%I", 0, true);
+			if (m_hourpos>=0) {
+				m_24h = false;
+				m_hoursWithLeadingZero = true;
+			}
+			else {
+				m_hourpos = tf.find("%l", 0, true);
+				if (m_hourpos>=0) {
+					m_24h = false;
+					m_hoursWithLeadingZero = false;
+				}
+			}
+		}
+	}
+	m_minpos = tf.find("%M", 0, true);
+	m_secpos = tf.find("%S", 0, true); //can be -1
+	m_ampmpos = tf.find("%p", 0, true); //can be -1
 
-	connect(m_edit,SIGNAL(valueChanged(const QTime&)), this, SLOT(slotValueChanged(const QTime&)));
+	if (m_hourpos<0 || m_minpos<0) {
+		//set default: hr and min are needed, sec are optional
+		tf = "%H:%M:%S";
+		m_24h = true;
+		m_hoursWithLeadingZero = false;
+		m_hourpos = 0;
+		m_minpos = 3;
+		m_secpos = m_minpos + 3;
+		m_ampmpos = -1;
+	}
+	hourVariable = tf.mid(m_hourpos, 2);
 
-	setFocusProxy(m_edit);
+	m_inputMask = tf;
+//	m_inputMask.replace( hourVariable, "00" );
+//	m_inputMask.replace( "%M", "00" );
+//	m_inputMask.replace( "%S", "00" ); //optional
+	m_inputMask.replace( hourVariable, "99" );
+	m_inputMask.replace( "%M", "99" );
+	m_inputMask.replace( "%S", "99" ); //optional
+	m_inputMask.replace( "%p", "AA" ); //am or pm
+	m_inputMask += ";_";
 
-	m_acceptEditorAfterDeleteContents = true;
+	m_outputFormat = tf;
+}
+
+KexiTimeFormatter::~KexiTimeFormatter()
+{
+}
+
+QString KexiTimeFormatter::timeToString( const QTime& time ) const
+{
+	if (!time.isValid())
+		return QString::null;
+
+	QString s(m_outputFormat);
+	if (m_24h) {
+		if (m_hoursWithLeadingZero)
+			s.replace( "%H", QString::fromLatin1(time.hour()<10 ? "0" : "") + QString::number(time.hour()) );
+		else
+			s.replace( "%k", QString::number(time.hour()) );
+	}
+	else {
+		int time12 = (time.hour()>12) ? (time.hour()-12) : time.hour();
+		if (m_hoursWithLeadingZero)
+			s.replace( "%I", QString::fromLatin1(time12<10 ? "0" : "") + QString::number(time12) );
+		else
+			s.replace( "%l", QString::number(time12) );
+	}
+	s.replace( "%M", QString::fromLatin1(time.minute()<10 ? "0" : "") + QString::number(time.minute()) );
+	if (m_secpos>=0)
+		s.replace( "%S", QString::fromLatin1(time.second()<10 ? "0" : "") + QString::number(time.second()) );
+	if (m_ampmpos>=0)
+		s.replace( "%p", KGlobal::locale()->translate( time.hour()>=12 ? "pm" : "am") );
+	return s;
+}
+
+QTime KexiTimeFormatter::stringToTime( const QString& str )
+{
+	int hour, min, sec;
+	bool pm = false;
+
+	if (m_secpos>=0) {
+		if (-1 == m_hmsRegExp.search(str))
+			return QTime(99,0,0);
+		hour = m_hmsRegExp.cap(1).toInt();
+		min = m_hmsRegExp.cap(2).toInt();
+		sec = m_hmsRegExp.cap(3).toInt();
+		if (m_ampmpos >= 0 && m_hmsRegExp.numCaptures()>3)
+			pm = m_hmsRegExp.cap(4).lower()=="pm";
+	}
+	else {
+		if (-1 == m_hmRegExp.search(str))
+			return QTime(99,0,0);
+		hour = m_hmRegExp.cap(1).toInt();
+		min = m_hmRegExp.cap(2).toInt();
+		sec = 0;
+		if (m_ampmpos >= 0 && m_hmRegExp.numCaptures()>2)
+			pm = m_hmsRegExp.cap(4).lower()=="pm";
+	}
+
+	if (pm && hour < 12)
+		hour += 12; //PM
+	return QTime(hour, min, sec);
+}
+
+//------------------------------------------------
+
+KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent)
+ : KexiInputTableEdit(column, parent)
+{
+	setName("KexiTimeTableEdit");
+
+//! @todo add QValidator so time like "99:88:77" cannot be even entered
+
+	m_lineedit->setInputMask( m_formatter.inputMask() );
 }
 
 void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
-	m_cleared = !m_origValue.isValid();
-
-	m_setNumberOnFocus = -1;
-	QTime t;
-	QString add(add_.toString());
 	if (removeOld) {
-		if (!add.isEmpty() && add[0].latin1()>='0' && add[0].latin1() <='9') {
-			m_setNumberOnFocus = add[0].latin1()-'0';
-			t = QTime(m_setNumberOnFocus, 0, 0);
-		}
+		//new time entering... just fill the line edit
+//! @todo cut string if too long..
+		QString add(add_.toString());
+		m_lineedit->setText(add);
+		m_lineedit->setCursorPosition(add.length());
+		return;
 	}
-	else {
-		t = m_origValue.toTime();
-	}
-	m_edit->setTime(t);
-	moveToFirstSection();
+	m_lineedit->setText( 
+		m_formatter.timeToString( 
+			//hack to avoid converting null variant to valid QTime(0,0,0)
+			m_origValue.isValid() ? m_origValue.toTime() : QTime(99,0,0) 
+		)
+	);
+	m_lineedit->setCursorPosition(0); //ok?
 }
 
-//! \return true is editor's value is null (not empty)
 bool KexiTimeTableEdit::valueIsNull()
 {
-	return m_cleared;
+	return !timeValue().isValid();
 }
 
 bool KexiTimeTableEdit::valueIsEmpty()
@@ -103,101 +211,20 @@ bool KexiTimeTableEdit::valueIsEmpty()
 	return valueIsNull();// OK? TODO (nonsense?)
 }
 
+QTime KexiTimeTableEdit::timeValue()
+{
+	return m_formatter.stringToTime( m_lineedit->text() );
+}
+
 QVariant
 KexiTimeTableEdit::value()
 {
-//	ok = true;
+	return timeValue();
 
 	//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
-	return QVariant(QDateTime( m_cleared ? QDate() : QDate(0,1,2)/*nevermind*/, m_edit->time()));
+//	return QVariant(QDateTime( m_cleared ? QDate() : QDate(0,1,2)/*nevermind*/, m_edit->time()));
 }
 
-bool KexiTimeTableEdit::cursorAtStart()
-{
-#ifdef QDateTimeEditor_HACK
-	return m_dte_time && m_edit->hasFocus() && m_dte_time->focusSection()==0;
-#else
-	return false;
-#endif
-}
-
-bool KexiTimeTableEdit::cursorAtEnd()
-{
-#ifdef QDateTimeEditor_HACK
-	return m_dte_time && m_edit->hasFocus() 
-		&& m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
-#else
-	return false;
-#endif
-}
-
-void KexiTimeTableEdit::clear()
-{
-	m_edit->setTime(QTime());
-	m_cleared = true;
-}
-
-void KexiTimeTableEdit::slotValueChanged(const QTime& /*t*/)
-{
-	m_cleared = false;
-}
-
-//! @internal helper
-void KexiTimeTableEdit::moveToFirstSection()
-{
-#ifdef QDateTimeEditor_HACK
-	m_dte_time->setFocusSection(0);
-#else
-	QKeyEvent ke_left(QEvent::KeyPress, Qt::Key_Left, 0, 0);
-	for (int i=0; i<8; i++)
-		QApplication::sendEvent( m_dte_time_obj, &ke_left );
-#endif
-}
-
-bool KexiTimeTableEdit::eventFilter( QObject *o, QEvent *e )
-{
-	if (e->type()==QEvent::FocusIn && o->parent() && o->parent()->parent()==m_edit) {
-		if (m_setNumberOnFocus >= 0 && m_dte_time_obj) {
-			// there was a number character passed as 'add' parameter in init():
-			moveToFirstSection();
-			QKeyEvent ke(QEvent::KeyPress, int(Qt::Key_0)+m_setNumberOnFocus, 
-				'0'+m_setNumberOnFocus, 0, QString::number(m_setNumberOnFocus));
-			QApplication::sendEvent( m_dte_time_obj, &ke );
-			m_setNumberOnFocus = -1;
-		}
-	}
-#ifdef QDateTimeEditor_HACK
-	else if (e->type()==QEvent::KeyPress && m_dte_time) {
-		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
-		if ((ke->key()==Qt::Key_Right && !m_sentEvent && cursorAtEnd())
-			|| (ke->key()==Qt::Key_Left && !m_sentEvent && cursorAtStart()))
-		{
-			//the editor should send this key event:
-			m_sentEvent = true; //avoid recursion
-			QApplication::sendEvent( this, ke );
-			m_sentEvent = false;
-			ke->ignore();
-			return true;
-		}
-	}
-#endif
-	return false;
-}
-
-//======================================================
-
-KexiTimeEditorFactoryItem::KexiTimeEditorFactoryItem()
-{
-}
-
-KexiTimeEditorFactoryItem::~KexiTimeEditorFactoryItem()
-{
-}
-
-KexiTableEdit* KexiTimeEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, QScrollView* parent)
-{
-	return new KexiTimeTableEdit(column, parent);
-}
+KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiTimeEditorFactoryItem, KexiTimeTableEdit)
 
 #include "kexitimetableedit.moc"

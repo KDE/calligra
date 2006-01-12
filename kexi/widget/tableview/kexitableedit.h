@@ -41,35 +41,8 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 
 	public:
 		KexiTableEdit(KexiTableViewColumn &column, QScrollView* parent = 0, const char* name = 0);
-//		KexiTableEdit(KexiDB::Field &f, QScrollView* parent = 0, const char* name = 0);
 
 		virtual ~KexiTableEdit();
-
-/* moved to KexiDataItemInterface*/
-		/*! Just initializes \a value, and calls init(const QString& add, bool removeOld). 
-		 If \a removeOld is true, current value is set up as \a add.
-		 If \a removeOld if false, current value is set up as \a value + \a add.
-		 \a value is stored as 'old value' -it'd be usable in the future
-		 (e.g. Combo Box editor can use old value if current value does not 
-		 match any item on the list).
-		 Called by KexiTableView and others. */
-/*		void init(const QVariant& value, const QString& add, bool removeOld = false);
-
-		//! \return true if editor's value is changed (compared to original value)
-		virtual bool valueChanged();
-
-		//! \return true if editor's value is null (not empty)
-		virtual bool valueIsNull() = 0;
-
-		//! \return true if editor's value is empty (not null). 
-		//! Only few field types can accept "EMPTY" property 
-		//! (check this with KexiDB::Field::hasEmptyProperty()), 
-		virtual bool valueIsEmpty() = 0;
-*/
-
-/* moved to KexiDataItemInterface
-		virtual QVariant value(bool &ok) = 0;
-*/
 
 		//! Implemented for KexiDataItemInterface.
 		//! \return field information for this item
@@ -86,20 +59,6 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 		//! \return column information for this item 
 		//! (extended information, comparing to field()).
 		inline KexiTableViewColumn *column() const { return m_column; }
-
-//moved to KexiDataItemInterface
-		/*! \return true if internal editor's cursor (whatever that means, eg. line edit cursor)
-		 is at the beginning of editor's contents. This can inform table view that 
-		 after pressing "left arrow" key should stop editing and move to cell at the left 
-		 hand of the current cell. */
-//		virtual bool cursorAtStart() = 0;
-
-//moved to KexiDataItemInterface
-		/*! \return true if internal editor's cursor (whatever that means, eg. line edit cursor)
-		 is at the end of editor's contents. This can inform table view that 
-		 after pressing "right arrow" key should stop editing and move to cell at the right 
-		 hand of the current cell. */
-//		virtual bool cursorAtEnd() = 0;
 
 		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
@@ -189,5 +148,32 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 	private:
 		QWidget* m_view;
 };
+
+//! Declaration of cell editor factory
+#define KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(factoryclassname) \
+	class factoryclassname : public KexiCellEditorFactoryItem \
+	{ \
+		public: \
+			factoryclassname(); \
+			virtual ~factoryclassname(); \
+	\
+		protected: \
+			virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0); \
+	};
+
+//! Implementation of cell editor factory
+#define KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(factoryclassname, itemclassname) \
+factoryclassname::factoryclassname() \
+ : KexiCellEditorFactoryItem() \
+{} \
+\
+factoryclassname::~factoryclassname() \
+{} \
+\
+KexiTableEdit* factoryclassname::createEditor( \
+	KexiTableViewColumn &column, QScrollView* parent) \
+{ \
+	return new itemclassname(column, parent); \
+}
 
 #endif

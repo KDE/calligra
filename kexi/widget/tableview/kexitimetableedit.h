@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,14 +20,64 @@
 #ifndef KEXITIMETABLEEDIT_H
 #define KEXITIMETABLEEDIT_H
 
-#include "kexitableedit.h"
-#include "kexicelleditorfactory.h"
+#include <qregexp.h>
 
-class QTimeEdit;
-class QDateTimeEditor;
+#include "kexiinputtableedit.h"
 
-//! @short Editor class for Time type.
-class KEXIDATATABLE_EXPORT KexiTimeTableEdit : public KexiTableEdit
+//! @short Time formatter used by KexiTimeTableEdit and KexiDateTimeTableEdit
+//! Following time formats are allowed: HH:MM:SS (24h), HH:MM (24h), HH:MM AM/PM (12h)
+//! Separator MUST be ":"
+class KEXIDATATABLE_EXPORT KexiTimeFormatter
+{
+	public:
+		//! Creates new formatter with KDE setting for time
+		KexiTimeFormatter();
+
+		//! Creates new formatter with given settings
+//! @todo		KexiDateFormatter(... settings ...);
+
+		~KexiTimeFormatter();
+
+		//! converts string \a str to time using predefined settings
+		//! \return invalid time if the conversion is impossible
+		QTime stringToTime( const QString& str );
+
+		//! converts \a time to string using predefined settings
+		//! \return null string if \a time is invalid
+		QString timeToString( const QTime& time ) const;
+
+		//! \return Input mask generated using the formatter settings. 
+		//! Can be used in QLineEdit::setInputMask().
+		QString inputMask() const { return m_inputMask; }
+
+	protected:
+		//! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
+		QString m_inputMask;
+
+//		//! Order of date sections
+//		QDateEdit::Order m_order;
+
+		//! 12 or 12h
+		bool m_24h;
+
+		bool m_hoursWithLeadingZero;
+
+		//! Time format used in timeToString(). Notation from KLocale::setTimeFormat() is used.
+		QString m_outputFormat;
+
+		//! Used in stringToTime() to convert string back to QTime
+		int m_hourpos, m_minpos, m_secpos, m_ampmpos;
+
+		QRegExp m_hmsRegExp, m_hmRegExp;
+};
+
+/*! @short Editor class for Time type.
+ It is a replacement QTimeEdit due to usability problems: 
+ people are accustomed to use single-character cursor.
+ Time format is retrieved from the KDE global settings
+ and input/output is performed using KLineEdit (from KexiInputTableEdit).
+*/
+class KEXIDATATABLE_EXPORT KexiTimeTableEdit : public KexiInputTableEdit
 {
 	Q_OBJECT
 
@@ -36,35 +86,17 @@ class KEXIDATATABLE_EXPORT KexiTimeTableEdit : public KexiTableEdit
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
-		virtual void clear();
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
-
-		virtual bool eventFilter( QObject *o, QEvent *e );
 
 	protected slots:
-		void slotValueChanged(const QTime& t);
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		void moveToFirstSection();
+		QTime timeValue();
 
-		QTimeEdit* m_edit;
-		QDateTimeEditor* m_dte_time;
-		QObject *m_dte_time_obj;
-		int m_setNumberOnFocus;
-		bool m_cleared : 1;
-		bool m_sentEvent : 1;
+		//! Used to format and convert time values
+		KexiTimeFormatter m_formatter;
 };
 
-class KexiTimeEditorFactoryItem : public KexiCellEditorFactoryItem
-{
-	public:
-		KexiTimeEditorFactoryItem();
-		virtual ~KexiTimeEditorFactoryItem();
-
-	protected:
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
-};
+KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiTimeEditorFactoryItem)
 
 #endif

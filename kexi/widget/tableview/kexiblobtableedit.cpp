@@ -306,7 +306,6 @@ void KexiBlobTableEdit::clear()
 	//TODO??
 }
 
-
 //======================================================
 
 KexiBlobEditorFactoryItem::KexiBlobEditorFactoryItem()
@@ -320,7 +319,7 @@ KexiBlobEditorFactoryItem::~KexiBlobEditorFactoryItem()
 KexiTableEdit* KexiBlobEditorFactoryItem::createEditor(
 	KexiTableViewColumn & /*column*/, QScrollView* /*parent*/)
 {
-//js: TODO enable when KexiBlobTableEdit will be stable again!
+//! @todo js: enable when KexiBlobTableEdit will be stable again!
 //DISABLED
 //	return new KexiBlobTableEdit(f, parent);
 	return 0;
@@ -423,21 +422,6 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, QVariant 
 	}
 }
 
-//======================================================
-
-KexiKIconTableEditorFactoryItem::KexiKIconTableEditorFactoryItem()
-{
-}
-
-KexiKIconTableEditorFactoryItem::~KexiKIconTableEditorFactoryItem()
-{
-}
-
-KexiTableEdit* KexiKIconTableEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, QScrollView* parent)
-{
-	return new KexiKIconTableEdit(column, parent);
-}
-
+KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiKIconTableEditorFactoryItem, KexiKIconTableEdit)
 
 #include "kexiblobtableedit.moc"

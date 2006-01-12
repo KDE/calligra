@@ -35,7 +35,7 @@
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 
-
+//! @internal
 class MyLineEdit : public KLineEdit
 {
 	public:
@@ -150,13 +150,13 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 		QString add(add_.toString());
 
 		if (field()->isFPNumericType()) {
-//TODO: precision!
+//! @todo precision!
 			tmp_val = QString::number(origValue.toDouble(), 'f', 2/*prec*/);
 			if (origValue.toDouble() == 0.0) {
 				tmp_val=add; //eat 0
 			}
 			else {
-				//TODO(js): get decimal places settings here...
+//! @todo (js): get decimal places settings here...
 				QStringList sl = QStringList::split(".", tmp_val);
 				if (tmp_val.isEmpty())
 					m_lineedit->setText("");
@@ -421,20 +421,6 @@ QSize KexiInputTableEdit::totalSize()
 	return m_lineedit->size();
 }
 
-//======================================================
-
-KexiInputEditorFactoryItem::KexiInputEditorFactoryItem()
-{
-}
-
-KexiInputEditorFactoryItem::~KexiInputEditorFactoryItem()
-{
-}
-
-KexiTableEdit* KexiInputEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, QScrollView* parent)
-{
-	return new KexiInputTableEdit(column, parent);
-}
+KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiInputEditorFactoryItem, KexiInputTableEdit)
 
 #include "kexiinputtableedit.moc"

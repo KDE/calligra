@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or

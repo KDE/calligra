@@ -72,14 +72,6 @@ class KEXIDATATABLE_EXPORT KexiBoolTableEdit : public KexiTableEdit
 		void hintClicked();
 };
 
-class KexiBoolEditorFactoryItem : public KexiCellEditorFactoryItem
-{
-	public:
-		KexiBoolEditorFactoryItem();
-		virtual ~KexiBoolEditorFactoryItem();
-
-	protected:
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
-};
+KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBoolEditorFactoryItem)
 
 #endif

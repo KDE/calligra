@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003-2004,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,18 +22,60 @@
 #ifndef KEXIDATETABLEEDIT_H
 #define KEXIDATETABLEEDIT_H
 
-#include "kexitableedit.h"
-#include <kdatepicker.h>
+#include <qdatetimeedit.h>
 
-#include "kexicelleditorfactory.h"
+#include "kexiinputtableedit.h"
 
-class QDateEdit;
-class QDateTimeEditor;
-class KDatePicker;
-class KPopupMenu;
+//! @short Date formatter used by KexiDateTableEdit and KexiDateTimeTableEdit
+class KEXIDATATABLE_EXPORT KexiDateFormatter
+{
+	public:
+		//! Creates new formatter with KDE setting for "short date"
+		KexiDateFormatter();
 
-//! @short Editor class for Date type.
-class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
+		//! Creates new formatter with given settings
+//! @todo		KexiDateFormatter(... settings ...);
+
+		~KexiDateFormatter();
+
+		//! converts string \a str to date using predefined settings
+		//! \return invalid date if the conversion is impossible
+		QDate stringToDate( const QString& str ) const;
+
+		//! converts \a date to string using predefined settings
+		//! \return null string if \a date is invalid
+		QString dateToString( const QDate& date ) const;
+
+		//! \return Input mask generated using the formatter settings. 
+		//! Can be used in QLineEdit::setInputMask().
+		QString inputMask() const { return m_inputMask; }
+
+	protected:
+		//! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
+		QString m_inputMask;
+
+		//! Order of date sections
+		QDateEdit::Order m_order;
+
+		//! 4 or 2 digits
+		bool m_longYear;
+
+		bool m_monthWithLeadingZero, m_dayWithLeadingZero;
+
+		//! Date format used in dateToString()
+		QString m_qtFormat;
+
+		//! Used in stringToDate() to convert string back to QDate
+		int m_yearpos, m_monthpos, m_daypos;
+};
+
+/*! @short Editor class for Date type.
+ It is a replacement QDateEdit due to usability problems: 
+ people are accustomed to use single-character cursor.
+ Date format is retrieved from the KDE global settings.
+ and input/output is performed using KLineEdit (from KexiInputTableEdit).
+*/
+class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiInputTableEdit
 {
 	Q_OBJECT
 
@@ -42,40 +84,24 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiTableEdit
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
-		virtual void clear();
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
-
-		virtual bool eventFilter( QObject *o, QEvent *e );
+//		virtual void clear();
+//		virtual bool cursorAtStart();
+//		virtual bool cursorAtEnd();
+//		virtual bool eventFilter( QObject *o, QEvent *e );
 
 	protected slots:
-		void slotDateChanged(QDate);
-		void slotShowDatePicker();
-		void acceptDate();
+//		void slotDateChanged(QDate);
+//		void slotShowDatePicker();
+//		void acceptDate();
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
-		void moveToFirstSection();
+		QDate dateValue() const;
 
-		KDatePicker	*m_datePicker;
-		QDateEdit* m_edit;
-		
-		KPopupMenu *m_datePickerPopupMenu;
-
-		QDateTimeEditor* m_dte_date;
-		QObject *m_dte_date_obj;
-		int m_setNumberOnFocus;
-		bool m_sentEvent : 1;
+		//! Used to format and convert date values
+		KexiDateFormatter m_formatter;
 };
 
-class KexiDateEditorFactoryItem : public KexiCellEditorFactoryItem
-{
-	public:
-		KexiDateEditorFactoryItem();
-		virtual ~KexiDateEditorFactoryItem();
-
-	protected:
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
-};
+KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiDateEditorFactoryItem)
 
 #endif

@@ -71,31 +71,17 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 
 		void showHintButton();
 		void init();
+		virtual void paintEvent( QPaintEvent *e );
 
-		virtual void paintEvent ( QPaintEvent *e );
-	//virtual void drawFrame ( QPainter * p );
-
-
-		bool		m_calculatedCell;
-//js		QStringList	m_comp;
-
+		bool m_calculatedCell;
 		QString m_decsym; //! decimal symbol
 		QString m_origText; //! orig. Line Edit's text after conversion - for easy comparing
-
-		KLineEdit	*m_lineedit;
+		KLineEdit *m_lineedit;
 
 	signals:
 		void hintClicked();
 };
 
-class KexiInputEditorFactoryItem : public KexiCellEditorFactoryItem
-{
-	public:
-		KexiInputEditorFactoryItem();
-		virtual ~KexiInputEditorFactoryItem();
-
-	protected:
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
-};
+KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiInputEditorFactoryItem)
 
 #endif

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003-2004,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,6 @@
  */
 
 #include "kexidatetimetableedit.h"
-#include "kexidatetimeeditor_p.h"
 
 #include <qapplication.h>
 #include <qpainter.h>
@@ -48,86 +47,43 @@
 #include <kexiutils/utils.h>
 
 KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent)
- : KexiTableEdit(column, parent,"KexiDateTimeTableEdit")
+ : KexiInputTableEdit(column, parent)
 {
-	m_sentEvent = false;
-	setViewWidget( new QWidget(this) );
-	m_dateEdit = new QDateEdit(widget());
-	m_dateEdit->setAutoAdvance(true);
-	m_dateEdit->installEventFilter(this);
-//	m_dateEdit->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
-//TODO: width ok?
-	m_dateEdit->setFixedWidth( QFontMetrics(m_dateEdit->font()).width("8888-88-88___") );
+	setName("KexiDateTimeTableEdit");
 
-	QToolButton* dateBtn = new QToolButton(widget());
-	dateBtn->setText("...");
-	dateBtn->setFixedWidth( QFontMetrics(dateBtn->font()).width(" ... ") );
-	dateBtn->setPopupDelay(1); //1 ms
+//! @todo add QValidator so time like "99:88:77" cannot be even entered
 
-	m_timeEdit = new QTimeEdit(widget());
-	m_timeEdit->setAutoAdvance(true);
-	m_timeEdit->installEventFilter(this);
-//TODO: use QTimeEdit::display() for better width calculation
-	m_timeEdit->setFixedWidth( QFontMetrics(m_dateEdit->font()).width("88:88:88___") );
-
-	m_datePickerPopupMenu = new KPopupMenu(0, "date_popup");
-	connect(m_datePickerPopupMenu, SIGNAL(aboutToShow()), this, SLOT(slotShowDatePicker()));
-	m_datePicker = new KDatePicker(m_datePickerPopupMenu, QDate::currentDate(), 0);
-
-	KDateTable *dt = KexiUtils::findFirstChild<KDateTable>(m_datePicker, "KDateTable");
-	if (dt)
-		connect(dt, SIGNAL(tableClicked()), this, SLOT(acceptDate()));
-	m_datePicker->setCloseButton(true);
-	m_datePicker->installEventFilter(this);
-	m_datePickerPopupMenu->insertItem(m_datePicker);
-	dateBtn->setPopup(m_datePickerPopupMenu);
-	
-#ifdef QDateTimeEditor_HACK
-	m_dte_date = KexiUtils::findFirstChild<QDateTimeEditor>(m_dateEdit, "QDateTimeEditor");
-	m_dte_time = KexiUtils::findFirstChild<QDateTimeEditor>(m_timeEdit, "QDateTimeEditor");
-	if (m_dte_date && m_dte_time) {
-		m_dte_date->installEventFilter(this);
-		m_dte_time->installEventFilter(this);
-	}
-#else
-	m_dte_date = 0;
-	m_dte_time = 0;
-#endif
-
-//	kdDebug() << m_dte_date->focusSection() << endl;
-//	kdDebug() << m_dte_time->focusSection() << endl;
-
-//	dte->setFocusSection(1);
-
-//	connect(btn, SIGNAL(clicked()), this, SLOT(slotShowDatePicker()));
-	
-	QHBoxLayout* layout = new QHBoxLayout(widget());
-	layout->addWidget(m_dateEdit, 0);
-	layout->addWidget(dateBtn, 0);
-	layout->addWidget(m_timeEdit, 0);
-	layout->addStretch(1);
-
-	setFocusProxy(m_dateEdit);
-
-	m_acceptEditorAfterDeleteContents = true;
+	QString mask(m_dateFormatter.inputMask());
+	mask.truncate(m_dateFormatter.inputMask().length()-2);
+	m_lineedit->setInputMask( mask + " " + m_timeFormatter.inputMask() );
 }
 
-void KexiDateTimeTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
+void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
-	m_dateEdit->setDate(m_origValue.toDate());
-	m_timeEdit->setTime(m_origValue.toTime());
-
-#ifdef QDateTimeEditor_HACK
-	if (m_dte_date)
-		m_dte_date->setFocusSection(0);
-#endif
-//	m_oldVal = m_origValue;
+	if (removeOld) {
+		//new time entering... just fill the line edit
+//! @todo cut string if too long..
+		QString add(add_.toString());
+		m_lineedit->setText(add);
+		m_lineedit->setCursorPosition(add.length());
+		return;
+	}
+	if (m_origValue.isValid()) {
+		m_lineedit->setText(
+			m_dateFormatter.dateToString( m_origValue.toDateTime().date() ) + " " +
+			m_timeFormatter.timeToString( m_origValue.toDateTime().time() )
+		);
+	}
+	else {
+		m_lineedit->setText( QString::null );
+	}
+	m_lineedit->setCursorPosition(0); //ok?
 }
 
 //! \return true is editor's value is null (not empty)
 bool KexiDateTimeTableEdit::valueIsNull()
 {
-	return m_dateEdit->date().isNull();
+	return !dateTimeValue().isValid();
 }
 
 bool KexiDateTimeTableEdit::valueIsEmpty()
@@ -135,147 +91,30 @@ bool KexiDateTimeTableEdit::valueIsEmpty()
 	return valueIsNull();//js OK? TODO (nonsense?)
 }
 
-void
-KexiDateTimeTableEdit::slotDateChanged(QDate date)
+QDateTime KexiDateTimeTableEdit::dateTimeValue()
 {
-	m_dateEdit->setDate(date);
-
-	repaint();
+	QString s(m_lineedit->text());
+	int timepos = s.find(" ");
+	if (timepos>0) {
+		return QDateTime(
+			m_dateFormatter.stringToDate( s.left(timepos) ),
+			m_timeFormatter.stringToTime( s.mid(timepos+1) )
+		);
+	}
+	else {
+		return QDateTime(
+			m_dateFormatter.stringToDate( s ),
+			QTime(0,0,0)
+		);
+	}
 }
 
 QVariant
 KexiDateTimeTableEdit::value()
 {
-//	ok = true;
-	return QVariant(QDateTime(m_dateEdit->date(), m_timeEdit->time()));
+	return dateTimeValue();
 }
 
-void
-KexiDateTimeTableEdit::slotShowDatePicker()
-{
-	QDate date = m_dateEdit->date();
-	m_datePicker->setDate(date);
-	m_datePicker->setFocus();
-	m_datePicker->show();
-	m_datePicker->setFocus();
-}
-
-/*! filtering some events on a date picker */
-bool
-KexiDateTimeTableEdit::eventFilter( QObject *o, QEvent *e )
-{
-	if (o==m_datePicker) {
-		kdDebug() << e->type() << endl;
-		switch (e->type()) {
-		case QEvent::Hide:
-			m_datePickerPopupMenu->hide();
-			break;
-		case QEvent::KeyPress:
-		case QEvent::KeyRelease: {
-			kdDebug() << "ok!" << endl;
-			QKeyEvent *ke = (QKeyEvent *)e;
-			if (ke->key()==Key_Enter || ke->key()==Key_Return) {
-				//accepting picker
-				acceptDate();
-				return true;
-			}
-			else if (ke->key()==Key_Escape) {
-				//cancelling picker
-				m_datePickerPopupMenu->hide();
-				kdDebug() << "reject" << endl;
-				return true;
-			}
-			else m_datePickerPopupMenu->setFocus();
-			break;
-			}
-		default:
-			break;
-		}
-	}
-#ifdef QDateTimeEditor_HACK
-	else if (e->type()==QEvent::KeyPress && m_dte_date && m_dte_time) {
-		bool resendEvent = false;
-		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
-		if (ke->key()==Qt::Key_Right)
-		{
-			if (o==m_dte_date && m_dateEdit->hasFocus() 
-				&& m_dte_date->focusSection()==int(m_dte_date->sectionCount()-1))
-			{
-				m_dte_date->setFocusSection(0); //to avoid h-scrolling
-				m_timeEdit->setFocus();
-				m_dte_time->setFocusSection(0);
-			}
-			else if (!m_sentEvent && cursorAtEnd())
-				resendEvent = true;
-		}
-		else if (ke->key()==Qt::Key_Left)
-		{
-			if (o==m_dte_time && m_timeEdit->hasFocus() && m_dte_time->focusSection()==0) {
-				m_dateEdit->setFocus();
-				m_dte_date->setFocusSection(m_dte_date->sectionCount()-1);
-			}
-			else if (!m_sentEvent && cursorAtStart())
-				resendEvent = true;
-		}
-		if (resendEvent) {
-			//the editor should send this key event:
-			m_sentEvent = true; //avoid recursion
-			QApplication::sendEvent( this, ke );
-			m_sentEvent = false;
-			ke->ignore();
-			return true;
-		}
-	}
-#endif
-	return false;
-}
-
-void KexiDateTimeTableEdit::acceptDate()
-{
-	m_dateEdit->setDate(m_datePicker->date());
-	m_datePickerPopupMenu->hide();
-	kdDebug() << "accept" << endl;
-}
-
-bool KexiDateTimeTableEdit::cursorAtStart()
-{
-#ifdef QDateTimeEditor_HACK
-	return m_dte_date && m_dateEdit->hasFocus() && m_dte_date->focusSection()==0;
-#else
-	return false;
-#endif
-}
-
-bool KexiDateTimeTableEdit::cursorAtEnd()
-{
-#ifdef QDateTimeEditor_HACK
-	return m_dte_time && m_timeEdit->hasFocus() 
-		&& m_dte_time->focusSection()==int(m_dte_time->sectionCount()-1);
-#else
-	return false;
-#endif
-}
-
-void KexiDateTimeTableEdit::clear()
-{
-	m_dateEdit->setDate(QDate());
-}
-
-
-//======================================================
-
-KexiDateTimeEditorFactoryItem::KexiDateTimeEditorFactoryItem()
-{
-}
-
-KexiDateTimeEditorFactoryItem::~KexiDateTimeEditorFactoryItem()
-{
-}
-
-KexiTableEdit* KexiDateTimeEditorFactoryItem::createEditor(
-	KexiTableViewColumn &column, QScrollView* parent)
-{
-	return new KexiDateTimeTableEdit(column, parent);
-}
+KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateTimeEditorFactoryItem, KexiDateTimeTableEdit)
 
 #include "kexidatetimetableedit.moc"

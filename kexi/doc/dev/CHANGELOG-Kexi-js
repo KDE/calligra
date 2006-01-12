@@ -11,7 +11,9 @@ For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
 
-TODO: entering table/wuery name by hand doesn't work in 'form data source' combo
+2006-01-12
+Table View
+- Usability: Date, Date/Time and Time cell editors reimplemented
 
 2006-01-11
 Migration

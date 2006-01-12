@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
+   Copyright (C) 2003-2004,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,19 +22,16 @@
 #ifndef KEXIDATETIMETABLEEDIT_H
 #define KEXIDATETIMETABLEEDIT_H
 
-#include "kexitableedit.h"
-#include <kdatepicker.h>
-#include "kexicelleditorfactory.h"
+#include "kexidatetableedit.h"
+#include "kexitimetableedit.h"
 
-class QDateEdit;
-class QTimeEdit;
-class QDateTimeEditor;
-
-class KDatePicker;
-class KPopupMenu;
-
-//! @short Editor class for DateTime type.
-class KEXIDATATABLE_EXPORT KexiDateTimeTableEdit : public KexiTableEdit
+/*! @short Editor class for Date/Time type.
+ It is a replacement QDateTimeEdit due to usability problems: 
+ people are accustomed to use single-character cursor.
+ Date and Time format is retrieved from the KDE global settings
+ and input/output is performed using KLineEdit (from KexiInputTableEdit).
+*/
+class KEXIDATATABLE_EXPORT KexiDateTimeTableEdit : public KexiInputTableEdit
 {
 	Q_OBJECT
 
@@ -43,37 +40,20 @@ class KEXIDATATABLE_EXPORT KexiDateTimeTableEdit : public KexiTableEdit
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
-		virtual void clear();
-		virtual bool cursorAtStart();
-		virtual bool cursorAtEnd();
-
-		virtual bool eventFilter( QObject *o, QEvent *e );
 
 	protected slots:
-		void slotDateChanged(QDate);
-		void slotShowDatePicker();
-		void acceptDate();
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
+		QDateTime dateTimeValue();
 
-		KDatePicker *m_datePicker;
-		QDateEdit* m_dateEdit;
-		QTimeEdit* m_timeEdit;
-		QDateTimeEditor *m_dte_date, *m_dte_time;
-		KPopupMenu *m_datePickerPopupMenu;
+		//! Used to format and convert date values
+		KexiDateFormatter m_dateFormatter;
 
-		bool m_sentEvent : 1;
+		//! Used to format and convert time values
+		KexiTimeFormatter m_timeFormatter;
 };
 
-class KexiDateTimeEditorFactoryItem : public KexiCellEditorFactoryItem
-{
-	public:
-		KexiDateTimeEditorFactoryItem();
-		virtual ~KexiDateTimeEditorFactoryItem();
-
-	protected:
-		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QScrollView* parent = 0);
-};
+KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiDateTimeEditorFactoryItem)
 
 #endif
