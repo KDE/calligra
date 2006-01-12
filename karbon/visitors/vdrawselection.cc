@@ -128,7 +128,7 @@ VDrawSelection::visitVPath( VPath &composite )
 						// Draw control node2:
 						m_painter->newPath();
 						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
-						m_painter->drawNode( jtr.current()->point( 1 ), 2 );
+						m_painter->drawNode( jtr.current()->point( 1 ), m_nodeSize );
 						m_painter->strokePath();
 					}
 
@@ -149,7 +149,7 @@ VDrawSelection::visitVPath( VPath &composite )
 						// Draw control node1:
 						m_painter->newPath();
 						m_painter->setBrush( editnodes ? Qt::yellow : Qt::blue );
-						m_painter->drawNode( jtr.current()->point( 0 ), 2 );
+						m_painter->drawNode( jtr.current()->point( 0 ), m_nodeSize );
 						m_painter->strokePath();
 					}
 				}
@@ -164,7 +164,7 @@ VDrawSelection::visitVPath( VPath &composite )
 				else
 					m_painter->setBrush( Qt::white );
 
-				m_painter->drawNode( jtr.current()->knot(), 2 );
+				m_painter->drawNode( jtr.current()->knot(), m_nodeSize );
 			}
 		}
 	}
@@ -174,7 +174,7 @@ VDrawSelection::visitVPath( VPath &composite )
 	{
 		m_painter->setPen( Qt::NoPen );
 		m_painter->setBrush( Qt::blue.light() );
-		m_painter->drawNode( composite.boundingBox().center(), 2 );
+		m_painter->drawNode( composite.boundingBox().center(), m_nodeSize );
 	}
 
 	m_painter->restore();

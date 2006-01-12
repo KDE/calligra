@@ -75,6 +75,7 @@ protected:
 	virtual void mouseDragShiftPressed();
 	virtual void mouseDragShiftReleased();
 	virtual void arrowKeyReleased( Qt::Key );
+	virtual bool keyReleased( Qt::Key );
 
 	virtual void cancel();
 

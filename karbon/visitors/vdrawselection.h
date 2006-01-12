@@ -30,8 +30,8 @@
 class KARBONBASE_EXPORT VDrawSelection : public VVisitor
 {
 public:
-	VDrawSelection( const VObjectList& selection, VPainter *painter, bool nodeediting = false )
-		: m_selection( selection ), m_painter( painter ), m_nodeediting( nodeediting ) {}
+	VDrawSelection( const VObjectList& selection, VPainter *painter, bool nodeediting = false, uint nodeSize = 2 )
+		: m_selection( selection ), m_painter( painter ), m_nodeediting( nodeediting ), m_nodeSize( nodeSize ) {}
 
 	virtual void visitVPath( VPath& composite );
 
@@ -39,6 +39,7 @@ private:
 	VObjectList		m_selection;
 	VPainter		*m_painter;
 	bool			m_nodeediting;
+	uint			m_nodeSize;
 };
 
 #endif

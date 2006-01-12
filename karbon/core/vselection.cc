@@ -30,6 +30,8 @@
 #include "vfill.h"
 #include "vstroke.h"
 
+uint VSelection::m_handleNodeSize = 2;
+
 VSelection::VSelection( VObject* parent )
 	: VObject( parent ), m_showhandle( true )
 {
@@ -96,15 +98,13 @@ VSelection::take( const KoRect& rect, bool selectObjects, bool exclusive )
 	}
 	else
 	{
-		// TODO implement and test node deselection properly
-		/* 
 		VObjectListIterator itr( m_objects );
 		VObjectList deselected;
 
 		// Try to deselect all that have at least one node contained in the rect
 		for ( ; itr.current(); ++itr )
 		{
-			VSelectNodes op( rect, false, exclusive );
+			VSelectNodes op( rect, false, false );
 
 			if( op.visit( *itr.current() ) )
 			{
@@ -112,6 +112,7 @@ VSelection::take( const KoRect& rect, bool selectObjects, bool exclusive )
 				success = true;
 			}
 		}
+		/*
 		// Remove all that were selected from this selection
 		VObjectListIterator jtr( deselected );
 		for ( ; jtr.current(); ++jtr )
@@ -222,7 +223,7 @@ VSelection::draw( VPainter* painter, double zoomFactor ) const
 	if( objects().count() == 0 || state() == VObject::edit )
 		return;
 
-	VDrawSelection op( m_objects, painter, !m_selectObjects );
+	VDrawSelection op( m_objects, painter, !m_selectObjects, m_handleNodeSize );
 	op.visitVSelection( (VSelection &)*this );
 
 	// get bounding box:

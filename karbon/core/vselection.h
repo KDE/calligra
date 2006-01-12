@@ -172,6 +172,11 @@ public:
 	 */
 	virtual void setSelectObjects( bool selectObjects = true ) { m_selectObjects = selectObjects; }
 
+	static void setHandleSize( uint size )
+		{ m_handleNodeSize = size; }
+
+	static uint handleSize()
+		{ return m_handleNodeSize; }
 private:
 	/**
 	 * Show/Hide handle.
@@ -197,7 +202,7 @@ private:
 	/**
 	 * Paint size of nodes.
 	 */
-	static const uint m_handleNodeSize = 3;
+	static uint m_handleNodeSize;
 };
 
 #endif

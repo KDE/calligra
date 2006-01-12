@@ -375,6 +375,31 @@ VSelectTool::arrowKeyReleased( Qt::Key key )
 	updateStatusBar();
 }
 
+bool
+VSelectTool::keyReleased( Qt::Key key )
+{
+	
+	VSelection* selection = view()->part()->document().selection();
+
+	switch( key )
+	{
+		// increase/decrease the handle size
+		case Qt::Key_I:
+			uint handleSize = selection->handleSize();
+			if( shiftPressed() ) 
+				selection->setHandleSize( ++handleSize );
+			else if( handleSize > 1 )
+				selection->setHandleSize( --handleSize );
+		break;
+		default: return false;
+	}
+
+	if( view() )
+		view()->repaintAll( selection->boundingBox() );
+
+	return true;
+}
+
 void
 VSelectTool::updateStatusBar() const
 {
