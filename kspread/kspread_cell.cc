@@ -2255,7 +2255,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   paintingObscured++;
 
   if (d->hasExtra() && (d->extra()->extraXCells > 0
-      || d->extra()->extraYCells > 0)) {
+			|| d->extra()->extraYCells > 0)) {
     //kdDebug(36001) << "painting obscured cells for " << name() << endl;
 
     paintObscuredCells( rect, painter, view, cellRect, cellRef,
@@ -2265,7 +2265,8 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 			mergedCellsPainted);
 
     // FIXME: Is this the right place for this?
-    mergedCellsPainted.prepend( cellRef );
+    if ( d->extra()->mergedXCells > 0 || d->extra()->mergedYCells > 0 )
+      mergedCellsPainted.prepend( cellRef );
   }
   paintingObscured--;
 
@@ -2603,7 +2604,7 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 
 
 	//kdDebug(36001) << "calling paintcell for obscured cell "
-	//       << name() << endl;
+	//       << cell->name() << endl;
 	cell->paintCell( rect, painter, view,
 			 corner,
 			 QPoint( cellRef.x() + x, cellRef.y() + y ),
