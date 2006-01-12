@@ -4350,7 +4350,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
     QPen pen( Qt::black, 3 );
     painter.setPen( pen );
 
-    retrieveMarkerInfo( range, viewRect, positions, paintSides );
+    retrieveMarkerInfo( selectionInfo()->extendToMergedAreas(range), viewRect, positions, paintSides );
 
     double left =   positions[0];
     double top =    positions[1];
