@@ -4111,6 +4111,11 @@ void KPrDocument::insertObjectInPage(double offset, KPrObject *_obj, int pos)
 {
     /// Why does this use __pgLayout instead of m_pageLayout ?
     int page = (int)(offset/__pgLayout.ptHeight)+m_insertFilePage;
+    if ( page < 0 )
+    {
+        kdDebug(33001) << "insertObjectInPage object cound not be inserted page = " << page << endl;
+        return;
+    }
     double newPos = offset - ( page - m_insertFilePage ) * __pgLayout.ptHeight;
     // due to a very small caluculating error which gives us the wrong page
     // for objects placed on top of the page we have to move them to the right page.
