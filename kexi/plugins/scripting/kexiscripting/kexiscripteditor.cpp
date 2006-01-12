@@ -67,7 +67,7 @@ void KexiScriptEditor::initialize(Kross::Api::ScriptAction* scriptaction)
             "support in Kexi. The scripting-API may change in details\n"
             "in the next Kexi version.\n"
             "For more information and documentation see\n%1"
-        ).arg("http://www.kexi-project.org/scripting/"), true).join("\n# ");
+        ).arg("http://www.kexi-project.org/scripting/"), true).join("\n# ") + "\n";
     }
     KexiEditor::setText(code);
     // We assume Kross and the HighlightingInterface are using same

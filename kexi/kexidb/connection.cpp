@@ -851,9 +851,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 					v += " PRIMARY KEY";
 			if (!pk && field->isUniqueKey())
 				v += " UNIQUE";
-#ifndef Q_WS_WIN
-#warning IS this ok for all engines?: if (!autoinc && !field->isPrimaryKey() && field->isNotNull())
-#endif
+///@todo IS this ok for all engines?: if (!autoinc && !field->isPrimaryKey() && field->isNotNull())
 			if (!autoinc && !pk && field->isNotNull())
 				v += " NOT NULL"; //only add not null option if no autocommit is set
 			if (field->defaultValue().isValid())

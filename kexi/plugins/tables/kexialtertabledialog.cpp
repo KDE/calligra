@@ -863,6 +863,8 @@ void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* /*item*/,
 void KexiAlterTableDialog::slotAboutToDeleteRow(
 	KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint)
 {
+	Q_UNUSED(result)
+	Q_UNUSED(repaint)
 	if (item[COLUMN_ID_PK].toString()=="key")
 		d->primaryKeyExists = false;
 }
