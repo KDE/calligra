@@ -67,6 +67,7 @@
 #include <KoStoreDrag.h>
 #include <koxmlwriter.h>
 #include <koDocumentChild.h>
+#include <KoRect.h>
 
 #include "commands.h"
 #include "kspread_doc.h"
