@@ -59,7 +59,7 @@ signals:
 class ResourceDialog : public KDialogBase {
     Q_OBJECT
 public:
-    ResourceDialog(Project &project, Resource &resource, QWidget *parent=0, const char *name=0);
+    ResourceDialog(Project &project, Resource *resource, QWidget *parent=0, const char *name=0);
 
     bool calculationNeeded() {  return m_calculationNeeded; }
 
@@ -75,7 +75,7 @@ protected slots:
     void slotCalendarChanged(int);
 
 private:
-    Resource &m_original;
+    Resource *m_original;
     Resource m_resource;
     ResourceDialogImpl *dia;
     bool m_calculationNeeded;

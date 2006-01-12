@@ -96,7 +96,7 @@ void ResourceDialogImpl::slotChooseResource()
 
 //////////////////  ResourceDialog  ////////////////////////
 
-ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *parent, const char *name)
+ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Resource Settings"), Ok|Cancel, Ok, parent, name, true, true),
       m_original(resource),
       m_resource(resource),
@@ -106,15 +106,15 @@ ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *pa
     setMainWidget(dia);
     enableButtonOK(false);
 
-    dia->nameEdit->setText(resource.name());
-    dia->initialsEdit->setText(resource.initials());
-    dia->emailEdit->setText(resource.email());
-    dia->type->setCurrentItem((int)resource.type()); // NOTE: must match enum
-    dia->units->setValue(resource.units());
-    dia->availableFrom->setDateTime(resource.availableFrom());
-    dia->availableUntil->setDateTime(resource.availableUntil());
-    dia->rateEdit->setText(KGlobal::locale()->formatMoney(resource.normalRate()));
-    dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource.overtimeRate()));
+    dia->nameEdit->setText(resource->name());
+    dia->initialsEdit->setText(resource->initials());
+    dia->emailEdit->setText(resource->email());
+    dia->type->setCurrentItem((int)resource->type()); // NOTE: must match enum
+    dia->units->setValue(resource->units());
+    dia->availableFrom->setDateTime(resource->availableFrom());
+    dia->availableUntil->setDateTime(resource->availableUntil());
+    dia->rateEdit->setText(KGlobal::locale()->formatMoney(resource->normalRate()));
+    dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource->overtimeRate()));
 
     int cal = 0;
     dia->calendarList->insertItem(i18n("None"));
@@ -124,7 +124,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *pa
     for(int i=1; cit.current(); ++cit, ++i) {
         dia->calendarList->insertItem(cit.current()->name(), i);
         m_calendars.insert(i, cit.current());
-        if (cit.current() == resource.calendar())
+        if (cit.current() == resource->calendar())
             cal = i;
     }
     dia->calendarList->setCurrentItem(cal);
@@ -165,7 +165,7 @@ void ResourceDialog::slotCalendarChanged(int cal) {
 }
 
 KCommand *ResourceDialog::buildCommand(Part *part) {
-    return buildCommand(&m_original, m_resource, part);
+    return buildCommand(m_original, m_resource, part);
 }
 
 // static

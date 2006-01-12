@@ -318,7 +318,7 @@ void ResourcesPanel::slotAddResource() {
     }
     listOfResources->setSelected(listOfResources->selectedItem(), false);
     Resource *r = new Resource(project);
-    ResourceDialog *dia = new ResourceDialog(*project, *r);
+    ResourceDialog *dia = new ResourceDialog(*project, r);
     if (dia->exec()) {
         ResourcesPanelResourceItem *resourceItem = new ResourcesPanelResourceItem(r, ResourcesPanelResourceItem::New);
         m_groupItem->m_group->addResource(resourceItem);
@@ -339,7 +339,7 @@ void ResourcesPanel::slotEditResource() {
     ResourceLBItem *item = dynamic_cast<ResourceLBItem*> (listOfResources->selectedItem());
     if(item == 0) return;
     Resource *r = item->m_resourceItem->m_resource;
-    ResourceDialog *dia = new ResourceDialog(*project, *r);
+    ResourceDialog *dia = new ResourceDialog(*project, r);
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand();
         if (cmd) {

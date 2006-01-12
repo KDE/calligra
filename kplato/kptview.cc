@@ -931,7 +931,7 @@ void View::slotEditResource() {
     Resource *r = m_resourceview->currentResource();
     if (!r)
         return;
-    ResourceDialog *dia = new ResourceDialog(getProject(), *r);
+    ResourceDialog *dia = new ResourceDialog(getProject(), r);
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand(getPart());
         if (cmd)
