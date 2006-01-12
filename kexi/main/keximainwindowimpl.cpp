@@ -927,7 +927,7 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 		d->prj = 0;
 		if (incompatibleWithKexi) {
 			if (KMessageBox::Yes == KMessageBox::questionYesNo(this,
-				i18n("<qt>Database project %1 appears to be not created using Kexi.<br><br>"
+				i18n("<qt>Database project %1 does not appear to have been created using Kexi.<br><br>"
 				"Do you want to import it as a new Kexi project?</qt>").arg(projectData.infoString()),
 				0, KGuiItem(i18n("Import Database", "&Import..."), "database_import"),
 				KStdGuiItem::quit()))

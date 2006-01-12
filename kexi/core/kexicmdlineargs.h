@@ -47,18 +47,18 @@ static KCmdLineOptions options[] =
 	"is provided."), 0 },
   { "t", 0, 0 },
   { "type <name>", I18N_NOOP(
-	"Specify a type of a file provided\n"
-	"as argument. This option is only useful\n"
-	"if your filename has not set a valid \n"
-	"extension and its type cannot be detected\n"
-	"unambiguously by looking at its contents.\n"
-	"This option is ignored if no file\n"
-	"is specified as an argument.\n"
+	"Specify the type of file provided as an argument.\n"
+	"This option is only useful if the filename does\n"
+	"not have a valid extension set and its type\n"
+	"cannot be determined unabiguously by examining\n"
+	"its contents.\n"
+	"This option is ignored if no file is specified as\n"
+	"an argument.\n"
 	"Available file types are:\n"
 	"- \"project\" for a project file (the default)\n"
-	"- \"shortcut\" for a shortcut file pointing\n"
-	"  you to a project.\n"
-	"- \"connection\" for a database connection data.\n"
+	"- \"shortcut\" for a shortcut file pointing to a\n"
+	"  project.\n"
+	"- \"connection\" for database connection data.\n"
 	), 0 },
   { "conn", 0, 0 },
   { "connection <shortcut_filename>", I18N_NOOP(
@@ -93,12 +93,12 @@ static KCmdLineOptions options[] =
   { "new <object_type>", I18N_NOOP(
 	"Start new object design of type <object_type>."), 0 },
   { "print [<object_type>:]<object_name>", I18N_NOOP(
-	"\nOpen Print dialog window for object of type\n"
-	"<object_type> and name <object_name> in specified\n"
-	"project on application start for quick printing\n"
+	"\nOpen the Print dialog window for an object of type\n"
+	"<object_type> and name <object_name> in the specified\n"
+	"project when the application starts, for quick printing\n"
 	"of the object's data.\n"
-	"<object_type>: is optional, if omitted - table\n"
-	"type is assumed. Object type can be also query."), 0 },
+	"<object_type>: is optional; if omitted, table\n"
+	"type is assumed. Object type can also be query."), 0 },
   { "print-preview [<object_type>:]<object_name>", I18N_NOOP(
 	"\nOpen Print Preview window for object\n"
 	"of type <object_type> and name <object_name>\n"
@@ -106,10 +106,10 @@ static KCmdLineOptions options[] =
 	"See --print for more details."), 0 },
 #ifdef KEXI_SHOW_UNIMPLEMENTED
   { "final-mode", I18N_NOOP(
-	"Start project in the Final Mode, regardless \n"
+	"Start project in Final Mode, regardless \n"
 	"of the project settings".), 0 },
   { "design-mode", I18N_NOOP(
-	"Start project in the Design Mode, regardless \n"
+	"Start project in Design Mode, regardless \n"
 	"of the project settings."), 0 },
 #endif
 
@@ -149,10 +149,10 @@ static KCmdLineOptions options[] =
 #endif //KEXI_SERVER_SUPPORT
 
   { "+[project-name]", I18N_NOOP(
-	"Kexi database project's filename\n"
-	"or Kexi shortcut's filename\n"
-	"or Kexi database project's name\n"
-	"on a server to open."), 0 },
+	"Kexi database project filename,\n"
+	"Kexi shortcut filename,\n"
+	"or name of a Kexi database\n"
+	"project on a server to open."), 0 },
   // INSERT YOUR COMMANDLINE OPTIONS HERE
   KCmdLineLastOption
 };

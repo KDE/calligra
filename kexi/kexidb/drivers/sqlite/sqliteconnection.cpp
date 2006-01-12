@@ -176,13 +176,13 @@ bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 	d->storeResult();
 	if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_READWRITE) {
 		setError(ERR_ACCESS_RIGHTS, 
-		i18n("The file is probably already opened on this or other computer.")+"\n\n"
+		i18n("The file is probably already open on this or another computer.")+"\n\n"
 		+ i18n("Could not gain exclusive access for reading and writing the file.") + " "
 		+ i18n("Check the file's permissions and whether it is already opened and locked by another application."));
 	}
 	else if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_WRITE) {
 		setError(ERR_ACCESS_RIGHTS, 
-		i18n("The file is probably already opened on this or other computer.")+"\n\n"
+		i18n("The file is probably already open on this or another computer.")+"\n\n"
 		+ i18n("Could not gain exclusive access for writing the file.") + " "
 		+ i18n("Check the file's permissions and whether it is already opened and locked by another application."));
 	}

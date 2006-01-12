@@ -383,7 +383,7 @@ void KexiStartupDialog::setupPageTemplates()
 		DesktopIcon("database_import") );
 	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 	lbl_blank = new QLabel( 
-		i18n("Kexi will import structure and data of an existing database as new database project.")
+		i18n("Kexi will import the structure and data of an existing database as a new database project.")
 		+clickMsg, templPageFrame );
 	lbl_blank->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
 	lbl_blank->setMargin(0);
