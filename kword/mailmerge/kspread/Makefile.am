@@ -1,6 +1,6 @@
 
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOSCRIPT_INCLUDES) \
+INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES)  \
            -I$(top_srcdir)/kspread -I$(top_srcdir)/kword $(all_includes)
 
 kde_module_LTLIBRARIES = kwmailmerge_kspread.la
