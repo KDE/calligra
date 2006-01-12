@@ -320,6 +320,11 @@ void ResourcesPanel::slotAddResource() {
     Resource *r = new Resource(project);
     ResourceDialog *dia = new ResourceDialog(*project, r);
     if (dia->exec()) {
+        KCommand *cmd = dia->buildCommand();
+        if (cmd) {
+            cmd->execute(); // modifications -> r
+            delete cmd;
+        }
         ResourcesPanelResourceItem *resourceItem = new ResourcesPanelResourceItem(r, ResourcesPanelResourceItem::New);
         m_groupItem->m_group->addResource(resourceItem);
         ResourceLBItem *item = new ResourceLBItem(resourceItem);
