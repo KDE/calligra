@@ -360,13 +360,6 @@ void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
       else
         parameter += "==";
     }
-    else if ( f[p] == '%' )
-    {
-      if( inQuote )
-        parameter += '%';
-      else
-        parameter += "/100";
-    }
     else if ( f[p] == ')' )
     {
       if ( !inQuote )
