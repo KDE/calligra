@@ -202,11 +202,13 @@ VSelectNodesTool::keyReleased( Qt::Key key )
 	{
 		// increase/decrease the handle size
 		case Qt::Key_I:
+		{
 			uint handleSize = selection->handleSize();
 			if( shiftPressed() ) 
 				selection->setHandleSize( ++handleSize );
 			else if( handleSize > 1 )
 				selection->setHandleSize( --handleSize );
+		}
 		break;
 		case Qt::Key_Delete:
 			if( selection->objects().count() > 0 )
