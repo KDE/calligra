@@ -50,7 +50,7 @@ static KCmdLineOptions options[] =
 	"Specify the type of file provided as an argument.\n"
 	"This option is only useful if the filename does\n"
 	"not have a valid extension set and its type\n"
-	"cannot be determined unabiguously by examining\n"
+	"cannot be determined unambiguously by examining\n"
 	"its contents.\n"
 	"This option is ignored if no file is specified as\n"
 	"an argument.\n"
