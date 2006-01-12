@@ -84,14 +84,6 @@
 # define KWMF_EXPORT
 #endif
 
-#ifdef MAKE_KOSCRIPT_LIB
-# define KOSCRIPT_EXPORT KDE_EXPORT
-#elif KDE_MAKE_LIB
-# define KOSCRIPT_EXPORT KDE_IMPORT
-#else
-# define KOSCRIPT_EXPORT
-#endif
-
 #ifdef MAKE_KOTEXT_LIB
 # define KOTEXT_EXPORT KDE_EXPORT
 #elif KDE_MAKE_LIB
