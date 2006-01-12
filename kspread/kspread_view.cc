@@ -3963,7 +3963,7 @@ void View::cutSelection()
       if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
       {
         if( !macroCommand )
-          macroCommand = new KMacroCommand( i18n( "Cut objects" ) );
+          macroCommand = new KMacroCommand( i18n( "Cut Objects" ) );
         RemoveObjectCommand *cmd = new RemoveObjectCommand( it.current(), true );
         macroCommand->addCommand( cmd );
       }
@@ -5897,7 +5897,7 @@ void View::deleteSelectedObjects()
     if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
     {
       if( !macroCommand )
-        macroCommand = new KMacroCommand( i18n( "Remove object" ) );
+        macroCommand = new KMacroCommand( i18n( "Remove Object" ) );
       RemoveObjectCommand *cmd = new RemoveObjectCommand( it.current() );
       macroCommand->addCommand( cmd );
     }

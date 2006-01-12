@@ -602,9 +602,9 @@ void ChangeObjectGeometryCommand::unexecute()
 QString ChangeObjectGeometryCommand::name() const
 {
   if ( fabs( obj->geometry().width() - newGeometry.width() )<1e-3  && fabs( obj->geometry().height() - newGeometry.height() ) < 1e-3 )
-    return i18n("Move object");
+    return i18n("Move Object");
   else
-    return i18n("Resize object");
+    return i18n("Resize Object");
 }
 
 RemoveObjectCommand::RemoveObjectCommand( KSpreadObject *_obj, bool _cut )
@@ -655,9 +655,9 @@ void RemoveObjectCommand::unexecute()
 QString RemoveObjectCommand::name() const
 {
   if ( cut )
-    return i18n("Cut object");
+    return i18n("Cut Object");
   else
-    return i18n("Remove object");
+    return i18n("Remove Object");
 }
 
 InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry& _entry, Canvas *_canvas ) //child
@@ -754,5 +754,5 @@ void InsertObjectCommand::unexecute()
 
 QString InsertObjectCommand::name() const
 {
-  return i18n("Insert object");
+  return i18n("Insert Object");
 }

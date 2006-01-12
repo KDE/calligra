@@ -110,7 +110,7 @@ DataManipulator::DataManipulator ()
   m_parsing (false)
 {
   // default name for DataManipulator, can be changed using setName
-  m_name = i18n ("Change value");
+  m_name = i18n ("Change Value");
 }
 
 DataManipulator::~DataManipulator ()
@@ -131,7 +131,7 @@ Value DataManipulator::newValue (Element *element, int col, int row,
 
 ArrayFormulaManipulator::ArrayFormulaManipulator ()
 {
-  m_name = i18n ("Set array formula");
+  m_name = i18n ("Set Array Formula");
 }
 
 ArrayFormulaManipulator::~ArrayFormulaManipulator ()

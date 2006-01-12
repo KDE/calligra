@@ -1617,7 +1617,7 @@ KCommand * KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTe
             replacement=QString("¼");
         else if (word == QString("3/4") )
             replacement=QString("¾");
-        QString cmdName = i18n("Autocorrect for fraction");
+        QString cmdName = i18n("Autocorrect for Fraction");
         KCommand *cmd =txtObj->replaceSelectionCommand( textEditCursor, replacement,
                                                         cmdName,
                                                         KoTextDocument::HighlightSelection );

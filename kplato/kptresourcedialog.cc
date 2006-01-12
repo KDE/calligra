@@ -171,7 +171,7 @@ KCommand *ResourceDialog::buildCommand(Part *part) {
 // static
 KCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource, Part *part) {
     KMacroCommand *m=0;
-    QString n = i18n("Modify resource");
+    QString n = i18n("Modify Resource");
     if (resource.name() != original->name()) {
         if (!m) m = new KMacroCommand(n);
         m->addCommand(new ModifyResourceNameCmd(part, original, resource.name()));

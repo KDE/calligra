@@ -143,7 +143,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	name ? name : "KexiCSVImportDialog", 
 	true, 
 	false,
-	KGuiItem( i18n("&Options..."))
+	KGuiItem( i18n("&Options"))
   ),
 	m_mainWin(mainWin),
 	m_cancelled( false ),

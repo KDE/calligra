@@ -392,7 +392,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Deflate Compression Options:</string>
+                            <string>Deflate Compression Options</string>
                         </property>
                         <hbox>
                             <property name="name">
@@ -527,7 +527,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>CCITT Group 3 fax encoding Options:</string>
+                            <string>CCITT Group 3 fax encoding Options</string>
                         </property>
                         <hbox>
                             <property name="name">
@@ -595,7 +595,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>Pixar Log Compression Options:</string>
+                            <string>Pixar Log Compression Options</string>
                         </property>
                         <hbox>
                             <property name="name">
