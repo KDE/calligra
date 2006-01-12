@@ -20,48 +20,6 @@
 #include "vcursor.h"
 #include <qbitmap.h>
 
-static char *cross_mask[]={
-"16 16 2 1",
-"# c #000000",
-". c #ffffff",
-"......###.......",
-"......###.......",
-"......###.......",
-"......###.......",
-"......###.......",
-"......###.......",
-"###############.",
-"#######.#######.",
-"###############.",
-"......###.......",
-"......###.......",
-"......###.......",
-"......###.......",
-"......###.......",
-"......###.......",
-"................"};
-
-static char *cross_bitmap[]={
-"16 16 2 1",
-"# c #000000",
-". c #ffffff",
-".......#........",
-".......#........",
-".......#........",
-".......#........",
-".......#........",
-".......#........",
-".......#........",
-"#######.#######.",
-".......#........",
-".......#........",
-".......#........",
-".......#........",
-".......#........",
-".......#........",
-".......#........",
-"................"};
-
 static const char* const cminus[] = {
 "16 16 6 1",
 "  c Gray0",
@@ -119,13 +77,16 @@ QCursor VCursor::createCursor( CursorType type )
 	switch( type )
 	{
 		case CrossHair:
-			return createCursor( (const char**) cross_bitmap, (const char**) cross_mask, 7, 7 );
+			return crossHair();
 		break;
 		case ZoomPlus:
 			return QCursor( QPixmap( ( const char**) cplus ), -1, -1 );
 		break;
 		case ZoomMinus:
 			return QCursor( QPixmap( ( const char**) cminus ), -1, -1 );
+		break;
+		case NeedleArrow:
+			return needleArrow();
 		break;
 		default: return QCursor( Qt::arrowCursor );
 	}
@@ -140,4 +101,43 @@ QCursor VCursor::createCursor( const char * bitmap[], const char * mask[], int h
 	m = QPixmap( (const char**) mask );
 	
 	return QCursor( b, m, hotX, hotY );
+}
+
+QCursor VCursor::crossHair()
+{
+	static unsigned char cross_bits[] = {
+		0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00,
+		0x80, 0x00, 0xff, 0x7f, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00,
+		0x80, 0x00, 0x80, 0x00, 0x80, 0x00};
+
+	QBitmap b = QBitmap( 15, 15, cross_bits, true );
+	QBitmap m = b.createHeuristicMask( false );
+
+    return QCursor( b, m, 7, 7 );
+}
+
+QCursor VCursor::needleArrow()
+{
+	static unsigned char needle_bits[] = {
+		0x00, 0x00, 0x10, 0x00, 0x20, 0x00, 0x60, 0x00, 0xc0, 0x00, 0xc0, 0x01,
+		0x80, 0x03, 0x80, 0x07, 0x00, 0x0f, 0x00, 0x1f, 0x00, 0x3e, 0x00, 0x7e,
+		0x00, 0x7c, 0x00, 0x1c, 0x00, 0x18, 0x00, 0x00};
+
+	QBitmap b = QBitmap( 16, 16, needle_bits, true );
+	QBitmap m = b.createHeuristicMask( false );
+
+    return QCursor( b, m, 2, 0 );
+}
+
+QCursor VCursor::needleMoveArrow()
+{
+	static unsigned char needle_move_bits[] = {
+		0x00, 0x00, 0x10, 0x00, 0x20, 0x00, 0x60, 0x00, 0xc0, 0x00, 0xc0, 0x01,
+		0x80, 0x03, 0x80, 0x07, 0x10, 0x0f, 0x38, 0x1f, 0x54, 0x3e, 0xfe, 0x7e,
+		0x54, 0x7c, 0x38, 0x1c, 0x10, 0x18, 0x00, 0x00};
+
+	QBitmap b = QBitmap( 16, 16, needle_move_bits, true );
+	QBitmap m = b.createHeuristicMask( false );
+
+    return QCursor( b, m, 2, 0 );
 }

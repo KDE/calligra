@@ -35,6 +35,7 @@
 #include <commands/vtransformcmd.h>
 #include <visitors/vdrawselection.h>
 #include <core/vselection.h>
+#include <core/vcursor.h>
 #include "vselectnodestool.h"
 #include <vtransformnodes.h>
 #include <commands/vdeletenodescmd.h>
@@ -43,7 +44,7 @@
 #include <kdebug.h>
 
 VSelectNodesTool::VSelectNodesTool( KarbonView* view )
-	: VTool( view, "tool_select_nodes" ), m_state( normal )
+	: VTool( view, "tool_select_nodes" ), m_state( normal ), m_select( true )
 {
 	registerTool( this );
 }
@@ -55,9 +56,15 @@ VSelectNodesTool::~VSelectNodesTool()
 void
 VSelectNodesTool::activate()
 {
-	view()->setCursor( QCursor( Qt::arrowCursor ) );
-	view()->part()->document().selection()->showHandle( false );
-	view()->part()->document().selection()->setSelectObjects( false );
+	if( view() )
+	{
+		view()->setCursor( VCursor::needleArrow() );
+		view()->part()->document().selection()->showHandle( false );
+		view()->part()->document().selection()->setSelectObjects( false );
+		// deselect all nodes
+		view()->part()->document().selection()->selectNodes( false );
+		view()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	}
 	VTool::activate();
 }
 
@@ -77,12 +84,12 @@ VSelectNodesTool::draw()
 	painter->setZoomFactor( view()->zoom() );
 	painter->setRasterOp( Qt::NotROP );
 
-	double tolerance = 2.0 / view()->zoom();
+	VSelection* selection = view()->part()->document().selection();
 
-	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
-					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
-	QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
-	if( view()->part()->document().selection()->objects().count() > 0 &&
+	KoRect selrect = calcSelRect( last() );	
+
+	QPtrList<VSegment> segments = selection->getSegments( selrect );
+	if( selection->objects().count() > 0 &&
 		m_state != dragging && ( m_state >= moving || segments.count() > 0 ) )
 	{
 		if( m_state == normal )
@@ -100,14 +107,18 @@ VSelectNodesTool::draw()
 					m_state = movingbezier2;
 					segments.at( 0 )->selectPoint( 0, false );
 				}
-				view()->part()->document().selection()->append( selrect.normalize(), false, true );
+				selection->append( selrect.normalize(), false, true );
 			}
 			else
+			{
 				m_state = moving;
+				selection->append( selrect.normalize(), false, false );
+			}
+
 			recalc();
 		}
 
-		VDrawSelection op( m_objects, painter, true );
+		VDrawSelection op( m_objects, painter, true, selection->handleSize() );
 		VObjectListIterator itr = m_objects;
         for( ; itr.current(); ++itr )
 			op.visit( *( itr.current() ) );
@@ -132,10 +143,8 @@ VSelectNodesTool::setCursor() const
 {
 	if( m_state == moving ) return;
 
-	double tolerance = 2.0 / view()->zoom();
+	KoRect selrect = calcSelRect( last() );
 
-	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
-					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
 	QPtrList<VSegment> segments = view()->part()->document().selection()->getSegments( selrect );
 	if( segments.count() > 0 &&
 		( segments.at( 0 )->knotIsSelected() ||
@@ -143,10 +152,10 @@ VSelectNodesTool::setCursor() const
 		  segments.at( 0 )->pointIsSelected( 1 ) ||
 		  selrect.contains( segments.at( 0 )->knot() ) ) )
 	{
-		view()->setCursor( QCursor( Qt::CrossCursor ) );
+		view()->setCursor( VCursor::needleMoveArrow() );
 	}
 	else
-		view()->setCursor( QCursor( Qt::arrowCursor ) );
+		view()->setCursor( VCursor::needleArrow() );
 }
 
 void
@@ -155,6 +164,24 @@ VSelectNodesTool::mouseButtonPress()
 	m_current = first();
 
 	m_state = normal;
+	m_select = true;
+
+	recalc();
+
+	view()->part()->document().selection()->setState( VObject::edit );
+	view()->repaintAll( view()->part()->document().selection()->boundingBox() );
+	view()->part()->document().selection()->setState( VObject::selected );
+
+	draw();
+}
+
+void 
+VSelectNodesTool::rightMouseButtonPress()
+{
+	m_current = first();
+
+	m_state = normal;
+	m_select = false;
 
 	recalc();
 
@@ -168,14 +195,30 @@ VSelectNodesTool::mouseButtonPress()
 bool
 VSelectNodesTool::keyReleased( Qt::Key key )
 {
-	if( key == Qt::Key_Delete )
-	{
-		if( view()->part()->document().selection()->objects().count() > 0 )
-			view()->part()->addCommand( new VDeleteNodeCmd( &view()->part()->document() ), true );
+	
+	VSelection* selection = view()->part()->document().selection();
 
-		return true;
+	switch( key )
+	{
+		// increase/decrease the handle size
+		case Qt::Key_I:
+			uint handleSize = selection->handleSize();
+			if( shiftPressed() ) 
+				selection->setHandleSize( ++handleSize );
+			else if( handleSize > 1 )
+				selection->setHandleSize( --handleSize );
+		break;
+		case Qt::Key_Delete:
+			if( selection->objects().count() > 0 )
+				view()->part()->addCommand( new VDeleteNodeCmd( &view()->part()->document() ), true );
+		break;
+		default: return false;
 	}
-	return false;
+
+	if( view() )
+		view()->repaintAll( selection->boundingBox() );
+
+	return true;
 }
 
 void
@@ -184,12 +227,31 @@ VSelectNodesTool::mouseButtonRelease()
 	// erase old object:
 	draw();
 
-	double tolerance = 2.0 / view()->zoom();
-	KoRect selrect( last().x() - tolerance, last().y() - tolerance,
-					2 * tolerance + 1.0, 2 * tolerance + 1.0 );
+	VSelection* selection = view()->part()->document().selection();
 
-	view()->part()->document().selection()->append();	// select all
-	view()->part()->document().selection()->append( selrect.normalize(), false, true );
+	KoRect selrect = calcSelRect( last() );
+
+	if( ctrlPressed() )
+		selection->append( selrect.normalize(), false, false );
+	else
+		selection->append( selrect.normalize(), false, true );
+
+	view()->selectionChanged();
+	view()->part()->repaintAllViews();
+	m_state = normal;
+}
+
+void 
+VSelectNodesTool::rightMouseButtonRelease()
+{
+	// erase old object:
+	draw();
+
+	VSelection* selection = view()->part()->document().selection();
+
+	KoRect selrect = calcSelRect( last() );
+
+	selection->take( selrect.normalize(), false, false );
 
 	view()->selectionChanged();
 	view()->part()->repaintAllViews();
@@ -216,10 +278,7 @@ VSelectNodesTool::mouseDragRelease()
 		QPtrList<VSegment> segments;
 		if( m_state == movingbezier1 || m_state == movingbezier2 )
 		{
-			double tolerance = 2.0 / view()->zoom();
-
-			KoRect selrect( first().x() - tolerance, first().y() - tolerance,
-							2 * tolerance + 1.0, 2 * tolerance + 1.0 );
+			KoRect selrect = calcSelRect( first() );
 			segments = view()->part()->document().selection()->getSegments( selrect );
 			cmd = new VTranslateBezierCmd( segments.at( 0 ),
 					qRound( ( last().x() - first().x() ) ),
@@ -251,11 +310,19 @@ VSelectNodesTool::mouseDragRelease()
 		// erase old object:
 		draw();
 
-		view()->part()->document().selection()->append();	// select all
-		view()->part()->document().selection()->append(
-			KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
-			false );
-
+		if( m_select )
+		{
+			view()->part()->document().selection()->append();	// select all
+			view()->part()->document().selection()->append(
+				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
+				false );
+		}
+		else
+		{
+			view()->part()->document().selection()->take(
+				KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize(),
+				false, false );
+		}
 		view()->selectionChanged();
 		view()->part()->repaintAllViews();
 		m_state = normal;
@@ -324,3 +391,9 @@ VSelectNodesTool::setup( KActionCollection *collection )
 	}
 }
 
+KoRect 
+VSelectNodesTool::calcSelRect( const KoPoint &pos ) const
+{
+	double tolerance = view()->part()->document().selection()->handleSize() / view()->zoom();
+	return KoRect( pos.x() - tolerance, pos.y() - tolerance, 2 * tolerance + 1.0, 2 * tolerance + 1.0 );
+}

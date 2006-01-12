@@ -45,6 +45,8 @@ protected:
 	virtual void mouseButtonRelease();
 	virtual void mouseDragRelease();
 	virtual void mouseDrag();
+	virtual void rightMouseButtonPress();
+	virtual void rightMouseButtonRelease();
 
 	virtual bool keyReleased( Qt::Key );
 
@@ -55,10 +57,14 @@ private:
 
 	void recalc();
 
+	KoRect calcSelRect( const KoPoint &pos ) const;
+
 	// A list of temporary objects:
 	VObjectList m_objects;
 
 	KoPoint m_current;
+
+	bool m_select;
 };
 
 #endif

@@ -99,25 +99,17 @@ VSelection::take( const KoRect& rect, bool selectObjects, bool exclusive )
 	else
 	{
 		VObjectListIterator itr( m_objects );
-		VObjectList deselected;
 
 		// Try to deselect all that have at least one node contained in the rect
 		for ( ; itr.current(); ++itr )
 		{
-			VSelectNodes op( rect, false, false );
+			VSelectNodes op( rect, false, exclusive );
 
 			if( op.visit( *itr.current() ) )
 			{
-				deselected.append( itr.current() );
 				success = true;
 			}
 		}
-		/*
-		// Remove all that were selected from this selection
-		VObjectListIterator jtr( deselected );
-		for ( ; jtr.current(); ++jtr )
-			take( *( jtr.current() ) );
-		*/
 	}
 
 	invalidateBoundingBox();

@@ -37,7 +37,8 @@ public:
 	{
 		CrossHair = 0, /**< unthemed crosshair cursor */
 		ZoomPlus  = 1, /**< zoom in cursor */
-		ZoomMinus = 2  /**< zoom out cursor */
+		ZoomMinus = 2, /**< zoom out cursor */
+		NeedleArrow = 3  /**< needle arrow */
 	};
 
 	/**
@@ -54,6 +55,14 @@ public:
 	 */
 	static QCursor createCursor( const char * bitmap[], const char * mask[], int hotX = -1, int hotY = -1 );
 
+	/** crosshair cursor */
+	static QCursor crossHair();
+	
+	/** needle arraow cursor */
+	static QCursor needleArrow();
+
+	/** needle arrow with four way arrow */
+	static QCursor needleMoveArrow();
 private:
 	// prevent instantiation
 	VCursor() {};
