@@ -28,5 +28,5 @@ Name[uk]=Ресурси (перевірка звіту)
 Name[xx]=xxResources (Test report)xx
 Name[zh_CN]=资源(测试报告)
 Type=Link
-URL= .source/Test_report_Resources.kut
+URL= .source/Test_report_Resources.ktf
 X-KDE-Hidden=false

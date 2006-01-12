@@ -28,5 +28,5 @@ Name[uk]=Завдання (перевірка звіту)
 Name[xx]=xxTasks (Test report)xx
 Name[zh_CN]=任务(测试报告)
 Type=Link
-URL= .source/Test_report_Tasks.kut
+URL= .source/Test_report_Tasks.ktf
 X-KDE-Hidden=false
