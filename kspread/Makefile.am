@@ -2,7 +2,7 @@ KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES  = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) \
 	-I$(srcdir)/tests \
 	-Idialogs \
-	$(KOSCRIPT_INCLUDES) -I$(top_srcdir)/interfaces \
+	-I$(top_srcdir)/interfaces \
 	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
 
 lib_LTLIBRARIES = libkspreadcommon.la
@@ -30,7 +30,7 @@ libkspreadcommon_la_SOURCES = digest.cc commands.cc damages.cc dependencies.cc \
 libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
 libkspreadcommon_la_LIBADD = $(top_builddir)/interfaces/libkochart.la \
 	dialogs/libdialogs.la tests/libtests.la \
-	$(LIB_KOSCRIPT) $(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell
+	$(LIB_KOFFICEUI) $(LIB_KOTEXT) -lkspell
 
 libkspreadpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
 libkspreadpart_la_LIBADD  = libkspreadcommon.la
