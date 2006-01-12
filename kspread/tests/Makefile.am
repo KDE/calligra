@@ -2,7 +2,6 @@ KDE_CXXFLAGS = $(USE_RTTI)
 
 INCLUDES = \
 	$(KOFFICE_INCLUDES) \
-	$(KOSCRIPT_INCLUDES) \
 	$(KOTEXT_INCLUDES) \
 	-I$(srcdir)/.. \
 	$(all_includes)
