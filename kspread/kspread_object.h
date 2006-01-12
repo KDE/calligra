@@ -26,8 +26,8 @@
 #include <kodom.h>
 #include <KoOasisLoadingContext.h>
 #include <koPictureCollection.h>
-#include <koRect.h>
-#include <koSize.h>
+#include <KoRect.h>
+#include <KoSize.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <koxmlns.h>
