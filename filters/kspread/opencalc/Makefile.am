@@ -1,7 +1,7 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir)/../../liboofilter -I$(srcdir) -I$(top_srcdir)/kspread $(KOFFICE_INCLUDES) \
-	$(KOTEXT_INCLUDES) $(KOSCRIPT_INCLUDES) $(all_includes)
+	$(KOTEXT_INCLUDES) $(all_includes)
 
 ####### Files
 kde_module_LTLIBRARIES = libopencalcimport.la libopencalcexport.la

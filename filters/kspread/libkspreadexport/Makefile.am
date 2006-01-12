@@ -1,7 +1,7 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) -I$(top_srcdir)/kspread -I$(srcdir)/../libkspreadexport $(KOFFICE_INCLUDES) \
-	          $(KOTEXT_INCLUDES) $(KOSCRIPT_INCLUDES) $(all_includes)
+	          $(KOTEXT_INCLUDES) $(all_includes)
 
 libkspreadexport_la_LDFLAGS = $(all_libraries) -module -version-info 1:0:0 -no-undefined
 

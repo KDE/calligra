@@ -1,7 +1,7 @@
 ####### General stuff
 
 INCLUDES= -I$(srcdir) -I$(srcdir)/libqpro -I$(top_srcdir)/kspread \
-	$(KOFFICE_INCLUDES) $(KOSCRIPT_INCLUDES) \
+	$(KOFFICE_INCLUDES) \
 	$(KOTEXT_INCLUDES) $(all_includes)
 
 ####### Files
