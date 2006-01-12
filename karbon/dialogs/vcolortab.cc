@@ -50,7 +50,7 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	//Selector
 	mSelector = new KGradientSelector( KSelector::Vertical, mRGBWidget );
 	mSelector->setColors( QColor( "white" ), QColor( "black" ) );
-	mSelector->setMinimumWidth( 12 );
+	mSelector->setMinimumWidth( 20 );
 	//TODO: Make it autochange color if the solid-filled object is selected (also for QSpinBoxes)
 	connect( mSelector, SIGNAL( valueChanged( int ) ), this, SLOT( slotVChanged( int ) ) );
 	mainLayout->addMultiCellWidget( mSelector, 0, 2, 1, 1 );
