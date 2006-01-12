@@ -128,7 +128,7 @@ ResourceView::ResourceView(View *view, QWidget *parent)
     resList->setColumnAlignment(2, AlignHCenter);
     resList->addColumn(i18n("Initials"));
     resList->setColumnAlignment(3, AlignLeft);
-    resList->addColumn(i18n("E-mail"));
+    resList->addColumn(i18n("Email"));
     resList->setColumnAlignment(4, AlignRight);
     resList->addColumn(i18n("Available From"));
     resList->setColumnAlignment(5, AlignRight);
