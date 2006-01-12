@@ -179,10 +179,10 @@ VSelectTool::mouseButtonPress()
 	m_activeNode = view()->part()->document().selection()->handleNode( first() );
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
-	if( rect.contains( m_current ) && m_state == normal )
-		m_state = moving;
-	else if( m_activeNode != node_none ) 
+	if( m_activeNode != node_none )
 		m_state = scaling;
+	else if( rect.contains( m_current ) && m_state == normal )
+		m_state = moving;
 
 	recalc();
 
