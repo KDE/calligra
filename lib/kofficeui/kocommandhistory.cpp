@@ -18,17 +18,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kocommandhistory.h"
-#include <kcommand.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlistbox.h>
+
 #include <kaction.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
+#include <kcommand.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kpopupmenu.h>
-#include <qlistbox.h>
 #include <kshortcutlist.h>
-#include <qlabel.h>
+#include <kstdaccel.h>
+#include <kstdaction.h>
+
+#include "kocommandhistory.h"
 
 KoListBox::KoListBox( QWidget *parent , const char *name , WFlags f)
     : QListBox( parent, name, f)
@@ -48,6 +51,12 @@ void KoListBox::contentsMouseMoveEvent ( QMouseEvent * e)
             setSelected ( i, false );
         emit changeNumberOfSelectedItem( itemIndex);
     }
+}
+
+QSize KoListBox::sizeHint() const
+{
+  return QSize(QMIN(maxItemWidth() + verticalScrollBar()->width() + 4, 400),
+               QMIN(count() * itemHeight() + horizontalScrollBar()->height() + 4,300));
 }
 
 class KoCommandHistory::KoCommandHistoryPrivate {
@@ -89,7 +98,6 @@ KoCommandHistory::KoCommandHistory(KActionCollection * actionCollection, bool wi
         m_undo = undo;
         m_undoPopup = undo->popupMenu();
         d->m_undoListBox = new KoListBox( m_undoPopup );
-        d->m_undoListBox->resize( 200, 200);//todo fix me
         d->m_undoListBox->setSelectionMode( QListBox::Multi );
 
         m_undoPopup->insertItem(d->m_undoListBox);
@@ -111,7 +119,6 @@ KoCommandHistory::KoCommandHistory(KActionCollection * actionCollection, bool wi
         m_redoPopup = redo->popupMenu();
         d->m_redoListBox = new KoListBox( m_redoPopup );
         d->m_redoListBox->setSelectionMode( QListBox::Multi );
-        d->m_redoListBox->resize( 200, 200);//todo fix me
         m_redoPopup->insertItem(d->m_redoListBox);
 
         d->m_redoLabel = new QLabel( m_redoPopup);
