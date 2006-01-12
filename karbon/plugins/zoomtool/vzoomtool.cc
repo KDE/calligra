@@ -20,7 +20,6 @@
 
 #include <qcursor.h>
 #include <qevent.h>
-#include <qpixmap.h>
 
 #include <klocale.h>
 
@@ -31,75 +30,17 @@
 #include <karbon_view.h>
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>
-
-static const char* const cminus[] = {
-"16 16 6 1",
-"  c Gray0",
-". c #939393",
-"X c Gray63",
-"o c #aeaeae",
-"O c None",
-"+ c Gray100",
-"OOOOo    XXoOOOO",
-"OOo  ++++  XoOOO",
-"OO ++++++++ XoOO",
-"Oo ++++++++ XXoO",
-"O ++++++++++ XoO",
-"O ++      ++ XoO",
-"O ++      ++ XoO",
-"O ++++++++++ XoO",
-"Oo ++++++++ .oOO",
-"OO ++++++++ .oOO",
-"OOo  ++++   .oOO",
-"OOOOo    O   XoO",
-"OOOOOOOOOOO   Xo",
-"OOOOOOOOOOOO   X",
-"OOOOOOOOOOOOO   ",
-"OOOOOOOOOOOOOO  "
-};
-
-static const char* const cplus[] = {
-"16 16 6 1",
-"  c Gray0",
-". c #939393",
-"X c Gray63",
-"o c #aeaeae",
-"O c None",
-"+ c Gray100",
-"OOOo    XXoOOOOO",
-"Oo  ++++  XoOOOO",
-"O ++++++++ XoOOO",
-"o +++  +++ XXoOO",
-" ++++  ++++ XoOO",
-" ++      ++ XoOO",
-" ++      ++ XoOO",
-" ++++  ++++ XoOO",
-"o +++  +++ .oOOO",
-"O ++++++++ .oOOO",
-"Oo  ++++   .oOOO",
-"OOOo    O   XoOO",
-"OOOOOOOOOO   XoO",
-"OOOOOOOOOOO   XO",
-"OOOOOOOOOOOO   O",
-"OOOOOOOOOOOOO  O"
-};
+#include <core/vcursor.h>
 
 VZoomTool::VZoomTool(KarbonView *view ): VTool( view, "tool_zoom_plugin" )
 {
-	QPixmap pix;
-
-	pix = QPixmap( ( const char**) cminus );
-	m_minusCursor = new QCursor( pix, pix.width()/2, pix.height()/2 );
-
-	pix = QPixmap( ( const char**) cplus );
-	m_plusCursor = new QCursor( pix, pix.width()/2, pix.height()/2 );
+	m_plusCursor = new QCursor( VCursor::createCursor( VCursor::ZoomPlus ) );
 
 	registerTool( this );
 }
 
 VZoomTool::~VZoomTool()
 {
-	delete m_minusCursor;
 	delete m_plusCursor;
 }
 

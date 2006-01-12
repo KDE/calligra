@@ -61,7 +61,6 @@ protected:
 	KoPoint m_current;
 
 private:
-	QCursor* m_minusCursor;
 	QCursor* m_plusCursor;
 
 };

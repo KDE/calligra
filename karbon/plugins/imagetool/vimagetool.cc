@@ -28,14 +28,17 @@
 #include <karbon_view.h>
 #include <core/vimage.h>
 #include <core/vselection.h>
+#include <core/vcursor.h>
 
 VImageTool::VImageTool( KarbonView *view ) : VTool( view, "tool_image_plugin" )
 {
 	registerTool( this );
+	m_cursor = new QCursor( VCursor::createCursor( VCursor::CrossHair ) );
 }
 
 VImageTool::~VImageTool()
 {
+	delete m_cursor;
 }
 
 QString
@@ -48,7 +51,7 @@ VImageTool::contextHelp()
 void
 VImageTool::activate()
 {
-	view()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( *m_cursor );
 	VTool::activate();
 }
 

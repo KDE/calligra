@@ -28,6 +28,7 @@
 
 class KarbonView;
 class VImage;
+class QCursor;
 
 class VImageTool : public VTool
 {
@@ -60,6 +61,9 @@ protected:
 	};
 
 	virtual void mouseButtonRelease();
+
+private:
+	QCursor* m_cursor;
 };
 
 #endif
