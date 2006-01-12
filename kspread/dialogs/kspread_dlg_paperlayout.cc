@@ -90,17 +90,35 @@ void PaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
 {
     SheetPrint* print = m_pSheet->print();
 
-    QHGroupBox *group = new QHGroupBox( i18n("General Options"), tab );
-    vbox->addWidget( group );
+    QGroupBox *group = new QGroupBox( i18n("General Options"), tab );
+    QGridLayout *l = new QGridLayout( group, 2, 3 );
 
     pPrintGrid = new QCheckBox ( i18n("Print &grid"), group );
     pPrintGrid->setChecked( print->printGrid() );
+    l->addWidget( pPrintGrid, 0, 0 );
 
     pPrintCommentIndicator = new QCheckBox ( i18n("Print &comment indicator"), group );
     pPrintCommentIndicator->setChecked( print->printCommentIndicator() );
+    l->addWidget( pPrintCommentIndicator, 0, 1 );
 
     pPrintFormulaIndicator = new QCheckBox ( i18n("Print &formula indicator"), group );
     pPrintFormulaIndicator->setChecked( print->printFormulaIndicator() );
+    l->addWidget( pPrintFormulaIndicator, 0, 2 );
+
+    pPrintObjects = new QCheckBox ( i18n("Print &objects"), group );
+    pPrintObjects->setChecked( print->printObjects() );
+    l->addWidget( pPrintObjects, 1, 0 );
+
+    pPrintCharts = new QCheckBox ( i18n("Print &charts"), group );
+    pPrintCharts->setChecked( print->printCharts() );
+    l->addWidget( pPrintCharts, 1, 1 );
+
+//     Not used yet unless someone implement some kind of drawing object
+//     pPrintGraphics = new QCheckBox ( i18n("Print &drawings"), group );
+//     pPrintGraphics->setChecked( print->printGraphics() );
+//     l->addWidget( pPrintGraphics, 1, 2 );
+
+    vbox->addWidget( group );
 }
 
 void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
@@ -300,6 +318,9 @@ void PaperLayout::slotOk()
       print->setPrintGrid( pPrintGrid->isChecked() );
       print->setPrintCommentIndicator( pPrintCommentIndicator->isChecked() );
       print->setPrintFormulaIndicator( pPrintFormulaIndicator->isChecked() );
+      print->setPrintObjects( pPrintObjects->isChecked() );
+      print->setPrintCharts( pPrintCharts->isChecked() );
+//       print->setPrintGraphics( pPrintGraphics->isChecked() );
       QString tmpPrintRange = ePrintRange->text();
       QString tmpRepeatCols = eRepeatCols->text();
       QString tmpRepeatRows = eRepeatRows->text();

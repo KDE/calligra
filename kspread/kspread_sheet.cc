@@ -19,38 +19,44 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <stdlib.h>
+#include <assert.h>
 #include <ctype.h>
 #include <float.h>
 #include <math.h>
 #include <pwd.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include <qapplication.h>
+#include <qcheckbox.h>
 #include <qclipboard.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
 #include <qpicture.h>
 #include <qregexp.h>
-
-#include <qlayout.h>
 #include <qvbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <kmessagebox.h>
 
+#include <kdebug.h>
+#include <kmdcodec.h>
 #include <kfind.h>
 #include <kfinddialog.h>
+#include <kmessagebox.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
 #include <kprinter.h>
-#include <koDocumentInfo.h>
-#include <koOasisStyles.h>
-#include <koUnit.h>
-#include <koStyleStack.h>
-#include <koOasisSettings.h>
-#include <koQueryTrader.h>
-#include <koxmlns.h>
+#include <kurl.h>
+
+#include <koChart.h>
 #include <kodom.h>
+#include <koDocumentInfo.h>
+#include <KoOasisLoadingContext.h>
+#include <koOasisSettings.h>
+#include <koOasisStyles.h>
+#include <koStyleStack.h>
+#include <koQueryTrader.h>
+#include <koUnit.h>
+#include <koxmlns.h>
 
 #include "dependencies.h"
 
@@ -73,14 +79,9 @@
 #include "KSpreadTableIface.h"
 #include "manipulator.h"
 #include "manipulator_data.h"
+#include "selection.h"
+#include "kspread_object.h"
 
-#include <kdebug.h>
-#include <kmdcodec.h>
-#include <assert.h>
-
-#if 0  //FIXME: Enable after the new kdchart API is fixed.
-#include <koChart.h>
-#endif
 #include "kspread_sheet.moc"
 
 #define NO_MODIFICATION_POSSIBLE \
@@ -726,6 +727,20 @@ const QColor& Sheet::emptyColor() const
 KSpread::DependencyManager *Sheet::dependencies ()
 {
   return d->dependencies;
+}
+
+int Sheet::numSelected() const
+{
+    int num = 0;
+
+    QPtrListIterator<KSpreadObject> it(  d->workbook->doc()->embeddedObjects() );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->sheet() == this && it.current()->isSelected() )
+            num++;
+    }
+
+    return num;
 }
 
 int Sheet::leftColumn( double _xpos, double &_left,
@@ -3771,11 +3786,11 @@ void Sheet::copyCells( int x1, int y1, int x2, int y2, bool cpFormat )
     targetCell->setVerticalText( sourceCell->verticalText( x1, y1 ) );
     targetCell->setStyle( sourceCell->style() );
     targetCell->setDontPrintText( sourceCell->getDontprintText( x1, y1 ) );
-    targetCell->format()->setIndent( sourceCell->format()->getIndent( x1, y1 ) );
+    targetCell->setIndent( sourceCell->getIndent( x1, y1 ) );
     targetCell->SetConditionList(sourceCell->GetConditionList());
     targetCell->setComment( sourceCell->comment( x1, y1 ) );
     targetCell->setAngle( sourceCell->getAngle( x1, y1 ) );
-    targetCell->setFormatType( sourceCell->format()->getFormatType( x1, y1 ) );
+    targetCell->setFormatType( sourceCell->getFormatType( x1, y1 ) );
     */
   }
 }
@@ -5921,26 +5936,17 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
     }
 
-    QPtrListIterator<KoDocumentChild> chl( doc()->children() );
+    QPtrListIterator<KSpreadObject>  chl = doc()->embeddedObjects();
     for( ; chl.current(); ++chl )
     {
-       if ( ((Child*)chl.current())->sheet() == this )
-        {
-            QDomElement e;
-            Child * child = (Child *) chl.current();
+       if ( chl.current()->sheet() == this )
+       {
+         QDomElement e = chl.current()->save( dd );
 
-            // stupid hack :-( has anybody a better solution?
-            if ( child->inherits("KSpread::ChartChild") )
-            {
-                e = ((ChartChild *) child)->save( dd );
-            }
-            else
-                e = chl.current()->save( dd );
-
-            if ( e.isNull() )
-                return QDomElement();
-            sheet.appendChild( e );
-        }
+         if ( e.isNull() )
+           return QDomElement();
+         sheet.appendChild( e );
+       }
     }
     return sheet;
 }
@@ -6097,14 +6103,14 @@ QString Sheet::getPart( const QDomNode & part )
 }
 
 
-bool Sheet::loadOasis( const QDomElement& sheetElement, const KoOasisStyles& oasisStyles )
+bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& oasisContext )
 {
     d->layoutDirection = LeftToRight;
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
         kdDebug()<<" style of table :"<<stylename<<endl;
-        QDomElement *style = oasisStyles.styles()[stylename];
+        QDomElement *style = oasisContext.oasisStyles().styles()[stylename];
         Q_ASSERT( style );
         kdDebug()<<" style :"<<style<<endl;
         if ( style )
@@ -6122,7 +6128,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, const KoOasisStyles& oas
             {
                 QString masterPageStyleName = style->attributeNS( KoXmlNS::style, "master-page-name", QString::null );
                 kdDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName <<endl;
-                QDomElement *masterStyle = oasisStyles.masterPages()[masterPageStyleName];
+                QDomElement *masterStyle = oasisContext.oasisStyles().masterPages()[masterPageStyleName];
                 kdDebug()<<"oasisStyles.styles()[masterPageStyleName] :"<<masterStyle<<endl;
                 if ( masterStyle )
                 {
@@ -6131,7 +6137,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, const KoOasisStyles& oas
                     {
                         QString masterPageLayoutStyleName=masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
                         kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
-                        QDomElement *masterLayoutStyle = oasisStyles.styles()[masterPageLayoutStyleName];
+                        QDomElement *masterLayoutStyle = oasisContext.oasisStyles().styles()[masterPageLayoutStyleName];
                         kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
                         KoStyleStack styleStack;
                         styleStack.setTypeProperties( "page-layout" );
@@ -6158,15 +6164,17 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, const KoOasisStyles& oas
                 if ( rowElement.localName()=="table-column" )
                 {
                     kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
-                    loadColumnFormat( rowElement, oasisStyles, indexCol );
+                    loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol );
                     kdDebug ()<<" table-column found : index column after "<< indexCol<<endl;
                 }
                 else if( rowElement.localName() == "table-row" )
                 {
                     kdDebug()<<" table-row found :index row before "<<rowIndex<<endl;
-                    loadRowFormat( rowElement, rowIndex, oasisStyles, rowNode.isNull() );
+                    loadRowFormat( rowElement, rowIndex, oasisContext, rowNode.isNull() );
                     kdDebug()<<" table-row found :index row after "<<rowIndex<<endl;
                 }
+                else if ( rowElement.localName() == "shapes" )
+                    loadOasisObjects( rowElement, oasisContext );
             }
         }
         rowNode = rowNode.nextSibling();
@@ -6196,6 +6204,39 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, const KoOasisStyles& oas
         d->password = passwd;
     }
     return true;
+}
+
+
+void Sheet::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& oasisContext )
+{
+    QDomElement e;
+    QDomNode n = parent.firstChild();
+    while( !n.isNull() )
+    {
+        e = n.toElement();
+        if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
+        {
+          KSpreadObject *obj = 0;
+          QDomNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
+          if ( !object.isNull() )
+            obj = new KSpreadChild( doc(), this );
+          else
+          {
+            QDomNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
+            if ( !image.isNull() )
+              obj = new KSpreadPictureObject( this, doc()->pictureCollection() );
+            else
+              kdDebug() << "Object type wasn't loaded!" << endl;
+          }
+
+          if ( obj )
+          {
+            obj->loadOasis( e, oasisContext );
+            insertObject( obj );
+          }
+        }
+        n = n.nextSibling();
+    }
 }
 
 
@@ -6430,7 +6471,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 }
 
 
-bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )
+bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext, bool isLast )
 {
     kdDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
     double height = -1.0;
@@ -6441,11 +6482,11 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisSt
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        QDomElement *style = oasisStyles.styles()[str];
+        QDomElement *style = oasisContext.oasisStyles().styles()[str];
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
-    layout.loadOasisStyleProperties( styleStack, oasisStyles );
+    layout.loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
     styleStack.setTypeProperties( "table-row" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
     {
@@ -6528,7 +6569,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisSt
             {
                 kdDebug()<<" create cell at row index :"<<backupRow<<endl;
                 Cell* cell = nonDefaultCell( columnIndex, backupRow );
-                cell->loadOasis( cellElement, oasisStyles );
+                cell->loadOasis( cellElement, oasisContext );
                 bool haveStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
                 //kdDebug()<<" haveStyle ? :"<<haveStyle<<endl;
                 int cols = 1;
@@ -6948,7 +6989,7 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker
 }
 
 
-bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle )
+bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* /*manifestWriter*/, int &indexObj, int &partIndexObj )
 {
     int maxCols= 1;
     int maxRows= 1;
@@ -6969,6 +7010,7 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
         xmlWriter.addAttribute( "table:print-ranges", range );
     }
 
+    saveOasisObjects( store, xmlWriter, mainStyles, indexObj, partIndexObj );
     maxRowCols( maxCols, maxRows );
     saveOasisColRowCell( xmlWriter, mainStyles, maxCols, maxRows, valStyle );
     xmlWriter.endElement();
@@ -6980,10 +7022,17 @@ void Sheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
     QString printParameter;
     if ( d->print->printGrid() )
         printParameter="grid ";
+    if ( d->print->printObjects() )
+      printParameter+="objects ";
+    if ( d->print->printCharts() )
+      printParameter+="charts ";
     if ( d->showFormula )
         printParameter+="formulas ";
     if ( !printParameter.isEmpty() )
+    {
+        printParameter+="drawings zero-values"; //default print style attributes in OO
         style.addProperty( "style:print", printParameter );
+    }
 }
 
 QString Sheet::saveOasisSheetStyleName( KoGenStyles &mainStyles )
@@ -7147,19 +7196,19 @@ bool Sheet::loadXML( const QDomElement& sheet )
     {
         if( layoutDir == "rtl" )
         {
-            detectDirection = false;
-            d->layoutDirection = RightToLeft;
+           detectDirection = false;
+           d->layoutDirection = RightToLeft;
         }
         else if( layoutDir == "ltr" )
         {
-            detectDirection = false;
-            d->layoutDirection = LeftToRight;
+           detectDirection = false;
+           d->layoutDirection = LeftToRight;
         }
         else
             kdDebug()<<" Direction not implemented : "<<layoutDir<<endl;
     }
     if( detectDirection )
-        checkContentDirection( d->name );
+       checkContentDirection( d->name );
 
     /* older versions of KSpread allowed all sorts of characters that
        the parser won't actually understand.  Replace these with '_'
@@ -7167,16 +7216,16 @@ bool Sheet::loadXML( const QDomElement& sheet )
     */
     if (d->name[0] == ' ')
     {
-        d->name.remove(0,1);
+      d->name.remove(0,1);
     }
     for (unsigned int i=0; i < d->name.length(); i++)
     {
-        if ( !(d->name[i].isLetterOrNumber() ||
-               d->name[i] == ' ' || d->name[i] == '.' ||
-               d->name[i] == '_'))
+      if ( !(d->name[i].isLetterOrNumber() ||
+             d->name[i] == ' ' || d->name[i] == '.' ||
+             d->name[i] == '_'))
         {
-            d->name[i] = '_';
-        }
+        d->name[i] = '_';
+      }
     }
 
     /* make sure there are no name collisions with the altered name */
@@ -7191,8 +7240,8 @@ bool Sheet::loadXML( const QDomElement& sheet )
     d->name = "";
     while (workbook()->findSheet(testName) != NULL)
     {
-        nameSuffix++;
-        testName = baseName + '_' + QString::number(nameSuffix);
+      nameSuffix++;
+      testName = baseName + '_' + QString::number(nameSuffix);
     }
     d->name = testName;
 
@@ -7281,102 +7330,102 @@ bool Sheet::loadXML( const QDomElement& sheet )
     QDomElement paper = sheet.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
     {
-        QString format = paper.attribute( "format" );
-        QString orientation = paper.attribute( "orientation" );
+      QString format = paper.attribute( "format" );
+      QString orientation = paper.attribute( "orientation" );
 
-        // <borders>
-        QDomElement borders = paper.namedItem( "borders" ).toElement();
-        if ( !borders.isNull() )
-        {
-            float left = borders.attribute( "left" ).toFloat();
-            float right = borders.attribute( "right" ).toFloat();
-            float top = borders.attribute( "top" ).toFloat();
-            float bottom = borders.attribute( "bottom" ).toFloat();
-            d->print->setPaperLayout( left, top, right, bottom, format, orientation );
-        }
-        QString hleft, hright, hcenter;
-        QString fleft, fright, fcenter;
-        // <head>
-        QDomElement head = paper.namedItem( "head" ).toElement();
-        if ( !head.isNull() )
-        {
-            QDomElement left = head.namedItem( "left" ).toElement();
-            if ( !left.isNull() )
-                hleft = left.text();
-            QDomElement center = head.namedItem( "center" ).toElement();
-            if ( !center.isNull() )
-                hcenter = center.text();
-            QDomElement right = head.namedItem( "right" ).toElement();
-            if ( !right.isNull() )
-                hright = right.text();
-        }
-        // <foot>
-        QDomElement foot = paper.namedItem( "foot" ).toElement();
-        if ( !foot.isNull() )
-        {
-            QDomElement left = foot.namedItem( "left" ).toElement();
-            if ( !left.isNull() )
-                fleft = left.text();
-            QDomElement center = foot.namedItem( "center" ).toElement();
-            if ( !center.isNull() )
-                fcenter = center.text();
-            QDomElement right = foot.namedItem( "right" ).toElement();
-            if ( !right.isNull() )
-                fright = right.text();
-        }
-        d->print->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
+      // <borders>
+      QDomElement borders = paper.namedItem( "borders" ).toElement();
+      if ( !borders.isNull() )
+      {
+        float left = borders.attribute( "left" ).toFloat();
+        float right = borders.attribute( "right" ).toFloat();
+        float top = borders.attribute( "top" ).toFloat();
+        float bottom = borders.attribute( "bottom" ).toFloat();
+        d->print->setPaperLayout( left, top, right, bottom, format, orientation );
+      }
+      QString hleft, hright, hcenter;
+      QString fleft, fright, fcenter;
+      // <head>
+      QDomElement head = paper.namedItem( "head" ).toElement();
+      if ( !head.isNull() )
+      {
+        QDomElement left = head.namedItem( "left" ).toElement();
+        if ( !left.isNull() )
+          hleft = left.text();
+        QDomElement center = head.namedItem( "center" ).toElement();
+        if ( !center.isNull() )
+        hcenter = center.text();
+        QDomElement right = head.namedItem( "right" ).toElement();
+        if ( !right.isNull() )
+          hright = right.text();
+      }
+      // <foot>
+      QDomElement foot = paper.namedItem( "foot" ).toElement();
+      if ( !foot.isNull() )
+      {
+        QDomElement left = foot.namedItem( "left" ).toElement();
+        if ( !left.isNull() )
+          fleft = left.text();
+        QDomElement center = foot.namedItem( "center" ).toElement();
+        if ( !center.isNull() )
+          fcenter = center.text();
+        QDomElement right = foot.namedItem( "right" ).toElement();
+        if ( !right.isNull() )
+          fright = right.text();
+      }
+      d->print->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
-    // load print range
-    QDomElement printrange = sheet.namedItem( "printrange-rect" ).toElement();
-    if ( !printrange.isNull() )
-    {
+      // load print range
+      QDomElement printrange = sheet.namedItem( "printrange-rect" ).toElement();
+      if ( !printrange.isNull() )
+      {
         int left = printrange.attribute( "left-rect" ).toInt();
         int right = printrange.attribute( "right-rect" ).toInt();
         int bottom = printrange.attribute( "bottom-rect" ).toInt();
         int top = printrange.attribute( "top-rect" ).toInt();
         if ( left == 0 ) //whole row(s) selected
         {
-            left = 1;
-            right = KS_colMax;
+          left = 1;
+          right = KS_colMax;
         }
         if ( top == 0 ) //whole column(s) selected
         {
-            top = 1;
-            bottom = KS_rowMax;
+          top = 1;
+          bottom = KS_rowMax;
         }
         d->print->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
-    }
+      }
 
-    // load print zoom
-    if( sheet.hasAttribute( "printZoom" ) )
-    {
+      // load print zoom
+      if( sheet.hasAttribute( "printZoom" ) )
+      {
         double zoom = sheet.attribute( "printZoom" ).toDouble( &ok );
         if ( ok )
         {
-            d->print->setZoom( zoom );
+          d->print->setZoom( zoom );
         }
-    }
+      }
 
-    // load page limits
-    if( sheet.hasAttribute( "printPageLimitX" ) )
-    {
+      // load page limits
+      if( sheet.hasAttribute( "printPageLimitX" ) )
+      {
         int pageLimit = sheet.attribute( "printPageLimitX" ).toInt( &ok );
         if ( ok )
         {
-            d->print->setPageLimitX( pageLimit );
+          d->print->setPageLimitX( pageLimit );
         }
-    }
+      }
 
-    // load page limits
-    if( sheet.hasAttribute( "printPageLimitY" ) )
-    {
+      // load page limits
+      if( sheet.hasAttribute( "printPageLimitY" ) )
+      {
         int pageLimit = sheet.attribute( "printPageLimitY" ).toInt( &ok );
         if ( ok )
         {
-            d->print->setPageLimitY( pageLimit );
+          d->print->setPageLimitY( pageLimit );
         }
-    }
+      }
 
     // Load the cells
     QDomNode n = sheet.firstChild();
@@ -7387,51 +7436,56 @@ bool Sheet::loadXML( const QDomElement& sheet )
         {
             QString tagName=e.tagName();
             if ( tagName == "cell" )
-            {
-                Cell *cell = new Cell( this, 0, 0 );
-                if ( cell->load( e, 0, 0 ) )
-                    insertCell( cell );
-                else
-                    delete cell; // Allow error handling: just skip invalid cells
-            }
+        {
+            Cell *cell = new Cell( this, 0, 0 );
+            if ( cell->load( e, 0, 0 ) )
+                insertCell( cell );
+            else
+                delete cell; // Allow error handling: just skip invalid cells
+        }
             else if ( tagName == "row" )
-            {
-                RowFormat *rl = new RowFormat( this, 0 );
-                if ( rl->load( e ) )
-                    insertRowFormat( rl );
-                else
-                    delete rl;
-            }
+        {
+            RowFormat *rl = new RowFormat( this, 0 );
+            if ( rl->load( e ) )
+                insertRowFormat( rl );
+            else
+                delete rl;
+        }
             else if ( tagName == "column" )
-            {
-                ColumnFormat *cl = new ColumnFormat( this, 0 );
-                if ( cl->load( e ) )
-                    insertColumnFormat( cl );
-                else
-                    delete cl;
-            }
+        {
+            ColumnFormat *cl = new ColumnFormat( this, 0 );
+            if ( cl->load( e ) )
+                insertColumnFormat( cl );
+            else
+                delete cl;
+        }
             else if ( tagName == "object" )
+        {
+            KSpreadChild *ch = new KSpreadChild( doc(), this );
+            if ( ch->load( e ) )
+                insertObject( ch );
+            else
             {
-                Child *ch = new Child( doc(), this );
-                if ( ch->load( e ) )
-                    insertChild( ch );
-                else
-                    delete ch;
-            }
-            else if ( tagName == "chart" )
-            {
-                ChartChild *ch = new ChartChild( doc(), this );
-                if ( ch->load( e ) )
-                    insertChild( ch );
-                else
-                {
-                    ch->setDeleted(true);
-                    delete ch;
-                }
+                ch->embeddedObject()->setDeleted(true);
+                delete ch;
             }
         }
+            else if ( tagName == "chart" )
+        {
+          ChartChild *ch = new ChartChild( doc(), this );
+          if ( ch->load( e ) )
+                insertObject( ch );
+          else
+          {
+            ch->embeddedObject()->setDeleted(true);
+            delete ch;
+          }
+        }
+        }
+
         n = n.nextSibling();
     }
+
 
     // load print repeat columns
     QDomElement printrepeatcolumns = sheet.namedItem( "printrepeatcolumns" ).toElement();
@@ -7453,20 +7507,20 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
     if( !sheet.hasAttribute( "borders1.2" ) )
     {
-        convertObscuringBorders();
+      convertObscuringBorders();
     }
 
     if ( sheet.hasAttribute( "protected" ) )
     {
-        QString passwd = sheet.attribute( "protected" );
+      QString passwd = sheet.attribute( "protected" );
 
-        if ( passwd.length() > 0 )
-        {
-            QCString str( passwd.latin1() );
-            d->password = KCodecs::base64Decode( str );
-        }
-        else
-            d->password = QCString( "" );
+      if ( passwd.length() > 0 )
+      {
+        QCString str( passwd.latin1() );
+        d->password = KCodecs::base64Decode( str );
+      }
+      else
+        d->password = QCString( "" );
     }
 
     return true;
@@ -7475,18 +7529,20 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
 bool Sheet::loadChildren( KoStore* _store )
 {
-    QPtrListIterator<KoDocumentChild> it( doc()->children() );
+    QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
     for( ; it.current(); ++it )
     {
-        if ( ((Child*)it.current())->sheet() == this )
+        if ( it.current()->sheet() == this && ( it.current()->getType() == OBJECT_KOFFICE_PART || it.current()->getType() == OBJECT_CHART ) )
         {
-            if ( !it.current()->loadDocument( _store ) )
+            kdDebug() << "KSpreadSheet::loadChildren" << endl;
+            if ( !dynamic_cast<KSpreadChild*>( it.current() )->embeddedObject()->loadDocument( _store ) )
                 return false;
         }
     }
 
     return true;
 }
+
 
 void Sheet::setShowPageBorders( bool b )
 {
@@ -7609,109 +7665,111 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
     _format->clearDisplayDirtyFlag();
 }
 
-void Sheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _data )
+bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& _data )
 {
-#if 0  //FIXME: Enable after the new kdchart API is fixed.
     kdDebug(36001) << "Creating document" << endl;
     KoDocument* dd = _e.createDoc();
     kdDebug(36001) << "Created" << endl;
     if ( !dd )
         // Error message is already displayed, so just return
-        return;
+        return false;
 
     kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
     if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
-        return;
-
+        return false;
     ChartChild * ch = new ChartChild( doc(), this, dd, _rect );
     ch->setDataArea( _data );
     ch->update();
     ch->chart()->setCanChangeValue( false  );
-    // doc()->insertChild( ch );
-    //insertChild( ch );
 
     KoChart::WizardExtension * wiz = ch->chart()->wizardExtension();
 
-    if ( wiz && wiz->show())
-        insertChild( ch );
-    else
-    {
-      ch->setDeleted(true);
-        delete ch;
-    }
-#endif
+    if ( wiz )
+        wiz->show();
+
+    insertObject( ch );
+
+    return true;
 }
 
-void Sheet::insertChild( const QRect& _rect, KoDocumentEntry& _e )
+bool Sheet::insertChild( const KoRect& _rect, KoDocumentEntry& _e )
 {
     KoDocument* d = _e.createDoc( doc() );
     if ( !d )
     {
         kdDebug() << "Error inserting child!" << endl;
-        return;
+        return false;
     }
-    if ( !d->showEmbedInitDialog( 0 ) ) //TODO should really have parent
-        return;
+    if ( !d->initDoc(KoDocument::InitDocEmbedded) )
+        return false;
 
-    Child* ch = new Child( doc(), this, d, _rect );
-
-    insertChild( ch );
+    KSpreadChild* ch = new KSpreadChild( doc(), this, d, _rect );
+    insertObject( ch );
+    return true;
 }
 
-void Sheet::insertChild( Child *_child )
+bool Sheet::insertPicture( const KoRect& _rect, KURL& _file )
 {
-    // m_lstChildren.append( _child );
-    doc()->insertChild( _child );
-
-    updateView( _child->boundingRect() );
-
-    /* TODO - handle this */
-//    emit sig_polygonInvalidated( _child->framePointArray() );
+    KoPictureKey key = doc()->pictureCollection()->loadPicture( _file.prettyURL(0, KURL::StripFileProtocol) ).getKey();
+    KSpreadPictureObject* ch = new KSpreadPictureObject( this, _rect, doc()->pictureCollection(), key );
+    insertObject( ch );
+    return true;
 }
 
-void Sheet::deleteChild( Child* child )
+void Sheet::insertObject( KSpreadObject *_obj )
 {
-    QPointArray polygon = child->framePointArray();
-
-    emit sig_removeChild( child );
-
-    child->setDeleted(true);
-    delete child;
-
-    /** TODO - handle this */
-//    emit sig_polygonInvalidated( polygon );
+    doc()->insertObject( _obj );
+    updateView( doc()->zoomRect( _obj->geometry() ) );
 }
 
-void Sheet::changeChildGeometry( Child *_child, const QRect& _rect )
+void Sheet::changeChildGeometry( KSpreadChild *_child, const KoRect& _rect )
 {
     _child->setGeometry( _rect );
 
     emit sig_updateChildGeometry( _child );
 }
 
-/*
-QPtrListIterator<Child> Sheet::childIterator()
-{
-  return QPtrListIterator<Child> ( m_lstChildren );
-}
-*/
-
 bool Sheet::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 
-    QPtrListIterator<KoDocumentChild> it( doc()->children() );
+    QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
     for( ; it.current(); ++it )
     {
-        if ( ((Child*)it.current())->sheet() == this )
+        if ( it.current()->sheet() == this && ( it.current()->getType() == OBJECT_KOFFICE_PART || it.current()->getType() == OBJECT_CHART ) )
         {
             QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
-            if ( !it.current()->document()->saveToStore( _store, path ) )
+            if ( !dynamic_cast<KSpreadChild*>( it.current() )->embeddedObject()->document()->saveToStore( _store, path ) )
                 return false;
         }
     }
     return true;
+}
+
+bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj )
+{
+  //int i = 0;
+  if ( doc()->embeddedObjects().isEmpty() )
+    return true;
+
+  xmlWriter.startElement( "table:shapes" );
+  KSpreadObject::KSpreadOasisSaveContext sc( xmlWriter, mainStyles, indexObj, partIndexObj );
+  QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+  for( ; it.current(); ++it )
+  {
+    if ( it.current()->sheet() == this && ( doc()->savingWholeDocument() || it.current()->isSelected() ) )
+    {
+      if ( !it.current()->saveOasisObject(sc)  )
+      {
+        xmlWriter.endElement();
+        return false;
+      }
+      ++indexObj;
+    }
+  }
+  xmlWriter.endElement();
+  return true;
 }
 
 Sheet::~Sheet()
@@ -7746,7 +7804,6 @@ Sheet::~Sheet()
 
     delete d;
 }
-
 
 void Sheet::checkRangeHBorder ( int _column )
 {
@@ -7975,124 +8032,3 @@ void Sheet::printDebug()
     }
 }
 #endif
-
-/**********************************************************
- *
- * Child
- *
- **********************************************************/
-
-Child::Child( Doc *parent, Sheet *_sheet, KoDocument* doc, const QRect& geometry )
-  : KoDocumentChild( parent, doc, geometry )
-{
-  m_pSheet = _sheet;
-}
-
-Child::Child( Doc *parent, Sheet *_sheet ) : KoDocumentChild( parent )
-{
-  m_pSheet = _sheet;
-}
-
-
-Child::~Child()
-{
-}
-
-/**********************************************************
- *
- * ChartChild
- *
- **********************************************************/
-
-ChartChild::ChartChild( Doc *_spread, Sheet *_sheet, KoDocument* doc, const QRect& geometry )
-  : Child( _spread, _sheet, doc, geometry )
-{
-    m_pBinding = 0;
-}
-
-ChartChild::ChartChild( Doc *_spread, Sheet *_sheet )
-  : Child( _spread, _sheet )
-{
-    m_pBinding = 0;
-}
-
-ChartChild::~ChartChild()
-{
-    if ( isDeleted() )
-        delete m_pBinding;
-}
-
-void ChartChild::setDataArea( const QRect& _data )
-{
-    if ( m_pBinding == 0L )
-        m_pBinding = new ChartBinding( m_pSheet, _data, this );
-    else
-        m_pBinding->setDataArea( _data );
-}
-
-void ChartChild::update()
-{
-    if ( m_pBinding )
-        m_pBinding->cellChanged( 0 );
-}
-
-bool ChartChild::load( const QDomElement& element )
-{
-    if ( !Child::load( element ) )
-        return false;
-
-    if ( element.hasAttribute( "left-cell" ) &&
-         element.hasAttribute( "top-cell" ) &&
-         element.hasAttribute( "right-cell" ) &&
-         element.hasAttribute( "bottom-cell" ) )
-    {
-        QRect r;
-        r.setCoords( element.attribute( "left-cell" ).toInt(),
-                     element.attribute( "top-cell" ).toInt(),
-                     element.attribute( "right-cell" ).toInt(),
-                     element.attribute( "bottom-cell" ).toInt() );
-
-        setDataArea( r );
-    }
-
-    return true;
-}
-
-QDomElement ChartChild::save( QDomDocument& doc )
-{
-    QDomElement element = Child::save( doc );
-    element.setTagName( "chart" );
-
-    element.setAttribute( "left-cell", m_pBinding->dataArea().left() );
-    element.setAttribute( "right-cell", m_pBinding->dataArea().right() );
-    element.setAttribute( "top-cell", m_pBinding->dataArea().top() );
-    element.setAttribute( "bottom-cell", m_pBinding->dataArea().bottom() );
-
-    return element;
-}
-
-bool ChartChild::loadDocument( KoStore* _store )
-{
-    bool res = Child::loadDocument( _store );
-    if ( !res )
-        return res;
-
-    // Did we see a cell rectangle ?
-    if ( !m_pBinding )
-        return true;
-
-    update();
-
-#if 0  //FIXME: Enable after the new kdchart API is fixed.
-    chart()->setCanChangeValue( false  );
-#endif
-    return true;
-}
-
-KoChart::Part* ChartChild::chart()
-{
-#if 0  //FIXME: Enable after the new kdchart API is fixed.
-    assert( document()->inherits( "KoChart::Part" ) );
-    return static_cast<KoChart::Part *>( document() );
-#endif
-}

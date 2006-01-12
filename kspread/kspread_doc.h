@@ -39,6 +39,7 @@
 
 #include <koDocument.h>
 #include <koGenStyles.h>
+#include <koPictureCollection.h>
 #include <koUnit.h>
 #include <kozoomhandler.h>
 
@@ -72,6 +73,7 @@ class Region;
 class StyleManager;
 class UndoAction;
 class KSPLoadingInfo;
+class KSpreadObject;
 
 struct Reference
 {
@@ -109,6 +111,7 @@ class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler
   Q_PROPERTY( bool showStatusBar READ showStatusBar WRITE setShowStatusBar )
   Q_PROPERTY( bool showFormulaBar READ showFormulaBar WRITE setShowFormulaBar )
   Q_PROPERTY( bool showTabBar READ showTabBar WRITE setShowTabBar )
+  Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
 
 public:
 
@@ -390,8 +393,30 @@ public:
   QColor pageBorderColor() const;
   void changePageBorderColor( const QColor  & _color);
 
+  virtual bool completeSaving( KoStore* _store );
 
   virtual QDomDocument saveXML();
+
+  enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and kword have have SavePage too
+
+  bool savingWholeDocument();
+
+    /**
+     * Save the whole document, or just the selection, into OASIS format
+     * When saving the selection, also return the data as plain text and/or plain picture,
+     * which are used to insert into the KMultipleDrag drag object.
+     *
+     * @param store the KoStore to save into
+     * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
+     * @param saveFlag either the whole document, or only the selected text/objects.
+     * @param plainText must be set when saveFlag==SaveSelected.
+     *        It returns the plain text format of the saved data, when available.
+     * @param picture must be set when saveFlag==SaveSelected.
+     *        It returns the selected picture, when exactly one picture was selected.
+     * @param fs the text frameset, which must be set when saveFlag==SaveSelected.
+     */
+  bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
+                        QString* plainText = 0, KoPicture* picture = 0 );
 
   virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
   void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
@@ -483,7 +508,15 @@ public:
 
   QRect getRectArea(const QString &  _sheetName);
 
-  void insertChild( KoDocumentChild * child ) { KoDocument::insertChild( child ); }
+  /**
+   * Inserts an object to the object list.
+   */
+  void insertObject( KSpreadObject * obj );
+    /**
+    * @return the list of all embedded objects (charts, pictures and koffice objects) Use insertObject to add an object to the list.
+    */
+  QPtrList<KSpreadObject>& embeddedObjects();
+  KoPictureCollection *pictureCollection();
 
   void initConfig();
   void saveConfig();
@@ -577,6 +610,17 @@ public:
   void loadConfigFromFile();
   bool configLoadFromFile() const;
 
+    // repaint all views
+  void repaint( bool );
+
+  void repaint( const QRect& );
+  void repaint( KSpreadObject* );
+
+  virtual void addShell( KoMainWindow *shell );
+
+  int undoRedoLimit() const;
+  void setUndoRedoLimit(int _val);
+
 public slots:
 
   //void newView(); obsloete (Werner)
@@ -613,6 +657,9 @@ protected slots:
 
 protected:
   KoView* createViewInstance( QWidget* parent, const char* name );
+
+  void makeUsedPixmapList();
+  void insertPixmapKey( KoPictureKey key );
 
   /**
    * Overloaded function of @ref KoDocument.

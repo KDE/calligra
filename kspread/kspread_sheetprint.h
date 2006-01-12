@@ -33,6 +33,7 @@ namespace KSpread
 class Doc;
 class Selection;
 class PrintNewPageEntry;
+class PrintObject;
 
 class KSPREAD_EXPORT SheetPrint : public QObject
 {
@@ -324,6 +325,36 @@ public:
     void setPrintGrid( bool _printGrid );
 
     /**
+     * Returns, if the objects shall be shown on printouts
+     */
+    bool printObjects() const { return m_bPrintObjects; }
+
+    /**
+     * Sets, if the objects shall be shown on printouts
+     */
+    void setPrintObjects( bool _printObjects );
+
+    /**
+     * Returns, if the charts shall be shown on printouts
+     */
+    bool printCharts() const { return m_bPrintCharts; }
+
+    /**
+     * Sets, if the charts shall be shown on printouts
+     */
+    void setPrintCharts( bool _printCharts );
+
+    /**
+     * Returns, if the graphics shall be shown on printouts
+     */
+    bool printGraphics() const { return m_bPrintGraphics; }
+
+    /**
+     * Sets, if the graphics shall be shown on printouts
+     */
+    void setPrintGraphics( bool _printGraphics );
+
+    /**
      * Returns, if the comment rect shall be shown on printouts
      */
     bool printCommentIndicator() const { return m_bPrintCommentIndicator; }
@@ -566,6 +597,21 @@ private:
     bool m_bPrintGrid;
 
     /**
+     * Show the objects when making printout
+     */
+    bool m_bPrintObjects;
+
+    /**
+     * Show the charts when making printout
+     */
+    bool m_bPrintCharts;
+
+    /**
+     * Show the graphics when making printout
+     */
+    bool m_bPrintGraphics;
+
+    /**
      * Show the formula rect when making printout
      */
     bool m_bPrintFormulaIndicator;
@@ -618,6 +664,8 @@ private:
      * Limit of pages in Y direction. 0 means no limit
      */
     int m_iPageLimitY;
+
+    QValueList<PrintObject*> m_printObjects;
 };
 
 
@@ -653,6 +701,15 @@ private:
     int m_iEndItem;
     double m_dSize;
     double m_dOffset;
+};
+
+class PrintObject
+{
+  public:
+    PrintObject() : obj(0), p(0) {}
+
+    KSpreadObject *obj;
+    QPixmap *p;
 };
 
 } // namespace KSpread

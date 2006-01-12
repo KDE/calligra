@@ -56,6 +56,9 @@ SheetPrint::SheetPrint( Sheet* sheet )
     m_bPrintGrid = false;
     m_bPrintCommentIndicator = false;
     m_bPrintFormulaIndicator = false;
+    m_bPrintObjects = true;
+    m_bPrintCharts = true;
+    m_bPrintGraphics = true;
 
     m_leftBorder = 20.0;
     m_rightBorder = 20.0;
@@ -274,6 +277,34 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
     kdDebug(36001) << "PRINTING " << page_list.count() << " pages" << endl;
     m_uprintPages = page_list.count();
 
+
+    //Cache all object so they only need to be repainted once.
+    QPtrListIterator<KSpreadObject> itObject( m_pDoc->embeddedObjects() );
+    for ( ; itObject.current(); ++itObject )
+    {
+      KSpreadObject *obj = itObject.current();
+      if ( obj->sheet() != m_pSheet ||
+           !( (( obj->getType() == OBJECT_KOFFICE_PART || obj->getType() == OBJECT_PICTURE ) && m_bPrintObjects) ||
+           ( obj->getType() == OBJECT_CHART && m_bPrintCharts ) ) )
+        continue;
+
+      QRect zoomRect = m_pDoc->zoomRect( itObject.current()->geometry() );
+      QPixmap *p = new QPixmap( zoomRect.size() );
+      QPainter painter(p);
+      painter.fillRect( p->rect(), QColor("white") );
+      painter.translate( -zoomRect.x(), -zoomRect.y() ); //we cant to paint at (0,0)
+      bool const isSelected = itObject.current()->isSelected();
+      itObject.current()->setSelected( false );
+      itObject.current()->draw( &painter );
+      painter.end();
+      itObject.current()->setSelected( isSelected );
+
+      PrintObject *po = new PrintObject();
+      m_printObjects.append( po );
+      po->obj = itObject.current();
+      po->p = p;
+    }
+
     if ( page_list.count() == 0 )
     {
         // nothing to print
@@ -318,6 +349,11 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
         m_pDoc->setGridColor( gridPen.color() );
     }
     m_pSheet->setShowGrid( oldShowGrid );
+
+    QValueList<PrintObject *>::iterator it;
+    for ( it = m_printObjects.begin(); it != m_printObjects.end(); ++it )
+      delete (*it)->p;
+    m_printObjects.clear();
 
     return ( page_list.count() > 0 );
 }
@@ -535,8 +571,12 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     // Draw the children
     //
     QRect zoomedView = m_pDoc->zoomRect( view );
-    QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
-    for ( ; it.current(); ++it ) {
+    //QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
+    //QPtrListIterator<KSpreadObject> itObject( m_pDoc->embeddedObjects() );
+
+    QValueList<PrintObject *>::iterator itObject;
+    for ( itObject = m_printObjects.begin(); itObject != m_printObjects.end(); ++itObject ) {
+          KSpreadObject *obj = (*itObject)->obj;
 //        QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
 //        .arg(it.current()->contentRect().left())
 //        .arg(it.current()->contentRect().top())
@@ -545,44 +585,31 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 //        .arg(view.left()).arg(view.top()).arg(zoomedView.right()).arg(zoomedView.bottom());
 //        kdDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
-        QRect bound = it.current()->boundingRect();
-	QRect zoomedBound = m_pDoc->zoomRect( KoRect(bound.left(), bound.top(),
-						     bound.width(), 
-						     bound.height() ) );
+          KoRect const bound = obj->geometry();
+          QRect zoomedBound = m_pDoc->zoomRect( KoRect(bound.left(), bound.top(),
+              bound.width(), 
+              bound.height() ) );
 #if 1
-        kdDebug(36001)  << "printRect(): Bounding rect of view: " << view
-			<< endl;
-        kdDebug(36001)  << "printRect(): Bounding rect of zoomed view: "
-			<< zoomedView << endl;
-        kdDebug(36001)  << "printRect(): Bounding rect of child: " << bound
-			<< endl;
-        kdDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
-			<< zoomedBound << endl;
+//         kdDebug(36001)  << "printRect(): Bounding rect of view: " << view
+//             << endl;
+//         kdDebug(36001)  << "printRect(): Bounding rect of zoomed view: "
+//             << zoomedView << endl;
+//         kdDebug(36001)  << "printRect(): Bounding rect of child: " << bound
+//             << endl;
+//         kdDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
+//             << zoomedBound << endl;
 #endif
-        if ( ( ( Child* )it.current() )->sheet() == m_pSheet 
-	     && zoomedBound.intersects( zoomedView ) ) 
-	{      
+    if ( obj->sheet() == m_pSheet  && zoomedBound.intersects( zoomedView ) )
+    {
             painter.save();
 
-//             painter.translate( -zoomedView.left()
-//                   + m_pDoc->zoomItX( topLeft.x() )
-//                   + zoomedBound.left(),
-//                                -zoomedView.top()  
-//                   + m_pDoc->zoomItY( topLeft.y() ) 
-//                   + zoomedBound.top() );
-//        // FIXME: Why can this suddenly be removed?
-//             zoomedBound.moveBy( -zoomedBound.x(), -zoomedBound.y() );
-//        kdDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
-//                << zoomedBound << endl;
+            painter.translate( -zoomedView.left() + m_pDoc->zoomItX( topLeft.x() ),
+                                -zoomedView.top() + m_pDoc->zoomItY( topLeft.y() ) );
 
-//             it.current()->transform( painter );
-//             it.current()->document()->paintEverything( painter,
-//                                                        zoomedBound,
-//                                                        it.current()->isTransparent() );
+            //obj->draw( &painter );
+            painter.drawPixmap( m_pDoc->zoomRect( obj->geometry() ).topLeft(), *(*itObject)->p ); //draw the cached object
 
-            it.current()->document()->paintEverything( painter, zoomedBound, it.current()->isTransparent(), 0L,
-                                             m_pDoc->zoomedResolutionX(), m_pDoc->zoomedResolutionY() );
-//             painter.fillRect(zoomedBound, QBrush("red")); for debug purpose
+            //painter.fillRect(zoomedBound, QBrush("red")); //for debug purpose
             painter.restore();
         }
     }
@@ -1495,6 +1522,33 @@ void SheetPrint::setPrintGrid( bool _printGrid )
     m_pDoc->setModified( true );
 }
 
+void SheetPrint::setPrintObjects( bool _printObjects )
+{
+  if ( m_bPrintObjects == _printObjects )
+    return;
+
+  m_bPrintObjects = _printObjects;
+  m_pDoc->setModified( true );
+}
+
+void SheetPrint::setPrintCharts( bool _printCharts )
+{
+  if ( m_bPrintCharts == _printCharts )
+    return;
+
+  m_bPrintCharts = _printCharts;
+  m_pDoc->setModified( true );
+}
+
+void SheetPrint::setPrintGraphics( bool _printGraphics )
+{
+  if ( m_bPrintGraphics == _printGraphics )
+    return;
+
+  m_bPrintGraphics = _printGraphics;
+  m_pDoc->setModified( true );
+}
+
 void SheetPrint::setPrintCommentIndicator( bool _printCommentIndicator )
 {
     if ( m_bPrintCommentIndicator == _printCommentIndicator )
@@ -1512,7 +1566,6 @@ void SheetPrint::setPrintFormulaIndicator( bool _printFormulaIndicator )
     m_bPrintFormulaIndicator = _printFormulaIndicator;
     m_pDoc->setModified( true );
 }
-
 void SheetPrint::updatePrintRepeatColumnsWidth()
 {
     m_dPrintRepeatColumnsWidth = 0.0;
@@ -1524,7 +1577,6 @@ void SheetPrint::updatePrintRepeatColumnsWidth()
         }
     }
 }
-
 
 void SheetPrint::updatePrintRepeatRowsHeight()
 {

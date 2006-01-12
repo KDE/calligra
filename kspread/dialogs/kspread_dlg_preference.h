@@ -113,7 +113,9 @@ protected:
   QComboBox *typeCalc;
   QComboBox *typeOfMove;
   QCheckBox *msgError;
+  KIntNumInput* m_undoRedoLimit;
   bool comboChanged;
+  int m_oldNbRedo;
 } ;
 
 class colorParameters : public QObject

@@ -61,6 +61,8 @@ class Selection;
 class VBorder;
 class View;
 class ComboboxLocationEditWidget;
+class KSpreadChild;
+class KSpreadObject;
 
 
 /**
@@ -246,7 +248,6 @@ public:
     void enableInsertRow( bool _b );
 
     /**
-     * Called by @ref InsertHandler
      *
      * @param _geometry is the zoomed geometry of the new child.
      * @param _entry is the entry to insert.
@@ -255,7 +256,6 @@ public:
      */
     void insertChart( const QRect& _geometry, KoDocumentEntry& _entry );
     /**
-     * Called by @ref InsertHandler
      *
      * @param _geometry is the geometry of the new child.
      * @param _entry is the entry to insert.
@@ -263,6 +263,8 @@ public:
      * @todo check validity of @p _entry docs.
      */
     void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
+
+    void insertPicture( const QRect& _geometry, KURL& _file );
 
     virtual void print( KPrinter &printer );
     virtual void setupPrinter( KPrinter &printer );
@@ -334,6 +336,8 @@ public:
      */
     void resetInsertHandle();
 
+    bool isInsertingObject();
+
     bool showSheet(const QString& sheetName);
 
     QPoint markerFromSheet( Sheet *_sheet ) const;
@@ -341,6 +345,8 @@ public:
      * Save current sheet selection. Call when we change sheet, or save in oasis format
      */
     void saveCurrentSheetSelection();
+
+    void deleteSelectedObjects();
 
 public slots:
     /**
@@ -407,6 +413,7 @@ public slots:
     void showSheet();
     void helpUsing();
     void insertChart();
+    void insertPicture();
     void moneyFormat(bool b);
     void alignLeft( bool b );
     void alignRight( bool b );
@@ -598,17 +605,6 @@ protected slots:
     void slotPopupDeleteChild();
 
     /**
-     * Deletes an embedded document. This has a different
-     * purpose to the @ref View::slotRemoveChild() function
-     * which is called whilst an embedded document is
-     * being deleted in order for the view to make any
-     * necessary updates. 
-    */
-    void slotDeleteChild(KoChild* child);
-
-
-
-    /**
      * Border popup menu
      */
     void slotPopupAdjustColumn();
@@ -641,13 +637,13 @@ public slots:
     void slotRefreshView();
     void slotUpdateView( Sheet *_sheet );
     void slotUpdateView( Sheet *_sheet, const Region& );
+    void slotUpdateView( KSpreadObject* obj );
     void slotUpdateHBorder( Sheet *_sheet );
     void slotUpdateVBorder( Sheet *_sheet );
     void slotChangeSelection(const Region&);
     void slotChangeChoice(const Region&);
     void slotAddSheet( Sheet *_sheet );
-    void slotRemoveChild( Child *_child );
-    void slotUpdateChildGeometry( Child *_child );
+    void slotUpdateChildGeometry( KSpreadChild *_child );
     void slotSheetRenamed( Sheet* sheet, const QString& old_name );
     void slotSheetHidden( Sheet*_sheet );
     void slotSheetShown( Sheet*_sheet );

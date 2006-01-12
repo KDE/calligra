@@ -156,6 +156,48 @@ enum FormatType {
     Custom_format = 300, No_format = 400
 };
 
+enum ModifyType {
+  MT_NONE = 0,
+  MT_MOVE,
+  MT_RESIZE_UP,
+  MT_RESIZE_DN,
+  MT_RESIZE_LF,
+  MT_RESIZE_RT,
+  MT_RESIZE_LU,
+  MT_RESIZE_LD,
+  MT_RESIZE_RU,
+  MT_RESIZE_RD
+};
+
+//TODO Implement all objects :)
+enum ToolEditMode {
+    TEM_MOUSE = 0,
+    //INS_RECT = 1,
+    //INS_ELLIPSE = 2,
+    //INS_TEXT = 3,
+    //INS_PIE = 4,
+    INS_OBJECT = 5,
+    //INS_LINE = 6,
+    INS_DIAGRAMM = 7,
+    //INS_TABLE = 8,
+    //INS_FORMULA = 9,
+    //INS_AUTOFORM = 10,
+    //INS_FREEHAND = 11,
+    //INS_POLYLINE = 12,
+    //INS_QUADRICBEZIERCURVE = 13,
+    //INS_CUBICBEZIERCURVE = 14,
+    //INS_POLYGON = 15,
+    INS_PICTURE = 16
+    //INS_CLIPART = 17,
+    //TEM_ROTATE = 18,
+    //TEM_ZOOM = 19,
+    //INS_CLOSED_FREEHAND = 20,
+    //INS_CLOSED_POLYLINE = 21,
+    //INS_CLOSED_QUADRICBEZIERCURVE = 22,
+    //INS_CLOSED_CUBICBEZIERCURVE = 23
+};
+
+
 } // namespace KSpread
 
 #endif

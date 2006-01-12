@@ -20,6 +20,7 @@
 
 #include "commands.h"
 #include "damages.h"
+#include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
@@ -574,3 +575,184 @@ QString LinkCommand::name() const
   return newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link");
 }
 
+ChangeObjectGeometryCommand::ChangeObjectGeometryCommand( KSpreadObject *_obj, KoRect &_newGeometry )
+{
+  obj = _obj;
+  newGeometry = _newGeometry;
+}
+
+void ChangeObjectGeometryCommand::execute()
+{
+  KoRect tmp = obj->geometry();
+  obj->setGeometry( newGeometry );
+  newGeometry = tmp;
+  obj->sheet()->doc()->repaint( obj );
+  obj->sheet()->doc()->repaint( obj->sheet()->doc()->zoomRect( newGeometry ) );
+}
+
+void ChangeObjectGeometryCommand::unexecute()
+{
+  KoRect tmp = obj->geometry();
+  obj->setGeometry( newGeometry );
+  newGeometry = tmp;
+  obj->sheet()->doc()->repaint( obj );
+  obj->sheet()->doc()->repaint( obj->sheet()->doc()->zoomRect( newGeometry ) );
+}
+
+QString ChangeObjectGeometryCommand::name() const
+{
+  if ( fabs( obj->geometry().width() - newGeometry.width() )<1e-3  && fabs( obj->geometry().height() - newGeometry.height() ) < 1e-3 )
+    return i18n("Move object");
+  else
+    return i18n("Resize object");
+}
+
+RemoveObjectCommand::RemoveObjectCommand( KSpreadObject *_obj, bool _cut )
+{
+  obj = _obj;
+  cut = _cut;
+  doc = obj->sheet()->doc();
+}
+
+RemoveObjectCommand::~RemoveObjectCommand()
+{
+  if ( !executed )
+    return;
+  //kdDebug() << "*********Deleting object..." << endl;
+  if ( obj->getType() == OBJECT_CHART )
+  {
+    KSpreadChild *chart = dynamic_cast<KSpreadChild *>(obj);
+    chart->embeddedObject()->setDeleted(true);
+  }
+
+  delete obj;
+}
+
+void RemoveObjectCommand::execute()
+{
+
+//  I don't think we need this:
+//       Make shure that this child has no active embedded view -> activate ourselfs
+//       doc()->emitBeginOperation( false );
+//       partManager()->setActivePart( koDocument(), this );
+//       partManager()->setSelectedPart( 0 );
+//       doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+
+  doc->embeddedObjects().removeRef( obj );
+
+  obj->setSelected( false );
+  doc->repaint( obj );
+  executed = true;
+}
+
+void RemoveObjectCommand::unexecute()
+{
+  doc->embeddedObjects().append( obj );
+  doc->repaint( obj );
+  executed = false;
+}
+
+QString RemoveObjectCommand::name() const
+{
+  if ( cut )
+    return i18n("Cut object");
+  else
+    return i18n("Remove object");
+}
+
+InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry& _entry, Canvas *_canvas ) //child
+{
+  geometry = _geometry;
+  entry = _entry;
+  canvas = _canvas;
+  type = OBJECT_KOFFICE_PART;
+  obj = 0;
+}
+
+InsertObjectCommand::InsertObjectCommand(const KoRect& _geometry, KoDocumentEntry& _entry, const QRect& _data, Canvas *_canvas ) //chart
+{
+  geometry = _geometry;
+  entry = _entry;
+  data = _data;
+  canvas = _canvas;
+  type = OBJECT_CHART;
+  obj = 0;
+}
+
+InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry, KURL& _file, Canvas *_canvas ) //picture
+{
+  geometry = _geometry;
+  file = _file;
+  canvas = _canvas;
+  type = OBJECT_PICTURE;
+  obj = 0;
+}
+
+InsertObjectCommand::~InsertObjectCommand()
+{
+  if ( executed )
+    return;
+  //kdDebug() << "*********Deleting object..." << endl;
+  if ( obj->getType() == OBJECT_CHART )
+  {
+    KSpreadChild *chart = dynamic_cast<KSpreadChild *>(obj);
+    chart->embeddedObject()->setDeleted(true);
+  }
+
+  delete obj;
+}
+
+void InsertObjectCommand::execute()
+{
+  if ( obj ) //restore the object which was removed from the object list in InsertObjectCommand::unexecute()
+  {
+    canvas->doc()->embeddedObjects().append( obj );
+    canvas->doc()->repaint( obj );
+  }
+  else
+  {
+    bool success = false;
+    switch ( type )
+    {
+      case OBJECT_CHART:
+      {
+        success = canvas->activeSheet()->insertChart( geometry, entry, data );
+        break;
+      }
+      case OBJECT_KOFFICE_PART:
+      {
+        success = canvas->activeSheet()->insertChild( geometry, entry );
+        break;
+      }
+      case OBJECT_PICTURE:
+      {
+        success = canvas->activeSheet()->insertPicture( geometry, file );
+        break;
+      }
+      default:
+        break;
+    }
+    if ( success )
+      obj = canvas->doc()->embeddedObjects().last();
+    else
+      obj = 0;
+  }
+  executed = true;
+}
+
+void InsertObjectCommand::unexecute()
+{
+  if ( !obj )
+    return;
+
+  canvas->doc()->embeddedObjects().removeRef( obj );
+  obj->setSelected( false );
+  canvas->doc()->repaint( obj );
+
+  executed = false;
+}
+
+QString InsertObjectCommand::name() const
+{
+  return i18n("Insert object");
+}

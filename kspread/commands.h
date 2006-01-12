@@ -21,11 +21,15 @@
 #ifndef KSPREAD_COMMANDS
 #define KSPREAD_COMMANDS
 
+#include <koPageLayout.h>
+#include <koQueryTrader.h>
+#include <koUnit.h>
 #include <qrect.h>
 #include <qstring.h>
 
 #include <kcommand.h>
 
+#include "kspread_object.h"
 #include "kspread_sheet.h" // for Sheet::LayoutDirection
 
 /**
@@ -348,6 +352,61 @@ protected:
   QString oldLink;
   QString newText;
   QString newLink;
+};
+
+
+class ChangeObjectGeometryCommand : public KCommand
+{
+  public:
+    ChangeObjectGeometryCommand( KSpreadObject *_obj, KoRect &_newGeometry );
+
+    virtual void execute();
+    virtual void unexecute();
+    virtual QString name() const;
+
+  protected:
+    KoRect newGeometry;
+    KSpreadObject *obj;
+};
+
+class RemoveObjectCommand : public KCommand
+{
+  public:
+    RemoveObjectCommand( KSpreadObject *_obj, bool _cut = false );
+    ~RemoveObjectCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+    virtual QString name() const;
+
+  protected:
+    KSpreadObject *obj;
+    Doc* doc;
+    bool executed;
+    bool cut;
+};
+
+class InsertObjectCommand : public KCommand
+{
+  public:
+    InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry&, Canvas *_canvas ); //child
+    InsertObjectCommand( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data, Canvas *_canvas ); //chart
+    InsertObjectCommand( const KoRect& _geometry, KURL& _file, Canvas *_canvas ); //picture
+    ~InsertObjectCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+    virtual QString name() const;
+
+  protected:
+    KoRect geometry;
+    Canvas *canvas;
+    bool executed;
+    KoDocumentEntry entry;
+    QRect data;
+    ObjType type;
+    KURL file;
+    KSpreadObject *obj;
 };
 
 } // namespace KSpread

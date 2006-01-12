@@ -45,6 +45,7 @@
 
 #include <qapplication.h>
 #include <qbuffer.h>
+#include <qclipboard.h>
 #include <qdrawutil.h>
 #include <qlabel.h>
 #include <qpoint.h>
@@ -55,12 +56,19 @@
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
+#include <kmultipledrag.h>
 #include <krun.h>
 #include <kmimetype.h>
 #include <ksharedptr.h>
 
+#include <koOasisStore.h>
 #include <KoSpeaker.h>
+#include <koStore.h>
+#include <KoStoreDrag.h>
+#include <koxmlwriter.h>
+#include <koDocumentChild.h>
 
+#include "commands.h"
 #include "kspread_doc.h"
 #include "kspread_editors.h"
 #include "kspread_global.h"
@@ -146,6 +154,28 @@ class Canvas::Private
     // If the mouse is over some anchor ( in the sense of HTML anchors )
     QString anchor;
 
+    bool mouseSelectedObject;
+    bool drawContour;
+    ModifyType modType;
+    /**
+     * Saves the last mouse position during mouse move events.
+     */
+    QPoint m_savedMousePos;
+
+    //---- stuff needed for resizing ----
+    /// object which gets resized
+    KSpreadObject *m_resizeObject;
+    /// should the ratio of the object kept during resize
+    bool m_keepRatio;
+    /// ratio of the object ( width / height )
+    double m_ratio;
+
+    QRect m_boundingRealRect; ///< when moving object(s)
+    //KoRect m_boundingRect;
+    QSize m_origSize;  ///< The size of the object for move
+    QPoint m_origPos;  ///< Start point for move
+    bool m_isMoving;
+
     //Stores information about cells referenced in the formula currently being edited,
     //Used to highlight relevant cells
     std::vector< KSharedPtr<HighlightRange> >* highlightedRanges;
@@ -214,6 +244,13 @@ Canvas::Canvas (View *_view)
 
   setMouseTracking( true );
   d->mousePressed = false;
+  d->drawContour = false;
+  d->modType = MT_NONE;
+
+  d->m_resizeObject = 0L;
+  d->m_ratio = 0.0;
+  d->m_keepRatio = false;
+  d->m_isMoving = false;
 
   d->prevSpokenPointerRow = -1;
   d->prevSpokenPointerCol = -1;
@@ -976,6 +1013,73 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( (!d->view->koDocument()->isReadWrite()) && (d->mouseAction!=Mark))
     return;
 
+  if ( d->mousePressed && d->m_resizeObject && d->modType != MT_NONE )
+  {
+    if ( !d->m_isMoving )
+    {
+      d->m_isMoving = true;
+      repaint();
+    }
+    else
+      repaint( d->m_boundingRealRect );
+
+    QRect drawingRect;
+
+    if ( d->modType == MT_MOVE )
+    {
+      drawingRect = QRect( _ev->pos() - d->m_origPos, d->m_origSize );
+      d->m_boundingRealRect = drawingRect;
+    }
+    else
+    {
+      drawingRect = doc()->zoomRect( calculateNewGeometry(d->modType,  _ev->pos().x(), _ev->pos().y() ) );
+      drawingRect.moveBy( (int)( -xOffset() * doc()->zoomedResolutionX() ) , (int)( -yOffset() * doc()->zoomedResolutionY() ) );
+    }
+
+    // Autoscrolling
+    if ( ( d->modType == MT_MOVE && drawingRect.top() < 0 ) ||  ( d->modType != MT_MOVE && _ev->pos().y() < 0 ) )
+    {
+      vertScrollBar()->setValue ((int) ( vertScrollBar()->value() -
+          autoScrollAccelerationY( - drawingRect.top() ) ) );
+    }
+    else if ( ( d->modType == MT_MOVE && drawingRect.bottom() > height() ) ||  ( d->modType != MT_MOVE && _ev->pos().y() > height() ) )
+    {
+      vertScrollBar()->setValue ((int) ( vertScrollBar()->value() +
+          autoScrollAccelerationY ( drawingRect.bottom() - height() ) ) );
+    }
+    if ( ( d->modType == MT_MOVE && drawingRect.left() < 0 ) ||  ( d->modType != MT_MOVE && _ev->pos().x() < 0 ) )
+    {
+      horzScrollBar()->setValue ((int) ( horzScrollBar()->value() -
+          autoScrollAccelerationX( - drawingRect.left() ) ) );
+    }
+    else if ( ( d->modType == MT_MOVE && drawingRect.right() > width() ) ||  ( d->modType != MT_MOVE && _ev->pos().x() > width() )  )
+    {
+      horzScrollBar()->setValue ((int) (horzScrollBar()->value() +
+          autoScrollAccelerationX( drawingRect.right() - width() ) ) );
+    }
+
+    if ( drawingRect.left() < 0 )
+    {
+        drawingRect.setRight( drawingRect.right() -drawingRect.left() );
+        drawingRect.setLeft( 0 );
+    }
+    if ( drawingRect.top() < 0 )
+    {
+        drawingRect.setBottom( drawingRect.bottom() -drawingRect.top() );
+        drawingRect.setTop( 0 );
+    }
+
+    d->m_boundingRealRect = drawingRect; //redraw this area next time the mouse has been moved
+
+    //repaint( d->m_boundingRealRect );
+    QPainter p(this);
+    p.setRasterOp( NotROP );
+    p.setPen( QPen( black, 0, DotLine ) );
+    p.drawRect( drawingRect );
+    p.end();
+    return;
+  }
+
   if ( d->dragging )
   {
     return;
@@ -1001,6 +1105,23 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( !sheet )
   {
     return;
+  }
+
+  if ( d->mouseSelectedObject )
+  {
+    KSpreadObject *obj = 0;
+    QPoint p ( (int) _ev->x(),
+              (int) _ev->y() );
+    if ( ( obj = getObject( p, activeSheet() ) ) && obj->isSelected() )
+    {
+      KoRect const bound = obj->geometry();
+      QRect zoomedBound = doc()->zoomRect( KoRect(bound.left(), bound.top(),
+      bound.width(),
+      bound.height() ) );
+      zoomedBound.moveBy( (int)(-xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ));
+      setCursor( obj->getCursor( p, d->modType, zoomedBound ) );
+      return;
+    }
   }
 
   double dwidth = d->view->doc()->unzoomItX( width() );
@@ -1137,12 +1258,52 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
-void Canvas::mouseReleaseEvent( QMouseEvent* )
+void Canvas::mouseReleaseEvent( QMouseEvent* _ev)
 {
   if ( d->scrollTimer->isActive() )
     d->scrollTimer->stop();
 
   d->mousePressed = false;
+
+  if ( d->modType != MT_NONE && d->m_resizeObject && d->m_resizeObject->isSelected() )
+  {
+    KSpreadObject *obj = d->m_resizeObject;
+    QRect r;
+    KoRect unzoomedRect;
+    if ( d->modType == MT_MOVE )
+    {
+      r = QRect( _ev->pos() - QPoint( d->m_origPos.x(), d->m_origPos.y() ), d->m_origSize );
+      unzoomedRect = doc()->unzoomRect( r );
+      unzoomedRect.moveBy( xOffset() , yOffset() );
+    }
+    else
+    {
+      unzoomedRect = calculateNewGeometry(d->modType,  _ev->pos().x(), _ev->pos().y() );
+      r = doc()->zoomRect( unzoomedRect );
+      r.moveBy( (int)( -xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ) );
+    }
+
+    if ( unzoomedRect.left() < 0 )
+    {
+        unzoomedRect.setRight( unzoomedRect.right() - unzoomedRect.left() );
+        unzoomedRect.setLeft( 0 );
+    }
+    if ( unzoomedRect.top() < 0 )
+    {
+        unzoomedRect.setBottom( unzoomedRect.bottom() - unzoomedRect.top() );
+        unzoomedRect.setTop( 0 );
+    }
+    if ( unzoomedRect != obj->geometry() )
+    {
+      ChangeObjectGeometryCommand *cmd = new ChangeObjectGeometryCommand( obj, unzoomedRect );
+      d->view->doc()->addCommand( cmd );
+      cmd->execute();
+    }
+    d->m_resizeObject = 0;
+    d->m_isMoving = false;
+    repaint( r );
+    return;
+  }
 
   Sheet *sheet = activeSheet();
   if ( !sheet )
@@ -1262,12 +1423,142 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     d->mousePressed = true;
   }
 
+
+  if ( activeSheet() )
+  {
+    KSpreadObject *obj;
+    if ( (obj = getObject( _ev->pos(), activeSheet() ) ) )
+    {
+      if ( obj->isSelected() )
+      {
+        if ( d->modType == MT_NONE)
+          return;
+
+        deSelectAllObj();
+        selectObj( obj );
+          //raiseObject( kpobject );
+
+        d->m_resizeObject = obj;
+
+        d->m_keepRatio = false;
+        if ( _ev->state() & ControlButton )
+          d->m_keepRatio = true;
+
+        if ( d->modType == MT_MOVE)
+        {
+          d->m_origSize = doc()->zoomRect( obj->geometry() ).size();
+          d->m_origPos = _ev->pos();
+          d->m_origPos-= doc()->zoomRect( obj->geometry() ).topLeft();
+          d->m_origPos+= QPoint( (int)( xOffset() * doc()->zoomedResolutionX() ), (int)( yOffset()  * doc()->zoomedResolutionY() ) );
+          d->m_boundingRealRect = QRect( d->m_origPos, d->m_origSize );
+        }
+        else/* if ( d->modType == MT_RESIZE_DN )*/
+        {
+//           d->m_keepRatio = d->m_keepRatio || d->m_resizeObject->isKeepRatio();
+//           d->m_ratio = static_cast<double>( obj->geometrygetSize().width() )
+//             / static_cast<double>( obj->getSizegeometry().height()*/ );
+
+          d->m_origSize = doc()->zoomRect( obj->geometry() ).size();
+          d->m_origPos = _ev->pos();
+          QPoint p = doc()->zoomRect( obj->geometry() ).topLeft();
+          d->m_origPos-= QPoint( abs( p.x() ), abs( p.y() ) );
+          d->m_origPos+= QPoint( (int)( xOffset() * doc()->zoomedResolutionX() ), (int)( yOffset()  * doc()->zoomedResolutionY() ) );
+          d->m_boundingRealRect = QRect( d->m_origPos, d->m_origSize );
+        }
+      }
+      else
+      {
+        //QPoint tmp = applyGrid ( e->pos(),true );
+        QPoint tmp( _ev->pos() );;
+        //d->insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
+        deSelectAllObj();
+        selectObj( obj );
+        setCursor( Qt::SizeAllCursor );
+      }
+
+      if ( _ev->button() == RightButton )
+      {
+        //updatePosWidget();
+//     // TODO: Handle anchor
+        QPoint p = mapToGlobal( _ev->pos() );
+        d->view->openPopupMenu( p );
+      }
+      return;
+    }
+    else if ( d->mouseSelectedObject )
+      deSelectAllObj();
+  }
+
   // Get info about where the event occurred - this is duplicated
   // in ::mouseMoveEvent, needs to be separated into one function
   Sheet *sheet = activeSheet();
   if ( !sheet )
   {
     return;
+  }
+
+if ( activeSheet() )
+  {
+    KSpreadObject *obj;
+    if ( (obj = getObject( _ev->pos(), activeSheet() ) ) )
+    {
+      if ( obj->isSelected() )
+      {
+        if ( d->modType == MT_NONE)
+          return;
+
+        deSelectAllObj();
+        selectObj( obj );
+          //raiseObject( kpobject );
+
+        d->m_resizeObject = obj;
+
+        d->m_keepRatio = false;
+        if ( _ev->state() & ControlButton )
+          d->m_keepRatio = true;
+
+        if ( d->modType == MT_MOVE)
+        {
+          d->m_origSize = doc()->zoomRect( obj->geometry() ).size();
+          d->m_origPos = _ev->pos();
+          d->m_origPos-= doc()->zoomRect( obj->geometry() ).topLeft();
+          d->m_origPos+= QPoint( (int)( xOffset() * doc()->zoomedResolutionX() ), (int)( yOffset()  * doc()->zoomedResolutionY() ) );
+          d->m_boundingRealRect = QRect( d->m_origPos, d->m_origSize );
+        }
+        else/* if ( d->modType == MT_RESIZE_DN )*/
+        {
+//           d->m_keepRatio = d->m_keepRatio || d->m_resizeObject->isKeepRatio();
+//           d->m_ratio = static_cast<double>( obj->geometrygetSize().width() )
+//             / static_cast<double>( obj->getSizegeometry().height()*/ );
+
+          d->m_origSize = doc()->zoomRect( obj->geometry() ).size();
+          d->m_origPos = _ev->pos();
+          QPoint p = doc()->zoomRect( obj->geometry() ).topLeft();
+          d->m_origPos-= QPoint( abs( p.x() ), abs( p.y() ) );
+          d->m_origPos+= QPoint( (int)( xOffset() * doc()->zoomedResolutionX() ), (int)( yOffset()  * doc()->zoomedResolutionY() ) );
+          d->m_boundingRealRect = QRect( d->m_origPos, d->m_origSize );
+        }
+      }
+      else
+      {
+        //QPoint tmp = applyGrid ( e->pos(),true );
+        QPoint tmp( _ev->pos() );;
+        //d->insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
+        selectObj( obj );
+        setCursor( Qt::SizeAllCursor );
+      }
+      
+      if ( _ev->button() == RightButton )
+      {
+        //updatePosWidget();
+//     // TODO: Handle anchor
+        QPoint p = mapToGlobal( _ev->pos() );
+        d->view->openPopupMenu( p );
+      }
+      return;
+    }
+    else if ( d->mouseSelectedObject )
+      deSelectAllObj();
   }
 
   double dwidth = d->view->doc()->unzoomItX( width() );
@@ -1477,8 +1768,25 @@ void Canvas::startTheDrag()
   setCursor( KCursor::arrowCursor() );
 }
 
-void Canvas::mouseDoubleClickEvent( QMouseEvent*  )
+void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
 {
+
+  KSpreadObject *obj;
+  if ( ( obj = getObject( _ev->pos(), activeSheet() ) ) )
+  {
+    switch ( obj->getType() )
+    {
+      case OBJECT_KOFFICE_PART: case OBJECT_CHART:
+      {
+        dynamic_cast<KSpreadChild*>(obj)->activate( view(), this );
+        return;
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
   if ( d->view->koDocument()->isReadWrite() && activeSheet() )
     createEditor(true);
 }
@@ -1985,6 +2293,19 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   if ( d->cellEditor )
     deleteEditor( false );
 
+  if ( d->m_isMoving ) //moving or resizing
+  {
+    d->m_resizeObject = 0;
+    d->m_isMoving = false;
+    repaint( /*d->m_boundingRealRect*/ );
+  }
+  else if ( view()->isInsertingObject() )
+  {
+    view()->resetInsertHandle();
+    setCursor( arrowCursor );
+    return;
+  }
+
   event->accept(); // ?
   QPoint cursor = cursorPos();
 
@@ -2168,6 +2489,13 @@ bool Canvas::processNextKey(QKeyEvent *event)
 
 void Canvas::processDeleteKey(QKeyEvent* /* event */)
 {
+  if ( isObjectSelected() )
+  {
+    d->view->doc()->emitEndOperation( activeSheet()->visibleRect( this ) );
+    d->view->deleteSelectedObjects();
+    return;
+  }
+
   activeSheet()->clearTextSelection( selectionInfo() );
   d->view->editWidget()->setText( "" );
 
@@ -3070,6 +3398,244 @@ double Canvas::autoScrollAccelerationY( int offset )
     }
 }
 
+
+KSpread::KSpreadObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
+{
+  QPoint const p ( (int) pos.x() ,
+              (int) pos.y() );
+
+  QPtrListIterator<KSpreadObject> itObject( doc()->embeddedObjects() );
+  for( ; itObject.current(); ++itObject )
+  {
+    if ( itObject.current()->sheet() == _sheet )
+    {
+        KoRect const bound = ( itObject.current() )->geometry();
+        QRect zoomedBound = doc()->zoomRect( KoRect(bound.left(), bound.top(),
+                                bound.width(),
+                                bound.height() ) );
+        zoomedBound.moveBy( (int)( -xOffset() * doc()->zoomedResolutionX() ), (int)( -yOffset() * doc()->zoomedResolutionY() ) );
+         if ( zoomedBound.contains( p ) )
+              return itObject.current();
+    }
+  }
+  return 0;
+}
+
+void Canvas::selectObj( KSpreadObject *obj )
+{
+  if ( obj->sheet() != activeSheet() || obj->isSelected() )
+    return;
+  obj->setSelected( true );
+  _repaint( obj );
+
+  emit objectSelectedChanged();
+  d->mouseSelectedObject = true;
+  deleteEditor( true );
+}
+
+void Canvas::deSelectObj( KSpreadObject *obj )
+{
+  if ( obj->sheet() != activeSheet() || !obj->isSelected() )
+    return;
+  obj->setSelected( false );
+  _repaint( obj );
+
+  d->mouseSelectedObject = false;
+  emit objectSelectedChanged();
+}
+
+void Canvas::selectAllObj()
+{
+  QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+  for ( ; it.current() ; ++it )
+  {
+    if ( it.current()->sheet() == activeSheet() )
+      it.current()->setSelected( true );
+  }
+
+   d->mouseSelectedObject = true;
+//   emit objectSelectedChanged();
+}
+
+void Canvas::deSelectAllObj()
+{
+  if( activeSheet()->numSelected() == 0 )
+    return;
+
+  //lowerObject();
+
+  QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+  for ( ; it.current() ; ++it )
+      deSelectObj( it.current() );
+
+   d->mouseSelectedObject = false;
+//   emit objectSelectedChanged();
+}
+
+
+
+void Canvas::setMouseSelectedObject(bool b)
+{
+  d->mouseSelectedObject = b;
+  emit objectSelectedChanged();
+}
+
+bool Canvas::isObjectSelected()
+{
+  return d->mouseSelectedObject;
+}
+
+
+KoRect Canvas::calculateNewGeometry( ModifyType _modType, int _x, int _y )
+{
+  KoRect unzoomedRect = d->m_resizeObject->geometry();
+  double const x = doc()->unzoomItX( _x ) +  xOffset();
+  double const y = doc()->unzoomItY( _y ) +  yOffset();
+
+  switch ( _modType )
+  {
+    case MT_RESIZE_DN:
+    {
+      if( y > unzoomedRect.top() )
+        unzoomedRect.setBottom( y );
+      else
+      {
+        double const new_bottom = unzoomedRect.top();
+        unzoomedRect.setTop( y );
+        unzoomedRect.setBottom( new_bottom );
+      }
+      break;
+    }
+    case MT_RESIZE_UP:
+    {
+      if( y < unzoomedRect.bottom() )
+        unzoomedRect.setTop( y );
+      else
+      {
+        double const new_top = unzoomedRect.bottom();
+        unzoomedRect.setBottom( y );
+        unzoomedRect.setTop( new_top );
+      }
+      break;
+    }
+    case MT_RESIZE_LF:
+    {
+      if( x < unzoomedRect.right() )
+        unzoomedRect.setLeft( x );
+      else
+      {
+        double const new_left = unzoomedRect.right();
+        unzoomedRect.setRight( x );
+        unzoomedRect.setLeft( new_left );
+      }
+      break;
+    }
+    case MT_RESIZE_RT:
+    {
+      if( x > unzoomedRect.left() )
+        unzoomedRect.setRight( x );
+      else
+      {
+        double const new_right = unzoomedRect.left();
+        unzoomedRect.setLeft( x );
+        unzoomedRect.setRight( new_right );
+      }
+      break;
+    }
+    case MT_RESIZE_LU:
+    {
+      if( x < unzoomedRect.right() && y < unzoomedRect.bottom() )
+        unzoomedRect.setTopLeft( KoPoint( x, y ) );
+      else if( x < unzoomedRect.right() && y > unzoomedRect.bottom() )
+      {
+        unzoomedRect.setTop( unzoomedRect.bottom() );
+        unzoomedRect.setBottomLeft( KoPoint( x, y ) );
+      }
+      else if( x > unzoomedRect.right() && y < unzoomedRect.bottom() )
+      {
+        unzoomedRect.setLeft( unzoomedRect.right() );
+        unzoomedRect.setTopRight( KoPoint( x, y ) );
+      }
+      else
+      {
+        unzoomedRect.setLeft( unzoomedRect.right() );
+        unzoomedRect.setTop( unzoomedRect.bottom() );
+        unzoomedRect.setBottomRight( KoPoint( x, y ) );
+      }
+      break;
+    }
+    case MT_RESIZE_LD:
+    {
+      if( x < unzoomedRect.right() && y > unzoomedRect.top() )
+        unzoomedRect.setBottomLeft( KoPoint( x, y ) );
+      else if( x < unzoomedRect.right() && y < unzoomedRect.top() )
+      {
+        unzoomedRect.setBottom( unzoomedRect.top() );
+        unzoomedRect.setTopLeft( KoPoint( x, y ) );
+      }
+      else if( x > unzoomedRect.right() && y > unzoomedRect.top() )
+      {
+        unzoomedRect.setLeft( unzoomedRect.right() );
+        unzoomedRect.setBottomRight( KoPoint( x, y ) );
+      }
+      else
+      {
+        unzoomedRect.setLeft( unzoomedRect.right() );
+        unzoomedRect.setBottom( unzoomedRect.top() );
+        unzoomedRect.setTopRight( KoPoint( x, y ) );
+      }
+      break;
+    }
+    case MT_RESIZE_RU:
+    {
+      if( x > unzoomedRect.left() && y < unzoomedRect.bottom() )
+        unzoomedRect.setTopRight( KoPoint( x, y ) );
+      else if( x > unzoomedRect.left() && y > unzoomedRect.bottom() )
+      {
+        unzoomedRect.setTop( unzoomedRect.bottom() );
+        unzoomedRect.setBottomRight( KoPoint( x, y ) );
+      }
+      else if( x < unzoomedRect.right() && y < unzoomedRect.bottom() )
+      {
+        unzoomedRect.setRight( unzoomedRect.left() );
+        unzoomedRect.setTopLeft( KoPoint( x, y ) );
+      }
+      else
+      {
+        unzoomedRect.setTop( unzoomedRect.bottom() );
+        unzoomedRect.setRight( unzoomedRect.left() );
+        unzoomedRect.setBottomLeft( KoPoint( x, y ) );
+      }
+      break;
+    }
+    case MT_RESIZE_RD:
+    {
+      if( x > unzoomedRect.left() && y > unzoomedRect.top() )
+        unzoomedRect.setBottomRight( KoPoint( x, y ) );
+      else if( x > unzoomedRect.left() && y < unzoomedRect.top() )
+      {
+        unzoomedRect.setBottom( unzoomedRect.top() );
+        unzoomedRect.setTopRight( KoPoint( x, y ) );
+      }
+      else if( x < unzoomedRect.right() && y > unzoomedRect.top() )
+      {
+        unzoomedRect.setRight( unzoomedRect.left() );
+        unzoomedRect.setBottomLeft( KoPoint( x, y ) );
+      }
+      else
+      {
+        unzoomedRect.setBottom( unzoomedRect.top() );
+        unzoomedRect.setRight( unzoomedRect.left() );
+        unzoomedRect.setTopLeft( KoPoint( x, y ) );
+      }
+      break;
+    }
+    default:
+      break;
+  }
+  return unzoomedRect;
+}
+
 void Canvas::deleteEditor (bool saveChanges, bool array)
 {
   if ( !d->cellEditor )
@@ -3225,6 +3791,69 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
   }
 
   return true;
+}
+
+void Canvas::_repaint( KSpreadObject *obj )
+{
+  if ( !obj->isSelected() )
+  {
+    QRect geometry( doc()->zoomRect( obj->geometry() ) );
+    repaint( geometry );
+  }
+  else
+  {
+    QPainter p(this);
+    p.translate( -xOffset() * doc()->zoomedResolutionX() , -yOffset() * doc()->zoomedResolutionY() );
+    obj->draw(&p); //this goes faster than calling repaint
+    p.end();
+  }
+}
+
+void Canvas::copyOasisObjs()
+{
+    //todo copy object from selected object
+//     KoStoreDrag *kd = new KoStoreDrag( "application/vnd.oasis.opendocument.spreadsheet", 0L );
+//     QDragObject* dragObject = kd;
+//     QByteArray arr;
+//     QBuffer buffer(arr);
+//     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, "application/vnd.oasis.opendocument.spreadsheet" );
+// 
+//     delete store;
+//     kd->setEncodedData( arr );
+
+    // We'll create a store (ZIP format) in memory
+    QBuffer buffer;
+    QCString mimeType = /*KWOasisSaver::selectionMimeType()*/"application/vnd.oasis.opendocument.spreadsheet";
+    KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
+    Q_ASSERT( store );
+    Q_ASSERT( !store->bad() );
+    KoOasisStore oasisStore( store );
+
+    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
+
+    QString plainText;
+    KoPicture picture;
+    if ( !doc()->saveOasisHelper( store, manifestWriter, Doc::SaveSelected, &plainText, &picture/*, fs*/ )
+         || !oasisStore.closeManifestWriter() )
+    {
+        delete store;
+        kdDebug() << "AAAAAA" << endl;
+        return;
+    }
+    delete store;
+
+    KMultipleDrag* multiDrag = new KMultipleDrag( /*parent*/0 );
+    if ( !plainText.isEmpty() )
+        multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
+    if ( !picture.isNull() )
+        multiDrag->addDragObject( picture.dragObject( 0 ) );
+    KoStoreDrag* storeDrag = new KoStoreDrag( mimeType/*KWOasisSaver::selectionMimeType()*/, 0 );
+    kdDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
+    storeDrag->setEncodedData( buffer.buffer() );
+    multiDrag->addDragObject( storeDrag );
+
+    QDragObject *dragObject = storeDrag;
+    QApplication::clipboard()->setData( dragObject, QClipboard::Clipboard );
 }
 
 void Canvas::closeEditor()
@@ -3582,42 +4211,56 @@ void Canvas::paintUpdates()
 
 
 
-void Canvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
+void Canvas::clipoutChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 {
   QRegion rgn = painter.clipRegion();
   if ( rgn.isEmpty() )
     rgn = QRegion( QRect( 0, 0, width(), height() ) );
 
-  QPtrListIterator<KoDocumentChild> itChild( d->view->doc()->children() );
-  for( ; itChild.current(); ++itChild )
+  painter.save();
+  painter.translate( -xOffset() * doc()->zoomedResolutionX() , -yOffset() * doc()->zoomedResolutionY() );
+
+  QPtrListIterator<KSpreadObject> itObject( doc()->embeddedObjects() );
+  for( ; itObject.current(); ++itObject )
   {
-//    if ( ((Child*)it.current())->sheet() == sheet &&
-//         !d->view->hasDocumentInWindow( it.current()->document() ) )
-    if ( ( ( Child*)itChild.current() )->sheet() == activeSheet() )
+    if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject && d->m_isMoving ) )
     {
-      rgn -= itChild.current()->region( matrix );
+      rgn -= doc()->zoomRect( itObject.current()->geometry() );
+      //painter.fillRect( doc()->zoomRect( itObject.current()->geometry() ), QColor("red" ) );
     }
   }
+
   painter.setClipRegion( rgn );
+  painter.restore();
 }
 
-void Canvas::paintChildren( QPainter& painter, QWMatrix& matrix )
+void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 {
-  painter.setWorldMatrix( matrix );
-  QPtrListIterator<KoDocumentChild> itChild( d->view->doc()->children() );
-  itChild.toFirst();
-  for( ; itChild.current(); ++itChild )
+  //painter.setWorldMatrix( matrix );
+  painter.end();
+  QPtrListIterator<KSpreadObject> itObject( doc()->embeddedObjects() );
+  itObject.toFirst();
+  if ( !itObject.current() )
+    return;
+
+  painter.save();
+  painter.begin(this);
+  painter.translate( -xOffset() * doc()->zoomedResolutionX() , -yOffset() * doc()->zoomedResolutionY() );
+
+  QRect zoomedWindowGeometry = painter.window();
+  zoomedWindowGeometry.moveBy( (int)( xOffset() * doc()->zoomedResolutionX() ) , (int)( yOffset() * doc()->zoomedResolutionY() ) );
+
+  for( ; itObject.current(); ++itObject )
   {
-    if ( ( ( Child*)itChild.current() )->sheet() == activeSheet() &&
-         ( d->view && !d->view->hasDocumentInWindow( itChild.current()->document() ) ) )
+    QRect const zoomedObjectGeometry = doc()->zoomRect( itObject.current()->geometry() );
+    if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject && d->m_isMoving ) &&
+           zoomedWindowGeometry.intersects( zoomedObjectGeometry ) )
     {
       // #### todo: paint only if child is visible inside rect
-      painter.save();
-      d->view->doc()->paintChild( itChild.current(), painter, d->view,
-        d->view->doc()->zoomedResolutionX(), d->view->doc()->zoomedResolutionY() );
-      painter.restore();
+      itObject.current()->draw( &painter );
     }
   }
+  painter.restore();
 }
 
 void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)

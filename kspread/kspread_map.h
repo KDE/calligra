@@ -30,6 +30,7 @@
 #include <koffice_export.h>
 
 class KoStore;
+class KoOasisLoadingContext;
 class KoOasisStyles;
 
 class DCOPObject;
@@ -46,6 +47,7 @@ class Changes;
 class Map;
 class Doc;
 class Sheet;
+class GenValidationStyles;
 
 /**
   A map is a simple container for all sheets. Usually a complete map
@@ -71,9 +73,9 @@ public:
     void saveOasisSettings( KoXmlWriter &settingsWriter );
     void loadOasisSettings( KoOasisSettings &settings );
 
-    bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles );
+    bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj );
 
-    bool loadOasis( const QDomElement& mymap, KoOasisStyles& oasisStyles );
+    bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext );
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 

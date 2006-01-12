@@ -40,6 +40,7 @@
 #include "kspread_cell.h"
 #include "kspread_format.h"
 #include "kspread_global.h"
+#include "kspread_object.h"
 
 class QWidget;
 class QPainter;
@@ -50,6 +51,7 @@ class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;
 class KoOasisSettings;
+class KoOasisLoadingContext;
 
 namespace KoChart
 {
@@ -73,6 +75,8 @@ class SheetPrint;
 class Style;
 class UndoInsertRemoveAction;
 class View;
+class KSpreadChild;
+class KSpreadObject;
 
 /********************************************************************
  *
@@ -115,35 +119,6 @@ protected:
     bool m_bIgnoreChanges;
 };
 
-/********************************************************************
- *
- * Child
- *
- ********************************************************************/
-
-/**
- * Holds an embedded object.
- */
-class Child : public KoDocumentChild
-{
-public:
-  Child( Doc *parent, Sheet *_sheet, KoDocument* doc, const QRect& geometry );
-  Child( Doc *parent, Sheet *_sheet );
-  ~Child();
-
-  Doc* parent()const { return (Doc*)parent(); }
-  Sheet* sheet()const { return m_pSheet; }
-
-protected:
-  Sheet *m_pSheet;
-};
-
-/********************************************************************
- *
- * Charts
- *
- ********************************************************************/
-
 class ChartBinding : public CellBinding
 {
     Q_OBJECT
@@ -156,37 +131,6 @@ public:
 
 private:
     ChartChild* m_child;
-};
-
-class ChartChild : public Child
-{
-    Q_OBJECT
-public:
-    ChartChild( Doc *_spread, Sheet *_sheet, KoDocument* doc, const QRect& _rect );
-    ChartChild( Doc *_spread, Sheet *_sheet );
-    ~ChartChild();
-
-    void setDataArea( const QRect& _data );
-    void update();
-
-    /**
-     * @reimp
-     */
-    bool load( const QDomElement& element );
-    /**
-     * @reimp
-     */
-    QDomElement save( QDomDocument& doc );
-
-    /**
-     * @reimp
-     */
-    bool loadDocument( KoStore* _store );
-
-    KoChart::Part* chart();
-
-private:
-    ChartBinding *m_pBinding;
 };
 
 /********************************************************************
@@ -298,11 +242,12 @@ public:
      */
     virtual bool loadXML( const QDomElement& );
 
-    virtual bool loadOasis( const QDomElement& sheet, const KoOasisStyles& oasisStyles );
+    virtual bool loadOasis( const QDomElement& sheet, KoOasisLoadingContext& oasisContext );
 
-    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle );
+    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* manifestWriter, int & indexObj, int &partIndexObj );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
 
+    void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
     void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
     void saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker ) const;
     void saveOasisPrintStyleLayout( KoGenStyle &style ) const;
@@ -311,6 +256,7 @@ public:
      * Saves a children
      */
     virtual bool saveChildren( KoStore* _store, const QString &_path );
+    bool saveOasisObjects( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj );
     /**
      * Loads a children
      */
@@ -988,22 +934,12 @@ public:
      */
     void autofill( QRect &src, QRect &dest );
 
-    /**
-     * Deletes a child object. That will cause all views to update
-     * accordingly. Do not use this child object afterwards.
-     *
-     * @ref #insertChild
-     */
-    void deleteChild( Child *_child );
-    /**
-     * @ref #deleteChild
-     */
-    void insertChild( const QRect& _geometry, KoDocumentEntry& );
-    /**
-     * A convenience function around @ref #insertChild.
-     */
-    void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
-    void changeChildGeometry( Child *_child, const QRect& _geometry );
+
+    bool insertChild( const KoRect& _geometry, KoDocumentEntry& );
+
+    bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data );
+    bool insertPicture( const KoRect& _geometry, KURL& _file );
+    void changeChildGeometry( KSpreadChild *_child, const KoRect& _geometry );
 
     const QColorGroup& colorGroup() { return widget()->colorGroup(); }
 
@@ -1219,14 +1155,26 @@ public:
   /** returns a pointer to the dependency manager */
   KSpread::DependencyManager *dependencies ();
 
+  /**
+   * @brief Get the amount of selected objects that belong to this sheet
+             *
+             * @return the amount of select objects in this sheet
+   */
+  int numSelected() const;
+
+//return command when we move object
+//     KCommand *moveObject(KSpreadView *_view, double diffx, double diffy);
+//     KCommand *moveObject(KSpreadView *m_view,const KoPoint &_move,bool key);
+
+
 signals:
     void sig_refreshView();
     void sig_updateView( Sheet *_sheet );
     void sig_updateView( Sheet *_sheet, const Region& );
+    void sig_updateView( KSpreadObject *obj );
     void sig_updateHBorder( Sheet *_sheet );
     void sig_updateVBorder( Sheet *_sheet );
-    void sig_updateChildGeometry( Child *_child );
-    void sig_removeChild( Child *_child );
+    void sig_updateChildGeometry( KSpreadChild *_child );
     void sig_maxColumn( int _max_column );
     void sig_maxRow( int _max_row );
     /**
@@ -1257,7 +1205,7 @@ protected:
      */
     void changeCellTabName( QString const & old_name,QString const & new_name );
 
-    bool loadRowFormat( const QDomElement& row, int &rowIndex, const KoOasisStyles& oasisStyles, bool isLast );
+    bool loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext, bool isLast );
     bool loadColumnFormat(const QDomElement& row, const KoOasisStyles& oasisStyles, int & indexCol );
     bool loadSheetStyleFormat( QDomElement *style );
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
@@ -1275,7 +1223,7 @@ protected:
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
 
-    void insertChild( Child *_child );
+    void insertObject( KSpreadObject *_obj );
 
     /**
      * @see #autofill

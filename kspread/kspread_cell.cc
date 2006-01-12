@@ -5518,7 +5518,7 @@ void Cell::loadOasisConditional( QDomElement * style )
     }
 }
 
-bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles )
+bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisContext )
 {
     QString text;
     kdDebug()<<" table:style-name :"<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
@@ -5526,12 +5526,12 @@ bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyl
     {
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         kdDebug()<<" bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles ) str :"<<str<<endl;
-        QDomElement * style = oasisStyles.styles()[str];
+        QDomElement * style = oasisContext.oasisStyles().styles()[str];
         //kdDebug()<<" style :"<<style<<endl;
         KoStyleStack styleStack;
         styleStack.push( *style );
         styleStack.setTypeProperties( "table-cell" );
-        format()->loadOasisStyleProperties( styleStack, oasisStyles );
+        format()->loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
         loadOasisConditional( style );
     }
     QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
@@ -5766,11 +5766,64 @@ bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyl
         //kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[str].formatStr<<endl;
         //kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[str].prefix<<endl;
         //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[str].suffix<<endl;
-        format()->setPrefix( oasisStyles.dataFormats()[str].prefix );
-        format()->setPostfix( oasisStyles.dataFormats()[str].suffix );
-        format()->setFormatType( Style::formatType( oasisStyles.dataFormats()[str].formatStr ) );
+        format()->setPrefix( oasisContext.oasisStyles().dataFormats()[str].prefix );
+        format()->setPostfix( oasisContext.oasisStyles().dataFormats()[str].suffix );
+        format()->setFormatType( Style::formatType( oasisContext.oasisStyles().dataFormats()[str].formatStr ) );
     }
+
+    QDomElement frame = KoDom::namedItemNS( element, KoXmlNS::draw, "frame" );
+    if ( !frame.isNull() )
+      loadOasisObjects( frame, oasisContext );
+
     return true;
+}
+
+void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& oasisContext )
+{
+    QDomElement e = parent;
+    while( !e.isNull() )
+    {
+        if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
+        {
+          KSpreadObject *obj = 0;
+          QDomNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
+          if ( !object.isNull() )
+          {
+            if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null).isNull() )
+              obj = new ChartChild( sheet()->doc(), sheet() );
+            else
+              obj = new KSpreadChild( sheet()->doc(), sheet() );
+          }
+          else
+          {
+            QDomNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
+            if ( !image.isNull() )
+              obj = new KSpreadPictureObject( sheet(), sheet()->doc()->pictureCollection() );
+            else
+              kdDebug() << "Object type wasn't loaded!" << endl;
+          }
+
+          if ( obj )
+          {
+            obj->loadOasis( e, oasisContext );
+            KoRect geometry = obj->geometry();
+            geometry.setLeft( geometry.left() + sheet()->columnPos( d->column, 0 ) );
+            geometry.setTop( geometry.top() + sheet()->rowPos( d->row, 0 ) );
+
+            QString cell = e.attributeNS( KoXmlNS::table, "end-cell-address", QString::null );
+            cell = cell.mid( cell.find('.') + 1 );
+            Point point( cell );
+            int end_x = KoUnit::parseValue( e.attributeNS( KoXmlNS::table, "end-x", QString::null ) );
+            int end_y = KoUnit::parseValue( e.attributeNS( KoXmlNS::table, "end-y", QString::null ) );
+            geometry.setRight( sheet()->columnPos( point.column(), 0) + end_x );
+            geometry.setBottom( sheet()->rowPos( point.row(), 0) + end_y );
+
+            obj->setGeometry( geometry );
+            sheet()->doc()->insertObject( obj );
+          }
+        }
+        e = e.nextSibling().toElement();
+    }
 }
 
 void Cell::loadOasisValidation( const QString& validationName )

@@ -38,6 +38,29 @@ KoRect KoRect::normalize() const
     return r;
 }
 
+void KoRect::setTopLeft(const KoPoint &topleft)
+{
+    m_tl = topleft;
+}
+
+void KoRect::setBottomRight(const KoPoint &bottomright)
+{
+    m_br = bottomright;
+}
+
+void KoRect::setTopRight(const KoPoint &topright)
+{
+    m_br.rx() = topright.x();
+    m_tl.ry() = topright.y();
+}
+
+void KoRect::setBottomLeft(const KoPoint &bottomleft)
+{
+    m_tl.rx() = bottomleft.x();
+    m_br.ry() = bottomleft.y();
+}
+
+
 KoPoint KoRect::center() const
 {
   return KoPoint((left() + right()) / 2, (top() + bottom()) / 2);

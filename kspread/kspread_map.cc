@@ -186,7 +186,7 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
 }
 
 
-bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
+bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj )
 {
     if ( !m_strPassword.isEmpty() )
     {
@@ -206,7 +206,7 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles )
     QPtrListIterator<Sheet> it( m_lstSheets );
     for( ; it.current(); ++it )
     {
-        it.current()->saveOasis( bodyTmpWriter, mainStyles, valStyle );
+        it.current()->saveOasis( bodyTmpWriter, mainStyles, valStyle, store, manifestWriter, _indexObj, _partIndexObj );
     }
 
     valStyle.writeStyle( xmlWriter );
@@ -257,7 +257,7 @@ QDomElement Map::save( QDomDocument& doc )
   return mymap;
 }
 
-bool Map::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles )
+bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContext )
 {
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
@@ -312,7 +312,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisStyles& oasisStyles )
                     QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString::null );
                     Sheet* sheet = findSheet( name );
                     if( sheet )
-                        sheet->loadOasis( sheetElement , oasisStyles );
+                        sheet->loadOasis( sheetElement , oasisContext );
                 }
             }
         }

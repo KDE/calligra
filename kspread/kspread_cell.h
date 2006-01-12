@@ -50,6 +50,7 @@ class KSParseNode;
 class KoRect;
 class KoPoint;
 class KoOasisStyles;
+class KoOasisLoadingContext;
 
 namespace KSpread
 {
@@ -268,7 +269,8 @@ public:
     bool load( const QDomElement& cell, int _xshift, int _yshift, Paste::Mode pm = Paste::Normal,
                Paste::Operation op = Paste::OverWrite, bool paste = false );
 
-    bool loadOasis( const QDomElement & element, const KoOasisStyles &oasisStyles );
+    bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext );
+    void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
     void loadOasisValidation( const QString& validationName );
 
     QTime toTime(const QDomElement &element);

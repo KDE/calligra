@@ -51,6 +51,8 @@
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 #include <koOasisSettings.h>
+#include <koMainWindow.h>
+#include <KoVariable.h>
 
 #include "kspread_doc.h"
 
@@ -150,6 +152,11 @@ public:
   bool dontCheckTitleCase:1;
     bool configLoadFromFile:1;
   QStringList spellListIgnoreAll;
+  /// list of all objects
+  QPtrList<KSpreadObject> m_embeddedObjects;
+  KoPictureCollection m_pictureCollection;
+  QValueList<KoPictureKey> usedPictures;
+  bool m_savingWholeDocument;
 };
 
 /*****************************************************************************
@@ -446,6 +453,15 @@ void Doc::initConfig()
     else
       m_zoom = 100;
 
+    int undo=30;
+    if(config->hasGroup("Misc" ) )
+    {
+        config->setGroup( "Misc" );
+        undo=config->readNumEntry("UndoRedo",-1);
+    }
+    if(undo!=-1)
+        setUndoRedoLimit(undo);
+
     setZoomAndResolution( m_zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
@@ -495,6 +511,17 @@ int Doc::supportedSpecialFormats() const
 {
     return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
 }
+
+bool Doc::completeSaving( KoStore* _store )
+{
+    if (specialOutputFlag()==SaveAsKOffice1dot1)
+        d->m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, d->usedPictures );
+    else
+        d->m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, d->usedPictures );
+
+    return true;
+}
+
 
 QDomDocument Doc::saveXML()
 {
@@ -637,9 +664,16 @@ bool Doc::loadChildren( KoStore* _store )
 
 bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+  return saveOasisHelper( store, manifestWriter, SaveAll );
+}
 
+bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
+                            QString* plainText, KoPicture* picture )
+{
+    d->m_pictureCollection.assignUniqueIds();
     //Terminate current cell edition, if any
     QPtrListIterator<KoView> it2( views() );
+    d->m_savingWholeDocument = saveFlag == SaveAll ? true : false;
 
     /* don't pull focus away from the editor if this is just a background
        autosave */
@@ -666,7 +700,10 @@ bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:spreadsheet" );
 
-    map()->saveOasis( contentTmpWriter, mainStyles );
+    int indexObj = 1;
+    int partIndexObj = 0;
+
+    map()->saveOasis( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
     styleManager()->saveOasis( mainStyles );
 
     saveOasisAreaName( contentTmpWriter );
@@ -772,6 +809,9 @@ bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->close() ) // done with styles.xml
         return false;
 
+    makeUsedPixmapList();
+    d->m_pictureCollection.saveOasisToStore( store, d->usedPictures, manifestWriter);
+
     if(!store->open("settings.xml"))
         return false;
 
@@ -799,6 +839,47 @@ bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         return false;
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+
+    if ( saveFlag == SaveSelected )
+    {
+      QPtrListIterator<KSpreadObject> it(embeddedObjects() );
+      for( ; it.current(); ++it )
+      {
+        if ( it.current()->getType() != OBJECT_CHART  && it.current()->getType() != OBJECT_KOFFICE_PART )
+          continue;
+        KoDocumentChild *embedded = dynamic_cast<KSpreadChild *>(it.current() )->embeddedObject();
+        KoDocument* childDoc = embedded->document();
+        QString path;
+        if ( !childDoc->isStoredExtern() )
+        {
+          if ( !embedded->saveOasisToStore( store, manifestWriter ) )
+            continue;
+
+                    // see KoDocumentChild
+                    //assert( childDoc->url().protocol() == INTERNAL_PROTOCOL );
+          path = store->currentDirectory();
+          if ( !path.isEmpty() )
+            path += '/';
+          path += childDoc->url().path();
+          if ( path.startsWith( "/" ) )
+            path = path.mid( 1 ); // remove leading '/', no wanted in manifest
+        }
+        else
+        {
+          kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
+          path = childDoc->url().url();
+        }
+                // OOo uses a trailing slash for the path to embedded objects (== directories)
+        if ( !path.endsWith( "/" ) )
+          path += '/';
+        QCString mimetype = childDoc->nativeOasisMimeType();
+        if ( mimetype.isEmpty() )
+          mimetype = childDoc->nativeFormatMimeType();
+        manifestWriter->addManifestEntry( path, mimetype );
+      }
+    }
+
 
     setModified( false );
 
@@ -902,7 +983,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     delete stylesWriter;;
 }
 
-bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
+bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store)
 {
     if ( !d->m_loadingInfo )
         d->m_loadingInfo = new KSPLoadingInfo;
@@ -941,6 +1022,9 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
         deleteLoadingInfo();
         return false;
     }
+
+    KoOasisLoadingContext context( this, oasisStyles, store );
+
     //load in first
     styleManager()->loadOasisStyleTemplate( oasisStyles );
 
@@ -949,7 +1033,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     loadOasisCellValidation( body );
 
     // all <sheet:sheet> goes to workbook
-    if ( !map()->loadOasis( body, oasisStyles ) )
+    if ( !map()->loadOasis( body, context ) )
     {
         d->isLoading = false;
         deleteLoadingInfo();
@@ -1625,13 +1709,13 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
     matrix = painter.worldMatrix();
   }
 
-  QPtrListIterator<KoDocumentChild> it( children() );
-  for( ; it.current(); ++it ) {
-    // if ( ((Child*)it.current())->sheet() == sheet &&
-    //    !m_pView->hasDocumentInWindow( it.current()->document() ) )
-    if ( ((Child*)it.current())->sheet() == sheet)
-      rgn -= it.current()->region( matrix );
-  }
+//   QPtrListIterator<KoDocumentChild> it( children() );
+//   for( ; it.current(); ++it ) {
+//     // if ( ((Child*)it.current())->sheet() == sheet &&
+//     //    !m_pView->hasDocumentInWindow( it.current()->document() ) )
+//     if ( ((Child*)it.current())->sheet() == sheet)
+//       rgn -= it.current()->region( matrix );
+//   }
   painter.setClipRegion( rgn );
 
   QPen pen;
@@ -2275,6 +2359,105 @@ bool Doc::configLoadFromFile() const
     return d->configLoadFromFile;
 }
 
+
+void Doc::insertObject( KSpreadObject * obj )
+{
+  switch ( obj->getType() )
+  {
+    case OBJECT_KOFFICE_PART: case OBJECT_CHART:
+    {
+      KoDocument::insertChild( dynamic_cast<KSpreadChild*>(obj)->embeddedObject() );
+      break;
+    }
+    default:
+      ;
+  }
+  d->m_embeddedObjects.append( obj );
+}
+
+QPtrList<KSpreadObject>& Doc::embeddedObjects()
+{
+    return d->m_embeddedObjects;
+}
+
+KoPictureCollection *Doc::pictureCollection()
+{
+  return &d->m_pictureCollection;
+}
+
+void Doc::repaint( bool erase )
+{
+  QPtrListIterator<KoView> it( views() );
+  for( ; it.current(); ++it )
+  {
+    Canvas* canvas = ((View*)it.current())->canvasWidget();
+    canvas->repaint( erase );
+  }
+}
+
+void Doc::repaint( const QRect& rect )
+{
+  QRect r;
+  QPtrListIterator<KoView> it( views() );
+  for( ; it.current(); ++it )
+  {
+    r = rect;
+    Canvas* canvas = ((View*)it.current())->canvasWidget();
+    r.moveTopLeft( QPoint( r.x() - canvas->xOffset(),
+                   r.y() - canvas->yOffset() ) );
+    canvas->update( r );
+  }
+}
+
+void Doc::repaint( KSpreadObject *obj )
+{
+  QPtrListIterator<KoView> it( views() );
+  for( ; it.current(); ++it )
+  {
+    Canvas* canvas = ((View*)it.current())->canvasWidget();
+    if ( obj->sheet() == canvas->activeSheet() )
+        canvas->_repaint( obj );
+  }
+}
+
+void Doc::addShell( KoMainWindow *shell )
+{
+  connect( shell, SIGNAL( documentSaved() ), d->commandHistory, SLOT( documentSaved() ) );
+  KoDocument::addShell( shell );
+}
+
+int Doc::undoRedoLimit() const
+{
+  return d->commandHistory->undoLimit();
+}
+
+void Doc::setUndoRedoLimit(int val)
+{
+  d->commandHistory->setUndoLimit(val);
+  d->commandHistory->setRedoLimit(val);
+}
+
+void Doc::insertPixmapKey( KoPictureKey key )
+{
+    if ( !d->usedPictures.contains( key ) )
+        d->usedPictures.append( key );
+}
+
+void Doc::makeUsedPixmapList()
+{
+    d->usedPictures.clear();
+    QPtrListIterator<KSpreadObject> it( d->m_embeddedObjects );
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->getType() == OBJECT_PICTURE && ( d->m_savingWholeDocument || it.current()->isSelected() ) )
+            insertPixmapKey( static_cast<KSpreadPictureObject*>( it.current() )->getKey() );
+    }
+}
+
+bool Doc::savingWholeDocument()
+{
+    return d->m_savingWholeDocument;
+}
 
 #include "kspread_doc.moc"
 

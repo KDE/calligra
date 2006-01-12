@@ -74,6 +74,7 @@ class CellEditor;
 class LocationEditWidget;
 class ComboboxLocationEditWidget;
 class HighlightRange;
+class KSpreadObject;
 
 
 /**
@@ -279,12 +280,29 @@ public:
     */
     void resizeHighlightedRange(KSpread::HighlightRange* range, const QRect& newArea);
 
+    KSpreadObject *getObject( const QPoint &pos, Sheet *_sheet );
+    void selectAllObj();
+    void deSelectAllObj();
+    void selectObj( KSpreadObject* );
+    void deSelectObj( KSpreadObject* );
+    void setMouseSelectedObject(bool b);
+    bool isObjectSelected();
+
+    void _repaint( KSpreadObject *obj );
+
+    void copyOasisObjs();
+    //void insertOasisData();
+
 public slots:
     void slotScrollVert( int _value );
     void slotScrollHorz( int _value );
 
     void slotMaxColumn( int _max_column );
     void slotMaxRow( int _max_row );
+
+signals:
+    void objectSelectedChanged();
+    void objectSizeChanged();
 
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );
@@ -375,6 +393,11 @@ private:
 
 
 private:
+
+  void moveObject( int x, int y, bool key );
+
+  //---- stuff needed for resizing objects----
+  KoRect calculateNewGeometry( ModifyType _modType, int _x, int _y );
 
   void startTheDrag();
   void paintSelectionChange(QRect area1, QRect area2);

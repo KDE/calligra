@@ -75,6 +75,9 @@ private:
   QCheckBox * pPrintGrid;
   QCheckBox * pPrintCommentIndicator;
   QCheckBox * pPrintFormulaIndicator;
+  QCheckBox * pPrintObjects;
+  QCheckBox * pPrintCharts;
+  QCheckBox * pPrintGraphics;
   QLineEdit * ePrintRange;
   QLineEdit * eRepeatCols;
   QLineEdit * eRepeatRows;
