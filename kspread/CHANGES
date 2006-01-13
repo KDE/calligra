@@ -1,24 +1,57 @@
-since 1.4.2
-===========
-- Implement custom sheet selection and ordering in print dialog
-- Fix format changes of automerged cells (#115948)
-- Fix zoomed printouts (#115879)
-- Fix indentation setting in preferences (#116903)
-- Fix unit setting in preferences (#116901)
-- Move Comment Indicator setting from KSpread preferences to Sheet properties (#114693)
-- Prevent hiding all rows/columns (#483630)
-- Add a lot of QWhatsThis help to various dialogs
-- Handbook update for some dialogs
-- Implement move sheets
-- Fix date (and time) increment for autofill (#117252)
-- Always allow date input in ISO 8601 format, regardless of local settings (#50192)
-- Fix cell protection (#116444)
-- Fix freeze with certain spreadsheet content (#116702)
-- Implement manual line wrap (#9881)
+Changes for KSpread 1.5 Beta 1
+==============================
 
-Some important developer visible changes:
-- Decouple KSpread::Cell and KSpread::Format (association instead of inheritance)
-- Provide setter and getter methods for KSpread::Point
+Features
+--------
+Non-contiguous selection
+Rewritten dependency handling
+Embedded picture/image inside workbook
+Improved and faster formula calculation
+Manual line break (wish #9881)
+Syntax highlight and function autocomplete for formula editing 
+Custom sheet selection and ordering in print dialog
+
+Enhancements
+------------
+QWhatsThis help is available to various dialogs
+Updated dialog screenshot in the handbook
+Default autofill increment is set to 1 if only one cell is selected
+Sum button automatically selects a suitable cell range 	
+Percent operator in formula (wish #101217)
+Improved zoomed printouts (bug #115879)
+Use standard KDE font dialog in cell format dialog (bug #116991)
+Faster redraw of merged cells (bug #118248)
+
+Bug Fixes
+---------
+#119675: Background brush color is not correctly loaded
+#119097: Right arrow for entry and validation
+#118769: Better wording cursor movement setting
+#117435: Incorrect result from COUNTIF function
+#117252: Fix date (and time) increment for autofill
+#116903: Indentation setting is not correctly handled in preferences
+#116901: Unclear unit setting in preferences 
+#116702: Fix freeze with certain spreadsheet content
+#116546: Endless dependency calculation
+#116444: Fix cell protection
+#116236: Crash on OpenDocument with external file cell references
+#116144: Incorrect return value of ISBLANK function
+#115948: Formatting problem in automerged cells
+#115362: Crash when spellchecking
+#114693: Comment indicator in sheet properties dialog
+#114961: Enter does not move cursor
+#114635: Endless loop while loading
+ #50192: Always allow date input in ISO 8601 format
+
+??#483630: Prevent hiding all rows/columns
+
+Developer-Visible Only
+----------------------
+Manipulators used in commands
+KSpread::Cell is associated with KSpread::Format, no longer inherits it
+Setter and getter methods for KSpread::Point
+
+
 
 since 1.4.1
 ===========
