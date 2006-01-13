@@ -12,19 +12,50 @@ Splitting KOffice into packages:
    package selections.
 
 
+Database drivers
+----------------
+
+Kexi provides database drivers for MySQL and PostgreSQL.  We suggest
+putting each driver in a separate package, and that installation of
+these packages be optional.  Each driver package may then depend on
+the corresponding 'native' libraries: libmysqlclient for MySQL; and
+libpq and libpqxx for PostgreSQL.
+
+Thus, the MySQL package could contain:
+ lib/kde3/kexidb_mysqldriver.so
+ lib/kde3/kexidb_mysqldriver.la
+ lib/kde3/keximigrate_mysql.so
+ lib/kde3/keximigrate_mysql.la
+ share/services/kexidb_mysqldriver.desktop
+ share/services/keximigrate_mysql.desktop
+
+The PostgreSQL driver consists of the following files:
+ lib/kde3/kexidb_pqxxsqldriver.so
+ lib/kde3/kexidb_pqxxsqldriver.la
+ lib/kde3/keximigrate_pqxx.so
+ lib/kde3/keximigrate_pqxx.la
+ share/services/kexidb_pqxxsqldriver.desktop
+ share/services/keximigrate_pqxx.desktop
+
+
 Development files
 -----------------
 
-* Kexi development files
+* KexiDB development files
 Location: koffice/kexi/kexiutils, koffice/kexi/kexidb, koffice/kexi/migration
 
-Kexi installs some development headers which are required for building
-external plugins, such as the MS Access import plugin described below.
+KexiDB, the database abstraction library used in Kexi, installs some
+development files which are required for building external plugins,
+such as the MS Access import plugin described below.
 
-We recommend providing Kexi development headers in a separate
-package. Note that all headers from the above directories are
-installed under:
-  ${prefix}/include/kexidb
+We recommend providing KexiDB development files in a separate package.
+The files are:
+  include/kexidb/*.h
+  include/kexiutils/*.h
+  lib/libkexidb.la
+  lib/libkexidb.so
+  lib/libkexidbparser.so
+  lib/libkexidbparser.la
 
 The installation can be tested by building the MS Access import plugin
 as described in the Microsoft Access import plugin section below.
@@ -59,15 +90,15 @@ Build time dependencies:
 
 Run time dependencies:
   Kross detects which of these libraries is installed dynamically, at
-  run-time.  Therefore, KOffice packages should not have any run-time
+  run-time.  Therefore, KOffice packages need not have any run-time
   dependencies on any scripting interpreter.
 
 The scripting language plugins can be found in:
   koffice/lib/kross/python; and
   koffice/lib/kross/ruby.
 They install as:
-  ${prefix}/lib/kde3/krosspython.{la,so}; and
-  ${prefix}/lib/kde3/krossruby.{la,so}
+  lib/kde3/krosspython.{la,so}; and
+  lib/kde3/krossruby.{la,so}
 
 It is recommended to put each interpreter plugin into a separate
 package, and the user decide if they would like support for each
@@ -110,7 +141,8 @@ ftp://ftp.kde.org/pub/kde/stable/apps/KDE3.x/database/keximdb-1.0.tar.gz
 
 Alternatively, it can be found in the KDE Subversion repository.  It
 can be build as follows:
-  svn svn://svn.kde.org/home/kde/branches/work/keximdb/1.0/keximdb
+  svn export svn://anonsvn.kde.org/home/kde/branches/work/keximdb/koffice-1.5/keximdb keximdb-1.0
+  cd keximdb-1.0
   make -f Makefile.cvs
   ./configure --enable-debug=full
   make
