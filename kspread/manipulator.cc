@@ -777,9 +777,11 @@ void FormatManipulator::prepareCell(Cell* cell)
 ****************************************************************************/
 
 MergeManipulator::MergeManipulator()
-  : Manipulator()
+  : Manipulator(),
+    m_merge(true),
+    m_mergeHorizontal(false),
+    m_mergeVertical(false)
 {
-  m_merge = true;
 }
 
 MergeManipulator::~MergeManipulator()
@@ -801,25 +803,53 @@ bool MergeManipulator::process(Element* element)
   }
 
   QRect range = element->rect().normalize();
+  int left   = range.left();
+  int right  = range.right();
+  int top    = range.top();
+  int bottom = range.bottom();
+  int height = range.height();
+  int width  = range.width();
 
   bool doMerge = m_reverse ? (!m_merge) : m_merge;
-  
+
   if (doMerge)
   {
-    Cell *cell = m_sheet->nonDefaultCell( range.topLeft() );
-    cell->mergeCells( range.topLeft().x(), range.topLeft().y(),
-		      range.width() - 1, range.height() - 1);
+    if (m_mergeHorizontal)
+    {
+      for (int row = top; row <= bottom; ++row)
+      {
+        Cell *cell = m_sheet->nonDefaultCell( left, row );
+        cell->mergeCells( left, row, width - 1, 0 );
+      }
+    }
+    else if (m_mergeVertical)
+    {
+      for (int col = left; col <= right; ++col)
+      {
+        Cell *cell = m_sheet->nonDefaultCell( col, top );
+        cell->mergeCells( col, top, 0, height - 1);
+      }
+    }
+    else
+    {
+      Cell *cell = m_sheet->nonDefaultCell( left, top );
+      cell->mergeCells( left, top, width - 1, height - 1);
+    }
   }
   else
   {
-    QPoint marker(range.topLeft());
-    Cell *cell = m_sheet->nonDefaultCell( marker );
-    if(!cell->doesMergeCells())
+    for (int col = left; col <= right; ++col)
     {
-      return true;
+      for (int row = top; row <= bottom; ++row)
+      {
+        Cell *cell = m_sheet->cellAt( col, row );
+        if (!cell->doesMergeCells())
+        {
+          continue;
+        }
+        cell->mergeCells( col, row, 0, 0 );
+      }
     }
-
-    cell->mergeCells( marker.x() ,marker.y(), 0, 0 );
   }
 
   return true;

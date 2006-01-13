@@ -5817,8 +5817,8 @@ void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& o
             QString cell = e.attributeNS( KoXmlNS::table, "end-cell-address", QString::null );
             cell = cell.mid( cell.find('.') + 1 );
             Point point( cell );
-            int end_x = KoUnit::parseValue( e.attributeNS( KoXmlNS::table, "end-x", QString::null ) );
-            int end_y = KoUnit::parseValue( e.attributeNS( KoXmlNS::table, "end-y", QString::null ) );
+            int end_x = (int) KoUnit::parseValue( e.attributeNS( KoXmlNS::table, "end-x", QString::null ) );
+            int end_y = (int) KoUnit::parseValue( e.attributeNS( KoXmlNS::table, "end-y", QString::null ) );
             geometry.setRight( sheet()->columnPos( point.column(), 0) + end_x );
             geometry.setBottom( sheet()->rowPos( point.row(), 0) + end_y );
 

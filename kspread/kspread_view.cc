@@ -2680,15 +2680,15 @@ void View::updateEditWidgetOnPress()
     Cell* cell = d->activeSheet->cellAt( column, row );
     if ( !cell )
     {
-        editWidget()->setText( "" );
+        d->editWidget->setText( "" );
         return;
     }
     if ( d->activeSheet->isProtected() && cell->format()->isHideFormula( column, row ) )
-        editWidget()->setText( cell->strOutText() );
+        d->editWidget->setText( cell->strOutText() );
     else if ( d->activeSheet->isProtected() && cell->format()->isHideAll( column, row ) )
-        editWidget()->setText( "" );
+        d->editWidget->setText( "" );
     else
-        editWidget()->setText( cell->text() );
+        d->editWidget->setText( cell->text() );
 
     d->updateButton(cell, column, row);
     d->adjustActions( d->activeSheet, cell );
@@ -2712,25 +2712,25 @@ void View::updateEditWidget()
 
     if ( !cell )
     {
-        editWidget()->setText( "" );
+        d->editWidget->setText( "" );
         if ( d->activeSheet->isProtected() )
-          editWidget()->setEnabled( false );
+          d->editWidget->setEnabled( false );
         else
-          editWidget()->setEnabled( true );
+          d->editWidget->setEnabled( true );
         return;
     }
 
     if ( d->activeSheet->isProtected() && cell->format()->isHideFormula( column, row ) )
-        editWidget()->setText( cell->strOutText() );
+        d->editWidget->setText( cell->strOutText() );
     else if ( d->activeSheet->isProtected() && cell->format()->isHideAll( column, row ) )
-        editWidget()->setText( "" );
+        d->editWidget->setText( "" );
     else
-        editWidget()->setText( cell->text() );
+        d->editWidget->setText( cell->text() );
 
     if ( d->activeSheet->isProtected() && !cell->format()->notProtected( column, row ) )
-      editWidget()->setEnabled( false );
+      d->editWidget->setEnabled( false );
     else
-      editWidget()->setEnabled( true );
+      d->editWidget->setEnabled( true );
 
     if ( d->canvas->editor() )
     {
@@ -3263,7 +3263,7 @@ void View::slotSpecialChar( QChar c, const QString & _font )
     {
       cell->format()->setTextFontFamily( _font );
     }
-    EditWidget * edit = d->canvas->editWidget();
+    EditWidget * edit = d->editWidget;
     QKeyEvent ev( QEvent::KeyPress, 0, 0, 0, QString( c ) );
     QApplication::sendEvent( edit, &ev );
   }
@@ -4155,18 +4155,18 @@ void View::mergeCell()
 
 void View::mergeCellHorizontal()
 {
-//   // sanity check
-//   if( !d->activeSheet )
-//     return;
-//   d->activeSheet->mergeCells(*selectionInfo());
+  // sanity check
+  if( !d->activeSheet )
+    return;
+  d->activeSheet->mergeCells(*selectionInfo(), true);
 }
 
 void View::mergeCellVertical()
 {
-//   // sanity check
-//   if( !d->activeSheet )
-//     return;
-//   d->activeSheet->mergeCells(*selectionInfo());
+  // sanity check
+  if( !d->activeSheet )
+    return;
+  d->activeSheet->mergeCells(*selectionInfo(), false, true);
 }
 
 void View::dissociateCell()
@@ -4555,9 +4555,9 @@ void View::replace()
     Cell *cell = activeSheet()->cellAt( canvasWidget()->markerColumn(),
                                                canvasWidget()->markerRow() );
     if ( cell->text() != 0L )
-        editWidget()->setText( cell->text() );
+        d->editWidget->setText( cell->text() );
     else
-        editWidget()->setText( "" );
+        d->editWidget->setText( "" );
 #endif
 }
 
@@ -4651,7 +4651,7 @@ void View::removeHyperlink()
     command->execute();
 
   canvasWidget()->setFocus();
-  editWidget()->setText( cell->text() );
+  d->editWidget->setText( cell->text() );
 }
 
 void View::insertHyperlink()
@@ -4683,7 +4683,7 @@ void View::insertHyperlink()
 
         //refresh editWidget
       canvasWidget()->setFocus();
-      editWidget()->setText( cell->text() );
+      d->editWidget->setText( cell->text() );
     }
     delete dlg;
 }
@@ -5258,7 +5258,7 @@ void View::keyPressEvent ( QKeyEvent* _ev )
     QApplication::sendEvent( d->canvas, _ev );
 }
 
-KoDocument * View::hitTest( const QPoint &pos )
+KoDocument * View::hitTest( const QPoint& /*pos*/ )
 {
 //     // Code copied from KoView::hitTest
 //     KoViewChild *viewChild;
@@ -5350,7 +5350,7 @@ void View::refreshView()
   d->tabBar->setReadOnly( !doc()->isReadWrite() );
 
   d->toolWidget->setShown( doc()->showFormulaBar() );
-  editWidget()->showEditWidget( doc()->showFormulaBar() );
+  d->editWidget->showEditWidget( doc()->showFormulaBar() );
   d->hBorderWidget->setShown( doc()->showColumnHeader() );
   d->vBorderWidget->setShown( doc()->showRowHeader() );
   d->vertScrollBar->setShown( doc()->showVerticalScrollBar() );
@@ -5392,7 +5392,7 @@ void View::resizeEvent( QResizeEvent * )
   refreshView();
 }
 
-void View::popupChildMenu( KoChild* child, const QPoint& global_pos )
+void View::popupChildMenu( KoChild* child, const QPoint& /*global_pos*/ )
 {
     if ( !child )
   return;
@@ -5724,7 +5724,7 @@ void View::slotItemSelected( int id )
   }
 
   cell->setCellText( tmp );
-  editWidget()->setText( tmp );
+  d->editWidget->setText( tmp );
 
   doc()->emitEndOperation( QRect( x, y, 1, 1 ) );
 }
@@ -5866,7 +5866,7 @@ void View::slotActivateTool( int _id )
       activeSheet()->setWordSpelling( selectionInfo(), text);
 
       Cell *cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
-      editWidget()->setText( cell->text() );
+      d->editWidget->setText( cell->text() );
 
       doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
@@ -6915,7 +6915,7 @@ void View::transformPart()
     }
 }
 
-void View::slotChildSelected( KoDocumentChild* ch )
+void View::slotChildSelected( KoDocumentChild* /*ch*/ )
 {
 //   if ( d->activeSheet && !d->activeSheet->isProtected() )
 //   {

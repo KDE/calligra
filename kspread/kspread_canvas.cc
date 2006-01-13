@@ -93,7 +93,6 @@ using namespace KSpread;
 class Canvas::Private
 {
   public:
-
     ComboboxLocationEditWidget *posWidget;
     KSpread::EditWidget *editWidget;
     KSpread::CellEditor *cellEditor;
@@ -245,6 +244,7 @@ Canvas::Canvas (View *_view)
 
   setMouseTracking( true );
   d->mousePressed = false;
+  d->mouseSelectedObject = false;
   d->drawContour = false;
   d->modType = MT_NONE;
 
@@ -1863,7 +1863,7 @@ void Canvas::focusInEvent( QFocusEvent* )
   // This screws up <Tab> though (David)
   if ( lastEditorWithFocus() == EditWidget )
   {
-    d->view->editWidget()->setFocus();
+    d->editWidget->setFocus();
     //kdDebug(36001) << "Focus to EditWidget" << endl;
     return;
   }
@@ -2498,7 +2498,7 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
   }
 
   activeSheet()->clearTextSelection( selectionInfo() );
-  d->view->editWidget()->setText( "" );
+  d->editWidget->setText( "" );
 
   QPoint cursor = cursorPos();
 
@@ -2508,10 +2508,10 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
 
 void Canvas::processF2Key(QKeyEvent* /* event */)
 {
-  d->view->editWidget()->setFocus();
+  d->editWidget->setFocus();
   if ( d->cellEditor )
-    d->view->editWidget()->setCursorPosition( d->cellEditor->cursorPosition() - 1 );
-  d->view->editWidget()->cursorForward( false );
+    d->editWidget->setCursorPosition( d->cellEditor->cursorPosition() - 1 );
+  d->editWidget->cursorForward( false );
 
 
   QPoint cursor = cursorPos();
@@ -2527,8 +2527,8 @@ void Canvas::processF4Key(QKeyEvent* event)
   if ( d->cellEditor )
   {
     d->cellEditor->handleKeyPressEvent( event );
-//    d->view->editWidget()->setFocus();
-    d->view->editWidget()->setCursorPosition( d->cellEditor->cursorPosition() );
+//    d->editWidget->setFocus();
+    d->editWidget->setCursorPosition( d->cellEditor->cursorPosition() );
   }
   QPoint cursor = cursorPos();
 

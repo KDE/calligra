@@ -421,7 +421,8 @@ public:
   MergeManipulator();
   virtual ~MergeManipulator();
 
-  virtual void setArgument(const QString&, const QString&) {};
+  void setHorizontalMerge(bool state) { m_mergeHorizontal = state; }
+  void setVerticalMerge(bool state) { m_mergeVertical = state; }
 
 protected:
   virtual bool process(Element*);
@@ -433,6 +434,8 @@ protected:
 
   bool m_merge;
 private:
+  bool m_mergeHorizontal : 1;
+  bool m_mergeVertical   : 1;
 };
 
 

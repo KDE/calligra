@@ -739,7 +739,12 @@ public:
     // TODO Stefan: remove after kspread_undo.cc|h and commands.cc|h are obsolete
     void changeMergedCell( int /*m_iCol*/, int /*m_iRow*/, int /*m_iExtraX*/, int /*m_iExtraY*/) {}
 
-    void mergeCells( const Region& region );
+    /**
+     * @param region the region to merge
+     * @param hor merge horizontally
+     * @param ver merge vertically
+     */
+    void mergeCells( const Region& region, bool hor = false, bool ver = false );
     void dissociateCells( const Region &region );
 
     void increaseIndent( Selection* selectionInfo );

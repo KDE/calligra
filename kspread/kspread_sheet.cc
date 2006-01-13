@@ -5598,7 +5598,7 @@ void Sheet::refreshView( const Region& region )
 }
 
 
-void Sheet::mergeCells(const Region& region)
+void Sheet::mergeCells(const Region& region, bool hor, bool ver)
 {
   // sanity check
   if( isProtected() )
@@ -5606,8 +5606,10 @@ void Sheet::mergeCells(const Region& region)
   if( workbook()->isProtected() )
     return;
 
-  Manipulator* manipulator = new MergeManipulator();
+  MergeManipulator* manipulator = new MergeManipulator();
   manipulator->setSheet(this);
+  manipulator->setHorizontalMerge(hor);
+  manipulator->setVerticalMerge(ver);
   manipulator->add(region);
   manipulator->execute();
 }
