@@ -818,6 +818,14 @@ bool MergeManipulator::process(Element* element)
     {
       for (int row = top; row <= bottom; ++row)
       {
+        for (int col = left; col <= right; ++col)
+        {
+          Cell *cell = m_sheet->cellAt( col, row );
+          if (cell->doesMergeCells())
+          {
+            cell->mergeCells( col, row, 0, 0 );
+          }
+        }
         Cell *cell = m_sheet->nonDefaultCell( left, row );
         cell->mergeCells( left, row, width - 1, 0 );
       }
@@ -826,12 +834,31 @@ bool MergeManipulator::process(Element* element)
     {
       for (int col = left; col <= right; ++col)
       {
+        for (int row = top; row <= bottom; ++row)
+        {
+          Cell *cell = m_sheet->cellAt( col, row );
+          if (cell->doesMergeCells())
+          {
+            cell->mergeCells( col, row, 0, 0 );
+          }
+        }
         Cell *cell = m_sheet->nonDefaultCell( col, top );
         cell->mergeCells( col, top, 0, height - 1);
       }
     }
     else
     {
+      for (int col = left; col <= right; ++col)
+      {
+        for (int row = top; row <= bottom; ++row)
+        {
+          Cell *cell = m_sheet->cellAt( col, row );
+          if (cell->doesMergeCells())
+          {
+            cell->mergeCells( col, row, 0, 0 );
+          }
+        }
+      }
       Cell *cell = m_sheet->nonDefaultCell( left, top );
       cell->mergeCells( left, top, width - 1, height - 1);
     }
@@ -857,13 +884,17 @@ bool MergeManipulator::process(Element* element)
 
 QString MergeManipulator::name() const
 {
-  if (Region::name().isEmpty())
+  if (m_mergeHorizontal)
   {
-    return i18n("Merge Cells");
+    return i18n("Merge Cells Horizontally");
+  }
+  else if (m_mergeVertical)
+  {
+    return i18n("Merge Cells Vertically");
   }
   else
   {
-    return i18n("Merge Cells %1").arg(Region::name());
+    return i18n("Merge Cells");
   }
 }
 

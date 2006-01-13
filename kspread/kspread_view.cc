@@ -676,19 +676,19 @@ void View::Private::initActions()
 
   actions->mergeCell = new KAction( i18n("Merge Cells"),"mergecell",
       0, view, SLOT( mergeCell() ), ac, "mergecell" );
-  actions->mergeCell->setToolTip(i18n("Merge the selected region into one large cell."));
+  actions->mergeCell->setToolTip(i18n("Merge the selected region."));
 
   actions->mergeCellHorizontal = new KAction( i18n("Merge Cells Horizontally"),"mergecell-horizontal",
       0, view, SLOT( mergeCellHorizontal() ), ac, "mergecellHorizontal" );
-  actions->mergeCell->setToolTip(i18n("Merge the selected region horizontally."));
+  actions->mergeCellHorizontal->setToolTip(i18n("Merge the selected region horizontally."));
 
   actions->mergeCellVertical = new KAction( i18n("Merge Cells Vertically"),"mergecell-vertical",
       0, view, SLOT( mergeCellVertical() ), ac, "mergecellVertical" );
-  actions->mergeCell->setToolTip(i18n("Merge the selected region vertically."));
+  actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically."));
 
   actions->dissociateCell = new KAction( i18n("Dissociate Cells"),"dissociatecell",
       0, view, SLOT( dissociateCell() ), ac, "dissociatecell" );
-  actions->dissociateCell->setToolTip(i18n("Unmerge the current cell."));
+  actions->dissociateCell->setToolTip(i18n("Unmerge the selected region."));
 
   actions->clearText = new KAction( i18n("Text"),
       0, view, SLOT( clearTextSelection() ), ac, "cleartext" );
