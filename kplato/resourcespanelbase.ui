@@ -10,8 +10,14 @@
             <x>0</x>
             <y>0</y>
             <width>510</width>
-            <height>373</height>
+            <height>227</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>500</width>
+            <height>200</height>
+        </size>
     </property>
     <property name="caption">
         <string>ResourcesPanelBase</string>
