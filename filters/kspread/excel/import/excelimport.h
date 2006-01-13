@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,8 @@
 #include <koFilter.h>
 #include <KoStore.h>
 
+#include <qcstring.h>
+
 class ExcelImport : public KoFilter {
 
     Q_OBJECT
@@ -30,9 +32,14 @@ class ExcelImport : public KoFilter {
 public:
 
     ExcelImport ( QObject *parent, const char* name, const QStringList& );
-    virtual ~ExcelImport() {}
+    virtual ~ExcelImport();
 
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+
+private:
+  class Private;
+  Private* d;
+
 };
 
 #endif // EXCELIMPORT_H

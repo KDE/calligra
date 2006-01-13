@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
@@ -27,17 +27,19 @@
 #include <excelimport.h>
 #include <excelimport.moc>
 
-#include <qcolor.h>
-#include <qdatetime.h>
-#include <qdom.h>
+#include <qbuffer.h>
+#include <qcstring.h>
+#include <qfile.h>
 #include <qstring.h>
+#include <qtextstream.h>
 
 #include <kdebug.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
 #include <koUnit.h>
 #include <kgenericfactory.h>
-#include <kmessagebox.h>
+
+#include <KoXmlWriter.h>
 
 #include "swinder.h"
 #include <iostream>
@@ -53,752 +55,503 @@ inline QConstString string( const Swinder::UString& str ) {
    return QConstString( reinterpret_cast<const QChar*>( str.data() ), str.length() );
 }
 
+using namespace Swinder;
+
+class ExcelImport::Private
+{
+public:
+  QString inputFile;
+  QString outputFile;
+
+  Workbook *workbook;  
+
+  QByteArray createManifest();
+  QByteArray createStyles();
+  QByteArray createContent();
+  
+  int sheetFormatIndex;
+  int columnFormatIndex;
+  int rowFormatIndex;
+  int cellFormatIndex;
+  
+  void processWorkbookForBody( Workbook* workbook, KoXmlWriter* xmlWriter );
+  void processWorkbookForStyle( Workbook* workbook, KoXmlWriter* xmlWriter );
+  void processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWriter );
+  void processSheetForStyle( Sheet* sheet, KoXmlWriter* xmlWriter );
+  void processColumnForBody( Column* column, KoXmlWriter* xmlWriter );
+  void processColumnForStyle( Column* column, KoXmlWriter* xmlWriter );
+  void processRowForBody( Row* row, KoXmlWriter* xmlWriter );
+  void processRowForStyle( Row* row, KoXmlWriter* xmlWriter );
+  void processCellForBody( Cell* cell, KoXmlWriter* xmlWriter );
+  void processCellForStyle( Cell* cell, KoXmlWriter* xmlWriter );
+};
+
+
 ExcelImport::ExcelImport ( QObject*, const char*, const QStringList& )
     : KoFilter()
 {
+  d = new Private;
 }
 
-// convert from RGB values to "#rrggbb"
-static QString convertColor( const Swinder::Color& color )
+ExcelImport::~ExcelImport()
 {
-  return QColor( color.red, color.green, color.blue ).name();
+  delete d;
 }
-
-// convert brush styles from Swinder values to KSpread values
-static QString convertBrushStyle( unsigned pattern )
-{
-  switch( pattern )
-  {
-    case Swinder::FormatBackground::EmptyPattern: return "0";
-    case Swinder::FormatBackground::SolidPattern: return "0"; // Solid pattern is not supported by the GUI of kspread, use empty pattern instead
-    case Swinder::FormatBackground::Dense1Pattern: return "2";
-    case Swinder::FormatBackground::Dense2Pattern: return "3";
-    case Swinder::FormatBackground::Dense3Pattern: return "4";
-    case Swinder::FormatBackground::Dense4Pattern: return "5";
-    case Swinder::FormatBackground::Dense5Pattern: return "6";
-    case Swinder::FormatBackground::Dense6Pattern: return "7";
-    case Swinder::FormatBackground::Dense7Pattern: return "8";
-    case Swinder::FormatBackground::HorPattern: return "9";
-    case Swinder::FormatBackground::VerPattern: return "10";
-    case Swinder::FormatBackground::CrossPattern: return "11";
-    case Swinder::FormatBackground::BDiagPattern: return "12";
-    case Swinder::FormatBackground::FDiagPattern: return "13";
-    case Swinder::FormatBackground::DiagCrossPattern: return "14";
-    default: return "0";
-  }
-}
-
-static QDomElement convertPen( QDomDocument& doc, const Swinder::Pen& pen )
-{
-  QDomElement penElement = doc.createElement( "pen" );
-
-  unsigned style = 0;
-  switch( pen.style )
-  {
-    case Swinder::Pen::NoLine:         style = 0; break;
-    case Swinder::Pen::SolidLine:      style = 1; break;
-    case Swinder::Pen::DashLine:       style = 2; break;
-    case Swinder::Pen::DotLine:        style = 3; break;
-    case Swinder::Pen::DashDotLine:    style = 4; break;
-    case Swinder::Pen::DashDotDotLine: style = 5; break;
-    default: style = 1; break; // fallback, solid line
-  }
-
-  penElement.setAttribute( "style", style );
-  penElement.setAttribute( "width", pen.width );
-  penElement.setAttribute( "color", convertColor( pen.color ) );
-
-  return penElement;
-}
-
-static QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& format )
-{
-  QDomElement e = doc.createElement( "format" );
-  
-  // value format
-    
-  // NOTE this is not The Right Thing, we need to parse&compile the format string
-  // this hack only works for built-in common formats, not customized ones
-  QString vf = string( format.valueFormat()).string();
-  if( vf == "General" )
-    ;
-  else if( vf == "0" )
-    e.setAttribute("precision", "0");
-  else if( vf == "0.0" )
-    e.setAttribute("precision", "1");
-  else if( vf == "0.00" )
-    e.setAttribute("precision", "2");
-  else if( vf == "0.000" )
-    e.setAttribute("precision", "3");
-  else if( vf == "0.0000" )
-    e.setAttribute("precision", "4");
-  else if( vf == "0.00000" )
-    e.setAttribute("precision", "5");
-  else if( vf == "0.000000" )
-    e.setAttribute("precision", "6");
-  else if( vf == "0.0000000" )
-    e.setAttribute("precision", "7");
-  else if( vf == "0.00000000" )
-    e.setAttribute("precision", "8");
-  else if( vf == "0.000000000" )
-    e.setAttribute("precision", "9");
-  else if( vf == "0.0000000000" )
-    e.setAttribute("precision", "10");
-  else if( vf == "0.00000000000" )
-    e.setAttribute("precision", "11");
-  else if( vf == "0.000000000000" )
-    e.setAttribute("precision", "12");
-  else if( vf == "0.0000000000000" )
-    e.setAttribute("precision", "13");
-  else if( vf == "0.00000000000000" )
-    e.setAttribute("precision", "14");
-  else if( vf == "0.000000000000000" )
-    e.setAttribute("precision", "15");
-        
-  else if( vf == "0%" )
-  {
-    e.setAttribute("precision", "0");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.0%" )
-  {
-    e.setAttribute("precision", "1");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.00%" )
-  {
-    e.setAttribute("precision", "2");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.000%" )
-  {
-    e.setAttribute("precision", "3");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.0000%" )
-  {
-    e.setAttribute("precision", "4");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.00000%" )
-  {
-    e.setAttribute("precision", "5");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.000000%" )
-  {
-    e.setAttribute("precision", "6");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.0000000%" )
-  {
-    e.setAttribute("precision", "7");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.00000000%" )
-  {
-    e.setAttribute("precision", "8");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-
-  else if( vf == "0.000000000%" )
-  {
-    e.setAttribute("precision", "9");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.0000000000%" )
-  {
-    e.setAttribute("precision", "10");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.00000000000%" )
-  {
-    e.setAttribute("precision", "11");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.000000000000%" )
-  {
-    e.setAttribute("precision", "12");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-    
-  else if( vf == "0.0000000000000%" )
-  {
-    e.setAttribute("precision", "13");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.00000000000000%" )
-  {
-    e.setAttribute("precision", "14");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  else if( vf == "0.000000000000000%" )
-  {
-    e.setAttribute("precision", "15");
-    e.setAttribute("format", "25");
-    e.setAttribute("faktor", "100");
-  }
-  
-  else if( vf == "0E+00" )
-  {
-    e.setAttribute("precision", "0");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.0E+00" )
-  {
-    e.setAttribute("precision", "1");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.00E+00" )
-  {
-    e.setAttribute("precision", "2");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.000E+00" )
-  {
-    e.setAttribute("precision", "3");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.0000E+00" )
-  {
-    e.setAttribute("precision", "4");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.00000E+00" )
-  {
-    e.setAttribute("precision", "5");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.000000E+00" )
-  {
-    e.setAttribute("precision", "6");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.0000000E+00" )
-  {
-    e.setAttribute("precision", "7");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.00000000E+00" )
-  {
-    e.setAttribute("precision", "8");
-    e.setAttribute("format", "30");
-  }  
-  else if( vf == "0.000000000E+00" )
-  {
-    e.setAttribute("precision", "9");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.0000000000E+00" )
-  {
-    e.setAttribute("precision", "10");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.00000000000E+00" )
-  {
-    e.setAttribute("precision", "11");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.000000000000E+00" )
-  {
-    e.setAttribute("precision", "12");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.0000000000000E+00" )
-  {
-    e.setAttribute("precision", "13");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.00000000000000E+00" )
-  {
-    e.setAttribute("precision", "14");
-    e.setAttribute("format", "30");
-  }
-  else if( vf == "0.000000000000000E+00" )
-  {
-    e.setAttribute("precision", "15");
-    e.setAttribute("format", "30");
-  }
-      
-  else if( vf.upper() == "M/D/YY" )
-    e.setAttribute("format", "219");
-  else if( vf.upper() == "M/D/YYYY" )
-    e.setAttribute("format", "220");
-  else if( vf.upper() == "MM/DD/YY" )
-    e.setAttribute("format", "218");
-  else if( vf.upper() == "MM/DD/YYYY" )
-    e.setAttribute("format", "217");
-  else if( vf.upper() == "YYYY/MM/DD" )
-    e.setAttribute("format", "224");
-  else if( vf.upper() == "YYYY-MM-DD" )
-    e.setAttribute("format", "215");
-  
-  else if( vf == "h:mm AM/PM" )
-    e.setAttribute("format", "52");
-  else if( vf == "h:mm:ss AM/PM" )
-    e.setAttribute("format", "53");
-  else if( vf == "h:mm" )
-    e.setAttribute("format", "55");
-  else if( vf == "h:mm:ss" )
-    e.setAttribute("format", "56");
-  else if( vf == "[mm]:ss" )
-    e.setAttribute("format", "57");
-  else if( vf == "[h]:mm:ss" )
-    e.setAttribute("format", "58");
-  else if( vf == "[h]:mm" )
-    e.setAttribute("format", "59");
-
-  // these are not supported in KSpread, find the closest one
-  else if( vf.upper() == "YYYY/MM/D" )
-    e.setAttribute("format", "224"); // yyyy/mm/dd
-  else if( vf.upper() == "YYYY-MM-D" )
-    e.setAttribute("format", "215"); // yyyy-mm-dd
-  else if( vf == "M/D/YY h:mm" )
-    e.setAttribute("format", "219"); // m/dd/yy
-  else if( vf == "[ss]" )
-    e.setAttribute("format", "56"); // h:mm:ss
-  else if( vf == "mm:ss" )
-    e.setAttribute("format", "56"); // h:mm:ss
-  else if( vf == "mm:ss.0" )
-    e.setAttribute("format", "56"); // h:mm:ss
-  else if ( vf.upper() == "D-MMM" )
-    e.setAttribute("format", "210"); // dd/MMM
-  else if ( vf.upper() == "D/MMM" )
-    e.setAttribute("format", "210"); // dd/MMM
-
-  if ( !format.alignment().isNull() )
-  {
-    unsigned align = 0;
-    switch( format.alignment().alignX() )
-    {
-      case Swinder::Format::Left: align = 1; break;
-      case Swinder::Format::Center: align = 2; break;
-      case Swinder::Format::Right: align = 3; break;
-       default: align = 4; break;
-    };
-    e.setAttribute( "align", QString::number( align ) );
-
-    switch( format.alignment().alignY() )
-    {
-      case Swinder::Format::Top: align = 1; break;
-      case Swinder::Format::Middle: align = 2; break;
-      case Swinder::Format::Bottom: align = 3; break;
-       default: align = 4; break;
-    }
-    e.setAttribute( "alignY", QString::number( align ) );
-    
-    if ( format.alignment().wrap() ) e.setAttribute( "multirow", "yes");
-  }
-
-  QDomElement fontElement = doc.createElement( "font" );
-  const Swinder::FormatFont& font = format.font();
-  if ( !font.isNull() ) {
-    QString fontFamily = string( font.fontFamily()).string();
-    double fontSize = font.fontSize();
-    fontElement.setAttribute( "family", fontFamily );
-    fontElement.setAttribute( "size", fontSize );
-    fontElement.setAttribute( "weight", font.bold() ? 75 : 50 );
-    fontElement.setAttribute( "bold", font.bold() ? "yes" : "no" );
-    fontElement.setAttribute( "italic", font.italic() ? "yes" : "no" );
-    fontElement.setAttribute( "underline", font.underline() ? "yes" : "no" );
-    fontElement.setAttribute( "strikeout", font.strikeout() ? "yes" : "no" );
-    e.appendChild( fontElement );
-  }
-
-  QDomElement penElement = doc.createElement( "pen" );
-  penElement.setAttribute( "width", 0 );
-  penElement.setAttribute( "style", 1 );
-  penElement.setAttribute( "color", convertColor( font.color() ) );
-  e.appendChild( penElement );
-
-
-  // cell borders
-
-  const Swinder::FormatBorders& borders = format.borders();
-  if( !borders.isNull() ) {
-    QDomElement leftBorderElement = doc.createElement( "left-border" );
-    leftBorderElement.appendChild( convertPen( doc, borders.leftBorder() ) );
-    e.appendChild( leftBorderElement );
-
-    QDomElement rightBorderElement = doc.createElement( "right-border" );
-    rightBorderElement.appendChild( convertPen( doc, borders.rightBorder() ) );
-    e.appendChild( rightBorderElement );
-
-    QDomElement topBorderElement = doc.createElement( "top-border" );
-    topBorderElement.appendChild( convertPen( doc, borders.topBorder() ) );
-    e.appendChild( topBorderElement );
-
-    QDomElement bottomBorderElement = doc.createElement( "bottom-border" );
-    bottomBorderElement.appendChild( convertPen( doc, borders.bottomBorder() ) );
-    e.appendChild( bottomBorderElement );
-  }
-  
-  // cell background
-  
-  const Swinder::FormatBackground& background = format.background();
-  if ( !background.isNull() && background.pattern() != Swinder::FormatBackground::EmptyPattern) {
-    Swinder::Color fgColor = background.foregroundColor();
-    Swinder::Color bgColor = background.backgroundColor();
-    if ( background.pattern() == Swinder::FormatBackground::SolidPattern ) {
-      // Solid pattern is not supported by the GUI of kspread, use empty pattern instead and switch colors
-      bgColor = fgColor;
-      fgColor = Swinder::Color();
-    }
-    e.setAttribute( "bgcolor", convertColor( bgColor ) );
-    e.setAttribute( "brushcolor", convertColor( fgColor ) );
-    e.setAttribute( "brushstyle", convertBrushStyle( background.pattern() ) );
-  }
-
-  return e;
-}
-
-// see convertFormat above, this is the complementary hack
-static bool isDateFormat( const Swinder::Format& format )
-{
-  QString vf = string( format.valueFormat()).string();
-  QString vfu = vf.upper();
-  if( vfu == "M/D/YY" ) return true;
-  if( vfu == "M/D/YYYY" ) return true;
-  if( vfu == "MM/DD/YY" ) return true;
-  if( vfu == "MM/DD/YYYY" ) return true;
-  if( vfu == "YYYY/MM/D" ) return true;
-  if( vfu == "YYYY/MM/DD" ) return true;
-  if( vfu == "YYYY-MM-D" ) return true;
-  if( vfu == "YYYY-MM-DD" ) return true;
-  if( vf == "h:mm AM/PM" ) return true;
-  if( vf == "h:mm:ss AM/PM" ) return true;
-  if( vf == "h:mm" ) return true;
-  if( vf == "h:mm:ss" ) return true;
-  if( vf == "[h]:mm:ss" ) return true;
-  if( vf == "[h]:mm" ) return true;
-  if( vf == "[mm]:ss" ) return true;
-  if( vf == "M/D/YY h:mm" ) return true;
-  if( vf == "[ss]" ) return true;
-  if( vf == "mm:ss" ) return true;
-  if( vf == "mm:ss.0" ) return true;
-  
-  return false;
-}
-
-static QDomElement convertDateResult( QDomDocument& doc, const Swinder::Value& value )
-{
-  QDomText resultElement = doc.createTextNode( "result" );
-  resultElement.toElement().setAttribute( "dataType", "Date" );
-  
-  QDate dt( 1899, 12, 30 );
-  dt = dt.addDays( value.asInteger() );
-  QString str = "%1/%2/%3";
-  str = str.arg(dt.year()).arg(dt.month()).arg(dt.day());
-  resultElement.appendChild( doc.createTextNode( str ) );
-  
-  return resultElement.toElement();
-}
-
-
-// FIXME adjust formula to match KSpread
-static QDomElement convertValue( QDomDocument& doc, const Swinder::UString& formula, 
-  const Swinder::Value& value )
-{
-  QDomElement textElement;
-  textElement = doc.createElement( "text" );
-
-  if( !formula.isEmpty() )
-  {
-    QString str = string( formula ).string();
-    str.prepend( "=" );
-    textElement.appendChild( doc.createTextNode( str ) );
-  }
-
-  if( value.isBoolean() )
-  {
-    textElement.setAttribute( "dataType", "Bool" );
-    if( value.asBoolean() )
-    {
-      textElement.setAttribute( "outStr", "True" );
-      if( formula.isEmpty() )
-        textElement.appendChild( doc.createTextNode( "true" ) );
-    }
-    else
-    {
-      textElement.setAttribute( "outStr", "False" );
-      if( formula.isEmpty() )
-        textElement.appendChild( doc.createTextNode( "false" ) );
-    }
-  }
-
-  else if( value.isFloat() )
-  {
-    textElement.setAttribute( "dataType", "Num" );
-    QString str = QString::number( value.asFloat(), 'g', 18 );
-    if( formula.isEmpty() )
-      textElement.appendChild( doc.createTextNode( str ) );
-  }
-
-  else if( value.isInteger() )
-  {
-    textElement.setAttribute( "dataType", "Num" );
-    QString str = QString::number( value.asInteger() );
-    if( formula.isEmpty() )
-      textElement.appendChild( doc.createTextNode( str ) );
-  }
-
-  else if( value.isString() )
-  {
-    textElement.setAttribute( "dataType", "Str" );
-    QString str = string( value.asString() ).string();
-    if( formula.isEmpty() )
-      textElement.appendChild( doc.createTextNode( str.prepend('\'') ) );
-  }
-
-  return textElement;
-}
-
-
-
-static QString convertField( const QString& s )
-{
-  QString result = s;
-
-  result.replace( "&A", "<sheet>" );
-  result.replace( "&P", "<page>" );
-  result.replace( "&N", "<pages>" );
-  result.replace( "&D", "<date>" );
-  result.replace( "&T", "<time>" );
-  result.replace( "&F", "<file>" ); // not really correct
-
-  return result;
-}
-
-static QDomElement convertHeader( QDomDocument& doc, const QString& left,
-  const QString& center, const QString& right )
-{
-  QDomElement headElement = doc.createElement( "head" );
-
-  QDomElement headLeftElement = doc.createElement( "left" );
-  headLeftElement.appendChild( doc.createTextNode( convertField( left ) ) );
-  headElement.appendChild( headLeftElement );
-
-  QDomElement headCenterElement = doc.createElement( "center" );
-  headCenterElement.appendChild( doc.createTextNode( convertField( center ) ) );
-  headElement.appendChild( headCenterElement );
-
-  QDomElement headRightElement = doc.createElement( "right" );
-  headRightElement.appendChild( doc.createTextNode( convertField( right ) ) );
-  headElement.appendChild( headRightElement );
-
-  return headElement;
-}
-
-static QDomElement convertFooter( QDomDocument& doc, const QString& left,
-  const QString& center, const QString& right )
-{
-  QDomElement footElement = doc.createElement( "foot" );
-
-  QDomElement footLeftElement = doc.createElement( "left" );
-  footLeftElement.appendChild( doc.createTextNode( convertField( left ) ) );
-  footElement.appendChild( footLeftElement );
-
-  QDomElement footCenterElement = doc.createElement( "center" );
-  footCenterElement.appendChild( doc.createTextNode( convertField( center ) ) );
-  footElement.appendChild( footCenterElement );
-
-  QDomElement footRightElement = doc.createElement( "right" );
-  footRightElement.appendChild( doc.createTextNode( convertField( right ) ) );
-  footElement.appendChild( footRightElement );
-
-  return footElement;
-}
-
-static QDomElement convertPaper( QDomDocument& doc, double leftMargin,
-  double rightMargin, double topMargin, double bottomMargin )
-{
-  QDomElement paperElement = doc.createElement( "paper" );
-  paperElement.setAttribute( "format", "A4" );
-  paperElement.setAttribute( "orientation", "Portrait" );
-
-  QDomElement bordersElement = doc.createElement( "borders" );
-  bordersElement.setAttribute( "left", leftMargin );
-  bordersElement.setAttribute( "right", rightMargin );
-  bordersElement.setAttribute( "top", topMargin );
-  bordersElement.setAttribute( "bottom", bottomMargin );
-  paperElement.appendChild( bordersElement );
-
-  return paperElement;
-}
-
 
 KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCString& to )
 {
-  if (to != "application/x-kspread" || from != "application/msexcel")
+  if ( from != "application/msexcel" )
+    return KoFilter::NotImplemented; 
+
+  if ( to != "application/vnd.oasis.opendocument.spreadsheet" )     
     return KoFilter::NotImplemented;
 
-  QString inputFile = m_chain->inputFile();
+  d->inputFile = m_chain->inputFile();
+  d->outputFile = m_chain->outputFile();
 
-  Swinder::Workbook* workbook = new Swinder::Workbook;
-  if( workbook->load( inputFile.local8Bit() ) )
+  // open inputFile
+  d->workbook = new Swinder::Workbook;
+  if( d->workbook->load( d->inputFile.local8Bit() ) )
   {
-    KMessageBox::sorry( 0, i18n("Could not read from file." ) );
-    delete workbook;
+    delete d->workbook;
+    d->workbook = 0;
     return KoFilter::StupidError;
   }
-  
-  if( workbook->isPasswordProtected() )
+
+  if( d->workbook->isPasswordProtected() )
   {
-    delete workbook;
+    delete d->workbook;
+    d->workbook = 0;
     return KoFilter::PasswordProtected;
   }
   
-kdDebug() << "Loaded workbook" << endl;
-  QString root, documentInfo;
+  // create output store
+  KoStore* storeout;
+  storeout = KoStore::createStore( d->outputFile, KoStore::Write, "", 
+    KoStore::Zip );
 
-  QDomDocument mainDocument( "spreadsheet" );
-  mainDocument.appendChild( mainDocument.createProcessingInstruction(
-    "xml","version=\"1.0\" encoding=\"UTF-8\"" ) );
-
-  QDomElement spreadsheet;
-  spreadsheet = mainDocument.createElement( "spreadsheet" );
-  spreadsheet.setAttribute( "editor","MS Excel Import Filter" );
-  spreadsheet.setAttribute( "mime","application/x-kspread" );
-  mainDocument.appendChild( spreadsheet );
-
-  QDomElement map;
-  map = mainDocument.createElement( "map" );
-  map.setAttribute( "activeTable", "Table1" ); // dummy
-  spreadsheet.appendChild( map );
-
-  for( unsigned i=0; i < workbook->sheetCount(); i++ )
+  if ( !storeout )
   {
-    kdDebug() << "Worksheet " << i << endl;
-    Swinder::Sheet* sheet = workbook->sheet( i );
-
-    if( !sheet ) break;
-
-    QDomElement table;
-    table = mainDocument.createElement( "table" );
-    table.setAttribute( "name", string( sheet->name() ).string() );
-    table.setAttribute( "hide", sheet->visible() ? 0 : 1 );
-    map.appendChild( table );
-
-    // FIXME the real active sheet
-    if( i == 0 ) map.setAttribute( "activeTable",string( sheet->name() ).string() );
-
-    // paper settings, i.e <paper>
-    QDomElement pe = convertPaper( mainDocument,
-      POINT_TO_MM ( sheet->leftMargin() ), POINT_TO_MM ( sheet->rightMargin() ),
-      POINT_TO_MM ( sheet->topMargin() ), POINT_TO_MM ( sheet->bottomMargin() ) );
-    table.appendChild( pe );
-    pe.appendChild( convertHeader( mainDocument, string( sheet->leftHeader() ).string(),
-      string( sheet->centerHeader() ).string(), string( sheet->rightHeader() ).string() ) );
-    pe.appendChild( convertFooter( mainDocument, string( sheet->leftFooter() ).string(),
-      string( sheet->centerFooter() ).string(), string( sheet->rightFooter() ).string() ) );
-
-    // columns, i.e <column>
-    for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
-    {
-      Swinder::Column* column = sheet->column( i, false );
-      if( column )
-      {
-        QDomElement e;
-        e = mainDocument.createElement( "column" );
-        e.setAttribute( "column", i+1 );
-        e.setAttribute( "width", column->width() );
-        e.setAttribute( "hide", column->visible() ? 0 : 1 );
-        table.appendChild( e );
-        e.appendChild( convertFormat( mainDocument, column->format() ) );
-      }
-    }
-
-    // rows, i.e <row>
-    for( unsigned i = 0; i <= sheet->maxRow(); i++ )
-    {
-      Swinder::Row* row = sheet->row( i, false );
-      if( row )
-      {
-        QDomElement e;
-        e = mainDocument.createElement( "row" );
-        e.setAttribute( "row", i+1 );
-        e.setAttribute( "height", POINT_TO_MM ( row->height() ) );
-        e.setAttribute( "hide", row->visible() ? 0 : 1 );
-        table.appendChild( e );
-        e.appendChild( convertFormat( mainDocument, row->format() ) );
-      }
-    }
-
-    // cells, i.e <cell>
-    for( unsigned row = 0; row <= sheet->maxRow(); row++ )
-      for( unsigned col = 0; col <= sheet->maxColumn(); col++ )
-      {
-        Swinder::Cell* cell = sheet->cell( col, row, false );
-        if( cell )
-        {
-          QDomElement ce;
-          ce = mainDocument.createElement( "cell" );
-          ce.setAttribute( "row", row+1 );
-          ce.setAttribute( "column", col+1 );
-          table.appendChild( ce );
-
-          QDomElement fe = convertFormat( mainDocument, cell->format() );
-          if( cell->columnSpan() > 1 )
-            fe.setAttribute( "colspan", cell->columnSpan()-1 );
-          if( cell->rowSpan() > 1 )
-            fe.setAttribute( "rowspan", cell->rowSpan()-1 );
-          
-          QDomElement ve = convertValue( mainDocument, cell->formula(), cell->value() );
-          
-          ce.appendChild( fe );
-          ce.appendChild( ve );
-          
-          if( isDateFormat( cell->format() ) )
-          {
-            ve.setAttribute( "dataType", "Date" );
-            ve.appendChild( convertDateResult( mainDocument, cell->value() ) );
-          }
-            
-        }
-      }
-
+    kdWarning() << "Couldn't open the requested file." << endl;
+    return KoFilter::FileNotFound;
   }
 
-  // TODO: get real document information
-  documentInfo = "<document-info xmlns=\"http://www.koffice.org/DTD/document-info\"/>";
-      
-  // prepare storage
-  KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
+  // store document styles
+  d->sheetFormatIndex = 1;
+  d->columnFormatIndex = 1;
+  d->rowFormatIndex = 1;
+  d->cellFormatIndex = 1;
+  if ( !storeout->open( "styles.xml" ) )
+  {
+    kdWarning() << "Couldn't open the file 'styles.xml'." << endl;
+    return KoFilter::CreationError;
+  }
+  storeout->write( d->createStyles() );
+  storeout->close();
 
-  // store output document
-  if( out )
-    {
-      QCString cstring = mainDocument.toCString();
-      out->writeBlock( (const char*) cstring, cstring.length() );
-      out->close();
-    }
+  // store document content
+  d->sheetFormatIndex = 1;
+  d->columnFormatIndex = 1;
+  d->rowFormatIndex = 1;
+  d->cellFormatIndex = 1;
+  if ( !storeout->open( "content.xml" ) )
+  {
+    kdWarning() << "Couldn't open the file 'content.xml'." << endl;
+    return KoFilter::CreationError;
+  }
+  storeout->write( d->createContent() );
+  storeout->close();
 
-  // store document info
-  out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
-  if ( out )
-    {
-       QCString cstring = documentInfo.utf8();
-       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-       out->writeBlock( (const char*) cstring, cstring.length() );
-       out->close();
-     }
+  // store document manifest
+  storeout->enterDirectory( "META-INF" );
+  if ( !storeout->open( "manifest.xml" ) )
+  {
+     kdWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+     return KoFilter::CreationError;
+  }
+  storeout->write( d->createManifest() );
+  storeout->close();
 
-  delete workbook;
+  // we are done!
+  delete d->workbook;
+  delete storeout;
+  d->inputFile = QString::null;
+  d->outputFile = QString::null;
+  d->workbook = 0;
 
   return KoFilter::OK;
+}
+
+QByteArray ExcelImport::Private::createContent()
+{
+  KoXmlWriter* contentWriter;
+  QByteArray contentData;
+  QBuffer contentBuffer( contentData );
+
+  contentBuffer.open( IO_WriteOnly );
+  contentWriter = new KoXmlWriter( &contentBuffer );
+
+  contentWriter->startDocument( "office:document-content" );
+  contentWriter->startElement( "office:document-content" );
+  contentWriter->addAttribute( "xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
+  contentWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
+  contentWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
+  contentWriter->addAttribute( "xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" );
+  contentWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
+  contentWriter->addAttribute( "xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" );
+  contentWriter->addAttribute( "xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
+  contentWriter->addAttribute( "office:version","1.0" );
+
+  // office:automatic-styles
+  sheetFormatIndex = 1;
+  columnFormatIndex = 1;
+  rowFormatIndex = 1;
+  cellFormatIndex = 1;
+  contentWriter->startElement( "office:automatic-styles" );
+  processWorkbookForStyle( workbook, contentWriter );
+  contentWriter->endElement();
+
+  // office:body
+  sheetFormatIndex = 1;
+  columnFormatIndex = 1;
+  rowFormatIndex = 1;
+  cellFormatIndex = 1;
+  contentWriter->startElement( "office:body" );
+  processWorkbookForBody( workbook, contentWriter );
+  contentWriter->endElement();  // office:body
+
+  contentWriter->endElement();  // office:document-content
+  contentWriter->endDocument();
+  delete contentWriter;
+
+  // for troubleshooting only !!
+  QString dbg;
+  for( unsigned i=0; i<contentData.size(); i++ )
+    dbg.append( contentData[i] );
+  printf("\ncontent.xml:\n%s\n", dbg.latin1() );
+
+  return contentData;
+}
+
+QByteArray ExcelImport::Private::createStyles()
+{
+  KoXmlWriter* stylesWriter;
+  QByteArray stylesData;
+  QBuffer stylesBuffer( stylesData );
+
+  stylesBuffer.open( IO_WriteOnly );
+  stylesWriter = new KoXmlWriter( &stylesBuffer );
+
+  stylesWriter->startDocument( "office:document-styles" );
+  stylesWriter->startElement( "office:document-styles" );
+  stylesWriter->addAttribute( "xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
+  stylesWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
+  stylesWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
+  stylesWriter->addAttribute( "xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" );
+  stylesWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
+  stylesWriter->addAttribute( "xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" );
+  stylesWriter->addAttribute( "office:version","1.0" );
+
+  // office:styles
+  stylesWriter->startElement( "office:styles" );
+  stylesWriter->endElement();
+
+  // office:automatic-styles
+  stylesWriter->startElement( "office:automatic-styles" );
+  
+  // page layout
+  stylesWriter->startElement( "style:page-layout" );
+  stylesWriter->addAttribute( "style:name","pm1" );
+  stylesWriter->addAttribute( "style:page-usage","all" );
+  stylesWriter->startElement( "style:page-layout-properties" );
+  stylesWriter->endElement(); // style:page-layout-properties
+  stylesWriter->endElement(); // style:page-layout
+
+
+  stylesWriter->endElement(); // office:automatic-styles
+
+
+  stylesWriter->endElement();  // office:document-styles
+  stylesWriter->endDocument();
+  delete stylesWriter;
+
+  // for troubleshooting only !!
+  QString dbg;
+  for( unsigned i=0; i<stylesData.size(); i++ )
+    dbg.append( stylesData[i] );
+  printf("\nstyles.xml:\n%s\n", dbg.latin1() );
+
+  return stylesData;
+}
+
+QByteArray ExcelImport::Private::createManifest()
+{
+  KoXmlWriter* manifestWriter;
+  QByteArray manifestData;
+  QBuffer manifestBuffer( manifestData );
+
+  manifestBuffer.open( IO_WriteOnly );
+  manifestWriter = new KoXmlWriter( &manifestBuffer );
+
+  manifestWriter->startDocument( "manifest:manifest" );
+  manifestWriter->startElement( "manifest:manifest" );
+  manifestWriter->addAttribute( "xmlns:manifest", 
+    "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
+
+  manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+  manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+
+  manifestWriter->endElement();
+  manifestWriter->endDocument();
+  delete manifestWriter;
+
+  // for troubleshooting only !!
+  QString dbg;
+  for( unsigned i=0; i<manifestData.size(); i++ )
+    dbg.append( manifestData[i] );
+  printf("\nmanifest.xml:\n%s\n", dbg.latin1() );
+
+  return manifestData;
+}
+
+void ExcelImport::Private::processWorkbookForBody( Workbook* workbook, KoXmlWriter* xmlWriter )
+{
+  if( !workbook ) return;
+  if( !xmlWriter ) return;
+  
+  xmlWriter->startElement( "office:spreadsheet" );
+  
+  for( unsigned i=0; i < workbook->sheetCount(); i++ )
+  {
+    Sheet* sheet = workbook->sheet( i );
+    processSheetForBody( sheet, xmlWriter );
+  }
+  
+  xmlWriter->endElement();  // office:spreadsheet
+}
+
+void ExcelImport::Private::processWorkbookForStyle( Workbook* workbook, KoXmlWriter* xmlWriter )
+{
+  if( !workbook ) return;
+  if( !xmlWriter ) return;
+  
+  for( unsigned i=0; i < workbook->sheetCount(); i++ )
+  {
+    Sheet* sheet = workbook->sheet( i );
+    processSheetForStyle( sheet, xmlWriter );
+  }
+}
+
+void ExcelImport::Private::processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWriter )
+{
+  if( !sheet ) return;
+  if( !xmlWriter ) return;
+  
+  xmlWriter->startElement( "table:table" );
+  
+  xmlWriter->addAttribute( "table:name", string( sheet->name() ).string() );
+  xmlWriter->addAttribute( "table:print", "false" );
+  xmlWriter->addAttribute( "table:protected", "false" );
+  xmlWriter->addAttribute( "table:style-name", QString("ta%1").arg(sheetFormatIndex));
+  sheetFormatIndex++;
+
+  for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
+  {
+    // FIXME optimized this when operator== in Swinder::Format is implemented
+    processColumnForBody( sheet->column( i, false ), xmlWriter );
+  }
+  
+  for( unsigned i = 0; i <= sheet->maxRow(); i++ )
+  {
+    // FIXME optimized this when operator== in Swinder::Format is implemented
+    processRowForBody( sheet->row( i, false ), xmlWriter );
+  }
+    
+  xmlWriter->endElement();  // table:table
+}
+
+void ExcelImport::Private::processSheetForStyle( Sheet* sheet, KoXmlWriter* xmlWriter )
+{
+  if( !sheet ) return;
+  if( !xmlWriter ) return;
+  
+  xmlWriter->startElement( "style:style" );
+  xmlWriter->addAttribute( "style:family", "table" );  
+  xmlWriter->addAttribute( "style:master-page-name", "Default" );  
+  xmlWriter->addAttribute( "style:name", QString("ta%1").arg(sheetFormatIndex) );  
+  sheetFormatIndex++;
+  
+  xmlWriter->startElement( "style:table-properties" );
+  xmlWriter->addAttribute( "table:display", sheet->visible() ? "true" : "false" );
+  xmlWriter->addAttribute( "table:writing-mode", "lr-tb" );
+  xmlWriter->endElement();  // style:table-properties
+  
+  xmlWriter->endElement();  // style:style
+
+  for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
+  {
+    Column* column = sheet->column( i, false );
+    if( !column ) break;
+    // FIXME optimized this when operator== in Swinder::Format is implemented
+    processColumnForStyle( column, xmlWriter );
+  }
+
+  for( unsigned i = 0; i <= sheet->maxRow(); i++ )
+  {
+    Row* row = sheet->row( i, false );
+    if( !row ) break;
+    // FIXME optimized this when operator== in Swinder::Format is implemented
+    processRowForStyle( row, xmlWriter );
+  }
+
+}
+
+void ExcelImport::Private::processColumnForBody( Column* column, KoXmlWriter* xmlWriter )
+{
+  if( !column ) return;
+  if( !xmlWriter ) return;
+  
+  xmlWriter->startElement( "table:table-column" );
+  xmlWriter->addAttribute( "table:default-style-name", "Default" );  
+  xmlWriter->addAttribute( "table:visibility", column->visible() ? "visible" : "collapse" );  
+  xmlWriter->addAttribute( "table:style-name", QString("co%1").arg(columnFormatIndex) );  
+  columnFormatIndex++;
+  xmlWriter->endElement();  // table:table-column
+}
+
+void ExcelImport::Private::processColumnForStyle( Column* column, KoXmlWriter* xmlWriter )
+{
+  if( !column ) return;
+  if( !xmlWriter ) return;
+  
+  xmlWriter->startElement( "style:style" );
+  xmlWriter->addAttribute( "style:family", "table-column" );  
+  xmlWriter->addAttribute( "style:name", QString("co%1").arg(columnFormatIndex) );  
+  columnFormatIndex++;
+  
+  xmlWriter->startElement( "style:table-column-properties" );
+  xmlWriter->addAttribute( "fo:break-before", "auto" );
+  xmlWriter->addAttribute( "style:column-width", QString("%1in").arg(column->width()/27) );
+  xmlWriter->endElement();  // style:table-column-properties
+  
+  xmlWriter->endElement();  // style:style
+}
+
+void ExcelImport::Private::processRowForBody( Row* row, KoXmlWriter* xmlWriter )
+{
+  if( !row ) return;
+  if( !row->sheet() ) return;
+  if( !xmlWriter ) return;
+
+  // find the column of the rightmost cell (if any)
+  int lastCol = -1;
+  for( unsigned i = 0; i <= row->sheet()->maxColumn(); i++ )
+    if( row->sheet()->cell( i, row->index(), false ) ) lastCol = i;
+  
+  xmlWriter->startElement( "table:table-row" );
+  xmlWriter->addAttribute( "table:visibility", row->visible() ? "visible" : "collapse" );  
+  xmlWriter->addAttribute( "table:style-name", QString("ro%1").arg(rowFormatIndex) );  
+  rowFormatIndex++;
+  
+  for( unsigned i = 0; i <= lastCol; i++ )
+  {
+    Cell* cell = row->sheet()->cell( i, row->index(), false );
+    if( cell )
+      processCellForBody( cell, xmlWriter );
+    else
+    {
+      // empty cell
+      xmlWriter->startElement( "table:table-cell" );
+      xmlWriter->endElement();
+    }  
+  }
+  
+  xmlWriter->endElement();  // table:table-row
+}
+
+void ExcelImport::Private::processRowForStyle( Row* row, KoXmlWriter* xmlWriter )
+{
+  if( !row ) return;
+  if( !row->sheet() ) return;
+  if( !xmlWriter ) return;
+
+  // find the column of the rightmost cell (if any)
+  int lastCol = -1;
+  for( unsigned i = 0; i <= row->sheet()->maxColumn(); i++ )
+    if( row->sheet()->cell( i, row->index(), false ) ) lastCol = i;
+  
+  xmlWriter->startElement( "style:style" );
+  xmlWriter->addAttribute( "style:family", "table-row" );  
+  xmlWriter->addAttribute( "style:name", QString("ro%1").arg(rowFormatIndex) );  
+  rowFormatIndex++;
+  
+  xmlWriter->startElement( "style:table-row-properties" );
+  xmlWriter->addAttribute( "fo:break-before", "auto" );
+  xmlWriter->addAttribute( "style:row-height", QString("%1pt").arg(row->height()) );
+  xmlWriter->endElement();  // style:table-row-properties
+  
+  xmlWriter->endElement();  // style:style
+
+  for( unsigned i = 0; i <= lastCol; i++ )
+  {
+    Cell* cell = row->sheet()->cell( i, row->index(), false );
+    if( cell )
+      processCellForStyle( cell, xmlWriter );
+  }
+}
+
+void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWriter )
+{
+  if( !cell ) return;
+  if( !xmlWriter ) return;
+  
+  xmlWriter->startElement( "table:table-cell" );
+  xmlWriter->addAttribute( "table:style-name", QString("ce%1").arg(cellFormatIndex) );  
+  cellFormatIndex++;
+  
+  Value value = cell->value();
+  
+  if( value.isBoolean() )
+  {
+    xmlWriter->addAttribute( "office:value-type", "boolean" );
+    xmlWriter->addAttribute( "office:boolean-value", value.asBoolean() ? "true" : "false" );
+  }
+  else if( value.isFloat() )
+  {
+    xmlWriter->addAttribute( "office:value-type", "float" );
+    xmlWriter->addAttribute( "office:value", QString::number( value.asFloat() ) );
+  }
+  else if( value.isInteger() )
+  {
+    xmlWriter->addAttribute( "office:value-type", "float" );
+    xmlWriter->addAttribute( "office:value", QString::number( value.asInteger() ) );
+  }
+  else if( value.isString() )
+  {
+    QString str = string( value.asString() ).string();
+    xmlWriter->addAttribute( "office:value-type", "string" );
+    xmlWriter->addAttribute( "office:string-value", str );
+    xmlWriter->startElement( "text:p" );
+    xmlWriter->addTextNode( str );
+    xmlWriter->endElement(); //  text:p 
+  }
+  
+  // TODO: handle formula
+  
+  xmlWriter->endElement(); //  table:table-cell 
+}
+
+void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWriter )
+{
+  if( !cell ) return;
+  if( !xmlWriter ) return;
+  
+  xmlWriter->startElement( "style:style" );
+  xmlWriter->addAttribute( "style:family", "table-cell" );  
+  xmlWriter->addAttribute( "style:name", QString("ce%1").arg(cellFormatIndex) );  
+  cellFormatIndex++;
+  
+  // BIG TODO: create cell format here !!!
+  
+  xmlWriter->endElement();  // style:style
 }
