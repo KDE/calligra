@@ -297,8 +297,11 @@ void View::setZoom(double zoom) {
 }
 
 void View::setupPrinter(KPrinter &printer) {
-    Q_UNUSED(printer);
     kdDebug()<<k_funcinfo<<endl;
+	if (m_tab->visibleWidget() == m_reportview)
+	{
+        m_reportview->setup(printer);
+	}
 }
 
 void View::print(KPrinter &printer) {

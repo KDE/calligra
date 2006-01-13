@@ -228,9 +228,13 @@ void ReportView::draw(const QString &report) {
     m_reportTags=0L;
 }
 
-void ReportView::print(KPrinter &printer) {
+void ReportView::setup(KPrinter &printer) {
     //kdDebug()<<k_funcinfo<<endl;
     m_reportview->setupPrinter(printer);
+}
+
+void ReportView::print(KPrinter &printer) {
+    //kdDebug()<<k_funcinfo<<endl;
 	m_reportview->printReport(printer);
 }
 
