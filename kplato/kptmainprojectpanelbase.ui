@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>459</width>
+            <width>478</width>
             <height>337</height>
         </rect>
     </property>
@@ -137,9 +137,10 @@
                 <string>Scheduling</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Here you can define the overal schedule of the project.
+                <string>Here you define when the project shall start or end.
 
-The project is scheduled within the given start and end dates.</string>
+If start time is defined, the project is scheduled forward from this time. When the project has been calculated, end time shows when the project is planned to end.
+If end time is defined, the project is scheduled backwards from this time. When the project has been calculated, start time shows when the project must start in order to finish in time.</string>
             </property>
             <grid>
                 <property name="name">
@@ -148,6 +149,9 @@ The project is scheduled within the given start and end dates.</string>
                 <widget class="KDateWidget" row="0" column="1">
                     <property name="name">
                         <cstring>startDate</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Define when the project shall start.</string>
                     </property>
                 </widget>
                 <widget class="QTimeEdit" row="0" column="2">
@@ -164,6 +168,9 @@ The project is scheduled within the given start and end dates.</string>
                     <property name="name">
                         <cstring>endDate</cstring>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Define when the project shall end.</string>
+                    </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
@@ -175,6 +182,9 @@ The project is scheduled within the given start and end dates.</string>
                     <property name="buttonGroupId">
                         <number>1</number>
                     </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Select this to schedule the project backward from end time.</string>
+                    </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0">
                     <property name="name">
@@ -185,6 +195,9 @@ The project is scheduled within the given start and end dates.</string>
                     </property>
                     <property name="buttonGroupId">
                         <number>0</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Select this to schedule the project forward from start time.</string>
                     </property>
                 </widget>
             </grid>
