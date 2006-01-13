@@ -12,7 +12,7 @@
 		   X="2" Y="0" ForegroundColor="0,0,0"
 		   Text="List of Tasks" BorderColor="0,0,0" FontFamily="Helvetica"
 		   DrawTop="false" FontWeight="75" Height="80"
-		   Width="840" BackgroundColor="0,0,255" FontItalic="1"
+		   Width="840" BackgroundColor="0,255,255" FontItalic="1"
 		   BorderWidth="0" DrawRight="false" DrawBottom="false"
 		   FontSize="24" />
 	</ReportHeader>
@@ -101,14 +101,14 @@
 		   BorderWidth="1" DrawRight="false" DrawBottom="false"
 		   FontSize="12" />
 		<Field VAlignment="0" HAlignment="0"
-		   CommaSeparator="44" BorderStyle="1" WordWrap="0"
+		   CommaSeparator="52" BorderStyle="1" WordWrap="0"
 		   DrawLeft="false" Field="project.leader" X="572"
 		   Y="31" ForegroundColor="0,0,0" NegValueColor="0,0,0"
 		   Text="" DataType="0" BorderColor="0,0,0"
 		   DateFormat="11" FontFamily="Courier 10 Pitch" DrawTop="false"
 		   FontWeight="63" InputMask="" Precision="2"
 		   Height="60" Width="270" BackgroundColor="255,255,255"
-		   Currency="32" FontItalic="0" BorderWidth="1"
+		   Currency="51" FontItalic="0" BorderWidth="1"
 		   DrawRight="false" DrawBottom="false" FontSize="15" />
 	</PageHeader>
 
