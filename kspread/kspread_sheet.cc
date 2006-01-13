@@ -1183,6 +1183,34 @@ void Sheet::recalc()
   //  emitBeginOperation(true);
   //  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
   setCalcDirtyFlag();
+
+  // (Tomas): actually recalc each cell
+  // this is FAR from being perfect, dependencies will cause some to be
+  // recalculated a LOT, but it's still better than otherwise, where
+  // we get no recalc if the result stored in a file differs from the
+  // current one - then we only obtain the correct result AFTER we scroll
+  // to the cell ... recalc should actually ... recalc :)
+  Cell* c;
+  
+  int count = 0;
+  c = d->cells.firstCell();
+  for( ; c; c = c->nextCell() )
+    ++count;
+
+  int cur = 0;
+  int percent = -1;
+  c = d->cells.firstCell();
+  for( ; c; c = c->nextCell() )
+  {
+    c->calc (false);
+    cur++;
+    // some debug output to get some idea how damn slow this is ...
+    if (cur*100/count != percent) {
+      percent = cur*100/count;
+      kdDebug() << "Recalc: " << percent << "%" << endl;
+    }
+  }
+  
   //  emitEndOperation();
   emit sig_updateView( this );
 }

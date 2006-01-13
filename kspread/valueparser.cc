@@ -214,16 +214,16 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
   {
     if (percent)
     {
-      kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
-          "' successfully parsed as percentage: " << val << "%" << endl;
+      //kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+      //    "' successfully parsed as percentage: " << val << "%" << endl;
       value.setValue (val / 100.0);
       value.setFormat (Value::fmt_Percent);
       fmtType = Percentage_format;
     }
     else
     {
-      kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
-          "' successfully parsed as number: " << val << endl;
+      //kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+      //    "' successfully parsed as number: " << val << endl;
       value.setValue (val);
       
       if ( str2.contains('E') || str2.contains('e') )

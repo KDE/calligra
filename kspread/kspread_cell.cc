@@ -5776,6 +5776,9 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
     if ( !frame.isNull() )
       loadOasisObjects( frame, oasisContext );
 
+    if (isFormula)
+      setCalcDirtyFlag ();   // formulas must be recalculated
+
     return true;
 }
 

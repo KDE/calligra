@@ -1834,7 +1834,6 @@ void ValueCalc::getCond (Condition &cond, Value val)
     cond.comp = isEqual;
     cond.type = numeric;
     cond.value = converter->asFloat (val).asFloat();
-    kdDebug() << "Numeric: " << cond.value << ", Op: " << cond.comp << endl;
     return;
   }
   QString text = converter->asString (val).asString();
@@ -1885,13 +1884,11 @@ void ValueCalc::getCond (Condition &cond, Value val)
   {
     cond.type = numeric;
     cond.value = d;
-    kdDebug() << "Numeric: " << d << ", Op: " << cond.comp << endl;
   }
   else
   {
     cond.type = string;
     cond.stringValue = text;
-    kdDebug() << "String: " << text << ", Op: " << cond.comp << endl;
   }
 }
 
