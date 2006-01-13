@@ -76,8 +76,8 @@ class ReportView : public QSplitter
     void loadTemplate(QIODevice &dev);
     void loadTemplate(QDomDocument &doc);
     void handleHeader(QDomNode &node);
-    void handleDetailHeader(QDomNode &node);
     void handleDetail(QDomElement &elem);
+    void handleKPlato(QDomElement &elem);
     void replaceTags(QDomNode &node);
 
     QString setReportDetail();
@@ -86,6 +86,7 @@ class ReportView : public QSplitter
     QStringList getProperties(QDomElement &elem);
 
     QString setResourceDetail(Resource *res);
+    QString setResourceGroupDetail(ResourceGroup *group);
 
     QString setDetail(const QString &source, QStringList &properties, QString &level);
 

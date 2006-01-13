@@ -1,7 +1,7 @@
 kplatoreportdir = $(kde_datadir)/kplato/reports
-kplatoreport_DATA = Test_report_Resources.desktop Test_report_Tasks.desktop
+kplatoreport_DATA = resourcelist.desktop tasklist.desktop
 
 kplatoreportsourcedir = $(kde_datadir)/kplato/reports/.source
-kplatoreportsource_DATA = Test_report_Resources.ktf Test_report_Tasks.ktf
+kplatoreportsource_DATA = resourcelist.ktf tasklist.ktf
 
 EXTRA_DIST = $(kplatoreport_DATA)

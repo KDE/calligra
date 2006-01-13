@@ -77,6 +77,7 @@ public:
     }
 
     QString getData(QString tag) const {
+        //kdDebug()<<k_funcinfo<<"tag="<<tag<<endl;
         KLocale *l = KGlobal::locale();
         if (!tag.contains('.'))
             return QString::null;
@@ -90,6 +91,10 @@ public:
         } else if (tag.section(".", 0, 0) == "task") {
             if (tag.section(".", 1, 1) == "name")
                 return (m_task ? m_task->name() : QString::null);
+            if (tag.section(".", 1, 1) == "responsible")
+                return (m_task ? m_task->leader() : QString::null);
+            else if (tag.section(".", 1, 1) == "wbs")
+                return (m_task ? m_task->wbs() : QString::null);
             else if (tag.section(".", 1, 1) == "start")
                 return (m_task ? l->formatDateTime(m_task->startTime()) : QString::null);
             else if (tag.section(".", 1, 1) == "starttime")
@@ -97,25 +102,31 @@ public:
             else if (tag.section(".", 1, 1) == "startdate")
                 return (m_task ? l->formatDate(m_task->startTime().date(), true) : QString::null);
             else if (tag.section(".", 1, 1) == "duration") {
-                if (m_task) {
-                    Duration *d = m_task->getExpectedDuration();
-                    QString s = d->toString(Duration::Format_i18nHour);
-                    delete d;
-                    return s;
-                }
-                return QString::null;
-            } else if (tag.section(".", 1, 1) == "plannedcost")
-                return (m_task ? KGlobal::locale()->formatMoney(m_task->plannedCost()) : QString::null);
-
+                    return (m_task ? m_task->duration().toString(Duration::Format_i18nDayTime) : QString::null);
+            } else if (tag.section(".", 1, 1) == "plannedcost") {
+                return (m_task ? l->formatMoney(m_task->plannedCost()) : QString::null);
+            }
+        } else if (tag.section(".", 0, 0) == "resourcegroup") {
+            if (tag.section(".", 1, 1) == "name")
+                return (m_resourcegroup ? m_resourcegroup->name() : QString::null);
+        
         } else if (tag.section(".", 0, 0) == "resource") {
             if (tag.section(".", 1, 1) == "name")
                 return (m_resource ? m_resource->name() : QString::null);
+            if (tag.section(".", 1, 1) == "type")
+                return (m_resource ? m_resource->typeToString() : QString::null);
+            if (tag.section(".", 1, 1) == "email")
+                return (m_resource ? m_resource->email() : QString::null);
+            if (tag.section(".", 1, 1) == "availablefrom")
+                return (m_resource ? l->formatDate(m_resource->availableFrom().date(), true) : QString::null);
+            if (tag.section(".", 1, 1) == "availableuntil")
+                return (m_resource ? l->formatDate(m_resource->availableUntil().date(), true) : QString::null);
+            if (tag.section(".", 1, 1) == "units")
+                return (m_resource ? QString("%1%").arg(m_resource->units()) : QString::null);
             if (tag.section(".", 1, 1) == "normalrate")
-                return (m_resource ? KGlobal::locale()->formatMoney(m_resource->normalRate()) : QString::null);
+                return (m_resource ? l->formatMoney(m_resource->normalRate()) : QString::null);
             if (tag.section(".", 1, 1) == "overtimerate")
-                return (m_resource ? KGlobal::locale()->formatMoney(m_resource->overtimeRate()) : QString::null);
-            if (tag.section(".", 1, 1) == "fixedcost")
-                return (m_resource ? KGlobal::locale()->formatMoney(m_resource->fixedCost()) : QString::null);
+                return (m_resource ? l->formatMoney(m_resource->overtimeRate()) : QString::null);
         }
 	return QString::null;
     }
@@ -150,6 +161,7 @@ ReportView::ReportView(View *view, QWidget *parent)
     m_reportList = new KListView(this);
     m_reportList->addColumn(i18n("Report Template"));
     m_reportList->header()->setStretchEnabled(true, 0);
+    m_reportList->header()->setSortIndicator(0);
     
     m_reportview = new Kugar::MReportViewer(this);
 
@@ -248,11 +260,8 @@ QString ReportView::setReportDetail() {
             m_reportTags->milestonesLevel = m_reportTags->alltasksLevel;
             m_reportTags->milestonesProps = m_reportTags->alltasksProps;
         }
-        QPtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
-        for (; it.current(); ++it) {
-            s += setTaskDetail(it.current());
-        }
-
+        s+= setTaskChildren(&(mainView()->getProject()));
+    
     } else if (m_reportTags->summarytasksLevel == "0") {
         // make a report that has summarytasks as starting points
         QPtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
@@ -282,6 +291,11 @@ QString ReportView::setReportDetail() {
     } else if (m_reportTags->milestonesLevel == "0") {
 
     } else if (m_reportTags->resourcegroupsLevel == "0") {
+        // make a report that has resourcegroups as starting points
+        QPtrListIterator<ResourceGroup> it(mainView()->getProject().resourceGroups());
+        for (; it.current(); ++it) {
+            s += setResourceGroupDetail(it.current());
+        }
 
     } else if (m_reportTags->resourcesLevel == "0") {
         // make a report that has resources as starting points
@@ -297,11 +311,27 @@ QString ReportView::setReportDetail() {
     return s;
 }
 
+QString ReportView::setResourceGroupDetail(ResourceGroup *group) {
+    //kdDebug()<<k_funcinfo<<group->name()<<endl;
+    QString s;
+    if (m_reportTags->resourcegroupsLevel != "-1") {
+        m_reportTags->m_resourcegroup = group;
+        //kdDebug()<<k_funcinfo<<group->name()<<": level="<<m_reportTags->resourcegroupsLevel<<endl;
+        s = setDetail("resourcegroup", m_reportTags->resourcegroupsProps, m_reportTags->resourcegroupsLevel);
+        QPtrListIterator<Resource> rit(group->resources());
+        for (; rit.current(); ++rit) {
+            s += setResourceDetail(rit.current());
+        }
+    }
+    return s;
+}
+
 QString ReportView::setResourceDetail(Resource *res) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<res->name()<<endl;
     QString s;
     if (m_reportTags->resourcesLevel != "-1") {
-        m_reportTags->m_resource = res;;
+        m_reportTags->m_resource = res;
+        //kdDebug()<<k_funcinfo<<res->name()<<": level="<<m_reportTags->resourcesLevel<<endl;
         s = setDetail("resource", m_reportTags->resourcesProps, m_reportTags->resourcesLevel);
     }
     return s;
@@ -313,7 +343,7 @@ QString ReportView::setTaskChildren(Node *node) {
     QPtrListIterator<Node> it(node->childNodeIterator());
     for (; it.current(); ++it) {
         s += setTaskDetail(it.current());
-        if (node->type() == Node::Type_Summarytask)
+        if (it.current()->type() == Node::Type_Summarytask)
             s+= setTaskChildren(it.current());
     }
     return s;
@@ -451,21 +481,19 @@ void ReportView::loadTemplate(QDomDocument &doc) {
             } else if (child.nodeName() == "PageHeader") {
                 handleHeader(child);
             } else if(child.nodeName() == "DetailHeader") {
-                handleDetailHeader(child);
-            }
-            else if(child.nodeName() == "Detail")
-            {
+                handleHeader(child);
+            } else if(child.nodeName() == "Detail") {
                 handleDetail(e);
-            }
-            else if(child.nodeName() == "DetailFooter")
-            {
-                handleDetailHeader(child);
-            }
-            else if(child.nodeName() == "PageFooter")
+            } else if(child.nodeName() == "DetailFooter") {
                 handleHeader(child);
-            else if(child.nodeName() == "ReportFooter")
+            } else if(child.nodeName() == "PageFooter") {
                 handleHeader(child);
+            } else if(child.nodeName() == "ReportFooter") {
+                handleHeader(child);
+            } else if(child.nodeName() == "KPlato") {
+                handleKPlato(e);
             }
+        }
     }
 }
 
@@ -490,18 +518,15 @@ void ReportView::handleHeader(QDomNode &node) {
             } while (i != -1 && j != -1);
             n.setNodeValue(r);
             //kdDebug()<<" new Text="<<n.nodeValue()<<endl;
-        }
-    }
-}
-
-void ReportView::handleDetailHeader(QDomNode &node) {
-    QDomNode child;
-    QDomNodeList children = node.childNodes();
-    int childCount = children.length();
-    for (int j = 0; j < childCount; j++) {
-        child = children.item(j);
-        if (child.nodeName() == "Label") {
-//            replaceTags(child.attributes().namedItem("Text"));
+        } else if (child.nodeName() == "Field") {
+            QDomElement e = child.toElement();
+            if (!e.isElement()) {
+                continue; // !!!!!
+            }
+            QString s = e.attribute("Field");
+            QString data = m_reportTags->getData(s);
+            e.setAttribute("Text", data);
+            //kdDebug()<<" new Text="<<e.attribute("Text")<<endl;
         }
     }
 }
@@ -513,45 +538,79 @@ QStringList ReportView::getProperties(QDomElement &elem) {
     for (int j = 0; j < childCount; j++) {
         QDomNode child = list.item(j);
         if (child.nodeName() == "Field") {
-            props.append(child.attributes().namedItem("Field").nodeValue()+"="+child.attributes().namedItem("Property").nodeValue());
+            props.append(child.attributes().namedItem("Field").nodeValue()+"="+child.attributes().namedItem("Field").nodeValue());
         }
     }
     return props;
 }
 
+void ReportView::handleKPlato(QDomElement &elem) {
+    QDomNodeList list(elem.childNodes());
+    int childCount = list.length();
+    for (int j = 0; j < childCount; j++) {
+        QDomNode child = list.item(j);
+        if (child.nodeName() == "Detail") {
+            QDomElement e = child.toElement();
+            if (!e.isElement()) {
+                continue; // !!!!!
+            }
+            QString source = e.attribute("SelectFrom");
+            QString level = e.attribute("Level", "-1");
+            //kdDebug()<<k_funcinfo<<"SelectFrom="<<source<<" Level="<<level<<endl;
+            if (source.isNull() || level == "-1")
+                continue;
+        
+            QStringList list = QStringList::split(" ", source);
+            QStringList::iterator it = list.begin();
+            for (; it != list.end(); ++it) {
+                //kdDebug()<<k_funcinfo<<(*it)<<endl;
+                if ((*it) == "alltasks") {
+                    m_reportTags->alltasksLevel = level;
+                }
+                if ((*it) == "summarytasks") {
+                    m_reportTags->summarytasksLevel = level;
+                }
+                if ((*it) == "tasks") {
+                    m_reportTags->tasksLevel = level;
+                }
+                if ((*it) == "milestones") {
+                    m_reportTags->milestonesLevel = level;
+                }
+                if ((*it) == "resourcegroups") {
+                    m_reportTags->resourcegroupsLevel = level;
+                }
+                if ((*it) == "resources") {
+                    m_reportTags->resourcesLevel = level;
+                }
+            }
+        }
+    }
+}
+
 void ReportView::handleDetail(QDomElement &elem) {
-
-    QString source = elem.attribute("SelectFrom");
-    if (source.isNull())
+    //kdDebug()<<k_funcinfo<<endl;
+    QString level = elem.attribute("Level", "-1");
+    if (level == "-1") {
         return;
-
-    QStringList list = QStringList::split(" ", source);
-    QStringList::iterator it = list.begin();
-    for (; it != list.end(); ++it) {
-        if ((*it) == "alltasks") {
-            m_reportTags->alltasksLevel = elem.attribute("Level", "-1");
-            m_reportTags->alltasksProps = getProperties(elem);
-        }
-        if ((*it) == "summarytasks") {
-            m_reportTags->summarytasksLevel = elem.attribute("Level", "-1");
-            m_reportTags->summarytasksProps = getProperties(elem);
-        }
-        if ((*it) == "tasks") {
-            m_reportTags->tasksLevel = elem.attribute("Level", "-1");
-            m_reportTags->tasksProps = getProperties(elem);
-        }
-        if ((*it) == "milestones") {
-            m_reportTags->milestonesLevel = elem.attribute("Level", "-1");
-            m_reportTags->milestonesProps = getProperties(elem);
-        }
-        if ((*it) == "resourcegroups") {
-            m_reportTags->resourcegroupsLevel = elem.attribute("Level", "-1");
-            m_reportTags->resourcegroupsProps = getProperties(elem);
-        }
-        if ((*it) == "resources") {
-            m_reportTags->resourcesLevel = elem.attribute("Level", "-1");
-            m_reportTags->resourcesProps = getProperties(elem);
-        }
+    }
+    
+    if (level == m_reportTags->alltasksLevel) {
+        m_reportTags->alltasksProps = getProperties(elem);
+    }
+    if (level ==  m_reportTags->summarytasksLevel) {
+        m_reportTags->summarytasksProps = getProperties(elem);
+    }
+    if (level == m_reportTags->tasksLevel) {
+        m_reportTags->tasksProps = getProperties(elem);
+    }
+    if (level == m_reportTags->milestonesLevel) {
+        m_reportTags->milestonesProps = getProperties(elem);
+    }
+    if (level == m_reportTags->resourcegroupsLevel) {
+        m_reportTags->resourcegroupsProps = getProperties(elem);
+    }
+    if (level == m_reportTags->resourcesLevel) {
+        m_reportTags->resourcesProps = getProperties(elem);
     }
 }
 
