@@ -195,7 +195,7 @@ Appointment ResourceGroup::appointmentIntervals() const {
     return a;
 }
 
-Resource::Resource(Project *project) : m_project(project), m_schedules(), m_workingHours(), m_overbooked(false) {
+Resource::Resource(Project *project) : m_project(project), m_schedules(), m_workingHours() {
     m_type = Type_Work;
     m_units = 100; // %
 
@@ -298,7 +298,6 @@ void Resource::copy(Resource *resource) {
     m_workingHours = resource->workingHours();
 
     m_units = resource->units(); // available units in percent
-    m_overbooked = resource->isOverbooked();
 
     m_type = resource->type();
 
@@ -552,7 +551,7 @@ bool Resource::isOverbooked(const QDate &date) const {
 }
 
 bool Resource::isOverbooked(const DateTime &start, const DateTime &end) const {
-    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<start.toString()<<" - "<<end.toString()<<" cs=("<<m_currentSchedule<<")"<<endl;
     return m_currentSchedule ? m_currentSchedule->isOverbooked(start, end) : false;
 }
 

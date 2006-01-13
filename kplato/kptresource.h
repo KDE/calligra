@@ -332,7 +332,6 @@ private:
     QPtrList<QTime> m_workingHours;
 
     int m_units; // avalable units in percent
-    bool m_overbooked;
 
     Type m_type;
 
