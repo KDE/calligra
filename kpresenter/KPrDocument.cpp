@@ -803,8 +803,11 @@ QDomDocumentFragment KPrDocument::saveBackground( QDomDocument &doc )
             continue;
         fragment.appendChild( m_pageList.at(i)->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ));
     }
-    // save backgound of masterpage
-    fragment.appendChild( m_masterPage->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ) );
+    // save backgound of masterpage only when the complete doc is saved
+    if ( saveOnlyPage == -1 )
+    {
+        fragment.appendChild( m_masterPage->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ) );
+    }
     return fragment;
 }
 
@@ -1561,60 +1564,60 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     // Load all styles before the corresponding paragraphs try to use them!
     m_styleColl->loadOasisStyles( context );
 
-
-
-
-    QString masterPageName = drawPage.toElement().attributeNS( KoXmlNS::draw, "master-page-name", QString::null );
-    QDomElement *master = oasisStyles.masterPages()[ masterPageName];
-
-    kdDebug()<<" master :"<<master<<endl;
-    kdDebug()<<" masterPageName:"<<masterPageName<<endl;
-    if ( ! master )
+    // if we only copy a page we have no master
+    if ( !m_pageWhereLoadObject )
     {
-        masterPageName = "Standard"; // use default layout as fallback (default in kpresenter)
-        master = oasisStyles.masterPages()[ masterPageName];
-        if ( !master ) //last test...
-            master = oasisStyles.masterPages()["Default"];
+        QString masterPageName = drawPage.toElement().attributeNS( KoXmlNS::draw, "master-page-name", QString::null );
+        QDomElement *master = oasisStyles.masterPages()[ masterPageName];
+
+        kdDebug()<<" master :"<<master<<endl;
+        kdDebug()<<" masterPageName:"<<masterPageName<<endl;
+        if ( ! master )
+        {
+            masterPageName = "Standard"; // use default layout as fallback (default in kpresenter)
+            master = oasisStyles.masterPages()[ masterPageName];
+            if ( !master ) //last test...
+                master = oasisStyles.masterPages()["Default"];
+        }
+
+        if ( master == 0 )
+        {
+            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No master-style found inside office:master-styles." ) );
+            return false;
+        }
+
+        kdDebug()<<" load oasis master styles\n";
+        QDomNode node = *master;
+        QDomElement masterElement = node.toElement();
+        kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
+        // add the correct styles
+        context.addStyles( context.oasisStyles().stylesAutoStyles()[masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null )] );
+        m_masterPage->loadOasis( context );
+        loadOasisObject( m_masterPage, node , context);
+        loadOasisHeaderFooter( node,context );
+
+        kdDebug()<<" end load oasis master style \n";
+
+        Q_ASSERT( master );
+        QDomElement *style =master ? oasisStyles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
+        QDomElement *backgroundStyle = oasisStyles.styles()[ "Standard-background"];
+        kdDebug()<<"Standard background "<<backgroundStyle<<endl;
+        // parse all pages
+        Q_ASSERT( style );
+        if ( style )
+        {
+            __pgLayout.loadOasis( *style );
+            kdDebug()<<"Page size __pgLayout.ptWidth :"<<__pgLayout.ptWidth<<" __pgLayout.ptHeight :"<<__pgLayout.ptHeight<<endl;
+            kdDebug()<<"Page orientation :"<<(( __pgLayout.orientation== PG_LANDSCAPE )? " landscape " : " portrait ")<<endl;
+
+            kdDebug()<<" margin right:"<< __pgLayout.ptRight <<" __pgLayout.ptBottom :"<<__pgLayout.ptBottom<<" __pgLayout.ptLeft :"<<__pgLayout.ptLeft<<" __pgLayout.ptTop :"<<__pgLayout.ptTop<<endl;
+        }
+        if ( _clean )
+        {
+            /// ### this has already been done, no?
+            setPageLayout( __pgLayout );
+        }
     }
-
-    if ( master == 0 )
-    {
-        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No master-style found inside office:master-styles." ) );
-        return false;
-    }
-
-    kdDebug()<<" load oasis master styles\n";
-    QDomNode node = *master;
-    QDomElement masterElement = node.toElement();
-    kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
-    // add the correct styles
-    context.addStyles( context.oasisStyles().stylesAutoStyles()[masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null )] );
-    m_masterPage->loadOasis( context );
-    loadOasisObject( m_masterPage, node , context);
-    loadOasisHeaderFooter( node,context );
-
-    kdDebug()<<" end load oasis master style \n";
-
-    Q_ASSERT( master );
-    QDomElement *style =master ? oasisStyles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
-    QDomElement *backgroundStyle = oasisStyles.styles()[ "Standard-background"];
-    kdDebug()<<"Standard background "<<backgroundStyle<<endl;
-    // parse all pages
-    Q_ASSERT( style );
-    if ( style )
-    {
-        __pgLayout.loadOasis( *style );
-        kdDebug()<<"Page size __pgLayout.ptWidth :"<<__pgLayout.ptWidth<<" __pgLayout.ptHeight :"<<__pgLayout.ptHeight<<endl;
-        kdDebug()<<"Page orientation :"<<(( __pgLayout.orientation== PG_LANDSCAPE )? " landscape " : " portrait ")<<endl;
-
-        kdDebug()<<" margin right:"<< __pgLayout.ptRight <<" __pgLayout.ptBottom :"<<__pgLayout.ptBottom<<" __pgLayout.ptLeft :"<<__pgLayout.ptLeft<<" __pgLayout.ptTop :"<<__pgLayout.ptTop<<endl;
-    }
-    if ( _clean )
-    {
-        /// ### this has already been done, no?
-        setPageLayout( __pgLayout );
-    }
-
 
     int pos = 0;
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
@@ -2533,7 +2536,11 @@ void KPrDocument::loadBackground( const QDomElement &element )
     int i=m_insertFilePage;
     while(!page.isNull()) {
         if(m_pageWhereLoadObject)
+        {
+            kdDebug(33001) << "m_pageWhereLoadObject->load(...)" << m_pageWhereLoadObject <<  endl;
             m_pageWhereLoadObject->load(page);
+            break;
+        }
         else
         {
             if ( page.tagName() == "MASTERPAGE" )
@@ -3497,17 +3504,6 @@ int KPrDocument::insertNewPage( const QString &cmdName, int _page, InsertPos _in
     return _page;
 }
 
-void KPrDocument::saveOasisPage( const QString &file, int pgnum, bool ignore )
-{
-    saveOnlyPage = pgnum;
-    _duplicatePage=ignore;
-    //save in oasis format
-    saveNativeFormat( file );
-    _duplicatePage=false;
-    saveOnlyPage = -1;
-}
-
-
 void KPrDocument::savePage( const QString &file, int pgnum, bool ignore )
 {
     saveOnlyPage = pgnum;
@@ -3757,38 +3753,6 @@ void KPrDocument::movePage( int from, int to )
     addCommand(cmd);
 }
 
-void KPrDocument::copyOasisPage( int from )
-{
-    _clean = false;
-    _duplicatePage=true; // ### now also set via saveOasisPage() parameter below
-
-    kdDebug(33001) << "KPrDocument::copyOasisPage from=" << from << " to=" << from + 1 << endl;
-    bool wasSelected = isSlideSelected( from );
-    KTempFile tempFile( QString::null, ".oop" );
-    tempFile.setAutoDelete( true );
-    saveOasisPage( tempFile.name(), from, true );
-
-    //insert page.
-    KPrPage *newpage = new KPrPage( this, m_masterPage );
-
-    m_pageWhereLoadObject = newpage;
-
-    bool ok = loadNativeFormat( tempFile.name() );
-    if ( !ok )
-        showLoadingErrorDialog();
-
-    KPrInsertPageCmd *cmd = new KPrInsertPageCmd( i18n("Duplicate Slide"), from, IP_AFTER, newpage, this );
-    cmd->execute();
-    addCommand(cmd);
-
-    _duplicatePage=false;
-
-    _clean = true;
-    m_pageWhereLoadObject=0L;
-
-    selectPage( from + 1, wasSelected );
-}
-
 void KPrDocument::copyPage( int from )
 {
     _clean = false;
@@ -3797,8 +3761,9 @@ void KPrDocument::copyPage( int from )
     _duplicatePage=true; // ### now also set via savePage() parameter below
 
     kdDebug(33001) << "KPrDocument::copyPage from=" << from << " to=" << from + 1 << endl;
+    kdDebug(33001) << "mimeType = " << mimeType() << ", outputMimeType = " << outputMimeType() << endl;
     bool wasSelected = isSlideSelected( from );
-    KTempFile tempFile( QString::null, ".kpr" );
+    KTempFile tempFile( QString::null, mimeType() == nativeOasisMimeType() ? ".oop": ".kpr" );
     tempFile.setAutoDelete( true );
     savePage( tempFile.name(), from, true );
 
@@ -3824,22 +3789,6 @@ void KPrDocument::copyPage( int from )
     selectPage( from + 1, wasSelected );
 }
 
-void KPrDocument::copyOasisPageToClipboard( int pgnum )
-{
-    // We save the page to a temp file and set the URL of the file in the clipboard
-    // Yes it's a hack but at least we don't hit the clipboard size limit :)
-    // (and we don't have to implement copy-tar-structure-to-clipboard)
-    // In fact it even allows copying a [1-page] kpr in konq and pasting it in kpresenter :))
-    kdDebug(33001) << "KPrDocument::copyPageToClipboard pgnum=" << pgnum << endl;
-    KTempFile tempFile( QString::null, ".oop" );
-    saveOasisPage( tempFile.name(), pgnum );
-    KURL url; url.setPath( tempFile.name() );
-    KURL::List lst;
-    lst.append( url );
-    QApplication::clipboard()->setData( new KURLDrag( lst ) );
-    m_tempFileInClipboard = tempFile.name(); // do this last, the above calls clipboardDataChanged
-}
-
 void KPrDocument::copyPageToClipboard( int pgnum )
 {
     // We save the page to a temp file and set the URL of the file in the clipboard
@@ -3847,7 +3796,8 @@ void KPrDocument::copyPageToClipboard( int pgnum )
     // (and we don't have to implement copy-tar-structure-to-clipboard)
     // In fact it even allows copying a [1-page] kpr in konq and pasting it in kpresenter :))
     kdDebug(33001) << "KPrDocument::copyPageToClipboard pgnum=" << pgnum << endl;
-    KTempFile tempFile( QString::null, ".kpr" );
+    kdDebug(33001) << "mimeType = " << mimeType() << ", outputMimeType = " << outputMimeType() << endl;
+    KTempFile tempFile( QString::null, mimeType() == nativeOasisMimeType() ? ".oop": ".kpr" );
     savePage( tempFile.name(), pgnum, true );
     KURL url; url.setPath( tempFile.name() );
     KURL::List lst;

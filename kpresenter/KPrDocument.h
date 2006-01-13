@@ -210,7 +210,6 @@ class KPrDocument : public KoDocument
     void insertObject(KPrChild* ch ){ insertChild(ch);}
 
     void savePage( const QString &file, int pgnum, bool ignore = false );
-    void saveOasisPage( const QString &file, int pgnum, bool ignore = false );
 
     void pastePage( const QMimeSource * data, int pgnum );
 
@@ -230,7 +229,6 @@ class KPrDocument : public KoDocument
     void takePage( KPrPage *page, int pageNum );
     void deletePage( int _page );
     void copyPageToClipboard( int pgnum );
-    void copyOasisPageToClipboard( int pgnum );
 
     // repaint all views
     void repaint( bool );
@@ -514,7 +512,6 @@ class KPrDocument : public KoDocument
 public slots:
     void movePage( int from, int to );
     void copyPage( int from );
-    void copyOasisPage( int from );
 
     void selectPage( int pgNum, bool select );
     void clipboardDataChanged();

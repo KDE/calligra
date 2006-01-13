@@ -621,20 +621,12 @@ void KPrView::editDeSelectAll()
 
 void KPrView::editCopyPage()
 {
-#if COPYOASISFORMAT
-    m_pKPresenterDoc->copyOasisPageToClipboard( currPg );
-#else
     m_pKPresenterDoc->copyPageToClipboard( currPg );
-#endif
 }
 
 void KPrView::editDuplicatePage()
 {
-#if COPYOASISFORMAT
-    m_pKPresenterDoc->copyOasisPage( currPg );
-#else
     m_pKPresenterDoc->copyPage( currPg );
-#endif
     setRanges();
 }
 
