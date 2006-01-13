@@ -563,6 +563,7 @@ Value func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
   QString new_text = calc->conv()->asString (args[2]).asString();
 
   if( num <= 0 ) return Value::errorVALUE();
+  if (old_text.length() == 0) return Value (text);
 
   QString result = text;
 
@@ -570,7 +571,8 @@ Value func_substitute (valVector args, ValueCalc *calc, FuncExtra *)
   while ((p != -1) && (num > 0))
   {
     result.replace( p, old_text.length(), new_text );
-    p = result.find( old_text );
+    // find another location, starting straight after the replaced text
+    p = result.find (old_text, p + new_text.length());
     if( !all ) num--;
   }
 
