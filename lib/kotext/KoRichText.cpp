@@ -59,30 +59,6 @@
 static QString debug_indent;
 #endif
 
-static bool is_printer( QPainter *p )
-{
-    return p && p->device() && p->device()->devType() == QInternal::Printer;
-}
-
-static inline int scale( int value, QPainter *painter )
-{
-    if ( is_printer( painter ) ) {
-	QPaintDeviceMetrics metrics( painter->device() );
-#if defined(Q_WS_X11)
-	value = value * metrics.logicalDpiY() / QPaintDevice::x11AppDpiY();
-#elif defined (Q_WS_WIN)
-	int gdc = GetDeviceCaps( GetDC( 0 ), LOGPIXELSY );
-	if ( gdc )
-	    value = value * metrics.logicalDpiY() / gdc;
-#elif defined (Q_WS_MAC)
-	value = value * metrics.logicalDpiY() / 75; // ##### FIXME
-#elif defined (Q_WS_QWS)
-	value = value * metrics.logicalDpiY() / 75;
-#endif
-    }
-    return value;
-}
-
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void KoTextDocCommandHistory::addCommand( KoTextDocCommand *cmd )
