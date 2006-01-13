@@ -38,8 +38,6 @@
 #include <kdialogbase.h>
 #include <kmessagebox.h>
 
-#include <koscript.h>
-
 #include "kspread_dlg_cons.h"
 
 #include <kspread_canvas.h>
