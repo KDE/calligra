@@ -115,19 +115,23 @@ void Sheet::setName( const UString& name )
   d->name = name;
 }
 
-Cell* Sheet::cell( unsigned column, unsigned row, bool autoCreate )
+Cell* Sheet::cell( unsigned columnIndex, unsigned rowIndex, bool autoCreate )
 {
-  unsigned hashed = (row+1)*1024 + column + 1;
+  unsigned hashed = (rowIndex+1)*1024 + columnIndex + 1;
   Cell* c = d->cells[ hashed ];
   
   // create cell if necessary
   if( !c && autoCreate )
   {
-    c = new Cell( this, column, row );
+    c = new Cell( this, columnIndex, rowIndex );
     d->cells[ hashed ] = c;
+
+    // force creating the column and row
+    this->column( columnIndex, true );
+    this->row( rowIndex, true );
     
-    if( row > d->maxRow ) d->maxRow = row;
-    if( column > d->maxColumn ) d->maxColumn = column;
+    if( rowIndex > d->maxRow ) d->maxRow = rowIndex;
+    if( columnIndex > d->maxColumn ) d->maxColumn = columnIndex;
   }
   
   return c;
