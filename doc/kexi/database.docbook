@@ -32,8 +32,8 @@ presented on a separate card. It appears that such a card can
 constitute a single line in a table:
 </para>
 
-<table>
-<title>Contacts</title>
+<para><emphasis>Contacts table</emphasis></para>
+<informaltable>
 <tgroup cols="2">
 <tbody>
 <row>
@@ -50,7 +50,7 @@ constitute a single line in a table:
 </row>
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
 <para>
 <emphasis>Terms and definitions</emphasis>:
@@ -122,8 +122,8 @@ database)</para></listitem>
 <listitem><para>there are no two persons with the same name and surname</para>
 </listitem>
 </itemizedlist>
-<table>
-<title>Contacts</title>
+<para><emphasis>Contacts table</emphasis></para>
+<informaltable>
 <tgroup cols="3">
 <tbody>
 <row>
@@ -158,7 +158,7 @@ database)</para></listitem>
 </row>
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
 <para>
 Such a table can be made both in a spreadsheet and in a database.
@@ -199,8 +199,8 @@ with only two columns: <guilabel>Name and suname</guilabel>
 and <guilabel>Address</guilabel>:
 </para>
 
-<table>
-<title>Persons</title>
+<para><emphasis>Persons table</emphasis></para>
+<informaltable>
 <tgroup cols="2">
 <tbody>
 <row>
@@ -217,7 +217,7 @@ and <guilabel>Address</guilabel>:
 </row>
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
 <para>
 Each line in the table <guilabel>Persons</guilabel> corresponds to a
@@ -270,8 +270,8 @@ are empty, e.g. you must always enter house number.
 A modified table looks something like this:
 </para>
 
-<table>
-<title>Persons</title>
+<para><emphasis>Persons table</emphasis></para>
+<informaltable>
 <tgroup cols="5">
 <colspec colnum="1" colname="c1"></colspec>
 <colspec colnum="2" colname="c2"></colspec>
@@ -312,7 +312,7 @@ A modified table looks something like this:
 </row>
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
 <para>
 Thanks to introducing conditions <guilabel>required field</guilabel> we can
@@ -345,8 +345,8 @@ A very practical way of limitting is the following extended version of
 the previously described table <guilabel>Persons</guilabel>:
 </para>
 
-<table>
-<title>Persons</title>
+<para><emphasis>Persons table</emphasis></para>
+<informaltable>
 <tgroup cols="6">
 <tbody>
 <row>
@@ -375,7 +375,7 @@ the previously described table <guilabel>Persons</guilabel>:
 </row>
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
 <para>
 Let's assume that the newly introduced column <guilabel>Income</guilabel>
