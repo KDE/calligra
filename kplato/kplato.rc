@@ -67,7 +67,7 @@
             <Action name="configure" group="settings_configure"/>
         </Menu>
     </MenuBar>
-    <ToolBar name="view" position="top"><Text>View</Text>
+    <ToolBar name="view" position="left"><Text>View</Text>
         <Action name="view_gantt"/>
         <!--<Action name="view_pert"/> -->
         <Action name="view_resources"/>
@@ -79,13 +79,13 @@
         <Action name="koffice_undo"/>
         <Action name="koffice_redo"/>
         <Separator/>
+        <Action name="project_edit"/>
+        <Separator/>
         <Action name="add_task"/>
         <Action name="add_sub_task"/>
         <Action name="add_milestone"/>
-        <Separator/>
-        <Action name="project_edit"/>
-        <Separator/>
         <Action name="delete_task"/>
+        <Separator/>
         <Action name="indent_task"/>
         <Action name="unindent_task"/>
         <Action name="move_task_up"/>

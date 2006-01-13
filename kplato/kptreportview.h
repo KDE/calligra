@@ -49,7 +49,7 @@ namespace KPlato
 
 class View;
 class Node;
-
+class KugarReportViewer;
 class ReportTagsPrivate;
 
 class ReportView : public QSplitter
@@ -94,6 +94,14 @@ class ReportView : public QSplitter
     virtual bool setContext(Context::Reportview &context);
     virtual void getContext(Context::Reportview &context) const;
 
+    void enableNavigationBtn();
+    
+signals:
+    void setFirstPageActionEnabled(bool);
+    void setNextPageActionEnabled(bool);
+    void setPriorPageActionEnabled(bool);
+    void setLastPageActionEnabled(bool);
+
 public slots:
 	void slotFirstPage();
 	void slotNextPage();
@@ -118,7 +126,7 @@ private:
 private:
     View *m_mainview;
     KListView *m_reportList;
-    Kugar::MReportViewer *m_reportview;
+    KugarReportViewer *m_reportview;
     int m_defaultFontSize;
 
     QDomDocument templateDoc;

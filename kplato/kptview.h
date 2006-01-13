@@ -155,7 +155,8 @@ protected slots:
 
 protected:
     virtual void updateReadWrite(bool readwrite);
-	Node *currentTask();
+    Node *currentTask();
+    void updateView(QWidget *widget);
 
 private:
     GanttView *m_ganttview;

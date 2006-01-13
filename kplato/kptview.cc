@@ -21,7 +21,7 @@
 #include <kprinter.h>
 #include <kmessagebox.h>
 
-#include <koKoolBar.h>
+#include <koMainWindow.h>
 
 #include <qapplication.h>
 #include <qpainter.h>
@@ -212,10 +212,16 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     // ------ Reports
     actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
+    connect(m_reportview, SIGNAL(setFirstPageActionEnabled(bool)), actionFirstpage, SLOT(setEnabled(bool)));
     actionPriorpage = KStdAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
+    connect(m_reportview, SIGNAL(setPriorPageActionEnabled(bool)), actionPriorpage, SLOT(setEnabled(bool)));
     actionNextpage = KStdAction::next(m_reportview,SLOT(slotNextPage()),actionCollection(), "go_nextpage");
+    connect(m_reportview, SIGNAL(setNextPageActionEnabled(bool)), actionNextpage, SLOT(setEnabled(bool)));
     actionLastpage = KStdAction::lastPage(m_reportview,SLOT(slotLastPage()),actionCollection(), "go_lastpage");
-
+    connect(m_reportview, SIGNAL(setLastPageActionEnabled(bool)), actionLastpage, SLOT(setEnabled(bool)));
+    m_reportview->enableNavigationBtn();
+    mainWindow()->toolBar("report")->hide();
+    
 //     new KAction(i18n("Design..."), "report_design", 0, this,
 //         SLOT(slotReportDesign()), actionCollection(), "report_design");
 
@@ -270,6 +276,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionViewPessimistic->setEnabled(getProject().findSchedule(Schedule::Pessimistic));
     actionViewExpected->setChecked(true); //TODO: context
     slotViewExpected();
+    
 }
 
 View::~View()
@@ -599,12 +606,8 @@ void View::slotAddTask() {
 }
 
 void View::slotAddMilestone() {
-	Duration zeroDuration(0);
     Task* node = getProject().createTask(currentTask());
-	node->effort()->set( zeroDuration );
-
-    //Milestone *node = new Milestone(currentTask());
-    node->setName(i18n("Milestone"));
+    node->effort()->set(Duration::zeroDuration);
 
     TaskDialog *dia = new TaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
@@ -983,64 +986,47 @@ void View::slotUpdate(bool calculate)
 {
     //kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
-	    projectCalculate();
+        projectCalculate();
 
-	if (m_tab->visibleWidget() == m_ganttview)
-	{
-	    //m_ganttview->hide();
-        m_ganttview->drawChanges(getProject());
-	    m_ganttview->show();
-	}
-	else if (m_tab->visibleWidget() == m_pertview)
-	{
-    	m_pertview->draw();
-	    m_pertview->show();
-	}
-	else if (m_tab->visibleWidget() == m_resourceview)
-	{
-    	m_resourceview->draw(getProject());
-	    m_resourceview->show();
-	}
-	else if (m_tab->visibleWidget() == m_accountsview)
-	{
-        m_accountsview->draw();
-	}
-	else if (m_tab->visibleWidget() == m_reportview)
-	{
-	}
+    updateView(m_tab->visibleWidget());
 }
 
-//FIXME: We need a solution that takes care project specific reports.
 void View::slotAboutToShow(QWidget *widget) {
-	if (widget == m_ganttview)
-	{
+    updateView(widget);
+}
+
+void View::updateView(QWidget *widget)
+{
+    mainWindow()->toolBar("report")->hide();
+    if (widget == m_ganttview)
+    {
         //kdDebug()<<k_funcinfo<<"draw gantt"<<endl;
-	    //m_ganttview->hide();
+        //m_ganttview->hide();
         m_ganttview->drawChanges(getProject());
-	    m_ganttview->show();
-	}
-	else if (widget == m_pertview)
-	{
+        m_ganttview->show();
+    }
+    else if (widget == m_pertview)
+    {
         //kdDebug()<<k_funcinfo<<"draw pertview"<<endl;
-    	m_pertview->draw();
-	    m_pertview->show();
-	}
-	else if (widget == m_resourceview)
-	{
+        m_pertview->draw();
+        m_pertview->show();
+    }
+    else if (widget == m_resourceview)
+    {
         //kdDebug()<<k_funcinfo<<"draw resourceview"<<endl;
-    	m_resourceview->draw(getPart()->getProject());
-	    m_resourceview->show();
+        m_resourceview->draw(getPart()->getProject());
+        m_resourceview->show();
     }
     else if (widget == m_accountsview)
     {
         //kdDebug()<<k_funcinfo<<"draw accountsview"<<endl;
         m_accountsview->draw();
     }
-	else if (widget == m_reportview)
-	{
-        //kdDebug()<<k_funcinfo<<"draw reportview"<<endl;
-	}
-
+    else if (widget == m_reportview)
+    {
+        mainWindow()->toolBar("report")->show();
+        m_reportview->enableNavigationBtn();
+    }
 }
 
 void View::renameNode(Node *node, QString name) {

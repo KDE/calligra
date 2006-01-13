@@ -24,6 +24,7 @@
 #include "kptcontext.h"
 
 #include <mreportviewer.h>
+#include <mpagecollection.h>
 
 #include <KoStore.h>
 
@@ -151,6 +152,19 @@ public:
 
 };
 
+class KugarReportViewer : public Kugar::MReportViewer {
+public:
+    KugarReportViewer(QWidget *parent = 0, const char *name = 0)
+    : MReportViewer(parent, name)
+    {}
+    
+    int currentPage() {
+        return report ? report->getCurrentIndex() : 0;
+    }
+    int pageCount() {
+        return report ? report->pageCount() : 0;
+    }
+};
 
 ReportView::ReportView(View *view, QWidget *parent)
     : QSplitter(parent),
@@ -163,7 +177,7 @@ ReportView::ReportView(View *view, QWidget *parent)
     m_reportList->header()->setStretchEnabled(true, 0);
     m_reportList->header()->setSortIndicator(0);
     
-    m_reportview = new Kugar::MReportViewer(this);
+    m_reportview = new KugarReportViewer(this);
 
     initReportList();
     
@@ -226,6 +240,7 @@ void ReportView::draw(const QString &report) {
     m_reportview->show();
     delete m_reportTags;
     m_reportTags=0L;
+    enableNavigationBtn();
 }
 
 void ReportView::setup(KPrinter &printer) {
@@ -650,20 +665,31 @@ void ReportView::getTemplateFile(const QString &tpl) {
 	}
 }
 
+void ReportView::enableNavigationBtn() {
+    //kdDebug()<<k_funcinfo<<"curr="<<m_reportview->currentPage()<<" count="<<m_reportview->pageCount()<<endl;
+    emit setFirstPageActionEnabled(m_reportview->currentPage() > 0);
+    emit setNextPageActionEnabled(m_reportview->currentPage() < m_reportview->pageCount()-1);
+    emit setPriorPageActionEnabled(m_reportview->currentPage() > 0);
+    emit setLastPageActionEnabled(m_reportview->currentPage() < m_reportview->pageCount()-1);
+}
 void ReportView::slotFirstPage() {
     m_reportview->slotFirstPage();
+    enableNavigationBtn();
 }
 
 void ReportView::slotNextPage() {
     m_reportview->slotNextPage();
+    enableNavigationBtn();
 }
 
 void ReportView::slotPrevPage() {
     m_reportview->slotPrevPage();
+    enableNavigationBtn();
 }
 
 void ReportView::slotLastPage() {
     m_reportview->slotLastPage();
+    enableNavigationBtn();
 }
 
 bool ReportView::setContext(Context::Reportview &context) {
