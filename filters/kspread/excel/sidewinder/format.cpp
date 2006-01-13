@@ -1,5 +1,5 @@
 /* Swinder - Portable library for spreadsheet
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
@@ -15,7 +15,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA
+   Boston, MA 02110-1301, USA
 */
 
 #include "format.h"
@@ -198,6 +198,34 @@ void FormatFont::setSuperscript( bool s )
     d->subscript = false;
 }
 
+bool FormatFont::operator==(const FormatFont& font)
+{
+	return 
+    d->bold == font.d->bold &&
+    d->italic == font.d->italic &&
+    d->underline == font.d->underline &&
+    d->strikeout == font.d->strikeout &&
+    d->subscript == font.d->subscript &&
+    d->superscript == font.d->superscript &&
+    d->fontFamily == font.d->fontFamily &&
+    d->fontSize == font.d->fontSize &&
+    d->color == font.d->color;
+}
+
+bool FormatFont::operator!=(const FormatFont& font)
+{
+	return 
+    d->bold != font.d->bold ||
+    d->italic != font.d->italic ||
+    d->underline != font.d->underline ||
+    d->strikeout != font.d->strikeout ||
+    d->subscript != font.d->subscript ||
+    d->superscript != font.d->superscript ||
+    d->fontFamily != font.d->fontFamily ||
+    d->fontSize != font.d->fontSize ||
+    d->color != font.d->color;
+}
+
 class FormatAlignment::Private
 {
 public:
@@ -306,6 +334,26 @@ void FormatAlignment::setRotationAngle( unsigned r )
   d->null = false;
 }
 
+bool FormatAlignment::operator==(const FormatAlignment& font)
+{
+	return 
+    d->alignX == font.d->alignX &&
+    d->alignY == font.d->alignY &&
+    d->wrap == font.d->wrap &&
+    d->indentLevel == font.d->indentLevel &&
+    d->rotationAngle == font.d->rotationAngle;
+}
+
+bool FormatAlignment::operator!=(const FormatAlignment& font)
+{
+	return 
+    d->alignX != font.d->alignX ||
+    d->alignY != font.d->alignY ||
+    d->wrap != font.d->wrap ||
+    d->indentLevel != font.d->indentLevel ||
+    d->rotationAngle != font.d->rotationAngle;
+}
+
 class FormatBackground::Private
 {
 public:
@@ -387,6 +435,22 @@ void FormatBackground::setForegroundColor( const Color& color )
 {
   d->foreground = color;
   d->null = false;
+}
+
+bool FormatBackground::operator==(const FormatBackground& font)
+{
+	return 
+    d->pattern == font.d->pattern &&
+    d->background == font.d->background &&
+    d->foreground == font.d->foreground;
+}
+
+bool FormatBackground::operator!=(const FormatBackground& font)
+{
+	return 
+    d->pattern != font.d->pattern ||
+    d->background != font.d->background ||
+    d->foreground != font.d->foreground;
 }
 
 class FormatBorders::Private
@@ -483,6 +547,24 @@ void FormatBorders::setBottomBorder( const Pen& pen )
 {
   d->bottomBorder = pen;
   d->null = false;
+}
+
+bool FormatBorders::operator==(const FormatBorders& font)
+{
+	return 
+    d->leftBorder == font.d->leftBorder &&
+    d->rightBorder == font.d->rightBorder &&
+    d->topBorder == font.d->topBorder &&
+    d->bottomBorder == font.d->bottomBorder;
+}
+
+bool FormatBorders::operator!=(const FormatBorders& font)
+{
+	return 
+    d->leftBorder != font.d->leftBorder ||
+    d->rightBorder != font.d->rightBorder ||
+    d->topBorder != font.d->topBorder ||
+    d->bottomBorder != font.d->bottomBorder;
 }
 
 // helper class for Format class
@@ -608,4 +690,24 @@ Format& Format::apply( const Format& f )
     background() = f.background();
   
   return *this;
+}
+
+bool Format::operator==(const Format& format)
+{
+	return 
+    d->font == format.d->font &&
+    d->alignment == format.d->alignment &&
+    d->borders == format.d->borders &&
+    d->background == format.d->background &&
+    d->valueFormat == format.d->valueFormat;
+}
+
+bool Format::operator!=(const Format& format)
+{
+	return 
+    d->font != format.d->font ||
+    d->alignment != format.d->alignment ||
+    d->borders != format.d->borders ||
+    d->background != format.d->background ||
+    d->valueFormat != format.d->valueFormat;
 }

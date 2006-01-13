@@ -1,5 +1,5 @@
 /* Sidewinder - Portable library for spreadsheet 
-   Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2003-2006 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
@@ -62,8 +62,22 @@ public:
    */
   Color( const char* c )
     { std::sscanf(c, "#%2x%2x%2x", &red, &green, &blue); }
-  
+
+  friend inline bool operator==(const Color&, const Color&);
+  friend inline bool operator!=(const Color&, const Color&);
 };
+
+/**
+    Returns true if c1 is equal to c2; otherwise returns false.
+*/
+inline bool operator==(const Color& c1, const Color& c2)
+{ return c1.red == c2.red && c1.green == c2.green && c1.blue == c2.blue; }
+
+/**
+    Returns true if c1 is not equal to c2; otherwise returns false.
+*/
+inline bool operator!=(const Color& c1, const Color& c2)
+{ return c1.red != c2.red || c1.green != c2.green || c1.blue != c2.blue; }
 
 class Pen
 {
@@ -85,8 +99,22 @@ public:
   };
   
   Pen(): style( SolidLine ), width( 0 ){}
-  
+
+  friend inline bool operator==(const Pen&, const Pen&);
+  friend inline bool operator!=(const Pen&, const Pen&);
 };
+
+/**
+    Returns true if p1 is equal to p2; otherwise returns false.
+*/
+inline bool operator==(const Pen& p1, const Pen& p2)
+{ return p1.style == p2.style && p1.width == p1.width && p1.color == p2.color; }
+
+/**
+    Returns true if p1 is not equal to p2; otherwise returns false.
+*/
+inline bool operator!=(const Pen& p1, const Pen& p2)
+{ return p1.style != p2.style || p1.width != p1.width || p1.color != p2.color; }
 
 
 /**
@@ -221,6 +249,16 @@ public:
    */
   void setSuperscript( bool s );
   
+  /**
+   * Returns true if this font is equal to f; otherwise returns false.
+   */
+  bool operator==(const FormatFont& f);
+
+  /**
+   * Returns true if this font is not equal to f; otherwise returns false.
+   */
+  bool operator!=(const FormatFont& f);
+
 private:  
   class Private;
   Private *d;
@@ -341,6 +379,16 @@ public:
    */  
    void setRotationAngle( unsigned r );
        
+  /**
+   * Returns true if this alignment is equal to f; otherwise returns false.
+   */
+  bool operator==(const FormatAlignment& f);
+
+  /**
+   * Returns true if this alignment is not equal to f; otherwise returns false.
+   */
+  bool operator!=(const FormatAlignment& f);
+
 private:  
   class Private;
   Private *d;
@@ -443,6 +491,16 @@ public:
    */
   void setForegroundColor( const Color& );
 
+  /**
+   * Returns true if this background is equal to f; otherwise returns false.
+   */
+  bool operator==(const FormatBackground& f);
+
+  /**
+   * Returns true if this background is not equal to f; otherwise returns false.
+   */
+  bool operator!=(const FormatBackground& f);
+  
 private:
   class Private;
   Private *d;
@@ -542,7 +600,17 @@ public:
    * \sa bottomBorder
    */
   void setBottomBorder( const Pen& pen );
-  
+
+  /**
+   * Returns true if this background is equal to f; otherwise returns false.
+   */
+  bool operator==(const FormatBorders& f);
+
+  /**
+   * Returns true if this background is not equal to f; otherwise returns false.
+   */
+  bool operator!=(const FormatBorders& f);
+    
 private:  
   class Private;
   Private *d;
@@ -672,12 +740,20 @@ public:
    */
   Format& apply( const Format& f );
 
-protected:
+  /**
+   * Returns true if this format is equal to f; otherwise returns false.
+   */
+  bool operator==(const Format& f);
+
+  /**
+   * Returns true if this format is not equal to f; otherwise returns false.
+   */
+  bool operator!=(const Format& f);
+
+private:
   class Private;
   Private* d; // can't never be 0
-
 };
-
 
 }
 
