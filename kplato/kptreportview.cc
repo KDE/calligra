@@ -230,6 +230,7 @@ void ReportView::draw(const QString &report) {
 
 void ReportView::print(KPrinter &printer) {
     //kdDebug()<<k_funcinfo<<endl;
+    m_reportview->setupPrinter(printer);
 	m_reportview->printReport(printer);
 }
 
