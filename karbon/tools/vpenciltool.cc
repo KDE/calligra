@@ -78,7 +78,7 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 
 	m_optimizeCurve = new QCheckBox( i18n( "Optimize" ), vbox2 );
 	m_fittingError = new KDoubleNumInput( 0.0, 400.0, 4.00, 0.50, 3, vbox2 );
-	m_fittingError->setLabel( i18n( "Exactness" ) );
+	m_fittingError->setLabel( i18n( "Exactness:" ) );
 
 	group2->setInsideMargin( 4 );
 	group2->setInsideSpacing( 2 );
@@ -88,7 +88,7 @@ VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, co
 
 	m_combineAngle = new KDoubleNumInput( 0.0, 360.0, 0.10, 0.50, 3, group3 );
 	m_combineAngle->setSuffix( " deg" );
-	m_combineAngle->setLabel( i18n( "Combine Angle" ) );
+	m_combineAngle->setLabel( i18n( "Combine angle:" ) );
 
 	group3->setInsideMargin( 4 );
 	group3->setInsideSpacing( 2 );

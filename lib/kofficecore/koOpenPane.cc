@@ -91,7 +91,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   connect(m_sectionList, SIGNAL(selectionChanged(QListViewItem*)),
           this, SLOT(selectionChanged(QListViewItem*)));
 
-  KGuiItem openExistingGItem(i18n("Open Existing Document"), "fileopen");
+  KGuiItem openExistingGItem(i18n("Open Existing Document..."), "fileopen");
   m_openExistingButton->setGuiItem(openExistingGItem);
   connect(m_openExistingButton, SIGNAL(clicked()), this, SLOT(showOpenFileDialog()));
 

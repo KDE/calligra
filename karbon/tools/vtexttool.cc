@@ -603,7 +603,7 @@ VTextTool::~VTextTool()
 
 QString VTextTool::contextHelp()
 {
-	QString s = "<qt><b>Text tool</b><br>";
+	QString s = "<qt><b>Text Tool</b><br>";
 	s += "Click on document to place horizontal text.<br>";
 	s += "Click and drag in document to place directional text.<br>";
 	s += "Click on a selected path object to place text along its outline.<br>";
