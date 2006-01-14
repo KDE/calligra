@@ -284,9 +284,11 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, QVBox *box, char *
 
     showStatusBar = new QCheckBox(i18n("Show &status bar"),gbInterfaceGroup);
     showStatusBar->setChecked(oldShowStatusBar);
+    QWhatsThis::add( showStatusBar, i18n("Show or hide the status bar. If enabled, the status bar is shown at the bottom and shows some information."));
 
     showScrollBar = new QCheckBox( i18n("Show s&crollbar"), gbInterfaceGroup);
     showScrollBar->setChecked(oldShowScrollBar);
+    QWhatsThis::add( showScrollBar, i18n("Show or hide the scroll bar. If enabled, the scroll bar is shown on the right and lets you scroll up and down, which is useful for navigating through the document."));
 
     pgUpDownMovesCaret = new QCheckBox(i18n("PageUp/PageDown &moves the caret"),gbInterfaceGroup);
     pgUpDownMovesCaret->setChecked(oldPgUpDownMovesCaret);
@@ -296,15 +298,20 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, QVBox *box, char *
                          "If it is disabled, they move the scrollbars, as in most other word processors." ) );
 
     QHBox* hbRecent = new QHBox( gbInterfaceGroup );
+    QString recentHelp = i18n("The number of files remembered in the file open dialog and in the "
+                              "recent files menu item.");
     QLabel* labelRecent = new QLabel( i18n("Number of recent &files:"), hbRecent );
+    QWhatsThis::add( labelRecent, recentHelp );
     recentFiles=new KIntNumInput( oldNbRecentFiles, hbRecent );
     recentFiles->setRange(1, 20, 1);
     labelRecent->setBuddy( recentFiles );
-    QWhatsThis::add( recentFiles, i18n("The number of files remembered in the file open dialog and in the "
-                    "recent files menu item") );
+    QWhatsThis::add( recentFiles, recentHelp );
 
     QHBox* hbGridX = new QHBox( gbInterfaceGroup );
+    QString gridxHelp = i18n("The grid size on which frames, tabs and other content snaps while "
+                             "moving and scaling.");
     QLabel* labelGridX = new QLabel( i18n("&Horizontal grid size:"), hbGridX );
+    QWhatsThis::add( labelGridX, gridxHelp );
     gridX=new KoUnitDoubleSpinBox( hbGridX,
                                    0.1,
                                    50,
@@ -312,11 +319,13 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, QVBox *box, char *
                                    ptGridX,
                                    unit );
     labelGridX->setBuddy( gridX );
-    QWhatsThis::add( gridX, i18n("The grid size on which frames, tabs and other content snaps while "
-                    "moving and scaling") );
+    QWhatsThis::add( gridX, gridxHelp );
 
     QHBox* hbGridY = new QHBox( gbInterfaceGroup );
+    QString gridyHelp = i18n("The grid size on which frames and other content snaps while "
+                             "moving and scaling.");
     QLabel* labelGridY = new QLabel( i18n("&Vertical grid size:"), hbGridY );
+    QWhatsThis::add( labelGridY, gridyHelp );
     gridY=new KoUnitDoubleSpinBox( hbGridY,
                                    0.1,
                                    50,
@@ -325,32 +334,35 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, QVBox *box, char *
                                    unit );
     labelGridY->setBuddy( gridY );
 
-    QWhatsThis::add( gridY, i18n("The grid size on which frames and other content snaps while "
-                    "moving and scaling") );
+    QWhatsThis::add( gridY, gridyHelp );
 
     QHBox* hbIndent = new QHBox( gbInterfaceGroup );
-    QLabel* labelIdent = new QLabel( i18n("&Paragraph indent by toolbar buttons:"), hbIndent );
+    QString indentHelp = i18n("Configure the indent width used when using the 'Increase' "
+                              "or 'Decrease' indentation buttons on a paragraph.<p>The lower the value, "
+                              "the more often the buttons will have to be pressed to gain the same "
+                              "indentation.");
+    QLabel* labelIndent = new QLabel( i18n("&Paragraph indent by toolbar buttons:"), hbIndent );
+    QWhatsThis::add( labelIndent, indentHelp );
     indent = new KoUnitDoubleSpinBox( hbIndent,
                                       0.1,
                                       50,
                                       0.1,
                                       ptIndent,
                                       unit );
-    labelIdent->setBuddy( indent );
-    QWhatsThis::add( indent, i18n("Configure the indent width used when using the 'Increase' "
-                    "or 'Decrease' indentation buttons on a paragraph.<p>The lower the value, "
-                    "the more often the buttons will have to be pressed to gain the same "
-                    "indentation.") );
+    labelIndent->setBuddy( indent );
+    QWhatsThis::add( indent, indentHelp );
 
     QHBox* hbPagePerRow = new QHBox( gbInterfaceGroup );
+    QString pagePerRowHelp = i18n("After selecting preview mode (via the \"View\" "
+                                  "menu, option \"Preview mode\") this is the amount of pages KWord will "
+                                  "position on one horizontal row.");
     QLabel* labelPagePerRow = new QLabel( i18n("Number of pa&ges per row in preview mode:" ), hbPagePerRow );
+    QWhatsThis::add( labelPagePerRow, pagePerRowHelp );
     m_nbPagePerRow=new KIntNumInput( 0, nbPagePerRow, hbPagePerRow );
     m_nbPagePerRow->setRange(1, 10, 1);
     labelPagePerRow->setBuddy( m_nbPagePerRow );
     hbPagePerRow->setStretchFactor( m_nbPagePerRow, 1 );
-    QWhatsThis::add(m_nbPagePerRow , i18n("After selecting preview mode (via the \"View\" "
-                    "menu, option \"Preview mode\") this is the amount of pages KWord will "
-                    "position on one horizontal row") );
+    QWhatsThis::add(m_nbPagePerRow , pagePerRowHelp );
 }
 
 void ConfigureInterfacePage::apply()
