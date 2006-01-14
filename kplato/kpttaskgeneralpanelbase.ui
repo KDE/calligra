@@ -188,6 +188,9 @@ This is not limited to persons available in a resource group but can be anyone. 
                                     <property name="toolTip" stdset="0">
                                         <string>Insert a person from your address book.</string>
                                     </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Insert a person from your address book.</string>
+                                    </property>
                                 </widget>
                             </hbox>
                         </widget>
@@ -201,6 +204,11 @@ This is not limited to persons available in a resource group but can be anyone. 
             </property>
             <property name="title">
                 <string>Timing</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Scheduling Configuration. These settings affect the actual scheduling of the task.
+
+The estimation can be either effort based or duration based. If it is effort based, the final duration will depend on the resources assigned to the task. For duration based estimation, the assigned resources don't affect the fixed duration of the task, but only the costs.</string>
             </property>
             <grid>
                 <property name="name">
@@ -306,6 +314,16 @@ This is not limited to persons available in a resource group but can be anyone. 
                     <property name="name">
                         <cstring>scheduleStartDate</cstring>
                     </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
+                    </property>
+                    <property name="date">
+                        <date>
+                            <year>2000</year>
+                            <month>1</month>
+                            <day>1</day>
+                        </date>
+                    </property>
                 </widget>
                 <widget class="QTimeEdit" row="0" column="3">
                     <property name="name">
@@ -316,6 +334,9 @@ This is not limited to persons available in a resource group but can be anyone. 
                     <property name="name">
                         <cstring>scheduleEndDate</cstring>
                     </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
+                    </property>
                 </widget>
                 <widget class="QTimeEdit" row="1" column="3">
                     <property name="name">
@@ -325,6 +346,9 @@ This is not limited to persons available in a resource group but can be anyone. 
                 <widget class="KPlato::DurationWidget" row="2" column="2" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>estimate</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>WheelFocus</enum>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget" row="3" column="2" rowspan="1" colspan="2">
@@ -382,11 +406,6 @@ This is not limited to persons available in a resource group but can be anyone. 
                     </hbox>
                 </widget>
             </grid>
-            <property name="whatsThis" stdset="0">
-              <string>Scheduling Configuration. These settings affect the actual scheduling of the task.
-              
-              The estimation can be either effort based or duration based. If it is effort based, the final duration will depend on the resources assigned to the task. For duration based estimation, the assigned resources don't affect the fixed duration of the task, but only the costs.</string>
-            </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
@@ -561,9 +580,12 @@ This is not limited to persons available in a resource group but can be anyone. 
     <tabstop>leaderfield</tabstop>
     <tabstop>chooseLeader</tabstop>
     <tabstop>scheduleType</tabstop>
+    <tabstop>scheduleStartDate</tabstop>
     <tabstop>scheduleStartTime</tabstop>
+    <tabstop>scheduleEndDate</tabstop>
     <tabstop>scheduleEndTime</tabstop>
     <tabstop>estimateType</tabstop>
+    <tabstop>estimate</tabstop>
     <tabstop>optimisticValue</tabstop>
     <tabstop>pessimisticValue</tabstop>
     <tabstop>descriptionfield</tabstop>
@@ -631,8 +653,13 @@ This is not limited to persons available in a resource group but can be anyone. 
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kdatewidget.h</includehint>
+    <includehint>kdatewidget.h</includehint>
+    <includehint>kplato::durationwidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>

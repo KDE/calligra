@@ -74,6 +74,9 @@
             <property name="name">
                 <cstring>year</cstring>
             </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
             <property name="maxValue">
                 <number>8784</number>
             </property>
@@ -87,6 +90,9 @@
         <widget class="KDoubleSpinBox" row="1" column="1">
             <property name="name">
                 <cstring>month</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
             </property>
             <property name="maxValue">
                 <number>744</number>
@@ -102,6 +108,9 @@
             <property name="name">
                 <cstring>week</cstring>
             </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
+            </property>
             <property name="maxValue">
                 <number>168</number>
             </property>
@@ -115,6 +124,9 @@
         <widget class="KDoubleSpinBox" row="3" column="1">
             <property name="name">
                 <cstring>day</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>WheelFocus</enum>
             </property>
             <property name="maxValue">
                 <number>24</number>

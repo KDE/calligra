@@ -26,6 +26,7 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 
+#include <qlabel.h>
 #include <klineedit.h>
 #include <ktextedit.h>
 #include <kdatewidget.h>
@@ -52,7 +53,8 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     idfield->setText(project.id());
     leaderfield->setText(project.leader());
     descriptionfield->setText(project.description());
-
+    wbs->setText(project.wbs());
+    
     //baseline->setChecked(project.isBaselined()); FIXME: Removed for this release
     
     QString s = i18n("Scheduling");

@@ -96,6 +96,8 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     setEstimate(task.effort()->expected()); 
     setOptimistic(task.effort()->optimisticRatio());
     setPessimistic(task.effort()->pessimisticRatio());
+    
+    namefield->setFocus();
 }
 
 KMacroCommand *TaskGeneralPanel::buildCommand(Part *part) {

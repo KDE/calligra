@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>262</width>
+            <width>278</width>
             <height>248</height>
         </rect>
     </property>
@@ -37,6 +37,9 @@
             </column>
             <property name="name">
                 <cstring>intervalList</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>NoFocus</enum>
             </property>
             <property name="resizeMode">
                 <enum>AllColumns</enum>
@@ -143,5 +146,12 @@
         </widget>
     </vbox>
 </widget>
+<tabstops>
+    <tabstop>startTime</tabstop>
+    <tabstop>endTime</tabstop>
+    <tabstop>bClear</tabstop>
+    <tabstop>bAddInterval</tabstop>
+    <tabstop>intervalList</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -116,6 +116,12 @@
 </widget>
 <customwidgets>
 </customwidgets>
+<tabstops>
+    <tabstop>calendarList</tabstop>
+    <tabstop>bAdd</tabstop>
+    <tabstop>bDelete</tabstop>
+    <tabstop>baseCalendar</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
