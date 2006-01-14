@@ -252,12 +252,12 @@ public:
   /**
    * Returns true if this font is equal to f; otherwise returns false.
    */
-  bool operator==(const FormatFont& f);
+  bool operator==(const FormatFont& f) const;
 
   /**
    * Returns true if this font is not equal to f; otherwise returns false.
    */
-  bool operator!=(const FormatFont& f);
+  bool operator!=(const FormatFont& f) const;
 
 private:  
   class Private;
@@ -382,12 +382,12 @@ public:
   /**
    * Returns true if this alignment is equal to f; otherwise returns false.
    */
-  bool operator==(const FormatAlignment& f);
+  bool operator==(const FormatAlignment& f) const;
 
   /**
    * Returns true if this alignment is not equal to f; otherwise returns false.
    */
-  bool operator!=(const FormatAlignment& f);
+  bool operator!=(const FormatAlignment& f) const;
 
 private:  
   class Private;
@@ -494,12 +494,12 @@ public:
   /**
    * Returns true if this background is equal to f; otherwise returns false.
    */
-  bool operator==(const FormatBackground& f);
+  bool operator==(const FormatBackground& f) const;
 
   /**
    * Returns true if this background is not equal to f; otherwise returns false.
    */
-  bool operator!=(const FormatBackground& f);
+  bool operator!=(const FormatBackground& f) const;
   
 private:
   class Private;
@@ -604,12 +604,12 @@ public:
   /**
    * Returns true if this background is equal to f; otherwise returns false.
    */
-  bool operator==(const FormatBorders& f);
+  bool operator==(const FormatBorders& f) const;
 
   /**
    * Returns true if this background is not equal to f; otherwise returns false.
    */
-  bool operator!=(const FormatBorders& f);
+  bool operator!=(const FormatBorders& f) const;
     
 private:  
   class Private;
@@ -743,12 +743,12 @@ public:
   /**
    * Returns true if this format is equal to f; otherwise returns false.
    */
-  bool operator==(const Format& f);
+  bool operator==(const Format& f) const;
 
   /**
    * Returns true if this format is not equal to f; otherwise returns false.
    */
-  bool operator!=(const Format& f);
+  bool operator!=(const Format& f) const;
 
 private:
   class Private;

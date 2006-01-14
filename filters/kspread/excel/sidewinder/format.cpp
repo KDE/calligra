@@ -198,7 +198,7 @@ void FormatFont::setSuperscript( bool s )
     d->subscript = false;
 }
 
-bool FormatFont::operator==(const FormatFont& font)
+bool FormatFont::operator==(const FormatFont& font) const
 {
 	return 
     d->bold == font.d->bold &&
@@ -212,7 +212,7 @@ bool FormatFont::operator==(const FormatFont& font)
     d->color == font.d->color;
 }
 
-bool FormatFont::operator!=(const FormatFont& font)
+bool FormatFont::operator!=(const FormatFont& font) const
 {
 	return 
     d->bold != font.d->bold ||
@@ -334,7 +334,7 @@ void FormatAlignment::setRotationAngle( unsigned r )
   d->null = false;
 }
 
-bool FormatAlignment::operator==(const FormatAlignment& font)
+bool FormatAlignment::operator==(const FormatAlignment& font) const
 {
 	return 
     d->alignX == font.d->alignX &&
@@ -344,7 +344,7 @@ bool FormatAlignment::operator==(const FormatAlignment& font)
     d->rotationAngle == font.d->rotationAngle;
 }
 
-bool FormatAlignment::operator!=(const FormatAlignment& font)
+bool FormatAlignment::operator!=(const FormatAlignment& font) const
 {
 	return 
     d->alignX != font.d->alignX ||
@@ -437,7 +437,7 @@ void FormatBackground::setForegroundColor( const Color& color )
   d->null = false;
 }
 
-bool FormatBackground::operator==(const FormatBackground& font)
+bool FormatBackground::operator==(const FormatBackground& font) const
 {
 	return 
     d->pattern == font.d->pattern &&
@@ -445,7 +445,7 @@ bool FormatBackground::operator==(const FormatBackground& font)
     d->foreground == font.d->foreground;
 }
 
-bool FormatBackground::operator!=(const FormatBackground& font)
+bool FormatBackground::operator!=(const FormatBackground& font) const
 {
 	return 
     d->pattern != font.d->pattern ||
@@ -549,7 +549,7 @@ void FormatBorders::setBottomBorder( const Pen& pen )
   d->null = false;
 }
 
-bool FormatBorders::operator==(const FormatBorders& font)
+bool FormatBorders::operator==(const FormatBorders& font) const
 {
 	return 
     d->leftBorder == font.d->leftBorder &&
@@ -558,7 +558,7 @@ bool FormatBorders::operator==(const FormatBorders& font)
     d->bottomBorder == font.d->bottomBorder;
 }
 
-bool FormatBorders::operator!=(const FormatBorders& font)
+bool FormatBorders::operator!=(const FormatBorders& font) const
 {
 	return 
     d->leftBorder != font.d->leftBorder ||
@@ -692,7 +692,7 @@ Format& Format::apply( const Format& f )
   return *this;
 }
 
-bool Format::operator==(const Format& format)
+bool Format::operator==(const Format& format) const
 {
 	return 
     d->font == format.d->font &&
@@ -702,7 +702,7 @@ bool Format::operator==(const Format& format)
     d->valueFormat == format.d->valueFormat;
 }
 
-bool Format::operator!=(const Format& format)
+bool Format::operator!=(const Format& format) const
 {
 	return 
     d->font != format.d->font ||
