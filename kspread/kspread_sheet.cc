@@ -143,7 +143,7 @@ ChartBinding::~ChartBinding()
 
 void ChartBinding::cellChanged( Cell* )
 {
-#if 0  //FIXME: Enable after the new kdchart API is fixed.
+#if 1  //FIXME: Enable after the new kdchart API is fixed.
     kdDebug(36001) << "######### void ChartBinding::cellChanged( Cell* )" << endl;
 
     if ( m_bIgnoreChanges )
@@ -151,19 +151,21 @@ void ChartBinding::cellChanged( Cell* )
 
     kdDebug(36001) << m_rctDataArea << endl;
 
-    KoChart::Data matrix( m_rctDataArea.height(), m_rctDataArea.width() );
+    //KoChart::Data matrix( m_rctDataArea.height(), m_rctDataArea.width() );
+    KoChart::Part  *chart = m_child->chart();
+    chart->resizeData( m_rctDataArea.height(), m_rctDataArea.width() );
 
     Cell* cell;
-    for ( int y = 0; y < m_rctDataArea.height(); y++ ) {
-        for ( int x = 0; x < m_rctDataArea.width(); x++ ) {
-            cell = m_pSheet->cellAt( m_rctDataArea.left() + x,
-				     m_rctDataArea.top() + y );
+    for ( int row = 0; row < m_rctDataArea.height(); row++ ) {
+        for ( int col = 0; col < m_rctDataArea.width(); col++ ) {
+            cell = m_pSheet->cellAt( m_rctDataArea.left() + col,
+				     m_rctDataArea.top() + row );
             if ( cell && cell->value().isNumber() )
-	        matrix.setCell( y, x, cell->value().asFloat() );
+		chart->setCellData( row, col, cell->value().asFloat() );
             else if ( cell )
-	        matrix.setCell( y, x, cell->value().asString() );
+	        chart->setCellData( row, col, cell->value().asString() );
             else
-	        matrix.setCell( y, x, KoChart::Value() );
+	        chart->setCellData( row, col, KoChart::Value() );
         }
     }
 
@@ -175,7 +177,7 @@ void ChartBinding::cellChanged( Cell* )
        range.bottom = m_rctDataArea.bottom();
        range.sheet = m_pSheet->name(); */
 
-    m_child->chart()->setData( matrix );
+    //m_child->chart()->setData( matrix );
 
     // Force a redraw of the chart on all views
 
