@@ -175,7 +175,7 @@ linkend="tab-stops">Using Tab Stops</link>.</para>
 
 <tip>
 <para>To quickly format the page layout, you can right mouse click on
-either ruler.  A small sub menu will appear.  Simply select Page Layout,
+either ruler.  A small sub menu will appear.  Simply select <guilabel>Page Layout...</guilabel>,
 and the <link linkend="page-format">Page Layout Dialog box</link> 
 will appear.</para>
 </tip>

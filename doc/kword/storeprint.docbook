@@ -89,7 +89,7 @@ first choose which template you want to use.</para>
 display all the available templates of that group.</para>
 
 <note>
-<para>Remember templates are either Text Oriented or Page Layout
+<para>Remember templates are either Text Oriented (Blank Document) or Page Layout
 templates. If you need to review the differences, click <link
 linkend="wp-vs-dtp">here</link>.</para>
 </note>
@@ -106,7 +106,7 @@ own</link>.</para>
 <listitem><para>To select your template, click on it with the &LMB;.  The
 selected template will be highlighted.</para></listitem>  
 <listitem><para>Confirm your choice by clicking
-the <guibutton>OK</guibutton> button. This will begin a new document
+the <guibutton>Use This Template</guibutton> button. This will begin a new document
 with that template.</para></listitem>
 </orderedlist>
 
@@ -119,15 +119,15 @@ template, and &kword; will immediately load that template.</para>
 <sect2 id="loading-existing-doc">
 <title>Opening an existing document</title>
 
-<para>Click on the <guibutton>Open Existing Document</guibutton> tab, and an new
+<para>Click on the <guibutton>Open Existing Document</guibutton> button, and an new
 dialog box is revealed.  For more details on this dialog box refer to
 <link linkend="file-dialog">Using the file selection dialog</link>.</para>
 
 <sect3 id="loading-recent-doc">
 <title>Open a Recent Document</title>
-<para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by clicking on the tab labeled 
+<para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by clicking on the icon labeled 
 <guilabel>Recent Documents</guilabel>. This will list the most recently edited files on the system.  Simply click on the icon of the desired file with the 
-&LMB; and click <guibutton>OK</guibutton>.</para>
+&LMB; and click <guibutton>Use This Document</guibutton>.</para>
 
 </sect3>
 
@@ -321,7 +321,7 @@ linkend="new-doc">Opening a New Document</link></para>
 
 <listitem>
 <para>By selecting <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice> from
+<guimenu>File</guimenu><guimenuitem>Open...</guimenuitem></menuchoice> from
 the menubar</para>
 </listitem>
 
