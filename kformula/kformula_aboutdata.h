@@ -32,7 +32,7 @@ KAboutData * newKFormulaAboutData()
 {
     KAboutData * aboutData = new KAboutData( "kformula", I18N_NOOP( "KFormula" ),
                                              version, description, KAboutData::License_GPL,
-                                             "(c) 1998-2003, The KFormula Team", 0,
+                                             "(c) 1998-2006, The KFormula Team", 0,
 					     "http://www.koffice.org/kformula/" );
     aboutData->addAuthor( "Andrea Rizzi", I18N_NOOP( "original author" ), "rizzi@kde.org" );
     aboutData->addAuthor( "Ulrich Kuettler", I18N_NOOP( "current maintainer" ), "ulrich.kuettler@gmx.de" );

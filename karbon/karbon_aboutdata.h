@@ -5,6 +5,9 @@
 #include <klocale.h>
 #include <config.h>
 
+static const char* description=I18N_NOOP( "A Vector Graphics Drawing Application." );
+static const char* version=VERSION;
+
 // This is all implemented here so that the executable and the part can share it
 // without sharing an object file.
 KAboutData * newKarbonAboutData()
@@ -12,10 +15,10 @@ KAboutData * newKarbonAboutData()
 	KAboutData * aboutData = new KAboutData(
 		"karbon",
 		I18N_NOOP( "Karbon14" ),
-		"0.2.90",
-		I18N_NOOP( "A Vector Graphics Drawing Application." ),
+		version,
+		description,
 		KAboutData::License_GPL,
-		I18N_NOOP( "(c) 2001-2005, The Karbon Developers" ),
+		I18N_NOOP( "(c) 2001-2006, The Karbon Developers" ),
 		I18N_NOOP( "You are invited to participate in any way." ),
 		"http://www.koffice.org/karbon/");
 	aboutData->addAuthor(

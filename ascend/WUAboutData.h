@@ -31,7 +31,7 @@ KAboutData * newWriteupAboutData()
 {
     KAboutData * aboutData=new KAboutData( "writeup", I18N_NOOP("WriteUp"),
                                            WRITEUP_VERSION, WRITEUP_DESCRIPTION, KAboutData::License_LGPL,
-                                           I18N_NOOP("(c) 2005, The Ascend and KOffice Teams"), 0,
+                                           I18N_NOOP("(c) 2005-2006, The Ascend and KOffice Teams"), 0,
                                            "http://www.koffice.org/kword/" );
     aboutData->addAuthor("Inge Wallin", 0, "inge@lysator.liu");
     aboutData->addAuthor("David Faure", 0, "faure@kde.org");
