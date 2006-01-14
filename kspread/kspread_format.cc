@@ -1259,7 +1259,11 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) )
     {
-        setVerticalText( true );
+        QString dir = styleStack.attributeNS( KoXmlNS::fo, "direction" );
+        if ( dir == "ttb" )
+            setVerticalText( true );
+        else if ( dir == "ltr" )
+            setVerticalText( false );
     }
 
     //kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
@@ -1328,13 +1332,12 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" ) )
     {
-        setMultiRow( true );
-
-        /* we do not support anything else yet
-           QString s = property.attributeNS( KoXmlNS::fo, "wrap-option", QString::null );
-           if ( s == "wrap" )
-           layout->setMultiRow( true );
-        */
+        // we do not support anything else yet
+       QString wrapOpt = styleStack.attributeNS( KoXmlNS::fo, "wrap-option" );
+        if ( wrapOpt == "wrap" )
+            setMultiRow( true );
+        else if ( wrapOpt == "no-wrap" )
+            setMultiRow( false );
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
     {
