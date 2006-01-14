@@ -1298,6 +1298,8 @@ void View::Private::adjustActions( Sheet* sheet, Cell* cell )
 
 void View::Private::adjustWorkbookActions( bool mode )
 {
+  tabBar->setReadOnly( !view->doc()->isReadWrite() || view->doc()->map()->isProtected() );
+
   actions->hideSheet->setEnabled( mode );
   actions->showSheet->setEnabled( mode );
   actions->insertSheet->setEnabled( mode );
@@ -5352,7 +5354,7 @@ void View::refreshView()
     d->actions->alignRight->setEnabled( !active );
   }
 
-  d->tabBar->setReadOnly( !doc()->isReadWrite() );
+  d->tabBar->setReadOnly( !doc()->isReadWrite() || doc()->map()->isProtected() );
 
   d->toolWidget->setShown( doc()->showFormulaBar() );
   d->editWidget->showEditWidget( doc()->showFormulaBar() );
