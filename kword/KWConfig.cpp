@@ -500,27 +500,43 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, QVBox *box, char *name )
 
     QHBox* hbUndoRedo = new QHBox( gbMiscGroup );
     QLabel* labelUndoRedo = new QLabel( i18n("Undo/&redo limit:"), hbUndoRedo );
+    QString undoHelp = i18n("Limit the amount of undo/redo actions remembered. "
+                            "A lower value helps to save memory, a higher value let's "
+                            "you undo and redo more editing steps.");
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, hbUndoRedo );
     m_undoRedoLimit->setRange(1, 100, 1);
     labelUndoRedo->setBuddy( m_undoRedoLimit );
-    QWhatsThis::add( m_undoRedoLimit, i18n("Limit the amount of undo/redo actions remembered to save "
-                                           "memory") );
+    QWhatsThis::add( m_undoRedoLimit, undoHelp );
+    QWhatsThis::add( labelUndoRedo, undoHelp );
 
     KWDocument* doc = m_pView->kWordDocument();
     m_displayLink=new QCheckBox(i18n("Display &links"),gbMiscGroup);
     m_displayLink->setChecked(doc->variableCollection()->variableSetting()->displayLink());
+    QWhatsThis::add( m_displayLink, i18n("If enabled, a link is highlighted as such and is clickable.\n\n"
+                                         "You can insert a link from the <b>Insert</b> menu."));
     m_underlineLink=new QCheckBox(i18n("&Underline all links"),gbMiscGroup);
     m_underlineLink->setChecked(doc->variableCollection()->variableSetting()->underlineLink());
-
+    QWhatsThis::add( m_underlineLink, i18n("If enabled, a link is underlined."));
 
     m_displayComment=new QCheckBox(i18n("Display c&omments"),gbMiscGroup);
     m_displayComment->setChecked(doc->variableCollection()->variableSetting()->displayComment());
+    QWhatsThis::add( m_displayComment, i18n("If enabled, comments are indicated by a small yellow box.\n\n"
+                                            "You can show and edit a comment from the context menu."));
 
     m_displayFieldCode=new QCheckBox(i18n("Display field code"),gbMiscGroup);
     m_displayFieldCode->setChecked(doc->variableCollection()->variableSetting()->displayFieldCode());
+    QWhatsThis::add( m_displayFieldCode, i18n("If enabled, the type of link is displayed instead "
+                                              "of display string of the link.\n\n"
+                                              "There are various types of link that can be inserted, "
+                                              "like hyperlinks, files, mail and news or bookmarks."));
 
 
     QVGroupBox* gbViewFormatting = new QVGroupBox( i18n("View Formatting"), box, "view_formatting" );
+    QWhatsThis::add( gbViewFormatting, i18n("These settings can be used to select the formatting "
+                                            "characters that should be shown.\n\n"
+                                            "Note that the selected formatting characters are only "
+                                            "shown if formattinc characters are enabled in general, "
+                                            "which can be done from the View menu."));
     gbViewFormatting->setMargin( KDialog::marginHint() );
     gbViewFormatting->setInsideSpacing( KDialog::spacingHint() );
 
