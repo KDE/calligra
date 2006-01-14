@@ -98,8 +98,8 @@ KoFilter::ConversionStatus PowerPointImport::convert( const QCString& from, cons
 
   // create output store
   KoStore* storeout;
-  storeout = KoStore::createStore( d->outputFile, KoStore::Write, "", 
-    KoStore::Zip );
+  storeout = KoStore::createStore( d->outputFile, KoStore::Write, 
+    "application/vnd.oasis.opendocument.presentation",   KoStore::Zip );
 
   if ( !storeout )
   {
@@ -326,6 +326,7 @@ QByteArray PowerPointImport::createManifest()
   manifestWriter->addAttribute( "xmlns:manifest", 
     "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
 
+  manifestWriter->addManifestEntry( "/", "application/vnd.oasis.opendocument.presentation" );
   manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
   manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
