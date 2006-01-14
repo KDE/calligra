@@ -513,7 +513,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, QVBox *box, char *name )
     m_displayLink=new QCheckBox(i18n("Display &links"),gbMiscGroup);
     m_displayLink->setChecked(doc->variableCollection()->variableSetting()->displayLink());
     QWhatsThis::add( m_displayLink, i18n("If enabled, a link is highlighted as such and is clickable.\n\n"
-                                         "You can insert a link from the <b>Insert</b> menu."));
+                                         "You can insert a link from the Insert menu."));
     m_underlineLink=new QCheckBox(i18n("&Underline all links"),gbMiscGroup);
     m_underlineLink->setChecked(doc->variableCollection()->variableSetting()->underlineLink());
     QWhatsThis::add( m_underlineLink, i18n("If enabled, a link is underlined."));
@@ -535,7 +535,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, QVBox *box, char *name )
     QWhatsThis::add( gbViewFormatting, i18n("These settings can be used to select the formatting "
                                             "characters that should be shown.\n\n"
                                             "Note that the selected formatting characters are only "
-                                            "shown if formattinc characters are enabled in general, "
+                                            "shown if formatting characters are enabled in general, "
                                             "which can be done from the View menu."));
     gbViewFormatting->setMargin( KDialog::marginHint() );
     gbViewFormatting->setInsideSpacing( KDialog::spacingHint() );
