@@ -28,7 +28,7 @@
                 <cstring>backgroundColorGroupBox</cstring>
             </property>
             <property name="title">
-                <string>Background Color</string>
+                <string>Paragraph Background Color</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>&lt;p&gt;Paragraph Background Color&lt;/p&gt;

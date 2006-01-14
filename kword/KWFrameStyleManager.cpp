@@ -577,7 +577,7 @@ KWFrameStyleBackgroundTab::KWFrameStyleBackgroundTab( QWidget * parent )
     brushPreview = new KWBrushStylePreview( bgwidget );
     grid->addMultiCellWidget(brushPreview,row,5,1,1);
 
-    QLabel *l = new QLabel( i18n( "Background color:" ), bgwidget );
+    QLabel *l = new QLabel( i18n( "Frame background color:" ), bgwidget );
 
     grid->addWidget(l,row++,0);
 
