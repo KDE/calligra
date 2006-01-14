@@ -65,9 +65,9 @@ public:
 
   Workbook *workbook;  
 
-  QByteArray createManifest();
   QByteArray createStyles();
   QByteArray createContent();
+  QByteArray createManifest();
   
   int sheetFormatIndex;
   int columnFormatIndex;
@@ -78,12 +78,13 @@ public:
   void processWorkbookForStyle( Workbook* workbook, KoXmlWriter* xmlWriter );
   void processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWriter );
   void processSheetForStyle( Sheet* sheet, KoXmlWriter* xmlWriter );
-  void processColumnForBody( Column* column, KoXmlWriter* xmlWriter );
-  void processColumnForStyle( Column* column, KoXmlWriter* xmlWriter );
-  void processRowForBody( Row* row, KoXmlWriter* xmlWriter );
-  void processRowForStyle( Row* row, KoXmlWriter* xmlWriter );
+  void processColumnForBody( Column* column, int repeat, KoXmlWriter* xmlWriter );
+  void processColumnForStyle( Column* column, int repeat, KoXmlWriter* xmlWriter );
+  void processRowForBody( Row* row, int repeat, KoXmlWriter* xmlWriter );
+  void processRowForStyle( Row* row, int repeat, KoXmlWriter* xmlWriter );
   void processCellForBody( Cell* cell, KoXmlWriter* xmlWriter );
   void processCellForStyle( Cell* cell, KoXmlWriter* xmlWriter );
+  void processFormat( Format* format, KoXmlWriter* xmlWriter );
 };
 
 
@@ -127,8 +128,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   
   // create output store
   KoStore* storeout;
-  storeout = KoStore::createStore( d->outputFile, KoStore::Write, "", 
-    KoStore::Zip );
+  storeout = KoStore::createStore( d->outputFile, KoStore::Write, 
+    "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip );
 
   if ( !storeout )
   {
@@ -193,6 +194,7 @@ QByteArray ExcelImport::Private::createContent()
 
   contentWriter->startDocument( "office:document-content" );
   contentWriter->startElement( "office:document-content" );
+  
   contentWriter->addAttribute( "xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
   contentWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
   contentWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
@@ -202,6 +204,18 @@ QByteArray ExcelImport::Private::createContent()
   contentWriter->addAttribute( "xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
   contentWriter->addAttribute( "office:version","1.0" );
 
+  // FIXME this is dummy and hardcoded, replace with real font names
+  contentWriter->startElement( "office:font-face-decls" );
+  contentWriter->startElement( "style:font-face" );
+  contentWriter->addAttribute( "style:name", "Arial" );
+  contentWriter->addAttribute( "svg:font-family", "Arial" );
+  contentWriter->endElement(); // style:font-face
+  contentWriter->startElement( "style:font-face" );
+  contentWriter->addAttribute( "style:name", "Times New Roman" );
+  contentWriter->addAttribute( "svg:font-family", "&apos;Times New Roman&apos;" );
+  contentWriter->endElement(); // style:font-face
+  contentWriter->endElement(); // office:font-face-decls
+  
   // office:automatic-styles
   sheetFormatIndex = 1;
   columnFormatIndex = 1;
@@ -209,7 +223,7 @@ QByteArray ExcelImport::Private::createContent()
   cellFormatIndex = 1;
   contentWriter->startElement( "office:automatic-styles" );
   processWorkbookForStyle( workbook, contentWriter );
-  contentWriter->endElement();
+  contentWriter->endElement(); // office:automatic-style
 
   // office:body
   sheetFormatIndex = 1;
@@ -219,9 +233,10 @@ QByteArray ExcelImport::Private::createContent()
   contentWriter->startElement( "office:body" );
   processWorkbookForBody( workbook, contentWriter );
   contentWriter->endElement();  // office:body
-
+  
   contentWriter->endElement();  // office:document-content
   contentWriter->endDocument();
+  
   delete contentWriter;
 
   // for troubleshooting only !!
@@ -242,37 +257,50 @@ QByteArray ExcelImport::Private::createStyles()
   stylesBuffer.open( IO_WriteOnly );
   stylesWriter = new KoXmlWriter( &stylesBuffer );
 
+  // FIXME this is dummy default, replace if necessary
   stylesWriter->startDocument( "office:document-styles" );
   stylesWriter->startElement( "office:document-styles" );
   stylesWriter->addAttribute( "xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
-  stylesWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
+  stylesWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
   stylesWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
   stylesWriter->addAttribute( "xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" );
-  stylesWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
+  stylesWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
   stylesWriter->addAttribute( "xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" );
+  stylesWriter->addAttribute( "xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
   stylesWriter->addAttribute( "office:version","1.0" );
-
-  // office:styles
   stylesWriter->startElement( "office:styles" );
-  stylesWriter->endElement();
-
+  stylesWriter->startElement( "style:default-style" );
+  stylesWriter->addAttribute( "style:family", "table-cell" );
+  stylesWriter->startElement( "style:table-cell-properties" );
+  stylesWriter->addAttribute( "style:decimal-places", "2" );
+  stylesWriter->endElement(); // style:table-cell-properties
+  stylesWriter->startElement( "style:paragraph-properties" );
+  stylesWriter->addAttribute( "style:tab-stop-distance", "0.5in" );
+  stylesWriter->endElement(); // style:paragraph-properties
+  stylesWriter->startElement( "style:text-properties" );
+  stylesWriter->addAttribute( "style:font-name", "Albany AMT" );
+  stylesWriter->addAttribute( "fo:language", "en" );
+  stylesWriter->addAttribute( "fo:country", "US" );
+  stylesWriter->addAttribute( "style:font-name-asian", "Albany AMT1" );
+  stylesWriter->addAttribute( "style:country-asian", "none" );
+  stylesWriter->addAttribute( "style:font-name-complex", "Lucidasans" );
+  stylesWriter->addAttribute( "style:language-complex", "none" );
+  stylesWriter->addAttribute( "style:country-complex", "none" );
+  stylesWriter->endElement(); // style:text-properties
+  stylesWriter->endElement(); // style:default-style
+  stylesWriter->endElement(); // office:styles
+  stylesWriter->startElement( "style:style" );
+  stylesWriter->addAttribute( "style:name", "Default" );
+  stylesWriter->addAttribute( "style:family", "table-cell" );
+  stylesWriter->endElement(); // style:style
+  
   // office:automatic-styles
   stylesWriter->startElement( "office:automatic-styles" );
-  
-  // page layout
-  stylesWriter->startElement( "style:page-layout" );
-  stylesWriter->addAttribute( "style:name","pm1" );
-  stylesWriter->addAttribute( "style:page-usage","all" );
-  stylesWriter->startElement( "style:page-layout-properties" );
-  stylesWriter->endElement(); // style:page-layout-properties
-  stylesWriter->endElement(); // style:page-layout
-
-
   stylesWriter->endElement(); // office:automatic-styles
-
 
   stylesWriter->endElement();  // office:document-styles
   stylesWriter->endDocument();
+  
   delete stylesWriter;
 
   // for troubleshooting only !!
@@ -292,15 +320,13 @@ QByteArray ExcelImport::Private::createManifest()
 
   manifestBuffer.open( IO_WriteOnly );
   manifestWriter = new KoXmlWriter( &manifestBuffer );
-
+  
   manifestWriter->startDocument( "manifest:manifest" );
   manifestWriter->startElement( "manifest:manifest" );
-  manifestWriter->addAttribute( "xmlns:manifest", 
-    "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
-
+  manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
+  manifestWriter->addManifestEntry( "/", "application/vnd.oasis.opendocument.spreadsheet" );
   manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
   manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-
   manifestWriter->endElement();
   manifestWriter->endDocument();
   delete manifestWriter;
@@ -354,19 +380,39 @@ void ExcelImport::Private::processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWr
   xmlWriter->addAttribute( "table:protected", "false" );
   xmlWriter->addAttribute( "table:style-name", QString("ta%1").arg(sheetFormatIndex));
   sheetFormatIndex++;
-
-  for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
+  
+  int ci = 0;
+  while( ci <= sheet->maxColumn() )
   {
-    // FIXME optimized this when operator== in Swinder::Format is implemented
-    processColumnForBody( sheet->column( i, false ), xmlWriter );
+    Column* column = sheet->column( ci, false );
+    if( column )
+    {
+      // forward search for columns with same properties
+      int cj = ci + 1;
+      while( cj <= sheet->maxColumn() )
+      {
+        const Column* nextColumn = sheet->column( cj, false );
+        if( !nextColumn ) break;
+        if( column->width() != nextColumn->width() ) break;
+        if( column->visible() != nextColumn->visible() ) break;
+        if( column->format() != nextColumn->format() ) break;
+        cj++;
+      }
+      
+      int repeated = cj - ci;
+      processColumnForBody( column, repeated, xmlWriter );
+      ci += repeated;
+    }
+    else
+      ci++;
   }
   
   for( unsigned i = 0; i <= sheet->maxRow(); i++ )
   {
     // FIXME optimized this when operator== in Swinder::Format is implemented
-    processRowForBody( sheet->row( i, false ), xmlWriter );
+    processRowForBody( sheet->row( i, false ), 1, xmlWriter );
   }
-    
+  
   xmlWriter->endElement();  // table:table
 }
 
@@ -374,7 +420,7 @@ void ExcelImport::Private::processSheetForStyle( Sheet* sheet, KoXmlWriter* xmlW
 {
   if( !sheet ) return;
   if( !xmlWriter ) return;
-  
+
   xmlWriter->startElement( "style:style" );
   xmlWriter->addAttribute( "style:family", "table" );  
   xmlWriter->addAttribute( "style:master-page-name", "Default" );  
@@ -388,25 +434,41 @@ void ExcelImport::Private::processSheetForStyle( Sheet* sheet, KoXmlWriter* xmlW
   
   xmlWriter->endElement();  // style:style
 
-  for( unsigned i = 0; i <= sheet->maxColumn(); i++ )
+  int ci = 0;
+  while( ci <= sheet->maxColumn() )
   {
-    Column* column = sheet->column( i, false );
-    if( !column ) break;
-    // FIXME optimized this when operator== in Swinder::Format is implemented
-    processColumnForStyle( column, xmlWriter );
+    Column* column = sheet->column( ci, false );
+    if( column )
+    {
+      // forward search for similar column
+      int cj = ci + 1;
+      while( cj <= sheet->maxColumn() )
+      {
+        Column* nextColumn = sheet->column( cj, false );
+        if( !nextColumn ) break;
+        if( column->width() != nextColumn->width() ) break;
+        if( column->visible() != nextColumn->visible() ) break;
+        if( column->format() != nextColumn->format() ) break;
+        cj++;
+      }
+      
+      int repeated = cj - ci;
+      processColumnForStyle( column, repeated, xmlWriter );
+      ci += repeated;
+    }
+    else
+      ci++;
   }
-
+  
   for( unsigned i = 0; i <= sheet->maxRow(); i++ )
   {
     Row* row = sheet->row( i, false );
-    if( !row ) break;
     // FIXME optimized this when operator== in Swinder::Format is implemented
-    processRowForStyle( row, xmlWriter );
+    processRowForStyle( row, 1, xmlWriter );
   }
-
 }
 
-void ExcelImport::Private::processColumnForBody( Column* column, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processColumnForBody( Column* column, int repeat, KoXmlWriter* xmlWriter )
 {
   if( !column ) return;
   if( !xmlWriter ) return;
@@ -416,16 +478,18 @@ void ExcelImport::Private::processColumnForBody( Column* column, KoXmlWriter* xm
   xmlWriter->addAttribute( "table:visibility", column->visible() ? "visible" : "collapse" );  
   xmlWriter->addAttribute( "table:style-name", QString("co%1").arg(columnFormatIndex) );  
   columnFormatIndex++;
+
   xmlWriter->endElement();  // table:table-column
 }
 
-void ExcelImport::Private::processColumnForStyle( Column* column, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processColumnForStyle( Column* column, int repeat, KoXmlWriter* xmlWriter )
 {
   if( !column ) return;
   if( !xmlWriter ) return;
   
   xmlWriter->startElement( "style:style" );
   xmlWriter->addAttribute( "style:family", "table-column" );  
+  if(repeat > 1) xmlWriter->addAttribute( "table:number-columns-repeated", repeat );  
   xmlWriter->addAttribute( "style:name", QString("co%1").arg(columnFormatIndex) );  
   columnFormatIndex++;
   
@@ -437,12 +501,12 @@ void ExcelImport::Private::processColumnForStyle( Column* column, KoXmlWriter* x
   xmlWriter->endElement();  // style:style
 }
 
-void ExcelImport::Private::processRowForBody( Row* row, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processRowForBody( Row* row, int repeat, KoXmlWriter* xmlWriter )
 {
   if( !row ) return;
   if( !row->sheet() ) return;
   if( !xmlWriter ) return;
-
+  
   // find the column of the rightmost cell (if any)
   int lastCol = -1;
   for( unsigned i = 0; i <= row->sheet()->maxColumn(); i++ )
@@ -453,7 +517,7 @@ void ExcelImport::Private::processRowForBody( Row* row, KoXmlWriter* xmlWriter )
   xmlWriter->addAttribute( "table:style-name", QString("ro%1").arg(rowFormatIndex) );  
   rowFormatIndex++;
   
-  for( unsigned i = 0; i <= lastCol; i++ )
+  for( int i = 0; i <= lastCol; i++ )
   {
     Cell* cell = row->sheet()->cell( i, row->index(), false );
     if( cell )
@@ -469,7 +533,7 @@ void ExcelImport::Private::processRowForBody( Row* row, KoXmlWriter* xmlWriter )
   xmlWriter->endElement();  // table:table-row
 }
 
-void ExcelImport::Private::processRowForStyle( Row* row, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processRowForStyle( Row* row, int repeat, KoXmlWriter* xmlWriter )
 {
   if( !row ) return;
   if( !row->sheet() ) return;
@@ -482,6 +546,7 @@ void ExcelImport::Private::processRowForStyle( Row* row, KoXmlWriter* xmlWriter 
   
   xmlWriter->startElement( "style:style" );
   xmlWriter->addAttribute( "style:family", "table-row" );  
+  if(repeat > 1) xmlWriter->addAttribute( "table:number-rows-repeated", repeat );  
   xmlWriter->addAttribute( "style:name", QString("ro%1").arg(rowFormatIndex) );  
   rowFormatIndex++;
   
@@ -492,7 +557,7 @@ void ExcelImport::Private::processRowForStyle( Row* row, KoXmlWriter* xmlWriter 
   
   xmlWriter->endElement();  // style:style
 
-  for( unsigned i = 0; i <= lastCol; i++ )
+  for( int i = 0; i <= lastCol; i++ )
   {
     Cell* cell = row->sheet()->cell( i, row->index(), false );
     if( cell )
@@ -551,7 +616,41 @@ void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWrit
   xmlWriter->addAttribute( "style:name", QString("ce%1").arg(cellFormatIndex) );  
   cellFormatIndex++;
   
-  // BIG TODO: create cell format here !!!
+  Format format = cell->format();
+  // TODO optimize with hash table
+  processFormat( &format, xmlWriter );
   
   xmlWriter->endElement();  // style:style
+}
+
+void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter )
+{
+  if( !format ) return;
+  if( !xmlWriter ) return;
+  
+  FormatFont font = format->font();
+  xmlWriter->startElement( "style:text-properties" );
+  
+  if( font.bold() ) 
+    xmlWriter->addAttribute( "fo:font-weight", "bold" );  
+    
+  if( font.italic() ) 
+    xmlWriter->addAttribute( "fo:font-style", "italic" );  
+    
+  if( font.underline() )
+  {
+    xmlWriter->addAttribute( "style:text-underline-style", "solid" );  
+    xmlWriter->addAttribute( "style:text-underline-width", "auto" );  
+    xmlWriter->addAttribute( "style:text-underline-color", "font-color" );  
+  }
+  
+  if( font.strikeout() )
+    xmlWriter->addAttribute( "style:text-line-through-style", "solid" );  
+
+  if( !font.fontFamily().isEmpty() )
+    xmlWriter->addAttribute( "style:font-name", string(font.fontFamily()).string() );
+    
+  xmlWriter->addAttribute( "fo:font-size", QString("%1pt").arg(font.fontSize()) );  
+  
+  xmlWriter->endElement();  // style:text-properties
 }
