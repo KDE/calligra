@@ -407,24 +407,37 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 				+ (m_settings->addTableBorders ? "" : ":"));
 		}
 		QString text;
+		QVariant v(item->at(i));
 		KexiDB::Field::Type ftype = m_fieldsExpanded[i]->field->type();
+		if (v.isNull() || !v.isValid()) {
+			//nothing to do
+		}
 //! todo inherit format
-		if (ftype==KexiDB::Field::DateTime)
-			text = KGlobal::locale()->formatDateTime(item->at(i).toDateTime());
+		else if (ftype==KexiDB::Field::DateTime) {
+			QDateTime dt(v.toDateTime());
+			if (dt.isValid())
+				text = KGlobal::locale()->formatDateTime(dt);
+		}
 //! todo inherit format
-		else if (ftype==KexiDB::Field::Date)
-			text = KGlobal::locale()->formatDate(item->at(i).toDate());
+		else if (ftype==KexiDB::Field::Date) {
+			QDate date(v.toDate());
+			if (date.isValid())
+				text = KGlobal::locale()->formatDate(date);
+		}
 //! todo inherit format
-		else if (ftype==KexiDB::Field::Time)
-			text = KGlobal::locale()->formatTime(item->at(i).toTime());
+		else if (ftype==KexiDB::Field::Time) {
+			QTime time(v.toTime());
+			if (time.isValid())
+				text = KGlobal::locale()->formatTime(time);
+		}
 //! todo currency, decimal...
 		else if (m_fieldsExpanded[i]->field->isFPNumericType())
-			text = KGlobal::locale()->formatNumber(item->at(i).toDouble());
+			text = KGlobal::locale()->formatNumber(v.toDouble());
 		else if (ftype==KexiDB::Field::Boolean)
-			text = item->at(i).toBool() 
+			text = v.toBool() 
 				? i18n("Boolean Yes (true)","Yes") : i18n("Boolean No (false)", "No");
 		else
-			text = item->at(i).toString();
+			text = v.toString();
 		QRect rect( painter.fontMetrics().boundingRect(
 			(int)leftMargin + m_maxFieldNameWidth + cellMargin, y,
 			m_pageWidth - m_maxFieldNameWidth - cellMargin*2, m_pageHeight - y, 

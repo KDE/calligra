@@ -157,6 +157,7 @@ class KexiMainWindowImpl::Private
 		bool forceHideProjectNavigatorOnCreation : 1;
 
 		bool navWasVisibleBeforeProjectClosing : 1;
+		bool saveSettingsForShowProjectNavigator : 1;
 #ifdef HAVE_KNEWSTUFF
 		KexiNewStuff  *newStuff;
 #endif
@@ -212,6 +213,7 @@ class KexiMainWindowImpl::Private
 		forceShowProjectNavigatorOnCreation = false;
 		forceHideProjectNavigatorOnCreation = false;
 		navWasVisibleBeforeProjectClosing = false;
+		saveSettingsForShowProjectNavigator = true;
 		m_openedCustomObjectsForItem.setAutoDelete(true);
 	}
 	~Private() {

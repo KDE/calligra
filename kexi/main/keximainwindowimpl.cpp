@@ -1105,8 +1105,10 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 
 tristate KexiMainWindowImpl::closeProject()
 {
-	if (!d->prj)
+	d->saveSettingsForShowProjectNavigator = d->prj; //only save nav. visibility setting is project is opened
+	if (!d->prj) {
 		return true;
+	}
 
 	{
 		// make sure the project can be closed
@@ -1369,6 +1371,7 @@ void KexiMainWindowImpl::initPropertyEditor()
 			tmp->show(KDockWidget::DockRight,getMainDockWidget(),20);
 	*/
 	}
+//	makeDockInvisible(manager()->findWidgetParentDock(d->propEditorTabWidget));
 }
 
 void KexiMainWindowImpl::slotPartLoaded(KexiPart::Part* p)
@@ -1627,10 +1630,12 @@ KexiMainWindowImpl::storeSettings()
 	d->config->writeEntry("maximized childframes", isInMaximizedChildFrmMode());
 
 //	if (manager()->findWidgetParentDock(d->nav)->isVisible())
-	if (d->navWasVisibleBeforeProjectClosing)
-		d->config->deleteEntry("ShowProjectNavigator");
-	else
-		d->config->writeEntry("ShowProjectNavigator", false);
+	if (d->saveSettingsForShowProjectNavigator) {
+		if (d->navWasVisibleBeforeProjectClosing)
+			d->config->deleteEntry("ShowProjectNavigator");
+		else
+			d->config->writeEntry("ShowProjectNavigator", false);
+	}
 
 	if (modeToSave==KMdi::ChildframeMode || modeToSave==KMdi::TabPageMode) {
 		if (d->propEditor && d->propEditorDockSeparatorPos >= 0 && d->propEditorDockSeparatorPos <= 100) {
