@@ -81,7 +81,7 @@ TestRunner::TestRunner():
   
   // add all tests here !!
   addTester( new ValueTester() );
-  addTester( new StyleClusterTester() );
+  // addTester( new StyleClusterTester() );
   addTester( new FormulaParserTester() );
   addTester( new FormulaEvalTester() );
 }
