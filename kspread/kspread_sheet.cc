@@ -6222,7 +6222,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
     }
 
 
-    if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protected" ) )
+    if ( sheetElement.attributeNS( KoXmlNS::table, "protected", QString::null ) == "true" )
     {
         QCString passwd( "" );
         if ( sheetElement.hasAttributeNS( KoXmlNS::table, "protection-key" ) )
