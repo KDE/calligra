@@ -928,7 +928,7 @@ void View::Private::initActions()
   QObject::connect( actions->protectSheet, SIGNAL( toggled( bool ) ),
       view, SLOT( toggleProtectSheet( bool ) ) );
 
-  actions->protectDoc = new KToggleAction( i18n( "Protect &Doc..." ),
+  actions->protectDoc = new KToggleAction( i18n( "Protect &Document..." ),
       0, ac, "protectDoc" );
   actions->protectDoc->setToolTip( i18n( "Protect the document from being modified." ) );
   QObject::connect( actions->protectDoc, SIGNAL( toggled( bool ) ),
