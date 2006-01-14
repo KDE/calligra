@@ -25,12 +25,14 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qtooltip.h>
 #include <koFrameButton.h>
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 #include <kdualcolorbutton.h>
 #include <koColor.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name)
 {
@@ -55,14 +57,17 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name
     mHIn = new QSpinBox(0, 359, 1, this);
     mHIn->setFixedSize(50, 20);
     mHIn->setFocusPolicy( QWidget::ClickFocus );
+    QToolTip::add( mHIn, i18n( "Hue" ) );
 
     mSIn = new QSpinBox(0, 255, 1, this);
     mSIn->setFixedSize(50, 20);
     mSIn->setFocusPolicy( QWidget::ClickFocus );
+    QToolTip::add( mSIn, i18n( "Saturation" ) );
 
     mVIn = new QSpinBox(0, 255, 1, this);
     mVIn->setFixedSize(50, 20);
     mVIn->setFocusPolicy( QWidget::ClickFocus );
+    QToolTip::add( mVIn, i18n( "Value (brightness)" ) );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 0, 0, 1, Qt::AlignTop);
 

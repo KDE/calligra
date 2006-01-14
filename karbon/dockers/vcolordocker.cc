@@ -23,6 +23,7 @@
 #include <qtabwidget.h>
 #include <qwidget.h>
 #include <qcolor.h>
+#include <qtooltip.h>
 #include <qevent.h>
 #include <qptrlist.h>
 
@@ -67,12 +68,16 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mHSVWidget = new KoHSVWidget( mTabWidget );
 	connect( mHSVWidget, SIGNAL( sigFgColorChanged( const QColor &) ), this, SLOT( updateFgColor( const QColor &) ) );
 	connect( mHSVWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
+	connect(this, SIGNAL(fgColorChanged(const QColor &)), mHSVWidget, SLOT(setFgColor(const QColor &)));
+	connect(this, SIGNAL(bgColorChanged(const QColor &)), mHSVWidget, SLOT(setBgColor(const QColor &)));
 	mTabWidget->addTab( mHSVWidget, i18n( "HSV" ) );
 
 	/* ##### RGB WIDGET ##### */
 	mRGBWidget = new KoRGBWidget( mTabWidget );
 	connect( mRGBWidget, SIGNAL( sigFgColorChanged( const QColor &) ), this, SLOT( updateFgColor( const QColor &) ) );
 	connect( mRGBWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
+	connect(this, SIGNAL(fgColorChanged(const QColor &)), mRGBWidget, SLOT(setFgColor(const QColor &)));
+	connect(this, SIGNAL(bgColorChanged(const QColor &)), mRGBWidget, SLOT(setBgColor(const QColor &)));
 	mTabWidget->addTab( mRGBWidget, i18n( "RGB" ) );
 
 	/* ##### CMYK WIDGET ##### */
@@ -85,6 +90,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "white" ), QColor( "black" ), 0, 100, 100, this );
 	//TODO: Make "white" a transparent color
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
+	QToolTip::add( mOpacity, i18n( "Alpha (opacity)" ) );
 
 	QVBoxLayout *mainWidgetLayout = new QVBoxLayout( this, 3 );
 	mainWidgetLayout->addWidget( mTabWidget );
@@ -138,6 +144,8 @@ void VColorDocker::updateFgColor(const QColor &c)
 			m_part->addCommand( m_strokeCmd, true );
 		}
 	}
+ 
+	emit fgColorChanged( c );
 
 	mHSVWidget->blockSignals(false);
 	mRGBWidget->blockSignals(false);
@@ -183,6 +191,8 @@ void VColorDocker::updateBgColor(const QColor &c)
 			m_part->addCommand( m_fillCmd, true );
 		}
 	}
+ 
+	emit bgColorChanged( c );
 
 	mHSVWidget->blockSignals(false);
 	mRGBWidget->blockSignals(false);

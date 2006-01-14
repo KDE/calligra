@@ -56,6 +56,10 @@ private:
 	KoRGBWidget *mRGBWidget;
 	VColorSlider *mOpacity;
 
+signals:
+	void fgColorChanged( const QColor &c );
+	void bgColorChanged( const QColor &c );
+
 private slots:
 	void updateFgColor(const QColor &c);
 	void updateBgColor(const QColor &c);

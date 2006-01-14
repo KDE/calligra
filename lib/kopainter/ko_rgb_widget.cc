@@ -25,9 +25,11 @@
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
+#include <qtooltip.h>
 #include <qcolor.h>
 
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <koFrameButton.h>
 #include <koColorSlider.h>
@@ -72,16 +74,19 @@ KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name
     mRIn->setFixedWidth(50);
     mRIn->setFixedHeight(20);
     mRIn->setFocusPolicy( QWidget::ClickFocus );
+    QToolTip::add( mRIn, i18n( "Red" ) );
 
     mGIn = new QSpinBox(0, 255, 1, this);
     mGIn->setFixedWidth(50);
     mGIn->setFixedHeight(20);
     mGIn->setFocusPolicy( QWidget::ClickFocus );
+    QToolTip::add( mGIn, i18n( "Green" ) );
 
     mBIn = new QSpinBox(0, 255, 1, this);
     mBIn->setFixedWidth(50);
     mBIn->setFixedHeight(20);
     mBIn->setFocusPolicy( QWidget::ClickFocus );
+    QToolTip::add( mBIn, i18n( "Blue" ) );
 
     mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
     mGrid->addWidget(mRLabel, 0, 1);
