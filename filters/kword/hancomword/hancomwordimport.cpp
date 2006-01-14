@@ -30,6 +30,7 @@
 #include <qcstring.h>
 #include <qfile.h>
 #include <qstring.h>
+#include <qstringlist.h>
 #include <qtextstream.h>
 
 #include <kdebug.h>
@@ -52,7 +53,7 @@ public:
   QString inputFile;
   QString outputFile;
   
-  QString text;
+  QStringList paragraphs;
   
   QByteArray createStyles();
   QByteArray createContent();
@@ -91,7 +92,7 @@ KoFilter::ConversionStatus HancomWordImport::convert( const QCString& from, cons
 
   d->inputFile = m_chain->inputFile();
   d->outputFile = m_chain->outputFile();
-  d->text = QString::null;
+  d->paragraphs.clear();
 
   POLE::Storage storage( d->inputFile.latin1() );
   if( !storage.open() )
@@ -106,15 +107,19 @@ KoFilter::ConversionStatus HancomWordImport::convert( const QCString& from, cons
   }
   
   int len = stream->size() / 2;
-  d->text.reserve(len);
+  QString plaindoc;
+  plaindoc.reserve( len );
   
   unsigned char* buf = new unsigned char [stream->size()];
   stream->read( buf, stream->size());
   for(int i = 0; i < len; i++ )
-    d->text.append( QChar((int)readU16(buf + i*2) ) );
+    plaindoc.append( QChar((int)readU16(buf + i*2) ) );
   delete[] buf;
   delete stream;
-  
+
+  // split into paragraphs
+  d->paragraphs = QStringList::split( "\n", plaindoc, true );
+    
   // create output store
   KoStore* storeout;
   storeout = KoStore::createStore( d->outputFile, KoStore::Write, 
@@ -191,10 +196,15 @@ QByteArray HancomWordImport::Private::createContent()
   
   contentWriter->startElement( "text:sequence-decls" );
   contentWriter->endElement();  // text:sequence-decls
-   
-  contentWriter->startElement( "text:p" );
-  contentWriter->addTextNode( text );
-  contentWriter->endElement();  // text:p
+
+  for( int i = 0; i < paragraphs.count(); i++ )
+  {
+    QString text = paragraphs[i];
+    text.replace( '\r', ' ' );
+    contentWriter->startElement( "text:p" );
+    contentWriter->addTextNode( text );
+    contentWriter->endElement();  // text:p
+  }
   
   contentWriter->endElement();  //office:text
   contentWriter->endElement();  // office:body
