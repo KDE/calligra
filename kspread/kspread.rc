@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="28">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="29">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -139,10 +139,9 @@
   <Action name="spelling"/>
   <Separator/>
   <Action name="sortlist"/>
-  <Menu name="Protect"><text>&amp;Protect Document</text>
-    <Action name="protectSheet"/>
-    <Action name="protectDoc"/>
-  </Menu>
+  <Separator/>
+  <Action name="protectSheet"/>
+  <Action name="protectDoc"/>
   <Separator/>
   <Action name="RecalcWorkSheet"/>
   <Action name="RecalcWorkBook"/>
