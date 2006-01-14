@@ -271,7 +271,7 @@ void kchartDataEditor::addDocs()
 // The data is taken from the KDChart data.  This method is never
 // called when the chart is a part of a spreadsheet.
 //
-void kchartDataEditor::setData( KoChart::Data* dat )
+void kchartDataEditor::setData( KDChartTableData* dat )
 {
     unsigned int  rowsCount;
     unsigned int  colsCount;
@@ -336,7 +336,7 @@ void kchartDataEditor::setData( KoChart::Data* dat )
 
 // Get the data from the data editor and put it back into the chart.
 //
-void kchartDataEditor::getData( KoChart::Data* dat )
+void kchartDataEditor::getData( KDChartTableData* dat )
 {	
     //Number of rows used as headers
     int labelRows = headerRows();

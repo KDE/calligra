@@ -41,7 +41,8 @@ class KChartFontConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    KChartFontConfigPage( KChartParams* params,QWidget* parent, KoChart::Data *dat);
+    KChartFontConfigPage( KChartParams* params,QWidget* parent, 
+			  KDChartTableData *dat);
     void init();
     void apply();
     void initList();
@@ -71,7 +72,7 @@ private:
     QButton::ToggleState yAxisIsRelative;
     QButton::ToggleState xAxisIsRelative;
     QButton::ToggleState legendIsRelative;
-    KoChart::Data *data;
+    KDChartTableData *data;
 };
 
 }  //KChart namespace

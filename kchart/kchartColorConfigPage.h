@@ -43,7 +43,7 @@ class KChartColorConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    KChartColorConfigPage( KChartParams* params, QWidget* parent, KoChart::Data *dat );
+    KChartColorConfigPage( KChartParams* params, QWidget* parent, KDChartTableData *dat );
     void apply();
 
     void setBackgroundColor( QColor color );
@@ -82,8 +82,8 @@ private slots:
 private:
     void initDataColorList();
 
-    KChartParams   *m_params;
-    KoChart::Data  *m_data;
+    KChartParams      *m_params;
+    KDChartTableData  *m_data;
 
     KColorButton* _lineCB;
     KColorButton* _gridCB;

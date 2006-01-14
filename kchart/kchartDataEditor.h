@@ -86,8 +86,8 @@ class kchartDataEditor : public KDialogBase
     Q_OBJECT
 public:
     kchartDataEditor(QWidget* parent = 0);
-    void setData(KoChart::Data* dat);
-    void getData(KoChart::Data* dat);
+    void setData(KDChartTableData* dat);
+    void getData(KDChartTableData* dat);
     void setRowLabels(const QStringList &rowLabels);
     void getRowLabels(QStringList &rowLabels);
     void setColLabels(const QStringList &colLabels);

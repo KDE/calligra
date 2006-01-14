@@ -321,7 +321,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // FIXME: In a HiLo chart, the Legend should be the same as the
     //        labels on the X Axis.  Should we disable one of them?
     if (m_params->chartType() == KDChartParams::HiLo) {
-	KoChart::Data  tmpData = m_displayData;
+	KDChartTableData  tmpData = m_displayData;
 
 	// Calculate the min, max, open and close values for each row.
 	m_displayData.expand(tmpData.usedRows(), 4);
@@ -389,7 +389,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 // for instance, when the chart is initialized from a spreadsheet in
 // KSpread.
 //
-void KChartPart::setData( const KoChart::Data& data )
+void KChartPart::setData( const KDChartTableData& data )
 {
     // FIXME(khz): replace this when automatic string detection works in KDChart
     //m_currentData = data;
@@ -436,7 +436,8 @@ void KChartPart::setData( const KoChart::Data& data )
 }
 
 
-void KChartPart::doSetData( const KoChart::Data&  data,
+
+void KChartPart::doSetData( const KDChartTableData&  data,
 			    bool  hasRowHeader,
 			    bool  hasColHeader )
 {
@@ -470,7 +471,7 @@ void KChartPart::doSetData( const KoChart::Data&  data,
     // the data that will be used for the chart by translating the
     // original data.
     if ( hasColHeader || hasRowHeader ) {
-        KoChart::Data matrix( data.rows() - rowStart, data.cols() - colStart );
+        KDChartTableData matrix( data.rows() - rowStart, data.cols() - colStart );
 
         for ( col = colStart; col < data.cols(); col++ ) {
             for ( row = rowStart; row < data.rows(); row++ ) {
@@ -486,6 +487,20 @@ void KChartPart::doSetData( const KoChart::Data&  data,
     setChartDefaults();
 
     emit docChanged();
+}
+
+
+void KChartPart::resizeData( int rows, int cols )
+{
+    m_currentData.expand( rows, cols );
+    m_currentData.setUsedRows( rows );
+    m_currentData.setUsedCols( cols );
+}
+
+
+void KChartPart::setCellData( int row, int column, const QVariant &val)
+{
+    m_currentData.setCell( row, column, val );
 }
 
 
@@ -1103,7 +1118,7 @@ bool KChartPart::loadAuxiliary( const QDomDocument& doc )
 
 
 bool KChartPart::loadData( const QDomDocument& doc,
-			   KoChart::Data& m_currentData )
+			   KDChartTableData& m_currentData )
 {
     kdDebug(35001) << "kchart loadData called" << endl;
 

@@ -41,15 +41,29 @@ public:
 		bool singleViewMode = false );
     ~KChartPart();
 
+    // Methods inherited from KoDocument:
+
+    virtual bool  initDoc(InitDocFlags flags, QWidget* parentWidget=0);
+
     virtual void  paintContent( QPainter& painter, const QRect& rect,
 				bool transparent = false,
 				double zoomX = 1.0, double zoomY = 1.0 );
 
-    virtual bool  initDoc(InitDocFlags flags, QWidget* parentWidget=0);
+    // Methods unique to KChart, and available in the old interface
+    // (see interfaces/koChart.h.)
 
-    virtual void  setData( const KoChart::Data& data );
+    virtual void  setData( const KDChartTableData& data );
+    virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
 
-    void  doSetData( const KoChart::Data&  data,
+    // Methods unique to KChart, and available in the new interface
+    // (see interfaces/koChart.h.)
+
+    virtual void resizeData( int rows, int columns );
+    virtual void setCellData( int row, int column, const QVariant &);
+
+    // ----------------------------------------------------------------
+
+    void  doSetData( const KDChartTableData&  data,
 		     bool  hasRowHeader,
 		     bool  hasRowHeader );
 
@@ -59,11 +73,11 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    KoChart::Data   *data()                    { return &m_currentData; }
-    KChartParams    *params() const            { return m_params;       }
-    KChartAuxiliary *auxdata()                 { return &m_auxiliary;   }
-    QStringList     &rowLabelTexts()           { return m_rowLabels;  }
-    QStringList     &colLabelTexts()           { return m_colLabels;  }
+    KDChartTableData  *data()                  { return &m_currentData; }
+    KChartParams      *params() const          { return m_params;       }
+    KChartAuxiliary   *auxdata()               { return &m_auxiliary;   }
+    QStringList       &rowLabelTexts()         { return m_rowLabels;  }
+    QStringList       &colLabelTexts()         { return m_colLabels;  }
 
     // Save and load
     virtual QDomDocument  saveXML();
@@ -75,7 +89,6 @@ public:
     virtual bool          saveOasis(KoStore*, KoXmlWriter*);
 
     bool  canChangeValue()   const             { return m_bCanChangeValue; }
-    virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
 
     void  initNullChart();
 
@@ -95,7 +108,7 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
     bool  loadOldXML( const QDomDocument& doc );
     bool  loadAuxiliary( const QDomDocument& doc );
-    bool  loadData( const QDomDocument& doc, KoChart::Data& currentData );
+    bool  loadData( const QDomDocument& doc, KDChartTableData& currentData );
     bool  loadOasisData( const QDomElement& tableElem );
 
 private:
@@ -108,7 +121,7 @@ private:
 
 private:
     // The chart and its contents
-    KoChart::Data  m_currentData;
+    KDChartTableData  m_currentData;
     QStringList    m_rowLabels;
     QStringList    m_colLabels;
     KChartParams  *m_params;
@@ -124,7 +137,7 @@ private:
     QWidget       *m_parentWidget;
 
     // Used when displaying.
-    KoChart::Data  m_displayData;
+    KDChartTableData  m_displayData;
 };
 
 

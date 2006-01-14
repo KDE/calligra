@@ -41,7 +41,7 @@ namespace KChart
 
 KChartPieConfigPage::KChartPieConfigPage( KChartParams* params,
                                           QWidget* parent,
-                                          KoChart::Data* data) :
+                                          KDChartTableData* data) :
     QWidget( parent ),_params( params )
 {
     //    col=_params->colPie;

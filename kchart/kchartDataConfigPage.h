@@ -41,7 +41,7 @@ class KChartDataConfigPage : public QWidget
 
 public:
     KChartDataConfigPage( KChartParams* params, QWidget* parent,
-			  KoChart::Data *dat,
+			  KDChartTableData *dat,
 			  KChartAuxiliary *aux);
     void init();
     void defaults();
@@ -55,7 +55,7 @@ private:
     QRadioButton* m_rowMajor;
     QRadioButton* m_colMajor;
 
-    KoChart::Data    *data;
+    KDChartTableData *data;
     KChartAuxiliary  *m_aux;
 };
 

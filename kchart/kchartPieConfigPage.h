@@ -47,7 +47,8 @@ class KChartPieConfigPage : public QWidget
     Q_OBJECT
 
 public:
-    KChartPieConfigPage( KChartParams* params, QWidget* parent, KoChart::Data* data);
+    KChartPieConfigPage( KChartParams* params, QWidget* parent, 
+			 KDChartTableData* data);
     void init();
     void apply();
     void initList();

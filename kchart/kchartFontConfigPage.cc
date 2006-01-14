@@ -82,7 +82,8 @@ namespace KChart
 {
 
 KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
-                                            QWidget* parent, KoChart::Data *dat) :
+                                            QWidget* parent, 
+					    KDChartTableData *dat) :
     QWidget( parent ), m_params( params ), data(dat)
 {
     QGridLayout *grid = new QGridLayout(this,4,3,KDialog::marginHint(), KDialog::spacingHint());

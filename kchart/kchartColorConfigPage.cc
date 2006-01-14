@@ -37,7 +37,8 @@ namespace KChart
 {
 
 KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
-                                              QWidget* parent, KoChart::Data *dat ) :
+                                              QWidget* parent, 
+					      KDChartTableData *dat ) :
     QWidget( parent ),
     m_params( params ),
     m_data( dat ),

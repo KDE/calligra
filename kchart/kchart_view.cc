@@ -220,7 +220,7 @@ void KChartView::edit()
     kchartDataEditor  ed(this);
     //KChartParams     *params=((KChartPart*)koDocument())->params();
 
-    KoChart::Data    *dat = (( (KChartPart*)koDocument())->data());
+    KDChartTableData   *dat = (( (KChartPart*)koDocument())->data());
 
     kdDebug(35001) << "***Before calling editor: cols =" << dat->cols()
 		   << " , rows = "     << dat->rows()
@@ -334,7 +334,7 @@ void KChartView::config(int flags)
 {
     // open a config dialog depending on the chart type
     KChartParams        *params = ((KChartPart*)koDocument())->params();
-    KoChart::Data       *dat    = ((KChartPart*)koDocument())->data();
+    KDChartTableData    *dat    = ((KChartPart*)koDocument())->data();
     KChartAuxiliary     *aux    = ((KChartPart*)koDocument())->auxdata();
     KChartConfigDialog  *d      = new KChartConfigDialog( params, this, flags,
 							  dat, aux );
@@ -703,7 +703,7 @@ void KChartView::importData()
     bool  hasRowHeaders = ( rows > 1 && dialog->firstRowContainHeaders() );
     bool  hasColHeaders = ( cols > 1 && dialog->firstColContainHeaders() );
 
-    KoChart::Data  data( rows, cols );
+    KDChartTableData  data( rows, cols );
     data.setUsedRows( rows );
     data.setUsedCols( cols );
     for (uint row = 0; row < rows; row++) {

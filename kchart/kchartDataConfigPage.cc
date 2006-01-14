@@ -52,7 +52,7 @@ namespace KChart
 
 KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 					    QWidget* parent, 
-					    KoChart::Data *dat,
+					    KDChartTableData *dat,
 					    KChartAuxiliary *aux) :
     QWidget( parent ), m_params( params ), data(dat), m_aux(aux)
 {

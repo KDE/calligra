@@ -14,6 +14,19 @@ inge	Inge has taken this subtask
 RAPH	Raphael has taken this task
 
 
+Before release of KOffice 1.5.0
+===============================
+
+* Before the feature freeze
+  + Reintegrate kchart into KSpread
+     - New interface into KoChart
+     - Adapt kspread_sheet to it.
+  + Fix so that users can change data area after the fact.
+
+
+* After the feature freeze
+
+
 Before release of KOffice 1.4.2
 ===============================
 
