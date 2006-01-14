@@ -90,7 +90,8 @@ Manipulator::Manipulator()
     m_creation(true),
     m_reverse(false),
     m_firstrun(true),
-    m_format(true)
+    m_format(true),
+    m_register(true)
 {
 }
 
@@ -138,14 +139,14 @@ void Manipulator::execute()
 
   m_sheet->doc()->emitEndOperation(*this);
   m_sheet->doc()->undoUnlock ();
-  
+
   // add me to undo if needed
-  if (m_firstrun)
+  if (m_firstrun && m_register)
   {
     // addCommand itself checks for undo lock
     m_sheet->doc()->addCommand (this);
-    m_firstrun = false;
   }
+  m_firstrun = false;
 }
 
 void Manipulator::unexecute()
@@ -780,12 +781,14 @@ MergeManipulator::MergeManipulator()
   : Manipulator(),
     m_merge(true),
     m_mergeHorizontal(false),
-    m_mergeVertical(false)
+    m_mergeVertical(false),
+    m_unmerger(0)
 {
 }
 
 MergeManipulator::~MergeManipulator()
 {
+  delete m_unmerger;
 }
 
 bool MergeManipulator::process(Element* element)
@@ -818,52 +821,51 @@ bool MergeManipulator::process(Element* element)
     {
       for (int row = top; row <= bottom; ++row)
       {
+        int rows = 0;
         for (int col = left; col <= right; ++col)
         {
           Cell *cell = m_sheet->cellAt( col, row );
           if (cell->doesMergeCells())
           {
+            rows = QMAX(rows, cell->mergedYCells());
             cell->mergeCells( col, row, 0, 0 );
           }
         }
         Cell *cell = m_sheet->nonDefaultCell( left, row );
-        cell->mergeCells( left, row, width - 1, 0 );
+        if (!cell->isPartOfMerged())
+        {
+          cell->mergeCells( left, row, width - 1, rows );
+        }
       }
     }
     else if (m_mergeVertical)
     {
       for (int col = left; col <= right; ++col)
       {
+        int cols = 0;
         for (int row = top; row <= bottom; ++row)
         {
           Cell *cell = m_sheet->cellAt( col, row );
           if (cell->doesMergeCells())
           {
+            cols = QMAX(cols, cell->mergedXCells());
             cell->mergeCells( col, row, 0, 0 );
           }
         }
         Cell *cell = m_sheet->nonDefaultCell( col, top );
-        cell->mergeCells( col, top, 0, height - 1);
+        if (!cell->isPartOfMerged())
+        {
+          cell->mergeCells( col, top, cols, height - 1);
+        }
       }
     }
     else
     {
-      for (int col = left; col <= right; ++col)
-      {
-        for (int row = top; row <= bottom; ++row)
-        {
-          Cell *cell = m_sheet->cellAt( col, row );
-          if (cell->doesMergeCells())
-          {
-            cell->mergeCells( col, row, 0, 0 );
-          }
-        }
-      }
       Cell *cell = m_sheet->nonDefaultCell( left, top );
       cell->mergeCells( left, top, width - 1, height - 1);
     }
   }
-  else
+  else // dissociate
   {
     for (int col = left; col <= right; ++col)
     {
@@ -884,18 +886,22 @@ bool MergeManipulator::process(Element* element)
 
 QString MergeManipulator::name() const
 {
-  if (m_mergeHorizontal)
+  if (m_merge) // MergeManipulator
   {
-    return i18n("Merge Cells Horizontally");
+    if (m_mergeHorizontal)
+    {
+      return i18n("Merge Cells Horizontally");
+    }
+    else if (m_mergeVertical)
+    {
+      return i18n("Merge Cells Vertically");
+    }
+    else
+    {
+      return i18n("Merge Cells");
+    }
   }
-  else if (m_mergeVertical)
-  {
-    return i18n("Merge Cells Vertically");
-  }
-  else
-  {
-    return i18n("Merge Cells");
-  }
+  return i18n("Dissociate Cells");
 }
 
 bool MergeManipulator::preProcessing()
@@ -905,11 +911,93 @@ bool MergeManipulator::preProcessing()
     KMessageBox::information( 0, i18n( "Merging of columns or rows is not supported." ) );
     return false;
   }
+
+  if (m_firstrun)
+  {
+    // reduce the region to the region occupied by merged cells
+    Region mergedCells;
+    ConstIterator endOfList = constEnd();
+    for (ConstIterator it = constBegin(); it != endOfList; ++it)
+    {
+      Element* element = *it;
+      QRect range = element->rect().normalize();
+      int right = range.right();
+      int bottom = range.bottom();
+      for (int row = range.top(); row <= bottom; ++row)
+      {
+        for (int col = range.left(); col <= right; ++col)
+        {
+          Cell *cell = m_sheet->cellAt(col, row);
+          if (cell->doesMergeCells())
+          {
+            QRect rect(col, row, cell->mergedXCells() + 1, cell->mergedYCells() + 1);
+            mergedCells.add(rect);
+          }
+        }
+      }
+    }
+
+    if (m_merge) // MergeManipulator
+    {
+      // we're in the manipulator's first execution
+      // initialize the undo manipulator
+      m_unmerger = new MergeManipulator();
+      if (!m_mergeHorizontal && !m_mergeVertical)
+      {
+        m_unmerger->setReverse(true);
+      }
+      m_unmerger->setSheet(m_sheet);
+      m_unmerger->setRegisterUndo(false);
+      m_unmerger->add(mergedCells);
+    }
+    else // DissociateManipulator
+    {
+      clear();
+      add(mergedCells);
+    }
+  }
+
+  if (m_merge) // MergeManipulator
+  {
+    if (m_reverse) // dissociate
+    {
+    }
+    else // merge
+    {
+      // Dissociate cells before merging the whole region.
+      // For horizontal/vertical merging the cells stay
+      // as they are. E.g. the region contains a merged cell
+      // occupying two rows. Then the horizontal merge should
+      // keep the height of two rows and extend the merging to the
+      // region's width. In this case the unmerging is done while
+      // processing each region element.
+      if (!m_mergeHorizontal && !m_mergeVertical)
+      {
+        m_unmerger->execute();
+      }
+    }
+  }
   return true;
 }
 
 bool MergeManipulator::postProcessing()
 {
+  if (m_merge) // MergeManipulator
+  {
+    if (m_reverse) // dissociate
+    {
+      // restore the old merge status
+      if (m_mergeHorizontal || m_mergeVertical)
+      {
+        m_unmerger->execute();
+      }
+      else
+      {
+        m_unmerger->unexecute();
+      }
+    }
+  }
+
   if (!m_reverse)
   {
     if (m_sheet->getAutoCalc())
@@ -920,58 +1008,6 @@ bool MergeManipulator::postProcessing()
   else
   {
     m_sheet->refreshMergedCell();
-  }
-  return true;
-}
-
-
-
-/***************************************************************************
-  class DissociateManipulator
-****************************************************************************/
-
-DissociateManipulator::DissociateManipulator()
-  : MergeManipulator()
-{
-  m_merge = false;
-}
-
-DissociateManipulator::~DissociateManipulator()
-{
-}
-
-QString DissociateManipulator::name() const
-{
-  if (Region::name().isEmpty())
-  {
-    return i18n("Dissociate Cells");
-  }
-  else
-  {
-    return i18n("Dissociate Cells %1").arg(Region::name());
-  }
-}
-
-bool DissociateManipulator::preProcessing()
-{
-  if (!m_reverse)  // we will dissociate
-  {
-    Region unmergedCells;
-    ConstIterator endOfList(cells().end());
-    for (ConstIterator it = cells().begin(); it != endOfList; ++it)
-    {
-      Element* element = *it;
-      if (element->type() == Element::Point)
-      {
-        QRect range = element->rect().normalize();
-        QPoint marker(range.topLeft());
-
-        Cell *cell = m_sheet->nonDefaultCell( marker );
-        QRect rect(marker.x(), marker.y(), cell->mergedXCells() + 1, cell->mergedYCells() + 1);
-        unmergedCells.add(rect);
-      }
-    }
-    add(unmergedCells);
   }
   return true;
 }

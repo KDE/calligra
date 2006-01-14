@@ -5624,8 +5624,9 @@ void Sheet::dissociateCells(const Region& region)
   if( workbook()->isProtected() )
     return;
 
-  Manipulator* manipulator = new DissociateManipulator();
+  Manipulator* manipulator = new MergeManipulator();
   manipulator->setSheet(this);
+  manipulator->setReverse(true);
   manipulator->add(region);
   manipulator->execute();
 }

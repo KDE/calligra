@@ -42,7 +42,6 @@ class RowFormat;
 class Sheet;
 
 
-
 // struct layoutCell {
 //   int row;
 //   int col;
@@ -87,7 +86,8 @@ public:
 
   virtual void setArgument(const QString& /*arg*/, const QString& /*val*/) {};
 
-  void setReverse(bool reverse) { m_reverse = reverse; }
+  virtual void setReverse(bool reverse) { m_reverse = reverse; }
+  void setRegisterUndo(bool registerUndo) { m_register = registerUndo; }
 
   virtual void setName (const QString &n) { m_name = n; }
   virtual QString name() const { return m_name; };
@@ -107,6 +107,7 @@ protected:
   bool   m_reverse  : 1;
   bool   m_firstrun : 1;
   bool   m_format   : 1;
+  bool   m_register : 1;
 private:
 };
 
@@ -421,13 +422,15 @@ public:
   MergeManipulator();
   virtual ~MergeManipulator();
 
+  virtual bool preProcessing();
+
+  virtual void setReverse(bool reverse) { m_merge = !reverse; }
   void setHorizontalMerge(bool state) { m_mergeHorizontal = state; }
   void setVerticalMerge(bool state) { m_mergeVertical = state; }
 
 protected:
   virtual bool process(Element*);
 
-  virtual bool preProcessing();
   virtual bool postProcessing();
 
   virtual QString name() const;
@@ -436,25 +439,7 @@ protected:
 private:
   bool m_mergeHorizontal : 1;
   bool m_mergeVertical   : 1;
-};
-
-
-
-/**
- * DissociateManipulator
- */
-class DissociateManipulator : public MergeManipulator
-{
-public:
-  DissociateManipulator();
-  virtual ~DissociateManipulator();
-
-protected:
-  virtual bool preProcessing();
-
-  virtual QString name() const;
-
-private:
+  Manipulator* m_unmerger; // to restore old merging
 };
 
 

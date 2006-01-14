@@ -979,14 +979,17 @@ void CellFormatDialog::slotApply()
     {
       Manipulator* manipulator = new MergeManipulator();
       manipulator->setSheet(m_pView->activeSheet());
+      manipulator->setRegisterUndo(false);
       manipulator->add(*m_pView->selectionInfo());
       macroCommand->addCommand( manipulator );
     }
     else
     {
       //dissociate cells
-      Manipulator* manipulator = new DissociateManipulator();
+      Manipulator* manipulator = new MergeManipulator();
       manipulator->setSheet(m_pView->activeSheet());
+      manipulator->setReverse(true);
+      manipulator->setRegisterUndo(false);
       manipulator->add(*m_pView->selectionInfo());
       macroCommand->addCommand( manipulator );
     }
@@ -994,6 +997,7 @@ void CellFormatDialog::slotApply()
 
   FormatManipulator* manipulator = new FormatManipulator();
   manipulator->setSheet(m_pView->activeSheet());
+  manipulator->setRegisterUndo(false);
   manipulator->add(*m_pView->selectionInfo());
   borderPage->apply(manipulator);
   floatPage->apply(manipulator);
