@@ -163,12 +163,6 @@
                 <note xml:lang="en_us">SGML DocBook only</note>
                 <stat import="none" export="abandoned"/>
             </filter>
-            <filter id="kword_hancomword">
-                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/hancomword"/>
-                <title xml:lang="en_us">HancomWord</title>
-                <note xml:lang="en_us">for version 2.0, text only</note>
-                <stat import="twostars" export="none"/>
-            </filter>
             <filter id="kword_html">
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/html"/>
                 <title xml:lang="en_us">HTML</title>
@@ -219,12 +213,6 @@
                 <contact href="mailto:info@marcozanon.com">Marco Zanon</contact>
                 <stat import="onestar" export="none"/>
             </filter>
-            <filter id="kword_msword97">
-                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/winword97"/>
-                <title xml:lang="en_us">MS Word</title>
-                <note xml:lang="en_us">Microsoft Word 97/2000</note>
-                <stat import="threestars" export="none"/>
-            </filter>
             <filter id="kword_wml">
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kword/wml"/>
                 <title xml:lang="en_us">WML</title>
@@ -257,12 +245,6 @@
                 <title xml:lang="en_us">dBase</title>
                 <note xml:lang="en_us">dBase 3 only</note>
                 <stat import="twostars" export="none"/>
-            </filter>
-            <filter id="kspread_excel">
-                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/excel97"/>
-                <title xml:lang="en_us">Excel</title>
-                <note xml:lang="en_us">Microsoft Excel 97/2000</note>
-                <stat import="threestars" export="none"/>
             </filter>
             <filter id="kspread_gnumeric">
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kspread/gnumeric"/>
@@ -304,12 +286,6 @@
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/kpresenter/ooimpress"/>
                 <title xml:lang="en_us">OpenOffice.org Impress</title>
                 <stat import="fourstars" export="twostars"/>
-            </filter>
-            <filter id="kpresenter_powerpoint">
-                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/olefilters/powerpoint97"/>
-                <title xml:lang="en_us">PowerPoint 97</title>
-                <note xml:lang="en_us">Microsoft PowerPoint 97</note>
-                <stat import="onestar" export="none"/>
             </filter>
             <filter id="kpresenter_kword">
                 <websvn importsuffix="" exportsuffix="#export" path="koffice/filters/kpresenter/kword"/>

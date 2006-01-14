@@ -1,6 +1,0 @@
-* shared formula support added
-* inner-sheet references done
-* strings in formulas done
-* complete rewrite of formula decoding (works now with all kind of nested formulas)
-* added all Excel functions - implementation of most is still missing in kspread though
-* locked, absolute formula references ($A$8...) done (at least for excel 97/2k/xp files)
