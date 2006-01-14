@@ -3793,6 +3793,8 @@ void View::changeSheet( const QString& _name )
 
 void View::moveSheet( unsigned sheet, unsigned target )
 {
+    if( doc()->map()->isProtected() ) return;
+
     QStringList vs = doc()->map()->visibleSheets();
 
     if( target >= vs.count() )
