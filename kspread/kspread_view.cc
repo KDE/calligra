@@ -330,7 +330,7 @@ public:
     KAction* insertCell;
     KAction* removeCell;
     KAction* deleteCell;
-    KAction* mergeCell;
+    KToolBarPopupAction* mergeCell;
     KAction* mergeCellHorizontal;
     KAction* mergeCellVertical;
     KAction* dissociateCell;
@@ -674,17 +674,20 @@ void View::Private::initActions()
       0, view, SLOT( deleteSelection() ), ac, "delete" );
   actions->deleteCell->setToolTip(i18n("Delete all contents and formatting of the current cell."));
 
-  actions->mergeCell = new KAction( i18n("Merge Cells"),"mergecell",
+  actions->mergeCell = new KToolBarPopupAction( i18n("Merge Cells"),"mergecell",
       0, view, SLOT( mergeCell() ), ac, "mergecell" );
   actions->mergeCell->setToolTip(i18n("Merge the selected region."));
+  actions->mergeCell->plug( actions->mergeCell->popupMenu() );
 
   actions->mergeCellHorizontal = new KAction( i18n("Merge Cells Horizontally"),"mergecell-horizontal",
       0, view, SLOT( mergeCellHorizontal() ), ac, "mergecellHorizontal" );
   actions->mergeCellHorizontal->setToolTip(i18n("Merge the selected region horizontally."));
+  actions->mergeCellHorizontal->plug( actions->mergeCell->popupMenu() );
 
   actions->mergeCellVertical = new KAction( i18n("Merge Cells Vertically"),"mergecell-vertical",
       0, view, SLOT( mergeCellVertical() ), ac, "mergecellVertical" );
   actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically."));
+  actions->mergeCellVertical->plug( actions->mergeCell->popupMenu() );
 
   actions->dissociateCell = new KAction( i18n("Dissociate Cells"),"dissociatecell",
       0, view, SLOT( dissociateCell() ), ac, "dissociatecell" );
