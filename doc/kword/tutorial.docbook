@@ -200,8 +200,7 @@ fileref="Tut13.png"/></imageobject>
 
 <para>Notice how the right side of the title block has slid behind the empty frame on the right. This is easily corrected.</para>
 
-<para>Step 13: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Raise
-Frame</guimenuitem></menuchoice>.</para>
+<para>Step 13: Select <menuchoice><guimenu>Frames</guimenu><guimenuitem>Bring to Front</guimenuitem></menuchoice>.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
 fileref="Tut13a.png"/></imageobject>
@@ -344,6 +343,7 @@ fileref="Tut22.png"/></imageobject>
 <para>At this point, you have :</para>
 
 <itemizedlist>
+<listitem><para>Started a new document using a template</para></listitem>
 <listitem><para>Added text to a frame.</para></listitem>
 <listitem><para>Resized text.</para></listitem>
 <listitem><para>Created, moved, resized and deleted frames.</para></listitem>

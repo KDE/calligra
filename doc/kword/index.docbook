@@ -60,7 +60,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-12-22</date>
+<date>2006-1-13</date>
 <releaseinfo>1.5</releaseinfo>
 
 <abstract>
@@ -69,7 +69,7 @@
 &koffice; suite of utilities.
 </para>
 <para>
-This manual describes &kword; 1.4.
+This manual describes &kword; 1.5.
 </para>
 </abstract>
 
@@ -929,8 +929,8 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 
 <para>&kword; comes with the following filters:</para>
 
-<table>
-<title>Available import/export filters</title>
+<informaltable>
+
 <tgroup cols="3">
 <thead><row><entry> </entry><entry>Import</entry><entry>Export</entry></row></thead>
 <tbody>
@@ -958,7 +958,7 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <row><entry>&XML;</entry><entry>Yes</entry><entry>No</entry></row>
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
 <para>For details on each filter, please refer to the <ulink 
 url="http://koffice.org/filters/">&koffice; filters web page</ulink>. </para>
@@ -973,8 +973,8 @@ url="http://koffice.org/filters/">&koffice; filters web page</ulink>. </para>
 <title>Key Bindings Summary</title>
 <indexterm><primary>keyboard shortcuts</primary><secondary>table of</secondary></indexterm>
 
-
-<table><title>Keybindings for Working with Documents</title>
+<para>Keybindings for Working with Documents</para>
+<informaltable>
 <tgroup cols="2"><tbody>
 <row>
 <entry><link linkend="menu-new">Start New
@@ -1019,10 +1019,11 @@ action="simul">&Ctrl;<keycap>Q</keycap></keycombo></entry>
 </row>
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
-<table>
-<title>Keybindings for Character Selection</title>
+
+<para>Keybindings for Character Selection</para>
+<informaltable>
 <tgroup cols="2"><tbody>
 <row><entry>Move selection one character to the left.</entry><entry><keycombo action="simul">&Shift;<keycap>Left Arrow</keycap></keycombo></entry></row>
 <row><entry>Move selection one word to the left.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Left Arrow</keycap></keycombo></entry></row>
@@ -1052,10 +1053,10 @@ action="simul">&Ctrl;<keycap>Q</keycap></keycombo></entry>
 
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
-<table>
-<title>Keybindings for Character Formatting</title>
+<para>Keybindings for Character Formatting</para>
+<informaltable>
 
 <tgroup cols="2">
 <tbody>
@@ -1097,10 +1098,11 @@ action="simul">&Ctrl;<keycap>&lt;</keycap></keycombo></entry>
 
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
-<table>
-<title>Keybindings for Paragraph Formatting</title>
+
+<para>Keybindings for Paragraph Formatting</para>
+<informaltable>
 
 <tgroup cols="2">
 <tbody>
@@ -1136,12 +1138,13 @@ action="simul">&Alt;&Ctrl;<keycap>P</keycap></keycombo></entry>
 
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
 
-<table>
-<title>Keybindings for Basic Editing Functions and Search and
-Replace</title>
+<para>Keybindings for Basic Editing Functions and Search and
+Replace</para>
+<informaltable>
+
 <tgroup cols="2">
 <tbody>
 
@@ -1192,10 +1195,11 @@ action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo></entry>
 </row>
 </tbody>
 </tgroup>
-</table>
+</informaltable>
 
-<table>
-<title>Keybindings for Inserting</title>
+<para>Keybindings for Inserting</para>
+<informaltable>
+
 <tgroup cols="2"><tbody>
 
 <row>
@@ -1258,10 +1262,11 @@ Break</link></entry>
 action="simul">&Ctrl;<keycap>Return</keycap></keycombo></entry>
 </row>
 
-</tbody></tgroup></table>
+</tbody></tgroup></informaltable>
 
-<table>
-<title>Miscellaneous Keyboard Shortcuts</title>
+<para>Miscellaneous Keyboard Shortcuts</para>
+<informaltable>
+
 <tgroup cols="2"><tbody>
 <row>
 <entry>&kword; Handbook</entry>
@@ -1296,7 +1301,7 @@ action="simul">&Ctrl;<keycap>Return</keycap></keycombo></entry>
 
 
 
-</tbody></tgroup></table>
+</tbody></tgroup></informaltable>
 </appendix>
 
 <appendix id="technical-info">
