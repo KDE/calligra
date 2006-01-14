@@ -659,7 +659,7 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 {
   KPopupMenu menu;
   KIconLoader il;
-  int const mnuSave = menu.insertItem( il.loadIcon( "filesave", KIcon::Small ), i18n("Save") );
+  int const mnuSave = menu.insertItem( il.loadIconSet( "filesave", KIcon::Small ), i18n("Save") );
   int const mnuClose = menu.insertItem( il.loadIcon( "fileclose", KIcon::Small ), i18n("Close") );
   
   int tabnr = m_pFrame->indexOf( w );
