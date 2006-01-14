@@ -47,6 +47,7 @@
 #include <kparts/partmanager.h>
 #include <kaction.h>
 #include <kdeversion.h>
+#include <kaboutdata.h>
 
 #include <koQueryTrader.h>
 #include <koDocumentInfo.h>
@@ -488,6 +489,9 @@ void KoShellWindow::switchToPage( QValueList<Page>::Iterator it )
   // Fix caption and set focus to the new view
   updateCaption();
   v->setFocus();
+
+  partSpecificHelpAction->setEnabled(true);
+  partSpecificHelpAction->setText(i18n("%1 Handbook").arg((*m_activePage).m_pDoc->instance()->aboutData()->programName()));
 }
 
 void KoShellWindow::slotFileNew()
@@ -582,6 +586,8 @@ void KoShellWindow::closeDocument()
       setRootDocument( 0L );
       partManager()->setActivePart( 0L, 0L );
       mnuSaveAll->setEnabled(false);
+      partSpecificHelpAction->setEnabled(false);
+      partSpecificHelpAction->setText(i18n("Part Handbook"));
     }
 
     // Now delete the old view and page
@@ -698,6 +704,14 @@ void KoShellWindow::createShellGUI( bool  )
 	guiFactory()->addClient( m_client );
 }
 
+void KoShellWindow::showPartSpecificHelp()
+{
+  if((m_activePage == m_lstPages.end()) || ((*m_activePage).m_pDoc == 0))
+    return;
+
+  kapp->invokeHelp("", (*m_activePage).m_pDoc->instance()->aboutData()->appName(), "");
+}
+
 
 ///////////////////
 KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
@@ -705,6 +719,9 @@ KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
   setXMLFile( "koshellui.rc", true, true );
   window->mnuSaveAll = new KAction( i18n("Save All"), 0, window, SLOT( saveAll() ), actionCollection(), "save_all" );
   window->mnuSaveAll->setEnabled(false);
+  window->partSpecificHelpAction = new KAction(i18n("Part Handbook"), "contents", 0, window, SLOT(showPartSpecificHelp()),
+                                               actionCollection(), "partSpecificHelp");
+  window->partSpecificHelpAction->setEnabled(false);
 }
 
 #include "koshell_shell.moc"

@@ -7,5 +7,8 @@
   <Menu name="settings"><Text>&amp;Settings</Text>
      <Action name="show_sidebar"/>
   </Menu>
+  <Menu name="help">
+    <Action name="partSpecificHelp"/>
+  </Menu>
 </MenuBar>
 </kpartgui>

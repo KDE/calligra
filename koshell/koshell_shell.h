@@ -61,6 +61,7 @@ public:
   virtual QString configFile() const;
 
   KAction *mnuSaveAll;
+  KAction* partSpecificHelpAction;
 
 protected slots:
 
@@ -68,6 +69,8 @@ protected slots:
   virtual void slotFileClose();
   virtual void slotFileOpen();
   void saveAll();
+
+  void showPartSpecificHelp();
 
   void slotSidebar_Part(int);
   void slotSidebar_Document(int);
