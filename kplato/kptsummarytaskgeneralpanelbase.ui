@@ -1,0 +1,248 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPlato::SummaryTaskGeneralPanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SummaryTaskGeneralPanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>400</width>
+            <height>250</height>
+        </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>400</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>SummaryTaskGeneralPanelBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout11</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout9</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>wbslabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>WBS:</string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Work Breakdown Structure</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The Work Breakdown Structure introduces numbering for all tasks in the project, according to the task structure.
+
+The WBS code is auto-generated; simply choose Generate WBS Code from the Tools menu to generate the WBS code for the project.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>namelabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Name:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>namefield</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The name of the Task.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>leaderlabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Responsible:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>leaderfield</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The person responsible for this task.
+
+This is not limited to persons available in a resource group but can be anyone. You can even directly access your address book with the Choose button.</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout10</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout7</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>wbsfield</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer1</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>40</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>idlabel</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Task id:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>idfield</cstring>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>This is the unique identifier for this task.</string>
+                                    </property>
+                                </widget>
+                                <widget class="KLineEdit">
+                                    <property name="name">
+                                        <cstring>idfield</cstring>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>WheelFocus</enum>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="KLineEdit">
+                            <property name="name">
+                                <cstring>namefield</cstring>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>WheelFocus</enum>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>The name of the Task.</string>
+                            </property>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout6</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="KLineEdit">
+                                    <property name="name">
+                                        <cstring>leaderfield</cstring>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>WheelFocus</enum>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>The person responsible for this task.
+
+This is not limited to persons available in a resource group but can be anyone. You can even directly access your address book with the Choose button.</string>
+                                    </property>
+                                </widget>
+                                <widget class="QPushButton">
+                                    <property name="name">
+                                        <cstring>chooseLeader</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>Choose...</string>
+                                    </property>
+                                    <property name="accel">
+                                        <string></string>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Insert a person from your address book.</string>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>descriptionlabell6</cstring>
+            </property>
+            <property name="text">
+                <string>Note:</string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>descriptionfield</cstring>
+            </property>
+        </widget>
+        <widget class="KTextEdit">
+            <property name="name">
+                <cstring>descriptionfield</cstring>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+</customwidgets>
+<connections>
+</connections>
+<tabstops>
+    <tabstop>namefield</tabstop>
+    <tabstop>leaderfield</tabstop>
+    <tabstop>chooseLeader</tabstop>
+    <tabstop>descriptionfield</tabstop>
+    <tabstop>idfield</tabstop>
+    <tabstop>wbsfield</tabstop>
+</tabstops>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klineedit.h</includehint>
+    <includehint>ktextedit.h</includehint>
+</includehints>
+</UI>

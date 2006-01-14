@@ -68,6 +68,7 @@
 #include "kptmainprojectdialog.h"
 #include "kptprojectdialog.h"
 #include "kpttask.h"
+#include "kptsummarytaskdialog.h"
 #include "kpttaskdialog.h"
 #include "kpttaskprogressdialog.h"
 #include "kptganttview.h"
@@ -718,7 +719,15 @@ void View::slotOpenNode() {
             break;
         }
         case Node::Type_Summarytask: {
-            // TODO
+            Task *task = dynamic_cast<Task *>(node);
+            SummaryTaskDialog *dia = new SummaryTaskDialog(*task);
+            if (dia->exec()) {
+                KCommand *m = dia->buildCommand(getPart());
+                if (m) {
+                    getPart()->addCommand(m);
+                }
+            }
+            delete dia;
             break;
         }
         default:

@@ -4,6 +4,9 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib
            $(all_includes)
 
 libkplatopart_la_SOURCES = \
+    kptsummarytaskgeneralpanelbase.ui \
+    kptsummarytaskdialog.cc \
+    kptsummarytaskgeneralpanel.cc \
     kptschedule.cc \
     kptappointment.cc \
     kptcalendarlistpanel.ui \
@@ -53,6 +56,8 @@ libkplatopart_la_SOURCES = \
 
 # (this is not used)
 noinst_HEADERS = \
+    kptsummarytaskdialog.h \
+    kptsummarytaskgeneralpanel.h \
     kptschedule.h \
     kptappointment.h \
     kptresourceappointmentsview.h \

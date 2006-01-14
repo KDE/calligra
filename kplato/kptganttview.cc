@@ -875,7 +875,7 @@ void GanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, i
         return;
     } 
     if (t && t->type() == Node::Type_Summarytask) {
-        QPopupMenu *menu = m_mainview->popupMenu("node_popup");
+        QPopupMenu *menu = m_mainview->popupMenu("summarytask_popup");
         if (menu)
         {
             /*int id =*/ menu->exec(pos);
@@ -888,8 +888,10 @@ void GanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, i
 
 void GanttView::slotItemDoubleClicked(QListViewItem* item) {
     //kdDebug()<<k_funcinfo<<endl;
-    if (item == 0)
+    if (item == 0 || item->childCount() > 0) {
+        // FIXME: How else to avoid interference wirh expanding/collapsing summary items?
         return;
+    }
     emit itemDoubleClicked();
 }
 

@@ -111,7 +111,7 @@
     <Menu name="task_popup">
         <Action name="node_properties"/>
         <Separator/>
-<!--        <Action name="edit_cut"/>
+        <!--        <Action name="edit_cut"/>
         <Action name="edit_copy"/>
         <Action name="edit_paste"/>
         <Separator/> -->
@@ -122,6 +122,19 @@
         <Action name="move_task_down"/>
         <Separator/>
         <Action name="task_progress"/>
+    </Menu>
+    <Menu name="summarytask_popup">
+        <Action name="node_properties"/>
+        <Separator/>
+        <!--        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+        <Separator/> -->
+        <Action name="delete_task"/>
+        <Action name="indent_task"/>
+        <Action name="unindent_task"/>
+        <Action name="move_task_up"/>
+        <Action name="move_task_down"/>
     </Menu>
     <Menu name="resource_popup">
         <Action name="edit_resource"/>
