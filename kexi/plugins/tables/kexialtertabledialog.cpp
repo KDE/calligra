@@ -780,6 +780,7 @@ void KexiAlterTableDialog::updateActions()
 void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
 	const QCString pname = property.name();
+	kexipluginsdbg << "KexiAlterTableDialog::slotPropertyChanged(): " << pname << " = " << property.value() << endl;
 	if (pname=="primaryKey" && d->slotPropertyChanged_primaryKey_enabled) {
 		d->slotPropertyChanged_primaryKey_enabled = false;
 		if (property.value().toBool()) {
@@ -974,8 +975,9 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 				continue;
 			KoProperty::Set &set = *s;
 
-//			kdDebug() << set["subType"].value().toString() << endl;
+			kexipluginsdbg << set["subType"].value().toString() << endl;
 			int i_type = set["type"].value().toInt();
+			QString subTypeString( set["subType"].value().toString() );
 /*			if (type == (int)KexiDB::Field::BLOB) {
 //! @todo hardcoded! image is the only subtype for now
 			}
@@ -983,11 +985,15 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 				QString subTypeString = set["subType"].value().toString();
 				KexiDB::Field::Type type = KexiDB::Field::typeForString(subTypeString);
 			}*/
-			KexiDB::Field::Type type;
-			if (i_type <= (int)KexiDB::Field::InvalidType || i_type > (int)KexiDB::Field::LastType) //for sanity
+			KexiDB::Field::Type type = KexiDB::Field::typeForString(subTypeString);
+//			KexiDB::Field::Type type;
+			if (type <= (int)KexiDB::Field::InvalidType || type > (int)KexiDB::Field::LastType) {//for sanity
 				type = KexiDB::Field::Text;
-			else 
-				type = (KexiDB::Field::Type)i_type;
+				kexipluginswarn << "KexiAlterTableDialog::buildSchema(): invalid type " << type 
+					<< ", moving back to Text type" << endl;
+			}
+//			else 
+//				type = (KexiDB::Field::Type)i_type;
 
 			uint constraints = 0;
 			uint options = 0;
