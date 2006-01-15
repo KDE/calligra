@@ -17,14 +17,39 @@ RAPH	Raphael has taken this task
 Before release of KOffice 1.5.0
 ===============================
 
+Item								   Prio Status
+------------------------------------------------------------------------------
+
 * Before the feature freeze
-  + Reintegrate kchart into KSpread
-     - New interface into KoChart
-     - Adapt kspread_sheet to it.
-  + Fix so that users can change data area after the fact.
+  + Reintegrate kchart into KSpread				      1	DONE
+     - New interface into KoChart					done
+     - Adapt kspread_sheet to it.					done
+  + Fix so that users can change data area after the fact.	      1	----
+     - wizard							      1 ----
+     - config dialog						      1 ----
+  + New chart type: combine bars and lines			      1 ----
+  + Checkboxes for "first row/column contains header		      1 ----
+     - wizard							      1 ----
+     - config dialog						      1 ----
+  + New chart type: histogram					      2 ----
+  + New chart type: horizontal bars				      3 ----
 
+After the feature freeze
+------------------------
 
-* After the feature freeze
+* Bugs
+  + The chart title is not included in the chart from the  wizard     1 ----
+  + The title is miniscule					      1 ---- 
+
+* OpenDocument
+  + Read and write
+
+* Scripting
+  + DCOP for data manipulation
+    - class KChartData
+
+* Structure
+  + put dialogs in their own directory
 
 
 Before release of KOffice 1.4.2
