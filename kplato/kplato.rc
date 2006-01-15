@@ -80,6 +80,12 @@
         <Action name="koffice_redo"/>
         <Separator/>
         <Action name="project_edit"/>
+        <Action name="project_calculate">
+            <!-- These must be added (I think) programatically
+            <Action name="project_calculate_expected"/>
+            <Action name="project_calculate_optimistic"/>
+            <Action name="project_calculate_pessimistic"/> -->
+        </Action>
         <Separator/>
         <Action name="add_task"/>
         <Action name="add_sub_task"/>

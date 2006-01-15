@@ -199,18 +199,24 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
         SLOT(slotAddMilestone()), actionCollection(), "add_milestone");
 
     // ------ Project
-    actionEditMainProject = new KAction(i18n("Edit Main Project..."), "project_edit", 0, this, SLOT(slotProjectEdit()), actionCollection(), "project_edit");
-    actionEditStandardWorktime = new KAction(i18n("Edit Standard Worktime..."), "project_worktime", 0, this, SLOT(slotProjectWorktime()), actionCollection(), "project_worktime");
-    actionEditCalendar = new KAction(i18n("Edit Calendar..."), "project_calendar", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
-    actionEditAccounts = new KAction(i18n("Edit Accounts..."), "project_accounts", 0, this, SLOT(slotProjectAccounts()), actionCollection(), "project_accounts");
-    actionEditResources = new KAction(i18n("Edit Resources..."), "project_resources", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
+    actionEditMainProject = new KAction(i18n("Edit Main Project..."), "edit", 0, this, SLOT(slotProjectEdit()), actionCollection(), "project_edit");
+    actionEditStandardWorktime = new KAction(i18n("Edit Standard Worktime..."), "edit", 0, this, SLOT(slotProjectWorktime()), actionCollection(), "project_worktime");
+    actionEditCalendar = new KAction(i18n("Edit Calendar..."), "edit", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
+    actionEditAccounts = new KAction(i18n("Edit Accounts..."), "edit", 0, this, SLOT(slotProjectAccounts()), actionCollection(), "project_accounts");
+    actionEditResources = new KAction(i18n("Edit Resources..."), "edit", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
     
-    actionCalculateExpected = new KAction(i18n("Expected"), "project_calculate_expected", 0, this, SLOT(slotProjectCalculateExpected()), actionCollection(), "project_calculate_expected");
+    actionCalculate = new KActionMenu(i18n("Calculate"), "project_calculate",  actionCollection(), "project_calculate");
+    connect(actionCalculate, SIGNAL(activated()), SLOT(slotProjectCalculate()));
     
-    actionCalculateOptimistic = new KAction(i18n("Optimistic"), "project_calculate_optimistic", 0, this, SLOT(slotProjectCalculateOptimistic()), actionCollection(), "project_calculate_optimistic");
+    actionCalculateExpected = new KAction(i18n("Expected"), "project_calculate", 0, this, SLOT(slotProjectCalculateExpected()), actionCollection(), "project_calculate_expected");
+    actionCalculate->insert(actionCalculateExpected);
     
-    actionCalculatePessimistic = new KAction(i18n("Pessimistic"), "project_calculate_pessimistic", 0, this, SLOT(slotProjectCalculatePessimistic()), actionCollection(), "project_calculate_pessimistic");
-
+    actionCalculateOptimistic = new KAction(i18n("Optimistic"), "project_calculate", 0, this, SLOT(slotProjectCalculateOptimistic()), actionCollection(), "project_calculate_optimistic");
+    actionCalculate->insert(actionCalculateOptimistic);
+    
+    actionCalculatePessimistic = new KAction(i18n("Pessimistic"), "project_calculate", 0, this, SLOT(slotProjectCalculatePessimistic()), actionCollection(), "project_calculate_pessimistic");
+    actionCalculate->insert(actionCalculatePessimistic);
+    
     // ------ Reports
     actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
     connect(m_reportview, SIGNAL(setFirstPageActionEnabled(bool)), actionFirstpage, SLOT(setEnabled(bool)));
@@ -244,14 +250,14 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
         SLOT(slotConfigure()), actionCollection(), "configure");
     
     // ------ Popup
-    actionOpenNode = new KAction(i18n("Edit..."), "node_properties", 0, this,
+    actionOpenNode = new KAction(i18n("Edit..."), "edit", 0, this,
         SLOT(slotOpenNode()), actionCollection(), "node_properties");
-    actionTaskProgress = new KAction(i18n("Progress..."), "task_progress", 0, this,
+    actionTaskProgress = new KAction(i18n("Progress..."), "edit", 0, this,
         SLOT(slotTaskProgress()), actionCollection(), "task_progress");
     actionDeleteTask = new KAction(i18n("Delete Task"), "editdelete", 0, this,
         SLOT(slotDeleteTask()), actionCollection(), "delete_task");
 
-    actionEditResource = new KAction(i18n("Edit Resource..."), "edit_resource", 0, this,
+    actionEditResource = new KAction(i18n("Edit Resource..."), "edit", 0, this,
         SLOT(slotEditResource()), actionCollection(), "edit_resource");
 
     // ------------------- Actions with a key binding and no GUI item
@@ -511,6 +517,7 @@ void View::slotProjectResources() {
 }
 
 void View::slotProjectCalculate() {
+    kdDebug()<<k_funcinfo<<endl;
     slotUpdate(true);
 }
 

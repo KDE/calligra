@@ -33,6 +33,7 @@ class QWidgetStack;
 class KListView;
 class KPrinter;
 class KAction;
+class KActionMenu;
 class KSelectAction;
 class KToggleAction;
 class KRadioAction;
@@ -216,7 +217,7 @@ private:
     KAction *actionEditCalendar;
     KAction *actionEditAccounts;
     KAction *actionEditResources;
-    KAction *actionCalculate;
+    KActionMenu *actionCalculate;
     KAction *actionCalculateExpected;
     KAction *actionCalculateOptimistic;
     KAction *actionCalculatePessimistic;
