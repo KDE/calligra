@@ -53,6 +53,10 @@
 #include <kodom.h>
 #include <KoTextParag.h>
 #include <koxmlns.h>
+#include <KoStore.h>
+#include <KoOasisContext.h>
+#include <koOasisStyles.h>
+#include <koOasisStore.h>
 
 #include <qxml.h>
 #include <qbuffer.h>
@@ -1790,7 +1794,7 @@ void KPrResizeCmd::unexecute()
 
 
 KPrOasisPasteTextCommand::KPrOasisPasteTextCommand( KoTextDocument *d, int parag, int idx,
-                                const QCString & data )
+                                const QByteArray &data )
     : KoTextDocCommand( d ), m_parag( parag ), m_idx( idx ), m_data( data ), m_oldParagLayout( 0 )
 {
 }
@@ -1808,20 +1812,40 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
     cursor.setIndex( m_idx );
     c->setParag( firstParag );
     c->setIndex( m_idx );
+    
     QBuffer buffer( m_data );
-    QXmlInputSource source( &buffer );
-    QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader,true );
-    QDomDocument domDoc;
-    domDoc.setContent( &source, &reader );
+    KoStore * store = KoStore::createStore( &buffer, KoStore::Read ); 
 
-    QDomElement content = domDoc.documentElement();
+    if ( store->bad() || !store->hasFile( "content.xml" ) )
+    {
+        kdError(33001) << "Invalid ZIP store in memory" << endl;
+        if ( !store->hasFile( "content.xml" ) )
+            kdError(33001) << "No content.xml file" << endl;
+        return c;
+    }
+    store->disallowNameExpansion();
+
+    KoOasisStore oasisStore( store );
+    QDomDocument contentDoc;
+    QString errorMessage;
+    bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, errorMessage );
+    if ( !ok ) {
+        kdError(33001) << "Error parsing content.xml: " << errorMessage << endl;
+        return c;
+    }
+
+    KoOasisStyles oasisStyles;
+    QDomDocument stylesDoc;
+    (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
+    // Load styles from style.xml
+    oasisStyles.createStyleMap( stylesDoc, true );
+    // Also load styles from content.xml
+    oasisStyles.createStyleMap( contentDoc, false );
+
+    QDomElement content = contentDoc.documentElement();
 
     QDomElement body ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
-    if ( body.isNull() ) {
-        kdError(30518) << "No office:body found!" << endl;
-        return 0;
-    }
+    
     // We then want to use whichever element is the child of <office:body>,
     // whether that's <office:text> or <office:presentation> or whatever.
     QDomElement iter, realBody;
@@ -1829,16 +1853,14 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
         realBody = iter;
     }
     if ( realBody.isNull() ) {
-        kdError(32001) << "No element found inside office:body!" << endl;
-        return 0;
+        kdError(33001) << "No element found inside office:body!" << endl;
+        return c;
     }
 
     KPrTextDocument * textdoc = static_cast<KPrTextDocument *>(c->parag()->document());
-
-    KoOasisStyles oasisStyles;
-    oasisStyles.createStyleMap( domDoc, false );
     KPrDocument *doc = textdoc->textObject()->kPresenterDocument();
-    KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
+    KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, store );
+
     *c = textdoc->textObject()->textObject()->pasteOasisText( realBody, context, cursor, doc->styleCollection() );
     textdoc->textObject()->textObject()->setNeedSpellCheck( true );
 

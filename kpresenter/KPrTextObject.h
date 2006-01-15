@@ -115,7 +115,7 @@ public:
     void removeHighlight();
     void highlightPortion( KoTextParag * parag, int index, int length, KPrCanvas *canvas, bool repaint, KDialogBase* dialog = 0 );
 
-    KCommand * pasteOasis( KoTextCursor * cursor, const QCString & data, bool removeSelected );
+    KCommand * pasteOasis( KoTextCursor * cursor, const QByteArray & data, bool removeSelected );
 
     void saveParagraph( QDomDocument& doc,
                         KoTextParag * parag,

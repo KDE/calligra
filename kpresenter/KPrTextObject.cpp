@@ -1496,12 +1496,9 @@ void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length
     }
 }
 
-KCommand * KPrTextObject::pasteOasis( KoTextCursor * cursor, const QCString & data, bool removeSelected )
+KCommand * KPrTextObject::pasteOasis( KoTextCursor * cursor, const QByteArray & data, bool removeSelected )
 {
-    // Having data as a QCString instead of a QByteArray seems to fix the trailing 0 problem
-    // I tried using QDomDocument::setContent( QByteArray ) but that leads to parse error at the end
-
-    //kdDebug(33001) << "KWTextFrameSet::pasteKPresenter" << endl;
+    //kdDebug(33001) << "KPrTextObject::pasteOasis" << endl;
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste Text") );
     if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
@@ -1836,8 +1833,13 @@ void KPrTextView::paste()
         QByteArray arr = data->encodedData( returnedMimeType );
         if ( arr.size() )
         {
-            kdDebug(33001)<<"QCString( arr ) :"<<QCString( arr.data(), arr.size()+1 )<<endl;
-            KCommand *cmd = kpTextObject()->pasteOasis( cursor(), QCString( arr.data(), arr.count()+1 ), true );
+#if 0
+            QFile paste( "/tmp/oasis.tmp" );
+            paste.open( IO_WriteOnly );
+            paste.writeBlock( arr );
+            paste.close();
+#endif
+            KCommand *cmd = kpTextObject()->pasteOasis( cursor(), arr, true );
             if ( cmd )
                 kpTextObject()->kPresenterDocument()->addCommand(cmd);
         }
@@ -2501,7 +2503,7 @@ void KPrTextView::dropEvent( QDropEvent * e )
             QByteArray arr = e->encodedData( returnedTypeMime );
             if ( arr.size() )
             {
-                KCommand *cmd = kpTextObject()->pasteOasis( cursor(), QCString(arr, arr.size()+1), false );
+                KCommand *cmd = kpTextObject()->pasteOasis( cursor(), arr, false );
                 if ( cmd )
                 {
                     macroCmd->addCommand(cmd);
