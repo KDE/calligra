@@ -195,7 +195,10 @@ public:
     * @param choices A list of possible function names which match the characters that the user has already entered.
     */
     void showCompletion( const QStringList &choices );
-    
+
+private slots:
+    void itemSelected( const QString& item );    
+        
 signals:
     /**
     * Emitted, if the user selects a function name from the list.

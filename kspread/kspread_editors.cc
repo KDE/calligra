@@ -34,6 +34,7 @@
 #include <qapplication.h>
 #include <qlistbox.h>
 #include <qtimer.h>
+#include <qlabel.h>
 #include <qvbox.h>
 #include <private/qrichtext_p.h>
 
@@ -367,6 +368,7 @@ public:
   TextEditor* editor;
   QVBox *completionPopup;
   KListBox *completionListBox;
+  QLabel* hintLabel;
 };
 
 FunctionCompletion::FunctionCompletion( TextEditor* editor ): 
@@ -374,6 +376,7 @@ QObject( editor )
 {
   d = new Private;
   d->editor = editor;
+  d->hintLabel = 0;
   
   d->completionPopup = new QVBox( editor->topLevelWidget(), 0, WType_Popup );
   d->completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
@@ -386,11 +389,48 @@ QObject( editor )
   d->completionListBox->setFrameStyle( QFrame::NoFrame );
   d->completionListBox->setVariableWidth( true );
   d->completionListBox->installEventFilter( this );
+  connect( d->completionListBox, SIGNAL(selected(const QString&)), this,
+    SLOT(itemSelected(const QString&)) );
+  connect( d->completionListBox, SIGNAL(highlighted(const QString&)), this,
+    SLOT(itemSelected(const QString&)) );
+
+  d->hintLabel = new QLabel( 0, "autocalc", Qt::WStyle_StaysOnTop |
+    Qt::WStyle_Customize | Qt::WStyle_NoBorder | Qt::WStyle_Tool |  Qt::WX11BypassWM );
+  d->hintLabel->setFrameStyle( QFrame::Plain | QFrame::Box );
+  d->hintLabel->setPalette( QToolTip::palette() );
+  d->hintLabel->hide();
 }
 
 FunctionCompletion::~FunctionCompletion()
 {
+      delete d->hintLabel;
       delete d;
+}
+
+void FunctionCompletion::itemSelected( const QString& item )
+{
+    KSpread::FunctionDescription* desc;
+    desc = KSpread::FunctionRepository::self()->functionInfo(item);
+    if(!desc)
+    {
+        d->hintLabel->hide();
+        return;
+    }
+    
+    QString helpText = desc->helpText().join("\n");
+    helpText.append("</qt>").prepend("<qt>");
+    d->hintLabel->setText( helpText );
+    d->hintLabel->adjustSize();
+    
+    // reposition nicely
+    QPoint pos = d->editor->mapToGlobal( QPoint( d->editor->width(), 0 ) );
+    pos.setY( pos.y() - d->hintLabel->height() - 1 );
+    d->hintLabel->move( pos );
+    d->hintLabel->show();
+    d->hintLabel->raise();
+
+    // do not show it forever
+    //QTimer::singleShot( 5000, d->hintLabel, SLOT( hide()) );
 }
 
 bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
@@ -430,6 +470,7 @@ bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
 
 void FunctionCompletion::doneCompletion()
 {
+  d->hintLabel->hide();
   d->completionPopup->close();
   d->editor->setFocus();
   emit selectedCompletion( d->completionListBox->currentText() );
