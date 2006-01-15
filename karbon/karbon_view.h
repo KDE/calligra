@@ -212,7 +212,7 @@ protected:
 	void createStrokeDock();
 	void createColorDock();
 	void createTransformDock();
-	void createRessourceDock();
+	void createResourceDock();
 
 	//KXMLGUIBuilder
 	virtual QWidget *createContainer( QWidget *parent, int index, const QDomElement &element, int &id );

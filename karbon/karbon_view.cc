@@ -183,7 +183,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		createDocumentTabDock();
 		createLayersTabDock();
 		createHistoryTabDock();
-		createRessourceDock();
+		createResourceDock();
 
 		if( m_showRulerAction->isChecked() )
 		{
@@ -1505,11 +1505,11 @@ void KarbonView::createTransformDock()
 	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_TransformDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
 
-void KarbonView::createRessourceDock()
+void KarbonView::createResourceDock()
 {
 	m_styleDocker = new VStyleDocker( part(), this );
-	m_styleDocker->setCaption(i18n("Ressources"));
-	paletteManager()->addWidget(m_styleDocker, "RessourceTabDock", "RessourcePanel");
+	m_styleDocker->setCaption(i18n("Resources"));
+	paletteManager()->addWidget(m_styleDocker, "ResourceTabDock", "ResourcePanel");
 }
 
 VToolController *
