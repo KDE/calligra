@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=List of Resources
+Name[es]=Lista de recursos
+Name[et]=Ressursside nimekiri
+Name[it]=Elenco di risorse
+Name[sv]=Resurslista
 Type=Link
 URL= .source/resourcelist.ktf
 X-KDE-Hidden=false

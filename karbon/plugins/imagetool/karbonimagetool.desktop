@@ -11,6 +11,7 @@ Name[it]=Strumento per immagini
 Name[ja]=画像ツール
 Name[pt]=Ferramenta de Imagens
 Name[pt_BR]=Ferramenta de Imagens
+Name[sv]=Bildverktyg
 Name[xx]=xxImage Toolxx
 ServiceTypes=Karbon/CoreModule
 Type=Service

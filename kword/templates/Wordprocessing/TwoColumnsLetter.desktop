@@ -72,6 +72,7 @@ Comment[it]=Crea un documento US Letter con due colonne per pagina
 Comment[ja]=1ページを2列に分割したLetterサイズのドキュメントを作成
 Comment[pt]=Cria uma carta com duas colunas por página
 Comment[pt_BR]=Cria uma carta com duas colunas por página
+Comment[sv]=Skapar ett US Letter-dokument med två kolumner per sida
 Comment[xx]=xxCreates a letter document with two columns per pagexx
 Icon=template_twocolumns
 X-KDE-MeasureSystem=imperial
