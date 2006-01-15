@@ -173,6 +173,7 @@ ReportView::ReportView(View *view, QWidget *parent)
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_reportList = new KListView(this);
+    m_reportList->setShadeSortColumn(false);
     m_reportList->addColumn(i18n("Report Template"));
     m_reportList->header()->setStretchEnabled(true, 0);
     m_reportList->header()->setSortIndicator(0);

@@ -310,6 +310,7 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
     m_masterList->setSelectionMode(QListView::NoSelection);
     m_masterList->setItemMargin(2);
     m_masterList->setRootIsDecorated(true);
+    m_masterList->setShadeSortColumn(false);
     m_masterList->setSortColumn(-1); // Disable sort!!
     m_masterList->addColumn(i18n("Name"));
     m_masterList->addColumn(i18n("Total"));
