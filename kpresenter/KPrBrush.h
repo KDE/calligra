@@ -22,6 +22,7 @@
 #define KPRBRUSH_H
 
 #include <qbrush.h>
+#include <KoBrush.h>
 
 #include "global.h"
 
@@ -30,7 +31,7 @@ class KoGenStyles;
 class KoOasisContext;
 class QDomElement;
 
-class KPrBrush
+class KPrBrush : public KoBrush
 {
 public:
     KPrBrush();
@@ -38,55 +39,11 @@ public:
               BCType gType, FillType fillType, bool unbalanced,
               int xfactor, int yfactor );
 
-    KPrBrush &operator=( const KPrBrush &brush );
-
-    void setBrush( const QBrush &brush )
-        {  m_brush = brush; }
-    void setGColor1( const QColor &gColor1 )
-        {  m_gColor1 = gColor1; }
-    void setGColor2( const QColor &gColor2 )
-        {  m_gColor2 = gColor2; }
-    void setGType( BCType gType )
-        {  m_gType = gType; }
-    void setFillType( FillType fillType )
-        {  m_fillType = fillType; }
-    void setGUnbalanced( bool unbalanced )
-        {  m_unbalanced = unbalanced; }
-    void setGXFactor( int xfactor )
-        {  m_xfactor = xfactor; }
-    void setGYFactor( int yfactor )
-        {  m_yfactor = yfactor; }
-
-    QBrush getBrush() const
-        { return m_brush; }
-    QColor getGColor1() const
-        { return m_gColor1; }
-    QColor getGColor2() const
-        { return m_gColor2; }
-    BCType getGType() const
-        { return m_gType; }
-    FillType getFillType() const
-        { return m_fillType; }
-    bool getGUnbalanced() const
-        { return m_unbalanced; }
-    int getGXFactor() const
-        { return m_xfactor; }
-    int getGYFactor() const
-        { return m_yfactor; }
-
     void saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles& mainStyles ) const;
     void loadOasisFillStyle( KoOasisContext &context, const char * propertyType );
 
 private:
     QString saveOasisGradientStyle( KoGenStyles& mainStyles ) const;
-    QBrush m_brush;
-    QColor m_gColor1;
-    QColor m_gColor2;
-    BCType m_gType;
-    FillType m_fillType;
-    bool m_unbalanced;
-    int m_xfactor;
-    int m_yfactor;
 };
 
 #endif /* KPRBRUSH_H */

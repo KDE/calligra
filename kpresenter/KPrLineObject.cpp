@@ -45,7 +45,7 @@ KPrLineObject::KPrLineObject()
     lineType = LT_HORZ;
 }
 
-KPrLineObject::KPrLineObject( const KPrPen &_pen, LineEnd _lineBegin,
+KPrLineObject::KPrLineObject( const KoPen &_pen, LineEnd _lineBegin,
                             LineEnd _lineEnd, LineType _lineType )
     : KPrShadowObject( _pen ), KPrStartEndLine( _lineBegin, _lineEnd )
 {

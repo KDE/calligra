@@ -843,7 +843,7 @@ void KPrAlignCmd::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-KPrPenCmd::KPrPenCmd( const QString &_name, QPtrList<KPrObject> &_objects, Pen _newPen,
+KoPenCmd::KoPenCmd( const QString &_name, QPtrList<KPrObject> &_objects, Pen _newPen,
                 KPrDocument *_doc, KPrPage *_page, int _flags )
 : KNamedCommand(_name), doc(_doc), m_page( _page ), newPen(_newPen), flags(_flags)
 {
@@ -853,7 +853,7 @@ KPrPenCmd::KPrPenCmd( const QString &_name, QPtrList<KPrObject> &_objects, Pen _
     addObjects( _objects );
 }
 
-KPrPenCmd::~KPrPenCmd()
+KoPenCmd::~KoPenCmd()
 {
     QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
@@ -863,7 +863,7 @@ KPrPenCmd::~KPrPenCmd()
     oldPen.clear();
 }
 
-void KPrPenCmd::execute()
+void KoPenCmd::execute()
 {
     for ( int i = 0; i < static_cast<int>( objects.count() ); i++ )
     {
@@ -890,7 +890,7 @@ void KPrPenCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void KPrPenCmd::applyPen( KPrObject *object, Pen *tmpPen )
+void KoPenCmd::applyPen( KPrObject *object, Pen *tmpPen )
 {
     switch (object->getType()) {
         case OT_LINE:
@@ -948,7 +948,7 @@ void KPrPenCmd::applyPen( KPrObject *object, Pen *tmpPen )
     }
 }
 
-void KPrPenCmd::unexecute()
+void KoPenCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); ++i ) {
         if( oldPen.count() > i )
@@ -958,7 +958,7 @@ void KPrPenCmd::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-void KPrPenCmd::addObjects( const QPtrList<KPrObject> &_objects )
+void KoPenCmd::addObjects( const QPtrList<KPrObject> &_objects )
 {
     QPtrListIterator<KPrObject> it( _objects );
     for ( ; it.current(); ++it )
@@ -1027,7 +1027,7 @@ void KPrPenCmd::addObjects( const QPtrList<KPrObject> &_objects )
                 objects.append( obj );
                 obj->incCmdRef();
 
-                Pen * pen = new KPrPenCmd::Pen( obj->getPen(), lineBegin, lineEnd );
+                Pen * pen = new KoPenCmd::Pen( obj->getPen(), lineBegin, lineEnd );
 
                 oldPen.append( pen );
             }

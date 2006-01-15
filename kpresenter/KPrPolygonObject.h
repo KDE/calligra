@@ -29,13 +29,13 @@
 class KPrGradient;
 class QPainter;
 class DCOPObject;
-class KPrPen;
+class KoPen;
 
 class KPrPolygonObject : public KPr2DObject
 {
 public:
     KPrPolygonObject();
-    KPrPolygonObject( const KoPointArray &_points, const KoSize &_size, const KPrPen &_pen, const QBrush &_brush,
+    KPrPolygonObject( const KoPointArray &_points, const KoSize &_size, const KoPen &_pen, const QBrush &_brush,
                      FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor,
                      bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );

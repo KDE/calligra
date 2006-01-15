@@ -5989,6 +5989,60 @@ bool Sheet::isLoading()
     return doc()->isLoading();
 }
 
+
+QPtrList<KSpreadObject> Sheet::getSelectedObjects()
+{
+    QPtrList<KSpreadObject> objects;
+    QPtrListIterator<KSpreadObject> it = doc()->embeddedObjects();
+    for ( ; it.current() ; ++it )
+    {
+        if( it.current()->isSelected()
+            && it.current()->sheet() == this )
+        {
+            objects.append( it.current() );
+        }
+    }
+     return objects;
+}
+
+/*
+ * Check if object name already exists.
+ */
+bool Sheet::objectNameExists( KSpreadObject *object, QPtrList<KSpreadObject> &list ) {
+    QPtrListIterator<KSpreadObject> it( list );
+
+    for ( it.toFirst(); it.current(); ++it ) {
+        // object name can exist in current object.
+        if ( it.current()->getObjectName() == object->getObjectName() &&
+             it.current() != object ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Sheet::unifyObjectName( KSpreadObject *object ) {
+    if ( object->getObjectName().isEmpty() ) {
+        object->setObjectName( object->getTypeString() );
+    }
+    QString objectName( object->getObjectName() );
+
+    QPtrList<KSpreadObject> list( doc()->embeddedObjects() );
+
+    int count = 1;
+
+    while ( objectNameExists( object, list ) ) {
+        count++;
+        QRegExp rx( " \\(\\d{1,3}\\)$" );
+        if ( rx.search( objectName ) != -1 ) {
+            objectName.remove( rx );
+        }
+        objectName += QString(" (%1)").arg( count );
+        object->setObjectName( objectName );
+    }
+}
+
+
 void Sheet::checkContentDirection( QString const & name )
 {
   /* set sheet's direction to RTL if sheet name is an RTL string */

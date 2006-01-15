@@ -733,7 +733,10 @@ void InsertObjectCommand::execute()
         break;
     }
     if ( success )
+    {
       obj = canvas->doc()->embeddedObjects().last();
+      obj->sheet()->unifyObjectName( obj );
+    }
     else
       obj = 0;
   }
@@ -756,3 +759,108 @@ QString InsertObjectCommand::name() const
 {
   return i18n("Insert Object");
 }
+
+RenameNameObjectCommand::RenameNameObjectCommand( const QString &_name, const QString &_objectName,
+                                            KSpreadObject *_obj, Doc *_doc ):
+    KNamedCommand( _name ),
+    newObjectName( _objectName ),
+    object( _obj ),
+    doc( _doc )
+{
+    oldObjectName = object->getObjectName();
+
+    m_page = object->sheet()/*doc->findPage( object )*/;
+}
+
+RenameNameObjectCommand::~RenameNameObjectCommand()
+{
+}
+
+void RenameNameObjectCommand::execute()
+{
+    object->setObjectName( newObjectName );
+    m_page->unifyObjectName( object );
+
+//     doc->updateSideBarItem( m_page );
+}
+
+void RenameNameObjectCommand::unexecute()
+{
+    object->setObjectName( oldObjectName );
+
+//     doc->updateSideBarItem( m_page );
+}
+
+GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QPtrList<KSpreadObject> &objects,
+                                                            bool newValue, KgpType type, Doc *_doc )
+: KNamedCommand( name )
+, m_objects( objects )
+, m_newValue( newValue )
+, m_type( type )
+    , m_doc( _doc )
+{
+    QPtrListIterator<KSpreadObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->incCmdRef();
+        if ( m_type == ProtectSize )
+            m_oldValue.append( it.current()->isProtect() );
+        else if ( m_type == KeepRatio)
+            m_oldValue.append( it.current()->isKeepRatio() );
+    }
+}
+
+GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QValueList<bool> &lst,
+                                                            QPtrList<KSpreadObject> &objects, bool newValue,
+                                                            KgpType type, Doc *_doc)
+: KNamedCommand( name )
+, m_oldValue( lst )
+, m_objects( objects )
+, m_newValue( newValue )
+, m_type( type )
+, m_doc ( _doc )
+{
+    QPtrListIterator<KSpreadObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+        it.current()->incCmdRef();
+}
+
+GeometryPropertiesCommand::~GeometryPropertiesCommand()
+{
+    QPtrListIterator<KSpreadObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+}
+
+void GeometryPropertiesCommand::execute()
+{
+    QPtrListIterator<KSpreadObject> it( m_objects );
+    for ( ; it.current() ; ++it )
+    {
+        if ( m_type == ProtectSize )
+        {
+            it.current()->setProtect( m_newValue );
+            if ( it.current()->isSelected() )
+                m_doc->repaint( it.current() );
+        }
+        else if ( m_type == KeepRatio)
+            it.current()->setKeepRatio( m_newValue );
+    }
+}
+
+void GeometryPropertiesCommand::unexecute()
+{
+    KSpreadObject *obj = 0;
+    for ( unsigned int i = 0; i < m_objects.count(); ++i ) {
+        obj = m_objects.at( i );
+        if ( m_type == ProtectSize )
+        {
+            obj->setProtect( *m_oldValue.at(i) );
+            if ( obj->isSelected() )
+                m_doc->repaint( obj );
+        }
+        else if ( m_type == KeepRatio)
+            obj->setKeepRatio( *m_oldValue.at(i) );
+    }
+}
+

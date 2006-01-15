@@ -48,17 +48,7 @@ enum BackView {
     BV_CENTER = 1,
     BV_TILED = 2
 };
-enum BCType {
-    BCT_PLAIN = 0,
-    BCT_GHORZ = 1,
-    BCT_GVERT = 2,
-    BCT_GDIAGONAL1 = 3,
-    BCT_GDIAGONAL2 = 4,
-    BCT_GCIRCLE = 5,
-    BCT_GRECT = 6,
-    BCT_GPIPECROSS = 7,
-    BCT_GPYRAMID = 8
-};
+
 enum ObjType {
     OT_PICTURE = 0,
     OT_LINE = 1,
@@ -232,11 +222,6 @@ enum ShadowDirection {
     SD_BOTTOM = 6,
     SD_LEFT_BOTTOM = 7,
     SD_LEFT = 8
-};
-enum FillType
-{
-    FT_BRUSH = 0,
-    FT_GRADIENT = 1
 };
 
 typedef int PresSpeed;

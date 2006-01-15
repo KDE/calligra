@@ -48,7 +48,7 @@ DCOPObject* KPrRectObject::dcopObject()
     return dcop;
 }
 
-KPrRectObject::KPrRectObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
+KPrRectObject::KPrRectObject( const KoPen &_pen, const QBrush &_brush, FillType _fillType,
                             const QColor &_gColor1, const QColor &_gColor2,
                             BCType _gType, int _xRnd, int _yRnd,
                             bool _unbalanced, int _xfactor, int _yfactor)

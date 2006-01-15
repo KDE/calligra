@@ -36,7 +36,7 @@ KPrPartObject::KPrPartObject( KPrChild *_child )
     : KPr2DObject()
 {
     child = _child;
-    pen = KPrPen( Qt::black, 1.0, Qt::NoPen );
+    pen = KoPen( Qt::black, 1.0, Qt::NoPen );
     _enableDrawing = true;
 }
 

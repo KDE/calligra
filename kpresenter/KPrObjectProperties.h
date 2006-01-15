@@ -44,7 +44,7 @@ public:
     int getPropertyFlags() { return m_flags; }
 
     /// get pen properties
-    KPrPenCmd::Pen getPen() const { return m_pen; }
+    KoPenCmd::Pen getPen() const { return m_pen; }
     /// get brush properties
     KPrBrushCmd::Brush getBrush() const { return m_brush; }
     /// get rectangle properties
@@ -77,7 +77,7 @@ private:
     int m_flags;
 
     /// pen properties
-    KPrPenCmd::Pen m_pen;
+    KoPenCmd::Pen m_pen;
     /// brush properties
     KPrBrushCmd::Brush m_brush;
     /// rect properties

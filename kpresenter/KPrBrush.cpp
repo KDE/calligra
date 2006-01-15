@@ -27,55 +27,26 @@
 #include "KPrDocument.h"
 
 KPrBrush::KPrBrush()
-: m_gColor1( Qt::red )
-, m_gColor2( Qt::green )
-, m_gType( BCT_GHORZ )
-, m_fillType( FT_BRUSH )
-, m_unbalanced( false )
-, m_xfactor( 100 )
-, m_yfactor( 100 )
+    : KoBrush()
 {
 }
-
 
 KPrBrush::KPrBrush( const QBrush &brush, const QColor &gColor1, const QColor &gColor2,
                     BCType gType, FillType fillType, bool unbalanced,
                     int xfactor, int yfactor )
-: m_brush( brush )
-, m_gColor1( gColor1 )
-, m_gColor2( gColor2 )
-, m_gType( gType )
-, m_fillType( fillType )
-, m_unbalanced( unbalanced )
-, m_xfactor( xfactor )
-, m_yfactor( yfactor )
+    : KoBrush( brush, gColor1,gColor2, gType, fillType, unbalanced, xfactor, yfactor )
 {
 }
-
-
-KPrBrush & KPrBrush::operator=( const KPrBrush &brush )
-{
-    m_brush = brush.m_brush;
-    m_gColor1 = brush.m_gColor1;
-    m_gColor2 = brush.m_gColor2;
-    m_gType = brush.m_gType;
-    m_fillType = brush.m_fillType;
-    m_unbalanced = brush.m_unbalanced;
-    m_xfactor = brush.m_xfactor;
-    m_yfactor = brush.m_yfactor;
-    return *this;
-}
-
 
 void KPrBrush::saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    switch ( m_fillType )
+    switch ( getFillType() )
     {
         case FT_BRUSH:
         {
-            if( m_brush.style() != Qt::NoBrush )
+            if( getBrush().style() != Qt::NoBrush )
             {
-                KoOasisStyles::saveOasisFillStyle( styleObjectAuto, mainStyles, m_brush );
+                KoOasisStyles::saveOasisFillStyle( styleObjectAuto, mainStyles, getBrush() );
             }
             else
             {
@@ -94,21 +65,21 @@ void KPrBrush::saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles& mai
 QString KPrBrush::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
 {
     KoGenStyle gradientStyle( KPrDocument::STYLE_GRADIENT /*no family name*/);
-    gradientStyle.addAttribute( "draw:start-color", m_gColor1.name() );
-    gradientStyle.addAttribute( "draw:end-color", m_gColor2.name() );
+    gradientStyle.addAttribute( "draw:start-color", getGColor1().name() );
+    gradientStyle.addAttribute( "draw:end-color", getGColor2().name() );
 
     QString unbalancedx( "50%" );
     QString unbalancedy( "50%" );
 
-    if ( m_unbalanced )
+    if ( getGUnbalanced() )
     {
-        unbalancedx = QString( "%1%" ).arg( m_xfactor / 4 + 50 );
-        unbalancedy = QString( "%1%" ).arg( m_yfactor / 4 + 50 );
+        unbalancedx = QString( "%1%" ).arg( getGXFactor() / 4 + 50 );
+        unbalancedy = QString( "%1%" ).arg( getGYFactor() / 4 + 50 );
     }
-    gradientStyle.addAttribute( "draw:cx", unbalancedx );
-    gradientStyle.addAttribute( "draw:cy", unbalancedy );
+    gradientStyle.addAttribute( "draw:cx", getGXFactor() );
+    gradientStyle.addAttribute( "draw:cy", getGYFactor() );
 
-    switch( m_gType )
+    switch( getGType() )
     {
         case BCT_PLAIN:
             gradientStyle.addAttribute( "draw:angle", 0 );

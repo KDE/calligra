@@ -23,6 +23,7 @@
 #define kpautoformobject_h
 
 #include <qpixmap.h>
+#include <KoBrush.h>
 
 #include "KPrObject.h"
 #include "global.h"
@@ -35,7 +36,7 @@ class KPrAutoformObject : public KPr2DObject, public KPrStartEndLine
 {
 public:
     KPrAutoformObject();
-    KPrAutoformObject( const KPrPen & _pen, const QBrush &_brush, const QString &_filename, LineEnd _lineBegin, LineEnd _lineEnd,
+    KPrAutoformObject( const KoPen & _pen, const QBrush &_brush, const QString &_filename, LineEnd _lineBegin, LineEnd _lineEnd,
                       FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                       bool _unbalanced, int _xfactor, int _yfactor);
     virtual ~KPrAutoformObject() {}

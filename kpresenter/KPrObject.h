@@ -39,7 +39,7 @@
 #include <koGenStyles.h>
 #include "KPrLoadingInfo.h"
 #include "KPrBrush.h"
-#include "KPrPen.h"
+#include <KoPen.h>
 
 class KoSavingContext;
 class QPainter;
@@ -297,7 +297,7 @@ public:
     virtual KPrTextObject *nextTextObject() { return 0L;} // deprecated
     virtual void getAllObjectSelectedList(QPtrList<KPrObject> &lst, bool force = false )
         { if (selected || force ) lst.append( this );}
-    virtual KPrPen getPen() const;
+    virtual KoPen getPen() const;
 
     bool hasAnimation() const;
 
@@ -326,8 +326,8 @@ protected:
     QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);
     QDomElement createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
                                       int type, bool unbalanced, int xfactor, int yfactor, QDomDocument &doc);
-    QDomElement createPenElement(const QString &tag, const KPrPen &pen, QDomDocument &doc);
-    KPrPen toPen(const QDomElement &element) const;
+    QDomElement createPenElement(const QString &tag, const KoPen &pen, QDomDocument &doc);
+    KoPen toPen(const QDomElement &element) const;
 
     QDomElement createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc);
     QBrush toBrush(const QDomElement &element) const;
@@ -407,14 +407,14 @@ class KPrShadowObject : public KPrObject
 {
 public:
     KPrShadowObject();
-    KPrShadowObject( const KPrPen &_pen );
+    KPrShadowObject( const KoPen &_pen );
 
     KPrShadowObject &operator=( const KPrShadowObject & );
 
-    virtual void setPen( const KPrPen &_pen )
+    virtual void setPen( const KoPen &_pen )
         { pen = _pen; }
 
-    virtual KPrPen getPen() const
+    virtual KoPen getPen() const
         { return pen; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
@@ -459,7 +459,7 @@ protected:
      * (e.g. it's a black solidline for lines and rects, but it's NoPen
      * for text objects
      */
-    virtual KPrPen defaultPen() const;
+    virtual KoPen defaultPen() const;
 
     /**
      * This method is to be implemented by all KPShadowObjects, to draw themselves.
@@ -473,14 +473,14 @@ protected:
      */
     virtual void paint( QPainter* /* painter */, KoTextZoomHandler* /* zoomHandler */,
                         int /* pageNum */, bool drawingShadow, bool /* drawContour */ =  FALSE );
-    KPrPen pen;
+    KoPen pen;
 };
 
 class KPr2DObject : public KPrShadowObject
 {
 public:
     KPr2DObject();
-    KPr2DObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
+    KPr2DObject( const KoPen &_pen, const QBrush &_brush, FillType _fillType,
                 const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                 bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPr2DObject() { delete gradient; }

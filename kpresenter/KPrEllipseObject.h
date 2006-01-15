@@ -22,6 +22,8 @@
 #ifndef kpellipseobject_h
 #define kpellipseobject_h
 
+#include <KoBrush.h>
+
 #include "KPrObject.h"
 #include "global.h"
 
@@ -33,7 +35,7 @@ class KPrEllipseObject : public KPr2DObject
 {
 public:
     KPrEllipseObject();
-    KPrEllipseObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
+    KPrEllipseObject( const KoPen &_pen, const QBrush &_brush, FillType _fillType,
                      const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor );
     virtual ~KPrEllipseObject() {}

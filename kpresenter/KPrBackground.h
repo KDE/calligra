@@ -24,6 +24,7 @@
 
 #include <qsize.h>
 #include <qdatetime.h>
+#include <KoBrush.h>
 #include <koStyleStack.h>
 #include <koOasisStyles.h>
 #include <KoOasisContext.h>

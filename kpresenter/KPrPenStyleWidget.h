@@ -26,7 +26,7 @@
 #include <qwidget.h>
 
 #include "KPrCommand.h"
-#include "KPrPen.h"
+#include <KoPen.h>
 
 class PenStyleUI;
 
@@ -35,25 +35,25 @@ class KPrPenStyleWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPenStyleWidget( QWidget *parent, const char *name, const KPrPenCmd::Pen &pen, bool configureLineEnds = true );
+    KPrPenStyleWidget( QWidget *parent, const char *name, const KoPenCmd::Pen &pen, bool configureLineEnds = true );
     ~KPrPenStyleWidget();
 
     int getPenConfigChange() const;
-    KPrPenCmd::Pen getPen() const;
+    KoPenCmd::Pen getPen() const;
 
-    void setPen( const KPrPenCmd::Pen &pen );
+    void setPen( const KoPenCmd::Pen &pen );
     void apply();
 
 private:
-    KPrPen getKPPen() const;
+    KoPen getKPPen() const;
     LineEnd getLineBegin() const;
     LineEnd getLineEnd() const;
 
-    void setPen( const KPrPen &pen );
+    void setPen( const KoPen &pen );
     void setLineBegin( LineEnd lb );
     void setLineEnd( LineEnd le );
 
-    KPrPenCmd::Pen m_pen;
+    KoPenCmd::Pen m_pen;
 
     PenStyleUI *m_ui;
 

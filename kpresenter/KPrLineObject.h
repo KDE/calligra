@@ -33,7 +33,7 @@ class KPrLineObject : public KPrShadowObject, public KPrStartEndLine
 {
 public:
     KPrLineObject();
-    KPrLineObject( const KPrPen &_pen, LineEnd _lineBegin,
+    KPrLineObject( const KoPen &_pen, LineEnd _lineBegin,
                   LineEnd _lineEnd, LineType _lineType );
     virtual ~KPrLineObject()
         {}

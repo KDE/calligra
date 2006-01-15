@@ -22,19 +22,18 @@
 
 #include "kspread_sheet.h"
 
+#include <klocale.h>
+#include <KoBrush.h>
 #include <koChild.h>
 #include <kodom.h>
 #include <KoOasisLoadingContext.h>
+#include <KoPen.h>
 #include <koPictureCollection.h>
 #include <KoRect.h>
 #include <KoSize.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <koxmlns.h>
-
-
-#include "kspread_brush.h"
-#include "kspread_pen.h"
 
 namespace KoChart
 {
@@ -112,6 +111,9 @@ class KSpreadObject
     KSpreadObject( Sheet *_sheet, const KoRect& _geometry );
     virtual ~KSpreadObject();
     virtual ObjType getType() const { return OBJECT_GENERAL; }
+    virtual QString getTypeString() const
+        { return QString(); }
+
     KoRect geometry();
     void setGeometry( const KoRect &rect );
     Sheet* sheet() const { return m_sheet; }
@@ -157,6 +159,15 @@ class KSpreadObject
     void paintSelection( QPainter *_painter, SelectionMode selectionMode );
     virtual QCursor getCursor( const QPoint &_point, ModifyType &_modType, QRect &geometry ) const;
 
+    virtual void removeFromObjList()
+        { inObjList = false; }
+    virtual void addToObjList()
+        { inObjList = true; }
+    virtual void incCmdRef()
+        { cmds++; }
+    virtual void decCmdRef()
+        { cmds--; doDelete(); }
+
     //TEMP:
     virtual QBrush getBrush() const { return m_brush.getBrush(); }
 
@@ -169,6 +180,7 @@ class KSpreadObject
     virtual void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const;
     virtual bool saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const;
 
+    virtual void doDelete();
 
     KoRect m_geometry;
     Sheet *m_sheet;
@@ -177,10 +189,12 @@ class KSpreadObject
     bool m_selected:1;
     bool m_protect:1;
     bool m_keepRatio:1;
+    bool inObjList:1;
+    int cmds;
     float angle;
 
-    KSpreadPen pen;
-    KSpreadBrush m_brush;
+    KoPen pen;
+    KoBrush m_brush;
 };
 
 /**
@@ -193,6 +207,8 @@ class KSpreadChild : public KSpreadObject
     KSpreadChild( Doc *parent, Sheet *_sheet );
     virtual ~KSpreadChild();
     virtual ObjType getType() const { return OBJECT_KOFFICE_PART; }
+    virtual QString getTypeString() const
+        { return i18n("Embedded Object"); }
 
     Doc* parent();
     KoDocumentChild *embeddedObject();
@@ -225,6 +241,8 @@ class ChartChild : public KSpreadChild
     ChartChild( Doc *_spread, Sheet *_sheet );
     virtual ~ChartChild();
     virtual ObjType getType() const { return OBJECT_CHART; }
+    virtual QString getTypeString() const
+        { return i18n("Chart"); }
 
     void setDataArea( const QRect& _data );
     void update();
@@ -262,6 +280,8 @@ class KSpreadPictureObject : public KSpreadObject
     KSpreadPictureObject &operator=( const KSpreadPictureObject & );
 
     virtual ObjType getType() const { return OBJECT_PICTURE; }
+    virtual QString getTypeString() const
+        { return i18n("Picture"); }
     bool load( const QDomElement& element );
     virtual void loadOasis(const QDomElement &element, KoOasisLoadingContext & context );
     QDomElement save( QDomDocument& doc );

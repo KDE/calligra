@@ -53,7 +53,7 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection )
     : KPr2DObject()
 {
     imageCollection = _imageCollection;
-    pen = KPrPen( Qt::black, 1.0, Qt::NoPen );
+    pen = KoPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -74,7 +74,7 @@ KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection, const K
     imageCollection = _imageCollection;
 
     ext = KoSize(); // invalid size means unset
-    pen = KPrPen( Qt::black, 1.0, Qt::NoPen );
+    pen = KoPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;

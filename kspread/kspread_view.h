@@ -451,6 +451,7 @@ public slots:
     void sortInc();
     void sortDec();
     void layoutDlg();
+    void extraProperties();
     void borderBottom();
     void borderRight();
     void borderLeft();
@@ -627,6 +628,10 @@ protected slots:
 
     void slotSpecialChar( QChar c, const QString & _font );
     void slotSpecialCharDlgClosed();
+
+    void propertiesOk();
+
+    void objectSelectedChanged();
 
 protected slots:
     void slotChildSelected( KoDocumentChild* ch );

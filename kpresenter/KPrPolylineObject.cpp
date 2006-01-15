@@ -48,7 +48,7 @@ DCOPObject* KPrPolylineObject::dcopObject()
 }
 
 KPrPolylineObject::KPrPolylineObject(  const KoPointArray &_points, const KoSize &_size,
-                                     const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+                                     const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
     : KPrPointObject( _pen, _lineBegin, _lineEnd )
 {
     points = KoPointArray( _points );

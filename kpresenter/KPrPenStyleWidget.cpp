@@ -33,7 +33,7 @@
 #include <knuminput.h>
 
 
-KPrPenStyleWidget::KPrPenStyleWidget( QWidget *parent, const char *name, const KPrPenCmd::Pen &pen, bool configureLineEnds )
+KPrPenStyleWidget::KPrPenStyleWidget( QWidget *parent, const char *name, const KoPenCmd::Pen &pen, bool configureLineEnds )
 : QWidget( parent, name )
 , m_pen( pen )
 {
@@ -99,7 +99,7 @@ KPrPenStyleWidget::~KPrPenStyleWidget()
 }
 
 
-void KPrPenStyleWidget::setPen( const KPrPen &pen )
+void KPrPenStyleWidget::setPen( const KoPen &pen )
 {
     m_ui->colorChooser->setColor( pen.color() );
 
@@ -146,9 +146,9 @@ void KPrPenStyleWidget::setLineEnd( LineEnd le )
 }
 
 
-KPrPen KPrPenStyleWidget::getKPPen() const
+KoPen KPrPenStyleWidget::getKPPen() const
 {
-    KPrPen pen;
+    KoPen pen;
 
     switch ( m_ui->styleCombo->currentItem() )
     {
@@ -196,28 +196,28 @@ int KPrPenStyleWidget::getPenConfigChange() const
     int flags = 0;
 
     if ( getLineEnd() != m_pen.lineEnd )
-        flags = flags | KPrPenCmd::LineEnd;
+        flags = flags | KoPenCmd::LineEnd;
     if ( getLineBegin() != m_pen.lineBegin )
-        flags = flags | KPrPenCmd::LineBegin;
+        flags = flags | KoPenCmd::LineBegin;
     if ( getKPPen().color() != m_pen.pen.color() )
-        flags = flags | KPrPenCmd::Color;
+        flags = flags | KoPenCmd::Color;
     if ( getKPPen().style() != m_pen.pen.style() )
-        flags = flags | KPrPenCmd::Style;
+        flags = flags | KoPenCmd::Style;
     if ( getKPPen().pointWidth() != m_pen.pen.pointWidth() )
-        flags = flags | KPrPenCmd::Width;
+        flags = flags | KoPenCmd::Width;
 
     return flags;
 }
 
 
-KPrPenCmd::Pen KPrPenStyleWidget::getPen() const
+KoPenCmd::Pen KPrPenStyleWidget::getPen() const
 {
-    KPrPenCmd::Pen pen( getKPPen(), getLineBegin(), getLineEnd() );
+    KoPenCmd::Pen pen( getKPPen(), getLineBegin(), getLineEnd() );
     return pen;
 }
 
 
-void KPrPenStyleWidget::setPen( const KPrPenCmd::Pen &pen )
+void KPrPenStyleWidget::setPen( const KoPenCmd::Pen &pen )
 {
     m_pen = pen;
     slotReset();
@@ -228,19 +228,19 @@ void KPrPenStyleWidget::apply()
 {
     int flags = getPenConfigChange();
 
-    if ( flags & KPrPenCmd::LineEnd )
+    if ( flags & KoPenCmd::LineEnd )
         m_pen.lineEnd = getLineEnd();
 
-    if ( flags & KPrPenCmd::LineBegin )
+    if ( flags & KoPenCmd::LineBegin )
         m_pen.lineBegin = getLineBegin();
 
-    if ( flags & KPrPenCmd::Color )
+    if ( flags & KoPenCmd::Color )
         m_pen.pen.setColor( getKPPen().color() );
 
-    if ( flags & KPrPenCmd::Style )
+    if ( flags & KoPenCmd::Style )
         m_pen.pen.setStyle( getKPPen().style() );
 
-    if ( flags & KPrPenCmd::Width )
+    if ( flags & KoPenCmd::Width )
         m_pen.pen.setPointWidth( getKPPen().pointWidth() );
 }
 
@@ -258,7 +258,7 @@ void KPrPenStyleWidget::slotReset()
 
 void KPrPenStyleWidget::slotPenChanged()
 {
-    KPrPen pen = getKPPen();
+    KoPen pen = getKPPen();
     m_ui->widthLabel->setEnabled( pen.style() != NoPen );
     m_ui->widthInput->setEnabled( pen.style() != NoPen );
     m_ui->pbPreview->setPen( pen );

@@ -32,7 +32,7 @@ class KPrFreehandObject : public KPrPointObject
 {
 public:
     KPrFreehandObject();
-    KPrFreehandObject( const KoPointArray &_points, const KoSize &_size, const KPrPen &_pen,
+    KPrFreehandObject( const KoPointArray &_points, const KoSize &_size, const KoPen &_pen,
                       LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrFreehandObject() {}
     virtual DCOPObject* dcopObject();

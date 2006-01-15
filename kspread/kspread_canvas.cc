@@ -3429,8 +3429,8 @@ void Canvas::selectObj( KSpreadObject *obj )
   obj->setSelected( true );
   _repaint( obj );
 
-  emit objectSelectedChanged();
   d->mouseSelectedObject = true;
+  emit objectSelectedChanged();
   deleteEditor( true );
 }
 

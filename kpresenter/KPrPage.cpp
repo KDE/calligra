@@ -1210,13 +1210,13 @@ KCommand *KPrPage::insertObject( const QString &name, KPrObject * object, const 
     return insertCmd;
 }
 
-void KPrPage::insertLine( const KoRect &r, const KPrPen & pen, LineEnd lb, LineEnd le, LineType lt )
+void KPrPage::insertLine( const KoRect &r, const KoPen & pen, LineEnd lb, LineEnd le, LineType lt )
 {
     KPrLineObject *kplineobject = new KPrLineObject( pen, lb, le, lt );
     insertObject( i18n( "Insert Line" ), kplineobject, r );
 }
 
-void KPrPage::insertRectangle( const KoRect &r, const KPrPen & pen, const QBrush &brush, FillType ft,
+void KPrPage::insertRectangle( const KoRect &r, const KoPen & pen, const QBrush &brush, FillType ft,
                                const QColor &g1, const QColor &g2,
                                BCType gt, int rndX, int rndY, bool unbalanced, int xfactor, int yfactor )
 {
@@ -1225,7 +1225,7 @@ void KPrPage::insertRectangle( const KoRect &r, const KPrPen & pen, const QBrush
     insertObject( i18n( "Insert Rectangle" ), kprectobject, r );
 }
 
-void KPrPage::insertCircleOrEllipse( const KoRect &r, const KPrPen &pen, const QBrush & brush, FillType ft,
+void KPrPage::insertCircleOrEllipse( const KoRect &r, const KoPen &pen, const QBrush & brush, FillType ft,
                                      const QColor &g1, const QColor &g2,
                                      BCType gt, bool unbalanced, int xfactor, int yfactor )
 {
@@ -1234,7 +1234,7 @@ void KPrPage::insertCircleOrEllipse( const KoRect &r, const KPrPen &pen, const Q
     insertObject( i18n( "Insert Ellipse" ), kpellipseobject, r );
 }
 
-void KPrPage::insertPie( const KoRect &r, const KPrPen &pen, const QBrush &brush, FillType ft,
+void KPrPage::insertPie( const KoRect &r, const KoPen &pen, const QBrush &brush, FillType ft,
                          const QColor &g1, const QColor &g2,
                          BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le,
                          bool unbalanced, int xfactor, int yfactor )
@@ -1261,7 +1261,7 @@ KPrTextObject* KPrPage::insertTextObject( const KoRect& r, const QString&  text 
     return kptextobject;
 }
 
-void KPrPage::insertAutoform( const KoRect &r, const KPrPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,
+void KPrPage::insertAutoform( const KoRect &r, const KoPen &pen, const QBrush &brush, LineEnd lb, LineEnd le, FillType ft,
                               const QColor &g1, const QColor &g2, BCType gt, const QString &fileName, bool unbalanced,
                               int xfactor, int yfactor ){
     KPrAutoformObject *kpautoformobject = new KPrAutoformObject( pen, brush, fileName, lb, le, ft,
@@ -1269,7 +1269,7 @@ void KPrPage::insertAutoform( const KoRect &r, const KPrPen &pen, const QBrush &
     insertObject( i18n( "Insert Autoform" ), kpautoformobject, r );
 }
 
-void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const KPrPen &pen,
+void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const KoPen &pen,
                               LineEnd lb, LineEnd le )
 {
     KoSize size( r.width(), r.height() );
@@ -1277,7 +1277,7 @@ void KPrPage::insertFreehand( const KoPointArray &points, const KoRect &r, const
     insertObject( i18n( "Insert Freehand" ), kpfreehandobject, r );
 }
 
-void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const KPrPen &pen,
+void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const KoPen &pen,
                               LineEnd lb, LineEnd le )
 {
     KoSize size( r.width(), r.height() );
@@ -1286,7 +1286,7 @@ void KPrPage::insertPolyline( const KoPointArray &points, const KoRect &r, const
 }
 
 void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints,
-                                        const KoRect &r, const KPrPen &pen,
+                                        const KoRect &r, const KoPen &pen,
                                         LineEnd lb, LineEnd le )
 {
     KoSize size( r.width(), r.height() );
@@ -1297,7 +1297,7 @@ void KPrPage::insertQuadricBezierCurve( const KoPointArray &points, const KoPoin
 }
 
 void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints,
-                                      const KoRect &r, const KPrPen &pen,
+                                      const KoRect &r, const KoPen &pen,
                                       LineEnd lb, LineEnd le )
 {
     KoSize size( r.width(), r.height() );
@@ -1306,7 +1306,7 @@ void KPrPage::insertCubicBezierCurve( const KoPointArray &points, const KoPointA
     insertObject( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject, r );
 }
 
-void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const KPrPen &pen, const QBrush &brush, FillType ft,
+void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const KoPen &pen, const QBrush &brush, FillType ft,
                              const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor,
                              bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
 {
@@ -1318,7 +1318,7 @@ void KPrPage::insertPolygon( const KoPointArray &points, const KoRect &r, const 
     insertObject( i18n( "Insert Polygon" ), kpPolygonObject, r );
 }
 
-void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, const KPrPen &pen, const QBrush &brush,
+void KPrPage::insertClosedLine( const KoPointArray &points, const KoRect &r, const KoPen &pen, const QBrush &brush,
                                 FillType ft,const QColor &g1, const QColor &g2,
                                 BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode )
 {
@@ -1373,11 +1373,11 @@ KPrPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
     return kppartobject;
 }
 
-KCommand* KPrPage::setPen( const KPrPen &pen, LineEnd lb, LineEnd le, int flags )
+KCommand* KPrPage::setPen( const KoPen &pen, LineEnd lb, LineEnd le, int flags )
 {
-    KPrPenCmd * cmd = NULL;
+    KoPenCmd * cmd = NULL;
 
-    KPrPenCmd::Pen _newPen( pen, lb, le);
+    KoPenCmd::Pen _newPen( pen, lb, le);
 
     QPtrList<KPrObject> _objects;
     _objects.setAutoDelete( false );
@@ -1392,7 +1392,7 @@ KCommand* KPrPage::setPen( const KPrPen &pen, LineEnd lb, LineEnd le, int flags 
     }
 
     if ( !_objects.isEmpty() && flags ) {
-        cmd = new KPrPenCmd( i18n( "Apply Styles" ), _objects, _newPen, m_doc, this, flags );
+        cmd = new KoPenCmd( i18n( "Apply Styles" ), _objects, _newPen, m_doc, this, flags );
         cmd->execute();
     }
 

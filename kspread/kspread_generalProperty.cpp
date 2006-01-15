@@ -17,7 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "KPrGeneralProperty.h"
+#include "kspread_generalProperty.h"
 
 #include <qcheckbox.h>
 #include <qgroupbox.h>
@@ -27,11 +27,12 @@
 
 #include <knuminput.h>
 #include <klocale.h>
+#include <KoGeneralPropertyUi.h>
 #include <koUnitWidgets.h>
 
-#include <KoGeneralPropertyUi.h>
+using namespace KSpread;
 
-KPrGeneralProperty::KPrGeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit )
+GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit )
 : QWidget( parent, name )
 , m_ratio( 1.0 )
 , m_generalValue( generalValue )
@@ -77,12 +78,12 @@ KPrGeneralProperty::KPrGeneralProperty( QWidget *parent, const char *name, Gener
 }
 
 
-KPrGeneralProperty::~KPrGeneralProperty()
+GeneralProperty::~GeneralProperty()
 {
 }
 
 
-int KPrGeneralProperty::getGeneralPropertyChange() const
+int GeneralProperty::getGeneralPropertyChange() const
 {
     int flags = 0;
 
@@ -119,7 +120,7 @@ int KPrGeneralProperty::getGeneralPropertyChange() const
 }
 
 
-KPrGeneralProperty::GeneralValue KPrGeneralProperty::getGeneralValue() const
+GeneralProperty::GeneralValue GeneralProperty::getGeneralValue() const
 {
     GeneralValue generalValue;
     generalValue.m_name = m_ui->nameInput->isEnabled() ? m_ui->nameInput->text() : QString();
@@ -130,7 +131,7 @@ KPrGeneralProperty::GeneralValue KPrGeneralProperty::getGeneralValue() const
 }
 
 
-void KPrGeneralProperty::apply()
+void GeneralProperty::apply()
 {
     int flags = getGeneralPropertyChange();
 
@@ -148,7 +149,7 @@ void KPrGeneralProperty::apply()
 }
 
 
-KoRect KPrGeneralProperty::getRect() const
+KoRect GeneralProperty::getRect() const
 {
     double x = QMAX( 0, m_ui->xInput->value() );
     double y = QMAX( 0, m_ui->yInput->value() );
@@ -160,7 +161,7 @@ KoRect KPrGeneralProperty::getRect() const
 }
 
 
-void KPrGeneralProperty::setRect( KoRect &rect )
+void GeneralProperty::setRect( KoRect &rect )
 {
     m_ui->xInput->changeValue( QMAX( 0.00, rect.left() ) );
     m_ui->yInput->changeValue( QMAX( 0.00, rect.top() ) );
@@ -169,7 +170,7 @@ void KPrGeneralProperty::setRect( KoRect &rect )
 }
 
 
-void KPrGeneralProperty::slotReset()
+void GeneralProperty::slotReset()
 {
     switch ( m_generalValue.m_protect )
     {
@@ -211,13 +212,13 @@ void KPrGeneralProperty::slotReset()
 }
 
 
-void KPrGeneralProperty::slotProtectToggled( bool state )
+void GeneralProperty::slotProtectToggled( bool state )
 {
     m_ui->positionGroup->setEnabled( !state );
 }
 
 
-void KPrGeneralProperty::slotKeepRatioToggled( bool state )
+void GeneralProperty::slotKeepRatioToggled( bool state )
 {
     if ( state )
     {
@@ -233,7 +234,7 @@ void KPrGeneralProperty::slotKeepRatioToggled( bool state )
 }
 
 
-void KPrGeneralProperty::slotWidthChanged( double value )
+void GeneralProperty::slotWidthChanged( double value )
 {
     if ( m_ui->keepRatio->isChecked() )
     {
@@ -242,7 +243,7 @@ void KPrGeneralProperty::slotWidthChanged( double value )
 }
 
 
-void KPrGeneralProperty::slotHeightChanged( double value )
+void GeneralProperty::slotHeightChanged( double value )
 {
     if ( m_ui->keepRatio->isChecked() && m_ratio != 0 )
     {
@@ -251,4 +252,4 @@ void KPrGeneralProperty::slotHeightChanged( double value )
 }
 
 
-#include "KPrGeneralProperty.moc"
+#include "kspread_generalProperty.moc"

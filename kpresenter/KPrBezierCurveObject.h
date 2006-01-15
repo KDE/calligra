@@ -32,7 +32,7 @@ class KPrBezierCurveObject : public KPrPointObject
 public:
     KPrBezierCurveObject();
     KPrBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
-                          const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+                          const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrBezierCurveObject() {}
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
@@ -64,7 +64,7 @@ class KPrCubicBezierCurveObject : public KPrBezierCurveObject
 public:
     KPrCubicBezierCurveObject();
     KPrCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
-                               const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+                               const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrCubicBezierCurveObject() {}
 
     virtual DCOPObject* dcopObject();
@@ -78,7 +78,7 @@ class KPrQuadricBezierCurveObject : public KPrBezierCurveObject
 public:
     KPrQuadricBezierCurveObject();
     KPrQuadricBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
-                                 const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+                                 const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
     virtual ~KPrQuadricBezierCurveObject() {}
 
     virtual DCOPObject* dcopObject();

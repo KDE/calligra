@@ -41,7 +41,7 @@
 #include <qvaluevector.h>
 #include "KPrBackground.h"
 #include "KPrVariableCollection.h"
-#include "KPrPen.h"
+#include <KoPen.h>
 
 class KPrDocument;
 class KPrTextObject;
@@ -352,17 +352,17 @@ protected:
     KPrPage *m_page;
 };
 
-class KPrPenCmd : public KNamedCommand
+class KoPenCmd : public KNamedCommand
 {
 public:
     struct Pen {
-        Pen( KPrPen p, LineEnd lb, LineEnd le )
+        Pen( KoPen p, LineEnd lb, LineEnd le )
         : pen( p )
         , lineBegin( lb )
         , lineEnd( le )
         {}
 
-        KPrPen pen;
+        KoPen pen;
         LineEnd lineBegin, lineEnd;
 
         Pen &operator=( const Pen &_pen ) {
@@ -383,9 +383,9 @@ public:
         All = LineBegin | LineEnd | Color | Width | Style
     };
 
-    KPrPenCmd( const QString &_name, QPtrList<KPrObject> &_objects, Pen _newPen,
+    KoPenCmd( const QString &_name, QPtrList<KPrObject> &_objects, Pen _newPen,
             KPrDocument *_doc, KPrPage *_page, int _flags = All);
-    ~KPrPenCmd();
+    ~KoPenCmd();
 
     virtual void execute();
     virtual void unexecute();

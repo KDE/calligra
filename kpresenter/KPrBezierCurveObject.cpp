@@ -40,7 +40,7 @@ KPrBezierCurveObject::KPrBezierCurveObject()
 
 KPrBezierCurveObject::KPrBezierCurveObject( const KoPointArray &_controlPoints,
                                             const KoPointArray &_allPoints,
-                                            const KoSize &_size, const KPrPen &_pen,
+                                            const KoSize &_size, const KoPen &_pen,
                                             LineEnd _lineBegin, LineEnd _lineEnd )
 : KPrPointObject( _pen, _lineBegin, _lineEnd )
 {
@@ -264,7 +264,7 @@ KPrCubicBezierCurveObject::KPrCubicBezierCurveObject()
 
 KPrCubicBezierCurveObject::KPrCubicBezierCurveObject( const KoPointArray &_controlPoints, 
                                                       const KoPointArray &_allPoints, 
-                                                      const KoSize & _size, const KPrPen &_pen, 
+                                                      const KoSize & _size, const KoPen &_pen, 
                                                       LineEnd _lineBegin, LineEnd _lineEnd )
 : KPrBezierCurveObject( _controlPoints, _allPoints, _size, _pen, _lineBegin, _lineEnd )
 {
@@ -287,7 +287,7 @@ KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject()
 
 KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject( const KoPointArray &_controlPoints, 
                                                           const KoPointArray &_allPoints, 
-                                                          const KoSize & _size, const KPrPen &_pen, 
+                                                          const KoSize & _size, const KoPen &_pen, 
                                                           LineEnd _lineBegin, LineEnd _lineEnd )
 : KPrBezierCurveObject( _controlPoints, _allPoints, _size, _pen, _lineBegin, _lineEnd )
 {

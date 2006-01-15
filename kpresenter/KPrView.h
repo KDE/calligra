@@ -31,7 +31,8 @@
 
 #include <koView.h>
 #include "global.h"
-#include "KPrPen.h"
+#include <KoBrush.h>
+#include <KoPen.h>
 #include <koRuler.h>
 
 class QPopupMenu;
@@ -518,7 +519,7 @@ public:
     PieType getPieType() const { return pieType; }
     int getPieAngle() const { return pieAngle; }
     int getPieLength() const { return pieLength; }
-    KPrPen getPen() const { return pen; }
+    KoPen getPen() const { return pen; }
     QBrush getBrush() const { return brush; }
     LineEnd getLineBegin() const { return lineBegin; }
     LineEnd getLineEnd() const{ return lineEnd; }
@@ -535,7 +536,7 @@ public:
     void setPieType(PieType _pieType) { pieType = _pieType; }
     void setPieAngle(int _pieAngle) { pieAngle = _pieAngle; }
     void setPieLength(int _pieLength) { pieLength = _pieLength; }
-    void setPen(KPrPen _pen) { pen = _pen; }
+    void setPen(KoPen _pen) { pen = _pen; }
     void setBrush(QBrush _brush) { brush = _brush; }
     void setLineBegin(LineEnd _lineBegin) { lineBegin = _lineBegin; }
     void setLineEnd(LineEnd _lineEnd){ lineEnd = _lineEnd; }
@@ -594,7 +595,7 @@ public:
 
     void openPopupMenuZoom( const QPoint & _point );
 
-    void penColorChanged( const KPrPen & _pen );
+    void penColorChanged( const KoPen & _pen );
     void brushColorChanged( const QBrush & _brush );
 
     /**
@@ -800,7 +801,7 @@ protected:
      * create a command which sets the pen according to the flags
      * for the selected objects on the active and sticky page
      */
-    KCommand * getPenCmd( const QString &name, KPrPen pen, LineEnd lb, LineEnd le, int flags );
+    KCommand * getPenCmd( const QString &name, KoPen pen, LineEnd lb, LineEnd le, int flags );
 
     void spellCheckerRemoveHighlight();
 
@@ -846,7 +847,7 @@ private:
     KPrPresDurationDia *presDurationDia;
 
     // default pen and brush
-    KPrPen pen;
+    KoPen pen;
     QBrush brush;
     LineEnd lineBegin;
     LineEnd lineEnd;

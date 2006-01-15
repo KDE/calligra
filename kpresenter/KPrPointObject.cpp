@@ -36,7 +36,7 @@ KPrPointObject::KPrPointObject()
 }
 
 
-KPrPointObject::KPrPointObject( const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+KPrPointObject::KPrPointObject( const KoPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
     : KPrShadowObject( _pen ), KPrStartEndLine(_lineBegin, _lineEnd)
 {
 }

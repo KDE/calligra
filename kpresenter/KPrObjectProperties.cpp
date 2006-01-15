@@ -34,7 +34,7 @@
 KPrObjectProperties::KPrObjectProperties( const QPtrList<KPrObject> &objects )
 : m_objects( objects )
 , m_flags( 0 )
-, m_pen( KPrPen( Qt::black, 1.0, Qt::SolidLine ), L_NORMAL, L_NORMAL )
+, m_pen( KoPen( Qt::black, 1.0, Qt::SolidLine ), L_NORMAL, L_NORMAL )
 , m_protectContent( STATE_UNDEF )
 {
     getProperties( m_objects );

@@ -58,7 +58,7 @@ libkpresenterprivate_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp \
 	KPrPolygonPreview.cpp \
 	KPrPicturePreview.cpp \
 	brushpropertyui.ui gradientpropertyui.ui KPrBrushProperty.cpp \
-	generalpropertyui.ui KPrGeneralProperty.cpp \
+	KPrGeneralProperty.cpp \
 	polygonpropertyui.ui KPrPolygonProperty.cpp \
 	piepropertyui.ui KPrPieProperty.cpp \
 	picturepropertyui.ui KPrPictureProperty.cpp \
@@ -66,7 +66,7 @@ libkpresenterprivate_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp \
 	KPrObjectProperties.cpp \
 	KPrPropertyEditor.cpp \
 	slidetransitionwidget.ui KPrSlideTransitionDia.cpp \
-	KPrPen.cpp KPrPrinterDlg.cpp
+	KPrPrinterDlg.cpp
 
 libkpresenterprivate_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
 if include_ARTS

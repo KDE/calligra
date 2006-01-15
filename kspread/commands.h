@@ -409,6 +409,42 @@ class InsertObjectCommand : public KCommand
     KSpreadObject *obj;
 };
 
+class RenameNameObjectCommand : public KNamedCommand
+{
+public:
+    RenameNameObjectCommand( const QString &_name, const QString &_objectName, KSpreadObject *_obj, Doc *_doc );
+    ~RenameNameObjectCommand();
+    void execute();
+    void unexecute();
+protected:
+    QString oldObjectName, newObjectName;
+    KSpreadObject *object;
+    Doc *doc;
+    Sheet *m_page;
+};
+
+
+class GeometryPropertiesCommand : public KNamedCommand
+{
+public:
+    enum KgpType { ProtectSize, KeepRatio};
+    GeometryPropertiesCommand( const QString &name, QPtrList<KSpreadObject> &objects,
+                                  bool newValue, KgpType type, Doc *_doc );
+    GeometryPropertiesCommand( const QString &name, QValueList<bool> &lst, QPtrList<KSpreadObject> &objects,
+                                  bool newValue, KgpType type, Doc *_doc );
+    ~GeometryPropertiesCommand();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+    QValueList<bool> m_oldValue;
+    QPtrList<KSpreadObject> m_objects;
+    bool m_newValue;
+    KgpType m_type;
+    Doc *m_doc;
+};
+
 } // namespace KSpread
 
 #endif /* KSPREAD_COMMANDS */

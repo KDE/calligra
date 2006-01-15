@@ -59,6 +59,8 @@ KSpreadObject::KSpreadObject( Sheet *_sheet, const KoRect& _geometry )
   : m_geometry( _geometry), m_sheet(_sheet), m_selected(false), m_objectName(""), m_protect(false), m_keepRatio(false), pen( Qt::black, 1, QPen::SolidLine )
 {
   angle = 0.0;
+  inObjList = true;
+  cmds = 0;
 }
 
 KSpreadObject::~KSpreadObject()
@@ -300,6 +302,13 @@ QCursor KSpreadObject::getCursor( const QPoint &_point, ModifyType &_modType, QR
 
     _modType = MT_MOVE;
     return Qt::sizeAllCursor;
+}
+
+
+void KSpreadObject::doDelete()
+{
+    if ( cmds == 0 && !inObjList )
+        delete this;
 }
 
 /**********************************************************
@@ -576,7 +585,7 @@ KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, const KoRect& _geomet
    : KSpreadObject( _sheet, _geometry )
 {
     imageCollection = _imageCollection;
-    pen = KSpreadPen( Qt::black, 1.0, Qt::NoPen );
+    pen = KoPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -597,7 +606,7 @@ KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, const KoRect& _geomet
     imageCollection = _imageCollection;
 
     //ext = KoSize(); // invalid size means unset
-    pen = KSpreadPen( Qt::black, 1.0, Qt::NoPen );
+    pen = KoPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -619,7 +628,7 @@ KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, KoPictureCollection *
   imageCollection = _imageCollection;
 
   //ext = KoSize(); // invalid size means unset
-  pen = KSpreadPen( Qt::black, 1.0, Qt::NoPen );
+  pen = KoPen( Qt::black, 1.0, Qt::NoPen );
   mirrorType = PM_NORMAL;
   depth = 0;
   swapRGB = false;
@@ -1101,8 +1110,8 @@ QPixmap KSpreadPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
                  (int)( _zoomHandler->zoomItX( /*ext*/m_geometry.width() ) - 2.0 * penw ),
                  (int)( _zoomHandler->zoomItY( /*ext*/m_geometry.height() ) - 2.0 * penw ) );
 
-//     if ( getFillType() == FT_BRUSH || !gradient )
-//         paint.drawRect( rect );
+//      if ( getFillType() == FT_BRUSH || !gradient )
+         paint.drawRect( rect );
 //     else {
         // ### TODO: this was also drawn for drawContour==true, but why?
 //         gradient->setSize( size );

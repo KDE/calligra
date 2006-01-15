@@ -9,25 +9,6 @@
 #include <kdebug.h>
 
 
-enum BCType {
-    BCT_PLAIN = 0,
-    BCT_GHORZ = 1,
-    BCT_GVERT = 2,
-    BCT_GDIAGONAL1 = 3,
-    BCT_GDIAGONAL2 = 4,
-    BCT_GCIRCLE = 5,
-    BCT_GRECT = 6,
-    BCT_GPIPECROSS = 7,
-    BCT_GPYRAMID = 8
-};
-
-enum FillType
-{
-    FT_BRUSH = 0,
-    FT_GRADIENT = 1
-};
-
-
 #define KSBarIcon( x ) BarIcon( x, Factory::global() )
 #define colWidth 60.0
 #define heightOfRow 20.0
@@ -186,6 +167,12 @@ enum ModifyType {
   MT_RESIZE_LD,
   MT_RESIZE_RU,
   MT_RESIZE_RD
+};
+
+enum PropValue {
+    STATE_ON = 0,
+    STATE_OFF = 1,
+    STATE_UNDEF = 2
 };
 
 //TODO Implement all objects :)

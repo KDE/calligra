@@ -1496,7 +1496,7 @@ QDomElement KPrObject::createGradientElement(const QString &tag, const QColor &c
     return elem;
 }
 
-QDomElement KPrObject::createPenElement(const QString &tag, const KPrPen &pen, QDomDocument &doc) {
+QDomElement KPrObject::createPenElement(const QString &tag, const KoPen &pen, QDomDocument &doc) {
 
     QDomElement elem=doc.createElement(tag);
     elem.setAttribute(attrColor, pen.color().name());
@@ -1505,9 +1505,9 @@ QDomElement KPrObject::createPenElement(const QString &tag, const KPrPen &pen, Q
     return elem;
 }
 
-KPrPen KPrObject::toPen(const QDomElement &element) const {
+KoPen KPrObject::toPen(const QDomElement &element) const {
 
-    KPrPen pen;
+    KoPen pen;
     pen.setColor(retrieveColor(element));
     if(element.hasAttribute(attrStyle))
         pen.setStyle(static_cast<Qt::PenStyle>(element.attribute(attrStyle).toInt()));
@@ -1558,10 +1558,10 @@ void KPrObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         paintSelection( _painter, _zoomHandler, selectionMode );
 }
 
-KPrPen KPrObject::getPen() const
+KoPen KPrObject::getPen() const
 {
     // Return the default pen
-    return KPrPen();
+    return KoPen();
 }
 
 void KPrObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
@@ -1624,7 +1624,7 @@ KPrShadowObject::KPrShadowObject()
 {
 }
 
-KPrShadowObject::KPrShadowObject( const KPrPen &_pen )
+KPrShadowObject::KPrShadowObject( const KoPen &_pen )
     : KPrObject(), pen( _pen )
 {
 }
@@ -1909,7 +1909,7 @@ void KPrShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     {
         _painter->save();
         // tz TODO fix tmpPen usage
-        KPrPen tmpPen( pen );
+        KoPen tmpPen( pen );
         pen.setColor( shadowColor );
         QBrush brush;
         brush.setColor( shadowColor );
@@ -1942,9 +1942,9 @@ void KPrShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     KPrObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
 }
 
-KPrPen KPrShadowObject::defaultPen() const
+KoPen KPrShadowObject::defaultPen() const
 {
-    return KPrPen();
+    return KoPen();
 }
 
 void KPrShadowObject::paint(QPainter* painter, KoTextZoomHandler* zoomHandler, int pageNum, bool drawingShadow, bool drawContour) {
@@ -1962,7 +1962,7 @@ KPr2DObject::KPr2DObject()
 {
 }
 
-KPr2DObject::KPr2DObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
+KPr2DObject::KPr2DObject( const KoPen &_pen, const QBrush &_brush, FillType _fillType,
                         const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor )
     : KPrShadowObject( _pen )
@@ -2092,7 +2092,7 @@ void KPr2DObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     if ( shadowDistance > 0 && !drawContour )
     {
         _painter->save();
-        KPrPen tmpPen( pen );
+        KoPen tmpPen( pen );
         pen.setColor( shadowColor );
         QBrush tmpBrush( m_brush.getBrush() );
         QBrush shadowBrush( tmpBrush );

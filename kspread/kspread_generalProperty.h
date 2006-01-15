@@ -21,14 +21,17 @@
 #define GENERALPROPERTY_H
 
 #include <qwidget.h>
-#include <global.h>
+#include "kspread_global.h"
 
 #include <KoRect.h>
 #include <koUnit.h>
 
 class KoGeneralPropertyUI;
 
-class KPrGeneralProperty : public QWidget
+namespace KSpread
+{
+
+class GeneralProperty : public QWidget
 {
     Q_OBJECT
 public:
@@ -53,8 +56,8 @@ public:
         Height = 64
     };
 
-    KPrGeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit );
-    ~KPrGeneralProperty();
+    GeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit );
+    ~GeneralProperty();
 
     int getGeneralPropertyChange() const;
     GeneralValue getGeneralValue() const;
@@ -78,5 +81,7 @@ protected slots:
     void slotWidthChanged( double value );
     void slotHeightChanged( double value );
 };
+
+}
 
 #endif /* GENERALPROPERTY_H */

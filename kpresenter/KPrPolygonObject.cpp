@@ -33,7 +33,7 @@
 #include <KoOasisContext.h>
 #include <math.h>
 #include <koxmlns.h>
-#include "KPrPen.h"
+#include "KoPen.h"
 
 using namespace std;
 
@@ -43,7 +43,7 @@ KPrPolygonObject::KPrPolygonObject()
 }
 
 KPrPolygonObject::KPrPolygonObject( const KoPointArray &_points, const KoSize &_size,
-                                  const KPrPen &_pen, const QBrush &_brush,
+                                  const KoPen &_pen, const QBrush &_brush,
                                   FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor,
                                   bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )

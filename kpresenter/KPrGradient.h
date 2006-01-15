@@ -22,6 +22,7 @@
 #define kpgradient_h
 
 #include <qcolor.h>
+#include <KoBrush.h>
 #include <kpixmap.h>
 #include "global.h"
 

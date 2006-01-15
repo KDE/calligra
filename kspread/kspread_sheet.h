@@ -264,6 +264,26 @@ public:
 
     bool isLoading();
 
+
+    /**
+     * @brief Get a list of all selected objects
+     *
+     * @return list of selected objets.
+     */
+    QPtrList<KSpreadObject> getSelectedObjects();
+
+
+    /**
+     * @brief Create a uniq name for an object.
+     *
+     * Create a uniq name for the object. If no name is set for the object
+     * a name according to its type is created. If the name already exists
+     * append ' (x)'. // FIXME: not allowed by I18N
+     *
+     * @param object to work on
+     */
+    void unifyObjectName( KSpreadObject *object );
+
     /**
      * Returns the layout direction of the sheet.
      */
@@ -1291,6 +1311,7 @@ private:
     void checkCellContent(Cell * cell1, Cell * cell2, int & ret);
     int  adjustColumnHelper(Cell * c, int _col, int _row);
     void checkContentDirection( QString const & name );
+    bool objectNameExists( KSpreadObject *object, QPtrList<KSpreadObject> &list );
 
     class Private;
     Private* d;

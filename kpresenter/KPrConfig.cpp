@@ -822,7 +822,7 @@ KPrConfigureToolsPage::KPrConfigureToolsPage( KPrView *_view, QWidget *parent, c
 
     QTabWidget *tab = new QTabWidget(this);
 
-    KPrPenCmd::Pen pen( m_pView->getPen(), m_pView->getLineBegin(), m_pView->getLineEnd() );
+    KoPenCmd::Pen pen( m_pView->getPen(), m_pView->getLineBegin(), m_pView->getLineEnd() );
     m_confPenDia = new KPrPenStyleWidget(tab, 0, pen, true );
     tab->addTab( m_confPenDia, i18n( "Outl&ine" ) );
 
@@ -866,7 +866,7 @@ KPrConfigureToolsPage::~KPrConfigureToolsPage()
 
 void KPrConfigureToolsPage::apply()
 {
-    KPrPenCmd::Pen pen = m_confPenDia->getPen();
+    KoPenCmd::Pen pen = m_confPenDia->getPen();
     m_pView->setPen( pen.pen );
     m_pView->setLineBegin( pen.lineBegin );
     m_pView->setLineEnd( pen.lineEnd );
@@ -904,7 +904,7 @@ void KPrConfigureToolsPage::apply()
 
 void KPrConfigureToolsPage::slotDefault()
 {
-    KPrPenCmd::Pen pen( KPrPen(black, 1.0, SolidLine), L_NORMAL, L_NORMAL );
+    KoPenCmd::Pen pen( KoPen(black, 1.0, SolidLine), L_NORMAL, L_NORMAL );
     m_confPenDia->setPen( pen );
     m_pView->getActionPenColor()->setCurrentColor( pen.pen.color() );
 

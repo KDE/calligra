@@ -41,7 +41,7 @@ KPrClosedLineObject::KPrClosedLineObject()
 {
 }
 
-KPrClosedLineObject::KPrClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KPrPen &_pen, const QBrush &_brush,
+KPrClosedLineObject::KPrClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KoPen &_pen, const QBrush &_brush,
                                         FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                         bool _unbalanced, int _xfactor, int _yfactor, const QString _typeString )
     : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )

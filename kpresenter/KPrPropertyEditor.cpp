@@ -78,9 +78,9 @@ KCommand * KPrPropertyEditor::getCommand()
         int change = m_penProperty->getPenConfigChange();
         if ( change )
         {
-            KPrPenCmd::Pen pen( m_penProperty->getPen() );
+            KoPenCmd::Pen pen( m_penProperty->getPen() );
 
-            KPrPenCmd *cmd = new KPrPenCmd( i18n( "Apply Styles" ), m_objects, pen, m_doc, m_page, change );
+            KoPenCmd *cmd = new KoPenCmd( i18n( "Apply Styles" ), m_objects, pen, m_doc, m_page, change );
 
             if ( !macro )
             {
@@ -340,7 +340,7 @@ void KPrPropertyEditor::setupTabPen( bool configureLineEnds )
 {
     if ( m_penProperty == 0 )
     {
-        KPrPenCmd::Pen pen( m_objectProperties->getPen() );
+        KoPenCmd::Pen pen( m_objectProperties->getPen() );
 
         m_penProperty = new KPrPenStyleWidget( this, 0, pen, configureLineEnds );
         addTab( m_penProperty, i18n( "Outl&ine" ) );

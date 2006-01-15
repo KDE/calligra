@@ -22,6 +22,7 @@
 #define kppieobject_h
 
 #include "KPrObject.h"
+#include <KoBrush.h>
 #include <koStyleStack.h>
 
 class KPrGradient;
@@ -31,7 +32,7 @@ class KPrPieObject : public KPr2DObject, public KPrStartEndLine
 {
 public:
     KPrPieObject();
-    KPrPieObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
+    KPrPieObject( const KoPen &_pen, const QBrush &_brush, FillType _fillType,
                  const QColor &_gColor1, const QColor &_gColor2, BCType _gType, PieType _pieType,
                  int _p_angle, int _p_len, LineEnd _lineBegin, LineEnd _lineEnd,
                  bool _unbalanced, int _xfactor, int _yfactor );

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="29">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="30">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -36,8 +36,8 @@
   <Action name="conditional"/>
   <Action name="validity"/>
   <Action name="editCell"/>
-  <Separator/>
-  <Action name="transform"/>
+<!--  <Separator/>
+  <Action name="transform"/>-->
  </Menu>
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_newview"/>
@@ -76,6 +76,7 @@
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
+  <Action name="extra_properties"/>
   <Action name="changeangle"/>
   <Action name="decreaseindent"/>
   <Action name="increaseindent"/>

@@ -2568,9 +2568,9 @@ void KPrTextObject::saveParagraph( QDomDocument& doc,KoTextParag * parag,QDomEle
     parentElem.appendChild(paragraph);
 }
 
-KPrPen KPrTextObject::defaultPen() const
+KoPen KPrTextObject::defaultPen() const
 {
-    return KPrPen( Qt::black, 1.0, Qt::NoPen );
+    return KoPen( Qt::black, 1.0, Qt::NoPen );
 }
 
 QPoint KPrTextObject::viewToInternal( const QPoint & pos, KPrCanvas* canvas ) const

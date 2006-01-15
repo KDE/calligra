@@ -142,6 +142,8 @@
 #include "dialogs/sheet_properties.h"
 #include "dialogs/kspread_dlg_find.h"
 #include "dialogs/SheetSelectWidget.h"
+#include "kspread_propertyEditor.h"
+#include "kspread_generalProperty.h"
 
 // KSpread DCOP
 #include "KSpreadViewIface.h"
@@ -277,6 +279,8 @@ public:
     void adjustWorkbookActions( bool mode );
     void updateButton( Cell *cell, int column, int row);
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
+
+    PropertyEditor *m_propertyEditor;
 };
 
 class ViewActions
@@ -285,6 +289,7 @@ public:
 
     // cell formatting
     KAction* cellLayout;
+    KAction *actionExtraProperties;
     KAction* defaultFormat;
     KToggleAction* bold;
     KToggleAction* italic;
@@ -459,6 +464,9 @@ void View::Private::initActions()
   actions->cellLayout = new KAction( i18n("Cell Format..."), "cell_layout",
       Qt::CTRL+ Qt::ALT+ Qt::Key_F, view, SLOT( layoutDlg() ), ac, "cellLayout" );
   actions->cellLayout->setToolTip( i18n("Set the cell formatting.") );
+
+  actions->actionExtraProperties = new KAction( i18n( "&Properties" ), "penbrush", 0,
+      view, SLOT( extraProperties() ), ac, "extra_properties" );
 
   actions->defaultFormat = new KAction( i18n("Default"),
       0, view, SLOT( defaultSelection() ), ac, "default" );
@@ -1132,6 +1140,8 @@ void View::Private::initActions()
       Qt::CTRL+ Qt::SHIFT + Qt::Key_T, view, SLOT( runInternalTests() ), ac, "internalTests" );
   actions->inspector = new KAction( i18n("Run Inspector..."), "inspector",
       Qt::CTRL+ Qt::SHIFT + Qt::Key_I, view, SLOT( runInspector() ), ac, "inspector" );
+
+  m_propertyEditor = 0;
 }
 
 void View::Private::adjustActions( bool mode )
@@ -1271,6 +1281,7 @@ void View::Private::adjustActions( bool mode )
   if ( activeSheet )
   {
     selection->update();
+    view->objectSelectedChanged();
   }
 }
 
@@ -1804,6 +1815,9 @@ View::View( QWidget *_parent, const char *_name,
     // just before.
     connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
+
+    connect( d->canvas, SIGNAL( objectSelectedChanged() ),
+             this, SLOT( objectSelectedChanged() ) );
 
     QObject::connect( doc()->map(), SIGNAL( sig_addSheet( Sheet* ) ), SLOT( slotAddSheet( Sheet* ) ) );
 
@@ -2748,6 +2762,14 @@ void View::updateEditWidget()
 
 void View::activateFormulaEditor()
 {
+}
+
+void View::objectSelectedChanged()
+{
+  if ( d->canvas->isObjectSelected() )
+    d->actions->actionExtraProperties->setEnabled( true );
+  else
+    d->actions->actionExtraProperties->setEnabled( false );
 }
 
 void View::updateReadWrite( bool readwrite )
@@ -5755,6 +5777,8 @@ void View::openPopupMenu( const QPoint & _point )
       d->actions->copy->plug( d->popupMenu );
       d->actions->paste->plug( d->popupMenu );
       d->popupMenu->popup( _point );
+      d->popupMenu->insertSeparator();
+      d->actions->actionExtraProperties->plug( d->popupMenu );
       return;
     }
 
@@ -6109,6 +6133,32 @@ void View::equalizeColumn()
 void View::layoutDlg()
 {
   CellFormatDialog dlg( this, d->activeSheet );
+}
+
+void View::extraProperties()
+{
+    //d->canvas->setToolEditMode( TEM_MOUSE );
+
+    d->m_propertyEditor = new PropertyEditor( this, "KPrPropertyEditor", d->activeSheet, doc() );
+    d->m_propertyEditor->setCaption( i18n( "Properties" ) );
+
+    connect( d->m_propertyEditor, SIGNAL( propertiesOk() ), this, SLOT( propertiesOk() ) );
+    d->m_propertyEditor->exec();
+    disconnect( d->m_propertyEditor, SIGNAL( propertiesOk() ), this, SLOT( propertiesOk() ) );
+
+    delete d->m_propertyEditor;
+    d->m_propertyEditor = 0;
+}
+
+void View::propertiesOk()
+{
+    KCommand *cmd = d->m_propertyEditor->getCommand();
+
+    if ( cmd )
+    {
+        cmd->execute();
+        doc()->addCommand( cmd );
+    }
 }
 
 void View::styleDialog()

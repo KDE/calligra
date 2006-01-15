@@ -31,7 +31,7 @@ KPrPBPreview::KPrPBPreview( QWidget* parent, const char* name, PaintType _paintT
     //FIXME zoom
     _zoomHandler=new KoTextZoomHandler();
     paintType = _paintType;
-    pen = KPrPen( black, 1, SolidLine );
+    pen = KoPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );
     gradient = new KPrGradient( Qt::red, Qt::green, BCT_GHORZ, false, 100, 100 );
     savedGradient = gradient;

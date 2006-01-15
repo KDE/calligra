@@ -46,7 +46,7 @@ KPrPieObject::KPrPieObject()
     p_len = 270 * 16;
 }
 
-KPrPieObject::KPrPieObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
+KPrPieObject::KPrPieObject( const KoPen &_pen, const QBrush &_brush, FillType _fillType,
                           const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                           PieType _pieType, int _p_angle, int _p_len,
                           LineEnd _lineBegin, LineEnd _lineEnd,
