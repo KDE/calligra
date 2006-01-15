@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
-   Copyright (C) 2005 Sven Lüppken <sven@kde.org>
+   Copyright (C) 2005, 2006 Sven Lüppken <sven@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -94,10 +94,17 @@ KoShellWindow::KoShellWindow()
   // Get all available components
   for( ; it != lstComponents.end(); ++it )
   {
-      if (!(*it).service()->genericName().isEmpty()) //skip the unavailable part
-          id = m_pSidebar->insertItem(m_grpFile, (*it).service()->icon(), (*it).service()->genericName());
+      KService* service = (*it).service();
+      if ( !service->genericName().isEmpty()
+        && service->genericName() != "Report Generator"
+        && service->genericName() != "Report Template" ) //skip the unavailable part and kugar
+      {
+          id = m_pSidebar->insertItem(m_grpFile, service->icon(), service->genericName());
+      }
       else
+      {
           continue;
+      }
 
       m_mapComponents[ id++ ] = *it;
   }
