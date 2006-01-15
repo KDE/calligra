@@ -40,6 +40,7 @@
 #include <kgenericfactory.h>
 
 #include <KoXmlWriter.h>
+#include <koOasisStore.h>
 
 #include "swinder.h"
 #include <iostream>
@@ -65,9 +66,9 @@ public:
 
   Workbook *workbook;  
 
-  QByteArray createStyles();
-  QByteArray createContent();
-  QByteArray createManifest();
+  bool createStyles( KoOasisStore* store );
+  bool createContent( KoOasisStore* store );
+  bool createManifest( KoOasisStore* store );
   
   int sheetFormatIndex;
   int columnFormatIndex;
@@ -134,44 +135,48 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   if ( !storeout )
   {
     kdWarning() << "Couldn't open the requested file." << endl;
+    delete d->workbook;
     return KoFilter::FileNotFound;
   }
+
+  // Tell KoStore not to touch the file names
+  storeout->disallowNameExpansion();
+  KoOasisStore oasisStore( storeout );
 
   // store document styles
   d->sheetFormatIndex = 1;
   d->columnFormatIndex = 1;
   d->rowFormatIndex = 1;
   d->cellFormatIndex = 1;
-  if ( !storeout->open( "styles.xml" ) )
+  if ( !d->createStyles( &oasisStore ) ) 
   {
     kdWarning() << "Couldn't open the file 'styles.xml'." << endl;
+    delete d->workbook;
+    delete storeout;
     return KoFilter::CreationError;
   }
-  storeout->write( d->createStyles() );
-  storeout->close();
 
   // store document content
   d->sheetFormatIndex = 1;
   d->columnFormatIndex = 1;
   d->rowFormatIndex = 1;
   d->cellFormatIndex = 1;
-  if ( !storeout->open( "content.xml" ) )
+  if ( !d->createContent( &oasisStore ) )
   {
     kdWarning() << "Couldn't open the file 'content.xml'." << endl;
+    delete d->workbook;
+    delete storeout;
     return KoFilter::CreationError;
   }
-  storeout->write( d->createContent() );
-  storeout->close();
 
   // store document manifest
-  storeout->enterDirectory( "META-INF" );
-  if ( !storeout->open( "manifest.xml" ) )
+  if ( !d->createManifest( &oasisStore ) )
   {
-     kdWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
-     return KoFilter::CreationError;
+    kdWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+    delete d->workbook;
+    delete storeout;
+    return KoFilter::CreationError;
   }
-  storeout->write( d->createManifest() );
-  storeout->close();
 
   // we are done!
   delete d->workbook;
@@ -183,26 +188,12 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   return KoFilter::OK;
 }
 
-QByteArray ExcelImport::Private::createContent()
+bool ExcelImport::Private::createContent( KoOasisStore* store )
 {
-  KoXmlWriter* contentWriter;
-  QByteArray contentData;
-  QBuffer contentBuffer( contentData );
-
-  contentBuffer.open( IO_WriteOnly );
-  contentWriter = new KoXmlWriter( &contentBuffer );
-
-  contentWriter->startDocument( "office:document-content" );
-  contentWriter->startElement( "office:document-content" );
-  
-  contentWriter->addAttribute( "xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0" );
-  contentWriter->addAttribute( "xmlns:style", "urn:oasis:names:tc:opendocument:xmlns:style:1.0" );
-  contentWriter->addAttribute( "xmlns:text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0" );
-  contentWriter->addAttribute( "xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" );
-  contentWriter->addAttribute( "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
-  contentWriter->addAttribute( "xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" );
-  contentWriter->addAttribute( "xmlns:svg","urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
-  contentWriter->addAttribute( "office:version","1.0" );
+  KoXmlWriter* bodyWriter = store->bodyWriter();
+  KoXmlWriter* contentWriter = store->contentWriter();
+  if ( !bodyWriter || !contentWriter )
+    return false;
 
   // FIXME this is dummy and hardcoded, replace with real font names
   contentWriter->startElement( "office:font-face-decls" );
@@ -230,32 +221,19 @@ QByteArray ExcelImport::Private::createContent()
   columnFormatIndex = 1;
   rowFormatIndex = 1;
   cellFormatIndex = 1;
-  contentWriter->startElement( "office:body" );
-  processWorkbookForBody( workbook, contentWriter );
-  contentWriter->endElement();  // office:body
+  bodyWriter->startElement( "office:body" );
+  processWorkbookForBody( workbook, bodyWriter );
+  bodyWriter->endElement();  // office:body
   
-  contentWriter->endElement();  // office:document-content
-  contentWriter->endDocument();
-  
-  delete contentWriter;
-
-  // for troubleshooting only !!
-  QString dbg;
-  for( unsigned i=0; i<contentData.size(); i++ )
-    dbg.append( contentData[i] );
-  printf("\ncontent.xml:\n%s\n", dbg.latin1() );
-
-  return contentData;
+  return store->closeContentWriter();
 }
 
-QByteArray ExcelImport::Private::createStyles()
+bool ExcelImport::Private::createStyles( KoOasisStore* store )
 {
-  KoXmlWriter* stylesWriter;
-  QByteArray stylesData;
-  QBuffer stylesBuffer( stylesData );
-
-  stylesBuffer.open( IO_WriteOnly );
-  stylesWriter = new KoXmlWriter( &stylesBuffer );
+  if ( !store->store()->open( "styles.xml" ) )
+    return false;
+  KoStoreDevice dev( store->store() );
+  KoXmlWriter* stylesWriter = new KoXmlWriter( &dev );
 
   // FIXME this is dummy default, replace if necessary
   stylesWriter->startDocument( "office:document-styles" );
@@ -303,23 +281,12 @@ QByteArray ExcelImport::Private::createStyles()
   
   delete stylesWriter;
 
-  // for troubleshooting only !!
-  QString dbg;
-  for( unsigned i=0; i<stylesData.size(); i++ )
-    dbg.append( stylesData[i] );
-  printf("\nstyles.xml:\n%s\n", dbg.latin1() );
-
-  return stylesData;
+  return store->store()->close();
 }
 
-QByteArray ExcelImport::Private::createManifest()
+bool ExcelImport::Private::createManifest( KoOasisStore* store )
 {
-  KoXmlWriter* manifestWriter;
-  QByteArray manifestData;
-  QBuffer manifestBuffer( manifestData );
-
-  manifestBuffer.open( IO_WriteOnly );
-  manifestWriter = new KoXmlWriter( &manifestBuffer );
+  KoXmlWriter* manifestWriter = store->manifestWriter( "application/vnd.oasis.opendocument.spreadsheet" );
   
   manifestWriter->startDocument( "manifest:manifest" );
   manifestWriter->startElement( "manifest:manifest" );
@@ -329,15 +296,8 @@ QByteArray ExcelImport::Private::createManifest()
   manifestWriter->addManifestEntry( "content.xml", "text/xml" );
   manifestWriter->endElement();
   manifestWriter->endDocument();
-  delete manifestWriter;
 
-  // for troubleshooting only !!
-  QString dbg;
-  for( unsigned i=0; i<manifestData.size(); i++ )
-    dbg.append( manifestData[i] );
-  printf("\nmanifest.xml:\n%s\n", dbg.latin1() );
-
-  return manifestData;
+  return store->closeManifestWriter();
 }
 
 void ExcelImport::Private::processWorkbookForBody( Workbook* workbook, KoXmlWriter* xmlWriter )
