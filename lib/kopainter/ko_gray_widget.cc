@@ -26,7 +26,6 @@
 #include <qcolor.h>
 
 #include <kdebug.h>
-#include <kdualcolorbutton.h>
 
 #include <koFrameButton.h>
 #include <koColorSlider.h>
@@ -79,25 +78,25 @@ void KoGrayWidget::slotChanged(int v)
     v = 255 - v;
 
     if (m_ColorButton->current() == KDualColorButton::Foreground){
-        m_fgColor.setRgb(v, v, v);
-        m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	emit sigFgColorChanged(m_fgColor);
+        slotFGColorSelected( QColor( v, v, v));
     }
     else{
-        m_bgColor.setRgb(v, v, v);
-        m_ColorButton->setCurrent(KDualColorButton::Background);
-	emit sigBgColorChanged(m_bgColor);
+        slotBGColorSelected( QColor( v, v, v));
     }
 }
 
 void KoGrayWidget::setFgColor(const QColor & c)
 {
-    update(c, m_bgColor);
+    blockSignals(true);
+    slotFGColorSelected(c);
+    blockSignals(false);
 }
 
 void KoGrayWidget::setBgColor(const QColor & c)
 {
-    update(m_fgColor, c);
+    blockSignals(true);
+    slotBGColorSelected(c);
+    blockSignals(false);
 }
 
 void KoGrayWidget::update(const QColor & fgColor, const QColor & bgColor)
@@ -108,12 +107,8 @@ void KoGrayWidget::update(const QColor & fgColor, const QColor & bgColor)
 
     QColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
-    disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-    disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
     disconnect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
     disconnect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
-    m_ColorButton->setForeground( m_fgColor );
-    m_ColorButton->setBackground( m_bgColor );
 
     mIn->blockSignals(true);
     mSlider->blockSignals(true);
@@ -125,8 +120,6 @@ void KoGrayWidget::update(const QColor & fgColor, const QColor & bgColor)
     mIn->blockSignals(false);
     mSlider->blockSignals(false);
 
-    connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-    connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
     connect(mSlider, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
     connect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
 }
@@ -134,13 +127,31 @@ void KoGrayWidget::update(const QColor & fgColor, const QColor & bgColor)
 void KoGrayWidget::slotFGColorSelected(const QColor& c)
 {
     m_fgColor = c;
+
+    disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    m_ColorButton->setForeground( m_fgColor );
+    connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+
     emit sigFgColorChanged(m_fgColor);
 }
 
 void KoGrayWidget::slotBGColorSelected(const QColor& c)
 {
     m_bgColor = c;
+
+    disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+    m_ColorButton->setBackground( m_bgColor );
+    connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+
     emit sigBgColorChanged(m_bgColor);
+}
+
+void KoGrayWidget::currentChanged(KDualColorButton::DualColor s)
+{
+   if(s == KDualColorButton::Foreground)
+     slotFGColorSelected(m_ColorButton->currentColor());
+   else
+     slotBGColorSelected(m_ColorButton->currentColor());
 }
 
 #include "ko_gray_widget.moc"

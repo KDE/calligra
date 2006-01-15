@@ -34,7 +34,6 @@
 #include <koFrameButton.h>
 #include <koColorSlider.h>
 #include <kcolordialog.h>
-#include <kdualcolorbutton.h>
 
 KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name)
 {
@@ -101,6 +100,7 @@ KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name
 
     connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
     connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+    connect(m_ColorButton, SIGNAL(currentChanged(KDualColorButton::DualColor)), this, SLOT(currentChanged(KDualColorButton::DualColor)));
 
     /* connect color sliders */
     connect(mRSlider, SIGNAL(valueChanged(int)), this, SLOT(slotRChanged(int)));
@@ -111,58 +111,46 @@ KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name
     connect(mRIn, SIGNAL(valueChanged(int)), this, SLOT(slotRChanged(int)));
     connect(mGIn, SIGNAL(valueChanged(int)), this, SLOT(slotGChanged(int)));
     connect(mBIn, SIGNAL(valueChanged(int)), this, SLOT(slotBChanged(int)));
+
+    update(Qt::black, Qt::white);
 }
 
 void KoRGBWidget::slotRChanged(int r)
 {
-    if (m_ColorButton->current() == KDualColorButton::Foreground){
-        m_fgColor.setRgb(r, m_fgColor.green(), m_fgColor.blue());
-        m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	emit sigFgColorChanged(m_fgColor);
-    }
-    else{
-        m_bgColor.setRgb(r, m_bgColor.green(), m_bgColor.blue());
-        m_ColorButton->setCurrent(KDualColorButton::Background);
-	emit sigBgColorChanged(m_bgColor);
-    }
+    if (m_ColorButton->current() == KDualColorButton::Foreground)
+        slotFGColorSelected( QColor(r, m_fgColor.green(), m_fgColor.blue()));
+    else
+        slotBGColorSelected( QColor(r, m_bgColor.green(), m_bgColor.blue()));
 }
 
 void KoRGBWidget::slotGChanged(int g)
 {
-    if (m_ColorButton->current() == KDualColorButton::Foreground){
-        m_fgColor.setRgb(m_fgColor.red(), g, m_fgColor.blue());
-        m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	emit sigFgColorChanged(m_fgColor);
-    }
-    else{
-        m_bgColor.setRgb(m_bgColor.red(), g, m_bgColor.blue());
-        m_ColorButton->setCurrent(KDualColorButton::Background);
-	emit sigBgColorChanged(m_bgColor);
-    }
+    if (m_ColorButton->current() == KDualColorButton::Foreground)
+        slotFGColorSelected( QColor( m_fgColor.red(), g, m_fgColor.blue()));
+    else
+        slotBGColorSelected( QColor( m_bgColor.red(), g, m_bgColor.blue()));;
 }
 
 void KoRGBWidget::slotBChanged(int b)
 {
-    if (m_ColorButton->current() == KDualColorButton::Foreground){
-        m_fgColor.setRgb(m_fgColor.red(), m_fgColor.green(), b);
-        m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	emit sigFgColorChanged(m_fgColor);
-    }
-    else{
-        m_bgColor.setRgb(m_bgColor.red(), m_bgColor.green(), b);
-        m_ColorButton->setCurrent(KDualColorButton::Background);
-	emit sigBgColorChanged(m_bgColor);
-    }
+    if (m_ColorButton->current() == KDualColorButton::Foreground)
+        slotFGColorSelected( QColor( m_fgColor.red(), m_fgColor.green(), b));
+    else
+        slotBGColorSelected( QColor( m_bgColor.red(), m_bgColor.green(), b));
 }
 
 void KoRGBWidget::setFgColor(const QColor & c)
 {
-    update(c, m_bgColor);
+    blockSignals(true);
+    slotFGColorSelected(c);
+    blockSignals(false);
 }
 
 void KoRGBWidget::setBgColor(const QColor & c)
 {
-    update(m_fgColor, c);
+    blockSignals(true);
+    slotBGColorSelected(c);
+    blockSignals(false);
 }
 
 void KoRGBWidget::update(const QColor fgColor, const QColor bgColor)
@@ -176,15 +164,6 @@ void KoRGBWidget::update(const QColor fgColor, const QColor bgColor)
     int r = color.red();
     int g = color.green();
     int b = color.blue();
-
-    disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-    disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
-
-    m_ColorButton->setForeground( m_fgColor );
-    m_ColorButton->setBackground( m_bgColor );
-
-    connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
-    connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
 
     mRSlider->blockSignals(true);
     mRIn->blockSignals(true);
@@ -218,14 +197,33 @@ void KoRGBWidget::update(const QColor fgColor, const QColor bgColor)
 
 void KoRGBWidget::slotFGColorSelected(const QColor& c)
 {
-    m_fgColor = QColor(c);
+    m_fgColor = c;
+    disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+    m_ColorButton->setForeground( m_fgColor );
+    connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
+
+    update( m_fgColor, m_bgColor);
     emit sigFgColorChanged(m_fgColor);
 }
 
 void KoRGBWidget::slotBGColorSelected(const QColor& c)
 {
-    m_bgColor = QColor(c);
+    m_bgColor = c;
+
+    disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+    m_ColorButton->setBackground( m_bgColor );
+    connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
+
+    update(m_fgColor, m_bgColor);
     emit sigBgColorChanged(m_bgColor);
+}
+
+void KoRGBWidget::currentChanged(KDualColorButton::DualColor s)
+{
+   if(s == KDualColorButton::Foreground)
+     slotFGColorSelected(m_ColorButton->currentColor());
+   else
+     slotBGColorSelected(m_ColorButton->currentColor());
 }
 
 #include "ko_rgb_widget.moc"

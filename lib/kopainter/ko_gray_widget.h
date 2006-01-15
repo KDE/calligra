@@ -22,6 +22,7 @@
 #include "qwidget.h"
 
 #include <koffice_export.h>
+#include <kdualcolorbutton.h>
 
 class KoFrameButton;
 class QGridLayout;
@@ -61,6 +62,7 @@ protected slots:
 
     void slotFGColorSelected(const QColor& c);
     void slotBGColorSelected(const QColor& c);
+    void currentChanged(KDualColorButton::DualColor);
 
 private:
 

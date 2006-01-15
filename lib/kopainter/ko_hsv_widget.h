@@ -20,6 +20,7 @@
 #define KO_HSV_WIDGET_H
 
 #include "qwidget.h"
+#include "kdualcolorbutton.h"
 
 #include "koColor.h"
 
@@ -68,8 +69,11 @@ protected slots:
 
     void slotFGColorSelected(const QColor& c);
     void slotBGColorSelected(const QColor& c);
+    void currentChanged(KDualColorButton::DualColor);
 
 private:
+    void changedFgColor();
+    void changedBgColor();
 
     void update(const KoColor & fgColor, const KoColor & bgColor);
 
@@ -86,7 +90,6 @@ private:
     KoColor m_fgColor;
     KoColor m_bgColor;
 
-    bool locked;
     bool autovalue;
 };
 
