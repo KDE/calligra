@@ -2,7 +2,7 @@ AC_ARG_ENABLE(scripting,
     AC_HELP_STRING([--enable-scripting],
                    [build scripting library (Kross) [default=yes]]),
     compile_kross=$enableval, compile_kross=yes)
-AM_CONDITIONAL(compile_kross, test "x$compile_kross" != "xyes")
+AM_CONDITIONAL(compile_kross, test "x$compile_kross" = "xyes")
 
 ###############################
 # Check if Python is installed.
