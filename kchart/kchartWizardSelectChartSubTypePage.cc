@@ -51,7 +51,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     m_percent = new QRadioButton( i18n( "Percent" ), grp );
 
     QHBox   *hbox = new QHBox( this );
-    QLabel  *lbl  = new QLabel( i18n( "Number of Lines: "), hbox );
+    QLabel  *lbl  = new QLabel( i18n( "Number of lines: "), hbox );
     m_numLines    = new QSpinBox( hbox );
 
     if( ( m_chart->chartType() == KChartParams::Bar &&

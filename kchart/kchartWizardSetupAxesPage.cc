@@ -42,8 +42,8 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     
     //grid = new QCheckBox( i18n( "Has grid:" ), tmpQGroupBox  );
     new QLabel( i18n( "Grid Lines" ), tmpQGroupBox );
-    gridX = new QCheckBox( i18n( "X Axis:" ), tmpQGroupBox  );
-    gridY = new QCheckBox( i18n( "Y Axid:" ), tmpQGroupBox  );
+    gridX = new QCheckBox( i18n( "X axis:" ), tmpQGroupBox  );
+    gridY = new QCheckBox( i18n( "Y axis:" ), tmpQGroupBox  );
 
     gridX->setChecked(_chart->params()->showGrid());
     gridY->setChecked(_chart->params()->showGrid());
