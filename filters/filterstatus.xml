@@ -349,25 +349,53 @@
 
         <application id="krita">
             <title xml:lang="en_US">Krita</title> <foreword
-            xml:lang="en_US"> Krita uses &lt;a
+            xml:lang="en_US"> Krita can use &lt;a
             href="http://imagemagick.org/"&gt;ImageMagick&lt;/a&gt;
-            for importing and exporting images. This means that Krita
-            can work with all images that your installation of
-            ImageMagick supports. This includes all common image file
-            formats, including the native formats of Photoshop and the
-            Gimp.  &lt;br /&gt; &lt;a
+            for importing and exporting images. This means that, in
+            addition to the file formats listed below, Krita can work
+            with all images that your installation of ImageMagick
+            supports. This includes all common image file formats,
+            including the native formats of Photoshop and the Gimp.
+            &lt;br /&gt; &lt;a
             href="http://imagemagick.org/script/formats.php"&gt;More
             information on file formats supported by
             ImageMagick.&lt;/a&gt;
             </foreword>
+            <filter id="krita_png">
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/png"/>
+                <title xml:lang="en_us">PNG</title>
+                <note xml:lang="en_us">Portable Network Graphics</note>
+                <stat import="fourstars" export="fourstars"/>
+            </filter>
+            <filter id="krita_jpeg">
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/jpeg"/>
+                <title xml:lang="en_us">JPEG</title>
+                <stat import="fourstars" export="fourstars"/>
+            </filter>
+            <filter id="krita_tiff">
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/tiff"/>
+                <title xml:lang="en_us">TIFF</title>
+                <stat import="threestars" export="threestars"/>
+            </filter>
+            <filter id="krita_raw">
+                <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/raw"/>
+                <title xml:lang="en_us">RAW</title>
+                <stat import="onestar" export="none"/>
+            </filter>
             <filter id="krita_openexr">
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/openexr"/>
                 <title xml:lang="en_us">OpenEXR</title>
+                <note xml:lang="en_us">
+                &lt;a href="http://www.openexr.com/"&gt;OpenEXR&lt;/a&gt; is a high dynamic-range (HDR) format &lt;br /&gt; 
+                developed by &lt;a href="http://www.ilm.com"&gt;Industrial Light &amp; Magic&lt;/a&gt;
+                </note>
                 <stat import="fourstars" export="fourstars"/>
             </filter>
             <filter id="krita_xcf">
                 <websvn importsuffix="#import" exportsuffix="#export" path="koffice/filters/krita/xcf"/>
                 <title xml:lang="en_us">Gimp (XCF)</title>
+                <note xml:lang="en_us">Native file format of the 
+                    &lt;a href="http://www.gimp.org/"&gt;Gimp&lt;/a&gt;</note>
                 <stat import="planned" export="planned"/>
             </filter>
         </application>
