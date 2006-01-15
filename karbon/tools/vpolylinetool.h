@@ -48,6 +48,8 @@ class QCursor;
 
 class VPolylineTool : public VTool
 {
+	Q_OBJECT
+
 	public:
 		VPolylineTool( KarbonView *view );
 		~VPolylineTool(); 
@@ -106,6 +108,8 @@ class VPolylineTool : public VTool
 		 * Indicates if the polyline is to close.
 		 */
 		bool m_close;
+	protected slots:
+		void commandExecuted();
 
 	private:
 		QCursor* m_crossCursor;

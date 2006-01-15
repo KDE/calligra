@@ -36,6 +36,7 @@
 #include <render/vpainterfactory.h>
 #include "vpolylinetool.h"
 #include <commands/vshapecmd.h>
+#include <commands/vcommand.h>
 #include <widgets/vcanvas.h>
 
 VPolylineTool::VPolylineTool( KarbonView *view )
@@ -74,6 +75,8 @@ VPolylineTool::activate()
 
 	m_bezierPoints.clear();
 	m_close = false;
+
+	connect( view()->part()->commandHistory(), SIGNAL(commandExecuted()), this, SLOT(commandExecuted()) );
 }
 
 void
@@ -117,6 +120,8 @@ VPolylineTool::deactivate()
 			polyline->close();
 	}
 
+	m_bezierPoints.clear();
+
 	if( polyline )
 	{
 		VShapeCmd* cmd = new VShapeCmd(
@@ -127,6 +132,8 @@ VPolylineTool::deactivate()
 
 		view()->part()->addCommand( cmd, true );
 	}
+
+	disconnect( view()->part()->commandHistory(), SIGNAL(commandExecuted()), this, SLOT(commandExecuted()) );
 }
 
 void
@@ -485,3 +492,10 @@ VPolylineTool::setup( KActionCollection *collection )
 	}
 }
 
+void 
+VPolylineTool::commandExecuted()
+{
+	cancel();
+}
+
+#include "vpolylinetool.moc"
