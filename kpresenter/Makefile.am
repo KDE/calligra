@@ -28,7 +28,7 @@ libkpresenterprivate_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp \
 	KPrPageIface.skel KPrPageIface.cpp \
 	KPrSideBar.cpp \
 	insertpagedia.ui \
-	KPrConfig.cpp KPrVariableCollection.cpp KPrTextDrag.cpp \
+	KPrConfig.cpp KPrVariableCollection.cpp \
 	KPrTextDocument.cpp KPrPointObject.cpp KPrFreehandObject.cpp KPrPolylineObject.cpp \
     KPrBezierCurveObject.cpp \
 	KPrPolygonObject.cpp KPrNoteBar.cpp \

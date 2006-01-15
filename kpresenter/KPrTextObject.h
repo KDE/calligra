@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,6 +28,8 @@
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 #include <koStyleStack.h>
 
+class QDragObject;
+
 class KoSavingContext;
 class KPrView;
 class KPrDocument;
@@ -42,7 +44,6 @@ class KCommand;
 class KPrCanvas;
 class KoPoint;
 class KoVariable;
-class KPrTextDrag;
 class KPrTextDocument;
 class DCOPObject;
 class KPrPage;
@@ -285,9 +286,9 @@ public slots:
 protected slots:
     virtual void startDrag();
 
-    KPrTextDrag * newDrag( QWidget * parent );
-
 protected:
+    bool canDecode( QMimeSource *e );
+    QDragObject * newDrag( QWidget * parent );
     // Reimplemented from KoTextView
     virtual void doAutoFormat( KoTextCursor* cursor, KoTextParag *parag, int index, QChar ch );
     virtual bool doIgnoreDoubleSpace(KoTextParag * parag, int index,QChar ch );

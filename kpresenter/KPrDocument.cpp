@@ -1413,7 +1413,7 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
     //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
 }
 
-void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles ) const
+void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles, SaveFlag saveFlag ) const
 {
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
@@ -1459,34 +1459,40 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
 
     stylesWriter->endElement(); // office:styles
 
-    stylesWriter->startElement( "office:automatic-styles" );
-    styles = mainStyles.styles( STYLE_BACKGROUNDPAGE );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:drawing-page-properties"  );
+    if ( saveFlag == SaveAll )
+    {
+        stylesWriter->startElement( "office:automatic-styles" );
+        styles = mainStyles.styles( STYLE_BACKGROUNDPAGE );
+        it = styles.begin();
+        for ( ; it != styles.end() ; ++it ) {
+            (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:drawing-page-properties"  );
+        }
+
+        // if there's more than one pagemaster we need to rethink all this
+        styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+        Q_ASSERT( styles.count() == 1 );
+        it = styles.begin();
+        for ( ; it != styles.end() ; ++it ) {
+            (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
+            stylesWriter->endElement();
+        }
+
+        styles = mainStyles.styles( STYLE_PRESENTATIONSTICKYOBJECT );
+        it = styles.begin();
+        for ( ; it != styles.end() ; ++it ) {
+            //TODO fix me graphic-properties ???
+            (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+        }
+
+        stylesWriter->endElement(); // office:automatic-styles
+
+        if ( masterStyles )
+        {
+            stylesWriter->startElement( "office:master-styles" );
+            stylesWriter->addCompleteElement( masterStyles );
+            stylesWriter->endElement(); 
+        }
     }
-
-    // if there's more than one pagemaster we need to rethink all this
-    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
-    Q_ASSERT( styles.count() == 1 );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
-        stylesWriter->endElement();
-    }
-
-    styles = mainStyles.styles( STYLE_PRESENTATIONSTICKYOBJECT );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        //TODO fix me graphic-properties ???
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
-    }
-
-    stylesWriter->endElement(); // office:automatic-styles
-
-    stylesWriter->startElement( "office:master-styles" );
-    stylesWriter->addCompleteElement( masterStyles );
-    stylesWriter->endElement(); 
 
     stylesWriter->endElement(); // root element (office:document-styles)
     stylesWriter->endDocument();

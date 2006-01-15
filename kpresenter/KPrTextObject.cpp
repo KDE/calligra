@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@
 #include "KPrDocument.h"
 #include "KPrBgSpellCheck.h"
 #include "KPrVariableCollection.h"
-#include "KPrTextDrag.h"
 
 #include <KoAutoFormat.h>
 #include <KoTextParag.h>
@@ -47,6 +46,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <kmultipledrag.h>
 
 #include <qfont.h>
 #include <qfile.h>
@@ -68,6 +68,9 @@
 #include <KoSize.h>
 #include <koxmlns.h>
 #include <kodom.h>
+#include <KoStore.h>
+#include <KoStoreDrag.h>
+#include <koOasisStore.h>
 
 #include <float.h>
 using namespace std;
@@ -1817,8 +1820,8 @@ void KPrTextView::copy()
 {
     //kdDebug(33001)<<"void KPrTextView::copy() "<<endl;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
-        KPrTextDrag *kd = newDrag( 0L );
-        QApplication::clipboard()->setData( kd );
+        QDragObject *drag = newDrag( 0 );
+        QApplication::clipboard()->setData( drag );
     }
 }
 
@@ -2030,7 +2033,7 @@ void KPrTextView::startDrag()
 {
     textView()->dragStarted();
     m_canvas->dragStarted();
-    KPrTextDrag *drag = newDrag( m_canvas );
+    QDragObject *drag = newDrag( m_canvas );
     if ( !kpTextObject()->kPresenterDocument()->isReadWrite() )
         drag->dragCopy();
     else
@@ -2356,87 +2359,74 @@ void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format, bool re
     }
 }
 
-KPrTextDrag * KPrTextView::newDrag( QWidget * parent )
+bool KPrTextView::canDecode( QMimeSource *e )
 {
-#if 1 //old koffice-1.3 format
-    KoTextCursor c1 = textDocument()->selectionStartCursor( KoTextDocument::Standard );
-    KoTextCursor c2 = textDocument()->selectionEndCursor( KoTextDocument::Standard );
+    return kpTextObject()->kPresenterDocument()->isReadWrite() && ( KoTextObject::providesOasis( e ) || QTextDrag::canDecode( e ) );
+}
 
-    QString plainText;
+QDragObject * KPrTextView::newDrag( QWidget * parent )
+{
+    QBuffer buffer;
+    const QCString mimeType = "application/vnd.oasis.opendocument.text";
+    KoStore * store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
+    Q_ASSERT( store );
+    Q_ASSERT( !store->bad() );
 
-    QDomDocument domDoc( "PARAGRAPHS" );
-    QDomElement elem = domDoc.createElement( "TEXTOBJ" );
-    domDoc.appendChild( elem );
-    if ( c1.parag() == c2.parag() )
-    {
-        plainText = c1.parag()->toString( c1.index(), c2.index() - c1.index() );
+    KoOasisStore oasisStore( store );
 
-        m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c2.index()-1 );
-    }
-    else
-    {
-        plainText += c1.parag()->toString( c1.index() ) + "\n";
-
-        m_kptextobj->saveParagraph( domDoc, c1.parag(), elem, c1.index(), c1.parag()->length()-1 );
-        KoTextParag *p = c1.parag()->next();
-        while ( p && p != c2.parag() ) {
-            plainText += p->toString() + "\n";
-            m_kptextobj->saveParagraph( domDoc, p, elem, 0, p->length()-2 );
-            p = p->next();
-        }
-        plainText += c2.parag()->toString( 0, c2.index() );
-        m_kptextobj->saveParagraph( domDoc, c2.parag(), elem, 0, c2.index()-1 );
-    }
-    const QCString cstr = domDoc.toCString();
-#else
-    KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles, KoSavingContext::Flat );
-
-    // Save user styles as KoGenStyle objects - useful when pasting to another document
+    //KoXmlWriter* manifestWriter = oasisStore.manifestWriter( mimeType );
+    
     KPrDocument * doc = kpTextObject()->kPresenterDocument();
-    doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
+    
+    doc->getVariableCollection()->variableSetting()->setModificationDate( QDateTime::currentDateTime() );
+    doc->recalcVariables( VT_DATE );
+    doc->recalcVariables( VT_TIME );
+    doc->recalcVariables( VT_STATISTIC );
 
-    QBuffer buff;
-    buff.open( IO_WriteOnly );
-    KoXmlWriter* contentWriter = KoDocument::createOasisXmlWriter( &buff, "office:document-content" );
-    // not sure how to avoid copy/pasting that code...
-    KTempFile contentTmpFile;
-    contentTmpFile.setAutoDelete( true );
-    QFile* tmpFile = contentTmpFile.file();
-    KoXmlWriter contentTmpWriter( tmpFile, 1 );
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:presentation" );
+    KoGenStyles mainStyles;
+    KoSavingContext savingContext( mainStyles, 0, false, KoSavingContext::Store );
 
-    const QString plainText = textDocument()->copySelection( contentTmpWriter, savingContext, KoTextDocument::Standard );
+    doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
 
-    contentTmpWriter.endElement(); // office:text
-    contentTmpWriter.endElement(); // office:body
+    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:text" );
 
-    // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    KPrDocument::writeAutomaticStyles( *contentWriter, mainStyles );
+    const QString plainText = textDocument()->copySelection( *bodyWriter, savingContext, KoTextDocument::Standard );
 
-    // And now we can copy over the contents from the tempfile to the real one
-    tmpFile->close();
-    contentWriter->addCompleteElement( tmpFile );
-    contentTmpFile.close();
-    contentWriter->endElement(); // document-content
-    contentWriter->endDocument();
-    delete contentWriter;
+    bodyWriter->endElement(); // office:text
+    bodyWriter->endElement(); // office:body
 
-    const QByteArray data = buff.buffer();
-    const QCString cstr( data.data(), data.size() + 1 ); // null-terminate
+    KoXmlWriter* contentWriter = oasisStore.contentWriter();
+    Q_ASSERT( contentWriter );
 
-#endif
-    KPrTextDrag *kd = new KPrTextDrag( parent );
-    kd->setPlain( plainText );
-    kd->setKPresenter( cstr );
-    kdDebug(33001) << "KPrTextView::newDrag " << cstr << endl;
-    return kd;
+    //KPrDocument * doc = kpTextObject()->kPresenterDocument();
+    doc->writeAutomaticStyles( *contentWriter, mainStyles, savingContext );
+
+    oasisStore.closeContentWriter();
+
+    if ( !store->open( "styles.xml" ) )
+        return false;
+    //manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+    doc->saveOasisDocumentStyles( store, mainStyles, 0, KPrDocument::SaveSelected /* simply means not SaveAll */ );
+    if ( !store->close() ) // done with styles.xml
+        return false;
+
+    delete store;
+
+    KMultipleDrag* multiDrag = new KMultipleDrag( parent );
+    if (  !plainText.isEmpty() )
+        multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
+    KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
+    kdDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
+    storeDrag->setEncodedData( buffer.buffer() );
+    multiDrag->addDragObject( storeDrag );
+    return multiDrag;
 }
 
 void KPrTextView::dragEnterEvent( QDragEnterEvent *e )
 {
-    if ( !kpTextObject()->kPresenterDocument()->isReadWrite() || !KPrTextDrag::canDecode( e ) )
+    if ( !canDecode( e ) )
     {
         e->ignore();
         return;
@@ -2446,8 +2436,7 @@ void KPrTextView::dragEnterEvent( QDragEnterEvent *e )
 
 void KPrTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 {
-    KPrDocument *doc= kpTextObject()->kPresenterDocument();
-    if ( !doc->isReadWrite() || !KPrTextDrag::canDecode( e ) )
+    if ( !canDecode( e ) )
     {
         e->ignore();
         return;
@@ -2462,9 +2451,9 @@ void KPrTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 
 void KPrTextView::dropEvent( QDropEvent * e )
 {
-    KPrDocument *doc = kpTextObject()->kPresenterDocument();
-    if ( doc->isReadWrite() && KPrTextDrag::canDecode( e ) )
+    if ( canDecode( e ) )
     {
+        KPrDocument *doc = kpTextObject()->kPresenterDocument();
         e->acceptAction();
         KoTextCursor dropCursor( textDocument() );
         QPoint dropPoint = viewToInternal( e->pos() );
