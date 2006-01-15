@@ -3,6 +3,8 @@
 #include "kchart_view.h"
 #include "kchart_part.h"
 
+#include <qhbox.h>
+#include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
@@ -11,6 +13,7 @@
 #include <qvbuttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
+#include <qlineedit.h>
 #include <qpainter.h>
 
 #include <kdebug.h>
@@ -27,14 +30,27 @@ namespace KChart
 KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* parent,
                                                                         KChartPart* chart ) :
   QWidget( parent ),
-  _chart( chart )
+  m_chart( chart )
 {
-    QGridLayout *grid1 = new QGridLayout(this, 2, 1, KDialog::marginHint(),
-                     KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout(this, 6, 1, KDialog::marginHint(),
+					 KDialog::spacingHint());
 
-    QButtonGroup* gb = new QVButtonGroup( i18n( "Data Format" ), this );
-    QGridLayout *grid2 = new QGridLayout(gb, 2, 1, KDialog::marginHint(),
-                     KDialog::spacingHint());
+    // The Data Area
+    QHBox   *hbox = new QHBox( this );
+    (void) new QLabel( i18n("Data Area: "), hbox);
+    m_dataArea = new QLineEdit( hbox );
+    grid1->addWidget(hbox, 0, 0);
+
+    // The row/column as label checkboxes. 
+    m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), this);
+    grid1->addWidget(m_firstRowAsLabel, 1, 0);
+    m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), this);
+    grid1->addWidget(m_firstColAsLabel, 2, 0);
+
+    // The Data Format button group
+    QButtonGroup *gb = new QVButtonGroup( i18n( "Data Format" ), this );
+    QGridLayout  *grid2 = new QGridLayout(gb, 2, 1, KDialog::marginHint(),
+					  KDialog::spacingHint());
 
     m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb );
     m_rowMajor->resize( m_rowMajor->sizeHint() );
@@ -46,12 +62,23 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
     grid2->setColStretch(1, 0);
 
     grid2->activate();
-    grid1->addWidget(gb, 0, 0);
-    grid1->setColStretch(1, 0);
+    grid1->addWidget(gb, 3, 0);
+
+    QLabel *lbl = new QLabel( i18n( 
+        "\n"
+	"If the selected data area do not match the data you want,\n"
+	"then select the data now.\n"
+	"\n"
+	"Include cells that you want to use as row and column labels\n"
+	"if you want them in the chart.\n"
+	), this);
+    grid1->addWidget(lbl, 4, 0);
+
+    grid1->setColStretch(5, 0);
 
     grid1->activate();
 
-    if( _chart->auxdata()->m_dataDirection == KChartAuxiliary::DataColumns)
+    if( m_chart->auxdata()->m_dataDirection == KChartAuxiliary::DataColumns)
       m_colMajor->setChecked(true);
     else
       m_rowMajor->setChecked(true);
@@ -62,9 +89,9 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 void KChartWizardSelectDataFormatPage::apply()
 {
     if (m_rowMajor->isChecked())
-      _chart->auxdata()->m_dataDirection = KChartAuxiliary::DataRows;
+      m_chart->auxdata()->m_dataDirection = KChartAuxiliary::DataRows;
     else
-      _chart->auxdata()->m_dataDirection = KChartAuxiliary::DataColumns;
+      m_chart->auxdata()->m_dataDirection = KChartAuxiliary::DataColumns;
 }
 
 

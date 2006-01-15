@@ -32,7 +32,7 @@ KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* na
 
     // First page: select the range
     m_selectdataformatpage = new KChartWizardSelectDataFormatPage(this, m_chart);
-    addPage( m_selectdataformatpage, i18n("Select Data Format"));
+    addPage( m_selectdataformatpage, i18n("Data"));
     setFinishEnabled(m_selectdataformatpage, true);
     setHelpEnabled(m_selectdataformatpage, false);
     

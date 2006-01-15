@@ -1,12 +1,15 @@
 #ifndef _kchartWIZARDSELECTDATAFORMATPAGE_H
 #define _kchartWIZARDSELECTDATAFORMATPAGE_H
 
-#include <qradiobutton.h>
 
 #include "kchart_params.h"
 
+class QLineEdit;
+class QRadioButton;
+class QCheckBox;
 class QButtonGroup;
 class QPushButton;
+
 
 namespace KChart
 {
@@ -23,10 +26,13 @@ public slots:
   void apply();
 
 private:
-  KChartPart* _chart;
+  KChartPart   *m_chart;
   
-  QRadioButton* m_rowMajor;
-  QRadioButton* m_colMajor;
+  QLineEdit    *m_dataArea;
+  QRadioButton *m_rowMajor;
+  QRadioButton *m_colMajor;
+  QCheckBox    *m_firstRowAsLabel;
+  QCheckBox    *m_firstColAsLabel;
 };
 
 }  //KChart namespace
