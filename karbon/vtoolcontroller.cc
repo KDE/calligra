@@ -52,6 +52,10 @@ VToolController::setCurrentTool( VTool *tool )
 	else
 	{
 		m_currentTool = tool;
+
+		if( ! tool )
+			return;
+
 		m_currentTool->action()->setChecked( true );
 		m_currentTool->action()->activate();
 	}
