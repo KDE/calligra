@@ -35,6 +35,22 @@ namespace KChart
 class KChartParams : public KDChartParams
 {
   public:
+    typedef enum {
+	// From KDChart
+	NoType     = KDChartParams::NoType,
+	Bar        = KDChartParams::Bar,
+	Line       = KDChartParams::Line,
+	Area       = KDChartParams::Area,
+	Pie        = KDChartParams::Pie,
+	HiLo       = KDChartParams::HiLo,
+	Ring       = KDChartParams::Ring,
+	Polar      = KDChartParams::Polar,
+	BoxWhisker = KDChartParams::BoxWhisker,
+    
+	// Only in KChart
+	BarLines,
+    } ChartType;
+
     KChartParams();
     ~KChartParams();
 

@@ -36,7 +36,8 @@ protected:
 private:
   kchartWidget* preview;
   KChartPart* _chart;
-  QCheckBox* grid;
+  QCheckBox* gridX;
+  QCheckBox* gridY;
   QCheckBox* border;
   QLineEdit *y_interval;
   QLineEdit *y_max;

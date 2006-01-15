@@ -3,12 +3,15 @@
 #include "kchart_view.h"
 #include "kchart_part.h"
 
-#include <qpushbutton.h>
 #include <qbuttongroup.h>
+#include <qpushbutton.h>
+#include <qradiobutton.h>
+#include <qspinbox.h>
 #include <qlabel.h>
 #include <qptrcollection.h>
 #include <qobjectlist.h>
 #include <qlayout.h>
+#include <qhbox.h>
 
 #include <kdebug.h>
 #include <kiconloader.h>
@@ -18,139 +21,148 @@
 
 #include "kchart_params.h"
 
+
 namespace KChart
 {
 
 KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget* parent,
                                                                         KChartPart* chart ) :
   QWidget( parent ),
-  _chart( chart )
+  m_chart( chart )
 {
-    _charttype = _chart->params()->chartType();
-    chartSubType=true;
+    // FIXME: Use KChartPart::chartType() instead, when implemented.
+    m_charttype  = (KChartParams::ChartType) m_chart->params()->chartType();
+    chartSubType = true;
 
-    QGridLayout *grid1 = new QGridLayout(this,2,2,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid1 = new QGridLayout(this, 3, 2, KDialog::marginHint(), 
+					 KDialog::spacingHint());
 
     QVBoxLayout *lay1 = new QVBoxLayout(  );
     lay1->setMargin( KDialog::marginHint() );
     lay1->setSpacing( KDialog::spacingHint() );
 
-    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, i18n( "Chart Sub Type" ),this );
-    grp->setRadioButtonExclusive( TRUE );
+    QButtonGroup *grp = new QButtonGroup( 1, QGroupBox::Horizontal, 
+					  i18n( "Chart Sub Type" ), this );
+    grp->setRadioButtonExclusive( true );
     grp->layout();
     lay1->addWidget(grp);
-    normal = new QRadioButton( i18n( "Normal" ), grp );
-    stacked = new QRadioButton( i18n( "Stacked" ), grp );
-    percent = new QRadioButton( i18n( "Percent" ), grp );
+    m_normal  = new QRadioButton( i18n( "Normal" ),  grp );
+    m_stacked = new QRadioButton( i18n( "Stacked" ), grp );
+    m_percent = new QRadioButton( i18n( "Percent" ), grp );
 
-    if( ( _chart->params()->chartType() == KDChartParams::Bar &&
-          _chart->params()->barChartSubType() == KDChartParams::BarNormal ) ||
-        ( _chart->params()->chartType() == KDChartParams::Line &&
-          _chart->params()->lineChartSubType() == KDChartParams::LineNormal ) ||
-        ( _chart->params()->chartType() == KDChartParams::Polar &&
-          _chart->params()->polarChartSubType() == KDChartParams::PolarNormal ) ||
-        ( _chart->params()->chartType() == KDChartParams::Area &&
-          _chart->params()->areaChartSubType() == KDChartParams::AreaNormal ) )
-        normal->setChecked( true );
-    else if( ( _chart->params()->chartType() == KDChartParams::Bar &&
-          _chart->params()->barChartSubType() == KDChartParams::BarStacked ) ||
-        ( _chart->params()->chartType() == KDChartParams::Line &&
-          _chart->params()->lineChartSubType() == KDChartParams::LineStacked ) ||
-             ( _chart->params()->chartType() == KDChartParams::Polar &&
-               _chart->params()->polarChartSubType() == KDChartParams::PolarStacked ) ||
-        ( _chart->params()->chartType() == KDChartParams::Area &&
-          _chart->params()->areaChartSubType() == KDChartParams::AreaStacked ) )
-        stacked->setChecked( true );
-    else if( ( _chart->params()->chartType() == KDChartParams::Bar &&
-          _chart->params()->barChartSubType() == KDChartParams::BarPercent ) ||
-        ( _chart->params()->chartType() == KDChartParams::Line &&
-          _chart->params()->lineChartSubType() == KDChartParams::LinePercent ) ||
-             ( _chart->params()->chartType() == KDChartParams::Polar &&
-               _chart->params()->polarChartSubType() == KDChartParams::PolarPercent ) ||
-        ( _chart->params()->chartType() == KDChartParams::Area &&
-          _chart->params()->areaChartSubType() == KDChartParams::AreaPercent ) )
-        percent->setChecked( true );
+    QHBox   *hbox = new QHBox( this );
+    QLabel  *lbl  = new QLabel( i18n( "Number of Lines: "), hbox );
+    m_numLines    = new QSpinBox( hbox );
+
+    if( ( m_chart->chartType() == KChartParams::Bar &&
+          m_chart->params()->barChartSubType() == KDChartParams::BarNormal ) 
+	|| ( m_chart->chartType() == KChartParams::Line &&
+	     m_chart->params()->lineChartSubType() == KDChartParams::LineNormal )
+	|| ( m_chart->chartType() == KChartParams::Polar &&
+	     m_chart->params()->polarChartSubType() == KDChartParams::PolarNormal )
+	|| ( m_chart->chartType() == KChartParams::Area &&
+	     m_chart->params()->areaChartSubType() == KDChartParams::AreaNormal ) )
+        m_normal->setChecked( true );
+    else if( ( m_chart->params()->chartType() == KDChartParams::Bar &&
+          m_chart->params()->barChartSubType() == KDChartParams::BarStacked ) ||
+        ( m_chart->params()->chartType() == KDChartParams::Line &&
+          m_chart->params()->lineChartSubType() == KDChartParams::LineStacked ) ||
+             ( m_chart->params()->chartType() == KDChartParams::Polar &&
+               m_chart->params()->polarChartSubType() == KDChartParams::PolarStacked ) ||
+        ( m_chart->params()->chartType() == KDChartParams::Area &&
+          m_chart->params()->areaChartSubType() == KDChartParams::AreaStacked ) )
+        m_stacked->setChecked( true );
+    else if( ( m_chart->params()->chartType() == KDChartParams::Bar &&
+          m_chart->params()->barChartSubType() == KDChartParams::BarPercent ) ||
+        ( m_chart->params()->chartType() == KDChartParams::Line &&
+          m_chart->params()->lineChartSubType() == KDChartParams::LinePercent ) ||
+             ( m_chart->params()->chartType() == KDChartParams::Polar &&
+               m_chart->params()->polarChartSubType() == KDChartParams::PolarPercent ) ||
+        ( m_chart->params()->chartType() == KDChartParams::Area &&
+          m_chart->params()->areaChartSubType() == KDChartParams::AreaPercent ) )
+        m_percent->setChecked( true );
     else {
-        kdDebug(35001)<<"Error in stack_type\n";
+        kdDebug(35001)<<"Error in chart_type\n";
     }
 
-    if( _chart->params()->chartType() == KDChartParams::HiLo)
+    if( m_chart->params()->chartType() == KDChartParams::HiLo)
     {
-        if( _chart->params()->hiLoChartSubType()==KDChartParams::HiLoNormal)
-            normal->setChecked( true );
-        else if(_chart->params()->hiLoChartSubType()==KDChartParams::HiLoClose)
-            stacked->setChecked(true);
-        else if(_chart->params()->hiLoChartSubType()==KDChartParams::HiLoOpenClose)
-            percent->setChecked(true);
+        if( m_chart->params()->hiLoChartSubType()==KDChartParams::HiLoNormal)
+            m_normal->setChecked( true );
+        else if(m_chart->params()->hiLoChartSubType()==KDChartParams::HiLoClose)
+            m_stacked->setChecked(true);
+        else if(m_chart->params()->hiLoChartSubType()==KDChartParams::HiLoOpenClose)
+            m_percent->setChecked(true);
     }
 
-    changeSubTypeName( _chart->params()->chartType());
+    changeSubTypeName( m_chart->chartType());
     if(!chartSubType)
         grp->setEnabled(false);
 
-    grid1->addWidget(grp,0,0);
+    grid1->addWidget(grp,  0, 0);
+    grid1->addWidget(hbox, 1, 0);
 }
 
 
 
 void KChartWizardSelectChartSubTypePage::apply()
 {
-    if(chartSubType) {
-        if( normal->isChecked() )
-            switch( _chart->params()->chartType() ) {
-            case KDChartParams::Bar:
-                _chart->params()->setBarChartSubType( KDChartParams::BarNormal );
+    if (chartSubType) {
+        if( m_normal->isChecked() )
+            switch( m_chart->params()->chartType() ) {
+            case KChartParams::Bar:
+                m_chart->params()->setBarChartSubType( KDChartParams::BarNormal );
                 break;
-            case KDChartParams::Line:
-                _chart->params()->setLineChartSubType( KDChartParams::LineNormal );
+            case KChartParams::Line:
+                m_chart->params()->setLineChartSubType( KDChartParams::LineNormal );
                 break;
-            case KDChartParams::Area:
-                _chart->params()->setAreaChartSubType( KDChartParams::AreaNormal );
+            case KChartParams::Area:
+                m_chart->params()->setAreaChartSubType( KDChartParams::AreaNormal );
                 break;
-            case KDChartParams::HiLo:
-                _chart->params()->setHiLoChartSubType(KDChartParams::HiLoNormal);
+            case KChartParams::HiLo:
+                m_chart->params()->setHiLoChartSubType(KDChartParams::HiLoNormal);
                 break;
-            case KDChartParams::Polar:
-                _chart->params()->setPolarChartSubType( KDChartParams::PolarNormal );
+            case KChartParams::Polar:
+                m_chart->params()->setPolarChartSubType( KDChartParams::PolarNormal );
             default:
                 kdDebug( 35001 ) << "Error in group button\n";
             }
-        else if( stacked->isChecked() )
-            switch( _chart->params()->chartType() ) {
-            case KDChartParams::Bar:
-                _chart->params()->setBarChartSubType( KDChartParams::BarStacked );
+        else if ( m_stacked->isChecked() )
+            switch( m_chart->params()->chartType() ) {
+            case KChartParams::Bar:
+                m_chart->params()->setBarChartSubType( KDChartParams::BarStacked );
                 break;
-            case KDChartParams::Line:
-                _chart->params()->setLineChartSubType( KDChartParams::LineStacked );
+            case KChartParams::Line:
+                m_chart->params()->setLineChartSubType( KDChartParams::LineStacked );
                 break;
-            case KDChartParams::Area:
-                _chart->params()->setAreaChartSubType( KDChartParams::AreaStacked );
+            case KChartParams::Area:
+                m_chart->params()->setAreaChartSubType( KDChartParams::AreaStacked );
                 break;
-            case KDChartParams::HiLo:
-                _chart->params()->setHiLoChartSubType( KDChartParams::HiLoClose);
+            case KChartParams::HiLo:
+                m_chart->params()->setHiLoChartSubType( KDChartParams::HiLoClose);
                 break;
-            case KDChartParams::Polar:
-                _chart->params()->setPolarChartSubType( KDChartParams::PolarStacked );
+            case KChartParams::Polar:
+                m_chart->params()->setPolarChartSubType( KDChartParams::PolarStacked );
                 break;
             default:
                 kdDebug( 35001 ) << "Error in group button\n";
             }
-        else if( percent->isChecked() )
-            switch( _chart->params()->chartType() ) {
-            case KDChartParams::Bar:
-                _chart->params()->setBarChartSubType( KDChartParams::BarPercent );
+        else if( m_percent->isChecked() )
+            switch( m_chart->params()->chartType() ) {
+            case KChartParams::Bar:
+                m_chart->params()->setBarChartSubType( KDChartParams::BarPercent );
                 break;
-            case KDChartParams::Line:
-                _chart->params()->setLineChartSubType( KDChartParams::LinePercent );
+            case KChartParams::Line:
+                m_chart->params()->setLineChartSubType( KDChartParams::LinePercent );
                 break;
-            case KDChartParams::Area:
-                _chart->params()->setAreaChartSubType( KDChartParams::AreaPercent );
+            case KChartParams::Area:
+                m_chart->params()->setAreaChartSubType( KDChartParams::AreaPercent );
                 break;
-            case KDChartParams::HiLo:
-                _chart->params()->setHiLoChartSubType( KDChartParams::HiLoOpenClose);
+            case KChartParams::HiLo:
+                m_chart->params()->setHiLoChartSubType( KDChartParams::HiLoOpenClose);
                 break;
-            case KDChartParams::Polar:
-                _chart->params()->setPolarChartSubType( KDChartParams::PolarPercent );
+            case KChartParams::Polar:
+                m_chart->params()->setPolarChartSubType( KDChartParams::PolarPercent );
                 break;
             default:
                 kdDebug( 35001 ) << "Error in group button\n";
@@ -160,17 +172,17 @@ void KChartWizardSelectChartSubTypePage::apply()
     }
 }
 
-void KChartWizardSelectChartSubTypePage::changeSubTypeName( KDChartParams::ChartType _type)
+void KChartWizardSelectChartSubTypePage::changeSubTypeName( KChartParams::ChartType _type)
 {
-    if(_type==KDChartParams::HiLo)
+    if (_type==KChartParams::HiLo)
     {
-        stacked->setText(i18n("HiLoClose"));
-        percent->setText(i18n("HiLoOpenClose"));
+	m_stacked->setText( i18n("HiLoClose") );
+        m_percent->setText( i18n("HiLoOpenClose") );
     }
     else
     {
-        stacked->setText( i18n( "Stacked" ));
-        percent->setText( i18n( "Percent" ));
+        m_stacked->setText( i18n( "Stacked" ) );
+        m_percent->setText( i18n( "Percent" ) );
     }
 }
 

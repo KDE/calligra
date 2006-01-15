@@ -39,19 +39,31 @@ public:
   KChartWizardSelectChartTypePage( QWidget* parent, KChartPart* chart );
 
 public slots:
-  void apply();
-private slots:
-  void chartTypeSelected( int type );
-signals:
-  void chartChange(int);
-private:
-  KChartPart* _chart;
-  QButtonGroup* _typeBG;
-  int c_pos, r_pos; //column and row position (used by KChartWizardSelectChartTypePage::addButton to know where to put the new button)
-  KDChartParams::ChartType _type;
+  void  apply();
 
-  void addButton(const QString &name, const QString &icon_name, int type);
-  QGridLayout *_layout;
+private slots:
+  void  chartTypeSelected( int type );
+
+signals:
+  void  chartChange(int);
+
+private:
+  void  addButton(const QString &name, const QString &icon_name, int type);
+  void  incPos();
+
+private:
+  KChartPart    *m_chart;
+
+  QButtonGroup  *m_typeBG;
+  QGridLayout   *m_layout;
+
+  // column and row position (used by addButton() to know where to put
+  // the new button)
+  int            m_colPos;
+  int            m_rowPos;
+
+  KDChartParams::ChartType  m_type;
+
 };
 
 }  //namespace KChart

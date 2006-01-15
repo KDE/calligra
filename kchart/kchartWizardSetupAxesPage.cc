@@ -37,30 +37,36 @@ KChartWizardSetupAxesPage::KChartWizardSetupAxesPage( QWidget* parent,
     tmpQGroupBox = new QGroupBox( this, "GroupBox_1" );
     tmpQGroupBox->setFrameStyle( 49 );
 
-    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,2,2,KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid2 = new QGridLayout(tmpQGroupBox,3,2,KDialog::marginHint(), KDialog::spacingHint());
 
-    grid = new QCheckBox( i18n( "Has grid:" ),tmpQGroupBox  );
+    
+    //grid = new QCheckBox( i18n( "Has grid:" ), tmpQGroupBox  );
+    new QLabel( i18n( "Grid Lines" ), tmpQGroupBox );
+    gridX = new QCheckBox( i18n( "X Axis:" ), tmpQGroupBox  );
+    gridY = new QCheckBox( i18n( "Y Axid:" ), tmpQGroupBox  );
 
-    grid->setChecked(_chart->params()->showGrid());
-    grid2->addWidget(grid,0,0);
+    gridX->setChecked(_chart->params()->showGrid());
+    gridY->setChecked(_chart->params()->showGrid());
+    grid2->addWidget(gridX, 0, 0);
+    grid2->addWidget(gridY, 1, 0);
 
     gridColor=new KColorButton(tmpQGroupBox);
     // PENDING(kalle) Put back in
     //     colorGrid=_chart->params()->GridColor;
     gridColor->setColor( colorGrid );
-    grid2->addWidget(gridColor,0,1);
+    grid2->addWidget(gridColor, 0, 1);
 
     border = new QCheckBox( i18n( "Border:" ), tmpQGroupBox );
     // PENDING(kalle) Put back in
     //     border->setChecked( _chart->params()->border );
-    grid2->addWidget(border,1,0);
+    grid2->addWidget(border, 2, 0);
     border->setEnabled(false);
 
     borderColor=new KColorButton(tmpQGroupBox);
     // PENDING(kalle) Put back in
     //     colorBorder=_chart->params()->LineColor;
     borderColor->setColor( colorBorder );
-    grid2->addWidget(borderColor,1,1);
+    grid2->addWidget(borderColor,2,1);
     borderColor->setEnabled(false);
 
     grid1->addWidget(tmpQGroupBox,0,0);
@@ -236,8 +242,8 @@ void KChartWizardSetupAxesPage::paintEvent( QPaintEvent *)
 
 void KChartWizardSetupAxesPage::apply()
 {
-    _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,grid->isChecked() );
-    _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,grid->isChecked() );
+    _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosLeft,gridY->isChecked() );
+    _chart->params()->setAxisShowGrid(KDChartAxisParams::AxisPosBottom,gridX->isChecked() );
 
     KDChartAxisParams leftparams;
     leftparams = _chart->params()->axisParams( KDChartAxisParams::AxisPosLeft );

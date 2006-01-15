@@ -9,6 +9,7 @@
 #include <kconfig.h>
 
 #include <koChart.h>
+#include "kchart_params.h"
 #include "koffice_export.h"
 
 namespace KChart
@@ -25,7 +26,7 @@ class KChartParams;
 // accessors, and then we would have won nothing.
 //
 struct KChartAuxiliary {
-    typedef  enum {DataRows = 0, DataColumns = 1} DataDirection;
+    typedef  enum { DataRows = 0, DataColumns = 1 } DataDirection;
 
     DataDirection  m_dataDirection; // Rows or Columns
 };
@@ -73,6 +74,8 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
+    // FIXME: return m_chartType when implemented.
+    KChartParams::ChartType  chartType() const { return (KChartParams::ChartType) params()->chartType(); }
     KDChartTableData  *data()                  { return &m_currentData; }
     KChartParams      *params() const          { return m_params;       }
     KChartAuxiliary   *auxdata()               { return &m_auxiliary;   }
@@ -121,23 +124,24 @@ private:
 
 private:
     // The chart and its contents
-    KDChartTableData  m_currentData;
-    QStringList    m_rowLabels;
-    QStringList    m_colLabels;
-    KChartParams  *m_params;
+    KChartParams::ChartType  m_chartType;
+    KChartParams            *m_params;
+    KDChartTableData         m_currentData;
+    QStringList              m_rowLabels;
+    QStringList              m_colLabels;
 
     // Auxiliary values that are part of the document, and thus will
     // be included in saved files.
-    KChartAuxiliary  m_auxiliary;
+    KChartAuxiliary          m_auxiliary;
 
     // Other auxiliary values
-    bool           m_bCanChangeValue;
+    bool                     m_bCanChangeValue;
 
     // Graphics
-    QWidget       *m_parentWidget;
+    QWidget                 *m_parentWidget;
 
     // Used when displaying.
-    KDChartTableData  m_displayData;
+    KDChartTableData         m_displayData;
 };
 
 

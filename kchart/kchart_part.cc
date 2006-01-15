@@ -47,8 +47,8 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 			QObject* parent, const char* name,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, widgetName, parent, name, singleViewMode ),
-    m_rowLabels(), m_colLabels(),
     m_params( 0 ),
+    m_rowLabels(), m_colLabels(),
     m_parentWidget( parentWidget )
 {
     kdDebug(35001) << "Constructor started!" << endl;

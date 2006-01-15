@@ -36,32 +36,29 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 					 KDialog::spacingHint());
 
     // The Data Area
-    QHBox   *hbox = new QHBox( this );
-    (void) new QLabel( i18n("Data Area: "), hbox);
+    QButtonGroup *gb1 = new QVButtonGroup( i18n( "Data Area" ), this );
+
+    QHBox   *hbox = new QHBox( gb1 );
+    (void) new QLabel( i18n("Area: "), hbox);
     m_dataArea = new QLineEdit( hbox );
-    grid1->addWidget(hbox, 0, 0);
+    grid1->addWidget(gb1, 0, 0);
 
     // The row/column as label checkboxes. 
-    m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), this);
-    grid1->addWidget(m_firstRowAsLabel, 1, 0);
-    m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), this);
-    grid1->addWidget(m_firstColAsLabel, 2, 0);
+    m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), gb1);
+    m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), gb1);
 
     // The Data Format button group
     QButtonGroup *gb = new QVButtonGroup( i18n( "Data Format" ), this );
+#if 0
     QGridLayout  *grid2 = new QGridLayout(gb, 2, 1, KDialog::marginHint(),
 					  KDialog::spacingHint());
-
+#endif
     m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb );
     m_rowMajor->resize( m_rowMajor->sizeHint() );
-    grid2->addWidget( m_rowMajor, 0, 0);
 
     m_colMajor = new QRadioButton( i18n( "Data in columns" ), gb );
     m_colMajor->resize( m_colMajor->sizeHint() );
-    grid2->addWidget( m_colMajor, 1, 0);
-    grid2->setColStretch(1, 0);
 
-    grid2->activate();
     grid1->addWidget(gb, 3, 0);
 
     QLabel *lbl = new QLabel( i18n( 

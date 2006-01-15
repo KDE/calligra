@@ -94,19 +94,19 @@ KChartWizard::~KChartWizard()
 
 void KChartWizard::subType(int _type)
 {
-    KDChartParams::ChartType type = (KDChartParams::ChartType)_type;
-    if (type == KDChartParams::Bar ||
-        type == KDChartParams::Line ||
-        type == KDChartParams::Area ||
-        type == KDChartParams::HiLo ||
-        type == KDChartParams::Polar) {
-        m_selectchartsubtypepage->chartSubType=true;
+    KChartParams::ChartType  type = (KChartParams::ChartType) _type;
+    if (type == KChartParams::Bar ||
+        type == KChartParams::Line ||
+        type == KChartParams::Area ||
+        type == KChartParams::HiLo ||
+        type == KChartParams::Polar) {
+        m_selectchartsubtypepage->chartSubType = true;
     } else {
-        m_selectchartsubtypepage->chartSubType=false;
+        m_selectchartsubtypepage->chartSubType = false;
     }
     m_selectchartsubtypepage->changeSubTypeName( type );
-    if( ( type == KDChartParams::Bar && m_chart->params()->threeDBars() ) 
-	|| ( type == KDChartParams::Pie && m_chart->params()->threeDPies() ) ) {
+    if( ( type == KChartParams::Bar && m_chart->params()->threeDBars() ) 
+	|| ( type == KChartParams::Pie && m_chart->params()->threeDPies() ) ) {
 	m_axespage->chart3d = true;
     } else {
         m_axespage->chart3d = false;
