@@ -416,9 +416,9 @@ void KexiConnSelectorWidget::slotRemoteRemoveBtnClicked()
 	ConnectionDataLVItem* item = static_cast<ConnectionDataLVItem*>(m_remote->list->selectedItem());
 	if (!item)
 		return;
-	if (KMessageBox::Yes!=KMessageBox::questionYesNo(0, 
+	if (KMessageBox::Continue!=KMessageBox::warningContinueCancel(0, 
 		i18n("Do you want to remove database connection \"%1\" from the list of available connections?")
-		.arg(item->data()->serverInfoString(true)), 0))
+		.arg(item->data()->serverInfoString(true)), QString::null, KStdGuiItem::del(), 0))
 		return;
 
 	QListViewItem* nextItem = item->itemBelow();

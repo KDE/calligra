@@ -189,7 +189,7 @@
                         <cstring>chkPortDefault</cstring>
                     </property>
                     <property name="text">
-                        <string>default</string>
+                        <string>Default</string>
                         <comment>port: default</comment>
                     </property>
                     <property name="buttonGroupId">

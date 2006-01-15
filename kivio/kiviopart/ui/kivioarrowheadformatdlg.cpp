@@ -52,7 +52,7 @@ void KivioArrowHeadFormatDlg::init()
   QLabel* startAHHeaderIcon = new QLabel(mainWidget);
   startAHHeaderIcon->setPixmap(SmallIcon("start_arrowhead", 16));
   startAHHeaderIcon->setFixedSize(16, 16);
-  QLabel* startAHHeaderLabel = new QLabel(i18n("<b>Arrowhead At Origin</b>"), mainWidget);
+  QLabel* startAHHeaderLabel = new QLabel(i18n("<b>Arrowhead at Origin</b>"), mainWidget);
   QFont font = startAHHeaderLabel->font();
   QFrame* startAHHeaderLine = new QFrame(mainWidget);
   startAHHeaderLine->setFrameStyle(QFrame::HLine|QFrame::Plain);
@@ -70,7 +70,7 @@ void KivioArrowHeadFormatDlg::init()
   QLabel* endAHHeaderIcon = new QLabel(mainWidget);
   endAHHeaderIcon->setPixmap(SmallIcon("end_arrowhead", 16));
   endAHHeaderIcon->setFixedSize(16, 16);
-  QLabel* endAHHeaderLabel = new QLabel(i18n("<b>Arrowhead At End</b>"), mainWidget);
+  QLabel* endAHHeaderLabel = new QLabel(i18n("<b>Arrowhead at End</b>"), mainWidget);
   QFrame* endAHHeaderLine = new QFrame(mainWidget);
   endAHHeaderLine->setFrameStyle(QFrame::HLine|QFrame::Plain);
   QLabel* endAHTypeLbl = new QLabel(i18n("T&ype:"), mainWidget);

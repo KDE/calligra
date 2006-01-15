@@ -56,7 +56,7 @@
                                 <cstring>pbAddCompletionEntry</cstring>
                             </property>
                             <property name="text">
-                                <string>Add</string>
+                                <string>Add...</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>By clicking this button you can add manually an individual word to the completion list.</string>

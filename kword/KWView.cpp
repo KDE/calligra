@@ -1303,7 +1303,7 @@ void KWView::setupActions()
                                         this, SLOT( changeFootNoteType() ),
                                             actionCollection(), "change_footendtype");
 
-    m_actionSavePicture= new KAction( i18n("Save Picture..."), 0,
+    m_actionSavePicture= new KAction( i18n("Save Picture As..."), 0,
                                     this, SLOT( savePicture() ),
                                     actionCollection(), "save_picture");
     m_actionSavePicture->setToolTip( i18n( "Save the picture in a separate file." ) );
@@ -2729,7 +2729,7 @@ void KWView::deleteFrame( bool warning )
                 i18n( "You are about to delete a table.\n"
                       "Doing so will delete all the text in the table.\n"
                       "Are you sure you want to do that?"),
-                i18n("Delete Table"), i18n("&Delete"),
+                i18n("Delete Table"), KStdGuiItem::del(),
                 "DeleteTableConfirmation",
                 true );
             if (result != KMessageBox::Continue)
@@ -2757,7 +2757,7 @@ void KWView::deleteFrame( bool warning )
                           "The contents of this Frameset will not appear "
                           "anymore!\n"
                           "Are you sure you want to do that?").arg(fs->name()),
-                    i18n("Delete Frame"), i18n("&Delete"));
+                    i18n("Delete Frame"), KStdGuiItem::del());
 
                 if (result != KMessageBox::Continue)
                     return;

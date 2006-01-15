@@ -140,8 +140,8 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(KexiMainWindow *mainWin, QWid
 	d->historyHead->installEventFilter(this);
 	d->history = new KexiQueryDesignerSQLHistory(d->historyHead, "sql_history");
 
-	static const QString msg_back = i18n("Back to selected query");
-	static const QString msg_clear = i18n("Clear history");
+	static const QString msg_back = i18n("Back to Selected Query");
+	static const QString msg_clear = i18n("Clear History");
 	d->historyHead->addButton("select_item", msg_back, this, SLOT(slotSelectQuery()));
 	d->historyHead->addButton("editclear", msg_clear, d->history, SLOT(clear()));
 	d->history->popupMenu()->insertItem(SmallIcon("select_item"), msg_back, this, SLOT(slotSelectQuery()));

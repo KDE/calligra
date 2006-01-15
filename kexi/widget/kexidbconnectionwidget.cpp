@@ -90,7 +90,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 	QWidget::setTabOrder(titleEdit, d->btnSaveChanges);
 	d->btnSaveChanges->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
 
-	d->btnTestConnection = new KPushButton(KGuiItem(i18n("&Test Connection..."), "", 
+	d->btnTestConnection = new KPushButton(KGuiItem(i18n("&Test Connection"), "", 
 		i18n("Test database connection"), 
 		i18n("Tests database connection. You can ensure that valid connection information is provided.")), 
 		frmBottom, "testConnection");

@@ -57,7 +57,7 @@
       <Name>NUM2STRING</Name>
       <Type>String</Type>
       <Parameter>
-        <Comment>number to convert into string</Comment>
+        <Comment>Number to convert into string</Comment>
         <Type range="false">Float</Type>
       </Parameter>
       <Help>
@@ -74,7 +74,7 @@
       <Name>STRING</Name>
       <Type>String</Type>
       <Parameter>
-        <Comment>number to convert into string</Comment>
+        <Comment>Number to convert into string</Comment>
         <Type range="false">Float</Type>
       </Parameter>
       <Help>

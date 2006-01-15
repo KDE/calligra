@@ -128,7 +128,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	connect(d->relations, SIGNAL(tableFieldDoubleClicked(KexiDB::TableSchema*,const QString&)),
 		this, SLOT(slotTableFieldDoubleClicked(KexiDB::TableSchema*,const QString&)));
 
-	d->head = new KexiSectionHeader(i18n("Query columns"), Vertical, d->spl);
+	d->head = new KexiSectionHeader(i18n("Query Columns"), Vertical, d->spl);
 	d->dataTable = new KexiDataTable(mainWin, d->head, "guieditor_dataTable", false);
 	d->dataTable->dataAwareObject()->setSpreadSheetMode();
 

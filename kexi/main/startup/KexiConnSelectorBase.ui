@@ -136,7 +136,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>&amp;Remove...</string>
+                <string>&amp;Remove</string>
             </property>
         </widget>
         <spacer row="2" column="2">
@@ -242,7 +242,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>&lt;b&gt;Select existing database server's connection from the list below and click "OK".&lt;/b&gt;
+                <string>&lt;b&gt;Select Existing Database Server's Connection From the List Below&lt;/b&gt;
 &lt;p&gt;You will see existing Kexi projects available for the selected connection. Here you may also add, edit or remove connections from the list.
 </string>
             </property>

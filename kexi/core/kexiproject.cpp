@@ -883,11 +883,11 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 	tristate res = prj->create(false);
 	if (~res) {
 //! @todo move to KexiMessageHandler
-		if (KMessageBox::Yes != KMessageBox::warningYesNo(0, i18n(
+		if (KMessageBox::Yes != KMessageBox::warningYesNo(0, "<qt>"+i18n(
 			"The project %1 already exists.\n"
 			"Do you want to replace it with a new, blank one?")
-				.arg(prj->data()->infoString())+"\n"+warningNoUndo,
-			QString::null, KGuiItem(i18n("Replace")) ))
+				.arg(prj->data()->infoString())+"\n"+warningNoUndo+"</qt>",
+			QString::null, KGuiItem(i18n("Replace")), KStdGuiItem::cancel() ))
 //todo add serverInfoString() for server-based prj
 		{
 			delete prj;

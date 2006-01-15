@@ -304,7 +304,7 @@ bool KexiStartupFileDialog::checkFileName()
 		}
 		else if (m_confirmOverwrites && fi.exists()) {
 			if (KMessageBox::Yes!=KMessageBox::warningYesNo( this, i18n( "The file \"%1\" already exists.\n"
-			"Do you want to overwrite it?").arg( QDir::convertSeparators(path) ) )) {
+			"Do you want to overwrite it?").arg( QDir::convertSeparators(path) ), QString::null, i18n("Overwrite"), KStdGuiItem::cancel() )) {
 				return false;
 			}
 		}

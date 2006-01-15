@@ -184,15 +184,15 @@
    <Function>
      <Name>LOOKUP</Name>
      <Parameter>
-       <Comment>Lookup Value</Comment>
+       <Comment>Lookup value</Comment>
        <Type>String/Numeric</Type>
      </Parameter>
      <Parameter>
-       <Comment>Lookup Vector</Comment>
+       <Comment>Lookup vector</Comment>
        <Type>String/Numeric</Type>
      </Parameter>
      <Parameter>
-       <Comment>Result Vector</Comment>
+       <Comment>Result vector</Comment>
        <Type>String/Numeric</Type>
      </Parameter>
      <Help>
