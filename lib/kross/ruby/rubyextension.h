@@ -58,7 +58,7 @@ class RubyExtension{
         /**
          * This function iterats through a ruby hash
          */
-        static int RubyExtension::convertHash_i(VALUE key, VALUE value, VALUE vmap);
+        static int convertHash_i(VALUE key, VALUE value, VALUE vmap);
         /**
          * Converts a \a VALUE into a \a Kross::Api::Object.
          * \param object The ruby VALUE to convert.
