@@ -24,15 +24,26 @@ Item								   Prio Status
   + Reintegrate kchart into KSpread				      1	DONE
      - New interface into KoChart					done
      - Adapt kspread_sheet to it.					done
-  + Fix so that users can change data area after the fact.	      1	----
+  + Fix so that users can change data area after the fact (GUI).      1	----
+     - wizard							      1 done
+     - config dialog						      1 ----
+  + Add tooltips and whatsthis					      1 ----
      - wizard							      1 ----
      - config dialog						      1 ----
   + New chart type: combine bars and lines			      1 ----
+     - in wizard							done
+     - in config dialog							----
   + Checkboxes for "first row/column contains header		      1 ----
-     - wizard							      1 ----
+     - wizard							      1 done
      - config dialog						      1 ----
+  + Grid setting for both directions				      1 ----
   + New chart type: histogram					      2 ----
+     - in wizard
+     - in config dialog
   + New chart type: horizontal bars				      3 ----
+     - in wizard
+     - in config dialog
+
 
 After the feature freeze
 ------------------------
@@ -40,6 +51,7 @@ After the feature freeze
 * Bugs
   + The chart title is not included in the chart from the  wizard     1 ----
   + The title is miniscule					      1 ---- 
+     - small fonts everywhere, in fact
 
 * OpenDocument
   + Read and write
