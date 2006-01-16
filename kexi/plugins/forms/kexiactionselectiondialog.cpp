@@ -194,7 +194,7 @@ void KexiActionSelectionDialog::showScriptListView()
 {
 	if (d->kactionListView)
 		d->kactionListView->hide();
-	if (!d->kactionListView) {
+	if (!d->scriptListView) {
 		d->scriptListView = new ScriptsListView(d->mainbox, this);
 	}
 	d->scriptListView->show();
