@@ -24,7 +24,242 @@ typedef QMap< int, QGuardedPtr<KexiDialogBase> > KexiDialogDict;
 //! @internal
 class KexiMainWindowImpl::Private
 {
-	public:
+public:
+	Private(KexiMainWindowImpl* w)
+//		: dialogs(401)
+		: wnd(w)
+		, m_openedCustomObjectsForItem(1019, true)
+	{
+		propEditor=0;
+		propEditorToolWindow=0;
+		propEditorTabWidget=0;
+		final = false;
+		nav=0;
+		navToolWindow=0;
+		prj = 0;
+		curDialogGUIClient=0;
+		curDialogViewGUIClient=0;
+		closedDialogGUIClient=0;
+		closedDialogViewGUIClient=0;
+		nameDialog=0;
+		curDialog=0;
+		block_KMdiMainFrm_eventFilter=false;
+		focus_before_popup=0;
+//		relationPart=0;
+		privateIDCounter=0;
+		action_view_nav=0;
+		action_view_propeditor=0;
+		action_open_recent_projects_title_id = -1;
+		action_open_recent_connections_title_id = -1;
+		forceDialogClosing=false;
+		insideCloseDialog=false;
+		createMenu=0;
+		showImportantInfoOnStartup=true;
+//		disableErrorMessages=false;
+//		last_checked_mode=0;
+		propEditorDockSeparatorPos=-1;
+		navDockSeparatorPos=-1;
+//		navDockSeparatorPosWithAutoOpen=-1;
+		wasAutoOpen = false;
+		dialogExistedBeforeCloseProject = false;
+#ifndef KEXI_SHOW_UNIMPLEMENTED
+		dummy_action = new KActionMenu("", wnd);
+#endif
+		maximizeFirstOpenedChildFrm = false;
+#ifdef HAVE_KNEWSTUFF
+		newStuff = 0;
+#endif
+		mdiModeToSwitchAfterRestart = (KMdi::MdiMode)0;
+		forceShowProjectNavigatorOnCreation = false;
+		forceHideProjectNavigatorOnCreation = false;
+		navWasVisibleBeforeProjectClosing = false;
+		saveSettingsForShowProjectNavigator = true;
+		m_openedCustomObjectsForItem.setAutoDelete(true);
+	}
+	~Private() {
+	}
+
+	KexiDialogBase *openedDialogFor( const KexiPart::Item* item, bool &pending )
+	{
+		return openedDialogFor( item->identifier(), pending );
+	}
+
+	KexiDialogBase *openedDialogFor( int identifier, bool &pending )
+	{
+		QMutexLocker dialogsLocker( &dialogsMutex );
+		if (pendingDialogs[ identifier ]) {
+			pending = true;
+			return 0;
+		}
+		pending = false;
+		return (KexiDialogBase*)dialogs[ identifier ];
+	}
+
+	void insertDialog(KexiDialogBase *dlg) {
+		QMutexLocker dialogsLocker( &dialogsMutex );
+		dialogs.insert(dlg->id(), QGuardedPtr<KexiDialogBase>(dlg));
+		pendingDialogs.remove(dlg->id());
+	}
+
+	void addItemToPendingDialogs(const KexiPart::Item* item) {
+		QMutexLocker dialogsLocker( &dialogsMutex );
+		pendingDialogs.replace( item->identifier(), (char*)1);
+	}
+
+	void updateDialogId(KexiDialogBase *dlg, int oldItemID) {
+		QMutexLocker dialogsLocker( &dialogsMutex );
+		dialogs.remove(oldItemID);
+		pendingDialogs.remove(oldItemID);
+		dialogs.insert(dlg->id(), QGuardedPtr<KexiDialogBase>(dlg));
+	}
+
+	void removeDialog(int identifier) {
+		QMutexLocker dialogsLocker( &dialogsMutex );
+		dialogs.remove(identifier);
+		pendingDialogs.remove(identifier);
+	}
+
+	uint openedDialogsCount() {
+		QMutexLocker dialogsLocker( &dialogsMutex );
+		return dialogs.count();
+	}
+
+	//! Used in KexiMainWindowImple::closeProject()
+	void clearDialogs() {
+		QMutexLocker dialogsLocker( &dialogsMutex );
+		dialogs.clear();
+		pendingDialogs.clear();
+	}
+
+	/*! Toggles last checked view mode radio action, if available. */
+	void toggleLastCheckedMode()
+	{
+		if (curDialog.isNull())
+			return;
+		KRadioAction *ra = actions_for_view_modes[ curDialog->currentViewMode() ];
+		if (ra)
+			ra->setChecked(true);
+//		if (!last_checked_mode)
+//			return;
+//		last_checked_mode->setChecked(true);
+	}
+
+/*
+void updatePropEditorDockWidthInfo() {
+		if (propEditor) {
+			KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
+#if defined(KDOCKWIDGET_P)
+			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+			if (ds) {
+				propEditorDockSeparatorPos = ds->separatorPosInPercent();*/
+/*				if (propEditorDockSeparatorPos<=0) {
+						config->setGroup("MainWindow");
+						propEditorDockSeparatorPos = config->readNumEntry("RightDockPosition", 80);
+						ds->setSeparatorPos(propEditorDockSeparatorPos, true);
+				}*/
+			/*}
+#endif
+		}
+	}*/
+
+	void showStartProcessMsg(const QStringList& args)
+	{
+		wnd->showErrorMessage(i18n("Could not start %1 application.").arg(KEXI_APP_NAME),
+			i18n("Command \"%1\" failed.").arg(args.join(" ")));
+	}
+
+	void hideMenuItem(const QString& menuName, const QString& itemText, bool alsoSeparator)
+	{
+		QPopupMenu *pm = popups[menuName.ascii()];
+		if (!pm)
+			return;
+		uint i=0;
+		const uint c = pm->count();
+		for (;i<c;i++) {
+			kdDebug() << pm->text( pm->idAt(i) ) <<endl;
+			if (pm->text( pm->idAt(i) ).lower().stripWhiteSpace()==itemText.lower().stripWhiteSpace())
+				break;
+		}
+		if (i<c) {
+			pm->setItemVisible( pm->idAt(i), false );
+			if (alsoSeparator)
+				pm->setItemVisible( pm->idAt(i+1), false ); //also separator
+		}
+	}
+
+	void updatePropEditorVisibility(int viewMode)
+	{
+		if (propEditorToolWindow) {
+			if (viewMode==0 || viewMode==Kexi::DataViewMode) {
+#ifdef PROPEDITOR_VISIBILITY_CHANGES
+				wnd->makeDockInvisible( wnd->manager()->findWidgetParentDock(propEditor) );
+//				propEditorToolWindow->hide();
+#endif
+			} else {
+				//propEditorToolWindow->show();
+				wnd->makeWidgetDockVisible(propEditorTabWidget);
+/*moved
+#if defined(KDOCKWIDGET_P)
+				KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
+				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+				ds->setSeparatorPosInPercent(config->readNumEntry("RightDockPosition", 80));//%
+#endif*/
+			}
+		}
+	}
+
+	void restoreNavigatorWidth()
+	{
+#if defined(KDOCKWIDGET_P)
+			if (wnd->mdiMode()==KMdi::ChildframeMode || wnd->mdiMode()==KMdi::TabPageMode) {
+				KDockWidget *dw = (KDockWidget *)nav->parentWidget();
+				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
+//				ds->setKeepSize(true);
+
+				config->setGroup("MainWindow");
+# if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
+
+				if (wasAutoOpen) //(dw2->isVisible())
+//				ds->setSeparatorPosInPercent( 100 * nav->width() / wnd->width() );
+					ds->setSeparatorPosInPercent(
+						QMAX(QMAX( config->readNumEntry("LeftDockPositionWithAutoOpen",20),
+						config->readNumEntry("LeftDockPosition",20)),20)
+					);
+				else
+					ds->setSeparatorPosInPercent(
+					QMAX(20, config->readNumEntry("LeftDockPosition", 20/* % */)));
+
+	//			dw->resize( d->config->readNumEntry("LeftDockPosition", 115/* % */), dw->height() );
+# else
+				//there were problems on KDE < 3.4
+				ds->setSeparatorPosInPercent( 20 );
+# endif
+				//if (!wasAutoOpen) //(dw2->isVisible())
+//					ds->setSeparatorPos( ds->separatorPos(), true );
+			}
+#endif
+	}
+
+	template<class type>
+	type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name)
+	{
+		if (!item || !name) {
+			kdWarning() << 
+				"KexiMainWindowImpl::Private::openedCustomObjectsForItem(): !item || !name" << endl;
+			return 0;
+		}
+		QString key( QString::number(item->identifier()) + name );
+		return dynamic_cast<type*>( m_openedCustomObjectsForItem.find( key.latin1() ) );
+	}
+
+	void addOpenedCustomObjectForItem(KexiPart::Item* item, QObject* object, const char* name)
+	{
+		QString key = QString::number(item->identifier()) + name;
+		m_openedCustomObjectsForItem.insert( key.latin1(), object );
+	}
+
+		KexiMainWindowImpl *wnd;
+		KexiStatusBar *statusBar;
 		KexiProject *prj;
 		KConfig *config;
 #ifndef KEXI_NO_CTXT_HELP
@@ -39,7 +274,6 @@ class KexiMainWindowImpl::Private
 		QGuardedPtr<KexiPropertyEditorView> propEditor;
 		QGuardedPtr<KoProperty::Set> propBuffer;
 
-		KexiDialogDict dialogs;
 		KXMLGUIClient *curDialogGUIClient, *curDialogViewGUIClient,
 			*closedDialogGUIClient, *closedDialogViewGUIClient;
 		QGuardedPtr<KexiDialogBase> curDialog;
@@ -165,77 +399,6 @@ class KexiMainWindowImpl::Private
 		//! Used by openedCustomObjectsForItem() and addOpenedCustomObjectForItem()
 		QAsciiDict<QObject> m_openedCustomObjectsForItem;
 
-	Private(KexiMainWindowImpl* w)
-//		: dialogs(401)
-		: m_openedCustomObjectsForItem(1019, true)
-		, wnd(w)
-	{
-		propEditor=0;
-		propEditorToolWindow=0;
-		propEditorTabWidget=0;
-		final = false;
-		nav=0;
-		navToolWindow=0;
-		prj = 0;
-		curDialogGUIClient=0;
-		curDialogViewGUIClient=0;
-		closedDialogGUIClient=0;
-		closedDialogViewGUIClient=0;
-		nameDialog=0;
-		curDialog=0;
-		block_KMdiMainFrm_eventFilter=false;
-		focus_before_popup=0;
-//		relationPart=0;
-		privateIDCounter=0;
-		action_view_nav=0;
-		action_view_propeditor=0;
-		action_open_recent_projects_title_id = -1;
-		action_open_recent_connections_title_id = -1;
-		forceDialogClosing=false;
-		insideCloseDialog=false;
-		createMenu=0;
-		showImportantInfoOnStartup=true;
-//		disableErrorMessages=false;
-//		last_checked_mode=0;
-		propEditorDockSeparatorPos=-1;
-		navDockSeparatorPos=-1;
-//		navDockSeparatorPosWithAutoOpen=-1;
-		wasAutoOpen = false;
-		dialogExistedBeforeCloseProject = false;
-#ifndef KEXI_SHOW_UNIMPLEMENTED
-		dummy_action = new KActionMenu("", wnd);
-#endif
-		maximizeFirstOpenedChildFrm = false;
-#ifdef HAVE_KNEWSTUFF
-		newStuff = 0;
-#endif
-		mdiModeToSwitchAfterRestart = (KMdi::MdiMode)0;
-		forceShowProjectNavigatorOnCreation = false;
-		forceHideProjectNavigatorOnCreation = false;
-		navWasVisibleBeforeProjectClosing = false;
-		saveSettingsForShowProjectNavigator = true;
-		m_openedCustomObjectsForItem.setAutoDelete(true);
-	}
-	~Private() {
-	}
-
-	KexiMainWindowImpl *wnd;
-
-	KexiStatusBar *statusBar;
-
-	/*! Toggles last checked view mode radio action, if available. */
-	void toggleLastCheckedMode()
-	{
-		if (curDialog.isNull())
-			return;
-		KRadioAction *ra = actions_for_view_modes[ curDialog->currentViewMode() ];
-		if (ra)
-			ra->setChecked(true);
-//		if (!last_checked_mode)
-//			return;
-//		last_checked_mode->setChecked(true);
-	}
-
 	int propEditorDockSeparatorPos, navDockSeparatorPos;
 //	int navDockSeparatorPosWithAutoOpen;
 	bool wasAutoOpen;
@@ -243,123 +406,9 @@ class KexiMainWindowImpl::Private
 
 	KMdi::MdiMode mdiModeToSwitchAfterRestart;
 
-/*
-void updatePropEditorDockWidthInfo() {
-		if (propEditor) {
-			KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
-#if defined(KDOCKWIDGET_P)
-			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-			if (ds) {
-				propEditorDockSeparatorPos = ds->separatorPosInPercent();*/
-/*				if (propEditorDockSeparatorPos<=0) {
-						config->setGroup("MainWindow");
-						propEditorDockSeparatorPos = config->readNumEntry("RightDockPosition", 80);
-						ds->setSeparatorPos(propEditorDockSeparatorPos, true);
-				}*/
-			/*}
-#endif
-		}
-	}*/
-
-	void showStartProcessMsg(const QStringList& args)
-	{
-		wnd->showErrorMessage(i18n("Could not start %1 application.").arg(KEXI_APP_NAME),
-			i18n("Command \"%1\" failed.").arg(args.join(" ")));
-	}
-
-	void hideMenuItem(const QString& menuName, const QString& itemText, bool alsoSeparator)
-	{
-		QPopupMenu *pm = popups[menuName.ascii()];
-		if (!pm)
-			return;
-		uint i=0;
-		const uint c = pm->count();
-		for (;i<c;i++) {
-			kdDebug() << pm->text( pm->idAt(i) ) <<endl;
-			if (pm->text( pm->idAt(i) ).lower().stripWhiteSpace()==itemText.lower().stripWhiteSpace())
-				break;
-		}
-		if (i<c) {
-			pm->setItemVisible( pm->idAt(i), false );
-			if (alsoSeparator)
-				pm->setItemVisible( pm->idAt(i+1), false ); //also separator
-		}
-	}
-
-	void updatePropEditorVisibility(int viewMode)
-	{
-		if (propEditorToolWindow) {
-			if (viewMode==0 || viewMode==Kexi::DataViewMode) {
-#ifdef PROPEDITOR_VISIBILITY_CHANGES
-				wnd->makeDockInvisible( wnd->manager()->findWidgetParentDock(propEditor) );
-//				propEditorToolWindow->hide();
-#endif
-			} else {
-				//propEditorToolWindow->show();
-				wnd->makeWidgetDockVisible(propEditorTabWidget);
-/*moved
-#if defined(KDOCKWIDGET_P)
-				KDockWidget *dw = (KDockWidget *)propEditor->parentWidget();
-				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-				ds->setSeparatorPosInPercent(config->readNumEntry("RightDockPosition", 80));//%
-#endif*/
-			}
-		}
-	}
-
-	void restoreNavigatorWidth()
-	{
-#if defined(KDOCKWIDGET_P)
-			if (wnd->mdiMode()==KMdi::ChildframeMode || wnd->mdiMode()==KMdi::TabPageMode) {
-				KDockWidget *dw = (KDockWidget *)nav->parentWidget();
-				KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
-//				ds->setKeepSize(true);
-
-				config->setGroup("MainWindow");
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
-
-				if (wasAutoOpen) //(dw2->isVisible())
-//				ds->setSeparatorPosInPercent( 100 * nav->width() / wnd->width() );
-					ds->setSeparatorPosInPercent(
-						QMAX(QMAX( config->readNumEntry("LeftDockPositionWithAutoOpen",20),
-						config->readNumEntry("LeftDockPosition",20)),20)
-					);
-				else
-					ds->setSeparatorPosInPercent(
-					QMAX(20, config->readNumEntry("LeftDockPosition", 20/* % */)));
-
-	//			dw->resize( d->config->readNumEntry("LeftDockPosition", 115/* % */), dw->height() );
-# else
-				//there were problems on KDE < 3.4
-				ds->setSeparatorPosInPercent( 20 );
-# endif
-				//if (!wasAutoOpen) //(dw2->isVisible())
-//					ds->setSeparatorPos( ds->separatorPos(), true );
-			}
-#endif
-	}
-
-	KexiDialogBase *dialogForItem( KexiPart::Item* item ) const
-	{
-		return item ? dialogs[ item->identifier() ] : 0;
-	}
-
-	template<class type>
-	type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name)
-	{
-		if (!item || !name) {
-			kdWarning() << 
-				"KexiMainWindowImpl::Private::openedCustomObjectsForItem(): !item || !name" << endl;
-			return 0;
-		}
-		QString key( QString::number(item->identifier()) + name );
-		return dynamic_cast<type*>( m_openedCustomObjectsForItem.find( key.latin1() ) );
-	}
-
-	void addOpenedCustomObjectForItem(KexiPart::Item* item, QObject* object, const char* name)
-	{
-		QString key = QString::number(item->identifier()) + name;
-		m_openedCustomObjectsForItem.insert( key.latin1(), object );
-	}
+protected:
+	//! @todo move to KexiProject
+	KexiDialogDict dialogs;
+	QIntDict<char> pendingDialogs; //!< part item identifiers for dialogs whoose opening has been started
+	QMutex dialogsMutex; //!< used for locking dialogs and pendingDialogs dicts
 };
-

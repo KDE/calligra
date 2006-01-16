@@ -83,11 +83,12 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 
 	public slots:
 		//! Opens object pointed by \a item in a view \a viewMode
-		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode,
-			QMap<QString,QString>* staticObjectArgs = 0) = 0;
+		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode,
+			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		//! For convenience
-		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, int viewMode = Kexi::DataViewMode) = 0;
+		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, 
+			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		/*! Called to accept property butter editing. */
 		virtual void acceptPropertySetEditing() = 0;

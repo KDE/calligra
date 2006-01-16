@@ -123,12 +123,14 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		/*! Opens object pointed by \a item in a view \a viewMode.
 		 \a staticObjectArgs can be passed for static object 
-		 (only works when part for this item is of type KexiPart::StaticPart) */
-		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode, 
-			QMap<QString,QString>* staticObjectArgs = 0);
+		 (only works when part for this item is of type KexiPart::StaticPart).
+		 \a openingCancelled is set to true is opening has been cancelled. */
+		virtual KexiDialogBase* openObject(KexiPart::Item *item, int viewMode, 
+			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
 
 		//! For convenience
-		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
+		virtual KexiDialogBase* openObject(const QCString& mime, const QString& name, 
+			int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
 
 		/*! Implemented for KexiMainWindow */
 		virtual tristate saveObject( KexiDialogBase *dlg,
@@ -307,14 +309,26 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		//! internal - creates and initializes kexi project
 		void createKexiProject(KexiProjectData* new_data);
 
-		/*! this slot handles event when user double clicked (or single -depending on settings)
-		 or pressed return ky on the part item in the navigator.
+		/*! Handles event when user double clicked (or single -depending on settings)
+		 or pressed Return key on the part item in the navigator.
 		 This differs from openObject() signal in that if the object is already opened
 		 in view mode other than \a viewMode, the mode is not changed.
 		 \sa KexiBrowser::openOrActivateItem() */
-		KexiDialogBase * openObjectFromNavigator(KexiPart::Item* item, int viewMode);
+		KexiDialogBase* openObjectFromNavigator(KexiPart::Item* item, int viewMode, 
+			bool &openingCancelled);
+
+		//! For convenience
+		KexiDialogBase* openObjectFromNavigator(KexiPart::Item* item, int viewMode);
 
 		bool newObject( KexiPart::Info *info );
+
+		//! For convenience
+		KexiDialogBase* openObject(KexiPart::Item *item, int viewMode, 
+			QMap<QString,QString>* staticObjectArgs = 0)
+		{
+			bool openingCancelled;
+			return openObject(item, viewMode, openingCancelled, staticObjectArgs);
+		}
 
 		/*! Removes object pointed by \a item from current project.
 		 Asks for confirmation. \return true on success
@@ -434,12 +448,12 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 			const QString& titleText = QString::null, bool reload = false);
 
 		//! Shows "page setup" dialog for \a item.
-		//! \return true on success.
-		bool pageSetupForItem(KexiPart::Item* item);
+		//! \return true on success and cancelled when the action was cancelled.
+		tristate pageSetupForItem(KexiPart::Item* item);
 
 		//! Helper for printItem() and printPreviewForItem()
-		//! \return true on success.
-		bool printActionForItem(KexiPart::Item* item, PrintActionType action);
+		//! \return true on success and cancelled when the action was cancelled.
+		tristate printActionForItem(KexiPart::Item* item, PrintActionType action);
 
 	private:
 

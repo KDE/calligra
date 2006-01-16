@@ -27,6 +27,7 @@
 #include <qprocess.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
+#include <qmutex.h>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -1045,7 +1046,8 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 			viewMode = Kexi::TextViewMode;
 		else
 			continue; //sanity
-		if (!openObject(item, viewMode)) {
+		bool openingCancelled;
+		if (!openObject(item, viewMode, openingCancelled) && !openingCancelled) {
 			not_found_msg += "<li>";
 			not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot open object")+
 				internalReason(d->prj)+"<br></li>" );
@@ -1132,7 +1134,7 @@ tristate KexiMainWindowImpl::closeProject()
 //		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
 
 		if (d->propEditor) {
-			if (d->dialogs.isEmpty())
+			if (d->openedDialogsCount() == 0)
 				makeWidgetDockVisible(d->propEditorTabWidget);
 			KDockWidget *dw = (KDockWidget *)d->propEditorTabWidget->parentWidget();
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
@@ -1144,7 +1146,7 @@ tristate KexiMainWindowImpl::closeProject()
 		KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 		int dwWidth = dw->width();
 		if (ds) {
-				if (!d->dialogs.isEmpty() && d->propEditorTabWidget->isVisible())
+				if (d->openedDialogsCount()!=0 && d->propEditorTabWidget->isVisible())
 					d->navDockSeparatorPos = ds->separatorPosInPercent();
 				else
 					d->navDockSeparatorPos = (100 * dwWidth) / width();
@@ -1178,7 +1180,7 @@ tristate KexiMainWindowImpl::closeProject()
 //	if(d->propEditorToolWindow)
 	//	d->propEditorToolWindow->hide();
 
-	d->dialogs.clear(); //sanity!
+	d->clearDialogs(); //sanity!
 	delete d->prj;
 	d->prj=0;
 
@@ -1742,8 +1744,9 @@ KexiMainWindowImpl::registerChild(KexiDialogBase *dlg)
 		this, SLOT(slotDirtyFlagChanged(KexiDialogBase*)));
 
 //	connect(dlg, SIGNAL(childWindowCloseRequest(KMdiChildView *)), this, SLOT(childClosed(KMdiChildView *)));
-	if(dlg->id() != -1)
-		d->dialogs.insert(dlg->id(), QGuardedPtr<KexiDialogBase>(dlg));
+	if(dlg->id() != -1) {
+		d->insertDialog(dlg);
+	}
 	kdDebug() << "KexiMainWindowImpl::registerChild() ID = " << dlg->id() << endl;
 
 	if (m_mdiMode==KMdi::ToplevelMode || m_mdiMode==KMdi::ChildframeMode) {//kmdi fix
@@ -1972,7 +1975,8 @@ bool
 KexiMainWindowImpl::activateWindow(int id)
 {
 	kdDebug() << "KexiMainWindowImpl::activateWindow()" << endl;
-	return activateWindow( (KexiDialogBase*)d->dialogs[id] );
+	bool pending;
+	return activateWindow( d->openedDialogFor( id, pending ) );
 }
 
 bool
@@ -1991,10 +1995,10 @@ void
 KexiMainWindowImpl::childClosed(KMdiChildView *v)
 {
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
-	d->dialogs.remove(dlg->id());
+	d->removeDialog(dlg->id());
 
 	//focus navigator if nothing else available
-	if (d->dialogs.isEmpty())
+	if (d->openedDialogsCount() == 0)
 		d->nav->setFocus();
 }
 
@@ -2772,8 +2776,7 @@ tristate KexiMainWindowImpl::saveObject( KexiDialogBase *dlg, const QString& mes
 //this is alreday done in KexiProject::addStoredItem():	d->nav->addItem(dlg->partItem());
 	//item id changed to final one: update association in dialogs' dictionary
 //	d->dialogs.take(oldItemID);
-	d->dialogs.remove(oldItemID);
-	d->dialogs.insert(dlg->partItem()->identifier(), QGuardedPtr<KexiDialogBase>(dlg));
+	d->updateDialogId(dlg, oldItemID);
 	invalidateProjectWideActions();
 	return true;
 }
@@ -2872,7 +2875,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	}
 
 //	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
-	d->dialogs.remove(dlg_id); //don't remove -KMDI will do that
+	d->removeDialog(dlg_id); //don't remove -KMDI will do that
 
 	KXMLGUIClient *client = dlg->commonGUIClient();
 	KXMLGUIClient *viewClient = dlg->guiClient();
@@ -2886,7 +2889,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 		//sanity: ouch, it is not removed yet? - do it now
 		if (d->closedDialogGUIClient && d->closedDialogGUIClient!=client)
 			guiFactory()->removeClient(d->closedDialogGUIClient);
-		if (d->dialogs.isEmpty()) {//now there is no dialogs - remove client RIGHT NOW!
+		if (d->openedDialogsCount()==0) {//now there is no dialogs - remove client RIGHT NOW!
 			d->closedDialogGUIClient=0;
 			guiFactory()->removeClient(client);
 		}
@@ -2899,7 +2902,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 		//sanity: ouch, it is not removed yet? - do it now
 		if (d->closedDialogViewGUIClient && d->closedDialogViewGUIClient!=viewClient)
 			guiFactory()->removeClient(d->closedDialogViewGUIClient);
-		if (d->dialogs.isEmpty()) {//now there is no dialogs - remove client RIGHT NOW!
+		if (d->openedDialogsCount()==0) {//now there is no dialogs - remove client RIGHT NOW!
 			d->closedDialogViewGUIClient=0;
 			guiFactory()->removeClient(viewClient);
 		}
@@ -2914,7 +2917,7 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	KMdiMainFrm::closeWindow(dlg, layoutTaskBar);
 
 	//focus navigator if nothing else available
-	if (d->dialogs.isEmpty()) {
+	if (d->openedDialogsCount()==0) {
 		d->maximizeFirstOpenedChildFrm = isInMaximizedChildFrmMode;
 		if (d->nav)
 			d->nav->setFocus();
@@ -3155,22 +3158,30 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 }
 
 KexiDialogBase *
-KexiMainWindowImpl::openObject(const QCString& mimeType, const QString& name, int viewMode)
+KexiMainWindowImpl::openObject(const QCString& mimeType, const QString& name, 
+	int viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs)
 {
 	KexiPart::Item *item = d->prj->itemForMimeType(mimeType,name);
 	if (!item)
 		return 0;
-	return openObject(item, viewMode);
+	return openObject(item, viewMode, openingCancelled, staticObjectArgs);
 }
 
 KexiDialogBase *
-KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, 
+KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &openingCancelled,
 	QMap<QString,QString>* staticObjectArgs)
 {
 	if (!d->prj || !item)
 		return 0;
 	KexiUtils::WaitCursor wait;
-	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[ item->identifier() ];
+	bool pending;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pending );
+	if (pending) {
+		openingCancelled = true;
+		return 0;
+	}
+	openingCancelled = false;
+
 	bool needsUpdateViewGUIClient = true;
 	if (dlg) {
 		dlg->activate();
@@ -3199,6 +3210,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode,
 			d->curDialog ? d->curDialog->currentViewMode() : Kexi::NoViewMode,
 			part, viewMode);
 
+		d->addItemToPendingDialogs(item);
 		dlg = d->prj->openObject(this, *item, viewMode, staticObjectArgs);
 
 //moved up		if (dlg)
@@ -3230,9 +3242,23 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode,
 KexiDialogBase *
 KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 {
+	bool openingCancelled;
+	return openObjectFromNavigator(item, viewMode, openingCancelled);
+}
+
+KexiDialogBase *
+KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode, 
+	bool &openingCancelled)
+{
 	if (!d->prj || !item)
 		return false;
-	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[ item->identifier() ];
+	bool pending;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pending );
+	if (pending) {
+		openingCancelled = true;
+		return 0;
+	}
+	openingCancelled = false;
 	if (dlg) {
 		if (activateWindow(dlg)) {//item->identifier())) {//just activate
 			invalidateViewModeActions();
@@ -3245,12 +3271,12 @@ KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 		return 0;
 	if (viewMode == Kexi::DataViewMode && !(part->supportedViewModes() & Kexi::DataViewMode)) {
 		if (part->supportedViewModes() & Kexi::DesignViewMode)
-			return openObjectFromNavigator( item, Kexi::DesignViewMode );
+			return openObjectFromNavigator( item, Kexi::DesignViewMode, openingCancelled );
 		else if (part->supportedViewModes() & Kexi::TextViewMode)
-			return openObjectFromNavigator( item, Kexi::TextViewMode );
+			return openObjectFromNavigator( item, Kexi::TextViewMode, openingCancelled );
 	}
 	//do the same as in openObject()
-	return openObject(item, viewMode);
+	return openObject(item, viewMode, openingCancelled);
 }
 
 bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
@@ -3310,7 +3336,8 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 
 	if (!it->neverSaved()) //only add stored objects to the browser
 		d->nav->addItem(*it);
-	return openObject(it, Kexi::DesignViewMode);
+	bool openingCancelled;
+	return openObject(it, Kexi::DesignViewMode, openingCancelled);
 }
 
 tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
@@ -3333,7 +3360,11 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	}
 
 	tristate res;
-	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[item->identifier()];
+	bool pending;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pending );
+	if (pending) {
+		return cancelled;
+	}
 
 	//also close 'print setup' dialog for this item, if any
 	KexiDialogBase * pageSetupDlg = d->pageSetupDialogs[item->identifier()];
@@ -3391,12 +3422,15 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 
 void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item, const QCString& /*oldName*/)
 {
-	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[item.identifier()];
-	if (dlg) {//change item
-		dlg->updateCaption();
-		if (static_cast<KexiDialogBase*>(d->curDialog)==dlg)//optionally, update app. caption
-			updateAppCaption();
-	}
+	bool pending;
+	KexiDialogBase *dlg = d->openedDialogFor( &item, pending );
+	if (pending || !dlg)
+		return;
+
+	//change item
+	dlg->updateCaption();
+	if (static_cast<KexiDialogBase*>(d->curDialog)==dlg)//optionally, update app. caption
+		updateAppCaption();
 }
 
 int KexiMainWindowImpl::generatePrivateID()
@@ -3616,7 +3650,8 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 
 	Kexi::partManager().part(i);
 	KexiPart::Item *item = d->prj->item(i, startupItem);
-	if(!openObject(item, Kexi::DataViewMode)) {
+	bool openingCancelled;
+	if(!openObject(item, Kexi::DataViewMode, openingCancelled) && !openingCancelled) {
 		hide();
 		showErrorMessage( err_msg, i18n("Specified object could not be opened.") );
 		return false;
@@ -3776,14 +3811,14 @@ bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item,
 //	return printActionForItem(item, PreviewItem);
 }
 
-bool KexiMainWindowImpl::pageSetupForItem(KexiPart::Item* item)
+tristate KexiMainWindowImpl::pageSetupForItem(KexiPart::Item* item)
 {
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
 //! @todo: accept row changes...
 	return printActionForItem(item, PageSetupForItem);
 }
 
-bool KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActionType action)
+tristate KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActionType action)
 {
 	if (!item)
 		return false;
@@ -3802,7 +3837,10 @@ bool KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActionTyp
 		return true;
 	}
 
-	KexiDialogBase *dlg = d->dialogForItem( item );
+	bool pending;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pending );
+	if (pending)
+		return cancelled;
 
 	if (dlg) {
 		// accept row changes
@@ -3865,7 +3903,11 @@ bool KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActionTyp
 		staticObjectArgs["action"] = "pageSetup";
 	else
 		return false;
-	printingDialog = openObject(printingPartItem, Kexi::DesignViewMode, &staticObjectArgs);
+	bool openingCancelled;
+	printingDialog = openObject(printingPartItem, Kexi::DesignViewMode, 
+		openingCancelled, &staticObjectArgs);
+	if (openingCancelled)
+		return cancelled;
 	if (!printingDialog) //sanity
 		return false;
 	d->pageSetupDialogs.insert(item->identifier(), printingDialog);
