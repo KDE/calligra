@@ -6,6 +6,7 @@
 #include <qwhatsthis.h>
 #include <qtooltip.h>
 #include <qvalidator.h>
+#include <qpushbutton.h>
 
 #include <kinputdialog.h>
 #include <klocale.h>
@@ -185,9 +186,37 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_colsSB = new kchartDataSpinBox( page );
     m_colsSB->resize( m_colsSB->sizeHint() );
     m_colsSB->setMinValue(1);
-
+    
+    //Buttons for Inserting / Removing rows & columns 
+    QPushButton* insertRowButton=new QPushButton( i18n("Insert Row") , page);
+    connect( insertRowButton , SIGNAL( clicked() ) , this , SLOT( insertRow() ) );
+    
+    QPushButton* insertColButton=new QPushButton( i18n("Insert Column") , page);
+    connect( insertColButton , SIGNAL( clicked() ) , this , SLOT( insertColumn() ) );
+    
+    QPushButton* removeRowButton=new QPushButton( i18n("Remove Row") , page);
+    connect( removeRowButton , SIGNAL( clicked() ) , this , SLOT( removeCurrentRow() ) );
+    
+    QPushButton* removeColButton=new QPushButton( i18n("Remove Column") , page);
+    connect( removeColButton , SIGNAL( clicked() ) , this , SLOT( removeCurrentColumn() ) );
+    
+    
+  
     // Start the layout.  The table is at the top.
     QVBoxLayout  *topLayout = new QVBoxLayout( page );
+    
+    QHBoxLayout* insertRemoveLayout = new QHBoxLayout( );
+   
+    insertRemoveLayout->setSpacing(5);
+    insertRemoveLayout->addWidget(insertRowButton);
+    insertRemoveLayout->addWidget(insertColButton);
+    insertRemoveLayout->addWidget(removeRowButton);
+    insertRemoveLayout->addWidget(removeColButton);
+    insertRemoveLayout->addStretch(1);
+    
+    topLayout->addLayout(insertRemoveLayout);
+    topLayout->addSpacing(10);
+    
     topLayout->addWidget(m_table);
 
     // Then, a horizontal layer with the rows and columns settings
@@ -196,11 +225,14 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     rowColLayout->addWidget(m_rowsSB);
     rowColLayout->addWidget(m_colsLA);
     rowColLayout->addWidget(m_colsSB);
+    
+    
     rowColLayout->addStretch(1);
     rowColLayout->setMargin(10);
 
     topLayout->addLayout(rowColLayout);
     topLayout->setStretchFactor(m_table, 1);
+    topLayout->setStretchFactor(insertRemoveLayout,1);
 
     // Connect signals from the spin boxes.
     connect(m_rowsSB, SIGNAL(valueChangedSpecial(int)), 
@@ -209,6 +241,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 	    this,     SLOT(setCols(int)));
 
 
+    
     /* -- Changed data editor to use top row and leftmost column for series names and labels
           so this is no longer necessary
 
@@ -216,7 +249,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 	    this,                        SLOT(column_clicked(int)) );
     connect(m_table->verticalHeader(),   SIGNAL(clicked(int)),
 	    this,                        SLOT(row_clicked(int)) );*/
-
+  
     connect(m_table, SIGNAL(valueChanged(int, int)),
 	    this,    SLOT(tableChanged(int, int)) );
 
@@ -232,6 +265,44 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     addDocs();
 }
 
+void kchartDataEditor::removeCurrentRow()
+{
+    int row=m_table->currentRow();
+    
+    m_table->removeRow(row);
+    m_rowsSB->setValue(m_table->numRows());
+    
+    if (row == 0)
+        updateColHeaders();   
+    
+    m_modified=true;
+}
+void kchartDataEditor::removeCurrentColumn()
+{
+    int col=m_table->currentColumn();
+    
+    m_table->removeColumn(col);
+    m_colsSB->setValue(m_table->numCols());
+    
+    if (col == 0)
+        updateRowHeaders();
+    
+    m_modified=true;
+}
+void kchartDataEditor::insertColumn()
+{
+    m_table->insertColumns(m_table->currentColumn()+1,1);
+    m_colsSB->setValue(m_table->numCols());
+    updateColHeaders();
+    m_modified=true;
+}
+void kchartDataEditor::insertRow()
+{
+    m_table->insertRows(m_table->currentRow()+1,1);
+    m_rowsSB->setValue(m_table->numRows());
+    updateRowHeaders();
+    m_modified=true;
+}    
 
 // Add Tooltips and WhatsThis help to various parts of the Data Editor.
 //
@@ -252,9 +323,28 @@ void kchartDataEditor::addDocs()
     QWhatsThis::add(m_colsSB, colwhatsthis);
 
     // The table.
-    QToolTip::add(m_table, i18n("Chart data, each row is a data set. "
-			       "Headers can be changed by clicking on them."));
-    QWhatsThis::add(m_table, i18n("<p>This table represents the complete data"
+    QToolTip::add(m_table, i18n("Chart data table."));
+    
+    //GUI
+    //The QWhatsThis information below is incorrect since the way that the contents of the table
+    //are displayed in the chart depends upon the data format selected (which can be 
+    //either "Data in columns" (default) or "Data in rows)
+    //The names of the data sets / axes labels are no longer set by clicking on the table 
+    //headers - since that was slow to work with and did not allow for keyboard input. 
+    //Instead the names are taken from the topmost row and leftmost column.  
+    //
+    //eg:       Month | Sales 
+    //          Jan   | 105
+    //          Feb   | 117
+    //          March | 120
+    //
+    //The captions of the header are automatically set to the names of the cells in the topmost row
+    //and leftmost column.  This means that if you have more data than will fit in the visible area,
+    //you can still see the column names or row names when the table has been scrolled.
+    //KSpread could use some functionality like this as well.
+    
+    
+    /*QWhatsThis::add(m_table, i18n("<p>This table contains the data"
     " for the chart.<br><br> Each row is one data set of values."
     " The name of such a data set can be changed in the column header (on the left)"
     " of the table. In a line diagram each row is one line. In a ring diagram each row"
@@ -262,7 +352,7 @@ void kchartDataEditor::addDocs()
     " Just like rows you can also change the name of each value in the"
     " column headers (at the top) of the table.  In a bar diagram the number"
     " of columns defines the number of value sets.  In a ring diagram each"
-    " column is one ring.</p>"));
+    " column is one ring.</p>"));*/
 }
 
 
@@ -400,6 +490,9 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
     {
         m_table->setText(i+headerRows(),0,rowLabels[i]);    
     }
+    
+    updateRowHeaders();
+    
 }
 
 int kchartDataEditor::headerRows()
@@ -454,6 +547,8 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
     {
         m_table->setText(0,i+headerCols(),colLabels[i]);
     }
+    
+    updateColHeaders();
 }
 
 
@@ -496,10 +591,7 @@ static int askUserForConfirmation(QWidget *parent)
 	     "This message will not be shown again if you click Continue"));
 }
 
-void kchartDataEditor::test()
-{
-  kdDebug() << "hej!" << endl;
-}
+
 // This slot is called when the spinbox for rows is changed.
 //
 void kchartDataEditor::setRows(int rows)
@@ -614,7 +706,7 @@ void kchartDataEditor::setCols(int cols)
 
 // Get the new name for a column header.
 //
-void kchartDataEditor::column_clicked(int column)
+/*void kchartDataEditor::column_clicked(int column)
 {
 	bool ok;
     QString name = KInputDialog::getText(i18n("Column Name"), 
@@ -627,12 +719,12 @@ void kchartDataEditor::column_clicked(int column)
     m_table->horizontalHeader()->setLabel(column, name);
 	m_modified = true;
     }
-}
+}*/
 
 
 // Get the new name for a row header.
 //
-void kchartDataEditor::row_clicked(int row)
+/*void kchartDataEditor::row_clicked(int row)
 {
 	bool ok;
     QString name = KInputDialog::getText(i18n("Row Name"),
@@ -645,7 +737,7 @@ void kchartDataEditor::row_clicked(int row)
     m_table->verticalHeader()->setLabel(row, name);
 	m_modified = true;
     }
-}
+}*/
 
 
 void  kchartDataEditor::tableChanged(int row, int col)
@@ -660,17 +752,31 @@ void  kchartDataEditor::tableChanged(int row, int col)
 
 void kchartDataEditor::updateRowHeaders()
 {
-    for (int i=headerRows();i<m_table->numRows();i++)
+    for (int i=0;i<m_table->numRows();i++)
     {
-        m_table->verticalHeader()->setLabel(i,m_table->text(i,0));
+        QHeader* header=m_table->verticalHeader();
+        
+        QString tableCellText=m_table->text(i,0);
+        
+        if (tableCellText == QString::null)
+            tableCellText=QString("");
+        
+        header->setLabel(header->mapToSection(i),tableCellText);
     }
 }
 
 void kchartDataEditor::updateColHeaders()
 {
-    for (int i=headerCols();i<m_table->numCols();i++)
+    for (int i=0;i<m_table->numCols();i++)
     {
-        m_table->horizontalHeader()->setLabel(i,m_table->text(0,i));
+        QHeader* header=m_table->horizontalHeader();
+        
+        QString tableCellText=m_table->text(0,i);
+        
+        if (tableCellText == QString::null)
+            tableCellText=QString("");
+            
+        header->setLabel(header->mapToSection(i),tableCellText);
     }
 }
 

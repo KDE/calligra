@@ -76,7 +76,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     // Geometry page
     //_geompage = new KChartGeometryConfigPage( this );
     //addTab( _geompage, i18n( "&Geometry" ) );
-    setCaption( i18n( "Chart Config Dialog" ) );
+    setCaption( i18n( "Chart Setup" ) );
 
     if (flags & KC_DATAFORMAT) {
         m_datapage = new KChartDataConfigPage(m_params, this, dat, aux);

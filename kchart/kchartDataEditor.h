@@ -127,17 +127,22 @@ signals:
 
 private slots:
     void  slotApply();
+    
+    /** Removes the row which the current cell belongs to */
+    void  removeCurrentRow();   
+    /** Removes the column which the current cell belongs to */
+    void  removeCurrentColumn();
+    /** Inserts a new row below the current cell */
+    void  insertRow();
+    /** Inserts a new column to the right of the current cell */
+    void  insertColumn();
+    
     void  setRows(int rows);
     void  setCols(int cols);
-
-    // The user clicked on a header item.
-    void  column_clicked(int);
-    void  row_clicked(int);
 
     // Called when something changes in the table.
     void  tableChanged(int row, int col);
 
-    void test();
 
 private:
     // Widgets in the editor
