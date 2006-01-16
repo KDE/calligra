@@ -108,7 +108,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     recentFile->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     fLayout->add( recentFile );
     fLayout->addItem( new QSpacerItem( 0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );
-    connect( d->mailText, SIGNAL( textChanged( const QString& ) ), this,
+    connect( d->fileText, SIGNAL( textChanged( const QString& ) ), this,
         SLOT( setText( const QString& ) ) );
     QObject::connect( recentFile, SIGNAL( highlighted ( const QString &) ),
         d->fileLink->lineEdit(), SLOT( setText( const QString & ) ) );
