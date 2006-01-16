@@ -52,11 +52,6 @@ public:
   bool load( const char* filename );
   
   /*
-   * Saves the workbook to file. Returns false if error occurred.
-   */
-  bool save( const char* filename );
-  
-  /*
    * Appends a new sheet.
    */
   void appendSheet( Sheet* sheet );

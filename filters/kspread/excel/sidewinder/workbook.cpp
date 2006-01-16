@@ -66,11 +66,6 @@ bool Workbook::load( const char* filename )
   return result;
 }
 
-bool Workbook::save( const char* filename )
-{
-  return true;
-}
-
 void Workbook::appendSheet( Sheet* sheet )
 {
   d->sheets.push_back( sheet );
