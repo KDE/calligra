@@ -123,6 +123,13 @@ void ConnectorTool::setActivated(bool a)
     m_pDragData = 0;
     emit activated(this);
   } else {
+    if(m_pStencil && (m_mode == stmDrawRubber) && (m_type == PolyLineConnector)) {
+      Kivio::PolyLineConnector* polyconnector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
+      polyconnector->removeLastPoint();
+      connector(view()->canvasWidget()->rect());
+      view()->canvasWidget()->guideLines().repaintAfterSnapping();
+    }
+
     m_pStencil = 0;
     delete m_pDragData;
     m_pDragData = 0;
@@ -324,6 +331,7 @@ void ConnectorTool::endRubberBanding(QMouseEvent *)
 {
   connector(view()->canvasWidget()->rect());
   m_pStencil = 0;
+  m_mode = stmNone;
   view()->canvasWidget()->guideLines().repaintAfterSnapping();
 
   if(!m_permanent) {

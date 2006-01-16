@@ -457,4 +457,19 @@ namespace Kivio {
 
     return e;
   }
+
+  void PolyLineConnector::removePoint(unsigned int index)
+  {
+    if(index >= m_points.count()) {
+      return;
+    }
+
+    m_points.remove(m_points.at(index));
+  }
+
+  void PolyLineConnector::removeLastPoint()
+  {
+    removePoint(m_points.count() - 1);
+  }
+
 }

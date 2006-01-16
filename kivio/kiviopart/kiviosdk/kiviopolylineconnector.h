@@ -55,6 +55,10 @@ namespace Kivio {
        * @param p The point to append.
        */
       void addPoint(const KoPoint& p);
+      /// Remove a point from the list.
+      void removePoint(unsigned int index);
+      /// Remove the last point from the list
+      void removeLastPoint();
       
       unsigned int pointCount() const { return m_points.count(); }
       
