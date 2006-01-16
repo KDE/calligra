@@ -39,7 +39,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     lay = new QVBoxLayout(m_columnsTab, KDialog::marginHint());
     m_columnsWidget = new KoPageLayoutColumns(m_columnsTab, m_columns, KoUnit::U_MM, m_layout);
-    lay->addWidget(m_columnsTab);
+    lay->addWidget(m_columnsWidget);
 
     connect (m_columnsWidget, SIGNAL( propertyChange(KoColumns&)),
             this, SLOT (columnsUpdated( KoColumns&)));
