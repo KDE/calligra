@@ -288,14 +288,8 @@ bool ExcelImport::Private::createManifest( KoOasisStore* store )
 {
   KoXmlWriter* manifestWriter = store->manifestWriter( "application/vnd.oasis.opendocument.spreadsheet" );
   
-  manifestWriter->startDocument( "manifest:manifest" );
-  manifestWriter->startElement( "manifest:manifest" );
-  manifestWriter->addAttribute( "xmlns:manifest", "urn:oasis:names:tc:openoffice:xmlns:manifest:1.0" );
-  manifestWriter->addManifestEntry( "/", "application/vnd.oasis.opendocument.spreadsheet" );
   manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
   manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-  manifestWriter->endElement();
-  manifestWriter->endDocument();
 
   return store->closeManifestWriter();
 }
