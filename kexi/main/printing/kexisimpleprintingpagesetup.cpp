@@ -482,7 +482,8 @@ void KexiSimplePrintingPageSetup::printPreview()
 
 void KexiSimplePrintingPageSetup::slotOpenData()
 {
-	m_mainWin->openObject(m_item);
+	bool openingCancelled;
+	m_mainWin->openObject(m_item, Kexi::DataViewMode, openingCancelled);
 }
 
 void KexiSimplePrintingPageSetup::slotTitleTextChanged(const QString&)

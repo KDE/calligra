@@ -470,8 +470,11 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		// open the form in design mode
 		KexiMainWindow *mainWin = KexiUtils::findParent<KexiMainWindow>(w, "KexiMainWindow");
 		KexiDBSubForm *subform = static_cast<KexiDBSubForm*>(w);
-		if(mainWin)
-			mainWin->openObject("kexi/form", subform->formName(), Kexi::DesignViewMode);
+		if(mainWin) {
+			bool openingCancelled;
+			mainWin->openObject("kexi/form", subform->formName(), Kexi::DesignViewMode, 
+				openingCancelled);
+		}
 		return true;
 	}
 	else if( (classname == "KexiDBDateEdit") || (classname == "KexiDBDateTimeEdit") || (classname == "KexiDBTimeEdit")

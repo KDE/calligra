@@ -289,7 +289,9 @@ void KexiRelationWidget::openSelectedTable()
 /*! @todo what about query? */
 	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->schema()->table())
 		return;
-	m_win->openObject("kexi/table", m_relationView->focusedTableView()->schema()->name(), Kexi::DataViewMode);
+	bool openingCancelled;
+	m_win->openObject("kexi/table", m_relationView->focusedTableView()->schema()->name(), 
+		Kexi::DataViewMode, openingCancelled);
 }
 
 void KexiRelationWidget::designSelectedTable()
@@ -297,7 +299,9 @@ void KexiRelationWidget::designSelectedTable()
 /*! @todo what about query? */
 	if (!m_relationView->focusedTableView() || !m_relationView->focusedTableView()->schema()->table())
 		return;
-	m_win->openObject("kexi/table", m_relationView->focusedTableView()->schema()->name(), Kexi::DesignViewMode);
+	bool openingCancelled;
+	m_win->openObject("kexi/table", m_relationView->focusedTableView()->schema()->name(), 
+		Kexi::DesignViewMode, openingCancelled);
 }
 
 QSize KexiRelationWidget::sizeHint() const
