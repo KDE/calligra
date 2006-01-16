@@ -47,10 +47,11 @@ namespace {
     const Q_UINT8 PIXEL_RED = 2;
     const Q_UINT8 PIXEL_ALPHA = 3;
 
-    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 extrasamplescount) {
+    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount) {
         if(color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK)
         {
-            nbchannels = 1;
+            if(nbchannels == 0) nbchannels = 1;
+            extrasamplescount = nbchannels - 1; // FIX the extrasamples count in case of
             if(color_nb_bits <= 8)
             {
                     return "GRAYA";
@@ -58,7 +59,8 @@ namespace {
                     return "GRAYA16";
             }
         } else if(color_type == PHOTOMETRIC_RGB ) {
-            nbchannels = 3;
+            if(nbchannels == 0) nbchannels = 3;
+            extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
             if(color_nb_bits <= 8)
             {
                 return "RGBA";
@@ -101,10 +103,12 @@ namespace {
                 return "CMYKA16";
             }
         } else if(color_type == PHOTOMETRIC_CIELAB ) {
-            nbchannels = 3;
+            if(nbchannels == 0) nbchannels = 3;
+            extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
             return "LABA"; // TODO add support for a 8bit LAB colorspace when it is written
         } else if(color_type ==  PHOTOMETRIC_PALETTE) {
-            nbchannels = 2;
+            if(nbchannels == 0) nbchannels = 2;
+            extrasamplescount = nbchannels - 2; // FIX the extrasamples count in case of
             // <-- we will convert the index image to RGBA16 as the palette is allways on 16bits colors
             return "RGBA16";
         }

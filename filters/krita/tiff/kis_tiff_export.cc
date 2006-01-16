@@ -29,6 +29,7 @@
 #include <koFilterChain.h>
 
 #include <kis_doc.h>
+#include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_progress_display_interface.h>
@@ -83,18 +84,9 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
     
     if(options.flatten)
     {
-        img = new KisImage(*output->currentImage());
-        Q_CHECK_PTR(img);
-
-        // Don't store this information in the document's undo adapter
-        bool undo = output->undoAdapter()->undo();
-        output->undoAdapter()->setUndo(false);
-
-        KisTIFFConverter kpc(output, output->undoAdapter());
-
-        img->flatten();
-
-        output->undoAdapter()->setUndo(undo);
+        img = new KisImage(0, output->currentImage()->width(), output->currentImage()->height(), output->currentImage()->colorSpace(), "");
+        KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, output->currentImage()->projection());
+        img->addLayer(l.data(), img->rootLayer());
     } else {
         img = output->currentImage();
     }
