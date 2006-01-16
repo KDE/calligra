@@ -76,8 +76,8 @@ QString KPrBrush::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
         unbalancedx = QString( "%1%" ).arg( getGXFactor() / 4 + 50 );
         unbalancedy = QString( "%1%" ).arg( getGYFactor() / 4 + 50 );
     }
-    gradientStyle.addAttribute( "draw:cx", getGXFactor() );
-    gradientStyle.addAttribute( "draw:cy", getGYFactor() );
+    gradientStyle.addAttribute( "draw:cx", unbalancedx );
+    gradientStyle.addAttribute( "draw:cy", unbalancedy );
 
     switch( getGType() )
     {
