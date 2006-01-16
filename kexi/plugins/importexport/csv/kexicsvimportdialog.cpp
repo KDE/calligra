@@ -558,12 +558,12 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	row = column = 1;
 	maxColumn = 0;
 	QChar x;
-	m_file->at(0); //always seek at 0 because loadRows() is called many times
 	delete m_inputStream;
 	if ( m_mode == Clipboard ) {
 		m_inputStream = new QTextStream(m_data, IO_ReadOnly);
 	}
 	else {
+		m_file->at(0); //always seek at 0 because loadRows() is called many times
 		m_inputStream = new QTextStream(m_file);
 		if (m_encoding != QString::fromLatin1(KGlobal::locale()->encoding())) {
 			QTextCodec *codec = KGlobal::charsets()->codecForName(m_encoding);
