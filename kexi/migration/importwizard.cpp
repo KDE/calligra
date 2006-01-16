@@ -790,21 +790,23 @@ tristate ImportWizard::import()
 	Kexi::ObjectStatus result;
 	KexiMigrate* sourceDriver = prepareImport(result);
 
+	bool acceptingNeeded = false;
+
 	// Perform import
 	if (!result.error())
 	{
-		if (!m_sourceDBEncoding.isEmpty())
+		if (!m_sourceDBEncoding.isEmpty()) {
 			sourceDriver->setPropertyValue( "source_database_nonunicode_encoding", 
 				QVariant(m_sourceDBEncoding.upper().replace(' ',"")) // "CP1250", not "cp 1250" 
 			);
-		
+		}
+
+		sourceDriver->checkIfDestinationDatabaseOverwritingNeedsAccepting(
+			&result, acceptingNeeded);
+
 		kdDebug() << sourceDriver->data()->destination->databaseName() << endl;
 		kdDebug() << "Performing import..." << endl;
 	}
-
-	bool acceptingNeeded;
-	sourceDriver->checkIfDestinationDatabaseOverwritingNeedsAccepting(
-		&result, acceptingNeeded);
 
 	if (!result.error() && acceptingNeeded && KMessageBox::Yes != KMessageBox::questionYesNo(this,
 		"<qt>"+i18n("Database %1 already exists."
