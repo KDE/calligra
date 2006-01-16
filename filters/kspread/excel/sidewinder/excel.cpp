@@ -4685,7 +4685,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
   
   storage.close();
   
-  return false;
+  return true;
 }
 
 void ExcelReader::handleRecord( Record* record )
