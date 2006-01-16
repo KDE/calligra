@@ -71,6 +71,8 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
 	m_fileBasedDstWasPresented = false;
 	m_setupFileBasedSrcNeeded = true;
 	m_importExecuted = false;
+	m_predefinedConnectionData = 0;
+	m_predefinedDatabaseName = "";
 
 	setMinimumSize(400, 400);
 	setupIntro();
