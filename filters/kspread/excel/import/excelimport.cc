@@ -113,7 +113,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
   // open inputFile
   d->workbook = new Swinder::Workbook;
-  if( d->workbook->load( d->inputFile.local8Bit() ) )
+  if( !d->workbook->load( d->inputFile.local8Bit() ) )
   {
     delete d->workbook;
     d->workbook = 0;
