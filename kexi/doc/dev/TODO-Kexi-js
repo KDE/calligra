@@ -275,6 +275,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   as in http://www.sqlmanager.net/i/scr/mysql/manager/Main%20100.gif
 - display autonumber indicator in autonumbered column(s)
 - reimplement header widget to better show sorting indicators
+- display tooltip over cells that are to small to display entire contents
 
 ==== ALTER TABLE TODO: =============
 -add a function for editing indices (including multi-field indices)
@@ -735,26 +736,12 @@ Migration (Import Project Wizard) TODO:
 - 'select source db type' page: change "sqlite/msa/mysql/pg" to "sqlite/msa/server database"
   because type of server db is in fact selected on the next page (source conn selection)
 - copy kexi__db contents!
-- store "Recent Paths" for browsed directory file 
 - set the same path for "destination" file browser as for "source" one
 
 MDB Migration:
 - add checks for "no space left on device" error (otherwise Kexi will crash)
 - fix date/time and currency converting
 - use MSysRelationdhips table to read MSA db relationships (easy, it's not encoded)
-
-
-OOPL 2006 PRO TODO:
-DONE -obsuga baz danych MySQL i PostgreSQL, w tym:
-DONE -import ww. Baz do plikowego projektu Kexi
-     -eksport baz plikowych do serwer�
-     -proste raporty (autoraporty, bez projektowania)
-     -drukowanie raport�
-DONE -import z csv (edytowany znak rozdzielenia kolumn) i ze schowka
-DONE -eksport do csv (edytowany znak rozdzielenia kolumn) i do schowka
-IN-PR-obsuga comboboks� w formularzach i tabelach
-     -update dokumentacji, w tym dot. serwerow
-IN-PR-trzymanie obrazk� w bazie
 
 === Kexi Web Site TODO ===
 - move to mediawiki (JJ?)
@@ -806,7 +793,7 @@ Table Column Lookup XML Format:
     <type>table|query</type>
   |<sql>string</sql> #must be valid KEXISQL
 </rowsource>
-
+[todo]
 
 
 General TODO:
@@ -823,3 +810,8 @@ TODO:
   3rd table or so. Move to KProcess on Linux.
 
 TODO: entering table/query name by hand doesn't work in 'form data source' combo
+
+
+BETA1 TODO:
+- if you place e.g. a label in a container like a tabwidget and doubleclick it to edit the content, 
+  the label jumps around. ccpasteur sayed him fixed it last year ;)

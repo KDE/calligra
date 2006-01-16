@@ -11,6 +11,22 @@ For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
 
+2006-01-16
+Project Import Wizard
+- hide Kexi file extensions in source connection file dialog's filter
+Main Window
+- fixed saving Project Navigator Side Panel's visibility
+- do not allow to open the same dialog twice - it was possible 
+  for slowly loading dialogs with large data (e.g. a table view with 10^4 rows);
+  pending 'open' actions are now known
+Simple Printing
+- do not paint invalid values of type time, date or date/time
+Table Designer
+- fixed selecting subtypes
+KexiDB
+- SQLite driver: missing {} in PreparedStatement
+- testing connection executes "USE DATABASE" if needed (e.g. for PostgreSQL)
+
 2006-01-12
 Table View
 - Usability: Date, Date/Time and Time cell editors reimplemented
