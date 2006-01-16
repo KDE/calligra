@@ -280,7 +280,7 @@ int Appointment::UsedEffort::compareItems(QPtrCollection::Item item1, QPtrCollec
 ////
 Appointment::Appointment() 
     : m_extraRepeats(), m_skipRepeats() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_resource=0;
     m_node=0;
     m_repeatInterval=Duration();
@@ -292,7 +292,7 @@ Appointment::Appointment()
 Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load) 
     : m_extraRepeats(), 
       m_skipRepeats() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_node = node;
     m_resource = resource;
     m_repeatInterval = Duration();
@@ -306,7 +306,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dat
 Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load) 
     : m_extraRepeats(), 
       m_skipRepeats() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_node = node;
     m_resource = resource;
     m_repeatInterval = Duration();
@@ -318,7 +318,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dur
 }
 
 Appointment::~Appointment() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     detach();
 }
 
@@ -375,11 +375,11 @@ bool Appointment::isBusy(const DateTime &start, const DateTime &end) {
 }
 
 bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QDictIterator<Node> it = project.nodeDict();
-    for (; it.current(); ++it) {
+/*    for (; it.current(); ++it) {
         kdDebug()<<" Node="<<it.current()->name()<<" id="<<it.currentKey()<<endl;
-    }
+    }*/
     Node *node = project.findNode(element.attribute("task-id"));
     if (node == 0) {
         kdError()<<k_funcinfo<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
@@ -397,7 +397,7 @@ bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch)
         m_resource->takeAppointment(this);
         return false;
     }
-    kdDebug()<<k_funcinfo<<"res="<<m_resource<<" node="<<m_node<<endl;
+    //kdDebug()<<k_funcinfo<<"res="<<m_resource<<" node="<<m_node<<endl;
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
@@ -432,7 +432,7 @@ void Appointment::saveXML(QDomElement &element) const {
         kdError()<<k_funcinfo<<"Incomplete appointment data: No node"<<endl;
         return; // shouldn't happen
     }
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QDomElement me = element.ownerDocument().createElement("appointment");
     element.appendChild(me);
 
@@ -481,7 +481,7 @@ Duration Appointment::plannedEffortTo(const QDate& date) const {
 // Returns a list of efforts pr day for interval start, end inclusive
 // The list only includes days with any planned effort
 EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) const {
-    kdDebug()<<k_funcinfo<<m_node->id()<<", "<<m_resource->id()<<endl;
+    //kdDebug()<<k_funcinfo<<m_node->id()<<", "<<m_resource->id()<<endl;
     EffortCostMap ec;
     Duration eff;
     DateTime dt(start);

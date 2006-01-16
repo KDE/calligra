@@ -107,10 +107,10 @@ void ResourceAppointmentsView::draw() {
     m_totalItem->setOpen(true);
     m_availItem = new ResourceAppointmentsView::NodeItem(i18n("Available"), masterListView());
     QPtrList<Appointment> lst = m_resource->appointments();
-    kdDebug()<<k_funcinfo<<lst.count()<<endl;
+    //kdDebug()<<k_funcinfo<<lst.count()<<endl;
     QPtrListIterator<Appointment> it(lst);
     for (; it.current(); ++it) {
-        kdDebug()<<k_funcinfo<<endl;
+        //kdDebug()<<k_funcinfo<<endl;
         Node *n = it.current()->node()->node();
         ResourceAppointmentsView::NodeItem *item = new ResourceAppointmentsView::NodeItem(n, m_totalItem);
         
@@ -165,7 +165,7 @@ void ResourceAppointmentsView::slotUpdate() {
     }
     if (m_totalItem && m_availItem) {
         m_totalItem->setLimit(m_availItem->value());
-        kdDebug()<<k_funcinfo<<"avail="<<m_availItem->value()<<endl;
+        //kdDebug()<<k_funcinfo<<"avail="<<m_availItem->value()<<endl;
     }
     calculate();
 }
