@@ -118,7 +118,10 @@ rcdir = $(kde_datadir)/kplato
 rc_DATA = kplato.rc kplato_readonly.rc
 
 messages: rc.cpp
+	## NOTE: extractattr needs <Label & Text on same line!
+	$(EXTRACTATTR) --attr=Label,Text rp.xml >>rp.cpp
 	$(XGETTEXT) rc.cpp *.cc kptaboutdata.h -o $(podir)/kplato.pot
+
 kde_services_DATA = kplatopart.desktop
 
 include $(top_srcdir)/admin/Doxyfile.am
