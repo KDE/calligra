@@ -526,7 +526,8 @@ void ReportView::handleHeader(QDomNode &node) {
         child = children.item(j);
         if (child.nodeName() == "Label") {
             QDomNode n = child.attributes().namedItem("Text");
-            QString s = n.nodeValue();
+            // Translate labels
+            QString s = i18n(n.nodeValue().latin1()); //NOTE: Not sure if latin1 is ok
             QString r = s;
             int i = 0, j = 0;
             do {
