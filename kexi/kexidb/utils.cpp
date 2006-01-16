@@ -318,6 +318,14 @@ void ConnectionTestThread::run()
 		delete conn;
 		return;
 	}
+	// SQL database backends like PostgreSQL require executing "USE database" 
+	// if we really want to know connection to the server succeeded.
+	QString tmpDbName;
+	if (!conn->useTemporaryDatabaseIfNeeded( tmpDbName )) {
+		m_dlg->error(conn);
+		delete conn;
+		return;
+	}
 	delete conn;
 	m_dlg->error(0);
 }

@@ -358,12 +358,14 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 
 	QString tmpdbName;
 	//some engines need to have opened any database before executing "create database"
+	const bool orig_skip_databaseExists_check_in_useDatabase = d->skip_databaseExists_check_in_useDatabase;
 	d->skip_databaseExists_check_in_useDatabase = true;
-	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
+	bool ret = useTemporaryDatabaseIfNeeded(tmpdbName);
+	d->skip_databaseExists_check_in_useDatabase = orig_skip_databaseExists_check_in_useDatabase;
+	if (!ret)
 		return false;
-	d->skip_databaseExists_check_in_useDatabase = false;
 
-	bool ret = drv_databaseExists(dbName, ignoreErrors);
+	ret = drv_databaseExists(dbName, ignoreErrors);
 
 	if (!tmpdbName.isEmpty()) {
 		//whatever result is - now we have to close temporary opened database:
@@ -620,7 +622,11 @@ bool Connection::useTemporaryDatabaseIfNeeded(QString &tmpdbName)
 			setError(ERR_NO_DB_USED, i18n("Cannot find any database for temporary connection.") );
 			return false;
 		}
-		if (!useDatabase(tmpdbName, false)) {
+		const bool orig_skip_databaseExists_check_in_useDatabase = d->skip_databaseExists_check_in_useDatabase;
+		d->skip_databaseExists_check_in_useDatabase = true;
+		bool ret = useDatabase(tmpdbName, false);
+		d->skip_databaseExists_check_in_useDatabase = orig_skip_databaseExists_check_in_useDatabase;
+		if (!ret) {
 			setError(errorNum(), 
 				i18n("Error during starting temporary connection using \"%1\" database name.")
 				.arg(tmpdbName) );
