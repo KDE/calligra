@@ -57,9 +57,10 @@ bool SQLitePreparedStatement::execute()
 {
 	if (m_resetRequired) {
 		res = sqlite3_reset(prepared_st_handle);
-		//! @todo msg?
-		if (SQLITE_OK != res)
+		if (SQLITE_OK != res) {
+			//! @todo msg?
 			return false;
+		}
 		m_resetRequired = false;
 	}
 
@@ -75,26 +76,28 @@ bool SQLitePreparedStatement::execute()
 	else if (m_type == InsertStatement)
 		itFields = m_fields->fieldsIterator();
 	else
-		assert(0);
+		assert(0); //impl. error
 
 	for (QValueListConstIterator<QVariant> it = m_args.constBegin(); 
 		(field = itFields.current()); ++it, ++itFields, arg++)
 	{
 		if (it==m_args.constEnd() || (*it).isNull()) {//no value to bind or the value is null: bind NULL
 			res = sqlite3_bind_null(prepared_st_handle, arg);
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 			continue;
 		}
 		if (field->isTextType()) {
 			//! @todo optimize: make a static copy so SQLITE_STATIC can be used
 			QCString utf8String((*it).toString().utf8());
-			res= sqlite3_bind_text(prepared_st_handle, arg, 
+			res = sqlite3_bind_text(prepared_st_handle, arg, 
 				(const char*)utf8String, utf8String.length(), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 		}
 		else switch (field->type()) {
 		case KexiDB::Field::Byte:
@@ -103,92 +106,107 @@ bool SQLitePreparedStatement::execute()
 		{
 //! @todo what about unsigned > INT_MAX ?
 			bool ok;
-			int value = (*it).toInt(&ok);
-			if (ok)
+			const int value = (*it).toInt(&ok);
+			if (ok) {
 				res = sqlite3_bind_int(prepared_st_handle, arg, value);
-				if (SQLITE_OK != res)
+				if (SQLITE_OK != res) {
 					//! @todo msg?
 					return false;
-			else
+				}
+			}
+			else {
 				res = sqlite3_bind_null(prepared_st_handle, arg);
-				if (SQLITE_OK != res)
+				if (SQLITE_OK != res) {
 					//! @todo msg?
 					return false;
+				}
+			}
 			break;
 		}
 		case KexiDB::Field::Float:
 		case KexiDB::Field::Double:
 			res = sqlite3_bind_double(prepared_st_handle, arg, (*it).toDouble());
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 			break;
 		case KexiDB::Field::BigInteger:
 		{
 //! @todo what about unsigned > LLONG_MAX ?
 			bool ok;
 			Q_LLONG value = (*it).toLongLong(&ok);
-			if (ok)
+			if (ok) {
 				res = sqlite3_bind_int64(prepared_st_handle, arg, value);
-				if (SQLITE_OK != res)
+				if (SQLITE_OK != res) {
 					//! @todo msg?
 					return false;
-			else
+				}
+			}
+			else {
 				res = sqlite3_bind_null(prepared_st_handle, arg);
-				if (SQLITE_OK != res)
+				if (SQLITE_OK != res) {
 					//! @todo msg?
 					return false;
+				}
+			}
 			break;
 		}
 		case KexiDB::Field::Boolean:
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
 				QString::number((*it).toBool() ? 1 : 0).latin1(), 
 				1, SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 			break;
 		case KexiDB::Field::Time:
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
 				(*it).toTime().toString(Qt::ISODate).latin1(), 
 				sizeof("HH:MM:SS"), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 			break;
 		case KexiDB::Field::Date:
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
 				(*it).toDate().toString(Qt::ISODate).latin1(), 
 				sizeof("YYYY-MM-DD"), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 			break;
 		case KexiDB::Field::DateTime:
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
 				(*it).toDateTime().toString(Qt::ISODate).latin1(), 
 				sizeof("YYYY-MM-DDTHH:MM:SS"), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 			break;
 		case KexiDB::Field::BLOB:
 		{
-			QByteArray byteArray((*it).toByteArray());
+			const QByteArray byteArray((*it).toByteArray());
 			res = sqlite3_bind_blob(prepared_st_handle, arg, 
 				(const char*)byteArray, byteArray.size(), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 			break;
 		}
 		default:
 			KexiDBWarn << "PreparedStatement::execute(): unsupported field type: " 
 				<< field->type() << " - NULL value bound to column #" << arg << endl;
 			res = sqlite3_bind_null(prepared_st_handle, arg);
-			if (SQLITE_OK != res)
+			if (SQLITE_OK != res) {
 				//! @todo msg?
 				return false;
+			}
 		} //switch
 	}
 
