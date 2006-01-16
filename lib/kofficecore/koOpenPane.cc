@@ -113,6 +113,15 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
 
 KoOpenPane::~KoOpenPane()
 {
+  KoSectionListItem* item = dynamic_cast<KoSectionListItem*>(m_sectionList->selectedItem());
+
+  if(item) {
+    if(!dynamic_cast<KoDetailsPaneBase*>(m_widgetStack->widget(item->widgetIndex()))) {
+      KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+      cfgGrp.writeEntry("LastReturnType", "Custom");
+    }
+  }
+
   delete d;
 }
 
@@ -203,9 +212,15 @@ void KoOpenPane::initTemplates(const QString& templateType)
 }
 
 void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
-    Q_ASSERT(widget);
+  Q_ASSERT(widget);
 
-    addPane(i18n("Custom Document"), QString::null, widget, 1);
+  QListViewItem* item = addPane(i18n("Custom Document"), QString::null, widget, 1);
+
+  KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+
+  if(cfgGrp.readEntry("LastReturnType") == "Custom") {
+    m_sectionList->setSelected(item, true);
+  }
 }
 
 QListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
