@@ -69,8 +69,6 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
 	m_fileBasedDstWasPresented = false;
 	m_setupFileBasedSrcNeeded = true;
 	m_importExecuted = false;
-	m_predefinedConnectionData = 0;
-	m_predefinedDatabaseName = "";
 
 	setMinimumSize(400, 400);
 	parseArguments();
@@ -126,9 +124,9 @@ ImportWizard::~ImportWizard()
 //
 void ImportWizard::parseArguments()
 {
+	m_predefinedConnectionData = 0;
 	if (!m_args)
 		return;
-	m_predefinedConnectionData = 0;
 	if (!(*m_args)["databaseName"].isEmpty() && !(*m_args)["mimeType"].isEmpty()) {
 		m_predefinedDatabaseName = (*m_args)["databaseName"];
 		m_predefinedMimeType = (*m_args)["mimeType"];
