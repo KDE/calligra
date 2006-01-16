@@ -119,6 +119,7 @@ public slots:
     void setBaselineMode(bool on);
     
     void slotExportGantt(); // testing
+    void setTaskActionsEnabled(bool on);
     
 protected slots:
     void slotProjectCalendar();

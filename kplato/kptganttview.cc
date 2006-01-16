@@ -835,18 +835,18 @@ void GanttView::currentItemChanged(KDGanttViewItem* item)
     m_taskView->clear();
     m_gantt->setSelected(m_currentItem, false);
     m_currentItem = item;
-    if (!item) {
-        return;
+    if (item) {
+        m_gantt->setSelected(item, true);
+        GanttViewTaskItem *taskItem = dynamic_cast<GanttViewTaskItem *>(item);
+        if (taskItem) {
+            m_taskView->draw(taskItem->getTask());
+        } else {
+            GanttViewEventItem *msItem = dynamic_cast<GanttViewEventItem *>(item);
+            if (msItem)
+                m_taskView->draw(msItem->getTask());
+        }
     }
-    m_gantt->setSelected(item, true);
-    GanttViewTaskItem *taskItem = dynamic_cast<GanttViewTaskItem *>(item);
-    if (taskItem) {
-        m_taskView->draw(taskItem->getTask());
-        return;
-    }
-    GanttViewEventItem *msItem = dynamic_cast<GanttViewEventItem *>(item);
-    if (msItem)
-        m_taskView->draw(msItem->getTask());
+    emit enableActions(true);
 }
 
 Node *GanttView::currentNode() const

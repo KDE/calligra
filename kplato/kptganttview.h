@@ -84,6 +84,7 @@ class GanttView : public QSplitter
     bool isReadWriteMode() const { return m_readWrite; }
     
 signals:
+    void enableActions(bool);
     void modifyRelation(Relation *rel) ;
     void addRelation(Node *par, Node *child);
     void modifyRelation(Relation *rel, int linkType) ;

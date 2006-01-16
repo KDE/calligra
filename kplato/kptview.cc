@@ -142,6 +142,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     connect(m_pertview, SIGNAL(addRelation(Node*, Node*)), SLOT(slotAddRelation(Node*, Node*)));
     connect(m_pertview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
 
+	connect(m_ganttview, SIGNAL(enableActions(bool)), SLOT(setTaskActionsEnabled(bool)));
     connect(m_ganttview, SIGNAL(addRelation(Node*, Node*, int)), SLOT(slotAddRelation(Node*, Node*, int)));
     connect(m_ganttview, SIGNAL(modifyRelation(Relation*, int)), SLOT(slotModifyRelation(Relation*, int)));
     connect(m_ganttview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
@@ -284,6 +285,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionViewExpected->setChecked(true); //TODO: context
     slotViewExpected();
     
+    setTaskActionsEnabled(false);
 }
 
 View::~View()
@@ -1013,6 +1015,7 @@ void View::slotAboutToShow(QWidget *widget) {
 
 void View::updateView(QWidget *widget)
 {
+    setTaskActionsEnabled(false);
     mainWindow()->toolBar("report")->hide();
     if (widget == m_ganttview)
     {
@@ -1020,12 +1023,14 @@ void View::updateView(QWidget *widget)
         //m_ganttview->hide();
         m_ganttview->drawChanges(getProject());
         m_ganttview->show();
+        setTaskActionsEnabled(true);
     }
     else if (widget == m_pertview)
     {
         //kdDebug()<<k_funcinfo<<"draw pertview"<<endl;
         m_pertview->draw();
         m_pertview->show();
+        setTaskActionsEnabled(true);
     }
     else if (widget == m_resourceview)
     {
@@ -1149,6 +1154,19 @@ void View::setBaselineMode(bool on) {
     actionCalculate->setEnabled(!on);
 
     actionEditResource->setEnabled(!on);*/
+}
+
+void View::setTaskActionsEnabled(bool on) {
+    actionAddTask->setEnabled(on);
+    actionAddMilestone->setEnabled(on);
+    // only enabled when we have a task selected
+    bool o = on && currentTask();
+    actionAddSubtask->setEnabled(o);
+    actionDeleteTask->setEnabled(o);
+    actionMoveTaskUp->setEnabled(o);
+    actionMoveTaskDown->setEnabled(o);
+    actionIndentTask->setEnabled(o);
+    actionUnindentTask->setEnabled(o);
 }
 
 #ifndef NDEBUG
