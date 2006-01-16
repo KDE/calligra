@@ -220,7 +220,7 @@ void KexiDataAwarePropertySet::slotRowInserted(KexiTableItem*, uint row, bool /*
 	m_sets.setAutoDelete(false);//to avoid auto deleting in insert()
 //	const int r = m_dataObject->currentRow();
 	m_sets.resize(m_sets.size()+1);
-	for (int i=int(m_sets.size()); i>(int)row; i--) {
+	for (int i=int(m_sets.size())-1; i>(int)row; i--) {
 		KoProperty::Set *b = m_sets[i-1];
 		m_sets.insert( i , b );
 	}

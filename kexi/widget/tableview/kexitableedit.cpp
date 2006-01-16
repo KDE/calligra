@@ -196,10 +196,11 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 			}
 			break;
 		case KexiDB::Field::Date:
-			txt = val.toDate().toString(Qt::LocalDate);
+			if (val.toDate().isValid())
+				txt = val.toDate().toString(Qt::LocalDate);
 			break;
 		case KexiDB::Field::DateTime:
-			if (!val.toDate().isNull())
+			if (!val.toDateTime().isNull())
 				txt = val.toDate().toString(Qt::LocalDate) + " " + val.toTime().toString(Qt::LocalDate);
 			break;
 		default:
