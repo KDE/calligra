@@ -80,9 +80,13 @@ public:
     QString getData(QString tag) const {
         //kdDebug()<<k_funcinfo<<"tag="<<tag<<endl;
         KLocale *l = KGlobal::locale();
-        if (!tag.contains('.'))
+        if (!tag.contains('.')) {
+            // global tags
+            if (tag == "currentdate") {
+                return l->formatDate(QDate::currentDate(), true);
+            }
             return QString::null;
-
+        }
         if (tag.section(".", 0, 0) == "project") {
             if (tag.section(".", 1, 1) == "name")
                 return (m_project ? m_project->name() : QString::null);
