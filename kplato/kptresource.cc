@@ -477,21 +477,23 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
     //kdDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(Duration::Format_Day)<<endl;
     bool sts=false;
     Duration e;
+    Calendar *cal = calendar();
+    if (cal == 0) {
+        kdDebug()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
+    }
     if (backward) {
-        if (availableBefore(start+duration).isValid()) {
-            Calendar *cal = calendar();
-            if (cal && cal->hasIntervalBefore(start+duration)) {
-                sts = true;
-                e = (cal->effort(start, duration) * m_units)/100;
-            }
+        if (availableBefore(start+duration).isValid() &&
+            cal->hasIntervalBefore(start+duration))
+        {
+            sts = true;
+            e = (cal->effort(start, duration) * m_units)/100;
         }
     } else {
-        if (availableAfter(start).isValid()) {
-            Calendar *cal = calendar();
-            if (cal && cal->hasIntervalAfter(start)) {
-                sts = true;
-                e = (cal->effort(start, duration) * m_units)/100;
-            }
+        if (availableAfter(start).isValid() &&
+            cal->hasIntervalAfter(start))
+        {
+            sts = true;
+            e = (cal->effort(start, duration) * m_units)/100;
         }
     }
     //kdDebug()<<k_funcinfo<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
@@ -501,32 +503,45 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
 
 DateTime Resource::availableAfter(const DateTime &time, bool checkAppointments) const {
     DateTime t;
-    if (time >= m_availableUntil)
+    if (time >= m_availableUntil) {
         return t;
+    } else if (type() == Type_Material) {
+        t = time > m_availableFrom ? time : m_availableFrom;
+        kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+        return t;
+    }
     Calendar *cal = calendar();
     if (cal == 0) {
         return t;
     }
-    t = cal->availableAfter(time);
+    t = m_availableFrom > time ? m_availableFrom : time;
+    t = cal->availableAfter(t, t.daysTo(m_availableUntil));
     if (checkAppointments) {
         //TODO
     }
-    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+    kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
     return t;
 }
 
 DateTime Resource::availableBefore(const DateTime &time, bool checkAppointments) const {
     DateTime t;
-    if (time <= m_availableFrom)
+    if (time <= m_availableFrom) {
         return t;
+    } else if (type() == Type_Material) {
+        t = time < m_availableUntil ? time : m_availableUntil;
+        kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+        return t;
+    }
     Calendar *cal = calendar();
     if (cal == 0) {
         return t;
     }
-    t = cal->availableBefore(time);
+    t = m_availableUntil < time ? m_availableUntil : time;
+    t = cal->availableBefore(t, m_availableFrom.daysTo(t));
     if (checkAppointments) {
         //TODO
     }
+    kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
     return t;
 }
 
@@ -755,6 +770,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
             if (!t2.isValid() || t2 > t1)
                 t2 = t1;
         }
+        kdDebug()<<k_funcinfo<<"bw "<<time.toString()<<": "<<t2.daysTo(time)<<endl;
         return t2.daysTo(time);
     }
     QPtrListIterator<ResourceRequest> it = m_resourceRequests;
@@ -763,6 +779,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
         if (!t2.isValid() || t2 < t1)
             t2 = t1;
     }
+    kdDebug()<<k_funcinfo<<"fw "<<time.toString()<<": "<<time.daysTo(t2)<<endl;
     return time.daysTo(t2);
 }
 
@@ -786,8 +803,10 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
                       : effort(start, end - start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
-            if (!sts)
+            if (!sts) {
+                kdDebug()<<k_funcinfo<<"Cannot get a valid effort"<<endl;
                 break;
+            }
             start = end;
         } else if (e + e1 == _effort) {
             e += e1;

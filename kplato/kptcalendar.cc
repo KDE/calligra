@@ -1073,35 +1073,35 @@ bool Calendar::hasInterval(const DateTime &start, const DateTime &end) const {
     return false;
 }
 
-DateTime Calendar::availableAfter(const DateTime &time) {
-    //kdDebug()<<k_funcinfo<<m_name<<" "<<time.toString()<<endl;
+DateTime Calendar::availableAfter(const DateTime &time, int days) {
+    kdDebug()<<k_funcinfo<<m_name<<": check from "<<time.toString()<<" days="<<days<<endl;
     DateTime start = time;
     DateTime end(time.date(), QTime(23,59,59,999));
     DateTime t = time;
-    int i=28;
+    int i = days == -1 ? 28 : days;
     for (; i > 0 && !hasInterval(start, end); --i) { //FIXME Set a period for which this calendar is valid
         end = end.addDays(1);
         start = DateTime(end.date(), QTime());
     }
     if (i > 0)
         t = interval(start, end).first;
-    //kdDebug()<<k_funcinfo<<m_name<<" "<<t.toString()<<endl;
+    kdDebug()<<k_funcinfo<<m_name<<" "<<i<<": "<<t.toString()<<endl;
     return t;
 }
 
-DateTime Calendar::availableBefore(const DateTime &time) {
-    //kdDebug()<<k_funcinfo<<time.toString()<<endl;
+DateTime Calendar::availableBefore(const DateTime &time, int days) {
+    kdDebug()<<k_funcinfo<<m_name<<": check from "<<time.toString()<<" days="<<days<<endl;
     DateTime start(time.date(), QTime());
     DateTime end = time;
     DateTime t = time;
-    int i=28;
+    int i = days == -1 ? 28 : days;
     for (; i > 0 && !hasInterval(start, end); --i) { //FIXME Set a period for which this calendar is valid
         start = start.addDays(-1);
         end = DateTime(start.date(), QTime(23,59,59,999));
     }
     if (i > 0)
         t = interval(start, end).second;
-    //kdDebug()<<k_funcinfo<<t.toString()<<endl;
+    kdDebug()<<k_funcinfo<<m_name<<" "<<i<<": "<<t.toString()<<endl;
     return t;
 }
 

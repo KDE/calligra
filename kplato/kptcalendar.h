@@ -354,8 +354,8 @@ public:
      */
     bool hasInterval(const QDate &date, const QTime &start, const QTime &end) const;
         
-    DateTime availableAfter(const DateTime &time);
-    DateTime availableBefore(const DateTime &time);
+    DateTime availableAfter(const DateTime &time, int days=-1);
+    DateTime availableBefore(const DateTime &time, int days=-1);
 
     Calendar *findCalendar() const { return findCalendar(m_id); }
     Calendar *findCalendar(const QString &id) const;
