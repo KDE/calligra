@@ -59,7 +59,12 @@ public:
 
 	//! Sets additional filters list, e.g. "text/x-csv"
 	void setAdditionalFilters(const QStringList &mimeTypes);
-	
+
+	QStringList excludedFilters() const;
+
+	//! Excludes filters list
+	void setExcludedFilters(const QStringList &mimeTypes);
+
 //	KURL currentURL();
 	QString currentFileName();
 
@@ -111,7 +116,7 @@ private:
 //	KURL m_lastUrl;
 	QString m_lastFileName;
 	int m_mode;
-	QStringList m_additionalMimeTypes;
+	QStringList m_additionalMimeTypes, m_excludedMimeTypes;
 	QString m_defaultExtension;
 	bool m_confirmOverwrites : 1;
 	bool m_filtersUpdated : 1;

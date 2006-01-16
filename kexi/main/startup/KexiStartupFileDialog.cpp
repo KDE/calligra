@@ -110,6 +110,18 @@ void KexiStartupFileDialog::setAdditionalFilters(const QStringList &mimeTypes)
 	m_filtersUpdated = false;
 }
 
+QStringList KexiStartupFileDialog::excludedFilters() const
+{
+	return m_excludedMimeTypes;
+}
+
+void KexiStartupFileDialog::setExcludedFilters(const QStringList &mimeTypes)
+{
+	//delayed
+	m_excludedMimeTypes = mimeTypes;
+	m_filtersUpdated = false;
+}
+
 void KexiStartupFileDialog::updateFilters()
 {
 	if (m_filtersUpdated)
@@ -130,7 +142,7 @@ void KexiStartupFileDialog::updateFilters()
 
 	if (normalOpeningMode || normalSavingMode) {
 		mime = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() );
-		if (mime) {
+		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
@@ -138,14 +150,14 @@ void KexiStartupFileDialog::updateFilters()
 #ifdef KEXI_SERVER_SUPPORT
 	if (normalOpeningMode || m_mode & SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
-		if (mime) {
+		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
 	}
 	if (normalOpeningMode || m_mode & SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexi-connectiondata");
-		if (mime) {
+		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
@@ -155,7 +167,7 @@ void KexiStartupFileDialog::updateFilters()
 //! @todo hardcoded for MSA:
 	if (normalOpeningMode) {
 		mime = KMimeType::mimeType("application/x-msaccess");
-		if (mime) {
+		if (mime && m_excludedMimeTypes.find(mime->name())==m_excludedMimeTypes.end()) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
@@ -164,12 +176,15 @@ void KexiStartupFileDialog::updateFilters()
 	foreach (QStringList::ConstIterator, it, m_additionalMimeTypes) {
 		if (*it == "all/allfiles")
 			continue;
+		if (m_excludedMimeTypes.find(*it)!=m_excludedMimeTypes.end())
+			continue;
 		filter += KexiUtils::fileDialogFilterString(*it);
 		mime = KMimeType::mimeType(*it);
 		allfilters += mime->patterns();
 	}
 
-	filter += KexiUtils::fileDialogFilterString("all/allfiles");
+	if (m_excludedMimeTypes.find("all/allfiles")==m_excludedMimeTypes.end())
+		filter += KexiUtils::fileDialogFilterString("all/allfiles");
 //	mime = KMimeType::mimeType("all/allfiles");
 //	if (mime) {
 //		filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) 
