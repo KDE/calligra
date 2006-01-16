@@ -63,10 +63,8 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
  : KWizard(parent)
  , m_args(args)
 {
-	parseArguments();
 	setCaption(i18n("Import Database"));
 	setIcon(DesktopIcon("database_import"));
-//	finishButton()->setText(i18n("&Import"));
 	m_prjSet = 0;
 	m_fileBasedDstWasPresented = false;
 	m_setupFileBasedSrcNeeded = true;
@@ -75,6 +73,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
 	m_predefinedDatabaseName = "";
 
 	setMinimumSize(400, 400);
+	parseArguments();
 	setupIntro();
 //	setupSrcType();
 	setupSrcConn();
