@@ -64,6 +64,8 @@ List of features that KWord doesn't have, and which OpenDocument has:
    in the middle of a page)
    We could at least keep section styles and section markers (begin/end),
     so that load+save preserves it.
+ - some anchoring options are not supported, e.g. paragraph-anchored frames. We load
+    them as page-anchored frames, but this means the placement is wrong, obviously.
 
 Differences in rendering:
  - In KWord endnotes are right under the end of the text; in OOo they are on a separate page.
