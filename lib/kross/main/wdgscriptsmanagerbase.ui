@@ -8,22 +8,22 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>360</width>
-            <height>320</height>
+            <width>262</width>
+            <height>305</height>
         </rect>
     </property>
     <property name="sizePolicy">
         <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>7</vsizetype>
+            <hsizetype>1</hsizetype>
+            <vsizetype>1</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
     <property name="minimumSize">
         <size>
-            <width>360</width>
-            <height>320</height>
+            <width>0</width>
+            <height>0</height>
         </size>
     </property>
     <property name="caption">
@@ -39,6 +39,14 @@
         <widget class="KListView">
             <property name="name">
                 <cstring>scriptsList</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>2</hsizetype>
+                    <vsizetype>2</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
         </widget>
         <widget class="KToolBar">

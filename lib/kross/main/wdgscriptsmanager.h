@@ -19,8 +19,8 @@
 #ifndef WDGSCRIPTSMANAGER_H
 #define WDGSCRIPTSMANAGER_H
 
-#include "scriptaction.h"
-#include "wdgscriptsmanagerbase.h"
+#include "main/scriptaction.h"
+#include "main/wdgscriptsmanagerbase.h"
 
 class Scripting;
 

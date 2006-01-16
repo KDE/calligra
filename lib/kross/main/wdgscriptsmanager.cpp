@@ -182,7 +182,7 @@ QListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, QListViewIte
         return 0;
 
     ListItem* i = new ListItem(dynamic_cast<ListItem*>(parentitem), afteritem, action);
-    i->setText(0, action->text());
+    i->setText(0, action->text()); // FIXME: i18nise it for ko2.0 /me feel stupid to have forget it :(
 
     QPixmap pm;
     if(action->hasIcon()) {

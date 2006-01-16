@@ -319,6 +319,7 @@ void ScriptGUIClient::showScriptManager()
     KDialogBase* dialog = new KDialogBase(d->parent, "", true, i18n("Scripts Manager"), KDialogBase::Close);
     WdgScriptsManager* wsm = new WdgScriptsManager(this, dialog);
     dialog->setMainWidget(wsm);
+    dialog->resize( QSize(360, 320).expandedTo(dialog->minimumSizeHint()) );
     dialog->show();
 }
 
