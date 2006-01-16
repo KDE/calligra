@@ -65,10 +65,11 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 	m_params->setBarChartSubType( KDChartParams::BarNormal );
 	//m_params->setThreeDBars( true );
 
-        //Changed this to use columns rather than rows by default because I believe that this 
-        //is the more common format for entering data (you can see this looking at the fact
-        //that most spreadsheet packages allow far more rows than columns)
-        //  -- Robert Knight
+        //Changed this to use columns rather than rows by default
+        //because I believe that this is the more common format for
+        //entering data (you can see this looking at the fact that
+        //most spreadsheet packages allow far more rows than columns)
+        //-- Robert Knight
         
 	// Handle data in columns by default
 	m_auxiliary.m_dataDirection = KChartAuxiliary::DataColumns;
@@ -84,7 +85,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 
 KChartPart::~KChartPart()
 {
-    kdDebug(35001) << "Part is going to be destroyed now!!!" << endl;
+    //kdDebug(35001) << "Part is going to be destroyed now!!!" << endl;
     delete m_params;
 }
 
@@ -92,9 +93,11 @@ KChartPart::~KChartPart()
 bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
     // Initialize the parameter set for this chart document
+#if 0
     kdDebug(35001) << "================================================================" << endl;
     kdDebug(35001) << "InitDOC: flags = " << flags << endl;
     kdDebug(35001) << "================================================================" << endl;
+#endif
 
     QString f;
 
@@ -106,10 +109,7 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     // If we are supposed to create a new, empty document, then do so.
     if (flags == KoDocument::InitDocEmpty) {
-	initNullChart();
-
-	resetURL();
-	setEmpty();
+	initEmpty();
 	return true;
     }
 
@@ -132,10 +132,7 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 	return openURL( url );
     }
     else if ( ret == KoTemplateChooseDia::Empty ) {
-	initNullChart();
-
-	resetURL();
-	setEmpty();
+	initEmpty();
 	return true;
     }
     else if ( ret == KoTemplateChooseDia::Template ) {
@@ -174,7 +171,7 @@ void KChartPart::initEmpty()
 void KChartPart::initNullChart()
 {
     // Fill cells with data if there is none.
-    kdDebug(35001) << "Initialize null chart." << endl;
+    //kdDebug(35001) << "Initialize null chart." << endl;
 
     // Empty data.
     m_currentData.expand(0, 0);
@@ -198,16 +195,14 @@ void KChartPart::generateBarChartTemplate()
 
     // Fill cells with data if there is none.
     if (m_currentData.rows() == 0) {
-        kdDebug(35001) << "Initialize with some data!!!" << endl;
-        m_currentData.expand(4,4);
+        //kdDebug(35001) << "Initialize with some data!!!" << endl;
+        m_currentData.expand( 4, 4 );
         m_currentData.setUsedRows( 4 );
         m_currentData.setUsedCols( 4 );
         for (row = 0; row < 4; row++) {
             for (col = 0; col < 4; col++) {
-                // line commented out by khz: KoChart::Value t( (double) row + col );
-                // kdDebug(35001) << "Set cell for " << row << "," << col << endl;
-                // line commented out by khz: m_currentData.setCell(row, col, t);
-                m_currentData.setCell(row, col, static_cast <double> (row + col));
+                m_currentData.setCell(row, col, 
+				      static_cast <double> (row + col));
 
 		// Fill column label, but only on the first iteration.
 		if (row == 0) {
@@ -221,6 +216,7 @@ void KChartPart::generateBarChartTemplate()
     }
 
     setChartDefaults();
+    // FIXME: Should this go into setChartDefaults()?
     m_params->setDrawSolidExcessArrows(true);
 }
 
@@ -291,18 +287,18 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	m_displayData.expand(m_currentData.usedCols(),
 			     m_currentData.usedRows());
 
-          // Copy data and transpose it.
-          QVariant value1;
-          QVariant value2;
-          int prop;
-          for (uint row = 0; row < m_currentData.usedCols(); row++) {
-              for (uint col = 0; col < m_currentData.usedRows(); col++) {
-                if( m_currentData.cellContent( col, row, value1, value2, prop ) ){
-                  m_displayData.setCell(row, col, value1, value2);
-                  m_displayData.setProp(row, col, prop);
+	// Copy data and transpose it.
+	QVariant  value1;
+	QVariant  value2;
+	int       prop;
+	for (uint row = 0; row < m_currentData.usedCols(); row++) {
+	    for (uint col = 0; col < m_currentData.usedRows(); col++) {
+                if ( m_currentData.cellContent( col, row, value1, value2, prop ) ) {
+		    m_displayData.setCell(row, col, value1, value2);
+		    m_displayData.setProp(row, col, prop);
                 }
-              }
-          }
+	    }
+	}
 
 	// Set X axis labels from row headers.
 	for ( uint row = 0; row < m_currentData.rows(); row++ ) {
@@ -330,6 +326,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	    double  maxVal   = -numeric_limits<double>::max() ;
 
 	    // Calculate min and max for this row.
+	    // BUG: Take care of different data directions!
 	    for (uint col = 0; col < tmpData.usedCols(); col++) {
 		double  data = tmpData.cellVal(row, col).toDouble();
 
@@ -476,7 +473,7 @@ void KChartPart::doSetData( const KDChartTableData&  data,
         for ( col = colStart; col < data.cols(); col++ ) {
             for ( row = rowStart; row < data.rows(); row++ ) {
                 matrix.setCell( row - rowStart, col - colStart,
-                  data.cellVal( row, col ).toDouble() );
+				data.cellVal( row, col ).toDouble() );
             }
         }
         m_currentData = matrix;

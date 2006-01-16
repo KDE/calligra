@@ -49,6 +49,7 @@ After the feature freeze
 ------------------------
 
 * Bugs
+  + First row / column as labels doesn't work.			      1 ----
   + The chart title is not included in the chart from the  wizard     1 ----
   + The title is miniscule					      1 ---- 
      - small fonts everywhere, in fact
