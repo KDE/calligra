@@ -54,13 +54,14 @@ public:
     // (see interfaces/koChart.h.)
 
     virtual void  setData( const KDChartTableData& data );
-    virtual void  setCanChangeValue(bool b )   { m_bCanChangeValue = b;    }
+    virtual void  setCanChangeValue( bool b )  { m_bCanChangeValue = b;    }
 
     // Methods unique to KChart, and available in the new interface
     // (see interfaces/koChart.h.)
 
-    virtual void resizeData( int rows, int columns );
-    virtual void setCellData( int row, int column, const QVariant &);
+    virtual void  resizeData( int rows, int columns );
+    virtual void  setCellData( int row, int column, const QVariant &);
+    virtual void  analyzeData( );
 
     // ----------------------------------------------------------------
 

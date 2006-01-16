@@ -168,6 +168,7 @@ void ChartBinding::cellChanged( Cell* )
 	        chart->setCellData( row, col, KoChart::Value() );
         }
     }
+    chart->analyzeData( );
 
     // ######### Kalle may be interested in that, too
     /* Chart::Range range;

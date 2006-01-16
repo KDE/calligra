@@ -382,6 +382,11 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 }
 
 
+void KChartPart::analyzeData()
+{
+    setData( m_currentData );
+}
+
 // This function sets the data from an external source.  It is called,
 // for instance, when the chart is initialized from a spreadsheet in
 // KSpread.
