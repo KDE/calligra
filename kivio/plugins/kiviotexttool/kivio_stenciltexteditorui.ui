@@ -208,7 +208,7 @@ You should have received a copy of the GNU General Public License along with thi
                 <string></string>
             </property>
             <property name="popupDelay">
-                <number>1</number>
+                <number>0</number>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Horizontal Alignment</string>
@@ -222,7 +222,7 @@ You should have received a copy of the GNU General Public License along with thi
                 <string></string>
             </property>
             <property name="popupDelay">
-                <number>1</number>
+                <number>0</number>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Vertical Alignment</string>

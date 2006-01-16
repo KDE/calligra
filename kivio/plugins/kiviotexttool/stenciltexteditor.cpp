@@ -54,6 +54,7 @@ StencilTextEditor::StencilTextEditor(const QString& caption, QWidget *parent, co
   menu->insertItem(SmallIconSet("text_right", 16), i18n("Align Right"), Qt::AlignRight);
   m_mainWidget->m_hAlignButton->setPopup(menu);
   connect(menu, SIGNAL(activated(int)), this, SLOT(setHorizontalAlign(int)));
+  connect(m_mainWidget->m_hAlignButton, SIGNAL(clicked()), this, SLOT(showHAlignPopup()));
 
   menu = new QPopupMenu(m_mainWidget->m_vAlignButton, "hAlignMenu");
   menu->setCheckable(true);
@@ -62,6 +63,7 @@ StencilTextEditor::StencilTextEditor(const QString& caption, QWidget *parent, co
   menu->insertItem(SmallIconSet("align_bottom", 16), i18n("Align Bottom"), Qt::AlignBottom);
   m_mainWidget->m_vAlignButton->setPopup(menu);
   connect(menu, SIGNAL(activated(int)), this, SLOT(setVerticalAlign(int)));
+  connect(m_mainWidget->m_vAlignButton, SIGNAL(clicked()), this, SLOT(showVAlignPopup()));
 
   connect(m_mainWidget->m_fontCombo, SIGNAL(activated(int)), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_fontSizeCombo, SIGNAL(activated(int)), this, SLOT(updateFormating()));
@@ -171,6 +173,16 @@ void StencilTextEditor::updateFormating()
   m_mainWidget->m_textArea->selectAll(false);
 
   m_mainWidget->m_textArea->setFocus();
+}
+
+void StencilTextEditor::showHAlignPopup()
+{
+  m_mainWidget->m_hAlignButton->openPopup();
+}
+
+void StencilTextEditor::showVAlignPopup()
+{
+  m_mainWidget->m_vAlignButton->openPopup();
 }
 
 }

@@ -57,6 +57,9 @@ class StencilTextEditor : public KDialogBase
   protected slots:
     void updateFormating();
 
+    void showHAlignPopup();
+    void showVAlignPopup();
+
   private:
     StencilTextEditorUI* m_mainWidget;
 
