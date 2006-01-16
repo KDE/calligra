@@ -26,6 +26,8 @@
 #include <kis_paint_layer.h>
 #include <kis_types.h>
 
+#include "kis_tiff_converter.h"
+
 namespace {
     bool writeColorSpaceInformation( TIFF* image, KisColorSpace * cs, uint16& color_type )
     {
@@ -57,13 +59,15 @@ namespace {
     }
 }
 
-KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*img, bool sa) : m_image(img), m_saveAlpha(sa)
+KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options) : m_image(img), m_options(options)
 {
 }
 
 KisTIFFWriterVisitor::~KisTIFFWriterVisitor()
 {
 }
+
+bool KisTIFFWriterVisitor::saveAlpha() { return m_options->alpha; }
 
 bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, Q_UINT8* poses)
 {
@@ -110,8 +114,11 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     if(saveAlpha())
     {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->nChannels());
+        uint16 sampleinfo[1] = { EXTRASAMPLE_ASSOCALPHA };
+        TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo);
     } else {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->nChannels() - 1);
+        TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 0);
     }
     // Save colorspace information
     uint16 color_type;
@@ -122,6 +129,21 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     TIFFSetField(image(), TIFFTAG_PHOTOMETRIC, color_type);
     TIFFSetField(image(), TIFFTAG_IMAGEWIDTH, layer->image()->width());
     TIFFSetField(image(), TIFFTAG_IMAGELENGTH, layer->image()->height());
+
+    // Set the compression options
+    TIFFSetField(image(), TIFFTAG_COMPRESSION, m_options->compressionType);
+    TIFFSetField(image(), TIFFTAG_FAXMODE, m_options->faxMode);
+    TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
+    TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
+    TIFFSetField(image(), TIFFTAG_PIXARLOGQUALITY, m_options->pixarLogCompress);
+    
+    // Set the predictor
+    TIFFSetField(image(), TIFFTAG_PREDICTOR, m_options->predictor);
+
+    // Use contiguous configuration
+    TIFFSetField(image(), TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    // Use 8 rows per strip
+    TIFFSetField(image(), TIFFTAG_ROWSPERSTRIP, 8);
 
     // Save profile
     KisProfile* profile = pd->colorSpace()->getProfile();

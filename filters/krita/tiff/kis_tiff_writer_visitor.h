@@ -26,26 +26,28 @@
 
 #include <tiffio.h>
 
+class KisTIFFOptions;
+
 /**
 	@author Cyrille Berger <cberger@cberger.net>
 */
 class KisTIFFWriterVisitor : public KisLayerVisitor
 {
     public:
-        KisTIFFWriterVisitor(TIFF*img, bool sa);
+        KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options);
         ~KisTIFFWriterVisitor();
     public:
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);
         virtual bool visit(KisPartLayer *layer);
-        virtual bool visit(KisAdjustmentLayer* layer) { return true; }
+        virtual bool visit(KisAdjustmentLayer* ) { return true; }
     private:
         inline TIFF* image() { return m_image; }
-        inline bool saveAlpha() { return m_saveAlpha; }
+        inline bool saveAlpha();
         bool copyDataToStrips( KisHLineIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, Q_UINT8* poses);
     private:
         TIFF* m_image;
-        bool m_saveAlpha;
+        KisTIFFOptions* m_options;
 };
 
 #endif

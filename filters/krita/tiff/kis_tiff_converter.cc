@@ -50,7 +50,7 @@ namespace {
     QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 extrasamplescount) {
         if(color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK)
         {
-            if(nbchannels == 0) nbchannels = 1;
+            nbchannels = 1;
             if(color_nb_bits <= 8)
             {
                     return "GRAYA";
@@ -58,7 +58,7 @@ namespace {
                     return "GRAYA16";
             }
         } else if(color_type == PHOTOMETRIC_RGB ) {
-            if(nbchannels == 0) nbchannels = 3;
+            nbchannels = 3;
             if(color_nb_bits <= 8)
             {
                 return "RGBA";
@@ -101,10 +101,10 @@ namespace {
                 return "CMYKA16";
             }
         } else if(color_type == PHOTOMETRIC_CIELAB ) {
-            if(nbchannels == 0) nbchannels = 3;
+            nbchannels = 3;
             return "LABA"; // TODO add support for a 8bit LAB colorspace when it is written
         } else if(color_type ==  PHOTOMETRIC_PALETTE) {
-            if(nbchannels == 0) nbchannels = 2;
+            nbchannels = 2;
             // <-- we will convert the index image to RGBA16 as the palette is allways on 16bits colors
             return "RGBA16";
         }
@@ -608,15 +608,6 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP i
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
-    // Set the compression options
-    TIFFSetField(image, TIFFTAG_COMPRESSION, options.compressionType);
-    TIFFSetField(image, TIFFTAG_FAXMODE, options.faxMode);
-    TIFFSetField(image, TIFFTAG_JPEGQUALITY, options.jpegQuality);
-    TIFFSetField(image, TIFFTAG_ZIPQUALITY, options.deflateCompress);
-    TIFFSetField(image, TIFFTAG_PIXARLOGQUALITY, options.pixarLogCompress);
-    
-    // Set the predictor
-    TIFFSetField(image, TIFFTAG_PREDICTOR, options.predictor);
     // Set the document informations
     KoDocumentInfo * info = m_doc->documentInfo();
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
@@ -636,12 +627,8 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP i
     {
         TIFFSetField(image, TIFFTAG_ARTIST, author.ascii());
     }
-    // Use contiguous configuration
-    TIFFSetField(image, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-    // Use 8 rows per strip
-    TIFFSetField(image, TIFFTAG_ROWSPERSTRIP, 8);
     
-    KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, options.alpha);
+    KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, &options);
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());
     if(root == 0)
     {
