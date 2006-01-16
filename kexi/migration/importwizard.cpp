@@ -208,8 +208,16 @@ void ImportWizard::setupSrcConn()
 
 	m_srcConn = new KexiConnSelectorWidget(Kexi::connset(), 
 		":ProjectMigrationSourceDir", m_srcConnPage, "m_srcConnSelector");
+
 	m_srcConn->hideConnectonIcon();
 	m_srcConn->showSimpleConn();
+
+	QStringList excludedFilters;
+//! @todo remove when support for kexi files as source prj is added in migration
+	excludedFilters += KexiDB::Driver::defaultFileBasedDriverMimeType();
+	excludedFilters += "application/x-kexiproject-shortcut";
+	excludedFilters += "application/x-kexi-connectiondata";
+	m_srcConn->m_fileDlg->setExcludedFilters(excludedFilters);
 
 //	m_srcConn->hideHelpers();
 	vbox->addWidget(m_srcConn);
