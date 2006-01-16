@@ -75,13 +75,13 @@ void GotoDialog::slotOk()
     if ( region.isValid() )
     {
       m_pView->selectionInfo()->initialize(region);
-      m_pView->slotUpdateView( m_pView->activeSheet() );
       accept();
     }
     else
     {
         m_nameCell->clear();
     }
+    m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
 #include "kspread_dlg_goto.moc"
