@@ -39,7 +39,6 @@ public:
   bool eventFilter(QObject*, QEvent*);
 
 public slots:
-  void zoomChanged(int);
   void zoomMinus();
   void zoomPlus();
 

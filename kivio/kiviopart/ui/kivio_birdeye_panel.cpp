@@ -43,7 +43,7 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
   m_zoomInButton->setIconSet(SmallIconSet("viewmag+", 16));
   connect(m_zoomOutButton, SIGNAL(clicked()), this, SLOT(zoomMinus()));
   connect(m_zoomInButton, SIGNAL(clicked()), this, SLOT(zoomPlus()));
-  connect(m_zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomChanged(int)));
+  connect(m_zoomSlider, SIGNAL(valueChanged(int)), m_pView, SLOT(viewZoom(int)));
 
   canvasZoomChanged(m_pView->zoomHandler()->zoom());
 }
@@ -52,11 +52,6 @@ KivioBirdEyePanel::~KivioBirdEyePanel()
 {
   delete m_buffer;
   delete m_zoomHandler;
-}
-
-void KivioBirdEyePanel::zoomChanged(int z)
-{
-  m_pView->viewZoom(z);
 }
 
 void KivioBirdEyePanel::zoomMinus()

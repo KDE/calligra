@@ -863,10 +863,9 @@ void KivioView::viewZoom(int zoom)
     return;
   }
 
+  KoPoint centerPoint = m_pCanvas->visibleArea().center();
   zoomHandler()->setZoomAndResolution(zoom, KoGlobal::dpiX(),
     KoGlobal::dpiY());
-  m_pCanvas->update();
-  m_pCanvas->updateScrollBars();
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   KoPageLayout l = activePage()->paperLayout();
@@ -875,6 +874,9 @@ void KivioView::viewZoom(int zoom)
   setRulerVOffset(m_vertScrollBar->value());
   setRulerHOffset(m_horzScrollBar->value());
   KoView::setZoom(zoomHandler()->zoomedResolutionY());
+  m_pCanvas->setViewCenterPoint(centerPoint);
+  m_pCanvas->update();
+  m_pCanvas->updateScrollBars();
 
   emit zoomChanged(zoom);
 }

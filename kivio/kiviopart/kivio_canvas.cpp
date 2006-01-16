@@ -1022,8 +1022,8 @@ void KivioCanvas::setViewCenterPoint(const KoPoint &p)
 
   KoRect va = visibleArea();
 
-  float x = QMAX(0, p.x() - (va.width() / 2));
-  float y = QMAX(0, p.y() - (va.height() / 2));
+  double x = QMAX(0.0, p.x() - (va.width() / 2.0));
+  double y = QMAX(0.0, p.y() - (va.height() / 2.0));
 
   m_pVertScrollBar->setValue(m_pView->zoomHandler()->zoomItY(y));
   m_pHorzScrollBar->setValue(m_pView->zoomHandler()->zoomItX(x));
