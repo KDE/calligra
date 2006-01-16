@@ -1,9 +1,12 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=List of Tasks
+Name[da]=Opgaveliste
 Name[es]=Lista de tareas
 Name[et]=Ülesannete nimekiri
 Name[it]=Elenco di attività
+Name[pt]=Lista de Tarefas
+Name[pt_BR]=Lista de Tarefas
 Name[sv]=Aktivitetslista
 Type=Link
 URL= .source/tasklist.ktf
