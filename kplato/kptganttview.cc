@@ -458,18 +458,20 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
     if (m_showTaskName) {
         text = task->name();
     }
-    if (m_showResources) {
-        if (!text.isEmpty())
-            text += ' ';
-        text += '(';
+    if (m_showResources && !task->notScheduled()) {
         QPtrList<Appointment> lst = task->appointments();
-        QPtrListIterator<Appointment> it = lst;
-        for (bool first=true; it.current(); ++it) {
-            if (!first)
-                text += ", ";
-            text += it.current()->resource()->resource()->name();
+        if (lst.count() > 0) {
+            if (!text.isEmpty())
+                text += ' ';
+            text += '(';
+            QPtrListIterator<Appointment> it = lst;
+            for (bool first=true; it.current(); ++it) {
+                if (!first)
+                    text += ", ";
+                text += it.current()->resource()->resource()->name();
+            }
+            text += ')';
         }
-        text += ')';
     }
     item->setText(text);
     if (m_showProgress) {
