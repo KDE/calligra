@@ -4545,7 +4545,7 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     delete stream;
     return false;
   }
-
+  
   unsigned long stream_size = stream->size();
 
   unsigned int buffer_size = 65536;		// current size of the buffer
@@ -4705,6 +4705,8 @@ void ExcelReader::handleRecord( Record* record )
       handleBoolErr( static_cast<BoolErrRecord*>( record ) ); break;
     case BlankRecord::id: 
       handleBlank( static_cast<BlankRecord*>( record ) ); break;
+    case CalcModeRecord::id: 
+      handleCalcMode( static_cast<CalcModeRecord*>( record ) ); break;
     case ColInfoRecord::id: 
       handleColInfo( static_cast<ColInfoRecord*>( record ) ); break;
     case ExternNameRecord::id: 
