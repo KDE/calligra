@@ -22,6 +22,7 @@
 
 #include "core/keximainwindow.h"
 #include "core/kexiproject.h"
+#include "core/kexi.h"
 #include "kexidb/connection.h"
 
 #include "main/manager.h"
@@ -105,7 +106,9 @@ Kross::Api::Object::Ptr KexiAppMainWindow::getPartItems(Kross::Api::List::Ptr ar
 Kross::Api::Object::Ptr KexiAppMainWindow::openPartItem(Kross::Api::List::Ptr args)
 {
     KexiAppPartItem* partitem = Kross::Api::Object::fromObject<KexiAppPartItem>(args->item(0));
-    KexiDialogBase* dialog = partitem ? d->mainwindow->openObject( partitem->item() ) : 0;
+    bool openingCancelled;
+    KexiDialogBase* dialog = partitem ? d->mainwindow->openObject( partitem->item(),
+        Kexi::DataViewMode, openingCancelled ) : 0;
     return new Kross::Api::Variant( QVariant(dialog != 0, 0) );
 }
 

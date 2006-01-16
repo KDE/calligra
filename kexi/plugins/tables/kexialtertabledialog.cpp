@@ -976,7 +976,7 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 			KoProperty::Set &set = *s;
 
 			kexipluginsdbg << set["subType"].value().toString() << endl;
-			int i_type = set["type"].value().toInt();
+//			int i_type = set["type"].value().toInt();
 			QString subTypeString( set["subType"].value().toString() );
 /*			if (type == (int)KexiDB::Field::BLOB) {
 //! @todo hardcoded! image is the only subtype for now
