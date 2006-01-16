@@ -131,7 +131,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
 
     if(d->m_alwaysUseTemplate == t->file()) {
       selectItem = item;
-    } else if(!selectItem && ((t->file() == fullTemplateName) || (t == defaultTemplate))) {
+    } else if(!selectItem && (t->file() == fullTemplateName)) {
       selectItem = item;
     }
   }
