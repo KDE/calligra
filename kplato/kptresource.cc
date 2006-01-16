@@ -41,7 +41,9 @@ ResourceGroup::ResourceGroup(Project *project) {
 }
 
 ResourceGroup::~ResourceGroup() {
-    removeId();
+    if (findId() == this) {
+        removeId(); // only remove myself (I may be just a working copy)
+    }
     //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
@@ -218,7 +220,9 @@ Resource::Resource(Resource *resource) {
 
 Resource::~Resource() {
     //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
-    removeId();
+    if (findId() == this) {
+        removeId(); // only remove myself (I may be just a working copy)
+    }
     QPtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->setResource(0); // avoid the request to mess with my list
@@ -263,6 +267,7 @@ void Resource::generateId() {
         m_id = m_id.setNum(i);
         if (!findId()) {
             insertId(m_id);
+            //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<m_id<<endl;
             return;
         }
     }

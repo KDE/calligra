@@ -68,7 +68,9 @@ Node::Node(Node &node, Node *parent)
 }
 
 Node::~Node() {
-    removeId();
+    if (findNode() == this) {
+        removeId(); // only remove myself (I may be just a working copy)
+    }
     Relation *rel = 0;
     while ((rel = m_dependParentNodes.getFirst())) {
         delete rel;

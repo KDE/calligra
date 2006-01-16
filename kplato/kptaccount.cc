@@ -57,7 +57,9 @@ Account::Account(QString name, QString description)
 
 Account::~Account() {
     m_accountList.clear();
-    removeId();
+    if (findAccount() == this) {
+        removeId(); // only remove myself (I may be just a working copy)
+    }
     if (m_list)
         m_list->accountDeleted(this);
 }
