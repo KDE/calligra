@@ -56,7 +56,7 @@ namespace Kross { namespace KexiDB {
         private:
             ::KexiDB::Field* m_field;
 
-            /// \returns the type string for this field, e.g. "Integer" for Integer type.
+            /// \return the type string for this field, e.g. "Integer" for Integer type.
             Kross::Api::Object::Ptr type(Kross::Api::List::Ptr);
             /// Sets the type string for this field, e.g. "Integer" for Integer type.
             Kross::Api::Object::Ptr setType(Kross::Api::List::Ptr);

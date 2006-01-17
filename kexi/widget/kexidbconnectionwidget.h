@@ -53,10 +53,10 @@ class KEXIEXTWIDGETS_EXPORT KexiDBConnectionWidget : public KexiDBConnectionWidg
 
 		KexiProjectData data();
 
-		//! \returns a pointer to 'save changes' button. You can call hide() for this to hide it.
+		//! \return a pointer to 'save changes' button. You can call hide() for this to hide it.
 		KPushButton* saveChangesButton() const;
 
-		//! \returns a pointer to 'test connection' button. You can call hide() for this to hide it.
+		//! \return a pointer to 'test connection' button. You can call hide() for this to hide it.
 		KPushButton* testConnectionButton() const;
 
 		KexiDBDriverComboBox *driversCombo() const { return m_driversCombo; }

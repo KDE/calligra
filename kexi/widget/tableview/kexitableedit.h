@@ -99,12 +99,12 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 			bool readOnly, bool fullRowSelection );
 
 		/*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
-		 dropdown button at the right side. \returns left margin's size; 
+		 dropdown button at the right side. \return left margin's size; 
 		 0 by default. For reimplementation.  */
 		int leftMargin() const { return m_leftMargin; }
 
 		/*! Sometimes, editor can contain non-standard margin, for example combobox editor contains
-		 dropdown button at the right side. \returns right margin;s size; 
+		 dropdown button at the right side. \return right margin;s size; 
 		 0 by default. For reimplementation.  */
 		int rightMargin() const { return m_rightMargin; }
 

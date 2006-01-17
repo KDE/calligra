@@ -20,6 +20,8 @@ CSV Import Dialog
 General
 - "Dangerous" flag set for potentially destructive dialogs
 - a few redundant i18n strings removed
+Table View
+- data for large table view is destroyed without blocking GUI
 
 2006-01-16
 Project Import Wizard

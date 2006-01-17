@@ -110,10 +110,10 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 			selected from Cursor::Options enum. */
 		inline uint options() const { return m_options; }
 
-		/*! \returns true if the cursor is opened. */
+		/*! \return true if the cursor is opened. */
 		inline bool isOpened() const { return m_opened; }
 
-		/*! \returns true if the cursor is buffered. */
+		/*! \return true if the cursor is buffered. */
 		bool isBuffered() const;
 
 		/*! Sets this cursor to buffered type or not. See description 
