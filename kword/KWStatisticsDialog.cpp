@@ -23,6 +23,7 @@
 #include <qtabwidget.h>
 #include <qvbox.h>
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qprogressdialog.h>
 #include <qcheckbox.h>
 

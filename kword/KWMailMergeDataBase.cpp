@@ -19,26 +19,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <klocale.h>
-
-#include <kdebug.h>
-
 #include "KWDocument.h"
 #include "KWMailMergeDataBase.h"
 #include "KWMailMergeDataBase.moc"
 #include <KoCustomVariablesDia.h>
-#include <kmainwindow.h>
 #include "defs.h"
-#include <qfile.h>
+
+#include <klocale.h>
+#include <kdebug.h>
 #include <kstdaction.h>
 #include <kaction.h>
 #include <kmessagebox.h>
 #include <kseparator.h>
 #include <kservice.h>
+#include <kmainwindow.h>
+
+#include <qfile.h>
 #include <qvbox.h>
 #include <qspinbox.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
 
 /******************************************************************
  *

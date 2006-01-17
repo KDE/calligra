@@ -36,6 +36,7 @@
 #include <qpushbutton.h>
 #include <qlistbox.h>
 #include <qlineedit.h>
+#include <qlayout.h>
 
 #include "KWConfig.h"
 #include "KWView.h"

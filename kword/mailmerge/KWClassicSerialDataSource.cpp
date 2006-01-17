@@ -24,6 +24,7 @@
 #include <kinputdialog.h>
 #include <qlabel.h>
 #include <qhbox.h>
+#include <qlayout.h>
 #include <qvbox.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>

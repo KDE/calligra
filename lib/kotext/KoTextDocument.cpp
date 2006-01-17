@@ -31,6 +31,7 @@
 #include <kodom.h>
 #include <kdebug.h>
 #include <kdeversion.h>
+#include <qapplication.h>
 #include <assert.h>
 
 //#define DEBUG_PAINTING

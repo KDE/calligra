@@ -44,6 +44,8 @@
 #include <ktoolbar.h>
 #include <ktoolbarbutton.h>
 
+#include <qlayout.h>
+
 /******************************************************************/
 /* Class: KWOrderedFrameSet                                       */
 /******************************************************************/

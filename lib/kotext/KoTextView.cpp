@@ -38,6 +38,7 @@
 #include <kbookmark.h>
 #include <kurldrag.h>
 
+#include <qapplication.h>
 #include <qtimer.h>
 #include <qclipboard.h>
 

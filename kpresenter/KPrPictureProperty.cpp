@@ -20,12 +20,13 @@
 
 #include "KPrPictureProperty.h"
 
-#include <qradiobutton.h>
-#include <qcheckbox.h>
-#include <knuminput.h>
-
 #include "picturepropertyui.h"
 #include "KPrPicturePreview.h"
+
+#include <knuminput.h>
+#include <qradiobutton.h>
+#include <qcheckbox.h>
+#include <qlayout.h>
 
 KPrPictureProperty::KPrPictureProperty( QWidget *parent, const char *name, const QPixmap &pixmap,
                                   KPrPictureSettingCmd::PictureSettings pictureSettings )

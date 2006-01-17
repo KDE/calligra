@@ -17,20 +17,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "KWEditPersonnalExpression.h"
+#include "KWView.h"
+
 #include <klocale.h>
 #include <klineeditdlg.h>
-
-#include <qfile.h>
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
+#include <qfile.h>
+#include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qlabel.h>
-
-#include "KWEditPersonnalExpression.h"
-#include "KWView.h"
-#include <qpushbutton.h>
+#include <qlayout.h>
 
 KWEditPersonnalExpression::KWEditPersonnalExpression( QWidget *parent, const char *name )
     : KDialogBase( parent, name , true, i18n("Edit Personal Expression"), Ok|Cancel, Ok, true )

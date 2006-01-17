@@ -24,17 +24,19 @@
 #include "KWCommand.h"
 #include "KWFrameSet.h"
 
+#include <KoParagDia.h>
+#include <koUnitWidgets.h>
+
 #include <klocale.h>
+#include <knuminput.h>
+
 #include <qradiobutton.h>
 #include <qwhatsthis.h>
-#include <knuminput.h>
 #include <qvbuttongroup.h>
 #include <qlabel.h>
 #include <qvbox.h>
+#include <qlayout.h>
 #include <qcombobox.h>
-#include <koUnitWidgets.h>
-
-#include <KoParagDia.h>
 
 
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *doc )

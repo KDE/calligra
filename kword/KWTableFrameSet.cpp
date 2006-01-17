@@ -37,6 +37,7 @@ DESCRIPTION
 #include "KWFrameList.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWOasisSaver.h"
 
 #include <KoOasisContext.h>
 #include <KoXmlWriter.h>
@@ -49,9 +50,9 @@ DESCRIPTION
 #include <kdebug.h>
 #include <klocale.h>
 #include <dcopobject.h>
+#include <qapplication.h>
 #include <qpopupmenu.h>
 #include <qclipboard.h>
-#include "KWOasisSaver.h"
 
 
 KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :

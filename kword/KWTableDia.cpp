@@ -32,6 +32,7 @@
 #include <kcommand.h>
 
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>

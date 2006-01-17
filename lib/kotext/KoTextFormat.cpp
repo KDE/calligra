@@ -29,6 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <qapplication.h>
 #include <qregexp.h>
 #include <assert.h>
 

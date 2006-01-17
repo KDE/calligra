@@ -20,13 +20,14 @@
 
 #include "KPrRectProperty.h"
 
-#include <qspinbox.h>
-#include <qtoolbutton.h>
+#include "rectpropertyui.h"
+#include "KPrRectPreview.h"
 
 #include <koImageResource.h>
 
-#include "rectpropertyui.h"
-#include "KPrRectPreview.h"
+#include <qspinbox.h>
+#include <qtoolbutton.h>
+#include <qlayout.h>
 
 KPrRectProperty::KPrRectProperty( QWidget *parent, const char *name, KPrRectValueCmd::RectValues &rectValue )
 : QWidget( parent, name )

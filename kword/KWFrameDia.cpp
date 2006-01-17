@@ -34,6 +34,10 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kiconloader.h>
+#include <kmessagebox.h>
+#include <knumvalidator.h>
+#include <kcolorbutton.h>
+#include <kdebug.h>
 
 #include <qwhatsthis.h>
 #include <qlineedit.h>
@@ -46,14 +50,10 @@
 #include <qbuttongroup.h>
 #include <qhbox.h>
 #include <qheader.h>
-#include <kmessagebox.h>
-#include <knumvalidator.h>
-#include <kcolorbutton.h>
+#include <qlayout.h>
 
 #include <stdlib.h>
 #include <limits.h>
-
-#include <kdebug.h>
 
 /******************************************************************/
 /* Class KWBrushStylePreview - only used by kwframestylemanager   */

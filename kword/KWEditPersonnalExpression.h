@@ -26,6 +26,7 @@
 class QPushButton;
 class QComboBox;
 class QListBox;
+class QLineEdit;
 
 class KWEditPersonnalExpression : public KDialogBase
 {

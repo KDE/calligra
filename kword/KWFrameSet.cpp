@@ -38,6 +38,7 @@
 #include <KoXmlWriter.h>
 
 #include <qpopupmenu.h>
+#include <qapplication.h>
 
 //#define DEBUG_DRAW
 

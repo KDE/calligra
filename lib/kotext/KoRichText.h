@@ -34,47 +34,20 @@
 **
 **********************************************************************/
 
-#ifndef QRICHTEXT_P_H
-#define QRICHTEXT_P_H
+#ifndef KORICHTEXT_H
+#define KORICHTEXT_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt API.  It exists for the convenience
-// of a number of Qt sources files.  This header file may change from
-// version to version without notice, or even be removed.
-//
-// We mean it.
-//
-//
-
-#ifndef QT_H
-#include "qstring.h"
-#include "qptrlist.h"
-#include "qrect.h"
-#include "qfontmetrics.h"
-#include "qintdict.h"
-#include "qmap.h"
-#include "qstringlist.h"
-#include "qfont.h"
-#include "qcolor.h"
-#include "qsize.h"
-#include "qvaluelist.h"
-#include "qvaluestack.h"
-#include "qobject.h"
-#include "qdict.h"
-#include "qtextstream.h"
-#include "qpixmap.h"
-#include "qstylesheet.h"
-#include "qptrvector.h"
-#include "qpainter.h"
-#include "qlayout.h"
-#include "qobject.h"
-#include <limits.h>
+#include <qptrlist.h>
+#include <qrect.h>
+#include <qmap.h>
+#include <qstringlist.h>
+#include <qcolor.h>
+#include <qsize.h>
+#include <qvaluelist.h>
+#include <qobject.h>
+#include <qstylesheet.h>
+#include <qpainter.h>
 #include "KoComplexText.h"
-#include "qapplication.h"
-#endif // QT_H
 
 #include <koffice_export.h>
 class KoXmlWriter;
@@ -254,14 +227,6 @@ inline QChar::Direction KoTextString::direction() const
 }
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#if defined(Q_TEMPLATEDLL)
-// MOC_SKIP_BEGIN
-template class QValueStack<int>;
-template class QValueStack<KoTextParag*>;
-template class QValueStack<bool>;
-// MOC_SKIP_END
-#endif
 
 class KOTEXT_EXPORT KoTextCursor
 {

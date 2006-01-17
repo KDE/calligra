@@ -27,6 +27,12 @@
 
 #include <KoRect.h>
 
+#include <klocale.h>
+#include <kurl.h>
+#include <kio/netaccess.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
+
 #include <qlabel.h>
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
@@ -35,12 +41,7 @@
 #include <qdom.h>
 #include <qrect.h>
 #include <qptrlist.h>
-
-#include <klocale.h>
-#include <kurl.h>
-#include <kio/netaccess.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
+#include <qlayout.h>
 
 #include <stdlib.h>
 #include <math.h>

@@ -28,6 +28,7 @@
 #include <qspinbox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
+#include <qlayout.h>
 
 KWInsertDia::KWInsertDia( KWView *parent, KWTableFrameSet *table, InsertType type, int insertHint)
     : KDialogBase( Plain, (type==insertRow?i18n("Insert Row") : i18n("Insert Column")), Ok | Cancel, Ok, parent, "Insert Table items dialog", true )

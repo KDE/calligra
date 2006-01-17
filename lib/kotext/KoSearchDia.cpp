@@ -39,6 +39,7 @@
 #include <qradiobutton.h>
 #include <qregexp.h>
 #include <qspinbox.h>
+#include <qlayout.h>
 
 KoSearchContext::KoSearchContext()
 {

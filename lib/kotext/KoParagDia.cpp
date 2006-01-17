@@ -27,15 +27,6 @@
 #include "KoTextZoomHandler.h"
 #include "KoParagDecorationTab.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qhbuttongroup.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qvbox.h>
-#include <qhbox.h>
-#include <qtooltip.h>
-
 #include <koCharSelectDia.h>
 #include <koUnitWidgets.h>
 #include <kcolorbutton.h>
@@ -49,6 +40,17 @@
 #include <kdeversion.h>
 #include <kpushbutton.h>
 #include <kcombobox.h>
+
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qhbuttongroup.h>
+#include <qlabel.h>
+#include <qradiobutton.h>
+#include <qvbox.h>
+#include <qhbox.h>
+#include <qtooltip.h>
+#include <qlayout.h>
+#include <qapplication.h>
 
 KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, bool disableAll, QWidget * parent, const char* name  )
     :QWidget( parent, name ),

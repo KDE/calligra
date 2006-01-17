@@ -119,6 +119,7 @@
 #include <kiconloader.h>
 
 #include <qclipboard.h>
+#include <qapplication.h>
 #include <qgroupbox.h>
 #include <qlayout.h>
 #include <qpaintdevicemetrics.h>

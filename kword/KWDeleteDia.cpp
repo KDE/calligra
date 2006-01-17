@@ -24,6 +24,7 @@
 
 #include <klocale.h>
 #include <qlabel.h>
+#include <qlayout.h>
 
 KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType type, QValueList<uint> remove)
     : KDialogBase( Plain, (type==deleteRow?i18n("Delete Row") : i18n("Delete Column")), Ok | Cancel, Ok, parent, "Delete Table items dialog", true )
