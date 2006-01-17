@@ -387,9 +387,12 @@ KexiTableView::~KexiTableView()
 {
 	cancelRowEdit();
 
-	if (m_owner)
-		delete m_data;
+	KexiTableViewData *data = m_data;
 	m_data = 0;
+	if (m_owner) {
+		if (data)
+			data->deleteLater();
+	}
 	delete d;
 }
 

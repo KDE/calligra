@@ -259,6 +259,7 @@ KexiTableViewData::KexiTableViewData(
 KexiTableViewData::~KexiTableViewData()
 {
 	emit destroying();
+	clearInternal();
 }
 
 void KexiTableViewData::init(
@@ -759,9 +760,15 @@ void KexiTableViewData::insertRow(KexiTableItem& item, uint index, bool repaint)
 void KexiTableViewData::clearInternal()
 {
 	clearRowEditBuffer();
-	qApp->processEvents( 1 );
+//	qApp->processEvents( 1 );
 //TODO: this is time consuming: find better data model
-	KexiTableViewDataBase::clear();
+//	KexiTableViewDataBase::clear();
+	const uint c = count();
+	for (uint i=0; i<c; i++) {
+		removeLast();
+		if (i % 1000 == 0)
+			qApp->processEvents( 1 );
+	}
 }
 
 bool KexiTableViewData::deleteAllRows(bool repaint)
