@@ -469,6 +469,7 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
                 if (!first)
                     text += ", ";
                 text += it.current()->resource()->resource()->name();
+                first = false;
             }
             text += ')';
         }
