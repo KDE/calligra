@@ -1,6 +1,6 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -112,6 +112,14 @@ void KPrObjectProperties::getPenProperties( KPrObject *object )
             m_pen.pen = obj->getPen();
 
             m_flags |= PtPen;
+        }
+    }
+    if ( !( m_flags & PtPenWidth ) )
+    {
+        KPrShadowObject *obj = dynamic_cast<KPrShadowObject*>( object );
+        if ( obj && obj->getPen().style() != Qt::NoPen )
+        {
+            m_flags |= PtPenWidth;
         }
     }
 }

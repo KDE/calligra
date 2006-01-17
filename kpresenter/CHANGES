@@ -2,6 +2,7 @@ Changes after KPresenter 1.4
 ============================
 Fixes:
 - Fixed Bug 47825 object appeared on the wrong page after save/open in kpr format
+- Fixed Bug 118825: Property altering actions are not enabled correctly
 
 Changes:
 - Added auto guidelines

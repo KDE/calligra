@@ -1,6 +1,6 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -35,7 +35,8 @@ public:
         PtPolygon = 32,
         PtRectangle = 64,
         PtText = 128,
-        PtOther = 256
+        PtOther = 256,
+        PtPenWidth = 512    
     };
 
     KPrObjectProperties( const QPtrList<KPrObject> &objects );

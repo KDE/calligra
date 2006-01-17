@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Laurent Montel <lmontel@mandrakesoft.com>
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -887,6 +887,9 @@ void KoPenCmd::execute()
         applyPen( objects.at( i ), &tmpPen );
     }
 
+    // this has to be called as the outline could have been changed so 
+    // that the toolbar is updated correctly
+    doc->updateObjectSelected();
     doc->updateSideBarItem( m_page );
 }
 
@@ -955,6 +958,9 @@ void KoPenCmd::unexecute()
             applyPen( objects.at( i ), oldPen.at( i ) );
     }
 
+    // this has to be called as the outline could have been changed so 
+    // that the toolbar is updated correctly
+    doc->updateObjectSelected();
     doc->updateSideBarItem( m_page );
 }
 

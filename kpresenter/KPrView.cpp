@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,6 +47,7 @@
 #include "KPrImageEffectDia.h"
 #include "KPrBackground.h"
 #include "KPrPenStyleWidget.h"
+#include "KPrObjectProperties.h"
 
 #include <KoAutoFormat.h>
 
@@ -3110,9 +3111,9 @@ void KPrView::increaseFontSize()
 
 void KPrView::objectSelectedChanged()
 {
+    
     bool state=m_canvas->isOneObjectSelected();
     bool headerfooterselected=false;
-    bool state2=false;
 
     if (m_canvas->numberOfObjectSelected()==1)
     {
@@ -3122,17 +3123,19 @@ void KPrView::objectSelectedChanged()
             headerfooterselected=true;
         else
             headerfooterselected=false;
-
-        ObjType objtype = obj->getType();
-        if (objtype == OT_RECT || objtype == OT_ELLIPSE || objtype == OT_TEXT
-            || objtype == OT_AUTOFORM || objtype == OT_PIE || objtype == OT_CLOSED_LINE)
-            state2=true;
     }
     actionScreenAssignEffect->setEnabled(state && !headerfooterselected);
     actionEditDelete->setEnabled(state && !headerfooterselected);
     actionEditCut->setEnabled(state && !headerfooterselected);
 
-    actionBrushColor->setEnabled(state && state2); // no brush button for objects that don't support it
+    KPrObjectProperties objectProperties( m_canvas->activePage()->getSelectedObjects() );
+    int flags = objectProperties.getPropertyFlags();
+    // only button when object support them or none object is selected
+    actionBrushColor->setEnabled( !state || ( flags & KPrObjectProperties::PtBrush ) ); 
+    actionExtraLineBegin->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) ); 
+    actionExtraLineEnd->setEnabled( !state || ( flags & KPrObjectProperties::PtLineEnds ) ); 
+    actionExtraPenWidth->setEnabled( !state || ( flags & KPrObjectProperties::PtPenWidth ) );
+
     actionExtraProperties->setEnabled(state && !headerfooterselected);
     actionExtraRotate->setEnabled(state && !headerfooterselected);
     actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
