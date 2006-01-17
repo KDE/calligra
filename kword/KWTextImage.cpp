@@ -100,12 +100,7 @@ void KWTextImage::save( QDomElement & parentElem )
     // This code is similar to KWPictureFrameSet::save
     KWDocument * doc = static_cast<KWTextDocument *>(parent)->textFrameSet()->kWordDocument();
 
-    QString strPicture;
-    if (doc->specialOutputFlag()==KoDocument::SaveAsKOffice1dot1)
-        strPicture="IMAGE"; // This compactibility is nearly useless, as KWord 1.1.x can not load text images.
-    else
-        strPicture="PICTURE";
-    QDomElement imageElem = parentElem.ownerDocument().createElement( strPicture );
+    QDomElement imageElem = parentElem.ownerDocument().createElement( "PICTURE" );
     parentElem.appendChild( imageElem );
     //imageElem.setAttribute( "keepAspectRatio", "true" );
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );

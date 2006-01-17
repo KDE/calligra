@@ -265,7 +265,7 @@ void KoOpenPane::selectionChanged(QListViewItem* item)
   m_widgetStack->widget(section->widgetIndex())->setFocus();
 }
 
-void KoOpenPane::saveSplitterSizes(KoDetailsPaneBase* sender, const QValueList<int>& sizes)
+void KoOpenPane::saveSplitterSizes(KoDetailsPaneBase* /*sender*/, const QValueList<int>& sizes)
 {
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   cfgGrp.writeEntry("DetailsPaneSplitterSizes", sizes);

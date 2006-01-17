@@ -1,6 +1,7 @@
 Changes after KOffice-1.4 (other than those done in branch too)
 =========================
-
+- Made OpenDocument the default format in kword and kpresenter
+- Removed support for saving in the koffice-1.1 format.
 
 Changes after KOffice-1.4-beta1
 ===============================

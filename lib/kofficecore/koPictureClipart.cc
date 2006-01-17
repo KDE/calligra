@@ -117,36 +117,6 @@ bool KoPictureClipart::save(QIODevice* io) const
     return (size==m_rawData.size());
 }
 
-bool KoPictureClipart::saveAsKOffice1Dot1(QIODevice* io, const QString& extension) const
-{
-    QPicture picture(3); //compatibility with QT 2.1 and later (KOffice 1.1.x was with QT 2.3.1 or QT 3.0.x)
-
-    bool result=false;
-    if (extension=="svg")
-    {
-        // SVG: convert it to QPicture
-        QBuffer buffer(m_rawData);
-        buffer.open(IO_ReadWrite);
-        if (picture.load(&buffer,"svg"))
-        {
-            result=picture.save(io,NULL);
-        }
-        buffer.close();
-    }
-    else if (extension=="qpic")
-    {
-        // We cannot do much with a QPicture, we cannot convert it to previous formats
-        result=save(io);
-    }
-    else
-    {
-        kdWarning(30003)<< "Unsupported clipart extension " << extension << " (KoPictureClipart::saveAsKOffice1Dot1)" << endl;
-        result=save(io); // Always save something!
-    }
-
-    return result;
-}
-
 QSize KoPictureClipart::getOriginalSize(void) const
 {
     return m_clipart.boundingRect().size();
@@ -168,11 +138,6 @@ QPixmap KoPictureClipart::generatePixmap(const QSize& size, bool /*smoothScale*/
     p.drawPicture( m_clipart );
     p.end();
     return pixmap;
-}
-
-bool KoPictureClipart::isClipartAsKOffice1Dot1(void) const
-{
-    return true;
 }
 
 QString KoPictureClipart::getMimeType(const QString& extension) const

@@ -40,8 +40,6 @@ public:
      */
     virtual FrameSetType type() const;
 
-    virtual FrameSetType typeAsKOffice1Dot1() const;
-
     void setPicture( const KoPicture &picture ) { m_picture = picture; }
     KoPicture picture() const { return m_picture; }
 

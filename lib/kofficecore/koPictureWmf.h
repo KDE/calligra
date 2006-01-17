@@ -84,21 +84,9 @@ public:
      */
     virtual bool save(QIODevice* io) const;
 
-    /**
-     *  Save picture in the format supported by KOffice 1,1
-     */
-
-    virtual bool saveAsKOffice1Dot1(QIODevice* io, const QString& extension) const;
-
     virtual QSize getOriginalSize(void) const;
 
     virtual QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
-
-     /**
-     * Helper function for saving
-     * @return true if it is a clipart in KOffice 1.1, false if not
-     */
-    virtual bool isClipartAsKOffice1Dot1(void) const;
 
     virtual QString getMimeType(const QString& extension) const;
 

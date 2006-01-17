@@ -114,11 +114,6 @@ public:
     bool save(QIODevice* io) const;
 
     /**
-     * Save picture in the format supported by KOffice 1.1
-     */
-    bool saveAsKOffice1Dot1(QIODevice* io) const;
-
-    /**
      * OASIS FlatXML support:
      * Save picture as base64-encoded data into an XML writer.
      * The caller will usually do something like
@@ -139,8 +134,6 @@ public:
      * @return the image MIME type
      */
     QString getMimeType(void) const;
-
-    QString getExtensionAsKOffice1Dot1(void) const;
 
     /**
      * @return the original image size
@@ -181,13 +174,6 @@ public:
      * Returns an empty QPixmap if the KoPicture is not an image.
      */
     QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
-
-    /**
-     * Helper function for saving
-     *
-     * @return true if it is a clipart in KOffice 1.1, false if not
-     */
-    bool isClipartAsKOffice1Dot1(void) const;
 
     /**
      * Download and set the key for a possibly remote file.
@@ -266,7 +252,7 @@ protected:
      */
     KoPictureShared* m_sharedData;
     static uint uniqueValue;
-    
+
     QString m_uniqueName;
 };
 

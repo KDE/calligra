@@ -91,12 +91,6 @@ bool KoPictureBase::save(QIODevice*) const
     return false;
 }
 
-bool KoPictureBase::saveAsKOffice1Dot1(QIODevice* io, const QString&) const
-{
-    // The default is the normla save
-    return save(io);
-}
-
 bool KoPictureBase::saveAsBase64( KoXmlWriter& writer ) const
 {
     QBuffer buffer;
@@ -116,11 +110,6 @@ QSize KoPictureBase::getOriginalSize(void) const
 QPixmap KoPictureBase::generatePixmap(const QSize&, bool /*smoothScale*/)
 {
     return QPixmap();
-}
-
-bool KoPictureBase::isClipartAsKOffice1Dot1(void) const
-{
-    return false;
 }
 
 QString KoPictureBase::getMimeType(const QString&) const

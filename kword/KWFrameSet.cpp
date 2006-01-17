@@ -848,14 +848,7 @@ void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
         return;
 
     // Save all the common attributes for framesets.
-    if (m_doc->specialOutputFlag()==KoDocument::SaveAsKOffice1dot1)
-    {
-        parentElem.setAttribute( "frameType", static_cast<int>( typeAsKOffice1Dot1() ) );
-    }
-    else
-    {
-        parentElem.setAttribute( "frameType", static_cast<int>( type() ) );
-    }
+    parentElem.setAttribute( "frameType", static_cast<int>( type() ) );
     parentElem.setAttribute( "frameInfo", static_cast<int>( m_info ) );
     parentElem.setAttribute( "name", m_name );
     parentElem.setAttribute( "visible", static_cast<int>( m_visible ) );

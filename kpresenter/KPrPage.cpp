@@ -477,9 +477,9 @@ void KPrPage::loadOasis(KoOasisContext & context )
     }
 }
 
-QDomElement KPrPage::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
+QDomElement KPrPage::save( QDomDocument &doc )
 {
-    QDomElement page = m_kpbackground->save( doc, saveAsKOffice1Dot1 );
+    QDomElement page = m_kpbackground->save( doc );
     QDomElement element;
 
     if ( m_pageEffect != PEF_NONE) {

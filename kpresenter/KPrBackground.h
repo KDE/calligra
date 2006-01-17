@@ -52,7 +52,7 @@ public:
     struct Settings
     {
         Settings( const BackType backType, const QColor backColor1, const QColor backColor2,
-                  const BCType bcType, const bool unbalanced, const int xfactor, const int yfactor, 
+                  const BCType bcType, const bool unbalanced, const int xfactor, const int yfactor,
                   const KoPictureKey &key, const BackView backView )
         : m_backType( backType )
         , m_backColor1( backColor1 )
@@ -62,7 +62,7 @@ public:
         , m_xfactor( xfactor )
         , m_yfactor( yfactor )
         , m_backPictureKey( key )
-        , m_backView( backView ) 
+        , m_backView( backView )
         {}
 
         BackType m_backType;
@@ -106,7 +106,7 @@ public:
     void setBackPicture ( const KoPictureKey& key );
     void setBackGround( const struct Settings &settings );
     struct Settings getBackGround() const;
-    
+
     KoPicture picture() const { return backPicture;}
 
     BackType getBackType() const
@@ -141,7 +141,7 @@ public:
 
     void reload();
 
-    QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
+    QDomElement save( QDomDocument &doc );
     void load( const QDomElement &element );
     void loadOasis( KoOasisContext & context );
     void saveOasisBackgroundPageStyle( KoGenStyle &stylepageauto, KoGenStyles &mainStyles );

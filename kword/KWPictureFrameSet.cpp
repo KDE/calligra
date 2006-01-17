@@ -91,27 +91,10 @@ QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 
     KWFrameSet::saveCommon( framesetElem, saveFrames );
 
-    QDomElement imageElem;
+    QDomElement imageElem = parentElem.ownerDocument().createElement( "PICTURE" );
+    framesetElem.appendChild( imageElem );
+    imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
 
-    if (m_doc->specialOutputFlag()==KoDocument::SaveAsKOffice1dot1)
-    {
-        // KWord 1.1 file format
-        QString strElementName=m_picture.isClipartAsKOffice1Dot1() ? QString( "CLIPART" ) : QString( "IMAGE" );
-        imageElem = parentElem.ownerDocument().createElement( strElementName );
-        framesetElem.appendChild( imageElem );
-        if ( !m_picture.isClipartAsKOffice1Dot1() )
-        {
-            // KWord 1.1 does not save keepAspectRaio for a clipart
-            imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
-        }
-    }
-    else
-    {
-        // KWord 1.3 file format
-        imageElem = parentElem.ownerDocument().createElement( "PICTURE" );
-        framesetElem.appendChild( imageElem );
-        imageElem.setAttribute( "keepAspectRatio", m_keepAspectRatio ? "true" : "false" );
-    }
     QDomElement elem = parentElem.ownerDocument().createElement( "KEY" );
     imageElem.appendChild( elem );
     m_picture.getKey().saveAttributes( elem );
@@ -251,11 +234,6 @@ void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, co
 FrameSetType KWPictureFrameSet::type() const
 {
     return FT_PICTURE;
-}
-
-FrameSetType KWPictureFrameSet::typeAsKOffice1Dot1() const
-{
-    return m_picture.isClipartAsKOffice1Dot1()?FT_CLIPART:FT_PICTURE;
 }
 
 bool KWPictureFrameSet::keepAspectRatio() const

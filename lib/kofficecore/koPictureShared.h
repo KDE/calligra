@@ -107,11 +107,6 @@ public:
     bool save(QIODevice* io) const;
 
     /**
-     * Save picture in the format supported by KOffice 1.1
-     */
-    bool saveAsKOffice1Dot1(QIODevice* io) const;
-
-    /**
      * OASIS FlatXML support:
      * Save picture as base64-encoded data into an XML writer.
      */
@@ -120,8 +115,6 @@ public:
     void setExtension(const QString& extension);
 
     QString getExtension(void) const;
-
-    QString getExtensionAsKOffice1Dot1(void) const;
 
     QSize getOriginalSize(void) const;
 
@@ -156,12 +149,6 @@ public:
      * @param size the wanted size for the QPixmap
      */
     QPixmap generatePixmap(const QSize& size, bool smoothScale = false);
-
-    /**
-     * Helper function for saving
-     * @return true if it is a clipart in %KOffice 1.1, false if not
-     */
-    bool isClipartAsKOffice1Dot1(void) const;
 
     QString getMimeType(void) const;
 

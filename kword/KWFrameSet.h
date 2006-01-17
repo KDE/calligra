@@ -74,11 +74,6 @@ public:
      */
     virtual FrameSetType type() const { return FT_BASE; }
 
-    /**
-     *  Return the type of FrameSet that would have been used in KWord 1.1
-     */
-    virtual FrameSetType typeAsKOffice1Dot1() const { return type(); }
-
     virtual void addTextFrameSets( QPtrList<KWTextFrameSet> & /*lst*/, bool /*onlyReadWrite*/ = false ) {};
     virtual bool ownLine() const { return FALSE;}
 

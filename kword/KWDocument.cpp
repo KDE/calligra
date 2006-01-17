@@ -3490,15 +3490,9 @@ QDomDocument KWDocument::saveXML()
           it != end ; ++it )
         saveTableStyle( static_cast<KWTableStyle *>(*it), tableStyles );
 
-    if (specialOutputFlag()==SaveAsKOffice1dot1)
-    {
-        m_pictureCollection->saveXMLAsKOffice1Dot1( doc, kwdoc, savePictures );
-    }
-    else
-    {
-        QDomElement pictures = m_pictureCollection->saveXML( KoPictureCollection::CollectionPicture, doc, savePictures );
-        kwdoc.appendChild( pictures );
-    }
+    QDomElement pictures = m_pictureCollection->saveXML( KoPictureCollection::CollectionPicture, doc, savePictures );
+    kwdoc.appendChild( pictures );
+
     // Not needed anymore
 #if 0
     // Write out the list of parags (id) that form the table of contents, see KWContents::createContents
@@ -3635,19 +3629,12 @@ bool KWDocument::completeSaving( KoStore *store )
 
     QValueList<KoPictureKey> savePictures( savePictureList() );
 
-    if (specialOutputFlag()==SaveAsKOffice1dot1)
-    {
-        return m_pictureCollection->saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, store, savePictures );
-    }
-    else
-    {
-        return m_pictureCollection->saveToStore( KoPictureCollection::CollectionPicture, store, savePictures );
-    }
+    return m_pictureCollection->saveToStore( KoPictureCollection::CollectionPicture, store, savePictures );
 }
 
 int KWDocument::supportedSpecialFormats() const
 {
-    return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
+    return KoDocument::supportedSpecialFormats();
 }
 
 void KWDocument::addView( KoView *view )

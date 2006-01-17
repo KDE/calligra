@@ -523,7 +523,7 @@ public:
     void load( const QDomElement &element );
     void loadOasis( KoOasisContext & context );
 
-    QDomElement save( QDomDocument &doc, const bool saveAsKOffice1Dot1 );
+    QDomElement save( QDomDocument &doc );
 
     bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
     QString saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const;

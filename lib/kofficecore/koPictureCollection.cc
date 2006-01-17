@@ -136,19 +136,6 @@ QString KoPictureCollection::getFileName(const Type pictureType, KoPicture& pict
     return storeURL;
 }
 
-QString KoPictureCollection::getFileNameAsKOffice1Dot1(const Type pictureType, KoPicture& picture, int& counter)
-{
-    QString storeURL;
-    if (pictureType==CollectionClipart)
-        storeURL="cliparts/clipart";
-    else
-        storeURL="pictures/picture";
-    storeURL+=QString::number(++counter);
-    storeURL+='.';
-    storeURL+=picture.getExtensionAsKOffice1Dot1();
-    return storeURL;
-}
-
 QString KoPictureCollection::getOasisFileName(const KoPicture& picture) const
 {
     QString storeURL( "Pictures/");
@@ -157,14 +144,14 @@ QString KoPictureCollection::getOasisFileName(const KoPicture& picture) const
     else
         storeURL+=picture.getKey().toString();
     storeURL+='.';
-    storeURL+=picture.getExtensionAsKOffice1Dot1();
+    storeURL+=picture.getExtension();
     return storeURL;
 }
 
-bool KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *store, QValueList<KoPictureKey>& keys, const bool koffice11)
+bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, const QValueList<KoPictureKey>& keys)
 {
     int counter=0;
-    QValueList<KoPictureKey>::Iterator it = keys.begin();
+    QValueList<KoPictureKey>::const_iterator it = keys.begin();
     for ( ; it != keys.end(); ++it )
     {
         KoPicture c = findPicture( *it );
@@ -172,25 +159,13 @@ bool KoPictureCollection::saveToStoreInternal(const Type pictureType, KoStore *s
             kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
         else
         {
-            QString storeURL;
-            if (koffice11)
-                storeURL=getFileNameAsKOffice1Dot1(pictureType, c, counter);
-            else
-                storeURL=getFileName(pictureType, c, counter);
+            QString storeURL=getFileName(pictureType, c, counter);
 
             if (store->open(storeURL))
             {
                 KoStoreDevice dev(store);
-                if (koffice11)
-                {
-                    if ( !c.saveAsKOffice1Dot1(&dev) )
-                        return false;
-                }
-                else
-                {
-                    if ( ! c.save(&dev) )
-                        return false; // e.g. bad image?
-                }
+                if ( ! c.save(&dev) )
+                    return false; // e.g. bad image?
                 if ( !store->close() )
                     return false; // e.g. disk full
             }
@@ -224,16 +199,6 @@ bool KoPictureCollection::saveOasisToStore( KoStore *store, QValueList<KoPicture
     return true;
 }
 
-bool KoPictureCollection::saveToStore(const Type pictureType, KoStore *store, QValueList<KoPictureKey> keys)
-{
-    return saveToStoreInternal(pictureType,store, keys, false);
-}
-
-bool KoPictureCollection::saveToStoreAsKOffice1Dot1(const Type pictureType, KoStore *store, QValueList<KoPictureKey> keys)
-{
-    return saveToStoreInternal(pictureType,store, keys, true);
-}
-
 QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &doc, QValueList<KoPictureKey> keys)
 {
     QString strElementName("PICTURES");
@@ -259,42 +224,6 @@ QDomElement KoPictureCollection::saveXML(const Type pictureType, QDomDocument &d
         }
     }
     return cliparts;
-}
-
-void KoPictureCollection::saveXMLAsKOffice1Dot1(QDomDocument &doc, QDomElement& parent, QValueList<KoPictureKey> keys)
-{
-    QDomElement pixmaps = doc.createElement( "PIXMAPS" );
-    QDomElement cliparts = doc.createElement( "CLIPARTS" );
-    parent.appendChild(pixmaps);
-    parent.appendChild(cliparts);
-    int counter=0;
-    QValueList<KoPictureKey>::Iterator it = keys.begin();
-    for ( ; it != keys.end(); ++it )
-    {
-        KoPicture picture = findPicture( *it );
-        if ( picture.isNull() )
-            kdWarning(30003) << "Picture " << (*it).toString() << " not found in collection !" << endl;
-        else
-        {
-            QString pictureName("error");
-            QDomElement keyElem = doc.createElement( "KEY" );
-
-            if (picture.isClipartAsKOffice1Dot1())
-            {
-                pictureName=getFileNameAsKOffice1Dot1(CollectionClipart, picture, counter);
-                cliparts.appendChild(keyElem);
-            }
-            else
-            {
-                pictureName=getFileNameAsKOffice1Dot1(CollectionImage, picture, counter);
-                pixmaps.appendChild(keyElem);
-            }
-
-            (*it).saveAttributes(keyElem);
-            keyElem.setAttribute("name", pictureName);
-        }
-    }
-    return;
 }
 
 void KoPictureCollection::readXML( QDomElement& pixmapsElem, QMap <KoPictureKey, QString>& map )

@@ -109,20 +109,6 @@ bool KoPictureWmf::save(QIODevice* io) const
     return (size==m_rawData.size());
 }
 
-bool KoPictureWmf::saveAsKOffice1Dot1(QIODevice* io, const QString& /* extension */) const
-{
-    QPicture picture(3); //compatibility with QT 2.1 and later (KOffice 1.1.x was with QT 2.3.1 or QT 3.0.x)
-
-    bool result=false;
-    KoWmfPaint wmf;
-    if (wmf.load(m_rawData))
-    {
-        wmf.play(picture, true);
-        result=picture.save(io,NULL);
-    }
-    return result;
-}
-
 QSize KoPictureWmf::getOriginalSize(void) const
 {
     return m_originalSize;
@@ -143,11 +129,6 @@ QPixmap KoPictureWmf::generatePixmap(const QSize& size, bool /*smoothScale*/)
     p.drawPicture( m_clipart );
     p.end();
     return pixmap;
-}
-
-bool KoPictureWmf::isClipartAsKOffice1Dot1(void) const
-{
-    return true;
 }
 
 QString KoPictureWmf::getMimeType(const QString& /* extension */) const

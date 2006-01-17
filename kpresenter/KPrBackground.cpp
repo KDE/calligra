@@ -123,7 +123,7 @@ void KPrBackGround::reload()
 }
 
 
-QDomElement KPrBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
+QDomElement KPrBackGround::save( QDomDocument &doc )
 {
     QString tag = m_page->masterPage() == 0 ? "MASTERPAGE" : "PAGE";
     QDomElement page=doc.createElement( tag );
@@ -177,15 +177,7 @@ QDomElement KPrBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot
 
         if ( !backPicture.isNull() && ( ( backType == BT_PICTURE ) || ( backType == BT_CLIPART ) ) )
         {
-            if (saveAsKOffice1Dot1) // KOffice 1.1
-            {
-                if ( backPicture.isClipartAsKOffice1Dot1() )
-                    element=doc.createElement( "BACKCLIPKEY" );
-                else
-                    element = doc.createElement( "BACKPIXKEY" );
-            }
-            else
-                element = doc.createElement( "BACKPICTUREKEY" );
+            element = doc.createElement( "BACKPICTUREKEY" );
 
             backPicture.getKey().saveAttributes( element );
             page.appendChild( element );
@@ -203,8 +195,8 @@ void KPrBackGround::saveOasisBackgroundPageStyle( KoGenStyle& stylepageauto, KoG
         case BT_COLOR:
         {
             QBrush qbrush( backColor1 );
-            KPrBrush brush( qbrush, backColor1, backColor2, bcType, 
-                            bcType == BCT_PLAIN ? FT_BRUSH : FT_GRADIENT, 
+            KPrBrush brush( qbrush, backColor1, backColor2, bcType,
+                            bcType == BCT_PLAIN ? FT_BRUSH : FT_GRADIENT,
                             unbalanced, xfactor, yfactor );
             brush.saveOasisFillStyle( stylepageauto, mainStyles );
         } break;

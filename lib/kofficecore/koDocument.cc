@@ -962,13 +962,16 @@ bool KoDocument::saveNativeFormat( const QString & file )
     //kdDebug(30003) << "Saving to store" << endl;
 
     KoStore::Backend backend = KoStore::Auto;
+#if 0
     if ( d->m_specialOutputFlag == SaveAsKOffice1dot1 )
     {
         kdDebug(30003) << "Saving as KOffice-1.1 format, using a tar.gz" << endl;
         backend = KoStore::Tar; // KOffice-1.0/1.1 used tar.gz for the native mimetype
         //// TODO more backwards compat stuff (embedded docs etc.)
     }
-    else if ( d->m_specialOutputFlag == SaveAsDirectoryStore )
+    else
+#endif
+        if ( d->m_specialOutputFlag == SaveAsDirectoryStore )
     {
         backend = KoStore::Directory;
         kdDebug(30003) << "Saving as uncompressed XML, using directory store." << endl;
@@ -1470,46 +1473,46 @@ bool KoDocument::openFile()
         if ( status != KoFilter::OK )
         {
             QApplication::restoreOverrideCursor();
-            
+
             QString msg;
             switch( status )
             {
                 case KoFilter::OK: break;
-                
+
                 case KoFilter::CreationError:
                     msg = i18n( "Creation error" ); break;
-                    
+
                 case KoFilter::FileNotFound:
                     msg = i18n( "File not found" ); break;
-                    
+
                 case KoFilter::StorageCreationError:
                     msg = i18n( "Cannot create storage" ); break;
-                
+
                 case KoFilter::BadMimeType:
                     msg = i18n( "Bad MIME type" ); break;
-                
+
                 case KoFilter::EmbeddedDocError:
                     msg = i18n( "Error in embedded document" ); break;
-                
+
                 case KoFilter::WrongFormat:
                     msg = i18n( "Format not recognized" ); break;
-                
+
                 case KoFilter::NotImplemented:
                     msg = i18n( "Not implemented" ); break;
-                
+
                 case KoFilter::ParsingError:
                     msg = i18n( "Parsing error" ); break;
-                
+
                 case KoFilter::PasswordProtected:
                     msg = i18n( "Document is password protected" ); break;
-                
+
                 case KoFilter::InternalError:
                 case KoFilter::UnexpectedEOF:
                 case KoFilter::UnexpectedOpcode:
                 case KoFilter::StupidError: // ?? what is this ??
                 case KoFilter::UsageError:
                     msg = i18n( "Internal error" ); break;
-                
+
                 case KoFilter::OutOfMemory:
                     msg = i18n( "Out of memory" ); break;
 
@@ -1517,10 +1520,10 @@ bool KoDocument::openFile()
                 case KoFilter::BadConversionGraph:
                     // intentionally we do not prompt the error message here
                     break;
-                    
+
                 default: msg = i18n( "Unknown error" ); break;
-            } 
-            
+            }
+
             if( d->m_autoErrorHandlingEnabled && !msg.isEmpty())
             {
                 QString errorMsg( i18n( "Could not open\n%1.\nReason: %2" ) );
@@ -2284,7 +2287,8 @@ QStringList KoDocument::extraNativeMimeTypes() const
 
 int KoDocument::supportedSpecialFormats() const
 {
-    // Apps which support saving in the 1.1 or in the 1.3 format can add SaveAsKOffice1dot1/3 here.
+    // Apps which support special output flags can add reimplement and add to this.
+    // E.g. this is how did "saving in the 1.1 format".
     // SaveAsDirectoryStore is a given since it's implemented by KoDocument itself.
     return SaveAsDirectoryStore;
 }

@@ -678,13 +678,8 @@ QDomDocument KPrDocument::saveXML()
         emit sigProgress( 70 );
     makeUsedPixmapList();
 
-    if (specialOutputFlag()==SaveAsKOffice1dot1)
-        m_pictureCollection.saveXMLAsKOffice1Dot1( doc, presenter, usedPictures );
-    else
-    {
-        QDomElement pictures = m_pictureCollection.saveXML( KoPictureCollection::CollectionPicture, doc, usedPictures );
-        presenter.appendChild( pictures );
-    }
+    QDomElement pictures = m_pictureCollection.saveXML( KoPictureCollection::CollectionPicture, doc, usedPictures );
+    presenter.appendChild( pictures );
 
     if ( saveOnlyPage == -1 )
         emit sigProgress( 90 );
@@ -801,12 +796,12 @@ QDomDocumentFragment KPrDocument::saveBackground( QDomDocument &doc )
     for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ ) {
         if ( saveOnlyPage != -1 && i != saveOnlyPage )
             continue;
-        fragment.appendChild( m_pageList.at(i)->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ));
+        fragment.appendChild( m_pageList.at(i)->save( doc ) );
     }
     // save backgound of masterpage only when the complete doc is saved
     if ( saveOnlyPage == -1 )
     {
-        fragment.appendChild( m_masterPage->save( doc, (specialOutputFlag()==SaveAsKOffice1dot1) ) );
+        fragment.appendChild( m_masterPage->save( doc ) );
     }
     return fragment;
 }
@@ -920,10 +915,7 @@ bool KPrDocument::completeSaving( KoStore* _store )
         return true;
     }
 
-    if (specialOutputFlag()==SaveAsKOffice1dot1)
-        m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, usedPictures );
-    else
-        m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, usedPictures );
+    m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, usedPictures );
 
     saveUsedSoundFileToStore( _store, usedSoundFile );
 
@@ -937,7 +929,7 @@ bool KPrDocument::completeSaving( KoStore* _store )
 
 int KPrDocument::supportedSpecialFormats() const
 {
-    return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
+    return KoDocument::supportedSpecialFormats();
 }
 
 void KPrDocument::saveUsedSoundFileToStore( KoStore *_store, QStringList _list )
@@ -1936,7 +1928,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                 }
                 newpage->setNoteText( note );
             }
-            else if ( ( name == "header" || name == "footer" ) && o.namespaceURI() == KoXmlNS::style || 
+            else if ( ( name == "header" || name == "footer" ) && o.namespaceURI() == KoXmlNS::style ||
                       ( name == "animations" && o.namespaceURI() == KoXmlNS::presentation) )
             {
                 //nothing
@@ -1962,7 +1954,7 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
         if ( ! tagName.isEmpty() ) // only tags that open
         {
             const bool isPresentationNS = e.namespaceURI() == KoXmlNS::presentation;
-            if ( isPresentationNS && 
+            if ( isPresentationNS &&
                  ( tagName == "show-shape" || tagName == "hide-shape" ) )
             {
                 Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );

@@ -323,15 +323,6 @@ bool KoPictureShared::save(QIODevice* io) const
     return false;
 }
 
-bool KoPictureShared::saveAsKOffice1Dot1(QIODevice* io) const
-{
-    if (!io)
-        return false;
-    if (m_base)
-        return m_base->saveAsKOffice1Dot1(io, getExtension());
-    return false;
-}
-
 bool KoPictureShared::saveAsBase64( KoXmlWriter& writer ) const
 {
     if ( m_base )
@@ -379,14 +370,6 @@ QString KoPictureShared::getExtension(void) const
 void KoPictureShared::setExtension(const QString& extension)
 {
     m_extension = extension;
-}
-
-QString KoPictureShared::getExtensionAsKOffice1Dot1(void) const
-{
-    if (isClipartAsKOffice1Dot1())
-        return "wmf"; // In KOffice 1.1, all cliparts are QPicture but are named as wmf
-    else
-        return m_extension;
 }
 
 QString KoPictureShared::getMimeType(void) const
@@ -482,13 +465,6 @@ QPixmap KoPictureShared::generatePixmap(const QSize& size, bool smoothScale)
     if (m_base)
         return m_base->generatePixmap(size, smoothScale);
     return QPixmap();
-}
-
-bool KoPictureShared::isClipartAsKOffice1Dot1(void) const
-{
-   if (m_base)
-        return m_base->isClipartAsKOffice1Dot1();
-    return false;
 }
 
 QDragObject* KoPictureShared::dragObject( QWidget *dragSource, const char *name )

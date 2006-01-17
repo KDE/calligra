@@ -165,16 +165,6 @@ bool KoPicture::save(QIODevice* io) const
     return false;
 }
 
-bool KoPicture::saveAsKOffice1Dot1(QIODevice* io) const
-{
-    if (!io)
-        return false;
-    if (m_sharedData)
-        return m_sharedData->saveAsKOffice1Dot1(io);
-    return false;
-}
-
-
 bool KoPicture::saveAsBase64( KoXmlWriter& writer ) const
 {
     if ( m_sharedData )
@@ -197,13 +187,6 @@ QString KoPicture::getExtension(void) const
 {
     if (m_sharedData)
         return m_sharedData->getExtension();
-    return "null"; // Just a dummy
-}
-
-QString KoPicture::getExtensionAsKOffice1Dot1(void) const
-{
-    if (m_sharedData)
-        return m_sharedData->getExtensionAsKOffice1Dot1();
     return "null"; // Just a dummy
 }
 
@@ -247,13 +230,6 @@ QPixmap KoPicture::generatePixmap(const QSize& size, bool smoothScale)
     if (m_sharedData)
         return m_sharedData->generatePixmap(size, smoothScale);
     return QPixmap();
-}
-
-bool KoPicture::isClipartAsKOffice1Dot1(void) const
-{
-    if (m_sharedData)
-        return m_sharedData->isClipartAsKOffice1Dot1();
-    return false;
 }
 
 bool KoPicture::setKeyAndDownloadPicture(const KURL& url, QWidget *window)
