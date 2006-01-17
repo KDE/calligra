@@ -69,6 +69,7 @@ include_HEADERS =	KDChartTableBase.h	\
 			KDChartParams.h		\
 			KDFrameProfileSection.h	\
 			KDChartPropertySet.h	\
+			KDChartDataIntern.h	\
 			KDChartDataRegion.h	\
 			KDFrame.h		\
 			KDChartGlobal.h		\
