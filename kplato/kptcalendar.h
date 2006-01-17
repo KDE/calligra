@@ -325,9 +325,9 @@ public:
     Duration effort(const QDate &date, const QTime &start, const QTime &end) const;
     /**
      * Returns the amount of 'worktime' that can be done in the
-     * interval from start with the duration  duration
+     * interval from start to end
      */
-    Duration effort(const DateTime &start, const Duration &duration) const;
+    Duration effort(const DateTime &start, const DateTime &end) const;
 
     /**
      * Returns the first 'work interval' for the interval 
@@ -354,8 +354,16 @@ public:
      */
     bool hasInterval(const QDate &date, const QTime &start, const QTime &end) const;
         
-    DateTime availableAfter(const DateTime &time, int days=-1);
-    DateTime availableBefore(const DateTime &time, int days=-1);
+    /** 
+     * Find the first available time after time before limit.
+     * Return invalid datetime if not available.
+     */
+    DateTime firstAvailableAfter(const DateTime &time, const DateTime &limit);
+    /** 
+     * Find the first available time backwards from time. Search until limit.
+     * Return invalid datetime if not available.
+     */
+    DateTime firstAvailableBefore(const DateTime &time, const DateTime &limit);
 
     Calendar *findCalendar() const { return findCalendar(m_id); }
     Calendar *findCalendar(const QString &id) const;

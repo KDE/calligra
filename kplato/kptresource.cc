@@ -457,17 +457,28 @@ void Resource::makeAppointment(NodeSchedule *node) {
     }
     //TODO: units and moderated by availability, and standard non-working days
     DateTime time = node->startTime;
-    DateTime end = node->startTime+node->duration;
+    DateTime end = node->endTime;
+    time = availableAfter(time, end);
+    end = availableBefore(end, time);
+    if (!time.isValid() || !end.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": Resource not available"<<endl;
+        //node->resourceNotAvailable = true;
+        return;
+    }
+    //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
     while (time < end) {
         //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
         if (!cal->hasInterval(time, end)) {
             //kdDebug()<<time.toString()<<" to "<<end.toString()<<": No (more) interval(s)"<<endl;
+            kdWarning()<<k_funcinfo<<m_name<<": Resource only partially available"<<endl;
+            //node->resourceNotAvailable = true;
             return; // nothing more to do
         }
         QPair<DateTime, DateTime> i = cal->interval(time, end);
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
         addAppointment(node, i.first, i.second, 100); //FIXME
+        //kdDebug()<<k_funcinfo<<"Add :"<<i.first.toString()<<" to "<<i.second.toString()<<endl;
         time = i.second;
     }
 }
@@ -479,21 +490,22 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
     Duration e;
     Calendar *cal = calendar();
     if (cal == 0) {
-        kdDebug()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
+        kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
+        return e;
     }
     if (backward) {
-        if (availableBefore(start+duration).isValid() &&
-            cal->hasIntervalBefore(start+duration))
-        {
+        DateTime limit = start - duration;
+        DateTime t = availableBefore(start, limit);
+        if (t.isValid()) {
             sts = true;
-            e = (cal->effort(start, duration) * m_units)/100;
+            e = (cal->effort(limit, t) * m_units)/100;
         }
     } else {
-        if (availableAfter(start).isValid() &&
-            cal->hasIntervalAfter(start))
-        {
+        DateTime limit = start + duration;
+        DateTime t = availableAfter(start, limit);
+        if (t.isValid()) {
             sts = true;
-            e = (cal->effort(start, duration) * m_units)/100;
+            e = (cal->effort(t, limit) * m_units)/100;
         }
     }
     //kdDebug()<<k_funcinfo<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
@@ -501,13 +513,17 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
     return e;
 }
 
-DateTime Resource::availableAfter(const DateTime &time, bool checkAppointments) const {
+DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, bool checkAppointments) const {
     DateTime t;
-    if (time >= m_availableUntil) {
+    DateTime lmt = m_availableUntil;
+    if (limit.isValid() && limit < lmt) {
+        lmt = limit;
+    }
+    if (time >= lmt) {
         return t;
     } else if (type() == Type_Material) {
         t = time > m_availableFrom ? time : m_availableFrom;
-        kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+        //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
         return t;
     }
     Calendar *cal = calendar();
@@ -515,21 +531,25 @@ DateTime Resource::availableAfter(const DateTime &time, bool checkAppointments) 
         return t;
     }
     t = m_availableFrom > time ? m_availableFrom : time;
-    t = cal->availableAfter(t, t.daysTo(m_availableUntil));
+    t = cal->firstAvailableAfter(t, lmt);
     if (checkAppointments) {
         //TODO
     }
-    kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
     return t;
 }
 
-DateTime Resource::availableBefore(const DateTime &time, bool checkAppointments) const {
+DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, bool checkAppointments) const {
     DateTime t;
-    if (time <= m_availableFrom) {
+    DateTime lmt = m_availableFrom;
+    if (limit.isValid() && limit > lmt) {
+        lmt = limit;
+    }
+    if (time <= lmt) {
         return t;
     } else if (type() == Type_Material) {
         t = time < m_availableUntil ? time : m_availableUntil;
-        kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+        //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
         return t;
     }
     Calendar *cal = calendar();
@@ -537,11 +557,11 @@ DateTime Resource::availableBefore(const DateTime &time, bool checkAppointments)
         return t;
     }
     t = m_availableUntil < time ? m_availableUntil : time;
-    t = cal->availableBefore(t, m_availableFrom.daysTo(t));
+    t = cal->firstAvailableBefore(t, lmt);
     if (checkAppointments) {
         //TODO
     }
-    kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
     return t;
 }
 
@@ -758,6 +778,7 @@ Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &dura
         if (sts && ok) *ok = sts;
         //kdDebug()<<k_funcinfo<<it.current()->resource()->name()<<" e="<<e.toString()<<endl;
     }
+    //kdDebug()<<k_funcinfo<<time.toString()<<"d="<<duration.toString()<<": e="<<e.toString()<<endl;
     return e;
 }
 
@@ -770,7 +791,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
             if (!t2.isValid() || t2 > t1)
                 t2 = t1;
         }
-        kdDebug()<<k_funcinfo<<"bw "<<time.toString()<<": "<<t2.daysTo(time)<<endl;
+        //kdDebug()<<k_funcinfo<<"bw "<<time.toString()<<": "<<t2.daysTo(time)<<endl;
         return t2.daysTo(time);
     }
     QPtrListIterator<ResourceRequest> it = m_resourceRequests;
@@ -779,7 +800,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
         if (!t2.isValid() || t2 < t1)
             t2 = t1;
     }
-    kdDebug()<<k_funcinfo<<"fw "<<time.toString()<<": "<<time.daysTo(t2)<<endl;
+    //kdDebug()<<k_funcinfo<<"fw "<<time.toString()<<": "<<time.daysTo(t2)<<endl;
     return time.daysTo(t2);
 }
 
@@ -799,12 +820,11 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i <= nDays && sts; ++i) {
         // days
         end = end.addDays(inc);
-        e1 = backward ? effort(end, start - end, backward, &sts) 
-                      : effort(start, end - start, backward, &sts);
+        e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             if (!sts) {
-                kdDebug()<<k_funcinfo<<"Cannot get a valid effort"<<endl;
+                kdWarning()<<k_funcinfo<<"Cannot get a valid effort"<<endl;
                 break;
             }
             start = end;
@@ -821,8 +841,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 24 && sts; ++i) {
         // hours
         end = end.addSecs(inc*60*60);
-        e1 = backward ? effort(end, start - end, &sts) 
-                      : effort(start, end - start, &sts);
+        e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             if (!sts)
@@ -841,8 +860,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 60 && sts; ++i) {
         //minutes
         end = end.addSecs(inc*60);
-        e1 = backward ? effort(end, start - end, &sts) 
-                      : effort(start, end - start, &sts);
+        e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             if (!sts)
@@ -861,8 +879,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 60 && sts; ++i) {
         //seconds
         end = end.addSecs(inc);
-        e1 = backward ? effort(end, start - end, &sts) 
-                      : effort(start, end - start, &sts);
+        e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             if (!sts)
@@ -880,8 +897,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 1000 && sts; ++i) {
         //milliseconds
         end.setTime(end.time().addMSecs(inc));
-        e1 = backward ? effort(end, start - end, &sts) 
-                      : effort(start, end - start, &sts);
+        e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             if (!sts)
@@ -898,8 +914,11 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     if (!match) {
         kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<_effort.toString(Duration::Format_Day)<<" got: "<<e.toString(Duration::Format_Day)<<" sts="<<sts<<endl;
     }
-    end = backward ? availableAfter(end) : availableBefore(end);
-    
+    DateTime t;
+    if (e != Duration::zeroDuration) {
+        t = backward ? availableAfter(end) : availableBefore(end);
+    }
+    end = t.isValid() ? t : time;
     //kdDebug()<<k_funcinfo<<"<---"<<(backward?"(B) ":"(F) ")<<m_group->name()<<": "<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort: "<<_effort.toString(Duration::Format_Day)<<endl;
     return end - time;
 }
@@ -923,11 +942,12 @@ DateTime ResourceGroupRequest::availableBefore(const DateTime &time) {
     QPtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         DateTime t = it.current()->resource()->availableBefore(time);
-        if (!end.isValid() || end > t)
+        if (t.isValid() && (!end.isValid() || t > end))
             end = t;
     }
     if (!end.isValid() || end > time)
         end = time;
+    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<end.toString()<<" "<<m_group->name()<<endl;
     return end;
 }
 
@@ -1048,7 +1068,7 @@ DateTime ResourceRequestCollection::availableAfter(const DateTime &time) {
     QPtrListIterator<ResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         DateTime t = it.current()->availableAfter(time);
-        if (!start.isValid() || t < start)
+        if (t.isValid() && (!start.isValid() || t < start))
             start = t;
     }
     if (start.isValid() && start < time)
@@ -1062,7 +1082,7 @@ DateTime ResourceRequestCollection::availableBefore(const DateTime &time) {
     QPtrListIterator<ResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         DateTime t = it.current()->availableBefore(time);
-        if (!end.isValid() || end > t)
+        if (t.isValid() && (!end.isValid() ||t > end))
             end = t;
     }
     if (!end.isValid() || end > time)

@@ -286,15 +286,15 @@ public:
     Duration effort(const DateTime &start, const Duration &duration, bool backward, bool *ok=0) const;
 
     /**
-     * Find the first available time after time.
+     * Find the first available time after time, within limit.
      * Returns invalid DateTime if not available.
      */
-    DateTime availableAfter(const DateTime &time, bool checkAppointments=false) const;
+    DateTime availableAfter(const DateTime &time, const DateTime limit=DateTime(), bool checkAppointments=false) const;
     /**
-     * Find the first available time before time.
+     * Find the first available time before time, within limit.
      * Returns invalid DateTime if not available.
      */
-    DateTime availableBefore(const DateTime &time, bool checkAppointments=false) const;
+    DateTime availableBefore(const DateTime &time, const DateTime limit=DateTime(), bool checkAppointments=false) const;
 
     Resource *findId() const { return findId(m_id); }
     Resource *findId(const QString &id) const;

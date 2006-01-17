@@ -1247,13 +1247,14 @@ void Task::adjustSummarytask() {
 Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool backward) {
     if (m_currentSchedule == 0)
         return Duration::zeroDuration;
-    //kdDebug()<<"calcDuration "<<m_name<<" effort="<<effort.toString(Duration::Format_Day)<<endl;
+    //kdDebug()<<endl;
+    //kdDebug()<<"--------> calcDuration "<<(backward?"(B) ":"(F) ")<<m_name<<" "<<time.toString()<<" effort="<<effort.toString(Duration::Format_Day)<<endl;
     if (!m_requests || m_requests->isEmpty()) {
         m_currentSchedule->resourceError = true;
         return effort;
     }
     Duration dur = m_requests->duration(time, effort, backward);
-    //kdDebug()<<"calcDuration "<<m_name<<": "<<time.toString()<<" to "<<(time+dur).toString()<<" = "<<dur.toString(Duration::Format_Day)<<endl;
+    //kdDebug()<<"<--------calcDuration "<<m_name<<": "<<time.toString()<<" to "<<(time+dur).toString()<<" = "<<dur.toString(Duration::Format_Day)<<endl;
     return dur;
 }
 
