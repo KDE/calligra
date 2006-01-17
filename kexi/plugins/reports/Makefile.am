@@ -30,6 +30,9 @@ kformdesignerservices_DATA = kexireportfactory.desktop
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexireporthandler.desktop
 
+rcdir = $(kde_datadir)/kexi
+rc_DATA = kexireportpartui.rc kexireportpartinstui.rc
+
 SUBDIRS = .
 
 INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \

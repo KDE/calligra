@@ -18,6 +18,9 @@ INCLUDES= $(KOFFICE_INCLUDES) \
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexitablehandler.desktop
 
+rcdir = $(kde_datadir)/kexi
+rc_DATA = kexitablepartui.rc kexitablepartinstui.rc
+
 METASOURCES = AUTO
 
 include ../Makefile.common

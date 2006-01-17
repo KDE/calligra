@@ -25,6 +25,9 @@ INCLUDES = \
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexiscripthandler.desktop
 
+rcdir = $(kde_datadir)/kexi
+rc_DATA = kexiscriptpartui.rc kexiscriptpartinstui.rc
+
 METASOURCES = AUTO
 
 SUBDIRS = .

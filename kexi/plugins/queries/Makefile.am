@@ -21,6 +21,9 @@ INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexiqueryhandler.desktop
 
+rcdir = $(kde_datadir)/kexi
+rc_DATA = kexiquerypartui.rc kexiquerypartinstui.rc
+
 METASOURCES = AUTO
 
 include ../Makefile.common

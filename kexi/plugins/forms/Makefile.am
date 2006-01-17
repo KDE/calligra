@@ -34,6 +34,9 @@ kformdesignerservices_DATA=kexidbfactory.desktop
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexiformhandler.desktop
 
+rcdir = $(kde_datadir)/kexi
+rc_DATA = kexiformpartui.rc kexiformpartinstui.rc
+
 SUBDIRS = widgets .
 
 INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
