@@ -21,15 +21,7 @@ include $(top_srcdir)/kexi/Makefile.global
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 rcdir = $(kde_datadir)/kexi
-rc_DATA = kexiui.rc \
-	kexiquerypartui.rc kexiquerypartinstui.rc \
-	kexirelationpartui.rc kexirelationhandlerui.rc \
-	kexitablepartui.rc kexitablepartinstui.rc \
-	kexiformpartui.rc kexiformpartinstui.rc \
-	kexireportpartui.rc kexireportpartinstui.rc \
-	kexiscriptpartui.rc kexiscriptpartinstui.rc \
-	kexitableview.rc \
-	kexirelationsview.rc kexidatatableui.rc
+rc_DATA = kexiui.rc
 
 kde_conf_DATA = kexirc
 
