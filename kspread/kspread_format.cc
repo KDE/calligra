@@ -405,7 +405,7 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
     if ( m_pStyle->type() == Style::BUILTIN || m_pStyle->type() == Style::CUSTOM )
     {
         currentCellStyle.addAttribute( "style:parent-style-name", ((CustomStyle *) m_pStyle)->name() );
-        if ( !copy && m_pSheet->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+        if ( !copy )
             return ""; //FIXME
     }
     else //FIXME !!!!
@@ -626,7 +626,7 @@ QDomElement Format::saveFormat( QDomDocument & doc, int _col, int _row, bool for
   {
     format.setAttribute( "style-name", ((CustomStyle *) m_pStyle)->name() );
 
-    if ( !copy && m_pSheet->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+    if ( !copy )
       return format;
   }
   else
@@ -747,7 +747,7 @@ QDomElement Format::saveFormat( QDomDocument& doc, bool force, bool copy ) const
   {
     format.setAttribute( "style-name", ((CustomStyle *) m_pStyle)->name() );
 
-    if ( !copy && m_pSheet->doc()->specialOutputFlag() != KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
+    if ( !copy )
       return format;
   }
   else

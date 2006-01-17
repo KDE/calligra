@@ -5814,10 +5814,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     sheet.setAttribute( "printGrid", (int)d->print->printGrid() );
     sheet.setAttribute( "printCommentIndicator", (int)d->print->printCommentIndicator() );
     sheet.setAttribute( "printFormulaIndicator", (int)d->print->printFormulaIndicator() );
-    if ( doc()->specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
-      sheet.setAttribute( "formular", (int)d->showFormula); //Was named different
-    else
-      sheet.setAttribute( "showFormula", (int)d->showFormula);
+    sheet.setAttribute( "showFormula", (int)d->showFormula);
     sheet.setAttribute( "showFormulaIndicator", (int)d->showFormulaIndicator);
     sheet.setAttribute( "showCommentIndicator", (int)d->showCommentIndicator);
     sheet.setAttribute( "lcmode", (int)d->lcMode);

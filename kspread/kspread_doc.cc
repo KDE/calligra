@@ -509,15 +509,12 @@ bool Doc::saveChildren( KoStore* _store )
 
 int Doc::supportedSpecialFormats() const
 {
-    return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
+    return KoDocument::supportedSpecialFormats();
 }
 
 bool Doc::completeSaving( KoStore* _store )
 {
-    if (specialOutputFlag()==SaveAsKOffice1dot1)
-        d->m_pictureCollection.saveToStoreAsKOffice1Dot1( KoPictureCollection::CollectionImage, _store, d->usedPictures );
-    else
-        d->m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, d->usedPictures );
+    d->m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, d->usedPictures );
 
     return true;
 }
@@ -541,68 +538,6 @@ QDomDocument Doc::saveXML()
     spread.setAttribute( "editor", "KSpread" );
     spread.setAttribute( "mime", "application/x-kspread" );
     spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
-
-    /* Backwards compatibility with KSpread < 1.2
-       Looks like a hack, but it saves us to define an export filter for this issue.
-
-       In KSpread < 1.2, the paper format was per map, since 1.2 it's per sheet.
-       To enable KSpread < 1.2 to open these files, we store the page layout of the first sheet
-       for the whole map as the map paper layout. */
-    if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
-    {
-        SheetPrint* printObject = map()->firstSheet()->print();
-
-        QDomElement paper = doc.createElement( "paper" );
-        paper.setAttribute( "format", printObject->paperFormatString() );
-        paper.setAttribute( "orientation", printObject->orientationString() );
-        spread.appendChild( paper );
-        QDomElement borders = doc.createElement( "borders" );
-        borders.setAttribute( "left", printObject->leftBorder() );
-        borders.setAttribute( "top", printObject->topBorder() );
-        borders.setAttribute( "right", printObject->rightBorder() );
-        borders.setAttribute( "bottom", printObject->bottomBorder() );
-        paper.appendChild( borders );
-        QDomElement head = doc.createElement( "head" );
-        paper.appendChild( head );
-        if ( !printObject->headLeft().isEmpty() )
-        {
-            QDomElement left = doc.createElement( "left" );
-            head.appendChild( left );
-            left.appendChild( doc.createTextNode( printObject->headLeft() ) );
-        }
-        if ( !printObject->headMid().isEmpty() )
-        {
-            QDomElement center = doc.createElement( "center" );
-            head.appendChild( center );
-            center.appendChild( doc.createTextNode( printObject->headMid() ) );
-        }
-        if ( !printObject->headRight().isEmpty() )
-        {
-            QDomElement right = doc.createElement( "right" );
-            head.appendChild( right );
-            right.appendChild( doc.createTextNode( printObject->headRight() ) );
-        }
-        QDomElement foot = doc.createElement( "foot" );
-        paper.appendChild( foot );
-        if ( !printObject->footLeft().isEmpty() )
-        {
-            QDomElement left = doc.createElement( "left" );
-            foot.appendChild( left );
-            left.appendChild( doc.createTextNode( printObject->footLeft() ) );
-        }
-        if ( !printObject->footMid().isEmpty() )
-        {
-            QDomElement center = doc.createElement( "center" );
-            foot.appendChild( center );
-            center.appendChild( doc.createTextNode( printObject->footMid() ) );
-        }
-        if ( !printObject->footRight().isEmpty() )
-        {
-            QDomElement right = doc.createElement( "right" );
-            foot.appendChild( right );
-            right.appendChild( doc.createTextNode( printObject->footRight() ) );
-        }
-    }
 
     QDomElement dlocale = ((Locale *)locale())->save( doc );
     spread.appendChild( dlocale );

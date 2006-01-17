@@ -78,6 +78,7 @@ void KSpreadObject::setGeometry( const KoRect &rect )
 bool KSpreadObject::load( const QDomElement& element )
 {
     kdDebug() << "Loading KSpreadObject" << endl;
+    return false;
 }
 
 void KSpreadObject::loadOasis(const QDomElement &element, KoOasisLoadingContext & context )
@@ -98,6 +99,7 @@ void KSpreadObject::loadOasis(const QDomElement &element, KoOasisLoadingContext 
 QDomElement KSpreadObject::save( QDomDocument& doc )
 {
     kdDebug() << "Saving KSpreadObject..." << endl;
+    return QDomElement();
 }
 
 void KSpreadObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
@@ -654,6 +656,7 @@ bool KSpreadPictureObject::load( const QDomElement& element )
 QDomElement KSpreadPictureObject::save( QDomDocument& doc )
 {
     kdDebug() << "Saving KSpreadPictureObject" << endl;
+    return QDomElement();
 }
 
 QString KSpreadPictureObject::convertValueToPercent( int val ) const
