@@ -1716,11 +1716,6 @@ void KPSheetSelectPage::moveBottom()
 }
 
 
-} // namespace KSpread
-
-
-using namespace KSpread;
-
 /*****************************************************************************
  *
  * View
@@ -7254,5 +7249,7 @@ void View::runInspector()
     ins->exec();
     delete ins;
 }
+
+} // namespace KSpread
 
 #include "kspread_view.moc"

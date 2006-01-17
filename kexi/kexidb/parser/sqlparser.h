@@ -1,3 +1,6 @@
+#ifndef _SQLPARSER_H
+#define _SQLPARSER_H
+
 #include "field.h"
 #include "parser.h"
 #include "sqltypes.h"
@@ -363,3 +366,4 @@ typedef union {
 
 
 extern YYSTYPE yylval;
+#endif

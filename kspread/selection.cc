@@ -71,6 +71,7 @@ public:
 /***************************************************************************
   class Selection
 ****************************************************************************/
+namespace KSpread {
 
 Selection::Selection(View *view)
   : QObject(view), Region(1,1)
@@ -746,4 +747,5 @@ Selection::Range::Range(const QString& string)
   m_bottomFixed = lr.rowFixed();
 }
 
+} // namespace KSpread
 #include "selection.moc"

@@ -200,7 +200,7 @@ void Point::setSheet(Sheet* sheet)
 {
     _sheet=sheet;
 }
-Sheet* Point::sheet() const
+KSpread::Sheet* Point::sheet() const
 {
     return _sheet;
 }
@@ -659,7 +659,7 @@ void Range::setSheet(Sheet* sheet)
 {
     _sheet=sheet;
 }
-Sheet* Range::sheet() const
+KSpread::Sheet* Range::sheet() const
 {
     return _sheet;
 }
@@ -948,3 +948,4 @@ bool KSpread::localReferenceAnchor( const QString &_ref )
                        _ref.find("file:") != 0 );
     return isLocalRef;
 }
+

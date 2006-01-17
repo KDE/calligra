@@ -89,7 +89,7 @@ do { \
   KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); return; \
 } while(0)
 
-using namespace KSpread;
+namespace KSpread {
 
 /*****************************************************************************
  *
@@ -8117,3 +8117,6 @@ void Sheet::printDebug()
     }
 }
 #endif
+
+} // namespace KSpread
+
