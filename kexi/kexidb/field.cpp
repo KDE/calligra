@@ -409,9 +409,7 @@ Field::setDefaultValue(const QCString& def)
 				m_defaultValue = QVariant((Q_LLONG)v);
 			break;
 		}case BigInteger: {//8 bytes
-#ifndef Q_WS_WIN
-#warning fixme
-#endif
+//! @todo BigInteger support
 /*
 			Q_LLONG long v = def.toLongLong(&ok);
 //TODO: 2-part decoding

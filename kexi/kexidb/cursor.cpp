@@ -41,11 +41,6 @@ Cursor::Cursor(Connection* conn, const QString& statement, uint options)
 	, m_options(options)
 {
 	init();
-#ifndef Q_WS_WIN
-#warning TODO
-#endif
-//TODO(js) if the statement is not empty update m_fieldCount
-// (change this when KexiDB::Query will be used here)
 }
 
 Cursor::Cursor(Connection* conn, QuerySchema& query, uint options )
