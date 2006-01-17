@@ -666,7 +666,7 @@ void KPrView::insertPage()
     {
 #if COPYOASISFORMAT
         QString file = locateLocal( "appdata", "default.oop" );
-        m_pKPresenterDoc->saveOasisPage( file, currPg, true /*ignore stickies*/ );
+        m_pKPresenterDoc->savePage( file, currPg, true /*ignore stickies*/ );
 #else
         QString file = locateLocal( "appdata", "default.kpr" );
         m_pKPresenterDoc->savePage( file, currPg, true /*ignore stickies*/ );
@@ -1282,7 +1282,7 @@ void KPrView::extraCreateTemplate()
 #if COPYOASISFORMAT
     KTempFile tempFile( QString::null, ".otp" );
     tempFile.setAutoDelete( true );
-    m_pKPresenterDoc->saveOasisPage( tempFile.name(), getCurrPgNum() - 1);
+    m_pKPresenterDoc->savePage( tempFile.name(), getCurrPgNum() - 1);
 #else
     KTempFile tempFile( QString::null, ".kpt" );
     tempFile.setAutoDelete( true );
@@ -1300,7 +1300,7 @@ void KPrView::extraDefaultTemplate()
 {
 #if COPYOASISFORMAT
     QString file = locateLocal( "appdata", "default.oop" );
-    m_pKPresenterDoc->saveOasisPage( file, currPg );
+    m_pKPresenterDoc->savePage( file, currPg );
 #else
     QString file = locateLocal( "appdata", "default.kpr" );
     m_pKPresenterDoc->savePage( file, currPg );
@@ -6062,9 +6062,7 @@ void KPrView::insertFile(  )
     KFileDialog fd( QString::null, QString::null, this, 0, TRUE );
     QStringList filter;
     filter<<"application/x-kpresenter";
-#if COPYOASISFORMAT
     filter<<"application/vnd.oasis.opendocument.presentation";
-#endif
     fd.setMimeFilter( filter );
     fd.setCaption(i18n("Insert File"));
 

@@ -1562,8 +1562,9 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     // Load all styles before the corresponding paragraphs try to use them!
     m_styleColl->loadOasisStyles( context );
 
-    // if we only copy a page we have no master
-    if ( !m_pageWhereLoadObject )
+    // if we only copy a page we have no master 
+    // also don't copy master when you insert file as long as we don't have multiple masters
+    if ( !m_pageWhereLoadObject && _clean )
     {
         QString masterPageName = drawPage.toElement().attributeNS( KoXmlNS::draw, "master-page-name", QString::null );
         QDomElement *master = oasisStyles.masterPages()[ masterPageName];
@@ -1617,7 +1618,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         }
     }
 
-    int pos = 0;
+    int pos = m_insertFilePage;
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
     {
         dp = drawPage.toElement();
