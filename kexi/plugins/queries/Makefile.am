@@ -18,6 +18,9 @@ INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 	-I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore \
 	-I$(top_srcdir)/kexi/kexidb $(all_includes)
 
+servicesdir=$(kde_servicesdir)/kexi
+services_DATA=kexiqueryhandler.desktop
+
 METASOURCES = AUTO
 
 include ../Makefile.common

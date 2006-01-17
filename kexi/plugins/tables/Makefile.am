@@ -15,6 +15,9 @@ INCLUDES= $(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/widget/tableview \
 	-I$(top_srcdir)/kexi/kexidb -I$(top_srcdir)/lib  $(all_includes)
 
+servicesdir=$(kde_servicesdir)/kexi
+services_DATA=kexitablehandler.desktop
+
 METASOURCES = AUTO
 
 include ../Makefile.common

@@ -22,6 +22,9 @@ INCLUDES = \
     -I$(top_srcdir)/kexi/widget \
     $(all_includes)
 
+servicesdir=$(kde_servicesdir)/kexi
+services_DATA=kexiscripthandler.desktop
+
 METASOURCES = AUTO
 
 SUBDIRS = .
