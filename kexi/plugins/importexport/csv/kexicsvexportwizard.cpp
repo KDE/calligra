@@ -298,7 +298,7 @@ void KexiCSVExportWizard::done(int result)
 	const bool store = m_alwaysUseCheckBox->isChecked();
 	cfg->writeEntry("StoreOptionsForCSVExportDialog", store);
 	// only save if an option differs from default
-	if (store && m_delimiterWidget->delimiter()!=KEXICSV_DEFAULT_DELIMITER)
+	if (store && m_delimiterWidget->delimiter()!=KEXICSV_DEFAULT_FILE_DELIMITER)
 		cfg->writeEntry("DefaultDelimiterForExportingCSVFiles", m_delimiterWidget->delimiter());
 	else
 		cfg->deleteEntry("DefaultDelimiterForExportingCSVFiles");
@@ -358,7 +358,7 @@ void KexiCSVExportWizard::layOutButtonRow( QHBoxLayout * layout )
 
 void KexiCSVExportWizard::slotDefaultsButtonClicked()
 {
-	m_delimiterWidget->setDelimiter(KEXICSV_DEFAULT_DELIMITER);
+	m_delimiterWidget->setDelimiter(KEXICSV_DEFAULT_FILE_DELIMITER);
 	m_textQuote->setTextQuote(KEXICSV_DEFAULT_TEXT_QUOTE);
 	m_addColumnNamesCheckBox->setChecked(true);
 	m_characterEncodingCombo->selectDefaultEncoding();

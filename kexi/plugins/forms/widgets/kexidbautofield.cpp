@@ -549,7 +549,7 @@ KexiDBAutoField::updateInformationAboutUnboundField()
 	if (   (m_autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
 		|| (!m_autoCaption && m_caption.isEmpty()) )
 	{
-		m_label->setText( QString::fromLatin1(name())+" "+i18n(" (unbound)") );
+		m_label->setText( QString::fromLatin1(name())+" "+i18n("Unbound Auto Field", " (unbound)") );
 	}
 //	else
 //		m_label->setText( QString::fromLatin1(name())+" "+i18n(" (unbound)") );

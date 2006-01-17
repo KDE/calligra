@@ -95,15 +95,19 @@ void Object::setError( KexiDB::Object *obj, const QString& prependMessage )
 
 void Object::setError( KexiDB::Object *obj, int code, const QString& prependMessage )
 {
-	if (obj && obj->errorNum()!=0) {
+	if (obj && (obj->errorNum()!=0 || !obj->serverErrorMsg().isEmpty())) {
 		STORE_PREV_ERR;
 
 		m_errno = obj->errorNum();
+		m_hasError = obj->error();
+		if (m_errno==0) {
+			m_errno = code;
+			m_hasError = true;
+		}
 		m_errMsg = (prependMessage.isEmpty() ? QString::null : (prependMessage + " ")) 
 			+ obj->errorMsg();
 		m_sql = obj->m_sql;
 		m_errorSql = obj->m_errorSql;
-		m_hasError = obj->error();
 		m_serverResult = obj->serverResult();
 		if (m_serverResult==0) //try copied
 			m_serverResult = obj->m_serverResult;

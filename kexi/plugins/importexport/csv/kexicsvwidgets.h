@@ -28,8 +28,9 @@ class KActiveLabel;
 class QLabel;
 
 #define KEXICSV_DEFAULT_TEXT_QUOTE "\""
-#define KEXICSV_DEFAULT_DELIMITER ","
-#define KEXICSV_DEFAULT_DELIMITER_INDEX 0
+#define KEXICSV_DEFAULT_FILE_DELIMITER ","
+#define KEXICSV_DEFAULT_CLIPBOARD_DELIMITER "\t"
+#define KEXICSV_DEFAULT_FILE_DELIMITER_INDEX 0
 
 //! \return a list of mimetypes usable for handling CSV format handling
 QStringList csvMimeTypes();

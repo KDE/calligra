@@ -992,8 +992,9 @@ bool Connection::executeSQL( const QString& statement )
 {
 	m_sql = statement; //remember for error handling
 	if (!drv_executeSQL( m_sql )) {
+		m_errMsg = QString::null; //clear as this could be most probably jsut "Unknown error" string.
 		m_errorSql = statement;
-		setError(ERR_SQL_EXECUTION_ERROR, i18n("Error while executing SQL statement."));
+		setError(this, ERR_SQL_EXECUTION_ERROR, i18n("Error while executing SQL statement."));
 		return false;
 	}
 	return true;
@@ -1181,9 +1182,10 @@ Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName,
 
 #define createTable_ERR \
 	{ KexiDBDbg << "Connection::createTable(): ERROR!" <<endl; \
+	  setError(this, i18n("Creating table failed.")); \
 	  rollbackAutoCommitTransaction(tg.transaction()); \
-	  setError( errorNum(), i18n("Creating table failed.") + " " + errorMsg()); \
 	  return false; }
+		//setError( errorNum(), i18n("Creating table failed.") + " " + errorMsg()); 
 
 //! Creates a table according to the given schema
 /*! Creates a table according to the given TableSchema, adding the table and
@@ -1747,8 +1749,10 @@ Transaction Connection::beginTransaction()
 
 bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive)
 {
-	if (!checkIsDatabaseUsed())
+	if (!isDatabaseUsed())
 		return false;
+//	if (!checkIsDatabaseUsed())
+		//return false;
 	if ( !m_driver->transactionsSupported()
 		&& !(m_driver->d->features & Driver::IgnoreTransactions))
 	{
@@ -1781,8 +1785,10 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 
 bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inactive)
 {
-	if (!checkIsDatabaseUsed())
+	if (!isDatabaseUsed())
 		return false;
+//	if (!checkIsDatabaseUsed())
+//		return false;
 	if ( !m_driver->transactionsSupported()
 		&& !(m_driver->d->features & Driver::IgnoreTransactions))
 	{
@@ -1828,8 +1834,10 @@ Transaction& Connection::defaultTransaction() const
 
 void Connection::setDefaultTransaction(const Transaction& trans)
 {
-	if (!checkIsDatabaseUsed())
+	if (!isDatabaseUsed())
 		return;
+//	if (!checkIsDatabaseUsed())
+	//	return;
 	if ( !(m_driver->d->features & Driver::IgnoreTransactions)
 		&& (!trans.active() || !m_driver->transactionsSupported()) )
 	{

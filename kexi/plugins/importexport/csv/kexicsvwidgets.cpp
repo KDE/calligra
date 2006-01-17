@@ -42,13 +42,13 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget *
 		(QBoxLayout *)new QVBoxLayout( this, 0, KDialogBase::spacingHint() )
 		: (QBoxLayout *)new QHBoxLayout( this, 0, KDialogBase::spacingHint() );
 
-	m_availableDelimiters[0]=KEXICSV_DEFAULT_DELIMITER;
+	m_availableDelimiters[0]=KEXICSV_DEFAULT_FILE_DELIMITER;
 	m_availableDelimiters[1]=";";
 	m_availableDelimiters[2]="\t";
 	m_availableDelimiters[3]=" ";
 
 	m_combo = new KComboBox(this, "KexiCSVDelimiterComboBox");
-	m_combo->insertItem( i18n("Comma \",\"") ); //<-- KEXICSV_DEFAULT_DELIMITER
+	m_combo->insertItem( i18n("Comma \",\"") ); //<-- KEXICSV_DEFAULT_FILE_DELIMITER
 	m_combo->insertItem( i18n( "Semicolon \";\"" ) );
 	m_combo->insertItem( i18n( "Tabulator" ) );
 	m_combo->insertItem( i18n( "Space \" \"" ) );
@@ -64,7 +64,7 @@ KexiCSVDelimiterWidget::KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget *
 	if (!lineEditOnBottom)
 		lyr->addStretch(2);
 
-	slotDelimiterChangedInternal(KEXICSV_DEFAULT_DELIMITER_INDEX); //this will init m_delimiter
+	slotDelimiterChangedInternal(KEXICSV_DEFAULT_FILE_DELIMITER_INDEX); //this will init m_delimiter
 	connect(m_combo, SIGNAL(activated(int)),
 	  this, SLOT(slotDelimiterChanged(int)));
 	connect(m_delimiterEdit, SIGNAL(returnPressed()),
@@ -182,8 +182,10 @@ KexiCSVInfoLabel::KexiCSVInfoLabel( const QString& labelText, QWidget* parent )
 void KexiCSVInfoLabel::setFileName( const QString& fileName )
 {
 	m_fnameLbl->setText( QDir::convertSeparators(fileName) );
-	m_iconLbl->setPixmap( 
-		KMimeType::pixmapForURL(KURL::fromPathOrURL(fileName), 0, KIcon::Desktop) );
+	if (!fileName.isEmpty()) {
+		m_iconLbl->setPixmap( 
+			KMimeType::pixmapForURL(KURL::fromPathOrURL(fileName), 0, KIcon::Desktop) );
+	}
 }
 
 void KexiCSVInfoLabel::setLabelText( const QString& text )

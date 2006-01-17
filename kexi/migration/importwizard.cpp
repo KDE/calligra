@@ -816,7 +816,7 @@ tristate ImportWizard::import()
 		kdDebug() << "Performing import..." << endl;
 	}
 
-	if (!result.error() && acceptingNeeded && KMessageBox::Yes != KMessageBox::questionYesNo(this,
+	if (!result.error() && acceptingNeeded && KMessageBox::Yes != KMessageBox::warningYesNo(this,
 		"<qt>"+i18n("Database %1 already exists."
 		"<p>Do you want to replace it with a new one?")
 		.arg(sourceDriver->data()->destination->infoString()),

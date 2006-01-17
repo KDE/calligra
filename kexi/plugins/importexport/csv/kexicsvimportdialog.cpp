@@ -385,24 +385,29 @@ void KexiCSVImportDialog::initLater()
 	if (!openData())
 		return;
 
-	//try to detect delimiter
-	QString detectedDelimiter = m_mode==File ? "," : "\t"; //<-- defaults
-	for (uint i=0; i < QMIN(4096, m_data.length()); i++) {
-		const QChar c(m_data[i]);
-		if (c=='\t') {
-			detectedDelimiter = "\t";
-			break;
-		}
-		else if (c==',') {
-			detectedDelimiter = ",";
-			break;
-		}
-		else if (c==';') {
-			detectedDelimiter = ";";
-			break;
+	QChar detectedDelimiter;
+	if (m_mode==File) { //only detect for File mode
+		// try to detect delimiter
+		// \t has priority, then , then ;
+		for (uint i=0; i < QMIN(4096, m_data.length()); i++) {
+			const QChar c(m_data[i]);
+			if (c=='\t') {
+				detectedDelimiter = c;
+				break;
+			}
+			else if (c==',' && detectedDelimiter!='\t') {
+				detectedDelimiter = c;
+			}
+			else if (c==';' && detectedDelimiter!='\t' && detectedDelimiter!=',') {
+				detectedDelimiter = c;
+			}
 		}
 	}
+	if (detectedDelimiter.isNull())
+		detectedDelimiter = m_mode==File 
+			? KEXICSV_DEFAULT_FILE_DELIMITER[0] : KEXICSV_DEFAULT_CLIPBOARD_DELIMITER[0]; //<-- defaults
 
+	m_delimiterWidget->setDelimiter(QString(detectedDelimiter));
 //	delimiterChanged(detectedDelimiter); // this will cause fillTable()
 	m_columnsAdjusted = false;
 	fillTable();
@@ -1325,7 +1330,7 @@ void KexiCSVImportDialog::accept()
 
 	//-create physical table
 	if (!m_conn->createTable(m_destinationTableSchema, allowOverwriting)) {
-		msg.showErrorMessage(m_conn);
+			msg.showErrorMessage(m_conn);
 		_ERR;
 	}
 

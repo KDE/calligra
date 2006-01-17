@@ -2712,7 +2712,8 @@ tristate KexiMainWindowImpl::getNewObjectInfo(
 						.arg(d->nameDialog->widget()->nameText())
 					+"</p><p>"+i18n("Do you want to replace it?")+"</p>", 0,
 					KGuiItem(i18n("&Replace"), "button_yes"),
-					KGuiItem(i18n("&Choose Other Name...")));
+					KGuiItem(i18n("&Choose Other Name...")),
+					QString::null, KMessageBox::Notify|KMessageBox::Dangerous);
 				if (res == KMessageBox::No)
 					continue;
 				else if (res == KMessageBox::Cancel)
@@ -3355,7 +3356,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 			"%1\n"
 			"If you click Yes, you will not be able to undo the deletion.")
 				.arg( "</p><p>"+part->instanceCaption()+" \""+ item->name() + "\"?</p>" ),
-			0, KGuiItem(i18n("Delete"), "delete"), KStdGuiItem::no()))//, "askBeforeDeletePartItem"/*config entry*/))
+			0, KGuiItem(i18n("Delete"), "delete"), KStdGuiItem::no()))
 			return cancelled;
 	}
 

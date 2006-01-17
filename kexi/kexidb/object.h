@@ -151,11 +151,11 @@ class KEXI_DB_EXPORT Object
 		QString m_sql, m_errorSql;
 		int m_serverResult;
 		QString m_serverResultName, m_serverErrorMsg;
+		QString m_errMsg;
 
 	private:
 		int m_errno;
 		bool m_hasError;
-		QString m_errMsg;
 
 		//! previous server result number, for error displaying purposes.
 		int m_previousServerResultNum, m_previousServerResultNum2;
