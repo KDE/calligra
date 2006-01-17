@@ -53,10 +53,6 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 #include <knuminput.h>
-#ifdef Q_WS_X11
-#include <X11/Xlib.h> 
-		    // not needed any more...
-#endif
 
 #include <koffice_export.h>
 
