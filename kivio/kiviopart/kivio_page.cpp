@@ -75,6 +75,8 @@
 #include "kivioglobal.h"
 #include "kiviodragobject.h"
 
+#include <fixx11h.h> // for None
+
 int KivioPage::s_id = 0L;
 QIntDict<KivioPage>* KivioPage::s_mapPages;
 
