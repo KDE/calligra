@@ -330,9 +330,7 @@ void pqxxSqlCursor::storeCurrentRow(RowData &data) const
 //
 void pqxxSqlCursor::drv_clearServerResult()
 {
-#ifdef __GNUC__
-#warning TODO: stuff with server results
-#endif
+//! @todo pqxxSqlCursor: stuff with server results
 }
 
 //==================================================================================
@@ -365,6 +363,6 @@ void pqxxSqlCursor::drv_bufferMovePointerPrev()
 //Implementation required but no need in this driver
 void pqxxSqlCursor::drv_bufferMovePointerTo(Q_LLONG to)
 {
-
+	Q_UNUSED(to);
 }
 
