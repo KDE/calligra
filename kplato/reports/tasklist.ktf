@@ -154,7 +154,7 @@
 		   DrawRight="false" DrawBottom="false" FontSize="12" />
 		<Field VAlignment="1" HAlignment="1"
 		   CommaSeparator="53" BorderStyle="1" WordWrap="0"
-		   DrawLeft="false" Field="start" X="532"
+		   DrawLeft="false" Field="startdate" X="532"
 		   Y="5" ForegroundColor="0,0,0" NegValueColor="0,0,0"
 		   Text="" DataType="0" BorderColor="0,0,0"
 		   DateFormat="11" FontFamily="Courier 10 Pitch" DrawTop="false"
