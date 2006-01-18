@@ -66,11 +66,33 @@ ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
 
     connect(chooseBtn, SIGNAL(clicked()), SLOT(slotChooseResource()));
     
+    connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotChanged()));
+    connect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotChanged()));
+    connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
+    connect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
 }
 
 
 void ResourceDialogImpl::slotChanged() {
     emit changed();
+}
+
+void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
+    if (availableUntil->dateTime() < availableFrom->dateTime()) {
+        disconnect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), this,  SLOT(slotAvailableUntilChanged(const QDateTime&)));
+        //kdDebug()<<"From: "<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString()<<endl;
+        availableUntil->setDateTime(availableFrom->dateTime());
+        connect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
+    }
+}
+
+void ResourceDialogImpl::slotAvailableUntilChanged(const QDateTime&) {
+    if (availableFrom->dateTime() > availableUntil->dateTime()) {
+        disconnect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), this,  SLOT(slotAvailableFromChanged(const QDateTime&)));
+        //kdDebug()<<"Until: "<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString()<<endl;
+        availableFrom->setDateTime(availableUntil->dateTime());
+        connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
+    }
 }
 
 void ResourceDialogImpl::slotCalculationNeeded(const QString&) {
@@ -132,8 +154,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
-    connect(dia->availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(enableButtonOk()));
-    connect(dia->availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(enableButtonOk()));
+    
 }
 
 

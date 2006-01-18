@@ -54,6 +54,10 @@ public slots:
 signals:
     void changed();
     void calculate();
+
+protected slots:
+    void slotAvailableFromChanged(const QDateTime& dt);
+    void slotAvailableUntilChanged(const QDateTime& dt);
 };
 
 class ResourceDialog : public KDialogBase {
