@@ -49,10 +49,7 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 
     // The Data Format button group
     QButtonGroup *gb = new QVButtonGroup( i18n( "Data Format" ), this );
-#if 0
-    QGridLayout  *grid2 = new QGridLayout(gb, 2, 1, KDialog::marginHint(),
-					  KDialog::spacingHint());
-#endif
+
     m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb );
     m_rowMajor->resize( m_rowMajor->sizeHint() );
 

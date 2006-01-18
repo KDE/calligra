@@ -26,6 +26,7 @@
 #include <kcolorbutton.h>
 #include <kdebug.h>
 
+#include <qhbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
@@ -34,6 +35,7 @@
 #include <qvbuttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
+#include <qcheckbox.h>
 #include <qpainter.h>
 #include <qwhatsthis.h>
 
@@ -56,45 +58,45 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 					    KChartAuxiliary *aux) :
     QWidget( parent ), m_params( params ), data(dat), m_aux(aux)
 {
-    QGridLayout *grid1 = new QGridLayout(this, 2, 1, KDialog::marginHint(),
+    QGridLayout *grid1 = new QGridLayout(this, 4, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
 
-    QButtonGroup* gb = new QVButtonGroup( i18n( "Data Format" ), this );
-    QGridLayout *grid2 = new QGridLayout(gb, 2, 1, KDialog::marginHint(),
-					 KDialog::spacingHint());
-    QWhatsThis::add(this, i18n("This configuration page can be used to swap the interpretation of rows and columns."));
+    // The Data Area
+    QButtonGroup *gb1 = new QVButtonGroup( i18n( "Data Area" ), this );
+
+    // ================================================================
+    // This code is copied from kchartWizardSelectDataFormatPage.cc
+    QHBox   *hbox = new QHBox( gb1 );
+    (void) new QLabel( i18n("Area: "), hbox);
+    m_dataArea = new QLineEdit( hbox );
+    //grid1->addWidget(gb1, 0, 0);
+
+    // The row/column as label checkboxes. 
+    m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), gb1);
+    m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), gb1);
+
+    grid1->addWidget(gb1, 0, 0);
+
+    // The Data Format button group
+    QButtonGroup *gb = new QVButtonGroup( i18n( "Data Format" ), this );
+
     m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb );
-    QWhatsThis::add(m_rowMajor, i18n("By default one row is considered to be a data set and each column holds the individual values of the data series. This sets the data in rows on your chart."));
     m_rowMajor->resize( m_rowMajor->sizeHint() );
-    grid2->addWidget( m_rowMajor, 0, 0);
 
     m_colMajor = new QRadioButton( i18n( "Data in columns" ), gb );
+    m_colMajor->resize( m_colMajor->sizeHint() );
+
+    grid1->addWidget(gb, 2, 0);
+
+    QWhatsThis::add(this, i18n("This configuration page can be used to swap the interpretation of rows and columns."));
+    QWhatsThis::add(m_rowMajor, i18n("By default one row is considered to be a data set and each column holds the individual values of the data series. This sets the data in rows on your chart."));
+
     QWhatsThis::add(m_colMajor, i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
     m_colMajor->resize( m_colMajor->sizeHint() );
-    grid2->addWidget( m_colMajor, 1, 0);
-    grid2->setColStretch(1, 0);
-
-    grid2->activate();
-    grid1->addWidget(gb, 0, 0);
-    grid1->setColStretch(1, 0);
+    grid1->addWidget(gb, 1, 0);
+    grid1->setColStretch(3, 0);
 
     grid1->activate();
-
-#if 0
-    list = new QListBox(this);
-    list->resize( list->sizeHint() );
-    grid->addMultiCellWidget(list,0,4,0,0);
-    fontButton = new QPushButton( this);
-    fontButton->setText(i18n("Font..."));
-
-    fontButton->resize( fontButton->sizeHint() );
-    grid->addWidget( fontButton,2,1);
-
-    connect( fontButton, SIGNAL(clicked()), this, SLOT(changeLabelFont()));
-    connect( list, SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(changeLabelFont()));
-
-    initList();
-#endif
 }
 
 

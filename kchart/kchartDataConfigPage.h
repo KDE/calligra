@@ -27,7 +27,11 @@
 
 #include "koChart.h"
 
+
+class QLineEdit;
 class QRadioButton;
+class QCheckBox;
+
 
 namespace KChart
 {
@@ -52,8 +56,11 @@ public slots:
 private:
     KChartParams *m_params;
 
-    QRadioButton* m_rowMajor;
-    QRadioButton* m_colMajor;
+    QLineEdit    *m_dataArea;
+    QRadioButton *m_rowMajor;
+    QRadioButton *m_colMajor;
+    QCheckBox    *m_firstRowAsLabel;
+    QCheckBox    *m_firstColAsLabel;
 
     KDChartTableData *data;
     KChartAuxiliary  *m_aux;
