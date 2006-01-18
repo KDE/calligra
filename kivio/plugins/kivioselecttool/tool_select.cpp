@@ -150,7 +150,7 @@ void SelectTool::setActivated(bool a)
 {
   if(a) {
     m_selectAction->setChecked(true);
-    view()->canvasWidget()->setCursor(arrowCursor);
+    view()->canvasWidget()->unsetCursor();
     m_mode = stmNone;
     emit activated(this);
   } else if(m_selectAction->isChecked()) {
@@ -605,7 +605,7 @@ void SelectTool::continueCustomDragging(const QPoint &pos)
   }
 
   if(!hit) {
-    pagePoint = canvas->snapToGrid( pagePoint );
+    pagePoint = canvas->snapToGridAndGuides( pagePoint );
   }
 
   KivioCustomDragData data;
@@ -865,7 +865,7 @@ void SelectTool::changeMouseCursor(const QPoint &pos)
     pStencil = canvas->activePage()->selectedStencils()->next();
   }
 
-  canvas->setCursor( arrowCursor );
+  canvas->unsetCursor();
 }
 
 

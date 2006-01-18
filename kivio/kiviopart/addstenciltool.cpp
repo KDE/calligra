@@ -98,7 +98,7 @@ void AddStencilTool::setActivated(bool a)
     view()->canvasWidget()->setCursor(Qt::CrossCursor);
     emit activated(this);
   } else {
-    view()->canvasWidget()->setCursor(Qt::ArrowCursor);
+    view()->canvasWidget()->unsetCursor();
     m_spawner = 0;
     delete m_stencil;
     m_stencil = 0;

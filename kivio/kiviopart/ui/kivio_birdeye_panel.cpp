@@ -231,7 +231,7 @@ void KivioBirdEyePanel::handleMouseMove(QPoint p)
     return;
   }
 
-  canvas->setCursor(arrowCursor);
+  canvas->unsetCursor();
   handlePress = false;
 }
 

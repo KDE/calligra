@@ -424,7 +424,9 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
       return;
     }
 
-    if(m_pView->isShowGuides()) {
+    Kivio::PluginManager* pluginManager = view()->pluginManager();
+
+    if(m_pView->isShowGuides() && (!pluginManager || (pluginManager->defaultTool() == pluginManager->activeTool()))) {
       if(m_guides.mousePressEvent(e)) {
         delegateThisEvent = false;
         return;
@@ -437,9 +439,13 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
   if(!m_pDoc->isReadWrite())
     return;
 
-  if(view()->isShowGuides() && m_guides.mouseReleaseEvent(e)) {
-    delegateThisEvent = false;
-    return;
+  Kivio::PluginManager* pluginManager = view()->pluginManager();
+
+  if(view()->isShowGuides() && (!pluginManager || (pluginManager->defaultTool() == pluginManager->activeTool()))) {
+    if(m_guides.mouseReleaseEvent(e)) {
+      delegateThisEvent = false;
+      return;
+    }
   }
 }
 
@@ -451,9 +457,10 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
   if(m_pasteMoving) {
     continuePasteMoving(e->pos());
   } else {
-    if(m_pView->isShowGuides())
-    {
-      m_guides.mouseMoveEvent(e);
+    Kivio::PluginManager* pluginManager = view()->pluginManager();
+
+    if(m_pView->isShowGuides() && (!pluginManager || (pluginManager->defaultTool() == pluginManager->activeTool()))) {
+      delegateThisEvent = !m_guides.mouseMoveEvent(e);
     }
   }
 
