@@ -82,6 +82,7 @@ class GanttView : public QSplitter
 
     void setReadWriteMode(bool on);
     bool isReadWriteMode() const { return m_readWrite; }
+    KDGanttViewItem *currentItem() const { return m_currentItem; }
     
 signals:
     void enableActions(bool);

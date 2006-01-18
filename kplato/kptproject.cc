@@ -628,6 +628,8 @@ bool Project::unindentTask( Node* node )
 
 bool Project::canMoveTaskUp( Node* node )
 {
+    if (node == 0)
+        return false; // safety
     // we have to find the parent of task to manipulate its list of children
     Node* parentNode = node->getParent();
     if (!parentNode) {
@@ -654,6 +656,8 @@ bool Project::moveTaskUp( Node* node )
 
 bool Project::canMoveTaskDown( Node* node )
 {
+    if (node == 0)
+        return false; // safety
     // we have to find the parent of task to manipulate its list of children
     Node* parentNode = node->getParent();
     if (!parentNode) {

@@ -83,6 +83,8 @@ public:
     virtual bool setContext(Context &context);
     virtual void getContext(Context &context) const;
 
+    void setTaskActionsEnabled(QWidget *w, bool on);
+    
 public slots:
     void slotUpdate(bool calculate);
     void slotEditResource();

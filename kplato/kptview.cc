@@ -1015,7 +1015,6 @@ void View::slotAboutToShow(QWidget *widget) {
 
 void View::updateView(QWidget *widget)
 {
-    setTaskActionsEnabled(false);
     mainWindow()->toolBar("report")->hide();
     if (widget == m_ganttview)
     {
@@ -1023,14 +1022,12 @@ void View::updateView(QWidget *widget)
         //m_ganttview->hide();
         m_ganttview->drawChanges(getProject());
         m_ganttview->show();
-        setTaskActionsEnabled(true);
     }
     else if (widget == m_pertview)
     {
         //kdDebug()<<k_funcinfo<<"draw pertview"<<endl;
         m_pertview->draw();
         m_pertview->show();
-        setTaskActionsEnabled(true);
     }
     else if (widget == m_resourceview)
     {
@@ -1048,6 +1045,7 @@ void View::updateView(QWidget *widget)
         mainWindow()->toolBar("report")->show();
         m_reportview->enableNavigationBtn();
     }
+    setTaskActionsEnabled(widget, true);
 }
 
 void View::renameNode(Node *node, QString name) {
@@ -1156,17 +1154,27 @@ void View::setBaselineMode(bool on) {
     actionEditResource->setEnabled(!on);*/
 }
 
-void View::setTaskActionsEnabled(bool on) {
+// called when widget w is about to be shown
+void View::setTaskActionsEnabled(QWidget *w, bool on) {
+    Node *n = 0;
+    if (w == m_ganttview) {
+        n = m_ganttview->currentNode();
+    }// else pert, etc when implemented
+     
     actionAddTask->setEnabled(on);
     actionAddMilestone->setEnabled(on);
     // only enabled when we have a task selected
-    bool o = on && currentTask();
+    bool o = (on && n);
     actionAddSubtask->setEnabled(o);
     actionDeleteTask->setEnabled(o);
-    actionMoveTaskUp->setEnabled(o);
-    actionMoveTaskDown->setEnabled(o);
-    actionIndentTask->setEnabled(o);
-    actionUnindentTask->setEnabled(o);
+    actionMoveTaskUp->setEnabled(o && getProject().canMoveTaskUp(n));
+    actionMoveTaskDown->setEnabled(o && getProject().canMoveTaskDown(n));
+    actionIndentTask->setEnabled(o && getProject().canIndentTask(n));
+    actionUnindentTask->setEnabled(o && getProject().canUnindentTask(n));
+}
+
+void View::setTaskActionsEnabled(bool on) {
+    setTaskActionsEnabled(m_ganttview, on); //FIXME if more than ganttview can do this
 }
 
 #ifndef NDEBUG
