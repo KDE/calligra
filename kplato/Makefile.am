@@ -117,9 +117,9 @@ kdelnkdir = $(kde_appsdir)/Office
 rcdir = $(kde_datadir)/kplato
 rc_DATA = kplato.rc kplato_readonly.rc
 
+## NOTE: extractattr needs <Label & Text on same line!
 messages: rc.cpp
-	## NOTE: extractattr needs <Label & Text on same line!
-	$(EXTRACTATTR) --attr=Label,Text rp.xml >>rp.cpp
+	$(EXTRACTATTR) --attr=Label,Text reports/*.ktf >>rp.cpp
 	$(XGETTEXT) rc.cpp *.cc kptaboutdata.h -o $(podir)/kplato.pot
 
 kde_services_DATA = kplatopart.desktop
