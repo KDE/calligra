@@ -34,7 +34,7 @@
 #include "libactionwidget.h"
 #include "container.h"
 #include "form.h"
-#include "formio.h"
+#include "formIO.h"
 
 namespace KFormDesigner {
 //! @internal

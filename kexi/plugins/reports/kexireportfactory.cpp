@@ -96,6 +96,7 @@ QWidget*
 KexiReportFactory::createWidget(const QCString &c, QWidget *p, const char *n, 
 	KFormDesigner::Container *container, int options)
 {
+	Q_UNUSED(options);
 	kexipluginsdbg << "KexiReportFactory::create() " << this << endl;
 
 	QString text( container->form()->library()->textForWidgetName(n, c) );
@@ -113,9 +114,11 @@ KexiReportFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 }
 
 bool
-KexiReportFactory::createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
-	KFormDesigner::Container *container)
+KexiReportFactory::createMenuActions(const QCString &classname, QWidget *w, 
+	QPopupMenu *menu,	KFormDesigner::Container *container)
 {
+	Q_UNUSED(w);
+	Q_UNUSED(container);
 	if(classname == "Label") {
 		/*! @todo use KAction */
 		menu->insertItem(SmallIconSet("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
