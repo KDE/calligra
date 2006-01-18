@@ -880,6 +880,6 @@ ContainerFactory::~ContainerFactory()
 {
 }
 
-K_EXPORT_COMPONENT_FACTORY(containers, KGenericFactory<ContainerFactory>("containers"))
+KFORMDESIGNER_WIDGET_FACTORY(ContainerFactory, containers)
 
 #include "containerfactory.moc"

@@ -485,7 +485,7 @@ WidgetLibrary::iconName(const QCString &classname)
 	if(wi)
 		return wi->pixmap();
 
-	return QString::fromLatin1("form");
+	return QString::fromLatin1("unknown_widget");
 }
 
 bool

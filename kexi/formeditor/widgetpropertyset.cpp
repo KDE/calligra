@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
-[B[B
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -266,6 +266,11 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	int count = 0;
 	KoProperty::Property *newProp = 0;
 	WidgetInfo *winfo = form->library()->widgetInfoForClassName(w->className());
+	if (!winfo) {
+		kdWarning() << "WidgetPropertySet::createPropertiesForWidget() no widget info for class " 
+			<< w->className() << endl;
+		return;
+	}
 
 	QStrList pList = w->metaObject()->propertyNames(true);
 	QStrListIterator it(pList);

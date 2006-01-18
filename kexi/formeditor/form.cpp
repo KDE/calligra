@@ -106,6 +106,7 @@ Form::~Form()
 {
 	emit destroying();
 	delete d;
+	d = 0;
 }
 
 QWidget*
@@ -554,6 +555,8 @@ void Form::setOriginalFormatVersion(uint ver)
 
 void Form::setFormWidget(FormWidget* w)
 {
+	if (!d)
+		return;
 	d->formWidget = w;
 	if (!d->formWidget)
 		return;

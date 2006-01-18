@@ -25,7 +25,7 @@ libkexireportutils_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
 	$(top_builddir)/kexi/plugins/forms/widgets/libkexiformutilswidgets.la
 
 kformdesignerservicesdir=$(kde_servicesdir)/kformdesigner
-kformdesignerservices_DATA = kexireportfactory.desktop
+kformdesignerservices_DATA = kformdesigner_kexireportfactory.desktop
 
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexireporthandler.desktop

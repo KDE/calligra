@@ -36,5 +36,5 @@ Name[uk]=Віджети контейнера
 Name[xx]=xxContainer Widgetsxx
 Name[zh_CN]=容器部件
 
-X-KDE-Library=containers
+X-KDE-Library=kformdesigner_containers
 X-KFormDesigner-FactoryGroup=

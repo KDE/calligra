@@ -492,5 +492,9 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 	friend class WidgetLibrary;
 };
 
+//! macro to declare KFormDesigner-compatible widget factory as a KDE Component factory
+#define KFORMDESIGNER_WIDGET_FACTORY(factoryClassName, libraryName) \
+	K_EXPORT_COMPONENT_FACTORY(kformdesigner_ ## libraryName, KGenericFactory<factoryClassName>("kformdesigner_" # libraryName))
+
 }
 #endif

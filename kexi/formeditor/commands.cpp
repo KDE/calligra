@@ -452,8 +452,11 @@ AdjustSizeCommand::execute()
 				}
 				else if(item && item->container()) // empty container
 					w->resize(item->container()->form()->gridSize() * 5, item->container()->form()->gridSize() * 5); // basic size
-				else
-					w->resize(w->sizeHint());
+				else {
+					QSize sizeHint(w->sizeHint());
+					if (sizeHint.isValid())
+						w->resize(sizeHint);
+				}
 			}
 			break;
 		}

@@ -35,5 +35,5 @@ Name[uk]=Віджети Kexi DB
 Name[xx]=xxKexi DB Widgetsxx
 Name[zh_CN]=Kexi 数据库部件
 
-X-KDE-Library=kexidbwidgets
+X-KDE-Library=kformdesigner_kexidbwidgets
 X-KFormDesigner-FactoryGroup=kexi

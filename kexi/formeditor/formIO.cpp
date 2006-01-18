@@ -51,16 +51,11 @@
 
 #include "formIO.h"
 
-/// A blank widget when the class name is not supported
+/// A blank widget used when the class name is not supported
 CustomWidget::CustomWidget(const QCString &className, QWidget *parent, const char *name)
 : QWidget(parent, name), m_className(className)
 {
 	setBackgroundMode(Qt::PaletteDark);
-
-	QFont f = font();
-	f.setBold(true);
-	f.setPointSize(f.pointSize() + 2);
-	setFont(f);
 }
 
 CustomWidget::~CustomWidget()
@@ -71,7 +66,10 @@ void
 CustomWidget::paintEvent(QPaintEvent *)
 {
 	QPainter p(this);
-	p.drawText(10, height() / 2, m_className);
+	p.setPen(palette().active().text());
+	QRect r(rect());
+	r.setX(r.x()+2);
+	p.drawText(r, Qt::AlignTop, m_className);
 }
 
 using namespace KFormDesigner;
@@ -968,7 +966,7 @@ FormIO::saveWidget(ObjectTreeItem *item, QDomElement &parent, QDomDocument &domD
 	for(QMap<QString,QVariant>::ConstIterator it = map->constBegin(); it != endIt; ++it)
 	{
 		QString name = it.key();
-		if((name == QString("hAlign")) || (name == QString("vAlign")) || (name == QString("wordbreak")))
+		if((name == QString::fromLatin1("hAlign")) || (name == QString::fromLatin1("vAlign")) || (name == QString::fromLatin1("wordbreak")))
 		{
 			if(!savedAlignment) // not tosave it twice
 			{
@@ -1339,7 +1337,7 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 			// If the object doesn't have this property, we let the Factory handle it (maybe a special property)
 			else if(w->metaObject()->findProperty(name.latin1(), true) == -1)
 			{
-				if(w->className() == QString("CustomWidget"))
+				if(w->className() == QString::fromLatin1("CustomWidget"))
 					item->storeUnknownProperty(node);
 				else {
 					bool read = container->form()->library()->readSpecialProperty(
@@ -1421,7 +1419,7 @@ FormIO::readChildNodes(ObjectTreeItem *item, Container *container, const QDomEle
 			readChildNodes(item, container, node, w);
 		}
 		else {// unknown tag, we let the Factory handle it
-			if(w->className() == QString("CustomWidget"))
+			if(w->className() == QString::fromLatin1("CustomWidget"))
 				item->storeUnknownProperty(node);
 			else {
 				bool read = container->form()->library()->readSpecialProperty(

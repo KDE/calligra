@@ -1,6 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-kde_module_LTLIBRARIES = kexihandler_form.la kexidbwidgets.la
+kde_module_LTLIBRARIES = kexihandler_form.la kformdesigner_kexidbwidgets.la
 
 kexihandler_form_la_SOURCES = kexiforms.cpp
 
@@ -13,9 +13,9 @@ kexihandler_form_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
 	$(top_builddir)/lib/koproperty/libkoproperty.la \
 	./libkexiformutils.la
 
-kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
-kexidbwidgets_la_SOURCES = kexidbfactory.cpp
-kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
+kformdesigner_kexidbwidgets_la_LDFLAGS =  $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+kformdesigner_kexidbwidgets_la_SOURCES = kexidbfactory.cpp
+kformdesigner_kexidbwidgets_la_LIBADD = $(top_builddir)/kexi/formeditor/libkformdesigner.la \
 	./libkexiformutils.la
 
 lib_LTLIBRARIES = libkexiformutils.la
@@ -29,7 +29,7 @@ libkexiformutils_la_LIBADD = $(top_builddir)/kexi/core/libkexicore.la \
 	$(top_builddir)/kexi/plugins/forms/widgets/libkexiformutilswidgets.la
 
 kformdesignerservicesdir=$(kde_servicesdir)/kformdesigner
-kformdesignerservices_DATA=kexidbfactory.desktop
+kformdesignerservices_DATA=kformdesigner_kexidbfactory.desktop
 
 servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexiformhandler.desktop

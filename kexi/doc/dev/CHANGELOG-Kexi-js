@@ -10,6 +10,13 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-01-18
+Form Designer
+- widget library naming made more verbose to avoid potential 
+  conflicts between packages
+Query Designer
+- fixed displaying criteria for table view rows when 'visible' 
+  column is set to false
 
 2006-01-17
 KexiDB

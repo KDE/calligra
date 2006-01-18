@@ -638,6 +638,6 @@ KexiDBFactory::slotImageBoxIdChanged(KexiBLOBBuffer::Id_t id)
 	}
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexidbwidgets, KGenericFactory<KexiDBFactory>("kexidbwidgets"))
+KFORMDESIGNER_WIDGET_FACTORY(KexiDBFactory, kexidbwidgets)
 
 #include "kexidbfactory.moc"

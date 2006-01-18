@@ -63,7 +63,7 @@ WidgetInfo::WidgetInfo(WidgetFactory *f)
 
 WidgetInfo::WidgetInfo(WidgetFactory *f, const char* parentFactoryName,
 	const char* inheritedClassName)
- :  m_parentFactoryName(parentFactoryName)
+ : m_parentFactoryName( QCString("kformdesigner_")+parentFactoryName )
  , m_inheritedClassName(inheritedClassName)
  , m_inheritedClass(0)
  , m_overriddenAlternateNames(0)
@@ -145,7 +145,7 @@ int WidgetInfo::customTypeForProperty(const char *propertyName) const
 ///// Widget Factory //////////////////////////
 
 WidgetFactory::WidgetFactory(QObject *parent, const char *name)
- : QObject(parent, name)
+ : QObject(parent, (const char*)(QCString("kformdesigner_")+name))
 {
 	m_showAdvancedProperties = true;
 	m_classesByName.setAutoDelete(true);

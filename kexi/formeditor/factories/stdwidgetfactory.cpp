@@ -115,7 +115,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 	addClass(wFormWidget);
 
 	KFormDesigner::WidgetInfo *wCustomWidget = new KFormDesigner::WidgetInfo(this);
-	wCustomWidget->setPixmap("custom_widget");
+	wCustomWidget->setPixmap("unknown_widget");
 	wCustomWidget->setClassName("CustomWidget");
 	wCustomWidget->setName(i18n("Custom Widget"));
 	wCustomWidget->setNamePrefix(i18n("This string will be used to name widgets of this class. It must _not_ contain white "
@@ -976,7 +976,7 @@ StdWidgetFactory::setPropertyOptions( KFormDesigner::WidgetPropertySet& buf, con
 	}
 }
 
-K_EXPORT_COMPONENT_FACTORY(stdwidgets, KGenericFactory<StdWidgetFactory>("stdwidgets"))
+KFORMDESIGNER_WIDGET_FACTORY(StdWidgetFactory, stdwidgets)
 
 #include "stdwidgetfactory.moc"
 

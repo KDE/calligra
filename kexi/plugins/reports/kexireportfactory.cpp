@@ -218,7 +218,7 @@ KexiReportFactory::previewWidget(const QCString &, QWidget *, KFormDesigner::Con
 	return false;
 }
 
-K_EXPORT_COMPONENT_FACTORY(kexireportwidgets, KGenericFactory<KexiReportFactory>("kexireportwidgets"))
+KFORMDESIGNER_WIDGET_FACTORY(KexiReportFactory, kexireportwidgets)
 
 #include "kexireportfactory.moc"
 
