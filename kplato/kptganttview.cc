@@ -269,6 +269,8 @@ void GanttView::removeNotDrawn(KDGanttViewItem *_item)
     for (; item; item = nextItem) {
         nextItem = item->nextSibling();
         if (!isDrawn(item)) {
+            if (item == m_currentItem)
+                m_currentItem = 0;
             deleteItem(item);
         } else {
             removeNotDrawn(item->firstChild()); // then my children
