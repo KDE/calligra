@@ -37,3 +37,6 @@ Comment[zh_CN]=基础组件工厂
 
 [PropertyDef::X-KFormDesigner-FactoryGroup]
 Type=QString
+
+[PropertyDef::X-KFormDesigner-WidgetFactoryVersion]
+Type=int

@@ -38,3 +38,4 @@ Name[zh_CN]=基本部件
 
 X-KDE-Library=kformdesigner_stdwidgets
 X-KFormDesigner-FactoryGroup=
+X-KFormDesigner-WidgetFactoryVersion=2

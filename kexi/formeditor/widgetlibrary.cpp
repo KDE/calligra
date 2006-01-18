@@ -34,6 +34,7 @@
 #include "libactionwidget.h"
 #include "container.h"
 #include "form.h"
+#include "formio.h"
 
 namespace KFormDesigner {
 //! @internal
@@ -186,20 +187,27 @@ WidgetLibrary::lookupFactories()
 		KService::Ptr ptr = (*it);
 		KService::Ptr* existingService = (d->services)[ptr->library().latin1()];
 		if (existingService) {
-			kdWarning() << "WidgetLibrary::scan(): factory '" << ptr->name()
+			kdWarning() << "WidgetLibrary::lookupFactories(): factory '" << ptr->name()
 				<< "' already found (library="<< (*existingService)->library()
 				<<")! skipping this one: library=" << ptr->library() << endl;
 			continue;
 		}
-		kdDebug() << "WidgetLibrary::scan(): found factory: " << ptr->name() << endl;
+		kdDebug() << "WidgetLibrary::lookupFactories(): found factory: " << ptr->name() << endl;
 
 		QCString groupName = ptr->property("X-KFormDesigner-FactoryGroup").toCString();
 		if (!groupName.isEmpty() && !d->supportedFactoryGroups[groupName]) {
-			kdDebug() << "WidgetLibrary::scan(): factory group '" << groupName
+			kdDebug() << "WidgetLibrary::lookupFactories(): factory group '" << groupName
 				<< "' is unsupported by this application (library=" << ptr->library() << ")"<< endl;
 			continue;
 		}
-		//FIXME: check if this name matches the filter...
+		const uint factoryVersion = ptr->property("X-KFormDesigner-WidgetFactoryVersion").toUInt();
+		if (KFormDesigner::version()!=factoryVersion) {
+			kdWarning() << QString("WidgetLibrary::lookupFactories(): factory '%1'" 
+				" has version '%2' but required Widget Factory version is '%3'\n"
+				" -- skipping this factory!").arg(ptr->library()).arg(factoryVersion)
+				.arg(KFormDesigner::version()) << endl;
+			continue;
+		}
 		d->services.insert(ptr->library().latin1(), new KService::Ptr( ptr ));
 	}
 }

@@ -38,3 +38,4 @@ Name[zh_CN]=容器部件
 
 X-KDE-Library=kformdesigner_containers
 X-KFormDesigner-FactoryGroup=
+X-KFormDesigner-WidgetFactoryVersion=2

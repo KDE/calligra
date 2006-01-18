@@ -36,3 +36,4 @@ Name[zh_CN]=Kexi 报表部件
 
 X-KDE-Library=kformdesigner_kexireportwidgets
 X-KFormDesigner-FactoryGroup=kexi-report
+X-KFormDesigner-WidgetFactoryVersion=2
