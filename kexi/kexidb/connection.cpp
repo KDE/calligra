@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -706,9 +706,9 @@ QStringList Connection::objectNames(int objType, bool* ok)
 
 	QString sql;
 	if (objType==KexiDB::AnyObjectType)
-		sql = "select o_name from kexi__objects";
+		sql = "SELECT o_name FROM kexi__objects";
 	else
-		sql = QString("select o_name from kexi__objects where o_type=%1").arg(objType);
+		sql = QString::fromLatin1("SELECT o_name FROM kexi__objects WHERE o_type=%1").arg(objType);
 
 	Cursor *c = executeQuery(sql);
 	if (!c) {
@@ -790,7 +790,7 @@ QValueList<int> Connection::objectIds(int objType)
 		return list;
 
 	Cursor *c = executeQuery(
-		QString::fromLatin1("select o_id, o_name from kexi__objects where o_type=%1").arg(objType));
+		QString::fromLatin1("SELECT o_id, o_name FROM kexi__objects WHERE o_type=%1").arg(objType));
 	if (!c)
 		return list;
 	for (c->moveFirst(); !c->eof(); c->moveNext())
@@ -1166,8 +1166,9 @@ Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const 
 	}
 	RowData rdata;
 	if (row_id<=0 || true!=querySingleRecord(
-	 QString("select ")+aiFieldName+" from "+tableName+" where "+m_driver->beh->ROW_ID_FIELD_NAME
-	 +"="+QString::number(row_id), rdata)) {
+		QString::fromLatin1("SELECT ") + aiFieldName + " FROM " + tableName
+		+ " WHERE " + m_driver->beh->ROW_ID_FIELD_NAME + "=" + QString::number(row_id), rdata))
+	{
 //		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()" << endl;
 	 	return (Q_ULLONG)-1; //ULL;
 	}
@@ -1555,7 +1556,7 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 //TODO indices, etc.???
 
 	// 3. copy all rows to the new table
-	if (!executeSQL(QString("insert into %1 select * from %2")
+	if (!executeSQL(QString::fromLatin1("INSERT INTO %1 SELECT * FROM %2")
 		.arg(escapeIdentifier(tableSchema.name())).arg(escapeIdentifier(oldTableName))))
 	{
 		drv_alterTableName_ERR;
@@ -1570,7 +1571,7 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 
 	// 5. Update kexi__objects
 	//TODO
-	if (!executeSQL(QString("update kexi__objects set o_name=%1 where o_id=%2")
+	if (!executeSQL(QString::fromLatin1("UPDATE kexi__objects SET o_name=%1 WHERE o_id=%2")
 		.arg(m_driver->escapeString(tableSchema.name())).arg(tableSchema.id())))
 	{
 		drv_alterTableName_ERR;
@@ -1988,7 +1989,7 @@ tristate Connection::loadObjectSchemaData( int objectID, SchemaData &sdata )
 {
 	RowData data;
 	if (true!=querySingleRecord(QString::fromLatin1(
-		"select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1")
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects where o_id=%1")
 		.arg(objectID), data))
 		return cancelled;
 	return setupObjectSchemaData( data, sdata );
@@ -1997,8 +1998,8 @@ tristate Connection::loadObjectSchemaData( int objectID, SchemaData &sdata )
 tristate Connection::loadObjectSchemaData( int objectType, const QString& objectName, SchemaData &sdata )
 {
 	RowData data;
-	if (true!=querySingleRecord(QString::fromLatin1("select o_id, o_type, o_name, o_caption, o_desc "
-		"from kexi__objects where o_type=%1 and lower(o_name)=%2")
+	if (true!=querySingleRecord(QString::fromLatin1("SELECT o_id, o_type, o_name, o_caption, o_desc "
+		"FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
 		.arg(objectType).arg(m_driver->valueToSQL(Field::Text, objectName.lower())), data))
 		return cancelled;
 	return setupObjectSchemaData( data, sdata );
@@ -2012,7 +2013,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 	if (newObject) {
 		int existingID;
 		if (querySingleNumber(QString::fromLatin1(
-			"select o_id from kexi__objects where o_type=%1 and lower(o_name)=%2")
+			"SELECT o_id FROM kexi__objects WHERE o_type=%1 AND lower(o_name)=%2")
 			.arg(sdata.type()).arg(m_driver->valueToSQL(Field::Text, sdata.name().lower())), existingID))
 		{
 			//we already have stored a schema data with the same name and type:
@@ -2052,7 +2053,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		}
 	}
 	//existing object:
-	return executeSQL(QString("update kexi__objects set o_type=%2, o_caption=%3, o_desc=%4 where o_id=%1")
+	return executeSQL(QString("UPDATE kexi__objects SET o_type=%2, o_caption=%3, o_desc=%4 WHERE o_id=%1")
 		.arg(sdata.id()).arg(sdata.type())
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.caption()))
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
@@ -2223,9 +2224,9 @@ KexiDB::TableSchema* Connection::setupTableSchema( const RowData &data )
 
 	KexiDB::Cursor *cursor;
 	if (!(cursor = executeQuery(
-		QString::fromLatin1("select t_id, f_type, f_name, f_length, f_precision, f_constraints, "
+		QString::fromLatin1("SELECT t_id, f_type, f_name, f_length, f_precision, f_constraints, "
 			"f_options, f_default, f_order, f_caption, f_help"
-			" from kexi__fields where t_id=%1 order by f_order").arg(t->m_id) ))) {
+			" FROM kexi__fields WHERE t_id=%1 ORDER BY f_order").arg(t->m_id) ))) {
 		return 0;
 	}
 	if (!cursor->moveFirst()) {
@@ -2295,7 +2296,8 @@ TableSchema* Connection::tableSchema( const QString& tableName )
 		return t;
 	//not found: retrieve schema
 	RowData data;
-	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where lower(o_name)='%1' and o_type=%2")
+	if (true!=querySingleRecord(QString::fromLatin1(
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE lower(o_name)='%1' AND o_type=%2")
 			.arg(m_tableName).arg(KexiDB::TableObjectType), data))
 		return 0;
 
@@ -2309,7 +2311,9 @@ TableSchema* Connection::tableSchema( int tableId )
 		return t;
 	//not found: retrieve schema
 	RowData data;
-	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(tableId), data))
+	if (true!=querySingleRecord(QString::fromLatin1(
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE o_id=%1")
+		.arg(tableId), data))
 		return 0;
 
 	return setupTableSchema(data);
@@ -2320,8 +2324,8 @@ bool Connection::loadDataBlock( int objectID, QString &dataString, const QString
 	if (objectID<=0)
 		return false;
 	return querySingleString(
-		QString("select o_data from kexi__objectdata where o_id=") + QString::number(objectID)
-		+ " and " + KexiDB::sqlWhere(m_driver, KexiDB::Field::Text, "o_sub_id", dataID),
+		QString("SELECT o_data FROM kexi__objectdata WHERE o_id=") + QString::number(objectID)
+		+ " AND " + KexiDB::sqlWhere(m_driver, KexiDB::Field::Text, "o_sub_id", dataID),
 		dataString );
 }
 
@@ -2329,20 +2333,20 @@ bool Connection::storeDataBlock( int objectID, const QString &dataString, const 
 {
 	if (objectID<=0)
 		return false;
-	QString sql = "select kexi__objectdata.o_id from kexi__objectdata where o_id=" + QString::number(objectID);
-	QString sql_sub = KexiDB::sqlWhere(m_driver, KexiDB::Field::Text, "o_sub_id", dataID);
+	QString sql(QString::fromLatin1("SELECT kexi__objectdata.o_id FROM kexi__objectdata WHERE o_id=%1").arg(objectID));
+	QString sql_sub( KexiDB::sqlWhere(m_driver, KexiDB::Field::Text, "o_sub_id", dataID) );
 
 	bool ok, exists;
 	exists = resultExists(sql + " and " + sql_sub, ok);
 	if (!ok)
 		return false;
 	if (exists) {
-		return executeSQL( "update kexi__objectdata set o_data="
+		return executeSQL( "UPDATE kexi__objectdata SET o_data="
 			+ m_driver->valueToSQL( KexiDB::Field::BLOB, dataString )
-			+ " where o_id=" + QString::number(objectID) + " and " + sql_sub );
+			+ " WHERE o_id=" + QString::number(objectID) + " AND " + sql_sub );
 	}
 	return executeSQL(
-		"insert into kexi__objectdata (o_id, o_data, o_sub_id) values ("
+		QString::fromLatin1("INSERT INTO kexi__objectdata (o_id, o_data, o_sub_id) VALUES (")
 		+ QString::number(objectID) +"," + m_driver->valueToSQL( KexiDB::Field::BLOB, dataString )
 		+ "," + m_driver->valueToSQL( KexiDB::Field::Text, dataID ) + ")" );
 }
@@ -2399,7 +2403,8 @@ QuerySchema* Connection::querySchema( const QString& queryName )
 		return q;
 	//not found: retrieve schema
 	RowData data;
-	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where lower(o_name)='%1' and o_type=%2")
+	if (true!=querySingleRecord(QString::fromLatin1(
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE lower(o_name)='%1' AND o_type=%2")
 			.arg(m_queryName).arg(KexiDB::QueryObjectType), data))
 		return 0;
 
@@ -2414,7 +2419,8 @@ QuerySchema* Connection::querySchema( int queryId )
 	//not found: retrieve schema
 	clearError();
 	RowData data;
-	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(queryId), data))
+	if (true!=querySingleRecord(QString::fromLatin1(
+		"SELECT o_id, o_type, o_name, o_caption, o_desc FROM kexi__objects WHERE o_id=%1").arg(queryId), data))
 		return 0;
 
 	return setupQuerySchema(data);
