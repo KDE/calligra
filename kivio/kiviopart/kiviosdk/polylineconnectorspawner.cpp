@@ -38,7 +38,7 @@ bool PolyLineConnectorSpawner::load(const QString&)
   return true;
 }
 
-QDomElement PolyLineConnectorSpawner::saveXML(QDomDocument& doc)
+QDomElement PolyLineConnectorSpawner::saveXML(QDomDocument& /*doc*/)
 {
   return QDomElement();
 }
@@ -51,7 +51,7 @@ KivioStencil* PolyLineConnectorSpawner::newStencil()
   return connector;
 }
 
-KivioStencil* PolyLineConnectorSpawner::newStencil(const QString& arg)
+KivioStencil* PolyLineConnectorSpawner::newStencil(const QString& /*arg*/)
 {
   PolyLineConnector* connector = new PolyLineConnector();
   connector->setSpawner(this);

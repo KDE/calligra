@@ -68,9 +68,9 @@ namespace Kivio {
        * @param xOffset How far to move the point horizontaly.
        * @param yOffset How far to move the point verticaly.
        */
-      void movePoint(int index, double xOffset, double yOffset);
+      void movePoint(unsigned int index, double xOffset, double yOffset);
       
-      void movePointTo(int index, const KoPoint& p);
+      void movePointTo(unsigned int index, const KoPoint& p);
       
       void moveLastPointTo(const KoPoint& p);
       

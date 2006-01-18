@@ -41,20 +41,20 @@ namespace Kivio {
   {
     m_startArrow = new KivioArrowHead();
     m_endArrow = new KivioArrowHead();
-  
+
     m_needsWidth = false;
     m_needsText = false; // FIXME add text support
-  
+
     m_pCanProtect->clearBit(kpAspect);
     m_pCanProtect->clearBit(kpWidth);
     m_pCanProtect->clearBit(kpHeight);
     m_pCanProtect->clearBit(kpX);
     m_pCanProtect->clearBit(kpY);
-    
+
     // This is a stencil of type connector
     setType(kstConnector);
   }
-  
+
   PolyLineConnector::~PolyLineConnector()
   {
     delete m_startArrow;
@@ -84,17 +84,16 @@ namespace Kivio {
     QDomNode node = e.firstChild();
     QString nodeName;
     m_points.clear();
-    kdDebug() << "Loading custom nodes..." << endl;
-    
+
     while(!node.isNull()) {
       nodeName = node.nodeName();
-      
+
       if(nodeName == "KivioArrowHeads") {
         loadArrowHeads(node.toElement());
       } else if(nodeName == "KivioGeometryPoints") {
         QDomNode pointsNode = node.firstChild();
         QDomElement el;
-        
+
         while(!pointsNode.isNull()) {
           if(pointsNode.nodeName() == "KivioPoint") {
             el = pointsNode.toElement();
@@ -103,7 +102,7 @@ namespace Kivio {
             p.setY(XmlReadFloat(el, "y", 1.0f));
             addPoint(p);
           }
-          
+
           pointsNode = pointsNode.nextSibling();
         }
       }
@@ -113,7 +112,7 @@ namespace Kivio {
 
     return true;
   }
-  
+
   bool PolyLineConnector::saveCustom(QDomElement& e, QDomDocument& doc)
   {
     e.appendChild(saveArrowHeads(doc));
@@ -126,7 +125,7 @@ namespace Kivio {
       XmlWriteFloat(el, "y", p.y());
       pointsElement.appendChild(el);
     }
-    
+
     e.appendChild(pointsElement);
 
     return true;
@@ -174,52 +173,52 @@ namespace Kivio {
   {
     KoZoomHandler* zoom = data->zoomHandler;
     KivioPainter* painter = data->painter;
-    
+
     painter->setLineStyle(m_pLineStyle);
     painter->setLineWidth(zoom->zoomItY(m_pLineStyle->width()));
-    
+
     QPointArray pa(m_points.count());
     QValueList<KoPoint>::iterator it;
     int i = 0;
-    
+
     for(it = m_points.begin(); it != m_points.end(); ++it) {
       pa.setPoint(i, zoom->zoomPoint(*it));
       i++;
     }
-    
+
     KoPoint startVec = m_points[1] - m_points[0];
     KoPoint endVec = m_points.last() - m_points[m_points.count() - 2];
     double startLen = startVec.manhattanLength();
     double endLen = endVec.manhattanLength();
-    
+
     if(startLen) {
       startVec.setX(startVec.x() / startLen);
       startVec.setY(startVec.y() / startLen);
       QPoint p = pa[0];
-      p.setX(p.x() + (startVec.x() * zoom->zoomItX(m_startArrow->cut())));
-      p.setY(p.y() + (startVec.y() * zoom->zoomItY(m_startArrow->cut())));
+      p.setX(p.x() + qRound(startVec.x() * zoom->zoomItX(m_startArrow->cut())));
+      p.setY(p.y() + qRound(startVec.y() * zoom->zoomItY(m_startArrow->cut())));
     }
 
     if(endLen) {
       endVec.setX(endVec.x() / endLen);
       endVec.setY(endVec.y() / endLen);
       QPoint p = pa[m_points.count() - 1];
-      p.setX(p.x() + (endVec.x() * zoom->zoomItX(m_endArrow->cut())));
-      p.setY(p.y() + (endVec.y() * zoom->zoomItY(m_endArrow->cut())));
+      p.setX(p.x() + qRound(endVec.x() * zoom->zoomItX(m_endArrow->cut())));
+      p.setY(p.y() + qRound(endVec.y() * zoom->zoomItY(m_endArrow->cut())));
     }
-        
+
     painter->drawPolyline(pa);
     painter->setBGColor(m_pFillStyle->color());
-    
+
     if(startLen) {
       m_startArrow->paint(painter, m_points[0].x(), m_points[0].y(), -startVec.x(), -startVec.y(), zoom);
     }
-    
+
     if(endLen) {
       m_endArrow->paint(painter, m_points.last().x(), m_points.last().y(), endVec.x(), endVec.y(), zoom);
     }
   }
-  
+
   void PolyLineConnector::paintOutline(KivioIntraStencilData* data)
   {
     paint(data);
@@ -232,11 +231,11 @@ namespace Kivio {
     QValueList<KoPoint>::Iterator it;
     int x, y, flag;
     x = y = flag = 0;
-    
+
     for(it = m_points.begin(); it != m_points.end(); ++it) {
       x = zoomHandler->zoomItX((*it).x());
       y = zoomHandler->zoomItY((*it).y());    
-      
+
       if((*it) == m_pEnd->position()) {
         flag = ((m_pEnd->target()) ? KivioPainter::cpfConnected : 0) | KivioPainter::cpfEnd;
       } else if((*it) == m_pStart->position()) {
@@ -244,11 +243,11 @@ namespace Kivio {
       } else {
         flag = 0;
       }
-      
+
       painter->drawHandle(x, y, flag);
     }
   }
-    
+
   void PolyLineConnector::addPoint(const KoPoint& p)
   {
     if(m_points.count() == 0) {
@@ -258,11 +257,11 @@ namespace Kivio {
       m_pEnd->setPosition(p.x(), p.y(), false);
       m_pEnd->disconnect();
     }
-    
+
     m_points.append(p);
   }
-  
-  void PolyLineConnector::movePoint(int index, double xOffset, double yOffset)
+
+  void PolyLineConnector::movePoint(unsigned int index, double xOffset, double yOffset)
   {
     if(index >= m_points.count()) {
       return;
@@ -280,10 +279,10 @@ namespace Kivio {
     }
   }
 
-  void PolyLineConnector::movePointTo(int index, const KoPoint& p)
+  void PolyLineConnector::movePointTo(unsigned int index, const KoPoint& p)
   {
     m_points[index] = p;
-    
+
     if(index == (m_points.count() - 1)) {
       m_pEnd->setPosition(p.x(), p.y(), false);
       m_pEnd->disconnect();
@@ -292,7 +291,7 @@ namespace Kivio {
       m_pStart->disconnect();
     }
   }
-  
+
   void PolyLineConnector::moveLastPointTo(const KoPoint& p)
   {
     movePointTo(m_points.count() - 1, p);
@@ -301,29 +300,30 @@ namespace Kivio {
   void PolyLineConnector::customDrag(KivioCustomDragData* data)
   {
     int index = data->id - (kctCustom + 1);
-    
-    if((index < 0) || index >= m_points.count()) {
+
+    if((index < 0) || index >= (int)m_points.count()) {
       kdDebug(43000) << "PolyLineConnector::customDrag: Index out of range! Index = " << index << endl;
+      return;
     }
-    
+
     KoPoint pos(data->x, data->y);
     movePointTo(index, pos);
     KivioConnectorPoint* cp;
-    
+
     if(index == 0) {
       cp = m_pStart;
-    } else if(index == (m_points.count() - 1)) {
+    } else if(index == ((int)m_points.count() - 1)) {
       cp = m_pEnd;
     } else {
       return;
     }
-    
+
     checkForConnection(cp, data->page);
   }
 
   void PolyLineConnector::move(double xOffset, double yOffset)
   {
-    for(int i = 0; i < m_points.count(); i++) {
+    for(unsigned int i = 0; i < m_points.count(); i++) {
       movePoint(i, xOffset, yOffset);
     }
   }
@@ -333,25 +333,25 @@ namespace Kivio {
     if(m_points.count() == 0) {
       return 0;
     }
-    
+
     return rect().x();
   }
-  
+
   void PolyLineConnector::setX(double newX)
   {
     double dx = newX - x();
     move(dx, 0);
   }
-  
+
   double PolyLineConnector::y()
   {
     if(m_points.count() == 0) {
       return 0;
     }
-  
+
     return rect().y();
   }
-  
+
   void PolyLineConnector::setY(double newY)
   {
     double dy = newY - y();
@@ -364,20 +364,20 @@ namespace Kivio {
       KivioLayer* currentLayer = page->curLayer();
       KivioLayer* layer = page->firstLayer();
       bool found = false;
-      
+
       while(layer && !found) {
         if((layer != currentLayer) && (!layer->connectable() || !layer->visible())) {
           layer = page->nextLayer();
           continue;
         }
-        
+
         if(layer->connectPointToTarget(cp, 8.0f)) {
           found = true;
         }
-      
+
         layer = page->nextLayer();
       }
-      
+
       if(!found) {
         cp->disconnect();
       }
@@ -419,11 +419,11 @@ namespace Kivio {
   {
     QValueList<KoPoint>::Iterator it;
     bool retVal = true;
-    
+
     for(it = m_points.begin(); it != m_points.end(); ++it) {
       retVal = retVal && rect.contains((*it));
     }
-    
+
     return retVal;
   }
 
@@ -431,7 +431,7 @@ namespace Kivio {
   {
     bool first = true;
     QDomNode node = e.firstChild();
-    
+
     while(!node.isNull()) {
       if(node.nodeName() == "KivioArrowHead") {
         if(first) {
@@ -447,7 +447,7 @@ namespace Kivio {
 
     return true;
   }
-  
+
   QDomElement PolyLineConnector::saveArrowHeads(QDomDocument& doc)
   {
     QDomElement e = doc.createElement("KivioArrowHeads");
