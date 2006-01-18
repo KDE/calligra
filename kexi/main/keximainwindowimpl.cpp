@@ -90,7 +90,7 @@
 
 //Extreme verbose debug
 #if defined(Q_WS_WIN)
-# define KexiVDebug kdDebug()
+//# define KexiVDebug kdDebug()
 #endif
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) kdDebug()
@@ -203,7 +203,7 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 	{//store menu popups list
 		QObjectList *l = queryList( "QPopupMenu" );
 		for (QObjectListIt it( *l ); it.current(); ++it ) {
-			kdDebug() << "name=" <<it.current()->name() << " cname="<<it.current()->className()<<endl;
+			//kdDebug() << "name=" <<it.current()->name() << " cname="<<it.current()->className()<<endl;
 			//KexiMainWindowImpl::eventFilter() will filter our popups:
 			it.current()->installEventFilter(this);
 			d->popups.insert(it.current()->name(), static_cast<QPopupMenu*>(it.current()));
