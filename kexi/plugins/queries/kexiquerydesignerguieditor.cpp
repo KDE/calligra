@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -574,7 +574,8 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 KexiDB::SchemaData*
 KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &/*cancel*/)
 {
-	buildSchema();
+	if (!buildSchema())
+		return 0;
 	KexiQueryPart::TempData * temp = tempData();
 	(KexiDB::SchemaData&)*temp->query = sdata; //copy main attributes
 
@@ -595,12 +596,15 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 
 tristate KexiQueryDesignerGuiEditor::storeData(bool dontAsk)
 {
-	tristate res = KexiViewBase::storeData(dontAsk);
-	if (~res)
-		return res;
-	if (res) {
-		buildSchema();
+	const bool was_dirty = dirty();
+	tristate res = KexiViewBase::storeData(dontAsk); //this clears dirty flag
+	if (true == res)
+		res = buildSchema();
+	if (true == res)
 		res = storeLayout();
+	if (true != res) {
+		if (was_dirty)
+			setDirty(true);
 	}
 	return res;
 }
@@ -732,10 +736,13 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	//3. show fields
 	uint row_num = 0;
 	KexiDB::Field *field;
+	QPtrDict<char> usedCriterias(101); // <-- used criterias will be saved here 
+	                                   //     so in step 4. we will be able to add 
+	                                   //     remaining invisible columns with criterias
 	for (KexiDB::Field::ListIterator it(*query->fields()); 
 		(field = it.current()); ++it, row_num++)
 	{
-		//add row
+		//append a new row
 		QString tableName, fieldName, columnAlias, criteriaString;
 		KexiDB::BinaryExpr *criteriaExpr = 0;
 		KexiDB::BaseExpr *criteriaArgument = 0;
@@ -768,11 +775,14 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 				if (!criteriaArgument) {//try table.field
 					criteriaArgument = criterias[tableName+"."+fieldName];
 				}
-				if (criteriaArgument) //criteria expression is just a parent of argument
+				if (criteriaArgument) {//criteria expression is just a parent of argument
 					criteriaExpr = criteriaArgument->parent()->toBinary();
+					usedCriterias.insert(criteriaArgument, (char*)1); //save info. about used criteria
+				}
 			}
 		}
-		KexiTableItem *newItem = createNewRow(tableName, fieldName); //, columnAlias);
+		//create new row data
+		KexiTableItem *newItem = createNewRow(tableName, fieldName);
 		if (criteriaExpr) {
 //! @todo fix for !INFIX operators
 			if (criteriaExpr->token()=='=')
@@ -782,7 +792,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 			(*newItem)[COLUMN_ID_CRITERIA] = criteriaString;
 		}
 		d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
-		//create a new set
+		//OK, row inserted: create a new set for it
 		KoProperty::Set &set = *createPropertySet( row_num, tableName, fieldName, true/*new one*/ );
 		if (!columnAlias.isEmpty())
 			set["alias"].setValue(columnAlias, false);
@@ -796,10 +806,64 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 			d->data->saveRowChanges(*newItem, true);
 		}
 	}
+
+	//4. Show fields for unused criterias (with "Visible" column set to false)
+	KexiDB::BaseExpr *criteriaArgument; // <-- contains field or table.field
+	for (QDictIterator<KexiDB::BaseExpr> it(criterias); (criteriaArgument = it.current()); ++it) {
+		if (usedCriterias[it.current()])
+			continue;
+		//unused: append a new row
+		KexiDB::BinaryExpr *criteriaExpr = criteriaArgument->parent()->toBinary();
+		if (!criteriaExpr) {
+			kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
+				"criteriaExpr is not a binary expr" << endl;
+			continue;
+		}
+		KexiDB::VariableExpr *columnNameArgument = criteriaExpr->left()->toVariable(); //left or right
+		if (!columnNameArgument) {
+			columnNameArgument = criteriaExpr->right()->toVariable();
+			if (!columnNameArgument) {
+				kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
+					"columnNameArgument is not a variable (table or table.field) expr" << endl;
+				continue;
+			}
+		}
+		KexiDB::QueryColumnInfo *columnInfo = query->columnInfo( columnNameArgument->name );
+		if (!columnInfo) {
+			kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
+				"no columnInfo found in the query for name \"" << columnNameArgument->name << endl;
+			continue;
+		}
+		QString tableName, fieldName, columnAlias, criteriaString;
+//! @todo what about ALIAS?
+		tableName = columnInfo->field->table()->name();
+		fieldName = columnInfo->field->name();
+		//create new row data
+		KexiTableItem *newItem = createNewRow(tableName, fieldName, false /* !visible*/);
+		if (criteriaExpr) {
+//! @todo fix for !INFIX operators
+			if (criteriaExpr->token()=='=')
+				criteriaString = criteriaArgument->toString();
+			else
+				criteriaString = criteriaExpr->tokenToString() + " " + criteriaArgument->toString();
+			(*newItem)[COLUMN_ID_CRITERIA] = criteriaString;
+		}
+		d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
+		//OK, row inserted: create a new set for it
+		KoProperty::Set &set = *createPropertySet( row_num++, tableName, fieldName, true/*new one*/ );
+//		if (!columnAlias.isEmpty())
+//			set["alias"].setValue(columnAlias, false);
+////		if (!criteriaString.isEmpty())
+		set["criteria"].setValue( criteriaString, false );
+		set["visible"].setValue( QVariant(false,1), false );
+	}
+	
+	//current property set has most probably changed
 	propertySetSwitched();
 
 	if (!was_dirty)
 		setDirty(false);
+	//move to 1st column, 1st row
 	d->dataTable->dataAwareObject()->ensureCellVisible(0,0);
 //	tempData()->registerTableSchemaChanges(query);
 }
@@ -910,7 +974,8 @@ QSize KexiQueryDesignerGuiEditor::sizeHint() const
 }
 
 KexiTableItem*
-KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName) const
+KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName,
+	bool visible) const
 {
 	KexiTableItem *newItem = d->data->createItem(); //new KexiTableItem(d->data->columnsCount());
 	QString key;
@@ -925,7 +990,7 @@ KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString
 	}
 	(*newItem)[COLUMN_ID_COLUMN]=key;
 	(*newItem)[COLUMN_ID_TABLE]=tableName;
-	(*newItem)[COLUMN_ID_VISIBLE]=QVariant(true,1);//visible
+	(*newItem)[COLUMN_ID_VISIBLE]=QVariant(visible, 1);
 #ifndef KEXI_NO_QUERY_TOTALS
 	(*newItem)[COLUMN_ID_TOTALS]=QVariant(0);//totals
 #endif

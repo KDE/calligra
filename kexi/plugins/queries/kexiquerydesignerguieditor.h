@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -104,8 +104,11 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 
 		KexiQueryPart::TempData * tempData() const;
 
-		/*! Helper: allocates and initializes new GUI table's row. Doesn't insert it, just returns. */
-		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName) const;
+		/*! Helper: allocates and initializes new table view's row. Doesn't insert it, just returns. 
+		 \a tableName and \a fieldName shoudl be provided. 
+		 \a visible flag sets value for "Visible" column. */
+		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName,
+			bool visible = true) const;
 
 		KexiDB::BaseExpr* parseExpressionString(const QString& fullString, int& token,
 			bool allowRelationalOperator);
