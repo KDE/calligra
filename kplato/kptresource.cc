@@ -817,16 +817,13 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     DateTime end = start;
     Duration e1;
     int nDays = numDays(time, backward) + 1;
-    for (int i=0; !match && i <= nDays && sts; ++i) {
+    for (int i=0; !match && i <= nDays; ++i) {
         // days
         end = end.addDays(inc);
         e1 = effort(start, end-start, backward, &sts);
+        //kdDebug()<<"duration["<<i<<"("<<nDays<<")] "<<(backward?"(B)":"(F):")<<"  date="<<start.date().toString()<<" e+e1="<<(e+e1).toString()<<"=="<<_effort.toString()<<endl;
         if (e + e1 < _effort) {
             e += e1;
-            if (!sts) {
-                kdWarning()<<k_funcinfo<<"Cannot get a valid effort"<<endl;
-                break;
-            }
             start = end;
         } else if (e + e1 == _effort) {
             e += e1;
@@ -835,17 +832,14 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             end = start;
             break;
         }
-        //kdDebug()<<"duration(d)["<<i<<"] "<<(backward?"backward":"forward:")<<"  date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
-    for (int i=0; !match && i < 24 && sts; ++i) {
+    for (int i=0; !match && i < 24; ++i) {
         // hours
         end = end.addSecs(inc*60*60);
         e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
-            if (!sts)
-                break;
             start = end;
         } else if (e + e1 == _effort) {
             e += e1;
@@ -857,14 +851,12 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kdDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward ":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
-    for (int i=0; !match && i < 60 && sts; ++i) {
+    for (int i=0; !match && i < 60; ++i) {
         //minutes
         end = end.addSecs(inc*60);
         e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
-            if (!sts)
-                break;
             start = end;
         } else if (e + e1 == _effort) {
             e += e1;
@@ -882,8 +874,6 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
-            if (!sts)
-                break;
             start = end;
         } else if (e + e1 == _effort) {
             e += e1;
@@ -894,14 +884,12 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
         //kdDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    for (int i=0; !match && i < 1000 && sts; ++i) {
+    for (int i=0; !match && i < 1000; ++i) {
         //milliseconds
         end.setTime(end.time().addMSecs(inc));
         e1 = effort(start, end-start, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
-            if (!sts)
-                break;
             start = end;
         } else if (e + e1 == _effort) {
             e += e1;
