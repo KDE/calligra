@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,6 +51,7 @@ class KexiQueryPart : public KexiPart::Part
 
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
 
+		//! @short Temporary data kept in memory while switching between Query Dialog's views
 		class TempData : public KexiDialogTempData, 
 		                 public KexiDB::Connection::TableSchemaChangeListenerInterface
 		{
@@ -62,13 +63,32 @@ class KexiQueryPart : public KexiPart::Part
 				void unregisterForTablesSchemaChanges();
 				void registerTableSchemaChanges(KexiDB::QuerySchema *q);
 
-				KexiDB::QuerySchema *query;
+				/*! Assigns query \a query for this data.
+				 Existing query (available using query()) is deleted but only 
+				 if it is not owned by parent dialog (i.e. != KexiDialogBase::schemaData()).
+				 \a query can be 0. 
+				 If \a query is equal to existing query, nothing is performed.
+				*/
+				void setQuery(KexiDB::QuerySchema *query);
+
+				//! \return query associated with this data
+				KexiDB::QuerySchema *query() const { return m_query; }
+
+				//! Takes query associated with this data (without deleting) and returns it.
+				//! After this call query() == 0
+				KexiDB::QuerySchema *takeQuery();
+
+				//! Connection used for retrieving definition of the query
 				KexiDB::Connection *conn;
+
 				/*! true, if \a query member has changed in previous view. 
 				 Used on view switching. We're checking this flag to see if we should 
 				 rebuild internal structure for DesignViewMode of regenerated sql text 
 				 in TextViewMode after switch from other view. */
 				bool queryChangedInPreviousView : 1;
+
+			protected:
+				KexiDB::QuerySchema *m_query;
 		};
 
 		virtual QString i18nMessage(const QCString& englishMessage, 

@@ -67,7 +67,7 @@ KexiQueryView::afterSwitchFrom(int mode)
 	}
 	else if (mode==Kexi::DesignViewMode || Kexi::TextViewMode) {
 		KexiQueryPart::TempData * temp = static_cast<KexiQueryPart::TempData*>(parentDialog()->tempData());
-		if (!executeQuery(temp->query)) {
+		if (!executeQuery(temp->query())) {
 			return false;
 		}
 	}

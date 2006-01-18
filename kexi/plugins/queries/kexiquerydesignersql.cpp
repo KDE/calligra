@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -210,10 +210,11 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 		KexiQueryPart::TempData * temp = tempData();
 		if (sqlText.isEmpty()) {
 			//special case: empty SQL text
-			if (temp->query) {
+			if (temp->query()) {
 				temp->queryChangedInPreviousView = true; //query changed
-				delete temp->query; //safe?
-				temp->query = 0;
+				temp->setQuery(0);
+//				delete temp->query; //safe?
+//				temp->query = 0;
 			}
 		}
 		else {
@@ -243,8 +244,9 @@ KexiQueryDesignerSQLView::beforeSwitchTo(int mode, bool &dontStore)
 				//this view is no longer _just_ switched from "NoViewMode"
 				d->justSwitchedFromNoViewMode = false;
 				//replace old query schema with new one
-				delete temp->query; //safe?
-				temp->query = d->parsedQuery;
+				temp->setQuery( d->parsedQuery ); //this wil also delete temp->query()
+//				delete temp->query; //safe?
+//				temp->query = d->parsedQuery;
 				d->parsedQuery = 0;
 				temp->queryChangedInPreviousView = true;
 			}
@@ -285,7 +287,7 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 		d->justSwitchedFromNoViewMode = true;
 	}
 	KexiQueryPart::TempData * temp = tempData();
-	KexiDB::QuerySchema *query = temp->query;
+	KexiDB::QuerySchema *query = temp->query();
 	if (!query) {//try to just get saved schema, instead of temporary one
 		query = dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
 	}
@@ -302,7 +304,8 @@ KexiQueryDesignerSQLView::afterSwitchFrom(int mode)
 	}
 	else {
 	// Use query with Kexi keywords (but not driver-specific keywords) escaped.
-		temp->query = query;
+		temp->setQuery( query );
+//		temp->query = query;
 		KexiDB::Connection* conn = mainWin()->project()->dbConnection();
 		int flags = KexiDB::Driver::EscapeKexi;
 		d->origStatement = conn->selectStatement(*query, flags).stripWhiteSpace();
@@ -320,7 +323,7 @@ KexiQueryDesignerSQLView::sqlText() const
 
 bool KexiQueryDesignerSQLView::slotCheckQuery()
 {
-	QString sqlText = d->editor->text().stripWhiteSpace();
+	QString sqlText( d->editor->text().stripWhiteSpace() );
 	if (sqlText.isEmpty()) {
 		delete d->parsedQuery;
 		d->parsedQuery = 0;

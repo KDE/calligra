@@ -14,9 +14,14 @@ Use CCMAIL:###-done@bugs.kde.org
 Form Designer
 - widget library naming made more verbose to avoid potential 
   conflicts between packages
+- versioning added for widget library plugins; this can also 
+  avoid conflicts between plugins as we've just renamed them
 Query Designer
 - fixed displaying criteria for table view rows when 'visible' 
   column is set to false
+- all-tables-asterisk is also hidden when last table is hidden
+- temporary data member isolated; fixed possible crash when 
+  switching back from SQL View to Design View
 
 2006-01-17
 KexiDB

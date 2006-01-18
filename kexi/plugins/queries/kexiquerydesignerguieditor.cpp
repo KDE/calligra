@@ -253,11 +253,14 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 		KoProperty::Set *set = d->sets->at(r);
 		if (set) {
 			QString tableName = (*set)["table"].value().toString();
-			if (tableName!="*"
+			QString fieldName = (*set)["field"].value().toString();
+			const bool allTablesAsterisk = tableName=="*" && d->relations->tables()->isEmpty();
+			const bool fieldNotFound = tableName!="*"
 				&& !(*set)["isExpression"].value().toBool()
-				&& sortedTableNames.end() == qFind( sortedTableNames.begin(), sortedTableNames.end(), tableName ))
-			{
-				//table not found: mark this line for later remove
+				&& sortedTableNames.end() == qFind( sortedTableNames.begin(), sortedTableNames.end(), tableName );
+
+			if (allTablesAsterisk || fieldNotFound) {
+				//table not found: mark this line for later removal
 				rowsToDelete += r;
 			}
 		}
@@ -326,16 +329,16 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 {
 	//build query schema
 	KexiQueryPart::TempData * temp = tempData();
-	if (temp->query) {
+	if (temp->query()) {
 		temp->clearQuery();
 	} else {
-		temp->query = new KexiDB::QuerySchema();
+		temp->setQuery( new KexiDB::QuerySchema() );
 	}
 
 	//add tables
 	for (TablesDictIterator it(*d->relations->tables()); it.current(); ++it) {
 /*! @todo what about query? */
-		temp->query->addTable( it.current()->schema()->table() );
+		temp->query()->addTable( it.current()->schema()->table() );
 	}
 
 	//add fields
@@ -392,18 +395,18 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 							*errMsg = i18n("Invalid expression \"%1\"").arg(fieldName);
 						return false;
 					}
-					KexiDB::Field *f = new KexiDB::Field(temp->query, columnExpr);
-					temp->query->addField(f, fieldVisible);
+					KexiDB::Field *f = new KexiDB::Field(temp->query(), columnExpr);
+					temp->query()->addField(f, fieldVisible);
 					if (fieldVisible)
 						fieldsFound = true;
 					if (!alias.isEmpty())
-						temp->query->setColumnAlias( temp->query->fieldCount()-1, alias );
+						temp->query()->setColumnAlias( temp->query()->fieldCount()-1, alias );
 				}
 				//TODO
 			}
 			else if (tableName=="*") {
 				//all tables asterisk
-				temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, 0 ), fieldVisible );
+				temp->query()->addAsterisk( new KexiDB::QueryAsterisk( temp->query(), 0 ), fieldVisible );
 				if (fieldVisible)
 					fieldsFound = true;
 				continue;
@@ -413,7 +416,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 //				if (fieldName.find(".*")!=-1) {
 				if (fieldName=="*") {
 					//single-table asterisk: <tablename> + ".*" + number
-					temp->query->addAsterisk( new KexiDB::QueryAsterisk( temp->query, t ), fieldVisible );
+					temp->query()->addAsterisk( new KexiDB::QueryAsterisk( temp->query(), t ), fieldVisible );
 					if (fieldVisible)
 						fieldsFound = true;
 				} else {
@@ -426,11 +429,11 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 						kexipluginswarn << "query designer: NO FIELD '" << fieldName << "'" << endl;
 						continue;
 					}
-					temp->query->addField(f, fieldVisible);
+					temp->query()->addField(f, fieldVisible);
 					if (fieldVisible)
 						fieldsFound = true;
 					if (!alias.isEmpty())
-						temp->query->setColumnAlias( temp->query->fieldCount()-1, alias );
+						temp->query()->setColumnAlias( temp->query()->fieldCount()-1, alias );
 				}
 			}
 		}
@@ -448,7 +451,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 
 	//set always, because if whereExpr==NULL,
 	//this will clear prev. expr
-	temp->query->setWhereExpression( whereExpr );
+	temp->query()->setWhereExpression( whereExpr );
 
 	//add relations (looking for connections)
 	for (ConnectionListIterator it(*d->relations->connections()); it.current(); ++it) {
@@ -456,13 +459,13 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 		KexiRelationViewTableContainer *detailsTable = it.current()->detailsTable();
 
 /*! @todo what about query? */
-		temp->query->addRelationship(
+		temp->query()->addRelationship(
 			masterTable->schema()->table()->field(it.current()->masterField()),
 			detailsTable->schema()->table()->field(it.current()->detailsField()) );
 	}
 
-	temp->query->debug();
-	temp->registerTableSchemaChanges(temp->query);
+	temp->query()->debug();
+	temp->registerTableSchemaChanges(temp->query());
 	//TODO?
 	return true;
 }
@@ -486,7 +489,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 			KMessageBox::information(this, msgCannotSwitch_EmptyDesign());
 			return cancelled;
 		}
-		if (dirty() || !tempData()->query) {
+		if (dirty() || !tempData()->query()) {
 			//remember current design in a temporary structure
 			dontStore=true;
 			QString errMsg;
@@ -518,7 +521,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 tristate
 KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 {
-	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query)) {
+	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query())) {
 		//this is not a SWITCH but a fresh opening in this view mode
 		if (!m_dialog->neverSaved()) {
 			if (!loadLayout()) {
@@ -546,11 +549,11 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 			d->relations->clear();
 			initTableRows();
 			//todo
-			if (tempData()->query) {
+			if (tempData()->query()) {
 				//there is a query schema to show
-				showTablesForQuery( tempData()->query );
+				showTablesForQuery( tempData()->query() );
 				//-show fields
-				showFieldsAndRelationsForQuery( tempData()->query );
+				showFieldsAndRelationsForQuery( tempData()->query() );
 			}
 		}
 		//todo: load global query properties
@@ -577,21 +580,21 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 	if (!buildSchema())
 		return 0;
 	KexiQueryPart::TempData * temp = tempData();
-	(KexiDB::SchemaData&)*temp->query = sdata; //copy main attributes
+	(KexiDB::SchemaData&)*temp->query() = sdata; //copy main attributes
 
-	bool ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *temp->query, true /*newObject*/ );
-	m_dialog->setId( temp->query->id() );
+	bool ok = m_mainWin->project()->dbConnection()->storeObjectSchemaData( *temp->query(), true /*newObject*/ );
+	m_dialog->setId( temp->query()->id() );
 
 	if (ok)
 		ok = storeLayout();
 
-	KexiDB::QuerySchema *query = temp->query;
-	temp->query = 0; //will be returned, so: don't keep it
+//	temp->query = 0; //will be returned, so: don't keep it
 	if (!ok) {
-		delete query;
+		temp->setQuery( 0 );
+//		delete query;
 		return 0;
 	}
-	return query;
+	return temp->takeQuery(); //will be returned, so: don't keep it in temp
 }
 
 tristate KexiQueryDesignerGuiEditor::storeData(bool dontAsk)
@@ -616,7 +619,7 @@ void KexiQueryDesignerGuiEditor::showTablesForQuery(KexiDB::QuerySchema *query)
 	d->slotTableAdded_enabled = false; //speedup
 
 	//! @todo: instead of hiding all tables and showing some tables,
-	// show only these new and hide these unncecessary; the same for connections)
+	//!        show only these new and hide these unncecessary; the same for connections)
 	for (KexiDB::TableSchema::ListIterator it(*query->tables()); it.current(); ++it) {
 		d->relations->addTable( it.current() );
 	}
@@ -851,8 +854,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
 		//OK, row inserted: create a new set for it
 		KoProperty::Set &set = *createPropertySet( row_num++, tableName, fieldName, true/*new one*/ );
-//		if (!columnAlias.isEmpty())
-//			set["alias"].setValue(columnAlias, false);
+//! @todo		if (!columnAlias.isEmpty())
+//! @todo			set["alias"].setValue(columnAlias, false);
 ////		if (!criteriaString.isEmpty())
 		set["criteria"].setValue( criteriaString, false );
 		set["visible"].setValue( QVariant(false,1), false );
@@ -932,7 +935,7 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 
 	// Save SQL without driver-escaped keywords.
 	QString sqlText = mainWin()->project()->dbConnection()->selectStatement( 
-		*temp->query, KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary );
+		*temp->query(), KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary );
 	if (!storeDataBlock( sqlText, "sql" )) {
 		return false;
 	}
@@ -1412,7 +1415,7 @@ void KexiQueryDesignerGuiEditor::slotTableFieldDoubleClicked(
 		return;
 	int row_num;
 	//find last filled row in the GUI table
-	for (row_num=d->sets->size()-1; !d->sets->at(row_num) && row_num>=0; row_num--)
+	for (row_num=d->sets->size()-1; row_num>=0 && !d->sets->at(row_num); row_num--)
 		;
 	row_num++; //after
 	//add row

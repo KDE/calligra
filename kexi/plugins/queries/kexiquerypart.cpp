@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,8 @@
 #include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesignersql.h"
+
+//------------------------------------------------
 
 KexiQueryPart::KexiQueryPart(QObject *parent, const char *name, const QStringList &l)
  : KexiPart::Part(parent, name, l)
@@ -189,12 +191,23 @@ KexiQueryPart::loadSchemaData(KexiDialogBase *dlg, const KexiDB::SchemaData& sda
 	return query;
 }
 
+QString KexiQueryPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
+{
+	Q_UNUSED(dlg);
+	if (englishMessage=="Design of object \"%1\" has been modified.")
+		return i18n("Design of query \"%1\" has been modified.");
+	if (englishMessage=="Object \"%1\" already exists.")
+		return i18n("Query \"%1\" already exists.");
+
+	return englishMessage;
+}
+
 //----------------
 
 KexiQueryPart::TempData::TempData(KexiDialogBase* parent, KexiDB::Connection *conn)
  : KexiDialogTempData(parent)
  , KexiDB::Connection::TableSchemaChangeListenerInterface()
- , query(0)
+ , m_query(0)
  , queryChangedInPreviousView(false)
 {
 	this->conn = conn;
@@ -207,10 +220,10 @@ KexiQueryPart::TempData::~TempData()
 
 void KexiQueryPart::TempData::clearQuery()
 {
-	if (!query)
+	if (!m_query)
 		return;
 	unregisterForTablesSchemaChanges();
-	query->clear();
+	m_query->clear();
 }
 
 void KexiQueryPart::TempData::unregisterForTablesSchemaChanges()
@@ -235,15 +248,24 @@ tristate KexiQueryPart::TempData::closeListener()
 	return dlg->mainWin()->closeDialog(dlg);
 }
 
-QString KexiQueryPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
+KexiDB::QuerySchema *KexiQueryPart::TempData::takeQuery()
 {
-	Q_UNUSED(dlg);
-	if (englishMessage=="Design of object \"%1\" has been modified.")
-		return i18n("Design of query \"%1\" has been modified.");
-	if (englishMessage=="Object \"%1\" already exists.")
-		return i18n("Query \"%1\" already exists.");
+	KexiDB::QuerySchema *query = m_query;
+	m_query = 0;
+	return query;
+}
 
-	return englishMessage;
+void KexiQueryPart::TempData::setQuery(KexiDB::QuerySchema *query)
+{
+	if (m_query && m_query == query)
+		return;
+	if (m_query
+		/* query not owned by dialog */
+		&& (static_cast<KexiDialogBase*>(parent())->schemaData() != static_cast<KexiDB::SchemaData*>( m_query )))
+	{
+		delete m_query;
+	}
+	m_query = query;
 }
 
 //----------------
