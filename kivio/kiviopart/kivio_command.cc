@@ -739,3 +739,26 @@ void KivioAddConnectorTargetCommand::unexecute()
   m_stencil->removeConnectorTarget(m_targetPoint);
   m_page->doc()->updateView(m_page);
 }
+
+KivioCustomDragCommand::KivioCustomDragCommand(const QString& name, KivioPage* page, KivioStencil* stencil,
+                                               int customID, const KoPoint& originalPoint, const KoPoint& newPoint)
+  : KNamedCommand(name)
+{
+  m_page = page;
+  m_stencil = stencil;
+  m_customID = customID;
+  m_originalPoint = originalPoint;
+  m_newPoint = newPoint;
+}
+
+void KivioCustomDragCommand::execute()
+{
+  m_stencil->setCustomIDPoint(m_customID, m_newPoint, m_page);
+  m_page->doc()->updateView(m_page);
+}
+
+void KivioCustomDragCommand::unexecute()
+{
+  m_stencil->setCustomIDPoint(m_customID, m_originalPoint, m_page);
+  m_page->doc()->updateView(m_page);
+}

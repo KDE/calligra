@@ -299,26 +299,8 @@ namespace Kivio {
 
   void PolyLineConnector::customDrag(KivioCustomDragData* data)
   {
-    int index = data->id - (kctCustom + 1);
-
-    if((index < 0) || index >= (int)m_points.count()) {
-      kdDebug(43000) << "PolyLineConnector::customDrag: Index out of range! Index = " << index << endl;
-      return;
-    }
-
     KoPoint pos(data->x, data->y);
-    movePointTo(index, pos);
-    KivioConnectorPoint* cp;
-
-    if(index == 0) {
-      cp = m_pStart;
-    } else if(index == ((int)m_points.count() - 1)) {
-      cp = m_pEnd;
-    } else {
-      return;
-    }
-
-    checkForConnection(cp, data->page);
+    setCustomIDPoint(data->id, pos, data->page);
   }
 
   void PolyLineConnector::move(double xOffset, double yOffset)
@@ -470,6 +452,41 @@ namespace Kivio {
   void PolyLineConnector::removeLastPoint()
   {
     removePoint(m_points.count() - 1);
+  }
+
+  void PolyLineConnector::setCustomIDPoint(int customID, const KoPoint& point, KivioPage* page)
+  {
+    int index = customID - (kctCustom + 1);
+
+    if((index < 0) || index >= (int)m_points.count()) {
+      kdDebug(43000) << "PolyLineConnector::setCustomIDPoint: Index out of range! Index = " << index << endl;
+      return;
+    }
+
+    movePointTo(index, point);
+    KivioConnectorPoint* cp;
+
+    if(index == 0) {
+      cp = m_pStart;
+    } else if(index == ((int)m_points.count() - 1)) {
+      cp = m_pEnd;
+    } else {
+      return;
+    }
+
+    checkForConnection(cp, page);
+  }
+
+  KoPoint PolyLineConnector::customIDPoint(int customID)
+  {
+    int index = customID - (kctCustom + 1);
+
+    if((index < 0) || index >= (int)m_points.count()) {
+      kdDebug(43000) << "PolyLineConnector::customIDPoint: Index out of range! Index = " << index << endl;
+      return KoPoint();
+    }
+
+    return m_points[index];
   }
 
 }

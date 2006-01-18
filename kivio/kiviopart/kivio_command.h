@@ -423,5 +423,23 @@ class KivioAddConnectorTargetCommand : public KNamedCommand
     KoPoint m_targetPoint;
 };
 
+class KivioCustomDragCommand : public KNamedCommand
+{
+  public:
+    KivioCustomDragCommand(const QString& name, KivioPage* page, KivioStencil* stencil,
+                           int customID, const KoPoint& originalPoint, const KoPoint& newPoint);
+
+    virtual void execute();
+    virtual void unexecute();
+
+  protected:
+    KivioPage* m_page;
+    KivioStencil* m_stencil;
+
+    int m_customID;
+    KoPoint m_originalPoint;
+    KoPoint m_newPoint;
+};
+
 #endif
 

@@ -292,6 +292,9 @@ class KIVIO_EXPORT KivioStencil
     virtual void setHidden(bool hide) { m_hidden = hide; }
     virtual bool hidden() { return m_hidden; }
 
+    virtual void setCustomIDPoint(int, const KoPoint&, KivioPage*) {}
+    virtual KoPoint customIDPoint(int) { return KoPoint(); }
+
     /****** ARROW HEAD STUFF *******/
     virtual void setStartAHType( int ) { ; }
     virtual void setStartAHWidth( double ) { ; }

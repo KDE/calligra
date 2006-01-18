@@ -370,99 +370,7 @@ KivioCollisionType Kivio1DStencil::checkForCollision( KoPoint *, double )
  */
 void Kivio1DStencil::customDrag( KivioCustomDragData *pData )
 {
-  double _x = pData->x;
-  double _y = pData->y;
-  int id = pData->id;
-  double oldX, oldY;
-  KivioConnectorPoint *p;
-
-  // Locate the point specified by id
-  p = m_pConnectorPoints->at( id - (kctCustom+1));
-
-  if( !p )
-  {
-    kdDebug(43000) << "Kivio1DStencil::customDrag() - KivioConnectorPoint id: " << (id - (kctCustom+1)) << "  not found\n" << endl;
-    return;
-  }
-
-  oldX = p->x();
-  oldY = p->y();
-  p->setPosition(_x,_y,true);
-
-  if( p->connectable()==true )
-  {
-    // Attempt a snap....
-    KivioLayer *pCurLayer = pData->page->curLayer();
-    KivioLayer *pLayer = pData->page->firstLayer(); //pData->page->curLayer();
-    bool foundConnection = false;
-
-    while( pLayer && !foundConnection )
-    {
-      // To be connected to, a layer must be visible and connectable
-      if( pLayer!=pCurLayer )
-      {
-          if( pLayer->connectable()==false || pLayer->visible()==false )
-          {
-            pLayer = pData->page->nextLayer();
-            continue;
-          }
-      }
-
-      // Tell the layer to search for a target
-      if( pLayer->connectPointToTarget( p, 8.0f ) )
-      {
-        foundConnection = true;
-      }
-
-      pLayer = pData->page->nextLayer();
-    }
-
-    if( foundConnection == false )
-    {
-      p->disconnect();
-    }
-  }
-
-  // If it is a start/end point, then make a request to update the connectors (must be implemented by stencil developer)
-  if( id == kctCustom+1 || id == kctCustom+2 )
-  {
-    // If it's the end connector, then update the text point
-    if( p==m_pEnd && m_needsText==true )
-    {
-      m_pTextConn->setPosition( m_pTextConn->x() + (m_pEnd->x() - oldX),
-        m_pTextConn->y() + (m_pEnd->y() - oldY), false );
-    }
-
-    updateConnectorPoints(p, oldX, oldY);
-  }
-  // If it is one of the width handles, then fix the width and update the opposite point
-  // only if the stencils 'needs width' connectors
-  else if( (id == kctCustom+3 || id == kctCustom+4) && (m_needsWidth==true) )
-  {
-    double vx = m_pStart->x() - m_pEnd->x();
-    double vy = m_pStart->y() - m_pEnd->y();
-    double len = sqrt( vx*vx + vy*vy );
-    double midX = (m_pStart->x() + m_pEnd->x())/2.0f;
-    double midY = (m_pStart->y() + m_pEnd->y())/2.0f;
-
-    vx /= len;
-    vy /= len;
-
-    double d = shortestDistance( m_pStart, m_pEnd, (id==kctCustom+3) ? m_pLeft : m_pRight );
-
-    m_pLeft->setPosition( midX + d*vy, midY + d*(-vx), false );
-    m_pRight->setPosition( midX + d*(-vy), midY + d*vx, false );
-
-    m_connectorWidth = d*2.0f;
-
-    updateConnectorPoints(p, oldX, oldY);
-    return;
-  }
-  // Text handle
-  else if( id == kctCustom+5 )
-  {
-    updateConnectorPoints(p, oldX, oldY);
-  }
+  setCustomIDPoint(pData->id, KoPoint(pData->x, pData->y), pData->page);
 }
 
 
@@ -996,4 +904,108 @@ KivioLineStyle Kivio1DStencil::lineStyle()
 void Kivio1DStencil::setLineStyle(KivioLineStyle ls)
 {
   ls.copyInto(m_pLineStyle);
+}
+
+void Kivio1DStencil::setCustomIDPoint(int customID, const KoPoint& point, KivioPage* page)
+{
+  double oldX, oldY;
+  KivioConnectorPoint *p;
+
+  // Locate the point specified by customID
+  p = m_pConnectorPoints->at( customID - (kctCustom+1));
+
+  if( !p )
+  {
+    kdDebug(43000) << "Kivio1DStencil::customDrag() - KivioConnectorPoint customID: " << (customID - (kctCustom+1)) << "  not found\n" << endl;
+    return;
+  }
+
+  oldX = p->x();
+  oldY = p->y();
+  p->setPosition(point.x(),point.y(),true);
+
+  if( p->connectable()==true )
+  {
+    // Attempt a snap....
+    KivioLayer *pCurLayer = page->curLayer();
+    KivioLayer *pLayer = page->firstLayer(); //page->curLayer();
+    bool foundConnection = false;
+
+    while( pLayer && !foundConnection )
+    {
+      // To be connected to, a layer must be visible and connectable
+      if( pLayer!=pCurLayer )
+      {
+        if( pLayer->connectable()==false || pLayer->visible()==false )
+        {
+          pLayer = page->nextLayer();
+          continue;
+        }
+      }
+
+      // Tell the layer to search for a target
+      if( pLayer->connectPointToTarget( p, 8.0f ) )
+      {
+        foundConnection = true;
+      }
+
+      pLayer = page->nextLayer();
+    }
+
+    if( foundConnection == false )
+    {
+      p->disconnect();
+    }
+  }
+
+  // If it is a start/end point, then make a request to update the connectors (must be implemented by stencil developer)
+  if( customID == kctCustom+1 || customID == kctCustom+2 )
+  {
+    // If it's the end connector, then update the text point
+    if( p==m_pEnd && m_needsText==true )
+    {
+      m_pTextConn->setPosition( m_pTextConn->x() + (m_pEnd->x() - oldX),
+                                m_pTextConn->y() + (m_pEnd->y() - oldY), false );
+    }
+
+    updateConnectorPoints(p, oldX, oldY);
+  }
+  // If it is one of the width handles, then fix the width and update the opposite point
+  // only if the stencils 'needs width' connectors
+  else if( (customID == kctCustom+3 || customID == kctCustom+4) && (m_needsWidth==true) )
+  {
+    double vx = m_pStart->x() - m_pEnd->x();
+    double vy = m_pStart->y() - m_pEnd->y();
+    double len = sqrt( vx*vx + vy*vy );
+    double midX = (m_pStart->x() + m_pEnd->x())/2.0f;
+    double midY = (m_pStart->y() + m_pEnd->y())/2.0f;
+
+    vx /= len;
+    vy /= len;
+
+    double d = shortestDistance( m_pStart, m_pEnd, (customID==kctCustom+3) ? m_pLeft : m_pRight );
+
+    m_pLeft->setPosition( midX + d*vy, midY + d*(-vx), false );
+    m_pRight->setPosition( midX + d*(-vy), midY + d*vx, false );
+
+    m_connectorWidth = d*2.0f;
+
+    updateConnectorPoints(p, oldX, oldY);
+    return;
+  }
+  // Text handle
+  else if( customID == kctCustom+5 )
+  {
+    updateConnectorPoints(p, oldX, oldY);
+  }
+}
+
+KoPoint Kivio1DStencil::customIDPoint(int customID)
+{
+  KivioConnectorPoint *p;
+
+  // Locate the point specified by customID
+  p = m_pConnectorPoints->at( customID - (kctCustom+1));
+
+  return p->position();
 }

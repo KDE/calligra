@@ -362,6 +362,7 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
   m_mode = stmCustomDragging;
 
   m_customDragID = colType;
+  m_customDragOrigPoint = pStencil->customIDPoint(m_customDragID);
 
   // Create a new painter object
   canvas->beginUnclippedSpawnerPainter();
@@ -1048,6 +1049,10 @@ void SelectTool::endCustomDragging(const QPoint&)
 {
   KivioCanvas* canvas = view()->canvasWidget();
   m_pCustomDraggingStencil->setHidden(false);
+  KivioCustomDragCommand* cmd = new KivioCustomDragCommand(i18n("Move Connector Point"), view()->activePage(),
+      m_pCustomDraggingStencil, m_customDragID, m_customDragOrigPoint,
+      m_pCustomDraggingStencil->customIDPoint(m_customDragID));
+  view()->doc()->addCommand(cmd);
   m_customDragID = 0;
   canvas->drawStencilXOR(m_pCustomDraggingStencil);
   KivioStencil *pStencil = canvas->activePage()->selectedStencils()->first();

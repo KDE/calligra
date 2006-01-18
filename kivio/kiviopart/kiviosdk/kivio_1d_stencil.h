@@ -149,6 +149,9 @@ public:
     virtual void disconnectFromTargets();
     virtual KivioLineStyle lineStyle();
     virtual void setLineStyle(KivioLineStyle ls);
+
+    virtual void setCustomIDPoint(int customID, const KoPoint& point, KivioPage* page);
+    virtual KoPoint customIDPoint(int customID);
 };
 
 

@@ -123,6 +123,7 @@ class SelectTool : public Kivio::MouseTool
     int m_customDragID;
     QPtrList <KivioSelectDragData> m_lstOldGeometry;
     KoRect m_selectedRect;
+    KoPoint m_customDragOrigPoint;
 
     KRadioAction* m_selectAction;
     KAction* m_arrowHeadAction;

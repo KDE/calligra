@@ -84,6 +84,9 @@ namespace Kivio {
       virtual double h() { return 0; }
       virtual KoRect rect();
       virtual bool isInRect(const KoRect& rect);
+      virtual void setCustomIDPoint(int customID, const KoPoint& point, KivioPage* page);
+      virtual KoPoint customIDPoint(int customID);
+
 
       virtual void updateConnectorPoints(KivioConnectorPoint* cp, double /*oldX*/, double /*oldY*/);
       
