@@ -480,6 +480,13 @@ public:
   KoView *parentView() const { return m_parentView; }
   KoFrame *frame() const { return m_frame; }
 
+  void setInitialFrameGeometry();
+
+public slots:
+
+  // Call this when the view transformations change
+  void reposition() { slotDocGeometryChanged(); }
+
 private slots:
   void slotFrameGeometryChanged();
   void slotDocGeometryChanged();

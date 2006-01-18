@@ -345,6 +345,9 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
         // This is the long operation (due to toolbar layout stuff)
         d->m_manager->setActivePart( child->document(), viewChild->frame()->view() );
         QApplication::restoreOverrideCursor();
+
+        // Now we can move the frame to the right place
+        viewChild->setInitialFrameGeometry();
       }
       else
       {
@@ -754,22 +757,12 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
           viewGeometry() applies the zoom as well as any other translation the app might want to do
    */
 
-  // Set frameGeometry from childGeometry
-  // This initial calculation uses R1 but omits borders because the frame is currently inactive (-> 0)
-
-  QRect frameGeom = parentView()->applyViewTransformations( child->geometry() );
-  frameGeom.moveBy( -parentView()->canvasXOffset(), -parentView()->canvasYOffset() );
-  m_frame->setGeometry( frameGeom );
+  // Setting the frameGeometry is done in setInitialFrameGeometry, which is
+  // also called right after activation.
 
   m_frame->show();
   m_frame->raise();
-  // Set myGeometry from frameGeometry
-  slotFrameGeometryChanged();
 
-  connect( m_frame, SIGNAL( geometryChanged() ),
-           this, SLOT( slotFrameGeometryChanged() ) );
-  connect( m_child, SIGNAL( changed( KoChild * ) ),
-           this, SLOT( slotDocGeometryChanged() ) );
   connect( view, SIGNAL( activated( bool ) ),
            parentView(), SLOT( slotChildActivated( bool ) ) );
 }
@@ -852,6 +845,23 @@ QRect KoView::reverseViewTransformations( const QRect& r ) const
 {
   return QRect( reverseViewTransformations( r.topLeft() ),
                 reverseViewTransformations( r.bottomRight() ) );
+}
+
+void KoViewChild::setInitialFrameGeometry()
+{
+    kdDebug() << k_funcinfo << endl;
+
+    // Connect only now, so that the GUI building doesn't move us around.
+    connect( m_frame, SIGNAL( geometryChanged() ),
+             this, SLOT( slotFrameGeometryChanged() ) );
+    connect( m_child, SIGNAL( changed( KoChild * ) ),
+             this, SLOT( slotDocGeometryChanged() ) );
+
+    // Set frameGeometry from childGeometry
+    slotDocGeometryChanged();
+    // Set myGeometry from frameGeometry
+    slotFrameGeometryChanged();
+
 }
 
 #include "koView.moc"
