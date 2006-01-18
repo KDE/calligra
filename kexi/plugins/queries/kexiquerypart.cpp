@@ -207,8 +207,8 @@ QString KexiQueryPart::i18nMessage(const QCString& englishMessage, KexiDialogBas
 KexiQueryPart::TempData::TempData(KexiDialogBase* parent, KexiDB::Connection *conn)
  : KexiDialogTempData(parent)
  , KexiDB::Connection::TableSchemaChangeListenerInterface()
- , m_query(0)
  , queryChangedInPreviousView(false)
+ , m_query(0)
 {
 	this->conn = conn;
 }
