@@ -339,9 +339,8 @@ void KoTemplateCreateDia::slotOk() {
     {
       KConfigGroup grp( d->m_instance->config(), "TemplateChooserDialog" );
       grp.writeEntry( "LastReturnType", "Template" );
-      grp.writeEntry( "TemplateTab", 0 );
-      grp.writePathEntry( "TemplateName", d->m_name->text() );
       grp.writePathEntry( "FullTemplateName", dir + "/" + t->file() );
+      grp.writePathEntry( "AlwaysUseTemplate", dir + "/" + t->file() );
     }
     KDialogBase::slotOk();
 }

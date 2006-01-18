@@ -95,7 +95,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
   m_documentList->header()->hide();
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
-  d->m_alwaysUseTemplate = cfgGrp.readEntry("AlwaysUseTemplate");
+  d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate");
   connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
   changePalette();
 
