@@ -270,7 +270,8 @@ VStar::name() const
 void
 VStar::save( QDomElement& element ) const
 {
-	if( document()->saveAsPath() )
+	VDocument *doc = document();
+	if( doc && doc->saveAsPath() )
 	{
 		VPath::save( element );
 		return;

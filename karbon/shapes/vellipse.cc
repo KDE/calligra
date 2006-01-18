@@ -112,7 +112,8 @@ VEllipse::name() const
 void
 VEllipse::save( QDomElement& element ) const
 {
-	if( document()->saveAsPath() )
+	VDocument *doc = document();
+	if( doc && doc->saveAsPath() )
 	{
 		VPath::save( element );
 		return;

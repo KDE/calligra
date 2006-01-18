@@ -55,9 +55,13 @@ VObject::VObject( const VObject& obj )
 	invalidateBoundingBox();
 	m_dcop = 0L;
 
-	if( obj.document() && !obj.document()->objectName( &obj ).isEmpty() )
-		if( document() )
-			document()->setObjectName( this, obj.document()->objectName( &obj ) );
+	VDocument *srcDoc = obj.document();
+	if( srcDoc && !srcDoc->objectName( &obj ).isEmpty() )
+	{
+		VDocument *dstDoc = document();
+		if( dstDoc )
+			dstDoc->setObjectName( this, srcDoc->objectName( &obj ) );
+	}
 }
 
 VObject::~VObject()
@@ -103,8 +107,9 @@ VObject::save( QDomElement& element ) const
 	if( m_fill )
 		m_fill->save( element );
 
-	if( document() && !document()->objectName( this ).isEmpty() )
-		element.setAttribute( "ID", QString( document()->objectName( this ) ) );
+	VDocument *doc = document();
+	if( doc && !doc->objectName( this ).isEmpty() )
+		element.setAttribute( "ID", QString( doc->objectName( this ) ) );
 }
 
 void
@@ -141,8 +146,9 @@ VObject::load( const QDomElement& element )
 		m_fill->load( element );
 	}
 
-	if( document() && !element.attribute( "ID" ).isEmpty() )
-		document()->setObjectName( this, element.attribute( "ID" ) );
+	VDocument *doc = document();
+	if( doc && !element.attribute( "ID" ).isEmpty() )
+		doc->setObjectName( this, element.attribute( "ID" ) );
 }
 
 bool
