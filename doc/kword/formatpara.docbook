@@ -232,10 +232,10 @@ editing. </para>
 </sect2>
 
 <sect2 id="para-borders">
-<title>Borders</title>
+<title>Decorations</title>
 <indexterm><primary>paragraph</primary><secondary>borders</secondary></indexterm>
 
-<para>The next section is used to define and configure graphical borders
+<para>The next section is used to define the background color of the current paragraphs and configure graphical borders
 around your paragraphs.</para>
 
 <screenshot>
@@ -245,6 +245,8 @@ around your paragraphs.</para>
 </mediaobject>
 </screenshot>
 
+<para>Clicking the color button to the right of <guilabel>Background color:</guilabel>, will let you select a color to serve as the background 
+of your paragraph. </para>
 <para>&kword; can surround (on some or all sides) a
 paragraph with a border.  This border can be solid or not, of any color
 and of many sizes.  This dialog panel is used to adjust the

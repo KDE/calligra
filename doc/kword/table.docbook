@@ -66,8 +66,7 @@ to how many rows and columns will be created in the table.  This is
 useful for laying out your table.  You cannot edit
 your table layout here.</para>
 
-<para>The left half of the dialog box consists of two combo boxes,
-and two spin boxes.</para>
+<para>The left half of the dialog box consists of two combo boxes.</para>
 
 <para>The spin box labeled <guilabel>Number of
 rows:</guilabel>, allows you to specify from 1 to 128 rows in the
@@ -80,81 +79,6 @@ table.</para>
 <para>While adjusting either of these two options, the preview box
 adjusts to your new settings.</para>
 
-<para>The combo box labeled <guilabel>Cell heights:</guilabel>, can be
-set to either of two options.</para>
-
-<variablelist>
-<varlistentry>
-<term><guilabel>Automatic</guilabel></term>
-<listitem>
-<para>If this option is selected, &kword; will set the cell height of
-each cell in the new table to a size appropriate to allow vertical space 
-for the currently selected text.  &kword; will not automatically provide additional
-space in each cell, because you draw a table larger (or reduce the height of 
-each row because you draw a table smaller) than
-necessary.</para>
-<para>As an example, if you create a table with three rows, it does not
-matter if you <quote>draw</quote> the table as 1 inch tall, or 4 inches
-tall, the height of each cell will be based on the current text
-size.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Manual</guilabel></term>
-<listitem>
-<para>When selected, &kword; will calculate the cell height by dividing the user
-specified size of the table by the number of rows.</para>
-<para>If for example, you create a table with 3 rows and
-<quote>draw</quote> the table 3 inches tall, each cell will be 1 inch in
-height.  If you draw the table 1.5 inches tall, each cell will be 0.5
-inches tall. </para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<para>The combo box labeled <guilabel>Cell widths:</guilabel>, can be
-set to either of two options.</para>
-
-<variablelist>
-<varlistentry>
-<term><guilabel>Automatic</guilabel></term>
-<listitem>
-<para>If this option is selected, &kword; will determine the width of
-each cell, by dividing the width of the table by the number of
-columns.  It is unaffected by the table size you have
-<quote>drawn</quote> on the document.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Manual</guilabel></term>
-<listitem>
-<para>When selected, &kword; determines the width of each cell, by
-dividing the width of the table you <quote>draw</quote> by the number of
-columns selected.</para>
-<para>As an example, if you create a table with 3 columns, and
-<quote>draw</quote> it 3 inches wide, each cell will be 1 inch in width.
-If, however, you draw the same table 6 inches wide, each cell will be 2
-inches wide.</para>
-</listitem>
-</varlistentry>
-</variablelist>
-
-<para>Tables can be inserted into a document as either <emphasis>framed</emphasis> or <emphasis>inline</emphasis> tables.</para>
-
-<para>Framed tables are tables that have a frame around them.  The frame around a table functions
-exactly the same as a frame around text.  It contains the table and determines the size and shape of the table.</para>
-
-<para>An inline table has a frame around it, but this frame is inserted <emphasis>within</emphasis> the current text
-frame. If text is inserted in front of the table, the table travels down the frame just like any text would.  This means the table will
-stay in the same area of the page as the text that surrounds it.</para>
-
-<para>Framed tables, on the other hand, need to be moved by hand on the page.  </para>
-
-<para>The check box labled <guilabel>The table is inline</guilabel> is used to determine 
-which type of table is inserted.  If there is a mark in the check box, the table is inserted inline.  If not, the table is 
-given a frame of its own.</para>
 
 <para>If you click on the tab labeled <guilabel>Templates</guilabel>, you can use predefined table looks to format the look of your table.  
 For more information see the section on <link linkend="table-templates">Using formatting templates</link>.</para>
