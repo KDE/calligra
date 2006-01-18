@@ -450,6 +450,15 @@ ResourceSchedule *Resource::createSchedule(QString name, int type, int id) {
 
 void Resource::makeAppointment(NodeSchedule *node) {
     //kdDebug()<<k_funcinfo<<m_name<< ": "<<node->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
+    if (m_type == Type_Material) {
+        // we just allocate the whole task length (if  available)
+        DateTime from = availableAfter(node->startTime, node->endTime);
+        DateTime until = availableBefore(node->endTime, node->startTime);
+        if (from.isValid() && until.isValid()) {
+            addAppointment(node, from, until, 100); //FIXME
+        }
+        return;
+    }
     Calendar *cal = calendar();
     if (!cal) {
         kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
@@ -521,7 +530,8 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, bo
     }
     if (time >= lmt) {
         return t;
-    } else if (type() == Type_Material) {
+    }
+    if (type() == Type_Material) {
         t = time > m_availableFrom ? time : m_availableFrom;
         //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
         return t;
@@ -547,7 +557,8 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, b
     }
     if (time <= lmt) {
         return t;
-    } else if (type() == Type_Material) {
+    }
+    if (type() == Type_Material) {
         t = time < m_availableUntil ? time : m_availableUntil;
         //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
         return t;

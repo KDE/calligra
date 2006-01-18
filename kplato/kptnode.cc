@@ -347,6 +347,7 @@ bool Node::isDependChildOf(Node *node) {
 
 Duration Node::duration(const DateTime &time, int use, bool backward) {
     //kdDebug()<<k_funcinfo<<endl;
+    // TODO: handle risc
     if (m_currentSchedule == 0)
         return Duration::zeroDuration;
     if (!m_effort) {
@@ -358,19 +359,21 @@ Duration Node::duration(const DateTime &time, int use, bool backward) {
         return Duration::zeroDuration;
     }
     Duration dur = effort; // use effort as default duration
-    if (m_effort->type() == Effort::Type_Effort ||
-        m_effort->type() == Effort::Type_FixedDuration) {
+    if (m_effort->type() == Effort::Type_Effort) {
         dur = calcDuration(time, effort, backward);
         if (dur == Duration::zeroDuration) {
             kdWarning()<<k_funcinfo<<"zero duration: Resource not available"<<endl;
             m_currentSchedule->resourceNotAvailable = true;
-            return effort;
+            dur = effort; //???
         }
-    } else {
-        // error
-        kdError()<<k_funcinfo<<"Unsupported effort type: "<<m_effort->type()<<endl;
+        return dur;
+    if (m_effort->type() == Effort::Type_FixedDuration) {
+        calcDuration(time, effort, backward);
+        return dur; //
     }
-    // TODO: handle risc
+    // error
+    kdError()<<k_funcinfo<<"Unsupported effort type: "<<m_effort->type()<<endl;
+    }
 
     return dur;
 }
