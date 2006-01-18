@@ -1015,6 +1015,7 @@ void View::slotAboutToShow(QWidget *widget) {
 
 void View::updateView(QWidget *widget)
 {
+    setTaskActionsEnabled(false);
     mainWindow()->toolBar("report")->hide();
     if (widget == m_ganttview)
     {
@@ -1022,6 +1023,7 @@ void View::updateView(QWidget *widget)
         //m_ganttview->hide();
         m_ganttview->drawChanges(getProject());
         m_ganttview->show();
+        setTaskActionsEnabled(widget, true);
     }
     else if (widget == m_pertview)
     {
@@ -1045,7 +1047,6 @@ void View::updateView(QWidget *widget)
         mainWindow()->toolBar("report")->show();
         m_reportview->enableNavigationBtn();
     }
-    setTaskActionsEnabled(widget, true);
 }
 
 void View::renameNode(Node *node, QString name) {
