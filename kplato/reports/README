@@ -1,0 +1,41 @@
+This method of creating reports is temporary.
+In the future kudesigner must be integrated with kplato
+or maybe we'll use a totally different report generator.
+
+Report templates use the same format as kudesigner
+and can be read/created (partially) with it.
+
+To map template fields to kplato data the following deviations exists:
+1)  A <KPlato> tag to define where to select data from. Ex:
+    <KPlato>
+        <Detail Level="0"  SelectFrom="resourcegroups" />
+        <Detail Level="1"  SelectFrom="resources" />
+    </KPlato>
+    will select properties from ResourceGroup into fields defined
+    in Detail level 0, and properties from Resource into fields defined
+    in Detail level 1.
+2)
+    When you define a Field, the Field attribute (called Name in kudesigner ui)
+    is used to select the property from the kplato class.
+    Ex:
+        <Field Field="normalrate" />
+3)
+    You can also get data into fields by specifying <class>.<property>.
+    Ex:
+        <Field Field="project.name" />
+
+4)
+    Currently one "global" property exists: currentdate.
+    So you can specify
+        <Field Field="currentdate" />
+    to present a localized formatted date.
+    
+The method I've used to create reports:
+1)  
+    Define the layout using kudesigner.
+2)
+    Save as flat xml file. This gives you a *.kut file.
+3)  
+    Use text editor to add the <KPlato> tag.
+4)  
+    Save as a *.ktf file.
