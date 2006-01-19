@@ -319,8 +319,12 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
 KivioView::~KivioView()
 {
+  delete m_pluginManager;
+  m_pluginManager = 0;
   delete dcop;
+  dcop = 0;
   delete m_zoomHandler;
+  m_zoomHandler = 0;
 }
 
 DCOPObject* KivioView::dcopObject()
