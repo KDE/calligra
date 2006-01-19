@@ -417,7 +417,13 @@ void FunctionCompletion::itemSelected( const QString& item )
         return;
     }
     
-    QString helpText = desc->helpText().join("\n");
+    QString helpText = desc->helpText()[0];
+    if( helpText.isEmpty() )
+    {
+        d->hintLabel->hide();
+        return;
+    }
+    
     helpText.append("</qt>").prepend("<qt>");
     d->hintLabel->setText( helpText );
     d->hintLabel->adjustSize();
