@@ -39,10 +39,10 @@ Tomas
 #include "kspread_util.h"
 #include "kspread_value.h"
 
-enum { Unkown, TimeDate, Number, Scientific, Fraction } Type;
-
 namespace NumFormat_Local
 {
+  enum { Unknown, TimeDate, Number, Scientific, Fraction } Type;
+
   QString g_Monday;
   QString g_Tuesday;
   QString g_Wednesday;
@@ -653,7 +653,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       break;
 
      case ',':
-      if ( type == Unkown )
+      if ( type == Unknown )
       {
         g_convertionInfo.prefix += ',';
       }      
@@ -678,7 +678,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       }
 
      case '.': // decimal point
-      if ( type == Unkown )
+      if ( type == Unknown )
       {
         int j = i + 1;
         if ( ( j < l ) 
@@ -714,7 +714,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
         s += format[i];
         ++i;
       }
-      if ( type == Unkown )
+      if ( type == Unknown )
         g_convertionInfo.prefix += s;
       else 
       {
@@ -757,7 +757,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       break;
 
      case ';':
-      if ( type == Unkown )
+      if ( type == Unknown )
       {
         g_convertionInfo.postfix += ';';
         format.remove( i, 1 );
@@ -795,7 +795,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
         spaceInNum = i;
         g_convertionInfo.postfix += ' ';
       }
-      else if ( type == Unkown )
+      else if ( type == Unknown )
       {
         g_convertionInfo.prefix += ' ';
         format.remove( i, 1 );
@@ -805,7 +805,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
 
      case 'A':
      case 'a':
-      if ( type == TimeDate || type == Unkown )
+      if ( type == TimeDate || type == Unknown )
       {
         if ( ( i + 1 < l ) && ( format[i + 1].lower() == 'm' ) )
         {
@@ -818,7 +818,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
             i += 3;
           }
         }
-        else if ( type == Unkown )
+        else if ( type == Unknown )
         {
           g_convertionInfo.prefix += format[i];
           format.remove( i, 1 );
@@ -837,14 +837,14 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
 
      case 'P':
      case 'p':
-      if ( type == TimeDate || type == Unkown )
+      if ( type == TimeDate || type == Unknown )
       {
         if ( ( i + 1 < l ) && ( format[i + 1].lower() == 'm' ) )
         {
           g_convertionInfo.ampm = true;
           i += 1;
         }
-        else if ( type == Unkown )
+        else if ( type == Unknown )
         {
           g_convertionInfo.prefix += format[i];
           format.remove( i, 1 );
@@ -863,7 +863,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
 
      case 'M':
      case 'm':
-      if ( type == Unkown )
+      if ( type == Unknown )
         type = TimeDate;
       else if ( type != TimeDate )
         endFixed = true;        
@@ -873,7 +873,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
      case 's':
      case 'H':
      case 'h':
-      if ( type != Unkown && type != TimeDate )
+      if ( type != Unknown && type != TimeDate )
         endFixed = true;        
       else
         type = TimeDate;
@@ -883,14 +883,14 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
      case 'd':
      case 'Y':
      case 'y':
-      if ( type != Unkown && type != TimeDate )
+      if ( type != Unknown && type != TimeDate )
         endFixed = true;        
       else
         type = TimeDate;
       break;
 
      default:
-      if ( type == Unkown )
+      if ( type == Unknown )
       {
         g_convertionInfo.prefix += format[i];
         format.remove( i, 1 );
