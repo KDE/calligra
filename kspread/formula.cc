@@ -703,14 +703,18 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
 
        else
        {
-         // must be followed by '!'
+         // must be followed by '!', otherwise we have a string in ''
          i++;
          if( ex[i] == '!' )
          {
            tokenText.append( ex[i++] );
            state = InCell;
          }
-         else state = Bad;
+         else {
+           tokens.append( Token( Token::String, tokenText, tokenStart ) );
+           tokenText = "";
+           state = Start;
+	 }
        }
        break;
 
@@ -799,7 +803,7 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
 
     case InString:
 
-       // consume until "'
+       // consume until "
        if( ch != '"' ) tokenText.append( ex[i++] );
 
        else
