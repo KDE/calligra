@@ -491,7 +491,7 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
     for (; it.current(); ++it) {
         DateTime st = it.current()->startTime();
         DateTime e = it.current()->endTime();
-        if (end < st.date())
+        if (end <= st.date())
             break;
         if (dt.date() < st.date()) {
             dt.setDate(st.date());
@@ -708,7 +708,7 @@ void Appointment::printDebug(QString indent)
     }
     if (err)
         return;
-    kdDebug()<<indent<<"  + Appointment to schedule: "<<m_node->name()<<endl;
+    kdDebug()<<indent<<"  + Appointment to schedule: "<<m_node->name()<<" ("<<m_node->type()<<")"<<" resource: "<<m_resource->resource()->name()<<endl;
     indent += "  ! ";
     QPtrListIterator<AppointmentInterval> it = intervals();
     for (; it.current(); ++it) {
