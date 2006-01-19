@@ -318,7 +318,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     int mb = m_pView->zoomHandler()->zoomItY(pl.ptBottom);
 
     painter.save();
-    painter.setPen(QPen(blue,1,DotLine));
+    painter.setPen(QPen("#C7C7C7",1,SolidLine));
     painter.drawRect(ml,mt,pw-ml-mr,ph-mt-mb);
     painter.restore();
   }
