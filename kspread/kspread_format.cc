@@ -249,11 +249,19 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
         currentCellStyle.addProperty( "fo:text-align", value );
     }
 
-    if ( hasProperty( Format::PAlignY ) || !hasNoFallBackProperties( Format::PAlignY ) )
+    if ( hasProperty( Format::PAlignY,true ) || hasNoFallBackProperties( Format::PAlignY ) )
     {
         Format::AlignY align = m_pStyle->alignY(  );
-        if ( align != Format::Bottom ) // default in OpenCalc
-            currentCellStyle.addProperty( "style:vertical-align", ( align == Format::Middle ? "middle" : "top" ) );
+        QString value;
+        if( align == Format::Top )
+            value = "top";
+        else if( align == Format::Middle )
+            value = "middle";
+        else if( align == Format::Bottom )
+            value = "bottom";
+            
+        if( !value.isEmpty() )
+            currentCellStyle.addProperty( "style:vertical-align", value );
     }
 
     if ( hasProperty( Format::PIndent,true ) || hasNoFallBackProperties( Format::PIndent ) )

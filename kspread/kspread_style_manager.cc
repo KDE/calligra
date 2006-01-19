@@ -79,11 +79,12 @@ void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
     kdDebug()<<" number of template style to load : "<<nStyles<<endl;
     for (unsigned int item = 0; item < nStyles; item++) {
         QDomElement styleElem = oasisStyles.userStyles()[item];
-        QString name;
-        if ( styleElem.hasAttributeNS( KoXmlNS::style, "display-name" ) )
-        {
-            name = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
-        }
+        
+        // assume the name assigned by the application
+        QString name = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
+        
+        // then replace by user-visible one (if any)
+        name = styleElem.attributeNS( KoXmlNS::style, "display-name", name );
 
         if ( name == "Default" )
         {

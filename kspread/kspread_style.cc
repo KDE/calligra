@@ -1010,10 +1010,30 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         style.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
     }
 
-    if ( featureSet( SAlignY ) && alignY() != Format::Middle )
+    if ( featureSet( SAlignY ) && alignY() != Format::UndefinedY )
     {
-        style.addProperty( "style:vertical-align", ( alignY() == Format::Bottom ? "bottom" : "top" ) );
+        QString value = "bottom";  // OO.o Calc's default
+        switch( alignY()  )
+        {
+        case Format::Top:
+            value = "top";
+            break;
+        case Format::Middle:
+            value = "middle";
+            break;
+        case Format::Bottom:
+            value = "bottom";
+            break;
+        }
+            
+        style.addProperty( "style:vertical-align", value );
     }
+    
+    if ( !featureSet( SAlignY ) )
+    {
+        style.addProperty( "style:vertical-align", "middle" );
+    }
+    
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
         style.addProperty( "fo:background-color", m_bgColor.name() );
 
@@ -2560,17 +2580,31 @@ void CustomStyle::saveOasis( KoGenStyles &mainStyles )
     if ( m_name.isEmpty() )
         return;
     KoGenStyle gs;
+
+    if ( m_name == "Default" )
+        gs = KoGenStyle(Doc::STYLE_USERSTYLE, "table-cell");
+    else    
     if ( m_type == AUTO )
-        gs = KoGenStyle(Doc::STYLE_DEFAULTSTYLE );
+        gs = KoGenStyle(Doc::STYLE_DEFAULTSTYLE, "table-cell" );
     else
-        gs = KoGenStyle( Doc::STYLE_USERSTYLE ); //FIXME name of style
+        gs = KoGenStyle( Doc::STYLE_USERSTYLE, "table-cell" ); //FIXME name of style
+        
     if ( m_parent )
         gs.addAttribute( "style:parent-style-name", m_parent->name() );
-    gs.addAttribute( "style:display-name", m_name );
+
+    // default style does not need display name    
+    if( m_name != "Default" )
+        gs.addAttribute( "style:display-name", m_name );
+        
     QString numericStyle = saveOasisStyle( gs, mainStyles );
     if ( !numericStyle.isEmpty() )
         gs.addAttribute( "style:data-style-name", numericStyle );
-    mainStyles.lookup( gs, "custom-style" );
+        
+    if( ( m_type == BUILTIN ) && ( m_name == "Default" ) )
+        mainStyles.lookup( gs, "Default", KoGenStyles::DontForceNumbering );
+    else  
+        // this is auto or user style
+        mainStyles.lookup( gs, "custom-style" );
 }
 
 void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const QDomElement & style, const QString & name )
