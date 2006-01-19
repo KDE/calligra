@@ -47,7 +47,7 @@ VToolController::setCurrentTool( VTool *tool )
 		m_currentTool->deactivate();
 	}
 
-	if( m_currentTool == tool )
+	if( m_currentTool && m_currentTool == tool )
 		m_currentTool->showDialog();
 	else
 	{
