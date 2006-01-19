@@ -114,12 +114,6 @@ double Duration::operator/(const Duration &d) const {
     return (double)(m_ms) / (double)(d.m_ms);
 }
 
-bool Duration::isCloseTo(const Duration &d) const {
-    Q_INT64 limit = 30000;
-    Q_INT64 delta = m_ms - d.m_ms;
-    return (delta >= 0) ? (delta < limit) : (-delta < limit);
-}
-
 QString Duration::toString(Format format) const {
     Q_INT64 ms;
     double days;

@@ -80,18 +80,23 @@ class Duration {
         unsigned days() const { return hours() / 24; }
         void get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds=0, unsigned *milliseconds=0) const;
 
-        bool isCloseTo(const Duration &d) const;
-
+        Duration &abs() { m_ms = QABS(m_ms); return (*this); }
         bool   operator==( const Duration &d ) const { return m_ms == d.m_ms; }
+        bool   operator==( Q_INT64 d ) const { return m_ms == d; }
         bool   operator!=( const Duration &d ) const { return m_ms != d.m_ms; }
+        bool   operator!=( Q_INT64 d ) const { return m_ms != d; }
         bool   operator<( const Duration &d ) const { return m_ms < d.m_ms; }
+        bool   operator<( Q_INT64 d ) const { return m_ms < d; }
         bool   operator<=( const Duration &d ) const { return m_ms <= d.m_ms; }
+        bool   operator<=( Q_INT64 d ) const { return m_ms <= d; }
         bool   operator>( const Duration &d ) const { return m_ms > d.m_ms; }
+        bool   operator>( Q_INT64 d ) const { return m_ms > d; }
         bool   operator>=( const Duration &d ) const { return m_ms >= d.m_ms; }
+        bool   operator>=( Q_INT64 d ) const { return m_ms >= d; }
         Duration &operator=(const Duration &d ) { m_ms = d.m_ms; return *this;}
         Duration operator*(int unit) const; 
-        Duration operator/(int unit) const;
         Duration operator*(const double value) const;
+        Duration operator/(int unit) const;
         double operator/(const Duration &d) const;
         
         Duration operator+(Duration &d) const
