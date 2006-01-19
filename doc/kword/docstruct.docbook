@@ -37,8 +37,8 @@ has the ability to toggle the document structure window on and off.</para>
 </screenshot>
 <para>As you can see, there are 4 groups of frames categorized (<guilabel>Text
 Frames/Frame Sets</guilabel>
-<guilabel>Pictures</guilabel>,<guilabel>Tables</guilabel>, <guilabel>Formula
-Frames</guilabel>,
+<guilabel>Pictures</guilabel>, <guilabel>Tables</guilabel>, <guilabel>Formula
+Frames</guilabel>, 
 <guilabel>Embedded Objects</guilabel>.</para>
 
 <variablelist>
