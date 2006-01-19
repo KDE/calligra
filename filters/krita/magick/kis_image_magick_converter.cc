@@ -90,6 +90,10 @@ namespace {
                 return "CMYK16";
             }
         }
+        else if (type == LABColorspace) {
+            kdDebug() << "Lab!\n";
+            return "LABA";
+        }
         else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
             if (imageDepth == 8)
                 return "RGBA";
@@ -105,6 +109,7 @@ namespace {
         if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") ) return GRAYColorspace;
         if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") ) return RGBColorspace;
         if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYK16") ) return CMYKColorspace;
+        if ( cs->id() == KisID("LABA") ) return LABColorspace;
 
         kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return RGBColorspace;
@@ -382,6 +387,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
             csName = getColorSpaceName(image -> colorspace, imageDepth);
         }
 
+        kdDebug(41008) << "image has " << csName << " colorspace\n";
+        
         KisProfile * profile = getProfileForProfileInfo(image);
         if (profile)
         {
@@ -475,23 +482,38 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                             *(ptr++) = Downscale(pp->green); // magenta
                             *(ptr++) = Downscale(pp->blue); // yellow
                             *(ptr++) = Downscale(indexes[x]); // Black
+// XXX: Warning! This ifdef messes up the paren matching big-time!
 #ifdef HAVE_MAGICK6
                             if (image->matte != MagickFalse) {
 #else
-                                if (image->matte == true) {
+                            if (image->matte == true) {
 #endif
-                                    *(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
-                                }
-                                else {
-                                    *(ptr++) = OPACITY_OPAQUE;
-                                }
-                                ++x;
-                                pp++;
-                                ++hiter;
+                                *(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
                             }
+                            else {
+                                *(ptr++) = OPACITY_OPAQUE;
+                            }
+                            ++x;
+                            pp++;
+                            ++hiter;
                         }
                     }
-                    else if (colorspaceType== RGBColorspace ||
+                }
+                else if (colorspaceType == LABColorspace) {
+                    while(! hiter.isDone())
+                    {
+                        Q_UINT16 *ptr = reinterpret_cast<Q_UINT16 *>(hiter.rawData());
+                        
+                        *(ptr++) = ScaleQuantumToShort(pp->red);
+                        *(ptr++) = ScaleQuantumToShort(pp->green);
+                        *(ptr++) = ScaleQuantumToShort(pp->blue);
+                        *(ptr++) = 65535/*OPACITY_OPAQUE*/ - ScaleQuantumToShort(pp->opacity);
+
+                        pp++;
+                        ++hiter;
+                    }
+                }
+                else if (colorspaceType == RGBColorspace ||
                              colorspaceType == sRGBColorspace ||
                              colorspaceType == TransparentColorspace)
                     {
