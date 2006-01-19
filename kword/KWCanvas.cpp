@@ -1604,6 +1604,12 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
     // cx and cy contain the future values for contentsx and contentsy, so we need to
     // pass them to updateRulerOffsets.
     updateRulerOffsets( cx, cy );
+
+    // Tell KoView that the view transformations have changed (e.g. the centering of the page, or the scrolling offsets)
+    // so that it will reposition any active embedded object.
+    // This needs to be delayed since contents moving is emitted -before- moving,
+    // and from resizeEvent it's too early too.
+    QTimer::singleShot( 0, this, SIGNAL( viewTransformationsChanged() ) );
 }
 
 void KWCanvas::slotMainTextHeightChanged()

@@ -266,6 +266,8 @@ signals:
     // Emitted when the insert key is pressed
     void overwriteModeChanged( bool m_overwriteMode );
 
+    void viewTransformationsChanged();
+
     void updateRuler();
 
 private slots:

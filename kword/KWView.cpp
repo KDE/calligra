@@ -5996,7 +5996,10 @@ bool KWView::doubleClickActivation() const
 
 QWidget* KWView::canvas() const
 {
-    return m_gui->canvasWidget()->viewport();
+    // used to be ->viewport(), but this makes no sense.
+    // active embedded objects must be positioned relative to the real view,
+    // to scroll around with it, instead of being children of the fixed viewport.
+    return m_gui->canvasWidget();
 }
 
 int KWView::canvasXOffset() const
@@ -6009,8 +6012,10 @@ int KWView::canvasYOffset() const
     return m_gui->canvasWidget()->contentsY();
 }
 
-void KWView::canvasAddChild( KoViewChild * /*child*/ )
+void KWView::canvasAddChild( KoViewChild * child )
 {
+    connect( m_gui->canvasWidget(), SIGNAL( viewTransformationsChanged() ),
+             child, SLOT( reposition() ) );
     // Not necessary anymore
     //m_gui->canvasWidget()->addChild( child->frame() );
 }
