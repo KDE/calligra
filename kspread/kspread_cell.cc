@@ -2001,10 +2001,9 @@ bool Cell::makeFormula()
     return false;
   }
 
-  //our value has been changed
-  //TODO: is this necessary?
-  valueChanged ();
-
+  // we must recalc
+  setCalcDirtyFlag ();
+  
   return true;
 }
 
@@ -4544,6 +4543,7 @@ void Cell::setDisplayText( const QString& _text )
   kdError(36001) << "ERROR: Syntax ERROR" << endl;
       }
     }
+    setCalcDirtyFlag ();
   }
 
   /**

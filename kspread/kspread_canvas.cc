@@ -4085,10 +4085,10 @@ void Canvas::paintUpdates()
         cell = sheet->cellAt( x, y );
 
         // recalc and relayout only for non default cells
-        if ((!cell->isDefault()) && cell->layoutDirtyFlag())
+        if (!cell->isDefault())
         {
-          cell->calc();
-          cell->makeLayout( painter, x, y );
+          if (cell->calcDirtyFlag()) cell->calc();
+          if (cell->layoutDirtyFlag()) cell->makeLayout( painter, x, y );
         }
 
        /* bool paintBordersBottom = false;
