@@ -19,9 +19,9 @@ Kexi provides database drivers for MySQL and PostgreSQL.  We suggest
 putting each driver in a separate package, and that installation of
 these packages be optional.  Each driver package may then depend on
 the corresponding 'native' libraries: libmysqlclient for MySQL; and
-libpq and libpqxx for PostgreSQL.
+and libpqxx for PostgreSQL (libpqxx in turn depends on libpq).
 
-Thus, the MySQL package could contain:
+Thus, the MySQL driver package could contain:
  lib/kde3/kexidb_mysqldriver.so
  lib/kde3/kexidb_mysqldriver.la
  lib/kde3/keximigrate_mysql.so
@@ -29,7 +29,7 @@ Thus, the MySQL package could contain:
  share/services/kexidb_mysqldriver.desktop
  share/services/keximigrate_mysql.desktop
 
-The PostgreSQL driver consists of the following files:
+The PostgreSQL driver package consists of the following files:
  lib/kde3/kexidb_pqxxsqldriver.so
  lib/kde3/kexidb_pqxxsqldriver.la
  lib/kde3/keximigrate_pqxx.so
