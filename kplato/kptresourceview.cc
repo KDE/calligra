@@ -121,7 +121,9 @@ ResourceView::ResourceView(View *view, QWidget *parent)
 
     resList = new KListView(this, "Resource list");
     resList->setItemMargin(2);
+#if KDE_IS_VERSION(3,3,9)
     resList->setShadeSortColumn(false);
+#endif
     resList->setRootIsDecorated(true);
     resList->addColumn(i18n("Name"));
     resList->setColumnAlignment(1, AlignHCenter);

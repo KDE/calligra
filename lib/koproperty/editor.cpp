@@ -152,7 +152,7 @@ Editor::Editor(QWidget *parent, bool autoSync, const char *name)
 	setColumnWidthMode(0, QListView::Maximum);
 	setFullWidth(true);
 	setShowSortIndicator(false);
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,9)
+#if KDE_IS_VERSION(3,3,9)
 	setShadeSortColumn(false);
 #endif
 	setTooltipColumn(0);
