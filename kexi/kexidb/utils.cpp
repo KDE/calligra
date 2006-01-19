@@ -520,4 +520,21 @@ void KexiDB::fromMap( const QMap<QString,QString>& map, ConnectionData& data )
 	data.setFileName(map["fileName"]);
 }
 
+bool KexiDB::splitToTableAndFieldParts(const QString& string, 
+	QString& tableName, QString& fieldName,
+	SetFieldNameIfNoTableNameOptions option)
+{
+	const int id = string.find('.');
+	if (option & SetFieldNameIfNoTableName && id==-1) {
+		tableName = QString::null;
+		fieldName = string;
+		return true;
+	}
+	if (id<=0 || id==(string.length()-1))
+		return false;
+	tableName = string.left(id);
+	fieldName = string.mid(id+1);
+	return true;
+}
+
 #include "utils_p.moc"

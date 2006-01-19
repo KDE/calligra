@@ -206,11 +206,36 @@ namespace KexiDB
 	KEXI_DB_EXPORT void connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData& data, 
 		KexiDB::MessageHandler& msgHandler);
 
-	/* Saves connection data \a data into \a map. */
+	/*! Saves connection data \a data into \a map. */
 	KEXI_DB_EXPORT QMap<QString,QString> toMap( const ConnectionData& data );
 
-	/* Restores connection data \a data from \a map. */
+	/*! Restores connection data \a data from \a map. */
 	KEXI_DB_EXPORT void fromMap( const QMap<QString,QString>& map, ConnectionData& data );
+
+	//! Used in splitToTableAndFieldParts().
+	enum SetFieldNameIfNoTableNameOptions {
+		FailIfNoTableOrFieldName = 0, //!< default value for splitToTableAndFieldParts()
+		SetFieldNameIfNoTableName = 1 //!< @see splitToTableAndFieldParts()
+	};
+
+	/*! Splits \a string like "table.field" into "table" and "field" parts. 
+	 On success, a table name is passed to \a tableName and a field name is passed to \a fieldName.
+	 The function fails if either:
+	 - \a string is empty, or
+	 - \a string does not contain '.' character and \a option is FailIfNoTableOrFieldName 
+	    (the default), or
+	 - '.' character is the first of last character of \a string (in this case table name 
+	   or field name could become empty what is not allowed).
+
+	 If \a option is SetFieldNameIfNoTableName and \a string does not contain '.', 
+	 \a string is passed to \a fieldName and \a tableName is set to QString::null
+	 without failure.
+
+	 If function fails, \a tableName and \a fieldName remain unchanged.
+	 \return true on success. */
+	KEXI_DB_EXPORT bool splitToTableAndFieldParts(const QString& string, 
+		QString& tableName, QString& fieldName, 
+		SetFieldNameIfNoTableNameOptions option = FailIfNoTableOrFieldName);
 }
 
 #endif

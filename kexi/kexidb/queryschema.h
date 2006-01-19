@@ -203,6 +203,22 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return true if the query uses \a table. */
 		bool contains(TableSchema *table) const;
 
+		/*! Convenience function. 
+		 \return table field by searching through all tables in this query.
+		 The field does not need to be included on the list of query columns.
+		 Similarly, query aliases are not taken into account.
+
+		 \a tableDotFieldName string must contain table name and field name 
+		 with '.' character between them, e.g. "mytable.myfield". 
+		 0 is returned if the query has no such 
+		 table defined of the table has no such field defined.
+
+		 QuerySchema::table("mytable")->field("myfield") could be 
+		 alternative for findTableField("mytable.myfield") but it can crash
+		 if "mytable" is not defined in the query.
+		*/
+		Field* findTableField(const QString &tableDotFieldName) const;
+
 		/*! \return alias of a column at \a position or null string 
 		 If there is no alias for this column
 		 or if there is no such column within the query defined. 

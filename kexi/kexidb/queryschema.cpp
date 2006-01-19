@@ -22,6 +22,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/expression.h>
 #include <kexidb/parser/sqlparser.h>
+#include <kexidb/utils.h>
 
 #include <assert.h>
 
@@ -645,6 +646,17 @@ TableSchema* QuerySchema::table(const QString& tableName) const
 bool QuerySchema::contains(TableSchema *table) const
 {
 	return d->tables.findRef(table)!=-1;
+}
+
+Field* QuerySchema::findTableField(const QString &tableDotFieldName) const
+{
+	QString tableName, fieldName;
+	if (!KexiDB::splitToTableAndFieldParts(tableDotFieldName, tableName, fieldName))
+		return 0;
+	TableSchema *tableSchema = table(tableName);
+	if (!tableSchema)
+		return 0;
+	return tableSchema->field(fieldName);
 }
 
 QCString QuerySchema::columnAlias(uint position) const
