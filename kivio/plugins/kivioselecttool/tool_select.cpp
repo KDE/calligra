@@ -364,6 +364,9 @@ bool SelectTool::startCustomDragging(const QPoint &pos, bool selectedOnly )
   m_customDragID = colType;
   m_customDragOrigPoint = pStencil->customIDPoint(m_customDragID);
 
+  view()->canvasWidget()->setShowConnectorTargets(true);
+  view()->canvasWidget()->repaint();
+
   // Create a new painter object
   canvas->beginUnclippedSpawnerPainter();
   m_firstTime = true;
@@ -1067,6 +1070,9 @@ void SelectTool::endCustomDragging(const QPoint&)
   }
 
   canvas->endUnclippedSpawnerPainter();
+
+  canvas->setShowConnectorTargets(false);
+  canvas->repaint();
 }
 
 void SelectTool::endResizing(const QPoint&)

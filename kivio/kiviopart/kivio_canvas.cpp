@@ -69,6 +69,7 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, QScrollB
   setFocusPolicy(StrongFocus);
   setFocus();
 
+  m_showConnectorTargets = false;
   delegateThisEvent = true;
 
   m_pVertScrollBar->setLineStep(1);
@@ -332,7 +333,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   KivioScreenPainter kpainter;
   kpainter.start(m_buffer);
   kpainter.translateBy(-m_iXOffset + m_pageOffsetX, -m_iYOffset + m_pageOffsetY);
-  m_pDoc->paintContent(kpainter, paintRect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
+  m_pDoc->paintContent(kpainter, paintRect, false, page, QPoint(0, 0), m_pView->zoomHandler(), showConnectorTargets());
   kpainter.stop();
 
   if(m_pView->isShowGuides()) {

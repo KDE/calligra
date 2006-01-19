@@ -121,6 +121,8 @@ void ConnectorTool::setActivated(bool a)
     m_mode = stmNone;
     m_pStencil = 0;
     m_pDragData = 0;
+    view()->canvasWidget()->setShowConnectorTargets(true);
+    view()->canvasWidget()->repaint();
     emit activated(this);
   } else {
     if(m_pStencil && (m_mode == stmDrawRubber) && (m_type == PolyLineConnector)) {
@@ -138,6 +140,8 @@ void ConnectorTool::setActivated(bool a)
     m_polyLineAction->setChecked(false);
     m_permanent = false;
     view()->setStatusBarInfo("");
+    view()->canvasWidget()->setShowConnectorTargets(false);
+    view()->canvasWidget()->repaint();
   }
 }
 

@@ -114,6 +114,9 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     int pageOffsetX() const { return m_pageOffsetX; }
     int pageOffsetY() const { return m_pageOffsetY; }
 
+    void setShowConnectorTargets(bool state) { m_showConnectorTargets = state; }
+    bool showConnectorTargets() const { return m_showConnectorTargets; }
+
   signals:
     void visibleAreaChanged();
 
@@ -204,6 +207,8 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
 
     int m_pageOffsetX;
     int m_pageOffsetY;
+
+    bool m_showConnectorTargets;
 };
 
 #endif
