@@ -831,7 +831,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i <= nDays; ++i) {
         // days
         end = end.addDays(inc);
-        e1 = effort(start, end-start, backward, &sts);
+        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
         //kdDebug()<<"duration["<<i<<"("<<nDays<<")] "<<(backward?"(B)":"(F):")<<"  date="<<start.date().toString()<<" e+e1="<<(e+e1).toString()<<"=="<<_effort.toString()<<endl;
         if (e + e1 < _effort) {
             e += e1;
@@ -848,7 +848,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 24; ++i) {
         // hours
         end = end.addSecs(inc*60*60);
-        e1 = effort(start, end-start, backward, &sts);
+        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -865,7 +865,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 60; ++i) {
         //minutes
         end = end.addSecs(inc*60);
-        e1 = effort(start, end-start, backward, &sts);
+        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -882,7 +882,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 60 && sts; ++i) {
         //seconds
         end = end.addSecs(inc);
-        e1 = effort(start, end-start, backward, &sts);
+        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -898,7 +898,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     for (int i=0; !match && i < 1000; ++i) {
         //milliseconds
         end.setTime(end.time().addMSecs(inc));
-        e1 = effort(start, end-start, backward, &sts);
+        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -919,7 +919,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     }
     end = t.isValid() ? t : time;
     //kdDebug()<<k_funcinfo<<"<---"<<(backward?"(B) ":"(F) ")<<m_group->name()<<": "<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort: "<<_effort.toString(Duration::Format_Day)<<endl;
-    return end - time;
+    return (end>time?end-time:time-end);
 }
 
 DateTime ResourceGroupRequest::availableAfter(const DateTime &time) {
