@@ -495,7 +495,7 @@ KexiQueryDesignerGuiEditor::beforeSwitchTo(int mode, bool &dontStore)
 			QString errMsg;
 			//build schema; problems are not allowed
 			if (!buildSchema(&errMsg)) {
-				KMessageBox::information(this, errMsg);
+				KMessageBox::sorry(this, errMsg);
 				return cancelled;
 			}
 		}
@@ -575,10 +575,14 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 
 
 KexiDB::SchemaData*
-KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &/*cancel*/)
+KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
-	if (!buildSchema())
+	QString errMsg;
+	if (!buildSchema(&errMsg)) {
+		KMessageBox::sorry(this, errMsg);
+		cancel = true;
 		return 0;
+	}
 	KexiQueryPart::TempData * temp = tempData();
 	(KexiDB::SchemaData&)*temp->query() = sdata; //copy main attributes
 
@@ -818,7 +822,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		//unused: append a new row
 		KexiDB::BinaryExpr *criteriaExpr = criteriaArgument->parent()->toBinary();
 		if (!criteriaExpr) {
-			kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
+			kexipluginswarn << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
 				"criteriaExpr is not a binary expr" << endl;
 			continue;
 		}
@@ -826,21 +830,29 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		if (!columnNameArgument) {
 			columnNameArgument = criteriaExpr->right()->toVariable();
 			if (!columnNameArgument) {
-				kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
+				kexipluginswarn << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
 					"columnNameArgument is not a variable (table or table.field) expr" << endl;
 				continue;
 			}
 		}
-		KexiDB::QueryColumnInfo *columnInfo = query->columnInfo( columnNameArgument->name );
-		if (!columnInfo) {
-			kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
+		KexiDB::Field* field = 0;
+		if (-1 == columnNameArgument->name.find('.') && query->tables()->count()==1) {
+			//extreme case: only field name provided for one-table query:
+			field = query->tables()->first()->field(columnNameArgument->name);
+		}
+		else {
+			field = query->findTableField(columnNameArgument->name);
+		}
+
+		if (!field) {
+			kexipluginswarn << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(): "
 				"no columnInfo found in the query for name \"" << columnNameArgument->name << endl;
 			continue;
 		}
 		QString tableName, fieldName, columnAlias, criteriaString;
 //! @todo what about ALIAS?
-		tableName = columnInfo->field->table()->name();
-		fieldName = columnInfo->field->name();
+		tableName = field->table()->name();
+		fieldName = field->name();
 		//create new row data
 		KexiTableItem *newItem = createNewRow(tableName, fieldName, false /* !visible*/);
 		if (criteriaExpr) {
@@ -1213,7 +1225,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		}
 		else {
 			//auto fill 'table' column
-			QString fieldId = newValue.toString().stripWhiteSpace(); //tmp, can look like "table.field"
+			QString fieldId( newValue.toString().stripWhiteSpace() ); //tmp, can look like "table.field"
 			QString fieldName; //"field" part of "table.field" or expression string
 			QString tableName; //empty for expressions
 			QCString alias;
@@ -1259,10 +1271,12 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 					tableName = "*";
 				}
 				else {
-					const int id = fieldId.find('.');
-					if (id>=0)
-						tableName = fieldId.left(id);
-					fieldName = fieldId.mid(id+1);
+					if (!KexiDB::splitToTableAndFieldParts(
+						fieldId, tableName, fieldName, KexiDB::SetFieldNameIfNoTableName))
+					{
+						kexipluginswarn << "KexiQueryDesignerGuiEditor::slotBeforeCellChanged(): no 'field' or 'table.field'" << endl;
+						return;
+					}
 				}
 			}
 			bool saveOldValue = true;

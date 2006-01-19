@@ -10,7 +10,7 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
-2006-01-18
+2006-01-18, 19
 Form Designer
 - widget library naming made more verbose to avoid potential 
   conflicts between packages

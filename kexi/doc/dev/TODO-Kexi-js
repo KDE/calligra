@@ -337,6 +337,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   (see MSA's hiperlinkaddress, hiperlinksubaddress properties)
 - frame widget:
 -- add such fancy frame: http://www.themaninblue.com/writing/perspective/2004/08/05/
+- tab widget: add color property for setting particular tab 
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -815,3 +816,6 @@ TODO: entering table/query name by hand doesn't work in 'form data source' combo
 BETA1 TODO:
 - if you place e.g. a label in a container like a tabwidget and doubleclick it to edit the content, 
   the label jumps around. ccpasteur sayed him fixed it last year ;)
+- only change bg color of tab widget, not its outer area
+ -nie dziala pokazywanie kryt. gdy sa w nawiasie: telefony.telefon < '3') - dodac wy³uskiwanie nawiasów
+
