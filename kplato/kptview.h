@@ -77,8 +77,6 @@ public:
     void projectCalculate();
 
     virtual DCOPObject* dcopObject();
-    
-    void renameNode(Node *node, QString name);
    
     virtual bool setContext(Context &context);
     virtual void getContext(Context &context) const;
@@ -123,6 +121,10 @@ public slots:
     void slotExportGantt(); // testing
     void setTaskActionsEnabled(bool on);
     
+    void slotRenameNode(Node *node, const QString& name);
+    
+    void slotPopupMenu(const QString& menuname, const QPoint & pos);
+    
 protected slots:
     void slotProjectCalendar();
     void slotProjectWorktime();
@@ -137,15 +139,15 @@ protected slots:
 
     void slotOpenNode();
     void slotTaskProgress();
-	void slotDeleteTask();
-	void slotIndentTask();
-	void slotUnindentTask();
-	void slotMoveTaskUp();
-	void slotMoveTaskDown();
+    void slotDeleteTask();
+    void slotIndentTask();
+    void slotUnindentTask();
+    void slotMoveTaskUp();
+    void slotMoveTaskDown();
 
     void slotConnectNode();
-	void slotChanged(QWidget *);
-	void slotChanged();
+    void slotChanged(QWidget *);
+    void slotChanged();
 
     void slotAboutToShow(QWidget *widget);
 
@@ -167,7 +169,7 @@ private:
     QHBoxLayout *m_ganttlayout;
     PertView *m_pertview;
     QHBoxLayout *m_pertlayout;
-	QWidgetStack *m_tab;
+    QWidgetStack *m_tab;
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
     ReportView *m_reportview;

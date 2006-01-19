@@ -21,7 +21,6 @@
 
 #include "kptappointment.h"
 #include "kpttask.h"
-#include "kptview.h"
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
@@ -56,9 +55,8 @@ TaskAppointmentsView::ResourceItem::ResourceItem(QString text, QListViewItem *pa
 }
 
 //-------------------------------------------
-TaskAppointmentsView::TaskAppointmentsView(View *view, QWidget *parent)
+TaskAppointmentsView::TaskAppointmentsView(QWidget *parent)
     : DoubleListViewBase(parent),
-      m_mainview(view),
       m_task(0) {
     
     setNameHeader(i18n("Resource"));
@@ -96,6 +94,11 @@ void TaskAppointmentsView::draw() {
         item->effortMap = it.current()->plannedPrDay(m_task->startTime().date(), m_task->endTime().date());
     }
     slotUpdate();
+}
+
+void TaskAppointmentsView::drawContents(QPainter* painter)
+{
+  this->DoubleListViewBase::drawContents(painter);
 }
 
 void TaskAppointmentsView::slotUpdate() {

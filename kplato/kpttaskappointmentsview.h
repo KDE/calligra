@@ -39,7 +39,6 @@ class KPrinter;
 namespace KPlato
 {
 
-class View;
 class Project;
 class Resource;
 class Task;
@@ -53,15 +52,15 @@ class TaskAppointmentsView : public DoubleListViewBase
     Q_OBJECT
 public:
 
-    TaskAppointmentsView(View *view, QWidget *parent);
+    TaskAppointmentsView(QWidget *parent);
 
     //~TaskAppointmentsView();
 
     void zoom(double zoom);
 
-    View *mainView() { return m_mainview; }
     void draw();
     void draw(Task *task);
+    virtual void drawContents(QPainter* painter);
     void print(KPrinter &printer);
     void clear();
     
@@ -85,7 +84,6 @@ private:
     };
     
 private:
-    View *m_mainview;
     
     int m_defaultFontSize;
     Task *m_task;

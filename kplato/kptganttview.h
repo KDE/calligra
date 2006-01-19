@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,7 +47,6 @@ namespace KPlato
 
 class TaskAppointmentsView;
 
-class View;
 class Node;
 class Task;
 class Project;
@@ -58,15 +58,19 @@ class GanttView : public QSplitter
 
  public:
 
-    GanttView(View *view, QWidget *parent, bool readWrite=true, const char* name = 0  );
+    GanttView(QWidget *parent, bool readWrite=true, const char* name = 0  );
 
     //~GanttView();
 
-    void zoom(double zoom);
+    void setZoom(double zoom);
 
     void draw(Project &project);
     void drawChanges(Project &project);
-    View *mainView();
+    
+    /**
+     * Call draw() or drawChanges() before calling this.
+     */
+    void drawOnPainter(QPainter* painter, QRect rect);
 
     Node *currentNode() const;
 
@@ -77,9 +81,9 @@ class GanttView : public QSplitter
     
     bool exportGantt(QIODevice* device); // testing
     
-    virtual bool setContext(Context::Ganttview &context);
+    virtual bool setContext(Context::Ganttview &context, Project &project);
     virtual void getContext(Context::Ganttview &context) const;
-
+    
     void setReadWriteMode(bool on);
     bool isReadWriteMode() const { return m_readWrite; }
     KDGanttViewItem *currentItem() const { return m_currentItem; }
@@ -92,7 +96,18 @@ signals:
     void addRelation(Node *par, Node *child, int linkType);
     void itemDoubleClicked();
     
+    void itemRenamed(Node*, const QString&);
+    
+    /**
+     * Requests a specific type of popup menu.
+     * Usually a KPlato::View object is connected to this signal.
+     */
+    void requestPopupMenu(const QString& menuname, const QPoint & pos);
+    
 public slots:
+    /**
+     * Determines the correct type of popup menu and emits requestPopupMenu()
+     */
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
 
     void setShowExpected(bool on) { m_showExpected = on; }
@@ -165,7 +180,6 @@ private:
     void getContextClosedNodes(Context::Ganttview &context, KDGanttViewItem *item) const;
     
 private:
-    View *m_mainview;
     bool m_readWrite;
     int m_defaultFontSize;
     KDGanttViewItem *m_currentItem;

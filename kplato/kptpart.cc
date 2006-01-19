@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
    Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include "kptprojectdialog.h"
 #include "kptresource.h"
 #include "kptcontext.h"
+#include "kptganttview.h"
 
 #include <qpainter.h>
 #include <qfileinfo.h>
@@ -46,7 +48,9 @@ namespace KPlato
 Part::Part(QWidget *parentWidget, const char *widgetName,
 		 QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
-      m_project(0), m_projectDialog(0), m_view(0),
+      m_project(0), m_projectDialog(0), m_parentWidget(parentWidget), m_view(0),
+      m_embeddedGanttView(new GanttView(parentWidget)),
+      m_embeddedContext(new Context()), m_embeddedContextInitialized(false),
       m_context(0)
 {
     m_update = m_calculate = false;
@@ -63,6 +67,11 @@ Part::Part(QWidget *parentWidget, const char *widgetName,
     connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
     connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));
 
+    //FIXME the following is really dirty, we should make KPlato::Context a real class
+    //      with getter and setter and signals when content changes, thus we can keep track
+    QTimer* timer = new QTimer(this,"context update timer");
+    connect(timer,SIGNAL(timeout()),this,SLOT(slotCopyContextFromView()));
+    timer->start(500);
 }
 
 
@@ -71,6 +80,10 @@ Part::~Part() {
     delete m_project;
     delete m_projectDialog;
     delete m_commandHistory;
+    if (m_embeddedGanttView)
+      delete m_embeddedGanttView;
+    if (m_embeddedContext)
+      delete m_embeddedContext;
 }
 
 
@@ -127,6 +140,7 @@ bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
 
 KoView *Part::createViewInstance(QWidget *parent, const char *name) {
     m_view = new View(this, parent, name);
+    connect(m_view,SIGNAL(destroyed()),this,SLOT(slotViewDestroyed()));
 
     // If there is a project dialog this should be deleted so it will
     // use the m_view as parent. If the dialog will be needed again,
@@ -137,7 +151,9 @@ KoView *Part::createViewInstance(QWidget *parent, const char *name) {
 	m_projectDialog = 0;
     }
     if (m_context)
-        m_view->setContext(*m_context);
+        m_view->setContext( *m_context );
+    else if (m_embeddedContext && m_embeddedContextInitialized)
+        m_view->setContext( *m_embeddedContext );
 
     //m_view->setBaselineMode(getProject().isBaselined()); FIXME: Removed for this release  
     return m_view;
@@ -145,9 +161,14 @@ KoView *Part::createViewInstance(QWidget *parent, const char *name) {
 
 
 void Part::editProject() {
+
+    QWidget* parent = m_parentWidget;
+    if (m_view)
+      parent = m_view;
+      
     if (m_projectDialog == 0)
 	// Make the dialog
-	m_projectDialog = new ProjectDialog(*m_project, m_view);
+	m_projectDialog = new ProjectDialog(*m_project, parent);
 
     m_projectDialog->exec();
 }
@@ -268,10 +289,40 @@ void Part::slotDocumentRestored() {
 }
 
 
-void Part::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
+void Part::paintContent(QPainter &painter, const QRect &rect,
 			   bool /*transparent*/,
-			   double /*zoomX*/, double /*zoomY*/)
+			   double zoomX, double zoomY)
 {
+    kdDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
+    if (isEmbedded() && m_embeddedGanttView && m_project)
+    {
+      if (m_embeddedContext)
+      {
+        int ganttsize = m_embeddedContext->ganttview.ganttviewsize;
+        int tasksize = m_embeddedContext->ganttview.taskviewsize;
+        bool showtaskname = m_embeddedContext->ganttview.showTaskName;
+        
+//         m_embeddedContext->ganttview.ganttviewsize += m_embeddedContext->ganttview.taskviewsize;
+//         m_embeddedContext->ganttview.taskviewsize = 0;  //TODO this doesn't have any effect?! (bug?)
+        m_embeddedContext->ganttview.showTaskName = true;  //since task view is not shown(?), show name in the gantt itself
+        
+        m_embeddedGanttView->setContext( m_embeddedContext->ganttview, *m_project );
+        
+        m_embeddedContext->ganttview.ganttviewsize = ganttsize;
+        m_embeddedContext->ganttview.taskviewsize = tasksize;
+        m_embeddedContext->ganttview.showTaskName = showtaskname;
+      }
+      else
+        kdWarning() << "Don't have any context to set!" << endl;
+    
+      double zoom = zoomX;
+      if (zoomY < zoomX)
+        zoom = zoomY;
+      m_embeddedGanttView->clear();
+//       m_embeddedGanttView->setZoom(zoom); //behaves a bit weird
+      m_embeddedGanttView->draw(*m_project);
+      m_embeddedGanttView->drawOnPainter(&painter,rect);
+    }
     // ####### handle transparency
 
     // Need to draw only the document rectangle described in the parameter rect.
@@ -295,6 +346,10 @@ void Part::addCommand(KCommand * cmd, bool execute)
 void Part::slotCommandExecuted() {
     //kdDebug()<<k_funcinfo<<endl;
     setModified(true);
+    kdDebug() << "------- KPlato, is embedded: " << isEmbedded() << endl;
+    if (m_view == NULL)
+      return;
+      
     if (m_calculate)
         m_view->slotUpdate(config().behavior().calculationMode == Behavior::OnChange);
     else if (m_update)
@@ -304,6 +359,27 @@ void Part::slotCommandExecuted() {
         m_view->setBaselineMode(getProject().isBaselined());
 
     m_update = m_calculate = m_baseline = false;
+}
+
+void Part::slotCopyContextFromView()
+{
+    if (m_view)
+    {
+//         kdDebug() << "Updating embedded context from view context." << endl;
+        this->m_view->getContext( *m_embeddedContext );
+        this->m_embeddedContextInitialized = true;
+    }
+//     else
+//     {
+//         kdDebug() << "Not updating the context." << endl;
+//         if (m_context)
+//           kdDebug() << "Current View: " << m_context->currentView << endl;
+//     }
+}
+
+void Part::slotViewDestroyed()
+{
+    m_view = NULL;
 }
 
 void Part::setCommandType(int type) {

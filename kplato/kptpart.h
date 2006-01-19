@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
    Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +40,7 @@ class Project;
 class ProjectDialog;
 class ResourceGroup;
 class Context;
+class GanttView;
 
 class Part : public KoDocument {
     Q_OBJECT
@@ -85,11 +87,23 @@ protected:
 protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
+    void slotCopyContextFromView();
+    void slotViewDestroyed();
 
 private:
     Project *m_project;
     ProjectDialog *m_projectDialog;
+    QWidget* m_parentWidget;
     View *m_view;
+    
+    /**
+     * Used for drawing the project when embedded into another koffice app.
+     * @see paintContent()
+     */
+    GanttView* m_embeddedGanttView;
+    Context* m_embeddedContext;
+    bool m_embeddedContextInitialized;
+    
     KoCommandHistory *m_commandHistory;
     bool m_update, m_calculate, m_baseline;
     

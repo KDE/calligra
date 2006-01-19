@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -66,15 +67,14 @@
 namespace KPlato
 {
 
-GanttView::GanttView(View *view, QWidget *parent, bool readWrite, const char* name)
+GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     : QSplitter(parent, name),
-    m_mainview(view),
     m_readWrite(readWrite),
     m_currentItem(0),
     m_taskView(0),
     m_firstTime(true)
 {
-
+    kdDebug() << " ---------------- KPlato: Creating GanttView ----------------" << endl;
     setOrientation(QSplitter::Vertical);
     
     m_gantt = new KDGanttView(this, "Gantt view");
@@ -99,13 +99,13 @@ GanttView::GanttView(View *view, QWidget *parent, bool readWrite, const char* na
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
     m_gantt->setShowHeaderPopupMenu();
-    m_taskView = new TaskAppointmentsView(view, this);
+    m_taskView = new TaskAppointmentsView(this);
     // hide TaskAppointmentsView
     QValueList<int> list = sizes();
     list[0] += list[1];
     list[1] = 0;
     setSizes(list);
-    draw(view->getPart()->getProject());
+    
     setReadWriteMode(readWrite);
     
 	connect(m_gantt, SIGNAL(lvContextMenuRequested ( KDGanttViewItem *, const QPoint &, int )),
@@ -124,13 +124,16 @@ GanttView::GanttView(View *view, QWidget *parent, bool readWrite, const char* na
     }
 }
 
-void GanttView::zoom(double /*zoom*/)
+void GanttView::setZoom(double zoom)
 {
+  kdDebug() << "setting gantt zoom: " << zoom << endl;
+  m_gantt->setZoomFactor(zoom,true);
+  m_taskView->zoom( zoom );
 }
 
 void GanttView::clear()
 {
-	m_gantt->clear();
+    m_gantt->clear();
     m_taskView->clear();
 }
 
@@ -190,6 +193,36 @@ void GanttView::drawChanges(Project &project)
         currentItemChanged(m_gantt->firstChild()); //hmmm
     }
     currentItemChanged(m_currentItem);
+}
+
+void GanttView::drawOnPainter(QPainter* painter, QRect rect)
+{
+//   QValueList<int> sizes = m_taskView->sizes();
+//   if (sizes.count() >= 2)
+//   {
+//     int first = sizes[0];
+//     int second = sizes[1];
+//     sizes.pop_front();
+//     sizes.pop_front();
+//     sizes.prepend(first+second);
+//     sizes.prepend(0);
+//     m_taskView->setSizes(sizes);
+//   }
+//   else
+//     kdWarning() << "Apparently the task view splitter contains less than 2 parts!" << endl;
+
+//   bool showlistview = m_gantt->showListView();
+//   int listviewwidth = m_gantt->listViewWidth();
+//   m_gantt->setShowListView(false);
+//   m_gantt->setListViewWidth(0);
+  
+//   m_gantt->setGanttMaximumWidth(rect.x());
+  m_gantt->drawContents(painter,false,true);
+  
+//   m_gantt->setShowListView(showlistview);
+//   m_gantt->setListViewWidth(listviewwidth);
+
+//   m_taskView->drawContents(painter); //TODO doesn't seem to do very much
 }
 
 KDGanttViewItem *GanttView::findItem(Node *node)
@@ -871,21 +904,23 @@ void GanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, i
     }
     Task *t =  dynamic_cast<Task*>(n);
     if (t && (t->type() == Node::Type_Task || t->type() == Node::Type_Milestone)) {
-        QPopupMenu *menu = m_mainview->popupMenu("task_popup");
-        if (menu)
-        {
-            /*int id =*/ menu->exec(pos);
+        emit requestPopupMenu("task_popup",pos);
+//         QPopupMenu *menu = m_mainview->popupMenu("task_popup");
+//         if (menu)
+//         {
+//             /*int id =*/ menu->exec(pos);
             //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
-        }
+//         }
         return;
     } 
     if (t && t->type() == Node::Type_Summarytask) {
-        QPopupMenu *menu = m_mainview->popupMenu("summarytask_popup");
-        if (menu)
-        {
-            /*int id =*/ menu->exec(pos);
+        emit requestPopupMenu("summarytask_popup",pos);
+//         QPopupMenu *menu = m_mainview->popupMenu("summarytask_popup");
+//         if (menu)
+//         {
+//             /*int id =*/ menu->exec(pos);
             //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
-        }
+//         }
         return;
     }
     //TODO: Other nodetypes
@@ -920,17 +955,22 @@ void GanttView::print(KPrinter &prt) {
     // here we want to print: ListView and TimeLine (default)
     // for this purpose, we call drawContents() with a 0 pointer as painter
     QSize size = m_gantt->drawContents(0);
-        
+    
     QPainter p;
     p.begin( &prt );
     
     // Make a simple header
     p.drawRect(0,0,metrics.width(),metrics.height());
-    QString text = i18n("Project: %1").arg(m_mainview->getPart()->getProject().name());
+    QString text;
+    int hei = 0;
     QRect r = p.boundingRect(1,0,0,0, Qt::AlignLeft, text );
-    p.drawText( r, Qt::AlignLeft, text );
-    int hei = r.height();
-    //kdDebug()<<"Project r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
+//     if (m_mainview)
+//     {
+//       text = i18n("Project: %1").arg(m_mainview->getPart()->getProject().name());
+//       p.drawText( r, Qt::AlignLeft, text );
+//       hei = r.height();
+//       //kdDebug()<<"Project r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
+//     }
     text = KGlobal::locale()->formatDateTime(QDateTime::currentDateTime());
     r = p.boundingRect(metrics.width()-1,0,0,0, Qt::AlignRight, text );
     p.drawText( r, Qt::AlignRight, text );
@@ -966,7 +1006,7 @@ void GanttView::print(KPrinter &prt) {
 void GanttView::slotItemRenamed(KDGanttViewItem* item, int col, const QString& str) {
     //kdDebug()<<k_funcinfo<<(item ? item->listViewText(col) : "null")<<": "<<str<<endl;
     if (col == 0) {
-        m_mainview->renameNode(getNode(item), QString(str));
+        emit itemRenamed(getNode(item), str);
     }
 }
 
@@ -1023,16 +1063,16 @@ void GanttView::slotModifyLink(KDGanttViewTaskLink* link) {
         emit modifyRelation(rel);
 }
 
-bool GanttView::setContext(Context::Ganttview &context) {
+bool GanttView::setContext(Context::Ganttview &context, Project& project) {
     //kdDebug()<<k_funcinfo<<endl;
     
     QValueList<int> list = sizes();
     list[0] = context.ganttviewsize;
     list[1] = context.taskviewsize;
-    setSizes(list);    
+    setSizes(list);
 
-    Project &p = m_mainview->getProject();
-    currentItemChanged(findItem(p.findNode(context.currentNode)));
+    //TODO this does not work yet!
+//     currentItemChanged(findItem(project.findNode(context.currentNode)));
     
     m_showResources = context.showResources ;
     m_showTaskName = context.showTaskName;
@@ -1042,13 +1082,14 @@ bool GanttView::setContext(Context::Ganttview &context) {
     m_showCriticalTasks = context.showCriticalTasks;
     m_showCriticalPath = context.showCriticalPath;
     
-    getContextClosedNodes(context, m_gantt->firstChild());
-    for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
-        KDGanttViewItem *item = findItem(p.findNode(*it));
-        if (item) {
-            item->setOpen(false);
-        }
-    }
+    //TODO this does not work yet!
+//     getContextClosedNodes(context, m_gantt->firstChild());
+//     for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
+//         KDGanttViewItem *item = findItem(project.findNode(*it));
+//         if (item) {
+//             item->setOpen(false);
+//         }
+//     }
     return true;
 }
 

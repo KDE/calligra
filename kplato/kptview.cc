@@ -41,6 +41,7 @@
 #include <qtabwidget.h>
 #include <qwidgetstack.h>
 #include <qtimer.h>
+#include <qpopupmenu.h>
 
 #include <kiconloader.h>
 #include <kaction.h>
@@ -118,14 +119,15 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     // build the DCOP object
     dcopObject();
 
-	m_tab = new QWidgetStack(this);
+    m_tab = new QWidgetStack(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
-	layout->add(m_tab);
+    layout->add(m_tab);
 
-	m_ganttview = new GanttView(this, m_tab, part->isReadWrite());
-	m_tab->addWidget(m_ganttview);
+    m_ganttview = new GanttView(m_tab, part->isReadWrite());
+    m_tab->addWidget(m_ganttview);
+    m_ganttview->draw(getPart()->getProject());
 
-	m_pertview = new PertView( this, m_tab, layout );
+    m_pertview = new PertView( this, m_tab, layout );
     m_tab->addWidget(m_pertview);
 
     m_resourceview = new ResourceView( this, m_tab );
@@ -147,6 +149,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     connect(m_ganttview, SIGNAL(modifyRelation(Relation*, int)), SLOT(slotModifyRelation(Relation*, int)));
     connect(m_ganttview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
     connect(m_ganttview, SIGNAL(itemDoubleClicked()), SLOT(slotOpenNode()));
+    connect(m_ganttview, SIGNAL(itemRenamed(Node*, const QString&)),this,SLOT(slotRenameNode(Node*, const QString&)));
+    connect(m_ganttview, SIGNAL(requestPopupMenu(const QString&, const QPoint &)),this,SLOT(slotPopupMenu(const QString&, const QPoint&)));
     connect(m_resourceview, SIGNAL(itemDoubleClicked()), SLOT(slotEditResource()));
 
 	// The menu items
@@ -308,8 +312,8 @@ Project& View::getProject() const
 }
 
 void View::setZoom(double zoom) {
-    m_ganttview->zoom(zoom);
-	m_pertview->zoom(zoom);
+    m_ganttview->setZoom(zoom);
+	m_pertview->setZoom(zoom);
 }
 
 void View::setupPrinter(KPrinter &printer) {
@@ -1049,12 +1053,19 @@ void View::updateView(QWidget *widget)
     }
 }
 
-void View::renameNode(Node *node, QString name) {
+void View::slotRenameNode(Node *node, const QString& name) {
     //kdDebug()<<k_funcinfo<<name<<endl;
     if (node) {
         NodeModifyNameCmd *cmd = new NodeModifyNameCmd(getPart(), *node, name, i18n("Modify Name"));
         getPart()->addCommand(cmd);
     }
+}
+
+void View::slotPopupMenu(const QString& menuname, const QPoint & pos)
+{
+    QPopupMenu* menu = this->popupMenu(menuname);
+    if (menu)
+      menu->exec(pos);
 }
 
 bool View::setContext(Context &context) {
@@ -1065,7 +1076,7 @@ bool View::setContext(Context &context) {
     actionViewOptimistic->setChecked(context.actionViewOptimistic);
     actionViewPessimistic->setChecked(context.actionViewPessimistic);
     
-    m_ganttview->setContext(context.ganttview);
+    m_ganttview->setContext(context.ganttview, getProject());
     // hmmm, can't decide if these should be here or actions moved to ganttview
     actionViewGanttResources->setChecked(context.ganttview.showResources);
     actionViewGanttTaskName->setChecked(context.ganttview.showTaskName);

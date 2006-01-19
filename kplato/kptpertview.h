@@ -47,7 +47,7 @@ public:
 
     ~PertView();
     
-    void zoom(double /*zoom*/) {}
+    void setZoom(double /*zoom*/) {}
 
     void draw();
     View *mainView() const { return m_mainview; } 
