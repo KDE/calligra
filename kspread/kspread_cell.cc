@@ -5588,7 +5588,7 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
             {
                 bool value = val == "true";
                 setValue( value );
-                setCellText( value ? i18n("True") : i18n("False" ) );
+                if (!isFormula) setCellText( value ? i18n("True") : i18n("False" ) );
             }
         }
 

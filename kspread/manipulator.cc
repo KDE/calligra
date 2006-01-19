@@ -145,6 +145,8 @@ void Manipulator::execute()
   {
     // addCommand itself checks for undo lock
     m_sheet->doc()->addCommand (this);
+    // if we add something to undo, then the document surely is modified ...
+    m_sheet->doc()->setModified (true);
   }
   m_firstrun = false;
 }

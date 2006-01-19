@@ -85,6 +85,7 @@ void RegisterTrigFunctions()
   f = new Function ("TANH",   func_tanh);
   repo->add (f);
   f = new Function ("PI",     func_pi);
+  f->setParamCount (0);
   repo->add (f);
 }
 
