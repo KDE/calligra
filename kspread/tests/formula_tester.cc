@@ -111,8 +111,8 @@ void FormulaParserTester::run()
   errorList.clear();
 
   // simple, single-token formulas
-  CHECK_PARSE( "True", "b" );
-  CHECK_PARSE( "False", "b" );
+  CHECK_PARSE( "True", "x" );
+  CHECK_PARSE( "False", "x" );
   CHECK_PARSE( "36", "i" );
   CHECK_PARSE( "0", "i" );
   CHECK_PARSE( "3.14159", "f" );
