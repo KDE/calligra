@@ -400,7 +400,7 @@ bool KivioPage::setPageName( const QString& name, bool init )
  * most visible.
  */
 void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool transparent,
-  QPoint p0, KoZoomHandler* zoom, bool drawHandles )
+  QPoint p0, KoZoomHandler* zoom, bool drawConnectorTargets, bool drawSelection )
 {
   KivioLayer *pLayer = m_lstLayers.first();
   while( pLayer )
@@ -415,15 +415,13 @@ void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool tra
 
   // Now the second iteration - connection targets
   // Only draw targets if the zoom is higher than a certain value
-  if( zoom->zoom() >= 50 )
-  {
-    if( drawHandles )
-    {
+  if(zoom->zoom() >= 50) {
+    if(drawConnectorTargets) {
       m_pCurLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
       pLayer = m_lstLayers.first();
-      while( pLayer )
-      {
-        if( pLayer->connectable() ) {
+
+      while(pLayer) {
+        if(pLayer->connectable() && (pLayer != m_pCurLayer)) {
           pLayer->paintConnectorTargets( painter, rect, transparent, p0, zoom );
         }
 
@@ -433,8 +431,7 @@ void KivioPage::paintContent( KivioPainter& painter, const QRect& rect, bool tra
   }
 
   // Now the third iteration - selection handles
-  if( drawHandles )
-  {
+  if(drawSelection) {
     m_pCurLayer->paintSelectionHandles( painter, rect, transparent, p0, zoom );
   }
 }

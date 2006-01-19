@@ -111,7 +111,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     KoPageLayout paperLayout()const { return m_pPageLayout; }
     void setPaperLayout(const KoPageLayout&);
 
-    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool, bool );
     void printContent( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
     void printSelected( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
     void printContent(KivioPainter& painter, KoZoomHandler* zoomHandler);

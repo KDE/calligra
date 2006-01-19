@@ -120,7 +120,8 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     bool isLoading()const { return m_bLoading; }
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
-    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, KoZoomHandler*, bool );
+    void paintContent(KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page,
+                      QPoint, KoZoomHandler*, bool, bool);
 
     void printContent( KPrinter& prn );
 

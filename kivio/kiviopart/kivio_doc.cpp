@@ -677,16 +677,16 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
     KoGlobal::dpiY());
   KivioScreenPainter ksp(&painter);
   ksp.painter()->translate( - zoom.zoomItX(r.x()), - zoom.zoomItY(r.y()) );
-  paintContent(ksp,rect,transparent,page, QPoint(zoom.zoomItX(r.x()), zoom.zoomItY(r.y())), &zoom, false);
+  paintContent(ksp,rect,transparent,page, QPoint(zoom.zoomItX(r.x()), zoom.zoomItY(r.y())), &zoom, false, false);
   ksp.setPainter(0L); // Important! Don't delete the QPainter!!!
 }
 
-void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, KoZoomHandler* zoom, bool drawHandles )
+void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, KoZoomHandler* zoom, bool drawConnectorTargets, bool drawSelection )
 {
   if ( isLoading() )
     return;
 
-  page->paintContent(painter,rect,transparent,p0,zoom, drawHandles);
+  page->paintContent(painter,rect,transparent,p0,zoom, drawConnectorTargets, drawSelection);
 }
 
 void KivioDoc::printContent( KPrinter &prn )

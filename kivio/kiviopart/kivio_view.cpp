@@ -832,13 +832,6 @@ void KivioView::slotUpdateView( KivioPage* page )
   m_objectListPalette->updateObjectList();
 }
 
-void KivioView::paintContent( KivioPainter&, const QRect&, bool)
-{
-//  m_pDoc->paintContent( painter, rect, transparent, m_pActivePage );
-//  temporary
-  m_pCanvas->update();
-}
-
 QWidget *KivioView::canvas() const
 {
   return canvasWidget();
