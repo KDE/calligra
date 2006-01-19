@@ -37,17 +37,18 @@ class Inspector::Private
 {
 public:
   Cell* cell;
+  Format* format;
   Sheet* sheet;
   
   QListView *cellView;
+  QListView *formatView;
   QListView *sheetView;
   QListView* depView;
   
-  
   void handleCell();
+  void handleFormat();
   void handleSheet();
   void handleDep();
-  
 };
 
 }
@@ -106,6 +107,18 @@ void Inspector::Private::handleCell()
   new QListViewItem( cellView, "Height", QString::number( cell->dblHeight() ) );
 }
 
+void Inspector::Private::handleFormat()
+{  
+  formatView->clear();
+  int col = cell->column();
+  int row = cell->row();
+  
+  new QListViewItem( formatView, "Angle", QString::number( format->getAngle(col, row) ) );
+  new QListViewItem( formatView, "Multirow", boolAsString( format->multiRow(col, row) ) );
+  new QListViewItem( formatView, "Protected", format->hasProperty( Format::PVerticalText ) 
+    ? "Not specified" : boolAsString( format->isProtected(col, row) ) );
+  new QListViewItem( formatView, "Vertical Text", boolAsString( format->verticalText(col, row ) ) );
+}
 
 void Inspector::Private::handleSheet()
 {  
@@ -147,6 +160,7 @@ Inspector::Inspector( Cell* cell ):
   d = new Private;
   
   d->cell = cell;
+  d->format = cell->format();
   d->sheet = cell->sheet();
   
   QFrame* cellPage = addPage( QString("Cell") );
@@ -155,6 +169,13 @@ Inspector::Inspector( Cell* cell ):
   cellLayout->addWidget( d->cellView );
   d->cellView->addColumn( "Key", 150 );
   d->cellView->addColumn( "Value" );
+  
+  QFrame* formatPage = addPage( QString("Format") );
+  QVBoxLayout* formatLayout = new QVBoxLayout( formatPage, 0 );
+  d->formatView = new QListView( formatPage );
+  formatLayout->addWidget( d->formatView );
+  d->formatView->addColumn( "Key", 150 );
+  d->formatView->addColumn( "Value" );
   
   QFrame* sheetPage = addPage( QString("Sheet") );
   QVBoxLayout* sheetLayout = new QVBoxLayout( sheetPage, 0 );
@@ -171,6 +192,7 @@ Inspector::Inspector( Cell* cell ):
   d->depView->addColumn( "Content" );
   
   d->handleCell();
+  d->handleFormat();
   d->handleSheet();
   d->handleDep();
   
