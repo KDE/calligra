@@ -60,10 +60,10 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 
     QLabel *lbl = new QLabel( i18n( 
         "\n"
-	"If the selected data area do not match the data you want,\n"
-	"then select the data now.\n"
+	"If the selected data area does not match the data you want,\n"
+	"select the data now.\n"
 	"\n"
-	"Include cells that you want to use as row and column labels\n"
+	"Include cells that you want to use as row and column labels,\n"
 	"if you want them in the chart.\n"
 	), this);
     grid1->addWidget(lbl, 4, 0);
