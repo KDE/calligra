@@ -386,11 +386,14 @@ void TaskGeneralPanelImpl::startDateChanged()
         return;
     }
     QDate date = startDate();
-    if (date > endDate()) 
+    if (startDateTime() > endDateTime()) 
     {
         scheduleEndTime->blockSignals(true);
+        scheduleEndDate->blockSignals(true);
         setEndDate(date);
+        setEndTime(startTime());
         scheduleEndTime->blockSignals(false);
+        scheduleEndDate->blockSignals(false);
     }
     if (scheduleType->currentItem() == 6 /*FixedInterval*/)
     {
@@ -404,7 +407,7 @@ void TaskGeneralPanelImpl::startTimeChanged( const QTime &time )
     if (!scheduleStartTime->isEnabled()) {
         return;
     }
-    if (time > endTime()) 
+    if (startDateTime() > endDateTime()) 
     {
         scheduleEndTime->blockSignals(true);
         setEndTime(time);
@@ -424,11 +427,14 @@ void TaskGeneralPanelImpl::endDateChanged()
         return;
     }
     QDate date = endDate();
-    if (date < startDate()) 
+    if (endDateTime() < startDateTime()) 
     {
         scheduleStartTime->blockSignals(true);
+        scheduleStartDate->blockSignals(true);
         setStartDate(date);
+        setStartTime(endTime());
         scheduleStartTime->blockSignals(false);
+        scheduleStartDate->blockSignals(false);
     }
     
     if (scheduleType->currentItem() == 6 /*FixedInterval*/)
@@ -443,7 +449,7 @@ void TaskGeneralPanelImpl::endTimeChanged( const QTime &time )
     if (!scheduleEndTime->isEnabled()) {
         return;
     }
-    if (time < startTime()) 
+    if (endDateTime() < startDateTime()) 
     {
         scheduleStartTime->blockSignals(true);
         setStartTime(time);
