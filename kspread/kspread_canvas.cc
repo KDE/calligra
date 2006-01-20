@@ -52,6 +52,7 @@
 #include <qscrollbar.h>
 #include <qtimer.h>
 #include <qtooltip.h>
+#include <qwidgetlist.h>
 
 #include <kcursor.h>
 #include <kdebug.h>
@@ -60,6 +61,7 @@
 #include <krun.h>
 #include <kmimetype.h>
 #include <ksharedptr.h>
+#include <kwordwrap.h>
 
 #include <koOasisStore.h>
 #include <KoSpeaker.h>
@@ -5950,6 +5952,23 @@ ToolTip::ToolTip( Canvas* canvas )
 {
 }
 
+// find the label for the tip
+// this is a hack of course, because it's not available from QToolTip
+QLabel *tip_findLabel()
+{
+    QWidgetList  *list = QApplication::allWidgets();
+    QWidgetListIt it( *list );
+    QWidget * w;
+    while ( (w=it.current()) != 0 ) 
+    {
+        if(w->isA("QTipLabel"))
+            return static_cast<QLabel*>(w);
+        ++it;
+    }
+    delete list;
+    return 0;
+}
+
 void ToolTip::maybeTip( const QPoint& p )
 {
     Sheet *sheet = m_canvas->activeSheet();
@@ -6005,6 +6024,7 @@ void ToolTip::maybeTip( const QPoint& p )
     {
       tipText = cell->format()->comment( col, row );
     }
+
     // Show hyperlink, if any
     if( tipText.isEmpty() )
     {
@@ -6014,6 +6034,11 @@ void ToolTip::maybeTip( const QPoint& p )
     // Nothing to display, bail out
     if( tipText.isEmpty() )
       return;
+
+    // Cut if the tip is ridiculously long
+    unsigned maxLen = 256;
+    if(tipText.length() > maxLen )
+        tipText = tipText.left(maxLen).append("...");
 
     // Determine position and width of the current cell.
     cell = sheet->cellAt( col, row );
@@ -6035,6 +6060,9 @@ void ToolTip::maybeTip( const QPoint& p )
     }
 
     // Get the cell dimensions
+    QRect marker;
+    bool insideMarker = false;
+
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
       KoRect unzoomedMarker( dwidth - u - xpos + m_canvas->xOffset(),
@@ -6042,11 +6070,8 @@ void ToolTip::maybeTip( const QPoint& p )
                              u,
                              v );
 
-      QRect marker( m_canvas->doc()->zoomRect( unzoomedMarker ) );
-      if ( marker.contains( p ) )
-      {
-          tip( marker, tipText );
-      }
+      marker = m_canvas->doc()->zoomRect( unzoomedMarker );
+      insideMarker = marker.contains( p );
     }
     else
     {
@@ -6055,12 +6080,45 @@ void ToolTip::maybeTip( const QPoint& p )
                              u,
                              v );
 
-      QRect marker( m_canvas->doc()->zoomRect( unzoomedMarker ) );
-      if ( marker.contains( p ) )
-      {
-          tip( marker, tipText );
-      }
+      marker = m_canvas->doc()->zoomRect( unzoomedMarker );
+      insideMarker = marker.contains( p );
     }
+
+    // No use if mouse is somewhere else
+    if( !insideMarker )
+        return;
+
+    // Find the tipLabel    
+    // NOTE: if we failed, check again when the tip is shown already
+    QLabel* tipLabel = tip_findLabel();
+
+    // Ensure that it is plain text
+    // Not funny if (intentional or not) <a> appears as hyperlink
+    if( tipLabel ) 
+         tipLabel->setTextFormat( Qt::PlainText );
+
+    // Wrap the text if too long
+    if( tipText.length() > 16 )
+    {
+        QFontMetrics fm = tipLabel? tipLabel->fontMetrics() : m_canvas->fontMetrics();
+        QRect r( 0, 0, 200, -1 );
+        KWordWrap* wrap = KWordWrap::formatText( fm, r, 0, tipText );
+        tipText = wrap->wrappedString();
+        delete wrap;
+    }
+
+    // Now we shows the tip
+    tip( marker, tipText );
+
+    // Here we try to find the tip label again
+    // Reason: the previous tip_findLabel might fail if no tip has ever shown yet
+    if( !tipLabel )
+    {
+      tipLabel = tip_findLabel();
+      if( tipLabel ) 
+            tipLabel->setTextFormat( Qt::PlainText );
+    }
+
 }
 
 void Canvas::setHighlightedRanges(std::vector< KSharedPtr<HighlightRange> >* cells)
