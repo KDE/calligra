@@ -464,7 +464,7 @@ void Resource::makeAppointment(NodeSchedule *node) {
         kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
         return; 
     }
-    //TODO: units and moderated by availability, and standard non-working days
+    //TODO: units and standard non-working days
     DateTime time = node->startTime;
     DateTime end = node->endTime;
     time = availableAfter(time, end);
@@ -486,7 +486,7 @@ void Resource::makeAppointment(NodeSchedule *node) {
         QPair<DateTime, DateTime> i = cal->interval(time, end);
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
-        addAppointment(node, i.first, i.second, 100); //FIXME
+        addAppointment(node, i.first, i.second, 100); //FIXME units
         //kdDebug()<<k_funcinfo<<"Add :"<<i.first.toString()<<" to "<<i.second.toString()<<endl;
         time = i.second;
     }

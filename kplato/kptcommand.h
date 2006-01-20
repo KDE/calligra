@@ -605,6 +605,19 @@ private:
     int m_oldvalue;
 };
 
+class ModifyResourceUnitsCmd : public NamedCommand
+{
+public:
+    ModifyResourceUnitsCmd(Part *part, Resource *resource, int value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    int m_newvalue;
+    int m_oldvalue;
+};
+
 class ModifyResourceAvailableFromCmd : public NamedCommand
 {
 public:

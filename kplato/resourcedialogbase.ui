@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>573</width>
+            <width>576</width>
             <height>265</height>
         </rect>
     </property>
@@ -239,7 +239,7 @@
                         <cstring>units</cstring>
                     </property>
                     <property name="enabled">
-                        <bool>false</bool>
+                        <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
                         <enum>WheelFocus</enum>

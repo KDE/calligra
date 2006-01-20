@@ -987,6 +987,22 @@ void ModifyResourceTypeCmd::unexecute() {
     
     setCommandType(0); //FIXME
 }
+ModifyResourceUnitsCmd::ModifyResourceUnitsCmd(Part *part, Resource *resource, int value, QString name)
+    : NamedCommand(part, name),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->units();
+}
+void ModifyResourceUnitsCmd::execute() {
+    m_resource->setUnits(m_newvalue);
+    
+    setCommandType(0); //FIXME
+}
+void ModifyResourceUnitsCmd::unexecute() {
+    m_resource->setUnits(m_oldvalue);
+    
+    setCommandType(0); //FIXME
+}
 
 ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd(Part *part, Resource *resource, DateTime value, QString name)
     : NamedCommand(part, name),

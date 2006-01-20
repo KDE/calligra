@@ -209,6 +209,10 @@ KCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource, P
         if (!m) m = new KMacroCommand(n);
         m->addCommand(new ModifyResourceTypeCmd(part, original, resource.type()));
     }
+    if (resource.units() != original->units()) {
+        if (!m) m = new KMacroCommand(n);
+        m->addCommand(new ModifyResourceUnitsCmd(part, original, resource.units()));
+    }
     if (resource.availableFrom() != original->availableFrom()) {
         if (!m) m = new KMacroCommand(n);
         m->addCommand(new ModifyResourceAvailableFromCmd(part, original, resource.availableFrom()));
