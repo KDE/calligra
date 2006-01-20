@@ -1129,7 +1129,7 @@
 	<Type>Float</Type>
       </Parameter>
       <Help>
-	<Text>Function FIB calculates the Nth term of a Fibonacci sequence (1, 1, 2, 3, 5, 8, 13, 21...), in which each number, after the first two, is the sum of the two numbers immediately preceding it. @FIB(0) is defined to be 0.</Text>
+	<Text>Function FIB calculates the Nth term of a Fibonacci sequence (1, 1, 2, 3, 5, 8, 13, 21...), in which each number, after the first two, is the sum of the two numbers immediately preceding it. FIB(0) is defined to be 0.</Text>
 	<Syntax>FIB(n)</Syntax>
 	<Example>FIB(9) returns 34</Example>
 	<Example>FIB(26) returns 121393</Example>
