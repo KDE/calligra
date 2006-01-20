@@ -85,11 +85,15 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 		void slotFieldListViewSelectionChanged();
 
 	protected:
+		void updateSourceFieldWidgetsAvailability();
+
 		KexiFieldComboBox *m_sourceFieldCombo;
 		KexiObjectInfoLabel *m_objectInfoLabel;
 		KexiDataSourceComboBox* m_dataSourceCombo;
 		KexiFieldListView* m_fieldListView;
-		QLabel *m_noDataSourceAvailableLabel, *m_widgetDSLabel, *m_availableFieldsLabel;
+		QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel, 
+			*m_widgetDSLabel, *m_availableFieldsLabel,
+			*m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
 		QToolButton *m_clearWidgetDSButton, *m_clearDSButton, *m_gotoButton, *m_addField;
 		QFrame *m_dataSourceSeparator;
 		QString m_noDataSourceAvailableSingleText, m_noDataSourceAvailableMultiText;

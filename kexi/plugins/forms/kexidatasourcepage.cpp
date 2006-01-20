@@ -94,16 +94,16 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	//Form's Data Source
 	hlyr = new QHBoxLayout(vlyr);
-	QLabel *dsLabel = new QLabel(i18n("Form's data source:"), this);
-	dsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-	dsLabel->setMargin(2);
-	dsLabel->setMinimumHeight(IconSize(KIcon::Small)+4);
-	dsLabel->setAlignment(AlignLeft|AlignBottom);
-	hlyr->addWidget(dsLabel);
+	m_dataSourceLabel = new QLabel(i18n("Form's data source:"), this);
+	m_dataSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+	m_dataSourceLabel->setMargin(2);
+	m_dataSourceLabel->setMinimumHeight(IconSize(KIcon::Small)+4);
+	m_dataSourceLabel->setAlignment(AlignLeft|AlignBottom);
+	hlyr->addWidget(m_dataSourceLabel);
 
 	m_gotoButton = new QToolButton(this, "gotoButton");
 	m_gotoButton->setIconSet(SmallIconSet("goto"));
-	m_gotoButton->setMinimumHeight(dsLabel->minimumHeight());
+	m_gotoButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
 	m_gotoButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_gotoButton->setAutoRaise(true);
 	m_gotoButton->setPaletteBackgroundColor(palette().active().background());
@@ -113,7 +113,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	m_clearDSButton = new QToolButton(this, "clearDSButton");
 	m_clearDSButton->setIconSet(SmallIconSet("clear_left"));
-	m_clearDSButton->setMinimumHeight(dsLabel->minimumHeight());
+	m_clearDSButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
 	m_clearDSButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	m_clearDSButton->setAutoRaise(true);
 	m_clearDSButton->setPaletteBackgroundColor(palette().active().background());
@@ -122,7 +122,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	connect(m_clearDSButton, SIGNAL(clicked()), this, SLOT(clearDataSourceSelection()));
 	
 	m_dataSourceCombo = new KexiDataSourceComboBox(this, "dataSourceCombo");
-	dsLabel->setBuddy(m_dataSourceCombo);
+	m_dataSourceLabel->setBuddy(m_dataSourceCombo);
 	vlyr->addWidget(m_dataSourceCombo);
 
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
@@ -140,13 +140,13 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	//helper info
 //! @todo allow to hide such helpers by adding global option
 	hlyr = new QHBoxLayout(vlyr);
-	QLabel *label = new QLabel(this);
-	hlyr->addWidget(label);
-	label->setPixmap( SmallIcon("mouse_pointer") );
-	label->setFixedWidth(label->pixmap()->width());
-	label = new QLabel(i18n("Select fields from the list below and drag them onto a form or click the \"Insert\" button"), this);
-	label->setAlignment( Qt::AlignAuto | Qt::WordBreak );
-	hlyr->addWidget(label);
+	m_mousePointerLabel = new QLabel(this);
+	hlyr->addWidget(m_mousePointerLabel);
+	m_mousePointerLabel->setPixmap( SmallIcon("mouse_pointer") );
+	m_mousePointerLabel->setFixedWidth( m_mousePointerLabel->pixmap() ? m_mousePointerLabel->pixmap()->width() : 0);
+	m_availableFieldsDescriptionLabel = new QLabel(i18n("Select fields from the list below and drag them onto a form or click the \"Insert\" button"), this);
+	m_availableFieldsDescriptionLabel->setAlignment( Qt::AlignAuto | Qt::WordBreak );
+	hlyr->addWidget(m_availableFieldsDescriptionLabel);
 
 	//Available Fields
 	vlyr->addSpacing(4);
@@ -260,11 +260,12 @@ void KexiDataSourcePage::slotDataSourceTextChanged(const QString & string)
 	if (!enable) {
 		clearDataSourceSelection();
 	}
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+	updateSourceFieldWidgetsAvailability();
+/*#ifndef KEXI_NO_AUTOFIELD_WIDGET
 	m_fieldListView->setEnabled(enable);
 //	m_addField->setEnabled(enable);
 	m_availableFieldsLabel->setEnabled(enable);
-#endif
+#endif*/
 }
 
 void KexiDataSourcePage::slotDataSourceSelected()
@@ -291,6 +292,8 @@ void KexiDataSourcePage::slotDataSourceSelected()
 	if (!dataSourceFound) {
 		m_sourceFieldCombo->setTableOrQuery("", true);
 	}
+	if (m_sourceFieldCombo->hasFocus())
+		m_dataSourceCombo->setFocus();
 	m_clearDSButton->setEnabled(dataSourceFound);
 	m_gotoButton->setEnabled(dataSourceFound);
 	if (dataSourceFound) {
@@ -300,7 +303,7 @@ void KexiDataSourcePage::slotDataSourceSelected()
 		m_addField->setEnabled(false);
 #endif
 	}
-
+	updateSourceFieldWidgetsAvailability();
 	emit formDataSourceChanged(mime, name);
 }
 
@@ -373,6 +376,7 @@ void KexiDataSourcePage::assignPropertySet(KoProperty::Set* propertySet)
 			m_clearWidgetDSButton->show();
 			m_sourceFieldCombo->show();
 			m_dataSourceSeparator->hide();
+			updateSourceFieldWidgetsAvailability();
 		}
 	}
 
@@ -412,6 +416,19 @@ void KexiDataSourcePage::slotFieldListViewSelectionChanged()
 		}
 	}
 	m_addField->setEnabled(false);
+#endif
+}
+
+void KexiDataSourcePage::updateSourceFieldWidgetsAvailability()
+{
+	const bool hasDataSource = !m_dataSourceCombo->selectedName().isEmpty();
+	m_sourceFieldCombo->setEnabled( hasDataSource );
+	m_widgetDSLabel->setEnabled( hasDataSource );
+	m_fieldListView->setEnabled( hasDataSource );
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+	m_availableFieldsLabel->setEnabled( hasDataSource );
+	m_mousePointerLabel->setEnabled( hasDataSource );
+	m_availableFieldsDescriptionLabel->setEnabled( hasDataSource );
 #endif
 }
 

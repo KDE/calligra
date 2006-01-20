@@ -491,6 +491,9 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
 - add Connection::ping() or so, using http://dev.mysql.com/doc/mysql/en/mysql-ping.html
   and use it after being idle for a while (eg. call it every minute; also add an option for the delay)
 - Move ObjectStatus to kexidb. Merge with Object.
+- Support for opening .sql files: just import it on opening to in-memory database and dump it back into
+  .sql text on exisitng. Add optional compressing.
+- Add support for compressed kexi files (better keep the same .kexi extension instead of .kexiz)
 
 === KexiDB MySQL Driver TODO ===
 - use InnoDB instead of MyISAM tables because of transactions support
