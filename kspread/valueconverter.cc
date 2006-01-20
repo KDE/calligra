@@ -246,7 +246,7 @@ Value ValueConverter::asDateTime (const Value &value) const
       //no DateTime parser, so we parse as Date, hoping for the best ...
       val = parser->tryParseDate (value.asString(), &ok);
       if (!ok)
-        val.setValue (QDateTime::currentDateTime());
+        val = Value::errorVALUE();
       val.setFormat (Value::fmt_DateTime);
     break;
     case Value::Array:
@@ -256,7 +256,6 @@ Value ValueConverter::asDateTime (const Value &value) const
       /* NOTHING */
     break;
     case Value::Error:
-      val.setValue (QDateTime::currentDateTime());
     break;
   };
   
@@ -287,7 +286,7 @@ Value ValueConverter::asDate (const Value &value) const
     case Value::String:
       val = parser->tryParseDate (value.asString(), &ok);
       if (!ok)
-        val.setValue (QDate::currentDate());
+        val = Value::errorVALUE();
     break;
     case Value::Array:
       val = asDate (value.element (0, 0));
@@ -296,7 +295,6 @@ Value ValueConverter::asDate (const Value &value) const
       /* NOTHING */
     break;
     case Value::Error:
-      val.setValue (QDate::currentDate());
     break;
   };
   
@@ -327,7 +325,7 @@ Value ValueConverter::asTime (const Value &value) const
     case Value::String:
       val = parser->tryParseTime (value.asString(), &ok);
       if (!ok)
-        val.setValue (QTime::currentTime());
+        val = Value::errorVALUE();
     break;
     case Value::Array:
       val = asTime (value.element (0, 0));
@@ -336,7 +334,6 @@ Value ValueConverter::asTime (const Value &value) const
       /* NOTHING */
     break;
     case Value::Error:
-      val.setValue (QTime::currentTime());
     break;
   };
   

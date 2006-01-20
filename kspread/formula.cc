@@ -703,10 +703,11 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
            bool gotNamed = false;
            // check for named areas ...
            if (d->sheet) {
+	     QString txt = tokenText.mid(1, tokenText.length() - 2).lower();
              const QValueList<Reference> areas = d->sheet->doc()->listArea();
              QValueList<Reference>::const_iterator it;
              for (it = areas.begin(); it != areas.end(); ++it) {
-               if ((*it).ref_name.lower() == tokenText.lower()) {
+               if ((*it).ref_name.lower() == txt) {
                  // we got a named area
                  tokens.append (Token (Token::Range, tokenText, tokenStart));
                  gotNamed = true;
@@ -1222,8 +1223,8 @@ Value Formula::eval() const
       case Opcode::Neg:
         entry.reset();
         entry.val = stack.pop().val;
-        if( entry.val.isError() ) return Value::errorVALUE();
-        entry.val = calc->mul (entry.val, -1);
+        if (!entry.val.isError()) // do nothing if we got an error
+          entry.val = calc->mul (entry.val, -1);
         stack.push (entry);
         break;
 
@@ -1234,7 +1235,6 @@ Value Formula::eval() const
         val2 = stack.pop().val;
         val1 = stack.pop().val;
         val2 = calc->add( val1, val2 );
-        if( val2.isError() ) return val2;
         entry.reset();
         entry.val = val2;
         stack.push (entry);
@@ -1244,7 +1244,6 @@ Value Formula::eval() const
         val2 = stack.pop().val;
         val1 = stack.pop().val;
         val2 = calc->sub( val1, val2 );
-        if( val2.isError() ) return val2;
         entry.reset();
         entry.val = val2;
         stack.push (entry);
@@ -1254,7 +1253,6 @@ Value Formula::eval() const
         val2 = stack.pop().val;
         val1 = stack.pop().val;
         val2 = calc->mul( val1, val2 );
-        if( val2.isError() ) return val2;
         entry.reset();
         entry.val = val2;
         stack.push (entry);
@@ -1263,9 +1261,7 @@ Value Formula::eval() const
       case Opcode::Div:
         val2 = stack.pop().val;
         val1 = stack.pop().val;
-        if( val1.isZero() ) return Value::errorDIV0();
         val2 = calc->div( val1, val2 );
-        if( val2.isError() ) return val2;
         entry.reset();
         entry.val = val2;
         stack.push (entry);
@@ -1275,7 +1271,6 @@ Value Formula::eval() const
         val2 = stack.pop().val;
         val1 = stack.pop().val;
         val2 = calc->pow( val1, val2 );
-        if( val2.isError() ) return val2;
         entry.reset();
         entry.val = val2;
         stack.push (entry);
@@ -1284,10 +1279,11 @@ Value Formula::eval() const
       // string concatenation
       case Opcode::Concat:
         val1 = converter->asString (stack.pop().val);
-        if( val1.isError() ) return Value::errorVALUE();
-        val2 = converter->asString (stack.pop().val);
-        if( val2.isError() ) return Value::errorVALUE();
-        val1.setValue( val2.asString().append( val1.asString() ) );
+	val2 = converter->asString (stack.pop().val);
+        if (val1.isError() || val2.isError())
+	  val1 = Value::errorVALUE();
+	else
+          val1.setValue( val2.asString().append( val1.asString() ) );
         entry.reset();
         entry.val = val1;
         stack.push (entry);
@@ -1296,8 +1292,10 @@ Value Formula::eval() const
       // logical not
       case Opcode::Not:
         val1 = converter->asBoolean (stack.pop().val);
-        if( val1.isError() ) return Value::errorVALUE();
-        val1.setValue( !val1.asBoolean() );
+        if( val1.isError() )
+	  val1 = Value::errorVALUE();
+	else
+	  val1.setValue( !val1.asBoolean() );
         entry.reset();
         entry.val = val1;
         stack.push (entry);
@@ -1308,8 +1306,8 @@ Value Formula::eval() const
         val1 = stack.pop().val;
         val2 = stack.pop().val;
         if( !val1.allowComparison( val2 ) )
-          return Value::errorVALUE();
-        if( val2.compare( val1 ) == 0 )
+          val1 = Value::errorNA();
+	else if( val2.compare( val1 ) == 0 )
           val1 = Value (true);
         else
           val1 = Value (false);
@@ -1323,8 +1321,8 @@ Value Formula::eval() const
         val1 = stack.pop().val;
         val2 = stack.pop().val;
         if( !val1.allowComparison( val2 ) )
-          return Value::errorVALUE();
-        if( val2.compare( val1 ) < 0 )
+          val1 = Value::errorNA();
+	else if( val2.compare( val1 ) < 0 )
           val1 = Value (true);
         else
           val1 = Value (false);
@@ -1338,8 +1336,8 @@ Value Formula::eval() const
         val1 = stack.pop().val;
         val2 = stack.pop().val;
         if( !val1.allowComparison( val2 ) )
-          return Value::errorVALUE();
-        if( val2.compare( val1 ) > 0 )
+          val1 = Value::errorNA();
+	else if( val2.compare( val1 ) > 0 )
           val1 = Value (true);
         else
           val1 = Value (false);
@@ -1430,8 +1428,6 @@ Value Formula::eval() const
           return Value::errorVALUE(); // no such function
         
         ret = function->exec (args, calc, &fe);
-        if (ret.isError ())
-          return ret;    // error in the function
         entry.reset();
         entry.val = ret;
         stack.push (entry);

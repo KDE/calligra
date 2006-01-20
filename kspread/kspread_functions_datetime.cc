@@ -264,21 +264,27 @@ Value func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: YEAR
 Value func_year (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date = calc->conv()->asDate (args[0]).asDate();
+  Value v = calc->conv()->asDate (args[0]);
+  if (v.isError()) return v;
+  QDate date = v.asDate();
   return Value (date.year ());
 }
 
 // Function: MONTH
 Value func_month (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date = calc->conv()->asDate (args[0]).asDate();
+  Value v = calc->conv()->asDate (args[0]);
+  if (v.isError()) return v;
+  QDate date = v.asDate();
   return Value (date.month ());
 }
 
 // Function: DAY
 Value func_day (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date = calc->conv()->asDate (args[0]).asDate();
+  Value v = calc->conv()->asDate (args[0]);
+  if (v.isError()) return v;
+  QDate date = v.asDate();
   return Value (date.day ());
 }
 
@@ -287,7 +293,11 @@ Value func_hour (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QTime time;
   if (args.count() == 1)
-    time = calc->conv()->asTime (args[0]).asTime();
+  {
+    Value v = calc->conv()->asTime (args[0]);
+    if (v.isError()) return v;
+    time = v.asTime();
+  }
   else
     time = QTime::currentTime ();
   return Value (time.hour ());
@@ -298,7 +308,11 @@ Value func_minute (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QTime time;
   if (args.count() == 1)
-    time = calc->conv()->asTime (args[0]).asTime();
+  {
+    Value v = calc->conv()->asTime (args[0]);
+    if (v.isError()) return v;
+    time = v.asTime();
+  }
   else
     time = QTime::currentTime ();
   return Value (time.minute ());
@@ -309,7 +323,11 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QTime time;
   if (args.count() == 1)
-    time = calc->conv()->asTime (args[0]).asTime();
+  {
+    Value v = calc->conv()->asTime (args[0]);
+    if (v.isError()) return v;
+    time = v.asTime();
+  }
   else
     time = QTime::currentTime ();
   return Value (time.second ());
@@ -318,7 +336,9 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: weekday
 Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date = calc->conv()->asDate (args[0]).asDate();
+  Value v = calc->conv()->asDate (args[0]).asDate();
+  if (v.isError()) return v;
+  QDate date = v.asDate();
   int method = 1;
   if (args.count() == 2)
     method = calc->conv()->asInteger (args[1]).asInteger();
