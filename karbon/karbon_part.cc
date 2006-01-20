@@ -610,6 +610,7 @@ KarbonPart::initConfig()
 		m_maxRecentFiles = config->readNumEntry( "NbRecentFile", 10 );
 		setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
 		setBackupFile( config->readNumEntry( "BackupFile", true ) );
+		m_doc.saveAsPath( config->readBoolEntry( "SaveAsPath", true ) );
 	}
 	int undos = 30;
 	if( config->hasGroup( "Misc" ) )
