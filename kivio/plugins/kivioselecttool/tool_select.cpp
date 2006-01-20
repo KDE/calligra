@@ -622,22 +622,28 @@ void SelectTool::continueCustomDragging(const QPoint &pos)
   data.scale = view()->zoomHandler()->zoomedResolutionY();
 
 
-  // Undraw the old stencils
-  if(!m_firstTime) {
-    canvas->drawStencilXOR(m_pCustomDraggingStencil);
-  } else {
-    m_pCustomDraggingStencil->setHidden(true);
-    canvas->repaint();
-    m_firstTime = false;
+  if(m_pCustomDraggingStencil->type() != kstConnector){
+    // Undraw the old stencils
+    if(!m_firstTime) {
+      canvas->drawStencilXOR(m_pCustomDraggingStencil);
+    } else {
+      m_pCustomDraggingStencil->setHidden(true);
+      canvas->repaint();
+      m_firstTime = false;
+    }
   }
-
 
   // Custom dragging can only occur on one stencil
   if( m_pCustomDraggingStencil )
     m_pCustomDraggingStencil->customDrag( &data );
 
   // Draw the stencils
-  canvas->drawStencilXOR(m_pCustomDraggingStencil);
+  if(m_pCustomDraggingStencil->type() != kstConnector){
+    canvas->drawStencilXOR(m_pCustomDraggingStencil);
+  } else {
+    view()->canvasWidget()->repaint();
+  }
+
   view()->updateToolBars();
 }
 
@@ -1057,7 +1063,6 @@ void SelectTool::endCustomDragging(const QPoint&)
       m_pCustomDraggingStencil->customIDPoint(m_customDragID));
   view()->doc()->addCommand(cmd);
   m_customDragID = 0;
-  canvas->drawStencilXOR(m_pCustomDraggingStencil);
   KivioStencil *pStencil = canvas->activePage()->selectedStencils()->first();
 
   while( pStencil )
