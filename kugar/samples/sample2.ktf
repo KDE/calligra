@@ -2,239 +2,239 @@
 
 <!DOCTYPE KugarTemplate SYSTEM "kugartemplate.dtd">
 
-<KugarTemplate PageSize="2" PageOrientation="1" TopMargin="40" BottomMargin="40" LeftMargin="48" RightMargin="48">
-	<ReportHeader Height="70" PrintFrequency="0">
-		<Label Text="Networks R Us" X="0"
-		   Y="0" Width="255" Height="31"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="0" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="24" FontWeight="75"
-		   FontItalic="1" HAlignment="0" VAlignment="2"
-		   WordWrap="0" />
-		<Label Text="(Western Region)" X="435"
-		   Y="0" Width="255" Height="31"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="0" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="14" FontWeight="50"
-		   FontItalic="0" HAlignment="2" VAlignment="2"
-		   WordWrap="0" />
-		<Label Text="  Ethernet Products Inventory" X="0"
-		   Y="39" Width="690" Height="30"
-		   BackgroundColor="224,224,224" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="1" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="12" FontWeight="75"
-		   FontItalic="0" HAlignment="0" VAlignment="1"
-		   WordWrap="0" />
+<KugarTemplate PageOrientation="1" TopMargin="40" RightMargin="48" BottomMargin="40" LeftMargin="48" PageSize="2" PageWidth="1100" PageHeight="850">
+	<ReportHeader PrintFrequency="0" Height="70">
+		<Label VAlignment="2" HAlignment="0"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="0" Y="0" ForegroundColor="0,0,0"
+		   Text="Networks R Us" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="75" Height="31"
+		   Width="255" BackgroundColor="255,255,255" FontItalic="1"
+		   BorderWidth="0" DrawRight="false" DrawBottom="false"
+		   FontSize="24" />
+		<Label VAlignment="2" HAlignment="2"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="435" Y="0" ForegroundColor="0,0,0"
+		   Text="(Western Region)" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="50" Height="31"
+		   Width="255" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="0" DrawRight="false" DrawBottom="false"
+		   FontSize="14" />
+		<Label VAlignment="1" HAlignment="0"
+		   BorderStyle="1" WordWrap="0" DrawLeft="false"
+		   X="0" Y="39" ForegroundColor="0,0,0"
+		   Text="  Ethernet Products Inventory" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="75" Height="30"
+		   Width="690" BackgroundColor="224,224,224" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="12" />
 	</ReportHeader>
 
-	<PageHeader Height="32" PrintFrequency="1">
-		<Line X1="0" Y1="26"
-		   X2="263" Y2="26" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="0" Y1="28"
-		   X2="263" Y2="28" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="267" Y1="26"
-		   X2="339" Y2="26" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="267" Y1="28"
-		   X2="339" Y2="28" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="344" Y1="26"
-		   X2="388" Y2="26" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="344" Y1="28"
-		   X2="388" Y2="28" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="393" Y1="26"
-		   X2="462" Y2="26" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="393" Y1="28"
-		   X2="462" Y2="28" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="467" Y1="26"
-		   X2="536" Y2="26" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="467" Y1="28"
-		   X2="536" Y2="28" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="541" Y1="26"
-		   X2="610" Y2="26" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="541" Y1="28"
-		   X2="610" Y2="28" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="615" Y1="26"
-		   X2="690" Y2="26" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Line X1="615" Y1="28"
-		   X2="690" Y2="28" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Label Text="Product Description" X="0"
-		   Y="5" Width="268" Height="20"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="12" FontWeight="50"
-		   FontItalic="0" HAlignment="0" VAlignment="2"
-		   WordWrap="0" />
-		<Label Text="Catalog #" X="267"
-		   Y="5" Width="78" Height="20"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="12" FontWeight="50"
-		   FontItalic="0" HAlignment="0" VAlignment="2"
-		   WordWrap="0" />
-		<Label Text="Sale" X="344"
-		   Y="5" Width="50" Height="20"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="12" FontWeight="50"
-		   FontItalic="0" HAlignment="1" VAlignment="2"
-		   WordWrap="0" />
-		<Label Text="Price" X="393"
-		   Y="5" Width="75" Height="20"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="12" FontWeight="50"
-		   FontItalic="0" HAlignment="1" VAlignment="2"
-		   WordWrap="0" />
-		<Label Text="Quantity" X="467"
-		   Y="5" Width="75" Height="20"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="12" FontWeight="50"
-		   FontItalic="0" HAlignment="1" VAlignment="2"
-		   WordWrap="0" />
-		<Label Text="Reorder" X="541"
-		   Y="5" Width="75" Height="20"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="12" FontWeight="50"
-		   FontItalic="0" HAlignment="1" VAlignment="2"
-		   WordWrap="0" />
-		<Label Text="Last Order" X="615"
-		   Y="5" Width="75" Height="20"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="12" FontWeight="50"
-		   FontItalic="0" HAlignment="1" VAlignment="2"
-		   WordWrap="0" />
+	<PageHeader PrintFrequency="1" Height="32">
+		<Line Color="0,0,0" Style="1"
+		   X1="0" X2="263" Y1="26"
+		   Y2="26" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="0" X2="263" Y1="28"
+		   Y2="28" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="267" X2="339" Y1="26"
+		   Y2="26" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="267" X2="339" Y1="28"
+		   Y2="28" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="344" X2="388" Y1="26"
+		   Y2="26" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="344" X2="388" Y1="28"
+		   Y2="28" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="393" X2="462" Y1="26"
+		   Y2="26" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="393" X2="462" Y1="28"
+		   Y2="28" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="467" X2="536" Y1="26"
+		   Y2="26" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="467" X2="536" Y1="28"
+		   Y2="28" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="541" X2="610" Y1="26"
+		   Y2="26" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="541" X2="610" Y1="28"
+		   Y2="28" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="615" X2="690" Y1="26"
+		   Y2="26" Width="1" />
+		<Line Color="0,0,0" Style="1"
+		   X1="615" X2="690" Y1="28"
+		   Y2="28" Width="1" />
+		<Label VAlignment="2" HAlignment="0"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="0" Y="5" ForegroundColor="0,0,0"
+		   Text="Product Description" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="50" Height="20"
+		   Width="268" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="12" />
+		<Label VAlignment="2" HAlignment="0"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="267" Y="5" ForegroundColor="0,0,0"
+		   Text="Catalog #" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="50" Height="20"
+		   Width="78" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="12" />
+		<Label VAlignment="2" HAlignment="1"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="344" Y="5" ForegroundColor="0,0,0"
+		   Text="Sale" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="50" Height="20"
+		   Width="50" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="12" />
+		<Label VAlignment="2" HAlignment="1"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="393" Y="5" ForegroundColor="0,0,0"
+		   Text="Price" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="50" Height="20"
+		   Width="75" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="12" />
+		<Label VAlignment="2" HAlignment="1"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="467" Y="5" ForegroundColor="0,0,0"
+		   Text="Quantity" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="50" Height="20"
+		   Width="75" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="12" />
+		<Label VAlignment="2" HAlignment="1"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="541" Y="5" ForegroundColor="0,0,0"
+		   Text="Reorder" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="50" Height="20"
+		   Width="75" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="12" />
+		<Label VAlignment="2" HAlignment="1"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="615" Y="5" ForegroundColor="0,0,0"
+		   Text="Last Order" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="50" Height="20"
+		   Width="75" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="12" />
 	</PageHeader>
 
-	<Detail Height="14" Level="0">
-		<Field Text="" X="0"
-		   Y="0" Width="268" Height="14"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="0" VAlignment="1"
-		   WordWrap="0" Field="prddesc" DataType="0"
-		   DateFormat="0" Precision="0" Currency="36"
-		   NegValueColor="255,0,0" CommaSeparator="0" />
-		<Field Text="" X="267"
-		   Y="0" Width="78" Height="14"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="0" VAlignment="1"
-		   WordWrap="0" Field="prdnumber" DataType="0"
-		   DateFormat="0" Precision="0" Currency="36"
-		   NegValueColor="255,0,0" CommaSeparator="0" />
-		<Field Text="" X="344"
-		   Y="0" Width="50" Height="14"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="1" VAlignment="1"
-		   WordWrap="0" Field="onsale" DataType="0"
-		   DateFormat="0" Precision="0" Currency="36"
-		   NegValueColor="255,0,0" CommaSeparator="0" />
-		<Field Text="" X="393"
-		   Y="0" Width="65" Height="14"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="2" VAlignment="1"
-		   WordWrap="0" Field="price" DataType="4"
-		   DateFormat="0" Precision="0" Currency="36"
-		   NegValueColor="255,0,0" CommaSeparator="1" />
-		<Field Text="" X="467"
-		   Y="0" Width="65" Height="14"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="2" VAlignment="1"
-		   WordWrap="0" Field="onhand" DataType="1"
-		   DateFormat="0" Precision="0" Currency="36"
-		   NegValueColor="255,0,0" CommaSeparator="1" />
-		<Field Text="" X="541"
-		   Y="0" Width="65" Height="14"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="2" VAlignment="1"
-		   WordWrap="0" Field="reorder" DataType="1"
-		   DateFormat="0" Precision="0" Currency="36"
-		   NegValueColor="255,0,0" CommaSeparator="1" />
-		<Field Text="" X="615"
-		   Y="0" Width="65" Height="14"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="2" VAlignment="1"
-		   WordWrap="0" Field="lastorder" DataType="3"
-		   DateFormat="0" Precision="0" Currency="36"
-		   NegValueColor="255,0,0" CommaSeparator="0" />
+	<Detail Level="0" Height="14" Repeat="false">
+		<Field VAlignment="1" HAlignment="0"
+		   CommaSeparator="48" BorderStyle="0" WordWrap="0"
+		   DrawLeft="false" Field="prddesc" X="0"
+		   Y="0" ForegroundColor="0,0,0" NegValueColor="255,0,0"
+		   Text="" DataType="0" BorderColor="0,0,0"
+		   DateFormat="0" FontFamily="Helvetica" DrawTop="false"
+		   FontWeight="25" InputMask="" Precision="0"
+		   Height="14" Width="268" BackgroundColor="255,255,255"
+		   Currency="51" FontItalic="0" BorderWidth="1"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
+		<Field VAlignment="1" HAlignment="0"
+		   CommaSeparator="48" BorderStyle="0" WordWrap="0"
+		   DrawLeft="false" Field="prdnumber" X="267"
+		   Y="0" ForegroundColor="0,0,0" NegValueColor="255,0,0"
+		   Text="" DataType="0" BorderColor="0,0,0"
+		   DateFormat="0" FontFamily="Helvetica" DrawTop="false"
+		   FontWeight="25" InputMask="" Precision="0"
+		   Height="14" Width="78" BackgroundColor="255,255,255"
+		   Currency="51" FontItalic="0" BorderWidth="1"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
+		<Field VAlignment="1" HAlignment="1"
+		   CommaSeparator="48" BorderStyle="0" WordWrap="0"
+		   DrawLeft="false" Field="onsale" X="344"
+		   Y="0" ForegroundColor="0,0,0" NegValueColor="255,0,0"
+		   Text="" DataType="0" BorderColor="0,0,0"
+		   DateFormat="0" FontFamily="Helvetica" DrawTop="false"
+		   FontWeight="25" InputMask="" Precision="0"
+		   Height="14" Width="50" BackgroundColor="255,255,255"
+		   Currency="51" FontItalic="0" BorderWidth="1"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
+		<Field VAlignment="1" HAlignment="2"
+		   CommaSeparator="49" BorderStyle="0" WordWrap="0"
+		   DrawLeft="false" Field="price" X="393"
+		   Y="0" ForegroundColor="0,0,0" NegValueColor="255,0,0"
+		   Text="" DataType="4" BorderColor="0,0,0"
+		   DateFormat="0" FontFamily="Helvetica" DrawTop="false"
+		   FontWeight="25" InputMask="" Precision="0"
+		   Height="14" Width="65" BackgroundColor="255,255,255"
+		   Currency="51" FontItalic="0" BorderWidth="1"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
+		<Field VAlignment="1" HAlignment="2"
+		   CommaSeparator="49" BorderStyle="0" WordWrap="0"
+		   DrawLeft="false" Field="onhand" X="467"
+		   Y="0" ForegroundColor="0,0,0" NegValueColor="255,0,0"
+		   Text="" DataType="1" BorderColor="0,0,0"
+		   DateFormat="0" FontFamily="Helvetica" DrawTop="false"
+		   FontWeight="25" InputMask="" Precision="0"
+		   Height="14" Width="65" BackgroundColor="255,255,255"
+		   Currency="51" FontItalic="0" BorderWidth="1"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
+		<Field VAlignment="1" HAlignment="2"
+		   CommaSeparator="49" BorderStyle="0" WordWrap="0"
+		   DrawLeft="false" Field="reorder" X="541"
+		   Y="0" ForegroundColor="0,0,0" NegValueColor="255,0,0"
+		   Text="" DataType="1" BorderColor="0,0,0"
+		   DateFormat="0" FontFamily="Helvetica" DrawTop="false"
+		   FontWeight="25" InputMask="" Precision="0"
+		   Height="14" Width="65" BackgroundColor="255,255,255"
+		   Currency="51" FontItalic="0" BorderWidth="1"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
+		<Field VAlignment="1" HAlignment="2"
+		   CommaSeparator="48" BorderStyle="0" WordWrap="0"
+		   DrawLeft="false" Field="lastorder" X="615"
+		   Y="0" ForegroundColor="0,0,0" NegValueColor="255,0,0"
+		   Text="" DataType="3" BorderColor="0,0,0"
+		   DateFormat="0" FontFamily="Helvetica" DrawTop="false"
+		   FontWeight="25" InputMask="" Precision="0"
+		   Height="14" Width="65" BackgroundColor="255,255,255"
+		   Currency="51" FontItalic="0" BorderWidth="1"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
 	</Detail>
 
-	<PageFooter Height="32" PrintFrequency="1">
-		<Line X1="0" Y1="0"
-		   X2="690" Y2="0" Color="0,0,0"
-		   Width="1" Style="1" />
-		<Label Text="Page:" X="640"
-		   Y="2" Width="30" Height="30"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="2" VAlignment="1"
-		   WordWrap="0" />
-		<Special Text="[Date]" X="0"
-		   Y="2" Width="90" Height="30"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="0" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="0" VAlignment="1"
-		   WordWrap="0" Type="0" DateFormat="2" />
-		<Special Text="[PageNo]" X="670"
-		   Y="2" Width="20" Height="30"
-		   BackgroundColor="255,255,255" ForegroundColor="0,0,0" BorderColor="0,0,0"
-		   BorderWidth="1" BorderStyle="0" DrawTop="false"
-		   DrawBottom="false" DrawLeft="false" DrawRight="false"
-		   FontFamily="Helvetica" FontSize="10" FontWeight="25"
-		   FontItalic="0" HAlignment="1" VAlignment="1"
-		   WordWrap="0" Type="1" DateFormat="0" />
+	<PageFooter PrintFrequency="1" Height="32">
+		<Line Color="0,0,0" Style="1"
+		   X1="0" X2="690" Y1="0"
+		   Y2="0" Width="1" />
+		<Label VAlignment="1" HAlignment="2"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="640" Y="2" ForegroundColor="0,0,0"
+		   Text="Page:" BorderColor="0,0,0" FontFamily="Helvetica"
+		   DrawTop="false" FontWeight="25" Height="30"
+		   Width="30" BackgroundColor="255,255,255" FontItalic="0"
+		   BorderWidth="1" DrawRight="false" DrawBottom="false"
+		   FontSize="10" />
+		<Special VAlignment="1" HAlignment="0"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="0" Y="2" ForegroundColor="0,0,0"
+		   Text="[Date]" BorderColor="0,0,0" DateFormat="2"
+		   FontFamily="Helvetica" DrawTop="false" FontWeight="25"
+		   Height="30" Type="0" Width="90"
+		   BackgroundColor="255,255,255" FontItalic="0" BorderWidth="0"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
+		<Special VAlignment="1" HAlignment="1"
+		   BorderStyle="0" WordWrap="0" DrawLeft="false"
+		   X="670" Y="2" ForegroundColor="0,0,0"
+		   Text="[PageNo]" BorderColor="0,0,0" DateFormat="0"
+		   FontFamily="Helvetica" DrawTop="false" FontWeight="25"
+		   Height="30" Type="1" Width="20"
+		   BackgroundColor="255,255,255" FontItalic="0" BorderWidth="1"
+		   DrawRight="false" DrawBottom="false" FontSize="10" />
 	</PageFooter>
 
-	<ReportFooter Height="0" PrintFrequency="2">
+	<ReportFooter PrintFrequency="2" Height="0">
 	</ReportFooter>
 
 </KugarTemplate>

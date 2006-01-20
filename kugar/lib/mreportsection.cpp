@@ -185,7 +185,6 @@ void MReportSection::setCalcFieldData( QPtrList<QMemArray<double> >* values )
     MCalcObject * field;
     int i = 0;
 
-    qWarning( "here" );
     // Calculate and set the calculated field's data
     for ( field = calculatedFields.first(); field != 0; field = calculatedFields.next() )
     {

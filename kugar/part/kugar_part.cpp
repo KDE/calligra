@@ -30,9 +30,10 @@
 
 #include <koFilterManager.h>
 
-KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName, QObject* parent ,
-                      const char* name , bool singleViewMode ) : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
-        m_templateOk( false )
+KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName, 
+                      QObject* parent, const char* name, bool singleViewMode ) 
+    : KoDocument( parentWidget, widgetName, parent, name, singleViewMode ),
+    m_templateOk( false )
 {
     setInstance( KugarFactory::global(), false );
     m_reportEngine = new Kugar::MReportEngine();
@@ -46,7 +47,8 @@ KugarPart::~KugarPart()
     //  closeURL();
 }
 
-bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
+bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&, 
+                           const QDomDocument&, KoStore* )
 {
     return false;
 }
@@ -63,10 +65,7 @@ bool KugarPart::loadXML( QIODevice *file, const QDomDocument & doc )
     if ( file )
     {
         file->reset();
-        //      m_reportData=QString(file->readAll());
-        //direct database access
-        Kugar::MDatabaseReportEngine* rptdata = new Kugar::MDatabaseReportEngine();
-        m_reportData = rptdata->mergeReportDataFile( file );
+        m_reportData=QString(file->readAll());
 
         if ( m_reportData.length() != 0 )
         {
@@ -113,7 +112,8 @@ bool KugarPart::initDoc( InitDocFlags flags, QWidget* parentWidget )
     QString filename;
     bool ok = false;
 
-    KFileDialog *dialog = new KFileDialog( QString::null, QString::null, 0L, "file dialog", true );
+    KFileDialog *dialog = 
+        new KFileDialog( QString::null, QString::null, 0L, "file dialog", true );
     dialog->setMimeFilter( KoFilterManager::mimeFilter( KoDocument::readNativeFormatMimeType(),
                            KoFilterManager::Import ) );
     if ( dialog->exec() != QDialog::Accepted )
@@ -149,8 +149,6 @@ KoView* KugarPart::createViewInstance( QWidget* parent, const char* name )
 
 void KugarPart::slotPreferredTemplate( const QString &tpl )
 {
-/*    kdDebug() << "slotPreferredTemplate called !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! tpl = " << tpl.latin1() << endl;*/
-    //        KURL url(m_forcedUserTemplate.isEmpty()?tpl:m_forcedUserTemplate);
     KURL url( tpl );
     QString localtpl;
     bool isTemp = false;

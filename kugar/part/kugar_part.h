@@ -6,12 +6,10 @@
 #ifndef _KUGAR_PART_H
 #define _KUGAR_PART_H
 
-
 #include <koDocument.h>
 
 #include "mpagecollection.h"
 #include "mreportengine.h"
-#include "mdatabasereportengine.h"
 
 class KInstance;
 class KugarBrowserExtension;
@@ -21,20 +19,23 @@ class KugarPart: public KoDocument
     Q_OBJECT
 
 public:
-    KugarPart( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
+    KugarPart( QWidget *parentWidget = 0, const char *widgetName = 0, 
+               QObject* parent = 0,
                const char* name = 0, bool singleViewMode = false );
     virtual ~KugarPart();
 
     virtual bool initDoc( InitDocFlags flags, QWidget* parentWidget = 0 );
 
-    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
+    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, 
+                            const QDomDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
 
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     //  virtual QDomDocument saveXML();
 
     virtual void paintContent( QPainter& painter, const QRect& rect,
-                               bool transparent = FALSE, double zoomX = 1.0, double zoomY = 1.0 )
+                               bool transparent = FALSE, 
+                               double zoomX = 1.0, double zoomY = 1.0 )
     {
         ;
     }
@@ -43,11 +44,7 @@ public:
     {
         return m_reportEngine;
     }
-private:
-    QString m_reportData;
-    Kugar::MReportEngine *m_reportEngine;
-    bool m_templateOk;
-    KURL m_docURL;
+
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
@@ -60,6 +57,11 @@ public slots:
 private slots:
     void slotPreferredTemplate( const QString & );
 
+private:
+    QString m_reportData;
+    Kugar::MReportEngine *m_reportEngine;
+    bool m_templateOk;
+    KURL m_docURL;
 };
 
 
