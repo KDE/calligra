@@ -2,9 +2,15 @@ include( ../common.pro )
 
 INCLUDEPATH += $(MYSQL_INC) $(MYSQL_INC)/mysql
 
-win32:LIBS += $(MYSQL_LIB)/mysqlclient.lib
+contains(CONFIG,debug) {
+	win32:LIBS += $(MYSQL_LIB)/debug/libmysql.lib
+	win32:QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMTD.LIB
+}
+!contains(CONFIG,debug) {
+	win32:LIBS += $(MYSQL_LIB)/opt/mysqlclient.lib
+}
 
-TARGET		= kexidb_mysqldriver$$KDELIBDEBUG
+TARGET = kexidb_mysqldriver$$KDELIBDEBUG
 
 system( bash kmoc )
 
