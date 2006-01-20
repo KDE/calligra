@@ -161,6 +161,7 @@ void WBSDefinitionPanel::slotLevelChanged(int value) {
         }
     }
     addBtn->setEnabled(levelsGroup->isChecked());
+    slotChanged();
 }
 void WBSDefinitionPanel::slotLevelsGroupToggled(bool on) {
     slotLevelChanged(level->value());
