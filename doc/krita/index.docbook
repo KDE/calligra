@@ -38,6 +38,13 @@
 </author>
 <author>
 <personname>
+<firstname>Casper</firstname>
+<surname>Boemann</surname>
+</personname>
+<email>cbr@boemann.dk</email>
+</author>
+<author>
+<personname>
 <firstname>Sander</firstname>
 <surname>Koning</surname>
 </personname>
@@ -47,7 +54,7 @@
 </authorgroup>
 
 <copyright>
-<year>2005</year>
+<year>2005-2006</year>
 <holder>Boudewijn Rempt</holder>
 <holder>Casper Boemann</holder>
 <holder>Sander Koning</holder>
@@ -57,7 +64,7 @@
 
 <!-- Date and version information of the documentation -->
 
-<date>2005-12-10</date>
+<date>2006-01-20</date>
 <releaseinfo>1.4.88</releaseinfo>
 
 <!-- Abstract about this handbook -->
@@ -87,6 +94,7 @@ continually working on extending &krita; and making it better in every respect.
 &tutorial;
 &using;
 &commands;
+<!-- &settings; -->
 <!-- &developers; -->
 &faq;
 &credits;

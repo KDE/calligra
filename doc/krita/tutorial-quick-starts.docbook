@@ -1,7 +1,7 @@
 <sect1 id="tutorial-quick-starts">
 <title>Quick Starts for Dummies</title>
 <sect2 id="crop-image">
-<title><guilabel>Crop an image and save as New</guilabel></title>
+<title>Crop an image and save as New</title>
 
 <para>Aim: from a picture, crop an area and save that area in a new file</para>
 
@@ -73,7 +73,7 @@
 
 </sect2>
 <sect2 id="draw-rectangle">
-<title><guilabel>Draw a rectangle on your picture</guilabel></title>
+<title>Draw a rectangle on your picture</title>
 
 <para>Aim: draw a coloured rectangle on your picture</para>
 
@@ -89,8 +89,8 @@
 </mediaobject>
 </screenshot>
 
-<para>Enable the <guilabel>Brushes and stuff toolbar</guilabel> using <guimenu>Settings</guimenu><guimenuitem>Toolbars</guimenuitem> menu.</para>
-<para>Also make sure the palettes are viewed. If not, use the <guimenu>View</guimenu><guimenuitem>Palettes</guimenuitem><guimenuitem>View palettes</guimenuitem> menu.</para>
+<para>Enable the <guilabel>Brushes and Stuff</guilabel> toolbar using <guimenu>Settings</guimenu><guimenuitem>Toolbars</guimenuitem> menu.</para>
+<para>Also make sure the palettes are viewed. If not, use the <guimenu>View</guimenu><guimenuitem>Palettes</guimenuitem> menu.</para>
 
 <screenshot>
 <screeninfo>&krita; view</screeninfo>
@@ -102,7 +102,7 @@
 </mediaobject>
 </screenshot>
 
-<para>Click on the <guiicon>Brush shapes icon</guiicon> in the <guilabel>Brushes and stuff toolbar</guilabel>.</para>
+<para>Click on the <guiicon>Brush Shapes</guiicon> icon in the <guilabel>Brushes and Stuff</guilabel> toolbar.</para>
 
 <screenshot>
 <screeninfo>The Brush shapes icon</screeninfo>

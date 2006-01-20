@@ -1,5 +1,5 @@
 <sect1 id="tutorial-starting">
-<title>Starting to Know Krita</title>
+<title>Starting to know Krita</title>
 
 <para>
 So, let's show off. You can start &krita; either on its own or from the
@@ -38,7 +38,7 @@ is a very flexible application and can handle many different types of images:
 <acronym>CMYK</acronym> images for printers, <acronym>RGB</acronym> images for
 the web, <acronym>RGB</acronym> images with high channel depths for
 photographers, watercolor images for painters &mdash; and more. For now, choose
-<guilabel>Empty</guilabel> and click <guibutton>OK</guibutton>. That will allow
+<guilabel>Custom Document</guilabel>. That will allow
 us to see the New Image dialog box:
 </para>
 
@@ -71,16 +71,16 @@ that this actually works out. For now, just think pixels, not inches.
 <para>
 The next group of options is a lot more interesting than resolution: &krita;
 is an enormously flexible application and you can work with many kinds of
-images. For this tutorial, just select <guilabel>RGB/Alpha (8
+images. For this tutorial, just select <guilabel>RGB (8
 bits/channel)</guilabel>. You can also select a profile. For now, we leave this
-at the default setting of <guilabel>None</guilabel>.
+at the default setting of <guilabel>sRGB built-in - (lcms internal)</guilabel>.
 </para>
 
 <para>
 In the third option group, you can select the initial canvas color and the
 amount of opacity/transparency of this color. Furthermore you can
 add a description of the contents. We leave these options at their default
-settings as well, so click <guibutton>OK</guibutton> to actually create the new
+settings as well, so click <guibutton>Create</guibutton> to actually create the new
 image.
 </para>
 

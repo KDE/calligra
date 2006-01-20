@@ -30,9 +30,9 @@ current tool.</para>
 </mediaobject>
 </screenshot>
 </para>
-<para>This tab offers you two settings. In the <guilabel>Zoom</guilabel>
+<para>This tab offers you two settings. In the <guilabel>Zoom:</guilabel>
 slider and textbox, you can set the zoom level for the document. The
-<guilabel>Exposure</guilabel> slider and textbox can be used to choose the
+<guilabel>Exposure:</guilabel> slider and textbox can be used to choose the
 exposure level for OpenEXR images.</para>
 </sect3>
 
@@ -84,11 +84,11 @@ Zoom have no options, the others are discussed below.</para>
 </para>
 <para>There are two options available on this tab.
 </para><para>
-The <guilabel>Opacity</guilabel> slider and spin box are used to set the 
+The <guilabel>Opacity:</guilabel> slider and spin box are used to set the 
 opacity when drawing (opacity is the opposite of transparency, i.e. 100%
 opaque is 0% transparent, and vice versa).
 </para><para>
-In the <guilabel>Mode</guilabel> drop down box, you can choose a drawing
+In the <guilabel>Mode:</guilabel> drop down box, you can choose a drawing
 mode. This changes the actual effect that drawing has on the image (normal
 painting, only changing the color, etcetera).</para>
 </sect4>
@@ -190,10 +190,10 @@ available here.</para>
 linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
 available here, as well as two options specific to this tool.
 </para><para>
-The <guilabel>Vertices</guilabel> drop down box is used to set the amount
+The <guilabel>Vertices:</guilabel> drop down box is used to set the amount
 of vertices (points) in the star.
 </para><para>
-The <guilabel>Ratio</guilabel> setting defines the shape of the
+The <guilabel>Ratio:</guilabel> setting defines the shape of the
 star. A ratio of 0% will create a star with no inner area (when drawing the
 star, the two lines that make up a star point, overlap). Increasing the ratio
 will slowly make the star more outlined (the two lines are <quote>pulled
@@ -224,10 +224,10 @@ are available here.</para>
 </mediaobject>
 </screenshot>
 </para>
-<para>The <guilabel>Move X</guilabel> and <guilabel>Move Y</guilabel>
+<para>The <guilabel>Move X:</guilabel> and <guilabel>Move Y:</guilabel>
 spin boxes show, and can be used to set, the displacement of the layer or
-selection. The same applies to <guilabel>Scale X</guilabel> and <guilabel>Scale
-Y</guilabel> for the scaling of the current layer or selection. Finally, 
+selection. The same applies to <guilabel>Scale X:</guilabel> and <guilabel>Scale
+Y:</guilabel> for the scaling of the current layer or selection. Finally, 
 you can decide upon a transformation algorithm in the
 <guilabel>Filter</guilabel> drop down box.</para>
 </sect4>
@@ -249,8 +249,8 @@ you can decide upon a transformation algorithm in the
 </screenshot>
 </para>
 <para>Set the corner coordinates of the area that should remain with the
-four spin boxes <guilabel>Start X</guilabel>, <guilabel>Start Y</guilabel>,
-<guilabel>End X</guilabel> and <guilabel>End Y</guilabel>. The drop down
+four spin boxes <guilabel>Start X:</guilabel>, <guilabel>Start Y:</guilabel>,
+<guilabel>End X:</guilabel> and <guilabel>End Y:</guilabel>. The drop down
 box can be used to select whether the entire image or only the current layer
 should be cropped. Clicking the <guibutton>Crop</guibutton> button has
 the same effect as double-clicking outside the area in the image.</para>
@@ -276,7 +276,7 @@ the same effect as double-clicking outside the area in the image.</para>
 linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
 are available here, as are a couple of other options.
 </para><para>
-The setting in the <guilabel>Threshold</guilabel> slider and spin box
+The setting in the <guilabel>Threshold:</guilabel> slider and spin box
 determines how near to the color of the point the fill starts from, the color of
 a point should be for the fill to spread out over that point. A higher threshold
 will also fill areas that have less similar colors, a lower threshold limits
@@ -314,21 +314,22 @@ entire selection will be filled instead of only the neighboring area.
 linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
 are available here, as are a couple of other options.
 </para><para>
-The <guilabel>Shape</guilabel> drop down box can be used to select the gradient
-type: linear, radial, conical, etcetera.
+The <guilabel>Shape:</guilabel> drop down box can be used to select the gradient
+type: <guilabel>Linear</guilabel>, <guilabel>Bi-Linear</guilabel>, <guilabel>Radial</guilabel>, 
+<guilabel>Square</guilabel>, <guilabel>Conical</guilabel> and <guilabel>Conical Symmetric</guilabel>.
 </para><para>
-The <guilabel>Repeat</guilabel> option determines whether the gradient is
-repeated if it does not fill the entire image. With None, the colors on the
-ends of the gradient are used to fill the remaining space. With Forwards, the
+The <guilabel>Repeat:</guilabel> option determines whether the gradient is
+repeated if it does not fill the entire image. With <guilabel>None</guilabel>, the colors on the
+ends of the gradient are used to fill the remaining space. With <guilabel>Forwards</guilabel>, the
 gradient is normally repeated (connecting the back end of one occurrence with
-the front end of the next). With Alternating, the gradient is repeated with
+the front end of the next). With <guilabel>Alternating</guilabel>, the gradient is repeated with
 every second occurrence being drawn from back to front (linking front to front
 and back to back).
 </para><para>
 Check the <guilabel>Reverse</guilabel> checkbox to have the gradient drawn
 reversed (from back to front).
 </para><para>
-The final setting is <guilabel>Anti-alias treshold</guilabel>.
+The final setting is <guilabel>Anti-alias treshold:</guilabel>.
 <!-- TODO elaborate  -->
 </para>
 </sect4>
@@ -376,7 +377,7 @@ which shows the font that will be used for the text. Click the
 <para>The first option is a dropdown box in which you can choose which
 layer to pick the color from. If you choose a specific layer,
 the color of the point in that layer will be retrieved. With <guilabel>Sample
-all visible layers</guilabel>, the topmost visible layer which is not
+All Visible Layers</guilabel>, the topmost visible layer which is not
 transparent at that point is used.
 </para><para>
 If the <guilabel>Update current color</guilabel> checkbox is checked, then the
@@ -407,12 +408,12 @@ range of color values displayed from the <quote>normal</quote> range (e.g. 0 to
 </para>
 <para>The Paint selection, Erase selection, Select rectangular, Select
 elliptical, Select polygonal and Select outline tools have one option:
-the <guilabel>Action</guilabel> to perform. You can choose between adding to, or
-subtracting from the selection.</para>
+the <guilabel>Action:</guilabel> to perform. You can choose between <guilabel>Add</guilabel> to, or
+<guilabel>Subtract</guilabel> from the selection.</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-selectcontiguous">
-<title><guilabel>Select contiguous</guilabel></title>
+<title><guilabel>Select Contiguous Areas</guilabel></title>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Select contiguous</screeninfo>
@@ -427,11 +428,11 @@ subtracting from the selection.</para>
 </mediaobject>
 </screenshot>
 </para>
-<para>The <guilabel>Action</guilabel> is the same as discussed with the
+<para>The <guilabel>Action:</guilabel> is the same as discussed with the
 <link linkend="commands-palettes-controlbox-tool-select">Select
 operations</link>.
 </para><para>
-The slider and spin box at <guilabel>Fuzziness</guilabel> determine how near
+The slider and spin box at <guilabel>Fuzziness:</guilabel> determine how near
 colors must be to the color at the clicked point to be added to the selection.
 </para><para>
 When the <guilabel>Sample merged</guilabel> checkbox is checked, the
@@ -441,8 +442,8 @@ of at the current layer.
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-selectsimilar">
-<title><guilabel>Select similar</guilabel></title>
-<para>The <guilabel>Action</guilabel> and <guilabel>Fuzziness</guilabel> 
+<title><guilabel>Similar Select</guilabel></title>
+<para>The <guilabel>Action:</guilabel> and <guilabel>Fuzziness:</guilabel> 
 options are the same as with <link
 linkend="commands-palettes-controlbox-tool-selectcontiguous">Select
 contiguous</link>. </para>

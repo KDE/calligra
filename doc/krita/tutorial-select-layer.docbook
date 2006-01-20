@@ -1,12 +1,29 @@
 <sect1 id="tutorial-select-layer">
 <title>A Small Selections and Layer Tutorial</title>
 
+<!-- Does someone know a better way to do this? -->
+<screenshot>
+<screeninfo>The starting image.</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="tutorial-select-layer-sample.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The starting image.</phrase>
+</textobject>
+<caption><para>The starting image.</para></caption>
+</mediaobject>
+</screenshot>
+
 <para>
-Open the <ulink url="tutorial-select-layer-sample.png">sample image</ulink>. It looks a bit like this:
+The image above is the image we will work with. Save it to disk (by
+right-clicking on it and choosing <guilabel>Save Image As...</guilabel>) and
+then open it in &krita; &mdash; your screen will look a bit like this (we have
+zoomed in):
 </para>
 
 <screenshot>
-<screeninfo>The starting image.</screeninfo>
+<screeninfo>Krita with the starting image.</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-1.png" format="PNG" />

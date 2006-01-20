@@ -113,8 +113,8 @@ more at less detail. </para>
 
 <para>This toolbar contains actions to transform your image in certain
 ways. By default, there are four actions available on this toolbar:
-<guilabel>Flip on X axis</guilabel> flips the image vertically,
-<guilabel>Flip on Y axis</guilabel> flips the image horizontally,
+<guilabel>Flip on X Axis</guilabel> flips the image vertically,
+<guilabel>Flip on Y Axis</guilabel> flips the image horizontally,
 <guilabel>Rotate Image CW</guilabel> rotates the image 90 degrees clockwise
 (right), and <guilabel>Rotate Image CCW</guilabel> rotates the image 90 degrees
 counterclockwise (left).</para>
@@ -456,8 +456,8 @@ adjacent.
 </para>
 
 <para>This toolbar contains dropdown <quote>palettes</quote> in which you
-can choose brush shapes, gradients, and fill patterns. There is also a
-dropdown box for painter's tools.</para>
+can choose brush shapes, gradients, and fill patterns. It also contains a
+dropdown box for painter's tools, and a tablet pressure setting.</para>
 
 <sect3 id="commands-toolbars-brushesandstuff-brushshapes">
 <title>Brush Shapes</title>
@@ -480,7 +480,7 @@ dropdown box for painter's tools.</para>
 <para>In the <guilabel>Brush Shapes</guilabel> palette, you can choose
 which brush to paint with. This brush is used for painting operations
 like Freehand, Rectangle, Ellipse, etcetera. You can choose a predefined
-brush (in the <guilabel>Predefined brushes</guilabel> tab, shown above), or
+brush (in the <guilabel>Predefined Brushes</guilabel> tab, shown above), or
 customize or create one.</para>
 
 <para>
@@ -527,7 +527,7 @@ tab</para></caption>
 
 <para>The <guilabel>Custom Brush</guilabel> tab of this palette lets you
 use the current image as a brush. With the <guibutton>Add to
-predefined brushes</guibutton> button, you can save it for later use.</para>
+Predefined Brushes</guibutton> button, you can save it for later use.</para>
 
 </sect3>
 
@@ -554,7 +554,7 @@ to paint with using the Gradient fill tool. Clicking once on a gradient in the
 palette will show a larger preview. Click it again to make it the current
 gradient.</para>
 <para>You can create your own gradients with the <guibutton>Custom
-gradient</guibutton> button.</para>
+Gradient</guibutton> button.</para>
 
 </sect3>
 
@@ -579,6 +579,25 @@ gradient</guibutton> button.</para>
 <para>The <guilabel>Patterns</guilabel> palette allows you to choose a pattern
 for operations like Pattern fill. Click a pattern to see a preview at
 actual size, then click it again to select it.</para>
+
+</sect3>
+
+<sect3 id="commands-toolbars-brushesandstuff-painterstools">
+<title>Painter's tools</title>
+
+<para>With the <guilabel>Painter's tools</guilabel> dropdown box, you can
+select the tool your painting operation should simulate. For example, you can
+paint with a normal brush, an airbrush, or a filter.</para>
+
+</sect3>
+
+<sect3 id="commands-toolbars-brushesandstuff-pressurevariation">
+<title>Pressure variation</title>
+
+<para>This setting allows you to change &krita;'s behaviour when you use a
+tablet to paint with, and change the pressure you put on the tablet: you can
+choose between changing the line width (<guilabel>size</guilabel>), the
+opacity, and the darkness.</para>
 
 </sect3>
 

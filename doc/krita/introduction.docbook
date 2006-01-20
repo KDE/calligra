@@ -69,6 +69,17 @@ instead of almost meaningless RGB triplets.
 </para>
 </sect2>
 
+<sect2 id="introduction-keyfeatures-imageformats">
+<title>Image formats</title>
+<para>
+&krita; currently supports the following image formats, both for importing and
+exporting, apart from its own: PNG, TIFF, JPEG, Dicom, XCF, PSD, GIF, BMP,
+XPM, Targa, RGB, and OpenEXR. Additionally, &krita; can import from RAW and
+ICO files. PSD (the Photoshop file format) is only supported up to version 6,
+from version 7 on, the Photoshop file format is closed. 
+</para>
+</sect2>
+
 </sect1>
 
 <sect1 id="introduction-manual">

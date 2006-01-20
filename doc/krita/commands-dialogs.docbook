@@ -5,4 +5,265 @@
 This section will describe &krita;'s dialog windows.
 </para>
 
+<sect2 id="commands-dialogs-documentinformation">
+<title>The Document Information dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Document Information dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-documentinformation.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Document Information dialog</phrase>
+</textobject>
+<caption><para>The Document Information dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog is the same as in other &koffice; programs. You can enter various
+information about your document here, which will be saved with the document so
+that you can retrieve it later to review or edit.
+</para>
+
+<para>
+On the <guilabel>General</guilabel> tab, you can enter the title, subject and
+keywords, as well as an abstract. On the bottom of this tab, some statistical
+information is displayed. On the <guilabel>Author</guilabel> tab, you can
+store information about yourself. The third tab, <guilabel>User-defined
+Metadata</guilabel>, allows you to store any other information.
+</para>
+
+</sect2>
+
+<sect2 id="commands-dialogs-imageproperties">
+<title>The Image Properties dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Image Properties dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-imageproperties.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Image Properties dialog</phrase>
+</textobject>
+<caption><para>The Image Properties dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+On this dialog you can a couple of image properties. First of all, the
+<guilabel>Name</guilabel> of the image. If you did not set a name earlier
+(that can also be done when creating the image), it will have a default name
+like <quote>Image1</quote>. Then, you can set its size (determined by the
+<guilabel>Width</guilabel> and <guilabel>Height</guilabel> in pixels and
+the <guilabel>Resolution</guilabel> in dots per inch) and the color profile to
+be used (<guilabel>Profile</guilabel>). Finally, you can fill in the
+<guilabel>Description</guilabel> field with any information you want to add to
+the image.
+</para>
+
+</sect2>
+
+<sect2 id="commands-dialogs-imagesize">
+<title>The Image Size dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Image Size dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-imagesize.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Image Size dialog</phrase>
+</textobject>
+<caption><para>The Image Size dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog lets you resize your image. In the top part, you can choose the
+way the image is resized. If you choose <guilabel>Resize</guilabel>, the size
+of the image is changed, but its layers (which contain the actual contents)
+will not be modified. So, when you double the height and width of the image,
+your original image will occupy the top-left quarter part of your new image.
+On decreasing the size of your image, the image layers will stretch out over
+the image borders, unless you choose <guilabel>Crop layers on image
+resize</guilabel>, which will crop all layers to the new image size.
+</para><para>
+With <guilabel>Scale</guilabel>, the image layers will be resized with the
+image. So increasing the image size will actually enlarge the contents, and
+similar for decreasing.
+</para><para>
+Under <guilabel>Pixel dimensions</guilabel>, you can set which new size you
+want the image to have. The original size is given as a reference. The new
+size can be set both as pixels or as a percentage, with 100% being the
+original size. If you select <guilabel>Constrain proportions</guilabel>, the
+new width and height will always be set to the same percentage. For example,
+if you have an image of 200 x 100 pixels, and set the width to 20 pixels, the
+height will automatically be changed to 10. With this checkbox unselected, you
+can also resize the image non-proportionally.
+</para>
+
+</sect2>
+
+<sect2 id="commands-dialogs-rotateimage">
+<title>The Rotate Image dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Rotate Image dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-rotateimage.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Rotate Image dialog</phrase>
+</textobject>
+<caption><para>The Rotate Image dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can rotate the image. The top part of the dialog shows
+the result of the rotation in the form of a change in dimension (if any) and
+visual feedback. Under <guilabel>Direction</guilabel> you can choose between 
+rotating clockwise and counter-clockwise. Under <guilabel>Angle</guilabel>,
+you can set the amount of rotation. 90, 180 and 270 degrees can be selected
+using the respective option button, other amounts need to be specified with
+the <guilabel>Custom</guilabel> spin box.
+</para>
+
+</sect2>
+
+<sect2 id="commands-dialogs-shearimage">
+<title>The Shear Image dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Shear Image dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-shearimage.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Shear Image dialog</phrase>
+</textobject>
+<caption><para>The Shear Image dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog allows you to shear your image. By shearing, the bounding
+rectangle of your image is transformed into a parallellogram. One pixel
+row/column is kept in place, the next one is shifted by a certain amount, the
+next one by the same amount relative to the previous one, etcetera.
+The X and Y shearing angles can be set using the two spin boxes.
+</para>
+
+</sect2>
+
+
+<sect2 id="commands-dialogs-separateimage">
+<title>The Separate Image dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Separate Image dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-separateimage.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Separate Image dialog</phrase>
+</textobject>
+<caption><para>The Separate Image dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can separate (part of) your image. Every color component
+(channel) will be put into a separate layer or image. At the top of the dialog, the current color model is shown. Below that, a couple of options can be set.
+</para>
+<para>
+Under <guilabel>Source</guilabel>, you can choose what part of the image to
+separate. The three options are <guilabel>Current layer</guilabel>, which
+(obviously) only uses the currently selected layer, <guilabel>Flatten all
+layers before separation</guilabel>, which uses the entire image, and
+<guilabel>Flatten all visible layers before separation</guilabel>, which uses
+all visible layers.
+</para>
+<para>
+Under <guilabel>Output</guilabel>, you can choose where the result of the
+separation should be written to: either to a couple of layers, or to a couple
+of images.
+</para>
+<para>
+Under <guilabel>Alpha Options</guilabel>, you can choose what should be done
+with the alpha channel of the selected layer(s). It can be copied to each new
+channel, be discarded, or separated on its own.
+</para>
+<para>
+The two options at the bottom of the dialog, finally, determine whether the
+source should be downscaled to 8 bit colors (if it contains more), and if the
+output should be in color (default is to separate the channels to grayscale
+values).
+</para>
+</sect2>
+
+
+<sect2 id="commands-dialogs-convertimagetype">
+<title>The Convert Image Type dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Convert Image Type dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-convertimagetype.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Convert Image Type dialog</phrase>
+</textobject>
+<caption><para>The Convert Image Type dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog allows you to convert your image from one color space to another.
+The <guilabel>Target color space</guilabel> and <guilabel>Destination ICM
+profile</guilabel> are used to set to which colorspace and profile the image
+will be converted. You can influence how this conversion is done with the
+<guilabel>Rendering Intent</guilabel> option.
+</para>
+<para>
+With <guilabel>Perceptual</guilabel> conversion, the source color space is
+mapped linearly to the destination color space. If the destination color space
+<quote>accepts</quote> a lesser color range than the source, shifts may occur
+because the range is compressed. <guilabel>Relative colorimetric</guilabel>
+conversion converts every color to the closest color in the destination color
+space. This may mean that a certain color range is mapped to one color in the
+destination color space. <guilabel>Saturation</guilabel> means that fully
+saturated colors will remain fully saturated, even if this means that the
+actual color is changed. With <guilabel>Absolute colorimetric</guilabel>
+conversion, the same approach is used as with <guilabel>Relative
+colorimetric</guilabel>, but the white point of the color space (the value
+designating the color white) is not changed to match the new color space,
+which may result in unwanted changes to near colors.
+</para>
+
+</sect2>
+
 </sect1>

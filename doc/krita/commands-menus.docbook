@@ -4,21 +4,22 @@
 <para>
 Some of &krita;'s menus are standard in &kde; or &koffice;, while others are
 particular to &krita;. The <guimenu>File</guimenu> menu contains commands for
-manipluating files. In the <guimenu>Edit</guimenu> menu, you can find
-commands that do things with the current selection.
-With the commands from the <guimenu>View</guimenu> menu, you can change the way
-you look at the image. The <guimenu>Image</guimenu> menu contains commands that
-change the entire image, like converting all layers to another color model or
-resizing or scaling the image. The <guimenu>Adjust</guimenu> menu contains
-commands that change the color values of the current layer. The
-<guimenu>Layer</guimenu> menu is like the <guimenu>Image</guimenu> menu, but the
-commands only work on the current layer. The <guimenu>Select</guimenu> menu
-contains commands to create and manipulate selections. The
-<guimenu>Filter</guimenu> menu contains all the filters you have installed.
-These work on the current layer. The <guimenu>Tools</guimenu> menu is common to
-&koffice; and contains &koffice;-wide plugins. The <guimenu>Settings</guimenu>
-menu is again common to &koffice; and allows you to manipulate the toolbars,
-shortcuts and configuration of &krita;.
+manipluating files. In the <guimenu>Edit</guimenu> menu, you can find commands
+that do things with the current selection.  With the commands from the
+<guimenu>View</guimenu> menu, you can change the way you look at the image.
+The <guimenu>Image</guimenu> menu contains commands that change the entire
+image, like converting all layers to another color model or resizing or
+scaling the image. The <guimenu>Layer</guimenu> menu is like the
+<guimenu>Image</guimenu> menu, but the commands only work on the current
+layer. The <guimenu>Select</guimenu> menu contains commands to create and
+manipulate selections. The <guimenu>Filter</guimenu> menu contains all the
+filters you have installed. These work on the current layer. The
+<guimenu>Scripts</guimenu> menu contains entries for working with scripts.
+The <guimenu>Tools</guimenu> menu is common to &koffice; and contains
+&koffice;-wide plugins. The <guimenu>Settings</guimenu> menu is again common
+to &koffice; and allows you to manipulate the toolbars, shortcuts and
+configuration of &krita;. Finally, the <guimenu>Help</guimenu> menu gives you
+access to various (hopefully helpful) information, such as this handbook.
 </para>
 
 <!-- ====== File ================================================ -->
@@ -102,7 +103,7 @@ will be lost.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Import</guimenuitem>
+<guimenuitem>Import...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens an existing document.</action> (For the moment,
 this is the same as
@@ -114,13 +115,22 @@ this is the same as
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Export</guimenuitem>
+<guimenuitem>Export...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Saves the document under a different name.</action> (For
 the moment, this is the same as
 <menuchoice><guimenu>File</guimenu><guimenuitem>Save
 As...</guimenuitem></menuchoice>.)
 </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Sends the document via email.</action> The default &kde;
+mail compose window will be used.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -147,19 +157,12 @@ will look like.</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Document Information</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Document Information</guilabel>
-dialog.</action> This dialog can be used to add various
-information to the image, like title, subject, keywords, author information,
-and any other information you want to save with the image.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>File</guimenu>
-<guimenuitem>Mail...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Sends the document via email.</action> The default &kde;
-mail compose window will be used.</para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-documentinformation"><guilabel>Document
+Information</guilabel> dialog</link>.</action> This dialog can be used to add
+various information to the image, like title, subject, keywords, author
+information, and any other information you want to save with the
+image.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -304,9 +307,38 @@ palette.</para></listitem>
 <guimenuitem>Fill with Pattern</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Fills the selection with the current pattern.</action>
-The current pattern is shown on the <guilabel>Brush shapes</guilabel> toolbar,
+The current pattern is shown on the <guilabel>Brush Shapes</guilabel> toolbar,
 usually at the top right of the &krita; window.</para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guisubmenu>Resources</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Contains options for editing
+palettes.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guisubmenu>Resources</guisubmenu>
+<guimenuitem>Add New Palette...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Add Palette</guilabel>
+dialog.</action> You can create a custom palette here.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
+<guisubmenu>Resources</guisubmenu>
+<guimenuitem>Edit Palette...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Edit Palette</guilabel>
+dialog.</action> In this dialog, you can edit existing color palettes.</para>
+</listitem></varlistentry>
 
 </variablelist>
 </para>
@@ -435,7 +467,7 @@ detailed.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <shortcut><keycombo
-action="simul">&Ctrl;<keycap>O</keycap></keycombo></shortcut>
+action="simul">&Ctrl;<keycap>0</keycap></keycombo></shortcut>
 <guimenu>View</guimenu>
 <guimenuitem>Actual Pixels</guimenuitem>
 </menuchoice></term>
@@ -454,6 +486,15 @@ size.</action></para></listitem>
 
 <varlistentry>
 <term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Fit to Page</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Zooms the view so that the image fills the available
+workspace.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
 <shortcut><keycombo
 action="simul">&Ctrl;<keycap>R</keycap></keycombo></shortcut>
 <guimenu>View</guimenu>
@@ -461,6 +502,37 @@ action="simul">&Ctrl;<keycap>R</keycap></keycombo></shortcut>
 </menuchoice></term>
 <listitem><para><action>Toggles display of the
 rulers on and off.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Guide Lines</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles display of the
+guide lines on and off.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guimenuitem>Show Grid</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Toggles display of the
+grid lines on and off.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Grid Spacing</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Contains various options to set the distance between
+grid lines.</action> The available spacing options are
+<guimenuitem>1x1</guimenuitem>, <guimenuitem>2x2</guimenuitem>,
+<guimenuitem>5x5</guimenuitem>, <guimenuitem>10x10</guimenuitem>,
+<guimenuitem>20x20</guimenuitem>, and <guimenuitem>40x40</guimenuitem>.</para>
+</listitem>
 </varlistentry>
 
 <varlistentry>
@@ -478,21 +550,13 @@ the corresponding menu item changes to Show
 
 <varlistentry>
 <term><menuchoice>
+<shortcut><keycombo
+action="simul">&Ctrl;&Shift;<keycap>H</keycap></keycombo></shortcut>
 <guimenu>View</guimenu>
 <guisubmenu>Palettes</guisubmenu>
-<guimenuitem>Hide all Palette Windows</guimenuitem>
+<guimenuitem>Hide All Palette Windows</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Hides all palettes.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>View</guimenu>
-<guisubmenu>Palettes</guisubmenu>
-<guimenuitem>Hide Layers</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Hides the <guilabel>Layers</guilabel>
-palette.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -549,10 +613,30 @@ palette.</action></para></listitem>
 <term><menuchoice>
 <guimenu>View</guimenu>
 <guisubmenu>Palettes</guisubmenu>
-<guimenuitem>Hide Brushes and stuff</guimenuitem>
+<guimenuitem>Hide Layers</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the <guilabel>Layers</guilabel>
+palette.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Scripts Manager</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the <guilabel>Scripts Manager</guilabel>.
+</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Histogram</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Hides the
-<guilabel>Brushes and stuff</guilabel> palette.</action></para></listitem>
+<guilabel>Histogram</guilabel> palette.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -565,6 +649,15 @@ palette.</action></para></listitem>
 palette.</action></para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><menuchoice>
+<guimenu>View</guimenu>
+<guisubmenu>Palettes</guisubmenu>
+<guimenuitem>Hide Brush, Ellipse, Filter tool, Line, Polygon &etc;</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Hides the palette of the selected 
+<guilabel>Tool</guilabel>.</action></para></listitem>
+</varlistentry>
 
 <varlistentry>
 <term><menuchoice>
@@ -593,7 +686,9 @@ visualisation on and off.</action></para></listitem>
 <guimenu>Image</guimenu>
 <guimenuitem>Image Properties</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Image Properties</guilabel> dialog,
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-imageproperties"><guilabel>Image
+Properties</guilabel> dialog</link>,
 in which you can change the image name, size,
 profile and description.</action></para></listitem>
 </varlistentry>
@@ -610,39 +705,7 @@ size of the currently active layer.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
-<guimenuitem>Convert Image Type...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Convert All Layers</guilabel>
-dialog.</action> This allows you to convert the image to a different color
-space. Apart from the color space, the profile and
-rendering intent can be specified as well.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Image</guimenu>
-<guimenuitem>Separate Image...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Separate Image</guilabel>
-dialog for separating the image into various layers.</action>
-You can set various options like source, destination, and
-alpha channels.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Image</guimenu>
-<guimenuitem>Change Image Size...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the
-<guilabel>Image Size</guilabel> dialog.</action> You can
-resize or scale the image using various algorithms here.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Image</guimenu>
-<guisubmenu>Rotate Image</guisubmenu>
+<guisubmenu>Rotate</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Rotates the image.</action></para></listitem>
 </varlistentry>
@@ -650,35 +713,38 @@ resize or scale the image using various algorithms here.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
-<guisubmenu>Rotate Image</guisubmenu>
+<guisubmenu>Rotate</guisubmenu>
 <guimenuitem>Rotate Image...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Rotate Image</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-rotateimage"><guilabel>Rotate Image</guilabel>
+dialog</link>.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
-<guisubmenu>Rotate Image</guisubmenu>
+<guisubmenu>Rotate</guisubmenu>
 <guimenuitem>Rotate Image CW</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Rotates the image 90 degrees clockwise.</action></para></listitem>
+<listitem><para><action>Rotates the image 90 degrees
+clockwise.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
-<guisubmenu>Rotate Image</guisubmenu>
+<guisubmenu>Rotate</guisubmenu>
 <guimenuitem>Rotate CCW</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Rotates the image 90 degrees counterclockwise.</action></para></listitem>
+<listitem><para><action>Rotates the image 90 degrees counterclockwise
+(270 degrees clockwise).</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
-<guisubmenu>Rotate Image</guisubmenu>
+<guisubmenu>Rotate</guisubmenu>
 <guimenuitem>Rotate 180</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Rotates the image 180 degrees.</action></para></listitem>
@@ -687,10 +753,54 @@ dialog.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
+<guimenuitem>Variations...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Variations</guilabel>
+dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Convert Image Type...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-convertimagetype"><guilabel>Convert All
+Layers</guilabel> dialog</link>.</action> This allows you to convert the image
+to a different color space. Apart from the color space, the profile and
+rendering intent can be specified as well.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Separate Image</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<link linkend="commands-dialogs-separateimage"><guilabel>Separate Image</guilabel>
+dialog</link>.</action> You can separate the image into layers for each
+individual colorspace component there.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
+<guimenuitem>Change Image Size...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<link linkend="commands-dialogs-imagesize"><guilabel>Image Size</guilabel>
+dialog </link>.</action> You can resize or scale the image using various
+algorithms here.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Image</guimenu>
 <guimenuitem>Shear Image...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Shear Image</guilabel>
-dialog.</action> You can shear the image in X or Y directions,
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-shearimage"><guilabel>Shear Image</guilabel>
+dialog</link>.</action> You can shear the image in X or Y directions,
 or both.</para></listitem>
 </varlistentry>
 
@@ -701,7 +811,8 @@ or both.</para></listitem>
 
 <!-- ====== Adjust ============================================== -->
 
-
+<!-- Auto Contrast, Brightness/Contrast, Desaturate and Color Adjustment is now in menu Flter,
+ and Variations in menu Image, but where is Gamma Correction?
 <sect2 id="commands-menus-adjust">
 <title>The <guimenu>Adjust</guimenu> Menu</title>
 <para>
@@ -781,7 +892,7 @@ change the gamma of the current image there.</para></listitem>
 </para>
 
 </sect2>
-
+-->
 <!-- ====== Layer =============================================== -->
 
 
@@ -839,7 +950,18 @@ embedded &karbon14; object.</action></para></listitem>
 <guimenu>Layer</guimenu>
 <guisubmenu>New</guisubmenu>
 <guisubmenu>Object Layer</guisubmenu>
-<guimenuitem>Flowchart &amp; diagram</guimenuitem>
+<guimenuitem>Text Documents</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Creates a new layer for an
+embedded &kword; document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>New</guisubmenu>
+<guisubmenu>Object Layer</guisubmenu>
+<guimenuitem>Flowchart &amp; Diagram</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Creates a new layer for an embedded
 &kivio; object.</action></para></listitem>
@@ -937,11 +1059,10 @@ embedded &kspread; document.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
 <guisubmenu>New</guisubmenu>
-<guisubmenu>Object Layer</guisubmenu>
-<guimenuitem>Word Processing</guimenuitem>
+<guimenuitem>Adjustment Layer</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Creates a new layer for an
-embedded &kword; document.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>New Adjustment Layer</guilabel>
+dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1006,14 +1127,14 @@ layer.</action></para></listitem>
 the current layer in the image editing window.</action></para></listitem>
 </varlistentry>
 
-<varlistentry>
+<!--varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
 <guimenuitem>Link/Unlink Layer</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Links or unlinks the current
 layer.</action></para></listitem>
-</varlistentry>
+</varlistentry-->
 
 <varlistentry>
 <term><menuchoice>
@@ -1126,7 +1247,7 @@ action="simul">&Ctrl;&Shift;<keycap>E</keycap></keycombo></shortcut>
 <listitem><para><action>Merges all visible layers.</action></para></listitem>
 </varlistentry>
 
-<varlistentry>
+<!--varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
 <guimenuitem>Merge Linked Layers</guimenuitem>
@@ -1134,7 +1255,7 @@ action="simul">&Ctrl;&Shift;<keycap>E</keycap></keycombo></shortcut>
 <listitem><para><action>Merges all linked layers.</action> The
 layers will be merged and placed at the position of the lowest
 layer marked as linked.</para></listitem>
-</varlistentry>
+</varlistentry-->
 
 <varlistentry>
 <term><menuchoice>
@@ -1147,12 +1268,49 @@ layer marked as linked.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
-<guimenuitem>Convert Layer Type...</guimenuitem>
+<guisubmenu>Rotate</guisubmenu>
 </menuchoice></term>
-<listitem><para><action>Opens the
-<guilabel>Convert Layer</guilabel> dialog.</action> You can
-set various options with respect to the colorspace and
-rendering intent.</para></listitem>
+<listitem><para><action>Rotates the current layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate</guisubmenu>
+<guimenuitem>Rotate Layer...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Rotate Layer</guilabel>
+dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate</guisubmenu>
+<guimenuitem>Rotate CW</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the current layer by 90
+degrees clockwise.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate</guisubmenu>
+<guimenuitem>Rotate CCW</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the current layer by
+90 degrees counterclockwise (270 degrees clockwise).</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guisubmenu>Rotate</guisubmenu>
+<guimenuitem>Rotate 180</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Rotates the current layer by
+180 degrees.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1162,6 +1320,17 @@ rendering intent.</para></listitem>
 </menuchoice></term>
 <listitem><para><action>Shows a color histogram for
 the current layer.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Layer</guimenu>
+<guimenuitem>Convert Layer Type...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Convert Current Layer</guilabel> dialog.</action> You can
+set various options with respect to the colorspace and
+rendering intent.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1177,49 +1346,21 @@ dimensions and the resize filter to use.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
-<guisubmenu>Rotate Layer</guisubmenu>
+<guisubmenu>Layer Effects</guisubmenu>
 </menuchoice></term>
-<listitem><para><action>Rotates the current layer.</action></para></listitem>
+<listitem><para>Contains commands to add effects to the current layer.
+</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
-<guisubmenu>Rotate Layer</guisubmenu>
-<guimenuitem>Rotate 90</guimenuitem>
+<guisubmenu>Layer Effects</guisubmenu>
+<guimenuitem>Drop Shadow</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Rotates the current layer by 90
-degrees clockwise.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guisubmenu>Rotate Layer</guisubmenu>
-<guimenuitem>Rotate 180</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Rotates the current layer by
-180 degrees.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guisubmenu>Rotate Layer</guisubmenu>
-<guimenuitem>Rotate 270</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Rotates the current layer by
-90 degrees counterclockwise (270 degrees clockwise).</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guisubmenu>Rotate Layer</guisubmenu>
-<guimenuitem>Rotate Layer</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Rotate Layer</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Drop Shadow</guilabel>
+dialog.</action> This dialog can be used to add a drop shadow beneath the
+current layer.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1232,7 +1373,7 @@ dialog.</action> You can select the X and Y angles to shear
 by.</para></listitem>
 </varlistentry>
 
-<varlistentry>
+<!--varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
 <guisubmenu>Watercolors</guisubmenu>
@@ -1248,7 +1389,7 @@ with watercolors.</para></listitem>
 <guimenuitem>Initialize Texture</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>?</action></para></listitem>
-</varlistentry>
+</varlistentry-->
 
 </variablelist>
 </para>
@@ -1329,6 +1470,15 @@ a soft border around it.)</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Select</guimenu>
+<guisubmenu>Hide Selection</guisubmenu>
+</menuchoice></term>
+<listitem><para><action>Hides the selection.</action> The selection is still
+active, but it is not made visible anymore.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Select</guimenu>
 <guimenuitem>Color Range...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <guilabel>Color Range</guilabel>
@@ -1356,10 +1506,60 @@ Filters</link> for more information on filters.</para>
 <shortcut><keycombo
 action="simul">&Ctrl;&Shift;<keycap>J</keycap></keycombo></shortcut>
 <guimenu>Filter</guimenu>
-<guimenuitem>Apply filter again</guimenuitem>
+<guimenuitem>Apply Filter Again</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Applies the last filter
 again.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+</menuchoice></term>
+<listitem><para>Contains various options for changing the
+colors in your image.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Auto Contrast</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Changes the colors to obtain an image with as
+much contrast as possible.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Brightness/Contrast...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the
+<guilabel>Brightness/Contrast</guilabel> dialog.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Desaturate</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Desaturates the image.</action> This
+will effectively convert the current image to grayscale.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Adjust</guisubmenu>
+<guimenuitem>Color Adjustment...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Color Adjustment</guilabel>
+dialog.</action> You can modify the red, green, and blue levels
+of the current image there.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1375,9 +1575,20 @@ again.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Artistic</guisubmenu>
+<guimenuitem>Cubism...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Opens the <guilabel>Cubism</guilabel> dialog to add a
+cubism effect to the selection or image.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu>
 <guimenuitem>Oilpaint...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Oilpaint</guilabel> dialog to add an oilpaint effect to the selection or image.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Oilpaint</guilabel> dialog to add
+an oilpaint effect to the selection or image.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1386,7 +1597,17 @@ again.</action></para></listitem>
 <guisubmenu>Artistic</guisubmenu>
 <guimenuitem>Raindrops...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Raindrops</guilabel> dialog to add a raindrops effect to the selection or image.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Raindrops</guilabel> dialog to add
+a raindrops effect to the selection or image.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Filter</guimenu>
+<guisubmenu>Artistic</guisubmenu>
+<guimenuitem>Dry the Paint</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Dries wet paint.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1404,14 +1625,15 @@ filters.</para></listitem>
 <guisubmenu>Blur</guisubmenu>
 <guimenuitem>Gaussian Blur</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Performs a slight blur on the image or selection.</action></para></listitem>
+<listitem><para><action>Performs a slight blur on the image or
+selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Blur</guisubmenu>
-<guimenuitem>Pixelize</guimenuitem>
+<guimenuitem>Pixelize...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Pixelizes the image.</action></para></listitem>
 </varlistentry>
@@ -1430,7 +1652,8 @@ filters.</para></listitem>
 <guisubmenu>Colors</guisubmenu>
 <guimenuitem>Invert</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inverts the image or selection.</action></para></listitem>
+<listitem><para><action>Inverts the image or
+selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1439,7 +1662,8 @@ filters.</para></listitem>
 <guisubmenu>Colors</guisubmenu>
 <guimenuitem>Invert with Threads</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Inverts the image or selection.</action></para></listitem>
+<listitem><para><action>Inverts the image or
+selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1456,7 +1680,8 @@ filters.</para></listitem>
 <guisubmenu>Decor</guisubmenu>
 <guimenuitem>Round Corners...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Rounds off the corners of the image or selection.</action></para></listitem>
+<listitem><para><action>Rounds off the corners of the image or
+selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1473,7 +1698,8 @@ filters.</para></listitem>
 <guisubmenu>Edge Detection</guisubmenu>
 <guimenuitem>Bottom Edge Detection</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Performs edge detection with the bottom sides of image parts as references.</action></para></listitem>
+<listitem><para><action>Performs edge detection with the bottom sides of image
+parts as references.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1482,7 +1708,8 @@ filters.</para></listitem>
 <guisubmenu>Edge Detection</guisubmenu>
 <guimenuitem>Left Edge Detection</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Performs edge detection with the left sides of image parts as references.</action></para></listitem>
+<listitem><para><action>Performs edge detection with the left sides of image
+parts as references.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1491,16 +1718,18 @@ filters.</para></listitem>
 <guisubmenu>Edge Detection</guisubmenu>
 <guimenuitem>Right Edge Detection</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Performs edge detection with the right sides of image parts as references.</action></para></listitem>
+<listitem><para><action>Performs edge detection with the right sides of image
+parts as references.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Edge Detection</guisubmenu>
-<guimenuitem>Sobel</guimenuitem>
+<guimenuitem>Sobel...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Sobel</guilabel> dialog.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Sobel</guilabel>
+dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1509,7 +1738,8 @@ filters.</para></listitem>
 <guisubmenu>Edge Detection</guisubmenu>
 <guimenuitem>Top Edge Detection</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Performs edge detection with the top sides of image parts as references.</action></para></listitem>
+<listitem><para><action>Performs edge detection with the top sides of image
+parts as references.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1527,7 +1757,8 @@ filters.</para></listitem>
 <guisubmenu>Enhance</guisubmenu>
 <guimenuitem>Custom Convolution...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Custom Convolution</guilabel> dialog.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Custom Convolution</guilabel>
+dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1536,7 +1767,8 @@ filters.</para></listitem>
 <guisubmenu>Enhance</guisubmenu>
 <guimenuitem>Mean Removal</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Sharpens the image or selection by aggravating color borders.</action></para></listitem>
+<listitem><para><action>Sharpens the image or selection by aggravating color
+borders.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1554,7 +1786,8 @@ filters.</para></listitem>
 <guisubmenu>Enhance</guisubmenu>
 <guimenuitem>Simple Noise Reduction</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Reduces noise in the image or selection.</action></para></listitem>
+<listitem><para><action>Reduces noise in the image or
+selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1563,7 +1796,8 @@ filters.</para></listitem>
 <guisubmenu>Enhance</guisubmenu>
 <guimenuitem>Wavelet Noise Reducer</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Reduces noise in the image or selection in a more \"pixelized\" way.</action></para></listitem>
+<listitem><para><action>Reduces noise in the image or selection in a more
+\"pixelized\" way.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1580,7 +1814,8 @@ filters.</para></listitem>
 <guisubmenu>Emboss</guisubmenu>
 <guimenuitem>Emboss Horizontal &amp; Vertical</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Embosses the image or selection on the two main directions.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection on the two main
+directions.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1589,7 +1824,8 @@ filters.</para></listitem>
 <guisubmenu>Emboss</guisubmenu>
 <guimenuitem>Emboss with Variable Depth...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Emboss</guilabel> dialog.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Emboss</guilabel>
+dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1598,7 +1834,8 @@ filters.</para></listitem>
 <guisubmenu>Emboss</guisubmenu>
 <guimenuitem>Emboss in All Directions</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Embosses the image or selection.</action></para></listitem>
+<listitem><para><action>Embosses the image or
+selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1607,7 +1844,8 @@ filters.</para></listitem>
 <guisubmenu>Emboss</guisubmenu>
 <guimenuitem>Emboss Horizontal Only</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Embosses the image or selection on the horizontal axis only.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection on the horizontal axis
+only.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1616,7 +1854,8 @@ filters.</para></listitem>
 <guisubmenu>Emboss</guisubmenu>
 <guimenuitem>Emboss Laplascian</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Embosses the image or selection using the Laplace technique.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection using the Laplace
+technique.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1625,7 +1864,8 @@ filters.</para></listitem>
 <guisubmenu>Emboss</guisubmenu>
 <guimenuitem>Emboss Vertical Only</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Embosses the image or selection on the vertical axis only.</action></para></listitem>
+<listitem><para><action>Embosses the image or selection on the vertical axis
+only.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1640,9 +1880,10 @@ filters.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Map</guisubmenu>
-<guimenuitem>Small Tiles</guimenuitem>
+<guimenuitem>Small Tiles...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Shrinks the image or selection and then tiles it.</action></para></listitem>
+<listitem><para><action>Shrinks the image or selection and then tiles
+it.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1657,18 +1898,20 @@ filters.</para></listitem>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu>
-<guimenuitem>Bumpmap</guimenuitem>
+<guimenuitem>Bumpmap...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Bumpmap</guilabel> dialog.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Bumpmap</guilabel>
+dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
 <guisubmenu>Other</guisubmenu>
-<guimenuitem>CImg Image Restauration...</guimenuitem>
+<guimenuitem>CImg Image Restoration...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Image Restauration</guilabel> dialog.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Image Restauration</guilabel>
+dialog.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1687,7 +1930,7 @@ comparison.</para></listitem>
 
 </sect2>
 
-<!-- ====== Scripts ============================================= 
+<!-- ====== Scripts ============================================= -->
 
 
 <sect2 id="commands-menus-scripts">
@@ -1698,28 +1941,18 @@ comparison.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Scripts</guimenu>
-<guimenuitem>Script Console</guimenuitem>
+<guimenuitem>Execute Script File</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the &krita;
-JavaScript Console.</action></para></listitem>
+<listitem><para><action>Executes a script file.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Scripts</guimenu>
-<guimenuitem>Load Script...</guimenuitem>
+<guimenuitem>Script Manager</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Loads a script.</action> &krita; JavaScript scripts
-usually have a <filename>.krajs</filename> extension. </para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Scripts</guimenu>
-<guisubmenu>Scripts</guisubmenu>
-</menuchoice></term>
-<listitem><para><action>Displays a list of
-available scripts.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Script Manager</guilabel> dialog.
+</action></para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -1727,7 +1960,7 @@ available scripts.</action></para></listitem>
 
 </sect2>
 
- ====== Tools =============================================== -->
+<!-- ====== Tools =============================================== -->
 
 
 <sect2 id="commands-menus-tools">
@@ -1745,7 +1978,7 @@ dialog.</action> You can select a number of tests to run (default is all
 tests) and how many times the tests should be run.</para></listitem>
 </varlistentry>
 
-<varlistentry>
+<!---varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
 <guimenuitem>Scan Image...</guimenuitem>
@@ -1762,7 +1995,7 @@ interface.</para></listitem>
 <guimenuitem>Screenshot...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the Screenshot dialog.</action></para></listitem>
-</varlistentry>
+</varlistentry-->
 
 </variablelist>
 </para>
@@ -1800,16 +2033,6 @@ toolbar.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
 <guisubmenu>Toolbars</guisubmenu>
-<guimenuitem>Krita</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Displays or hides the <guilabel>Krita</guilabel>
-toolbar.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guisubmenu>Toolbars</guisubmenu>
 <guimenuitem>Edit</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Displays or hides the <guilabel>Edit</guilabel>
@@ -1840,6 +2063,26 @@ toolbar.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
 <guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>&krita;</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the
+<guilabel>&krita;</guilabel> toolbar.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
+<guimenuitem>Brushes and Stuff</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Displays or hides the
+<guilabel>Brushes and Stuff</guilabel> toolbar.</action></para></listitem>
+</varlistentry>
+
+<!--varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guisubmenu>Toolbars</guisubmenu>
 <guimenuitem>Paint Tool Options</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Displays or hides the <guilabel>Paint Tool
@@ -1864,7 +2107,7 @@ Tools</guilabel> toolbar.</action></para></listitem>
 </menuchoice></term>
 <listitem><para><action>Displays or hides the <guilabel>Selection
 Tools</guilabel> toolbar.</action></para></listitem>
-</varlistentry>
+</varlistentry-->
 
 <varlistentry>
 <term><menuchoice>

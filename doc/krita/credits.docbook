@@ -6,7 +6,7 @@
 &krita;
 </para>
 <para>
-Program copyright &copy; 1999-2005 The &krita; Team
+Program copyright &copy; 1999-2006 The &krita; Team
 </para>
 
 <para>
@@ -48,11 +48,11 @@ Contributors:
 Documentation copyright &copy; 2005 Boudewijn Rempt
 <email>boud@valdyas.org</email>, Sander Koning
 <email>sanderkoning@kde.nl</email>
-with contributions from Casper Boemann, Bart Coppens and Anne-Marie Mahfouf.
+with contributions from Casper Boemann, Bart Coppens, Burkhard Lueck, and Anne-Marie Mahfouf.
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
-&underFDL;               <!-- FDL: do not remove -->
+&underFDL;           <!-- FDL: do not remove -->
 &underGPL;        	 <!-- GPL License -->
 
 </chapter>
