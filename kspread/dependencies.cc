@@ -536,13 +536,22 @@ void DependencyList::updateCell (const Point &cell) const
 {
   Cell *c = cell.cell();
   //prevent infinite recursion (circular dependencies)
-  if (c->testFlag (Cell::Flag_Progress))
+  if (c->testFlag (Cell::Flag_Progress) ||
+      c->testFlag (Cell::Flag_CircularCalculation))
   {
-    kdError(36001) << "ERROR: Circle" << endl;
-    c->setFlag(Cell::Flag_CircularCalculation);
+    kdError(36001) << "ERROR: Circle, cell " << c->fullName() <<
+        ", in dep.manager for sheet " << sheet->name() << endl;
     Value v;
-    v.setError ( "####" );
-    c->setValue (v);
+    // don't set anything if the cell already has all these things set
+    // this prevents endless loop for inter-sheet curcular dependencies,
+    // where the usual mechanisms fail doe to having multiple dependency
+    // managers ...
+    if (!c->testFlag (Cell::Flag_CircularCalculation))
+    {
+      c->setFlag(Cell::Flag_CircularCalculation);
+      v.setError ( "####" );
+      c->setValue (v);
+    }
     //clear the computing-dependencies flag
     c->clearFlag (Cell::Flag_Progress);
     return;
