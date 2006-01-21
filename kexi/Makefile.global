@@ -11,4 +11,7 @@ $(USE_EXCEPTIONS) $(KEXI_OPTIONS)
 
 KDE_CXXFLAGS += -include $(top_srcdir)/kexi/kexi_global.h
 
+# temporary:
+KDE_CXXFLAGS += -DKEXI_NO_AUTOFIELD_WIDGET
+
 VER_INFO = -version-info 1:0:0

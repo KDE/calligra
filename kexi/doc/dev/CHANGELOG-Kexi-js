@@ -17,6 +17,8 @@ General
 Form Designer
 - Data source pane: disable widget's data source combo box 
   when there is no form's data source defined
+- temporary disable AutoField
+- temporary disable cursor property
 Query Designer
 - fixed displaying criteria if WHERE section contains '('
 - tables positions are preserved if possible when 
