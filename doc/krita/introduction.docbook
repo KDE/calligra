@@ -22,27 +22,55 @@ experimental &mdash; first and foremost a pleasure to use and to hack on.
 
 <sect1 id="introduction-keyfeatures">
 <title>Key features</title>
+
 <para>The most important features &krita; currently has to offer, are:</para>
 <itemizedlist>
-<listitem><para>Painting with brushes and colors.</para></listitem>
-<listitem><para>Creating brushes from circles and squares.</para></listitem>
-<listitem><para>Many filters.</para></listitem>
-<listitem><para>Importing and exporting of images in all file formats supported
-by your installation of ImageMagick.</para></listitem>
-<listitem><para>Adding, removing, reordering and merging of
-layers.</para></listitem>
-<listitem><para>Layer transparency.</para></listitem>
-<listitem><para>Selections, with a full set of selection
-tools.</para></listitem>
-<listitem><para>High-quality scaling, rotating and shearing.</para></listitem>
-<listitem><para>Support for Wacom tablets.</para></listitem>
-<listitem><para>A complete color management system based on <ulink
-url="http://www.littlecms.com">LittleCMS</ulink>.</para></listitem>
-<listitem><para>Native CMYK, 16 bit/channel RGBA, and
-watercolors.</para></listitem>
-<listitem><para>OpenEXR support.</para></listitem>
-<listitem><para>A cimg-based image restoration tool.</para></listitem>
-<listitem><para>Histograms.</para></listitem>
+
+<listitem><para>Plugins: Krita is extensible through plugins. There are tools,
+colorspaces, paint operations, filters and kpart-based user interface plugins.
+It is intended to make layer types plugins, too.</para></listitem>
+
+<listitem><para>Scriptable: &krita; is scriptable in Python and Ruby. The
+scripting is compatible with using the PyQt/KDE and Korundum for adding GUI
+items.</para></listitem>
+
+<listitem><para>Color models: &krita; uses lcms for a dependable color
+workflow using icc profiles for importing, exporting, selecting paint colors,
+printing, cutting and pasting. 8, 16, and 32 bit colorspaces are available
+(RGB, CMYK, L*a*b*, ...) and colors can be selected from a color wheel, rgb or
+grayscale sliders or with a palette.</para></listitem>
+
+<listitem><para>Editing and viewing: Unlimited undo and redo are available.
+One can cut, copy and paste between lagers and images, with conversion through
+icc profiles if this is necessary.  OpenGL is supported for display. The view
+can be made fullscreen and can be split. Rulers and guides are available, the
+image can be zoomed, and for maximizing the workspace all palette windows can
+be hidden in one go. Also a histogram palette is available.</para></listitem>
+
+<listitem><para>Images and layers: Layers and entire images can be mirrored,
+sheared, rotated and scaled, converted between colorspaces, and layers in
+different colorspaces can be merged. An image can be separated into colorspace
+channels.</para></listitem>
+
+<listitem><para>Layers: Layers can be added, removed, grouped, locked, made
+(in)visible, and re-ordered.  Adjustment layers (layers which perform a filter
+function) can be added as well. A layer can be saved as a separate image and
+its colorspace can be changed.</para></listitem>
+
+<listitem><para>Tools: Through the innovative paintOp plugin system, all
+painting tools (brush, ellipse, line, etc.) can paint aliased, anti-aliased,
+erase, airbrush and more.</para></listitem>
+
+<listitem><para>Filters: &krita; can multithread the operation of some
+filters. Flters can be previewed in the filter gallery. Available filters
+include color adjustment, sharpen or blur, emboss, raindrops, and
+more.</para></listitem>
+
+<listitem><para>Brushes: The Gimp brush shapes can be used, both colored and
+grayscale brushes and pipe brushes. Custom brushes can be created, even from
+entire layers or images. Colored brushes can also be used as
+masks.</para></listitem>
+
 </itemizedlist>
 
 <sect2 id="introduction-keyfeatures-colormanagement">
@@ -56,8 +84,7 @@ another screen a sickly bluish. Very seldom is it a creamy milk-white. The same
 holds, unfortunately, for scanners, printers and digital cameras. So, if you
 want to see the right colors on screen and on paper, being the colors that you
 saw when taking your snapshot, you will have to compensate.
-</para>
-<para>
+</para><para>
 &krita; can do this for you: in &krita;, a color is (almost) never just a set of
 numbers, one for each color channel; it is a set of numbers with information
 attached. And that extra information is contained in a profile: your image has a
@@ -66,6 +93,10 @@ screen has a profile. When passing information from your image to your screen,
 the profiles are checked and the correct color is computed. This may cause a
 little slowness, now and then, but the result is that you can work with colors,
 instead of almost meaningless RGB triplets.
+</para><para>
+Available colorspaces are: 8 bit/channel RGB, CMYK, grayscale and wet
+watercolors, 16 bit/channel RGB, CMYK, grayscale and L*a*b, <quote>half</quote>
+RGB, and 32 bit float RGB (HDR) and LMS.
 </para>
 </sect2>
 
@@ -77,6 +108,10 @@ exporting, apart from its own: PNG, TIFF, JPEG, Dicom, XCF, PSD, GIF, BMP,
 XPM, Targa, RGB, and OpenEXR. Additionally, &krita; can import from RAW and
 ICO files. PSD (the Photoshop file format) is only supported up to version 6,
 from version 7 on, the Photoshop file format is closed. 
+</para><para>
+Embedded icc profiles and exif information are preserved on export to
+supporting file formats. &krita;'s native file format stores icc and exif
+information.
 </para>
 </sect2>
 
