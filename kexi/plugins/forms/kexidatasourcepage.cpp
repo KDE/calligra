@@ -34,7 +34,6 @@
 #include <widget/kexifieldlistview.h>
 #include <widget/kexifieldcombobox.h>
 #include <kexidb/connection.h>
-#include <kexidb/utils.h>
 #include <kexiproject.h>
 
 #include <formeditor/commands.h>
@@ -128,7 +127,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 #ifdef KEXI_NO_AUTOFIELD_WIDGET
 	m_availableFieldsLabel = 0;
 	m_addField = 0;
-	m_fieldListView = 0;
+//	m_fieldListView = 0;
 	vlyr->addStretch();
 #else
 	vlyr->addSpacing(8);
@@ -279,7 +278,9 @@ void KexiDataSourcePage::slotDataSourceSelected()
 		KexiDB::TableOrQuerySchema *tableOrQuery = new KexiDB::TableOrQuerySchema(
 			m_dataSourceCombo->project()->dbConnection(), name, mime=="kexi/table");
 		if (tableOrQuery->table() || tableOrQuery->query()) {
-#ifndef KEXI_NO_AUTOFIELD_WIDGET
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+			m_tableOrQuerySchema = tableOrQuery;
+#else
 			m_fieldListView->setSchema( tableOrQuery );
 #endif
 			dataSourceFound = true;
@@ -310,8 +311,12 @@ void KexiDataSourcePage::slotDataSourceSelected()
 void KexiDataSourcePage::slotFieldSelected()
 {
 	KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+	KexiDB::Field *field = m_tableOrQuerySchema->field( m_sourceFieldCombo->fieldOrExpression() ); //temp
+#else
 //! @todo this should also work for expressions
 	KexiDB::Field *field = m_fieldListView->schema()->field( m_sourceFieldCombo->fieldOrExpression() );
+#endif
 	if (field)
 		dataType = field->type();
 	
@@ -424,8 +429,8 @@ void KexiDataSourcePage::updateSourceFieldWidgetsAvailability()
 	const bool hasDataSource = !m_dataSourceCombo->selectedName().isEmpty();
 	m_sourceFieldCombo->setEnabled( hasDataSource );
 	m_widgetDSLabel->setEnabled( hasDataSource );
+#ifndef KEXI_NO_AUTOFIELD_WIDGET
 	m_fieldListView->setEnabled( hasDataSource );
-#ifdef KEXI_NO_AUTOFIELD_WIDGET
 	m_availableFieldsLabel->setEnabled( hasDataSource );
 	m_mousePointerLabel->setEnabled( hasDataSource );
 	m_availableFieldsDescriptionLabel->setEnabled( hasDataSource );

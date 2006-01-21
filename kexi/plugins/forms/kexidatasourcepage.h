@@ -21,6 +21,7 @@
 
 #include <qwidget.h>
 #include <kexidb/field.h>
+#include <kexidb/utils.h>
 
 class KCommand;
 class KexiObjectInfoLabel;
@@ -90,7 +91,6 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 		KexiFieldComboBox *m_sourceFieldCombo;
 		KexiObjectInfoLabel *m_objectInfoLabel;
 		KexiDataSourceComboBox* m_dataSourceCombo;
-		KexiFieldListView* m_fieldListView;
 		QLabel *m_dataSourceLabel, *m_noDataSourceAvailableLabel, 
 			*m_widgetDSLabel, *m_availableFieldsLabel,
 			*m_mousePointerLabel, *m_availableFieldsDescriptionLabel;
@@ -98,6 +98,11 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 		QFrame *m_dataSourceSeparator;
 		QString m_noDataSourceAvailableSingleText, m_noDataSourceAvailableMultiText;
 		bool m_insideClearDataSourceSelection : 1;
+#ifdef KEXI_NO_AUTOFIELD_WIDGET
+		KexiDB::TableOrQuerySchema *m_tableOrQuerySchema; //!< temp.
+#else
+		KexiFieldListView* m_fieldListView;
+#endif
 
 //		class Private;
 //		Private *d;

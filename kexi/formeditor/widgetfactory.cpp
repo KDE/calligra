@@ -550,6 +550,10 @@ WidgetFactory::isPropertyVisibleInternal(const QCString &, QWidget *w,
 {
 	Q_UNUSED( w );
 
+//! @todo temporary unless cursor works properly in the Designer
+	if (property=="cursor")
+		return false;
+
 	if (!isTopLevel 
 		&& (property=="caption" || property=="icon" || property=="sizeIncrement" || property=="iconText")) {
 		// don't show these properties for a non-toplevel widget
