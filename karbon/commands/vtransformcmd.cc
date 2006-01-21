@@ -144,6 +144,23 @@ VTransformCmd::unexecute()
 }
 
 void
+VTransformCmd::visitVObject( VObject& object )
+{
+	// Apply transformation to gradients.
+	VStroke* stroke = object.stroke();
+	if( stroke && stroke->type() == VStroke::grad )
+		stroke->gradient().transform( m_mat );
+	else if( stroke && stroke->type() == VStroke::patt )
+		stroke->pattern().transform( m_mat );
+
+	VFill* fill = object.fill();
+	if( fill && fill->type() == VFill::grad )
+		fill->gradient().transform( m_mat );
+	else if( fill && fill->type() == VFill::patt )
+		fill->pattern().transform( m_mat );
+}
+
+void
 VTransformCmd::visitVPath( VPath& composite )
 {
 	if( composite.state() == VObject::hidden ||
@@ -151,12 +168,7 @@ VTransformCmd::visitVPath( VPath& composite )
 		composite.state() == VObject::hidden_locked )
 		return;
 
-	// Apply transformation to gradients.
-	if( composite.stroke()->type() == VStroke::grad )
-		composite.stroke()->gradient().transform( m_mat );
-
-	if( composite.fill()->type() == VFill::grad )
-		composite.fill()->gradient().transform( m_mat );
+	visitVObject( composite );
 
 	composite.transform( m_mat );
 
@@ -193,6 +205,8 @@ VTransformCmd::visitVText( VText& text )
 		text.state() == VObject::normal_locked ||
 		text.state() == VObject::hidden_locked )
 		return;
+
+	visitVObject( text );
 
 	visit( text.basePath() );
 

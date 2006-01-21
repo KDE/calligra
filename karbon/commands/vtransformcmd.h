@@ -48,6 +48,7 @@ public:
 	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVText( VText& text );
 	virtual void visitVImage( VImage& img );
+	virtual void visitVObject( VObject& object );
 
 	void setMatrix( const QWMatrix& m )
 	{
