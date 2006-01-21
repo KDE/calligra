@@ -8,4 +8,22 @@ AM_CONDITIONAL(have_png, test -n "$LIBPNG")
 AC_FIND_JPEG
 AM_CONDITIONAL(have_jpeg, test -n "$LIBJPEG")
 
+#---------------------------------------------------------
+# libexif detection
+# taken from libkexif's configure.in.in
+#---------------------------------------------------------
 
+LIBEXIF=no
+
+PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.5.7, ,
+        [ AC_MSG_WARN([libexif >= 0.5.7 not found.])
+          LIBEXIF=yes ])
+
+AC_SUBST(LIBEXIF_LIBS)
+AC_SUBST(LIBEXIF_CFLAGS)
+
+PKG_CHECK_MODULES(LIBEXIF06, libexif >= 0.6.9,
+        AC_DEFINE(HAVE_EXIF06,1,[check for libexif > 0.6]),
+                AC_MSG_WARN([Using old version of libexif.]))
+                
+AM_CONDITIONAL(have_exif, test -n "$LIBEXIF")
