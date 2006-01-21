@@ -41,6 +41,13 @@
 #include "vtext.h"
 #include "vkopainter.h"
 #include "vtransformcmd.h"
+#include "shapes/vellipse.h"
+#include "shapes/vrectangle.h"
+#include "shapes/vsinus.h"
+#include "shapes/vspiral.h"
+#include "shapes/vstar.h"
+#include "shapes/vpolyline.h"
+#include "shapes/vpolygon.h"
 
 
 KarbonResourceServer::KarbonResourceServer()
@@ -425,7 +432,24 @@ KarbonResourceServer::loadClipart( const QString& filename )
 							clipart = new VPath( 0L );
 						else if( e.tagName() == "GROUP" )
 							clipart = new VGroup( 0L );
-
+						else if( e.tagName() == "ELLIPSE" )
+							clipart = new VEllipse( 0L );
+						else if( e.tagName() == "POLYGON" )
+							clipart = new VPolygon( 0L );
+						else if( e.tagName() == "POLYLINE" )
+							clipart = new VPolyline( 0L );
+						else if( e.tagName() == "RECT" )
+							clipart = new VRectangle( 0L );
+						else if( e.tagName() == "SINUS" )
+							clipart = new VSinus( 0L );
+						else if( e.tagName() == "SPIRAL" )
+							clipart = new VSpiral( 0L );
+						else if( e.tagName() == "STAR" )
+							clipart = new VStar( 0L );
+#ifdef HAVE_KARBONTEXT
+						else if( e.tagName() == "TEXT" )
+							clipart = new VText( 0L );
+#endif
 						if( clipart )
 							clipart->load( e );
 					}
