@@ -27,6 +27,7 @@
 #include <vglobal.h>
 #include <vdocument.h>
 #include <qdom.h>
+#include <core/vfill.h>
 
 VEllipse::VEllipse( VObject* parent, VState state ) : VPath( parent, state )
 {
@@ -96,8 +97,9 @@ VEllipse::init()
 	m.translate( m_center.x(), m_center.y() );
 	m.scale( 2.0 * m_rx, 2.0 * m_ry );
 
+	// only tranform the path data
 	VTransformCmd cmd( 0L, m );
-	cmd.visit( *this );
+	cmd.VVisitor::visitVPath( *this );
 
 	m_matrix.reset();
 }
@@ -124,8 +126,13 @@ VEllipse::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "ELLIPSE" );
 		element.appendChild( me );
 
-		VObject::save( me );
-
+		// save fill/stroke untransformed
+		VPath path( *this );
+		VTransformCmd cmd( 0L, m_matrix.invert() );
+		cmd.visit( path );
+		path.VObject::save( me );
+		//VObject::save( me );
+		
 		me.setAttribute( "cx", m_center.x() );
 		me.setAttribute( "cy", m_center.y() );
 

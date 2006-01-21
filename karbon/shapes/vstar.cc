@@ -223,8 +223,9 @@ VStar::init()
 	QWMatrix m;
 	m.translate( m_center.x(), m_center.y() );
 
+	// only tranform the path data
 	VTransformCmd cmd( 0L, m );
-	cmd.visit( *this );
+	cmd.VVisitor::visitVPath( *this );
 
 	setFillRule( evenOdd );
 
@@ -282,7 +283,12 @@ VStar::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "STAR" );
 		element.appendChild( me );
 
-		VObject::save( me );
+		// save fill/stroke untransformed
+		VPath path( *this );
+		VTransformCmd cmd( 0L, m_matrix.invert() );
+		cmd.visit( path );
+		path.VObject::save( me );
+		//VObject::save( me );
 
 		me.setAttribute( "cx", m_center.x() );
 		me.setAttribute( "cy", m_center.y() );

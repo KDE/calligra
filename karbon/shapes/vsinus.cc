@@ -123,8 +123,9 @@ VSinus::init()
 	m.translate( m_topLeft.x(), m_topLeft.y() - m_height * 0.5 );
 	m.scale( m_width / m_periods, m_height * 0.5 );
 
+	// only tranform the path data
 	VTransformCmd cmd( 0L, m );
-	cmd.visit( *this );
+	cmd.VVisitor::visitVPath( *this );
 
 	m_matrix.reset();
 }
@@ -151,7 +152,12 @@ VSinus::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "SINUS" );
 		element.appendChild( me );
 
-		VObject::save( me );
+		// save fill/stroke untransformed
+		VPath path( *this );
+		VTransformCmd cmd( 0L, m_matrix.invert() );
+		cmd.visit( path );
+		path.VObject::save( me );
+		//VObject::save( me );
 
 		me.setAttribute( "x", m_topLeft.x() );
 		me.setAttribute( "y", m_topLeft.y() );

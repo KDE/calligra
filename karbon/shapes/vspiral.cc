@@ -94,8 +94,9 @@ VSpiral::init()
 		( m_angle + ( m_clockwise ? VGlobal::pi : 0.0 ) ) * // make cw-spiral start at mouse-pointer
 			VGlobal::one_pi_180 );	// one_pi_180 = 1/(pi/180) = 180/pi.
 
+	// only tranform the path data
 	VTransformCmd cmd( 0L, m );
-	cmd.visit( *this );
+	cmd.VVisitor::visitVPath( *this );
 
 	m_matrix.reset();
 }
@@ -122,7 +123,12 @@ VSpiral::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "SPIRAL" );
 		element.appendChild( me );
 
-		VObject::save( me );
+		// save fill/stroke untransformed
+		VPath path( *this );
+		VTransformCmd cmd( 0L, m_matrix.invert() );
+		cmd.visit( path );
+		path.VObject::save( me );
+		//VObject::save( me );
 
 		me.setAttribute( "cx", m_center.x() );
 		me.setAttribute( "cy", m_center.y() );

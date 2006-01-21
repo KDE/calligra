@@ -79,6 +79,7 @@ VPath::VPath( const VPath& composite )
 
 	m_drawCenterNode = false;
 	m_fillRule = composite.m_fillRule;
+	m_matrix = composite.m_matrix;
 }
 
 VPath::~VPath()

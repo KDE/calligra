@@ -67,8 +67,9 @@ VPolygon::init()
 	QWMatrix m;
 	m.translate( m_topLeft.x(), m_topLeft.y() );
 
+	// only tranform the path data
 	VTransformCmd cmd( 0L, m );
-	cmd.visit( *this );
+	cmd.VVisitor::visitVPath( *this );
 }
 
 QString
@@ -93,7 +94,12 @@ VPolygon::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "POLYGON" );
 		element.appendChild( me );
 
-		VObject::save( me );
+		// save fill/stroke untransformed
+		VPath path( *this );
+		VTransformCmd cmd( 0L, m_matrix.invert() );
+		cmd.visit( path );
+		path.VObject::save( me );
+		//VObject::save( me );
 
 		me.setAttribute( "x", m_topLeft.x() );
 		me.setAttribute( "y", m_topLeft.y() );

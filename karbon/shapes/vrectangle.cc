@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include "vglobal.h"
 #include <vdocument.h>
+#include "vtransformcmd.h"
 
 VRectangle::VRectangle( VObject* parent, VState state )
 	: VPath( parent, state )
@@ -113,7 +114,12 @@ VRectangle::save( QDomElement& element ) const
 		QDomElement me = element.ownerDocument().createElement( "RECT" );
 		element.appendChild( me );
 
-		VObject::save( me );
+		// save fill/stroke untransformed
+		VPath path( *this );
+		VTransformCmd cmd( 0L, m_matrix.invert() );
+		cmd.visit( path );
+		path.VObject::save( me );
+		//VObject::save( me );
 
 		me.setAttribute( "x", m_topLeft.x() );
 		me.setAttribute( "y", m_topLeft.y() );
