@@ -87,6 +87,12 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiViewBase
 		/*! Removes all tables and coonections from the widget. */
 		void clear();
 
+		/*! Removes all coonections from the view. */
+		void removeAllConnections();
+
+		/*! Hides all tables except \a tables. */
+		void hideAllTablesExcept( KexiDB::TableSchema::List* tables );
+
 	protected slots:
 		void slotAddTable();
 		void tableViewGotFocus();

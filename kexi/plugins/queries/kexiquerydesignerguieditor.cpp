@@ -193,6 +193,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 	KexiTableViewColumn *col3 = new KexiTableViewColumn("visible", KexiDB::Field::Boolean, i18n("Visible"),
 		i18n("Describes visibility for a given field or expression."));
 	d->data->addColumn(col3);
+	d->dataTable->tableView()->adjustColumnWidthToContents( COLUMN_ID_VISIBLE );
 
 #ifndef KEXI_NO_QUERY_TOTALS
 	KexiTableViewColumn *col4 = new KexiTableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
@@ -546,7 +547,6 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 		if (tempData()->queryChangedInPreviousView) {
 			//previous view changed query data
 			//-clear and regenerate GUI items
-			d->relations->clear();
 			initTableRows();
 			//todo
 			if (tempData()->query()) {
@@ -554,6 +554,9 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 				showTablesForQuery( tempData()->query() );
 				//-show fields
 				showFieldsAndRelationsForQuery( tempData()->query() );
+			}
+			else {
+				d->relations->clear();
 			}
 		}
 		//todo: load global query properties
@@ -619,11 +622,13 @@ tristate KexiQueryDesignerGuiEditor::storeData(bool dontAsk)
 //void KexiQueryDesignerGuiEditor::showTablesAndConnectionsForQuery(KexiDB::QuerySchema *query)
 void KexiQueryDesignerGuiEditor::showTablesForQuery(KexiDB::QuerySchema *query)
 {
-	d->relations->clear();
-	d->slotTableAdded_enabled = false; //speedup
+//replaced by code below that preserves geometries d->relations->clear();
 
-	//! @todo: instead of hiding all tables and showing some tables,
-	//!        show only these new and hide these unncecessary; the same for connections)
+	// instead of hiding all tables and showing some tables,
+	// show only these new and hide these unncecessary; the same for connections)
+	d->slotTableAdded_enabled = false; //speedup
+	d->relations->removeAllConnections(); //connections will be recreated
+	d->relations->hideAllTablesExcept( query->tables() );
 	for (KexiDB::TableSchema::ListIterator it(*query->tables()); it.current(); ++it) {
 		d->relations->addTable( it.current() );
 	}
@@ -683,6 +688,10 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	KexiDB::BaseExpr* e = query->whereExpression();
 	KexiDB::BaseExpr* eItem = 0;
 	while (e) {
+		//eat parentheses because the expression can be (....) AND (... AND ... )
+		while (e && e->toUnary() && e->token()=='(')
+			e = e->toUnary()->arg();
+
 		if (e->toBinary() && e->token()==AND) {
 			eItem = e->toBinary()->left();
 			e = e->toBinary()->right();
@@ -692,7 +701,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 			e = 0;
 		}
 
-		//eat parentheses (special case)
+		//eat parentheses
 		while (eItem && eItem->toUnary() && eItem->token()=='(')
 			eItem = eItem->toUnary()->arg();
 
@@ -706,8 +715,8 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 			if (eItem->token()=='=' 
 				&& binary->left()->toVariable()
 				&& binary->right()->toVariable()
-				&& (leftField = query->field( binary->left()->toString() ))
-				&& (rightField = query->field( binary->right()->toString() )))
+				&& (leftField = query->findTableField( binary->left()->toString() )) 
+				&& (rightField = query->findTableField( binary->right()->toString() )))
 			{
 //! @todo move this check to parser on QuerySchema creation
 //!       or to QuerySchema creation (WHERE expression should be then simplified

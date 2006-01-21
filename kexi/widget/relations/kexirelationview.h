@@ -26,6 +26,8 @@
 #include <qptrlist.h>
 #include <qdict.h>
 
+#include <kexidb/tableschema.h>
+
 #include "kexirelationviewconnection.h"
 
 class QFrame;
@@ -37,7 +39,6 @@ class KPopupMenu;
 
 namespace KexiDB
 {
-	class TableSchema;
 	class Reference;
 	class Connection;
 }
@@ -49,13 +50,14 @@ typedef QPtrListIterator<KexiRelationViewConnection> ConnectionListIterator;
 
 struct SourceConnection
 {
-	QString	masterTable;
+	QString masterTable;
 	QString detailsTable;
 	QString masterField;
 	QString detailsField;
 };
 
-/*! KexiRelationView class provides a view for displaying relations between database tables.
+/*! @short provides a view for displaying relations between database tables.
+
  It is currently used for two purposes:
  - displaying global database relations
  - displaying relations defined for a database query
@@ -63,7 +65,6 @@ struct SourceConnection
  The class is for displaying only - retrieving data and updating data on the backend side is implemented 
  in KexiRelationWidget, and more specifically in: Kexi Relation Part and Kexi Query Part.
 */
-
 class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 {
 	Q_OBJECT
@@ -83,15 +84,17 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		//! Adds a connection \a con to the area. This changes only visual representation.
 		void addConnection(const SourceConnection& _conn /*, bool interactive=true*/);
 
-//		RelationList	getConnections()const { return m_connections; };
 		void setReadOnly(bool);
 
 		inline KexiRelationViewConnection* selectedConnection() const { return m_selectedConnection; }
+
 		inline KexiRelationViewTableContainer* focusedTableView() const { return m_focusedTableView; }
 
 		virtual QSize sizeHint() const;
 
 		const ConnectionList* connections() const { return &m_connectionViews; }
+
+//		KexiRelationViewTableContainer* containerForTable(KexiDB::TableSchema* tableSchema);
 
 	signals:
 		void tableContextMenuRequest( const QPoint& pos );
@@ -108,58 +111,52 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public QScrollView
 		//! Clears current selection - table/query or connection
 		void clearSelection();
 
-		/*! Removes all tables and coonections from the view. 
+		/*! Removes all tables and connections from the view. 
 		 Does not emit signals like tableHidden(). */
 		void clear();
 
-		void		slotTableScrolling(QString);
-//		void		removeSelectedConnection();
-//		void		removeSelectedTableQuery();
+		/*! Removes all coonections from the view. */
+		void removeAllConnections();
+
+		/*! Hides all tables except \a tables. */
+		void hideAllTablesExcept( KexiDB::TableSchema::List* tables );
+
+		void slotTableScrolling(QString);
 
 		//! removes selected table or connection
 		void removeSelectedObject();
 
+
 	protected slots:
-		void		containerMoved(KexiRelationViewTableContainer *c);
-		void		slotListUpdate(QObject *s);
-		void		slotTableViewEndDrag();
-		void		slotTableViewGotFocus();
-//		void		tableHeaderContextMenuRequest(const QPoint& pos);
+		void containerMoved(KexiRelationViewTableContainer *c);
+		void slotListUpdate(QObject *s);
+		void slotTableViewEndDrag();
+		void slotTableViewGotFocus();
 
 	protected:
-
-		/*! executes popup menu at \a pos, or, 
-		 if \a pos not specified: at center of selected table view (if any selected),
-		 or at center point of the relations view. */
+//		/*! executes popup menu at \a pos, or, 
+//		 if \a pos not specified: at center of selected table view (if any selected),
+//		 or at center point of the relations view. */
 //		void executePopup( QPoint pos = QPoint(-1,-1) );
 
-		void		drawContents(QPainter *p, int cx, int cy, int cw, int ch);
-		void		contentsMousePressEvent(QMouseEvent *ev);
-		virtual void	keyPressEvent(QKeyEvent *ev);
+		void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+		void contentsMousePressEvent(QMouseEvent *ev);
+		virtual void keyPressEvent(QKeyEvent *ev);
 
-		void		recalculateSize(int width, int height);
-		void		stretchExpandSize();
+		void recalculateSize(int width, int height);
+		void stretchExpandSize();
 //		void		invalidateActions();
-
 //		void clearTableSelection();
 //		void clearConnSelection();
 
 		void hideTable(KexiRelationViewTableContainer* tableView);
 		void removeConnection(KexiRelationViewConnection *conn);
 
-		TablesDict		m_tables;
-//		RelationList		m_connections;
-		bool			m_readOnly;
-//		KexiRelation    	*m_relation;
-		ConnectionList		m_connectionViews;
+		TablesDict m_tables;
+		bool m_readOnly;
+		ConnectionList m_connectionViews;
 		KexiRelationViewConnection* m_selectedConnection;
 		QGuardedPtr<KexiRelationViewTableContainer> m_focusedTableView;
-	/*
-		KPopupMenu *m_tableQueryPopup //over table/query
-			, *m_connectionPopup //over connection
-			, *m_areaPopup; //over outer area
-		KAction *m_openSelectedTableQueryAction;
-*/
 };
 
 #endif

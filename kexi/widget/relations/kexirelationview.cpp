@@ -101,6 +101,18 @@ KexiRelationView::~KexiRelationView()
 {
 }
 
+/*KexiRelationViewTableContainer*
+KexiRelationView::containerForTable(KexiDB::TableSchema* tableSchema)
+{
+	if (!tableSchema)
+		return 0;
+	for (TablesDictIterator it(m_tables); it.current(); ++it) {
+		if (it.current()->schema()->table()==tableSchema)
+			return it.current();
+	}
+	return 0;
+}*/
+
 KexiRelationViewTableContainer*
 KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 {
@@ -117,7 +129,13 @@ KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 	}
 	*/
 
-	KexiRelationViewTableContainer *c = new KexiRelationViewTableContainer(this, 
+	KexiRelationViewTableContainer* c = m_tables.find(t->name());
+	if (c) {
+		kdWarning() << "KexiRelationView::addTable(): table already added" << endl;
+		return c;
+	}
+
+	c = new KexiRelationViewTableContainer(this, 
 /*! @todo what about query? */
 		new KexiDB::TableOrQuerySchema(t)
 	);
@@ -163,7 +181,7 @@ KexiRelationView::addTable(KexiDB::TableSchema *t, const QRect &rect)
 				place = right;
 		}
 
-		x = place + 15;
+		x = place + 30;
 	}
 	else
 	{
@@ -531,6 +549,20 @@ KexiRelationView::hideTable(KexiRelationViewTableContainer* tableView)
 }
 
 void
+KexiRelationView::hideAllTablesExcept( KexiDB::TableSchema::List* tables )
+{
+//! @todo what about queries?
+	for (TablesDictIterator it(m_tables); it.current();) {
+		KexiDB::TableSchema *table = it.current()->schema()->table();
+		if (!table || tables->findRef( table )!=-1) {
+			++it;
+			continue;
+		}
+		hideTable(it.current());
+	}
+}
+
+void
 KexiRelationView::removeConnection(KexiRelationViewConnection *conn)
 {
 	emit aboutConnectionRemove(conn);
@@ -559,13 +591,19 @@ QSize KexiRelationView::sizeHint() const
 
 void KexiRelationView::clear()
 {
+	removeAllConnections();
+	m_tables.setAutoDelete(true);
+	m_tables.clear();
+	m_tables.setAutoDelete(false);
+	updateContents();
+}
+
+void KexiRelationView::removeAllConnections()
+{
 	clearSelection(); //sanity
 	m_connectionViews.setAutoDelete(true);
 	m_connectionViews.clear();
 	m_connectionViews.setAutoDelete(false);
-	m_tables.setAutoDelete(true);
-	m_tables.clear();
-	m_tables.setAutoDelete(false);
 	updateContents();
 }
 

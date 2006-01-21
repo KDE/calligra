@@ -175,7 +175,7 @@ KexiRelationWidget::addTable(KexiDB::TableSchema *t, const QRect &rect)
 
 	const QString tname = t->name().lower();
 	const int count = m_tableCombo->count();
-        int i = 0;
+	int i = 0;
 	for (; i < count; i++ ) {
 		if (m_tableCombo->text(i).lower() == tname )
 			break;
@@ -354,6 +354,12 @@ KexiRelationWidget::clear()
 	fillTablesCombo();
 }
 
+/*! Removes all coonections from the view. */
+void KexiRelationWidget::removeAllConnections()
+{
+	m_relationView->removeAllConnections();
+}
+
 void 
 KexiRelationWidget::fillTablesCombo()
 {
@@ -408,6 +414,12 @@ KexiRelationWidget::objectRenamed(const QCString &mime, const QCString& name, co
 			}
 		}
 	}
+}
+
+void
+KexiRelationWidget::hideAllTablesExcept( KexiDB::TableSchema::List* tables )
+{
+	m_relationView->hideAllTablesExcept(tables);
 }
 
 #include "kexirelationwidget.moc"
