@@ -7,12 +7,12 @@ libkritaconverter_la_SOURCES = kis_jpeg_converter.cc iccjpeg.c
 libkritajpegexport_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries)
 libkritajpegexport_la_LIBADD = $(top_builddir)/krita/libkritacommon.la \
-	libkritaconverter.la $(KOFFICE_LIBS) -ljpeg
+	libkritaconverter.la $(KOFFICE_LIBS) -ljpeg -lexif
 
 libkritajpegimport_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries)
 libkritajpegimport_la_LIBADD = $(top_builddir)/krita/libkritacommon.la \
-	libkritaconverter.la $(KOFFICE_LIBS) -ljpeg
+	libkritaconverter.la $(KOFFICE_LIBS) -ljpeg -lexif
 
 INCLUDES= \
 	-I$(srcdir) \

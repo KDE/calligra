@@ -40,6 +40,8 @@ extern "C" {
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
 
+#include <libexif/exif-loader.h>
+
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
 #define MAX_BYTES_IN_MARKER  65533  /* maximum data len of a JPEG marker */
@@ -219,8 +221,63 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     jpeg_destroy_decompress(&cinfo);
     fclose(fp);
 
+    // Read exif information
+    ExifLoader *l = exif_loader_new ();
+    
+    exif_loader_write_file (l,uri.path().ascii());
+    
+    ExifData *ed = exif_loader_get_data (l);
+
+    ed = exif_loader_get_data (l);
+    exif_loader_unref (l);
+    if (ed) { // there are some exif tags
+        ExifTag tag = EXIF_TAG_ORIENTATION;
+        ExifIfd ifd = EXIF_IFD_0;
+        ExifEntry *e = exif_content_get_entry ( ed->ifd[ifd], tag);
+        if(e)
+        {
+            char buf[1024];
+            char value[1024];
+//             exif_entry_get_value (e, value, sizeof(value));
+            ExifShort v_short = exif_get_short (e->data, exif_data_get_byte_order (e->parent->parent));
+//             kdDebug() << "tag orientation = " << value << " begin " << v_short << " end" << endl;
+            switch(v_short) //
+            {
+                case 2:
+                    layer->paintDevice()->mirrorY();
+                    break;
+                case 3:
+                    image()->rotate(180, 0);
+                    break;
+                case 4:
+                    layer->paintDevice()->mirrorX();
+                    break;
+                case 5:
+                    image()->rotate(90, 0);
+                    layer->paintDevice()->mirrorY();
+                    break;
+                case 6:
+                    image()->rotate(90, 0);
+                    break;
+                case 7:
+                    image()->rotate(90, 0);
+                    layer->paintDevice()->mirrorX();
+                    break;
+                case 8:
+                    image()->rotate(270, 0);
+                    break;
+                default:
+                    break;
+            }
+        }
+    } else {
+        kdDebug() << "no exif information" << endl;
+    }
+    
     return KisImageBuilder_RESULT_OK;
 }
+
+
 
 KisImageBuilder_Result KisJPEGConverter::buildImage(const KURL& uri)
 {
