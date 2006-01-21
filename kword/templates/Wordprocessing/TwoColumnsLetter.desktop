@@ -65,6 +65,7 @@ Name[zh_TW]=兩列
 Name[zu]=Amakholamu Amabili
 Comment=Creates a letter document with two columns per page.
 Comment[da]=Opretter et brev-dokument med to søjler pr side
+Comment[es]=Crea un documento de carta con dos columnas por página.
 Comment[et]=Loob Letter dokumendi, igal leheküljel kaks veergu.
 Comment[ja]=1ページを2列に分割したLetterサイズのドキュメントを作成
 Comment[pt]=Cria uma carta com duas colunas por página.
