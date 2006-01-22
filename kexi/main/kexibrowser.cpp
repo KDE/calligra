@@ -38,6 +38,7 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kimageeffect.h>
+#include <kconfig.h>
 
 #include <kexi.h>
 #include <kexipart.h>
@@ -93,10 +94,20 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 
 	connect(m_list, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
 		this, SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
-//js todo: ADD OPTION for enable this:
-//connect(this, SIGNAL(doubleClicked(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
-	connect(m_list, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
-	connect(m_list, SIGNAL(executed(QListViewItem*)), this, SLOT(slotExecuteItem(QListViewItem*)));
+	connect(m_list, SIGNAL(selectionChanged(QListViewItem*)), this,
+		SLOT(slotSelectionChanged(QListViewItem*)));
+	
+	KConfig *config = kapp->config();
+	config->setGroup("MainWindow");
+	if (config->readBoolEntry("SingleClickOpensItem", false)) {
+		connect(m_list, SIGNAL(executed(QListViewItem*)), this,
+			SLOT(slotExecuteItem(QListViewItem*)));
+	}
+	else {
+		connect(m_list, SIGNAL(doubleClicked(QListViewItem*)), this,
+			SLOT(slotExecuteItem(QListViewItem*)));
+		m_list->enableExecuteArea = false;
+	}
 
 	//init popups
 	m_itemPopup = new KPopupMenu(this, "itemPopup");
@@ -588,6 +599,11 @@ void KexiBrowser::slotPageSetupForItem()
 KexiBrowserListView::KexiBrowserListView(QWidget *parent)
  : KListView(parent, "KexiBrowserListView")
  , nameEndsWithAsterisk(false)
+ , enableExecuteArea(true)
+{
+}
+
+KexiBrowserListView::~KexiBrowserListView()
 {
 }
 
@@ -607,6 +623,11 @@ void KexiBrowserListView::rename(QListViewItem *item, int c)
 		KListView::rename(item, c);
 		adjustColumn(0);
 	}
+}
+
+bool KexiBrowserListView::isExecuteArea( const QPoint& point )
+{
+	return enableExecuteArea && KListView::isExecuteArea(point);
 }
 
 #include "kexibrowser.moc"

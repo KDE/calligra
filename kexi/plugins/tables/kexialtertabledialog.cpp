@@ -58,6 +58,9 @@
 
 //#define KexiAlterTableDialog_DEBUG
 
+//! @todo remove this when BLOBs are implemented
+#define KEXI_NO_BLOB_FIELDS
+
 //! @internal
 class KexiAlterTableDialogPrivate
 {
@@ -131,12 +134,12 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 		i18n("Describes data type for the field."));
 	d->data->addColumn( col );
 
-//#ifdef KEXI_SHOW_UNIMPLEMENTED
+#ifdef KEXI_NO_BLOB_FIELDS
+//! @todo remove this later
+	QValueVector<QString> types(KexiDB::Field::LastTypeGroup-1); //don't show last type (BLOB)
+#else
 	QValueVector<QString> types(KexiDB::Field::LastTypeGroup);
-//#else
-//TODO: remove this later
-//	QValueVector<QString> types(KexiDB::Field::LastTypeGroup-1); //don't show last (BLOB) type
-//#endif
+#endif
 	d->maxTypeNameTextWidth = 0;
 	QFontMetrics fm(font());
 	for (uint i=1; i<=types.count(); i++) {
@@ -646,12 +649,12 @@ void KexiAlterTableDialog::slotBeforeCellChanged(
 		KexiDB::Field::TypeGroup fieldTypeGroup;
 		int i_fieldTypeGroup = newValue.toInt()+1/*counting from 1*/;
 		if (i_fieldTypeGroup < 1 || i_fieldTypeGroup >
-//#ifdef KEXI_SHOW_UNIMPLEMENTED
+#ifdef KEXI_NO_BLOB_FIELDS
+//! @todo remove this later
+			(int)KexiDB::Field::LastTypeGroup-1) //don't show last (BLOB) type
+#else
 			(int)KexiDB::Field::LastTypeGroup)
-//#else
-//TODO: remove this later
-//			(int)KexiDB::Field::LastTypeGroup-1) //don't show last (BLOB) type
-//#endif
+#endif
 			return;
 		fieldTypeGroup = static_cast<KexiDB::Field::TypeGroup>(i_fieldTypeGroup);
 

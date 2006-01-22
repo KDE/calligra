@@ -10,6 +10,12 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-01-23
+Main Window
+- 'single click opens' is mode is off by default, can be turned on
+Table Designer
+- Object type hidden for beta1
+
 2006-01-20
 General
 - examples/ directory i nthe source code tree now contains 

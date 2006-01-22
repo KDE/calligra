@@ -29,8 +29,12 @@ class KexiBrowserListView : public KListView
 	Q_OBJECT
 	public:
 		KexiBrowserListView(QWidget *parent);
+		~KexiBrowserListView();
+		
+		virtual bool isExecuteArea( const QPoint& point );
 
 		bool nameEndsWithAsterisk : 1;
+		bool enableExecuteArea : 1; //! used in isExecuteArea()
 	public slots:
 		virtual void rename(QListViewItem *item, int c);
 	protected:

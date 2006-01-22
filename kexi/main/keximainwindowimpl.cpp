@@ -3356,7 +3356,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 			"%1\n"
 			"If you click Yes, you will not be able to undo the deletion.")
 				.arg( "</p><p>"+part->instanceCaption()+" \""+ item->name() + "\"?</p>" ),
-			0, KGuiItem(i18n("Delete"), "delete"), KStdGuiItem::no()))
+			0, KGuiItem(i18n("Delete"), "editdelete"), KStdGuiItem::no()))
 			return cancelled;
 	}
 
