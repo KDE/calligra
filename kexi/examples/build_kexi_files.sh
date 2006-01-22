@@ -4,6 +4,7 @@
 # Only .kexi file that is older than .sql file is recreated.
 # ksqlite is needed on the PATH
 
+PATH=$PATH:../3rdparty/kexisql3/src/.libs/
 which ksqlite > /dev/null || exit 1
 
 for f in `ls -1 *.kexi.sql` ; do

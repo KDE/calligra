@@ -20,6 +20,8 @@ to track changes in the Subversion repository.
 
 Each .kexi file is generated out of the original .kexi.sql file by running 
 build_kexi_files.sh script. 
+Makefile is also provided, so you can just run make (or unsermake) to create 
+.kexi files.
 
 You can run update_sql_files.sh script if you have changed .kexi file using 
 Kexi program and want to update the related .kexi.sql file before checking it 
