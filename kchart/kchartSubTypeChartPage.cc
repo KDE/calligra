@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <stdlib.h>
+
 #include "kchartSubTypeChartPage.h"
 #include "kchartSubTypeChartPage.moc"
 
@@ -26,11 +28,12 @@
 #include <kdebug.h>
 #include <qvbuttongroup.h>
 #include <qradiobutton.h>
+#include <qspinbox.h>
 #include <qlabel.h>
 #include <qhgroupbox.h>
 #include <qlayout.h>
-#include <stdlib.h>
 #include <qwhatsthis.h>
+#include <qvbox.h>
 
 #include "kchart_params.h"
 
@@ -203,9 +206,11 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
     KChartSubTypeChartPage( params, parent )
 {
     QHBoxLayout* toplevel = new QHBoxLayout( this, 10 );
-    QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Sub-type" ), this );
+    QVBox       *left = new QVBox( this );
+    QVButtonGroup* subtypeBG = new QVButtonGroup( i18n( "Sub-type" ), left );
     QWhatsThis::add(subtypeBG, i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
-    toplevel->addWidget( subtypeBG, AlignCenter );
+    //toplevel->addWidget( subtypeBG, AlignCenter );
+    toplevel->addWidget( left, AlignCenter );
 
     normal = new QRadioButton( i18n( "Normal" ), subtypeBG );
     subtypeBG->insert( normal, KDChartParams::BarNormal );
@@ -217,6 +222,13 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
     subtypeBG->setFixedWidth( subtypeBG->sizeHint().width() );
     connect( subtypeBG, SIGNAL( clicked( int ) ),
              this, SLOT( slotChangeSubType( int ) ) );
+
+    //QHBox   *hbox = new QHBox( this );
+    new QLabel( i18n( "Number of lines: "), left );
+    m_numLines    = new QSpinBox( left );
+    // FIXME: Use a grid layout instead
+    QLabel  *lbl  = new QLabel( "", left);
+    left->setStretchFactor( left, 1 );
 
     QHGroupBox* exampleGB = new QHGroupBox( i18n( "Example" ), this );
     QWhatsThis::add(exampleGB, i18n("Preview the sub-type you choose."));

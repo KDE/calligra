@@ -22,15 +22,15 @@ Item								   Prio Status
 
 * Before the feature freeze
   + Reintegrate kchart into KSpread				      1	DONE
-     - New interface into KoChart					done
-     - Adapt kspread_sheet to it.					done
+     - New interface into KoChart					  done
+     - Adapt kspread_sheet to it.					  done
   + Fix so that users can change data area after the fact (GUI).      1	DONE
-     - wizard							      1 done
-     - config dialog						      1 done
-  + New chart type: combine bars and lines			      1 ----
-     - in wizard							done
-     - in config dialog							----
-     - in left toolbar							----
+     - wizard							      1   done
+     - config dialog						      1   done
+  + New chart type: combine bars and lines			      1 DONE
+     - in wizard							  done
+     - in config dialog							  done
+     - in left toolbar							  done
   + Grid setting for both directions				      1 ----
 
 
@@ -39,7 +39,7 @@ After the feature freeze
 
 * Bugs
   + First row / column as labels doesn't work.			      1 ----
-  + The chart title is not included in the chart from the  wizard     1 ----
+  + The chart title is not included in the chart from the wizard      1 ----
   + The title is miniscule					      1 ---- 
      - small fonts everywhere, in fact
 

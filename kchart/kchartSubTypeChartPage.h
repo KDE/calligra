@@ -26,6 +26,7 @@
 class KDChartParams;
 class QLabel;
 class QRadioButton;
+class QSpinBox;
 
 namespace KChart
 {
@@ -100,10 +101,11 @@ private slots:
     void slotChangeSubType( int type );
 
 private:
-    QRadioButton *normal;
-    QRadioButton *stacked;
-    QRadioButton *percent;
-    QLabel* exampleLA;
+    QRadioButton  *normal;
+    QRadioButton  *stacked;
+    QRadioButton  *percent;
+    QLabel        *exampleLA;
+    QSpinBox      *m_numLines;
 };
 
 
