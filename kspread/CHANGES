@@ -25,6 +25,7 @@ Faster redraw of merged cells (bug #118248)
 Bug Fixes
 ---------
 #120234: Freeze on circular reference
+#120232: Strange behaviour on creating new file
 #120204: Cell comment isn't wrapped
 #119675: Background brush color is not correctly loaded
 #119097: Right arrow for entry and validation
