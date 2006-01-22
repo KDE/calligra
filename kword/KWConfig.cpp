@@ -354,7 +354,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, QVBox *box, char *
     QWhatsThis::add( indent, indentHelp );
 
     QHBox* hbPagePerRow = new QHBox( gbInterfaceGroup );
-    QString pagePerRowHelp = i18n("After selecting Preview Mode (from the \"View\" menua,) "
+    QString pagePerRowHelp = i18n("After selecting Preview Mode (from the \"View\" menu,) "
                                   "this is the number of pages KWord will "
                                   "position on one horizontal row.");
     QLabel* labelPagePerRow = new QLabel( i18n("Number of pa&ges per row in preview mode:" ), hbPagePerRow );
