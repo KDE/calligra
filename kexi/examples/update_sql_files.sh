@@ -7,12 +7,12 @@
 which ksqlite > /dev/null || exit 1
 
 for f in `ls -1 *.kexi` ; do
-	if test -f $f.sql -a $f -o $f.sql ; then
+	if test -f $f.sql -a ! $f.sql -ot $f ; then
 		echo "Local $f.sql is newer than $f - skipping it"
 		continue
 	fi
-	echo -n "Creating $f.sql ..."
+	echo -n "Creating $f.sql ... "
 	echo "vacuum;" | ksqlite $f
-	if ! echo .dump | ksqlite $f > $f.sql ; then exit 1; fi
+	echo .dump | ksqlite $f > $f.sql || exit 1
 	echo "OK"
 done
