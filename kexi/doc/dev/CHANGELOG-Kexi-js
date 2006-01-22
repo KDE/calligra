@@ -15,10 +15,13 @@ Main Window
 - 'single click opens' is mode is off by default, can be turned on
 Table Designer
 - Object type hidden for beta1
+Table View
+- date, time and date/time values are displayed using KDE settings
+TODO: fix acceping am/pm in KexiTimeFormatter::stringToTime()
 
 2006-01-20
 General
-- examples/ directory i nthe source code tree now contains 
+- examples/ directory in the source code tree now contains 
   example database(s)
 Form Designer
 - Data source pane: disable widget's data source combo box 

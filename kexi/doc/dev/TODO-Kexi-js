@@ -744,7 +744,7 @@ Migration (Import Project Wizard) TODO:
 
 MDB Migration:
 - add checks for "no space left on device" error (otherwise Kexi will crash)
-- fix date/time and currency converting
+- fix currency converting
 - use MSysRelationdhips table to read MSA db relationships (easy, it's not encoded)
 
 === Kexi Web Site TODO ===
@@ -802,7 +802,6 @@ Table Column Lookup XML Format:
 
 General TODO:
 - handle KApplication::shutDown()
-- fix blocking kexi database when second was opened using file->open (KProcess?)
 
 TODO:
 - BUG! "edit->clear table" actions does not repaints tableview when it's in spreadsheet mode 
@@ -818,7 +817,7 @@ TODO: entering table/query name by hand doesn't work in 'form data source' combo
 
 BETA1 TODO:
 - if you place e.g. a label in a container like a tabwidget and doubleclick it to edit the content, 
-  the label jumps around. ccpasteur sayed him fixed it last year ;)
+  the label jumps around. ccpasteur said he fixed it last year ;)
 - only change bg color of tab widget, not its outer area; fix changing tabs bg color
 
 Queries
