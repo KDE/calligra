@@ -1094,12 +1094,15 @@ DateTime Calendar::firstAvailableBefore(const DateTime &time, const DateTime &li
         return DateTime();
     }
     DateTime t = limit;
+    DateTime res;
     while(hasInterval(t, time)) {
         // Find the last interval
         t = interval(t, time).second;
+        if (!res.isValid() || t > res)
+            res = t;
     }
     //kdDebug()<<k_funcinfo<<m_name<<": "<<t.toString()<<endl;
-    return t;
+    return res;
 }
 
 Calendar *Calendar::findCalendar(const QString &id) const { 
