@@ -282,7 +282,7 @@ EString EString::fromUnicodeString( const void* p, bool longString, unsigned /* 
     for( unsigned k=0; k<len; k++ )
     {
       unsigned uchar = readU16( data + offset + k*2 );
-      str.append( UString(uchar) );
+      str.append( UString(UChar(uchar)) );
     }
   }
   
@@ -355,7 +355,7 @@ EString EString::fromSheetName( const void* p, unsigned datasize )
     for( unsigned k=0; k<len; k++ )
     {
       unsigned uchar = readU16( data + offset + k*2 );
-      str.append( UString(uchar) );
+      str.append( UString(UChar(uchar)) );
     }
   }
   
@@ -1151,9 +1151,8 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   }
 
   UString result;
-
-#if 0 
-// normal use
+  result.append( UString("[") );  // OpenDocument format
+  
   if( !col1Relative )
     result.append( UString("$") );
   result.append( Cell::columnLabel( col1Ref ) );  
@@ -1167,43 +1166,8 @@ UString FormulaToken::area( unsigned row, unsigned col ) const
   if( !row2Relative )
     result.append( UString("$") );
   result.append( UString::from( row2Ref+1 ) );  
-#else 
-   // SUPERHACK !! KSpread only !!!
-  if( col1Relative )
-    col1Ref -= col;
-  else col1Ref++;
-  if( row1Relative )
-    row1Ref -= row;
-  else row1Ref++;
-  if( !col1Relative )
-    result.append( UString("$") );
-  else  result.append( UString("#") ); 
-  result.append( UString::from( col1Ref ) );  
-  if( !row1Relative )
-    result.append( UString("$") );
-  else  result.append( UString("#") ); // HACK, only for KSpread !!!
-  result.append( UString::from( row1Ref ) );  
-  result.append( UString("#") );
-
-  result.append( UString(":") );
-
-  if( col2Relative )
-    col2Ref -= col;
-  else col2Ref++;
-  if( row2Relative )
-    row2Ref -= row;
-  else row2Ref++;
-  if( !col2Relative )
-    result.append( UString("$") );
-  else  result.append( UString("#") ); 
-  result.append( UString::from( col2Ref ) );  
-  if( !row2Relative )
-    result.append( UString("$") );
-  else  result.append( UString("#") ); // HACK, only for KSpread !!!
-  result.append( UString::from( row2Ref ) );  
-  result.append( UString("#") );
-
-#endif
+  
+  result.append( UString("]") );// OpenDocument format
 
   return result;  
 }
@@ -1247,32 +1211,16 @@ UString FormulaToken::ref( unsigned row, unsigned col ) const
 
   UString result;
 
-#if 0 
-// normal use
+  result.append( UString("[") );  // OpenDocument format
+  
   if( !colRelative )
     result.append( UString("$") );
   result.append( Cell::columnLabel( colRef ) );  
   if( !rowRelative )
     result.append( UString("$") );
   result.append( UString::from( rowRef+1 ) );  
-#else 
-   // SUPERHACK !! KSpread only !!!
-  if( colRelative )
-    colRef -= col;
-  else colRef++;
-  if( rowRelative )
-    rowRef -= row;
-  else rowRef++;
-  if( !colRelative )
-    result.append( UString("$") );
-  else  result.append( UString("#") ); 
-  result.append( UString::from( colRef ) );  
-  if( !rowRelative )
-    result.append( UString("$") );
-  else  result.append( UString("#") ); // HACK, only for KSpread !!!
-  result.append( UString::from( rowRef ) );  
-  result.append( UString("#") );
-#endif
+  
+  result.append( UString("]") );// OpenDocument format
 
   return result;  
 }
