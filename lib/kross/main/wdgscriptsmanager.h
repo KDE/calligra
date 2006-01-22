@@ -1,7 +1,7 @@
 /*
  * This file is part of the KDE project
  *
- * Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or

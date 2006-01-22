@@ -18,19 +18,21 @@
  */
 #include "wdgscriptsmanager.h"
 
-#include <qobjectlist.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qheader.h>
-#include <klistview.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kmessagebox.h>
-#include <ktoolbar.h>
-#include <kiconloader.h>
-#include <kfiledialog.h>
+#include <qobjectlist.h>
+
 #include <kapplication.h>
 #include <kdeversion.h>
+#include <kfiledialog.h>
+#include <kiconloader.h>
+#include <klistview.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kpushbutton.h>
+#include <kstandarddirs.h>
+#include <ktoolbar.h>
 
 #if KDE_IS_VERSION(3, 4, 0)
   // The KNewStuffSecure we use internaly for the GetHotNewStuff-functionality
@@ -107,7 +109,11 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     //scriptsList->setRootIsDecorated(true);
     scriptsList->setSorting(-1);
 
-    scriptsList->addColumn("");
+    scriptsList->addColumn("name");
+    scriptsList->addColumn("description");
+    scriptsList->setColumnWidthMode(1, QListView::Manual);
+    scriptsList->hideColumn(1);
+    scriptsList->setTooltipColumn(1);
     //scriptsList->addColumn(i18n("Name"));
     //scriptsList->addColumn(i18n("Action"));
 
@@ -117,31 +123,46 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
 
     //toolBar->setIconText( KToolBar::IconTextRight );
 
-    toolBar->insertButton("exec", WdgScriptsManagerPrivate::ExecBtn, false, i18n("Execute"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::ExecBtn, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
-
-    toolBar->insertLineSeparator();
-
-    toolBar->insertButton("fileopen", WdgScriptsManagerPrivate::LoadBtn, true, i18n("Load"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::LoadBtn, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
-
-    toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UnloadBtn, false, i18n("Unload"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::UnloadBtn, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
-
-    toolBar->insertLineSeparator();
-
-    toolBar->insertButton("fileimport", WdgScriptsManagerPrivate::InstallBtn, true, i18n("Install"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::InstallBtn, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
-
-    toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UninstallBtn, false, i18n("Uninstall"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::UninstallBtn, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
-
+    
+    btnExec->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "exec", KIcon::MainToolbar, 16 ));
+    connect(btnExec, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
+    btnLoad->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileopen", KIcon::MainToolbar, 16 ));
+    connect(btnLoad, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
+    btnUnload->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", KIcon::MainToolbar, 16 ));
+    connect(btnUnload, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
+    btnInstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileimport", KIcon::MainToolbar, 16 ));
+    connect(btnInstall, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
+    btnUninstall->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "fileclose", KIcon::MainToolbar, 16 ));
+    connect(btnUninstall, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
 #ifdef KROSS_SUPPORT_NEWSTUFF
-    toolBar->insertLineSeparator();
-
-    toolBar->insertButton("knewstuff", WdgScriptsManagerPrivate::NewStuffBtn, true, i18n("Get More Scripts"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::NewStuffBtn, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
+    btnNewStuff->setIconSet(KGlobal::instance()->iconLoader()->loadIconSet( "knewstuff", KIcon::MainToolbar, 16 ));
+    connect(btnNewStuff, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
 #endif
+//     toolBar->insertButton("exec", WdgScriptsManagerPrivate::ExecBtn, false, i18n("Execute"));
+//     toolBar->addConnection(WdgScriptsManagerPrivate::ExecBtn, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
+// 
+//     toolBar->insertLineSeparator();
+// 
+//     toolBar->insertButton("fileopen", WdgScriptsManagerPrivate::LoadBtn, true, i18n("Load"));
+//     toolBar->addConnection(WdgScriptsManagerPrivate::LoadBtn, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
+// 
+//     toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UnloadBtn, false, i18n("Unload"));
+//     toolBar->addConnection(WdgScriptsManagerPrivate::UnloadBtn, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
+// 
+//     toolBar->insertLineSeparator();
+// 
+//     toolBar->insertButton("fileimport", WdgScriptsManagerPrivate::InstallBtn, true, i18n("Install"));
+//     toolBar->addConnection(WdgScriptsManagerPrivate::InstallBtn, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
+// 
+//     toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UninstallBtn, false, i18n("Uninstall"));
+//     toolBar->addConnection(WdgScriptsManagerPrivate::UninstallBtn, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
+// 
+// #ifdef KROSS_SUPPORT_NEWSTUFF
+//     toolBar->insertLineSeparator();
+// 
+//     toolBar->insertButton("knewstuff", WdgScriptsManagerPrivate::NewStuffBtn, true, i18n("Get More Scripts"));
+//     toolBar->addConnection(WdgScriptsManagerPrivate::NewStuffBtn, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
+// #endif
 
     connect(scr, SIGNAL( collectionChanged(ScriptActionCollection*) ),
             this, SLOT( slotFillScriptsList() ));
@@ -182,8 +203,9 @@ QListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, QListViewIte
         return 0;
 
     ListItem* i = new ListItem(dynamic_cast<ListItem*>(parentitem), afteritem, action);
-    i->setText(0, action->text()); // FIXME: i18nise it for ko2.0 /me feel stupid to have forget it :(
-
+    i->setText(0, action-> name()); // FIXME: i18nise it for ko2.0 /me feel stupid to have forget it :(
+    i->setText(1, action-> text());
+    
     QPixmap pm;
     if(action->hasIcon()) {
         KIconLoader* icons = KGlobal::iconLoader();
