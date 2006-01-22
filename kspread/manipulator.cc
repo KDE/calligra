@@ -115,6 +115,7 @@ void Manipulator::execute()
     return;   // do nothing if pre-processing fails
   }
 
+  m_sheet->doc()->setModified(true);
   m_sheet->doc()->undoLock ();
   m_sheet->doc()->emitBeginOperation();
 
