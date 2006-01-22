@@ -201,7 +201,7 @@ void KexiInputTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 		}
 
 		if (tmp_val.isEmpty()) {
-			if (origValue.isNull()) {
+			if (origValue.toString().isEmpty()) {
 				//we have to set NULL initial value:
 				m_lineedit->setText(QString::null);
 			}
