@@ -50,6 +50,7 @@ extern "C" int kdemain(int argc, char *argv[])
 	KGlobal::locale()->insertCatalogue("standalone_kexi");
 #endif
 	KGlobal::locale()->insertCatalogue("koffice");
+	KGlobal::locale()->insertCatalogue("koproperty");
 
 	if (GUIenabled) {
 		dummyWidget = new QWidget();
