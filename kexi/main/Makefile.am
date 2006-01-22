@@ -23,7 +23,7 @@ libkeximain_la_LIBADD =  $(top_builddir)/kexi/kexidb/libkexidb.la $(top_builddir
 
 #disabled	../migration/libkeximigrate.la
 
-INCLUDES = -I$(INC_KFEEDBACK) $(LIB_KEXI_KMDI_INCLUDES) \
+INCLUDES = $(INC_KFEEDBACK) $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/lib/kofficeui -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/core \
 	-I$(top_srcdir)/kexi/main \
 	-I$(top_srcdir)/kexi/main/startup -I$(top_srcdir)/kexi/widget \

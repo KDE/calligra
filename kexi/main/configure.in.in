@@ -82,7 +82,7 @@ if test "$have_kfeedback" != yes; then
     CXXFLAGS="$CXXFLAGS -DFEEDBACK_CLASS=KexiFeedbackWizard -DFEEDBACK_INCLUDE=\"<kexifeedbackwizard.h>\""
     use_kexifb="yes"
     AC_MSG_RESULT([using internal])
-    INC_KFEEDBACK='../3rdparty/kexifeedbackwizard/lib'
+    INC_KFEEDBACK='-I../3rdparty/kexifeedbackwizard/lib'
     LIB_KFEEDBACK='../3rdparty/kexifeedbackwizard/lib/libkexifeedbackwizard.la'
   else
     use_kexifb="no"
