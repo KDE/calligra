@@ -54,7 +54,7 @@ namespace Kivio {
     Settings::setHeight(layout.ptHeight);
   }
 
-  void Config::setGrid(const KivioGridData& grid)
+  void Config::setGrid(const KivioGridData& /*grid*/)
   {
   }
   

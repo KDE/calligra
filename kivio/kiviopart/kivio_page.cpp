@@ -182,7 +182,7 @@ QDomElement KivioPage::save( QDomDocument& doc )
     return page;
 }
 
-void KivioPage::saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* styles)
+void KivioPage::saveOasis(KoStore* /*store*/, KoXmlWriter* docWriter, KoGenStyles* styles)
 {
   docWriter->startElement("draw:page");
   docWriter->addAttribute("draw:name", m_strName);

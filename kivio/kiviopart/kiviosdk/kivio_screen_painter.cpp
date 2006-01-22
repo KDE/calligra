@@ -580,7 +580,7 @@ void KivioScreenPainter::drawPolygon( QPointArray &pArray )
       (KImageEffect::GradientType) m_pFillStyle->gradientType());
     pix.convertFromImage(image);
     b.setPixmap(pix);
-    m_pPainter->setBrushOrigin(x1 + m_transX, y1 + m_transY);
+    m_pPainter->setBrushOrigin(x1 + (int)m_transX, y1 + (int)m_transY);
   }
 
   m_pPainter->setPen(m_pLineStyle->pen(1.0f));

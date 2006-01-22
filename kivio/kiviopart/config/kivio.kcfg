@@ -3,7 +3,7 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
-  <include>koPageLayoutDia.h</include>
+  <include>koPageLayout.h</include>
   <include>kivioglobal.h</include>
   <include>koGlobal.h</include>
   <include>kglobal.h</include>
@@ -22,27 +22,27 @@
     </entry>
     <entry name="Width" type="Double">
       <label>The width of the page.</label>
-      <default code="true">KoPageLayoutDia::standardLayout().ptWidth</default>
+      <default code="true">KoPageLayout::standardLayout().ptWidth</default>
     </entry>
     <entry name="Height" type="Double">
       <label>The height of the page.</label>
-      <default code="true">KoPageLayoutDia::standardLayout().ptHeight</default>
+      <default code="true">KoPageLayout::standardLayout().ptHeight</default>
     </entry>
     <entry name="BorderTop" type="Double">
       <label>The size of the border at the top of the page.</label>
-      <default code="true">KoPageLayoutDia::standardLayout().ptTop</default>
+      <default code="true">KoPageLayout::standardLayout().ptTop</default>
     </entry>
     <entry name="BorderBottom" type="Double">
       <label>The size of the border at the bottom of the page.</label>
-      <default code="true">KoPageLayoutDia::standardLayout().ptBottom</default>
+      <default code="true">KoPageLayout::standardLayout().ptBottom</default>
     </entry>
     <entry name="BorderLeft" type="Double">
       <label>The size of the border at the left of the page.</label>
-      <default code="true">KoPageLayoutDia::standardLayout().ptLeft</default>
+      <default code="true">KoPageLayout::standardLayout().ptLeft</default>
     </entry>
     <entry name="BorderRight" type="Double">
       <label>The size of the border at the right of the page.</label>
-      <default code="true">KoPageLayoutDia::standardLayout().ptRight</default>
+      <default code="true">KoPageLayout::standardLayout().ptRight</default>
     </entry>
   </group>
   <group name="Interface">

@@ -125,7 +125,7 @@ void KivioStencilGeometryPanel::setPageLayout(const KoPageLayout& l)
   m_pY->setMaxValue(l.ptHeight);
 }
 
-void KivioStencilGeometryPanel::setRotation(int d)
+void KivioStencilGeometryPanel::setRotation(int /*d*/)
 {
 //   m_rotationSBox->setValue(d);
 }

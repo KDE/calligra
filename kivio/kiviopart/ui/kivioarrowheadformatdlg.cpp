@@ -58,7 +58,7 @@ void KivioArrowHeadFormatDlg::init()
   startAHHeaderLine->setFrameStyle(QFrame::HLine|QFrame::Plain);
   QLabel* startAHTypeLbl = new QLabel(i18n("&Type:"), mainWidget);
   m_startAHTypeCBox = new KComboBox(mainWidget);
-  loadArrowHeads(m_startAHTypeCBox, false);
+  loadArrowHeads(m_startAHTypeCBox);
   startAHTypeLbl->setBuddy(m_startAHTypeCBox);
   QLabel* startAHWidthLbl = new QLabel(i18n("&Width:"), mainWidget);
   m_startAHWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
@@ -75,7 +75,7 @@ void KivioArrowHeadFormatDlg::init()
   endAHHeaderLine->setFrameStyle(QFrame::HLine|QFrame::Plain);
   QLabel* endAHTypeLbl = new QLabel(i18n("T&ype:"), mainWidget);
   m_endAHTypeCBox = new KComboBox(mainWidget);
-  loadArrowHeads(m_endAHTypeCBox, true);
+  loadArrowHeads(m_endAHTypeCBox);
   endAHTypeLbl->setBuddy(m_endAHTypeCBox);
   QLabel* endAHWidthLbl = new QLabel(i18n("W&idth:"), mainWidget);
   m_endAHWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
@@ -109,7 +109,7 @@ void KivioArrowHeadFormatDlg::init()
   gl->setRowStretch(11, 10);
 }
 
-void KivioArrowHeadFormatDlg::loadArrowHeads(KComboBox* combo, bool endArrow)
+void KivioArrowHeadFormatDlg::loadArrowHeads(KComboBox* combo)
 {
   QBitmap mask;
   QPixmap pixAll = Kivio::arrowHeadPixmap();

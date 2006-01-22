@@ -1557,7 +1557,6 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
  */
 void KivioSMLStencil::updateGeometry()
 {
-  KivioConnectorTarget *pTarget, *pOriginal;
   //kdDebug(43000) << "m_x = " << m_x << " m_y = " << m_y << endl;
 
   QWMatrix m;
@@ -1566,7 +1565,7 @@ void KivioSMLStencil::updateGeometry()
   m.rotate(m_rotation);
   m.translate(-m_w / 2.0, -m_h / 2.0);
 
-  pTarget = m_pConnectorTargets->first();
+  KivioConnectorTarget* pTarget = m_pConnectorTargets->first();
 
   while( pTarget )
   {

@@ -59,7 +59,7 @@ StencilBarDockManager::~StencilBarDockManager()
 }
 
 void StencilBarDockManager::insertStencilSet( QWidget* w, const QString& caption,
-                                              BarPos pos, QRect r, KivioStackBar* destinationBar )
+                                              BarPos pos, QRect /*r*/, KivioStackBar* destinationBar )
 {
   KivioStackBar* bar = 0L;
   

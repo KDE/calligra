@@ -29,13 +29,13 @@ class QPixmap;
 #include <koffice_export.h>
 class KIVIO_EXPORT KivioStencilFactory : public QObject
 {
-	Q_OBJECT
-    public:
-	KivioStencilFactory(QObject *parent=0, const char*name=0, const QStringList& args = QStringList()) :
-		QObject(parent, name){;}
-	virtual KivioStencil *NewStencil(const QString& name) =0;
-	virtual KivioStencil *NewStencil()=0;
-    	virtual QPixmap *GetIcon()=0;
-    	virtual KivioStencilSpawnerInfo *GetSpawnerInfo()=0;
+  Q_OBJECT
+  public:
+    KivioStencilFactory(QObject *parent=0, const char*name=0, const QStringList& args = QStringList())
+      : QObject(parent, name) { Q_UNUSED(args) }
+    virtual KivioStencil *NewStencil(const QString& name) =0;
+    virtual KivioStencil *NewStencil()=0;
+    virtual QPixmap *GetIcon()=0;
+    virtual KivioStencilSpawnerInfo *GetSpawnerInfo()=0;
 };
 #endif

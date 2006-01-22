@@ -50,8 +50,8 @@ KivioArrowHeadAction::KivioArrowHeadAction(const QString &text, const QString &p
   m_endPopup->setCheckable(true);
   m_popup->insertItem(SmallIconSet("start_arrowhead", 16), i18n("Arrowhead at Origin"), m_startPopup);
   m_popup->insertItem(SmallIconSet("end_arrowhead", 16), i18n("Arrowhead at End"), m_endPopup);
-  loadArrowHeads(m_startPopup, false);
-  loadArrowHeads(m_endPopup, true);
+  loadArrowHeads(m_startPopup);
+  loadArrowHeads(m_endPopup);
   m_currentStart = m_currentEnd = 0;
   m_startPopup->setItemChecked(0, true);
   m_endPopup->setItemChecked(0, true);
@@ -159,7 +159,7 @@ int KivioArrowHeadAction::plug( QWidget* widget, int index)
   return -1;
 }
 
-void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup, bool endArrow)
+void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup)
 {
   QBitmap mask;
   QPixmap pixAll = Kivio::arrowHeadPixmap();  

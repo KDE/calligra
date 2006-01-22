@@ -100,7 +100,7 @@ void KivioStencil::paintConnectorTargets( KivioIntraStencilData * )
 
 void KivioStencil::paintSelectionHandles( KivioIntraStencilData *pData )
 {
-  double newX, newY, newW, newH;
+  int newX, newY, newW, newH;
 
   // Handle Width
   //const double HW = 6.0f;
