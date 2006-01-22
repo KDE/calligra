@@ -62,11 +62,10 @@ public:
 			pitem->setPixmap( 0, (*it)->iconSet( KIcon::Small, 16 ).pixmap( QIconSet::Small, QIconSet::Active ) );
 			if (!pitem->pixmap(0) || pitem->pixmap(0)->isNull())
 				pitem->setPixmap( 0, noIcon );
-			if (!selectedItem() && dialog->currentActionName() == name) {
+			if (!selectedItem() && dialog->currentActionName() == name)
 				setSelected(pitem, true);
-				ensureItemVisible(pitem);
-			}
 		}
+		ensureItemVisible(selectedItem());
 	}
 	virtual ~ActionsListView() {}
 };
@@ -93,6 +92,7 @@ public:
 					if(!selectedItem() && dialog->currentActionName() == name)
 						setSelected(item, true);
 				}
+				ensureItemVisible(selectedItem());
 			}
 		}
 	}
@@ -166,11 +166,10 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 		}
 		
 	}
-	else if (d->currentActionName.startsWith("kaction:")) {
+	else { // default == kaction //if (d->currentActionName.startsWith("kaction:")) {
 		combobox->setCurrentItem(ACTION_TYPE_KACTION_ID);
 		slotActionTypeSelected(ACTION_TYPE_KACTION_ID);
 	}
-	//else "No Action"
 	connect(combobox, SIGNAL(activated(int)), this, SLOT(slotActionTypeSelected(int)));
 	connect(this, SIGNAL(finished()), SLOT(closeDialog()));
 }

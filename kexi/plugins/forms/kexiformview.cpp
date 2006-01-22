@@ -651,6 +651,10 @@ KexiFormView::storeData(bool dontAsk)
 	for (QMapConstIterator<QWidget*, KexiBLOBBuffer::Id_t> it = m_unsavedLocalBLOBs.constBegin(); 
 		it!=m_unsavedLocalBLOBs.constEnd(); ++it)
 	{
+		if (!it.key()) {
+			kexipluginswarn << "KexiFormView::storeData(): it.key()==0 !" << endl;
+			continue;
+		}
 		kexipluginsdbg << "name=" << it.key()->name() << " dataID=" << it.data() << endl;
 		KexiBLOBBuffer::Handle h( blobBuf->objectForId(it.data(), /*!stored*/false) );
 		if (!h)
