@@ -560,10 +560,18 @@ static bool isDateFormat( QString valueFormat )
   if( vfu == "D\\-MMM" ) return true;
   if( vfu == "D-MM" ) return true;
   if( vfu == "D\\-MM" ) return true;
+  if( vfu == "MMM/DD" ) return true;
+  if( vfu == "MMM/D" ) return true;
+  if( vfu == "MM/DD" ) return true;
+  if( vfu == "MM/D" ) return true;
+  if( vfu == "MM/DD/YY" ) return true;
+  if( vfu == "MM/DD/YYYY" ) return true;
   if( vfu == "YYYY/MM/D" ) return true;
   if( vfu == "YYYY/MM/DD" ) return true;
   if( vfu == "YYYY-MM-D" ) return true;
+  if( vfu == "YYYY\\-MM\\-D" ) return true;
   if( vfu == "YYYY-MM-DD" ) return true;
+  if( vfu == "YYYY\\-MM\\-DD" ) return true;
   
   return false;
 }
@@ -1587,7 +1595,7 @@ KoXmlWriter* xmlWriter )
     xmlWriter->endElement();  // number:month
   
     xmlWriter->endElement();  // number:date-style
-}
+  }
   else if( (valueFormat.lower() == "d-mm") || (valueFormat.lower() == "d\\-mm") )
   {
     xmlWriter->startElement( "number:date-style" );
@@ -1607,6 +1615,264 @@ KoXmlWriter* xmlWriter )
     xmlWriter->addAttribute( "number:style", "long" ); 
     xmlWriter->endElement();  // number:month
   
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "mmm/d" )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "true" ); 
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "mmm/dd" )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "true" ); 
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "mm/d" )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "mm/dd" )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "mm/dd/yy" )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:year
+   
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "mm/dd/yyyy" )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:year
+   
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "yyyy/mm/dd" )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:year
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "yyyy/mm/d" )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:year
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( (valueFormat.lower() == "yyyy-mm-dd") || (valueFormat.lower() == "yyyy\\-mm\\-dd") )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:year
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( (valueFormat.lower() == "yyyy-mm-d") || (valueFormat.lower() == "yyyy\\-mm\\-d") )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:year
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
     xmlWriter->endElement();  // number:date-style
   }
 }
