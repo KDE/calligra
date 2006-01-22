@@ -557,7 +557,9 @@ static bool isDateFormat( QString valueFormat )
   if( vfu == "D-MMM-YYYY" ) return true;
   if( vfu == "D\\-MMM\\-YYYY" ) return true;
   if( vfu == "D-MMM" ) return true;
+  if( vfu == "D\\-MMM" ) return true;
   if( vfu == "D-MM" ) return true;
+  if( vfu == "D\\-MM" ) return true;
   if( vfu == "YYYY/MM/D" ) return true;
   if( vfu == "YYYY/MM/DD" ) return true;
   if( vfu == "YYYY-MM-D" ) return true;
@@ -1602,10 +1604,9 @@ KoXmlWriter* xmlWriter )
     
     xmlWriter->startElement( "number:month" );
     xmlWriter->addAttribute( "number:textual", "false" ); 
-    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->addAttribute( "number:style", "long" ); 
     xmlWriter->endElement();  // number:month
   
     xmlWriter->endElement();  // number:date-style
   }
- 
 }
