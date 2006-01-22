@@ -591,6 +591,8 @@ static bool isTimeFormat( QString valueFormat )
   if( vf == "[ss]" ) return true;
   if( vf == "mm:ss" ) return true;
   if( vf == "mm:ss.0" ) return true;
+  if( vf == "[mm]:ss" ) return true;
+  if( vf == "[ss]" ) return true;
   
   return false;
 }
@@ -1875,4 +1877,245 @@ KoXmlWriter* xmlWriter )
     
     xmlWriter->endElement();  // number:date-style
   }
+
+  else if( valueFormat == "h:mm AM/PM" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:hours" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:hour
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( " " );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:am-pm" );
+    xmlWriter->endElement();  // number:am-pm
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "h:mm:ss AM/PM" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:hours" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:hour
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:seconds" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( " " );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:am-pm" );
+    xmlWriter->endElement();  // number:am-pm
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "h:mm" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:hours" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:hour
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "h:mm:ss" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:hours" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:hour
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:seconds" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "[h]:mm" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->addAttribute( "number:truncate-on-overflow", "false" ); 
+    
+    xmlWriter->startElement( "number:hours" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:hour
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "[h]:mm:ss" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->addAttribute( "number:truncate-on-overflow", "false" ); 
+    
+    xmlWriter->startElement( "number:hours" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:hour
+   
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:seconds" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "mm:ss" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:seconds" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "mm:ss.0" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:seconds" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    
+    xmlWriter->endElement();  // number:minutes
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ".0" );
+    xmlWriter->endElement();  // number:text
+    
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "[mm]:ss" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->addAttribute( "number:truncate-on-overflow", "false" ); 
+    
+    xmlWriter->startElement( "number:minutes" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+  
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( ":" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:seconds" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+  else if( valueFormat == "[ss]" )
+  {
+    xmlWriter->startElement( "number:time-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->addAttribute( "number:truncate-on-overflow", "false" ); 
+    
+    xmlWriter->startElement( "number:seconds" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:minutes
+    
+    xmlWriter->endElement();  // number:time-style
+  }
+
 }
