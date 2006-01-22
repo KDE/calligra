@@ -29,6 +29,7 @@
 
 #include <qbuffer.h>
 #include <qcstring.h>
+#include <qdatetime.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qtextstream.h>
@@ -74,6 +75,7 @@ public:
   int columnFormatIndex;
   int rowFormatIndex;
   int cellFormatIndex;
+  int valueFormatIndex;
   
   void processWorkbookForBody( Workbook* workbook, KoXmlWriter* xmlWriter );
   void processWorkbookForStyle( Workbook* workbook, KoXmlWriter* xmlWriter );
@@ -86,6 +88,7 @@ public:
   void processCellForBody( Cell* cell, KoXmlWriter* xmlWriter );
   void processCellForStyle( Cell* cell, KoXmlWriter* xmlWriter );
   void processFormat( Format* format, KoXmlWriter* xmlWriter );
+  void processValueFormat( QString valueFormat, QString refName, KoXmlWriter* xmlWriter );
 };
 
 
@@ -148,6 +151,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   d->columnFormatIndex = 1;
   d->rowFormatIndex = 1;
   d->cellFormatIndex = 1;
+  d->valueFormatIndex = 1;
   if ( !d->createStyles( &oasisStore ) ) 
   {
     kdWarning() << "Couldn't open the file 'styles.xml'." << endl;
@@ -161,6 +165,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
   d->columnFormatIndex = 1;
   d->rowFormatIndex = 1;
   d->cellFormatIndex = 1;
+  d->valueFormatIndex = 1;
   if ( !d->createContent( &oasisStore ) )
   {
     kdWarning() << "Couldn't open the file 'content.xml'." << endl;
@@ -206,21 +211,27 @@ bool ExcelImport::Private::createContent( KoOasisStore* store )
   contentWriter->addAttribute( "svg:font-family", "&apos;Times New Roman&apos;" );
   contentWriter->endElement(); // style:font-face
   contentWriter->endElement(); // office:font-face-decls
-  
-  // office:automatic-styles
+
+  // important: reset all indexes  
   sheetFormatIndex = 1;
   columnFormatIndex = 1;
   rowFormatIndex = 1;
   cellFormatIndex = 1;
+  valueFormatIndex = 1;
+  
+  // office:automatic-styles
   contentWriter->startElement( "office:automatic-styles" );
   processWorkbookForStyle( workbook, contentWriter );
   contentWriter->endElement(); // office:automatic-style
 
-  // office:body
+  // important: reset all indexes  
   sheetFormatIndex = 1;
   columnFormatIndex = 1;
   rowFormatIndex = 1;
   cellFormatIndex = 1;
+  valueFormatIndex = 1;
+  
+  // office:body
   bodyWriter->startElement( "office:body" );
   processWorkbookForBody( workbook, bodyWriter );
   bodyWriter->endElement();  // office:body
@@ -526,6 +537,70 @@ void ExcelImport::Private::processRowForStyle( Row* row, int repeat, KoXmlWriter
   }
 }
 
+static bool isPercentageFormat( QString valueFormat )
+{
+  if( valueFormat.isEmpty() ) return false;
+  if( valueFormat.length() < 1 ) return false;
+  return valueFormat[valueFormat.length()-1] == QChar('%');
+}
+
+static bool isDateFormat( QString valueFormat )
+{
+  QString vfu = valueFormat.upper();
+  
+  if( vfu == "M/D/YY" ) return true;
+  if( vfu == "M/D/YYYY" ) return true;
+  if( vfu == "MM/DD/YY" ) return true;
+  if( vfu == "MM/DD/YYYY" ) return true;
+  if( vfu == "D-MMM-YY" ) return true;
+  if( vfu == "D\\-MMM\\-YY" ) return true;
+  if( vfu == "D-MMM-YYYY" ) return true;
+  if( vfu == "D\\-MMM\\-YYYY" ) return true;
+  if( vfu == "D-MMM" ) return true;
+  if( vfu == "D-MM" ) return true;
+  if( vfu == "YYYY/MM/D" ) return true;
+  if( vfu == "YYYY/MM/DD" ) return true;
+  if( vfu == "YYYY-MM-D" ) return true;
+  if( vfu == "YYYY-MM-DD" ) return true;
+  
+  return false;
+}
+
+static bool isTimeFormat( QString valueFormat )
+{
+  QString vf = valueFormat;
+  
+  if( vf == "h:mm AM/PM" ) return true;
+  if( vf == "h:mm:ss AM/PM" ) return true;
+  if( vf == "h:mm" ) return true;
+  if( vf == "h:mm:ss" ) return true;
+  if( vf == "[h]:mm:ss" ) return true;
+  if( vf == "[h]:mm" ) return true;
+  if( vf == "[mm]:ss" ) return true;
+  if( vf == "M/D/YY h:mm" ) return true;
+  if( vf == "[ss]" ) return true;
+  if( vf == "mm:ss" ) return true;
+  if( vf == "mm:ss.0" ) return true;
+  
+  return false;
+}
+
+static QString convertDate( double serialNo )
+{
+  // reference is midnight 30 Dec 1899
+  QDate dd( 1899, 12, 30 );
+  dd = dd.addDays( (int) serialNo );
+  return dd.toString( "yyyy-MM-dd" );
+}
+
+static QString convertTime( double serialNo )
+{
+  // reference is midnight 30 Dec 1899
+  QTime tt;
+  tt = tt.addMSecs( qRound( (serialNo-(int)serialNo) * 86400 * 1000 ) );
+  return tt.toString( "PThhHmmMss,zzz0S" );
+}  
+
 void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWriter )
 {
   if( !cell ) return;
@@ -535,6 +610,10 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
   xmlWriter->addAttribute( "table:style-name", QString("ce%1").arg(cellFormatIndex) );  
   cellFormatIndex++;
   
+  QString formula = string( cell->formula() ).string();
+  if( !formula.isEmpty() )
+    xmlWriter->addAttribute( "table:formula", formula.prepend("=") );
+  
   Value value = cell->value();
   
   if( value.isBoolean() )
@@ -542,15 +621,41 @@ void ExcelImport::Private::processCellForBody( Cell* cell, KoXmlWriter* xmlWrite
     xmlWriter->addAttribute( "office:value-type", "boolean" );
     xmlWriter->addAttribute( "office:boolean-value", value.asBoolean() ? "true" : "false" );
   }
-  else if( value.isFloat() )
+  else if( value.isFloat() || value.isInteger() )
   {
-    xmlWriter->addAttribute( "office:value-type", "float" );
-    xmlWriter->addAttribute( "office:value", QString::number( value.asFloat() ) );
-  }
-  else if( value.isInteger() )
-  {
-    xmlWriter->addAttribute( "office:value-type", "float" );
-    xmlWriter->addAttribute( "office:value", QString::number( value.asInteger() ) );
+    QString valueFormat = string( cell->format().valueFormat() ).string();
+    
+    bool handled = false;
+    
+    if( isPercentageFormat( valueFormat ) )
+    {
+      handled = true;
+      xmlWriter->addAttribute( "office:value-type", "percentage" );
+      xmlWriter->addAttribute( "office:value", QString::number( value.asFloat(), 'g', 15 ) );
+    }
+    
+    if( isDateFormat( valueFormat ) )
+    {
+      handled = true;
+      QString dateValue = convertDate( value.asFloat() );
+      xmlWriter->addAttribute( "office:value-type", "date" );
+      xmlWriter->addAttribute( "office:date-value", dateValue );
+    }
+    
+    if( isTimeFormat( valueFormat ) )
+    {
+      handled = true;
+      QString timeValue = convertTime( value.asFloat() );
+      xmlWriter->addAttribute( "office:value-type", "time" );
+      xmlWriter->addAttribute( "office:time-value", timeValue );
+    }
+    
+    // fallback
+    if( !handled )
+    {
+      xmlWriter->addAttribute( "office:value-type", "float" );
+      xmlWriter->addAttribute( "office:value", QString::number( value.asFloat(), 'g', 15 ) );
+    }
   }
   else if( value.isString() )
   {
@@ -572,16 +677,31 @@ void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWrit
   if( !cell ) return;
   if( !xmlWriter ) return;
   
+  // TODO optimize with hash table
+  Format format = cell->format();
+  
+  // handle data format, e.g. number style
+  QString refName;
+  QString valueFormat = string( format.valueFormat() ).string();
+  if( valueFormat != QString("General") )
+  {
+    refName = QString("N%1").arg(valueFormatIndex);
+    valueFormatIndex++; 
+    processValueFormat( valueFormat, refName, xmlWriter );
+  }
+
+  // now the real table-cell  
   xmlWriter->startElement( "style:style" );
   xmlWriter->addAttribute( "style:family", "table-cell" );  
   xmlWriter->addAttribute( "style:name", QString("ce%1").arg(cellFormatIndex) );  
   cellFormatIndex++;
+  if( !refName.isEmpty() )
+    xmlWriter->addAttribute( "style:data-style-name", refName );  
   
-  Format format = cell->format();
-  // TODO optimize with hash table
   processFormat( &format, xmlWriter );
   
   xmlWriter->endElement();  // style:style
+
 }
 
 QString convertColor( const Color& color )
@@ -704,4 +824,788 @@ void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter
       xmlWriter->addAttribute( "fo:margin-left", QString::number( align.indentLevel() ) + "0pt" );
   }
   xmlWriter->endElement(); // style:paragraph-properties
+}
+
+void ExcelImport::Private::processValueFormat( QString valueFormat, QString refName, 
+KoXmlWriter* xmlWriter )
+{
+  int decimalPlaces = 2;
+  int leadingZeroes = 1;
+  int exponentDigits = -1;
+  bool percentage = false;
+
+  // TODO: someday we need a real MS Excel to OpenDocument format paraser
+  // this just catches the most common format, not covers all possible cases
+  
+  if( valueFormat == "0")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 0 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 1 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 2 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 3 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 4 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 5 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 6 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 7 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 8 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 9 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 10 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00000000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 11 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000000000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 12 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000000000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 13 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00000000000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 14 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000000000000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 15 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000000000000000")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 16 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 0 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 1 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 2 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 3 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 4 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 5 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 6 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 7 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 8 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 9 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 10 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00000000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 11 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000000000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 12 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000000000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 13 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.00000000000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 14 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.000000000000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 16 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0.0000000000000000E+00")
+  {
+    xmlWriter->startElement( "number:number-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    xmlWriter->startElement( "number:scientific-number" );
+    xmlWriter->addAttribute( "number:decimal-places", 17 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->addAttribute( "number:min-exponent-digits", 2 ); 
+    xmlWriter->endElement();  // number:scientific-number
+    xmlWriter->endElement();  // number:number-style
+  }
+  else if( valueFormat == "0%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 0 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.0%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 1 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.00%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 2 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 3 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.0000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 4 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.00000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 5 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 6 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.0000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 7 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.00000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 8 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.000000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 9 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.0000000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 10 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.00000000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 11 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.000000000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 12 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.0000000000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 13 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.00000000000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 14 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.000000000000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 15 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat == "0.0000000000000000%")
+  {
+    xmlWriter->startElement( "number:percentage-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->startElement( "number:number" );
+    xmlWriter->addAttribute( "number:decimal-places", 16 ); 
+    xmlWriter->addAttribute( "number:min-integer-digits", 1 ); 
+    xmlWriter->endElement();  // number:number
+    xmlWriter->startElement( "number:text" );
+    xmlWriter->addTextNode( "%" );
+    xmlWriter->endElement();  // number:text
+    xmlWriter->endElement();  // number:percentage-style
+  }
+  else if( valueFormat.lower() == "m/d/yy")
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:month
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:year
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( valueFormat.lower() == "m/d/yyyy")
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:month
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "/" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:year
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( (valueFormat.lower() == "d-mmm-yy") || (valueFormat.lower() == "d\\-mmm\\-yy") )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "true" ); 
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:month
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:year
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( (valueFormat.lower() == "d-mmm-yyyy") || (valueFormat.lower() == "d\\-mmm\\-yyyy") )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "true" ); 
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:month
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:year" );
+    xmlWriter->addAttribute( "number:style", "long" ); 
+    xmlWriter->endElement();  // number:year
+    
+    xmlWriter->endElement();  // number:date-style
+  }
+  else if( (valueFormat.lower() == "d-mmm") || (valueFormat.lower() == "d\\-mmm") )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "true" ); 
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->endElement();  // number:date-style
+}
+  else if( (valueFormat.lower() == "d-mm") || (valueFormat.lower() == "d\\-mm") )
+  {
+    xmlWriter->startElement( "number:date-style" );
+    xmlWriter->addAttribute( "style:name", refName ); 
+    xmlWriter->addAttribute( "style:family", "data-style" ); 
+    
+    xmlWriter->startElement( "number:day" );
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:day
+    
+    xmlWriter->startElement( "number:text");
+    xmlWriter->addTextNode( "-" );
+    xmlWriter->endElement();  // number:text
+    
+    xmlWriter->startElement( "number:month" );
+    xmlWriter->addAttribute( "number:textual", "false" ); 
+    xmlWriter->addAttribute( "number:style", "short" ); 
+    xmlWriter->endElement();  // number:month
+  
+    xmlWriter->endElement();  // number:date-style
+  }
+ 
 }
