@@ -283,6 +283,7 @@ void KHTMLReader::parseStyle(DOM::Element e) {
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
      if (PROPV("font-weight") == "bold")
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+     */
 /*
      // debugging code.
      kdDebug(30503) << "e.style()" << endl;
