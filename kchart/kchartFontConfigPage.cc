@@ -121,8 +121,8 @@ KChartFontConfigPage::KChartFontConfigPage( KChartParams* params,
 
 void KChartFontConfigPage::initList()
 {
-    if ( m_params->chartType() != KDChartParams::Pie
-	 && m_params->chartType() != KDChartParams::Ring ) {
+    if ( m_params->chartType() != KChartParams::Pie
+	 && m_params->chartType() != KChartParams::Ring ) {
         m_list->insertItem(new KChartFontListBoxItem( i18n("X-Title")));
         m_list->insertItem(new KChartFontListBoxItem( i18n("Y-Title")));
         m_list->insertItem(new KChartFontListBoxItem( i18n("X-Axis")));

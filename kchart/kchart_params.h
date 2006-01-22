@@ -54,6 +54,19 @@ class KChartParams : public KDChartParams
     KChartParams();
     ~KChartParams();
 
+    // Reimplementation of selected KDChartParams methods
+    ChartType  chartType() const { return (ChartType) KDChartParams::chartType(); }
+    void       setChartType( ChartType _type ) {
+      if ( _type == BarLines )
+	  /* NOTHING YET */; // FIXME
+      else
+	  KDChartParams::setChartType( (KDChartParams::ChartType) _type );
+    }
+
+    QString    chartTypeToString( ChartType _type) const;
+    ChartType  stringToChartType( const QString& string );
+
+
     DCOPObject  *dcopObject();
 
     bool loadOasis( const QDomElement& chartElem,

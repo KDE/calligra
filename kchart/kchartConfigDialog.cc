@@ -114,17 +114,21 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         subtypePage();
 
 	// The subtype configuration page (not for all types).
-        if ( m_params->chartType() == KDChartParams::Bar ) {
+        if ( m_params->chartType() == KChartParams::Bar ) {
             _parameter3dpage = new KChartParameter3dConfigPage(m_params,this );
             addTab( _parameter3dpage,i18n("Bar"));
         }
-#if 1	// Disabled due to bugs and all around uglyness.
-        else if ( m_params->chartType() == KDChartParams::Line) {
+        else if ( m_params->chartType() == KChartParams::Line) {
             _linepage3d= new KChartLine3dConfigPage(m_params,this);
             addTab( _linepage3d,i18n("Line"));
         }
+        else if ( m_params->chartType() == KChartParams::BarLines) {
+#if 0
+            m_barslinesPage = new KChartBarslinesConfigPage(m_params, this);
+            addTab( _linepage3d,i18n("Line"));
 #endif
-	else if ( m_params->chartType() == KDChartParams::Pie ) {
+        }
+	else if ( m_params->chartType() == KChartParams::Pie ) {
 
             _parameterpiepage = new KChartParameterPieConfigPage(m_params, 
 								 this );
@@ -135,7 +139,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             addTab( _piepage, i18n( "&Piedata" ) );
 #endif
         }
-        else if ( m_params->chartType() == KDChartParams::Polar) {
+        else if ( m_params->chartType() == KChartParams::Polar) {
             _polarpage=new KChartParameterPolarConfigPage(m_params,this);
             addTab( _polarpage,i18n("&Polar"));
         }
@@ -150,8 +154,8 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
         addTab( m_legendPage,i18n("Legend"));
 
 	// Add axes page if applicable (all except Pie, Ring).
-        if ( m_params->chartType() != KDChartParams::Pie
-	     && m_params->chartType() != KDChartParams::Ring ) {
+        if ( m_params->chartType() != KChartParams::Pie
+	     && m_params->chartType() != KChartParams::Ring ) {
 
             m_axespage = new KChartParameterConfigPage(m_params,this );
             addTab( m_axespage, i18n( "&Axes" ) );
@@ -167,9 +171,9 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 								   this );
         addTab( _backgroundpixpage, i18n( "&Background" ) );
 
-        if ( m_params->chartType() == KDChartParams::HiLo &&
-            ( m_params->hiLoChartSubType() == KDChartParams::HiLoClose ||
-              m_params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) ) {
+        if ( m_params->chartType() == KChartParams::HiLo &&
+            ( m_params->hiLoChartSubType() == KChartParams::HiLoClose ||
+              m_params->hiLoChartSubType() == KChartParams::HiLoOpenClose ) ) {
             // PENDING(kalle) Combo page needs to be redone completely.
             //         _hlcChart=new KChartComboPage(m_params,this);
 //         addTab( _hlcChart, i18n( "HLC Chart" ) );
@@ -240,7 +244,7 @@ void KChartConfigDialog::init()
     if (_parameter3dpage)
         _parameter3dpage->init();
 
-    if ( _linepage3d && m_params->chartType() == KDChartParams::Line)
+    if ( _linepage3d && m_params->chartType() == KChartParams::Line)
         _linepage3d->init();
 
     if (_parameterfontpage)
@@ -335,10 +339,10 @@ void KChartConfigDialog::apply()
     if (_piepage)
 	_piepage->apply();
 #endif
-    if( _parameter3dpage && m_params->chartType() == KDChartParams::Bar  )
+    if( _parameter3dpage && m_params->chartType() == KChartParams::Bar  )
         _parameter3dpage->apply();
 
-    if( _linepage3d && m_params->chartType() == KDChartParams::Line)
+    if( _linepage3d && m_params->chartType() == KChartParams::Line)
         _linepage3d->apply();
 
     if(_parameterfontpage)
@@ -350,9 +354,9 @@ void KChartConfigDialog::apply()
     if( m_subTypePage )
         m_subTypePage->apply();
 
-    if ( m_params->chartType() == KDChartParams::HiLo &&
-        ( m_params->hiLoChartSubType() == KDChartParams::HiLoClose ||
-          m_params->hiLoChartSubType() == KDChartParams::HiLoOpenClose ) )
+    if ( m_params->chartType() == KChartParams::HiLo &&
+        ( m_params->hiLoChartSubType() == KChartParams::HiLoClose ||
+          m_params->hiLoChartSubType() == KChartParams::HiLoOpenClose ) )
     {
         /* if( _hlcChart)
            _hlcChart->apply();*/

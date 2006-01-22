@@ -112,7 +112,7 @@ void KChartWizardSelectChartTypePage::incPos()
 
 void KChartWizardSelectChartTypePage::chartTypeSelected( int type )
 {
-    m_type = (KDChartParams::ChartType) type;
+    m_type = (KChartParams::ChartType) type;
     emit chartChange(type);
 }
 

@@ -387,7 +387,7 @@ void KChartView::pieChart()
 	forceAxisParams(false);
 	KChartParams  *params = ((KChartPart*)koDocument())->params();
 
-	params->setChartType( KDChartParams::Pie );
+	params->setChartType( KChartParams::Pie );
 	params->setThreeDPies(params->threeDBars());
 	params->setExplodeFactor( 0 );
 	params->setExplode( true );
@@ -404,7 +404,7 @@ void KChartView::forceAxisParams(bool lineMode) {
     KChartParams  *params = ((KChartPart*)koDocument())->params();
     KDChartAxisParams  axisParams;
     axisParams = params->axisParams( KDChartAxisParams::AxisPosLeft );
-    if(params->chartType() == KDChartParams::Line)
+    if(params->chartType() == KChartParams::Line)
         m_logarithmicScale = axisParams.axisCalcMode();
     if(lineMode) {
         if(m_logarithmicScale)
@@ -420,7 +420,7 @@ void KChartView::lineChart()
 	forceAxisParams(true);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
-	params->setChartType( KDChartParams::Line );
+	params->setChartType( KChartParams::Line );
 	params->setLineChartSubType( KDChartParams::LineNormal );
 
 	updateButton();
@@ -439,7 +439,7 @@ void KChartView::barsChart()
 	forceAxisParams(false);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
-	params->setChartType( KDChartParams::Bar );
+	params->setChartType( KChartParams::Bar );
 	params->setBarChartSubType( KDChartParams::BarNormal );
 
 	updateButton();
@@ -458,7 +458,7 @@ void KChartView::areasChart()
 	forceAxisParams(false);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
-	params->setChartType( KDChartParams::Area );
+	params->setChartType( KChartParams::Area );
 	params->setAreaChartSubType( KDChartParams::AreaNormal );
 
 	updateButton();
@@ -477,7 +477,7 @@ void KChartView::hiLoChart()
 	forceAxisParams(false);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
-	params->setChartType( KDChartParams::HiLo );
+	params->setChartType( KChartParams::HiLo );
 	params->setHiLoChartSubType( KDChartParams::HiLoNormal );
 
 	updateButton();
@@ -495,7 +495,7 @@ void KChartView::ringChart()
 	forceAxisParams(false);
 	KChartParams* params = ((KChartPart*)koDocument())->params();
 
-	params->setChartType( KDChartParams::Ring );
+	params->setChartType( KChartParams::Ring );
 
 	updateButton();
 	repaint();
@@ -596,11 +596,11 @@ void KChartView::updateButton()
     // Disable sub chart config item.
     KChartParams* params = ((KChartPart*)koDocument())->params();
 
-    bool state=(params->chartType()==KDChartParams::Bar ||
-                params->chartType()==KDChartParams::Area ||
-                params->chartType()==KDChartParams::Line ||
-                params->chartType()==KDChartParams::HiLo ||
-                params->chartType()==KDChartParams::Polar);
+    bool state=(params->chartType()==KChartParams::Bar ||
+                params->chartType()==KChartParams::Area ||
+                params->chartType()==KChartParams::Line ||
+                params->chartType()==KChartParams::HiLo ||
+                params->chartType()==KChartParams::Polar);
     m_subTypeChartConfig->setEnabled(state);
 }
 

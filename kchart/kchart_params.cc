@@ -44,6 +44,25 @@ KChartParams::~KChartParams()
 }
 
 
+QString KChartParams::chartTypeToString( ChartType _type) const
+{
+    if (_type == BarLines )
+	return "BarLines";
+    else
+	return KDChartParams::chartTypeToString( (KDChartParams::ChartType) _type );
+}
+
+
+KChartParams::ChartType
+KChartParams::stringToChartType( const QString& _string )
+{
+    if ( _string == "BarLines" )
+	return BarLines;
+    else
+	return (ChartType) KDChartParams::stringToChartType( _string );
+}
+
+
 DCOPObject* KChartParams::dcopObject()
 {
     if ( !m_dcop )
@@ -53,9 +72,9 @@ DCOPObject* KChartParams::dcopObject()
 
 static const struct {
     const char* oasisClass;
-    KDChartParams::ChartType chartType;
+    KChartParams::ChartType chartType;
 } oasisChartTypes[] = {
-    { "chart:bar", KDChartParams::Bar }
+    { "chart:bar", KChartParams::Bar }
 // TODO...
 };
 

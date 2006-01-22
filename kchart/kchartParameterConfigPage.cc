@@ -332,7 +332,7 @@ void KChartParameterConfigPage::apply()
             {
                 // Since in this version of kdChart logarithmic scales only work for Line charts,
                 // lets switch now
-                _params->setChartType( KDChartParams::Line );
+                _params->setChartType( KChartParams::Line );
             }
             params.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
         }

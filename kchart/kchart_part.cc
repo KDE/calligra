@@ -61,8 +61,8 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 	// Create the chart parameters and let the default be a bar chart
 	// with 3D looks.
 	m_params = new KChartParams();
-	m_params->setChartType( KDChartParams::Bar );
-	m_params->setBarChartSubType( KDChartParams::BarNormal );
+	m_params->setChartType( KChartParams::Bar );
+	m_params->setBarChartSubType( KChartParams::BarNormal );
 	//m_params->setThreeDBars( true );
 
         //Changed this to use columns rather than rows by default
@@ -316,7 +316,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     //
     // FIXME: In a HiLo chart, the Legend should be the same as the
     //        labels on the X Axis.  Should we disable one of them?
-    if (m_params->chartType() == KDChartParams::HiLo) {
+    if (m_params->chartType() == KChartParams::HiLo) {
 	KDChartTableData  tmpData = m_displayData;
 
 	// Calculate the min, max, open and close values for each row.
@@ -657,7 +657,7 @@ void KChartPart::loadConfig( KConfig *conf )
     // 							 percent_labels);
     //   label_dist = conf->readNumEntry("label_dist", label_dist);
     //   label_line = conf->readBoolEntry("label_line", label_line);
-    m_params->setChartType( (KDChartParams::ChartType)conf->readNumEntry( "type", m_params->chartType() ) );
+    m_params->setChartType( (KChartParams::ChartType)conf->readNumEntry( "type", m_params->chartType() ) );
     //   other_threshold = conf->readNumEntry("other_threshold", other_threshold);
 
     //   backgroundPixmapName = conf->readPathEntry( "backgroundPixmapName" );
@@ -1310,16 +1310,16 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
         switch(type)
         {
         case 1:
-            m_params->setChartType(KDChartParams::Line);
+            m_params->setChartType(KChartParams::Line);
             break;
         case 2:
-            m_params->setChartType(KDChartParams::Area);
+            m_params->setChartType(KChartParams::Area);
             break;
         case 3:
-            m_params->setChartType(KDChartParams::Bar);
+            m_params->setChartType(KChartParams::Bar);
             break;
         case 4:
-            m_params->setChartType(KDChartParams::HiLo);
+            m_params->setChartType(KChartParams::HiLo);
             break;
         case 5:
         case 6:
@@ -1331,35 +1331,35 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
                    KCHARTTYPE_COMBO_HLC_AREA,
             */
             /* line by default*/
-            m_params->setChartType(KDChartParams::Line);
+            m_params->setChartType(KChartParams::Line);
             break;
         case 9:
-            m_params->setChartType(KDChartParams::HiLo);
+            m_params->setChartType(KChartParams::HiLo);
             break;
         case 10:
-            m_params->setChartType(KDChartParams::Bar);
+            m_params->setChartType(KChartParams::Bar);
             break;
         case 11:
-            m_params->setChartType(KDChartParams::Area);
+            m_params->setChartType(KChartParams::Area);
             break;
         case 12:
-            m_params->setChartType(KDChartParams::Bar);
+            m_params->setChartType(KChartParams::Bar);
             break;
         case 13:
-            m_params->setChartType(KDChartParams::Area);
+            m_params->setChartType(KChartParams::Area);
             break;
         case 14:
-            m_params->setChartType(KDChartParams::Bar);
+            m_params->setChartType(KChartParams::Bar);
             break;
         case 15:
-            m_params->setChartType(KDChartParams::Area);
+            m_params->setChartType(KChartParams::Area);
             break;
         case 16:
-            m_params->setChartType(KDChartParams::Line);
+            m_params->setChartType(KChartParams::Line);
             break;
         case 17:
         case 18:
-            m_params->setChartType(KDChartParams::Pie);
+            m_params->setChartType(KChartParams::Pie);
             break;
 
         }

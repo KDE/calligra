@@ -63,29 +63,29 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
 	|| ( m_chart->chartType() == KChartParams::Area &&
 	     m_chart->params()->areaChartSubType() == KDChartParams::AreaNormal ) )
         m_normal->setChecked( true );
-    else if( ( m_chart->params()->chartType() == KDChartParams::Bar &&
+    else if( ( m_chart->params()->chartType() == KChartParams::Bar &&
           m_chart->params()->barChartSubType() == KDChartParams::BarStacked ) ||
-        ( m_chart->params()->chartType() == KDChartParams::Line &&
+        ( m_chart->params()->chartType() == KChartParams::Line &&
           m_chart->params()->lineChartSubType() == KDChartParams::LineStacked ) ||
-             ( m_chart->params()->chartType() == KDChartParams::Polar &&
+             ( m_chart->params()->chartType() == KChartParams::Polar &&
                m_chart->params()->polarChartSubType() == KDChartParams::PolarStacked ) ||
-        ( m_chart->params()->chartType() == KDChartParams::Area &&
+        ( m_chart->params()->chartType() == KChartParams::Area &&
           m_chart->params()->areaChartSubType() == KDChartParams::AreaStacked ) )
         m_stacked->setChecked( true );
-    else if( ( m_chart->params()->chartType() == KDChartParams::Bar &&
+    else if( ( m_chart->params()->chartType() == KChartParams::Bar &&
           m_chart->params()->barChartSubType() == KDChartParams::BarPercent ) ||
-        ( m_chart->params()->chartType() == KDChartParams::Line &&
+        ( m_chart->params()->chartType() == KChartParams::Line &&
           m_chart->params()->lineChartSubType() == KDChartParams::LinePercent ) ||
-             ( m_chart->params()->chartType() == KDChartParams::Polar &&
+             ( m_chart->params()->chartType() == KChartParams::Polar &&
                m_chart->params()->polarChartSubType() == KDChartParams::PolarPercent ) ||
-        ( m_chart->params()->chartType() == KDChartParams::Area &&
+        ( m_chart->params()->chartType() == KChartParams::Area &&
           m_chart->params()->areaChartSubType() == KDChartParams::AreaPercent ) )
         m_percent->setChecked( true );
     else {
         kdDebug(35001)<<"Error in chart_type\n";
     }
 
-    if( m_chart->params()->chartType() == KDChartParams::HiLo)
+    if( m_chart->params()->chartType() == KChartParams::HiLo)
     {
         if( m_chart->params()->hiLoChartSubType()==KDChartParams::HiLoNormal)
             m_normal->setChecked( true );

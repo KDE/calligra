@@ -62,7 +62,7 @@ private:
   int            m_colPos;
   int            m_rowPos;
 
-  KDChartParams::ChartType  m_type;
+  KChartParams::ChartType  m_type;
 
 };
 

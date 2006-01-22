@@ -44,6 +44,7 @@ class KChartHeaderFooterConfigPage;
 class KChartColorConfigPage;
 class KChartParameterConfigPage;
 class KChartParameter3dConfigPage;
+class KChartBarslinesConfigPage;
 class KChartParameterPieConfigPage;
 class KChartFontConfigPage;
 class KChartDataConfigPage;
@@ -78,6 +79,7 @@ protected:
 
     KChartParameter3dConfigPage      *_parameter3dpage;
     KChartLine3dConfigPage           *_linepage3d;
+    KChartBarslinesConfigPage        *m_barslinesPage;
     KChartParameterPieConfigPage     *_parameterpiepage;
     KChartParameterPolarConfigPage   *_polarpage;
 
