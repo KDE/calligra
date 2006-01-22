@@ -604,7 +604,7 @@ QPoint TextEditor::globalCursorPosition() const
 void TextEditor::checkFunctionAutoComplete()
 {  
   functionCompletionTimer->stop();
-  functionCompletionTimer->start( 500, true );
+  functionCompletionTimer->start( 2000, true );
 }
 
 void TextEditor::triggerFunctionAutoComplete()
