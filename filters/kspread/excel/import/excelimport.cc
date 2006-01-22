@@ -266,11 +266,11 @@ bool ExcelImport::Private::createStyles( KoOasisStore* store )
   stylesWriter->addAttribute( "style:country-complex", "none" );
   stylesWriter->endElement(); // style:text-properties
   stylesWriter->endElement(); // style:default-style
-  stylesWriter->endElement(); // office:styles
   stylesWriter->startElement( "style:style" );
   stylesWriter->addAttribute( "style:name", "Default" );
   stylesWriter->addAttribute( "style:family", "table-cell" );
   stylesWriter->endElement(); // style:style
+  stylesWriter->endElement(); // office:styles
   
   // office:automatic-styles
   stylesWriter->startElement( "office:automatic-styles" );
@@ -357,8 +357,11 @@ void ExcelImport::Private::processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWr
       processColumnForBody( column, repeated, xmlWriter );
       ci += repeated;
     }
-    else
+    else {
       ci++;
+      xmlWriter->startElement( "table:table-column" );
+      xmlWriter->endElement();
+    }
   }
   
   for( unsigned i = 0; i <= sheet->maxRow(); i++ )
@@ -430,6 +433,7 @@ void ExcelImport::Private::processColumnForBody( Column* column, int repeat, KoX
   xmlWriter->startElement( "table:table-column" );
   xmlWriter->addAttribute( "table:default-style-name", "Default" );  
   xmlWriter->addAttribute( "table:visibility", column->visible() ? "visible" : "collapse" );  
+  if(repeat > 1) xmlWriter->addAttribute( "table:number-columns-repeated", repeat );  
   xmlWriter->addAttribute( "table:style-name", QString("co%1").arg(columnFormatIndex) );  
   columnFormatIndex++;
 
@@ -443,7 +447,6 @@ void ExcelImport::Private::processColumnForStyle( Column* column, int repeat, Ko
   
   xmlWriter->startElement( "style:style" );
   xmlWriter->addAttribute( "style:family", "table-column" );  
-  if(repeat > 1) xmlWriter->addAttribute( "table:number-columns-repeated", repeat );  
   xmlWriter->addAttribute( "style:name", QString("co%1").arg(columnFormatIndex) );  
   columnFormatIndex++;
   
@@ -457,9 +460,13 @@ void ExcelImport::Private::processColumnForStyle( Column* column, int repeat, Ko
 
 void ExcelImport::Private::processRowForBody( Row* row, int repeat, KoXmlWriter* xmlWriter )
 {
-  if( !row ) return;
-  if( !row->sheet() ) return;
   if( !xmlWriter ) return;
+  if( !row ) {
+    xmlWriter->startElement( "table:table-row" );
+    xmlWriter->endElement();
+    return;
+  }
+  if( !row->sheet() ) return;
   
   // find the column of the rightmost cell (if any)
   int lastCol = -1;
@@ -481,7 +488,7 @@ void ExcelImport::Private::processRowForBody( Row* row, int repeat, KoXmlWriter*
       // empty cell
       xmlWriter->startElement( "table:table-cell" );
       xmlWriter->endElement();
-    }  
+    }
   }
   
   xmlWriter->endElement();  // table:table-row
@@ -577,34 +584,124 @@ void ExcelImport::Private::processCellForStyle( Cell* cell, KoXmlWriter* xmlWrit
   xmlWriter->endElement();  // style:style
 }
 
+QString convertColor( const Color& color )
+{
+  char buf[8];
+  sprintf( buf, "#%02x%02x%02x", color.red, color.green, color.blue );
+  return QString( buf );
+}
+
+QString convertBorder( const Pen& pen )
+{
+  if( pen.style == Pen::NoLine || pen.width == 0 ) return "none";
+  
+  QString result = QString::number( pen.width );
+  result += "pt ";
+  
+  switch( pen.style )
+  {
+    case Pen::SolidLine: result += "solid "; break;
+    case Pen::DashLine: result += "dashed "; break;
+    case Pen::DotLine: result += "dotted "; break;
+    case Pen::DashDotLine: result += "dot-dash "; break;
+    case Pen::DashDotDotLine: result += "dot-dot-dash "; break;
+  }
+  
+  return result + convertColor( pen.color );
+}
+
 void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter )
 {
   if( !format ) return;
   if( !xmlWriter ) return;
   
   FormatFont font = format->font();
-  xmlWriter->startElement( "style:text-properties" );
+  FormatAlignment align = format->alignment();
+  FormatBackground back = format->background();
+  FormatBorders borders = format->borders();
   
-  if( font.bold() ) 
-    xmlWriter->addAttribute( "fo:font-weight", "bold" );  
-    
-  if( font.italic() ) 
-    xmlWriter->addAttribute( "fo:font-style", "italic" );  
-    
-  if( font.underline() )
+  if( !font.isNull() )
   {
-    xmlWriter->addAttribute( "style:text-underline-style", "solid" );  
-    xmlWriter->addAttribute( "style:text-underline-width", "auto" );  
-    xmlWriter->addAttribute( "style:text-underline-color", "font-color" );  
+    xmlWriter->startElement( "style:text-properties" );
+    
+    if( font.bold() ) 
+      xmlWriter->addAttribute( "fo:font-weight", "bold" );  
+      
+    if( font.italic() ) 
+      xmlWriter->addAttribute( "fo:font-style", "italic" );  
+      
+    if( font.underline() )
+    {
+      xmlWriter->addAttribute( "style:text-underline-style", "solid" );  
+      xmlWriter->addAttribute( "style:text-underline-width", "auto" );  
+      xmlWriter->addAttribute( "style:text-underline-color", "font-color" );  
+    }
+    
+    if( font.strikeout() )
+      xmlWriter->addAttribute( "style:text-line-through-style", "solid" );  
+  
+    if( font.subscript() )
+      xmlWriter->addAttribute( "style:text-position", "sub" );
+  
+    if( font.superscript() )
+      xmlWriter->addAttribute( "style:text-position", "super" );
+
+    if( !font.fontFamily().isEmpty() )
+      xmlWriter->addAttribute( "style:font-name", string(font.fontFamily()).string() );
+      
+    xmlWriter->addAttribute( "fo:font-size", QString("%1pt").arg(font.fontSize()) );  
+    
+    xmlWriter->addAttribute( "fo:color", convertColor( font.color() ) );
+    
+    xmlWriter->endElement();  // style:text-properties
   }
   
-  if( font.strikeout() )
-    xmlWriter->addAttribute( "style:text-line-through-style", "solid" );  
-
-  if( !font.fontFamily().isEmpty() )
-    xmlWriter->addAttribute( "style:font-name", string(font.fontFamily()).string() );
+  xmlWriter->startElement( "style:table-cell-properties" );
+  if( !align.isNull() )
+  {
+    switch( align.alignY() ) {
+      case Format::Top: xmlWriter->addAttribute( "style:vertical-align", "top" ); break;
+      case Format::Middle: xmlWriter->addAttribute( "style:vertical-align", "middle" ); break;
+      case Format::Bottom: xmlWriter->addAttribute( "style:vertical-align", "bottom" ); break;
+    }
     
-  xmlWriter->addAttribute( "fo:font-size", QString("%1pt").arg(font.fontSize()) );  
+    xmlWriter->addAttribute( "fo:wrap-option", align.wrap() ? "wrap" : "no-wrap" );
+    //TODO rotation
+    //TODO stacked letters
+  }
   
-  xmlWriter->endElement();  // style:text-properties
+  if( !borders.isNull() )
+  {
+    xmlWriter->addAttribute( "fo:border-left", convertBorder( borders.leftBorder() ) );
+    xmlWriter->addAttribute( "fo:border-right", convertBorder( borders.rightBorder() ) );
+    xmlWriter->addAttribute( "fo:border-top", convertBorder( borders.topBorder() ) );
+    xmlWriter->addAttribute( "fo:border-bottom", convertBorder( borders.bottomBorder() ) );
+    //TODO diagonal 'borders'
+  }
+  
+  if( !back.isNull() && back.pattern() != FormatBackground::EmptyPattern )
+  {
+    Color backColor = back.backgroundColor();
+    if( back.pattern() == FormatBackground::SolidPattern )
+      backColor = back.foregroundColor();
+    
+    xmlWriter->addAttribute( "fo:background-color", convertColor( backColor ) );
+    
+    //TODO patterns
+  }
+  xmlWriter->endElement(); // style:table-cell-properties
+  
+  xmlWriter->startElement( "style:paragraph-properties" );
+  if( !align.isNull() )
+  {
+    switch( align.alignX() ) {
+      case Format::Left: xmlWriter->addAttribute( "fo:text-align", "start" ); break;
+      case Format::Center: xmlWriter->addAttribute( "fo:text-align", "center" ); break;
+      case Format::Right: xmlWriter->addAttribute( "fo:text-align", "end" ); break;
+    }
+    
+    if( align.indentLevel() != 0 )
+      xmlWriter->addAttribute( "fo:margin-left", QString::number( align.indentLevel() ) + "0pt" );
+  }
+  xmlWriter->endElement(); // style:paragraph-properties
 }
