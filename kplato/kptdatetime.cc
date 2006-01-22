@@ -48,10 +48,15 @@ void DateTime::subtract(const Duration &duration) {
 Duration DateTime::duration(const DateTime &dt) const {
     Duration dur;
     if (isValid() && dt.isValid()) {
-        dur.addDays(dt.daysTo(*this));
-        dur.addSeconds(dt.time().secsTo(time()));
+        if (dt < *this) {
+            dur.addDays(dt.daysTo(*this));
+            dur.addSeconds(dt.time().secsTo(time()));
+        } else {
+            dur.addDays(daysTo(dt));
+            dur.addSeconds(time().secsTo(dt.time()));
+        }
     }
-    return dur.abs();
+    return dur;
 }
 
 DateTime DateTime::operator+(const Duration &duration) const {
