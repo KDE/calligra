@@ -30,7 +30,7 @@
 #include "vfill.h"
 #include "vstroke.h"
 
-uint VSelection::m_handleNodeSize = 2;
+uint VSelection::m_handleNodeSize = 3;
 
 VSelection::VSelection( VObject* parent )
 	: VObject( parent ), m_showhandle( true )
