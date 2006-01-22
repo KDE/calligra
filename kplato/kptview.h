@@ -47,7 +47,7 @@ class AccountsView;
 class GanttView;
 class PertView;
 class ResourceView;
-class ReportView;
+//class ReportView;
 class Part;
 class Node;
 class Project;
@@ -154,6 +154,7 @@ protected slots:
 #ifndef NDEBUG
     void slotPrintDebug();
     void slotPrintCalendarDebug();
+    void slotPrintTestDebug();
 #else
     static void slotPrintDebug() { };
     static void slotPrintCalendarDebug() { };
@@ -172,7 +173,7 @@ private:
     QWidgetStack *m_tab;
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
-    ReportView *m_reportview;
+//    ReportView *m_reportview;
     QPtrList<QString> m_reportTemplateFiles;
 
     bool m_baselineMode;

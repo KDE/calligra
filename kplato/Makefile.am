@@ -37,7 +37,7 @@ libkplatopart_la_SOURCES = \
     resourcedialogbase.ui kptresourcedialog.cc \
     kpttaskgeneralpanelbase.ui \
     kpttasknotespanelbase.ui \
-    kptdatetime.cc kptreportview.cc \
+    kptdatetime.cc \
     kptcalendar.cc kptcalendaredit.cc kptcalendarlistdialog.cc \
     kptcalendarpanel.cc kptdatetable.cc \
     kptcalendarlistdialogbase.cc kptcalendareditbase.cc \
@@ -53,6 +53,7 @@ libkplatopart_la_SOURCES = \
     kptresourcesdialog.cc \
     kptwbsdefinitiondialog.cc kptwbsdefinitionpanel.cc kptwbsdefinitionpanelbase.ui \
     kptwbsdefinition.cc
+##    kptreportview.cc 
 
 # (this is not used)
 noinst_HEADERS = \
@@ -78,7 +79,7 @@ noinst_HEADERS = \
     kptpertview.h kptpertcanvas.h kptrelationdialog.h \
     kptresourcespanel.h kptresourceview.h \
     kptrequestresourcespanel.h kptresourcedialog.h\
-    kptdatetime.h kptreportview.h kptmap.h \
+    kptdatetime.h kptmap.h \
     kptcalendar.h kptcalendaredit.h kptcalendarlistdialog.h \
     kptcalendarpanel.h kptdatetable.h \
     kptcalendarlistdialogbase.h kptcalendareditbase.h \
@@ -93,14 +94,15 @@ noinst_HEADERS = \
     kptwbsdefinitiondialog.h kptwbsdefinitionpanel.h \
     kptwbsdefinition.h \
     kpteffortcostmap.h
-    
+##    kptreportview.h
+
 ## The part
 lib_LTLIBRARIES = 
 kde_module_LTLIBRARIES = libkplatopart.la
 libkplatopart_la_LDFLAGS = $(KDE_LDFLAGS) $(KDE_PLUGIN)
 libkplatopart_la_LIBADD = $(LIB_KABC) $(LIB_KOFFICEUI) \
-                          $(top_builddir)/kdgantt/libkdgantt.la \
-                          $(top_builddir)/kugar/lib/libkugarlib.la
+                          $(top_builddir)/kdgantt/libkdgantt.la
+##                          $(top_builddir)/kugar/lib/libkugarlib.la
 
 libkplatopart_la_METASOURCES = AUTO
 
