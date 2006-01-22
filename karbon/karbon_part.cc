@@ -85,6 +85,11 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 	m_pageLayout.ptHeight = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
 	m_doc.setWidth( m_pageLayout.ptWidth );
 	m_doc.setHeight( m_pageLayout.ptHeight );
+	// enable selection drawing
+	m_doc.selection()->showHandle();
+	m_doc.selection()->setSelectObjects();
+	m_doc.selection()->setState( VObject::selected );
+	m_doc.selection()->selectNodes();
 }
 
 KarbonPart::~KarbonPart()
