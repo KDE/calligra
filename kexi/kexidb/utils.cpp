@@ -530,7 +530,7 @@ bool KexiDB::splitToTableAndFieldParts(const QString& string,
 		fieldName = string;
 		return true;
 	}
-	if (id<=0 || id==(string.length()-1))
+	if (id<=0 || id==int(string.length()-1))
 		return false;
 	tableName = string.left(id);
 	fieldName = string.mid(id+1);

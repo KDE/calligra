@@ -23,7 +23,7 @@
 #include <qpainter.h>
 #include <qscrollview.h>
 #include <ktoolbar.h>
-#include <3rdparty/kolibs/koPageLayoutDia.h>
+#include <koPageLayoutDia.h>
 
 class KexiSimplePrintPreviewScrollView;
 class KexiSimplePrintPreviewView;
