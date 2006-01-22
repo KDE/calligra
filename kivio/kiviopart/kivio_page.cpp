@@ -761,57 +761,18 @@ void KivioPage::groupSelectedStencils()
   m_pCurLayer->addStencil(pGroup);
 
   selectStencil(pGroup);
+
+  KivioGroupCommand* cmd = new KivioGroupCommand(i18n("Group Selection"), this, m_pCurLayer, pGroup);
+  doc()->addCommand(cmd);
 }
 
-// The following is the old implementation of groupSelectedStencils.  It did
-// not preserve connections so a new method was devised.
-/*
-void KivioPage::groupSelectedStencils()
-{
-    KivioGroupStencil *pGroup;
-    KivioStencil *pTake;
-    KivioStencil *pStencil;
-
-
-    debug("*GROUP* About to group");
-    // Can't group 0 or 1 stencils
-    if( m_lstSelection.count() <= 1 )
-        return;
-
-    pGroup = new KivioGroupStencil();
-
-    // Iterate through all items in the selection list, duplicating them, then adding
-    // them to the group
-
-    pStencil = m_lstSelection.first();
-    while( pStencil )
-    {
-
-        debug("*GROUP* Duplicating 1");
-
-        // Dup the stencil & group it
-        pTake  = pStencil->duplicate();
-
-        pGroup->addToGroup( pDuplicate );
-
-        pStencil = m_lstSelection.next();
-    }
-
-    // Kill the old selections
-    deleteSelectedStencils();
-
-
-    // Add the group as the selected stencil
-    m_pCurLayer->addStencil( pGroup );
-
-    selectStencil( pGroup );
-}
-*/
 void KivioPage::ungroupSelectedStencils()
 {
   KivioStencil *pSelStencil, *pStencil;
   QPtrList<KivioStencil> *pList;
   QPtrList<KivioStencil> *pSelectThese = new QPtrList<KivioStencil>;
+  KMacroCommand* macro = new KMacroCommand(i18n("Ungroup"));
+  bool ungrouped = false;
 
   pSelectThese->setAutoDelete(false);
 
@@ -821,49 +782,34 @@ void KivioPage::ungroupSelectedStencils()
   {
     // If there is a list, it is a group stencil
     pList = pSelStencil->groupList();
-    if( pList )
+    if(pList)
     {
       pList->first();
-      pStencil = pList->take();
+      pStencil = pList->first();
 
       while( pStencil )
       {
-        addStencil( pStencil );
+        m_pCurLayer->addStencil( pStencil );
         pSelectThese->append( pStencil );
 
-        pStencil = pList->take();
+        pStencil = pList->next();
       }
-
-      /*
-      *  The following is commented out because the group should be on the
-      * current layer since selections must be on the current layer.
-      */
-      // Since this was a group, it is now an empty stencil, so we remove it
-      // from the selection list, and then remove it from the layer it came
-      // from, but we have to search for that.
-      /*
-      pSelStencil = m_lstSelection.take();
-      KivioLayer *pLayer = m_lstLayers.first();
-      while( pLayer )
-      {
-          if( pLayer->removeStencil( pSelStencil )==true )
-              break;
-
-          pLayer = m_lstLayers.next();
-      }
-      */
 
       // Remove the current stencil from the selection list(the group we just disassembled)
       m_lstSelection.take();
 
       // Remove it permanently from the layer
-      if( m_pCurLayer->removeStencil( pSelStencil )==false )
+      if(!m_pCurLayer->takeStencil(pSelStencil))
       {
         kdDebug(43000) << "KivioPage::ungroupSelectedStencil() - Failed to locate the group shell for deletion"
           << endl;
       }
-    }
 
+      KivioUnGroupCommand* cmd = new KivioUnGroupCommand(i18n("Ungroup"), this, m_pCurLayer,
+          static_cast<KivioGroupStencil*>(pSelStencil));
+      macro->addCommand(cmd);
+      ungrouped = true;
+    }
 
     pSelStencil = m_lstSelection.next();
   }
@@ -878,13 +824,17 @@ void KivioPage::ungroupSelectedStencils()
     if(pStencil->type() == kstConnector) {
       pStencil->searchForConnections(this, 4.0);
     }
-    
+
     pStencil = pSelectThese->next();
   }
 
-
-
   delete pSelectThese;
+
+  if(ungrouped) {
+    doc()->addCommand(macro);
+  } else {
+    delete macro;
+  }
 }
 
 void KivioPage::bringToFront()

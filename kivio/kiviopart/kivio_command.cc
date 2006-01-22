@@ -23,6 +23,7 @@
 #include "kivio_map.h"
 #include "kivio_doc.h"
 #include "kivio_layer.h"
+#include "kivio_group_stencil.h"
 
 KivioChangePageNameCommand::KivioChangePageNameCommand(const QString &_name,  const QString & _oldPageName, const QString & _newPageName, KivioPage *_page)
     : KNamedCommand( _name ),
@@ -740,6 +741,7 @@ void KivioAddConnectorTargetCommand::unexecute()
   m_page->doc()->updateView(m_page);
 }
 
+
 KivioCustomDragCommand::KivioCustomDragCommand(const QString& name, KivioPage* page, KivioStencil* stencil,
                                                int customID, const KoPoint& originalPoint, const KoPoint& newPoint)
   : KNamedCommand(name)
@@ -760,5 +762,45 @@ void KivioCustomDragCommand::execute()
 void KivioCustomDragCommand::unexecute()
 {
   m_stencil->setCustomIDPoint(m_customID, m_originalPoint, m_page);
+  m_page->doc()->updateView(m_page);
+}
+
+
+KivioGroupCommand::KivioGroupCommand(const QString& name, KivioPage* page, KivioLayer* layer,
+                                     KivioGroupStencil* group)
+  : KNamedCommand(name)
+{
+  m_page = page;
+  m_layer = layer;
+  m_groupStencil = group;
+}
+
+void KivioGroupCommand::execute()
+{
+  QPtrList<KivioStencil>* list = m_groupStencil->groupList();
+  QPtrListIterator<KivioStencil> it(*list);
+  KivioStencil* stencil = 0;
+
+  for(; (stencil = it.current()) != 0; ++it) {
+    m_layer->takeStencil(stencil);
+  }
+
+  m_groupStencil->unselect();
+  m_layer->addStencil(m_groupStencil);
+  m_page->doc()->updateView(m_page);
+}
+
+void KivioGroupCommand::unexecute()
+{
+  QPtrList<KivioStencil>* list = m_groupStencil->groupList();
+  QPtrListIterator<KivioStencil> it(*list);
+  KivioStencil* stencil = 0;
+
+  for(; (stencil = it.current()) != 0; ++it) {
+    stencil->unselect();
+    m_layer->addStencil(stencil);
+  }
+
+  m_layer->takeStencil(m_groupStencil);
   m_page->doc()->updateView(m_page);
 }

@@ -23,12 +23,14 @@
 #include <kcommand.h>
 #include <qfont.h>
 #include <qcolor.h>
+#include <qvaluelist.h>
 #include <KoRect.h>
 #include <koPageLayout.h>
 #include <koffice_export.h>
 class KivioPage;
 class KivioLayer;
 class KivioStencil;
+class KivioGroupStencil;
 struct KoPageLayout;
 
 class KivioChangePageNameCommand : public KNamedCommand
@@ -439,6 +441,32 @@ class KivioCustomDragCommand : public KNamedCommand
     int m_customID;
     KoPoint m_originalPoint;
     KoPoint m_newPoint;
+};
+
+class KivioGroupCommand : public KNamedCommand
+{
+  public:
+    KivioGroupCommand(const QString& name, KivioPage* page, KivioLayer* layer, KivioGroupStencil* group);
+
+    virtual void execute();
+    virtual void unexecute();
+
+  protected:
+    KivioPage* m_page;
+    KivioLayer* m_layer;
+
+    KivioGroupStencil* m_groupStencil;
+};
+
+class KivioUnGroupCommand : public KivioGroupCommand
+{
+  public:
+    KivioUnGroupCommand(const QString& name, KivioPage* page, KivioLayer* layer, KivioGroupStencil* group)
+      : KivioGroupCommand(name, page, layer, group)
+    {}
+
+    virtual void execute() { KivioGroupCommand::unexecute(); }
+    virtual void unexecute() { KivioGroupCommand::execute(); }
 };
 
 #endif
