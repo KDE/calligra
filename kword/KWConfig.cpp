@@ -285,7 +285,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, QVBox *box, char *
 
     showStatusBar = new QCheckBox(i18n("Show &status bar"),gbInterfaceGroup);
     showStatusBar->setChecked(oldShowStatusBar);
-    QWhatsThis::add( showStatusBar, i18n("Show or hide the status bar. If enabled, the status bar is shown at the bottom and shows some information."));
+    QWhatsThis::add( showStatusBar, i18n("Show or hide the status bar. If enabled, the status bar is shown at the bottom, which displays various information."));
 
     showScrollBar = new QCheckBox( i18n("Show s&crollbar"), gbInterfaceGroup);
     showScrollBar->setChecked(oldShowScrollBar);
@@ -354,8 +354,8 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, QVBox *box, char *
     QWhatsThis::add( indent, indentHelp );
 
     QHBox* hbPagePerRow = new QHBox( gbInterfaceGroup );
-    QString pagePerRowHelp = i18n("After selecting preview mode (via the \"View\" "
-                                  "menu, option \"Preview mode\") this is the amount of pages KWord will "
+    QString pagePerRowHelp = i18n("After selecting Preview Mode (from the \"View\" menua,) "
+                                  "this is the number of pages KWord will "
                                   "position on one horizontal row.");
     QLabel* labelPagePerRow = new QLabel( i18n("Number of pa&ges per row in preview mode:" ), hbPagePerRow );
     QWhatsThis::add( labelPagePerRow, pagePerRowHelp );
@@ -501,9 +501,9 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, QVBox *box, char *name )
 
     QHBox* hbUndoRedo = new QHBox( gbMiscGroup );
     QLabel* labelUndoRedo = new QLabel( i18n("Undo/&redo limit:"), hbUndoRedo );
-    QString undoHelp = i18n("Limit the amount of undo/redo actions remembered. "
-                            "A lower value helps to save memory, a higher value let's "
-                            "you undo and redo more editing steps.");
+    QString undoHelp = i18n("Limit the number of undo/redo actions remembered. "
+                            "A lower value helps to save memory, a higher value allows "
+                            "you to undo and redo more editing steps.");
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, hbUndoRedo );
     m_undoRedoLimit->setRange(1, 100, 1);
     labelUndoRedo->setBuddy( m_undoRedoLimit );
@@ -527,9 +527,9 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, QVBox *box, char *name )
     m_displayFieldCode=new QCheckBox(i18n("Display field code"),gbMiscGroup);
     m_displayFieldCode->setChecked(doc->variableCollection()->variableSetting()->displayFieldCode());
     QWhatsThis::add( m_displayFieldCode, i18n("If enabled, the type of link is displayed instead "
-                                              "of display string of the link.\n\n"
+                                              "of displaying the link text.\n\n"
                                               "There are various types of link that can be inserted, "
-                                              "like hyperlinks, files, mail and news or bookmarks."));
+                                              "such as hyperlinks, files, mail, news and bookmarks."));
 
 
     QVGroupBox* gbViewFormatting = new QVGroupBox( i18n("View Formatting"), box, "view_formatting" );
