@@ -22,6 +22,7 @@
 #include <qfileinfo.h>
 #include <qheader.h>
 #include <qobjectlist.h>
+#include <qtooltip.h>
 
 #include <kapplication.h>
 #include <kdeversion.h>
@@ -55,7 +56,6 @@ namespace Kross { namespace Api {
 #ifdef KROSS_SUPPORT_NEWSTUFF
 class ScriptNewStuff : public KNewStuffSecure
 {
-        //Q_OBJECT
     public:
         ScriptNewStuff(ScriptGUIClient* scripguiclient, const QString& type, QWidget *parentWidget = 0)
             : KNewStuffSecure(type, parentWidget)
@@ -84,10 +84,30 @@ class ListItem : public QListViewItem
         //ScriptActionMenu* actionMenu() const { return m_menu; }
 };
 
+class ToolTip : public QToolTip
+{
+    public:
+        ToolTip(KListView* parent) : QToolTip(parent->viewport()), m_parent(parent) {}
+        virtual ~ToolTip () { remove(m_parent); }
+    protected:
+        virtual void maybeTip(const QPoint& p) {
+            ListItem* item = dynamic_cast<ListItem*>( m_parent->itemAt(p) );
+            if(item) {
+                QRect r( m_parent->itemRect(item) );
+                if(r.isValid()) {
+                    tip(r, item->text(1));
+                }
+            }
+        }
+    private:
+        KListView* m_parent;
+};
+
 class WdgScriptsManagerPrivate
 {
     friend class WdgScriptsManager;
     ScriptGUIClient* m_scripguiclient;
+    ToolTip* m_tooltip;
 #ifdef KROSS_SUPPORT_NEWSTUFF
     ScriptNewStuff* newstuff;
 #endif
@@ -99,6 +119,7 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     , d(new WdgScriptsManagerPrivate)
 {
     d->m_scripguiclient = scr;
+    d->m_tooltip = new ToolTip(scriptsList);
 #ifdef KROSS_SUPPORT_NEWSTUFF
     d->newstuff = 0;
 #endif
@@ -114,8 +135,6 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     scriptsList->setColumnWidthMode(1, QListView::Manual);
     scriptsList->hideColumn(1);
     scriptsList->setTooltipColumn(1);
-    //scriptsList->addColumn(i18n("Name"));
-    //scriptsList->addColumn(i18n("Action"));
 
     slotFillScriptsList();
 
@@ -170,6 +189,7 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
 
 WdgScriptsManager::~WdgScriptsManager()
 {
+    delete d->m_tooltip;
     delete d;
 }
 
