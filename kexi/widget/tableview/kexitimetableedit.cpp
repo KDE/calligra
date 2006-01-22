@@ -182,6 +182,10 @@ KexiTimeTableEdit::KexiTimeTableEdit(KexiTableViewColumn &column, QScrollView *p
 	m_lineedit->setInputMask( m_formatter.inputMask() );
 }
 
+KexiTimeTableEdit::~KexiTimeTableEdit()
+{
+}
+
 void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	if (removeOld) {
@@ -199,6 +203,24 @@ void KexiTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 		)
 	);
 	m_lineedit->setCursorPosition(0); //ok?
+}
+
+void KexiTimeTableEdit::setupContents( QPainter *p, bool focused, QVariant val, 
+	QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
+{
+	Q_UNUSED(p);
+	Q_UNUSED(focused);
+	Q_UNUSED(x);
+	Q_UNUSED(w);
+	Q_UNUSED(h);
+#ifdef Q_WS_WIN
+	y_offset = -1;
+#else
+	y_offset = 0;
+#endif
+	if (!val.isNull() && val.canCast(QVariant::Time))
+		txt = m_formatter.timeToString(val.toTime());
+	align |= AlignLeft;
 }
 
 bool KexiTimeTableEdit::valueIsNull()

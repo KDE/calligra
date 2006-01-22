@@ -180,6 +180,10 @@ KexiDateTableEdit::KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *p
 	m_lineedit->setInputMask( m_formatter.inputMask() );
 }
 
+KexiDateTableEdit::~KexiDateTableEdit()
+{
+}
+
 void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	if (removeOld) {
@@ -194,25 +198,24 @@ void KexiDateTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 	m_lineedit->setCursorPosition(0); //ok?
 }
 
-/*
-
-QVariant origValue;
-	if (!removeOld)
-		origValue = m_origValue;
-	QString tmp_val( origValue.toString() );
-	QString add(add_.toString());
-	if (removeOld) {
-		if (!add.isEmpty() && add[0].latin1()>='0' && add[0].latin1() <='9') {
-			m_setNumberOnFocus = add[0].latin1()-'0';
-			d = QDate((m_setNumberOnFocus)*1000, 1, 1);
-		}
-	}
-	else {
-		d = m_origValue.toDate();
-	}
-	m_lineedit->setText(QString::null);
-//	setCursorPosition(0);
-}*/
+void KexiDateTableEdit::setupContents( QPainter *p, bool focused, QVariant val, 
+	QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
+{
+	Q_UNUSED(p);
+	Q_UNUSED(focused);
+	Q_UNUSED(x);
+	Q_UNUSED(w);
+	Q_UNUSED(h);
+#ifdef Q_WS_WIN
+	y_offset = -1;
+#else
+	y_offset = 0;
+#endif
+	if (val.toDate().isValid())
+		txt = m_formatter.dateToString(val.toDate());
+//		txt = val.toDate().toString(Qt::LocalDate);
+	align |= AlignLeft;
+}
 
 bool KexiDateTableEdit::valueIsNull()
 {

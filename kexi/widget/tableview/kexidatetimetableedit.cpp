@@ -58,6 +58,10 @@ KexiDateTimeTableEdit::KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrol
 	m_lineedit->setInputMask( mask + " " + m_timeFormatter.inputMask() );
 }
 
+KexiDateTimeTableEdit::~KexiDateTimeTableEdit()
+{
+}
+
 void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOld)
 {
 	if (removeOld) {
@@ -80,7 +84,25 @@ void KexiDateTimeTableEdit::setValueInternal(const QVariant& add_, bool removeOl
 	m_lineedit->setCursorPosition(0); //ok?
 }
 
-//! \return true is editor's value is null (not empty)
+void KexiDateTimeTableEdit::setupContents( QPainter *p, bool focused, QVariant val, 
+	QString &txt, int &align, int &x, int &y_offset, int &w, int &h )
+{
+	Q_UNUSED(p);
+	Q_UNUSED(focused);
+	Q_UNUSED(x);
+	Q_UNUSED(w);
+	Q_UNUSED(h);
+#ifdef Q_WS_WIN
+	y_offset = -1;
+#else
+	y_offset = 0;
+#endif
+	if (val.toDateTime().isValid())
+		txt = m_dateFormatter.dateToString(val.toDateTime().date()) + " " 
+			+ m_timeFormatter.timeToString(val.toDateTime().time());
+	align |= AlignLeft;
+}
+
 bool KexiDateTimeTableEdit::valueIsNull()
 {
 	return !dateTimeValue().isValid();

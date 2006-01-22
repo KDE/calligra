@@ -189,7 +189,7 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 //		y_offset = 0;
 #endif*/
 		switch (m_column->field()->type()) {
-		case KexiDB::Field::Time:
+/*moved		case KexiDB::Field::Time:
 			//it was QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 			if (!val.isNull()) {
 				txt = val.toTime().toString(Qt::LocalDate);
@@ -202,7 +202,7 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 		case KexiDB::Field::DateTime:
 			if (!val.toDateTime().isNull())
 				txt = val.toDate().toString(Qt::LocalDate) + " " + val.toTime().toString(Qt::LocalDate);
-			break;
+			break;*/
 		default:
 			if (!val.isNull()) {
 				txt = val.toString();
@@ -210,7 +210,6 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 		}
 		align |= AlignLeft;
 	}
-
 }
 
 void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/, 

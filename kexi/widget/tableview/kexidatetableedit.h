@@ -81,6 +81,9 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiInputTableEdit
 
 	public:
 		KexiDateTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		virtual ~KexiDateTableEdit();
+		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();

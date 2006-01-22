@@ -37,6 +37,9 @@ class KEXIDATATABLE_EXPORT KexiDateTimeTableEdit : public KexiInputTableEdit
 
 	public:
 		KexiDateTimeTableEdit(KexiTableViewColumn &column, QScrollView *parent=0);
+		virtual ~KexiDateTimeTableEdit();
+		virtual void setupContents( QPainter *p, bool focused, QVariant val, 
+			QString &txt, int &align, int &x, int &y_offset, int &w, int &h );
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
