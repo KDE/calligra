@@ -33,6 +33,7 @@
  <Action name="barschart"/>
  <Action name="linechart"/>
  <Action name="areaschart"/>
+ <Action name="barlineschart"/>
  <Action name="hilochart"/>
  <Action name="bwchart"/>
  <Action name="piechart"/>
