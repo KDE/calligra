@@ -24,7 +24,7 @@ LIBEXIF=no
 #        AC_DEFINE(HAVE_EXIF06,1,[check for libexif > 0.6]),
 #                AC_MSG_WARN([Using old version of libexif.]))
 
-PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.6.9 ,
+PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.6.9 , ,
         [ AC_MSG_WARN([libexif >= 0.6.9 not found.])
           LIBEXIF=yes ])
 
@@ -68,3 +68,4 @@ AC_MSG_CHECKING(for libexif headers)
 
                 
 AM_CONDITIONAL(have_exif, test -n "$LIBEXIF")
+AM_CONDITIONAL(include_jpeg_filter, test -n "$LIBJPEG" -a -n "$LIBEXIF")

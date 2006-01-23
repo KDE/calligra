@@ -10,7 +10,7 @@ if have_png
 PNG_SUBDIR=png
 endif
 
-if have_jpeg
+if include_jpeg_filter
 JPEG_SUBDIR=jpeg
 endif
 

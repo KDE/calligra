@@ -1,0 +1,7 @@
+if test -z "$LIBTIFF"; then
+  echo ""
+  echo "You're missing libtiff (binaries and/or headers), krita won't be able"
+  echo "to import/export tiff"
+  echo ""
+  all_tests=bad
+fi
