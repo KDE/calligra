@@ -1,0 +1,30 @@
+<!--
+  <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" >
+-->
+
+<chapter id="building-databases">
+<title>Building Simple Databases</title>
+<sect1 id="building-intro">
+<title>Introduction</title>
+<para>
+To learn basics of Kexi usage, first you could build a simple database
+utilizing most elementary Kexi's features. To make things simpler,
+advanced database design topics will not be covered here.
+</para>
+<para>
+Start by creating a new empty <emphasis>Phone Book</emphasis>.
+<!--
+See chapter <a href="04_03_00_creating_database.html">4.3.
+Creating a new database project</a> for information how to do this.
+-->
+</para>
+<itemizedlist>
+<title>Having a new empty database project, perform the following steps:</title>
+<listitem>Design database tables. Read section <!--<a href="05_01_00_table_designing.html">5.1</a>--></listitem>
+<listitem>Enter data to tables. Read section <!--<a href="05_02_00_data_entering_into_tables.html">5.2</a>--></listitem>
+<listitem>Design database queries. Read section <!-- <a href="05_03_00_query_designing.html">5.3</a> --></listitem>
+<listitem>Design forms. Read section <!-- <a href="05_04_00_form_designing.html">5.4</a> --></listitem>
+</itemizedlist>
+
+</sect1>
+</chapter>

@@ -8,6 +8,7 @@
   <!-- Chapters -->
   <!ENTITY intro SYSTEM "intro.docbook">
   <!ENTITY basics SYSTEM "basics.docbook">
+  <!ENTITY building SYSTEM "building.docbook">
   <!ENTITY configuration SYSTEM "configuration.docbook">
   <!ENTITY credits SYSTEM "credits.docbook">
   <!ENTITY database SYSTEM "database.docbook">
@@ -93,6 +94,7 @@ consistent documentation style across all KDE apps. -->
 
 &intro;
 &basics;
+&building;
 &configuration;
 &menus;
 &credits;
