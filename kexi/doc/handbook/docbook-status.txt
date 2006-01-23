@@ -97,7 +97,7 @@ The Kexi main window stuff is text I've written can be mered with 4.6 in HTML
 04_06_03_property_editor.html   Done.
 
 Chapter 3: Building Simple Databases (Raphael)
-05_00_00_idx_building_simple_database.html  Ready for conversion
+05_00_00_idx_building_simple_database.html  Done.
 05_01_00_table_designing.html               Ready for conversion
 05_02_00_entering_data_into_tables.html     Ready for conversion
 05_03_00_query_designing.html               Ready for conversion
