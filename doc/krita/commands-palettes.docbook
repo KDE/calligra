@@ -33,7 +33,9 @@ current tool.</para>
 <para>This tab offers you two settings. In the <guilabel>Zoom:</guilabel>
 slider and textbox, you can set the zoom level for the document. The
 <guilabel>Exposure:</guilabel> slider and textbox can be used to choose the
-exposure level for OpenEXR images.</para>
+exposure level for OpenEXR images. Furthermore, the <guilabel>X</guilabel> and
+<guilabel>Y</guilabel> labels indicate the current pointer position, with
+(0,0) being the top left corner of the canvas.</para>
 </sect3>
 
 <sect3 id="commands-palettes-controlbox-histogram">
@@ -66,23 +68,23 @@ reflect the name of the currently selected tool. This tab shows the
 customization options available for some specific tools. Pan, Move and
 Zoom have no options, the others are discussed below.</para>
 
-<sect4 id="commands-palettes-controlbox-tool-drawfreehand">
-<title><guilabel>Draw Freehand</guilabel></title>
+<sect4 id="commands-palettes-controlbox-tool-brush">
+<title><guilabel>Brush</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Draw Freehand</screeninfo>
+<screeninfo>The Tool tab for Brush</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="palettes-controlbox-drawfreehand.png" format="PNG" />
+<imagedata fileref="palettes-controlbox-brush.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Draw Freehand</phrase>
+<phrase>The Tool tab for Brush</phrase>
 </textobject>
-<caption><para>The Tool tab for Draw Freehand</para></caption>
+<caption><para>The Tool tab for Brush</para></caption>
 </mediaobject>
 </screenshot>
 </para>
-<para>There are two options available on this tab.
+<para>There are three options available on this tab.
 </para><para>
 The <guilabel>Opacity:</guilabel> slider and spin box are used to set the 
 opacity when drawing (opacity is the opposite of transparency, i.e. 100%
@@ -90,34 +92,120 @@ opaque is 0% transparent, and vice versa).
 </para><para>
 In the <guilabel>Mode:</guilabel> drop down box, you can choose a drawing
 mode. This changes the actual effect that drawing has on the image (normal
-painting, only changing the color, etcetera).</para>
+painting, only changing the color, etcetera).
+</para><para>
+With the <guilabel>Paint direct</guilabel> option, you can determine whether
+you want to paint directly on the current layer, or on a temporary layer which
+is then composited onto the actual layer. This makes a difference especially
+when using relative low opacity values.</para>
 </sect4>
 
-<sect4 id="commands-palettes-controlbox-tool-ellipse">
-<title><guilabel>Ellipse</guilabel></title>
+<sect4 id="commands-palettes-controlbox-tool-line">
+<title><guilabel>Line</guilabel></title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Ellipse</screeninfo>
+<screeninfo>The Tool tab for Line</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="palettes-controlbox-ellipse.png" format="PNG" />
+<imagedata fileref="palettes-controlbox-line.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Ellipse</phrase>
+<phrase>The Tool tab for Line</phrase>
 </textobject>
-<caption><para>The Tool tab for Ellipse</para></caption>
+<caption><para>The Tool tab for Line</para></caption>
 </mediaobject>
 </screenshot>
 </para>
 <para>See <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw
-Freehand</link> for a description of <guilabel>Opacity</guilabel> and
+linkend="commands-palettes-controlbox-tool-brush">Brush</link>
+for the description of <guilabel>Opacity</guilabel> and
+<guilabel>Mode</guilabel>. The <guilabel>?</guilabel> button shows a tip about
+the usage of modifier keys.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-rectangle">
+<title><guilabel>Rectangle</guilabel></title>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Rectangle</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-rectangle.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Rectangle</phrase>
+</textobject>
+<caption><para>The Tool tab for Rectangle</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>See <link
+linkend="commands-palettes-controlbox-tool-brush">Brush</link> for a description of <guilabel>Opacity</guilabel> and
 <guilabel>Mode</guilabel>.
 </para><para>
 The <guilabel>Fill</guilabel> drop down box is used to specify whether the
-inside of the ellipse should be filled. You can choose between three fill
+inside of the rectangle should be filled. You can choose between three fill
 options: the current foreground color, background color or pattern is
 used.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-ellipse">
+<title><guilabel>Ellipse</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-rectangle">Rectangle</link> are
+available here.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-polygon">
+<title><guilabel>Polygon</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-rectangle">Rectangle</link> are
+available here.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-polyline">
+<title><guilabel>Polyline</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-line">Line</link>
+are available here.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-star">
+<title><guilabel>Star</guilabel></title>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Star</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-star.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Star</phrase>
+</textobject>
+<caption><para>The Tool tab for Star</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>The options for <link
+linkend="commands-palettes-controlbox-tool-rectangle">Rectangle</link> are
+available here, as well as two options specific to this tool.
+</para><para>
+The <guilabel>Vertices:</guilabel> drop down box is used to set the amount
+of vertices (points) in the star.
+</para><para>
+The <guilabel>Ratio:</guilabel> setting defines the shape of the
+star. A ratio of 0% will create a star with no inner area (when drawing the
+star, the two lines that make up a star point, overlap). Increasing the ratio
+will slowly make the star more outlined (the two lines are <quote>pulled
+apart</quote>). A star with a ratio of 100% is a regular polygon.
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-duplicate">
+<title><guilabel>Duplicate</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-line">Line</link>
+are available here.</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-paintwithfilters">
@@ -138,75 +226,9 @@ used.</para>
 </para>
 <para>Depending on the filter, you can set different options here. The
 options you can set are the same as those available in the
-<quote>normal</quote> settings dialog for the chosen filter. See the respective
-section for more information.</para>
-</sect4>
-
-<sect4 id="commands-palettes-controlbox-tool-line">
-<title><guilabel>Line</guilabel></title>
-<para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
-are available here.</para>
-</sect4>
-
-<sect4 id="commands-palettes-controlbox-tool-polygon">
-<title><guilabel>Polygon</guilabel></title>
-<para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
-available here.</para>
-</sect4>
-
-<sect4 id="commands-palettes-controlbox-tool-polyline">
-<title><guilabel>Polyline</guilabel></title>
-<para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
-are available here.</para>
-</sect4>
-
-<sect4 id="commands-palettes-controlbox-tool-rectangle">
-<title><guilabel>Rectangle</guilabel></title>
-<para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
-available here.</para>
-</sect4>
-
-<sect4 id="commands-palettes-controlbox-tool-star">
-<title><guilabel>Star</guilabel></title>
-<para>
-<screenshot>
-<screeninfo>The Tool tab for Star</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="palettes-controlbox-star.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The Tool tab for Star</phrase>
-</textobject>
-<caption><para>The Tool tab for Star</para></caption>
-</mediaobject>
-</screenshot>
-</para>
-<para>The options for <link
-linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
-available here, as well as two options specific to this tool.
-</para><para>
-The <guilabel>Vertices:</guilabel> drop down box is used to set the amount
-of vertices (points) in the star.
-</para><para>
-The <guilabel>Ratio:</guilabel> setting defines the shape of the
-star. A ratio of 0% will create a star with no inner area (when drawing the
-star, the two lines that make up a star point, overlap). Increasing the ratio
-will slowly make the star more outlined (the two lines are <quote>pulled
-apart</quote>). A star with a ratio of 100% is a regular polygon.
-</para>
-</sect4>
-
-<sect4 id="commands-palettes-controlbox-tool-duplicate">
-<title><guilabel>Duplicate</guilabel></title>
-<para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
-are available here.</para>
-</sect4>
+<quote>normal</quote> settings dialog for the chosen filter. See the
+<link linkend="commands-dialogs-filters">Filters section in the Dialogs
+chapter</link> for more information.</para> </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-transform">
 <title><guilabel>Transform</guilabel></title>
@@ -249,11 +271,14 @@ you can decide upon a transformation algorithm in the
 </screenshot>
 </para>
 <para>Set the corner coordinates of the area that should remain with the
-four spin boxes <guilabel>Start X:</guilabel>, <guilabel>Start Y:</guilabel>,
-<guilabel>End X:</guilabel> and <guilabel>End Y:</guilabel>. The drop down
-box can be used to select whether the entire image or only the current layer
-should be cropped. Clicking the <guibutton>Crop</guibutton> button has
-the same effect as double-clicking outside the area in the image.</para>
+four spin boxes <guilabel>X:</guilabel>, <guilabel>Y:</guilabel>,
+<guilabel>Width:</guilabel> and <guilabel>Height:</guilabel>. You can also
+fill in <guilabel>Ratio:</guilabel> to determine the Y/X ratio. Check one of
+the checkboxes to have the respective value remain constant while changing the
+size of the area. The drop down box can be used to select whether the entire
+image or only the current layer should be cropped. Clicking the
+<guibutton>Crop</guibutton> button has the same effect as double-clicking
+outside the area in the image.</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-contiguousfill">
@@ -273,7 +298,7 @@ the same effect as double-clicking outside the area in the image.</para>
 </screenshot>
 </para>
 <para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+linkend="commands-palettes-controlbox-tool-brush">Brush</link>
 are available here, as are a couple of other options.
 </para><para>
 The setting in the <guilabel>Threshold:</guilabel> slider and spin box
@@ -311,7 +336,7 @@ entire selection will be filled instead of only the neighboring area.
 </screenshot>
 </para>
 <para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+linkend="commands-palettes-controlbox-tool-brush">Brush</link>
 are available here, as are a couple of other options.
 </para><para>
 The <guilabel>Shape:</guilabel> drop down box can be used to select the gradient
@@ -329,8 +354,8 @@ and back to back).
 Check the <guilabel>Reverse</guilabel> checkbox to have the gradient drawn
 reversed (from back to front).
 </para><para>
-The final setting is <guilabel>Anti-alias treshold:</guilabel>.
-<!-- TODO elaborate  -->
+The final setting is <guilabel>Anti-alias treshold:</guilabel>, which
+determines how smooth the gradient will become.
 </para>
 </sect4>
 
@@ -351,7 +376,7 @@ The final setting is <guilabel>Anti-alias treshold:</guilabel>.
 </screenshot>
 </para>
 <para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+linkend="commands-palettes-controlbox-tool-brush">Brush</link>
 are available here. Furthermore there is an option <guilabel>Font</guilabel>,
 which shows the font that will be used for the text. Click the
 <guibutton>...</guibutton> button to change the font.
@@ -384,9 +409,19 @@ If the <guilabel>Update current color</guilabel> checkbox is checked, then the
 current foreground color (when clicking with the &LMB;) or background color
 (when clicking with the &RMB;) is set to the picked color.
 </para><para>
-The checkbox <guilabel>Normalize integer values</guilabel> switches the
+The checkbox <guilabel>Add to palette:</guilabel> and the accompanying
+dropdown box determine whether the picked color should be added to an existing
+palette. Check the checkbox, and choose the desired palette from the list, if
+you want to do so.
+</para><para>
+The checkbox <guilabel>Show colors as percentages</guilabel> switches the
 range of color values displayed from the <quote>normal</quote> range (e.g. 0 to
-255) to a scaled value between 0 and 1.
+255) to a scaled value between 0% and 100%.
+</para><para>
+With the <guilabel>Sample radius:</guilabel> option, you can choose the area
+size to use when picking the color. A radius of one just picks one pixel,
+larger radii will make the picker average over the colors of the circle-shaped
+area with the chosen radius that is centered around the chosen pixel.
 </para>
 </sect4>
 
@@ -456,7 +491,7 @@ contiguous</link>. </para>
 <sect2 id="commands-palettes-colors">
 <title>The <guilabel>Colors</guilabel> palette</title>
 <para>In this palette you can choose the foreground and background colors
-that should be used for painting. You can choose these in four different
+that should be used for painting. You can choose these in five different
 ways. Each of these has its own tab on this palette.</para>
 <para>You can choose which color to set by clicking the corresponding
 buttons at the top left. The topmost color is the foreground color, the
@@ -570,11 +605,37 @@ color palettes.</para>
 box at the top.</para>
 </sect3>
 
+<sect3 id="commands-palettes-colors-watercolors">
+<title><guilabel>Watercolors</guilabel></title>
+<para>
+<screenshot>
+<screeninfo>The Watercolors tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-colors-watercolors.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Watercolors tab</phrase>
+</textobject>
+<caption><para>The Watercolors tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>This tab offers you a selection of watercolors for painting with <quote>wet
+paint</quote>.
+</para><para>
+You can set two options to modify the painting behaviour: <guilabel>Paint
+strength</guilabel> influences how much paint you will apply to the canvas,
+and <guilabel>Wetness</guilabel> determines how wet the paint is when it is
+applied. You can dry the paint later.
+</para>
+</sect3>
+
 </sect2>
 
 <sect2 id="commands-palettes-layers">
 <title>The <guilabel>Layers</guilabel> palette</title>
-<para>This palette offers one tab, also called Layers.</para>
+<para>This palette offers two tabs.</para>
 
 <sect3 id="commands-palettes-layers-layers">
 <title><guilabel>Layers</guilabel></title>
@@ -598,8 +659,8 @@ On the top left, you can select what blending mode should be used for the
 selected layer. These are the same possibilities as you can choose from for
 drawing modes.
 </para><para>
-The spin box at the top right determines the opacity of the selected layer. 0%
-opacity corresponds to 100% transparency.
+The slider/textbox at the top right determines the opacity of the selected
+layer. 0% opacity corresponds to 100% transparency, and vice versa.
 </para><para>
 The list shows all layers and their names, and offers various controls for each
 layer. The eye icon toggles whether the layer is visible or not. The link icon
@@ -618,6 +679,28 @@ drag and drop layers to change their order. To do so, click on the bottom part
 of the list item representing the layer, drag the mouse, and release the mouse
 button at the desired position. If you click at the top part of the list item
 instead, you will get a text field so that you can rename the layer.
+</para>
+</sect3>
+
+<sect3 id="commands-palettes-layers-scriptsmanager">
+<title><guilabel>Scripts Manager</guilabel></title>
+<para>
+<screenshot>
+<screeninfo>The Scripts Manager tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-layers-scriptsmanager.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Scripts Manager tab</phrase>
+</textobject>
+<caption><para>The Scripts Manager tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>This tab is a smaller version of the <guilabel>Scripts
+Manager</guilabel> dialog. See the description over there for more
+information.
 </para>
 </sect3>
 

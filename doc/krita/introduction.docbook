@@ -43,7 +43,7 @@ grayscale sliders or with a palette.</para></listitem>
 <listitem><para>Editing and viewing: Unlimited undo and redo are available.
 One can cut, copy and paste between lagers and images, with conversion through
 icc profiles if this is necessary.  OpenGL is supported for display. The view
-can be made fullscreen and can be split. Rulers and guides are available, the
+can be made fullscreen and can be split. Rulers are available, the
 image can be zoomed, and for maximizing the workspace all palette windows can
 be hidden in one go. Also a histogram palette is available.</para></listitem>
 

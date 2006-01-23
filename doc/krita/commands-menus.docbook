@@ -158,7 +158,7 @@ will look like.</action></para></listitem>
 <guimenuitem>Document Information</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="commands-dialogs-documentinformation"><guilabel>Document
+linkend="commands-dialogs-general-documentinformation"><guilabel>Document
 Information</guilabel> dialog</link>.</action> This dialog can be used to add
 various information to the image, like title, subject, keywords, author
 information, and any other information you want to save with the
@@ -507,15 +507,6 @@ rulers on and off.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Guide Lines</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Toggles display of the
-guide lines on and off.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>View</guimenu>
 <guimenuitem>Show Grid</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Toggles display of the
@@ -687,7 +678,7 @@ visualisation on and off.</action></para></listitem>
 <guimenuitem>Image Properties</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="commands-dialogs-imageproperties"><guilabel>Image
+linkend="commands-dialogs-image-imageproperties"><guilabel>Image
 Properties</guilabel> dialog</link>,
 in which you can change the image name, size,
 profile and description.</action></para></listitem>
@@ -717,7 +708,7 @@ size of the currently active layer.</action></para></listitem>
 <guimenuitem>Rotate Image...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="commands-dialogs-rotateimage"><guilabel>Rotate Image</guilabel>
+linkend="commands-dialogs-image-rotateimage"><guilabel>Rotate Image</guilabel>
 dialog</link>.</action></para></listitem>
 </varlistentry>
 
@@ -765,7 +756,7 @@ dialog.</action></para></listitem>
 <guimenuitem>Convert Image Type...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="commands-dialogs-convertimagetype"><guilabel>Convert All
+linkend="commands-dialogs-image-convertimagetype"><guilabel>Convert All
 Layers</guilabel> dialog</link>.</action> This allows you to convert the image
 to a different color space. Apart from the color space, the profile and
 rendering intent can be specified as well.</para></listitem>
@@ -777,7 +768,7 @@ rendering intent can be specified as well.</para></listitem>
 <guimenuitem>Separate Image</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
-<link linkend="commands-dialogs-separateimage"><guilabel>Separate Image</guilabel>
+<link linkend="commands-dialogs-image-separateimage"><guilabel>Separate Image</guilabel>
 dialog</link>.</action> You can separate the image into layers for each
 individual colorspace component there.</para></listitem>
 </varlistentry>
@@ -788,7 +779,7 @@ individual colorspace component there.</para></listitem>
 <guimenuitem>Change Image Size...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
-<link linkend="commands-dialogs-imagesize"><guilabel>Image Size</guilabel>
+<link linkend="commands-dialogs-image-imagesize"><guilabel>Image Size</guilabel>
 dialog </link>.</action> You can resize or scale the image using various
 algorithms here.</para></listitem>
 </varlistentry>
@@ -799,7 +790,7 @@ algorithms here.</para></listitem>
 <guimenuitem>Shear Image...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="commands-dialogs-shearimage"><guilabel>Shear Image</guilabel>
+linkend="commands-dialogs-image-shearimage"><guilabel>Shear Image</guilabel>
 dialog</link>.</action> You can shear the image in X or Y directions,
 or both.</para></listitem>
 </varlistentry>
@@ -1508,8 +1499,8 @@ action="simul">&Ctrl;&Shift;<keycap>J</keycap></keycombo></shortcut>
 <guimenu>Filter</guimenu>
 <guimenuitem>Apply Filter Again</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Applies the last filter
-again.</action></para></listitem>
+<listitem><para><action>Repeats the last filter
+action.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1527,8 +1518,8 @@ colors in your image.</para></listitem>
 <guisubmenu>Adjust</guisubmenu>
 <guimenuitem>Auto Contrast</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Changes the colors to obtain an image with as
-much contrast as possible.</action></para></listitem>
+<listitem><para><action>Automatically changes the image to obtain as much
+contrast as possible.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1538,7 +1529,8 @@ much contrast as possible.</action></para></listitem>
 <guimenuitem>Brightness/Contrast...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
-<guilabel>Brightness/Contrast</guilabel> dialog.</action></para></listitem>
+<guilabel>Brightness/Contrast</guilabel> dialog.</action> You can set the
+brightness and contrast ratio of your image here.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1548,7 +1540,8 @@ much contrast as possible.</action></para></listitem>
 <guimenuitem>Desaturate</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Desaturates the image.</action> This
-will effectively convert the current image to grayscale.</para></listitem>
+will effectively convert the current image to grayscale, but all subsequent
+painting is done with usual colors.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1558,8 +1551,9 @@ will effectively convert the current image to grayscale.</para></listitem>
 <guimenuitem>Color Adjustment...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <guilabel>Color Adjustment</guilabel>
-dialog.</action> You can modify the red, green, and blue levels
-of the current image there.</para></listitem>
+dialog.</action> You can adjust the colorspace components
+of the current image there (for example, in an RGB image, you can change the
+contribution of red, green, and blue to the total image).</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1577,8 +1571,8 @@ of the current image there.</para></listitem>
 <guisubmenu>Artistic</guisubmenu>
 <guimenuitem>Cubism...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Cubism</guilabel> dialog to add a
-cubism effect to the selection or image.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Cubism</guilabel> dialog.</action>
+This allows you to add a cubism effect to the selection or image.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1615,8 +1609,7 @@ a raindrops effect to the selection or image.</action></para></listitem>
 <guimenu>Filter</guimenu>
 <guisubmenu>Blur</guisubmenu>
 </menuchoice></term>
-<listitem><para>Contains various blur
-filters.</para></listitem>
+<listitem><para>Contains various blur filters.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1635,7 +1628,8 @@ selection.</action></para></listitem>
 <guisubmenu>Blur</guisubmenu>
 <guimenuitem>Pixelize...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Pixelizes the image.</action></para></listitem>
+<listitem><para><action>Pixelizes the image.</action> (A block of pixels is
+changed so that they all become the same, averaged color.)</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1653,8 +1647,8 @@ selection.</action></para></listitem>
 <guimenuitem>Invert</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inverts the image or
-selection.</action></para></listitem>
-</varlistentry>
+selection.</action> (Black becomes white, blue becomes yellow,
+etcetera.)</para></listitem> </varlistentry>
 
 <varlistentry>
 <term><menuchoice>

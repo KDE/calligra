@@ -147,13 +147,47 @@ resulting effect) by setting tool options in the
 
 <variablelist>
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
-fileref="tool-freehand.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> Freehand</term>
+fileref="tool-brush.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Brush</term>
 <listitem><para>
 With this tool you can paint freely. Click the &LMB; to paint a
 single instance of the currently selected brush, or hold the &LMB; and drag
 your mouse around to paint. The mouse movements you make are directly used for
 painting.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-line.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Line</term>
+<listitem><para>
+This tool is used to draw lines. Click the &LMB; to indicate the first
+endpoint, then drag to the second endpoint and release the button.
+</para><para>
+Use &Shift; while holding the mouse button to restrict drawing to only
+horizontal or vertical lines. You can press &Alt; while still keeping the &LMB;
+down to move the line to a different location.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-rectangle.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Rectangle</term>
+<listitem><para>
+This tool can be used to paint rectangles. Click and hold the &LMB; to indicate
+one corner of the rectangle, drag to the opposite corner, and release the
+button.
+</para><para>
+If you hold &Shift; while drawing, a square will be drawn instead of a
+rectangle. Holding &Ctrl; will change the way the rectangle is constructed:
+instead of two corners, the initial mouse position indicates the center of the
+rectangle, and the final mouse position indicates a corner.
+You can press &Alt; while still keeping the &LMB; down to move the rectangle to
+a different location.
+</para><para>
+You can change between the corner/corner and center/corner drawing
+methods as often as you want by pressing or releasing &Ctrl;, provided that you
+keep the &LMB; pressed. With &Ctrl; pressed, mouse movements will affect all
+four corners of the rectangle (relative to the center), without &Ctrl;, one
+of the corners is unaffected.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -181,26 +215,6 @@ without &Ctrl;, the corner opposite to the one you are moving remains still.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
-fileref="tool-paintwithfilters.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> Paint with
-filters</term>
-<listitem><para>
-This tool allows you to pick a filter and draw with it.
-</para></listitem></varlistentry>
-
-<varlistentry><term><inlinemediaobject><imageobject><imagedata
-fileref="tool-line.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> Line</term>
-<listitem><para>
-This tool is used to draw lines. Click the &LMB; to indicate the first
-endpoint, then drag to the second endpoint and release the button.
-</para><para>
-Use &Shift; while holding the mouse button to restrict drawing to only
-horizontal or vertical lines. You can press &Alt; while still keeping the &LMB;
-down to move the line to a different location.
-</para></listitem></varlistentry>
-
-<varlistentry><term><inlinemediaobject><imageobject><imagedata
 fileref="tool-polygon.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> Polygon</term>
 <listitem><para>
@@ -215,28 +229,6 @@ fileref="tool-polyline.png" format="PNG"></imagedata>
 <listitem><para>
 Polylines are drawn like polygons, but the &RMB; click indicating the
 end of the polyline does not connect the last vertex to the first one.
-</para></listitem></varlistentry>
-
-<varlistentry><term><inlinemediaobject><imageobject><imagedata
-fileref="tool-rectangle.png" format="PNG"></imagedata>
-</imageobject></inlinemediaobject> Rectangle</term>
-<listitem><para>
-This tool can be used to paint rectangles. Click and hold the &LMB; to indicate
-one corner of the rectangle, drag to the opposite corner, and release the
-button.
-</para><para>
-If you hold &Shift; while drawing, a square will be drawn instead of a
-rectangle. Holding &Ctrl; will change the way the rectangle is constructed:
-instead of two corners, the initial mouse position indicates the center of the
-rectangle, and the final mouse position indicates a corner.
-You can press &Alt; while still keeping the &LMB; down to move the rectangle to
-a different location.
-</para><para>
-You can change between the corner/corner and center/corner drawing
-methods as often as you want by pressing or releasing &Ctrl;, provided that you
-keep the &LMB; pressed. With &Ctrl; pressed, mouse movements will affect all
-four corners of the rectangle (relative to the center), without &Ctrl;, one
-of the corners is unaffected.
 </para></listitem></varlistentry>
 
 <varlistentry><term><inlinemediaobject><imageobject><imagedata
@@ -264,6 +256,14 @@ location.
 While you are painting the duplicate, both your cursor in the destination
 location and the brush outline in the source location will move, in order to
 give you visual feedback.
+</para></listitem></varlistentry>
+
+<varlistentry><term><inlinemediaobject><imageobject><imagedata
+fileref="tool-paintwithfilters.png" format="PNG"></imagedata>
+</imageobject></inlinemediaobject> Paint with
+filters</term>
+<listitem><para>
+This tool allows you to pick a filter and draw with it.
 </para></listitem></varlistentry>
 
 <varlistentry>

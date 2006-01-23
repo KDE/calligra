@@ -5,7 +5,10 @@
 This section will describe &krita;'s dialog windows.
 </para>
 
-<sect2 id="commands-dialogs-documentinformation">
+<sect2 id="commands-dialogs-general">
+<title>General dialogs</title>
+
+<sect3 id="commands-dialogs-general-documentinformation">
 <title>The Document Information dialog</title>
 
 <para>
@@ -37,9 +40,15 @@ store information about yourself. The third tab, <guilabel>User-defined
 Metadata</guilabel>, allows you to store any other information.
 </para>
 
+</sect3>
+
 </sect2>
 
-<sect2 id="commands-dialogs-imageproperties">
+<sect2 id="commands-dialogs-image">
+<title>Dialogs for image editing</title>
+
+
+<sect3 id="commands-dialogs-image-imageproperties">
 <title>The Image Properties dialog</title>
 
 <para>
@@ -69,9 +78,9 @@ be used (<guilabel>Profile</guilabel>). Finally, you can fill in the
 the image.
 </para>
 
-</sect2>
+</sect3>
 
-<sect2 id="commands-dialogs-imagesize">
+<sect3 id="commands-dialogs-image-imagesize">
 <title>The Image Size dialog</title>
 
 <para>
@@ -113,9 +122,9 @@ height will automatically be changed to 10. With this checkbox unselected, you
 can also resize the image non-proportionally.
 </para>
 
-</sect2>
+</sect3>
 
-<sect2 id="commands-dialogs-rotateimage">
+<sect3 id="commands-dialogs-image-rotateimage">
 <title>The Rotate Image dialog</title>
 
 <para>
@@ -143,9 +152,9 @@ using the respective option button, other amounts need to be specified with
 the <guilabel>Custom</guilabel> spin box.
 </para>
 
-</sect2>
+</sect3>
 
-<sect2 id="commands-dialogs-shearimage">
+<sect3 id="commands-dialogs-image-shearimage">
 <title>The Shear Image dialog</title>
 
 <para>
@@ -171,10 +180,10 @@ next one by the same amount relative to the previous one, etcetera.
 The X and Y shearing angles can be set using the two spin boxes.
 </para>
 
-</sect2>
+</sect3>
 
 
-<sect2 id="commands-dialogs-separateimage">
+<sect3 id="commands-dialogs-image-separateimage">
 <title>The Separate Image dialog</title>
 
 <para>
@@ -220,10 +229,10 @@ source should be downscaled to 8 bit colors (if it contains more), and if the
 output should be in color (default is to separate the channels to grayscale
 values).
 </para>
-</sect2>
+</sect3>
 
 
-<sect2 id="commands-dialogs-convertimagetype">
+<sect3 id="commands-dialogs-image-convertimagetype">
 <title>The Convert Image Type dialog</title>
 
 <para>
@@ -262,6 +271,26 @@ conversion, the same approach is used as with <guilabel>Relative
 colorimetric</guilabel>, but the white point of the color space (the value
 designating the color white) is not changed to match the new color space,
 which may result in unwanted changes to near colors.
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="commands-dialogs-layers">
+<title>Dialogs for layer options</title>
+
+<para>
+This section is to be written.
+</para>
+
+</sect2>
+
+<sect2 id="commands-dialogs-filters">
+<title>Dialogs for filter options</title>
+
+<para>
+This section is to be written.
 </para>
 
 </sect2>
