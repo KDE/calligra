@@ -33,6 +33,7 @@
   <!ENTITY links SYSTEM "doclinks.docbook">
   <!ENTITY comments SYSTEM "doccomments.docbook">
   <!ENTITY footend SYSTEM "footendnotes.docbook">
+  <!ENTITY a11y SYSTEM "a11y.docbook">
   <!ENTITY struct SYSTEM "docstruct.docbook">
   <!ENTITY mmerge SYSTEM "mailmerge.docbook">
   <!ENTITY insfile SYSTEM "insertfile.docbook">
@@ -466,6 +467,9 @@ If any document variables were changed, &kword; will update their values through
 &formulas;
 </chapter>
 
+<!-- **************************************************************************************************** -->
+<!-- Detailed Guides: For Users with Disabilities -->
+&a11y;
 
 <!-- **************************************************************************************************** -->
 <chapter id="advanced-topics"><title>Advanced Topics</title>
