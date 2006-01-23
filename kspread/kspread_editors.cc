@@ -102,6 +102,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
 {
 //   kdDebug() << k_funcinfo << endl;
 
+  
   // reset syntax highlighting
   setFormat(0, text.length(), Qt::black);
 
@@ -146,15 +147,103 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
         font.setBold(true);
         setFormat(token.pos() + 1, token.text().length(), font);*/
         break;
+      
       case Token::Unknown:
       case Token::Integer:     // 14, 3, 1977
       case Token::Float:       // 3.141592, 1e10, 5.9e-7
       case Token::String:      // "KOffice", "The quick brown fox..."
       case Token::Operator:    // +, *, /, -
+        {
+            switch (token.asOperator())
+            {
+                case Token::LeftPar:
+                case Token::RightPar:
+                    handleBrace( i );
+                    break;
+                default:
+                    break;
+            }
+        }
         break;
     }
   }
   return 0;
+}
+
+void FormulaEditorHighlighter::handleBrace( uint index )
+{
+  int cursorParagraph;
+  int cursorPos;
+  const Token& token = d->tokens.at( index );
+  
+  textEdit()->getCursorPosition( &cursorParagraph , &cursorPos );
+  
+  int distance = cursorPos-token.pos();
+  int opType = token.asOperator();
+  bool highlightBrace=false;
+
+  if ( opType == Token::LeftPar )
+  {
+    if ( distance == 1 )
+      highlightBrace=true;
+    else
+      if (distance==2)
+        if ( (index == d->tokens.count()-1) || ( d->tokens.at(index+1).asOperator() != Token::LeftPar) )
+          highlightBrace=true;
+
+  }
+  else
+  {
+    if ( distance == 2 )
+      highlightBrace=true;
+    else
+      if ( distance == 1 )
+        if ( (index == 0) || (d->tokens.at(index-1).asOperator() != Token::RightPar) )
+          highlightBrace=true;
+  }
+
+  if (highlightBrace)
+  {
+    QFont font = QFont( textEdit()->currentFont() );
+    font.setBold(true);
+    setFormat(token.pos() + 1, token.text().length(), font);
+
+    int matching = findMatchingBrace( index );
+
+    if (matching != -1)
+    {
+      Token matchingBrace = d->tokens.at(matching);
+      setFormat( matchingBrace.pos() + 1 , matchingBrace.text().length() , font);
+    }
+  }
+}
+
+int FormulaEditorHighlighter::findMatchingBrace(int pos)
+{
+    int depth=0;
+    int step=0;
+    
+    Tokens tokens = d->tokens;
+    
+    if (tokens.at(pos).asOperator() == Token::LeftPar)
+        step = 1;
+    else
+        step = -1;
+    
+    for (int index=pos ; (index >= 0) && (index < tokens.count() ) ; index += step  )
+    {
+        if (tokens.at(index).asOperator() == Token::LeftPar)
+            depth++;
+        if (tokens.at(index).asOperator() == Token::RightPar)
+            depth--;
+            
+        if (depth == 0)
+        {
+            return index;
+        }
+    }
+    
+    return -1; 
 }
 
 uint FormulaEditorHighlighter::rangeCount() const
@@ -536,6 +625,8 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   // turn choose mode on/off
   if (!checkChoice())
     return;
+    
+  d->highlighter->rehighlight();
 
   Tokens tokens = d->highlighter->formulaTokens();
   uint rangeCounter = 0;

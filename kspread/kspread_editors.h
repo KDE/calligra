@@ -83,9 +83,20 @@ public:
    *
    */
   bool rangeChanged() const;
+  
+  
 
 protected:
-
+  /**
+  * Returns the position of the brace matching the one found at position pos
+  */
+  int findMatchingBrace(int pos);
+  /**
+  * Examines the brace (Token::LeftPar or Token::RightPar) operator token at the given index in the token vector 
+  * ( as returned by formulaTokens() ) and if the cursor is next to it, the token plus any matching brace will be highlighted
+  */
+  void handleBrace(uint index);
+  
 private:
   class Private;
   Private* d;
