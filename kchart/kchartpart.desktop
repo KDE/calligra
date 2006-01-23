@@ -41,7 +41,8 @@ Type=Service
 MimeType=application/x-kchart;application/vnd.oasis.opendocument.chart,application/vnd.oasis.opendocument.chart-template
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart,KOfficeChart
 X-KDE-NativeMimeType=application/x-kchart
-X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
+# Disable this until OASIS works with kchart
+# X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.chart,application/vnd.oasis.opendocument.chart-template
 GenericName=Chart
 GenericName[af]=Kaart
