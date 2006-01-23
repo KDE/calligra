@@ -111,7 +111,9 @@ QVariant MySqlCursor::value(uint pos) {
 	KexiDB::Field *f = (m_fieldsExpanded && pos<m_fieldsExpanded->count())
 		? m_fieldsExpanded->at(pos)->field : 0;
 	
-//! @todo js: handle DateTime, Date, Time, BLOB types!
+//! @todo js: use MYSQL_FIELD::type here!
+
+//	kdDebug() << "@@@ " << d->mysqlrow[pos] << endl;
 
 	//from most to least frequently used types:
 	if (!f || f->isTextType())
@@ -130,13 +132,14 @@ QVariant MySqlCursor::value(uint pos) {
    strings. So just put that string in a QVariant and let KexiDB deal with it.
  */
 void MySqlCursor::storeCurrentRow(RowData &data) const {
-	KexiDBDrvDbg << "MySqlCursor::storeCurrentRow: Position is " << (long)m_at<< endl;
+//	KexiDBDrvDbg << "MySqlCursor::storeCurrentRow: Position is " << (long)m_at<< endl;
 	if (d->numRows<=0)
 		return;
 
+//! @todo js: use MYSQL_FIELD::type here!
 	data.reserve(m_fieldCount);
 	for( uint i=0; i<m_fieldCount; i++) {
-		data[i] = QVariant(d->mysqlrow[i]);
+		data[i] = QVariant(QString::fromUtf8((const char*)d->mysqlrow[i]));
 	}
 }
 
