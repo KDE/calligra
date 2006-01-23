@@ -21,7 +21,8 @@
 
 #include <stdio.h>
 
-#include <lcms.h>
+#include <config.h>
+#include LCMS_HEADER
 
 #include <kapplication.h>
 #include <koDocumentInfo.h>
