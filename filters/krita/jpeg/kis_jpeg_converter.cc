@@ -68,6 +68,7 @@ namespace {
     }
 
     QString getColorSpaceForColorType(J_COLOR_SPACE color_type) {
+        kdDebug(41008) << "color_type = " << color_type << endl;
         if(color_type == JCS_GRAYSCALE)
         {
             return "GRAYA";
@@ -139,11 +140,15 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
             Q_CHECK_PTR(profile);
             kdDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
         }
+        if(!profile->isSuitableForOutput())
+        {
+            kdDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
+        }
     }
-
+    
     // Retrieve a pointer to the colorspace
     KisColorSpace* cs;
-    if (profile)
+    if (profile && profile->isSuitableForOutput())
     {
         kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
@@ -157,6 +162,16 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
         jpeg_destroy_decompress(&cinfo);
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
+    }
+    
+    // Create the cmsTransform if needed 
+    
+    cmsHTRANSFORM transform = 0;
+    if(profile && !profile->isSuitableForOutput())
+    {
+        transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
+                                       cs->getProfile()->profile() , cs->colorSpaceType(),
+                                       INTENT_PERCEPTUAL, 0);
     }
     
     // Creating the KisImageSP
@@ -184,6 +199,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
                 while (!it.isDone()) {
                     Q_UINT8 *d = it.rawData();
                     d[0] = *(src++);
+                    if(transform) cmsDoTransform(transform, d, d, 1);
                     d[1] = Q_UINT8_MAX;
                     ++it;
                 }
@@ -194,6 +210,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
                     d[2] = *(src++);
                     d[1] = *(src++);
                     d[0] = *(src++);
+                    if(transform) cmsDoTransform(transform, d, d, 1);
                     d[3] = Q_UINT8_MAX;
                     ++it;
                 }
@@ -205,6 +222,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
                     d[1] = Q_UINT8_MAX - *(src++);
                     d[2] = Q_UINT8_MAX - *(src++);
                     d[3] = Q_UINT8_MAX - *(src++);
+                    if(transform) cmsDoTransform(transform, d, d, 1);
                     d[4] = Q_UINT8_MAX;
                     ++it;
                 }
