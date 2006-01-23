@@ -347,6 +347,11 @@ public:
     void saveCurrentSheetSelection();
 
     void deleteSelectedObjects();
+    
+    /**
+    * Returns the default color for highlighting cells and column / row headers
+    */
+    static QColor highlightColor();
 
 public slots:
     /**

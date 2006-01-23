@@ -788,6 +788,9 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
         QString path;
         if ( !childDoc->isStoredExtern() )
         {
+            //NOTE: If an application's .desktop file lies about opendocument support (ie. it indicates that it has
+            //a native OASIS mime type, when it doesn't, this causes a crash when trying to reload and paint
+            //the object, since it won't have an associated document.
           if ( !embedded->saveOasisToStore( store, manifestWriter ) )
             continue;
 

@@ -108,7 +108,7 @@ public:
       ResizeCell,
       /** Autofilling */
       AutoFill,
-      /** Rsizing the selection */
+      /** Resizing the selection */
       ResizeSelection
     };
     enum EditorType { CellEditor, EditWidget };

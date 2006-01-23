@@ -7254,6 +7254,11 @@ void View::runInspector()
     delete ins;
 }
 
+QColor View::highlightColor()
+{
+    return QApplication::palette().active().highlight().light( 175 );
+}
+
 } // namespace KSpread
 
 #include "kspread_view.moc"

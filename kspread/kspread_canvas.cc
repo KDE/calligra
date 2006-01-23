@@ -4314,7 +4314,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
     QRect range = (*it)->rect().normalize();
 
     bool current = QRect(selectionInfo()->anchor(), selectionInfo()->marker()).normalize() == range;
-    QPen pen( Qt::black, 3 );
+    QPen pen( Qt::black, 2 );
     painter.setPen( pen );
 
     retrieveMarkerInfo( selectionInfo()->extendToMergedAreas(range), viewRect, positions, paintSides );
@@ -4340,7 +4340,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
     if ( paintTop )
     {
       painter.drawLine( d->view->doc()->zoomItX( left ) - l,      d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( right ) + 2 * l, d->view->doc()->zoomItY( top ) );
+                        d->view->doc()->zoomItX( right ) + l, d->view->doc()->zoomItY( top ) );
     }
     if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
     {
@@ -5023,6 +5023,7 @@ void VBorder::paintEvent( QPaintEvent* _ev )
     return;
 
   QPainter painter( this );
+  QColor highlightColor = View::highlightColor();
   QPen pen( Qt::black, 1 );
   painter.setPen( pen );
   // painter.setBackgroundColor( colorGroup().base() );
@@ -5064,16 +5065,14 @@ void VBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
     {
-      QColor c = colorGroup().highlight().light();
-      QBrush fillSelected( c );
-      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150),
+      QBrush fillSelected( highlightColor );
+      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, highlightColor.dark(150),
            1, &fillSelected );
     }
     else if ( highlighted )
     {
-      QColor c = colorGroup().highlight().light();
-      QBrush fillHighlighted( c );
-      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, c.dark(150),
+      QBrush fillHighlighted( highlightColor );
+      qDrawPlainRect ( &painter, 0, zoomedYPos, width, height+1, highlightColor.dark(150),
            1, &fillHighlighted );
     }
     else
@@ -5718,6 +5717,7 @@ void HBorder::paintEvent( QPaintEvent* _ev )
   if ( !sheet )
     return;
 
+  QColor   highlightColor = View::highlightColor();
   QPainter painter( this );
   QPen pen( Qt::black, 1 );
   painter.setPen( pen );
@@ -5780,16 +5780,14 @@ void HBorder::paintEvent( QPaintEvent* _ev )
 
       if ( selected )
       {
-        QColor c = colorGroup().highlight().light();
-        QBrush fillSelected( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150),
+        QBrush fillSelected( highlightColor );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, highlightColor.dark(150),
            1, &fillSelected );
       }
       else if ( highlighted )
       {
-        QColor c = colorGroup().highlight().light();
-        QBrush fillHighlighted( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(150),
+        QBrush fillHighlighted( highlightColor );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, highlightColor.dark(150),
            1, &fillHighlighted );
       }
       else
@@ -5845,16 +5843,14 @@ void HBorder::paintEvent( QPaintEvent* _ev )
 
       if ( selected )
       {
-        QColor c = colorGroup().highlight().light();
-        QBrush fillSelected( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(),
+        QBrush fillSelected( highlightColor );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, highlightColor.dark(),
            1, &fillSelected );
       }
       else if ( highlighted )
       {
-        QColor c = colorGroup().highlight().light();
-        QBrush fillHighlighted( c );
-        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, c.dark(),
+        QBrush fillHighlighted( highlightColor );
+        qDrawPlainRect ( &painter, zoomedXPos, 0, width+1, height, highlightColor.dark(),
            1, &fillHighlighted );
       }
       else

@@ -410,12 +410,15 @@ void KSpreadChild::draw( QPainter *_painter )
 
   _painter->setClipRect( zoomedBound, QPainter::CoordPainter );
 
-  embeddedObject()->document()->paintEverything( *_painter,
-    zoomedBound,
-    embeddedObject()->isTransparent(),
-    0 /* View isn't known from here - is that a problem? */,
-    sheet()->doc()->zoomedResolutionX() ,
-    sheet()->doc()->zoomedResolutionY() );
+   assert( embeddedObject()->document() != 0 );
+   
+        embeddedObject()->document()->paintEverything( *_painter,
+        zoomedBound,
+        embeddedObject()->isTransparent(),
+        0 /* View isn't known from here - is that a problem? */,
+        sheet()->doc()->zoomedResolutionX() ,
+        sheet()->doc()->zoomedResolutionY() );
+    
 
    embeddedObject()->setGeometry( new_geometry );
   _painter->restore();
