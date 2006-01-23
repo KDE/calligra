@@ -43,12 +43,14 @@ class KEXIDATATABLE_EXPORT KexiDateTimeTableEdit : public KexiInputTableEdit
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
+		virtual bool valueIsValid();
 
 	protected slots:
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);
 		QDateTime dateTimeValue();
+		bool textIsEmpty() const;
 
 		//! Used to format and convert date values
 		KexiDateFormatter m_dateFormatter;

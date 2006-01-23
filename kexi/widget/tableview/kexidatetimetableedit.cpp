@@ -105,6 +105,8 @@ void KexiDateTimeTableEdit::setupContents( QPainter *p, bool focused, QVariant v
 
 bool KexiDateTimeTableEdit::valueIsNull()
 {
+	if (textIsEmpty())
+		return true;
 	return !dateTimeValue().isValid();
 }
 
@@ -115,9 +117,12 @@ bool KexiDateTimeTableEdit::valueIsEmpty()
 
 QDateTime KexiDateTimeTableEdit::dateTimeValue()
 {
-	QString s(m_lineedit->text());
-	int timepos = s.find(" ");
-	if (timepos>0) {
+	QString s = m_lineedit->text().stripWhiteSpace();
+	const int timepos = s.find(" ");
+	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
+	if (emptyTime)
+		s = s.left(timepos);
+	if (timepos>0 && !emptyTime) {
 		return QDateTime(
 			m_dateFormatter.stringToDate( s.left(timepos) ),
 			m_timeFormatter.stringToTime( s.mid(timepos+1) )
@@ -131,10 +136,33 @@ QDateTime KexiDateTimeTableEdit::dateTimeValue()
 	}
 }
 
-QVariant
-KexiDateTimeTableEdit::value()
+QVariant KexiDateTimeTableEdit::value()
 {
+	if (textIsEmpty())
+		return QVariant();
 	return dateTimeValue();
+}
+
+bool KexiDateTimeTableEdit::valueIsValid()
+{
+	QString s(m_lineedit->text());
+	int timepos = s.find(" ");
+	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
+	if (timepos >= 0 && s.left(timepos).replace(m_dateFormatter.separator(), "").stripWhiteSpace().isEmpty()
+		&& emptyTime)
+		//empty date/time is valid
+		return true;
+	return timepos>=0 && m_dateFormatter.stringToDate( s.left(timepos) ).isValid()
+		&& (emptyTime /*date without time is also valid*/ || m_timeFormatter.stringToTime( s.mid(timepos+1) ).isValid());
+}
+
+bool KexiDateTimeTableEdit::textIsEmpty() const
+{
+	QString s(m_lineedit->text());
+	int timepos = s.find(" ");
+	const bool emptyTime = timepos >= 0 && s.mid(timepos+1).replace(':',"").stripWhiteSpace().isEmpty();
+	return (timepos >= 0 && s.left(timepos).replace(m_dateFormatter.separator(), "").stripWhiteSpace().isEmpty()
+		&& emptyTime);
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiDateTimeEditorFactoryItem, KexiDateTimeTableEdit)

@@ -97,3 +97,8 @@ void KexiDataItemInterface::hideFocus()
 void KexiDataItemInterface::clickedOnContents()
 {
 }
+
+bool KexiDataItemInterface::valueIsValid()
+{
+	return true;
+}

@@ -45,8 +45,8 @@
 #include <kexiutils/utils.h>
 
 KexiTimeFormatter::KexiTimeFormatter()
- : m_hmsRegExp("(\\d*):(\\d*):(\\d*).*")//.*(am|pm|)")
- , m_hmRegExp("(\\d*):(\\d*)")//.*(am|pm|)")
+: m_hmsRegExp("(\\d*):(\\d*):(\\d*).*( am| pm){,1}", false/*!CS*/)
+ , m_hmRegExp("(\\d*):(\\d*).*( am| pm){,1}", false/*!CS*/)
 {
 	QString tf( KGlobal::locale()->timeFormat() );
 	//m_hourpos, m_minpos, m_secpos; are result of tf.find()
@@ -103,7 +103,7 @@ KexiTimeFormatter::KexiTimeFormatter()
 //	m_inputMask.replace( "%S", "00" ); //optional
 	m_inputMask.replace( hourVariable, "99" );
 	m_inputMask.replace( "%M", "99" );
-	m_inputMask.replace( "%S", "99" ); //optional
+	m_inputMask.replace( "%S", "00" ); //optional
 	m_inputMask.replace( "%p", "AA" ); //am or pm
 	m_inputMask += ";_";
 
@@ -146,16 +146,18 @@ QTime KexiTimeFormatter::stringToTime( const QString& str )
 	int hour, min, sec;
 	bool pm = false;
 
+	bool tryWithoutSeconds = true;
 	if (m_secpos>=0) {
-		if (-1 == m_hmsRegExp.search(str))
-			return QTime(99,0,0);
-		hour = m_hmsRegExp.cap(1).toInt();
-		min = m_hmsRegExp.cap(2).toInt();
-		sec = m_hmsRegExp.cap(3).toInt();
-		if (m_ampmpos >= 0 && m_hmsRegExp.numCaptures()>3)
-			pm = m_hmsRegExp.cap(4).lower()=="pm";
+		if (-1 != m_hmsRegExp.search(str)) {
+			hour = m_hmsRegExp.cap(1).toInt();
+			min = m_hmsRegExp.cap(2).toInt();
+			sec = m_hmsRegExp.cap(3).toInt();
+			if (m_ampmpos >= 0 && m_hmsRegExp.numCaptures()>3)
+				pm = m_hmsRegExp.cap(4).stripWhiteSpace().lower()=="pm";
+			tryWithoutSeconds = false;
+		}
 	}
-	else {
+	if (tryWithoutSeconds) {
 		if (-1 == m_hmRegExp.search(str))
 			return QTime(99,0,0);
 		hour = m_hmRegExp.cap(1).toInt();
@@ -225,6 +227,8 @@ void KexiTimeTableEdit::setupContents( QPainter *p, bool focused, QVariant val,
 
 bool KexiTimeTableEdit::valueIsNull()
 {
+	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty())
+		return true;
 	return !timeValue().isValid();
 }
 
@@ -238,13 +242,21 @@ QTime KexiTimeTableEdit::timeValue()
 	return m_formatter.stringToTime( m_lineedit->text() );
 }
 
-QVariant
-KexiTimeTableEdit::value()
+QVariant KexiTimeTableEdit::value()
 {
+	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty())
+		return QVariant();
 	return timeValue();
 
 	//QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 //	return QVariant(QDateTime( m_cleared ? QDate() : QDate(0,1,2)/*nevermind*/, m_edit->time()));
+}
+
+bool KexiTimeTableEdit::valueIsValid()
+{
+	if (m_lineedit->text().replace(':',"").stripWhiteSpace().isEmpty()) //empty time is valid
+		return true;
+	return m_formatter.stringToTime( m_lineedit->text() ).isValid();
 }
 
 KEXI_CELLEDITOR_FACTORY_ITEM_IMPL(KexiTimeEditorFactoryItem, KexiTimeTableEdit)

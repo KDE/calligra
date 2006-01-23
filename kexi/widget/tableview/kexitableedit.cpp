@@ -188,7 +188,7 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 		x = 5;
 //		y_offset = 0;
 #endif*/
-		switch (m_column->field()->type()) {
+//		switch (m_column->field()->type()) {
 /*moved		case KexiDB::Field::Time:
 			//it was QDateTime - a hack needed because QVariant(QTime) has broken isNull()
 			if (!val.isNull()) {
@@ -203,11 +203,11 @@ else if (m_field->type() == KexiDB::Field::Date) { //todo: datetime & time
 			if (!val.toDateTime().isNull())
 				txt = val.toDate().toString(Qt::LocalDate) + " " + val.toTime().toString(Qt::LocalDate);
 			break;*/
-		default:
-			if (!val.isNull()) {
-				txt = val.toString();
-			}
+//		default:
+		if (!val.isNull()) {
+			txt = val.toString();
 		}
+//		}
 		align |= AlignLeft;
 	}
 }

@@ -83,6 +83,13 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		//! \return value currently represented by this item.
 		virtual QVariant value() = 0;
 
+		//! \return true if editor's value is valid for a given type
+		//! Used for checking if an entered value is valid,
+		//! E.g. a part of time value can be entered: "12:8" and this is invalid, not only null.
+		//! Null time or date is valid in Kexi, so it is not enough to test value().isValid().
+		//! Default implementation just returns true.
+		virtual bool valueIsValid();
+
 		//! \return true if editor's value is null (not empty)
 		//! Used for checking if a given constraint within table or form is met.
 		virtual bool valueIsNull() = 0;

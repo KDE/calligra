@@ -50,6 +50,8 @@ class KEXIDATATABLE_EXPORT KexiDateFormatter
 		//! Can be used in QLineEdit::setInputMask().
 		QString inputMask() const { return m_inputMask; }
 
+		QString separator() const { return m_separator; }
+
 	protected:
 		//! Input mask generated using the formatter settings. Can be used in QLineEdit::setInputMask().
 		QString m_inputMask;
@@ -67,6 +69,8 @@ class KEXIDATATABLE_EXPORT KexiDateFormatter
 
 		//! Used in stringToDate() to convert string back to QDate
 		int m_yearpos, m_monthpos, m_daypos;
+
+		QString m_separator;
 };
 
 /*! @short Editor class for Date type.
@@ -87,15 +91,7 @@ class KEXIDATATABLE_EXPORT KexiDateTableEdit : public KexiInputTableEdit
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
-//		virtual void clear();
-//		virtual bool cursorAtStart();
-//		virtual bool cursorAtEnd();
-//		virtual bool eventFilter( QObject *o, QEvent *e );
-
-	protected slots:
-//		void slotDateChanged(QDate);
-//		void slotShowDatePicker();
-//		void acceptDate();
+		virtual bool valueIsValid();
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);

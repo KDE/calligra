@@ -27,6 +27,9 @@
 #ifndef KEXIDATAAWAREOBJECTINTERFACE_H
 #define KEXIDATAAWAREOBJECTINTERFACE_H
 
+#include <qguardedptr.h>
+#include <qlabel.h>
+
 #include <kdebug.h>
 #include "kexitableviewdata.h"
 
@@ -699,6 +702,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 This value will be used in slotRowDeleted() after rowDeleted() signal 
 		 is received from KexiTableViewData member and then cleared (set to -1). */
 		int m_rowWillBeDeleted;
+
+		/*! Displays passive error popup label used when invalid data has been entered. */
+		QGuardedPtr<QLabel> m_errorMessagePopup;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const

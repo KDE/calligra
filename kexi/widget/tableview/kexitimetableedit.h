@@ -89,8 +89,7 @@ class KEXIDATATABLE_EXPORT KexiTimeTableEdit : public KexiInputTableEdit
 		virtual QVariant value();
 		virtual bool valueIsNull();
 		virtual bool valueIsEmpty();
-
-	protected slots:
+		virtual bool valueIsValid();
 
 	protected:
 		virtual void setValueInternal(const QVariant& add, bool removeOld);

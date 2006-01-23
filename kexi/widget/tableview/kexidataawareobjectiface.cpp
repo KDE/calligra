@@ -26,6 +26,10 @@
 
 #include "kexidataawareobjectiface.h"
 
+#include <qscrollview.h>
+#include <qlabel.h>
+#include <qtooltip.h>
+
 #include <kexi.h>
 #include <kexiutils/validator.h>
 #include <widget/utils/kexirecordnavigator.h>
@@ -506,6 +510,9 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 				newrow = QMIN( rows() - 1 + (isInsertingEnabled()?1:0), newrow);
 			}
 		}
+		if (m_errorMessagePopup) {
+			m_errorMessagePopup->close();
+		}
 
 		if (m_curRow != newrow) {//update current row info
 			m_navPanel->setCurrentRecordNumber(newrow+1);
@@ -796,10 +803,27 @@ void KexiDataAwareObjectInterface::removeEditor()
 
 void KexiDataAwareObjectInterface::cancelEditor()
 {
+	if (m_errorMessagePopup) {
+		m_errorMessagePopup->close();
+	}
 	if (!m_editor)
 		return;
 	removeEditor();
 }
+
+//! @internal
+class KexiDataAwareObjectInterfaceToolTip : public QToolTip {
+	public:
+	KexiDataAwareObjectInterfaceToolTip( const QString & text, const QPoint & pos, QWidget * widget )
+		: QToolTip(widget), m_text(text)
+	{
+		tip( QRect(pos, QSize(100, 100)), text );
+	}
+	virtual void maybeTip(const QPoint & p) {
+		tip( QRect(p, QSize(100, 100)), m_text);
+	}
+	QString m_text;
+};
 
 bool KexiDataAwareObjectInterface::acceptEditor()
 {
@@ -825,7 +849,55 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 	bool editCurrentCellAgain = false;
 
 	if (valueChanged) {
-		if (m_editor->valueIsNull()) {//null value entered
+		if (!m_editor->valueIsValid()) {
+			//used e.g. for date or time values - the value can be null but not necessary invalid
+			res = Validator::Error;
+			editCurrentCellAgain = true;
+			QWidget *par = dynamic_cast<QScrollView*>(this) ? dynamic_cast<QScrollView*>(this)->viewport() :
+					dynamic_cast<QWidget*>(this);
+			QWidget *edit = dynamic_cast<QWidget*>(m_editor);
+			if (par && edit) {
+//! @todo move this to a separate class
+//! @todo allow displaying user-defined warning
+//! @todo also use for other error messages
+				if (!m_errorMessagePopup) {
+//					m_errorMessagePopup->close();
+					m_errorMessagePopup = new QLabel(i18n("Error: %1").arg(m_editor->columnInfo()->field->typeName())+"?", 
+						dynamic_cast<QWidget*>(this), 0,
+					Qt::WStyle_Customize | Qt::WType_Popup | Qt::WStyle_NoBorder 
+					| Qt::WX11BypassWM | Qt::WDestructiveClose);
+					QPalette pal( QToolTip::palette() );
+					QColorGroup cg(pal.active());
+					cg.setColor(QColorGroup::Foreground, Qt::red);
+					pal.setActive(cg);
+					m_errorMessagePopup->setFocusPolicy(QWidget::NoFocus);
+					m_errorMessagePopup->setPalette(pal);
+					m_errorMessagePopup->setMargin(2);
+					m_errorMessagePopup->setAutoMask( FALSE );
+					m_errorMessagePopup->setFrameStyle( QFrame::Plain | QFrame::Box );
+					m_errorMessagePopup->setLineWidth( 2 );
+					m_errorMessagePopup->setAlignment( Qt::AlignAuto | Qt::AlignTop );
+					m_errorMessagePopup->setIndent(0);
+					m_errorMessagePopup->polish();
+					m_errorMessagePopup->adjustSize();
+					m_errorMessagePopup->move( 
+						par->mapToGlobal(edit->pos()) + 
+						QPoint(
+							(m_verticalHeader ? m_verticalHeader->width() : 0),
+							edit->height() + 5) );
+					m_errorMessagePopup->show();
+				}
+				m_editor->setFocus();
+/*
+QWhatsThis::display( m_editor->columnInfo()->field->typeName() + " ?", 
+					par->mapToGlobal(edit->pos()) 
+					+ QPoint(
+						(m_verticalHeader ? m_verticalHeader->width() : 0) + 10,
+						edit->height() + 5),	par );
+						*/
+			}
+		}
+		else if (m_editor->valueIsNull()) {//null value entered
 //			if (m_editor->columnInfo()->field->isNotNull() && !autoIncColumnCanBeOmitted) {
 			if (m_editor->field()->isNotNull() && !autoIncColumnCanBeOmitted) {
 				kdDebug() << "KexiDataAwareObjectInterface::acceptEditor(): NULL NOT ALLOWED!" << endl;
@@ -935,10 +1007,12 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 
 	//show the validation result if not OK:
 	if (res == Validator::Error) {
-		if (desc.isEmpty())
-			KMessageBox::sorry(dynamic_cast<QWidget*>(this), msg);
-		else
-			KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), msg, desc);
+		if (!msg.isEmpty()) {
+			if (desc.isEmpty())
+				KMessageBox::sorry(dynamic_cast<QWidget*>(this), msg);
+			else
+				KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), msg, desc);
+		}
 		editCurrentCellAgain = true;
 //		allow = false;
 	}
@@ -991,8 +1065,13 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 	}
 	if (m_editor) {
 		//allow to edit the cell again, (if m_pEditor is not cleared)
-		startEditCurrentCell(newval.type()==QVariant::String ? newval.toString() : QString::null);
-		m_editor->setFocus();
+
+		if (m_editor->hasFocusableWidget()) {
+			m_editor->showWidget();
+			m_editor->setFocus();
+		}
+//		startEditCurrentCell(newval.type()==QVariant::String ? newval.toString() : QString::null);
+//		m_editor->setFocus();
 	}
 	return false;
 }

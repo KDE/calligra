@@ -17,7 +17,11 @@ Table Designer
 - Object type hidden for beta1
 Table View
 - date, time and date/time values are displayed using KDE settings
-TODO: fix acceping am/pm in KexiTimeFormatter::stringToTime()
+- fixed acceping am/pm for entering time values
+- various fixes for entering date, time and date/time values
+- time can be entered without seconds
+- small passive warning box is displayed when entered value is invalid
+  (currently for date, time and date/time types)
 
 2006-01-20
 General
