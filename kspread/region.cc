@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright (C) 2005-2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -78,9 +78,28 @@ Region::Region(View* view, const QString& string, Sheet* sheet)
       {
         sheet = filterSheetName(sRegion);
       }
-      Range* range = createRange(sRegion);
-      range->setSheet(sheet);
-      d->cells.append(range);
+
+      Point ul(sRegion.left(delimiterPos));
+      Point lr(sRegion.mid(delimiterPos + 1));
+
+      if (ul.isValid() && lr.isValid())
+      {
+        Range* range = createRange(sRegion);
+        range->setSheet(sheet);
+        d->cells.append(range);
+      }
+      else if (ul.isValid())
+      {
+        Point* point = createPoint(sRegion.left(delimiterPos));
+        point->setSheet(sheet);
+        d->cells.append(point);
+      }
+      else // lr.isValid()
+      {
+        Point* point = createPoint(sRegion.right(delimiterPos + 1));
+        point->setSheet(sheet);
+        d->cells.append(point);
+      }
     }
     else
     {
@@ -235,44 +254,7 @@ Region::Element* Region::add(const QPoint& point, Sheet* sheet)
   {
     return 0;
   }
-
-  bool containsPoint = false;
-  bool adjacentPoint = false;
-  QRect neighbour;
-
-  ConstIterator endOfList(d->cells.constEnd());
-  for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
-  {
-    Element *element = *it;
-    if (sheet && sheet != element->sheet())
-    {
-      continue;
-    }
-    if (element->contains(point))
-    {
-      containsPoint = true;
-      break;
-    }
-    else
-    {
-      neighbour = element->rect().normalize();
-      neighbour.setTopLeft(neighbour.topLeft() - QPoint(1,1));
-      neighbour.setBottomRight(neighbour.bottomRight() + QPoint(1,1));
-      if (neighbour.contains(point))
-      {
-        adjacentPoint = true; // TODO Stefan: Implement!
-        break;
-      }
-    }
-  }
-  if ( !containsPoint )
-  {
-    Point* rpoint = createPoint(point);
-    rpoint->setSheet(sheet);
-    d->cells.append(rpoint);
-    return rpoint;
-  }
-  return 0;
+  return *insert(d->cells.end(), point, sheet, false);
 }
 
 Region::Element* Region::add(const QRect& range, Sheet* sheet)
@@ -285,38 +267,7 @@ Region::Element* Region::add(const QRect& range, Sheet* sheet)
   {
     return add(range.topLeft(), sheet);
   }
-
-  bool containsRange = false;
-
-  Iterator it( d->cells.begin() );
-  Iterator endOfList( d->cells.end() );
-  while ( it != endOfList )
-  {
-    if (sheet && sheet != (*it)->sheet())
-    {
-      ++it;
-      continue;
-    }
-    if ((*it)->contains(range))
-    {
-      containsRange = true;
-    }
-    else if (range.contains((*it)->rect()))
-    {
-      delete *it;
-      it = d->cells.remove(it);
-      continue;
-    }
-    ++it;
-  }
-  if ( !containsRange )
-  {
-    Range* rrange = createRange(range);
-    rrange->setSheet(sheet);
-    d->cells.append(rrange);
-    return rrange;
-  }
-  return 0;
+  return *insert(d->cells.end(), range, sheet, false);
 }
 
 Region::Element* Region::add(const Region& region)
@@ -431,31 +382,107 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
   return 0;
 }
 
-void Region::insert(Region::Iterator pos, const QPoint& point, Sheet* sheet)
+Region::Iterator Region::insert(Region::Iterator pos, const QPoint& point, Sheet* sheet, bool multi)
 {
   if (point.x() < 1 || point.y() < 1)
   {
-    return;
+    return pos;
   }
-  Point* rpoint = createPoint(point);
-  rpoint->setSheet(sheet);
-  d->cells.insert(pos, 1, rpoint);
+
+  bool containsPoint = false;
+//   bool adjacentPoint = false;
+//   QRect neighbour;
+
+  // we don't have to check for occurences?
+  if (multi)
+  {
+    Point* rpoint = createPoint(point);
+    rpoint->setSheet(sheet);
+    return d->cells.insert(pos, rpoint);
+  }
+
+  ConstIterator endOfList(d->cells.constEnd());
+  for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
+  {
+    Element *element = *it;
+    if (sheet && sheet != element->sheet())
+    {
+      continue;
+    }
+    if (element->contains(point))
+    {
+      containsPoint = true;
+      break;
+    }
+/*    else
+    {
+      neighbour = element->rect().normalize();
+      neighbour.setTopLeft(neighbour.topLeft() - QPoint(1,1));
+      neighbour.setBottomRight(neighbour.bottomRight() + QPoint(1,1));
+      if (neighbour.contains(point))
+      {
+        adjacentPoint = true; // TODO Stefan: Implement!
+        break;
+      }
+    }*/
+  }
+  if ( !containsPoint )
+  {
+    Point* rpoint = createPoint(point);
+    rpoint->setSheet(sheet);
+    return d->cells.insert(pos, rpoint);
+  }
+  return pos;
 }
 
-void Region::insert(Region::Iterator pos, const QRect& range, Sheet* sheet)
+Region::Iterator Region::insert(Region::Iterator pos, const QRect& range, Sheet* sheet, bool multi)
 {
   if (range.width() == 0 || range.height() == 0)
   {
-    return;
+    return pos;
   }
   if (range.size() == QSize(1,1))
   {
-    insert(pos, range.topLeft(), sheet);
-    return;
+    return insert(pos, range.topLeft(), sheet);
   }
-  Range* rrange = createRange(range);
-  rrange->setSheet(sheet);
-  d->cells.insert(pos, 1, rrange);
+
+  if (multi)
+  {
+    Range* rrange = createRange(range);
+    rrange->setSheet(sheet);
+    return d->cells.insert(pos, rrange);
+  }
+
+  bool containsRange = false;
+
+  Iterator it( d->cells.begin() );
+  Iterator endOfList( d->cells.end() );
+  while ( it != endOfList )
+  {
+    if (sheet && sheet != (*it)->sheet())
+    {
+      ++it;
+      continue;
+    }
+    if ((*it)->contains(range))
+    {
+      containsRange = true;
+    }
+    else if (range.contains((*it)->rect()))
+    {
+      delete *it;
+      it = d->cells.remove(it);
+      continue;
+    }
+    ++it;
+  }
+  if ( !containsRange )
+  {
+    Range* rrange = createRange(range);
+    rrange->setSheet(sheet);
+    return d->cells.insert(pos, rrange);
+  }
+  return pos;
 }
 
 bool Region::isColumnAffected(uint col) const

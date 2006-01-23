@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright 1999-2004 The KSpread Team <koffice-devel@kde.org>
+   Copyright 1999-2006 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,130 +42,61 @@ namespace KSpread
 {
 class Canvas;
 class Cell;
+class CellEditor;
 class LocationEditWidget;
 class Region;
 class Sheet;
-class TextEditor;
+class Tokens;
 class View;
 
 
-class CellEditor : public QWidget
-{
-    Q_OBJECT
-public:
-    CellEditor( Cell*, Canvas* _parent = 0, const char* _name = 0 );
-    ~CellEditor();
-
-    Cell* cell()const { return m_pCell; }
-
-    virtual void handleKeyPressEvent( QKeyEvent* _ev ) = 0;
-    virtual void handleIMEvent( QIMEvent * _ev ) = 0;
-    virtual void setEditorFont(QFont const & font, bool updateSize) = 0;
-    virtual QString text() const = 0;
-    virtual void setText(QString text) = 0;
-    virtual int cursorPosition() const = 0;
-    virtual void setCursorPosition(int pos) = 0;
-    // virtual void setFocus() = 0;
-    virtual void insertFormulaChar(int c) = 0;
-    virtual void cut(){};
-    virtual void paste(){};
-    virtual void copy(){};
-    Canvas* canvas()const { return m_pCanvas; }
-
-private:
-    Cell* m_pCell;
-    Canvas* m_pCanvas;
-};
-
 /**
-	Colours cell references in formulas.  Installed by TextEditor instances in
-	the constructor.
+ * Colours cell references in formulas.  Installed by CellEditor instances in
+ * the constructor.
  */
 class FormulaEditorHighlighter : public QSyntaxHighlighter
 {
-	//Q_OBJECT
-
-	public:
-	/**
-	 * Constructs a KSpreadTextEditorHighlighter to colour-code cell references in a QTextEdit.
-	 *
-	 * @param textEdit The QTextEdit widget which the highlighter should operate on
-	 * @param sheet The active KSpreadSheet object
-	 */
-		FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas);
-		virtual ~FormulaEditorHighlighter(){}
+public:
+  /**
+   * Constructs a FormulaHighlighter to colour-code cell references in a QTextEdit.
+   *
+   * @param textEdit The QTextEdit widget which the highlighter should operate on
+   * @param sheet The active KSpreadSheet object
+   */
+  FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas);
+  virtual ~FormulaEditorHighlighter();
 
 
-	/**
-	* Called automatically by KTextEditor to highlight text when modified.
-	*/
-		virtual int highlightParagraph(const QString& text, int endStateOfLastPara);
-		
-	/**
-	*
-	*
-	*/
-		void getReferences(std::vector<KSharedPtr<HighlightRange> >* ranges);
+  /**
+   * Called automatically by KTextEditor to highlight text when modified.
+   */
+  virtual int highlightParagraph(const QString& text, int endStateOfLastPara);
+  /**
+   * 
+   */
+  const Tokens& formulaTokens() const;
+  /**
+   *
+   */
+  uint rangeCount() const;
+  /**
+   *
+   */
+  bool rangeChanged() const;
 
-	/**
-	*	Returns true if the cell references in the formula have changed since the last call
-	*	to referencesChanged().
-	*	The first call always returns true.
-	 */
-		bool referencesChanged();
-  const QValueList<QColor>& colors() const { return m_colors; }
-	protected:
+protected:
 
-	//Array of references already found in text.  This is so that all references to the same cell
-	//share the same colour
-		std::vector<QString> _refs;
-
-	//These are the default colours used to
-	//highlight cell references
-		QValueList<QColor> m_colors;
-
-	//Source for cell reference checking
-		Canvas* m_pCanvas;
-
-	//Have cell references changed since last call to referencesChanged()?
-		bool _refsChanged;
+private:
+  class Private;
+  Private* d;
 };
-
-/**
-* Represents a highlighted range which is associated with a QTextEdit widget.  
-* When the @ref EditorHighlightRange::setRange() method is called any references to the old
-* area in the edit widget's text are replaced with references to the new area.
-*/
-// class EditorHighlightRange : public HighlightRange
-// {
-// public:
-// 
-//     /**
-//     * Constructs a new highlighted range and associates it with a QTextEdit widget.
-//     * @param rangeReference The string reference for the range (eg. "A1" or "Sheet2!B2:B12")
-//     * @param workbook The workbook which this range's sheet is in
-//     * @param sheet The sheet which this range is in
-//     * @param editor The KTextEdit widget to associate this this highlighted range.  When the area of the range is changed via 
-//     * @ref EditorHighlightRange::setRange() , any references to the old area in the edit widget's text will be updated.
-//     */
-//     EditorHighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet, QTextEdit* editor);
-//     
-//     
-//     /**
-//     * Changes the area of this range and replaces references in the associated KTextEdit widget
-//     */
-//     virtual void setRange(QRect& newRange);
-//     
-// protected:
-//     QTextEdit* _editor;
-// };
 
 
 
 /**
 * Provides autocompletition facilities in formula editors.
 * When the user types in the first few characters of a
-* function name in a TextEditor which has a FunctionCompletion
+* function name in a CellEditor which has a FunctionCompletion
 * object installed on it, the FunctionCompletion object
 * creates and displays a list of possible names which the user
 * can select from. If the user selects a function name from the list,
@@ -174,22 +105,22 @@ class FormulaEditorHighlighter : public QSyntaxHighlighter
 class FunctionCompletion : public QObject
 {
     Q_OBJECT
-  
+
 public:
 
-    FunctionCompletion( TextEditor* editor );
+    FunctionCompletion( CellEditor* editor );
     ~FunctionCompletion();
-    
+
     /**
     * Handles various keyboard and mouse actions which may occur on the autocompletion popup list
     */
     bool eventFilter( QObject *o, QEvent *e );
-    
+
     /**
     * Hides the autocompletion list box if it is visible and emits the @ref selectedCompletion signal.
     */
     void doneCompletion();
-    
+
     /**
     * Populates the autocompletion list box with the specified choices and shows it so that the user can view and select a function name.
     * @param choices A list of possible function names which match the characters that the user has already entered.
@@ -197,61 +128,72 @@ public:
     void showCompletion( const QStringList &choices );
 
 private slots:
-    void itemSelected( const QString& item );    
-        
+    void itemSelected( const QString& item );
+
 signals:
     /**
     * Emitted, if the user selects a function name from the list.
     */
     void selectedCompletion( const QString& item );
-    
+
 private:
     class Private;
     Private* d;
     FunctionCompletion( const FunctionCompletion& );
-    FunctionCompletion& operator=( const FunctionCompletion& );    
+    FunctionCompletion& operator=( const FunctionCompletion& );
 };
 
 
-class TextEditor : public CellEditor
+
+/**
+ * class CellEditor
+ */
+class CellEditor : public QWidget
 {
     Q_OBJECT
 public:
 
     /**
-    * Creates a new TextEditor.
+    * Creates a new CellEditor.
     * @param cell The spreadsheet cell to associate the cell text editor with
     * @param _parent The @ref KSpreadCanvas object to associate this cell text editor with
     * @param captureAllKeyEvents Controls whether or not the text editor swallows arrow key events or sends them to the parent canvas instead.  If this is set to true, pressing the arrow keys will navigate backwards and forwards through the text in the editor.  If it is false, the key events will be sent to the parent canvas which will change the cell being edited (depending on the direction of the arrow pressed).  Generally this should be set to true if the user double clicks on the cell to edit it, and false if the user initiates editing by typing whilst the cell is selected.
     * @param _name This parameter is sent to the QObject constructor
     */
-    TextEditor( Cell* cell, Canvas* _parent = 0, bool captureAllKeyEvents = false, const char* _name = 0 );
-    ~TextEditor();
+    CellEditor( Cell* cell, Canvas* _parent = 0, bool captureAllKeyEvents = false, const char* _name = 0 );
+    ~CellEditor();
 
+    Cell* cell() const;
+    Canvas* canvas() const;
 
-    virtual void handleKeyPressEvent( QKeyEvent* _ev );
-    virtual void handleIMEvent( QIMEvent * _ev );
-    virtual void setEditorFont(QFont const & font, bool updateSize);
-    virtual QString text() const;
-    virtual void setText(QString text);
-    virtual int cursorPosition() const;
-    virtual void setCursorPosition(int pos);
-    // virtual void setFocus();
-    virtual void insertFormulaChar(int c);
-    virtual void cut();
-    virtual void paste();
-    virtual void copy();
+    void handleKeyPressEvent( QKeyEvent* _ev );
+    void handleIMEvent( QIMEvent * _ev );
+    void setEditorFont(QFont const & font, bool updateSize);
+
+    int cursorPosition() const;
+    void setCursorPosition(int pos);
+
+    void setText(QString text);
+
+    /** wrapper to KTextEdit::text() */
+    QString text() const;
+
+    /** wrapper to KTextEdit::cut() */
+    void cut();
+    /** wrapper to KTextEdit::paste() */
+    void paste();
+    /** wrapper to KTextEdit::copy() */
+    void copy();
 
     QPoint globalCursorPosition() const;
 
-    //Colour-code references to cells in formulas
-    void colorCellReferences();
+    bool checkChoice();
+    void setCheckChoice(bool b);
 
-    bool checkChoose();
-    void blockCheckChoose( bool b ) { m_blockCheck = b; }
-    bool sizeUpdate() const { return m_sizeUpdate; }
+    void updateChoice();
+    void setUpdateChoice(bool);
 
-    const QValueList<QColor>& colors() const { return m_highlighter->colors(); }
+    void setCursorToRange(uint);
 
 private slots:
     void  slotTextChanged();
@@ -267,33 +209,21 @@ protected:
      */
     bool eventFilter( QObject* o, QEvent* e );
 
-protected slots:   
+protected slots:
     void checkFunctionAutoComplete();
     void triggerFunctionAutoComplete();
     void functionAutoComplete( const QString& item );
 
-
 private:
-    //QLineEdit* m_pEdit;
-   // KLineEdit* m_pEdit;
-	KTextEdit* m_pEdit;
-
-    bool m_captureAllKeyEvents;
-    bool m_blockCheck;
-    bool m_sizeUpdate;
-    uint m_length;
-    int  m_fontLength;
-
-
-    FormulaEditorHighlighter* m_highlighter;
-
-
-    FunctionCompletion* functionCompletion;
-    QTimer* functionCompletionTimer;
-    QPoint globalCursorPos;
+    class Private;
+    Private* d;
 };
 
 
+
+/**
+ * ComboboxLocationEditWidget
+ */
 class ComboboxLocationEditWidget : public KComboBox
 {
     Q_OBJECT
@@ -308,7 +238,8 @@ private:
 };
 
 
- /**
+
+/**
  * A widget that allows the user to enter an arbitrary
  * cell location to goto or cell selection to highlight
  */
@@ -332,6 +263,8 @@ private:
     KCompletion completionList;
     bool activateItem();
 };
+
+
 
 /**
  * The widget that appears above the sheet and allows to

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2005 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright (C) 2005-2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -110,7 +110,45 @@ public:
   void setSheet(Sheet* sheet);
   Sheet* sheet() const;
 
-  void setActive(const QPoint&);
+  /**
+   * Sets the element, which has @p point as anchor, as active
+   */
+  void setActiveElement(const QPoint& point);
+  /**
+   * Sets the @p number 'th element as active
+   */
+  void setActiveElement(uint number);
+  /**
+   * @return the active element
+   */
+  Element* activeElement() const;
+  /**
+   * Sets the starting position and the length of a subregion in a multiple
+   * selection
+   */
+  void setActiveSubRegion(uint start, uint length);
+  /**
+   *
+   */
+  QString activeSubRegionName() const;
+  /**
+   * Clears the elements of the subregion
+   */
+  void clearSubRegion();
+  /**
+   * fix subregion dimensions
+   */
+  void fixSubRegionDimension();
+  /**
+   * Deletes all elements of the region. The result is an empty region.
+   */
+  virtual void clear();
+
+
+  /**
+   * Sets, wether multiple selections are allowed.
+   */
+  void setMultipleSelection(bool state);
 
   QRect lastRange(bool extend = true) const;
   QRect extendToMergedAreas(QRect area) const;

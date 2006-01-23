@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright (C) 2005-2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -231,7 +231,7 @@ public:
   /**
    * Deletes all elements of the region. The result is an empty region.
    */
-  void clear();
+  virtual void clear();
 
 
 
@@ -275,8 +275,8 @@ protected:
    */
   QValueList<Element*>& cells() const;
 
-  void insert(Iterator, const QPoint&, Sheet*);
-  void insert(Iterator, const QRect&, Sheet*);
+  Iterator insert(Iterator, const QPoint&, Sheet*, bool multi = true);
+  Iterator insert(Iterator, const QRect&, Sheet*, bool multi = true);
 
   virtual Point* createPoint(const QPoint&) const;
   virtual Point* createPoint(const QString&) const;

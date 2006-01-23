@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 1999-2004 David Faure <faure@kde.org>
@@ -98,10 +99,6 @@ class Canvas::Private
     ComboboxLocationEditWidget *posWidget;
     KSpread::EditWidget *editWidget;
     KSpread::CellEditor *cellEditor;
-
-    bool choose_visible;
-    int  length_namecell;
-    int  length_text;
 
     View *view;
     QTimer* scrollTimer;
@@ -211,8 +208,6 @@ Canvas::Canvas (View *_view)
 {
   d = new Private;
 
-
-  d->length_namecell = 0;
   d->cellEditor = 0;
   d->chooseCell = false;
   d->validationInfo = 0L;
@@ -270,7 +265,6 @@ Canvas::Canvas (View *_view)
       this, SLOT(speakCell(QWidget*, const QPoint&, uint)));
   }
 
-  d->choose_visible = false;
   setFocus();
   installEventFilter( this );
   (void)new ToolTip( this );
@@ -395,11 +389,6 @@ bool Canvas::focusNextPrevChild( bool )
     return true; // Don't allow to go out of the canvas widget by pressing "Tab"
 }
 
-int Canvas::chooseTextLen() const
-{
-  return d->length_namecell;
-}
-
 Selection* Canvas::selectionInfo() const
 {
   return d->view->selectionInfo();
@@ -433,6 +422,11 @@ int Canvas::markerRow() const
 double Canvas::zoom() const
 {
   return d->view->zoom();
+}
+
+void Canvas::setChooseMode(bool state)
+{
+  d->chooseCell = state;
 }
 
 bool Canvas::chooseMode() const
@@ -478,7 +472,6 @@ void Canvas::endChoose()
   choice()->clear();
   repaint();
 
-  d->length_namecell = 0;
   d->chooseCell = false;
 
   Sheet *sheet=d->view->doc()->map()->findSheet(choice()->sheet()->sheetName());
@@ -1158,7 +1151,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if (d->mouseAction == ResizeSelection)
   {
     choice()->update(QPoint(col,row));
-    updateChooseRect();
+//     updateEditor();
     return;
   }
 
@@ -1252,12 +1245,13 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( d->mouseAction == NoAction )
     return;
 
+  bool updateEditor = d->chooseCell && (QPoint(col,row) != choice()->marker());
   // Set the new extent of the selection
   (d->chooseCell ? choice() : selectionInfo())->update(QPoint(col,row));
 
-  if (d->chooseCell)
+  if (updateEditor)
   {
-    updateChooseRect();
+//     Canvas::updateEditor();
   }
 }
 
@@ -1500,7 +1494,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     return;
   }
 
-if ( activeSheet() )
+  if ( activeSheet() )
   {
     KSpreadObject *obj;
     if ( (obj = getObject( _ev->pos(), activeSheet() ) ) )
@@ -1599,7 +1593,7 @@ if ( activeSheet() )
 
   if (d->chooseCell && highlightRangeSizeGripAt(ev_PosX,ev_PosY))
   {
-    choice()->setActive(QPoint(col,row));
+    choice()->setActiveElement(QPoint(col,row));
     d->mouseAction = ResizeSelection;
     return;
   }
@@ -1689,10 +1683,24 @@ if ( activeSheet() )
 #ifdef NONCONTIGUOUSSELECTION
       else if ( _ev->state() & ControlButton )
       {
-        // Start a marking action
-        d->mouseAction = Mark;
-        // extend the existing selection
-        (d->chooseCell ? choice() : selectionInfo())->extend(QPoint(col,row), activeSheet());
+        if (d->chooseCell)
+        {
+#if 0 // TODO Stefan: remove for NCS of choices
+          // Start a marking action
+          d->mouseAction = Mark;
+          // extend the existing selection
+          choice()->extend(QPoint(col,row), activeSheet());
+#endif
+        }
+        else
+        {
+          // Start a marking action
+          d->mouseAction = Mark;
+          // extend the existing selection
+          selectionInfo()->extend(QPoint(col,row), activeSheet());
+        }
+// TODO Stefan: simplification, if NCS of choices is working
+/*        (d->chooseCell ? choice() : selectionInfo())->extend(QPoint(col,row), activeSheet());*/
       }
 #endif
       else
@@ -1725,7 +1733,7 @@ if ( activeSheet() )
 
   if (d->chooseCell)
   {
-    updateChooseRect();
+//     updateEditor();
   }
 
   scrollToCell(selectionInfo()->marker());
@@ -2087,7 +2095,9 @@ QPoint Canvas::cursorPos()
     cursor = choice()->cursor();
     /* if the cursor is unset, pretend we're starting at the regular cursor */
     if (cursor.x() == 0 || cursor.y() == 0)
-      cursor = choice()->cursor();
+    {
+      cursor = selectionInfo()->cursor();
+    }
   }
   else
     cursor = selectionInfo()->cursor();
@@ -2323,12 +2333,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
   if ( d->cellEditor )
   // We are in edit mode -> go beginning of line
   {
-    // (David) Do this for text editor only, not formula editor...
-    // Don't know how to avoid this hack (member var for editor type ?)
-    if ( d->cellEditor->inherits("KSpread::TextEditor") )
-      QApplication::sendEvent( d->editWidget, event );
-    // What to do for a formula editor ?
-
+    QApplication::sendEvent( d->editWidget, event );
     return false;
   }
   else
@@ -2394,11 +2399,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
   // We are in edit mode -> go beginning of line
   if ( d->cellEditor )
   {
-    // (David) Do this for text editor only, not formula editor...
-    // Don't know how to avoid this hack (member var for editor type ?)
-    if ( d->cellEditor->inherits("KSpread::TextEditor") )
-      QApplication::sendEvent( d->editWidget, event );
-    // TODO: What to do for a formula editor ?
+    QApplication::sendEvent( d->editWidget, event );
     d->view->doc()->emitEndOperation( QRect( marker, marker ) );
     return false;
   }
@@ -3643,14 +3644,8 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
 {
   if ( !d->cellEditor )
     return;
-  // We need to set the line-edit out of edit mode,
-  // but only if we are using it (text editor)
-  // A bit of a hack - perhaps we should store the editor mode ?
-  bool textEditor = true;
-  if ( d->cellEditor->inherits("KSpread::TextEditor") )
-      d->editWidget->setEditMode( false );
-  else
-      textEditor = false;
+
+  d->editWidget->setEditMode( false );
 
   QString t = d->cellEditor->text();
   // Delete the cell editor first and after that update the document.
@@ -3659,7 +3654,7 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
   delete d->cellEditor;
   d->cellEditor = 0;
 
-  if ( saveChanges && textEditor )
+  if ( saveChanges )
   {
       if ( t.at(0)=='=' )
       {
@@ -3708,9 +3703,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     if ( ed == CellEditor )
     {
       d->editWidget->setEditMode( true );
-
-      d->cellEditor = new TextEditor( cell, this, captureArrowKeys );
-
+      d->cellEditor = new KSpread::CellEditor( cell, this, captureArrowKeys );
     }
 
     double w, h;
@@ -3870,18 +3863,18 @@ void Canvas::closeEditor()
   }
 }
 
-void Canvas::updateChooseRect()
+void Canvas::updateEditor()
 {
-  if( !d->chooseCell )
+  if (!d->chooseCell)
     return;
 
   Sheet* sheet = activeSheet();
-  if ( ! sheet )
+  if (!sheet)
     return;
 
-  if( d->cellEditor )
+  if (d->cellEditor)
   {
-    if( choice()->sheet() != sheet )
+    if (choice()->sheet() != sheet)
     {
       d->cellEditor->hide();
     }
@@ -3889,37 +3882,7 @@ void Canvas::updateChooseRect()
     {
       d->cellEditor->show();
     }
-  }
-
-  if ( !d->cellEditor )
-  {
-    d->length_namecell = 0;
-    return;
-  }
-
-  /* the rest of this function updates the text showing the choose rect */
-  /***** TODO - should this be here? */
-
-//  if (newMarker.x() != 0 && newMarker.y() != 0)
-    /* don't update the text if we are removing the marker */
-  {
-    QString name_cell = choice()->name();
-
-    int old = d->length_namecell;
-    d->length_namecell = name_cell.length();
-    d->length_text = d->cellEditor->text().length();
-    //kdDebug(36001) << "updateChooseMarker2 len=" << d->length_namecell << endl;
-
-    QString text = d->cellEditor->text();
-    QString res = text.left( d->cellEditor->cursorPosition() - old ) + name_cell + text.right( text.length() - d->cellEditor->cursorPosition() );
-    int pos = d->cellEditor->cursorPosition() - old;
-
-    ((TextEditor*)d->cellEditor)->blockCheckChoose( true );
-    d->cellEditor->setText( res );
-    ((TextEditor*)d->cellEditor)->blockCheckChoose( false );
-    d->cellEditor->setCursorPosition( pos + d->length_namecell );
-    d->editWidget->setText( res );
-    //kdDebug(36001) << "old=" << old << " len=" << d->length_namecell << " pos=" << pos << endl;
+    d->cellEditor->updateChoice();
   }
 }
 
@@ -4279,10 +4242,12 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
   Region::ConstIterator end(choice()->constEnd());
   for (Region::ConstIterator it = choice()->constBegin(); it != end; ++it)
   {
-
-		//Only paint ranges or cells on the current sheet
-		if ( (*it)->sheet() != activeSheet())
-			continue;
+    //Only paint ranges or cells on the current sheet
+    if ((*it)->sheet() != activeSheet())
+    {
+      index++;
+      continue;
+    }
 
     QRect region = (*it)->rect().normalize();
 
@@ -4321,15 +4286,15 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		//click and drag to resize the region)
 
 
-    QBrush sizeGripBrush( colors[(index++) % colors.size()] ); // (*it)->color());
+    QBrush sizeGripBrush( colors[(index) % colors.size()] ); // (*it)->color());
 		QPen   sizeGripPen(Qt::white);
 
 		painter.setPen(sizeGripPen);
 		painter.setBrush(sizeGripBrush);
 
 		painter.drawRect(zoomedRect.right()-3,zoomedRect.bottom()-3,6,6);
-
-	}
+    index++;
+  }
 }
 
 void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)

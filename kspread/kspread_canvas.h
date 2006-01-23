@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 1999-2001,2003 David Faure <faure@kde.org>
@@ -110,7 +111,7 @@ public:
       /** Rsizing the selection */
       ResizeSelection
     };
-    enum EditorType { CellEditor, FormulaEditor, EditWidget };
+    enum EditorType { CellEditor, EditWidget };
 
     Canvas (View *_view);
     ~Canvas( );
@@ -126,15 +127,6 @@ public:
 
     KSpread::EditWidget* editWidget() const;
     KSpread::CellEditor* editor() const;
-
-
-  /**
-     * If the user chooses some cells during editing a formula, then
-     * this function returns the length of the textual representation.
-     * For example the user selects "Sheet1!A1:B2" then this function
-     * returns 12.
-     */
-    int chooseTextLen() const;
 
     Selection* selectionInfo() const;
     Selection* choice() const;
@@ -231,6 +223,7 @@ public:
     void startChoose( const QRect& selection );
     void endChoose();
 
+    void setChooseMode(bool state);
     bool chooseMode() const;
 
     void equalizeRow();
@@ -492,7 +485,7 @@ private:
 
   void processIMEvent( QIMEvent * event );
 
-  void updateChooseRect();
+  void updateEditor();
 
   /**
    * This function sets the paint dirty flag for a @p changedRegion in a

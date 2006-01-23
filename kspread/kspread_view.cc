@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005-2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+             (C) 2006      Stefan Nikolaus <stefan.nikolaus@kdemail.net>
              (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
              (C) 1999-2003 Laurent Montel <montel@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
@@ -1742,6 +1743,7 @@ View::View( QWidget *_parent, const char *_name,
 
     d->selection = new Selection( this );
     d->choice = new Selection( this );
+    d->choice->setMultipleSelection(true);
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
     connect(d->choice, SIGNAL(changed(const Region&)), this, SLOT(slotChangeChoice(const Region&)));
 
@@ -6817,8 +6819,10 @@ void View::slotChangeChoice(const KSpread::Region& changedRegion)
     return;
   }
   doc()->emitBeginOperation( false );
+  d->canvas->updateEditor();
   d->canvas->setSelectionChangePaintDirty( d->activeSheet, changedRegion );
   doc()->emitEndOperation( *choice() );
+  kdDebug() << "Choice: " << *choice() << endl;
 }
 
 void View::resultOfCalc()
