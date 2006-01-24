@@ -2551,9 +2551,8 @@ void KoDocument::openExistingFile( const QString& file )
     bool ok = openURL( url );
     setModified( false );
 
-    if( ok ) {
-      deleteOpenPane();
-    }
+    if( ok )
+        QTimer::singleShot( 0, this, SLOT( deleteOpenPane() ) );
 }
 
 void KoDocument::openTemplate( const QString& file )

@@ -1120,18 +1120,17 @@ protected:
     KoOpenPane* createOpenPane( QWidget* parent, KInstance* instance,
                                 const QString& templateType = QString::null);
 
-    /**
-     * Removes the open widget showed at application start up.
-     * @since 1.5
-     */
-    void deleteOpenPane();
-
 private slots:
     void slotChildChanged( KoChild *c );
     void slotChildDestroyed();
     void slotAutoSave();
     void slotStarted( KIO::Job* );
     void startCustomDocument();
+    /**
+     * Removes the open widget showed at application start up.
+     * @since 1.5
+     */
+    void deleteOpenPane();
 
 private:
     KService::Ptr nativeService();
