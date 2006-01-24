@@ -48,7 +48,7 @@ class KChartParams : public KDChartParams
 	BoxWhisker = KDChartParams::BoxWhisker,
     
 	// Only in KChart
-	BarLines,
+	BarLines
     } ChartType;
 
     KChartParams();

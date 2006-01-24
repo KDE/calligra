@@ -25,7 +25,7 @@ SUBDIRS = .
 
 INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/main/printing \
 	-I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi/widget \
-	-I$(top_srcdir)/lib/kofficeui \
+	-I$(top_builddir)/lib/kofficeui -I$(top_srcdir)/lib/kofficeui \
 	-I$(top_srcdir)/lib/kofficecore \
 	-I$(top_builddir)/kexi/widget $(all_includes)
 
