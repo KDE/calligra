@@ -194,7 +194,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 
     // Retrieve a pointer to the colorspace
     KisColorSpace* cs;
-    if (profile)
+    if (profile && profile->isSuitableForOutput())
     {
         kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
@@ -208,6 +208,16 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     
+    // Create the cmsTransform if needed 
+    cmsHTRANSFORM transform = 0;
+    if(profile && !profile->isSuitableForOutput())
+    {
+        transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
+                                       cs->getProfile()->profile() , cs->colorSpaceType(),
+                                       INTENT_PERCEPTUAL, 0);
+    }
+
+    // Read comments/texts...
     png_text* text_ptr;
     int num_comments;
     png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
@@ -276,6 +286,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                     while (!it.isDone()) {
                         Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
                         d[0] = *(src++);
+                        if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[1] = *(src++);
                         else d[1] = Q_UINT16_MAX;
                         ++it;
@@ -285,6 +296,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                     while (!it.isDone()) {
                         Q_UINT8 *d = it.rawData();
                         d[0] = *(src++);
+                        if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[1] = *(src++);
                         else d[1] = Q_UINT8_MAX;
                         ++it;
@@ -302,6 +314,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                         d[2] = *(src++);
                         d[1] = *(src++);
                         d[0] = *(src++);
+                        if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[3] = *(src++);
                         else d[3] = Q_UINT16_MAX;
                         ++it;
@@ -313,6 +326,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                         d[2] = *(src++);
                         d[1] = *(src++);
                         d[0] = *(src++);
+                        if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[3] = *(src++);
                         else d[3] = Q_UINT8_MAX;
                         ++it;

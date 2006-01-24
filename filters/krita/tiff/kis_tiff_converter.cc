@@ -204,7 +204,7 @@ namespace {
         }
     }
 
-    void copyDataToChannels( KisHLineIterator it, TIFFStream* tiffstream, int8 alphapos, uint8 depth, uint8 nbcolorssamples, uint8 extrasamplescount, Q_UINT8* poses, copyTransform transform = cTidentity, cmsHTRANSFORM convertToLAB = 0)
+    void copyDataToChannels( KisHLineIterator it, TIFFStream* tiffstream, int8 alphapos, uint8 depth, uint8 nbcolorssamples, uint8 extrasamplescount, Q_UINT8* poses, cmsHTRANSFORM transformProfile, copyTransform transform = cTidentity,  cmsHTRANSFORM convertToLAB = 0)
     {
        if( depth <= 8 )
         {
@@ -215,9 +215,10 @@ namespace {
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = tiffstream->nextValueBelow16();
+                    d[poses[i]] = tiffstream->nextValueBelow16() * coeff;
                 }
                 transform( d, nbcolorssamples, convertToLAB );
+                if(transformProfile) cmsDoTransform(transformProfile, d, d, 1);
                 d[poses[i]] = Q_UINT8_MAX;
                 for(int k = 0; k < extrasamplescount; k++)
                 {
@@ -236,9 +237,10 @@ namespace {
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = tiffstream->nextValueBelow16();
+                    d[poses[i]] = tiffstream->nextValueBelow16() * coeff;
                 }
                 transform( (Q_UINT8*)d, nbcolorssamples, convertToLAB );
+                if(transformProfile) cmsDoTransform(transformProfile, d, d, 1);
                 d[poses[i]] = Q_UINT16_MAX;
                 for(int k = 0; k < extrasamplescount; k++)
                 {
@@ -251,15 +253,16 @@ namespace {
             }
         } else if( depth < 32 ) {
             double coeff = Q_UINT16_MAX / (double)( ( 1 << depth ) - 1 );
-//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+//             kdDebug() << " depth expension coefficient : " << ((double)coeff) << " " << Q_UINT16_MAX << " " << ( ( 1 << depth ) - 1 ) << " " << depth << endl;
             while (!it.isDone()) {
                 Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = tiffstream->nextValueBelow32();
+                    d[poses[i]] = tiffstream->nextValueBelow32() / coeff;
                 }
                 transform( (Q_UINT8*)d, nbcolorssamples, convertToLAB );
+                if(transformProfile) cmsDoTransform(transformProfile, d, d, 1);
                 d[poses[i]] = Q_UINT16_MAX;
                 for(int k = 0; k < extrasamplescount; k++)
                 {
@@ -280,6 +283,8 @@ namespace {
                 {
                     d[poses[i]] = tiffstream->nextValueAbove32() / coeff;
                 }
+                transform( (Q_UINT8*)d, nbcolorssamples, convertToLAB );
+                if(transformProfile) cmsDoTransform(transformProfile, d, d, 1);
                 d[poses[i]] = Q_UINT16_MAX;
                 for(int k = 0; k < extrasamplescount; k++)
                 {
@@ -292,7 +297,7 @@ namespace {
             }
         }
     }
-    void convertFromTIFFData( KisHLineIterator it, TIFFStream* tiffstream, int8 alphapos, uint16 color_type, uint16 depth, uint8 nbcolorssamples, uint8 extrasamplescount, uint16 *red, uint16 *green, uint16 *blue, KisProfile* profile)
+    void convertFromTIFFData( KisHLineIterator it, TIFFStream* tiffstream, int8 alphapos, uint16 color_type, uint16 depth, uint8 nbcolorssamples, uint8 extrasamplescount, uint16 *red, uint16 *green, uint16 *blue, KisProfile* profile, cmsHTRANSFORM transform )
     {
         switch(color_type)
         {
@@ -300,36 +305,36 @@ namespace {
             {
                 Q_UINT8 poses[]={ 0, 1};
                 if(depth > 8)
-                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTinvert16);
+                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform, cTinvert16);
                 else
-                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTinvert8);
+                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform, cTinvert8);
             }
             break;
             case PHOTOMETRIC_MINISBLACK:
             {
                 Q_UINT8 poses[]={ 0, 1};
-                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
+                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform);
             }
             break;
             case PHOTOMETRIC_CIELAB:
             {
                 Q_UINT8 poses[]={ 0, 1, 2, 3};
-                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
+                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform);
             }
             break;
             case PHOTOMETRIC_ICCLAB:
             {
                 Q_UINT8 poses[]={ 0, 1};
                 if(depth > 8)
-                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTICCLABtoCIELAB16);
+                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform, cTICCLABtoCIELAB16);
                 else
-                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTICCLABtoCIELAB8);
+                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform, cTICCLABtoCIELAB8);
             }
             break;
             case PHOTOMETRIC_RGB:
             {
                 Q_UINT8 poses[]={ 2, 1, 0, 3};
-                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
+                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform);
             }
             break;
 #if 0
@@ -391,7 +396,7 @@ namespace {
             case PHOTOMETRIC_SEPARATED: // it means CMYK
             {
                 Q_UINT8 poses[]={ 0, 1, 2, 3, 4};
-                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
+                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform);
             }
             break;
         }
@@ -491,7 +496,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     
     // Retrieve a pointer to the colorspace
     KisColorSpace* cs;
-    if (profile)
+    if (profile && profile->isSuitableForOutput())
     {
         kdDebug() << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
@@ -504,6 +509,17 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
+    
+    // Create the cmsTransform if needed 
+    cmsHTRANSFORM transform = 0;
+    if(profile && !profile->isSuitableForOutput())
+    {
+        transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
+                                       cs->getProfile()->profile() , cs->colorSpaceType(),
+                                       INTENT_PERCEPTUAL, 0);
+    }
+
+    
     // Check if there is an alpha channel
     int8 alphapos = -1; // <- no alpha
     // Check which extra is alpha if any
@@ -613,7 +629,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 uint32 realTileWidth =  (x + tileWidth) < width ? tileWidth : width - x;
                 for (uint yintile = 0; y + yintile < height && yintile < tileHeight; yintile++) {
                     KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(x, y + yintile, realTileWidth, true);
-                    convertFromTIFFData( it, tiffstream, alphapos, color_type, depth, nbchannels - extrasamplescount, extrasamplescount, red, green, blue, profile);
+                    convertFromTIFFData( it, tiffstream, alphapos, color_type, depth, nbchannels - extrasamplescount, extrasamplescount, red, green, blue, profile, transform);
                 }
                 tiffstream->restart();
             }
@@ -648,7 +664,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 }
             }
             KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
-            convertFromTIFFData( it, tiffstream, alphapos, color_type, depth, nbchannels - extrasamplescount, extrasamplescount,  red, green, blue, profile);
+            convertFromTIFFData( it, tiffstream, alphapos, color_type, depth, nbchannels - extrasamplescount, extrasamplescount,  red, green, blue, profile, transform);
             tiffstream->restart();
         }
     }

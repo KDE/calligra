@@ -40,7 +40,10 @@ extern "C" {
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
 
+extern "C" {
 #include <libexif/exif-loader.h>
+#include <libexif/exif-utils.h>
+}
 
 #define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
 #define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
