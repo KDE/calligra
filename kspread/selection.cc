@@ -138,10 +138,15 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
   d->cursor = point;
   d->marker = topLeft;
 
-  fixSubRegionDimension();
+  fixSubRegionDimension(); // TODO remove this sanity check
   Iterator it = cells().begin() += d->activeSubRegionStart + d->activeSubRegionLength;
-  Element* element = *insert(it, topLeft, sheet); // allow multipleSelection
-  clearSubRegion();
+  if (it != insert(it, topLeft, sheet/*, true*/))
+  {
+    // if the point was inserted
+    clearSubRegion();
+  }
+  Element* element = *(cells().begin() += d->activeSubRegionStart);
+  // we end up with one element in the subregion
   d->activeSubRegionLength = 1;
   if (element && element->type() == Element::Point)
   {
@@ -203,10 +208,15 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
   d->cursor = topLeft;
   d->marker = bottomRight;
 
-  fixSubRegionDimension();
+  fixSubRegionDimension(); // TODO remove this sanity check
   Iterator it = cells().begin() += d->activeSubRegionStart + d->activeSubRegionLength;
-  Element* element = *insert(it, QRect(topLeft, bottomRight), sheet); // allow multipleSelection
-  clearSubRegion();
+  if (it != insert(it, QRect(topLeft, bottomRight), sheet/*, true*/))
+  {
+    // if the range was inserted
+    clearSubRegion();
+  }
+  Element* element = *(cells().begin() += d->activeSubRegionStart);
+  // we end up with one element in the subregion
   d->activeSubRegionLength = 1;
   if (element && element->type() == Element::Point)
   {
