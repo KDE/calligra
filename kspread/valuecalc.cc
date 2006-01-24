@@ -175,6 +175,8 @@ ValueCalc::ValueCalc (ValueConverter* c): converter( c )
 
 Value ValueCalc::add (const Value &a, const Value &b)
 {
+  if (a.isError()) return a;
+  if (b.isError()) return b;
   double aa, bb;
   aa = converter->asFloat (a).asFloat();
   bb = converter->asFloat (b).asFloat();
@@ -191,6 +193,8 @@ Value ValueCalc::add (const Value &a, const Value &b)
 
 Value ValueCalc::sub (const Value &a, const Value &b)
 {
+  if (a.isError()) return a;
+  if (b.isError()) return b;
   double aa, bb;
   aa = converter->asFloat (a).asFloat();
   bb = converter->asFloat (b).asFloat();
@@ -207,6 +211,8 @@ Value ValueCalc::sub (const Value &a, const Value &b)
 
 Value ValueCalc::mul (const Value &a, const Value &b)
 {
+  if (a.isError()) return a;
+  if (b.isError()) return b;
   double aa, bb;
   aa = converter->asFloat (a).asFloat();
   bb = converter->asFloat (b).asFloat();
@@ -223,6 +229,8 @@ Value ValueCalc::mul (const Value &a, const Value &b)
 
 Value ValueCalc::div (const Value &a, const Value &b)
 {
+  if (a.isError()) return a;
+  if (b.isError()) return b;
   double aa, bb;
   aa = converter->asFloat (a).asFloat();
   bb = converter->asFloat (b).asFloat();
@@ -243,6 +251,8 @@ Value ValueCalc::div (const Value &a, const Value &b)
 
 Value ValueCalc::mod (const Value &a, const Value &b)
 {
+  if (a.isError()) return a;
+  if (b.isError()) return b;
   double aa, bb;
   aa = converter->asFloat (a).asFloat();
   bb = converter->asFloat (b).asFloat();
@@ -278,6 +288,8 @@ Value ValueCalc::mod (const Value &a, const Value &b)
 
 Value ValueCalc::pow (const Value &a, const Value &b)
 {
+  if (a.isError()) return a;
+  if (b.isError()) return b;
   double aa, bb;
   aa = converter->asFloat (a).asFloat();
   bb = converter->asFloat (b).asFloat();
@@ -294,11 +306,13 @@ Value ValueCalc::pow (const Value &a, const Value &b)
 
 Value ValueCalc::sqr (const Value &a)
 {
+  if (a.isError()) return a;
   return mul (a, a);
 }
 
 Value ValueCalc::sqrt (const Value &a)
 {
+  if (a.isError()) return a;
   Value res = Value (::sqrt (converter->asFloat(a).asFloat()));
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -311,6 +325,7 @@ Value ValueCalc::sqrt (const Value &a)
 
 Value ValueCalc::add (const Value &a, double b)
 {
+  if (a.isError()) return a;
   Value res = Value (converter->asFloat(a).asFloat() + b);
 
   if (a.isNumber() || a.isEmpty())
@@ -321,6 +336,7 @@ Value ValueCalc::add (const Value &a, double b)
 
 Value ValueCalc::sub (const Value &a, double b)
 {
+  if (a.isError()) return a;
   Value res = Value (converter->asFloat(a).asFloat() - b);
 
   if (a.isNumber() || a.isEmpty())
@@ -331,6 +347,7 @@ Value ValueCalc::sub (const Value &a, double b)
 
 Value ValueCalc::mul (const Value &a, double b)
 {
+  if (a.isError()) return a;
   Value res = Value (converter->asFloat(a).asFloat() * b);
 
   if (a.isNumber() || a.isEmpty())
@@ -341,6 +358,7 @@ Value ValueCalc::mul (const Value &a, double b)
 
 Value ValueCalc::div (const Value &a, double b)
 {
+  if (a.isError()) return a;
   Value res;
   if (b == 0.0)
     return Value::errorDIV0();
@@ -355,6 +373,7 @@ Value ValueCalc::div (const Value &a, double b)
 
 Value ValueCalc::pow (const Value &a, double b)
 {
+  if (a.isError()) return a;
   Value res = Value (::pow (converter->asFloat(a).asFloat(), b));
 
   if (a.isNumber() || a.isEmpty())
@@ -365,16 +384,19 @@ Value ValueCalc::pow (const Value &a, double b)
 
 Value ValueCalc::abs (const Value &a)
 {
+  if (a.isError()) return a;
   return Value (fabs (converter->asFloat (a).asFloat()));
 }
 
 bool ValueCalc::isZero (const Value &a)
 {
+  if (a.isError()) return false;
   return (converter->asFloat (a).asFloat() != 0.0);
 }
 
 bool ValueCalc::isEven (const Value &a)
 {
+  if (a.isError()) return false;
   return ((converter->asInteger (a).asInteger() % 2) == 0);
 }
 
