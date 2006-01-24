@@ -248,11 +248,11 @@ bool pqxxSqlConnection::drv_dropDatabase( const QString &dbName )
 bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 {
 	KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL: " << statement << endl;
-	bool ok;
+	bool ok = false;
 
-	ok = false;
 	// Clear the last result information...
 	delete d->m_res;
+	d->m_res = 0;
 
 	KexiDBDrvDbg << "About to try" << endl;
 	try
@@ -288,7 +288,7 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 	{
 		d->errmsg = i18n("Unknown error.");
 	}
-	KexiDBDrvDbg << "EXECUTE SQL OK: OID was " << (d->m_res ? d->m_res->inserted_oid() : 0) << endl;
+	//KexiDBDrvDbg << "EXECUTE SQL OK: OID was " << (d->m_res ? d->m_res->inserted_oid() : 0) << endl;
 	return ok;
 }
 

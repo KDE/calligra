@@ -295,7 +295,7 @@ QStringList Connection::databaseNames(bool also_system_db)
 	for (QStringList::ConstIterator it = list.constBegin(); it!=list.constEnd(); ++it) {
 		KexiDBDbg << "Connection::databaseNames(): " << *it << endl;
 		if (!m_driver->isSystemDatabaseName(*it)) {
-			KexiDBDbg << "add " << endl;
+			KexiDBDbg << "add " << *it << endl;
 			non_system_list << (*it);
 		}
 	}
@@ -452,7 +452,7 @@ bool Connection::createDatabase( const QString &dbName )
 	//-physically create system tables
 	for (QPtrDictIterator<TableSchema> it(m_kexiDBSystemTables); it.current(); ++it) {
 		if (!drv_createTable( it.current()->name() ))
-			createDatabase_ERROR;
+ 			createDatabase_ERROR;
 	}
 
 /* moved to KexiProject...
