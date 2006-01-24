@@ -462,17 +462,14 @@ MouseMeaning ImageFramePolicy::mouseMeaning( const KoPoint &point, int keyState 
 }
 QPopupMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     Q_UNUSED(point);
-    KWFrameSet *fs = m_view->frame()->frameSet();
     KActionSeparator *separator=new KActionSeparator();
     KActionCollection *actionCollection = view->actionCollection();
     QPtrList<KAction> actionList;
     actionList.append(separator);
-    if ( !fs->protectContent() ) {
-        KAction *action = actionCollection->action("change_picture");
-        Q_ASSERT(action);
-        actionList.append(action);
-    }
-    KAction *action = actionCollection->action("save_picture");
+    KAction *action = actionCollection->action("change_picture");
+    Q_ASSERT(action);
+    actionList.append(action);
+    action = actionCollection->action("save_picture");
     Q_ASSERT(action);
     actionList.append(action);
     addFloatingAction(view, actionList);

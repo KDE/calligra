@@ -1178,11 +1178,11 @@ void KWView::setupActions()
     m_actionConfigure = KStdAction::preferences(this, SLOT(configure()), actionCollection(), "configure" );
 
     //------------------------ Menu frameSet
-    m_actionChangePicture=new KAction( i18n( "Change Picture..." ),"frame_image",0,
+    KAction *actionChangePicture=new KAction( i18n( "Change Picture..." ),"frame_image",0,
                                      this, SLOT( changePicture() ),
                                      actionCollection(), "change_picture" );
-    m_actionChangePicture->setToolTip( i18n( "Change the picture in the currently selected frame." ) );
-    m_actionChangePicture->setWhatsThis( i18n( "You can specify a different picture in the current frame.<br><br>KWord automatically resizes the new picture to fit within the old frame." ) );
+    actionChangePicture->setToolTip( i18n( "Change the picture in the currently selected frame." ) );
+    actionChangePicture->setWhatsThis( i18n( "You can specify a different picture in the current frame.<br><br>KWord automatically resizes the new picture to fit within the old frame." ) );
 
     m_actionConfigureHeaderFooter=new KAction( i18n( "Configure Header/Footer..." ), 0,
                                      this, SLOT( configureHeaderFooter() ),
@@ -6027,8 +6027,6 @@ void KWView::changePicture()
     if( !frame )
         return;
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
-    if ( frameset->protectContent() )
-        return;
     KoPictureKey oldKey ( frameset->picture().getKey() );
     QString oldFile ( oldKey.filename() );
     KURL url;

@@ -33,7 +33,7 @@
 //#define DEBUG_DRAW
 
 KWPictureFrameSet::KWPictureFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc ), m_keepAspectRatio( true ), m_finalSize( false ), m_protectContent( false )
+    : KWFrameSet( _doc ), m_keepAspectRatio( true ), m_finalSize( false )
 {
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Picture %1" ) );

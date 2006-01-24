@@ -701,9 +701,6 @@ private: // variables
 
     KAction *m_actionConfigureCompletion;
 
-
-    KAction *m_actionChangePicture;
-
     KAction *m_actionSavePicture;
 
     KAction *m_actionConfigureHeaderFooter;

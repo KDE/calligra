@@ -72,8 +72,16 @@ public:
     bool keepAspectRatio() const;
     void setKeepAspectRatio( bool b );
 
-    virtual void setProtectContent ( bool protect ) { m_protectContent = protect; }
-    virtual bool protectContent() const { return m_protectContent; }
+    /**
+     * This method is part of the KWFrameSet API and is left empty here,
+     * protect content is irrelevant for picture frame sets.
+     */
+    virtual void setProtectContent ( bool ) { };
+    /**
+     * This method is part of the KWFrameSet API and is left empty here,
+     * protect content is irrelevant for picture frame sets.
+     */
+    virtual bool protectContent() const { return false; }
 
 protected:
     void loadOasis( const QDomElement& frame, const QDomElement& imageTag, KoOasisContext& context );
@@ -83,7 +91,6 @@ protected:
     bool m_keepAspectRatio;
     /// Cache the finalSize parameter of the method resizeFrame for drawFrame
     bool m_finalSize;
-    bool m_protectContent;
 };
 
 #endif
