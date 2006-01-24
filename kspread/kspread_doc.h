@@ -413,7 +413,6 @@ public:
      *        It returns the plain text format of the saved data, when available.
      * @param picture must be set when saveFlag==SaveSelected.
      *        It returns the selected picture, when exactly one picture was selected.
-     * @param fs the text frameset, which must be set when saveFlag==SaveSelected.
      */
   bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
                         QString* plainText = 0, KoPicture* picture = 0 );

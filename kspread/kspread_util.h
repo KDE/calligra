@@ -118,7 +118,7 @@ private:
 
 /**
 * Represents a region within a workbook.  The region has an area (the columns and rows that it includes) and
-* optionally an associated @ref Sheet
+* optionally an associated @ref KSpread::Sheet
 * A range is defined by four coordinates: Its left column, top row, right column and bottom row.  Each
 * of these coordinates may be set as fixed, to represent absolute coordinates in formulae.
 */

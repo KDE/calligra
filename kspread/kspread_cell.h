@@ -232,7 +232,7 @@ public:
     void move( int column, int row );
 
     /**
-     * The @ref Sheet calls this method if the sheet becomes deleted.
+     * The @ref KSpread::Sheet calls this method if the sheet becomes deleted.
      * At the time this method is called other cells may already be deleted or
      * in some inconsistent state.
      *
@@ -325,6 +325,7 @@ public:
      * @param bottomPen pen to use to draw the bottom border if @p paintBorderBottom includes the Border_Bottom flag
      * @param leftPen pen to use to draw the left border if @p paintBorderLeft includes the Border_Left flag
      * @param topPen pen to use to draw the top border if @p paintBorderTop includes the Border_Top flag
+     * @param mergedCellsPainted list of merged cells being painted
      * @param drawCursor whether to draw the cursor and selection or not
      */
     void paintCell( const KoRect & rect, QPainter & painter,

@@ -607,7 +607,8 @@ public slots:
 protected:
 
     /**
-     * Used to draw the @ref #formatPixmap and friends.
+     * Draws a pixmap showing a text consisting of two parts, @p _string1 and @p _string2 .
+     * The parts' colors are given by @p _color1 and @p _color2 .
      */
     QPixmap* paintFormatPixmap( const char *_string1, const QColor & _color1,
 				const char *_string2, const QColor & _color2 );

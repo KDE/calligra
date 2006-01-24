@@ -31,43 +31,52 @@ class Cell;
 class Sheet;
 class Value;
 
+/**
+ * Token
+ */
 class Token
 {
   public:
-    typedef enum
+    /**
+     * token types
+     */
+    enum Type
     {
-      Unknown,
-      Boolean,     // True, False (also i18n-ized)
-      Integer,     // 14, 3, 1977
-      Float,       // 3.141592, 1e10, 5.9e-7
-      String,      // "KOffice", "The quick brown fox..."
-      Operator,    // +, *, /, -
-      Cell,        // $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
-      Range,       // C1:C100
-      Identifier   // function name or named area
-    } Type;
+      Unknown = 0, ///< unknown type
+      Boolean,     ///< True, False (also i18n-ized)
+      Integer,     ///< 14, 3, 1977
+      Float,       ///< 3.141592, 1e10, 5.9e-7
+      String,      ///< "KOffice", "The quick brown fox..."
+      Operator,    ///< +, *, /, -
+      Cell,        ///< $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
+      Range,       ///< C1:C100
+      Identifier   ///< function name or named area
+    };
 
-    typedef enum
+    /**
+     * operator types
+     */
+    enum Op
     {
-      InvalidOp = 0,
-      Plus,           //  + (addition)
-      Minus,          //  - (substraction, negation)
-      Asterisk,       //  * (multiplication)
-      Slash,          //  / (division)
-      Caret,          //  ^ (power)
-      LeftPar,        //  (
-      RightPar,       //  )
-      Comma,          //  ,
-      Semicolon,      //  ; (argument separator)
-      Ampersand,      //  & (string concat)
-      Equal,          //  =
-      NotEqual,       //  <>
-      Less,           //  <
-      Greater,        //  >
-      LessEqual,      //  <=
-      GreaterEqual,   //  >=
-      Percent         //  %
-    } Op;
+      InvalidOp = 0,  ///< invalid operator
+      Plus,           ///<  + (addition)
+      Minus,          ///<  - (substraction, negation)
+      Asterisk,       ///<  * (multiplication)
+      Slash,          ///<  / (division)
+      Caret,          ///<  ^ (power)
+      LeftPar,        ///<  (
+      RightPar,       ///<  )
+      Comma,          ///<  ,
+      Semicolon,      ///<  ; (argument separator)
+      Ampersand,      ///<  & (string concat)
+      Equal,          ///<  =
+      NotEqual,       ///<  <>
+      Less,           ///<  <
+      Greater,        ///<  >
+      LessEqual,      ///<  <=
+      GreaterEqual,   ///<  >=
+      Percent         ///<  %
+    };
 
     /**
      * Creates a token.
@@ -203,7 +212,7 @@ class Token
 
 };
 
-/*
+/**
  * Class Tokens represents array of tokens.
  *
  */
@@ -218,7 +227,7 @@ protected:
 };
 
 
-/*
+/**
  * Class Formula encapsulates a formula for a cell.
  *
  * A Formula is a equations which perform calculations on values in the cells 
@@ -226,59 +235,58 @@ protected:
  *
  *
  */
-
 class Formula
 {
   public:
   
-    /*
+    /**
      * Creates a formula. It must be owned by a sheet, and optionally sheet.
      */
     Formula (Sheet *sheet,  Cell *cell = 0);
     
-    /*
+    /**
      * Creates a formula that is not owned by any sheet.
      * This might be useful in some cases.
      */
     Formula();
     
-    /*
+    /**
      * Destroys the formula.
      */
     ~Formula();
     
-    /*
+    /**
      * Returns the cell which owns this formula.
      */
     Sheet* sheet();
-    /*
+    /**
      * Returns the cell which owns this formula.
      */
     Cell* cell();
     
-    /*
+    /**
      * Sets the expression for this formula.
      */    
     void setExpression( const QString& expr );
     
-    /*
+    /**
      * Gets the expression of this formula.
      */    
     QString expression() const;    
     
-    /*
+    /**
      * Clears everything, makes as like a newly constructed formula.
      */    
     void clear();
         
-    /*
+    /**
      * Returns true if the specified expression is valid, i.e. it contains 
      * no parsing error.
      * Empty formula (i.e. without expression) is always invalid.
      */    
     bool isValid() const;
         
-    /*
+    /**
      * Returns list of tokens associated with this formula. This has nothing to 
      * with the formula evaluation but might be useful, e.g. for syntax 
      * highlight or similar features.
@@ -286,12 +294,12 @@ class Formula
      */    
     Tokens tokens() const;
     
-    /*
+    /**
      * Evaluates the formula and returns the result.
      */    
     Value eval() const;
     
-    /*
+    /**
      * Given an expression, this function separates it into tokens.
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.

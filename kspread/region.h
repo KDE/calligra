@@ -180,6 +180,7 @@ public:
 
   /**
    * @param point the point's location
+   * @param sheet the sheet the point belongs to
    * @return @c true, if the region contains the point @p point
    */
   bool contains(const QPoint& point, Sheet* sheet = 0) const;
