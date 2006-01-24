@@ -25,6 +25,7 @@
 #include <kexi_version.h>
 #include <kaboutdata.h>
 #include <kdeversion.h>
+#include <kofficeversion.h> //only for KOFFICE_VERSION_STRING
 
 static const char *description =
 	I18N_NOOP("Database creation for everyone")
@@ -40,7 +41,12 @@ static const char *description =
 KAboutData *newKexiAboutData()
 {
 	KAboutData *aboutData=new KAboutData( "kexi", KEXI_APP_NAME,
-		KEXI_VERSION_STRING, description, KAboutData::License_LGPL_V2,
+		KEXI_VERSION_STRING 
+#ifndef CUSTOM_VERSION
+		" (KOffice " KOFFICE_VERSION_STRING ")"
+#endif
+		, description, 
+		KAboutData::License_LGPL_V2,
 		I18N_NOOP(	"(c) 2002-2006, Kexi Team\n"
 					"(c) 2003-2006, OpenOffice Polska Ltd.\n"),
 		I18N_NOOP(	"This software is developed by Kexi Team - an international group\n"
