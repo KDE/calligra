@@ -10,6 +10,7 @@
   <!ENTITY importexport SYSTEM "importexport.docbook">
   <!ENTITY config SYSTEM "config.docbook">
   <!ENTITY configdialog SYSTEM "configdialog.docbook">
+  <!ENTITY a11y SYSTEM "a11y.docbook">
   <!ENTITY commands SYSTEM "commands.docbook">
   <!ENTITY faq SYSTEM "faq.docbook">
 ]>
@@ -53,7 +54,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2006-01-10</date>
+<date>2006-01-23</date>
 <releaseinfo>1.5.0</releaseinfo>
 
 
@@ -100,6 +101,8 @@ http://www.koffice.org</ulink></para>
 &config;
 
 &configdialog;
+
+&a11y;
 
 &commands;
 
