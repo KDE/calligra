@@ -71,10 +71,10 @@ Move the screen with the arrow keys and press <keycap>&Esc;</keycap>.
 </sect2>
 
 <sect2 id="a11y-kmagnifier">
-<title>&kmagnifier;</title>
+<title>KMagnifier</title>
 <indexterm><primary>magnifier</primary></indexterm>
 <para>The <command>kdeaccessibility</command> module includes a screen magnifier
-application called <ulink url="help:kmag">&kmagnifier;</ulink>.
+application called <ulink url="help:kmag">KMagnifier</ulink>.
 If it is installed, you may run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
 <guimenuitem>Accessibility</guimenuitem><guimenuitem>Screen Magnifier</guimenuitem></menuchoice>.
