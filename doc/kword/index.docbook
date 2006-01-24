@@ -61,7 +61,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2006-1-13</date>
+<date>2006-1-23</date>
 <releaseinfo>1.5</releaseinfo>
 
 <abstract>
@@ -294,6 +294,10 @@ comments are stored in the &kword; file, and can be changed or deleted easily.</
 </listitem>
 <listitem>
 <para>&kword; can surround your frames with borders and you can set the background color of each frame separately if you want.</para>
+</listitem>
+<listitem>
+<para>&kword; has several accessibility features, including the ability to speak all or part of
+a document using Text-to-Speech (KTTS) and manipulate documents using the keyboard only.</para>
 </listitem>
 
 </itemizedlist>
