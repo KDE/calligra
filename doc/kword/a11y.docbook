@@ -261,6 +261,12 @@ Check the <guilabel>Move pointer with keyboard (using the num pad)</guilabel> bo
 and then use the <keycap>.</keycap> to emulate releasing the selected pointer button.
 </para>
 
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="mousenav.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
 </sect2>
 
 <sect2 id="a11y-motor-shortcuts">
@@ -321,7 +327,7 @@ menu and choose <menuchoice><guimenuitem>Edit Text</guimenuitem></menuchoice>
 <title>Resizing panels</title>
 
 <para>You can move the sizing bar between the <guilabel>Document Structure Area</guilabel>
-and the main document panel by pressing <keycap>F8</keycap>.  A sizing cursor appears
+and the main document panel by pressing <keycap>F8</keycap>.  A sizing icon appears
 overtop the sizing bar.  Use the arrow keys to move the bar left or right.
 Press <keycap>F8</keycap> again or &Esc; when finished sizing.
 </para>

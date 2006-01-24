@@ -1268,6 +1268,56 @@ action="simul">&Ctrl;<keycap>Return</keycap></keycombo></entry>
 
 </tbody></tgroup></informaltable>
 
+<para>Keybindings for Accessibility</para>
+<informaltable>
+<tgroup cols="2"><tbody>
+<row>
+<entry>Popup Context Menu</entry>
+<entry><keycap>Menu</keycap> (see note below)</entry>
+</row>
+<row>
+<entry><link linkend="a11y-motor-panel-sizing">Resize Panel Forward</link></entry>
+<entry><keycap>F8</keycap></entry>
+</row>
+<row>
+<entry><link linkend="a11y-motor-panel-sizing">Resize Panel Reverse</link></entry>
+<entry><keycombo action="simul">&Shift;<keycap>F8</keycap></keycombo></entry>
+</row>
+<row>
+<entry><link linkend="a11y-motor-moving-focus">Set Focus to Widget</link></entry>
+<entry><keycombo action="simul">&Alt;<keycap>F8</keycap></keycombo></entry>
+</row>
+<row>
+<entry>Enter keyboard <link linkend="a11y-mouse-emulation">Mouse Emulation</link> mode</entry>
+<entry><keycombo action="simul">&Alt;<keycap>F12</keycap></keycombo></entry>
+</row>
+<row>
+<entry>Click mouse in <link linkend="a11y-mouse-emulation">Mouse Emulation</link> mode</entry>
+<entry><keycap>spacebar</keycap></entry>
+</row>
+<row>
+<entry>Go to Document Structure</entry>
+<entry><keycombo action="simul">&Alt;<keycap>1</keycap></keycombo></entry>
+</row>
+<row>
+<entry>Go to Document</entry>
+<entry><keycombo action="simul">&Alt;<keycap>2</keycap></keycombo></entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<note><para>
+On most keyboards, the <keycap>Menu</keycap> key is on the righthand side between
+the &Windows; and &Ctrl; keys.  It has a menu icon on it.
+</para></note>
+
+<para>Keybindings for <link linkend="a11y-mouse-navigation">Mouse Navigation</link></para>
+
+<screenshot>
+<mediaobject>
+<imageobject><imagedata fileref="mousenav.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
 <para>Miscellaneous Keyboard Shortcuts</para>
 <informaltable>
 
