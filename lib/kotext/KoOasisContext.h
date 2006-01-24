@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2004-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ class KoGenStyles;
 class KoVariableCollection;
 
 #include "KoListStyleStack.h"
+#include "KoTextBookmark.h"
 
 // ####### TODO rename to KoTextOasisLoadingContext (wow that's long).
 // ####### maybe KoTextLoadingContext?
@@ -134,6 +135,28 @@ public:
     KoTextParag* cursorTextParagraph() const { return m_cursorTextParagraph; }
     int cursorTextIndex() const { return m_cursorTextIndex; }
 
+    /// Store bookmarks [for the current text paragraph beind saved]
+    /// so that KoTextParag can save them at the right place inside the text
+    struct BookmarkPosition {
+        BookmarkPosition() : name(), pos( -1 ), startEqualsEnd( false ) {} // for QValueList
+        BookmarkPosition( const QString& nm, int p, bool simple )
+            : name( nm ), pos( p ), startEqualsEnd( simple ) {}
+        QString name;
+        int pos;
+        bool startEqualsEnd;
+        bool operator<( BookmarkPosition& rhs ) const {
+            return pos < rhs.pos;
+        }
+    };
+    typedef QValueList<BookmarkPosition> BookmarkPositions;
+    void setBookmarkPositions( const BookmarkPositions& bkStarts,
+                               const BookmarkPositions& bkEnds ) {
+        m_bookmarkStarts = bkStarts;
+        m_bookmarkEnds = bkEnds;
+    }
+    const BookmarkPositions& bookmarkStarts() const { return m_bookmarkStarts; }
+    const BookmarkPositions& bookmarkEnds() const { return m_bookmarkEnds; }
+
     void addFontFace( const QString& fontName );
     typedef QMap<QString, bool> FontFaces;
     void writeFontFaces( KoXmlWriter& writer );
@@ -147,6 +170,8 @@ public:
 private:
     KoGenStyles& m_mainStyles;
     SavingMode m_savingMode;
+
+    BookmarkPositions m_bookmarkStarts, m_bookmarkEnds;
 
     KoTextParag* m_cursorTextParagraph;
     int m_cursorTextIndex;

@@ -49,15 +49,10 @@
 #include <klocale.h>
 #include <private/qtextengine_p.h>
 
-//#define PARSER_DEBUG
 //#define DEBUG_COLLECTION
 //#define DEBUG_TABLE_RENDERING
 
 //static KoTextFormatCollection *qFormatCollection = 0;
-
-#if defined(PARSER_DEBUG)
-static QString debug_indent;
-#endif
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

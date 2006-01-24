@@ -69,9 +69,6 @@ KoTextDocument::KoTextDocument( KoTextZoomHandler *zoomHandler, KoTextFormatColl
 
 void KoTextDocument::init()
 {
-#if defined(PARSER_DEBUG)
-    kdDebug(32500) << debug_indent + "new KoTextDocument (%p)", this << endl;
-#endif
     //pProcessor = 0;
     useFC = TRUE;
     pFormatter = 0;

@@ -35,7 +35,7 @@
 #include "KWLoadingInfo.h"
 #include "KWInsertTOCCommand.h"
 #include "KWMailMergeDataBase.h"
-#include "KWBookMark.h"
+#include "KoTextBookmark.h"
 #include "KWVariable.h"
 #include "KWOasisSaver.h"
 #include "KWFrameList.h"
@@ -1752,8 +1752,13 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
 {
     // TODO save protectContent
 
+    QMap<const KoTextParag*, KoTextBookmarkList> bookmarksPerParagraph;
+    if ( m_doc->bookmarkList() )
+        bookmarksPerParagraph = m_doc->bookmarkList()->bookmarksPerParagraph();
+
     // Basically just call saveOasis on every paragraph.
-    // But we do table-of-contents-handling (for kword) in addition.
+    // But we do table-of-contents-handling (for kword) in addition,
+    // as well as bookmarks.
     KoTextParag* parag = textDocument()->firstParag();
     bool inTOC = false;
     while ( parag ) {
@@ -1775,6 +1780,30 @@ void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& con
                 finishTOC( writer );
             }
         }
+
+
+        // I want Qt4's QMap/QHash::value()!
+        KoSavingContext::BookmarkPositions bookmarkStarts, bookmarkEnds;
+        QMap<const KoTextParag*, KoTextBookmarkList>::const_iterator bkit = bookmarksPerParagraph.find( parag );
+        if ( bkit != bookmarksPerParagraph.end() ) {
+            // Massage a bit the bookmarks data; KoTextParag wants it ordered by position, for speed.
+            const KoTextBookmarkList& bookmarks = *bkit;
+            for ( KoTextBookmarkList::const_iterator it = bookmarks.begin(); it != bookmarks.end(); ++it )
+            {
+                const KoTextBookmark& bk = *it;
+                if ( bk.startParag() == parag )
+                    bookmarkStarts.append( KoSavingContext::BookmarkPosition(
+                                               bk.bookmarkName(), bk.bookmarkStartIndex(),
+                                               bk.isSimple() ) );
+                if ( bk.endParag() == parag && !bk.isSimple() )
+                    bookmarkEnds.append( KoSavingContext::BookmarkPosition( bk.bookmarkName(),
+                                                                            bk.bookmarkEndIndex(), false ) );
+            }
+            qHeapSort( bookmarkStarts );
+            qHeapSort( bookmarkEnds );
+        }
+        // should be done in all cases, even if both lists are empty
+        context.setBookmarkPositions( bookmarkStarts, bookmarkEnds );
 
         // Save the whole parag, without the trailing space.
         parag->saveOasis( writer, context, 0, parag->lastCharPos() );
@@ -3500,7 +3529,7 @@ bool KWTextFrameSetEdit::openLink( KoLinkVariable* variable )
         const QString url = variable->url();
         if( url.startsWith("bkm://") )
         {
-            KWBookMark* bookmark = doc->bookMarkByName(url.mid(6) );
+            const KoTextBookmark* bookmark = doc->bookmarkByName(url.mid(6) );
             if ( bookmark )
             {
                 cursor()->setParag( bookmark->startParag() );

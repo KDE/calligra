@@ -132,7 +132,7 @@ void KWSelectBookmarkDia::slotDeleteBookmark()
     QString tmp =m_bookmarkList->currentText();
     if ( !tmp.isEmpty())
     {
-        m_doc->deleteBookMark(tmp);
+        m_doc->deleteBookmark(tmp);
         m_bookmarkList->removeItem(m_bookmarkList->currentItem());
     }
 }

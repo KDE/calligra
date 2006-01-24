@@ -64,6 +64,8 @@ class KWFootNoteVariable;
 class DCOPObject;
 class KWLoadingInfo;
 class KoPicture;
+class KoTextBookmark;
+class KoTextBookmarkList;
 class KoPictureCollection;
 class KWDocumentChild;
 class KWPageManager;
@@ -83,7 +85,6 @@ class KoOasisSettings;
 
 #include "KWAnchorPos.h" // legacy loading stuff
 #include "KWView.h"
-class KWBookMark;
 
 #include <koDocument.h>
 #include <KoTextZoomHandler.h>
@@ -716,13 +717,13 @@ public:
     SeparatorLineLineType footNoteSeparatorLineType()const { return m_footNoteSeparatorLineType;}
     void setFootNoteSeparatorLineType( SeparatorLineLineType type) {m_footNoteSeparatorLineType = type;}
 
+    const KoTextBookmarkList* bookmarkList() const { return m_bookmarkList; }
+    void insertBookmark( const QString &name, KoTextParag *startparag, KoTextParag *endparag, int start, int end );
+    void deleteBookmark( const QString &name );
+    void renameBookmark( const QString &oldname, const QString &newName );
 
-    void insertBookMark(const QString &name, KWTextParag *startparag, KWTextParag *endparag, KWFrameSet *frameSet, int start, int end);
-    void deleteBookMark(const QString &name);
-    void renameBookMark(const QString &oldname, const QString &newName);
-
-    KWBookMark * bookMarkByName( const QString & name );
-    QStringList listOfBookmarkName(KWViewMode * viewMode)const;
+    const KoTextBookmark * bookmarkByName( const QString & name ) const;
+    QStringList listOfBookmarkName(KWViewMode * viewMode) const;
 
     void paragraphDeleted( KoTextParag *parag, KWFrameSet *frm);
     void paragraphModified(KoTextParag* parag, int /*KoTextParag::ParagModifyType*/ type, int start, int lenght);
@@ -735,8 +736,6 @@ public:
     void updateRulerInProtectContentMode();
 
     KoPageLayout pageLayout(int pageNumber = 0) const;
-
-    QPtrListIterator<KWBookMark> bookmarkIterator() const { return QPtrListIterator<KWBookMark>(m_bookmarkList); }
 
     QStringList personalExpressionPath() const { return m_personalExpressionPath;}
     void setPersonalExpressionPath( const QStringList & );
@@ -995,7 +994,7 @@ private:
     /// \note Remains alive a little bit longer than the loading info (until KWCanvas ctor)
     InitialEditing *m_initialEditing;
 
-    QPtrList<KWBookMark> m_bookmarkList;
+    KoTextBookmarkList* m_bookmarkList;
 
     QStringList m_personalExpressionPath;
     QString m_globalLanguage;
@@ -1008,6 +1007,5 @@ private:
     KWPageManager *m_pageManager;
     FramesChangedHandler *m_framesChangedHandler;
 };
-
 
 #endif

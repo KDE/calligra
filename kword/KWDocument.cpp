@@ -23,7 +23,7 @@
 
 #include "KWordDocIface.h"
 #include "KWBgSpellCheck.h"
-#include "KWBookMark.h"
+#include "KoTextBookmark.h"
 #include "KWCanvas.h"
 #include "KWCommand.h"
 #include "KWFormulaFrameSet.h"
@@ -168,7 +168,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
     m_lstFrameSet.setAutoDelete( true );
     // m_textImageRequests does not create or delete the KWTextImage classes
     m_textImageRequests.setAutoDelete(false);
-    m_bookmarkList.setAutoDelete( true );
 
     m_styleColl = new KoStyleCollection();
     m_frameStyleColl = new KWFrameStyleCollection();
@@ -242,6 +241,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
     m_autoFormat = new KoAutoFormat(this,m_varColl,m_varFormatCollection );
     m_bgSpellCheck = new KWBgSpellCheck(this);
     m_slDataBase = new KWMailMergeDataBase( this );
+    m_bookmarkList = new KoTextBookmarkList;
     slRecordNum = -1;
 
     m_syntaxVersion = CURRENT_SYNTAX_VERSION;
@@ -296,7 +296,6 @@ KWDocument::~KWDocument()
         saveConfig();
     // formula frames have to be deleted before m_formulaDocumentWrapper
     m_lstFrameSet.clear();
-    m_bookmarkList.clear();
     delete m_loadingInfo;
     delete m_autoFormat;
     delete m_formulaDocumentWrapper;
@@ -314,6 +313,7 @@ KWDocument::~KWDocument()
     delete m_bufPixmap;
     delete m_pictureCollection;
     delete m_pageManager;
+    delete m_bookmarkList;
 }
 
 void KWDocument::initConfig()
@@ -3409,28 +3409,29 @@ QDomDocument KWDocument::saveXML()
         }
     }
 
-    if( !m_bookmarkList.isEmpty() )
+    if( !m_bookmarkList->isEmpty() )
     {
         QDomElement bookmark = doc.createElement( "BOOKMARKS" );
         kwdoc.appendChild( bookmark );
 
-        QPtrListIterator<KWBookMark> book(m_bookmarkList);
-        for ( ; book.current() ; ++book )
+        for ( KoTextBookmarkList::const_iterator it = m_bookmarkList->begin();
+              it != m_bookmarkList->end() ; ++it )
         {
-            if ( book.current()->startParag()!=0 &&
-                 book.current()->endParag()!=0 &&
-                 !book.current()->frameSet()->isDeleted())
+            const KoTextBookmark& book = *it;
+            KWTextFrameSet* fs = static_cast<KWTextDocument*>(book.textDocument())->textFrameSet();
+            if ( book.startParag() &&
+                 book.endParag() &&
+                 fs && !fs->isDeleted() )
             {
                 QDomElement bookElem = doc.createElement( "BOOKMARKITEM" );
                 bookmark.appendChild( bookElem );
-                bookElem.setAttribute( "name", book.current()->bookMarkName());
-                bookElem.setAttribute( "frameset", book.current()->frameSet()->name());
-                bookElem.setAttribute( "startparag", book.current()->startParag()->paragId());
-                bookElem.setAttribute( "endparag", book.current()->endParag()->paragId());
+                bookElem.setAttribute( "name", book.bookmarkName() );
+                bookElem.setAttribute( "frameset", fs->name() );
+                bookElem.setAttribute( "startparag", book.startParag()->paragId() );
+                bookElem.setAttribute( "endparag", book.endParag()->paragId() );
 
-                bookElem.setAttribute( "cursorIndexStart", book.current()->bookmarkStartIndex());
-                bookElem.setAttribute( "cursorIndexEnd", book.current()->bookmarkEndIndex());
-
+                bookElem.setAttribute( "cursorIndexStart", book.bookmarkStartIndex() );
+                bookElem.setAttribute( "cursorIndexEnd", book.bookmarkEndIndex() );
             }
         }
     }
@@ -5083,103 +5084,85 @@ void KWDocument::testAndCloseAllFrameSetProtectedContent()
 
 void KWDocument::updateRulerInProtectContentMode()
 {
-    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+    for( QValueList<KWView *>::const_iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
         (*it)->updateRulerInProtectContentMode();
 }
 
 
-void KWDocument::insertBookMark(const QString &name, KWTextParag *startparag,KWTextParag *endparag, KWFrameSet *frameSet, int start, int end)
+void KWDocument::insertBookmark( const QString &name, KoTextParag *startparag, KoTextParag *endparag, int start, int end )
 {
-    KWBookMark *book = new KWBookMark( name, startparag, endparag, frameSet, start, end );
-    m_bookmarkList.append( book );
+    m_bookmarkList->append( KoTextBookmark( name, startparag, endparag, start, end ) );
 }
 
-void KWDocument::deleteBookMark(const QString &name)
+void KWDocument::deleteBookmark( const QString &name )
 {
-    QPtrListIterator<KWBookMark> book(m_bookmarkList);
-    for ( ; book.current() ; ++book )
-    {
-        if ( book.current()->bookMarkName()==name)
-        {
-            m_bookmarkList.remove(book.current());
-            setModified(true);
-            break;
-        }
-    }
+    if ( m_bookmarkList->removeByName( name ) )
+        setModified(true);
 }
 
-void KWDocument::renameBookMark(const QString &oldName, const QString &newName)
+void KWDocument::renameBookmark( const QString &oldName, const QString &newName )
 {
-    if ( oldName==newName)
+    if ( oldName == newName )
         return;
-    QPtrListIterator<KWBookMark> book(m_bookmarkList);
-    for ( ; book.current() ; ++book )
+
+    KoTextBookmarkList::iterator it = m_bookmarkList->findByName( oldName );
+    if ( it != m_bookmarkList->end() )
     {
-        if ( book.current()->bookMarkName()==oldName)
-        {
-            book.current()->setBookMarkName(newName );
-            setModified(true);
-            break;
-        }
+        (*it).setBookmarkName( newName );
+        setModified(true);
     }
 }
 
-KWBookMark * KWDocument::bookMarkByName( const QString & name )
+const KoTextBookmark * KWDocument::bookmarkByName( const QString & name ) const
 {
-    QPtrListIterator<KWBookMark> book(m_bookmarkList);
-    for ( ; book.current() ; ++book )
-    {
-        if ( book.current()->bookMarkName()==name)
-            return book.current();
-    }
-    return 0L;
+    KoTextBookmarkList::const_iterator it = m_bookmarkList->findByName( name );
+    if ( it != m_bookmarkList->end() )
+        return &(*it);
+    return 0;
 }
 
-QStringList KWDocument::listOfBookmarkName(KWViewMode * viewMode)const
+QStringList KWDocument::listOfBookmarkName( KWViewMode * viewMode ) const
 {
     QStringList list;
-    if ( viewMode && viewMode->type()!="ModeText")
+    KoTextBookmarkList::const_iterator it = m_bookmarkList->begin();
+    const KoTextBookmarkList::const_iterator end = m_bookmarkList->end();
+    for ( ; it != end ; ++it )
     {
-        QPtrListIterator<KWBookMark> book(m_bookmarkList);
-        for ( ; book.current() ; ++book )
-        {
-            if ( !book.current()->frameSet()->isDeleted())
-                list.append( book.current()->bookMarkName());
-        }
-    }
-    else
-    {
-        QPtrListIterator<KWBookMark> book(m_bookmarkList);
-        for ( ; book.current() ; ++book )
-        {
-            if ( book.current()->frameSet()->isVisible( viewMode )&& !book.current()->frameSet()->isDeleted())
-                list.append( book.current()->bookMarkName());
-        }
+        const KoTextBookmark& book = *it;
+        KWFrameSet* fs = static_cast<KWTextDocument *>(book.textDocument())->textFrameSet();
+        if ( fs->isVisible( viewMode ) && !fs->isDeleted() )
+            list.append( book.bookmarkName() );
     }
     return list;
 }
 
-void KWDocument::paragraphModified(KoTextParag* /*parag*/, int /*KoTextParag::ParagModifyType*/ /*type*/, int /*start*/, int /*lenght*/)
+void KWDocument::paragraphModified(KoTextParag* /*parag*/, int /*KoTextParag::ParagModifyType*/ /*type*/, int /*start*/, int /*length*/)
 {
-    //kdDebug()<<" parag :"<<parag<<" start :"<<start<<" lenght :"<<lenght<<endl;
-    emit docStructureChanged(Tables | TextFrames);
+    //kdDebug()<<" parag :"<<parag<<" start :"<<start<<" length :"<<length<<endl;
+    emit docStructureChanged( Tables | TextFrames );
 }
 
 
 void KWDocument::paragraphDeleted( KoTextParag *parag, KWFrameSet *frm )
 {
-    if ( m_bookmarkList.isEmpty() )
-        return;
-    QPtrListIterator<KWBookMark> book(m_bookmarkList);
-    for ( ; book.current() ; ++book ) {
-        KWBookMark* bk = book.current();
-        if ( bk->frameSet()==frm ) {
+    KWTextFrameSet* textfs = dynamic_cast<KWTextFrameSet *>( frm );
+    if ( textfs )
+    {
+        // For speed KoTextBookmarkList should probably be a per-paragraph map.
+        // The problem is that a bookmark is associated with TWO paragraphs...
+
+        KoTextBookmarkList::iterator it = m_bookmarkList->begin();
+        const KoTextBookmarkList::iterator end = m_bookmarkList->end();
+        for ( ; it != end ; ++it )
+        {
+            KoTextBookmark& book = *it;
+
             // Adjust bookmark to point to a valid paragraph, below or above the deleted one.
             // The old implementation turned the bookmark into a useless one. OOo simply deletes the bookmark...
-            if ( bk->startParag() == parag )
-                bk->setStartParag( parag->next() ? parag->next() : parag->prev() );
-            if ( bk->endParag() == parag )
-                bk->setEndParag( parag->next() ? parag->next() : parag->prev() );
+            if ( book.startParag() == parag )
+                book.setStartParag( parag->next() ? parag->next() : parag->prev() );
+            if ( book.endParag() == parag )
+                book.setEndParag( parag->next() ? parag->next() : parag->prev() );
         }
     }
 }
@@ -5189,7 +5172,6 @@ void KWDocument::initBookmarkList()
     Q_ASSERT( m_loadingInfo );
     if ( !m_loadingInfo )
         return;
-    KWLoadingInfo::BookMarkList bookmarks();
     KWLoadingInfo::BookMarkList::Iterator it = m_loadingInfo->bookMarkList.begin();
     KWLoadingInfo::BookMarkList::Iterator end = m_loadingInfo->bookMarkList.end();
     for( ; it != end; ++it )
@@ -5203,17 +5185,14 @@ void KWDocument::initBookmarkList()
             KWTextFrameSet *frm = dynamic_cast<KWTextFrameSet *>(fs);
             if ( frm )
             {
-                KoTextParag* startparag = frm->textDocument()->paragAt( (*it).paragStartIndex );
-                KoTextParag* endparag = frm->textDocument()->paragAt( (*it).paragEndIndex );
+                KoTextDocument* textdoc = frm->textDocument();
+                KoTextParag* startparag = textdoc->paragAt( (*it).paragStartIndex );
+                KoTextParag* endparag = textdoc->paragAt( (*it).paragEndIndex );
                 if ( startparag && endparag )
                 {
-                    KWBookMark *bk = new KWBookMark( (*it).bookname );
-                    bk->setFrameSet( frm );
-                    bk->setStartParag( startparag );
-                    bk->setEndParag( endparag );
-                    bk->setBookmarkStartIndex( (*it).cursorStartIndex );
-                    bk->setBookmarkEndIndex( (*it).cursorEndIndex );
-                    m_bookmarkList.append( bk );
+                    m_bookmarkList->append( KoTextBookmark( (*it).bookname,
+                                                            startparag, endparag,
+                                                            (*it).cursorStartIndex, (*it).cursorEndIndex ) );
                 }
             }
         }

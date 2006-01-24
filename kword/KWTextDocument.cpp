@@ -152,9 +152,7 @@ void KWTextDocument::appendBookmark( KoTextParag* parag, int pos, KoTextParag* e
 {
     // The OASIS format is cool. No need to store the bookmarks until end of loading (e.g. KWLoadingInfo)
     // We can "resolve" them right away.
-    m_textfs->kWordDocument()->insertBookMark( name, static_cast<KWTextParag *>( parag ),
-                                               static_cast<KWTextParag *>( endParag ),
-                                               m_textfs, pos, endPos );
+    m_textfs->kWordDocument()->insertBookmark( name, parag, endParag, pos, endPos );
 }
 
 void KWTextDocument::loadOasisFootnote( const QDomElement& tag, KoOasisContext& context,
@@ -229,10 +227,8 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
             }
             return true;
         }
-        else if ( localName == "bookmark" ) // this is an empty element
+        else if ( localName == "bookmark" )
         {
-            // the number of <PARAGRAPH> tags in the frameset element is the parag id
-            // (-1 for starting at 0, +1 since not written yet)
             appendBookmark( parag, pos, parag, pos, tag.attributeNS( KoXmlNS::text, "name", QString::null ) );
             return true;
         }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001-2005 David Faure <faure@kde.org>
+   Copyright (C) 2001-2006 David Faure <faure@kde.org>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -58,9 +58,6 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 	tabStopWidth = defFormat->width( 'x' ) * 8;
 	commandHistory = new KoTextDocCommandHistory( 100 );
     }*/
-#if defined(PARSER_DEBUG)
-    kdDebug(32500) << debug_indent + "new KoTextParag" << endl;
-#endif
 
     if ( p ) {
 	p->n = this;
@@ -2909,6 +2906,40 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
             writer.endElement();                                        \
         }                                                               \
     }
+#define ISSTARTBOOKMARK( i ) bkStartIter != bookmarkStarts.end() && (*bkStartIter).pos == i
+#define ISENDBOOKMARK( i ) bkEndIter != bookmarkEnds.end() && (*bkEndIter).pos == i
+#define CHECKPOS( i ) \
+        if ( cursorIndex == i ) { \
+            writer.addProcessingInstruction( "opendocument cursor-position" ); \
+        } \
+        if ( ISSTARTBOOKMARK( i ) ) { \
+            if ( (*bkStartIter).startEqualsEnd ) \
+                writer.startElement( "text:bookmark" ); \
+            else \
+                writer.startElement( "text:bookmark-start" ); \
+            writer.addAttribute( "text:name", (*bkStartIter).name ); \
+            writer.endElement(); \
+            ++bkStartIter; \
+        } \
+        if ( ISENDBOOKMARK( i ) ) { \
+            writer.startElement( "text:bookmark-end" ); \
+            writer.addAttribute( "text:name", (*bkEndIter).name ); \
+            writer.endElement(); \
+            ++bkEndIter; \
+        }
+
+
+
+    typedef KoSavingContext::BookmarkPositions BookmarkPositions;
+    const BookmarkPositions& bookmarkStarts = context.bookmarkStarts();
+    BookmarkPositions::const_iterator bkStartIter = bookmarkStarts.begin();
+    while ( bkStartIter != bookmarkStarts.end() && (*bkStartIter).pos < from )
+        ++bkStartIter;
+    //int nextBookmarkStart = bkStartIter == bookmarkStarts.end() ? -1 : (*bkStartIter).pos;
+    const BookmarkPositions& bookmarkEnds = context.bookmarkEnds();
+    BookmarkPositions::const_iterator bkEndIter = bookmarkEnds.begin();
+    while ( bkEndIter != bookmarkEnds.end() && (*bkEndIter).pos < from )
+        ++bkEndIter;
 
     KoTextFormat *curFormat = 0;
     KoTextFormat *lastFormatRaw = 0; // this is for speeding up "removing misspelled" from each char
@@ -2933,14 +2964,14 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         }
         if ( !curFormat )
             curFormat = newFormat;
-        if ( newFormat != curFormat || ch.isCustom() || cursorIndex == i ) { // Format changed, save previous one.
+        if ( newFormat != curFormat  // Format changed, save previous one.
+             || ch.isCustom() || cursorIndex == i || ISSTARTBOOKMARK( i ) || ISENDBOOKMARK( i ) )
+        {
             WRITESPAN( i ) // write text up to i-1
             startPos = i;
             curFormat = newFormat;
         }
-        if ( cursorIndex == i ) {
-            writer.addProcessingInstruction( "opendocument cursor-position" );
-        }
+        CHECKPOS( i ) // do cursor position and bookmarks
         if ( ch.isCustom() ) {
             KoTextCustomItem* customItem = ch.customItem();
             customItem->saveOasis( writer, context );
@@ -2953,9 +2984,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     if ( to >= startPos ) { // Save last format
         WRITESPAN( to + 1 )
     }
-    if ( cursorIndex == to + 1 ) {
-        writer.addProcessingInstruction( "opendocument cursor-position" );
-    }
+    CHECKPOS( to + 1 ) // do cursor position and bookmarks
 
     writer.endElement(); // text:p or text:h
     if ( normalList )

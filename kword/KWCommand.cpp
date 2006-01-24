@@ -2038,12 +2038,12 @@ KWRenameBookmarkCommand::KWRenameBookmarkCommand( const QString &name, const QSt
 
 void KWRenameBookmarkCommand::execute()
 {
-    m_doc->renameBookMark( m_oldName, m_newName);
+    m_doc->renameBookmark( m_oldName, m_newName);
 }
 
 void KWRenameBookmarkCommand::unexecute()
 {
-    m_doc->renameBookMark( m_newName, m_oldName);
+    m_doc->renameBookmark( m_newName, m_oldName);
 }
 
 KWResizeColumnCommand::KWResizeColumnCommand( KWTableFrameSet *table, int col, double oldSize, double newSize ):

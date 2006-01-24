@@ -31,7 +31,7 @@
 #include "KWFootNoteDia.h"
 #include "KWInsertDia.h"
 #include "KWAnchor.h"
-#include "KWBookMark.h"
+#include "KoTextBookmark.h"
 #include "KWCanvas.h"
 #include "KWCommand.h"
 #include "KWConfig.h"
@@ -7068,7 +7068,7 @@ void KWView::addBookmark()
             }
             int startSel = start.index();
             int endSel = end.index();
-            m_doc->insertBookMark(bookName, static_cast<KWTextParag*>(start.parag()),static_cast<KWTextParag*>(end.parag()), edit->textFrameSet(), startSel, endSel);
+            m_doc->insertBookmark(bookName, start.parag(),end.parag(), startSel, endSel);
         }
     }
 }
@@ -7078,7 +7078,7 @@ void KWView::selectBookmark()
     KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(viewMode()), m_doc, this, 0 );
     if ( dia.exec() ) {
         QString bookName = dia.bookmarkSelected();
-        KWBookMark * book = m_doc->bookMarkByName( bookName );
+        const KoTextBookmark * book = m_doc->bookmarkByName( bookName );
         Q_ASSERT( book );
         if ( book )
         {
@@ -7086,7 +7086,8 @@ void KWView::selectBookmark()
             Q_ASSERT( book->endParag() );
             if ( !book->startParag() || !book->endParag() )
                 return;
-            m_gui->canvasWidget()->editTextFrameSet( book->frameSet(), book->startParag(), book->bookmarkStartIndex() );
+            KWTextFrameSet* textfs = static_cast<KWTextDocument *>( book->textDocument() )->textFrameSet();
+            m_gui->canvasWidget()->editTextFrameSet( textfs, book->startParag(), book->bookmarkStartIndex() );
             KWTextFrameSetEdit * edit = currentTextEdit();
             Q_ASSERT( edit );
             if ( edit )

@@ -598,7 +598,6 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
 {
     if ( protectContent() )
         return;
-    kdDebug() << k_funcinfo << insertFlags << endl;
     const bool checkNewLine = insertFlags & CheckNewLine;
     const bool removeSelected = ( insertFlags & DoNotRemoveSelected ) == 0;
     const bool repaint = ( insertFlags & DoNotRepaint ) == 0;
