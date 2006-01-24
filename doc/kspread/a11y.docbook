@@ -178,11 +178,11 @@ the items on the main menubar are not spoken.
 <indexterm><primary>Mouseless Operation</primary></indexterm>
 
 <sect2 id="a11y-kmousetool">
-<title>&kmousetool;</title>
+<title>KMouseTool</title>
 <para>If you can operate a mouse, but have trouble clicking, the
-<ulink url="help:kmag">&kmousetool;</ulink> application may help.  Run it from
+<ulink url="help:kmag">KMouseTool</ulink> application may help.  Run it from
 <menuchoice><guimenu>K-Button</guimenu><guimenuitem>Utilities</guimenuitem>
-<guimenuitem>Accessibility</guimenuitem><guimenuitem>&kmousetool;</guimenuitem></menuchoice>.
+<guimenuitem>Accessibility</guimenuitem><guimenuitem>KMouseTool</guimenuitem></menuchoice>.
 </para>
 </sect2>
 
