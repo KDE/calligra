@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# IMPORTANT: this is like the slowest thing ever. But it works. Usually.
+# Requires an open instance of KSpread, with openformula-test.ods loaded.
+#
+
+KSPREAD=`dcopfind 'kspread*'`
+KSPREAD=`echo $KSPREAD | sed s/DCOPRef\(// | sed s/,\)//`
+for i in `seq 51 514`
+  do
+  CELLREF=`dcop $KSPREAD Document/Map/List1 cell 7 $i`
+  PASS=`dcop $CELLREF value`
+  if test $PASS = 1.000000
+    then
+    CELLREF=`dcop $KSPREAD Document/Map/List1 cell 2 $i`
+    formula=`dcop $CELLREF text`
+    formula=`echo $formula | sed s/\"/\\\\\\\\\"/g`
+    
+#nothing if formula contains a cellref ...
+    if test -z "`echo $formula | grep B[1-9]`"
+      then
+      CELLREF=`dcop $KSPREAD Document/Map/List1 cell 3 $i`
+      result=`dcop $CELLREF text`
+#test whether we have a number
+      if test $result = True
+        then
+	VAL="true"
+      else if test $result = False
+        then
+	VAL="false"
+      else if test -z `echo $result | grep -P "^\d+([\.,]\d+)?$"`
+        then
+	VAL="\"${result}\""
+      else
+	result=`echo $result | sed s/,/./`
+        VAL=$result
+      fi;fi;fi
+      echo "CHECK_EVAL(\"=${formula}\", Value($VAL));  // row $i"
+    fi
+  else echo // Not passed for line $i.
+  fi
+done
+
+
