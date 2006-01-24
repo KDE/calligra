@@ -493,8 +493,7 @@ class KPrDocument : public KoDocument
 
     KPrBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
 
-    CustomListMap customListSlideShow();
-    void updateCustomListSlideShow( CustomListMap & map, bool loadOasis = false );
+    void setCustomSlideShows( const CustomSlideShowMap & customSlideShows );
     QValueList <KPrPage *> customListPage( const QStringList & lst, bool loadOasis=false );
 
 
@@ -507,8 +506,10 @@ class KPrDocument : public KoDocument
     //otherwise return list of custom slide show
     QValueList<int> displaySelectedSlides();
     QValueList<int> listOfDisplaySelectedSlides( const QValueList<KPrPage*>& lst );
-    void addTestCustomSlideShow( const QStringList &lst, KPrView *_view );
+    void testCustomSlideShow( const QValueList<KPrPage *> &pages, KPrView *view );
     void clearTestCustomSlideShow();
+
+    const CustomSlideShowMap & customSlideShows() { return m_customListSlideShow; }
 
 public slots:
     void movePage( int from, int to );
@@ -582,9 +583,9 @@ protected:
      */
     int createPresentationAnimation(const QDomElement& element, int order = 0 ,bool increaseOrder = true);
 
-    void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter );
+    void saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter, QMap<int, QString> &page2name );
     void loadOasisPresentationSettings( QDomNode &settingsDoc );
-    void saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter );
+    void saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter, QMap<int, QString> &page2name );
     void loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc );
 
     void loadOasisHeaderFooter( QDomNode & drawPage, KoOasisContext & context);
@@ -630,8 +631,7 @@ protected:
 
     QMap<KoPictureKey, QString> m_pictureMap;
 
-    typedef QMap<QString, QValueList<KPrPage *> > ListCustomSlideShow;
-    ListCustomSlideShow m_customListSlideShow;
+    CustomSlideShowMap m_customListSlideShow;
 
 
     KoPageLayout __pgLayout;

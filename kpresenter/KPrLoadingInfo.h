@@ -73,7 +73,7 @@ public:
     }
     bool oldFormat() const { return m_oldFormat; }
     int presSpeed;
-    CustomListMap m_tmpCustomListMap;
+    QMap<QString, KPrPage *> m_name2page;
     bool m_header;
     bool m_footer;
     bool m_headerFooterByPage;

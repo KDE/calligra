@@ -21,15 +21,15 @@
 #define __CUSTOM_SLIDE_SHOW__
 
 #include <kdialogbase.h>
+#include <qlistbox.h>
 #include "global.h"
 
-class QListBox;
-class QListBoxItem;
 class QLineEdit;
 class QPushButton;
 class KPrDocument;
 class QToolButton;
 class KPrView;
+class KPrPage;
 
 class KPrCustomSlideShowDia : public KDialogBase
 {
@@ -65,19 +65,32 @@ protected:
     bool m_bChanged;
     KPrDocument *m_doc;
     KPrView *m_view;
-    CustomListMap m_customListMap;
+    CustomSlideShowMap m_customSlideShowMap;
     QStringList listPageName;
+};
+
+class KPrCustomSlideShowItem : public QListBoxText
+{
+public:
+    KPrCustomSlideShowItem( QListBox * listbox, KPrPage * page );
+    KPrCustomSlideShowItem( KPrPage * page );
+    KPrCustomSlideShowItem( QListBox * listbox, KPrPage * page, QListBoxItem * after );
+
+    KPrPage * getPage() { return m_page; }
+private:
+    KPrPage * m_page;
 };
 
 class KPrDefineCustomSlideShow : public KDialogBase
 {
     Q_OBJECT
 public:
-    KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, QStringList & _listPage, const char *name = 0L);
-    KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, QStringList& _listPage, QStringList &_customListPage, const char* name = 0L );
+    KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, const QPtrList<KPrPage> &pages, const char *name = 0L);
+    KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, 
+                              const QPtrList<KPrPage> &pages, QValueList<KPrPage *> &customPages, const char* name = 0L );
 
     QString customSlideShowName() const;
-    QStringList customListSlideShow();
+    QValueList<KPrPage *> customSlides();
 
 protected slots:
     void slotMoveUpSlide();

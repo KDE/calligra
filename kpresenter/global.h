@@ -22,6 +22,9 @@
 
 #include <kiconloader.h>
 #include "KPrFactory.h"
+
+class KPrPage;
+
 #define KPBarIcon( x ) BarIcon( x, KPrFactory::global() )
 
 #define MAX_UNDO_REDO 100
@@ -291,6 +294,6 @@ enum VerticalAlignmentType {
 // offsets of the effects in the Effect2 enum accoording to a objType
 const int TxtObjOffset = 0;
 
-typedef QMap<QString, QStringList> CustomListMap;
+typedef QMap<QString, QValueList<KPrPage *> > CustomSlideShowMap;
 
 #endif //GLOBAL_H

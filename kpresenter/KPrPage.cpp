@@ -513,7 +513,8 @@ QString KPrPage::oasisNamePage( int posPage ) const
     return  ( m_manualTitle.isEmpty() ?  QString( "page%1" ).arg( posPage ) : m_manualTitle );
 }
 
-bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter) const
+bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, 
+                             int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter, QMap<QString, int> &pageNames ) const
 {
     if ( isMasterPage() )
     {
@@ -546,9 +547,16 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
     {
         //store use to save picture and co
         xmlWriter.startElement( "draw:page" );
-        QString namePage = oasisNamePage(posPage);
 
-        xmlWriter.addAttribute( "draw:name", namePage ); //we must store a name
+        QString drawName( m_manualTitle );
+        QRegExp rx( "^page[0-9]+$" );
+        if ( drawName.isEmpty() || pageNames.contains( drawName ) || rx.search( drawName ) != -1 )
+        {
+            drawName = "page" + QString::number( posPage );
+        }
+        pageNames.insert( drawName, posPage );
+        xmlWriter.addAttribute( "draw:name", drawName ); //we must store a name
+        xmlWriter.addAttribute( "koffice:name", m_manualTitle ); // so that we can have the same name for different pages
         xmlWriter.addAttribute( "draw:id", "page" + QString::number( posPage ) );
         xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
 

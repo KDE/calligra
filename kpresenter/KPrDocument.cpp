@@ -595,8 +595,15 @@ QDomDocument KPrDocument::saveXML()
     {
         if ( !m_customListSlideShow.isEmpty() )
         {
+            QMap<KPrPage *, QString> page2name;
+            int pos = 1;
+            for ( QPtrListIterator<KPrPage> it( m_pageList ); it.current(); ++it )
+            {
+                page2name.insert( it.current(), "page" + QString::number( pos++ ) ) ;
+            }
+
             element = doc.createElement( "CUSTOMSLIDESHOWCONFIG" );
-            ListCustomSlideShow::Iterator it;
+            CustomSlideShowMap::Iterator it;
             for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
             {
                 QDomElement slide=doc.createElement("CUSTOMSLIDESHOW");
@@ -605,9 +612,13 @@ QDomDocument KPrDocument::saveXML()
                 QValueListIterator<KPrPage*> itPage ;
                 for( itPage = ( *it ).begin(); itPage != ( *it ).end(); ++itPage )
                 {
-                    int posPage = m_pageList.find(*itPage );
+                    int posPage = m_pageList.find( *itPage );
                     if ( posPage != -1 )
-                        tmp+=( *itPage )->oasisNamePage(posPage+1)+",";
+                    {
+                        if ( itPage != ( *it ).begin() )
+                            tmp += ",";
+                        tmp += page2name[*itPage];
+                    }
                 }
                 slide.setAttribute( "pages", tmp );
                 element.appendChild(slide);
@@ -1023,24 +1034,31 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     int partIndexObj = 0;
 //save page
 
+    QMap<QString, int> pageNames;
     if ( saveOnlyPage != -1 )
     {
-        m_pageList.at( saveOnlyPage )->saveOasisPage( store, contentTmpWriter, ( saveOnlyPage+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
+        m_pageList.at( saveOnlyPage )->saveOasisPage( store, contentTmpWriter, ( saveOnlyPage+1 ), savingContext, indexObj, partIndexObj , manifestWriter, pageNames );
     }
     else
     {
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         {
-            m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
+            m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter, pageNames );
         }
     }
     if ( !_duplicatePage )
     {
-        m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter );
+        m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
     }
     if ( saveOnlyPage == -1 ) //don't save setting when we save on page
     {
-        saveOasisPresentationSettings( contentTmpWriter );
+        QMap<int, QString> page2name;
+        QMap<QString, int>::ConstIterator it( pageNames.begin() );
+        for ( ; it != pageNames.end(); ++it )
+        {
+            page2name.insert( it.data(), it.key() );
+        }
+        saveOasisPresentationSettings( contentTmpWriter, page2name );
     }
 
     contentTmpWriter.endElement(); //office:presentation
@@ -1355,18 +1373,31 @@ void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
     for ( QDomNode element = settingsDoc.firstChild(); !element.isNull(); element = element.nextSibling() )
     {
         QDomElement e = element.toElement();
-	QCString tagName = e.tagName().latin1();
+        QCString tagName = e.tagName().latin1();
         //kdDebug()<<" tagName :"<<tagName<<endl;
-        if ( tagName == "show" && e.namespaceURI() == KoXmlNS::presentation)
+        if ( tagName == "show" && e.namespaceURI() == KoXmlNS::presentation )
         {
             //kdDebug()<<" e.attribute(presentation:name) :"<<e.attributeNS( KoXmlNS::presentation, "name", QString::null)<< " e.attribute(presentation:pages) :"<<e.attributeNS( KoXmlNS::presentation, "pages", QString::null)<<endl;
+            QString name = e.attributeNS( KoXmlNS::presentation, "name", QString::null );
             QStringList tmp = QStringList::split( ",", e.attributeNS( KoXmlNS::presentation, "pages", QString::null) );
-            m_loadingInfo->m_tmpCustomListMap.insert( e.attributeNS( KoXmlNS::presentation, "name", QString::null), tmp );
+            QValueList<KPrPage *> pageList;
+            for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it ) 
+            {
+                if ( m_loadingInfo->m_name2page.contains( *it ) )
+                {
+                    kdDebug(33001) << "slide show " << name << " page = " << *it << endl;
+                    pageList.push_back( m_loadingInfo->m_name2page[*it] );
+                }
+            }
+            if ( ! pageList.empty() )
+            {
+                m_customListSlideShow.insert( name, pageList );
+            }
         }
     }
 }
 
-void KPrDocument::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter )
+void KPrDocument::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter, QMap<int, QString> &page2name )
 {
     //todo don't save when is not value by default (check with oo)
     //FIXME
@@ -1377,16 +1408,16 @@ void KPrDocument::saveOasisPresentationSettings( KoXmlWriter &contentTmpWriter )
     if ( !m_presentationName.isEmpty() )
         contentTmpWriter.addAttribute( "presentation:show",  m_presentationName );
 
-    saveOasisPresentationCustomSlideShow( contentTmpWriter );
+    saveOasisPresentationCustomSlideShow( contentTmpWriter, page2name );
     contentTmpWriter.endElement();
 }
 
-void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter )
+void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter, QMap<int, QString> &page2name )
 {
     if ( m_customListSlideShow.isEmpty() )
         return;
 
-    ListCustomSlideShow::Iterator it;
+    CustomSlideShowMap::Iterator it;
     for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
     {
         contentTmpWriter.startElement( "presentation:show" );
@@ -1397,7 +1428,12 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
         {
             int posPage = m_pageList.find(*itPage );
             if ( posPage != -1 )
-                tmp+=( *itPage )->oasisNamePage(posPage+1)+",";
+            {
+                if ( itPage != ( *it ).begin() )
+                    tmp += ",";
+                //tmp+=( *itPage )->oasisNamePage(posPage+1)+",";
+                tmp += page2name[posPage + 1];
+            }
         }
         contentTmpWriter.addAttribute( "presentation:pages", tmp );
         contentTmpWriter.endElement();
@@ -1537,12 +1573,6 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         return false;
     }
 
-    //load settings
-    QDomNode settings  = KoDom::namedItemNS( body, KoXmlNS::presentation, "settings" );
-    kdDebug()<<"settings :"<<settings.isNull()<<endl;
-    if (!settings.isNull() && _clean /*don't load settings when we copy/paste a page*/)
-        loadOasisPresentationSettings( settings );
-
     // it seems that ooimpress has different paper-settings for every slide.
     // we take the settings of the first slide for the whole document.
     QDomNode drawPage = KoDom::namedItemNS( body, KoXmlNS::draw, "page" );
@@ -1648,9 +1678,19 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
             }
             //only set the manual title if it is different to the draw:id. Only in this case it had one.
             QString str = dp.attributeNS( KoXmlNS::draw, "name", QString::null );
+            m_loadingInfo->m_name2page.insert( str, newpage );
             QString idPage = dp.attributeNS( KoXmlNS::draw, "id", QString::null );
-            if ( str != idPage )
+
+            if ( dp.hasAttributeNS( KoXmlNS::koffice, "name" ) )
+            {
+                str = dp.attributeNS( KoXmlNS::koffice, "name", QString::null );
                 newpage->insertManualTitle(str);
+            }
+            else
+            {
+                if ( str != idPage )
+                    newpage->insertManualTitle(str);
+            }
             context.styleStack().setTypeProperties( "drawing-page" );
 
             newpage->loadOasis( context );
@@ -1667,6 +1707,11 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         }
     }
 
+    //load settings at the end as we need to know what the draw:name of a page is
+    QDomNode settings  = KoDom::namedItemNS( body, KoXmlNS::presentation, "settings" );
+    kdDebug()<<"settings :"<<settings.isNull()<<endl;
+    if (!settings.isNull() && _clean /*don't load settings when we copy/paste a page*/)
+        loadOasisPresentationSettings( settings );
 
     ignoreSticky = TRUE;
     kdDebug()<<" _clean :"<<_clean<<endl;
@@ -1678,7 +1723,6 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         startBackgroundSpellCheck();
 #endif
     }
-    updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap, true );
     kdDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
     if ( !settingsDoc.isNull() )
@@ -2081,7 +2125,6 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
     if(_clean)
     {
         startBackgroundSpellCheck();
-        updateCustomListSlideShow( m_loadingInfo->m_tmpCustomListMap, true );
     }
     if ( m_pageWhereLoadObject == 0 && m_insertFilePage == 0 )
         setModified( false );
@@ -2447,12 +2490,30 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                 m_presentationName=elem.attribute( "name" );
         } else if ( elem.tagName()=="CUSTOMSLIDESHOWCONFIG" ) {
             if ( _clean ) {
+                QMap<QString, KPrPage *> name2page;
+                int pos = 1;
+                for ( QPtrListIterator<KPrPage> it( m_pageList ); it.current(); ++it )
+                {
+                    name2page.insert( "page" + QString::number( pos++ ), it.current() ) ;
+                }
+
                 QDomElement slide=elem.firstChild().toElement();
                 while(!slide.isNull()) {
                     if(slide.tagName()=="CUSTOMSLIDESHOW") {
                         QStringList tmp = QStringList::split( ",", slide.attribute( "pages" ) );
-                        m_loadingInfo->m_tmpCustomListMap.insert( slide.attribute( "name" ), tmp );
-
+                        QValueList<KPrPage *> pageList;
+                        for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it ) 
+                        {
+                            if ( name2page.contains( *it ) )
+                            {
+                                kdDebug(33001) << "slide show " << slide.attribute( "name" ) << " page = " << *it << endl;
+                                pageList.push_back( name2page[*it] );
+                            }
+                        }
+                        if ( ! pageList.empty() )
+                        {
+                            m_customListSlideShow.insert( slide.attribute( "name" ), pageList );
+                        }
                     }
                     slide=slide.nextSibling().toElement();
                 }
@@ -4624,30 +4685,6 @@ void KPrDocument::addWordToDictionary( const QString & word)
     }
 }
 
-CustomListMap KPrDocument::customListSlideShow()
-{
-    CustomListMap listMap;
-    if ( !m_customListSlideShow.isEmpty() )
-    {
-        //kdDebug()<<" m_customListSlideShow is not empty\n";
-        ListCustomSlideShow::Iterator it;
-        for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
-        {
-            QStringList tmp;
-            QValueListIterator<KPrPage*> itPage;
-            QValueListIterator<KPrPage*> itPageEnd = ( *it ).end();
-            for( itPage = ( *it ).begin() ; itPage != itPageEnd ; ++itPage )
-                if ( m_pageList.find(*itPage ) != -1 )
-                {
-                    //kdDebug()<<" add page :"<<itPage.current()->pageTitle()<<endl;
-                    tmp.append( ( *itPage )->pageTitle() );
-                }
-            listMap.insert( it.key(), tmp);
-        }
-    }
-    return listMap;
-}
-
 QValueList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, bool loadOasis )
 {
     QStringList tmp( lst );
@@ -4682,13 +4719,9 @@ QValueList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, boo
 
 }
 
-void KPrDocument::updateCustomListSlideShow( CustomListMap & map, bool loadOasis )
+void KPrDocument::setCustomSlideShows( const CustomSlideShowMap & customSlideShows )
 {
-    m_customListSlideShow.clear();
-    CustomListMap::Iterator it;
-    for ( it = map.begin(); it != map.end(); ++it ) {
-        m_customListSlideShow.insert( it.key(), customListPage( it.data(), loadOasis )  );
-    }
+    m_customListSlideShow = customSlideShows;
     setModified( true );
 }
 
@@ -4697,19 +4730,19 @@ QStringList KPrDocument::presentationList()
     QStringList lst;
     if ( !m_customListSlideShow.isEmpty() )
     {
-        ListCustomSlideShow::Iterator it;
+        CustomSlideShowMap::Iterator it;
         for ( it = m_customListSlideShow.begin(); it != m_customListSlideShow.end(); ++it )
             lst << it.key();
     }
     return lst;
 }
 
-void KPrDocument::addTestCustomSlideShow( const QStringList &lst, KPrView *_view )
+void KPrDocument::testCustomSlideShow( const QValueList<KPrPage *> &pages, KPrView *view )
 {
     delete m_customListTest;
-    m_customListTest = new QValueList<int>( listOfDisplaySelectedSlides( customListPage( lst) ) );
-    if ( _view )
-        _view->screenStartFromFirst();
+    m_customListTest = new QValueList<int>( listOfDisplaySelectedSlides( pages ) );
+    if ( view )
+        view->screenStartFromFirst();
 
 }
 

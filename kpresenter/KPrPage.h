@@ -525,7 +525,8 @@ public:
 
     QDomElement save( QDomDocument &doc );
 
-    bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
+    bool saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage, KoSavingContext& context, 
+                       int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter, QMap<QString, int> &pageNames ) const;
     QString saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const;
     QString saveOasisPageEffect() const;
     bool saveOasisNote( KoXmlWriter &xmlWriter ) const;
