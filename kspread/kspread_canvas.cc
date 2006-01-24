@@ -2900,7 +2900,8 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
        (_ev->key() != Key_Left) &&
        (_ev->key() != Key_Home) &&
        (_ev->key() != Key_Enter) &&
-       (_ev->key() != Key_Return) )
+       (_ev->key() != Key_Return) &&
+       (_ev->key() != KGlobalSettings::contextMenuKey()))
   {
     QWidget::keyPressEvent( _ev );
     return;
@@ -2911,6 +2912,14 @@ void Canvas::keyPressEvent ( QKeyEvent * _ev )
   _ev->accept();
 
   d->view->doc()->emitBeginOperation(false);
+  if ( _ev->key() == KGlobalSettings::contextMenuKey() ) {
+    int row = markerRow();
+    int col = markerColumn();
+    KoPoint kop(sheet->columnPos(col, this), sheet->rowPos(row, this));
+    QPoint p = d->view->doc()->zoomPoint(kop);
+    p = mapToGlobal(p);
+    d->view->openPopupMenu( p );
+  }
   switch( _ev->key() )
   {
    case Key_Return:
