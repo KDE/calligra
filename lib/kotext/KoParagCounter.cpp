@@ -770,7 +770,7 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     m_cache.counterFormat = counterFormat( paragraph );
     m_cache.counterFormat->addRef();
     m_cache.width = 0;
-    if ( m_style != STYLE_NONE )
+    if ( m_style != STYLE_NONE || m_numbering == NUM_FOOTNOTE)
     {
         QString text = m_cache.text;
         if ( m_style == STYLE_CUSTOMBULLET && !text.isEmpty() )
