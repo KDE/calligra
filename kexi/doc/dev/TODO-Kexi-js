@@ -788,7 +788,7 @@ TableView TODO (before 1.0)
 
 Table Designer TODO
 - i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)
-
+- add setting for default length of the text type
 
 Table Column Lookup XML Format:
 <rowsource>

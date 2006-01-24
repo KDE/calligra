@@ -1470,7 +1470,9 @@ void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KoProperty::Set& set
 	set["caption"].setVisible( !asterisk );
 #endif
 	set["alias"].setVisible( !asterisk );
+#ifdef KEXI_NO_UNFINISHED
 	set["sorting"].setVisible( !asterisk );
+#endif
 	propertySetReloaded(true);
 }
 
@@ -1515,6 +1517,9 @@ KexiQueryDesignerGuiEditor::createPropertySet( int row,
 	nlist << i18n("None") << i18n("Ascending") << i18n("Descending");
 	set->addProperty(prop = new KoProperty::Property("sorting", 
 		slist, nlist, slist[0], i18n("Sorting")));
+#ifdef KEXI_NO_UNFINISHED
+	prop->setVisible(false);
+#endif
 
 	set->addProperty(prop = new KoProperty::Property("criteria", QVariant(QString::null)) );
 	prop->setVisible(false);

@@ -103,7 +103,7 @@ UICIMPLS =
 SRCMOC	=	
 OBJMOC	=	
 DIST	=	
-TARGET	=	$(KDEDIR)/lib/kexisql2_d.dll
+TARGET	=	$(KDEDIR)/bin/kexisql2_d.dll
 
 ####### Implicit rules
 
@@ -148,9 +148,9 @@ $(TARGET):  $(UICDECLS) $(OBJECTS) $(OBJMOC)
 	  $(OBJECTS) $(OBJMOC) $(LIBS)
 <<
 
-sqlite2:	obj/shell.obj $(KDEDIR)/lib/kexisql2.lib
+sqlite2:	obj/shell.obj $(KDEDIR)/bin/kexisql2.lib
 	link $(READLINE_FLAGS) $(LIBPTHREAD) \
-		/OUT:$(KDEDIR)/bin/ksqlite2.exe obj/shell.obj $(KDEDIR)/lib/kexisql2.lib $(LIBREADLINE)
+		/OUT:$(KDEDIR)/bin/ksqlite2.exe obj/shell.obj $(KDEDIR)/bin/kexisql2.lib $(LIBREADLINE)
 
 mocables: $(SRCMOC)
 uicables: $(UICIMPLS) $(UICDECLS)
