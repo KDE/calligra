@@ -48,20 +48,25 @@
 </authorgroup>
 
 <copyright>
-
 <year>2002</year>
 <holder>Pamela Roberts</holder>
 </copyright>
-<copyright>
 
+<copyright>
 <year>2005</year>
 <holder>Anne-Marie Mahfouf</holder>
 </copyright>
+
+<copyright>
+<year>2006</year>
+<holder>Gary Cramblitt</holder>
+</copyright>
+
 <!-- Translators: put here the copyright notice of the translation -->
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2006-01-23</date>
+<date>2006-01-24</date>
 <releaseinfo>1.5.0</releaseinfo>
 
 

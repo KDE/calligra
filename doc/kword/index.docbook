@@ -52,16 +52,27 @@
 <firstname>Mike</firstname>
 <surname>McBride</surname>
 </author>
+<author>
+<firstname>Gary</firstname>
+<surname>Cramblitt</surname>
+<affiliation>
+<address><email>garycramblitt@comcast.net</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 <copyright>
 <year>2000-2006</year>
 <holder>Michael McBride</holder>
 </copyright>
+<copyright>
+<year>2006</year>
+<holder>Gary Cramblitt</holder>
+</copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2006-1-23</date>
+<date>2006-1-24</date>
 <releaseinfo>1.5</releaseinfo>
 
 <abstract>
