@@ -158,7 +158,7 @@ will look like.</action></para></listitem>
 <guimenuitem>Document Information</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="commands-dialogs-general-documentinformation"><guilabel>Document
+linkend="commands-dialogs-misc-documentinformation"><guilabel>Document
 Information</guilabel> dialog</link>.</action> This dialog can be used to add
 various information to the image, like title, subject, keywords, author
 information, and any other information you want to save with the
@@ -326,8 +326,10 @@ palettes.</action></para></listitem>
 <guisubmenu>Resources</guisubmenu>
 <guimenuitem>Add New Palette...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Add Palette</guilabel>
-dialog.</action> You can create a custom palette here.</para></listitem>
+<listitem><para><action>Opens the <link
+linkend="dialogs-misc-addpalette"><guilabel>Add Palette</guilabel>
+dialog</link>.</action> You can create a custom palette
+here.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -337,7 +339,9 @@ dialog.</action> You can create a custom palette here.</para></listitem>
 <guimenuitem>Edit Palette...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <guilabel>Edit Palette</guilabel>
-dialog.</action> In this dialog, you can edit existing color palettes.</para>
+dialog.</action> Choose a palette to edit from this list. You will then be
+given the same dialog as with <guilabel>Add Palette</guilabel>, with the
+difference that you edit the chosen palette instead of adding a new one.</para>
 </listitem></varlistentry>
 
 </variablelist>
@@ -744,15 +748,6 @@ clockwise.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
-<guimenuitem>Variations...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Variations</guilabel>
-dialog.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Image</guimenu>
 <guimenuitem>Convert Image Type...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
@@ -800,92 +795,7 @@ or both.</para></listitem>
 
 </sect2>
 
-<!-- ====== Adjust ============================================== -->
-
-<!-- Auto Contrast, Brightness/Contrast, Desaturate and Color Adjustment is now in menu Flter,
- and Variations in menu Image, but where is Gamma Correction?
-<sect2 id="commands-menus-adjust">
-<title>The <guimenu>Adjust</guimenu> Menu</title>
-<para>
-<variablelist>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Adjust</guimenu>
-<guisubmenu>Adjust</guisubmenu>
-</menuchoice></term>
-<listitem><para>Contains various options for changing the
-colors in your image.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Adjust</guimenu>
-<guisubmenu>Adjust</guisubmenu>
-<guimenuitem>Auto Contrast</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Changes the colors to obtain an image with as
-much contrast as possible.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Adjust</guimenu>
-<guisubmenu>Adjust</guisubmenu>
-<guimenuitem>Brightness/Contrast...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the
-<guilabel>Brightness/Contrast</guilabel> dialog.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Adjust</guimenu>
-<guisubmenu>Adjust</guisubmenu>
-<guimenuitem>Color Adjustment...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Color Adjustment</guilabel>
-dialog.</action> You can modify the red, green, and blue levels
-of the current image there.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Adjust</guimenu>
-<guisubmenu>Adjust</guisubmenu>
-<guimenuitem>Desaturate</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Desaturates the image.</action> This
-will effectively convert the current image to grayscale.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Adjust</guimenu>
-<guisubmenu>Adjust</guisubmenu>
-<guimenuitem>Gamma Correction...</guimenuitem>
-</menuchoice></term>	
-<listitem><para><action>Opens the
-<guilabel>Gamma Correction</guilabel> dialog.</action> You can
-change the gamma of the current image there.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Adjust</guimenu>
-<guimenuitem>Variations</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the
-<guilabel>Variations</guilabel> dialog.</action></para></listitem>
-</varlistentry>
-
-</variablelist>
-</para>
-
-</sect2>
--->
 <!-- ====== Layer =============================================== -->
-
 
 <sect2 id="commands-menus-layer">
 <title>The <guimenu>Layer</guimenu> Menu</title>
@@ -1118,15 +1028,6 @@ layer.</action></para></listitem>
 the current layer in the image editing window.</action></para></listitem>
 </varlistentry>
 
-<!--varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guimenuitem>Link/Unlink Layer</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Links or unlinks the current
-layer.</action></para></listitem>
-</varlistentry-->
-
 <varlistentry>
 <term><menuchoice>
 <shortcut><keycombo
@@ -1237,16 +1138,6 @@ action="simul">&Ctrl;&Shift;<keycap>E</keycap></keycombo></shortcut>
 </menuchoice></term>
 <listitem><para><action>Merges all visible layers.</action></para></listitem>
 </varlistentry>
-
-<!--varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guimenuitem>Merge Linked Layers</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Merges all linked layers.</action> The
-layers will be merged and placed at the position of the lowest
-layer marked as linked.</para></listitem>
-</varlistentry-->
 
 <varlistentry>
 <term><menuchoice>
@@ -1363,24 +1254,6 @@ current layer.</para></listitem>
 dialog.</action> You can select the X and Y angles to shear
 by.</para></listitem>
 </varlistentry>
-
-<!--varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guisubmenu>Watercolors</guisubmenu>
-</menuchoice></term>
-<listitem><para>Contains options for working
-with watercolors.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guisubmenu>Watercolors</guisubmenu>
-<guimenuitem>Initialize Texture</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>?</action></para></listitem>
-</varlistentry-->
 
 </variablelist>
 </para>
@@ -1972,25 +1845,6 @@ dialog.</action> You can select a number of tests to run (default is all
 tests) and how many times the tests should be run.</para></listitem>
 </varlistentry>
 
-<!---varlistentry>
-<term><menuchoice>
-<guimenu>Tools</guimenu>
-<guimenuitem>Scan Image...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the
-<guilabel>Acquire Image</guilabel> dialog.</action> This
-dialog is common to all applications that make use of the SANE
-interface.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Tools</guimenu>
-<guimenuitem>Screenshot...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the Screenshot dialog.</action></para></listitem>
-</varlistentry-->
-
 </variablelist>
 </para>
 
@@ -2072,36 +1926,6 @@ toolbar.</action></para></listitem>
 <listitem><para><action>Displays or hides the
 <guilabel>Brushes and Stuff</guilabel> toolbar.</action></para></listitem>
 </varlistentry>
-
-<!--varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guisubmenu>Toolbars</guisubmenu>
-<guimenuitem>Paint Tool Options</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Displays or hides the <guilabel>Paint Tool
-Options</guilabel> toolbar.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guisubmenu>Toolbars</guisubmenu>
-<guimenuitem>Painting Tools</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Displays or hides the <guilabel>Painting
-Tools</guilabel> toolbar.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guisubmenu>Toolbars</guisubmenu>
-<guimenuitem>Selection Tools</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Displays or hides the <guilabel>Selection
-Tools</guilabel> toolbar.</action></para></listitem>
-</varlistentry-->
 
 <varlistentry>
 <term><menuchoice>

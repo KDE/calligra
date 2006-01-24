@@ -2,51 +2,54 @@
 <title>Dialogs</title>
 
 <para>
-This section will describe &krita;'s dialog windows.
+This section describes &krita;'s dialog windows.
 </para>
 
-<sect2 id="commands-dialogs-general">
-<title>General dialogs</title>
+<sect2 id="commands-dialogs-image">
+<title>Dialogs for working with images</title>
 
-<sect3 id="commands-dialogs-general-documentinformation">
-<title>The Document Information dialog</title>
+<sect3 id="commands-dialogs-image-convertimagetype">
+<title>The Convert Image Type dialog</title>
 
 <para>
 <screenshot>
-<screeninfo>The Document Information dialog</screeninfo>
+<screeninfo>The Convert Image Type dialog</screeninfo>
 <mediaobject>
 <imageobject>
-<imagedata fileref="dialogs-documentinformation.png" format="PNG" />
+<imagedata fileref="dialogs-convertimagetype.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Document Information dialog</phrase>
+<phrase>The Convert Image Type dialog</phrase>
 </textobject>
-<caption><para>The Document Information dialog</para></caption>
+<caption><para>The Convert Image Type dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
 
 <para>
-This dialog is the same as in other &koffice; programs. You can enter various
-information about your document here, which will be saved with the document so
-that you can retrieve it later to review or edit.
+This dialog allows you to convert your image from one color space to another.
+The <guilabel>Target color space</guilabel> and <guilabel>Destination ICM
+profile</guilabel> are used to set to which colorspace and profile the image
+will be converted. You can influence how this conversion is done with the
+<guilabel>Rendering Intent</guilabel> option.
 </para>
-
 <para>
-On the <guilabel>General</guilabel> tab, you can enter the title, subject and
-keywords, as well as an abstract. On the bottom of this tab, some statistical
-information is displayed. On the <guilabel>Author</guilabel> tab, you can
-store information about yourself. The third tab, <guilabel>User-defined
-Metadata</guilabel>, allows you to store any other information.
+With <guilabel>Perceptual</guilabel> conversion, the source color space is
+mapped linearly to the destination color space. If the destination color space
+<quote>accepts</quote> a lesser color range than the source, shifts may occur
+because the range is compressed. <guilabel>Relative colorimetric</guilabel>
+conversion converts every color to the closest color in the destination color
+space. This may mean that a certain color range is mapped to one color in the
+destination color space. <guilabel>Saturation</guilabel> means that fully
+saturated colors will remain fully saturated, even if this means that the
+actual color is changed. With <guilabel>Absolute colorimetric</guilabel>
+conversion, the same approach is used as with <guilabel>Relative
+colorimetric</guilabel>, but the white point of the color space (the value
+designating the color white) is not changed to match the new color space,
+which may result in unwanted changes to near colors.
 </para>
 
 </sect3>
-
-</sect2>
-
-<sect2 id="commands-dialogs-image">
-<title>Dialogs for image editing</title>
-
 
 <sect3 id="commands-dialogs-image-imageproperties">
 <title>The Image Properties dialog</title>
@@ -154,6 +157,56 @@ the <guilabel>Custom</guilabel> spin box.
 
 </sect3>
 
+<sect3 id="commands-dialogs-image-separateimage">
+<title>The Separate Image dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Separate Image dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-separateimage.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Separate Image dialog</phrase>
+</textobject>
+<caption><para>The Separate Image dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can separate (part of) your image. Every color component
+(channel) will be put into a separate layer or image. At the top of the
+dialog, the current color model is shown. Below that, a couple of options can
+be set.
+</para>
+<para>
+Under <guilabel>Source</guilabel>, you can choose what part of the image to
+separate. The three options are <guilabel>Current layer</guilabel>, which
+(obviously) only uses the currently selected layer, <guilabel>Flatten all
+layers before separation</guilabel>, which uses the entire image, and
+<guilabel>Flatten all visible layers before separation</guilabel>, which uses
+all visible layers.
+</para>
+<para>
+Under <guilabel>Output</guilabel>, you can choose where the result of the
+separation should be written to: either to a couple of layers, or to a couple
+of images.
+</para>
+<para>
+Under <guilabel>Alpha Options</guilabel>, you can choose what should be done
+with the alpha channel of the selected layer(s). It can be copied to each new
+channel, be discarded, or separated on its own.
+</para>
+<para>
+The two options at the bottom of the dialog, finally, determine whether the
+source should be downscaled to 8 bit colors (if it contains more), and if the
+output should be in color (default is to separate the channels to grayscale
+values).
+</para>
+</sect3>
+
 <sect3 id="commands-dialogs-image-shearimage">
 <title>The Shear Image dialog</title>
 
@@ -182,103 +235,10 @@ The X and Y shearing angles can be set using the two spin boxes.
 
 </sect3>
 
-
-<sect3 id="commands-dialogs-image-separateimage">
-<title>The Separate Image dialog</title>
-
-<para>
-<screenshot>
-<screeninfo>The Separate Image dialog</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="dialogs-separateimage.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The Separate Image dialog</phrase>
-</textobject>
-<caption><para>The Separate Image dialog</para></caption>
-</mediaobject>
-</screenshot>
-</para>
-
-<para>
-With this dialog, you can separate (part of) your image. Every color component
-(channel) will be put into a separate layer or image. At the top of the dialog, the current color model is shown. Below that, a couple of options can be set.
-</para>
-<para>
-Under <guilabel>Source</guilabel>, you can choose what part of the image to
-separate. The three options are <guilabel>Current layer</guilabel>, which
-(obviously) only uses the currently selected layer, <guilabel>Flatten all
-layers before separation</guilabel>, which uses the entire image, and
-<guilabel>Flatten all visible layers before separation</guilabel>, which uses
-all visible layers.
-</para>
-<para>
-Under <guilabel>Output</guilabel>, you can choose where the result of the
-separation should be written to: either to a couple of layers, or to a couple
-of images.
-</para>
-<para>
-Under <guilabel>Alpha Options</guilabel>, you can choose what should be done
-with the alpha channel of the selected layer(s). It can be copied to each new
-channel, be discarded, or separated on its own.
-</para>
-<para>
-The two options at the bottom of the dialog, finally, determine whether the
-source should be downscaled to 8 bit colors (if it contains more), and if the
-output should be in color (default is to separate the channels to grayscale
-values).
-</para>
-</sect3>
-
-
-<sect3 id="commands-dialogs-image-convertimagetype">
-<title>The Convert Image Type dialog</title>
-
-<para>
-<screenshot>
-<screeninfo>The Convert Image Type dialog</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="dialogs-convertimagetype.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The Convert Image Type dialog</phrase>
-</textobject>
-<caption><para>The Convert Image Type dialog</para></caption>
-</mediaobject>
-</screenshot>
-</para>
-
-<para>
-This dialog allows you to convert your image from one color space to another.
-The <guilabel>Target color space</guilabel> and <guilabel>Destination ICM
-profile</guilabel> are used to set to which colorspace and profile the image
-will be converted. You can influence how this conversion is done with the
-<guilabel>Rendering Intent</guilabel> option.
-</para>
-<para>
-With <guilabel>Perceptual</guilabel> conversion, the source color space is
-mapped linearly to the destination color space. If the destination color space
-<quote>accepts</quote> a lesser color range than the source, shifts may occur
-because the range is compressed. <guilabel>Relative colorimetric</guilabel>
-conversion converts every color to the closest color in the destination color
-space. This may mean that a certain color range is mapped to one color in the
-destination color space. <guilabel>Saturation</guilabel> means that fully
-saturated colors will remain fully saturated, even if this means that the
-actual color is changed. With <guilabel>Absolute colorimetric</guilabel>
-conversion, the same approach is used as with <guilabel>Relative
-colorimetric</guilabel>, but the white point of the color space (the value
-designating the color white) is not changed to match the new color space,
-which may result in unwanted changes to near colors.
-</para>
-
-</sect3>
-
 </sect2>
 
 <sect2 id="commands-dialogs-layers">
-<title>Dialogs for layer options</title>
+<title>Dialogs for working with layers</title>
 
 <para>
 This section is to be written.
@@ -287,12 +247,81 @@ This section is to be written.
 </sect2>
 
 <sect2 id="commands-dialogs-filters">
-<title>Dialogs for filter options</title>
+<title>Dialogs for working with filters</title>
 
 <para>
 This section is to be written.
 </para>
 
 </sect2>
+
+<sect2 id="commands-dialogs-misc">
+<title>Miscellaneous dialogs</title>
+
+<sect3 id="commands-dialogs-misc-documentinformation">
+<title>The Document Information dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Document Information dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-documentinformation.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Document Information dialog</phrase>
+</textobject>
+<caption><para>The Document Information dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog is the same as in other &koffice; programs. You can enter various
+information about your document here, which will be saved with the document so
+that you can retrieve it later to review or edit.
+</para>
+
+<para>
+On the <guilabel>General</guilabel> tab, you can enter the title, subject and
+keywords, as well as an abstract. On the bottom of this tab, some statistical
+information is displayed. On the <guilabel>Author</guilabel> tab, you can
+store information about yourself. The third tab, <guilabel>User-defined
+Metadata</guilabel>, allows you to store any other information.
+</para>
+</sect3>
+
+<sect3 id="dialogs-misc-addpalette">
+<title>The Add Palette dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Add Palette dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-addpalette.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Add Palette dialog</phrase>
+</textobject>
+<caption><para>The Add Palette dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can add a custom color palette to &krita;. Fill in the
+name for your palette in the text field at the top. Then make the palette: use
+the button <guibutton>Add New Color...</guibutton> to add a color to the palette
+and <guibutton>Remove Selected Color</guibutton> to remove the currently
+selected color. Click the button <guibutton>Add to Predefined
+Palettes</guibutton> to add your newly created palette to the palette list, or
+just choose <guibutton>OK</guibutton> when you're done.
+</para>
+
+</sect3>
+
+</sect2>
+
 
 </sect1>
