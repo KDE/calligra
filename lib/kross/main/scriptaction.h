@@ -51,6 +51,9 @@ namespace Kross { namespace Api {
             /// The scriptfile which should be executed.
             //Q_PROPERTY(QString file READ getFile WRITE setFile)
 
+            /// The description for this \a ScriptAction .
+            Q_PROPERTY(QString description READ getDescription WRITE setDescription)
+
         public:
 
             /// Shared pointer to implement reference-counting.
@@ -79,6 +82,16 @@ namespace Kross { namespace Api {
              * Destructor.
              */
             virtual ~ScriptAction();
+
+            /**
+             * \return the description for this \a ScriptAction has.
+             */
+            const QString getDescription() const;
+
+            /**
+             * Set the description \p description for this \a ScriptAction .
+             */
+            void setDescription(const QString& description);
 
             /**
              * Set the name of the interpreter which will be used

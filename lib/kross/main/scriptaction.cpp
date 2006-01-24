@@ -46,6 +46,8 @@ namespace Kross { namespace Api {
             */
             QStringList logs;
 
+            QString description;
+
             QValueList<ScriptActionCollection*> collections;
     };
 
@@ -60,17 +62,16 @@ ScriptAction::ScriptAction(const QString& file)
 
     KURL url(file);
     if(url.isLocalFile()) {
-        setFile( file );
-        setText( url.fileName() );
-        setIcon( KMimeType::iconForURL(url) );
+        setFile(file);
+        setText(url.fileName());
+        setIcon(KMimeType::iconForURL(url));
     }
     else {
-        setText( file );
+        setText(file);
     }
 
-    setToolTip( file );
-    setWhatsThis( file );
-    setEnabled( false );
+    setDescription(file);
+    setEnabled(false);
 }
 
 ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& element)
@@ -82,6 +83,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
 
     QString name = element.attribute("name");
     QString text = element.attribute("text");
+    QString description = element.attribute("description");
     QString file = element.attribute("file");
     QString icon = element.attribute("icon");
 
@@ -105,9 +107,9 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         setInterpreterName( interpreter );
 
     if(file.isNull()) {
-        setToolTip( name );
-        setWhatsThis( name );
         setCode( element.text().stripWhiteSpace() );
+        if(description.isNull())
+            description = text;
     }
     else {
         QDir dir = QFileInfo(scriptconfigfile).dir(true);
@@ -116,16 +118,19 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         file = fi.absFilePath();
         setEnabled(fi.exists());
         setFile(file);
-        setToolTip(file);
-        setWhatsThis(file);
         if(icon.isNull())
             icon = KMimeType::iconForURL( KURL(file) );
+        if(description.isNull())
+            description = file;
+        else
+            description += QString("<br>%1").arg(file);
     }
 
-    ScriptContainer::setName( name );
-    KAction::setName( name.latin1() );
-    KAction::setText( text );
-    KAction::setIcon( icon );
+    ScriptContainer::setName(name);
+    KAction::setName(name.latin1());
+    KAction::setText(text);
+    setDescription(description);
+    KAction::setIcon(icon);
 
     // connect signal
     connect(this, SIGNAL(activated()), this, SLOT(activate()));
@@ -136,6 +141,18 @@ ScriptAction::~ScriptAction()
     //kdDebug() << QString("Kross::Api::ScriptAction::~ScriptAction() name='%1' text='%2'").arg(name()).arg(text()) << endl;
     detachAll();
     delete d;
+}
+
+const QString ScriptAction::getDescription() const
+{
+    return d->description;
+}
+
+void ScriptAction::setDescription(const QString& description)
+{
+    d->description = description;
+    setToolTip( description );
+    setWhatsThis( description );
 }
 
 void ScriptAction::setInterpreterName(const QString& name)
