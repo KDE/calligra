@@ -9,6 +9,7 @@
   <!ENTITY great SYSTEM "great-presentations.docbook">
   <!ENTITY menus SYSTEM "menus.docbook">
   <!ENTITY options SYSTEM "options.docbook">
+  <!ENTITY a11y SYSTEM "a11y.docbook">
   <!ENTITY faq SYSTEM "faq.docbook">
   <!ENTITY % English "INCLUDE" > <!-- change language only here -->
 ]>
@@ -42,10 +43,18 @@
 </affiliation>
 </author>
 
+<author>
+<firstname>Gary</firstname>
+<surname>Cramblitt</surname>
+<affiliation>
+<address><email>garycramblitt@comcast.net</email></address>
+</affiliation>
+</author>
+
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
-<date>2005-12-02</date>
+<date>2006-01-24</date>
 <releaseinfo>1.5</releaseinfo>
 
 <copyright>
@@ -61,6 +70,11 @@
 <copyright>
 <year>2005</year>
 <holder>Anne-Marie Mahfouf</holder>
+</copyright>
+
+<copyright>
+<year>2006</year>
+<holder>Gary Cramblitt</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
@@ -157,6 +171,8 @@ License.
 &menus;
 
 &options;
+
+&a11y;
 
 &faq;
 
