@@ -28,8 +28,10 @@
 
 #include "KSpreadCellIface.h"
 
+#include "kspread_doc.h"
 #include "kspread_sheet.h"
 #include "kspread_value.h"
+#include "valueconverter.h"
 
 using namespace KSpread;
 
@@ -62,7 +64,7 @@ QString CellIface::text() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->value().asString();
+    return m_sheet->doc()->converter()->asString (cell->value()).asString();
 }
 
 void CellIface::setText( const QString& text )
@@ -120,7 +122,7 @@ double CellIface::value() const
 {
     if( !m_sheet ) return 0.0;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->value().asFloat();
+    return m_sheet->doc()->converter()->asFloat (cell->value()).asFloat();
 }
 
 void CellIface::setBgColor(const QString& _c)
