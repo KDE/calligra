@@ -55,6 +55,8 @@
 
 #define NO_DSWIZARD
 
+//! @todo #define KEXI_SHOW_SPLITTER_WIDGET
+
 KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 	const char *name, bool /*dbAware*/)
  : KexiDataAwareView( mainWin, parent, name )
@@ -119,8 +121,10 @@ KexiFormView::KexiFormView(KexiMainWindow *mainWin, QWidget *parent,
 		plugSharedAction("formpart_layout_hbox", KFormDesigner::FormManager::self(), SLOT(layoutHBox()) );
 		plugSharedAction("formpart_layout_vbox", KFormDesigner::FormManager::self(), SLOT(layoutVBox()) );
 		plugSharedAction("formpart_layout_grid", KFormDesigner::FormManager::self(), SLOT(layoutGrid()) );
+#ifdef KEXI_SHOW_SPLITTER_WIDGET
 		plugSharedAction("formpart_layout_hsplitter", KFormDesigner::FormManager::self(), SLOT(layoutHSplitter()) );
 		plugSharedAction("formpart_layout_vsplitter", KFormDesigner::FormManager::self(), SLOT(layoutVSplitter()) );
+#endif
 		plugSharedAction("formpart_break_layout", KFormDesigner::FormManager::self(), SLOT(breakLayout()) );
 
 		plugSharedAction("formpart_format_raise", KFormDesigner::FormManager::self(), SLOT(bringWidgetToFront()) );

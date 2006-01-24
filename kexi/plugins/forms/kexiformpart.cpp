@@ -52,6 +52,8 @@
 #include "kexiformpart.h"
 #include "kexidatasourcepage.h"
 
+//! @todo #define KEXI_SHOW_SPLITTER_WIDGET
+
 KFormDesigner::WidgetLibrary* KexiFormPart::static_formsLibrary = 0L;
 
 //! @internal
@@ -178,10 +180,12 @@ void KexiFormPart::initInstanceActions()
 		QString::null, 0, "formpart_layout_vbox"));
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"),
 		QString::null, 0, "formpart_layout_grid"));
+#ifdef KEXI_SHOW_SPLITTER_WIDGET
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in &Splitter"),
 		QString::null, 0, "formpart_layout_hsplitter"));
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in Splitter"),
 		QString::null, 0, "formpart_layout_vsplitter"));
+#endif
 
 	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString::null, 0, "formpart_break_layout");
 /*

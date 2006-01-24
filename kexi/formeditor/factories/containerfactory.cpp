@@ -400,8 +400,10 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	addClass(wGrid);
 
 	KFormDesigner::WidgetInfo *wSplitter = new KFormDesigner::WidgetInfo(this);
+//! @todo horizontal/vertical splitter icons
 	wSplitter->setPixmap("frame");
-	wSplitter->setClassName("QSplitter");
+	wSplitter->setClassName("Splitter");
+	wSplitter->addAlternateClassName("QSplitter");
 	wSplitter->setName(i18n("Splitter"));
 	wSplitter->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "splitter"));
@@ -409,6 +411,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	addClass(wSplitter);
 
 	KFormDesigner::WidgetInfo *wHFlow = new KFormDesigner::WidgetInfo(this);
+//! @todo hflow icon
 	wHFlow->setPixmap("frame");
 	wHFlow->setClassName("HFlow");
 	wHFlow->setName(i18n("Row Layout"));
@@ -418,6 +421,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	addClass(wHFlow);
 
 	KFormDesigner::WidgetInfo *wVFlow = new KFormDesigner::WidgetInfo(this);
+//! @todo vflow icon
 	wVFlow->setPixmap("frame");
 	wVFlow->setClassName("VFlow");
 	wVFlow->setName(i18n("Column Layout"));
