@@ -7,7 +7,7 @@ KROSSDIR = kross
 endif
 
 if compile_kexionly
-SUBDIRS = koproperty $(KROSSDIR)
+SUBDIRS = koproperty kofficecore kofficeui $(KROSSDIR)
 else
 SUBDIRS = store kwmf kofficecore kofficeui kotext \
           $(KOPAINTERDIR) kformula koproperty kopalette $(KROSSDIR)
