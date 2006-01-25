@@ -511,8 +511,8 @@ void *sqlite3_commit_hook(sqlite3*, int(*)(void*), void*);
 int sqlite3_open(
   const char *filename,   /* Database filename (UTF-8) */
   sqlite3 **ppDb,         /* OUT: SQLite db handle */
-  int exclusiveFlag,      /* If SQLITE_OPEN_READONLY, readonly mode is used, 
-                          /* If SQLITE_OPEN_READ_WRITE_LOCKED, exclusive read/write access is required, 
+  int exclusiveFlag,      /* If SQLITE_OPEN_READONLY, readonly mode is used, */
+                          /* If SQLITE_OPEN_READ_WRITE_LOCKED, exclusive read/write access is required, */
                           /* If SQLITE_OPEN_WRITE_LOCKED, exclusive write access is required, 
                              If SQLITE_OPEN_NO_LOCKED, no locking is performed. */
   int allowReadonly       /* If 1 and read/write opening fails, 
@@ -522,8 +522,8 @@ int sqlite3_open(
 int sqlite3_open16(
   const void *filename,   /* Database filename (UTF-16) */
   sqlite3 **ppDb,         /* OUT: SQLite db handle */
-  int exclusiveFlag,      /* If SQLITE_OPEN_READONLY, readonly mode is used, 
-                          /* If SQLITE_OPEN_READ_WRITE_LOCKED, exclusive read/write access is required, 
+  int exclusiveFlag,      /* If SQLITE_OPEN_READONLY, readonly mode is used, */
+                          /* If SQLITE_OPEN_READ_WRITE_LOCKED, exclusive read/write access is required, */
                           /* If SQLITE_OPEN_WRITE_LOCKED, exclusive write access is required, 
                              If SQLITE_OPEN_NO_LOCKED, no locking is performed. */
   int allowReadonly       /* If 1 and read/write opening fails, 

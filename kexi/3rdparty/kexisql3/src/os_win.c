@@ -93,7 +93,10 @@ int sqlite3OsOpenReadWrite(
       NULL
     );
     if (!allowReadonly && GetLastError()==ERROR_SHARING_VIOLATION) {
-      return exclusiveFlag==2 ? SQLITE_CANTOPEN_WITH_LOCKED_READWRITE
+      if (exclusiveFlag==SQLITE_OPEN_NO_LOCKED)
+        return SQLITE_CANTOPEN;
+      return exclusiveFlag==SQLITE_OPEN_READ_WRITE_LOCKED 
+             ? SQLITE_CANTOPEN_WITH_LOCKED_READWRITE
              : SQLITE_CANTOPEN_WITH_LOCKED_WRITE;
     }
   }
