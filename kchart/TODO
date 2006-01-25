@@ -67,7 +67,7 @@ Item								   Prio Status
      - Enable settings in the config dialog.				done
      - Read and write the values from the axis parameters		done
      - Do it in the wizard as well					done
-  + 101490: Error in drawing charts with logarithmic scale.	      1	----
+  + 101490: Error in drawing charts with logarithmic scale.	      1	DONE
        Fixed by new KDChart version (hopefully)
   + 108461: Bug in generation of HiLo charts			      1 DONE
 
