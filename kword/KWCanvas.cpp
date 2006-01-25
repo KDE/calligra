@@ -2397,7 +2397,7 @@ FrameSelectPolicy::FrameSelectPolicy(KWCanvas *parent, MouseMeaning meaning, KoP
         if(view && view->frame()->frameSet() == fse->frameSet()) {
             // make sure 'point' is inside the frame
             point.setX(QMAX(point.x(), view->frame()->left()));
-            point.setY(QMAX(point.y(), view->frame()->right()));
+            point.setY(QMAX(point.y(), view->frame()->top()));
             point.setX(QMIN(point.x(), view->frame()->right()));
             point.setY(QMIN(point.y(), view->frame()->bottom()));
 
