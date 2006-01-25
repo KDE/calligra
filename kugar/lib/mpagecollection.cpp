@@ -15,7 +15,7 @@ namespace Kugar
 {
 
 /** Constructor */
-MPageCollection::MPageCollection() : QObject()
+MPageCollection::MPageCollection( QObject *parent ) : QObject( parent )
 {
     // Set page list to AutoDelete
     pages.setAutoDelete( true );

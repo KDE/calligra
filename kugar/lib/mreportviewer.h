@@ -18,6 +18,7 @@
 #include <qpainter.h>
 #include <qpaintdevicemetrics.h>
 #include <qprogressdialog.h>
+#include <qguardedptr.h>
 #include <koffice_export.h>
 #include "mreportengine.h"
 #include "mpagecollection.h"
@@ -79,7 +80,7 @@ protected:
     QScrollView *scroller;
     MPageDisplay *display;
     MReportEngine *rptEngine;
-    MPageCollection *report;
+    QGuardedPtr<MPageCollection> report;
     KPrinter *printer;
 
 private:

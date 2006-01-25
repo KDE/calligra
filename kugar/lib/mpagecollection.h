@@ -26,7 +26,7 @@ class MPageCollection : public QObject
 
 public:
     /** Constructor */
-    MPageCollection();
+    MPageCollection( QObject *parent );
     /** Copy constructor */
     MPageCollection( const MPageCollection& mPageCollection );
     /** Assignment operator */

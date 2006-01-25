@@ -85,8 +85,6 @@ MReportEngine::~MReportEngine()
 {
     // Clear the grand total data
     grandTotal.clear();
-    if ( m_pageCollection )
-        m_pageCollection->removeRef();
     kdDebug( 31000 ) << k_funcinfo << endl;
 }
 
@@ -107,7 +105,9 @@ void MReportEngine::clearFormatting()
 {
     rHeader.clear();
     pHeader.clear();
+    dHeaders.clear();
     details.clear();
+    dFooters.clear();
     pFooter.clear();
     rFooter.clear();
 }
@@ -272,7 +272,11 @@ MPageCollection* MReportEngine::renderReport()
     if ( !m_needRegeneration )
         return m_pageCollection;
     if ( m_pageCollection )
-        m_pageCollection->removeRef();
+    {
+        m_pageCollection->deleteLater();
+        m_pageCollection = 0;
+    }
+
     unsigned int j;
     unsigned int i;
 
@@ -280,7 +284,7 @@ MPageCollection* MReportEngine::renderReport()
     cancelRender = false;
 
     // Create the page collection
-    MPageCollection* pages = new MPageCollection;
+    MPageCollection* pages = new MPageCollection( this );
 
     // Initialize the basic page data
     currHeight = pageHeight - ( topMargin + bottomMargin + pFooter.getHeight() );

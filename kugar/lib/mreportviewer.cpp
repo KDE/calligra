@@ -37,9 +37,6 @@ void MReportViewer::init()
 {
     scroller = new QScrollView( this );
 
-    // Create the report engine
-    report = 0;
-
     // Connect the rendering update signal and slot
     connect( rptEngine, SIGNAL( signalRenderStatus( int ) ),
              SLOT( slotRenderProgress( int ) ) );
@@ -71,7 +68,6 @@ void MReportViewer::init()
 MReportViewer::~MReportViewer()
 {
     clearReport();
-    //delete rptEngine;
     rptEngine->removeRef();
 }
 
@@ -84,7 +80,6 @@ void MReportViewer::resizeEvent( QResizeEvent* event )
 {
     scroller->resize( event->size() );
 }
-
 
 // Set the report's data from an in-line string.
 
@@ -121,17 +116,11 @@ bool MReportViewer::setReportTemplate( QIODevice *dev )
 /** Generates the report's page collection */
 bool MReportViewer::renderReport()
 {
-    // Check if a previous report exists and
-    // if so de-allocated it
-    if ( report != 0 )
-        report->removeRef();
-    //    delete report;
-
     // Render the report
     report = rptEngine->renderReport();
 
     // Display the first page of the report
-    if ( report != 0 && report->getFirstPage() != 0 )
+    if ( report && report->getFirstPage() != 0 )
     {
         display->setPageDimensions( report->pageDimensions() );
         display->setPage( report->getFirstPage() );
@@ -148,21 +137,13 @@ void MReportViewer::clearReport()
 {
     // Hide the display
     display->hide();
-
-    // De-Allocate any report
-    if ( report )
-    {
-        report->removeRef();
-        //delete report;
-        report = 0;
-    }
 }
 
 /** Prints the rendered report to the selected printer - displays KDE print dialog */
 void MReportViewer::printReport()
 {
     // Check for a report
-    if ( report == 0 )
+    if ( !report )
         return ;
 
     // Get the page count
@@ -188,7 +169,7 @@ void MReportViewer::slotFirstPage()
 {
     QPicture * page;
 
-    if ( report == 0 )
+    if ( !report )
         return ;
 
     if ( ( page = report->getFirstPage() ) != 0 )
@@ -203,7 +184,7 @@ void MReportViewer::slotNextPage()
 {
     QPicture * page;
 
-    if ( report == 0 )
+    if ( !report )
         return ;
 
     int index = report->getCurrentIndex();
@@ -222,7 +203,7 @@ void MReportViewer::slotPrevPage()
 {
     QPicture * page;
 
-    if ( report == 0 )
+    if ( !report )
         return ;
 
     int index = report->getCurrentIndex();
@@ -241,7 +222,7 @@ void MReportViewer::slotLastPage()
 {
     QPicture * page;
 
-    if ( report == 0 )
+    if ( !report )
         return ;
 
     if ( ( page = report->getLastPage() ) != 0 )
@@ -300,7 +281,7 @@ QSize MReportViewer::sizeHint() const
 void MReportViewer::printReport( KPrinter &printer )
 {
     // Check for a report
-    if ( report == 0 )
+    if ( !report )
         return ;
 
     // Get the page count

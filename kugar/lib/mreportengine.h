@@ -79,7 +79,7 @@ protected:
 
 private:
 
-    QGuardedPtr<MPageCollection> m_pageCollection;
+    MPageCollection *m_pageCollection;
     bool m_needRegeneration;
     /** Report data document */
     QDomDocument rd;
