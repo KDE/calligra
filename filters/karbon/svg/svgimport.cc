@@ -548,6 +548,10 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
 	SvgGraphicsContext *gc = m_gc.current();
 	if( !gc ) return;
 
+	GradientHelper gradhelper;
+	gradhelper.gradient.clearStops();
+	gradhelper.gradient.setRepeatMethod( VGradient::none );
+
 	if(e.childNodes().count() == 0)
 	{
 		QString href = e.attribute("xlink:href").mid(1);
@@ -557,11 +561,14 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
 			//gc->fill.setType( VFill::none ); // <--- TODO Fill OR Stroke are none
 			return;
 		}
+		else 
+		{
+			// copy the referenced gradient if found
+			GradientHelper *pGrad = findGradient( href );
+			if( pGrad )
+				gradhelper = *pGrad;
+		}
 	}
-
-	GradientHelper gradhelper;
-	gradhelper.gradient.clearStops();
-	gradhelper.gradient.setRepeatMethod( VGradient::none );
 
 	// Use the gradient that is referencing, or if there isn't one, the original gradient.
 	QDomElement b;

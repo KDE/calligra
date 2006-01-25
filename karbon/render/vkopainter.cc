@@ -696,7 +696,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		linear->stops = buildStopArray( gradient, offsets );
 		linear->n_stops = offsets;
 
-		if( x0 != x1 && y0 != y1 )
+		if( x0 != x1 && y0 != y1 && offsets >= 0 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * int(x0) + m_width * 4 * int(y0), m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
 			int opacity = int( opa * 255.0 );
@@ -750,7 +750,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		radial->stops = buildStopArray( gradient, offsets );
 		radial->n_stops = offsets;
 
-		if( x0 != x1 && y0 != y1 )
+		if( x0 != x1 && y0 != y1 && offsets >= 0 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
 			int opacity = int( opa * 255.0 );
@@ -791,7 +791,7 @@ VKoPainter::applyGradient( ArtSVP *svp, bool fill )
 		conical->stops = buildStopArray( gradient, offsets );
 		conical->n_stops = offsets;
 
-		if( x0 != x1 && y0 != y1 )
+		if( x0 != x1 && y0 != y1 && offsets >= 0 )
 		{
 			render = art_render_new( x0, y0, x1, y1, m_buffer + 4 * x0 + m_width * 4 * y0, m_width * 4, 3, 8, ART_ALPHA_PREMUL, 0 );
 			int opacity = int( opa * 255.0 );
