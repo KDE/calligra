@@ -1411,7 +1411,7 @@ int sqlite3pager_open(
   const char *zFilename,   /* Name of the database file to open */
   int nExtra,              /* Extra bytes append to each in-memory page */
   int useJournal,          /* TRUE to use a rollback journal on this file */
-  int exclusive,           /* as in sqlite3OsOpenReadWrite() */
+  int exclusiveFlag,       /* as in sqlite3OsOpenReadWrite() */
   int allowReadonly        /* as in sqlite3OsOpenReadWrite() */
 ){
   Pager *pPager;
@@ -1438,7 +1438,7 @@ int sqlite3pager_open(
     }else{
       zFullPathname = sqlite3OsFullPathname(zFilename);
       if( zFullPathname ){
-        rc = sqlite3OsOpenReadWrite(zFullPathname, &fd, &readOnly, exclusive, allowReadonly);
+        rc = sqlite3OsOpenReadWrite(zFullPathname, &fd, &readOnly, exclusiveFlag, allowReadonly);
       }
     }
   }else{

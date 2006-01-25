@@ -55,7 +55,7 @@ typedef struct Pager Pager;
 ** routines:
 */
 int sqlite3pager_open(Pager **ppPager, const char *zFilename,
-                     int nExtra, int useJournal, int exclusive, int allowReadonly);
+                     int nExtra, int useJournal, int exclusiveFlag, int allowReadonly);
 void sqlite3pager_set_busyhandler(Pager*, BusyHandler *pBusyHandler);
 void sqlite3pager_set_destructor(Pager*, void(*)(void*,int));
 void sqlite3pager_set_reiniter(Pager*, void(*)(void*,int));

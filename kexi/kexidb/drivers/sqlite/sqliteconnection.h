@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,6 +48,8 @@ class SQLiteConnection : public Connection
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
 			TableSchema& tableSchema);
 #endif
+		/*! Reimplemented to provide real read-only flag of the connection */
+		virtual bool isReadOnly() const;
 
 	protected:
 		/*! Used by driver */
@@ -56,20 +58,26 @@ class SQLiteConnection : public Connection
 		virtual bool drv_connect();
 		virtual bool drv_disconnect();
 		virtual bool drv_getDatabasesList( QStringList &list );
+
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_getTablesList( QStringList &list );
+
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_containsTable( const QString &tableName );
+
 		/*! Creates new database using connection. Note: Do not pass \a dbName 
 			arg because for file-based engine (that has one database per connection)
 			it is defined during connection. */
 		virtual bool drv_createDatabase( const QString &dbName = QString::null );
+
 		/*! Opens existing database using connection. Do not pass \a dbName 
 			arg because for file-based engine (that has one database per connection)
 			it is defined during connection. If you pass it, 
 			database file name will be changed. */
 		virtual bool drv_useDatabase( const QString &dbName = QString::null );
+
 		virtual bool drv_closeDatabase();
+
 		/*! Drops database from the server using connection.
 			After drop, database shouldn't be accessible 
 			anymore, so database file is just removed. See note from drv_useDatabase(). */

@@ -33,8 +33,8 @@ int sqlite3BtreeOpen(
   const char *zFilename,   /* Name of database file to open */
   Btree **,                /* Return open Btree* here */
   int flags,               /* Flags */
-  int exclusive,          /* as in sqlite3OsOpenReadWrite() */
-  int allowReadonly       /* as in sqlite3OsOpenReadWrite() */
+  int exclusiveFlag,       /* as in sqlite3OsOpenReadWrite() */
+  int allowReadonly        /* as in sqlite3OsOpenReadWrite() */
 );
 
 /* The flags parameter to sqlite3BtreeOpen can be the bitwise or of the

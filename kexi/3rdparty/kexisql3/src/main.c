@@ -821,7 +821,7 @@ int sqlite3BtreeFactory(
   int omitJournal,          /* if TRUE then do not journal this file */
   int nCache,               /* How many pages in the page cache */
   Btree **ppBtree,          /* Pointer to new Btree object written here */
-  int exclusive,            /* as in sqlite3OsOpenReadWrite() */
+  int exclusiveFlag,        /* as in sqlite3OsOpenReadWrite() */
   int allowReadonly         /* as in sqlite3OsOpenReadWrite() */
 ){
   int btree_flags = 0;
@@ -849,7 +849,7 @@ int sqlite3BtreeFactory(
 #endif
   }
 
-  rc = sqlite3BtreeOpen(zFilename, ppBtree, btree_flags, exclusive, allowReadonly);
+  rc = sqlite3BtreeOpen(zFilename, ppBtree, btree_flags, exclusiveFlag, allowReadonly);
   if( rc==SQLITE_OK ){
     sqlite3BtreeSetBusyHandler(*ppBtree, (void*)&db->busyHandler);
     sqlite3BtreeSetCacheSize(*ppBtree, nCache);
@@ -1084,7 +1084,7 @@ int sqlite3_prepare16(
 static int openDatabase(
   const char *zFilename, /* Database filename UTF-8 encoded */
   sqlite3 **ppDb,        /* OUT: Returned database handle */
-  int exclusive,         /* as in sqlite3OsOpenReadWrite() */
+  int exclusiveFlag,     /* as in sqlite3OsOpenReadWrite() */
   int allowReadonly      /* as in sqlite3OsOpenReadWrite() */
 ){
   sqlite3 *db;
@@ -1129,7 +1129,7 @@ static int openDatabase(
   sqlite3_create_collation(db, "NOCASE", SQLITE_UTF8, 0, nocaseCollatingFunc);
 
   /* Open the backend database driver */
-  rc = sqlite3BtreeFactory(db, zFilename, 0, MAX_PAGES, &db->aDb[0].pBt, exclusive, allowReadonly);
+  rc = sqlite3BtreeFactory(db, zFilename, 0, MAX_PAGES, &db->aDb[0].pBt, exclusiveFlag, allowReadonly);
   if( rc!=SQLITE_OK ){
     sqlite3Error(db, rc, 0);
     db->magic = SQLITE_MAGIC_CLOSED;
@@ -1171,10 +1171,10 @@ opendb_out:
 int sqlite3_open(
   const char *zFilename, 
   sqlite3 **ppDb,
-  int exclusive,         /* as in sqlite3OsOpenReadWrite() */
+  int exclusiveFlag,     /* as in sqlite3OsOpenReadWrite() */
   int allowReadonly      /* as in sqlite3OsOpenReadWrite() */
 ){
-  return openDatabase(zFilename, ppDb, exclusive, allowReadonly);
+  return openDatabase(zFilename, ppDb, exclusiveFlag, allowReadonly);
 }
 
 /*
@@ -1183,7 +1183,7 @@ int sqlite3_open(
 int sqlite3_open16(
   const void *zFilename, 
   sqlite3 **ppDb,
-  int exclusive,         /* as in sqlite3OsOpenReadWrite() */
+  int exclusiveFlag,     /* as in sqlite3OsOpenReadWrite() */
   int allowReadonly      /* as in sqlite3OsOpenReadWrite() */
 ){
   char const *zFilename8;   /* zFilename encoded in UTF-8 instead of UTF-16 */
@@ -1196,7 +1196,7 @@ int sqlite3_open16(
   sqlite3ValueSetStr(pVal, -1, zFilename, SQLITE_UTF16NATIVE, SQLITE_STATIC);
   zFilename8 = sqlite3ValueText(pVal, SQLITE_UTF8);
   if( zFilename8 ){
-    rc = openDatabase(zFilename8, ppDb, exclusive, allowReadonly);
+    rc = openDatabase(zFilename8, ppDb, exclusiveFlag, allowReadonly);
     if( rc==SQLITE_OK && *ppDb ){
       sqlite3_exec(*ppDb, "PRAGMA encoding = 'UTF-16'", 0, 0, 0);
     }

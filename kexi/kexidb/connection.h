@@ -87,8 +87,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 with useDatabase(). */
 		bool isDatabaseUsed() const;
 
-		/*! \return true for read only connection. Used especially for file-based drivers. */
-		bool isReadOnly() const;
+		/*! \return true for read only connection. Used especially for file-based drivers. 
+		 Can be reimplemented in a driver to provide real read-only flag of the connection 
+		 (SQlite3 dirver does this). */
+		virtual bool isReadOnly() const;
 
 		/*! Reimplemented from Object: also clears sql string.
 		 @sa recentSQLString() */
@@ -1050,7 +1052,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! @internal used by querySingleRecord() methods. */
 		tristate querySingleRecordInternal(RowData &data, const QString* sql, QuerySchema* query);
 
-		/*! @internal used by Driver::createConnection(). */
+		/*! @internal used by Driver::createConnection(). 
+		 Only works if connection is not yet established. */
 		void setReadOnly(bool set);
 
 		QGuardedPtr<ConnectionData> m_data;

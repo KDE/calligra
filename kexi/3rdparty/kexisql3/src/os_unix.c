@@ -427,7 +427,7 @@ int sqlite3OsOpenReadWrite(
   const char *zFilename,
   OsFile *id,
   int *pReadonly,
-  int exclusive,
+  int exclusiveFlag,
   int allowReadonly
 ){
   int rc;

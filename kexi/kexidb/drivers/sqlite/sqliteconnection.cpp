@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,6 +23,10 @@
 #include "sqlitepreparedstatement.h"
 
 #include "sqlite.h"
+
+#ifndef SQLITE2
+# include "kexisql.h" //for isReadOnly()
+#endif
 
 #include <kexidb/driver.h>
 #include <kexidb/cursor.h>
@@ -163,15 +167,19 @@ bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 	return d->data != 0;
 #else //SQLITE3
 	//TODO: perhaps allow to use sqlite3_open16() as well for SQLite ~ 3.3 ?
-	int exclusive = 1;
-	int allowReadonly = isReadOnly() ? 1 : 0;
+//! @todo add option (command line or in kexirc?)
+	int exclusiveFlag = Connection::isReadOnly() ? SQLITE_OPEN_READONLY : SQLITE_OPEN_WRITE_LOCKED; // <-- shared read + (if !r/o): exclusive write
+//! @todo add option
+	int allowReadonly = 1;
 	d->res = sqlite3_open( 
 		//m_data->fileName().ucs2(), //utf16
 		QFile::encodeName( m_data->fileName() ), 
 		&d->data,
-		exclusive, /* If 1, exclusive read/write access is required, else only shared writing is locked. */
-		allowReadonly /* If 1 and read/write opening fails, try opening in read-only mode */
+		exclusiveFlag,
+		allowReadonly /* If 1 and locking fails, try opening in read-only mode */
 	);
+
+	bool readOnly = sqlite3_is_readonly(d->data);
 
 	d->storeResult();
 	if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_READWRITE) {
@@ -287,5 +295,14 @@ PreparedStatement::Ptr SQLiteConnection::prepareStatement(PreparedStatement::Sta
 	return new SQLitePreparedStatement(type, *d, tableSchema);
 }
 #endif
+
+bool SQLiteConnection::isReadOnly() const
+{
+#ifdef SQLITE2
+	return Connection::isReadOnly();
+#else
+	return d->data ? sqlite3_is_readonly(d->data) : false;
+#endif
+}
 
 #include "sqliteconnection.moc"

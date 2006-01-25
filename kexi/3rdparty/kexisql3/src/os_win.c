@@ -51,7 +51,8 @@ int sqlite3OsFileExists(const char *zFilename){
 ** fails, and allowReadonly is 1, try opening it read-only.  
 ** If the file does not exist, try to create it.
 **
-** Exclusive read/write access is required if exclusive is 1. 
+** Exclusive write access is required if exclusiveFlag is 1. 
+** Exclusive read/write access is required if exclusiveFlag is 2. 
 ** In this case, if allowReadonly is also 1, only shared writing is locked.
 **
 ** and *pReadonly is set to 0 if the file was opened for reading and
@@ -69,33 +70,39 @@ int sqlite3OsOpenReadWrite(
   const char *zFilename,
   OsFile *id,
   int *pReadonly,
-  int exclusive,
+  int exclusiveFlag,
   int allowReadonly
 ){
   HANDLE h;
   int access;
   assert( !id->isOpen );
   /* js */
-  if (exclusive)
-     access = 0;
-  else
-     access = FILE_SHARE_READ | FILE_SHARE_WRITE;
-  h = CreateFileA(zFilename,
-     GENERIC_READ | GENERIC_WRITE,
-     access,
-     NULL,
-     OPEN_ALWAYS,
-     FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
-     NULL
-  );
-  if (!allowReadonly && GetLastError()==ERROR_SHARING_VIOLATION) {
-    return SQLITE_CANTOPEN_WITH_LOCKED_READWRITE;
-  }
-  if( allowReadonly && h==INVALID_HANDLE_VALUE ){
-    if (exclusive)
-       access = 0;
-    else
+  if (exclusiveFlag!=SQLITE_OPEN_READONLY) {
+    if (exclusiveFlag==SQLITE_OPEN_NO_LOCKED)
+       access = FILE_SHARE_READ | FILE_SHARE_WRITE;
+    else if (exclusiveFlag==SQLITE_OPEN_WRITE_LOCKED)
        access = FILE_SHARE_READ;
+    else /* SQLITE_OPEN_READ_WRITE_LOCKED */
+       access = 0;
+    h = CreateFileA(zFilename,
+      GENERIC_READ | GENERIC_WRITE,
+      access,
+      NULL,
+      OPEN_ALWAYS,
+      FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
+      NULL
+    );
+    if (!allowReadonly && GetLastError()==ERROR_SHARING_VIOLATION) {
+      return exclusiveFlag==2 ? SQLITE_CANTOPEN_WITH_LOCKED_READWRITE
+             : SQLITE_CANTOPEN_WITH_LOCKED_WRITE;
+    }
+  }
+  if( exclusiveFlag==SQLITE_OPEN_READONLY || (allowReadonly && h==INVALID_HANDLE_VALUE) ){
+  /* open read only */
+/*	  if (exclusiveFlag==0) */
+    access = FILE_SHARE_READ | FILE_SHARE_WRITE;
+/*		else
+			 access = FILE_SHARE_READ;*/
     h = CreateFileA(zFilename,
        GENERIC_READ,
        access,
@@ -105,7 +112,7 @@ int sqlite3OsOpenReadWrite(
        NULL
     );
     if (GetLastError()==ERROR_SHARING_VIOLATION) {
-      return SQLITE_CANTOPEN_WITH_LOCKED_WRITE;
+      return SQLITE_CANTOPEN;
     }
     if( h!=INVALID_HANDLE_VALUE ){
       *pReadonly = 1;
