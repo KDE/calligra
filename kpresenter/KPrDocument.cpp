@@ -1534,9 +1534,18 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     m_loadingInfo = new KPrLoadingInfo;
     ignoreSticky = FALSE;
     emit sigProgress( 0 );
+
     lastObj = -1;
     // clean
     if ( _clean ) {
+        m_styleColl->clear();
+        // Some simple import filters don't define any style,
+        // so let's have a Standard style at least
+        KoParagStyle * standardStyle = new KoParagStyle( "Standard" ); // This gets translated later on
+        //kdDebug() << "KWDocument::KWDocument creating standardStyle " << standardStyle << endl;
+        standardStyle->format().setFont( m_defaultFont );
+        m_styleColl->addStyle( standardStyle );
+
         __pgLayout = KoPageLayout::standardLayout();
         _spInfiniteLoop = false;
         _spManualSwitch = true;
@@ -1688,7 +1697,9 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
             }
             else
             {
-                if ( str != idPage )
+                // OO uses /page[0-9]+$/ as default for no name set 
+                QRegExp rx( "^page[0-9]+$" );
+                if ( rx.search( str ) == -1 )
                     newpage->insertManualTitle(str);
             }
             context.styleStack().setTypeProperties( "drawing-page" );
@@ -1755,6 +1766,12 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         if ( !name.isEmpty() )
         {
             kdDebug()<<" name :"<<name<<endl;
+            if ( o.hasAttributeNS( KoXmlNS::presentation, "placeholder" ) &&
+                 o.attributeNS( KoXmlNS::presentation, "placeholder", QString::null ) == "true" )
+            {
+                kdDebug(33001) << "Placeholder" << endl;
+                continue;
+            }
             context.styleStack().save();
             const bool isDrawNS = o.namespaceURI() == KoXmlNS::draw;
             //"draw:text-box"
@@ -2038,26 +2055,21 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
 
 void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & context )
 {
-    // find all styles associated with an object and push them on the stack
     if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
-        kdDebug(33001) << "presentation:style-name :" << object.attributeNS( KoXmlNS::presentation, "style-name", QString::null ) << endl;
-        context.addStyles( context.oasisStyles().stylesAutoStyles()[object.attributeNS( KoXmlNS::presentation, "style-name", QString::null )] );
+        context.fillStyleStack( object, KoXmlNS::presentation, "style-name" );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        kdDebug(33001)<<"draw:style-name :"<<object.attributeNS( KoXmlNS::draw, "style-name", QString::null )<<endl;
-        context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "style-name", QString::null )] );
+        context.fillStyleStack( object, KoXmlNS::presentation, "style-name" );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
     {
-        //kdDebug()<<"Add 'draw:text-style-name' \n";
-        context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "text-style-name", QString::null )] );
+        context.fillStyleStack( object, KoXmlNS::draw, "text-style-name" );
     }
     if ( object.hasAttributeNS( KoXmlNS::text, "style-name" ) )
     {
-        //kdDebug()<<"Add 'text:style-name' : "<<object.attributeNS( KoXmlNS::text, "style-name", QString::null )<<endl;
-        context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::text, "style-name", QString::null )] );
+        context.fillStyleStack( object, KoXmlNS::text, "style-name" );
     }
 }
 
