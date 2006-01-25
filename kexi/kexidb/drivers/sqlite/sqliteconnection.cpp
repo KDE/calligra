@@ -179,8 +179,6 @@ bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 		allowReadonly /* If 1 and locking fails, try opening in read-only mode */
 	);
 
-	bool readOnly = sqlite3_is_readonly(d->data);
-
 	d->storeResult();
 	if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_READWRITE) {
 		setError(ERR_ACCESS_RIGHTS, 
