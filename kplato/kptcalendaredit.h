@@ -47,7 +47,6 @@ private slots:
     void slotCheckAllFieldsFilled();
     void slotDateSelected(QDate date);
     void slotWeekdaySelected(int day);
-    void slotWeekSelected(int week, int year);
     void slotStateActivated(int id);
     void slotClearClicked();
     void slotAddIntervalClicked();

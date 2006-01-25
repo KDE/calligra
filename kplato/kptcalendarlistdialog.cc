@@ -119,10 +119,6 @@ public:
                     macro->addCommand(new CalendarModifyDayCmd(part, original, new CalendarDay(cit.current())));
                 }
             }
-            if (calendar->weeks() != original->weeks()) {
-                //kdDebug()<<k_funcinfo<<"Weeks modified: "<<calendar->name()<<endl;
-                original->weeks()->setWeeks(calendar->weeks()->weeks());
-            }
             //kdDebug()<<k_funcinfo<<"Check for weekdays modified: "<<calendar->name()<<endl;
             CalendarDay *day = 0, *org = 0;
             for (int i=0; i < 7; ++i) {

@@ -285,17 +285,11 @@ public:
     void setMarkedWeekdays(const IntMap days);
     bool weekdayMarked(int day);
 
-    void setMarkedWeeks(WeekMap weeks);
-    void addMarkedWeek(int week, int year, int holiday);
-    bool weekMarked(QPair<int, int> week);
-
     DateMap selectedDates() const { return m_selectedDates; }
     IntMap selectedWeekdays() const { return m_selectedWeekdays; }
-    WeekMap selectedWeeks() const { return m_selectedWeeks; }
 
     DateMap markedDates() const { return m_markedDates; }
     IntMap markedWeekdays() const { return m_markedWeekdays; }
-    WeekMap markedWeeks() const { return m_markedWeeks; }
 
     void clear();
     void clearSelection();
@@ -408,12 +402,10 @@ private:
 
     DateMap m_selectedDates;
     IntMap m_selectedWeekdays;
-    WeekMap m_selectedWeeks;
 
     // These results in marking the dates, weekdays and weeks respectivly
     DateMap m_markedDates;
     IntMap m_markedWeekdays;
-    WeekMap m_markedWeeks;
 
     int m_dateStartCol;
     bool m_enabled;

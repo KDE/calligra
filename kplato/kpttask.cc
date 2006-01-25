@@ -142,8 +142,16 @@ void Task::makeAppointments() {
     if (m_currentSchedule == 0)
         return;
     if (type() == Node::Type_Task) {
-        if (m_requests) 
+        if (m_requests) {
+            //kdDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->startTime<<", "<<m_currentSchedule->endTime<<"; "<<m_currentSchedule->duration.toString()<<endl;
             m_requests->makeAppointments(m_currentSchedule);
+            if (m_currentSchedule->workStartTime.isValid())
+                m_currentSchedule->startTime = m_currentSchedule->workStartTime;
+            if (m_currentSchedule->workEndTime.isValid())
+                m_currentSchedule->endTime = m_currentSchedule->workEndTime;
+            m_currentSchedule->duration = m_currentSchedule->endTime - m_currentSchedule->startTime;
+            //kdDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->startTime<<", "<<m_currentSchedule->endTime<<"; "<<m_currentSchedule->duration.toString()<<endl;
+        }
     } else if (type() == Node::Type_Summarytask) {
         QPtrListIterator<Node> nit(m_nodes);
         for ( ; nit.current(); ++nit ) {
@@ -604,11 +612,11 @@ DateTime Task::calculateForward(int use) {
     if (m_currentSchedule == 0) {
         return DateTime();
     }
+    NodeSchedule *cs = m_currentSchedule;
     if (m_visitedForward) {
     //kdDebug()<<earliestStart.toString()<<" + "<<m_durationBackward.toString()<<" "<<m_name<<" calculateForward() (visited)"<<endl;
-        return m_earliestStartForward + m_durationForward;
+        return cs->earliestStart + m_durationForward;
     }
-    NodeSchedule *cs = m_currentSchedule;
     // First, calculate all predecessors
     if (!dependParentNodes().isEmpty()) {
         DateTime time = calculatePredeccessors(dependParentNodes(), use);
@@ -622,50 +630,48 @@ DateTime Task::calculateForward(int use) {
             cs->earliestStart = time;
         }
     }
-    m_earliestStartForward = cs->earliestStart;
     if (type() == Node::Type_Task) {
         m_durationForward = m_effort->effort(use);
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
                 if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationForward = duration(m_earliestStartForward, use, false);
+                    m_durationForward = duration(cs->earliestStart, use, false);
                 }
+                //kdDebug()<<k_funcinfo<<m_name<<": "<<cs->earliestStart<<"+"<<m_durationForward.toString()<<"="<<(cs->earliestStart+m_durationForward)<<endl;
                 break;
             case Node::MustFinishOn:
                 if (m_effort->type() == Effort::Type_Effort) {
                     m_durationForward = duration(m_constraintEndTime, use, true);
                 }
-                m_earliestStartForward = m_constraintEndTime - m_durationForward;
+                cs->earliestStart = m_constraintEndTime - m_durationForward;
                 break;
             case Node::FinishNotLater:
                 if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationForward = duration(m_earliestStartForward, use, false);
+                    m_durationForward = duration(cs->earliestStart, use, false);
                 }
-                if (m_earliestStartForward + m_durationForward > m_constraintEndTime) {
+                if (cs->earliestStart + m_durationForward > m_constraintEndTime) {
                     m_durationForward = duration(m_constraintEndTime, use, true);
-                    m_earliestStartForward = m_constraintEndTime - m_durationForward;
+                    cs->earliestStart = m_constraintEndTime - m_durationForward;
                 }
                 break;
             case Node::MustStartOn:
-                m_earliestStartForward = m_constraintStartTime;
+                cs->earliestStart = m_constraintStartTime;
                 if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationForward = duration(m_earliestStartForward, use, false);
+                    m_durationForward = duration(cs->earliestStart, use, false);
                 }
                 break;
             case Node::StartNotEarlier:
-                if (m_earliestStartForward < m_constraintStartTime) {
-                    m_earliestStartForward = m_constraintStartTime;
+                if (cs->earliestStart < m_constraintStartTime) {
+                    cs->earliestStart = m_constraintStartTime;
                 }
                 if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationForward = duration(m_earliestStartForward, use, false);
+                    m_durationForward = duration(cs->earliestStart, use, false);
                 }
                 break;
             case Node::FixedInterval: {
-                DateTime st = m_constraintStartTime;
-                DateTime end = m_constraintEndTime;
-                m_earliestStartForward = st;
-                m_durationForward = end - st;
+                cs->earliestStart = m_constraintStartTime;
+                m_durationForward = m_constraintEndTime - m_constraintStartTime;
                 break;
             }
         }
@@ -673,23 +679,23 @@ DateTime Task::calculateForward(int use) {
         m_durationForward = Duration::zeroDuration;
         switch (constraint()) {
             case Node::MustFinishOn:
-                m_earliestStartForward = m_constraintEndTime;
+                cs->earliestStart = m_constraintEndTime;
                 break;
             case Node::FinishNotLater:
-                if (m_earliestStartForward > m_constraintEndTime) {
-                    m_earliestStartForward = m_constraintEndTime;
+                if (cs->earliestStart > m_constraintEndTime) {
+                    cs->earliestStart = m_constraintEndTime;
                 }
                 break;
             case Node::MustStartOn:
-                m_earliestStartForward = m_constraintStartTime;
+                cs->earliestStart = m_constraintStartTime;
                 break;
             case Node::StartNotEarlier:
-                if (m_earliestStartForward < m_constraintStartTime) {
-                    m_earliestStartForward = m_constraintStartTime;
+                if (cs->earliestStart < m_constraintStartTime) {
+                    cs->earliestStart = m_constraintStartTime;
                 }
                 break;
             case Node::FixedInterval:
-                m_earliestStartForward = m_constraintStartTime;
+                cs->earliestStart = m_constraintStartTime;
                 break;
             default:
                 break;
@@ -701,9 +707,9 @@ DateTime Task::calculateForward(int use) {
         m_durationForward = Duration::zeroDuration;
     }
     
-    //kdDebug()<<"Earlyfinish: "<<m_earliestStartForward.toString()<<"+"<<m_durationForward.toString()<<"="<<(m_earliestStartForward+m_durationForward).toString()<<" "<<m_name<<" calculateForward()"<<endl;
+    //kdDebug()<<"Earlyfinish: "<<cs->earliestStart<<"+"<<m_durationForward.toString()<<"="<<(cs->earliestStart+m_durationForward)<<" "<<m_name<<" calculateForward()"<<endl;
     m_visitedForward = true;
-    return m_earliestStartForward + m_durationForward;
+    return cs->earliestStart + m_durationForward;
 }
 
 DateTime Task::calculateSuccessors(const QPtrList<Relation> &list, int use) {
@@ -738,15 +744,15 @@ DateTime Task::calculateSuccessors(const QPtrList<Relation> &list, int use) {
     return time;
 }
 DateTime Task::calculateBackward(int use) {
-    //kdDebug()<<k_funcinfo<<m_name<<<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
+    NodeSchedule *cs = m_currentSchedule;
     if (m_visitedBackward) {
     //kdDebug()<<latestFinish.toString()<<" - "<<m_durationBackward.toString()<<" "<<m_name<<" calculateBackward() (visited)"<<endl;
-        return m_latestFinishBackward - m_durationBackward;
+        return cs->latestFinish - m_durationBackward;
     }
-    NodeSchedule *cs = m_currentSchedule;
     // First, calculate all successors
     if (!dependChildNodes().isEmpty()) {
         DateTime time = calculateSuccessors(dependChildNodes(), use);
@@ -760,50 +766,48 @@ DateTime Task::calculateBackward(int use) {
             cs->latestFinish = time;
         }
     }
-    m_latestFinishBackward = cs->latestFinish;
+    //kdDebug()<<k_funcinfo<<m_name<<": latestFinish="<<cs->latestFinish<<endl;
     if (type() == Node::Type_Task) {
         m_durationBackward = m_effort->effort(use);
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
                 if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationBackward = duration(m_latestFinishBackward, use, true);
+                    m_durationBackward = duration(cs->latestFinish, use, true);
                 }
                 break;
             case Node::MustStartOn:
                 if (m_effort->type() == Effort::Type_Effort) {
                     m_durationBackward = duration(m_constraintStartTime, use, false);
                 }
-                m_latestFinishBackward = m_constraintStartTime + m_durationBackward;
+                cs->latestFinish = m_constraintStartTime + m_durationBackward;
                 break;
             case Node::StartNotEarlier:
                 if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationBackward = duration(m_latestFinishBackward, use, true);
+                    m_durationBackward = duration(cs->latestFinish, use, true);
                 }
-                if (m_latestFinishBackward - m_durationBackward < m_constraintStartTime) {
+                if (cs->latestFinish - m_durationBackward < m_constraintStartTime) {
                     m_durationBackward = duration(m_constraintStartTime, use, false);
-                    m_latestFinishBackward = m_constraintStartTime + m_durationBackward;
+                    cs->latestFinish = m_constraintStartTime + m_durationBackward;
                 }
                 break;
             case Node::MustFinishOn:
-                m_latestFinishBackward = m_constraintEndTime;
+                cs->latestFinish = m_constraintEndTime;
                 if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationBackward = duration(m_latestFinishBackward, use, true);
+                    m_durationBackward = duration(cs->latestFinish, use, true);
                 }
                 break;
             case Node::FinishNotLater:
-                if (m_latestFinishBackward > m_constraintEndTime) {
-                    m_latestFinishBackward = m_constraintEndTime;
+                if (cs->latestFinish > m_constraintEndTime) {
+                    cs->latestFinish = m_constraintEndTime;
                 }
                 if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationBackward = duration(m_latestFinishBackward, use, true);
+                    m_durationBackward = duration(cs->latestFinish, use, true);
                 }
                 break;
             case Node::FixedInterval: {
-                DateTime st = m_constraintStartTime;
-                DateTime end = m_constraintEndTime;
-                m_latestFinishBackward = end;
-                m_durationBackward = end - st;
+                cs->latestFinish = m_constraintEndTime;
+                m_durationBackward = m_constraintEndTime - m_constraintStartTime;
                 break;
             }
         }
@@ -811,36 +815,36 @@ DateTime Task::calculateBackward(int use) {
         m_durationBackward = Duration::zeroDuration;
         switch (constraint()) {
             case Node::MustFinishOn:
-                m_latestFinishBackward = m_constraintEndTime;
+                cs->latestFinish = m_constraintEndTime;
                 break;
             case Node::FinishNotLater:
-                if (m_latestFinishBackward > m_constraintEndTime) {
-                    m_latestFinishBackward = m_constraintEndTime;
+                if (cs->latestFinish > m_constraintEndTime) {
+                    cs->latestFinish = m_constraintEndTime;
                 }
                 break;
             case Node::MustStartOn:
-                m_latestFinishBackward = m_constraintStartTime;
+                cs->latestFinish = m_constraintStartTime;
                 break;
             case Node::StartNotEarlier:
-                if (m_latestFinishBackward < m_constraintStartTime) {
-                    m_latestFinishBackward = m_constraintStartTime;
+                if (cs->latestFinish < m_constraintStartTime) {
+                    cs->latestFinish = m_constraintStartTime;
                 }
                 break;
             case Node::FixedInterval:
-                m_latestFinishBackward = m_constraintEndTime;
+                cs->latestFinish = m_constraintEndTime;
                 break;
             default:
                 break;
         }
-        //kdDebug()<<k_funcinfo<<m_name<<" "<<latestFinish.toString()<<" : "<<m_endTime.toString()<<endl;
+        //kdDebug()<<k_funcinfo<<m_name<<" "<<cs->latestFinish<<endl;
     } else if (type() == Node::Type_Summarytask) {
         kdWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     } else { // ???
         m_durationBackward = Duration::zeroDuration;
     }
-    //kdDebug()<<"Latestart: "<<m_latestFinishBackward.toString()<<"-"<<m_durationBackward.toString()<<"="<<(m_latestFinishBackward-m_durationBackward).toString()<<" "<<m_name<<" calculateBackward()"<<endl;
+    //kdDebug()<<"Latestart: "<<cs->latestFinish<<"-"<<m_durationBackward.toString()<<"="<<(cs->latestFinish-m_durationBackward).toString()<<" "<<m_name<<" calculateBackward()"<<endl;
     m_visitedBackward = true;
-    return m_latestFinishBackward - m_durationBackward;
+    return cs->latestFinish - m_durationBackward;
 }
 
 DateTime Task::schedulePredeccessors(const QPtrList<Relation> &list, int use) {
@@ -865,7 +869,7 @@ DateTime Task::schedulePredeccessors(const QPtrList<Relation> &list, int use) {
                 t -= duration(t + it.current()->lag(), use, true);
                 break;
             default:
-                time += it.current()->lag();
+                t += it.current()->lag();
                 break;
         }
         if (!time.isValid() || t > time)
@@ -876,7 +880,7 @@ DateTime Task::schedulePredeccessors(const QPtrList<Relation> &list, int use) {
 }
 
 DateTime Task::scheduleForward(const DateTime &earliest, int use) {
-    //kdDebug()<<k_funcinfo<<m_name<<" earliest="<<earliest.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" earliest="<<earliest<<endl;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -890,7 +894,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     DateTime time = schedulePredeccessors(dependParentNodes(), use);
     if (time.isValid() && time > cs->startTime) {
         cs->startTime = time;
-        //kdDebug()<<k_funcinfo<<m_name<<" new startime="<<cd->startTime<<endl;
+        //kdDebug()<<k_funcinfo<<m_name<<" new startime="<<cs->startTime<<endl;
     }
     // Then my parents
     time = schedulePredeccessors(m_parentProxyRelations, use);
@@ -898,35 +902,31 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
         cs->startTime = time;
         //kdDebug()<<k_funcinfo<<m_name<<" new startime="<<cs->startTime<<endl;
     }
-    //kdDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
     if(type() == Node::Type_Task) {
         cs->duration = m_effort->effort(use);
         switch (m_constraint) {
         case Node::ASAP:
             // cs->startTime calculated above
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->startTime = cs->workStartTime;
+            //kdDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
             if (m_effort->type() == Effort::Type_Effort) {
                 cs->duration = duration(cs->startTime, use, false);
             }
             cs->endTime = cs->startTime + cs->duration;
-            cs->workEndTime = workFinishBefore(cs->endTime);
+            //kdDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
             break;
         case Node::ALAP:
             // cd->startTime calculated above
-            cs->workEndTime = workFinishBefore(cs->latestFinish);
-            cs->endTime = cs->workEndTime;
             if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->endTime, use, true);
+                cs->duration = duration(cs->latestFinish, use, true);
             }
+            cs->endTime = cs->latestFinish;
             cs->startTime = cs->endTime - cs->duration;
-            cs->workStartTime = workStartAfter(cs->startTime);
+            //kdDebug()<<k_funcinfo<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->latestFinish<<endl;
             break;
         case Node::StartNotEarlier:
             // cs->startTime calculated above
             //kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<cd->startTime.toString()<<endl;            
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->startTime = cs->workStartTime;
             if (cs->startTime < m_constraintStartTime) {
                 cs->startTime = m_constraintStartTime;
             }
@@ -937,13 +937,10 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
             if (cs->endTime > cs->latestFinish) {
                 cs->schedulingError = true;
             }
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->workEndTime = workFinishBefore(cs->endTime);
             break;
         case Node::FinishNotLater:
             // cs->startTime calculated above
             //kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<cs->startTime.toString()<<endl;
-            cs->workStartTime = workStartAfter(cs->startTime);
             if (m_effort->type() == Effort::Type_Effort) {
                 cs->duration = duration(cs->startTime, use, false);
             }
@@ -956,7 +953,6 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
                 }
                 cs->startTime = cs->endTime - cs->duration;
             }
-            cs->workEndTime = workFinishBefore(cs->endTime);
             break;
         case Node::MustStartOn:
             // cs->startTime calculated above
@@ -970,8 +966,6 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
                 cs->duration = duration(cs->startTime, use, false);
             }
             cs->endTime = cs->startTime + cs->duration;
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->workEndTime = workFinishBefore(cs->endTime);
             break;
         case Node::MustFinishOn:
             // cs->startTime calculated above
@@ -985,20 +979,19 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
                 cs->duration = duration(cs->endTime, use, true);
             }
             cs->startTime = cs->endTime - cs->duration;
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->workEndTime = workFinishBefore(cs->endTime);
             break;
         case Node::FixedInterval: {
             // cs->startTime calculated above
-            //kdDebug()<<"FixedInterval="<<m_constraintStartTime.toString()<<" "<<cs->startTime.toString()<<endl;
-            if (cs->endTime > cs->latestFinish || cs->startTime < cs->earliestStart) {
+            //kdDebug()<<"FixedInterval="<<m_constraintStartTime<<" "<<cs->startTime<<endl;
+            if (cs->startTime < cs->earliestStart) {
                 cs->schedulingError = true;
             }
             cs->startTime = m_constraintStartTime;
             cs->endTime = m_constraintEndTime;
             cs->duration = cs->endTime - cs->startTime;
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->workEndTime = workFinishBefore(cs->endTime);
+            cs->workStartTime = m_constraintStartTime;
+            cs->workEndTime = m_constraintEndTime;
+            //kdDebug()<<"FixedInterval="<<cs->startTime<<", "<<cs->endTime<<endl;
             break;
         }
         default:
@@ -1052,6 +1045,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
             break;
         }
         cs->duration = Duration::zeroDuration;
+        //kdDebug()<<k_funcinfo<<m_name<<": "<<cs->startTime<<", "<<cs->endTime<<endl;
     } else if (type() == Node::Type_Summarytask) {
         //shouldn't come here
         cs->endTime = cs->startTime;
@@ -1113,35 +1107,37 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     if (time.isValid() && time < cs->endTime) {
         cs->endTime = time;
     }
-
+    //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<endl;
     if (type() == Node::Type_Task) {
         cs->duration = m_effort->effort(use);
         switch (m_constraint) {
-        case Node::ASAP:
+        case Node::ASAP: {
             // cs->endTime calculated above
-            cs->workEndTime = workFinishBefore(cs->endTime);
-            cs->endTime = cs->workEndTime;
+            //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  early="<<cs->earliestStart<<endl;
             if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->endTime, use, true);
+                cs->duration = duration(cs->earliestStart, use, false);
             }
-            cs->startTime = cs->endTime - cs->duration;
-            cs->workStartTime = workStartAfter(cs->startTime);
+            cs->startTime = cs->earliestStart;
+            DateTime e = cs->startTime + cs->duration;
+            if (e > cs->endTime) {
+                cs->schedulingError = true;
+            }
+            cs->endTime = e;
+            //kdDebug()<<k_funcinfo<<m_name<<": start="<<cs->startTime<<"+"<<cs->duration.toString()<<"="<<e<<" -> end="<<cs->endTime<<endl;
             break;
+        }
         case Node::ALAP:
             // cs->endTime calculated above
-            cs->workEndTime = workFinishBefore(cs->endTime);
-            cs->endTime = cs->workEndTime;
+            //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  late="<<cs->latestFinish<<endl;
             if (m_effort->type() == Effort::Type_Effort) {
                 cs->duration = duration(cs->endTime, use, true);
             }
             cs->startTime = cs->endTime - cs->duration;
-            cs->workStartTime = workStartAfter(cs->startTime);
+            //kdDebug()<<k_funcinfo<<m_name<<": lateStart="<<cs->startTime<<endl;
             break;
         case Node::StartNotEarlier:
             // cs->endTime calculated above
             //kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<cs->endTime.toString()<<endl;
-            cs->workEndTime = workFinishBefore(cs->endTime);
-            cs->endTime = cs->workEndTime;
             if (m_effort->type() == Effort::Type_Effort) {
                 cs->duration = duration(cs->endTime, use, true);
             }
@@ -1153,15 +1149,11 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
                     cs->duration = duration(cs->startTime, use, false);
                 }
                 cs->endTime = cs->startTime + cs->duration;
-                cs->workEndTime = workFinishBefore(cs->endTime);
             }
-            cs->workStartTime = workStartAfter(cs->startTime);
             break;
         case Node::FinishNotLater:
             // cs->endTime calculated above
             //kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<cs->endTime.toString()<<endl;            
-            cs->workEndTime = workFinishBefore(cs->endTime);
-            cs->endTime = cs->workEndTime;
             if (cs->endTime > m_constraintEndTime) {
                 cs->schedulingError = true;
                 cs->endTime = m_constraintEndTime;
@@ -1170,7 +1162,6 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
                 cs->duration = duration(cs->endTime, use, true);
             }
             cs->startTime = cs->endTime - cs->duration;
-            cs->workStartTime = workStartAfter(cs->startTime);
             break;
         case Node::MustStartOn:
             // cs->endTime calculated above
@@ -1184,8 +1175,6 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
                 cs->duration = duration(cs->startTime, use, false);
             }
             cs->endTime = cs->startTime + cs->duration;
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->workEndTime = workFinishBefore(cs->endTime);
             break;
         case Node::MustFinishOn:
             // cs->endTime calculated above
@@ -1193,27 +1182,25 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
             if (m_constraintEndTime > cs->latestFinish ||
                 m_constraintEndTime < cs->earliestStart + m_durationForward) {
                 cs->schedulingError = true;
-            }                
+            }
             cs->endTime = m_constraintEndTime;
             if (m_effort->type() == Effort::Type_Effort) {
                 cs->duration = duration(cs->endTime, use, true);
             }
             cs->startTime = cs->endTime - cs->duration;
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->workEndTime = workFinishBefore(cs->endTime);
             break;
         case Node::FixedInterval: {
             // cs->endTime calculated above
-            //kdDebug()<<"FixedInterval="<<m_constraintEndTime.toString()<<" "<<cs->endTime.toString()<<endl;
-            if (m_constraintEndTime > cs->endTime ||
-                cs->startTime < cs->earliestStart) {
+            //kdDebug()<<k_funcinfo<<"FixedInterval="<<m_constraintEndTime<<" "<<cs->endTime<<endl;
+            if (m_constraintEndTime > cs->endTime) {
                 cs->schedulingError = true;
+                kdDebug()<<k_funcinfo<<"FixedInterval error: "<<m_constraintEndTime<<" >  "<<cs->endTime<<endl;
             }
             cs->startTime = m_constraintStartTime;
             cs->endTime = m_constraintEndTime;
             cs->duration = cs->endTime - cs->startTime;
-            cs->workStartTime = workStartAfter(cs->startTime);
-            cs->workEndTime = workFinishBefore(cs->endTime);
+            cs->workStartTime = m_constraintStartTime;
+            cs->workEndTime = m_constraintEndTime;
             break;
         }
         default:
@@ -1301,10 +1288,14 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
     if (m_currentSchedule == 0)
         return Duration::zeroDuration;
     //kdDebug()<<endl;
-    //kdDebug()<<"--------> calcDuration "<<(backward?"(B) ":"(F) ")<<m_name<<" "<<time.toString()<<" effort="<<effort.toString(Duration::Format_Day)<<endl;
+    //kdDebug()<<"--------> calcDuration "<<(backward?"(B) ":"(F) ")<<m_name<<" time="<<time.toString()<<" effort="<<effort.toString(Duration::Format_Day)<<endl;
     if (!m_requests || m_requests->isEmpty()) {
         m_currentSchedule->resourceError = true;
         return effort;
+    }
+    if (!time.isValid()) {
+        kdError()<<k_funcinfo<<"Time is invalid"<<endl;
+        return Duration::zeroDuration;
     }
     Duration dur = m_requests->duration(time, effort, backward);
     //kdDebug()<<"<--------calcDuration "<<m_name<<": "<<time.toString()<<" to "<<(time+dur).toString()<<" = "<<dur.toString(Duration::Format_Day)<<endl;
@@ -1430,8 +1421,6 @@ DateTime Task::workStartTime() const {
 DateTime Task::workEndTime() const {
     if (m_currentSchedule == 0)
          return DateTime();
-    if (m_requests)
-        return m_currentSchedule->workEndTime;
     return m_currentSchedule->endTime;
 }
 
@@ -1453,11 +1442,23 @@ DateTime Task::workFinishBefore(const DateTime &dt) {
 Duration Task::positiveFloat() {
     if (m_currentSchedule == 0)
         return Duration::zeroDuration;
-    DateTime t = workFinishBefore(m_currentSchedule->latestFinish);
-    if (t <= (type() == Node::Type_Milestone ? m_currentSchedule->startTime : m_currentSchedule->endTime)) {
-        return Duration::zeroDuration;
+    Duration f;
+    if (type() == Node::Type_Milestone) {
+        if (m_currentSchedule->startTime < m_currentSchedule->latestFinish) {
+            f = m_currentSchedule->latestFinish - m_currentSchedule->startTime;
+        }
+    } else {
+        if (m_currentSchedule->workEndTime.isValid())
+            if (m_currentSchedule->workEndTime < m_currentSchedule->latestFinish) {
+            f = m_currentSchedule->latestFinish - m_currentSchedule->workEndTime;
+        } else if (m_currentSchedule->endTime.isValid()) {
+            if (m_currentSchedule->endTime < m_currentSchedule->latestFinish) {
+                f = m_currentSchedule->latestFinish - m_currentSchedule->endTime;
+            }
+        }
     }
-    return t - m_currentSchedule->endTime;
+    //kdDebug()<<k_funcinfo<<f.toString()<<endl;
+    return f;
 }
 
 bool Task::isCritical() {

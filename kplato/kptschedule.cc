@@ -446,6 +446,8 @@ void NodeSchedule::initiateCalculation() {
     resourceOverbooked = false;
     schedulingError = false;
     inCriticalPath = false;
+    workStartTime = DateTime();
+    workEndTime = DateTime();
 }
 
 void NodeSchedule::addAppointment(Schedule *resource, DateTime &start, DateTime &end, double load) {

@@ -61,7 +61,6 @@ CalendarEdit::CalendarEdit (QWidget *parent, const char *name)
 
     connect (calendarPanel, SIGNAL(dateChanged(QDate)), SLOT(slotDateSelected(QDate)));
     connect (calendarPanel, SIGNAL(weekdaySelected(int)), SLOT(slotWeekdaySelected(int)));
-    connect (calendarPanel, SIGNAL(weekSelected(int, int)), SLOT(slotWeekSelected(int, int)));
     connect(calendarPanel, SIGNAL(selectionCleared()), SLOT(slotSelectionCleared()));
 
     connect (state, SIGNAL(activated(int)), SLOT(slotStateActivated(int)));
@@ -128,11 +127,6 @@ void CalendarEdit::slotApplyClicked() {
                 calDay->addInterval(static_cast<IntervalItem *>(item)->interval());
             }
         }
-    }
-
-    WeekMap weeks = calendarPanel->selectedWeeks();
-    for(WeekMap::iterator it = weeks.begin(); it != weeks.end(); ++it) {
-        m_calendar->setWeek(it, state->currentItem());//NOTE!!
     }
 
     IntMap weekdays = calendarPanel->selectedWeekdays();
@@ -274,26 +268,6 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
         bApply->setEnabled(true);
     } else {
         //kdDebug()<<k_funcinfo<<"("<<day_<<")=none"<<endl;
-        state->setCurrentItem(0);
-        slotStateActivated(0);
-        bApply->setEnabled(true);
-    }
-}
-
-void CalendarEdit::slotWeekSelected(int week, int year) {
-    clearEditPart();
-    state->clear();
-    state->insertItem(i18n("Undefined"));
-    state->insertItem(i18n("Non-working"));
-    WeekMap weeks = calendarPanel->markedWeeks();
-    int s = weeks.state(QPair<int, int>(week, year));
-    //kdDebug()<<k_funcinfo<<"("<<week<<", "<<year<<")="<<s<<endl;
-    state->setEnabled(true);
-    if (s == Map::NonWorking) {
-        state->setCurrentItem(1);
-        slotStateActivated(1);
-        bApply->setEnabled(true);
-    } else if (s == Map::None) {
         state->setCurrentItem(0);
         slotStateActivated(0);
         bApply->setEnabled(true);

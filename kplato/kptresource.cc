@@ -449,7 +449,15 @@ ResourceSchedule *Resource::createSchedule(QString name, int type, int id) {
 }
 
 void Resource::makeAppointment(NodeSchedule *node) {
-    //kdDebug()<<k_funcinfo<<m_name<< ": "<<node->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<< ": "<<node->node()->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
+    if (!node->startTime.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": startTime invalid"<<endl;
+        return;
+    }
+    if (!node->endTime.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": endTime invalid"<<endl;
+        return;
+    }
     if (m_type == Type_Material) {
         // we just allocate the whole task length (if  available)
         DateTime from = availableAfter(node->startTime, node->endTime);
@@ -468,26 +476,43 @@ void Resource::makeAppointment(NodeSchedule *node) {
     DateTime time = node->startTime;
     DateTime end = node->endTime;
     time = availableAfter(time, end);
+    if (!time.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": Resource not available (after="<<node->startTime<<", "<<end<<")"<<endl;
+        node->resourceNotAvailable = true;
+        return;
+    }
     end = availableBefore(end, time);
-    if (!time.isValid() || !end.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": Resource not available"<<endl;
-        //node->resourceNotAvailable = true;
+    if (!end.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": Resource not available (before="<<node->endTime<<", "<<time<<")"<<endl;
+        node->resourceNotAvailable = true;
         return;
     }
     //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
     while (time < end) {
         //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
+        if (!time.isValid() || !end.isValid()) {
+            kdWarning()<<k_funcinfo<<"Invalid time"<<endl;
+            return;
+        }
         if (!cal->hasInterval(time, end)) {
             //kdDebug()<<time.toString()<<" to "<<end.toString()<<": No (more) interval(s)"<<endl;
             kdWarning()<<k_funcinfo<<m_name<<": Resource only partially available"<<endl;
             //node->resourceNotAvailable = true;
             return; // nothing more to do
         }
-        QPair<DateTime, DateTime> i = cal->interval(time, end);
+        QPair<DateTime, DateTime> i = cal->firstInterval(time, end);
+        if (!i.second.isValid()) {
+            kdWarning()<<k_funcinfo<<"Invalid interval: "<<time<<", "<<end<<endl;
+            return;
+        }
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
         addAppointment(node, i.first, i.second, 100); //FIXME units
         //kdDebug()<<k_funcinfo<<"Add :"<<i.first.toString()<<" to "<<i.second.toString()<<endl;
+        if (!(node->workStartTime.isValid()) || i.first < node->workStartTime)
+            node->workStartTime = i.first;
+        if (!(node->workEndTime.isValid()) || i.second > node->workEndTime)
+            node->workEndTime = i.second;
         time = i.second;
     }
 }
@@ -497,6 +522,10 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
     //kdDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(Duration::Format_Day)<<endl;
     bool sts=false;
     Duration e;
+    if (duration == 0) {
+        kdWarning()<<k_funcinfo<<"zero duration"<<endl;
+        return e;
+    }
     Calendar *cal = calendar();
     if (cal == 0) {
         kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
@@ -508,6 +537,8 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
         if (t.isValid()) {
             sts = true;
             e = (cal->effort(limit, t) * m_units)/100;
+        } else {
+            //kdDebug()<<k_funcinfo<<m_name<<": Not available (start="<<start<<", "<<limit<<")"<<endl;
         }
     } else {
         DateTime limit = start + duration;
@@ -567,12 +598,18 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, b
     if (cal == 0) {
         return t;
     }
-    t = m_availableUntil < time ? m_availableUntil : time;
+    if (!m_availableUntil.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": availabelUntil is invalid"<<endl;
+        t = time;
+    } else {
+        t = m_availableUntil < time ? m_availableUntil : time;
+    }
+    //kdDebug()<<k_funcinfo<<t<<", "<<lmt<<endl;
     t = cal->firstAvailableBefore(t, lmt);
     if (checkAppointments) {
         //TODO
     }
-    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" returns: "<<time<<"="<<t<<" "<<endl;
     return t;
 }
 
@@ -649,7 +686,7 @@ bool ResourceRequest::load(QDomElement &element, Project &project) {
     //kdDebug()<<k_funcinfo<<endl;
     m_resource = project.resource(element.attribute("resource-id"));
     if (m_resource == 0) {
-        kdDebug()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id")<<endl;
+        kdWarning()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id")<<endl;
         return false;
     }
     m_units  = element.attribute("units").toInt();
@@ -787,7 +824,7 @@ Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &dura
     for (; it.current(); ++it) {
         e += it.current()->resource()->effort(time, duration, backward, &sts);
         if (sts && ok) *ok = sts;
-        //kdDebug()<<k_funcinfo<<it.current()->resource()->name()<<" e="<<e.toString()<<endl;
+        //kdDebug()<<k_funcinfo<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="duration.toString()<<"gave e="<<e.toString()<<endl;
     }
     //kdDebug()<<k_funcinfo<<time.toString()<<"d="<<duration.toString()<<": e="<<e.toString()<<endl;
     return e;
@@ -827,12 +864,13 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     int inc = backward ? -1 : 1;
     DateTime end = start;
     Duration e1;
+    Duration d(1, 0, 0); // 1 day
     int nDays = numDays(time, backward) + 1;
     for (int i=0; !match && i <= nDays; ++i) {
         // days
         end = end.addDays(inc);
-        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
-        //kdDebug()<<"duration["<<i<<"("<<nDays<<")] "<<(backward?"(B)":"(F):")<<"  date="<<start.date().toString()<<" e+e1="<<(e+e1).toString()<<"=="<<_effort.toString()<<endl;
+        e1 = effort(start, d, backward, &sts);
+        //kdDebug()<<"["<<i<<"of"<<nDays<<"] "<<(backward?"(B)":"(F):")<<"  start="<<start<<" e+e1="<<(e+e1).toString()<<" match "<<_effort.toString()<<endl;
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -845,10 +883,11 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
     }
     //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    d = Duration(0, 1, 0); // 1 hour
     for (int i=0; !match && i < 24; ++i) {
         // hours
         end = end.addSecs(inc*60*60);
-        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
+        e1 = effort(start, d, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -862,10 +901,11 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kdDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward ":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    d = Duration(0, 0, 1); // 1 minute
     for (int i=0; !match && i < 60; ++i) {
         //minutes
         end = end.addSecs(inc*60);
-        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
+        e1 = effort(start, d, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -879,10 +919,11 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kdDebug()<<"duration(m) "<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     //kdDebug()<<"duration "<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts<<endl;
+    d = Duration(0, 0, 0, 1); // 1 second
     for (int i=0; !match && i < 60 && sts; ++i) {
         //seconds
         end = end.addSecs(inc);
-        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
+        e1 = effort(start, d, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -895,10 +936,11 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
         //kdDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
+    d = Duration(0, 0, 0, 0, 1); // 1 millisecond
     for (int i=0; !match && i < 1000; ++i) {
         //milliseconds
         end.setTime(end.time().addMSecs(inc));
-        e1 = effort(start, (end>start?end-start:start-end), backward, &sts);
+        e1 = effort(start, d, backward, &sts);
         if (e + e1 < _effort) {
             e += e1;
             start = end;

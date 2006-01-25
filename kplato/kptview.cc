@@ -42,6 +42,7 @@
 #include <qwidgetstack.h>
 #include <qtimer.h>
 #include <qpopupmenu.h>
+#include <qpair.h>
 
 #include <kiconloader.h>
 #include <kaction.h>
@@ -1231,7 +1232,7 @@ void View::slotPrintTestDebug() {
     b = (d2 + d)==d1;
     kdDebug()<<"5: Success="<<b<<"   "<<d2<<"+"<<d.toString()<<"="<<d1<<endl;
     b = (d1 - d)==d2;
-    kdDebug()<<"5: Success="<<b<<"   "<<d1<<"-"<<d.toString()<<"="<<d2<<endl;
+    kdDebug()<<"6: Success="<<b<<"   "<<d1<<"-"<<d.toString()<<"="<<d2<<endl;
     } // end test 1
     kdDebug()<<endl;
     kdDebug()<<"------------Test 2 Single calendar-----------------"<<endl;
@@ -1283,6 +1284,12 @@ void View::slotPrintTestDebug() {
     
     b = !t->hasInterval(before, before.addDays(-1));
     kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before<<", "<<before.addDays(-1)<<")"<<endl;
+    
+    Duration e1(0, 2, 0); // 2 hours
+    Duration e2 = t->effort(before, after);
+    b = e1==e2;
+    kdDebug()<<"9: Success="<<b<<"      effort"<<e1.toString()<<" = "<<e2.toString()<<endl;
+    
     delete t;
     }// end test 2
     
@@ -1338,6 +1345,11 @@ void View::slotPrintTestDebug() {
     
     b = !t->hasInterval(before, before.addDays(-1));
     kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
+    Duration e1(0, 2, 0); // 2 hours
+    Duration e2 = t->effort(before, after);
+    b = e1==e2;
+    kdDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"=="<<e2.toString()<<endl;
+    
     delete t;
     delete p;
     }// end test 3
@@ -1347,12 +1359,13 @@ void View::slotPrintTestDebug() {
     QTime t1(8,0,0);
     QTime t2(10,0,0);
     Calendar *p = new Calendar("Test 4 parent");
-    CalendarDay *wd1 = p->weekday(0);
+    CalendarDay *wd1 = p->weekday(0); // monday
     if (wd1 == 0) {
         kdDebug()<<"Failed to get weekday"<<endl;
     }
     wd1->setState(Map::NonWorking);
-    CalendarDay *wd2 = p->weekday(2);
+    
+    CalendarDay *wd2 = p->weekday(2); // wednesday
     if (wd2 == 0) {
         kdDebug()<<"Failed to get weekday"<<endl;
     }
@@ -1361,11 +1374,11 @@ void View::slotPrintTestDebug() {
      
     Calendar *t = new Calendar("Test 4");
     t->setParent(p);
-    QDate wdate(2006,1,2);
-    DateTime before = DateTime(wdate.addDays(-4));
-    DateTime after = DateTime(wdate.addDays(4));
+    QDate wdate(2006,1,2); // monday jan 2
+    DateTime before = DateTime(wdate.addDays(-4)); //Thursday dec 29
+    DateTime after = DateTime(wdate.addDays(4)); // Friday jan 6
     DateTime wdt1(wdate, t1);
-    DateTime wdt2(wdate, t2);
+    DateTime wdt2(QDate(2006, 1, 4), t2); // Wednesday
     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
     day->addInterval(QPair<QTime, QTime>(t1, t2));
     if (!p->addDay(day)) {
@@ -1390,11 +1403,11 @@ void View::slotPrintTestDebug() {
     kdDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
     
     dt = t->firstAvailableAfter(before, after);
-    b = dt == wdt1;
+    b = dt == wdt1; // We find the day jan 2
     kdDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
     
     dt = t->firstAvailableBefore(after, before);
-    b = dt == wdt2;
+    b = dt == wdt2; // We find the weekday (wednesday)
     kdDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
     
     b = t->hasInterval(before, after);
@@ -1405,6 +1418,18 @@ void View::slotPrintTestDebug() {
     
     b = !t->hasInterval(before, before.addDays(-1));
     kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
+    Duration e1(0, 4, 0); // 2 hours
+    Duration e2 = t->effort(before, after);
+    b = e1==e2;
+    kdDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"="<<e2.toString()<<endl;
+    
+    QPair<DateTime, DateTime> r = t->firstInterval(before, after);
+    b = r.first == wdt1; // We find the monday jan 2
+    kdDebug()<<"10: Success="<<b<<"      firstInterval("<<before<<"): ="<<r.first<<", "<<r.second<<endl;
+    r = t->firstInterval(r.second, after);
+    b = r.first == DateTime(QDate(2006, 1, 4),t1); // We find the wednesday jan 4
+    kdDebug()<<"11: Success="<<b<<"      firstInterval("<<r.second<<"): ="<<r.first<<", "<<r.second<<endl;
+    
     delete t;
     delete p;
     }// end test 4

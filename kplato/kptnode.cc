@@ -458,7 +458,7 @@ void Node::propagateLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->latestFinish = time;
-    //kdDebug()<<k_funcinfo<<m_name<<": "<<latestFinish.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->latestFinish<<endl;
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateLatestFinish(time);

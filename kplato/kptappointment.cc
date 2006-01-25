@@ -491,7 +491,7 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
     for (; it.current(); ++it) {
         DateTime st = it.current()->startTime();
         DateTime e = it.current()->endTime();
-        if (end <= st.date())
+        if (end < st.date())
             break;
         if (dt.date() < st.date()) {
             dt.setDate(st.date());

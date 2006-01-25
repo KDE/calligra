@@ -81,7 +81,6 @@ DateTable::DateTable(QWidget *parent, QDate date_, const char* name, WFlags f)
     m_dateStartCol = 1;
     m_selectedDates.clear();
     m_selectedWeekdays.clear();
-    m_selectedWeeks.clear();
 
     QPair<int, int> p(0,0);
     m_weeks.fill(p, 7);
@@ -175,28 +174,11 @@ void DateTable::paintWeekNumber(QPainter *painter, int row) {
     painter->setPen(KGlobalSettings::baseColor());
     painter->drawRect(0, 0, w, h);
     painter->setPen(KGlobalSettings::textColor());
-    if (m_markedWeeks.state(m_weeks[row]) == Map::NonWorking) {
-        painter->setPen(colorBackgroundHoliday);
-        painter->setBrush(colorBackgroundHoliday);
-        painter->drawRect(0, 0, w, h);
-        painter->setPen(colorTextHoliday);
-    } else if (m_markedWeeks.state(m_weeks[row]) == Map::Working) {
-        painter->setPen(colorBackgroundWorkday);
-        painter->setBrush(colorBackgroundWorkday);
-        painter->drawRect(0, 0, w, h);
-        painter->setPen(colorTextWorkday);
-    }
-    if (m_selectedWeeks.contains(m_weeks[row])) {
-        painter->setPen(backgroundSelectColor);
-        painter->setBrush(backgroundSelectColor);
-        painter->drawRect(2, 2, w-4, h-4);
-        painter->setPen(penSelectColor);
-    }
+    
     painter->drawText(0, 0, w, h-1, AlignCenter, QString("%1").arg(m_weeks[row].first), -1, &rect);
     painter->setPen(colorLine);
     painter->moveTo(w-1, 0);
     painter->lineTo(w-1, h-1);
-    //kdDebug()<<k_funcinfo<<"weeknumbers: row,col=("<<row<<","<<col<<") week="<<m_weeks[row].first<<endl;
 
     if(rect.width()>maxCell.width()) maxCell.setWidth(rect.width());
     if(rect.height()>maxCell.height()) maxCell.setHeight(rect.height());
@@ -240,32 +222,7 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
     }
     // If weeks or weekdays are selected/marked we draw lines around the date
     QPen pen = painter->pen();
-    if (m_markedWeeks.state(m_weeks[row]) == Map::NonWorking) {
-        //kdDebug()<<k_funcinfo<<"Marked week: row,dayCol=("<<row<<","<<dayCol<<")=NonWorking"<<endl;
-        painter->setPen(colorBackgroundHoliday);
-        painter->moveTo(0, 0);
-        painter->lineTo(w-1, 0);
-        painter->moveTo(0, h-1);
-        painter->lineTo(w-1, h-1);
-        pen.setStyle(DotLine);
-    } else if (m_markedWeeks.state(m_weeks[row]) == Map::Working) {
-        //kdDebug()<<k_funcinfo<<"Marked week: row,dayCol=("<<row<<","<<dayCol<<")=Working"<<endl;
-        painter->setPen(colorBackgroundWorkday);
-        painter->moveTo(0, 0);
-        painter->lineTo(w-1, 0);
-        painter->moveTo(0, h-1);
-        painter->lineTo(w-1, h-1);
-        pen.setStyle(DotLine);
-    }
-    if (m_markedWeekdays.state(weekday(col)) == Map::NonWorking) {
-        //kdDebug()<<k_funcinfo<<"Marked week: row,dayCol=("<<row<<","<<dayCol<<")=NonWorking"<<endl;
-        pen.setColor(colorBackgroundHoliday);
-        painter->setPen(pen);
-        painter->moveTo(0, 0);
-        painter->lineTo(0, h-1);
-        painter->moveTo(w-1, 0);
-        painter->lineTo(w-1, h-1);
-    } else if (m_markedWeekdays.state(weekday(col)) == Map::Working) {
+    if (m_markedWeekdays.state(weekday(col)) == Map::Working) {
         //kdDebug()<<k_funcinfo<<"Marked weekday: row,dayCol=("<<row<<","<<dayCol<<")=Working"<<endl;
         pen.setColor(colorBackgroundWorkday);
         painter->setPen(pen);
@@ -420,7 +377,6 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
     int col=columnAt(mouseCoord.x());
     if (row == 0 && col == 0) { // user clicked on (unused) upper left square
         updateSelectedCells();
-        m_selectedWeeks.clear();
         m_selectedWeekdays.clear();
         m_selectedDates.clear();
         repaintContents(false);
@@ -431,27 +387,13 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         updateSelectedCells();
         m_selectedWeekdays.clear();
         m_selectedDates.clear();
-/*        if (e->state() & ShiftButton) {
-            //TODO
-        } else if (e->state() & ControlButton) {
-            // toggle select this week
-            m_selectedWeeks.toggle(m_weeks[row]);
-            //kdDebug()<<k_funcinfo<<"toggle row: "<<row<<" state="<<m_selectedWeeks.state(m_weeks[row])<<endl;
-        } else {
-            // toggle select this, clear all others
-            m_selectedWeeks.toggleClear(m_weeks[row]);
-            //kdDebug()<<k_funcinfo<<"toggleClear row: "<<row<<" state="<<m_selectedWeeks.state(m_weeks[row])<<endl;
-        }*/
         updateSelectedCells();
         repaintContents(false);
-/*        if (m_enabled)
-            emit weekSelected(m_weeks[row].first, m_weeks[row].second);*/
         return;
     }
     if (row==0 && col>0) { // the user clicked on weekdays
         updateSelectedCells();
         m_selectedDates.clear();
-        m_selectedWeeks.clear();;
         int day = weekday(col);
         if (e->state() & ShiftButton) {
             // select all days between this and the furthest away selected day,
@@ -496,7 +438,6 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
     if (contentsMousePressEvent_internal(e)) {
         // Date hit,
         m_selectedWeekdays.clear();
-        m_selectedWeeks.clear();
         if (e->state() & ShiftButton) {
             // find first&last date
             QDate first;
@@ -612,7 +553,7 @@ bool DateTable::setDate(const QDate& date_, bool repaint) {
         QDate d(date.year(), date.month()-1,1);
         setWeekNumbers(d.addDays(d.daysInMonth()-1));
     }
-/*    if (m_selectedWeeks.isEmpty() && m_selectedWeekdays.isEmpty() &&
+/*    if (m_selectedWeekdays.isEmpty() &&
         !m_selectedDates.isEmpty() && !m_selectedDates.contains(date))
     {
         //kdDebug()<<k_funcinfo<<"date inserted"<<endl;
@@ -676,8 +617,7 @@ void DateTable::updateSelectedCells() {
     dt = dt.addDays(-firstday);
     for (int pos=0; pos < 42; ++pos) {
         if (m_selectedDates.contains(dt.addDays(pos)) ||
-            m_selectedWeekdays.contains(pos%7+1) ||
-            m_selectedWeeks.contains(m_weeks[pos/7+1]))
+            m_selectedWeekdays.contains(pos%7+1))
         {
             updateCell(pos/7+1, pos%7+1);
             //kdDebug()<<k_funcinfo<<" update cell ("<<pos/7+1<<","<<pos%7+1<<") date="<<dt.addDays(pos).toString()<<endl;
@@ -690,31 +630,12 @@ void DateTable::updateMarkedCells() {
     dt = dt.addDays(-firstday);
     for (int pos=0; pos < 42; ++pos) {
         if (m_markedDates.contains(dt.addDays(pos)) ||
-            m_markedWeekdays.contains(pos%7+1) ||
-            m_markedWeeks.contains(m_weeks[pos/7+1]))
+            m_markedWeekdays.contains(pos%7+1))
         {
             updateCell(pos/7+1, pos%7+1);
             //kdDebug()<<k_funcinfo<<" update cell ("<<pos/7+1<<","<<pos%7+1<<") date="<<dt.addDays(pos).toString()<<endl;
         }
     }
-}
-
-void DateTable::setMarkedWeeks(WeekMap weeks) {
-    updateMarkedCells();
-    m_markedWeeks.clear();
-    WeekMap::iterator it;
-    for (it = weeks.begin(); it != weeks.end(); ++it) {
-        //kdDebug()<<k_funcinfo<<"insert: "<<it.key()<<"="<<it.data()<<endl;
-        m_markedWeeks.insert(it, it.data());
-    }
-    updateMarkedCells();
-    repaintContents(false);
-}
-
-void DateTable::addMarkedWeek(int week, int year, int state) {
-    m_markedWeeks.insert(week, year, state);
-    updateMarkedCells();
-    repaintContents(false);
 }
 
 void DateTable::setMarkedWeekdays(const IntMap days) {
@@ -733,22 +654,16 @@ bool DateTable::dateMarked(QDate date) {
     return m_markedDates[date.toString()];
 }
 
-bool DateTable::weekMarked(QPair<int, int> week) {
-    return m_markedWeeks.contains(week);
-}
-
 void DateTable::clear() {
     clearSelection();
     m_markedDates.clear();
     m_markedWeekdays.clear();
-    m_markedWeeks.clear();
     repaintContents(false);
 }
 
 void DateTable::clearSelection() {
     m_selectedDates.clear();
     m_selectedWeekdays.clear();
-    m_selectedWeeks.clear();;
     repaintContents(false);
 }
 
@@ -771,12 +686,6 @@ void DateTable::markSelected(int state) {
         for(it = m_selectedWeekdays.begin(); it != m_selectedWeekdays.end(); ++it) {
             m_markedWeekdays.insert(it.key(), state);
             //kdDebug()<<k_funcinfo<<"marked weekday: "<<it.key()<<"="<<state<<endl;
-        }
-    } else if (!m_selectedWeeks.isEmpty()) {
-        WeekMap::iterator it;
-        for(it = m_selectedWeeks.begin(); it != m_selectedWeeks.end(); ++it) {
-            m_markedWeeks.insert(WeekMap::week(it.key()), state);
-            //kdDebug()<<k_funcinfo<<"marked week: "<<it.key()<<"="<<state<<endl;
         }
     }
     updateSelectedCells();

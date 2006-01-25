@@ -169,7 +169,7 @@ public:
     void saveXML(QDomElement &element) const;
 
     /**
-     * Returns the planned effort and cost for the interval start to end.
+     * Returns the planned effort and cost for the interval start to end (inclusive).
      * Only dates with any planned effort is returned.
      */
     EffortCostMap plannedPrDay(const QDate& start, const QDate& end) const;

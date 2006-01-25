@@ -94,9 +94,6 @@ public:
      */
     bool hasInterval(const QTime &start, const QTime &end) const;
     
-    bool hasIntervalBefore(const QTime &time) const;
-    bool hasIntervalAfter(const QTime &time) const;
-
     Duration duration() const;
     
     const CalendarDay &copy(const CalendarDay &day);
@@ -164,9 +161,6 @@ public:
      * on the weekday defined by date for the interval start to end.
      */
     bool hasInterval(const QDate date, const QTime &start, const QTime &end) const;
-    bool hasIntervalAfter(const QDate date, const QTime &time) const;
-    bool hasIntervalBefore(const QDate date, const QTime &time) const;
-
     bool hasInterval() const;
 
     Duration duration() const;
@@ -189,42 +183,6 @@ public:
 #endif
 };
 
-class CalendarWeeks {
-
-public:
-    CalendarWeeks();
-    CalendarWeeks(CalendarWeeks *weeks);
-    ~CalendarWeeks();
-
-    bool load(QDomElement &element);
-    void save(QDomElement &element) const;
-
-    void setWeek(int week, int year, int type);
-    void setWeek(WeekMap::iterator it, int state){ m_weeks.insert(it, state); }
-    void setWeeks(WeekMap m){ m_weeks = m; }
-    WeekMap weeks() const { return m_weeks; }
-    
-    bool operator==(const CalendarWeeks *w) const { 
-        return weeks() == w->weeks(); 
-    }
-    bool operator!=(const CalendarWeeks *w) const { 
-        return weeks() != w->weeks(); 
-    }
-    
-    int state(const QDate &date);
-
-    CalendarWeeks &copy(CalendarWeeks &weeks);
-
-private:
-    WeekMap m_weeks;
-
-#ifndef NDEBUG
-public:
-    void printDebug(QCString indent="");
-#endif
-};
-
-class StandardWorktime;
 /**
  * Calendar defines the working and nonworking days and hours.
  * A day can have the three states None (Undefined), NonWorking, or Working.
@@ -233,16 +191,8 @@ class StandardWorktime;
  * to Nonworking.
  * A Working day has one or more work intervals to define the work hours.
  *
- * The definition can consist of three parts: Weekdays, Week, and Day.
- * Day has highest priority, Weekdays lowest.
- * Week can only have states None and Nonworking. (Should maybe change this)
- * The total priorities including parent(s), are:
- *  1. Own Day
- *  2. Own Weeks
- *  3. Parent Day
- *  4. Parent Weeks
- *  5. Own Weekdays
- *  6. Parent weekdays
+ * The definition can consist of two parts: Weekdays and Day.
+ * Day has highest priority.
  * 
  * A typical calendar hierarchy could include calendars on three levels:
  *  1. Definition of normal weekdays and national holidays/vacation days.
@@ -279,34 +229,19 @@ public:
 
     /**
      * Find the definition for the day date.
-     * If skipNone=true the day is NOT returned if it has state None.
+     * If skipUndefined=true the day is NOT returned if it has state None (Undefined).
      */
-    CalendarDay *findDay(const QDate &date, bool skipNone=false) const;
+    CalendarDay *findDay(const QDate &date, bool skipUndefined=false) const;
     bool addDay(CalendarDay *day) { return m_days.insert(0, day); }
     bool removeDay(CalendarDay *day) { return m_days.removeRef(day); }
     CalendarDay *takeDay(CalendarDay *day) { return m_days.take(m_days.find(day)); }
     const QPtrList<CalendarDay> &days() const { return m_days; }
     
     /**
-     * Returns the state of definition for the day and week with date in it.
-     * Also checks parent.
+     * Returns the state of definition for parents day date in it.
+     * Also checks the parents recursively.
      */
-    int parentDayWeekState(const QDate &date) const;
-    /**
-     * Returns the state of definition for the date's weekday.
-     * Also checks parent.
-     */
-    int parentWeekdayState(const QDate &date) const;
-    /**
-     * Returns the state of definition for the week with date in it.
-     * State can be None or Nonworking.
-     */
-    int weekState(const QDate &date) const;
-    
-    void setWeek(int week, int year, int type) { m_weeks->setWeek(week, year, type); }
-    void setWeek(WeekMap::iterator it, int state){ m_weeks->setWeek(it, state); }
-    WeekMap weekMap() { return m_weeks->weeks(); }
-    CalendarWeeks *weeks() { return m_weeks; }
+    int parentDayState(const QDate &date) const;
     
     IntMap weekdaysMap() { return m_weekdays->map(); }
     void setWeekday(IntMap::iterator it, int state) { m_weekdays->setWeekday(it, state); }
@@ -331,17 +266,20 @@ public:
 
     /**
      * Returns the first 'work interval' for the interval 
-     * starting at start with duration duration.
-     * If no 'work interval' exists, returns the interval (start, end).
-     * Use @ref hasInterval() to check if a 'work interval' exists.
+     * starting at start and ending at end.
+     * If no 'work interval' exists, returns an interval with invalid DateTime.
+     * You can also use @ref hasInterval() to check if a 'work interval' exists.
      */
-    QPair<DateTime, DateTime> interval(const DateTime &start, const DateTime &end) const;
+    QPair<DateTime, DateTime> firstInterval(const DateTime &start, const DateTime &end) const;
     
-    /// Checks if a work interval exists before time
-    bool hasIntervalBefore(const DateTime &time) const;
-    /// Checks if a work interval exists after time
-    bool hasIntervalAfter(const DateTime &time) const;
-
+    /**
+     * Returns the first 'work interval' on date for the interval 
+     * starting at start and ending at end.
+     * If no 'work interval' exists, returns an interval with first==second.
+     * You can also use @ref hasInterval() to check if a 'work interval' exists.
+     */
+    QPair<QTime, QTime> firstInterval(const QDate &date, const QTime &start, const QTime &end) const;
+    
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval starting at start and ending at end.
@@ -370,13 +308,6 @@ public:
     bool removeId() { return removeId(m_id); }
     bool removeId(const QString &id);
     void insertId(const QString &id);
-    
-    Duration parentDayWeekEffort(const QDate &date, const QTime &start, const QTime &end) const;
-    Duration parentWeekdayEffort(const QDate &date, const QTime &start, const QTime &end) const;
-    int parentDayWeekHasInterval(const QDate &date, const QTime &start, const QTime &end) const;
-    bool parentWeekdayHasInterval(const QDate &date, const QTime &start, const QTime &end) const;
-    QPair<QTime, QTime> parentDayWeekInterval(const QDate &date, const QTime &start, const QTime &end) const;
-    QPair<QTime, QTime> parentWeekdayInterval(const QDate &date, const QTime &start, const QTime &end) const;
 
 protected:
     const Calendar &copy(Calendar &calendar);
@@ -391,7 +322,6 @@ private:
     QString m_parentId;
 
     QPtrList<CalendarDay> m_days;
-    CalendarWeeks *m_weeks;
     CalendarWeekdays *m_weekdays;
 
 #ifndef NDEBUG

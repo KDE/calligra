@@ -552,7 +552,6 @@ void CalendarPanel::setCalendar(Calendar *cal) {
     //kdDebug()<<k_funcinfo<<endl;
     table->clear();
     if (cal) {
-        table->setMarkedWeeks(cal->weekMap());
         table->setMarkedWeekdays(cal->weekdaysMap());
         QPtrListIterator<CalendarDay> it = cal->days();
         //kdDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
@@ -575,20 +574,12 @@ IntMap  CalendarPanel::selectedWeekdays() {
     return table->selectedWeekdays();
 }
 
-WeekMap  CalendarPanel::selectedWeeks() {
-    return table->selectedWeeks();
-}
-
 DateMap  CalendarPanel::markedDates() {
     return table->markedDates();
 }
 
 IntMap  CalendarPanel::markedWeekdays() {
     return table->markedWeekdays();
-}
-
-WeekMap  CalendarPanel::markedWeeks() {
-    return table->markedWeeks();
 }
 
 void CalendarPanel::clear() {
