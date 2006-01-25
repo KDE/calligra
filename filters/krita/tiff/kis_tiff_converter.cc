@@ -40,34 +40,34 @@
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 
+#include "kis_tiff_reader.h"
 #include "kis_tiff_stream.h"
 #include "kis_tiff_writer_visitor.h"
 
 namespace {
 
-    const Q_UINT8 PIXEL_BLUE = 0;
-    const Q_UINT8 PIXEL_GREEN = 1;
-    const Q_UINT8 PIXEL_RED = 2;
-    const Q_UINT8 PIXEL_ALPHA = 3;
-
-    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount) {
+    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount, uint8 &destDepth) {
         if(color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK)
         {
             if(nbchannels == 0) nbchannels = 1;
             extrasamplescount = nbchannels - 1; // FIX the extrasamples count in case of
             if(color_nb_bits <= 8)
             {
-                    return "GRAYA";
+                destDepth = 8;
+                return "GRAYA";
             } else {
-                    return "GRAYA16";
+                destDepth = 16;
+                return "GRAYA16";
             }
         } else if(color_type == PHOTOMETRIC_RGB  /*|| color_type == PHOTOMETRIC_YCBCR*/ ) {
             if(nbchannels == 0) nbchannels = 3;
             extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
             if(color_nb_bits <= 8)
             {
+                destDepth = 8;
                 return "RGBA";
             } else {
+                destDepth = 16;
                 return "RGBA16";
             }
         } else if(color_type == PHOTOMETRIC_SEPARATED ) {
@@ -101,305 +101,25 @@ namespace {
             }
             if(color_nb_bits <= 8)
             {
+                destDepth = 8;
                 return "CMYK";
             } else {
+                destDepth = 16;
                 return "CMYKA16";
             }
         } else if(color_type == PHOTOMETRIC_CIELAB || color_type == PHOTOMETRIC_ICCLAB ) {
+            destDepth = 16;
             if(nbchannels == 0) nbchannels = 3;
             extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
             return "LABA"; // TODO add support for a 8bit LAB colorspace when it is written
         } else if(color_type ==  PHOTOMETRIC_PALETTE) {
+            destDepth = 16;
             if(nbchannels == 0) nbchannels = 2;
             extrasamplescount = nbchannels - 2; // FIX the extrasamples count in case of
             // <-- we will convert the index image to RGBA16 as the palette is allways on 16bits colors
             return "RGBA16";
         }
         return "";
-    }
-    
-    typedef void (*copyTransform)(Q_UINT8*, int, cmsHTRANSFORM);
-    
-    void cTidentity(Q_UINT8*, int , cmsHTRANSFORM)
-    {
-    }
-    
-    void cTinvert8(Q_UINT8* d, int pixelsize, cmsHTRANSFORM)
-    {
-        for(int i = 0; i < pixelsize; i++)
-        {
-            d[i] = Q_UINT8_MAX - d[i];
-        }
-    }
-    
-    void cTinvert16(Q_UINT8* v, int pixelsize, cmsHTRANSFORM)
-    {
-        Q_UINT16* d = (Q_UINT16*) v;
-        for(int i = 0; i < pixelsize; i++)
-        {
-            d[i] = Q_UINT16_MAX - d[i];
-        }
-    }
-    
-    void cTconvertUsingLcms(Q_UINT8* v, int pixelsize, cmsHTRANSFORM transform)
-    {
-        cmsDoTransform(transform, v, v, pixelsize);
-    }
-    
-#if 0
-    
-#define Kr 0.2126
-#define Kb 0.0722
-    
-/*    template<typename TYPE, Q_UINT32 TYPE_MAX>
-    void cTYcBcRtoRGB(Q_UINT8* v, int , cmsHTRANSFORM )
-    {
-        TYPE* d = (TYPE*)v;
-        double Eyq = (d[0]-(double)(TYPE_MAX/16 + 1)) / (double)(TYPE_MAX - 5);
-        double Ebq = (d[1]-(double)(TYPE_MAX/2 + 1)) / (double)(TYPE_MAX - 1);
-        double Erq = (d[2]-(double)(TYPE_MAX/2 + 1) ) / (double)(TYPE_MAX - 1);
-        d[2] = 0;//(TYPE)round(TYPE_MAX * (2. * (1. - Kr) * Erq + Eyq));
-        d[1] = 0;//(TYPE)round(TYPE_MAX * (2. * (1. - Kb) * Ebq + Eyq));
-        d[0] = (TYPE)round(TYPE_MAX * (Eyq - 2. * (Kr * (1. - Kr) * Erq + Kb * (1. - Kr) * Ebq)));
-//         d[0] = TYPE_MAX;
-    }*/
-    
-    void cTTest(Q_UINT8* d, int , cmsHTRANSFORM )
-    {
-        Q_UINT8 v = d[1];
-        d[0] = v;
-        d[1] = v;
-        d[2] = v;
-//         Q_UINT8 Y = d[0]; Q_UINT8 U = d[1]; Q_UINT8 V = d[2];
-//         d[2] = 126; //Y + U;
-//         d[1] = 126; //Y - 0.51*U - 0.186*V;
-//         d[0] = 126; //Y + V;
-        
-/*        double Eyq = ((double)d[0]-16) / 219.0;
-        double Ebq = ((double)d[1]-128) / 224.0;
-        double Erq = ((double)d[2]-128) / 224.0;
-
-        d[2] = round(255 * (2 * (1-Kr) * Erq + Eyq));
-        d[1] = round(255 * (2 * (1-Kb) * Ebq + Eyq));
-        d[0] = round(255 * (Eyq - 2 * (Kr * (1 - Kr) * Erq + Kb * (1 -Kr) * Ebq)));
-        d[0] = 126;*/
-    }
-#endif
-    void cTICCLABtoCIELAB8(Q_UINT8* d, int pixelsize, cmsHTRANSFORM )
-    {
-        Q_INT8* ds = (Q_INT8*) d;
-        for(int i = 1; i < pixelsize; i++)
-        {
-            ds[i] = d[i] - Q_UINT8_MAX/2;
-        }
-    }
-    
-    void cTICCLABtoCIELAB16(Q_UINT8* v, int pixelsize, cmsHTRANSFORM )
-    {
-        Q_UINT16* d = (Q_UINT16*) v;
-        Q_INT16* ds = (Q_INT16*) v;
-        for(int i = 1; i < pixelsize; i++)
-        {
-            ds[i] = d[i] - Q_UINT16_MAX /2;
-        }
-    }
-
-    void copyDataToChannels( KisHLineIterator it, TIFFStream* tiffstream, int8 alphapos, uint8 depth, uint8 nbcolorssamples, uint8 extrasamplescount, Q_UINT8* poses, cmsHTRANSFORM transformProfile, copyTransform transform = cTidentity,  cmsHTRANSFORM convertToLAB = 0)
-    {
-       if( depth <= 8 )
-        {
-            double coeff = Q_UINT8_MAX / (double)( ( 1 << depth ) - 1 );
-//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-            while (!it.isDone()) {
-                Q_UINT8 *d = it.rawData();
-                Q_UINT8 i;
-                for(i = 0; i < nbcolorssamples; i++)
-                {
-                    d[poses[i]] = tiffstream->nextValueBelow16() * coeff;
-                }
-                transform( d, nbcolorssamples, convertToLAB );
-                if(transformProfile) cmsDoTransform(transformProfile, d, d, 1);
-                d[poses[i]] = Q_UINT8_MAX;
-                for(int k = 0; k < extrasamplescount; k++)
-                {
-                    if(k == alphapos)
-                        d[poses[i]] = (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff );
-                    else
-                        tiffstream->nextValueBelow16();
-                }
-                ++it;
-            }
-        } else if( depth < 16 ) {
-            double coeff = Q_UINT16_MAX / (double)( ( 1 << depth ) - 1 );
-//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-            while (!it.isDone()) {
-                Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                Q_UINT8 i;
-                for(i = 0; i < nbcolorssamples; i++)
-                {
-                    d[poses[i]] = tiffstream->nextValueBelow16() * coeff;
-                }
-                transform( (Q_UINT8*)d, nbcolorssamples, convertToLAB );
-                if(transformProfile) cmsDoTransform(transformProfile, d, d, 1);
-                d[poses[i]] = Q_UINT16_MAX;
-                for(int k = 0; k < extrasamplescount; k++)
-                {
-                    if(k == alphapos)
-                        d[poses[i]] = (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff );
-                    else
-                        tiffstream->nextValueBelow16();
-                }
-                ++it;
-            }
-        } else if( depth < 32 ) {
-            double coeff = Q_UINT16_MAX / (double)( ( 1 << depth ) - 1 );
-//             kdDebug() << " depth expension coefficient : " << ((double)coeff) << " " << Q_UINT16_MAX << " " << ( ( 1 << depth ) - 1 ) << " " << depth << endl;
-            while (!it.isDone()) {
-                Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                Q_UINT8 i;
-                for(i = 0; i < nbcolorssamples; i++)
-                {
-                    d[poses[i]] = tiffstream->nextValueBelow32() / coeff;
-                }
-                transform( (Q_UINT8*)d, nbcolorssamples, convertToLAB );
-                if(transformProfile) cmsDoTransform(transformProfile, d, d, 1);
-                d[poses[i]] = Q_UINT16_MAX;
-                for(int k = 0; k < extrasamplescount; k++)
-                {
-                    if(k == alphapos)
-                        d[poses[i]] = (Q_UINT16) ( tiffstream->nextValueBelow32() * coeff );
-                    else
-                        tiffstream->nextValueBelow32();
-                }
-                ++it;
-            }
-        } else {
-            Q_UINT32 coeff =  1 << ( 16 );
-//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-            while (!it.isDone()) {
-                Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                Q_UINT8 i;
-                for(i = 0; i < nbcolorssamples; i++)
-                {
-                    d[poses[i]] = tiffstream->nextValueAbove32() / coeff;
-                }
-                transform( (Q_UINT8*)d, nbcolorssamples, convertToLAB );
-                if(transformProfile) cmsDoTransform(transformProfile, d, d, 1);
-                d[poses[i]] = Q_UINT16_MAX;
-                for(int k = 0; k < extrasamplescount; k++)
-                {
-                    if(k == alphapos)
-                        d[poses[i]] = tiffstream->nextValueAbove32() / coeff;
-                    else
-                        tiffstream->nextValueBelow32();
-                }
-                ++it;
-            }
-        }
-    }
-    void convertFromTIFFData( KisHLineIterator it, TIFFStream* tiffstream, int8 alphapos, uint16 color_type, uint16 depth, uint8 nbcolorssamples, uint8 extrasamplescount, uint16 *red, uint16 *green, uint16 *blue, KisProfile* profile, cmsHTRANSFORM transform )
-    {
-        switch(color_type)
-        {
-            case PHOTOMETRIC_MINISWHITE:
-            {
-                Q_UINT8 poses[]={ 0, 1};
-                if(depth > 8)
-                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform, cTinvert16);
-                else
-                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform, cTinvert8);
-            }
-            break;
-            case PHOTOMETRIC_MINISBLACK:
-            {
-                Q_UINT8 poses[]={ 0, 1};
-                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform);
-            }
-            break;
-            case PHOTOMETRIC_CIELAB:
-            {
-                Q_UINT8 poses[]={ 0, 1, 2, 3};
-                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform);
-            }
-            break;
-            case PHOTOMETRIC_ICCLAB:
-            {
-                Q_UINT8 poses[]={ 0, 1};
-                if(depth > 8)
-                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform, cTICCLABtoCIELAB16);
-                else
-                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform, cTICCLABtoCIELAB8);
-            }
-            break;
-            case PHOTOMETRIC_RGB:
-            {
-                Q_UINT8 poses[]={ 2, 1, 0, 3};
-                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform);
-            }
-            break;
-#if 0
-            case PHOTOMETRIC_YCBCR:
-            {
-                Q_UINT8 poses[]={ 0, 1, 2, 3};
-/*                if(profile)
-                {
-                    if(depth > 8)
-                        copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTtoLAB, cmsCreateTransform( profile->profile(), TYPE_YCbCr_16, cmsCreateLabProfile(NULL), TYPE_Lab_16, INTENT_PERCEPTUAL, 0) );
-                    else
-                        copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTtoLAB, cmsCreateTransform( profile->profile(), TYPE_YCbCr_8, cmsCreateLabProfile(NULL), TYPE_Lab_16, INTENT_PERCEPTUAL, 0) );
-                } else {*/
-                        copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses,  cTTest/*cTYcBcRtoRGB<Q_UINT8, Q_UINT8_MAX>*/ );
-//                     if(depth > 8)
-//                         copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTYcBcRtoRGB<Q_UINT16, Q_UINT16_MAX> );
-//                     else
-//                         copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses,  cTTest/*cTYcBcRtoRGB<Q_UINT8, Q_UINT8_MAX>*/ );
-//                 }
-            }
-#endif
-            case PHOTOMETRIC_PALETTE:
-            {
-                if(depth <= 8)
-                {
-                    while (!it.isDone()) {
-                        Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        uint32 index = tiffstream->nextValueBelow16();
-                        d[2] = red[index];
-                        d[1] = green[index];
-                        d[0] = blue[index];
-                        d[3] = Q_UINT16_MAX;
-                        ++it;
-                    }
-                } else if(depth < 16)
-                {
-                    while (!it.isDone()) {
-                        Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        uint32 index = tiffstream->nextValueBelow16();
-                        d[2] = red[index];
-                        d[1] = green[index];
-                        d[0] = blue[index];
-                        d[3] = Q_UINT16_MAX;
-                        ++it;
-                    }
-                } else if(depth < 32)
-                {
-                    while (!it.isDone()) {
-                        Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        uint32 index = tiffstream->nextValueBelow32();
-                        d[2] = red[index];
-                        d[1] = green[index];
-                        d[0] = blue[index];
-                        d[3] = Q_UINT16_MAX;
-                        ++it;
-                    }
-                }
-            }
-            case PHOTOMETRIC_SEPARATED: // it means CMYK
-            {
-                Q_UINT8 poses[]={ 0, 1, 2, 3, 4};
-                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, transform);
-            }
-            break;
-        }
     }
 }
 
@@ -474,7 +194,8 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         kdDebug() << "Image has an undefined photometric interpretation" << endl;
         color_type = PHOTOMETRIC_MINISWHITE;
     }
-    QString csName = getColorSpaceForColorType(color_type, depth, image, nbchannels, extrasamplescount);
+    uint8 dstDepth;
+    QString csName = getColorSpaceForColorType(color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
     if(csName == "") {
         kdDebug() << "Image has an unsupported colorspace : " << color_type << " for this depth : "<< depth << endl;
         TIFFClose(image);
@@ -548,18 +269,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         aboutPage->setAbstract( text );
     }
     
-    // Read pallete if the file is indexed
-    uint16 *red; // No need to free them they are free by libtiff
-    uint16 *green;
-    uint16 *blue;
-    if(color_type == PHOTOMETRIC_PALETTE) {
-        if ((TIFFGetField(image, TIFFTAG_COLORMAP, &red, &green, &blue)) == 0)
-        {
-            kdDebug() <<  "Indexed image does not define a palette" << endl;
-            TIFFClose(image);
-            return KisImageBuilder_RESULT_INVALID_ARG;
-        }
-    }
     
     // Get the planar configuration
     uint16 planarconfig;
@@ -589,7 +298,76 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     m_img->addLayer(layer, m_img->rootLayer(), 0);
     tdata_t buf = 0;
     tdata_t* ps_buf = 0; // used only for planar configuration seperated
-    TIFFStream* tiffstream;
+    TIFFStreamBase* tiffstream;
+    
+    KisTIFFReaderBase* tiffReader;
+    
+    Q_UINT8 poses[5];
+    KisTIFFPostProcessor* postprocessor;
+    
+    uint8 nbcolorsamples = nbchannels - extrasamplescount;
+    switch(color_type)
+    {
+        case PHOTOMETRIC_MINISWHITE:
+        {
+            poses[0] = 0; poses[1] = 1;
+            postprocessor = new KisTIFFPostProcessorInvert(nbcolorsamples);
+        }
+        break;
+        case PHOTOMETRIC_MINISBLACK:
+        {
+            poses[0] = 0; poses[1] = 1;
+            postprocessor = new KisTIFFPostProcessor(nbcolorsamples);
+        }
+        break;
+        case PHOTOMETRIC_CIELAB:
+        {
+            poses[0] = 0; poses[1] = 1; poses[2] = 2; poses[3] = 3;
+            postprocessor = new KisTIFFPostProcessor(nbcolorsamples);
+        }
+        break;
+        case PHOTOMETRIC_ICCLAB:
+        {
+            poses[0] = 0; poses[1] = 1; poses[2] = 2; poses[3] = 3;
+            postprocessor = new KisTIFFPostProcessorICCLABtoCIELAB(nbcolorsamples);
+        }
+        break;
+        case PHOTOMETRIC_RGB:
+        {
+            poses[0] = 2; poses[1] = 1; poses[2] = 0; poses[3] = 3;
+            postprocessor = new KisTIFFPostProcessor(nbcolorsamples);
+        }
+        break;
+        case PHOTOMETRIC_SEPARATED:
+        {
+            poses[0] = 0; poses[1] = 1; poses[2] = 2; poses[3] = 3; poses[4] = 4;
+            postprocessor = new KisTIFFPostProcessor(nbcolorsamples);
+        }
+        break;
+        default:
+        break;
+    }
+    
+    if( color_type == PHOTOMETRIC_PALETTE)
+    {
+        uint16 *red; // No need to free them they are free by libtiff
+        uint16 *green;
+        uint16 *blue;
+        if ((TIFFGetField(image, TIFFTAG_COLORMAP, &red, &green, &blue)) == 0)
+        {
+            kdDebug() <<  "Indexed image does not define a palette" << endl;
+            TIFFClose(image);
+            return KisImageBuilder_RESULT_INVALID_ARG;
+        }
+
+        tiffReader = new KisTIFFReaderFromPalette( red, green, blue, poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
+    } else if(dstDepth == 8)
+    {
+        tiffReader = new KisTIFFReaderTarget8bit( poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
+    } else if(dstDepth == 16) {
+        tiffReader = new KisTIFFReaderTarget16bit( poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
+    }
+    
     if(TIFFIsTiled(image))
     {
         kdDebug() << "tiled image" << endl;
@@ -600,9 +378,17 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         if(planarconfig == PLANARCONFIG_CONTIG)
         {
             buf = _TIFFmalloc(TIFFTileSize(image));
-            tiffstream = new TIFFStreamContig((uint8*)buf, depth);
+            if(depth < 16)
+            {
+                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth);
+            } else if(depth < 32)
+            {
+                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth);
+            } else {
+                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth);
+            }
         } else {
-            ps_buf = new tdata_t[nbchannels];
+             ps_buf = new tdata_t[nbchannels];
             for(uint i = 0; i < nbchannels; i++)
             {
                 ps_buf[i] = _TIFFmalloc(TIFFTileSize(image)/nbchannels);
@@ -629,7 +415,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 uint32 realTileWidth =  (x + tileWidth) < width ? tileWidth : width - x;
                 for (uint yintile = 0; y + yintile < height && yintile < tileHeight; yintile++) {
                     KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(x, y + yintile, realTileWidth, true);
-                    convertFromTIFFData( it, tiffstream, alphapos, color_type, depth, nbchannels - extrasamplescount, extrasamplescount, red, green, blue, profile, transform);
+                    tiffReader->copyDataToChannels( it, tiffstream);
                 }
                 tiffstream->restart();
             }
@@ -642,7 +428,15 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         if(planarconfig == PLANARCONFIG_CONTIG)
         {
             buf = _TIFFmalloc(stripsize);
-            tiffstream = new TIFFStreamContig((uint8*)buf, depth);
+            if(depth < 16)
+            {
+                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth);
+            } else if(depth < 32)
+            {
+                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth);
+            } else {
+                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth);
+            }
         } else {
             ps_buf = new tdata_t[nbchannels];
             for(uint i = 0; i < nbchannels; i++)
@@ -664,7 +458,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 }
             }
             KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
-            convertFromTIFFData( it, tiffstream, alphapos, color_type, depth, nbchannels - extrasamplescount, extrasamplescount,  red, green, blue, profile, transform);
+            tiffReader->copyDataToChannels( it, tiffstream);
             tiffstream->restart();
         }
     }

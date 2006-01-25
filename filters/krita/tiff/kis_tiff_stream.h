@@ -22,40 +22,55 @@
 
 #include <tiffio.h>
 
-class TIFFStream {
+class TIFFStreamBase {
     public:
-        TIFFStream( uint16 depth) : m_depth(depth) {};
-        virtual uint32 nextValueBelow16() =0;
-        virtual uint32 nextValueBelow32() =0;
-        virtual uint32 nextValueAbove32() =0;
+        TIFFStreamBase( uint16 depth) : m_depth(depth) {};
+        virtual uint32 nextValue() =0;
         virtual void restart() =0;
     protected:
         uint16 m_depth;
 };
 
-class TIFFStreamContig : public TIFFStream {
+class TIFFStreamContigBase : public TIFFStreamBase {
     public:
-        TIFFStreamContig( uint8* src, uint16 depth );
-        virtual uint32 nextValueBelow16();
-        virtual uint32 nextValueBelow32();
-        virtual uint32 nextValueAbove32();
+        TIFFStreamContigBase( uint8* src, uint16 depth );
         virtual void restart();
-    private:
+    protected:
         uint8* m_src;
         uint8* m_srcit;
         uint8 m_posinc;
 };
 
-class TIFFStreamSeperate : public TIFFStream {
+class TIFFStreamContigBelow16 : public TIFFStreamContigBase {
     public:
-        TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth);
+        TIFFStreamContigBelow16( uint8* src, uint16 depth ) : TIFFStreamContigBase(src, depth) { }
+    public:
+        virtual uint32 nextValue();
+};
+
+class TIFFStreamContigBelow32 : public TIFFStreamContigBase {
+    public:
+        TIFFStreamContigBelow32( uint8* src, uint16 depth ) : TIFFStreamContigBase(src, depth) { }
+    public:
+        virtual uint32 nextValue();
+};
+
+class TIFFStreamContigAbove32 : public TIFFStreamContigBase {
+    public:
+        TIFFStreamContigAbove32( uint8* src, uint16 depth ) : TIFFStreamContigBase(src, depth) { }
+    public:
+        virtual uint32 nextValue();
+};
+
+
+class TIFFStreamSeperate : public TIFFStreamBase {
+    public:
+        TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth );
         ~TIFFStreamSeperate();
-        virtual uint32 nextValueBelow16();
-        virtual uint32 nextValueBelow32();
-        virtual uint32 nextValueAbove32();
+        virtual uint32 nextValue();
         virtual void restart();
     private:
-        TIFFStreamContig** streams;
+        TIFFStreamContigBase** streams;
         uint8 m_current_sample, m_nb_samples;
 };
 

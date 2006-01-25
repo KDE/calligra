@@ -45,4 +45,4 @@ noinst_HEADERS = kis_dlg_options_tiff.h kis_tiff_writer_visitor.h
 libkritatiffconverter_la_LDFLAGS = -no-undefined $(all_libraries)
 noinst_LTLIBRARIES = libkritatiffconverter.la
 libkritatiffconverter_la_SOURCES = kis_tiff_converter.cc kis_tiff_stream.cc \
-	kis_tiff_writer_visitor.cpp
+		kis_tiff_writer_visitor.cpp kis_tiff_reader.cc
