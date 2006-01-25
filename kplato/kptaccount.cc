@@ -410,16 +410,19 @@ bool Accounts::load(QDomElement &element, const Project &project) {
     }
     if (element.hasAttribute("default-account")) {
         m_defaultAccount = findAccount(element.attribute("default-account"));
+        if (m_defaultAccount == 0) {
+            kdWarning()<<k_funcinfo<<"Could not find default account."<<endl;
+        }
     }
     return true;
 }
 
 void Accounts::save(QDomElement &element) const {
-    if (m_defaultAccount) {
-        element.setAttribute("default-account", m_defaultAccount->name());
-    }
     QDomElement me = element.ownerDocument().createElement("accounts");
     element.appendChild(me);
+    if (m_defaultAccount) {
+        me.setAttribute("default-account", m_defaultAccount->name());
+    }
     AccountListIterator it = m_accountList;
     for (; it.current(); ++it) {
         it.current()->save(me);
