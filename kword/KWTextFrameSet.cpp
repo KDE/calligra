@@ -2027,7 +2027,11 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
 
             wantedPosition = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) ) + theFrame->bottom();
             KWPage *page = m_doc->pageManager()->page( theFrame );
-            double pageBottom = page->offsetInDocument() + page->height() - page->bottomMargin();
+            double pageBottom;
+            if(page)
+                pageBottom = page->offsetInDocument() + page->height() - page->bottomMargin();
+            else
+                pageBottom = theFrame->bottom();
             double newPosition = QMIN( wantedPosition, pageBottom );
             kdDebug(32002) << "wantedPosition=" << wantedPosition << " pageBottom=" << pageBottom
                            << " -> newPosition=" << newPosition << endl;
