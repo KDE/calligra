@@ -28,7 +28,7 @@ KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* na
 {
     // hack
 
-    kdDebug(35001) << "Creating KChartWizard" << endl;
+    //kdDebug(35001) << "Creating KChartWizard" << endl;
 
     // First page: select the range
     m_selectdataformatpage = new KChartWizardSelectDataFormatPage(this, m_chart);
