@@ -823,3 +823,6 @@ BETA1 TODO:
 Queries
 - when a field has been added to query, form designer should know about this; 
   now even reopening the form doesn't refresh query schema (only reopening the project)
+
+KexiDB
+- disable actions that require write access to the db is it's opened as readonly

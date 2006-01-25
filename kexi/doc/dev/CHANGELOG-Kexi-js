@@ -10,6 +10,13 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-01-25
+KexiDB
+- SQLite3 driver & kexisql3: fixes for read-only opening
+Main Window
+- fixed usability: read-only flag of the db connection is now visible
+  in the statusbar
+
 2006-01-24
 KexiDB
 - Unicode support fixed for MySQL

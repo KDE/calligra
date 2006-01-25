@@ -952,9 +952,9 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 //	initPropertyEditor();
 	Kexi::recentProjects().addProjectData( newProjectData );
 	invalidateActions();
-
 //	d->disableErrorMessages = true;
 	enableMessages( false );
+	d->statusBar->setReadOnlyFlag( d->prj->dbConnection()->isReadOnly() );
 
 	QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
 	return true;
@@ -1189,6 +1189,8 @@ tristate KexiMainWindowImpl::closeProject()
 	invalidateActions();
 	if(!d->final)
 		updateAppCaption();
+
+	d->statusBar->setReadOnlyFlag( false );
 
 	emit projectClosed();
 	return true;

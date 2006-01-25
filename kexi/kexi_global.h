@@ -53,5 +53,8 @@
 
 #define foreach_dict(_class, _variable, _list) foreach_list(_class, _variable, _list)
 
-#endif /* _KEXI_GLOBAL_ */
+#ifndef futureI18n
+# define futureI18n QString
+#endif
 
+#endif /* _KEXI_GLOBAL_ */

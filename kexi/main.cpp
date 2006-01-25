@@ -70,6 +70,10 @@ extern "C" int kdemain(int argc, char *argv[])
 	if (Kexi::startupHandler().action() == KexiStartupData::Exit)
 		return 0;
 
+#ifdef CUSTOM_VERSION
+# include "custom_exec.h"
+#endif
+
 	KexiMainWindowImpl *win = new KexiMainWindowImpl();
 
 	if (true != win->startup()) {
@@ -81,10 +85,6 @@ extern "C" int kdemain(int argc, char *argv[])
 	delete dummyWidget;
 	win->show();
 	app.processEvents();//allow refresh our app
-
-#ifdef CUSTOM_VERSION
-# include "custom_exec.h"
-#endif
 
 	return app.exec();
 }

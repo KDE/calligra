@@ -41,21 +41,23 @@ namespace KParts { class Part; }
 class KexiStatusBar : public KStatusBar
 {
 	Q_OBJECT
-public:
-	KexiStatusBar( QWidget *parent=0, const char *name=0 );
-	virtual ~KexiStatusBar();
-	virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
+	public:
+		KexiStatusBar( QWidget *parent=0, const char *name=0 );
+		virtual ~KexiStatusBar();
+//		virtual void addWidget( QWidget *widget, int stretch = 0, bool permanent = false);
 
-public slots:
-	virtual void setStatus(const QString &str);
+	public slots:
+		virtual void setStatus(const QString &str);
+		virtual void setReadOnlyFlag(bool readOnly);
 
-private slots:
-	virtual void cursorPositionChanged();
-	virtual void activePartChanged(KParts::Part *part);
-	virtual void setCursorPosition(int line, int col);
+	protected slots:
+		virtual void cursorPositionChanged();
+		virtual void activePartChanged(KParts::Part *part);
+		virtual void setCursorPosition(int line, int col);
 
-private:
-	QLabel *m_status;
+	protected:
+		int m_msgID, m_readOnlyID;
+//		QLabel *m_status, *m_readOnlyStatus;
 
 #if KexiStatusBar_KTEXTEDITOR_USED
 	KTextEditor::ViewCursorInterface * m_cursorIface;
