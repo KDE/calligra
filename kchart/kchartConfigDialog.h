@@ -74,7 +74,7 @@ protected:
     KChartParams                 *m_params;
     KChartAuxiliary              *m_aux;
 
-    KChartDataConfigPage         *m_datapage;
+    KChartDataConfigPage         *m_dataPage;
     KChartSubTypeChartPage       *m_subTypePage;
 
     KChartParameter3dConfigPage      *_parameter3dpage;
