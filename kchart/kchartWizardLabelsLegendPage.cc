@@ -65,8 +65,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     _xlabelED = new QLineEdit( tmpQGroupBox );
     //_xlabelED->setEnabled(false); //Not supported by kdChart yet
-    // PENDING(kalle) Put back in
-    //   _xlabelED->setText(_chart->params()->xtitle);
+    _xlabelED->setText(_chart->params()->axisTitle( KDChartAxisParams::AxisPosBottom));
     grid2->addWidget(_xlabelED,1,1);
 
     xtitlefont = new QPushButton( tmpQGroupBox );
@@ -88,8 +87,7 @@ KChartWizardLabelsLegendPage::KChartWizardLabelsLegendPage( QWidget* parent, KCh
 
     _ylabelED = new QLineEdit( tmpQGroupBox );
     //_ylabelED->setEnabled(false); //Not supported by kdChart yet
-    // PENDING(kalle) Put back in
-    //   _ylabelED->setText(_chart->params()->ytitle);
+    _ylabelED->setText(_chart->params()->axisTitle( KDChartAxisParams::AxisPosLeft));
     grid2->addWidget(_ylabelED,2,1);
 
 
@@ -305,6 +303,9 @@ void KChartWizardLabelsLegendPage::apply(  )
 
     _chart->params()->setHeaderFooterColor( KDChartParams::HdFtPosHeader,title_color);
     _chart->params()->setHeader1Font(title);
+    _chart->params()->setAxisTitle( KDChartAxisParams::AxisPosBottom, _xlabelED->text() );
+    _chart->params()->setAxisTitle( KDChartAxisParams::AxisPosLeft, _ylabelED->text() );
+
     _chart->params()->setLegendTitleText(_legendTitleText->text());
     _chart->params()->setLegendTitleTextColor(_legendTitleColor);
     _chart->params()->setLegendTitleFont(_legendTitleFont,true);

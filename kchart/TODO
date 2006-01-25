@@ -62,10 +62,10 @@ Item								   Prio Status
 ------------------------------------------------------------------------------
 
 * Bugs
-  + 41612: No titles for axes					      1	----
-     - Fixed by new KDChart version					----
+  + 41612: No titles for axes					      1	DONE
+     - Fixed by new KDChart version					done
      - Enable settings in the config dialog.				done
-     - Read and write the values from the axis parameters		--
+     - Read and write the values from the axis parameters		done
      - Do it in the wizard as well					done
   + 101490: Error in drawing charts with logarithmic scale.	      1	----
        Fixed by new KDChart version (hopefully)
