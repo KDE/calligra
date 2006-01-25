@@ -282,6 +282,8 @@ public:
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
 
     PropertyEditor *m_propertyEditor;
+
+    QTimer statusBarOpTimer;
 };
 
 class ViewActions
@@ -1846,6 +1848,8 @@ View::View( QWidget *_parent, const char *_name,
     // Otherwise the doc will do it in completeLoading.
     if ( !doc()->map()->sheetList().isEmpty() )
         initialPosition();
+
+    connect (&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
 }
 
 View::~View()
@@ -2138,7 +2142,7 @@ if ( config->hasGroup("KSpread Page Layout" ) )
 */
 
  initCalcMenu();
- resultOfCalc();
+ calcStatusBarOp();
 }
 
 void View::changeNbOfRecentFiles(int _nb)
@@ -3757,7 +3761,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   d->selection->initialize(QRect(newMarker, newAnchor));
 
   d->canvas->scrollToCell(newMarker);
-  resultOfCalc();
+  calcStatusBarOp();
 
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
@@ -4006,7 +4010,7 @@ void View::cutSelection()
   if ( !d->canvas->editor())
   {
     d->activeSheet->cutSelection( selectionInfo() );
-    resultOfCalc();
+    calcStatusBarOp();
     updateEditWidget();
     }
   else
@@ -4103,7 +4107,7 @@ void View::paste()
   {
       //kdDebug(36001) << "Pasting. Rect= " << d->selection->selection(false) << " bytes" << endl;
     d->activeSheet->paste( d->selection->selection(false), true, Paste::Normal, Paste::OverWrite, false, 0, true );
-    resultOfCalc();
+    calcStatusBarOp();
     updateEditWidget();
   }
   else
@@ -4127,7 +4131,7 @@ void View::specialPaste()
       d->activeSheet->recalc();
       doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
     }
-    resultOfCalc();
+    calcStatusBarOp();
     updateEditWidget();
   }
 }
@@ -5911,7 +5915,7 @@ void View::deleteSelection()
 
     doc()->emitBeginOperation( false );
     d->activeSheet->deleteSelection( selectionInfo() );
-    resultOfCalc();
+    calcStatusBarOp();
     updateEditWidget();
     doc()->emitEndOperation( *selectionInfo() );
 }
@@ -6783,7 +6787,8 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     d->actions->subTotals->setEnabled(contiguousSelection);
   }
   d->actions->selectStyle->setCurrentItem( -1 );
-  resultOfCalc();
+  // delayed recalculation of the operation shown in the status bar
+  d->statusBarOpTimer.start(250, true);
   // Send some event around. This is read for example
   // by the calculator plugin.
 //   SelectionChanged ev(*selectionInfo(), activeSheet()->name());
@@ -6795,7 +6800,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
 
   if (colSelected || rowSelected)
   {
-    doc()->emitEndOperation( *selectionInfo() );
+    doc()->emitEndOperation(/* *selectionInfo() */);
     return;
   }
 
@@ -6809,7 +6814,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   }
   d->canvas->updatePosWidget();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  doc()->emitEndOperation(/* *selectionInfo() */);
 }
 
 void View::slotChangeChoice(const KSpread::Region& changedRegion)
@@ -6825,13 +6830,13 @@ void View::slotChangeChoice(const KSpread::Region& changedRegion)
   kdDebug() << "Choice: " << *choice() << endl;
 }
 
-void View::resultOfCalc()
+void View::calcStatusBarOp()
 {
   Sheet * sheet = activeSheet();
   ValueCalc* calc = d->doc->calc();
   Value val;
   QRect tmpRect(d->selection->selection());
-  MethodOfCalc tmpMethod = doc()->getTypeOfCalc() ;
+  MethodOfCalc tmpMethod = doc()->getTypeOfCalc();
   if ( tmpMethod != NoneCalc )
   {
 
@@ -6938,7 +6943,7 @@ void View::menuCalc( bool )
   else if ( d->actions->calcNone->isChecked() )
     doc()->setTypeOfCalc( NoneCalc );
 
-  resultOfCalc();
+  calcStatusBarOp();
 
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
@@ -7050,7 +7055,7 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
     if ( ev->activated() )
     {
       if ( d->calcLabel )
-        resultOfCalc();
+        calcStatusBarOp();
     }
     else
     {
@@ -7167,7 +7172,7 @@ void View::paintUpdates()
 void View::commandExecuted()
 {
   updateEditWidget();
-  resultOfCalc();
+  calcStatusBarOp();
 }
 
 void View::initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point )

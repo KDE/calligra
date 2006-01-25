@@ -691,7 +691,7 @@ void miscParameters::apply()
     {
         m_pView->doc()->setTypeOfCalc(tmpMethodCalc);
         config->writeEntry( "Method of Calc", (int)tmpMethodCalc);
-        m_pView->resultOfCalc();
+        m_pView->calcStatusBarOp();
         m_pView->initCalcMenu();
     }
 

@@ -306,10 +306,6 @@ public:
      */
     bool isLoading() const;
 
-    /**
-     * write in statusBar result of calc (Min, or Max, average, sum, count)
-     */
-    void resultOfCalc();
 
     void initCalcMenu();
 
@@ -588,6 +584,11 @@ public slots:
     void runInspector();
 
     void initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point );
+
+    /**
+     * write in statusBar result of calc (Min, or Max, average, sum, count)
+     */
+    void calcStatusBarOp();
 
 protected slots:
     /**
