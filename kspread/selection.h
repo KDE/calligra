@@ -239,7 +239,7 @@ inline kdbgstream operator<<( kdbgstream str, const KSpread::Selection& s )
   return str;
 }
 
-inline kndbgstream operator<<( kndbgstream str, const KSpread::Selection& s )
+inline kndbgstream operator<<( kndbgstream str, const KSpread::Selection& )
 {
   return str;
 }
