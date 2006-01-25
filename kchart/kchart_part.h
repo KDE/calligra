@@ -18,20 +18,6 @@ namespace KChart
 class KChartParams;
 
 
-// This struct only exists because the configuration editor needs
-// access to it.
-//
-// You might wonder why this is a struct instead of a class. Well, if
-// it was a class, we would have to provide all members with
-// accessors, and then we would have won nothing.
-//
-struct KChartAuxiliary {
-    typedef  enum { DataRows = 0, DataColumns = 1 } DataDirection;
-
-    DataDirection  m_dataDirection; // Rows or Columns
-};
-
-
 class KCHART_EXPORT KChartPart : public KoChart::Part
 {
     Q_OBJECT
@@ -75,11 +61,10 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    // FIXME: return m_chartType when implemented.
     KChartParams::ChartType  chartType() const { return (KChartParams::ChartType) params()->chartType(); }
     KDChartTableData  *data()                  { return &m_currentData; }
     KChartParams      *params() const          { return m_params;       }
-    KChartAuxiliary   *auxdata()               { return &m_auxiliary;   }
+
     QStringList       &rowLabelTexts()         { return m_rowLabels;  }
     QStringList       &colLabelTexts()         { return m_colLabels;  }
 
@@ -125,15 +110,10 @@ private:
 
 private:
     // The chart and its contents
-    KChartParams::ChartType  m_chartType;
     KChartParams            *m_params;
     KDChartTableData         m_currentData;
     QStringList              m_rowLabels;
     QStringList              m_colLabels;
-
-    // Auxiliary values that are part of the document, and thus will
-    // be included in saved files.
-    KChartAuxiliary          m_auxiliary;
 
     // Other auxiliary values
     bool                     m_bCanChangeValue;

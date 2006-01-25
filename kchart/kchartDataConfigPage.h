@@ -37,7 +37,6 @@ namespace KChart
 {
 
 class  KChartParams;
-struct KChartAuxiliary;
 
 class KChartDataConfigPage : public QWidget
 {
@@ -45,8 +44,7 @@ class KChartDataConfigPage : public QWidget
 
 public:
     KChartDataConfigPage( KChartParams* params, QWidget* parent,
-			  KDChartTableData *dat,
-			  KChartAuxiliary *aux);
+			  KDChartTableData *dat);
     void init();
     void defaults();
     void apply();
@@ -54,16 +52,14 @@ public:
 public slots:
 
 private:
-    KChartParams *m_params;
+    KChartParams      *m_params;
+    KDChartTableData  *data;
 
     QLineEdit    *m_dataArea;
     QRadioButton *m_rowMajor;
     QRadioButton *m_colMajor;
     QCheckBox    *m_firstRowAsLabel;
     QCheckBox    *m_firstColAsLabel;
-
-    KDChartTableData *data;
-    KChartAuxiliary  *m_aux;
 };
 
 }  //KChart namespace

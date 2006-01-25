@@ -72,7 +72,7 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 
     grid1->activate();
 
-    if( m_chart->auxdata()->m_dataDirection == KChartAuxiliary::DataColumns)
+    if ( m_chart->params()->dataDirection() == KChartParams::DataColumns)
       m_colMajor->setChecked(true);
     else
       m_rowMajor->setChecked(true);
@@ -83,9 +83,9 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 void KChartWizardSelectDataFormatPage::apply()
 {
     if (m_rowMajor->isChecked())
-      m_chart->auxdata()->m_dataDirection = KChartAuxiliary::DataRows;
+      m_chart->params()->setDataDirection( KChartParams::DataRows );
     else
-      m_chart->auxdata()->m_dataDirection = KChartAuxiliary::DataColumns;
+      m_chart->params()->setDataDirection( KChartParams::DataColumns );
 }
 
 

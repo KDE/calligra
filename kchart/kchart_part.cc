@@ -72,7 +72,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
         //-- Robert Knight
         
 	// Handle data in columns by default
-	m_auxiliary.m_dataDirection = KChartAuxiliary::DataColumns;
+	m_params->setDataDirection( KChartParams::DataColumns );
     }
 
     (void)new WizardExt( this );
@@ -253,7 +253,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
     longLabels.clear();
     shortLabels.clear();
-    if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
+    if (m_params->dataDirection() == KChartParams::DataRows) {
 	// Data is handled in rows.  This is the default.
 
 	// This is efficient so it doesn't matter if we always copy.
@@ -345,7 +345,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	// Set the correct X axis labels and legend.
 	longLabels.clear();
 	shortLabels.clear();
-	if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
+	if (m_params->dataDirection() == KChartParams::DataRows) {
 
 	    // If data are in rows, then the X axis labels should be
 	    // taken from the row headers.
@@ -785,7 +785,7 @@ QDomDocument KChartPart::saveXML()
 
     // Only one auxiliary element so far: the data direction (rows/columns).
     QDomElement e = doc.createElement( "direction" );
-    e.setAttribute( "value", (int) m_auxiliary.m_dataDirection );
+    e.setAttribute( "value", (int) m_params->dataDirection() );
     aux.appendChild( e );
 
     // Save the data values.
@@ -1029,6 +1029,7 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
         result = loadOldXML( doc );
     else {
 	// ...but if it did, try to load the auxiliary data and the data.
+	// FIXME: Move this into loadOasis part of KChartParams
         result = loadAuxiliary(doc)
 	    && loadData( doc, m_currentData );
     }
@@ -1045,7 +1046,7 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 	while ((str = m_params->legendText(index++)) != QString::null)
 	    legendLabels << str;
 
-	if (m_auxiliary.m_dataDirection == KChartAuxiliary::DataRows) {
+	if (m_params->dataDirection() == KChartParams::DataRows) {
 	    m_colLabels = params.axisLabelStringList();
 	    m_rowLabels = legendLabels;
 	}
@@ -1096,10 +1097,10 @@ bool KChartPart::loadAuxiliary( const QDomDocument& doc )
 		// Read the direction. On failure, use the default.
 		int   dir = e.attribute("value").toInt(&ok);
 		if ( !ok )
-		    dir = (int) KChartAuxiliary::DataRows;
+		    dir = (int) KChartParams::DataColumns;
 
 		kdDebug(35001) << "Got aux value \"direction\": " << dir << endl;
-		m_auxiliary.m_dataDirection = (KChartAuxiliary::DataDirection) dir;
+		m_params->setDataDirection( (KChartParams::DataDirection) dir );
 	    }
 	    else {
 		kdDebug(35001) << "Error in direction tag." << endl;

@@ -51,16 +51,28 @@ class KChartParams : public KDChartParams
 	BarLines
     } ChartType;
 
+    // Data direction
+    typedef  enum { 
+	DataRows    = 0,
+	DataColumns = 1
+    } DataDirection;
+
     KChartParams();
     ~KChartParams();
 
     // Reimplementation of selected KDChartParams methods
+    // FIXME: Enhance for BarLines
     ChartType  chartType() const { return (ChartType) KDChartParams::chartType(); }
     void       setChartType( ChartType _type ) {
       if ( _type == BarLines )
 	  /* NOTHING YET */; // FIXME
       else
 	  KDChartParams::setChartType( (KDChartParams::ChartType) _type );
+    }
+
+    DataDirection  dataDirection() const    { return m_dataDirection; }
+    void           setDataDirection( DataDirection _dir ) {
+	m_dataDirection = _dir;
     }
 
     QString    chartTypeToString( ChartType _type) const;
@@ -74,6 +86,9 @@ class KChartParams : public KDChartParams
                     QString& errorMessage );
 
   private:
+    //ChartType  m_chartType;
+    DataDirection  m_dataDirection; // Rows or Columns
+
     DCOPObject  *m_dcop;
 };
 

@@ -60,10 +60,21 @@ class KChartConfigDialog : public QTabDialog
     Q_OBJECT
 
 public:
-    enum { KC_FONT = 1, KC_COLORS = 2, KC_BACK = 4, KC_LEGEND=8, KC_SUBTYPE=16,KC_HEADERFOOTER=32,KC_DATAFORMAT=64,KC_ALL=256 };
+    enum {
+      KC_FONT         = 1,
+      KC_COLORS       = 2,
+      KC_BACK         = 4,
+      KC_LEGEND       = 8,
+      KC_SUBTYPE      = 16,
+      KC_HEADERFOOTER = 32,
+      KC_DATAFORMAT   = 64,
+      KC_ALL          = 256
+    };
+
+
     KChartConfigDialog( KChartParams* params,
                         QWidget* parent, int flags,
-			KDChartTableData *dat, KChartAuxiliary *aux );
+			KDChartTableData *dat );
 
     void subtypePage();
 
@@ -71,11 +82,10 @@ signals:
     void dataChanged();
 
 protected:
-    KChartParams                 *m_params;
-    KChartAuxiliary              *m_aux;
+    KChartParams                     *m_params;
 
-    KChartDataConfigPage         *m_dataPage;
-    KChartSubTypeChartPage       *m_subTypePage;
+    KChartDataConfigPage             *m_dataPage;
+    KChartSubTypeChartPage           *m_subTypePage;
 
     KChartParameter3dConfigPage      *_parameter3dpage;
     KChartLine3dConfigPage           *_linepage3d;

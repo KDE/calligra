@@ -50,11 +50,9 @@ namespace KChart
 
 KChartConfigDialog::KChartConfigDialog( KChartParams* params,
 					QWidget* parent, int flags,
-					KDChartTableData *dat, 
-					KChartAuxiliary *aux ) :
+					KDChartTableData *dat ) :
     QTabDialog( parent, "Chart config dialog", true ),
     m_params( params ),
-    m_aux(aux),
 
     m_dataPage(0),
     m_subTypePage(0),
@@ -79,7 +77,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     setCaption( i18n( "Chart Setup" ) );
 
     if (flags & KC_DATAFORMAT) {
-        m_dataPage = new KChartDataConfigPage(m_params, this, dat, aux);
+        m_dataPage = new KChartDataConfigPage(m_params, this, dat);
         addTab( m_dataPage, i18n( "&Data" ) );
     }
     else if (flags & KC_SUBTYPE) {
@@ -107,7 +105,7 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
     }
     else if ( flags & KC_ALL ) {
 	// The data page
-        m_dataPage = new KChartDataConfigPage(m_params, this, dat, aux);
+        m_dataPage = new KChartDataConfigPage(m_params, this, dat);
         addTab( m_dataPage, i18n( "&Data" ) );
 
 	// The subtype page

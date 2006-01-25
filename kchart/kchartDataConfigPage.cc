@@ -54,9 +54,8 @@ namespace KChart
 
 KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 					    QWidget* parent, 
-					    KDChartTableData *dat,
-					    KChartAuxiliary *aux) :
-    QWidget( parent ), m_params( params ), data(dat), m_aux(aux)
+					    KDChartTableData *dat) 
+    : QWidget( parent ), m_params( params ), data(dat)
 {
     QGridLayout *grid1 = new QGridLayout(this, 4, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
@@ -102,7 +101,7 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 
 void KChartDataConfigPage::init()
 {
-    if (m_aux->m_dataDirection == KChartAuxiliary::DataRows)
+    if (m_params->dataDirection() == KChartParams::DataRows)
 	m_rowMajor->setChecked(true);
     else
 	m_colMajor->setChecked(true);
@@ -111,16 +110,16 @@ void KChartDataConfigPage::init()
 
 void KChartDataConfigPage::defaults()
 {
-    m_rowMajor->setChecked(true);
+    m_colMajor->setChecked(true);
 }
 
 
 void KChartDataConfigPage::apply()
 {
     if (m_rowMajor->isChecked())
-	m_aux->m_dataDirection = KChartAuxiliary::DataRows;
+	m_params->setDataDirection( KChartParams::DataRows );
     else
-	m_aux->m_dataDirection = KChartAuxiliary::DataColumns;
+	m_params->setDataDirection( KChartParams::DataColumns );
 }
 
 
