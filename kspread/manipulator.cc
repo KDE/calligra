@@ -1048,6 +1048,19 @@ void DilationManipulator::execute()
   int top = area.top();
   int bottom = area.bottom();
 
+  // a merged cells is selected
+  if (element->type() == Region::Element::Point)
+  {
+    Cell* cell = m_sheet->cellAt(left, top);
+    if (cell->doesMergeCells())
+    {
+      // extend to the merged region
+      // prevents artefacts of the selection rectangle
+      right += cell->mergedXCells();
+      bottom += cell->mergedYCells();
+    }
+  }
+
   if ( right < KS_colMax )
   {
     do
