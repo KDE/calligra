@@ -358,7 +358,8 @@ bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
               ke->key() == Key_Home || ke->key() == Key_End ||
               ke->key() == Key_Prior || ke->key() == Key_Next ) 
                   return false;
-                      
+
+              d->hintLabel->hide();
               d->completionPopup->close();
               d->editor->setFocus();
               QApplication::sendEvent( d->editor, ev );
