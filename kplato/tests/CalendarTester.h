@@ -25,4 +25,6 @@ class CalendarTester : public KUnitTest::Tester {
         void allTests();
     private:
         void testSingleDay();
+        void testWeekdays();
+        void testCalendarWithParent();
 };

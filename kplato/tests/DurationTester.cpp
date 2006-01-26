@@ -35,8 +35,8 @@ void DurationTester::allTests() {
 void DurationTester::testArithmetic() {
     KPlato::Duration d(0, 2, 0);
     
-    CHECK((d+d).toString(), KPlato::Duration(0, 4, 0).toString());
-    CHECK((d-d).toString(), KPlato::Duration(0, 0, 0).toString());
-    CHECK((d/2).toString(), KPlato::Duration(0, 1, 0).toString());
+    COMPARE((d+d).toString(), KPlato::Duration(0, 4, 0).toString());
+    COMPARE((d-d).toString(), KPlato::Duration(0, 0, 0).toString());
+    COMPARE((d/2).toString(), KPlato::Duration(0, 1, 0).toString());
 }
 

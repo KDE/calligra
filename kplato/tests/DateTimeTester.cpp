@@ -40,13 +40,13 @@ void DateTimeTester::testSubtract() {
     KPlato::DateTime dt2(QDate(2006, 1, 1), QTime(10, 0, 0));
     KPlato::Duration d(0, 2, 0);
 
-    CHECK((dt2-dt1).toString(), d.toString());
-    CHECK((dt2-d).toString(), dt1.toString());
+    COMPARE((dt2-dt1).toString(), d.toString());
+    COMPARE((dt2-d).toString(), dt1.toString());
 }
 
 void DateTimeTester::testAdd() {
     KPlato::DateTime dt1(QDate(2006, 1, 1), QTime(8, 0, 0));
     KPlato::DateTime dt2(QDate(2006, 1, 1), QTime(10, 0, 0));
     KPlato::Duration d(0, 2, 0);
-    CHECK((dt1+d).toString(), dt2.toString());
+    COMPARE((dt1+d).toString(), dt2.toString());
 }
