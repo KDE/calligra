@@ -127,7 +127,13 @@ public:
     KSpread::EditWidget* editWidget() const;
     KSpread::CellEditor* editor() const;
 
+    /**
+     * @return the usual selection of cells
+     */
     Selection* selectionInfo() const;
+    /**
+     * @return a selection of cells used in formulas
+     */
     Selection* choice() const;
 
     /**
@@ -137,22 +143,42 @@ public:
      * @see Selection::activeElement()
     */
     QRect selection() const;
+    /**
+     * convenience function.
+     * @return selection's marker
+     * @see Selection::marker()
+     */
     QPoint marker() const;
+    /**
+     * convenience function.
+     * @return selection's marker's column
+     * @see Selection::marker()
+     */
     int markerColumn() const;
+    /**
+     * convenience function.
+     * @return selection's marker's row
+     * @see Selection::marker()
+     */
     int markerRow() const;
 
-    void updateCellRect( const QRect &_rect );
-
+    /**
+     * @return the pen, the default grid is painted with (light gray)
+     */
     const QPen& defaultGridPen() const;
 
+    /**
+     * convenience function
+     * @see View::zoom()
+     */
     double zoom() const;
 
     /**
-     * Returns the width of the columns before the current screen
+     * @return the width of the columns before the current screen
      */
     double xOffset() const;
     /**
-     * Returns the height of the rows before the current screen
+     * @return the height of the rows before the current screen
      */
     double yOffset() const;
     /**
@@ -165,11 +191,18 @@ public:
     void  setYOffset( double _yOffset );
 
     /**
-     * Return a rect indicating which cell range is currently visible onscreen
+     * @return a rect indicating which cell range is currently visible onscreen
      */
     QRect visibleCells();
 
+    /**
+     * @return a pointer to the active sheet
+     */
     Sheet* activeSheet() const;
+    /**
+     * convenience function
+     * @see Map::findSheet()
+     */
     Sheet* findSheet( const QString& _name ) const;
 
 
@@ -206,7 +239,7 @@ public:
      *                    if false, the changes are discarded.
      * @param array if true, array formula was entered
      */
-    void deleteEditor (bool saveChanges, bool array = false);
+    void deleteEditor(bool saveChanges, bool array = false);
 
     /**
      * Called from @ref EditWidget and CellEditor
@@ -220,22 +253,39 @@ public:
     /**
      * Switches to choose mode and sets the initial selection to the
      * position returned by marker().
+     * Clears the choice.
      */
     void startChoose();
     /**
      * Switches to choose mode and sets the initial @p selection.
      */
     void startChoose( const QRect& selection );
+    /**
+     * Switches to selection mode.
+     * Clear the choice.
+     */
     void endChoose();
-
+    /**
+     * Switches the choose mode on and off.
+     * Does not clear the choice.
+     */
     void setChooseMode(bool state);
+    /**
+     * @return @c true if choose mode is enabled, @c false otherwise
+     */
     bool chooseMode() const;
 
     void equalizeRow();
     void equalizeColumn();
 
+    /**
+     * Updates the position widget.
+     */
     void updatePosWidget();
-
+    /**
+     * Close the cell editor and saves changes.
+     * @see deleteEditor()
+     */
     void closeEditor();
 
     // Created by the view since it's layout is managed there,
@@ -243,8 +293,6 @@ public:
     void setEditWidget( KSpread::EditWidget * ew );
 
     virtual bool focusNextPrevChild( bool );
-
-    bool chooseFormulaArea() const { return chooseMode();}
 
     /**
      * Depending on the offset in "zoomed" screen pixels
@@ -299,7 +347,7 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent * _ev);
     virtual void dropEvent(QDropEvent * _ev);
     virtual void dragLeaveEvent(QDragLeaveEvent * _ev);
-	
+
     /**
      * Checks to see if there is a size grip for a highlight range at a given position. 
      * Note that both X and Y coordinates are UNZOOMED.  To translate from a zoomed coordinate (eg. position of a mouse event) to
@@ -307,8 +355,7 @@ protected:
      * can be accessed via view()->doc()
      * @param x Unzoomed x coordinate to check
      * @param y Unzoomed y coordinate to check
-     * @return A pointer to a HighlightRange struct containing information about the range, or null if there is no size grip at 
-     * the specified position.
+     * @return @c true if there is a size grip at the specified position, @c false otherwise.
      */
     bool highlightRangeSizeGripAt(double x, double y);
 
@@ -339,42 +386,17 @@ private:
      */
     EditorType lastEditorWithFocus() const;
 
-    /**
-     * Hides the marker. Hiding it multiple times means that it has to be shown ( using @ref #showMarker ) multiple times
-     * to become visible again. This function is optimized since it does not create a new painter.
-     */
-    // void hideMarker( QPainter& );
-    // void showMarker( QPainter& );
-
-    // void drawMarker( QPainter * _painter = 0L );
-
-    // int m_iMarkerColumn;
-    // int m_iMarkerRow;
-    /**
-     * A value of 1 means that it is visible, every lower value means it is
-     * made invisible multiple times.
-     *
-     * @see #hideMarker
-     * @see #showMarker
-     */
-    // int m_iMarkerVisible;
-
-
 private:
-
   void moveObject( int x, int y, bool key );
 
   //---- stuff needed for resizing objects----
   KoRect calculateNewGeometry( ModifyType _modType, int _x, int _y );
 
   void startTheDrag();
-  void paintSelectionChange(QRect area1, QRect area2);
 
   /* helpers for the paintUpdates function */
-  void paintChooseRect(QPainter& painter, const KoRect &viewRect);
-
   void paintNormalMarker(QPainter& painter, const KoRect &viewRect);
-  
+
   /**
   * Paint the highlighted ranges of cells.  When the user is editing a formula in a text box, cells and ranges referenced
   * in the formula are highlighted on the canvas.
@@ -382,7 +404,7 @@ private:
   * @param viewRect The area currently visible on the canvas
   */
   void paintHighlightedRanges(QPainter& painter, const KoRect& viewRect);
-  
+
   /**
   * Calculates the visible region on the canvas occupied by a range of cells on the currently active sheet.
   * This is used for drawing the thick border around the current selection or highlights around cell range
@@ -396,7 +418,7 @@ private:
   */
   void sheetAreaToVisibleRect( const QRect& sheetArea,
 			       KoRect& visibleRect ); 
-  
+
   /** 
   * Calculates the physical region on the canvas widget occupied by a range of cells on
   * the currently active sheet.
@@ -406,7 +428,7 @@ private:
   * @param visibleRect This is set to the physical region occupied by the given range of cells
   */
   void sheetAreaToRect( const QRect& sheetArea, KoRect& rect );
-  
+
 
   /**
    * helper function in drawing the marker and choose marker.
@@ -424,22 +446,22 @@ private:
    */
   void retrieveMarkerInfo( const QRect &marker, const KoRect &viewRect,
                            double positions[], bool paintSides[] );
-  
+
 
 
 
   bool formatKeyPress( QKeyEvent * _ev );
-  
+
   /** helper method for formatKeyPress */
-  bool formatCellByKey (Cell *cell, int key, const QRect &rect);
-  
+  bool formatCellByKey(Cell *cell, int key, const QRect &rect);
+
   void processClickSelectionHandle(QMouseEvent *event);
   void processLeftClickAnchor();
 
 
-  /** current cursor position, be it marker of choose marker */
-  QPoint cursorPos ();
-  
+  /** current cursor position, be it marker or choose marker */
+  QPoint cursorPos();
+
   /**
    * returns the rect that needs to be redrawn
    */
@@ -460,6 +482,11 @@ private:
 
   void processIMEvent( QIMEvent * event );
 
+  /**
+   * Used in choose mode. Shows/hides the editor depending on the selected
+   * sheet. Triggers an update of the regions shown in the CellEditor.
+   * @see CellEditor::updateChoice()
+   */
   void updateEditor();
 
   /**

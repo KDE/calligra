@@ -60,12 +60,12 @@ public:
   /**
    * Created an empty map.
    */
-  Map ( Doc* doc, const char* name = 0);
+  Map(Doc* doc, const char* name = 0);
   /**
    * This deletes all sheets contained in this map.
    */
   virtual ~Map();
-  
+
   Doc* doc();
 
   QDomElement save( QDomDocument& doc );
@@ -93,6 +93,10 @@ public:
    */
   void moveSheet( const QString & _from, const QString & _to, bool _before = true );
 
+  /**
+   * searches for a sheet named @p _name
+   * @return a pointer to the searched sheet, @c 0 if nothing was found
+   */
   Sheet* findSheet( const QString & _name );
   Sheet* nextSheet( Sheet* );
   Sheet* previousSheet( Sheet* );
@@ -114,7 +118,7 @@ public:
 
   /** add a new sheet to the map, returning a pointer to it */
   Sheet *addNewSheet ();
-  
+
   /**
    * Use the @ref #nextSheet function to get all the other sheets.
    * Attention: Function is not reentrant.
@@ -192,7 +196,7 @@ private:
   int m_initialMarkerRow;
   double m_initialXOffset;
   double m_initialYOffset;
-  
+
   // used to give every Sheet a unique default name.
   int tableId;
 

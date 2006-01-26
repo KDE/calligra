@@ -424,8 +424,6 @@ void Canvas::startChoose()
   if ( d->chooseCell )
     return;
 
-  kdDebug() << k_funcinfo << endl;
-
   choice()->clear();
   choice()->setSheet(activeSheet());
 
@@ -438,8 +436,6 @@ void Canvas::startChoose( const QRect& rect )
   if (d->chooseCell)
     return;
 
-  kdDebug() << k_funcinfo << endl;
-
   choice()->setSheet(activeSheet());
   choice()->initialize(rect);
 
@@ -451,8 +447,6 @@ void Canvas::endChoose()
 {
   if ( !d->chooseCell )
     return;
-
-  kdDebug() << k_funcinfo << endl;
 
   choice()->clear();
   repaint();
@@ -1006,7 +1000,6 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if (d->mouseAction == ResizeSelection)
   {
     choice()->update(QPoint(col,row));
-//     updateEditor();
     return;
   }
 
@@ -1100,14 +1093,8 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( d->mouseAction == NoAction )
     return;
 
-  bool updateEditor = d->chooseCell && (QPoint(col,row) != choice()->marker());
   // Set the new extent of the selection
   (d->chooseCell ? choice() : selectionInfo())->update(QPoint(col,row));
-
-  if (updateEditor)
-  {
-//     Canvas::updateEditor();
-  }
 }
 
 void Canvas::mouseReleaseEvent( QMouseEvent* _ev)
@@ -1584,11 +1571,6 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       break;
     default:
       break;
-  }
-
-  if (d->chooseCell)
-  {
-//     updateEditor();
   }
 
   scrollToCell(selectionInfo()->marker());
