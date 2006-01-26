@@ -1630,9 +1630,12 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
         // add the correct styles
         context.addStyles( context.oasisStyles().stylesAutoStyles()[masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null )] );
+
+        context.setUseStylesAutoStyles( true );
         m_masterPage->loadOasis( context );
         loadOasisObject( m_masterPage, node , context);
         loadOasisHeaderFooter( node,context );
+        context.setUseStylesAutoStyles( false );
 
         kdDebug()<<" end load oasis master style \n";
 
@@ -2061,7 +2064,7 @@ void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & co
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        context.fillStyleStack( object, KoXmlNS::presentation, "style-name" );
+        context.fillStyleStack( object, KoXmlNS::draw, "style-name" );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
     {
