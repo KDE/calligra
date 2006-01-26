@@ -145,11 +145,6 @@ void Task::makeAppointments() {
         if (m_requests) {
             //kdDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->startTime<<", "<<m_currentSchedule->endTime<<"; "<<m_currentSchedule->duration.toString()<<endl;
             m_requests->makeAppointments(m_currentSchedule);
-            if (m_currentSchedule->workStartTime.isValid())
-                m_currentSchedule->startTime = m_currentSchedule->workStartTime;
-            if (m_currentSchedule->workEndTime.isValid())
-                m_currentSchedule->endTime = m_currentSchedule->workEndTime;
-            m_currentSchedule->duration = m_currentSchedule->endTime - m_currentSchedule->startTime;
             //kdDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->startTime<<", "<<m_currentSchedule->endTime<<"; "<<m_currentSchedule->duration.toString()<<endl;
         }
     } else if (type() == Node::Type_Summarytask) {
@@ -589,7 +584,7 @@ DateTime Task::calculatePredeccessors(const QPtrList<Relation> &list, int use) {
         switch (it.current()->type()) {
             case Relation::StartStart:
                 // I can't start earlier than my predesseccor
-                t = it.current()->parent()->earliestStartForward() + it.current()->lag();
+                t = it.current()->parent()->getEarliestStart() + it.current()->lag();
                 break;
             case Relation::FinishFinish:
                 // I can't finish earlier than my predeccessor, so
@@ -636,6 +631,9 @@ DateTime Task::calculateForward(int use) {
             case Node::ASAP:
             case Node::ALAP:
                 if (m_effort->type() == Effort::Type_Effort) {
+                    DateTime t = workStartAfter(cs->earliestStart);
+                    if (t.isValid())
+                         cs->earliestStart = t;
                     m_durationForward = duration(cs->earliestStart, use, false);
                 }
                 //kdDebug()<<k_funcinfo<<m_name<<": "<<cs->earliestStart<<"+"<<m_durationForward.toString()<<"="<<(cs->earliestStart+m_durationForward)<<endl;
@@ -731,7 +729,7 @@ DateTime Task::calculateSuccessors(const QPtrList<Relation> &list, int use) {
             case Relation::FinishFinish:
                 // My successor cannot finish before me, so
                 // I can't finish later than it's latest finish - lag
-                t = it.current()->child()->latestFinishBackward() -  it.current()->lag();
+                t = it.current()->child()->getLatestFinish() -  it.current()->lag();
                 break;
             default:
                 t -= it.current()->lag();
@@ -773,6 +771,11 @@ DateTime Task::calculateBackward(int use) {
             case Node::ASAP:
             case Node::ALAP:
                 if (m_effort->type() == Effort::Type_Effort) {
+                    DateTime t = workFinishBefore(cs->latestFinish);
+                    //kdDebug()<<k_funcinfo<<m_name<<": latestFinish="<<cs->latestFinish<<" t="<<t<<endl;
+                    if (t.isValid()) {
+                        cs->latestFinish = t;
+                    }
                     m_durationBackward = duration(cs->latestFinish, use, true);
                 }
                 break;
@@ -902,6 +905,9 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
         cs->startTime = time;
         //kdDebug()<<k_funcinfo<<m_name<<" new startime="<<cs->startTime<<endl;
     }
+    DateTime t = workStartAfter(cs->startTime);
+    if (t.isValid())
+        cs->startTime = t;
     //kdDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
     if(type() == Node::Type_Task) {
         cs->duration = m_effort->effort(use);
@@ -1107,7 +1113,10 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     if (time.isValid() && time < cs->endTime) {
         cs->endTime = time;
     }
-    //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<endl;
+    DateTime t = workFinishBefore(cs->endTime);
+    //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<" t="<<t<<endl;
+    if (t.isValid())
+        cs->endTime = t;
     if (type() == Node::Type_Task) {
         cs->duration = m_effort->effort(use);
         switch (m_constraint) {
@@ -1194,7 +1203,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
             //kdDebug()<<k_funcinfo<<"FixedInterval="<<m_constraintEndTime<<" "<<cs->endTime<<endl;
             if (m_constraintEndTime > cs->endTime) {
                 cs->schedulingError = true;
-                kdDebug()<<k_funcinfo<<"FixedInterval error: "<<m_constraintEndTime<<" >  "<<cs->endTime<<endl;
+                //kdDebug()<<k_funcinfo<<"FixedInterval error: "<<m_constraintEndTime<<" >  "<<cs->endTime<<endl;
             }
             cs->startTime = m_constraintStartTime;
             cs->endTime = m_constraintEndTime;
@@ -1462,35 +1471,61 @@ Duration Task::positiveFloat() {
 }
 
 bool Task::isCritical() {
-    return positiveFloat() == Duration::zeroDuration;
+    NodeSchedule *cs = m_currentSchedule;
+    if (cs == 0) {
+        return false;
+    }
+    return cs->earliestStart >= cs->startTime && cs->latestFinish <= cs->endTime;
 }
 
-bool Task::calcCriticalPath() {
+bool Task::calcCriticalPath(bool fromEnd) {
     if (m_currentSchedule == 0)
         return false;
-    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" fromEnd="<<fromEnd<<" cp="<<m_currentSchedule->inCriticalPath<<endl;
     if (m_currentSchedule->inCriticalPath) {
         return true; // path allready calculated
     }
     if (!isCritical()) {
         return false;
     }
-    if (isStartNode()) {
-        m_currentSchedule->inCriticalPath = true;
-        return true;
-    }
-    QPtrListIterator<Relation> it(m_parentProxyRelations);
-    for (; it.current(); ++it) {
-        if (it.current()->parent()->calcCriticalPath()) {
+    if (fromEnd) {
+        if (isEndNode()) {
             m_currentSchedule->inCriticalPath = true;
+            //kdDebug()<<k_funcinfo<<m_name<<" end node"<<endl;
+            return true;
+        }
+        QPtrListIterator<Relation> it(m_childProxyRelations);
+        for (; it.current(); ++it) {
+            if (it.current()->child()->calcCriticalPath(fromEnd)) {
+                m_currentSchedule->inCriticalPath = true;
+            }
+        }
+        QPtrListIterator<Relation> pit(m_dependChildNodes);
+        for (; pit.current(); ++pit) {
+            if (pit.current()->child()->calcCriticalPath(fromEnd)) {
+                m_currentSchedule->inCriticalPath = true;
+            }
+        }
+    } else {
+        if (isStartNode()) {
+            m_currentSchedule->inCriticalPath = true;
+            //kdDebug()<<k_funcinfo<<m_name<<" start node"<<endl;
+            return true;
+        }
+        QPtrListIterator<Relation> it(m_parentProxyRelations);
+        for (; it.current(); ++it) {
+            if (it.current()->parent()->calcCriticalPath(fromEnd)) {
+                m_currentSchedule->inCriticalPath = true;
+            }
+        }
+        QPtrListIterator<Relation> pit(m_dependParentNodes);
+        for (; pit.current(); ++pit) {
+            if (pit.current()->parent()->calcCriticalPath(fromEnd)) {
+                m_currentSchedule->inCriticalPath = true;
+            }
         }
     }
-    QPtrListIterator<Relation> pit(m_dependParentNodes);
-    for (; pit.current(); ++pit) {
-        if (pit.current()->parent()->calcCriticalPath()) {
-            m_currentSchedule->inCriticalPath = true;
-        }
-    }
+    //kdDebug()<<k_funcinfo<<m_name<<" return cp="<<m_currentSchedule->inCriticalPath<<endl;
     return m_currentSchedule->inCriticalPath;
 }
 

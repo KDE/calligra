@@ -684,20 +684,24 @@ NodeSchedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
     return sch;
 }
 
-bool Node::calcCriticalPath() {
+bool Node::calcCriticalPath(bool fromEnd) {
     if (m_currentSchedule == 0)
         return false;
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (!isCritical()) {
         return false;
     }
-    if (isStartNode()) {
+    if (!fromEnd && isStartNode()) {
+        m_currentSchedule->inCriticalPath = true;
+        return true;
+    }
+    if (fromEnd && isEndNode()) {
         m_currentSchedule->inCriticalPath = true;
         return true;
     }
     QPtrListIterator<Relation> pit(m_dependParentNodes);
     for (; pit.current(); ++pit) {
-        if (pit.current()->parent()->calcCriticalPath()) {
+        if (pit.current()->parent()->calcCriticalPath(fromEnd)) {
             m_currentSchedule->inCriticalPath = true;
         }
     }

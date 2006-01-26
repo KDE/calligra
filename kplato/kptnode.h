@@ -409,9 +409,6 @@ public:
     virtual void insertId(const QString &id, const Node *node)
         { if (m_parent) m_parent->insertId(id, node); }
     
-    DateTime &earliestStartForward() { return m_earliestStartForward; }
-    DateTime &latestFinishBackward() { return m_latestFinishBackward; }
-    
     /**
      * This is when work can start on this node in accordance with 
      * the calendar of allocated resources. Normally this is the same
@@ -435,7 +432,7 @@ public:
     virtual bool isCritical() const { return false; }
     virtual bool inCriticalPath() const
         { return m_currentSchedule ? m_currentSchedule->inCriticalPath : false; }
-    virtual bool calcCriticalPath();
+    virtual bool calcCriticalPath(bool fromEnd);
     
     /// Returns the level this node is in the hierarchy. Top node is level 0.
     virtual int level();
@@ -514,8 +511,6 @@ protected:
 
     bool m_visitedForward;
     bool m_visitedBackward;
-    DateTime m_earliestStartForward;
-    DateTime m_latestFinishBackward;
     Duration m_durationForward;
     Duration m_durationBackward;
     

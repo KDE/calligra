@@ -63,7 +63,7 @@ public:
      */
     void calculate(Effort::Use use=Effort::Use_Expected);
      
-    virtual bool calcCriticalPath();
+    virtual bool calcCriticalPath(bool fromEnd);
     
     virtual DateTime startTime() const;
     virtual DateTime endTime() const;

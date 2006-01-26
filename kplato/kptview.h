@@ -153,6 +153,7 @@ protected slots:
 
 #ifndef NDEBUG
     void slotPrintDebug();
+    void slotPrintSelectedDebug();
     void slotPrintCalendarDebug();
     void slotPrintTestDebug();
 #else

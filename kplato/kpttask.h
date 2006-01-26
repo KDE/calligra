@@ -242,7 +242,7 @@ public:
     /// A task is critical if there is no positive float
     virtual bool isCritical();
     /// Calculate critical path
-    virtual bool calcCriticalPath();
+    virtual bool calcCriticalPath(bool fromEnd);
     
     /// Set current schedule to schedule with identity id, for me nd my children
     virtual void setCurrentSchedule(long id);

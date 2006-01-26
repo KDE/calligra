@@ -95,6 +95,7 @@ void Project::calculate(Effort::Use estType) {
             propagateLatestFinish(m_currentSchedule->latestFinish);
             calculateBackward(estType);
             m_currentSchedule->endTime = scheduleForward(m_currentSchedule->startTime, estType);
+            calcCriticalPath(false);
         } else {
             m_currentSchedule->endTime = m_constraintEndTime;
             m_currentSchedule->latestFinish = m_constraintEndTime;
@@ -104,8 +105,8 @@ void Project::calculate(Effort::Use estType) {
             propagateEarliestStart(m_currentSchedule->earliestStart);
             calculateForward(estType);
             m_currentSchedule->startTime = scheduleBackward(m_currentSchedule->endTime, estType);
+            calcCriticalPath(true);
         }
-        calcCriticalPath();
         makeAppointments();
         calcResourceOverbooked();
     } else if (type() == Type_Subproject) {
@@ -115,11 +116,18 @@ void Project::calculate(Effort::Use estType) {
     }
 }
 
-bool Project::calcCriticalPath() {
+bool Project::calcCriticalPath(bool fromEnd) {
     //kdDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<Node> endnodes = m_endNodes;
-    for (; endnodes.current(); ++endnodes) {
-        endnodes.current()->calcCriticalPath();
+    if (fromEnd) {
+        QPtrListIterator<Node> startnodes = m_startNodes;
+        for (; startnodes.current(); ++startnodes) {
+            startnodes.current()->calcCriticalPath(fromEnd);
+        }
+    } else {
+        QPtrListIterator<Node> endnodes = m_endNodes;
+        for (; endnodes.current(); ++endnodes) {
+            endnodes.current()->calcCriticalPath(fromEnd);
+        }
     }
     return false;
 }
