@@ -327,7 +327,7 @@ palettes.</action></para></listitem>
 <guimenuitem>Add New Palette...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="dialogs-misc-addpalette"><guilabel>Add Palette</guilabel>
+linkend="commands-dialogs-misc-addpalette"><guilabel>Add Palette</guilabel>
 dialog</link>.</action> You can create a custom palette
 here.</para></listitem>
 </varlistentry>
@@ -760,7 +760,7 @@ rendering intent can be specified as well.</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Image</guimenu>
-<guimenuitem>Separate Image</guimenuitem>
+<guimenuitem>Separate Image...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
 <link linkend="commands-dialogs-image-separateimage"><guilabel>Separate Image</guilabel>
@@ -817,10 +817,11 @@ or both.</para></listitem>
 action="simul">&Ctrl;&Shift;<keycap>N</keycap></keycombo></shortcut>
 <guimenu>Layer</guimenu>
 <guisubmenu>New</guisubmenu>
-<guimenuitem>Add Layer...</guimenuitem>
+<guimenuitem>Add...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
-<guilabel>New Layer</guilabel> dialog.</action> This will create a new empty
+<link linkend="commands-dialogs-layers-newlayer"><guilabel>New Layer</guilabel>
+dialog</link>.</action> This will create a new empty
 layer. You can set the name, opacity, composite mode and
 layer type.</para></listitem>
 </varlistentry>
@@ -962,8 +963,9 @@ embedded &kspread; document.</action></para></listitem>
 <guisubmenu>New</guisubmenu>
 <guimenuitem>Adjustment Layer</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>New Adjustment Layer</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-layers-newadjustmentlayer"><guilabel>New Adjustment
+Layer</guilabel>dialog</link>.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1004,7 +1006,7 @@ and inserts it as a new layer.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
-<guimenuitem>Remove Layer</guimenuitem>
+<guimenuitem>Remove</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Removes the current layer
 and its contents.</action></para></listitem>
@@ -1013,7 +1015,7 @@ and its contents.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
-<guimenuitem>Duplicate Layer</guimenuitem>
+<guimenuitem>Duplicate</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Duplicates the current
 layer.</action></para></listitem>
@@ -1022,7 +1024,7 @@ layer.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
-<guimenuitem>Hide/Show Layer</guimenuitem>
+<guimenuitem>Hide/Show</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Toggles the visibility of
 the current layer in the image editing window.</action></para></listitem>
@@ -1033,7 +1035,7 @@ the current layer in the image editing window.</action></para></listitem>
 <shortcut><keycombo
 action="simul">&Ctrl;<keycap>]</keycap></keycombo></shortcut>
 <guimenu>Layer</guimenu>
-<guimenuitem>Raise Layer</guimenuitem>
+<guimenuitem>Raise</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Moves the current layer one
 level upward.</action></para></listitem>
@@ -1044,7 +1046,7 @@ level upward.</action></para></listitem>
 <shortcut><keycombo
 action="simul">&Ctrl;<keycap>[</keycap></keycombo></shortcut>
 <guimenu>Layer</guimenu>
-<guimenuitem>Lower Layer</guimenuitem>
+<guimenuitem>Lower</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Moves the current layer one
 level downward.</action></para></listitem>
@@ -1055,7 +1057,7 @@ level downward.</action></para></listitem>
 <shortcut><keycombo
 action="simul">&Ctrl;&Shift;<keycap>]</keycap></keycombo></shortcut>
 <guimenu>Layer</guimenu>
-<guimenuitem>Layer to Top</guimenuitem>
+<guimenuitem>To Top</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Moves the current layer to the
 top.</action></para></listitem>
@@ -1066,7 +1068,7 @@ top.</action></para></listitem>
 <shortcut><keycombo
 action="simul">&Ctrl;&Shift;<keycap>[</keycap></keycombo></shortcut>
 <guimenu>Layer</guimenu>
-<guimenuitem>Layer to Bottom</guimenuitem>
+<guimenuitem>To Bottom</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Moves the current layer to
 the bottom.</action></para></listitem>
@@ -1103,19 +1105,13 @@ vertically.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
-<guimenuitem>Layer Properties</guimenuitem>
+<guimenuitem>Properties</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the Layer Properties
-dialog.</action> You can change the name, colorspace, opacity,
-composite mode and position of the current layer here.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Layer</guimenu>
-<guisubmenu>Mode</guisubmenu>
-</menuchoice></term>
-<listitem><para><action>?</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-layers-layerproperties"><guilabel>Layer
+Properties</guilabel>dialog</link>.</action> You can change the name,
+colorspace, opacity, composite mode and position of the current layer
+here.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1161,8 +1157,9 @@ action="simul">&Ctrl;&Shift;<keycap>E</keycap></keycombo></shortcut>
 <guisubmenu>Rotate</guisubmenu>
 <guimenuitem>Rotate Layer...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Rotate Layer</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-layers-rotatelayer"><guilabel>Rotate Layer</guilabel>
+dialog</link>.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1200,8 +1197,10 @@ degrees clockwise.</action></para></listitem>
 <guimenu>Layer</guimenu>
 <guimenuitem>Histogram...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Shows a color histogram for
-the current layer.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-layers-histogram"><guilabel>Histogram</guilabel>
+dialog</link>, in which you can see histograms for the current
+layer.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1210,7 +1209,8 @@ the current layer.</action></para></listitem>
 <guimenuitem>Convert Layer Type...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
-<guilabel>Convert Current Layer</guilabel> dialog.</action> You can
+<link linkend="commands-dialogs-layers-convertlayertype"><guilabel>Convert
+Current Layer</guilabel> dialog</link>.</action> You can
 set various options with respect to the colorspace and
 rendering intent.</para></listitem>
 </varlistentry>
@@ -1220,8 +1220,9 @@ rendering intent.</para></listitem>
 <guimenu>Layer</guimenu>
 <guimenuitem>Change Layer Size...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Layer
-Size</guilabel> dialog.</action> You can choose the new
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-layers-layersize"><guilabel>Layer
+Size</guilabel> dialog</link>.</action> You can choose the new
 dimensions and the resize filter to use.</para></listitem>
 </varlistentry>
 
@@ -1238,11 +1239,12 @@ dimensions and the resize filter to use.</para></listitem>
 <term><menuchoice>
 <guimenu>Layer</guimenu>
 <guisubmenu>Layer Effects</guisubmenu>
-<guimenuitem>Drop Shadow</guimenuitem>
+<guimenuitem>Add Drop Shadow...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Drop Shadow</guilabel>
-dialog.</action> This dialog can be used to add a drop shadow beneath the
-current layer.</para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-layers-dropshadow"><guilabel>Drop Shadow</guilabel>
+dialog</link>.</action> This dialog can be used to add a drop shadow beneath
+the current layer.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1360,9 +1362,8 @@ dialog.</action></para></listitem>
 <sect2 id="commands-menus-filter">
 <title>The <guimenu>Filter</guimenu> Menu</title>
 
-<para>See the section on <link linkend="using-filters">Using
-Filters</link> for more information on filters.</para>
-<para>
+<para>See the <link linkend="filters">Filters</link> chapter for more
+information on filters.</para> <para>
 <variablelist>
 
 <varlistentry>

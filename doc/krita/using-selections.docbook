@@ -1,15 +1,16 @@
-<sect1 id="using-selections">
+<chapter id="selections">
 <title>Selections</title>
 
 <para>
+This chapter gives a short introduction on selections.
+</para><para>
 You can select a part of an image masking off the rest. This is handy when
 you want to cut, copy or just modify a part of the image without affecting
 the rest. &krita; handles selections with a mask where each pixel is given any
 of 256 levels between selected and unselected. Yes, that is right, you can
 have fractionally selected pixels. And by working on individual pixels you
 can effectively <quote>paint</quote> your selection.
-</para>
-<para>
+</para><para>
 The selection mask is visualized with unselected pixels having a blueish
 tint, and selected pixels looking like normal. Fractionally selected pixels
 are shown as something in between. Additionally a red border is drawn around
@@ -17,7 +18,7 @@ the selected areas. Fractionally selected pixels are inside the border, so
 even inside the red border you can possibly see the blueish tint on some pixels.
 </para>
 
-<sect2 id="using-selections-making">
+<sect1 id="selections-making">
 <title>Making a selection</title>
 <para>
 A whole range of tools exist to make selections. From rectangles, ellipses
@@ -25,30 +26,24 @@ and freehand to the more exotic like color range select. When you make
 several selections they add up. So a rectangle select followed by an
 ellipse select select both areas. Later you can subtract from the selection
 with say the select-eraser.
-</para>
-<para>
+</para><para>
 To get back to normal (no active selection), choose
 <menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem>
-</menuchoice>.
-</para>
-<para>
-To select all pixels choose
+</menuchoice>. To select all pixels, choose
 <menuchoice><guimenu>Select</guimenu><guimenuitem>Select All</guimenuitem>
 </menuchoice>.
-</para>
-<para>
+</para><para>
 You may think that those two actions give the same result, but it
 is much more efficient to have no active selection than to have selected
 everything.
-</para>
-<para>
-After having deselected you can bring it back by choosing
+</para><para>
+After having deselected you can bring your selection back by choosing
 <menuchoice><guimenu>Select</guimenu><guimenuitem>Reselect</guimenuitem>
 </menuchoice>.
 </para>
-</sect2>
+</sect1>
 
-<sect2 id="using-selections-painting">
+<sect1 id="selections-painting">
 <title>Painting your selection</title>
 <para>
 As said above you can essentially paint you selection, and just like
@@ -57,8 +52,7 @@ guided with rectangles, ellipses, &etc;. You also have the choice of different
 paint tools like pen, brush, airbrush, &etc;. Choose the guide tool, and the
 paint tool in the toolbox, and go ahead and <quote>paint</quote> your
 selection.
-</para>
-<para>
+</para><para>
 The guide tools work just like you may be used to from other applications. So
 holding down shift while drawing a rectangle or an ellipse still forces them to
 be a square or a circle respectively.
@@ -89,13 +83,13 @@ be a square or a circle respectively.
 </mediaobject>
 </screenshot>
 
-</sect2>
+</sect1>
 
-<sect2 id="using-selections-unselecting">
+<sect1 id="selections-unselecting">
 <title>Unselecting</title>
 <para>
 All the selection paint tools have an option to add or subtract from the
-selection. This means that you can use alle your familiar tools to both select
+selection. This means that you can use all your familiar tools to both select
 and unselect. There is also a true selection eraser among the selection paint
 tools.
 </para>
@@ -112,9 +106,9 @@ tools.
 <caption><para>Unselecting.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-selections-making-new">
+<sect1 id="selections-making-new">
 <title>Making a new selection</title>
 <para>
 When you want to make a new selection, replacing the currently active one, you
@@ -122,9 +116,9 @@ first need to deselect the active selection. Choose
 <menuchoice><guimenu>Select</guimenu><guimenuitem>Deselect</guimenuitem>
 </menuchoice>.
 </para>
-</sect2>
+</sect1>
 
-<sect2 id="using-selections-contigious">
+<sect1 id="selections-contigious">
 <title>Selecting a contiguous area (magic wand)</title>
 <para>
 To follow the analogy of painting your selection Krita also provides an
@@ -162,9 +156,9 @@ flooding stops.
 </mediaobject>
 </screenshot>
 
-</sect2>
+</sect1>
 
-<sect2 id="using-selections-similar">
+<sect1 id="selections-similar">
 <title>Selecting similar colors</title>
 <para>
 The Select Similar tool lets you pick a pixel and then select all pixels that
@@ -186,9 +180,9 @@ selected.
 <caption><para>Selecting similar colors.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-selections-inverting">
+<sect1 id="selections-inverting">
 <title>Inverting the selection</title>
 <para>
 In some cases it is easier to specify your selection the other way around. That
@@ -200,6 +194,6 @@ What invert does, is that for every pixel it flips the selection level so to
 speak, by setting it to 256 minus the current selection level. Thus what was
 selected becomes unselected and vice versa.
 </para>
-</sect2>
-
 </sect1>
+
+</chapter>

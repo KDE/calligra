@@ -1,8 +1,8 @@
-<sect1 id="using-filters">
+<chapter id="filters">
 <title>Filters</title>
 
 <para>
-This section describes the various filters in detail. To illustrate the result
+This chapter describes the various filters in detail. To illustrate the result
 of applying the filters, each description is accompanied by an sample image
 with the respective filter applied to it. The original image (with thanks to the
 photographer, Christian Peper) is shown below at half of the original size. The
@@ -31,7 +31,7 @@ information on the dialog windows containing the filter settings.
 </mediaobject>
 </screenshot>
 
-<sect2 id="using-filters-bumpmap">
+<sect1 id="filters-bumpmap">
 <title>The Bumpmap filter</title>
 <para>
 The Bumpmap filter takes two layers and uses one of these to convert the other
@@ -55,9 +55,9 @@ layer.
 <caption><para>The image with the Bumpmap filter applied to it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-edgedetection">
+<sect1 id="filters-edgedetection">
 <title>The Edge Detection filters</title>
 <para>
 These filters try to detect <quote>edges</quote> (boundaries) in the picture
@@ -83,9 +83,9 @@ it.</screeninfo>
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-emboss">
+<sect1 id="filters-emboss">
 <title>The Emboss filters</title>
 <para>
 Emboss filters work somewhat like edge detection filters, with the difference
@@ -120,9 +120,9 @@ it.</screeninfo>
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-">
+<sect1 id="filters-">
 <title>The Gaussian Blur filter</title>
 <para>
 This filter makes the image a little fuzzy by blurring it in a pseudo-random
@@ -142,9 +142,9 @@ the image should be blurred.
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-invert">
+<sect1 id="filters-invert">
 <title>The Invert filter</title>
 <para>
 This filter inverts all colors. The Red, Green and Blue component of each pixel
@@ -164,9 +164,9 @@ pixel color.
 <caption><para>The image with the Invert filter applied to it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-meanremoval">
+<sect1 id="filters-meanremoval">
 <title>The Mean Removal filter</title>
 <para>
 This filter sharpens the image by changing the colors of neighboring pixels
@@ -185,9 +185,9 @@ with approximately the same color, so that small differences are evened out.
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-oilpaint">
+<sect1 id="filters-oilpaint">
 <title>The Oilpaint filter</title>
 <para>
 An oilpaint effect is given to the image by creating patch-shaped areas in which
@@ -206,9 +206,9 @@ the most important color is applied to the entire area.
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-pixelize">
+<sect1 id="filters-pixelize">
 <title>The Pixelize filter</title>
 <para>
 The image is pixelated by taking a square area and giving it the mean color
@@ -227,9 +227,9 @@ value of the pixels it contains.
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-raindrops">
+<sect1 id="filters-raindrops">
 <title>The Raindrops filter</title>
 <para>
 This filter makes it look like raindrops have fallen on the image by distorting
@@ -250,9 +250,9 @@ effect.
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-roundcorners">
+<sect1 id="filters-roundcorners">
 <title>The Round Corners filter</title>
 <para>
 This filter just rounds off the corners of the image. This is done by making
@@ -271,9 +271,9 @@ the outside of the rounded corner transparent.
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-sharpen">
+<sect1 id="filters-sharpen">
 <title>The Sharpen filter</title>
 <para>
 This filter sharpens the image.
@@ -290,9 +290,9 @@ This filter sharpens the image.
 <caption><para>The image with the Sharpen filter applied to it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-simplenoise">
+<sect1 id="filters-simplenoise">
 <title>The Simple Noise Reduction filter</title>
 <para>
 This filter reduces noise in the image by giving loose pixels a color close to
@@ -313,9 +313,9 @@ it.</screeninfo>
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
+</sect1>
 
-<sect2 id="using-filters-tiles">
+<sect1 id="filters-tiles">
 <title>The Small Tiles filter</title>
 <para>
 The picture is reduced in size and repeated multiple times.
@@ -333,6 +333,6 @@ The picture is reduced in size and repeated multiple times.
 it.</para></caption>
 </mediaobject>
 </screenshot>
-</sect2>
-
 </sect1>
+
+</chapter>

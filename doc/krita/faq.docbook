@@ -4,14 +4,15 @@
 <para>
 Stuff does not work, sometimes. &krita; can crash, sometimes — not all
 that often, these days, but still. So you will need some help. The first thing
-to do is try to determine what was going on, exactly. Then you can either create
-a bug report: go to the <guimenu>Help</guimenu> menu and select
+to do is try to determine what was going on, exactly. Then you can create a
+bug report: go to the <guimenu>Help</guimenu> menu and select
 <guimenuitem>Report Bug</guimenuitem>. That way we know exactly which version of
 &krita; you are using. Please try to make reasonably sure that your problem has
 not been reported already! You can also, if it is just that you cannot figure
 out how to do something that you can do using Photoshop using &krita; or some
-other question, mail the &krita; developers at our mailing list, or mail the
-maintainer directly: <email>boud@valdyas.org</email>. 
+other question, mail the &krita; developers at our mailing list
+<email>kde-kimageshop@kde.org</email>, or mail the maintainer directly:
+<email>boud@valdyas.org</email>.
 </para>
 
 &reporting.bugs;

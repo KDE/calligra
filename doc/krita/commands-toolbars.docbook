@@ -1,10 +1,9 @@
 <sect1 id="commands-toolbars">
 <title>Toolbars</title>
 
-<para>This section describes &krita;'s toolbars. Currently &krita; offers six
-functional toolbars. By default, the <guilabel>Krita</guilabel> toolbar is
-located to the left of the drawing area, while the others can be found at the
-top, below the menu bar.</para>
+<para>This section describes &krita;'s toolbars. By default, the
+<guilabel>Krita</guilabel> toolbar is located to the left of the drawing area,
+while the others can be found at the top, below the menu bar.</para>
 
 <para>You can customize your toolbars by choosing
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
@@ -90,34 +89,6 @@ default actions available are <guilabel>Zoom In</guilabel> and
 level is increased. You will see less, but in higher detail. With
 <guilabel>Zoom Out</guilabel>, the zoom level is decreased, so that you see
 more at less detail. </para>
-
-</sect2>
-
-<sect2 id="commands-toolbars-transformationtools">
-<title>The <guilabel>Transformation Tools</guilabel> Toolbar</title>
-
-<para>
-<screenshot>
-<screeninfo>The Transformation Tools toolbar</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="toolbar-transformationtools.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The Transformation Tools toolbar</phrase>
-</textobject>
-<caption><para>The Transformation Tools toolbar</para></caption>
-</mediaobject>
-</screenshot>
-</para>
-
-<para>This toolbar contains actions to transform your image in certain
-ways. By default, there are four actions available on this toolbar:
-<guilabel>Flip on X Axis</guilabel> flips the image vertically,
-<guilabel>Flip on Y Axis</guilabel> flips the image horizontally,
-<guilabel>Rotate Image CW</guilabel> rotates the image 90 degrees clockwise
-(right), and <guilabel>Rotate Image CCW</guilabel> rotates the image 90 degrees
-counterclockwise (left).</para>
 
 </sect2>
 
@@ -360,7 +331,7 @@ fileref="tool-paintselection.png" format="PNG"></imagedata>
 This tool can be used to select custom areas. The currently selected brush is
 used to select areas: instead of painting on the image, the area is selected.
 For more information on selections, see <link
-linkend="using-selections">this section</link>.
+linkend="selections">the Selections chapter</link>.
 </para></listitem></varlistentry>
 
 <varlistentry>
@@ -579,6 +550,23 @@ Gradient</guibutton> button.</para>
 <para>The <guilabel>Patterns</guilabel> palette allows you to choose a pattern
 for operations like Pattern fill. Click a pattern to see a preview at
 actual size, then click it again to select it.</para>
+
+<para>
+<screenshot>
+<screeninfo>The Patterns palette with the Custom Pattern tab selected</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-patterns-custompattern.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Patterns palette with the Custom Pattern tab selected</phrase>
+</textobject>
+<caption><para>The Patterns palette with the Custom Pattern tab selected</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>You can also create a custom pattern, as is shown above.</para>
 
 </sect3>
 

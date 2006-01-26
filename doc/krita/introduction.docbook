@@ -120,11 +120,14 @@ information.
 <sect1 id="introduction-manual">
 <title>About this manual</title>
 <para>
-This manual is not complete. The invitation to join us and help out extends to
-the manual, too! We are assuming you have got a good working knowledge of &kde;
-and of your operating system. The first chapter will give you a quick tour of
-&krita;'s cool features; the other chapters will expand on that information.
+We are assuming you have got a good working knowledge of &kde; and of your
+operating system. The first chapter will give you a quick tour of &krita;'s
+cool features; the other chapters will expand on that information.
 </para>
+<note><para>
+This manual is not complete. The invitation to join us and help out extends to
+the manual, too!
+</para></note>
 <para>
 Should you have any questions, comments or suggestions, please contact the
 documentation maintainer at <email>sanderkoning@kde.nl</email>.

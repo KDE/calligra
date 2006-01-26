@@ -122,7 +122,9 @@ original size. If you select <guilabel>Constrain proportions</guilabel>, the
 new width and height will always be set to the same percentage. For example,
 if you have an image of 200 x 100 pixels, and set the width to 20 pixels, the
 height will automatically be changed to 10. With this checkbox unselected, you
-can also resize the image non-proportionally.
+can also resize the image non-proportionally. The <guilabel>Filter:</guilabel>
+dropdown box can be used to select a different algorithm for resizing the
+image.
 </para>
 
 </sect3>
@@ -240,9 +242,280 @@ The X and Y shearing angles can be set using the two spin boxes.
 <sect2 id="commands-dialogs-layers">
 <title>Dialogs for working with layers</title>
 
+<sect3 id="commands-dialogs-layers-convertlayertype">
+<title>The Convert Layer Type dialog</title>
+
 <para>
-This section is to be written.
+<screenshot>
+<screeninfo>The Convert Layer Type dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-convertlayertype.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Convert Layer Type dialog</phrase>
+</textobject>
+<caption><para>The Convert Layer Type dialog</para></caption>
+</mediaobject>
+</screenshot>
 </para>
+
+<para>
+This dialog is exactly the same as the <link
+linkend="commands-dialogs-image-convertimagetype"><guilabel>Convert Image
+Type</guilabel> dialog</link>, which converts an entire image instead of a
+single layer. See the description there for details.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-dropshadow">
+<title>The Drop Shadow dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Drop Shadow dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-dropshadow.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Drop Shadow dialog</phrase>
+</textobject>
+<caption><para>The Drop Shadow dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can add a drop shadow effect to the current layer.
+Select the X and Y offsets (displacements) of the shadow relative to the
+original layer with the two topmost spin boxes. The <guilabel>Blur
+radius</guilabel> spinbox determines the radius in which the shadow will be
+blurred (to achieve a smooth transition at the shadow border). If you want
+a special color for the shadow, you can choose one with the
+<guilabel>Color</guilabel> field. The <guilabel>Opacity</guilabel> slider and
+spinbox can be used to make the shadow more or less transparent. Disable the
+<guilabel>Allow resizing</guilabel> checkbox if you don't want the layer to be
+resized in order to give it a shadow.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-histogram">
+<title>The Histogram dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Histogram dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-histogram.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Histogram dialog</phrase>
+</textobject>
+<caption><para>The Histogram dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog shows a histogram for the current layer. With the
+<guilabel>Method:</guilabel> settings, you can choose what kind of histogram
+to show. You can change the channel(s) to show with the
+<guilabel>Channels:</guilabel> listbox, and the scale on which it should be
+drawn with the <guilabel>Linear</guilabel> and
+<guilabel>Logarithmic</guilabel> radio buttons. Under the preview, there are
+buttons available to zoom in to, and move over, the histogram. These are
+activated for 16-bit colorspace layers.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-layerproperties">
+<title>The Layer Properties dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Layer Properties dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-layerproperties.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Layer Properties dialog</phrase>
+</textobject>
+<caption><para>The Layer Properties dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog is in essence the same as the <link
+linkend="commands-dialogs-layers-newlayer">New Layer</link> dialog, with the difference that
+you cannot change its colorspace or profile anymore. These properties are
+shown, though, to keep the information complete.
+</para>
+</sect3>
+
+<sect3 id="commands-dialogs-layers-layersize">
+<title>The Layer Size dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Layer Size dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-layersize.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Layer Size dialog</phrase>
+</textobject>
+<caption><para>The Layer Size dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog allows you to resize the current layer.
+Under <guilabel>Pixel dimensions</guilabel>, you can set which new size you
+want the layer to have. The original size is given as a reference. The new
+size can be set both as pixels or as a percentage, with 100% being the
+original size. If you select <guilabel>Constrain proportions</guilabel>, the
+new width and height will always be set to the same percentage. For example,
+if you have a layer of 200 x 100 pixels, and set the width to 20 pixels, the
+height will automatically be changed to 10. With this checkbox unselected, you
+can also resize the layer non-proportionally. The <guilabel>Filter:</guilabel>
+dropdown list can be used to select a different algorithm for resizing nthe
+layer.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-newadjustmentlayer">
+<title>The New Adjustment Layer dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The New Adjustment Layer dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-newadjustmentlayer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The New Adjustment Layer dialog</phrase>
+</textobject>
+<caption><para>The New Adjustment Layer dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+In this dialog, you can select the type of adjustment layer to add to the
+image. In the left-hand list, you can see the available adjustment layers,
+each with a preview. When you select one, the <guilabel>Preview</guilabel>
+will change to show a correctly scaled preview of what the result of the
+adjustment layer is going to be. 
+</para><para>
+You can then choose to show either the original image or the preview of the
+adjustment layer with the radio buttons below the preview window. The buttons
+next to these allow you to zoom in, zoom out, and refresh the preview,
+respectively. The <guilabel>Autoupdate</guilabel> checkbox determines if the
+preview window should update automatically after you made a change.
+</para><para>
+The various options available for the filter that is used to create the
+adjustment layer, are shown at the bottom of the dialog. See the section on
+<link linkend="commands-dialogs-filters">filters</link> of this chapter for
+descriptions.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-newlayer">
+<title>The New Layer dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The New Layer dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-newlayer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The New Layer dialog</phrase>
+</textobject>
+<caption><para>The New Layer dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+You can add a new layer to your image with this dialog. If you want a
+descriptive name for your layer, you can fill one in at
+<guilabel>Name:</guilabel>. You can select the desired colorspace for the newn
+layer with the <guilabel>Colorspace:</guilabel> list, and the specific
+color profile for that colorspace at <guilabel>Profile:</guilabel>.
+You can preset the layer's opacity (you can change it later with the slider in
+the layer box), and choose the mode with which the layer should be composited
+onto the final image.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layers-rotatelayer">
+<title>The Rotate Layer dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Rotate Layer dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-rotatelayer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Rotate Layer dialog</phrase>
+</textobject>
+<caption><para>The Rotate Layer dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog, similar to the <link
+linkend="commands-dialogs-image-rotateimage"><guilabel>Rotate Image</guilabel>
+dialog</link>, allows you to rotate the current layer. You can choose the
+direction in which to rotate and the amount to rotate the layer by.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-layer-shearlayer">
+<title>The Shear Layer dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Shear Layer dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-shearlayer.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Shear Layer dialog</phrase>
+</textobject>
+<caption><para>The Shear Layer dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog works the same as the <link
+linkend="commands-dialogs-image-shearimage"><guilabel>Shear Image</guilabel>
+dialog</link>, except that it operates on the current layer instead of on the
+entire image.
+</para>
+
+</sect3>
 
 </sect2>
 
@@ -257,6 +530,36 @@ This section is to be written.
 
 <sect2 id="commands-dialogs-misc">
 <title>Miscellaneous dialogs</title>
+
+<sect3 id="commands-dialogs-misc-addpalette">
+<title>The Add Palette dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Add Palette dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-addpalette.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Add Palette dialog</phrase>
+</textobject>
+<caption><para>The Add Palette dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can add a custom color palette to &krita;. Fill in the
+name for your palette in the text field at the top. Then make the palette: use
+the button <guibutton>Add New Color...</guibutton> to add a color to the palette
+and <guibutton>Remove Selected Color</guibutton> to remove the currently
+selected color. Click the button <guibutton>Add to Predefined
+Palettes</guibutton> to add your newly created palette to the palette list, or
+just choose <guibutton>OK</guibutton> when you're done.
+</para>
+
+</sect3>
 
 <sect3 id="commands-dialogs-misc-documentinformation">
 <title>The Document Information dialog</title>
@@ -289,36 +592,6 @@ information is displayed. On the <guilabel>Author</guilabel> tab, you can
 store information about yourself. The third tab, <guilabel>User-defined
 Metadata</guilabel>, allows you to store any other information.
 </para>
-</sect3>
-
-<sect3 id="dialogs-misc-addpalette">
-<title>The Add Palette dialog</title>
-
-<para>
-<screenshot>
-<screeninfo>The Add Palette dialog</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="dialogs-addpalette.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The Add Palette dialog</phrase>
-</textobject>
-<caption><para>The Add Palette dialog</para></caption>
-</mediaobject>
-</screenshot>
-</para>
-
-<para>
-With this dialog, you can add a custom color palette to &krita;. Fill in the
-name for your palette in the text field at the top. Then make the palette: use
-the button <guibutton>Add New Color...</guibutton> to add a color to the palette
-and <guibutton>Remove Selected Color</guibutton> to remove the currently
-selected color. Click the button <guibutton>Add to Predefined
-Palettes</guibutton> to add your newly created palette to the palette list, or
-just choose <guibutton>OK</guibutton> when you're done.
-</para>
-
 </sect3>
 
 </sect2>
