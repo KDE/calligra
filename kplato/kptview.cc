@@ -268,13 +268,10 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     // ------------------- Actions with a key binding and no GUI item
 #ifndef NDEBUG
-    KAction* actPrintDebug = new KAction( i18n( "Print Debug" ), CTRL+SHIFT+Key_P,
-                        this, SLOT( slotPrintDebug() ), actionCollection(), "print_debug" );
-    KAction* actPrintCalendarDebug = new KAction( i18n( "Print Calendar Debug" ), CTRL+SHIFT+Key_C,
-                        this, SLOT( slotPrintCalendarDebug() ), actionCollection(), "print_calendar_debug" );
-
-    new KAction( i18n( "Print Test Debug" ), CTRL+SHIFT+Key_T,
-                        this, SLOT( slotPrintTestDebug() ), actionCollection(), "print_test_debug" );
+    //new KAction("Print Debug", CTRL+SHIFT+Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
+    new KAction("Print Debug", CTRL+SHIFT+Key_P, this, SLOT(slotPrintSelectedDebug()), actionCollection(), "print_debug");
+    new KAction("Print Calendar Debug", CTRL+SHIFT+Key_C, this, SLOT(slotPrintCalendarDebug()), actionCollection(), "print_calendar_debug");
+    new KAction("Print Test Debug", CTRL+SHIFT+Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
     KAction* actExportGantt = new KAction( i18n( "Export Gantt" ), CTRL+SHIFT+Key_G,
                         this, SLOT( slotExportGantt() ), actionCollection(), "export_gantt" );
@@ -282,8 +279,9 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 #endif
     // Stupid compilers ;)
 #ifndef NDEBUG
-    Q_UNUSED( actPrintDebug );
-    Q_UNUSED( actPrintCalendarDebug );
+/*    Q_UNUSED( actPrintDebug );
+    Q_UNUSED( actPrintSelectedDebug );
+    Q_UNUSED( actPrintCalendarDebug );*/
     Q_UNUSED( actExportGantt );
 #endif
 
@@ -1201,6 +1199,14 @@ void View::slotPrintDebug() {
         curr->printDebug(true,"");
     } else*/
         getPart()->getProject().printDebug(true, "");
+}
+void View::slotPrintSelectedDebug() {
+    Node *curr = m_ganttview->currentNode();
+    if (curr) {
+        kdDebug()<<"-------- Debug printout: Selected node" <<endl;
+        curr->printDebug(true,"");
+    } else
+        slotPrintDebug();
 }
 void View::slotPrintCalendarDebug() {
     kdDebug()<<"-------- Debug printout: Node list" <<endl;
