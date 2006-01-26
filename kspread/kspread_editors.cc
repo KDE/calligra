@@ -47,8 +47,6 @@
 #include <qregexp.h>
 #include <kdebug.h>
 
-#include "highlight_range.h"
-
 using namespace KSpread;
 
 

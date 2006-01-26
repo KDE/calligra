@@ -31,8 +31,6 @@
 #include <klineedit.h>
 #include <ksharedptr.h>
 
-#include "highlight_range.h"
-
 class KTextEdit;
 class QFont;
 class QButton;

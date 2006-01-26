@@ -85,7 +85,6 @@
 #include "selection.h"
 
 #include "kspread_canvas.h"
-#include "highlight_range.h"
 
 // TODO Stefan: undefine/remove, if non-contiguous selections don't work
 //              properly or if we are sure, that they do. ;-)
