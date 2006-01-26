@@ -175,16 +175,6 @@ class Canvas::Private
     QPoint m_origPos;  ///< Start point for move
     bool m_isMoving;
 
-    //Stores information about cells referenced in the formula currently being edited,
-    //Used to highlight relevant cells
-    std::vector< KSharedPtr<HighlightRange> >* highlightedRanges;
-
-    //The highlighted range being resized by the user (using the size grip, or null if the user
-    //is not resizing a range.
-    KSharedPtr<HighlightRange> sizingHighlightRange;
-
-   // bool mouseOverHighlightRangeSizeGrip;
-
     // The row and column of 1) the last cell under mouse pointer, 2) the last focused cell, and
     // the last spoken cell.
     int prevSpokenPointerRow;
@@ -211,9 +201,6 @@ Canvas::Canvas (View *_view)
   d->cellEditor = 0;
   d->chooseCell = false;
   d->validationInfo = 0L;
-  d->highlightedRanges = 0;
-  d->sizingHighlightRange = 0;
- // d->mouseOverHighlightRangeSizeGrip = false;
 
   QWidget::setFocusPolicy( QWidget::StrongFocus );
 
@@ -276,7 +263,6 @@ Canvas::~Canvas()
 {
   delete d->scrollTimer;
   delete d->validationInfo;
-  delete d->highlightedRanges;
   delete d;
 }
 
@@ -872,136 +858,6 @@ void Canvas::slotMaxRow( int _max_row )
 
   vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( ypos + yOffset() ) );
 }
-
-bool Canvas::getHighlightedRangesAt(const int col, const int row, std::vector< HighlightRange* >& ranges)
-{
-	if (!d->highlightedRanges)
-		return false;
-
-	bool result=false;
-
-	std::vector< KSharedPtr<HighlightRange> >::iterator iter;
-
-	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
-	{
-		Point pt;
-		pt.setRow(row);
-		pt.setColumn(col);
-		pt.setSheet( activeSheet() );
-
-		if ( (*iter)->contains(pt))
-		{
-			ranges.push_back( *iter );
-			result=true;
-		}
-	}
-
-	return result;
-}
-
-void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
-{
-	if (!range) return;
-	if (!d->cellEditor) return;
-	if (!d->editWidget) return;
-
-	//Normalise the area because 'negative' ranges (eg: B1:A1) are not valid.
-	QRect normArea=newArea.normalize();
-
-	if ( (normArea.right() > KS_colMax) || (normArea.bottom() > KS_rowMax) )
-		return;
-
-
- Range rg(*range);
-
-	if (rg.range() == normArea) //Don't update if no change to area
-		return;
-
-	QString oldRangeRef=rg.toString();
-
-	int sheetNameEndPos=oldRangeRef.find("!");
-
-	if (sheetNameEndPos == -1) return;
-
-	oldRangeRef.remove(0,sheetNameEndPos+1); //Remove the sheet name (eg. Sheet1!A1 -> A1)
-
-	int refSeparator=oldRangeRef.find(":");
-
-	QString oldPointRef=oldRangeRef.mid(refSeparator+1);
-
-
-
-	//Adjust range to fit new area selected by user
-	rg.setRange(normArea);
-	QString newRangeRef=rg.toString();
-
-	newRangeRef.remove(0,sheetNameEndPos+1); //Remove sheet name, will be same name as for old reference
-
-	if ( (rg.range().width()==1) && (rg.range().height()==1) )
-		newRangeRef.remove(0,newRangeRef.find(":")+1);
-
-	//kdDebug() << "Old Range Ref - " << oldRangeRef << " -- New Range Ref - " << newRangeRef << endl;
-
-	QString formulaText=d->cellEditor->text();
-
-	int pos=formulaText.find(oldRangeRef);
-	int pointPos=formulaText.find(oldPointRef);
-	int cellEditorCursorPos=d->cellEditor->cursorPosition();
-	int canvasEditWidgetCursorPos=d->editWidget->cursorPosition();
-
-	while ( (pos != -1) || (pointPos != -1))
-	{
-		bool validRef=true;
-
-		if (pos != -1)
-		{
-			//Check that this is not part of a longer reference (eg. if we are looking for A1:A1, don't find A1:A12)
-			if (formulaText.at ( pos - 1).isLetterOrNumber())
-				validRef=false;
-
-			if (formulaText.at ( pos + oldRangeRef.length() ).isLetterOrNumber() )
-				validRef=false;
-		}
-		else
-		{
-			if (formulaText.at (pointPos - 1).isLetterOrNumber())
-				validRef=false;
-
-			QChar ch=formulaText.at(pointPos + oldPointRef.length());
-
-			if ( (ch.isLetterOrNumber()) || (ch == ':') )
-				validRef=false;
-		}
-
-		if (validRef)
-		{
-			if (pos != -1)
-				formulaText=formulaText.replace(pos,oldRangeRef.length(),newRangeRef);
-			else
-				formulaText=formulaText.replace(pointPos,oldPointRef.length(),newRangeRef);
-		}
-
-		kdDebug() << "Formula Text : " << formulaText << endl;
-
-		if (pos != -1)
-		{
-			pos = formulaText.find(oldRangeRef,pos+newRangeRef.length());
-			pointPos = formulaText.find(oldPointRef,pos+newRangeRef.length());
-		}
-		else
-		{
-			pos = formulaText.find(oldRangeRef,pointPos+1+newRangeRef.length());
-			pointPos = formulaText.find(oldPointRef,pointPos+1+newRangeRef.length());
-		}
-	}
-
-	d->cellEditor->setText(formulaText);
-	d->cellEditor->setCursorPosition(cellEditorCursorPos);
-
-	d->editWidget->setText(formulaText);
-	d->editWidget->setCursorPosition(canvasEditWidgetCursorPos);
-}
-
 
 void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 {
@@ -3684,7 +3540,6 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
   else
     d->view->updateEditWidget();
 
-  setHighlightedRanges(0);
   setFocus();
 }
 
@@ -6090,81 +5945,5 @@ void ToolTip::maybeTip( const QPoint& p )
     }
 
 }
-
-void Canvas::setHighlightedRanges(std::vector< KSharedPtr<HighlightRange> >* cells)
-{
-	//Clear existing highlighted ranges
-
-	if (d->highlightedRanges)
-	{
-		std::vector< KSharedPtr<HighlightRange> >::iterator iter;
-
-		for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
-		{
-		      (*iter)->sheet()->setRegionPaintDirty( (*iter)->range());
-			/*if (iter->lastCell())
-			{
-				Range rg(*(iter->firstCell()),*(iter->lastCell()));
-
-
-				rg.sheet()->setRegionPaintDirty(rg.range());
-			}
-			else
-			{
-				QRect cellRect(iter->firstCell()->column(),iter->firstCell()->row(),
-				       1,1);
-
-				iter->firstCell()->sheet()->setRegionPaintDirty(cellRect);
-			}*/
-		}
-
-		delete d->highlightedRanges;
-	}
-
-	if (cells==0)
-		d->highlightedRanges=0;
-	else
-	{
-		//Set the highlight flag for the specified cells, set the highlight color and add them to the dirty list for
-		//later repainting
-		d->highlightedRanges=new std::vector< KSharedPtr<HighlightRange> >(*cells);
-
-#if 0
-		std::vector<HighlightRange>::iterator iter;
-
-		for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
-		{
-			if (iter->lastCell)
-			{
-
-				Range rg(*(iter->firstCell),*(iter->lastCell));
-				/*QRect range=rg.range();
-				range.setWidth(range.width()+1);
-				range.setHeight(range.height()+1);*/
-				rg.sheet->setRegionPaintDirty(rg.range());
-			}
-			else
-			{
-				QRect cellRect(iter->firstCell->column(),iter->firstCell->row(),
-				       1,1);
-
-				iter->firstCell->sheet->setRegionPaintDirty(cellRect);
-			}
-			//iter->cell->setFlag(Cell::Flag_DisplayDirty);
-		}
-
-#endif
-	}
-
-	//activeSheet()->setRegionPaintDirty(visibleCells());
-
-	paintUpdates();
-
-
-
-
-}
-
-
 
 #include "kspread_canvas.moc"

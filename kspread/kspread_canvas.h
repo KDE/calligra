@@ -74,7 +74,6 @@ class Selection;
 class CellEditor;
 class LocationEditWidget;
 class ComboboxLocationEditWidget;
-class HighlightRange;
 class KSpreadObject;
 
 
@@ -131,6 +130,12 @@ public:
     Selection* selectionInfo() const;
     Selection* choice() const;
 
+    /**
+     * @deprecated use selectionInfo()
+     * Selections are no longer contiguous in general.
+     * @see Selection::lastRange()
+     * @see Selection::activeElement()
+    */
     QRect selection() const;
     QPoint marker() const;
     int markerColumn() const;
@@ -256,23 +261,6 @@ public:
      */
     double autoScrollAccelerationY( int offset );
 
-    /**
-    * Sets which cell ranges are highlighted and the colours used to highlight them.
-    * This is used to highlight cells referenced in the formula currently being edited for example
-    *
-    */
-    void setHighlightedRanges(std::vector< KSharedPtr<HighlightRange> >* ranges);
-
-    /**
-    * Resizes a highlighted range, and updates the text in the formula edit box accordingly.
-    *
-    * @param range Highlighted range to be resized.  References to this range in the formula edit
-    * box will be changed accordingly.
-    * @param newArea The new area for the highlighted range.  @see resizeHighlightedRange
-    * normalises this area before applying it to @p range.
-    */
-    void resizeHighlightedRange(KSpread::HighlightRange* range, const QRect& newArea);
-
     KSpreadObject *getObject( const QPoint &pos, Sheet *_sheet );
     void selectAllObj();
     void deSelectAllObj();
@@ -311,16 +299,6 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent * _ev);
     virtual void dropEvent(QDropEvent * _ev);
     virtual void dragLeaveEvent(QDragLeaveEvent * _ev);
-
-    /**
-     * Retrieves the highlighted ranges at the specified position.
-     * @param col Column index of cell
-     * @param row Row index of cell
-     * @param ranges A vector to be filled with pointers to HighlightRange structures containing information about the ranges
-     * which contain the the given column and row.
-     * @return True if there are any highlighted ranges at the given column and row or false otherwise.
-     */ 
-    bool getHighlightedRangesAt(const int col, const int row, std::vector<HighlightRange*>& ranges);
 	
     /**
      * Checks to see if there is a size grip for a highlight range at a given position. 
@@ -345,9 +323,6 @@ private:
     VBorder* vBorderWidget() const;
     QScrollBar* horzScrollBar() const;
     QScrollBar* vertScrollBar() const;
-
-    void drawChooseMarker( );
-    void drawChooseMarker( const QRect& );
 
     /**
      * Clips out the children region from the painter
@@ -500,10 +475,12 @@ private:
 private:
   class Private;
   Private* d;
-
 };
 
+
+
 /**
+ * HBorder
  */
 class HBorder : public QWidget
 {
@@ -586,7 +563,10 @@ private:
 private:
 };
 
+
+
 /**
+ * VBorder
  */
 class VBorder : public QWidget
 {
@@ -634,6 +614,8 @@ private:
      */
     bool m_bMousePressed;
 };
+
+
 
 /**
  * Tooltip, which displays the comment and cell content, when it's too short
