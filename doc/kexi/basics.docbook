@@ -53,7 +53,7 @@
 	      <keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
 	    </shortcut>
 	    <guimenu>File</guimenu><guimenuitem>New</guimenuitem>
-	  </menuchoice>
+	  </menuchoice>.
 	</para>
       </step>
       <step>
@@ -95,10 +95,9 @@
       at the top of the pane (just below the toolbar).
     </para>
     <para>
-      New child windows can be created by clicking (or
-      double-clicking, depending upon your global &kde; settings) on
-      the names of database objects listed in the <guilabel>Project
-      Navigator</guilabel>.
+      Database objects (tables, queries, etc.) listed in the <guilabel>Project
+      Navigator</guilabel> can opened by clicking (or
+      double-clicking, depending upon your global &kde; settings) on their names.
     </para>
 
 <sect2 id="main-application-elements">
@@ -143,7 +142,7 @@ small toolbar with most usable commands related to the database objects.
 <para><emphasis>Opened database objects area</emphasis></para>
 <para>
 a central area of the application taking most of the screen space.
-For IDEAl user interface mode it contains a switchable tabs with
+For IDEAl user interface mode it contains switchable tabs with
 windows that are always maximized. For Childframe user interface
 mode it contains floating windows.
 </para>
@@ -153,7 +152,7 @@ mode it contains floating windows.
 <para><emphasis>Properties pane</emphasis></para>
 <para>
 contains a list of properties of currently activated database object.
-For certain objects (e.g. form's widgets) it can be consisted of several tabs.
+For certain objects (e.g. form's widgets) it can have several tabs.
 </para>
 </listitem>
 
@@ -172,13 +171,13 @@ buttons, behaving just like your operating system's taskbar.
 <sect3 id="project-navigator-pane">
 <title>Project Navigator pane</title>
 <para>
-Project Navigator pane is one of the most frequently used elements
+The Project Navigator pane is one of the most frequently used elements
 of the &kexi; main window. The pane contains a list of all objects
 created within the currently opened &kexi; database project. The objects
-are splitted into groups: tables, queries, forms.
+are split into groups: tables, queries, forms.
 </para>
 <para id="project-navigator-pane-toolbar">
-Project Navigator pane also contains a <emphasis>small toolbar for most
+The Project Navigator pane also contains a <emphasis>small toolbar for most
 frequently used commands</emphasis> (from left to right): <emphasis>Open
 selected object</emphasis>, <emphasis>Design selected object</emphasis>,
 <emphasis>Create a new object</emphasis>, and <emphasis>Delete selected
@@ -189,8 +188,8 @@ object</emphasis>.
 -->
 </para>
 <para>
-For each object on the list context menu is available using the &RMB;
-For example, this is context menu for <emphasis>persons</emphasis> table.
+For each object on the list context menu is available using the &RMB;.
+For example, this is context menu for the <emphasis>persons</emphasis> table.
 <!--
  <br><img src="img/04_06_01_context_menu.png">
  <br>Project Navigator pane's context menu<br><br>
@@ -211,9 +210,9 @@ open the object in Data View. If the object's window was alread opened,
 the action just activates the window without switching it's view mode.
 </para>
 <para>
-Note that your operating system can be set up to handle single clicks
-instead of double clicks. In this case it is enough to single click
-on the object name to open it's window.
+Note that your operating system or window manager can be set up to handle
+single clicks instead of double clicks. In this case it is enough to single
+click on the object name to open its window.
 <!-- TODO (js) but then how to select an object without opening it? -->
 </para>
 
@@ -223,10 +222,10 @@ on the object name to open it's window.
 <title>Database object windows</title>
 
 <orderedlist>
-<title>Opening object's window</title>
+<title>Opening an object's window</title>
 <listitem>
 <para>
-Select the object in <link linkend="project-navigator-pane">Project Navigator
+Select the object in the <link linkend="project-navigator-pane">Project Navigator
 pane</link>.
 </para>
 </listitem>
@@ -244,9 +243,9 @@ linkend="project-navigator-pane-toolbar">Project Navigator pane's toolbar</link>
 <listitem><para><emphasis>Closing an object window</emphasis></para>
 <para>
 When the IDEAl user interface mode (the default) is used, each window has
-it's own tab. Move the mouse pointer to the tab. You will see the
-<!-- <img src="fileclose.png" class="icon"> --> close button.
-Click it to close the tab.
+its own tab. Place the mouse pointer on the icon on the tab. A
+<!-- <img src="fileclose.png" class="icon"> --> close button will become
+visible. Click it to close the tab.
 </para>
 <para>
 In the Childframe on the right hand of each opened window there are
@@ -259,7 +258,7 @@ you can select <menuchoice><guimenu>Window</guimenu>
 <guimenuitem>Close</guimenuitem></menuchoice> from the Menubar.
 </para>
 </listitem>
-<listitem><para><emphasis>Window's buttons for Childframe user interface
+<listitem><para><emphasis>Window buttons for Childframe user interface
 mode</emphasis></para>
 <!--
 <para>
@@ -268,11 +267,11 @@ mode</emphasis></para>
 </para>
 -->
 <para>
-Other button's (from right to left) can be used to: maximize, minimize
+The other buttons (from right to left) can be used to: maximize, minimize
 and undock the window.
 </para>
 <para>
-There's a small icon on the left hand of the window which can be clicked
+There's a small icon on the left side of the title bar which can be clicked
 to show a context menu with commands related to the window.
 </para>
 <!--
@@ -286,9 +285,9 @@ to show a context menu with commands related to the window.
 <sect3 id="property-editor-pane">
 <title>Property Editor pane</title>
 <para>
-The Property Editor pane allows to change properties of object
+In the Property Editor pane you can change properties of the object
 displayed in the active window. Depending on the context, the pane is
-consisted of one or more tabs. The first, always visible, Propertiestab
+consisted of one or more tabs. The first, always visible tab, Properties,
 contains the list of available properties.
 </para>
 <!--
@@ -300,10 +299,10 @@ contains the list of available properties.
 <itemizedlist>
 <title>Rules for using the Property Editor:</title>
 <listitem>
-<para>One row means a single property.</para>
+<para>Each row contains a single property.</para>
 </listitem>
 <listitem>
-<para>You can use mouse or keyboard to change values of particular
+<para>You can use the mouse or the keyboard to change values of particular
 properties.</para>
 </listitem>
 <listitem>
@@ -311,23 +310,24 @@ properties.</para>
 <title>Most frequently used types of property values are:</title>
 <listitem>
 <para><emphasis>a number;</emphasis> you can enter the value directly
-or increate or decrease it's value clicking with the &LMB; on the arrows.
+or increase or decrease its value by clicking with the &LMB; on the arrows.
 <!-- <img src="img/04_06_03_prop_arrows.png" class="icon"> -->
 </para>
 </listitem>
 <listitem><para>text</para></listitem>
 <listitem><para>drop down list of values</para></listitem>
-<listitem><para><emphasis>Yes/No value;</emphasis>
-in form of a button you can toggle; button toggled on means
-<emphasis>yes</emphasis> (<emphasis>true</emphasis>) value, button toggled
-off means <emphasis>no</emphasis> (<emphasis>false</emphasis>) value;
+<listitem><para><emphasis>Yes/No;</emphasis>
+you can toggle the value by clicking on the button;
+<emphasis>Yes</emphasis> (<emphasis>true</emphasis>) means that the button is
+toggled on, <emphasis>No</emphasis> (<emphasis>false</emphasis>) means that
+the button is toggled off.
 <!-- see the above figure -->
 </para>
 </listitem>
 </itemizedlist>
 </listitem>
 <listitem><para>
-There is no need for accepting changed value: changes are visible immediately
+There is no need to confirm a changed value: changes are visible immediately
 after moving to a different row of the Property Editor's list or by pressing
 the <keycombo><keycap>Enter</keycap></keycombo> key.
 </para></listitem>
@@ -339,8 +339,8 @@ database are marked with bold text.
 </listitem>
 <listitem>
 <para>
-After changing a value of property, a special <guilabel>Undo changes</guilabel>
-button appears on the right hand of the Property Editor's list.
+After changing the value of a property, a special <guilabel>Undo changes</guilabel>
+button appears on the right side of the Property Editor's list.
 <!-- <img src="img/04_06_03_prop_undo.png" class="icon"> -->
 By clicking it you can revert the value of the property to the original value
 that was loaded from the database upon opening the database object. The button
@@ -350,11 +350,11 @@ is only visible when the property is actually highlighted.
 </itemizedlist>
 
 <itemizedlist>
-<title>Property Editor pane is empty if:</title>
+<title>The Property Editor pane is empty if:</title>
 <listitem><para>no single database object's window is opened, or</para>
 </listitem>
 <listitem><para>
-active database object's window does not offer properties; it is usually
+the active database object's window does not offer properties; it is usually
 the case when it is opened in Data View instead of Design View
 </para>
 </listitem>
@@ -382,23 +382,25 @@ pane in appendix Property Editor pane.
         To open an existing Kexi database file:
       </title>
       <listitem><para>
-        select it in <guimenuitem>Open Existing Project</guimenuitem> window; or
+        select it in the <guimenuitem>Open Existing Project</guimenuitem>
+		dialog; or
       </para></listitem>
       <listitem><para>
-        open it by clicking on .kexi file's icon.
+        open it by clicking on the .kexi file icon.
       </para></listitem>
     </itemizedlist>
 
     <sect2 id="window-open-existing">
       <title>
-        Opening a database file in the <guimenuitem>Open Existing Project</guimenuitem> window
+        Opening a database file in the <guimenuitem>Open Existing
+		Project</guimenuitem> dialog
       </title>
       <itemizedlist>
         <listitem><para>
             Run &kexi;. <!--(see <a href="04_02_00_running_kexi.html">Running Kexi</a>).-->
             You should see <guilabel>Choose Project</guilabel> startup dialog.
             Choose <guilabel>Open Existing Project</guilabel> tab.
-            You will see following dialog:
+            You will see the following dialog:
           <!-- image: <img src="img/04_04_01_startup_open_existing.png"> -->
         </para></listitem>
         <listitem><para>
@@ -407,7 +409,7 @@ pane in appendix Property Editor pane.
         </para></listitem>
         <listitem><para>
           You can either pick a file or enter its name in the
-          <guilabel>File name</guilabel> box.
+          <guilabel>Location</guilabel> box.
         </para></listitem>
         <listitem><para>
           Click <guibutton>OK</guibutton>.
@@ -420,23 +422,23 @@ pane in appendix Property Editor pane.
         </title>
         <itemizedlist>
           <listitem><para>
-            By default <guilabel>File type</guilabel> drop down list has
-            <guilabel>All Supported Files</guilabel> setting chosen.
-            In case the file you are looking for has other extension,
-            you can change selection of <guilabel>File type</guilabel>
+            By default the <guilabel>Filter:</guilabel> drop down list has
+            <guilabel>Kexi Database File-Based Project</guilabel> selected.
+            In case the file you are looking for has an other extension,
+            you can change the selection of the <guilabel>Filter:</guilabel>
             drop down list to <guilabel>All files</guilabel> to display
             all available files (regardless of an extension).
           </para></listitem>
           <listitem><para>
-            If you have selected a file of external type like MS Access' .mdb
-            file, &kexi; will provide you with option to import the file.
+            If you have selected a file of an external type, like a MS Access .mdb
+            file, &kexi; will provide you with the option to import the file.
 <!-- todo an advice to read "importing" chapter will be placed here -->
           </para></listitem>
           <listitem><para>
             If you have selected a <emphasis>connection data</emphasis> file
             (with .kexic extension) or a <emphasis>shortcut to a project on
             database server</emphasis> file (with .kexis extension), &kexi;
-            will display appropriate windows.
+            will display appropriate dialogs.
           </para></listitem>
         </itemizedlist>
         <para></para>
@@ -459,17 +461,16 @@ pane in appendix Property Editor pane.
         <para>
           <emphasis>Note about database files accessed remotely.</emphasis>
           You may want to open a database file that is located on a remote
-          source (e.g. an web or FTP server or MS Windows share).
+          source (e.g. a web or FTP server or a MS Windows network share).
           K Desktop Environment allows you to open files from remote sources
-          directly in applications and saving changes back to the source, but
+          directly in applications and to save changes back to the source, but
           this is not the case with database files. By clicking on a database
-          file located on a remote source, you will cause a download the file
-          to a temporary directory on your computer and all eventual your
+          file located on a remote source, a copy of the file will be
+		  downloaded to a temporary directory on your computer and all your
           changes will be made to this local file. The remote original of
-          the file will remain unchanged after you close Kexi, so it's
-          recommended to copy (download) the file to your computer first,
-          then open the file and copy it back to remove source if you want
-          to make it up to date.
+          the file will remain unchanged, so it's recommended to copy
+		  (download) the file to your computer first, then open the file and
+		  copy it back to the remote source if you want to make it up to date.
         </para>
       </sect3>
     </sect2>
@@ -481,7 +482,7 @@ pane in appendix Property Editor pane.
     </title>
     <itemizedlist>
       <title>
-        Following ways to get built-in help in Kexi are available:
+        The following ways to get built-in help in Kexi are available:
       </title>
       <listitem>
         <para><emphasis>The Handbook in form of electronic document.</emphasis></para>

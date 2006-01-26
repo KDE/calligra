@@ -57,7 +57,7 @@ constitute a single line in a table:
 A single data which constitutes a part of a greater collection can be called a
 <firstterm>line</firstterm> or more professionally a
 <firstterm>record</firstterm>.
-The collection is narmally called a <firstterm>table</firstterm>.
+The collection is normally called a <firstterm>table</firstterm>.
 Moreover, the most natural name for the table is one describing the data it
 offers/stores which is <guilabel>Contacts</guilabel>.
 Furthermore, each line in the table consists of <firstterm>columns</firstterm>
@@ -95,7 +95,7 @@ data integrity</link></para></listitem>
 </para></listitem>
 <listitem><para><link linkend="data-integrity-and-validity">Data integrity
 and validity</link></para></listitem>
-<listitem><para><link linkend="data-limiting">Data limiting</link></para></listitem>
+<listitem><para><link linkend="data-limiting">Limiting data view</link></para></listitem>
 <listitem><para><link linkend="performance-and-capacity">Performance and
 capacity</link></para></listitem>
 <listitem><para><link linkend="convenient-data-entry">Convenient data entry</link></para></listitem>
@@ -188,14 +188,14 @@ since you have to remember about deleting all the lines releted to him or her.
 <para>
 This is directly connected to the previous problem. In fields
 <guilabel>Name and surname</guilabel> and <guilabel>Address</guilabel>
-the same data is entered many times. This is typical of spreadsheets,
+the same data is entered many times. This is typical of a spreadsheets'
 ineffective way of storing data because the database grows unnecessarily,
 thus requiring more computer resources (larger size of data and slower access).
 </para>
 <para>
 How can you solve these problems with a database? You can split information
-into smaller chunks by creating additional table <emphasis>Persons</emphasis>
-with only two columns: <guilabel>Name and suname</guilabel>
+into smaller chunks by creating an additional table <emphasis>Persons</emphasis>
+with only two columns: <guilabel>Name and surname</guilabel>
 and <guilabel>Address</guilabel>:
 </para>
 
@@ -222,8 +222,8 @@ and <guilabel>Address</guilabel>:
 <para>
 Each line in the table <guilabel>Persons</guilabel> corresponds to a
 <emphasis>single person</emphasis>. Table <guilabel>Contacts</guilabel>
-is from now in a relation to the table <guilabel>Persons</guilabel>
-(see next paragraph).
+is from now on a relation to the table <guilabel>Persons</guilabel>
+<!--(see next paragraph)-->.
 </para>
 
 </sect3>
@@ -231,7 +231,7 @@ is from now in a relation to the table <guilabel>Persons</guilabel>
 <sect3 id="data-integrity-and-validity">
 <title>Data integrity and validity</title>
 <para>
-Note the way data is entered in fields <guilabel>Name and surname</guilabel>
+Note the way data is entered in the fields <guilabel>Name and surname</guilabel>
 and <guilabel>Address</guilabel>. People entering data can be fallible,
 sometimes even negligent. In our sample data we have both different sequence
 of entering name and surname (Joan Smith and Smith Joan; Adam and ADAM) and
@@ -257,7 +257,7 @@ and <guilabel>Surname</guilabel>.
 </para></listitem>
 <listitem><para>
 <emphasis>Dividing data</emphasis> in the field <guilabel>Address</guilabel>
-into three separate fields <guilabel>Street</guilabel>, <guilabel>House
+into three separate fields: <guilabel>Street</guilabel>, <guilabel>House
 number</guilabel> and <guilabel>Town</guilabel>.
 </para></listitem>
 <listitem><para>
@@ -315,7 +315,7 @@ A modified table looks something like this:
 </informaltable>
 
 <para>
-Thanks to introducing conditions <guilabel>required field</guilabel> we can
+Thanks to introducing the condition <guilabel>required field</guilabel> we can
 be sure that the entered data is complete. In case of other tables you may
 of course allow omitting certain fields while entering data.
 </para>
@@ -325,7 +325,7 @@ of course allow omitting certain fields while entering data.
 <sect3 id="data-limiting">
 <title>Limiting data view</title>
 <para>
-Spreadsheet displays all lines and columns of the table which is bothersome
+A spreadsheet displays all lines and columns of the table which is bothersome
 in case of very large data sheets. You may of course filter and sort lines
 in spreadsheets, however you must be extra careful while doing so. Spreadsheet
 users are in risk of forgetting that their data view has been filtered what
@@ -399,7 +399,7 @@ of all due to lack of indexes accelertaing the process of data search
 even copying data may become troublesome with time.
 </para>
 <para>
-Spreadsheets containing large data sets may take ages to open. Spreadsheet
+Spreadsheets containing large data sets may take ages to open. A spreadsheet
 loads lots of data to the computer's memory while opening. Most of the data
 loaded are probably useless/unneccessary for you at the moment. Databases
 unlike spreadsheets load data from computer storage only when needed.
@@ -458,7 +458,7 @@ the layout of fields.
 Applications for creating databases often contain full programming languages.
 Newer spreadsheets have this capability too, however calculations come down
 to modifying the spreadsheet's fields and simple data copying, regardless of
-the relevance an integrity rules mentioned in previous paragraphs.
+the relevance and integrity rules mentioned in previous paragraphs.
 </para>
 <para>
 Data processing within a spreadsheet is usually done via a graphical user's
@@ -484,8 +484,8 @@ be currently locked by another person.
 </para>
 <para>
 On the other hand, databases have been designed mainly with multiuser
-access in mind. Even for simplest version locking at particular table
-row's level is possible, what enables easy sharing of table data.
+access in mind. Even for the simplest version locking at a particular table
+row's level is possible, which enables easy sharing of table data.
 </para>
 </sect3>
 
@@ -493,7 +493,7 @@ row's level is possible, what enables easy sharing of table data.
 <title>Security</title>
 <para>
 Securing a spreadsheet or its particular sections with a password is only
-symbolic activity. After providing a spreadsheet file in computer network,
+symbolic activity. After providing a spreadsheet file in a computer network,
 every person being able to copy the file can try to break the password.
 It is sometimes not so hard as the password is stored in the same file
 as the spreadsheet.
@@ -507,7 +507,7 @@ Databases (except these saved in a file instead of a server) do not need
 to be available in a single file. You're accessing them using a computer
 network, usually by providing a user name and a password. You are gaining
 access only to these areas (tables, forms or even selected rows and columns)
-whose were assigned to you by setting appropriate access rights.
+which were assigned to you by setting appropriate access rights.
 </para>
 <para>
 Access rights can affect ability of data editing or only data reading.
@@ -524,9 +524,9 @@ easy way as in case of spreadsheet files.
 <title>Database design</title>
 <para>
 Database design needs careful planning. Note that <guilabel>Contacts</guilabel>
-table redesign proposed in this section 1.2 can generate problems when the
-table is filled with data. For exampe, renaming a field is a simple task,
-but splitting <guilabel>Address</guilabel> field into two separate fields
+table redesign proposed in section 1.2 can generate problems when the
+table is filled with data. For example, renaming a field is a simple task,
+but splitting the <guilabel>Address</guilabel> field into separate fields
 requires careful and tedious work.
 </para>
 <para>
@@ -567,7 +567,7 @@ that this work is getting more and more tedious. In this case the
 effort of switching to databases easily pays off.
 </para></listitem>
 <listitem><para>
-You create reports and statemets for which the table view of
+You create reports and statements for which the table view of
 a spreadsheet is not suitable. You can then consider switch
 to using a database with form views.
 </para></listitem>
@@ -586,7 +586,7 @@ in the 60s, e.g. IBM System/360. Those were not the days of PCs,
 therefore these databases required a highly specialized personnel.
 Although the old computers' hardware was unreliable, they were immeasurably
 slower and had less storage capacity, one feature of databases still remains
-most attractive: the data access by many users through network.
+most attractive: the data access by many users through a network.
 </para>
 <para>
 In the 70s scientists formed the theory of relational databases
@@ -626,7 +626,7 @@ seems a bit obsolete.
 <ulink url="http://office.microsoft.com/access/">Microsoft Access</ulink>
 - an application for databases (data and graphic interface design) with many
 simplifications, therefore suitable for beginners, designed in the late 80s,
-based on 16-Bit Architecture. Product offered and widely used till today, especially
+based on 16-Bit Architecture. This product is offered and widely used till today, especially
 by small companies, where efficiency and multiuser requirements are not very demanding.
 </para></listitem>
 <listitem><para>
