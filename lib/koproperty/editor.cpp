@@ -191,7 +191,7 @@ Editor::fill()
 	if(!d->set) {
 		d->topItem = 0;
 		setUpdatesEnabled(true);
-		update();
+		triggerUpdate();
 		return;
 	}
 
@@ -231,7 +231,8 @@ Editor::fill()
 		slotClicked(firstChild());
 	}
 	setUpdatesEnabled(true);
-	repaint();
+	// aaah, call this instead of update() as explained here http://lists.trolltech.com/qt-interest/2000-06/thread00337-0.html
+	triggerUpdate();
 }
 
 void
@@ -846,7 +847,7 @@ Editor::eventFilter( QObject * watched, QEvent * e )
 		if (handleKeyPress(static_cast<QKeyEvent*>(e)))
 			return true;
 	}
-	return QListView::eventFilter(watched, e);
+	return KListView::eventFilter(watched, e);
 }
 
 bool
@@ -924,7 +925,7 @@ Editor::event( QEvent * e )
 	if (e->type()==QEvent::ParentFontChange) {
 		updateFont();
 	}
-	return QListView::event(e);
+	return KListView::event(e);
 }
 
 void
