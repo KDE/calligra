@@ -25,7 +25,7 @@ libkspreadcommon_la_SOURCES = digest.cc commands.cc damages.cc dependencies.cc \
 	KSpreadDocIface.skel KSpreadLayoutIface.skel KSpreadLayoutIface.cc KSpreadMapIface.cc \
 	KSpreadMapIface.skel KSpreadRowIface.skel KSpreadRowIface.cc KSpreadTableIface.cc \
 	KSpreadTableIface.skel KSpreadViewIface.skel KSpreadViewIface.cc \
-		kspread_genvalidationstyle.cc highlight_range.cc region.cc selection.cc manipulator.cc manipulator_data.cc \
+		kspread_genvalidationstyle.cc region.cc selection.cc manipulator.cc manipulator_data.cc \
 	kspread_generalProperty.cpp kspread_propertyEditor.cpp 
 
 libkspreadcommon_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) -no-undefined
@@ -71,4 +71,4 @@ messages: rc.cpp
 
 include ../admin/Doxyfile.am
 
-noinst_HEADERS = highlight_range.h
+noinst_HEADERS =
