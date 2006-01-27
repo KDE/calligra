@@ -53,23 +53,19 @@ After the feature freeze
 * Structure
   + put dialogs in their own directory
 
+* Data editor
+  + Better keyboard shortcuts?					      1 ----
+    - Remove the spinboxes from the buddy list.				--
 
-Before release of KOffice 1.4.2
-===============================
+
+After 1.5
+=========
 
 
 Item								   Prio Status
 ------------------------------------------------------------------------------
 
 * Bugs
-  + 41612: No titles for axes					      1	DONE
-     - Fixed by new KDChart version					done
-     - Enable settings in the config dialog.				done
-     - Read and write the values from the axis parameters		done
-     - Do it in the wizard as well					done
-  + 101490: Error in drawing charts with logarithmic scale.	      1	DONE
-       Fixed by new KDChart version (hopefully)
-  + 108461: Bug in generation of HiLo charts			      1 DONE
 
 * Wishes
   + Give KChart the same page layout dialog as KSpread.		      1 ----
@@ -99,46 +95,6 @@ Item								   Prio Status
 * Filters
 
 * KDChart (See also above)
-  + Titles for axes don't work.						----
-  + Logarithmic Y axis is painted wrong - Axis itself is not scaled.	----
-  + Legend is not painted (or is not scaled?) when printing from
-    an embedded chart in KSpread.					----
-  + Legend loses the header ("Legend") when embedded in KSpread		----
-    The strange thing is that it comes back when clicked on so that
-    it becomes editable.
-
-
-Before release of KOffice 1.5 / 2.0
-===================================
-
-
-Item								   Prio Status
-------------------------------------------------------------------------------
-
-* Bugs
-
-* Wishes
-
-* New features
-  + Integrate with Kexi							----
-
-* Miscellaneous fixes
-
-* Toolbars
-
-* Data editor
-
-* Config dialog
-
-* Wizard
-
-* Manual
-
-* Filters
-
-* KDChart (See also above)
-
-* Issues with KSpread
 
 
 ================================================================
