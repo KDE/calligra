@@ -50,7 +50,8 @@ include_HEADERS = handler.h \
 	koStyleStack.h koGenStyles.h koOasisSettings.h koPageLayout.h koxmlns.h kodom.h koversiondialog.h \
 	kkbdaccessextensions.h \
 	koffice_export.h koOpenPane.h \
-	KoSpeaker.h KoOasisLoadingContext.h
+	KoSpeaker.h KoOasisLoadingContext.h \
+	KoPoint.h
 
 noinst_HEADERS = koDocument_p.h koFilterManager_p.h \
 	koPictureShared.h koPictureBase.h koPictureImage.h koPictureClipart.h \
