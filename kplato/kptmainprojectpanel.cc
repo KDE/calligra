@@ -127,13 +127,11 @@ KCommand *MainProjectPanel::buildCommand(Part *part) {
     } 
     if (startDateTime() != project.startTime()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new NodeModifyStartTimeCmd(part, project, startDateTime()));
-        m->addCommand(new NodeModifyConstraintStartTimeCmd(part, project, startDateTime()));
+        m->addCommand(new ProjectModifyStartTimeCmd(part, project, startDateTime()));
     }
     if (endDateTime() != project.endTime()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new NodeModifyEndTimeCmd(part, project, endDateTime()));
-        m->addCommand(new NodeModifyConstraintEndTimeCmd(part, project, endDateTime()));
+        m->addCommand(new ProjectModifyEndTimeCmd(part, project, endDateTime()));
     }
     return m;
 }

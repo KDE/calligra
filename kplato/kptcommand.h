@@ -880,6 +880,30 @@ private:
     Account *m_newvalue;
 };
 
+class ProjectModifyStartTimeCmd : public NamedCommand
+{
+public:
+    ProjectModifyStartTimeCmd(Part *part, Project &node, QDateTime dt, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    QDateTime newTime;
+    QDateTime oldTime;
+};
+class ProjectModifyEndTimeCmd : public NamedCommand
+{
+public:
+    ProjectModifyEndTimeCmd(Part *part, Project &project, QDateTime dt, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    QDateTime newTime;
+    QDateTime oldTime;
+};
 
 }  //KPlato namespace
 

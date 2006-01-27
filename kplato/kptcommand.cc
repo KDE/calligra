@@ -1447,5 +1447,44 @@ void ModifyDefaultAccountCmd::unexecute() {
     setCommandType(0);
 }
 
+ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd(Part *part, Project &node, QDateTime dt, QString name)
+    : NamedCommand(part, name),
+      m_node(node),
+      newTime(dt),
+      oldTime(node.startTime()) {
+
+}
+void ProjectModifyStartTimeCmd::execute() {
+    m_node.setConstraintStartTime(newTime);
+    m_node.setStartTime(newTime);
+    
+    setCommandType(1);
+}
+void ProjectModifyStartTimeCmd::unexecute() {
+    m_node.setConstraintStartTime(oldTime);
+    m_node.setStartTime(oldTime);
+    
+    setCommandType(1);
+}
+
+ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd(Part *part, Project &node, QDateTime dt, QString name)
+    : NamedCommand(part, name),
+      m_node(node),
+      newTime(dt),
+      oldTime(node.endTime()) {
+
+}
+void ProjectModifyEndTimeCmd::execute() {
+    m_node.setEndTime(newTime);
+    m_node.setConstraintEndTime(newTime);
+    
+    setCommandType(1);
+}
+void ProjectModifyEndTimeCmd::unexecute() {
+    m_node.setConstraintEndTime(oldTime);
+    m_node.setEndTime(oldTime);
+    
+    setCommandType(1);
+}
 
 }  //KPlato namespace
