@@ -339,14 +339,19 @@ DateTime Resource::getBestAvailableTime(const DateTime after, const Duration dur
 
 bool Resource::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
+    QString s;
     setId(element.attribute("id"));
     m_name = element.attribute("name");
     m_initials = element.attribute("initials");
     m_email = element.attribute("email");
     setType(element.attribute("type"));
     m_calendar = findCalendar(element.attribute("calendar-id"));
-    m_availableFrom = QDateTime::fromString(element.attribute("available-from"));
-    m_availableUntil = QDateTime::fromString(element.attribute("available-until"));
+    s = element.attribute("available-from");
+    if (s != "")
+        m_availableFrom = QDateTime::fromString(s);
+    s = element.attribute("available-until");
+    if (s != "")
+        m_availableUntil = QDateTime::fromString(s);
     return true;
 }
 

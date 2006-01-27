@@ -265,6 +265,7 @@ void Project::initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node
 }
 
 bool Project::load(QDomElement &element) {
+    //kdDebug()<<k_funcinfo<<"--->"<<endl;
     // Maybe TODO: Delete old stuff here
     bool ok = false;
     QString id = element.attribute("id");
@@ -340,6 +341,7 @@ bool Project::load(QDomElement &element) {
             QDomElement e = list.item(i).toElement();
     
             if (e.tagName() == "project") {
+                //kdDebug()<<k_funcinfo<<"Sub project--->"<<endl;
                 // Load the subproject
                 Project *child = new Project(this);
                 if (child->load(e)) {
@@ -349,6 +351,7 @@ bool Project::load(QDomElement &element) {
                     delete child;
                 }
             } else if (e.tagName() == "task") {
+                //kdDebug()<<k_funcinfo<<"Task--->"<<endl;
                 // Load the task (and resourcerequests). 
                 // Depends on resources already loaded
                 Task *child = new Task(this);
@@ -366,12 +369,14 @@ bool Project::load(QDomElement &element) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "accounts") {
+                //kdDebug()<<k_funcinfo<<"Accounts--->"<<endl;
                 // Load accounts
                 // References tasks
                 if (!m_accounts.load(e, *this)) {
                     kdError()<<k_funcinfo<<"Failed to load accounts"<<endl;
                 }
             } else if (e.tagName() == "relation") {
+                //kdDebug()<<k_funcinfo<<"Relation--->"<<endl;
                 // Load the relation
                 // References tasks
                 Relation *child = new Relation();
@@ -380,7 +385,9 @@ bool Project::load(QDomElement &element) {
                     kdError()<<k_funcinfo<<"Failed to load relation"<<endl;
                     delete child;
                 }
+                //kdDebug()<<k_funcinfo<<"Relation<---"<<endl;
             } else if (e.tagName() == "schedules") {
+                //kdDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
                 // Prepare for multiple schedules
                 // References tasks and resources
                 QDomNodeList lst = e.childNodes();
@@ -398,10 +405,11 @@ bool Project::load(QDomElement &element) {
                         }
                     }
                 }
+                //kdDebug()<<k_funcinfo<<"Node schedules<---"<<endl;
             }
         }
     }
-    
+    //kdDebug()<<k_funcinfo<<"Calendars--->"<<endl;
     // calendars references calendars in arbritary saved order
     QPtrListIterator<Calendar> calit(m_calendars);
     for (; calit.current(); ++calit) {
@@ -411,6 +419,7 @@ bool Project::load(QDomElement &element) {
         }
         calit.current()->setParent(calendar(calit.current()->parentId()));
     }
+    //kdDebug()<<k_funcinfo<<"Project schedules--->"<<endl;
     QIntDictIterator<NodeSchedule> it = m_schedules;
     if (it.current()) {
         if (m_constraint == Node::MustFinishOn)
@@ -418,7 +427,8 @@ bool Project::load(QDomElement &element) {
         else
             m_constraintStartTime = it.current()->startTime;
     }
-        
+    //kdDebug()<<k_funcinfo<<"Project schedules<---"<<endl;
+    //kdDebug()<<k_funcinfo<<"<---"<<endl;
     return true;
 }
 

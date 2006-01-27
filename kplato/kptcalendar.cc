@@ -90,8 +90,9 @@ bool CalendarDay::load(QDomElement &element) {
     if (m_state < 0)
         return false;
     //kdDebug()<<k_funcinfo<<" state="<<m_state<<endl;
-    if (element.hasAttribute("date"))
-        m_date = QDate::fromString(element.attribute("date"));
+    QString s = element.attribute("date");
+    if (s != "")
+        m_date = QDate::fromString(s);
         
     clearIntervals();
     QDomNodeList list = element.childNodes();
@@ -100,9 +101,13 @@ bool CalendarDay::load(QDomElement &element) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "interval") {
                 //kdDebug()<<k_funcinfo<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end")<<endl;
-                QTime start = QTime::fromString(e.attribute("start"));
-                QTime end = QTime::fromString(e.attribute("end"));
-                addInterval(new QPair<QTime, QTime>(start,end));
+                QString st = e.attribute("start");
+                QString en = e.attribute("end");
+                if (st != "" && en != "") {
+                    QTime start = QTime::fromString(st);
+                    QTime end = QTime::fromString(en);
+                    addInterval(new QPair<QTime, QTime>(start,end));
+                }
             }
         }
     }

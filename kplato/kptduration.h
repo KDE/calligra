@@ -80,7 +80,6 @@ class Duration {
         unsigned days() const { return hours() / 24; }
         void get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds=0, unsigned *milliseconds=0) const;
 
-        Duration &abs() { m_ms = QABS(m_ms); return (*this); }
         bool   operator==( const Duration &d ) const { return m_ms == d.m_ms; }
         bool   operator==( Q_INT64 d ) const { return m_ms == d; }
         bool   operator!=( const Duration &d ) const { return m_ms != d.m_ms; }

@@ -171,6 +171,7 @@ void Task::setConstraint(Node::ConstraintType type) {
 
 bool Task::load(QDomElement &element, Project &project) {
     // Load attributes (TODO: Handle different types of tasks, milestone, summary...)
+    QString s;
     bool ok = false;
     m_id = element.attribute("id");
     
@@ -185,8 +186,12 @@ bool Task::load(QDomElement &element, Project &project) {
     if (!ok)
         Node::setConstraint(constraint); // hmmm, why do I need Node::?
 
-    m_constraintStartTime = DateTime::fromString(element.attribute("constraint-starttime"));
-    m_constraintEndTime = DateTime::fromString(element.attribute("constraint-endtime"));
+    s = element.attribute("constraint-starttime");
+    if (s != "")
+        m_constraintStartTime = DateTime::fromString(s);
+    s = element.attribute("constraint-endtime");
+    if ( s != "")
+        m_constraintEndTime = DateTime::fromString(s);
     
     m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
     m_shutdownCost = element.attribute("shutdown-cost", "0.0").toDouble();
@@ -234,8 +239,13 @@ bool Task::load(QDomElement &element, Project &project) {
             } else if (e.tagName() == "progress") {
                 m_progress.started = (bool)e.attribute("started", "0").toInt();
                 m_progress.finished = (bool)e.attribute("finished", "0").toInt();
-                m_progress.startTime = DateTime::fromString(e.attribute("startTime"));
-                m_progress.finishTime = DateTime::fromString(e.attribute("finishTime"));
+                
+                s = e.attribute("startTime");
+                if (s != "")
+                    m_progress.startTime = DateTime::fromString(s);
+                s = e.attribute("finishTime");
+                if (s != "")
+                    m_progress.finishTime = DateTime::fromString(s);
                 m_progress.percentFinished = e.attribute("percent-finished", "0").toInt();
                 m_progress.remainingEffort = Duration::fromString(e.attribute("remaining-effort"));
                 m_progress.totalPerformed = Duration::fromString(e.attribute("performed-effort"));

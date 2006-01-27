@@ -191,7 +191,7 @@ public:
 
     /// Find the calendar with identity id
     virtual Calendar *findCalendar(const QString &id) const 
-        { return calendarIdDict.find(id); }
+        { return id.isEmpty() ? 0 : calendarIdDict.find(id); }
     /// Remove the calendar with identity id from the register
     virtual bool removeCalendarId(const QString &id) 
         { return calendarIdDict.remove(id); }

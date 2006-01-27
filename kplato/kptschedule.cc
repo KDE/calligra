@@ -360,14 +360,26 @@ NodeSchedule *NodeSchedule::find(const QIntDict<NodeSchedule> &sch, QString name
 
 bool NodeSchedule::loadXML(const QDomElement &sch) {
     //kdDebug()<<k_funcinfo<<endl;
+    QString s;
     Schedule::loadXML(sch);
-    
-    earliestStart = DateTime::fromString(sch.attribute("earlieststart"));
-    latestFinish = DateTime::fromString(sch.attribute("latestfinish"));
-    startTime = DateTime::fromString(sch.attribute("start"));
-    endTime = DateTime::fromString(sch.attribute("end"));
-    workStartTime = DateTime::fromString(sch.attribute("start-work"));
-    workEndTime = DateTime::fromString(sch.attribute("end-work"));
+    s = sch.attribute("earlieststart");
+    if (s != "")
+        earliestStart = DateTime::fromString(s);
+    s = sch.attribute("latestfinish");
+    if (s != "")
+        latestFinish = DateTime::fromString(s);
+    s = sch.attribute("start");
+    if (s != "")
+        startTime = DateTime::fromString(s);
+    s = sch.attribute("end");
+    if (s != "")
+        endTime = DateTime::fromString(s);
+    s = sch.attribute("start-work");
+    if (s != "")
+        workStartTime = DateTime::fromString(s);
+    s = sch.attribute("end-work");
+    if (s != "")
+        workEndTime = DateTime::fromString(s);
     duration = Duration::fromString(sch.attribute("duration"));
     
     inCriticalPath = sch.attribute("in-critical-path", "0").toInt();
@@ -409,10 +421,15 @@ void NodeSchedule::saveXML(QDomElement &element) const {
 
 bool NodeSchedule::loadProjectXML(const QDomElement &sch, Project &project) {
     //kdDebug()<<k_funcinfo<<endl;
+    QString s;
     Schedule::loadXML(sch);
     
-    startTime = DateTime::fromString(sch.attribute("start"));
-    endTime = DateTime::fromString(sch.attribute("end"));
+    s = sch.attribute("start");
+    if (s != "")
+        startTime = DateTime::fromString(s);
+    s = sch.attribute("end");
+    if (s != "")
+        endTime = DateTime::fromString(s);
     
     QDomNodeList al = sch.childNodes();
     //kdDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;

@@ -80,8 +80,12 @@ Duration AppointmentInterval::effort(const DateTime &time, bool upto) const {
 bool AppointmentInterval::loadXML(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     bool ok;
-    m_start = DateTime::fromString(element.attribute("start"));
-    m_end = DateTime::fromString(element.attribute("end"));
+    QString s = element.attribute("start");
+    if (s != "")
+        m_start = DateTime::fromString(s);
+    s = element.attribute("end");
+    if (s != "")
+        m_end = DateTime::fromString(s);
     m_load = element.attribute("load", "100").toDouble(&ok);
     if (!ok) m_load = 100;
     return m_start.isValid() && m_end.isValid();
@@ -238,12 +242,16 @@ Duration Appointment::UsedEffort::usedOvertimeTo(const QDate &date) const {
 }
 
 bool Appointment::UsedEffort::load(QDomElement &element) {
+    QString s;
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "actual-effort") {
-                QDate date = QDate::fromString(e.attribute("date"), Qt::ISODate);
+                QDate date;
+                s = e.attribute("date");
+                if (s != "")
+                    date = QDate::fromString(s, Qt::ISODate);
                 Duration eff = Duration::fromString(e.attribute("effort"));
                 bool ot = e.attribute("overtime", "0").toInt();
                 if (date.isValid()) {

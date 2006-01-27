@@ -585,13 +585,15 @@ bool Node::setId(QString id) {
         m_id = id;
         return false;
     }
-    Node *n = findNode();
-    if (n == this) {
-        //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
-        removeId();
-    } else if (n) {
-        //Hmmm, shouldn't happen
-        kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
+    if (!m_id.isEmpty()) {
+        Node *n = findNode();
+        if (n == this) {
+            //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+            removeId();
+        } else if (n) {
+            //Hmmm, shouldn't happen
+            kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
+        }
     }
     if (findNode(id)) {
         kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name()<<endl;
