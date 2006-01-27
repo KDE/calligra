@@ -1403,7 +1403,9 @@ contrast as possible.</action></para></listitem>
 <guimenuitem>Brightness/Contrast...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
-<guilabel>Brightness/Contrast</guilabel> dialog.</action> You can set the
+<link
+linkend="commands-dialogs-filters-brightnesscontrast"><guilabel>Brightness/Contrast</guilabel>
+dialog</link>.</action> You can set the
 brightness and contrast ratio of your image here.</para></listitem>
 </varlistentry>
 
@@ -1424,8 +1426,9 @@ painting is done with usual colors.</para></listitem>
 <guisubmenu>Adjust</guisubmenu>
 <guimenuitem>Color Adjustment...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Color Adjustment</guilabel>
-dialog.</action> You can adjust the colorspace components
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-coloradjustment"><guilabel>Color Adjustment</guilabel>
+dialog</link>.</action> You can adjust the colorspace components
 of the current image there (for example, in an RGB image, you can change the
 contribution of red, green, and blue to the total image).</para></listitem>
 </varlistentry>
@@ -1445,8 +1448,10 @@ contribution of red, green, and blue to the total image).</para></listitem>
 <guisubmenu>Artistic</guisubmenu>
 <guimenuitem>Cubism...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Cubism</guilabel> dialog.</action>
-This allows you to add a cubism effect to the selection or image.</para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-cubism"><guilabel>Cubism</guilabel>
+dialog</link>.</action> This allows you to add a cubism effect to the
+selection or image.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1455,7 +1460,9 @@ This allows you to add a cubism effect to the selection or image.</para></listit
 <guisubmenu>Artistic</guisubmenu>
 <guimenuitem>Oilpaint...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Oilpaint</guilabel> dialog to add
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-oilpaint"><guilabel>Oilpaint</guilabel>
+dialog</link> to add
 an oilpaint effect to the selection or image.</action></para></listitem>
 </varlistentry>
 
@@ -1465,8 +1472,10 @@ an oilpaint effect to the selection or image.</action></para></listitem>
 <guisubmenu>Artistic</guisubmenu>
 <guimenuitem>Raindrops...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Raindrops</guilabel> dialog to add
-a raindrops effect to the selection or image.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-raindrops"><guilabel>Raindrops</guilabel>
+dialog</link> to add a raindrops effect to the selection or
+image.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1502,7 +1511,9 @@ selection.</action></para></listitem>
 <guisubmenu>Blur</guisubmenu>
 <guimenuitem>Pixelize...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Pixelizes the image.</action> (A block of pixels is
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-pixelize"><guilabel>Pixelize</guilabel>
+dialog</link> to pixelize the image.</action> (A block of pixels is
 changed so that they all become the same, averaged color.)</para></listitem>
 </varlistentry>
 
@@ -1527,16 +1538,6 @@ etcetera.)</para></listitem> </varlistentry>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Filter</guimenu>
-<guisubmenu>Colors</guisubmenu>
-<guimenuitem>Invert with Threads</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Inverts the image or
-selection.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Filter</guimenu>
 <guisubmenu>Decor</guisubmenu>
 </menuchoice></term>
 <listitem><para>Contains decorative filters.</para></listitem>
@@ -1548,7 +1549,9 @@ selection.</action></para></listitem>
 <guisubmenu>Decor</guisubmenu>
 <guimenuitem>Round Corners...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Rounds off the corners of the image or
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-roundcorners"><guilabel>Round
+Corners</guilabel> dialog</link> to round off the corners of the image or
 selection.</action></para></listitem>
 </varlistentry>
 
@@ -1625,8 +1628,9 @@ filters.</para></listitem>
 <guisubmenu>Enhance</guisubmenu>
 <guimenuitem>Custom Convolution...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Custom Convolution</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-customconvolution"><guilabel>Custom
+Convolution</guilabel> dialog</link>.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1665,7 +1669,7 @@ selection.</action></para></listitem>
 <guimenuitem>Wavelet Noise Reducer</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Reduces noise in the image or selection in a more
-\"pixelized\" way.</action></para></listitem>
+"pixelized" way.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1692,8 +1696,9 @@ directions.</action></para></listitem>
 <guisubmenu>Emboss</guisubmenu>
 <guimenuitem>Emboss with Variable Depth...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Emboss</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-emboss"><guilabel>Emboss</guilabel>
+dialog</link>.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1768,8 +1773,9 @@ it.</action></para></listitem>
 <guisubmenu>Other</guisubmenu>
 <guimenuitem>Bumpmap...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Bumpmap</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-bumpmap"><guilabel>Bumpmap</guilabel>
+dialog</link>.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1778,8 +1784,9 @@ dialog.</action></para></listitem>
 <guisubmenu>Other</guisubmenu>
 <guimenuitem>CImg Image Restoration...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Image Restauration</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-filters-imagerestauration"><guilabel>Image
+Restauration</guilabel> dialog</link>.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1788,7 +1795,8 @@ dialog.</action></para></listitem>
 <guimenuitem>Filters Gallery</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
-<guilabel>Filters Gallery</guilabel> window.</action> This
+<link linkend="commands-dialogs-filters-filtersgallery"><guilabel>Filters
+Gallery</guilabel> dialog</link>.</action> This
 shows previews of the various filters and allows for easy
 comparison.</para></listitem>
 </varlistentry>

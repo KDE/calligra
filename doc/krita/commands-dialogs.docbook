@@ -185,11 +185,9 @@ be set.
 </para>
 <para>
 Under <guilabel>Source</guilabel>, you can choose what part of the image to
-separate. The three options are <guilabel>Current layer</guilabel>, which
-(obviously) only uses the currently selected layer, <guilabel>Flatten all
-layers before separation</guilabel>, which uses the entire image, and
-<guilabel>Flatten all visible layers before separation</guilabel>, which uses
-all visible layers.
+separate. The two options are <guilabel>Current layer</guilabel>, which
+(obviously) only uses the currently selected layer and <guilabel>Flatten all
+layers before separation</guilabel>, which uses the entire image.
 </para>
 <para>
 Under <guilabel>Output</guilabel>, you can choose where the result of the
@@ -453,7 +451,7 @@ descriptions.
 <para>
 You can add a new layer to your image with this dialog. If you want a
 descriptive name for your layer, you can fill one in at
-<guilabel>Name:</guilabel>. You can select the desired colorspace for the newn
+<guilabel>Name:</guilabel>. You can select the desired colorspace for the new
 layer with the <guilabel>Colorspace:</guilabel> list, and the specific
 color profile for that colorspace at <guilabel>Profile:</guilabel>.
 You can preset the layer's opacity (you can change it later with the slider in
@@ -523,8 +521,393 @@ entire image.
 <title>Dialogs for working with filters</title>
 
 <para>
-This section is to be written.
+All filter dialogs consist of a filter-specific part, at the left, and a
+generic part, at the right. The generic part contains a preview window, which
+you can configure using the controls below it. Choose
+<guilabel>Preview</guilabel> or <guilabel>Original</guilabel> depending on
+whether you want the preview window to show the preview of the filter effect
+or the original image. You can soom in and zoom out, and refresh the preview,
+with the three buttons at the bottom right. Furthermore, the option
+<guilabel>Autoupdate</guilabel> determines if the preview window is updated
+automatically. If you uncheck this checkbox, you will have to refresh the
+preview yourself.
 </para>
+
+<sect3 id="commands-dialogs-filters-brightnesscontrast">
+<title>The Brightness / Contrast dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Brightness / Contrast dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-brightnesscontrast.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brightness / Contrast dialog</phrase>
+</textobject>
+<caption><para>The Brightness / Contrast dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this dialog, you can customize the brightness and contrast of your image.
+Use the curve or the <guibutton>+</guibutton> and <guibutton>-</guibutton>
+buttons to set the brightness and contrast. The curve shows to which new level
+(vertically) pixels with a certain original level (horizontally) are mapped.
+For example, no change corresponds to a diagonal line from bottom left to top
+right, and a horizontal line means all every pixels will get the same
+brightness/contrast values. Click on the curve to add a handle to it, then
+drag it around to have the curve change as it passes through the handles.
+Press <keycap>Delete</keycap> to delete the currently selected handle
+(indicated by the filled red circle).
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-bumpmap">
+<title>The Bumpmap dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Bumpmap dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-bumpmap.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Bumpmap dialog</phrase>
+</textobject>
+<caption><para>The Bumpmap dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+You can apply a bumpmap effect and customize it using this dialog. One layer
+is used as bumpmap layer: it is read as grayscale image and the gray values of
+its pixels are used to to distort the other layer for creating the depth
+illusion. A light source, shining <quote>from above</quote> on the image that
+lies <quote>on the ground</quote>, is simulated to determine the depth and
+direction of the shadows.
+</para><para>
+The first option in this dialog offers you the selection of the
+<guilabel>Bumpmap layer</guilabel>.
+</para><para>
+Under <guilabel>Type</guilabel>, you can select what kind of bumpmap to be
+applied. There are three types, <guilabel>Linear</guilabel> (a normal
+application of the bumpmap), <guilabel>Spherical</guilabel> (focusing on the
+extremes, &ie; the shadow and highlight values) and
+<guilabel>Sinusoidal</guilabel> (focusing on the midtone values).
+</para><para>
+Then, there are three options to modify the bumpmap apart from its
+algorithmical application. With <guilabel>Compensate for darkoning</guilabel>,
+the image is restored to about its original average lightness if using the
+bumpmap filter would make it darker. The <guilabel>Invert bumpmap</guilabel>
+option creates an inverted bumpmap (high and low are reversed). With
+<guilabel>Tile bumpmap</guilabel>, a bumpmap layer that is smaller than the
+layer it is applied to, will be tiled (repeatedly) to cover the entire layer.
+</para><para>
+Under <guilabel>Settings</guilabel>, you can select the mathematical
+parameters for the bumpmap. First of all, <guilabel>Azimuth</guilabel> (the
+angle of the light source in the X-Y plane), <guilabel>Elevation</guilabel>
+(the height of the simulated light source above the surface in degrees, with 0
+degrees being on the ground and 90 degrees being vertically above the image),
+and <guilabel>Depth</guilabel> (the maximal vertical distortion of the image).
+</para><para>
+Then, there are the <guilabel>X offset</guilabel> and <guilabel>Y
+offset</guilabel>, with which you can displace the bumpmap layer relative to
+the destination layer, <guilabel>Water level</guilabel> (the depth which is
+used as neutral), and <guilabel>Ambient light</guilabel>, which determines the
+relative amount of ambient (environmental) light.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-coloradjustment">
+<title>The Color Adjustment dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Color Adjustment dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-coloradjustment.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Color Adjustment dialog</phrase>
+</textobject>
+<caption><para>The Color Adjustment dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog allows you to customize the Color Adjustment filter. You can use
+the curve (see the section on <link
+linkend="commands-dialogs-filters-brightnesscontrast">Brightness /
+Contrast</link> for a short description on the curve) to determine the mapping
+from old to new color levels, for each of the channels separately.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-cubism">
+<title>The Cubism filter</title>
+
+<para>
+<screenshot>
+<screeninfo>The Cubism filter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-cubism.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Cubism filter</phrase>
+</textobject>
+<caption><para>The Cubism filter</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog has two filter-specific options. The <guilabel>Tile
+size:</guilabel> slider and spinbox determine how big the tiles are in which
+the image is subdivided, the <guilabel>Tile saturation:</guilabel> setting
+sets the color saturation of the tiles.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-customconvolution">
+<title>The Custom Convolution filter</title>
+
+<para>
+<screenshot>
+<screeninfo>The Custom Convolution filter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="filters-customconvolution.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Custom Convolution filter</phrase>
+</textobject>
+<caption><para>The Custom Convolution filter</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+With this filter, you can apply a customized distortion effect to your image.
+The nine spinboxes at the top left determine the distortion. Each pixel is
+assigned a new value based on these values: the old color values of the pixel
+inself and the eight surrounding pixels are each multiplied by the values in
+the respective spinboxes, these results are added, and the final result is the
+new color value for the pixel. Before being applied, this final result can be
+multiplied with a certain <guilabel>Factor:</guilabel> or a certain
+<guilabel>Offset:</guilabel> can be added to it.
+</para><para>
+In the example screenshot, each pixel is assigned a new value based on its
+own (the 1 in the center), to which are added the values of the pixels to its
+top right and directly below it (each with a factor 1, &ie; the actual value,
+since multiplying by one has no effect), and from which are subtracted the
+values of the pixels to its bottom right and directly above it (added with a
+factor -1, so subtracted with a factor 1).
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-emboss">
+<title>The Emboss dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Emboss dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-emboss.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Emboss dialog</phrase>
+</textobject>
+<caption><para>The Emboss dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog contains just one option, the <guilabel>Depth:</guilabel> slider
+and spinbox which determines the depth of the embossing effect.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-filtersgallery">
+<title>The Filters Gallery dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Filters Gallery dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-filtersgallery.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Filters Gallery dialog</phrase>
+</textobject>
+<caption><para>The Filters Gallery dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog can be used to get a quick overview of what the various available
+filters do. The filters are in turn applied to the current image and the
+results are put in the left list box as thumbnails. If you select one, its
+options become available in the <guilabel>Configuration</guilabel> section.
+See the description of the respective filter for details.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-imagerestauration">
+<title>The Image Restauration dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Image Restauration dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Image Restauration dialog</phrase>
+</textobject>
+<caption><para>The Image Restauration dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+Using this dialog, you can specify exactly how the image restauration should
+be done. This filter tries to increase the quality of an image, for instance
+by removing scratches. Various options are available to customize its
+behaviour.
+</para><para>
+(Unfortunately, these are not described as of yet.)
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-oilpaint">
+<title>The Oilpaint filter</title>
+
+<para>
+<screenshot>
+<screeninfo>The Oilpaint filter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-oilpaint.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Oilpaint filter</phrase>
+</textobject>
+<caption><para>The Oilpaint filter</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog can configure two parameters for the associated filter. The
+<guilabel>Brush size:</guilabel> setting determines the size of the brush that
+is used to simulate the oilpaint effect, the <guilabel>Smooth:</guilabel>
+setting specifies if the difference in colors between adjacent
+<quote>swatches</quote> may be large (low smoothness) or should be small (high
+smoothness).
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-pixelize">
+<title>The Pixelize dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Pixelize dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-pixelize.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Pixelize dialog</phrase>
+</textobject>
+<caption><para>The Pixelize dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+On this dialog, you can adjust two settings. <guilabel>Pixel width:</guilabel>
+and <guilabel>Pixel height:</guilabel> indicate the width and height of the
+area that should be taken together and averaged to form one new, large
+<quote>pixel</quote>.
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-raindrops">
+<title>The Raindrops filter</title>
+
+<para>
+<screenshot>
+<screeninfo>The Raindrops filter</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-raindrops.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Raindrops filter</phrase>
+</textobject>
+<caption><para>The Raindrops filter</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This filter can be configured using the settings <guilabel>Drop
+size:</guilabel> (the average diameter of the raindrops),
+<guilabel>Number:</guilabel> (the number of raindrop effects that should be
+added to the image), and <guilabel>Fish eyes:</guilabel> (the percentage of
+raindrops that should be rendered as fisheye lens effects instead of plain
+raindrop effects).
+</para>
+
+</sect3>
+
+<sect3 id="commands-dialogs-filters-roundcorners">
+<title>The Round Corners dialog</title>
+
+<para>
+<screenshot>
+<screeninfo>The Round Corners dialog</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="dialogs-roundcorners.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Round Corners dialog</phrase>
+</textobject>
+<caption><para>The Round Corners dialog</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>
+This dialog has one setting: the radius of the rounded corners.
+</para>
+
+</sect3>
 
 </sect2>
 
