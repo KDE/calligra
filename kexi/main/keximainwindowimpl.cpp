@@ -971,6 +971,8 @@ void KexiMainWindowImpl::updateReadOnlyState()
 {
 	const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->isReadOnly();
 	d->statusBar->setReadOnlyFlag( readOnly );
+	if (d->nav)
+		d->nav->setReadOnly(readOnly);
 	// update "insert ....." actions for every part
 	KActionCollection *ac = actionCollection();
 	for (KexiPart::PartInfoListIterator it(*Kexi::partManager().partInfoList()); it.current(); ++it) {

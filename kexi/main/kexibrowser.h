@@ -21,11 +21,16 @@
 #ifndef KEXIBROWSER_H
 #define KEXIBROWSER_H
 
-#include "kexiviewbase.h"
+#include <klistview.h>
+#include <qasciidict.h>
+#include <qintdict.h>
 
 class QListViewItem;
 class KIconLoader;
 class KPopupMenu;
+class KAction;
+class KActionMenu;
+class KActionCollection;
 class KListView;
 class KToolBar;
 class KexiBrowserItem;
@@ -41,8 +46,8 @@ namespace KexiPart
 	class Part;
 }
 
-//! Main Kexi Navigator Widget
-class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
+//! @short Main Kexi Navigator Widget
+class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 {
 	Q_OBJECT
 
@@ -56,15 +61,17 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		virtual bool eventFilter ( QObject *o, QEvent * e );
 
 		bool actionEnabled(const QCString& actionName) const;
+//		virtual bool isExecuteArea( const QPoint& point );
 
 	public slots:
 		void addGroup(KexiPart::Info& info);
 		void addItem(KexiPart::Item& item);
 		void slotRemoveItem(const KexiPart::Item &item);
-		void clear();
 		virtual void setFocus();
 		void updateItemName(KexiPart::Item& item, bool dirty);
 		void highlightItem(KexiPart::Item& item);
+//		virtual void rename(QListViewItem *item, int c);
+		void clear();
 
 		//! Sets by main window to disable actions that may try to modify the project.
 		//! Does not disable actions like opening objects.
@@ -121,10 +128,14 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 	protected:
 		void itemRenameDone();
 
+		KexiMainWindow *m_mainWin;
+		KexiBrowserListView *m_list;
+		KActionCollection *m_actions;
 		QAsciiDict<KexiBrowserItem> m_baseItems;
 		QIntDict<KexiBrowserItem> m_normalItems;
 		KPopupMenu *m_itemPopup, *m_partPopup;
-		KAction *m_newObjectAction, // *m_newObjectToolbarAction,
+		KAction *m_deleteAction, *m_renameAction, 
+			*m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction,
 			*m_dataExportAction, *m_printAction, *m_pageSetupAction;
 		KActionMenu* m_exportActionMenu;
@@ -136,11 +147,11 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;
-		KexiBrowserListView *m_list;
 		KexiSmallToolButton *m_newObjectToolButton, *m_deleteObjectToolButton;
 		bool m_singleClick : 1;
-		bool m_nameEndsWithAsterisk : 1;
+//		bool m_nameEndsWithAsterisk : 1;
 		bool m_readOnly : 1;
+//		bool m_enableExecuteArea : 1; //!< used in isExecuteArea()
 };
 
 #endif

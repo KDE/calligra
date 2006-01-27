@@ -24,6 +24,8 @@ Simple Printing
 - enlarge default zoom
 Property Editor
 - fixed editor refreshing after contents loading
+Table View
+- 'inserting enabled' flag is always false for read-only objects
 
 2006-01-24
 KexiDB

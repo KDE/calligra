@@ -51,12 +51,33 @@
 #include <widget/utils/kexiflowlayout.h>
 #include <widget/kexismalltoolbutton.h>
 
+/*
+class KexiBrowserView : public QWidget
+{
+	KexiBrowserView*(
+};
+
+KexiBrowserView::KexiBrowserView(KexiMainWindow *mainWin)
+ : QWidget(mainWin, "KexiBrowserView")
+{
+	QVBoxLayout *lyr = new QVBoxLayout(this);
+	KexiFlowLayout *buttons_flyr = new KexiFlowLayout(lyr);
+	m_browser = KexiBrowser(this, mainWin);
+	lyr->addWidget(m_browser);
+	setFocusProxy(m_browser);
+}*/
+
 KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
- : KexiViewBase(mainWin, mainWin, "KexiBrowser")
+ : QWidget(mainWin, "KexiBrowser")
+ , m_mainWin(mainWin)
+ , m_actions( new KActionCollection(this) )
  , m_baseItems(199, false)
  , m_normalItems(199)
  , m_prevSelectedPart(0)
  , m_singleClick(false)
+// , m_nameEndsWithAsterisk(false)
+ , m_readOnly(false)
+// , m_enableExecuteArea(true)
 {
 	QVBoxLayout *lyr = new QVBoxLayout(this);
 	KexiFlowLayout *buttons_flyr = new KexiFlowLayout(lyr);
@@ -69,13 +90,16 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list->renameLineEdit()->installEventFilter(this);
 	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
 	slotSettingsChanged(0);
-	//shared actions
-	plugSharedAction("edit_delete",SLOT(slotRemove()));
-	plugSharedAction("edit_edititem", SLOT(slotRename()));
+
+	// actions
+	m_deleteAction = new KAction(i18n("&Delete"), "editdelete", 0/*Key_Delete*/, 
+		this, SLOT(slotRemove()), m_actions, "edit_delete");
+	m_renameAction = new KAction(i18n("&Rename"), "", 0, 
+		this, SLOT(slotRename()), m_actions, "edit_rename");
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	plugSharedAction("edit_cut",SLOT(slotCut()));
-	plugSharedAction("edit_copy",SLOT(slotCopy()));
-	plugSharedAction("edit_paste",SLOT(slotPaste()));
+//todo	plugSharedAction("edit_cut",SLOT(slotCut()));
+//todo	plugSharedAction("edit_copy",SLOT(slotCopy()));
+//todo	plugSharedAction("edit_paste",SLOT(slotPaste()));
 #endif
 	
 	setCaption(i18n("Project Navigator"));
@@ -155,14 +179,14 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	connect(m_newObjectToolButton, SIGNAL(clicked()), this, SLOT(slotNewObject()));
 	buttons_flyr->add(m_newObjectToolButton);
 
-	m_deleteObjectToolButton = new KexiSmallToolButton(this, sharedAction("edit_delete"));
+	m_deleteObjectToolButton = new KexiSmallToolButton(this, m_deleteAction);
 	m_deleteObjectToolButton->setTextLabel("");
 	buttons_flyr->add(m_deleteObjectToolButton);
 
 	m_itemPopup->insertSeparator();
 #ifdef KEXI_SHOW_UNIMPLEMENTED
-	plugSharedAction("edit_cut", m_itemPopup);
-	plugSharedAction("edit_copy", m_itemPopup);
+//todo	plugSharedAction("edit_cut", m_itemPopup);
+//todo	plugSharedAction("edit_copy", m_itemPopup);
 	m_itemPopup->insertSeparator();
 #endif
 	m_exportActionMenu = new KActionMenu(i18n("Export"));
@@ -191,11 +215,14 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_itemPopup->insertSeparator();
 	m_pageSetupAction_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
 
-	plugSharedAction("edit_edititem", i18n("&Rename"), m_itemPopup);
+
+	m_renameAction->plug(m_itemPopup);
+//	plugSharedAction("edit_edititem", i18n("&Rename"), m_itemPopup);
 //	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
 //		SLOT(slotRename()), this, "rename_object");
 //	m_renameObjectAction->plug(m_itemPopup);
-	plugSharedAction("edit_delete", m_itemPopup);
+	m_deleteAction->plug(m_itemPopup);
+//	plugSharedAction("edit_delete", m_itemPopup);
 
 	m_partPopup = new KPopupMenu(this, "partPopup");
 	m_partPopupTitle_id = m_partPopup->insertTitle("");
@@ -208,12 +235,6 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 
 KexiBrowser::~KexiBrowser()
 {
-}
-
-void
-KexiBrowser::clear()
-{
-	m_list->clear();
 }
 
 void
@@ -325,14 +346,14 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 
 	const bool gotitem = it && it->item();
 	//bool gotgroup = it && !it->item();
- //TODO: also check if the item is not read only
-	setAvailable("edit_delete",gotitem);
-	m_deleteObjectToolButton->setEnabled(gotitem);
-	setAvailable("edit_cut",gotitem);
-	setAvailable("edit_copy",gotitem);
-//	setAvailable("edit_paste",gotgroup);
-//	m_renameObjectAction->setEnabled(gotitem);
-	setAvailable("edit_edititem",gotitem);
+//TODO: also check if the item is not read only
+	m_deleteAction->setEnabled(gotitem && !m_readOnly);
+	m_deleteObjectToolButton->setEnabled(gotitem && !m_readOnly);
+#ifdef KEXI_SHOW_UNIMPLEMENTED
+//todo	setAvailable("edit_cut",gotitem);
+//todo	setAvailable("edit_copy",gotitem);
+//todo	setAvailable("edit_edititem",gotitem);
+#endif
 
 	m_openAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DataViewMode));
 	m_designAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
@@ -374,7 +395,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 void KexiBrowser::installEventFilter ( const QObject * filterObj )
 {
 	m_list->installEventFilter ( filterObj );
-	KexiViewBase::installEventFilter ( filterObj );
+	QWidget::installEventFilter ( filterObj );
 }
 
 bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
@@ -391,6 +412,11 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 		//override delete action
 		if (ke->key()==Key_Delete && ke->state()==NoButton) {
 			slotRemove();
+			ke->accept();
+			return true;
+		}
+		if (ke->key()==Key_F2 && ke->state()==NoButton) {
+			slotRename();
 			ke->accept();
 			return true;
 		}
@@ -412,7 +438,7 @@ bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 
 void KexiBrowser::slotRemove()
 {
-	if (!isAvailable("edit_delete"))
+	if (!m_deleteAction->isEnabled())
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->item())
@@ -454,19 +480,19 @@ void KexiBrowser::slotEditTextObject()
 
 void KexiBrowser::slotCut()
 {
-	KEXI_UNFINISHED_SHARED_ACTION("edit_cut");
+//	KEXI_UNFINISHED_SHARED_ACTION("edit_cut");
 	//TODO
 }
 
 void KexiBrowser::slotCopy()
 {
-	KEXI_UNFINISHED_SHARED_ACTION("edit_copy");
+//	KEXI_UNFINISHED_SHARED_ACTION("edit_copy");
 	//TODO
 }
 
 void KexiBrowser::slotPaste()
 {
-	KEXI_UNFINISHED_SHARED_ACTION("edit_paste");
+//	KEXI_UNFINISHED_SHARED_ACTION("edit_paste");
 	//TODO
 }
 
@@ -498,12 +524,11 @@ void KexiBrowser::itemRenameDone()
 	}
 	it->setText(0, txt);
 	it->parent()->sort();
-	m_list->setFocus();
+	setFocus();
 }
 
 void KexiBrowser::setFocus()
 {
-	m_list->setFocus();
 	if (!m_list->selectedItem() && m_list->firstChild())//select first
 		m_list->setSelected(m_list->firstChild(), true);
 }
@@ -513,17 +538,8 @@ void KexiBrowser::updateItemName( KexiPart::Item& item, bool dirty )
 	KexiBrowserItem *bitem = m_normalItems[item.identifier()];
 	if (!bitem)
 		return;
-//	bitem->setText( 0, " "+ item.name() + (dirty ? "* " : " ") );
 	bitem->setText( 0, item.name() + (dirty ? "*" : "") );
 }
-
-/*void KexiBrowser::focusInEvent( QFocusEvent *e )
-{
-	KexiDockBase::focusInEvent(e);
-	if (m_list->selectedItem() && m_list->firstChild())//select first
-		m_list->setSelected(m_list->firstChild(), true);
-	m_list->setFocus();
-}*/
 
 void KexiBrowser::slotSettingsChanged(int)
 {
@@ -598,7 +614,11 @@ void KexiBrowser::slotPageSetupForItem()
 void KexiBrowser::setReadOnly(bool set)
 {
 	m_readOnly = set;
-	//todo
+	m_deleteAction->setEnabled(!m_readOnly);
+	m_renameAction->setEnabled(!m_readOnly);
+	m_newObjectAction->setEnabled(!m_readOnly);
+	m_newObjectPopup->setEnabled(!m_readOnly);
+	m_newObjectToolButton->setEnabled(!m_readOnly);
 }
 
 bool KexiBrowser::isReadOnly() const
@@ -606,8 +626,12 @@ bool KexiBrowser::isReadOnly() const
 	return m_readOnly;
 }
 
-//--------------------------------------------
+void KexiBrowser::clear()
+{
+	m_list->clear();
+}
 
+//--------------------------------------------
 KexiBrowserListView::KexiBrowserListView(QWidget *parent)
  : KListView(parent, "KexiBrowserListView")
  , nameEndsWithAsterisk(false)
