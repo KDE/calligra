@@ -329,6 +329,8 @@ void KexiDataAwareObjectInterface::sortColumnInternal(int col, int order)
 
 bool KexiDataAwareObjectInterface::isInsertingEnabled() const
 {
+	if (isReadOnly())
+		return false;
 	if (m_insertingEnabled == 1 || m_insertingEnabled == 0)
 		return (bool)m_insertingEnabled;
 	if (!hasData())

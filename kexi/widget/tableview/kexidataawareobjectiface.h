@@ -174,7 +174,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 has insertingEnabled set off - in that case the method does nothing.
 		 You can check internal data flag calling data()->insertingEnabled().
 		 
-		 If \a set is true, read-only flag will be cleared automatically.
+		 Setting this flag to true will have no effect if read-only flag is true.
 		 \sa setReadOnly()
 		*/
 		void setInsertingEnabled(bool set);
