@@ -488,8 +488,10 @@ Return the value of one of the channels of this pixel.</para></listitem>
 Return an array with the values of all channels.</para></listitem>
 
 <listitem><para>Function: <function>darken</function></para><para>
-Darken a pixel. This function takes three arguments: shade, compensate, and
-compensation.</para></listitem>
+Darken a pixel. This function takes at least one argument:
+<varname>shade</varname> (amount used to darken all color channels). This
+function can take the following optional argument:
+<varname>compensation</varname> (to limit the darkening).</para></listitem>
 
 <listitem><para>Function: <function>invertColor</function></para><para>
 Invert the color of a pixel.</para></listitem>
