@@ -1372,10 +1372,10 @@ KarbonView::selectionChanged()
 		VObject *obj = part()->document().selection()->objects().getFirst();
 
 		if ( shell() ) {
-			if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
+			//if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
 				m_strokeFillPreview->update( *obj->stroke(), *obj->fill() );
 				m_smallPreview->update( *obj->stroke(), *obj->fill() );
-			}
+			//}
 		}
 		m_strokeDocker->setStroke( *( obj->stroke() ) );
 
@@ -1413,7 +1413,7 @@ KarbonView::selectionChanged()
 	else
 	{
 		if ( shell() )
-			if ( this == shell()->rootView() || koDocument()->isEmbedded() )
+			//if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_strokeFillPreview )
 			m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
   		m_lineStyleAction->setEnabled( false );
