@@ -171,6 +171,11 @@ namespace Kivio {
 
   void PolyLineConnector::paint(KivioIntraStencilData* data)
   {
+    if(m_points.count() < 2) {
+      kdDebug(43000) << "ARGH! We're missing points in this connector!" << endl;
+      return;
+    }
+
     KoZoomHandler* zoom = data->zoomHandler;
     KivioPainter* painter = data->painter;
 
