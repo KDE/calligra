@@ -51,7 +51,7 @@ Part::Part(QWidget *parentWidget, const char *widgetName,
       m_project(0), m_projectDialog(0), m_parentWidget(parentWidget), m_view(0),
       m_embeddedGanttView(new GanttView(parentWidget)),
       m_embeddedContext(new Context()), m_embeddedContextInitialized(false),
-      m_context(0)
+      m_context(0), m_xmlLoader()
 {
     m_update = m_calculate = false;
     m_commandHistory = new KoCommandHistory(actionCollection());
@@ -216,7 +216,7 @@ bool Part::loadXML(QIODevice *, const QDomDocument &document) {
                 << "\n";
         return false;
     }
-
+    m_xmlLoader.startLoad();
     for (unsigned int i = 0; i < list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
@@ -234,12 +234,15 @@ bool Part::loadXML(QIODevice *, const QDomDocument &document) {
                     delete m_projectDialog;
                     m_projectDialog = 0;
                 }
-                else
+                else {
                     delete newProject;
+                    m_xmlLoader.addMsg(XMLLoaderObject::Errors, "Loading of project failed");
+                    //TODO add some ui here
+                }
             }
         }
     }
-
+    m_xmlLoader.stopLoad();
     emit sigProgress(100); // the rest is only processing, not loading
 
     kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;

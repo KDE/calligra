@@ -1217,228 +1217,233 @@ void View::slotPrintCalendarDebug() {
         getPart()->getProject().printCalendarDebug("");
 }
 void View::slotPrintTestDebug() {
-    kdDebug()<<"------------Test 1---------------------"<<endl;
-    {
-    DateTime d1(QDate(2006,1,2), QTime(8,0,0));
-    DateTime d2 = d1.addSecs(3600);
-    Duration d = d2 - d1;
-    bool b = d==Duration(0,0,0,3600);
-    kdDebug()<<"1: Success="<<b<<"    "<<d2.toString()<<"-"<<d1.toString()<<"="<<d.toString()<<endl;
-    d = d1 - d2;
-    b = d==Duration(0,0,0,3600);
-    kdDebug()<<"2: Success="<<b<<"    "<<d1.toString()<<"-"<<d2.toString()<<"="<<d.toString()<<endl;
-    d2 = d2.addDays(-2);
-    d = d1 - d2;
-    b = d==Duration(2,0,0)-Duration(0,0,0,3600);
-    kdDebug()<<"3: Success="<<b<<"    "<<d1.toString()<<"-"<<d2.toString()<<"="<<d.toString()<<endl;
-    d = d2 - d1;
-    b = d==Duration(2,0,0)-Duration(0,0,0,3600);
-    kdDebug()<<"4: Success="<<b<<"     "<<d2.toString()<<"-"<<d1.toString()<<"="<<d.toString()<<endl;
-    kdDebug()<<endl;
-    b = (d2 + d)==d1;
-    kdDebug()<<"5: Success="<<b<<"   "<<d2<<"+"<<d.toString()<<"="<<d1<<endl;
-    b = (d1 - d)==d2;
-    kdDebug()<<"6: Success="<<b<<"   "<<d1<<"-"<<d.toString()<<"="<<d2<<endl;
-    } // end test 1
-    kdDebug()<<endl;
-    kdDebug()<<"------------Test 2 Single calendar-----------------"<<endl;
-    {
-    Calendar *t = new Calendar("Test 2");
-    QDate wdate(2006,1,2);
-    DateTime before = DateTime(wdate.addDays(-1));
-    DateTime after = DateTime(wdate.addDays(1));
-    QTime t1(8,0,0);
-    QTime t2(10,0,0);
-    DateTime wdt1(wdate, t1);
-    DateTime wdt2(wdate, t2);
-    CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
-    day->addInterval(QPair<QTime, QTime>(t1, t2));
-    if (!t->addDay(day)) {
-        kdDebug()<<"Failed to add day"<<endl;
-        delete day;
-        delete t;
-        return;
+    const QStringList &lst = getPart()->xmlLoader().log();
+    
+    for ( QStringList::ConstIterator it = lst.constBegin(); it != lst.constEnd(); ++it ) {
+        kdDebug()<<*it<<endl;
     }
-    kdDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay()<<endl;
-    kdDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay()<<endl;
-    
-    CalendarDay *d = t->findDay(wdate);
-    bool b = (day == d);
-    kdDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
-    
-    DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
-    b = !dt.isValid();
-    kdDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt<<endl;
-    
-    dt = t->firstAvailableBefore(before, before.addDays(-10));
-    b = !dt.isValid();
-    kdDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
-    
-    dt = t->firstAvailableAfter(before, after);
-    b = dt == wdt1;
-    kdDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before<<"): ="<<dt<<endl;
-    
-    dt = t->firstAvailableBefore(after, before);
-    b = dt == wdt2;
-    kdDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after<<"): ="<<dt<<endl;
-    
-    b = t->hasInterval(before, after);
-    kdDebug()<<"6: Success="<<b<<"      hasInterval("<<before<<", "<<after<<")"<<endl;
-    
-    b = !t->hasInterval(after, after.addDays(1));
-    kdDebug()<<"7: Success="<<b<<"      !hasInterval("<<after<<", "<<after.addDays(1)<<")"<<endl;
-    
-    b = !t->hasInterval(before, before.addDays(-1));
-    kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before<<", "<<before.addDays(-1)<<")"<<endl;
-    
-    Duration e1(0, 2, 0); // 2 hours
-    Duration e2 = t->effort(before, after);
-    b = e1==e2;
-    kdDebug()<<"9: Success="<<b<<"      effort"<<e1.toString()<<" = "<<e2.toString()<<endl;
-    
-    delete t;
-    }// end test 2
-    
-    kdDebug()<<endl;
-    kdDebug()<<"------------Test 3 Parent calendar-----------------"<<endl;
-    {
-    Calendar *t = new Calendar("Test 3");
-    Calendar *p = new Calendar("Test 3 parent");
-    t->setParent(p);
-    QDate wdate(2006,1,2);
-    DateTime before = DateTime(wdate.addDays(-1));
-    DateTime after = DateTime(wdate.addDays(1));
-    QTime t1(8,0,0);
-    QTime t2(10,0,0);
-    DateTime wdt1(wdate, t1);
-    DateTime wdt2(wdate, t2);
-    CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
-    day->addInterval(QPair<QTime, QTime>(t1, t2));
-    if (!p->addDay(day)) {
-        kdDebug()<<"Failed to add day"<<endl;
-        delete day;
-        delete t;
-        return;
-    }
-    kdDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
-    kdDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
-    
-    CalendarDay *d = p->findDay(wdate);
-    bool b = (day == d);
-    kdDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
-    
-    DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
-    b = !dt.isValid();
-    kdDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after.toString()<<"): ="<<!b<<endl;
-    
-    dt = t->firstAvailableBefore(before, before.addDays(-10));
-    b = !dt.isValid();
-    kdDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<!b<<endl;
-    
-    dt = t->firstAvailableAfter(before, after);
-    b = dt == wdt1;
-    kdDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
-    
-    dt = t->firstAvailableBefore(after, before);
-    b = dt == wdt2;
-    kdDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
-    
-    b = t->hasInterval(before, after);
-    kdDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<", "<<after<<")"<<endl;
-    
-    b = !t->hasInterval(after, after.addDays(1));
-    kdDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<", "<<after.addDays(1)<<")"<<endl;
-    
-    b = !t->hasInterval(before, before.addDays(-1));
-    kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
-    Duration e1(0, 2, 0); // 2 hours
-    Duration e2 = t->effort(before, after);
-    b = e1==e2;
-    kdDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"=="<<e2.toString()<<endl;
-    
-    delete t;
-    delete p;
-    }// end test 3
-    kdDebug()<<endl;
-    kdDebug()<<"------------Test 4 Parent calendar/weekdays-------------"<<endl;
-    {
-    QTime t1(8,0,0);
-    QTime t2(10,0,0);
-    Calendar *p = new Calendar("Test 4 parent");
-    CalendarDay *wd1 = p->weekday(0); // monday
-    if (wd1 == 0) {
-        kdDebug()<<"Failed to get weekday"<<endl;
-    }
-    wd1->setState(Map::NonWorking);
-    
-    CalendarDay *wd2 = p->weekday(2); // wednesday
-    if (wd2 == 0) {
-        kdDebug()<<"Failed to get weekday"<<endl;
-    }
-    wd2->addInterval(QPair<QTime, QTime>(t1, t2));
-    wd2->setState(Map::Working);
-     
-    Calendar *t = new Calendar("Test 4");
-    t->setParent(p);
-    QDate wdate(2006,1,2); // monday jan 2
-    DateTime before = DateTime(wdate.addDays(-4)); //Thursday dec 29
-    DateTime after = DateTime(wdate.addDays(4)); // Friday jan 6
-    DateTime wdt1(wdate, t1);
-    DateTime wdt2(QDate(2006, 1, 4), t2); // Wednesday
-    CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
-    day->addInterval(QPair<QTime, QTime>(t1, t2));
-    if (!p->addDay(day)) {
-        kdDebug()<<"Failed to add day"<<endl;
-        delete day;
-        delete t;
-        return;
-    }
-    kdDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
-    kdDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
-    
-    CalendarDay *d = p->findDay(wdate);
-    bool b = (day == d);
-    kdDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
-    
-    DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
-    b = (dt.isValid() && dt == DateTime(QDate(2006,1,11), t1));
-    kdDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt<<endl;
-    
-    dt = t->firstAvailableBefore(before, before.addDays(-10));
-    b = (dt.isValid() && dt == DateTime(QDate(2005, 12, 28), t2));
-    kdDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
-    
-    dt = t->firstAvailableAfter(before, after);
-    b = dt == wdt1; // We find the day jan 2
-    kdDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
-    
-    dt = t->firstAvailableBefore(after, before);
-    b = dt == wdt2; // We find the weekday (wednesday)
-    kdDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
-    
-    b = t->hasInterval(before, after);
-    kdDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<", "<<after<<")"<<endl;
-    
-    b = !t->hasInterval(after, after.addDays(1));
-    kdDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<", "<<after.addDays(1)<<")"<<endl;
-    
-    b = !t->hasInterval(before, before.addDays(-1));
-    kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
-    Duration e1(0, 4, 0); // 2 hours
-    Duration e2 = t->effort(before, after);
-    b = e1==e2;
-    kdDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"="<<e2.toString()<<endl;
-    
-    QPair<DateTime, DateTime> r = t->firstInterval(before, after);
-    b = r.first == wdt1; // We find the monday jan 2
-    kdDebug()<<"10: Success="<<b<<"      firstInterval("<<before<<"): ="<<r.first<<", "<<r.second<<endl;
-    r = t->firstInterval(r.second, after);
-    b = r.first == DateTime(QDate(2006, 1, 4),t1); // We find the wednesday jan 4
-    kdDebug()<<"11: Success="<<b<<"      firstInterval("<<r.second<<"): ="<<r.first<<", "<<r.second<<endl;
-    
-    delete t;
-    delete p;
-    }// end test 4
+//     kdDebug()<<"------------Test 1---------------------"<<endl;
+//     {
+//     DateTime d1(QDate(2006,1,2), QTime(8,0,0));
+//     DateTime d2 = d1.addSecs(3600);
+//     Duration d = d2 - d1;
+//     bool b = d==Duration(0,0,0,3600);
+//     kdDebug()<<"1: Success="<<b<<"    "<<d2.toString()<<"-"<<d1.toString()<<"="<<d.toString()<<endl;
+//     d = d1 - d2;
+//     b = d==Duration(0,0,0,3600);
+//     kdDebug()<<"2: Success="<<b<<"    "<<d1.toString()<<"-"<<d2.toString()<<"="<<d.toString()<<endl;
+//     d2 = d2.addDays(-2);
+//     d = d1 - d2;
+//     b = d==Duration(2,0,0)-Duration(0,0,0,3600);
+//     kdDebug()<<"3: Success="<<b<<"    "<<d1.toString()<<"-"<<d2.toString()<<"="<<d.toString()<<endl;
+//     d = d2 - d1;
+//     b = d==Duration(2,0,0)-Duration(0,0,0,3600);
+//     kdDebug()<<"4: Success="<<b<<"     "<<d2.toString()<<"-"<<d1.toString()<<"="<<d.toString()<<endl;
+//     kdDebug()<<endl;
+//     b = (d2 + d)==d1;
+//     kdDebug()<<"5: Success="<<b<<"   "<<d2<<"+"<<d.toString()<<"="<<d1<<endl;
+//     b = (d1 - d)==d2;
+//     kdDebug()<<"6: Success="<<b<<"   "<<d1<<"-"<<d.toString()<<"="<<d2<<endl;
+//     } // end test 1
+//     kdDebug()<<endl;
+//     kdDebug()<<"------------Test 2 Single calendar-----------------"<<endl;
+//     {
+//     Calendar *t = new Calendar("Test 2");
+//     QDate wdate(2006,1,2);
+//     DateTime before = DateTime(wdate.addDays(-1));
+//     DateTime after = DateTime(wdate.addDays(1));
+//     QTime t1(8,0,0);
+//     QTime t2(10,0,0);
+//     DateTime wdt1(wdate, t1);
+//     DateTime wdt2(wdate, t2);
+//     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
+//     day->addInterval(QPair<QTime, QTime>(t1, t2));
+//     if (!t->addDay(day)) {
+//         kdDebug()<<"Failed to add day"<<endl;
+//         delete day;
+//         delete t;
+//         return;
+//     }
+//     kdDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay()<<endl;
+//     kdDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay()<<endl;
+//     
+//     CalendarDay *d = t->findDay(wdate);
+//     bool b = (day == d);
+//     kdDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
+//     
+//     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
+//     b = !dt.isValid();
+//     kdDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt<<endl;
+//     
+//     dt = t->firstAvailableBefore(before, before.addDays(-10));
+//     b = !dt.isValid();
+//     kdDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
+//     
+//     dt = t->firstAvailableAfter(before, after);
+//     b = dt == wdt1;
+//     kdDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before<<"): ="<<dt<<endl;
+//     
+//     dt = t->firstAvailableBefore(after, before);
+//     b = dt == wdt2;
+//     kdDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after<<"): ="<<dt<<endl;
+//     
+//     b = t->hasInterval(before, after);
+//     kdDebug()<<"6: Success="<<b<<"      hasInterval("<<before<<", "<<after<<")"<<endl;
+//     
+//     b = !t->hasInterval(after, after.addDays(1));
+//     kdDebug()<<"7: Success="<<b<<"      !hasInterval("<<after<<", "<<after.addDays(1)<<")"<<endl;
+//     
+//     b = !t->hasInterval(before, before.addDays(-1));
+//     kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before<<", "<<before.addDays(-1)<<")"<<endl;
+//     
+//     Duration e1(0, 2, 0); // 2 hours
+//     Duration e2 = t->effort(before, after);
+//     b = e1==e2;
+//     kdDebug()<<"9: Success="<<b<<"      effort"<<e1.toString()<<" = "<<e2.toString()<<endl;
+//     
+//     delete t;
+//     }// end test 2
+//     
+//     kdDebug()<<endl;
+//     kdDebug()<<"------------Test 3 Parent calendar-----------------"<<endl;
+//     {
+//     Calendar *t = new Calendar("Test 3");
+//     Calendar *p = new Calendar("Test 3 parent");
+//     t->setParent(p);
+//     QDate wdate(2006,1,2);
+//     DateTime before = DateTime(wdate.addDays(-1));
+//     DateTime after = DateTime(wdate.addDays(1));
+//     QTime t1(8,0,0);
+//     QTime t2(10,0,0);
+//     DateTime wdt1(wdate, t1);
+//     DateTime wdt2(wdate, t2);
+//     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
+//     day->addInterval(QPair<QTime, QTime>(t1, t2));
+//     if (!p->addDay(day)) {
+//         kdDebug()<<"Failed to add day"<<endl;
+//         delete day;
+//         delete t;
+//         return;
+//     }
+//     kdDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
+//     kdDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
+//     
+//     CalendarDay *d = p->findDay(wdate);
+//     bool b = (day == d);
+//     kdDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
+//     
+//     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
+//     b = !dt.isValid();
+//     kdDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after.toString()<<"): ="<<!b<<endl;
+//     
+//     dt = t->firstAvailableBefore(before, before.addDays(-10));
+//     b = !dt.isValid();
+//     kdDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<!b<<endl;
+//     
+//     dt = t->firstAvailableAfter(before, after);
+//     b = dt == wdt1;
+//     kdDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
+//     
+//     dt = t->firstAvailableBefore(after, before);
+//     b = dt == wdt2;
+//     kdDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
+//     
+//     b = t->hasInterval(before, after);
+//     kdDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<", "<<after<<")"<<endl;
+//     
+//     b = !t->hasInterval(after, after.addDays(1));
+//     kdDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<", "<<after.addDays(1)<<")"<<endl;
+//     
+//     b = !t->hasInterval(before, before.addDays(-1));
+//     kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
+//     Duration e1(0, 2, 0); // 2 hours
+//     Duration e2 = t->effort(before, after);
+//     b = e1==e2;
+//     kdDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"=="<<e2.toString()<<endl;
+//     
+//     delete t;
+//     delete p;
+//     }// end test 3
+//     kdDebug()<<endl;
+//     kdDebug()<<"------------Test 4 Parent calendar/weekdays-------------"<<endl;
+//     {
+//     QTime t1(8,0,0);
+//     QTime t2(10,0,0);
+//     Calendar *p = new Calendar("Test 4 parent");
+//     CalendarDay *wd1 = p->weekday(0); // monday
+//     if (wd1 == 0) {
+//         kdDebug()<<"Failed to get weekday"<<endl;
+//     }
+//     wd1->setState(Map::NonWorking);
+//     
+//     CalendarDay *wd2 = p->weekday(2); // wednesday
+//     if (wd2 == 0) {
+//         kdDebug()<<"Failed to get weekday"<<endl;
+//     }
+//     wd2->addInterval(QPair<QTime, QTime>(t1, t2));
+//     wd2->setState(Map::Working);
+//      
+//     Calendar *t = new Calendar("Test 4");
+//     t->setParent(p);
+//     QDate wdate(2006,1,2); // monday jan 2
+//     DateTime before = DateTime(wdate.addDays(-4)); //Thursday dec 29
+//     DateTime after = DateTime(wdate.addDays(4)); // Friday jan 6
+//     DateTime wdt1(wdate, t1);
+//     DateTime wdt2(QDate(2006, 1, 4), t2); // Wednesday
+//     CalendarDay *day = new CalendarDay(QDate(2006,1,2), Map::Working);
+//     day->addInterval(QPair<QTime, QTime>(t1, t2));
+//     if (!p->addDay(day)) {
+//         kdDebug()<<"Failed to add day"<<endl;
+//         delete day;
+//         delete t;
+//         return;
+//     }
+//     kdDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
+//     kdDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
+//     
+//     CalendarDay *d = p->findDay(wdate);
+//     bool b = (day == d);
+//     kdDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
+//     
+//     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
+//     b = (dt.isValid() && dt == DateTime(QDate(2006,1,11), t1));
+//     kdDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt<<endl;
+//     
+//     dt = t->firstAvailableBefore(before, before.addDays(-10));
+//     b = (dt.isValid() && dt == DateTime(QDate(2005, 12, 28), t2));
+//     kdDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
+//     
+//     dt = t->firstAvailableAfter(before, after);
+//     b = dt == wdt1; // We find the day jan 2
+//     kdDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
+//     
+//     dt = t->firstAvailableBefore(after, before);
+//     b = dt == wdt2; // We find the weekday (wednesday)
+//     kdDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
+//     
+//     b = t->hasInterval(before, after);
+//     kdDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<", "<<after<<")"<<endl;
+//     
+//     b = !t->hasInterval(after, after.addDays(1));
+//     kdDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<", "<<after.addDays(1)<<")"<<endl;
+//     
+//     b = !t->hasInterval(before, before.addDays(-1));
+//     kdDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
+//     Duration e1(0, 4, 0); // 2 hours
+//     Duration e2 = t->effort(before, after);
+//     b = e1==e2;
+//     kdDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"="<<e2.toString()<<endl;
+//     
+//     QPair<DateTime, DateTime> r = t->firstInterval(before, after);
+//     b = r.first == wdt1; // We find the monday jan 2
+//     kdDebug()<<"10: Success="<<b<<"      firstInterval("<<before<<"): ="<<r.first<<", "<<r.second<<endl;
+//     r = t->firstInterval(r.second, after);
+//     b = r.first == DateTime(QDate(2006, 1, 4),t1); // We find the wednesday jan 4
+//     kdDebug()<<"11: Success="<<b<<"      firstInterval("<<r.second<<"): ="<<r.first<<", "<<r.second<<endl;
+//     
+//     delete t;
+//     delete p;
+//     }// end test 4
 }
 #endif
 

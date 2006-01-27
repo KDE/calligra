@@ -25,6 +25,7 @@
 #include "kpttask.h"
 #include "kptconfig.h"
 #include "kptwbsdefinition.h"
+#include "kptxmlloaderobject.h"
 
 #include <koDocument.h>
 
@@ -81,6 +82,7 @@ public:
     void generateWBS();
     WBSDefinition &wbsDefinition() { return m_wbsDefinition; }
     
+    const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
 
@@ -111,6 +113,8 @@ private:
     Context *m_context;
     
     WBSDefinition m_wbsDefinition;
+    
+    XMLLoaderObject m_xmlLoader;
 };
 
 }  //KPlato namespace

@@ -57,6 +57,7 @@ libkplatopart_la_SOURCES = \
 
 # (this is not used)
 noinst_HEADERS = \
+    kptxmlloaderobject.h \
     kptsummarytaskdialog.h \
     kptsummarytaskgeneralpanel.h \
     kptschedule.h \
