@@ -79,11 +79,11 @@
                                 <enum>NoMarks</enum>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>Note : the compression level doesn't change the quality of the result</string>
+                                <string>Note: the compression level doesn't change the quality of the result</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
                             </property>
                         </widget>
                         <widget class="QLayoutWidget">
@@ -103,7 +103,7 @@
                                     </property>
                                     <property name="whatsThis" stdset="0">
                                         <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
                                     </property>
                                 </widget>
                                 <widget class="QLabel">
@@ -118,7 +118,7 @@
                                     </property>
                                     <property name="whatsThis" stdset="0">
                                         <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
                                     </property>
                                 </widget>
                             </hbox>
