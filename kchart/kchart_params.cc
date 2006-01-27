@@ -30,8 +30,9 @@
 namespace KChart
 {
 
-KChartParams::KChartParams()
-    : KDChartParams()
+KChartParams::KChartParams( KChartPart *_part )
+    : KDChartParams(),
+      m_part( _part )
 {
     // Default values for subtypes.
     m_barlinesChartSubType = BarlinesNormal;

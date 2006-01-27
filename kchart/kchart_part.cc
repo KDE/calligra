@@ -60,7 +60,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
     {
 	// Create the chart parameters and let the default be a bar chart
 	// with 3D looks.
-	m_params = new KChartParams();
+	m_params = new KChartParams( this );
 	m_params->setChartType( KChartParams::Bar );
 	m_params->setBarChartSubType( KChartParams::BarNormal );
 	//m_params->setThreeDBars( true );
@@ -675,7 +675,7 @@ void KChartPart::loadConfig( KConfig *conf )
 void KChartPart::defaultConfig(  )
 {
     delete m_params;
-    m_params = new KChartParams();
+    m_params = new KChartParams( this );
     setChartDefaults();
 }
 

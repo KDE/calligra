@@ -32,6 +32,8 @@ class DCOPObject;
 namespace KChart
 {
 
+class KChartPart;
+
 class KChartParams : public KDChartParams
 {
   public:
@@ -58,7 +60,7 @@ class KChartParams : public KDChartParams
     } DataDirection;
 
 
-    KChartParams();
+    KChartParams( KChartPart *_part );
     ~KChartParams();
 
     // Reimplementation of selected KDChartParams methods
@@ -129,6 +131,8 @@ public slots:
                     QString& errorMessage );
 
   private:
+    KChartPart    *m_part;
+
     ChartType      m_chartType;
     DataDirection  m_dataDirection; // Rows or Columns
 
