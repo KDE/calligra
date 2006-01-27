@@ -282,6 +282,10 @@ public:
 
     virtual bool isTextModeFrameset(KWFrameSet *fs) const;
 
+    /// hardcoded distance from the left side this viewmode starts its rendering
+    static const int OFFSET = 10;
+
+
 private:
     KWTextFrameSet *m_textFrameSet;
 };

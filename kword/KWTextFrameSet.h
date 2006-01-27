@@ -95,8 +95,9 @@ public:
      * into a point (@p iPoint) in the internal qtextdoc coordinates (in layout units). */
     KWFrame * documentToInternal( const KoPoint &dPoint, QPoint &iPoint ) const;
 
+    /// used by documentToInternalMouseSelection()
     enum RelativePosition { InsideFrame, LeftOfFrame, TopOfFrame, AtEnd };
-    KWFrame * documentToInternalMouseSelection( const KoPoint &dPoint, QPoint &iPoint, RelativePosition& relPos ) const;
+    KWFrame * documentToInternalMouseSelection( const KoPoint &dPoint, QPoint &iPoint, RelativePosition& relPos, KWViewMode *viewMode ) const;
 
     /** Convert the @p in the internal qtextdoc coordinates (in layout units)
      * into a point in the document coordinate system (in pt).

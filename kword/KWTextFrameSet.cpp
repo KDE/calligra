@@ -249,12 +249,12 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
     return 0;
 }
 
-KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoint, QPoint &iPoint, RelativePosition& relPos ) const
+KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoint, QPoint &iPoint, RelativePosition& relPos, KWViewMode *viewMode ) const
 {
 #ifdef DEBUG_DTI
     kdDebug() << "KWTextFrameSet::documentToInternalMouseSelection dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
-    if ( !m_doc->layoutViewMode()->hasFrames() ) { // text viewmode
+    if ( !viewMode->hasFrames() ) { // text viewmode
         relPos = InsideFrame;
         iPoint = QPoint( m_doc->ptToLayoutUnitPixX( dPoint.x() ),
                          m_doc->ptToLayoutUnitPixY( dPoint.y() ) );
@@ -671,16 +671,15 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
 void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *theFrame )
 {
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
-    KWViewMode *viewMode = canvas->viewMode();
-    bool hasFrames = viewMode->hasFrames();
-    m_currentViewMode = viewMode;
+    m_currentViewMode = canvas->viewMode();
+    bool hasFrames = m_currentViewMode->hasFrames();
     m_currentDrawnFrame = theFrame;
 
     QRect normalFrameRect;
     if (hasFrames)
         normalFrameRect = m_doc->zoomRect( theFrame->innerRect() );
     else
-        normalFrameRect = QRect( QPoint(0, 0), viewMode->contentsSize() );
+        normalFrameRect = QRect( QPoint(0, 0), m_currentViewMode->contentsSize() );
 
     KoTextParag* parag = cursor->parag();
     QPoint topLeft = parag->rect().topLeft();         // in QRT coords
@@ -705,7 +704,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
         QPoint debugPt = m_doc->zoomPoint( dPoint );
         kdDebug() << " zoomed dPoint(doc, pixels)=" << debugPt.x() << "," << debugPt.y() << endl;
 #endif
-        QPoint vPoint = viewMode->normalToView( m_doc->zoomPoint( dPoint ) ); // from doc to view contents
+        QPoint vPoint = m_currentViewMode->normalToView( m_doc->zoomPoint( dPoint ) ); // from doc to view contents
 #ifdef DEBUG_CURSOR
         kdDebug() << " vPoint(view, pixels)=" << vPoint.x() << "," << vPoint.y() << endl;
 #endif
@@ -724,7 +723,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
         kdDebug() << " clip(view, before intersect)=" << clip << endl;
 #endif
 
-        QRect viewFrameRect = viewMode->normalToView( normalFrameRect );
+        QRect viewFrameRect = m_currentViewMode->normalToView( normalFrameRect );
         clip &= viewFrameRect; // clip to frame
 #ifdef DEBUG_CURSOR
         kdDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << normalFrameRect
@@ -733,7 +732,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
 
         QRegion reg;
         if ( hasFrames ) {
-            reg = frameClipRegion( p, theFrame, clip, viewMode );
+            reg = frameClipRegion( p, theFrame, clip, m_currentViewMode );
             if ( !isFloating() ) // problem with multiparent inline frames
                 reg &= p->xForm( viewFrameRect );
         }
@@ -772,6 +771,8 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                 cg.setColor(QColorGroup::Text, QColor( 255 - background.red(),
                     255 - background.green(), 255 - background.blue()) );
             }
+            else if(dynamic_cast<KWViewModeText *>(m_currentViewMode) != 0)
+                p->translate( KWViewModeText::OFFSET, 0 );
 
             QPixmap *pix = 0;
             uint drawingFlags = KoTextDocument::DrawSelections;
@@ -3468,7 +3469,7 @@ void KWTextFrameSetEdit::mousePressEvent( QMouseEvent *e, const QPoint &, const 
 
     QPoint iPoint;
     KWTextFrameSet::RelativePosition relPos;
-    KWFrame * theFrame = textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos );
+    KWFrame * theFrame = textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos, m_canvas->viewMode() );
     if ( theFrame && m_currentFrame != theFrame )
     {
         m_currentFrame = theFrame;
@@ -3514,7 +3515,7 @@ void KWTextFrameSetEdit::mouseMoveEvent( QMouseEvent * e, const QPoint & nPoint,
     QPoint iPoint;
     KoPoint dPoint = frameSet()->kWordDocument()->unzoomPoint( nPoint );
     KWTextFrameSet::RelativePosition relPos;
-    if ( nPoint.y() > 0 && textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos ) )
+    if ( nPoint.y() > 0 && textFrameSet()->documentToInternalMouseSelection( dPoint, iPoint, relPos , m_canvas->viewMode()) )
     {
         if ( relPos == KWTextFrameSet::LeftOfFrame )
             textView()->extendParagraphSelection( iPoint );

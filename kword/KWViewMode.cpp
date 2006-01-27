@@ -488,12 +488,16 @@ KWTextFrameSet * KWViewModeText::determineTextFrameSet( KWDocument* doc ) // sta
 
 QPoint KWViewModeText::normalToView( const QPoint & nPoint )
 {
-    return nPoint;
+    QPoint r (nPoint);
+    r.setX(r.x() + OFFSET);
+    return r;
 }
 
 QPoint KWViewModeText::viewToNormal( const QPoint & vPoint )
 {
-    return vPoint;
+    QPoint r (vPoint);
+    r.setX(r.x() - OFFSET);
+    return r;
 }
 
 QSize KWViewModeText::contentsSize()
@@ -537,18 +541,14 @@ bool KWViewModeText::isFrameSetVisible( const KWFrameSet *fs )
 void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
                                       const QRegion & /*emptySpaceRegion*/ )
 {
-    KWTextFrameSet * textfs = textFrameSet();
-    if (!textfs)
-        return;
     painter->save();
     QRegion grayRegion( crect );
     //kdDebug() << "KWViewModeText::drawPageBorders crect=" << grayRegion << endl;
-    QPtrListIterator<KWFrame> it( textfs->frameIterator() );
     painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     QSize cSize = contentsSize();
     // Draw a line on the right -- ## or a shadow?
     // +1 to be out of the contents, and +1 for QRect
-    QRect frameRect( 0, 0, cSize.width() + 2, cSize.height() );
+    QRect frameRect( OFFSET, 0, cSize.width() + 2, cSize.height() );
     //kdDebug() << "KWViewModeText::drawPageBorders right line: "  << frameRect.topRight() << "   " << frameRect.bottomRight()<< endl;
     painter->drawLine( frameRect.topRight(), frameRect.bottomRight() );
     if ( frameRect.intersects( crect ) )
@@ -571,7 +571,7 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
 
 QRect KWViewModeText::rulerFrameRect()
 {
-    return QRect( QPoint(0,0), contentsSize() );
+    return QRect( QPoint(OFFSET, 0), contentsSize() );
 }
 
 void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& /*layout*/ )
@@ -584,7 +584,7 @@ void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPa
     layout.ptWidth = m_doc->unzoomItX( cSize.width() );
     layout.ptHeight = m_doc->unzoomItY( cSize.height() );
     //kdDebug() << "KWViewModeText::setPageLayout layout size " << layout.ptWidth << "x" << layout.ptHeight << endl;
-    layout.ptLeft = 0;
+    layout.ptLeft = OFFSET;
     layout.ptRight = 0;
     layout.ptTop = 0;
     layout.ptBottom = 0;

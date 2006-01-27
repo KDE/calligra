@@ -659,9 +659,10 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
             }
             //totalHeight += frame->innerHeight();
         }
-    } else {
-        // Text view mode
-        drawFrame( 0L /*frame*/, p, crect, crect, QPoint(0,0),
+    }
+    else { // Text view mode
+        QRect normalRect = viewMode->viewToNormal(crect);
+        drawFrame( 0L /*frame*/, p, normalRect, crect, QPoint(KWViewModeText::OFFSET, 0),
                    0L /*settingsFrame*/, cg, onlyChanged, resetChanged, edit, viewMode, true );
     }
 }

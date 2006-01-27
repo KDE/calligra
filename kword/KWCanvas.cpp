@@ -428,13 +428,15 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     switch ( m_mouseMode ) {
     case MM_EDIT:
     {
+        if(! viewMode()->hasFrames() ) { // for the text mode we just forward the click to the text
+            // first, make clicks left of text be on the border;
+            docPoint = KoPoint(QMAX(0, docPoint.x()), QMAX(0, docPoint.y()));
+            if ( m_currentFrameSetEdit )
+                m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
+            break;
+        }
         // See if we clicked on a frame's border
         m_mouseMeaning = m_frameViewManager->mouseMeaning( docPoint, e->state());
-        if (! (viewMode()->hasFrames() || m_mouseMeaning == MEANING_MOUSE_INSIDE ||
-                    m_mouseMeaning == MEANING_MOUSE_OVER_LINK ||
-                    m_mouseMeaning == MEANING_MOUSE_OVER_FOOTNOTE ||
-                    m_mouseMeaning == MEANING_MOUSE_INSIDE_TEXT) )
-            break; // limited functionality when no frames allowed.
 
         //kdDebug(32001) << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
         switch ( m_mouseMeaning )  {
