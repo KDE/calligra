@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Tomas Mecir <mecirt@gmail.com>
+   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+             (C) 2004 Tomas Mecir <mecirt@gmail.com>
              (C) 2002-2004 Ariya Hidayat <ariya@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
@@ -1145,10 +1146,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->addWidget(tmpQLabel,2,0);
     tmpQLabel->setText( i18n("Postfix:") );
 
-    if ( dlg->postfix.isNull() )
-        postfix->setText( "########" );
-    else
-        postfix->setText( dlg->postfix );
+    postfix->setText( dlg->postfix );
 
     tmpQLabel = new QLabel( box, "Label_2" );
     grid->addWidget(tmpQLabel,0,0);
@@ -1158,11 +1156,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->addWidget(tmpQLabel,1,0);
     tmpQLabel->setText( i18n("Precision:") );
 
-    if ( dlg->prefix.isNull() )
-        prefix->setText( "########" );
-    else
-        prefix->setText( dlg->prefix );
-
+    prefix->setText( dlg->prefix );
 
     format->insertItem( *_dlg->formatOnlyNegSignedPixmap, 0 );
     format->insertItem( *_dlg->formatRedOnlyNegSignedPixmap, 1 );
@@ -1283,6 +1277,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     connect(postfix,SIGNAL(textChanged ( const QString & ) ),this,SLOT(makeformat()));
     connect(currency,SIGNAL(activated ( const QString & ) ),this, SLOT(currencyChanged(const QString &)));
     connect(format,SIGNAL(activated ( int ) ),this,SLOT(formatChanged(int)));
+    connect(format, SIGNAL(activated(int)), this, SLOT(makeformat()));
     slotChangeState();
     m_bFormatColorChanged=false;
     m_bFormatTypeChanged=false;
@@ -1651,35 +1646,60 @@ void CellFormatPageFloat::makeformat()
   QString tmp;
 
   updateFormatType();
+  QColor color;
+  Format::FloatFormat floatFormat;
+  switch( format->currentItem() )
+  {
+    case 0:
+      floatFormat = Format::OnlyNegSigned;
+      color = black;
+      break;
+    case 1:
+      floatFormat =  Format::OnlyNegSigned;
+      color = Qt::red;
+      break;
+    case 2:
+      floatFormat =  Format::AlwaysUnsigned;
+      color = Qt::red;
+      break;
+    case 3:
+      floatFormat =  Format::AlwaysSigned;
+      color = black;
+      break;
+    case 4:
+      floatFormat =  Format::AlwaysSigned;
+      color = Qt::red;
+      break;
+  }
+  if (!dlg->value.isNumber() || dlg->value.asFloat() >= 0 || !format->isEnabled())
+  {
+    color = black;
+  }
   ValueFormatter *fmt = dlg->getDoc()->formatter();
-  tmp = fmt->formatText (dlg->value, newFormatType,
-      precision->value());
+  tmp = fmt->formatText(dlg->value, newFormatType, precision->value(),
+                        floatFormat,
+                        prefix->isEnabled() ? prefix->text() : QString::null,
+                        postfix->isEnabled() ? postfix->text() : QString::null);
   if (tmp.length() > 50)
     tmp = tmp.left (50);
-  exampleLabel->setText (tmp);
+  exampleLabel->setText(tmp.prepend("<font color=" + color.name() + ">").append("</font>"));
 }
 
 void CellFormatPageFloat::apply( CustomStyle * style )
 {
   if ( postfix->text() != dlg->postfix )
   {
-    if ( postfix->text() != "########" )
-    {
       if ( postfix->isEnabled())
         style->changePostfix( postfix->text() );
       else
         style->changePostfix( "" );
-    }
   }
   if ( prefix->text() != dlg->prefix )
   {
-    if ( prefix->text() != "########" )
-    {
       if (prefix->isEnabled())
         style->changePrefix( prefix->text() );
       else
         style->changePrefix( "" );
-    }
   }
 
   if ( dlg->precision != precision->value() )
@@ -1745,7 +1765,7 @@ void CellFormatPageFloat::apply( CustomStyle * style )
 void CellFormatPageFloat::apply(FormatManipulator* _obj)
 {
   if ( postfix->text() != dlg->postfix )
-    if ( postfix->text() != "########" && postfix->isEnabled())
+    if ( postfix->isEnabled())
     {
       // If we are in here it *never* can be disabled - FIXME (Werner)!
       if ( postfix->isEnabled())
@@ -1754,14 +1774,10 @@ void CellFormatPageFloat::apply(FormatManipulator* _obj)
         _obj->setPostfix( "" );
     }
   if ( prefix->text() != dlg->prefix )
-    if ( prefix->text() != "########" )
-    {
       if (prefix->isEnabled())
         _obj->setPrefix( prefix->text() );
       else
         _obj->setPrefix( "" );
-
-    }
 
   if ( dlg->precision != precision->value() )
       _obj->setPrecision( precision->value() );
