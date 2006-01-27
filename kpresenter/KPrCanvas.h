@@ -730,6 +730,14 @@ private:
      */
     void updateInsertRect( const KoPoint &point, Qt::ButtonState state );
 
+    /**
+     * @brief Popup context menu
+     *
+     * Popup context menu for current active or selected object,
+     * otherwise popup context menu for page.
+     */
+    void popupContextMenu();
+
 private slots:
     void toFontChanged( const QFont &font ) { emit fontChanged( font ); }
     void toColorChanged( const QColor &color ) { emit colorChanged( color ); }

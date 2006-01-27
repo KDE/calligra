@@ -227,6 +227,10 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
     case QEvent::KeyPress:
     {
         QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+        if ( keyev->key() == KGlobalSettings::contextMenuKey() ) {
+            popupContextMenu();
+            return true;
+        }
         if ( m_currentTextObjectView &&
                 (keyev->key()==Qt::Key_Home ||keyev->key()==Key_End
                  || keyev->key()==Qt::Key_Tab || keyev->key()==Key_Prior
@@ -245,7 +249,7 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
     case QEvent::AccelOverride:
     {
 #ifndef NDEBUG
-      QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
+        QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
         // Debug keys
         if ( ( keyev->state() & ControlButton ) && ( keyev->state() & ShiftButton ) )
         {
@@ -5584,5 +5588,44 @@ void KPrCanvas::objectPopup( KPrObject *object, const QPoint &point )
         default:
             m_view->openPopupMenuObject( "graphmenu_popup", point );
             break;
+    }
+}
+
+void KPrCanvas::popupContextMenu()
+{
+    if ( !editMode ) {
+        if ( !m_drawMode && !spManualSwitch() )
+        {
+            finishObjectEffects();
+            finishPageEffect();
+            m_view->stopAutoPresTimer();
+        }
+        setCursor( arrowCursor );
+        QPoint p( width()/2, height()/2 );
+        int ret = m_presMenu->exec( p );
+        // we have to continue the timer if the menu was canceled and draw mode is not active
+        if ( ret == -1 && !m_presMenu->isItemChecked( PM_DM ) && !spManualSwitch() )
+            m_view->continueAutoPresTimer();
+        return;
+    }
+    if ( m_currentTextObjectView ) {
+        // TODO: Better to popup at caret position.
+        // KoTextCursor* cursor = m_currentTextObjectView->cursor();
+        KoPoint kop = m_currentTextObjectView->kpTextObject()->getOrig();
+        QPoint p = m_view->zoomHandler()->zoomPoint( kop );
+        p = mapToGlobal( p );
+        m_currentTextObjectView->showPopup( m_view, p, m_view->actionList() );
+        return;
+    }
+    if (!m_activePage) return;
+    KPrObject* obj = m_activePage->getSelectedObj();
+    if (obj) {
+        KoPoint kop = obj->getOrig();
+        QPoint p = m_view->zoomHandler()->zoomPoint( kop );
+        p = mapToGlobal( p );
+        objectPopup( obj, p );
+    } else {
+        QPoint p = mapToGlobal( QPoint() );
+        m_view->openPopupMenuMenuPage( p );
     }
 }
