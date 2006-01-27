@@ -41,6 +41,7 @@ void DateTimeTester::testSubtract() {
     KPlato::Duration d(0, 2, 0);
 
     COMPARE((dt2-dt1).toString(), d.toString());
+    COMPARE((dt1-dt2).toString(), d.toString()); // result always positive
     COMPARE((dt2-d).toString(), dt1.toString());
 }
 

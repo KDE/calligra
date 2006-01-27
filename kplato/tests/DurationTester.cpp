@@ -33,10 +33,21 @@ void DurationTester::allTests() {
 //FIXME: Define a operator<< for Duration
 
 void DurationTester::testArithmetic() {
-    KPlato::Duration d(0, 2, 0);
+    KPlato::Duration d1(0, 2, 0);
+    KPlato::Duration d2(1, 0, 0);
     
-    COMPARE((d+d).toString(), KPlato::Duration(0, 4, 0).toString());
-    COMPARE((d-d).toString(), KPlato::Duration(0, 0, 0).toString());
-    COMPARE((d/2).toString(), KPlato::Duration(0, 1, 0).toString());
+    COMPARE((d1+d1).toString(), KPlato::Duration(0, 4, 0).toString());
+    COMPARE((d1-d1).toString(), KPlato::Duration(0, 0, 0).toString());
+    COMPARE((d1/2).toString(), KPlato::Duration(0, 1, 0).toString());
+    
+    VERIFY(d1==d1);
+    VERIFY(d1<=d1);
+    VERIFY(d1>=d1);
+    VERIFY(!(d1!=d1));
+    VERIFY(d2>d1);
+    VERIFY(d1<d2);
+    
+    VERIFY(d1 > 1*60*60*1000);
+    VERIFY(d1 < 3*60*60*1000);
 }
 
