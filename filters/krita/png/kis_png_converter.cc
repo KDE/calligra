@@ -102,10 +102,14 @@ namespace {
 
 KisPNGConverter::KisPNGConverter(KisDoc *doc, KisUndoAdapter *adapter)
 {
+    Q_ASSERT(doc);
+    Q_ASSERT(adapter);
+    
     m_doc = doc;
     m_adapter = adapter;
-    m_job = 0;
     m_stop = false;
+    m_max_row = 0;
+    m_img = 0;
 }
 
 KisPNGConverter::~KisPNGConverter()
@@ -366,7 +370,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     for (png_uint_32 y = 0; y < height; y++) {
         delete row_pointers[y];
     }
-    delete row_pointers;
+    delete [] row_pointers;
     
     return KisImageBuilder_RESULT_OK;
 

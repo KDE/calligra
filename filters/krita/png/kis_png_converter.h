@@ -76,7 +76,6 @@ class KisPNGConverter : public KisProgressSubject {
         KisDoc *m_doc;
         KisUndoAdapter *m_adapter;
         bool m_stop;
-        KIO::TransferJob *m_job;
 };
 
 #endif

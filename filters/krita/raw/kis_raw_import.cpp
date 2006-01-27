@@ -177,7 +177,7 @@ void KisRawImport::slotUpdatePreview()
         char * data = m_data->data() + startOfImagedata;
 
         KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
-        KisPaintDeviceImpl * dev = new KisPaintDeviceImpl(cs, "preview");
+        KisPaintDevice * dev = new KisPaintDevice(cs, "preview");
 
         KisRectIterator it = dev->createRectIterator(0, 0, sz.width(), sz.height(), true);
         int pos = 0;

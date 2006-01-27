@@ -106,7 +106,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, 
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
     kdDebug() << "visiting on paint layer " << layer->name() << "\n";
-    KisPaintDeviceImplSP pd = layer->paintDevice();
+    KisPaintDeviceSP pd = layer->paintDevice();
     // Save depth
     int depth = 8 * pd->pixelSize() / pd->nChannels();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
