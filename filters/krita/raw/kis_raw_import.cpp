@@ -54,7 +54,7 @@
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_abstract_colorspace.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 #include "wdgrawimport.h"
 
 typedef KGenericFactory<KisRawImport, KoFilter> KisRawImportFactory;

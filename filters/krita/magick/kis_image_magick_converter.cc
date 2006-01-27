@@ -50,7 +50,7 @@
 #include "kis_annotation.h"
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
-#include "kis_paint_device_impl.h"
+#include "kis_paint_device.h"
 
 #include "../../../config.h"
 
