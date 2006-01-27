@@ -49,6 +49,7 @@
 #include <kiconloader.h>
 #include <ktabwidget.h>
 #include <kimageio.h>
+#include <khelpmenu.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -210,6 +211,16 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		}
 		delete l;
 		d->createMenu = d->popups["create"];
+
+#ifdef KEXI_NO_REPORTBUG_COMMAND
+		//remove "bug report" action to avoid confusion for supported with commercial technical support
+		QPopupMenu *helpMenu = d->popups["help"];
+		if (helpMenu) {
+			//const int idx = helpMenu->indexOf( (int)KHelpMenu::menuReportBug );
+			helpMenu->removeItemAt(int(KHelpMenu::menuReportBug)-1);
+			helpMenu->removeItemAt(int(KHelpMenu::menuReportBug)-1); //separator
+		}
+#endif
 	}
 
 	//fix menus a bit more:

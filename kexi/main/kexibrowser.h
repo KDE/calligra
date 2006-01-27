@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -149,9 +149,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 		KToolBar *m_toolbar;
 		KexiSmallToolButton *m_newObjectToolButton, *m_deleteObjectToolButton;
 		bool m_singleClick : 1;
-//		bool m_nameEndsWithAsterisk : 1;
 		bool m_readOnly : 1;
-//		bool m_enableExecuteArea : 1; //!< used in isExecuteArea()
 };
 
 #endif
