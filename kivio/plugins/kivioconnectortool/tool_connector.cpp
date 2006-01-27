@@ -128,7 +128,16 @@ void ConnectorTool::setActivated(bool a)
     if(m_pStencil && (m_mode == stmDrawRubber) && (m_type == PolyLineConnector)) {
       Kivio::PolyLineConnector* polyconnector = static_cast<Kivio::PolyLineConnector*>(m_pStencil);
       polyconnector->removeLastPoint();
-      connector(view()->canvasWidget()->rect());
+
+      if(polyconnector->pointCount() > 1) {
+        connector(view()->canvasWidget()->rect());
+      } else {
+        view()->activePage()->unselectStencil(polyconnector);
+        view()->activePage()->curLayer()->takeStencil(polyconnector);
+        delete polyconnector;
+        polyconnector = 0;
+      }
+
       view()->canvasWidget()->guideLines().repaintAfterSnapping();
     }
 
