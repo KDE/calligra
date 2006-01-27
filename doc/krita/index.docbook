@@ -18,6 +18,7 @@
   <!ENTITY commands-palettes SYSTEM "commands-palettes.docbook">
   <!ENTITY commands-menus SYSTEM "commands-menus.docbook">
   <!ENTITY commands-dialogs SYSTEM "commands-dialogs.docbook">
+  <!ENTITY scripting SYSTEM "scripting.docbook">
   <!ENTITY developers SYSTEM "developers.docbook">
   <!ENTITY faq SYSTEM "faq.docbook">
   <!ENTITY credits SYSTEM "credits.docbook">
@@ -46,6 +47,13 @@
 </author>
 <author>
 <personname>
+<firstname>Cyrille</firstname>
+<surname>Berger</surname>
+</personname>
+<email>cberger@cberger.net</email>
+</author>
+<author>
+<personname>
 <firstname>Sander</firstname>
 <surname>Koning</surname>
 </personname>
@@ -58,6 +66,7 @@
 <year>2005-2006</year>
 <holder>Boudewijn Rempt</holder>
 <holder>Casper Boemann</holder>
+<holder>Cyrille Berger</holder>
 <holder>Sander Koning</holder>
 </copyright>
 
@@ -65,7 +74,7 @@
 
 <!-- Date and version information of the documentation -->
 
-<date>2006-01-26</date>
+<date>2006-01-27</date>
 <releaseinfo>1.4.88</releaseinfo>
 
 <!-- Abstract about this handbook -->
@@ -98,8 +107,9 @@ continually working on extending &krita; and making it better in every respect.
 &filters;
 &colorspaces;
 &commands;
-<!-- &settings; -->
-<!-- &developers; -->
+<!-- &settings; (we don't need this yet) -->
+&scripting; 
+&developers; 
 &faq;
 &credits;
 &installation;
