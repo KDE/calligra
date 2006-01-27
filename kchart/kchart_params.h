@@ -82,6 +82,12 @@ class KChartParams : public KDChartParams
     ChartType  stringToChartType( const QString& string );
 
 
+    bool       firstRowAsLabel() const { return m_firstRowAsLabel; }
+    void       setFirstRowAsLabel( bool _val ) { m_firstRowAsLabel = _val; }
+    bool       firstColAsLabel() const { return m_firstColAsLabel; }
+    void       setFirstColAsLabel( bool _val ) { m_firstColAsLabel = _val; }
+
+
     // ----------------------------------------------------------------
     // BARLINES CHART-SPECIFIC
 
@@ -133,11 +139,14 @@ public slots:
   private:
     KChartPart    *m_part;
 
+    // The chart itself.
     ChartType      m_chartType;
     DataDirection  m_dataDirection; // Rows or Columns
 
+    bool           m_firstRowAsLabel;
+    bool           m_firstColAsLabel;
     
-    DCOPObject  *m_dcop;
+    DCOPObject    *m_dcop;
 };
 
 }  //KChart namespace

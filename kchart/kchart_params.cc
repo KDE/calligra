@@ -38,6 +38,9 @@ KChartParams::KChartParams( KChartPart *_part )
     m_barlinesChartSubType = BarlinesNormal;
     m_barlinesNumLines     = 1;
 
+    m_firstRowAsLabel = false;
+    m_firstColAsLabel = false;
+
     m_dcop = 0;
     //dcopObject(); // build it
 }

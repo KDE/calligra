@@ -20,18 +20,6 @@ Before release of KOffice 1.5.0
 Item								   Prio Status
 ------------------------------------------------------------------------------
 
-* Before the feature freeze
-  + Reintegrate kchart into KSpread				      1	DONE
-     - New interface into KoChart					  done
-     - Adapt kspread_sheet to it.					  done
-  + Fix so that users can change data area after the fact (GUI).      1	DONE
-     - wizard							      1   done
-     - config dialog						      1   done
-  + New chart type: combine bars and lines			      1 DONE
-     - in wizard							  done
-     - in config dialog							  done
-     - in left toolbar							  done
-  + Grid setting for both directions				      1 ----
 
 
 After the feature freeze
@@ -56,6 +44,13 @@ After the feature freeze
 * Data editor
   + Better keyboard shortcuts?					      1 ----
     - Remove the spinboxes from the buddy list.				--
+
+* Features
+  + First Row / Col as label					      1 ----
+    - Connect GUI to KChartParams					  done
+    - Use it when drawing						  ----
+    - Store the values in the file					  ----
+  + Grid setting for both directions				      1 ----
 
 
 After 1.5

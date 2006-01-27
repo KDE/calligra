@@ -105,12 +105,17 @@ void KChartDataConfigPage::init()
 	m_rowMajor->setChecked(true);
     else
 	m_colMajor->setChecked(true);
+
+    m_firstRowAsLabel->setChecked( m_params->firstRowAsLabel() );
+    m_firstColAsLabel->setChecked( m_params->firstColAsLabel() );
 }
 
 
 void KChartDataConfigPage::defaults()
 {
-    m_colMajor->setChecked(true);
+    m_colMajor->setChecked( true );
+    m_firstRowAsLabel->setChecked( false );
+    m_firstColAsLabel->setChecked( false );
 }
 
 
@@ -120,6 +125,9 @@ void KChartDataConfigPage::apply()
 	m_params->setDataDirection( KChartParams::DataRows );
     else
 	m_params->setDataDirection( KChartParams::DataColumns );
+
+    m_params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
+    m_params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
 }
 
 
