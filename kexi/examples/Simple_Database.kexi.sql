@@ -611,11 +611,11 @@ CREATE TABLE kexi__objects (o_id INTEGER PRIMARY KEY, o_type UNSIGNED Byte, o_na
 INSERT INTO "kexi__objects" VALUES(1, 1, 'persons', 'Persons in our factory', NULL);
 INSERT INTO "kexi__objects" VALUES(2, 1, 'cars', 'Cars owned by persons', NULL);
 INSERT INTO "kexi__objects" VALUES(4, 3, 'persons', 'Formularz1', NULL);
-INSERT INTO "kexi__objects" VALUES(57, 2, 'selected_cars', 'Zapytanie7', NULL);
+INSERT INTO "kexi__objects" VALUES(57, 2, 'selected_cars', 'Selected cars', NULL);
 INSERT INTO "kexi__objects" VALUES(65, 3, 'cars', 'Form1', NULL);
 INSERT INTO "kexi__objects" VALUES(96, 4, 'report', 'Report2', NULL);
 INSERT INTO "kexi__objects" VALUES(101, 5, 'script1', 'Skrypt1', NULL);
-INSERT INTO "kexi__objects" VALUES(102, 2, 'persons_and_cars', 'Zapytanie1', NULL);
+INSERT INTO "kexi__objects" VALUES(102, 2, 'persons_and_cars', 'Persons and cars', NULL);
 CREATE TABLE kexi__parts (p_id INTEGER PRIMARY KEY, p_name Text(200), p_mime Text(200), p_url Text(200));
 INSERT INTO "kexi__parts" VALUES(1, 'Tables', 'kexi/table', 'http://koffice.org/kexi/');
 INSERT INTO "kexi__parts" VALUES(2, 'Queries', 'kexi/query', 'http://koffice.org/kexi/');
