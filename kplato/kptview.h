@@ -158,6 +158,7 @@ protected slots:
     void slotPrintTestDebug();
 #else
     static void slotPrintDebug() { };
+    static void slotPrintSelectedDebug() { };
     static void slotPrintCalendarDebug() { };
     static void slotPrintTestDebug() { };
 #endif
