@@ -76,5 +76,6 @@ Comment[nl]=Maakt een A4-document aan met twee kolommen per pagina.
 Comment[pt]=Cria um documento A4 com duas colunas por página.
 Comment[pt_BR]=Cria um documento A4 com duas colunas por página.
 Comment[sv]=Skapar ett A4-dokument med två kolumner per sida.
+Comment[zh_CN]=创建每页两栏的 A4 文档。
 Icon=template_twocolumns
 X-KDE-MeasureSystem=metric

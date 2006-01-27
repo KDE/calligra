@@ -12,6 +12,7 @@ Name[nl]=Lijst van taken
 Name[pt]=Lista de Tarefas
 Name[pt_BR]=Lista de Tarefas
 Name[sv]=Aktivitetslista
+Name[zh_CN]=任务列表
 Type=Link
 URL= .source/tasklist.ktf
 X-KDE-Hidden=false

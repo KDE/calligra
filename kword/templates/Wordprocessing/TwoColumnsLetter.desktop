@@ -75,5 +75,6 @@ Comment[nl]=Maakt een Letter-document aan met twee kolommen per pagina.
 Comment[pt]=Cria uma carta com duas colunas por página.
 Comment[pt_BR]=Cria uma carta com duas colunas por página.
 Comment[sv]=Skapar ett US Letter-dokument med två kolumner per sida.
+Comment[zh_CN]=创建每页两栏的信函文档。
 Icon=template_twocolumns
 X-KDE-MeasureSystem=imperial

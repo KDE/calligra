@@ -12,6 +12,7 @@ Name[nl]=Lijst van gegevensbronnen
 Name[pt]=Acoplador de Histórico
 Name[pt_BR]=Acoplador de Histórico
 Name[sv]=Resurslista
+Name[zh_CN]=资源列表
 Type=Link
 URL= .source/resourcelist.ktf
 X-KDE-Hidden=false
