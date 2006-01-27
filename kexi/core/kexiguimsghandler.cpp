@@ -136,3 +136,20 @@ KexiGUIMessageHandler::showMessage(MessageType type,
 			type==Error ? KMessageBox::Error : KMessageBox::Sorry, msg);
 	}
 }
+
+int KexiGUIMessageHandler::askQuestion( const QString& message, 
+	KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+	const KGuiItem &buttonYes, 
+	const KGuiItem &buttonNo,
+	const QString &dontShowAskAgainName,
+	int options )
+{
+	Q_UNUSED(defaultResult);
+	if (KMessageBox::WarningContinueCancel == dlgType)
+		return KMessageBox::warningContinueCancel(m_messageHandlerParentWidget,
+			message, QString::null, buttonYes, dontShowAskAgainName, options);
+	else
+		return KMessageBox::messageBox(m_messageHandlerParentWidget,
+			dlgType, message, QString::null, buttonYes, buttonNo, dontShowAskAgainName, options);
+}
+

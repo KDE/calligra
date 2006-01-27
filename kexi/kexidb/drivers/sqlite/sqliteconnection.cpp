@@ -157,8 +157,10 @@ bool SQLiteConnection::drv_createDatabase( const QString &dbName )
 #endif
 }
 
-bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
+bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled, 
+	MessageHandler* msgHandler )
 {
+	Q_UNUSED(dbName);
 	KexiDBDrvDbg << "drv_useDatabase(): " << m_data->fileName() << endl;
 #ifdef SQLITE2
 	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
@@ -171,6 +173,8 @@ bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 	int exclusiveFlag = Connection::isReadOnly() ? SQLITE_OPEN_READONLY : SQLITE_OPEN_WRITE_LOCKED; // <-- shared read + (if !r/o): exclusive write
 //! @todo add option
 	int allowReadonly = 1;
+	const bool wasReadOnly = Connection::isReadOnly();
+
 	d->res = sqlite3_open( 
 		//m_data->fileName().ucs2(), //utf16
 		QFile::encodeName( m_data->fileName() ), 
@@ -178,8 +182,29 @@ bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 		exclusiveFlag,
 		allowReadonly /* If 1 and locking fails, try opening in read-only mode */
 	);
-
 	d->storeResult();
+
+#ifdef KEXI_FUTURE_FEATURES
+	if (d->res == SQLITE_OK && cancelled && !wasReadOnly && allowReadonly && isReadOnly()) {
+		//opened as read only, ask
+		if (KMessageBox::Continue != 
+			askQuestion( 
+			futureI18n("Do you want to open file \"%1\" as read-only?")
+				.arg(QDir::convertSeparators(m_data->fileName()))
+			+ "\n\n"
+			+ i18n("The file is probably already open on this or another computer.") + " "
+			+ i18n("Could not gain exclusive access for writing the file."),
+			KMessageBox::WarningContinueCancel, KMessageBox::Continue, 
+			KGuiItem(futureI18n("Open As Read-Only"), "fileopen"), KStdGuiItem::cancel(),
+			"askBeforeOpeningFileReadOnly", KMessageBox::Notify, msgHandler ))
+		{
+			clearError();
+			*cancelled = true;
+			return false;
+		}
+	}
+#endif
+
 	if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_READWRITE) {
 		setError(ERR_ACCESS_RIGHTS, 
 		i18n("The file is probably already open on this or another computer.")+"\n\n"

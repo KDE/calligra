@@ -31,7 +31,9 @@ Group: PropertyEditor
 -FontSize [integer]
 
 Group: Notification Messages
--dontAskBeforeDeleteRow [boolean]
+-dontAskBeforeDeleteRow [boolean] (default: true)
+
+-askBeforeOpeningFileReadOnly [boolean] (default: true)
 
 Group: General
 #especially useful for SQL-related messages

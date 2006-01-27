@@ -350,6 +350,10 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();
 
+		//! Updates the statusbar and "Insert->....." actions, dependent on read-only state.
+		//! Only called on project opening and closing.
+		void updateReadOnlyState();
+
 		void slotProjectNew();
 		void slotProjectOpen();
 		void slotProjectOpenRecentAboutToShow();

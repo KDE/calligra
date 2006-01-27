@@ -61,7 +61,8 @@ class MySqlConnection : public Connection
 		virtual bool drv_disconnect();
 		virtual bool drv_getDatabasesList( QStringList &list );
 		virtual bool drv_createDatabase( const QString &dbName = QString::null );
-		virtual bool drv_useDatabase( const QString &dbName = QString::null );
+		virtual bool drv_useDatabase( const QString &dbName = QString::null, bool *cancelled = 0, 
+			MessageHandler* msgHandler = 0 );
 		virtual bool drv_closeDatabase();
 		virtual bool drv_dropDatabase( const QString &dbName = QString::null );
 		virtual bool drv_executeSQL( const QString& statement );

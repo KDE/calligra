@@ -85,7 +85,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewColumn {
 		/*! \return true if the column is read-only
 		 For db-aware column this can depend on whether the column 
 		 is in parent table of this query. \sa setReadOnly() */
-		inline bool readOnly() const { return m_readOnly; }
+		inline bool isReadOnly() const { return m_readOnly; }
 
 //TODO: syncroize this with table view:
 		//! forces readOnly flag to be set to \a ro
@@ -268,8 +268,10 @@ public:
 	/*! Columns information */
 	KexiTableViewColumn::List columns;
 
-	/*! \return true if data is not editable. */
-	virtual bool isReadOnly() const { return m_readOnly; }
+	/*! \return true if data is not editable. Can be set using setReadOnly()
+	 but it's still true if database cursor returned by cursor() 
+	 is not 0 and has read-only connection. */
+	virtual bool isReadOnly() const;
 
 	/*! Sets readOnly flag for this data.
 	 If \a set is true, insertingEnabled flag will be cleared automatically.

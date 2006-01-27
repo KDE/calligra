@@ -210,7 +210,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 		kexipluginsdbg << "KexiFormScrollView::createEditor(): DATA IS READ ONLY!"<<endl;
 		return;
 	}
-	if (column( col )->readOnly()) {
+	if (column( col )->isReadOnly()) {
 		kexipluginsdbg << "KexiFormScrollView::createEditor(): COL IS READ ONLY!"<<endl;
 		return;
 	}

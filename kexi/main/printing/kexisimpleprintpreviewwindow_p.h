@@ -45,6 +45,7 @@ class KexiSimplePrintPreviewScrollView : public QScrollView
 
 	public slots:
 		void setFullWidth();
+		void setContentsPos(int x, int y);
 
 	protected:
 		virtual void resizeEvent( QResizeEvent *re );

@@ -22,13 +22,15 @@
 
 #include "kexiguimsghandler.h"
 
+//! @short A wrapper that redirects messages to a string variables instead of displaying them.
+//! See KexiTextMessageHandler constructor for details.
 class KEXICORE_EXPORT KexiTextMessageHandler : public KexiGUIMessageHandler
 {
 	public:
 		KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget);
 		virtual ~KexiTextMessageHandler();
 		virtual void showMessage(MessageType type, const QString &title, const QString &details);
-	
+
 		QString *m_messageTarget, *m_detailsTarget;
 };
 

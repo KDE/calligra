@@ -47,6 +47,7 @@
 #include "kexi.h"
 #include "keximainwindow.h"
 #include "kexiblobbuffer.h"
+#include "kexiguimsghandler.h"
 
 #include <assert.h>
 
@@ -172,19 +173,19 @@ int KexiProject::versionMinor() const
 	return d->versionMinor;
 }
 
-bool
+tristate
 KexiProject::open(bool &incompatibleWithKexi)
 {
 	return openInternal(&incompatibleWithKexi);
 }
 
-bool
+tristate
 KexiProject::open()
 {
 	return openInternal(0);
 }
 
-bool
+tristate
 KexiProject::openInternal(bool *incompatibleWithKexi)
 {
 	if (incompatibleWithKexi)
@@ -197,8 +198,13 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
 		kdDebug() << "KexiProject::open(): !createConnection()" << endl;
 		return false;
 	}
-	if (!d->connection->useDatabase(d->data->databaseName()))
+	bool cancel = false;
+	KexiGUIMessageHandler msgHandler;
+	if (!d->connection->useDatabase(d->data->databaseName(), true, &cancel, &msgHandler))
 	{
+		if (cancel) {
+			return cancelled;
+		}
 		kdDebug() << "KexiProject::open(): !d->connection->useDatabase() " 
 			<< d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
 

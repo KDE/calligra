@@ -36,6 +36,15 @@ class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
 		void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
 		void showSorryMessage(const QString &title, const QString &details = QString::null);
 		virtual void showMessage(MessageType type, const QString &title, const QString &details);
+
+		/*! Interactively asks a question using KMessageBox.
+		 See KexiDB::MessageHandler::askQuestion() for details. */
+		virtual int askQuestion( const QString& message, 
+			KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+			const KGuiItem &buttonYes=KStdGuiItem::yes(), 
+			const KGuiItem &buttonNo=KStdGuiItem::no(),
+			const QString &dontShowAskAgainName = QString::null,
+			int options = KMessageBox::Notify );
 };
 
 #endif

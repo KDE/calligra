@@ -53,7 +53,7 @@ void KexiSimplePrintPreviewView::paintEvent( QPaintEvent *pe )
 	QPainter p;
 	p.begin(&pm, this);
 //! @todo only for screen!
-	p.fillRect(pe->rect(), QBrush(white));
+	p.fillRect(QRect(QPoint(0,0),pm.size()), QBrush(white));//pe->rect(), QBrush(white));
 	if (m_window->currentPage()>=0)
 		m_window->m_engine.paintPage(m_window->currentPage(), p);
 //		emit m_window->paintingPageRequested(m_window->currentPage(), p);
@@ -114,7 +114,11 @@ void KexiSimplePrintPreviewScrollView::setFullWidth()
 	double constantWidth = width()- KexiSimplePrintPreviewScrollView_MARGIN*6;
 	double heightForWidth = constantWidth * heightMM / widthMM;
 //	heightForWidth = QMIN(kapp->desktop()->height()*4/5, heightForWidth);
+	kdDebug() << "1: " << heightForWidth << endl;
+#if 0 //todo we can use this if we want to fix the height to width of the page
 	heightForWidth = QMIN(height(), heightForWidth);
+	kdDebug() << "2: " << heightForWidth << endl;
+#endif
 	constantWidth = heightForWidth * widthMM / heightMM;
 	widget->resize((int)constantWidth, (int)heightForWidth); //keep aspect
 	resizeContents(int(widget->width() + 2*KexiSimplePrintPreviewScrollView_MARGIN), 
@@ -127,6 +131,13 @@ void KexiSimplePrintPreviewScrollView::setFullWidth()
 	widget->repaint();
 }
 
+void KexiSimplePrintPreviewScrollView::setContentsPos(int x, int y)
+{
+//	kdDebug() << "############" << x << " " << y << " " << contentsX()<< " " <<contentsY() << endl;
+	if (x<0 || y<0) //to avoid endless loop on Linux
+		return;
+	QScrollView::setContentsPos(x,y);
+}
 
 //------------------
 
@@ -248,12 +259,12 @@ void KexiSimplePrintPreviewWindow::slotPageSetup()
 
 void KexiSimplePrintPreviewWindow::slotZoomInClicked()
 {
-	//todo
+	//! @todo
 }
 
 void KexiSimplePrintPreviewWindow::slotZoomOutClicked()
 {
-	//todo
+	//! @todo
 }
 
 void KexiSimplePrintPreviewWindow::slotFirstClicked()

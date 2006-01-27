@@ -96,7 +96,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		/*! Opens existing project using project data. 
 		 \return true on success */
-		bool open();
+		tristate open();
 
 		/*! Like open(). 
 		 \return true on success.
@@ -108,7 +108,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 If so, Kexi application can propose importing the database
 		 or linking it to parent project (the latter isn't yet implemented).
 		 For other types of errors the variable is set to true. */
-		bool open(bool &incompatibleWithKexi);
+		tristate open(bool &incompatibleWithKexi);
 
 		/*! Creates new, empty project using project data.
 		 If \a forceOverwrite is true, existing database project is silently overwritten.
@@ -261,8 +261,6 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 //		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
 
 	protected:
-//		bool			openConnection(KexiProjectConnectionData *connection);
-
 		/*! Creates connection using project data.
 		 \return true on success, otherwise false and appropriate error is set. */
 		bool createConnection();
@@ -272,7 +270,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		bool initProject();
 
 		//! Used in open() and open(bool&).
-		bool openInternal(bool *incompatibleWithKexi);
+		tristate openInternal(bool *incompatibleWithKexi);
 
 		/*! Kexi itself can define a number of internal database objects (mostly data structures), 
 		 usually tables for it's own purposes.

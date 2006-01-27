@@ -227,7 +227,7 @@ bool SQLiteCursor::drv_open()
 //	d->st = m_conn->driver()->escapeString( statement.local8Bit() );
 
 	if(! d->data) {
-		// this may as example be the case if SQLiteConnection::drv_useDatabase
+		// this may as example be the case if SQLiteConnection::drv_useDatabase()
 		// wasn't called before. Normaly sqlite_compile/sqlite3_prepare
 		// should handle it, but it crashes in in sqlite3SafetyOn at util.c:786
 		kdWarning() << "SQLiteCursor::drv_open(): Database handle undefined." << endl;

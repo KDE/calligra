@@ -134,8 +134,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 to recognize database Kexi-specific format. Set \a kexiCompatible to false
 		 if you're using native database (one that have no Kexi System tables).
 		 For file-based drivers, \a dbName should be equal to filename
-		 (the same as specified for ConnectionData). */
-		bool useDatabase( const QString &dbName, bool kexiCompatible = true );
+		 (the same as specified for ConnectionData). 
+		 \return true on success, false on failure. 
+		 If user has cancelled this action and \a cancelled is not 0, *cancelled is set to true. */
+		bool useDatabase( const QString &dbName, bool kexiCompatible = true, bool *cancelled = 0, 
+			MessageHandler* msgHandler = 0 );
 
 		/*! 
 		\brief Closes currently used database for this connection.
@@ -801,8 +804,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! For reimplemenation: creates new database using connection */
 		virtual bool drv_createDatabase( const QString &dbName = QString::null ) = 0;
 
-		/*! For reimplemenation: opens existing database using connection */
-		virtual bool drv_useDatabase( const QString &dbName = QString::null ) = 0;
+		/*! For reimplemenation: opens existing database using connection 
+		 \return true on success, false on failure and cancelled if user has cancelled this action. */
+		virtual bool drv_useDatabase( const QString &dbName = QString::null, bool *cancelled = 0, 
+			MessageHandler* msgHandler = 0 ) = 0;
 
 		/*! For reimplemenation: closes previously opened database 
 			using connection. */

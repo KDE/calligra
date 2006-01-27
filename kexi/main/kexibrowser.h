@@ -66,6 +66,12 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void updateItemName(KexiPart::Item& item, bool dirty);
 		void highlightItem(KexiPart::Item& item);
 
+		//! Sets by main window to disable actions that may try to modify the project.
+		//! Does not disable actions like opening objects.
+		void setReadOnly(bool set);
+
+		bool isReadOnly() const;
+
 	signals: 
 		void openItem( KexiPart::Item*, int viewMode );
 
@@ -134,6 +140,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		KexiSmallToolButton *m_newObjectToolButton, *m_deleteObjectToolButton;
 		bool m_singleClick : 1;
 		bool m_nameEndsWithAsterisk : 1;
+		bool m_readOnly : 1;
 };
 
 #endif

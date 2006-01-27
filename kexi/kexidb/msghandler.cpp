@@ -45,3 +45,18 @@ MessageHandler::~MessageHandler()
 {
 }
 
+int MessageHandler::askQuestion( const QString& message, 
+	KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+	const KGuiItem &buttonYes, 
+	const KGuiItem &buttonNo,
+	const QString &dontShowAskAgainName,
+	int options )
+{
+	Q_UNUSED(message);
+	Q_UNUSED(dlgType);
+	Q_UNUSED(buttonYes);
+	Q_UNUSED(buttonNo);
+	Q_UNUSED(dontShowAskAgainName);
+	Q_UNUSED(options);
+	return defaultResult;
+}

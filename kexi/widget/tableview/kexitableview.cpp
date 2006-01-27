@@ -910,7 +910,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	// draw selection background
 //	const bool has_focus = hasFocus() || viewport()->hasFocus() || m_popup->hasFocus();
 
-	const bool columnReadOnly = m_data->column(col)->readOnly();
+	const bool columnReadOnly = m_data->column(col)->isReadOnly();
 
 	const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
 		= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections 
@@ -1671,7 +1671,7 @@ void KexiTableView::createEditor(int row, int col, const QString& addText, bool 
 		return;
 	}
 
-	if (m_data->column(col)->readOnly()) {//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
+	if (m_data->column(col)->isReadOnly()) {//d->pColumnModes.at(d->numCols-1) & ColumnReadOnly)
 		kdDebug(44021) << "KexiTableView::createEditor(): COL IS READ ONLY!"<<endl;
 		return;
 	}

@@ -1366,7 +1366,7 @@ int KexiDataAwareObjectInterface::columnType(int col)
 bool KexiDataAwareObjectInterface::columnEditable(int col)
 {
     KexiTableViewColumn* c = m_data ? column(col) : 0;
-    return c ? (! c->readOnly()) : false;
+    return c ? (! c->isReadOnly()) : false;
 }
 
 int KexiDataAwareObjectInterface::rows() const

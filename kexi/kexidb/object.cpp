@@ -171,3 +171,21 @@ void Object::debugError()
 		KexiDBDbg << "KEXIDB OK." << endl;
 }
 
+int Object::askQuestion( const QString& message, 
+	KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+	const KGuiItem &buttonYes, 
+	const KGuiItem &buttonNo,
+	const QString &dontShowAskAgainName,
+	int options, 
+	MessageHandler* msgHandler )
+{
+	if (msgHandler)
+		return msgHandler->askQuestion(message, dlgType, defaultResult, buttonYes, buttonNo, 
+			dontShowAskAgainName, options);
+
+	if (m_msgHandler)
+		return m_msgHandler->askQuestion(message, dlgType, defaultResult, buttonYes, buttonNo, 
+			dontShowAskAgainName, options);
+
+	return defaultResult;
+}

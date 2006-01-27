@@ -74,7 +74,8 @@ class SQLiteConnection : public Connection
 			arg because for file-based engine (that has one database per connection)
 			it is defined during connection. If you pass it, 
 			database file name will be changed. */
-		virtual bool drv_useDatabase( const QString &dbName = QString::null );
+		virtual bool drv_useDatabase( const QString &dbName = QString::null, bool *cancelled = 0, 
+			MessageHandler* msgHandler = 0 );
 
 		virtual bool drv_closeDatabase();
 

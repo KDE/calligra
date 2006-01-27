@@ -594,6 +594,18 @@ void KexiBrowser::slotPageSetupForItem()
 		emit pageSetupForItem( item );
 }
 
+
+void KexiBrowser::setReadOnly(bool set)
+{
+	m_readOnly = set;
+	//todo
+}
+
+bool KexiBrowser::isReadOnly() const
+{
+	return m_readOnly;
+}
+
 //--------------------------------------------
 
 KexiBrowserListView::KexiBrowserListView(QWidget *parent)

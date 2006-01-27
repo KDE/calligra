@@ -75,14 +75,14 @@ extern "C" int kdemain(int argc, char *argv[])
 #endif
 
 	KexiMainWindowImpl *win = new KexiMainWindowImpl();
+	app.setMainWidget(win);
+	delete dummyWidget;
 
 	if (true != win->startup()) {
 		delete win;
 		return 1;
 	}
 
-	app.setMainWidget(win);
-	delete dummyWidget;
 	win->show();
 	app.processEvents();//allow refresh our app
 

@@ -116,8 +116,10 @@ KexiTableViewColumn::KexiTableViewColumn(
 		//todo: compute other auto-name?
 	}
 	init();
-	//setup column's readonly flag: true if this is parent table's field
-	m_readOnly = (query.masterTable()!=fieldinfo->field->table());
+	//setup column's readonly flag: 
+	// true if it's not from parent table's field or if the query itself is coming read-only connection
+	m_readOnly = (query.masterTable()!=fieldinfo->field->table())
+		|| (query.connection() && query.connection()->isReadOnly());
 //	kdDebug() << "KexiTableViewColumn: query.masterTable()==" 
 //		<< (query.masterTable() ? query.masterTable()->name() : "notable") << ", fieldinfo->field->table()=="
 //		<< (fieldinfo->field->table() ? fieldinfo->field->table()->name()  : "notable") << endl;
@@ -817,6 +819,11 @@ void KexiTableViewData::preloadAllRows()
 		if ((i % 1000) == 0)
 			qApp->processEvents( 1 );
 	}
+}
+
+bool KexiTableViewData::isReadOnly() const
+{
+	return m_readOnly || (m_cursor && m_cursor->connection()->isReadOnly());
 }
 
 #include "kexitableviewdata.moc"

@@ -554,7 +554,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		|| getAutoopenObjects(args, "edittext")
 		|| getAutoopenObjects(args, "new")
 		|| getAutoopenObjects(args, "print")
-		|| getAutoopenObjects(args, "printpreview");
+		|| getAutoopenObjects(args, "print-preview");
 
 	if (atLeastOneAOOFound && !openExisting) {
 		KMessageBox::information( 0, 

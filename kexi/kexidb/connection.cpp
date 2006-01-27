@@ -488,8 +488,10 @@ bool Connection::createDatabase( const QString &dbName )
 #undef createDatabase_CLOSE
 #undef createDatabase_ERROR
 
-bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
+bool Connection::useDatabase( const QString &dbName, bool kexiCompatible, bool *cancelled, MessageHandler* msgHandler )
 {
+	if (cancelled)
+		*cancelled = false;
 	kdDebug() << "Connection::useDatabase(" << dbName << "," << kexiCompatible <<")" << endl;
 	if (!checkConnected())
 		return false;
@@ -515,7 +517,9 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 
 	m_usedDatabase = "";
 
-	if (!drv_useDatabase( my_dbName )) {
+	if (!drv_useDatabase( my_dbName, cancelled, msgHandler )) {
+		if (cancelled && *cancelled)
+			return false;
 		QString msg(i18n("Opening database \"%1\" failed.").arg( my_dbName ));
 		if (error())
 			setError( this, msg );

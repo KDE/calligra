@@ -800,14 +800,15 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 
 	const bool have_dialog = d->curDialog;
 	const bool dialog_dirty = d->curDialog && d->curDialog->dirty();
+	const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->isReadOnly();
 
 	//PROJECT MENU
-	d->action_save->setEnabled(have_dialog && dialog_dirty);
-	d->action_save_as->setEnabled(have_dialog);
+	d->action_save->setEnabled(have_dialog && dialog_dirty && !readOnly);
+	d->action_save_as->setEnabled(have_dialog && !readOnly);
 	d->action_project_properties->setEnabled(d->prj);
 	d->action_close->setEnabled(d->prj);
 	d->action_project_relations->setEnabled(d->prj);
-	d->action_project_import_data_table->setEnabled(d->prj);
+	d->action_project_import_data_table->setEnabled(d->prj && !readOnly);
 	d->action_project_export_data_table->setEnabled( 
 		d->curDialog && d->curDialog->part()->info()->isDataExportSuppored() 
 		&& !d->curDialog->neverSaved() );
@@ -820,7 +821,7 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_project_print_setup->setEnabled( printingActionsEnabled );
 
 	//EDIT MENU
-	d->action_edit_paste_special_data_table->setEnabled(d->prj);
+	d->action_edit_paste_special_data_table->setEnabled(d->prj && !readOnly);
 
 //! @todo "copy special" is currently enabled only for data view mode; 
 //! 	what about allowing it to enable in design view for "kexi/table" ?
@@ -923,7 +924,13 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 	}
 	createKexiProject( newProjectData );
 	bool incompatibleWithKexi;
-	if (!d->prj->open(incompatibleWithKexi)) {
+	tristate res = d->prj->open(incompatibleWithKexi);
+	if (~res) {
+		delete d->prj;
+		d->prj = 0;
+		return cancelled;
+	}
+	else if (!res) {
 		delete d->prj;
 		d->prj = 0;
 		if (incompatibleWithKexi) {
@@ -951,13 +958,26 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 	initNavigator();
 //	initPropertyEditor();
 	Kexi::recentProjects().addProjectData( newProjectData );
+	updateReadOnlyState();
 	invalidateActions();
 //	d->disableErrorMessages = true;
 	enableMessages( false );
-	d->statusBar->setReadOnlyFlag( d->prj->dbConnection()->isReadOnly() );
 
 	QTimer::singleShot(1, this, SLOT(slotAutoOpenObjectsLater()));
 	return true;
+}
+
+void KexiMainWindowImpl::updateReadOnlyState()
+{
+	const bool readOnly = d->prj && d->prj->dbConnection() && d->prj->dbConnection()->isReadOnly();
+	d->statusBar->setReadOnlyFlag( readOnly );
+	// update "insert ....." actions for every part
+	KActionCollection *ac = actionCollection();
+	for (KexiPart::PartInfoListIterator it(*Kexi::partManager().partInfoList()); it.current(); ++it) {
+		KAction *a = ac->action( KexiPart::nameForCreateAction( *it.current() ) );
+		if (a)
+			a->setEnabled(!readOnly);
+	}
 }
 
 void KexiMainWindowImpl::slotAutoOpenObjectsLater()
@@ -1000,7 +1020,7 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 		if (!item) {
 			not_found_msg += "<li>";
 			QString taskName;
-			if (info["action"]=="printpreview")
+			if (info["action"]=="print-preview")
 				taskName = i18n("making print preview for");
 			else if (info["action"]=="print")
 				taskName = i18n("printing");
@@ -1027,7 +1047,7 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 			}
 			continue;
 		}
-		else if (info["action"]=="printpreview") {
+		else if (info["action"]=="print-preview") {
 			tristate res = printPreviewForItem(item);
 			if (false == res) {
 				not_found_msg += "<li>";
@@ -1186,11 +1206,10 @@ tristate KexiMainWindowImpl::closeProject()
 
 //	Kexi::partManager().unloadAllParts();
 
+	updateReadOnlyState();
 	invalidateActions();
 	if(!d->final)
 		updateAppCaption();
-
-	d->statusBar->setReadOnlyFlag( false );
 
 	emit projectClosed();
 	return true;
@@ -3600,8 +3619,12 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 	createKexiProject(projectData); //initialize project
 	d->prj->setFinal(true);         //announce that we are in fianl mode
 
-	if(!d->prj->open())             //try to open database
+	tristate res = d->prj->open();             //try to open database
+	if (!res || ~res) {
+		delete d->prj;
+		d->prj = 0;
 		return false;
+	}
 
 	KexiDB::TableSchema *sch = d->prj->dbConnection()->tableSchema("kexi__final");
 	QString err_msg = i18n("Could not start project \"%1\" in Final Mode.")

@@ -29,4 +29,4 @@ INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/main/printing \
 	-I$(top_srcdir)/lib/kofficecore \
 	-I$(top_builddir)/kexi/widget $(all_includes)
 
-KDE_CXXFLAGS += -DSIMPLE_KOLIBS -DKOFFICECORE_EXPORT= -DKOFFICEUI_EXPORT=
+#KDE_CXXFLAGS += -DSIMPLE_KOLIBS -DKOFFICECORE_EXPORT= -DKOFFICEUI_EXPORT=

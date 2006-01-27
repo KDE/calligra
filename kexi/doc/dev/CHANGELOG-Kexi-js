@@ -10,12 +10,20 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
-2006-01-25
+2006-01-25,26
 KexiDB
 - SQLite3 driver & kexisql3: fixes for read-only opening
 Main Window
 - fixed usability: read-only flag of the db connection is now visible
   in the statusbar
+- added question about for opening db file as read-only when it is already opened
+- disable actions that require write access to the db if it's opened as readonly
+Startup
+- fixed support for "-print-preview" command line option
+Simple Printing
+- enlarge default zoom
+Property Editor
+- fixed editor refreshing after contents loading
 
 2006-01-24
 KexiDB
@@ -176,7 +184,7 @@ Table Designer
 Kexi Core 
 - possibility of adding non-db-aware windows/tabs in Kexi
 General
-- added --print and --printpreview command line options
+- added --print and --print-preview command line options
 - (temporary) mini-kolibs added to get print settings stuff and remain 
   independent on kolibs
 

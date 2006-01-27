@@ -1470,7 +1470,7 @@ void KexiQueryDesignerGuiEditor::updatePropertiesVisibility(KoProperty::Set& set
 	set["caption"].setVisible( !asterisk );
 #endif
 	set["alias"].setVisible( !asterisk );
-#ifdef KEXI_NO_UNFINISHED
+#ifndef KEXI_NO_UNFINISHED
 	set["sorting"].setVisible( !asterisk );
 #endif
 	propertySetReloaded(true);

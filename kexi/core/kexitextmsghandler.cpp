@@ -54,3 +54,4 @@ KexiTextMessageHandler::showMessage(MessageType type,
 	*m_messageTarget = msg;
 	*m_detailsTarget = details;
 }
+

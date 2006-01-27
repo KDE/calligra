@@ -115,7 +115,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 from the data structure.
 		 Note: it is not allowed to force readOnly off
 		 when internal data is readOnly - in that case the method does nothing.
-		 You can check internal data flag calling data()->readOnly().
+		 You can check internal data flag calling data()->isReadOnly().
 
 		 If \a set is true, insertingEnabled flag will be cleared automatically.
 		 \sa isInsertingEnabled()

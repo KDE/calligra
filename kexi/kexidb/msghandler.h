@@ -67,10 +67,26 @@ class KEXI_DB_EXPORT MessageHandler
 		 See KexiMainWindowImpl::renameObject() implementation for example. */
 		inline void enableMessages(bool enable) { m_enableMessages = enable; }
 
+		/*! Shows error message with \a title (it is not caption) and details. */
 		virtual void showErrorMessage(const QString &title, 
 			const QString &details = QString::null) = 0;
 		
+		/*! Shows error message with \a msg text. Existing error message from \a obj object
+		 is also copied, if present. */
 		virtual void showErrorMessage(KexiDB::Object *obj, const QString& msg = QString::null) = 0;
+
+		/*! Interactively asks a question. For GUI version, KMessageBox class is used.
+		 See KMessageBox documentation for explanation of the parameters.
+		 \a defaultResult is returned in case when no message handler is installed. 
+		 \a message should be i18n's string. 
+		 Value from KMessageBox::ButtonCode enum is returned.
+		 Reimplement this. This implementation does nothing, just returns \a defaultResult. */
+		virtual int askQuestion( const QString& message, 
+			KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+			const KGuiItem &buttonYes=KStdGuiItem::yes(), 
+			const KGuiItem &buttonNo=KStdGuiItem::no(),
+			const QString &dontShowAskAgainName = QString::null,
+			int options = KMessageBox::Notify );
 
 	protected:
 		QGuardedPtr<QWidget> m_messageHandlerParentWidget;

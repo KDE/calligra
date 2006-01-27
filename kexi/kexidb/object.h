@@ -21,7 +21,8 @@
 #define KEXIDB_OBJECT_H
 
 #include <kexidb/error.h>
-
+#include <kmessagebox.h>
+#include <kstdguiitem.h>
 #include <qstring.h>
 
 namespace KexiDB {
@@ -120,14 +121,12 @@ class KEXI_DB_EXPORT Object
 		virtual void setError(int code = ERR_OTHER, const QString &msg = QString::null );
 
 		/*! \overload void setError(int code,  const QString &msg = QString::null )
-		
 			Sets error code to ERR_OTHER. Use this if you don't care about 
 			setting error code.
 		*/
 		virtual void setError( const QString &msg );
 
-		/* \overload void setError(const QString &msg)
-		
+		/*! \overload void setError(const QString &msg)
 			Also sets \a title. */
 		virtual void setError( const QString &title, const QString &msg );
 		
@@ -138,6 +137,17 @@ class KEXI_DB_EXPORT Object
 		 with custom error \a code. */
 		virtual void setError( KexiDB::Object *obj, int code, 
 			const QString& prependMessage = QString::null );
+
+		/*! Interactively asks a question. Console or GUI can be used for this, 
+		 depending on installed message handler. For GUI version, KMessageBox class is used.
+		 See KexiDB::MessageHandler::askQuestion() for details. */
+		virtual int askQuestion( const QString& message, 
+			KMessageBox::DialogType dlgType, KMessageBox::ButtonCode defaultResult,
+			const KGuiItem &buttonYes=KStdGuiItem::yes(), 
+			const KGuiItem &buttonNo=KStdGuiItem::no(),
+			const QString &dontShowAskAgainName = QString::null,
+			int options = KMessageBox::Notify,
+			MessageHandler* msgHandler = 0 );
 
 		/*! Clears number of last server operation's result stored
 		 as a single integer. Formally, this integer should be set to value 
