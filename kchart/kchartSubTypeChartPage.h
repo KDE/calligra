@@ -39,12 +39,12 @@ class KChartSubTypeChartPage : public QWidget
 
 public:
     KChartSubTypeChartPage( KChartParams* params, QWidget* parent ) :
-        QWidget( parent ), _params( params ) {}
+        QWidget( parent ), m_params( params ) {}
     virtual void init() = 0;
     virtual void apply() = 0;
 
 protected:
-    KChartParams* _params;
+    KChartParams* m_params;
 };
 
 class KChartLineSubTypeChartPage : public KChartSubTypeChartPage

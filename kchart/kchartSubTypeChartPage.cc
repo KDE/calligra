@@ -70,7 +70,7 @@ KChartHiloSubTypeChartPage::KChartHiloSubTypeChartPage( KChartParams* params,
 
 void KChartHiloSubTypeChartPage::init()
 {
-    switch( _params->hiLoChartSubType() ) {
+    switch( m_params->hiLoChartSubType() ) {
     case KDChartParams::HiLoNormal:
         normal->setChecked( true );
         break;
@@ -88,7 +88,7 @@ void KChartHiloSubTypeChartPage::init()
         }
     }
 
-    slotChangeSubType( _params->hiLoChartSubType() );
+    slotChangeSubType( m_params->hiLoChartSubType() );
 }
 
 void KChartHiloSubTypeChartPage::slotChangeSubType( int type )
@@ -111,11 +111,11 @@ void KChartHiloSubTypeChartPage::slotChangeSubType( int type )
 void KChartHiloSubTypeChartPage::apply()
 {
     if( normal->isChecked() )
-        _params->setHiLoChartSubType( KDChartParams::HiLoNormal );
+	m_params->setHiLoChartSubType( KDChartParams::HiLoNormal );
     else if( stacked->isChecked() )
-        _params->setHiLoChartSubType( KDChartParams::HiLoClose );
+        m_params->setHiLoChartSubType( KDChartParams::HiLoClose );
     else if( percent->isChecked() )
-        _params->setHiLoChartSubType( KDChartParams::HiLoOpenClose );
+        m_params->setHiLoChartSubType( KDChartParams::HiLoOpenClose );
     else {
         kdDebug( 35001 ) << "Error in groupbutton" << endl;
     }
@@ -150,7 +150,7 @@ KChartAreaSubTypeChartPage::KChartAreaSubTypeChartPage( KChartParams* params,
 
 void KChartAreaSubTypeChartPage::init()
 {
-    switch( _params->areaChartSubType() ) {
+    switch( m_params->areaChartSubType() ) {
     case KDChartParams::AreaNormal:
         normal->setChecked( true );
         break;
@@ -168,7 +168,7 @@ void KChartAreaSubTypeChartPage::init()
         }
     }
 
-    slotChangeSubType( _params->areaChartSubType() );
+    slotChangeSubType( m_params->areaChartSubType() );
 }
 
 void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
@@ -191,11 +191,11 @@ void KChartAreaSubTypeChartPage::slotChangeSubType( int type )
 void KChartAreaSubTypeChartPage::apply()
 {
     if( normal->isChecked() )
-        _params->setAreaChartSubType( KDChartParams::AreaNormal );
+        m_params->setAreaChartSubType( KDChartParams::AreaNormal );
     else if( stacked->isChecked() )
-        _params->setAreaChartSubType( KDChartParams::AreaStacked );
+        m_params->setAreaChartSubType( KDChartParams::AreaStacked );
     else if( percent->isChecked() )
-        _params->setAreaChartSubType( KDChartParams::AreaPercent );
+        m_params->setAreaChartSubType( KDChartParams::AreaPercent );
     else {
         kdDebug( 35001 ) << "Error in groupbutton" << endl;
     }
@@ -240,7 +240,7 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
 void KChartBarSubTypeChartPage::init()
 {
     // SUM is for areas only and therefore not configurable here.
-    switch( _params->barChartSubType() ) {
+    switch( m_params->barChartSubType() ) {
     case KDChartParams::BarNormal:
 	normal->setChecked( true );
         break;
@@ -257,7 +257,9 @@ void KChartBarSubTypeChartPage::init()
         }
     }
 
-    slotChangeSubType( _params->barChartSubType() );
+    m_numLines->setValue( m_params->barlinesNumLines() );
+
+    slotChangeSubType( m_params->barChartSubType() );
 }
 
 
@@ -280,14 +282,17 @@ void KChartBarSubTypeChartPage::slotChangeSubType( int type )
 void KChartBarSubTypeChartPage::apply()
 {
     if( normal->isChecked() ) {
-        _params->setBarChartSubType( KDChartParams::BarNormal );
+        m_params->setBarChartSubType( KDChartParams::BarNormal );
     } else if( stacked->isChecked() ) {
-        _params->setBarChartSubType( KDChartParams::BarStacked );
+        m_params->setBarChartSubType( KDChartParams::BarStacked );
     } else if( percent->isChecked() )	{
-        _params->setBarChartSubType( KDChartParams::BarPercent );
+        m_params->setBarChartSubType( KDChartParams::BarPercent );
     } else {
         kdDebug( 35001 ) << "Error in groupbutton" << endl;
     }
+
+    // FIXME: Error controls.
+    m_params->setBarlinesNumLines( m_numLines->value() );
 }
 
 KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
@@ -318,7 +323,7 @@ KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,
 
 void KChartLineSubTypeChartPage::init()
 {
-    switch( _params->lineChartSubType() ) {
+    switch( m_params->lineChartSubType() ) {
     case KDChartParams::LineNormal:
         normal->setChecked( true );
         break;
@@ -336,7 +341,7 @@ void KChartLineSubTypeChartPage::init()
         }
     }
 
-    slotChangeSubType( _params->lineChartSubType() );
+    slotChangeSubType( m_params->lineChartSubType() );
 }
 
 void KChartLineSubTypeChartPage::slotChangeSubType( int type )
@@ -359,11 +364,11 @@ void KChartLineSubTypeChartPage::slotChangeSubType( int type )
 void KChartLineSubTypeChartPage::apply()
 {
     if( normal->isChecked() )
-        _params->setLineChartSubType( KDChartParams::LineNormal );
+        m_params->setLineChartSubType( KDChartParams::LineNormal );
     else if( stacked->isChecked() )
-        _params->setLineChartSubType( KDChartParams::LineStacked );
+        m_params->setLineChartSubType( KDChartParams::LineStacked );
     else if( percent->isChecked() )
-        _params->setLineChartSubType( KDChartParams::LinePercent );
+        m_params->setLineChartSubType( KDChartParams::LinePercent );
     else {
         kdDebug( 35001 ) << "Error in groupbutton" << endl;
     }
@@ -397,7 +402,7 @@ KChartPolarSubTypeChartPage::KChartPolarSubTypeChartPage( KChartParams* params,
 
 void KChartPolarSubTypeChartPage::init()
 {
-    switch( _params->polarChartSubType() ) {
+    switch( m_params->polarChartSubType() ) {
     case KDChartParams::PolarNormal:
         normal->setChecked( true );
         break;
@@ -415,7 +420,7 @@ void KChartPolarSubTypeChartPage::init()
         }
     }
 
-    slotChangeSubType( _params->lineChartSubType() );
+    slotChangeSubType( m_params->lineChartSubType() );
 }
 
 void KChartPolarSubTypeChartPage::slotChangeSubType( int type )
@@ -438,11 +443,11 @@ void KChartPolarSubTypeChartPage::slotChangeSubType( int type )
 void KChartPolarSubTypeChartPage::apply()
 {
     if( normal->isChecked() )
-        _params->setPolarChartSubType( KDChartParams::PolarNormal );
+        m_params->setPolarChartSubType( KDChartParams::PolarNormal );
     else if( stacked->isChecked() )
-        _params->setPolarChartSubType( KDChartParams::PolarStacked );
+        m_params->setPolarChartSubType( KDChartParams::PolarStacked );
     else if( percent->isChecked() )
-        _params->setPolarChartSubType( KDChartParams::PolarPercent );
+        m_params->setPolarChartSubType( KDChartParams::PolarPercent );
     else {
         kdDebug( 35001 ) << "Error in groupbutton" << endl;
     }

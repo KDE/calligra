@@ -57,19 +57,20 @@ class KChartParams : public KDChartParams
 	DataColumns = 1
     } DataDirection;
 
+
     KChartParams();
     ~KChartParams();
 
     // Reimplementation of selected KDChartParams methods
     // FIXME: Enhance for BarLines
-    ChartType  chartType() const { return (ChartType) KDChartParams::chartType(); }
+    ChartType  chartType() const            { return m_chartType; }
     void       setChartType( ChartType _type ) {
-      if ( _type == BarLines )
-	  /* NOTHING YET */; // FIXME
-      else
-	  KDChartParams::setChartType( (KDChartParams::ChartType) _type );
+	m_chartType = _type;
+	if ( _type != BarLines )
+	    KDChartParams::setChartType( (KDChartParams::ChartType) _type );
     }
 
+    // Data in rows or columns.
     DataDirection  dataDirection() const    { return m_dataDirection; }
     void           setDataDirection( DataDirection _dir ) {
 	m_dataDirection = _dir;
@@ -79,6 +80,48 @@ class KChartParams : public KDChartParams
     ChartType  stringToChartType( const QString& string );
 
 
+    // ----------------------------------------------------------------
+    // BARLINES CHART-SPECIFIC
+
+    enum BarlinesChartSubType { 
+	BarlinesNormal, 
+	BarlinesStacked,
+	BarlinesPercent
+    };
+
+
+public slots:
+    void setBarlinesChartSubType( BarlinesChartSubType _barlinesChartSubType ) {
+	m_barlinesChartSubType = _barlinesChartSubType;
+	emit changed();
+    }
+
+    BarlinesChartSubType barlinesChartSubType() const {
+	return m_barlinesChartSubType;
+    }
+
+    void setBarlinesNumLines( int _numLines ) {
+	m_barlinesNumLines = _numLines;
+	emit changed();
+    }
+
+    int barlinesNumLines() const {
+	return m_barlinesNumLines;
+    }
+
+
+    static QString barlinesChartSubTypeToString( BarlinesChartSubType type );
+    static BarChartSubType stringToBarlinesChartSubType( const QString& string );
+
+ private:
+    BarlinesChartSubType  m_barlinesChartSubType;
+    int                   m_barlinesNumLines;
+
+
+    // ----------------------------------------------------------------
+
+ public:
+
     DCOPObject  *dcopObject();
 
     bool loadOasis( const QDomElement& chartElem,
@@ -86,9 +129,10 @@ class KChartParams : public KDChartParams
                     QString& errorMessage );
 
   private:
-    //ChartType  m_chartType;
+    ChartType      m_chartType;
     DataDirection  m_dataDirection; // Rows or Columns
 
+    
     DCOPObject  *m_dcop;
 };
 

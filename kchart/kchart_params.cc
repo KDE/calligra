@@ -33,6 +33,10 @@ namespace KChart
 KChartParams::KChartParams()
     : KDChartParams()
 {
+    // Default values for subtypes.
+    m_barlinesChartSubType = BarlinesNormal;
+    m_barlinesNumLines     = 1;
+
     m_dcop = 0;
     //dcopObject(); // build it
 }
