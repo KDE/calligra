@@ -468,9 +468,16 @@ fill with background color, 3 for fill with pattern.</para></listitem>
 </listitem>
 
 <listitem><para>Object: <classname>Iterator</classname></para><para>
-This object allows you to change pixel values one by one.</para>
-<itemizedlist>
+This object allows you to change pixel values one by one.
+The name of some functions depends on the colorspace, for instance, if the
+colorspace of the layer is RGB, you will have <function>setR</function>,
+<function>setG</function> and <function>setB</function>, and for
+CMYK: <function>setC</function>, <function>setM</function>,
+<function>setY</function> and <function>setK</function>. In the documentation
+below we will assume that the colorspace is called ABC, with three channels:
+A, B and C.</para>
 
+<itemizedlist>
 <listitem><para>Functions: <function>setA</function>,
 <function>setB</function>, <function>setC</function></para><para>
 Those functions take one argument: the new value of one of the channels of
