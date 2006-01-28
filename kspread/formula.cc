@@ -392,12 +392,12 @@ Formula::~Formula()
   delete d;
 }
 
-Cell* Formula::cell()
+Cell* Formula::cell() const
 {
   return d->cell;
 }  
 
-Sheet* Formula::sheet()
+Sheet* Formula::sheet() const
 {
   return d->sheet;
 }  

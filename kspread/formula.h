@@ -258,11 +258,11 @@ class Formula
     /**
      * Returns the cell which owns this formula.
      */
-    Sheet* sheet();
+    Sheet* sheet() const;
     /**
      * Returns the cell which owns this formula.
      */
-    Cell* cell();
+    Cell* cell() const;
     
     /**
      * Sets the expression for this formula.

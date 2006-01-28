@@ -416,17 +416,12 @@ QString Sheet::sheetName() const
   return d->name;
 }
 
-Map* Sheet::workbook()
+Map* Sheet::workbook() const
 {
   return d->workbook;
 }
 
-Doc* Sheet::doc()
-{
-  return d->workbook->doc();
-}
-
-const Doc* Sheet::doc() const
+Doc* Sheet::doc() const
 {
   return d->workbook->doc();
 }

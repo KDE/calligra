@@ -312,12 +312,7 @@ Cell::Cell( Sheet * _sheet, Style * _style,  int _column, int _row )
   clearAllErrors();
 }
 
-Format* Cell::format()
-{
-  return d->format;
-}
-
-const Format* Cell::format() const
+Format* Cell::format() const
 {
   return d->format;
 }

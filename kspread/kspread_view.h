@@ -195,7 +195,7 @@ public:
     /** Destroys the view */
     ~View();
 
-    Doc* doc();
+    Doc* doc() const;
 
     /** Returns the canvas of the view */
     Canvas* canvasWidget() const;

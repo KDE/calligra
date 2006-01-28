@@ -66,7 +66,7 @@ public:
    */
   virtual ~Map();
 
-  Doc* doc();
+  Doc* doc() const;
 
   QDomElement save( QDomDocument& doc );
 

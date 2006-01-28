@@ -115,14 +115,8 @@ public:
     Canvas (View *_view);
     ~Canvas( );
 
-    View* view();
-    Doc* doc();
-
-    /**
-     * Called from @ref View to complete the construction. Has to
-     * be called before any other method on this object may be invoced.
-     */
-    void init();
+    View* view() const;
+    Doc* doc() const;
 
     KSpread::EditWidget* editWidget() const;
     KSpread::CellEditor* editor() const;
@@ -193,7 +187,7 @@ public:
     /**
      * @return a rect indicating which cell range is currently visible onscreen
      */
-    QRect visibleCells();
+    QRect visibleCells() const;
 
     /**
      * @return a pointer to the active sheet
@@ -223,7 +217,7 @@ public:
      *
      * @param location the cell coordinates to scroll to
      */
-    void scrollToCell(QPoint location);
+    void scrollToCell(QPoint location) const;
     /**
      * Chooses the correct EditorType by looking at
      * the current cells value. By default CellEditor is chosen.

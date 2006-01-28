@@ -1891,7 +1891,7 @@ View::~View()
     delete d;
 }
 
-Doc* View::doc()
+Doc* View::doc() const
 {
   return d->doc;
 }

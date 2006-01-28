@@ -229,9 +229,8 @@ public:
      */
     bool setSheetName( const QString& name, bool init = false, bool makeUndo=true );
 
-    Map* workbook();
-    Doc* doc();
-    const Doc* doc() const;
+    Map* workbook() const;
+    Doc* doc() const;
 
     /**
      * Saves the sheet and all it's children in XML format

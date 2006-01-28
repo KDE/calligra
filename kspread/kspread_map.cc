@@ -61,7 +61,7 @@ Map::~Map()
     delete m_dcop;
 }
 
-Doc* Map::doc()
+Doc* Map::doc() const
 {
   return m_doc;
 }

@@ -265,12 +265,12 @@ Canvas::~Canvas()
   delete d;
 }
 
-KSpread::View* Canvas::view()
+KSpread::View* Canvas::view() const
 {
   return d->view;
 }
 
-Doc* Canvas::doc()
+Doc* Canvas::doc() const
 {
   return d->view->doc();
 }
@@ -453,7 +453,7 @@ void Canvas::endChoose()
 
   d->chooseCell = false;
 
-  Sheet *sheet=d->view->doc()->map()->findSheet(choice()->sheet()->sheetName());
+  Sheet *sheet = choice()->sheet();
   if (sheet)
   {
     d->view->setActiveSheet(sheet);
@@ -590,7 +590,7 @@ void Canvas::validateSelection()
 }
 
 
-void Canvas::scrollToCell(QPoint location)
+void Canvas::scrollToCell(QPoint location) const
 {
   Sheet* sheet = activeSheet();
   if (sheet == NULL)
@@ -3814,7 +3814,7 @@ void Canvas::equalizeColumn()
   d->view->hBorderWidget()->equalizeColumn(size);
 }
 
-QRect Canvas::visibleCells()
+QRect Canvas::visibleCells() const
 {
   KoRect unzoomedRect = d->view->doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
   unzoomedRect.moveBy( xOffset(), yOffset() );

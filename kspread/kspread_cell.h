@@ -201,9 +201,7 @@ public:
     Formula *formula () const;
 
     /** Returns the format object of this cell */
-    Format* format();
-    /** Returns the format object of this cell */
-    const Format* format() const;
+    Format* format() const;
 
     /**
      * Returns the value that this cell holds. It could be from the user
