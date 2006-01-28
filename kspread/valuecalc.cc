@@ -512,9 +512,9 @@ Value ValueCalc::round (const Value &a, int digits)
   if (digits < 0)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
-  
-  val = Value (::round (converter->asFloat (val).asFloat()));
-  
+
+  val = Value (int(converter->asFloat (val).asFloat()+0.5));
+
   if (digits > 0)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
