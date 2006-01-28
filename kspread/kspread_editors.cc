@@ -156,6 +156,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
             {
                 case Token::LeftPar:
                 case Token::RightPar:
+                    //Check where this brace is in relation to the cursor and highlight it if necessary.
                     handleBrace( i );
                     break;
                 default:
@@ -180,21 +181,33 @@ void FormulaEditorHighlighter::handleBrace( uint index )
   int opType = token.asOperator();
   bool highlightBrace=false;
 
+  //Check where the cursor is in relation to this left or right parenthesis token.
+  //Only one pair of braces should be highlighted at a time, and if the cursor
+  //is between two braces, the inner-most pair should be highlighted.
+  
   if ( opType == Token::LeftPar )
   {
-    if ( distance == 1 )
+    //If cursor is directly to the left of this left brace, highlight it
+    if ( distance == 1 ) 
       highlightBrace=true;
     else
-      if (distance==2)
-        if ( (index == d->tokens.count()-1) || ( d->tokens.at(index+1).asOperator() != Token::LeftPar) )
+        //Cursor is directly to the right of this left brace, highlight it unless
+        //there is another left brace to the right (in which case that should be highlighted instead as it 
+        //is the inner-most brace)
+        if (distance==2) 
+            if ( (index == d->tokens.count()-1) || ( d->tokens.at(index+1).asOperator() != Token::LeftPar) )
           highlightBrace=true;
 
   }
   else
   {
+    //If cursor is directly to the right of this right brace, highlight it
     if ( distance == 2 )
       highlightBrace=true;
     else
+        //Cursor is directly to the left of this right brace, so highlight it unless
+        //there is another right brace to the left (in which case that should be highlighted instead as it
+        //is the inner-most brace)
       if ( distance == 1 )
         if ( (index == 0) || (d->tokens.at(index-1).asOperator() != Token::RightPar) )
           highlightBrace=true;
@@ -223,6 +236,9 @@ int FormulaEditorHighlighter::findMatchingBrace(int pos)
     
     Tokens tokens = d->tokens;
     
+    //If this is a left brace we need to step forwards through the text to find the matching right brace,
+    //otherwise, it is a right brace so we need to step backwards through the text to find the matching left
+    //brace.
     if (tokens.at(pos).asOperator() == Token::LeftPar)
         step = 1;
     else

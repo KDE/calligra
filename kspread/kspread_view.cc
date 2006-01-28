@@ -6989,8 +6989,10 @@ void View::slotChildSelected( KoDocumentChild* /*ch*/ )
 //     }
 //   }
 
+  
   doc()->emitBeginOperation( false );
   d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
+
   doc()->emitEndOperation();
   paintUpdates();
 }
@@ -7008,6 +7010,7 @@ void View::slotChildUnselected( KoDocumentChild* )
 //     deleteEditor( true );
 //   }
 
+   
   doc()->emitBeginOperation( false );
   d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0), QPoint(KS_colMax, KS_rowMax)));
   doc()->emitEndOperation();

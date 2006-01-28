@@ -8067,7 +8067,9 @@ void Sheet::setRegionPaintDirty( Region const & region )
 
 void Sheet::setRegionPaintDirty( QRect const & range )
 {
-  d->paintDirtyList.add(range);
+
+    d->paintDirtyList.add(range);
+
 }
 
 void Sheet::clearPaintDirtyData()

@@ -2702,9 +2702,25 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
         QPen const & rightPen, QPen const & bottomPen,
         QPen const & leftPen, QPen const & topPen )
 {
+    /*
+        *** Notes about optimisation ***
+        
+        This function was painting the top , left , right & bottom lines in almost all cells previously, contrary to what the comment
+        below says should happen.  There doesn't appear to be a UI option to enable or disable showing of the grid when printing at the moment,
+        so I have disabled drawing of right and bottom borders for all cells.
+        
+        I also couldn't work out under what conditions the variables dt / db would come out as anything other than 0 in the code
+        for painting the various borders.  The effTopBorderPen / effBottomBorderPen calls were taking up a lot of time
+        according some profiling I did.  If that code really is necessary, we need to find a more efficient way of getting the widths 
+        than grabbing the whole QPen object and asking it.
+        
+        
+        --Robert Knight (robertknight@gmail.com)
+    */
   Doc* doc = sheet()->doc();
 
   Sheet::LayoutDirection sheetDir =  format()->sheet()->layoutDirection();
+  bool paintingToExternalDevice = painter.device()->isExtDev();
 
   // Each cell is responsible for drawing it's top and left portions
   // of the "default" grid. --Or not drawing it if it shouldn't be
@@ -2713,17 +2729,21 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
   bool paintTop;
   bool paintLeft;
-  bool paintBottom;
-  bool paintRight;
+  bool paintBottom=false;
+  bool paintRight=false;
 
   paintLeft   = ( paintBorderLeft && leftPen.style() == Qt::NoPen
-      && sheet()->getShowGrid() );
+      && sheet()->getShowGrid() && sheetDir==Sheet::LeftToRight );
   paintRight  = ( paintBorderRight && rightPen.style() == Qt::NoPen
-      && sheet()->getShowGrid() );
+      && sheet()->getShowGrid() && sheetDir==Sheet::RightToLeft );
   paintTop    = ( paintBorderTop && topPen.style() == Qt::NoPen
       && sheet()->getShowGrid() );
-  paintBottom = ( paintBorderBottom && sheet()->getShowGrid()
-                  && bottomPen.style() == Qt::NoPen );
+//  paintBottom = ( paintBorderBottom && sheet()->getShowGrid()
+//                  && bottomPen.style() == Qt::NoPen );
+
+   
+   //Set the single-pixel with pen for drawing the borders with.
+   painter.setPen( QPen( sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
   // If there are extra cells, there might be more conditions.
   if (d->hasExtra()) {
@@ -2751,6 +2771,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     int dt = 0;
     int db = 0;
 
+    #if 0
     if ( cellRef.x() > 1 ) {
       Cell  *cell_west = format()->sheet()->cellAt( cellRef.x() - 1,
                 cellRef.y() );
@@ -2762,12 +2783,11 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
       if ( b.style() != Qt::NoPen )
         db = ( t.width() / 2);
     }
-
-    painter.setPen( QPen( sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
+    #endif
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() ) {
+    if ( paintingToExternalDevice ) {
       if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.right() ) ),
                           doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
@@ -2792,12 +2812,53 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                           doc->zoomItY( cellRect.bottom() - db ) );
     }
   }
+  
+
+  // The top border.
+  if ( paintTop ) {
+    int dl = 0;
+    int dr = 0;
+    
+    #if 0
+    if ( cellRef.y() > 1 ) {
+      Cell  *cell_north = format()->sheet()->cellAt( cellRef.x(),
+                 cellRef.y() - 1 );
+
+      QPen l = cell_north->effLeftBorderPen(  cellRef.x(), cellRef.y() - 1 );
+      QPen r = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
+
+      if ( l.style() != Qt::NoPen )
+        dl = ( l.width() - 1 ) / 2 + 1;
+      if ( r.style() != Qt::NoPen )
+        dr = r.width() / 2;
+    }
+    #endif
+
+    
+
+    // If we are on paper printout, we limit the length of the lines.
+    // On paper, we always have full cells, on screen not.
+    if ( paintingToExternalDevice ) {
+      painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() + dl ) ),
+                        doc->zoomItY( QMAX( rect.top(),    cellRect.y() ) ),
+                        doc->zoomItX( QMIN( rect.right(),  cellRect.right() - dr ) ),
+                        doc->zoomItY( QMIN( rect.bottom(), cellRect.y() ) ) );
+    }
+    else {
+      painter.drawLine( doc->zoomItX( cellRect.x() + dl ),
+                        doc->zoomItY( cellRect.y() ),
+                        doc->zoomItX( cellRect.right() - dr ),
+                        doc->zoomItY( cellRect.y() ) );
+    }
+  }
+  
 
   // The right border.
   if ( paintRight ) {
     int dt = 0;
     int db = 0;
 
+    #if 0
     if ( cellRef.x() < KS_colMax ) {
       Cell  *cell_east = format()->sheet()->cellAt( cellRef.x() + 1,
                 cellRef.y() );
@@ -2810,8 +2871,9 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
       if ( b.style() != Qt::NoPen )
         db = ( t.width() / 2);
     }
+    #endif
 
-    painter.setPen( QPen( sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
+    //painter.setPen( QPen( sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
@@ -2840,44 +2902,9 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                           doc->zoomItY( cellRect.bottom() - db ) );
     }
   }
-
-  // The top border.
-  if ( paintTop ) {
-    int dl = 0;
-    int dr = 0;
-    if ( cellRef.y() > 1 ) {
-      Cell  *cell_north = format()->sheet()->cellAt( cellRef.x(),
-                 cellRef.y() - 1 );
-
-      QPen l = cell_north->effLeftBorderPen(  cellRef.x(), cellRef.y() - 1 );
-      QPen r = cell_north->effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
-
-      if ( l.style() != Qt::NoPen )
-        dl = ( l.width() - 1 ) / 2 + 1;
-      if ( r.style() != Qt::NoPen )
-        dr = r.width() / 2;
-    }
-
-    painter.setPen( QPen( sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
-
-    // If we are on paper printout, we limit the length of the lines.
-    // On paper, we always have full cells, on screen not.
-    if ( painter.device()->isExtDev() ) {
-      painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() + dl ) ),
-                        doc->zoomItY( QMAX( rect.top(),    cellRect.y() ) ),
-                        doc->zoomItX( QMIN( rect.right(),  cellRect.right() - dr ) ),
-                        doc->zoomItY( QMIN( rect.bottom(), cellRect.y() ) ) );
-    }
-    else {
-      painter.drawLine( doc->zoomItX( cellRect.x() + dl ),
-                        doc->zoomItY( cellRect.y() ),
-                        doc->zoomItX( cellRect.right() - dr ),
-                        doc->zoomItY( cellRect.y() ) );
-    }
-  }
-
+  
   // The bottom border.
-  if ( paintBottom ) {
+  /*if ( paintBottom ) {
     int dl = 0;
     int dr = 0;
     if ( cellRef.y() < KS_rowMax ) {
@@ -2909,7 +2936,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                         doc->zoomItX( cellRect.right() - dr ),
                         doc->zoomItY( cellRect.bottom() ) );
     }
-  }
+  }*/
 }
 
 
@@ -3444,6 +3471,12 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
            QPen & _rightPen, QPen & _bottomPen,
            QPen & _leftPen,  QPen & _topPen )
 {
+  
+  //Sanity check: If we are not painting any of the borders then the function
+  //really shouldn't be called at all.
+  if ( (!paintLeft) && (!paintRight) && (!paintTop) && (!paintBottom) )
+        return;
+        
   Doc * doc = sheet()->doc();
 
   Sheet::LayoutDirection sheetDir =  format()->sheet()->layoutDirection();
@@ -3651,6 +3684,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   //        document printing problem" at the same time.
   return;
 
+#if 0
   // Look at the cells on our corners. It may happen that we
   // just erased parts of their borders corner, so we might need
   // to repaint these corners.
@@ -3878,6 +3912,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       }
     }
   }
+  #endif
 }
 
 

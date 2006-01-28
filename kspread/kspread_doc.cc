@@ -2102,8 +2102,12 @@ void Doc::emitEndOperation()
      d->delayCalculation = false;
      for ( t = map()->firstSheet(); t != NULL; t = map()->nextSheet() )
      {
-       //       ElapsedTime etm( "Updating table..." );
-       t->update();
+      //PERF:  This caused *EVERY NON-DEFAULT CELL IN THE CURRENT SHEET* to be added to the paint dirty list
+      //This caused areas to be added to the paint dirty list multiple times, so calls to check whether a cell
+      //was in the paint dirty list became very time consuming because of the O(n) behaviour of Region::contains
+      // -- Robert Knight
+    
+     //###  t->update();
 
        // ElapsedTime etm2( "Sub: Updating cellbindings..." );
        for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
@@ -2142,8 +2146,13 @@ void Doc::emitEndOperation( QRect const & rect )
   d->delayCalculation = false;
 
   {
-    //ElapsedTime etm( "Updating active table..." );
-    d->activeSheet->updateCellArea( rect );
+    //PERF:  This adds every cell in the region to the paint dirty list.  I don't think this is necessary since 
+    //Sheet::setRegionPaintDirty can be used for this.
+    //This caused areas to be added to the paint dirty list multiple times, so calls to check whether a cell
+    //was in the paint dirty list became very time consuming because of the O(n) behaviour of Region::contains
+    // -- Robert Knight
+    
+   //### d->activeSheet->updateCellArea( rect );
   }
 
   //  ElapsedTime etm2( "Sub: Updating cellbindings..." );
@@ -2182,13 +2191,14 @@ void Doc::emitEndOperation( const Region& region )
   d->delayCalculation = false;
 
   {
-    //ElapsedTime etm( "Updating active table..." );
-    d->activeSheet->updateCellArea(region);
-/*    Region::ConstIterator endOfList(region.constEnd());
-    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
-    {
-      d->activeSheet->updateCellArea( (*it)->rect() );
-    }*/
+    //PERF:  This adds every cell in the region to the paint dirty list.  I don't think this is necessary since 
+    //Sheet::setRegionPaintDirty can be used for this.
+    //This caused areas to be added to the paint dirty list multiple times, so calls to check whether a cell
+    //was in the paint dirty list became very time consuming because of the O(n) behaviour of Region::contains
+    // -- Robert Knight
+    
+    //### d->activeSheet->updateCellArea(region);
+    
   }
 
   //  ElapsedTime etm2( "Sub: Updating cellbindings..." );
