@@ -25,6 +25,19 @@ Creating a new database project</a> for information how to do this.
 <listitem><para>Design database queries. Read section <!-- <a href="05_03_00_query_designing.html">5.3</a> --></para></listitem>
 <listitem><para>Design forms. Read section <!-- <a href="05_04_00_form_designing.html">5.4</a> --></para></listitem>
 </itemizedlist>
-
 </sect1>
+
+<sect1 id="designing-tables">
+<title>Designing Database Tables</title>
+<para>
+First, there will be two tables added to your database:
+<emphasis>persons</emphasis> and <emphasis>phone_numbers</emphasis>.
+These are exactly the same tables as described in chapter <link
+linkend="database-and-spreadsheet">Database and spreadsheet</link>.
+A layout for <emphasis>Persons</emphasis> can be found in section
+<link linkend="data-integrity-and-validity">Data integrity and validity</link>
+in that chapter.
+</para>
+</sect1>
+
 </chapter>
