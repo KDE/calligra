@@ -29,7 +29,7 @@
 	    <guimenu>File</guimenu>
 	    <guimenuitem>New</guimenuitem>
 	  </menuchoice></term>
-	  <listitem><para><action>Create a new database.</action></para></listitem>
+	  <listitem><para><action>Create a new database project.</action></para></listitem>
 	</varlistentry>
 	
 	<varlistentry>
@@ -40,7 +40,7 @@
 	    <guimenu>File</guimenu>
 	    <guimenuitem>Open...</guimenuitem>
 	  </menuchoice></term>
-	  <listitem><para><action>Open an existing database.</action></para></listitem>
+	  <listitem><para><action>Open an existing database project.</action></para></listitem>
 	</varlistentry>
 	
 	<varlistentry>
@@ -68,7 +68,7 @@
 	    </menuchoice>
 	  </term>
 	  <listitem>
-	    <para><action>Save the document.</action></para>
+	    <para><action>Save data in the active window.</action></para>
 	  </listitem>
 	</varlistentry>
 	
@@ -96,7 +96,7 @@
 	  </menuchoice>
 	  </term>
 	  <listitem>
-	    <para><action>Close the current document but leave &kexi; running.
+	    <para><action>Close the currently opened project but leave &kexi; running.
 	    </action></para>
 	  </listitem>
 	</varlistentry>
@@ -132,8 +132,7 @@
 	    </menuchoice>
 	  </term>
 	  <listitem>
-	    <para><action>Show or hide the toolbars: File, Edit, Math,
-	    Navigation, Format and Color/Border.</action></para>
+	    <para><action>Show or hide the toolbars.</action></para>
 	  </listitem>
     </varlistentry>
 
