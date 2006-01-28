@@ -31,6 +31,18 @@ After the feature freeze
   + The title is miniscule					      1 ---- 
      - small fonts everywhere, in fact
 
+* Features
+  + First Row / Col as label					      1 ----
+    - Connect GUI to KChartParams in the config dialog			  done
+    - Connect GUI to KChartParams in the wizard				  ----
+    - Use it when drawing						  ----
+    - Store the values in the file					  ----
+  + Grid setting for both directions				      1 ----
+
+* Data editor
+  + Better keyboard shortcuts?					      1 ----
+    - Remove the spinboxes from the buddy list.				  ----
+
 * OpenDocument
   + Read and write
 
@@ -40,17 +52,6 @@ After the feature freeze
 
 * Structure
   + put dialogs in their own directory
-
-* Data editor
-  + Better keyboard shortcuts?					      1 ----
-    - Remove the spinboxes from the buddy list.				--
-
-* Features
-  + First Row / Col as label					      1 ----
-    - Connect GUI to KChartParams					  done
-    - Use it when drawing						  ----
-    - Store the values in the file					  ----
-  + Grid setting for both directions				      1 ----
 
 
 After 1.5

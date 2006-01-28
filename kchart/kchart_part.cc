@@ -48,8 +48,8 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, widgetName, parent, name, singleViewMode ),
     m_params( 0 ),
-    m_rowLabels(), m_colLabels(),
-    m_parentWidget( parentWidget )
+    m_parentWidget( parentWidget ),
+    m_rowLabels(), m_colLabels()
 {
     kdDebug(35001) << "Constructor started!" << endl;
 
@@ -89,6 +89,8 @@ KChartPart::~KChartPart()
     delete m_params;
 }
 
+
+// Reimplement KoDocument::initDoc()
 
 bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
@@ -165,6 +167,7 @@ void KChartPart::initEmpty()
     setEmpty();
 }
 
+
 // This method creates the simplest chart imaginable:
 // Data size 1x1, empty, no headers
 //
@@ -227,6 +230,10 @@ KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
 }
 
 
+// ================================================================
+//                              Painting
+
+
 void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 			       bool transparent,
 			       double /*zoomX*/, double /*zoomY*/ )
@@ -243,21 +250,19 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // set them as X axis labels or legend according to the current
     // setting.  Also, transpose the data if it should be displayed in
     // columns instead of in rows.
-    //
-    // After this sequence, m_DisplyData contains the data in the
-    // correct transposition, and the X axis (represented by
-    // bottomparms) and the legend contain the correct labels.
 
+
+    // Create the displayData table.
+    createDisplayData();
+
+    // Create the axis labels and legend.
     QStringList  longLabels;
     QStringList  shortLabels;
 
     longLabels.clear();
     shortLabels.clear();
     if (m_params->dataDirection() == KChartParams::DataRows) {
-	// Data is handled in rows.  This is the default.
-
-	// This is efficient so it doesn't matter if we always copy.
-	m_displayData = m_currentData;
+	// Data is handled in rows.  This is the way KDChart works also.
 
 	// Set X axis labels from column headers.
 	for ( uint col = 0; col < m_currentData.cols(); col++ ) {
@@ -270,35 +275,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	    m_params->setLegendText( row, m_rowLabels[row] );
     }
     else {
-	// Data is handled in columns.  We will have to transpose
-	// everything since KDChart wants its data in rows.
-
-// Note: While the current KD Chart 1.1.3 version is still expecting data
-//       to be in rows, the upcoming KD Chart 2.0 release will be using
-//       data in columns instead, to it will be matching KSpread's way.
-//       -khz, 2005-11-15
-
-	// FIXME: Rewrite so that we only copy data when necessary.
-	// On the other hand, the next version of KDChart is able to
-	// get data directly without storing it into a KDChartData
-	// class first, so we might never need to.
-
-	// Resize displayData so that the transposed data has room.
-	m_displayData.expand(m_currentData.usedCols(),
-			     m_currentData.usedRows());
-
-	// Copy data and transpose it.
-	QVariant  value1;
-	QVariant  value2;
-	int       prop;
-	for (uint row = 0; row < m_currentData.usedCols(); row++) {
-	    for (uint col = 0; col < m_currentData.usedRows(); col++) {
-                if ( m_currentData.cellContent( col, row, value1, value2, prop ) ) {
-		    m_displayData.setCell(row, col, value1, value2);
-		    m_displayData.setProp(row, col, prop);
-                }
-	    }
-	}
+	// Data is handled in columns.
 
 	// Set X axis labels from row headers.
 	for ( uint row = 0; row < m_currentData.rows(); row++ ) {
@@ -311,36 +288,9 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	    m_params->setLegendText( col, m_colLabels[col] );
     }
 
-    // If this is a HiLo chart, we need to manually create the correct
-    // values.  This is not done by KDChart.
-    //
     // FIXME: In a HiLo chart, the Legend should be the same as the
     //        labels on the X Axis.  Should we disable one of them?
     if (m_params->chartType() == KChartParams::HiLo) {
-	KDChartTableData  tmpData = m_displayData;
-
-	// Calculate the min, max, open and close values for each row.
-	m_displayData.expand(tmpData.usedRows(), 4);
-	for (uint row = 0; row < tmpData.usedRows(); row++) {
-	    double  minVal   = numeric_limits<double>::max() ;
-	    double  maxVal   = -numeric_limits<double>::max() ;
-
-	    // Calculate min and max for this row.
-	    // BUG: Take care of different data directions!
-	    for (uint col = 0; col < tmpData.usedCols(); col++) {
-		double  data = tmpData.cellVal(row, col).toDouble();
-
-		if (data < minVal)
-		    minVal = data;
-		if (data > maxVal)
-		    maxVal = data;
-	    }
-	    m_displayData.setCell(row, 0, minVal); // min
-	    m_displayData.setCell(row, 1, maxVal); // max
-	    m_displayData.setCell(row, 2, tmpData.cellVal(row, 0).toDouble());   // open
-	    m_displayData.setCell(row, 3,                          // close
-				  tmpData.cellVal(row, tmpData.usedCols() - 1).toDouble());
-	}
 
 	// Set the correct X axis labels and legend.
 	longLabels.clear();
@@ -382,57 +332,179 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 }
 
 
-void KChartPart::analyzeData()
+// Create the data table m_displayData from m_currentData, taking into
+// account if the first row or line contains headers.  The chart type
+// HiLo demands special handling.
+//
+//
+// Note: While the current KD Chart 1.1.3 version is still expecting data
+//       to be in rows, the upcoming KD Chart 2.0 release will be using
+//       data in columns instead, to it will be matching KSpread's way.
+//       -khz, 2005-11-15
+//
+// FIXME: Rewrite so that we only copy data when necessary.
+//        On the other hand, the next version of KDChart is able to
+//        get data directly without storing it into a KDChartData
+//        class first, so we might never need to.
+void KChartPart::createDisplayData()
 {
-    setData( m_currentData );
+    int  rowOffset = 0;
+    int  colOffset = 0;
+
+    if ( m_params->firstRowAsLabel() )
+	rowOffset++;
+    if ( m_params->firstColAsLabel() )
+	colOffset++;
+
+    // After this sequence, m_DisplayData contains the data in the
+    // correct transposition, and the X axis (represented by
+    // bottomparms) and the legend contain the correct labels.
+    QVariant  value1;
+    QVariant  value2;
+    int       prop;
+    if (m_params->dataDirection() == KChartParams::DataRows) {
+	// Data is handled in rows.  This is the way KDChart works also.
+
+	m_displayData.expand( m_currentData.usedRows() - rowOffset,
+			      m_currentData.usedCols() - colOffset );
+	for (uint row = rowOffset; row < m_currentData.usedRows(); row++) {
+	    for (uint col = colOffset; col < m_currentData.usedCols(); col++) {
+		if ( m_currentData.cellContent( row, col, 
+						value1, value2, prop ) ) {
+		    m_displayData.setCell(row - rowOffset, col - colOffset,
+					  value1, value2);
+		    m_displayData.setProp(row - rowOffset, col - colOffset, 
+					  prop);
+                }
+
+	    }
+	}
+    }
+    else {
+	// Data is handled in columns.  We will have to transpose
+	// everything since KDChart wants its data in rows.
+
+	// Resize displayData so that the transposed data has room.
+	m_displayData.expand( m_currentData.usedCols() - colOffset,
+			      m_currentData.usedRows() - rowOffset );
+
+	// Copy data and transpose it.
+	for (uint row = colOffset; row < m_currentData.usedCols(); row++) {
+	    for (uint col = rowOffset; col < m_currentData.usedRows(); col++) {
+                if ( m_currentData.cellContent( col, row,
+						value1, value2, prop ) ) {
+		    m_displayData.setCell(row - colOffset, col - rowOffset,
+					  value1, value2);
+		    m_displayData.setProp(row - colOffset, col - rowOffset,
+					  prop);
+                }
+	    }
+	}
+    }
+
+    // If this is a HiLo chart, we need to manually create the correct
+    // values.  This is not done by KDChart.
+    //
+    // Here we don't need to transpose, since we can start from the
+    // newly generated displayData.
+    if (m_params->chartType() == KChartParams::HiLo) {
+	KDChartTableData  tmpData = m_displayData;
+
+	// Calculate the min, max, open and close values for each row.
+	m_displayData.expand(tmpData.usedRows(), 4);
+	for (uint row = 0; row < tmpData.usedRows(); row++) {
+	    double  minVal   = numeric_limits<double>::max() ;
+	    double  maxVal   = -numeric_limits<double>::max() ;
+
+	    // Calculate min and max for this row.
+	    //
+	    // Note that we have already taken care of different data
+	    // directions above.
+	    for (uint col = 0; col < tmpData.usedCols(); col++) {
+		double  data = tmpData.cellVal(row, col).toDouble();
+
+		if (data < minVal)
+		    minVal = data;
+		if (data > maxVal)
+		    maxVal = data;
+	    }
+	    m_displayData.setCell(row, 0, minVal); // min
+	    m_displayData.setCell(row, 1, maxVal); // max
+	    m_displayData.setCell(row, 2, tmpData.cellVal(row, 0).toDouble());   // open
+	    m_displayData.setCell(row, 3,                          // close
+				  tmpData.cellVal(row, tmpData.usedCols() - 1).toDouble());
+	}
+    }
+}
+
+
+// ================================================================
+
+
+void KChartPart::analyzeHeaders()
+{
+#if 0
+    analyzeHeaders( m_currentData );
+#else
+    doSetData( m_currentData,
+	       m_params->firstRowAsLabel(), m_params->firstColAsLabel());
+#endif
 }
 
 // This function sets the data from an external source.  It is called,
 // for instance, when the chart is initialized from a spreadsheet in
 // KSpread.
 //
-void KChartPart::setData( const KDChartTableData& data )
+void KChartPart::analyzeHeaders( const KDChartTableData& data )
 {
     // FIXME(khz): replace this when automatic string detection works in KDChart
-    //m_currentData = data;
-
     // Does the top/left cell contain a string?
-    bool isStringTopLeft = data.cellVal( 0, 0 ).type() == QVariant::String;
+    bool isStringTopLeft = (data.cellVal( 0, 0 ).type() == QVariant::String);
 
     // Does the first row (without first cell) contain only strings?
-    bool isStringFirstRow = TRUE;
+    bool isStringFirstRow = true;
     for ( uint col = 1; isStringFirstRow && col < data.cols(); col++ ) {
-        isStringFirstRow = data.cellVal( 0, col ).type() == QVariant::String;
+        isStringFirstRow = (data.cellVal( 0, col ).type() == QVariant::String);
     }
 
     // Just in case, we only have 1 row, we never use it for label text.
     // This prevents a crash.
+    //
+    // FIXME: Wonder if this is still true for KDChart 1.1.3 / iw 
+    //        Disabling...
+#if 1
     if ( data.rows() == 1 )
-        isStringFirstRow = FALSE;
+        isStringFirstRow = false;
+#endif
 
     // Does the first column (without first cell) contain only strings?
-    bool isStringFirstCol = TRUE;
+    bool isStringFirstCol = true;
     for ( uint row = 1; isStringFirstCol && row < data.rows(); row++ ) {
-        isStringFirstCol = data.cellVal( row, 0 ).type() == QVariant::String;
+        isStringFirstCol = (data.cellVal( row, 0 ).type() == QVariant::String);
     }
 
     // Just in case, we only have 1 column, we never use it for axis
     // label text => prevents crash.
+#if 1
     if ( data.cols() == 1 )
         isStringFirstRow = FALSE;
+#endif
 
-    bool hasColHeader = FALSE;
-    bool hasRowHeader = FALSE;
+    bool hasColHeader = false;
+    bool hasRowHeader = false;
 
     // Let's check if we have a full axis label text column
     if ( isStringFirstCol && isStringTopLeft
 	 || isStringFirstCol && isStringFirstRow )
-        hasColHeader = TRUE;
+        hasColHeader = true;
 
     // Let's check if we have a full label text row.
     if ( isStringFirstRow && isStringTopLeft
 	 || isStringFirstCol && isStringFirstRow )
-        hasRowHeader = TRUE;
+        hasRowHeader = true;
+
+    m_params->setFirstRowAsLabel( hasRowHeader );
+    m_params->setFirstColAsLabel( hasColHeader );
 
     doSetData(data, hasRowHeader, hasColHeader);
 }
@@ -469,6 +541,7 @@ void KChartPart::doSetData( const KDChartTableData&  data,
 	    m_colLabels << data.cellVal( 0, col ).toString();
     }
 
+#if 0
     // If there is a row header and/or a column header, then generate
     // the data that will be used for the chart by translating the
     // original data.
@@ -484,6 +557,7 @@ void KChartPart::doSetData( const KDChartTableData&  data,
         m_currentData = matrix;
     }
     else
+#endif
         m_currentData = data;
 
     setChartDefaults();
@@ -529,9 +603,7 @@ void KChartPart::initLabelAndLegend()
 // Set up some values for the chart Axis, that are not well chosen by
 // default by KDChart.
 //
-// FIXME: This function should maybe change name since it does things
-//        that are not only for axis.
-//
+
 void KChartPart::setChartDefaults()
 {
   //
@@ -558,11 +630,10 @@ void KChartPart::setChartDefaults()
 
   m_params->setAxisParams( KDChartAxisParams::AxisPosBottom, xAxis );
 
-  //FIXME: The following has nothing to do with the axis.  Maybe this
-  //       function should change name.
+  // Other parameters for various things.
   m_params->setLineColor();
 
-  // setting the background layer
+  // Setting the background layer.
   KDFrame frame;
   frame.setBackground( QBrush( QColor( 230, 222, 222 ) ) );
   m_params->setFrame( KDChartEnums::AreaInnermost, frame, 0, 0, 0, 0 );

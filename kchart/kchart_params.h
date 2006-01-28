@@ -29,6 +29,7 @@ class DCOPObject;
 
 #include "kdchart/KDChartParams.h"
 
+
 namespace KChart
 {
 
@@ -83,10 +84,9 @@ class KChartParams : public KDChartParams
 
 
     bool       firstRowAsLabel() const { return m_firstRowAsLabel; }
-    void       setFirstRowAsLabel( bool _val ) { m_firstRowAsLabel = _val; }
+    void       setFirstRowAsLabel( bool _val );
     bool       firstColAsLabel() const { return m_firstColAsLabel; }
-    void       setFirstColAsLabel( bool _val ) { m_firstColAsLabel = _val; }
-
+    void       setFirstColAsLabel( bool _val );
 
     // ----------------------------------------------------------------
     // BARLINES CHART-SPECIFIC
@@ -124,7 +124,6 @@ public slots:
  private:
     BarlinesChartSubType  m_barlinesChartSubType;
     int                   m_barlinesNumLines;
-
 
     // ----------------------------------------------------------------
 

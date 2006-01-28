@@ -18,14 +18,19 @@
 */
 
 
-#include "kchart_params.h"
-#include "KChartParamsIface.h"
 #include <dcopobject.h>
-#include "kdchart/KDChartParams.h"
-#include "kdchart/KDChartAxisParams.h"
-#include <koxmlns.h>
 #include <klocale.h>
 #include <kdebug.h>
+
+#include <koxmlns.h>
+
+#include "kdchart/KDChartParams.h"
+#include "kdchart/KDChartAxisParams.h"
+
+#include "kchart_params.h"
+#include "kchart_part.h"
+#include "KChartParamsIface.h"
+
 
 namespace KChart
 {
@@ -68,6 +73,23 @@ KChartParams::stringToChartType( const QString& _string )
 	return BarLines;
     else
 	return (ChartType) KDChartParams::stringToChartType( _string );
+}
+
+
+void KChartParams::setFirstRowAsLabel( bool _val )
+{ 
+    m_firstRowAsLabel = _val;
+
+    m_part->doSetData( *m_part->data(), 
+		       m_firstRowAsLabel, m_firstColAsLabel );
+}
+
+void KChartParams::setFirstColAsLabel( bool _val )
+{ 
+    m_firstColAsLabel = _val; 
+
+    m_part->doSetData( *m_part->data(), 
+		       m_firstRowAsLabel, m_firstColAsLabel );
 }
 
 

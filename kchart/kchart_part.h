@@ -39,7 +39,6 @@ public:
     // Methods unique to KChart, and available in the old interface
     // (see interfaces/koChart.h.)
 
-    virtual void  setData( const KDChartTableData& data );
     virtual void  setCanChangeValue( bool b )  { m_bCanChangeValue = b;    }
 
     // Methods unique to KChart, and available in the new interface
@@ -47,7 +46,8 @@ public:
 
     virtual void  resizeData( int rows, int columns );
     virtual void  setCellData( int row, int column, const QVariant &);
-    virtual void  analyzeData( );
+    virtual void  analyzeHeaders( );
+    virtual void  analyzeHeaders( const KDChartTableData& data );
 
     // ----------------------------------------------------------------
 
@@ -101,6 +101,9 @@ protected:
     bool  loadOasisData( const QDomElement& tableElem );
 
 private:
+    // Helper methods for painting.
+    void         KChartPart::createDisplayData();
+
     QDomElement  createElement(const QString &tagName,
 			       const QFont &font,
 			       QDomDocument &doc) const;
@@ -110,10 +113,8 @@ private:
 
 private:
     // The chart and its contents
-    KChartParams            *m_params;
-    KDChartTableData         m_currentData;
-    QStringList              m_rowLabels;
-    QStringList              m_colLabels;
+    KChartParams            *m_params;      // Everything about the chart
+    KDChartTableData         m_currentData; // The data in the chart.
 
     // Other auxiliary values
     bool                     m_bCanChangeValue;
@@ -123,6 +124,8 @@ private:
 
     // Used when displaying.
     KDChartTableData         m_displayData;
+    QStringList              m_rowLabels;
+    QStringList              m_colLabels;
 };
 
 
