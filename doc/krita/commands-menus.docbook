@@ -15,11 +15,10 @@ layer. The <guimenu>Select</guimenu> menu contains commands to create and
 manipulate selections. The <guimenu>Filter</guimenu> menu contains all the
 filters you have installed. These work on the current layer. The
 <guimenu>Scripts</guimenu> menu contains entries for working with scripts.
-The <guimenu>Tools</guimenu> menu is common to &koffice; and contains
-&koffice;-wide plugins. The <guimenu>Settings</guimenu> menu is again common
-to &koffice; and allows you to manipulate the toolbars, shortcuts and
-configuration of &krita;. Finally, the <guimenu>Help</guimenu> menu gives you
-access to various (hopefully helpful) information, such as this handbook.
+The <guimenu>Settings</guimenu> menu is again common to &koffice; and allows
+you to manipulate the toolbars, shortcuts and configuration of &krita;.
+Finally, the <guimenu>Help</guimenu> menu gives you access to various
+(hopefully helpful) information, such as this handbook.
 </para>
 
 <!-- ====== File ================================================ -->
@@ -107,8 +106,7 @@ will be lost.</para></listitem>
 </menuchoice></term>
 <listitem><para><action>Opens an existing document.</action> (For the moment,
 this is the same as
-<menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>.
-)
+<menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>.)
 </para></listitem>
 </varlistentry>
 
@@ -140,7 +138,8 @@ action="simul">&Ctrl;<keycap>P</keycap></keycombo></shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Print...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Prints the document.</action></para></listitem>
+<listitem><para><action>Prints the document.</action> You will see the usual
+&kde; print dialog appear.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -246,7 +245,7 @@ action="simul">&Ctrl;<keycap>C</keycap></keycombo></shortcut>
 <guimenuitem>Copy</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Copies the selection to the
-keyboard.</action></para></listitem>
+clipboard.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -659,8 +658,8 @@ palette.</action></para></listitem>
 <guimenu>View</guimenu>
 <guimenuitem>Wetness Visualisation</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Toggles wetness
-visualisation on and off.</action></para></listitem>
+<listitem><para><action>Toggles indication of the wetness of watercolor paint
+on and off.</action></para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -730,7 +729,7 @@ clockwise.</action></para></listitem>
 <term><menuchoice>
 <guimenu>Image</guimenu>
 <guisubmenu>Rotate</guisubmenu>
-<guimenuitem>Rotate CCW</guimenuitem>
+<guimenuitem>Rotate Image CCW</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Rotates the image 90 degrees counterclockwise
 (270 degrees clockwise).</action></para></listitem>
@@ -1328,14 +1327,6 @@ a soft border around it.)</para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Select</guimenu>
-<guisubmenu>Modify</guisubmenu>
-</menuchoice></term>
-<listitem><para><action>?</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Select</guimenu>
 <guisubmenu>Hide Selection</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Hides the selection.</action> The selection is still
@@ -1836,31 +1827,7 @@ comparison.</para></listitem>
 
 </sect2>
 
-<!-- ====== Tools =============================================== -->
-
-
-<sect2 id="commands-menus-tools">
-<title>The <guimenu>Tools</guimenu> Menu</title>
-<para>
-<variablelist>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Tools</guimenu>
-<guimenuitem>Performance Test...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Performance Test</guilabel>
-dialog.</action> You can select a number of tests to run (default is all
-tests) and how many times the tests should be run.</para></listitem>
-</varlistentry>
-
-</variablelist>
-</para>
-
-</sect2>
-
 <!-- ====== Settings ============================================ -->
-
 
 <sect2 id="commands-menus-settings">
 <title>The <guimenu>Settings</guimenu> Menu</title>
@@ -1963,8 +1930,9 @@ and allows you to configure &krita;'s toolbars.</para></listitem>
 <guimenuitem>Configure &krita;...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the
-<guilabel>Preferences</guilabel> dialog.</action> You can
-configure &krita; here to match your personal preferences.</para></listitem>
+<link linkend="settings-preferences"><guilabel>Preferences</guilabel>
+dialog</link>.</action> You can configure &krita; here to match your personal
+preferences.</para></listitem>
 </varlistentry>
 
 </variablelist>
