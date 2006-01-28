@@ -32,7 +32,7 @@
 #include "tester.h"
 #include "value_tester.h"
 #include "formula_tester.h"
-#include "stylecluster_tester.h"
+//#include "stylecluster_tester.h"
 
 namespace KSpread
 {
