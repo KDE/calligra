@@ -7687,14 +7687,6 @@ void Sheet::update()
   }
 }
 
-void Sheet::updateCellArea( const QRect &cellArea )
-{
-  if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
-    return;
-
-  setRegionPaintDirty( cellArea );
-}
-
 void Sheet::updateCellArea(const Region& cellArea)
 {
   if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))

@@ -1022,8 +1022,7 @@ public:
      * rather than calling updateCell(..) on several adjacent cells so there
      * will be one paint event instead of several
      */
-    void updateCellArea(const QRect &cellArea);
-    void updateCellArea(const Region & cellArea);
+    void updateCellArea(const Region& cellArea);
 
     /**
      * Updates every cell on the sheet

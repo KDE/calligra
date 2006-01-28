@@ -2129,51 +2129,6 @@ void Doc::emitEndOperation()
    }
 }
 
-void Doc::emitEndOperation( QRect const & rect )
-{
-  // ElapsedTime et( "*Doc::emitEndOperation - 2 -*" );
-  CellBinding  * b = 0;
-  d->numOperations--;
-
-  if ( d->numOperations > 0 || !d->activeSheet )
-  {
-    KoDocument::emitEndOperation();
-    QApplication::restoreOverrideCursor();
-    return;
-  }
-
-  d->numOperations = 0;
-  d->delayCalculation = false;
-
-  {
-    //PERF:  This adds every cell in the region to the paint dirty list.  I don't think this is necessary since 
-    //Sheet::setRegionPaintDirty can be used for this.
-    //This caused areas to be added to the paint dirty list multiple times, so calls to check whether a cell
-    //was in the paint dirty list became very time consuming because of the O(n) behaviour of Region::contains
-    // -- Robert Knight
-    
-   //### d->activeSheet->updateCellArea( rect );
-  }
-
-  //  ElapsedTime etm2( "Sub: Updating cellbindings..." );
-  for ( b = d->activeSheet->firstCellBinding(); b != 0; b = d->activeSheet->nextCellBinding() )
-  {
-    b->cellChanged( 0 );
-  }
-
-  KoDocument::emitEndOperation();
-
-  QApplication::restoreOverrideCursor();
-
-  if ( d->numOperations == 0 )
-  {
-    /* do this after the parent class emitEndOperation because that allows updates
-       on the view again
-    */
-    paintUpdates();
-  }
-}
-
 void Doc::emitEndOperation( const Region& region )
 {
   // ElapsedTime et( "*Doc::emitEndOperation - 2 -*" );

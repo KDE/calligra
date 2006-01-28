@@ -556,7 +556,6 @@ public:
    * s.a. difference does only specified tasks and thats why it improves performance
    * significantly. rect normally are the visible cells/the cells that need to be updated.
    */
-  void emitEndOperation( QRect const & rect );
   void emitEndOperation( const Region& region );
 
   bool delayCalculation() const;
