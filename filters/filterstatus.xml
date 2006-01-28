@@ -421,6 +421,23 @@
             </filter>
         </application>
 
+        <application id="kexi">
+            <title xml:lang="en_us">Kexi</title>
+            <filter id="kexi_text">
+                <title xml:lang="en_us">Text</title>
+                <note xml:lang="en_us">Text file (e.g. CSV or tab-delimited)</note>
+                <stat import="threestars" export="fourstars"/>
+            </filter>
+            <filter id="kexi_mdb">
+                <title xml:lang="en_us">Microsoft Access (MDB)</title>
+                <note xml:lang="en_us">
+                  Available as a
+                  &lt;a href="kexi/mdb.php"
+                  &gt;separate plugin&lt;/a&gt;
+                </note>
+                <stat import="threestars" export="none"/>
+            </filter>
+        </application>
 <!--
         <application id="kivio">
             <title xml:lang="en_us">Kivio</title>
