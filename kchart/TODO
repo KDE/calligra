@@ -26,8 +26,7 @@ After the feature freeze
 ------------------------
 
 * Bugs
-  + First row / column as labels doesn't work.			      1 ----
-  + The chart title is not included in the chart from the wizard      1 ----
+  + The chart title is not included in the chart from the wizard      1 DONE
   + The title is miniscule					      1 ---- 
      - small fonts everywhere, in fact
 
@@ -35,7 +34,7 @@ After the feature freeze
   + First Row / Col as label					      1 ----
     - Connect GUI to KChartParams in the config dialog			  done
     - Connect GUI to KChartParams in the wizard				  ----
-    - Use it when drawing						  ----
+    - Use it when drawing						  done
     - Store the values in the file					  ----
   + Grid setting for both directions				      1 ----
 
