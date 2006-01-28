@@ -86,6 +86,9 @@ void KChartWizardSelectDataFormatPage::apply()
       m_chart->params()->setDataDirection( KChartParams::DataRows );
     else
       m_chart->params()->setDataDirection( KChartParams::DataColumns );
+
+    m_chart->params()->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
+    m_chart->params()->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
 }
 
 

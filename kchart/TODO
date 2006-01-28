@@ -33,7 +33,7 @@ After the feature freeze
 * Features
   + First Row / Col as label					      1 ----
     - Connect GUI to KChartParams in the config dialog			  done
-    - Connect GUI to KChartParams in the wizard				  ----
+    - Connect GUI to KChartParams in the wizard				  done
     - Use it when drawing						  done
     - Store the values in the file					  ----
   + Grid setting for both directions				      1 ----
