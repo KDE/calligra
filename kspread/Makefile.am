@@ -9,7 +9,7 @@ lib_LTLIBRARIES = libkspreadcommon.la
 kde_module_LTLIBRARIES = libkspreadpart.la
 
 libkspreadcommon_la_SOURCES = digest.cc commands.cc damages.cc dependencies.cc \
-	formula.cc 	functions.cc 	stylecluster.cc kspread_autofill.cc kspread_canvas.cc \
+	formula.cc 	functions.cc kspread_autofill.cc kspread_canvas.cc \
 	kspread_cell.cc kspread_cluster.cc kspread_condition.cc kspread_doc.cc \
 	kspread_editors.cc kspread_events.cc kspread_factory.cc kspread_format.cc \
 	kspread_functions_conversion.cc kspread_functions_database.cc kspread_functions_datetime.cc \
