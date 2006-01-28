@@ -94,15 +94,6 @@ This manual describes &kword; 1.5.
 
 </bookinfo>
 
-<!--
-TODO:
-- Write Migrating section
-- Write Chapter Numbering
-- Recheck "Spelling dialog" section for changes to UI
-- Describe "Counter alignment" in footnotes/endnotes section.....when working
-
--->
-
 <chapter id="introduction">
 <title>Introduction</title>
 
@@ -778,7 +769,7 @@ can read and write effectively.  Rich Text Format is probably a good choice.</pa
 <listitem><para>Ulrich Kuettler <email>ulrich.kuettler@mailbox.tu-dresden.de</email></para></listitem>
 </itemizedlist>
 
-<para>Documentation by &Mike.McBride; &Mike.McBride.mail; </para>
+<para>Documentation by &Mike.McBride;</para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;

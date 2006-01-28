@@ -335,7 +335,16 @@ information on the ability to export files to other applications, see the sectio
 </listitem>
 </varlistentry>
 
-
+<varlistentry>
+<term id="menu-send-file">
+<menuchoice>
+<guimenu>File</guimenu><guimenuitem>Mail...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Launches your email client so you can send the current file as an attachment.  The file must have been saved once before this option can be selected.</action></para> 
+</listitem>
+</varlistentry>
 
 <varlistentry>
 <term id="menu-template-create">
@@ -437,17 +446,6 @@ the document</action> (such as author's name, address, phone numbers,
 document abstract, &etc;). This information is saved with the document for later
 classification.</para> 
 <para>For more information, see <link linkend="documentinfo">Document Information</link>.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term id="menu-send-file">
-<menuchoice>
-<guimenu>File</guimenu><guimenuitem>Mail...</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-<para><action>Launches your email client so you can send the current file as an attachment.  The file must have been saved once before this option can be selected.</action></para> 
 </listitem>
 </varlistentry>
 
@@ -636,10 +634,22 @@ using the menubar.</para>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Immediately selects all frames in the currend document.</action></para>
+<para><action>Immediately selects all frames in the current document.</action></para>
 
 </listitem>
 </varlistentry>
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Select Frame</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selects the current text frame in the document.</action></para>
+
+</listitem>
+</varlistentry>
+
 
 <varlistentry>
 <term id="menu-find">
@@ -744,7 +754,9 @@ linkend="views">Using Multiple Views</link>.</para>
 
 <varlistentry>
 <term>
-<menuchoice>
+<menuchoice><shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>W</keycap></keycombo>
+</shortcut>
 <guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem>
 </menuchoice>
 </term>
@@ -869,12 +881,37 @@ structure window.</action> For more information, refer to the section entitled
 </term>
 <listitem>
 <para><action>Selecting this option will toggle the rulers off.</action>
-Selecting this option again will turn rulers on.  A checkmark before
-the menu entry will show you the current status of this option.  More
+Selecting this option again will turn rulers on.  More
 information on rulers can be found under <link
 linkend="rulers">Using rulers</link>.</para>
 </listitem>
 </varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Show/Hide Grid</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle the grid on.</action>
+Selecting this option again will turn grid off.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>View</guimenu><guimenuitem>Snap to Grid</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para><action>Selecting this option will toggle the snap to grid on.</action>
+Selecting this option again will turn snap to grid off. A checkmark before
+the menu entry will show you the current status of this option.</para>
+</listitem>
+</varlistentry>
+
 
 <varlistentry>
 <term id="menu-zoom">
@@ -896,7 +933,6 @@ documents.</para>
 </important>
 </listitem>
 </varlistentry>
-
 </variablelist>
 </sect2>
 
@@ -1062,28 +1098,23 @@ For more information refer to the section entitled
 </varlistentry>
 
 <varlistentry>
-<term id="menu-create-text-frame">
+<term id="menu-create-table">
 <menuchoice>
 <shortcut>
 <keycombo action="simul"><keycap>F10</keycap></keycombo>
 </shortcut>
-<guimenu>Insert</guimenu><guimenuitem>Text Frame</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Table...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>To create a new text frame.</action>  After selecting this
-option, your cursor will change to cross hairs.  Choose the location of
-one corner of your new text frame.  Click on the
-<mousebutton>left</mousebutton> mouse button and hold the button down.
-Drag the mouse, until you have the desired text frame.  When you have
-the correct shape and size, release the mouse button. &kword; will now
-bring up a dialog box with options to connect this text frame to other
-frames in your document.  For more information on this subject, see
-<link linkend="frames">Working with Frames</link>.</para> 
+<para><action>This will allow you to create a table in the current 
+cursor location.</action> For more information, please see the section entitled <link 
+linkend="tables">Tables</link>.</para> 
 
-<para>Typing <keycombo action="simul"><keycap>F10</keycap></keycombo> or
+<para>Typing <keycombo action="simul"><keycap>F5</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using the
+fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are 
+equivalent to using the
 menubar.</para>
 </listitem>
 </varlistentry>
@@ -1121,17 +1152,26 @@ is equivalent to using the menubar.</para>
 </varlistentry>
 
 <varlistentry>
-<term id="menu-create-formula">
+<term id="menu-create-text-frame">
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Formula</guimenuitem>
+<shortcut>
+<keycombo><keycap>F10</keycap></keycombo>
+</shortcut>
+<guimenu>Insert</guimenu><guimenuitem>Text Frame</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>Insert a formula into the document.</action>  More
-information on formulas in &kword; can be found <link
-linkend="formulas">here</link>.</para> 
+<para><action>To create a new text frame.</action>  After selecting this
+option, your cursor will change to cross hairs.  Choose the location of
+one corner of your new text frame.  Click on the
+<mousebutton>left</mousebutton> mouse button and hold the button down.
+Drag the mouse, until you have the desired text frame.  When you have
+the correct shape and size, release the mouse button. &kword; will now
+bring up a dialog box with options to connect this text frame to other
+frames in your document.  For more information on this subject, see
+<link linkend="frames">Working with Frames</link>.</para>
 
-<para>Typing <keycombo action="simul"><keycap>F4</keycap></keycombo> or
+<para>Typing <keycombo action="simul"><keycap>F10</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
 fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are 
 equivalent to using
@@ -1140,9 +1180,9 @@ the menubar.</para>
 </varlistentry>
 
 <varlistentry>
-<term id="menu-create-table">
+<term id="menu-create-formula">
 <menuchoice>
-<guimenu>Insert</guimenu><guimenuitem>Table...</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Formula</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1150,7 +1190,7 @@ the menubar.</para>
 cursor location.</action> For more information, please see the section entitled <link
 linkend="tables">Tables</link>.</para>
 
-<para>Typing <keycombo action="simul"><keycap>F5</keycap></keycombo> or
+<para>Typing <keycombo action="simul"><keycap>F4</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
 fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are 
 equivalent to using the
@@ -1182,7 +1222,7 @@ using the menubar. </para>
 </term>
 <listitem>
 <para><action>Allows you to access your scanner for inserting pictures into your document.</action> For more information see 
-the section entitled <link linkend="scan-graphics">Useing a picture from a scanner</link>.</para>
+the section entitled <link linkend="scan-graphics">Using a picture from a scanner</link>.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -1350,8 +1390,7 @@ including size, headers and footers.</action> For more details, go to
 </term>
 <listitem>
 <para><action>Selecting this option will toggle headers on.</action>
-Selecting this option again will turn headers off.  A checkmark before
-the menu entry will show you the current status of this option.  More
+Selecting this option again will turn headers off. More
 information on headers and footers can be found under <link
 linkend="headers-and-footers">Headers and Footers</link>.</para>
 </listitem>
@@ -1365,8 +1404,7 @@ linkend="headers-and-footers">Headers and Footers</link>.</para>
 </term>
 <listitem>
 <para><action>Selecting this option will toggle footers on.</action>
-Selecting this option again will turn footers off.  A checkmark before
-the menu entry will show you the current status of this option.  More
+Selecting this option again will turn footers off. More
 information on headers and footers can be found under <link
 linkend="headers-and-footers">Headers and Footers</link>.</para>
 </listitem>
@@ -1538,7 +1576,7 @@ using the menubar. </para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Configure Frame Borders</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Configure Frame Border</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1878,7 +1916,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 </menuchoice>
 </term>
 <listitem>
-<para>Begin <link linkend="mail-merge">mail merge</link>.</para>
+<para>Displays the <link linkend="mail-merge">Mail Merge Setup</link> Dialog.</para>
 </listitem>
 </varlistentry>
 
@@ -1902,7 +1940,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 the section entitled <link linkend="toolbars">Hiding, Changing and Moving Toolbars</link>.</para>
 </listitem>
 </varlistentry>
-
+<!--
 <varlistentry>
 <term>
 <menuchoice>
@@ -1917,7 +1955,7 @@ Toggles the cursor between two distinct behaviors.</action></para>
 <para>When Type Anywhere Cursor is selected, &kword; inserts whitespace characters to make it possible for you to begin typing at that exact location.</para>
 </listitem>
 </varlistentry>
-
+-->
 <varlistentry>
 <term>
 <menuchoice>
@@ -1989,7 +2027,6 @@ options.For details, click <link linkend="options-kword">here</link>.</para>
 &help.menu.documentation;
 
 </sect2>
-
 </sect1>
 
 
@@ -2041,9 +2078,9 @@ task from the menubar.  Click on that task for more details. </para>
 </sect1>
 
 <sect1 id="char-format-toolbar">
-<title>Formatting ToolBar</title>
+<title>Format ToolBar</title>
 
-<para>The Formatting Toolbar consists of 9 buttons.  Each button
+<para>The Format Toolbar consists of 9 buttons.  Each button
 performs a task from the <link linkend="change-font-dialog">format
 character dialog</link>.</para>
 
