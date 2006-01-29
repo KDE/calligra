@@ -90,6 +90,7 @@ VSelectTool::activate()
 	view()->part()->document().selection()->setSelectObjects();
 	view()->part()->document().selection()->setState( VObject::selected );
 	view()->part()->document().selection()->selectNodes();
+	view()->repaintAll( view()->part()->document().selection()->boundingBox() );
 	updateStatusBar();
 }
 
