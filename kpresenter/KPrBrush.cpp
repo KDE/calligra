@@ -179,6 +179,12 @@ void KPrBrush::loadOasisFillStyle( KoOasisContext &context, const char * propert
                         setGType( BCT_GDIAGONAL1 ); // diagonal 1
                     else if ( nearAngle == 135 || nearAngle == 315 )
                         setGType( BCT_GDIAGONAL2 ); // diagonal 2
+
+                    if ( nearAngle == 180 || nearAngle == 270 || nearAngle == 225 || nearAngle == 315 )
+                    {
+                        setGColor1( draw->attributeNS( KoXmlNS::draw, "end-color", QString::null ) );
+                        setGColor2( draw->attributeNS( KoXmlNS::draw, "start-color", QString::null ) );
+                    }
                 }
                 else if ( type == "radial" || type == "ellipsoid" )
                     setGType( BCT_GCIRCLE ); // circle
