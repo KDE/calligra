@@ -275,11 +275,21 @@ VRotateCmd::VRotateCmd( VDocument *doc, const KoPoint& p, double angle, bool dup
 	m_mat.translate( -p.x(), -p.y() );
 }
 
-VTranslateBezierCmd::VTranslateBezierCmd( VSegment *segment, double d1, double d2, bool firstControl )
-		: VCommand( 0L, i18n( "Translate Bezier" ) ), m_segment( segment ), m_firstControl( firstControl )
+VTranslateBezierCmd::VTranslateBezierCmd( VDocument *doc, VSegment *segment, double d1, double d2, bool firstControl )
+	: VCommand( doc, i18n( "Translate Bezier" ) ), m_segment( segment ), m_firstControl( firstControl )
+	, m_subpath(0L)
 {
 	m_mat.translate( d1, d2 );
 	m_segmenttwo = 0L;
+
+	if( document() && document()->selection() )
+	{
+		VObjectListIterator itr( document()->selection()->objects() );
+
+		// find subpath containing the segment
+		for( ; itr.current() ; ++itr )
+			visit( *itr.current() );
+	}
 }
 
 VTranslateBezierCmd::~VTranslateBezierCmd()
@@ -331,6 +341,10 @@ VTranslateBezierCmd::execute()
 				m_segment->setPoint( i, m_segment->point( i ).transform( m_mat ) );
 		}
 	}
+
+	if( m_subpath )
+		m_subpath->invalidateBoundingBox();
+
 	setSuccess( true );
 }
 
@@ -361,6 +375,26 @@ VTranslateBezierCmd::unexecute()
 		}
 	}
 	setSuccess( false );
+}
+
+void
+VTranslateBezierCmd::visitVSubpath( VSubpath& path )
+{
+	if( m_subpath ) 
+		return;
+
+	VSegment* segment = path.first();
+
+	// check all segments of the path
+	while( segment )
+	{
+		if( segment == m_segment )
+		{
+			m_subpath = &path;
+			break;
+		}
+		segment = segment->next();
+	}
 }
 
 VTranslatePointCmd::VTranslatePointCmd( VDocument *doc, double d1, double d2 )

@@ -282,7 +282,7 @@ VSelectNodesTool::mouseDragRelease()
 		{
 			KoRect selrect = calcSelRect( first() );
 			segments = view()->part()->document().selection()->getSegments( selrect );
-			cmd = new VTranslateBezierCmd( segments.at( 0 ),
+			cmd = new VTranslateBezierCmd( &view()->part()->document(), segments.at( 0 ),
 					qRound( ( last().x() - first().x() ) ),
 					qRound( ( last().y() - first().y() ) ),
 					m_state == movingbezier2 );

@@ -97,17 +97,20 @@ public:
 class KARBONCOMMAND_EXPORT VTranslateBezierCmd : public VCommand
 {
 public:
-	VTranslateBezierCmd( VSegment *segment, double d1, double d2, bool firstControl );
+	VTranslateBezierCmd( VDocument *doc, VSegment *segment, double d1, double d2, bool firstControl );
 	virtual ~VTranslateBezierCmd();
 
 	virtual void execute();
 	virtual void unexecute();
+
+	virtual void visitVSubpath( VSubpath& path );
 
 protected:
 	QWMatrix m_mat;
 	VSegment *m_segment;
 	VSegment *m_segmenttwo;
 	bool	  m_firstControl;
+	VSubpath *m_subpath;
 };
 
 class KARBONCOMMAND_EXPORT VTranslatePointCmd : public VCommand
