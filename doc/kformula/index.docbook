@@ -273,7 +273,7 @@ document.</action></para></listitem>
 <guimenuitem>Mail...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Invokes &kmail; so you can email the file.
-Note: You still have to attach the file to the email.</action></para></listitem>
+The file is already attached to the email.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -814,8 +814,8 @@ displayed in color.</action></para></listitem>
 allows you to specify shortcuts.</para>
 
 
-<para>Below is an example of how to configure a shortcut for making a
-thick space.
+<para>Below is an example of how to configure a shortcut for a
+print preview.
 </para>
 
 <screenshot>
@@ -829,11 +829,11 @@ thick space.
 
 <itemizedlist>
 <listitem><para>
-Click on the custom button.
+Click on the <guibutton>Custom</guibutton> button.
 </para></listitem>
 
 <listitem><para>
-Next click on the primary button.
+Next click on the buttons <guibutton>Advanced &gt;&gt;</guibutton> and then <guibutton>Primary shortcut:</guibutton>.
 </para></listitem>
 
 <listitem><para>
@@ -853,8 +853,8 @@ and the dialog should disappear. The shortcut is now entered.
 </screenshot>
 
 <para>Pressing the keys <userinput><keycombo
-action="seq"><keycap>CTRL</keycap><keycap>Space</keycap></keycombo></userinput>
-now produces a thick space.
+action="seq"><keycap>&Ctrl;</keycap><keycap>Space</keycap></keycombo></userinput>
+now displays the print preview.
 </para>
 </sect2>
 
@@ -895,8 +895,8 @@ is used to add additional buttons to the toolbars.</para>
 </para></listitem>
 
 <listitem><para>
-Click on one of the items in the left hand pane. This item will now have a
-blue background showing that it has been selected.
+Click on one of the items in the left hand pane. This item will now be
+highlighted to show that it has been selected.
 </para></listitem>
 
 <listitem><para>
@@ -925,7 +925,7 @@ click on <userinput><guilabel>OK</guilabel></userinput>.
 <title>Configuring &kformula;</title>
 <para>The <menuchoice>
 <guimenu>Settings</guimenu><guimenuitem>Configure
-&kformula;...</guimenuitem></menuchoice> is where the font sizes are
+&kformula;...</guimenuitem></menuchoice> is where the font sizes and font styles are
 selected.</para>
 
 <itemizedlist>
