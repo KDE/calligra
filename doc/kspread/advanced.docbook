@@ -72,9 +72,11 @@ a cell then choosing <guimenuitem>Function...</guimenuitem> from the
 <guimenu>Insert</guimenu> menu. This brings up the <guilabel>Function
 </guilabel> dialog box.</para>
 <para>Select the function you want to use from the listbox at the left of the 
-dialog box then press the button with the down arrow key symbol on it to paste 
-it into the text edit box at the bottom of the <guilabel>Math 
-Expression</guilabel> dialog.</para>
+dialog box. The <guilabel>Help</guilabel> tab page will then display a description,
+the return typ, Syntax, Parameters, and Examples for this function.
+In addition this page provides often links to Related Functions. 
+Then press the button with the down arrow key symbol on it to paste 
+it into the text edit box at the bottom of the dialog.</para>
 <para>The <guilabel>Parameters</guilabel> tab page will then be displayed 
 to let you enter the parameter(s) for the function you have just 
 chosen. If you want to enter an actual value for a parameter, just type it 
@@ -243,7 +245,7 @@ should enter the reference of the target value cell (<userinput>A1</userinput>
 in this case) into the <guilabel>Set cell:</guilabel> box, the target value 
 itself (<userinput>4</userinput>) into the <guilabel>To value:</guilabel> box 
 and the reference of the cell that is to be changed 
-(<userinput>A2</userinput>) into the <guilabel>By changing cell</guilabel> 
+(<userinput>A2</userinput>) into the <guilabel>By changing cell:</guilabel> 
 box. Note that you need to have entered some initial value into the cell that 
 is to be changed before starting <guimenuitem>Goal Seek</guimenuitem>.</para>
 <para>Pressing the <guibutton>Start</guibutton> button will start the

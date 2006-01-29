@@ -367,7 +367,7 @@ Indent</guimenuitem></menuchoice> menus.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Size Of Cell</guilabel></term>
+<term><guilabel>Size of Cell</guilabel></term>
 <listitem><para>You set here the size of the cell, either a custom width and
 height or choose the default width and height.</para>
 </listitem>

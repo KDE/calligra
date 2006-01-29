@@ -20,7 +20,7 @@ To cut down on some of the possibilities for confusion, it it suggested that
 when you first start to use &kspread; you set the default options in all pages
 of the &kspread; configuration dialog (obtained by selecting
 <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
-&kspread;...</guimenuitem></menuchoice>) except for <guilabel>Completion mode
+&kspread;...</guimenuitem></menuchoice>) except for <guilabel>Completion mode:
 </guilabel> in the <guisubmenu>Misc</guisubmenu> page, which should be set to
 <guimenuitem>None</guimenuitem>.
 </para>
@@ -170,8 +170,8 @@ Numbers are entered in the obvious way; <userinput>123</userinput>, <userinput>
 </para></listitem>
 <listitem><para>
 Dates should be entered in your <quote>System</quote> format, as defined in 
-the K menu <menuchoice><guisubmenu>Preferences</guisubmenu> <guisubmenu>
-Personalisation</guisubmenu> <guimenuitem>Country &amp; Languages</guimenuitem>
+the K menu <menuchoice><guisubmenu>Settings</guisubmenu> <guisubmenu>
+Regional &amp; Accessibility</guisubmenu> <guimenuitem>Country/Region &amp; Language</guimenuitem>
 </menuchoice> dialog box.  If, for example, you are using the DD/MM/YYYY form 
 you should enter <userinput>30/03/2002</userinput> for 30th March 2002. 
 Leading zeroes can be omitted from the day and month fields and only the last
@@ -418,7 +418,7 @@ countries of a number of mountains together with their height above sea level.
 <para>We may want the data sorted so that the names are in 
 alphabetical order. To do this select the area containing the data (A2:C7 
 in this case) and choose <guimenuitem>Sort...</guimenuitem> from the <guimenu>Data</guimenu> 
-menu. This opens the <guilabel>Sorting</guilabel> dialog box. Using the <guilabel>Sort criteria</guilabel> page of this dialog box you 
+menu. This opens the <guilabel>Sorting</guilabel> dialog box. Using the <guilabel>Sort Criteria</guilabel> page of this dialog box you 
 can choose which column of the data is to be used as a primary sort key and, 
 if you wish, other columns to be used as secondary and tertiary keys. Using
 the example in the above screenshot, choosing column B as the first key and 
@@ -445,12 +445,12 @@ of alphanumerically.</para>
 
 <para>&kspread; can also place the results of a sort into a different area of 
 the sheet, or even into a different worksheet, rather than overwriting the 
-original data. To do this enter the 
-top left cell reference of the target area into the <guilabel>Starting cell:
-</guilabel> text box in the <guilabel>Options</guilabel> page. The cell 
+original data. To do this enter the top left cell reference of the target 
+area into the <guilabel>Destination Cell:</guilabel> text box and select a
+<guilabel>Destination Sheet:</guilabel> in the <guilabel>Options</guilabel> page. The cell 
 formats will also be copied to the new area if you check the <guilabel>
-Copy layout</guilabel> box. If you check the <guilabel>First row contains 
-header</guilabel> box data in the first row will be copied directly to the 
+Copy cell Formatting (Borders, Colors, Text Style)</guilabel> box. If you check the 
+<guilabel>First row contains headers</guilabel> box data in the first row will be copied directly to the 
 first row of the target area without being included in the sort operation.
 </para>
 </sect1>
@@ -607,16 +607,18 @@ invoked by selecting <menuchoice><guimenu>Format</guimenu><guimenuitem>Page
 Layout...</guimenuitem></menuchoice>, to change the orientation of the printed
 pages, the paper size (this should be suitable for your printer) and the size
 of the page borders.</para>
-<para>The <guilabel>Header and Footer</guilabel> page of the <guilabel>
+<para>The <guilabel>Header &amp; Footer</guilabel> page of the <guilabel>
 Page Layout</guilabel> dialog box also lets you add text, including items such
 as the filename, date and page number to the header and footer, of each
 printed page.</para>
-<para>The <guilabel>Print Range:</guilabel> section of the <guilabel>Options
+<para>The <guilabel>Ranges</guilabel> section of the <guilabel>Options
 </guilabel> page of the <guilabel>Page Layout</guilabel> dialog box provides
 an alternative way of restricting the printed output to just one part of the
-worksheet. This page also lets you select whether or not to print the grid,
-comment indicators and formula indicators, and allows you to repeat selected
-column(s) or row(s) on each printed page.</para>
+worksheet and allows you to repeat selected column(s) or row(s) on each printed
+page. This page also lets you select whether or not to print the grid,
+comment indicators and formula indicators, objects and charts.
+In the section <guilabel>Scale Printout</guilabel> you can set a scalefactor 
+or limit the number of pages for the print.</para>
 
 </sect1>
 

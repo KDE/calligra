@@ -19,14 +19,14 @@ with several pages, selected with the icons at the left of the dialog box,
 which allow you to change many aspects of &kspread;'s operation.</para>
 
 <sect1 id="configlocale">
-<title><guilabel>Locale Parameters</guilabel></title>
+<title><guilabel>Locale Settings</guilabel></title>
 <para>
     <mediaobject>
         <imageobject>
             <imagedata fileref="configure1.png" format="PNG"/>
         </imageobject>
         <textobject>
-            <phrase>Locale Parameters Configuration.</phrase>
+            <phrase>Locale Settings Configuration.</phrase>
         </textobject>
     </mediaobject>
 </para>
@@ -242,7 +242,7 @@ box in the <guimenu>View</guimenu> menu is checked.</para>
 </sect1>
 
 <sect1 id="configpagelayout">
-<title><guilabel>Page layout</guilabel></title>
+<title><guilabel>Page Layout</guilabel></title>
 <para>
     <mediaobject>
         <imageobject>
