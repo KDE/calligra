@@ -436,46 +436,95 @@ public:
     //
     ////////////////////////////////
 
+    /**
+     * @return effective pen for the left border
+     * If this cell is merged by another cell, the other cell's
+     * left border pen. If this cell's conditional formatting contains
+     * a left border pen and the condition is matched, the conditional
+     * formatting's pen. Otherwise, its own left border pen.
+     */
     const QPen & effLeftBorderPen( int col, int row ) const;
+    /**
+     * @return effective pen for the top border
+     * @see effLeftBorderPen
+     */
     const QPen & effTopBorderPen( int col, int row ) const;
+    /**
+     * @return effective pen for the right border
+     * @see effLeftBorderPen
+     */
     const QPen & effRightBorderPen( int col, int row ) const;
+    /**
+     * @return effective pen for the bottom border
+     * @see effLeftBorderPen
+     */
     const QPen & effBottomBorderPen( int col, int row ) const;
+    /**
+     * @return effective pen for the go up diagonal border
+     * If this cell's conditional formatting contains a go up diagonal pen and
+     * the condition is matched, the conditional formatting's pen. Otherwise,
+     * its own go up diagonal pen.
+     */
     const QPen & effGoUpDiagonalPen( int col, int row ) const;
+    /**
+     * @return effective pen for the go up diagonal border
+     * @see effGoUpDiagonalPen
+     */
     const QPen & effFallDiagonalPen( int col, int row ) const;
     const QColor & effTextColor( int col, int row ) const;
 
+    /**
+     * @return "worth" of the effective bottom border pen
+     * @see Style::calculateValue
+     * @see effLeftBorderPen
+     */
     uint effBottomBorderValue( int col, int row ) const;
+    /**
+     * @return "worth" of the effective right border pen
+     * @see Style::calculateValue
+     * @see effLeftBorderPen
+     */
     uint effRightBorderValue( int col, int row ) const;
+    /**
+     * @return "worth" of the effective left border pen
+     * @see Style::calculateValue
+     * @see effLeftBorderPen
+     */
     uint effLeftBorderValue( int col, int row ) const;
+    /**
+     * @return "worth" of the effective top border pen
+     * @see Style::calculateValue
+     * @see effLeftBorderPen
+     */
     uint effTopBorderValue( int col, int row ) const;
 
     /**
-     * @reimp
+     * @see Format::leftBorderPen
      */
     const QPen& leftBorderPen( int col, int row ) const;
 
     /**
-     * @reimp
+     * @see Format::topBorderPen
      */
     const QPen& topBorderPen( int col, int row ) const;
 
     /**
-     * @reimp
+     * @see Format::rightBorderPen
      */
     const QPen& rightBorderPen( int col, int row ) const;
 
     /**
-     * @reimp
+     * @see Format::bottomBorderPen
      */
     const QPen& bottomBorderPen( int col, int row ) const;
 
     /**
-     * @reimp
+     * @see Format::bgColor
      */
     const QColor& bgColor( int col, int row ) const;
 
     /**
-     * @reimp
+     * @see Format::backGroundBrush
      */
     const QBrush& backGroundBrush( int col, int row ) const;
 
@@ -486,22 +535,22 @@ public:
     ////////////////////////////////
 
     /**
-     * @reimp
+     * @see Format::setLeftBorderPen
      */
     void setLeftBorderPen( const QPen& p );
 
     /**
-     * @reimp
+     * @see Format::setTopBorderPen
      */
     void setTopBorderPen( const QPen& p );
 
     /**
-     * @reimp
+     * @see Format::setRightBorderPen
      */
     void setRightBorderPen( const QPen& p );
 
     /**
-     * @reimp
+     * @see Format::setBottomBorderPen
      */
     void setBottomBorderPen( const QPen& p );
 
