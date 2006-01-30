@@ -486,9 +486,11 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
                 layout.lineSpacingType = KoParagLayout::LS_DOUBLE;
             else if ( value.find('%') > -1 )
             {
+                value = value.remove( '%' );
                 double percent = value.toDouble();
                 layout.lineSpacingType = KoParagLayout::LS_MULTIPLE;
-                layout.lineSpacing = percent/100;
+                layout.lineSpacing = percent / 100.0;
+                kdDebug(33001) << "line-height =" << percent << ", " << layout.lineSpacing << ", " << percent/100 << endl;
             }
             else // fixed value
             {
