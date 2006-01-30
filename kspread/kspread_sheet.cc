@@ -7825,13 +7825,18 @@ bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenS
   if ( doc()->embeddedObjects().isEmpty() )
     return true;
 
-  xmlWriter.startElement( "table:shapes" );
+  bool objectFound = false; // object on this sheet?
   KSpreadObject::KSpreadOasisSaveContext sc( xmlWriter, mainStyles, indexObj, partIndexObj );
   QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
   for( ; it.current(); ++it )
   {
     if ( it.current()->sheet() == this && ( doc()->savingWholeDocument() || it.current()->isSelected() ) )
     {
+      if ( !objectFound )
+      {
+        xmlWriter.startElement( "table:shapes" );
+        objectFound = true;
+      }
       if ( !it.current()->saveOasisObject(sc)  )
       {
         xmlWriter.endElement();
@@ -7840,7 +7845,10 @@ bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenS
       ++indexObj;
     }
   }
-  xmlWriter.endElement();
+  if ( objectFound )
+  {
+    xmlWriter.endElement();
+  }
   return true;
 }
 
