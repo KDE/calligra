@@ -88,9 +88,11 @@ public:
     /// Import a number of styles (e.g. loaded from another document)
     void importStyles( const KoStyleCollection& styleList );
 
-    void loadOasisStyles( KoOasisContext& context );
+    /// Loads the entire style collection, in the OASIS OpenDocument format
+    /// @return the number of new styles loaded
+    int loadOasisStyles( KoOasisContext& context );
 
-    /// Save the entire style collection to OASIS
+    /// Save the entire style collection in the OASIS OpenDocument format
     /// @p styleType is the STYLE_* value for this style.
     void saveOasis( KoGenStyles& styles, int styleType, KoSavingContext& context ) const;
 

@@ -40,17 +40,13 @@ KoStyleCollection::~KoStyleCollection()
 {
 }
 
-void KoStyleCollection::loadOasisStyles( KoOasisContext& context )
+int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
 {
     QStringList followingStyles;
     QValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
-    uint nStyles = userStyles.count();
-    if( nStyles ) { // we are going to import at least one style.
-        KoParagStyle *s = defaultStyle();
-        //kdDebug() << "loadOasisStyles looking for Standard, to delete it. Found " << s << endl;
-        if(s) // delete the standard style.
-            removeStyle(s);
-    }
+    bool defaultStyleDeleted = false;
+    int stylesLoaded = 0;
+    const unsigned int nStyles = userStyles.count();
     for (unsigned int item = 0; item < nStyles; item++) {
         QDomElement styleElem = userStyles[item];
 	Q_ASSERT( !styleElem.isNull() );
@@ -58,20 +54,30 @@ void KoStyleCollection::loadOasisStyles( KoOasisContext& context )
         if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "paragraph" )
             continue;
 
+        if( !defaultStyleDeleted ) { // we are going to import at least one style.
+            KoParagStyle *s = defaultStyle();
+            //kdDebug() << "loadOasisStyles looking for Standard, to delete it. Found " << s << endl;
+            if(s) // delete the standard style.
+                removeStyle(s);
+            defaultStyleDeleted = true;
+        }
+
         KoParagStyle *sty = new KoParagStyle( QString::null );
         // Load the style
         sty->loadStyle( styleElem, context );
         // Style created, now let's try to add it
+        const int oldStyleCount = count();
         sty = addStyle( sty );
         // the real value of followingStyle is set below after loading all styles
         sty->setFollowingStyle( sty );
 
         kdDebug() << " Loaded style " << sty->name() << endl;
 
-        if(styleList().count() > followingStyles.count() )
+        if ( count() > oldStyleCount )
         {
             const QString following = styleElem.attributeNS( KoXmlNS::style, "next-style-name", QString::null );
             followingStyles.append( following );
+            ++stylesLoaded;
         }
         else
             kdWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
@@ -95,6 +101,7 @@ void KoStyleCollection::loadOasisStyles( KoOasisContext& context )
     // TODO the same thing for style inheritance (style:parent-style-name) and setParentStyle()
 
     Q_ASSERT( defaultStyle() );
+    return stylesLoaded;
 }
 
 void KoStyleCollection::saveOasis( KoGenStyles& styles, int styleType, KoSavingContext& context ) const
