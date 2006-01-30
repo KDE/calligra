@@ -56,6 +56,8 @@ class QListBox;
 class QPushButton;
 class QRadioButton;
 class QWidget;
+class QWidgetStack;
+class KIntNumInput;
 class KDoubleNumInput;
 class KComboBox;
 class QVBoxLayout;
@@ -132,6 +134,8 @@ private slots:
 private:
     void updateLineSpacing( KoParagLayout::SpacingType _type );
 
+    QWidgetStack *sSpacingStack;
+    KIntNumInput *eSpacingPercent;
     KoUnitDoubleSpinBox *eBefore, *eAfter, *eSpacing;
     KoUnitDoubleSpinBox *eLeft, *eRight, *eFirstLine;
     QComboBox *cSpacing;

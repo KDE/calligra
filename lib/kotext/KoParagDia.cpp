@@ -51,6 +51,7 @@
 #include <qtooltip.h>
 #include <qlayout.h>
 #include <qapplication.h>
+#include <qwidgetstack.h>
 
 KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, bool disableAll, QWidget * parent, const char* name  )
     :QWidget( parent, name ),
@@ -925,11 +926,20 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     connect( cSpacing, SIGNAL( activated( int ) ), this, SLOT( spacingActivated( int ) ) );
     spacingGrid->addWidget( cSpacing, 1, 0 );
 
+    sSpacingStack = new QWidgetStack( spacingFrame );
+    
     eSpacing = new KoUnitDoubleSpinBox( spacingFrame, 0, 9999, CM_TO_POINT(1),
 					0.0, m_unit );
     eSpacing->setRange( 0, 9999, 1, false);
     connect( eSpacing, SIGNAL( valueChanged( double ) ), this, SLOT( spacingChanged( double ) ) );
-    spacingGrid->addWidget( eSpacing, 1, 1 );
+    eSpacingPercent = new KIntNumInput( 100, spacingFrame );
+    eSpacingPercent->setRange( 0, 1000, 10, false );
+    eSpacingPercent->setSuffix( " %" );
+    connect( eSpacingPercent, SIGNAL( valueChanged( int ) ), this, SLOT( spacingChanged( double ) ) );
+    
+    sSpacingStack->addWidget( eSpacing );
+    sSpacingStack->addWidget( eSpacingPercent );
+    spacingGrid->addWidget( sSpacingStack, 1, 1 );
 
     // grid row spacing
     spacingGrid->addRowSpacing( 0, fontMetrics().height() / 2 ); // groupbox title
@@ -1028,8 +1038,8 @@ KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
 double KoIndentSpacingWidget::lineSpacing() const
 {
     return (lineSpacingType() == KoParagLayout::LS_MULTIPLE)
-                               ? QMAX(1, eSpacing->value())
-                               : QMAX(0, KoUnit::fromUserValue( eSpacing->value(), m_unit ));
+                               ? QMAX( 1, eSpacingPercent->value() ) / 100.0
+                               : QMAX( 0, eSpacing->value() );
 }
 
 
@@ -1088,7 +1098,7 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     updateLineSpacing( _type );
     eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? QMAX( 1, _spacing )
                         : KoUnit::toUserValue( _spacing, m_unit ) );
-
+    eSpacingPercent->setValue( ( _type == KoParagLayout::LS_MULTIPLE ) ? qRound( _spacing * 100 ) : 100 );
 }
 
 void KoIndentSpacingWidget::save( KoParagLayout & lay )
@@ -1130,6 +1140,14 @@ void KoIndentSpacingWidget::updateLineSpacing( KoParagLayout::SpacingType _type 
                        _type != KoParagLayout::LS_ONEANDHALF &&
                        _type != KoParagLayout::LS_DOUBLE);
 
+    if ( _type == KoParagLayout::LS_MULTIPLE )
+    {
+        sSpacingStack->raiseWidget( eSpacingPercent );
+    }
+    else
+    {
+        sSpacingStack->raiseWidget( eSpacing );
+    }
     eSpacing->setEnabled( needsValue );
     if ( needsValue )
         prev1->setSpacing( eSpacing->value() );
