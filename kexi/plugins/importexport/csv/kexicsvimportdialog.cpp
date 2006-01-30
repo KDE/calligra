@@ -578,7 +578,7 @@ tristate KexiCSVImportDialog::loadRows(QString &field, int &row, int &column, in
 	}
 	int progressStep = 0;
 	if (m_importingProgressDlg)
-		progressStep = m_importingProgressDlg->progressBar()->totalSteps()/200;
+		progressStep = QMAX( 1, m_importingProgressDlg->progressBar()->totalSteps()/200 );
 	int offset = 0;
 	for (;!m_inputStream->atEnd(); offset++)
 	{
