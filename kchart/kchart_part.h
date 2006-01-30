@@ -102,7 +102,7 @@ protected:
 
 private:
     // Helper methods for painting.
-    void         KChartPart::createDisplayData();
+    void         createDisplayData();
 
     QDomElement  createElement(const QString &tagName,
 			       const QFont &font,
