@@ -1648,7 +1648,7 @@ QDomElement OoImpressImport::parseParagraph( QDomDocument& doc, const QDomElemen
     fillStyleStack( paragraph );
 
     // Style name
-    QString styleName = m_styleStack.userStyleName();
+    QString styleName = m_styleStack.userStyleName("paragraph");
     if ( !styleName.isEmpty() )
     {
         QDomElement nameElem = doc.createElement("NAME");
