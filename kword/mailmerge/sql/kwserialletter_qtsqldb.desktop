@@ -5,6 +5,7 @@ ServiceTypes=KWord/MailMergePlugin
 
 Name=Qt-SQL Source (single table)
 Name[bg]=Източник Qt-SQL (една таблица)
+Name[ca]=Font Qt-SQL (taula única)
 Name[cy]=Ffynhonell Qt-SQL (tabl sengl)
 Name[da]=Qt-SQL-kilde (enkelt tabel)
 Name[de]=Qt-SQL (Einzeltabelle)

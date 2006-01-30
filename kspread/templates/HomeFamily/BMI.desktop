@@ -51,6 +51,7 @@ Name[xx]=xxBMI Calculatorxx
 Name[zh_CN]=BMI 计算器
 Name[zh_TW]=BMI 計算機
 Comment=Simple Body Mass Index Calculator
+Comment[ca]=Calculadora senzilla per a índexs de massa corporal.
 Comment[da]=Simpel Body Mass Index regnemaskine
 Comment[de]=Einfache Berechnung des Body Mass Indexes (BMI).
 Comment[es]=Calculadora sencilla de índices de masas de cuerpos

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Kivio Image Export Filter
+Name[ca]=Filtre d'exportació d'imatges per a Kivio
 Name[da]=Kivio billedeksportfilter
 Name[de]=Kivio Bild-Exportfilter
 Name[es]=Filtro de exportación a imagen de Kivio
