@@ -65,7 +65,7 @@ public:
     /**
      * @return the style:text-properties for the currenty applicable list style.
      */
-    QDomElement KoListStyleStack::currentListStyleTextProperties() const;
+    QDomElement currentListStyleTextProperties() const;
 
     /**
      * Set the initial level of the list, i.e. of item at the bottom of the stack.
