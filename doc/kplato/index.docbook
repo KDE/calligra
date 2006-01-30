@@ -14,11 +14,11 @@
 
 <authorgroup>
 <author>
-<firstname></firstname>
-<othername></othername>
-<surname></surname>
+<firstname>Raphael</firstname>
+<!-- <othername></othername> -->
+<surname>Langerhorst</surname>
 <affiliation>
-<address><email></email></address>
+<address><email>raphael.langerhorst@kdemail.net</email></address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
@@ -32,8 +32,8 @@ need them for translation coordination !
 Please respect the format of the date (DD/MM/YYYY) and of the version
 (Major.minor.lesser), it could be used by automation scripts -->
 
-<date>2005-09-23</date>
-<releaseinfo>0.1.0</releaseinfo>
+<date>2006-01-30</date>
+<releaseinfo>0.5.0</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
@@ -54,13 +54,45 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 
 </bookinfo>
 
-<chapter id="introduction"> <title>Introduction</title> <para>
-The documentation for &kappname; was not finished when &kde; was installed on
-this computer.</para> <para>If you need help, please check <ulink
-url="http://www.kde.org">The &kde; Website</ulink> for updates, or by
-submitting your question to <ulink url="mailto:kde@kde.org">The
-&kde; User Mailing list</ulink>.</para> <para><emphasis>The &kde;
-Team</emphasis></para>
+<chapter id="introduction"> <title>Introduction</title>
+<para><emphasis>
+&kplato; as included in &koffice; 1.5 is a technology preview
+release and it is not advised to use &kplato; in critical
+production scenarios. Do so at your own risk.
+</emphasis></para>
+<para>
+&kplato; is a project management application and a planning tool.
+As an integrated component of &koffice;, &kplato; can
+be used within larger documents of other &koffice; components.
+</para>
+</chapter>
+<chapter id="features"> <title>Features</title>
+<itemizedlist>
+<title>Features include:</title>
+<listitem>Resource management,</listitem>
+<listitem>Hierarchical calendars,</listitem>
+<listitem>Tasks with dependencies and subtasks.</listitem>
+<listitem>
+<itemizedlist>
+<title>Various charts for visualization, like:</title>
+<listitem>Gantt</listitem>
+<listitem>Pert</listitem>
+</itemizedlist>
+</listitem>
+<listitem>Reports generation</listitem>
+<listitem>
+<itemizedlist><title>Project scheduling</title>
+<listitem>Pessimistic,</listitem>
+<listitem>Expected,</listitem>
+<listitem>Optimistic.</listitem>
+</itemizedlist>
+</listitem>
+<listitem>Work breakdown structure (WBS).</listitem>
+<listitem>Critical path and resources.</listitem>
+</itemizedlist>
+</chapter>
+
+<chapter id="license"><title>License</title>
 
 &underFDL;
 
