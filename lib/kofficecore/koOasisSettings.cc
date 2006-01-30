@@ -165,10 +165,11 @@ int KoOasisSettings::Items::parseConfigItemInt( const QString& configName, int d
     bool ok;
     const QString str = findConfigItem( configName, &ok );
     int value;
-    if ( ok )
+    if ( ok ) {
         value = str.toInt( &ok );
-    if ( ok )
-        return value;
+        if ( ok )
+            return value;
+    }
     return defValue;
 }
 
@@ -177,10 +178,11 @@ double KoOasisSettings::Items::parseConfigItemDouble( const QString& configName,
     bool ok;
     const QString str = findConfigItem( configName, &ok );
     double value;
-    if ( ok )
+    if ( ok ) {
         value = str.toDouble( &ok );
-    if ( ok )
-        return value;
+        if ( ok )
+            return value;
+    }
     return defValue;
 }
 
@@ -200,10 +202,11 @@ short KoOasisSettings::Items::parseConfigItemShort( const QString& configName, s
     bool ok;
     const QString str = findConfigItem( configName, &ok );
     short value;
-    if ( ok )
+    if ( ok ) {
         value = str.toShort( &ok );
-    if ( ok )
-        return value;
+        if ( ok )
+            return value;
+    }
     return defValue;
 }
 
@@ -212,9 +215,10 @@ long KoOasisSettings::Items::parseConfigItemLong( const QString& configName, lon
     bool ok;
     const QString str = findConfigItem( configName, &ok );
     long value;
-    if ( ok )
+    if ( ok ) {
         value = str.toLong( &ok );
-    if ( ok )
-        return value;
+        if ( ok )
+            return value;
+    }
     return defValue;
 }
