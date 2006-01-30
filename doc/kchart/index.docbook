@@ -34,7 +34,7 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2006-01-10</date>
+<date>2006-01-30</date>
 <releaseinfo>1.5.0</releaseinfo>
 
 <abstract>
@@ -178,6 +178,31 @@ To start the wizard simply click on the
 <imagedata fileref="cr22-action-wizard.png" format="PNG"/>
 </imageobject></inlinemediaobject> icon in the toolbar.
 </para>
+
+<sect2 id="wizard-data">
+<title>Step 0 - Choosing the Data source</title>
+<screenshot>
+<screeninfo>Wizard Step 0 - Data source</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="kchart-wizard0.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para>
+The first step in the wizard is to actually choose the data source.
+If the selected data area does not match the data you want,
+select the data now</para>
+<para>
+Include cells that you want to use as row and column labels,
+if you want them in the chart.</para>
+<para>
+Then go to the next step with the <guibutton>Next &gt;</guibutton> 
+button. You can also choose <guibutton>Finish</guibutton> at any step
+if you are already comfortable with the setup done so far.
+</para>
+</sect2>
+
 <sect2 id="wizard-charttype">
 <title>Step 1 - Choosing the Chart Type</title>
 <screenshot>
@@ -189,7 +214,7 @@ To start the wizard simply click on the
   </mediaobject>
 </screenshot>
 <para>
-The first step in the wizard is to actually choose the primary
+The next step in the wizard is to actually choose the primary
 type of the chart. This selection has the most important
 impact on how your data will be presented. Thus it should
 be chosen well. You can change the type of the chart with the
@@ -198,14 +223,13 @@ later on. In fact it is even considered normal to test all the
 various chart types to find the best fitting.
 </para>
 <para>
-In this example we choose the line type. Depending on the
+In this example we choose the <guilabel>Lines</guilabel> type. Depending on the
 chosen chart type different options are available in the
 following steps.
 </para>
 <para>
 After chosing the type you can get to the next step with
-the Next button. You can also choose Finish at any step
-if you are already comfortable with the setup done so far.
+the <guibutton>Next &gt;</guibutton> button.
 </para>
 </sect2>
 <sect2 id="wizard-chartsubtype">
@@ -264,10 +288,10 @@ The last step of the wizard lets you set various options for
 the axes and other options, depending on the chart type.
 </para>
 <para>
-You can either choose <guimenu>Finish</guimenu> to accept
-the options for your chart, go <guimenu>Back</guimenu> and
+You can either choose <guibutton>Finish</guibutton> to accept
+the options for your chart, go <guibutton>&lt; Back</guibutton> and
 change various things or simply dismiss all options from the
-wizard by choosing <guimenu>Cancel</guimenu>.
+wizard by choosing <guibutton>Cancel</guibutton>.
 </para>
 <para>
 If you choose Finish all your choices in the wizard will
@@ -542,7 +566,7 @@ help you here.
 <sect2>
 <title>Getting started</title>
 <para>
-Run &kchart; and select the blank template.
+Run &kchart; and select the <guilabel>Blank Worksheeet</guilabel>.
 </para>
 <screenshot>
 <screeninfo>Starting with a blank chart</screeninfo>
@@ -553,7 +577,7 @@ Run &kchart; and select the blank template.
   </mediaobject>
 </screenshot>
 <para>
-Hit the OK button to get started. &kchart; will present to you
+Hit the button <guibutton>Use This Template</guibutton> to get started. &kchart; will present to you
 a completely empty document. That's good, we just need to enter
 some data and do some basic configuration to get a nice chart.
 </para>
@@ -989,7 +1013,7 @@ based on this document.
 <listitem><para><action>Prints the document</action></para>
 <important><para>Make sure the proper print system is selected in the
 <quote>Print system currently used:</quote> section. This option can
-be seen after clicking on the <guimenu>Options>></guimenu> button.</para></important></listitem>
+be seen after clicking on the <guimenu>Options &gt;&gt;</guimenu> button.</para></important></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1099,8 +1123,8 @@ dialog.</para>
 <term><menuchoice>
 <guimenu>Colors...</guimenu>
 </menuchoice></term>
-<listitem><para><action>Select graph colors</action>, grid colors and
-title colors here.</para>
+<listitem><para><action>Select graph colors</action>, line colors, grid colors and
+axis title and axis label colors here.</para>
 </listitem>
 </varlistentry>
 
@@ -1118,9 +1142,8 @@ individual graphs. Each graphed set of data is a series.</para>
 <term><menuchoice>
 <guimenu>Background...</guimenu>
 </menuchoice></term>
-<listitem><para><action>Select the background color</action> for your
+<listitem><para><action>Select a color or a wallpaper</action> as background for your
 graph.</para>
-<note><para>The picture backgrounds do not work at this time.</para></note>
 </listitem>
 </varlistentry>
 
@@ -1128,9 +1151,8 @@ graph.</para>
 <term><menuchoice>
 <guimenu>Legend...</guimenu>
 </menuchoice></term>
-<listitem><para><action>Change the location of the legend</action> box. The
-color of the legend box can be changed also. The legend box contains
-the color key to the graph series.</para>
+<listitem><para><action>Change title, font and location of the legend</action> box. The
+color of the legend box can be changed also.</para>
 </listitem>
 </varlistentry>
 
@@ -1265,8 +1287,8 @@ is used to add additional buttons to the toolbars.</para>
 </para></listitem>
 
 <listitem><para>
-Click on one of the items in the left hand pane. This item will now have a
-blue background showing that it has been selected.
+Click on one of the items in the left hand pane. This item will now be
+highlighted showing that it has been selected.
 </para></listitem>
 
 <listitem><para>
