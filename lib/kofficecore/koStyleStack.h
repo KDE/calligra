@@ -147,15 +147,17 @@ public:
 
     /**
      * Return the name of the style specified by the user,
-     * i.e. not an auto style
+     * i.e. not an auto style.
+     * This is used to know e.g. which user-style is associated with the current paragraph.
+     * There could be none though.
      */
-    QString userStyleName() const;
+    QString userStyleName( const QString& family ) const;
 
     /**
      * Return the display name of the style specified by the user,
      * i.e. not an auto style
      */
-    QString userStyleDisplayName() const;
+    QString userStyleDisplayName( const QString& family ) const;
 
     /**
      * Set the type of properties that will be looked for.
@@ -167,7 +169,7 @@ public:
     void setTypeProperties( const char* typeProperties );
 
 private:
-    bool isUserStyle( const QDomElement& e ) const;
+    bool isUserStyle( const QDomElement& e, const QString& family ) const;
 
 private:
     /// For save/restore: stack of "marks". Each mark is an index in m_stack.

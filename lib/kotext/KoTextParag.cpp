@@ -2772,13 +2772,13 @@ KoParagLayout KoTextParag::loadParagLayout( KoOasisContext& context, KoStyleColl
         KoParagStyle *style;
         // Name of the style. If there is no style, then we do not supply
         // any default!
-        QString styleName = context.styleStack().userStyleName();
+        QString styleName = context.styleStack().userStyleName( "paragraph" );
         if ( !styleName.isEmpty() )
         {
             style = styleCollection->findStyle( styleName );
             // When pasting the style names are random, the display names matter
             if (!style)
-                style = styleCollection->findStyleByDisplayName( context.styleStack().userStyleDisplayName() );
+                style = styleCollection->findStyleByDisplayName( context.styleStack().userStyleDisplayName( "paragraph" ) );
             if (!style)
             {
                 kdError(32500) << "Cannot find style \"" << styleName << "\" - using Standard" << endl;

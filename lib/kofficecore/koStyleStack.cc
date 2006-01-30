@@ -254,35 +254,37 @@ QDomElement KoStyleStack::childNodeNS( const char* nsURI, const char* localName)
     return QDomElement();          // a null element
 }
 
-bool KoStyleStack::isUserStyle( const QDomElement& e ) const
+bool KoStyleStack::isUserStyle( const QDomElement& e, const QString& family ) const
 {
+    if ( e.attributeNS( m_styleNSURI, "family", QString::null ) != family )
+        return false;
     const QDomElement parent = e.parentNode().toElement();
     //kdDebug(30003) << k_funcinfo << "tagName=" << e.tagName() << " parent-tagName=" << parent.tagName() << endl;
     return parent.localName() == "styles" /*&& parent.namespaceURI() == KoXmlNS::office*/;
 }
 
-QString KoStyleStack::userStyleName() const
+QString KoStyleStack::userStyleName( const QString& family ) const
 {
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
-        //kdDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI, "name") << endl;
-        if ( isUserStyle( *it ) )
+        //kdDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI, "name", QString::null) << endl;
+        if ( isUserStyle( *it, family ) )
             return (*it).attributeNS( m_styleNSURI, "name", QString::null );
     }
     // Can this ever happen?
     return "Standard";
 }
 
-QString KoStyleStack::userStyleDisplayName() const
+QString KoStyleStack::userStyleDisplayName( const QString& family ) const
 {
     QValueList<QDomElement>::ConstIterator it = m_stack.end();
     while ( it != m_stack.begin() )
     {
         --it;
         //kdDebug(30003) << k_funcinfo << (*it).attributeNS( m_styleNSURI, "display-name") << endl;
-        if ( isUserStyle( *it ) )
+        if ( isUserStyle( *it, family ) )
             return (*it).attributeNS( m_styleNSURI, "display-name", QString::null );
     }
     return QString::null; // no display name, this can happen since it's optional
