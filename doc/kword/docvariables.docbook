@@ -164,6 +164,34 @@ and toggled between fixed and variable dates.  Simply click once with the &RMB; 
 A small menu will appear.  Select <guilabel>Change Variable To</guilabel> and a submenu will appear.  Select your new
 variable or new layout from the menu and the variable is immediately updated. </para></tip>
 
+<!-- -->
+<para> There are three additional dates you can insert into your document:</para>
+<variablelist>
+<varlistentry>
+<term><guimenuitem>Date of Last Printing</guimenuitem></term>
+<listitem><para>Selecting this option will insert the date this document was last printed into the current cursor position.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Date of File Creation</guimenuitem></term>
+<listitem><para>Selecting this option will insert the date this document created into the current cursor position.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guimenuitem>Date of File Modification</guimenuitem></term>
+<listitem><para>Selecting this option will insert the date this document was last edited into the current cursor position.
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+<!--row><entry>Date of Last Printing</entry><entry>Any date format</entry><entry>The date this document was last printed.</entry></row>
+<row><entry>Date of File Creation</entry><entry>Any date format</entry><entry>The date this document was created.</entry></row>
+<row><entry>Date of File Modification</entry><entry>Any date format</entry><entry>The date this document was edited.</entry></row>
+-->
+
 </sect3>
 <sect3 id="insert-time"><title>Insert Time</title>
 <indexterm><primary>variables</primary><secondary>insert time</secondary></indexterm>
@@ -302,6 +330,8 @@ A small menu will appear.  Select <guilabel>Change Variable To</guilabel> and a 
 variable or new layout from the menu and the variable is immediately updated. </para></tip>
 
 </sect3>
+
+
 </sect2>
 <sect2 id="page-number"><title>Page Numbering </title>
 <indexterm><primary>variables</primary><secondary>insert page numbers</secondary></indexterm>
@@ -370,9 +400,6 @@ are specific to the document.  You can insert these variables by selecting
 <row><entry>City</entry><entry>Philadelphia</entry><entry>The city specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Company</entry><entry>&kde;</entry><entry>The company name specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
 <row><entry>Country</entry><entry>United States</entry><entry>The country name specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>
-<row><entry>Date of File Creation</entry><entry>Any date format</entry><entry>The date this document was created.</entry></row>
-<row><entry>Date of File Modification</entry><entry>Any date format</entry><entry>The date this document was edited.</entry></row>
-<row><entry>Date of Last Printing</entry><entry>Any date format</entry><entry>The date this document was last printed.</entry></row>
 <row><entry>Directory Name</entry><entry>/home/juser/kword</entry><entry>This is the folder name for the document. The filename is not included in the folder name variable.</entry></row>
 <row><entry>Directory &amp; Filename</entry><entry>/home/juser/kword/Resume.kwd</entry><entry>The folder and filename of the current file.</entry></row>
 <row><entry>Document Abstract</entry><entry>This is a current resume.</entry> <entry>The document abstract specified in the <link linkend="documentinfo">Document information</link> box.</entry></row>

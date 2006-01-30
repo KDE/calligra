@@ -41,7 +41,7 @@ has the ability to toggle the document structure window on and off.</para>
 <imagedata fileref="docstruct.png" format="PNG"/></imageobject>
 </mediaobject>
 </screenshot>
-<para>As you can see, there are 4 groups of frames categorized (<guilabel>Text
+<para>As you can see, there are five groups of frames categorized (<guilabel>Text
 Frames/Frame Sets</guilabel>
 <guilabel>Pictures</guilabel>, <guilabel>Tables</guilabel>, <guilabel>Formula
 Frames</guilabel>, 
