@@ -161,6 +161,10 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	MessageHandler* msgHandler )
 {
 	Q_UNUSED(dbName);
+#ifndef KEXI_FUTURE_FEATURES
+	Q_UNUSED(cancelled);
+	Q_UNUSED(msgHandler);
+#endif
 	KexiDBDrvDbg << "drv_useDatabase(): " << m_data->fileName() << endl;
 #ifdef SQLITE2
 	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
@@ -173,7 +177,9 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	int exclusiveFlag = Connection::isReadOnly() ? SQLITE_OPEN_READONLY : SQLITE_OPEN_WRITE_LOCKED; // <-- shared read + (if !r/o): exclusive write
 //! @todo add option
 	int allowReadonly = 1;
+# ifdef KEXI_FUTURE_FEATURES
 	const bool wasReadOnly = Connection::isReadOnly();
+# endif
 
 	d->res = sqlite3_open( 
 		//m_data->fileName().ucs2(), //utf16

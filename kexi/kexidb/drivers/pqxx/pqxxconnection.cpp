@@ -147,6 +147,8 @@ bool pqxxSqlConnection::drv_createDatabase( const QString &dbName )
 bool pqxxSqlConnection::drv_useDatabase( const QString &dbName, bool *cancelled, 
 	MessageHandler* msgHandler )
 {
+	Q_UNUSED(cancelled);
+	Q_UNUSED(msgHandler);
 	KexiDBDrvDbg << "pqxxSqlConnection::drv_useDatabase: " << dbName << endl;
 
 	QString conninfo;

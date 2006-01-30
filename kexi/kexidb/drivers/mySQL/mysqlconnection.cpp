@@ -107,6 +107,7 @@ bool MySqlConnection::drv_createDatabase( const QString &dbName) {
 bool MySqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled, MessageHandler* msgHandler)
 {
 	Q_UNUSED(cancelled);
+	Q_UNUSED(msgHandler);
 //TODO is here escaping needed?
 	return d->useDatabase(dbName);
 }

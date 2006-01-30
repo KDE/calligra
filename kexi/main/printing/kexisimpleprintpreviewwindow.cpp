@@ -47,6 +47,7 @@ KexiSimplePrintPreviewView::KexiSimplePrintPreviewView(
 
 void KexiSimplePrintPreviewView::paintEvent( QPaintEvent *pe )
 {
+	Q_UNUSED(pe);
 	if (!enablePainting)
 		return;
 	QPixmap pm(size()); //dbl buffered
