@@ -84,6 +84,7 @@ public:
     /// Part of loadOasis that is shared with KWVariableSettings::loadOasis for footnotes/endnotes
     void loadOasisListStyle( const QDomElement& listStyle,
                              const QDomElement& listStyleProperties,
+                             const QDomElement& listStyleTextProperties,
                              int restartNumbering,
                              bool orderedList, bool heading, int level, bool loadingStyle );
     /// Save as OASIS XML

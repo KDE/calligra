@@ -63,6 +63,11 @@ public:
     QDomElement currentListStyleProperties() const;
 
     /**
+     * @return the style:text-properties for the currenty applicable list style.
+     */
+    QDomElement KoListStyleStack::currentListStyleTextProperties() const;
+
+    /**
      * Set the initial level of the list, i.e. of item at the bottom of the stack.
      * This is used when a level is explicitely specified in the
      * [un]ordered-list tag (OASIS extension)

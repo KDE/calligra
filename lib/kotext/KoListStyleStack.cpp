@@ -38,3 +38,9 @@ QDomElement KoListStyleStack::currentListStyleProperties() const
     QDomElement style = currentListStyle();
     return KoDom::namedItemNS( style, KoXmlNS::style, "list-level-properties" );
 }
+
+QDomElement KoListStyleStack::currentListStyleTextProperties() const
+{
+    QDomElement style = currentListStyle();
+    return KoDom::namedItemNS( style, KoXmlNS::style, "text-properties" );
+}
