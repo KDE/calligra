@@ -1193,7 +1193,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
     p.appendChild( layoutElement );
 
     // Style name
-    QString styleName = m_styleStack.userStyleName();
+    QString styleName = m_styleStack.userStyleName("paragraph");
     if ( !styleName.isEmpty() )
     {
         QDomElement nameElement = doc.createElement("NAME");
