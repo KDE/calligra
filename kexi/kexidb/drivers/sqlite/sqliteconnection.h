@@ -44,10 +44,10 @@ class SQLiteConnection : public Connection
 		virtual Cursor* prepareQuery( const QString& statement, uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
 
-#ifndef SQLITE2 //TEMP IFDEF!
+//#ifndef SQLITE2 //TEMP IFDEF!
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
 			TableSchema& tableSchema);
-#endif
+//#endif
 		/*! Reimplemented to provide real read-only flag of the connection */
 		virtual bool isReadOnly() const;
 

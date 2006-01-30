@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#if !defined KEXIDB_SQLITEPREPAREDSTATEMENT_H && !defined SQLITE2
+#if !defined KEXIDB_SQLITEPREPAREDSTATEMENT_H
+//&& !defined SQLITE2
 #define KEXIDB_SQLITEPREPAREDSTATEMENT_H
 
 #include <kexidb/preparedstatement.h>

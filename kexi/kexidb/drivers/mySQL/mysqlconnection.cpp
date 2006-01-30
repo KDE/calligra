@@ -183,7 +183,7 @@ bool MySqlConnection::drv_getTablesList( QStringList &list )
 }
 
 PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type, 
-	const TableSchema& tableSchema)
+	TableSchema& tableSchema)
 {
 	Q_UNUSED(type);
 	Q_UNUSED(tableSchema);

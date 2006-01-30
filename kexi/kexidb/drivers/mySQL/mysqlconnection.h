@@ -50,7 +50,7 @@ class MySqlConnection : public Connection
 		virtual QCString escapeString( const QCString& str) const;
 
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
-			const TableSchema& tableSchema);
+			TableSchema& tableSchema);
 
 	protected:
 

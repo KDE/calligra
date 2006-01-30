@@ -19,7 +19,8 @@ mysqlconnection_p.cpp \
 mysqlconnection.cpp \
 mysqldriver.cpp \
 mysqlcursor.cpp \
-mysqlkeywords.cpp
+mysqlkeywords.cpp \
+mysqlpreparedstatement.cpp
 
 HEADERS		= 
 

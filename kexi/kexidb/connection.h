@@ -740,7 +740,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! */
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
-			TableSchema& tableSchema);
+			TableSchema& tableSchema) = 0;
 
 		bool isInternalTableSchema(const QString& tableName);
 

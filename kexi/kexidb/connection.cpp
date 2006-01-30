@@ -2919,12 +2919,12 @@ tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema
 	return res;
 }
 
-PreparedStatement::Ptr Connection::prepareStatement(PreparedStatement::StatementType /*type*/, 
-		TableSchema& /*tableSchema*/)
+/*PreparedStatement::Ptr Connection::prepareStatement(PreparedStatement::StatementType, 
+		TableSchema&)
 {
 	//safe?
 	return 0;
-}
+}*/
 
 void Connection::setReadOnly(bool set)
 {

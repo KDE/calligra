@@ -34,6 +34,9 @@ SQLitePreparedStatement::SQLitePreparedStatement(StatementType type, ConnectionI
 	data = dynamic_cast<KexiDB::SQLiteConnectionInternal&>(conn).data; //copy
 
 	temp_st = generateStatementString();
+#ifdef SQLITE2
+	//! @todo
+#else
 	if (!temp_st.isEmpty()) {
 		res = sqlite3_prepare(
 			data, /* Database handle */
@@ -46,15 +49,23 @@ SQLitePreparedStatement::SQLitePreparedStatement(StatementType type, ConnectionI
 		
 		}
 	}
+#endif
 }
 
 SQLitePreparedStatement::~SQLitePreparedStatement()
 {
+#ifdef SQLITE2
+//! @todo
+#else
 	sqlite3_finalize(prepared_st_handle);
+#endif
 }
 
 bool SQLitePreparedStatement::execute()
 {
+#ifdef SQLITE2
+//! @todo
+#else
 	if (m_resetRequired) {
 		res = sqlite3_reset(prepared_st_handle);
 		if (SQLITE_OK != res) {
@@ -221,6 +232,7 @@ bool SQLitePreparedStatement::execute()
 
 		//todo
 	}
+#endif
 	return false;
 }
 

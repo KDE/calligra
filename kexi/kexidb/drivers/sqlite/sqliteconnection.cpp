@@ -311,13 +311,13 @@ QString SQLiteConnection::serverErrorMsg()
 	return d->errmsg.isEmpty() ? Connection::serverErrorMsg() : d->errmsg;
 }
 
-#ifndef SQLITE2 //TEMP IFDEF!
 PreparedStatement::Ptr SQLiteConnection::prepareStatement(PreparedStatement::StatementType type, 
 	TableSchema& tableSchema)
 {
+//#ifndef SQLITE2 //TEMP IFDEF!
 	return new SQLitePreparedStatement(type, *d, tableSchema);
+//#endif
 }
-#endif
 
 bool SQLiteConnection::isReadOnly() const
 {

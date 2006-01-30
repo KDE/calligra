@@ -14,7 +14,8 @@ kexidb_mysqldriver_la_SOURCES = \
   mysqlconnection.cpp \
   mysqlconnection_p.cpp \
   mysqlcursor.cpp \
-  mysqlkeywords.cpp
+  mysqlkeywords.cpp \
+  mysqlpreparedstatement.cpp
 
 kexidb_mysqldriver_la_LIBADD = $(LIB_KPARTS) \
   $(LIB_QT) \
