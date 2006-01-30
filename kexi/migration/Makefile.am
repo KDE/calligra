@@ -8,7 +8,7 @@ INCLUDES = \
 	-I$(top_srcdir)/kexi/widget \
 	-I$(top_srcdir)/kexi/main/startup \
 	-I$(top_builddir)/kexi/main/startup \
-  $(all_includes)
+	$(all_includes)
 
 if compile_pgsql_plugin
 pgsql_dir=pqxx
@@ -26,10 +26,11 @@ libkeximigrate_la_SOURCES = keximigrate.cpp importwizard.cpp migratemanager.cpp 
 	keximigratedata.cpp importoptionsdlg.cpp
 
 libkeximigrate_la_LIBADD = \
-	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) \
+	$(top_builddir)/kexi/core/libkexicore.la \
 	$(top_builddir)/kexi/kexidb/libkexidb.la \
 	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
-	$(top_builddir)/kexi/main/libkeximain.la
+	$(top_builddir)/kexi/main/libkeximain.la \
+	$(LIB_QT) $(LIB_KDECORE)
 
 libkeximigrate_la_LDFLAGS = $(all_libraries) $(KDE_RPATH) $(VER_INFO)
 
@@ -45,10 +46,11 @@ noinst_PROGRAMS = keximigratetest
 
 keximigratetest_SOURCES = keximigratetest.cpp
 keximigratetest_LDADD = libkeximigrate.la \
-	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) \
+	$(top_builddir)/kexi/core/libkexicore.la \
 	$(top_builddir)/kexi/kexidb/libkexidb.la \
 	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
-	$(top_builddir)/kexi/main/libkeximain.la
+	$(top_builddir)/kexi/main/libkeximain.la \
+	$(LIB_QT) $(LIB_KDECORE)
 
 keximigratetest_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 
