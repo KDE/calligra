@@ -253,7 +253,6 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     m_bInsertDirectCursor = false;
 
     objStartY = 0;
-    setPageLayout( m_pageLayout );
     _presPen = QPen( red, 3, SolidLine );
     ignoreSticky = TRUE;
 

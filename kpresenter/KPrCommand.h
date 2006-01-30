@@ -791,12 +791,6 @@ protected:
     KoParagLayout* m_oldParagLayout;
 };
 
-struct ParagBookmark {
-    QString m_bookName;
-    int m_startParagIndex;
-    int m_endParagIndex;
-};
-
 /**
  * Command to change variable setting
  */
