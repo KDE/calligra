@@ -1336,7 +1336,7 @@ int KoTextParag::calculateLineSpacing( int line, int startChar, int lastChar ) c
         {
         case KoParagLayout::LS_MULTIPLE:
         {
-            double n = QMAX( m_layout.lineSpacingValue() - 1.0, 0.0 );
+            double n = m_layout.lineSpacingValue() - 1.0; // yes, can be negative
             return shadow + qRound( n * heightForLineSpacing( startChar, lastChar ) );
         }
         case KoParagLayout::LS_ONEANDHALF:
@@ -2336,6 +2336,20 @@ void KoTextParag::printRTDebug( int info )
         if ( kwLineSpacingType() != KoParagLayout::LS_SINGLE )
             kdDebug(32500) << "  linespacing type=" << s_linespacing[ -kwLineSpacingType() ]
                            << " value=" << kwLineSpacing() << endl;
+        const int pageBreaking = m_layout.pageBreaking;
+        QStringList pageBreakingFlags;
+        if ( pageBreaking & KoParagLayout::KeepLinesTogether )
+            pageBreakingFlags.append( "KeepLinesTogether" );
+        if ( pageBreaking & KoParagLayout::HardFrameBreakBefore )
+            pageBreakingFlags.append( "HardFrameBreakBefore" );
+        if ( pageBreaking & KoParagLayout::HardFrameBreakAfter )
+            pageBreakingFlags.append( "HardFrameBreakAfter" );
+        if ( pageBreaking & KoParagLayout::KeepWithPrevious )
+            pageBreakingFlags.append( "KeepWithPrevious" );
+        if ( pageBreaking & KoParagLayout::KeepWithNext )
+            pageBreakingFlags.append( "KeepWithNext" );
+        if ( !pageBreakingFlags.isEmpty() )
+            kdDebug(32500) << " page Breaking: " << pageBreakingFlags.join(",") << endl;
 
         static const char * const tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
