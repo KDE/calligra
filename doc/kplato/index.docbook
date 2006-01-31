@@ -69,26 +69,26 @@ be used within larger documents of other &koffice; components.
 <chapter id="features"> <title>Features</title>
 <itemizedlist>
 <title>Features include:</title>
-<listitem>Resource management,</listitem>
-<listitem>Hierarchical calendars,</listitem>
-<listitem>Tasks with dependencies and subtasks.</listitem>
+<listitem><para>Resource management,</para></listitem>
+<listitem><para>Hierarchical calendars,</para></listitem>
+<listitem><para>Tasks with dependencies and subtasks.</para></listitem>
 <listitem>
 <itemizedlist>
 <title>Various charts for visualization, like:</title>
-<listitem>Gantt</listitem>
-<listitem>Pert</listitem>
+<listitem><para>Gantt</para></listitem>
+<listitem><para>Pert</para></listitem>
 </itemizedlist>
 </listitem>
-<listitem>Reports generation</listitem>
+<listitem><para>Reports generation</para></listitem>
 <listitem>
 <itemizedlist><title>Project scheduling</title>
-<listitem>Pessimistic,</listitem>
-<listitem>Expected,</listitem>
-<listitem>Optimistic.</listitem>
+<listitem><para>Pessimistic,</para></listitem>
+<listitem><para>Expected,</para></listitem>
+<listitem><para>Optimistic.</para></listitem>
 </itemizedlist>
 </listitem>
-<listitem>Work breakdown structure (WBS).</listitem>
-<listitem>Critical path and resources.</listitem>
+<listitem><para>Work breakdown structure (WBS).</para></listitem>
+<listitem><para>Critical path and resources.</para></listitem>
 </itemizedlist>
 </chapter>
 
