@@ -547,7 +547,8 @@ public:
   virtual void emitBeginOperation();
 
   /**
-   * Mark the end of an operation and triggers repaints/calculations.
+   * Mark the end of an operation and triggers a repaint of any cells or regions of cells which
+   * have been marked as 'dirty' via calls to Sheet::setRegionPaintDirty
    * See above comment to emitBeginOperation(bool).
    */
   virtual void emitEndOperation();
@@ -555,6 +556,9 @@ public:
   /**
    * s.a. difference does only specified tasks and thats why it improves performance
    * significantly. rect normally are the visible cells/the cells that need to be updated.
+   *
+   * TODO:  This is essentially redundant now since emitEndOperation behaviour has been fixed to
+   * only update cells that were already in the paint dirty list.
    */
   void emitEndOperation( const Region& region );
 

@@ -6694,7 +6694,7 @@ void View::slotUpdateView( Sheet *_sheet )
 
   //  d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0),
   //                                      QPoint(KS_colMax, KS_rowMax)));
-
+  
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 

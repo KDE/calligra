@@ -7714,6 +7714,10 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
 
     if ( repaint )
     {
+        //All the cells in this row, or below this row will need to be repainted
+        //So add that region of the sheet to the paint dirty list. 
+        setRegionPaintDirty( QRect( 0 , _row , KS_colMax , KS_rowMax) );
+        
       emit sig_updateVBorder( this );
       emit sig_updateView( this );
     }
@@ -7731,9 +7735,16 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
         if ( c->column() == _column )
             c->setLayoutDirtyFlag( true );
 
+    //All the cells in this column or to the right of it will need to be repainted if the column
+    //has been resized or hidden, so add that region of the sheet to the paint dirty list.
+    setRegionPaintDirty( QRect( _column , 0 , KS_colMax , KS_rowMax) );
+
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
     emit sig_maxColumn( maxColumn() );
+    
+
+    
     _format->clearDisplayDirtyFlag();
 }
 
