@@ -162,7 +162,7 @@ class Canvas::Private
 
     //---- stuff needed for resizing ----
     /// object which gets resized
-    KSpreadObject *m_resizeObject;
+    EmbeddedObject *m_resizeObject;
     /// should the ratio of the object kept during resize
     bool m_keepRatio;
     /// ratio of the object ( width / height )
@@ -256,6 +256,8 @@ Canvas::Canvas (View *_view)
   (void)new ToolTip( this );
   setAcceptDrops( true );
   setInputMethodEnabled( true ); // ensure using the InputMethod
+  
+  setWFlags(Qt::WNoAutoErase);
 }
 
 Canvas::~Canvas()
@@ -867,6 +869,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     }
     else
       repaint( d->m_boundingRealRect );
+  
 
     QRect drawingRect;
 
@@ -954,7 +957,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
   if ( d->mouseSelectedObject )
   {
-    KSpreadObject *obj = 0;
+    EmbeddedObject *obj = 0;
     QPoint p ( (int) _ev->x(),
               (int) _ev->y() );
     if ( ( obj = getObject( p, activeSheet() ) ) && obj->isSelected() )
@@ -1106,7 +1109,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* _ev)
 
   if ( d->modType != MT_NONE && d->m_resizeObject && d->m_resizeObject->isSelected() )
   {
-    KSpreadObject *obj = d->m_resizeObject;
+    EmbeddedObject *obj = d->m_resizeObject;
     QRect r;
     KoRect unzoomedRect;
     if ( d->modType == MT_MOVE )
@@ -1265,7 +1268,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   if ( activeSheet() )
   {
-    KSpreadObject *obj;
+    EmbeddedObject *obj;
     if ( (obj = getObject( _ev->pos(), activeSheet() ) ) )
     {
       if ( obj->isSelected() )
@@ -1273,8 +1276,8 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         if ( d->modType == MT_NONE)
           return;
 
-        deSelectAllObj();
-        selectObj( obj );
+        deselectAllObjects();
+        selectObject( obj );
           //raiseObject( kpobject );
 
         d->m_resizeObject = obj;
@@ -1310,8 +1313,8 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         //QPoint tmp = applyGrid ( e->pos(),true );
         QPoint tmp( _ev->pos() );;
         //d->insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
-        deSelectAllObj();
-        selectObj( obj );
+        deselectAllObjects();
+        selectObject( obj );
         setCursor( Qt::SizeAllCursor );
       }
 
@@ -1325,7 +1328,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       return;
     }
     else if ( d->mouseSelectedObject )
-      deSelectAllObj();
+      deselectAllObjects();
   }
 
   // Get info about where the event occurred - this is duplicated
@@ -1338,7 +1341,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   if ( activeSheet() )
   {
-    KSpreadObject *obj;
+    EmbeddedObject *obj;
     if ( (obj = getObject( _ev->pos(), activeSheet() ) ) )
     {
       if ( obj->isSelected() )
@@ -1346,8 +1349,8 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         if ( d->modType == MT_NONE)
           return;
 
-        deSelectAllObj();
-        selectObj( obj );
+        deselectAllObjects();
+        selectObject( obj );
           //raiseObject( kpobject );
 
         d->m_resizeObject = obj;
@@ -1383,7 +1386,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         //QPoint tmp = applyGrid ( e->pos(),true );
         QPoint tmp( _ev->pos() );;
         //d->insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
-        selectObj( obj );
+        selectObject( obj );
         setCursor( Qt::SizeAllCursor );
       }
       
@@ -1397,7 +1400,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       return;
     }
     else if ( d->mouseSelectedObject )
-      deSelectAllObj();
+      deselectAllObjects();
   }
 
   double dwidth = d->view->doc()->unzoomItX( width() );
@@ -1619,14 +1622,14 @@ void Canvas::startTheDrag()
 void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
 {
 
-  KSpreadObject *obj;
+  EmbeddedObject *obj;
   if ( ( obj = getObject( _ev->pos(), activeSheet() ) ) )
   {
     switch ( obj->getType() )
     {
       case OBJECT_KOFFICE_PART: case OBJECT_CHART:
       {
-        dynamic_cast<KSpreadChild*>(obj)->activate( view(), this );
+        dynamic_cast<EmbeddedKOfficeObject*>(obj)->activate( view(), this );
         return;
         break;
       }
@@ -3249,12 +3252,12 @@ double Canvas::autoScrollAccelerationY( int offset )
 }
 
 
-KSpread::KSpreadObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
+KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
 {
   QPoint const p ( (int) pos.x() ,
               (int) pos.y() );
 
-  QPtrListIterator<KSpreadObject> itObject( doc()->embeddedObjects() );
+  QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   for( ; itObject.current(); ++itObject )
   {
     if ( itObject.current()->sheet() == _sheet )
@@ -3271,32 +3274,32 @@ KSpread::KSpreadObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )
   return 0;
 }
 
-void Canvas::selectObj( KSpreadObject *obj )
+void Canvas::selectObject( EmbeddedObject *obj )
 {
   if ( obj->sheet() != activeSheet() || obj->isSelected() )
     return;
   obj->setSelected( true );
-  _repaint( obj );
+  repaintObject( obj );
 
   d->mouseSelectedObject = true;
   emit objectSelectedChanged();
   deleteEditor( true );
 }
 
-void Canvas::deSelectObj( KSpreadObject *obj )
+void Canvas::deselectObject( EmbeddedObject *obj )
 {
   if ( obj->sheet() != activeSheet() || !obj->isSelected() )
     return;
   obj->setSelected( false );
-  _repaint( obj );
+  repaintObject( obj );
 
   d->mouseSelectedObject = false;
   emit objectSelectedChanged();
 }
 
-void Canvas::selectAllObj()
+void Canvas::selectAllObjects()
 {
-  QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+  QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
   for ( ; it.current() ; ++it )
   {
     if ( it.current()->sheet() == activeSheet() )
@@ -3307,16 +3310,16 @@ void Canvas::selectAllObj()
 //   emit objectSelectedChanged();
 }
 
-void Canvas::deSelectAllObj()
+void Canvas::deselectAllObjects()
 {
   if( activeSheet()->numSelected() == 0 )
     return;
 
   //lowerObject();
 
-  QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+  QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
   for ( ; it.current() ; ++it )
-      deSelectObj( it.current() );
+      deselectObject( it.current() );
 
    d->mouseSelectedObject = false;
 //   emit objectSelectedChanged();
@@ -3634,7 +3637,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
   return true;
 }
 
-void Canvas::_repaint( KSpreadObject *obj )
+void Canvas::repaintObject( EmbeddedObject *obj )
 {
   if ( !obj->isSelected() )
   {
@@ -3650,7 +3653,7 @@ void Canvas::_repaint( KSpreadObject *obj )
   }
 }
 
-void Canvas::copyOasisObjs()
+void Canvas::copyOasisObjects()
 {
     //todo copy object from selected object
 //     KoStoreDrag *kd = new KoStoreDrag( "application/vnd.oasis.opendocument.spreadsheet", 0L );
@@ -4031,7 +4034,7 @@ void Canvas::clipoutChildren( QPainter& painter, QWMatrix& /*matrix*/ )
   painter.save();
   painter.translate( -xOffset() * doc()->zoomedResolutionX() , -yOffset() * doc()->zoomedResolutionY() );
 
-  QPtrListIterator<KSpreadObject> itObject( doc()->embeddedObjects() );
+  QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   for( ; itObject.current(); ++itObject )
   {
     if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject && d->m_isMoving ) )
@@ -4049,7 +4052,7 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 {
   //painter.setWorldMatrix( matrix );
   painter.end();
-  QPtrListIterator<KSpreadObject> itObject( doc()->embeddedObjects() );
+  QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   itObject.toFirst();
   if ( !itObject.current() )
     return;
@@ -4064,7 +4067,7 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
   for( ; itObject.current(); ++itObject )
   {
     QRect const zoomedObjectGeometry = doc()->zoomRect( itObject.current()->geometry() );
-    if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject && d->m_isMoving ) &&
+    if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject /*&& d->m_isMoving*/ ) &&
            zoomedWindowGeometry.intersects( zoomedObjectGeometry ) )
     {
       // #### todo: paint only if child is visible inside rect

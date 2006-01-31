@@ -74,7 +74,7 @@ class Selection;
 class CellEditor;
 class LocationEditWidget;
 class ComboboxLocationEditWidget;
-class KSpreadObject;
+class EmbeddedObject;
 
 
 /**
@@ -303,17 +303,18 @@ public:
      */
     double autoScrollAccelerationY( int offset );
 
-    KSpreadObject *getObject( const QPoint &pos, Sheet *_sheet );
-    void selectAllObj();
-    void deSelectAllObj();
-    void selectObj( KSpreadObject* );
-    void deSelectObj( KSpreadObject* );
+    //TODO: These embedded-object related methods need API documentation!
+    EmbeddedObject* getObject( const QPoint &pos, Sheet *_sheet );
+    void selectAllObjects();
+    void deselectAllObjects();
+    void selectObject( EmbeddedObject* );
+    void deselectObject( EmbeddedObject* );
     void setMouseSelectedObject(bool b);
     bool isObjectSelected();
 
-    void _repaint( KSpreadObject *obj );
+    void repaintObject( EmbeddedObject *obj );
 
-    void copyOasisObjs();
+    void copyOasisObjects();
     //void insertOasisData();
 
 public slots:

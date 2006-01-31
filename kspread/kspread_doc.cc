@@ -153,7 +153,7 @@ public:
     bool configLoadFromFile:1;
   QStringList spellListIgnoreAll;
   /// list of all objects
-  QPtrList<KSpreadObject> m_embeddedObjects;
+  QPtrList<EmbeddedObject> m_embeddedObjects;
   KoPictureCollection m_pictureCollection;
   QValueList<KoPictureKey> usedPictures;
   bool m_savingWholeDocument;
@@ -778,12 +778,12 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 
     if ( saveFlag == SaveSelected )
     {
-      QPtrListIterator<KSpreadObject> it(embeddedObjects() );
+      QPtrListIterator<EmbeddedObject> it(embeddedObjects() );
       for( ; it.current(); ++it )
       {
         if ( it.current()->getType() != OBJECT_CHART  && it.current()->getType() != OBJECT_KOFFICE_PART )
           continue;
-        KoDocumentChild *embedded = dynamic_cast<KSpreadChild *>(it.current() )->embeddedObject();
+        KoDocumentChild *embedded = dynamic_cast<EmbeddedKOfficeObject *>(it.current() )->embeddedObject();
         KoDocument* childDoc = embedded->document();
         QString path;
         if ( !childDoc->isStoredExtern() )
@@ -2263,13 +2263,13 @@ bool Doc::configLoadFromFile() const
 }
 
 
-void Doc::insertObject( KSpreadObject * obj )
+void Doc::insertObject( EmbeddedObject * obj )
 {
   switch ( obj->getType() )
   {
     case OBJECT_KOFFICE_PART: case OBJECT_CHART:
     {
-      KoDocument::insertChild( dynamic_cast<KSpreadChild*>(obj)->embeddedObject() );
+      KoDocument::insertChild( dynamic_cast<EmbeddedKOfficeObject*>(obj)->embeddedObject() );
       break;
     }
     default:
@@ -2278,7 +2278,7 @@ void Doc::insertObject( KSpreadObject * obj )
   d->m_embeddedObjects.append( obj );
 }
 
-QPtrList<KSpreadObject>& Doc::embeddedObjects()
+QPtrList<EmbeddedObject>& Doc::embeddedObjects()
 {
     return d->m_embeddedObjects;
 }
@@ -2312,14 +2312,14 @@ void Doc::repaint( const QRect& rect )
   }
 }
 
-void Doc::repaint( KSpreadObject *obj )
+void Doc::repaint( EmbeddedObject *obj )
 {
   QPtrListIterator<KoView> it( views() );
   for( ; it.current(); ++it )
   {
     Canvas* canvas = ((View*)it.current())->canvasWidget();
     if ( obj->sheet() == canvas->activeSheet() )
-        canvas->_repaint( obj );
+        canvas->repaintObject( obj );
   }
 }
 
@@ -2349,11 +2349,11 @@ void Doc::insertPixmapKey( KoPictureKey key )
 void Doc::makeUsedPixmapList()
 {
     d->usedPictures.clear();
-    QPtrListIterator<KSpreadObject> it( d->m_embeddedObjects );
+    QPtrListIterator<EmbeddedObject> it( d->m_embeddedObjects );
     for ( ; it.current() ; ++it )
     {
         if( it.current()->getType() == OBJECT_PICTURE && ( d->m_savingWholeDocument || it.current()->isSelected() ) )
-            insertPixmapKey( static_cast<KSpreadPictureObject*>( it.current() )->getKey() );
+            insertPixmapKey( static_cast<EmbeddedPictureObject*>( it.current() )->getKey() );
     }
 }
 

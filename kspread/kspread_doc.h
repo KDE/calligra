@@ -73,7 +73,7 @@ class Region;
 class StyleManager;
 class UndoAction;
 class KSPLoadingInfo;
-class KSpreadObject;
+class EmbeddedObject;
 
 struct Reference
 {
@@ -510,11 +510,11 @@ public:
   /**
    * Inserts an object to the object list.
    */
-  void insertObject( KSpreadObject * obj );
+  void insertObject( EmbeddedObject * obj );
     /**
     * @return the list of all embedded objects (charts, pictures and koffice objects) Use insertObject to add an object to the list.
     */
-  QPtrList<KSpreadObject>& embeddedObjects();
+  QPtrList<EmbeddedObject>& embeddedObjects();
   KoPictureCollection *pictureCollection();
 
   void initConfig();
@@ -612,7 +612,7 @@ public:
   void repaint( bool );
 
   void repaint( const QRect& );
-  void repaint( KSpreadObject* );
+  void repaint( EmbeddedObject* );
 
   virtual void addShell( KoMainWindow *shell );
 

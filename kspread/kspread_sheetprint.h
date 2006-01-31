@@ -708,7 +708,7 @@ class PrintObject
   public:
     PrintObject() : obj(0), p(0) {}
 
-    KSpreadObject *obj;
+    EmbeddedObject *obj;
     QPixmap *p;
 };
 

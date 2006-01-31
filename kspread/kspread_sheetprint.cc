@@ -279,10 +279,10 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 
 
     //Cache all object so they only need to be repainted once.
-    QPtrListIterator<KSpreadObject> itObject( m_pDoc->embeddedObjects() );
+    QPtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
     for ( ; itObject.current(); ++itObject )
     {
-      KSpreadObject *obj = itObject.current();
+      EmbeddedObject *obj = itObject.current();
       if ( obj->sheet() != m_pSheet ||
            !( (( obj->getType() == OBJECT_KOFFICE_PART || obj->getType() == OBJECT_PICTURE ) && m_bPrintObjects) ||
            ( obj->getType() == OBJECT_CHART && m_bPrintCharts ) ) )
@@ -572,11 +572,11 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
     //
     QRect zoomedView = m_pDoc->zoomRect( view );
     //QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
-    //QPtrListIterator<KSpreadObject> itObject( m_pDoc->embeddedObjects() );
+    //QPtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
 
     QValueList<PrintObject *>::iterator itObject;
     for ( itObject = m_printObjects.begin(); itObject != m_printObjects.end(); ++itObject ) {
-          KSpreadObject *obj = (*itObject)->obj;
+          EmbeddedObject *obj = (*itObject)->obj;
 //        QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
 //        .arg(it.current()->contentRect().left())
 //        .arg(it.current()->contentRect().top())

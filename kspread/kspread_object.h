@@ -44,8 +44,8 @@ namespace KSpread
 {
 
 class Doc;
-class KSpreadChild;
-class KSpreadObject;
+class EmbeddedKOfficeObject;
+class EmbeddedObject;
 class View;
 class ChartBinding;
 
@@ -105,11 +105,11 @@ enum AlignType {
 /**
  * Contains basic information for every object.
  */
-class KSpreadObject
+class EmbeddedObject
 {
   public:
-    KSpreadObject( Sheet *_sheet, const KoRect& _geometry );
-    virtual ~KSpreadObject();
+    EmbeddedObject( Sheet *_sheet, const KoRect& _geometry );
+    virtual ~EmbeddedObject();
     virtual ObjType getType() const { return OBJECT_GENERAL; }
     virtual QString getTypeString() const
         { return QString(); }
@@ -200,12 +200,12 @@ class KSpreadObject
 /**
  * Holds an embedded koffice object.
  */
-class KSpreadChild : public KSpreadObject
+class EmbeddedKOfficeObject : public EmbeddedObject
 {
   public:
-    KSpreadChild( Doc *parent, Sheet *_sheet, KoDocument* doc, const KoRect& geometry );
-    KSpreadChild( Doc *parent, Sheet *_sheet );
-    virtual ~KSpreadChild();
+    EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet, KoDocument* doc, const KoRect& geometry );
+    EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet );
+    virtual ~EmbeddedKOfficeObject();
     virtual ObjType getType() const { return OBJECT_KOFFICE_PART; }
     virtual QString getTypeString() const
         { return i18n("Embedded Object"); }
@@ -233,13 +233,13 @@ class KSpreadChild : public KSpreadObject
 /**
  * Holds an embedded chart object.
  */
-class ChartChild : public KSpreadChild
+class EmbeddedChart : public EmbeddedKOfficeObject
 {
 //     Q_OBJECT
   public:
-    ChartChild( Doc *_spread, Sheet *_sheet, KoDocument* doc, const KoRect& _rect );
-    ChartChild( Doc *_spread, Sheet *_sheet );
-    virtual ~ChartChild();
+    EmbeddedChart( Doc *_spread, Sheet *_sheet, KoDocument* doc, const KoRect& _rect );
+    EmbeddedChart( Doc *_spread, Sheet *_sheet );
+    virtual ~EmbeddedChart();
     virtual ObjType getType() const { return OBJECT_CHART; }
     virtual QString getTypeString() const
         { return i18n("Chart"); }
@@ -270,14 +270,14 @@ class ChartChild : public KSpreadChild
 /**
  * Holds a picture object.
  */
-class KSpreadPictureObject : public KSpreadObject
+class EmbeddedPictureObject : public EmbeddedObject
 {
   public:
-    KSpreadPictureObject(Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection );
-    KSpreadPictureObject(Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection, const KoPictureKey & key );
-    KSpreadPictureObject( Sheet *_sheet, KoPictureCollection *_imageCollection );
-    virtual ~KSpreadPictureObject();
-    KSpreadPictureObject &operator=( const KSpreadPictureObject & );
+    EmbeddedPictureObject(Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection );
+    EmbeddedPictureObject(Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection, const KoPictureKey & key );
+    EmbeddedPictureObject( Sheet *_sheet, KoPictureCollection *_imageCollection );
+    virtual ~EmbeddedPictureObject();
+    EmbeddedPictureObject &operator=( const EmbeddedPictureObject & );
 
     virtual ObjType getType() const { return OBJECT_PICTURE; }
     virtual QString getTypeString() const

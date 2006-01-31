@@ -131,7 +131,7 @@ bool CellBinding::contains( int _x, int _y )
  *
  *****************************************************************************/
 
-ChartBinding::ChartBinding( Sheet *_sheet, const QRect& _area, ChartChild *_child )
+ChartBinding::ChartBinding( Sheet *_sheet, const QRect& _area, EmbeddedChart *_child )
     : CellBinding( _sheet, _area )
 {
   m_child = _child;
@@ -731,7 +731,7 @@ int Sheet::numSelected() const
 {
     int num = 0;
 
-    QPtrListIterator<KSpreadObject> it(  d->workbook->doc()->embeddedObjects() );
+    QPtrListIterator<EmbeddedObject> it(  d->workbook->doc()->embeddedObjects() );
     for ( ; it.current() ; ++it )
     {
         if( it.current()->sheet() == this && it.current()->isSelected() )
@@ -5962,7 +5962,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
     }
 
-    QPtrListIterator<KSpreadObject>  chl = doc()->embeddedObjects();
+    QPtrListIterator<EmbeddedObject>  chl = doc()->embeddedObjects();
     for( ; chl.current(); ++chl )
     {
        if ( chl.current()->sheet() == this )
@@ -5983,10 +5983,10 @@ bool Sheet::isLoading()
 }
 
 
-QPtrList<KSpreadObject> Sheet::getSelectedObjects()
+QPtrList<EmbeddedObject> Sheet::getSelectedObjects()
 {
-    QPtrList<KSpreadObject> objects;
-    QPtrListIterator<KSpreadObject> it = doc()->embeddedObjects();
+    QPtrList<EmbeddedObject> objects;
+    QPtrListIterator<EmbeddedObject> it = doc()->embeddedObjects();
     for ( ; it.current() ; ++it )
     {
         if( it.current()->isSelected()
@@ -6001,8 +6001,8 @@ QPtrList<KSpreadObject> Sheet::getSelectedObjects()
 /*
  * Check if object name already exists.
  */
-bool Sheet::objectNameExists( KSpreadObject *object, QPtrList<KSpreadObject> &list ) {
-    QPtrListIterator<KSpreadObject> it( list );
+bool Sheet::objectNameExists( EmbeddedObject *object, QPtrList<EmbeddedObject> &list ) {
+    QPtrListIterator<EmbeddedObject> it( list );
 
     for ( it.toFirst(); it.current(); ++it ) {
         // object name can exist in current object.
@@ -6014,13 +6014,13 @@ bool Sheet::objectNameExists( KSpreadObject *object, QPtrList<KSpreadObject> &li
     return false;
 }
 
-void Sheet::unifyObjectName( KSpreadObject *object ) {
+void Sheet::unifyObjectName( EmbeddedObject *object ) {
     if ( object->getObjectName().isEmpty() ) {
         object->setObjectName( object->getTypeString() );
     }
     QString objectName( object->getObjectName() );
 
-    QPtrList<KSpreadObject> list( doc()->embeddedObjects() );
+    QPtrList<EmbeddedObject> list( doc()->embeddedObjects() );
 
     int count = 1;
 
@@ -6296,15 +6296,15 @@ void Sheet::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& 
         e = n.toElement();
         if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
         {
-          KSpreadObject *obj = 0;
+          EmbeddedObject *obj = 0;
           QDomNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
-            obj = new KSpreadChild( doc(), this );
+            obj = new EmbeddedKOfficeObject( doc(), this );
           else
           {
             QDomNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
             if ( !image.isNull() )
-              obj = new KSpreadPictureObject( this, doc()->pictureCollection() );
+              obj = new EmbeddedPictureObject( this, doc()->pictureCollection() );
             else
               kdDebug() << "Object type wasn't loaded!" << endl;
           }
@@ -7541,7 +7541,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
         }
             else if ( tagName == "object" )
         {
-            KSpreadChild *ch = new KSpreadChild( doc(), this );
+            EmbeddedKOfficeObject *ch = new EmbeddedKOfficeObject( doc(), this );
             if ( ch->load( e ) )
                 insertObject( ch );
             else
@@ -7552,7 +7552,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
         }
             else if ( tagName == "chart" )
         {
-          ChartChild *ch = new ChartChild( doc(), this );
+          EmbeddedChart *ch = new EmbeddedChart( doc(), this );
           if ( ch->load( e ) )
                 insertObject( ch );
           else
@@ -7609,13 +7609,13 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
 bool Sheet::loadChildren( KoStore* _store )
 {
-    QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
     for( ; it.current(); ++it )
     {
         if ( it.current()->sheet() == this && ( it.current()->getType() == OBJECT_KOFFICE_PART || it.current()->getType() == OBJECT_CHART ) )
         {
             kdDebug() << "KSpreadSheet::loadChildren" << endl;
-            if ( !dynamic_cast<KSpreadChild*>( it.current() )->embeddedObject()->loadDocument( _store ) )
+            if ( !dynamic_cast<EmbeddedKOfficeObject*>( it.current() )->embeddedObject()->loadDocument( _store ) )
                 return false;
         }
     }
@@ -7750,7 +7750,7 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
 
     if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
         return false;
-    ChartChild * ch = new ChartChild( doc(), this, dd, _rect );
+    EmbeddedChart * ch = new EmbeddedChart( doc(), this, dd, _rect );
     ch->setDataArea( _data );
     ch->update();
     ch->chart()->setCanChangeValue( false  );
@@ -7776,7 +7776,7 @@ bool Sheet::insertChild( const KoRect& _rect, KoDocumentEntry& _e )
     if ( !d->initDoc(KoDocument::InitDocEmbedded) )
         return false;
 
-    KSpreadChild* ch = new KSpreadChild( doc(), this, d, _rect );
+    EmbeddedKOfficeObject* ch = new EmbeddedKOfficeObject( doc(), this, d, _rect );
     insertObject( ch );
     return true;
 }
@@ -7784,18 +7784,18 @@ bool Sheet::insertChild( const KoRect& _rect, KoDocumentEntry& _e )
 bool Sheet::insertPicture( const KoRect& _rect, KURL& _file )
 {
     KoPictureKey key = doc()->pictureCollection()->loadPicture( _file.prettyURL(0, KURL::StripFileProtocol) ).getKey();
-    KSpreadPictureObject* ch = new KSpreadPictureObject( this, _rect, doc()->pictureCollection(), key );
+    EmbeddedPictureObject* ch = new EmbeddedPictureObject( this, _rect, doc()->pictureCollection(), key );
     insertObject( ch );
     return true;
 }
 
-void Sheet::insertObject( KSpreadObject *_obj )
+void Sheet::insertObject( EmbeddedObject *_obj )
 {
     doc()->insertObject( _obj );
     updateView( doc()->zoomRect( _obj->geometry() ) );
 }
 
-void Sheet::changeChildGeometry( KSpreadChild *_child, const KoRect& _rect )
+void Sheet::changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _rect )
 {
     _child->setGeometry( _rect );
 
@@ -7806,13 +7806,13 @@ bool Sheet::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
 
-    QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
     for( ; it.current(); ++it )
     {
         if ( it.current()->sheet() == this && ( it.current()->getType() == OBJECT_KOFFICE_PART || it.current()->getType() == OBJECT_CHART ) )
         {
             QString path = QString( "%1/%2" ).arg( _path ).arg( i++ );
-            if ( !dynamic_cast<KSpreadChild*>( it.current() )->embeddedObject()->document()->saveToStore( _store, path ) )
+            if ( !dynamic_cast<EmbeddedKOfficeObject*>( it.current() )->embeddedObject()->document()->saveToStore( _store, path ) )
                 return false;
         }
     }
@@ -7826,8 +7826,8 @@ bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenS
     return true;
 
   bool objectFound = false; // object on this sheet?
-  KSpreadObject::KSpreadOasisSaveContext sc( xmlWriter, mainStyles, indexObj, partIndexObj );
-  QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+  EmbeddedObject::KSpreadOasisSaveContext sc( xmlWriter, mainStyles, indexObj, partIndexObj );
+  QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
   for( ; it.current(); ++it )
   {
     if ( it.current()->sheet() == this && ( doc()->savingWholeDocument() || it.current()->isSelected() ) )

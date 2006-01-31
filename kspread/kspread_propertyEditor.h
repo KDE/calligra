@@ -28,7 +28,7 @@ class KCommand;
 namespace KSpread
 {
 
-class KSpreadObject;
+class EmbeddedObject;
 class Sheet;
 class Doc;
 // class KPrPenStyleWidget;
@@ -68,7 +68,7 @@ private:
 
     Sheet *m_page;
     Doc *m_doc;
-    QPtrList<KSpreadObject> m_objects;
+    QPtrList<EmbeddedObject> m_objects;
 
 //     KPrPenStyleWidget *m_penProperty;
 //     KPrBrushProperty *m_brushProperty;

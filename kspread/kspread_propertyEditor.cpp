@@ -277,7 +277,7 @@ KCommand * PropertyEditor::getCommand()
                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
                 }
 
-                QPtrListIterator<KSpreadObject> it( m_objects );
+                QPtrListIterator<EmbeddedObject> it( m_objects );
                 for ( ; it.current(); ++it )
                 {
                     KoRect oldRect = it.current()->geometry()/*getRect()*/;
@@ -443,7 +443,7 @@ GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
     bool keepRatio = false;
     generalValue.m_keepRatio = STATE_OFF;
 
-    QPtrListIterator<KSpreadObject> it( m_objects );
+    QPtrListIterator<EmbeddedObject> it( m_objects );
     if ( it.current() )
     {
         protect = it.current()->isProtect();

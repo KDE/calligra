@@ -358,7 +358,7 @@ protected:
 class ChangeObjectGeometryCommand : public KCommand
 {
   public:
-    ChangeObjectGeometryCommand( KSpreadObject *_obj, KoRect &_newGeometry );
+    ChangeObjectGeometryCommand( EmbeddedObject *_obj, KoRect &_newGeometry );
 
     virtual void execute();
     virtual void unexecute();
@@ -366,13 +366,13 @@ class ChangeObjectGeometryCommand : public KCommand
 
   protected:
     KoRect newGeometry;
-    KSpreadObject *obj;
+    EmbeddedObject *obj;
 };
 
 class RemoveObjectCommand : public KCommand
 {
   public:
-    RemoveObjectCommand( KSpreadObject *_obj, bool _cut = false );
+    RemoveObjectCommand( EmbeddedObject *_obj, bool _cut = false );
     ~RemoveObjectCommand();
 
     virtual void execute();
@@ -380,7 +380,7 @@ class RemoveObjectCommand : public KCommand
     virtual QString name() const;
 
   protected:
-    KSpreadObject *obj;
+    EmbeddedObject *obj;
     Doc* doc;
     bool executed;
     bool cut;
@@ -406,19 +406,19 @@ class InsertObjectCommand : public KCommand
     QRect data;
     ObjType type;
     KURL file;
-    KSpreadObject *obj;
+    EmbeddedObject *obj;
 };
 
 class RenameNameObjectCommand : public KNamedCommand
 {
 public:
-    RenameNameObjectCommand( const QString &_name, const QString &_objectName, KSpreadObject *_obj, Doc *_doc );
+    RenameNameObjectCommand( const QString &_name, const QString &_objectName, EmbeddedObject *_obj, Doc *_doc );
     ~RenameNameObjectCommand();
     void execute();
     void unexecute();
 protected:
     QString oldObjectName, newObjectName;
-    KSpreadObject *object;
+    EmbeddedObject *object;
     Doc *doc;
     Sheet *m_page;
 };
@@ -428,9 +428,9 @@ class GeometryPropertiesCommand : public KNamedCommand
 {
 public:
     enum KgpType { ProtectSize, KeepRatio};
-    GeometryPropertiesCommand( const QString &name, QPtrList<KSpreadObject> &objects,
+    GeometryPropertiesCommand( const QString &name, QPtrList<EmbeddedObject> &objects,
                                   bool newValue, KgpType type, Doc *_doc );
-    GeometryPropertiesCommand( const QString &name, QValueList<bool> &lst, QPtrList<KSpreadObject> &objects,
+    GeometryPropertiesCommand( const QString &name, QValueList<bool> &lst, QPtrList<EmbeddedObject> &objects,
                                   bool newValue, KgpType type, Doc *_doc );
     ~GeometryPropertiesCommand();
 
@@ -439,7 +439,7 @@ public:
 
 protected:
     QValueList<bool> m_oldValue;
-    QPtrList<KSpreadObject> m_objects;
+    QPtrList<EmbeddedObject> m_objects;
     bool m_newValue;
     KgpType m_type;
     Doc *m_doc;

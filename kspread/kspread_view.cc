@@ -3651,8 +3651,8 @@ void View::addSheet( Sheet * _t )
                     this, SLOT( slotSheetRemoved( Sheet* ) ) );
   // ########### Why do these signals not send a pointer to the sheet?
   // This will lead to bugs.
-  QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
-                    SLOT( slotUpdateChildGeometry( KSpreadChild* ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateChildGeometry( EmbeddedKOfficeObject* ) ),
+                    SLOT( slotUpdateChildGeometry( EmbeddedKOfficeObject* ) ) );
   QObject::connect( _t, SIGNAL( sig_maxColumn( int ) ), d->canvas, SLOT( slotMaxColumn( int ) ) );
   QObject::connect( _t, SIGNAL( sig_maxRow( int ) ), d->canvas, SLOT( slotMaxRow( int ) ) );
 
@@ -3953,7 +3953,7 @@ void View::copySelection()
 
   if ( canvasWidget()->isObjectSelected() )
   {
-    canvasWidget()->copyOasisObjs();
+    canvasWidget()->copyOasisObjects();
     return;
   }
   if ( !d->canvas->editor() )
@@ -3983,11 +3983,11 @@ void View::cutSelection()
 
   if ( canvasWidget()->isObjectSelected() )
   {
-    canvasWidget()->copyOasisObjs();
+    canvasWidget()->copyOasisObjects();
     doc()->emitEndOperation( *selectionInfo() );
 
     KMacroCommand * macroCommand = 0L;
-    QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
     for ( ; it.current() ; ++it )
     {
       if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
@@ -4033,7 +4033,7 @@ void View::paste()
 
   if ( data->provides( KoStoreDrag::mimeType("application/vnd.oasis.opendocument.spreadsheet" ) ))
   {
-    canvasWidget()->deSelectAllObj();
+    canvasWidget()->deselectAllObjects();
     QCString returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
     const QByteArray arr = data->encodedData( returnedTypeMime );
     if( arr.isEmpty() )
@@ -4947,7 +4947,7 @@ void View::insertPicture( const QRect& _geometry, KURL& _file )
   cmd->execute();
 }
 
-void View::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
+void View::slotUpdateChildGeometry( EmbeddedKOfficeObject */*_child*/ )
 {
     // ##############
     // TODO
@@ -5327,7 +5327,7 @@ KoDocument * View::hitTest( const QPoint& /*pos*/ )
 //     for (; it.current(); ++it )
 //     {
 //         // Is the child document on the visible sheet ?
-//         if ( ((KSpreadChild*)it.current())->sheet() == d->activeSheet )
+//         if ( ((EmbeddedKOfficeObject*)it.current())->sheet() == d->activeSheet )
 //         {
 //             KoDocument *doc = it.current()->hitTest( pos, m );
 //             if ( doc )
@@ -5429,7 +5429,7 @@ void View::popupChildMenu( KoChild* child, const QPoint& /*global_pos*/ )
 
     delete d->popupChild;
 
-//     d->popupChildObject = static_cast<KSpreadChild*>(child);
+//     d->popupChildObject = static_cast<EmbeddedKOfficeObject*>(child);
 // 
 //     d->popupChild = new QPopupMenu( this );
 // 
@@ -5769,7 +5769,7 @@ void View::openPopupMenu( const QPoint & _point )
 
     d->popupMenu = new QPopupMenu();
 
-    KSpreadObject *obj;
+    EmbeddedObject *obj;
     if ( d->canvas->isObjectSelected() && ( obj = d->canvas->getObject( d->canvas->mapFromGlobal( _point ), d->activeSheet ) ) && obj->isSelected() )
     {
       d->actions->deleteCell->plug( d->popupMenu );
@@ -5923,7 +5923,7 @@ void View::deleteSelection()
 void View::deleteSelectedObjects()
 {
   KMacroCommand * macroCommand = 0L;
-  QPtrListIterator<KSpreadObject> it( doc()->embeddedObjects() );
+  QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
   for ( ; it.current() ; ++it )
   {
     if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
@@ -6711,9 +6711,9 @@ void View::slotUpdateView( Sheet * _sheet, const Region& region )
   doc()->emitEndOperation( region );
 }
 
-void View::slotUpdateView( KSpreadObject *obj )
+void View::slotUpdateView( EmbeddedObject *obj )
 {
-  d->canvas->_repaint( obj );
+  d->canvas->repaintObject( obj );
 }
 
 void View::slotUpdateHBorder( Sheet * _sheet )

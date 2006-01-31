@@ -62,7 +62,7 @@ namespace KSpread
 {
 class Canvas;
 class Cell;
-class ChartChild;
+class EmbeddedChart;
 class DependencyManager;
 class Doc;
 class GenValidationStyles;
@@ -75,8 +75,8 @@ class SheetPrint;
 class Style;
 class UndoInsertRemoveAction;
 class View;
-class KSpreadChild;
-class KSpreadObject;
+class EmbeddedKOfficeObject;
+class EmbeddedObject;
 
 /********************************************************************
  *
@@ -124,13 +124,13 @@ class ChartBinding : public CellBinding
     Q_OBJECT
 public:
 
-    ChartBinding( Sheet *_sheet, const QRect& _area, ChartChild *_child );
+    ChartBinding( Sheet *_sheet, const QRect& _area, EmbeddedChart *_child );
     virtual ~ChartBinding();
 
     virtual void cellChanged( Cell *_obj );
 
 private:
-    ChartChild* m_child;
+    EmbeddedChart* m_child;
 };
 
 /********************************************************************
@@ -269,7 +269,7 @@ public:
      *
      * @return list of selected objets.
      */
-    QPtrList<KSpreadObject> getSelectedObjects();
+    QPtrList<EmbeddedObject> getSelectedObjects();
 
 
     /**
@@ -281,7 +281,7 @@ public:
      *
      * @param object to work on
      */
-    void unifyObjectName( KSpreadObject *object );
+    void unifyObjectName( EmbeddedObject *object );
 
     /**
      * Returns the layout direction of the sheet.
@@ -963,7 +963,7 @@ public:
 
     bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data );
     bool insertPicture( const KoRect& _geometry, KURL& _file );
-    void changeChildGeometry( KSpreadChild *_child, const KoRect& _geometry );
+    void changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _geometry );
 
     const QColorGroup& colorGroup() { return widget()->colorGroup(); }
 
@@ -1194,10 +1194,10 @@ signals:
     void sig_refreshView();
     void sig_updateView( Sheet *_sheet );
     void sig_updateView( Sheet *_sheet, const Region& );
-    void sig_updateView( KSpreadObject *obj );
+    void sig_updateView( EmbeddedObject *obj );
     void sig_updateHBorder( Sheet *_sheet );
     void sig_updateVBorder( Sheet *_sheet );
-    void sig_updateChildGeometry( KSpreadChild *_child );
+    void sig_updateChildGeometry( EmbeddedKOfficeObject *_child );
     void sig_maxColumn( int _max_column );
     void sig_maxRow( int _max_row );
     /**
@@ -1246,7 +1246,7 @@ protected:
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
 
-    void insertObject( KSpreadObject *_obj );
+    void insertObject( EmbeddedObject *_obj );
 
     /**
      * @see #autofill
@@ -1309,7 +1309,7 @@ private:
     void checkCellContent(Cell * cell1, Cell * cell2, int & ret);
     int  adjustColumnHelper(Cell * c, int _col, int _row);
     void checkContentDirection( QString const & name );
-    bool objectNameExists( KSpreadObject *object, QPtrList<KSpreadObject> &list );
+    bool objectNameExists( EmbeddedObject *object, QPtrList<EmbeddedObject> &list );
 
     class Private;
     Private* d;

@@ -61,8 +61,8 @@ class Selection;
 class VBorder;
 class View;
 class ComboboxLocationEditWidget;
-class KSpreadChild;
-class KSpreadObject;
+class EmbeddedKOfficeObject;
+class EmbeddedObject;
 
 
 /**
@@ -648,13 +648,13 @@ public slots:
     void slotRefreshView();
     void slotUpdateView( Sheet *_sheet );
     void slotUpdateView( Sheet *_sheet, const Region& );
-    void slotUpdateView( KSpreadObject* obj );
+    void slotUpdateView( EmbeddedObject* obj );
     void slotUpdateHBorder( Sheet *_sheet );
     void slotUpdateVBorder( Sheet *_sheet );
     void slotChangeSelection(const Region&);
     void slotChangeChoice(const Region&);
     void slotAddSheet( Sheet *_sheet );
-    void slotUpdateChildGeometry( KSpreadChild *_child );
+    void slotUpdateChildGeometry( EmbeddedKOfficeObject *_child );
     void slotSheetRenamed( Sheet* sheet, const QString& old_name );
     void slotSheetHidden( Sheet*_sheet );
     void slotSheetShown( Sheet*_sheet );

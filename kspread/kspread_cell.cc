@@ -502,7 +502,8 @@ void Cell::setValue( const Value& v )
   // Value of the cell has changed - trigger necessary actions
   valueChanged ();
 
-  format()->sheet()->setRegionPaintDirty(cellRect());
+    if ( !format()->sheet()->isLoading() )
+        format()->sheet()->setRegionPaintDirty(cellRect());
 }
 
 void Cell::setCellValue (const Value &v, FormatType fmtType, const QString &txt)
@@ -3272,8 +3273,12 @@ void Cell::paintText( QPainter& painter,
     tmpMultiRow     = format()->multiRow( cellRef.x(), cellRef.y() );
   }
 
-  // Actually paint the text.  There are a number of cases to consider.
-  //
+  // Actually paint the text.  
+  //    There are 4 possible cases:
+  //        - One line of text , horizontal
+  //        - Angled text
+  //        - Multiple rows of text , horizontal
+  //        - Vertical text
   if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle ) {
     // Case 1: The simple case, one line, no angle.
 
@@ -4563,7 +4568,11 @@ void Cell::setCellText( const QString& _text, bool asText )
 
 void Cell::setDisplayText( const QString& _text )
 {
-  format()->sheet()->doc()->emitBeginOperation( false );
+  bool isLoading = format()->sheet()->isLoading();
+  
+  if (!isLoading)
+    format()->sheet()->doc()->emitBeginOperation( false );
+  
   d->strText = _text;
 
   /**
@@ -4574,7 +4583,7 @@ void Cell::setDisplayText( const QString& _text )
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
 
-    if ( !format()->sheet()->isLoading() )
+    if ( !isLoading )
     {
       if ( !makeFormula() )
       {
@@ -4596,12 +4605,13 @@ void Cell::setDisplayText( const QString& _text )
     setFlag(Flag_TextFormatDirty);
   }
 
-  format()->sheet()->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
+  if ( !isLoading )
+    format()->sheet()->doc()->emitEndOperation( QRect( d->column, d->row, 1, 1 ) );
 }
 
 void Cell::setLink( const QString& link )
 {
-  d->extra()->link = link;
+  d->extra()->link = link; 
 
   if( !link.isEmpty() && d->strText.isEmpty() )
     setCellText( link );
@@ -5827,20 +5837,20 @@ void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& o
     {
         if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
         {
-          KSpreadObject *obj = 0;
+          EmbeddedObject *obj = 0;
           QDomNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
           {
             if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null).isNull() )
-              obj = new ChartChild( sheet()->doc(), sheet() );
+              obj = new EmbeddedChart( sheet()->doc(), sheet() );
             else
-              obj = new KSpreadChild( sheet()->doc(), sheet() );
+              obj = new EmbeddedKOfficeObject( sheet()->doc(), sheet() );
           }
           else
           {
             QDomNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
             if ( !image.isNull() )
-              obj = new KSpreadPictureObject( sheet(), sheet()->doc()->pictureCollection() );
+              obj = new EmbeddedPictureObject( sheet(), sheet()->doc()->pictureCollection() );
             else
               kdDebug() << "Object type wasn't loaded!" << endl;
           }

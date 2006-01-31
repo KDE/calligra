@@ -575,7 +575,7 @@ QString LinkCommand::name() const
   return newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link");
 }
 
-ChangeObjectGeometryCommand::ChangeObjectGeometryCommand( KSpreadObject *_obj, KoRect &_newGeometry )
+ChangeObjectGeometryCommand::ChangeObjectGeometryCommand( EmbeddedObject *_obj, KoRect &_newGeometry )
 {
   obj = _obj;
   newGeometry = _newGeometry;
@@ -607,7 +607,7 @@ QString ChangeObjectGeometryCommand::name() const
     return i18n("Resize Object");
 }
 
-RemoveObjectCommand::RemoveObjectCommand( KSpreadObject *_obj, bool _cut )
+RemoveObjectCommand::RemoveObjectCommand( EmbeddedObject *_obj, bool _cut )
 {
   obj = _obj;
   cut = _cut;
@@ -621,7 +621,7 @@ RemoveObjectCommand::~RemoveObjectCommand()
   //kdDebug() << "*********Deleting object..." << endl;
   if ( obj->getType() == OBJECT_CHART )
   {
-    KSpreadChild *chart = dynamic_cast<KSpreadChild *>(obj);
+    EmbeddedKOfficeObject *chart = dynamic_cast<EmbeddedKOfficeObject *>(obj);
     chart->embeddedObject()->setDeleted(true);
   }
 
@@ -695,7 +695,7 @@ InsertObjectCommand::~InsertObjectCommand()
   //kdDebug() << "*********Deleting object..." << endl;
   if ( obj->getType() == OBJECT_CHART )
   {
-    KSpreadChild *chart = dynamic_cast<KSpreadChild *>(obj);
+    EmbeddedKOfficeObject *chart = dynamic_cast<EmbeddedKOfficeObject *>(obj);
     chart->embeddedObject()->setDeleted(true);
   }
 
@@ -761,7 +761,7 @@ QString InsertObjectCommand::name() const
 }
 
 RenameNameObjectCommand::RenameNameObjectCommand( const QString &_name, const QString &_objectName,
-                                            KSpreadObject *_obj, Doc *_doc ):
+                                            EmbeddedObject *_obj, Doc *_doc ):
     KNamedCommand( _name ),
     newObjectName( _objectName ),
     object( _obj ),
@@ -791,7 +791,7 @@ void RenameNameObjectCommand::unexecute()
 //     doc->updateSideBarItem( m_page );
 }
 
-GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QPtrList<KSpreadObject> &objects,
+GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QPtrList<EmbeddedObject> &objects,
                                                             bool newValue, KgpType type, Doc *_doc )
 : KNamedCommand( name )
 , m_objects( objects )
@@ -799,7 +799,7 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QPtrL
 , m_type( type )
     , m_doc( _doc )
 {
-    QPtrListIterator<KSpreadObject> it( m_objects );
+    QPtrListIterator<EmbeddedObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         it.current()->incCmdRef();
@@ -811,7 +811,7 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QPtrL
 }
 
 GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QValueList<bool> &lst,
-                                                            QPtrList<KSpreadObject> &objects, bool newValue,
+                                                            QPtrList<EmbeddedObject> &objects, bool newValue,
                                                             KgpType type, Doc *_doc)
 : KNamedCommand( name )
 , m_oldValue( lst )
@@ -820,21 +820,21 @@ GeometryPropertiesCommand::GeometryPropertiesCommand( const QString &name, QValu
 , m_type( type )
 , m_doc ( _doc )
 {
-    QPtrListIterator<KSpreadObject> it( m_objects );
+    QPtrListIterator<EmbeddedObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 GeometryPropertiesCommand::~GeometryPropertiesCommand()
 {
-    QPtrListIterator<KSpreadObject> it( m_objects );
+    QPtrListIterator<EmbeddedObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
 void GeometryPropertiesCommand::execute()
 {
-    QPtrListIterator<KSpreadObject> it( m_objects );
+    QPtrListIterator<EmbeddedObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         if ( m_type == ProtectSize )
@@ -850,7 +850,7 @@ void GeometryPropertiesCommand::execute()
 
 void GeometryPropertiesCommand::unexecute()
 {
-    KSpreadObject *obj = 0;
+    EmbeddedObject *obj = 0;
     for ( unsigned int i = 0; i < m_objects.count(); ++i ) {
         obj = m_objects.at( i );
         if ( m_type == ProtectSize )

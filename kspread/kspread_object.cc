@@ -52,10 +52,10 @@ class View;
 
 /**********************************************************
  *
- * KSpreadObject
+ * EmbeddedObject
  *
  **********************************************************/
-KSpreadObject::KSpreadObject( Sheet *_sheet, const KoRect& _geometry )
+EmbeddedObject::EmbeddedObject( Sheet *_sheet, const KoRect& _geometry )
   : m_geometry( _geometry), m_sheet(_sheet), m_selected(false), m_objectName(""), m_protect(false), m_keepRatio(false), pen( Qt::black, 1, QPen::SolidLine )
 {
   angle = 0.0;
@@ -63,25 +63,25 @@ KSpreadObject::KSpreadObject( Sheet *_sheet, const KoRect& _geometry )
   cmds = 0;
 }
 
-KSpreadObject::~KSpreadObject()
+EmbeddedObject::~EmbeddedObject()
 {
 }
-KoRect KSpreadObject::geometry()
+KoRect EmbeddedObject::geometry()
 {
     return m_geometry;
 }
-void KSpreadObject::setGeometry( const KoRect &rect )
+void EmbeddedObject::setGeometry( const KoRect &rect )
 {
     m_geometry = rect;
 }
 
-bool KSpreadObject::load( const QDomElement& element )
+bool EmbeddedObject::load( const QDomElement& element )
 {
-    kdDebug() << "Loading KSpreadObject" << endl;
+    kdDebug() << "Loading EmbeddedObject" << endl;
     return false;
 }
 
-void KSpreadObject::loadOasis(const QDomElement &element, KoOasisLoadingContext & context )
+void EmbeddedObject::loadOasis(const QDomElement &element, KoOasisLoadingContext & context )
 {
   if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
     m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
@@ -96,13 +96,13 @@ void KSpreadObject::loadOasis(const QDomElement &element, KoOasisLoadingContext 
 }
 
 
-QDomElement KSpreadObject::save( QDomDocument& doc )
+QDomElement EmbeddedObject::save( QDomDocument& doc )
 {
-    kdDebug() << "Saving KSpreadObject..." << endl;
+    kdDebug() << "Saving EmbeddedObject..." << endl;
     return QDomElement();
 }
 
-void KSpreadObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
+void EmbeddedObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
     //save all into pt
@@ -119,13 +119,13 @@ void KSpreadObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) c
 //     }
 }
 
-bool KSpreadObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &/* sc */ ) const
+bool EmbeddedObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &/* sc */ ) const
 {
     kdDebug() << "bool saveOasisObjectAttributes not implemented";
     return true;
 }
 
-bool KSpreadObject::saveOasisObject( KSpreadOasisSaveContext &sc ) const
+bool EmbeddedObject::saveOasisObject( KSpreadOasisSaveContext &sc ) const
 {
     sc.xmlWriter.startElement( getOasisElementName() );
     //sc.xmlWriter.addAttribute( "draw:style-name", getStyle( sc ) );
@@ -139,12 +139,12 @@ bool KSpreadObject::saveOasisObject( KSpreadOasisSaveContext &sc ) const
     return true;
 }
 
-void KSpreadObject::draw( QPainter *_painter )
+void EmbeddedObject::draw( QPainter *_painter )
 {
   paintSelection(_painter, SM_MOVERESIZE );
 }
 
-void KSpreadObject::paintSelection( QPainter *_painter, SelectionMode mode )
+void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
 {
   if ( !m_selected || mode == SM_NONE )
     return;
@@ -212,7 +212,7 @@ void KSpreadObject::paintSelection( QPainter *_painter, SelectionMode mode )
   _painter->restore();
 }
 
-QCursor KSpreadObject::getCursor( const QPoint &_point, ModifyType &_modType, QRect &geometry) const
+QCursor EmbeddedObject::getCursor( const QPoint &_point, ModifyType &_modType, QRect &geometry) const
 {
     int px = /*sheet()->doc()->zoomItX*/(_point.x());
     int py = /*sheet()->doc()->zoomItY*/(_point.y());
@@ -307,7 +307,7 @@ QCursor KSpreadObject::getCursor( const QPoint &_point, ModifyType &_modType, QR
 }
 
 
-void KSpreadObject::doDelete()
+void EmbeddedObject::doDelete()
 {
     if ( cmds == 0 && !inObjList )
         delete this;
@@ -315,39 +315,39 @@ void KSpreadObject::doDelete()
 
 /**********************************************************
  *
- * KSpreadChild
+ * EmbeddedKOfficeObject
  *
  **********************************************************/
-KSpreadChild::KSpreadChild( Doc *parent, Sheet *_sheet, KoDocument* doc, const KoRect& geometry )
-    : KSpreadObject( _sheet, geometry ), m_parent(parent)
+EmbeddedKOfficeObject::EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet, KoDocument* doc, const KoRect& geometry )
+    : EmbeddedObject( _sheet, geometry ), m_parent(parent)
 {
     m_embeddedObject = new KoDocumentChild(parent, doc, geometry.toQRect() );
 }
 
-KSpreadChild::KSpreadChild( Doc *parent, Sheet *_sheet )
-    : KSpreadObject( _sheet, KoRect() ), m_parent(parent)
+EmbeddedKOfficeObject::EmbeddedKOfficeObject( Doc *parent, Sheet *_sheet )
+    : EmbeddedObject( _sheet, KoRect() ), m_parent(parent)
 {
     m_embeddedObject = new KoDocumentChild( parent );
 }
 
-KSpreadChild::~KSpreadChild()
+EmbeddedKOfficeObject::~EmbeddedKOfficeObject()
 {
   delete m_embeddedObject;
 }
 
-Doc* KSpreadChild::parent()
+Doc* EmbeddedKOfficeObject::parent()
 {
     return m_parent;
 }
 
-KoDocumentChild* KSpreadChild::embeddedObject()
+KoDocumentChild* EmbeddedKOfficeObject::embeddedObject()
 {
     return m_embeddedObject;
 }
 
-bool KSpreadChild::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
+bool EmbeddedKOfficeObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
 {
-    kdDebug() << "KSpreadChild::saveOasisPart " << sc.partIndexObj << endl;
+    kdDebug() << "EmbeddedKOfficeObject::saveOasisPart " << sc.partIndexObj << endl;
 
     sc.xmlWriter.startElement( "draw:object" );
     const QString name = QString( "Object_%1" ).arg( sc.partIndexObj + 1 );
@@ -358,23 +358,23 @@ bool KSpreadChild::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) cons
     return true;
 }
 
-const char * KSpreadChild::getOasisElementName() const
+const char * EmbeddedKOfficeObject::getOasisElementName() const
 {
     return "draw:frame";
 }
 
-bool KSpreadChild::load( const QDomElement& element )
+bool EmbeddedKOfficeObject::load( const QDomElement& element )
 {
-    kdDebug() << "Loading KSpreadChild" << endl;
+    kdDebug() << "Loading EmbeddedKOfficeObject" << endl;
     bool result = embeddedObject()->load( element );
     setGeometry( KoRect::fromQRect( embeddedObject()->geometry() ) );
     return result;
 }
 
-void KSpreadChild::loadOasis(const QDomElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
+void EmbeddedKOfficeObject::loadOasis(const QDomElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kdDebug()<<"void KSpreadChild::loadOasis(const QDomElement &element)******************\n";
-    KSpreadObject::loadOasis( element, context );
+    kdDebug()<<"void EmbeddedKOfficeObject::loadOasis(const QDomElement &element)******************\n";
+    EmbeddedObject::loadOasis( element, context );
 
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     m_embeddedObject->loadOasis( element, objectElement );
@@ -383,14 +383,14 @@ void KSpreadChild::loadOasis(const QDomElement &element, KoOasisLoadingContext &
     (void)m_embeddedObject->loadOasisDocument( context.store(), context.manifestDocument() );
 }
 
-QDomElement KSpreadChild::save( QDomDocument& doc )
+QDomElement EmbeddedKOfficeObject::save( QDomDocument& doc )
 {
-    kdDebug() << "Saving KSpreadChild" << endl;
+    kdDebug() << "Saving EmbeddedKOfficeObject" << endl;
     embeddedObject()->setGeometry( geometry().toQRect() );
     return m_embeddedObject->save( doc );
 }
 
-void KSpreadChild::draw( QPainter *_painter )
+void EmbeddedKOfficeObject::draw( QPainter *_painter )
 {
   kdDebug() << "Painting..." << endl;
 
@@ -423,10 +423,10 @@ void KSpreadChild::draw( QPainter *_painter )
    embeddedObject()->setGeometry( new_geometry );
   _painter->restore();
 
-  KSpreadObject::draw( _painter );
+  EmbeddedObject::draw( _painter );
 }
 
-void KSpreadChild::activate( View *_view, Canvas *_canvas )
+void EmbeddedKOfficeObject::activate( View *_view, Canvas *_canvas )
 {
     KoDocument* part = embeddedObject()->document();
     if ( !part )
@@ -437,12 +437,12 @@ void KSpreadChild::activate( View *_view, Canvas *_canvas )
     _view->partManager()->setActivePart( part, _view );
 }
 
-void KSpreadChild::deactivate()
+void EmbeddedKOfficeObject::deactivate()
 {
 }
 
 
-void KSpreadChild::updateChildGeometry()
+void EmbeddedKOfficeObject::updateChildGeometry()
 {
 //   KoZoomHandler* zh = m_sheet->doc();
 //   embeddedObject()->setGeometry( zh->zoomRect( geometry() ), true );
@@ -462,29 +462,29 @@ void KSpreadChild::updateChildGeometry()
 
 /**********************************************************
  *
- * ChartChild
+ * EmbeddedChart
  *
  **********************************************************/
 
-ChartChild::ChartChild( Doc *_spread, Sheet *_sheet, KoDocument* doc, const KoRect& geometry )
-  : KSpreadChild( _spread, _sheet, doc, geometry )
+EmbeddedChart::EmbeddedChart( Doc *_spread, Sheet *_sheet, KoDocument* doc, const KoRect& geometry )
+  : EmbeddedKOfficeObject( _spread, _sheet, doc, geometry )
 {
     m_pBinding = 0;
 }
 
-ChartChild::ChartChild( Doc *_spread, Sheet *_sheet )
-  : KSpreadChild( _spread, _sheet )
+EmbeddedChart::EmbeddedChart( Doc *_spread, Sheet *_sheet )
+  : EmbeddedKOfficeObject( _spread, _sheet )
 {
     m_pBinding = 0;
 }
 
-ChartChild::~ChartChild()
+EmbeddedChart::~EmbeddedChart()
 {
   if ( m_embeddedObject->isDeleted() )
     delete m_pBinding;
 }
 
-void ChartChild::setDataArea( const QRect& _data )
+void EmbeddedChart::setDataArea( const QRect& _data )
 {
     if ( m_pBinding == 0L )
         m_pBinding = new ChartBinding( m_sheet, _data, this );
@@ -492,21 +492,21 @@ void ChartChild::setDataArea( const QRect& _data )
         m_pBinding->setDataArea( _data );
 }
 
-void ChartChild::update()
+void EmbeddedChart::update()
 {
     if ( m_pBinding )
         m_pBinding->cellChanged( 0 );
 }
 
-const char * ChartChild::getOasisElementName() const
+const char * EmbeddedChart::getOasisElementName() const
 {
     return "draw:frame";
 }
 
-bool ChartChild::load( const QDomElement& element )
+bool EmbeddedChart::load( const QDomElement& element )
 {
-    kdDebug() << "Loading ChartChild" << endl;
-    if ( !KSpreadChild::load( element ) )
+    kdDebug() << "Loading EmbeddedChart" << endl;
+    if ( !EmbeddedKOfficeObject::load( element ) )
         return false;
 
     if ( element.hasAttribute( "left-cell" ) &&
@@ -526,10 +526,10 @@ bool ChartChild::load( const QDomElement& element )
     return true;
 }
 
-void ChartChild::loadOasis(const QDomElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
+void EmbeddedChart::loadOasis(const QDomElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kdDebug()<<"void ChartChild::loadOasis(const QDomElement &element)******************\n";
-    KSpreadChild::loadOasis( element, context );
+    kdDebug()<<"void EmbeddedChart::loadOasis(const QDomElement &element)******************\n";
+    EmbeddedKOfficeObject::loadOasis( element, context );
 
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     QString str_range = objectElement.attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null);
@@ -541,10 +541,10 @@ void ChartChild::loadOasis(const QDomElement &element, KoOasisLoadingContext &co
     setDataArea( QRect(ul.pos(), lr.pos()));
 }
 
-QDomElement ChartChild::save( QDomDocument& doc )
+QDomElement EmbeddedChart::save( QDomDocument& doc )
 {
-    kdDebug() << "Saving ChartChild" << endl;
-    QDomElement element = KSpreadChild::save( doc );
+    kdDebug() << "Saving EmbeddedChart" << endl;
+    QDomElement element = EmbeddedKOfficeObject::save( doc );
     element.setTagName( "chart" );
 
     element.setAttribute( "left-cell", m_pBinding->dataArea().left() );
@@ -554,14 +554,14 @@ QDomElement ChartChild::save( QDomDocument& doc )
 
     return element;
 }
-void ChartChild::draw( QPainter *_painter )
+void EmbeddedChart::draw( QPainter *_painter )
 {
-  KSpreadChild::draw( _painter );
+  EmbeddedKOfficeObject::draw( _painter );
 }
 
-bool ChartChild::loadDocument( KoStore* _store )
+bool EmbeddedChart::loadDocument( KoStore* _store )
 {
-    bool res = /*KSpreadChild::*/m_embeddedObject->loadDocument( _store );
+    bool res = /*EmbeddedKOfficeObject::*/m_embeddedObject->loadDocument( _store );
     if ( !res )
         return res;
 
@@ -575,7 +575,7 @@ bool ChartChild::loadDocument( KoStore* _store )
     return true;
 }
 
-KoChart::Part* ChartChild::chart()
+KoChart::Part* EmbeddedChart::chart()
 {
     assert( m_embeddedObject->document()->inherits( "KoChart::Part" ) );
     return static_cast<KoChart::Part *>( m_embeddedObject->document() );
@@ -583,11 +583,11 @@ KoChart::Part* ChartChild::chart()
 
 /**********************************************************
  *
- * KSpreadPictureObject
+ * EmbeddedPictureObject
  *
  **********************************************************/
-KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection )
-   : KSpreadObject( _sheet, _geometry )
+EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection )
+   : EmbeddedObject( _sheet, _geometry )
 {
     imageCollection = _imageCollection;
     pen = KoPen( Qt::black, 1.0, Qt::NoPen );
@@ -605,8 +605,8 @@ KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, const KoRect& _geomet
 }
 
 
-KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection, const KoPictureKey & key )
-    : KSpreadObject( _sheet, _geometry )
+EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, const KoRect& _geometry, KoPictureCollection *_imageCollection, const KoPictureKey & key )
+    : EmbeddedObject( _sheet, _geometry )
 {
     imageCollection = _imageCollection;
 
@@ -627,8 +627,8 @@ KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, const KoRect& _geomet
     setPicture( key );
 }
 
-KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, KoPictureCollection *_imageCollection )
-  : KSpreadObject( _sheet, KoRect(0,0,0,0) )
+EmbeddedPictureObject::EmbeddedPictureObject( Sheet *_sheet, KoPictureCollection *_imageCollection )
+  : EmbeddedObject( _sheet, KoRect(0,0,0,0) )
 {
   imageCollection = _imageCollection;
 
@@ -647,27 +647,27 @@ KSpreadPictureObject::KSpreadPictureObject( Sheet *_sheet, KoPictureCollection *
   m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
 }
 
-KSpreadPictureObject::~KSpreadPictureObject()
+EmbeddedPictureObject::~EmbeddedPictureObject()
 {
 }
 
-bool KSpreadPictureObject::load( const QDomElement& element )
+bool EmbeddedPictureObject::load( const QDomElement& element )
 {
     return false;
 }
 
-QDomElement KSpreadPictureObject::save( QDomDocument& doc )
+QDomElement EmbeddedPictureObject::save( QDomDocument& doc )
 {
-    kdDebug() << "Saving KSpreadPictureObject" << endl;
+    kdDebug() << "Saving EmbeddedPictureObject" << endl;
     return QDomElement();
 }
 
-QString KSpreadPictureObject::convertValueToPercent( int val ) const
+QString EmbeddedPictureObject::convertValueToPercent( int val ) const
 {
    return QString::number( val )+"%";
 }
 
-void KSpreadPictureObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) const
+void EmbeddedPictureObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) const
 {
 
     if ( bright != 0 )
@@ -767,7 +767,7 @@ void KSpreadPictureObject::saveOasisPictureElement( KoGenStyle &styleobjectauto 
     }
 }
 
-bool KSpreadPictureObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
+bool EmbeddedPictureObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
 {
     sc.xmlWriter.startElement( "draw:image" );
     sc.xmlWriter.addAttribute( "xlink:type", "simple" );
@@ -779,35 +779,35 @@ bool KSpreadPictureObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &s
     return true;
 }
 
-const char * KSpreadPictureObject::getOasisElementName() const
+const char * EmbeddedPictureObject::getOasisElementName() const
 {
     return "draw:frame";
 }
 
 
-void KSpreadPictureObject::loadPicture( const QString & fileName )
+void EmbeddedPictureObject::loadPicture( const QString & fileName )
 {
     image = imageCollection->loadPicture( fileName );
 }
 
-KSpreadPictureObject &KSpreadPictureObject::operator=( const KSpreadPictureObject & )
+EmbeddedPictureObject &EmbeddedPictureObject::operator=( const EmbeddedPictureObject & )
 {
     return *this;
 }
 
-void KSpreadPictureObject::setPicture( const KoPictureKey & key )
+void EmbeddedPictureObject::setPicture( const KoPictureKey & key )
 {
     image = imageCollection->findPicture( key );
 }
 
-void KSpreadPictureObject::reload( void )
+void EmbeddedPictureObject::reload( void )
 {
     // ### FIXME: this seems wrong, KoPictureCollection will never reload it (or perhaps it is the function name that is wrong)
     setPicture( image.getKey() );
 }
 
 // KSpread doesn't support pictures in it's old XML file format.
-// QDomDocumentFragment KSpreadPictureObject::save( QDomDocument& doc, double offset )
+// QDomDocumentFragment EmbeddedPictureObject::save( QDomDocument& doc, double offset )
 // {
 //     QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
 //     QDomElement elem=doc.createElement("KEY");
@@ -838,7 +838,7 @@ void KSpreadPictureObject::reload( void )
 //     return fragment;
 // }
 
-void KSpreadPictureObject::loadOasisPictureEffect(KoOasisLoadingContext & context )
+void EmbeddedPictureObject::loadOasisPictureEffect(KoOasisLoadingContext & context )
 {
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
@@ -891,16 +891,16 @@ void KSpreadPictureObject::loadOasisPictureEffect(KoOasisLoadingContext & contex
     }
 }
 
-void KSpreadPictureObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void EmbeddedPictureObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
      //KP2DObject::fillStyle( styleObjectAuto, mainStyles );
      saveOasisPictureElement( styleObjectAuto );
 }
 
-void KSpreadPictureObject::loadOasis(const QDomElement &element, KoOasisLoadingContext & context/*, KPRLoadingInfo *info*/)
+void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoadingContext & context/*, KPRLoadingInfo *info*/)
 {
     //load it into kpresenter_doc
-    KSpreadObject::loadOasis( element, context );
+    EmbeddedObject::loadOasis( element, context );
     loadOasisPictureEffect( context );
     QDomNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString::null) );
@@ -931,7 +931,7 @@ void KSpreadPictureObject::loadOasis(const QDomElement &element, KoOasisLoadingC
 }
 
 
-// double KSpreadPictureObject::load(const QDomElement &element)
+// double EmbeddedPictureObject::load(const QDomElement &element)
 // {
 //     double offset=KP2DObject::load(element);
 //     QDomElement e=element.namedItem("KEY").toElement();
@@ -1046,7 +1046,7 @@ void KSpreadPictureObject::loadOasis(const QDomElement &element, KoOasisLoadingC
 //     return offset;
 // }
 
-void KSpreadPictureObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler)
+void EmbeddedPictureObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler)
 {
 //     const double ox = /*orig*/m_geometry.x();
 //     const double oy = /*orig*/m_geometry.y();
@@ -1096,12 +1096,12 @@ void KSpreadPictureObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoom
 //     _painter->restore();
 }
 
-QPixmap KSpreadPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
+QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
 {
     const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSize( m_geometry.size() /*ext*/ ) );
-    //kdDebug(33001) << "KSpreadPictureObject::generatePixmap size= " << size << endl;
+    //kdDebug(33001) << "EmbeddedPictureObject::generatePixmap size= " << size << endl;
     QPixmap pixmap(size);
     QPainter paint;
 
@@ -1140,7 +1140,7 @@ QPixmap KSpreadPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
     return pixmap;
 }
 
-void KSpreadPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandler,
+void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandler,
                            int pageNum, SelectionMode selectionMode, bool drawContour*/ )
 {
     bool drawContour = false;
@@ -1202,7 +1202,7 @@ void KSpreadPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandle
             variants3=(m_ie_par3 == m_cachedPar3);
 
         if (m_cachedRect == rect
-            // All what KSpreadPictureObject::changePictureSettings needs
+            // All what EmbeddedPictureObject::changePictureSettings needs
             && m_cachedMirrorType == mirrorType && m_cachedSwapRGB == swapRGB && m_cachedGrayscal == grayscal
             && m_cachedBright == bright && m_cachedEffect == m_effect
             // Who needs it?
@@ -1259,20 +1259,20 @@ void KSpreadPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandle
     _painter->restore();
 
     //KPObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
-    KSpreadObject::draw( _painter );
+    EmbeddedObject::draw( _painter );
 }
 
-QPixmap KSpreadPictureObject::getOriginalPixmap()
+QPixmap EmbeddedPictureObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
-    kdDebug(33001) << "KSpreadPictureObject::getOriginalPixmap size= " << _pixSize << endl;
+    kdDebug(33001) << "EmbeddedPictureObject::getOriginalPixmap size= " << _pixSize << endl;
     QPixmap _pixmap = image.generatePixmap( _pixSize, true );
     image.clearCache(); // Release the memoy of the picture cache
 
     return _pixmap;
 }
 
-QPixmap KSpreadPictureObject::changePictureSettings( QPixmap _tmpPixmap )
+QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
 {
     QImage _tmpImage = _tmpPixmap.convertToImage();
 
@@ -1471,7 +1471,7 @@ QPixmap KSpreadPictureObject::changePictureSettings( QPixmap _tmpPixmap )
     return _tmpPixmap;
 }
 
-void KSpreadPictureObject::flip( bool horizontal )
+void EmbeddedPictureObject::flip( bool horizontal )
 {
 //     KP2DObject::flip( horizontal );
 //     if ( horizontal )
