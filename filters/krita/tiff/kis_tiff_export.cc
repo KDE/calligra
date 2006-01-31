@@ -86,7 +86,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
     {
         img = new KisImage(0, output->currentImage()->width(), output->currentImage()->height(), output->currentImage()->colorSpace(), "");
         KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, output->currentImage()->projection());
-        img->addLayer(l.data(), img->rootLayer());
+        img->addLayer(l.data(), img->rootLayer(), 0);
     } else {
         img = output->currentImage();
     }
