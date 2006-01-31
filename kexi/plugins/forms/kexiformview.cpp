@@ -647,10 +647,13 @@ KexiFormView::storeData(bool dontAsk)
 	}
 	KexiDB::PreparedStatement::Ptr st = conn->prepareStatement(
 		KexiDB::PreparedStatement::InsertStatement, *blobsTable);
+#if 0 
+//! @todo reenable when all drivers get PreparedStatement support
 	if (!st) {
 		//! @todo show message 
 		return false;
 	}
+#endif
 	KexiBLOBBuffer *blobBuf = KexiBLOBBuffer::self();
 	for (QMapConstIterator<QWidget*, KexiBLOBBuffer::Id_t> it = m_unsavedLocalBLOBs.constBegin(); 
 		it!=m_unsavedLocalBLOBs.constEnd(); ++it)
@@ -670,11 +673,13 @@ KexiFormView::storeData(bool dontAsk)
 ////////
 
 //		KexiDB::PreparedStatement st(KexiDB::PreparedStatement::InsertStatement, *conn, *blobsTable);
-		*st << QVariant()/*id*/ << h.data() << originalFileName << caption 
-			<< h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
-		if (!st->execute()) {
-			kexipluginsdbg << " execute error" << endl;
-			return false;
+		if (st) {
+			*st << QVariant()/*id*/ << h.data() << originalFileName << caption 
+				<< h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
+			if (!st->execute()) {
+				kexipluginsdbg << " execute error" << endl;
+				return false;
+			}
 		}
 ///////
 #if 0
