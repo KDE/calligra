@@ -28,11 +28,12 @@ experimental &mdash; first and foremost a pleasure to use and to hack on.
 
 <listitem><para>Plugins: Krita is extensible through plugins. There are tools,
 colorspaces, paint operations, filters and kpart-based user interface plugins.
-It is intended to make layer types plugins, too.</para></listitem>
+</para></listitem>
 
-<listitem><para>Scriptable: &krita; is scriptable in Python and Ruby. The
-scripting is compatible with using the PyQt/KDE and Korundum for adding GUI
-items.</para></listitem>
+<listitem><para>Scriptable: &krita; is scriptable in Python and Ruby using
+Kross, the cross language scripting engine that originated in Kexi. The
+scripting is compatible with PyQt/KDE and Korundum for adding GUI
+items, such as dialog boxes.</para></listitem>
 
 <listitem><para>Color models: &krita; uses lcms for a dependable color
 workflow using icc profiles for importing, exporting, selecting paint colors,
@@ -41,7 +42,7 @@ printing, cutting and pasting. 8, 16, and 32 bit colorspaces are available
 grayscale sliders or with a palette.</para></listitem>
 
 <listitem><para>Editing and viewing: Unlimited undo and redo are available.
-One can cut, copy and paste between lagers and images, with conversion through
+You can cut, copy and paste between lagers and images, with conversion through
 icc profiles if this is necessary.  OpenGL is supported for display. The view
 can be made fullscreen and can be split. Rulers are available, the
 image can be zoomed, and for maximizing the workspace all palette windows can
@@ -105,7 +106,7 @@ RGB, and 32 bit float RGB (HDR) and LMS.
 <para>
 &krita; currently supports the following image formats, both for importing and
 exporting, apart from its own: PNG, TIFF, JPEG, Dicom, XCF, PSD, GIF, BMP,
-XPM, Targa, RGB, and OpenEXR. Additionally, &krita; can import from RAW and
+XPM, Targa, RGB, and OpenEXR. Additionally, &krita; can import 
 ICO files. PSD (the Photoshop file format) is only supported up to version 6,
 from version 7 on, the Photoshop file format is closed. 
 </para><para>
