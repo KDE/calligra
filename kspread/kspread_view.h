@@ -323,6 +323,12 @@ public:
     void updateShowSheetMenu();
 
     /**
+     * Mark all selected cells / regions of cells as 'dirty' (ie. requiring a repaint)
+     * They will be repainted on the next call to paintUpdates()
+     */
+    void markSelectionAsDirty();
+     
+    /**
      * Repaint any cell with the paintDirty flag that is visible in this view
      */
     void paintUpdates();

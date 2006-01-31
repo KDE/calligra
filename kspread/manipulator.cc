@@ -138,7 +138,8 @@ void Manipulator::execute()
     kdWarning() << "Manipulator::execute(): postprocessing was not successful!" << endl;
   }
 
-  m_sheet->doc()->emitEndOperation(*this);
+  m_sheet->setRegionPaintDirty( *this );
+  m_sheet->doc()->emitEndOperation();
   m_sheet->doc()->undoUnlock ();
 
   // add me to undo if needed

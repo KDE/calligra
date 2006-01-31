@@ -2957,7 +2957,9 @@ void View::setSelectionTextColor(const QColor &txtColor)
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionTextColor( selectionInfo(), txtColor );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3183,7 +3185,8 @@ void View::fontSelected( const QString & _font )
   else
     d->canvas->setFocus();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();  
+  doc()->emitEndOperation();
 }
 
 void View::decreaseFontSize()
@@ -3214,7 +3217,8 @@ void View::lower()
   d->activeSheet->setSelectionUpperLower( selectionInfo(), -1 );
   updateEditWidget();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::upper()
@@ -3227,7 +3231,8 @@ void View::upper()
   d->activeSheet->setSelectionUpperLower( selectionInfo(), 1 );
   updateEditWidget();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::firstLetterUpper()
@@ -3237,7 +3242,9 @@ void View::firstLetterUpper()
   doc()->emitBeginOperation( false );
   d->activeSheet->setSelectionfirstLetterUpper( selectionInfo() );
   updateEditWidget();
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::verticalText(bool b)
@@ -3249,7 +3256,9 @@ void View::verticalText(bool b)
   d->activeSheet->setSelectionVerticalText( selectionInfo(), b );
   d->activeSheet->adjustArea(*selectionInfo());
   updateEditWidget(); // TODO Stefan: nescessary?
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::insertSpecialChar()
@@ -3346,7 +3355,8 @@ void View::fontSizeSelected( int _size )
   else
     d->canvas->setFocus();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::bold( bool b )
@@ -3368,7 +3378,8 @@ void View::bold( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::underline( bool b )
@@ -3390,7 +3401,8 @@ void View::underline( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::strikeOut( bool b )
@@ -3412,7 +3424,8 @@ void View::strikeOut( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 
@@ -3435,7 +3448,8 @@ void View::italic( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::sortInc()
@@ -3456,7 +3470,8 @@ void View::sortInc()
     activeSheet()->sortByColumn( range, range.left(), Sheet::Increase );
   updateEditWidget();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::sortDec()
@@ -3477,7 +3492,8 @@ void View::sortDec()
     activeSheet()->sortByColumn( range, range.left(), Sheet::Decrease );
   updateEditWidget();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 
@@ -3489,7 +3505,8 @@ void View::borderBottom()
 
     d->activeSheet->borderBottom( d->selection, d->actions->borderColor->color() );
 
-    doc()->emitEndOperation( *selectionInfo() );
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3499,7 +3516,9 @@ void View::setSelectionBottomBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderBottom( selectionInfo(), color );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3512,7 +3531,9 @@ void View::borderRight()
       d->activeSheet->borderLeft( d->selection, d->actions->borderColor->color() );
     else
       d->activeSheet->borderRight( d->selection, d->actions->borderColor->color() );
-    doc()->emitEndOperation( *selectionInfo() );
+      
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3525,7 +3546,9 @@ void View::setSelectionRightBorderColor( const QColor & color )
       d->activeSheet->borderLeft( selectionInfo(), color );
     else
       d->activeSheet->borderRight( selectionInfo(), color );
-    doc()->emitEndOperation( *selectionInfo() );
+      
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3538,7 +3561,9 @@ void View::borderLeft()
       d->activeSheet->borderRight( d->selection, d->actions->borderColor->color() );
     else
       d->activeSheet->borderLeft( d->selection, d->actions->borderColor->color() );
-    doc()->emitEndOperation( *selectionInfo() );
+      
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3551,7 +3576,9 @@ void View::setSelectionLeftBorderColor( const QColor & color )
       d->activeSheet->borderRight( selectionInfo(), color );
     else
       d->activeSheet->borderLeft( selectionInfo(), color );
-    doc()->emitEndOperation( *selectionInfo() );
+      
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3561,7 +3588,9 @@ void View::borderTop()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderTop( d->selection, d->actions->borderColor->color() );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3571,7 +3600,9 @@ void View::setSelectionTopBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderTop( selectionInfo(), color );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3581,7 +3612,9 @@ void View::borderOutline()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderOutline( d->selection, d->actions->borderColor->color() );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3591,7 +3624,9 @@ void View::setSelectionOutlineBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderOutline( selectionInfo(), color );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3601,7 +3636,9 @@ void View::borderAll()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderAll( d->selection, d->actions->borderColor->color() );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3611,7 +3648,9 @@ void View::setSelectionAllBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderAll( selectionInfo(), color );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3621,7 +3660,9 @@ void View::borderRemove()
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->borderRemove( d->selection );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -3984,7 +4025,8 @@ void View::cutSelection()
   if ( canvasWidget()->isObjectSelected() )
   {
     canvasWidget()->copyOasisObjects();
-    doc()->emitEndOperation( *selectionInfo() );
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
 
     KMacroCommand * macroCommand = 0L;
     QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
@@ -4016,7 +4058,8 @@ void View::cutSelection()
   else
     d->canvas->editor()->cut();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::paste()
@@ -4144,7 +4187,9 @@ void View::removeComment()
   doc()->emitBeginOperation(false);
   d->activeSheet->setSelectionRemoveComment( selectionInfo() );
   updateEditWidget();
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 
@@ -4172,7 +4217,8 @@ void View::setSelectionAngle( int angle )
     d->activeSheet->adjustArea(*selectionInfo());
   }
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::mergeCell()
@@ -4216,7 +4262,9 @@ void View::increaseIndent()
   doc()->emitBeginOperation( false );
   d->activeSheet->increaseIndent( d->selection );
   updateEditWidget();
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::decreaseIndent()
@@ -4234,7 +4282,8 @@ void View::decreaseIndent()
     if ( !d->activeSheet->isProtected() )
       d->actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::goalSeek()
@@ -5182,7 +5231,8 @@ void View::setSelectionComment( QString comment )
     d->activeSheet->setSelectionComment( selectionInfo(), comment.stripWhiteSpace() );
     updateEditWidget();
 
-    doc()->emitEndOperation( *selectionInfo() );
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -5917,7 +5967,9 @@ void View::deleteSelection()
     d->activeSheet->deleteSelection( selectionInfo() );
     calcStatusBarOp();
     updateEditWidget();
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
 }
 
 void View::deleteSelectedObjects()
@@ -5957,7 +6009,9 @@ void View::clearTextSelection()
     d->activeSheet->clearTextSelection( selectionInfo() );
 
     updateEditWidget();
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
 }
 
 void View::clearCommentSelection()
@@ -5967,7 +6021,9 @@ void View::clearCommentSelection()
     d->activeSheet->setSelectionRemoveComment( selectionInfo() );
 
     updateEditWidget();
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
 }
 
 void View::clearValiditySelection()
@@ -5977,7 +6033,9 @@ void View::clearValiditySelection()
     d->activeSheet->clearValiditySelection( selectionInfo() );
 
     updateEditWidget();
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
 }
 
 void View::clearConditionalSelection()
@@ -5987,7 +6045,9 @@ void View::clearConditionalSelection()
     d->activeSheet->clearConditionalSelection( selectionInfo() );
 
     updateEditWidget();
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
 }
 
 void View::fillRight()
@@ -5995,7 +6055,9 @@ void View::fillRight()
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Right );
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::fillLeft()
@@ -6003,7 +6065,9 @@ void View::fillLeft()
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Left );
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::fillUp()
@@ -6011,7 +6075,9 @@ void View::fillUp()
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Up );
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::fillDown()
@@ -6019,7 +6085,9 @@ void View::fillDown()
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Down );
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::defaultSelection()
@@ -6029,7 +6097,9 @@ void View::defaultSelection()
   d->activeSheet->defaultSelection( selectionInfo() );
 
   updateEditWidget();
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::slotInsert()
@@ -6251,7 +6321,9 @@ void View::alignLeft( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(),
                                    Format::Left );
-    doc()->emitEndOperation( *selectionInfo() );
+                                   
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -6268,7 +6340,8 @@ void View::alignRight( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(), Format::Right );
 
-    doc()->emitEndOperation( *selectionInfo() );
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -6285,7 +6358,8 @@ void View::alignCenter( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(), Format::Center );
 
-    doc()->emitEndOperation( *selectionInfo() );
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -6302,7 +6376,8 @@ void View::alignTop( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Top );
 
-    doc()->emitEndOperation( *selectionInfo() );
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -6319,7 +6394,8 @@ void View::alignBottom( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Bottom );
 
-    doc()->emitEndOperation( *selectionInfo() );
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -6336,7 +6412,8 @@ void View::alignMiddle( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Middle );
 
-    doc()->emitEndOperation( *selectionInfo() );
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -6349,7 +6426,9 @@ void View::moneyFormat(bool b)
   if ( d->activeSheet != 0L )
     d->activeSheet->setSelectionMoneyFormat( selectionInfo(), b );
   updateEditWidget();
-  doc()->emitEndOperation( *selectionInfo() );
+  
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 void View::createStyleFromCell()
@@ -6408,7 +6487,9 @@ void View::styleSelected( const QString & style )
     {
       doc()->emitBeginOperation(false);
       d->activeSheet->setSelectionStyle( selectionInfo(), s );
-      doc()->emitEndOperation( *selectionInfo() );
+      
+      markSelectionAsDirty();
+      doc()->emitEndOperation();
     }
   }
 }
@@ -6429,7 +6510,9 @@ void View::setSelectionPrecision( int delta )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionPrecision( selectionInfo(), delta );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
@@ -6443,7 +6526,8 @@ void View::percent( bool b )
     d->activeSheet->setSelectionPercent( selectionInfo() ,b );
   updateEditWidget();
 
-  doc()->emitEndOperation( *selectionInfo() );
+  markSelectionAsDirty();
+  doc()->emitEndOperation();
 }
 
 
@@ -7022,7 +7106,9 @@ void View::deleteEditor( bool saveChanges )
 {
     doc()->emitBeginOperation( false );
     d->canvas->deleteEditor( saveChanges );
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
 }
 
 DCOPObject * View::dcopObject()
@@ -7159,10 +7245,16 @@ void View::closeEditor()
   if ( d->activeSheet ) { // #45822
     doc()->emitBeginOperation( false );
     d->canvas->closeEditor();
-    doc()->emitEndOperation( *selectionInfo() );
+    
+    markSelectionAsDirty();
+    doc()->emitEndOperation();
   }
 }
 
+void View::markSelectionAsDirty()
+{
+    d->activeSheet->setRegionPaintDirty( *selectionInfo() );
+}
 
 void View::paintUpdates()
 {
