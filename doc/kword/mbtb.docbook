@@ -637,6 +637,7 @@ using the menubar.</para>
 <para><action>Immediately selects all frames in the current document.</action></para>
 
 </listitem>
+
 </varlistentry>
 <varlistentry>
 <term>
@@ -649,7 +650,6 @@ using the menubar.</para>
 
 </listitem>
 </varlistentry>
-
 
 <varlistentry>
 <term id="menu-find">
@@ -754,7 +754,8 @@ linkend="views">Using Multiple Views</link>.</para>
 
 <varlistentry>
 <term>
-<menuchoice><shortcut>
+<menuchoice>
+<shortcut>
 <keycombo action="simul">&Ctrl;&Shift;<keycap>W</keycap></keycombo>
 </shortcut>
 <guimenu>View</guimenu><guimenuitem>Close All Views</guimenuitem>
@@ -1101,7 +1102,7 @@ For more information refer to the section entitled
 <term id="menu-create-table">
 <menuchoice>
 <shortcut>
-<keycombo action="simul"><keycap>F10</keycap></keycombo>
+<keycombo action="simul"><keycap>F5</keycap></keycombo>
 </shortcut>
 <guimenu>Insert</guimenu><guimenuitem>Table...</guimenuitem>
 </menuchoice>
@@ -1155,7 +1156,7 @@ is equivalent to using the menubar.</para>
 <term id="menu-create-text-frame">
 <menuchoice>
 <shortcut>
-<keycombo><keycap>F10</keycap></keycombo>
+<keycombo action="simul"><keycap>F10</keycap></keycombo>
 </shortcut>
 <guimenu>Insert</guimenu><guimenuitem>Text Frame</guimenuitem>
 </menuchoice>
@@ -1164,37 +1165,39 @@ is equivalent to using the menubar.</para>
 <para><action>To create a new text frame.</action>  After selecting this
 option, your cursor will change to cross hairs.  Choose the location of
 one corner of your new text frame.  Click on the
-<mousebutton>left</mousebutton> mouse button and hold the button down.
+&LMB; and hold the button down.
 Drag the mouse, until you have the desired text frame.  When you have
 the correct shape and size, release the mouse button. &kword; will now
 bring up a dialog box with options to connect this text frame to other
 frames in your document.  For more information on this subject, see
-<link linkend="frames">Working with Frames</link>.</para>
+<link linkend="frames">Working with Frames</link>.</para> 
 
 <para>Typing <keycombo action="simul"><keycap>F10</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are 
-equivalent to using
-the menubar.</para>
+fileref="tfcreatebut.png" format="PNG"/></imageobject></inlinemediaobject> is equivalent to using the
+menubar.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term id="menu-create-formula">
 <menuchoice>
+<shortcut>
+<keycombo action="simul"><keycap>F4</keycap></keycombo>
+</shortcut>
 <guimenu>Insert</guimenu><guimenuitem>Formula</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para><action>This will allow you to create a table in the current
-cursor location.</action> For more information, please see the section entitled <link
-linkend="tables">Tables</link>.</para>
+<para><action>Insert a formula into the document.</action>  More
+information on formulas in &kword; can be found <link
+linkend="formulas">here</link>.</para> 
 
 <para>Typing <keycombo action="simul"><keycap>F4</keycap></keycombo> or
 clicking <inlinemediaobject><imageobject><imagedata
-fileref="part-kspread.png" format="PNG"/></imageobject></inlinemediaobject> are 
-equivalent to using the
-menubar.</para>
+fileref="part-kformula.png" format="PNG"/></imageobject></inlinemediaobject> are 
+equivalent to using
+the menubar.</para>
 </listitem>
 </varlistentry>
 
@@ -2256,7 +2259,7 @@ a task from the menubar.</para>
 </sect1>
 
 <sect1 id="table-edit-toolbar">
-<title>Table ToolBar</title>
+<title>Table Toolbar</title>
 
 <para>The Table Edit Toolbar consists of 5 buttons.  Each button
 performs a task from the menubar.  Click on that task for more
