@@ -89,6 +89,7 @@ be used within larger documents of other &koffice; components.
 </listitem>
 <listitem><para>Work breakdown structure (WBS).</para></listitem>
 <listitem><para>Critical path and resources.</para></listitem>
+<listitem><para>Embedding into other KOffice applications.</para></listitem>
 </itemizedlist>
 </chapter>
 
