@@ -1,7 +1,7 @@
-<sect1 id="tutorial-quick-starts">
-<title>Quick Starts for Dummies</title>
-<sect2 id="crop-image">
-<title>Crop an image and save as New</title>
+<sect1 id="tutorial-quickstarts">
+<title>Quick Start Guides</title>
+<sect2 id="tutorial-quickstarts-cropimage">
+<title>Crop an area and save it</title>
 
 <para>Aim: from a picture, crop an area and save that area in a new file</para>
 
@@ -72,7 +72,7 @@
 <para>Save the new image.</para>
 
 </sect2>
-<sect2 id="draw-rectangle">
+<sect2 id="tutorial-quickstarts-drawrectangle">
 <title>Draw a rectangle on your picture</title>
 
 <para>Aim: draw a coloured rectangle on your picture</para>

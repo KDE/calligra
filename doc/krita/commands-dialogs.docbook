@@ -598,15 +598,24 @@ preview yourself.
 
 <para>
 With this dialog, you can customize the brightness and contrast of your image.
-Use the curve or the <guibutton>+</guibutton> and <guibutton>-</guibutton>
-buttons to set the brightness and contrast. The curve shows to which new level
-(vertically) pixels with a certain original level (horizontally) are mapped.
-For example, no change corresponds to a diagonal line from bottom left to top
-right, and a horizontal line means all every pixels will get the same
-brightness/contrast values. Click on the curve to add a handle to it, then
-drag it around to have the curve change as it passes through the handles.
-Press <keycap>Delete</keycap> to delete the currently selected handle
-(indicated by the filled red circle).
+</para><para>
+The curve diagram has a histogram-like background that shows you the abundance
+of various brightness levels. The curve itself (initially a diagonal line from
+bottom left to top right) determines to which new brightness level (on the
+vertical axis) pixels with a certain original level (on the horizontal axis) are
+to be mapped. For example, the default diagonal line from bottom left to top
+right sets every original pixel to its own brightness value, meaning no
+change. A horizontal line means that all pixels will get the same brightness.
+This means minimal contrast, the brightness itself is indicated by the height
+at which the line is placed.
+</para><para>
+You can click on a handle (red circle) to select it (a selected handle is
+indicated by a filled circle) and drag it around to change the shape of the
+curve. The curve will be drawn smoothly through the handles (always
+strictly from left to right). If you click on the curve, a handle is added to
+it at that position. Clicking somewhere else in the image will also add a
+handle at that point. You can press <keycap>Delete</keycap> to delete the
+currently selected handle.
 </para>
 
 </sect3>
@@ -633,9 +642,11 @@ Press <keycap>Delete</keycap> to delete the currently selected handle
 You can apply a bumpmap effect and customize it using this dialog. One layer
 is used as bumpmap layer: it is read as grayscale image and the gray values of
 its pixels are used to to distort the other layer for creating the depth
-illusion. A light source, shining <quote>from above</quote> on the image that
-lies <quote>on the ground</quote>, is simulated to determine the depth and
-direction of the shadows.
+illusion. High grey values, &ie; more white, mean a larger height, small
+values, &ie; near black, mean a smaller height &mdash; or a larger depth, the
+height can get <quote>below sealevel</quote>. A light source, shining
+<quote>from above</quote> on the image that lies <quote>on the ground</quote>,
+is simulated to determine the depth and direction of the shadows.
 </para><para>
 The first option in this dialog offers you the selection of the
 <guilabel>Bumpmap layer</guilabel>.
@@ -643,11 +654,11 @@ The first option in this dialog offers you the selection of the
 Under <guilabel>Type</guilabel>, you can select what kind of bumpmap to be
 applied. There are three types, <guilabel>Linear</guilabel> (a normal
 application of the bumpmap), <guilabel>Spherical</guilabel> (focusing on the
-extremes, &ie; the shadow and highlight values) and
+extremes, that is, the shadow and highlight values) and
 <guilabel>Sinusoidal</guilabel> (focusing on the midtone values).
 </para><para>
 Then, there are three options to modify the bumpmap apart from its
-algorithmical application. With <guilabel>Compensate for darkoning</guilabel>,
+algorithmical application. With <guilabel>Compensate for darkening</guilabel>,
 the image is restored to about its original average lightness if using the
 bumpmap filter would make it darker. The <guilabel>Invert bumpmap</guilabel>
 option creates an inverted bumpmap (high and low are reversed). With
@@ -663,8 +674,8 @@ and <guilabel>Depth</guilabel> (the maximal vertical distortion of the image).
 </para><para>
 Then, there are the <guilabel>X offset</guilabel> and <guilabel>Y
 offset</guilabel>, with which you can displace the bumpmap layer relative to
-the destination layer, <guilabel>Water level</guilabel> (the depth which is
-used as neutral), and <guilabel>Ambient light</guilabel>, which determines the
+the destination layer, <guilabel>Water level</guilabel> (the depth seen as
+neutral), and <guilabel>Ambient light</guilabel>, which determines the
 relative amount of ambient (environmental) light.
 </para>
 
@@ -692,7 +703,7 @@ relative amount of ambient (environmental) light.
 This dialog allows you to customize the Color Adjustment filter. You can use
 the curve (see the section on <link
 linkend="commands-dialogs-filters-brightnesscontrast">Brightness /
-Contrast</link> for a short description on the curve) to determine the mapping
+Contrast</link> for a description on the curve) to determine the mapping
 from old to new color levels, for each of the channels separately.
 </para>
 
@@ -755,10 +766,10 @@ multiplied with a certain <guilabel>Factor:</guilabel> or a certain
 </para><para>
 In the example screenshot, each pixel is assigned a new value based on its
 own (the 1 in the center), to which are added the values of the pixels to its
-top right and directly below it (each with a factor 1, &ie; the actual value,
-since multiplying by one has no effect), and from which are subtracted the
-values of the pixels to its bottom right and directly above it (added with a
-factor -1, so subtracted with a factor 1).
+top right and directly below it (each with a factor of 1, &ie; the actual
+value, since multiplying by one has no effect), and from which are subtracted
+the values of the pixels to its bottom right and directly above it (added with
+a factor of -1, so subtracted by a factor of 1).
 </para>
 
 </sect3>

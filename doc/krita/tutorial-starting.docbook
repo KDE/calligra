@@ -2,10 +2,10 @@
 <title>Starting to know Krita</title>
 
 <para>
-So, let's show off. You can start &krita; either on its own or from the
-&koffice; shell. In your &kde; menus, &krita; should be placed either under
-Graphics or under Office &mdash; it depends a bit on who packaged &koffice; for
-you. Or do what I do: press
+So, let's show you all the niceties. You can start &krita; either on its own
+or from the &koffice; shell. In your &kde; menus, &krita; should be placed
+either under Graphics or under Office &mdash; it depends a bit on who packaged
+&koffice; for you. Or do what I do: press
 <keycombo action="simul">&Alt;<keycap>F2</keycap></keycombo> (which opens the
 minicli), type <userinput><command>krita</command></userinput> and
 press <guibutton>OK</guibutton>.
