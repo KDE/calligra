@@ -393,9 +393,9 @@ does fit properly.</para>
 </menuchoice> dialog box is 
 checked, &kspread; will recalculate the values of cells whenever anything that 
 affects them is changed in the sheet.</para>
-<para>You can instruct &kspread; to perform a recalculation at any time by 
+<para>When <guilabel>Automatic recalculation</guilabel> is not checked for the current sheet, you can instruct &kspread; to perform a recalculation at any time by 
 using the <guimenuitem>Recalculate Sheet</guimenuitem> or <guimenuitem>
-Recalculate Document</guimenuitem> options in the <guimenu>Tools</guimenu> 
+Recalculate Document</guimenuitem> option in the <guimenu>Tools</guimenu> 
 menu or their shortcuts <keycombo action="simul">&Shift;<keysym>F9</keysym>
 </keycombo> or <keysym>F9</keysym>.</para>
 </sect2>
