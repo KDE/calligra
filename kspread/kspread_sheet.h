@@ -468,9 +468,20 @@ public:
      * Recalculates the current sheet. If you want to recalculate EVERYTHING, then
      * call @ref Sheet::setCalcDirtyFlag for all sheets in the @ref #m_pMap to make
      * sure that no invalid values in other sheets make you trouble.
+     *
+     * Recalc will do nothing if automatic calculation is disabled (via @ref Sheet::setAutoCalc ).
+     * unless the force flag is set to true.  Automatic recalculation is enabled by default.
+     *
+     * @param force If false, the sheet will be recalculated if automatic calculation is enabled.
+     * If true, the sheet will be recalculated regardless of the automatic calculation setting.
+     */
+    void recalc( bool force );
+    /**
+     * Recalculates the current sheet, if automatic recalculation is enabled.  
      */
     void recalc();
-
+    
+    
     /** handles the fact that a cell has been changed - updates
     things that need to be updated */
     void valueChanged (Cell *cell);
@@ -1221,6 +1232,9 @@ protected slots:
   void slotAreaModified (const QString &name);
 
 protected:
+     /** Updates dependencies for all cells on this sheet */
+     void updateAllDependencies();
+     
     /**
      * Change the name of a sheet in all formulas.
      * When you change name sheet Sheet1 -> Price

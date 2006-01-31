@@ -2192,10 +2192,10 @@ void View::recalcWorkBook()
         tbl != 0L;
         tbl = doc()->map()->nextSheet() )
   {
-    bool b = tbl->getAutoCalc();
-    tbl->setAutoCalc( true );
-    tbl->recalc();
-    tbl->setAutoCalc( b );
+   // bool b = tbl->getAutoCalc();
+   // tbl->setAutoCalc( true );
+    tbl->recalc( /*force recalculation = */ true);
+   // tbl->setAutoCalc( b );
   }
 
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
@@ -2219,10 +2219,10 @@ void View::recalcWorkSheet()
   if ( d->activeSheet != 0 )
   {
     doc()->emitBeginOperation( true );
-    bool b = d->activeSheet->getAutoCalc();
-    d->activeSheet->setAutoCalc( true );
-    d->activeSheet->recalc();
-    d->activeSheet->setAutoCalc( b );
+//    bool b = d->activeSheet->getAutoCalc();
+//    d->activeSheet->setAutoCalc( true );
+    d->activeSheet->recalc( /*force recalculation = */ true);
+ //   d->activeSheet->setAutoCalc( b );
     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
 }

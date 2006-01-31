@@ -513,7 +513,20 @@ bool Sheet::getAutoCalc() const
 
 void Sheet::setAutoCalc( bool _AutoCalc )
 {
+    //Avoid possible recalculation of dependancies if the auto calc setting hasn't changed
+    if (d->autoCalc == _AutoCalc)
+        return;
+    
+    //If enabling automatic calculation, make sure that the dependencies are up-to-date
+    if (_AutoCalc == true)   
+    { 
+        updateAllDependencies();
+        recalc();    
+    }
+        
     d->autoCalc=_AutoCalc;
+    
+    
 }
 
 bool Sheet::getShowColumnNumber() const
@@ -1176,12 +1189,41 @@ void Sheet::setCalcDirtyFlag()
     }
 }
 
+void Sheet::updateAllDependencies()
+{
+        for (Cell* cell = d->cells.firstCell() ; cell ; cell = cell->nextCell())
+        {
+            Point cellLocation;
+            cellLocation.setSheet(cell->sheet());
+            cellLocation.setRow(cell->row());
+            cellLocation.setColumn(cell->column());
+            d->dependencies->cellChanged(cellLocation);
+        }
+}
+
 void Sheet::recalc()
+{
+    recalc(false);
+}
+
+void Sheet::recalc( bool force )
 {
   //  emitBeginOperation(true);
   //  setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
   setCalcDirtyFlag();
 
+  //If automatic calculation is disabled, don't recalculate unless the force flag has been
+  //set.
+  if ( !getAutoCalc() && !force )
+        return;
+        
+  //If automatic calculation is disabled, the dependencies won't be up to date, so they need
+  //to be recalculated.
+  //FIXME:  Tomas, is there a more efficient way to do this?
+  if ( !getAutoCalc() )
+    updateAllDependencies();
+  
+  
   // (Tomas): actually recalc each cell
   // this is FAR from being perfect, dependencies will cause some to be
   // recalculated a LOT, but it's still better than otherwise, where
@@ -1225,7 +1267,8 @@ void Sheet::valueChanged (Cell *cell)
   c.setSheet( this );
 
   //update dependencies
-  d->dependencies->cellChanged (c);
+  if ( getAutoCalc() )
+        d->dependencies->cellChanged (c);
 
   //REMOVED - modification change - this was causing modified flag to be set inappropriately.
   //nobody else seems to be setting the modified flag, so we do it here
