@@ -53,6 +53,11 @@ Schedule::Schedule(QString name, Type type, long id)
 Schedule::~Schedule() {
 }
 
+void Schedule::setDeleted(bool on) {
+    //kdDebug()<<k_funcinfo<<"deleted="<<on<<endl;
+    m_deleted = on;
+}
+
 void Schedule::setType(const QString type) {
     m_type = Expected;
     if (type == "Expected")
@@ -333,6 +338,18 @@ void NodeSchedule::init() {
     inCriticalPath = false;
 }
 
+void NodeSchedule::setDeleted(bool on) {
+    //kdDebug()<<k_funcinfo<<"deleted="<<on<<endl;
+    m_deleted = on;
+    // set deleted also for possible resource schedules
+    QPtrListIterator<Appointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        if (it.current()->resource()) {
+            it.current()->resource()->setDeleted(on);
+        }
+    }
+}
+
 NodeSchedule *NodeSchedule::find(const QIntDict<NodeSchedule> &sch, Schedule::Type type) {
     QIntDictIterator<NodeSchedule> it = sch;
     for (; it.current(); ++it) {
@@ -572,9 +589,7 @@ double ResourceSchedule::normalRatePrHour() const {
 
 #ifndef NDEBUG
 void Schedule::printDebug(QString indent) {
-    kdDebug()<<indent<<"Schedule["<<m_id<<"] '"<<m_name<<"' type: "<<typeToString()<<" ("<<m_type<<")"<<endl;
-    if (m_deleted)
-        kdDebug()<<indent<<"Deleted"<<endl;
+    kdDebug()<<indent<<"Schedule["<<m_id<<"] '"<<m_name<<"' type: "<<typeToString()<<" ("<<m_type<<")"<<(m_deleted?"   Deleted":"")<<endl;
 }
 void NodeSchedule::printDebug(QString indent) {
     Schedule::printDebug(indent);

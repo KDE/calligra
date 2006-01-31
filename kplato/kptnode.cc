@@ -686,6 +686,54 @@ NodeSchedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
     return sch;
 }
 
+void Node::deleteSchedules() {
+    QIntDictIterator<NodeSchedule> it = m_schedules;
+    for (; it.current(); ++it) {
+        it.current()->setDeleted(true);
+        QPtrListIterator<Node> nit = m_nodes;
+        for (; nit.current(); ++nit) {
+            nit.current()->deleteSchedules();
+        }
+    }
+}
+
+NodeSchedule *Node::findSchedule(const QString name, const Schedule::Type type) const {
+    QIntDictIterator<NodeSchedule> it = m_schedules;
+    for (; it.current(); ++it) {
+        if (!it.current()->isDeleted() && 
+            it.current()->name() == name && it.current()->type() == type)
+            return it.current();
+    }
+    return 0;
+}
+
+NodeSchedule *Node::findSchedule(const Schedule::Type type) const {
+    //kdDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count()<<endl;
+    QIntDictIterator<NodeSchedule> it = m_schedules;
+    for (; it.current(); ++it) {
+        if (!it.current()->isDeleted() && it.current()->type() == type) {
+            return it.current();
+        }
+    }
+    return 0;
+}
+
+void Node::setScheduleDeleted(long id, bool on) {
+    NodeSchedule *ns = findSchedule(id);
+    if (ns == 0) {
+        kdError()<<k_funcinfo<<m_name<<" Could not find schedule with id="<<id<<endl;
+    } else {
+        ns->setDeleted(on);
+    }
+}
+void Node::deleteSchedules(long id, bool on) {
+    setScheduleDeleted(id, on);
+    QPtrListIterator<Node> nit = m_nodes;
+    for (; nit.current(); ++nit) {
+        nit.current()->deleteSchedules(id, on);
+    }
+}
+
 bool Node::calcCriticalPath(bool fromEnd) {
     if (m_currentSchedule == 0)
         return false;

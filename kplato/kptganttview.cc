@@ -453,12 +453,17 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     KLocale *locale = KGlobal::locale();
-    
+    if (task->currentSchedule() == 0) {
+        item->setShowNoInformation(true);
+        item->setStartTime(task->projectNode()->startTime());
+        item->setEndTime(item->startTime().addDays(1));
+    } else {
+        item->setShowNoInformation(task->notScheduled());
+        item->setStartTime(task->startTime());
+        item->setEndTime(task->endTime());
+    }
     item->setListViewText(task->name());
     item->setListViewText(1, task->wbs());
-    Duration dur = task->duration();
-    item->setStartTime(task->startTime());
-    item->setEndTime(task->endTime());
     //item->setOpen(true);
     if (m_showTaskName) {
         item->setText(task->name());
@@ -470,12 +475,10 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
         w += "\n" + i18n("Start: %1").arg(locale->formatDateTime(task->startTime()));
         w += "\n" + i18n("End: %1").arg(locale->formatDateTime(task->endTime()));
     }
-    QString sts;
-    bool ok = true;
     if (task->notScheduled()) {
-        sts += "\n" + i18n("Not scheduled");
-        ok = false;
+        w += "\n" + i18n("Not scheduled");
     }
+    item->setTooltipText(w);
     setDrawn(item, true);
 }
 
@@ -483,11 +486,17 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     KLocale *locale = KGlobal::locale();
-
     item->setListViewText(task->name());
     item->setListViewText(1, task->wbs());
-    item->setStartTime(task->startTime());
-    item->setEndTime(task->endTime());
+    if (task->currentSchedule() == 0) {
+        item->setShowNoInformation(true);
+        item->setStartTime(task->projectNode()->startTime());
+        item->setEndTime(item->startTime().addDays(1));
+    } else {
+        item->setShowNoInformation(task->notScheduled());
+        item->setStartTime(task->startTime());
+        item->setEndTime(task->endTime());
+    }
     //item->setOpen(true);
     QString text;
     if (m_showTaskName) {
@@ -588,10 +597,15 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     KLocale *locale = KGlobal::locale();
-    
+    if (task->currentSchedule() == 0) {
+        item->setShowNoInformation(true);
+        item->setStartTime(task->projectNode()->startTime());
+    } else {
+        item->setShowNoInformation(task->notScheduled());
+        item->setStartTime(task->startTime());
+    }
     item->setListViewText(task->name());
     item->setListViewText(1, task->wbs());
-    item->setStartTime(task->startTime());
     //item->setOpen(true);
     if (m_showTaskName) {
         item->setText(task->name());

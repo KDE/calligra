@@ -30,6 +30,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <qintdict.h>
+#include <qmap.h>
+
 namespace KPlato
 {
 
@@ -1447,23 +1450,55 @@ void ModifyDefaultAccountCmd::unexecute() {
     setCommandType(0);
 }
 
+ProjectModifyConstraintCmd::ProjectModifyConstraintCmd(Part *part, Project &node, Node::ConstraintType c, QString name)
+    : NamedCommand(part, name),
+      m_node(node),
+      newConstraint(c),
+      oldConstraint(static_cast<Node::ConstraintType>(node.constraint())) {
+
+    QIntDictIterator<NodeSchedule> it = node.schedules();
+    for (; it.current(); ++it) {
+        ids.insert(it.current()->id(), it.current()->isDeleted());
+    }
+}
+void ProjectModifyConstraintCmd::execute() {
+    m_node.setConstraint(newConstraint);
+    m_node.deleteSchedules();
+    
+    setCommandType(1);
+}
+void ProjectModifyConstraintCmd::unexecute() {
+    m_node.setConstraint(oldConstraint);
+    QMap<long, bool>::ConstIterator it;
+    for (it = ids.constBegin(); it != ids.constEnd(); ++it) {
+        m_node.deleteSchedules(it.key(), it.data());
+    }
+    setCommandType(1);
+}
+
 ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd(Part *part, Project &node, QDateTime dt, QString name)
     : NamedCommand(part, name),
       m_node(node),
       newTime(dt),
       oldTime(node.startTime()) {
 
+    QIntDictIterator<NodeSchedule> it = node.schedules();
+    for (; it.current(); ++it) {
+        ids.insert(it.current()->id(), it.current()->isDeleted());
+    }
 }
+
 void ProjectModifyStartTimeCmd::execute() {
     m_node.setConstraintStartTime(newTime);
-    m_node.setStartTime(newTime);
-    
+    m_node.deleteSchedules();
     setCommandType(1);
 }
 void ProjectModifyStartTimeCmd::unexecute() {
     m_node.setConstraintStartTime(oldTime);
-    m_node.setStartTime(oldTime);
-    
+    QMap<long, bool>::ConstIterator it;
+    for (it = ids.constBegin(); it != ids.constEnd(); ++it) {
+        m_node.deleteSchedules(it.key(), it.data());
+    }
     setCommandType(1);
 }
 
@@ -1473,18 +1508,85 @@ ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd(Part *part, Project &node, QDat
       newTime(dt),
       oldTime(node.endTime()) {
 
+    QIntDictIterator<NodeSchedule> it = node.schedules();
+    for (; it.current(); ++it) {
+        ids.insert(it.current()->id(), it.current()->isDeleted());
+    }
 }
 void ProjectModifyEndTimeCmd::execute() {
     m_node.setEndTime(newTime);
     m_node.setConstraintEndTime(newTime);
+    m_node.deleteSchedules();
     
     setCommandType(1);
 }
 void ProjectModifyEndTimeCmd::unexecute() {
     m_node.setConstraintEndTime(oldTime);
-    m_node.setEndTime(oldTime);
+    QMap<long, bool>::ConstIterator it;
+    for (it = ids.constBegin(); it != ids.constEnd(); ++it) {
+        m_node.deleteSchedules(it.key(), it.data());
+    }
     
     setCommandType(1);
+}
+
+CalculateProjectCmd::CalculateProjectCmd(Part *part, Project &node, QString tname, int type, QString name)
+    : NamedCommand(part, name),
+      m_node(node),
+      m_typename(tname),
+      m_type(type),
+      newSchedule(-1) {
+      
+    oldCurrent = node.currentSchedule();
+    //kdDebug()<<k_funcinfo<<type<<endl;
+}
+void CalculateProjectCmd::execute() {
+    if (newSchedule == -1) {
+        //kdDebug()<<k_funcinfo<<" create schedule"<<endl;
+        newSchedule = m_node.createSchedule(m_typename, (Schedule::Type)m_type)->id();
+        m_node.calculate((Effort::Use)m_type);
+    } else {
+        //kdDebug()<<k_funcinfo<<" redo"<<endl;
+        m_node.deleteSchedules(newSchedule, false);
+    }
+    setCommandType(0);
+}
+void CalculateProjectCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_node.deleteSchedules(newSchedule, true);
+    m_node.setCurrentSchedule(oldCurrent ? oldCurrent->id() : -1);
+
+    setCommandType(0);
+}
+
+RecalculateProjectCmd::RecalculateProjectCmd(Part *part, Project &node, NodeSchedule &sch, QString name)
+    : NamedCommand(part, name),
+      m_node(node),
+      oldSchedule(sch),
+      newSchedule(0),
+      oldDeleted(sch.isDeleted()) {
+
+    oldCurrent = node.currentSchedule();
+    //kdDebug()<<k_funcinfo<<sch.typeToString()<<"  curr="<<(oldCurrent?oldCurrent->id():-1)<<endl;
+}
+void RecalculateProjectCmd::execute() {
+    m_node.deleteSchedules(oldSchedule.id(), true);
+    if (newSchedule == 0) {
+        newSchedule = m_node.createSchedule(oldSchedule.name(), oldSchedule.type());
+        m_node.calculate((Effort::Use)newSchedule->type());
+    } else {
+        m_node.deleteSchedules(newSchedule->id(), false);
+        //kdDebug()<<k_funcinfo<<newSchedule->typeToString()<<" redo"<<endl;
+    }
+    setCommandType(0);
+}
+void RecalculateProjectCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<newSchedule->typeToString()<<(oldCurrent ? oldCurrent->id() : -1)<<endl;
+    m_node.deleteSchedules(newSchedule->id(), true);
+    m_node.deleteSchedules(oldSchedule.id(), oldDeleted);
+    m_node.setCurrentSchedule(oldCurrent ? oldCurrent->id() : -1);
+    
+    setCommandType(0);
 }
 
 }  //KPlato namespace

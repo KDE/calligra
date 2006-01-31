@@ -82,6 +82,7 @@ public:
     virtual void getContext(Context &context) const;
 
     void setTaskActionsEnabled(QWidget *w, bool on);
+    void setScheduleActionsEnabled();
     
 public slots:
     void slotUpdate(bool calculate);

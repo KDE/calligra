@@ -310,7 +310,9 @@ void Task::save(QDomElement &element)  const {
         me.appendChild(schs);
         QIntDictIterator<NodeSchedule> it = m_schedules;
         for (; it.current(); ++it) {
-            it.current()->saveXML(schs);
+            if (!it.current()->isDeleted()) {
+                it.current()->saveXML(schs);
+            }
         }
     }
     if (m_requests) {
@@ -1299,6 +1301,7 @@ void Task::adjustSummarytask() {
         m_currentSchedule->startTime = start;
         m_currentSchedule->endTime = end;
         m_currentSchedule->duration = end - start;
+        m_currentSchedule->notScheduled = false;
         //kdDebug()<<k_funcinfo<<cs->name<<": "<<m_currentSchedule->startTime.toString()<<" : "<<m_currentSchedule->endTime.toString()<<endl;
     }
 }

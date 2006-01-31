@@ -63,10 +63,10 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
         s = i18n("Scheduling (%1)").arg(sch->typeToString(true));
     }
     schedulingGroup->setTitle(s);
-    startDate->setDate(project.startTime().date());
-    startTime->setTime(project.startTime().time());
-    endDate->setDate(project.endTime().date());
-    endTime->setTime(project.endTime().time());
+    startDate->setDate(project.constraintStartTime().date());
+    startTime->setTime(project.constraintStartTime().time());
+    endDate->setDate(project.constraintEndTime().date());
+    endTime->setTime(project.constraintEndTime().time());
     if (project.constraint() == Node::MustStartOn) {
         schedulingGroup->setButton(0);
     }
@@ -117,19 +117,17 @@ KCommand *MainProjectPanel::buildCommand(Part *part) {
     } */
     if (bStartDate->state() && project.constraint() != Node::MustStartOn) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new NodeModifyConstraintCmd(part, project, Node::MustStartOn));
-        m->addCommand(new NodeModifyConstraintStartTimeCmd(part, project, startDateTime()));
-    } 
+        m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustStartOn));
+    }
     if (bEndDate->state() && project.constraint() != Node::MustFinishOn) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new NodeModifyConstraintCmd(part, project, Node::MustFinishOn));
-        m->addCommand(new NodeModifyConstraintEndTimeCmd(part, project, endDateTime()));
-    } 
-    if (startDateTime() != project.startTime()) {
+        m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustFinishOn));
+    }
+    if (startDateTime() != project.constraintStartTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(part, project, startDateTime()));
     }
-    if (endDateTime() != project.endTime()) {
+    if (endDateTime() != project.constraintEndTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(part, project, endDateTime()));
     }

@@ -112,7 +112,7 @@ void TaskAppointmentsView::slotUpdate() {
     // Add columns for selected period/periods
     QDate start = m_task->startTime().date();
     QDate end = m_task->endTime().date();
-    kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     int c=0;
     for (QDate dt = start; dt <= end; dt = cal->addDays(dt, 1), ++c) {
         QString df = locale->formatDate(dt, true);

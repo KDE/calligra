@@ -880,6 +880,20 @@ private:
     Account *m_newvalue;
 };
 
+class ProjectModifyConstraintCmd : public NamedCommand
+{
+public:
+    ProjectModifyConstraintCmd(Part *part, Project &node, Node::ConstraintType c, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    Node::ConstraintType newConstraint;
+    Node::ConstraintType oldConstraint;
+    QMap<long, bool> ids;
+};
+
 class ProjectModifyStartTimeCmd : public NamedCommand
 {
 public:
@@ -891,7 +905,9 @@ private:
     Project &m_node;
     QDateTime newTime;
     QDateTime oldTime;
+    QMap<long, bool> ids;
 };
+
 class ProjectModifyEndTimeCmd : public NamedCommand
 {
 public:
@@ -903,6 +919,38 @@ private:
     Project &m_node;
     QDateTime newTime;
     QDateTime oldTime;
+    QMap<long, bool> ids;
+};
+
+
+class CalculateProjectCmd : public NamedCommand
+{
+public:
+    CalculateProjectCmd(Part *part, Project &project, QString tname, int type, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    QString m_typename;
+    int m_type;
+    long newSchedule;
+    NodeSchedule *oldCurrent;
+};
+
+class RecalculateProjectCmd : public NamedCommand
+{
+public:
+    RecalculateProjectCmd(Part *part, Project &project, NodeSchedule &sch, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    NodeSchedule &oldSchedule;
+    NodeSchedule *newSchedule;
+    bool oldDeleted;
+    NodeSchedule *oldCurrent;
 };
 
 }  //KPlato namespace

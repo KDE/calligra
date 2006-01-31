@@ -56,15 +56,9 @@ Project::Project(Node *parent)
 
 void Project::init() {
     if (m_parent == 0) {
-        if (m_currentSchedule == 0)
-            m_currentSchedule = createSchedule(i18n("Standard"), Schedule::Expected);
         // set sensible defaults for a project wo parent
-        m_currentSchedule->startTime = QDateTime(QDate::currentDate(), QTime());
-        m_currentSchedule->endTime = m_currentSchedule->startTime.addDays(1);        m_currentSchedule->duration = m_currentSchedule->endTime - m_currentSchedule->startTime;
-        if (m_currentSchedule->duration == Duration::zeroDuration)
-            m_currentSchedule->duration.addDays(1);
-        m_constraintStartTime = m_currentSchedule->startTime;
-        m_constraintEndTime = m_currentSchedule->endTime;
+        m_constraintStartTime = QDateTime(QDate::currentDate(), QTime());
+        m_constraintEndTime = m_constraintStartTime.addDays(1);
     }
     m_calendars.setAutoDelete(true);
 }
@@ -83,10 +77,10 @@ void Project::calculate(Effort::Use estType) {
     if (m_currentSchedule == 0) {
         m_currentSchedule = createSchedule(i18n("Standard"), (Schedule::Type)estType);
     }
-    //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_currentSchedule->startTime.toString()<<endl;
     if (type() == Type_Project) {
         initiateCalculation(m_currentSchedule);
         if (m_constraint == Node::MustStartOn) {
+            //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString()<<endl;
             m_currentSchedule->startTime = m_constraintStartTime;
             m_currentSchedule->earliestStart = m_constraintStartTime;
             // Calculate from start time
@@ -97,6 +91,7 @@ void Project::calculate(Effort::Use estType) {
             m_currentSchedule->endTime = scheduleForward(m_currentSchedule->startTime, estType);
             calcCriticalPath(false);
         } else {
+            //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" End="<<m_constraintEndTime.toString()<<endl;
             m_currentSchedule->endTime = m_constraintEndTime;
             m_currentSchedule->latestFinish = m_constraintEndTime;
             // Calculate from end time
@@ -266,7 +261,7 @@ void Project::initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node
 
 bool Project::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<"--->"<<endl;
-    // Maybe TODO: Delete old stuff here
+    QString s;
     bool ok = false;
     QString id = element.attribute("id");
     if (!setId(id)) {
@@ -279,16 +274,22 @@ bool Project::load(QDomElement &element) {
     //m_baselined = (bool)element.attribute("baselined","0").toInt(&ok);FIXME: Removed for this release  
     
     // Allow for both numeric and text
-    QString c = element.attribute("scheduling","0");
-    m_constraint = (Node::ConstraintType)c.toInt(&ok);
+    s = element.attribute("scheduling","0");
+    m_constraint = (Node::ConstraintType)s.toInt(&ok);
     if (!ok)
-        setConstraint(c);
+        setConstraint(s);
     if (m_constraint != Node::MustStartOn &&
         m_constraint != Node::MustFinishOn) {
         kdError()<<k_funcinfo<<"Illegal constraint: "<<constraintToString()<<endl;
         setConstraint(Node::MustStartOn);
     }
-
+    s = element.attribute("start-time");
+    if (!s.isEmpty())
+        m_constraintStartTime = QDateTime::fromString(s);
+    s = element.attribute("end-time");
+    if (!s.isEmpty())
+        m_constraintEndTime = QDateTime::fromString(s);
+    
     // Load the project children
     // Must do these first
     QDomNodeList list = element.childNodes();
@@ -445,6 +446,8 @@ void Project::save(QDomElement &element)  const {
     //me.setAttribute("baselined",(int)m_baselined); FIXME: Removed for this release  
 
     me.setAttribute("scheduling",constraintToString());    
+    me.setAttribute("start-time", m_constraintStartTime.toString());
+    me.setAttribute("end-time", m_constraintEndTime.toString());
     
     m_accounts.save(me);
     
@@ -484,11 +487,13 @@ void Project::save(QDomElement &element)  const {
         me.appendChild(el);
         QIntDictIterator<NodeSchedule> it = m_schedules;
         for (; it.current(); ++it) {
-            QDomElement schs = el.ownerDocument().createElement("schedule");
-            el.appendChild(schs);
-            it.current()->saveProjectXML(schs);
-            //kdDebug()<<k_funcinfo<<m_name<<" id="<<it.current()->id()<<endl;
-            Node::saveAppointments(schs, it.current()->id());
+            if (!it.current()->isDeleted()) {
+                QDomElement schs = el.ownerDocument().createElement("schedule");
+                el.appendChild(schs);
+                it.current()->saveProjectXML(schs);
+                //kdDebug()<<k_funcinfo<<m_name<<" id="<<it.current()->id()<<(it.current()->isDeleted()?"  Deleted":"")<<endl;
+                Node::saveAppointments(schs, it.current()->id());
+            }
         }
     }
 }
@@ -702,26 +707,12 @@ bool Project::moveTaskDown( Node* node )
 Task *Project::createTask(Node* parent) {
     Task* node = new Task(parent);
     node->setId(uniqueNodeId());
-    QIntDictIterator<NodeSchedule> it = m_schedules;
-    for (; it.current(); ++it) {
-        NodeSchedule *sch = node->createSchedule(it.current()->name(), it.current()->type(), it.current()->id());
-        sch->startTime = it.current()->startTime;
-        sch->endTime = it.current()->startTime.addDays(1);
-        sch->duration = sch->endTime - sch->startTime;
-    }
     return node;
 }
 
 Task *Project::createTask(Task &def, Node* parent) {
     Task* node = new Task(def, parent);
     node->setId(uniqueNodeId());
-    QIntDictIterator<NodeSchedule> it = m_schedules;
-    for (; it.current(); ++it) {
-        NodeSchedule *sch = node->createSchedule(it.current()->name(), it.current()->type(), it.current()->id());
-        sch->startTime = it.current()->startTime;
-        sch->endTime = it.current()->startTime.addDays(1);
-        sch->duration = sch->endTime - sch->startTime;
-    }
     return node;
 }
 

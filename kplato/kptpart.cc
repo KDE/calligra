@@ -253,6 +253,8 @@ bool Part::loadXML(QIODevice *, const QDomDocument &document) {
     m_commandHistory->clear();
     m_commandHistory->documentSaved();
     setModified( false );
+    if (m_view)
+        m_view->slotUpdate(false);
     return true;
 }
 

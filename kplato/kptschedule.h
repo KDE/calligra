@@ -60,7 +60,7 @@ public:
     long id() const { return m_id; }
     void setId(long id) { m_id = id; }
     bool isDeleted() const { return m_deleted; }
-    void setDeleted(bool on) { m_deleted = on; }
+    void setDeleted(bool on);
     
     virtual Resource *resource() const { return 0; }
     virtual Node *node() const { return 0; }
@@ -152,6 +152,8 @@ public:
     NodeSchedule();
     NodeSchedule(Node *node, QString name, Schedule::Type type, long id);
     ~NodeSchedule();
+    
+    void setDeleted(bool on);
     
     static NodeSchedule *find(const QIntDict<NodeSchedule> &sch, Schedule::Type type);
     static NodeSchedule *find(const QIntDict<NodeSchedule> &sch, QString name, Schedule::Type type);

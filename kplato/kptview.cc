@@ -285,10 +285,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     Q_UNUSED( actExportGantt );
 #endif
 
-    actionViewExpected->setEnabled(getProject().findSchedule(Schedule::Expected));
-    actionViewOptimistic->setEnabled(getProject().findSchedule(Schedule::Optimistic));
-    actionViewPessimistic->setEnabled(getProject().findSchedule(Schedule::Pessimistic));
     actionViewExpected->setChecked(true); //TODO: context
+    setScheduleActionsEnabled();
     slotViewExpected();
     
     setTaskActionsEnabled(false);
@@ -525,7 +523,7 @@ void View::slotProjectResources() {
 }
 
 void View::slotProjectCalculate() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     slotUpdate(true);
 }
 
@@ -551,18 +549,15 @@ void View::projectCalculate() {
             return;
         }
     }
-    if (m_currentEstimateType == Schedule::Optimistic) {
-        actionViewOptimistic->setEnabled(true);
-    } else if (m_currentEstimateType == Schedule::Pessimistic) {
-        actionViewPessimistic->setEnabled(true);
-    } else if (m_currentEstimateType == Schedule::Expected) {
-        actionViewExpected->setEnabled(true);
-    } else {
-        m_currentEstimateType = Schedule::Expected;
-        actionViewExpected->setEnabled(true);
-    }
     QApplication::setOverrideCursor(Qt::waitCursor);
-    getProject().calculate((Effort::Use)m_currentEstimateType);
+    NodeSchedule *ns = getProject().findSchedule((Schedule::Type)m_currentEstimateType);
+    KCommand *cmd;
+    if (ns) {
+        cmd = new RecalculateProjectCmd(getPart(), getProject(), *ns, "Calculate");
+    } else  {
+        cmd = new CalculateProjectCmd(getPart(), getProject(), i18n("Standard"), (Effort::Use)m_currentEstimateType, i18n("Calculate"));
+    }
+    getPart()->addCommand(cmd);
     QApplication::restoreOverrideCursor();
 }
 
@@ -1021,6 +1016,7 @@ void View::slotAboutToShow(QWidget *widget) {
 
 void View::updateView(QWidget *widget)
 {
+    setScheduleActionsEnabled();
     setTaskActionsEnabled(false);
     mainWindow()->toolBar("report")->hide();
     if (widget == m_ganttview)
@@ -1189,6 +1185,22 @@ void View::setTaskActionsEnabled(QWidget *w, bool on) {
 
 void View::setTaskActionsEnabled(bool on) {
     setTaskActionsEnabled(m_ganttview, on); //FIXME if more than ganttview can do this
+}
+
+void View::setScheduleActionsEnabled() {
+    actionViewExpected->setEnabled(getProject().findSchedule(Schedule::Expected));
+    actionViewOptimistic->setEnabled(getProject().findSchedule(Schedule::Optimistic));
+    actionViewPessimistic->setEnabled(getProject().findSchedule(Schedule::Pessimistic));
+    NodeSchedule *ns = getProject().currentSchedule();
+    if (ns == 0) {
+        return;
+    }
+    if (ns->type() == Schedule::Expected)
+        actionViewExpected->setChecked(true);
+    else if (ns->type() == Schedule::Optimistic)
+        actionViewOptimistic->setChecked(true);
+    else if (ns->type() == Schedule::Pessimistic)
+        actionViewPessimistic->setChecked(true);
 }
 
 #ifndef NDEBUG

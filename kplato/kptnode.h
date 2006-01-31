@@ -273,7 +273,7 @@ public:
         { return m_currentSchedule ? m_currentSchedule->schedulingError : false; }
     /// The node has not been scheduled
     bool notScheduled() const
-        { return m_currentSchedule ? m_currentSchedule->notScheduled : true; }
+        { return m_currentSchedule == 0 || m_currentSchedule->isDeleted() || m_currentSchedule->notScheduled; }
     
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const=0;
         
@@ -462,21 +462,26 @@ public:
     void setCurrentSchedulePtr(NodeSchedule *schedule) { m_currentSchedule = schedule; }
     
     QIntDict<NodeSchedule> &schedules() { return m_schedules; }
-    /// Find schedule matching name and type.
-    NodeSchedule *findSchedule(const QString name, const Schedule::Type type) const
-        { return NodeSchedule::find(m_schedules, name, type); }
-    /// Find schedule matching type.
-    NodeSchedule *findSchedule(const Schedule::Type type) const
-        { return NodeSchedule::find(m_schedules, type); }
-    /// Find schedule matching id.
+    /// Find schedule matching name and type. Does not return deleted schedule.
+    NodeSchedule *findSchedule(const QString name, const Schedule::Type type) const;
+    /// Find schedule matching type.  Does not return deleted schedule.
+    NodeSchedule *findSchedule(const Schedule::Type type) const;
+    /// Find schedule matching id.  Also returns deleted schedule.
     NodeSchedule *findSchedule(long id) const { return m_schedules[id]; }
-    /// Take, don't delete.
+    /// Take, don't delete (as in destruct).
     void takeSchedule(const NodeSchedule *schedule);
     /// Add schedule to list, replace if schedule with same id allready exists.
     void addSchedule(NodeSchedule *schedule);
     /// Create a new schedule.
     NodeSchedule *createSchedule(QString name, Schedule::Type type, long id);
-
+    
+    /// Set deleted = onoff for schedule with id (only this node)
+    void setScheduleDeleted(long id, bool onoff);
+    /// Delete all schedules (also for my child nodes)
+    void deleteSchedules();
+    /// Set deleted = onoff for schedule with id (also for child nodes)
+    void deleteSchedules(long id, bool onoff);
+    
     DateTime startTime()
         { return m_currentSchedule ? m_currentSchedule->startTime : DateTime(); }
     DateTime endTime()
