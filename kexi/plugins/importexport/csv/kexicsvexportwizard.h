@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005,2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,11 +44,23 @@ class KexiCSVExportWizard : public KWizard
 	public:
 		//! Exporting mode: a file or clipboard
 		enum Mode { Clipboard, File };
-		KexiCSVExportWizard( Mode mode, int itemId, KexiMainWindow* mainWin, 
+
+		//! Options used in KexiCSVExportWizard contructor.
+		class Options {
+			public:
+				Options();
+				Mode mode;
+				int itemId; //!< Table or query ID
+				QString forceDelimiter; //!< Used for "clipboard" mode
+		};
+
+		KexiCSVExportWizard( const Options& options, KexiMainWindow* mainWin, 
 			QWidget * parent = 0, const char * name = 0 );
+
 		virtual ~KexiCSVExportWizard();
 
 		bool cancelled() const;
+
 		virtual void showPage ( QWidget * page );
 
 	protected slots:
@@ -64,8 +76,36 @@ class KexiCSVExportWizard : public KWizard
 		//! Exporting, returns false on failure.
 		bool exportData();
 
-		Mode m_mode;
-		int m_itemId;
+		//! \return default delimiter depending on mode.
+		QString defaultDelimiter() const;
+
+		//! \return default text quote depending on mode.
+		QString defaultTextQuote() const;
+
+		//! Helper, works like kapp->config()->readBoolEntry(const char*, bool) but if mode is Clipboard,
+		//! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy" 
+		//! and "CSVFiles" is replaced with "CSVToClipboard"
+		//! in \a key, to keep the setting separate.
+		bool readBoolEntry(const char *key, bool defaultValue);
+
+		//! Helper like \ref readBoolEntry(const char *, bool), but for QString values.
+		QString readEntry(const char *key, const QString& defaultValue = QString::null);
+
+		//! Helper, works like kapp->config()->writeEntry(const char*,bool) but if mode is Clipboard,
+		//! "Exporting" is replaced with "Copying" and "Export" is replaced with "Copy" 
+		//! and "CSVFiles" is replaced with "CSVToClipboard"
+		//! in \a key, to keep the setting separate.
+		void writeEntry(const char *key, bool value);
+
+		//! Helper like \ref writeEntry(const char *, bool), but for QString values.
+		void writeEntry(const char *key, const QString& value);
+
+		//! Helper like \ref writeEntry(const char *, bool), but for deleting config entry.
+		void deleteEntry(const char *key);
+
+		Options m_options;
+//		Mode m_mode;
+//		int m_itemId;
 		KexiMainWindow* m_mainWin;
 		KexiStartupFileDialog* m_fileSavePage;
 		QWidget* m_exportOptionsPage;

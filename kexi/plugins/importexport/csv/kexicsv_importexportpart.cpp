@@ -50,13 +50,17 @@ QWidget *KexiCSVImportExportPart::createWidget(const char* widgetClass, KexiMain
 	else if (0==qstrcmp(widgetClass, "KexiCSVExportWizard")) {
 		if (!args)
 			return 0;
-		KexiCSVExportWizard::Mode mode = (args && (*args)["destinationType"]=="file")
+		KexiCSVExportWizard::Options options;
+		options.mode = (args && (*args)["destinationType"]=="file")
 			? KexiCSVExportWizard::File : KexiCSVExportWizard::Clipboard;
 		bool ok;
-		int itemId = (*args)["itemId"].toInt(&ok);
-		if (!ok || itemId<=0)
+		options.itemId = (*args)["itemId"].toInt(&ok);
+		if (!ok || options.itemId<=0)
 			return 0;
-		KexiCSVExportWizard *dlg = new KexiCSVExportWizard( mode, itemId, mainWin, parent, objName);
+		if (args && args->contains("forceDelimiter")) {
+			options.forceDelimiter = (*args)["forceDelimiter"];
+		}
+		KexiCSVExportWizard *dlg = new KexiCSVExportWizard( options, mainWin, parent, objName);
 		m_cancelled = dlg->cancelled();
 		if (m_cancelled) {
 			delete dlg;
