@@ -2579,27 +2579,24 @@ void CustomStyle::saveOasis( KoGenStyles &mainStyles )
 {
     if ( m_name.isEmpty() )
         return;
-    KoGenStyle gs;
 
-    if ( m_name == "Default" )
-        gs = KoGenStyle(Doc::STYLE_USERSTYLE, "table-cell");
-    else    
-    if ( m_type == AUTO )
-        gs = KoGenStyle(Doc::STYLE_DEFAULTSTYLE, "table-cell" );
-    else
-        gs = KoGenStyle( Doc::STYLE_USERSTYLE, "table-cell" ); //FIXME name of style
-        
-    if ( m_parent )
+    KoGenStyle gs = KoGenStyle(Doc::STYLE_CELL, "table-cell");
+
+    // only automatic styles should go into content.xml
+//    if ( m_type == BUILTIN || m_type == CUSTOM )
+        gs.setAutoStyleInStylesDotXml(true);
+
+    if ( m_parent && m_parent->type() == BUILTIN && m_parent->name() == "Default" )
         gs.addAttribute( "style:parent-style-name", m_parent->name() );
 
     // default style does not need display name    
     if( m_name != "Default" )
         gs.addAttribute( "style:display-name", m_name );
-        
+
     QString numericStyle = saveOasisStyle( gs, mainStyles );
     if ( !numericStyle.isEmpty() )
         gs.addAttribute( "style:data-style-name", numericStyle );
-        
+
     if( ( m_type == BUILTIN ) && ( m_name == "Default" ) )
         mainStyles.lookup( gs, "Default", KoGenStyles::DontForceNumbering );
     else  

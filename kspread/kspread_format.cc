@@ -259,7 +259,7 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
             value = "middle";
         else if( align == Format::Bottom )
             value = "bottom";
-            
+
         if( !value.isEmpty() )
             currentCellStyle.addProperty( "style:vertical-align", value );
     }
@@ -310,7 +310,7 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
          && m_pStyle->hasProperty( Style::PHideFormula )/*fixme*/ )
         hideFormula = true;
     if ( ( hasProperty( Format::PNotProtected,true ) || hasNoFallBackProperties( Format::PNotProtected ) )
-         && m_pStyle->hasProperty( Style::PHideFormula ) )
+         && m_pStyle->hasProperty( Style::PNotProtected ) )
         isNotProtected = true;
 
     if ( hideAll )
@@ -410,6 +410,7 @@ void Format::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &
 
 QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle, int _col, int _row, bool force, bool copy )
 {
+#if 0
     if ( m_pStyle->type() == Style::BUILTIN || m_pStyle->type() == Style::CUSTOM )
     {
         currentCellStyle.addAttribute( "style:parent-style-name", ((CustomStyle *) m_pStyle)->name() );
@@ -417,8 +418,9 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
             return ""; //FIXME
     }
     else //FIXME !!!!
+#endif
     {
-        if ( m_pStyle->parent() && m_pStyle->parent()->name().length() > 0 )
+        if ( m_pStyle->parent() && m_pStyle->parent()->name().length() > 0 && m_pStyle->parent()->name() != "Default" )
             currentCellStyle.addAttribute( "style:parent-style-name", m_pStyle->parent()->name() );
     }
 

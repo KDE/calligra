@@ -4320,7 +4320,7 @@ struct SetSelectionStyleWorker : public Sheet::CellWorkerTypeA
 
   bool testCondition( Cell* cell )
   {
-    return ( !cell->isPartOfMerged() && cell->format()->kspreadStyle() != m_style );
+    return ( !cell->isPartOfMerged() && cell->format()->style() != m_style );
   }
 
   void doWork( Cell* cell, bool cellRegion, int, int )
@@ -7191,7 +7191,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         //style default layout for column
         KoGenStyle styleColCurrent( Doc::STYLE_CELL, "table-cell" );
-        column->saveOasisCellStyle(styleColCurrent,mainStyles );
+        column->saveOasisCellStyle( styleColCurrent, mainStyles );
         QString nameDefaultCellStyle = mainStyles.lookup( styleColCurrent, "ce" );
 
 

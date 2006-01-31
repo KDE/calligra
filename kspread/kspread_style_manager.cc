@@ -75,23 +75,31 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
 
 void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
 {
+    // loading default style first
+    QDomElement* defaultStyle = oasisStyles.defaultStyle( "table-cell" );
+    if ( defaultStyle )
+    {
+      m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, "Default" );
+      m_defaultStyle->setType( Style::BUILTIN );
+    }
+    else
+    {
+      delete m_defaultStyle;
+      m_defaultStyle = new CustomStyle();
+    }
+
     uint nStyles = oasisStyles.userStyles().count();
     kdDebug()<<" number of template style to load : "<<nStyles<<endl;
     for (unsigned int item = 0; item < nStyles; item++) {
         QDomElement styleElem = oasisStyles.userStyles()[item];
-        
+
         // assume the name assigned by the application
         QString name = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
-        
+
         // then replace by user-visible one (if any)
         name = styleElem.attributeNS( KoXmlNS::style, "display-name", name );
 
-        if ( name == "Default" )
-        {
-            m_defaultStyle->loadOasis( oasisStyles, styleElem,name );
-            m_defaultStyle->setType( Style::BUILTIN );
-        }
-        else if ( !name.isEmpty() )
+        if ( !name.isEmpty() )
         {
             CustomStyle * style = 0;
             if ( styleElem.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) && styleElem.attributeNS( KoXmlNS::style, "parent-style-name", QString::null ) == "Default" )
@@ -119,10 +127,6 @@ void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
 
         ++iter;
     }
-
-    m_defaultStyle->setName( "Default" );
-    m_defaultStyle->setType( Style::BUILTIN );
-
 }
 
 QDomElement StyleManager::save( QDomDocument & doc )

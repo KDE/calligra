@@ -603,7 +603,7 @@ bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 }
 
 bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
-                            QString* plainText, KoPicture* picture )
+                            QString* /*plainText*/, KoPicture* /*picture*/ )
 {
     d->m_pictureCollection.assignUniqueIds();
     //Terminate current cell edition, if any
@@ -638,8 +638,8 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     int indexObj = 1;
     int partIndexObj = 0;
 
-    map()->saveOasis( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
     styleManager()->saveOasis( mainStyles );
+    map()->saveOasis( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
 
     saveOasisAreaName( contentTmpWriter );
     contentTmpWriter.endElement(); ////office:spreadsheet
@@ -665,6 +665,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
     }
+
     styles = mainStyles.styles( STYLE_ROW );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
@@ -871,17 +872,17 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
-    styles = mainStyles.styles( Doc::STYLE_USERSTYLE );
+    styles = mainStyles.styles( Doc::STYLE_CELL, true );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
+        if ( (*it).name == "Default" ) {
+          (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-cell-properties" );
+        }
+        else {
+          (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
+        }
     }
 
-    styles = mainStyles.styles( Doc::STYLE_DEFAULTSTYLE );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-cell-properties" );
-    }
     styles = mainStyles.styles( KoGenStyle::STYLE_HATCH );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
@@ -2129,7 +2130,7 @@ void Doc::emitEndOperation()
    }
 }
 
-void Doc::emitEndOperation( const Region& region )
+void Doc::emitEndOperation( const Region& /*region*/ )
 {
   // ElapsedTime et( "*Doc::emitEndOperation - 2 -*" );
   CellBinding  * b = 0;
@@ -2306,8 +2307,8 @@ void Doc::repaint( const QRect& rect )
   {
     r = rect;
     Canvas* canvas = ((View*)it.current())->canvasWidget();
-    r.moveTopLeft( QPoint( r.x() - canvas->xOffset(),
-                   r.y() - canvas->yOffset() ) );
+    r.moveTopLeft( QPoint( (int) r.x() - canvas->xOffset(),
+                           (int) r.y() - canvas->yOffset() ) );
     canvas->update( r );
   }
 }

@@ -92,7 +92,7 @@ void Inspector::Private::handleCell()
   new QListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );    
   new QListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
   new QListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->format()->propertiesMask() ) ) );
-  new QListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->format()->kspreadStyle()->features() ) ) );
+  new QListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->format()->style()->features() ) ) );
   new QListViewItem( cellView, "Text", cell->text() );
   new QListViewItem( cellView, "Text (Displayed)", 
 		     cell->strOutText().replace( QChar('\n'), "\\n" ) );

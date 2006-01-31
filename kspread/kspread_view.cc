@@ -6468,7 +6468,7 @@ void View::createStyleFromCell()
     break;
   }
 
-  CustomStyle * style = new CustomStyle( cell->format()->kspreadStyle(), styleName );
+  CustomStyle * style = new CustomStyle( cell->format()->style(), styleName );
 
   doc()->styleManager()->m_styles[ styleName ] = style;
   cell->format()->setStyle( style );

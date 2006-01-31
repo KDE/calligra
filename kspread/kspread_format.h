@@ -362,7 +362,7 @@ public:
     bool isHideFormula( int col, int row) const;
     bool isProtected( int col, int row ) const;
 
-    Style * kspreadStyle() const { return m_pStyle; }
+    Style* style() const { return m_pStyle; }
     Sheet* sheet() { return m_pSheet; }
     const Sheet* sheet() const { return m_pSheet; }
 

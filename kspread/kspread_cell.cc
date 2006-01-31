@@ -2698,9 +2698,9 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
 void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
         const KoRect &cellRect,
         const QPoint &cellRef,
-        bool paintBorderRight, bool paintBorderBottom,
+        bool paintBorderRight, bool /*paintBorderBottom*/,
         bool paintBorderLeft,  bool paintBorderTop,
-        QPen const & rightPen, QPen const & bottomPen,
+        QPen const & rightPen, QPen const & /*bottomPen*/,
         QPen const & leftPen, QPen const & topPen )
 {
     /*
@@ -5316,9 +5316,13 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
 #endif
     KoGenStyle currentCellStyle( Doc::STYLE_CELL,"table-cell" );
     QString cellNumericStyle = saveOasisCellStyle( currentCellStyle,mainStyles );
-    xmlwriter.addAttribute( "table:style-name", mainStyles.lookup( currentCellStyle, "ce" ) );
-    if ( !cellNumericStyle.isEmpty() )
-        xmlwriter.addAttribute( "style:data-style-name", cellNumericStyle );
+    QString styleName = mainStyles.lookup( currentCellStyle, "ce" );
+    if ( styleName != "Default" )
+    {
+      xmlwriter.addAttribute( "table:style-name", styleName );
+      if ( !cellNumericStyle.isEmpty() )
+          xmlwriter.addAttribute( "style:data-style-name", cellNumericStyle );
+    }
 
     // group empty cells with the same style
     if ( isEmpty() && !format()->hasProperty( Format::PComment ) && !isPartOfMerged() && !doesMergeCells() )

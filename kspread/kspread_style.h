@@ -86,7 +86,7 @@ class Style
       SPrecision       = 0x80000,
       SFormatType      = 0x100000,
       SAngle           = 0x200000,
-      SComment         = 0x400000,
+      //SComment         = 0x400000,
       SIndent          = 0x800000,
       SDontPrintText   = 0x1000000,
       SCustomFormat    = 0x2000000,
