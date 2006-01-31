@@ -36,6 +36,7 @@
 #include <qtimer.h>
 #include <qlabel.h>
 #include <qvbox.h>
+#include <qvaluelist.h>
 #include <private/qrichtext_p.h>
 
 //#include <klineedit.h>
@@ -116,6 +117,8 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
   QFont editorFont = textEdit()->currentFont();
   QFont font;
 
+  uint oldRangeCount = d->rangeCount;
+  
   d->rangeCount = 0;
   QValueList<QColor> colors = d->canvas->choice()->colors();
   for (uint i = 0; i < d->tokens.count(); ++i)
@@ -166,6 +169,10 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
         break;
     }
   }
+  
+  if (oldRangeCount != d->rangeCount)
+    d->rangeChanged = true;
+  
   return 0;
 }
 
@@ -656,7 +663,6 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   bool lastWasASemicolon = false;
   d->currentToken = 0;
   uint rangeCount = d->highlighter->rangeCount();
-  int rangeCountDiff = rangeCount - d->rangeCount;
   d->rangeCount = rangeCount;
 
   Token token;
@@ -726,7 +732,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   // triggered by keyboard action?
   if (!d->updatingChoice)
   {
-    if (rangeCountDiff != 0 || d->highlighter->rangeChanged())
+    if (d->highlighter->rangeChanged())
     {
       d->highlighter->resetRangeChanged();
       
@@ -738,17 +744,31 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
       d->canvas->choice()->clear();
       Region tmpRegion;
       Region::ConstIterator it;
+      
+      //A list of regions which have already been highlighted on the spreadsheet.
+      //This is so that we don't end up highlighting the same region twice in two different
+      //colours.
+      QValueList<Region> alreadyUsedRegions;
+      
       for (uint i = 0; i < tokens.count(); ++i)
       {
         Token token = tokens[i];
         Token::Type type = token.type();
         if (type == Token::Cell || type == Token::Range)
         {
-          it = Region(d->canvas->view(), token.text()).constBegin();
-          if (d->canvas->choice()->isEmpty())
-            d->canvas->choice()->initialize((*it)->rect(), (*it)->sheet());
-          else
-            d->canvas->choice()->extend((*it)->rect(), (*it)->sheet());
+          Region region(d->canvas->view(), token.text());
+          it = region.constBegin();
+          
+          //if (!alreadyUsedRegions.contains(region))
+          {
+          
+            if (d->canvas->choice()->isEmpty())
+                d->canvas->choice()->initialize((*it)->rect(), (*it)->sheet());
+            else
+                d->canvas->choice()->extend((*it)->rect(), (*it)->sheet());
+                
+            alreadyUsedRegions.append(region);
+          }
         }
       }
 

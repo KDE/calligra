@@ -28,6 +28,7 @@
 #include "kspread_editors.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
+#include "kspread_util.h"
 
 #include "selection.h"
 
@@ -111,6 +112,9 @@ Selection::~Selection()
 
 void Selection::initialize(const QPoint& point, Sheet* sheet)
 {
+    if (!util_isPointValid(point))
+        return;
+        
   if (!sheet)
   {
     if (d->sheet)
@@ -173,6 +177,9 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
 
 void Selection::initialize(const QRect& range, Sheet* sheet)
 {
+    if (!util_isRectValid(range) || ( range == QRect(0,0,1,1) ))
+        return;
+        
   if (!sheet)
   {
     if (d->sheet)
@@ -215,6 +222,8 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
     // if the range was inserted
     clearSubRegion();
   }
+  
+  
   Element* element = *(cells().begin() += d->activeSubRegionStart);
   // we end up with one element in the subregion
   d->activeSubRegionLength = 1;
@@ -242,6 +251,9 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
 
 void Selection::initialize(const Region& region, Sheet* sheet)
 {
+    if (!region.isValid())
+        return;
+        
   if (!sheet)
   {
     if (d->sheet)
@@ -417,6 +429,9 @@ void Selection::update(const QPoint& point)
 
 void Selection::extend(const QPoint& point, Sheet* sheet)
 {
+    if (!util_isPointValid(point))
+        return;
+        
   if (!sheet)
   {
     if (d->sheet)
@@ -463,6 +478,9 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
 
 void Selection::extend(const QRect& range, Sheet* sheet)
 {
+    if (!util_isRectValid(range))
+        return;
+        
   if (!sheet)
   {
     if (d->sheet)
@@ -525,6 +543,9 @@ void Selection::extend(const QRect& range, Sheet* sheet)
 
 void Selection::extend(const Region& region)
 {
+    if (!region.isValid())
+        return;
+        
   uint count = cells().count();
   ConstIterator end(region.constEnd());
   for (ConstIterator it = region.constBegin(); it != end; ++it)

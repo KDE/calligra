@@ -36,6 +36,9 @@ class QDomDocument;
 
 class KLocale;
 
+bool util_isPointValid(QPoint point);
+bool util_isRectValid(QRect rect);
+
 namespace KSpread
 {
 class Cell;
@@ -61,7 +64,7 @@ public:
     _rowFixed = c._rowFixed;
   }
 
-  bool isValid() const { return ( _pos.x() >= 0 && ( _sheet != 0 || _sheetName.isEmpty() ) ); }
+  bool isValid() const { return ( util_isPointValid(pos()) && ( _sheet != 0 || _sheetName.isEmpty() ) ); }
   bool isSheetKnown() const { return ( ! _sheetName.isEmpty() && _sheet != 0 ); }
 
   Cell* cell() const;
@@ -104,6 +107,7 @@ public:
   */
   void      setRowFixed(bool rowFixed);
   bool      rowFixed() const;
+  
 
 private:
   Sheet* _sheet;
@@ -297,6 +301,8 @@ bool util_isAllSelected(const QRect &selection);
 bool util_isColumnSelected(const QRect &selection);
 bool util_isRowSelected(const QRect &selection);
 bool util_isRowOrColumnSelected( const QRect &selection );
+
+
 
 bool util_validateSheetName(const QString &name);
 

@@ -350,6 +350,28 @@ void Point::init(const QString & _str)
     _pos = QPoint( x, y );
 }
 
+bool util_isPointValid( QPoint point )
+{
+    if (    point.x() >= 0
+        &&  point.y() >= 0
+        &&  point.x() <= KS_colMax
+        &&  point.y() <= KS_rowMax 
+       )
+        return true;
+    else
+        return false;    
+}
+
+bool util_isRectValid( QRect rect )
+{
+    if (    util_isPointValid( rect.topLeft() ) 
+        &&  util_isPointValid( rect.bottomRight() )
+       )
+        return true;
+    else
+        return false;
+}
+
 Point::Point( const QString & str, Map * map,
                             Sheet * sheet )
 {
