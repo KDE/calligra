@@ -216,7 +216,6 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		//remove "bug report" action to avoid confusion for supported with commercial technical support
 		QPopupMenu *helpMenu = d->popups["help"];
 		if (helpMenu) {
-			//const int idx = helpMenu->indexOf( (int)KHelpMenu::menuReportBug );
 			helpMenu->removeItemAt(int(KHelpMenu::menuReportBug)-1);
 			helpMenu->removeItemAt(int(KHelpMenu::menuReportBug)-1); //separator
 		}
@@ -621,12 +620,14 @@ void KexiMainWindowImpl::initActions()
 
 	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
+//! @todo rename to: Go to the Project Navigator pane
 	d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
 	d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
 
 #ifdef KEXI_PROP_EDITOR
 	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", ALT + Key_2,
 		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
+//! @todo rename to: Go to the Property Editor pane
 	d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
 	d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
 #endif
