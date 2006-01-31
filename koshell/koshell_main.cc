@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <config.h>
+#include <kofficeversion.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
@@ -30,8 +30,8 @@
 
 #include "koshell_shell.h"
 
-static const char* description=I18N_NOOP("KOffice Workspace");
-static const char* version=VERSION;
+static const char* description = I18N_NOOP("KOffice Workspace");
+static const char* version = KOFFICE_VERSION_STRING;
 
 class KoShellApp : public KUniqueApplication {
   public:
