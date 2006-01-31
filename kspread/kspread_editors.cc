@@ -106,7 +106,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
 
   // save the old ones to identify range changes
   Tokens oldTokens = d->tokens;
-  d->rangeChanged = false;
+ // d->rangeChanged = false;
 
   // interpret the text as formula
   // we accept invalid/incomplete formulas
@@ -268,6 +268,11 @@ uint FormulaEditorHighlighter::rangeCount() const
 bool FormulaEditorHighlighter::rangeChanged() const
 {
   return d->rangeChanged;
+}
+
+void FormulaEditorHighlighter::resetRangeChanged()
+{
+    d->rangeChanged=false;
 }
 
 } // namespace KSpread
@@ -723,6 +728,8 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   {
     if (rangeCountDiff != 0 || d->highlighter->rangeChanged())
     {
+      d->highlighter->resetRangeChanged();
+      
       d->canvas->doc()->emitBeginOperation();
       setUpdateChoice(false);
 

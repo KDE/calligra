@@ -78,9 +78,15 @@ public:
    */
   uint rangeCount() const;
   /**
-   *
+   * Returns true if any of the ranges or cells in the formula have changed since the 
+   * last call to @ref FormulaEditorHighlighter::rangeChanged() 
    */
   bool rangeChanged() const;
+  
+  /**
+   * Sets the highlighter's range changed flag to false.
+   */
+  void resetRangeChanged();
   
   
 
