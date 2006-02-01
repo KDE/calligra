@@ -478,7 +478,8 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
 
 void Selection::extend(const QRect& range, Sheet* sheet)
 {
-    if (!util_isRectValid(range))
+    //See comment in Selection::initialize(const QRect& range, Sheet* sheet)
+    if (!util_isRectValid(range) || (range == QRect(0,0,1,1)))
         return;
         
   if (!sheet)

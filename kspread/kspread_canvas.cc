@@ -4079,11 +4079,6 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 
 void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)
 {
-  if (!d->chooseCell)
-  {
-    return;
-  }
-
   QValueList<QColor> colors = choice()->colors();
   QBrush nullBrush;
   int index = 0;

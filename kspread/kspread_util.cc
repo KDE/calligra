@@ -232,7 +232,9 @@ bool Point::rowFixed() const
 
 void Point::init(const QString & _str)
 {
-
+    _columnFixed=false;
+    _rowFixed=false;
+    
 //    kdDebug(36001) <<"Point::init ("<<_str<<")"<<endl;
     _pos.setX(-1);
 
@@ -375,6 +377,7 @@ bool util_isRectValid( QRect rect )
 Point::Point( const QString & str, Map * map,
                             Sheet * sheet )
 {
+    
     uint p = 0;
     int p2 = str.find( '!' );
     if ( p2 != -1 )
@@ -431,6 +434,19 @@ bool Point::operator< (const Point &cell) const
       ((pos().y() == cell.pos().y()) && (pos().x() < cell.pos().x()));
 }
 
+bool Range::operator ==(const Range& otherRange) const
+{
+    if (    _range == otherRange._range
+        &&  _leftFixed == otherRange._leftFixed
+        &&  _rightFixed == otherRange._rightFixed
+        &&  _bottomFixed == otherRange._bottomFixed
+        &&  _topFixed == otherRange._topFixed
+        &&  _sheet == otherRange._sheet )
+            return true;
+    else
+            return false;
+}
+
 Range::Range()
 {
     _sheet = 0;
@@ -447,11 +463,23 @@ Range::Range(const QString & _str)
     _sheet = 0;
 
     int p = _str.find(':');
-    if (p == -1)
-  return;
+ //   if (p == -1)
+ // return;
 
-    Point ul(_str.left(p));
-    Point lr(_str.mid(p + 1));
+    Point ul;
+    Point lr; ;
+    
+    if ( p != -1)
+    {
+        ul = Point(_str.left(p));
+        lr = Point(_str.mid(p + 1));
+    }
+    else
+    {
+        ul = Point(_str);
+        lr = ul;
+    }
+        
     _range = QRect(ul.pos(), lr.pos());
     _sheetName = ul.sheetName();
 
@@ -467,6 +495,11 @@ Range::Range(const QString & _str)
     _sheetName = r.sheetName();
     _range = r.range();
     _namedArea = r.namedArea();
+    
+    _leftFixed=r._leftFixed;
+    _rightFixed=r._rightFixed;
+    _topFixed=r._topFixed;
+    _bottomFixed=r._bottomFixed;
   }
   
  Range::Range( const Point& ul, const Point& lr )

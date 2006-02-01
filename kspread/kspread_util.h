@@ -216,6 +216,11 @@ public:
   */
   QString namedArea() const;
   
+  /**
+  * Returns true if the other range occupies the same area on the same sheet as this range.
+  */
+  bool operator==(const Range& range) const;
+  
 
 private:
   Sheet* _sheet;

@@ -99,15 +99,11 @@ const Tokens& FormulaEditorHighlighter::formulaTokens() const
 
 int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* endStateOfLastPara */)
 {
-//   kdDebug() << k_funcinfo << endl;
-
-  
   // reset syntax highlighting
   setFormat(0, text.length(), Qt::black);
 
   // save the old ones to identify range changes
   Tokens oldTokens = d->tokens;
- // d->rangeChanged = false;
 
   // interpret the text as formula
   // we accept invalid/incomplete formulas
@@ -121,6 +117,8 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
   
   d->rangeCount = 0;
   QValueList<QColor> colors = d->canvas->choice()->colors();
+  QValueList<Range> alreadyFoundRanges;
+  
   for (uint i = 0; i < d->tokens.count(); ++i)
   {
     Token token = d->tokens[i];
@@ -130,13 +128,22 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
     {
       case Token::Cell:
       case Token::Range:
-        // don't compare, if we have already found a change
-        if (!d->rangeChanged && i < oldTokens.count() && token.text() != oldTokens[i].text())
         {
-          d->rangeChanged = true;
+            // don't compare, if we have already found a change
+            if (!d->rangeChanged && i < oldTokens.count() && token.text() != oldTokens[i].text())
+            {
+                d->rangeChanged = true;
+            }
+        
+            Range newRange( token.text() );
+       
+            if (!alreadyFoundRanges.contains(newRange))
+            { 
+                alreadyFoundRanges.append(newRange);
+                d->rangeCount++;
+            }
+            setFormat(token.pos() + 1, token.text().length(), colors[ alreadyFoundRanges.findIndex(newRange) % colors.size()] );
         }
-        setFormat(token.pos() + 1, token.text().length(), colors[d->rangeCount % colors.size()]);
-        d->rangeCount++;
         break;
       case Token::Boolean:     // True, False (also i18n-ized)
 /*        font = QFont(editorFont);
@@ -759,9 +766,10 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
           Region region(d->canvas->view(), token.text());
           it = region.constBegin();
           
-          //if (!alreadyUsedRegions.contains(region))
+          if (!alreadyUsedRegions.contains(region))
           {
-          
+            QRect r=(*it)->rect();
+            
             if (d->canvas->choice()->isEmpty())
                 d->canvas->choice()->initialize((*it)->rect(), (*it)->sheet());
             else
@@ -771,7 +779,10 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
           }
         }
       }
-
+      
+      Selection* selec = d->canvas->choice();
+      selec;
+      
       setUpdateChoice(true);
       d->canvas->doc()->emitEndOperation(*d->canvas->choice());
     }
