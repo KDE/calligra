@@ -44,6 +44,7 @@ Bug Fixes
 #114693: Comment indicator in sheet properties dialog
 #114961: Enter does not move cursor
 #114635: Endless loop while loading
+#109633: OASIS format wrongly changes vertical align to Bottom
  #50192: Always allow date input in ISO 8601 format
 
 ??#483630: Prevent hiding all rows/columns
