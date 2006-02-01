@@ -420,7 +420,7 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
     else //FIXME !!!!
 #endif
     {
-        if ( m_pStyle->parent() && m_pStyle->parent()->name().length() > 0 && m_pStyle->parent()->name() != "Default" )
+        if ( m_pStyle->parent() && m_pStyle->parent()->name().length() > 0 && m_pStyle->parent()->name() != i18n( "Default" ) )
             currentCellStyle.addAttribute( "style:parent-style-name", m_pStyle->parent()->name() );
     }
 
@@ -1209,6 +1209,10 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
         {
             setStyle( s );
         }
+    }
+    else
+    {
+      setStyle( m_pSheet->doc()->styleManager()->defaultStyle() );
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "decimal-places" ) )

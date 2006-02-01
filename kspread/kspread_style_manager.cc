@@ -34,7 +34,7 @@ using namespace KSpread;
 StyleManager::StyleManager()
   : m_defaultStyle( new CustomStyle() )
 {
-  m_defaultStyle->setName( "Default" );
+  m_defaultStyle->setName( i18n( "Default" ) );
   m_defaultStyle->setType( Style::BUILTIN );
 }
 
@@ -79,7 +79,7 @@ void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
     QDomElement* defaultStyle = oasisStyles.defaultStyle( "table-cell" );
     if ( defaultStyle )
     {
-      m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, "Default" );
+      m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, i18n( "Default" ) );
       m_defaultStyle->setType( Style::BUILTIN );
     }
     else
@@ -89,7 +89,7 @@ void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
     }
 
     uint nStyles = oasisStyles.userStyles().count();
-    kdDebug()<<" number of template style to load : "<<nStyles<<endl;
+    kdDebug() << " number of template style to load : " << nStyles << endl;
     for (unsigned int item = 0; item < nStyles; item++) {
         QDomElement styleElem = oasisStyles.userStyles()[item];
 
@@ -102,22 +102,24 @@ void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
         if ( !name.isEmpty() )
         {
             CustomStyle * style = 0;
-            if ( styleElem.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) && styleElem.attributeNS( KoXmlNS::style, "parent-style-name", QString::null ) == "Default" )
-                style = new CustomStyle( name, m_defaultStyle );
-            else
+            if ( styleElem.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
+                // The style's parent name will be set in Style::loadOasis(..).
+                // After all styles are loaded the pointer to the parent is set.
                 style = new CustomStyle( name, 0 );
+            else
+                style = new CustomStyle( name, m_defaultStyle );
 
             //fixme test return;
-            style->loadOasis( oasisStyles, styleElem,name );
+            style->loadOasis( oasisStyles, styleElem, name );
             style->setType( Style::CUSTOM );
             m_styles[name] = style;
             kdDebug() << "Style " << name << ": " << style << endl;
-
         }
     }
+
+    // set the parent pointers after we loaded all styles
     Styles::iterator iter = m_styles.begin();
     Styles::iterator end  = m_styles.end();
-
     while ( iter != end )
     {
         CustomStyle * styleData = iter.data();
@@ -205,7 +207,7 @@ bool StyleManager::loadXML( QDomElement const & styles )
     ++iter;
   }
 
-  m_defaultStyle->setName( "Default" );
+  m_defaultStyle->setName( i18n( "Default" ) );
   m_defaultStyle->setType( Style::BUILTIN );
 
   return true;
@@ -239,7 +241,7 @@ CustomStyle * StyleManager::style( QString const & name ) const
   if ( iter != m_styles.end() )
     return iter.data();
 
-  if ( name == i18n( "Default" ) || name == "Default" )
+  if ( name == i18n( "Default" ) )
     return m_defaultStyle;
 
   return 0;

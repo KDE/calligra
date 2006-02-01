@@ -338,10 +338,15 @@ class CustomStyle : public Style
   QString const & name()       const { return m_name;       }
 
   void save( QDomDocument & doc, QDomElement & styles );
-    void saveOasis( KoGenStyles &mainStyles );
-    void loadOasis( KoOasisStyles& oasisStyles, const QDomElement & style, const QString & name );
+  void saveOasis( KoGenStyles &mainStyles );
+  /**
+   * Loads the style properties from @p style .
+   * Determines also the parent's name.
+   * @param name the style's new name
+   */
+  void loadOasis( KoOasisStyles& oasisStyles, const QDomElement & style, const QString & name );
 
- bool loadXML( QDomElement const & style, QString const & name );
+  bool loadXML( QDomElement const & style, QString const & name );
 
   void setType( StyleType type ) { m_type = type; }
 

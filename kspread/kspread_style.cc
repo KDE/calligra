@@ -2588,30 +2588,33 @@ void CustomStyle::saveOasis( KoGenStyles &mainStyles )
 //    if ( m_type == BUILTIN || m_type == CUSTOM )
         gs.setAutoStyleInStylesDotXml(true);
 
-    if ( m_parent && m_parent->type() == BUILTIN && m_parent->name() == "Default" )
+    // don't store parent, if it's the default style
+    if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != i18n( "Default" )) )
         gs.addAttribute( "style:parent-style-name", m_parent->name() );
 
     // default style does not need display name    
-    if( m_name != "Default" )
+    if( type() != BUILTIN || m_name != i18n( "Default" ) )
         gs.addAttribute( "style:display-name", m_name );
 
     QString numericStyle = saveOasisStyle( gs, mainStyles );
     if ( !numericStyle.isEmpty() )
         gs.addAttribute( "style:data-style-name", numericStyle );
 
-    if( ( m_type == BUILTIN ) && ( m_name == "Default" ) )
+    if( ( m_type == BUILTIN ) && ( m_name == i18n( "Default" ) ) )
+        // don't i18n'ize "Default" in this case
         mainStyles.lookup( gs, "Default", KoGenStyles::DontForceNumbering );
     else  
         // this is auto or user style
         mainStyles.lookup( gs, "custom-style" );
 }
 
-void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const QDomElement & style, const QString & name )
+void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const QDomElement& style, const QString & name )
 {
     m_name = name;
     if ( style.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
         m_parentName = style.attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
-
+    else if ( m_name != i18n( "Default" ) )
+        m_parentName = i18n( "Default" );
 
     m_type = CUSTOM;
 
