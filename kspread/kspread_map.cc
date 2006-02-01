@@ -50,6 +50,8 @@ Map::Map ( Doc* doc, const char* name)
     m_initialActiveSheet( 0 ),
     m_initialMarkerColumn( 0 ),
     m_initialMarkerRow( 0 ),
+    m_initialXOffset(0.0),
+    m_initialYOffset(0.0),
     tableId (1),
     m_dcop( 0 )
 {
