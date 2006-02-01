@@ -65,7 +65,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
  : KexiDBConnectionWidgetBase( parent, name )
  , d(new Private())
 {
-	iconLabel->setPixmap(DesktopIcon("socket"));
+	iconLabel->setPixmap(DesktopIcon("network"));
 
 	QVBoxLayout *driversComboLyr = new QVBoxLayout(frmEngine);
 	m_driversCombo = new KexiDBDriverComboBox(Kexi::driverManager().driversInfo(), false,
