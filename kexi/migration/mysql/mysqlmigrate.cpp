@@ -52,7 +52,7 @@ KEXIMIGRATE_DRIVER_INFO( MySQLMigrate, mysql )
 MySQLMigrate::MySQLMigrate(QObject *parent, const char *name,
                            const QStringList &args) :
 	KexiMigrate(parent, name, args),
-	d(new MySqlConnectionInternal()) {
+	d(new MySqlConnectionInternal(0)) {
 }
 
 /* ************************************************************************** */

@@ -38,7 +38,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 using namespace NAMESPACE;
 
 /* ************************************************************************** */
-MySqlConnectionInternal::MySqlConnectionInternal(Connection* connection)
+MySqlConnectionInternal::MySqlConnectionInternal(KexiDB::Connection* connection)
 	: ConnectionInternal(connection)
 	, mysql(0)
 	, mysql_owned(true)
@@ -158,7 +158,7 @@ QString MySqlConnectionInternal::escapeIdentifier(const QString& str) const {
 
 //--------------------------------------
 
-MySqlCursorData::MySqlCursorData(Connection* connection)
+MySqlCursorData::MySqlCursorData(KexiDB::Connection* connection)
 : MySqlConnectionInternal(connection)
 , mysqlres(0)
 , mysqlrow(0)

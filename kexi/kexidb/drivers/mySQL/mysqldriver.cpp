@@ -117,7 +117,8 @@ QString MySqlDriver::escapeString(const QString& str) const
 //! @todo support more characters, like %, _
 
 	const int old_length = str.length();
-	for ( int i = 0; i < old_length; i++ ) { //anything to escape?
+	int i;
+	for ( i = 0; i < old_length; i++ ) { //anything to escape?
 		const unsigned int ch = str[i].unicode();
 		if (ch == '\\' || ch == '\'' || ch == '"' || ch == '\n' || ch == '\r' || ch == '\t' || ch == '\b' || ch == '\0')
 			break;
@@ -130,7 +131,7 @@ QString MySqlDriver::escapeString(const QString& str) const
 //! @todo move new_string to Driver::m_new_string or so...
 	int new_length = 0;
 	new_string[new_length++] = '\''; //prepend '
-	for ( int i = 0; i < old_length; i++, new_length++ ) {
+	for ( i = 0; i < old_length; i++, new_length++ ) {
 		const unsigned int ch = str[i].unicode();
 		if (ch < 32) {//check for speedup
 			if (ch == '\\') {

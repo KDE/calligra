@@ -341,7 +341,7 @@ QString Driver::escapeBLOBInternal(const QByteArray& array, bool use0x) const
 		escaped_length += 1; //last char: '
 	QString str;
 	str.reserve(escaped_length);
-	if (str.capacity() < escaped_length) {
+	if (str.capacity() < (uint)escaped_length) {
 		KexiDBWarn << "MySqlDriver::escapeBLOB(): no enough memory (cannot allocate "<< escaped_length<<" chars)" << endl;
 		return QString::fromLatin1("NULL");
 	}
