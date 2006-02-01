@@ -30,9 +30,11 @@
 #include <kdebug.h>
 using namespace KexiDB;
 
-pqxxPreparedStatement::pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, TableSchema& tableSchema) : KexiDB::PreparedStatement(type, conn, tableSchema)
+pqxxPreparedStatement::pqxxPreparedStatement(
+	StatementType type, ConnectionInternal& conn, TableSchema& tableSchema) 
+ : KexiDB::PreparedStatement(type, conn, tableSchema)
 {
-	KexiDBDrvDbg << "pqxxPreparedStatement: Construction" << endl;
+//	KexiDBDrvDbg << "pqxxPreparedStatement: Construction" << endl;
 }
 
 
@@ -42,7 +44,7 @@ pqxxPreparedStatement::~pqxxPreparedStatement()
 
 bool pqxxPreparedStatement::execute()
 {
-	KexiDBDrvDbg << "pqxxPreparedStatement::execute()" << endl;
+//	KexiDBDrvDbg << "pqxxPreparedStatement::execute()" << endl;
 	return false;
 }
 

@@ -28,9 +28,11 @@ namespace KexiDB {
 class KEXI_DB_EXPORT ConnectionInternal
 {
 	public:
-		ConnectionInternal();
+		ConnectionInternal(Connection *conn);
 		virtual ~ConnectionInternal();
 		virtual void storeResult() = 0;
+
+		Connection* connection;
 };
 
 } //namespace KexiDB

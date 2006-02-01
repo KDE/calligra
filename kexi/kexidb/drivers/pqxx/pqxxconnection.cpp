@@ -52,10 +52,10 @@ pqxxTransactionData::~pqxxTransactionData()
 //==================================================================================
 
 pqxxSqlConnection::pqxxSqlConnection(Driver *driver, ConnectionData &conn_data)
-        :Connection(driver,conn_data)
+ : Connection(driver,conn_data)
+ , d( new pqxxSqlConnectionInternal(this) )
+ , m_trans(0)
 {
-	d = new pqxxSqlConnectionInternal();
-	m_trans = 0;
 }
 
 //==================================================================================
@@ -112,7 +112,7 @@ bool pqxxSqlConnection::drv_disconnect()
 //Return a list of database names
 bool pqxxSqlConnection::drv_getDatabasesList( QStringList &list )
 {
-	KexiDBDrvDbg << "pqxxSqlConnection::drv_getDatabaseList" << endl;
+//	KexiDBDrvDbg << "pqxxSqlConnection::drv_getDatabaseList" << endl;
 
 	if (executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
 	{
@@ -250,14 +250,14 @@ bool pqxxSqlConnection::drv_dropDatabase( const QString &dbName )
 //Execute an SQL statement
 bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 {
-	KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL: " << statement << endl;
+//	KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL: " << statement << endl;
 	bool ok = false;
 
 	// Clear the last result information...
 	delete d->m_res;
 	d->m_res = 0;
 
-	KexiDBDrvDbg << "About to try" << endl;
+//	KexiDBDrvDbg << "About to try" << endl;
 	try
 	{
 		//Create a transaction
@@ -266,10 +266,10 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 			(void)new pqxxTransactionData(this, true);
 
 		//		m_trans = new pqxx::nontransaction(*m_pqxxsql);
-		KexiDBDrvDbg << "About to execute" << endl;
+//		KexiDBDrvDbg << "About to execute" << endl;
 		//Create a result object through the transaction
 		d->m_res = new pqxx::result(m_trans->data->exec(statement.utf8()));
-		KexiDBDrvDbg << "Executed" << endl;
+//		KexiDBDrvDbg << "Executed" << endl;
 		//Commit the transaction
 		if (implicityStarted) {
 			pqxxTransactionData *t = m_trans;
@@ -339,7 +339,7 @@ bool pqxxSqlConnection::drv_getTablesList( QStringList &list )
 	KexiDB::Cursor *cursor;
 	m_sql = "select lower(relname) from pg_class where relkind='r'";
 	if (!(cursor = executeQuery( m_sql ))) {
-		KexiDBDrvDbg << "pqxxSqlConnection::drv_getTablesList(): !executeQuery()" << endl;
+		KexiDBDrvWarn << "pqxxSqlConnection::drv_getTablesList(): !executeQuery()" << endl;
 		return false;
 	}
 	list.clear();

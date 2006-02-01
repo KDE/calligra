@@ -41,9 +41,9 @@ namespace KexiDB
 class pqxxSqlConnectionInternal : public ConnectionInternal
 {
 	public:
-		pqxxSqlConnectionInternal();
+		pqxxSqlConnectionInternal(Connection *conn);
 
-		~pqxxSqlConnectionInternal();
+		virtual ~pqxxSqlConnectionInternal();
 
 		//! stores last result's message
 		virtual void storeResult();

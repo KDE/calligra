@@ -26,7 +26,7 @@
 
 namespace KexiDB {
 
-/*!  */
+/*! Implementation of prepared statements for SQLite driver. */
 class SQLitePreparedStatement : public PreparedStatement, SQLiteConnectionInternal
 {
 	public:
@@ -38,7 +38,7 @@ class SQLitePreparedStatement : public PreparedStatement, SQLiteConnectionIntern
 		virtual bool execute();
 
 #ifdef SQLITE2
-		sqlite_vm *prepared_st_handle; //vm
+		sqlite_vm *prepared_st_handle;
 #else //SQLITE3
 		sqlite3_stmt *prepared_st_handle;
 #endif

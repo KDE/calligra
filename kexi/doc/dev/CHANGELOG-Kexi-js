@@ -10,6 +10,27 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-02-01
+KexiDB
+- MySQL: added temporary (unoptimized) implementation of Prepared Statement
+- MySQL, SQLite: fixed inserting BLOB data (without Prepared Statements)
+- MySQL: fixed fetching BLOB data (without Prepared Statements)
+CSV Import Dialog
+- fixed importing for MySQL backend
+Form Designer
+- fixed saving images (binary data) to MySQL backend
+
+2006-01-31
+CSV Export Wizard
+- When data is copied to clipboard, default delimiter is ';'
+  and options are hidden.
+
+2006-01-30
+Form Designer
+- fixed saving new forms for MySQL databases
+CSV Import Dialog
+- fixed crash when importing CSV files smaller than 200 bytes
+
 2006-01-25,26
 KexiDB
 - SQLite3 driver & kexisql3: fixes for read-only opening

@@ -31,20 +31,20 @@ using namespace KexiDB;
 
 MySqlCursor::MySqlCursor(KexiDB::Connection* conn, const QString& statement, uint cursor_options)
 	: Cursor(conn,statement,cursor_options)
-	, d( new MySqlCursorData() )
+	, d( new MySqlCursorData(conn) )
 {
 	m_options |= Buffered;
 	d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
-	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
+//	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
 }
 
 MySqlCursor::MySqlCursor(Connection* conn, QuerySchema& query, uint options )
 	: Cursor( conn, query, options )
-	, d( new MySqlCursorData() )
+	, d( new MySqlCursorData(conn) )
 {
 	m_options |= Buffered;
 	d->mysql = static_cast<MySqlConnection*>(conn)->d->mysql;
-	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
+//	KexiDBDrvDbg << "MySqlCursor: constructor for query statement" << endl;
 }
 
 MySqlCursor::~MySqlCursor() {
@@ -52,7 +52,7 @@ MySqlCursor::~MySqlCursor() {
 }
 
 bool MySqlCursor::drv_open() {
-	KexiDBDrvDbg << "MySqlCursor::drv_open:" << m_sql << endl;
+//	KexiDBDrvDbg << "MySqlCursor::drv_open:" << m_sql << endl;
 	// This can't be right?  mysql_real_query takes a length in order that
 	// queries can have binary data - but strlen does not allow binary data.
 	if(mysql_real_query(d->mysql, m_sql.utf8(), strlen(m_sql.utf8())) == 0) {
@@ -90,7 +90,7 @@ bool MySqlCursor::drv_close() {
 }*/
 
 void MySqlCursor::drv_getNextRecord() {
-	KexiDBDrvDbg << "MySqlCursor::drv_getNextRecord" << endl;
+//	KexiDBDrvDbg << "MySqlCursor::drv_getNextRecord" << endl;
 	if (at() < d->numRows && at() >=0) {
 		d->lengths=mysql_fetch_lengths(d->mysqlres);
 		m_result=FetchOK;
@@ -112,8 +112,6 @@ QVariant MySqlCursor::value(uint pos) {
 		? m_fieldsExpanded->at(pos)->field : 0;
 	
 //! @todo js: use MYSQL_FIELD::type here!
-
-//	kdDebug() << "@@@ " << d->mysqlrow[pos] << endl;
 
 	//from most to least frequently used types:
 	if (!f || f->isTextType())
@@ -137,9 +135,26 @@ void MySqlCursor::storeCurrentRow(RowData &data) const {
 		return;
 
 //! @todo js: use MYSQL_FIELD::type here!
-	data.reserve(m_fieldCount);
-	for( uint i=0; i<m_fieldCount; i++) {
-		data[i] = QVariant(QString::fromUtf8((const char*)d->mysqlrow[i]));
+//!	          see SQLiteCursor::storeCurrentRow()
+
+	data.resize(m_fieldCount);
+	const uint fieldsExpandedCount = m_fieldsExpanded->count(); 
+	const uint realCount = QMIN(fieldsExpandedCount, m_fieldCount);
+	for( uint i=0; i<realCount; i++) {
+		Field *f = m_fieldsExpanded->at(i)->field;
+		if (!f)
+			continue;
+		if (f->type()==Field::BLOB) {
+			QByteArray ba;
+			ba.duplicate(d->mysqlrow[i], d->mysqlres->lengths[i]);
+			data[i] = ba;
+			KexiDBDbg << data[i].toByteArray().size() << endl;
+		}
+//! @todo more types!
+//! @todo look at what type mysql declares!
+		else {
+			data[i] = QVariant(QString::fromUtf8((const char*)d->mysqlrow[i]));
+		}
 	}
 }
 

@@ -253,9 +253,8 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 			return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
 		}
 		case Field::BLOB: {
-//TODO: here special encoding method needed
-			QString s = v.toString();
-			return escapeString(s); //QString("'")+v.toString()+"'";
+//			QString s = v.toString();
+			return escapeBLOB(v.toByteArray());
 		}
 		case Field::InvalidType:
 			return "!INVALIDTYPE!";
@@ -332,6 +331,30 @@ void Driver::initSQLKeywords(int hashSize) {
 	if(!d->driverSQLDict && beh->SQL_KEYWORDS != 0) {
 	  d->initDriverKeywords(beh->SQL_KEYWORDS, hashSize);
 	}
+}
+
+QString Driver::escapeBLOBInternal(const QByteArray& array, bool use0x) const
+{
+	const int size = array.size();
+	int escaped_length = size*2 + 2/*0x or X'*/;
+	if (!use0x)
+		escaped_length += 1; //last char: '
+	QString str;
+	str.reserve(escaped_length);
+	if (str.capacity() < escaped_length) {
+		KexiDBWarn << "MySqlDriver::escapeBLOB(): no enough memory (cannot allocate "<< escaped_length<<" chars)" << endl;
+		return QString::fromLatin1("NULL");
+	}
+	str = use0x ? QString::fromLatin1("0x") : QString::fromLatin1("X'");
+	int new_length = 2; //after X'
+	for (int i = 0; i < size; i++) {
+		unsigned char val = array[i];
+		str[new_length++] = (val/16) < 10 ? ('0'+(val/16)) : ('A'+(val/16)-10);
+		str[new_length++] = (val%16) < 10 ? ('0'+(val%16)) : ('A'+(val%16)-10);
+	}
+	if (!use0x)
+		str[new_length++] = '\'';
+	return str;
 }
 
 #include "driver.moc"

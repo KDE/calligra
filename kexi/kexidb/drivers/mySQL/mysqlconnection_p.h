@@ -54,8 +54,8 @@ namespace NAMESPACE {
 class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 {
 	public:
-		MySqlConnectionInternal();
-		~MySqlConnectionInternal();
+		MySqlConnectionInternal(Connection* connection);
+		virtual ~MySqlConnectionInternal();
 
 		//! Connects to a MySQL database
 		bool db_connect(const KexiDB::ConnectionData& data);
@@ -87,18 +87,8 @@ class MySqlConnectionInternal : public KexiDB::ConnectionInternal
 class MySqlCursorData : public MySqlConnectionInternal
 {
 	public:
-		MySqlCursorData()
-		: MySqlConnectionInternal()
-		, mysqlres(0)
-		, mysqlrow(0)
-		, lengths(0)
-		, numRows(0)
-		{
-			mysql_owned = false;
-		}
-		~MySqlCursorData()
-		{
-		}
+		MySqlCursorData(Connection* connection);
+		virtual ~MySqlCursorData();
 
 		MYSQL_RES *mysqlres;
 		MYSQL_ROW mysqlrow;

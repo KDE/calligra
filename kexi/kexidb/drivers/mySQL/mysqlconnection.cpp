@@ -20,8 +20,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
-
-
 #include <qvariant.h>
 #include <qfile.h>
 #include <qdict.h>
@@ -33,6 +31,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "mysqlconnection.h"
 #include "mysqlconnection_p.h"
 #include "mysqlcursor.h"
+#include "mysqlpreparedstatement.h"
 #include <kexidb/error.h>
 
 
@@ -42,7 +41,7 @@ using namespace KexiDB;
 
 MySqlConnection::MySqlConnection( Driver *driver, ConnectionData &conn_data )
 	:Connection(driver,conn_data)
-	,d(new MySqlConnectionInternal())
+	,d(new MySqlConnectionInternal(this))
 {
 }
 
@@ -186,10 +185,7 @@ bool MySqlConnection::drv_getTablesList( QStringList &list )
 PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type, 
 	TableSchema& tableSchema)
 {
-	Q_UNUSED(type);
-	Q_UNUSED(tableSchema);
-//! @todo:	return new MySqlPreparedStatement(type, *d, tableSchema);
-	return 0;
+	return new MySqlPreparedStatement(type, *d, tableSchema);
 }
 
 

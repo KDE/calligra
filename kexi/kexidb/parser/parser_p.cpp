@@ -80,8 +80,8 @@ extern void tokenize(const char *data);
 
 void yyerror(const char *str)
 {
-	kdDebug() << "error: " << str << endl;
-	kdDebug() << "at character " << current << " near tooken " << ctoken << endl;
+	KexiDBDbg << "error: " << str << endl;
+	KexiDBDbg << "at character " << current << " near tooken " << ctoken << endl;
 	parser->setOperation(Parser::OP_Error);
 
 	const bool otherError = (qstrnicmp(str, "other error", 11)==0);
@@ -91,14 +91,14 @@ void yyerror(const char *str)
 		|| qstrnicmp(str, "syntax error", 12)==0 || qstrnicmp(str, "parse error", 11)==0)
 		|| otherError)
 	{
-		kdDebug() << parser->statement() << endl;
+		KexiDBDbg << parser->statement() << endl;
 		QString ptrline = "";
 		for(int i=0; i < current; i++)
 			ptrline += " ";
 
 		ptrline += "^";
 
-		kdDebug() << ptrline << endl;
+		KexiDBDbg << ptrline << endl;
 
 		//lexer may add error messages
 		QString lexerErr = parser->error().error();
@@ -109,7 +109,7 @@ void yyerror(const char *str)
 			if (errtypestr.startsWith("parse error, unexpected ")) {
 				//something like "parse error, unexpected IDENTIFIER, expecting ',' or ')'"
 				QString e = errtypestr.mid(24);
-				kdDebug() << e <<endl;
+				KexiDBDbg << e <<endl;
 				QString token = "IDENTIFIER";
 				if (e.startsWith(token)) {
 					QRegExp re("'.'");
@@ -117,8 +117,8 @@ void yyerror(const char *str)
 					pos = re.search(e, pos);
 					QStringList captured=re.capturedTexts();
 					if (captured.count()>=2) {
-//						kdDebug() << "**" << captured[1] << endl;
-//						kdDebug() << "**" << captured[2] << endl;
+//						KexiDBDbg << "**" << captured[1] << endl;
+//						KexiDBDbg << "**" << captured[2] << endl;
 					}
 				}
 					
@@ -126,7 +126,7 @@ void yyerror(const char *str)
 					
 //			 IDENTIFIER, expecting '")) {
 				e = errtypestr.mid(47);
-				kdDebug() << e <<endl;
+				KexiDBDbg << e <<endl;
 //				,' or ')'
 //		lexerErr i18n("identifier was expected");
 				
@@ -191,12 +191,12 @@ bool parseData(Parser *p, const char *data)
 	bool ok = true;
 	if(parser->operation() == Parser::OP_Select)
 	{
-		kdDebug() << "parseData(): ok" << endl;
-//			kdDebug() << "parseData(): " << tableDict.count() << " loaded tables" << endl;
+		KexiDBDbg << "parseData(): ok" << endl;
+//			KexiDBDbg << "parseData(): " << tableDict.count() << " loaded tables" << endl;
 /*			TableSchema *ts;
 			for(QDictIterator<TableSchema> it(tableDict); TableSchema *s = tableList.first(); s; s = tableList.next())
 			{
-				kdDebug() << "  " << s->name() << endl;
+				KexiDBDbg << "  " << s->name() << endl;
 			}*/
 /*removed
 			Field::ListIterator it = parser->select()->fieldsIterator();
@@ -263,7 +263,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 	parseInfo.querySchema->addField(field);
 
 #if 0
-	kdDebug() << "found variable name: " << varName << endl;
+	KexiDBDbg << "found variable name: " << varName << endl;
 	int dotPos = varName.find('.');
 	QString tableName, fieldName;
 //TODO: shall we also support db name?
@@ -317,7 +317,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 				tableAlias = parseInfo.querySchema->tableAlias(*it);
 				if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
 					covered = false; //uncovered
-				kdDebug() << " --" << "covered by " << tableAlias << " alias" << endl;
+				KexiDBDbg << " --" << "covered by " << tableAlias << " alias" << endl;
 			}
 			if (covered) {
 				setError(i18n("Could not access the table directly using its name"), 
@@ -333,8 +333,9 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 			tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
 			if (tablePosition>=0) {
 				ts = parseInfo.querySchema->tables()->at(tablePosition);
-				if (ts)
-					kdDebug() << " --it's a tableAlias.name" << endl;
+				if (ts) {
+//					KexiDBDbg << " --it's a tableAlias.name" << endl;
+				}
 			}
 		}
 
@@ -355,7 +356,7 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 				parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema, ts) );
 			}
 			else {
-				kdDebug() << " --it's a table.name" << endl;
+//				KexiDBDbg << " --it's a table.name" << endl;
 				Field *realField = ts->field(fieldName);
 				if (realField) {
 					// check if table or alias is used twice and both have the same column
@@ -442,7 +443,7 @@ QuerySchema* parseSelect(
 			QCString tableOrAliasName;
 			if (!aliasString.isEmpty()) {
 				tableOrAliasName = aliasString;
-				kdDebug() << "- add alias for table: " << aliasString << endl;
+//				KexiDBDbg << "- add alias for table: " << aliasString << endl;
 			} else {
 				tableOrAliasName = tname;
 			}
@@ -452,13 +453,13 @@ QuerySchema* parseSelect(
 			if (list) {
 				//another table/alias with the same name
 				list->append( i );
-				kdDebug() << "- another table/alias with name: " << tableOrAliasName << endl;
+//				KexiDBDbg << "- another table/alias with name: " << tableOrAliasName << endl;
 			}
 			else {
 				list = new QValueList<int>();
 				list->append( i );
 				parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
-				kdDebug() << "- first table/alias with name: " << tableOrAliasName << endl;
+//				KexiDBDbg << "- first table/alias with name: " << tableOrAliasName << endl;
 			}
 	/*		if (repeatedTableNameOrTableAlias.isEmpty()) {
 				if (tableNamesAndTableAliases[tname])
@@ -467,7 +468,7 @@ QuerySchema* parseSelect(
 					tableNamesAndTableAliases.insert(tname, (const char*)1);
 			}
 			if (!aliasString.isEmpty()) {
-				kdDebug() << "- add alias for table: " << aliasString << endl;
+				KexiDBDbg << "- add alias for table: " << aliasString << endl;
 	//			querySchema->setTableAlias(columnNum, aliasString);
 				//2. collect information about first repeated table name or alias
 				//   (potential ambiguity)
@@ -478,7 +479,7 @@ QuerySchema* parseSelect(
 						tableNamesAndTableAliases.insert(aliasString, (const char*)1);
 				}
 			}*/
-			kdDebug() << "addTable: " << tname << endl;
+//			KexiDBDbg << "addTable: " << tname << endl;
 			querySchema->addTable( s, aliasString );
 		}
 	}
@@ -551,8 +552,8 @@ QuerySchema* parseSelect(
 			}
 			
 			if (aliasVariable) {
-				kdDebug() << "ALIAS \"" << aliasVariable->name << "\" set for column " 
-					<< columnNum << endl;
+//				KexiDBDbg << "ALIAS \"" << aliasVariable->name << "\" set for column " 
+//					<< columnNum << endl;
 				querySchema->setColumnAlias(columnNum, aliasVariable->name.latin1());
 			}
 	/*		if (e->exprClass() == KexiDBExpr_SpecialBinary && dynamic_cast<BinaryExpr*>(e)
@@ -586,8 +587,8 @@ QuerySchema* parseSelect(
 		querySchema->setWhereExpression(whereExpr);
 	}
 
-	kdDebug() << "Select ColViews=" << (colViews ? colViews->debugString() : QString::null)
-		<< " Tables=" << (tablesList ? tablesList->debugString() : QString::null) << endl;
+//	KexiDBDbg << "Select ColViews=" << (colViews ? colViews->debugString() : QString::null)
+//		<< " Tables=" << (tablesList ? tablesList->debugString() : QString::null) << endl;
 	
 	CLEANUP;
 	return querySchema;

@@ -19,23 +19,38 @@
 
 #ifndef MYSQLPREPAREDSTATEMENT_H
 #define MYSQLPREPAREDSTATEMENT_H
+
 #include <kexidb/preparedstatement.h>
-#include <kexidb/connection_p.h>
+#include "mysqlconnection_p.h"
+
+//todo 1.1 - unfinished: #define KEXI_USE_MYSQL_STMT
+// for 1.0 we're using unoptimized version
 
 namespace KexiDB 
 {
-class MySQLPreparedStatement : public PreparedStatement
+
+/*! Implementation of prepared statements for MySQL driver. */
+class MySqlPreparedStatement : public PreparedStatement, public MySqlConnectionInternal
 {
 	public:
-		MySQLPreparedStatement(StatementType type, ConnectionInternal& conn, TableSchema& tableSchema);
+		MySqlPreparedStatement(StatementType type, ConnectionInternal& conn, TableSchema& tableSchema);
 
-		virtual ~MySQLPreparedStatement();
+		virtual ~MySqlPreparedStatement();
 
 		virtual bool execute();
+
+		QCString m_tempStatementString;
+
+#ifdef KEXI_USE_MYSQL_STMT
+		int m_realParamCount;
+		MYSQL_STMT *m_statement;
+		MYSQL_BIND *m_mysqlBind;
+#endif
 		bool m_resetRequired : 1;
 
-	private:
-		Connection* m_conn;
+	protected:
+		bool init();
+		void done();
 };
 }
 #endif

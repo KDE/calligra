@@ -49,9 +49,9 @@ static bool sqliteStringToBool(const QString& s)
 class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 {
 	public:
-		SQLiteCursorData()
+		SQLiteCursorData(Connection* conn)
 			:
-			SQLiteConnectionInternal()
+			SQLiteConnectionInternal(conn)
 //			: curr_cols(0)
 //			errmsg_p(0)
 //			, res(SQLITE_OK)
@@ -201,14 +201,14 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 
 SQLiteCursor::SQLiteCursor(Connection* conn, const QString& statement, uint options)
 	: Cursor( conn, statement, options )
-	, d( new SQLiteCursorData() )
+	, d( new SQLiteCursorData(conn) )
 {
 	d->data = static_cast<SQLiteConnection*>(conn)->d->data;
 }
 
 SQLiteCursor::SQLiteCursor(Connection* conn, QuerySchema& query, uint options )
 	: Cursor( conn, query, options )
-	, d( new SQLiteCursorData() )
+	, d( new SQLiteCursorData(conn) )
 {
 	d->data = static_cast<SQLiteConnection*>(conn)->d->data;
 }

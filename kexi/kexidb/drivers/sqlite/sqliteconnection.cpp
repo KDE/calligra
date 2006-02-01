@@ -44,8 +44,8 @@
 
 using namespace KexiDB;
 
-SQLiteConnectionInternal::SQLiteConnectionInternal()
- : ConnectionInternal()
+SQLiteConnectionInternal::SQLiteConnectionInternal(Connection *connection)
+ : ConnectionInternal(connection)
  , data(0)
  , data_owned(true)
  , errmsg_p(0)
@@ -84,7 +84,7 @@ void SQLiteConnectionInternal::storeResult()
 /*! Used by driver */
 SQLiteConnection::SQLiteConnection( Driver *driver, ConnectionData &conn_data )
 	: Connection( driver, conn_data )
-	,d(new SQLiteConnectionInternal())
+	,d(new SQLiteConnectionInternal(this))
 {
 }
 
@@ -129,7 +129,7 @@ bool SQLiteConnection::drv_getTablesList( QStringList &list )
 	KexiDB::Cursor *cursor;
 	m_sql = "select lower(name) from sqlite_master where type='table'";
 	if (!(cursor = executeQuery( m_sql ))) {
-		KexiDBDbg << "Connection::drv_getTablesList(): !executeQuery()" << endl;
+		KexiDBWarn << "Connection::drv_getTablesList(): !executeQuery()" << endl;
 		return false;
 	}
 	list.clear();
@@ -165,7 +165,7 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	Q_UNUSED(cancelled);
 	Q_UNUSED(msgHandler);
 #endif
-	KexiDBDrvDbg << "drv_useDatabase(): " << m_data->fileName() << endl;
+//	KexiDBDrvDbg << "drv_useDatabase(): " << m_data->fileName() << endl;
 #ifdef SQLITE2
 	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
 		&d->errmsg_p );
@@ -260,7 +260,7 @@ Cursor* SQLiteConnection::prepareQuery( QuerySchema& query, uint cursor_options 
 
 bool SQLiteConnection::drv_executeSQL( const QString& statement )
 {
-	KexiDBDrvDbg << "SQLiteConnection::drv_executeSQL(" << statement << ")" <<endl;
+//	KexiDBDrvDbg << "SQLiteConnection::drv_executeSQL(" << statement << ")" <<endl;
 //	QCString st(statement.length()*2);
 //	st = escapeString( statement.local8Bit() ); //?
 #ifdef SQLITE_UTF8

@@ -31,11 +31,11 @@
 #include <kdebug.h>
 
 using namespace KexiDB;
-pqxxSqlConnectionInternal::pqxxSqlConnectionInternal()
- : ConnectionInternal()
+pqxxSqlConnectionInternal::pqxxSqlConnectionInternal(Connection *conn)
+ : ConnectionInternal(conn)
+ , m_pqxxsql(0)
+ , m_res(0)
 {
-	m_pqxxsql = 0;
-	m_res = 0;
 }
 
 

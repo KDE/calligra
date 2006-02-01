@@ -35,11 +35,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define NAMESPACE KexiDB
 #endif
 
-namespace NAMESPACE {
+using namespace NAMESPACE;
 
 /* ************************************************************************** */
-MySqlConnectionInternal::MySqlConnectionInternal()
-	: ConnectionInternal()
+MySqlConnectionInternal::MySqlConnectionInternal(Connection* connection)
+	: ConnectionInternal(connection)
 	, mysql(0)
 	, mysql_owned(true)
 	, res(0)
@@ -138,8 +138,8 @@ bool MySqlConnectionInternal::useDatabase(const QString &dbName) {
 /*! Executes the given SQL statement on the server.
  */
 bool MySqlConnectionInternal::executeSQL(const QString& statement) {
-	KexiDBDrvDbg << "MySqlConnectionInternal::executeSQL: "
-	             << statement << endl;
+//	KexiDBDrvDbg << "MySqlConnectionInternal::executeSQL: "
+//	             << statement << endl;
 	QCString queryStr=statement.utf8();
 	const char *query=queryStr;
 	if(mysql_real_query(mysql, query, strlen(query)) == 0)
@@ -156,5 +156,19 @@ QString MySqlConnectionInternal::escapeIdentifier(const QString& str) const {
 	return QString(str).replace('`', "'");
 }
 
+//--------------------------------------
 
-} // KexiDB namespace
+MySqlCursorData::MySqlCursorData(Connection* connection)
+: MySqlConnectionInternal(connection)
+, mysqlres(0)
+, mysqlrow(0)
+, lengths(0)
+, numRows(0)
+{
+	mysql_owned = false;
+}
+
+MySqlCursorData::~MySqlCursorData()
+{
+}
+

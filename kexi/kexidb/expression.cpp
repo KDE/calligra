@@ -511,7 +511,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 	tableForQueryAsterisk = 0;
 
 /* taken from parser's addColumn(): */
-	kdDebug() << "checking variable name: " << name << endl;
+	KexiDBDbg << "checking variable name: " << name << endl;
 	int dotPos = name.find('.');
 	QString tableName, fieldName;
 //TODO: shall we also support db name?
@@ -569,7 +569,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 			tableAlias = parseInfo.querySchema->tableAlias(*it);
 			if (tableAlias.isEmpty() || tableAlias.lower()==tableName.latin1())
 				covered = false; //uncovered
-			kdDebug() << " --" << "covered by " << tableAlias << " alias" << endl;
+			KexiDBDbg << " --" << "covered by " << tableAlias << " alias" << endl;
 		}
 		if (covered) {
 			parseInfo.errMsg = i18n("Could not access the table directly using its name");
@@ -585,8 +585,9 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 		tablePosition = parseInfo.querySchema->tablePositionForAlias( tableName.latin1() );
 		if (tablePosition>=0) {
 			ts = parseInfo.querySchema->tables()->at(tablePosition);
-			if (ts)
-				kdDebug() << " --it's a tableAlias.name" << endl;
+			if (ts) {
+//				KexiDBDbg << " --it's a tableAlias.name" << endl;
+			}
 		}
 	}
 
@@ -614,7 +615,7 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 		return true;
 	}
 
-	kdDebug() << " --it's a table.name" << endl;
+//	KexiDBDbg << " --it's a table.name" << endl;
 	Field *realField = ts->field(fieldName);
 	if (!realField) {
 		parseInfo.errMsg = i18n("Field not found");

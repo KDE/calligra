@@ -102,6 +102,7 @@ class KEXI_DB_EXPORT PreparedStatement : public KShared
 		virtual bool execute() = 0;
 
 	protected:
+//! @todo is this portable across backends?
 		QCString generateStatementString();
 
 		StatementType m_type;

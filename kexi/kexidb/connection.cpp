@@ -47,7 +47,8 @@
 
 namespace KexiDB {
 
-ConnectionInternal::ConnectionInternal()
+ConnectionInternal::ConnectionInternal(Connection *conn)
+ : connection(conn)
 {
 }
 
@@ -492,7 +493,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible, bool *
 {
 	if (cancelled)
 		*cancelled = false;
-	kdDebug() << "Connection::useDatabase(" << dbName << "," << kexiCompatible <<")" << endl;
+	KexiDBDbg << "Connection::useDatabase(" << dbName << "," << kexiCompatible <<")" << endl;
 	if (!checkConnected())
 		return false;
 

@@ -49,27 +49,27 @@ class pqxxSqlConnection : public Connection
 {
 	Q_OBJECT
 
-        public:
-                ~pqxxSqlConnection();
+	public:
+		virtual ~pqxxSqlConnection();
 
-                virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
+		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
 			TableSchema& tableSchema);
 	protected:
 
-                pqxxSqlConnection( Driver *driver, ConnectionData &conn_data );
+		pqxxSqlConnection( Driver *driver, ConnectionData &conn_data );
 
 		virtual bool drv_isDatabaseUsed() const;
-                virtual bool drv_connect();
-                virtual bool drv_disconnect();
-                virtual bool drv_getDatabasesList( QStringList &list );
-                virtual bool drv_createDatabase( const QString &dbName = QString::null );
-                virtual bool drv_useDatabase( const QString &dbName = QString::null, bool *cancelled = 0, 
-                  MessageHandler* msgHandler = 0 );
-                virtual bool drv_closeDatabase();
-                virtual bool drv_dropDatabase( const QString &dbName = QString::null );
-                virtual bool drv_executeSQL( const QString& statement );
+		virtual bool drv_connect();
+		virtual bool drv_disconnect();
+		virtual bool drv_getDatabasesList( QStringList &list );
+		virtual bool drv_createDatabase( const QString &dbName = QString::null );
+		virtual bool drv_useDatabase( const QString &dbName = QString::null, bool *cancelled = 0, 
+		  MessageHandler* msgHandler = 0 );
+		virtual bool drv_closeDatabase();
+		virtual bool drv_dropDatabase( const QString &dbName = QString::null );
+		virtual bool drv_executeSQL( const QString& statement );
 		virtual Q_ULLONG drv_lastInsertRowID();
 
 //TODO: move this somewhere to low level class (MIGRATION?)

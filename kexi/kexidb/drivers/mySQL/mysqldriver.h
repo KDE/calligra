@@ -42,6 +42,9 @@ class MySqlDriver : public Driver
 		virtual QString escapeString(const QString& str) const;
 		virtual QCString escapeString(const QCString& str) const;
 
+		//! Escape BLOB value \a array
+		virtual QString escapeBLOB(const QByteArray& array) const;
+
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;
 		virtual QCString drv_escapeIdentifier( const QCString& str) const;

@@ -50,8 +50,12 @@ class SQLiteDriver : public Driver
 		/*! \return false for this driver. */
 		virtual bool isSystemDatabaseName( const QString& ) const { return false; }
 
+		//! Escape a string for use as a value
 		virtual QString escapeString(const QString& str) const;
 		virtual QCString escapeString(const QCString& str) const;
+
+		//! Escape BLOB value \a array
+		virtual QString escapeBLOB(const QByteArray& array) const;
 
 	protected:
 		virtual QString drv_escapeIdentifier( const QString& str) const;

@@ -244,6 +244,12 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		virtual QCString escapeString( const QCString& str ) const = 0;
 		
+		/*! Driver-specific SQL BLOB value escaping.
+		 Implement escaping for any character like " or ' and \\0 as your 
+		 database engine requires. Prepend and append quotation marks.
+		*/
+		virtual QString escapeBLOB(const QByteArray& array) const = 0;
+
 //todo enum EscapeType { EscapeDriver = 0x00, EscapeKexi = 0x01};
 //todo enum EscapePolicy { EscapeAsNecessary = 0x00, EscapeAlways = 0x02 };
 
@@ -320,6 +326,10 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 eventually delete it. Better use Connection destructor. */
 		Connection* removeConnection( Connection *conn );
 
+		/*! Helper, used in escapeBLOB(). If \a use0x is true, \a array is encoded as 0xABCD,
+		 else \a array is encoded as X'ABCD'. For example, MySQL>=3 supports the former 
+		 and SQlite supports the latter. */
+		QString escapeBLOBInternal(const QByteArray& array, bool use0x) const;
 
 	friend class Connection;
 	friend class Cursor;

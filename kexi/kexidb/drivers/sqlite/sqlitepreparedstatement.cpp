@@ -27,7 +27,8 @@ using namespace KexiDB;
 SQLitePreparedStatement::SQLitePreparedStatement(StatementType type, ConnectionInternal& conn, 
 	TableSchema& tableSchema)
  : KexiDB::PreparedStatement(type, conn, tableSchema)
- , SQLiteConnectionInternal()
+ , SQLiteConnectionInternal(conn.connection)
+ , prepared_st_handle(0)
  , m_resetRequired(false)
 {
 	data_owned = false;
@@ -46,7 +47,7 @@ SQLitePreparedStatement::SQLitePreparedStatement(StatementType type, ConnectionI
 			0 //const char **pzTail     /* OUT: Pointer to unused portion of zSql */
 		);
 		if (SQLITE_OK != res) {
-		
+//! @todo err
 		}
 	}
 #endif
@@ -58,6 +59,7 @@ SQLitePreparedStatement::~SQLitePreparedStatement()
 //! @todo
 #else
 	sqlite3_finalize(prepared_st_handle);
+	prepared_st_handle = 0;
 #endif
 }
 
@@ -66,6 +68,8 @@ bool SQLitePreparedStatement::execute()
 #ifdef SQLITE2
 //! @todo
 #else
+	if (!prepared_st_handle)
+		return false;
 	if (m_resetRequired) {
 		res = sqlite3_reset(prepared_st_handle);
 		if (SQLITE_OK != res) {
@@ -75,7 +79,7 @@ bool SQLitePreparedStatement::execute()
 		m_resetRequired = false;
 	}
 
-	int arg=1; //arg index from counted 1
+	int arg=1; //arg index counted from 1
 	KexiDB::Field *field;
 
 	Field::List _dummy;

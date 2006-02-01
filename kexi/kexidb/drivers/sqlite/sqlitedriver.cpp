@@ -126,6 +126,11 @@ QCString SQLiteDriver::escapeString(const QCString& str) const
 	return QCString("'")+QCString(str).replace( '\'', "''" )+"'";
 }
 
+QString SQLiteDriver::escapeBLOB(const QByteArray& array) const
+{
+	return escapeBLOBInternal(array, false /* use X'ABCD' */);
+}
+
 QString SQLiteDriver::drv_escapeIdentifier( const QString& str) const
 {
 	return QString(str).replace( '"', "\"\"" );
