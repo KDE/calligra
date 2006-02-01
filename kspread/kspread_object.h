@@ -53,7 +53,7 @@ enum ObjType {
   OBJECT_GENERAL,
   OBJECT_KOFFICE_PART,
   OBJECT_CHART,
-  OBJECT_PICTURE,
+  OBJECT_PICTURE
 };
 
 enum SelectionMode {
