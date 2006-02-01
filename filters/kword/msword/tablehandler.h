@@ -71,7 +71,7 @@ namespace KWord
         void cacheCellEdge( int cellEdge );
         int columnNumber( int cellEdge ) const;
     };
-};
+}
 
 class KWordTableHandler : public QObject, public wvWare::TableHandler
 {

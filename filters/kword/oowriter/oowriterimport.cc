@@ -1595,16 +1595,6 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
         kdWarning(30518) << "Error in text-box: neither height nor min-height specified!" << endl;
     }
 
-    int overflowBehavior;
-    if ( isText ) {
-        if ( m_styleStack.hasAttributeNS( ooNS::style, "overflow-behavior" ) ) { // OASIS extension
-            overflowBehavior = Conversion::importOverflowBehavior( m_styleStack.attributeNS( ooNS::style, "overflow-behavior" ) );
-        } else {
-            // AutoCreateNewFrame not supported in OO-1.1. The presence of min-height tells if it's an auto-resized frame.
-            overflowBehavior = hasMinHeight ? 0 /*AutoExtendFrame*/ : 2 /*Ignore, i.e. fixed size*/;
-        }
-    }
-
     // draw:textarea-vertical-align, draw:textarea-horizontal-align
 
     // Not supported in KWord: fo:max-height  fo:max-width
@@ -1635,9 +1625,19 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElemen
     // ## runaroundGap is a problem. KWord-1.3 had one value, OO has 4 (margins on all sides, see p98).
     // Fixed in KWord-post-1.3, it has 4 values now.
 
-    // Not implemented in KWord: contour wrapping
-    if ( isText )
+
+    if ( isText ) {
+        int overflowBehavior;
+        if ( m_styleStack.hasAttributeNS( ooNS::style, "overflow-behavior" ) ) { // OASIS extension
+            overflowBehavior = Conversion::importOverflowBehavior( m_styleStack.attributeNS( ooNS::style, "overflow-behavior" ) );
+        } else {
+            // AutoCreateNewFrame not supported in OO-1.1. The presence of min-height tells if it's an auto-resized frame.
+            overflowBehavior = hasMinHeight ? 0 /*AutoExtendFrame*/ : 2 /*Ignore, i.e. fixed size*/;
+        }
+        // Not implemented in KWord: contour wrapping
         frameElementOut.setAttribute("autoCreateNewFrame", overflowBehavior);
+    }
+
     // TODO sheetSide (not implemented in KWord, but in its DTD)
 
     importCommonFrameProperties( frameElementOut );

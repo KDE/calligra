@@ -92,6 +92,6 @@ namespace Conversion
     int fldToFieldType( const wvWare::FLD* fld );
 
     bool isHeader( unsigned char type );
-};
+}
 
 #endif
