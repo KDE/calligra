@@ -855,8 +855,8 @@ QPointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
 }
 #endif
 
-#define BIDI_DEBUG 0 // 2
-#if (BIDI_DEBUG >= 1)
+//#define BIDI_DEBUG
+#ifdef BIDI_DEBUG
 #include <iostream>
 #endif
 
@@ -933,7 +933,7 @@ QPtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, con
 	    dirCurrent = text.at(current).direction();
 
 
-#if (BIDI_DEBUG >= 2)
+#ifdef BIDI_DEBUG
 	cout << "directions: dir=" << dir << " current=" << dirCurrent << " last=" << status.last << " eor=" << status.eor << " lastStrong=" << status.lastStrong << " embedding=" << context->dir << " level =" << (int)context->level << endl;
 #endif
 
@@ -1311,7 +1311,7 @@ QPtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, con
 	++current;
     }
 
-#if (BIDI_DEBUG >= 1)
+#ifdef BIDI_DEBUG
     cout << "reached end of line current=" << current << ", eor=" << eor << endl;
 #endif
     eor = current - 1; // remove dummy char
@@ -1341,7 +1341,7 @@ QPtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, con
     // reversing is only done up to the lowest odd level
     if(!(levelLow%2)) levelLow++;
 
-#if (BIDI_DEBUG >= 1)
+#ifdef BIDI_DEBUG
     cout << "reorderLine: lineLow = " << (uint)levelLow << ", lineHigh = " << (uint)levelHigh << endl;
     cout << "logical order is:" << endl;
     QPtrListIterator<KoTextRun> it2(*runs);
@@ -1379,7 +1379,7 @@ QPtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, con
 	levelHigh--;
     }
 
-#if (BIDI_DEBUG >= 1)
+#ifdef BIDI_DEBUG
     cout << "visual order is:" << endl;
     QPtrListIterator<KoTextRun> it3(*runs);
     KoTextRun *r3;
@@ -1468,7 +1468,7 @@ KoTextRun::KoTextRun(int _start, int _stop, KoBidiContext *context, QChar::Direc
 	else if( dir == QChar::DirAN )
 	    level += 2;
     }
-#if (BIDI_DEBUG >= 1)
+#ifdef BIDI_DEBUG
     printf("new run: dir=%d from %d, to %d level = %d\n", dir, _start, _stop, level);
 #endif
 }
