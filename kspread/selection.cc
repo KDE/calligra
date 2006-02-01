@@ -352,9 +352,22 @@ void Selection::update(const QPoint& point)
 
   QRect area1 = (*d->activeElement)->rect().normalize();
   QRect newRange = extendToMergedAreas(QRect(d->anchor, topLeft));
+  
+  Element* oldElement=(*d->activeElement);
   Iterator it = cells().remove(d->activeElement);
+  delete oldElement;
   d->activeElement = insert(it, newRange, sheet, d->multipleSelection);
   d->activeSubRegionLength += cells().count() - count;
+  
+  //###
+  //I'm not entirely sure about this.  It seems that sometimes the call to insert() above 
+  //can just return the iterator which has been passed in.  This may be cells.end(), if the old active elemement 
+  //was the last one in the list, so attempts to dereference it will fail.
+  if (d->activeElement == cells().end())
+  {
+    d->activeElement--;
+    return;
+  }
 
   QRect area2 = (*d->activeElement)->rect().normalize();
   Region changedRegion;
