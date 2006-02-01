@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_classroom
 Name=Classroom
+Name[bg]=Класна стая
 Name[ca]=Aula
 Name[de]=Klassenraum
 Name[et]=Klassituba
@@ -18,6 +19,7 @@ Name[sv]=Klassrum
 Name[xx]=xxClassroomxx
 Name[zh_CN]=教室
 Comment=Classroom by dannya
+Comment[bg]=Класна стая на dannya
 Comment[ca]=Aula per dannya
 Comment[da]=Klasseværelse af dannya
 Comment[de]=Klassenraum by dannya

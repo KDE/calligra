@@ -8,6 +8,7 @@ Name[xx]=xxWriteUpxx
 Name[zh_CN]=写呀
 Exec=writeup %u
 GenericName=Simplified Word Processing
+GenericName[bg]=Опростена текстообработка
 GenericName[ca]=Processador de text simplificat
 GenericName[cs]=Jednoduché zpracování textu
 GenericName[da]=Simplificeret tekstbehandling

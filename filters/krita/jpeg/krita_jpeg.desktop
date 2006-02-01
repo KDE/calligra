@@ -3,6 +3,7 @@ Categories=Qt;KDE;Office;Graphics;
 Encoding=UTF-8
 Exec=krita %u
 GenericName=Application for Drawing and Handling of Images
+GenericName[bg]=Приложение за рисуване и обработка на изображения
 GenericName[ca]=Aplicació per a dibuix i modificació d'imatges
 GenericName[da]=Tegne- og billedbehandlingsprogram
 GenericName[de]=Programm zum Zeichnen und Bearbeiten von Bildern

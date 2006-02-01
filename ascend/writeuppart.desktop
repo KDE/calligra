@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Simplified Word Processing Component
+Name[bg]=Компонент за опростена текстообработка в KOffice
 Name[ca]=Component de processament de text simplificat de KOffice
 Name[cs]=Součást KOffice pro jednoduché zpracování textu
 Name[da]=KOffice simplificeret tekstbehandlingskomponent

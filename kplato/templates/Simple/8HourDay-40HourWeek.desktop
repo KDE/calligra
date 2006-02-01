@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Link
 URL=.source/8HourDay-40HourWeek.kplatot
 Name=8 hour day, 40 hour week
+Name[bg]=8 часа дневно, 40 часа седмично
 Name[ca]=Dia de 8 hores, setmana de 40 hores
 Name[da]=8-timers dag, 40-timers uge
 Name[de]=8 Stunden / Tag, 40 Stunden / Woche
