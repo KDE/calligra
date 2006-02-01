@@ -154,4 +154,12 @@ QCString pqxxSqlDriver::drv_escapeIdentifier( const QCString& str) const {
 	return QCString(str).replace( '"', "\"\"" );
 }
 
+//==================================================================================
+//
+QString pqxxSqlDriver::escapeBLOB(const QByteArray& array) const
+{
+	return escapeBLOBInternal(array, false /* use X'ABCD' */);
+}
+
+
 #include "pqxxdriver.moc"
