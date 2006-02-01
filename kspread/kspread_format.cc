@@ -1133,9 +1133,7 @@ bool Format::loadFontOasisStyle( KoStyleStack & font )
         setTextColor( QColor( font.attributeNS( KoXmlNS::fo, "color" ) ) );
 
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
-        setTextFontSize( (int) KoUnit::parseValue( font.attributeNS( KoXmlNS::fo, "font-size" ),10.0 ) );
-    else
-        setTextFontSize( 10 );
+        setTextFontSize( (int) KoUnit::parseValue( font.attributeNS( KoXmlNS::fo, "font-size" ), 10.0 ) );
 
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-style" ) && ( font.attributeNS( KoXmlNS::fo,"font-style" )== "italic" ))
     {
