@@ -259,14 +259,18 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     styleStack.setTypeProperties( "table-cell" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
     {
+        m_alignY = Format::UndefinedY;
+
         str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
         if ( str == "bottom" )
             m_alignY = Format::Bottom;
         else if ( str =="top" )
             m_alignY = Format::Top;
-        else if ( str =="middle" )//FIXME !!!
+        else if ( str =="middle" )
             m_alignY = Format::Middle;
-        m_featuresSet |= SAlignY;
+
+        if (m_alignY != Format::UndefinedY) // file's property is invalid
+            m_featuresSet |= SAlignY;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
@@ -1010,10 +1014,10 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         style.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
     }
 
-    if ( featureSet( SAlignY ) && alignY() != Format::UndefinedY )
+    if ( featureSet( SAlignY ) )
     {
-        QString value = "bottom";  // OO.o Calc's default
-        switch( alignY()  )
+        QString value;
+        switch( alignY() )
         {
         case Format::Top:
             value = "top";
@@ -1024,16 +1028,14 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         case Format::Bottom:
             value = "bottom";
             break;
+        case Format::UndefinedY:
+        default:
+            break;
         }
-            
-        style.addProperty( "style:vertical-align", value );
+        if (!value.isEmpty()) // sanity
+            style.addProperty( "style:vertical-align", value );
     }
-    
-    if ( !featureSet( SAlignY ) )
-    {
-        style.addProperty( "style:vertical-align", "middle" );
-    }
-    
+
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
         style.addProperty( "fo:background-color", m_bgColor.name() );
 

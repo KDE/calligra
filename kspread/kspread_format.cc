@@ -251,7 +251,7 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
 
     if ( hasProperty( Format::PAlignY,true ) || hasNoFallBackProperties( Format::PAlignY ) )
     {
-        Format::AlignY align = m_pStyle->alignY(  );
+        Format::AlignY align = m_pStyle->alignY();
         QString value;
         if( align == Format::Top )
             value = "top";
@@ -260,7 +260,7 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
         else if( align == Format::Bottom )
             value = "bottom";
 
-        if( !value.isEmpty() )
+        if( !value.isEmpty() ) // sanity
             currentCellStyle.addProperty( "style:vertical-align", value );
     }
 
@@ -469,9 +469,18 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
     // cell attributes
     if (  hasProperty( PAlignY, true ) || hasNoFallBackProperties( PAlignY ) || force  )
     {
+        QString value;
+
         Format::AlignY align = alignY( _col, _row );
-        if ( align != Format::Bottom ) // default in OpenCalc
-            currentCellStyle.addProperty( "style:vertical-align", ( align == Format::Middle ? "middle" : "top" ) );
+        if ( align == Format::Top )
+            value = "top";
+        else if ( align == Format::Middle)
+            value = "middle";
+        else if ( align == Format::Bottom)
+            value = "bottom";
+
+        if (!value.isEmpty()) // sanity
+            currentCellStyle.addProperty( "style:vertical-align", value );
     }
 
 
@@ -1334,11 +1343,9 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
             setAlignY( Format::Middle );
         else if ( s == "bottom" )
             setAlignY( Format::Bottom );
-        else
+        else if ( s == "top" )
             setAlignY( Format::Top );
     }
-    else
-        setAlignY( Format::Bottom ); //default in ooimpress
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" ) )
     {
