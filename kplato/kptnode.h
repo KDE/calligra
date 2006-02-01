@@ -246,12 +246,12 @@ public:
     virtual void setConstraintStartTime(QDateTime time) { m_constraintStartTime = time; }
     virtual void setConstraintEndTime(QDateTime time) { m_constraintEndTime = time; }
 
-    virtual DateTime &constraintStartTime() { return m_constraintStartTime; }
-    virtual DateTime &constraintEndTime() { return m_constraintEndTime; }
-    virtual DateTime &startNotEarlier() { return m_constraintStartTime; }
-    virtual DateTime &finishNotLater() { return m_constraintEndTime; }
-    virtual DateTime &mustStartOn() { return m_constraintStartTime; }
-    virtual DateTime &mustFinishOn() { return m_constraintEndTime; }
+    virtual DateTime constraintStartTime() const { return m_constraintStartTime; }
+    virtual DateTime constraintEndTime() const { return m_constraintEndTime; }
+    virtual DateTime startNotEarlier() const { return m_constraintStartTime; }
+    virtual DateTime finishNotLater() const { return m_constraintEndTime; }
+    virtual DateTime mustStartOn() const { return m_constraintStartTime; }
+    virtual DateTime mustFinishOn() const { return m_constraintEndTime; }
 
     virtual ResourceGroupRequest *resourceRequest(ResourceGroup */*group*/) const { return 0; }
     virtual void makeAppointments();

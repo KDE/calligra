@@ -79,7 +79,7 @@ protected slots:
     void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);
 
 private:
-    void drawResources(Project &proj, QListViewItem *parent, ResourceGroup *group);
+    void drawResources(const Project &proj, QListViewItem *parent, ResourceGroup *group);
 
 private:
 	View *m_mainview;

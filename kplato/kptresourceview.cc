@@ -201,7 +201,7 @@ void ResourceView::draw(Project &project)
 }
 
 
-void ResourceView::drawResources(Project &proj, QListViewItem *parent, ResourceGroup *group)
+void ResourceView::drawResources(const Project &proj, QListViewItem *parent, ResourceGroup *group)
 {
     //kdDebug()<<k_funcinfo<<"group: "<<group->name()<<" ("<<group<<")"<<endl;
     QPtrListIterator<Resource> it(group->resources());
