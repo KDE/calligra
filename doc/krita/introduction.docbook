@@ -67,7 +67,7 @@ filters. Flters can be previewed in the filter gallery. Available filters
 include color adjustment, sharpen or blur, emboss, raindrops, and
 more.</para></listitem>
 
-<listitem><para>Brushes: The Gimp brush shapes can be used, both colored and
+<listitem><para>Brushes: The GIMP brush shapes can be used, both colored and
 grayscale brushes and pipe brushes. Custom brushes can be created, even from
 entire layers or images. Colored brushes can also be used as
 masks.</para></listitem>
@@ -135,8 +135,8 @@ documentation maintainer at <email>sanderkoning@kde.nl</email>.
 </para>
 </sect1>
 
-<sect1 id="introduction-author">
-<title>About the application author</title>
+<sect1 id="introduction-maintainer">
+<title>About the application maintainer</title>
 <para>
 Hi! I'm Boudewijn Rempt &mdash; the current maintainer of &krita;. I was
 educated as a linguist, retrained as a database developer, work as a Java

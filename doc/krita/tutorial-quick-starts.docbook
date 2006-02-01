@@ -17,7 +17,7 @@
 </mediaobject>
 </screenshot>
 
-<para>Select the <guiicon>Select  a rectangular area</guiicon> icon in the &krita; toolbar.</para>
+<para>Select the <guiicon>Select a rectangular area</guiicon> icon in the &krita; toolbar.</para>
 
 <screenshot>
 <screeninfo>The icon to use</screeninfo>
@@ -29,7 +29,8 @@
 </mediaobject>
 </screenshot>
 
-<para>Select the area you want to make a new picture with. &krita; makes the ouside area grey.</para>
+<para>Select the area you want to make a new picture with. &krita; makes the
+outside area grey.</para>
 
 <screenshot>
 <screeninfo>The selected area</screeninfo>

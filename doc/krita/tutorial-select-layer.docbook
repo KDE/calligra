@@ -3,15 +3,15 @@
 
 <!-- Does someone know a better way to do this? -->
 <screenshot>
-<screeninfo>The starting image.</screeninfo>
+<screeninfo>The starting image</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-sample.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The starting image.</phrase>
+<phrase>The starting image</phrase>
 </textobject>
-<caption><para>The starting image.</para></caption>
+<caption><para>The starting image</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -23,15 +23,15 @@ zoomed in):
 </para>
 
 <screenshot>
-<screeninfo>Krita with the starting image.</screeninfo>
+<screeninfo>Krita with the starting image</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-1.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The starting image.</phrase>
+<phrase>The starting image</phrase>
 </textobject>
-<caption><para>The starting image.</para></caption>
+<caption><para>The starting image</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -40,15 +40,15 @@ Now try to select the outline of the head with the select outline tool:
 </para>
 
 <screenshot>
-<screeninfo>The Outline Tool.</screeninfo>
+<screeninfo>The Outline Tool</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-2.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Outline Tool.</phrase>
+<phrase>The Outline Tool</phrase>
 </textobject>
-<caption><para>The Outline Tool.</para></caption>
+<caption><para>The Outline Tool</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -57,15 +57,15 @@ After you select it, it should look a bit like this picture:
 </para>
 
 <screenshot>
-<screeninfo>The picture after selecting the head.</screeninfo>
+<screeninfo>The picture after selecting the head</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-3.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The picture after selecting the head.</phrase>
+<phrase>The picture after selecting the head</phrase>
 </textobject>
-<caption><para>The picture after selecting the head.</para></caption>
+<caption><para>The picture after selecting the head</para></caption>
 </mediaobject>
 </screenshot>
 
@@ -104,28 +104,34 @@ Now it's time to make the edges of the selection a bit fuzzy. This can be done b
 </screenshot>
 
 <para>
-Now cut the selection, using <menuchoice><guimenu>Edit</guimenu><guimenuitem>Cut</guimenuitem></menuchoice>.
-Delete the current layer with <menuchoice><guimenu>Layer</guimenu><guimenuitem>Remove Layer</guimenuitem></menuchoice>.
-Paste your selection, with <menuchoice><guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem></menuchoice>
-Now we give ourselves a bit more room to work in by resizing the image a bit. Use the <menuchoice><guimenu>Image</guimenu><guimenuitem>Change Image Size...</guimenuitem></menuchoice> dialog for this.
+Now cut the selection, using
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Cut</guimenuitem></menuchoice>.
+Delete the current layer with
+<menuchoice><guimenu>Layer</guimenu><guimenuitem>Remove
+Layer</guimenuitem></menuchoice>.  Paste your selection, with
+<menuchoice><guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem></menuchoice>.
+Now we give ourselves a bit more room to work in by resizing the image a bit.
+Use the <menuchoice><guimenu>Image</guimenu><guimenuitem>Change Image
+Size...</guimenuitem></menuchoice> dialog for this.
 </para>
 
 <screenshot>
-<screeninfo>The Change Image Size dialog.</screeninfo>
+<screeninfo>The Image Size dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-6.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Change Image Size dialog.</phrase>
+<phrase>The Image Size dialog</phrase>
 </textobject>
-<caption><para>The Change Image Size dialog.</para></caption>
+<caption><para>The Image Size dialog</para></caption>
 </mediaobject>
 </screenshot>
 
 <para>
 Add a new layer, and place it below the old layer. You do this by selecting the new layer in the layerbox, and then pressing the little 'down' arrow at the bottom.
-Now we are going to select the area around the head with a contiguous select (bucket fill).
+Now we are going to select the area around the head with a contiguous select
+(the tool has a selection-with-bucketfill icon).
 </para>
 
 <screenshot>
@@ -159,8 +165,7 @@ Make sure to select "Sample merged" in the tool options:
 </screenshot>
 
 <para>
-Feather the selection again.
-Invert the selection again.
+Feather the selection again, and invert it.
 Select the contiguous fill tool (this is different from the contiguous select tool) and use it on the layer. 
 </para>
 
@@ -234,15 +239,15 @@ Save the image, and you're done :-)
 </para>
 
 <screenshot>
-<screeninfo>The resulting image.</screeninfo>
+<screeninfo>The resulting image</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tutorial-select-layer-13.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The resulting image.</phrase>
+<phrase>The resulting image</phrase>
 </textobject>
-<caption><para>The resulting image.</para></caption>
+<caption><para>The resulting image</para></caption>
 </mediaobject>
 </screenshot>
 

@@ -17,15 +17,15 @@ A little later, you'll be greeted by a dialog:
 
 <para>
 <screenshot>
-<screeninfo>The Create Document dialog.</screeninfo>
+<screeninfo>The Create Document dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="createdocument.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Create Document dialog.</phrase>
+<phrase>The Create Document dialog</phrase>
 </textobject>
-<caption><para>The Create Document dialog.</para></caption>
+<caption><para>The Create Document dialog</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -90,15 +90,15 @@ You will now see the main &krita; screen.
 
 <para>
 <screenshot>
-<screeninfo>&krita;'s main screen.</screeninfo>
+<screeninfo>&krita;'s main screen</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="mainscreen.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>&krita;'s main screen.</phrase>
+<phrase>&krita;'s main screen</phrase>
 </textobject>
-<caption><para>&krita;'s main screen.</para></caption>
+<caption><para>&krita;'s main screen</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -106,7 +106,7 @@ You will now see the main &krita; screen.
 <para>
 On the left hand side and on the top, there are toolbars which offer you access
 to tools for painting, editing, and selecting.
-You can find a more detailed description of these toolbars in <link
+You can find a more detailed description of these toolbars <link
 linkend="commands-toolbars">here</link>. The actual painting area is in the
 middle. On the right side of your screen, there are various palettes, which you
 can read more about in <link linkend="commands-palettes">this section</link>.
