@@ -23,6 +23,7 @@
 #include "kptduration.h"
 #include "kptresourceappointmentsview.h"
 #include "kptview.h"
+#include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
@@ -49,6 +50,21 @@ public:
         resource(r) {}
 
     Resource *resource;
+
+    virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align) {
+        QColorGroup g = cg;
+        if (m_columns[column] == 1) {
+            g.setColor(QColorGroup::Text, QColor(red));
+            g.setColor(QColorGroup::HighlightedText, QColor(red));
+        }
+
+        KListViewItem::paintCell(p, g, column, width, align);
+    }
+    void setColumnState(int c, int state=1) {
+        m_columns[c] = state;
+    }
+private:
+    QMap<int, int> m_columns;
 };
 
 class NodeItemPrivate : public KListViewItem {
@@ -132,13 +148,15 @@ ResourceView::ResourceView(View *view, QWidget *parent)
     resList->addColumn(i18n("Initials"));
     resList->setColumnAlignment(3, AlignLeft);
     resList->addColumn(i18n("Email"));
-    resList->setColumnAlignment(4, AlignRight);
-    resList->addColumn(i18n("Available From"));
+    resList->setColumnAlignment(4, AlignHCenter);
+    resList->addColumn(i18n("Calendar Name"));
     resList->setColumnAlignment(5, AlignRight);
-    resList->addColumn(i18n("Available Until"));
+    resList->addColumn(i18n("Available From"));
     resList->setColumnAlignment(6, AlignRight);
-    resList->addColumn(i18n("Normal Rate"));
+    resList->addColumn(i18n("Available Until"));
     resList->setColumnAlignment(7, AlignRight);
+    resList->addColumn(i18n("Normal Rate"));
+    resList->setColumnAlignment(8, AlignRight);
     resList->addColumn(i18n("Overtime Rate"));
 
     m_appview = new ResourceAppointmentsView(view, this);
@@ -174,7 +192,7 @@ void ResourceView::draw(Project &project)
     for (; it.current(); ++it) {
         KListViewItem *item = new KListViewItem(resList, it.current()->name());
         item->setOpen(true);
-        drawResources(item, it.current());
+        drawResources(project, item, it.current());
     }
     if (m_selectedItem) {
         resList->setSelected(m_selectedItem, true);
@@ -183,13 +201,35 @@ void ResourceView::draw(Project &project)
 }
 
 
-void ResourceView::drawResources(QListViewItem *parent, ResourceGroup *group)
+void ResourceView::drawResources(Project &proj, QListViewItem *parent, ResourceGroup *group)
 {
     //kdDebug()<<k_funcinfo<<"group: "<<group->name()<<" ("<<group<<")"<<endl;
     QPtrListIterator<Resource> it(group->resources());
     for (; it.current(); ++it) {
         Resource *r = it.current();
         ResourceItemPrivate *item = new ResourceItemPrivate(r, parent);
+        // set column colors
+        item->setColumnState(0, 0);
+        item->setColumnState(4, 0);
+        item->setColumnState(5, 0);
+        item->setColumnState(6, 0);
+        if (r->calendar() == 0) {
+            item->setColumnState(0, 1);
+            item->setColumnState(4, 1);
+        }
+        if (proj.constraint() == Node::MustFinishOn) {
+            if (proj.mustFinishOn() <= r->availableFrom()) {
+                item->setColumnState(0, 1);
+                item->setColumnState(5, 1);
+            }
+        } else {
+            if (proj.mustStartOn() >= r->availableUntil()) {
+                item->setColumnState(0, 1);
+                item->setColumnState(6, 1);
+            }
+        }
+        // and the texts
+        item->setText(0, r->name()); // refresh
         switch (r->type()) {
             case Resource::Type_Work:
                 item->setText(1, i18n("Work"));
@@ -203,10 +243,11 @@ void ResourceView::drawResources(QListViewItem *parent, ResourceGroup *group)
         }
         item->setText(2, r->initials());
         item->setText(3, r->email());
-        item->setText(4, KGlobal::locale()->formatDateTime(r->availableFrom()));
-        item->setText(5, KGlobal::locale()->formatDateTime(r->availableUntil()));
-        item->setText(6, KGlobal::locale()->formatMoney(r->normalRate()));
-        item->setText(7, KGlobal::locale()->formatMoney(r->overtimeRate()));
+        item->setText(4, r->calendar() ? r->calendar()->name() : i18n("None"));
+        item->setText(5, KGlobal::locale()->formatDateTime(r->availableFrom()));
+        item->setText(6, KGlobal::locale()->formatDateTime(r->availableUntil()));
+        item->setText(7, KGlobal::locale()->formatMoney(r->normalRate()));
+        item->setText(8, KGlobal::locale()->formatMoney(r->overtimeRate()));
         if (!m_selectedItem) {
             m_selectedItem = item;
         }
