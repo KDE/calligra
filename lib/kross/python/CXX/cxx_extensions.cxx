@@ -188,7 +188,7 @@ extern "C"
 	static int buffer_getreadbuffer_handler (PyObject*, int, void**);
 	static int buffer_getwritebuffer_handler (PyObject*, int, void**);
 	static int buffer_getsegcount_handler (PyObject*, int*);
-	};
+	}
 
 
 extern "C" void standard_dealloc( PyObject* p )
@@ -334,7 +334,7 @@ PythonType::~PythonType( )
 	delete mapping_table;
 	delete number_table;
 	delete buffer_table;
-	};
+	}
 
 PyTypeObject* PythonType::type_object( ) const
 	{return table;}

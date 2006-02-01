@@ -54,7 +54,7 @@ extern "C"
         }
         return 0;
     }
-};
+}
 
 using namespace Kross::Python;
 
