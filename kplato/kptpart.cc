@@ -154,7 +154,11 @@ KoView *Part::createViewInstance(QWidget *parent, const char *name) {
         m_view->setContext( *m_context );
     else if (m_embeddedContext && m_embeddedContextInitialized)
         m_view->setContext( *m_embeddedContext );
-
+    else {
+        // Activate menu actions. Assumes ganttview, we don't get any 
+        // 'aboutToShow' signal. Need to redo action control.
+        m_view->setTaskActionsEnabled(true);
+    }
     //m_view->setBaselineMode(getProject().isBaselined()); FIXME: Removed for this release  
     return m_view;
 }
