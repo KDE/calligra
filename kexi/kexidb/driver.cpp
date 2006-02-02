@@ -253,7 +253,8 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 			return escapeString(s); //QString("'")+s.replace( '"', "\\\"" ) + "'";
 		}
 		case Field::BLOB: {
-//			QString s = v.toString();
+			if (v.type()==QVariant::String)
+				return escapeBLOB(v.toString().utf8());
 			return escapeBLOB(v.toByteArray());
 		}
 		case Field::InvalidType:
