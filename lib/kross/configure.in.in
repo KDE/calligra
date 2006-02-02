@@ -30,7 +30,8 @@ if test "x$compile_kross" = "xyes" ; then
     RUBY_SITEDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitelibdir"@:>@)'`
     RUBY_LIBDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"libdir"@:>@)'`
     RUBY_LIBRUBYARG=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"LIBRUBYARG_SHARED"@:>@)'`
-    AC_MSG_RESULT([archdir $RUBY_ARCHDIR,
+    AC_MSG_RESULT([
+                   archdir $RUBY_ARCHDIR,
                    sitearchdir $RUBY_SITEARCHDIR,
                    sitedir $RUBY_SITEDIR,
                    libdir $RUBY_LIBDIR,
@@ -43,9 +44,16 @@ if test "x$compile_kross" = "xyes" ; then
 
     AC_MSG_CHECKING(for Ruby header)
     if test ! -r $RUBY_ARCHDIR/ruby.h; then
-        RUBY_LIBDIR=""
-        AC_MSG_RESULT([not found])
+      RUBY_LIBDIR=""
+      AC_MSG_RESULT([not found])
     else
+      AC_MSG_RESULT([found]) # header
+      AC_MSG_CHECKING(how to link against Ruby shared library)
+      if test -z "$RUBY_LIBRUBYARG" ; then
+        AC_MSG_RESULT([link argument not found])
+        RUBY_LIBDIR="" 
+      else
+        AC_MSG_RESULT([found]) # shared library link arg
         AC_MSG_CHECKING([if C++ program with ruby can be compiled])
         AC_LANG_SAVE
         AC_LANG_CPLUSPLUS
@@ -67,8 +75,9 @@ if test "x$compile_kross" = "xyes" ; then
         fi
         CXXFLAGS="$ac_save_CXXFLAGS"
         AC_LANG_RESTORE
-    fi
-  fi
-fi
+      fi # have ruby shared lib argument
+    fi # have ruby header
+  fi # have ruby
+fi # compiling kross
 
 AM_CONDITIONAL(compile_kross_ruby, test -n "$RUBY_LIBDIR")
