@@ -174,9 +174,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 
     KWFrameViewManager *fvm = 0;
     if(m_frameset->kWordDocument()) {
-        KWView *view = m_frameset->kWordDocument()->getAllViews()[0];
-        if(view)
-            fvm = view->frameViewManager();
+        QValueList<KWView *> views = m_frameset->kWordDocument()->getAllViews();
+        // Note that "views" is empty when the KWDocument is an (inactive) embedded document
+        if ( !views.isEmpty() )
+            fvm = views.first()->frameViewManager();
     }
     m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fvm);
 
