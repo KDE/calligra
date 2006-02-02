@@ -123,7 +123,7 @@ QString MySqlDriver::escapeString(const QString& str) const
 		if (ch == '\\' || ch == '\'' || ch == '"' || ch == '\n' || ch == '\r' || ch == '\t' || ch == '\b' || ch == '\0')
 			break;
 	}
-	if (i >= old_length) { //no characters to escapt
+	if (i >= old_length) { //no characters to escape
 		return QString::fromLatin1("'") + str + QString::fromLatin1("'");
 	}
 
@@ -133,12 +133,12 @@ QString MySqlDriver::escapeString(const QString& str) const
 	new_string[new_length++] = '\''; //prepend '
 	for ( i = 0; i < old_length; i++, new_length++ ) {
 		const unsigned int ch = str[i].unicode();
-		if (ch < 32) {//check for speedup
-			if (ch == '\\') {
-				new_string[new_length++] = '\\';
-				new_string[new_length] = '\\';
-			}
-			else if (ch == '\'') {
+		if (ch == '\\') {
+			new_string[new_length++] = '\\';
+			new_string[new_length] = '\\';
+		}
+		else if (ch <= '\'') {//check for speedup
+			if (ch == '\'') {
 				new_string[new_length++] = '\\';
 				new_string[new_length] = '\'';
 			}

@@ -65,16 +65,6 @@ Cursor* MySqlConnection::prepareQuery( QuerySchema& query, uint cursor_options )
 	return new MySqlCursor( this, query, cursor_options );
 }
 
-QString MySqlConnection::escapeString(const QString& str) const {
-	Q_UNUSED(str);
-	return QString();//!< @todo
-}
-
-QCString MySqlConnection::escapeString(const QCString& str) const {
-	Q_UNUSED(str);
-	return QCString();//!< @todo
-}
-
 bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
 	KexiDBDrvDbg << "MySqlConnection::drv_getDatabasesList()" << endl;
 	list.clear();
@@ -187,57 +177,5 @@ PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::Stat
 {
 	return new MySqlPreparedStatement(type, *d, tableSchema);
 }
-
-
-#if 0 //old code
-
-QString
-MySqlDB::escape(const QString &str)
-{
-//	QCString val(encode(str));
-	char* escaped = (char*) malloc(str.length() * 2 + 2);
-	mysql_real_escape_string(m_mysql, escaped, str.local8Bit(), str.length());
-
-	QString rval = escaped;
-	free(escaped);
-	return rval;
-}
-
-QString
-KexiDBTableStruct
-MySqlDB::structure(const QString& table) const
-{
-	KexiDBTableStruct dbStruct;
-	MYSQL_RES* result= mysql_list_fields(m_mysql, table.local8Bit().data(), 0);
-	KexiDBDrvDbg << "MySqlDB::structure: Get fields..." << endl;
-
-	if(result)
-	{
-		MYSQL_FIELD* field;
-
-		while((field = mysql_fetch_field(result)))
-		{
-			KexiDBField* f = new KexiDBField(field->table);
-			f->setName(field->name);
-			f->setColumnType(getInternalDataType(field->type));
-			f->setLength(field->length);
-			f->setPrecision(field->decimals);
-			f->setUnsigned(field->flags & UNSIGNED_FLAG);
-			f->setBinary(field->flags & BINARY_FLAG);
-			f->setDefaultValue(field->def);
-			f->setAutoIncrement(field->flags & AUTO_INCREMENT_FLAG);
-			f->setPrimaryKey(field->flags & PRI_KEY_FLAG);
-			f->setUniqueKey(field->flags & UNIQUE_KEY_FLAG);
-			f->setNotNull(field->flags & NOT_NULL_FLAG);
-			dbStruct.append(f);
-		}
-
-		mysql_free_result(result);
-	}
-
-	return dbStruct;
-}
-
-#endif
 
 #include "mysqlconnection.moc"

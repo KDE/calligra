@@ -46,8 +46,6 @@ class MySqlConnection : public Connection
 
 		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
-		virtual QString escapeString( const QString& str) const;
-		virtual QCString escapeString( const QCString& str) const;
 
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
 			TableSchema& tableSchema);

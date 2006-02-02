@@ -24,6 +24,7 @@
 #include <kexidb/error.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <limits.h>
 
 #define BOOL bool
 
@@ -138,13 +139,13 @@ void MySqlCursor::storeCurrentRow(RowData &data) const {
 //!	          see SQLiteCursor::storeCurrentRow()
 
 	data.resize(m_fieldCount);
-	const uint fieldsExpandedCount = m_fieldsExpanded->count(); 
+	const uint fieldsExpandedCount = m_fieldsExpanded ? m_fieldsExpanded->count() : UINT_MAX;
 	const uint realCount = QMIN(fieldsExpandedCount, m_fieldCount);
 	for( uint i=0; i<realCount; i++) {
-		Field *f = m_fieldsExpanded->at(i)->field;
-		if (!f)
+		Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
+		if (m_fieldsExpanded && !f)
 			continue;
-		if (f->type()==Field::BLOB) {
+		if (f && f->type()==Field::BLOB) {
 			QByteArray ba;
 			ba.duplicate(d->mysqlrow[i], d->mysqlres->lengths[i]);
 			data[i] = ba;
