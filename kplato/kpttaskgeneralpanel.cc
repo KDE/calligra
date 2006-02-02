@@ -190,11 +190,11 @@ void TaskGeneralPanel::estimationTypeChanged(int type) {
     if (type == 0 /*Effort*/) {
         Duration d = estimationValue();
         setEstimateScales(m_dayLength);
-        setEstimate(d);
+        //setEstimate(d);
     } else {
         Duration d = estimationValue();
         setEstimateScales(24);
-        setEstimate(d);
+        //setEstimate(d);
     }
     TaskGeneralPanelImpl::estimationTypeChanged(type);
 }
