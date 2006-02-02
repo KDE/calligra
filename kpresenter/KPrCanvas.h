@@ -375,7 +375,8 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void objectPopup( KPrObject *object, const QPoint &point );
 
 public slots:
-    void exitEditMode();
+    // use repaint = false when the KPrCanvas is destroyed to avaid a possible crash
+    void exitEditMode( bool repaint = true );
 
     void clipCut();
     void clipCopy();

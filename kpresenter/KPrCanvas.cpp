@@ -179,7 +179,7 @@ KPrCanvas::~KPrCanvas()
     // (exitEditMode) emits signals
     blockSignals(true);
 
-    exitEditMode();
+    exitEditMode( false );
 
     delete m_presMenu;
 
@@ -4304,7 +4304,7 @@ void KPrCanvas::setSwitchingMode( bool continueTimer )
         m_view->continueAutoPresTimer();
 }
 
-void KPrCanvas::exitEditMode()
+void KPrCanvas::exitEditMode( bool repaint )
 {
     if ( m_editObject )
     {
@@ -4314,14 +4314,18 @@ void KPrCanvas::exitEditMode()
             {
                 m_currentTextObjectView->clearSelection();
                 //hide cursor when we desactivate textObjectView
-                m_currentTextObjectView->drawCursor( false );
-                m_currentTextObjectView->terminate();
+                if ( repaint )
+                {
+                    m_currentTextObjectView->drawCursor( false );
+                    m_currentTextObjectView->terminate();
+                }
                 KPrTextObject *kpTextObj = m_currentTextObjectView->kpTextObject();
                 kpTextObj->setEditingTextObj( false );
                 delete m_currentTextObjectView;
                 m_currentTextObjectView = 0;
 
-                _repaint( static_cast<KPrObject*>( kpTextObj ) );
+                if ( repaint )
+                    _repaint( static_cast<KPrObject*>( kpTextObj ) );
             }
             // Title of slide may have changed
             m_view->kPresenterDoc()->updateSideBarItem( m_activePage );
