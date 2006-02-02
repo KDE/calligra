@@ -646,20 +646,16 @@ DateTime Task::calculateForward(int use) {
                     DateTime t = workStartAfter(cs->earliestStart);
                     if (t.isValid())
                          cs->earliestStart = t;
-                    m_durationForward = duration(cs->earliestStart, use, false);
                 }
+                m_durationForward = duration(cs->earliestStart, use, false);
                 //kdDebug()<<k_funcinfo<<m_name<<": "<<cs->earliestStart<<"+"<<m_durationForward.toString()<<"="<<(cs->earliestStart+m_durationForward)<<endl;
                 break;
             case Node::MustFinishOn:
-                if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationForward = duration(m_constraintEndTime, use, true);
-                }
+                m_durationForward = duration(m_constraintEndTime, use, true);
                 cs->earliestStart = m_constraintEndTime - m_durationForward;
                 break;
             case Node::FinishNotLater:
-                if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationForward = duration(cs->earliestStart, use, false);
-                }
+                m_durationForward = duration(cs->earliestStart, use, false);
                 if (cs->earliestStart + m_durationForward > m_constraintEndTime) {
                     m_durationForward = duration(m_constraintEndTime, use, true);
                     cs->earliestStart = m_constraintEndTime - m_durationForward;
@@ -667,17 +663,13 @@ DateTime Task::calculateForward(int use) {
                 break;
             case Node::MustStartOn:
                 cs->earliestStart = m_constraintStartTime;
-                if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationForward = duration(cs->earliestStart, use, false);
-                }
+                m_durationForward = duration(cs->earliestStart, use, false);
                 break;
             case Node::StartNotEarlier:
                 if (cs->earliestStart < m_constraintStartTime) {
                     cs->earliestStart = m_constraintStartTime;
                 }
-                if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationForward = duration(cs->earliestStart, use, false);
-                }
+                m_durationForward = duration(cs->earliestStart, use, false);
                 break;
             case Node::FixedInterval: {
                 cs->earliestStart = m_constraintStartTime;
@@ -788,19 +780,15 @@ DateTime Task::calculateBackward(int use) {
                     if (t.isValid()) {
                         cs->latestFinish = t;
                     }
-                    m_durationBackward = duration(cs->latestFinish, use, true);
                 }
+                m_durationBackward = duration(cs->latestFinish, use, true);
                 break;
             case Node::MustStartOn:
-                if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationBackward = duration(m_constraintStartTime, use, false);
-                }
+                m_durationBackward = duration(m_constraintStartTime, use, false);
                 cs->latestFinish = m_constraintStartTime + m_durationBackward;
                 break;
             case Node::StartNotEarlier:
-                if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationBackward = duration(cs->latestFinish, use, true);
-                }
+                m_durationBackward = duration(cs->latestFinish, use, true);
                 if (cs->latestFinish - m_durationBackward < m_constraintStartTime) {
                     m_durationBackward = duration(m_constraintStartTime, use, false);
                     cs->latestFinish = m_constraintStartTime + m_durationBackward;
@@ -808,17 +796,13 @@ DateTime Task::calculateBackward(int use) {
                 break;
             case Node::MustFinishOn:
                 cs->latestFinish = m_constraintEndTime;
-                if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationBackward = duration(cs->latestFinish, use, true);
-                }
+                m_durationBackward = duration(cs->latestFinish, use, true);
                 break;
             case Node::FinishNotLater:
                 if (cs->latestFinish > m_constraintEndTime) {
                     cs->latestFinish = m_constraintEndTime;
                 }
-                if (m_effort->type() == Effort::Type_Effort) {
-                    m_durationBackward = duration(cs->latestFinish, use, true);
-                }
+                m_durationBackward = duration(cs->latestFinish, use, true);
                 break;
             case Node::FixedInterval: {
                 cs->latestFinish = m_constraintEndTime;
@@ -917,9 +901,6 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
         cs->startTime = time;
         //kdDebug()<<k_funcinfo<<m_name<<" new startime="<<cs->startTime<<endl;
     }
-    DateTime t = workStartAfter(cs->startTime);
-    if (t.isValid())
-        cs->startTime = t;
     //kdDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
     if(type() == Node::Type_Task) {
         cs->duration = m_effort->effort(use);
@@ -928,16 +909,17 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
             // cs->startTime calculated above
             //kdDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
             if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->startTime, use, false);
+                DateTime t = workStartAfter(cs->startTime);
+                if (t.isValid())
+                    cs->startTime = t;
             }
+            cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             //kdDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime<<endl;
             break;
         case Node::ALAP:
             // cd->startTime calculated above
-            if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->latestFinish, use, true);
-            }
+            cs->duration = duration(cs->latestFinish, use, true);
             cs->endTime = cs->latestFinish;
             cs->startTime = cs->endTime - cs->duration;
             //kdDebug()<<k_funcinfo<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->latestFinish<<endl;
@@ -949,8 +931,11 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
                 cs->startTime = m_constraintStartTime;
             }
             if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->startTime, use, false);
+                DateTime t = workStartAfter(cs->startTime);
+                if (t.isValid())
+                    cs->startTime = t;
             }
+            cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             if (cs->endTime > cs->latestFinish) {
                 cs->schedulingError = true;
@@ -959,16 +944,12 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
         case Node::FinishNotLater:
             // cs->startTime calculated above
             //kdDebug()<<"FinishNotLater="<<m_constraintEndTime.toString()<<" "<<cs->startTime.toString()<<endl;
-            if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->startTime, use, false);
-            }
+            cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             if (cs->endTime > m_constraintEndTime) {
                 cs->schedulingError = true;
                 cs->endTime = m_constraintEndTime;
-                if (m_effort->type() == Effort::Type_Effort) {
-                    cs->duration = duration(cs->endTime, use, true);
-                }
+                cs->duration = duration(cs->endTime, use, true);
                 cs->startTime = cs->endTime - cs->duration;
             }
             break;
@@ -980,9 +961,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
                 cs->schedulingError = true;
             }
             cs->startTime = m_constraintStartTime;
-            if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->startTime, use, false);
-            }
+            cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             break;
         case Node::MustFinishOn:
@@ -993,9 +972,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
                 cs->schedulingError = true;
             }
             cs->endTime = m_constraintEndTime;
-            if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->endTime, use, true);
-            }
+            cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             break;
         case Node::FixedInterval: {
@@ -1125,10 +1102,6 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     if (time.isValid() && time < cs->endTime) {
         cs->endTime = time;
     }
-    DateTime t = workFinishBefore(cs->endTime);
-    //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<" t="<<t<<endl;
-    if (t.isValid())
-        cs->endTime = t;
     if (type() == Node::Type_Task) {
         cs->duration = m_effort->effort(use);
         switch (m_constraint) {
@@ -1136,8 +1109,12 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
             // cs->endTime calculated above
             //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  early="<<cs->earliestStart<<endl;
             if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->earliestStart, use, false);
+                DateTime t = workFinishBefore(cs->endTime);
+                //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<" t="<<t<<endl;
+                if (t.isValid())
+                    cs->endTime = t;
             }
+            cs->duration = duration(cs->earliestStart, use, false);
             cs->startTime = cs->earliestStart;
             DateTime e = cs->startTime + cs->duration;
             if (e > cs->endTime) {
@@ -1151,8 +1128,12 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
             // cs->endTime calculated above
             //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  late="<<cs->latestFinish<<endl;
             if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->endTime, use, true);
+                DateTime t = workFinishBefore(cs->endTime);
+                //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<" t="<<t<<endl;
+                if (t.isValid())
+                    cs->endTime = t;
             }
+            cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             //kdDebug()<<k_funcinfo<<m_name<<": lateStart="<<cs->startTime<<endl;
             break;
@@ -1160,15 +1141,17 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
             // cs->endTime calculated above
             //kdDebug()<<"StartNotEarlier="<<m_constraintStartTime.toString()<<" "<<cs->endTime.toString()<<endl;
             if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->endTime, use, true);
+                DateTime t = workFinishBefore(cs->endTime);
+                //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<" t="<<t<<endl;
+                if (t.isValid())
+                    cs->endTime = t;
             }
+            cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             if (cs->startTime < m_constraintStartTime) {
                 cs->schedulingError = true;
                 cs->startTime = m_constraintStartTime;
-                if (m_effort->type() == Effort::Type_Effort) {
-                    cs->duration = duration(cs->startTime, use, false);
-                }
+                cs->duration = duration(cs->startTime, use, false);
                 cs->endTime = cs->startTime + cs->duration;
             }
             break;
@@ -1180,8 +1163,12 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
                 cs->endTime = m_constraintEndTime;
             }
             if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->endTime, use, true);
+                DateTime t = workFinishBefore(cs->endTime);
+                //kdDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<" t="<<t<<endl;
+                if (t.isValid())
+                    cs->endTime = t;
             }
+            cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             break;
         case Node::MustStartOn:
@@ -1192,9 +1179,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
                 cs->schedulingError = true;
             }
             cs->startTime = m_constraintStartTime;
-            if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->startTime, use, false);
-            }
+            cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             break;
         case Node::MustFinishOn:
@@ -1205,9 +1190,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
                 cs->schedulingError = true;
             }
             cs->endTime = m_constraintEndTime;
-            if (m_effort->type() == Effort::Type_Effort) {
-                cs->duration = duration(cs->endTime, use, true);
-            }
+            cs->duration = duration(cs->endTime, use, true);
             cs->startTime = cs->endTime - cs->duration;
             break;
         case Node::FixedInterval: {
@@ -1307,20 +1290,28 @@ void Task::adjustSummarytask() {
 }
 
 Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool backward) {
-    if (m_currentSchedule == 0)
-        return Duration::zeroDuration;
-    //kdDebug()<<endl;
-    //kdDebug()<<"--------> calcDuration "<<(backward?"(B) ":"(F) ")<<m_name<<" time="<<time.toString()<<" effort="<<effort.toString(Duration::Format_Day)<<endl;
-    if (!m_requests || m_requests->isEmpty()) {
-        m_currentSchedule->resourceError = true;
-        return effort;
+    //kdDebug()<<"--------> calcDuration "<<(backward?"(B) ":"(F) ")<<m_name<<" time="<<time<<" effort="<<effort.toString(Duration::Format_Day)<<endl;
+    
+    // Allready checked: m_effort, m_currentSchedule and time.
+    Duration dur = effort; // use effort as default duration
+    if (m_effort->type() == Effort::Type_Effort) {
+        if (m_requests == 0 || m_requests->isEmpty()) {
+            m_currentSchedule->resourceError = true;
+            return effort;
+        }
+        dur = m_requests->duration(time, effort, backward);
+        if (dur == Duration::zeroDuration) {
+            kdWarning()<<k_funcinfo<<"zero duration: Resource not available"<<endl;
+            m_currentSchedule->resourceNotAvailable = true;
+            dur = effort; //???
+        }
+        return dur;
     }
-    if (!time.isValid()) {
-        kdError()<<k_funcinfo<<"Time is invalid"<<endl;
-        return Duration::zeroDuration;
+    if (m_effort->type() == Effort::Type_FixedDuration) {
+        //TODO: Different types of fixed duration
+        return dur; //
     }
-    Duration dur = m_requests->duration(time, effort, backward);
-    //kdDebug()<<"<--------calcDuration "<<m_name<<": "<<time.toString()<<" to "<<(time+dur).toString()<<" = "<<dur.toString(Duration::Format_Day)<<endl;
+    kdError()<<k_funcinfo<<"Unsupported effort type: "<<m_effort->type()<<endl;
     return dur;
 }
 

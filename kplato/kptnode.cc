@@ -348,34 +348,19 @@ bool Node::isDependChildOf(Node *node) {
 Duration Node::duration(const DateTime &time, int use, bool backward) {
     //kdDebug()<<k_funcinfo<<endl;
     // TODO: handle risc
-    if (m_currentSchedule == 0)
-        return Duration::zeroDuration;
-    if (!m_effort) {
-        kdError()<<k_funcinfo<<"m_effort = 0"<<endl;
+    if (!time.isValid()) {
+        kdError()<<k_funcinfo<<"Time is invalid"<<endl;
         return Duration::zeroDuration;
     }
-    Duration effort = m_effort->effort(use);
-    if (effort == Duration::zeroDuration) {
+    if (m_effort == 0) {
+        kdError()<<k_funcinfo<<"m_effort == 0"<<endl;
         return Duration::zeroDuration;
     }
-    Duration dur = effort; // use effort as default duration
-    if (m_effort->type() == Effort::Type_Effort) {
-        dur = calcDuration(time, effort, backward);
-        if (dur == Duration::zeroDuration) {
-            kdWarning()<<k_funcinfo<<"zero duration: Resource not available"<<endl;
-            m_currentSchedule->resourceNotAvailable = true;
-            dur = effort; //???
-        }
-        return dur;
-    if (m_effort->type() == Effort::Type_FixedDuration) {
-        calcDuration(time, effort, backward);
-        return dur; //
+    if (m_currentSchedule == 0) {
+        return Duration::zeroDuration;
+        kdError()<<k_funcinfo<<"No current schedule"<<endl;
     }
-    // error
-    kdError()<<k_funcinfo<<"Unsupported effort type: "<<m_effort->type()<<endl;
-    }
-
-    return dur;
+    return calcDuration(time, m_effort->effort(use), backward);
 }
 
 void Node::makeAppointments() {
