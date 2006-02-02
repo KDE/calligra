@@ -321,11 +321,17 @@ void Selection::update()
 void Selection::update(const QPoint& point)
 {
   uint count = cells().count();
+
   if (cells().isEmpty())
   {
     add(point);
     d->activeSubRegionLength += cells().count() - count;
     return;
+  }
+  if (d->activeElement == cells().end())
+  {
+    // we're not empty, so this will not become again end()
+    d->activeElement--;
   }
 
   Sheet* sheet = (*d->activeElement)->sheet();
@@ -450,6 +456,11 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
     initialize(point, sheet);
     return;
   }
+  if (d->activeElement == cells().end())
+  {
+    // we're not empty, so this will not become again end()
+    d->activeElement--;
+  }
 
   if (!sheet)
   {
@@ -476,11 +487,6 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   uint count = cells().count();
   if (d->multipleSelection)
   {
-    if (d->activeElement == cells().end())
-    {
-      // we're not empty, so this will not become again end()
-      d->activeElement--;
-    }
     d->activeElement = insert(++d->activeElement, point, sheet, false);
   }
   else
@@ -510,6 +516,11 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   {
     initialize(range, sheet);
     return;
+  }
+  if (d->activeElement == cells().end())
+  {
+    // we're not empty, so this will not become again end()
+    d->activeElement--;
   }
 
   if (!sheet)
@@ -548,11 +559,6 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   Element* element;
   if (d->multipleSelection)
   {
-    if (d->activeElement == cells().end())
-    {
-      // we're not empty, so this will not become again end()
-      d->activeElement--;
-    }
     d->activeElement = insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)).normalize(), sheet, false);
     element = *d->activeElement;
   }
