@@ -114,7 +114,7 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
 {
     if (!util_isPointValid(point))
         return;
-        
+
   if (!sheet)
   {
     if (d->sheet)
@@ -179,7 +179,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
 {
     if (!util_isRectValid(range) || ( range == QRect(0,0,1,1) ))
         return;
-        
+
   if (!sheet)
   {
     if (d->sheet)
@@ -212,7 +212,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
   }
 
   d->anchor = topLeft;
-  d->cursor = topLeft;
+  d->cursor = bottomRight;
   d->marker = bottomRight;
 
   fixSubRegionDimension(); // TODO remove this sanity check
@@ -222,8 +222,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
     // if the range was inserted
     clearSubRegion();
   }
-  
-  
+
   Element* element = *(cells().begin() += d->activeSubRegionStart);
   // we end up with one element in the subregion
   d->activeSubRegionLength = 1;
@@ -253,7 +252,7 @@ void Selection::initialize(const Region& region, Sheet* sheet)
 {
     if (!region.isValid())
         return;
-        
+
   if (!sheet)
   {
     if (d->sheet)
@@ -352,21 +351,22 @@ void Selection::update(const QPoint& point)
 
   QRect area1 = (*d->activeElement)->rect().normalize();
   QRect newRange = extendToMergedAreas(QRect(d->anchor, topLeft));
-  
-  Element* oldElement=(*d->activeElement);
+
+  Element* oldElement = *d->activeElement;
+  // returns iterator to the next element or end
   Iterator it = cells().remove(d->activeElement);
   delete oldElement;
+  // returns iterator to the new element (before 'it') or 'it'
   d->activeElement = insert(it, newRange, sheet, d->multipleSelection);
   d->activeSubRegionLength += cells().count() - count;
-  
-  //###
-  //I'm not entirely sure about this.  It seems that sometimes the call to insert() above 
-  //can just return the iterator which has been passed in.  This may be cells.end(), if the old active elemement 
-  //was the last one in the list, so attempts to dereference it will fail.
+
+  // The call to insert() above can just return the iterator which has been
+  // passed in. This may be cells.end(), if the old active element was the
+  // iterator to the list's end (!= last element). So attempts to dereference
+  // it will fail.
   if (d->activeElement == cells().end())
   {
     d->activeElement--;
-    return;
   }
 
   QRect area2 = (*d->activeElement)->rect().normalize();
@@ -444,7 +444,13 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
 {
     if (!util_isPointValid(point))
         return;
-        
+
+  if (isEmpty())
+  {
+    initialize(point, sheet);
+    return;
+  }
+
   if (!sheet)
   {
     if (d->sheet)
@@ -470,6 +476,11 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
   uint count = cells().count();
   if (d->multipleSelection)
   {
+    if (d->activeElement == cells().end())
+    {
+      // we're not empty, so this will not become again end()
+      d->activeElement--;
+    }
     d->activeElement = insert(++d->activeElement, point, sheet, false);
   }
   else
@@ -494,7 +505,13 @@ void Selection::extend(const QRect& range, Sheet* sheet)
     //See comment in Selection::initialize(const QRect& range, Sheet* sheet)
     if (!util_isRectValid(range) || (range == QRect(0,0,1,1)))
         return;
-        
+
+  if (isEmpty())
+  {
+    initialize(range, sheet);
+    return;
+  }
+
   if (!sheet)
   {
     if (d->sheet)
@@ -531,6 +548,11 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   Element* element;
   if (d->multipleSelection)
   {
+    if (d->activeElement == cells().end())
+    {
+      // we're not empty, so this will not become again end()
+      d->activeElement--;
+    }
     d->activeElement = insert(++d->activeElement, extendToMergedAreas(QRect(topLeft, bottomRight)).normalize(), sheet, false);
     element = *d->activeElement;
   }
@@ -559,7 +581,7 @@ void Selection::extend(const Region& region)
 {
     if (!region.isValid())
         return;
-        
+
   uint count = cells().count();
   ConstIterator end(region.constEnd());
   for (ConstIterator it = region.constBegin(); it != end; ++it)
@@ -708,6 +730,7 @@ void Selection::clear()
   d->activeSubRegionStart = 0;
   d->activeSubRegionLength = 0;
   Region::clear();
+  d->activeElement = cells().begin();
 }
 
 void Selection::clearSubRegion()
@@ -730,6 +753,7 @@ void Selection::clearSubRegion()
     it = cells().remove(it);
   }
   d->activeSubRegionLength = 0;
+  d->activeElement = it;
 /*  kdDebug() << "ENDE" << endl;*/
 }
 
@@ -756,6 +780,7 @@ void Selection::setActiveSubRegion(uint start, uint length)
   d->activeSubRegionStart = start;
   d->activeSubRegionLength = length;
   fixSubRegionDimension();
+  d->activeElement = cells().begin() += d->activeSubRegionStart;
 }
 
 QString Selection::activeSubRegionName() const

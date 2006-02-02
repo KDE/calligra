@@ -277,8 +277,24 @@ protected:
    */
   QValueList<Element*>& cells() const;
 
-  Iterator insert(Iterator, const QPoint&, Sheet*, bool multi = true);
-  Iterator insert(Iterator, const QRect&, Sheet*, bool multi = true);
+  /**
+   * @param iterator the iterator to the element in whose front the new point
+   * is inserted
+   * @param point the location of the point to be inserted
+   * @param multi @c true to allow multiple occurences of a point
+   * @return an iterator to the added point or @p iterator, if @p point is not
+   * valid or the point is already in the list
+   */
+  Iterator insert(Iterator iterator, const QPoint& point, Sheet*, bool multi = true);
+  /**
+   * @param iterator the iterator to the element in whose front the new range
+   * is inserted
+   * @param range the location of the range to be inserted
+   * @param multi @c true to allow multiple occurences of a range
+   * @return an iterator to the added range or @p iterator, if @p range is not
+   * valid or the range is already in the list
+   */
+  Iterator insert(Iterator iterator, const QRect& range, Sheet*, bool multi = true);
 
   virtual Point* createPoint(const QPoint&) const;
   virtual Point* createPoint(const QString&) const;

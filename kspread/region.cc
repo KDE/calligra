@@ -259,7 +259,7 @@ Region::Element* Region::add(const QPoint& point, Sheet* sheet)
 
 Region::Element* Region::add(const QRect& range, Sheet* sheet)
 {
-  if (range.width() == 0 || range.height() == 0)
+  if (range.normalize().width() == 0 || range.normalize().height() == 0)
   {
     return 0;
   }
@@ -289,6 +289,7 @@ void Region::sub(const QPoint& point)
     Element *element = *it;
     if (element->rect() == QRect(point,point))
     {
+      delete element;
       d->cells.remove(element);
       break;
     }
@@ -304,6 +305,7 @@ void Region::sub(const QRect& range)
     Element *element = *it;
     if (element->rect().normalize() == range.normalize())
     {
+      delete element;
       d->cells.remove(element);
       break;
     }
@@ -353,25 +355,37 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     int top = fullRange.top();
     int width = fullRange.width();
     int height = y - top;
-    insert(it, QRect(left, top, width, height), sheet);
+    if (height > 0)
+    {
+      insert(it, QRect(left, top, width, height), sheet);
+    }
     // left range
     left = fullRange.left();
     top = y;
     width = QMAX(0, x - left);
     height = 1;
-    insert(it, QRect(left, top, width, height), sheet);
+    if (width > 0)
+    {
+      insert(it, QRect(left, top, width, height), sheet);
+    }
     // right range
     left = QMIN(x+1, fullRange.right());
     top = y;
     width = QMAX(0, fullRange.right() - x);
     height = 1;
-    insert(it, QRect(left, top, width, height), sheet);
+    if (width > 0)
+    {
+      insert(it, QRect(left, top, width, height), sheet);
+    }
     // bottom range
     left = fullRange.left();
     top = y+1;
     width = fullRange.width();
     height = QMAX(0, fullRange.bottom() - y);
-    insert(it, QRect(left, top, width, height), sheet);
+    if (height > 0)
+    {
+      insert(it, QRect(left, top, width, height), sheet);
+    }
     return *it;
   }
 
@@ -437,10 +451,6 @@ Region::Iterator Region::insert(Region::Iterator pos, const QPoint& point, Sheet
 
 Region::Iterator Region::insert(Region::Iterator pos, const QRect& range, Sheet* sheet, bool multi)
 {
-  if (range.width() == 0 || range.height() == 0)
-  {
-    return pos;
-  }
   if (range.size() == QSize(1,1))
   {
     return insert(pos, range.topLeft(), sheet);

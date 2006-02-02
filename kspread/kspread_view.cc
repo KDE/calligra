@@ -3798,6 +3798,7 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
   QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
 
+  d->selection->clear();
   d->selection->setSheet( d->activeSheet );
   d->selection->initialize(QRect(newMarker, newAnchor));
 
