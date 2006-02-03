@@ -36,10 +36,17 @@ KoFileDialog::KoFileDialog(const QString& startDir, const QString& filter,
 
 void KoFileDialog::slotChangedfilter( int index )
 {
-    if ( index == KoDocument::SaveAsDirectoryStore ){
-        ops->setMode(KFile::Directory);
-    } else {
-        ops->setMode(KFile::File);
+    // Switch to "directory selection" mode for SaveAsDirectoryStore,
+    // switch back to "file selection" mode otherwise.
+    KFile::Mode newMode = KFile::File;
+    if ( index >= 1 && index <= (int)m_specialFormats.count()
+         && m_specialFormats[index-1] == KoDocument::SaveAsDirectoryStore ) {
+        newMode = KFile::Directory;
+    }
+    if ( newMode != mode() )
+    {
+        ops->setMode( newMode );
+        updateAutoSelectExtension();
     }
 }
 
