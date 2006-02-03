@@ -92,3 +92,6 @@ GenericName[xx]=xxReport Generatorxx
 GenericName[zh_CN]=报告生成器
 GenericName[zh_TW]=報告產生器
 Icon=kugar
+# Not ready for public consumption, so hide it from the menus and from koshell
+NoDisplay=true
+

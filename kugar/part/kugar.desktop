@@ -65,3 +65,5 @@ GenericName[zh_TW]=報告產生器
 Terminal=false
 X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed
 Categories=Qt;KDE;Office;X-KDE-More;
+# Not ready for public consumption, so hide it from the menus
+NoDisplay=true
