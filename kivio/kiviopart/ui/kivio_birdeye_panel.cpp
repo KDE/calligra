@@ -37,7 +37,7 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
 
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*)), SLOT(slotUpdateView(KivioPage*)) );
   connect( m_pView, SIGNAL(zoomChanged(int)), SLOT(canvasZoomChanged(int)));
-  connect( m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateVisibleArea()));
+  connect( m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateView()));
 
   m_zoomOutButton->setIconSet(SmallIconSet("viewmag-", 16));
   m_zoomInButton->setIconSet(SmallIconSet("viewmag+", 16));
@@ -94,7 +94,7 @@ bool KivioBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
   }
 
   if (o == canvas && ev->type() == QEvent::Paint) {
-    updateVisibleArea();
+    updateView();
     return true;
   }
 
@@ -157,40 +157,23 @@ void KivioBirdEyePanel::updateView()
 
   kpainter.painter()->translate(px0, py0);
   m_pDoc->paintContent(kpainter, rect, false, m_pView->activePage(), p0, m_zoomHandler, false, false);
-  kpainter.stop();
-
-  updateVisibleArea();
-}
-
-void KivioBirdEyePanel::updateVisibleArea()
-{
-  if(!m_pView->activePage()) {
-    return;
-  }
-
-  bitBlt(canvas,0,0,m_buffer);
 
   KoRect vr = m_pCanvas->visibleArea();
-  QSize s1 = canvas->size();
-  KoPageLayout pl = m_pView->activePage()->paperLayout();
-  int pw = m_zoomHandler->zoomItX(pl.ptWidth);
-  int ph = m_zoomHandler->zoomItY(pl.ptHeight);
-  int px0 = (s1.width()-pw)/2;
-  int py0 = (s1.height()-ph)/2;
 
-  int x = m_zoomHandler->zoomItX(vr.x()) + px0;
-  int y = m_zoomHandler->zoomItY(vr.y()) + py0;
+  int x = m_zoomHandler->zoomItX(vr.x());
+  int y = m_zoomHandler->zoomItY(vr.y());
   int w = m_zoomHandler->zoomItX(vr.width());
   int h = m_zoomHandler->zoomItX(vr.height());
 
-  QPainter painter(canvas,canvas);
-  painter.setPen(red);
-  painter.drawRect(x, y, w, h);
-  painter.setPen(red.light());
-  painter.drawRect(x-1, y-1, w+2, h+2);
-  painter.end();
+  kpainter.setFGColor(red);
+  kpainter.drawRect(x, y, w, h);
+  kpainter.setFGColor(red.light());
+  kpainter.drawRect(x-1, y-1, w+2, h+2);
+  kpainter.stop();
 
-  varea.setRect(x,y,w,h);
+  varea.setRect(x + px0,y + py0,w,h);
+
+  bitBlt(canvas,0,0,m_buffer);
 }
 
 void KivioBirdEyePanel::handleMouseMove(QPoint p)

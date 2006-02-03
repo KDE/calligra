@@ -43,12 +43,11 @@ public slots:
   void zoomPlus();
 
 protected slots:
-  void updateVisibleArea();
+  void updateView();
   void canvasZoomChanged(int zoom);
   void slotUpdateView(KivioPage*);
 
 protected:
-  void updateView();
   void handleMouseMove(QPoint);
   void handleMouseMoveAction(QPoint);
   void handleMousePress(QPoint);
