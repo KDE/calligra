@@ -51,3 +51,6 @@ GenericName[uk]=Текстові документи
 GenericName[xx]=xxText Documentsxx
 GenericName[zh_CN]=文本文档
 Icon=writeup
+
+###### Don't appear in koshell yet
+NoDisplay=true

@@ -132,8 +132,7 @@ QValueList<KoDocumentEntry> KoDocumentEntry::query( bool _onlyDocEmb, const QStr
     //kdDebug(30003) << "   desktopEntryPath=" << (*it)->desktopEntryPath()
     //               << "   library=" << (*it)->library() << endl;
 
-    // Workaround for "exist" bug in kdelibs < 3.2 (fixed in kservice.cpp:1.153)
-    if ( ( *it )->library().isEmpty() )
+    if ( (*it)->noDisplay() )
         continue;
     // Maybe this could be done as a trader constraint too.
     if ( (!_onlyDocEmb) || ((*it)->property("X-KDE-NOTKoDocumentEmbeddable").toString()!="1") )
