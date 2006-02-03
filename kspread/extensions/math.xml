@@ -779,7 +779,7 @@
       <Help>
 	<Text>The LOG2() function returns the base-2 logarithm of x.</Text>
 	<Syntax>LOG2(x)</Syntax>
-	<Example>LOG2(0.8) equals -0,32192809</Example>
+	<Example>LOG2(0.8) equals -0.32192809</Example>
 	<Example>LOG2(0) equals -inf.</Example>
 	<Related>LN</Related>
   <Related>LOGN</Related>

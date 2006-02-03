@@ -122,7 +122,7 @@
         <Type>Integer</Type>
       </Parameter>
       <Help>
-        <Text>If a range is given, returns value stored in a given row/column. If one cell is given, which contains an array, then one element of the array is retrned..</Text>
+        <Text>If a range is given, returns value stored in a given row/column. If one cell is given, which contains an array, then one element of the array is returned.</Text>
 	<Syntax>INDEX(cell, row, column)</Syntax>
 	<Syntax>INDEX(range, row, column)</Syntax>
 	<Example>INDEX(A1:C3;2;2), returns contents of B2</Example>
