@@ -1,7 +1,0 @@
-usr/bin/koshell
-usr/lib/koshell.*
-usr/share/applnk/Office/koshell.desktop
-usr/share/apps/koshell/koshellui.rc
-usr/share/doc/kde/HTML/en/koshell/*.bz2
-usr/share/doc/kde/HTML/en/koshell/*.docbook
-usr/share/doc/kde/HTML/en/koshell/common

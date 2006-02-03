@@ -1,2 +1,0 @@
-application/x-kpresenter; kpresenter %s;test=test "$DISPLAY" != ""; priority=7
-application/mspowerpoint; kpresenter %s;test=test "$DISPLAY" != ""; priority=2
