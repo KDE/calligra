@@ -708,7 +708,7 @@ bool KoTextFormatterCore::format()
             if ( i < len - 2 || c->c != ' ' )
                 lastBreak = i;
 
-        } else {
+        } else if ( i < len - 1 ) { // ignore height of trailing space
             // Non-breakable character
             //tminw += ww;
 #ifdef DEBUG_FORMATTER_VERT
