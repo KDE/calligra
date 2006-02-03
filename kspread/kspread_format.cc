@@ -381,7 +381,7 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
     }
     if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )/*|| force*/ )
     {
-        styleFormatName =  Style::saveOasisStyleNumeric( mainStyle, m_pStyle->formatType(), m_pStyle->prefix( ),  m_pStyle->postfix( ),m_pStyle->precision() );
+        styleFormatName =  Style::saveOasisStyleNumeric( currentCellStyle, mainStyle, m_pStyle->formatType(), m_pStyle->prefix( ),  m_pStyle->postfix( ),m_pStyle->precision() );
     }
     return styleFormatName;
 
@@ -408,7 +408,7 @@ void Format::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &
     currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize(),tt );
 }
 
-QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle, int _col, int _row, bool force, bool copy )
+QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle, int _col, int _row, bool force, bool /*copy*/ )
 {
 #if 0
     if ( m_pStyle->type() == Style::BUILTIN || m_pStyle->type() == Style::CUSTOM )
@@ -616,7 +616,7 @@ QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &m
 
     if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )|| force )
     {
-        styleFormatName =  Style::saveOasisStyleNumeric( mainStyle, getFormatType( _col, _row ), _prefix,  _postfix,_precision );
+        styleFormatName =  Style::saveOasisStyleNumeric( currentCellStyle, mainStyle, getFormatType( _col, _row ), _prefix,  _postfix,_precision );
     }
 
 #if 0

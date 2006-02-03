@@ -255,6 +255,30 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
             m_alignX = Format::Undefined;
         m_featuresSet |= SAlignX;
     }
+    if ( styleStack.hasAttributeNS( KoXmlNS::office, "value-type" ) )
+    {
+      m_formatType = Generic_format;
+
+      str = styleStack.attributeNS( KoXmlNS::office, "value-type" );
+      kdDebug()<<"str :"<<str<<endl<<endl;
+      if ( str == "float" ) // TODO
+        m_formatType = Number_format;
+      else if ( str == "time" ) // TODO
+        m_formatType = Time_format;
+      else if ( str == "date" ) // TODO
+        m_formatType = TextDate_format;
+      else if ( str == "percentage" )
+        m_formatType = Percentage_format;
+      else if ( str == "currency" )
+        m_formatType = Money_format;
+      else if ( str == "boolean" ) // TODO
+        ;
+      else if ( str == "string" ) //TODO
+        m_formatType = Text_format;
+
+      if ( m_formatType != Generic_format )
+        m_featuresSet |= SFormatType;
+    }
 
     styleStack.setTypeProperties( "table-cell" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "vertical-align" ) )
@@ -637,29 +661,37 @@ FormatType Style::formatType( const QString &_format )
         return Number_format;
 }
 
-QString Style::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix,int _precision )
+QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix, int _precision )
 {
+  kdDebug() << k_funcinfo << endl;
     QString styleName;
+    QString valueType;
     switch( _style )
     {
     case Number_format:
         styleName = saveOasisStyleNumericNumber( mainStyles,_style, _precision );
+        valueType = "float";
         break;
     case Text_format:
         styleName = saveOasisStyleNumericText( mainStyles,_style,_precision );
+        valueType = "string";
         break;
     case Money_format:
         styleName = saveOasisStyleNumericMoney( mainStyles,_style,_precision);
+        valueType = "currency";
         break;
     case Percentage_format:
         styleName = saveOasisStyleNumericPercentage( mainStyles,_style,_precision );
+        valueType = "percentage";
         break;
     case Scientific_format:
         styleName = saveOasisStyleNumericScientific( mainStyles,_style, _prefix, _postfix,_precision );
+        valueType = "float";
         break;
     case ShortDate_format:
     case TextDate_format:
         styleName = saveOasisStyleNumericDate( mainStyles,_style );
+        valueType = "date";
         break;
     case Time_format:
     case SecondeTime_format:
@@ -672,6 +704,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style
     case Time_format7:
     case Time_format8:
         styleName = saveOasisStyleNumericTime( mainStyles,_style );
+        valueType = "time";
         break;
     case fraction_half:
     case fraction_quarter:
@@ -683,6 +716,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style
     case fraction_two_digits:
     case fraction_three_digits:
         styleName = saveOasisStyleNumericFraction( mainStyles,_style, _prefix, _postfix );
+        valueType = "float";
         break;
     case date_format1:
     case date_format2:
@@ -711,10 +745,20 @@ QString Style::saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style
     case date_format25:
     case date_format26:
         styleName = saveOasisStyleNumericDate( mainStyles,_style );
+        valueType = "date";
         break;
     case Custom_format:
         styleName = saveOasisStyleNumericCustom( mainStyles,_style );
         break;
+    case Generic_format:
+    case No_format:
+      break;
+    }
+    if ( !valueType.isEmpty() )
+    {
+      kdDebug() << "addProperty ParagraphType" << endl;
+      KoGenStyle::PropertyType pt = KoGenStyle::ParagraphType;
+      style.addProperty( "office:value-type", valueType, pt );
     }
     return styleName;
 }
@@ -998,7 +1042,7 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 {
     if ( featureSet( SAlignX ) && alignX() != Format::Undefined )
     {
-        QString value ="start";
+        QString value;
         switch( alignX() )
         {
         case Format::Center:
@@ -1010,8 +1054,11 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
         case Format::Left:
             value = "start";
             break;
+        case Format::Undefined:
+            break;
         }
-        style.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
+        if ( !value.isEmpty() )
+            style.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
     }
 
     if ( featureSet( SAlignY ) )
@@ -1192,7 +1239,7 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     if ( featureSet( SPrecision ) )
         _precision =  m_precision;
 
-    return saveOasisStyleNumeric( mainStyles, m_formatType, _prefix, _postfix, _precision );
+    return saveOasisStyleNumeric( style, mainStyles, m_formatType, _prefix, _postfix, _precision );
 }
 
 QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )

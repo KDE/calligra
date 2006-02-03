@@ -105,7 +105,7 @@ class Style
 
     static FormatType formatType( const QString &_format );
 
-    static QString saveOasisStyleNumeric( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix,  int _precision);
+    static QString saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix,  int _precision);
     static QString saveOasisStyleNumericDate( KoGenStyles &mainStyles, FormatType _style );
     static QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString _suffix );
     static QString saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _style );
