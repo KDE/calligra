@@ -95,9 +95,7 @@ KoShellWindow::KoShellWindow()
   for( ; it != lstComponents.end(); ++it )
   {
       KService* service = (*it).service();
-      if ( !service->genericName().isEmpty()
-        && service->genericName() != "Report Generator"
-        && service->genericName() != "Report Template" ) //skip the unavailable part and kugar
+      if ( !service->genericName().isEmpty() )
       {
           id = m_pSidebar->insertItem(m_grpFile, service->icon(), service->genericName());
       }
