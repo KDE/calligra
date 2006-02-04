@@ -70,23 +70,6 @@
                             <string></string>
                         </property>
                     </widget>
-                    <spacer>
-                        <property name="name">
-                            <cstring>m_listSpacer</cstring>
-                        </property>
-                        <property name="orientation">
-                            <enum>Vertical</enum>
-                        </property>
-                        <property name="sizeType">
-                            <enum>Expanding</enum>
-                        </property>
-                        <property name="sizeHint">
-                            <size>
-                                <width>20</width>
-                                <height>1</height>
-                            </size>
-                        </property>
-                    </spacer>
                 </vbox>
             </widget>
             <widget class="QLayoutWidget">
