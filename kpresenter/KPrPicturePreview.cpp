@@ -162,7 +162,7 @@ void KPrPicturePreview::slotNormalPicture()
     if ( mirrorType != PM_NORMAL )
     {
         mirrorType = PM_NORMAL;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -172,7 +172,7 @@ void KPrPicturePreview::slotHorizontalMirrorPicture()
     if ( mirrorType != PM_HORIZONTAL )
     {
         mirrorType = PM_HORIZONTAL;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -182,7 +182,7 @@ void KPrPicturePreview::slotVerticalMirrorPicture()
     if ( mirrorType != PM_VERTICAL )
     {
         mirrorType = PM_VERTICAL;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -192,7 +192,7 @@ void KPrPicturePreview::slotHorizontalAndVerticalMirrorPicture()
     if ( mirrorType != PM_HORIZONTALANDVERTICAL )
     {
         mirrorType = PM_HORIZONTALANDVERTICAL;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -202,7 +202,7 @@ void KPrPicturePreview::slotPictureDepth0()
     if ( depth !=0 )
     {
         depth = 0;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -212,7 +212,7 @@ void KPrPicturePreview::slotPictureDepth1()
     if ( depth != 1 )
     {
         depth = 1;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -222,7 +222,7 @@ void KPrPicturePreview::slotPictureDepth8()
     if ( depth != 8)
     {
         depth = 8;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -232,7 +232,7 @@ void KPrPicturePreview::slotPictureDepth16()
     if ( depth != 16 )
     {
         depth = 16;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -242,7 +242,7 @@ void KPrPicturePreview::slotPictureDepth32()
     if ( depth !=32 )
     {
         depth = 32;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -252,7 +252,7 @@ void KPrPicturePreview::slotSwapRGBPicture( bool _on )
     if ( swapRGB != _on )
     {
         swapRGB = _on;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -262,7 +262,7 @@ void KPrPicturePreview::slotGrayscalPicture( bool _on )
     if ( grayscal != _on )
     {
         grayscal = _on;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -272,7 +272,7 @@ void KPrPicturePreview::slotBrightValue( int _value )
     if ( bright != _value )
     {
         bright = _value;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -282,7 +282,7 @@ void KPrPicturePreview::setDepth( int _depth)
     if ( _depth != depth )
     {
         depth = _depth;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -292,7 +292,7 @@ void KPrPicturePreview::setMirrorType (PictureMirrorType _t)
     if ( mirrorType != _t )
     {
         mirrorType = _t;
-        repaint();
+        repaint( false );
     }
 }
 
@@ -300,7 +300,7 @@ void KPrPicturePreview::setMirrorType (PictureMirrorType _t)
 void KPrPicturePreview::setPicturePixmap(const QPixmap &_pixmap)
 {
     origPixmap = _pixmap;
-    repaint();
+    repaint( false );
 }
 
 
