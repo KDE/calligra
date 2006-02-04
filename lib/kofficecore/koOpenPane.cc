@@ -98,6 +98,12 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   initRecentDocs();
   initTemplates(templateType);
 
+  KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(m_sectionList->selectedItem());
+
+  if(selectedItem) {
+    m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
+  }
+
   QValueList<int> sizes;
   sizes << 20 << width() - 20;
   m_splitter->setSizes(sizes);
@@ -264,7 +270,6 @@ void KoOpenPane::selectionChanged(QListViewItem* item)
 
   m_headerLabel->setText(section->text(0));
   m_widgetStack->raiseWidget(section->widgetIndex());
-  m_widgetStack->widget(section->widgetIndex())->setFocus();
 }
 
 void KoOpenPane::saveSplitterSizes(KoDetailsPaneBase* /*sender*/, const QValueList<int>& sizes)
