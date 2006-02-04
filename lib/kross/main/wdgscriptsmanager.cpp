@@ -88,12 +88,7 @@ class ToolTip : public QToolTip
 {
     public:
         ToolTip(KListView* parent) : QToolTip(parent->viewport()), m_parent(parent) {}
-        virtual ~ToolTip () {
-            //FIXME shouldn't this be remove(m_parent->viewport()) ???
-            //Needs more testing once beta1 is out cause the right now used
-            //solution works well (w/o crash) since years.
-            remove(m_parent);
-        }
+        virtual ~ToolTip () { remove(m_parent->viewport()); }
     protected:
         virtual void maybeTip(const QPoint& p) {
             ListItem* item = dynamic_cast<ListItem*>( m_parent->itemAt(p) );
@@ -329,7 +324,7 @@ void WdgScriptsManager::slotGetNewScript()
     const QString type = QString("%1/script").arg(appname);
 
     if(! d->newstuff) {
-        d->newstuff = new ScriptNewStuff(d->m_scripguiclient, type, this);
+        d->newstuff = new ScriptNewStuff(d->m_scripguiclient, type);
         connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotResourceInstalled()));
     }
 

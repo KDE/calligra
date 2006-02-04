@@ -121,7 +121,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         if(icon.isNull())
             icon = KMimeType::iconForURL( KURL(file) );
         if(description.isEmpty())
-            description = file;
+            description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);
         else
             description += QString("<br>%1").arg(file);
     }
