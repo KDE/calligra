@@ -11,7 +11,7 @@ Toolbars...</guimenuitem></menuchoice> or by clicking with the &RMB; on a
 toolbar and choosing <guimenuitem>Configure Toolbars...</guimenuitem>.</para>
 
 <sect2 id="commands-toolbars-file">
-<title>The <guilabel>File</guilabel> toolbar</title>
+<title>The <guilabel>File</guilabel> Toolbar</title>
 
 <para>
 <screenshot>
@@ -66,7 +66,7 @@ linkend="commands-menus-edit"><guimenu>Edit</guimenu> menu</link>.</para>
 </sect2>
 
 <sect2 id="commands-toolbars-navigation">
-<title>The <guilabel>Navigation</guilabel> toolbar</title>
+<title>The <guilabel>Navigation</guilabel> Toolbar</title>
 
 <para>
 <screenshot>
@@ -132,7 +132,8 @@ fileref="tool-line.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> Line</term>
 <listitem><para>
 This tool is used to draw lines. Click the &LMB; to indicate the first
-endpoint, then drag to the second endpoint and release the button.
+endpoint, keep the button pressed, drag to the second endpoint and release the
+button.
 </para><para>
 Use &Shift; while holding the mouse button to restrict drawing to only
 horizontal or vertical lines. You can press &Alt; while still keeping the &LMB;
@@ -148,8 +149,9 @@ one corner of the rectangle, drag to the opposite corner, and release the
 button.
 </para><para>
 If you hold &Shift; while drawing, a square will be drawn instead of a
-rectangle. Holding &Ctrl; will change the way the rectangle is constructed:
-instead of two corners, the initial mouse position indicates the center of the
+rectangle. Holding &Ctrl; will change the way the rectangle is constructed.
+Normally, the first mouse click indicates one corner and the second click the
+opposite. With &Ctrl;, the initial mouse position indicates the center of the
 rectangle, and the final mouse position indicates a corner.
 You can press &Alt; while still keeping the &LMB; down to move the rectangle to
 a different location.
@@ -284,7 +286,7 @@ the gradient will be used to fill up the rest of the area at that side.
 fileref="tool-text.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> Text</term>
 <listitem><para>
-With this tool you can add simple text to your drawing. Click the &LMB; on the
+With this tool you can add simple text to your image. Click the &LMB; on the
 location at which you want have the text. Then enter the desired text in the
 dialog window that appears. The text will be horizontally centered on, and
 the top of the text will be at the same height as, the chosen location.
@@ -381,7 +383,7 @@ format="PNG"></imagedata> </imageobject></inlinemediaobject> Select
 outline</term>
 <listitem><para>
 You can use this tool to select custom outlined areas. Click the &LMB; and drag
-with your mouse, like when painting with the Freehand tool, to define the
+with your mouse, like when painting with the Brush tool, to define the
 outline. When you release the mouse button, the outline will be finished with a
 straight line between the current position and the start position.
 </para></listitem></varlistentry>
@@ -583,7 +585,7 @@ paint with a normal brush, an airbrush, or a filter.</para>
 <title>Pressure variation</title>
 
 <para>This setting allows you to change &krita;'s behaviour when you use a
-tablet to paint with, and change the pressure you put on the tablet: you can
+tablet to paint with. When you change the pressure on the tablet, you can
 choose between changing the line width (<guilabel>size</guilabel>), the
 opacity, and the darkness.</para>
 
