@@ -36,6 +36,7 @@ After the feature freeze
     - Connect GUI to KChartParams in the wizard				  done
     - Use it when drawing						  done
     - Store the values in the file					  ----
+    - Maybe call the analysis code and do sensible defaults		  ----
   + Grid setting for both directions				      1 ----
 
 * Data editor
