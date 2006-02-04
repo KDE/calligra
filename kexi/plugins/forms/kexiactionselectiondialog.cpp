@@ -80,6 +80,7 @@ public:
 		addColumn("");
 		header()->hide();
 
+		QPixmap pm( SmallIcon("script") );
 		KexiPart::Info* info = Kexi::partManager().infoForMimeType("kexi/script");
 		KexiProject* project = dialog->mainWin()->project();
 		if(info && project) {
@@ -89,6 +90,7 @@ public:
 				for (KexiPart::ItemDictIterator it( *itemdict ); it.current(); ++it) {
 					QString name = QString("script:%1").arg(it.current()->name());
 					item = new ActionSelectorDialogListItem(name, this, item, it.current()->caption());
+					item->setPixmap(0, pm);
 					if(!selectedItem() && dialog->currentActionName() == name)
 						setSelected(item, true);
 				}
