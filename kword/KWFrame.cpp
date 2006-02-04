@@ -642,6 +642,12 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     if ( !protect.isEmpty() )
         frameStyle.addProperty( "style:protect", protect );
 
+    if ( !frameSet()->isFloating() )
+    { // non-inline frame, anchored to page
+        frameStyle.addProperty( "style:horizontal-rel", "page" );
+        frameStyle.addProperty( "style:vertical-rel", "page" );
+    }
+
     saveBorderProperties( frameStyle );
     saveMarginProperties( frameStyle );
 
