@@ -36,9 +36,9 @@ action="simul">&Ctrl;<keycap>N</keycap></keycombo></shortcut>
 <guimenuitem>New</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Creates a new document.</action> This displays the
-new document window standard across &koffice;, in which you can choose to start
-with a blank document of a certain type, or to open a recently opened
-document.</para></listitem>
+<guilabel>New document</guilabel> dialog, standard across &koffice;, in which
+you can choose to start with a blank document of a certain type, or to open a
+recently opened document.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -46,11 +46,11 @@ document.</para></listitem>
 <shortcut><keycombo
 action="simul">&Ctrl;<keycap>O</keycap></keycombo></shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Open</guimenuitem>
+<guimenuitem>Open...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens an existing document.</action>
 Because this uses the usual &kde; <guilabel>Open Document</guilabel>
-window to let you select a file, you can open files via various protocols
+dialog to let you select a file, you can open files via various protocols
 (ftp, fish, etcetera).
 </para></listitem>
 </varlistentry>
@@ -315,7 +315,7 @@ usually at the top right of the &krita; window.</para></listitem>
 <guimenu>Edit</guimenu>
 <guisubmenu>Resources</guisubmenu>
 </menuchoice></term>
-<listitem><para><action>Contains options for editing
+<listitem><para><action>Contains options for working with color
 palettes.</action></para></listitem>
 </varlistentry>
 
@@ -327,7 +327,7 @@ palettes.</action></para></listitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
 linkend="commands-dialogs-misc-addpalette"><guilabel>Add Palette</guilabel>
-dialog</link>.</action> You can create a custom palette
+dialog</link>.</action> You can create a custom color palette
 here.</para></listitem>
 </varlistentry>
 
@@ -338,9 +338,10 @@ here.</para></listitem>
 <guimenuitem>Edit Palette...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <guilabel>Edit Palette</guilabel>
-dialog.</action> Choose a palette to edit from this list. You will then be
+dialog.</action> Choose a color palette to edit from this list. You will then be
 given the same dialog as with <guilabel>Add Palette</guilabel>, with the
-difference that you edit the chosen palette instead of adding a new one.</para>
+difference that you edit the chosen color palette instead of adding a new
+one.</para>
 </listitem></varlistentry>
 
 </variablelist>
@@ -450,7 +451,7 @@ action="simul">&Ctrl;<keycap>+</keycap></keycombo></shortcut>
 <guimenu>View</guimenu>
 <guimenuitem>Zoom In</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Zooms in the view.</action> The view
+<listitem><para><action>Zooms in on the view.</action> The view
 will be more detailed, but a smaller area will be visible at the
 same time.</para></listitem>
 </varlistentry>
@@ -462,7 +463,7 @@ action="simul">&Ctrl;<keycap>-</keycap></keycombo></shortcut>
 <guimenu>View</guimenu>
 <guimenuitem>Zoom Out</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Zooms out the view.</action> A larger
+<listitem><para><action>Zooms out of the view.</action> A larger
 area will be visible at the same time, but it will be less
 detailed.</para></listitem>
 </varlistentry>
@@ -483,7 +484,7 @@ level.</action> (1:1 scale)</para></listitem>
 <guimenu>View</guimenu>
 <guimenuitem>Actual Size</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Zooms the view to the actual
+<listitem><para><action>Zooms the view to the actual image
 size.</action></para></listitem>
 </varlistentry>
 
@@ -1167,8 +1168,8 @@ dialog</link>.</action></para></listitem>
 <guisubmenu>Rotate</guisubmenu>
 <guimenuitem>Rotate CW</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Rotates the current layer by 90
-degrees clockwise.</action></para></listitem>
+<listitem><para><action>Rotates the current layer 90 degrees
+clockwise.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1177,8 +1178,8 @@ degrees clockwise.</action></para></listitem>
 <guisubmenu>Rotate</guisubmenu>
 <guimenuitem>Rotate CCW</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Rotates the current layer by
-90 degrees counterclockwise (270 degrees clockwise).</action></para></listitem>
+<listitem><para><action>Rotates the current layer 90 degrees counterclockwise
+(270 degrees clockwise).</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1251,8 +1252,9 @@ the current layer.</para></listitem>
 <guimenu>Layer</guimenu>
 <guimenuitem>Shear Layer...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Shear Layer</guilabel>
-dialog.</action> You can select the X and Y angles to shear
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-layers-shearlayer"><guilabel>Shear Layer</guilabel>
+dialog</link>.</action> You can select the X and Y angles to shear
 by.</para></listitem>
 </varlistentry>
 
@@ -1338,8 +1340,9 @@ active, but it is not made visible anymore.</para></listitem>
 <guimenu>Select</guimenu>
 <guimenuitem>Color Range...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the <guilabel>Color Range</guilabel>
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <link
+linkend="commands-dialogs-image-colorrange"><guilabel>Color Range</guilabel>
+dialog</link>.</action></para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -1659,8 +1662,8 @@ selection.</action></para></listitem>
 <guisubmenu>Enhance</guisubmenu>
 <guimenuitem>Wavelet Noise Reducer</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Reduces noise in the image or selection in a more
-"pixelized" way.</action></para></listitem>
+<listitem><para><action>Reduces noise in the image or
+selection.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -1871,16 +1874,6 @@ toolbar.</action></para></listitem>
 </menuchoice></term>
 <listitem><para><action>Displays or hides the <guilabel>Navigation</guilabel>
 toolbar.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>Settings</guimenu>
-<guisubmenu>Toolbars</guisubmenu>
-<guimenuitem>Transformation Tools</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Displays or hides the
-<guilabel>Transformation Tools</guilabel> toolbar.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>

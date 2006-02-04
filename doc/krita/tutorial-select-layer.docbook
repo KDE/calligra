@@ -108,7 +108,7 @@ Now cut the selection, using
 <menuchoice><guimenu>Edit</guimenu><guimenuitem>Cut</guimenuitem></menuchoice>.
 Delete the current layer with
 <menuchoice><guimenu>Layer</guimenu><guimenuitem>Remove
-Layer</guimenuitem></menuchoice>.  Paste your selection, with
+Layer</guimenuitem></menuchoice>. Paste your selection, with
 <menuchoice><guimenu>Edit</guimenu><guimenuitem>Paste</guimenuitem></menuchoice>.
 Now we give ourselves a bit more room to work in by resizing the image a bit.
 Use the <menuchoice><guimenu>Image</guimenu><guimenuitem>Change Image

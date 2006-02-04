@@ -96,7 +96,7 @@ little slowness, now and then, but the result is that you can work with colors,
 instead of almost meaningless RGB triplets.
 </para><para>
 Available colorspaces are: 8 bit/channel RGB, CMYK, grayscale and wet
-watercolors, 16 bit/channel RGB, CMYK, grayscale and L*a*b, <quote>half</quote>
+watercolors, 16 bit/channel RGB, CMYK, grayscale and L*a*b*, <quote>half</quote>
 RGB, and 32 bit float RGB (HDR) and LMS.
 </para>
 </sect2>

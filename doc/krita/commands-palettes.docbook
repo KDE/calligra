@@ -4,13 +4,13 @@
 <para>
 This section describes &krita;'s palettes. The palettes are usually found at
 the right hand side of &krita;'s main window. There are three palettes which
-help you in customizing your drawing experience:
+help you in customizing your images:
 </para>
 
 <sect2 id="commands-palettes-controlbox">
 <title>The <guilabel>Control box</guilabel> palette</title>
 <para>The <guilabel>Control box</guilabel> contains three tabs. You can get an
-overview of the drawing, view a color histogram, and modify options for the
+overview of the image, view a color histogram, and modify options for the
 current tool.</para>
 
 <sect3 id="commands-palettes-controlbox-overview">
@@ -91,8 +91,8 @@ opacity when drawing (opacity is the opposite of transparency, i.e. 100%
 opaque is 0% transparent, and vice versa).
 </para><para>
 In the <guilabel>Mode:</guilabel> drop down box, you can choose a drawing
-mode. This changes the actual effect that drawing has on the image (normal
-painting, only changing the color, etcetera).
+mode. This changes the actual effect that results from drawing on the image
+(for example, only changing the saturation or lightness).
 </para><para>
 With the <guilabel>Paint direct</guilabel> option, you can determine whether
 you want to paint directly on the current layer, or on a temporary layer which
@@ -302,15 +302,15 @@ linkend="commands-palettes-controlbox-tool-brush">Brush</link>
 are available here, as are a couple of other options.
 </para><para>
 The setting in the <guilabel>Threshold:</guilabel> slider and spin box
-determines how near to the color of the point the fill starts from, the color of
-a point should be for the fill to spread out over that point. A higher threshold
-will also fill areas that have less similar colors, a lower threshold limits
-the spread.
+determines how near the color of a point should be to the color of the
+starting point of the fill, in order for the fill to spread out over the
+former point. A higher threshold will therefore fill areas that have less
+similar colors, a lower threshold limits the spread.
 </para><para>
 By checking the <guilabel>Use pattern</guilabel> checkbox you can choose to
 fill with the currently selected pattern instead of with the foreground color.
 </para><para>
-Checking the <guilabel>Sample merged</guilabel> checkbox changes the behaviour
+Checking the <guilabel>Sample merged</guilabel> checkbox changes the behavior
 of the fill: the extent to which the fill is done, is determined from the
 entire image instead of the current layer only.
 </para><para>
@@ -354,7 +354,7 @@ and back to back).
 Check the <guilabel>Reverse</guilabel> checkbox to have the gradient drawn
 reversed (from back to front).
 </para><para>
-The final setting is <guilabel>Anti-alias treshold:</guilabel>, which
+The final setting is <guilabel>Anti-alias threshold:</guilabel>, which
 determines how smooth the gradient will become.
 </para>
 </sect4>
@@ -426,18 +426,18 @@ area with the chosen radius that is centered around the chosen pixel.
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-select">
-<title><guilabel>Select</guilabel> operations</title>
+<title><guilabel>Select</guilabel> tools</title>
 <para>
 <screenshot>
-<screeninfo>The Tool tab for Select operations</screeninfo>
+<screeninfo>The Tool tab for Select tools</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="palettes-controlbox-select.png" format="PNG" />
 </imageobject>
 <textobject>
-<phrase>The Tool tab for Select operations</phrase>
+<phrase>The Tool tab for Select tools</phrase>
 </textobject>
-<caption><para>The Tool tab for Select operations</para></caption>
+<caption><para>The Tool tab for Select tools</para></caption>
 </mediaobject>
 </screenshot>
 </para>
@@ -448,7 +448,7 @@ the <guilabel>Action:</guilabel> to perform. You can choose between <guilabel>Ad
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-selectcontiguous">
-<title><guilabel>Select Contiguous Areas</guilabel></title>
+<title><guilabel>Select Contiguous Area</guilabel></title>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Select contiguous</screeninfo>
@@ -492,12 +492,15 @@ contiguous</link>. </para>
 <title>The <guilabel>Colors</guilabel> palette</title>
 <para>In this palette you can choose the foreground and background colors
 that should be used for painting. You can choose these in five different
-ways. Each of these has its own tab on this palette.</para>
-<para>You can choose which color to set by clicking the corresponding
+ways. Each of these has its own tab on this palette.
+</para><para>
+You can choose which color to set by clicking the corresponding
 buttons at the top left. The topmost color is the foreground color, the
 bottom one is the background color. You can click the double-headed arrow
 to swap the colors: foreground color becomes background color and vice
-versa.</para>
+versa. You can reset the colors to the default (foreground black, background
+white) by clicking the small black/white icon.
+</para>
 
 <sect3 id="commands-palettes-colors-hsv">
 <title><guilabel>HSV</guilabel></title>
@@ -577,10 +580,10 @@ altering the corresponding value.
 </mediaobject>
 </screenshot>
 </para>
-<para>On this tab, you can choose a gray value (indicated with a K, the usual
-letter for blacK).</para>
-<para>The gray value can be chosen on a scale from 0 (black) to 255
-(white).</para>
+<para>On this tab, you can choose a gray value (indicated with a K for Key,
+the usual designation for black).</para>
+<para>The gray value can be chosen on a scale from 0 (pure black) to 255
+(pure white).</para>
 </sect3>
 
 <sect3 id="commands-palettes-colors-palettes">
