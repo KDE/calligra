@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include <qbitmap.h>
 #include <qregion.h>
+#include <qregexp.h>
 #include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>
@@ -34,6 +35,8 @@
 #include <math.h>
 #include <koUnit.h>
 #include <koxmlns.h>
+#include <kodom.h>
+
 using namespace std;
 
 KPrClosedLineObject::KPrClosedLineObject()
@@ -293,6 +296,25 @@ void KPrClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext 
         KPrSVGPathParser parser;
         points = parser.getPoints( d, true );
         loadOasisApplyViewBox( element, points );
+    }
+    else if ( tag == "custom-shape" )
+    {
+        QDomElement enhancedGeometry = KoDom::namedItemNS( element, KoXmlNS::draw, "enhanced-geometry" );
+
+        if ( !enhancedGeometry.isNull() )
+        {
+            QString d = enhancedGeometry.attributeNS( KoXmlNS::draw, "enhanced-path", QString::null );
+            QRegExp rx( "^([0-9 MLZ]+)N$" );
+            if ( rx.search( d ) != -1 )
+            {
+                d = rx.cap( 1 );
+                kdDebug(33001) << "enhanced-path d: " << d << endl;
+
+                KPrSVGPathParser parser;
+                points = parser.getPoints( d, true );
+                loadOasisApplyViewBox( enhancedGeometry, points );
+            }
+        }
     }
     else
     {

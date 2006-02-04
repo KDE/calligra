@@ -1947,6 +1947,77 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                         break;
                 }
             }
+            else if ( name == "custom-shape" && isDrawNS )
+            {
+                fillStyleStack( o, context );
+
+                QDomElement enhancedGeometry = KoDom::namedItemNS( o, KoXmlNS::draw, "enhanced-geometry" );
+
+                if ( !enhancedGeometry.isNull() )
+                {
+                    QString d = enhancedGeometry.attributeNS( KoXmlNS::draw, "enhanced-path", QString::null );
+                    QRegExp rx( "^([0-9 ML]+Z) N$" );
+                    if ( rx.search( d ) != -1 )
+                    {
+                        d = rx.cap( 1 );
+                        KPrSVGPathParser parser;
+                        ObjType objType = parser.getType( d );
+
+                        switch ( objType )
+                        {
+#if 0 // not yet supported
+                            case OT_CUBICBEZIERCURVE:
+                                {
+                                    kdDebug(33001) << "Cubicbeziercurve" << endl;
+                                    KPrCubicBezierCurveObject *kpCurveObject = new KPrCubicBezierCurveObject();
+                                    kpCurveObject->loadOasis( o, context, m_loadingInfo );
+                                    if ( groupObject )
+                                        groupObject->addObjects( kpCurveObject );
+                                    else
+                                        newpage->appendObject( kpCurveObject );
+                                } break;
+                            case OT_QUADRICBEZIERCURVE:
+                                {
+                                    kdDebug(33001) << "Quadricbeziercurve" << endl;
+                                    KPrQuadricBezierCurveObject *kpQuadricObject = new KPrQuadricBezierCurveObject();
+                                    kpQuadricObject->loadOasis( o, context, m_loadingInfo );
+                                    if ( groupObject )
+                                        groupObject->addObjects( kpQuadricObject );
+                                    else
+                                        newpage->appendObject( kpQuadricObject );
+                                } break;
+                            case OT_FREEHAND:
+                                {
+                                    kdDebug(33001) << "Freehand" << endl;
+                                    KPrFreehandObject *kpFreeHandObject = new KPrFreehandObject();
+                                    kpFreeHandObject->loadOasis( o, context, m_loadingInfo );
+                                    if ( groupObject )
+                                        groupObject->addObjects( kpFreeHandObject );
+                                    else
+                                        newpage->appendObject( kpFreeHandObject );
+                                } break;
+#endif
+                            case OT_CLOSED_LINE:
+                                {
+                                    kdDebug(33001) << "Closed Line" << endl;
+                                    KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
+                                    kpClosedObject->loadOasis( o, context, m_loadingInfo );
+                                    if ( groupObject )
+                                        groupObject->addObjects( kpClosedObject );
+                                    else
+                                        newpage->appendObject( kpClosedObject );
+                                } break;
+                            default:
+                                kdDebug(33001) << "draw:custom-shape found unsupported object type " << objType << " in draw:enhanced-path " << d << endl;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        kdDebug(33001) << "draw:custom-shape not supported" << endl;
+                    }
+                }
+            }
             else if ( name == "g" && isDrawNS)
             {
                 fillStyleStack( o, context );
