@@ -109,8 +109,8 @@ KoDocumentInfoDlg::KoDocumentInfoDlg( KoDocumentInfo *docInfo, QWidget *parent, 
       addAuthorPage( static_cast<KoDocumentInfoAuthor *>( pg ) );
     else if ( pg->inherits( "KoDocumentInfoAbout" ) )
       addAboutPage( static_cast<KoDocumentInfoAbout *>( pg ) );
-    else if ( pg->inherits( "KoDocumentInfoUserMetadata" ) )
-      addUserMetadataPage( static_cast<KoDocumentInfoUserMetadata *>( pg ) );
+/*    else if ( pg->inherits( "KoDocumentInfoUserMetadata" ) )
+      addUserMetadataPage( static_cast<KoDocumentInfoUserMetadata *>( pg ) );*/
   }
 }
 
