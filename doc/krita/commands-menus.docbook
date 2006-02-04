@@ -1341,7 +1341,7 @@ active, but it is not made visible anymore.</para></listitem>
 <guimenuitem>Color Range...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Opens the <link
-linkend="commands-dialogs-image-colorrange"><guilabel>Color Range</guilabel>
+linkend="commands-dialogs-images-colorrange"><guilabel>Color Range</guilabel>
 dialog</link>.</action></para></listitem>
 </varlistentry>
 
