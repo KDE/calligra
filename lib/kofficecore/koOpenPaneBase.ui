@@ -72,7 +72,7 @@
                     </widget>
                     <spacer>
                         <property name="name">
-                            <cstring>spacer6</cstring>
+                            <cstring>m_listSpacer</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -83,7 +83,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>41</height>
+                                <height>1</height>
                             </size>
                         </property>
                     </spacer>
@@ -153,6 +153,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
 <includehints>
