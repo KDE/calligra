@@ -103,6 +103,7 @@ kchartDataTable::~kchartDataTable()
 {
 }
 
+
 bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
 {
     if (ev->type() == QEvent::KeyPress && strcmp(obj->name(), 
@@ -119,7 +120,8 @@ bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
                 }
                 break;
             }
-            case Qt::Key_Down: {
+            case Qt::Key_Down: 
+	    {
                 if ( currentRow() < numRows()-1 ) {
                     setCurrentCell( currentRow()+1, currentColumn() );
                     editCell(currentRow(), currentColumn() );
@@ -127,7 +129,8 @@ bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
                 }
                 break;
             }
-            case Qt::Key_Right: {
+            case Qt::Key_Right: 
+	    {
                 if ( currentColumn() < numCols()-1 ) {
                     setCurrentCell( currentRow(), currentColumn()+1 );
                     editCell(currentRow(), currentColumn() );
@@ -146,6 +149,7 @@ bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
             }
         }
     }
+
     return QTable::eventFilter( obj, ev );
 }
 
@@ -158,11 +162,9 @@ bool kchartDataTable::eventFilter( QObject *obj, QEvent *ev )
 
 kchartDataEditor::kchartDataEditor(QWidget* parent) :
     KDialogBase(parent, "dataeditor", true, i18n("KChart Data Editor"), 
-		KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Apply,
+		KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply,
 		KDialogBase::Ok, true)
 {
-    //setCaption(i18n("KChart Data Editor"));
-
     QWidget      *page = new QWidget( this );
     setMainWidget(page);
 
@@ -188,21 +190,24 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_colsSB->setMinValue(1);
     
     //Buttons for Inserting / Removing rows & columns 
-    QPushButton* insertRowButton=new QPushButton( i18n("Insert Row") , page);
-    connect( insertRowButton , SIGNAL( clicked() ) , this , SLOT( insertRow() ) );
+    QPushButton *insertRowButton = new QPushButton( i18n("Insert Row") , page);
+    connect( insertRowButton, SIGNAL( clicked() ),
+	     this,            SLOT( insertRow() ) );
     
-    QPushButton* insertColButton=new QPushButton( i18n("Insert Column") , page);
-    connect( insertColButton , SIGNAL( clicked() ) , this , SLOT( insertColumn() ) );
+    QPushButton *insertColButton = new QPushButton( i18n("Insert Column") , page);
+    connect( insertColButton, SIGNAL( clicked() ),
+	     this,            SLOT( insertColumn() ) );
     
-    QPushButton* removeRowButton=new QPushButton( i18n("Remove Row") , page);
-    connect( removeRowButton , SIGNAL( clicked() ) , this , SLOT( removeCurrentRow() ) );
+    QPushButton* removeRowButton = new QPushButton( i18n("Remove Row") , page);
+    connect( removeRowButton, SIGNAL( clicked() ),
+	     this,            SLOT( removeCurrentRow() ) );
     
-    QPushButton* removeColButton=new QPushButton( i18n("Remove Column") , page);
-    connect( removeColButton , SIGNAL( clicked() ) , this , SLOT( removeCurrentColumn() ) );
-    
-    
+    QPushButton* removeColButton = new QPushButton( i18n("Remove Column") , page);
+    connect( removeColButton, SIGNAL( clicked() ),
+	     this,            SLOT( removeCurrentColumn() ) );
+        
   
-    // Start the layout.  The table is at the top.
+    // Start the layout.  The buttons are at the top.
     QVBoxLayout  *topLayout = new QVBoxLayout( page );
     
     QHBoxLayout* insertRemoveLayout = new QHBoxLayout( );
@@ -217,15 +222,15 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     topLayout->addLayout(insertRemoveLayout);
     topLayout->addSpacing(10);
     
+    // The table is below the buttons.
     topLayout->addWidget(m_table);
 
-    // Then, a horizontal layer with the rows and columns settings
+    // Then, last, a horizontal layer with the rows and columns settings
     QHBoxLayout  *rowColLayout = new QHBoxLayout(  );
     rowColLayout->addWidget(m_rowsLA);
     rowColLayout->addWidget(m_rowsSB);
     rowColLayout->addWidget(m_colsLA);
     rowColLayout->addWidget(m_colsSB);
-    
     
     rowColLayout->addStretch(1);
     rowColLayout->setMargin(10);
@@ -242,13 +247,15 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
 
 
     
-    /* -- Changed data editor to use top row and leftmost column for series names and labels
-          so this is no longer necessary
+#if 0
+    // -- Changed data editor to use top row and leftmost column for
+    //    series names and labels so this is no longer necessary.
 
     connect(m_table->horizontalHeader(), SIGNAL(clicked(int)), 
 	    this,                        SLOT(column_clicked(int)) );
     connect(m_table->verticalHeader(),   SIGNAL(clicked(int)),
-	    this,                        SLOT(row_clicked(int)) );*/
+	    this,                        SLOT(row_clicked(int)) );
+#endif
   
     connect(m_table, SIGNAL(valueChanged(int, int)),
 	    this,    SLOT(tableChanged(int, int)) );
@@ -265,44 +272,6 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     addDocs();
 }
 
-void kchartDataEditor::removeCurrentRow()
-{
-    int row=m_table->currentRow();
-    
-    m_table->removeRow(row);
-    m_rowsSB->setValue(m_table->numRows());
-    
-    if (row == 0)
-        updateColHeaders();   
-    
-    m_modified=true;
-}
-void kchartDataEditor::removeCurrentColumn()
-{
-    int col=m_table->currentColumn();
-    
-    m_table->removeColumn(col);
-    m_colsSB->setValue(m_table->numCols());
-    
-    if (col == 0)
-        updateRowHeaders();
-    
-    m_modified=true;
-}
-void kchartDataEditor::insertColumn()
-{
-    m_table->insertColumns(m_table->currentColumn()+1,1);
-    m_colsSB->setValue(m_table->numCols());
-    updateColHeaders();
-    m_modified=true;
-}
-void kchartDataEditor::insertRow()
-{
-    m_table->insertRows(m_table->currentRow()+1,1);
-    m_rowsSB->setValue(m_table->numRows());
-    updateRowHeaders();
-    m_modified=true;
-}    
 
 // Add Tooltips and WhatsThis help to various parts of the Data Editor.
 //
@@ -510,14 +479,16 @@ int kchartDataEditor::headerCols()
 //
 void kchartDataEditor::getRowLabels(QStringList &rowLabels)
 {
-   /* QHeader  *rowHeader = m_table->verticalHeader();
+#if 0
+    QHeader  *rowHeader = m_table->verticalHeader();
     int  numRows = m_rowsSB->value();
     int  row;
 
     rowLabels.clear();
     for (row = 0; row < numRows; row++) {
       rowLabels << rowHeader->label(row);
-    }*/
+    }
+#endif
     rowLabels.clear();
 
     for (int i=headerRows();i < m_table->numRows();i++)
@@ -531,7 +502,8 @@ void kchartDataEditor::getRowLabels(QStringList &rowLabels)
 //
 void kchartDataEditor::setColLabels(const QStringList &colLabels)
 {
-    /*QHeader  *colHeader = m_table->horizontalHeader();
+#if 0
+    QHeader  *colHeader = m_table->horizontalHeader();
     int       col;
 
     int  numCols = m_colsSB->value();
@@ -541,9 +513,10 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 		return;
     for (col = 0; col < numCols; col++) {
 	colHeader->setLabel(col, colLabels[col]);
-    }*/
+    }
+#endif
 
-    for (unsigned int i=0;i<colLabels.count();i++)
+    for (unsigned int i = 0; i < colLabels.count(); i++)
     {
         m_table->setText(0,i+headerCols(),colLabels[i]);
     }
@@ -567,7 +540,7 @@ void kchartDataEditor::getColLabels(QStringList &colLabels)
     
     colLabels.clear();
 
-    for (int i=headerCols();i<m_table->numCols();i++)
+    for (int i = headerCols();i<m_table->numCols();i++)
     {
         colLabels << m_table->text(0,i); 
     }
@@ -578,10 +551,57 @@ void kchartDataEditor::getColLabels(QStringList &colLabels)
 //                              Slots
 
 
+// Slots for the buttons that insert/remove rows/columns.
+//
+
+void kchartDataEditor::removeCurrentRow()
+{
+    int  row = m_table->currentRow();
+    
+    m_table->removeRow(row);
+    m_rowsSB->setValue(m_table->numRows());
+    
+    if (row == 0)
+        updateColHeaders();   
+    
+    m_modified = true;
+}
+
+void kchartDataEditor::removeCurrentColumn()
+{
+    int  col = m_table->currentColumn();
+    
+    m_table->removeColumn(col);
+    m_colsSB->setValue(m_table->numCols());
+    
+    if (col == 0)
+        updateRowHeaders();
+    
+    m_modified = true;
+}
+
+void kchartDataEditor::insertColumn()
+{
+    m_table->insertColumns(m_table->currentColumn() + 1, 1);
+    m_colsSB->setValue(m_table->numCols());
+    updateColHeaders();
+
+    m_modified = true;
+}
+
+void kchartDataEditor::insertRow()
+{
+    m_table->insertRows(m_table->currentRow() + 1, 1);
+    m_rowsSB->setValue(m_table->numRows());
+    updateRowHeaders();
+
+    m_modified = true;
+}    
+
+
 // Ask user to make sure that (s)he really wants to remove a row or
 // column.
 //
-
 static int askUserForConfirmation(QWidget *parent)
 {
     return KMessageBox::warningContinueCancel(parent,

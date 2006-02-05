@@ -36,21 +36,17 @@ public:
 				bool transparent = false,
 				double zoomX = 1.0, double zoomY = 1.0 );
 
-    // Methods unique to KChart, and available in the old interface
-    // (see interfaces/koChart.h.)
-
-    virtual void  setCanChangeValue( bool b )  { m_bCanChangeValue = b;    }
-
     // Methods unique to KChart, and available in the new interface
-    // (see interfaces/koChart.h.)
+    // (see /interfaces/koChart.h.)
 
     virtual void  resizeData( int rows, int columns );
     virtual void  setCellData( int row, int column, const QVariant &);
     virtual void  analyzeHeaders( );
-    virtual void  analyzeHeaders( const KDChartTableData& data );
+    virtual void  setCanChangeValue( bool b )  { m_bCanChangeValue = b;    }
 
     // ----------------------------------------------------------------
 
+    void  analyzeHeaders( const KDChartTableData& data );
     void  doSetData( const KDChartTableData&  data,
 		     bool  hasRowHeader,
 		     bool  hasRowHeader );

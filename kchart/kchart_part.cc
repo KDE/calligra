@@ -346,6 +346,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 //        On the other hand, the next version of KDChart is able to
 //        get data directly without storing it into a KDChartData
 //        class first, so we might never need to.
+//
 void KChartPart::createDisplayData()
 {
     int  rowOffset = 0;

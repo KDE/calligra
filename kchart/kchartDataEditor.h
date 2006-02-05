@@ -66,7 +66,10 @@ private:
 // ----------------------------------------------------------------
 
 
-// The reason for having a special Table class is to implement keyboard navigation in editing mode.
+// The reason for having a special Table class is to implement
+// keyboard navigation in editing mode.
+//
+
 class kchartDataTable : public QTable
 {
     Q_OBJECT
@@ -78,6 +81,8 @@ protected:
     // handles keyboard navigation
     bool eventFilter( QObject *obj, QEvent *ev );
 };
+
+
 // ----------------------------------------------------------------
 
 
