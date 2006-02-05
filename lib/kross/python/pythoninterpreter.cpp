@@ -25,6 +25,7 @@
 #include "../api/variant.h"
 
 #include <kglobal.h>
+#include <kdebug.h>
 #include <kstandarddirs.h>
 
 #if defined(Q_WS_WIN)

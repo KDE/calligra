@@ -28,7 +28,6 @@
 #include "../main/scriptcontainer.h"
 
 #include <qstring.h>
-#include <kdebug.h>
 
 namespace Kross { namespace Python {
 

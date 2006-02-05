@@ -23,7 +23,7 @@
 #include "pythonsecurity.h"
 #include "../main/scriptcontainer.h"
 
-#include <kapplication.h>
+//#include <kapplication.h>
 #include <kdebug.h>
 
 using namespace Kross::Python;
