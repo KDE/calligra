@@ -632,7 +632,7 @@ KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimeType);
 
-    if (!entry)
+    if (entry.isEmpty())
     {
         kdError( 30500 ) << "Couldn't find a part that can handle mimetype " << mimeType << endl;
     }
