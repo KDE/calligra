@@ -368,7 +368,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     
     for (png_uint_32 y = 0; y < height; y++) {
-        delete row_pointers[y];
+        delete[] row_pointers[y];
     }
     delete [] row_pointers;
     
