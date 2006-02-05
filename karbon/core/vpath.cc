@@ -415,15 +415,9 @@ VSubpath::close()
 bool
 VSubpath::pointIsInside( const KoPoint& p ) const
 {
-	// If the path is not closed, a point cannot be inside. If the point is
-	// not inside the boundingbox, it cannot be inside the path either.
-	if(
-		!isClosed() ||
-		!boundingBox().contains( p ) )
-	{
+	// If the point is not inside the boundingbox, it cannot be inside the path either.
+	if( !boundingBox().contains( p ) )
 		return false;
-	}
-
 
 	// First check if the point is inside the knot polygon (beziers are treated
 	// as lines).
@@ -432,6 +426,7 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 	 * in a Polygon" by Dan Sunday, geometryalgorithms.com.
 	 */
 
+	/*
 	int windingNumber = 0;
 
 	// Ommit first segment.
@@ -469,6 +464,10 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 		segment = segment->next();
 	}
 
+	if( static_cast<bool>( windingNumber ) )
+		return true;
+	*/
+	
 	// Then check if the point is located in between the knot polygon
 	// and the bezier curves.
 
@@ -478,9 +477,85 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 	 * and compare y(xp) with yp.
 	 */
 // TODO
+	
+	// cache the closed evaluation
+	bool closed = isClosed() || getLast()->knot() == getFirst()->knot();
 
+	QValueList<double> rparams;
 
-	return static_cast<bool>( windingNumber );
+	VSegment* segment = getFirst()->next();
+
+	// move all segements so that p is the origin 
+	// and compute their intersections with the x-axis
+	while( segment )
+	{
+		VSubpath tmpCurve( 0L );
+		tmpCurve.append( new VSegment( segment->degree() ) );
+	
+		for( int i = 0; i <= segment->degree(); ++i )
+			tmpCurve.current()->setP(i, segment->p(i)-p );
+		
+		tmpCurve.current()->rootParams( rparams );
+
+		segment = segment->next();
+	}
+	
+	// if the path is not closed, compute the intersection of
+	// the line through the first and last knot and the x-axis too
+	if( ! closed )
+	{
+		KoPoint prevKnot = getLast()->knot() - p;
+		KoPoint nextKnot = getFirst()->knot() - p;
+
+		double dx = nextKnot.x() - prevKnot.x();
+		double dy = nextKnot.y() - prevKnot.y();
+		if( dx == 0.0 )
+		{
+			rparams.append( nextKnot.x() );
+		}
+		else if( dy != 0.0 )
+		{
+			if( ( prevKnot.y() < 0.0 && nextKnot.y() > 0.0 ) || ( prevKnot.y() > 0.0 && nextKnot.y() < 0.0 ) )
+			{
+				double n = prevKnot.y() - dy / dx * prevKnot.x();
+				rparams.append( -n * dx / dy );
+			}
+		}
+	}
+	
+	kdDebug(38000) << "intersection count: " << rparams.count() << endl;
+
+	// sort all intersections
+	qHeapSort( rparams );
+
+	QValueList<double>::iterator itr, etr = rparams.end();
+	
+	for( itr = rparams.begin(); itr != etr; ++itr )
+		kdDebug(38000) << "intersection: " << *itr << endl;
+
+	if( closed )
+	{
+		// pair the intersections and check if the origin is within a pair
+		for( itr = rparams.begin(); itr != etr; ++itr )
+		{
+			if( *itr > 0.0 ) 
+				return false;
+	
+			if( ++itr == etr )
+				return false;
+			
+			if( *itr > 0.0 )
+				return true;
+		}
+	}
+	else
+	{
+		// only check if point is between first and last intersection if we have an open path
+		if ( rparams.front() < 0.0 && rparams.back() > 0.0 )
+			return true;
+	}
+
+	return false;
 }
 
 bool

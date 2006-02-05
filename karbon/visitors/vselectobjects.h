@@ -50,8 +50,7 @@ public:
 	virtual void visitVGroup( VGroup& group )
 		{ visitVObject( group ); }
 	virtual void visitVPath( VPath& composite );
-	virtual void visitVText( VText& text )
-		{ visitVObject( text ); }
+	virtual void visitVText( VText& text );
 	virtual void visitVImage( VImage& img )
 		{ visitVObject( img ); }
 	virtual void visitVLayer( VLayer& layer );

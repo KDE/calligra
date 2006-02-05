@@ -217,3 +217,41 @@ VSelectObjects::visitVLayer( VLayer& layer )
 			itr.current()->accept( *this );
 	}
 }
+
+void 
+VSelectObjects::visitVText( VText& text )
+{
+	// Never select a deleted, locked or hidden object.
+	if( text.state() > VObject::normal &&
+		text.state() < VObject::selected )
+		return;
+
+	int deselectedGlyphs = 0;
+
+	VPathListIterator itr( text.glyphs() );
+	for( ; itr.current(); ++itr )
+	{
+		VPath c( 0L );
+		c.combine( *itr.current() );
+		visitVPath( c );
+		if( m_select && c.state() == VObject::selected )
+		{
+			kdDebug(38000) << "selected: " << itr.current() << endl;
+			m_selection.remove( &c );
+			text.setState( VObject::selected );
+			if( ! m_selection.containsRef( &text ) )
+				m_selection.append( &text );
+			return;
+		}
+		else if( c.state() == VObject::normal )
+		{
+			kdDebug(38000) << "deselected: " << itr.current() << endl;
+			deselectedGlyphs++;
+		}
+	}
+	if( deselectedGlyphs == text.glyphs().count() )
+	{
+		text.setState( VObject::normal );
+		m_selection.remove( &text );
+	}
+}
