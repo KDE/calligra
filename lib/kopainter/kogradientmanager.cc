@@ -102,6 +102,7 @@ KoGradient* KoGradientManager::loadKritaGradient(QFile* file)
 
 	if (header != "GIMP Gradient") 
 	{
+		delete grad;
 		return 0;
 	}
 
@@ -207,7 +208,10 @@ KoGradient* KoGradientManager::loadKritaGradient(QFile* file)
 		return grad;
 	}
 	else 
+	{
+		delete grad;
 		return 0;
+	}
 }
 
 KoGradient* KoGradientManager::loadSvgGradient(QFile* file)
