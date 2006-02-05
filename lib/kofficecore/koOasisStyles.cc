@@ -1008,7 +1008,7 @@ QString KoOasisStyles::saveOasisPercentageStyle( KoGenStyles &mainStyles, const 
     do
     {
         if ( format[0]=='.' || format[0]==',' )
-            beforeSeparator = true;
+            beforeSeparator = false;
         else if ( format[0]=='0' && beforeSeparator )
             integerdigits++;
         else if ( format[0]=='0' && !beforeSeparator )
