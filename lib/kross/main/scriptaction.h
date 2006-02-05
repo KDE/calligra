@@ -168,28 +168,83 @@ namespace Kross { namespace Api {
             ScriptActionPrivate* d;
     };
 
+    /**
+     * A collection to store \a ScriptAction shared pointers.
+     *
+     * A \a ScriptAction instance could be stored within
+     * multiple \a ScriptActionCollection instances.
+     */
     class ScriptActionCollection
     {
         private:
+
+            /**
+             * The list of \a ScriptAction shared pointers.
+             */
             QValueList<ScriptAction::Ptr> m_list;
+
+            /**
+             * A map of \a ScriptAction shared pointers used to access
+             * the actions with there name.
+             */
             QMap<QCString, ScriptAction::Ptr> m_actions;
+
+            /**
+             * A KActionMenu which could be used to display the
+             * content of this \a ScriptActionCollection instance.
+             */
             KActionMenu* m_actionmenu;
+
+            /**
+             * Boolean value used to represent the modified-state. Will
+             * be true if this \a ScriptActionCollection is modified
+             * aka dirty and e.g. the \a m_actionmenu needs to be
+             * updated else its false.
+             */
             bool m_dirty;
 
         public:
+
+            /**
+             * Constructor.
+             *
+             * \param text The text used to display some describing caption.
+             * \param ac The KActionCollection which should be used to as
+             *        initial content for the KActionMenu \a m_actionmenu .
+             * \param name The internal name.
+             */
             ScriptActionCollection(const QString& text, KActionCollection* ac, const char* name)
                 : m_actionmenu( new KActionMenu(text, ac, name) )
                 , m_dirty(true) {}
 
+
+            /**
+             * Destructor.
+             */
             ~ScriptActionCollection() {
                 for(QValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it)
                     (*it)->detach(this);
             }
 
+            /**
+             * \return the \a ScriptAction instance which has the name \p name
+             * or NULL if there exists no such action.
+             */
             ScriptAction::Ptr action(const QCString& name) { return m_actions[name]; }
+
+            /**
+             * \return a list of actions.
+             */
             QValueList<ScriptAction::Ptr> actions() { return m_list; }
+
+            /**
+             * \return the KActionMenu \a m_actionmenu .
+             */
             KActionMenu* actionMenu() { return m_actionmenu; }
 
+            /**
+             * Attach a \a ScriptAction instance to this \a ScriptActionCollection .
+             */
             void attach(ScriptAction::Ptr action) {
                 m_dirty = true;
                 m_actions[ action->name() ] = action;
@@ -198,6 +253,9 @@ namespace Kross { namespace Api {
                 action->attach(this);
             }
 
+            /**
+             * Detach a \a ScriptAction instance from this \a ScriptActionCollection .
+             */
             void detach(ScriptAction::Ptr action) {
                 m_dirty = true;
                 m_actions.remove(action->name());
@@ -206,6 +264,10 @@ namespace Kross { namespace Api {
                 action->detach(this);
             }
 
+            /**
+             * Clear this \a ScriptActionCollection . The collection
+             * will be empty and there are no actions attach any longer.
+             */
             void clear() {
                 for(QValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it) {
                     m_actionmenu->remove(*it);
