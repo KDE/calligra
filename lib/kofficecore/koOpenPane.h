@@ -54,6 +54,7 @@ class KoOpenPane : public KoOpenPaneBase
     void showOpenFileDialog();
 
     void selectionChanged(QListViewItem* item);
+    void itemClicked(QListViewItem* item);
 
     /// Saves the splitter sizes for KoDetailsPaneBase based panes
     void saveSplitterSizes(KoDetailsPaneBase* sender, const QValueList<int>& sizes);

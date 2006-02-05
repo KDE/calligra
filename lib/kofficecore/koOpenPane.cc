@@ -26,6 +26,8 @@
 #include <qlabel.h>
 #include <qvaluelist.h>
 #include <qimage.h>
+#include <qpainter.h>
+#include <qpen.h>
 
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -61,6 +63,18 @@ class KoSectionListItem : public QListViewItem
       return sortWeight() - item->sortWeight();
     }
 
+    virtual void paintCell(QPainter* p, const QColorGroup& cg, int column, int width, int align)
+    {
+      if(widgetIndex() >= 0) {
+        QListViewItem::paintCell(p, cg, column, width, align);
+      } else {
+        int ypos = (height() - 2) / 2;
+        QPen pen(cg.foreground(), 2);
+        p->setPen(pen);
+        p->drawLine(0, ypos, width, ypos);
+      }
+    }
+
     int sortWeight() const { return m_sortWeight; }
     int widgetIndex() const { return m_widgetIndex; }
 
@@ -90,6 +104,12 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   m_sectionList->setSorting(0);
   connect(m_sectionList, SIGNAL(selectionChanged(QListViewItem*)),
           this, SLOT(selectionChanged(QListViewItem*)));
+  connect(m_sectionList, SIGNAL(pressed(QListViewItem*)),
+          this, SLOT(itemClicked(QListViewItem*)));
+  connect(m_sectionList, SIGNAL(spacePressed(QListViewItem*)),
+          this, SLOT(itemClicked(QListViewItem*)));
+  connect(m_sectionList, SIGNAL(returnPressed(QListViewItem*)),
+          this, SLOT(itemClicked(QListViewItem*)));
 
   KGuiItem openExistingGItem(i18n("Open Existing Document..."), "fileopen");
   m_openExistingButton->setGuiItem(openExistingGItem);
@@ -276,6 +296,15 @@ void KoOpenPane::saveSplitterSizes(KoDetailsPaneBase* /*sender*/, const QValueLi
 {
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   cfgGrp.writeEntry("DetailsPaneSplitterSizes", sizes);
+}
+
+void KoOpenPane::itemClicked(QListViewItem* item)
+{
+  KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
+
+  if(selectedItem) {
+    m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
+  }
 }
 
 #include "koOpenPane.moc"
