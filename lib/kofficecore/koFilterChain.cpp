@@ -630,20 +630,14 @@ KoDocument* KoFilterChain::createDocument( const QString& file )
 
 KoDocument* KoFilterChain::createDocument( const QCString& mimeType )
 {
-    // Not sure why this doesn't use KoDocumentEntry::queryByMimeType( const QString & mimetype ),
-    // except maybe to avoid a kounavail being returned...
-    const QString constraint( QString::fromLatin1( "[X-KDE-NativeMimeType] == '%1'" ).arg( mimeType ) );
-    QValueList<KoDocumentEntry> entries = KoDocumentEntry::query( constraint );
-    if ( entries.isEmpty() ) {
-        kdError( 30500 ) << "Couldn't find a KOffice document entry for " << mimeType << endl;
-        return 0;
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(mimeType);
+
+    if (!entry)
+    {
+        kdError( 30500 ) << "Couldn't find a part that can handle mimetype " << mimeType << endl;
     }
-
-    if ( entries.count() != 1 )
-        kdWarning( 30500 ) << "Huh?? Two document entries for the same mimetype?"
-                           << " Will take the first one." << endl;
-
-    KoDocument* doc = entries.first().createDoc();
+    
+    KoDocument* doc = entry.createDoc(); /*entries.first().createDoc();*/
     if ( !doc ) {
         kdError( 30500 ) << "Couldn't create the document" << endl;
         return 0;
