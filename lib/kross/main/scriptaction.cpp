@@ -110,6 +110,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         setCode( element.text().stripWhiteSpace() );
         if(description.isNull())
             description = text;
+        ScriptContainer::setName(name);
     }
     else {
         QDir dir = QFileInfo(scriptconfigfile).dir(true);
@@ -124,9 +125,9 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
             description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);
         else
             description += QString("<br>%1").arg(file);
+        ScriptContainer::setName(file);
     }
 
-    ScriptContainer::setName(name);
     KAction::setName(name.latin1());
     KAction::setText(text);
     setDescription(description);
