@@ -64,13 +64,17 @@ CSVExport::CSVExport( KoFilter *, const char *, const QStringList & )
 {
 }
 
-
-void CSVExport::exportCell( Sheet const * const sheet, int col, int row, QString & separators,
-                            QString & line, QChar const & csvDelimiter, QChar const & textQuote )
+QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, QChar const & textQuote )
 {
-  KSpread::Cell const * const cell = sheet->cellAt( col, row );
+  // This function, given a cell, returns a string corresponding to its export in CSV format
+  // It proceeds by:
+  //  - getting the value of the cell, if any
+  //  - protecting quote characters within cells, if any
+  //  - enclosing the cell in quotes if the cell is non empty
 
+  KSpread::Cell const * const cell = sheet->cellAt( col, row );
   QString text;
+
   if ( !cell->isDefault() && !cell->isEmpty() )
   {
     if ( cell->isFormula() )
@@ -79,44 +83,29 @@ void CSVExport::exportCell( Sheet const * const sheet, int col, int row, QString
         text = cell->text(); // untested
     else
         text = cell->strOutText();
-#if 0
-    switch( cell->content() )
-    {
-     case Cell:Text:
-      text = cell->strOutText();
-      break;
-     case Cell:RichText:
-     case Cell:VisualFormula:
-      text = cell->text(); // untested
-      break;
-     case Cell:Formula:
-      //      cell->setCalcDirtyFlag();
-      //      cell->calc();
-      //      text = cell->value().asString();
-      text = cell->strOutText();
-      break;
-    }
-#endif
   }
+
   if ( !text.isEmpty() )
   {
-    line += separators;
-    if ( text.find( csvDelimiter ) != -1 )
+    if ( text.find( textQuote ) != -1 )
     {
-      text = textQuote + text + textQuote;
+      QString doubleTextQuote(textQuote);
+      doubleTextQuote.append(textQuote);
+      text.replace(textQuote, doubleTextQuote);
     }
-    line += text;
-    separators = QString::null;
+
+    text.prepend(textQuote);
+    text.append(textQuote);
   }
-  // Append a delimiter, but in a temp string -> if no other real cell in this line,
-  // then those will be dropped
-  separators += csvDelimiter;
+
+  return text;
 }
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCString & to )
 {
+  kdDebug(30501) << "CSVExport::convert" << endl;
   KoDocument* document = m_chain->inputDocument();
 
   if ( !document )
@@ -164,13 +153,13 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   QChar csvDelimiter;
   if (expDialog)
   {
-	codec = expDialog->getCodec();
-	if ( !codec )
-	{
-	  delete expDialog;
-	  return KoFilter::StupidError;
-	}
-	csvDelimiter = expDialog->getDelimiter();
+    codec = expDialog->getCodec();
+    if ( !codec )
+    {
+      delete expDialog;
+      return KoFilter::StupidError;
+    }
+    csvDelimiter = expDialog->getDelimiter();
   }
   else
   {
@@ -206,29 +195,47 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
     Sheet const * const sheet = view->activeSheet();
 
     QRect selection = view->selectionInfo()->lastRange();
+    // Compute the highest row and column indexes (within the selection)
+    // containing non-empty cells, respectively called CSVMaxRow CSVMaxCol.
+    // The CSV will have CSVMaxRow rows, all with CSVMaxCol columns
     int right       = selection.right();
     int bottom      = selection.bottom();
+    int CSVMaxRow   = 0;
+    int CSVMaxCol   = 0;
 
-    QString emptyLines;
-    for ( int row = selection.top(); row <= bottom; ++row )
+    for ( int idxRow = 1, row = selection.top(); row <= bottom; ++row, ++idxRow )
     {
-      QString separators;
-      QString line;
-
-      for ( int col = selection.left(); col <= right; ++col )
+      for ( int idxCol = 1, col = selection.left(); col <= right; ++col, ++idxCol )
       {
-        exportCell( sheet, col, row, separators, line, csvDelimiter, textQuote );
+        if( ! sheet->cellAt( col, row )->isEmpty() )
+        {
+          if ( idxRow > CSVMaxRow )
+            CSVMaxRow = idxRow;
+
+          if ( idxCol > CSVMaxCol )
+            CSVMaxCol = idxCol;
+        }
+      }
+    }
+
+    for ( int idxRow = 1, row = selection.top();
+          row <= bottom && idxRow <= CSVMaxRow; ++row, ++idxRow )
+    {
+      int idxCol = 1;
+      for ( int col = selection.left();
+            col <= right && idxCol <= CSVMaxCol; ++col, ++idxCol )
+      {
+        str += exportCSVCell( sheet, col, row, textQuote );
+
+        if ( idxCol < CSVMaxCol )
+          str += csvDelimiter;
       }
 
-      if ( !line.isEmpty() )
-      {
-        str += emptyLines;
-        str += line;
-        emptyLines = QString::null;
-      }
-      // Append an end of line, but in a temp string -> if no other real line,
-      // then those will be dropped
-      emptyLines += m_eol;
+      // This is to deal with the case of non-rectangular selections 
+      for ( ; idxCol < CSVMaxCol; ++idxCol )
+          str += csvDelimiter;
+
+      str += m_eol;
     }
   }
   else
@@ -244,6 +251,36 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
         continue;
       }
 
+      // Compute the highest row and column indexes containing non-empty cells,
+      // respectively called CSVMaxRow CSVMaxCol.
+      // The CSV will have CSVMaxRow rows, all with CSVMaxCol columns
+      int sheetMaxRow = sheet->maxRow();
+      int sheetMaxCol = sheet->maxColumn();
+      int CSVMaxRow   = 0;
+      int CSVMaxCol   = 0;
+
+      for ( int row = 1 ; row <= sheetMaxRow ; ++row)
+      {
+        for ( int col = 1 ; col <= sheetMaxCol ; col++ )
+        {
+          if( ! sheet->cellAt( col, row )->isEmpty() )
+          {
+            if ( row > CSVMaxRow )
+              CSVMaxRow = row;
+
+            if ( col > CSVMaxCol )
+              CSVMaxCol = col;
+          }
+        }
+      }
+
+      // Skip the sheet altogether if it is empty
+      if ( CSVMaxRow + CSVMaxCol == 0)
+        continue;
+
+      kdDebug(30501) << "Max row x column: " << CSVMaxRow << " x " << CSVMaxCol << endl;
+
+      // Print sheet separators, except for the first sheet
       if ( !first || ( expDialog && expDialog->printAlwaysSheetDelimiter() ) )
       {
         if ( !first)
@@ -267,20 +304,14 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
 
       first = false;
 
-      // Either we get hold of Sheet::m_dctCells and apply the old method below (for sorting)
-      // or, cleaner and already sorted, we use Sheet's API (slower probably, though)
-      int iMaxColumn = sheet->maxColumn();
-      int iMaxRow    = sheet->maxRow();
-      kdDebug(30501) << "Max row x column: " << iMaxRow << " x " << iMaxColumn << endl;
 
       // this is just a bad approximation which fails for documents with less than 50 rows, but
       // we don't need any progress stuff there anyway :) (Werner)
       int value = 0;
-      int step = iMaxRow > 50 ? iMaxRow/50 : 1;
-      int i = 1;
+      int step  = CSVMaxRow > 50 ? CSVMaxRow/50 : 1;
 
-      QString emptyLines;
-      for ( int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow, ++i )
+      // Print the CSV for the sheet data
+      for ( int row = 1, i = 1 ; row <= CSVMaxRow ; ++row, ++i )
       {
         if ( i > step )
         {
@@ -289,25 +320,19 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
           i = 0;
         }
 
-        QString separators;
-        QString line;
-        for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
+        for ( int col = 1 ; col <= CSVMaxCol ; col++ )
         {
-          exportCell( sheet, currentcolumn, currentrow, separators, line, csvDelimiter, textQuote );
+          str += exportCSVCell( sheet, col, row, textQuote );
+
+          if ( col < CSVMaxCol )
+            str += csvDelimiter;
         }
-        if ( !line.isEmpty() )
-        {
-          str += emptyLines;
-          str += line;
-          emptyLines = QString::null;
-        }
-        // Append an end of line, but in a temp string -> if no other real line,
-        // then those will be dropped
-        emptyLines += m_eol;
+
+        str += m_eol;
       }
     }
   }
-  str += m_eol; // Last end of line
+
   emit sigProgress(100);
 
   QFile out(m_chain->outputFile());

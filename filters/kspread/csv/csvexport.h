@@ -32,17 +32,17 @@ class Sheet;
 class CSVExport : public KoFilter 
 {
   Q_OBJECT
-  
- public:
+
+  public:
   CSVExport(KoFilter * parent, const char * name, const QStringList &);
   virtual ~CSVExport() {}
-  
+
   virtual KoFilter::ConversionStatus convert( const QCString & from, const QCString & to );
-  
- private:
-   void exportCell( KSpread::Sheet const * const sheet, int col, int row,
-                   QString & separators, QString & line, QChar const & csvDelimiter, QChar const & textQuote );
- private:
+
+  private:
+  QString CSVExport::exportCSVCell( KSpread::Sheet const * const sheet, int col, int row, QChar const & textQuote );
+
+  private:
   QString m_eol; ///< End of line (LF, CR or CRLF)  
 };
 
