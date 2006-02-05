@@ -213,6 +213,7 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
 bool KivioLayer::loadXML( const QDomElement &layerE )
 {
     m_flags = XmlReadInt( layerE, "flags", 1 );
+    kdDebug(43000) << "Flags: " << m_flags << endl;
     m_name = XmlReadString( layerE, "name", "layerX" );
 
     QDomNode node;
@@ -487,18 +488,18 @@ void KivioLayer::setConnectable( bool f )
 void KivioLayer::setEditable(bool f)
 {
   if(f) {
-    m_flags = m_flags | FLOW_LAYER_EDITABLE;
+    m_flags = m_flags & (~FLOW_LAYER_NOT_EDITABLE);
   } else {
-    m_flags = m_flags & (~FLOW_LAYER_EDITABLE);
+    m_flags = m_flags | FLOW_LAYER_NOT_EDITABLE;
   }
 }
 
 void KivioLayer::setPrintable(bool f)
 {
   if(f) {
-    m_flags = m_flags | FLOW_LAYER_PRINTABLE;
+    m_flags = m_flags & (~FLOW_LAYER_NOT_PRINTABLE);
   } else {
-    m_flags = m_flags & (~FLOW_LAYER_PRINTABLE);
+    m_flags = m_flags | FLOW_LAYER_NOT_PRINTABLE;
   }
 }
 

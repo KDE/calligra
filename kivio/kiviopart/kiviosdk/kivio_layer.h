@@ -38,8 +38,8 @@ class KoXmlWriter;
 
 #define FLOW_LAYER_VISIBLE 0x0001
 #define FLOW_LAYER_CONNECTABLE 0x0002
-#define FLOW_LAYER_EDITABLE 0x0004
-#define FLOW_LAYER_PRINTABLE 0x0008
+#define FLOW_LAYER_NOT_EDITABLE 0x0004
+#define FLOW_LAYER_NOT_PRINTABLE 0x0008
 
 class KivioLayer
 {
@@ -75,10 +75,10 @@ public:
     void setConnectable( bool f );
 
     void setEditable(bool f);
-    bool editable() { return (m_flags & FLOW_LAYER_EDITABLE); }
+    bool editable() { return !(m_flags & FLOW_LAYER_NOT_EDITABLE); }
 
     void setPrintable(bool f);
-    bool printable() { return (m_flags & FLOW_LAYER_PRINTABLE); }
+    bool printable() { return !(m_flags & FLOW_LAYER_NOT_PRINTABLE); }
 
     QString name() const { return m_name; }
     void setName( const QString &n ) { m_name = QString(n); }
