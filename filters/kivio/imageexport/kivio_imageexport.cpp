@@ -73,16 +73,10 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
     format = "PBM";
   } else if(to == "image/x-pcx") {
     format = "PCX";
-  } else if(to == "image/x-portable-graymap") {
-    format = "PGM";
   } else if(to == "image/x-portable-pixmap") {
     format = "PPM";
   } else if(to == "image/x-rgb") {
     format = "RGB";
-  } else if(to == "image/x-tga") {
-    format = "TGA";
-  } else if(to == "image/x-xbitmap") {
-    format = "XBM";
   } else if(to == "image/x-xpm") {
     format = "XPM";
   } else if(to == "image/jp2") {
