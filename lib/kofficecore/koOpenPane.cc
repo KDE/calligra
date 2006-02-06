@@ -248,6 +248,8 @@ void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
 
   if(cfgGrp.readEntry("LastReturnType") == "Custom") {
     m_sectionList->setSelected(item, true);
+    KoSectionListItem* selectedItem = static_cast<KoSectionListItem*>(item);
+    m_widgetStack->widget(selectedItem->widgetIndex())->setFocus();
   }
 }
 
