@@ -33,7 +33,6 @@ class QListView;
 class QLineEdit;
 class QSpinBox;
 
-class KDGanttView;
 class KDGanttViewSummaryItem;
 class KDGanttViewTaskItem;
 class KDGanttViewEventItem;
@@ -45,6 +44,7 @@ class KPrinter;
 namespace KPlato
 {
 
+class MyKDGanttView;
 class TaskAppointmentsView;
 
 class Node;
@@ -183,7 +183,7 @@ private:
     bool m_readWrite;
     int m_defaultFontSize;
     KDGanttViewItem *m_currentItem;
-    KDGanttView *m_gantt;
+    MyKDGanttView *m_gantt;
     TaskAppointmentsView *m_taskView;
     bool m_showExpected;
     bool m_showOptimistic;

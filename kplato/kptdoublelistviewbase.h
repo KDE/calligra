@@ -72,6 +72,7 @@ public:
     void setFormat(int fieldwidth=0, char fmt='f', int prec=0);
     void setMasterFormat(int fieldwidth=0, char fmt='f', int prec=0);
     void setSlaveFormat(int fieldwidth=0, char fmt='f', int prec=0);
+    virtual QSize sizeHint() const;
     
     class MasterListItem;
     class SlaveListItem : public KListViewItem {

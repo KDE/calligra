@@ -32,7 +32,6 @@
 
 #include <qpopupmenu.h>
 
-
 #include <klistview.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -126,6 +125,10 @@ public:
     Appointment *appointment;
     QDate date;
 };
+
+QSize ResourceView::sizeHint() const {
+    return minimumSizeHint(); // HACK: koshell splitter minimumSize problem
+}
 
 ResourceView::ResourceView(View *view, QWidget *parent)
     : QSplitter(parent, "Resource view"),

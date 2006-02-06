@@ -69,6 +69,8 @@ class ResourceItemPrivate;
     virtual bool setContext(Context::Resourceview &context);
     virtual void getContext(Context::Resourceview &context) const;
 
+    virtual QSize sizeHint() const;
+    
 signals:
     void itemDoubleClicked();
     

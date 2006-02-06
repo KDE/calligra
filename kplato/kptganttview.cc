@@ -67,6 +67,16 @@
 namespace KPlato
 {
 
+class MyKDGanttView : public KDGanttView {
+public:
+    MyKDGanttView(QWidget *parent, const char *name)
+    : KDGanttView(parent, name) {
+    }
+    virtual QSize sizeHint() const {
+        return minimumSizeHint(); //HACK: koshell splitter minimumSize problem
+    }
+};
+
 GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     : QSplitter(parent, name),
     m_readWrite(readWrite),
@@ -77,7 +87,7 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     kdDebug() << " ---------------- KPlato: Creating GanttView ----------------" << endl;
     setOrientation(QSplitter::Vertical);
     
-    m_gantt = new KDGanttView(this, "Gantt view");
+    m_gantt = new MyKDGanttView(this, "Gantt view");
     
     m_showExpected = true;
     m_showOptimistic = false;

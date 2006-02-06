@@ -344,6 +344,11 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
     
 }
 
+QSize DoubleListViewBase::sizeHint() const {
+    //kdDebug()<<k_funcinfo<<minimumSizeHint()<<endl;
+    return minimumSizeHint();  //HACK: koshell splitter problem
+}
+
 void DoubleListViewBase::clearSlaveList() {
     while (m_slaveList->columns() > 0) {
         m_slaveList->removeColumn(0); // removing the last one clears the list!!!
