@@ -214,13 +214,13 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionCalculate = new KActionMenu(i18n("Calculate"), "project_calculate",  actionCollection(), "project_calculate");
     connect(actionCalculate, SIGNAL(activated()), SLOT(slotProjectCalculate()));
     
-    actionCalculateExpected = new KAction(i18n("Expected"), "project_calculate", 0, this, SLOT(slotProjectCalculateExpected()), actionCollection(), "project_calculate_expected");
+    actionCalculateExpected = new KAction(i18n("Expected"), 0, 0, this, SLOT(slotProjectCalculateExpected()), actionCollection(), "project_calculate_expected");
     actionCalculate->insert(actionCalculateExpected);
     
-    actionCalculateOptimistic = new KAction(i18n("Optimistic"), "project_calculate", 0, this, SLOT(slotProjectCalculateOptimistic()), actionCollection(), "project_calculate_optimistic");
+    actionCalculateOptimistic = new KAction(i18n("Optimistic"), 0, 0, this, SLOT(slotProjectCalculateOptimistic()), actionCollection(), "project_calculate_optimistic");
     actionCalculate->insert(actionCalculateOptimistic);
     
-    actionCalculatePessimistic = new KAction(i18n("Pessimistic"), "project_calculate", 0, this, SLOT(slotProjectCalculatePessimistic()), actionCollection(), "project_calculate_pessimistic");
+    actionCalculatePessimistic = new KAction(i18n("Pessimistic"), 0, 0, this, SLOT(slotProjectCalculatePessimistic()), actionCollection(), "project_calculate_pessimistic");
     actionCalculate->insert(actionCalculatePessimistic);
     
 /*    // ------ Reports
