@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright (C) 2006 Robert Knight <robertknight@gmail.com>
+             (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2002 Ariya Hidayat <ariya@kde.org>
              (C) 2002 John Dailey <dailey@vt.edu>
              (C) 2002 Werner Trobin <trobin@kde.org>
@@ -26,6 +27,7 @@
 
 
 #include <qbuttongroup.h>
+#include <qhbuttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qgroupbox.h>
@@ -54,13 +56,13 @@
 
 using namespace KSpread;
 
-SortDlg::SortDlg( View * parent,  const char * name,
+SortDialog::SortDialog( View * parent,  const char * name,
                                 bool modal )
     : KDialogBase( parent, name, modal,"Sort",Ok|Cancel ),
     m_pView( parent )
 {
   if ( !name )
-    setName( "SortDlg" );
+    setName( "SortDialog" );
 
   resize( 528, 316 );
   setCaption( i18n( "Sorting" ) );
@@ -74,8 +76,38 @@ SortDlg::SortDlg( View * parent,  const char * name,
   QGridLayout * page1Layout
     = new QGridLayout( m_page1, 1, 1, 11, 6, "page1Layout");
 
+//---------------- Sort Layout & Header Row/Column Toggle
+
+  //Sort orientation selector (for selecting Left-To-Right or Top-To-Bottom sorting of the selection)
+  QGroupBox* layoutGroup = new QGroupBox(2 , Qt::Vertical,  m_page1, "layoutGroup");
+  layoutGroup->setTitle( i18n("Layout") );
+  
+  QHButtonGroup * orientationGroup = new QHButtonGroup( layoutGroup, "orientationGroup" );
+  orientationGroup->setLineWidth(0);
+  orientationGroup->setMargin(0);
+  orientationGroup->layout()->setMargin(0);
+
+  m_sortColumn = new QRadioButton( orientationGroup, "m_sortColumn" );
+  m_sortColumn->setText( i18n( "Sort &Rows" ) );
+  m_sortColumn->setChecked( true );
+
+  m_sortRow = new QRadioButton( orientationGroup, "m_sortRow" );
+  m_sortRow->setText( i18n( "Sort &Columns" ) );
+
+  //First row / column contains header toggle
+  m_firstRowHeader = new QCheckBox( layoutGroup, "m_copyLayout" );
+  //m_firstRowHeader->setText( i18n( "&First row contains headers" ) );
+  m_firstRowHeader->setChecked(true);
+  page1Layout->addWidget(layoutGroup,0,0);
+
+//----------------
+
+  page1Layout->addRowSpacing(2,10);
+  
+
   QGroupBox * sort1Box = new QGroupBox( m_page1, "sort1Box" );
   sort1Box->setTitle( i18n( "Sort By" ) );
+  sort1Box->setFlat(true);
   sort1Box->setColumnLayout(0, Qt::Vertical );
   sort1Box->layout()->setSpacing( KDialog::spacingHint() );
   sort1Box->layout()->setMargin( KDialog::marginHint() );
@@ -90,10 +122,11 @@ SortDlg::SortDlg( View * parent,  const char * name,
   m_sortOrder1->insertItem( i18n( "Descending" ) );
   sort1BoxLayout->addWidget( m_sortOrder1 );
 
-  page1Layout->addWidget( sort1Box, 0, 0 );
+  page1Layout->addWidget( sort1Box, 3, 0 );
 
   QGroupBox * sort2Box = new QGroupBox( m_page1, "sort2Box" );
   sort2Box->setTitle( i18n( "Then By" ) );
+  sort2Box->setFlat(true);
   sort2Box->setColumnLayout(0, Qt::Vertical );
   sort2Box->layout()->setSpacing( KDialog::spacingHint() );
   sort2Box->layout()->setMargin( KDialog::marginHint() );
@@ -109,10 +142,11 @@ SortDlg::SortDlg( View * parent,  const char * name,
   m_sortOrder2->insertItem( i18n( "Descending" ) );
   sort2BoxLayout->addWidget( m_sortOrder2 );
 
-  page1Layout->addWidget( sort2Box, 1, 0 );
+  page1Layout->addWidget( sort2Box, 4, 0 );
 
   QGroupBox * sort3Box = new QGroupBox( m_page1, "sort3Box" );
   sort3Box->setTitle( i18n( "Then By" ) );
+  sort3Box->setFlat(true);
   sort3Box->setColumnLayout(0, Qt::Vertical );
   sort3Box->layout()->setSpacing( KDialog::spacingHint() );
   sort3Box->layout()->setMargin( KDialog::marginHint() );
@@ -130,14 +164,15 @@ SortDlg::SortDlg( View * parent,  const char * name,
   m_sortOrder3->setEnabled( false );
   sort3BoxLayout->addWidget( m_sortOrder3 );
 
-  page1Layout->addWidget( sort3Box, 2, 0 );
+  page1Layout->addWidget( sort3Box, 5, 0 );
   m_tabWidget->insertTab( m_page1, i18n( "Sort Criteria" ) );
 
 
-  // options page
+  //---------------- options page
 
   m_page2 = new QWidget( m_tabWidget, "m_page2" );
   QGridLayout * page2Layout = new QGridLayout( m_page2, 1, 1, 11, 6, "page2Layout");
+  page2Layout->setAlignment(Qt::AlignTop);
 
   QGroupBox * firstKeyBox = new QGroupBox( m_page2, "firstKeyBox" );
   firstKeyBox->setTitle( i18n( "First Key" ) );
@@ -156,45 +191,7 @@ SortDlg::SortDlg( View * parent,  const char * name,
   m_customList->setMaximumSize( 230, 30 );
   firstKeyBoxLayout->addWidget( m_customList );
 
-  page2Layout->addWidget( firstKeyBox, 0, 1 );
-
-  QButtonGroup * orientationGroup = new QButtonGroup( m_page2, "orientationGroup" );
-  orientationGroup->setTitle( i18n( "Layout" ) );
-  orientationGroup->setColumnLayout(0, Qt::Vertical );
-  orientationGroup->layout()->setSpacing( KDialog::spacingHint() );
-  orientationGroup->layout()->setMargin( KDialog::marginHint() );
-  QGridLayout * orientationGroupLayout = new QGridLayout( orientationGroup->layout() );
-  orientationGroupLayout->setAlignment( Qt::AlignTop );
-
-  m_sortColumn = new QRadioButton( orientationGroup, "m_sortColumn" );
-  m_sortColumn->setText( i18n( "Sort &Rows" ) );
-  m_sortColumn->setChecked( true );
-
-  orientationGroupLayout->addWidget( m_sortColumn, 0, 0 );
-
-  m_sortRow = new QRadioButton( orientationGroup, "m_sortRow" );
-  m_sortRow->setText( i18n( "Sort &Columns" ) );
-
-  orientationGroupLayout->addWidget( m_sortRow, 1, 0 );
-
-  page2Layout->addWidget( orientationGroup, 0, 0 );
-
-  m_copyLayout = new QCheckBox( m_page2, "m_copyLayout" );
-  m_copyLayout->setText( i18n( "Copy cell &formatting (Borders, Colours, Text Style)" ) );
-
-  page2Layout->addMultiCellWidget( m_copyLayout, 2, 2, 0, 1 );
-
-  m_firstRowHeader = new QCheckBox( m_page2, "m_copyLayout" );
-  m_firstRowHeader->setText( i18n( "&First row contains headers" ) );
-  m_firstRowHeader->setChecked(true);
-
-  page2Layout->addMultiCellWidget( m_firstRowHeader, 3, 3, 0, 1 );
-
-  m_respectCase = new QCheckBox( m_page2, "m_copyLayout" );
-  m_respectCase->setText( i18n( "Case sensitive sort" ) );
-  m_respectCase->setChecked( true );
-
-  page2Layout->addMultiCellWidget( m_respectCase, 4, 4, 0, 1 );
+  page2Layout->addWidget( firstKeyBox, 0, 0 );
 
 
   QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
@@ -224,13 +221,25 @@ SortDlg::SortDlg( View * parent,  const char * name,
   m_outputCell->setMaximumSize( QSize( 60, 32767 ) );
   resultToBoxLayout->addWidget( m_outputCell );
 
-  page2Layout->addMultiCellWidget( resultToBox, 1, 1, 0, 1 );
+  page2Layout->addWidget( resultToBox, 1,0 );
   m_tabWidget->insertTab( m_page2, i18n( "Options" ) );
 
   QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
   QSpacerItem * spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding,
                                             QSizePolicy::Minimum );
   Layout1->addItem( spacer_2 );
+  
+
+  m_copyLayout = new QCheckBox( m_page2, "m_copyLayout" );
+  m_copyLayout->setText( i18n( "Copy cell &formatting (Borders, Colours, Text Style)" ) );
+
+  page2Layout->addWidget( m_copyLayout, 2, 0 );
+
+  m_respectCase = new QCheckBox( m_page2, "m_copyLayout" );
+  m_respectCase->setText( i18n( "Case sensitive sort" ) );
+  m_respectCase->setChecked( true );
+
+  page2Layout->addWidget( m_respectCase, 3,0 );
 
   connect( m_sortKey2, SIGNAL( activated( int ) ), this,
            SLOT( sortKey2textChanged( int ) ) );
@@ -244,12 +253,12 @@ SortDlg::SortDlg( View * parent,  const char * name,
   init();
 }
 
-SortDlg::~SortDlg()
+SortDialog::~SortDialog()
 {
   // no need to delete child widgets, Qt does it all for us
 }
 
-void SortDlg::init()
+void SortDialog::init()
 {
     QStringList lst;
     lst<<i18n("January");
@@ -305,6 +314,11 @@ void SortDlg::init()
   cellArea += Cell::columnName(r.left());
   cellArea += QString::number( r.top() );
   m_outputCell->setText( cellArea );
+  
+  //If the top-most row or left-most column all contain text items (as opposed to numbers, dates etc.)
+  //then the dialog will guess that the top row (or left column) is a header.  
+  //The user can always change this if we get this wrong.
+  bool selectionMayHaveHeader = true;
 
   // Entire columns selected ?
   if ( util_isColumnSelected(r) )
@@ -319,9 +333,16 @@ void SortDlg::init()
 	    QString colName=i18n(" (Column %1)").arg(Cell::columnName(i));
 	    
 	    if (!guessName.isEmpty())
+	    {
 	    	m_listColumn += guessName + colName;
+	    }
 	    else
+	    {
 		m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
+		
+		if ( i == r.left() )
+		  selectionMayHaveHeader=false;
+            }
     }
      // m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
   }
@@ -338,9 +359,16 @@ void SortDlg::init()
 	    QString rowName=i18n(" (Row %1)").arg(i);
 	    
 	    if (!guessName.isEmpty())
+	    {
 	    	m_listRow += guessName + rowName;
+	    }
 	    else
+	    {
 		m_listRow += i18n("Row %1").arg(i);
+		
+		if ( i == r.top() )
+		  selectionMayHaveHeader=false;
+            }
     }
   }
   else
@@ -372,7 +400,12 @@ void SortDlg::init()
 	    if (!guessName.isEmpty())
 		    m_listColumn += guessName + colName;
 	    else
+	    {
 		    m_listColumn += i18n("Column %1").arg(Cell::columnName(i));
+		    
+		    if (i == r.left())
+		      selectionMayHaveHeader=false;
+            }
     }
 
     for (int i = r.top(); i <= bottom; ++i) 
@@ -383,22 +416,36 @@ void SortDlg::init()
 	    if (!guessName.isEmpty())
 		    m_listRow += guessName + rowName;
 	    else
+	    {
 		    m_listRow += i18n("Row %1").arg(i);
+		    
+		    if (i == r.top())
+		      selectionMayHaveHeader=false;
+            }
     }
   }
 
+  if ( selectionMayHaveHeader )
+    m_firstRowHeader->setChecked( true );
+  else
+    m_firstRowHeader->setChecked( false );  
+
   // Initialize the combo box
   if ( m_sortRow->isChecked() )
-    slotOrientationChanged(1);
+  {
+    slotOrientationChanged( SortRows );
+  }
   else
-    slotOrientationChanged(0);
+  {
+    slotOrientationChanged( SortColumns );
+  }
 }
 
-void SortDlg::slotOrientationChanged(int id)
+void SortDialog::slotOrientationChanged(int id)
 {
   switch( id )
   {
-   case 0 :
+   case SortColumns :
     m_sortKey1->clear();
     m_sortKey2->clear();
     m_sortKey3->clear();
@@ -407,9 +454,10 @@ void SortDlg::slotOrientationChanged(int id)
     m_sortKey2->insertStringList(m_listColumn);
     m_sortKey3->insertItem( i18n("None") );
     m_sortKey3->insertStringList(m_listColumn);
+    m_firstRowHeader->setText( i18n( "&First row contains headers" ) );
     break;
 
-   case 1 :
+   case SortRows :
     m_sortKey1->clear();
     m_sortKey2->clear();
     m_sortKey3->clear();
@@ -418,6 +466,7 @@ void SortDlg::slotOrientationChanged(int id)
     m_sortKey2->insertStringList(m_listRow);
     m_sortKey3->insertItem( i18n("None") );
     m_sortKey3->insertStringList(m_listRow);
+    m_firstRowHeader->setText( i18n( "&First column contains headers" ) );
 
     if (m_firstRowHeader->isChecked())
     {
@@ -445,7 +494,7 @@ void SortDlg::slotOrientationChanged(int id)
   }
 }
 
-void SortDlg::slotOk()
+void SortDialog::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
 
@@ -588,13 +637,13 @@ void SortDlg::slotOk()
   accept();
 }
 
-void SortDlg::sortKey2textChanged( int i )
+void SortDialog::sortKey2textChanged( int i )
 {
   m_sortKey3->setEnabled( ( i!=0 ) );
   m_sortOrder3->setEnabled( ( i!=0 ) );
 }
 
-void SortDlg::useCustomListsStateChanged( int state )
+void SortDialog::useCustomListsStateChanged( int state )
 {
   if (state == 0)
     m_customList->setEnabled(false);
@@ -602,8 +651,9 @@ void SortDlg::useCustomListsStateChanged( int state )
     m_customList->setEnabled(true);
 }
 
-void SortDlg::firstRowHeaderChanged( int state )
+void SortDialog::firstRowHeaderChanged( int state )
 {
+    //FIXME:  This doesn't work when sorting columns
   if (m_sortColumn->isChecked())
     return;
 

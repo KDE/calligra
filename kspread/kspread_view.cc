@@ -4715,7 +4715,7 @@ void View::sort()
         return;
     }
 
-    SortDlg dlg( this, "Sort" );
+    SortDialog dlg( this, "Sort" );
     dlg.exec();
 }
 

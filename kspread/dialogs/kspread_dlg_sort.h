@@ -45,14 +45,20 @@ namespace KSpread
 class Sheet;
 class View;
 
-class SortDlg : public KDialogBase
+class SortDialog : public KDialogBase
 {
   Q_OBJECT
 
  public:
-  SortDlg( View * parent, const char * name = 0,
+  enum Orientation
+  {
+    SortColumns,
+    SortRows
+  };
+  
+  SortDialog( View * parent, const char * name = 0,
                   bool modal = false );
-  ~SortDlg();
+  ~SortDialog();
 
  private slots:
   void sortKey2textChanged( int );
