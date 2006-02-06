@@ -620,7 +620,7 @@ public:
     void sortByColumn( const QRect &area, int ref_column, SortingOrder );
     void sortByColumn( const QRect &area, int key1, int key2, int key3,
                        SortingOrder order1, SortingOrder order2, SortingOrder order3,
-                       QStringList const * firstKey, bool copyFormat, bool headerRow,
+                       QStringList const * firstKey, bool copyFormat, bool headerCol,
                        Point const & outputPoint, bool respectCase );
     void swapCells( int x1, int y1, int x2, int y2, bool cpFormat );
 

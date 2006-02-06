@@ -89,15 +89,14 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
   m_sortColumn = new QRadioButton( orientationGroup, "m_sortColumn" );
   m_sortColumn->setText( i18n( "Sort &Rows" ) );
-  m_sortColumn->setChecked( true );
 
   m_sortRow = new QRadioButton( orientationGroup, "m_sortRow" );
   m_sortRow->setText( i18n( "Sort &Columns" ) );
-
+    
   //First row / column contains header toggle
-  m_firstRowHeader = new QCheckBox( layoutGroup, "m_copyLayout" );
-  //m_firstRowHeader->setText( i18n( "&First row contains headers" ) );
-  m_firstRowHeader->setChecked(true);
+  m_firstRowOrColHeader = new QCheckBox( layoutGroup, "m_copyLayout" );
+  //m_firstRowOrColHeader->setText( i18n( "&First row contains headers" ) );
+  m_firstRowOrColHeader->setChecked(true);
   page1Layout->addWidget(layoutGroup,0,0);
 
 //----------------
@@ -194,6 +193,11 @@ SortDialog::SortDialog( View * parent,  const char * name,
   page2Layout->addWidget( firstKeyBox, 0, 0 );
 
 
+ /* 
+  This doesn't work properly, and as a bug report pointed out, it isn't that useful since it is easy
+  to just copy and paste the data and then sort the newly pasted data in place.
+  -- Robert Knight
+  
   QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
   resultToBox->setTitle( i18n( "Location to Store Sort Results" ) );
   resultToBox->setColumnLayout(0, Qt::Vertical );
@@ -221,7 +225,9 @@ SortDialog::SortDialog( View * parent,  const char * name,
   m_outputCell->setMaximumSize( QSize( 60, 32767 ) );
   resultToBoxLayout->addWidget( m_outputCell );
 
-  page2Layout->addWidget( resultToBox, 1,0 );
+  page2Layout->addWidget( resultToBox, 1,0 );*/
+  
+  
   m_tabWidget->insertTab( m_page2, i18n( "Options" ) );
 
   QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
@@ -233,24 +239,39 @@ SortDialog::SortDialog( View * parent,  const char * name,
   m_copyLayout = new QCheckBox( m_page2, "m_copyLayout" );
   m_copyLayout->setText( i18n( "Copy cell &formatting (Borders, Colours, Text Style)" ) );
 
-  page2Layout->addWidget( m_copyLayout, 2, 0 );
+  page2Layout->addWidget( m_copyLayout, 1, 0 );
 
   m_respectCase = new QCheckBox( m_page2, "m_copyLayout" );
   m_respectCase->setText( i18n( "Case sensitive sort" ) );
   m_respectCase->setChecked( true );
 
-  page2Layout->addWidget( m_respectCase, 3,0 );
+  page2Layout->addWidget( m_respectCase, 2,0 );
 
   connect( m_sortKey2, SIGNAL( activated( int ) ), this,
            SLOT( sortKey2textChanged( int ) ) );
   connect( m_useCustomLists, SIGNAL( stateChanged(int) ), this,
            SLOT( useCustomListsStateChanged(int) ) );
-  connect( m_firstRowHeader, SIGNAL( stateChanged(int) ), this,
+  connect( m_firstRowOrColHeader, SIGNAL( stateChanged(int) ), this,
            SLOT( firstRowHeaderChanged(int) ) );
   connect( orientationGroup, SIGNAL( pressed(int) ), this,
            SLOT( slotOrientationChanged(int) ) );
 
   init();
+}
+
+QRect SortDialog::sourceArea()
+{
+    return m_pView->selectionInfo()->selection();
+}
+
+SortDialog::Orientation SortDialog::guessDataOrientation()
+{
+    const QRect selection=sourceArea();
+    
+    if (selection.width() >= selection.height())
+        return SortColumns;
+    else
+        return SortRows;
 }
 
 SortDialog::~SortDialog()
@@ -299,7 +320,7 @@ void SortDialog::init()
   }
   m_customList->insertStringList(lst);
 
-  QPtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
+  /*QPtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
   for (unsigned int c = 0; c < sheetList.count(); ++c)
   {
     Sheet * t = sheetList.at(c);
@@ -307,13 +328,13 @@ void SortDialog::init()
       continue;
     m_outputSheet->insertItem( t->sheetName() );
   }
-  m_outputSheet->setCurrentText( m_pView->activeSheet()->sheetName() );
+  m_outputSheet->setCurrentText( m_pView->activeSheet()->sheetName() );*/
 
-  QRect r = m_pView->selectionInfo()->selection();
-  QString cellArea;
+  QRect r = sourceArea();
+  /*QString cellArea;
   cellArea += Cell::columnName(r.left());
   cellArea += QString::number( r.top() );
-  m_outputCell->setText( cellArea );
+  m_outputCell->setText( cellArea );*/
   
   //If the top-most row or left-most column all contain text items (as opposed to numbers, dates etc.)
   //then the dialog will guess that the top row (or left column) is a header.  
@@ -387,7 +408,10 @@ void SortDialog::init()
     }
     else
     {
-      m_sortColumn->setChecked(true);
+        if (guessDataOrientation() == SortColumns)
+            m_sortRow->setChecked(true);
+        else
+            m_sortColumn->setChecked(true);
     }
 
     int right  = r.right();
@@ -426,9 +450,9 @@ void SortDialog::init()
   }
 
   if ( selectionMayHaveHeader )
-    m_firstRowHeader->setChecked( true );
+    m_firstRowOrColHeader->setChecked( true );
   else
-    m_firstRowHeader->setChecked( false );  
+    m_firstRowOrColHeader->setChecked( false );  
 
   // Initialize the combo box
   if ( m_sortRow->isChecked() )
@@ -454,7 +478,7 @@ void SortDialog::slotOrientationChanged(int id)
     m_sortKey2->insertStringList(m_listColumn);
     m_sortKey3->insertItem( i18n("None") );
     m_sortKey3->insertStringList(m_listColumn);
-    m_firstRowHeader->setText( i18n( "&First row contains headers" ) );
+    m_firstRowOrColHeader->setText( i18n( "&First row contains headers" ) );
     break;
 
    case SortRows :
@@ -466,9 +490,9 @@ void SortDialog::slotOrientationChanged(int id)
     m_sortKey2->insertStringList(m_listRow);
     m_sortKey3->insertItem( i18n("None") );
     m_sortKey3->insertStringList(m_listRow);
-    m_firstRowHeader->setText( i18n( "&First column contains headers" ) );
+    m_firstRowOrColHeader->setText( i18n( "&First column contains headers" ) );
 
-    if (m_firstRowHeader->isChecked())
+    /*if (m_firstRowOrColHeader->isChecked())
     {
       int k1 = m_sortKey1->currentItem();
       int k2 = m_sortKey2->currentItem();
@@ -484,7 +508,7 @@ void SortDialog::slotOrientationChanged(int id)
         m_sortKey2->setCurrentItem(--k2);
       if (k3 > 0)
         m_sortKey3->setCurrentItem(--k3);
-    }
+    }*/
 
     break;
 
@@ -497,8 +521,15 @@ void SortDialog::slotOrientationChanged(int id)
 void SortDialog::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
+  
+  Orientation sortOrientation;
+  if (m_sortRow->isChecked())
+    sortOrientation=SortColumns;
+  else
+    sortOrientation=SortRows;
 
-  Sheet * sheet = m_pView->doc()->map()->findSheet( m_outputSheet->currentText() );
+  Sheet * sheet = m_pView->activeSheet(); 
+  /*m_pView->doc()->map()->findSheet( m_outputSheet->currentText() );
   if ( !sheet )
   {
     KMessageBox::error( this, i18n("The destination sheet does not exist.") );
@@ -506,28 +537,46 @@ void SortDialog::slotOk()
     m_tabWidget->setTabEnabled(m_page2, true);
     m_pView->slotUpdateView( m_pView->activeSheet() );
     return;
-  }
+  }  */
 
-  Point outputPoint( m_outputCell->text() );
-  if ( !outputPoint.isValid() || outputPoint.isSheetKnown() )
+  /*if ( !outputPoint.isValid() || outputPoint.isSheetKnown() )
   {
     KMessageBox::error( this, i18n("The destination cell does not exist.") );
     m_outputCell->setFocus();
     m_tabWidget->setTabEnabled(m_page2, true);
     m_pView->slotUpdateView( m_pView->activeSheet() );
     return;
-  }
-  outputPoint.setSheet(sheet);
+  }*/
+  //outputPoint.setSheet(sheet);
 
-  QRect r = m_pView->selectionInfo()->selection();
-  if ( r.topLeft() != outputPoint.pos() )
+  QRect sortArea = sourceArea();
+  Point outputPoint;
+    outputPoint.setPos(sortArea.topLeft());
+    outputPoint.setSheet(sheet);  
+  bool hasHeader=m_firstRowOrColHeader->isChecked();
+  
+  if ( hasHeader )
   {
-    int h = outputPoint.pos().y() + r.height();
-    int w = outputPoint.pos().x() + r.width();
+    if (sortOrientation == SortColumns)
+    {
+        sortArea.setLeft( sortArea.left()+1 );
+        outputPoint.setColumn( outputPoint.column()+1 ); 
+    }
+    else
+    {
+        sortArea.setTop( sortArea.top()+1 );
+        outputPoint.setRow( outputPoint.row()+1 );
+    }
+  }
+  
+  /*if ( sortArea.topLeft() != outputPoint.pos() )
+  {
+    int h = outputPoint.pos().y() + sortArea.height();
+    int w = outputPoint.pos().x() + sortArea.width();
 
-    if ( r.contains(outputPoint.pos())
-         || ( w >= r.left() && w <= r.right() )
-         || ( h >= r.top()  && h <= r.bottom() ) )
+    if ( sortArea.contains(outputPoint.pos())
+         || ( w >= sortArea.left() && w <= sortArea.right() )
+         || ( h >= sortArea.top()  && h <= sortArea.bottom() ) )
     {
       KMessageBox::error( this, i18n("If the destination and source regions are different, they must not overlap.") );
       m_outputCell->setFocus();
@@ -535,7 +584,7 @@ void SortDialog::slotOk()
       // TODO: set right tab
       return;
     }
-  }
+  }*/
 
   int key1 = 1;
   int key2 = 0;
@@ -554,13 +603,23 @@ void SortDialog::slotOk()
 
   if ( m_sortRow->isChecked() )
   {
-    key1 = m_sortKey1->currentItem() + r.top();
+    key1 = m_sortKey1->currentItem() + sortArea.top();
     if (m_sortKey2->currentItem() > 0)
-      key2 = m_sortKey2->currentItem() + r.top() - 1; // cause there is "None"
+      key2 = m_sortKey2->currentItem() + sortArea.top() - 1; // cause there is "None"
     if (m_sortKey3->currentItem() > 0)
-      key3 = m_sortKey3->currentItem() + r.top() - 1; // cause there is "None"
-
-    if (m_firstRowHeader->isChecked())
+      key3 = m_sortKey3->currentItem() + sortArea.top() - 1; // cause there is "None"
+  }
+  else
+  {
+    key1 = m_sortKey1->currentItem() + sortArea.left();
+    if (m_sortKey2->currentItem() > 0)
+      key2 = m_sortKey2->currentItem() + sortArea.left() - 1; // cause there is "None"
+    if (m_sortKey3->currentItem() > 0)
+      key3 = m_sortKey3->currentItem() + sortArea.left() - 1; // cause there is "None"
+      
+  }
+  /*
+  if (m_firstRowOrColHeader->isChecked())
     {
       if (key1 >= 0)
         ++key1;
@@ -568,16 +627,7 @@ void SortDialog::slotOk()
         ++key2;
       if (key3 > 0)
         ++key3;
-    }
-  }
-  else
-  {
-    key1 = m_sortKey1->currentItem() + r.left();
-    if (m_sortKey2->currentItem() > 0)
-      key2 = m_sortKey2->currentItem() + r.left() - 1; // cause there is "None"
-    if (m_sortKey3->currentItem() > 0)
-      key3 = m_sortKey3->currentItem() + r.left() - 1; // cause there is "None"
-  }
+    }*/
 
   if ( m_useCustomLists->isChecked() )
   {
@@ -596,6 +646,8 @@ void SortDialog::slotOk()
         tmp += list[i];
     }
   }
+  
+
 
   if (key1 == key2)
     key2 = 0;
@@ -609,20 +661,22 @@ void SortDialog::slotOk()
     key3 = 0;
   }
 
+
+  
   if ( m_sortRow->isChecked() )
-  {
-    m_pView->activeSheet()->sortByRow( m_pView->selectionInfo()->selection(), key1, key2, key3,
+  {    
+    m_pView->activeSheet()->sortByRow( sortArea/*sourceArea*/, key1, key2, key3,
                                        order1, order2, order3,
                                        firstKey, m_copyLayout->isChecked(),
-                                       m_firstRowHeader->isChecked(),
+                                       false /*m_firstRowOrColHeader->isChecked()*/,
                                        outputPoint, m_respectCase->isChecked() );
   }
   else if (m_sortColumn->isChecked())
-  {
-    m_pView->activeSheet()->sortByColumn( m_pView->selectionInfo()->selection(), key1, key2, key3,
+  {     
+    m_pView->activeSheet()->sortByColumn( sortArea /*sourceArea*/, key1, key2, key3,
                                           order1, order2, order3,
                                           firstKey, m_copyLayout->isChecked(),
-                                          m_firstRowHeader->isChecked(),
+                                          false/*m_firstRowOrColHeader->isChecked()*/,
                                           outputPoint, m_respectCase->isChecked() );
   }
   else
@@ -652,9 +706,8 @@ void SortDialog::useCustomListsStateChanged( int state )
 }
 
 void SortDialog::firstRowHeaderChanged( int state )
-{
-    //FIXME:  This doesn't work when sorting columns
-  if (m_sortColumn->isChecked())
+{   
+ /* if (m_sortColumn->isChecked())
     return;
 
   if (state == 0) // off
@@ -665,11 +718,11 @@ void SortDialog::firstRowHeaderChanged( int state )
     m_sortKey1->clear();
     m_sortKey2->clear();
     m_sortKey3->clear();
-    m_sortKey1->insertStringList(m_listRow);
+    m_sortKey1->insertStringList( m_listRow );
     m_sortKey2->insertItem( i18n("None") );
-    m_sortKey2->insertStringList(m_listRow);
+    m_sortKey2->insertStringList( m_listRow );
     m_sortKey3->insertItem( i18n("None") );
-    m_sortKey3->insertStringList(m_listRow);
+    m_sortKey3->insertStringList( m_listRow );
 
     m_sortKey1->setCurrentItem(++k1);
     m_sortKey2->setCurrentItem(++k2);
@@ -689,7 +742,7 @@ void SortDialog::firstRowHeaderChanged( int state )
       m_sortKey2->setCurrentItem(--k2);
     if (k3 > 0)
       m_sortKey3->setCurrentItem(--k3);
-  }
+  }*/
 }
 
 #include "kspread_dlg_sort.moc"

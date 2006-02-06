@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright (C) 2006 Robert Knight <robertknight@gmail.com>
+             (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2002 Ariya Hidayat <ariya@kde.org>
              (C) 2002 John Dailey <dailey@vt.edu>
              (C) 2002 Werner Trobin <trobin@kde.org>
@@ -52,14 +53,18 @@ class SortDialog : public KDialogBase
  public:
   enum Orientation
   {
-    SortColumns,
-    SortRows
+    SortColumns=0,
+    SortRows=1
   };
   
   SortDialog( View * parent, const char * name = 0,
                   bool modal = false );
   ~SortDialog();
-
+ 
+ protected:
+    Orientation guessDataOrientation();
+    QRect       sourceArea();
+ 
  private slots:
   void sortKey2textChanged( int );
   void useCustomListsStateChanged( int );
@@ -94,11 +99,11 @@ class SortDialog : public KDialogBase
   QRadioButton * m_sortRow;
 
   QCheckBox    * m_copyLayout;
-  QCheckBox    * m_firstRowHeader;
+  QCheckBox    * m_firstRowOrColHeader;
   QCheckBox    * m_respectCase;
 
-  QComboBox    * m_outputSheet;
-  QLineEdit    * m_outputCell;
+  /*QComboBox    * m_outputSheet;
+  QLineEdit    * m_outputCell;*/
 };
 
 } // namespace KSpread
