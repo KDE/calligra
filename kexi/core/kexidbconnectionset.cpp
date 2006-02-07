@@ -154,7 +154,7 @@ void KexiDBConnectionSet::load()
 	QStringList files( KGlobal::dirs()->findAllResources("data", "kexi/connections/*.kexic") );
 //	//also try for capital file extension
 //	files += KGlobal::dirs()->findAllResources("data", "kexi/connections/*.KEXIC");
-	kexidbg << files << endl;
+//	kexidbg << files << endl;
 
 	foreach(QStringList::ConstIterator, it, files) {
 		KexiDB::ConnectionData *data = new KexiDB::ConnectionData();

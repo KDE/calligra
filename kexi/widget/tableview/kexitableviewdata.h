@@ -253,7 +253,7 @@ public:
 
 	/*virtual?*/
 	/*! \return true if this db-aware data set. */
-	inline bool isDBAware() { return m_cursor!=0; }
+	inline bool isDBAware() { return m_cursor; }
 
 	/*! For db-aware data set only: table name is returned;
 	 equivalent to cursor()->query()->parentTable()->name(). */
@@ -465,7 +465,7 @@ protected:
 	short m_type;
 	static unsigned short charTable[];
 	KexiDB::RowEditBuffer *m_pRowEditBuffer;
-	KexiDB::Cursor *m_cursor;
+	QGuardedPtr<KexiDB::Cursor> m_cursor;
 
 	//! used to faster lookup columns of simple type (not dbaware)
 //	QDict<KexiTableViewColumn> *m_simpleColumnsByName;

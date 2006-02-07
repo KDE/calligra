@@ -626,11 +626,13 @@ StdWidgetFactory::changeText(const QString &text)
 		return;*/
 	int width = w->sizeHint().width();
 
+#if 0 //not needed here, size hint is used on creation in InsertWidgetCommand::execute()
 	if(w->width() < width)
 	{
 		w->resize(width, w->height() );
 		//WidgetFactory::m_editor->resize(w->size());
 	}
+#endif
 	return true;
 }
 

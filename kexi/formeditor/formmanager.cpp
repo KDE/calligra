@@ -313,6 +313,7 @@ FormManager::stopInsert()
 	if(!m_inserting)
 		return;
 
+//#ifndef KEXI_NO_CURSOR_PROPERTY
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
@@ -320,17 +321,21 @@ FormManager::stopInsert()
 		QObjectList *l = form->widget()->queryList( "QWidget" );
 		for(QObject *o = l->first(); o; o = l->next())
 		{
+			static_cast<QWidget*>(o)->unsetCursor();
+#if 0
 			if( ((QWidget*)o)->ownCursor()) {
 				QMap<QObject*,QCursor>::ConstIterator curIt( form->d->cursors.find(o) );
 				if (curIt!=form->d->cursors.constEnd())
 					static_cast<QWidget*>(o)->setCursor( *curIt );
 //				((QWidget*)o)->setCursor( (*(form->d->cursors))[o->name()] ) ;
 			}
+#endif
 		}
 		delete l;
 //		delete (form->d->cursors);
 //		form->d->cursors = 0;
 	}
+//#endif
 	m_inserting = false;
 	m_pointer->setChecked(true);
 }

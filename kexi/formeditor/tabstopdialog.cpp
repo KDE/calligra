@@ -86,6 +86,7 @@ int TabStopDialog::exec(Form *form)
 
 	if(form->autoTabStops())
 		form->autoAssignTabStops();
+	form->updateTabStopsOrder();
 	ObjectTreeListIterator it( form->tabStopsIterator() );
 	it.toLast();
 	for(;it.current(); --it)

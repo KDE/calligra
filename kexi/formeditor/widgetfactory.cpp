@@ -550,9 +550,11 @@ WidgetFactory::isPropertyVisibleInternal(const QCString &, QWidget *w,
 {
 	Q_UNUSED( w );
 
+#ifdef KEXI_NO_CURSOR_PROPERTY
 //! @todo temporary unless cursor works properly in the Designer
 	if (property=="cursor")
 		return false;
+#endif
 
 	if (!isTopLevel 
 		&& (property=="caption" || property=="icon" || property=="sizeIncrement" || property=="iconText")) {

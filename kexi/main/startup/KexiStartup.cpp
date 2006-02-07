@@ -371,10 +371,10 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		}
 	}
 
-	kdDebug() << "ARGC==" << args->count() << endl;
+/*	kdDebug() << "ARGC==" << args->count() << endl;
 	for (int i=0;i<args->count();i++) {
 		kdDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
-	}
+	}*/
 
 	if (m_forcedFinalMode && m_forcedDesignMode) {
 		KMessageBox::sorry( 0, i18n(
@@ -614,7 +614,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
 		int r = d->startupDialog->result();
 		if (r==KexiStartupDialog::TemplateResult) {
-			kdDebug() << "Template key == " << d->startupDialog->selectedTemplateKey() << endl;
+//			kdDebug() << "Template key == " << d->startupDialog->selectedTemplateKey() << endl;
 			QString selectedTemplateKey( d->startupDialog->selectedTemplateKey() );
 			if (selectedTemplateKey=="blank") {
 				m_action = CreateBlankProject;
@@ -629,11 +629,11 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 			return true;
 		}
 		else if (r==KexiStartupDialog::OpenExistingResult) {
-			kdDebug() << "Existing project --------" << endl;
+//			kdDebug() << "Existing project --------" << endl;
 			QString selFile = d->startupDialog->selectedExistingFile();
 			if (!selFile.isEmpty()) {
 				//file-based project
-				kdDebug() << "Project File: " << selFile << endl;
+//				kdDebug() << "Project File: " << selFile << endl;
 				cdata.setFileName( selFile );
 				QString detectedDriverName;
 				const tristate res = detectActionForFile( m_importActionData, detectedDriverName, 
@@ -651,8 +651,8 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 				m_projectData = new KexiProjectData(cdata, selFile);
 			}
 			else if (d->startupDialog->selectedExistingConnection()) {
-				kdDebug() << "Existing connection: " <<
-					d->startupDialog->selectedExistingConnection()->serverInfoString() << endl;
+//				kdDebug() << "Existing connection: " <<
+//					d->startupDialog->selectedExistingConnection()->serverInfoString() << endl;
 				KexiDB::ConnectionData *cdata = d->startupDialog->selectedExistingConnection();
 				//ok, now we will try to show projects for this connection to the user
 				bool cancelled;
@@ -667,14 +667,14 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 			}
 		}
 		else if (r==KexiStartupDialog::OpenRecentResult) {
-			kdDebug() << "Recent project --------" << endl;
+//			kdDebug() << "Recent project --------" << endl;
 			const KexiProjectData *data = d->startupDialog->selectedProjectData();
 			if (data) {
-				kdDebug() << "Selected project: database=" << data->databaseName()
-					<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
+//				kdDebug() << "Selected project: database=" << data->databaseName()
+//					<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
 			}
 //! @todo
-			return true;
+			return data!=0;
 		}
 
 		if (!m_projectData)
@@ -792,7 +792,7 @@ tristate KexiStartupHandler::detectActionForFile(
 	else {//use suggested driver
 		detectedDriverName = suggestedDriverName;
 	}
-	kdDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName << endl;
+//	kdDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName << endl;
 //hardcoded for convenience:
 	const QString newFileFormat = "SQLite3";
 	if (!(options & DontConvert) 
@@ -805,7 +805,7 @@ tristate KexiStartupHandler::detectActionForFile(
 //		SQLite2ToSQLite3Migration *migr = new 
 		SQLite2ToSQLite3Migration migr( finfo.absFilePath() );
 		tristate res = migr.run();
-		kdDebug() << "--- migr.run() END ---" <<endl;
+//		kdDebug() << "--- migr.run() END ---" <<endl;
 		if (!res) {
 			//TODO msg
 			KMessageBox::sorry(parent, i18n(

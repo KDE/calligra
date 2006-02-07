@@ -826,4 +826,3 @@ Queries
 - when a field has been added to query, form designer should know about this; 
   now even reopening the form doesn't refresh query schema (only reopening the project)
 
-TODO: labels should not be visible in tab stop dlg! (check their focus policy property)

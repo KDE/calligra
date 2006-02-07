@@ -97,7 +97,7 @@ class KexiPropertyEditorView::Private
 //------------------------------
 
 KexiPropertyEditorView::KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget* parent)
-	: KexiViewBase(mainWin, parent, "KexiPropertyEditorView")
+	: QWidget(parent, "KexiPropertyEditorView")
 	, d(new Private())
 {
 	setCaption(i18n("Properties"));
@@ -147,15 +147,15 @@ QSize KexiPropertyEditorView::minimumSizeHint() const
 	return QSize(200,200);//m_editor->sizeHint();
 }
 
-void KexiPropertyEditorView::setGeometry ( const QRect &r )
+/*void KexiPropertyEditorView::setGeometry ( const QRect &r )
 {
-	KexiViewBase::setGeometry(r);
+	QWidget::setGeometry(r);
 }
 
 void KexiPropertyEditorView::resize (  int w, int h  )
 {
-	KexiViewBase::resize( w, h );
-}
+	QWidget::resize( w, h );
+}*/
 
 KoProperty::Editor *KexiPropertyEditorView::editor() const
 {

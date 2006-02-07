@@ -21,9 +21,11 @@
 #ifndef KEXIPROPERTYEDITORVIEW_H
 #define KEXIPROPERTYEDITORVIEW_H
 
-#include "kexiviewbase.h"
+//#include "kexiviewbase.h"
+#include <qwidget.h>
 
 class QLabel;
+class KexiMainWindow;
 
 namespace KoProperty {
 	class Editor;
@@ -36,6 +38,7 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 	public:
 		KexiObjectInfoLabel(QWidget* parent, const char* name = 0);
 		~KexiObjectInfoLabel();
+
 		void setObjectClassIcon(const QCString& name);
 		QCString objectClassIcon() const { return m_classIcon; }
 		void setObjectClassName(const QString& name);
@@ -44,6 +47,7 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 		QCString objectName() const { return m_objectName; }
 	protected:
 		void updateName();
+
 		QString m_className;
 		QCString m_classIcon, m_objectName;
 		QLabel *m_objectIconLabel, *m_objectNameLabel;
@@ -51,21 +55,21 @@ class KEXIEXTWIDGETS_EXPORT KexiObjectInfoLabel : public QWidget
 
 /*! The container (acts as a dock window) for KexiPropertyEditor
 */
-class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public KexiViewBase
+class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public QWidget //KexiViewBase
 {
 	Q_OBJECT
 
 	public:
 		KexiPropertyEditorView(KexiMainWindow *mainWin, QWidget* parent);
-		~KexiPropertyEditorView();
+		virtual ~KexiPropertyEditorView();
 
 		virtual QSize sizeHint() const;
 		virtual QSize minimumSizeHint() const;
 		KoProperty::Editor *editor() const;
 
-	public slots:
-		virtual void setGeometry( const QRect &r );
-		virtual void resize( int w, int h );
+//	public slots:
+//		virtual void setGeometry( const QRect &r );
+//		virtual void resize( int w, int h );
 
 	protected slots:
 		void slotPropertySetChanged(KoProperty::Set* );
@@ -76,4 +80,3 @@ class KEXIEXTWIDGETS_EXPORT KexiPropertyEditorView : public KexiViewBase
 };
 
 #endif
-

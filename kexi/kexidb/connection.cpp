@@ -1171,8 +1171,8 @@ Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const 
 	}
 	RowData rdata;
 	if (row_id<=0 || true!=querySingleRecord(
-		QString::fromLatin1("SELECT ") + aiFieldName + " FROM " + tableName
-		+ " WHERE " + m_driver->beh->ROW_ID_FIELD_NAME + "=" + QString::number(row_id), rdata))
+		QString::fromLatin1("SELECT ") + tableName + QString::fromLatin1(".") + aiFieldName + QString::fromLatin1(" FROM ") + tableName
+		+ QString::fromLatin1(" WHERE ") + m_driver->beh->ROW_ID_FIELD_NAME + QString::fromLatin1("=") + QString::number(row_id), rdata))
 	{
 //		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()" << endl;
 	 	return (Q_ULLONG)-1; //ULL;
@@ -2736,8 +2736,9 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 //! @todo safe to cast it?
 		Q_ULLONG last_id = lastInsertedAutoIncValue(
 			id_fieldinfo->field->name(), id_fieldinfo->field->table()->name(), &ROWID);
-		if (last_id<=0) {
+		if (last_id==(Q_ULLONG)-1 || last_id<=0) {
 			//! @todo show error
+//! @todo remove just inserted row. How? Using ROLLBACK?
 			return false;
 		}
 		RowData aif_data;

@@ -10,6 +10,13 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-02-03,07
+Forms
+- fixed painting "geometry" rectangle when inserting new widget
+- update tab stops information before displaying "Tab Stops" dialog
+- fixed invalid resizing for widget's inline editor
+- 'edit->tab order' action is available also when form design is not focused
+
 2006-02-01
 KexiDB
 - MySQL: added temporary (unoptimized) implementation of Prepared Statement

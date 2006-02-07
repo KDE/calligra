@@ -129,7 +129,10 @@ KexiDBForm::drawRects(const QValueList<QRect> &list, int type)
 	QValueList<QRect>::ConstIterator endIt = list.constEnd();
 	for(QValueList<QRect>::ConstIterator it = list.constBegin(); it != endIt; ++it) {
 		p.drawRect(*it);
-		d->prev_rect = d->prev_rect.unite(*it);
+		if (d->prev_rect.isValid())
+			d->prev_rect = d->prev_rect.unite(*it);
+		else
+			d->prev_rect = *it;
 	}
 
 	if (!unclipped)

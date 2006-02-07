@@ -1010,13 +1010,13 @@ Container::drawInsertRect(QMouseEvent *mev, QObject *s)
 	m_insertRect = QRect(QPoint(topx, topy), QPoint(botx, boty));
 
 	if(m_insertRect.x() < 0)
-		m_insertRect.moveLeft(0);
+		m_insertRect.setLeft(0);
 	if(m_insertRect.y() < 0)
-		m_insertRect.moveTop(0);
+		m_insertRect.setTop(0);
 	if(m_insertRect.right() > m_container->width())
-		m_insertRect.moveRight(m_container->width());
+		m_insertRect.setRight(m_container->width());
 	if(m_insertRect.bottom() > m_container->height())
-		m_insertRect.moveBottom(m_container->height());
+		m_insertRect.setBottom(m_container->height());
 
 	if(FormManager::self()->isInserting() && m_insertRect.isValid())
 	{

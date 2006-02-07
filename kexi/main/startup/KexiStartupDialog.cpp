@@ -287,7 +287,7 @@ void KexiStartupDialog::done(int r)
 	if (d->result!=-1) //already done!
 		return;
 
-	kdDebug() << "KexiStartupDialog::done(" << r << ")" << endl;
+//	kdDebug() << "KexiStartupDialog::done(" << r << ")" << endl;
 	updateSelectedTemplateKeyInfo();
 
 	if (r==QDialog::Rejected) {
@@ -602,7 +602,7 @@ void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataL
 }
 
 void KexiStartupDialog::slotOk() {
-	kdDebug()<<"KexiStartupDialog::slotOk()"<<endl;
+//	kdDebug()<<"KexiStartupDialog::slotOk()"<<endl;
 	if (activePageIndex()==d->pageOpenExistingID) {
 		if (d->openExistingFileDlg) {
 			if (d->openExistingFileDlg->okButton())
@@ -615,20 +615,20 @@ void KexiStartupDialog::slotOk() {
 
 void KexiStartupDialog::showSimpleConnForOpenExisting()
 {
-	kdDebug() << "simple" << endl;
+//	kdDebug() << "simple" << endl;
 	d->openExistingConnWidget->showSimpleConn();
 }
 
 void KexiStartupDialog::showAdvancedConnForOpenExisting()
 {
-	kdDebug() << "adv" << endl;
+//	kdDebug() << "adv" << endl;
 	d->openExistingConnWidget->showAdvancedConn();
 }
 
 QString KexiStartupDialog::selectedExistingFile() const
 {
-	kdDebug() << activePageIndex() << " " << d->openExistingFileDlg->isVisible()
-		<< ": " << d->existingFileToOpen << endl;
+//	kdDebug() << activePageIndex() << " " << d->openExistingFileDlg->isVisible()
+//		<< ": " << d->existingFileToOpen << endl;
 	return d->existingFileToOpen;
 }
 
@@ -694,7 +694,7 @@ bool KexiStartupDialog::eventFilter( QObject *o, QEvent *e )
 int KexiStartupDialog::activePageIndex() const
 {
 	if (!d->singlePage) {
-		kdDebug() << "int KexiStartupDialog::activePageIndex()" << KDialogBase::activePageIndex() << endl;
+//		kdDebug() << "int KexiStartupDialog::activePageIndex()" << KDialogBase::activePageIndex() << endl;
 		return KDialogBase::activePageIndex();
 	}
 	kdDebug() << "int KexiStartupDialog::activePageIndex() == " << 0 << endl;

@@ -193,10 +193,16 @@ bool KexiSharedActionHost::acceptsSharedActions(QObject *)
 
 QWidget* KexiSharedActionHost::focusWindow()
 {
-	QWidget *aw = qApp->activeWindow();
-	if (!aw)
-		aw = d->mainWin;
-	QWidget* fw = aw->focusWidget();
+	QWidget *fw;
+	if (dynamic_cast<KMdiMainFrm*>(d->mainWin)) {
+		fw = dynamic_cast<KMdiMainFrm*>(d->mainWin)->activeWindow();
+	}
+	else {
+		QWidget *aw = qApp->activeWindow();
+		if (!aw)
+			aw = d->mainWin;
+		fw = aw->focusWidget();
+	}
 	while (fw && !acceptsSharedActions(fw))
 		fw = fw->parentWidget();
 	return fw;
