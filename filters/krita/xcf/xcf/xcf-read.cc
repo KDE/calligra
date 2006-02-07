@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include "config.h"
@@ -29,17 +29,17 @@
 #include "gimp-intl.h"
 
 
-guint
+Q_UINT32
 xcf_read_int32 (FILE    *fp,
-		guint32 *data,
-		gint     count)
+		Q_INT32 *data,
+		Q_INT32     count)
 {
-  guint total;
+  Q_UINT32 total;
 
   total = count;
   if (count > 0)
     {
-      xcf_read_int8 (fp, (guint8 *) data, count * 4);
+      xcf_read_int8 (fp, (Q_UINT8 *) data, count * 4);
 
       while (count--)
         {
@@ -51,21 +51,21 @@ xcf_read_int32 (FILE    *fp,
   return total * 4;
 }
 
-guint
+Q_UINT32
 xcf_read_float (FILE   *fp,
-		gfloat *data,
-		gint    count)
+		float *data,
+		Q_INT32    count)
 {
-  return xcf_read_int32 (fp, (guint32 *) ((void *) data), count);
+  return xcf_read_int32 (fp, (Q_INT32 *) ((void *) data), count);
 }
 
-guint
+Q_UINT32
 xcf_read_int8 (FILE   *fp,
-	       guint8 *data,
-	       gint    count)
+	       Q_UINT8 *data,
+	       Q_INT32    count)
 {
-  guint total;
-  gint  bytes;
+  Q_UINT32 total;
+  Q_INT32  bytes;
 
   total = count;
   while (count > 0)
@@ -80,14 +80,14 @@ xcf_read_int8 (FILE   *fp,
   return total;
 }
 
-guint
+Q_UINT32
 xcf_read_string (FILE   *fp,
-		 gchar **data,
-		 gint    count)
+		 QCString **data,
+		 Q_INT32    count)
 {
-  guint32 tmp;
-  guint   total;
-  gint    i;
+  Q_INT32 tmp;
+  Q_UINT32   total;
+  Q_INT32    i;
 
   total = 0;
   for (i = 0; i < count; i++)
@@ -95,10 +95,10 @@ xcf_read_string (FILE   *fp,
       total += xcf_read_int32 (fp, &tmp, 1);
       if (tmp > 0)
         {
-          gchar *str;
+          QCString *str;
 
-          str = g_new (gchar, tmp);
-          total += xcf_read_int8 (fp, (guint8*) str, tmp);
+          str = g_new (QCString, tmp);
+          total += xcf_read_int8 (fp, (Q_UINT8*) str, tmp);
 
           if (str[tmp - 1] != '\0')
             str[tmp - 1] = '\0';

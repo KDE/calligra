@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <netinet/in.h>
 
 #include <qstring.h>
 #include <qfile.h>
@@ -33,6 +34,7 @@
 #include <knuminput.h>
 #include <kgenericfactory.h>
 #include <kdialogbase.h>
+#include <kdialog.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kprocess.h>
@@ -66,6 +68,7 @@ KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&)
     , m_process(0)
 {
     m_dialog = new KDialogBase();
+    m_dialog->enableButtonApply(false);
     m_page = new WdgRawImport(m_dialog);
     m_dialog -> setMainWidget(m_page);
 
@@ -112,38 +115,123 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
     // Show dialog
     m_dialog->setCursor(Qt::ArrowCursor);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    m_dialog->exec();
+    
+    if (m_dialog->exec() == QDialog::Accepted) {
+        
+        QApplication::setOverrideCursor(Qt::waitCursor);
+        doc -> undoAdapter() -> setUndo(false);
+    
+        getImageData(createArgumentList(false));
+        
+        KisImageSP image = 0;
+        KisPaintLayerSP layer = 0;
+        KisPaintDeviceSP device = 0;
+        
+        QApplication::restoreOverrideCursor();
+        if (m_page->radio8->isChecked()) {
+        // 8 bits
+        
+            QImage img;
+            img.loadFromData(*m_data);
+            
+            KisColorSpace * cs = 0;
+            if (m_page->radioGray->isChecked()) {
+                cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("GRAYA"), profile() );
+            }
+            else {
+               cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA"), profile() );
+            }
+            if (cs == 0) { kdDebug() << "No CS\n"; return KoFilter::InternalError; }
+            
+            image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
+            if (image == 0) return KoFilter::CreationError;
+            
+            layer = image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE);
+            if (layer == 0) return KoFilter::CreationError;
+            
+            device = layer->paintDevice();
+            if (device == 0) return KoFilter::CreationError;
+            
+            device->convertFromQImage(img, "");
+            
+        } else {
+        // 16 bits
+
+            Q_UINT32 startOfImagedata;
+            QSize sz = determineSize(&startOfImagedata);
+
+            kdDebug(41008) << "Total bytes: " << m_data->size()
+                    << "\n start of image data: " << startOfImagedata
+                    << "\n bytes for pixels left: " << m_data->size() - startOfImagedata
+                    << "\n total pixels: " << sz.width() * sz.height()
+                    << "\n total pixel bytes: " << sz.width() * sz.height() * 6
+                    << "\n total necessary bytes: " << (sz.width() * sz.height() * 6) + startOfImagedata
+                    << "\n";
+
+            
+            char * data = m_data->data() + startOfImagedata;
+
+            KisColorSpace * cs = 0;
+            if (m_page->radioGray->isChecked()) {
+                cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("GRAYA16"), profile() );
+            }
+            else {
+                cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
+            }
+            if (cs == 0) return KoFilter::InternalError;
+            
+            image = new KisImage( doc->undoAdapter(), sz.width(), sz.height(), cs, filename);
+            if (image == 0)return KoFilter::CreationError;
+            
+            layer = image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE);
+            if (layer == 0) return KoFilter::CreationError;
+            
+            device = layer->paintDevice();
+            if (device == 0) return KoFilter::CreationError;
+
+            // Copy the colordata to the pixels
+            int pos = 0;
+
+            for (int line = 0; line < sz.height(); ++line) {
+                KisHLineIterator it = device->createHLineIterator(0, line, sz.width(), true);
+
+                while (!it.isDone()) {
+                    if (m_page->radioGray->isChecked()) {
+                        Q_UINT16 d = (Q_INT16)*(data + pos);
+                        d = ntohs(d);
+                        memcpy(it.rawData(), &d, 2);
+                        pos += 2;
+                    }
+                    else {
+                        for (int c = 0; c < 6; c+=2) {
+                            Q_UINT16 d = (Q_INT16)*(data + pos);
+                            d = ntohs(d);
+                            memcpy(it.rawData() + c, &d, 2);
+                            pos += 2;
+                        }
+                    }
+                    cs->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                    ++it;
+                }
+            }
+        }
+
+        kdDebug() << "going to set image\n";
+        doc -> setCurrentImage(image);
+        doc -> undoAdapter() -> setUndo(true);
+        doc -> setModified(false);
+        kdDebug() << "everything ok\n";
+
+        QApplication::restoreOverrideCursor();
+        return KoFilter::OK;
+    }
+    
     QApplication::restoreOverrideCursor();
-
-    // Prepare image
-    KisColorSpace *cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("", ""),"" );
-
-    if (cs == 0) {
-        return KoFilter::InternalError;
-    }
-
-    doc -> undoAdapter() -> setUndo(false);
-
-    int imageWidth = 0, imageHeight = 0;
-    QString imageName = "";
-    KisImageSP image = new KisImage(doc->undoAdapter(), imageWidth, imageHeight, cs, imageName);
-
-    if (image == 0) {
-        return KoFilter::CreationError;
-    }
-
-    KisLayerSP layer = image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE);
-
-    if (layer == 0) {
-        return KoFilter::CreationError;
-    }
-
-    doc -> setCurrentImage(image);
-    doc -> undoAdapter() -> setUndo(true);
-    doc -> setModified(false);
-
-    return KoFilter::OK;
+    return KoFilter::UserCancelled;
 }
+
+    
+
 
 void KisRawImport::slotUpdatePreview()
 {
@@ -176,20 +264,39 @@ void KisRawImport::slotUpdatePreview()
 
         char * data = m_data->data() + startOfImagedata;
 
-        KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
-        KisPaintDevice * dev = new KisPaintDevice(cs, "preview");
-
-        KisRectIterator it = dev->createRectIterator(0, 0, sz.width(), sz.height(), true);
-        int pos = 0;
-        // Copy the colordata to the pixels
-        while (!it.isDone()) {
-            memcpy(it.rawData(), data + pos, 2);
-            cs->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
-            pos += 6;
-            ++it;
+        KisColorSpace * cs = 0;
+        if (m_page->radioGray->isChecked()) {
+            cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("GRAYA16"), profile() );
         }
-        // Set the alpha for all the pixels to opaque
-        //cs->setAlpha((Q_UINT8*)data, OPACITY_OPAQUE, sz.width() * sz.height());
+        else {
+            cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
+        }
+        KisPaintDevice * dev = new KisPaintDevice(cs, "preview");
+            // Copy the colordata to the pixels
+        int pos = 0;
+
+        for (int line = 0; line < sz.height(); ++line) {
+            KisHLineIterator it = dev->createHLineIterator(0, line, sz.width(), true);
+
+            while (!it.isDone()) {
+                if (m_page->radioGray->isChecked()) {
+                    Q_UINT16 d = (Q_INT16)*(data + pos);
+                    d = ntohs(d);
+                    memcpy(it.rawData(), &d, 2);
+                    pos += 2;
+                }
+                else {
+                    for (int c = 0; c < 6; c+=2) {
+                        Q_UINT16 d = (Q_INT16)*(data + pos);
+                        d = ntohs(d);
+                        memcpy(it.rawData() + c, &d, 2);
+                        pos += 2;
+                    }
+                }
+                cs->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+                ++it;
+            }
+        }
 
         img = dev->convertToQImage(m_monitorProfile);
     }
@@ -286,7 +393,6 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     if (m_page->radioGray->isChecked()) {
         args.append("-d"); // Create grayscale image
     }
-
 
     if (m_page->chkCameraColors->isChecked()) {
         args.append("-m"); // Use camera raw colors instead of sRGB

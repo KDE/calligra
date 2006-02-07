@@ -73,7 +73,7 @@
     void KisTIFFReaderTarget8bit::copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream)
     {
         double coeff = Q_UINT8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-        kdDebug() << " depth expension coefficient : " << coeff << endl;
+        kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
         while (!it.isDone()) {
             Q_UINT8 *d = it.rawData();
             Q_UINT8 i;
@@ -97,7 +97,7 @@
     void KisTIFFReaderTarget16bit::copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream)
     {
         double coeff = Q_UINT16_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-        kdDebug() << " depth expension coefficient : " << coeff << endl;
+        kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
         while (!it.isDone()) {
             Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
             Q_UINT8 i;

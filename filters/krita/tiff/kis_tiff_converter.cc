@@ -75,23 +75,23 @@ namespace {
             // SEPARATED is in general CMYK but not allways, so we check
             uint16 inkset;
             if((TIFFGetField(image, TIFFTAG_INKSET, &inkset) == 0)){
-                kdDebug() <<  "Image does not define the inkset." << endl;
+                kdDebug(41008) <<  "Image does not define the inkset." << endl;
                 inkset = 2;
             }
             if(inkset !=  INKSET_CMYK)
             {
-                kdDebug() << "Unsupported inkset (right now, only CMYK is supported)" << endl;
+                kdDebug(41008) << "Unsupported inkset (right now, only CMYK is supported)" << endl;
                 char** ink_names;
                 uint16 numberofinks;
                 if( TIFFGetField(image, TIFFTAG_INKNAMES, &ink_names) && TIFFGetField(image, TIFFTAG_NUMBEROFINKS, &numberofinks) )
                 {
-                    kdDebug() << "Inks are : " << endl;
+                    kdDebug(41008) << "Inks are : " << endl;
                     for(uint i = 0; i < numberofinks; i++)
                     {
-                        kdDebug() << ink_names[i] << endl;
+                        kdDebug(41008) << ink_names[i] << endl;
                     }
                 } else {
-                    kdDebug() << "inknames aren't defined !" << endl;
+                    kdDebug(41008) << "inknames aren't defined !" << endl;
                     // To be able to read stupid adobe files, if there are no information about inks and four channels, then it's a CMYK file :
                     if( nbchannels - extrasamplescount != 4)
                     {
@@ -137,16 +137,16 @@ KisTIFFConverter::~KisTIFFConverter()
 
 KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
 {
-    kdDebug() << "Start decoding TIFF File" << endl;
+    kdDebug(41008) << "Start decoding TIFF File" << endl;
     // Opent the TIFF file
     TIFF *image;
     if((image = TIFFOpen(uri.path().ascii(), "r")) == NULL){
-        kdDebug() << "Could not open the file, either it doesn't exist, either it is not a TIFF : " << uri.path() << endl;
+        kdDebug(41008) << "Could not open the file, either it doesn't exist, either it is not a TIFF : " << uri.path() << endl;
         TIFFClose(image);
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
     do {
-        kdDebug() << "Read new sub-image" << endl;
+        kdDebug(41008) << "Read new sub-image" << endl;
         KisImageBuilder_Result result = readTIFFDirectory(image);
         if(result != KisImageBuilder_RESULT_OK){
             return result;
@@ -162,24 +162,24 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     // Read information about the tiff
     uint32 width, height;
     if(TIFFGetField(image, TIFFTAG_IMAGEWIDTH, &width) == 0){
-        kdDebug() <<  "Image does not define its width" << endl;
+        kdDebug(41008) <<  "Image does not define its width" << endl;
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
     if(TIFFGetField(image, TIFFTAG_IMAGELENGTH, &height) == 0){
-        kdDebug() <<  "Image does not define its height" << endl;
+        kdDebug(41008) <<  "Image does not define its height" << endl;
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
     uint16 depth;
     if((TIFFGetField(image, TIFFTAG_BITSPERSAMPLE, &depth) == 0)){
-        kdDebug() <<  "Image does not define its depth" << endl;
+        kdDebug(41008) <<  "Image does not define its depth" << endl;
         depth = 1;
     }
     // Determine the number of channels (usefull to know if a file has an alpha or not
     uint16 nbchannels;
     if(TIFFGetField(image, TIFFTAG_SAMPLESPERPIXEL, &nbchannels) == 0){
-        kdDebug() << "Image has an undefined number of samples per pixel" << endl;
+        kdDebug(41008) << "Image has an undefined number of samples per pixel" << endl;
         nbchannels = 0;
     }
     // Get the number of extrasamples and information about them
@@ -191,17 +191,17 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     // Determine the colorspace
     uint16 color_type;
     if(TIFFGetField(image, TIFFTAG_PHOTOMETRIC, &color_type) == 0){
-        kdDebug() << "Image has an undefined photometric interpretation" << endl;
+        kdDebug(41008) << "Image has an undefined photometric interpretation" << endl;
         color_type = PHOTOMETRIC_MINISWHITE;
     }
     uint8 dstDepth;
     QString csName = getColorSpaceForColorType(color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
     if(csName == "") {
-        kdDebug() << "Image has an unsupported colorspace : " << color_type << " for this depth : "<< depth << endl;
+        kdDebug(41008) << "Image has an unsupported colorspace : " << color_type << " for this depth : "<< depth << endl;
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-    kdDebug() << "Colorspace is : " << csName << " with a depth of " << depth << " and with a nb of channels of " << nbchannels << endl;
+    kdDebug(41008) << "Colorspace is : " << csName << " with a depth of " << depth << " and with a nb of channels of " << nbchannels << endl;
     
     // Read image profile
     KisProfile* profile = 0;
@@ -219,14 +219,14 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     KisColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
-        kdDebug() << "image has embedded profile: " << profile -> productName() << "\n";
+        kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
     }
     else
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName,""),"");
 
     if(cs == 0) {
-        kdDebug() << "Colorspace " << csName << " is not available, please check your installation." << endl;
+        kdDebug(41008) << "Colorspace " << csName << " is not available, please check your installation." << endl;
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
@@ -244,10 +244,10 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     // Check if there is an alpha channel
     int8 alphapos = -1; // <- no alpha
     // Check which extra is alpha if any
-    kdDebug() << "There are " << nbchannels << " channels and " << extrasamplescount << " extra channels" << endl;
+    kdDebug(41008) << "There are " << nbchannels << " channels and " << extrasamplescount << " extra channels" << endl;
     for(int i = 0; i < extrasamplescount; i ++)
     {
-        kdDebug() << i << " " << extrasamplescount << " "  << (cs->nColorChannels()) <<  nbchannels << " " << sampleinfo[i] << endl;
+        kdDebug(41008) << i << " " << extrasamplescount << " "  << (cs->nColorChannels()) <<  nbchannels << " " << sampleinfo[i] << endl;
         if(sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA)
         {
             alphapos = i;
@@ -274,7 +274,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     uint16 planarconfig;
     if(TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0)
     {
-        kdDebug() <<  "Plannar configuration is not define" << endl;
+        kdDebug(41008) <<  "Plannar configuration is not define" << endl;
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
@@ -355,7 +355,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         uint16 *blue;
         if ((TIFFGetField(image, TIFFTAG_COLORMAP, &red, &green, &blue)) == 0)
         {
-            kdDebug() <<  "Indexed image does not define a palette" << endl;
+            kdDebug(41008) <<  "Indexed image does not define a palette" << endl;
             TIFFClose(image);
             return KisImageBuilder_RESULT_INVALID_ARG;
         }
@@ -370,7 +370,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     
     if(TIFFIsTiled(image))
     {
-        kdDebug() << "tiled image" << endl;
+        kdDebug(41008) << "tiled image" << endl;
         uint32 tileWidth, tileHeight;
         uint32 x, y;
         TIFFGetField(image, TIFFTAG_TILEWIDTH, &tileWidth);
@@ -397,12 +397,12 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         }
 
         uint32 linewidth = (tileWidth * depth * nbchannels) / 8;
-        kdDebug() << linewidth << " " << nbchannels << " " << layer->paintDevice()->colorSpace()->nColorChannels() << endl;
+        kdDebug(41008) << linewidth << " " << nbchannels << " " << layer->paintDevice()->colorSpace()->nColorChannels() << endl;
         for (y = 0; y < height; y+= tileHeight)
         {
             for (x = 0; x < width; x += tileWidth)
             {
-                kdDebug() << "Reading tile x = " << x << " y = " << y << endl;
+                kdDebug(41008) << "Reading tile x = " << x << " y = " << y << endl;
                 if( planarconfig == PLANARCONFIG_CONTIG )
                 {
                     TIFFReadTile(image, buf, x, y, 0, (tsample_t) -1);
@@ -421,7 +421,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             }
         }
     } else {
-        kdDebug() << "striped image" << endl;
+        kdDebug(41008) << "striped image" << endl;
         uint32 strip_height;
         TIFFGetField( image, TIFFTAG_ROWSPERSTRIP, &strip_height );
         tsize_t stripsize = TIFFStripSize(image);
@@ -507,7 +507,7 @@ KisImageSP KisTIFFConverter::image()
 
 KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP img, KisTIFFOptions options)
 {
-    kdDebug() << "Start writing TIFF File" << endl;
+    kdDebug(41008) << "Start writing TIFF File" << endl;
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 
@@ -520,7 +520,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP i
     // Open file for writing
     TIFF *image;
     if((image = TIFFOpen(uri.path().ascii(), "w")) == NULL){
-        kdDebug() << "Could not open the file for writting " << uri.path() << endl;
+        kdDebug(41008) << "Could not open the file for writting " << uri.path() << endl;
         TIFFClose(image);
         return (KisImageBuilder_RESULT_FAILURE);
     }

@@ -261,7 +261,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
             char value[1024];
 //             exif_entry_get_value (e, value, sizeof(value));
             ExifShort v_short = exif_get_short (e->data, exif_data_get_byte_order (e->parent->parent));
-//             kdDebug() << "tag orientation = " << value << " begin " << v_short << " end" << endl;
+//             kdDebug(41008) << "tag orientation = " << value << " begin " << v_short << " end" << endl;
             switch(v_short) //
             {
                 case 2:
@@ -292,7 +292,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
             }
         }
     } else {
-        kdDebug() << "no exif information" << endl;
+        kdDebug(41008) << "no exif information" << endl;
     }
     
     return KisImageBuilder_RESULT_OK;

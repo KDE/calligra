@@ -18,13 +18,8 @@ INCLUDES= \
 	-I$(top_srcdir)/krita \
 	-I$(top_srcdir)/krita/core \
 	-I$(top_srcdir)/krita/sdk \
-	-I$(top_srcdir)/krita/core/tool \
-	-I$(top_srcdir)/krita/core/resources \
-	-I$(top_srcdir)/krita/core/strategy \
 	-I$(top_srcdir)/krita/core/tiles \
-	-I$(top_srcdir)/krita/core/visitors \
-	-I$(top_srcdir)/krita/core/color_strategy \
-	-I$(top_srcdir)/krita/core/paintop \
+	-I$(top_srcdir)/krita/kritacolor \
 	-I$(top_srcdir)/krita/ui \
         $(KOFFICE_INCLUDES) -I$(interfacedir) \
         $(KOPAINTER_INCLUDES) $(LIBMAGICK_CPPFLAGS) \
@@ -33,10 +28,11 @@ INCLUDES= \
 service_DATA = krita_xcf_import.desktop krita_xcf_export.desktop
 servicedir = $(kde_servicesdir)
 
-libkritaxcfimport_la_SOURCES = xcfimport.cpp kis_xcf_converter.cc
-libkritaxcfexport_la_SOURCES = xcfexport.cpp kis_xcf_converter.cc
+libkritaxcfimport_la_SOURCES = xcfimport.cpp 
+libkritaxcfexport_la_SOURCES = xcfexport.cpp
 
 METASOURCES = AUTO
 
+SUBDIRS=xcf
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)

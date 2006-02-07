@@ -13,18 +13,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #ifndef __XCF_SEEK_H__
 #define __XCF_SEEK_H__
 
 
-gboolean   xcf_seek_pos (XcfInfo *info,
-                 guint    pos,
-                 GError **error);
-gboolean   xcf_seek_end (XcfInfo *info,
+bool   xcf_seek_pos (XcfInfo *info,
+		         Q_UINT32    pos,
+		         GError **error);
+bool   xcf_seek_end (XcfInfo *info,
                          GError **error);
 
 

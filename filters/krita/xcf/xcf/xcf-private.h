@@ -13,43 +13,43 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #ifndef __XCF_PRIVATE_H__
 #define __XCF_PRIVATE_H__
 
+#include <qcstring.h>
 
 typedef enum
 {
-  PROP_END                   =  0,
-  PROP_COLORMAP              =  1,
-  PROP_ACTIVE_LAYER          =  2,
-  PROP_ACTIVE_CHANNEL        =  3,
-  PROP_SELECTION             =  4,
-  PROP_FLOATING_SELECTION    =  5,
-  PROP_OPACITY               =  6,
-  PROP_MODE                  =  7,
-  PROP_VISIBLE               =  8,
-  PROP_LINKED                =  9,
-  PROP_PRESERVE_TRANSPARENCY = 10,
-  PROP_APPLY_MASK            = 11,
-  PROP_EDIT_MASK             = 12,
-  PROP_SHOW_MASK             = 13,
-  PROP_SHOW_MASKED           = 14,
-  PROP_OFFSETS               = 15,
-  PROP_COLOR                 = 16,
-  PROP_COMPRESSION           = 17,
-  PROP_GUIDES                = 18,
-  PROP_RESOLUTION            = 19,
-  PROP_TATTOO                = 20,
-  PROP_PARASITES             = 21,
-  PROP_UNIT                  = 22,
-  PROP_PATHS                 = 23,
-  PROP_USER_UNIT             = 24,
-  PROP_VECTORS               = 25,
-  PROP_TEXT_LAYER_FLAGS      = 26
+  PROP_END                =  0,
+  PROP_COLORMAP           =  1,
+  PROP_ACTIVE_LAYER       =  2,
+  PROP_ACTIVE_CHANNEL     =  3,
+  PROP_SELECTION          =  4,
+  PROP_FLOATING_SELECTION =  5,
+  PROP_OPACITY            =  6,
+  PROP_MODE               =  7,
+  PROP_VISIBLE            =  8,
+  PROP_LINKED             =  9,
+  PROP_LOCK_ALPHA         = 10,
+  PROP_APPLY_MASK         = 11,
+  PROP_EDIT_MASK          = 12,
+  PROP_SHOW_MASK          = 13,
+  PROP_SHOW_MASKED        = 14,
+  PROP_OFFSETS            = 15,
+  PROP_COLOR              = 16,
+  PROP_COMPRESSION        = 17,
+  PROP_GUIDES             = 18,
+  PROP_RESOLUTION         = 19,
+  PROP_TATTOO             = 20,
+  PROP_PARASITES          = 21,
+  PROP_UNIT               = 22,
+  PROP_PATHS              = 23,
+  PROP_USER_UNIT          = 24,
+  PROP_VECTORS            = 25,
+  PROP_TEXT_LAYER_FLAGS   = 26
 } PropType;
 
 typedef enum
@@ -77,18 +77,18 @@ typedef struct _XcfInfo  XcfInfo;
 struct _XcfInfo
 {
   FILE               *fp;
-  guint               cp;
-  const gchar        *filename;
-  GimpTattoo          tattoo_state;
-  GimpLayer          *active_layer;
-  GimpChannel        *active_channel;
-  GimpDrawable       *floating_sel_drawable;
-  GimpLayer          *floating_sel;
-  guint               floating_sel_offset;
-  gint                swap_num;
-  gint               *ref_count;
-  XcfCompressionType  compression;
-  gint                file_version;
+  Q_UINT32           cp;
+  const QCString     filename;
+  //GimpTattoo         tattoo_state;
+  KisLayer           *active_layer;
+  //GimpChannel        *active_channel;
+  //GimpDrawable       *floating_sel_drawable;
+  KisLayer           *floating_sel;
+  Q_UINT32           floating_sel_offset;
+  Q_INT32            swap_num;
+  Q_INT32            *ref_count;
+  XcfCompressionType compression;
+  Q_INT32            file_version;
 };
 
 

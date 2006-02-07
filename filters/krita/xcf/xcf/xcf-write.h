@@ -13,30 +13,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #ifndef __XCF_WRITE_H__
 #define __XCF_WRITE_H__
 
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qfile.h>
 
-guint   xcf_write_int32  (FILE     *fp,
-              guint32  *data,
-              gint      count,
-              GError  **error);
-guint   xcf_write_float  (FILE     *fp,
-              gfloat   *data,
-              gint      count,
-              GError  **error);
-guint   xcf_write_int8   (FILE     *fp,
-              guint8   *data,
-              gint      count,
-              GError  **error);
-guint   xcf_write_string (FILE     *fp,
-              gchar   **data,
-              gint      count,
-              GError  **error);
+// Write count integers to the file
+Q_UINT32 xcf_write_int32 (QFile *fp, Q_INT32 *data, Q_INT32 count);
+
+// Write count of floats to the file
+Q_UINT32 xcf_write_float (QFile *fp, float *data, Q_INT32 count);
+
+// Write count chars to the file
+Q_UINT32 xcf_write_int8 (QFile *fp, Q_UINT8 *data, Q_INT32 count);
+
+// Write count zero-terminated strings to the file, each string preceded by its length as an integer
+Q_UINT32 xcf_write_string (QFile *fp, QCString *data, Q_INT32 count);
 
 
 #endif  /* __XCF_WRITE_H__ */

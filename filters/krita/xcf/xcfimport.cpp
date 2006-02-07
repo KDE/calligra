@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <qstring.h>
- 
+
 #include <xcfimport.h>
 #include <kgenericfactory.h>
 #include <koDocument.h>
@@ -26,7 +26,6 @@
 #include <kis_doc.h>
 #include <kis_view.h>
 #include <kis_xcf_converter.h>
-#include <kis_dlg_progress.h>
 #include <kis_progress_display_interface.h>
 
 typedef KGenericFactory<XCFImport, KoFilter> XCFImportFactory;
@@ -49,26 +48,23 @@ KoFilter::ConversionStatus XCFImport::convert(const QCString&, const QCString& t
 
     KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
     KisView * view = static_cast<KisView*>(doc -> views().getFirst());
-    
+
     QString filename = m_chain -> inputFile();
-    
+
     if (!doc)
         return KoFilter::CreationError;
 
     doc -> prepareForImport();
-        
+
 
     if (!filename.isEmpty()) {
-    
+
         KURL url(filename);
 
         if (url.isEmpty())
             return KoFilter::FileNotFound;
-            
-        KisXCFConverter ib(doc, doc -> undoAdapter());
 
-        if (view != 0)
-            view -> progressDisplay() -> setSubject(&ib, false, true);
+        KisXCFConverter ib(doc, doc -> undoAdapter());
 
         switch (ib.buildImage(url)) {
             case KisImageBuilder_RESULT_UNSUPPORTED:
@@ -83,7 +79,7 @@ KoFilter::ConversionStatus XCFImport::convert(const QCString&, const QCString& t
                 break;
             case KisImageBuilder_RESULT_BAD_FETCH:
             case KisImageBuilder_RESULT_EMPTY:
-                return KoFilter::ParsingError;                
+                return KoFilter::ParsingError;
                 break;
             case KisImageBuilder_RESULT_FAILURE:
                 return KoFilter::InternalError;

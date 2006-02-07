@@ -12,6 +12,9 @@
             <height>690</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>WdgRawImport</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -323,6 +326,9 @@
                             <property name="name">
                                 <cstring>lblProfile</cstring>
                             </property>
+                            <property name="enabled">
+                                <bool>true</bool>
+                            </property>
                             <property name="text">
                                 <string>&amp;Profile:</string>
                             </property>
@@ -333,6 +339,9 @@
                         <widget class="KisCmbIDList">
                             <property name="name">
                                 <cstring>cmbProfile</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>true</bool>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -357,6 +366,9 @@
                             <property name="name">
                                 <cstring>lblCurve</cstring>
                             </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
                             <property name="text">
                                 <string>&amp;Curve:</string>
                             </property>
@@ -368,10 +380,16 @@
                             <property name="name">
                                 <cstring>txtCurve</cstring>
                             </property>
+                            <property name="enabled">
+                                <bool>false</bool>
+                            </property>
                         </widget>
                         <widget class="QPushButton">
                             <property name="name">
                                 <cstring>bnLoadCurve</cstring>
+                            </property>
+                            <property name="enabled">
+                                <bool>false</bool>
                             </property>
                             <property name="text">
                                 <string>...</string>
@@ -486,6 +504,7 @@
 <includehints>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>kiscmbidlist.h</includehint>
     <includehint>imageviewer.h</includehint>
 </includehints>
 </UI>

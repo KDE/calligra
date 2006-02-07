@@ -91,7 +91,7 @@ namespace {
             }
         }
         else if (type == LABColorspace) {
-            kdDebug() << "Lab!\n";
+            kdDebug(41008) << "Lab!\n";
             return "LABA";
         }
         else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {

@@ -13,26 +13,25 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #ifndef __XCF_READ_H__
 #define __XCF_READ_H__
 
 
-guint   xcf_read_int32  (FILE     *fp,
-             guint32  *data,
-             gint      count);
-guint   xcf_read_float  (FILE     *fp,
-             gfloat   *data,
-             gint      count);
-guint   xcf_read_int8   (FILE     *fp,
-             guint8   *data,
-             gint      count);
-guint   xcf_read_string (FILE     *fp,
-             gchar   **data,
-             gint      count);
+Q_UINT32   xcf_read_int32  (FILE     *fp,
+			 Q_INT32  *data,
+			 Q_INT32      count);
+Q_UINT32   xcf_read_float  (FILE     *fp,
+			 float   *data,
+			 Q_INT32      count);
+Q_UINT32   xcf_read_int8   (FILE     *fp,
+			 Q_UINT8   *data,
+			 Q_INT32      count);
+Q_UINT32   xcf_read_string (FILE     *fp,
+			 QCString   **data,
+			 Q_INT32      count);
 
 
 #endif  /* __XCF_READ_H__ */

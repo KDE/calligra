@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
 #include "config.h"
@@ -30,50 +30,50 @@
 
 #include "gimp-intl.h"
 
-gboolean
+bool
 xcf_seek_pos (XcfInfo  *info,
-	      guint     pos,
+	      Q_UINT32     pos,
 	      GError  **error)
 {
-  if (info->cp != pos)
+    if (info->cp != pos)
     {
-      info->cp = pos;
-      if (fseek (info->fp, info->cp, SEEK_SET) == -1)
+        info->cp = pos;
+        if (fseek (info->fp, info->cp, SEEK_SET) == -1)
         {
-          g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno),
-                       _("Could not seek in XCF file: %s"),
-                       g_strerror (errno));
+            g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno),
+                         _("Could not seek in XCF file: %s"),
+                         g_strerror (errno));
 
-          return FALSE;
+            return FALSE;
         }
     }
 
-  return TRUE;
+    return TRUE;
 }
 
-gboolean
+bool
 xcf_seek_end (XcfInfo  *info,
               GError  **error)
 {
-  if (fseek (info->fp, 0, SEEK_END) == -1)
+    if (fseek (info->fp, 0, SEEK_END) == -1)
     {
-      g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno),
-                   _("Could not seek in XCF file: %s"),
-                   g_strerror (errno));
+        g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno),
+                     _("Could not seek in XCF file: %s"),
+                     g_strerror (errno));
 
-      return FALSE;
+        return FALSE;
     }
 
-  info->cp = ftell (info->fp);
+    info->cp = ftell (info->fp);
 
-  if (fseek (info->fp, 0, SEEK_END) == -1)
+    if (fseek (info->fp, 0, SEEK_END) == -1)
     {
-      g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno),
-                   _("Could not seek in XCF file: %s"),
-                   g_strerror (errno));
+        g_set_error (error, G_FILE_ERROR, g_file_error_from_errno (errno),
+                     _("Could not seek in XCF file: %s"),
+                     g_strerror (errno));
 
-      return FALSE;
+        return FALSE;
     }
 
-  return TRUE;
+    return TRUE;
 }

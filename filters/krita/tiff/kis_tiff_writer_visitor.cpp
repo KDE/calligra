@@ -53,7 +53,7 @@ namespace {
             return true;
         }
 
-        kdDebug() << "Cannot export images in " + cs->id().name() + " yet.\n";
+        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return false;
 
     }
@@ -105,7 +105,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, 
 
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
-    kdDebug() << "visiting on paint layer " << layer->name() << "\n";
+    kdDebug(41008) << "visiting on paint layer " << layer->name() << "\n";
     KisPaintDeviceSP pd = layer->paintDevice();
     // Save depth
     int depth = 8 * pd->pixelSize() / pd->nChannels();
@@ -196,7 +196,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 }
 bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
 {
-    kdDebug() << "Visiting on grouplayer " << layer->name() << "\n";
+    kdDebug(41008) << "Visiting on grouplayer " << layer->name() << "\n";
     KisLayerSP child = layer->firstChild();
     while (child) {
         child->accept(*this);
