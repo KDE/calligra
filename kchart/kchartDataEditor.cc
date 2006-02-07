@@ -229,6 +229,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     QHBoxLayout  *rowColLayout = new QHBoxLayout(  );
     rowColLayout->addWidget(m_rowsLA);
     rowColLayout->addWidget(m_rowsSB);
+    rowColLayout->addSpacing(20);
     rowColLayout->addWidget(m_colsLA);
     rowColLayout->addWidget(m_colsSB);
     
@@ -313,7 +314,8 @@ void kchartDataEditor::addDocs()
     //KSpread could use some functionality like this as well.
     
     
-    /*QWhatsThis::add(m_table, i18n("<p>This table contains the data"
+#if 0
+    QWhatsThis::add(m_table, i18n("<p>This table contains the data"
     " for the chart.<br><br> Each row is one data set of values."
     " The name of such a data set can be changed in the column header (on the left)"
     " of the table. In a line diagram each row is one line. In a ring diagram each row"
@@ -321,7 +323,8 @@ void kchartDataEditor::addDocs()
     " Just like rows you can also change the name of each value in the"
     " column headers (at the top) of the table.  In a bar diagram the number"
     " of columns defines the number of value sets.  In a ring diagram each"
-    " column is one ring.</p>"));*/
+    " column is one ring.</p>"));
+#endif
 }
 
 
@@ -415,12 +418,14 @@ void kchartDataEditor::getData( KDChartTableData* dat )
     dat->setUsedCols( numCols );
 
 	// Empty table
-	/*if ( numRows==1 && numCols==1 && m_table->horizontalHeader()->label(0).isEmpty()
+#if 0
+	if ( numRows==1 && numCols==1 && m_table->horizontalHeader()->label(0).isEmpty()
 			&& m_table->verticalHeader()->label(0).isEmpty()
 			&& m_table->text(0, 0).isEmpty() ) {
 		dat->expand(0,0);
 		return;
-	}*/
+	}
+#endif
 
     // Get all the data.
     for (int row = labelRows ; row < (numRows+labelRows); row++) {
@@ -444,7 +449,8 @@ void kchartDataEditor::getData( KDChartTableData* dat )
 //
 void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 {
-    /*QHeader  *rowHeader = m_table->verticalHeader();
+#if 0
+    QHeader  *rowHeader = m_table->verticalHeader();
     int       row;
     int       numRows = m_rowsSB->value();
 
@@ -453,7 +459,8 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 		return;
     for (row = 0; row < numRows; row++) {
 	rowHeader->setLabel(row, rowLabels[row]);
-    }*/
+    }
+#endif
 
     for (unsigned int i=0;i<rowLabels.count();i++)
     {
@@ -529,14 +536,16 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 //
 void kchartDataEditor::getColLabels(QStringList &colLabels)
 {
-   /* QHeader  *colHeader = m_table->horizontalHeader();
+#if 0
+    QHeader  *colHeader = m_table->horizontalHeader();
     int  numCols = m_colsSB->value();
     int  col;
 
     colLabels.clear();
     for (col = 0; col < numCols; col++) {
       colLabels << colHeader->label(col);
-    }*/
+    }
+#endif
     
     colLabels.clear();
 
@@ -726,7 +735,8 @@ void kchartDataEditor::setCols(int cols)
 
 // Get the new name for a column header.
 //
-/*void kchartDataEditor::column_clicked(int column)
+#if 0	// Disabled since the first row / column now contains the labels.
+void kchartDataEditor::column_clicked(int column)
 {
 	bool ok;
     QString name = KInputDialog::getText(i18n("Column Name"), 
@@ -739,12 +749,12 @@ void kchartDataEditor::setCols(int cols)
     m_table->horizontalHeader()->setLabel(column, name);
 	m_modified = true;
     }
-}*/
+}
 
 
 // Get the new name for a row header.
 //
-/*void kchartDataEditor::row_clicked(int row)
+void kchartDataEditor::row_clicked(int row)
 {
 	bool ok;
     QString name = KInputDialog::getText(i18n("Row Name"),
@@ -757,7 +767,8 @@ void kchartDataEditor::setCols(int cols)
     m_table->verticalHeader()->setLabel(row, name);
 	m_modified = true;
     }
-}*/
+}
+#endif
 
 
 void  kchartDataEditor::tableChanged(int row, int col)
