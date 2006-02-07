@@ -5,6 +5,8 @@
   <!ENTITY package "koffice">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
+  <!ENTITY definitions SYSTEM "definitions.docbook">
+  <!ENTITY commands SYSTEM "commands.docbook">
 ]>
 
 <book lang="&language;">
@@ -93,6 +95,9 @@ be used within larger documents of other &koffice; components.
 </itemizedlist>
 </chapter>
 
+&definitions;
+&commands;
+
 <chapter id="license"><title>License</title>
 
 &underFDL;
@@ -102,3 +107,13 @@ be used within larger documents of other &koffice; components.
 &documentation.index; 
 </book>
 
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->

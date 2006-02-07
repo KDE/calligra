@@ -1,0 +1,126 @@
+<chapter id="definitions">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Definitions</title>
+
+<sect1 id="gantt">
+<title>Gant charts</title>
+<para>A Gantt chart is a popular type of bar chart, that aims to show the timing
+of tasks or activities as they occur over time. Although the Gantt chart did not
+initially indicate the relationships between activities this has become more
+common in current usage as both timing and interdependencies between tasks can
+be identified.
+</para>
+<para>
+In project management, a Gantt chart can show when the project terminal elements
+start and finish, summary elements (shown) or terminal element dependencies (not
+shown). A terminal element is defined as the smallest task tracked as part of
+the project effort.
+</para>
+<para>
+Since the initial introduction of Gantt charts, they have become an industry
+standard as a key project management tool for representing the phases, tasks and
+activities that are scheduled as part of a project Work Breakdown Structure
+(WBS) or timeline of activities.
+</para>
+<para>
+The initial format of the chart was developed by Henry L. Gantt (1861-1919) in
+1910 (see <quote>Work, Wages and Profit</quote> by H. L. Gantt, published by The
+Engineering Magazine, NY, 1910).
+</para>
+</sect1>
+
+<sect1 id="wbs">
+<title>Work Breakdown Structure (WBS)</title>
+<para>
+In project management, a work breakdown structure (WBS) is an exhaustive,
+hierarchical (from general to specific) tree structure of deliverables and tasks
+that need to be performed to complete a project.
+</para>
+<para>
+The purpose of a WBS is to identify terminal elements (the actual items to be
+done in a project). Therefore, WBS serves as the basis for much of project
+planning.
+</para>
+<para>A useful rule of thumb is that any project can be broken down into
+between 10 and 20 tasks.
+</para>
+<para>
+Work breakdown structure is a very common project management tool. Many United
+States government statements of work require work breakdown structures.
+</para>
+</sect1>
+
+<sect1 id="terminal-element">
+<title>Terminal element</title>
+<para>
+In project management, a terminal element is the lowest element (activity or
+deliverable) in a work breakdown structure(WBS); it is not further subdivided.
+</para>
+<para>
+Terminal elements are the items that are estimated in terms of resource
+requirements, budget and duration, linked by dependencies and scheduled.
+A terminal element is sometimes also called a work package, although the two
+terms are not synonymous.
+</para>
+</sect1>
+
+<sect1 id="critical-path">
+<title>Critical path</title>
+<para>In project management, a critical path is the sequence of project network
+terminal elements with the longest overall duration, determining the shortest
+time to complete the project.
+</para>
+<para>
+The duration of the critical path determines the duration of the entire project.
+Any delay of a terminal element on the critical path directly impacts the
+planned project completion date (i.e. there is no float on the critical path).
+A project can have several, parallel critical paths. An additional parallel path
+through the network with the total durations just shorter than the critical path
+is called a sub-critical path.
+</para>
+<para>
+Originally, the critical path method considered only logical dependencies among
+terminal elements. A related concept is the critical chain, which adds resource
+dependencies.
+</para>
+<para>
+The critical path method was invented by the DuPont corporation.
+</para>
+</sect1>
+
+<sect1 id="float">
+<title>Float</title>
+<para>
+Float in project management is the amount of time that a terminal element in a
+project network can be delayed by, without causing a delay to:
+<itemizedlist>
+<listitem><para>subsequent terminal elements (free float)</para></listitem>
+<listitem><para>project completion date (total float).</para></listitem>
+</itemizedlist>
+Float is sometimes also called slack.
+</para>
+</sect1>
+
+</chapter>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-parent-document: ("index.docbook" "book" "chapter")
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+-->
