@@ -501,10 +501,4 @@
     <tabstop>bnLoadCurve</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>kiscmbidlist.h</includehint>
-    <includehint>imageviewer.h</includehint>
-</includehints>
 </UI>

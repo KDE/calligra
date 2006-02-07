@@ -57,6 +57,7 @@
 #include "kis_iterators_pixel.h"
 #include "kis_abstract_colorspace.h"
 #include "kis_paint_device.h"
+#include "kis_paint_layer.h"
 #include "wdgrawimport.h"
 
 typedef KGenericFactory<KisRawImport, KoFilter> KisRawImportFactory;
@@ -183,7 +184,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
             image = new KisImage( doc->undoAdapter(), sz.width(), sz.height(), cs, filename);
             if (image == 0)return KoFilter::CreationError;
 
-            layer = image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE);
+            layer = dynamic_cast<KisPaintLayer*> (image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data());
             if (layer == 0) return KoFilter::CreationError;
 
             device = layer->paintDevice();
