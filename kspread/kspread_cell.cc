@@ -5593,28 +5593,11 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
         format()->loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
         loadOasisConditional( style );
     }
-    QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
-    if ( !textP.isNull() )
-    {
-        text = textP.text(); // our text, could contain formating for value or result of formul
-        setCellText( text );
-        setValue( text );
-
-        QDomElement textA = KoDom::namedItemNS( textP, KoXmlNS::text, "a" );
-        if( !textA.isNull() )
-        {
-            if ( textA.hasAttributeNS( KoXmlNS::xlink, "href" ) )
-            {
-                QString link = textA.attributeNS( KoXmlNS::xlink, "href", QString::null );
-                text = textA.text();
-                setCellText( text );
-                setValue( text );
-                if ( link[0]=='#' )
-                    link=link.remove( 0, 1 );
-                setLink( link );
-            }
-        }
-    }
+   // QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
+    
+     
+    //Search and load each paragraph of text. Each paragraph is separated by a line break.
+    loadOasisCellText( element );
 
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
@@ -5838,6 +5821,58 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
       setCalcDirtyFlag ();   // formulas must be recalculated
 
     return true;
+}
+
+void Cell::loadOasisCellText( const QDomElement& parent )
+{
+    //Search and load each paragraph of text. Each paragraph is separated by a line break
+    QDomElement textParagraphElement;
+    QString cellText;
+    
+    bool multipleTextParagraphsFound=false;
+    
+    forEachElement( textParagraphElement , parent )
+    {
+        if ( textParagraphElement.localName()=="p" && 
+             textParagraphElement.namespaceURI()== KoXmlNS::text )
+        {
+            // our text, could contain formating for value or result of formul
+            if (cellText.isEmpty())
+                cellText = textParagraphElement.text();
+            else
+            {
+                cellText += "\n"+textParagraphElement.text(); 
+                multipleTextParagraphsFound=true;   
+            }
+
+            QDomElement textA = KoDom::namedItemNS( textParagraphElement, KoXmlNS::text, "a" );
+            if( !textA.isNull() )
+            {
+                if ( textA.hasAttributeNS( KoXmlNS::xlink, "href" ) )
+                {
+                    QString link = textA.attributeNS( KoXmlNS::xlink, "href", QString::null );
+                    cellText = textA.text();
+                    setCellText( cellText );
+                    setValue( cellText );
+                    if ( link[0]=='#' )
+                        link=link.remove( 0, 1 );
+                    setLink( link );
+                }
+            }
+        }
+    }
+    
+    if (!cellText.isNull())
+    {
+        setCellText( cellText );
+        setValue( cellText );
+    }
+    
+    //Enable word wrapping if multiple lines of text have been found.
+    if ( multipleTextParagraphsFound )
+    {
+        format()->setMultiRow(true);
+    }
 }
 
 void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& oasisContext )

@@ -267,9 +267,7 @@ public:
     bool load( const QDomElement& cell, int _xshift, int _yshift, Paste::Mode pm = Paste::Normal,
                Paste::Operation op = Paste::OverWrite, bool paste = false );
 
-    bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext );
-    void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
-    void loadOasisValidation( const QString& validationName );
+    bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext );   
 
     QTime toTime(const QDomElement &element);
     QDate toDate(const QDomElement &element);
@@ -941,6 +939,14 @@ protected:
      */
     void checkNumberFormat();
 
+   /**
+     * Load the text paragraphs from an OASIS XML cell description.  
+     * @param parent The DOM element representing the cell.
+     */
+    void loadOasisCellText( const QDomElement& parent );
+    void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
+    void loadOasisValidation( const QString& validationName );
+    
     void loadOasisValidationCondition( QString &valExpression );
     void saveOasisAnnotation( KoXmlWriter &xmlwriter );
     void loadOasisConditional( QDomElement * style );
