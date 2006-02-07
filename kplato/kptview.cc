@@ -365,9 +365,6 @@ void View::slotViewExpected() {
     //kdDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = Effort::Use_Expected;
     getProject().setCurrentSchedulePtr(getProject().findSchedule(Schedule::Expected));
-    m_ganttview->setShowExpected(actionViewExpected->isChecked());
-    m_ganttview->setShowOptimistic(false);
-    m_ganttview->setShowPessimistic(false);
     slotUpdate(false);
 }
 
@@ -375,9 +372,6 @@ void View::slotViewOptimistic() {
     //kdDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = Effort::Use_Optimistic;
     getProject().setCurrentSchedulePtr(getProject().findSchedule(Schedule::Optimistic));
-    m_ganttview->setShowOptimistic(actionViewOptimistic->isChecked());
-    m_ganttview->setShowExpected(false);
-    m_ganttview->setShowPessimistic(false);
     slotUpdate(false);
 }
 
@@ -385,9 +379,6 @@ void View::slotViewPessimistic() {
     //kdDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = Effort::Use_Pessimistic;
     getProject().setCurrentSchedulePtr(getProject().findSchedule(Schedule::Pessimistic));
-    m_ganttview->setShowPessimistic(actionViewPessimistic->isChecked());
-    m_ganttview->setShowExpected(false);
-    m_ganttview->setShowOptimistic(false);
     slotUpdate(false);
 }
 
@@ -550,7 +541,7 @@ void View::projectCalculate() {
         }
     }
     QApplication::setOverrideCursor(Qt::waitCursor);
-    NodeSchedule *ns = getProject().findSchedule((Schedule::Type)m_currentEstimateType);
+    Schedule *ns = getProject().findSchedule((Schedule::Type)m_currentEstimateType);
     KCommand *cmd;
     if (ns) {
         cmd = new RecalculateProjectCmd(getPart(), getProject(), *ns, "Calculate");
@@ -1023,6 +1014,9 @@ void View::updateView(QWidget *widget)
     {
         //kdDebug()<<k_funcinfo<<"draw gantt"<<endl;
         //m_ganttview->hide();
+        m_ganttview->setShowExpected(actionViewExpected->isChecked());
+        m_ganttview->setShowOptimistic(actionViewOptimistic->isChecked());
+        m_ganttview->setShowPessimistic(actionViewPessimistic->isChecked());
         m_ganttview->drawChanges(getProject());
         m_ganttview->show();
         setTaskActionsEnabled(widget, true);
@@ -1191,7 +1185,7 @@ void View::setScheduleActionsEnabled() {
     actionViewExpected->setEnabled(getProject().findSchedule(Schedule::Expected));
     actionViewOptimistic->setEnabled(getProject().findSchedule(Schedule::Optimistic));
     actionViewPessimistic->setEnabled(getProject().findSchedule(Schedule::Pessimistic));
-    NodeSchedule *ns = getProject().currentSchedule();
+    Schedule *ns = getProject().currentSchedule();
     if (ns == 0) {
         return;
     }

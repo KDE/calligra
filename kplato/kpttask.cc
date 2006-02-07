@@ -308,7 +308,7 @@ void Task::save(QDomElement &element)  const {
     if (!m_schedules.isEmpty()) {
         QDomElement schs = me.ownerDocument().createElement("schedules");
         me.appendChild(schs);
-        QIntDictIterator<NodeSchedule> it = m_schedules;
+        QIntDictIterator<Schedule> it = m_schedules;
         for (; it.current(); ++it) {
             if (!it.current()->isDeleted()) {
                 it.current()->saveXML(schs);
@@ -325,7 +325,7 @@ void Task::save(QDomElement &element)  const {
 
 void Task::saveAppointments(QDomElement &element, long id) const {
     //kdDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
-    NodeSchedule *sch = findSchedule(id);
+    Schedule *sch = findSchedule(id);
     if (sch) {
         sch->saveAppointments(element);
     }
@@ -547,11 +547,11 @@ double Task::costPerformanceIndex(const QDate &date, bool *error) {
     return res;
 }
 
-void Task::initiateCalculation(Schedule *sch) {
+void Task::initiateCalculation(Schedule &sch) {
     //kdDebug()<<k_funcinfo<<m_name<<" schedule: "<<(sch?sch->name():"None")<<" id="<<(sch?sch->id():-1)<<endl;
     m_visitedForward = false;
     m_visitedBackward = false;
-    m_currentSchedule = createSchedule(sch->name(), sch->type(), sch->id());
+    m_currentSchedule = createSchedule(&sch);
     m_currentSchedule->initiateCalculation();
     clearProxyRelations();
     Node::initiateCalculation(sch);
@@ -619,7 +619,7 @@ DateTime Task::calculateForward(int use) {
     if (m_currentSchedule == 0) {
         return DateTime();
     }
-    NodeSchedule *cs = m_currentSchedule;
+    Schedule *cs = m_currentSchedule;
     if (m_visitedForward) {
     //kdDebug()<<earliestStart.toString()<<" + "<<m_durationBackward.toString()<<" "<<m_name<<" calculateForward() (visited)"<<endl;
         return cs->earliestStart + m_durationForward;
@@ -750,7 +750,7 @@ DateTime Task::calculateBackward(int use) {
     if (m_currentSchedule == 0) {
         return DateTime();
     }
-    NodeSchedule *cs = m_currentSchedule;
+    Schedule *cs = m_currentSchedule;
     if (m_visitedBackward) {
     //kdDebug()<<latestFinish.toString()<<" - "<<m_durationBackward.toString()<<" "<<m_name<<" calculateBackward() (visited)"<<endl;
         return cs->latestFinish - m_durationBackward;
@@ -883,7 +883,7 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     if (m_currentSchedule == 0) {
         return DateTime();
     }
-    NodeSchedule *cs = m_currentSchedule;
+    Schedule *cs = m_currentSchedule;
     if (m_visitedForward) {
         return cs->endTime;
     }
@@ -1086,7 +1086,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
     if (m_currentSchedule == 0) {
         return DateTime();
     }
-    NodeSchedule *cs = m_currentSchedule;
+    Schedule *cs = m_currentSchedule;
     if (m_visitedBackward) {
         return cs->startTime;
     }
@@ -1475,7 +1475,7 @@ Duration Task::positiveFloat() {
 }
 
 bool Task::isCritical() {
-    NodeSchedule *cs = m_currentSchedule;
+    Schedule *cs = m_currentSchedule;
     if (cs == 0) {
         return false;
     }

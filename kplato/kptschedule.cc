@@ -36,7 +36,22 @@ namespace KPlato
 Schedule::Schedule()
     : m_type(Expected),
       m_id(0),
-      m_deleted(false) {
+      m_deleted(false),
+      m_parent(0) {
+}
+
+Schedule::Schedule(Schedule *parent)
+    : m_deleted(false),
+      m_appointments(),
+      m_parent(parent) {
+
+    if (parent) {
+        m_name = parent->name();
+        m_type = parent->type();
+        m_id = parent->id();
+    }
+    m_appointments.setAutoDelete(true);
+    //kdDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
 }
 
 Schedule::Schedule(QString name, Type type, long id)
@@ -44,7 +59,8 @@ Schedule::Schedule(QString name, Type type, long id)
       m_type(type),
       m_id(id),
       m_deleted(false),
-      m_appointments() {
+      m_appointments(),
+      m_parent(0) {
 
     //kdDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
     m_appointments.setAutoDelete(true);
@@ -53,9 +69,17 @@ Schedule::Schedule(QString name, Type type, long id)
 Schedule::~Schedule() {
 }
 
+void Schedule::setParent(Schedule *parent) {
+    m_parent = parent;
+}
+
 void Schedule::setDeleted(bool on) {
     //kdDebug()<<k_funcinfo<<"deleted="<<on<<endl;
     m_deleted = on;
+}
+
+bool Schedule::isDeleted() const {
+    return m_parent == 0 ? m_deleted : m_parent->isDeleted();
 }
 
 void Schedule::setType(const QString type) {
@@ -88,6 +112,26 @@ QString Schedule::typeToString(bool translate) const {
     }
 }
 
+void Schedule::initiateCalculation() {
+    resourceError = false;
+    resourceOverbooked = false;
+    schedulingError = false;
+    inCriticalPath = false;
+    workStartTime = DateTime();
+    workEndTime = DateTime();
+}
+
+void Schedule::calcResourceOverbooked() {
+    resourceOverbooked = false;
+    QPtrListIterator<Appointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        if (it.current()->resource()->isOverbooked(startTime, endTime)) {
+            resourceOverbooked = true;
+            break;
+        }
+    }
+}
+
 bool Schedule::loadXML(const QDomElement &sch) {
     m_name = sch.attribute("name");
     setType(sch.attribute("type"));
@@ -116,30 +160,6 @@ void Schedule::saveAppointments(QDomElement &element) const {
         it.current()->saveXML(element);
     }
 }
-// Schedule *Schedule::find(const QIntDict<Schedule> &sch, Schedule::Type type) {
-//     QIntDictIterator<Schedule> it = sch;
-//     for (; it.current(); ++it) {
-//         if (it.current()->isDeleted())
-//             continue;
-//         if (it.current()->type() == type)
-//             return it.current();
-//     }
-//     return 0;
-// }
-// 
-// Schedule *Schedule::find(const QIntDict<Schedule> &sch, QString name, Schedule::Type type) {
-//     if (name.isEmpty()) {
-//         return find(sch, type);
-//     }
-//     QIntDictIterator<Schedule> it = sch;
-//     for (; it.current(); ++it) {
-//         if (it.current()->isDeleted())
-//             continue;
-//         if (it.current()->type() == type && it.current()->name() == name)
-//             return it.current();
-//     }
-//     return 0;
-// }
 
 bool Schedule::add(Appointment *appointment) {
     if (m_appointments.findRef(appointment) != -1) {
@@ -309,19 +329,29 @@ double Schedule::actualCostTo(const QDate &date) const {
     return c;
 }
 
-
-//----------------------------------------
+//-------------------------------------------------
 NodeSchedule::NodeSchedule()
-    : Schedule(),
-      m_node(0) {
+    : Schedule() {
     //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     init();
 }
 
 NodeSchedule::NodeSchedule(Node *node, QString name, Schedule::Type type, long id)
-    : Schedule(name, type, id),
-      m_node(node) {
+    : Schedule(name, type, id) {
     //kdDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
+    init();
+}
+
+NodeSchedule::NodeSchedule(Schedule *parent, Node *node)
+    : Schedule(parent),
+      m_node(node) {
+    
+    //kdDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
+    if (parent) {
+        m_name = parent->name();
+        m_type = parent->type();
+        m_id = parent->id();
+    }
     init();
 }
 
@@ -348,31 +378,6 @@ void NodeSchedule::setDeleted(bool on) {
             it.current()->resource()->setDeleted(on);
         }
     }
-}
-
-NodeSchedule *NodeSchedule::find(const QIntDict<NodeSchedule> &sch, Schedule::Type type) {
-    QIntDictIterator<NodeSchedule> it = sch;
-    for (; it.current(); ++it) {
-        if (it.current()->isDeleted())
-            continue;
-        if (it.current()->type() == type)
-            return it.current();
-    }
-    return 0;
-}
-
-NodeSchedule *NodeSchedule::find(const QIntDict<NodeSchedule> &sch, QString name, Schedule::Type type) {
-    if (name.isEmpty()) {
-        return find(sch, type);
-    }
-    QIntDictIterator<NodeSchedule> it = sch;
-    for (; it.current(); ++it) {
-        if (it.current()->isDeleted())
-            continue;
-        if (it.current()->type() == type && it.current()->name() == name)
-            return it.current();
-    }
-    return 0;
 }
 
 bool NodeSchedule::loadXML(const QDomElement &sch) {
@@ -436,54 +441,6 @@ void NodeSchedule::saveXML(QDomElement &element) const {
     sch.setAttribute("not-scheduled",notScheduled);
 }
 
-bool NodeSchedule::loadProjectXML(const QDomElement &sch, Project &project) {
-    //kdDebug()<<k_funcinfo<<endl;
-    QString s;
-    Schedule::loadXML(sch);
-    
-    s = sch.attribute("start");
-    if (s != "")
-        startTime = DateTime::fromString(s);
-    s = sch.attribute("end");
-    if (s != "")
-        endTime = DateTime::fromString(s);
-    
-    QDomNodeList al = sch.childNodes();
-    //kdDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
-    for (unsigned int i=0; i<al.count(); ++i) {
-        if (al.item(i).isElement()) {
-            QDomElement app = al.item(i).toElement();
-            if (app.tagName() == "appointment") {
-                // Load the appointments. 
-                // Resources and tasks must allready loaded
-                Appointment *child = new Appointment();
-                if (!child->loadXML(app, project, *this)) {
-                    // TODO: Complain about this
-                    kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
-                    delete child;
-                }
-            }
-        }
-    }
-    return true;
-}
-
-void NodeSchedule::saveProjectXML(QDomElement &element) const {
-    saveCommonXML(element);
-    
-    element.setAttribute("start",startTime.toString());
-    element.setAttribute("end",endTime.toString());
-}
-
-void NodeSchedule::initiateCalculation() {
-    resourceError = false;
-    resourceOverbooked = false;
-    schedulingError = false;
-    inCriticalPath = false;
-    workStartTime = DateTime();
-    workEndTime = DateTime();
-}
-
 void NodeSchedule::addAppointment(Schedule *resource, DateTime &start, DateTime &end, double load) {
     //kdDebug()<<k_funcinfo<<endl;
     Appointment *a = findAppointment(resource, this);
@@ -501,20 +458,7 @@ void NodeSchedule::addAppointment(Schedule *resource, DateTime &start, DateTime 
     }
 }
 
-
-void NodeSchedule::calcResourceOverbooked() {
-    resourceOverbooked = false;
-    QPtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        if (it.current()->resource()->isOverbooked(startTime, endTime)) {
-            resourceOverbooked = true;
-            break;
-        }
-    }
-}
-
-
-//----------------------------------------
+//-----------------------------------------------
 ResourceSchedule::ResourceSchedule()
     : Schedule(),
       m_resource(0) {
@@ -523,8 +467,21 @@ ResourceSchedule::ResourceSchedule()
 
 ResourceSchedule::ResourceSchedule(Resource *resource, QString name, Schedule::Type type, long id)
     : Schedule(name, type, id),
-      m_resource(resource) {
+      m_resource(resource),
+      m_parent(0) {
     //kdDebug()<<k_funcinfo<<"resource: "<<resource->name()<<endl;
+}
+
+ResourceSchedule::ResourceSchedule(Schedule *parent, Resource *resource)
+    : Schedule(),
+      m_resource(resource),
+      m_parent(parent) {
+    //kdDebug()<<k_funcinfo<<"resource: "<<resource->name()<<endl;
+    if (parent) {
+        m_name = parent->name();
+        m_type = parent->type();
+        m_id = parent->id();
+    }
 }
 
 ResourceSchedule::~ResourceSchedule() {
@@ -587,13 +544,71 @@ double ResourceSchedule::normalRatePrHour() const {
     return m_resource ? m_resource->normalRate() : 0.0;
 }
 
+//--------------------------------------
+MainSchedule::MainSchedule()
+    : NodeSchedule() {
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    init();
+}
+
+MainSchedule::MainSchedule(Node *node, QString name, Schedule::Type type, long id)
+    : NodeSchedule(node, name, type, id) {
+    //kdDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
+    init();
+}
+
+MainSchedule::~MainSchedule() {
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+}
+
+bool MainSchedule::loadXML(const QDomElement &sch, Project &project) {
+    kdDebug()<<k_funcinfo<<endl;
+    QString s;
+    Schedule::loadXML(sch);
+    
+    s = sch.attribute("start");
+    if (s != "")
+        startTime = DateTime::fromString(s);
+    s = sch.attribute("end");
+    if (s != "")
+        endTime = DateTime::fromString(s);
+    
+    QDomNodeList al = sch.childNodes();
+    kdDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
+    for (unsigned int i=0; i<al.count(); ++i) {
+        if (al.item(i).isElement()) {
+            QDomElement app = al.item(i).toElement();
+            if (app.tagName() == "appointment") {
+                // Load the appointments. 
+                // Resources and tasks must allready loaded
+                Appointment *child = new Appointment();
+                if (!child->loadXML(app, project, *this)) {
+                    // TODO: Complain about this
+                    kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
+                    delete child;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+void MainSchedule::saveXML(QDomElement &element) const {
+    saveCommonXML(element);
+    
+    element.setAttribute("start",startTime.toString());
+    element.setAttribute("end",endTime.toString());
+}
+
 #ifndef NDEBUG
 void Schedule::printDebug(QString indent) {
-    kdDebug()<<indent<<"Schedule["<<m_id<<"] '"<<m_name<<"' type: "<<typeToString()<<" ("<<m_type<<")"<<(m_deleted?"   Deleted":"")<<endl;
+    kdDebug()<<indent<<"Schedule["<<m_id<<"] '"<<m_name<<"' type: "<<typeToString()<<" ("<<m_type<<")"<<(isDeleted()?"   Deleted":"")<<endl;
 }
 void NodeSchedule::printDebug(QString indent) {
     Schedule::printDebug(indent);
     indent += "!  ";
+    if (m_parent == 0)
+        kdDebug()<<indent<<"No parent schedule!"<<endl;
     if (!notScheduled) {
         if (node()) kdDebug()<<indent<<"Node: "<<node()->name()<<endl;
         else kdDebug()<<indent<<"No parent node!"<<endl;
@@ -623,10 +638,34 @@ void NodeSchedule::printDebug(QString indent) {
 void ResourceSchedule::printDebug(QString indent) {
     Schedule::printDebug(indent);
     indent += "!  ";
+    if (m_parent == 0)
+        kdDebug()<<indent<<"No parent schedule!"<<endl;
     if (resource()) kdDebug()<<indent<<"Resource: "<<resource()->name()<<endl;
     else kdDebug()<<indent<<"No parent resource!"<<endl;
     kdDebug()<<indent<<endl;
     kdDebug()<<indent<<"Appointments: "<<m_appointments.count()<<endl;
+}
+
+void MainSchedule::printDebug(QString indent) {
+    Schedule::printDebug(indent);
+    indent += "!  ";
+    if (!notScheduled) {
+        if (node()) kdDebug()<<indent<<"Node: "<<node()->name()<<endl;
+        else kdDebug()<<indent<<"No parent node!"<<endl;
+    }
+    kdDebug()<<indent<<"Not scheduled="<<notScheduled<<endl;
+    kdDebug()<<indent<<"Start time: "<<startTime.toString()<<endl;
+    kdDebug()<<indent<<"End time: " <<endTime.toString()<<endl;
+    kdDebug()<<indent<<"Duration: "<<duration.seconds()<<QCString(" secs")<<" ("<<duration.toString()<<")"<<endl;
+    kdDebug()<<indent<<"Earliest start: "<<earliestStart.toString()<<endl;
+    kdDebug()<<indent<<"Latest finish: " <<latestFinish.toString()<<endl;
+
+    kdDebug()<<indent<<endl;
+    kdDebug()<<indent<<"Appointments: "<<m_appointments.count()<<endl;
+    QPtrListIterator<Appointment> it = m_appointments;
+    for (; it.current(); ++it) {
+        it.current()->printDebug(indent + "  ");
+    }
 }
 #endif
 

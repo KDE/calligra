@@ -50,7 +50,7 @@ class ResourceRequestCollection;
 class EffortCostMap;
 class Schedule;
 class ResourceSchedule;
-class NodeSchedule;
+class Schedule;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -126,7 +126,7 @@ class ResourceGroup {
           bool load(QDomElement &element);
           void save(QDomElement &element) const;
 
-          void initiateCalculation(Schedule *sch);
+          void initiateCalculation(Schedule &sch);
 
           void addNode(const Node *node) { m_nodes.append(node); }
           void clearNodes() { m_nodes.clear(); }
@@ -235,13 +235,13 @@ public:
     /// Adds appointment to current schedule
     virtual bool addAppointment(Appointment *appointment);
     /// Adds appointment to schedule sch
-    virtual bool addAppointment(Appointment *appointment, Schedule &sch);
+    virtual bool addAppointment(Appointment *appointment, Schedule &main);
     /// Adds appointment to both this resource and node
-    virtual void addAppointment(NodeSchedule *node, DateTime &start, DateTime &end, double load=100);
+    virtual void addAppointment(Schedule *node, DateTime &start, DateTime &end, double load=100);
     
-    void initiateCalculation(Schedule *sch);
+    void initiateCalculation(Schedule &sch);
     bool isAvailable(Task *task);
-    void makeAppointment(NodeSchedule *schedule);
+    void makeAppointment(Schedule *schedule);
 
     bool isOverbooked() const;
     bool isOverbooked(const QDate &date) const;
@@ -319,6 +319,7 @@ public:
     void takeSchedule(const Schedule *schedule);
     void addSchedule(ResourceSchedule *schedule);
     ResourceSchedule *createSchedule(QString name, int type, int id);
+    ResourceSchedule *createSchedule(Schedule *parent);
     
 private:
     Project *m_project;
@@ -409,7 +410,7 @@ class ResourceRequest {
         void registerRequest() { if (m_resource) m_resource->registerRequest(this); }
         void unregisterRequest() { if (m_resource) m_resource->unregisterRequest(this); }
  
-        void makeAppointment(NodeSchedule *schedule) { 
+        void makeAppointment(Schedule *schedule) { 
             if (m_resource) 
                 m_resource->makeAppointment(schedule);
         }
@@ -470,7 +471,7 @@ class ResourceGroupRequest {
          * Makes appointments for task @param task to the 
          * requested resources for the duration found in @ref duration().
          */
-        void makeAppointments(NodeSchedule *schedule);
+        void makeAppointments(Schedule *schedule);
             
         /**
          * Reserves the requested resources for the specified interval
@@ -538,7 +539,7 @@ public:
     * Makes appointments for the task @param task to the requested resources.
     * Assumes that @ref duration() has been run.
     */
-    void makeAppointments(NodeSchedule *schedule);
+    void makeAppointments(Schedule *schedule);
     /**
      * Reserves the requested resources for the specified interval
      */

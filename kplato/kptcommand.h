@@ -891,7 +891,7 @@ private:
     Project &m_node;
     Node::ConstraintType newConstraint;
     Node::ConstraintType oldConstraint;
-    QMap<long, bool> ids;
+    QMap<Schedule*, bool> m_schedules;
 };
 
 class ProjectModifyStartTimeCmd : public NamedCommand
@@ -905,7 +905,7 @@ private:
     Project &m_node;
     QDateTime newTime;
     QDateTime oldTime;
-    QMap<long, bool> ids;
+    QMap<Schedule*, bool> m_schedules;
 };
 
 class ProjectModifyEndTimeCmd : public NamedCommand
@@ -919,7 +919,7 @@ private:
     Project &m_node;
     QDateTime newTime;
     QDateTime oldTime;
-    QMap<long, bool> ids;
+    QMap<Schedule*, bool> m_schedules;
 };
 
 
@@ -934,23 +934,23 @@ private:
     Project &m_node;
     QString m_typename;
     int m_type;
-    long newSchedule;
-    NodeSchedule *oldCurrent;
+    Schedule *newSchedule;
+    Schedule *oldCurrent;
 };
 
 class RecalculateProjectCmd : public NamedCommand
 {
 public:
-    RecalculateProjectCmd(Part *part, Project &project, NodeSchedule &sch, QString name=0);
+    RecalculateProjectCmd(Part *part, Project &project, Schedule &sch, QString name=0);
     void execute();
     void unexecute();
 
 private:
     Project &m_node;
-    NodeSchedule &oldSchedule;
-    NodeSchedule *newSchedule;
+    Schedule &oldSchedule;
+    Schedule *newSchedule;
     bool oldDeleted;
-    NodeSchedule *oldCurrent;
+    Schedule *oldCurrent;
 };
 
 }  //KPlato namespace

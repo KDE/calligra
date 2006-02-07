@@ -326,7 +326,7 @@ public:
     virtual DateTime scheduleBackward(const DateTime &, int /*use*/) = 0;
     virtual void adjustSummarytask() = 0;
 
-    virtual void initiateCalculation(Schedule *sch);
+    virtual void initiateCalculation(Schedule &sch);
     virtual void resetVisited();
     void propagateEarliestStart(DateTime &time);
     void propagateLatestFinish(DateTime &time);
@@ -389,7 +389,7 @@ public:
     /// Adds appointment to this node only (not to resource)
     virtual bool addAppointment(Appointment *appointment);
     /// Adds appointment to this node only (not to resource)
-    virtual bool addAppointment(Appointment *appointment, Schedule &sch);
+    virtual bool addAppointment(Appointment *appointment, Schedule &main);
     /// Adds appointment to both this node and resource
     virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);
     
@@ -455,32 +455,32 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc) { m_runningAccount = acc; }
 
-    NodeSchedule *currentSchedule() const { return m_currentSchedule; }
+    Schedule *currentSchedule() const { return m_currentSchedule; }
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
     // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
-    void setCurrentSchedulePtr(NodeSchedule *schedule) { m_currentSchedule = schedule; }
+    void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }
     
-    QIntDict<NodeSchedule> &schedules() { return m_schedules; }
+    QIntDict<Schedule> &schedules() { return m_schedules; }
     /// Find schedule matching name and type. Does not return deleted schedule.
-    NodeSchedule *findSchedule(const QString name, const Schedule::Type type) const;
+    Schedule *findSchedule(const QString name, const Schedule::Type type) const;
     /// Find schedule matching type.  Does not return deleted schedule.
-    NodeSchedule *findSchedule(const Schedule::Type type) const;
+    Schedule *findSchedule(const Schedule::Type type) const;
     /// Find schedule matching id.  Also returns deleted schedule.
-    NodeSchedule *findSchedule(long id) const { return m_schedules[id]; }
+    Schedule *findSchedule(long id) const { return m_schedules[id]; }
     /// Take, don't delete (as in destruct).
-    void takeSchedule(const NodeSchedule *schedule);
+    void takeSchedule(const Schedule *schedule);
     /// Add schedule to list, replace if schedule with same id allready exists.
-    void addSchedule(NodeSchedule *schedule);
+    void addSchedule(Schedule *schedule);
     /// Create a new schedule.
-    NodeSchedule *createSchedule(QString name, Schedule::Type type, long id);
+    Schedule *createSchedule(QString name, Schedule::Type type, long id);
+    /// Create a new schedule.
+    Schedule *createSchedule(Schedule *parent);
     
-    /// Set deleted = onoff for schedule with id (only this node)
+    /// Set deleted = onoff for schedule with id
     void setScheduleDeleted(long id, bool onoff);
-    /// Delete all schedules (also for my child nodes)
-    void deleteSchedules();
-    /// Set deleted = onoff for schedule with id (also for child nodes)
-    void deleteSchedules(long id, bool onoff);
+    /// Set parent schedule recursivly
+    virtual void setParentSchedule(Schedule *sch);
     
     DateTime startTime()
         { return m_currentSchedule ? m_currentSchedule->startTime : DateTime(); }
@@ -523,8 +523,8 @@ protected:
     QDate m_dateOnlyEndDate;
     Duration m_dateOnlyDuration;
  
-    QIntDict<NodeSchedule> m_schedules;
-    NodeSchedule *m_currentSchedule;
+    QIntDict<Schedule> m_schedules;
+    Schedule *m_currentSchedule;
 
     QString m_wbs;
     

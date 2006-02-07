@@ -399,9 +399,11 @@ bool Appointment::loadXML(QDomElement &element, Project &project, Schedule &sch)
         return false;
     }
     if (!res->addAppointment(this, sch)) {
+        kdError()<<k_funcinfo<<"Failed to add appointment to resource: "<<res->name()<<endl;
         return false;
     }
     if (!node->addAppointment(this, sch)) {
+        kdError()<<k_funcinfo<<"Failed to add appointment to node: "<<node->name()<<endl;
         m_resource->takeAppointment(this);
         return false;
     }

@@ -472,7 +472,7 @@ void Node::moveLatestFinish(DateTime &time) {
     }
 }
 
-void Node::initiateCalculation(Schedule *sch) {
+void Node::initiateCalculation(Schedule &sch) {
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->initiateCalculation(sch);
@@ -632,25 +632,25 @@ bool Node::addAppointment(Appointment *appointment) {
     return false;
 }
 
-bool Node::addAppointment(Appointment *appointment, Schedule &sch) {
+bool Node::addAppointment(Appointment *appointment, Schedule &main) {
     //kdDebug()<<k_funcinfo<<this<<endl;
-    NodeSchedule *s = findSchedule(sch.id());
+    Schedule *s = findSchedule(main.id());
     if (s == 0) {
-        s = createSchedule(sch.name(), sch.type(), sch.id());
+        s = createSchedule(&main);
     }
     appointment->setNode(s);
     return s->add(appointment);
 }
 
 void Node::addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load) {
-    NodeSchedule *node = findSchedule(resource->id());
+    Schedule *node = findSchedule(resource->id());
     if (node == 0) {
-        node = createSchedule(resource->name(), resource->type(), resource->id());
+        node = createSchedule(resource->parent());
     }
     node->addAppointment(resource, start, end, load);
 }
 
-void Node::takeSchedule(const NodeSchedule *schedule) {
+void Node::takeSchedule(const Schedule *schedule) {
     if (schedule == 0)
         return;
     if (m_currentSchedule == schedule)
@@ -658,32 +658,28 @@ void Node::takeSchedule(const NodeSchedule *schedule) {
     m_schedules.take(schedule->id());
 }
 
-void Node::addSchedule(NodeSchedule *schedule) {
+void Node::addSchedule(Schedule *schedule) {
     if (schedule == 0)
         return;
     m_schedules.replace(schedule->id(), schedule);
 }
 
-NodeSchedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
+Schedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
     //kdDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
     NodeSchedule *sch = new NodeSchedule(this, name, type, id);
     addSchedule(sch);
     return sch;
 }
 
-void Node::deleteSchedules() {
-    QIntDictIterator<NodeSchedule> it = m_schedules;
-    for (; it.current(); ++it) {
-        it.current()->setDeleted(true);
-        QPtrListIterator<Node> nit = m_nodes;
-        for (; nit.current(); ++nit) {
-            nit.current()->deleteSchedules();
-        }
-    }
+Schedule *Node::createSchedule(Schedule *parent) {
+    //kdDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
+    NodeSchedule *sch = new NodeSchedule(parent, this);
+    addSchedule(sch);
+    return sch;
 }
 
-NodeSchedule *Node::findSchedule(const QString name, const Schedule::Type type) const {
-    QIntDictIterator<NodeSchedule> it = m_schedules;
+Schedule *Node::findSchedule(const QString name, const Schedule::Type type) const {
+    QIntDictIterator<Schedule> it = m_schedules;
     for (; it.current(); ++it) {
         if (!it.current()->isDeleted() && 
             it.current()->name() == name && it.current()->type() == type)
@@ -692,9 +688,9 @@ NodeSchedule *Node::findSchedule(const QString name, const Schedule::Type type) 
     return 0;
 }
 
-NodeSchedule *Node::findSchedule(const Schedule::Type type) const {
+Schedule *Node::findSchedule(const Schedule::Type type) const {
     //kdDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count()<<endl;
-    QIntDictIterator<NodeSchedule> it = m_schedules;
+    QIntDictIterator<Schedule> it = m_schedules;
     for (; it.current(); ++it) {
         if (!it.current()->isDeleted() && it.current()->type() == type) {
             return it.current();
@@ -704,18 +700,22 @@ NodeSchedule *Node::findSchedule(const Schedule::Type type) const {
 }
 
 void Node::setScheduleDeleted(long id, bool on) {
-    NodeSchedule *ns = findSchedule(id);
+    Schedule *ns = findSchedule(id);
     if (ns == 0) {
         kdError()<<k_funcinfo<<m_name<<" Could not find schedule with id="<<id<<endl;
     } else {
         ns->setDeleted(on);
     }
 }
-void Node::deleteSchedules(long id, bool on) {
-    setScheduleDeleted(id, on);
-    QPtrListIterator<Node> nit = m_nodes;
-    for (; nit.current(); ++nit) {
-        nit.current()->deleteSchedules(id, on);
+
+void Node::setParentSchedule(Schedule *sch) {
+    Schedule *s = findSchedule(sch->id());
+    if (s) {
+        s->setParent(sch);
+    }
+    QPtrListIterator<Node> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->setParentSchedule(sch);
     }
 }
 
@@ -884,13 +884,13 @@ void Node::printDebug(bool children, QCString indent) {
         kdDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")"<<endl;
     if (m_constraint == MustFinishOn || m_constraint == FinishNotLater || m_constraint == FixedInterval)
         kdDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")"<<endl;
-    NodeSchedule *cs = m_currentSchedule; 
+    Schedule *cs = m_currentSchedule; 
     if (cs) {
         kdDebug()<<indent<<"  Current schedule: "<<"id="<<cs->id()<<" '"<<cs->name()<<"' type: "<<cs->type()<<endl;
     } else {
         kdDebug()<<indent<<"  Current schedule: None"<<endl;
     }
-    QIntDictIterator<NodeSchedule> it = m_schedules;
+    QIntDictIterator<Schedule> it = m_schedules;
     for (; it.current(); ++it) {
         it.current()->printDebug(indent+"  ");
     }

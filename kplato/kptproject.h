@@ -40,6 +40,7 @@ namespace KPlato
 {
 
 class Part;
+class Schedule;
 class StandardWorktime;
 
 //#define DEBUGPERT
@@ -59,9 +60,17 @@ public:
     /**
      * Calculate the whole project.
      *
-     * @param use Calculate using expected-, optimistic- or pessimistic estimate.
+     * @param schedule Schedule to use
      */
-    void calculate(Effort::Use use=Effort::Use_Expected);
+    void calculate(Schedule *scedule);
+    /**
+     * Calculate the whole project.
+     *
+     * @param schedule Calculate using expected-, optimistic- or pessimistic estimate.
+     */
+    void calculate(Effort::Use use);
+    /// Calculate current schedule
+    void calculate();
      
     virtual bool calcCriticalPath(bool fromEnd);
     
@@ -216,7 +225,9 @@ public:
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
     /// Create new schedule with unique id.
-    NodeSchedule *createSchedule(QString name, Schedule::Type type);
+    MainSchedule *createSchedule(QString name, Schedule::Type type);
+    /// Set parent schedule for my children
+    virtual void setParentSchedule(Schedule *sch);
     
 protected:
     Accounts m_accounts;
@@ -233,7 +244,7 @@ protected:
     DateTime scheduleBackward(const DateTime &latest, int use);
     void adjustSummarytask();
 
-    void initiateCalculation(Schedule *sch);
+    void initiateCalculation(Schedule &sch);
     void initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks);
 
     bool legalParents(Node *par, Node *child);

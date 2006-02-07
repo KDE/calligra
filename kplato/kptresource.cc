@@ -158,7 +158,7 @@ void ResourceGroup::save(QDomElement &element)  const {
     }
 }
 
-void ResourceGroup::initiateCalculation(Schedule *sch) {
+void ResourceGroup::initiateCalculation(Schedule &sch) {
     QPtrListIterator<Resource> it(m_resources);
     for (; it.current(); ++it) {
         it.current()->initiateCalculation(sch);
@@ -406,26 +406,26 @@ bool Resource::addAppointment(Appointment *appointment) {
     return false;
 }
 
-bool Resource::addAppointment(Appointment *appointment, Schedule &sch) {
-    Schedule *s = findSchedule(sch.id());
+bool Resource::addAppointment(Appointment *appointment, Schedule &main) {
+    Schedule *s = findSchedule(main.id());
     if (s == 0) {
-        s = createSchedule(sch.name(), sch.type(), sch.id());
+        s = createSchedule(&main);
     }
     appointment->setResource(s);
     return s->add(appointment);
 }
 
-void Resource::addAppointment(NodeSchedule *node, DateTime &start, DateTime &end, double load) {
+void Resource::addAppointment(Schedule *node, DateTime &start, DateTime &end, double load) {
     //kdDebug()<<k_funcinfo<<endl;
     ResourceSchedule *s = findSchedule(node->id());
     if (s == 0) {
-        s = createSchedule(node->name(), node->type(), node->id());
+        s = createSchedule(node->parent());
     }
     s->addAppointment(node, start, end, load);
 }
 
-void Resource::initiateCalculation(Schedule *sch) {
-    m_currentSchedule = createSchedule(sch->name(), sch->type(), sch->id());
+void Resource::initiateCalculation(Schedule &sch) {
+    m_currentSchedule = createSchedule(&sch);
 }
 
 void Resource::removeSchedule(Schedule *schedule) {
@@ -453,7 +453,13 @@ ResourceSchedule *Resource::createSchedule(QString name, int type, int id) {
     return sch;
 }
 
-void Resource::makeAppointment(NodeSchedule *node) {
+ResourceSchedule *Resource::createSchedule(Schedule *parent) {
+    ResourceSchedule *sch = new ResourceSchedule(parent, this);
+    addSchedule(sch);
+    return sch;
+}
+
+void Resource::makeAppointment(Schedule *node) {
     //kdDebug()<<k_funcinfo<<m_name<< ": "<<node->node()->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
     if (!node->startTime.isValid()) {
         kdWarning()<<k_funcinfo<<m_name<<": startTime invalid"<<endl;
@@ -997,7 +1003,7 @@ DateTime ResourceGroupRequest::availableBefore(const DateTime &time) {
     return end;
 }
 
-void ResourceGroupRequest::makeAppointments(NodeSchedule *schedule) {
+void ResourceGroupRequest::makeAppointments(Schedule *schedule) {
     //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
@@ -1137,7 +1143,7 @@ DateTime ResourceRequestCollection::availableBefore(const DateTime &time) {
 }
 
 
-void ResourceRequestCollection::makeAppointments(NodeSchedule *schedule) {
+void ResourceRequestCollection::makeAppointments(Schedule *schedule) {
     //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {

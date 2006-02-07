@@ -58,7 +58,7 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     //baseline->setChecked(project.isBaselined()); FIXME: Removed for this release
     
     QString s = i18n("Scheduling");
-    NodeSchedule *sch = project.currentSchedule();
+    Schedule *sch = project.currentSchedule();
     if (sch) {
         s = i18n("Scheduling (%1)").arg(sch->typeToString(true));
     }

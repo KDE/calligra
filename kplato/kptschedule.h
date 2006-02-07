@@ -38,6 +38,18 @@ class Duration;
 class Node;
 class Task;
 
+/**
+ * The Schedule class holds data calculated during project
+ * calculation and scheduling, eg start- and end-times and
+ * appointments.
+ * There is one schedule per node and one per resource.
+ * Schedules can be of type Expected, Optimistic or Pessimistic
+ * refering to which estimate is used for the calculation.
+ * Schedule is subclassed into:
+ * MainSchedule     Used by the main project.
+ * NodeSchedule     Used by all other nodes (tasks).
+ * ResourceSchedule Used by resources.
+ */
 class Schedule
 {
 public:
@@ -48,6 +60,7 @@ public:
     };
     
     Schedule();
+    Schedule(Schedule *parent);
     Schedule(QString name, Type type, long id);
     ~Schedule();
     
@@ -59,8 +72,10 @@ public:
     QString typeToString(bool translate=false) const;
     long id() const { return m_id; }
     void setId(long id) { m_id = id; }
-    bool isDeleted() const { return m_deleted; }
-    void setDeleted(bool on);
+    void setParent(Schedule *parent);
+    Schedule *parent() const { return m_parent; }
+    virtual bool isDeleted() const;
+    virtual void setDeleted(bool on);
     
     virtual Resource *resource() const { return 0; }
     virtual Node *node() const { return 0; }
@@ -132,6 +147,13 @@ public:
     double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
 
     virtual double normalRatePrHour() const { return 0.0; }
+
+    void setEarliestStart(DateTime &dt) { earliestStart = dt; }
+    void setLatestFinish(DateTime &dt) { latestFinish = dt; }
+
+    virtual void initiateCalculation();
+    virtual void calcResourceOverbooked();
+
 protected:
     QString m_name;
     Type m_type;
@@ -139,51 +161,12 @@ protected:
     bool m_deleted;
 
     QPtrList<Appointment> m_appointments;
-
-#ifndef NDEBUG
-public:
-    void printDebug(QString ident);
-#endif
-};
-
-class NodeSchedule : public Schedule
-{
-public:
-    NodeSchedule();
-    NodeSchedule(Node *node, QString name, Schedule::Type type, long id);
-    ~NodeSchedule();
+    Schedule *m_parent;
     
-    void setDeleted(bool on);
-    
-    static NodeSchedule *find(const QIntDict<NodeSchedule> &sch, Schedule::Type type);
-    static NodeSchedule *find(const QIntDict<NodeSchedule> &sch, QString name, Schedule::Type type);
-    
-    virtual bool loadXML(const QDomElement &element);
-    virtual void saveXML(QDomElement &element) const;
-    virtual bool loadProjectXML(const QDomElement &element, Project &project);
-    virtual void saveProjectXML(QDomElement &element) const;
-
-// tasks------------>
-    void setEarliestStart(DateTime &dt) { earliestStart = dt; }
-    void setLatestFinish(DateTime &dt) { latestFinish = dt; }
-
-    virtual void addAppointment(Schedule *resource, DateTime &start, DateTime &end, double load=100);
-    
-    void initiateCalculation();
-    void calcResourceOverbooked();
-
-    virtual Node *node() const { return m_node; }
-    virtual void setNode(Node *n) { m_node = n; }
-    
-private:
-    void init();
-    
-private:
     friend class Node;
     friend class Task;
     friend class Project;
     friend class Resource;
-    Node *m_node;
     /** 
       * earliestStart is calculated by PERT/CPM.
       * A task may be scheduled to start later because of constraints
@@ -228,38 +211,105 @@ private:
     DateTime workEndTime;
     bool inCriticalPath;
 
+
 #ifndef NDEBUG
 public:
-    void printDebug(QString ident);
+    virtual void printDebug(QString ident);
 #endif
 };
 
+/**
+ * NodeSchedule holds scheduling information for a node (task).
+ * 
+ */
+class NodeSchedule : public Schedule
+{
+public:
+    NodeSchedule();
+    NodeSchedule(Node *node, QString name, Schedule::Type type, long id);
+    NodeSchedule(Schedule *parent, Node *node);
+    ~NodeSchedule();
+    
+    virtual bool isDeleted() const 
+        { return m_parent == 0 ? true : m_parent->isDeleted(); }
+    void setDeleted(bool on);
+    
+    virtual bool loadXML(const QDomElement &element);
+    virtual void saveXML(QDomElement &element) const;
+
+// tasks------------>
+    virtual void addAppointment(Schedule *resource, DateTime &start, DateTime &end, double load=100);
+    
+    virtual Node *node() const { return m_node; }
+    virtual void setNode(Node *n) { m_node = n; }
+    
+protected:
+    void init();
+
+private:
+    Node *m_node;
+    
+#ifndef NDEBUG
+public:
+    virtual void printDebug(QString ident);
+#endif
+};
+
+/**
+ * ResourceSchedule holds scheduling information for a resource.
+ * 
+ */
 class ResourceSchedule : public Schedule
 {
 public:
     ResourceSchedule();
     ResourceSchedule(Resource *Resource, QString name, Schedule::Type type, long id);
+    ResourceSchedule(Schedule *parent, Resource *Resource);
     ~ResourceSchedule();
     
+    virtual bool isDeleted() const 
+        { return m_parent == 0 ? true : m_parent->isDeleted(); }
     virtual void addAppointment(Schedule *node, DateTime &start, DateTime &end, double load=100);
     
     virtual bool isOverbooked() const;
     virtual bool isOverbooked(const DateTime &start, const DateTime &end) const;
     Appointment appointmentIntervals() const;
     
-    void initiateCalculation();
-    void calcResourceOverbooked();
-
     virtual Resource *resource() const { return m_resource; }
     virtual double normalRatePrHour() const;
 private:
     Resource *m_resource;
+    Schedule *m_parent;
 
 #ifndef NDEBUG
 public:
-    void printDebug(QString ident);
+    virtual void printDebug(QString ident);
 #endif
 };
+
+/**
+ * MainSchedule holds scheduling information for the main project node.
+ * 
+ */
+class MainSchedule : public NodeSchedule
+{
+public:
+    MainSchedule();
+    MainSchedule(Node *node, QString name, Schedule::Type type, long id);
+    ~MainSchedule();
+    virtual bool isDeleted() const { return m_deleted; }
+
+    virtual bool loadXML(const QDomElement &element, Project &project);
+    virtual void saveXML(QDomElement &element) const;
+
+private:
+
+#ifndef NDEBUG
+public:
+    virtual void printDebug(QString ident);
+#endif
+};
+
 
 } //namespace KPlato
 

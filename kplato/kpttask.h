@@ -128,7 +128,7 @@ public:
     /// Cost performance index
     double costPerformanceIndex(const QDate &date, bool *error=0);
     
-    void initiateCalculation(Schedule *sch);
+    void initiateCalculation(Schedule &sch);
     /**
      * Sets up the lists used for calculation.
      * This includes adding summarytasks relations to subtasks

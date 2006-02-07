@@ -72,13 +72,31 @@ Project::~Project() {
 
 int Project::type() const { return Node::Type_Project; }
 
+void Project::calculate(Schedule *schedule) {
+    if (schedule == 0) {
+        kdError()<<k_funcinfo<<"Schedule == 0, cannot calculate"<<endl;
+        return;
+    }
+    m_currentSchedule = schedule;
+    calculate();
+}
+
 void Project::calculate(Effort::Use estType) {
     m_currentSchedule = findSchedule((Schedule::Type)estType);
     if (m_currentSchedule == 0) {
         m_currentSchedule = createSchedule(i18n("Standard"), (Schedule::Type)estType);
     }
+    calculate();
+}
+
+void Project::calculate() {
+    if (m_currentSchedule == 0) {
+        kdError()<<k_funcinfo<<"No current schedule to calculate"<<endl;
+        return;
+    }
+    Effort::Use estType = (Effort::Use)m_currentSchedule->type();
     if (type() == Type_Project) {
-        initiateCalculation(m_currentSchedule);
+        initiateCalculation(*m_currentSchedule);
         if (m_constraint == Node::MustStartOn) {
             //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString()<<endl;
             m_currentSchedule->startTime = m_constraintStartTime;
@@ -231,7 +249,7 @@ void Project::adjustSummarytask() {
     }
 }
 
-void Project::initiateCalculation(Schedule *sch) {
+void Project::initiateCalculation(Schedule &sch) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     // clear all resource appointments
     m_visitedForward = false;
@@ -388,7 +406,7 @@ bool Project::load(QDomElement &element) {
                 }
                 //kdDebug()<<k_funcinfo<<"Relation<---"<<endl;
             } else if (e.tagName() == "schedules") {
-                //kdDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
+                kdDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
                 // Prepare for multiple schedules
                 // References tasks and resources
                 QDomNodeList lst = e.childNodes();
@@ -396,9 +414,10 @@ bool Project::load(QDomElement &element) {
                     if (lst.item(i).isElement()) {
                         QDomElement el = lst.item(i).toElement();
                         if (el.tagName() == "schedule") {
-                            NodeSchedule *sch = new NodeSchedule();
-                            if (sch->loadProjectXML(el, *this)) {
+                            MainSchedule *sch = new MainSchedule();
+                            if (sch->loadXML(el, *this)) {
                                 addSchedule(sch);
+                                setParentSchedule(sch);
                             } else {
                                 kdError()<<k_funcinfo<<"Failed to load schedule"<<endl;
                                 delete sch;
@@ -421,7 +440,7 @@ bool Project::load(QDomElement &element) {
         calit.current()->setParent(calendar(calit.current()->parentId()));
     }
     //kdDebug()<<k_funcinfo<<"Project schedules--->"<<endl;
-    QIntDictIterator<NodeSchedule> it = m_schedules;
+    QIntDictIterator<Schedule> it = m_schedules;
     if (it.current()) {
         if (m_constraint == Node::MustFinishOn)
             m_constraintEndTime = it.current()->endTime;
@@ -432,7 +451,6 @@ bool Project::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<"<---"<<endl;
     return true;
 }
-
 
 void Project::save(QDomElement &element)  const {
     QDomElement me = element.ownerDocument().createElement("project");
@@ -485,16 +503,23 @@ void Project::save(QDomElement &element)  const {
     if (!m_schedules.isEmpty()) {
         QDomElement el = me.ownerDocument().createElement("schedules");
         me.appendChild(el);
-        QIntDictIterator<NodeSchedule> it = m_schedules;
+        QIntDictIterator<Schedule> it = m_schedules;
         for (; it.current(); ++it) {
             if (!it.current()->isDeleted()) {
                 QDomElement schs = el.ownerDocument().createElement("schedule");
                 el.appendChild(schs);
-                it.current()->saveProjectXML(schs);
+                it.current()->saveXML(schs);
                 //kdDebug()<<k_funcinfo<<m_name<<" id="<<it.current()->id()<<(it.current()->isDeleted()?"  Deleted":"")<<endl;
                 Node::saveAppointments(schs, it.current()->id());
             }
         }
+    }
+}
+
+void Project::setParentSchedule(Schedule *sch) {
+    QPtrListIterator<Node> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->setParentSchedule(sch);
     }
 }
 
@@ -972,13 +997,15 @@ void Project::setCurrentSchedule(long id) {
     }
 }
 
-NodeSchedule *Project::createSchedule(QString name, Schedule::Type type) {
+MainSchedule *Project::createSchedule(QString name, Schedule::Type type) {
     //kdDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
     long i=1;
     while (m_schedules.find(i)) {
         ++i;
     }
-    return Node::createSchedule(name, type, i);
+    MainSchedule *sch = new MainSchedule(this, name, type, i);
+    addSchedule(sch);
+    return sch;
 }
 
 #ifndef NDEBUG

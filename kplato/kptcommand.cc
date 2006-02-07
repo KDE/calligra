@@ -1456,22 +1456,25 @@ ProjectModifyConstraintCmd::ProjectModifyConstraintCmd(Part *part, Project &node
       newConstraint(c),
       oldConstraint(static_cast<Node::ConstraintType>(node.constraint())) {
 
-    QIntDictIterator<NodeSchedule> it = node.schedules();
+    QIntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
-        ids.insert(it.current()->id(), it.current()->isDeleted());
+        m_schedules.insert(it.current(), it.current()->isDeleted());
     }
 }
 void ProjectModifyConstraintCmd::execute() {
     m_node.setConstraint(newConstraint);
-    m_node.deleteSchedules();
+    QMap<Schedule*, bool>::Iterator it;
+    for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
+        it.key()->setDeleted(true);
+    }
     
     setCommandType(1);
 }
 void ProjectModifyConstraintCmd::unexecute() {
     m_node.setConstraint(oldConstraint);
-    QMap<long, bool>::ConstIterator it;
-    for (it = ids.constBegin(); it != ids.constEnd(); ++it) {
-        m_node.deleteSchedules(it.key(), it.data());
+    QMap<Schedule*, bool>::Iterator it;
+    for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
+        it.key()->setDeleted(it.data());
     }
     setCommandType(1);
 }
@@ -1482,22 +1485,25 @@ ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd(Part *part, Project &node, 
       newTime(dt),
       oldTime(node.startTime()) {
 
-    QIntDictIterator<NodeSchedule> it = node.schedules();
+    QIntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
-        ids.insert(it.current()->id(), it.current()->isDeleted());
+        m_schedules.insert(it.current(), it.current()->isDeleted());
     }
 }
 
 void ProjectModifyStartTimeCmd::execute() {
     m_node.setConstraintStartTime(newTime);
-    m_node.deleteSchedules();
+    QMap<Schedule*, bool>::Iterator it;
+    for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
+        it.key()->setDeleted(true);
+    }
     setCommandType(1);
 }
 void ProjectModifyStartTimeCmd::unexecute() {
     m_node.setConstraintStartTime(oldTime);
-    QMap<long, bool>::ConstIterator it;
-    for (it = ids.constBegin(); it != ids.constEnd(); ++it) {
-        m_node.deleteSchedules(it.key(), it.data());
+    QMap<Schedule*, bool>::Iterator it;
+    for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
+        it.key()->setDeleted(it.data());
     }
     setCommandType(1);
 }
@@ -1508,25 +1514,26 @@ ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd(Part *part, Project &node, QDat
       newTime(dt),
       oldTime(node.endTime()) {
 
-    QIntDictIterator<NodeSchedule> it = node.schedules();
+    QIntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
-        ids.insert(it.current()->id(), it.current()->isDeleted());
+        m_schedules.insert(it.current(), it.current()->isDeleted());
     }
 }
 void ProjectModifyEndTimeCmd::execute() {
     m_node.setEndTime(newTime);
     m_node.setConstraintEndTime(newTime);
-    m_node.deleteSchedules();
-    
+    QMap<Schedule*, bool>::Iterator it;
+    for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
+        it.key()->setDeleted(true);
+    }
     setCommandType(1);
 }
 void ProjectModifyEndTimeCmd::unexecute() {
     m_node.setConstraintEndTime(oldTime);
-    QMap<long, bool>::ConstIterator it;
-    for (it = ids.constBegin(); it != ids.constEnd(); ++it) {
-        m_node.deleteSchedules(it.key(), it.data());
+    QMap<Schedule*, bool>::Iterator it;
+    for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
+        it.key()->setDeleted(it.data());
     }
-    
     setCommandType(1);
 }
 
@@ -1535,31 +1542,31 @@ CalculateProjectCmd::CalculateProjectCmd(Part *part, Project &node, QString tnam
       m_node(node),
       m_typename(tname),
       m_type(type),
-      newSchedule(-1) {
+      newSchedule(0) {
       
     oldCurrent = node.currentSchedule();
     //kdDebug()<<k_funcinfo<<type<<endl;
 }
 void CalculateProjectCmd::execute() {
-    if (newSchedule == -1) {
+    if (newSchedule == 0) {
         //kdDebug()<<k_funcinfo<<" create schedule"<<endl;
-        newSchedule = m_node.createSchedule(m_typename, (Schedule::Type)m_type)->id();
-        m_node.calculate((Effort::Use)m_type);
+        newSchedule = m_node.createSchedule(m_typename, (Schedule::Type)m_type);
+        m_node.calculate(newSchedule);
     } else {
         //kdDebug()<<k_funcinfo<<" redo"<<endl;
-        m_node.deleteSchedules(newSchedule, false);
+        newSchedule->setDeleted(false);
     }
     setCommandType(0);
 }
 void CalculateProjectCmd::unexecute() {
     //kdDebug()<<k_funcinfo<<endl;
-    m_node.deleteSchedules(newSchedule, true);
-    m_node.setCurrentSchedule(oldCurrent ? oldCurrent->id() : -1);
+    newSchedule->setDeleted(true);
+    m_node.setCurrentSchedulePtr(oldCurrent);
 
     setCommandType(0);
 }
 
-RecalculateProjectCmd::RecalculateProjectCmd(Part *part, Project &node, NodeSchedule &sch, QString name)
+RecalculateProjectCmd::RecalculateProjectCmd(Part *part, Project &node, Schedule &sch, QString name)
     : NamedCommand(part, name),
       m_node(node),
       oldSchedule(sch),
@@ -1570,21 +1577,21 @@ RecalculateProjectCmd::RecalculateProjectCmd(Part *part, Project &node, NodeSche
     //kdDebug()<<k_funcinfo<<sch.typeToString()<<"  curr="<<(oldCurrent?oldCurrent->id():-1)<<endl;
 }
 void RecalculateProjectCmd::execute() {
-    m_node.deleteSchedules(oldSchedule.id(), true);
+    oldSchedule.setDeleted(true);
     if (newSchedule == 0) {
         newSchedule = m_node.createSchedule(oldSchedule.name(), oldSchedule.type());
-        m_node.calculate((Effort::Use)newSchedule->type());
+        m_node.calculate(newSchedule);
     } else {
-        m_node.deleteSchedules(newSchedule->id(), false);
+        newSchedule->setDeleted(false);
         //kdDebug()<<k_funcinfo<<newSchedule->typeToString()<<" redo"<<endl;
     }
     setCommandType(0);
 }
 void RecalculateProjectCmd::unexecute() {
     //kdDebug()<<k_funcinfo<<newSchedule->typeToString()<<(oldCurrent ? oldCurrent->id() : -1)<<endl;
-    m_node.deleteSchedules(newSchedule->id(), true);
-    m_node.deleteSchedules(oldSchedule.id(), oldDeleted);
-    m_node.setCurrentSchedule(oldCurrent ? oldCurrent->id() : -1);
+    newSchedule->setDeleted(true);
+    oldSchedule.setDeleted(oldDeleted);
+    m_node.setCurrentSchedulePtr(oldCurrent);
     
     setCommandType(0);
 }
