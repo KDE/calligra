@@ -27,6 +27,7 @@
 
 #include <qguardedptr.h>
 #include <kdebug.h>
+#include <kmimetype.h>
 
 #include <kexidb/driver.h>
 #include <kexidb/connectiondata.h>
@@ -43,6 +44,8 @@ KexiDBDriverManager::KexiDBDriverManager()
     addFunction("driver", &KexiDBDriverManager::driver,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("lookupByMime", &KexiDBDriverManager::lookupByMime,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("mimeForFile", &KexiDBDriverManager::mimeForFile,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
     addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData);
@@ -89,6 +92,15 @@ Kross::Api::Object::Ptr KexiDBDriverManager::lookupByMime(Kross::Api::List::Ptr 
     return new Kross::Api::Variant(
         driverManager().lookupByMime( Kross::Api::Variant::toString(args->item(0)) ),
         "Kross::KexiDB::DriverManager::lookupByMime::String");
+}
+
+Kross::Api::Object::Ptr KexiDBDriverManager::mimeForFile(Kross::Api::List::Ptr args)
+{
+    QString const file = Kross::Api::Variant::toString(args->item(0));
+    QString mimename = KMimeType::findByFileContent(file)->name();
+    if(mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain")
+        mimename = KMimeType::findByURL(file)->name();
+    return new Kross::Api::Variant(mimename);
 }
 
 Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionData(Kross::Api::List::Ptr)

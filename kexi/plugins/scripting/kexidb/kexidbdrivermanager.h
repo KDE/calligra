@@ -107,6 +107,13 @@ namespace Kross { namespace KexiDB {
             Kross::Api::Object::Ptr lookupByMime(Kross::Api::List::Ptr);
 
             /**
+             * Return the matching mimetype for the defined file.
+             * \todo move that functionality to a more common place.
+             * See \see ::KexiDB::DriverManager::lookupByMime()
+             */
+            Kross::Api::Object::Ptr mimeForFile(Kross::Api::List::Ptr);
+
+            /**
              * Return a new \a KexiDBConnectionData object.
              */
             Kross::Api::Object::Ptr createConnectionData(Kross::Api::List::Ptr);
