@@ -484,7 +484,13 @@ void Cell::setValue( const Value& v )
   if (v.type() != Value::Error)
     clearAllErrors();
 
-  if ( d->value == v )
+  //If the value has not changed then we don't need to do anything
+  //(ie. no need to relayout, update dependant cells etc.), 
+  //unless this cell contains a formula, in which case its dependancies might have changed
+  //even though the value has not.  For example, if this cell was previously empty (and its value is 
+  //therefore empty) and a new dependency upon an empty cell has been added.  The new value would still
+  //be empty, but the dependencies need to be updated (via the call to valueChanged() below).
+  if ( ( d->value == v ) && ( !isFormula() ) )
     return;
 
   d->value = v;
