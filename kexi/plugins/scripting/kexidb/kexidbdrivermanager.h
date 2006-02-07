@@ -119,6 +119,13 @@ namespace Kross { namespace KexiDB {
             Kross::Api::Object::Ptr createConnectionData(Kross::Api::List::Ptr);
 
             /**
+             * Create and return a \a KexiDBConnectionData object. Fill the
+             * content of the \a KexiDBConnectionData object with the defined
+             * file as. The file could be e.g. a *.kexi file or a *.kexis file.
+             */
+            Kross::Api::Object::Ptr createConnectionDataByFile(Kross::Api::List::Ptr);
+
+            /**
              * Return a new \a KexiDBField object.
              */
             Kross::Api::Object::Ptr field(Kross::Api::List::Ptr);

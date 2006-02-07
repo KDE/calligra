@@ -49,6 +49,8 @@ KexiDBDriverManager::KexiDBDriverManager()
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
     addFunction("createConnectionData", &KexiDBDriverManager::createConnectionData);
+    addFunction("createConnectionDataByFile", &KexiDBDriverManager::createConnectionDataByFile,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
     addFunction("field", &KexiDBDriverManager::field);
     addFunction("tableSchema", &KexiDBDriverManager::tableSchema,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
@@ -106,6 +108,56 @@ Kross::Api::Object::Ptr KexiDBDriverManager::mimeForFile(Kross::Api::List::Ptr a
 Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionData(Kross::Api::List::Ptr)
 {
     return new KexiDBConnectionData( new ::KexiDB::ConnectionData() );
+}
+
+Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::Api::List::Ptr args)
+{
+    QString const file = Kross::Api::Variant::toString(args->item(0));
+
+    QString mimename = KMimeType::findByFileContent(file)->name();
+    if(mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain")
+        mimename = KMimeType::findByURL(file)->name();
+
+    if(mimename == "application/x-kexiproject-shortcut" || mimename == "application/x-kexi-connectiondata") {
+        KConfig config(file, true, false);
+        QString groupkey;
+        QStringList groups(config.groupList());
+        for(QStringList::Iterator it = groups.begin(); it != groups.end(); ++it) {
+            if((*it).lower()!="file information") {
+                groupkey = *it;
+                break;
+            }
+        }
+        config.setGroup(groupkey);
+        //QString type( config.readEntry("type", "database").lower() );
+        //bool isDatabaseShortcut = (type == "database");
+
+        ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
+        data->setFileName(QString::null);
+        data->caption = config.readEntry("caption");
+        data->description = config.readEntry("comment");
+        //data->setDatabaseName(config.readEntry("name"));
+        data->driverName = config.readEntry("engine");
+        data->hostName = config.readEntry("server");
+        data->port = config.readNumEntry("port", 0);
+        data->useLocalSocketFile = config.readBoolEntry("useLocalSocketFile", false);
+        data->localSocketFileName = config.readEntry("localSocketFile");
+        //UNSAFE!!!!
+        data->password = config.readEntry("password");
+        data->savePassword = ! data->password.isEmpty();
+        data->userName = config.readEntry("user");
+
+        return new KexiDBConnectionData(data);
+    }
+
+    QString const drivername = driverManager().lookupByMime(mimename);
+    if(! drivername)
+        return 0;
+
+    ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
+    data->setFileName(file);
+    data->driverName = drivername;
+    return new KexiDBConnectionData(data);
 }
 
 Kross::Api::Object::Ptr KexiDBDriverManager::field(Kross::Api::List::Ptr)
