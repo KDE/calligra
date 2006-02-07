@@ -115,25 +115,25 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
     // Show dialog
     m_dialog->setCursor(Qt::ArrowCursor);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
-    
+
     if (m_dialog->exec() == QDialog::Accepted) {
-        
+
         QApplication::setOverrideCursor(Qt::waitCursor);
         doc -> undoAdapter() -> setUndo(false);
-    
+
         getImageData(createArgumentList(false));
-        
+
         KisImageSP image = 0;
         KisPaintLayerSP layer = 0;
         KisPaintDeviceSP device = 0;
-        
+
         QApplication::restoreOverrideCursor();
         if (m_page->radio8->isChecked()) {
         // 8 bits
-        
+
             QImage img;
             img.loadFromData(*m_data);
-            
+
             KisColorSpace * cs = 0;
             if (m_page->radioGray->isChecked()) {
                 cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("GRAYA"), profile() );
@@ -142,18 +142,18 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
                cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA"), profile() );
             }
             if (cs == 0) { kdDebug() << "No CS\n"; return KoFilter::InternalError; }
-            
+
             image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
             if (image == 0) return KoFilter::CreationError;
-            
-            layer = image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE);
+
+            layer = dynamic_cast<KisPaintLayer*>( image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data() );
             if (layer == 0) return KoFilter::CreationError;
-            
+
             device = layer->paintDevice();
             if (device == 0) return KoFilter::CreationError;
-            
+
             device->convertFromQImage(img, "");
-            
+
         } else {
         // 16 bits
 
@@ -168,7 +168,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
                     << "\n total necessary bytes: " << (sz.width() * sz.height() * 6) + startOfImagedata
                     << "\n";
 
-            
+
             char * data = m_data->data() + startOfImagedata;
 
             KisColorSpace * cs = 0;
@@ -179,13 +179,13 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
                 cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
             }
             if (cs == 0) return KoFilter::InternalError;
-            
+
             image = new KisImage( doc->undoAdapter(), sz.width(), sz.height(), cs, filename);
             if (image == 0)return KoFilter::CreationError;
-            
+
             layer = image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE);
             if (layer == 0) return KoFilter::CreationError;
-            
+
             device = layer->paintDevice();
             if (device == 0) return KoFilter::CreationError;
 
@@ -225,12 +225,12 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
         QApplication::restoreOverrideCursor();
         return KoFilter::OK;
     }
-    
+
     QApplication::restoreOverrideCursor();
     return KoFilter::UserCancelled;
 }
 
-    
+
 
 
 void KisRawImport::slotUpdatePreview()
