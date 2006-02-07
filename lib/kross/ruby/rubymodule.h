@@ -34,19 +34,39 @@ namespace Ruby {
 
 class RubyModulePrivate;
 
+/**
+ * A ruby module.
+ * @author Cyrille Berger
+ */
 class RubyModule {
     public:
-        RubyModule(Kross::Api::Module* , QString);
+
+        /**
+         * Constructor.
+         *
+         * @param mod The \a Kross::Api::Module this RubyExtension
+         *        wraps.
+         * @param modname The name the module will be published as.
+         */
+        RubyModule(Kross::Api::Module* mod, QString modname);
+
+        /**
+         * Destructor.
+         */
         ~RubyModule();
+
     private:
+
         /**
          * This function will catch functions that are undefined.
          */
         static VALUE method_missing(int argc, VALUE *argv, VALUE self);
+
     private:
+        /// Private d-pointer.
         RubyModulePrivate* d;
 };
-    
+
 }
 
 }

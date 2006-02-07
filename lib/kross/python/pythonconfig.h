@@ -36,9 +36,13 @@
 #include "CXX/Objects.hxx"
 #include "CXX/Extensions.hxx"
 
+namespace Kross {
+
 /**
- * Code to manage the embedded python interpreter and
- * python-scripts.
+ * The Python plugin for the \a Kross scripting framework.
+ *
+ * The code in this namespace manage the embedded python
+ * interpreter and python-scripts.
  *
  * There is no dependency to e.g. the \a Kross::KexiDB
  * wrapper. Everything is handled through the common
@@ -56,7 +60,7 @@
  * \sa http://www.python.org
  * \sa http://cxx.sourceforge.net
  */
-namespace Kross { namespace Python {
+namespace Python {
 
     // The version of this python plugin. This will be exported
     // to the scripting code. That way we're able to write

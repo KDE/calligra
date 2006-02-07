@@ -29,22 +29,40 @@ namespace Ruby {
 
 class RubyInterpreterPrivate;
 /**
- * This class is the bridget between kross and Ruby
+ * This class is the bridget between Kross and Ruby.
  * @author Cyrille Berger
  */
 class RubyInterpreter : public Kross::Api::Interpreter
 {
     public:
+
+        /**
+         * Constructor
+         *
+         * @param info The \a Kross::Api::InterpreterInfo instance
+         *        that describes this \a RubyInterpreter .
+         */
         RubyInterpreter(Kross::Api::InterpreterInfo* info);
+
+        /**
+         * Destructor.
+         */
         ~RubyInterpreter();
 
+        /**
+         * Factory method to create and return a new \a RubyScript instance.
+         */
         virtual Kross::Api::Script* createScript(Kross::Api::ScriptContainer* scriptcontainer);
 
     private:
+        /// Initialize the ruby interpreter.
         void initRuby();
+        /// Finalize the ruby interpreter.
         void finalizeRuby();
+        /// Load an external plugin / module.
         static VALUE require (VALUE, VALUE);
     private:
+        /// Private d-pointer.
         static RubyInterpreterPrivate* d;
 };
 

@@ -1,7 +1,7 @@
 /***************************************************************************
  * pythonconfig.h
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +20,15 @@
 #ifndef KROSS_RUBY_CONFIG_H
 #define KROSS_RUBY_CONFIG_H
 
-namespace Kross { namespace Ruby {
+namespace Kross {
+
+/**
+ * The Ruby plugin for the \a Kross scripting framework.
+ *
+ * @author Cyrille Berger
+ * @sa http://www.ruby-lang.org
+ */
+namespace Ruby {
 // #define KROSS_RUBY_SCRIPT_DEBUG
 // #define KROSS_RUBY_INTERPRETER_DEBUG
 // #define KROSS_RUBY_EXTENSION_DEBUG

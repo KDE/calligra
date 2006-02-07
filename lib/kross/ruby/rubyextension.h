@@ -31,20 +31,30 @@ namespace Kross {
 namespace Ruby {
 
 class RubyExtensionPrivate;
+
 /**
-@author Cyrille Berger
-*/
+ * This class wraps a \a Kross::Api::Object into the world of ruby.
+ * @author Cyrille Berger
+ */
 class RubyExtension{
         friend class RubyInterpreter;
         friend class RubyModule;
         friend class RubyScript;
     public:
+        /**
+         * Constructor.
+         *
+         * @param object The \a Kross::Api::Object instance this
+         *        extension provides access to.
+         */
         RubyExtension(Kross::Api::Object::Ptr object);
+        /**
+         * Destructor.
+         */
         ~RubyExtension();
     private:
         /**
          * This function will catch functions that are undefined.
-         * 
          */
         static VALUE method_missing(int argc, VALUE *argv, VALUE self);
         /**
@@ -115,6 +125,7 @@ class RubyExtension{
          */
         static VALUE toVALUE(Kross::Api::List::Ptr list);
     private:
+        /// Private d-pointer.
         RubyExtensionPrivate* d;
  };
 

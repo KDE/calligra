@@ -27,15 +27,32 @@ namespace Kross {
 namespace Ruby {
 
 class RubyScriptPrivate;
-    /**
-     * Handle ruby scripts. This class implements
-     * \a Kross::Api::Script for ruby.
-     */
+
+/**
+ * Handle ruby scripts. This class implements
+ * \a Kross::Api::Script for ruby.
+ * @author Cyrille Berger
+ */
 class RubyScript : public Kross::Api::Script
 {
     public:
+
+        /**
+         * Constructor.
+         *
+         * @param interpreter The @a RubyInterpreter instance used to
+         *        create this script.
+         * @param scriptcontainer The @a Kross::Api::ScriptContainer
+         *        instance this @a RubyScript does handle the
+         *        backend-work for.
+         */
         RubyScript(Kross::Api::Interpreter* interpreter, Kross::Api::ScriptContainer* scriptcontainer);
+
+        /**
+         * Destructor.
+         */
         ~RubyScript();
+
         /**
          * Return a list of callable functionnames this
          * script spends.
@@ -61,9 +78,16 @@ class RubyScript : public Kross::Api::Script
          * Create and return a new class instance.
          */
         virtual Kross::Api::Object::Ptr classInstance(const QString& name);
+
     private:
+
+        /**
+         * Compile the script.
+         */
         void compile();
+
     private:
+        /// Private d-pointer.
         RubyScriptPrivate* d;
 };
 
