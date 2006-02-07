@@ -2836,8 +2836,8 @@ bool Format::isDefault() const
  *
  *****************************************************************************/
 
-#define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
-#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pSheet->emit_updateRow( this, m_iRow );
+//#define UPDATE_BEGIN bool b_update_begin = m_bDisplayDirtyFlag; m_bDisplayDirtyFlag = true;
+//#define UPDATE_END if ( !b_update_begin && m_bDisplayDirtyFlag ) m_pSheet->emit_updateRow( this, m_iRow );
 
 RowFormat::RowFormat( Sheet * _sheet, int _row )
   : Format( _sheet, _sheet->doc()->styleManager()->defaultStyle() )
@@ -2888,7 +2888,7 @@ void RowFormat::setDblHeight( double _h, const Canvas * _canvas )
   if ( kAbs( _h - dblHeight( _canvas ) ) < DBL_EPSILON )
     return;
 
-  UPDATE_BEGIN;
+//  UPDATE_BEGIN;
 
   // Lower maximum size by old height
   _sheet->adjustSizeMaxY ( - dblHeight() );
@@ -2903,7 +2903,8 @@ void RowFormat::setDblHeight( double _h, const Canvas * _canvas )
   _sheet->print()->updatePrintRepeatRowsHeight();
   _sheet->print()->updateNewPageListY ( row() );
 
-  UPDATE_END;
+  _sheet->emit_updateRow(this,m_iRow);
+//  UPDATE_END;
 }
 
 int RowFormat::height( const Canvas *_canvas ) const
@@ -3136,7 +3137,7 @@ void ColumnFormat::setDblWidth( double _w, const Canvas * _canvas )
   if ( kAbs( _w - dblWidth( _canvas ) ) < DBL_EPSILON )
     return;
 
-  UPDATE_BEGIN;
+ // UPDATE_BEGIN;
 
   // Lower maximum size by old width
   _sheet->adjustSizeMaxX ( - dblWidth() );
@@ -3151,7 +3152,8 @@ void ColumnFormat::setDblWidth( double _w, const Canvas * _canvas )
   _sheet->print()->updatePrintRepeatColumnsWidth();
   _sheet->print()->updateNewPageListX ( column() );
 
-  UPDATE_END;
+  _sheet->emit_updateColumn(this,m_iColumn);
+ // UPDATE_END;
 }
 
 int ColumnFormat::width( const Canvas * _canvas ) const
