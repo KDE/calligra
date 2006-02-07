@@ -7,6 +7,18 @@ libkrossmain_la_SOURCES = mainmodule.cpp scriptcontainer.cpp manager.cpp \
 
 libkrossmain_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 
+mainincludedir=$(includedir)/kross/main
+
+maininclude_HEADERS = \
+    krossconfig.h \
+    mainmodule.h \
+    manager.h \
+    scriptaction.h \
+    scriptcontainer.h \
+    scriptguiclient.h \
+    wdgscriptsmanager.h \
+    wdgscriptsmanagerbase.h 
+
 libkrossmain_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \

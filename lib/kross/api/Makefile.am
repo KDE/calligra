@@ -1,4 +1,27 @@
 include $(top_srcdir)/lib/kross/Makefile.global
+apiincludedir=$(includedir)/kross/api
+
+apiinclude_HEADERS = \
+    argument.h \
+    callable.h \
+    class.h \
+    dict.h \
+    eventaction.h \
+    event.h \
+    eventscript.h \
+    eventsignal.h \
+    eventslot.h \
+    exception.h \
+    function.h \
+    interpreter.h \
+    list.h \
+    module.h \
+    object.h \
+    proxy.h \
+    qtobject.h \
+    script.h \
+    value.h \
+    variant.h
 
 lib_LTLIBRARIES = libkrossapi.la
 
