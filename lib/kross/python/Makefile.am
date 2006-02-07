@@ -2,7 +2,7 @@ include $(top_srcdir)/lib/kross/Makefile.global
 
 kde_module_LTLIBRARIES = krosspython.la
 
-krosspython_la_LDFLAGS = $(LIBPYTHON) $(PYTHONLIB) -module $(KDE_PLUGIN) $(all_libraries) $(VER_INFO)
+krosspython_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries) $(LIBPYTHON) $(PYTHONLIB) -module $(VER_INFO)
 
 krosspython_la_SOURCES = \
     pythonextension.cpp \
@@ -14,7 +14,7 @@ krosspython_la_SOURCES = \
 
 krosspython_la_LIBADD = \
     $(LIB_QT) \
-    $(LIB_KPARTS) $(LIB_KFILE) $(LIB_KDEUI) $(LIB_KDECORE) \
+    $(LIB_KDECORE) \
     CXX/libkrosspythoncxx.la \
     ../api/libkrossapi.la \
     ../main/libkrossmain.la
