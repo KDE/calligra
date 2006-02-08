@@ -1,8 +1,8 @@
 if test -z "$RUBY_LIBDIR" -a "x$compile_kross" = "xyes" ; then
   echo ""
-  echo "Ruby developement files were not found, Ruby scripting support for"
-  echo "KOffice will not be built. If you don't need Ruby scripting, you"
-  echo "can ignore this message."
+  echo "Ruby developement files were not found, or Ruby <= 1.8.1 was foind,"
+  echo "Ruby scripting support for KOffice will not be built. If you don't"
+  echo "need Ruby scripting, you can ignore this message."
   echo ""
 fi
 

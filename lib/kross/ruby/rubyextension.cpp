@@ -27,11 +27,6 @@
 
 #include "rubyconfig.h"
 
-#include <version.h>
-#if(RUBY_VERSION_MAJOR==1 && RUBY_VERSION_MINOR == 8 && RUBY_VERSION_TEENY <= 1)
-void rb_hash_foreach _((VALUE, int (*)(ANYARGS), VALUE));
-#endif
-
 namespace Kross {
 
 namespace Ruby {

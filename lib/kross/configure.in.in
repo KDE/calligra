@@ -72,7 +72,13 @@ if test "x$compile_kross" = "xyes" ; then
           [
             AC_TRY_COMPILE([
                 #include <ruby.h>
+                #include <version.h>
             ],[
+            
+#if(RUBY_VERSION_MAJOR==1 && RUBY_VERSION_MINOR == 8 && RUBY_VERSION_TEENY <= 1)
+#error "need at least ruby 1.8.2\n"
+#endif
+
                 ruby_init();
                 return 0;
             ], ruby_build=yes,
