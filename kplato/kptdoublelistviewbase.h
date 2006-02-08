@@ -58,6 +58,7 @@ public:
 
     KListView *masterListView() const { return m_masterList; }
     KListView *slaveListView() const { return m_slaveList; }
+    void setOpen(QListViewItem *item, bool open);
     
     void setNameHeader(QString text);
     void setTotalHeader(QString text);

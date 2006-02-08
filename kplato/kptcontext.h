@@ -73,6 +73,7 @@ public:
         QDate date;
         int period;
         bool cumulative;
+        QStringList closedItems;
     } accountsview;
     
     struct Reportview {

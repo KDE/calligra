@@ -371,13 +371,20 @@ void DoubleListViewBase::print(KPrinter &printer) {
     Q_UNUSED(printer);
 }
 
+void DoubleListViewBase::setOpen(QListViewItem *item, bool open) {
+    kdDebug()<<k_funcinfo<<endl;
+    m_masterList->setOpen(item, open);
+}
+
 void DoubleListViewBase::slotExpanded(QListViewItem* item) {
+    kdDebug()<<k_funcinfo<<endl;
     if (item) {
         static_cast<DoubleListViewBase::MasterListItem*>(item)->setSlaveOpen(true);
     }
 }
 
 void DoubleListViewBase::slotCollapsed(QListViewItem*item) {
+    kdDebug()<<k_funcinfo<<endl;
     if (item) {
         static_cast<DoubleListViewBase::MasterListItem*>(item)->setSlaveOpen(false);
     }

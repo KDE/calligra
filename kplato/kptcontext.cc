@@ -81,6 +81,24 @@ bool Context::load(QDomElement &element) {
                 accountsview.date = QDate::fromString(e.attribute("date"), Qt::ISODate);
                 accountsview.period = e.attribute("period").toInt();
                 accountsview.cumulative = e.attribute("cumulative").toInt();
+                
+                QDomNodeList list = e.childNodes();
+                for (unsigned int i=0; i<list.count(); ++i) {
+                    if (list.item(i).isElement()) {
+                        QDomElement g = list.item(i).toElement();
+                        if (g.tagName() == "closed-items") {
+                            QDomNodeList list = g.childNodes();
+                            for (unsigned int i=0; i<list.count(); ++i) {
+                                if (list.item(i).isElement()) {
+                                    QDomElement ei = list.item(i).toElement();
+                                    if (ei.tagName() == "account") {
+                                        accountsview.closedItems.append(ei.attribute("name"));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 kdError()<<k_funcinfo<<"Unknown tag: "<<e.tagName()<<endl;
             }
@@ -121,7 +139,7 @@ void Context::save(QDomElement &element) const {
             c.setAttribute("id", (*it));
         }
     }
-    // Accountview
+    // Accountsview
     QDomElement a = me.ownerDocument().createElement("accounts-view");
     me.appendChild(a);
     a.setAttribute("accountsview-size", accountsview.accountsviewsize);
@@ -129,6 +147,15 @@ void Context::save(QDomElement &element) const {
     a.setAttribute("date", accountsview.date.toString(Qt::ISODate));
     a.setAttribute("period", accountsview.period);
     a.setAttribute("cumulative", accountsview.cumulative);
+    if (!accountsview.closedItems.isEmpty()) {
+        QDomElement e = a.ownerDocument().createElement("closed-items");
+        a.appendChild(e);
+        for (QStringList::ConstIterator it = accountsview.closedItems.begin(); it != accountsview.closedItems.end(); ++it) {
+            QDomElement c = e.ownerDocument().createElement("account");
+            e.appendChild(c);
+            c.setAttribute("name", (*it));
+        }
+    }
 }
 
 }  //KPlato namespace

@@ -134,7 +134,10 @@ void AccountsView::init() {
 
 void AccountsView::draw() {
     //kdDebug()<<k_funcinfo<<endl;
+    Context::Accountsview context;
+    getContextClosedItems(context, m_dlv->masterListView()->firstChild());
     initAccList(m_accounts.accountList());
+    setContextClosedItems(context);
     slotUpdate();
 }
 
@@ -143,6 +146,8 @@ void AccountsView::initAccList(const AccountList &list) {
     AccountListIterator it = list;
     for (it.toLast(); it.current(); --it) {
         AccountsView::AccountItem *a = new AccountsView::AccountItem(it.current(), m_dlv->masterListView());
+        a->setOpen(true);
+        a->setExpandable(!it.current()->isElement());
         initAccSubItems(it.current(), a);
     }
     createPeriods();
@@ -174,6 +179,8 @@ void AccountsView::initAccList(const AccountList &list, AccountsView::AccountIte
     AccountListIterator it = list;
     for (it.toLast(); it.current(); --it) {
         AccountsView::AccountItem *a = new AccountsView::AccountItem(it.current(), parent);
+        a->setOpen(true);
+        a->setExpandable(!it.current()->isElement());
         initAccSubItems(it.current(), a);
     }
 }
@@ -311,8 +318,7 @@ void AccountsView::print(KPrinter &printer) {
 }
 
 bool AccountsView::setContext(Context::Accountsview &context) {
-    //kdDebug()<<k_funcinfo<<endl;
-    
+    kdDebug()<<k_funcinfo<<"---->"<<endl;
     QValueList<int> list;
     list << context.accountsviewsize << context.periodviewsize;
     m_dlv->setSizes(list);
@@ -321,8 +327,23 @@ bool AccountsView::setContext(Context::Accountsview &context) {
         m_date = QDate::currentDate();
     m_period = context.period;
     m_cumulative = context.cumulative;
-    
+    setContextClosedItems(context);
+    kdDebug()<<k_funcinfo<<"<----"<<endl;
     return true;
+}
+
+void AccountsView::setContextClosedItems(Context::Accountsview &context) {
+    for (QStringList::ConstIterator it = context.closedItems.begin(); it != context.closedItems.end(); ++it) {
+        if (m_accounts.findAccount(*it)) {
+            QListViewItemIterator lit(m_dlv->masterListView());
+            for (; lit.current(); ++lit) {
+                if (lit.current()->text(0) == (*it)) {
+                    m_dlv->setOpen(lit.current(), false);
+                    break;
+                }
+            }
+        }
+    }
 }
 
 void AccountsView::getContext(Context::Accountsview &context) const {
@@ -333,6 +354,21 @@ void AccountsView::getContext(Context::Accountsview &context) const {
     context.period = m_period;
     context.cumulative = m_cumulative;
     //kdDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
+    
+    getContextClosedItems(context, m_dlv->masterListView()->firstChild());
+}
+
+
+void AccountsView::getContextClosedItems(Context::Accountsview &context, QListViewItem *item) const {
+    if (item == 0)
+        return;
+    for (QListViewItem *i = item; i; i = i->nextSibling()) {
+        if (!i->isOpen()) {
+            context.closedItems.append(i->text(0));
+            //kdDebug()<<k_funcinfo<<"add closed "<<i->text(0)<<endl;
+        }
+        getContextClosedItems(context, i->firstChild());
+    }
 }
 
 void AccountsView::slotConfigure() {

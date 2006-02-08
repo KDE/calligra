@@ -81,6 +81,10 @@ public slots:
 protected slots:
     void slotUpdate();
     
+protected:
+    void getContextClosedItems(Context::Accountsview &context, QListViewItem *item) const;
+    void setContextClosedItems(Context::Accountsview &context);
+
 private:
     class AccountItem : public DoubleListViewBase::MasterListItem {
     public:
