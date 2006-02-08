@@ -7,6 +7,7 @@
   <!ENTITY % English "INCLUDE">
   <!ENTITY definitions SYSTEM "definitions.docbook">
   <!ENTITY mainwindow SYSTEM "mainwindow.docbook">
+  <!ENTITY options SYSTEM "options.docbook">
   <!ENTITY commands SYSTEM "commands.docbook">
 ]>
 
@@ -24,6 +25,13 @@
 <address><email>raphael.langerhorst@kdemail.net</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
@@ -35,7 +43,7 @@ need them for translation coordination !
 Please respect the format of the date (DD/MM/YYYY) and of the version
 (Major.minor.lesser), it could be used by automation scripts -->
 
-<date>2006-01-30</date>
+<date>2006-02-07</date>
 <releaseinfo>0.5.0</releaseinfo>
 
 <!-- Abstract about this handbook -->
@@ -98,6 +106,7 @@ be used within larger documents of other &koffice; components.
 
 &definitions;
 &mainwindow;
+&options;
 &commands;
 
 <chapter id="license"><title>License</title>

@@ -25,7 +25,10 @@ be identified.
 In project management, a Gantt chart can show when the project terminal elements
 start and finish, summary elements (shown) or terminal element dependencies (not
 shown). A terminal element is defined as the smallest task tracked as part of
-the project effort.
+the project effort. The tasks are displayed on a page as bars. The page is laid
+out such that time increases as you move across the page. A task's start
+time/date is indicated by the point on the page the bar starts, and it's
+duration is indicated by the length of the bar.
 </para>
 <para>
 Since the initial introduction of Gantt charts, they have become an industry
@@ -91,14 +94,19 @@ In &kplato;, each task has a task ID, a name and a responsible. The timing, the
 cost and the assigned resources can also be set in the <guilabel>Task
 Settings</guilabel>dialog.
 </para>
+<para>A subtask is any node in the WBS tree that has a task as its
+parent.</para>
+
 </sect1>
 
 <sect1 id="resource">
 <title>Resource</title>
 <para>
-A resource is an item required to accomplish an activity. Resources can be
+A resource is an item required to to complete a task. Resources can be
 people, equipment, facilities, funding or anything else needed to perform the
-work of a project.
+work of a project. Resources are characterized by the fact that they have a
+limited time availability (&ie; an employee that works 8 hours a day, 5 days
+a week).
 </para>
 <para>
 In &kplato; resources are persons.

@@ -1,0 +1,127 @@
+<chapter id="options">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Configuring &kplato;</title>
+
+<sect1 id="configure-dialog">
+<title>The <guilabel>Configure &kplato;...</guilabel> Dialog</title>
+
+<para>You can access that dialog using the
+<menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure &kplato;...</guimenuitem></menuchoice> menu.</para>
+
+<sect2 id="configure-behaviour">
+<title><guilabel>Behaviour</guilabel></title>
+
+<para>This dialog configures the default behaviour for &kplato; regarding
+calculations and constraints.
+</para>
+
+<screenshot>
+<screeninfo>Configure Behaviour</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Configure Behaviour</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Calculation</guilabel></term>
+<listitem><para>You can choose <guilabel>Manual</guilabel> calculation which
+means you will have to use the <menuchoice><guimenu>Project</guimenu>
+<guimenuitem>Calculate</guimenuitem></menuchoice>menu to generate calculation
+or you can choose to have <guilabel>Immediate on
+change</guilabel> which will immediately do the calculation.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Constraints</guilabel></term>
+<listitem><para>Constraints are applicable restrictions that
+will affect the scope of the project. You can choose here to
+allow overbooking of resources.</para></listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="configure-task-defaults">
+<title><guilabel>Task Defaults</guilabel></title>
+
+<para>This set the options that will be used per default each time you add a
+new task.
+</para>
+
+<screenshot>
+<screeninfo>Task Defaults</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure2.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Task Defaults</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Responsible</guilabel></term>
+<listitem><para>Insert the name of the person responsible for this task.
+This is not limited to persons available in a resource group but can be
+anyone.</para>
+<para>Clicking on the <guibutton>Choose...</guibutton> button will allow you to
+insert a person from your address book.</para>
+<screenshot>
+<screeninfo>Addresses</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="configure2.1.png" format="PNG"/>
+</imageobject>
+<textobject><phrase>Addresses</phrase></textobject>
+</mediaobject>
+</screenshot>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Timing</guilabel></term>
+<listitem>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Schedule</guilabel></term>
+<listitem><para>Choose the scheduling constraint you would
+like as default. Depending on this constraint, the date fields
+become available if they need to be filled.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Estimate</guilabel></term>
+<listitem><para>-</para></listitem>
+</varlistentry>
+</variablelist>
+
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Note</guilabel></term>
+<listitem><para>-</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+</sect2>
+</sect1>
+
+</chapter>
