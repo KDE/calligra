@@ -20,6 +20,13 @@
 <menuchoice><guimenu>Settings</guimenu>
 <guimenuitem>Configure &kplato;...</guimenuitem></menuchoice> menu.</para>
 
+<para>On any widget in this dialog you can get a <guilabel>What's This
+</guilabel>help with <keycombo
+action="simul">&Shift;<keycap>F1</keycap></keycombo> or using the 
+<guiicon>Help</guiicon> icon.
+
+</para>
+
 <sect2 id="configure-behavior">
 <title><guilabel>Behavior</guilabel></title>
 
@@ -42,7 +49,7 @@ calculations and constraints.
 <term><guilabel>Calculation</guilabel></term>
 <listitem><para>You can choose <guilabel>Manual</guilabel> calculation which
 means you will have to use the <menuchoice><guimenu>Project</guimenu>
-<guimenuitem>Calculate</guimenuitem></menuchoice>menu to generate calculation
+<guimenuitem>Calculate</guimenuitem></menuchoice> menu to generate calculation
 or you can choose to have <guilabel>Immediate on
 change</guilabel> which will immediately do the calculation.</para></listitem>
 </varlistentry>
@@ -106,11 +113,16 @@ insert a person from your address book.</para>
 <term><guilabel>Schedule</guilabel></term>
 <listitem><para>Choose the scheduling constraint you would
 like as default. Depending on this constraint, the date fields
-become available if they need to be filled.</para></listitem>
+become available if they need to be filled. These
+settings affect the actual scheduling of the task.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Estimate</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Estimates the predictions of the quantitative
+results. The estimation can be either effort based or duration based. If it is
+effort based, the final duration will depend on the resources assigned to the
+task. For duration based estimation, the assigned resources don't affect the
+fixed duration of the task, but only the costs.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -119,7 +131,8 @@ become available if they need to be filled.</para></listitem>
 
 <varlistentry>
 <term><guilabel>Note</guilabel></term>
-<listitem><para>-</para></listitem>
+<listitem><para>Write here a note that you would like to be
+displayed as default on each new task.</para></listitem>
 </varlistentry>
 
 </variablelist>
