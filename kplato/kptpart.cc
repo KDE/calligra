@@ -110,7 +110,7 @@ bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
     ret = KoTemplateChooseDia::choose(Factory::global(), templateDoc,
                                       dlgtype,
                                       "kplato_template",
-                                      NULL);
+                                      parentWidget);
     if (ret == KoTemplateChooseDia::Template) {
         resetURL();
         result = loadNativeFormat(templateDoc);
