@@ -188,7 +188,7 @@ object</emphasis>.
 -->
 </para>
 <para>
-For each object on the list context menu is available using the &RMB;.
+For each object on the list a context menu is available using the &RMB;.
 For example, this is context menu for the <emphasis>persons</emphasis> table.
 <!--
  <br><img src="img/04_06_01_context_menu.png">
@@ -205,7 +205,7 @@ pane <! - - TODO (js) APPENDIX number - - ></a> .
 </para>
 
 <para>
-Double clicking with &LMB; on the object's name on the list allows to
+Double clicking with the &LMB; on the object's name on the list allows to
 open the object in Data View. If the object's window was alread opened,
 the action just activates the window without switching it's view mode.
 </para>
@@ -404,12 +404,12 @@ pane in appendix Property Editor pane.
           <!-- image: <img src="img/04_04_01_startup_open_existing.png"> -->
         </para></listitem>
         <listitem><para>
-          From <guilabel>Look in</guilabel> drop down box, pick a folder
+          From <guilabel>Current location</guilabel> drop down box, pick a folder
           containing a file you are looking for.
         </para></listitem>
         <listitem><para>
           You can either pick a file or enter its name in the
-          <guilabel>Location</guilabel> box.
+          <guilabel>Location:</guilabel> box.
         </para></listitem>
         <listitem><para>
           Click <guibutton>OK</guibutton>.
@@ -426,7 +426,7 @@ pane in appendix Property Editor pane.
             <guilabel>Kexi Database File-Based Project</guilabel> selected.
             In case the file you are looking for has an other extension,
             you can change the selection of the <guilabel>Filter:</guilabel>
-            drop down list to <guilabel>All files</guilabel> to display
+            drop down list to <guilabel>All Files</guilabel> to display
             all available files (regardless of an extension).
           </para></listitem>
           <listitem><para>
@@ -487,7 +487,7 @@ pane in appendix Property Editor pane.
       <listitem>
         <para><emphasis>The Handbook in form of electronic document.</emphasis></para>
         <para>
-          The Handbook is available by presing <keycombo><keycap>F1</keycap></keycombo>
+          The Handbook is available by pressing <keycombo><keycap>F1</keycap></keycombo>
           key or selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>&kexi;
           Handbook</guimenuitem></menuchoice> from the menubar.
         </para>

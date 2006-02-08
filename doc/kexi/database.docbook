@@ -258,7 +258,7 @@ and <guilabel>Surname</guilabel>.
 <listitem><para>
 <emphasis>Dividing data</emphasis> in the field <guilabel>Address</guilabel>
 into three separate fields: <guilabel>Street</guilabel>, <guilabel>House
-number</guilabel> and <guilabel>Town</guilabel>.
+number</guilabel> and <guilabel>City</guilabel>.
 </para></listitem>
 <listitem><para>
 <emphasis>Guaranteeing data correctness:</emphasis> by ensuring that no fields

@@ -29,12 +29,12 @@
       of how child windows are managed and displayed.  The two modes
       are:
       <itemizedlist>
-	<listitem><para>IDEAl mode; and</para></listitem>
-	<listitem><para>Childframe mode.</para></listitem>
+	<listitem><para><guisubmenu>IDEAl Mode</guisubmenu>; and</para></listitem>
+	<listitem><para><guisubmenu>Childframe Mode</guisubmenu>.</para></listitem>
       </itemizedlist>
       These modes are described in the following two sections.  You
       can change the MDI mode from the <guisubmenu>MDI
-      mode</guisubmenu> sub-menu under the <guimenu>Window</guimenu>
+      Mode</guisubmenu> sub-menu under the <guimenu>Window</guimenu>
       menu.  Note that changing the MDI mode requires &kexi; to be
       restarted before the new mode takes effect.
     </para>
@@ -63,7 +63,7 @@
 	In order to use Childframe mode, you need to select
 	<action>
 	  <guimenu>Window</guimenu>,
-	  <guisubmenu>MDI mode</guisubmenu>,
+	  <guisubmenu>MDI Mode</guisubmenu>,
 	  <guimenuitem>Childframe Mode</guimenuitem>
 	</action> from the menu.
       </para>
