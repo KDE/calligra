@@ -129,6 +129,7 @@ private slots:
     void firstChanged( double );
     void spacingActivated( int );
     void spacingChanged( double );
+    void spacingChanged( int );
     void beforeChanged( double );
     void afterChanged( double );
 private:

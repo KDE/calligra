@@ -935,7 +935,7 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
     eSpacingPercent = new KIntNumInput( 100, spacingFrame );
     eSpacingPercent->setRange( 0, 1000, 10, false );
     eSpacingPercent->setSuffix( " %" );
-    connect( eSpacingPercent, SIGNAL( valueChanged( int ) ), this, SLOT( spacingChanged( double ) ) );
+    connect( eSpacingPercent, SIGNAL( valueChanged( int ) ), this, SLOT( spacingChanged( int ) ) );
     
     sSpacingStack->addWidget( eSpacing );
     sSpacingStack->addWidget( eSpacingPercent );
@@ -1168,6 +1168,11 @@ void KoIndentSpacingWidget::spacingActivated( int /*_index*/ )
 void KoIndentSpacingWidget::spacingChanged( double _val )
 {
     prev1->setSpacing( _val );
+}
+
+void KoIndentSpacingWidget::spacingChanged( int _val )
+{
+    prev1->setSpacing( _val / 100.0 );
 }
 
 void KoIndentSpacingWidget::beforeChanged( double _val )
