@@ -128,6 +128,9 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::A
                 break;
             }
         }
+        if(groupkey.isNull())
+            return 0;
+
         config.setGroup(groupkey);
         //QString type( config.readEntry("type", "database").lower() );
         //bool isDatabaseShortcut = (type == "database");
@@ -136,7 +139,7 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::A
         data->setFileName(QString::null);
         data->caption = config.readEntry("caption");
         data->description = config.readEntry("comment");
-        //data->setDatabaseName(config.readEntry("name"));
+        QString dbname = config.readEntry("name");
         data->driverName = config.readEntry("engine");
         data->hostName = config.readEntry("server");
         data->port = config.readNumEntry("port", 0);
@@ -147,7 +150,9 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::A
         data->savePassword = ! data->password.isEmpty();
         data->userName = config.readEntry("user");
 
-        return new KexiDBConnectionData(data);
+        KexiDBConnectionData* c = new KexiDBConnectionData(data);
+        c->setDatabaseName(dbname);
+        return c;
     }
 
     QString const drivername = driverManager().lookupByMime(mimename);

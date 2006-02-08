@@ -41,6 +41,10 @@ KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
 
     addFunction("localSocketFileName", &KexiDBConnectionData::localSocketFileName);
 
+    addFunction("databaseName", &KexiDBConnectionData::databaseName);
+    addFunction("setDatabaseName", &KexiDBConnectionData::setDatabaseName,
+        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+
     addFunction("hostName", &KexiDBConnectionData::hostName);
     addFunction("setHostName", &KexiDBConnectionData::setHostName,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
@@ -117,6 +121,16 @@ Kross::Api::Object::Ptr KexiDBConnectionData::localSocketFileName(Kross::Api::Li
 {
     return new Kross::Api::Variant(m_data->localSocketFileName,
            "Kross::KexiDB::Connection::localSocketFileName::String");
+}
+
+Kross::Api::Object::Ptr KexiDBConnectionData::databaseName(Kross::Api::List::Ptr)
+{
+    return new Kross::Api::Variant(m_dbname);
+}
+
+Kross::Api::Object::Ptr KexiDBConnectionData::setDatabaseName(Kross::Api::List::Ptr args)
+{
+    m_dbname = Kross::Api::Variant::toString(args->item(0));
 }
 
 Kross::Api::Object::Ptr KexiDBConnectionData::hostName(Kross::Api::List::Ptr)

@@ -59,8 +59,13 @@ namespace Kross { namespace KexiDB {
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
+            ::KexiDB::ConnectionData* data() { return m_data; }
+            QString databaseName() { return m_dbname; }
+            void setDatabaseName(const QString& s) { m_dbname = s; }
+
         private:
             ::KexiDB::ConnectionData* m_data;
+            QString m_dbname;
 
             /// \return connection name.
             Kross::Api::Object::Ptr caption(Kross::Api::List::Ptr);
@@ -81,6 +86,10 @@ namespace Kross { namespace KexiDB {
             Kross::Api::Object::Ptr localSocketFileName(Kross::Api::List::Ptr);
 
             // For serverbased drivers
+            /// \return the database name.
+            Kross::Api::Object::Ptr databaseName(Kross::Api::List::Ptr);
+            /// Set the database name.
+            Kross::Api::Object::Ptr setDatabaseName(Kross::Api::List::Ptr);
 
             /// \return hostname.
             Kross::Api::Object::Ptr hostName(Kross::Api::List::Ptr);
