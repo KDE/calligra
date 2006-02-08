@@ -42,7 +42,6 @@ KivioDragObject::KivioDragObject(QWidget* dragSource, const char* name)
 {
   m_encodeMimeList[0] = "application/vnd.kde.kivio";
   m_encodeMimeList[1] = "text/xml";
-  m_encodeMimeList[2] = "text/plain";
   m_stencilList.setAutoDelete(true);
 }
 
@@ -60,8 +59,7 @@ const char* KivioDragObject::format(int i) const
 QByteArray KivioDragObject::encodedData(const char* mimetype) const
 {
   if((m_encodeMimeList[0] == mimetype) ||
-    (m_encodeMimeList[1] == mimetype) ||
-    (m_encodeMimeList[2] == mimetype))
+      (m_encodeMimeList[1] == mimetype))
   {
     return kivioEncoded();
   } else if(qstrnicmp(mimetype, "image/", 6) == 0) {
@@ -76,7 +74,7 @@ bool KivioDragObject::canDecode(QMimeSource* e)
   QValueList<QCString> decodeMimeList;
   decodeMimeList.append("application/vnd.kde.kivio");
   decodeMimeList.append("text/plain");
-  
+
   for(QValueList<QCString>::Iterator it = decodeMimeList.begin(); it != decodeMimeList.end(); ++it) {
     if(e->provides(*it)) {
       return true;
