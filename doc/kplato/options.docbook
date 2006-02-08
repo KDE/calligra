@@ -20,20 +20,20 @@
 <menuchoice><guimenu>Settings</guimenu>
 <guimenuitem>Configure &kplato;...</guimenuitem></menuchoice> menu.</para>
 
-<sect2 id="configure-behaviour">
-<title><guilabel>Behaviour</guilabel></title>
+<sect2 id="configure-behavior">
+<title><guilabel>Behavior</guilabel></title>
 
-<para>This dialog configures the default behaviour for &kplato; regarding
+<para>This dialog configures the default behavior for &kplato; regarding
 calculations and constraints.
 </para>
 
 <screenshot>
-<screeninfo>Configure Behaviour</screeninfo>
+<screeninfo>Configure Behavior</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="configure1.png" format="PNG"/>
 </imageobject>
-<textobject><phrase>Configure Behaviour</phrase></textobject>
+<textobject><phrase>Configure Behavior</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -50,8 +50,11 @@ change</guilabel> which will immediately do the calculation.</para></listitem>
 <varlistentry>
 <term><guilabel>Constraints</guilabel></term>
 <listitem><para>Constraints are applicable restrictions that
-will affect the scope of the project. You can choose here to
-allow overbooking of resources.</para></listitem>
+will affect the scope of the project. You will be able to choose here to
+allow overbooking of resources. </para>
+<warning><para>This option is not yet in
+used, this is why it is disabled.</para></warning>
+</listitem>
 </varlistentry>
 </variablelist>
 

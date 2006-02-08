@@ -133,8 +133,8 @@ there is a decision to be made at a milestone.
 <sect1 id="terminal-element">
 <title>Terminal element</title>
 <para>
-In project management, a terminal element is the lowest element (activity or
-deliverable) in a work breakdown structure(WBS); it is not further subdivided.
+In project management, a terminal element is the lowest element (task or
+deliverable) in a work breakdown structure (WBS); it is not further subdivided.
 </para>
 <para>
 Terminal elements are the items that are estimated in terms of resource
