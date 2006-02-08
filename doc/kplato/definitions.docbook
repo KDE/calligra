@@ -84,9 +84,13 @@ period of time. Tasks can be linked together to create Dependencies.
 Tasks take place over a period of time and generally consumes resources.
 </para>
 <para>
-A task is termed critical when it has zero or negative float..
+A task is termed critical when it has zero or negative float.
 </para>
-
+<para>
+In &kplato;, each task has a task ID, a name and a responsible. The timing, the
+cost and the assigned resources can also be set in the <guilabel>Task
+Settings</guilabel>dialog.
+</para>
 </sect1>
 
 <sect1 id="resource">

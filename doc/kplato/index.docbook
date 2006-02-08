@@ -6,6 +6,7 @@
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
   <!ENTITY definitions SYSTEM "definitions.docbook">
+  <!ENTITY mainwindow SYSTEM "mainwindow.docbook">
   <!ENTITY commands SYSTEM "commands.docbook">
 ]>
 
@@ -96,6 +97,7 @@ be used within larger documents of other &koffice; components.
 </chapter>
 
 &definitions;
+&mainwindow;
 &commands;
 
 <chapter id="license"><title>License</title>
