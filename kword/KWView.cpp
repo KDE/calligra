@@ -100,6 +100,7 @@
 #include <tkcoloractions.h>
 #include <KoSpeaker.h>
 
+#include <kparts/partmanager.h>
 #include <kaccelgen.h>
 #include <kcolordialog.h>
 #include <kdebug.h>
@@ -5511,10 +5512,15 @@ void KWView::newRightIndent( double rightIndent)
 
 QPopupMenu * KWView::popupMenu( const QString& name )
 {
-    Q_ASSERT(factory());
+    // factory() is 0 when right-clicking on the kword document while
+    // an embedded object is active. KoPartManager lets the click through,
+    // without activating us - so let's do that first.
+    if ( !factory() )
+        partManager()->setActivePart( m_doc, this );
+    Q_ASSERT( factory() );
     if ( factory() )
         return ((QPopupMenu*)factory()->container( name, this ));
-    return 0L;
+    return 0;
 }
 
 void KWView::startKSpell()
