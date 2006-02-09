@@ -154,6 +154,9 @@ public:
     virtual void initiateCalculation();
     virtual void calcResourceOverbooked();
 
+    void setScheduled(bool on) { notScheduled = !on; }
+    bool isScheduled() const { return !notScheduled; }
+    
 protected:
     QString m_name;
     Type m_type;
