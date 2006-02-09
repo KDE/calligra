@@ -63,9 +63,16 @@ class KoPartManager : public KParts::PartManager
 {
 public:
   KoPartManager( QWidget * parent, const char * name = 0L )
-    : KParts::PartManager( parent, name ) {}
-  KoPartManager( QWidget *topLevel, QObject *parent, const char *name = 0L )
-    : KParts::PartManager( topLevel, parent, name ) {}
+    : KParts::PartManager( parent, name )
+  {
+      setSelectionPolicy( KParts::PartManager::TriState );
+      setAllowNestedParts( true );
+      setIgnoreScrollBars( true );
+      // Allow right-click on embedded objects (without activating them)
+      // But beware: this means right-click on parent, from embedded object,
+      // doesn't make the parent active first...
+      setActivationButtonMask( Qt::LeftButton | Qt::MidButton );
+  }
   virtual bool eventFilter( QObject *obj, QEvent *ev )
   {
     if ( !obj->isWidgetType() || ::qt_cast<KoFrame *>( obj ) )
@@ -183,10 +190,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     d = new KoMainWindowPrivate;
 
     d->m_manager = new KoPartManager( this );
-    d->m_manager->setSelectionPolicy( KParts::PartManager::TriState );
-    d->m_manager->setAllowNestedParts( true );
-    d->m_manager->setIgnoreScrollBars( true );
-    d->m_manager->setActivationButtonMask( Qt::LeftButton | Qt::MidButton );
 
     connect( d->m_manager, SIGNAL( activePartChanged( KParts::Part * ) ),
              this, SLOT( slotActivePartChanged( KParts::Part * ) ) );
