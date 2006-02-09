@@ -120,28 +120,7 @@ QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCurs
             kdDebug() << k_funcinfo << bodyTagLocalName << endl;
             if ( bodyTagLocalName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
             {
-                // From KWTextDocument::loadFrame:
-                QDomElement elem;
-                forEachElement( elem, tag )
-                {
-                    if ( elem.namespaceURI() != KoXmlNS::draw )
-                        continue;
-                    const QString localName = elem.localName();
-                    KWFrame* frame = 0;
-                    if ( localName == "text-box" )
-                    {
-                        frame = loadOasisTextBox( tag, elem, context );
-                    }
-                    else if ( localName == "image" )
-                    {
-                        KWFrameSet* fs = new KWPictureFrameSet( m_doc, tag, elem, context );
-                        m_doc->addFrameSet( fs, false );
-                        frame = fs->frame( 0 );
-                        frames.append( frame );
-                    }
-                    if ( frame )
-                        frame->moveBy( 10, 10 );
-                }
+                loadFrame( tag, context, KoPoint( 10, 10 ) /*offset pasted object*/ );
             }
 #if 0 // TODO OASIS table:table
             else if ( bodyTagLocalName == "table" && tag.namespaceURI() == KoXmlNS::table )
@@ -246,7 +225,7 @@ void KWOasisLoader::loadOasisIgnoreList( const KoOasisSettings& settings )
     }
 }
 
-KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& context )
+KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& context, const KoPoint& offset )
 {
     KWFrame* frame = 0;
     QDomElement elem;
@@ -283,6 +262,7 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
             int pageNum = frameTag.attributeNS( KoXmlNS::text, "anchor-page-number", QString::null ).toInt();
             frame->moveTopLeft( KoPoint( x, y + m_doc->pageManager()->topOfPage(pageNum) ) );
         }
+        frame->moveBy( offset.x(), offset.y() );
     }
     return frame;
 }

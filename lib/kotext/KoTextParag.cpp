@@ -3016,7 +3016,7 @@ void KoTextParag::applyListStyle( KoOasisContext& context, int restartNumbering,
     if ( listStyleProperties.hasAttributeNS( KoXmlNS::text, "space-before" ) )
     {
         double spaceBefore = KoUnit::parseValue( listStyleProperties.attributeNS( KoXmlNS::text, "space-before", QString::null ) );
-        m_layout.margins[ QStyleSheetItem::MarginLeft ] += spaceBefore;
+        m_layout.margins[ QStyleSheetItem::MarginLeft ] += spaceBefore; // added to left-margin, see 15.12 in spec.
     }
     // need to call invalidateCounters() ? Not during the initial loading at least.
 }

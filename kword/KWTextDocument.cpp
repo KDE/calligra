@@ -116,7 +116,7 @@ bool KWTextDocument::loadOasisBodyTag( const QDomElement& tag, KoOasisContext& c
     {
         KWDocument* doc = m_textfs->kWordDocument();
         KWOasisLoader loader( doc );
-        KWFrame* frame = loader.loadFrame( tag, context );
+        KWFrame* frame = loader.loadFrame( tag, context, KoPoint() );
         if ( frame )
             return true;
     }
@@ -293,7 +293,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
 
             KWDocument* doc = m_textfs->kWordDocument();
             KWOasisLoader loader( doc );
-            KWFrame* frame = loader.loadFrame( tag, context );
+            KWFrame* frame = loader.loadFrame( tag, context, KoPoint() );
             if ( frame )
             {
                 KWFrameSet* fs = frame->frameSet();

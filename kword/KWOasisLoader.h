@@ -19,6 +19,7 @@
 #ifndef KWOASISLOADER_H
 #define KWOASISLOADER_H
 
+class KoPoint;
 class KWTableFrameSet;
 class KWLoadingInfo;
 class KoOasisContext;
@@ -46,7 +47,7 @@ public:
     void loadOasisHeaderFooter( const QDomElement& headerFooter, bool hasEvenOdd,
                                 QDomElement& style, KoOasisContext& context );
 
-    KWFrame* loadFrame( const QDomElement& frameTag, KoOasisContext& context );
+    KWFrame* loadFrame( const QDomElement& frameTag, KoOasisContext& context, const KoPoint& offset );
     KWFrame* loadOasisTextBox( const QDomElement& frame, const QDomElement& tag,
                                KoOasisContext& context );
     KWTableFrameSet* loadOasisTable( const QDomElement& tag,

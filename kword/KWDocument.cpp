@@ -1259,7 +1259,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 //setPageCount ( pages );
             }
             else if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
-                oasisLoader.loadFrame( tag, context );
+                oasisLoader.loadFrame( tag, context, KoPoint() );
             else
                 kdWarning(32001) << "Unsupported tag in DTP loading:" << tag.tagName() << endl;
         }
@@ -2866,7 +2866,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
 
         // write selected (non-inline) frames
         QString newText;
-        saveSelectedFrames( *bodyWriter, store, manifestWriter, savingContext, pictureList,
+        saveSelectedFrames( *bodyWriter, savingContext, pictureList,
                             selectedFrames, &newText ); // output vars
         *plainText += newText;
         // Single image -> return it
@@ -2898,6 +2898,31 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     //kdDebug(32001) << "saveOasis: " << pictureList.count() << " pictures" << endl;
     m_pictureCollection->saveOasisToStore( store, pictureList, manifestWriter );
 
+    if ( saveFlag == SaveSelected ) {
+        // Save embedded objects - code inspired from KoDocument::saveChildrenOasis,
+        // for the case where we're saving only some embedded objects, like with Ctrl+C.
+
+        // IMPORTANT: This must be done *after* we're done with writing content.xml,
+        // not while writing it (like in saveSelectedFrames).
+        // We can't be writing to two files at the same time.
+
+        QValueList<KoDocumentChild*> embeddedObjects;
+        QValueListConstIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+        for(; framesIterator != selectedFrames.end(); ++framesIterator) {
+            KWFrame *frame = (*framesIterator)->frame();
+            KWFrameSet *fs = frame->frameSet();
+            if ( fs->isVisible() && fs->type() == FT_PART) {
+                embeddedObjects.append( static_cast<KWPartFrameSet *>(fs)->getChild() );
+            }
+        }
+
+        QValueList<KoDocumentChild *>::const_iterator chl = embeddedObjects.begin();
+        for( ; chl != embeddedObjects.end(); ++chl ) {
+            if ( !(*chl)->saveOasis( store, manifestWriter ) )
+                return false;
+        }
+    }
+
     if ( saveFlag == SaveAll )
     {
 
@@ -2905,11 +2930,9 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
             return false;
 
         KoStoreDevice contentDev( store );
-        KoXmlWriter& settingsWriter = *createOasisXmlWriter(&contentDev, "office:document-settings");
-
-        saveOasisSettings( settingsWriter );
-
-        delete &settingsWriter;
+        KoXmlWriter* settingsWriter = createOasisXmlWriter(&contentDev, "office:document-settings");
+        saveOasisSettings( *settingsWriter );
+        delete settingsWriter;
 
         if(!store->close())
             return false;
@@ -2964,7 +2987,7 @@ QDragObject* KWDocument::dragSelectedPrivate( QWidget *parent, const QValueList<
     return multiDrag;
 }
 
-void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter, KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList, const QValueList<KWFrameView*> &selectedFrames, QString* plainText ) const {
+void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList, const QValueList<KWFrameView*> &selectedFrames, QString* plainText ) const {
     QPtrList<KoDocumentChild> embeddedObjects;
     QValueListConstIterator<KWFrameView*> framesIterator = selectedFrames.begin();
     for(; framesIterator != selectedFrames.end(); ++framesIterator) {
@@ -2972,7 +2995,6 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, Ko
         KWFrameSet *fs = frame->frameSet();
         if ( fs->isVisible() && fs->type() == FT_PART) {
             embeddedObjects.append( static_cast<KWPartFrameSet *>(fs)->getChild() );
-            continue;
         }
         bool isTable = fs->type() == FT_TABLE;
 
@@ -3006,28 +3028,6 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, Ko
         }
         if ( isTable ) // Copy tables only once, even if they have many cells selected
             break;
-    }
-
-    // Save embedded objects - code inspired from KoDocument::saveChildrenOasis
-    QPtrListIterator<KoDocumentChild> chl( embeddedObjects );
-    for( ; chl.current(); ++chl ) {
-        KoDocument* childDoc = chl.current()->document();
-        QString path;
-        if ( childDoc ) {
-            if ( !childDoc->isStoredExtern() ) {
-                if ( !chl.current()->saveOasisToStore( store, manifestWriter ) )
-                    return;
-
-                //assert( childDoc->url().protocol() == INTERNAL_PROTOCOL );
-                path = store->currentDirectory();
-                if ( !path.isEmpty() )
-                    path += '/';
-                path += childDoc->url().path();
-            } else {
-                path = childDoc->url().url();
-            }
-            manifestWriter->addManifestEntry( path, childDoc->nativeOasisMimeType() );
-        }
     }
 }
 
@@ -3669,7 +3669,7 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 // This is also used to paint the preview.png that goes into the ZIP file
 void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool transparent, double zoomX, double zoomY )
 {
-    kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+    //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
     setZoom( 100 );
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
@@ -4239,6 +4239,7 @@ void KWDocument::updateAllFrames( int flags )
 // and everything will be update / repainted accordingly
 void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 {
+    Q_UNUSED( view ); // DF: seems my idea of excluding one view got thrown away
     if(! m_framesChangedHandler) {
         m_framesChangedHandler = new FramesChangedHandler(this);
         QTimer::singleShot( 0, this, SLOT( updateFramesChanged() ) );
@@ -4248,6 +4249,7 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 
 void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view )
 {
+    Q_UNUSED( view ); // DF: seems my idea of excluding one view got thrown away
     QPtrListIterator<KWFrame> it( frames );
     for ( ; it.current() ; ++it )
         frameChanged(it.current());

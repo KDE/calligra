@@ -878,45 +878,18 @@ bool KoDocument::saveChildren( KoStore* _store )
     return true;
 }
 
-// TODO delegate most of the work to a method which takes a list of children to save.
-// Useful for e.g. KWDocument::saveSelectedFrames
 bool KoDocument::saveChildrenOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
     //kdDebug(30003)<<k_funcinfo<<" checking children of doc='"<<url().url()<<"'"<<endl;
     QPtrListIterator<KoDocumentChild> it( children() );
     for( ; it.current(); ++it ) {
         KoDocument* childDoc = it.current()->document();
-        if (childDoc && !it.current()->isDeleted())
+        if ( childDoc && !it.current()->isDeleted() )
         {
-            QString path;
-            if ( !childDoc->isStoredExtern() )
-            {
-                if ( !it.current()->saveOasisToStore( store, manifestWriter ) )
-                    return false;
-                if (!isExporting ())
-                    childDoc->setModified( false );
-
-                // see KoDocumentChild
-                assert( childDoc->url().protocol() == INTERNAL_PROTOCOL );
-                path = store->currentDirectory();
-                if ( !path.isEmpty() )
-                    path += '/';
-                path += childDoc->url().path();
-                if ( path.startsWith( "/" ) )
-                    path = path.mid( 1 ); // remove leading '/', no wanted in manifest
-            }
-            else
-            {
-                kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
-                path = childDoc->url().url();
-            }
-            // OOo uses a trailing slash for the path to embedded objects (== directories)
-            if ( !path.endsWith( "/" ) )
-                path += '/';
-            QCString mimetype = childDoc->nativeOasisMimeType();
-            if ( mimetype.isEmpty() )
-                mimetype = childDoc->nativeFormatMimeType();
-            manifestWriter->addManifestEntry( path, mimetype );
+            if ( !it.current()->saveOasis( store, manifestWriter ) )
+                return false;
+            if ( !childDoc->isStoredExtern() && !isExporting () )
+                childDoc->setModified( false );
         }
     }
     return true;

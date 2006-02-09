@@ -171,12 +171,13 @@ void KoOasisStyles::insertStyle( const QDomElement& e, bool styleAutoStyles )
             if ( m_stylesAutoStyles.find( name ) != 0 )
                 kdDebug(30003) << "Auto-style: '" << name << "' already exists" << endl;
             m_stylesAutoStyles.insert( name, new QDomElement( e ) );
+            //kdDebug(30003) << "Style: '" << name << "' loaded as a style auto style" << endl;
         } else {
             if ( m_styles.find( name ) != 0 )
                 kdDebug(30003) << "Style: '" << name << "' already exists" << endl;
             m_styles.insert( name, new QDomElement( e ) );
+            //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
         }
-        //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
     } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
         const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
         if ( !family.isEmpty() )

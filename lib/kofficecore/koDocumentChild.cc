@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
-   Copyright (C) 2004-2005 David Faure <faure@kde.org>
+   Copyright (C) 2004-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -109,14 +109,14 @@ KoDocument* KoDocumentChild::parentDocument() const
 
 KoDocument* KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
 {
-  if ( !region( _matrix ).contains( p ) || !document() )
+  if ( !region( _matrix ).contains( p ) || !d->m_doc )
     return 0L;
 
   QWMatrix m( _matrix );
   m = matrix() * m;
   m.scale( xScaling(), yScaling() );
 
-  return document()->hitTest( p, m );
+  return d->m_doc->hitTest( p, m );
 }
 
 void KoDocumentChild::loadOasis( const QDomElement &frameElement, const QDomElement& objectElement )
@@ -286,20 +286,20 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
                 assert( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) );
                 QString relPath = KURL( m_tmpURL ).path().mid( 1 );
                 store->enterDirectory( relPath );
-                res = document()->loadOasisFromStore( store );
+                res = d->m_doc->loadOasisFromStore( store );
                 store->popDirectory();
             } else {
                 if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) )
                     m_tmpURL = KURL( m_tmpURL ).path().mid( 1 );
-                res = document()->loadFromStore( store, m_tmpURL );
+                res = d->m_doc->loadFromStore( store, m_tmpURL );
             }
             internalURL = true;
-            document()->setStoreInternal( true );
+            d->m_doc->setStoreInternal( true );
         }
         else
         {
             // Reference to an external document. Hmmm...
-            document()->setStoreInternal( false );
+            d->m_doc->setStoreInternal( false );
             KURL url( m_tmpURL );
             if ( !url.isLocalFile() )
             {
@@ -315,11 +315,11 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
                     return false;
                 }
                 if ( result == KMessageBox::Yes )
-                    res = document()->openURL( url );
+                    res = d->m_doc->openURL( url );
                 // and if == No, res will still be false so we'll use a kounavail below
             }
             else
-                res = document()->openURL( url );
+                res = d->m_doc->openURL( url );
         }
         if ( !res )
         {
@@ -357,9 +357,9 @@ bool KoDocumentChild::loadDocumentInternal( KoStore* store, const KoDocumentEntr
         {
             KParts::PartManager *manager = parent->manager();
 
-            if ( !manager->parts()->containsRef( document() ) &&
+            if ( !manager->parts()->containsRef( d->m_doc ) &&
                  !parent->isSingleViewMode() )
-                manager->addPart( document(), false );
+                manager->addPart( d->m_doc, false );
         }
     }
 
@@ -384,43 +384,65 @@ bool KoDocumentChild::createUnavailDocument( KoStore* store, bool doOpenURL, con
     return true;
 }
 
-bool KoDocumentChild::saveOasisToStore( KoStore* store, KoXmlWriter* manifestWriter )
+bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    if ( document()->isStoredExtern() )
-        return true; // nothing to do
-
-    // The name comes from KoDocumentChild (which was set while saving the
-    // parent document).
-    assert( document()->url().protocol() == INTERNAL_PROTOCOL );
-    const QString name = document()->url().path();
-    kdDebug() << k_funcinfo << "saving " << name << endl;
-
-    if ( document()->nativeOasisMimeType().isEmpty() ) {
-        // Embedded object doesn't support OASIS OpenDocument, save in the old format.
-
-        if ( !document()->saveToStore( store, name ) )
-            return false;
+    QString path;
+    if ( d->m_doc->isStoredExtern() )
+    {
+        kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << d->m_doc->url().url()<<endl;
+        path = d->m_doc->url().url();
     }
     else
     {
-        // To make the children happy cd to the correct directory
-        store->pushDirectory();
-        store->enterDirectory( name );
+        // The name comes from KoDocumentChild (which was set while saving the
+        // parent document).
+        assert( d->m_doc->url().protocol() == INTERNAL_PROTOCOL );
+        const QString name = d->m_doc->url().path();
+        kdDebug() << k_funcinfo << "saving " << name << endl;
 
-        if ( !document()->saveOasis( store, manifestWriter ) ) {
-            kdWarning(30003) << "KoDocumentChild::saveOasis failed" << endl;
-            return false;
+        if ( d->m_doc->nativeOasisMimeType().isEmpty() ) {
+            // Embedded object doesn't support OASIS OpenDocument, save in the old format.
+
+            if ( !d->m_doc->saveToStore( store, name ) )
+                return false;
         }
-        // Now that we're done leave the directory again
-        store->popDirectory();
+        else
+        {
+            // To make the children happy cd to the correct directory
+            store->pushDirectory();
+            store->enterDirectory( name );
+
+            if ( !d->m_doc->saveOasis( store, manifestWriter ) ) {
+                kdWarning(30003) << "KoDocumentChild::saveOasis failed" << endl;
+                return false;
+            }
+            // Now that we're done leave the directory again
+            store->popDirectory();
+        }
+
+        assert( d->m_doc->url().protocol() == INTERNAL_PROTOCOL );
+        path = store->currentDirectory();
+        if ( !path.isEmpty() )
+            path += '/';
+        path += d->m_doc->url().path();
+        if ( path.startsWith( "/" ) )
+            path = path.mid( 1 ); // remove leading '/', no wanted in manifest
     }
+
+    // OOo uses a trailing slash for the path to embedded objects (== directories)
+    if ( !path.endsWith( "/" ) )
+        path += '/';
+    QCString mimetype = d->m_doc->nativeOasisMimeType();
+    if ( mimetype.isEmpty() )
+        mimetype = d->m_doc->nativeFormatMimeType();
+    manifestWriter->addManifestEntry( path, mimetype );
 
     return true;
 }
 
 void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString& name )
 {
-    if ( !document()->isStoredExtern() )
+    if ( !d->m_doc->isStoredExtern() )
     {
         // set URL in document so that KoDocument::saveChildrenOasis will save
         // the actual embedded object with the right name in the store.
@@ -428,7 +450,7 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
         u.setProtocol( INTERNAL_PROTOCOL );
         u.setPath( name );
         kdDebug() << k_funcinfo << u << endl;
-        document()->setURL( u );
+        d->m_doc->setURL( u );
     }
 
     //<draw:object draw:style-name="standard" draw:id="1" draw:layer="layout" svg:width="14.973cm" svg:height="4.478cm" svg:x="11.641cm" svg:y="14.613cm" xlink:href="#./Object 1" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
@@ -436,26 +458,26 @@ void KoDocumentChild::saveOasisAttributes( KoXmlWriter &xmlWriter, const QString
     xmlWriter.addAttribute( "xlink:show", "embed" );
     xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
 
-    const QString ref = document()->isStoredExtern() ? document()->url().url() : "./"+ name;
+    const QString ref = d->m_doc->isStoredExtern() ? d->m_doc->url().url() : "./"+ name;
     kdDebug(30003) << "KoDocumentChild::saveOasis saving reference to embedded document as " << ref << endl;
     xmlWriter.addAttribute( "xlink:href", /*"#" + */ref );
 }
 
 QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
 {
-    if( document() )
+    if( d->m_doc )
     {
         QDomElement e = doc.createElement( ( uppercase ? "OBJECT" : "object" ) );
-        if ( document()->url().protocol() != INTERNAL_PROTOCOL ) {
-            e.setAttribute( "url", document()->url().url() );
-            kdDebug() << "KoDocumentChild::save url=" << document()->url().url() << endl;
+        if ( d->m_doc->url().protocol() != INTERNAL_PROTOCOL ) {
+            e.setAttribute( "url", d->m_doc->url().url() );
+            kdDebug() << "KoDocumentChild::save url=" << d->m_doc->url().url() << endl;
         }
         else {
-            e.setAttribute( "url", document()->url().path().mid( 1 ) );
-            kdDebug() << "KoDocumentChild::save url=" << document()->url().path().mid( 1 ) << endl;
+            e.setAttribute( "url", d->m_doc->url().path().mid( 1 ) );
+            kdDebug() << "KoDocumentChild::save url=" << d->m_doc->url().path().mid( 1 ) << endl;
         }
-        e.setAttribute( "mime", document()->nativeFormatMimeType() );
-        kdDebug() << "KoDocumentChild::save mime=" << document()->nativeFormatMimeType() << endl;
+        e.setAttribute( "mime", d->m_doc->nativeFormatMimeType() );
+        kdDebug() << "KoDocumentChild::save mime=" << d->m_doc->nativeFormatMimeType() << endl;
         QDomElement rect = doc.createElement( ( uppercase ? "RECT" : "rect" ) );
         rect.setAttribute( "x", geometry().left() );
         rect.setAttribute( "y", geometry().top() );
@@ -469,13 +491,13 @@ QDomElement KoDocumentChild::save( QDomDocument& doc, bool uppercase )
 
 bool KoDocumentChild::isStoredExtern() const
 {
-    assert( document() );
-    return document()->isStoredExtern();
+    assert( d->m_doc );
+    return d->m_doc->isStoredExtern();
 }
 
 KURL KoDocumentChild::url() const
 {
-    return ( document() ? document()->url() : KURL() );
+    return ( d->m_doc ? d->m_doc->url() : KURL() );
 }
 
 KoDocumentChild::~KoDocumentChild()

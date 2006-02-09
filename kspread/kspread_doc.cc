@@ -785,37 +785,11 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
         if ( it.current()->getType() != OBJECT_CHART  && it.current()->getType() != OBJECT_KOFFICE_PART )
           continue;
         KoDocumentChild *embedded = dynamic_cast<EmbeddedKOfficeObject *>(it.current() )->embeddedObject();
-        KoDocument* childDoc = embedded->document();
-        QString path;
-        if ( !childDoc->isStoredExtern() )
-        {
             //NOTE: If an application's .desktop file lies about opendocument support (ie. it indicates that it has
             //a native OASIS mime type, when it doesn't, this causes a crash when trying to reload and paint
             //the object, since it won't have an associated document.
-          if ( !embedded->saveOasisToStore( store, manifestWriter ) )
+          if ( !embedded->saveOasis( store, manifestWriter ) )
             continue;
-
-                    // see KoDocumentChild
-                    //assert( childDoc->url().protocol() == INTERNAL_PROTOCOL );
-          path = store->currentDirectory();
-          if ( !path.isEmpty() )
-            path += '/';
-          path += childDoc->url().path();
-          if ( path.startsWith( "/" ) )
-            path = path.mid( 1 ); // remove leading '/', no wanted in manifest
-        }
-        else
-        {
-          kdDebug(30003)<<k_funcinfo<<" external (don't save) url:" << childDoc->url().url()<<endl;
-          path = childDoc->url().url();
-        }
-                // OOo uses a trailing slash for the path to embedded objects (== directories)
-        if ( !path.endsWith( "/" ) )
-          path += '/';
-        QCString mimetype = childDoc->nativeOasisMimeType();
-        if ( mimetype.isEmpty() )
-          mimetype = childDoc->nativeFormatMimeType();
-        manifestWriter->addManifestEntry( path, mimetype );
       }
     }
 

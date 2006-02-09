@@ -117,6 +117,7 @@ void StoreDropTest::showZipContents( QByteArray data, const char* mimeType, bool
         txt += loadTextFile( store, "content.xml" );
         txt += loadTextFile( store, "styles.xml" );
         txt += loadTextFile( store, "settings.xml" );
+        txt += loadTextFile( store, "META-INF/manifest.xml" );
     } else {
         txt += loadTextFile( store, "maindoc.xml" );
     }

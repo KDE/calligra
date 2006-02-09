@@ -72,7 +72,7 @@ public:
    *
    * @see KoDocument
    */
-  virtual KoDocument *parentDocument() const;
+  virtual KoDocument *parentDocument() const; // TODO: remove virtual, makes no sense
 
   virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
 
@@ -108,7 +108,7 @@ public:
    * Save an embedded object to an OASIS store.
    * This is called automatically by the parent KoDocument's saveOasis
    */
-  virtual bool saveOasisToStore( KoStore* store, KoXmlWriter* manifestWriter );
+  virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
   /**
    *  Parses the "object" tag. This does NOT mean creating the child documents.

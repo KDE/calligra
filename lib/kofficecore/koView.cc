@@ -352,8 +352,8 @@ void KoView::partActivateEvent( KParts::PartActivateEvent *event )
       else
       {
         emit regionInvalidated( child->frameRegion( matrix() ), true );
-        emit childActivated( child );
       }
+      emit childActivated( child );
     }
     else if ( child )
     {

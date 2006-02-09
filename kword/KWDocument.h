@@ -856,7 +856,7 @@ protected:
                     QString* plainText = 0, KoPicture* picture = 0, KWTextFrameSet* fs = 0 );
 
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
-    void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter,
+    void saveSelectedFrames( KoXmlWriter& bodyWriter,
                              KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
                              const QValueList<KWFrameView*> &selectedFrames, QString* plainText ) const;
 
