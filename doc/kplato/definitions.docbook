@@ -62,6 +62,9 @@ between 10 and 20 tasks.
 Work breakdown structure is a very common project management tool. Many United
 States government statements of work require work breakdown structures.
 </para>
+<para>See the <xref linkend="configure-wbs" /> section to learn how to
+configure your WBS.
+</para>
 </sect1>
 
 <sect1 id="float">

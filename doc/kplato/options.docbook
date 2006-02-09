@@ -24,48 +24,7 @@
 </guilabel>help with <keycombo
 action="simul">&Shift;<keycap>F1</keycap></keycombo> or using the 
 <guiicon>Help</guiicon> icon.
-
 </para>
-
-<sect2 id="configure-behavior">
-<title><guilabel>Behavior</guilabel></title>
-
-<para>This dialog configures the default behavior for &kplato; regarding
-calculations and constraints.
-</para>
-
-<screenshot>
-<screeninfo>Configure Behavior</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="configure1.png" format="PNG"/>
-</imageobject>
-<textobject><phrase>Configure Behavior</phrase></textobject>
-</mediaobject>
-</screenshot>
-
-<variablelist>
-<varlistentry>
-<term><guilabel>Calculation</guilabel></term>
-<listitem><para>You can choose <guilabel>Manual</guilabel> calculation which
-means you will have to use the <menuchoice><guimenu>Project</guimenu>
-<guimenuitem>Calculate</guimenuitem></menuchoice> menu to generate calculation
-or you can choose to have <guilabel>Immediate on
-change</guilabel> which will immediately do the calculation.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Constraints</guilabel></term>
-<listitem><para>Constraints are applicable restrictions that
-will affect the scope of the project. You will be able to choose here to
-allow overbooking of resources. </para>
-<warning><para>This option is not yet in
-used, this is why it is disabled.</para></warning>
-</listitem>
-</varlistentry>
-</variablelist>
-
-</sect2>
 
 <sect2 id="configure-task-defaults">
 <title><guilabel>Task Defaults</guilabel></title>

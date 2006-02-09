@@ -1,0 +1,67 @@
+<chapter id="configure-wbs">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annma@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo>
+<title>Configuring the Work Breakdown Structure (WBS)</title>
+
+<para>The Work Breakdown Structure introduces numbering for all tasks in the
+project, according to the task structure. The tasks are numbered in a fashion
+that reflects the structure of the project.
+The WBS is defined as a tree structure. 
+</para>
+
+<screenshot>
+<screeninfo>The WBS</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="wbs.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>The WBS</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<para>You can configure the way you want the WBS to look in your project. To do
+so, you can use the <menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Define WBS Pattern...
+</guimenuitem></menuchoice> menu. This displays the WBS Definition Dialog.
+</para>
+
+<sect1 id="define-wbs">
+<title>The <guilabel>Define WBS Pattern...</guilabel> Dialog</title>
+
+<screenshot>
+<screeninfo>WBS Definition Dialog</screeninfo>
+	<mediaobject>
+	  <imageobject>
+	    <imagedata fileref="configure-wbs.png" format="PNG"/>
+	  </imageobject>
+	  <textobject>
+	    <phrase>WBS Definition Dialog</phrase>
+	  </textobject>
+	</mediaobject>
+</screenshot>
+
+<para></para>
+</sect1>
+
+<sect1 id="generate-wbs-code">
+<title><guilabel>Generate WBS Code</guilabel></title>
+<para>The WBS code is auto-generated; simply choose <guimenuitem>Generate WBS
+Code</guimenuitem> from the <guimenu>Tools</guimenu> menu to generate the
+WBS code for the project.</para>
+<para>After you changed the WBS definition you will want to generate the
+new WBS.</para>
+</sect1>
+
+</chapter>
