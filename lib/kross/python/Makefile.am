@@ -4,6 +4,15 @@ kde_module_LTLIBRARIES = krosspython.la
 
 krosspython_la_LDFLAGS = $(KDE_PLUGIN) $(all_libraries) $(LIBPYTHON) $(PYTHONLIB) -module $(VER_INFO)
 
+noinst_HEADERS = \
+    pythonextension.h \
+    pythonmodule.h \
+    pythonobject.h \
+    pythonscript.h \
+    pythonsecurity.h \
+    pythoninterpreter.h \
+    pythonconfig.h
+
 krosspython_la_SOURCES = \
     pythonextension.cpp \
     pythonmodule.cpp \
