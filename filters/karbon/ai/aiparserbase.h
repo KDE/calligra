@@ -244,9 +244,9 @@ private:
   const double getDoubleValue(void);
   const int getIntValue(void);
   const bool getBoolValue(void);
-  const QString& getStringValue(void);
+  const QString getStringValue(void);
   const QString& getReferenceValue(void);
-  const QString& getOperatorValue(void);
+  const QString getOperatorValue(void);
 
 /*Ai88*/  // void _handleSetDash();
 /*Ai88*/  // void _handleGsaveIncludeDocument();

@@ -406,7 +406,7 @@ void AI88Handler::_handleSetStrokeColorGray()
 void AI88Handler::_handleSetFillColorCustom()
 {
   double g = m_delegate->getDoubleValue();
-  const QString &name = m_delegate->getStringValue();
+  const QString name = m_delegate->getStringValue();
   double k = m_delegate->getDoubleValue();
   double y = m_delegate->getDoubleValue();
   double m = m_delegate->getDoubleValue();

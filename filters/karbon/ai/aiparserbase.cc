@@ -1018,18 +1018,16 @@ const bool AIParserBase::getBoolValue(void) {
   return getIntValue() == 1;
 }
 
-const QString& AIParserBase::getStringValue(void) {
+const QString AIParserBase::getStringValue(void) {
   const AIElement &elem = m_stack.pop();
 
-  const QString &string = elem.toString();
-  return string;
+  return elem.toString();
 }
 
-const QString& AIParserBase::getOperatorValue(void) {
+const QString AIParserBase::getOperatorValue(void) {
   const AIElement &elem = m_stack.pop();
 
-  const QString &string = elem.toOperator();
-  return string;
+  return elem.toOperator();
 }
 
 AIOperation AIParserBase::getAIOperation (const char *operand)
