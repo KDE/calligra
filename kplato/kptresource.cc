@@ -724,6 +724,10 @@ int ResourceRequest::workUnits() const {
     return 0;
 }
 
+Task *ResourceRequest::task() const {
+    return m_parent ? m_parent->task() : 0;
+}
+
 /////////
 ResourceGroupRequest::ResourceGroupRequest(ResourceGroup *group, int units)
     : m_group(group), m_units(units) {
@@ -1018,6 +1022,10 @@ void ResourceGroupRequest::reserve(const DateTime &start, const Duration &durati
 
 bool ResourceGroupRequest::isEmpty() const {
     return m_resourceRequests.isEmpty() && m_units == 0;
+}
+
+Task *ResourceGroupRequest::task() const {
+    return m_parent ? &(m_parent->task()) : 0;
 }
 
 /////////

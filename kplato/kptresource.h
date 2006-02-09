@@ -414,7 +414,8 @@ class ResourceRequest {
             if (m_resource) 
                 m_resource->makeAppointment(schedule);
         }
-        
+        Task *task() const;
+    
     private:
         Resource *m_resource;
         int m_units;
@@ -479,7 +480,9 @@ class ResourceGroupRequest {
         void reserve(const DateTime &start, const Duration &duration);
 
         bool isEmpty() const;
-    
+        
+        Task *task() const;
+        
     private:
         ResourceGroup *m_group;
         int m_units;
