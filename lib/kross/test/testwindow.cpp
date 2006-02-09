@@ -47,12 +47,13 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     menuBar()->insertItem( "&File", menuFile );
 
     m_scriptextension = new Kross::Api::ScriptGUIClient(this, this);
-    m_scriptextension->setXMLFile( KGlobal::dirs()->findResource("appdata", "testscripting.rc") );
+    //m_scriptextension->setXMLFile( KGlobal::dirs()->findResource("appdata", "testscripting.rc") );
 
     m_scriptextension->action("executescriptfile")->plug(menuFile);
     //m_scriptextension->action("configurescripts")->plug(menuFile);
     //menuFile->insertSeparator();
-    m_scriptextension->action("scripts")->plug(menuFile);
+    KAction* scriptsaction = m_scriptextension->action("scripts");
+    if(scriptsaction) scriptsaction->plug(menuFile);
     //menuFile->insertItem( ( (KActionMenu*)m_scriptextension->action("scripts") )->popupMenu() );
 
     QVBox* mainbox = new QVBox(this);
