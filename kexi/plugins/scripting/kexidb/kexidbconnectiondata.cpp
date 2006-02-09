@@ -39,7 +39,7 @@ KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
     addFunction("setDriverName", &KexiDBConnectionData::setDriverName,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
 
-    addFunction("useLocalSocketFile", &KexiDBConnectionData::useLocalSocketFile);
+    addFunction("isLocalSocketFileUsed", &KexiDBConnectionData::useLocalSocketFile);
     addFunction("localSocketFileName", &KexiDBConnectionData::localSocketFileName);
 
     addFunction("databaseName", &KexiDBConnectionData::databaseName);
