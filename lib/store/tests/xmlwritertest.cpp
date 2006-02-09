@@ -1,6 +1,6 @@
 #include "xmlwritertest.h"
 
-#include "koxmlwriter.h"
+#include "KoXmlWriter.h"
 
 #include <qapplication.h>
 #include <qfile.h>

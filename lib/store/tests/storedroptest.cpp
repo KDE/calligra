@@ -1,6 +1,6 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <qtextbrowser.h>
 #include <qstringlist.h>
 #include <qbuffer.h>

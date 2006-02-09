@@ -22,7 +22,7 @@
 #include <kcmdlineargs.h>
 #include <kapplication.h>
 
-#include <koStore.h>
+#include <KoStore.h>
 #include <kdebug.h>
 #include <stdlib.h>
 
