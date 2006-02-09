@@ -25,15 +25,16 @@
 #include <qvgroupbox.h>
 //#include <qhgroupbox.h>
 #include <qcombobox.h>
+#include <qdir.h>
+#include <qpopupmenu.h>
+
 #include <ktextedit.h>
 #include <kpushbutton.h>
 #include <kpopupmenu.h>
 #include <kmenubar.h>
 #include <kstandarddirs.h>
-
 #include <kdebug.h>
 
-#include <qpopupmenu.h>
 TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode)
     : KMainWindow()
     , m_interpretername(interpretername)
@@ -47,12 +48,24 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     menuBar()->insertItem( "&File", menuFile );
 
     m_scriptextension = new Kross::Api::ScriptGUIClient(this, this);
-    //m_scriptextension->setXMLFile( KGlobal::dirs()->findResource("appdata", "testscripting.rc") );
 
-    m_scriptextension->action("executescriptfile")->plug(menuFile);
-    //m_scriptextension->action("configurescripts")->plug(menuFile);
+    QString file = KGlobal::dirs()->findResource("appdata", "testscripting.rc");
+    if(file.isNull())
+        file = QDir(QDir::currentDirPath()).filePath("testscripting.rc");
+    else kdDebug()<<"-------------------------222222"<<endl;
+
+    kdDebug()<<"XML-file: "<<file<<endl;
+    m_scriptextension->setXMLFile(file);
+
     //menuFile->insertSeparator();
-    KAction* scriptsaction = m_scriptextension->action("scripts");
+
+    KAction* execaction = m_scriptextension->action("executescriptfile");
+    if(execaction) execaction->plug(menuFile);
+
+    KAction* configaction = m_scriptextension->action("configurescripts");
+    if(configaction) configaction->plug(menuFile);
+
+    KAction* scriptsaction = m_scriptextension->action("installedscripts");
     if(scriptsaction) scriptsaction->plug(menuFile);
     //menuFile->insertItem( ( (KActionMenu*)m_scriptextension->action("scripts") )->popupMenu() );
 

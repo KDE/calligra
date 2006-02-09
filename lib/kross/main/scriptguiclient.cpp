@@ -286,6 +286,28 @@ bool ScriptGUIClient::loadScriptFile()
     return false;
 }
 
+void ScriptGUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
+{
+    KXMLGUIClient::setXMLFile(file, merge, setXMLDoc);
+    loadScriptConfig(file);
+}
+
+void ScriptGUIClient::setLocalXMLFile(const QString &file)
+{
+    KXMLGUIClient::setLocalXMLFile(file);
+    loadScriptConfig(file);
+}
+
+void ScriptGUIClient::setXML(const QString &document, bool merge)
+{
+    KXMLGUIClient::setXML(document, merge);
+}
+
+void ScriptGUIClient::setDOMDocument(const QDomDocument &document, bool merge)
+{
+    KXMLGUIClient::setDOMDocument(document, merge);
+}
+
 bool ScriptGUIClient::executeScriptFile()
 {
     KURL url = openScriptFile( i18n("Execute Script File") );
