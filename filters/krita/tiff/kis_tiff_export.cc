@@ -59,7 +59,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
     
     KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0, "options dialog for tiff");
  
-    if(kdb->exec() == KDialogBase::Cancel)
+    if(kdb->exec() == QDialog::Rejected)
     {
         return KoFilter::OK; // FIXME Cancel doesn't exist :(
     }

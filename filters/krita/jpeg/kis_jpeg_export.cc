@@ -60,7 +60,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QCString& from, const QC
     KisWdgOptionsJPEG* wdg = new KisWdgOptionsJPEG(kdb);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
-    if(kdb->exec() == KDialogBase::Cancel)
+    if(kdb->exec() == QDialog::Rejected)
     {
         return KoFilter::OK; // FIXME Cancel doesn't exist :(
     }
