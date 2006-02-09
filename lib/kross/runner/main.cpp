@@ -115,8 +115,11 @@ int main(int argc, char **argv)
     // Tell which options are supported and parse them.
     static KCmdLineOptions options[] = {
         { "+file", I18N_NOOP("Scriptfile"), 0 },
-        KCmdLineLastOption };    KCmdLineArgs::addCmdLineOptions(options);
+        KCmdLineLastOption
+    };
+    KCmdLineArgs::addCmdLineOptions(options);
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
     // If no options are defined.
     if(args->count() < 1) {
         std::cout << "Syntax: " << KCmdLineArgs::appName() << " scriptfile1 [scriptfile2] [scriptfile3] ..." << std::endl;
@@ -124,7 +127,7 @@ int main(int argc, char **argv)
     }
 
     // Create KApplication instance.
-    app = new KApplication(true, true);
+    app = new KApplication( /* allowStyles */ true, /* GUIenabled */ true );
 
     //QString interpretername = args->getOption("interpreter");
     //QString scriptfilename = args->getOption("scriptfile");
