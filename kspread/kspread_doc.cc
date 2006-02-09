@@ -377,6 +377,25 @@ void Doc::openTemplate (const QString& file)
     initConfig();
 }
 
+void Doc::initEmpty()
+{
+    KConfig *config = Factory::global()->config();
+    int _page=1;
+    if( config->hasGroup("Parameters" ))
+    {
+      config->setGroup( "Parameters" );
+      _page=config->readNumEntry( "NbPage",1 ) ;
+    }
+
+    for( int i=0; i<_page; i++ )
+      map()->addNewSheet();
+
+    resetURL();
+    setEmpty();
+    initConfig();
+    styleManager()->createBuiltinStyles();
+}
+
 KLocale *Doc::locale () const
 {
   return d->locale;

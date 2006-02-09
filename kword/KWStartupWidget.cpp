@@ -33,6 +33,8 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     m_layout = KoPageLayout::standardLayout();
     m_doc = doc;
 
+    setFocusProxy(m_createButton);
+
     QVBoxLayout *lay = new QVBoxLayout(m_sizeTab, KDialog::marginHint());
     m_sizeWidget = new KoPageLayoutSize(m_sizeTab, m_layout, KoUnit::U_MM, m_columns , true, true);
     lay->addWidget(m_sizeWidget);

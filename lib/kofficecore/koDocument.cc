@@ -2539,6 +2539,7 @@ void KoDocument::openTemplate( const QString& file )
         setEmpty();
     } else {
         showLoadingErrorDialog();
+        initEmpty();
     }
 }
 
