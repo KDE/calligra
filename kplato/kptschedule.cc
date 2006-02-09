@@ -331,13 +331,15 @@ double Schedule::actualCostTo(const QDate &date) const {
 
 //-------------------------------------------------
 NodeSchedule::NodeSchedule()
-    : Schedule() {
+    : Schedule(),
+      m_node(0) {
     //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     init();
 }
 
 NodeSchedule::NodeSchedule(Node *node, QString name, Schedule::Type type, long id)
-    : Schedule(name, type, id) {
+    : Schedule(name, type, id),
+      m_node(node) {
     //kdDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
     init();
 }
@@ -649,10 +651,9 @@ void ResourceSchedule::printDebug(QString indent) {
 void MainSchedule::printDebug(QString indent) {
     Schedule::printDebug(indent);
     indent += "!  ";
-    if (!notScheduled) {
-        if (node()) kdDebug()<<indent<<"Node: "<<node()->name()<<endl;
-        else kdDebug()<<indent<<"No parent node!"<<endl;
-    }
+    if (node()) kdDebug()<<indent<<"Node: "<<node()->name()<<endl;
+    else kdDebug()<<indent<<"No parent node!"<<endl;
+    
     kdDebug()<<indent<<"Not scheduled="<<notScheduled<<endl;
     kdDebug()<<indent<<"Start time: "<<startTime.toString()<<endl;
     kdDebug()<<indent<<"End time: " <<endTime.toString()<<endl;
