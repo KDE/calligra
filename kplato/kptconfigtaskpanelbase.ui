@@ -352,7 +352,7 @@ The estimation can be either effort based or duration based. If it is effort bas
     <includehint>kcombobox.h</includehint>
     <includehint>kdatewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
-    <includehint>kplato::durationwidget.h</includehint>
+    <includehint>kptdurationwidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
 </UI>
