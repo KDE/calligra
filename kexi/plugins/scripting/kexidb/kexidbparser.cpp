@@ -58,8 +58,7 @@ const QString KexiDBParser::getClassName() const
 Kross::Api::Object::Ptr KexiDBParser::parse(Kross::Api::List::Ptr args)
 {
     return new Kross::Api::Variant(
-           m_parser->parse(Kross::Api::Variant::toString(args->item(0))),
-           "Kross::Api::KexiDBParser::parse::Bool");
+           QVariant(m_parser->parse(Kross::Api::Variant::toString(args->item(0))),0));
 }
 
 Kross::Api::Object::Ptr KexiDBParser::clear(Kross::Api::List::Ptr)
@@ -70,8 +69,7 @@ Kross::Api::Object::Ptr KexiDBParser::clear(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr KexiDBParser::operation(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_parser->operationString(),
-           "Kross::Api::KexiDBParser::operation::String");
+    return new Kross::Api::Variant(m_parser->operationString());
     return 0;
 }
 
@@ -96,25 +94,21 @@ Kross::Api::Object::Ptr KexiDBParser::connection(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr KexiDBParser::statement(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_parser->statement(),
-           "Kross::Api::KexiDBParser::statement::String");
+    return new Kross::Api::Variant(m_parser->statement());
 }
 
 Kross::Api::Object::Ptr KexiDBParser::errorType(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_parser->error().type(),
-           "Kross::Api::KexiDBParser::errorType::String");
+    return new Kross::Api::Variant(m_parser->error().type());
 }
 
 Kross::Api::Object::Ptr KexiDBParser::errorMsg(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_parser->error().error(),
-           "Kross::Api::KexiDBParser::errorMsg::String");
+    return new Kross::Api::Variant(m_parser->error().error());
 }
 
 Kross::Api::Object::Ptr KexiDBParser::errorAt(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_parser->error().at(),
-           "Kross::Api::KexiDBParser::errorAt::Int");
+    return new Kross::Api::Variant(m_parser->error().at());
 }
 

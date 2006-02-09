@@ -83,9 +83,13 @@ namespace Kross { namespace KexiDB {
             Kross::Api::Object::Ptr setDriverName(Kross::Api::List::Ptr);
 
             /// \return true if a local socket file is used else false.
-            Kross::Api::Object::Ptr useLocalSocketFile(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr localSocketFileUsed(Kross::Api::List::Ptr);
+            /// Set if the local socket file should be used.
+            Kross::Api::Object::Ptr setLocalSocketFileUsed(Kross::Api::List::Ptr);
             /// \return local socket filename.
             Kross::Api::Object::Ptr localSocketFileName(Kross::Api::List::Ptr);
+            /// Set the local socket filename.
+            Kross::Api::Object::Ptr setLocalSocketFileName(Kross::Api::List::Ptr);
 
             // For serverbased drivers
             /// \return the database name.

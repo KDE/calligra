@@ -148,6 +148,11 @@ namespace Kross { namespace KexiDB {
             Kross::Api::Object::Ptr isDatabaseUsed(Kross::Api::List::Ptr);
 
             /**
+             * Returns true the connection is readonly.
+             */
+            Kross::Api::Object::Ptr isReadOnly(Kross::Api::List::Ptr);
+
+            /**
              * Opens an existing database specified by the as
              * argument passed databasename.
              * Wrapper for \a ::KexiDB::Connection::useDatabase

@@ -92,8 +92,7 @@ Kross::Api::Object::Ptr KexiDBDriverManager::driver(Kross::Api::List::Ptr args)
 Kross::Api::Object::Ptr KexiDBDriverManager::lookupByMime(Kross::Api::List::Ptr args)
 {
     return new Kross::Api::Variant(
-        driverManager().lookupByMime( Kross::Api::Variant::toString(args->item(0)) ),
-        "Kross::KexiDB::DriverManager::lookupByMime::String");
+        driverManager().lookupByMime( Kross::Api::Variant::toString(args->item(0)) ));
 }
 
 Kross::Api::Object::Ptr KexiDBDriverManager::mimeForFile(Kross::Api::List::Ptr args)

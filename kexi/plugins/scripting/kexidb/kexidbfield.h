@@ -56,10 +56,15 @@ namespace Kross { namespace KexiDB {
         private:
             ::KexiDB::Field* m_field;
 
-            /// \return the type string for this field, e.g. "Integer" for Integer type.
+            /// Returns the type string for this field, e.g. "Integer" for Integer type.
             Kross::Api::Object::Ptr type(Kross::Api::List::Ptr);
             /// Sets the type string for this field, e.g. "Integer" for Integer type.
             Kross::Api::Object::Ptr setType(Kross::Api::List::Ptr);
+
+            /// Returns the QVariant::typeName which is equivalent to the type this field has.
+            Kross::Api::Object::Ptr variantType(Kross::Api::List::Ptr);
+            /// Set the type this field has according to the defined QVariant::typeName.
+            Kross::Api::Object::Ptr setVariantType(Kross::Api::List::Ptr);
 
             /** Returns the optional subtype for this field. Subtype is a string 
             providing additional hint for field's type. E.g. for BLOB type, it 

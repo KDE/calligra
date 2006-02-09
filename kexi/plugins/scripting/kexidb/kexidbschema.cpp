@@ -58,8 +58,7 @@ KexiDBSchema<T>::~KexiDBSchema<T>()
 template<class T>
 Kross::Api::Object::Ptr KexiDBSchema<T>::name(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_schema->name(),
-           "Kross::KexiDB::KexiDBSchema::name::String");
+    return new Kross::Api::Variant(m_schema->name());
 }
 
 template<class T>
@@ -72,8 +71,7 @@ Kross::Api::Object::Ptr KexiDBSchema<T>::setName(Kross::Api::List::Ptr args)
 template<class T>
 Kross::Api::Object::Ptr KexiDBSchema<T>::caption(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_schema->caption(),
-           "Kross::KexiDB::KexiDBSchema::caption::String");
+    return new Kross::Api::Variant(m_schema->caption());
 }
 
 template<class T>
@@ -86,8 +84,7 @@ Kross::Api::Object::Ptr KexiDBSchema<T>::setCaption(Kross::Api::List::Ptr args)
 template<class T>
 Kross::Api::Object::Ptr KexiDBSchema<T>::description(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_schema->description(),
-           "Kross::KexiDB::KexiDBSchema::description::String");
+    return new Kross::Api::Variant(m_schema->description());
 }
 
 template<class T>
@@ -162,8 +159,7 @@ const QString KexiDBQuerySchema::getClassName() const
 Kross::Api::Object::Ptr KexiDBQuerySchema::statement(Kross::Api::List::Ptr)
 {
     return new Kross::Api::Variant(
-           static_cast< ::KexiDB::QuerySchema* >(m_schema)->statement(),
-           "Kross::KexiDB::KexiDBQuerySchema::statement::String");
+           static_cast< ::KexiDB::QuerySchema* >(m_schema)->statement() );
 }
 
 Kross::Api::Object::Ptr KexiDBQuerySchema::setStatement(Kross::Api::List::Ptr args)

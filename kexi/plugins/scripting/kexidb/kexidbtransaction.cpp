@@ -56,14 +56,12 @@ Kross::Api::Object::Ptr KexiDBTransaction::connection(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr KexiDBTransaction::isActive(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_transaction.active(),
-           "Kross::KexiDB::Transaction::isActive::Bool");
+    return new Kross::Api::Variant(QVariant(m_transaction.active(),0));
 }
 
 Kross::Api::Object::Ptr KexiDBTransaction::isNull(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant(m_transaction.isNull(),
-           "Kross::KexiDB::Transaction::isNull::Bool");
+    return new Kross::Api::Variant(QVariant(m_transaction.isNull(),0));
 }
 
 
