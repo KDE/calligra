@@ -95,7 +95,9 @@ bool KoApplication::start()
     KoDocumentEntry entry = KoDocumentEntry( KoDocument::readNativeService() );
     if ( entry.isEmpty() )
     {
-        // Error message already shown by queryByMimeType
+        kdError( 30003 ) << instanceName() << "part.desktop not found." << endl;
+        kdError( 30003 ) << "Run 'kde-config --path services' to see which directories were searched, assuming kde startup had the same environment as your current shell." << endl;
+        kdError( 30003 ) << "Check your installation (did you install KOffice in a different prefix than KDE, without adding the prefix to /etc/kderc ?)" << endl;
         return false;
     }
 
