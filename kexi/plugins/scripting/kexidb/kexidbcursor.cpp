@@ -28,6 +28,22 @@ KexiDBCursor::KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* curso
     : Kross::Api::Class<KexiDBCursor>("KexiDBCursor", connection)
     , m_cursor(cursor)
 {
+    // Opens the cursor.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("open", m_cursor, &::KexiDB::Cursor::open );
+
+    // Returns true if the cursor is opened else false.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("isOpened", m_cursor, &::KexiDB::Cursor::isOpened );
+
+    // Closes and then opens again the same cursor.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("reopen", m_cursor, &::KexiDB::Cursor::reopen );
+
+    // Closes previously opened cursor.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("close", m_cursor, &::KexiDB::Cursor::close );
+
     // Moves current position to the first record and retrieves it.
     this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
         ("moveFirst", m_cursor, &::KexiDB::Cursor::moveFirst );

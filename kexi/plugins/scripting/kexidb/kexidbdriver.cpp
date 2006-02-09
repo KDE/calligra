@@ -35,6 +35,11 @@ KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
     : Kross::Api::Class<KexiDBDriver>("KexiDBDriver", KexiDBDriverManager::self())
     , m_driver(driver)
 {
+
+    // Return true if this driver is valid else false.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("isValid", driver, &::KexiDB::Driver::isValid );
+
     // The drivers major versionnumber.
     this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,int> >
         ("versionMajor", driver, &::KexiDB::Driver::versionMajor );
@@ -51,6 +56,11 @@ KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
     // Returns true if this driver is file-based.
     this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
         ("isFileDriver", driver, &::KexiDB::Driver::isFileDriver );
+
+    // Return a name of MIME type of files handled by this driver if it is a
+    // file-based database's driver otherwise returns null string.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QString> >
+        ("fileDBDriverMimeType", driver, &::KexiDB::Driver::fileDBDriverMimeType );
 
     // Returns true if the passed string is a system object's name, eg. name
     // of build-in system table that cannot be used or created by a user.
