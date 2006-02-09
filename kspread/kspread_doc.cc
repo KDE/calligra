@@ -383,17 +383,18 @@ void Doc::initEmpty()
     int _page=1;
     if( config->hasGroup("Parameters" ))
     {
-      config->setGroup( "Parameters" );
-      _page=config->readNumEntry( "NbPage",1 ) ;
+        config->setGroup( "Parameters" );
+        _page=config->readNumEntry( "NbPage",1 ) ;
     }
 
     for( int i=0; i<_page; i++ )
-      map()->addNewSheet();
+        map()->addNewSheet();
 
     resetURL();
-    setEmpty();
     initConfig();
     styleManager()->createBuiltinStyles();
+
+    KoDocument::initEmpty();
 }
 
 KLocale *Doc::locale () const
