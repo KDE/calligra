@@ -418,7 +418,10 @@ bool Project::load(QDomElement &element) {
                             MainSchedule *sch = new MainSchedule();
                             if (sch->loadXML(el, *this)) {
                                 addSchedule(sch);
+                                sch->setNode(this);
                                 setParentSchedule(sch);
+                                // If it's here, it's scheduled!
+                                sch->setScheduled(true);
                             } else {
                                 kdError()<<k_funcinfo<<"Failed to load schedule"<<endl;
                                 delete sch;
@@ -506,7 +509,7 @@ void Project::save(QDomElement &element)  const {
         me.appendChild(el);
         QIntDictIterator<Schedule> it = m_schedules;
         for (; it.current(); ++it) {
-            if (!it.current()->isDeleted()) {
+            if (!it.current()->isDeleted() && it.current()->isScheduled()) {
                 QDomElement schs = el.ownerDocument().createElement("schedule");
                 el.appendChild(schs);
                 it.current()->saveXML(schs);
