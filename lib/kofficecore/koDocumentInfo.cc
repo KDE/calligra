@@ -246,13 +246,6 @@ void KoDocumentInfoAuthor::initParameters()
     if ( !name.isEmpty() )
       m_company = name;
   }
-  if ( m_email.isNull() )
-  {
-    QString email = m_emailCfg->readEntry( "EmailAddress" );
-    if ( !email.isEmpty() )
-      m_email = email;
-  }
-
 }
 
 bool KoDocumentInfoAuthor::saveOasis( KoXmlWriter &xmlWriter )
