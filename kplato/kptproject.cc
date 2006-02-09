@@ -122,6 +122,7 @@ void Project::calculate() {
         }
         makeAppointments();
         calcResourceOverbooked();
+        m_currentSchedule->notScheduled = false;
     } else if (type() == Type_Subproject) {
         kdWarning()<<k_funcinfo<<"Subprojects not implemented"<<endl;
     } else {
