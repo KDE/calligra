@@ -646,7 +646,7 @@ void View::slotGenerateWBS() {
 
 void View::slotConfigure() {
     //kdDebug()<<k_funcinfo<<endl;
-    ConfigDialog *dia = new ConfigDialog(getPart()->config());
+    ConfigDialog *dia = new ConfigDialog(getPart()->config(), getProject());
     dia->exec();
     delete dia;
 }

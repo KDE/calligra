@@ -27,14 +27,15 @@ class QWidget;
 namespace KPlato
 {
 
+class Project;
 class TaskDefaultPanel;
-class ConfigBehaviorPanel;
+//class ConfigBehaviorPanel;
 class Config;
 
 class ConfigDialog : public KDialogBase {
     Q_OBJECT
 public:
-    ConfigDialog(Config &config, QWidget *parent=0, const char *name=0);
+    ConfigDialog(Config &config, Project &project, QWidget *parent=0, const char *name=0);
 
 protected slots:
     void slotApply();
@@ -45,7 +46,7 @@ protected slots:
 private:
     Config &m_config;
     TaskDefaultPanel *m_taskDefaultPage;
-    ConfigBehaviorPanel *m_behaviorPage;
+    //ConfigBehaviorPanel *m_behaviorPage;
 
 };
 

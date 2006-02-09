@@ -40,12 +40,12 @@ void Config::load() {
     //kdDebug()<<k_funcinfo<<endl;
     KConfig *config = Factory::global()->config();
     
-    if( config->hasGroup("Behavior"))
+/*    if( config->hasGroup("Behavior"))
     {
         config->setGroup("Behavior");
         m_behavior.calculationMode = config->readNumEntry("CalculationMode",m_behavior.calculationMode);
         m_behavior.allowOverbooking =  config->readBoolEntry("AllowOverbooking",m_behavior.allowOverbooking);
-    }
+    }*/
     if( config->hasGroup("Task defaults"))
     {
         config->setGroup("Task defaults");
@@ -68,9 +68,9 @@ void Config::save() {
         
     KConfig *config = Factory::global()->config();
     
-    config->setGroup( "Behavior" );
-    config->writeEntry("CalculationMode",m_behavior.calculationMode);
-    config->writeEntry("AllowOverbooking",m_behavior.allowOverbooking);
+//     config->setGroup( "Behavior" );
+//     config->writeEntry("CalculationMode",m_behavior.calculationMode);
+//     config->writeEntry("AllowOverbooking",m_behavior.allowOverbooking);
 
     config->setGroup("Task defaults");
     config->writeEntry("Leader", m_taskDefaults.leader());

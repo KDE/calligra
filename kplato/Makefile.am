@@ -45,14 +45,15 @@ libkplatopart_la_SOURCES = \
     standardworktimedialogbase.ui kptstandardworktimedialog.cc \
     kptintervaleditbase.ui kptintervaledit.cc \
     kpttaskgeneralpanel.cc kpttaskdefaultpanel.cc \
+    kptconfigtaskpanelbase.ui \
     kptconfigdialog.cc \
     kpttaskprogresspanel.cc kpttaskprogresspanelbase.ui \
     kpttaskprogressdialog.cc \
-    kptconfigbehaviorpanel.cc kptconfigbehaviorpanelbase.ui \
     kptconfig.cc kptcontext.cc \
     kptresourcesdialog.cc \
     kptwbsdefinitiondialog.cc kptwbsdefinitionpanel.cc kptwbsdefinitionpanelbase.ui \
     kptwbsdefinition.cc
+##    kptconfigbehaviorpanel.cc kptconfigbehaviorpanelbase.ui \
 ##    kptreportview.cc 
 
 # (this is not used)
@@ -89,12 +90,12 @@ noinst_HEADERS = \
     kpttaskgeneralpanel.h kpttaskdefaultpanel.h \
     kptconfigdialog.h \
     kpttaskprogresspanel.h \
-    kptconfigbehaviorpanel.h \
     kptconfig.h kptcontext.h \
     kptresourcesdialog.h \
     kptwbsdefinitiondialog.h kptwbsdefinitionpanel.h \
     kptwbsdefinition.h \
     kpteffortcostmap.h
+##    kptconfigbehaviorpanel.h \
 ##    kptreportview.h
 
 ## The part

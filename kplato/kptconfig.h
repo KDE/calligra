@@ -25,16 +25,16 @@
 namespace KPlato
 {
 
-class Behavior {
-public:
-    enum CalculationMode { Manual, OnChange };
-    Behavior() {
-        calculationMode = Manual;
-        allowOverbooking = true;
-    }
-    int calculationMode;
-    bool allowOverbooking;
-};
+// class Behavior {
+// public:
+//     enum CalculationMode { Manual, OnChange };
+//     Behavior() {
+//         calculationMode = Manual;
+//         allowOverbooking = true;
+//     }
+//     int calculationMode;
+//     bool allowOverbooking;
+// };
 
 class Config {
 public:
@@ -47,11 +47,11 @@ public:
     void save();
 
     Task &taskDefaults() { return m_taskDefaults; }
-    Behavior &behavior() { return m_behavior; }
+//    Behavior &behavior() { return m_behavior; }
     
 private:
     bool m_readWrite;
-    Behavior m_behavior;  
+//    Behavior m_behavior;  
     Task m_taskDefaults;
 
 };

@@ -20,7 +20,7 @@
 #include "kptconfigdialog.h"
 
 #include "kpttaskdefaultpanel.h"
-#include "kptconfigbehaviorpanel.h"
+//#include "kptconfigbehaviorpanel.h"
 
 #include "kptconfig.h"
 #include "kptproject.h"
@@ -45,23 +45,23 @@ static inline QPixmap loadIcon( const char * name ) {
 }
 
 
-ConfigDialog::ConfigDialog(Config &config, QWidget *parent, const char *n)
+ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, const char *n)
     : KDialogBase(KDialogBase::IconList, i18n("Configure KPlato"),
                   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
                   KDialogBase::Ok, parent),
       m_config(config)
 {
 
-    QVBox *page = addVBoxPage(i18n("Behavior"), i18n("Behavior"), loadIcon("misc"));
-    m_behaviorPage = new ConfigBehaviorPanel(config.behavior(), page);
+/*    QVBox *page = addVBoxPage(i18n("Behavior"), i18n("Behavior"), loadIcon("misc"));
+    m_behaviorPage = new ConfigBehaviorPanel(config.behavior(), page);*/
     
-    page = addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
-    m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), 0, page);
+    QVBox *page = addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
+    m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), project.standardWorktime(), page);
     
     enableButtonOK(false);
     enableButtonApply(false);
     
-    connect(m_behaviorPage, SIGNAL(changed()), SLOT(slotChanged()));
+//    connect(m_behaviorPage, SIGNAL(changed()), SLOT(slotChanged()));
     connect(m_taskDefaultPage, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
@@ -69,26 +69,31 @@ ConfigDialog::ConfigDialog(Config &config, QWidget *parent, const char *n)
 void ConfigDialog::slotApply() {
     if (!m_taskDefaultPage->ok())
         return;
-    if (!m_behaviorPage->ok())
-        return;
+/*    if (!m_behaviorPage->ok())
+        return;*/
     KCommand *cmd = m_taskDefaultPage->buildCommand(0);
     if (cmd)
-        cmd->execute();    
+        cmd->execute();
 
-    m_behaviorPage->apply();
+//    m_behaviorPage->apply();
+    enableButtonOK(false);
+    enableButtonApply(false);
 }
 
 void ConfigDialog::slotOk() {
     slotApply();
+    enableButtonOK(false);
+    enableButtonApply(false);
     accept();
 }
 
 void ConfigDialog::slotDefault() {
     kdDebug()<<k_funcinfo<<endl;
     m_taskDefaultPage->setStartValues(m_config.taskDefaults());
-    m_behaviorPage->setStartValues();
+//    m_behaviorPage->setStartValues();
     
-    //enableButtonOk(false);
+    enableButtonOK(false);
+    enableButtonApply(false);
 }
 
 void ConfigDialog::slotChanged() {

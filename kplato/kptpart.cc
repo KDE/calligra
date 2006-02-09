@@ -360,7 +360,7 @@ void Part::slotCommandExecuted() {
       return;
       
     if (m_calculate)
-        m_view->slotUpdate(config().behavior().calculationMode == Behavior::OnChange);
+        m_view->slotUpdate(false/*config().behavior().calculationMode == Behavior::OnChange*/);
     else if (m_update)
         m_view->slotUpdate(false);
 

@@ -50,6 +50,7 @@ Node::Node(Node &node, Node *parent)
     init();
     m_name = node.name();
     m_leader = node.leader();
+    m_description = node.description();
     m_constraint = (ConstraintType) node.constraint();
     m_constraintStartTime = node.constraintStartTime();
     m_constraintEndTime = node.constraintEndTime();
