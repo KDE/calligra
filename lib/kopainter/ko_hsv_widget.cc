@@ -46,11 +46,11 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name
     m_VSelector-> setFixedSize( 30, 120);
 
     /* setup slider labels */
-    mHLabel = new QLabel("H", this);
+    mHLabel = new QLabel("H:", this);
     mHLabel->setFixedSize(12, 20);
-    mSLabel = new QLabel("S", this);
+    mSLabel = new QLabel("S:", this);
     mSLabel->setFixedSize(12, 20);
-    mVLabel = new QLabel("V", this);
+    mVLabel = new QLabel("V:", this);
     mVLabel->setFixedSize(12, 20);
 
     /* setup spin box */

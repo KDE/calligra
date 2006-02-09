@@ -48,7 +48,7 @@ KoGrayWidget::KoGrayWidget(QWidget *parent, const char *name) : super(parent, na
     mSlider->slotSetColor2(QColor(0, 0, 0));
 
     /* setup slider labels */
-    mLabel = new QLabel("K", this);
+    mLabel = new QLabel("K:", this);
     mLabel->setFixedWidth(12);
     mLabel->setFixedHeight(20);
 

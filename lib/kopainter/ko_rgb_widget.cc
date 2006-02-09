@@ -58,13 +58,13 @@ KoRGBWidget::KoRGBWidget(QWidget *parent, const char *name) : super(parent, name
     mBSlider->setFocusPolicy( QWidget::ClickFocus );
 
     /* setup slider labels */
-    mRLabel = new QLabel("R", this);
+    mRLabel = new QLabel("R:", this);
     mRLabel->setFixedWidth(12);
     mRLabel->setFixedHeight(20);
-    mGLabel = new QLabel("G", this);
+    mGLabel = new QLabel("G:", this);
     mGLabel->setFixedWidth(12);
     mGLabel->setFixedHeight(20);
-    mBLabel = new QLabel("B", this);
+    mBLabel = new QLabel("B:", this);
     mBLabel->setFixedWidth(12);
     mBLabel->setFixedHeight(20);
 
