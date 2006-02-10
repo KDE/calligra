@@ -130,7 +130,7 @@ void ScriptGUIClient::reloadInstalledScripts()
     QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*/*.rc");
     //files.sort();
     for(QStringList::iterator it = files.begin(); it != files.end(); ++it)
-        loadScriptConfig(*it);
+        loadScriptConfigFile(*it);
 }
 
 bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
@@ -180,7 +180,7 @@ bool ScriptGUIClient::uninstallScriptPackage(const QString& scriptpackagepath)
     return true;
 }
 
-bool ScriptGUIClient::loadScriptConfig(const QString& scriptconfigfile)
+bool ScriptGUIClient::loadScriptConfigFile(const QString& scriptconfigfile)
 {
     kdDebug() << "ScriptGUIClient::loadScriptConfig file=" << scriptconfigfile << endl;
 
@@ -197,7 +197,26 @@ bool ScriptGUIClient::loadScriptConfig(const QString& scriptconfigfile)
         return false;
     }
 
-    setDOMDocument(domdoc, true);
+    return loadScriptConfigDocument(scriptconfigfile, domdoc);
+}
+
+bool ScriptGUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, const QDomDocument &document)
+{
+    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
+    QDomNodeList nodelist = document.elementsByTagName("ScriptAction");
+    uint nodelistcount = nodelist.count();
+    for(uint i = 0; i < nodelistcount; i++) {
+        ScriptAction::Ptr action = new ScriptAction(scriptconfigfile, nodelist.item(i).toElement());
+
+        if(installedcollection)
+            installedcollection->attach( action );
+
+        connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
+                this, SLOT( executionFailed(const QString&, const QString&) ));
+        connect(action.data(), SIGNAL( success() ),
+                this, SLOT( successfullyExecuted() ));
+    }
+    emit collectionChanged(installedcollection);
     return true;
 }
 
@@ -212,22 +231,8 @@ void ScriptGUIClient::setDOMDocument(const QDomDocument &document, bool merge)
     if(! merge && installedcollection)
         installedcollection->clear();
 
-    QDomNodeList nodelist = document.elementsByTagName("ScriptAction");
-    uint nodelistcount = nodelist.count();
-    for(uint i = 0; i < nodelistcount; i++) {
-        ScriptAction::Ptr action = new ScriptAction(xmlFile(), nodelist.item(i).toElement());
-
-        if(installedcollection)
-            installedcollection->attach( action );
-
-        connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
-                this, SLOT( executionFailed(const QString&, const QString&) ));
-        connect(action.data(), SIGNAL( success() ),
-                this, SLOT( successfullyExecuted() ));
-    }
-
     KXMLGUIClient::setDOMDocument(document, merge);
-    emit collectionChanged(installedcollection);
+    loadScriptConfigDocument(xmlFile(), document);
 }
 
 void ScriptGUIClient::successfullyExecuted()
@@ -240,7 +245,6 @@ void ScriptGUIClient::successfullyExecuted()
             ScriptAction* actionptr = const_cast< ScriptAction* >( action );
             executedcollection->detach(actionptr);
             executedcollection->attach(actionptr);
-
             emit collectionChanged(executedcollection);
         }
     }

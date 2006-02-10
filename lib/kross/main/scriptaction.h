@@ -73,6 +73,8 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
+             * \param scriptconfigfile The XML-configurationfile
+             *        the DOM-element was readed from.
              * \param element The QDomElement which will be used
              *        to setup the \a ScriptAction attributes.
              */

@@ -123,10 +123,16 @@ namespace Kross { namespace Api {
             /**
              * Load the scriptpackage's configurationfile
              * \p scriptconfigfile and add the defined \a ScriptAction
-             * instances that will be added to the list of installed
-             * scripts.
+             * instances to the list of installed scripts.
              */
-            bool loadScriptConfig(const QString& scriptconfigfile);
+            bool loadScriptConfigFile(const QString& scriptconfigfile);
+
+            /**
+             * Load the \p document DOM-document from the scriptpackage's
+             * XML-configfile \p scriptconfigfile and add the defined
+             * \a ScriptAction instances to the list of installed scripts.
+             */
+            bool loadScriptConfigDocument(const QString& scriptconfigfile, const QDomDocument &document);
 
             /// KXMLGUIClient overloaded method to set the XML file.
             virtual void setXMLFile(const QString& file, bool merge = false, bool setXMLDoc = true);
