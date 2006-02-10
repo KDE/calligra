@@ -130,10 +130,6 @@ namespace Kross { namespace Api {
 
             /// KXMLGUIClient overloaded method to set the XML file.
             virtual void setXMLFile(const QString& file, bool merge = false, bool setXMLDoc = true);
-            /// KXMLGUIClient overloaded method to set the local XML file.
-            virtual void setLocalXMLFile(const QString &file);
-            /// KXMLGUIClient overloaded method to set the XML.
-            virtual void setXML(const QString &document, bool merge = false);
             /// KXMLGUIClient overloaded method to set the XML DOM-document.
             virtual void setDOMDocument(const QDomDocument &document, bool merge = false);
 

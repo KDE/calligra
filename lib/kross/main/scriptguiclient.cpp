@@ -197,13 +197,25 @@ bool ScriptGUIClient::loadScriptConfig(const QString& scriptconfigfile)
         return false;
     }
 
-    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
+    setDOMDocument(domdoc, true);
+    return true;
+}
 
-    // walk throuh the list of Scripts-elements.
-    QDomNodeList nodelist = domdoc.elementsByTagName("ScriptAction");
+void ScriptGUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
+{
+    KXMLGUIClient::setXMLFile(file, merge, setXMLDoc);
+}
+
+void ScriptGUIClient::setDOMDocument(const QDomDocument &document, bool merge)
+{
+    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
+    if(! merge && installedcollection)
+        installedcollection->clear();
+
+    QDomNodeList nodelist = document.elementsByTagName("ScriptAction");
     uint nodelistcount = nodelist.count();
     for(uint i = 0; i < nodelistcount; i++) {
-        ScriptAction::Ptr action = new ScriptAction(scriptconfigfile, nodelist.item(i).toElement());
+        ScriptAction::Ptr action = new ScriptAction(xmlFile(), nodelist.item(i).toElement());
 
         if(installedcollection)
             installedcollection->attach( action );
@@ -214,8 +226,8 @@ bool ScriptGUIClient::loadScriptConfig(const QString& scriptconfigfile)
                 this, SLOT( successfullyExecuted() ));
     }
 
+    KXMLGUIClient::setDOMDocument(document, merge);
     emit collectionChanged(installedcollection);
-    return true;
 }
 
 void ScriptGUIClient::successfullyExecuted()
@@ -284,28 +296,6 @@ bool ScriptGUIClient::loadScriptFile()
         }
     }
     return false;
-}
-
-void ScriptGUIClient::setXMLFile(const QString& file, bool merge, bool setXMLDoc)
-{
-    KXMLGUIClient::setXMLFile(file, merge, setXMLDoc);
-    loadScriptConfig(file);
-}
-
-void ScriptGUIClient::setLocalXMLFile(const QString &file)
-{
-    KXMLGUIClient::setLocalXMLFile(file);
-    loadScriptConfig(file);
-}
-
-void ScriptGUIClient::setXML(const QString &document, bool merge)
-{
-    KXMLGUIClient::setXML(document, merge);
-}
-
-void ScriptGUIClient::setDOMDocument(const QDomDocument &document, bool merge)
-{
-    KXMLGUIClient::setDOMDocument(document, merge);
 }
 
 bool ScriptGUIClient::executeScriptFile()
