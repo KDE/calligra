@@ -217,6 +217,7 @@ class KEXICORE_EXPORT KexiBLOBBuffer : public QObject
 		};
 		class Private;
 		Private *d;
+		friend class Handle;
 };
 
 #endif
