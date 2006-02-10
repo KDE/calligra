@@ -119,12 +119,6 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
     if(t->isHidden() || (t->measureSystem() == dontShow))
       continue;
 
-    QString listText = "<b>" + t->name() + "</b>";
-
-    if(!t->description().isEmpty()) {
-      listText += "<br>" + t->description();
-    }
-
     KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
     QImage icon = t->loadPicture(instance).convertToImage();
     icon = icon.smoothScale(64, 64, QImage::ScaleMin);
@@ -383,10 +377,10 @@ void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
     if(static_cast<KoFileListItem*>(item)->fileItem()) {
       KFileItem* fileItem = static_cast<KoFileListItem*>(item)->fileItem();
       QString details = "<center><table border=\"0\">";
-      details += "<tr><td><b>Modified:</b></td>";
-      details += "<td>" + fileItem->timeString(KIO::UDS_MODIFICATION_TIME) + "</td></tr>";
-      details += "<tr><td><b>Accessed:</b></td>";
-      details += "<td>" + fileItem->timeString(KIO::UDS_ACCESS_TIME) + "</td></tr>";
+      details += i18n("File modification date and time. %1 is date time", "<tr><td><b>Modified:</b></td><td>%1</td></tr>")
+          .arg(fileItem->timeString(KIO::UDS_MODIFICATION_TIME));
+      details += i18n("File access date and time. %1 is date time", "<tr><td><b>Accessed:</b></td><td>%1</td></tr>")
+          .arg(fileItem->timeString(KIO::UDS_ACCESS_TIME));
       details += "</table></center>";
       m_detailsLabel->setText(details);
     } else {
