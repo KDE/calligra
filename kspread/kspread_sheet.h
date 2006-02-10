@@ -507,7 +507,6 @@ public:
 
     /**
      * Sets the contents of the cell at row,column to text
-     * @param updateDepends set to false to disable updating the dependencies
      */
     void setText( int row, int column, const QString& text,
                   bool asString = false );
