@@ -182,78 +182,39 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) object='%1'").arg(object.as_string().c_str()) << endl;
 #endif
-
-    if(object.isNumeric()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isNumeric") << endl;
-#endif
-        //FIXME add isUnsignedLong() to Py::Long (or create
-        // an own Py::UnsignedLong class) and if true used it
-        // rather then long to prevent overflows (needed to
-        // handle e.g. uint correct!)
-
-        //Py::Long l = object;
-        //return new Kross::Api::Variant(Q_LLONG(long(l)));
-
-        Py::Int i = object;
-        return new Kross::Api::Variant(int(i));
-    }
-
-    if(object.isString()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isString='%1'").arg(object.as_string().c_str()) << endl;
-#endif
-        return new Kross::Api::Variant(QString(object.as_string().c_str()));
-    }
-
-    if(object.isTuple()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isTuple") << endl;
-#endif
-        Py::Tuple tuple = object;
-        return toObject(tuple).data();
-    }
-
-    if(object.isList()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isList") << endl;
-#endif
-        Py::List list = object;
-        return toObject(list).data();
-    }
-
-    if(object.isDict()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isDict") << endl;
-#endif
-        Py::Dict dict(object.ptr());
-        return toObject(dict).data();
-    }
-
-    if(object.isInstance()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isInstance") << endl;
-#endif
-        return new PythonObject(object);
-    }
-
-
-    /*TODO
-    if(object.isUnicode()) {
-        Py::String s = object;
-        return Kross::Api::Variant::create(QVariant(s.as_unicodestring().c_str()));
-    }
-    isMapping()
-    isSequence()
-    isTrue()
-    */
-
-    if(object == Py::None()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isNone") << endl;
-#endif
+    if(object == Py::None())
         return 0;
+    PyTypeObject *type = (PyTypeObject*) object.type().ptr();
+#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+    kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) type='%1'").arg(type->tp_name) << endl;
+#endif
+    if(type == &PyInt_Type)
+        return new Kross::Api::Variant(int(Py::Int(object)));
+    if(type == &PyString_Type)
+        return new Kross::Api::Variant(object.as_string().c_str());
+#ifdef Py_USING_UNICODE
+    if(type == &PyUnicode_Type) {
+        std::wstring ws = Py::String(object).as_unicodestring();
+        std::string s;
+        std::copy(ws.begin(), ws.end(), std::back_inserter(s));
+        return new Kross::Api::Variant(s.c_str());
     }
+#endif
+    if(type == &PyBool_Type)
+        return new Kross::Api::Variant(QVariant(object.isTrue(),0));
+    if(type == &PyLong_Type)
+        return new Kross::Api::Variant(Q_LLONG(long(Py::Long(object))));
+    if(type == &PyFloat_Type)
+        return new Kross::Api::Variant(double(Py::Float(object)));
+    if(type == &PyTuple_Type)
+        return toObject(Py::Tuple(object)).data();
+    if(type == &PyList_Type)
+        return toObject(Py::List(object)).data();
+    if(type == &PyDict_Type)
+        return toObject(Py::Dict(object.ptr())).data();
+
+    if(object.isInstance())
+        return new PythonObject(object);
 
     Py::ExtensionObject<PythonExtension> extobj(object);
     PythonExtension* extension = extobj.extensionObject();
