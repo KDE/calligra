@@ -171,9 +171,8 @@ void ResourceAppointmentsView::slotUpdate() {
 }
 
 
-void ResourceAppointmentsView::print(KPrinter &printer) {
+void ResourceAppointmentsView::print(KPrinter &/*printer*/) {
     kdDebug()<<k_funcinfo<<endl;
-    Q_UNUSED(printer);
 }
 
 // bool ResourceAppointmentsView::setContext(Context::ResourceAppointmentsView &context) {

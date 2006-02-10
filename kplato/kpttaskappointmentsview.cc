@@ -136,9 +136,8 @@ void TaskAppointmentsView::slotUpdate() {
 }
 
 
-void TaskAppointmentsView::print(KPrinter &printer) {
+void TaskAppointmentsView::print(KPrinter &/*printer*/) {
     kdDebug()<<k_funcinfo<<endl;
-    Q_UNUSED(printer);
 }
 
 // bool TaskAppointmentsView::setContext(Context::TaskAppointmentsView &context) {
