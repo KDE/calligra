@@ -3,7 +3,7 @@
  * Kalle Dalheimer <kalle@kde.org>
  */
 
-#include <limits> // For basic data types characteristics.
+#include <float.h> // For basic data types characteristics.
 
 #include "kchart_part.h"
 #include "kchart_view.h"
@@ -414,8 +414,8 @@ void KChartPart::createDisplayData()
 	// Calculate the min, max, open and close values for each row.
 	m_displayData.expand(tmpData.usedRows(), 4);
 	for (uint row = 0; row < tmpData.usedRows(); row++) {
-	    double  minVal   = numeric_limits<double>::max() ;
-	    double  maxVal   = -numeric_limits<double>::max() ;
+	    double  minVal   = DBL_MAX;
+	    double  maxVal   = -DBL_MAX;
 
 	    // Calculate min and max for this row.
 	    //
