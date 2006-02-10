@@ -234,8 +234,8 @@ public:
 	 *
 	 * @param visitor the visitor to accept
 	 */
-	virtual void accept( VVisitor& visitor ) 
-		{ Q_UNUSED( visitor ); }
+	virtual void accept( VVisitor& /*visitor*/ ) 
+		{ }
 
 	/**
 	 * This function is important for undo/redo. It inserts newObject in front
