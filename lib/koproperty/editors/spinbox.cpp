@@ -25,7 +25,6 @@
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qpainter.h>
-#include <limits>
 
 #ifdef QT_ONLY
 //! \todo

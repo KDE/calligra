@@ -183,6 +183,7 @@ class KOPROPERTY_EXPORT Set : public QObject
 	protected:
 		SetPrivate *d;
 
+	friend class Iterator;
 	friend class Property;
 	friend class Buffer;
 };
