@@ -6,6 +6,11 @@
 #ifndef __CXX_Objects__h
 #define __CXX_Objects__h
 
+// Prevent warnings
+#if defined(_XOPEN_SOURCE)
+#undef _XOPEN_SOURCE
+#endif
+
 #include "Python.h"
 #include "Config.hxx"
 #include "Exception.hxx"

@@ -138,6 +138,8 @@ Kross::Api::Object::Ptr RubyScript::execute()
 
 Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api::List::Ptr args)
 {
+    Q_UNUSED(name)
+    Q_UNUSED(args)
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "RubyScript::callFunction()" << endl;
 #endif
@@ -164,6 +166,7 @@ const QStringList& RubyScript::getClassNames()
 
 Kross::Api::Object::Ptr RubyScript::classInstance(const QString& name)
 {
+    Q_UNUSED(name)
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "RubyScript::classInstance()" << endl;
 #endif
