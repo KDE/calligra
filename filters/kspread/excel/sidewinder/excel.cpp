@@ -23,7 +23,6 @@
 #include <iostream>
 #include <iomanip>
 #include <vector>
-#include <sstream>
 #include <string>
 #include <map>
 #include <stdio.h> // memcpy
@@ -5555,7 +5554,7 @@ void mergeTokens( UStringStack* stack, int count, UString mergeString )
   {
 	count--;
     
-    UString last = stack->at( stack->size()-1 );
+    UString last = (*stack)[ stack->size()-1 ];
     UString tmp = last;
     tmp.append( s1 );
     s1 = tmp;

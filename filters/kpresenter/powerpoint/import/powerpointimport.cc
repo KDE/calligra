@@ -50,9 +50,13 @@ typedef KGenericFactory<PowerPointImport, KoFilter> PowerPointImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libpowerpointimport, 
   PowerPointImportFactory( "kofficefilters" ) )
 
+namespace Libppt {
+
 inline QConstString string( const Libppt::UString& str ) 
 {
    return QConstString( reinterpret_cast<const QChar*>( str.data() ), str.length() );
+}
+
 }
 
 class PowerPointImport::Private
@@ -1331,7 +1335,7 @@ void PowerPointImport::processTextObjectForBody( TextObject* textObject, KoXmlWr
   // count error if i begins with 0
     for (unsigned i=0; i<textObject->listSize(); i++)
     {
-      pStr = string(textObject->text(i)).string();
+      pStr = Libppt::string(textObject->text(i)).string();
       if (textObject->bulletFlag(i) == 1 )
       {
         xmlWriter->startElement( "text:list" ); 
@@ -1375,7 +1379,7 @@ void PowerPointImport::processSlideForBody( unsigned slideNo, Slide* slide, KoXm
 {
   if( !slide || !xmlWriter ) return;
 
-  QString nameStr = string( slide->title() ).string();
+  QString nameStr = Libppt::string( slide->title() ).string();
   if( nameStr.isEmpty() )
     nameStr = QString("page%1").arg(slideNo+1);
 

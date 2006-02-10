@@ -63,7 +63,7 @@ ImageExport::convert(const QCString& from, const QCString& to)
         kdWarning() << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;
     }
-    KPrDocument * kpresenterdoc = static_cast<const KPrDocument *>(document);
+    KPrDocument * kpresenterdoc = const_cast<KPrDocument *>(static_cast<const KPrDocument *>(document));
 
     if ( kpresenterdoc->mimeType() != "application/x-kpresenter" )
     {
