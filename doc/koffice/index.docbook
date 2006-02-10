@@ -540,6 +540,7 @@ In the &koffice; sources you'll find an example application in the
 </itemizedlist>
 </sect1>
 
+<!--
 <sect1 id="programmingplugin">
 <title>Developing &koffice; Plugins</title>
 <para>
@@ -565,9 +566,11 @@ TO BE WRITTEN.
 <title>Creating Reports with Kugar</title>
 <para>
 TO BE WRITTEN.
-<!--Maybe this should go completely into the
+
+Maybe this should go completely into the
 Kugar manual? So we just keep a reference to the kugar manual
-here.-->
+here.
+
 </para>
 </sect1>
 
@@ -575,7 +578,9 @@ here.-->
 <title>Integrating a Database with Kexi</title>
 <para>
 TO BE WRITTEN.
-<!-- Again, should this just be a reference to kexi documentation? -->
+
+Again, should this just be a reference to kexi documentation?
+
 </para>
 </sect1>
 
@@ -585,6 +590,8 @@ TO BE WRITTEN.
 TO BE WRITTEN.
 </para>
 </sect1>
+
+-->
 
 </chapter>
 
