@@ -34,37 +34,31 @@ AC_SUBST(LIBEXIF_CFLAGS)
 #---------------------------------------------------------
 # libexif detection
 #---------------------------------------------------------
-AC_MSG_CHECKING(for libexif headers)
-    if test ! -r /usr/include/libexif/exif-loader.h; then
-        LIBEXIF=""
-        AC_MSG_RESULT([not found])
-    else
-        AC_MSG_CHECKING([if C++ program with exif can be compiled])
-        AC_LANG_SAVE
-        AC_LANG_CPLUSPLUS
-        ac_save_CXXFLAGS="$CXXFLAGS"
-        CXXFLAGS="$CXXFLAGS"
-        AC_CACHE_VAL(exif_build,
-        [
-            AC_TRY_COMPILE([
-            extern "C" {
-#include <libexif/exif-loader.h>
-#include <libexif/exif-utils.h>
+AC_MSG_CHECKING([if C++ program with exif can be compiled])
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+ac_save_CXXFLAGS="$CXXFLAGS"
+CXXFLAGS="$CXXFLAGS $LIBEXIF_CFLAGS"
+AC_CACHE_VAL(exif_build,
+[
+    AC_TRY_COMPILE([
+    extern "C" {
+#include <exif-loader.h>
+#include <exif-utils.h>
 }
-            ],[
-                ExifLoader *l = exif_loader_new ();
-                exif_loader_write_file (l,"kikoo");
-                return 0;
-            ], exif_build=yes,
-            exif_build=no)
-        ])
-        AC_MSG_RESULT($exif_build)
-        if test "$exif_build" = "no"; then
-            LIBEXIF=""
-        fi
-        CXXFLAGS="$ac_save_CXXFLAGS"
-        AC_LANG_RESTORE
-    fi
+    ],[
+        ExifLoader *l = exif_loader_new ();
+        exif_loader_write_file (l,"kikoo");
+        return 0;
+    ], exif_build=yes,
+    exif_build=no)
+])
+AC_MSG_RESULT($exif_build)
+if test "$exif_build" = "no"; then
+    LIBEXIF=""
+fi
+CXXFLAGS="$ac_save_CXXFLAGS"
+AC_LANG_RESTORE
 
                 
 AM_CONDITIONAL(have_exif, test -n "$LIBEXIF")
