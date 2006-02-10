@@ -93,7 +93,7 @@ separator - and level 2 will be Letter upper case.</para>
 </screenshot>
 
 <para>To set a new level, choose the level number in the box near the
-<guibutton>Add Level</guibutton> button then click on the <guibutton>Add
+<guibutton>Add Level</guibutton> button then click the <guibutton>Add
 Level</guibutton> button. Then choose the Code for the level and the
 separator.</para>
 
@@ -110,8 +110,8 @@ separator.</para>
 </screenshot>
 
 <para>To remove a level, choose the level number in the first column of the
-list and click on it. The level row is highlighted and the level number changes
-to bold. Then click on the <guibutton>Remove</guibutton> button. This is
+list and click on it. The level row is then highlighted and the level number
+changes to bold. Then click the <guibutton>Remove</guibutton> button. This is
 demonstrated on the screenshot with Level 2.</para>
 
 <screenshot>
