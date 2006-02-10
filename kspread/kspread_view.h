@@ -723,6 +723,8 @@ private:
     void spellCleanup();
 
     Cell* nextFindValidCell( int col, int row );
+    
+    friend class Private;
 };
 
 } // namespace KSpread
