@@ -34,7 +34,7 @@
 
 <sect1 id="import-export">
 <title>Importing/Exporting Documents</title>
-<para>The <guimenuitem>Import</guimenuitem> menu option on the <guimenu>File</guimenu> menu currently loads a &kivio; or &XML; document into a new &kivio; application.</para>
+<para>The <guimenuitem>Import...</guimenuitem> menu option on the <guimenu>File</guimenu> menu currently loads a &kivio; or &XML; document into a new &kivio; application.</para>
 <para>The <guimenuitem>Export...</guimenuitem> menu option on the <guimenu>File</guimenu> menu currently perform the same functions as <menuchoice><guimenu>File</guimenu> <guimenuitem>Save As...</guimenuitem></menuchoice>. These options let you save a document under a different name or into an other format.</para>
 </sect1>
 

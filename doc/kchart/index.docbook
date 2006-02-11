@@ -192,7 +192,7 @@ To start the wizard simply click on the
 <para>
 The first step in the wizard is to actually choose the data source.
 If the selected data area does not match the data you want,
-select the data now</para>
+select the data now.</para>
 <para>
 Include cells that you want to use as row and column labels,
 if you want them in the chart.</para>

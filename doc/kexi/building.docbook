@@ -61,7 +61,7 @@ the same reason, the table name is not yet visible in the
 
 
 <sect2 id="design-window">
-<title>Table Designer window</title>
+<title>The Table Designer window</title>
 <itemizedlist>
 <title>Table Designer window consists of following columns:</title>
 <listitem><para>
@@ -69,23 +69,23 @@ the same reason, the table name is not yet visible in the
 <link linkend="building-advanced-database">in a later chapter</link>. -->
 </para></listitem>
 <listitem><para>
-<emphasis>Filed Name</emphasis> - field name (in other words: column name)
+<emphasis>Field Name</emphasis> - field name (in other words: column name)
 which will be visible during data entering.
 </para></listitem>
 <listitem><para>
-<emphasis>Data Type</emphasis> - a combo box containing a list of data types
+<emphasis>Data Type</emphasis> - a combo box containing a list of data types,
 allowing to set a main rule for entered data for a given field. For example,
-when integer number data type is set for a field, database user will not able
-to enter a letter characters into this field.
+when an integer number data type is set for a field, a database user will not
+able to enter letter characters into this field.
 </para></listitem>
 <listitem><para>
-<emphasis>Comments</emphasis> - you can enter here any informations useful for
+<emphasis>Comments</emphasis> - you can enter here any information useful for
 understanding what the given field is provided for. This additional text will
-be saved within the table design and only visible when it is designed.
+be saved within the table design and only visible in design mode.
 </para></listitem>
 </itemizedlist>
 <para>
-In <emphasis>Table designer</emphasis> window, every row corresponds to
+In the <emphasis>Table designer</emphasis> window, every row corresponds to
 a single table field. You can recognize you are in <emphasis>design
 mode</emphasis> because the <!-- <img src="icons/state_edit.png" class="icon"> -->
 <emphasis>Switch to Design View mode</emphasis> button is toggled on within
@@ -95,27 +95,29 @@ the main &kexi; toolbar<!-- (see the figure below) -->.
 <itemizedlist>
 <title>To start entering the <emphasis>Persons</emphasis> table design:</title>
 <listitem><para>
-In the first row click on the cell in <emphasis>Field name</emphasis> column
-and enter <emphasis>name</emphasis> as field name.
+In the first row click on the cell in the <emphasis>Field name</emphasis>
+column and enter <emphasis>name</emphasis> as field name.
 </para>
 <itemizedlist>
 <title>Notes about field names</title>
 <listitem><para>
-You must not left name for any of your fields empty.
+Every field must have a name, it cannot be empty.
 </para></listitem>
 <listitem><para>
-Field names could not contain natonal character (like ±, ¶, Ü), special
-characters or space characters. The names must only contain roman letters,
+Field names may not contain special characters (like ±, ¶, Ü)
+or space characters. The names must only contain <!--roman -->letters,
+<!-- JSTANIEK: TODO: what about for example japanese letters? Are they allowed in japanese versions?-->
 numbers and underscore sign &quot;_&quot;. Use the latter instead of
 spaces or dashes.
 </para></listitem>
 <listitem><para>
-Field names must be started with a roman letter or underscore sign
+Field names must be started with a letter or underscore sign
 &quot;_&quot;, never with a number.
 </para></listitem>
 <listitem><para>
-It does not matter whether you are using small or capital letters. For
-&kexi; databases, &quot;Persons&quot; is the same ad &quot;persons&quot; name.
+It does not matter whether you are using small or capital letters.
+For &kexi; the database name &quot;Persons&quot; is the same as
+&quot;persons&quot;.
 </para></listitem>
 </itemizedlist>
 </listitem>
@@ -129,20 +131,21 @@ It does not matter whether you are using small or capital letters. For
 </itemizedlist>
 </listitem>
 <listitem><para>
-All above fields except <emphasis>house_number</emphasis> are of type text.
+All the above fields, except <emphasis>house_number</emphasis>, are of type
+<emphasis>text</emphasis>.
 Change <emphasis>house_number</emphasis> field's type to <emphasis>integer
 number</emphasis>. To do this, click on a cell in the <emphasis>Data
 Type</emphasis> column, <emphasis>house_number</emphasis> row and then
 click on drop down list's button <!--<img src="icons/dropdown_button.png" class="icon">-->
 (you can also press <keycombo><keycap>F4</keycap></keycombo> or
 <keycombo action="simul">&Alt;<keycap>Down</keycap></keycombo>. The list
-of data types will appear. Select <emphasis>Integer number</emphasis> type.
+of data types will appear. Select the <emphasis>Integer number</emphasis> type.
 <!--
  <br><img src="img/05_01_01_changing_datatype.png">
  <br>Changing data type of a filed to integer number<br><br>
 -->
 </para><para>
-For now, the <emphasis>house_number</emphasis> field only accepts numbers.
+From now on, the <emphasis>house_number</emphasis> field only accepts numbers.
 </para></listitem>
 <!-- TODO setting additional properties: e.g. caption -->
 <listitem><para>
@@ -152,7 +155,7 @@ designing and switch to Data View for the table. This allows you entering
 data into the table.
 </para></listitem>
 <listitem><para>
-As the design is not yet saved in the database, &quot;Save Object As&quot;
+As the design is not yet saved in the database, the &quot;Save Object As&quot;
 dialog window appears. You need to specify the name for the new table.
 <!--
  <br><img src="img/05_01_01_entering_table_name.png">
@@ -161,15 +164,15 @@ dialog window appears. You need to specify the name for the new table.
 </para><para>
 &kexi; offers a generic name like <emphasis>Table1</emphasis>.
 To change the name, enter <emphasis>Persons</emphasis> into the
-<emphasis>Caption</emphasis> field and press
-<keycombo><keycap>Enter</keycap></keycombo> key or click <guilabel>OK</guilabel>
+<emphasis>Caption</emphasis> field and press the <keycombo>
+<keycap>Enter</keycap></keycombo> key or click the <guilabel>OK</guilabel>
 button. The <emphasis>Caption</emphasis> field will be used to display the
 table to database end-users, e.g. as a form. Unlike the name, the caption can
 contain any characters including spaces and special characters.
 </para><para>
-Note that filling <emphasis>Caption</emphasis> field automatically fills
-<emphasis>Name</emphasis> field. For your convenience the rule for using
-only latin letters, digits and the &quot;_&quot; character is kept. You
+Note that filling the <emphasis>Caption</emphasis> field automatically fills
+the <emphasis>Name</emphasis> field. For your convenience the rule for using
+only letters, numbers and the &quot;_&quot; character is kept. You
 can alter contents of the <emphasis>Name</emphasis> field if you want to.
 <!--
  <br><img src="img/05_01_01_automatic_names.png">
@@ -187,7 +190,7 @@ button to continue.
 -->
 </para></listitem>
 <listitem><para>
-<emphasis>Persons</emphasis> table has been created and opened in Data View.
+The <emphasis>Persons</emphasis> table has been created and opened in Data View.
 Its name appears in the Project Navigator pane.
 <!-- <br><img src="img/05_01_01_table_created.png">
  <br><em>Persons</em> table in the Project Navigator pane<br><br>
@@ -200,7 +203,7 @@ way as <emphasis>persons</emphasis> table.
 <listitem><para>
 Create <emphasis>person</emphasis> field of type <emphasis>Integer
 number</emphasis> and <emphasis>phone</emphasis> of type <emphasis>Text</emphasis>.
-Do not use a number type here because phone number can have many different
+Do not use a number type here because phone numbers can have many different
 forms and prefixes.
 </para></listitem>
 <listitem><para>

@@ -73,7 +73,7 @@ a cell then choosing <guimenuitem>Function...</guimenuitem> from the
 </guilabel> dialog box.</para>
 <para>Select the function you want to use from the listbox at the left of the 
 dialog box. The <guilabel>Help</guilabel> tab page will then display a description,
-the return typ, Syntax, Parameters, and Examples for this function.
+the return type, Syntax, Parameters, and Examples for this function.
 In addition this page provides often links to Related Functions. 
 Then press the button with the down arrow key symbol on it to paste 
 it into the text edit box at the bottom of the dialog.</para>
