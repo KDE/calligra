@@ -79,6 +79,16 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
 }
 
 
+QString KChartWizardSelectDataFormatPage::dataArea() const
+{
+    return m_dataArea->text();
+}
+
+void KChartWizardSelectDataFormatPage::setDataArea( const QString &area )
+{
+    m_dataArea->setText( area );
+}
+
 
 void KChartWizardSelectDataFormatPage::apply()
 {

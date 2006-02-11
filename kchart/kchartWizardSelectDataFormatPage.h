@@ -22,6 +22,9 @@ class KChartWizardSelectDataFormatPage : public QWidget
 public:
   KChartWizardSelectDataFormatPage( QWidget* parent, KChartPart* chart );
 
+  QString  dataArea() const;
+  void     setDataArea( const QString &area );
+
 public slots:
   void apply();
 

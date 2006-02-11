@@ -149,13 +149,13 @@ void KChartWizard::reject()
 
 void KChartWizard::setDataArea( const QString &area )
 {
-    //  _selectdatapage->rangeED->setText( area );
+    m_dataFormatPage->setDataArea( area );
 }
 
 
 QString KChartWizard::dataArea() const
 {
-    //  return m_dataFormatPage->dataArea();
+    return m_dataFormatPage->dataArea();
 }
 
 
