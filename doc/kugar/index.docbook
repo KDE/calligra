@@ -79,23 +79,23 @@
 <chapter id="introduction">
 <title>Introduction</title>
 
-<para> &kugar; is a report creation tool for &Qt; and &kde;. It
-includes &GUI; report template designer, report engine, &konqueror; part
-for easy report preview and a set of examples.  </para>
+<para> &kugar; is a report creation tool for &Qt; and &kde;. It includes
+a &GUI; report template designer, a report engine, a &konqueror; part
+for easy report preview and a set of examples.</para>
 
-<para> The &kugar; Report Designer is a report template creation tool
-for &kugar; report engine.  &kugar; report engine uses an &XML; based
-report template file (which can be created by hand or with
-&kudesigner;) and data file (also in &XML; format) to create
+<para> The &kudesigner; is a report template creation tool
+for the &kugar; report engine. The &kugar; report engine uses an &XML;
+based report template file (which can be created by hand or with
+&kudesigner;) and a data file (also in &XML; format) to create
 reports. To get more information on &kudesigner; refer to the <link
 linkend="designer-manual">Report Template Designer Manual</link>.
 </para>
 
 <para> See <link linkend="template-dtd"> The KugarTemplate Document
-Type Definition</link> for an overview of template's
+Type Definition</link> for an overview of the template's
 <acronym>DTD</acronym> (file format), <link
 linkend="kugardata-dtd">KugarData Document Type Definition</link> and
-<link linkend="tutorial">Tutorial</link> for step-by-step explanation
+<link linkend="tutorial">Tutorial</link> for a step-by-step explanation
 on how reports can be created.  </para>
 
 <para> Programmers should also refer to the <link

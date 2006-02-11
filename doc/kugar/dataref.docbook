@@ -62,7 +62,7 @@ can apply custom macros using &XSL; for column calculations, sorting,
 The <sgmltag class="element">KugarData</sgmltag> element contains zero
 or more <sgmltag class="element">Row</sgmltag> elements.  A <sgmltag
 class="element">Row</sgmltag> must contain one <sgmltag class="attribute">level</sgmltag>
-attribute with value corresponding to detail level in the template. Other attributes
+attribute with a value corresponding to detail level in the template. Other attributes
 represent data columns.
 </para>
 <para>
