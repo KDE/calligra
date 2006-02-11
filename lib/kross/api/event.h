@@ -96,11 +96,14 @@ namespace Kross { namespace Api {
              * \param function A pointer to the methodfunction that
              *        should handle calls.
              * \param arglist A list of arguments for the function.
+	     *
+	     * \todo Remove this method as soon as there is no code using it
              */
 //TODO remove this method as soon as there is no code using it any longer.
-            void addFunction(const QString& name, FunctionPtr function, const ArgumentList& /*arglist*/ = ArgumentList())
+            void addFunction(const QString& name, FunctionPtr function, const ArgumentList& arglist = ArgumentList())
             {
                 m_functions.replace(name, new VarFunction0<T>(static_cast<T*>(this), function));
+		Q_UNUSED(arglist);
             }
 
             /**
@@ -114,7 +117,6 @@ namespace Kross { namespace Api {
              *        the methodfunction. This \a Event will be the
              *        owner of the \a Function instance and will take
              *        care of deleting it if this \a Event got deleted.
-             * \param arglist A list of arguments for the function.
              */
             void addFunction(const QString& name, Function* function)
             {

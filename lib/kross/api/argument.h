@@ -44,14 +44,6 @@ namespace Kross { namespace Api {
              *
              * \param classname The name of the class this
              *        argument expects.
-             * \param object The optional default \a Object this
-             *        class holds.
-             * \param visible defines if the @a Argument is visible
-             *        to scripting-languages. If the argument is
-             *        hidden, it's somewhat 'const' and cant be
-             *        changed by scripting code. In that case the
-             *        argument won't be even visible by scripting
-             *        languages.
              */
             explicit Argument(const QString& classname = QString::null /*, Object::Ptr object = 0, bool visible = true*/ );
 
