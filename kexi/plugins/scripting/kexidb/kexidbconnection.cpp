@@ -205,9 +205,9 @@ Kross::Api::Object::Ptr KexiDBConnection::isReadOnly(Kross::Api::List::Ptr)
 Kross::Api::Object::Ptr KexiDBConnection::useDatabase(Kross::Api::List::Ptr args)
 {
     QString dbname = Kross::Api::Variant::toString(args->item(0));
-    if(connection()->databaseExists(dbname))
-        return new Kross::Api::Variant(QVariant(m_connection->useDatabase(dbname),0));
-    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("There exists no database with the name '%1'.").arg(dbname)) );
+    bool ok = connection()->databaseExists(dbname);
+    if(ok) ok = m_connection->useDatabase(dbname);
+    return new Kross::Api::Variant(QVariant(ok,0));
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::closeDatabase(Kross::Api::List::Ptr)
