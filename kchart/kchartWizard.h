@@ -55,11 +55,11 @@ private:
     KChartPart                          *m_chart;
 
     //KChartWizardSelectDataPage          *_selectdatapage;
-    KChartWizardSelectChartTypePage     *m_selectcharttypepage;
-    KChartWizardSelectDataFormatPage    *m_selectdataformatpage;
-    KChartWizardSelectChartSubTypePage  *m_selectchartsubtypepage;
+    KChartWizardSelectDataFormatPage    *m_dataFormatPage;
+    KChartWizardSelectChartTypePage     *m_chartTypePage;
+    KChartWizardSelectChartSubTypePage  *m_chartSubtypePage;
     //KChartWizardSetupDataPage           *_setupdatapage;
-    KChartWizardLabelsLegendPage        *m_labelslegendpage;
+    KChartWizardLabelsLegendPage        *m_labelsLegendPage;
     KChartWizardSetupAxesPage           *m_axespage;
 };
 
