@@ -357,7 +357,7 @@ Kross::Api::Object::Ptr KexiDBConnection::tableSchema(Kross::Api::List::Ptr args
 {
     ::KexiDB::TableSchema* tableschema = connection()->tableSchema( Kross::Api::Variant::toString(args->item(0)) );
     if(! tableschema)
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such tableschema.")) );
+        return 0; //throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such tableschema.")) );
     return new KexiDBTableSchema(tableschema);
 }
 
