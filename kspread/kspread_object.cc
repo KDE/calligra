@@ -75,7 +75,7 @@ void EmbeddedObject::setGeometry( const KoRect &rect )
     m_geometry = rect;
 }
 
-bool EmbeddedObject::load( const QDomElement& element )
+bool EmbeddedObject::load( const QDomElement& /*element*/ )
 {
     kdDebug() << "Loading EmbeddedObject" << endl;
     return false;
@@ -96,7 +96,7 @@ void EmbeddedObject::loadOasis(const QDomElement &element, KoOasisLoadingContext
 }
 
 
-QDomElement EmbeddedObject::save( QDomDocument& doc )
+QDomElement EmbeddedObject::save( QDomDocument& /*doc*/ )
 {
     kdDebug() << "Saving EmbeddedObject..." << endl;
     return QDomElement();
@@ -426,7 +426,7 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   EmbeddedObject::draw( _painter );
 }
 
-void EmbeddedKOfficeObject::activate( View *_view, Canvas *_canvas )
+void EmbeddedKOfficeObject::activate( View *_view, Canvas */*_canvas*/ )
 {
     KoDocument* part = embeddedObject()->document();
     if ( !part )
@@ -651,12 +651,12 @@ EmbeddedPictureObject::~EmbeddedPictureObject()
 {
 }
 
-bool EmbeddedPictureObject::load( const QDomElement& element )
+bool EmbeddedPictureObject::load( const QDomElement& /*element*/ )
 {
     return false;
 }
 
-QDomElement EmbeddedPictureObject::save( QDomDocument& doc )
+QDomElement EmbeddedPictureObject::save( QDomDocument& /*doc*/ )
 {
     kdDebug() << "Saving EmbeddedPictureObject" << endl;
     return QDomElement();
@@ -891,7 +891,7 @@ void EmbeddedPictureObject::loadOasisPictureEffect(KoOasisLoadingContext & conte
     }
 }
 
-void EmbeddedPictureObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void EmbeddedPictureObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /*mainStyles*/ ) const
 {
      //KP2DObject::fillStyle( styleObjectAuto, mainStyles );
      saveOasisPictureElement( styleObjectAuto );
@@ -1046,7 +1046,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //     return offset;
 // }
 
-void EmbeddedPictureObject::drawShadow( QPainter* _painter,  KoZoomHandler* _zoomHandler)
+void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* /*_zoomHandler*/)
 {
 //     const double ox = /*orig*/m_geometry.x();
 //     const double oy = /*orig*/m_geometry.y();
@@ -1156,7 +1156,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
     const double oy = /*orig*/m_geometry.y();
     const double ow = /*ext*/m_geometry.width();
     const double oh = /*ext*/m_geometry.height();
-    const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1.0 : pen.width() ) / 2.0 );
+    //const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1.0 : pen.width() ) / 2.0 );
 
     _painter->save();
 
@@ -1471,7 +1471,7 @@ QPixmap EmbeddedPictureObject::changePictureSettings( QPixmap _tmpPixmap )
     return _tmpPixmap;
 }
 
-void EmbeddedPictureObject::flip( bool horizontal )
+void EmbeddedPictureObject::flip( bool /*horizontal*/ )
 {
 //     KP2DObject::flip( horizontal );
 //     if ( horizontal )
