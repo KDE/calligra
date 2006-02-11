@@ -36,13 +36,14 @@ PythonExtension::PythonExtension(Kross::Api::Object::Ptr object)
     kdDebug() << QString("Kross::Python::PythonExtension::Constructor objectname='%1' objectclass='%2'").arg(m_object->getName()).arg(m_object->getClassName()) << endl;
 #endif
 
-    //TODO determinate and return real dynamic objectname and documentation.
     behaviors().name("KrossPythonExtension");
+    /*
     behaviors().doc(
         "The common KrossPythonExtension object enables passing "
         "of Kross::Api::Object's from C/C++ to Python and "
         "backwards in a transparent way."
     );
+    */
     behaviors().supportGetattr();
 
     m_proxymethod = new Py::MethodDefExt<PythonExtension>(
@@ -194,9 +195,9 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
         return new Kross::Api::Variant(object.as_string().c_str());
 #ifdef Py_USING_UNICODE
     if(type == &PyUnicode_Type) {
-	Py::unicodestring ws = Py::String(object).as_unicodestring();
+        Py::unicodestring u = Py::String(object).as_unicodestring();
         std::string s;
-        std::copy(ws.begin(), ws.end(), std::back_inserter(s));
+        std::copy(u.begin(), u.end(), std::back_inserter(s));
         return new Kross::Api::Variant(s.c_str());
     }
 #endif
@@ -336,7 +337,8 @@ const Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
         return Py::None();
     }
 
-    if(object->getClassName() == "Kross::Api::Variant") {
+    const QString classname = object->getClassName();
+    if(classname == "Kross::Api::Variant") {
         QVariant v = static_cast<Kross::Api::Variant*>( object.data() )->getValue();
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
         kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::Variant %1").arg(v.toString()) << endl;
@@ -344,7 +346,7 @@ const Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
         return toPyObject(v);
     }
 
-    if(object->getClassName() == "Kross::Api::List") {
+    if(classname == "Kross::Api::List") {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
         kdDebug() << "Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::List" << endl;
 #endif
@@ -356,7 +358,7 @@ const Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
         return pylist;
     }
 
-    if(object->getClassName() == "Kross::Api::Dict") {
+    if(classname == "Kross::Api::Dict") {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
         kdDebug() << "Kross::Python::PythonExtension::toPyObject(Kross::Api::Object) is Kross::Api::Dict" << endl;
 #endif
@@ -416,8 +418,16 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
         result.increment_reference_count();
         return result.ptr();
     }
+    catch(Py::Exception& e) {
+        const QString err = Py::value(e).as_string().c_str();
+        kdWarning() << QString("Py::Exception in Kross::Python::PythonExtension::proxyhandler %1").arg(err).latin1() << endl;
+        PyErr_SetString(Py::_Exc_RuntimeError(), err.latin1());
+        //throw e;
+    }
     catch(Kross::Api::Exception::Ptr e) {
-        kdWarning() << QString("EXCEPTION in Kross::Python::PythonExtension::proxyhandler %1").arg(e->toString()) << endl;
+        const QString err = e->toString();
+        kdWarning() << QString("Kross::Api::Exception in Kross::Python::PythonExtension::proxyhandler %1").arg(err).latin1() << endl;
+        PyErr_SetString(Py::_Exc_RuntimeError(), err.latin1());
         // Don't throw here cause it will end in a crash depp in python. The
         // error is already handled anyway.
         //throw Py::Exception( (char*) e->toString().latin1() );
