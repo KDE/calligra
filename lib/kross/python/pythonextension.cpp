@@ -109,7 +109,7 @@ Py::Object PythonExtension::getattr(const char* n)
         //if(n == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(n)<<endl; return Py::None(); }
 
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' is a internal name.").arg(name) << endl;
+        kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' is a internal name.").arg(n) << endl;
 #endif
         return Py::PythonExtension<PythonExtension>::getattr_methods(n);
     }
@@ -191,22 +191,25 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
 #endif
     if(type == &PyInt_Type)
         return new Kross::Api::Variant(int(Py::Int(object)));
-    if(type == &PyString_Type)
-        return new Kross::Api::Variant(object.as_string().c_str());
-#ifdef Py_USING_UNICODE
-    if(type == &PyUnicode_Type) {
-        Py::unicodestring u = Py::String(object).as_unicodestring();
-        std::string s;
-        std::copy(u.begin(), u.end(), std::back_inserter(s));
-        return new Kross::Api::Variant(s.c_str());
-    }
-#endif
     if(type == &PyBool_Type)
         return new Kross::Api::Variant(QVariant(object.isTrue(),0));
     if(type == &PyLong_Type)
         return new Kross::Api::Variant(Q_LLONG(long(Py::Long(object))));
     if(type == &PyFloat_Type)
         return new Kross::Api::Variant(double(Py::Float(object)));
+
+    if( PyType_IsSubtype(type,&PyString_Type) ) {
+#ifdef Py_USING_UNICODE
+        if(type == &PyUnicode_Type) {
+            Py::unicodestring u = Py::String(object).as_unicodestring();
+            std::string s;
+            std::copy(u.begin(), u.end(), std::back_inserter(s));
+            return new Kross::Api::Variant(s.c_str());
+        }
+#endif
+        return new Kross::Api::Variant(object.as_string().c_str());
+    }
+
     if(type == &PyTuple_Type)
         return toObject(Py::Tuple(object)).data();
     if(type == &PyList_Type)
