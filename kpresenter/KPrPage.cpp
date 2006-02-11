@@ -140,8 +140,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
             continue;
         it.current()->saveOasisObject( sc );
 
-        //TODO tz: check if isMasterPage is needed
-        if ( !isMasterPage() && it.current()->hasAnimation() )
+        if ( it.current()->hasAnimation() )
         {
             if ( it.current()->getEffect() != EF_NONE ||
                  it.current()->getAppearStep() != 0 ||

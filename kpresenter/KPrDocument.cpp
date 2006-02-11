@@ -1632,7 +1632,14 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
 
         context.setUseStylesAutoStyles( true );
         m_masterPage->loadOasis( context );
+
+        createPresentationAnimation( KoDom::namedItemNS( node, KoXmlNS::presentation, "animations"));
+        
         loadOasisObject( m_masterPage, node , context);
+
+        m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
+        m_loadingInfo->clearAnimationHideDict(); // clear all hide animations style
+
         loadOasisHeaderFooter( node,context );
         context.setUseStylesAutoStyles( false );
 
