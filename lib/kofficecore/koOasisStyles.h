@@ -41,6 +41,7 @@ public:
     ~KoOasisStyles();
 
     /// Look into @p doc for styles and remember them
+    /// @param doc document to look into
     /// @param stylesDotXml true when loading styles.xml, false otherwise
     void createStyleMap( const QDomDocument& doc, bool stylesDotXml );
 
