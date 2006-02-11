@@ -425,6 +425,7 @@ bool KPrObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int o
         animation.startElement( "presentation:show-shape" );
         animation.addAttribute( "draw:shape-id", "object" + QString::number( objectId ) );
         animation.addAttribute( "koffice:order-id", appearStep );
+
         switch( effect )
         {
         case EF_NONE:
@@ -479,6 +480,11 @@ bool KPrObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int o
             animation.addAttribute( "presentation:effect", "fade" );
             animation.addAttribute( "presentation:direction", "from-bottom" );
             break;
+        }
+
+        if ( effect2 != EF2_NONE )
+        {
+            animation.addAttribute( "koffice:by-paragraph", "true" );
         }
 
         if ( m_appearSpeed == ES_SLOW )
@@ -726,6 +732,13 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             kdDebug(33001) << " appear effect not supported: " << effectStr << endl;
             effect = EF_NONE;
         }
+
+        QString byParagaph = animation->attributeNS( KoXmlNS::koffice, "by-paragraph", QString::null );
+        if ( byParagaph == "true" )
+        {
+            effect2 = EF2T_PARA;
+        }
+
         QDomElement sound = KoDom::namedItemNS( *animation, KoXmlNS::presentation, "sound" );
         if ( !sound.isNull() )
         {
