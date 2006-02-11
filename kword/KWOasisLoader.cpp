@@ -120,7 +120,11 @@ QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCurs
             kdDebug() << k_funcinfo << bodyTagLocalName << endl;
             if ( bodyTagLocalName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
             {
-                loadFrame( tag, context, KoPoint( 10, 10 ) /*offset pasted object*/ );
+                KWFrame * frame = loadFrame( tag, context, KoPoint( 10, 10 ) /*offset pasted object*/ );
+                if ( frame )
+                {
+                    frames.append( frame );
+                }
             }
 #if 0 // TODO OASIS table:table
             else if ( bodyTagLocalName == "table" && tag.namespaceURI() == KoXmlNS::table )

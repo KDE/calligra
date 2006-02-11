@@ -2432,9 +2432,20 @@ void KWView::pasteData( QMimeSource* data, bool drop )
                     QValueList<KWFrame *> frames = oasisLoader.insertOasisData( store, 0 /* no cursor */ );
                     delete store;
                     QValueList<KWFrame *>::ConstIterator it = frames.begin();
+                    KMacroCommand* macroCmd = 0L;
                     for ( ; it != frames.end() ; ++it )
+                    {
+                        if ( !macroCmd )
+                            macroCmd = new KMacroCommand( i18n( "Paste" ) );
+
+                        KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n( "Paste" ), *it );
+                        macroCmd->addCommand( cmd );
+
                         frameViewManager()->view(*it)->setSelected(true);
-                    // TODO undo/redo command for the frames created above
+                    }
+
+                    if ( macroCmd )
+                        m_doc->addCommand( macroCmd );
                 }
             }
         }
