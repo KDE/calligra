@@ -148,6 +148,7 @@ Kross::Api::Object::Ptr KexiDBConnectionData::databaseName(Kross::Api::List::Ptr
 Kross::Api::Object::Ptr KexiDBConnectionData::setDatabaseName(Kross::Api::List::Ptr args)
 {
     m_dbname = Kross::Api::Variant::toString(args->item(0));
+    return 0;
 }
 
 Kross::Api::Object::Ptr KexiDBConnectionData::hostName(Kross::Api::List::Ptr)
