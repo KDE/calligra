@@ -40,10 +40,10 @@ namespace Kivio {
       
     public slots:
       virtual void setActivated(bool) = 0;
-      /** This function should apply a change to @param stencils
+      /** This function should apply a change to @p stencils
        * done by the tool.
        */
-      virtual void applyToolAction(QPtrList<KivioStencil>* /*stencils*/) {};
+      virtual void applyToolAction(QPtrList<KivioStencil>* stencils) { Q_UNUSED(stencils); };
       virtual void applyToolAction(KivioStencil* /*stencil*/, const KoPoint& /*pos*/) {};
     
     signals:
