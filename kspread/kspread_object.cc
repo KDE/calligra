@@ -56,7 +56,7 @@ class View;
  *
  **********************************************************/
 EmbeddedObject::EmbeddedObject( Sheet *_sheet, const KoRect& _geometry )
-  : m_geometry( _geometry), m_sheet(_sheet), m_selected(false), m_objectName(""), m_protect(false), m_keepRatio(false), pen( Qt::black, 1, QPen::SolidLine )
+  : m_geometry( _geometry), m_sheet(_sheet), m_objectName(""), m_selected(false), m_protect(false), m_keepRatio(false), pen( Qt::black, 1, QPen::SolidLine )
 {
   angle = 0.0;
   inObjList = true;

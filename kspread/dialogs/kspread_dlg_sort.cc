@@ -705,8 +705,8 @@ void SortDialog::useCustomListsStateChanged( int state )
     m_customList->setEnabled(true);
 }
 
-void SortDialog::firstRowHeaderChanged( int state )
-{   
+void SortDialog::firstRowHeaderChanged( int /*state*/ )
+{
  /* if (m_sortColumn->isChecked())
     return;
 

@@ -1265,7 +1265,6 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     d->mousePressed = true;
   }
 
-
   if ( activeSheet() )
   {
     EmbeddedObject *obj;

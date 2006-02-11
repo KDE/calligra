@@ -114,11 +114,11 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
   QFont font;
 
   uint oldRangeCount = d->rangeCount;
-  
+
   d->rangeCount = 0;
   QValueList<QColor> colors = d->canvas->choice()->colors();
   QValueList<Range> alreadyFoundRanges;
-  
+
   for (uint i = 0; i < d->tokens.count(); ++i)
   {
     Token token = d->tokens[i];
@@ -134,9 +134,9 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
             {
                 d->rangeChanged = true;
             }
-        
+
             Range newRange( token.text() );
-       
+
             if (!alreadyFoundRanges.contains(newRange))
             { 
                 alreadyFoundRanges.append(newRange);
@@ -155,7 +155,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
         font.setBold(true);
         setFormat(token.pos() + 1, token.text().length(), font);*/
         break;
-      
+
       case Token::Unknown:
       case Token::Integer:     // 14, 3, 1977
       case Token::Float:       // 3.141592, 1e10, 5.9e-7
@@ -176,10 +176,10 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
         break;
     }
   }
-  
+
   if (oldRangeCount != d->rangeCount)
     d->rangeChanged = true;
-  
+
   return 0;
 }
 
@@ -188,9 +188,9 @@ void FormulaEditorHighlighter::handleBrace( uint index )
   int cursorParagraph;
   int cursorPos;
   const Token& token = d->tokens.at( index );
-  
+
   textEdit()->getCursorPosition( &cursorParagraph , &cursorPos );
-  
+
   int distance = cursorPos-token.pos();
   int opType = token.asOperator();
   bool highlightBrace=false;
@@ -198,7 +198,7 @@ void FormulaEditorHighlighter::handleBrace( uint index )
   //Check where the cursor is in relation to this left or right parenthesis token.
   //Only one pair of braces should be highlighted at a time, and if the cursor
   //is between two braces, the inner-most pair should be highlighted.
-  
+
   if ( opType == Token::LeftPar )
   {
     //If cursor is directly to the left of this left brace, highlight it
@@ -247,9 +247,9 @@ int FormulaEditorHighlighter::findMatchingBrace(int pos)
 {
     int depth=0;
     int step=0;
-    
+
     Tokens tokens = d->tokens;
-    
+
     //If this is a left brace we need to step forwards through the text to find the matching right brace,
     //otherwise, it is a right brace so we need to step backwards through the text to find the matching left
     //brace.
@@ -257,20 +257,20 @@ int FormulaEditorHighlighter::findMatchingBrace(int pos)
         step = 1;
     else
         step = -1;
-    
-    for (int index=pos ; (index >= 0) && (index < tokens.count() ) ; index += step  )
+
+    for (int index=pos ; (index >= 0) && (index < (int) tokens.count() ) ; index += step  )
     {
         if (tokens.at(index).asOperator() == Token::LeftPar)
             depth++;
         if (tokens.at(index).asOperator() == Token::RightPar)
             depth--;
-            
+
         if (depth == 0)
         {
             return index;
         }
     }
-    
+
     return -1; 
 }
 
@@ -314,13 +314,13 @@ QObject( editor )
   d = new Private;
   d->editor = editor;
   d->hintLabel = 0;
-  
+
   d->completionPopup = new QVBox( editor->topLevelWidget(), 0, WType_Popup );
   d->completionPopup->setFrameStyle( QFrame::Box | QFrame::Plain );
   d->completionPopup->setLineWidth( 1 );
   d->completionPopup->installEventFilter( this );
   d->completionPopup->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum);
-  
+
   d->completionListBox = new KListBox( d->completionPopup );
   d->completionPopup->setFocusProxy( d->completionListBox );
   d->completionListBox->setFrameStyle( QFrame::NoFrame );
@@ -353,18 +353,18 @@ void FunctionCompletion::itemSelected( const QString& item )
         d->hintLabel->hide();
         return;
     }
-    
+
     QString helpText = desc->helpText()[0];
     if( helpText.isEmpty() )
     {
         d->hintLabel->hide();
         return;
     }
-    
+
     helpText.append("</qt>").prepend("<qt>");
     d->hintLabel->setText( helpText );
     d->hintLabel->adjustSize();
-    
+
     // reposition nicely
     QPoint pos = d->editor->mapToGlobal( QPoint( d->editor->width(), 0 ) );
     pos.setY( pos.y() - d->hintLabel->height() - 1 );
@@ -400,15 +400,14 @@ bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
               QApplication::sendEvent( d->editor, ev );
               return true;
       }
-    
+
       if ( ev->type() == QEvent::MouseButtonDblClick )
       {
           doneCompletion();
           return true;
       }
-    
   }
-  
+
   return false;
 }
 
@@ -423,12 +422,12 @@ void FunctionCompletion::doneCompletion()
 void FunctionCompletion::showCompletion( const QStringList &choices )
 {
   if( !choices.count() ) return;
-  
+
   d->completionListBox->clear();
   for( unsigned i = 0; i < choices.count(); i++ )
     new QListBoxText( (QListBox*)d->completionListBox, choices[i] );
   d->completionListBox->setCurrentItem( 0 );
-  
+
   // size of the pop-up
   d->completionPopup->setMaximumHeight( 100 );
   d->completionPopup->resize( d->completionListBox->sizeHint() +
@@ -602,7 +601,7 @@ void CellEditor::triggerFunctionAutoComplete()
   if( tokens.count()<1 ) return;
 
   KSpread::Token lastToken = tokens[ tokens.count()-1 ];
-  
+
   // last token must be an identifier  
   if( !lastToken.isIdentifier() ) return;
   QString id = lastToken.text();
@@ -659,7 +658,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   // turn choose mode on/off
   if (!checkChoice())
     return;
-    
+
   d->highlighter->rehighlight();
 
   Tokens tokens = d->highlighter->formulaTokens();
@@ -742,7 +741,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
     if (d->highlighter->rangeChanged())
     {
       d->highlighter->resetRangeChanged();
-      
+
       d->canvas->doc()->emitBeginOperation();
       setUpdateChoice(false);
 
@@ -751,12 +750,12 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
       d->canvas->choice()->clear();
       Region tmpRegion;
       Region::ConstIterator it;
-      
+
       //A list of regions which have already been highlighted on the spreadsheet.
       //This is so that we don't end up highlighting the same region twice in two different
       //colours.
       QValueList<Region> alreadyUsedRegions;
-      
+
       for (uint i = 0; i < tokens.count(); ++i)
       {
         Token token = tokens[i];
@@ -765,24 +764,20 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
         {
           Region region(d->canvas->view(), token.text());
           it = region.constBegin();
-          
+
           if (!alreadyUsedRegions.contains(region))
           {
             QRect r=(*it)->rect();
-            
+
             if (d->canvas->choice()->isEmpty())
                 d->canvas->choice()->initialize((*it)->rect(), (*it)->sheet());
             else
                 d->canvas->choice()->extend((*it)->rect(), (*it)->sheet());
-                
+
             alreadyUsedRegions.append(region);
           }
         }
       }
-      
-      Selection* selec = d->canvas->choice();
-      selec;
-      
       setUpdateChoice(true);
       d->canvas->doc()->emitEndOperation(*d->canvas->choice());
     }
@@ -969,7 +964,7 @@ bool CellEditor::checkChoice()
       }
 
       Token::Type type = token.type();
-      if (type == Token::Operator)
+      if (type == Token::Operator && token.asOperator() != Token::RightPar)
       {
         canvas()->setChooseMode(true);
       }

@@ -2301,8 +2301,8 @@ void Doc::repaint( const QRect& rect )
   {
     r = rect;
     Canvas* canvas = ((View*)it.current())->canvasWidget();
-    r.moveTopLeft( QPoint( (int) r.x() - canvas->xOffset(),
-                           (int) r.y() - canvas->yOffset() ) );
+    r.moveTopLeft( QPoint( r.x() - (int) canvas->xOffset(),
+                           r.y() - (int) canvas->yOffset() ) );
     canvas->update( r );
   }
 }
