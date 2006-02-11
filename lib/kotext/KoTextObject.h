@@ -263,7 +263,6 @@ public:
      * @param commandName the name to give the undo/redo command if we haven't created it already
      * @param customItemsMap the map of custom items to include in the new text
      * @param selectionId which selection to use (See KoTextDocument::SelectionId)
-     * @param repaint force repaint after insert
      */
     void insert( KoTextCursor * cursor, KoTextFormat * currentFormat, const QString &text,
                  const QString & commandName,
@@ -291,7 +290,15 @@ public:
 
     /**
      * Paste plain text at the given @p cursor
-     * @param removeSelected true when pasting with the keyboard, but false when dropping text.
+     * @param cursor location to paste text
+     * @param text the text to paste
+     * @param currentFormat format to apply to the pasted text
+     * @param removeSelected @c true when pasting with the keyboard, but @c false when dropping text.
+     *
+     * @todo Can currentFormat be NULL?
+     * @todo Besides saying when removeSelected is @c true, perhaps explain
+     *       what it does (presumably, removes the selection and replaces it
+     *       with the pasted text).
      */
     void pasteText( KoTextCursor * cursor, const QString & text, KoTextFormat * currentFormat,
                     bool removeSelected );
