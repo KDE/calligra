@@ -290,6 +290,8 @@ public:
     bool confirmNonNativeSave( const bool exporting ) const;
     void setConfirmNonNativeSave( const bool exporting, const bool on );
 
+    virtual bool wantExportConfirmation() const;
+    
     /**
      * Sets the error message to be shown to the user (use i18n()!)
      * when loading or saving fails.

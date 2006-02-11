@@ -499,6 +499,11 @@ void KoDocument::setConfirmNonNativeSave( const bool exporting, const bool on )
     d->m_confirmNonNativeSave [ exporting ? 1 : 0] = on;
 }
 
+bool KoDocument::wantExportConfirmation() const
+{
+    return true;
+}
+
 bool KoDocument::isImporting() const
 {
     return d->m_isImporting;

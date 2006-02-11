@@ -666,6 +666,7 @@ void KoMainWindow::slotSaveCompleted()
 // returns true if we should save, false otherwise.
 bool KoMainWindow::exportConfirmation( const QCString &outputFormat )
 {
+    if (!rootDocument()->wantExportConfirmation()) return true;
     KMimeType::Ptr mime = KMimeType::mimeType( outputFormat );
 
     const bool neverHeardOfIt = ( mime->name() == KMimeType::defaultMimeType() );
@@ -850,7 +851,7 @@ bool KoMainWindow::saveDocument( bool saveas, bool silent )
             // don't change this line unless you know what you're doing :)
             if (!justChangingFilterOptions || pDoc->confirmNonNativeSave (isExporting ())) {
                 if ( !pDoc->isNativeFormat( outputFormat ) )
-                    wantToSave = exportConfirmation( outputFormat );
+                        wantToSave = exportConfirmation( outputFormat );
             }
 
             if (wantToSave)
