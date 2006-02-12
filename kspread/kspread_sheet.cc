@@ -79,7 +79,6 @@
 #include "KSpreadTableIface.h"
 #include "manipulator.h"
 #include "manipulator_data.h"
-#include "selection.h"
 #include "kspread_object.h"
 
 #include "kspread_sheet.moc"
@@ -143,18 +142,23 @@ ChartBinding::~ChartBinding()
 
 void ChartBinding::cellChanged( Cell* )
 {
-#if 1  //FIXME: Enable after the new kdchart API is fixed.
-    kdDebug(36001) << "######### void ChartBinding::cellChanged( Cell* )" << endl;
+    //kdDebug(36001) << "######### void ChartBinding::cellChanged( Cell* )" << endl;
 
     if ( m_bIgnoreChanges )
         return;
 
-    kdDebug(36001) << m_rctDataArea << endl;
+    //kdDebug(36001) << m_rctDataArea << endl;
 
-    //KoChart::Data matrix( m_rctDataArea.height(), m_rctDataArea.width() );
+    // Get the chart and resize its data if necessary.
+    //
+    // FIXME: Only do this if he data actually changed size.
     KoChart::Part  *chart = m_child->chart();
     chart->resizeData( m_rctDataArea.height(), m_rctDataArea.width() );
 
+    // Reset all the data, i.e. retransfer them to the chart.
+    // This is definitely not the most efficient way to do this.
+    //
+    // FIXME: Find a way to do it with just the data that changed.
     Cell* cell;
     for ( int row = 0; row < m_rctDataArea.height(); row++ ) {
         for ( int col = 0; col < m_rctDataArea.width(); col++ ) {
@@ -171,25 +175,28 @@ void ChartBinding::cellChanged( Cell* )
     chart->analyzeHeaders( );
 
     // ######### Kalle may be interested in that, too
-    /* Chart::Range range;
-       range.top = m_rctDataArea.top();
-       range.left = m_rctDataArea.left();
-       range.right = m_rctDataArea.right();
-       range.bottom = m_rctDataArea.bottom();
-       range.sheet = m_pSheet->name(); */
+#if 0
+    Chart::Range range;
+    range.top = m_rctDataArea.top();
+    range.left = m_rctDataArea.left();
+    range.right = m_rctDataArea.right();
+    range.bottom = m_rctDataArea.bottom();
+    range.sheet = m_pSheet->name(); */
 
     //m_child->chart()->setData( matrix );
 
     // Force a redraw of the chart on all views
 
     /** TODO - replace the call below with something that will repaint this chart */
-//    sheet()->emit_polygonInvalidated( m_child->framePointArray() );
 #endif
+    //    sheet()->emit_polygonInvalidated( m_child->framePointArray() );
 }
+
 
 /******************************************************************/
 /* Class: TextDrag                                               */
 /******************************************************************/
+
 
 TextDrag::TextDrag( QWidget * dragSource, const char * name )
     : QTextDrag( dragSource, name )
@@ -7804,6 +7811,7 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
 
     if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
         return false;
+
     EmbeddedChart * ch = new EmbeddedChart( doc(), this, dd, _rect );
     ch->setDataArea( _data );
     ch->update();
@@ -7811,8 +7819,9 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
 
     KoChart::WizardExtension * wiz = ch->chart()->wizardExtension();
 
+    QString  tmp( _data->name() );
     if ( wiz )
-        wiz->show();
+        wiz->show( tmp );
 
     insertObject( ch );
 
