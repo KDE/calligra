@@ -51,7 +51,7 @@ public:
 		     bool  hasRowHeader,
 		     bool  hasRowHeader );
 
-    bool showWizard();
+    bool showWizard( QString &area );
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);
     void saveConfig(KConfig *conf);
@@ -111,6 +111,7 @@ private:
     // The chart and its contents
     KChartParams            *m_params;      // Everything about the chart
     KDChartTableData         m_currentData; // The data in the chart.
+    QString                  m_regionName;
 
     // Other auxiliary values
     bool                     m_bCanChangeValue;
@@ -131,7 +132,9 @@ public:
     WizardExt( KoChart::Part *part )
         : KoChart::WizardExtension( part ) {};
 
-    virtual bool show() { return static_cast<KChartPart *>( part() )->showWizard(); }
+    virtual bool show( QString &area ) {
+        return static_cast<KChartPart *>( part() )->showWizard( area ); 
+    }
 };
 
 }  //KChart namespace

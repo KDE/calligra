@@ -27,6 +27,7 @@ public:
 
     KChartPart* chart() const { return m_chart; };
 
+    // Set and get the string for the data area.
     void setDataArea( const QString &area );
     QString dataArea() const;
 

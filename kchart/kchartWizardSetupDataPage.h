@@ -30,6 +30,7 @@ private slots:
 private:
   KChartPart* _chart;
   KChartWizard* _parent;
+
   kchartWidget* preview;
   QRadioButton* datacol;
   QRadioButton* datarow;

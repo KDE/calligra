@@ -581,11 +581,13 @@ void KChartPart::setCellData( int row, int column, const QVariant &val)
 }
 
 
-bool KChartPart::showWizard()
+bool KChartPart::showWizard( QString &area )
 {
     KChartWizard  *wizard = new KChartWizard( this, m_parentWidget, "wizard" );
 
     connect( wizard, SIGNAL(finished()), this, SLOT(slotModified()) );
+
+    wizard->setDataArea( area );
 
     bool  ret = wizard->exec();
 
