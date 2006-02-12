@@ -76,14 +76,10 @@ void ConfigDialog::slotApply() {
         cmd->execute();
 
 //    m_behaviorPage->apply();
-    enableButtonOK(false);
-    enableButtonApply(false);
 }
 
 void ConfigDialog::slotOk() {
     slotApply();
-    enableButtonOK(false);
-    enableButtonApply(false);
     accept();
 }
 
