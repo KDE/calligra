@@ -25,7 +25,7 @@
 #include <knumvalidator.h>
 #include <klineedit.h>
 #include <kcombobox.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <koffice_export.h>
 
 

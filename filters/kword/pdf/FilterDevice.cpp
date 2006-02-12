@@ -20,7 +20,7 @@
 #include "FilterDevice.h"
 
 #include <math.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kdebug.h>
 
 #include "GfxState.h"

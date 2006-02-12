@@ -18,8 +18,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include "koPageLayout.h"
-#include <koUnit.h>
+#include "KoPageLayout.h"
+#include <KoUnit.h>
 #include <klocale.h>
 #include <kprinter.h>
 #include <kdebug.h>

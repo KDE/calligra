@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koDocument.h"
+#include "KoDocument.h"
 #include "KoDocumentIface.h"
-#include "koDocumentInfoDlg.h"
-#include "koDocumentInfo.h"
-#include "koView.h"
+#include "KoDocumentInfoDlg.h"
+#include "KoDocumentInfo.h"
+#include "KoView.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kdcopactionproxy.h>

@@ -20,10 +20,10 @@
 
 #include "kspread_brush.h"
 
-#include <koGenStyles.h>
-#include <koOasisStyles.h>
+#include <KoGenStyles.h>
+#include <KoOasisStyles.h>
 #include <KoOasisContext.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 KSpreadBrush::KSpreadBrush()
 : m_gColor1( Qt::red )

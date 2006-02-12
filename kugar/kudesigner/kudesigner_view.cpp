@@ -40,7 +40,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 
 #include <commdefs.h>
 #include <view.h>

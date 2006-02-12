@@ -20,7 +20,7 @@
 #ifndef MSWORDIMPORT_H
 #define MSWORDIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class QDomDocument;
 class QDomElement;

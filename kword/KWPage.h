@@ -20,7 +20,7 @@
 
 #include <KoRect.h>
 #include "KWPageManager.h"
-#include "koPageLayout.h"
+#include "KoPageLayout.h"
 
 class KoZoomHandler;
 

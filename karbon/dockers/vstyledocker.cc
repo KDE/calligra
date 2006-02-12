@@ -27,8 +27,8 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <koMainWindow.h>
-#include <koFilterManager.h>
+#include <KoMainWindow.h>
+#include <KoFilterManager.h>
 #include <kfiledialog.h>
 
 #include "karbon_part.h"

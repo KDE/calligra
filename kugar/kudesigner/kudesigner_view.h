@@ -19,7 +19,7 @@
 #ifndef KUDESIGNER_VIEW_H
 #define KUDESIGNER_VIEW_H
 
-#include <koView.h>
+#include <KoView.h>
 #include <kparts/event.h>
 
 #include <qdom.h>

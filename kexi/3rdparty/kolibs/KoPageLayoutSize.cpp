@@ -19,7 +19,7 @@
 
 #include <koPageLayoutDia.h>
 #include <KoPageLayoutSize.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <koUnitWidgets.h>
 
 #include <klocale.h>

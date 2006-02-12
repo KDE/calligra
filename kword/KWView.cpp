@@ -81,11 +81,11 @@
 #include <koCharSelectDia.h>
 #include <KoCommentDia.h>
 #include <KoCreateStyleDia.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 #include <KoFontDia.h>
-#include <koFrame.h>
+#include <KoFrame.h>
 #include <koInsertLink.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 #include <KoParagDia.h>
 #include <koPartSelectAction.h>
 #include <koPictureFilePreview.h>

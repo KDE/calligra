@@ -20,7 +20,7 @@
 #ifndef __AIIMPORT_H__
 #define __AIIMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 #include "karbonaiparserbase.h"
 

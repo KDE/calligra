@@ -20,7 +20,7 @@
 #ifndef __WPEXPORT_H
 #define __WPEXPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 class WPExport : public KoFilter

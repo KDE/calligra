@@ -20,8 +20,8 @@
 
 #include "KoBrush.h"
 
-#include <koGenStyles.h>
-#include <koxmlns.h>
+#include <KoGenStyles.h>
+#include <KoXmlNS.h>
 
 KoBrush::KoBrush()
 : m_gColor1( Qt::red )

@@ -24,8 +24,8 @@
 #include "versionmagic.h"
 
 #include <KoRect.h>
-#include <koUnit.h>
-#include <koPageLayout.h>
+#include <KoUnit.h>
+#include <KoPageLayout.h>
 #include <kdebug.h>
 
 #include <wv2/styles.h>
@@ -37,7 +37,7 @@
 #include <wv2/associatedstrings.h>
 #include <klocale.h>
 #include <KoStore.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement, KoFilterChain* chain )

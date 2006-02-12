@@ -20,7 +20,7 @@
 #ifndef __PALMDOCEXPORT_H
 #define __PALMDOCEXPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 class PalmDocExport : public KoFilter

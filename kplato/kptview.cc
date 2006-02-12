@@ -21,7 +21,7 @@
 #include <kprinter.h>
 #include <kmessagebox.h>
 
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 
 #include <qapplication.h>
 #include <qpainter.h>

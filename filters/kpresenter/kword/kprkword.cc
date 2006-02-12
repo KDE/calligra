@@ -21,8 +21,8 @@
 
 #include <kgenericfactory.h>
 #include <KoStoreDevice.h>
-#include <koFilterChain.h>
-#include <koGlobal.h>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
 #include <kprkword.h>
 #include <klocale.h>
 #include <kdebug.h>

@@ -39,8 +39,8 @@
 #include <klocale.h>
 #include <kprocess.h>
 
-#include <koDocument.h>
-#include <koFilterChain.h>
+#include <KoDocument.h>
+#include <KoFilterChain.h>
 
 #include "imageviewer.h"
 #include "kis_config.h"

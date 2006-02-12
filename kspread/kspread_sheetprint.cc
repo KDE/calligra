@@ -28,7 +28,7 @@
 #include "kspread_sheetprint.h"
 
 #include "commands.h"
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 
 #include <kmessagebox.h>
 #include <kprinter.h>

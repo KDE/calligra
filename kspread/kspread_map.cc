@@ -25,10 +25,10 @@
 #include <kmdcodec.h>
 #include <ktempfile.h>
 
-#include <kodom.h>
-#include <koGenStyles.h>
-#include <koOasisSettings.h>
-#include <koxmlns.h>
+#include <KoDom.h>
+#include <KoGenStyles.h>
+#include <KoOasisSettings.h>
+#include <KoXmlNS.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"

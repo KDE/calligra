@@ -2,7 +2,7 @@
 #include "kivio_text_style.h"
 #include <qdom.h>
 #include <qpainter.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 KivioTextStyle::KivioTextStyle()
 {

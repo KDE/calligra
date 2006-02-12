@@ -30,7 +30,7 @@ class KoGenStyle;
 class KoXmlWriter;
 class KWord13Document;
 
-#include <koGenStyles.h>
+#include <KoGenStyles.h>
 
 class KWord13OasisGenerator
 {

@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kprinter.h>
 
-#include "koGlobal.h"
+#include "KoGlobal.h"
 #include "bracketelement.h"
 #include "contextstyle.h"
 #include "formulacursor.h"

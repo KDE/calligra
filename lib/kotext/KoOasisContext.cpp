@@ -18,12 +18,12 @@
 */
 
 #include "KoOasisContext.h"
-#include <koOasisStyles.h>
-#include <koOasisStore.h>
-#include <koxmlns.h>
+#include <KoOasisStyles.h>
+#include <KoOasisStore.h>
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <kdebug.h>
-#include <kodom.h>
+#include <KoDom.h>
 
 KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
                                 KoOasisStyles& styles, KoStore* store )

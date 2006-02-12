@@ -26,9 +26,9 @@
 #include "KoVariable.h"
 #include <KoOasisContext.h>
 #include <KoXmlWriter.h>
-#include <koGenStyles.h>
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoGenStyles.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>

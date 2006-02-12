@@ -26,7 +26,7 @@
 #include <kfilterdev.h>
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <qapplication.h>
 #include <qptrlist.h>
 #include <qsortedlist.h>
@@ -39,7 +39,7 @@
 #include <kspread_view.h>
 #include <kspread_canvas.h>
 #include <kspread_sheetprint.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 
 using namespace KSpread;
 

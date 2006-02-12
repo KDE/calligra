@@ -20,7 +20,7 @@
 #ifndef HANCOMWORDIMPORT_H
 #define HANCOMWORDIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 #include <qcstring.h>

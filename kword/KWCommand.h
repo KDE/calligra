@@ -22,7 +22,7 @@
 #include <kcommand.h>
 #include <kurl.h>
 #include <kocommandhistory.h>
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 #include <KoRect.h>
 #include <KoBorder.h>
 #include <KoParagLayout.h>
@@ -31,7 +31,7 @@
 #include <KoTextCommand.h>
 #include "KWVariable.h"
 #include <KoPoint.h>
-#include <koPictureKey.h>
+#include <KoPictureKey.h>
 
 class KWFrameSet;
 class KWTableStyle;

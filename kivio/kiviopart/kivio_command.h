@@ -25,7 +25,7 @@
 #include <qcolor.h>
 #include <qvaluelist.h>
 #include <KoRect.h>
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 #include <koffice_export.h>
 class KivioPage;
 class KivioLayer;

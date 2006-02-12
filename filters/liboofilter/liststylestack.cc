@@ -20,7 +20,7 @@
 
 #include "liststylestack.h"
 #include "ooutils.h" // for ooNS
-#include <kodom.h>
+#include <KoDom.h>
 
 ListStyleStack::ListStyleStack()
     : m_initialLevel( 0 )

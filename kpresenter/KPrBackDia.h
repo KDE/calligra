@@ -29,7 +29,7 @@
 #include "KPrBackground.h"
 
 #include <KoBrush.h>
-#include <koPicture.h>
+#include <KoPicture.h>
 
 class QLabel;
 class QComboBox;

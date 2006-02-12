@@ -18,7 +18,7 @@
 */
 
 #include <handler.h>
-#include <koView.h>
+#include <KoView.h>
 #include <math.h>
 #include <kcursor.h>
 #include <kdebug.h>

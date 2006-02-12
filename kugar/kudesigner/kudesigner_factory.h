@@ -20,7 +20,7 @@
 #ifndef KUDESIGNER_FACTORY_H
 #define KUDESIGNER_FACTORY_H
 
-#include <koFactory.h>
+#include <KoFactory.h>
 #include <koffice_export.h>
 class KInstance;
 class KAboutData;

@@ -25,7 +25,7 @@
 #include <qtooltip.h>
 
 #include <klocale.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 #include <KoRect.h>
 #include <koUnitWidgets.h>
 

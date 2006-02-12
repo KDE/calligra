@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koApplication.h>
+#include <KoApplication.h>
 #include <kcmdlineargs.h>
 
 #include <dcopclient.h>

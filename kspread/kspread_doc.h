@@ -37,10 +37,10 @@
 
 #include <kcompletion.h>
 
-#include <koDocument.h>
-#include <koGenStyles.h>
-#include <koPictureCollection.h>
-#include <koUnit.h>
+#include <KoDocument.h>
+#include <KoGenStyles.h>
+#include <KoPictureCollection.h>
+#include <KoUnit.h>
 #include <kozoomhandler.h>
 
 #include "kspread_global.h"

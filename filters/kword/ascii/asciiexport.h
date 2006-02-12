@@ -20,7 +20,7 @@
 #ifndef ASCIIEXPORT_H
 #define ASCIIEXPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class ASCIIExport : public KoFilter
 {

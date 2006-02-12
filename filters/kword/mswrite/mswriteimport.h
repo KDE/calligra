@@ -20,7 +20,7 @@
 #ifndef MSWRITEIMPORT_H
 #define MSWRITEIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class WRIDevice;
 class MSWrite::InternalParser;

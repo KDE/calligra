@@ -37,7 +37,7 @@
 #include <kactioncollection.h>
 #include <kactionclasses.h>
 
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 #include "kotoolbox.h"
 
 #ifdef HAVE_CONFIG_H

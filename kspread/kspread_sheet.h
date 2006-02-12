@@ -30,11 +30,11 @@
 #include <qwidget.h>
 #include <qdragobject.h>
 
-#include <koOasisStyles.h>
+#include <KoOasisStyles.h>
 #include <KoXmlWriter.h>
-#include <koDocument.h>
-#include <koDocumentChild.h>
-#include <koOasisSettings.h> // for KoOasisSettings::NamedMap
+#include <KoDocument.h>
+#include <KoDocumentChild.h>
+#include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
 
 #include "kspread_autofill.h"
 #include "kspread_cell.h"

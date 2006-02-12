@@ -20,7 +20,7 @@
 #ifndef KSPREAD_FACTORY_H
 #define KSPREAD_FACTORY_H
 
-#include <koFactory.h>
+#include <KoFactory.h>
 
 class KAboutData;
 class DCOPObject;

@@ -20,7 +20,7 @@
 #ifndef GNUMERICEXPORT_TEST_H
 #define GNUMERICEXPORT_TEST_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qdom.h>
 
 namespace KSpread

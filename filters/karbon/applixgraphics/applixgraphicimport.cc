@@ -28,7 +28,7 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qmessagebox.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 #include <math.h>
 

@@ -23,7 +23,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 
 #include <qtextcodec.h>
 

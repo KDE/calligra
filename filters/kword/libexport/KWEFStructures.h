@@ -47,7 +47,7 @@
 #include <qdom.h>
 #include <qdatetime.h>
 
-#include <koPictureKey.h>
+#include <KoPictureKey.h>
 #include <koffice_export.h>
 /**
  * TextFormatting is a container for data retrieved from the \<FORMAT\> tag

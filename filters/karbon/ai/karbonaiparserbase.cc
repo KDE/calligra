@@ -28,7 +28,7 @@
 #include <qwmatrix.h>
 #include <commands/vtransformcmd.h>
 
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 
 const void pottoa (PathOutputType &data);
 

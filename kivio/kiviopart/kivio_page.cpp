@@ -43,17 +43,17 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <KoPoint.h>
 #include <KoRect.h>
 #include <kozoomhandler.h>
 #include <kapplication.h>
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 #include <KoStore.h>
-#include <koOasisStyles.h>
-#include <koGenStyles.h>
+#include <KoOasisStyles.h>
+#include <KoGenStyles.h>
 
 #include "kivio_page.h"
 #include "kivio_map.h"

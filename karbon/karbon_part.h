@@ -23,8 +23,8 @@
 
 #include <qptrlist.h>
 
-#include <koDocument.h>
-#include <koUnit.h>
+#include <KoDocument.h>
+#include <KoUnit.h>
 #include "vdocument.h"
 #include "koffice_export.h"
 

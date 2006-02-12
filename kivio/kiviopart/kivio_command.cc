@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 #include <kcommand.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include "kivio_command.h"
 #include "kivio_page.h"
 #include "kivio_map.h"

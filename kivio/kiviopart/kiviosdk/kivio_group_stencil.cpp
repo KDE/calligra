@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 KivioGroupStencil::KivioGroupStencil()
     : KivioStencil(),

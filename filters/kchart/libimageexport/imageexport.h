@@ -20,7 +20,7 @@
 #ifndef __IMAGEEXPORT_H__
 #define __IMAGEEXPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class QPixmap;
 class ImageExport : public KoFilter

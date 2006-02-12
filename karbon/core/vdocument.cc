@@ -28,7 +28,7 @@
 #include "vpainter.h"
 
 #include <KoStore.h>
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 
 #include <kdebug.h>

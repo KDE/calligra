@@ -21,10 +21,10 @@
 #include "KWDocument.h"
 #include "KWFrame.h"
 
-#include <koGenStyles.h>
-#include <koOasisStyles.h>
+#include <KoGenStyles.h>
+#include <KoOasisStyles.h>
 #include <KoOasisContext.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 #include <kdebug.h>
 #include <klocale.h>

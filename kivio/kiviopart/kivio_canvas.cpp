@@ -37,7 +37,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kcursor.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <kozoomhandler.h>
 #include <KoSize.h>
 #include <koRuler.h>

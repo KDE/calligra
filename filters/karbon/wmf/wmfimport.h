@@ -23,7 +23,7 @@ DESCRIPTION
 #ifndef WMFIMPORT_H
 #define WMFIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 

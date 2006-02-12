@@ -20,7 +20,7 @@
 
 #include "vrectangle.h"
 #include <klocale.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <qdom.h>

@@ -32,14 +32,16 @@ class KDualColorButton;
 class QGridLayout;
 class ToolArea;
 
+
 /**
- * KActionBox is a kind of super-specialized toolbox that can order tools according to
- * type and priority.
+ * KActionBox is a kind of super-specialized toolbox that can order
+ * tools according to type and priority.
  *
- * This is to a large extent a port of the Karbon vtoolbox -- with which it should be
- * merged one day. However, it doesn't depend on a tool-like class, it aggregates
- * actions.
+ * This is to a large extent a port of the Karbon vtoolbox -- with
+ * which it should be merged one day. However, it doesn't depend on a
+ * tool-like class, it aggregates actions.
  */
+
 class KOFFICEUI_EXPORT KoToolBox : public KToolBar {
 
     Q_OBJECT

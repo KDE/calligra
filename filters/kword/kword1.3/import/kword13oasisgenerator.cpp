@@ -32,8 +32,8 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
-#include <koGenStyles.h>
-#include <koDocument.h>
+#include <KoGenStyles.h>
+#include <KoDocument.h>
 
 #include "kword13formatother.h"
 #include "kword13picture.h"

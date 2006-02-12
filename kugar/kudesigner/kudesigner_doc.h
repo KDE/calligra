@@ -19,7 +19,7 @@
 #ifndef KUDESIGNER_DOC_H
 #define KUDESIGNER_DOC_H
 
-#include <koDocument.h>
+#include <KoDocument.h>
 #include <kcommand.h>
 #include <kocommandhistory.h>
 #include "plugin.h"

@@ -1,6 +1,6 @@
 #include "KPrTextPreview.h"
 
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include <qpainter.h>
 #include <qfont.h>

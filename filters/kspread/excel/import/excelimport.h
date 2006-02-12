@@ -20,7 +20,7 @@
 #ifndef EXCELIMPORT_H
 #define EXCELIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 #include <qcstring.h>

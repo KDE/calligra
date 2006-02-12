@@ -22,8 +22,8 @@
 #include <qfile.h>
 
 #include <kgenericfactory.h>
-#include <koFilter.h>
-#include <koFilterChain.h>
+#include <KoFilter.h>
+#include <KoFilterChain.h>
 #include <krun.h>
 #include <kprocess.h>
 

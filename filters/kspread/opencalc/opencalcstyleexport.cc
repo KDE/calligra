@@ -19,7 +19,7 @@
 
 #include <opencalcstyleexport.h>
 
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include <kspread_cell.h>
 #include <kspread_doc.h>

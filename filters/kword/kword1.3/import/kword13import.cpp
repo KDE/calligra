@@ -25,7 +25,7 @@
 #include <kimageio.h>
 #include <ktempfile.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <KoStoreDevice.h>
 
 #include "kword13parser.h"

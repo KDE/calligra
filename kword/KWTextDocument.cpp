@@ -29,8 +29,8 @@
 #include "KWTableFrameSet.h"
 
 #include <KoOasisContext.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 
 #include <kdebug.h>
 #include <kglobalsettings.h>

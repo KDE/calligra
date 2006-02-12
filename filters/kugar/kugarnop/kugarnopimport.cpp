@@ -15,11 +15,11 @@
 
 #include "kugarnopimport.h"
 #include "kugarnopimport.moc"
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <qfile.h>
-#include "koDocument.h"
+#include "KoDocument.h"
 #include <qdom.h>
 
 typedef KGenericFactory<KugarNOPImport, KoFilter> KugarNOPImportFactory;

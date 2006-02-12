@@ -8,7 +8,7 @@
 
 #include "mreportviewer.h"
 
-#include <koView.h>
+#include <KoView.h>
 
 class KugarPart;
 

@@ -27,8 +27,8 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
-#include <koDocumentInfo.h>
+#include <KoFilterChain.h>
+#include <KoDocumentInfo.h>
 #include <kofficeversion.h>
 
 #include <kspread_map.h>

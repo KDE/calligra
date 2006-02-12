@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <KoTextZoomHandler.h>
 #include <KoOasisContext.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 
 #include <math.h>
 using namespace std;

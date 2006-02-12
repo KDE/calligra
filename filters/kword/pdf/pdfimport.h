@@ -20,7 +20,7 @@
 #ifndef PDFIMPORT_H
 #define PDFIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 #include "pdfdocument.h"
 #include "dialog.h"

@@ -28,8 +28,8 @@
 #include <KoVariable.h>
 #include <KoParagCounter.h>
 #include <KoOasisContext.h>
-#include <koxmlns.h>
-#include <koOasisStyles.h>
+#include <KoXmlNS.h>
+#include <KoOasisStyles.h>
 
 #include <kglobalsettings.h>
 #include <klocale.h>

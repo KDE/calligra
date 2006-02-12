@@ -24,11 +24,11 @@
 #include <config.h>
 #endif
 
-#include <koView.h>
+#include <KoView.h>
 #include <KoPoint.h>
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <koffice_export.h>
 class DCOPObject;
 class QLabel;

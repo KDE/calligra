@@ -25,7 +25,7 @@
 #include <knuminput.h>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <klineedit.h>
 #include <knumvalidator.h>
 #include <koUnitWidgets.h>

@@ -28,10 +28,10 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 
-#include <koDocument.h>
+#include <KoDocument.h>
 #include <KoPoint.h>
 #include <KoRect.h>
-#include <koView.h>
+#include <KoView.h>
 #include <kozoomhandler.h>
 
 #include "koGuideLineDia.h"

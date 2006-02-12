@@ -20,7 +20,7 @@
 #ifndef _KIS_PNG_EXPORT_H_
 #define _KIS_PNG_EXPORT_H_
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class KisPNGExport : public KoFilter {
     Q_OBJECT

@@ -28,10 +28,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koxmlns.h>
-#include <koGlobal.h>
-#include <koStyleStack.h>
-#include <koGenStyles.h>
+#include <KoXmlNS.h>
+#include <KoGlobal.h>
+#include <KoStyleStack.h>
+#include <KoGenStyles.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"

@@ -1,7 +1,7 @@
 #ifndef KFORMULA_FACTORY_H
 #define KFORMULA_FACTORY_H
 
-#include <koFactory.h>
+#include <KoFactory.h>
 //#include <kaboutdata.h>
 
 class KInstance;

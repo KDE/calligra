@@ -24,8 +24,8 @@
 #include <qvaluelist.h>
 
 #include <kgenericfactory.h>
-#include <koFilter.h>
-#include <koFilterChain.h>
+#include <KoFilter.h>
+#include <KoFilterChain.h>
 #include <KoStore.h>
 
 #include "svgexport.h"

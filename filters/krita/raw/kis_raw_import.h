@@ -20,7 +20,7 @@
 #ifndef KIS_RAW_IMPORT_H_
 #define KIS_RAW_IMPORT_H_
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class KProcess;
 class KDialogBase;

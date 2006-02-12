@@ -34,7 +34,7 @@ namespace KFormula {
     class View;
 }
 
-#include <koView.h>
+#include <KoView.h>
 #include <qptrlist.h>
 #include <qstringlist.h>
 

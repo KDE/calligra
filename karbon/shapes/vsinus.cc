@@ -24,7 +24,7 @@
 #include "vsinus.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <qdom.h>
 #include <vdocument.h>
 

@@ -41,8 +41,8 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoOasisContext.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 
 #include "KPrPixmapObject.h"
 #include "KPrGradient.h"

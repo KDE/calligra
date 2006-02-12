@@ -30,9 +30,9 @@
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kinstance.h>
-#include <koFilterManager.h>
-#include <koTemplates.h>
-#include <koDocument.h>
+#include <KoFilterManager.h>
+#include <KoTemplates.h>
+#include <KoDocument.h>
 #include <kmainwindow.h>
 
 #include <kdebug.h>

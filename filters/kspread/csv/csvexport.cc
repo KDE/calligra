@@ -26,8 +26,8 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
-#include <koFilterManager.h>
+#include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kspread_map.h>
 #include <kspread_sheet.h>

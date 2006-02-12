@@ -20,13 +20,13 @@
 #ifndef OODRAW_IMPORT_H__
 #define OODRAW_IMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 #include <qdom.h>
 #include <qdict.h>
 #include <qcolor.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 #include <core/vdocument.h>
 #include <core/vcomposite.h>
 #include <core/vstroke.h>

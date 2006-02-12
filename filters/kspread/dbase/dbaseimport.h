@@ -20,7 +20,7 @@
 #ifndef __DBASEIMPORT_H
 #define __DBASEIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 class DBaseImport : public KoFilter {

@@ -21,7 +21,7 @@
 #ifndef KPRESENTER_FACTORY_H
 #define KPRESENTER_FACTORY_H
 
-#include <koFactory.h>
+#include <KoFactory.h>
 class KAboutData;
 
 class KPrFactory : public KoFactory

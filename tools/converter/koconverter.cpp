@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <kio/netaccess.h>
 
-#include <koFilterManager.h>
+#include <KoFilterManager.h>
 
 #include "koconverter.h"
 

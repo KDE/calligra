@@ -18,7 +18,7 @@
 */
 
 #include "KoFontDiaPreview.h"
-#include "koGlobal.h"
+#include "KoGlobal.h"
 #include "KoTextFormat.h"
 
 #include <klocale.h>

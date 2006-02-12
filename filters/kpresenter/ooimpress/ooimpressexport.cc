@@ -25,9 +25,9 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
-#include <koGlobal.h>
-#include <koUnit.h>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
+#include <KoUnit.h>
 
 typedef KGenericFactory<OoImpressExport, KoFilter> OoImpressExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libooimpressexport, OoImpressExportFactory( "kofficefilters" ) )

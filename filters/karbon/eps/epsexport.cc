@@ -27,9 +27,9 @@
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <koDocumentInfo.h>
-#include <koFilter.h>
-#include <koFilterChain.h>
+#include <KoDocumentInfo.h>
+#include <KoFilter.h>
+#include <KoFilterChain.h>
 #include <KoStore.h>
 
 #include "epsexport.h"

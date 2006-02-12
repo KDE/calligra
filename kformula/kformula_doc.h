@@ -25,7 +25,7 @@
 #include <qpainter.h>
 
 #include <kcommand.h>
-#include <koDocument.h>
+#include <KoDocument.h>
 #include <kocommandhistory.h>
 #include <kformuladefs.h>
 

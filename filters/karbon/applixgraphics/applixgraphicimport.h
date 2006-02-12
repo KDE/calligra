@@ -20,7 +20,7 @@
 #ifndef APPLIXGRAPHICIMPORT_H
 #define APPLIXGRAPHICIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 
 class APPLIXGRAPHICImport : public KoFilter {

@@ -21,9 +21,9 @@
 #ifndef KSPREAD_COMMANDS
 #define KSPREAD_COMMANDS
 
-#include <koPageLayout.h>
-#include <koQueryTrader.h>
-#include <koUnit.h>
+#include <KoPageLayout.h>
+#include <KoQueryTrader.h>
+#include <KoUnit.h>
 #include <qrect.h>
 #include <qstring.h>
 

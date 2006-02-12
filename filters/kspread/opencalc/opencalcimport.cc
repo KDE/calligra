@@ -30,15 +30,15 @@
 #include "opencalcimport.h"
 
 #include <kdebug.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
 #include <kmdcodec.h>
-#include <koFilterChain.h>
-#include <koGlobal.h>
-#include <koUnit.h>
-#include <koStyleStack.h>
-#include <kodom.h>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
+#include <KoUnit.h>
+#include <KoStyleStack.h>
+#include <KoDom.h>
 #include <ooutils.h>
 
 #include <kspread_cell.h>

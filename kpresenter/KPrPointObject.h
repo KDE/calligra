@@ -22,7 +22,7 @@
 #define kppointobject_h
 
 #include "KPrObject.h"
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 
 class KPrPointObject : public KPrShadowObject,  public KPrStartEndLine
 {

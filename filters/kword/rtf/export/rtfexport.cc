@@ -36,7 +36,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kimageio.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>

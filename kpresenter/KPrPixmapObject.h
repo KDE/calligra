@@ -28,7 +28,7 @@
 #include <qvariant.h>
 
 #include "KPrObject.h"
-#include <koPictureCollection.h>
+#include <KoPictureCollection.h>
 #include <KoSize.h>
 
 class QPixmap;

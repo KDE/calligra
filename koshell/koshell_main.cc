@@ -26,7 +26,7 @@
 #include <kuniqueapplication.h>
 #include <kwin.h>
 
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include "koshell_shell.h"
 

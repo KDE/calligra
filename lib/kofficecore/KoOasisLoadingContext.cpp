@@ -17,11 +17,11 @@
 */
 
 #include "KoOasisLoadingContext.h"
-#include <koOasisStore.h>
-#include <koOasisStyles.h>
-#include <koxmlns.h>
+#include <KoOasisStore.h>
+#include <KoOasisStyles.h>
+#include <KoXmlNS.h>
 #include <kdebug.h>
-#include <kodom.h>
+#include <KoDom.h>
 
 KoOasisLoadingContext::KoOasisLoadingContext( KoDocument* doc,
                                               KoOasisStyles& styles, KoStore* store )

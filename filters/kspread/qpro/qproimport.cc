@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 
 #include <kspread_doc.h>
 #include <kspread_sheet.h>

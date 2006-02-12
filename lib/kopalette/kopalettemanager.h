@@ -30,7 +30,7 @@
 
 #include <koffice_export.h>
 
-#include <koView.h>
+#include <KoView.h>
 
 class KoPalette;
 class KActionMenu;

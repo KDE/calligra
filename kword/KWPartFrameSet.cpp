@@ -26,7 +26,7 @@
 
 #include <KoOasisContext.h>
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 #include <klocale.h>
 #include <kapplication.h>

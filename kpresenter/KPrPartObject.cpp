@@ -23,8 +23,8 @@
 #include "KPrDocument.h"
 #include "KPrView.h"
 #include "KPrGradient.h"
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 #include "KoOasisContext.h"
 #include <kparts/partmanager.h>
 

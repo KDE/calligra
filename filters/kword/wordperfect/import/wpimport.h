@@ -28,7 +28,7 @@
 #include <qmemarray.h>
 #include <qdom.h>
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 class WPImport : public KoFilter

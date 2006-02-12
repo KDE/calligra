@@ -23,7 +23,7 @@
 #define kplineobject_h
 
 #include "KPrObject.h"
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 
 class QPainter;
 class DCOPObject;

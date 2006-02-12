@@ -24,9 +24,9 @@
 #include "KoTextParag.h"
 #include "KoVariable.h"
 #include "KoParagCounter.h"
-#include <koDocument.h>
+#include <KoDocument.h>
 #include <KoSearchDia.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include <kdeversion.h>
 #include <kdebug.h>

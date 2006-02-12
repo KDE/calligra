@@ -74,19 +74,19 @@
 #include <khelpmenu.h>
 #include <kconfig.h>
 #include <koTemplateChooseDia.h>
-#include <koFilterManager.h>
+#include <KoFilterManager.h>
 #include <KoStoreDevice.h>
 #include "KIvioDocIface.h"
 #include <kcommand.h>
 #include <kozoomhandler.h>
-#include <koApplication.h>
+#include <KoApplication.h>
 #include <kglobal.h>
 #include <kocommandhistory.h>
 #include <KoXmlWriter.h>
-#include <koGenStyles.h>
-#include <koOasisSettings.h>
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoGenStyles.h>
+#include <KoOasisSettings.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 //using namespace std;
 

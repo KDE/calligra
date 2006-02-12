@@ -28,7 +28,7 @@
 #include "kugar_view.h"
 #include "kugar_factory.h"
 
-#include <koFilterManager.h>
+#include <KoFilterManager.h>
 
 KugarPart::KugarPart( QWidget *parentWidget, const char *widgetName, 
                       QObject* parent, const char* name, bool singleViewMode ) 

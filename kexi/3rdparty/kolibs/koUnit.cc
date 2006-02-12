@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-//#include <koGlobal.h>
-#include "koUnit.h"
+//#include <KoGlobal.h>
+#include "KoUnit.h"
 #ifndef SIMPLE_KOLIBS
 # include <KoXmlWriter.h>
 #endif

@@ -16,7 +16,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koGenStyles.h>
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 #include "../../store/tests/xmlwritertest.h"
 #include <kdebug.h>

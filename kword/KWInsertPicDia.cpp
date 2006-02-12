@@ -31,7 +31,7 @@
 #include <kimageio.h>
 #include <kio/netaccess.h>
 
-#include <koPicture.h>
+#include <KoPicture.h>
 #include <koPictureFilePreview.h>
 
 #include "KWDocument.h"

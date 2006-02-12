@@ -28,10 +28,10 @@
 #include "kspread_style_manager.h"
 #include "kspread_util.h"
 
-#include <koGenStyles.h>
+#include <KoGenStyles.h>
 
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>

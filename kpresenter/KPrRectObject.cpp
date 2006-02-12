@@ -24,9 +24,9 @@
 #include "KPrRectObjectIface.h"
 
 #include <KoTextZoomHandler.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <KoOasisContext.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 #include <kdebug.h>
 #include <qregion.h>

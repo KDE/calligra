@@ -26,7 +26,7 @@
 #include <KoPageLayoutColumns.h>
 #include <KoPageLayoutSize.h>
 #include <KoPageLayoutHeader.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <koUnitWidgets.h>
 
 #include <klocale.h>

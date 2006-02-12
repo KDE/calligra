@@ -15,7 +15,7 @@
 #ifndef __RTFIMPORT_H__
 #define __RTFIMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qasciidict.h>
 #include <qcolor.h>
 #include <qcstring.h>

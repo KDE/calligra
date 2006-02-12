@@ -23,7 +23,7 @@
 class QCString;
 class QStringList;
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class LATEXExport : public KoFilter
 {

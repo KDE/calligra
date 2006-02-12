@@ -25,7 +25,7 @@
 
 #include <qwidget.h>
 
-#include <koUnit.h>
+#include <KoUnit.h>
 
 #include "KPrCommand.h"
 

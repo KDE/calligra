@@ -24,7 +24,7 @@
 #include "defs.h"
 #include "KWTextFrameSet.h"
 #include <kdialogbase.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <koUnitWidgets.h>
 #include <qgroupbox.h>
 

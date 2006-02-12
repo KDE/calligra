@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include <koPicture.h>
+#include <KoPicture.h>
 
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"

@@ -23,7 +23,7 @@
 #include <qbrush.h>
 #include <qptrlist.h>
 #include <qpointarray.h>
-#include <koFilter.h>
+#include <KoFilter.h>
 #include "vvisitor.h"
 
 class KoWmfWrite;

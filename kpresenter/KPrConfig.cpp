@@ -57,7 +57,7 @@
 #include "KPrView.h"
 #include "KPrDocument.h"
 #include "KPrPage.h"
-#include <koUnit.h>
+#include <KoUnit.h>
 
 #include <float.h>
 #include <knumvalidator.h>

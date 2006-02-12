@@ -22,7 +22,7 @@
 #define frame_picture_frame_set_h
 
 #include "KWFrameSet.h"
-#include <koPicture.h>
+#include <KoPicture.h>
 
 class KWPictureFrameSet : public KWFrameSet
 {

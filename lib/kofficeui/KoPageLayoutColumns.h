@@ -22,8 +22,8 @@
 #ifndef kopagelayoutcolumns_h
 #define kopagelayoutcolumns_h
 
-#include <koUnit.h>
-#include <koPageLayout.h>
+#include <KoUnit.h>
+#include <KoPageLayout.h>
 #include <KoPageLayoutColumnsBase.h>
 
 class QWidget;

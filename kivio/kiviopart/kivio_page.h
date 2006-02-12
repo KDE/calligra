@@ -34,7 +34,7 @@ class KivioLayer;
 class KoPoint;
 class DCOPObject;
 
-#include <koDocument.h>
+#include <KoDocument.h>
 
 #include <qpen.h>
 #include <qptrlist.h>

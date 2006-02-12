@@ -19,8 +19,8 @@
 #ifndef kopagelayoutheader_h
 #define kopagelayoutheader_h
 
-#include <koUnit.h>
-#include <koPageLayout.h>
+#include <KoUnit.h>
+#include <KoPageLayout.h>
 #include <KoPageLayoutHeaderBase.h>
 
 class QWidget;

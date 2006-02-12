@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <koApplication.h>
+#include <KoApplication.h>
 #include <kcmdlineargs.h>
 #include <dcopclient.h>
 

@@ -68,7 +68,7 @@ using namespace KSpell2;
 #include <kfiledialog.h>
 #include <qtabwidget.h>
 #include <keditlistbox.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)

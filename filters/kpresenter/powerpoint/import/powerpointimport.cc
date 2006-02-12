@@ -33,9 +33,9 @@
 #include <qtextstream.h>
 
 #include <kdebug.h>
-#include <koFilterChain.h>
-#include <koGlobal.h>
-#include <koUnit.h>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
+#include <KoUnit.h>
 #include <kgenericfactory.h>
 
 #include <KoXmlWriter.h>

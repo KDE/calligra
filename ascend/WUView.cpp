@@ -24,8 +24,8 @@
 #include <kparts/event.h>
 #include <klocale.h>
 
-#include <koView.h>
-#include <koMainWindow.h>
+#include <KoView.h>
+#include <KoMainWindow.h>
 #include <kotoolbox.h>
 
 #include "WUFactory.h"

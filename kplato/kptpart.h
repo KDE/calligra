@@ -27,7 +27,7 @@
 #include "kptwbsdefinition.h"
 #include "kptxmlloaderobject.h"
 
-#include <koDocument.h>
+#include <KoDocument.h>
 
 class KoView;
 class KoCommandHistory;

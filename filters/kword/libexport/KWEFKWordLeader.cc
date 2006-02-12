@@ -40,7 +40,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <KoStore.h>
 
 #include "KWEFStructures.h"

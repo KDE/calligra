@@ -20,7 +20,7 @@
 #ifndef GNUMERICFILTER_H
 #define GNUMERICFILTER_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 #include <qdatetime.h>
 #include <qdom.h>

@@ -28,8 +28,8 @@
 #include "KoOasisContext.h"
 #include "KoVariable.h"
 #include "KoAutoFormat.h"
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 
 #include <klocale.h>
 #include <kdebug.h>

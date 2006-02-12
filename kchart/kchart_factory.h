@@ -8,7 +8,7 @@
 #define KCHART_FACTORY_H
 
 
-#include <koFactory.h>
+#include <KoFactory.h>
 
 
 class KInstance;

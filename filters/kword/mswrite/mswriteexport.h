@@ -20,7 +20,7 @@
 #ifndef MSWRITEEXPORT_H
 #define MSWRITEEXPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class MSWriteExport : public KoFilter
 {

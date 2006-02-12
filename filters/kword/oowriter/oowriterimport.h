@@ -21,11 +21,11 @@
 #ifndef OoWriter_IMPORT_H__
 #define OoWriter_IMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 #include <qdict.h>
 #include <qdom.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 #include <liststylestack.h>
 
 class KZip;

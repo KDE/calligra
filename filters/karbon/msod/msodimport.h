@@ -23,7 +23,7 @@ DESCRIPTION
 #ifndef MSODIMPORT_H
 #define MSODIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <msod.h>
 
 class MSODImport :

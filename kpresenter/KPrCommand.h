@@ -28,7 +28,7 @@
 #include <qcolor.h>
 #include <qsize.h>
 #include "global.h"
-#include <koPictureCollection.h>
+#include <KoPictureCollection.h>
 #include <qvaluelist.h>
 #include <qpen.h>
 #include <qbrush.h>

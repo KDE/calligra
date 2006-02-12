@@ -20,7 +20,7 @@
 #ifndef __WMLEXPORT_H
 #define __WMLEXPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 class WMLExport : public KoFilter

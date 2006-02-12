@@ -43,7 +43,7 @@
 #include <qrect.h>
 #include <qbitmap.h>
 #include <kdebug.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <math.h>
 #include <kozoomhandler.h>
 

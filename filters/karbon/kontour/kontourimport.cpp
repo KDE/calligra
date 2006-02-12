@@ -18,11 +18,11 @@
 */
 
 #include <kontourimport.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
-#include <koUnit.h>
-#include <koGlobal.h>
+#include <KoUnit.h>
+#include <KoGlobal.h>
 #include <shapes/vellipse.h>
 #include <shapes/vrectangle.h>
 #include <shapes/vpolygon.h>

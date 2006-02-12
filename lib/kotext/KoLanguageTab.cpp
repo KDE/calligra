@@ -18,7 +18,7 @@
 */
 
 #include "KoLanguageTab.h"
-#include "koGlobal.h"
+#include "KoGlobal.h"
 
 #include <kcombobox.h>
 #include <kiconloader.h>

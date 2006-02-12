@@ -139,7 +139,7 @@ private:
 };
 #endif
 
-#include <koDocumentChild.h>
+#include <KoDocumentChild.h>
 class KWDocument;
 
 /******************************************************************/

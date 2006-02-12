@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 
-#include <koPictureCollection.h>
+#include <KoPictureCollection.h>
 
 #include "KWDocument.h"
 #include "defs.h"

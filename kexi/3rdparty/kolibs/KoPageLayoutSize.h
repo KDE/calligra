@@ -21,10 +21,10 @@
 #define kopagelayoutsize_h
 
 #include <qgroupbox.h>
-#include <koGlobal.h>
-#include <koUnit.h>
+#include <KoGlobal.h>
+#include <KoUnit.h>
 #include <kdialogbase.h>
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 #include <koPageLayoutDia.h>
 
 class QComboBox;

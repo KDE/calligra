@@ -19,7 +19,7 @@
 #ifndef _KIS_TIFF_IMPORT_H_
 #define _KIS_TIFF_IMPORT_H_
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class KisTIFFImport : public KoFilter {
     Q_OBJECT

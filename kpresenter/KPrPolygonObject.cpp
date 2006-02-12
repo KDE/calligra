@@ -29,10 +29,10 @@
 #include <qpicture.h>
 #include <qpainter.h>
 #include "KPrPolygonObjectIface.h"
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <KoOasisContext.h>
 #include <math.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 #include "KoPen.h"
 
 using namespace std;

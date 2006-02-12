@@ -20,7 +20,7 @@
 #ifndef __XAMLEXPORT_H__
 #define __XAMLEXPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 #include "vvisitor.h"
 #include "vgradient.h"

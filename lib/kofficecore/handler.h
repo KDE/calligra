@@ -21,7 +21,7 @@
 #define HANDLER_H
 
 #include <qobject.h>
-#include <koDocumentChild.h>
+#include <KoDocumentChild.h>
 
 class QWMatrix;
 

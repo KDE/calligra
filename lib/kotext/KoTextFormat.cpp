@@ -22,8 +22,8 @@
 #include "KoTextZoomHandler.h"
 #include "KoStyleCollection.h"
 #include "KoOasisContext.h"
-#include <koGenStyles.h>
-#include <koxmlns.h>
+#include <KoGenStyles.h>
+#include <KoXmlNS.h>
 
 #include <kglobal.h>
 #include <kdebug.h>

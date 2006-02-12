@@ -24,7 +24,7 @@
 #include <qstringlist.h>
 
 #include <kprocess.h>
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 class GenericFilter : public KoFilter

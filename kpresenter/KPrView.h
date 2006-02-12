@@ -29,7 +29,7 @@
 #include <qtimer.h>
 #include <qdatetime.h>
 
-#include <koView.h>
+#include <KoView.h>
 #include "global.h"
 #include <KoBrush.h>
 #include <KoPen.h>

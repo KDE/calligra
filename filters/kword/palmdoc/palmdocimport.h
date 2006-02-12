@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 class PalmDocImport : public KoFilter

@@ -20,7 +20,7 @@
 #ifndef __XSLTEXPORT_H__
 #define __XSLTEXPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class XSLTExport : public KoFilter
 {

@@ -5,7 +5,7 @@
 
 #include <qpoint.h>
 
-#include <koQueryTrader.h>
+#include <KoQueryTrader.h>
 
 class QWidget;
 

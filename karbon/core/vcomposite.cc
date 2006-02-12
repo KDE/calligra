@@ -26,7 +26,7 @@
 #include <KoRect.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 #include "vcomposite.h"
 #include "vcomposite_iface.h"

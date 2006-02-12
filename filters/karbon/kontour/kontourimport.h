@@ -20,7 +20,7 @@
 #ifndef __KONTOURIMPORT_H__
 #define __KONTOURIMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qdom.h>
 #include <core/vdocument.h>
 

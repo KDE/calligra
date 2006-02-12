@@ -28,7 +28,7 @@
 #include "KWPage.h"
 #include "KWPictureFrameSet.h"
 
-#include <koSetPropCommand.h>
+#include <KoSetPropCommand.h>
 #include <KoParagDia_p.h> // for KoBorderPreview
 
 #include <knuminput.h>

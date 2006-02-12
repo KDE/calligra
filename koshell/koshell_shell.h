@@ -22,8 +22,8 @@
 #ifndef __koshell_window_h__
 #define __koshell_window_h__
 
-#include <koMainWindow.h>
-#include <koQueryTrader.h>
+#include <KoMainWindow.h>
+#include <KoQueryTrader.h>
 #include <ktabwidget.h>
 #include <qptrlist.h>
 #include <qmap.h>

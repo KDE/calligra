@@ -16,8 +16,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koOasisStore.h>
-#include <kodom.h>
+#include <KoOasisStore.h>
+#include <KoDom.h>
 #include <kdebug.h>
 #include <assert.h>
 

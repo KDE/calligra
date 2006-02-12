@@ -31,7 +31,7 @@
 
 #include <kdebug.h>
 
-#include <koPicture.h>
+#include <KoPicture.h>
 
 /**
  * This class implements the actual widget that shows the image.

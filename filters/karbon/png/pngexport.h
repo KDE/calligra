@@ -20,7 +20,7 @@
 #ifndef __PNGEXPORT_H__
 #define __PNGEXPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 #include "vvisitor.h"
 

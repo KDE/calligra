@@ -20,7 +20,7 @@
 #ifndef KPRKWORD_H
 #define KPRKWORD_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qdom.h>
 
 class KprKword : public KoFilter {

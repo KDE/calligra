@@ -20,7 +20,7 @@
 #ifndef KIS_OPENEXR_EXPORT_H_
 #define KIS_OPENEXR_EXPORT_H_
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class KisOpenEXRExport : public KoFilter {
     Q_OBJECT

@@ -24,18 +24,18 @@
 #include "KPrDocument.h"
 #include "KPrLineObjectIface.h"
 #include "KoPointArray.h"
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 #include <KoOasisContext.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdom.h>
 #include <kdebug.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <KoTextZoomHandler.h>
 #include <math.h>
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 using namespace std;
 

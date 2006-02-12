@@ -23,10 +23,10 @@
 #define __KOPGLAYOUTDIA_H__
 
 #include <qgroupbox.h>
-#include <koGlobal.h>
-#include <koUnit.h>
+#include <KoGlobal.h>
+#include <KoUnit.h>
 #include <kdialogbase.h>
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 
 class QButtonGroup;
 class QComboBox;

@@ -31,8 +31,8 @@
 #include <kfilterdev.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
-#include <koGlobal.h>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
 
 // hehe >:->
 #include <kspread_doc.h>
@@ -41,7 +41,7 @@
 #include <kspread_sheetprint.h>
 #include <kspread_cell.h>
 #include <kspread_util.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 
 #include <math.h>
 

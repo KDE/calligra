@@ -34,7 +34,7 @@
 
 #include "kofficecreator.h"
 #include <KoStore.h>
-#include <koDocument.h>
+#include <KoDocument.h>
 #include "koffice_export.h"
 
 extern "C"

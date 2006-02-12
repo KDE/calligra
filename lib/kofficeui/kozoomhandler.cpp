@@ -19,8 +19,8 @@
 
 #include "kozoomhandler.h"
 #include <kdebug.h>
-#include <koUnit.h> // for POINT_TO_INCH
-#include <koGlobal.h>
+#include <KoUnit.h> // for POINT_TO_INCH
+#include <KoGlobal.h>
 
 KoZoomHandler::KoZoomHandler()
 {

@@ -33,7 +33,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <KoStore.h>
 
 #include "list.h"

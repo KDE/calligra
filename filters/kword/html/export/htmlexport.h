@@ -26,7 +26,7 @@
 #include <qfile.h>
 #include <qobject.h>
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 

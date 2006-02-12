@@ -28,7 +28,7 @@
 #include "KPrPage.h"
 #include <knuminput.h>
 #include <qlineedit.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <knumvalidator.h>
 #include "KPrDocument.h"
 #include <kseparator.h>

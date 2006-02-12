@@ -25,7 +25,7 @@
 #include <qiodevice.h>
 #include <qstring.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
 #include "pole.h"

@@ -49,12 +49,12 @@
 #include <qdom.h>
 #include <qdict.h>
 
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 #include <kurl.h>
 #include <kdebug.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <kapplication.h>
 #include <kurldrag.h>
 #include <ktempfile.h>
@@ -68,14 +68,14 @@
 
 #include <koTemplateChooseDia.h>
 #include <koRuler.h>
-#include <koGenStyles.h>
-#include <koFilterManager.h>
+#include <KoGenStyles.h>
+#include <KoFilterManager.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <koQueryTrader.h>
+#include <KoQueryTrader.h>
 #include <KoXmlWriter.h>
-#include <koOasisSettings.h>
-#include <koMainWindow.h>
+#include <KoOasisSettings.h>
+#include <KoMainWindow.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -94,15 +94,15 @@
 
 #include <KoVariable.h>
 #include <KoAutoFormat.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 #include "KPrVariableCollection.h"
 #include "KPrBackground.h"
 #include "KPrNoteBar.h"
 #include "KPrBgSpellCheck.h"
 #include <kglobalsettings.h>
 #include <kocommandhistory.h>
-#include "koApplication.h"
-#include <koOasisStyles.h>
+#include "KoApplication.h"
+#include <KoOasisStyles.h>
 #include <KoOasisContext.h>
 
 #include "KPrLoadingInfo.h"

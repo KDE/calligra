@@ -16,7 +16,7 @@
 #ifndef __KUGARNOPIMPORT_H__
 #define __KUGARNOPIMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qcstring.h>
 #include <qstringlist.h>
 

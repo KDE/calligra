@@ -26,8 +26,8 @@
 #include <qptrlist.h>
 #include <qvaluelist.h>
 
-#include <koUnit.h>
-#include <koPageLayout.h>
+#include <KoUnit.h>
+#include <KoPageLayout.h>
 
 #include "kspread_doc.h"
 #include "region.h"

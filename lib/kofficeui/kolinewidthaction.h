@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <koselectaction.h>
 #include <koffice_export.h>
 

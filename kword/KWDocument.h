@@ -86,9 +86,9 @@ class KoOasisSettings;
 #include "KWAnchorPos.h" // legacy loading stuff
 #include "KWView.h"
 
-#include <koDocument.h>
+#include <KoDocument.h>
 #include <KoTextZoomHandler.h>
-#include <koPictureKey.h>
+#include <KoPictureKey.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 
 #include <qmap.h>

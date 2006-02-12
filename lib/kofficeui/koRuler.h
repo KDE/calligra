@@ -29,9 +29,9 @@
 
 #include <kdemacros.h>
 #include <koffice_export.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <koTabChooser.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 
 class KoPageLayout;
 class QPainter;

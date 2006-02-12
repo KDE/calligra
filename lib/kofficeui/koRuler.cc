@@ -30,7 +30,7 @@
 #include <qpainter.h>
 #include <qpopupmenu.h>
 #include <qtooltip.h>
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 
 class KoRulerPrivate {
 public:

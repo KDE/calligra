@@ -32,7 +32,7 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <krecentdocument.h>
-#include <koFilterManager.h>
+#include <KoFilterManager.h>
 #include <ktempfile.h>
 #include <kdebug.h>
 

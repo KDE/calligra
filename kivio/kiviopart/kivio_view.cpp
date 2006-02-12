@@ -66,12 +66,12 @@
 
 #include <kparts/event.h>
 #include <koPartSelectDia.h>
-#include <koQueryTrader.h>
+#include <KoQueryTrader.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
 #include <kozoomhandler.h>
 #include <koUnitWidgets.h>
-#include <koApplication.h>
+#include <KoApplication.h>
 #include <kotabbar.h>
 #include <kolinewidthaction.h>
 #include <kolinestyleaction.h>

@@ -43,13 +43,13 @@
 #include "KPrClosedLineObject.h"
 #include "KPrUtils.h"
 #include <kdebug.h>
-#include <koQueryTrader.h>
+#include <KoQueryTrader.h>
 #include "KPrDocument.h"
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoTextZoomHandler.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 #include "KoPointArray.h"
 #include "KPrTextDocument.h"
 #include <KoTextObject.h>
@@ -58,7 +58,7 @@
 #include <qapplication.h>
 #include <KoStyleCollection.h>
 #include <KoVariable.h>
-#include <koGenStyles.h>
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 #include <ktempfile.h>
 #include <qbuffer.h>

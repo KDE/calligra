@@ -21,7 +21,7 @@
 #include "KWStyleManager.h"
 #include "KWStyleManager.moc"
 
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <KoStyleCollection.h>
 #include <kdebug.h>
 /******************************************************************/

@@ -18,7 +18,7 @@
 
 #include "KWOasisSaver.h"
 #include <KoStore.h>
-#include <koOasisStore.h>
+#include <KoOasisStore.h>
 #include <KoOasisContext.h>
 #include <KoXmlWriter.h>
 #include "KWDocument.h"

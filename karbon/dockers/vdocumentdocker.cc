@@ -31,7 +31,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <klineeditdlg.h>

@@ -26,12 +26,12 @@
 #include "vstroke.h"
 
 #include <KoStore.h>
-#include <koGenStyles.h>
-#include <koStyleStack.h>
+#include <KoGenStyles.h>
+#include <KoStyleStack.h>
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 #include <KoOasisLoadingContext.h>
-#include <koOasisStyles.h>
+#include <KoOasisStyles.h>
 
 VObject::VObject( VObject* parent, VState state ) : m_dcop( 0L )
 {

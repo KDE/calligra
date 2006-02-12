@@ -23,7 +23,7 @@
 
 #include <klocale.h>
 #include "koUnitWidgets.h"
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <kcombobox.h>
 #include <knuminput.h>
 

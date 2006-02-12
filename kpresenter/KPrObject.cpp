@@ -35,7 +35,7 @@
 
 #include <kapplication.h>
 #include <KoOasisContext.h>
-#include "koOasisStyles.h"
+#include "KoOasisStyles.h"
 
 #include <stdlib.h>
 #include <fstream>
@@ -46,8 +46,8 @@
 #include <KoRect.h>
 #include <KoSize.h>
 #include <KoPoint.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 #include <kdebug.h>
 
 const QString &KPrObject::tagORIG=KGlobal::staticQString("ORIG");

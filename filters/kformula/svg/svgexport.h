@@ -21,7 +21,7 @@
 #ifndef __SVGEXPORT_H__
 #define __SVGEXPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class SvgExport : public KoFilter
 {

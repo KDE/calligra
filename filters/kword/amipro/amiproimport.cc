@@ -29,9 +29,9 @@
 #include <qfont.h>
 
 #include <kdebug.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include <amiproimport.h>
 #include <amiproparser.h>

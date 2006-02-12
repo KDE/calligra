@@ -20,7 +20,7 @@
 #ifndef EXAMPLE_VIEW
 #define EXAMPLE_VIEW
 
-#include <koView.h>
+#include <KoView.h>
 
 class KAction;
 class QPaintEvent;

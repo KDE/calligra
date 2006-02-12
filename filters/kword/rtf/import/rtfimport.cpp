@@ -17,7 +17,7 @@
 #include <qfontinfo.h>
 #include <stddef.h>
 #include <string.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
 #include <qcstring.h>
@@ -30,8 +30,8 @@
 #include <kurl.h>
 #include <kmessagebox.h>
 
-#include <koPicture.h>
-#include <koFilterManager.h>
+#include <KoPicture.h>
+#include <KoFilterManager.h>
 
 #include "rtfimport.h"
 #include "rtfimport.moc"

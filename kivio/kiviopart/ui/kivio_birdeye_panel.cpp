@@ -12,7 +12,7 @@
 #include <ktoolbar.h>
 #include <kaction.h>
 #include <klocale.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <kozoomhandler.h>
 #include <kdeversion.h>
 #include <kiconloader.h>

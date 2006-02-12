@@ -20,7 +20,7 @@
 #ifndef KIVIO_IMAGEEXPORT_H
 #define KIVIO_IMAGEEXPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 namespace Kivio
 {

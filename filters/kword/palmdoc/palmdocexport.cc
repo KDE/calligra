@@ -28,7 +28,7 @@
 #include <qtextstream.h>
 
 #include <kdebug.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
 #include <KWEFStructures.h>

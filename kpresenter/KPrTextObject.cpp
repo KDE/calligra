@@ -41,7 +41,7 @@
 #include "KPrTextViewIface.h"
 #include "KPrTextObjectIface.h"
 #include <KoOasisContext.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 #include <ktempfile.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -66,11 +66,11 @@
 #include <KoCustomVariablesDia.h>
 #include <koRuler.h>
 #include <KoSize.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
-#include <koOasisStore.h>
+#include <KoOasisStore.h>
 
 #include <float.h>
 using namespace std;

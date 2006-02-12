@@ -23,7 +23,7 @@
 
 #include "KPrObject.h"
 #include <KoBrush.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 
 class KPrGradient;
 class DCOPObject;

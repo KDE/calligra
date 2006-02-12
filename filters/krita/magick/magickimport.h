@@ -19,7 +19,7 @@
 #ifndef MAGICKIMPORT_H_
 #define MAGICKIMPORT_H_
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class MagickImport : public KoFilter {
     Q_OBJECT

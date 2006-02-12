@@ -28,7 +28,7 @@
 #include <qstring.h>
 #include <qptrlist.h>
 
-#include <koQueryTrader.h>
+#include <KoQueryTrader.h>
 #include <KoPoint.h>
 #include <KoRect.h>
 #include <koGuides.h>

@@ -71,12 +71,12 @@
 #include "valueformatter.h"
 #include "valueparser.h"
 
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 #include <KoRect.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 #include <KoXmlWriter.h>
-#include <koOasisStyles.h>
+#include <KoOasisStyles.h>
 
 #include <kmessagebox.h>
 

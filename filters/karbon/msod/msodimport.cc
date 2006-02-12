@@ -24,7 +24,7 @@ DESCRIPTION
 #include <ktempfile.h>
 #include <kmimetype.h>
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <qfile.h>
 #include <msodimport.h>
 #include <qpointarray.h>

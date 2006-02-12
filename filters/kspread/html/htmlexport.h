@@ -22,7 +22,7 @@
 #ifndef HTMLEXPORT_TEST_H
 #define HTMLEXPORT_TEST_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class ExportDialog;
 class KoDocument;

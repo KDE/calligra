@@ -22,7 +22,7 @@
 #include <ktabwidget.h>
 #include <kdebug.h>
 
-#include <koView.h>
+#include <KoView.h>
 
 #include <kopalette.h>
 #include <kotabpalette.h>

@@ -29,8 +29,8 @@
 
 #include <KoVariable.h>
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 
 #include <klocale.h>
 #include <kdebug.h>

@@ -8,7 +8,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 #include <koUnitWidgets.h>
 
 KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)

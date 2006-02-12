@@ -21,10 +21,10 @@
 #include <qdom.h>
 #include <kdebug.h>
 
-#include <koGenStyles.h>
+#include <KoGenStyles.h>
 #include <KoOasisLoadingContext.h>
-#include <koOasisStyles.h>
-#include <koxmlns.h>
+#include <KoOasisStyles.h>
+#include <KoXmlNS.h>
 
 #include "vfill.h"
 

@@ -20,7 +20,7 @@
 #ifndef EXAMPLE_PART_H
 #define EXAMPLE_PART_H
 
-#include <koDocument.h>
+#include <KoDocument.h>
 
 class ExamplePart : public KoDocument
 {

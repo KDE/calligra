@@ -20,7 +20,7 @@
 #ifndef __KARBON_FACTORY_H__
 #define __KARBON_FACTORY_H__
 
-#include <koFactory.h>
+#include <KoFactory.h>
 #include <koffice_export.h>
 class KAboutData;
 class KInstance;

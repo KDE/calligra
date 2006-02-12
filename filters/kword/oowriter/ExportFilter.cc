@@ -40,9 +40,9 @@
 #include <klocale.h>
 #include <kzip.h>
 
-#include <koPageLayout.h>
-#include <koPictureKey.h>
-#include <koPicture.h>
+#include <KoPageLayout.h>
+#include <KoPictureKey.h>
+#include <KoPicture.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>

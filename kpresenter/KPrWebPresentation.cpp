@@ -74,7 +74,7 @@
 #include <kio/netaccess.h>
 #include <kdialog.h>
 
-#include "koDocumentInfo.h"
+#include "KoDocumentInfo.h"
 
 
 // Comes from koffice/filters/libexport/KWEFUtils.cc

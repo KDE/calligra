@@ -75,9 +75,9 @@ class KoPaletteManager;
 #include <qptrlist.h>
 #include <qframe.h>
 
-#include <koView.h>
-#include <koDocument.h>
-#include <koUnit.h>
+#include <KoView.h>
+#include <KoDocument.h>
+#include <KoUnit.h>
 
 #include <koffice_export.h>
 using namespace Kivio;

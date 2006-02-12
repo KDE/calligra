@@ -28,8 +28,8 @@
 #include "KPrVariableCollection.h"
 
 #include <KoOasisContext.h>
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 KPrTextDocument::KPrTextDocument( KPrTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textobj->kPresenterDocument()->zoomHandler(), fc, formatter, true ), m_textobj( textobj )

@@ -18,7 +18,7 @@
 */
 
 #include "KoDecorationTab.h"
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include <kcolorbutton.h>
 #include <kpushbutton.h>

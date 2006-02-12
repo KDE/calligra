@@ -22,7 +22,7 @@
 #include "KoSearchDia.h"
 #include "KoTextParag.h"
 
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <KoTextObject.h>
 #include <KoTextView.h>
 

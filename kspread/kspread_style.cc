@@ -23,11 +23,11 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koGlobal.h>
-#include <koGenStyles.h>
-#include <koStyleStack.h>
+#include <KoGlobal.h>
+#include <KoGenStyles.h>
+#include <KoStyleStack.h>
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 #include "kspread_util.h"
 #include "kspread_doc.h"

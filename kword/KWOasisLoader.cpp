@@ -29,12 +29,12 @@
 
 #include <KoStore.h>
 #include <KoOasisContext.h>
-#include <koOasisStyles.h>
-#include <koOasisStore.h>
-#include <koOasisSettings.h>
-#include <koxmlns.h>
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoOasisStyles.h>
+#include <KoOasisStore.h>
+#include <KoOasisSettings.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 #include <kdebug.h>
 #include <klocale.h>

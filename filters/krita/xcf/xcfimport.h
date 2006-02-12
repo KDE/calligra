@@ -19,7 +19,7 @@
 #ifndef XCFIMPORT_H_
 #define XCFIMPORT_H_
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class XCFImport : public KoFilter {
     Q_OBJECT

@@ -19,7 +19,7 @@
 #ifndef XCFEXPORT_H_
 #define XCFEXPORT_H_
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class XCFExport : public KoFilter {
     Q_OBJECT

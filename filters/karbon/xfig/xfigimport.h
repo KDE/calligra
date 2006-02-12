@@ -33,7 +33,7 @@ class GDocument;
 class GObject;
 class QColor;
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qobject.h>
 #include <qstring.h>
 

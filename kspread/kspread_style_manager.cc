@@ -23,8 +23,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <koOasisStyles.h>
-#include <koxmlns.h>
+#include <KoOasisStyles.h>
+#include <KoXmlNS.h>
 
 #include "kspread_style.h"
 #include "kspread_style_manager.h"

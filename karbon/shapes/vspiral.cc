@@ -27,7 +27,7 @@
 #include "vspiral.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <vdocument.h>
 
 VSpiral::VSpiral( VObject* parent, VState state )

@@ -26,7 +26,7 @@
 #include "KoRichText.h"
 #include <KoTextView.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 
 class QDragObject;
 

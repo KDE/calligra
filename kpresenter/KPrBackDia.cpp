@@ -41,7 +41,7 @@
 #include <kbuttonbox.h>
 #include <kurlrequester.h>
 
-#include <koPicture.h>
+#include <KoPicture.h>
 
 KPrBackPreview::KPrBackPreview( QWidget *parent, KPrPage *page )
     : QFrame( parent )

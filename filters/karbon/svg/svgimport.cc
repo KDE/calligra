@@ -19,12 +19,12 @@
 
 #include <svgimport.h>
 #include "color.h"
-#include <koFilterChain.h>
-#include <koPageLayout.h>
+#include <KoFilterChain.h>
+#include <KoPageLayout.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
-#include <koUnit.h>
-#include <koGlobal.h>
+#include <KoUnit.h>
+#include <KoGlobal.h>
 #include <shapes/vellipse.h>
 #include <shapes/vrectangle.h>
 #include <shapes/vpolygon.h>

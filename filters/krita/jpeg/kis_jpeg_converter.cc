@@ -26,7 +26,7 @@ extern "C" {
 }
 
 #include <kapplication.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>
 

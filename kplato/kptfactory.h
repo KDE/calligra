@@ -20,7 +20,7 @@
 #ifndef KPLATO_FACTORY_H
 #define KPLATO_FACTORY_H
 
-#include <koFactory.h>
+#include <KoFactory.h>
 
 class KAboutData;
 

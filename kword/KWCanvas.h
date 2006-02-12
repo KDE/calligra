@@ -27,8 +27,8 @@
 #include <qscrollview.h>
 #include <qstylesheet.h>
 #include <KoRichText.h>
-#include <koQueryTrader.h>
-#include <koPicture.h>
+#include <KoQueryTrader.h>
+#include <KoPicture.h>
 
 #include "KWTextParag.h"
 #include "KWFrame.h"

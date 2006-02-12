@@ -25,7 +25,7 @@
 #include <qfont.h>
 #include <qpen.h>
 
-#include <koOasisStyles.h>
+#include <KoOasisStyles.h>
 
 #include "kspread_format.h"
 

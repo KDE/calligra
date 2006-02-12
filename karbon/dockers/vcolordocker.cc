@@ -28,7 +28,7 @@
 #include <qptrlist.h>
 
 #include <klocale.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 
 #include "karbon_part.h"
 #include "karbon_view.h"

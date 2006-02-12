@@ -18,7 +18,7 @@
 */
 
 #include "kspread_toolbox.h"
-#include "koDocumentChild.h"
+#include "KoDocumentChild.h"
 
 #include <kwin.h>
 

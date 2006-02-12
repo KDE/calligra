@@ -28,7 +28,7 @@
 #include "kivio_config.h"
 
 #include <klocale.h>
-#include <koApplication.h>
+#include <KoApplication.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
 #include <koPageLayoutDia.h>

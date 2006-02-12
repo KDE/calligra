@@ -7,7 +7,7 @@
 #define KCHART_VIEW
 
 
-#include <koView.h>
+#include <KoView.h>
 #include "kdchart/KDChartAxisParams.h"
 
 class KAction;

@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 
-#include <koUnit.h>
+#include <KoUnit.h>
 
 class KoUnitDoubleSpinBox;
 class KColorButton;

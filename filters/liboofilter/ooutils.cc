@@ -20,16 +20,16 @@
 */
 
 #include "ooutils.h"
-#include <koDocument.h>
-#include <koStyleStack.h>
+#include <KoDocument.h>
+#include <KoStyleStack.h>
 #include <qdom.h>
 #include <qcolor.h>
 #include <qimage.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <qregexp.h>
 #include <kdebug.h>
 #include <kzip.h>
-#include <kodom.h>
+#include <KoDom.h>
 #include <qxml.h>
 
 const char* const ooNS::office="http://openoffice.org/2000/office";

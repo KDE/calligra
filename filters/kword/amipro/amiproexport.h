@@ -20,7 +20,7 @@
 #ifndef __AMIPROEXPORT_H
 #define __AMIPROEXPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 class AmiProExport : public KoFilter

@@ -20,7 +20,7 @@
 #ifndef POWERPOINTIMPORT_H
 #define POWERPOINTIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 #include <qcstring.h>

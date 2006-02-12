@@ -20,7 +20,7 @@
 #include <lateximport.h>
 #include <lateximport.moc>
 #include <kdebug.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 #include <kglobal.h>
 #include <klocale.h>

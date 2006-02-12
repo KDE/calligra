@@ -64,12 +64,12 @@
 #include <ksharedptr.h>
 #include <kwordwrap.h>
 
-#include <koOasisStore.h>
+#include <KoOasisStore.h>
 #include <KoSpeaker.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 #include <KoXmlWriter.h>
-#include <koDocumentChild.h>
+#include <KoDocumentChild.h>
 #include <KoRect.h>
 
 #include "commands.h"

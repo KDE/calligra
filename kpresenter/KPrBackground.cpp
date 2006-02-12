@@ -41,8 +41,8 @@ using namespace std;
 #include <kglobalsettings.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <koGenStyles.h>
-#include <koxmlns.h>
+#include <KoGenStyles.h>
+#include <KoXmlNS.h>
 
 KPrBackGround::KPrBackGround( KPrPage *_page )
     // : footerHeight( 0 )

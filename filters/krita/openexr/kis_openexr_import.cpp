@@ -21,8 +21,8 @@
 #include <qfile.h>
 
 #include <kgenericfactory.h>
-#include <koDocument.h>
-#include <koFilterChain.h>
+#include <KoDocument.h>
+#include <KoFilterChain.h>
 
 #include <half.h>
 #include <ImfRgbaFile.h>

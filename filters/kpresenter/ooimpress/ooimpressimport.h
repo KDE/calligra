@@ -21,13 +21,13 @@
 #ifndef OoImpress_IMPORT_H__
 #define OoImpress_IMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 #include <qdom.h>
 #include <qdict.h>
 #include <qcolor.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 #include <liststylestack.h>
 
 class KZip;

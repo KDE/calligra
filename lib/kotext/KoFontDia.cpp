@@ -36,7 +36,7 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <knuminput.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <qvgroupbox.h>
 #include <qvbox.h>
 #include <qhgroupbox.h>

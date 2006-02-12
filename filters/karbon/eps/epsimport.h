@@ -22,7 +22,7 @@
 
 #include <qobject.h>
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class QDomElement;
 class QTextStream;

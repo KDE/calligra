@@ -36,7 +36,7 @@
 #include <klocale.h>
 
 #include <koUnitWidgets.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 class KoLineWidthAction::KoLineWidthActionPrivate
 {

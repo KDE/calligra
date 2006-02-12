@@ -32,8 +32,8 @@
 #include <klocale.h>
 #include <kglobal.h>
 
-#include <koView.h>
-#include <koMainWindow.h>
+#include <KoView.h>
+#include <KoMainWindow.h>
 
 #include <kopalette.h>
 #include <kotabpalette.h>

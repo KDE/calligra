@@ -23,7 +23,7 @@
 
 #include "KWMailMergeLabelAction.h"
 #include "KWMailMergeLabelAction.moc"
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 #include <kstyle.h>
 #include <kpopupmenu.h>
 

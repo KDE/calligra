@@ -21,7 +21,7 @@
 #ifndef VDOCUMENT_H
 #define VDOCUMENT_H
 
-#include <koUnit.h>
+#include <KoUnit.h>
 
 #include <qstring.h>
 #include <qptrlist.h>

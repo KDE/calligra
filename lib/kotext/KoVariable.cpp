@@ -27,14 +27,14 @@
 #include "KoTextObject.h"
 #include "KoTextParag.h"
 #include "KoOasisContext.h"
-#include <koOasisSettings.h>
+#include <KoOasisSettings.h>
 
-#include <koDocumentInfo.h>
-#include <koOasisStyles.h>
+#include <KoDocumentInfo.h>
+#include <KoOasisStyles.h>
 #include <KoXmlWriter.h>
-#include <koDocument.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoDocument.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 
 #include <klocale.h>
 #include <kdebug.h>

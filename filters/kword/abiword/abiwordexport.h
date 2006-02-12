@@ -35,7 +35,7 @@
 #include <qstring.h>
 #include <qcstring.h>
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 
 class ABIWORDExport : public KoFilter {

@@ -28,7 +28,7 @@
 #include <ksimpleconfig.h>
 #include <kstandarddirs.h>
 
-#include <koDocument.h>
+#include <KoDocument.h>
 
 #include "contextstyle.h"
 #include "creationstrategy.h"

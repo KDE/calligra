@@ -20,9 +20,9 @@
 #include "KoOasisContext.h"
 #include "KoParagCounter.h"
 
-#include <koGenStyles.h>
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 #include <kdebug.h>
 #include <klocale.h>

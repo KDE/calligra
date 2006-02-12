@@ -21,7 +21,7 @@
 #include "KPrDocument.h"
 #include "KPrStyleManager.h"
 #include "KPrStyleManager.moc"
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <kdebug.h>
 #include <KoStyleManager.h>
 #include <KoStyleCollection.h>

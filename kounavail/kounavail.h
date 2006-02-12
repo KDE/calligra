@@ -20,7 +20,7 @@
 #ifndef KOUNAVAIL_H
 #define KOUNAVAIL_H
 
-#include <koDocument.h>
+#include <KoDocument.h>
 
 class KoUnavailPart : public KoDocument
 {
@@ -68,7 +68,7 @@ protected:
     QString m_reason;
 };
 
-#include <koView.h>
+#include <KoView.h>
 
 class KoUnavailView : public KoView
 {
@@ -81,7 +81,7 @@ protected:
     virtual void updateReadWrite( bool ) {}
 };
 
-#include <koFactory.h>
+#include <KoFactory.h>
 
 class KInstance;
 class KAboutData;

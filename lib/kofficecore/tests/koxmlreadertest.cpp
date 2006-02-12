@@ -26,7 +26,7 @@
 #include <qdatetime.h>
 #include <qfile.h>
 
-#include "koxmlreader.h"
+#include "KoXmlReader.h"
 #include <qxml.h>
 
 #define CHECK(x,y)  check(__FILE__,__LINE__,#x,x,y)

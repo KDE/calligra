@@ -27,8 +27,8 @@
 #include "KoOasisContext.h"
 #include "KoVariable.h"
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <qapplication.h>

@@ -27,7 +27,7 @@
 
 #include <kiconloader.h>
 #include <klocale.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 
 #include "koUnitWidgets.h"
 

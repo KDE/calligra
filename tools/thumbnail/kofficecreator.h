@@ -22,7 +22,7 @@
 
 #include <kio/thumbcreator.h>
 #include <kparts/part.h>
-#include "../../lib/kofficecore/koDocument.h"
+#include "../../lib/kofficecore/KoDocument.h"
 
 class KoDocument;
 

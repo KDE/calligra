@@ -20,8 +20,8 @@
 #ifndef kwtextimage_h
 #define kwtextimage_h
 
-#include <koPictureKey.h>
-#include <koPicture.h>
+#include <KoPictureKey.h>
+#include <KoPicture.h>
 
 #include <KWTextDocument.h>
 

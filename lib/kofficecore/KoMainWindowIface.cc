@@ -20,7 +20,7 @@
 */
 #include "KoMainWindowIface.h"
 
-#include "koMainWindow.h"
+#include "KoMainWindow.h"
 
 #include <kapplication.h>
 #include <dcopclient.h>

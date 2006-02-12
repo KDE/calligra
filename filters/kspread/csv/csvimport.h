@@ -20,7 +20,7 @@
 #ifndef CSVFILTER_H
 #define CSVFILTER_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class CSVFilter : public KoFilter {
 

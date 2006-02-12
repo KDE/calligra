@@ -36,9 +36,9 @@
 #include <kgenericfactory.h>
 #include <klocale.h>
 
-#include <koDocumentInfo.h>
-#include <koFilterChain.h>
-#include <koGlobal.h>
+#include <KoDocumentInfo.h>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
 
 #include <kspread_aboutdata.h>
 #include <kspread_cell.h>

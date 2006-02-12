@@ -20,7 +20,7 @@
 #ifndef WRITEUP_FACTORY_H
 #define WRITEUP_FACTORY_H
 
-#include <koFactory.h>
+#include <KoFactory.h>
 
 class KAboutData;
 

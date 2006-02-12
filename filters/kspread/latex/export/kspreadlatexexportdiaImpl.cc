@@ -36,7 +36,7 @@
 #include <kurlrequester.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
-#include <koFilterManager.h>
+#include <KoFilterManager.h>
 #include <kcombobox.h>
 #include <knuminput.h>
 

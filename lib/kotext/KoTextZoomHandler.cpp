@@ -20,8 +20,8 @@
 #include "KoTextZoomHandler.h"
 #include <kdebug.h>
 #include <qpaintdevice.h>
-#include <koUnit.h>
-#include <koGlobal.h>
+#include <KoUnit.h>
+#include <KoGlobal.h>
 
 // Layout text at 1440 DPI
 // Well, not really always 1440 DPI, but always 20 times the point size

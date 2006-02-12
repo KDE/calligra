@@ -22,7 +22,7 @@
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>
-#include <koGenStyles.h>
+#include <KoGenStyles.h>
 
 #include "kivio_map.h"
 #include "kivio_doc.h"

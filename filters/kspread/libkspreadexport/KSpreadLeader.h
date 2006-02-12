@@ -22,10 +22,10 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #define KSPREAD_LEADER_H
 
 #include <KSpreadBaseWorker.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kdebug.h>
 #include <kspread_doc.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 #include <kspread_map.h>
 
 namespace KSpread

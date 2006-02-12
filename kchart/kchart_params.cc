@@ -22,7 +22,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 #include "kdchart/KDChartParams.h"
 #include "kdchart/KDChartAxisParams.h"

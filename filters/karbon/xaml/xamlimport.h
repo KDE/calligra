@@ -20,7 +20,7 @@
 #ifndef __XAMLIMPORT_H__
 #define __XAMLIMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qdom.h>
 #include <qmap.h>
 #include <qptrstack.h>

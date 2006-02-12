@@ -29,7 +29,7 @@ class KoStore;
 #include <qmap.h>
 #include <koffice_export.h>
 #include <qstringlist.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).

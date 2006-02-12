@@ -24,7 +24,7 @@
 #include "kspread_global.h"
 
 #include <KoRect.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 
 class KoGeneralPropertyUI;
 

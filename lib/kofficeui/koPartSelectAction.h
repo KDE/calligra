@@ -20,7 +20,7 @@
 #define koPartSelectAction_h
 
 #include <kaction.h>
-#include <koQueryTrader.h>
+#include <KoQueryTrader.h>
 
 /**
  * An action for inserting an embedded object.

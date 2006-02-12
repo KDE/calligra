@@ -20,7 +20,7 @@
 */
 #include "KoViewIface.h"
 
-#include "koView.h"
+#include "KoView.h"
 
 #include <kapplication.h>
 #include <dcopclient.h>

@@ -19,7 +19,7 @@
 #ifndef _KIS_JPEG_IMPORT_H_
 #define _KIS_JPEG_IMPORT_H_
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class KisJPEGImport : public KoFilter {
     Q_OBJECT

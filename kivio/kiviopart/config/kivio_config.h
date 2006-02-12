@@ -20,7 +20,7 @@
 #ifndef KIVIOKIVIO_CONFIG_H
 #define KIVIOKIVIO_CONFIG_H
 
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 
 #include "kivio_settings.h"
 #include "kivio_grid_data.h"

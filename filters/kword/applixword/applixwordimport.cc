@@ -28,7 +28,7 @@
 #include <applixwordimport.h>
 #include <applixwordimport.moc>
 #include <kdebug.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
 typedef KGenericFactory<APPLIXWORDImport, KoFilter> APPLIXWORDImportFactory;

@@ -49,7 +49,7 @@
 #include <KoTextCommand.h>
 #include <KoTextFormatter.h>
 #include <KoChangeCaseDia.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoOasisContext.h>
 #include <KoStore.h>

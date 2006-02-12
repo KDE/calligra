@@ -29,13 +29,13 @@
 #include <ktempfile.h>
 #include <koTemplateChooseDia.h>
 #include <KoStoreDevice.h>
-#include <koOasisStyles.h>
+#include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
-#include <kodom.h>
-#include <koOasisSettings.h>
-#include <koMainWindow.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
+#include <KoOasisSettings.h>
+#include <KoMainWindow.h>
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -50,7 +50,7 @@
 #include "vlayer.h"
 #include "vdocumentdocker.h"
 #include "vtoolcontroller.h"
-#include "koApplication.h"
+#include "KoApplication.h"
 #include "vtool.h"
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value

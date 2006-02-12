@@ -23,7 +23,7 @@
 
 #include <qiodevice.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 
 #include "KWEFStructures.h"
 #include "KWEFBaseWorker.h"

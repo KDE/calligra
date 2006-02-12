@@ -23,7 +23,7 @@
 class QCString;
 class QStringList;
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class MathMLExport : public KoFilter
 {

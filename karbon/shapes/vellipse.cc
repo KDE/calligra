@@ -21,7 +21,7 @@
 #include "vellipse.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <vglobal.h>

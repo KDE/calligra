@@ -22,7 +22,7 @@
 #include <qstring.h>
 
 #include <kdebug.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include "cmstyle.h"
 #include "contextstyle.h"

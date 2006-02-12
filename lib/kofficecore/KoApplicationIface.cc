@@ -23,13 +23,13 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "koApplication.h"
+#include "KoApplication.h"
 #include "KoApplicationIface.h"
-#include "koDocument.h"
+#include "KoDocument.h"
 #include "KoDocumentIface.h"
-#include "koMainWindow.h"
-#include "koQueryTrader.h"
-#include "koView.h"
+#include "KoMainWindow.h"
+#include "KoQueryTrader.h"
+#include "KoView.h"
 
 KoApplicationIface::KoApplicationIface()
  : DCOPObject( "KoApplicationIface" )

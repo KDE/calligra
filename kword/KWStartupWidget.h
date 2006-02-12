@@ -19,7 +19,7 @@
 #define kw_startup_widget_h
 
 #include <KWStartupWidgetBase.h>
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 
 class KoPageLayoutSize;
 class KoPageLayoutColumns;

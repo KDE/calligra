@@ -14,8 +14,8 @@
 #include "kdchart/KDChartTable.h"
 
 #include <koTemplateChooseDia.h>
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>

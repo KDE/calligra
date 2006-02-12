@@ -23,12 +23,12 @@
 #include "KPrDocument.h"
 #include "KPrSVGPathParser.h"
 #include <KoTextZoomHandler.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <qdom.h>
 #include <qpainter.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 #include <KoOasisContext.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 KPrPointObject::KPrPointObject()
     : KPrShadowObject(), KPrStartEndLine( L_NORMAL, L_NORMAL )

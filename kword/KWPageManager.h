@@ -18,7 +18,7 @@
 #ifndef kw_pagemanager_h
 #define kw_pagemanager_h
 
-#include "koPageLayout.h"
+#include "KoPageLayout.h"
 
 #include <qptrlist.h>
 

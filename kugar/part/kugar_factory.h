@@ -7,7 +7,7 @@
 #define _KUGAR_FACTORY_H
 
 
-#include <koFactory.h>
+#include <KoFactory.h>
 #include <kaboutdata.h>
 
 class KInstance;

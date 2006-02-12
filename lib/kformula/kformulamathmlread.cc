@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-//#include <koUnit.h>
+//#include <KoUnit.h>
 
 #include "kformulamathmlread.h"
 #include "symboltable.h"

@@ -21,7 +21,7 @@
 #define __EPSEXPORT_H__
 
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 #include "vvisitor.h"
 

@@ -19,7 +19,7 @@
 
 #include <KoPageLayoutColumns.h>
 #include <koPageLayoutDia.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <koUnitWidgets.h>
 
 #include <qlabel.h>

@@ -1,6 +1,6 @@
 #include "KoListStyleStack.h"
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 
 KoListStyleStack::KoListStyleStack()
     : m_initialLevel( 0 )

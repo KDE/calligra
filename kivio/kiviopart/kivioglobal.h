@@ -20,8 +20,8 @@
 #ifndef KIVIOGLOBAL_H
 #define KIVIOGLOBAL_H
 
-#include <koUnit.h>
-#include <koPageLayout.h>
+#include <KoUnit.h>
+#include <KoPageLayout.h>
 #include <KoSize.h>
 
 class QDomElement;

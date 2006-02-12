@@ -24,7 +24,7 @@
 #include <qobject.h>
 
 #include <koffice_export.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 
 class KoGenStyles;
 

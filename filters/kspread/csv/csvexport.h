@@ -22,7 +22,7 @@
 #define CSVEXPORT_H
 
 #include <qstring.h>
-#include <koFilter.h>
+#include <KoFilter.h>
 
 namespace KSpread
 {

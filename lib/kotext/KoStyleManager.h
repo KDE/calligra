@@ -29,7 +29,7 @@
 #include <KoHighlightingTab.h>
 #include <KoLayoutTab.h>
 #include <KoLanguageTab.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <qptrlist.h>
 #include <KoStyleCollection.h>
 

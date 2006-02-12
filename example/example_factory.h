@@ -20,7 +20,7 @@
 #ifndef EXAMPLE_FACTORY_H
 #define EXAMPLE_FACTORY_H
 
-#include <koFactory.h>
+#include <KoFactory.h>
 
 class KInstance;
 class KAboutData;

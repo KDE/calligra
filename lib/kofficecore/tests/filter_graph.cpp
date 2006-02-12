@@ -18,8 +18,8 @@
 */
 
 #include <qfile.h>
-#include <koQueryTrader.h>
-#include <koFilterManager.h>
+#include <KoQueryTrader.h>
+#include <KoFilterManager.h>
 #include <kinstance.h>
 #include <kdebug.h>
 

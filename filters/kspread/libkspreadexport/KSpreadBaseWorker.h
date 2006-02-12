@@ -21,7 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifndef KSPREAD_BASE_WORKER_H
 #define KSPREAD_BASE_WORKER_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qmap.h>
 
 

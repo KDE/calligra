@@ -49,12 +49,12 @@
 #include <kdeversion.h>
 #include <kaboutdata.h>
 
-#include <koQueryTrader.h>
-#include <koDocumentInfo.h>
-#include <koDocument.h>
-#include <koView.h>
+#include <KoQueryTrader.h>
+#include <KoDocumentInfo.h>
+#include <KoDocument.h>
+#include <KoView.h>
 #include <koPartSelectDia.h>
-#include <koFilterManager.h>
+#include <KoFilterManager.h>
 #include <kiconloader.h>
 
 KoShellWindow::KoShellWindow()

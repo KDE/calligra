@@ -22,7 +22,7 @@
 #ifndef __STARWRITERIMPORT_H
 #define __STARWRITERIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qstring.h>
 #include <qcstring.h>
 

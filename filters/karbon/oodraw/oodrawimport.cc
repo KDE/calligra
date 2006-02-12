@@ -28,16 +28,16 @@
 #include <kzip.h>
 #include <karchive.h>
 #include <kdebug.h>
-#include <koUnit.h>
-#include <koPageLayout.h>
-#include <koDocumentInfo.h>
-#include <koDocument.h>
+#include <KoUnit.h>
+#include <KoPageLayout.h>
+#include <KoDocumentInfo.h>
+#include <KoDocument.h>
 #include <ooutils.h>
-#include <kodom.h>
+#include <KoDom.h>
 
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
-#include <koGlobal.h>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
 
 #include <shapes/vellipse.h>
 #include <shapes/vrectangle.h>

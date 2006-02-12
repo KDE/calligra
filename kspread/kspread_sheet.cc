@@ -48,15 +48,15 @@
 #include <kurl.h>
 
 #include <koChart.h>
-#include <kodom.h>
-#include <koDocumentInfo.h>
+#include <KoDom.h>
+#include <KoDocumentInfo.h>
 #include <KoOasisLoadingContext.h>
-#include <koOasisSettings.h>
-#include <koOasisStyles.h>
-#include <koStyleStack.h>
-#include <koQueryTrader.h>
-#include <koUnit.h>
-#include <koxmlns.h>
+#include <KoOasisSettings.h>
+#include <KoOasisStyles.h>
+#include <KoStyleStack.h>
+#include <KoQueryTrader.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
 
 #include "dependencies.h"
 

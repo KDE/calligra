@@ -23,7 +23,7 @@
 #define KOGUIDELINEDIA_H
 
 #include <kdialogbase.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include "KoRect.h"
 #include "KoPoint.h"
 

@@ -23,7 +23,7 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-#include <koApplication.h>
+#include <KoApplication.h>
 
 #include "karbon_aboutdata.h"
 

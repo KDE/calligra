@@ -21,7 +21,7 @@
 #ifndef KPLATO_VIEW
 #define KPLATO_VIEW
 
-#include <koView.h>
+#include <KoView.h>
 #include "kptcontext.h"
 
 class QListViewItem;

@@ -33,18 +33,18 @@
 #include <kdebug.h>
 #include <kzip.h>
 
-#include <koDocumentInfo.h>
-#include <koDocument.h>
+#include <KoDocumentInfo.h>
+#include <KoDocument.h>
 
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
-#include <koFilterChain.h>
-#include <koUnit.h>
-#include <koPageLayout.h>
-#include <koPicture.h>
+#include <KoFilterChain.h>
+#include <KoUnit.h>
+#include <KoPageLayout.h>
+#include <KoPicture.h>
 #include "conversion.h"
 #include <KoRect.h>
-#include <kodom.h>
+#include <KoDom.h>
 
 #if ! KDE_IS_VERSION(3,1,90)
 # include <kdebugclasses.h>

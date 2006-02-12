@@ -32,8 +32,8 @@
 #include <kmessagebox.h>
 #include <kdeversion.h>
 
-#include <koMainWindow.h>
-#include <koFilterManager.h>
+#include <KoMainWindow.h>
+#include <KoFilterManager.h>
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstdaction.h>

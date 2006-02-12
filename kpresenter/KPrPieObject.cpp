@@ -25,8 +25,8 @@
 
 #include <KoTextZoomHandler.h>
 #include <KoOasisContext.h>
-#include <koStyleStack.h>
-#include <koxmlns.h>
+#include <KoStyleStack.h>
+#include <KoXmlNS.h>
 
 #include <kdebug.h>
 

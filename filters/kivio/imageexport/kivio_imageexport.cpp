@@ -32,7 +32,7 @@
 #include <kdebug.h>
 
 #include <KoStore.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kozoomhandler.h>
 
 #include "kivio_doc.h"

@@ -21,7 +21,7 @@
 
 #include <qcolor.h>
 #include <qdatetime.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <kdebug.h>
 
 StyleFactory::StyleFactory()

@@ -33,10 +33,10 @@
 #include <KoPoint.h>
 #include <KoSize.h>
 #include <KoRect.h>
-#include <koStyleStack.h>
-#include <koOasisStyles.h>
+#include <KoStyleStack.h>
+#include <KoOasisStyles.h>
 #include <KoXmlWriter.h>
-#include <koGenStyles.h>
+#include <KoGenStyles.h>
 #include "KPrLoadingInfo.h"
 #include "KPrBrush.h"
 #include <KoPen.h>

@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kodom.h"
-#include "koxmlns.h"
+#include "KoDom.h"
+#include "KoXmlNS.h"
 
 #include <qapplication.h>
 #include <assert.h>

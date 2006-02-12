@@ -27,7 +27,7 @@
 #include "vstar.h"
 #include "vtransformcmd.h"
 #include <klocale.h>
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <vdocument.h>
 
 VStar::VStar( VObject* parent, VState state )

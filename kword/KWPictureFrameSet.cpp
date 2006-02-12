@@ -23,9 +23,9 @@
 #include "KWordPictureFrameSetIface.h"
 #include <KoStoreDevice.h>
 #include <KoOasisContext.h>
-#include <koPictureCollection.h>
-#include <kodom.h>
-#include <koxmlns.h>
+#include <KoPictureCollection.h>
+#include <KoDom.h>
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <klocale.h>
 #include <kdebug.h>

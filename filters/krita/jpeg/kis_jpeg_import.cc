@@ -21,7 +21,7 @@
 
 #include <kgenericfactory.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 
 #include <kis_doc.h>
 #include <kis_image.h>

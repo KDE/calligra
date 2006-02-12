@@ -33,9 +33,9 @@
 #include <qpainter.h>
 #include <KoOasisContext.h>
 #include <math.h>
-#include <koUnit.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 
 using namespace std;
 

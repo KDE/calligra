@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kpopupmenu.h>
 #include <ktoolbar.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 #include <kdebug.h>
 #include <kozoomhandler.h>
 #include <KoPoint.h>

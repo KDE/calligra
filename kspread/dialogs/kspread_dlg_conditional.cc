@@ -39,7 +39,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include <qgroupbox.h>
 #include <qlabel.h>

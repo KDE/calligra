@@ -22,7 +22,7 @@
 #define kppolylineobject_h
 
 #include "KPrPointObject.h"
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 
 #define RAD_FACTOR 180.0 / M_PI
 

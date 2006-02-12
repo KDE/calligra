@@ -36,7 +36,7 @@
 #include <klineedit.h>
 #include <klistview.h>
 #include <klocale.h>
-#include <koTemplates.h>
+#include <KoTemplates.h>
 #include <kicondialog.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>

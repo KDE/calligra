@@ -45,13 +45,13 @@
 #include <ksconfig.h>
 #include <ktempfile.h>
 
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 #include <kocommandhistory.h>
 #include <koTemplateChooseDia.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
-#include <koOasisSettings.h>
-#include <koMainWindow.h>
+#include <KoOasisSettings.h>
+#include <KoMainWindow.h>
 #include <KoVariable.h>
 
 #include "kspread_doc.h"
@@ -78,9 +78,9 @@
 
 #include "KSpreadDocIface.h"
 
-#include <koApplication.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoApplication.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 
 using namespace std;
 using namespace KSpread;

@@ -25,8 +25,8 @@
 #include <ImfRgbaFile.h>
 
 #include <kgenericfactory.h>
-#include <koDocument.h>
-#include <koFilterChain.h>
+#include <KoDocument.h>
+#include <KoFilterChain.h>
 
 #include "kis_doc.h"
 #include "kis_image.h"

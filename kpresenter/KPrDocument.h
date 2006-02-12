@@ -52,8 +52,8 @@ class KoXmlWriter;
 class QFile;
 class KoSavingContext;
 
-#include <koDocument.h>
-#include <koDocumentChild.h>
+#include <KoDocument.h>
+#include <KoDocumentChild.h>
 
 #include <qptrlist.h>
 #include <qobject.h>
@@ -64,8 +64,8 @@ class KoSavingContext;
 #include <koPageLayoutDia.h>
 
 #include "global.h"
-#include <koStyleStack.h>
-#include <koPictureCollection.h>
+#include <KoStyleStack.h>
+#include <KoPictureCollection.h>
 #include "KPrGradientCollection.h"
 #include <KoTextZoomHandler.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap

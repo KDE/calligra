@@ -77,10 +77,10 @@
 #include <kdatatool.h>
 #include <koCharSelectDia.h>
 #include <kocommandhistory.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 #include <KoOasisLoadingContext.h>
-#include <koOasisStore.h>
-#include <koOasisStyles.h>
+#include <KoOasisStore.h>
+#include <KoOasisStyles.h>
 #include <koPartSelectAction.h>
 #include <KoStoreDrag.h>
 #include <kotabbar.h>

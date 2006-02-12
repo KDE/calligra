@@ -21,7 +21,7 @@
 #include <qstring.h>
 #include <qtextcodec.h>
 
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 
 #include "KWEFUtil.h"
 

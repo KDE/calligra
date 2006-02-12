@@ -20,7 +20,7 @@
 
 #include "KoParagDia.h"
 #include "KoParagDia_p.h"
-#include "koDocument.h"
+#include "KoDocument.h"
 #include "KoTextFormat.h"
 #include "KoTextParag.h"
 #include "KoTextDocument.h"
@@ -34,7 +34,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <knumvalidator.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <qgroupbox.h>
 #include <knuminput.h>
 #include <kdeversion.h>

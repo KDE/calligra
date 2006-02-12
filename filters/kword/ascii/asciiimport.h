@@ -22,7 +22,7 @@
 #ifndef ASCIIIMPORT_H
 #define ASCIIIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 
 class QString;
 class QTextStream;

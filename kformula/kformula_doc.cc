@@ -40,7 +40,7 @@
 #include <kaction.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kstdaction.h>
@@ -49,7 +49,7 @@
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 #include <ktempfile.h>
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>

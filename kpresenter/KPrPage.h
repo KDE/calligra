@@ -30,8 +30,8 @@
 #include <KoRect.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 #include <qvariant.h>
-#include <koDocumentChild.h>
-#include <koPictureCollection.h>
+#include <KoDocumentChild.h>
+#include <KoPictureCollection.h>
 
 class KMacroCommand;
 class KoSavingContext;

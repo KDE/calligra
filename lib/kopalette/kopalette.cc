@@ -35,7 +35,7 @@
 #include <kaccelmanager.h>
 #include <kconfig.h>
 
-#include <koView.h>
+#include <KoView.h>
 
 #include "kopalette.h"
 

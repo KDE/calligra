@@ -19,7 +19,7 @@
 #ifndef KIVIO_FACTORY_H
 #define KIVIO_FACTORY_H
 
-#include <koFactory.h>
+#include <KoFactory.h>
 #include <koffice_export.h>
 class KInstance;
 class KAboutData;

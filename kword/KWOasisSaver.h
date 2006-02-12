@@ -20,8 +20,8 @@
 #define KWOASISSAVER_H
 
 #include <qbuffer.h>
-#include <koGenStyles.h>
-#include <koOasisStore.h>
+#include <KoGenStyles.h>
+#include <KoOasisStore.h>
 
 class KWDocument;
 class KoSavingContext;

@@ -27,7 +27,7 @@
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 

@@ -20,10 +20,10 @@
 
 #include <qdom.h>
 
-#include <koGenStyles.h>
-#include <koStyleStack.h>
-#include <koUnit.h>
-#include <koxmlns.h>
+#include <KoGenStyles.h>
+#include <KoStyleStack.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
 
 #include "vobject.h"
 #include "vstroke.h"

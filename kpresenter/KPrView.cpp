@@ -87,9 +87,9 @@
 #include <ktempfile.h>
 #include <kcolorbutton.h>
 
-#include <koMainWindow.h>
+#include <KoMainWindow.h>
 #include <koPartSelectDia.h>
-#include <koQueryTrader.h>
+#include <KoQueryTrader.h>
 #include <koPageLayoutDia.h>
 #include <koRuler.h>
 #include <koTemplateCreateDia.h>
@@ -144,7 +144,7 @@
 
 #include "KPrDuplicateObjDia.h"
 #include <kstdaccel.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 #include <kaccelgen.h>
 #include "KPrImportStyleDia.h"
 #include <kurldrag.h>

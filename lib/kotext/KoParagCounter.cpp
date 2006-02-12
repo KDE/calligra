@@ -24,8 +24,8 @@
 #include "KoTextDocument.h"
 #include "KoOasisContext.h"
 #include <KoXmlWriter.h>
-#include <koGenStyles.h>
-#include <koxmlns.h>
+#include <KoGenStyles.h>
+#include <KoXmlNS.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>

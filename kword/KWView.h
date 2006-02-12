@@ -32,7 +32,7 @@
 #include "KWTextParag.h"
 
 #include <koPageLayoutDia.h>
-#include <koView.h>
+#include <KoView.h>
 #include <KoPoint.h>
 #include <kshortcut.h>
 #include <KoZoomMode.h>

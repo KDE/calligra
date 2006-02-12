@@ -26,7 +26,7 @@
 #include <qtextstream.h>
 #include <qptrlist.h>
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KoStore.h>
 
 typedef struct

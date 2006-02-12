@@ -24,9 +24,9 @@
 #include <qptrlist.h>
 #include <qobject.h>
 
-#include <koDocument.h>
-#include <koMainWindow.h>
-#include <koGlobal.h>
+#include <KoDocument.h>
+#include <KoMainWindow.h>
+#include <KoGlobal.h>
 
 #include "kivio_config.h"
 #include <koffice_export.h>

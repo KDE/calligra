@@ -50,13 +50,13 @@
 #include <KoRect.h>
 #include <KoSize.h>
 #include <KoPoint.h>
-#include <kodom.h>
+#include <KoDom.h>
 #include <KoTextParag.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 #include <KoStore.h>
 #include <KoOasisContext.h>
-#include <koOasisStyles.h>
-#include <koOasisStore.h>
+#include <KoOasisStyles.h>
+#include <KoOasisStore.h>
 
 #include <qxml.h>
 #include <qbuffer.h>

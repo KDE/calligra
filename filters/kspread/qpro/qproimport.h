@@ -20,7 +20,7 @@
 #ifndef QPROIMPORT_H
 #define QPROIMPORT_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qpro/tablenames.h>
 
 namespace KSpread

@@ -26,7 +26,7 @@
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <KoOasisLoadingContext.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 
 #include "vcomposite.h"
 #include "shapes/vellipse.h"

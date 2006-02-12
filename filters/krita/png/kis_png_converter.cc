@@ -23,7 +23,7 @@
 #include <stdio.h>
 
 #include <kapplication.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>
 

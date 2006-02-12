@@ -29,7 +29,7 @@
 #include <qdir.h>
 #include <qdom.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>
 #include <KWEFKWordLeader.h>

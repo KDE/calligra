@@ -21,7 +21,7 @@
 #ifndef OpenCalc_IMPORT_H__
 #define OpenCalc_IMPORT_H__
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include "kspread_format.h"
 
 #include <qdict.h>

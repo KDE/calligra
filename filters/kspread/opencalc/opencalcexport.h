@@ -23,7 +23,7 @@
 
 #include "opencalcstyleexport.h"
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <qptrlist.h>
 
 class QDomDocument;

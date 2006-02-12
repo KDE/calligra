@@ -30,7 +30,7 @@
 
 #include <knuminput.h>
 
-#include <koUnit.h>
+#include <KoUnit.h>
 #include <koUnitWidgets.h>
 
 #include <kspread_canvas.h>

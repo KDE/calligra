@@ -25,11 +25,11 @@
 #include <qsize.h>
 #include <qdatetime.h>
 #include <KoBrush.h>
-#include <koStyleStack.h>
-#include <koOasisStyles.h>
+#include <KoStyleStack.h>
+#include <KoOasisStyles.h>
 #include <KoOasisContext.h>
 
-#include <koPictureCollection.h>
+#include <KoPictureCollection.h>
 
 #include "global.h"
 

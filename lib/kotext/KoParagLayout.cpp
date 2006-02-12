@@ -23,9 +23,9 @@
 #include "KoStyleCollection.h"
 #include "KoOasisContext.h"
 #include <KoXmlWriter.h>
-#include <koxmlns.h>
-#include <kodom.h>
-#include <koGenStyles.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
+#include <KoGenStyles.h>
 
 #include <kglobal.h>
 #include <klocale.h>

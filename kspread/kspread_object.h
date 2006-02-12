@@ -24,16 +24,16 @@
 
 #include <klocale.h>
 #include <KoBrush.h>
-#include <koChild.h>
-#include <kodom.h>
+#include <KoChild.h>
+#include <KoDom.h>
 #include <KoOasisLoadingContext.h>
 #include <KoPen.h>
-#include <koPictureCollection.h>
+#include <KoPictureCollection.h>
 #include <KoRect.h>
 #include <KoSize.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 
 namespace KoChart
 {

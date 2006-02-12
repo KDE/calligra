@@ -38,11 +38,11 @@
 #include <kglobal.h>
 #include <kgenericfactory.h>
 
-#include <koGlobal.h>
-#include <koPageLayout.h>
+#include <KoGlobal.h>
+#include <KoPageLayout.h>
 #include <KoStore.h>
-#include <koFilterChain.h>
-#include <koFilterManager.h>
+#include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <asciiimport.h>
 #include <asciiimport.moc>

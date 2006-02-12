@@ -34,7 +34,7 @@
 #include <kgenericfactory.h>
 #include <kimageio.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 
 #include "ExportFilter.h"
 #include "oowriterexport.h"

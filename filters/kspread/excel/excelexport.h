@@ -3,7 +3,7 @@
 #ifndef EXCELEXPORT_TEST_H
 #define EXCELEXPORT_TEST_H
 
-#include <koFilter.h>
+#include <KoFilter.h>
 #include <KSpreadLeader.h>
 #include <KSpreadBaseWorker.h>
 

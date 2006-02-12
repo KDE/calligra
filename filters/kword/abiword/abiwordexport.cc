@@ -41,9 +41,9 @@
 #include <kgenericfactory.h>
 #include <kimageio.h>
 
-#include <koPageLayout.h>
-#include <koFilterChain.h>
-#include <koPictureKey.h>
+#include <KoPageLayout.h>
+#include <KoFilterChain.h>
+#include <KoPictureKey.h>
 
 #include <KWEFStructures.h>
 #include <KWEFUtil.h>

@@ -36,9 +36,9 @@
 #include <kgenericfactory.h>
 #include <kmessagebox.h>
 
-#include <koPageLayout.h>
+#include <KoPageLayout.h>
 #include <KoStore.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 
 #include "ImportHelpers.h"
 #include "ImportFormatting.h"

@@ -22,7 +22,7 @@
 #include <qpainter.h>
 #include <qfile.h>
 
-#include <koPicture.h>
+#include <KoPicture.h>
 
 #include "clipartcreator.h"
 #include "koffice_export.h"

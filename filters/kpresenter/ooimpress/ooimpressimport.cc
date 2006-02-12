@@ -31,16 +31,16 @@
 #include <kzip.h>
 #include <karchive.h>
 #include <kdebug.h>
-#include <koUnit.h>
-#include <koDocumentInfo.h>
-#include <koDocument.h>
+#include <KoUnit.h>
+#include <KoDocumentInfo.h>
+#include <KoDocument.h>
 
 #include <kgenericfactory.h>
-#include <koFilterChain.h>
-#include <koGlobal.h>
+#include <KoFilterChain.h>
+#include <KoGlobal.h>
 #include <ooutils.h>
-#include <kodom.h>
-#include <koOasisSettings.h>
+#include <KoDom.h>
+#include <KoOasisSettings.h>
 
 typedef KGenericFactory<OoImpressImport, KoFilter> OoImpressImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libooimpressimport, OoImpressImportFactory( "kofficefilters" ) )

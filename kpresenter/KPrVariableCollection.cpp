@@ -24,8 +24,8 @@
 #include "KPrCommand.h"
 #include <klocale.h>
 #include <kdebug.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 #include "KPrTextObject.h"
 #include "KPrPage.h"
 

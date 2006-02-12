@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koFilterChain.h>
-#include <koFilterManager.h>
+#include <KoFilterChain.h>
+#include <KoFilterManager.h>
 #include <kinstance.h>
 #include <kdebug.h>
 

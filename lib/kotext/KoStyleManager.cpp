@@ -22,7 +22,7 @@
 #include "KoStyleManager.h"
 #include "KoStyleManager.moc"
 #include <KoFontDia.h>
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include <klocale.h>
 #include <kiconloader.h>

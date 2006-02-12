@@ -34,7 +34,7 @@
 #include <ktempfile.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
-#include <koFilterManager.h>
+#include <KoFilterManager.h>
 #include <KoStoreDevice.h>
 
 /*#ifdef __FreeBSD__

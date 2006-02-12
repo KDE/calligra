@@ -24,7 +24,7 @@
 
 #include <qwidget.h>
 
-#include <koUnit.h>
+#include <KoUnit.h>
 
 class MarginUI;
 

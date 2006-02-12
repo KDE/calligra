@@ -39,9 +39,9 @@
 #include <qpixmap.h>
 #include <qwmatrix.h>
 
-#include <koDocument.h>
-#include <koDocumentChild.h>
-#include <kodom.h>
+#include <KoDocument.h>
+#include <KoDocumentChild.h>
+#include <KoDom.h>
 #include <kozoomhandler.h>
 
 

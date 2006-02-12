@@ -28,8 +28,8 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
-#include <koFilterChain.h>
-#include <koFilterManager.h>
+#include <KoFilterChain.h>
+#include <KoFilterManager.h>
 #include <kspread_doc.h>
 #include <kspread_global.h>
 #include <kspread_map.h>

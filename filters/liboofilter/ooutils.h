@@ -23,7 +23,7 @@
 #define OOUTILS_H
 
 #include <qstring.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 class QColor;
 class QDomElement;
 class KoStyleStack;

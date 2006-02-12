@@ -37,12 +37,12 @@
 #include "KWPage.h"
 
 #include <KoTextObject.h>
-#include <koOasisStyles.h>
+#include <KoOasisStyles.h>
 #include <KoOasisContext.h>
-#include <koxmlns.h>
-#include <kodom.h>
+#include <KoXmlNS.h>
+#include <KoDom.h>
 #include <KoStore.h>
-#include <koOasisStore.h>
+#include <KoOasisStore.h>
 
 #include <klocale.h>
 #include <kdebug.h>

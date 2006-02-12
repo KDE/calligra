@@ -20,7 +20,7 @@
 #ifndef kppartobject_h
 #define kppartobject_h
 
-#include <koChild.h>
+#include <KoChild.h>
 
 #include "KPrObject.h"
 

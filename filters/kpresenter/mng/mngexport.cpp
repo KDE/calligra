@@ -22,10 +22,10 @@
 
 #include <kmessagebox.h>
 
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <KoStore.h>
 #include <kgenericfactory.h>
-#include <koDocument.h>
+#include <KoDocument.h>
 
 #include "mngexport.h"
 #include "exportsizedia.h"

@@ -25,7 +25,7 @@
 #include LCMS_HEADER
 
 #include <kapplication.h>
-#include <koDocumentInfo.h>
+#include <KoDocumentInfo.h>
 
 #include <kio/netaccess.h>
 

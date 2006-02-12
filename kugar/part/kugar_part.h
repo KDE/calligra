@@ -6,7 +6,7 @@
 #ifndef _KUGAR_PART_H
 #define _KUGAR_PART_H
 
-#include <koDocument.h>
+#include <KoDocument.h>
 
 #include "mpagecollection.h"
 #include "mreportengine.h"

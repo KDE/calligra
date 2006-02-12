@@ -30,7 +30,7 @@
 #include <applixspreadimport.h>
 #include <kdebug.h>
 #include <math.h>
-#include <koFilterChain.h>
+#include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
 typedef KGenericFactory<APPLIXSPREADImport, KoFilter> APPLIXSPREADImportFactory;

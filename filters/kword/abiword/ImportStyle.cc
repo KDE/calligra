@@ -22,7 +22,7 @@
 #include <kglobalsettings.h>
 #include <kdebug.h>
 
-#include <koGlobal.h>
+#include <KoGlobal.h>
 
 #include "ImportStyle.h"
 
