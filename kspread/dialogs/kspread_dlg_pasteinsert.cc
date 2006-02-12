@@ -62,11 +62,13 @@ void PasteInsertDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
-      m_pView->activeSheet()->paste( m_pView->selectionInfo()->selection() ,
-    true, Paste::Normal,Paste::OverWrite,true,-1);
+      m_pView->activeSheet()->paste( m_pView->selectionInfo()->lastRange(),
+                                     true, Paste::Normal, Paste::OverWrite,
+                                     true, -1 );
     else if( rb2->isChecked() )
-      m_pView->activeSheet()->paste( m_pView->selectionInfo()->selection() ,
-    true, Paste::Normal,Paste::OverWrite,true,+1);
+      m_pView->activeSheet()->paste( m_pView->selectionInfo()->lastRange(),
+                                     true, Paste::Normal, Paste::OverWrite,
+                                     true, +1 );
 
     m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();

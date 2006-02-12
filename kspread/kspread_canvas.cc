@@ -1560,7 +1560,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       if ( d->view->koDocument()->isReadWrite() && !sheet->isProtected() )
       {
         (d->chooseCell ? choice() : selectionInfo())->initialize( QPoint( col, row ), activeSheet() );
-        sheet->paste( QRect(marker(), marker()) );
+        sheet->paste(selectionInfo()->lastRange());
         sheet->setRegionPaintDirty(*selectionInfo());
       }
       break;

@@ -5066,8 +5066,9 @@ void Sheet::cutSelection( Selection* selectionInfo )
     deleteSelection( selectionInfo, true );
 }
 
-void Sheet::paste( const QRect &pasteArea, bool makeUndo,
-                   Paste::Mode sp, Paste::Operation op, bool insert, int insertTo, bool pasteFC )
+void Sheet::paste( const QRect& pasteArea, bool makeUndo,
+                   Paste::Mode mode, Paste::Operation operation,
+                   bool insert, int insertTo, bool pasteFC )
 {
     QMimeSource * mime = QApplication::clipboard()->data();
     if ( !mime )
@@ -5085,17 +5086,17 @@ void Sheet::paste( const QRect &pasteArea, bool makeUndo,
         // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
         QString _text = QApplication::clipboard()->text();
         doc()->emitBeginOperation();
-        pasteTextPlain( _text, pasteArea);
+        pasteTextPlain( _text, pasteArea );
         emit sig_updateView( this );
         // doc()->emitEndOperation();
-  return;
+        return;
     }
     else
         return;
 
     // Do the actual pasting.
     doc()->emitBeginOperation();
-    paste( b, pasteArea, makeUndo, sp, op, insert, insertTo, pasteFC );
+    paste( b, pasteArea, makeUndo, mode, operation, insert, insertTo, pasteFC );
     emit sig_updateView( this );
     // doc()->emitEndOperation();
 }
@@ -5177,8 +5178,9 @@ void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
   emit sig_updateVBorder( this );
 }
 
-void Sheet::paste( const QByteArray & b, const QRect & pasteArea, bool makeUndo,
-                   Paste::Mode sp, Paste::Operation op, bool insert, int insertTo, bool pasteFC )
+void Sheet::paste( const QByteArray& b, const QRect& pasteArea, bool makeUndo,
+                   Paste::Mode mode, Paste::Operation operation,
+                   bool insert, int insertTo, bool pasteFC )
 {
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
@@ -5193,13 +5195,13 @@ void Sheet::paste( const QByteArray & b, const QRect & pasteArea, bool makeUndo,
     int mx = pasteArea.left();
     int my = pasteArea.top();
 
-    loadSelection( doc, pasteArea, mx - 1, my - 1, makeUndo, sp, op, insert,
-                   insertTo, pasteFC );
+    loadSelection( doc, pasteArea, mx - 1, my - 1, makeUndo,
+                   mode, operation, insert, insertTo, pasteFC );
 }
 
-bool Sheet::loadSelection(const QDomDocument& doc, const QRect &pasteArea,
+bool Sheet::loadSelection(const QDomDocument& doc, const QRect& pasteArea,
                           int _xshift, int _yshift, bool makeUndo,
-                          Paste::Mode sp, Paste::Operation op, bool insert,
+                          Paste::Mode mode, Paste::Operation operation, bool insert,
                           int insertTo, bool pasteFC)
 {
   //kdDebug(36001) << "loadSelection called. pasteArea=" << pasteArea << endl;
@@ -5231,14 +5233,9 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect &pasteArea,
 //             << columnsInClpbrd << " columns in clipboard." << endl;
 //   kdDebug() << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
 
-  for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
+  QDomElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
+  for (; !e.isNull(); e = e.nextSibling().toElement())
   {
-    if (!n.isElement())
-    {
-      continue;
-    }
-    QDomElement e = n.toElement(); // "columns", "rows" or "cell"
-
     // entire columns given
     if (e.tagName() == "columns" && !isProtected())
     {
@@ -5263,7 +5260,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect &pasteArea,
             if ( c.tagName() == "column" )
             {
                 ColumnFormat *cl = new ColumnFormat( this, 0 );
-                if ( cl->load( c, _xshift, sp, pasteFC ) )
+                if ( cl->load( c, _xshift, mode, pasteFC ) )
                     insertColumnFormat( cl );
                 else
                     delete cl;
@@ -5295,7 +5292,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect &pasteArea,
             if ( c.tagName() == "row" )
             {
                 RowFormat *cl = new RowFormat( this, 0 );
-                if ( cl->load( c, _yshift, sp, pasteFC ) )
+                if ( cl->load( c, _yshift, mode, pasteFC ) )
                     insertRowFormat( cl );
                 else
                     delete cl;
@@ -5329,7 +5326,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect &pasteArea,
           cellBackup = new Cell(this, cell->column(), cell->row());
           cellBackup->copyAll(cell);
 
-          if (!cell->load(e, _xshift + coff, _yshift + roff, sp, op, pasteFC))
+          if (!cell->load(e, _xshift + coff, _yshift + roff, mode, operation, pasteFC))
           {
             cell->copyAll(cellBackup);
           }
@@ -5376,7 +5373,7 @@ bool Sheet::loadSelection(const QDomDocument& doc, const QRect &pasteArea,
     return true;
 }
 
-void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect &loadArea,
+void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
                               int _xshift, int _yshift,
                               bool insert, int insertTo)
 {
@@ -5395,36 +5392,73 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect &loadArea,
                            root.namedItem( "columns" ).toElement().isNull())
       ? loadArea.height() : rowsInClpbrd;
 
-  Region region;
+  uint numCols = 0;
+  uint numRows = 0;
+  Region region; // to store the current data, therefore shifted
   for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
   {
     QDomElement e = n.toElement(); // "columns", "rows" or "cell"
     if (e.tagName() == "columns")
     {
-      region.add(QRect(_xshift  +1, 1,
-                       _xshift + e.attribute("count").toInt(), KS_rowMax));
+      _yshift = 0;
+      int col = e.attribute("column").toInt();
+      int width = e.attribute("count").toInt();
+      for (int coff = 0; col + coff <= pasteWidth; coff += columnsInClpbrd)
+      {
+        uint overlap = QMAX(0, (col + coff + width) - pasteWidth);
+        uint effWidth = width - overlap;
+        region.add(QRect(_xshift + col + coff, 1, effWidth, KS_rowMax));
+        numCols += effWidth;
+      }
     }
     else if (e.tagName() == "rows")
     {
-      region.add(QRect(1, _yshift + 1,
-                       KS_colMax, _xshift + e.attribute("count").toInt()));
+      _xshift = 0;
+      int row = e.attribute("row").toInt();
+      int height = e.attribute("count").toInt();
+      for (int roff = 0; row + roff <= pasteHeight; roff += rowsInClpbrd)
+      {
+        uint overlap = QMAX(0, (row + roff + height) - pasteHeight);
+        uint effHeight = height - overlap;
+        region.add(QRect(1, _yshift + row + roff, KS_colMax, effHeight));
+        numRows += effHeight;
+      }
     }
     else if (!e.isNull())
     {
-      // TODO Stefan: maybe save the range dimensions?!
-      region.add(QPoint(_xshift + e.attribute("column").toInt(),
-                        _yshift + e.attribute("row").toInt()));
+      // store the cols/rows for the insertion
+      int col = e.attribute("column").toInt();
+      int row = e.attribute("row").toInt();
+      for (int coff = 0; col + coff <= pasteWidth; coff += columnsInClpbrd)
+      {
+        for (int roff = 0; row + roff <= pasteHeight; roff += rowsInClpbrd)
+        {
+          region.add(QPoint(_xshift + col + coff, _yshift + row + roff));
+        }
+      }
     }
   }
 
   if (!doc()->undoLocked())
   {
-    UndoCellPaste *undo = new UndoCellPaste( doc(), this, _xshift, _yshift, region, insert );
+    UndoCellPaste *undo = new UndoCellPaste( doc(), this, _xshift, _yshift, region, insert, insertTo );
     doc()->addCommand( undo );
   }
 
   if (insert)
   {
+    QRect rect = region.boundingRect();
+    if (insertTo == -1 || (insertTo == 0 && numRows == 0))
+    {
+      rect.setWidth(rect.width() - numCols);
+      shiftRow(rect, false);
+    }
+    else if (insertTo == 1 || (insertTo == 0 && numCols == 0))
+    {
+      rect.setHeight(rect.height() - numRows);
+      shiftColumn(rect, false);
+    }
+
     for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
     {
       QDomElement e = n.toElement(); // "columns", "rows" or "cell"
@@ -5435,18 +5469,6 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect &loadArea,
       else if (e.tagName() == "rows")
       {
         insertRow(_yshift+1, e.attribute("count").toInt()-1, false);
-      }
-      else if (!e.isNull())
-      {
-        QRect rect(_xshift + 1, _yshift + 1, pasteWidth, pasteHeight);
-        if (insertTo == -1)
-        {
-          shiftRow(rect, false);
-        }
-        else if (insertTo == 1)
-        {
-          shiftColumn(rect, false);
-        }
       }
     }
   }

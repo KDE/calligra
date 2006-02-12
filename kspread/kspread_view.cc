@@ -4157,7 +4157,9 @@ void View::paste()
   if ( !d->canvas->editor() )
   {
       //kdDebug(36001) << "Pasting. Rect= " << d->selection->selection(false) << " bytes" << endl;
-    d->activeSheet->paste( d->selection->selection(false), true, Paste::Normal, Paste::OverWrite, false, 0, true );
+    d->activeSheet->paste( d->selection->lastRange(), true,
+                           Paste::Normal, Paste::OverWrite,
+                           false, 0, true );
     calcStatusBarOp();
     updateEditWidget();
   }
@@ -6149,7 +6151,8 @@ void View::slotInsertCellCopy()
   if ( !d->activeSheet->testAreaPasteInsert() )
   {
     doc()->emitBeginOperation( false );
-    d->activeSheet->paste( d->selection->selection(), true, Paste::Normal, Paste::OverWrite, true );
+    d->activeSheet->paste( d->selection->lastRange(), true,
+                           Paste::Normal, Paste::OverWrite, true );
     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
   else
@@ -6784,12 +6787,8 @@ void View::slotUpdateView( Sheet *_sheet )
   if ( _sheet != d->activeSheet )
     return;
 
-  //  doc()->emitBeginOperation( false );
-
-  //  d->activeSheet->setRegionPaintDirty(QRect(QPoint(0,0),
-  //                                      QPoint(KS_colMax, KS_rowMax)));
-  
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  d->activeSheet->setRegionPaintDirty( d->activeSheet->visibleRect( d->canvas ) );
+  doc()->emitEndOperation();
 }
 
 void View::slotUpdateView( Sheet * _sheet, const Region& region )

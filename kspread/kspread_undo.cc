@@ -2661,14 +2661,19 @@ void UndoCellPaste::undo()
   doc()->undoLock();
   doc()->emitBeginOperation();
 
+  uint numCols = 0;
+  uint numRows = 0;
+
   Region::ConstIterator endOfList = m_region.constEnd();
-  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  for (Region::ConstIterator it = --m_region.constEnd(); it != endOfList; --it)
   {
     QRect range = (*it)->rect().normalize();
 
     if ((*it)->isColumn())
     {
-      int nbCol = range.width();
+      yshift = 0;
+      uint col = range.left();
+      uint width = range.width();
       if (!b_insert)
       {
         QValueList<columnSize>::Iterator it2;
@@ -2680,12 +2685,15 @@ void UndoCellPaste::undo()
       }
       else
       {
-        sheet->removeColumn( xshift+1, nbCol-1, false);
+        numCols += width;
+        sheet->removeColumn(col, width - 1, false);
       }
     }
     else if ((*it)->isRow())
     {
-      int nbRow = range.height();
+      xshift = 0;
+      uint row = range.top();
+      uint height = range.height();
       if (!b_insert)
       {
         QValueList<rowSize>::Iterator it2;
@@ -2697,21 +2705,8 @@ void UndoCellPaste::undo()
       }
       else
       {
-        sheet->removeRow(yshift+1, nbRow-1);
-      }
-    }
-    else
-    {
-      if (b_insert)
-      {
-        if (m_iInsertTo == -1)
-        {
-          sheet->unshiftRow(range);
-        }
-        else if (m_iInsertTo == 1)
-        {
-          sheet->unshiftColumn(range);
-        }
+        numRows += height;
+        sheet->removeRow(row, height - 1);
       }
     }
 
@@ -2721,7 +2716,23 @@ void UndoCellPaste::undo()
     }
   } // for (Region::...
 
-  if (!b_insert)
+  if (b_insert) // with insertion
+  {
+    QRect rect = m_region.boundingRect();
+    if (m_iInsertTo == -1 || (m_iInsertTo == 0 && numRows == 0))
+    {
+      // substract already removed columns
+      rect.setWidth(rect.width() - numCols);
+      sheet->unshiftRow(rect);
+    }
+    else if (m_iInsertTo == 1 || (m_iInsertTo == 0 && numCols == 0))
+    {
+      // substract already removed rows
+      rect.setHeight(rect.height() - numRows);
+      sheet->unshiftColumn(rect);
+    }
+  }
+  else // without insertion
   {
     sheet->paste(m_data, m_region.boundingRect());
   }
@@ -2743,6 +2754,9 @@ void UndoCellPaste::redo()
   doc()->undoLock();
   doc()->emitBeginOperation();
 
+  uint numCols = 0;
+  uint numRows = 0;
+
   Region::ConstIterator endOfList = m_region.constEnd();
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
@@ -2750,10 +2764,11 @@ void UndoCellPaste::redo()
 
     if ((*it)->isColumn())
     {
-      int nbCol = range.width();
+      int width = range.width();
       if (b_insert)
       {
-        sheet->insertColumn(  xshift+1,nbCol-1,false);
+        numCols += width;
+        sheet->insertColumn(xshift + 1, width - 1, false);
       }
       QValueList<columnSize>::Iterator it2;
       for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
@@ -2764,10 +2779,11 @@ void UndoCellPaste::redo()
     }
     else if ((*it)->isRow())
     {
-      int nbRow = range.height();
+      int height = range.height();
       if (b_insert)
       {
-        sheet->insertRow(  yshift+1,nbRow-1);
+        numRows += height;
+        sheet->insertRow(yshift + 1, height - 1);
       }
       QValueList<rowSize>::Iterator it2;
       for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
@@ -2778,20 +2794,27 @@ void UndoCellPaste::redo()
     }
     else
     {
-      if (b_insert)
+      if (!b_insert)
       {
-        if (m_iInsertTo == -1)
-        {
-          sheet->shiftRow(range);
-        }
-        else if (m_iInsertTo == 1)
-        {
-          sheet->shiftColumn(range);
-        }
+        sheet->deleteCells( range );
       }
-      sheet->deleteCells( range );
     }
   } // for (Region::...
+
+  if (b_insert)
+  {
+    QRect rect = m_region.boundingRect();
+    if (m_iInsertTo == -1 || (m_iInsertTo == 0 && numRows == 0))
+    {
+      rect.setWidth(rect.width() - numCols);
+      sheet->shiftRow(rect);
+    }
+    else if (m_iInsertTo == 1 || (m_iInsertTo == 0 && numCols == 0))
+    {
+      rect.setHeight(rect.height() - numRows);
+      sheet->shiftColumn(rect);
+    }
+  }
 
   sheet->paste( m_dataRedo, m_region.boundingRect() );
 
