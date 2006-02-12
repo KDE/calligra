@@ -82,7 +82,7 @@ namespace Kross { namespace Api {
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
                 inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2, typename ARG3::type arg3, typename ARG4::type arg4) {
-                    return new class RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2,arg3,arg4) );
+                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2,arg3,arg4) );
                 }
             };
 
@@ -143,7 +143,7 @@ namespace Kross { namespace Api {
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
                 inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2, typename ARG3::type arg3) {
-                    return new class RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2,arg3) );
+                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2,arg3) );
                 }
             };
 
@@ -180,7 +180,7 @@ namespace Kross { namespace Api {
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
                 inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2) {
-                    return new class RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2) );
+                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )(arg1,arg2) );
                 }
             };
 
@@ -216,7 +216,7 @@ namespace Kross { namespace Api {
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
                 inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1) {
-                    return new class RET::object( ( (self->m_instance)->*(self->m_method) )(arg1) );
+                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )(arg1) );
                 }
             };
 
@@ -251,7 +251,7 @@ namespace Kross { namespace Api {
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
                 inline static Object::Ptr exec(PROXYFUNC* self) {
-                    return new class RET::object( ( (self->m_instance)->*(self->m_method) )() );
+                    return new typename RET::object( ( (self->m_instance)->*(self->m_method) )() );
                 }
             };
 
