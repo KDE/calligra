@@ -36,7 +36,7 @@
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <koView.h>
 
 class QScrollBar;
