@@ -422,11 +422,11 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
         // Use the user-set profile, if it's not an lcms internal
         // profile. This does not add the profile to the image, we
         // need to do that later.
-        args.append("-p " + pf->filename());
+        args.append("-p \"" + pf->filename() + "\"");
     }
 
     // Don't forget the filename
-    args.append(m_chain -> inputFile());
+    args.append("\"" + m_chain -> inputFile() + "\"");
 
     return args;
 }
