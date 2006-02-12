@@ -163,7 +163,7 @@ public:
   * Changes the area on the spreadsheet represented by this range
   * @param newRange The new area for this range.
   */
-  virtual void setRange(QRect& newRange) {_range=newRange;}
+  virtual void setRange(const QRect& newRange) {_range=newRange;}
   
   void setRange(int newStartCol, int newStartRow, int newEndCol, int newEndRow)
   { _range=QRect(newStartCol,newStartRow,newEndCol-newStartCol,newEndRow-newStartRow); }

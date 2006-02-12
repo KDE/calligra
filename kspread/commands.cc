@@ -679,8 +679,9 @@ InsertObjectCommand::InsertObjectCommand(const KoRect& _geometry, KoDocumentEntr
   obj = 0;
 }
 
-InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry, KURL& _file, Canvas *_canvas ) //picture
+InsertObjectCommand::InsertObjectCommand( const KoRect& _geometry , KURL& _file, Canvas *_canvas ) //picture
 {
+  //In the case of pictures, only the top left point of the rectangle is relevant
   geometry = _geometry;
   file = _file;
   canvas = _canvas;
@@ -726,7 +727,7 @@ void InsertObjectCommand::execute()
       }
       case OBJECT_PICTURE:
       {
-        success = canvas->activeSheet()->insertPicture( geometry, file );
+        success = canvas->activeSheet()->insertPicture( geometry.topLeft() , file );
         break;
       }
       default:

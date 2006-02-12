@@ -432,7 +432,7 @@ public:
     KAction* createTemplate;
     KoPartSelectAction *insertPart;
     KToggleAction* insertChartFrame;
-    KToggleAction* insertPicture;
+    KAction* insertPicture;
     KAction* customList;
     KAction* spellChecking;
     KAction* internalTests;
@@ -871,7 +871,7 @@ void View::Private::initActions()
       0, view, SLOT( insertChart() ), ac, "insertChart" );
   actions->insertChartFrame->setToolTip(i18n("Insert a chart."));
 
-  actions->insertPicture = new KToggleAction( i18n("&Picture"),
+  actions->insertPicture = new KAction( i18n("&Picture"),
       0, view, SLOT( insertPicture() ), ac, "insertPicture" );
   actions->insertPicture->setToolTip(i18n("Insert a picture."));
 
@@ -2062,7 +2062,7 @@ Selection* View::choice() const
 void View::resetInsertHandle()
 {
   d->actions->insertChartFrame->setChecked( false );
-  d->actions->insertPicture->setChecked( false );
+ // d->actions->insertPicture->setChecked( false );
 
   d->insertHandler = 0;
 }
@@ -4056,7 +4056,7 @@ void View::cutSelection()
     calcStatusBarOp();
     updateEditWidget();
     }
-  else
+else
     d->canvas->editor()->cut();
 
   markSelectionAsDirty();
@@ -4070,6 +4070,13 @@ void View::paste()
 
   if (!koDocument()->isReadWrite()) // don't paste into a read only document
     return;
+
+  //TODO:  What if the clipboard data is available in both pixmap and OASIS format? (ie. for embedded parts)
+  QPixmap clipboardPixmap = QApplication::clipboard()->pixmap();
+  if (!clipboardPixmap.isNull())
+  {
+	  d->activeSheet->insertPicture( markerDocumentPosition()  , clipboardPixmap );
+  }	
 
   QMimeSource *data = QApplication::clipboard()->data();
   for ( int i=0; data->format(i) != 0; i++ )
@@ -4983,16 +4990,32 @@ void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
   cmd->execute();
 }
 
-void View::insertPicture( const QRect& _geometry, KURL& _file )
+KoPoint View::markerDocumentPosition()
 {
+	QPoint marker=selectionInfo()->marker();
+
+	return KoPoint( d->activeSheet->dblColumnPos(marker.x()),
+		        d->activeSheet->dblRowPos(marker.y()) );
+}
+
+void View::insertPicture()
+{
+  //Note:  We don't use the usual insert handler here (which allows the user to drag-select the target area
+  //for the object) because when inserting raster graphics, it is usually desireable to insert at 100% size,
+  //since the graphic won't look right if inserted with an incorrect aspect ratio or if blurred due to the
+  //scaling.  If the user wishes to change the size and/or aspect ratio, they can do that afterwards.
+  //This behaviour can be seen in other spreadsheets.
+  //-- Robert Knight 12/02/06 <robertknight@gmail.com>
+
+  KURL file = KFileDialog::getImageOpenURL( QString::null, d->canvas );
+  
+  if (file.isEmpty())
+ 	return; 
+  
   if ( !d->activeSheet )
-    return;
+    	return;
 
-  // Transform the view coordinates to document coordinates
-  KoRect unzoomedRect = doc()->unzoomRect( _geometry );
-  unzoomedRect.moveBy( d->canvas->xOffset(), d->canvas->yOffset() );
-
-  InsertObjectCommand *cmd = new InsertObjectCommand( unzoomedRect, _file, d->canvas );
+  InsertObjectCommand *cmd = new InsertObjectCommand( KoRect(markerDocumentPosition(),KoSize(0,0)) , file, d->canvas );
   doc()->addCommand( cmd );
   cmd->execute();
 }
@@ -5981,6 +6004,7 @@ void View::deleteSelectedObjects()
   {
     if ( it.current()->sheet() == canvasWidget()->activeSheet() && it.current()->isSelected() )
     {
+     // d->activeSheet->setRegionPaintDirty( it.
       if( !macroCommand )
         macroCommand = new KMacroCommand( i18n( "Remove Object" ) );
       RemoveObjectCommand *cmd = new RemoveObjectCommand( it.current() );
@@ -6572,22 +6596,7 @@ void View::insertChart()
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void View::insertPicture()
-{
-  KURL file = KFileDialog::getImageOpenURL( QString::null, d->canvas );
-  if ( file.isEmpty() )
-  {
-    d->actions->insertPicture->setChecked( false );
-    return;
-  }
-  doc()->emitBeginOperation( false );
 
-  //Don't start handles more than once
-  delete d->insertHandler;
-
-  d->insertHandler = new InsertPictureHandler( this, d->canvas, file );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
-}
 
 /*
   // TODO Use KoView setScaling/xScaling/yScaling instead

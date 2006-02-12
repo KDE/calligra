@@ -144,6 +144,35 @@ void EmbeddedObject::draw( QPainter *_painter )
   paintSelection(_painter, SM_MOVERESIZE );
 }
 
+QPixmap EmbeddedObject::toPixmap()
+{
+	return QPixmap( 1.0 , 1.0 );
+}
+
+QPixmap EmbeddedObject::toPixmap(QSize size)
+{
+	double xZoom;
+	double yZoom;
+
+	calculateRequiredZoom( size , xZoom , yZoom );
+
+	return toPixmap(xZoom,yZoom);
+}
+
+QPixmap EmbeddedObject::toPixmap(double /*xZoom*/ , double /*yZoom*/)
+{
+	return QPixmap();
+
+}
+
+void EmbeddedObject::calculateRequiredZoom( QSize desiredSize, double& xZoom, double& yZoom)
+{
+	QSize actualSize = geometry().size().toQSize();
+
+	xZoom = (double) desiredSize.width() / (double)actualSize.width();
+	yZoom = (double) desiredSize.height() / (double)actualSize.height();
+}
+
 void EmbeddedObject::paintSelection( QPainter *_painter, SelectionMode mode )
 {
   if ( !m_selected || mode == SM_NONE )
@@ -402,11 +431,16 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   _painter->save();
   int const xOffset = sheet()->doc()->zoomItX( geometry().left() + penw);
   int const yOffset = sheet()->doc()->zoomItY( geometry().top() + penw );
-  _painter->translate( xOffset , yOffset );
-
+ 
   QRect new_geometry = zoomedBound;
-  new_geometry.moveBy(  xOffset , yOffset );
-  new_geometry.moveBy( -_painter->window().x(), -_painter->window().y() );
+  
+  //if ( translate )
+  //{
+  	_painter->translate( xOffset , yOffset );
+
+  	new_geometry.moveBy(  xOffset , yOffset );
+  	new_geometry.moveBy( -_painter->window().x(), -_painter->window().y() );
+  //}
 
   _painter->setClipRect( zoomedBound, QPainter::CoordPainter );
 
@@ -426,7 +460,21 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   EmbeddedObject::draw( _painter );
 }
 
-void EmbeddedKOfficeObject::activate( View *_view, Canvas */*_canvas*/ )
+QPixmap EmbeddedKOfficeObject::toPixmap( double xZoom , double yZoom )
+{
+	QPixmap pixmap( (int) geometry().width()*xZoom , (int) geometry().height()*yZoom );
+
+	QPainter painter(&pixmap);
+	QRect  bound( 0,0,geometry().width()*xZoom,geometry().height()*yZoom );
+	embeddedObject()->document()->paintEverything(painter,bound,
+					embeddedObject()->isTransparent(),
+					0,
+					xZoom,
+					yZoom);
+	return pixmap;
+}
+
+void EmbeddedKOfficeObject::activate( View *_view, Canvas* /* canvas */ )
 {
     KoDocument* part = embeddedObject()->document();
     if ( !part )
@@ -1094,6 +1142,14 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 //     }
 // 
 //     _painter->restore();
+}
+
+QPixmap EmbeddedPictureObject::toPixmap( double xZoom , double yZoom )
+{
+	KoZoomHandler zoomHandler;
+	zoomHandler.setZoomedResolution( xZoom*zoomHandler.resolutionX() , yZoom*zoomHandler.resolutionY() );
+	
+	return generatePixmap( &zoomHandler );
 }
 
 QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)

@@ -314,6 +314,12 @@ public:
 
     void repaintObject( EmbeddedObject *obj );
 
+    /**
+     * This is intended to copy the selected objects to the clipboard so that they can be pasted into other
+     * applications.  However, until at least KWord, KSpread, KPresenter, KChart and KFormula have consistant
+     * support for copying and pasting of OASIS objects the selected objects will just be copied in the form
+     * of raster graphics
+     */
     void copyOasisObjects();
     //void insertOasisData();
 

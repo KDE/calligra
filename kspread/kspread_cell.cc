@@ -4001,12 +4001,7 @@ QString Cell::textDisplaying( QPainter &_painter )
   QFontMetrics  fm = _painter.fontMetrics();
   int           a  = format()->align( column(), row() );
 
-  // If the content of the cell is a number, then we shouldn't cut
-  // anything, but just display an error indication.
-  //
-  // FIXME: Check if this should be in class ValueFormatter() instead.
-  if ( value().isNumber() )
-    d->strOutText = "#####################################################";
+  bool isNumeric = value().isNumber();
 
   if ( !format()->verticalText( column(),row() ) ) {
     // Non-vertical text: the ordinary case.
@@ -4027,37 +4022,52 @@ QString Cell::textDisplaying( QPainter &_painter )
 
     // Start out with the whole text, cut one character at a time, and
     // when the text finally fits, return it.
-    for ( int i = d->strOutText.length(); i != 0; i-- ) {
+    for ( int i = d->strOutText.length(); i != 0; i-- ) 
+    {
       if ( a == Format::Left || a == Format::Undefined )
-  tmp = d->strOutText.left(i);
+  		tmp = d->strOutText.left(i);
       else if ( a == Format::Right)
-  tmp = d->strOutText.right(i);
+  		tmp = d->strOutText.right(i);
       else
-  tmp = d->strOutText.mid( ( d->strOutText.length() - i ) / 2, i);
+  		tmp = d->strOutText.mid( ( d->strOutText.length() - i ) / 2, i);
 
-      // 4 equal lenght of red triangle +1 point.
+      if (isNumeric)
+      {
+	  //For numeric values, we can cut off digits after the decimal point to make it fit,
+	  //but not the integer part of the number.  
+	  //If this number still contains a fraction part then we don't need to do anything, if we have run
+	  //out of space to fit even the integer part of the number then display #########
+	  //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
+	   
+	  if (!tmp.contains('.'))
+	  	d->strOutText=QString().fill('#',20);
+      }
+      
+      // 4 equal length of red triangle +1 point.
       if ( format()->sheet()->doc()->unzoomItX( fm.width( tmp ) ) + tmpIndent
      < len - 4.0 - 1.0 )
       {
-  if ( format()->getAngle( column(), row() ) != 0 ) {
-    QString tmp2;
-    RowFormat *rl = format()->sheet()->rowFormat( row() );
-    if ( d->textHeight > rl->dblHeight() ) {
-      for ( int j = d->strOutText.length(); j != 0; j-- ) {
-        tmp2 = d->strOutText.left( j );
-        if ( format()->sheet()->doc()->unzoomItY( fm.width( tmp2 ) )
-       < rl->dblHeight() - 1.0 )
-        {
-    return d->strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
-        }
-      }
-    }
-    else
-      return tmp;
+  	if ( format()->getAngle( column(), row() ) != 0 ) 
+	{
+    		QString tmp2;
+    		RowFormat *rl = format()->sheet()->rowFormat( row() );
+    		if ( d->textHeight > rl->dblHeight() ) 
+		{
+      			for ( int j = d->strOutText.length(); j != 0; j-- ) 
+			{
+        			tmp2 = d->strOutText.left( j );
+        			if ( format()->sheet()->doc()->unzoomItY( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
+        			{
+    					return d->strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
+        			}
+      			}
+    		}
+    		else
+      			return tmp;
 
-  }
-  else
-    return tmp;
+  	}
+  	else
+    		return tmp;
       }
     }
     return QString( "" );

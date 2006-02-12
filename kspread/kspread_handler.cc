@@ -188,7 +188,7 @@ InsertPictureHandler::~InsertPictureHandler()
 }
 void InsertPictureHandler::insertObject( QRect r)
 {
-  m_view->insertPicture( r, m_file );
+  //m_view->insertPicture(/* r,*/ m_file );
 }
 
 #include "kspread_handler.moc"

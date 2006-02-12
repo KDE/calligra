@@ -972,7 +972,28 @@ public:
     bool insertChild( const KoRect& _geometry, KoDocumentEntry& );
 
     bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data );
-    bool insertPicture( const KoRect& _geometry, KURL& _file );
+    
+    
+    /**
+     * Creates a new embedded picture object and inserts it into the sheet next to the currently
+     * selected cell.
+     *
+     * TODO:  Remove this method in future and provide a better way of opening pictures and inserting
+     * them into the sheet.
+     * 
+     * @param file The URL of the file to insert.
+     * @param point The the top-left point in the sheet where the picture should be inserted.
+     */
+    bool insertPicture( const KoPoint& point ,  KURL& file );
+
+    /**
+     * Creates a new embedded picture object and inserts it into the sheet at the specified position.
+     *
+     * @param point The top-left position for the new picture object in the sheet
+     * @param pixmap The source pixmap for the new picture
+     */
+    bool insertPicture( const KoPoint& point, const QPixmap& pixmap );
+    
     void changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _geometry );
 
     const QColorGroup& colorGroup() { return widget()->colorGroup(); }

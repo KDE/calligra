@@ -7819,9 +7819,14 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
 
     KoChart::WizardExtension * wiz = ch->chart()->wizardExtension();
 
-    QString  tmp( _data->name() );
+    Range dataRange;
+    dataRange.setRange( _data );
+    dataRange.setSheet( this );
+   
+    QString rangeString=dataRange.toString();
+    
     if ( wiz )
-        wiz->show( tmp );
+        wiz->show( rangeString );
 
     insertObject( ch );
 
@@ -7844,12 +7849,70 @@ bool Sheet::insertChild( const KoRect& _rect, KoDocumentEntry& _e )
     return true;
 }
 
-bool Sheet::insertPicture( const KoRect& _rect, KURL& _file )
+bool Sheet::insertPicture( const KoPoint& _point ,  KURL& _file )
 {
-    KoPictureKey key = doc()->pictureCollection()->loadPicture( _file.prettyURL(0, KURL::StripFileProtocol) ).getKey();
-    EmbeddedPictureObject* ch = new EmbeddedPictureObject( this, _rect, doc()->pictureCollection(), key );
+    KoPicture picture = doc()->pictureCollection()->downloadPicture( _file , 0 );
+
+    if (picture.isNull())
+	    return false;
+    
+    KoPictureKey key = picture.getKey();
+
+    KoRect destinationRect;
+    destinationRect.setLeft( _point.x()  );
+    destinationRect.setTop( _point.y()  );
+
+    //Generate correct pixel size - this is a bit tricky.  
+    //This ensures that when we load the image it appears
+    //the same size on screen on a 100%-zoom KSpread spreadsheet as it would in an
+    //image viewer or another spreadsheet program such as OpenOffice.  
+    //
+    //KoUnit assumes 72DPI, whereas the user's display resolution will probably be 
+    //different (eg. 96*96).  So, we convert the actual size in pixels into inches
+    //using the screen display resolution and then use KoUnit to convert back into
+    //the appropriate pixel size KSpread.        
+    
+    KoSize destinationSize;
+    
+    double inchWidth = (double)picture.getOriginalSize().width() / KoGlobal::dpiX();
+    double inchHeight = (double)picture.getOriginalSize().height() / KoGlobal::dpiY();
+
+    destinationSize.setWidth( KoUnit::fromUserValue(inchWidth,KoUnit::U_INCH) );
+    destinationSize.setHeight( KoUnit::fromUserValue(inchHeight,KoUnit::U_INCH) );
+    
+    destinationRect.setSize( destinationSize);
+
+    EmbeddedPictureObject* ch = new EmbeddedPictureObject( this, destinationRect, doc()->pictureCollection(),key);
+   // ch->setPicture(key);
+
     insertObject( ch );
     return true;
+}
+
+bool Sheet::insertPicture( const KoPoint& point, const QPixmap& pixmap  )
+{
+	QByteArray data;
+	QBuffer buffer(data);
+
+	buffer.open( IO_ReadWrite );
+	pixmap.save( &buffer , "PNG" );
+
+	//Reset the buffer so that KoPicture reads the whole file from the beginning 
+	//(at the moment the read/write position is at the end)
+	buffer.reset();
+
+	KoPicture picture;
+	picture.load( &buffer , "PNG" );
+
+	doc()->pictureCollection()->insertPicture(picture);
+
+	double width = pixmap.width();
+	double height = pixmap.height();
+
+	insertObject( new EmbeddedPictureObject( this, KoRect( point.x() , point.y() , width , height), 
+							doc()->pictureCollection(),picture.getKey() ) );
+
+	return true;
 }
 
 void Sheet::insertObject( EmbeddedObject *_obj )

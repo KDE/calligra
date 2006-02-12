@@ -36,6 +36,7 @@
 #include <kprinter.h>
 #include <kdeprint/kprintdialogpage.h>
 
+#include <koPoint.h>
 #include <koView.h>
 
 class QScrollBar;
@@ -264,7 +265,7 @@ public:
      */
     void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
 
-    void insertPicture( const QRect& _geometry, KURL& _file );
+   // void insertPicture( const QRect& _geometry, KURL& _file );
 
     virtual void print( KPrinter &printer );
     virtual void setupPrinter( KPrinter &printer );
@@ -695,6 +696,14 @@ protected:
 
     virtual QWMatrix matrix() const;
 
+    /**
+     * Returns the position of the top-left point of the currently selected cell in document coordinates.
+     * This is used when inserting some types of objects or pasting images into the document (so that the newly
+     * pasted object's top-left point will be aligned with the top-left point of the currently selected cell)
+     *
+     */
+    KoPoint markerDocumentPosition();
+    
     /**
      * Activates the formula editor for the current cell.
      * This function is usually called if the user presses
