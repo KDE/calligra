@@ -1809,4 +1809,71 @@ void RecalculateProjectCmd::unexecute() {
     setCommandType(0);
 }
 
+
+ModifyStandardWorktimeYearCmd::ModifyStandardWorktimeYearCmd(Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name)
+    : NamedCommand(part, name),
+      swt(wt),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+
+}
+void ModifyStandardWorktimeYearCmd::execute() {
+    swt->setYear(m_newvalue);
+    setCommandType(0);
+}
+void ModifyStandardWorktimeYearCmd::unexecute() {
+    swt->setYear(m_oldvalue);
+    setCommandType(0);
+}
+
+ModifyStandardWorktimeMonthCmd::ModifyStandardWorktimeMonthCmd(Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name)
+    : NamedCommand(part, name),
+      swt(wt),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+
+}
+void ModifyStandardWorktimeMonthCmd::execute() {
+    swt->setMonth(m_newvalue);
+    setCommandType(0);
+}
+void ModifyStandardWorktimeMonthCmd::unexecute() {
+    swt->setMonth(m_oldvalue);
+    setCommandType(0);
+}
+
+ModifyStandardWorktimeWeekCmd::ModifyStandardWorktimeWeekCmd(Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name)
+    : NamedCommand(part, name),
+      swt(wt),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+
+}
+void ModifyStandardWorktimeWeekCmd::execute() {
+    swt->setWeek(m_newvalue);
+    setCommandType(0);
+}
+void ModifyStandardWorktimeWeekCmd::unexecute() {
+    swt->setWeek(m_oldvalue);
+    setCommandType(0);
+}
+
+ModifyStandardWorktimeDayCmd::ModifyStandardWorktimeDayCmd(Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name)
+    : NamedCommand(part, name),
+      swt(wt),
+      m_oldvalue(oldvalue),
+      m_newvalue(newvalue) {
+
+}
+
+void ModifyStandardWorktimeDayCmd::execute() {
+    swt->setDay(m_newvalue);
+    setCommandType(0);
+}
+void ModifyStandardWorktimeDayCmd::unexecute() {
+    swt->setDay(m_oldvalue);
+    setCommandType(0);
+}
+
+
 }  //KPlato namespace

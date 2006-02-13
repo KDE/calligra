@@ -45,7 +45,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, cons
 {
     //kdDebug()<<k_funcinfo<<&p<<endl;
     m_original = p.standardWorktime();
-    dia = new StandardWorktimeDialogImpl(new StandardWorktime(m_original), this); //FIXME
+    dia = new StandardWorktimeDialogImpl(m_original, this);
 
     setMainWidget(dia);
     enableButtonOK(false);
@@ -54,11 +54,27 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, cons
     connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
 }
 
-// FIXME
 KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
     kdDebug()<<k_funcinfo<<endl;
-    project.setStandardWorktime(dia->standardWorktime());
-    return 0;
+    QString n = "Modify standard work time";
+    KMacroCommand *cmd = 0;
+    if (m_original->year() != dia->inYear()) {
+        if (cmd == 0) cmd = new KMacroCommand(n);
+        cmd->addCommand(new ModifyStandardWorktimeYearCmd(part, m_original, m_original->year(), dia->inYear()));
+    }
+    if (m_original->month() != dia->inMonth()) {
+        if (cmd == 0) cmd = new KMacroCommand(n);
+        cmd->addCommand(new ModifyStandardWorktimeMonthCmd(part, m_original, m_original->month(), dia->inMonth()));
+    }
+    if (m_original->week() != dia->inWeek()) {
+        if (cmd == 0) cmd = new KMacroCommand(n);
+        cmd->addCommand(new ModifyStandardWorktimeWeekCmd(part, m_original, m_original->week(), dia->inWeek()));
+    }
+    if (m_original->day() != dia->inDay()) {
+        if (cmd == 0) cmd = new KMacroCommand(n);
+        cmd->addCommand(new ModifyStandardWorktimeDayCmd(part, m_original, m_original->day(), dia->inDay()));
+    }
+    return cmd;
     
 }
 
@@ -73,10 +89,15 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     if (!std) {
         m_std = new StandardWorktime();
     }
-    year->setValue(m_std->year());
-    month->setValue(m_std->month());
-    week->setValue(m_std->week());
-    day->setValue(m_std->day());
+    m_year = m_std->year();
+    m_month = m_std->month();
+    m_week = m_std->week();
+    m_day = m_std->day();
+    
+    year->setValue(m_year);
+    month->setValue(m_month);
+    week->setValue(m_week);
+    day->setValue(m_day);
 
     connect(year, SIGNAL(valueChanged(double)), SLOT(slotYearChanged(double)));
     connect(month, SIGNAL(valueChanged(double)), SLOT(slotMonthChanged(double)));
@@ -96,14 +117,14 @@ void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
 
 void StandardWorktimeDialogImpl::slotYearChanged(double value) {
     //kdDebug()<<k_funcinfo<<value<<endl;
-    m_std->setYear(value);
+    m_year = value;
     if (month->value() > value)
         month->setValue(value);
     slotEnableButtonOk(true);
 }
 
 void StandardWorktimeDialogImpl::slotMonthChanged(double value) {
-    m_std->setMonth(value);
+    m_month = value;
     if (year->value() < value)
         year->setValue(value);
     if (week->value() > value)
@@ -112,7 +133,7 @@ void StandardWorktimeDialogImpl::slotMonthChanged(double value) {
 }
 
 void StandardWorktimeDialogImpl::slotWeekChanged(double value) {
-    m_std->setWeek(value);
+    m_week = value;
     if (month->value() < value)
         month->setValue(value);
     if (day->value() > value)
@@ -121,7 +142,7 @@ void StandardWorktimeDialogImpl::slotWeekChanged(double value) {
 }
 
 void StandardWorktimeDialogImpl::slotDayChanged(double value) {
-    m_std->setDay(value);
+    m_day = value;
     if (week->value() < value)
         week->setValue(value);
     slotEnableButtonOk(true);

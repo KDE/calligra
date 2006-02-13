@@ -45,6 +45,7 @@ class ResourceRequest;
 class ResourceGroup;
 class Resource;
 class Schedule;
+class StandardWorktime;
 
 class NamedCommand : public KNamedCommand
 {
@@ -980,6 +981,55 @@ private:
     bool oldDeleted;
     Schedule *oldCurrent;
 };
+
+class ModifyStandardWorktimeYearCmd : public NamedCommand
+{
+public:
+    ModifyStandardWorktimeYearCmd(Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name=0);
+    void execute();
+    void unexecute();
+private:
+    StandardWorktime *swt;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class ModifyStandardWorktimeMonthCmd : public NamedCommand
+{
+public:
+    ModifyStandardWorktimeMonthCmd(Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name=0);
+    void execute();
+    void unexecute();
+private:
+    StandardWorktime *swt;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class ModifyStandardWorktimeWeekCmd : public NamedCommand
+{
+public:
+    ModifyStandardWorktimeWeekCmd(Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name=0);
+    void execute();
+    void unexecute();
+private:
+    StandardWorktime *swt;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class ModifyStandardWorktimeDayCmd : public NamedCommand
+{
+public:
+    ModifyStandardWorktimeDayCmd(Part *part, StandardWorktime *wt, double oldvalue, double newvalue, QString name=0);
+    void execute();
+    void unexecute();
+private:
+    StandardWorktime *swt;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
 
 }  //KPlato namespace
 

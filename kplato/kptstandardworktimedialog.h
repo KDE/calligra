@@ -41,6 +41,10 @@ public:
     StandardWorktimeDialogImpl ( StandardWorktime *std, QWidget *parent);
 
     StandardWorktime *standardWorktime() { return m_std; }
+    double inYear() const { return m_year; }
+    double inMonth() const { return m_month; }
+    double inWeek() const { return m_week; }
+    double inDay() const { return m_day; }
     
 private slots:
     void slotCheckAllFieldsFilled();
@@ -51,13 +55,16 @@ private slots:
     void slotWeekChanged(double);
     void slotDayChanged(double);
     
-
 signals:
     void obligatedFieldsFilled(bool yes);
     void enableButtonOk(bool);
 
 private:
     StandardWorktime *m_std;
+    double m_year;
+    double m_month;
+    double m_week;
+    double m_day;
 };
 
 class StandardWorktimeDialog : public KDialogBase {
