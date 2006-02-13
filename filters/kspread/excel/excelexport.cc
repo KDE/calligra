@@ -6,7 +6,7 @@
 
 
 typedef KGenericFactory<ExcelExport, KoFilter> ExcelExportFactory;
-K_EXPORT_COMPONENT_FACTORY(libkspreadexcelexport, ExcelExportFactory("excelexport"))
+//K_EXPORT_COMPONENT_FACTORY(libkspreadexcelexport, ExcelExportFactory("excelexport"))
 
 
 ExcelExport::ExcelExport(KoFilter *, const char *, const QStringList&) : KoFilter() {

@@ -197,18 +197,6 @@ void CSVDialog::fillTable( )
             {
                 state = S_MAYBE_END_OF_QUOTED_FIELD;
             }
-            else if (x == '\n')
-            {
-                setText(row - m_startRow, column - m_startCol, field);
-                field = QString::null;
-
-                ++row;
-                column = 1;
-                if ( row > ( m_endRow - m_startRow ) && m_endRow >= 0 )
-                  break;
-
-                state = S_START;
-            }
             else
             {
                 field += x;
@@ -263,10 +251,6 @@ void CSVDialog::fillTable( )
                     lastCharDelimiter = true;
                 }
                 state = S_START;
-            }
-            else
-            {
-                state = S_END_OF_QUOTED_FIELD;
             }
             break;
          case S_MAYBE_NORMAL_FIELD :
