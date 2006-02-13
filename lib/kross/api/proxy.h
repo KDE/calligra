@@ -128,6 +128,9 @@ namespace Kross { namespace Api {
                     Kross::Api::Object::fromObject<typename ARG4::object>(args->item(3))->operator typename ARG4::type()
                 );
             }
+
+            template<class PROXYFUNC, typename RETURNRYPE>
+            friend struct ProxyFunctionCaller;
     };
 
     /**
@@ -165,6 +168,9 @@ namespace Kross { namespace Api {
                     Kross::Api::Object::fromObject<typename ARG3::object>(args->item(2))->operator typename ARG3::type()
                 );
             }
+
+            template<class PROXYFUNC, typename RETURNRYPE>
+            friend struct ProxyFunctionCaller;
     };
 
     /**
@@ -201,6 +207,9 @@ namespace Kross { namespace Api {
                     Kross::Api::Object::fromObject<typename ARG2::object>(args->item(1))->operator typename ARG2::type()
                 );
             }
+
+            template<class PROXYFUNC, typename RETURNRYPE>
+            friend struct ProxyFunctionCaller;
     };
 
     /**
@@ -236,6 +245,9 @@ namespace Kross { namespace Api {
                     Kross::Api::Object::fromObject<typename ARG1::object>(args->item(0))->operator typename ARG1::type()
                 );
             }
+
+            template<class PROXYFUNC, typename RETURNRYPE>
+	    friend struct ProxyFunctionCaller;
     };
 
     /**
@@ -269,6 +281,9 @@ namespace Kross { namespace Api {
             Object::Ptr call(List::Ptr) {
                 return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this);
             }
+
+            template<class PROXYFUNC, typename RETURNRYPE>
+            friend struct ProxyFunctionCaller;
     };
 
 }}
