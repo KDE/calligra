@@ -48,6 +48,7 @@ KexiDBFieldList::KexiDBFieldList(::KexiDB::FieldList* fieldlist)
     addFunction("removeField", &KexiDBFieldList::removeField,
         Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBField"));
     addFunction("clear", &KexiDBFieldList::clear);
+    addFunction("setFields", &KexiDBFieldList::setFields);
 
     addFunction("subList", &KexiDBFieldList::subList);
 }
@@ -128,12 +129,23 @@ Kross::Api::Object::Ptr KexiDBFieldList::clear(Kross::Api::List::Ptr)
     return 0;
 }
 
+Kross::Api::Object::Ptr KexiDBFieldList::setFields(Kross::Api::List::Ptr args)
+{
+    ::KexiDB::FieldList* fl = Kross::Api::Object::fromObject<KexiDBFieldList>(args->item(0))->fieldlist();
+    m_fieldlist->clear();
+    uint count = fl->fieldCount();
+    for(uint i = 0; i < count; i++)
+        m_fieldlist->addField( fl->field(i) );
+    return 0;
+}
+
 Kross::Api::Object::Ptr KexiDBFieldList::subList(Kross::Api::List::Ptr args)
 {
     QStringList sl;
     QValueList<QVariant> list = Kross::Api::Variant::toList( args->item(0) );
     for(QValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
         sl.append( (*it).toString() );
-    return new Kross::KexiDB::KexiDBFieldList( m_fieldlist->subList(sl) );
+    ::KexiDB::FieldList* fl = m_fieldlist->subList(sl);
+    return fl ? new Kross::KexiDB::KexiDBFieldList(fl) : 0;
 }
 
