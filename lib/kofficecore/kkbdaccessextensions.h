@@ -110,7 +110,6 @@ class KMainWindow;
 class KOFFICECORE_EXPORT KKbdAccessExtensions : public QObject
 {
     // TODO: A .moc isn't really needed right now, but see TODO in eventFilter method.
-    // Q_OBJECT
     // Q_PROPERTY(int stepSize READ stepSize WRITE setStepSize)
 
     public:

@@ -39,7 +39,7 @@
 // KKbdAccessExtensions includes
 #include "kkbdaccessextensions.h"
 // TODO: See eventFilter method.
-#include "kkbdaccessextensions.moc"
+//#include "kkbdaccessextensions.moc"
 
 class KPanelKbdSizerIcon : public QCursor
 {
