@@ -271,7 +271,6 @@ class EmbeddedKOfficeObject : public EmbeddedObject
  */
 class EmbeddedChart : public EmbeddedKOfficeObject
 {
-//     Q_OBJECT
   public:
     EmbeddedChart( Doc *_spread, Sheet *_sheet, KoDocument* doc, const KoRect& _rect );
     EmbeddedChart( Doc *_spread, Sheet *_sheet );

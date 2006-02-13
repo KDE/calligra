@@ -43,7 +43,6 @@
 #include <KoDocumentChild.h>
 #include <KoDom.h>
 #include <kozoomhandler.h>
-#include "kspread_object.moc"
 
 using namespace KSpread;
 
