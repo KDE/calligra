@@ -1,10 +1,15 @@
 [Desktop Entry]
 Name=Screen Presentations
 Name[ar]=تقديمات على امتداد الشّاشة
+Name[de]=Folien-Präsentationen
 Name[fa]=نمایش صفحه
+Name[is]=Kynningar á skjá
 Name[it]=Presentazioni a schermo
 Name[lv]=Ekrāna Prezentācijas
 Name[sk]=Prezentácie na monitore
+Name[sr]=Екранске презентације
+Name[sr@Latn]=Ekranske prezentacije
+Name[sv]=Skärmpresentationer
 Name[ta]=திரை முன்வைப்பு 
 Name[tg]=Тақдимҳои Экран
 X-KDE-DefaultTab=true
