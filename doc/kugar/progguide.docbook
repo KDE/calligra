@@ -49,22 +49,22 @@ call the <command>kugar</command> shell command (
 </cmdsynopsis>
 ) to preview and print the report.
 See <link linkend="prog-using-for-preview">Using &kugar; shell for previewing reports</link>
-section for a detailed description.
+for a detailed description.
 </para>
 </listitem>
 <listitem>
 <para>
 Use &kugar; directly in the application's code.
 See <link linkend="prog-using-widget">Using &kugar; classes for reporting</link>
-section for a detailed description.
+for a detailed description.
 </para>
 </listitem>
 <listitem>
 <para>
 Create a &Qt; designer plugin, use it to build the application &GUI; in the designer and
 link it to the program dynamically.
-See <link linkend="prog-designer-plugin">Creating &Qt; designer plugin</link>
-section for a detailed description.
+See <link linkend="prog-designer-plugin">Creating a &Qt; designer plugin</link>
+for a detailed description.
 </para>
 </listitem>
 </itemizedlist>
@@ -77,7 +77,7 @@ can produce output in &kugar; data file format as described in <link
 linkend="kugardata-dtd">KugarData <acronym>DTD</acronym></link> or
 even a report template file format (see <link
 linkend="template-dtd">KugarTemplate <acronym>DTD</acronym></link>).
-A &kugar; shell (report viewer) can be used to preview and print the
+&kugar; shell (report viewer) can be used to preview and print the
 generated report.  </para>
 
 </sect1>
@@ -104,7 +104,7 @@ Run &kugar; shell to preview and print a report. For example, to do this, in C o
 languages call:</para>
 
 <programlisting>
-<function>system(<option>"kugar -r <replaceable>template_file.kut</replaceable>-d <replaceable>data_file.kud</replaceable>"</option>)</function>.
+<function>system(<option>"kugar -r <replaceable>template_file.ktf</replaceable>-d <replaceable>data_file.kdf</replaceable>"</option>)</function>.
 </programlisting>
 
 <para>
@@ -117,15 +117,15 @@ Don't forget to include <filename class="headerfile">stdlib.h</filename>.
 <sect1 id="prog-using-widget">
 <title>Using &kugar; classes for reporting</title>
 <para>
-&kugar; library includes two widgets for use.
+The &kugar; library includes two widgets for use.
 </para>
 <para>
-<classname>KReportViewer</classname> class is designed for &kde;
+The <classname>KReportViewer</classname> class is designed for &kde;
 developers. It supports a &kde; printing system and &UNIX; localization
 via <function>i18n()</function> calls.
 </para>
 <para>
-<classname>MReportViewer</classname> class is designed for &Qt;
+The <classname>MReportViewer</classname> class is designed for &Qt;
 developers and provides real crossplatforming. It can be used not
 only on &UNIX; platforms, but also on &Windows; and &MacOS;.
 </para>
@@ -142,7 +142,7 @@ for &Qt; and &kde; programs respectively.
 folder in the &kugar; sources.
 </para>
 <para>
-The <classname>MReportViewer</classname> (and <classname>KReportViewer</classname> too)
+<classname>MReportViewer</classname> (and <classname>KReportViewer</classname> too)
 contains several public methods that can be used.
 </para>
 <funcsynopsis>
@@ -184,7 +184,7 @@ Call this before opening the new report.</funcsynopsisinfo>
 <paramdef>const QIODevice &amp;<parameter>data_io_device</parameter></paramdef>
 </funcprototype>
 <funcsynopsisinfo>Sets report data from <replaceable>data_io_device</replaceable> file.
-IO device can be any successor of <classname>QIODevice</classname> class.
+IO device can be any successor of the <classname>QIODevice</classname> class.
 For example, to fetch records directly from the database,
 create a <classname>QIODevice</classname> successor and redefine all necessary
 functionality.
@@ -205,8 +205,8 @@ functionality.
 <paramdef>const QIODevice &amp;<parameter>template_io_device</parameter></paramdef>
 </funcprototype>
 <funcsynopsisinfo>Sets report template from <replaceable>template_io_device</replaceable> file.
-IO device can be any successor of <classname>QIODevice</classname> class.
-For example, to obtain report template from network storage or database,
+IO device can be any successor of the <classname>QIODevice</classname> class.
+For example, to obtain a report template from network storage or database,
 create a QIODevice successor and redefine all necessary functionality.
 </funcsynopsisinfo>
 </funcsynopsis>
@@ -231,7 +231,7 @@ widget is desired, replace <classname>KReportViewer</classname> with
 <sect2 id="plugin-usage">
 <title>Plugin usage</title>
 <para>
-Designer plugin will allow the usage of &Qt; Designer to place a <classname>KReportViewer</classname>
+The designer plugin will allow the usage of &Qt; Designer to place a <classname>KReportViewer</classname>
 widget onto a window and preview it correctly.
 </para>
 
@@ -266,9 +266,9 @@ To build the plugin run:
 <segtitle><link linkend="plugin-cpp-source">kugar_plugin.cpp</link></segtitle>
 <segtitle><link linkend="plugin-pro-source">kugar_plugin.pro</link></segtitle>
 <seglistitem>
-<seg>A header file for <classname>KugarWidgetPlugin</classname>, <classname>QWidgetPlugin</classname> successor;</seg>
-<seg>A source file for <classname>KugarWidgetPlugin</classname>, <classname>QWidgetPlugin</classname> successor;</seg>
-<seg>Project file for <application>QMake</application> utility.</seg>
+<seg>A header file for the <classname>KugarWidgetPlugin</classname>, <classname>QWidgetPlugin</classname> successor;</seg>
+<seg>A source file for the <classname>KugarWidgetPlugin</classname>, <classname>QWidgetPlugin</classname> successor;</seg>
+<seg>A project file for the <application>QMake</application> utility.</seg>
 </seglistitem>
 </segmentedlist>
 

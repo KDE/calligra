@@ -27,14 +27,14 @@ this prolog
 </chapterinfo>
 <title>Report Template Designer Manual</title>
 
-<para>The &kudesigner; allows interactive creation and modification of
+<para>&kudesigner; allows interactive creation and modification of
 report templates, and placement of report sections and section items onto a
 report.</para>
 
 <para> &kudesigner; is a <acronym>WYSIWYG</acronym>
-application. Report page size defines the report dimensions on the
-screen. At the present moment, the scale is set to 100&percnt;
-automatically and cannot be changed.</para>
+application. <guilabel>Report page size</guilabel> defines the report
+dimensions on the screen. At the present moment, the scale is set
+to 100&percnt; automatically and cannot be changed.</para>
 
 <itemizedlist>
 <title>Every report template may contain the following report sections:</title>
@@ -59,9 +59,9 @@ automatically and cannot be changed.</para>
 <para>Report sections and items can be placed onto the report template by
 using menus or toolbars.</para>
 
-<para>Every element, such as report template, report section or an
+<para>Every element, such as a report template, a report section or an
 item has its own properties. These properties define geometrical,
-textual and any other parameters. Every time the element is placed, a set
+textual and any other parameters. Every time an element is placed, a set
 of default properties is applied. For example, when
 <guilabel>Label</guilabel> is placed, its Text property value is
 set to <quote>Text</quote>.</para>
@@ -104,7 +104,7 @@ To delete an item, &MMB; click on it or use the <guilabel>Delete</guilabel> butt
 <para><action>Bring up</action> the <guilabel>New Report</guilabel> dialog
 to create a new report template.</para>
 <para>
-As seen on the screenshot, report page size, orientation and margins
+As seen on the screenshot, the report page size, orientation and margins
 must be set before the report can be created.
 </para>
 <screenshot>
@@ -126,7 +126,7 @@ must be set before the report can be created.
 <keycap>O</keycap>
 </keycombo></shortcut>
 <guimenu>File</guimenu>
-<guimenuitem>Open</guimenuitem>
+<guimenuitem>Open...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Open</action> the previously saved report template.</para></listitem>
 </varlistentry>
@@ -136,7 +136,8 @@ must be set before the report can be created.
 <guimenu>File</guimenu>
 <guimenuitem>Open Recent</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Open</action> the report template from a list of recently opened templates.</para></listitem>
+<listitem><para><action>Display</action> a list of recently opened templates.
+Select a file to open it.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -153,7 +154,7 @@ must be set before the report can be created.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Save As</guimenuitem>
+<guimenuitem>Save As...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Save</action> the current report template into a file and give it another name.</para></listitem>
 </varlistentry>
@@ -177,7 +178,7 @@ must be set before the report can be created.
 <guimenu>File</guimenu>
 <guimenuitem>Print</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Print</action> the current report template as text in &XML; format.</para></listitem>
+<listitem><para><action>Print...</action> the current report template as text in &XML; format.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -239,7 +240,7 @@ will be edited or items deleted.</para></listitem>
 </menuchoice></term>
 <listitem><para><action>Place the Detail Header</action> section onto the report template.</para>
 <para>Before placing the section, the <guilabel>Add Detail Header</guilabel> dialog will be shown to
-specify the detail level. Detail header will be added to the detail section of the given level.</para>
+specify the detail level. The Detail header will be added to the detail section of the given level.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -281,7 +282,7 @@ specify the detail level.</para>
 </menuchoice></term>
 <listitem><para><action>Place the Detail Footer</action> section onto the report template.</para>
 <para>Before placing the section, the <guilabel>Add Detail Footer</guilabel> dialog will be shown to
-specify the detail level. Detail footer will be added to the detail section of the given level.</para>
+specify the detail level. The Detail footer will be added to the detail section of the given level.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
