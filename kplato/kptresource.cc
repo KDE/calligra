@@ -28,6 +28,8 @@
 #include "kptschedule.h"
 
 #include <kdebug.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 namespace KPlato
 {
@@ -346,12 +348,16 @@ bool Resource::load(QDomElement &element) {
     m_email = element.attribute("email");
     setType(element.attribute("type"));
     m_calendar = findCalendar(element.attribute("calendar-id"));
+    m_units = element.attribute("units").toInt();
     s = element.attribute("available-from");
     if (s != "")
         m_availableFrom = QDateTime::fromString(s);
     s = element.attribute("available-until");
     if (s != "")
         m_availableUntil = QDateTime::fromString(s);
+        
+    cost.normalRate = KGlobal::locale()->readMoney(element.attribute("normal-rate"));
+    cost.overtimeRate = KGlobal::locale()->readMoney(element.attribute("overtime-rate"));
     return true;
 }
 
@@ -367,8 +373,11 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("initials", m_initials);
     me.setAttribute("email", m_email);
     me.setAttribute("type", typeToString());
+    me.setAttribute("units", m_units);
     me.setAttribute("available-from", m_availableFrom.toString());
     me.setAttribute("available-until", m_availableUntil.toString());
+    me.setAttribute("normal-rate", KGlobal::locale()->formatMoney(cost.normalRate));
+    me.setAttribute("overtime-rate", KGlobal::locale()->formatMoney(cost.overtimeRate));
 }
 
 bool Resource::isAvailable(Task *task) {
