@@ -139,6 +139,8 @@ void KWFrameSet::deleteAllFrames()
 {
     if ( !m_frames.isEmpty() )
     {
+        for ( QPtrListIterator<KWFrame> frameIt( m_frames ); frameIt.current(); ++frameIt )
+            emit sigFrameRemoved( *frameIt );
         m_frames.clear();
         updateFrames();
     }
@@ -703,38 +705,41 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         int offsetY = normalInnerFrameRect.top() - m_doc->zoomItY( frame->internalY() );
 
         QRect innerCRect = outerCRect.intersect( innerFrameRect );
-        QRect fcrect = viewMode->viewToNormal( innerCRect );
-#ifdef DEBUG_DRAW
-        kdDebug(32001) << "                    (inner) normalFrameRect=" << normalInnerFrameRect << " frameRect=" << innerFrameRect << endl;
-        //kdDebug(32001) << "                    crect after view-to-normal:" << fcrect << "." << " Will move by (" << -offsetX << ", -(" << normalInnerFrameRect.top() << "-" << m_doc->zoomItY(frame->internalY()) << ") == " << -offsetY << ")." << endl;
-#endif
-        fcrect.moveBy( -offsetX, -offsetY );
-        Q_ASSERT( fcrect.x() >= 0 );
-        Q_ASSERT( fcrect.y() >= 0 );
-
-        // fcrect is now the portion of the frame to be drawn,
-        // in the frame's coordinates and in pixels
-#ifdef DEBUG_DRAW
-        kdDebug(32001) << "KWFrameSet::drawFrameAndBorders in frame coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << innerCRect.x()-fcrect.x() << "," << innerCRect.y()-fcrect.y() << "." << endl;
-#endif
-        QRegion reg;
-        if ( drawUnderlyingFrames )
-            reg = frameClipRegion( painter, frame, outerCRect, viewMode );
-        else // false means we are being drawn _as_ an underlying frame, so no clipping!
-            reg = painter->xForm( outerCRect );
-        if ( !reg.isEmpty() )
+        if ( !innerCRect.isEmpty() )
         {
-            painter->save();
-            painter->setClipRegion( reg );
+            QRect fcrect = viewMode->viewToNormal( innerCRect );
+#ifdef DEBUG_DRAW
+            kdDebug(32001) << "                    (inner) normalFrameRect=" << normalInnerFrameRect << " frameRect=" << innerFrameRect << endl;
+            //kdDebug(32001) << "                    crect after view-to-normal:" << fcrect << "." << " Will move by (" << -offsetX << ", -(" << normalInnerFrameRect.top() << "-" << m_doc->zoomItY(frame->internalY()) << ") == " << -offsetY << ")." << endl;
+#endif
+            fcrect.moveBy( -offsetX, -offsetY );
+            Q_ASSERT( fcrect.x() >= 0 );
+            Q_ASSERT( fcrect.y() >= 0 );
 
-            drawFrame( frame, painter, fcrect, outerCRect,
-                       innerCRect.topLeft() - fcrect.topLeft(), // This assume that viewToNormal() is only a translation
-                       settingsFrame, cg, onlyChanged, resetChanged,
-                       edit, viewMode, drawUnderlyingFrames );
+            // fcrect is now the portion of the frame to be drawn,
+            // in the frame's coordinates and in pixels
+#ifdef DEBUG_DRAW
+            kdDebug(32001) << "KWFrameSet::drawFrameAndBorders in frame coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << innerCRect.x()-fcrect.x() << "," << innerCRect.y()-fcrect.y() << "." << endl;
+#endif
+            QRegion reg;
+            if ( drawUnderlyingFrames )
+                reg = frameClipRegion( painter, frame, outerCRect, viewMode );
+            else // false means we are being drawn _as_ an underlying frame, so no clipping!
+                reg = painter->xForm( outerCRect );
+            if ( !reg.isEmpty() )
+            {
+                painter->save();
+                painter->setClipRegion( reg );
 
-            if( !groupmanager() ) // not for table cells
-                drawFrameBorder( painter, frame, settingsFrame, outerCRect, viewMode );
-            painter->restore();
+                drawFrame( frame, painter, fcrect, outerCRect,
+                           innerCRect.topLeft() - fcrect.topLeft(), // This assume that viewToNormal() is only a translation
+                           settingsFrame, cg, onlyChanged, resetChanged,
+                           edit, viewMode, drawUnderlyingFrames );
+
+                if( !groupmanager() ) // not for table cells
+                    drawFrameBorder( painter, frame, settingsFrame, outerCRect, viewMode );
+                painter->restore();
+            }
         }
     }
 }
@@ -750,6 +755,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 #ifdef DEBUG_DRAW
     kdDebug(32001) << "\nKWFrameSet::drawFrame " << name() << " outerCRect=" << outerCRect << " frameCrect=" << fcrect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
 #endif
+    Q_ASSERT( fcrect.isValid() );
 
     QColorGroup frameColorGroup( cg );
     if ( settingsFrame ) // 0L in text viewmode
