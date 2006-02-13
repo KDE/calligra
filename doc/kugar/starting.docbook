@@ -42,8 +42,8 @@ The &kugar; program takes two commandline arguments:
 
 <para>
 For example, <userinput><command>kugar</command> <option>-d</option>
-<parameter>sample1.kud</parameter> <option>-r</option>
-<parameter>sample1.kut</parameter></userinput>
+<parameter>sample1.kdf</parameter> <option>-r</option>
+<parameter>sample1.ktf</parameter></userinput>
 </para>
 
 <para>
@@ -53,7 +53,7 @@ or with a report template file name as an argument:
 <cmdsynopsis>
 <command>kudesigner</command>
 <group>
-<replaceable>template.kut</replaceable>
+<replaceable>template.ktf</replaceable>
 </group>
 </cmdsynopsis>
 

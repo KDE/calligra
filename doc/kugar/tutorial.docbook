@@ -33,7 +33,7 @@ this prolog
 a sample data file and finally generate a complete report.</para>
 
 <para>The source code for sample templates and data files can be found
-in <filename>sample1.kut</filename> and <filename>sample1.kud</filename>
+in <filename>sample1.ktf</filename> and <filename>sample1.kdf</filename>
 that are distributed with &kugar;.</para>
 
 
@@ -72,7 +72,7 @@ menu items from <guilabel>Items</guilabel> and <guilabel>Sections</guilabel> are
 <imagedata fileref="tut_empty_report.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>Empty Report dialog</phrase>
+<phrase>Empty Report window</phrase>
 </textobject>
 </mediaobject>
 </screenshot>
@@ -81,23 +81,23 @@ menu items from <guilabel>Items</guilabel> and <guilabel>Sections</guilabel> are
 <para>Now it is the time to add some sections to the report and determine
 their sizes. We will add <link linkend="report-header-and-footer">report header and footer</link>,
 <link linkend="page-header-and-footer">page header and footer</link> and a single
-<link linkend="detail">detail</link> section. Report headers and footers are printed
-at first, and the last pages of the report before and after any other report data accordingly.
+<link linkend="detail">detail</link> section. Report headers and footers are printed on the
+first page and on the last page of the report before and after any other report data accordingly.
 Report footers are good places for <link linkend="calculated-field-element">calculated fields</link>.
 Page headers and footers are printed at the top and bottom of each page.
 Our report will have one detail section with level 0. This means that all our data rows
-have identical structure (&ie; fields). If data structure is more complex or it is
+have identical structure (&ie; fields). If the data structure is more complex or it is
 organized according to a master-detail relationship, more detail levels should be created.
-See <filename>sample3.kut</filename> and <filename>sample3.kud</filename> for an example
+See <filename>sample3.ktf</filename> and <filename>sample3.kdf</filename> for an example
 of how that can be done.
 Refer to the <link linkend="template-elements">template elements descriptions</link>
 for additional information.
 </para>
 
 <para>Sections are added by using <guilabel>Sections</guilabel> menu
-or a <guilabel>Sections Toolbar</guilabel>. Now add report header and footer,
-page header and footer and then detail.
-When adding detail section, set
+or a <guilabel>Sections Toolbar</guilabel>. Now add a report header and footer,
+a page header and footer and then a detail section.
+When adding a detail section, set
 its level to 0 as shown on the screenshot below.
 <screenshot>
 <mediaobject>
@@ -105,7 +105,7 @@ its level to 0 as shown on the screenshot below.
 <imagedata fileref="tut_set_level.png" format="PNG"/>
 </imageobject>
 <textobject>
-<phrase>Setting detail level</phrase>
+<phrase>Setting the detail level</phrase>
 </textobject>
 </mediaobject>
 </screenshot>
@@ -127,9 +127,9 @@ Our report should now look like this one in the screenshot.
 
 <para>
 All our sections have a predefined height - 50mm. Let's change it.
-To do this &RMB; on the Report Header section or click <guilabel>Edit Properties</guilabel>
+To do this &RMB; click on the Report Header section or click the <guilabel>Edit Properties</guilabel>
 button on the <guilabel>Edit Toolbar</guilabel> and then choose a section.
-Properties window should be shown.
+The Properties window should be shown.
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -143,9 +143,9 @@ Properties window should be shown.
 </para>
 
 <para>
-Now set a Report Header's height to 70. Let's perform that procedure
-for all other sections. Set Page Header's height to 45 and Detail's to 30.
-Page and Report Footers should be 32 mm in height.
+Now set the Report Header's height to 70. Let's perform that procedure
+for all other sections. Set the Page Header's height to 45 and the Detail's to 30.
+The Page and Report Footers should be 32 mm in height.
 </para>
 
 <para>
@@ -167,15 +167,15 @@ report items.
 You can now add items to the sections on the report. Five different types of
 items can be added to the report. <link linkend="label-element">Label</link>
 is a rectangular area that can have borders and can be filled by
-any kind of textual data. Label text and background colors, as well as fonts,
-can be changed. Border line types and line colors are also
-customizable. <link linkend="field-element">Field</link> can be placed
+any kind of textual data. The Label's foreground and background colors,
+as well as fonts, can be changed. Border line types and line colors are also
+customizable. <link linkend="field-element">Fields</link> can be placed
 on to a detail section. Fields represent data fields; their values
 will be collected from a data file while generating a report.
 Counts, sums, averages, &etc; for field values can be printed on the report
 by means of <link linkend="calculated-field-element">Calculated Fields</link>.
 <link linkend="special-element">Specials</link> are labels with predefined text,
-such as current date or page number. General report appearance can be refined
+such as current date or page number. The general report appearance can be refined
 with <link linkend="line-element">Lines</link>.
 </para>
 
@@ -189,28 +189,28 @@ we used to change the section's height).
 
 <para>
 So, let's add labels to the report header and page header as shown on the screenshot below.
-Note, that the <quote>Mutiny Bay Software</quote> label has its <guilabel>BorderStyle</guilabel>
+Note that the <quote>Mutiny Bay Software</quote> label has its <guilabel>BorderStyle</guilabel>
 and <guilabel>BorderWidth</guilabel> set to 0 and <quote>Software Inventory Report</quote> - 1mm.
 Any colors are set as a combination of three values (RGB - red,green,blue) separated by commas.
 </para>
 
 <para>
-Also add field elements to the detail section. Just assume we have four fields
+We will also add field elements to the detail section. Just assume we have four fields
 - title, version, platform and copies. So, four <guilabel>Field</guilabel> elements should be placed and
-their <guilabel>Field</guilabel> properties set. Note, that <guilabel>Text</guilabel>
-property is automatically set to <quote>[<userinput>field_name</userinput>]</quote>
+their <guilabel>Field</guilabel> properties set. Note that <guilabel>Text</guilabel>
+property is automatically set to <quote>[<userinput>field_name</userinput>]</quote>.
 </para>
 
 <para>
 Our page footer is a good place to show the current date and page number, so add two
 special fields and set their <guilabel>Type</guilabel> properties to 0 and 1.
-Special with Type=0 will represent date and one with Type=1 - page number. Note that
+A special with Type=0 will represent date and one with Type=1 - page number. Note that
 special's <guilabel>Text</guilabel> property is changed automatically.
 </para>
 
 <para>
-The last element to be placed is <guilabel>Calculated Field</guilabel> for <quote>copies</quote>
-field. To acquire a sum(copies) set calculated field's <guilabel>Field</guilabel> property
+The last element to be placed is a <guilabel>Calculated Field</guilabel> for the <quote>copies</quote>
+field. To acquire a sum (copies) set the calculated field's <guilabel>Field</guilabel> property
 to <quote>copies</quote> and <guilabel>CalculationType</guilabel> to 1 (sum function).
 </para>
 
@@ -239,7 +239,7 @@ Finally, our report template should look like this:
 Generally speaking, data files may be created in several ways. Some will use xsl transformation tables
 to generate proper &XML; from another &XML; document (like a &kspread; spreadsheet); others will use
 their own program to fetch data from a database and fill the data file. In this tutorial we will
-simply create it by hand. The source code for the example can be found in file <filename>sample1.kud</filename>
+simply create it by hand. The source code for the example can be found in file <filename>sample1.kdf</filename>
 or copied from the example below.
 </para>
 
@@ -260,7 +260,7 @@ or copied from the example below.
         copies CDATA #REQUIRED&gt;
 ]&gt;
 
-&lt;KugarData Template="sample1.kut"&gt;
+&lt;KugarData Template="sample1.ktf"&gt;
     &lt;Row level="0" title="  BRU" version="15.0" platform="x86" copies="1"/&gt;
     &lt;Row level="0" title="  Caldera Open Linux" version="2.2" platform="x86" copies="3"/&gt;
     &lt;Row level="0" title="  K Desktop" version="1.1.1" platform="x86" copies="1"/&gt;
@@ -282,16 +282,16 @@ or copied from the example below.
 </sect1>
 
 <sect1 id="tut-3">
-<title>Generating report</title>
+<title>Generating the report</title>
 
 <para>
-At this moment we have a report template (<filename>sample1.kut</filename>) and
-a report data file (<filename>sample1.kud</filename>).
+At this moment we have a report template (<filename>sample1.ktf</filename>) and
+a report data file (<filename>sample1.kdf</filename>).
 </para>
 <para>
 To generate a report, type the following command in the shell:
-<command>kugar <option>-r <replaceable>sample1.kut</replaceable></option>
-<option>-d <replaceable>sample1.kud</replaceable></option></command>
+<command>kugar <option>-r <replaceable>sample1.ktf</replaceable></option>
+<option>-d <replaceable>sample1.kdf</replaceable></option></command>
 </para>
 
 <para>

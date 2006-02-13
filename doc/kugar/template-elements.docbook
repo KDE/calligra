@@ -103,7 +103,7 @@ that are usually printed at the beginning and end of the report.
 <term><anchor id="rhf-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>Sets the height of the report section.  If you don't want
-this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
+this section, set this value to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 </listitem>
 </varlistentry>
@@ -182,7 +182,7 @@ that are usually printed on every page of the report.
 <term><anchor id="phf-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>Sets the height of the report section.  If you don't want
-this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
+this section, set this value to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 </listitem>
 </varlistentry>
@@ -262,7 +262,7 @@ that are printed before and after details of a given level and below on the repo
 <term><anchor id="dhf-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>Sets the height of the report section.  If you don't want
-this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
+this section, set this value to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 </listitem>
 </varlistentry>
@@ -310,7 +310,7 @@ which are accessed by the detail's Level attribute.
 <term><anchor id="d-height"/><sgmltag class="attribute">Height</sgmltag></term>
 <listitem>
 <para>Sets the height of the report section.  If you don't want
-this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
+this section, set this value to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 </listitem>
 </varlistentry>
@@ -320,7 +320,7 @@ this,section set this value to <sgmltag class="attvalue">0</sgmltag>.
 <para>
 Set the hierarchy level of the section. Sections with higher levels will be printed
 before sections with lower ones. Level can be any number beginning from 0. This is an attribute
-from a <sgmltag class="attribute">row</sgmltag> element in a data file.
+of a <sgmltag class="attribute">row</sgmltag> element in a data file.
 </para>
 
 </listitem>
@@ -879,7 +879,7 @@ object used to draw data on a report.
 <term><anchor id="f-field"/><sgmltag class="attribute">Field</sgmltag></term>
 <listitem>
 <para>
-Sets the data field for the object. This is an attribute from <sgmltag
+Sets the data field for the object. This is an attribute of a <sgmltag
 class="attribute">row</sgmltag> element in a data file.
 </para>
 </listitem>
@@ -1261,8 +1261,8 @@ Sets the field's data type.
 <para>
 Sets the field's date format. For this to work, the format of the date
 from the data document must be in the format mm/dd/yyyy or mm-dd-yyyy,
-otherwise the original date format is used. If data type other than
-date, set to <sgmltag class="attvalue">0</sgmltag>.
+otherwise the original date format is used. If the data type is other than
+date, set this to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 
 <informaltable>
@@ -1332,8 +1332,8 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 <term><anchor id="f-precision"/><sgmltag class="attribute">Precision</sgmltag></term>
 <listitem>
 <para>
-Sets the field's numeric precision.  If data type other than a numeric
-type, set to 0.
+Sets the field's numeric precision.  If the data type is other than a numeric
+type, set this to 0.
 </para>
 </listitem>
 </varlistentry>
@@ -1342,8 +1342,8 @@ type, set to 0.
 <term><anchor id="f-currency"/><sgmltag class="attribute">Currency</sgmltag></term>
 <listitem>
 <para>
-Sets the field's currency symbol  If data type other than currency, set
-to <sgmltag class="attvalue">36</sgmltag> ($).  The value is a number
+Sets the field's currency symbol  If the data type is other than currency, set
+this to <sgmltag class="attvalue">36</sgmltag> ($).  The value is a number
 representing a Unicode character.
 </para>
 </listitem>
@@ -1364,8 +1364,8 @@ other than a numeric type, set to 255,0,0.
 <term><anchor id="f-commaseparator"/><sgmltag class="attribute">CommaSeparator</sgmltag></term>
 <listitem>
 <para>
-Sets whether commas are used in numeric fields. If data type other than
-a numeric type, set to <sgmltag class="attvalue">0</sgmltag>.
+Sets whether commas are used in numeric fields. If the data type is other than
+a numeric type, set this to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 
 <informaltable>
@@ -1488,7 +1488,7 @@ Sets the calculation type for the field.
 <term><anchor id="c-field"/><sgmltag class="attribute">Field</sgmltag></term>
 <listitem>
 <para>
-Sets the data field for the object. This is an attribute from <sgmltag
+Sets the data field for the object. This is an attribute of a <sgmltag
 class="attribute">row</sgmltag> element in a data file.
 </para>
 </listitem>
@@ -1867,8 +1867,8 @@ Sets the field's data type.
 <para>
 Sets the field's date format. For this to work, the format of the date
 from the data document must be in the format mm/dd/yyyy or mm-dd-yyyy,
-otherwise the original date format is used.  If data type other than
-date, set to <sgmltag class="attvalue">0</sgmltag>.
+otherwise the original date format is used.  If the data type is other than
+date, set this to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 
 <informaltable>
@@ -1938,8 +1938,8 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 <term><anchor id="c-precision"/><sgmltag class="attribute">Precision</sgmltag></term>
 <listitem>
 <para>
-Sets the field's numeric precision.  If data type other than a numeric
-type, set to 0.
+Sets the field's numeric precision.  If the data type is other than a numeric
+type, set this to 0.
 </para>
 </listitem>
 </varlistentry>
@@ -1948,9 +1948,9 @@ type, set to 0.
 <term><anchor id="c-currency"/><sgmltag class="attribute">Currency</sgmltag></term>
 <listitem>
 <para>
-Sets the field's currency symbol  If data type other than currency, set
-to <sgmltag class="attvalue">36</sgmltag> ($).  The value is a number
-representing a Unicode character.
+Sets the field's currency symbol. If the data type is other than currency, set
+this to <sgmltag class="attvalue">36</sgmltag> ($).  The value is a number
+representing an unicode character.
 </para>
 </listitem>
 </varlistentry>
@@ -1970,8 +1970,8 @@ other than a numeric type, set to 255,0,0.
 <term><anchor id="c-commaseparator"/><sgmltag class="attribute">CommaSeparator</sgmltag></term>
 <listitem>
 <para>
-Sets whether commas are used in numeric fields. If data type other than
-a numeric type, set to <sgmltag class="attvalue">0</sgmltag>.
+Sets whether commas are used in numeric fields. If the data type is other than
+a numeric type, set this to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 
 <informaltable>
@@ -2404,8 +2404,8 @@ Sets the word wrap flag for the field's text.
 <para>
 Sets the field's date format. For this to work, the format of the date
 from the data document must be in the format mm/dd/yyyy or mm-dd-yyyy,
-otherwise the original date format is used. If data type other than
-date, set to <sgmltag class="attvalue">0</sgmltag>.
+otherwise the original date format is used. If the data type is other than
+date, set this to <sgmltag class="attvalue">0</sgmltag>.
 </para>
 
 <informaltable>
@@ -2475,8 +2475,8 @@ date, set to <sgmltag class="attvalue">0</sgmltag>.
 <term><anchor id="s-precision"/><sgmltag class="attribute">Precision</sgmltag></term>
 <listitem>
 <para>
-Sets the field's numeric precision. If data type other than a numeric
-type, set to 0.
+Sets the field's numeric precision. If the data type is other than a numeric
+type, set this to 0.
 </para>
 </listitem>
 </varlistentry>

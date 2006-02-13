@@ -80,7 +80,7 @@ report.
 <listitem>
 <para>
 The <sgmltag class="element">DetailHeader</sgmltag> element defines report
-sections that are printed before details of given level on the report.
+sections that are printed before details of a given level on the report.
 </para>
 </listitem>
 </varlistentry>
@@ -90,7 +90,7 @@ sections that are printed before details of given level on the report.
 <listitem>
 <para>
 The <sgmltag class="element">Detail</sgmltag> element defines the report
-section that contains the report data. The report can have unlimited number
+section that contains the report data. The report can have an unlimited number
 of details.
 </para>
 </listitem>
