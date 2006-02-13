@@ -1537,7 +1537,7 @@ namespace Py
 
 		Char& operator= (const unicodestring& v)
 			{
-			set(PyUnicode_FromUnicode (const_cast<Py_UNICODE*>(v.c_str()),1), true);
+			set(PyUnicode_FromUnicode (const_cast<Py_UNICODE*>(v.data()),1), true);
 			return *this;
 			}
 
