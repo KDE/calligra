@@ -28,7 +28,7 @@
 #include <klocale.h>
 
 #include <KoGenStyles.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <KoGlobal.h>
 
 #include "kivio_common.h"

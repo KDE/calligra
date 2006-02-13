@@ -20,7 +20,7 @@
 #ifndef kotextzoomhandler_h
 #define kotextzoomhandler_h
 
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 /**
  * This class extends KoZoomHandler to add support for WYSIWYG text layouting.

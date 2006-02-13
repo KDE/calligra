@@ -22,7 +22,7 @@
 #include "kivio_painter.h"
 #include "kivio_stencil.h"
 
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <KoRect.h>
 #include <KIvioStencilIface.h>
 

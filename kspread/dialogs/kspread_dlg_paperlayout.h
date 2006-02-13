@@ -24,7 +24,7 @@
 #define __kspread_dlg_paperlayout__
 
 #include <kdialogbase.h>
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 
 class QCheckBox;
 class QComboBox;

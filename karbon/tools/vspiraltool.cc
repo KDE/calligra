@@ -28,7 +28,7 @@
 #include <karbon_part.h>
 #include <shapes/vspiral.h>
 #include "vspiraltool.h"
-#include "koUnitWidgets.h"
+#include "KoUnitWidgets.h"
 
 
 VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )

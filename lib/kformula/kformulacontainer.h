@@ -30,8 +30,8 @@
 #include <qstring.h>
 
 #include <kcommand.h>
-//#include <kocommandhistory.h>
-#include "kocommandhistory.h"
+//#include <KoCommandHistory.h>
+#include "KoCommandHistory.h"
 #include "kformuladefs.h"
 
 class QColorGroup;

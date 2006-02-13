@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 #include "kivio_layer.h"
 #include "kivio_page.h"

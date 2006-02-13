@@ -27,7 +27,7 @@
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kapplication.h>
-#include <kotoolbutton.h>
+#include <KoTooluButton.h>
 #include <coloraction_test.h>
 
 #include <stdlib.h>

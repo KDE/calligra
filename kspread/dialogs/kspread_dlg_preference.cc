@@ -40,7 +40,7 @@
 #include <kdeversion.h>
 #include <kcolorbutton.h>
 
-#include <kotabbar.h>
+#include <KoTabBar.h>
 #include <KoSpeaker.h>
 
 #include "kspread_sheet.h"

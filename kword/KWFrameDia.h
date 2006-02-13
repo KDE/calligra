@@ -25,7 +25,7 @@
 #include "KWTextFrameSet.h"
 #include <kdialogbase.h>
 #include <KoUnit.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 #include <qgroupbox.h>
 
 class KoBorderPreview;

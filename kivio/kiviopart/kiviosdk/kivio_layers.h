@@ -3,7 +3,7 @@
 
 #include "kivio_page.h"
 #include "kivio_view.h"
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
   extern KivioPage *page;
   extern KivioView* view;

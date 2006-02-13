@@ -18,7 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koUnitWidgets.moc"
+#include "KoUnitWidgets.h"
+#include "KoUnitWidgets.moc"
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>

@@ -33,7 +33,7 @@
 #include "global.h"
 #include <KoBrush.h>
 #include <KoPen.h>
-#include <koRuler.h>
+#include <KoRuler.h>
 
 class QPopupMenu;
 class QSplitter;

@@ -20,7 +20,7 @@
 
 #ifndef __VTOOLBOX_H__
 #define __VTOOLBOX_H__
-#include <kotoolbox.h>
+#include <KoToolBox.h>
 class VTool;
 
 /// This class...

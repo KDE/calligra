@@ -22,7 +22,7 @@
 #include <qlabel.h>
 
 #include <klocale.h>
-#include "koUnitWidgets.h"
+#include "KoUnitWidgets.h"
 #include <KoUnit.h>
 #include <kcombobox.h>
 #include <knuminput.h>

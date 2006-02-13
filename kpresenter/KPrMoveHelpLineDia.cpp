@@ -28,7 +28,7 @@
 #include <KoUnit.h>
 #include <klineedit.h>
 #include <knumvalidator.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include "KPrMoveHelpLineDia.h"
 #include "KPrDocument.h"

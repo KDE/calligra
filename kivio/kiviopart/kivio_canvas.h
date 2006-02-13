@@ -31,7 +31,7 @@
 #include <KoQueryTrader.h>
 #include <KoPoint.h>
 #include <KoRect.h>
-#include <koGuides.h>
+#include <KoGuides.h>
 #include <koffice_export.h>
 #include "kivio_intra_stencil_data.h"
 

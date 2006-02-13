@@ -60,7 +60,7 @@
 #include "insertpagedia.h"
 #include "KPrCustomSlideShowDia.h"
 
-#include <koPictureFilePreview.h>
+#include <KoPictureFilePreview.h>
 #include <KoCreateStyleDia.h>
 
 #include <dcopclient.h>
@@ -88,20 +88,20 @@
 #include <kcolorbutton.h>
 
 #include <KoMainWindow.h>
-#include <koPartSelectDia.h>
+#include <KoPartSelectDia.h>
 #include <KoQueryTrader.h>
-#include <koPageLayoutDia.h>
-#include <koRuler.h>
-#include <koTemplateCreateDia.h>
+#include <KoPageLayoutDia.h>
+#include <KoRuler.h>
+#include <KoTemplateCreateDia.h>
 #include <kcoloractions.h>
 #include <tkcoloractions.h>
 #include <kaction.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
-#include <koPartSelectAction.h>
+#include <KoPartSelectAction.h>
 #include <KoTextZoomHandler.h>
-#include <kolinestyleaction.h>
-#include <kolinewidthaction.h>
+#include <Kolinestyleaction.h>
+#include <Kolinewidthaction.h>
 
 #include <stdlib.h>
 #include <signal.h>
@@ -115,14 +115,14 @@
 #include <KoTextObject.h>
 #include "KPrCommand.h"
 #include <KoFontDia.h>
-#include <koCharSelectDia.h>
-#include <koInsertLink.h>
+#include <KoCharSelectDia.h>
+#include <KoInsertLink.h>
 #include <KoAutoFormatDia.h>
 #include <KoParagCounter.h>
 #include <KoParagDia.h>
 #include <KoVariable.h>
 #include <KoCustomVariablesDia.h>
-#include <koGuideLineDia.h>
+#include <KoGuideLineDia.h>
 #include <KoCompletionDia.h>
 
 #include <kspell.h>

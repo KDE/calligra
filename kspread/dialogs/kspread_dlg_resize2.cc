@@ -31,7 +31,7 @@
 #include <knuminput.h>
 
 #include <KoUnit.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include <kspread_canvas.h>
 #include <kspread_doc.h>

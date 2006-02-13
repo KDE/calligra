@@ -30,8 +30,8 @@
 #include <kaction.h>
 #include <kcommand.h>
 #include <kconfig.h>
-#include <kocommandhistory.h>
-//#include "kocommandhistory.h"
+#include <KoCommandHistory.h>
+//#include "KoCommandHistory.h"
 #include "kformuladefs.h"
 
 KFORMULA_NAMESPACE_BEGIN

@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kozoomhandler.h"
+#include "KoZoomHandler.h"
 #include <kdebug.h>
 #include <KoUnit.h> // for POINT_TO_INCH
 #include <KoGlobal.h>

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koKoolBar.h>
+#include <KoKoolBar.h>
 #include <kiconloader.h>
 
 #include <qpainter.h>
@@ -486,4 +486,4 @@ int main( int argc, char **argv )
 }
 */
 
-#include <koKoolBar.moc>
+#include <KoKoolBar.moc>

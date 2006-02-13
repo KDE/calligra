@@ -24,7 +24,7 @@
 
 /******************************************************************/
 
-#include "koTemplateChooseDia.h"
+#include "KoTemplateChooseDia.h"
 
 #include <klocale.h>
 #include <kdeversion.h>
@@ -826,4 +826,4 @@ void KoTCDRecentFilesIconView::hideEvent( QHideEvent *ev )
     KFileIconView::hideEvent( ev );
 }
 
-#include "koTemplateChooseDia.moc"
+#include "KoTemplateChooseDia.moc"

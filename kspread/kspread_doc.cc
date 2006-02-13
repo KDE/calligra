@@ -46,8 +46,8 @@
 #include <ktempfile.h>
 
 #include <KoDocumentInfo.h>
-#include <kocommandhistory.h>
-#include <koTemplateChooseDia.h>
+#include <KoCommandHistory.h>
+#include <KoTemplateChooseDia.h>
 #include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 #include <KoOasisSettings.h>

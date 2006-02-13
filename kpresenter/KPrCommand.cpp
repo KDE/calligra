@@ -39,7 +39,7 @@
 #include "KPrPixmapObject.h"
 
 #include "KPrPartObject.h"
-#include <koRuler.h>
+#include <KoRuler.h>
 #include "KPrPieObject.h"
 #include "KPrRectObject.h"
 #include "KPrView.h"

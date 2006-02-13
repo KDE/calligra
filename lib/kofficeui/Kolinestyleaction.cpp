@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kolinestyleaction.h"
+#include "Kolinestyleaction.h"
 
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -85,4 +85,4 @@ void KoLineStyleAction::createMenu()
   }
 }
 
-#include "kolinestyleaction.moc"
+#include "Kolinestyleaction.moc"

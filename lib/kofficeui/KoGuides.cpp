@@ -19,7 +19,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "koGuides.h"
+#include "KoGuides.h"
 
 #include <qcursor.h>
 #include <qpainter.h>
@@ -32,9 +32,9 @@
 #include <KoPoint.h>
 #include <KoRect.h>
 #include <KoView.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
-#include "koGuideLineDia.h"
+#include "KoGuideLineDia.h"
 
 class KoGuides::Popup : public KPopupMenu
 {
@@ -923,4 +923,4 @@ QPoint KoGuides::mapToScreen( const KoPoint & pos )
 }
 
 
-#include "koGuides.moc"
+#include "KoGuides.moc"

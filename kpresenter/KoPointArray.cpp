@@ -21,7 +21,7 @@
 #include "KoPointArray.h"
 #include <KoRect.h>
 #include <stdarg.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 void KoPointArray::translate( double dx, double dy )
 {

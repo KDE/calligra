@@ -30,7 +30,7 @@
 #include <kurlrequester.h>
 #include <kseparator.h>
 #include <kiconloader.h>
-#include "koInsertLink.h"
+#include "KoInsertLink.h"
 #include <kdesktopfile.h>
 #include <krecentdocument.h>
 
@@ -546,4 +546,4 @@ void fileLinkPage::textChanged ( const QString & )
     emit textChanged();
 }
 
-#include "koInsertLink.moc"
+#include "KoInsertLink.moc"

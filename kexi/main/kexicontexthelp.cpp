@@ -21,7 +21,7 @@
 
 
 #include "kexicontexthelp.h"
-#include <kocontexthelp.h>
+#include <KoContextCelp.h>
 #include <kxmlguiclient.h>
 #include <kapplication.h>
 #include <klocale.h>

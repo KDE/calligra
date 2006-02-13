@@ -38,7 +38,7 @@
 #include <kactionclasses.h>
 
 #include <KoMainWindow.h>
-#include "kotoolbox.h"
+#include "KoToolBox.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -253,4 +253,4 @@ void ToolArea::setOrientation ( Qt::Orientation o )
 }
 
 
-#include "kotoolbox.moc"
+#include "KoToolBox.moc"

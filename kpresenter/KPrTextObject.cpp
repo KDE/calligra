@@ -64,7 +64,7 @@
 #include <kaction.h>
 #include <KoVariable.h>
 #include <KoCustomVariablesDia.h>
-#include <koRuler.h>
+#include <KoRuler.h>
 #include <KoSize.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>

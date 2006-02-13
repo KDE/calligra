@@ -46,7 +46,7 @@
 #include <KoUnit.h>
 #include <KoPoint.h>
 #include <KoRect.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <kapplication.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>

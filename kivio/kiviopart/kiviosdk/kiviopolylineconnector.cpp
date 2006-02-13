@@ -21,7 +21,7 @@
 
 #include <kdebug.h>
 
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <KoSize.h>
 
 #include "kivio_line_style.h"

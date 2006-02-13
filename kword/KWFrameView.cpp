@@ -28,7 +28,7 @@
 #include "KWDocument.h"
 #include "KWCanvas.h"
 
-#include "kozoomhandler.h"
+#include "KoZoomHandler.h"
 
 #include <klocale.h>
 #include <kactionclasses.h>

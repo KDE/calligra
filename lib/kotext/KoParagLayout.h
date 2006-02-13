@@ -20,7 +20,7 @@
 #ifndef koparaglayout_h
 #define koparaglayout_h
 
-#include <koRuler.h> // for KoTabulatorList
+#include <KoRuler.h> // for KoTabulatorList
 #include <qdom.h>
 #include "KoBorder.h"
 #include <koffice_export.h>

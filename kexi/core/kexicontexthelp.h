@@ -22,7 +22,7 @@
 
 
 #include "keximainwindow.h"
-#include <kocontexthelp.h>
+#include <KoContextCelp.h>
 
 class KEXICORE_EXPORT KexiContextHelp : public KoContextHelpWidget
 {

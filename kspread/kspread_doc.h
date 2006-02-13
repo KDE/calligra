@@ -41,7 +41,7 @@
 #include <KoGenStyles.h>
 #include <KoPictureCollection.h>
 #include <KoUnit.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 #include "kspread_global.h"
 

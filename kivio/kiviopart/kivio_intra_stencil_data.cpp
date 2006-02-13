@@ -18,7 +18,7 @@
  */
 #include "kivio_intra_stencil_data.h"
 
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 #include "kivio_painter.h"
 

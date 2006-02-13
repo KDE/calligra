@@ -45,7 +45,7 @@
 #include <kdebug.h>
 #include <KoGlobal.h>
 #include <math.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 /**
  * Default constructor

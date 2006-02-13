@@ -28,7 +28,7 @@ class KexiSimplePrintingSettings;
 #include <kexidb/utils.h>
 #include <kexidb/queryschema.h>
 #include <widget/tableview/kexitableviewdata.h>
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 
 #include <qpaintdevicemetrics.h>
 #include <qfontmetrics.h>

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koselectaction.h"
+#include "KoSelectAction.h"
 
 #include <qpixmap.h>
 #include <qbitmap.h>
@@ -190,4 +190,4 @@ void KoSelectAction::setShowCurrentSelection(bool show)
   popupMenu()->setCheckable(show);
 }
 
-#include "koselectaction.moc"
+#include "KoSelectAction.moc"

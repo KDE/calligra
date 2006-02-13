@@ -61,7 +61,7 @@ class KoSavingContext;
 #include <qvaluelist.h>
 #include <qdatetime.h>
 #include <qdict.h>
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 
 #include "global.h"
 #include <KoStyleStack.h>
@@ -69,7 +69,7 @@ class KoSavingContext;
 #include "KPrGradientCollection.h"
 #include <KoTextZoomHandler.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
-#include <kocommandhistory.h>
+#include <KoCommandHistory.h>
 
 class KoDocumentEntry;
 class KPrTextObject;

@@ -31,7 +31,7 @@
 #include "defs.h"
 #include "KWTextParag.h"
 
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 #include <KoView.h>
 #include <KoPoint.h>
 #include <kshortcut.h>

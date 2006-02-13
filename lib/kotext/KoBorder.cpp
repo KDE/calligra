@@ -20,7 +20,7 @@
 #include "KoBorder.h"
 #include <qdom.h>
 #include <kdebug.h>
-#include "kozoomhandler.h"
+#include "KoZoomHandler.h"
 #include "KoTextFormat.h"
 #include "KoRichText.h" // for KoTextFormat
 #include "KoTextParag.h"

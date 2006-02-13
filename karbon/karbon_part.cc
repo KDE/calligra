@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <ktempfile.h>
-#include <koTemplateChooseDia.h>
+#include <KoTemplateChooseDia.h>
 #include <KoStoreDevice.h>
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>

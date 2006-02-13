@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koPartSelectDia.h>
+#include <KoPartSelectDia.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -90,4 +90,4 @@ KoDocumentEntry KoPartSelectDia::selectPart( QWidget *parent )
     return e;
 }
 
-#include <koPartSelectDia.moc>
+#include <KoPartSelectDia.moc>

@@ -24,7 +24,7 @@
 
 #include <math.h>
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 KivioArrowHead::KivioArrowHead()
 {

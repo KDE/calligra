@@ -65,18 +65,18 @@
 #include <dcopref.h>
 
 #include <kparts/event.h>
-#include <koPartSelectDia.h>
+#include <KoPartSelectDia.h>
 #include <KoQueryTrader.h>
-#include <koPageLayoutDia.h>
-#include <koRuler.h>
-#include <kozoomhandler.h>
-#include <koUnitWidgets.h>
+#include <KoPageLayoutDia.h>
+#include <KoRuler.h>
+#include <KoZoomHandler.h>
+#include <KoUnitWidgets.h>
 #include <KoApplication.h>
-#include <kotabbar.h>
-#include <kolinewidthaction.h>
-#include <kolinestyleaction.h>
+#include <KoTabBar.h>
+#include <Kolinewidthaction.h>
+#include <Kolinestyleaction.h>
 #include <kopalettemanager.h>
-#include <koGuideLineDia.h>
+#include <KoGuideLineDia.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"

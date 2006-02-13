@@ -19,7 +19,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koGuideLineDia.h"
+#include "KoGuideLineDia.h"
 
 #include <qbuttongroup.h>
 #include <qhbox.h>
@@ -29,7 +29,7 @@
 #include <qradiobutton.h>
 
 #include <klocale.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 
 KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, double maxPos,
@@ -128,4 +128,4 @@ void KoGuideLineDia::slotPositionChanged()
 {
     m_positionChanged = true;
 }
-#include "koGuideLineDia.moc"
+#include "KoGuideLineDia.moc"

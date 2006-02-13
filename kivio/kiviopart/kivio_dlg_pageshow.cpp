@@ -31,7 +31,7 @@
 #include <qstrlist.h>
 #include <qptrlist.h>
 #include <kdebug.h>
-#include <kotabbar.h>
+#include <KoTabBar.h>
 
 KivioPageShow::KivioPageShow( KivioView* parent, const char* name )
 : KDialogBase( parent, name, true, i18n("Show Page"), Ok|Cancel, Ok )

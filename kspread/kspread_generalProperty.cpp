@@ -28,7 +28,7 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <KoGeneralPropertyUi.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 using namespace KSpread;
 

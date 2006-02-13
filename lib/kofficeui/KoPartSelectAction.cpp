@@ -16,8 +16,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koPartSelectAction.h"
-#include "koPartSelectDia.h"
+#include "KoPartSelectAction.h"
+#include "KoPartSelectDia.h"
 
 #include <kdebug.h>
 
@@ -77,4 +77,4 @@ void KoPartSelectAction::slotActivated()
     emit activated();
 }
 
-#include "koPartSelectAction.moc"
+#include "KoPartSelectAction.moc"

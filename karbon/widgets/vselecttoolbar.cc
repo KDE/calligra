@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "koUnitWidgets.h"
+#include "KoUnitWidgets.h"
 #include "vselecttoolbar.h"
 #include "karbon_view.h"
 #include "karbon_part.h"

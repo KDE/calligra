@@ -27,7 +27,7 @@
 
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
-#include <kotoolbutton.h>
+#include <KoTooluButton.h>
 #include <kcolordrag.h>
 #include <klocale.h>
 #include <kcolordialog.h>
@@ -855,4 +855,4 @@ bool KoToolButton::hitArrow( const QPoint& pos )
     return QRect( width() - ARROW_WIDTH, 0, ARROW_WIDTH, height() ).contains( pos );
 }
 
-#include <kotoolbutton.moc>
+#include <KoTooluButton.moc>

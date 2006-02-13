@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kolinewidthaction.h"
+#include "Kolinewidthaction.h"
 
 #include <qpainter.h>
 #include <qpixmap.h>
@@ -35,7 +35,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 #include <KoGlobal.h>
 
 class KoLineWidthAction::KoLineWidthActionPrivate
@@ -197,4 +197,4 @@ void KoLineWidthChooser::setWidth(double width)
   d->m_lineWidthUSBox->changeValue(width);
 }
 
-#include "kolinewidthaction.moc"
+#include "Kolinewidthaction.moc"

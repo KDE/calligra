@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kcolorbutton.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include "karbon_view.h"
 #include "karbon_part.h"

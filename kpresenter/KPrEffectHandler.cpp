@@ -25,7 +25,7 @@
 #include "KPrView.h"
 #include "KPrCanvas.h"
 
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <kapplication.h>
 
 #include <qpainter.h>

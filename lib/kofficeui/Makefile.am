@@ -10,18 +10,18 @@ SUBDIRS = . tests pics
 lib_LTLIBRARIES = libkofficeui.la
 
 libkofficeui_la_SOURCES = \
-        koPageLayoutDia.cc kozoomaction.cpp kotabbar.cpp \
-	koPartSelectDia.cc koPartSelectAction.cc \
-	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
-	koKoolBar.cc koTemplateCreateDia.cc kocontexthelp.cc\
+        KoPageLayoutDia.cpp KoZoomAction.cpp KoTabBar.cpp \
+	KoPartSelectDia.cpp KoPartSelectAction.cpp \
+	KoRuler.cpp KoTemplateChooseDia.cpp KoTabChooser.cpp \
+	KoKoolBar.cpp KoTemplateCreateDia.cpp KoContextCelp.cpp\
 	kcoloractions.cpp \
-	koPictureFilePreview.cc koUnitWidgets.cc \
+	KoPictureFilePreview.cpp KoUnitWidgets.cpp \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
-	koCharSelectDia.cc koInsertLink.cc koeditpath.cc kocommandhistory.cpp \
-	koselectaction.cpp kolinewidthaction.cpp kolinestyleaction.cpp \
-	kotoolbutton.cc  \
-	KoBrush.cpp koImageResource.cc kotoolbox.cc kozoomhandler.cpp \
-	koGuideLineDia.cpp koGuides.cpp \
+	KoCharSelectDia.cpp KoInsertLink.cpp KoEditPath.cpp KoCommandHistory.cpp \
+	KoSelectAction.cpp Kolinewidthaction.cpp Kolinestyleaction.cpp \
+	KoTooluButton.cpp \
+	KoBrush.cpp KoImageResource.cpp KoToolBox.cpp KoZoomHandler.cpp \
+	KoGuideLineDia.cpp KoGuides.cpp \
 	KoGeneralPropertyUi.ui KoPageLayoutColumns.cpp KoPageLayoutColumnsBase.ui KoPageLayoutSize.cpp \
 	KoPageLayoutHeaderBase.ui KoPageLayoutHeader.cpp KoPen.cpp KoZoomMode.cpp
 
@@ -29,17 +29,17 @@ libkofficeui_la_LDFLAGS	= -version-info 3:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) 
 
 include_HEADERS = \
-	koPageLayoutDia.h kozoomaction.h kotabbar.h \
-	koPartSelectDia.h koPartSelectAction.h \
-	koRuler.h koTemplateChooseDia.h koTabChooser.h \
-	koKoolBar.h koTemplateCreateDia.h kocontexthelp.h \
+	KoPageLayoutDia.h KoZoomAction.h KoTabBar.h \
+	KoPartSelectDia.h KoPartSelectAction.h \
+	KoRuler.h KoTemplateChooseDia.h KoTabChooser.h \
+	KoKoolBar.h KoTemplateCreateDia.h KoContextCelp.h \
 	kcoloractions.h \
-	koPictureFilePreview.h koUnitWidgets.h \
+	KoPictureFilePreview.h KoUnitWidgets.h \
 	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h \
-	koCharSelectDia.h koInsertLink.h kotoolbutton.h koeditpath.h \
-	kocommandhistory.h  koImageResource.h \
-	koselectaction.h kolinewidthaction.h kolinestyleaction.h \
-	kozoomhandler.h koGuideLineDia.h koGuides.h \
+	KoCharSelectDia.h KoInsertLink.h KoTooluButton.h KoEditPath.h \
+	KoCommandHistory.h  KoImageResource.h \
+	KoSelectAction.h Kolinewidthaction.h Kolinestyleaction.h \
+	KoZoomHandler.h KoGuideLineDia.h KoGuides.h \
 	KoPageLayoutHeader.h KoPageLayoutSize.h KoGeneralPropertyUi.h KoPageLayoutColumns.h \
 	KoBrush.h KoPen.h KoZoomMode.h
 

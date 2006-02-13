@@ -24,7 +24,7 @@
 #include <qpoint.h>
 #include <qcolor.h>
 #include <qfont.h>
-#include <koRuler.h> // for KoTabulatorList
+#include <KoRuler.h> // for KoTabulatorList
 #include <KoTextObject.h> // for KoTextView
 #include <koffice_export.h>
 class KoTextObject;

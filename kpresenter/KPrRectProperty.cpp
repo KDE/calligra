@@ -23,7 +23,7 @@
 #include "rectpropertyui.h"
 #include "KPrRectPreview.h"
 
-#include <koImageResource.h>
+#include <KoImageResource.h>
 
 #include <qspinbox.h>
 #include <qtoolbutton.h>

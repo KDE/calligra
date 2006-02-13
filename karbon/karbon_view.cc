@@ -37,11 +37,11 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstdaction.h>
-#include <kocontexthelp.h>
-#include <koUnitWidgets.h>
-#include <koPageLayoutDia.h>
+#include <KoContextCelp.h>
+#include <KoUnitWidgets.h>
+#include <KoPageLayoutDia.h>
 #include <vruler.h>
-#include <kolinestyleaction.h>
+#include <Kolinestyleaction.h>
 
 // Commands.
 #include "valigncmd.h"

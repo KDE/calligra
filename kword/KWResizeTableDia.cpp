@@ -23,7 +23,7 @@
 #include "KWTableFrameSet.h"
 #include "KWCommand.h"
 
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 #include <klocale.h>
 #include <qlabel.h>
 #include <qvbox.h>

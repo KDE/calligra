@@ -27,7 +27,7 @@
 
 #include <knuminput.h>
 #include <klocale.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include <KoGeneralPropertyUi.h>
 

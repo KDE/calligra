@@ -21,7 +21,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 #include <knuminput.h>
 #include <knumvalidator.h>
 #include <kfontdialog.h>
@@ -45,7 +45,7 @@
 #include "KWViewMode.h"
 #include "KWCommand.h"
 #include "KWVariable.h"
-#include "koeditpath.h"
+#include "KoEditPath.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
 #include "KoSpeaker.h"

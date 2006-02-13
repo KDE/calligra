@@ -30,7 +30,7 @@
 #include <knuminput.h>
 
 #include "marginui.h"
-#include <koUnitWidgets.h>//for KoUnitDoubleSpinBox
+#include <KoUnitWidgets.h>//for KoUnitDoubleSpinBox
 
 KPrMarginWidget::KPrMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit )
 : QWidget( parent, name )

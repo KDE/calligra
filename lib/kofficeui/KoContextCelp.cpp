@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kocontexthelp.h"
+#include "KoContextCelp.h"
 
 #include <qpainter.h>
 #include <qregion.h>
@@ -592,4 +592,4 @@ void KoContextHelpDocker::setContextHelp( const QString& title, const QString& t
 	m_helpViewer->setText( text );
 } // KoContextHelpDocker::updateHelp
 
-#include "kocontexthelp.moc"
+#include "KoContextCelp.moc"

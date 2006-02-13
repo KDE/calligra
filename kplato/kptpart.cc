@@ -37,8 +37,8 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kcommand.h>
-#include <koTemplateChooseDia.h>
-#include <kocommandhistory.h>
+#include <KoTemplateChooseDia.h>
+#include <KoCommandHistory.h>
 
 #define CURRENT_SYNTAX_VERSION "0.1"
 

@@ -13,7 +13,7 @@
 #include <kaction.h>
 #include <klocale.h>
 #include <KoGlobal.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
 #include <kapplication.h>

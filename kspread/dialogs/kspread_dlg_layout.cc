@@ -51,7 +51,7 @@
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include "kspread_canvas.h"
 #include "kspread_dlg_layout.h"

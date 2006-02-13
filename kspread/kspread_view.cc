@@ -75,18 +75,18 @@
 // KOffice includes
 #include <tkcoloractions.h>
 #include <kdatatool.h>
-#include <koCharSelectDia.h>
-#include <kocommandhistory.h>
+#include <KoCharSelectDia.h>
+#include <KoCommandHistory.h>
 #include <KoMainWindow.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStore.h>
 #include <KoOasisStyles.h>
-#include <koPartSelectAction.h>
+#include <KoPartSelectAction.h>
 #include <KoStoreDrag.h>
-#include <kotabbar.h>
+#include <KoTabBar.h>
 #include <kspread_toolbox.h>
-#include <koTemplateCreateDia.h>
-#include <kozoomaction.h>
+#include <KoTemplateCreateDia.h>
+#include <KoZoomAction.h>
 
 // KSpread includes
 #include "commands.h"

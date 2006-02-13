@@ -16,7 +16,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kozoomaction.h>
+#include <KoZoomAction.h>
 
 #include <qstring.h>
 #include <qstringlist.h>
@@ -112,4 +112,4 @@ void KoZoomAction::init()
     SLOT( activated( const QString& ) ) );
 }
 
-#include "kozoomaction.moc"
+#include "KoZoomAction.moc"

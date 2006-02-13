@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 #include <KoPageLayoutSize.h>
 #include <KoUnit.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include <klocale.h>
 #include <kiconloader.h>

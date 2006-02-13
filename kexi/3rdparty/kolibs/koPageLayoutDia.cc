@@ -22,12 +22,12 @@
 
 /******************************************************************/
 
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 #include <KoPageLayoutColumns.h>
 #include <KoPageLayoutSize.h>
 #include <KoPageLayoutHeader.h>
 #include <KoUnit.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include <klocale.h>
 #include <kiconloader.h>

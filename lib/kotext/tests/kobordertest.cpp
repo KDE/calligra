@@ -1,5 +1,5 @@
 #include <KoBorder.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <qpainter.h>

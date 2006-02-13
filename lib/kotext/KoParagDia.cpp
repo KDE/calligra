@@ -27,8 +27,8 @@
 #include "KoTextZoomHandler.h"
 #include "KoParagDecorationTab.h"
 
-#include <koCharSelectDia.h>
-#include <koUnitWidgets.h>
+#include <KoCharSelectDia.h>
+#include <KoUnitWidgets.h>
 #include <kcolorbutton.h>
 #include <kdebug.h>
 #include <kiconloader.h>

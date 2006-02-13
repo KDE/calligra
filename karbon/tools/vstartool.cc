@@ -28,7 +28,7 @@
 #include <karbon_part.h>
 #include <shapes/vstar.h>
 #include "vstartool.h"
-#include "koUnitWidgets.h"
+#include "KoUnitWidgets.h"
 
 
 VStarOptionsWidget::VStarOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )

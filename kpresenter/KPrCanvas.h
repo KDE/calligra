@@ -32,8 +32,8 @@
 #include <qvaluevector.h>
 #include <qtimer.h>
 
-#include <koGuides.h>
-#include <koRuler.h>
+#include <KoGuides.h>
+#include <KoRuler.h>
 #include <KoQueryTrader.h>
 #include "KoPointArray.h"
 #include "global.h"

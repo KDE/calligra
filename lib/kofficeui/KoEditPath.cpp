@@ -22,7 +22,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qlistbox.h>
-#include "koeditpath.h"
+#include "KoEditPath.h"
 #include <keditlistbox.h>
 #include <kfiledialog.h>
 #include <kurlrequester.h>
@@ -95,4 +95,4 @@ void KoChangePathDia::slotChangeDefaultValue( bool _b)
     m_urlReq->setEnabled( !_b);
 }
 
-#include "koeditpath.moc"
+#include "KoEditPath.moc"

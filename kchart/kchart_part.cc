@@ -13,7 +13,7 @@
 #include "kdchart/KDChart.h"
 #include "kdchart/KDChartTable.h"
 
-#include <koTemplateChooseDia.h>
+#include <KoTemplateChooseDia.h>
 #include <KoDom.h>
 #include <KoXmlNS.h>
 

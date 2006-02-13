@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koPictureFilePreview.h>
+#include <KoPictureFilePreview.h>
 #include "KPrBackDia.h"
 #include "KPrBackground.h"
 #include "KPrDocument.h"

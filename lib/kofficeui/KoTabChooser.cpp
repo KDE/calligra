@@ -21,7 +21,7 @@
 
 /******************************************************************/
 
-#include <koTabChooser.h>
+#include <KoTabChooser.h>
 #include <qpainter.h>
 #include <qpopupmenu.h>
 #include <qcursor.h>
@@ -172,4 +172,4 @@ void KoTabChooser::setReadWrite(bool _readWrite)
     d->m_bReadWrite=_readWrite;
 }
 
-#include <koTabChooser.moc>
+#include <KoTabChooser.moc>

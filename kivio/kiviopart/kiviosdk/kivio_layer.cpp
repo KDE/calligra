@@ -35,7 +35,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <KoPoint.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>

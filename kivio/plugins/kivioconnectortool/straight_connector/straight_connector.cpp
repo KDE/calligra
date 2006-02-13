@@ -36,7 +36,7 @@
 #include <qcolor.h>
 #include <qpixmap.h>
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 #include "straight_connector.xpm"
 

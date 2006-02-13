@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koCharSelectDia.h"
-#include "koCharSelectDia.moc"
+#include "KoCharSelectDia.h"
+#include "KoCharSelectDia.moc"
 
 #include <qlayout.h>
 

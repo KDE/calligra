@@ -30,7 +30,7 @@
 #include <kdemacros.h>
 #include <koffice_export.h>
 #include <KoGlobal.h>
-#include <koTabChooser.h>
+#include <KoTabChooser.h>
 #include <KoUnit.h>
 
 class KoPageLayout;

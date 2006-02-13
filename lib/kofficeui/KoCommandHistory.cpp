@@ -31,7 +31,7 @@
 #include <kstdaccel.h>
 #include <kstdaction.h>
 
-#include "kocommandhistory.h"
+#include "KoCommandHistory.h"
 
 KoListBox::KoListBox( QWidget *parent , const char *name , WFlags f)
     : QListBox( parent, name, f)
@@ -430,4 +430,4 @@ void KoCommandHistory::updateActions()
 void KoCommandHistory::virtual_hook( int, void* )
 { /*BASE::virtual_hook( id, data );*/ }
 
-#include "kocommandhistory.moc"
+#include "KoCommandHistory.moc"

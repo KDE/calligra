@@ -31,10 +31,10 @@
 #include <KoApplication.h>
 #include <kiconloader.h>
 #include <kpushbutton.h>
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 #include <kurlrequester.h>
 #include <kcolorbutton.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kfontdialog.h>

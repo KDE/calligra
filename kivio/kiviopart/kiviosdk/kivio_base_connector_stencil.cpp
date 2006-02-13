@@ -51,7 +51,7 @@
 #include "kivio_stencil.h"
 
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 /**
  * Default constructor.

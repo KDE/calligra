@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koPictureFilePreview.h"
-#include "koPictureFilePreview.moc"
+#include "KoPictureFilePreview.h"
+#include "KoPictureFilePreview.moc"
 #include <kdialog.h>
 #include <klocale.h>
 #include <kurl.h>

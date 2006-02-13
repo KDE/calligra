@@ -57,7 +57,7 @@
 
 #include <kdebug.h>
 #include <math.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 #include <qbitmap.h>
 #include <qpainter.h>

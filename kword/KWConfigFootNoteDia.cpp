@@ -25,7 +25,7 @@
 #include "KWFrameSet.h"
 
 #include <KoParagDia.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include <klocale.h>
 #include <knuminput.h>

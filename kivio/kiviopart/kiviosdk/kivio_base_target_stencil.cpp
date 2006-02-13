@@ -11,7 +11,7 @@
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_text_style.h"
 
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 KivioBaseTargetStencil::KivioBaseTargetStencil()
     : KivioStencil()

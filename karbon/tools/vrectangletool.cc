@@ -27,7 +27,7 @@
 #include <karbon_part.h>
 #include <shapes/vrectangle.h>
 #include "vrectangletool.h"
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 
 VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )

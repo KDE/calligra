@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include "koUnitWidgets.h"
+#include "KoUnitWidgets.h"
 
 #include "karbon_part.h"
 #include "vcolor.h"

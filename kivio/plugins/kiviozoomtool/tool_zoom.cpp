@@ -30,10 +30,10 @@
 #include <ktoolbar.h>
 #include <KoMainWindow.h>
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <KoPoint.h>
 #include <kstdaction.h>
-#include <kozoomaction.h>
+#include <KoZoomAction.h>
 
 #include <qapplication.h>
 #include <qcursor.h>

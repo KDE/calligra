@@ -25,9 +25,9 @@
 #include <qstringlist.h>
 #include <qptrlist.h>
 #include <qstylesheet.h>
-#include <koRuler.h>
+#include <KoRuler.h>
 #include <KoUnit.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 #include <qdict.h>
 #include <qlineedit.h>
 #include "KoParagLayout.h"

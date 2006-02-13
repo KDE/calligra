@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 
 #include <KoUnit.h>
-#include <koselectaction.h>
+#include <KoSelectAction.h>
 #include <koffice_export.h>
 
 /** A line width selection action */

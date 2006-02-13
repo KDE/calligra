@@ -38,10 +38,10 @@
 #include <kactionclasses.h>
 #include <kpopupmenu.h>
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <KoPoint.h>
 #include <klocale.h>
-#include <koGuides.h>
+#include <KoGuides.h>
 #include "kivio_command.h"
 
 #include <qwmatrix.h>

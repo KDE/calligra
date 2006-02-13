@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "koImageResource.h"
+#include "KoImageResource.h"
 
 namespace {
     /* XPM -- copyright The Gimp */

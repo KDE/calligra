@@ -20,7 +20,7 @@
 
 #include "KoAutoFormatDia.h"
 #include "KoAutoFormat.h"
-#include "koCharSelectDia.h"
+#include "KoCharSelectDia.h"
 #include <KoSearchDia.h>
 
 #include <klocale.h>

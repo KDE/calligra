@@ -40,7 +40,7 @@
 #include <qcolor.h>
 #include <qpixmap.h>
 #include <kdebug.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <kiconloader.h>
 
 static KivioStencilSpawnerInfo sinfo = KivioStencilSpawnerInfo( "Ian Reinhart Geiser", "SML Connector", "SML Connector", "SML Based Connector", "0.1", "http://localhost/", "", "off" );

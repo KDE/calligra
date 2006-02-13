@@ -29,7 +29,7 @@ KivioView *view;
 #include <qcolor.h>
 #include <kdebug.h>
 #include <math.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 #include "py_kivio.h"
 

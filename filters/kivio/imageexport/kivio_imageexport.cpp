@@ -33,7 +33,7 @@
 
 #include <KoStore.h>
 #include <KoFilterChain.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 
 #include "kivio_doc.h"
 #include "kivio_page.h"

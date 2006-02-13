@@ -21,7 +21,7 @@
 #define KWORD_COMMAND_H
 #include <kcommand.h>
 #include <kurl.h>
-#include <kocommandhistory.h>
+#include <KoCommandHistory.h>
 #include <KoPageLayout.h>
 #include <KoRect.h>
 #include <KoBorder.h>

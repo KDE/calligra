@@ -38,11 +38,11 @@
 #include <kmessagebox.h>
 #include <kcursor.h>
 #include <KoGlobal.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <KoSize.h>
-#include <koRuler.h>
+#include <KoRuler.h>
 #include <KoPoint.h>
-#include <kotabbar.h>
+#include <KoTabBar.h>
 #include <kapplication.h>
 
 #include <assert.h>

@@ -24,7 +24,7 @@
 #include <kfiledialog.h>
 #include <kmessagebox.h>
 
-#include <koTemplateCreateDia.h>
+#include <KoTemplateCreateDia.h>
 
 #include "kdchart/KDChart.h"
 #include "kchart_view.h"

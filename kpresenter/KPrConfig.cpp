@@ -24,7 +24,7 @@
 
 
 #include <kapplication.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
@@ -72,7 +72,7 @@
 #include <kurlrequesterdlg.h>
 #include <klistview.h>
 #include <kfiledialog.h>
-#include <koeditpath.h>
+#include <KoEditPath.h>
 
 #include <kspell2/configwidget.h>
 #include <kspell2/settings.h>

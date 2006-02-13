@@ -26,7 +26,7 @@
 
 #include <kcommand.h>
 #include <KoDocument.h>
-#include <kocommandhistory.h>
+#include <KoCommandHistory.h>
 #include <kformuladefs.h>
 
 #include "kformula_view.h"

@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <koTemplateCreateDia.h>
+#include <KoTemplateCreateDia.h>
 
 #include <qfile.h>
 #include <qlayout.h>
@@ -494,4 +494,4 @@ void KoTemplateCreateDia::fillGroupTree() {
     }
 }
 
-#include <koTemplateCreateDia.moc>
+#include <KoTemplateCreateDia.moc>

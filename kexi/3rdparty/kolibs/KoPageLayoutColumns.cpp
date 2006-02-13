@@ -18,9 +18,9 @@
  */
 
 #include <KoPageLayoutColumns.h>
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 #include <KoUnit.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include <qlabel.h>
 #include <qlayout.h>

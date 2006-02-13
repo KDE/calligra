@@ -22,7 +22,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kotabbar.h"
+#include "KoTabBar.h"
 
 #include <qdrawutil.h>
 #include <qpainter.h>
@@ -910,4 +910,4 @@ void KoTabBar::wheelEvent( QWheelEvent * e )
 }
 
 
-#include "kotabbar.moc"
+#include "KoTabBar.moc"

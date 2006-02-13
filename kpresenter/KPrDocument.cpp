@@ -66,8 +66,8 @@
 #include <kprocess.h>
 #include <kio/netaccess.h>
 
-#include <koTemplateChooseDia.h>
-#include <koRuler.h>
+#include <KoTemplateChooseDia.h>
+#include <KoRuler.h>
 #include <KoGenStyles.h>
 #include <KoFilterManager.h>
 #include <KoStore.h>
@@ -100,7 +100,7 @@
 #include "KPrNoteBar.h"
 #include "KPrBgSpellCheck.h"
 #include <kglobalsettings.h>
-#include <kocommandhistory.h>
+#include <KoCommandHistory.h>
 #include "KoApplication.h"
 #include <KoOasisStyles.h>
 #include <KoOasisContext.h>

@@ -53,7 +53,7 @@
 #include <KoDocumentInfo.h>
 #include <KoDocument.h>
 #include <KoView.h>
-#include <koPartSelectDia.h>
+#include <KoPartSelectDia.h>
 #include <KoFilterManager.h>
 #include <kiconloader.h>
 

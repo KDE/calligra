@@ -17,7 +17,7 @@
  */
 
 #include "KWPage.h"
-#include "kozoomhandler.h"
+#include "KoZoomHandler.h"
 
 #include <qrect.h>
 

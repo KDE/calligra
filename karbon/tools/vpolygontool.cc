@@ -23,7 +23,7 @@
 
 #include <kdialogbase.h>
 #include <klocale.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 #include <karbon_view.h>
 #include <karbon_part.h>

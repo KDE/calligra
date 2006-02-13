@@ -32,7 +32,7 @@
 #include <knumvalidator.h>
 #include "KPrDocument.h"
 #include <kseparator.h>
-#include <koUnitWidgets.h>
+#include <KoUnitWidgets.h>
 
 KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const char *name)
     : KDialogBase( parent, name, true, "", Ok | Cancel, Ok, true )

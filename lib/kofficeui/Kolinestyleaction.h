@@ -20,7 +20,7 @@
 #ifndef KOLINESTYLEACTION_H
 #define KOLINESTYLEACTION_H
 
-#include "koselectaction.h"
+#include "KoSelectAction.h"
 #include <koffice_export.h>
 /** A line style selection action */
 class KOFFICEUI_EXPORT KoLineStyleAction : public KoSelectAction

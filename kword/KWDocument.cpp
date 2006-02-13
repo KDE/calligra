@@ -50,7 +50,7 @@
 #include "KWStartupWidget.h"
 
 #include <KoPictureCollection.h>
-#include <koTemplateChooseDia.h>
+#include <KoTemplateChooseDia.h>
 #include <KoMainWindow.h>
 #include <KoDocumentInfo.h>
 #include <KoGlobal.h>
@@ -61,7 +61,7 @@
 #include <kformuladocument.h>
 #include <KoApplication.h>
 #include <KoOasisContext.h>
-#include <kocommandhistory.h>
+#include <KoCommandHistory.h>
 #include <KoGenStyles.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>

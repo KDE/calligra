@@ -24,9 +24,9 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <KoPoint.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <klocale.h>
-#include <koGuides.h>
+#include <KoGuides.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"

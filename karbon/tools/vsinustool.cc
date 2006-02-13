@@ -29,7 +29,7 @@
 #include <karbon_part.h>
 #include <shapes/vsinus.h>
 #include "vsinustool.h"
-#include "koUnitWidgets.h"
+#include "KoUnitWidgets.h"
 
 
 VSinusTool::VSinusOptionsWidget::VSinusOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )

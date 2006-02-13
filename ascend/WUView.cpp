@@ -26,7 +26,7 @@
 
 #include <KoView.h>
 #include <KoMainWindow.h>
-#include <kotoolbox.h>
+#include <KoToolBox.h>
 
 #include "WUFactory.h"
 #include "WUDocument.h"

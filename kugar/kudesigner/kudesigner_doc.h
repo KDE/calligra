@@ -21,7 +21,7 @@
 
 #include <KoDocument.h>
 #include <kcommand.h>
-#include <kocommandhistory.h>
+#include <KoCommandHistory.h>
 #include "plugin.h"
 
 class QCanvas;

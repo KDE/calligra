@@ -25,7 +25,7 @@
 #include <kdebug.h>
 #include <KoPoint.h>
 #include <klocale.h>
-#include <kozoomhandler.h>
+#include <KoZoomHandler.h>
 #include <kinputdialog.h>
 
 #include "kivio_view.h"

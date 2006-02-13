@@ -21,7 +21,7 @@
 
 /******************************************************************/
 
-#include "koRuler.h"
+#include "KoRuler.h"
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>
@@ -1193,4 +1193,4 @@ void KoRuler::setPageLayout( const KoPageLayout& _layout )
     update();
 }
 
-#include "koRuler.moc"
+#include "KoRuler.moc"

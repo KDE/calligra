@@ -20,7 +20,7 @@
 #include "kudesigner_factory.h"
 #include "kudesigner_view.h"
 
-#include <koTemplateChooseDia.h>
+#include <KoTemplateChooseDia.h>
 #include <kparts/componentfactory.h>
 #include <kdebug.h>
 #include <klocale.h>

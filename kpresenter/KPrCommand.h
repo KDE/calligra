@@ -32,7 +32,7 @@
 #include <qvaluelist.h>
 #include <qpen.h>
 #include <qbrush.h>
-#include <koPageLayoutDia.h>
+#include <KoPageLayoutDia.h>
 #include <KoParagLayout.h>
 #include <KoTextCommand.h>
 #include <KoPoint.h>

@@ -32,7 +32,7 @@
 #include <kio/netaccess.h>
 
 #include <KoPicture.h>
-#include <koPictureFilePreview.h>
+#include <KoPictureFilePreview.h>
 
 #include "KWDocument.h"
 #include "KWInsertPicDia.h"
