@@ -307,23 +307,23 @@ public:
     Appointment appointmentIntervals() const;
     Duration plannedEffort(const QDate &date) const;
 
-    void setCurrentSchedule(ResourceSchedule *schedule) { m_currentSchedule = schedule; }
+    void setCurrentSchedule(Schedule *schedule) { m_currentSchedule = schedule; }
     void setCurrentSchedule(long id) { m_currentSchedule = findSchedule(id); }
-    ResourceSchedule *currentSchedule() const { return m_currentSchedule; }
+    Schedule *currentSchedule() const { return m_currentSchedule; }
     
-    QIntDict<ResourceSchedule> &schedules() { return m_schedules; }
-    ResourceSchedule *findSchedule(long id) { return m_schedules[id]; }
+    QIntDict<Schedule> &schedules() { return m_schedules; }
+    Schedule *findSchedule(long id) { return m_schedules[id]; }
     /// Take, and delete.
     void removeSchedule(Schedule *schedule);
     /// Take, don't delete.
     void takeSchedule(const Schedule *schedule);
-    void addSchedule(ResourceSchedule *schedule);
+    void addSchedule(Schedule *schedule);
     ResourceSchedule *createSchedule(QString name, int type, int id);
     ResourceSchedule *createSchedule(Schedule *parent);
     
 private:
     Project *m_project;
-    QIntDict<ResourceSchedule> m_schedules;
+    QIntDict<Schedule> m_schedules;
     QString m_id; // unique id
     QString m_name;
     QString m_initials;
@@ -345,7 +345,7 @@ private:
     Calendar *m_calendar;
     QPtrList<ResourceRequest> m_requests;
     
-    ResourceSchedule *m_currentSchedule;
+    Schedule *m_currentSchedule;
     
 public:
 #ifndef NDEBUG

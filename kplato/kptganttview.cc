@@ -82,7 +82,8 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     m_readWrite(readWrite),
     m_currentItem(0),
     m_taskView(0),
-    m_firstTime(true)
+    m_firstTime(true),
+    m_project(0)
 {
     kdDebug() << " ---------------- KPlato: Creating GanttView ----------------" << endl;
     setOrientation(QSplitter::Vertical);
@@ -99,6 +100,8 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     m_showPositiveFloat = false; //FIXME
     m_showCriticalTasks = false; //FIXME
     m_showCriticalPath = false; //FIXME
+    m_showNoInformation = false; //FIXME
+    
     m_gantt->setHeaderVisible(true);
     m_gantt->addColumn(i18n("Work Breakdown Structure", "WBS"));
     // HACK: need changes to kdgantt
@@ -149,6 +152,7 @@ void GanttView::clear()
 
 void GanttView::draw(Project &project)
 {
+    m_project = &project;
     //kdDebug()<<k_funcinfo<<endl;
     Schedule::Type type = Schedule::Expected;
     if (m_showOptimistic) {
@@ -177,6 +181,7 @@ void GanttView::draw(Project &project)
 
 void GanttView::drawChanges(Project &project)
 {
+    m_project = &project; //FIXME Only draw changes on same project
     //kdDebug()<<k_funcinfo<<endl;
     Schedule::Type type = Schedule::Expected;
     if (m_showOptimistic) {
@@ -463,12 +468,14 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     KLocale *locale = KGlobal::locale();
+    //kdDebug()<<k_funcinfo<<task->name()<<": "<<task->currentSchedule()<<", "<<task->notScheduled()<<", "<<(m_project ? m_project->notScheduled() : false)<<endl;
     if (task->currentSchedule() == 0) {
-        item->setShowNoInformation(true);
+        item->setShowNoInformation(m_showNoInformation);
         item->setStartTime(task->projectNode()->startTime());
         item->setEndTime(item->startTime().addDays(1));
     } else {
-        item->setShowNoInformation(task->notScheduled());
+        bool noinf = m_showNoInformation && (task->notScheduled() || (m_project ? m_project->notScheduled() : false /*hmmm, no project?*/));
+        item->setShowNoInformation(noinf);
         item->setStartTime(task->startTime());
         item->setEndTime(task->endTime());
     }
@@ -485,8 +492,21 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
         w += "\n" + i18n("Start: %1").arg(locale->formatDateTime(task->startTime()));
         w += "\n" + i18n("End: %1").arg(locale->formatDateTime(task->endTime()));
     }
+    bool ok = true;
     if (task->notScheduled()) {
         w += "\n" + i18n("Not scheduled");
+        ok = false;
+    } else {
+        if (!m_showNoInformation && m_project) {
+            ok = !(m_project->notScheduled());
+        }
+    }
+    if (ok) {
+        QColor c(cyan);
+        item->setColors(c,c,c);
+    } else {
+        QColor c(yellow);
+        item->setColors(c,c,c);
     }
     item->setTooltipText(w);
     setDrawn(item, true);
@@ -496,14 +516,16 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     KLocale *locale = KGlobal::locale();
+    //kdDebug()<<k_funcinfo<<task->name()<<": "<<task->currentSchedule()<<", "<<task->notScheduled()<<", "<<(m_project ? m_project->notScheduled() : false)<<endl;
     item->setListViewText(task->name());
     item->setListViewText(1, task->wbs());
     if (task->currentSchedule() == 0) {
-        item->setShowNoInformation(true);
+        item->setShowNoInformation(m_showNoInformation);
         item->setStartTime(task->projectNode()->startTime());
         item->setEndTime(item->startTime().addDays(1));
     } else {
-        item->setShowNoInformation(task->notScheduled());
+        bool noinf = m_showNoInformation && (task->notScheduled() || (m_project ? m_project->notScheduled() : false /*hmmm, no project?*/));
+        item->setShowNoInformation(noinf);
         item->setStartTime(task->startTime());
         item->setEndTime(task->endTime());
     }
@@ -583,6 +605,9 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
             sts += "\n" + i18n("Scheduling conflict");
             ok = false;
         }
+        if (!m_showNoInformation && m_project) {
+            ok = !(m_project->notScheduled());
+        }
     }
     if (ok) {
         QColor c(green);
@@ -607,11 +632,13 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     KLocale *locale = KGlobal::locale();
+    //kdDebug()<<k_funcinfo<<task->name()<<": "<<task->currentSchedule()<<", "<<task->notScheduled()<<", "<<(m_project ? m_project->notScheduled() : false)<<endl;
     if (task->currentSchedule() == 0) {
-        item->setShowNoInformation(true);
+        item->setShowNoInformation(m_showNoInformation);
         item->setStartTime(task->projectNode()->startTime());
     } else {
-        item->setShowNoInformation(task->notScheduled());
+        bool noinf = m_showNoInformation && (task->notScheduled() || (m_project ? m_project->notScheduled() : false /*hmmm, no project?*/));
+        item->setShowNoInformation(noinf);
         item->setStartTime(task->startTime());
     }
     item->setListViewText(task->name());
@@ -657,6 +684,9 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
         if (task->schedulingError()) {
             w += "\n" + i18n("Scheduling conflict");
             ok = false;
+        }
+        if (!m_showNoInformation && m_project) {
+            ok = !(m_project->notScheduled());
         }
     }
     if (ok) {
@@ -1105,6 +1135,7 @@ bool GanttView::setContext(Context::Ganttview &context, Project& project) {
     m_showPositiveFloat = context.showPositiveFloat;
     m_showCriticalTasks = context.showCriticalTasks;
     m_showCriticalPath = context.showCriticalPath;
+    m_showNoInformation = context.showNoInformation;
     
     //TODO this does not work yet!
 //     getContextClosedNodes(context, m_gantt->firstChild());
@@ -1132,6 +1163,7 @@ void GanttView::getContext(Context::Ganttview &context) const {
     context.showPositiveFloat = m_showPositiveFloat;
     context.showCriticalTasks = m_showCriticalTasks;
     context.showCriticalPath = m_showCriticalPath;
+    context.showNoInformation = m_showNoInformation;
     getContextClosedNodes(context, m_gantt->firstChild());
 }
 

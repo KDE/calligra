@@ -21,6 +21,8 @@
 #define KPTCOMMAND_H
 
 #include <kcommand.h>
+
+#include "kptappointment.h"
 #include "kptnode.h"
 #include "kptduration.h"
 #include "kptpart.h"
@@ -42,6 +44,7 @@ class ResourceGroupRequest;
 class ResourceRequest;
 class ResourceGroup;
 class Resource;
+class Schedule;
 
 class NamedCommand : public KNamedCommand
 {
@@ -50,11 +53,17 @@ public:
     : KNamedCommand(name), m_part(part)
     {}
     
-public:
-    void setCommandType(int type) {
-        if (m_part) 
-            m_part->setCommandType(type);
-    }
+    void setCommandType(int type);
+    
+protected:
+    void setSchDeleted();
+    void setSchDeleted(bool state);
+    void setSchScheduled();
+    void setSchScheduled(bool state);
+    void addSchScheduled(Schedule *sch);
+    void addSchDeleted(Schedule *sch);
+    
+    QMap<Schedule*, bool> m_schedules;
 private:
     Part *m_part;
 };
@@ -123,12 +132,17 @@ protected:
     bool m_mine;
 };
 
-class CalendarRemoveDayCmd : public CalendarAddDayCmd
+class CalendarRemoveDayCmd : public NamedCommand
 {
 public:
     CalendarRemoveDayCmd(Part *part, Calendar *cal, const QDate &day, QString name=0);
     void execute();
     void unexecute();
+
+protected:
+    Calendar *m_cal;
+    CalendarDay *m_value;
+    bool m_mine;
 };
 
 class CalendarModifyDayCmd : public NamedCommand
@@ -176,6 +190,7 @@ private:
     int m_index;
     bool m_mine;
     QPtrList<Appointment> m_appointments;
+
 };
 
 class TaskAddCmd : public NamedCommand
@@ -259,6 +274,7 @@ private:
     Node &m_node;
     Node::ConstraintType newConstraint;
     Node::ConstraintType oldConstraint;
+
 };
 
 class NodeModifyConstraintStartTimeCmd : public NamedCommand
@@ -272,6 +288,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     QDateTime oldTime;
+
 };
 class NodeModifyConstraintEndTimeCmd : public NamedCommand
 {
@@ -284,6 +301,7 @@ private:
     Node &m_node;
     QDateTime newTime;
     QDateTime oldTime;
+
 };
 class NodeModifyStartTimeCmd : public NamedCommand
 {
@@ -383,6 +401,7 @@ public:
 private:
     Relation *m_rel;
     bool m_taken;
+
 };
 
 class DeleteRelationCmd : public NamedCommand
@@ -396,6 +415,7 @@ public:
 private:
     Relation *m_rel;
     bool m_taken;
+
 };
 
 class ModifyRelationTypeCmd : public NamedCommand
@@ -409,6 +429,7 @@ private:
     Relation *m_rel;
     Relation::Type m_newtype;
     Relation::Type m_oldtype;
+
 };
 
 class ModifyRelationLagCmd : public NamedCommand
@@ -422,6 +443,7 @@ private:
     Relation *m_rel;
     Duration m_newlag;
     Duration m_oldlag;
+
 };
 
 class AddResourceRequestCmd : public NamedCommand
@@ -436,6 +458,7 @@ private:
     ResourceGroupRequest *m_group;
     ResourceRequest *m_request;
     bool m_mine;
+
 };
 
 class RemoveResourceRequestCmd : public NamedCommand
@@ -450,6 +473,7 @@ private:
     ResourceGroupRequest *m_group;
     ResourceRequest *m_request;
     bool m_mine;
+
 };
 
 class ModifyEffortCmd : public NamedCommand
@@ -462,6 +486,7 @@ public:
 private:
     Effort *m_effort;
     Duration m_oldvalue, m_newvalue;
+
 };
 
 class EffortModifyOptimisticRatioCmd : public NamedCommand
@@ -474,6 +499,7 @@ public:
 private:
     Effort *m_effort;
     int m_oldvalue, m_newvalue;
+
 };
 
 class EffortModifyPessimisticRatioCmd : public NamedCommand
@@ -486,6 +512,7 @@ public:
 private:
     Effort *m_effort;
     int m_oldvalue, m_newvalue;
+
 };
 
 class ModifyEffortTypeCmd : public NamedCommand
@@ -498,6 +525,7 @@ public:
 private:
     Effort *m_effort;
     int m_oldvalue, m_newvalue;
+
 };
 
 class AddResourceGroupRequestCmd : public NamedCommand
@@ -891,7 +919,7 @@ private:
     Project &m_node;
     Node::ConstraintType newConstraint;
     Node::ConstraintType oldConstraint;
-    QMap<Schedule*, bool> m_schedules;
+
 };
 
 class ProjectModifyStartTimeCmd : public NamedCommand
@@ -905,7 +933,7 @@ private:
     Project &m_node;
     QDateTime newTime;
     QDateTime oldTime;
-    QMap<Schedule*, bool> m_schedules;
+
 };
 
 class ProjectModifyEndTimeCmd : public NamedCommand
@@ -919,7 +947,7 @@ private:
     Project &m_node;
     QDateTime newTime;
     QDateTime oldTime;
-    QMap<Schedule*, bool> m_schedules;
+
 };
 
 

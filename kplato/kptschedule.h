@@ -157,6 +157,9 @@ public:
     void setScheduled(bool on) { notScheduled = !on; }
     bool isScheduled() const { return !notScheduled; }
     
+    DateTime start() const { return startTime; }
+    DateTime end() const { return endTime; }
+    
 protected:
     QString m_name;
     Type m_type;
@@ -280,6 +283,7 @@ public:
     
     virtual Resource *resource() const { return m_resource; }
     virtual double normalRatePrHour() const;
+    
 private:
     Resource *m_resource;
     Schedule *m_parent;

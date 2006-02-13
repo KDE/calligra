@@ -188,6 +188,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionViewGanttCriticalTasks = new KToggleAction(i18n("Critical Tasks"), 0, 0, this, SLOT(slotViewGanttCriticalTasks()), actionCollection(), "view_gantt_showCriticalTasks");
     actionViewGanttCriticalPath = new KToggleAction(i18n("Critical Path"), 0, 0, this, SLOT(slotViewGanttCriticalPath()), actionCollection(), "view_gantt_showCriticalPath");
     
+//    actionViewGanttNotScheduled = new KToggleAction(i18n("Not Scheduled"), 0, 0, this, SLOT(slotViewGanttNotScheduled()), actionCollection(), "view_gantt_showNotScheduled");
+    
     actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
     
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
@@ -267,11 +269,14 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
         SLOT(slotEditResource()), actionCollection(), "edit_resource");
 
     // ------------------- Actions with a key binding and no GUI item
+    // Temporary, till we get a menu entry
+    actNoInformation = new KAction("Toggle no information", CTRL+SHIFT+Key_T, this, SLOT(slotViewGanttNoInformation()), actionCollection(), "show_noinformation");
+    
 #ifndef NDEBUG
     //new KAction("Print Debug", CTRL+SHIFT+Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
     new KAction("Print Debug", CTRL+SHIFT+Key_P, this, SLOT(slotPrintSelectedDebug()), actionCollection(), "print_debug");
     new KAction("Print Calendar Debug", CTRL+SHIFT+Key_C, this, SLOT(slotPrintCalendarDebug()), actionCollection(), "print_calendar_debug");
-    new KAction("Print Test Debug", CTRL+SHIFT+Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
+//     new KAction("Print Test Debug", CTRL+SHIFT+Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
     KAction* actExportGantt = new KAction( i18n( "Export Gantt" ), CTRL+SHIFT+Key_G,
                         this, SLOT( slotExportGantt() ), actionCollection(), "export_gantt" );
@@ -427,6 +432,13 @@ void View::slotViewGanttCriticalTasks() {
 void View::slotViewGanttCriticalPath() {
     //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalPath(actionViewGanttCriticalPath->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
+}
+
+void View::slotViewGanttNoInformation() {
+    kdDebug()<<k_funcinfo<<m_ganttview->showNoInformation()<<endl;
+    m_ganttview->setShowNoInformation(!m_ganttview->showNoInformation()); //Toggle
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }

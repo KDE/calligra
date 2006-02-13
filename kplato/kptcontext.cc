@@ -57,6 +57,7 @@ bool Context::load(QDomElement &element) {
                 ganttview.showPositiveFloat = e.attribute("show-positivefloat").toInt();
                 ganttview.showCriticalTasks = e.attribute("show-criticaltasks").toInt();
                 ganttview.showCriticalPath = e.attribute("show-criticalpath").toInt();
+                ganttview.showNoInformation = e.attribute("show-noinformation").toInt();
                 
                 QDomNodeList list = e.childNodes();
                 for (unsigned int i=0; i<list.count(); ++i) {
@@ -130,6 +131,7 @@ void Context::save(QDomElement &element) const {
     g.setAttribute("show-positivefloat", ganttview.showPositiveFloat);
     g.setAttribute("show-criticaltasks", ganttview.showCriticalTasks);
     g.setAttribute("show-criticalpath", ganttview.showCriticalPath);
+    g.setAttribute("show-noinformation", ganttview.showNoInformation);
     if (!ganttview.closedNodes.isEmpty()) {
         QDomElement e = g.ownerDocument().createElement("closed-nodes");
         g.appendChild(e);

@@ -417,7 +417,7 @@ bool Resource::addAppointment(Appointment *appointment, Schedule &main) {
 
 void Resource::addAppointment(Schedule *node, DateTime &start, DateTime &end, double load) {
     //kdDebug()<<k_funcinfo<<endl;
-    ResourceSchedule *s = findSchedule(node->id());
+    Schedule *s = findSchedule(node->id());
     if (s == 0) {
         s = createSchedule(node->parent());
     }
@@ -441,7 +441,7 @@ void Resource::takeSchedule(const Schedule *schedule) {
     m_schedules.take(schedule->id());
 }
 
-void Resource::addSchedule(ResourceSchedule *schedule) {
+void Resource::addSchedule(Schedule *schedule) {
     if (schedule == 0)
         return;
     m_schedules.replace(schedule->id(), schedule);
@@ -1188,7 +1188,7 @@ void ResourceGroup::printDebug(QString indent)
 void Resource::printDebug(QString indent)
 {
     kdDebug()<<indent<<"  + Resource: "<<m_name<<" id="<<m_id/*<<" Overbooked="<<isOverbooked()*/<<endl;
-    QIntDictIterator<ResourceSchedule> it(m_schedules);
+    QIntDictIterator<Schedule> it(m_schedules);
     indent += "      ";
     for (; it.current(); ++it) {
         it.current()->printDebug(indent);

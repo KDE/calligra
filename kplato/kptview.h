@@ -102,6 +102,7 @@ public slots:
     void slotViewGanttFloat();
     void slotViewGanttCriticalTasks();
     void slotViewGanttCriticalPath();
+    void slotViewGanttNoInformation();
     void slotViewPert();
     void slotViewResources();
     void slotViewAccounts();
@@ -211,6 +212,7 @@ private:
     KToggleAction *actionViewGanttFloat;
     KToggleAction *actionViewGanttCriticalTasks;
     KToggleAction *actionViewGanttCriticalPath;
+    KToggleAction *actionViewGanttNotScheduled;
     KAction *actionViewPert;
     KAction *actionViewResources;
     KAction *actionViewAccounts;
@@ -253,6 +255,8 @@ private:
     KAction *actionDeleteTask;
     KAction *actionEditResource;
 
+    //Test
+    KAction *actNoInformation;
 };
 
 } //Kplato namespace

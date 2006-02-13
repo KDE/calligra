@@ -88,6 +88,8 @@ class GanttView : public QSplitter
     bool isReadWriteMode() const { return m_readWrite; }
     KDGanttViewItem *currentItem() const { return m_currentItem; }
     
+    bool showNoInformation() const { return m_showNoInformation; }
+
 signals:
     void enableActions(bool);
     void modifyRelation(Relation *rel) ;
@@ -120,6 +122,7 @@ public slots:
     void setShowPositiveFloat(bool on) { m_showPositiveFloat = on; }
     void setShowCriticalTasks(bool on) { m_showCriticalTasks = on; }
     void setShowCriticalPath(bool on) { m_showCriticalPath = on; }
+    void setShowNoInformation(bool on) { m_showNoInformation = on; }
 
 private slots:
     void currentItemChanged(KDGanttViewItem *);
@@ -195,8 +198,10 @@ private:
     bool m_showPositiveFloat;
     bool m_showCriticalTasks;
     bool m_showCriticalPath;
+    bool m_showNoInformation;
     bool m_firstTime;
     QPtrList<KDGanttViewTaskLink> m_taskLinks;
+    Project *m_project;
 };
 
 }  //KPlato namespace

@@ -32,7 +32,6 @@
             <Action name="view_gantt_showCriticalPath"/>
             <Action name="view_gantt_showCriticalTasks"/>
             <Separator/>
-            <Separator/>
             <!--<Action name="view_pert"/> -->
             <Separator/>
             <Action name="view_resources"/>

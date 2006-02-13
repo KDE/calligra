@@ -58,6 +58,7 @@ public:
         bool showPositiveFloat;
         bool showCriticalTasks;
         bool showCriticalPath;
+        bool showNoInformation;
         QStringList closedNodes;
     } ganttview;    
     
