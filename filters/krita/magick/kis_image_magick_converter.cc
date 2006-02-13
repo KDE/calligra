@@ -452,7 +452,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
                 y_offset = QString(attr->value).toInt();
             }
 
-            m_img->addLayer(layer.data(), m_img->rootLayer(), 0);
+            m_img->addLayer(layer.data(), m_img->rootLayer());
 
             for (Q_UINT32 y = 0; y < image->rows; y ++)
             {
