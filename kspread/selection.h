@@ -107,7 +107,14 @@ public:
    */
   QString name(Sheet* originSheet = 0) const;
 
+  /**
+   * Sets the selection's origin sheet.
+   * @param sheet the sheet from which the selection starts
+   */
   void setSheet(Sheet* sheet);
+  /**
+   * @return the selection's origin sheet
+   */
   Sheet* sheet() const;
 
   /**
