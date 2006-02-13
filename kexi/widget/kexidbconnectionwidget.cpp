@@ -194,6 +194,8 @@ KexiProjectData KexiDBConnectionWidget::data()
 
 void KexiDBConnectionWidget::slotLocationBGrpClicked(int id)
 {
+	if (id != 0 && id != 1) //only support local/remove radio buttons
+		return;
 	hostLbl->setEnabled(id==1);
 	hostEdit->setEnabled(id==1);
 }
@@ -238,7 +240,9 @@ void KexiDBConnectionTabWidget::setData(const KexiProjectData& data, const QStri
 	mainWidget->setData( data, shortcutFileName );
 	detailsWidget->chkUseSocket->setChecked( data.constConnectionData()->useLocalSocketFile );
 	detailsWidget->customSocketEdit->setURL( data.constConnectionData()->localSocketFileName );
+	detailsWidget->customSocketEdit->setEnabled( detailsWidget->chkUseSocket->isChecked() );
 	detailsWidget->chkSocketDefault->setChecked( data.constConnectionData()->localSocketFileName.isEmpty() );
+	detailsWidget->chkSocketDefault->setEnabled( detailsWidget->chkUseSocket->isChecked() );
 	detailsWidget->descriptionEdit->setText( data.description() );
 }
 
@@ -248,7 +252,9 @@ void KexiDBConnectionTabWidget::setData(const KexiDB::ConnectionData& data,
 	mainWidget->setData( data, shortcutFileName );
 	detailsWidget->chkUseSocket->setChecked( data.useLocalSocketFile );
 	detailsWidget->customSocketEdit->setURL( data.localSocketFileName );
+	detailsWidget->customSocketEdit->setEnabled( detailsWidget->chkUseSocket->isChecked() );
 	detailsWidget->chkSocketDefault->setChecked( data.localSocketFileName.isEmpty() );
+	detailsWidget->chkSocketDefault->setEnabled( detailsWidget->chkUseSocket->isChecked() );
 	detailsWidget->descriptionEdit->setText( data.description );
 }
 
