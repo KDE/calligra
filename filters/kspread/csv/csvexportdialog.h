@@ -24,6 +24,7 @@
 #include <kdialogbase.h>
 
 class ExportDialogUI;
+class QValidator;
 
 namespace KSpread
 {
@@ -51,6 +52,7 @@ class CSVExportDialog : public KDialogBase
  private:
   ExportDialogUI * m_dialog;
 
+  QValidator* m_delimiterValidator;
   QString m_delimiter;
   QChar   m_textquote;
 

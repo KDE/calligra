@@ -36,6 +36,7 @@
 #include <qtextstream.h>
 #include <qtabwidget.h>
 #include <qtextcodec.h>
+#include <qvalidator.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -70,6 +71,13 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
 
   setMainWidget(m_dialog);
 
+  // Invalid 'Other' delimiters
+  // - Quotes
+  // - CR,LF,Vetical-tab,Formfeed,ASCII bel
+  QRegExp rx( "^[^\"'\r\n\v\f\a]{0,1}$" );
+  m_delimiterValidator = new QRegExpValidator( rx, m_dialog->m_delimiterBox );
+  m_dialog->m_delimiterEdit->setValidator( m_delimiterValidator );
+
   connect( m_dialog->m_delimiterBox, SIGNAL( clicked(int) ),
            this, SLOT( delimiterClicked( int ) ) );
   connect( m_dialog->m_delimiterEdit, SIGNAL( returnPressed() ),
@@ -85,6 +93,7 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
 CSVExportDialog::~CSVExportDialog()
 {
   kapp->setOverrideCursor(Qt::waitCursor);
+  delete m_delimiterValidator;
 }
 
 void CSVExportDialog::fillSheet( Map * map )
@@ -102,7 +111,7 @@ void CSVExportDialog::fillSheet( Map * map )
     m_dialog->m_sheetList->insertItem( item );
   }
 
-  m_dialog->m_sheetList->setSorting(1, true);
+  m_dialog->m_sheetList->setSorting(0, true);
   m_dialog->m_sheetList->sort();
   m_dialog->m_sheetList->setSorting( -1 );
 }
@@ -160,29 +169,44 @@ void CSVExportDialog::returnPressed()
 
 void CSVExportDialog::textChanged ( const QString & )
 {
+
+  if ( m_dialog->m_delimiterEdit->text().isEmpty() )
+  {
+    enableButtonOK( ! m_dialog->m_radioOther->isChecked() );
+    return;
+  }
+
   m_dialog->m_radioOther->setChecked ( true );
-  delimiterClicked(4); // other
+  delimiterClicked(4);
 }
 
 void CSVExportDialog::delimiterClicked( int id )
 {
+  enableButtonOK( true );
+
+  //Erase "Other Delimiter" text box if the user has selected one of 
+  //the standard options instead (comma, semicolon, tab or space)
+  if (id != 4)
+  	m_dialog->m_delimiterEdit->setText("");
+  
   switch (id)
   {
     case 0: // comma
-     m_delimiter = ",";
-     break;
-   case 1: // semicolon
-    m_delimiter = ";";
-    break;
-   case 2: // tab
-    m_delimiter = "\t";
-    break;
-   case 3: // space
-    m_delimiter = " ";
-    break;
-   case 4: // other
-    m_delimiter = m_dialog->m_delimiterEdit->text();
-    break;
+      m_delimiter = ",";
+      break;
+    case 1: // semicolon
+      m_delimiter = ";";
+      break;
+    case 2: // tab
+      m_delimiter = "\t";
+      break;
+    case 3: // space
+      m_delimiter = " ";
+      break;
+    case 4: // other
+      enableButtonOK( ! m_dialog->m_delimiterEdit->text().isEmpty() );
+      m_delimiter = m_dialog->m_delimiterEdit->text();
+      break;
   }
 }
 
