@@ -43,6 +43,7 @@
 #include <KoDocumentChild.h>
 #include <KoDom.h>
 #include <kozoomhandler.h>
+#include "kspread_object.moc"
 
 
 using namespace KSpread;
@@ -431,9 +432,9 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   _painter->save();
   int const xOffset = sheet()->doc()->zoomItX( geometry().left() + penw);
   int const yOffset = sheet()->doc()->zoomItY( geometry().top() + penw );
- 
+
   QRect new_geometry = zoomedBound;
-  
+
   //if ( translate )
   //{
   	_painter->translate( xOffset , yOffset );
@@ -445,14 +446,14 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
   _painter->setClipRect( zoomedBound, QPainter::CoordPainter );
 
    assert( embeddedObject()->document() != 0 );
-   
+
         embeddedObject()->document()->paintEverything( *_painter,
         zoomedBound,
         embeddedObject()->isTransparent(),
         0 /* View isn't known from here - is that a problem? */,
         sheet()->doc()->zoomedResolutionX() ,
         sheet()->doc()->zoomedResolutionY() );
-    
+
 
    embeddedObject()->setGeometry( new_geometry );
   _painter->restore();
@@ -861,16 +862,16 @@ void EmbeddedPictureObject::reload( void )
 //     QDomElement elem=doc.createElement("KEY");
 //     image.getKey().saveAttributes(elem);
 //     fragment.appendChild(elem);
-// 
+//
 //     QDomElement elemSettings = doc.createElement( "PICTURESETTINGS" );
-// 
+//
 //     elemSettings.setAttribute( "mirrorType", static_cast<int>( mirrorType ) );
 //     elemSettings.setAttribute( "depth", depth );
 //     elemSettings.setAttribute( "swapRGB", static_cast<int>( swapRGB ) );
 //     elemSettings.setAttribute( "grayscal", static_cast<int>( grayscal ) );
 //     elemSettings.setAttribute( "bright", bright );
 //     fragment.appendChild( elemSettings );
-// 
+//
 //     if (m_effect!=IE_NONE) {
 //         QDomElement imageEffects = doc.createElement("EFFECTS");
 //         imageEffects.setAttribute("type", static_cast<int>(m_effect));
@@ -882,7 +883,7 @@ void EmbeddedPictureObject::reload( void )
 //             imageEffects.setAttribute("param3", m_ie_par3.toString());
 //         fragment.appendChild( imageEffects );
 //     }
-// 
+//
 //     return fragment;
 // }
 
@@ -1021,7 +1022,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //                     _fileName.replace( _envVarB-1, _envVarE-_envVarB+1, path );
 //                 }
 //             }
-// 
+//
 //             if ( openPic )
 //                 // !! this loads it from the disk (unless it's in the image collection already)
 //                 image = imageCollection->loadPicture( _fileName );
@@ -1037,7 +1038,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //             }
 //         }
 //     }
-// 
+//
 //     e = element.namedItem( "PICTURESETTINGS" ).toElement();
 //     if ( !e.isNull() ) {
 //         PictureMirrorType _mirrorType = PM_NORMAL;
@@ -1045,7 +1046,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //         bool _swapRGB = false;
 //         bool _grayscal = false;
 //         int _bright = 0;
-// 
+//
 //         if ( e.hasAttribute( "mirrorType" ) )
 //             _mirrorType = static_cast<PictureMirrorType>( e.attribute( "mirrorType" ).toInt() );
 //         if ( e.hasAttribute( "depth" ) )
@@ -1056,7 +1057,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //             _grayscal = static_cast<bool>( e.attribute( "grayscal" ).toInt() );
 //         if ( e.hasAttribute( "bright" ) )
 //             _bright = e.attribute( "bright" ).toInt();
-// 
+//
 //         mirrorType = _mirrorType;
 //         depth = _depth;
 //         swapRGB = _swapRGB;
@@ -1070,7 +1071,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //         grayscal = false;
 //         bright = 0;
 //     }
-// 
+//
 //     e = element.namedItem( "EFFECTS" ).toElement();
 //     if (!e.isNull()) {
 //         if (e.hasAttribute("type"))
@@ -1090,7 +1091,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
 //     }
 //     else
 //         m_effect = IE_NONE;
-// 
+//
 //     return offset;
 // }
 
@@ -1100,18 +1101,18 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 //     const double oy = /*orig*/m_geometry.y();
 //     const double ow = /*ext*/m_geometry.width();
 //     const double oh = /*ext*/m_geometry.height();
-// 
+//
 //     _painter->save();
-// 
+//
 //     QPen pen2 = pen.zoomedPen( _zoomHandler );
 //     _painter->setPen( pen2 );
 //     _painter->setBrush( getBrush() );
-// 
+//
 //     double sx = 0;
 //     double sy = 0;
-// 
+//
 //     getShadowCoords( sx, sy );
-// 
+//
 //     _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
 //     _painter->setPen( QPen( shadowColor ) );
 //     _painter->setBrush( shadowColor );
@@ -1129,18 +1130,18 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 //         int pixXPos = -rr.x();
 //         br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
 //         rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
-// 
+//
 //         QWMatrix m;
 //         m.translate( pw / 2, ph / 2 );
 //         m.rotate( angle );
 //         m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
 //                      rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
-// 
+//
 //         _painter->setWorldMatrix( m, true );
-// 
+//
 //         _painter->drawRect( 0, 0, bs.width(), bs.height() );
 //     }
-// 
+//
 //     _painter->restore();
 }
 
@@ -1148,7 +1149,7 @@ QPixmap EmbeddedPictureObject::toPixmap( double xZoom , double yZoom )
 {
 	KoZoomHandler zoomHandler;
 	zoomHandler.setZoomedResolution( xZoom*zoomHandler.resolutionX() , yZoom*zoomHandler.resolutionY() );
-	
+
 	return generatePixmap( &zoomHandler );
 }
 
@@ -1201,7 +1202,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
 {
     bool drawContour = false;
     KoZoomHandler*_zoomHandler = sheet()->doc();
-    
+
 
     if ( image.isNull() ) return;
 
