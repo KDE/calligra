@@ -21,7 +21,7 @@
 #include "KWFrame.h"
 
 #include <qptrlist.h>
-#include <qvaluelist.h>
+#include <qvaluevector.h>
 
 class KWDocument;
 
@@ -41,12 +41,12 @@ public:
     /**
      * Fetches the frames below the frame this frameList is for.
      */
-    QValueList<KWFrame *> framesBelow();
+    QValueList<KWFrame *> framesBelow() const;
 
     /**
      * Fetches the frames on top of the frame this frameList is for.
      */
-    QValueList<KWFrame *> framesOnTop();
+    QValueList<KWFrame *> framesOnTop() const;
 
     /**
      * Update the z-ordering around the frame we host the framelist for.
@@ -62,18 +62,6 @@ public:
      * This will make sure all frames on the same page will also be updated.
      */
     void update();
-
-    /**
-     * Update the z-ordering for all frames of the whole document.
-     */
-    void recalcAllFrames();
-
-    /**
-     * Update the z-ordering for all frames in the page section of the whole document.
-     * @param pageFrom the first page that will be updated
-     * @param pageTo the last page (including) that will be updated
-     */
-    void recalcFrames(int pageFrom, int pageTo);
 
     /**
      * Update the z-ordering for all frames of the whole document.
@@ -115,7 +103,7 @@ private:
     void updateZOrderFor(const QPtrList<KWFrame> &frames);
     void setFrames(const QPtrList<KWFrame> &frames);
 
-    ZOrderedFrameList m_frames;
+    QValueVector<KWFrame *> m_frames; // sorted by Z Order
     KWDocument *m_doc;
     KWFrame *m_frame;
 };

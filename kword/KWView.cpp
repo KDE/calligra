@@ -1880,7 +1880,7 @@ void KWView::print( KPrinter &prt )
     for ( ; fit.current() ; ++fit )
         if ( fit.current()->isVisible() )
         {
-            kapp->processEvents();
+            qApp->processEvents();
             if ( progress.wasCancelled() ) {
                 canceled = true;
                 break;

@@ -21,7 +21,6 @@
 #include "KWPictureFrameSet.h"
 #include "KWFrame.h"
 #include "KWDocument.h"
-#include <kapplication.h>
 #include <dcopclient.h>
 
 

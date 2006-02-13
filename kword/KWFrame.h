@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2000-2006 David Faure <faure@kde.org>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -45,12 +46,18 @@ class QDomElement;
 /**
  * small utility class representing a sortable (by z-order) list of frames
  * you can use sort() and inSort(item)
+ *
+ * Deprecated, use QValueVector<KWFrame*> from now on, and sort it with
+ * std::sort(frames.begin(),frames.end(),KWFrame::compareFrameZOrder);
+ *
+ * With Qt4 we'll be able to use qSort for lists.
  */
 class ZOrderedFrameList : public QPtrList<KWFrame>
 {
 protected:
     virtual int compareItems(QPtrCollection::Item a, QPtrCollection::Item b);
 };
+
 
 /**
  * This class represents a single frame.
@@ -149,6 +156,13 @@ public:
      */
     void setZOrder( int z ) { m_zOrder = z; }
     int zOrder() const { return m_zOrder; }
+
+    /**
+     * This is a method used to sort a list using the STL sorting methods.
+     * @param f1 the first object
+     * @param f2 the second object
+     */
+    static bool compareFrameZOrder(KWFrame *f1, KWFrame *f2);
 
     KWFrameList* frameStack() { return m_frameStack; }
     void setFrameStack(KWFrameList *fl) { m_frameStack = fl; }

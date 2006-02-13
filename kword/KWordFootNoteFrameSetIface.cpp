@@ -19,7 +19,6 @@
 
 #include "KWordFootNoteFrameSetIface.h"
 #include "KWTextFrameSet.h"
-#include <kapplication.h>
 #include <kdebug.h>
 
 KWFootNoteFrameSetIface::KWFootNoteFrameSetIface( KWFootNoteFrameSet *_note )

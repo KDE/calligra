@@ -43,17 +43,17 @@
 #include <qclipboard.h>
 #include <qprogressdialog.h>
 #include <qobjectlist.h>
+#include <qapplication.h>
 #include <qwhatsthis.h>
 
 #include <KoStore.h>
 #include <KoStoreDrag.h>
-#include <KoPictureCollection.h>
+#include <koPictureCollection.h>
 
 #include <ktempfile.h>
 #include <klocale.h>
 #include <kcursor.h>
 #include <kdebug.h>
-#include <kapplication.h>
 #include <kmessagebox.h>
 #include <kmultipledrag.h>
 #include <kurl.h>
@@ -226,7 +226,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     for ( ; it != pageList.end(); ++it )
     {
         progress.setProgress( ++j );
-        kapp->processEvents();
+        qApp->processEvents();
 
         if ( progress.wasCancelled() )
             break;
@@ -244,7 +244,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         painter->translate( 0, -yOffset );
         painter->setBrushOrigin( 0, -yOffset );
         drawDocument( painter, pageRect, viewMode );
-        kapp->processEvents();
+        qApp->processEvents();
         painter->restore();
     }
     if ( m_currentFrameSetEdit )

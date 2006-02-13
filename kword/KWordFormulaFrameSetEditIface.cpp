@@ -22,7 +22,6 @@
 #include "KWFrame.h"
 #include "KWFormulaFrameSet.h"
 #include "KWDocument.h"
-#include <kapplication.h>
 #include <dcopclient.h>
 #include <kformulacontainer.h>
 #include <kformuladocument.h>

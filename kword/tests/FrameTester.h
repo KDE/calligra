@@ -19,6 +19,7 @@
 
 #include <KWFrameSet.h>
 
+class KWDocument;
 class KoXmlWriter;
 
 class KWFrameTester : public KUnitTest::Tester {
@@ -26,11 +27,12 @@ class KWFrameTester : public KUnitTest::Tester {
         void allTests();
     private:
         void testSimpleFrame();
+        void testFrameList();
 };
 
 class TestFrameSet : public KWFrameSet {
 public:
-    TestFrameSet() : KWFrameSet (0) {
+    TestFrameSet( KWDocument* doc = 0 ) : KWFrameSet(doc) {
     }
     QDomElement save(QDomElement&, bool) { return QDomElement(); }
     void saveOasis( KoXmlWriter&, KoSavingContext&, bool) const { };

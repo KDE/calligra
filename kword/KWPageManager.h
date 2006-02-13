@@ -27,8 +27,8 @@ class KoPoint;
 class KoRect;
 
 /**
- * The Page Manger manages all the pages a document contains and separates the all the frames
- *  the document contains into actual printed pages.
+ * The Page Manager manages all the pages a document contains and separates all the frames
+ * the document contains into actual printed pages.
  */
 class KWPageManager {
 public:

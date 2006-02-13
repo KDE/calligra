@@ -32,10 +32,9 @@
 
 #include <klocale.h>
 #include <kactionclasses.h>
-#include <kapplication.h>
 
-#include "qpopupmenu.h"
-#include "qt.h"
+#include <qapplication.h>
+#include <qpopupmenu.h>
 
 static const double HORIZONTAL_SNAP = 6; // horizontal snap zone (in pt)
 static const double VERTICAL_SNAP = 6; // vertical snap zone (in pt)
@@ -146,10 +145,10 @@ void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KW
         }
         void paint(QPainter *p, int x, int y) {
             p->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
-            p->setBrush( kapp->palette().color( QPalette::Active, QColorGroup::Highlight ) );
+            p->setBrush( QApplication::palette().color( QPalette::Active, QColorGroup::Highlight ) );
             p->drawRect( x, y, GRIP_SIZE, GRIP_SIZE );
             if( readOnly ) { //protected frame
-                QBrush brush=kapp->palette().color( QPalette::Active,QColorGroup::Base );
+                QBrush brush = QApplication::palette().color( QPalette::Active,QColorGroup::Base );
                 p->fillRect( x+1, y+1, GRIP_SIZE-2, GRIP_SIZE-2, brush );
             }
         }

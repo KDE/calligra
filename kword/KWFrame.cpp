@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2000-2006 David Faure <faure@kde.org>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -28,9 +29,9 @@
 #include "KWCanvas.h"
 
 #include <KoOasisContext.h>
-#include <KoXmlNS.h>
+#include <koxmlns.h>
 #include <KoXmlWriter.h>
-#include <KoStyleStack.h>
+#include <koStyleStack.h>
 
 #include <kcommand.h>
 #include <kdebug.h>
@@ -722,4 +723,9 @@ void KWFrame::setFramePadding( double left, double top, double right, double bot
     m_paddingTop = top;
     m_paddingRight = right;
     m_paddingBottom = bottom;
+}
+
+bool KWFrame::compareFrameZOrder(KWFrame *f1, KWFrame *f2)
+{
+    return f1->zOrder() < f2->zOrder();
 }

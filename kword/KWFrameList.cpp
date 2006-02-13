@@ -32,36 +32,32 @@ KWFrameList::KWFrameList(KWDocument *doc, KWFrame *theFrame) {
     update();
 }
 
-QValueList<KWFrame *> KWFrameList::framesBelow() {
+QValueList<KWFrame *> KWFrameList::framesBelow() const {
     QValueList<KWFrame *> frames;
 //kdDebug() << "framesBelow " << endl;
-    int index = m_frames.findRef(m_frame);
-    if (index == -1)
-        return frames;
 
-    int count = 0;
-    KWFrame *frame = m_frames.first();
-    while( frame ) {
-        if (count++ < index)
-            frames.append( frame );
-        frame = m_frames.next();
+    // Copy until we find m_frame
+    for ( QValueVector<KWFrame*>::const_iterator it = m_frames.begin(), end = m_frames.end(); it != end && *it != m_frame; ++it) {
+        frames.append( *it );
     }
 
     return  frames;
 }
 
-QValueList<KWFrame *> KWFrameList::framesOnTop() {
+QValueList<KWFrame *> KWFrameList::framesOnTop() const {
 //kdDebug() << "framesOnTop " << endl;
     QValueList<KWFrame *> frames;
-    int index = m_frames.findRef(m_frame);
-    if (index == -1)
-        return frames;
 
-    KWFrame *frame = m_frames.next();
-    while( frame ) {
-        Q_ASSERT( !frame->frameSet()->isFloating() );
-        frames.append( frame );
-        frame = m_frames.next();
+    // Copy from m_frame to the end
+    bool found = false;
+    for ( QValueVector<KWFrame*>::const_iterator it = m_frames.begin(), end = m_frames.end(); it != end; ++it) {
+        KWFrame* frame = *it;
+        if ( found ) {
+            Q_ASSERT( !frame->frameSet()->isFloating() );
+            frames.append( frame );
+        }
+        else if ( frame == m_frame )
+            found = true;
     }
 
     return frames;
@@ -108,7 +104,7 @@ void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
         if ( !intersect.isEmpty() )
             m_frames.append( daFrame );
     }
-    m_frames.sort();
+    std::sort( m_frames.begin(), m_frames.end(), KWFrame::compareFrameZOrder );
 }
 
 void KWFrameList::updateAfterMove(int oldPageNum) {
@@ -151,22 +147,6 @@ void KWFrameList::updateZOrderFor(const QPtrList<KWFrame> &frames) {
 #endif
 }
 
-void KWFrameList::recalcAllFrames() {
-    recalcFrames(0, m_doc->pageCount());
-}
-
-void KWFrameList::recalcFrames(int pageFrom, int pageTo) {
-    for(int i=pageFrom; i >= pageTo; i--) {
-        QPtrList<KWFrame> framesOnPage = m_doc->framesInPage( i, false );
-        KWFrame *f = framesOnPage.first();
-        while(f) {
-            Q_ASSERT(f->frameStack());
-            f->frameStack()->setFrames(framesOnPage);
-            f = framesOnPage.next();
-        }
-    }
-}
-
 // ****** statics ******
 KWFrameList *KWFrameList::getFirstFrameList(KWDocument *doc) {
     for (QPtrListIterator<KWFrameSet> fsit = doc->framesetsIterator(); fsit.current() ; ++fsit ) {
@@ -178,17 +158,19 @@ KWFrameList *KWFrameList::getFirstFrameList(KWDocument *doc) {
 }
 
 void KWFrameList::recalcFrames(KWDocument *doc, int pageFrom, int pageTo) {
-    KWFrameList *fl = getFirstFrameList(doc);
-    if (fl)
-        fl->recalcFrames(pageFrom, pageTo);
-    else kdDebug(32001)<<"WARN  recalcFrames ("<< pageFrom<< ","<<pageTo<< ") No frame stack found"<<endl;
+    for(int i=pageFrom; i >= pageTo; i--) {
+        QPtrList<KWFrame> framesOnPage = doc->framesInPage( i, false );
+        KWFrame *f = framesOnPage.first();
+        while(f) {
+            Q_ASSERT(f->frameStack());
+            f->frameStack()->setFrames(framesOnPage);
+            f = framesOnPage.next();
+        }
+    }
 }
 
 void KWFrameList::recalcAllFrames(KWDocument *doc) {
-    KWFrameList *fl = getFirstFrameList(doc);
-    if (fl)
-        fl->recalcAllFrames();
-    else kdDebug(32001)<<"WARN  recalcAllFrames () No frame stack found"<<endl;
+    recalcFrames(doc, 0, doc->pageCount());
 }
 
 void KWFrameList::createFrameList(KWFrame *f, KWDocument *doc) {

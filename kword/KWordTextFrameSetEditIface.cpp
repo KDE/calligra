@@ -20,9 +20,9 @@
 #include "KWordTextFrameSetEditIface.h"
 
 #include "KWTextFrameSet.h"
-#include <kapplication.h>
 #include <dcopclient.h>
 #include "defs.h"
+
 KWordTextFrameSetEditIface::KWordTextFrameSetEditIface( KWTextFrameSetEdit *_framesetedit )
     :KoTextViewIface(_framesetedit)
 {

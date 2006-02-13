@@ -54,7 +54,6 @@
 #include <KoOasisContext.h>
 #include <KoStore.h>
 
-#include <kapplication.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kmessagebox.h>
@@ -68,6 +67,7 @@
 #include <qregexp.h>
 
 #include <assert.h>
+#include <qapplication.h>
 
 //#define DEBUG_MARGINS
 //#define DEBUG_FORMATVERTICALLY
@@ -566,6 +566,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
                                         const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                         KWFrameSetEdit *edit, KWViewMode *viewMode )
 {
+    Q_ASSERT( r.isValid() );
     // In this method the painter is translated to the frame's coordinate system
     // (in the first frame (0,0) will be its topleft, in the second frame it will be (0,internalY) etc.
 

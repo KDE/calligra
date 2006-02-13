@@ -4127,7 +4127,7 @@ QString KWDocument::generateFramesetName( const QString & templateName )
 }
 
 void KWDocument::fixZOrders() {
-    KWFrame *frameFixed = 0;
+    //KWFrame *frameFixed = 0;
     for (int pgnum = startPage() ; pgnum <= lastPage() ; pgnum++) {
         QPtrList<KWFrame> frames = framesInPage(pgnum);
         // scan this page to see if we need to fixup:
@@ -4156,7 +4156,7 @@ void KWDocument::fixZOrders() {
                     continue;
                 current_zorder++;
                 fr->setZOrder(current_zorder);
-                frameFixed = f;
+                //frameFixed = f;
             }
         }
 
@@ -4167,8 +4167,9 @@ void KWDocument::fixZOrders() {
             lowerMainFrames( pgnum );
         }
     }
-    if ( frameFixed )
-        frameFixed->frameStack()->recalcAllFrames();
+    //if ( frameFixed )
+    //    frameFixed->frameStack()->recalcAllFrames();
+    KWFrameList::recalcAllFrames(this);
 }
 
 void KWDocument::lowerMainFrames( int pageNum )
