@@ -4024,7 +4024,9 @@ QString Cell::textDisplaying( QPainter &_painter )
     // when the text finally fits, return it.
     for ( int i = d->strOutText.length(); i != 0; i-- ) 
     {
-      if ( a == Format::Left || a == Format::Undefined )
+      //Note that numbers are always treated as left-aligned since if we have to cut digits off, they should
+      //always be the least significant ones at the end of the string
+      if ( a == Format::Left || a == Format::Undefined || isNumeric)
   		tmp = d->strOutText.left(i);
       else if ( a == Format::Right)
   		tmp = d->strOutText.right(i);

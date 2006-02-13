@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-
+  
+   Copyright 2006 Robert Knight <robertknight@gmail.com>
    Copyright 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
@@ -3540,6 +3541,22 @@ void Canvas::createEditor(bool captureArrowKeys)
 bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 {
   Sheet * sheet = activeSheet();
+
+  //Ensure that the choice always has a sheet associated
+  //with it.
+  //
+  //FIXME:  This really doesn't make sense.  The concept of 
+  //the 'choice selection' having only one sheet is wrong - because
+  //different parts of the choice selection may be on different 
+  //sheets (at least, this doesn't work at the moment, but it should
+  //do).  REVIEW after KSpread 1.5 has been released.
+  //
+  //This is a temporary workaround for now.  It fixes the problem
+  //where the editor would be hidden because the choice's sheet
+  //was not the active sheet.
+  if (!choice()->sheet())
+  	choice()->setSheet( activeSheet() );
+  
   if ( !d->cellEditor )
   {
     Cell * cell = sheet->nonDefaultCell( marker().x(), marker().y(), false );
