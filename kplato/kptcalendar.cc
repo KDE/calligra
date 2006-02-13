@@ -296,25 +296,27 @@ CalendarWeekdays::CalendarWeekdays()
     for (int i=0; i < 7; ++i) {
         m_weekdays.append(new CalendarDay());
     }
-    m_weekdays.setAutoDelete(true);
+    m_weekdays.setAutoDelete(false);
     //kdDebug()<<k_funcinfo<<"<---"<<endl;
 }
 
 CalendarWeekdays::CalendarWeekdays(CalendarWeekdays *weekdays)
     : m_weekdays() {
     //kdDebug()<<k_funcinfo<<"--->"<<endl;
-    m_weekdays.setAutoDelete(true);
     copy(*weekdays);
     //kdDebug()<<k_funcinfo<<"<---"<<endl;
 }
 
 CalendarWeekdays::~CalendarWeekdays() {
+    m_weekdays.setAutoDelete(true);
     //kdDebug()<<k_funcinfo<<endl;
 }
 
 const CalendarWeekdays &CalendarWeekdays::copy(const CalendarWeekdays &weekdays) {
     //kdDebug()<<k_funcinfo<<endl;
+    m_weekdays.setAutoDelete(true);
     m_weekdays.clear();
+    m_weekdays.setAutoDelete(false);
     QPtrListIterator<CalendarDay> it = weekdays.weekdays();
     for (; it.current(); ++it) {
         m_weekdays.append(new CalendarDay(it.current()));
