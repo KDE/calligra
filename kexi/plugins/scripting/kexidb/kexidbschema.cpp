@@ -21,6 +21,8 @@
 #include "kexidbschema.h"
 #include "kexidbfieldlist.h"
 
+#include <qregexp.h>
+
 #include <api/variant.h>
 
 using namespace Kross::KexiDB;
@@ -172,23 +174,44 @@ Kross::Api::Object::Ptr KexiDBQuerySchema::setStatement(Kross::Api::List::Ptr ar
 
 Kross::Api::Object::Ptr KexiDBQuerySchema::setWhereExpression(Kross::Api::List::Ptr args)
 {
-    QString whereexpression = Kross::Api::Variant::toString(args->item(0));
-    QStringList expressions = QStringList::split(",",whereexpression);
-
     ::KexiDB::BaseExpr* oldexpr = static_cast< ::KexiDB::QuerySchema* >(m_schema)->whereExpression();
+
+    ///@todo use ::KexiDB::Parser for such kind of parser-functionality.
+    QString s = Kross::Api::Variant::toString(args->item(0));
     try {
-        for(QStringList::Iterator it = expressions.begin(); it != expressions.end(); ++it) {
-            QStringList list = QStringList::split("=",*it);
-            if(list.count() != 2)
-                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: Syntax error")) );
+        QRegExp re("[\"',]{1,1}");
+        while(true) {
+            s.remove(QRegExp("^[\\s,]+"));
+            int pos = s.find('=');
+            if(pos < 0) break;
+            QString key = s.left(pos).stripWhiteSpace();
+            s = s.mid(pos + 1).stripWhiteSpace();
 
-            ::KexiDB::Field* field = static_cast< ::KexiDB::QuerySchema* >(m_schema)->field( list[0] );
+            QString value;
+            int sp = s.find(re);
+            if(sp >= 0) {
+                if(re.cap(0) == ",") {
+                    value = s.left(sp).stripWhiteSpace();
+                    s = s.mid(sp+1).stripWhiteSpace();
+                }
+                else {
+                    int ep = s.find(re.cap(0),sp+1);
+                    value = s.mid(sp+1,ep-1);
+                    s = s.mid(ep + 1);
+                }
+            }
+            else {
+                value = s;
+                s = QString::null;
+            }
+
+            ::KexiDB::Field* field = static_cast< ::KexiDB::QuerySchema* >(m_schema)->field(key);
             if(! field)
-                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: Field \"%1\" does not exists in tableschema \"%2\".").arg(list[0]).arg(m_schema->name())) );
+                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: Field \"%1\" does not exists in tableschema \"%2\".").arg(key).arg(m_schema->name())) );
 
-            QVariant value(list[1]);
-            if(! value.cast(field->variantType()))
-                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: The for Field \"%1\" defined value is of type \"%2\" rather then the expected type \"%3\"").arg(list[0]).arg(value.typeName()).arg(field->variantType())) );
+            QVariant v(value);
+            if(! v.cast(field->variantType()))
+                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: The for Field \"%1\" defined value is of type \"%2\" rather then the expected type \"%3\"").arg(key).arg(v.typeName()).arg(field->variantType())) );
 
             static_cast< ::KexiDB::QuerySchema* >(m_schema)->addToWhereExpression(field,value);
         }
