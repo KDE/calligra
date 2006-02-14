@@ -57,7 +57,7 @@ namespace Kross { namespace Api {
              *
              * \param guiclient The KXMLGUIClient this \a ScriptGUIClient
              *        is a child of.
-             * \param parent The parent QObject. If defined Qt will handle
+             * \param parent The parent QWidget. If defined Qt will handle
              *        freeing this \a ScriptGUIClient instance else the
              *        caller has to take care of freeing this instance
              *        if not needed any longer.
@@ -200,6 +200,7 @@ namespace Kross { namespace Api {
             void successfullyExecuted();
 
         signals:
+            /// Emitted if a \a ScriptActionCollection instances changed.
             void collectionChanged(ScriptActionCollection*);
             /// This signal is emited when the execution of a script is finished
             void executionFinished(const Kross::Api::ScriptAction* );

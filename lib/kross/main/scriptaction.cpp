@@ -37,21 +37,47 @@ namespace Kross { namespace Api {
     class ScriptActionPrivate
     {
         public:
-
+            /**
+            * The packagepath is the directory that belongs to this
+            * \a ScriptAction instance. If this \a ScriptAction points
+            * to a scriptfile the packagepath will be the directory
+            * the scriptfile is located in.
+            */
             QString packagepath;
 
             /**
-            * List of all kind of logs this \a ScriptAction does
-            * remember.
+            * List of logs this \a ScriptAction has. Initialization,
+            * execution and finalization should be logged for
+            * example. So, the logs are usuabled to provide some
+            * more detailed visual information to the user what
+            * our \a ScriptAction did so far.
             */
             QStringList logs;
 
+            /**
+            * The versionnumber this \a ScriptAction has. We are using
+            * the version to handle \a ScriptAction instances which
+            * have the same unique \a ScriptAction::name() . If the name
+            * is the same, we are able to use the version to determinate
+            * which \a ScriptAction is newer / replaces the other.
+            */
             int version;
 
+            /**
+            * The description used to provide a way to the user to describe
+            * the \a ScriptAction with a longer string.
+            */
             QString description;
 
+            /**
+            * List of \a ScriptActionCollection instances this \a ScriptAction
+            * is attached to.
+            */
             QValueList<ScriptActionCollection*> collections;
 
+            /**
+            * Constructor.
+            */
             explicit ScriptActionPrivate() : version(0) {}
     };
 

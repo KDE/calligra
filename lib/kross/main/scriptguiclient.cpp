@@ -44,9 +44,21 @@ namespace Kross { namespace Api {
     class ScriptGUIClientPrivate
     {
         public:
+            /**
+             * The \a KXMLGUIClient that is parent of the \a ScriptGUIClient
+             * instance.
+             */
             KXMLGUIClient* guiclient;
+
+            /**
+             * The optional parent QWidget widget.
+             */
             QWidget* parent;
 
+            /**
+             * Map of \a ScriptActionCollection instances the \a ScriptGUIClient
+             * is attached to.
+             */
             QMap<QString, ScriptActionCollection*> collections;
     };
 

@@ -81,7 +81,7 @@ namespace Kross { namespace Api {
             virtual ~ScriptContainer();
 
             /**
-             * Return the unique name this ScriptContainer is
+             * \return the unique name this ScriptContainer is
              * reachable as.
              */
             const QString& getName() const;
