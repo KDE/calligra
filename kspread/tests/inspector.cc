@@ -118,6 +118,15 @@ void Inspector::Private::handleFormat()
   new QListViewItem( formatView, "Protected", format->hasProperty( Format::PVerticalText ) 
     ? "Not specified" : boolAsString( format->isProtected(col, row) ) );
   new QListViewItem( formatView, "Vertical Text", boolAsString( format->verticalText(col, row ) ) );
+
+  Format::Currency currrency;
+  bool valid = format->currencyInfo(currrency);
+  new QListViewItem( formatView, "Currency symbol", valid ? currrency.symbol : "Invalid" );
+  bool ok = false;
+  QString currencyType;
+  if (valid)
+    currencyType = Currency::getChooseString(currrency.type, ok);
+  new QListViewItem( formatView, "Currency type", valid && ok ? currencyType : "Invalid" );
 }
 
 void Inspector::Private::handleSheet()

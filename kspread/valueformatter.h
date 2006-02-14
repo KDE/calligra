@@ -48,7 +48,8 @@ class ValueFormatter {
       FormatType fmtType, int precision = -1,
       Format::FloatFormat floatFormat = Format::OnlyNegSigned,
       const QString &prefix = QString::null,
-      const QString &postfix = QString::null);
+      const QString &postfix = QString::null,
+      const QString &currencySymbol = QString::null);
 
   /** create a date format */
   QString dateFormat (const QDate &_date, FormatType fmtType);
@@ -67,7 +68,7 @@ class ValueFormatter {
 
   /** create a number format */
   QString createNumberFormat (double value, int precision, FormatType fmt,
-      bool alwaysSigned);
+      bool alwaysSigned, const QString& currencySymbol);
   
   /** create a fraction format */
   QString fractionFormat (double value, FormatType fmtType);

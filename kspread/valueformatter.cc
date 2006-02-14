@@ -44,20 +44,23 @@ QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
     return errorFormat (cell);
 
   QString str;
-  
+
   Format::FloatFormat floatFormat =
       cell->format()->floatFormat (cell->column(), cell->row());
   int precision = cell->format()->precision (cell->column(), cell->row());
   QString prefix = cell->format()->prefix (cell->column(), cell->row());
   QString postfix = cell->format()->postfix (cell->column(), cell->row());
+  Format::Currency currency;
+  bool valid = cell->format()->currencyInfo(currency);
+  QString currencySymbol = valid ? currency.symbol : QString::null;
 
   return formatText (cell->value(), fmtType, precision,
-      floatFormat, prefix, postfix);
+      floatFormat, prefix, postfix, currencySymbol);
 }
 
 QString ValueFormatter::formatText (const Value &value,
     FormatType fmtType, int precision, Format::FloatFormat floatFormat,
-    const QString &prefix, const QString &postfix)
+    const QString &prefix, const QString &postfix, const QString &currencySymbol)
 {
   //if we have an array, use its first element
   if (value.isArray())
@@ -107,20 +110,20 @@ QString ValueFormatter::formatText (const Value &value,
 
     // Make a string out of it.
     str = createNumberFormat (v, precision, fmtType,
-        (floatFormat == Format::AlwaysSigned));
+        (floatFormat == Format::AlwaysSigned), currencySymbol);
 
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point
     if (precision == -1)
       removeTrailingZeros (str, decimal_point);
   }
-    
+
   if (!prefix.isEmpty())
     str = prefix + ' ' + str;
 
   if( !postfix.isEmpty())
     str += ' ' + postfix;
-  
+
   //kdDebug() << "ValueFormatter says: " << str << endl;
   return str;
 }
@@ -229,7 +232,7 @@ void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
 }
 
 QString ValueFormatter::createNumberFormat ( double value, int precision,
-    FormatType fmt, bool alwaysSigned)
+    FormatType fmt, bool alwaysSigned, const QString& currencySymbol)
 {
   // if precision is -1, ask for a huge number of decimals, we'll remove
   // the zeros later. Is 8 ok ?
@@ -265,8 +268,8 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
       localizedNumber = converter->locale()->formatNumber (value, p)+ " %";
       break;
     case Money_format:
-      localizedNumber = converter->locale()->formatMoney (value, 
-          converter->locale()->currencySymbol(), p );
+      localizedNumber = converter->locale()->formatMoney (value,
+        currencySymbol.isEmpty() ? converter->locale()->currencySymbol() : currencySymbol, p );
       break;
     case Scientific_format:
       decimal_point = converter->locale()->decimalSymbol()[0];

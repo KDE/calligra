@@ -730,6 +730,10 @@ void FormatManipulator::doWork(Format* format,
   if (m_properties & Format::PFormatType)
   {
     format->setFormatType(m_formatType);
+    if (m_formatType == Money_format)
+    {
+      format->setCurrency(m_currencyType, m_currencySymbol);
+    }
   }
   if (m_properties & Format::PComment)
   {
