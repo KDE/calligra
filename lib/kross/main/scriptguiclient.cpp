@@ -208,8 +208,32 @@ bool ScriptGUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, 
     for(uint i = 0; i < nodelistcount; i++) {
         ScriptAction::Ptr action = new ScriptAction(scriptconfigfile, nodelist.item(i).toElement());
 
-        if(installedcollection)
+        if(installedcollection) {
+            ScriptAction::Ptr otheraction = installedcollection->action( action->name() );
+            if(otheraction) {
+                // There exists already an action with the same name. Use the versionnumber
+                // to see if one of them is newer and if that's the case display only
+                // the newer aka those with the highest version.
+                if(action->version() < otheraction->version() && action->version() >= 0) {
+                    // Just don't do anything with the above created action. The
+                    // shared pointer will take care of freeing the instance.
+                    continue;
+                }
+                else if(action->version() > otheraction->version() && otheraction->version() >= 0) {
+                    // The previously added scriptaction isn't up-to-date any
+                    // longer. Remove it from the list of installed scripts.
+                    otheraction->finalize();
+                    installedcollection->detach(otheraction);
+                    //otheraction->detachAll() //FIXME: why it crashes with detachAll() ?
+                }
+                else {
+                    // else just print a warning and fall through (so, install the action
+                    // and don't care any longer of the duplicated name)...
+                    kdWarning() << QString("Kross::Api::ScriptGUIClient::loadScriptConfigDocument: There exists already a scriptaction with name \"%1\". Added anyway...").arg(action->name()) << endl;
+                }
+            }
             installedcollection->attach( action );
+        }
 
         connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
                 this, SLOT( executionFailed(const QString&, const QString&) ));

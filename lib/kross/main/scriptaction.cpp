@@ -46,9 +46,13 @@ namespace Kross { namespace Api {
             */
             QStringList logs;
 
+            int version;
+
             QString description;
 
             QValueList<ScriptActionCollection*> collections;
+
+            explicit ScriptActionPrivate() : version(0) {}
     };
 
 }}
@@ -86,6 +90,11 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
     QString description = element.attribute("description");
     QString file = element.attribute("file");
     QString icon = element.attribute("icon");
+
+    QString version = element.attribute("version");
+    bool ok;
+    int v = version.toInt(&ok);
+    if(ok) d->version = v;
 
     if(file.isEmpty()) {
         if(text.isEmpty())
@@ -142,6 +151,11 @@ ScriptAction::~ScriptAction()
     //kdDebug() << QString("Kross::Api::ScriptAction::~ScriptAction() name='%1' text='%2'").arg(name()).arg(text()) << endl;
     detachAll();
     delete d;
+}
+
+int ScriptAction::version() const
+{
+    return d->version;
 }
 
 const QString ScriptAction::getDescription() const

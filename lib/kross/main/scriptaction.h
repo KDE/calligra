@@ -86,6 +86,14 @@ namespace Kross { namespace Api {
             virtual ~ScriptAction();
 
             /**
+             * \return the version this script has. Versions are used
+             * to be able to manage different versions of the same
+             * script. The version is 0 by default if not defined to
+             * something else in the rc-file.
+             */
+            int version() const;
+
+            /**
              * \return the description for this \a ScriptAction has.
              */
             const QString getDescription() const;
@@ -204,6 +212,15 @@ namespace Kross { namespace Api {
              * updated else its false.
              */
             bool m_dirty;
+
+            /**
+             * Copy-constructor. The cctor is private cause instances
+             * of this class shouldn't be copied. If that changes one
+             * day, don't forgot that it's needed to copy the private
+             * member variables as well or we may end in dirty
+             * crashes :)
+             */
+            ScriptActionCollection(const ScriptActionCollection&) {}
 
         public:
 
