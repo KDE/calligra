@@ -160,6 +160,15 @@ signals:
      * You can use this to update the GUI, for instance.
      */
     void commandExecuted();
+
+    /**
+     * Emitted every time a command is executed
+     * (whether by addCommand, undo or redo).
+     * You can use this to update the GUI, for instance.
+     * @param command was executed
+     */
+    void commandExecuted(KCommand *command);
+
     /**
      * Emitted every time we reach the index where you
      * saved the document for the last time. See @ref #documentSaved
