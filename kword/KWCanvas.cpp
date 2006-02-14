@@ -48,7 +48,7 @@
 
 #include <KoStore.h>
 #include <KoStoreDrag.h>
-#include <koPictureCollection.h>
+#include <KoPictureCollection.h>
 
 #include <ktempfile.h>
 #include <klocale.h>

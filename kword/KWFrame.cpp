@@ -29,9 +29,9 @@
 #include "KWCanvas.h"
 
 #include <KoOasisContext.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-#include <koStyleStack.h>
+#include <KoStyleStack.h>
 
 #include <kcommand.h>
 #include <kdebug.h>

@@ -34,7 +34,7 @@
 #include "KWFrameView.h"
 
 #include <KoOasisContext.h>
-#include <koxmlns.h>
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
 #include <qpopupmenu.h>
