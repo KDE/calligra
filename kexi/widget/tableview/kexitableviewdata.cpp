@@ -768,8 +768,10 @@ void KexiTableViewData::clearInternal()
 	const uint c = count();
 	for (uint i=0; i<c; i++) {
 		removeLast();
+#ifndef KEXI_NO_PROCESS_EVENTS
 		if (i % 1000 == 0)
 			qApp->processEvents( 1 );
+#endif
 	}
 }
 
@@ -816,8 +818,10 @@ void KexiTableViewData::preloadAllRows()
 		m_cursor->storeCurrentRow(*item);
 		append( item );
 		m_cursor->moveNext();
+#ifndef KEXI_NO_PROCESS_EVENTS
 		if ((i % 1000) == 0)
 			qApp->processEvents( 1 );
+#endif
 	}
 }
 

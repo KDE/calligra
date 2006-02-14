@@ -20,7 +20,10 @@
 
 #include "keximainwindowimpl.h"
 
+#include <unistd.h>
+
 #include <qapplication.h>
+#include <qeventloop.h>
 #include <qfile.h>
 #include <qtimer.h>
 #include <qobjectlist.h>
@@ -28,6 +31,7 @@
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qmutex.h>
+#include <qwaitcondition.h>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -71,7 +75,7 @@
 #include "kexi.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
-//#include "kde2_closebutton.xpm"
+#include "kde2_closebutton.xpm"
 
 #include <widget/kexipropertyeditorview.h>
 #include <koproperty/editor.h>
@@ -101,7 +105,7 @@
 //#define KEXI_NO_CTXT_HELP 1
 
 #ifndef KEXI_NO_CTXT_HELP
-#include "kexicontexthelp.h"
+#include <kexicontexthelp.h>
 #endif
 
 #ifdef HAVE_KNEWSTUFF
@@ -253,9 +257,9 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 		//create special close button as corner widget for IDEAl mode
 		QToolButton *closeButton = new QToolButton( tabWidget() );
 		closeButton->setAutoRaise( true );
-//		closeButton->setPixmap( QPixmap( kde2_closebutton ) );
+		closeButton->setPixmap( QPixmap( kde2_closebutton ) );
 		closeButton->setPaletteBackgroundColor(closeButton->palette().active().background()); 
-		closeButton->setIconSet(SmallIconSet("tab_remove"));
+//		closeButton->setIconSet(SmallIconSet("tab_remove"));
 		tabWidget()->setCornerWidget( closeButton, Qt::TopRight );
 		QToolTip::add(closeButton, 
 			i18n("Close the current tab page in Kexi tab interface", "Close the current tab"));
@@ -1140,6 +1144,14 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 
 tristate KexiMainWindowImpl::closeProject()
 {
+#ifndef KEXI_NO_PENDING_DIALOGS
+	if (d->pendingDialogsExist()) {
+		kdDebug() << "KexiMainWindowImpl::closeProject() pendingDialogsExist..." << endl;
+		d->actionToExecuteWhenPendingJobsAreFinished = Private::CloseProjectAction;
+		return cancelled;
+	}
+#endif
+
 	d->saveSettingsForShowProjectNavigator = d->prj; //only save nav. visibility setting is project is opened
 	if (!d->prj) {
 		return true;
@@ -1500,6 +1512,7 @@ void KexiMainWindowImpl::slotLastChildViewClosed() //slotLastChildFrmClosed()
 {
 	if (m_pDocumentViews->count()>0) //a fix for KMDI bug (will be fixed in KDE 3.4)
 		return;
+
 	slotCaptionForCurrentMDIChild(false);
 	activeWindowChanged(0);
 
@@ -1535,6 +1548,13 @@ KexiMainWindowImpl::closeEvent(QCloseEvent *ev)
 bool
 KexiMainWindowImpl::queryClose()
 {
+#ifndef KEXI_NO_PENDING_DIALOGS
+	if (d->pendingDialogsExist()) {
+		kdDebug() << "KexiMainWindowImpl::queryClose() pendingDialogsExist..." << endl;
+		d->actionToExecuteWhenPendingJobsAreFinished = Private::QuitAction;
+		return false;
+	}
+#endif
 //	storeSettings();
 	const tristate res = closeProject();
 	if (~res)
@@ -2009,8 +2029,12 @@ bool
 KexiMainWindowImpl::activateWindow(int id)
 {
 	kdDebug() << "KexiMainWindowImpl::activateWindow()" << endl;
-	bool pending;
-	return activateWindow( d->openedDialogFor( id, pending ) );
+#ifndef KEXI_NO_PENDING_DIALOGS
+	Private::PendingJobType pendingType;
+	return activateWindow( d->openedDialogFor( id, pendingType ) );
+#else
+	return activateWindow( d->openedDialogFor( id ) );
+#endif
 }
 
 bool
@@ -2030,6 +2054,9 @@ KexiMainWindowImpl::childClosed(KMdiChildView *v)
 {
 	KexiDialogBase *dlg = static_cast<KexiDialogBase *>(v);
 	d->removeDialog(dlg->id());
+#ifndef KEXI_NO_PENDING_DIALOGS
+	d->removePendingDialog(dlg->id());
+#endif
 
 	//focus navigator if nothing else available
 	if (d->openedDialogsCount() == 0)
@@ -2823,10 +2850,15 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg)
 
 tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar)
 {
-	if (!dlg)
+	if (!dlg) 
 		return true;
 	if (d->insideCloseDialog)
 		return true;
+
+#ifndef KEXI_NO_PENDING_DIALOGS
+	d->addItemToPendingDialogs(dlg->partItem(), Private::DialogClosingJob);
+#endif
+
 	d->insideCloseDialog = true;
 
 	if (dlg == d->curDialog && !dlg->isAttached()) {
@@ -2873,6 +2905,9 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 			saveChanges,
 			discardChanges);
 		if (questionRes==KMessageBox::Cancel) {
+#ifndef KEXI_NO_PENDING_DIALOGS
+			d->removePendingDialog(dlg->id());
+#endif
 			d->insideCloseDialog = false;
 			d->windowsToClose.clear(); //give up with 'close all'
 			return cancelled;
@@ -2883,6 +2918,9 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 			tristate res = saveObject( dlg, QString::null, true /*dontAsk*/ );
 			if (!res || ~res) {
 //js:TODO show error info; (retry/ignore/cancel)
+#ifndef KEXI_NO_PENDING_DIALOGS
+				d->removePendingDialog(dlg->id());
+#endif
 				d->insideCloseDialog = false;
 				d->windowsToClose.clear(); //give up with 'close all'
 				return res;
@@ -2896,6 +2934,9 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	if (remove_on_closing) {
 		//we won't save this object, and it was never saved -remove it
 		if (!removeObject( dlg->partItem(), true )) {
+#ifndef KEXI_NO_PENDING_DIALOGS
+			d->removePendingDialog(dlg->id());
+#endif
 			//msg?
 			//TODO: ask if we'd continue and return true/false
 			d->insideCloseDialog = false;
@@ -2963,6 +3004,15 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 	d->insideCloseDialog = false;
 	if (!d->windowsToClose.isEmpty()) //continue 'close all'
 		closeDialog(d->windowsToClose.take(0), true);
+
+#ifndef KEXI_NO_PENDING_DIALOGS
+	d->removePendingDialog( dlg_id );
+
+	//perform pending global action that was suspended:
+	if (!d->pendingDialogsExist()) {
+		d->executeActionWhenPendingJobsAreFinished();
+	}
+#endif
 	return true;
 }
 
@@ -3209,12 +3259,16 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &opening
 	if (!d->prj || !item)
 		return 0;
 	KexiUtils::WaitCursor wait;
-	bool pending;
-	KexiDialogBase *dlg = d->openedDialogFor( item, pending );
-	if (pending) {
+#ifndef KEXI_NO_PENDING_DIALOGS
+	Private::PendingJobType pendingType;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pendingType );
+	if (pendingType != Private::NoJob) {
 		openingCancelled = true;
 		return 0;
 	}
+#else
+	KexiDialogBase *dlg = d->openedDialogFor( item );
+#endif
 	openingCancelled = false;
 
 	bool needsUpdateViewGUIClient = true;
@@ -3245,7 +3299,9 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &opening
 			d->curDialog ? d->curDialog->currentViewMode() : Kexi::NoViewMode,
 			part, viewMode);
 
-		d->addItemToPendingDialogs(item);
+#ifndef KEXI_NO_PENDING_DIALOGS
+		d->addItemToPendingDialogs(item, Private::DialogOpeningJob);
+#endif
 		dlg = d->prj->openObject(this, *item, viewMode, staticObjectArgs);
 
 //moved up		if (dlg)
@@ -3253,6 +3309,9 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &opening
 	}
 
 	if (!dlg || !activateWindow(dlg)) {
+#ifndef KEXI_NO_PENDING_DIALOGS
+		d->removePendingDialog(item->identifier());
+#endif
 		updateCustomPropertyPanelTabs(0, Kexi::NoViewMode); //revert
 		//js TODO: add error msg...
 		return 0;
@@ -3271,6 +3330,12 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &opening
 	if (viewMode!=dlg->currentViewMode())
 		invalidateSharedActions();
 
+#ifndef KEXI_NO_PENDING_DIALOGS
+	//perform pending global action that was suspended:
+	if (!d->pendingDialogsExist()) {
+		d->executeActionWhenPendingJobsAreFinished();
+	}
+#endif
 	return dlg;
 }
 
@@ -3287,12 +3352,16 @@ KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode,
 {
 	if (!d->prj || !item)
 		return false;
-	bool pending;
-	KexiDialogBase *dlg = d->openedDialogFor( item, pending );
-	if (pending) {
+#ifndef KEXI_NO_PENDING_DIALOGS
+	Private::PendingJobType pendingType;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pendingType );
+	if (pendingType!=Private::NoJob) {
 		openingCancelled = true;
 		return 0;
 	}
+#else
+	KexiDialogBase *dlg = d->openedDialogFor( item );
+#endif
 	openingCancelled = false;
 	if (dlg) {
 		if (activateWindow(dlg)) {//item->identifier())) {//just activate
@@ -3395,11 +3464,15 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	}
 
 	tristate res;
-	bool pending;
-	KexiDialogBase *dlg = d->openedDialogFor( item, pending );
-	if (pending) {
+#ifndef KEXI_NO_PENDING_DIALOGS
+	Private::PendingJobType pendingType;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pendingType );
+	if (pendingType!=Private::NoJob) {
 		return cancelled;
 	}
+#else
+	KexiDialogBase *dlg = d->openedDialogFor( item );
+#endif
 
 	//also close 'print setup' dialog for this item, if any
 	KexiDialogBase * pageSetupDlg = d->pageSetupDialogs[item->identifier()];
@@ -3457,9 +3530,15 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 
 void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item, const QCString& /*oldName*/)
 {
-	bool pending;
-	KexiDialogBase *dlg = d->openedDialogFor( &item, pending );
-	if (pending || !dlg)
+#ifndef KEXI_NO_PENDING_DIALOGS
+	Private::PendingJobType pendingType;
+	KexiDialogBase *dlg = d->openedDialogFor( &item, pendingType );
+	if (pendingType!=Private::NoJob)
+		return;
+#else
+	KexiDialogBase *dlg = d->openedDialogFor( &item );
+#endif
+	if (!dlg)
 		return;
 
 	//change item
@@ -3876,10 +3955,14 @@ tristate KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActio
 		return true;
 	}
 
-	bool pending;
-	KexiDialogBase *dlg = d->openedDialogFor( item, pending );
-	if (pending)
+#ifndef KEXI_NO_PENDING_DIALOGS
+	Private::PendingJobType pendingType;
+	KexiDialogBase *dlg = d->openedDialogFor( item, pendingType );
+	if (pendingType!=Private::NoJob)
 		return cancelled;
+#else
+	KexiDialogBase *dlg = d->openedDialogFor( item );
+#endif
 
 	if (dlg) {
 		// accept row changes

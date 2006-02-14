@@ -18,6 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifdef KEXI_NO_PROCESS_EVENTS
+# define KEXI_NO_PENDING_DIALOGS
+#endif
+
 //! @internal safer dictionary
 typedef QMap< int, QGuardedPtr<KexiDialogBase> > KexiDialogDict; 
 
@@ -53,6 +57,10 @@ public:
 		action_open_recent_connections_title_id = -1;
 		forceDialogClosing=false;
 		insideCloseDialog=false;
+#ifndef KEXI_NO_PENDING_DIALOGS
+		actionToExecuteWhenPendingJobsAreFinished = NoAction;
+#endif
+//		callSlotLastChildViewClosedAfterCloseDialog=false;
 		createMenu=0;
 		showImportantInfoOnStartup=true;
 //		disableErrorMessages=false;
@@ -79,56 +87,94 @@ public:
 	~Private() {
 	}
 
-	KexiDialogBase *openedDialogFor( const KexiPart::Item* item, bool &pending )
+#ifndef KEXI_NO_PENDING_DIALOGS
+	//! Job type. Currently used for marking items as being opened or closed.
+	enum PendingJobType {
+		NoJob = 0,
+		DialogOpeningJob,
+		DialogClosingJob
+	};
+
+	KexiDialogBase *openedDialogFor( const KexiPart::Item* item, PendingJobType &pendingType )
 	{
-		return openedDialogFor( item->identifier(), pending );
+		return openedDialogFor( item->identifier(), pendingType );
 	}
 
-	KexiDialogBase *openedDialogFor( int identifier, bool &pending )
+	KexiDialogBase *openedDialogFor( int identifier, PendingJobType &pendingType )
 	{
-		QMutexLocker dialogsLocker( &dialogsMutex );
-		if (pendingDialogs[ identifier ]) {
-			pending = true;
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
+		pendingType = pendingDialogs[ identifier ];
+		if (pendingType == DialogOpeningJob) {
 			return 0;
 		}
-		pending = false;
 		return (KexiDialogBase*)dialogs[ identifier ];
 	}
+#else
+	KexiDialogBase *openedDialogFor( const KexiPart::Item* item )
+	{
+		return openedDialogFor( item->identifier() );
+	}
+
+	KexiDialogBase *openedDialogFor( int identifier )
+	{
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
+		return (KexiDialogBase*)dialogs[ identifier ];
+	}
+#endif
 
 	void insertDialog(KexiDialogBase *dlg) {
-		QMutexLocker dialogsLocker( &dialogsMutex );
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
 		dialogs.insert(dlg->id(), QGuardedPtr<KexiDialogBase>(dlg));
+#ifndef KEXI_NO_PENDING_DIALOGS
 		pendingDialogs.remove(dlg->id());
+#endif
 	}
 
-	void addItemToPendingDialogs(const KexiPart::Item* item) {
-		QMutexLocker dialogsLocker( &dialogsMutex );
-		pendingDialogs.replace( item->identifier(), (char*)1);
+#ifndef KEXI_NO_PENDING_DIALOGS
+	void addItemToPendingDialogs(const KexiPart::Item* item, PendingJobType jobType) {
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
+		pendingDialogs.replace( item->identifier(), jobType );
 	}
+
+	bool pendingDialogsExist() {
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
+		return !pendingDialogs.isEmpty();
+	}
+#endif
 
 	void updateDialogId(KexiDialogBase *dlg, int oldItemID) {
-		QMutexLocker dialogsLocker( &dialogsMutex );
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
 		dialogs.remove(oldItemID);
+#ifndef KEXI_NO_PENDING_DIALOGS
 		pendingDialogs.remove(oldItemID);
+#endif
 		dialogs.insert(dlg->id(), QGuardedPtr<KexiDialogBase>(dlg));
 	}
 
 	void removeDialog(int identifier) {
-		QMutexLocker dialogsLocker( &dialogsMutex );
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
 		dialogs.remove(identifier);
-		pendingDialogs.remove(identifier);
 	}
 
+#ifndef KEXI_NO_PENDING_DIALOGS
+	void removePendingDialog(int identifier) {
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
+		pendingDialogs.remove(identifier);
+	}
+#endif
+
 	uint openedDialogsCount() {
-		QMutexLocker dialogsLocker( &dialogsMutex );
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
 		return dialogs.count();
 	}
 
 	//! Used in KexiMainWindowImple::closeProject()
 	void clearDialogs() {
-		QMutexLocker dialogsLocker( &dialogsMutex );
+//todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
 		dialogs.clear();
+#ifndef KEXI_NO_PENDING_DIALOGS
 		pendingDialogs.clear();
+#endif
 	}
 
 	/*! Toggles last checked view mode radio action, if available. */
@@ -361,6 +407,30 @@ void updatePropEditorDockWidthInfo() {
 		//! on dialog removing
 		bool insideCloseDialog : 1;
 
+#ifndef KEXI_NO_PENDING_DIALOGS
+		//! Used in executeActionWhenPendingJobsAreFinished().
+		enum ActionToExecuteWhenPendingJobsAreFinished {
+			NoAction,
+			QuitAction,
+			CloseProjectAction
+		};
+		ActionToExecuteWhenPendingJobsAreFinished actionToExecuteWhenPendingJobsAreFinished;
+
+		void executeActionWhenPendingJobsAreFinished() {
+			ActionToExecuteWhenPendingJobsAreFinished a = actionToExecuteWhenPendingJobsAreFinished;
+			actionToExecuteWhenPendingJobsAreFinished = NoAction;
+			switch (a) {
+				case QuitAction: 
+					qApp->quit();
+					break;
+				case CloseProjectAction:
+					wnd->closeProject();
+					break;
+				default:;
+			}
+		}
+#endif
+
 		//! Used for delayed dialogs closing for 'close all'
 		QPtrList<KexiDialogBase> windowsToClose;
 
@@ -409,6 +479,8 @@ void updatePropEditorDockWidthInfo() {
 protected:
 	//! @todo move to KexiProject
 	KexiDialogDict dialogs;
-	QIntDict<char> pendingDialogs; //!< part item identifiers for dialogs whoose opening has been started
-	QMutex dialogsMutex; //!< used for locking dialogs and pendingDialogs dicts
+#ifndef KEXI_NO_PROCESS_EVENTS
+	QMap<int, PendingJobType> pendingDialogs; //!< part item identifiers for dialogs whoose opening has been started
+//todo(threads)	QMutex dialogsMutex; //!< used for locking dialogs and pendingDialogs dicts
+#endif
 };

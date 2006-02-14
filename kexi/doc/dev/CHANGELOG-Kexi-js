@@ -10,6 +10,14 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-02-10
+Main Window
+- closing dialog is now marked as 'pending job', the same as for opening
+- When there are pending jobs, 'quit' and 'close project' actions are
+  delayed and executed after last pending job finishes. This removed possible 
+  crashes when user closed application's main window (or closed project) 
+  when there are pending jobs.
+
 2006-02-03,07
 Forms
 - fixed painting "geometry" rectangle when inserting new widget

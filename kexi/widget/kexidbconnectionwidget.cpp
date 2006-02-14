@@ -46,6 +46,9 @@
 #include <qthread.h>
 #include <qradiobutton.h>
 
+//! @todo reenable this when implemented
+#define NO_LOAD_DB_LIST
+
 // @internal
 class KexiDBConnectionWidget::Private
 {
@@ -74,6 +77,9 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 	lblEngine->setFocusProxy( m_driversCombo );
 	driversComboLyr->addWidget( m_driversCombo );
 
+#ifdef NO_LOAD_DB_LIST
+	btnLoadDBList->hide();
+#endif
 	btnLoadDBList->setIconSet(SmallIconSet("reload"));
 	QToolTip::add(btnLoadDBList, i18n("Load database list from the server"));
 	QWhatsThis::add(btnLoadDBList, 
@@ -127,7 +133,9 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
 	else {
 		nameLabel->show();
 		nameCombo->show();
+#ifndef NO_LOAD_DB_LIST
 		btnLoadDBList->show();
+#endif
 		nameCombo->setCurrentText(m_data.databaseName());
 		dbGroupBox->setTitle(i18n("Database"));
 	}

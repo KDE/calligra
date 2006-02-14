@@ -7,7 +7,9 @@ contains(CONFIG,debug) {
 	win32:QMAKE_LFLAGS += /NODEFAULTLIB:LIBCMTD.LIB
 }
 !contains(CONFIG,debug) {
-	win32:LIBS += $(MYSQL_LIB)/opt/mysqlclient.lib
+#	win32:LIBS += $(MYSQL_LIB)/opt/mysqlclient.lib
+	win32:LIBS += $(MYSQL_LIB)/opt/libmysql.lib
+#	win32:QMAKE_LFLAGS += /NODEFAULTLIB:MSVCRT.LIB
 }
 
 TARGET = kexidb_mysqldriver$$KDELIBDEBUG

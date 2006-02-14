@@ -390,11 +390,11 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - also add this info as "Database>Open Recent" menu subentry
 - display errors when plugin library could not be instantiated due to a broken lib
 - Project Navigator: display multiline item names is needed
+- display progress bar (in the statusbar?) to indicate there're pending jobs
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
 CCPASTEUR: 
-	-why pixmap's code is in kexiproperty/kexipropertybuffer?
 	-perhaps we'd reuse KDE Menu editor GUI?
 
 === KexiDB TODO ===
@@ -494,6 +494,8 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
 - Support for opening .sql files: just import it on opening to in-memory database and dump it back into
   .sql text on exisitng. Add optional compressing.
 - Add support for compressed kexi files (better keep the same .kexi extension instead of .kexiz)
+- Implement tree structures using idea #5 described here http://www.depesz.com/various-sqltrees.php
+  (does pgsql require this hack?)
 
 === KexiDB MySQL Driver TODO ===
 - use InnoDB instead of MyISAM tables because of transactions support
@@ -559,7 +561,7 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
 === Docs TODO ===
 
 -translate the current content from polish to english
--migrate english content to wiki format
+-?? migrate english content to wiki format
 -move polish content to .po translation file
 -Add this to the preface http://encyklopedia.helion.pl/index.php/Kartotekowa_baza_danych
 
@@ -826,3 +828,6 @@ Queries
 - when a field has been added to query, form designer should know about this; 
   now even reopening the form doesn't refresh query schema (only reopening the project)
 
+HOT TODO:
+- ask for password when .kexis or .kexic file has no password defined
+- "save password" flag is not properly saved in .kexis or .kexic files
