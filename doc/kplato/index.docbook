@@ -44,14 +44,14 @@ need them for translation coordination !
 Please respect the format of the date (DD/MM/YYYY) and of the version
 (Major.minor.lesser), it could be used by automation scripts -->
 
-<date>2006-02-07</date>
+<date>2006-02-11</date>
 <releaseinfo>0.5.0</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
 <abstract>
 <para>
-&kplato; is a Project Management and Planning Tool for &kde;.
+&kplato; is a project planning and management application for &kde;.
 </para>
 </abstract>
 
@@ -70,7 +70,8 @@ Please respect the format of the date (DD/MM/YYYY) and of the version
 <para><emphasis>
 &kplato; as included in &koffice; 1.5 is a technology preview
 release and it is not advised to use &kplato; in critical
-production scenarios. Do so at your own risk.
+production scenarios. Do so at your own risk. In this first public release we
+focus on planning and scheduling of projects.
 </emphasis></para>
 <para>
 &kplato; is a project management application and a planning tool.
@@ -86,12 +87,10 @@ be used within larger documents of other &koffice; components.
 <listitem><para>Tasks with dependencies and subtasks.</para></listitem>
 <listitem>
 <itemizedlist>
-<title>Various charts for visualization, like:</title>
+<title>Chart for visualization:</title>
 <listitem><para>Gantt</para></listitem>
-<listitem><para>Pert</para></listitem>
 </itemizedlist>
 </listitem>
-<listitem><para>Reports generation</para></listitem>
 <listitem>
 <itemizedlist><title>Project scheduling</title>
 <listitem><para>Pessimistic,</para></listitem>

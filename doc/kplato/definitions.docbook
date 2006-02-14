@@ -17,7 +17,7 @@
 <title>Gant charts</title>
 <para>A Gantt chart is a popular type of bar chart, that aims to show the timing
 of tasks or activities as they occur over time. Although the Gantt chart did not
-initially indicate the relationships between activities this has become more
+initially indicate the relationships between tasks this has become more
 common in current usage as both timing and interdependencies between tasks can
 be identified.
 </para>
@@ -34,7 +34,7 @@ duration is indicated by the length of the bar.
 Since the initial introduction of Gantt charts, they have become an industry
 standard as a key project management tool for representing the phases, tasks and
 activities that are scheduled as part of a project Work Breakdown Structure
-(WBS) or timeline of activities.
+(WBS) or timeline of tasks.
 </para>
 <para>
 The initial format of the chart was developed by Henry L. Gantt (1861-1919) in
@@ -133,23 +133,9 @@ there is a decision to be made at a milestone.
 </para>
 </sect1>
 
-<sect1 id="terminal-element">
-<title>Terminal element</title>
-<para>
-In project management, a terminal element is the lowest element (task or
-deliverable) in a work breakdown structure (WBS); it is not further subdivided.
-</para>
-<para>
-Terminal elements are the items that are estimated in terms of resource
-requirements, budget and duration, linked by dependencies and scheduled.
-A terminal element is sometimes also called a work package, although the two
-terms are not synonymous.
-</para>
-</sect1>
-
 <sect1 id="critical-path">
 <title>Critical path</title>
-<para>A path is a series of connected activities. In project management, a
+<para>A path is a series of connected tasks. In project management, a
 critical path is the sequence of project network terminal elements with the
 longest overall duration, determining the shortest time to complete the project.
 </para>
