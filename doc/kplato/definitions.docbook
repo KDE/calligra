@@ -8,13 +8,20 @@
 <address><email>annma@kde.org</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Raphael</firstname>
+<surname>Langerhorst</surname>
+<affiliation>
+<address><email>raphael.langerhorst@kdemail.net</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 </chapterinfo> 
 <title>Definitions</title>
 
 <sect1 id="gantt">
-<title>Gant charts</title>
+<title>Gantt charts</title>
 <para>A Gantt chart is a popular type of bar chart, that aims to show the timing
 of tasks or activities as they occur over time. Although the Gantt chart did not
 initially indicate the relationships between tasks this has become more
@@ -107,12 +114,34 @@ parent.</para>
 <para>
 A resource is an item required to to complete a task. Resources can be
 people, equipment, facilities, funding or anything else needed to perform the
-work of a project. Resources are characterized by the fact that they have a
-limited time availability (&ie; an employee that works 8 hours a day, 5 days
-a week).
+work of a project. Resources can have a limited time availability (&ie; an
+employee that works 8 hours a day, 5 days a week). The availability is
+defined by <link linkend="calendar">calendars</link>.
 </para>
 <para>
-In &kplato; resources are persons.
+In &kplato; resources are either persons (work) or machines/devices (material).
+</para>
+</sect1>
+
+<sect1 id="calendar">
+<title>Calendars</title>
+<para>
+A calendar defines at what time a <link linkend="resource">resource</link>
+is available.
+</para>
+<para>
+Calendars can be either a regular working week or special working times
+that can be individually defined for each day. This allows for very subtle
+control over the availability of resources.
+</para>
+<!--
+<para>
+TO BE WRITTEN: WHAT ABOUT HIERARCHICAL CALENDARS?
+</para>
+-->
+<para>
+Every <link linkend="resource">resource</link> is usually connected to a
+calendar.
 </para>
 </sect1>
 
@@ -159,6 +188,28 @@ dependencies.
 </para>
 <para>
 The critical path method was invented by the DuPont corporation.
+</para>
+</sect1>
+
+<sect1 id="scheduling">
+<title>Scheduling</title>
+<para>
+Scheduling is the process of creating a project schedule based on the project
+data like <link linkend="task">tasks</link>,
+<link linkend="resource">resources</link> and
+<link linkend="calendar">calendars</link>. The result can be viewed in a chart,
+like a <link linkend="gantt">gantt chart</link>. &kplato; can also generate
+reports for a project.
+</para>
+<para>
+There are usually various scheduling modes, like optimistic, expected and
+pesimistic scheduling. When creating a task the additional estimation percentage
+for optimistic and pesimistic scheduling can be set. These settings are then
+used for the various scheduling modes.
+</para>
+<para>
+When scheduling a project with &kplato;, you can choose between optimistic,
+expected and pesimistic scheduling.
 </para>
 </sect1>
 
