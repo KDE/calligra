@@ -27,6 +27,10 @@ if test -n "$MAGICK_CONFIG"; then
      then
         AC_DEFINE(HAVE_MAGICK6, 1, [ImageMagick Version 6])
      fi
+     if test "$vers" -ge 6001000
+     then
+        AC_DEFINE(HAVE_MAGICK61, 1, [ImageMagick Version 6.1])
+     fi
      LIBMAGICK_LIBS="`$MAGICK_CONFIG --libs`"
      LIBMAGICK_LDFLAGS="`$MAGICK_CONFIG --ldflags`"
      LIBMAGICK_RPATH=
@@ -54,7 +58,7 @@ AC_SUBST(LIBMAGICK_LIBS)
 AC_SUBST(LIBMAGICK_LDFLAGS)
 AC_SUBST(LIBMAGICK_CPPFLAGS)
 AC_SUBST(LIBMAGICK_RPATH)
-AM_CONDITIONAL(include_imagemagick_filter, test "$have_imagemagick" = "yes")
+AM_CONDITIONAL(include_imagemagick_filter, test "$have_imagemagick" = "yes" -a HAVE_MAGICK61)
 
 # End of ImageMagick check
 

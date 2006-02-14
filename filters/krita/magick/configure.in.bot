@@ -1,6 +1,6 @@
 if test -z "$LIBMAGICK_LIBS"; then
   echo ""
-  echo "You're missing ImageMagick (>=5.5.2). krita's ImageMagick import/export"
+  echo "You're missing ImageMagick (>=6.1.0). krita's ImageMagick import/export"
   echo "filter will not be compiled. You can download ImageMagick from"
   echo "http://www.imagemagick.org/. The ImageMagick filter allows krita to"
   echo "read and write XCF, PSD, GIF, BMP, and many other image formats."
