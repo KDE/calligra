@@ -213,7 +213,7 @@ Kross::Api::Object::Ptr KexiDBQuerySchema::setWhereExpression(Kross::Api::List::
             if(! v.cast(field->variantType()))
                 throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: The for Field \"%1\" defined value is of type \"%2\" rather then the expected type \"%3\"").arg(key).arg(v.typeName()).arg(field->variantType())) );
 
-            static_cast< ::KexiDB::QuerySchema* >(m_schema)->addToWhereExpression(field,value);
+            static_cast< ::KexiDB::QuerySchema* >(m_schema)->addToWhereExpression(field,v);
         }
     }
     catch(Kross::Api::Exception::Ptr e) {
