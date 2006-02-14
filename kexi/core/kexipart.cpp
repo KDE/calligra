@@ -256,8 +256,8 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 //! @todo use message handler for this to enable non-gui apps
 				if (KMessageBox::No==KMessageBox::questionYesNo(0, 
 					((viewMode == Kexi::DesignViewMode) 
-					 ? i18n("Object \"%1\" could not be opened in Design View.")
-					 : i18n("Object could not be opened in Data View.")).arg(item.name())+"\n"
+					 ? i18n("Object \"%1\" could not be opened in Design View.").arg(item.name())
+					 : i18n("Object could not be opened in Data View."))+"\n"
 					+ i18n("Do you want to open it in Text View?"), 0, 
 					KStdGuiItem::open(), KStdGuiItem::cancel()))
 				{
