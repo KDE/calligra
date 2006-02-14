@@ -17,33 +17,33 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <handler.h>
+#include "KoContainerHandler.h"
 #include <KoView.h>
 #include <math.h>
 #include <kcursor.h>
 #include <kdebug.h>
 
-EventHandler::EventHandler( QObject* target )
+KoEventHandler::KoEventHandler( QObject* target )
 {
     m_target = target;
 
     m_target->installEventFilter( this );
 }
 
-EventHandler::~EventHandler()
+KoEventHandler::~KoEventHandler()
 {
 }
 
-QObject* EventHandler::target()
+QObject* KoEventHandler::target()
 {
     return m_target;
 }
 
 // ------------------------------------------------------
 
-class PartResizeHandlerPrivate {
+class KoPartResizeHandlerPrivate {
 public:
-    PartResizeHandlerPrivate( const QWMatrix& matrix, KoView *view, KoChild* child,
+    KoPartResizeHandlerPrivate( const QWMatrix& matrix, KoView *view, KoChild* child,
                               KoChild::Gadget gadget, const QPoint& point ) :
         m_gadget(gadget), m_view(view), m_child(child), m_parentMatrix(matrix) {
 
@@ -56,7 +56,7 @@ public:
         Q_ASSERT( ok );
         m_mouseStart = m_invert.map( m_invertParentMatrix.map( point ) );
     }
-    ~PartResizeHandlerPrivate() {}
+    ~KoPartResizeHandlerPrivate() {}
 
     KoChild::Gadget m_gadget;
     QPoint m_mouseStart;
@@ -69,29 +69,29 @@ public:
     QWMatrix m_invertParentMatrix;
 };
 
-PartResizeHandler::PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
+KoPartResizeHandler::KoPartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
                                       KoChild::Gadget gadget, const QPoint& point )
-    : EventHandler( widget )
+    : KoEventHandler( widget )
 {
     child->lock();
-    d=new PartResizeHandlerPrivate(matrix, view, child, gadget, point);
+    d=new KoPartResizeHandlerPrivate(matrix, view, child, gadget, point);
 }
 
-PartResizeHandler::~PartResizeHandler()
+KoPartResizeHandler::~KoPartResizeHandler()
 {
     d->m_child->unlock();
     delete d;
     d=0L;
 }
 
-void PartResizeHandler::repaint(QRegion &rgn)
+void KoPartResizeHandler::repaint(QRegion &rgn)
 {
   rgn = rgn.unite( d->m_child->frameRegion( d->m_parentMatrix, true ) );
  // rgn.translate(- d->m_view->canvasXOffset(), - d->m_view->canvasYOffset());
   ((QWidget*)target())->repaint( rgn );
 }
 
-bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
+bool KoPartResizeHandler::eventFilter( QObject*, QEvent* ev )
 {
     if ( ev->type() == QEvent::MouseButtonRelease )
     {
@@ -207,9 +207,9 @@ bool PartResizeHandler::eventFilter( QObject*, QEvent* ev )
 
 // --------------------------------------------------------------
 
-class PartMoveHandlerPrivate {
+class KoPartMoveHandlerPrivate {
 public:
-    PartMoveHandlerPrivate( const QWMatrix& matrix, KoView* view, KoChild* child,
+    KoPartMoveHandlerPrivate( const QWMatrix& matrix, KoView* view, KoChild* child,
                             const QPoint& point) : m_view(view), m_dragChild(child),
                                                    m_parentMatrix(matrix) {
         m_invertParentMatrix = matrix.invert();
@@ -217,7 +217,7 @@ public:
         m_geometryDragStart = m_dragChild->geometry();
         m_rotationDragStart = m_dragChild->rotationPoint();
     }
-    ~PartMoveHandlerPrivate() {}
+    ~KoPartMoveHandlerPrivate() {}
 
     KoView* m_view;
     KoChild* m_dragChild;
@@ -228,22 +228,22 @@ public:
     QWMatrix m_parentMatrix;
 };
 
-PartMoveHandler::PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
+KoPartMoveHandler::KoPartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
                                   const QPoint& point )
-    : EventHandler( widget )
+    : KoEventHandler( widget )
 {
     child->lock();
-    d=new PartMoveHandlerPrivate(matrix, view, child, point);
+    d=new KoPartMoveHandlerPrivate(matrix, view, child, point);
 }
 
-PartMoveHandler::~PartMoveHandler()
+KoPartMoveHandler::~KoPartMoveHandler()
 {
     d->m_dragChild->unlock();
     delete d;
     d=0L;
 }
 
-bool PartMoveHandler::eventFilter( QObject*, QEvent* ev )
+bool KoPartMoveHandler::eventFilter( QObject*, QEvent* ev )
 {
     if ( ev->type() == QEvent::MouseButtonRelease )
     {
@@ -273,17 +273,17 @@ bool PartMoveHandler::eventFilter( QObject*, QEvent* ev )
 
 // -------------------------------------------------------
 
-ContainerHandler::ContainerHandler( KoView* view, QWidget* widget )
-    : EventHandler( widget )
+KoContainerHandler::KoContainerHandler( KoView* view, QWidget* widget )
+    : KoEventHandler( widget )
 {
     m_view = view;
 }
 
-ContainerHandler::~ContainerHandler()
+KoContainerHandler::~KoContainerHandler()
 {
 }
 
-bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
+bool KoContainerHandler::eventFilter( QObject*, QEvent* ev )
 {
     if ( ev->type() == QEvent::KeyPress )
     {
@@ -312,12 +312,12 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
         }
         else if ( e->button() == LeftButton && gadget == KoChild::Move )
         {
-            (void)new PartMoveHandler( static_cast<QWidget*>(target()), m_view->matrix(), m_view, ch, pos );
+            (void)new KoPartMoveHandler( static_cast<QWidget*>(target()), m_view->matrix(), m_view, ch, pos );
             return true;
         }
         else if ( e->button() == LeftButton && gadget != KoChild::NoGadget )
         {
-            (void)new PartResizeHandler( static_cast<QWidget*>(target()), m_view->matrix(), m_view, ch, gadget, pos );
+            (void)new KoPartResizeHandler( static_cast<QWidget*>(target()), m_view->matrix(), m_view, ch, gadget, pos );
             return true;
         }
         return false;
@@ -354,7 +354,7 @@ bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
     return false;
 }
 
-KoChild *ContainerHandler::child(KoChild::Gadget &gadget, QPoint &pos, const QMouseEvent *ev) {
+KoChild *KoContainerHandler::child(KoChild::Gadget &gadget, QPoint &pos, const QMouseEvent *ev) {
 
     pos = ev->pos(); //+ QPoint(m_view->canvasXOffset(), m_view->canvasYOffset());
 
@@ -392,4 +392,4 @@ KoChild *ContainerHandler::child(KoChild::Gadget &gadget, QPoint &pos, const QMo
     return child;
 }
 
-#include <handler.moc>
+#include "KoContainerHandler.moc"

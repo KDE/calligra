@@ -13,7 +13,7 @@
 using namespace KSpread;
 
 InsertHandler::InsertHandler( View* view, QWidget* widget )
-    : EventHandler( widget )
+    : KoEventHandler( widget )
 {
     m_view = view;
     m_started = false;

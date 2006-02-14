@@ -92,7 +92,6 @@
 #include "commands.h"
 #include "damages.h"
 #include "digest.h"
-#include "handler.h"
 #include "inspector.h"
 #include "kspread_canvas.h"
 #include "kspread_editors.h"
@@ -1802,7 +1801,7 @@ View::View( QWidget *_parent, const char *_name,
 
 
     // Handler for moving and resizing embedded parts
-    ContainerHandler* h = new ContainerHandler( this, d->canvas );
+    KoContainerHandler* h = new KoContainerHandler( this, d->canvas );
     connect( h, SIGNAL( popupMenu( KoChild*, const QPoint& ) ), this, SLOT( popupChildMenu( KoChild*, const QPoint& ) ) );
 
 

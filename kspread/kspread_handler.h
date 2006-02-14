@@ -1,7 +1,7 @@
 #ifndef KSPREAD_HANDLER_H
 #define KSPREAD_HANDLER_H
 
-#include <handler.h>
+#include <KoContainerHandler.h>
 
 #include <qpoint.h>
 
@@ -25,7 +25,7 @@ class View;
  * takes care of selecting the rectangle at which the new
  * part will appear.
  */
-class InsertHandler : public EventHandler
+class InsertHandler : public KoEventHandler
 {
     Q_OBJECT
 public:

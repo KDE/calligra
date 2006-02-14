@@ -20,7 +20,7 @@ libkofficecore_la_SOURCES = KoDocument.cpp \
 	KoPictureImage.cpp KoPictureClipart.cpp KoPictureCollection.cpp \
 	KoPictureEps.cpp KoPictureWmf.cpp \
 	KoDocumentInfo.cpp \
-	KoView.cpp KoFrame.cpp handler.cpp KoDocumentChild.cpp \
+	KoView.cpp KoFrame.cpp KoContainerHandler.cpp KoDocumentChild.cpp \
 	KoDocumentInfoDlg.cpp KoFactory.cpp KoChild.cpp \
 	koDocumentInfoAboutWidget.ui koDocumentInfoAuthorWidget.ui \
 	koDocumentInfoUserMetadataWidget.ui \
@@ -36,7 +36,7 @@ libkofficecore_la_SOURCES = KoDocument.cpp \
 
 libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 
-include_HEADERS = handler.h \
+include_HEADERS = KoContainerHandler.h \
 	KoFilter.h KoFilterChain.h \
 	KoGlobal.h KoUnit.h KoDocument.h \
 	KoMainWindow.h \

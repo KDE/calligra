@@ -26,8 +26,8 @@
 class QWMatrix;
 
 class KoView;
-class PartResizeHandlerPrivate;
-class PartMoveHandlerPrivate;
+class KoPartResizeHandlerPrivate;
+class KoPartMoveHandlerPrivate;
 
 /**
  * @brief An abstract base class for event handlers.
@@ -40,12 +40,12 @@ class PartMoveHandlerPrivate;
  * This design pattern helps you to keep your event filters
  * and your mousePressEvent, mouseMoveEvent etc. methods clean.
  */
-class KOFFICECORE_EXPORT EventHandler : public QObject
+class KOFFICECORE_EXPORT KoEventHandler : public QObject
 {
     Q_OBJECT
 public:
-    EventHandler( QObject* target );
-    ~EventHandler();
+    KoEventHandler( QObject* target );
+    ~KoEventHandler();
 
     QObject* target();
 
@@ -54,42 +54,42 @@ private:
 };
 
 /**
- * Used by @ref ContainerHandler internally to handle resizing of
+ * Used by @ref KoContainerHandler internally to handle resizing of
  * embedded documents.
  */
-class PartResizeHandler : public EventHandler
+class KoPartResizeHandler : public KoEventHandler
 {
     Q_OBJECT
 public:
-    PartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
+    KoPartResizeHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
                        KoChild::Gadget gadget, const QPoint& point );
-    ~PartResizeHandler();
+    ~KoPartResizeHandler();
 
 protected:
     void repaint(QRegion &rgn);
     bool eventFilter( QObject*, QEvent* );
 
 private:
-    PartResizeHandlerPrivate *d;
+    KoPartResizeHandlerPrivate *d;
 };
 
 /**
- * Used by @ref ContainerHandler internally to handle moving of
+ * Used by @ref KoContainerHandler internally to handle moving of
  * embedded documents.
  */
-class PartMoveHandler : public EventHandler
+class KoPartMoveHandler : public KoEventHandler
 {
     Q_OBJECT
 public:
-    PartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
+    KoPartMoveHandler( QWidget* widget, const QWMatrix& matrix, KoView* view, KoChild* child,
                      const QPoint& point );
-    ~PartMoveHandler();
+    ~KoPartMoveHandler();
 
 protected:
     bool eventFilter( QObject*, QEvent* );
 
 private:
-    PartMoveHandlerPrivate *d;
+    KoPartMoveHandlerPrivate *d;
 };
 
 /**
@@ -103,15 +103,15 @@ private:
  * mouse events which are used for parts moving and resizing
  * will never show up in your view.
  *
- * @see PartMoveHandlerPrivate
- * @see PartResizeHandlerPrivate
+ * @see KoPartMoveHandlerPrivate
+ * @see KoPartResizeHandlerPrivate
  */
-class KOFFICECORE_EXPORT ContainerHandler : public EventHandler
+class KOFFICECORE_EXPORT KoContainerHandler : public KoEventHandler
 {
     Q_OBJECT
 public:
-    ContainerHandler( KoView* view, QWidget* widget );
-    ~ContainerHandler();
+    KoContainerHandler( KoView* view, QWidget* widget );
+    ~KoContainerHandler();
 
 signals:
     /**
@@ -124,7 +124,7 @@ signals:
       * Emitted if the user pressed the delete key whilst a child was selected
       */
     void deleteChild( KoChild* );
-    
+
 protected:
     bool eventFilter( QObject*, QEvent* );
 
