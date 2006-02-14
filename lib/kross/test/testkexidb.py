@@ -15,6 +15,7 @@ class KexiDBClass:
         #import KexiDB
         import krosskexidb
         self.kexidbmodule = krosskexidb
+        print "KrossKexiDB version=%s" % self.kexidbmodule.version()
 
         # Create and remember the drivermanager.
         self.drivermanager = self.kexidbmodule.DriverManager()
