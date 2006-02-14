@@ -564,6 +564,11 @@ CellEditor::~CellEditor()
   delete d->functionCompletion;
   delete d->functionCompletionTimer;
   delete d;
+  // Make sure the choose mode's activated before we stop it.
+  // Canvas::endChoose() resets the sheet to where the choice started,
+  // clears the choice and forces a repaint, so the highlighted ranges
+  // will be cleared.
+  canvas()->setChooseMode(true);
   canvas()->endChoose();
 }
 
@@ -1197,11 +1202,7 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
         // End choosing. May be restarted by CellEditor::slotTextChanged
         if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
-            //kdDebug(36001) << "eventFilter End Choose" << endl;
-//           kdDebug() << "canvas()->endChoose(); 3" << endl;
           canvas()->setChooseMode(false);
-
-            //kdDebug(36001) << "Cont" << endl;
         }
         // forward Left/Right keys - so that pressing left/right in this
         // editor leaves editing mode ... otherwise editing is annoying

@@ -1865,8 +1865,6 @@ View::~View()
 
         }*/
 
-    delete d->selection;
-    delete d->choice;
     delete d->spell.kspell;
 
     d->canvas->endChoose();
@@ -1875,6 +1873,9 @@ View::~View()
     // performed. The repains can happen if you delete an embedded document,
     // which leads to an regionInvalidated() signal emission in KoView, which calls
     // repaint, etc.etc. :-) (Simon)
+
+    delete d->selection;
+    delete d->choice;
 
     delete d->popupColumn;
     delete d->popupRow;
