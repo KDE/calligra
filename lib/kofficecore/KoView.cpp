@@ -733,6 +733,9 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
   view->setZoom( parentView()->zoom() * QMAX(child->xScaling(), child->yScaling()) );
 
   m_frame->setView( view );
+  m_frame->show();
+  m_frame->raise();
+
   parentView()->canvasAddChild( this );
 
 
@@ -759,9 +762,6 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
 
   // Setting the frameGeometry is done in setInitialFrameGeometry, which is
   // also called right after activation.
-
-  m_frame->show();
-  m_frame->raise();
 
   connect( view, SIGNAL( activated( bool ) ),
            parentView(), SLOT( slotChildActivated( bool ) ) );
