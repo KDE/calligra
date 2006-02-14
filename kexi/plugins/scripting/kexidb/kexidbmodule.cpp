@@ -27,6 +27,9 @@
 
 #include <kdebug.h>
 
+// The as version() published versionnumber of this kross-module.
+#define KROSS_KEXIDB_VERSION 1
+
 extern "C"
 {
     /**
@@ -46,6 +49,7 @@ KexiDBModule::KexiDBModule(Kross::Api::Manager* /*manager*/)
     //, m_manager(manager)
 {
     //kdDebug() << "Kross::KexiDB::KexiDBModule Ctor" << endl;
+    addChild( new Kross::Api::Variant(KROSS_KEXIDB_VERSION), "version" );
     addChild( KexiDBDriverManager::self() );
 }
 

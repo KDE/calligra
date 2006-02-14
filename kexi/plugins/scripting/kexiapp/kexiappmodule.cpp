@@ -28,6 +28,9 @@
 
 #include <kdebug.h>
 
+// The as version() published versionnumber of this kross-module.
+#define KROSS_KEXIAPP_VERSION 1
+
 extern "C"
 {
     /**
@@ -67,6 +70,7 @@ KexiAppModule::KexiAppModule(Kross::Api::Manager* manager)
         if(mainwinqtobject) {
             ::KexiMainWindow* mainwin = dynamic_cast< ::KexiMainWindow* >( mainwinqtobject->getObject() );
             if(mainwin) {
+                addChild( new Kross::Api::Variant(KROSS_KEXIAPP_VERSION), "version" );
                 addChild( new KexiAppMainWindow(mainwin) );
                 return;
             }
