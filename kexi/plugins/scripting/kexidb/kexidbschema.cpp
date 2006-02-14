@@ -138,8 +138,8 @@ KexiDBQuerySchema::KexiDBQuerySchema(::KexiDB::QuerySchema* queryschema)
     : KexiDBSchema<KexiDBQuerySchema>("KexiDBQuerySchema", queryschema, queryschema)
 {
     addFunction("statement", &KexiDBQuerySchema::statement);
-    addFunction("setStatement", &KexiDBQuerySchema::setStatement,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
+    addFunction("setStatement", &KexiDBQuerySchema::setStatement);
+    addFunction("setWhereExpression", &KexiDBQuerySchema::setWhereExpression);
 }
 
 KexiDBQuerySchema::~KexiDBQuerySchema()
@@ -170,3 +170,33 @@ Kross::Api::Object::Ptr KexiDBQuerySchema::setStatement(Kross::Api::List::Ptr ar
     return statement(args);
 }
 
+Kross::Api::Object::Ptr KexiDBQuerySchema::setWhereExpression(Kross::Api::List::Ptr args)
+{
+    QString whereexpression = Kross::Api::Variant::toString(args->item(0));
+    QStringList expressions = QStringList::split(",",whereexpression);
+
+    ::KexiDB::BaseExpr* oldexpr = static_cast< ::KexiDB::QuerySchema* >(m_schema)->whereExpression();
+    try {
+        for(QStringList::Iterator it = expressions.begin(); it != expressions.end(); ++it) {
+            QStringList list = QStringList::split("=",*it);
+            if(list.count() != 2)
+                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: Syntax error")) );
+
+            ::KexiDB::Field* field = static_cast< ::KexiDB::QuerySchema* >(m_schema)->field( list[0] );
+            if(! field)
+                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: Field \"%1\" does not exists in tableschema \"%2\".").arg(list[0]).arg(m_schema->name())) );
+
+            QVariant value(list[1]);
+            if(! value.cast(field->variantType()))
+                throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid WHERE-expression: The for Field \"%1\" defined value is of type \"%2\" rather then the expected type \"%3\"").arg(list[0]).arg(value.typeName()).arg(field->variantType())) );
+
+            static_cast< ::KexiDB::QuerySchema* >(m_schema)->addToWhereExpression(field,value);
+        }
+    }
+    catch(Kross::Api::Exception::Ptr e) {
+        kdWarning() << "Exception in Kross::KexiDB::KexiDBQuerySchema::setWhereExpression: " << e->toString() << endl;
+        static_cast< ::KexiDB::QuerySchema* >(m_schema)->setWhereExpression(oldexpr); // fallback
+        return new Kross::Api::Variant(QVariant(false,0));
+    }
+    return new Kross::Api::Variant(QVariant(true,0));
+}

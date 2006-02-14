@@ -133,9 +133,8 @@ Kross::Api::Object::Ptr KexiDBFieldList::setFields(Kross::Api::List::Ptr args)
 {
     ::KexiDB::FieldList* fl = Kross::Api::Object::fromObject<KexiDBFieldList>(args->item(0))->fieldlist();
     m_fieldlist->clear();
-    uint count = fl->fieldCount();
-    for(uint i = 0; i < count; i++)
-        m_fieldlist->addField( fl->field(i) );
+    for(::KexiDB::Field::ListIterator it = *fl->fields(); it.current(); ++it)
+        m_fieldlist->addField( it.current() );
     return 0;
 }
 

@@ -103,6 +103,8 @@ namespace Kross { namespace KexiDB {
             Kross::Api::Object::Ptr statement(Kross::Api::List::Ptr);
             /// Set the SQL statement of this query schema.
             Kross::Api::Object::Ptr setStatement(Kross::Api::List::Ptr);
+
+            Kross::Api::Object::Ptr setWhereExpression(Kross::Api::List::Ptr);
     };
 
 }}
