@@ -34,7 +34,7 @@
 <sect2 id="enabling-autocorrection">
 <title>Enabling/Disabling Autocorrection</title>
 
-<para>To toggle autocorrection on, selec^t <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
+<para>To toggle autocorrection on, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
 </para>
 
 <para>To toggle autocorrection off, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable Autocorrection</guimenuitem></menuchoice> from the menubar. When disabled, autocorrection changes are not made. You can, however, <link linkend="manually">apply autocorrection manually</link>, using the <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice> menu.
@@ -485,7 +485,7 @@ autocompletion when entered into this dialog.</para></note>
 <para>If this option is enabled, a tool tip box will appear when you type the
 beginning of a word that exists in the completion list. To complete the word,
 press the key you set to accept suggestions in the <guilabel>Key to accept
-suggestion.</guilabel> drop-down list.</para>
+suggestion:</guilabel> drop-down list.</para>
 </listitem>
 </varlistentry>
 
