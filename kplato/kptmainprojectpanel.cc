@@ -57,27 +57,34 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     
     //baseline->setChecked(project.isBaselined()); FIXME: Removed for this release
     
+    QDateTime st = project.constraintStartTime();
+    QDateTime et = project.constraintEndTime();
     QString s = i18n("Scheduling");
     Schedule *sch = project.currentSchedule();
     if (sch) {
         s = i18n("Scheduling (%1)").arg(sch->typeToString(true));
     }
     schedulingGroup->setTitle(s);
-    startDate->setDate(project.constraintStartTime().date());
-    startTime->setTime(project.constraintStartTime().time());
-    endDate->setDate(project.constraintEndTime().date());
-    endTime->setTime(project.constraintEndTime().time());
     if (project.constraint() == Node::MustStartOn) {
         schedulingGroup->setButton(0);
-    }
-    else if (project.constraint() == Node::MustFinishOn) {
+        if (sch)
+            et = project.endTime();
+    } else if (project.constraint() == Node::MustFinishOn) {
         schedulingGroup->setButton(1);
+        if (sch)
+            st = project.startTime();
     } else {
         kdWarning()<<k_funcinfo<<"Illegal constraint: "<<project.constraint()<<endl;
         schedulingGroup->setButton(0);
-    }    
+        if (sch)
+            et = project.endTime();
+    }
+    startDate->setDate(st.date());
+    startTime->setTime(st.time());
+    endDate->setDate(et.date());
+    endTime->setTime(et.time());
     enableDateTime();
-    slotBaseline(); 
+    //slotBaseline(); 
     namefield->setFocus();
 }
 
@@ -123,11 +130,11 @@ KCommand *MainProjectPanel::buildCommand(Part *part) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustFinishOn));
     }
-    if (startDateTime() != project.constraintStartTime()) {
+    if (bStartDate->state() && startDateTime() != project.constraintStartTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(part, project, startDateTime()));
     }
-    if (endDateTime() != project.constraintEndTime()) {
+    if (bEndDate->state() && endDateTime() != project.constraintEndTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(part, project, endDateTime()));
     }
@@ -175,7 +182,7 @@ void MainProjectPanelImpl::slotChooseLeader()
 
 void MainProjectPanelImpl::slotStartDateClicked()
 {
-    enableDateTime();    
+    enableDateTime();
 }
 
 
