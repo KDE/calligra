@@ -101,9 +101,10 @@ bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
 {
 	if (!oldData || !newData)
 		return false;
-	QString filename( d->filenamesForData[oldData] );
-	if (filename.isEmpty())
+	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( oldData );
+	if (it == d->filenamesForData.constEnd() || it.data().isEmpty())
 		return false;
+	const QString filename( it.data() );
 	KexiDBConnShortcutFile shortcutFile(filename);
 	if (!shortcutFile.saveConnectionData(*newData, true/*savePassword*/))
 		return false;
@@ -114,7 +115,8 @@ bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
 
 void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *data)
 {
-	QString filename( d->filenamesForData[data] );
+	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( data );
+	const QString filename( it.data() );
 	d->filenamesForData.remove(data);
 	d->dataForFilenames.remove(filename);
 	d->list.removeRef(data);
@@ -124,10 +126,10 @@ bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
 {
 	if (!data)
 		return false;
-	QString filename( d->filenamesForData[data] );
-	if (filename.isEmpty())
+	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( data );
+	if (it == d->filenamesForData.constEnd() || it.data().isEmpty())
 		return false;
-	QFile file(filename);
+	QFile file( it.data() );
 	if (!file.remove())
 		return false;
 	removeConnectionDataInternal(data);
@@ -169,7 +171,10 @@ void KexiDBConnectionSet::load()
 
 QString KexiDBConnectionSet::fileNameForConnectionData(KexiDB::ConnectionData *data) const
 {
-	return data ? d->filenamesForData[data] : QString::null;
+	if (!data)
+		return QString::null;
+	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( data );
+	return (it == d->filenamesForData.constEnd()) ? QString::null : it.data();
 }
 
 KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const

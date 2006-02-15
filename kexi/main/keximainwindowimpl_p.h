@@ -103,7 +103,12 @@ public:
 	KexiDialogBase *openedDialogFor( int identifier, PendingJobType &pendingType )
 	{
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		pendingType = pendingDialogs[ identifier ];
+		QMap<int, PendingJobType>::ConstIterator it = pendingDialogs.find( identifier );
+		if (it==pendingDialogs.constEnd())
+			pendingType = NoJob;
+		else
+			pendingType = it.data();
+		
 		if (pendingType == DialogOpeningJob) {
 			return 0;
 		}
@@ -137,6 +142,8 @@ public:
 	}
 
 	bool pendingDialogsExist() {
+		if (pendingDialogs.constBegin()!=pendingDialogs.constEnd())
+			kdDebug() << 	pendingDialogs.constBegin().key() << " " << (int)pendingDialogs.constBegin().data() << endl;
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
 		return !pendingDialogs.isEmpty();
 	}

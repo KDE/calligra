@@ -955,7 +955,10 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 	KexiQueryPart::TempData * temp = tempData();
 
 	// Save SQL without driver-escaped keywords.
-	QString sqlText = mainWin()->project()->dbConnection()->selectStatement( 
+	KexiDB::Connection* dbConn = mainWin()->project()->dbConnection();
+	dbConn->setQuerySchemaObsolete( m_dialog->schemaData()->name() );
+
+	QString sqlText = dbConn->selectStatement( 
 		*temp->query(), KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary );
 	if (!storeDataBlock( sqlText, "sql" )) {
 		return false;
@@ -987,6 +990,9 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 	if (!storeDataBlock( xml, "query_layout" )) {
 		return false;
 	}
+
+//	mainWin()->project()->reloadPartItem( m_dialog );
+
 	return true;
 }
 

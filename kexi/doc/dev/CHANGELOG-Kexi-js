@@ -10,7 +10,14 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
-2006-02-10
+2006-02-15
+General
+- when query design has been changed and saved, subsequent openings of a form using 
+  it will reload it's definition. The same for 'page setup' dialogs, etc.
+- fixed crash when 'page setup' dialog is opened, closed, and opened again for 
+  the same data object
+
+2006-02-10, 14
 Main Window
 - closing dialog is now marked as 'pending job', the same as for opening
 - When there are pending jobs, 'quit' and 'close project' actions are

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -256,6 +256,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		static tristate dropProject(KexiProjectData* data, 
 			KexiDB::MessageHandler* handler, bool dontAsk = false);
 
+		/*! @see KexiDB::Connection::setQuerySchemaObsolete( const QString& queryName ) */
+//		void setQuerySchemaObsolete( const QString& queryName );
+
 //		/** used to emit objectCreated() signal */
 //		void emitObjectCreated(const QCString &mime, const QCString& name) { emit objectCreated(mime, name); }
 //		void emitTableCreated(KexiDB::TableSchema& schema) { emit tableCreated(schema); }
@@ -293,26 +296,10 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		*/
 		bool createInternalStructures(bool insideTransaction);
 
-/* moved to Object
-		virtual void setError(int code = ERR_OTHER, const QString &msg = QString::null );
-		virtual void setError( const QString &msg );
-		virtual void setError( KexiDB::Object *obj );
-
-		//! setting not KexiDB-related erorr
-		void setError(const QString &msg, const QString &desc);
-*/
-		/*! Finds part for \a item. Sets error retrieved from Part Manager 
-		 if the part cannot be found. */
+		/*! \return Kexi part for \a item. */
 		KexiPart::Part *findPartFor(KexiPart::Item& item);
 
-//		void clearMsg();
-
 	signals:
-		/**
-		 * this signal gets emmited after succesfully connected to a db
-		 */
-//		void			dbAvailable();
-
 		/** signal emitted on error */
 		void error(const QString &title, KexiDB::Object *obj);
 
@@ -342,4 +329,3 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 
 #endif
-

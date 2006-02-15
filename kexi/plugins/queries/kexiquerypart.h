@@ -94,6 +94,10 @@ class KexiQueryPart : public KexiPart::Part
 		virtual QString i18nMessage(const QCString& englishMessage, 
 			KexiDialogBase* dlg) const;
 
+		/*! Renames stored data pointed by \a item to \a newName. 
+		 Reimplemented to mark the query obsolete by using KexiDB::Connection::setQuerySchemaObsolete(). */
+		virtual tristate rename(KexiMainWindow * win, KexiPart::Item & item, const QString& newName);
+
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
 

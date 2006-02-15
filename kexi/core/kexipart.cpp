@@ -380,6 +380,14 @@ QString Part::instanceCaption() const
 	return m_names["instanceCaption"];
 }
 
+tristate Part::rename(KexiMainWindow *win, KexiPart::Item &item, const QString& newName)
+{
+	Q_UNUSED(win);
+	Q_UNUSED(item);
+	Q_UNUSED(newName);
+	return true;
+}
+
 //-------------------------------------------------------------------------
 
 

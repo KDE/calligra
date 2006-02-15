@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -928,5 +928,23 @@ tristate KexiProject::dropProject(KexiProjectData* data,
 	return prj.dbConnection()->dropDatabase();
 }
 
-#include "kexiproject.moc"
+/*void KexiProject::reloadPartItem( KexiDialogBase* dialog )
+{
+	if (!dialog)
+		return;
 
+	KexiPart::Item* item = dialog->partItem();
+
+	if (dialog || !d->connection->setQuerySchemaObsolete( queryName ))
+		return;
+	KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType("kexi/query");
+	if (!partInfo)
+		return; //err?
+		item(partInfo, queryName);
+	if (!item)
+		return; //err?
+	emit itemSetO
+
+}*/
+
+#include "kexiproject.moc"

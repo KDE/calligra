@@ -202,6 +202,15 @@ QString KexiQueryPart::i18nMessage(const QCString& englishMessage, KexiDialogBas
 	return englishMessage;
 }
 
+tristate KexiQueryPart::rename(KexiMainWindow *win, KexiPart::Item &item, const QString& newName)
+{
+	Q_UNUSED(newName);
+	if (!win->project()->dbConnection())
+		return false;
+	win->project()->dbConnection()->setQuerySchemaObsolete( item.name() );
+	return true;
+}
+
 //----------------
 
 KexiQueryPart::TempData::TempData(KexiDialogBase* parent, KexiDB::Connection *conn)

@@ -126,9 +126,7 @@ class KEXICORE_EXPORT Part : public QObject
 		 You shouldn't use by hand transactions here.
 
 		 Default implementation does nothing and returns true. */
-		virtual tristate rename(KexiMainWindow * /*win*/, KexiPart::Item & /*item*/, 
-			const QString& /*newName*/)
-			{ return true; }
+		virtual tristate rename(KexiMainWindow *win, KexiPart::Item &item, const QString& newName);
 
 		/*! Creates and returns a new temporary data for a dialog \a dialog. 
 		 This method is called on openInstance() once per dialog.

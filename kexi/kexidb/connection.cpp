@@ -74,6 +74,7 @@ class ConnectionPrivate
 		 , autoCommit(true)
 		{
 			tableSchemaChangeListeners.setAutoDelete(true);
+			obsoleteQueries.setAutoDelete(true);
 		}
 		~ConnectionPrivate()
 		{
@@ -100,6 +101,10 @@ class ConnectionPrivate
 		QValueList<Transaction> transactions;
 
 		QPtrDict< QPtrList<Connection::TableSchemaChangeListenerInterface> > tableSchemaChangeListeners;
+
+		//! Used in Connection::setQuerySchemaObsolete( const QString& queryName )
+		//! to collect obsolete queries. THese are deleted on connection deleting.
+		QPtrList<QuerySchema> obsoleteQueries;
 
 		//! Version information for this connection.
 		int versionMajor;
@@ -1621,7 +1626,7 @@ bool Connection::dropQuery( KexiDB::QuerySchema* querySchema )
 	}
 
 //TODO(js): update any structure that depend on this table!
-	m_queries_byname.remove(querySchema->name().lower());
+	m_queries_byname.remove(querySchema->name());
 	m_queries.remove(querySchema->id());
 
 	return commitAutoCommitTransaction(tg.transaction());
@@ -2396,7 +2401,7 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 		return 0;
 	}
 	m_queries.insert(query->m_id, query);
-	m_queries_byname.insert(query->m_name.lower(), query);
+	m_queries_byname.insert(query->m_name, query);
 	return query;
 }
 
@@ -2429,6 +2434,17 @@ QuerySchema* Connection::querySchema( int queryId )
 		return 0;
 
 	return setupQuerySchema(data);
+}
+
+bool Connection::setQuerySchemaObsolete( const QString& queryName )
+{
+	QuerySchema* oldQuery = querySchema( queryName );
+	if (!oldQuery)
+		return false;
+	d->obsoleteQueries.append(oldQuery);
+	m_queries_byname.take(queryName);
+	m_queries.take(oldQuery->id());
+	return true;
 }
 
 TableSchema* Connection::newKexiDBSystemTableSchema(const QString& tsname)
@@ -2634,8 +2650,15 @@ bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	}
 	//success: now also assign new value in memory:
 	QMap<QueryColumnInfo*,int> fieldsOrder = query.fieldsOrder();
+	QMap<QueryColumnInfo*,int>::ConstIterator fieldsOrderIt;
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
-		data[ fieldsOrder[it.key()] ] = it.data();
+		fieldsOrderIt = fieldsOrder.find( it.key() );
+		if (fieldsOrderIt == fieldsOrder.constEnd()) {
+			KexiDBWarn << "Connection::updateRow(): \"now also assign new value in memory\" step "
+				"- could not find item '" << it.key()->aliasOrName() << "'" << endl;
+			continue;
+		}
+		data[ fieldsOrderIt.data() ] = it.data();
 	}
 	return true;
 }
@@ -2723,8 +2746,15 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 	}
 	//success: now also assign new value in memory:
 	QMap<QueryColumnInfo*,int> fieldsOrder = query.fieldsOrder();
+	QMap<QueryColumnInfo*,int>::ConstIterator fieldsOrderIt;
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
-		data[ fieldsOrder[it.key()] ] = it.data();
+		fieldsOrderIt = fieldsOrder.find( it.key() );
+		if (fieldsOrderIt == fieldsOrder.constEnd()) {
+			KexiDBWarn << "Connection::insertRow(): \"now also assign new value in memory\" step "
+				"- could not find item '" << it.key()->aliasOrName() << "'" << endl;
+			continue;
+		}
+		data[ fieldsOrderIt.data() ] = it.data();
 	}
 
 	//fetch autoincremented values

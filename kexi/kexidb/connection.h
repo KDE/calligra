@@ -395,6 +395,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 used database.  \sa querySchema( int queryId ) */
 		QuerySchema* querySchema( const QString& queryName );
 
+		/*! Sets \a queryName query obsolete by moving it out of the query sets, so it will not be 
+		 accessible by querySchema( const QString& queryName ). The existing query object is not 
+		 destroyed, to avoid problems when it's referenced. In this case, 
+		 a new query schema will be retrieved directly from the backend.
+
+		 For now it's used in KexiQueryDesignerGuiEditor::storeLayout(). 
+		 This solves the problem when user has changed a query schema but already form still uses
+		 previously instantiated query schema. 
+		 \return true if there is such query. Otherwise the method does nothing. */
+		bool setQuerySchemaObsolete( const QString& queryName );
+
 //js: MOVED TO Driver		QString valueToSQL( const Field::Type ftype, const QVariant& v ) const;
 //		QString valueToSQL( const Field *field, const QVariant& v ) const;
 

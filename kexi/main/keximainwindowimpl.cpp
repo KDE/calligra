@@ -2952,6 +2952,11 @@ tristate KexiMainWindowImpl::closeDialog(KexiDialogBase *dlg, bool layoutTaskBar
 
 //	d->dialogs.take(dlg_id); //don't remove -KMDI will do that
 	d->removeDialog(dlg_id); //don't remove -KMDI will do that
+	//also remove from 'print setup dialogs' cache, if needed
+	int printedObjectID = 0;
+	if (d->pageSetupDialogItemID2dataItemID_map.contains(dlg_id))
+		printedObjectID = d->pageSetupDialogItemID2dataItemID_map[ dlg_id ];
+	d->pageSetupDialogs.take(printedObjectID);
 
 	KXMLGUIClient *client = dlg->commonGUIClient();
 	KXMLGUIClient *viewClient = dlg->guiClient();
@@ -3465,7 +3470,20 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 			return cancelled;
 	}
 
+	//also close 'print setup' dialog for this item, if any
 	tristate res;
+//	int printedObjectID = 0;
+//	if (d->pageSetupDialogItemID2dataItemID_map.contains(item->identifier()))
+//		printedObjectID = d->pageSetupDialogItemID2dataItemID_map[ item->identifier() ];
+	KexiDialogBase * pageSetupDlg = d->pageSetupDialogs[ item->identifier() ];
+	const bool oldInsideCloseDialog = d->insideCloseDialog;
+	d->insideCloseDialog = false;
+	 res = closeDialog(pageSetupDlg);
+	d->insideCloseDialog = oldInsideCloseDialog;
+	if (!res || ~res) {
+		return res;
+	}
+
 #ifndef KEXI_NO_PENDING_DIALOGS
 	Private::PendingJobType pendingType;
 	KexiDialogBase *dlg = d->openedDialogFor( item, pendingType );
@@ -3475,13 +3493,6 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 #else
 	KexiDialogBase *dlg = d->openedDialogFor( item );
 #endif
-
-	//also close 'print setup' dialog for this item, if any
-	KexiDialogBase * pageSetupDlg = d->pageSetupDialogs[item->identifier()];
-	res = closeDialog(pageSetupDlg);
-	if (!res || ~res) {
-		return res;
-	}
 
 	if (dlg) {//close existing window
 //		if (!dlg->tryClose(true))
@@ -3514,6 +3525,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 
 void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _newName, bool &success )
 {
+	d->pendingDialogsExist();
 	QString newName = _newName.stripWhiteSpace();
 	if (newName.isEmpty()) {
 		showSorryMessage( i18n("Could not set empty name for this object.") );
@@ -3528,6 +3540,7 @@ void KexiMainWindowImpl::renameObject( KexiPart::Item *item, const QString& _new
 		success = false;
 		return;
 	}
+	d->pendingDialogsExist();
 }
 
 void KexiMainWindowImpl::slotObjectRenamed(const KexiPart::Item &item, const QCString& /*oldName*/)
