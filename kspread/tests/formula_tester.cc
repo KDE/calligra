@@ -299,9 +299,7 @@ void FormulaEvalTester::run()
   CHECK_EVAL("=\"A\"<\"B\"", Value(true));  // row 102
 // Not passed for line 103.
   CHECK_EVAL("=\"AA\">\"A\"", Value(true));  // row 104
-  ./generate-openformula-tests: line 25: test: too many arguments
-      ./generate-openformula-tests: line 28: test: too many arguments
-      CHECK_EVAL("=\"Hi \" & \"there\"", Value("Hi there"));  // row 107
+  CHECK_EVAL("=\"Hi \" & \"there\"", Value("Hi there"));  // row 107
   CHECK_EVAL("=\"H\" & \"\"", Value("H"));  // row 108
 // Not passed for line 109.
   CHECK_EVAL("=50%", Value(0.5));  // row 111
