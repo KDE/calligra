@@ -32,8 +32,6 @@ SQL database for your data source.</para></listitem>
 <listitem><para>If you want to use the internal database of &kword;, click <link linkend="mail-merge-internal">here</link>.</para></listitem>
 </itemizedlist>
 
-<para></para>
-
 <sect2 id="mail-merge-sql">
 <title>Using an external SQL database as a data source</title>
 <indexterm><primary>mail merge</primary><secondary>SQL databases</secondary></indexterm>

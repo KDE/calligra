@@ -36,7 +36,6 @@ You can access that dialog using the
 <term><guilabel>ID:</guilabel></term>
 <listitem><para>Enter a number. It sets the project
 identification and must be unique.</para>
-<para></para>
 </listitem>
 </varlistentry>
 
@@ -62,7 +61,6 @@ end. Choose either a start date or an end date.</para>
 <listitem><para>If a start date is set, the project is scheduled forward
 from this time. When the project has been calculated, end time shows when the
 project is planned to end.</para>
-<para></para>
 </listitem>
 </varlistentry>
 <varlistentry>
