@@ -158,8 +158,10 @@ ResourceView::ResourceView(View *view, QWidget *parent)
     resList->setColumnAlignment(6, AlignRight);
     resList->addColumn(i18n("Available Until"));
     resList->setColumnAlignment(7, AlignRight);
-    resList->addColumn(i18n("Normal Rate"));
+    resList->addColumn(i18n("%"));
     resList->setColumnAlignment(8, AlignRight);
+    resList->addColumn(i18n("Normal Rate"));
+    resList->setColumnAlignment(9, AlignRight);
     resList->addColumn(i18n("Overtime Rate"));
 
     m_appview = new ResourceAppointmentsView(view, this);
@@ -216,6 +218,7 @@ void ResourceView::drawResources(const Project &proj, QListViewItem *parent, Res
         item->setColumnState(4, 0);
         item->setColumnState(5, 0);
         item->setColumnState(6, 0);
+        item->setColumnState(7, 0);
         if (r->calendar() == 0) {
             item->setColumnState(0, 1);
             item->setColumnState(4, 1);
@@ -230,6 +233,10 @@ void ResourceView::drawResources(const Project &proj, QListViewItem *parent, Res
                 item->setColumnState(0, 1);
                 item->setColumnState(6, 1);
             }
+        }
+        if (r->units() == 0) {
+            item->setColumnState(0, 1);
+            item->setColumnState(7, 1);
         }
         // and the texts
         item->setText(0, r->name()); // refresh
@@ -249,8 +256,9 @@ void ResourceView::drawResources(const Project &proj, QListViewItem *parent, Res
         item->setText(4, r->calendar() ? r->calendar()->name() : i18n("None"));
         item->setText(5, KGlobal::locale()->formatDateTime(r->availableFrom()));
         item->setText(6, KGlobal::locale()->formatDateTime(r->availableUntil()));
-        item->setText(7, KGlobal::locale()->formatMoney(r->normalRate()));
-        item->setText(8, KGlobal::locale()->formatMoney(r->overtimeRate()));
+        item->setText(7, QString().setNum(r->units()));
+        item->setText(8, KGlobal::locale()->formatMoney(r->normalRate()));
+        item->setText(9, KGlobal::locale()->formatMoney(r->overtimeRate()));
         if (!m_selectedItem) {
             m_selectedItem = item;
         }
