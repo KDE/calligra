@@ -189,6 +189,75 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
   return val;
 }
 
+double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
+{
+  QString str = _str.stripWhiteSpace();
+  bool neg = str.find(parserLocale->negativeSign()) == 0;
+  if (neg)
+	str.remove( 0, parserLocale->negativeSign().length() );
+ 
+  /* will hold the scientific notation portion of the number.
+	 Example, with 2.34E+23, exponentialPart == "E+23"
+  */
+  QString exponentialPart;
+  int EPos;
+ 
+  EPos = str.find('E', 0, false);
+ 
+  if (EPos != -1)
+  {
+    exponentialPart = str.mid(EPos);
+    str = str.left(EPos);
+  }
+ 
+  int pos = str.find(parserLocale->decimalSymbol());
+  QString major;
+  QString minor;
+  if ( pos == -1 )
+  {
+    major = str;
+    if (isInt) *isInt = true;
+  }
+  else
+  {
+    major = str.left(pos);
+    minor = str.mid(pos + parserLocale->decimalSymbol().length());
+    if (isInt) *isInt = false;
+  }
+ 
+  // Remove thousand separators
+  int thlen = parserLocale->thousandsSeparator().length();
+  int lastpos = 0;
+  while ( ( pos = major.find( parserLocale->thousandsSeparator() ) ) > 0 )
+  {
+    // e.g. 12,,345,,678,,922 Acceptable positions (from the end) are 5, 10, 15... i.e. (3+thlen)*N
+    int fromEnd = major.length() - pos;
+    if ( fromEnd % (3+thlen) != 0 // Needs to be a multiple, otherwise it's an error
+         || pos - lastpos > 3 // More than 3 digits between two separators -> error
+         || pos == 0          // Can't start with a separator
+         || (lastpos>0 && pos-lastpos!=3))   // Must have exactly 3 digits between two separators
+    {
+      if (ok) *ok = false;
+      return 0.0;
+    }
+ 
+    lastpos = pos;
+    major.remove( pos, thlen );
+  }
+  if (lastpos>0 && major.length()-lastpos!=3)   // Must have exactly 3 digits after the last separator
+  {
+    if (ok) *ok = false;
+    return 0.0;
+  }
+ 
+  QString tot;
+  if (neg) tot = '-';
+ 
+  tot += major + '.' + minor + exponentialPart;
+ 
+  return tot.toDouble(ok);
+}
+
 Value ValueParser::tryParseNumber (const QString& str, bool *ok)
 {
   Value value;
@@ -205,10 +274,17 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
 
   
   // First try to understand the number using the parserLocale
-  double val = parserLocale->readNumber (str2, ok);
+  bool isInt;
+  double val = readNumber (str2, ok, &isInt);
   // If not, try with the '.' as decimal separator
   if (!(*ok))
+  {
     val = str2.toDouble(ok);
+    if (str.contains('.'))
+      isInt = false;
+    else
+      isInt = true;
+  }
 
   if (*ok)
   {
@@ -224,7 +300,10 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
     {
       //kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
       //    "' successfully parsed as number: " << val << endl;
-      value.setValue (val);
+	  if (isInt)
+		value.setValue (static_cast<long> (val));
+	  else
+		value.setValue (val);
       
       if ( str2.contains('E') || str2.contains('e') )
         fmtType = Scientific_format;

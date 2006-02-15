@@ -95,6 +95,15 @@ QString ValueFormatter::formatText (const Value &value,
     str = fractionFormat (value.asFloat(), fmtType);
 
   //another
+  else if (value.isInteger())
+  {
+	long v = value.asInteger();
+	// Always unsigned ?
+    if ((floatFormat == Format::AlwaysUnsigned) && (v < 0))
+      v *= -1;
+    str = createNumberFormat (v, fmtType,
+        (floatFormat == Format::AlwaysSigned));
+  }
   else
   {
     QChar decimal_point = converter->locale()->decimalSymbol()[0];
@@ -229,6 +238,45 @@ void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
         str.remove (--i, 1);
     }
   }
+}
+
+
+QString ValueFormatter::createNumberFormat ( long value, FormatType fmt, 
+	 bool alwaysSigned)
+{
+  QString number;
+  int pos = 0;
+  
+  //multiply value by 100 for percentage format
+  if (fmt == Percentage_format)
+    value *= 100;
+
+  switch (fmt)
+  {
+    case Number_format:
+    case Scientific_format:
+      number = QString::number(value);
+      break;
+    case Percentage_format:
+      number = QString::number(value) + " %";
+      break;
+    case Money_format:
+      number = converter->locale()->formatMoney (value, 
+          converter->locale()->currencySymbol());
+      break;
+    default :
+      //other formatting?
+      // This happens with Custom_format...
+      kdDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "\n";
+      break;
+  }
+
+  //prepend positive sign if needed
+  if (alwaysSigned && value >= 0 )
+    if (converter->locale()->positiveSign().isEmpty())
+      number='+'+number;
+
+  return number;
 }
 
 QString ValueFormatter::createNumberFormat ( double value, int precision,

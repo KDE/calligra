@@ -246,8 +246,88 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "1e3+7/0", Value::errorDIV0() );
   CHECK_EVAL( "2^(99/0)", Value::errorDIV0() );
  
+  // string expansion ...
+  CHECK_EVAL( "\"2\"+5", Value(7) );
+  CHECK_EVAL( "2+\"5\"", Value(7) );
+  CHECK_EVAL( "\"2\"+\"5\"", Value(7) );
+  
   //the built-in sine function
   CHECK_EVAL ("SIN(0)", Value(0));
   CHECK_EVAL ("2+sin(\"2\"-\"2\")", Value(2));
   CHECK_EVAL ("\"1\"+sin(\"0\")", Value(1));
+  
+  // tests from the OpenFormula testing suite:
+  // note that these get auto-generated using generate-openformula-tests
+  CHECK_EVAL("=(1/3)*3=1", Value(true));  // row 51
+  CHECK_EVAL("=(\"4\" & \"5\")+2", Value(47));  // row 57
+  CHECK_EVAL("=2+(\"4\" & \"5\")", Value(47));  // row 58
+  CHECK_EVAL("=1+2", Value(3));  // row 63
+  CHECK_EVAL("=3-1", Value(2));  // row 65
+  CHECK_EVAL("=5--2", Value(7));  // row 67
+  CHECK_EVAL("=3*4", Value(12));  // row 68
+  CHECK_EVAL("=2+3*4", Value(14));  // row 70
+  CHECK_EVAL("=6/3", Value(2));  // row 71
+  CHECK_EVAL("=5/2", Value(2.5));  // row 72
+  CHECK_EVAL("=ISERROR(1/0)", Value(true));  // row 73
+  CHECK_EVAL("=2^3", Value(8));  // row 74
+  CHECK_EVAL("=9^0.5", Value(3));  // row 75
+  CHECK_EVAL("=(-5)^3", Value("-125"));  // row 76
+  CHECK_EVAL("=4^-1", Value(0.25));  // row 77
+  CHECK_EVAL("=5^0", Value(1));  // row 78
+  CHECK_EVAL("=0^5", Value(0));  // row 79
+  CHECK_EVAL("=2+3*4^2", Value(50));  // row 80
+  CHECK_EVAL("=-2^2", Value(4));  // row 81
+  CHECK_EVAL("=1=1", Value(true));  // row 82
+  CHECK_EVAL("=1=0", Value(false));  // row 84
+  CHECK_EVAL("=3=3.0001", Value(false));  // row 85
+// Not passed for line 86.
+  CHECK_EVAL("=\"Hi\"=\"Bye\"", Value(false));  // row 87
+  CHECK_EVAL("=FALSE()=FALSE()", Value(true));  // row 88
+  CHECK_EVAL("=TRUE()=FALSE()", Value(false));  // row 89
+  CHECK_EVAL("=\"5\"=5", Value(false));  // row 90
+  CHECK_EVAL("=TRUE()=1", Value(false));  // row 91
+// Not passed for line 92.
+// Not passed for line 93.
+  CHECK_EVAL("=1<>1", Value(false));  // row 94
+  CHECK_EVAL("=1<>2", Value(true));  // row 95
+  CHECK_EVAL("=1<>\"1\"", Value(true));  // row 96
+// Not passed for line 97.
+  CHECK_EVAL("=5<6", Value(true));  // row 98
+  CHECK_EVAL("=5<=6", Value(true));  // row 99
+  CHECK_EVAL("=5>6", Value(false));  // row 100
+  CHECK_EVAL("=5>=6", Value(false));  // row 101
+  CHECK_EVAL("=\"A\"<\"B\"", Value(true));  // row 102
+// Not passed for line 103.
+  CHECK_EVAL("=\"AA\">\"A\"", Value(true));  // row 104
+  ./generate-openformula-tests: line 25: test: too many arguments
+      ./generate-openformula-tests: line 28: test: too many arguments
+      CHECK_EVAL("=\"Hi \" & \"there\"", Value("Hi there"));  // row 107
+  CHECK_EVAL("=\"H\" & \"\"", Value("H"));  // row 108
+// Not passed for line 109.
+  CHECK_EVAL("=50%", Value(0.5));  // row 111
+  CHECK_EVAL("=20+50%", Value(20.5));  // row 112
+  CHECK_EVAL("=+5", Value(5));  // row 113
+  CHECK_EVAL("=+\"Hello\"", Value("Hello"));  // row 114
+  CHECK_EVAL("=-\"7\"", Value("-7"));  // row 116
+  CHECK_EVAL("=DATE(2005;1;3)=DATEVALUE(\"2005-01-03\")", Value(true));  // row 118
+  CHECK_EVAL("=DATE(2017.5; 1; 2)=DATEVALUE(\"2017-01-02\")", Value(true));  // row 119
+  CHECK_EVAL("=DATE(2006; 2.5; 3)=DATEVALUE(\"2006-02-03\")", Value(true));  // row 120
+  CHECK_EVAL("=DATE(2006; 1; 3.5)=DATEVALUE(\"2006-01-03\")", Value(true));  // row 121
+  CHECK_EVAL("=DATE(2006; 13; 3)=DATEVALUE(\"2007-01-03\")", Value(true));  // row 122
+  CHECK_EVAL("=DATE(2006; 1; 32)=DATEVALUE(\"2006-02-01\")", Value(true));  // row 123
+  CHECK_EVAL("=DATE(2006; 25; 34)=DATEVALUE(\"2008-02-03\")", Value(true));  // row 124
+  CHECK_EVAL("=DATE(2006;-1; 1)=DATEVALUE(\"2005-11-01\")", Value(true));  // row 125
+// Not passed for line 126.
+// Not passed for line 127.
+  CHECK_EVAL("=DATE(2004;2;29)=DATEVALUE(\"2004-02-29\")", Value(true));  // row 128
+  CHECK_EVAL("=DATE(2003;2;29)=DATEVALUE(\"2003-03-01\")", Value(true));  // row 129
+  CHECK_EVAL("=DATE(1904; 1; 1)=DATEVALUE(\"1904-01-01\")", Value(true));  // row 130
+  CHECK_EVAL("=DATEVALUE(\"2004-12-25\")=DATE(2004;12;25)", Value(true));  // row 131
+  CHECK_EVAL("=DAY(\"2006-05-21\")", Value(21));  // row 132
+  CHECK_EVAL("=DAY(\"5/21/2006\")", Value(21));  // row 133
+  CHECK_EVAL("=DAY(\"05-21-2006\")", Value(21));  // row 134
+  CHECK_EVAL("=DAY(\"5/21/06\")", Value(21));  // row 135
+  CHECK_EVAL("=DAY(\"5-21-06\")", Value(21));  // row 136
+
+  
 }

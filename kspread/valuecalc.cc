@@ -177,10 +177,22 @@ Value ValueCalc::add (const Value &a, const Value &b)
 {
   if (a.isError()) return a;
   if (b.isError()) return b;
-  double aa, bb;
-  aa = converter->asFloat (a).asFloat();
-  bb = converter->asFloat (b).asFloat();
-  Value res = Value (aa + bb);
+  Value res;
+  if (a.isInteger() && b.isEmpty() || a.isEmpty() && b.isInteger() 
+      || a.isInteger() && b.isInteger())
+  {
+    int aa, bb;
+    aa = converter->asInteger (a).asInteger();
+    bb = converter->asInteger (b).asInteger();
+    res = Value (aa + bb);
+  }
+  else
+  {
+    double aa, bb;
+    aa = converter->asFloat (a).asFloat();
+    bb = converter->asFloat (b).asFloat();
+    res = Value (aa + bb);
+  }
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));

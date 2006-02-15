@@ -5262,7 +5262,10 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
       {
           // real number
           dataType = "Num";
-          str = QString::number(value().asFloat(), 'g', DBL_DIG);
+          if (value().isInteger())
+            str = QString::number(value().asInteger());
+          else
+            str = QString::number(value().asFloat(), 'g', DBL_DIG);
       }
   }
 
@@ -6669,7 +6672,10 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
       else if( dataType == "Num" )
       {
         bool ok = false;
-        setValue ( Value( t.toDouble(&ok) ) ); // We save in non-localized format
+        if (t.contains('.'))
+          setValue ( Value( t.toDouble(&ok) ) ); // We save in non-localized format
+        else
+          setValue ( Value( t.toLong(&ok) ) );
         if ( !ok )
   {
           kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
@@ -6683,15 +6689,21 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
 
   if ( formatType() == Percentage_format )
         {
-          t = locale->formatNumber( value().asFloat() * 100.0, precision );
-    d->strText = pasteOperation( t, d->strText, op );
+          if (value().isInteger())
+            t = locale->formatNumber( value().asInteger() * 100 );
+          else
+            t = locale->formatNumber( value().asFloat() * 100.0, precision );
+          d->strText = pasteOperation( t, d->strText, op );
           d->strText += '%';
         }
         else
-  {
-          t = locale->formatNumber(value().asFloat(), precision);
-    d->strText = pasteOperation( t, d->strText, op );
-  }
+        {
+          if (value().isInteger())
+            t = locale->formatLong(value().asInteger());
+          else
+            t = locale->formatNumber(value().asFloat(), precision);
+          d->strText = pasteOperation( t, d->strText, op );
+        }
       }
 
       // date ?
