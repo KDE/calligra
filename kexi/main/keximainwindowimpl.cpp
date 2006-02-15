@@ -3331,6 +3331,8 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode, bool &opening
 		invalidateSharedActions();
 
 #ifndef KEXI_NO_PENDING_DIALOGS
+	d->removePendingDialog( dlg->id() );
+
 	//perform pending global action that was suspended:
 	if (!d->pendingDialogsExist()) {
 		d->executeActionWhenPendingJobsAreFinished();
