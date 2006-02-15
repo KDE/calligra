@@ -86,8 +86,8 @@ The Kexi main window stuff is text I've written can be mered with 4.6 in HTML
 04_00_00_idx_basics_kexi.html   Removed. (It's empty)
 04_01_00_project_files.html     Done.
 04_02_00_running_kexi.html      Ignoring for now.
-04_03_00_creating_database.html Done.
-04_04_00_project_opening.html   Done.
+04_03_00_creating_database.html Done. TODO: polish source changed - UPDATE!
+04_04_00_project_opening.html   Done. TODO: polish source changed - UPDATE!
 04_05_00_help_on_help.html      Done.
 04_06_00_main_application_elements.html
                                 Merge with "Kexi Main Window" section in docbook.
@@ -101,13 +101,24 @@ Chapter 3: Building Simple Databases (Raphael)
 05_01_00_table_designing.html               Done.
 05_02_00_entering_data_into_tables.html     Ready for conversion
 05_03_00_query_designing.html               Ready for conversion
-05_04_00_form_designing.html                NOT READY FOR CONVERSION YET
+05_04_00_form_designing.html                NOT READY FOR CONVERSION YET; TODO: polish source changed - UPDATE!
 
 Chapter 4. Advanced database topics
-NOT READY FOR CONVERSION YET
+06_01_00_kexi_project_sharing.html           NOT READY FOR CONVERSION YET
+06_02_00_idx_designing_advanced_objects.html NOT READY FOR CONVERSION YET
+06_04_00_using_CLI.html                      NOT READY FOR CONVERSION YET
 
 Chapter 5. Work with external data
-NOT READY FOR CONVERSION YET
+07_01_00_data_import.html                    NOT READY FOR CONVERSION YET
+07_01_01_data_import_csv.html                NOT READY FOR CONVERSION YET
+07_01_02_data_pasting_csv.html               NOT READY FOR CONVERSION YET
+07_02_00_db_project_import.html              NOT READY FOR CONVERSION YET
+07_03_00_data_export.html                    NOT READY FOR CONVERSION YET
+07_03_01_data_export_csv.html                NOT READY FOR CONVERSION YET
+07_03_02_data_copying_csv.html               NOT READY FOR CONVERSION YET
+07_04_00_project_export.html                 NOT READY FOR CONVERSION YET
+07_05_00_working_with_multiple_projects.html NOT READY FOR CONVERSION YET
+
 
 Chapter 6: Configuring Kexi (Martin):
 08_00_00_kexi_tuning.html     Removed. (It's basically a chapter TOC)
@@ -116,12 +127,11 @@ Chapter 6: Configuring Kexi (Martin):
 08_03_00_conf_keys.html       TODO
 
 Chapter 7: Command Reference
-aa_00_00_menu.html                NOT READY FOR CONVERSION YET
-aa_05_00_menu.html                NOT READY FOR CONVERSION YET
-ab_00_00_shortcuts.html           NOT READY FOR CONVERSION YET
+aa_00_00_menu.html                NOT READY FOR CONVERSION YET (MERGE DOCS WITH docbook version)
+ab_00_00_shortcuts.html           NOT READY FOR CONVERSION YET (MERGE DOCS WITH docbook version)
 
-Anne-Marie wrote this text, since the Polish version has
-not been translated into English yet.
+Anne-Marie wrote this text (updated by jstaniek), 
+since the Polish version has not been translated into English yet.
 WILL BE REPALCED BY HTML Appendix A. and B.
 
 Appendix A (Raphael):
@@ -138,10 +148,14 @@ Appendix C: Widgets Reference
 ac_00_00_widgets.html                    NOT READY FOR CONVERSION YET
 TODO
 
-Appendix D: Form Widgets Reference
+Appendix D: Specifications
 ad_00_00_specs.html                      NOT READY FOR CONVERSION YET
 TODO
 
 Appendix E: Example database projects
 ae_00_00_example_projects.html           NOT READY FOR CONVERSION YET
 TODO
+
+Appendix E: Support
+ah_00_00_web_pages.html                  NOT READY FOR CONVERSION YET
+ag_00_00_technical_support.html          NOT READY FOR CONVERSION YET
