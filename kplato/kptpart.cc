@@ -40,7 +40,7 @@
 #include <KoTemplateChooseDia.h>
 #include <KoCommandHistory.h>
 
-#define CURRENT_SYNTAX_VERSION "0.1"
+#define CURRENT_SYNTAX_VERSION "0.2"
 
 namespace KPlato
 {
