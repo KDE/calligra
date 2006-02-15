@@ -348,7 +348,7 @@ bool Resource::load(QDomElement &element) {
     m_email = element.attribute("email");
     setType(element.attribute("type"));
     m_calendar = findCalendar(element.attribute("calendar-id"));
-    m_units = element.attribute("units").toInt();
+    m_units = element.attribute("units", "100").toInt();
     s = element.attribute("available-from");
     if (s != "")
         m_availableFrom = QDateTime::fromString(s);
@@ -848,7 +848,7 @@ Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &dura
     for (; it.current(); ++it) {
         e += it.current()->resource()->effort(time, duration, backward, &sts);
         if (sts && ok) *ok = sts;
-        //kdDebug()<<k_funcinfo<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="duration.toString()<<"gave e="<<e.toString()<<endl;
+        //kdDebug()<<k_funcinfo<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="<<duration.toString()<<"gave e="<<e.toString()<<endl;
     }
     //kdDebug()<<k_funcinfo<<time.toString()<<"d="<<duration.toString()<<": e="<<e.toString()<<endl;
     return e;
@@ -877,7 +877,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
 }
 
 Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, bool backward) {
-    //kdDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
+    kdDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
     Duration e;
     if (_effort == Duration::zeroDuration) {
         return e;
