@@ -1,4 +1,4 @@
-templates_DATA = empty.desktop
+templates_DATA = .directory empty.desktop
 templatesdir = $(kde_datadir)/karbon/templates/Basic
 
 templatesrc_DATA = empty.karbon
