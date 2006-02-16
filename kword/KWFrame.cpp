@@ -647,6 +647,8 @@ QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
     { // non-inline frame, anchored to page
         frameStyle.addProperty( "style:horizontal-rel", "page" );
         frameStyle.addProperty( "style:vertical-rel", "page" );
+        frameStyle.addProperty( "style:horizontal-pos", "from-left" );
+        frameStyle.addProperty( "style:vertical-pos", "from-top" );
     }
 
     saveBorderProperties( frameStyle );
