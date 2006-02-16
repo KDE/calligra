@@ -1928,6 +1928,8 @@ void ValueCalc::getCond (Condition &cond, Value val)
 
 bool ValueCalc::matches (const Condition &cond, Value val)
 {
+  if (val.isEmpty())
+	return false;
   if (cond.type == numeric) {
     double d = converter->asFloat (val).asFloat();
     switch ( cond.comp )
