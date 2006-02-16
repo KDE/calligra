@@ -209,16 +209,21 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
 KoParagStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )
 {
     // Determine style name.
-    // Don't add i18n here, those are internal names and must have no spaces.
     QString name;
-    if ( depth >= 0 )
+    QString displayName;
+    if ( depth >= 0 ) {
+        // Don't add i18n to this one, those are internal names and must have no spaces.
         name = QString( "Contents_Head_%1" ).arg( depth+1 );
-    else
+        displayName = i18n( "Contents Head %1" ).arg( depth+1 );
+    } else {
         name = "Contents_Title";
+        displayName = i18n( "Contents Title" );
+    }
     KoParagStyle * style = fs->kWordDocument()->styleCollection()->findStyle( name );
     if ( !style )
     {
         style = new KoParagStyle( name );
+        style->setDisplayName( displayName );
         style->format().setBold( ( ( depth==-1) || ( depth==0 ) ) ? true : false );
         style->format().setPointSize( depth==-1 ? 20 : 12 );
         if ( depth == -1 )
