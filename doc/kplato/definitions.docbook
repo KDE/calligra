@@ -94,15 +94,15 @@ A task is a part of a project that needs to be accomplished within a defined
 period of time. Tasks can be linked together to create Dependencies. 
 </para>
 <para>
-Tasks take place over a period of time and generally consumes resources.
+Tasks take place over a period of time and generally consume resources.
 </para>
 <para>
 A task is termed critical when it has zero or negative float.
 </para>
 <para>
-In &kplato;, each task has a task ID, a name and a responsible. The timing, the
-cost and the assigned resources can also be set in the <guilabel>Task
-Settings</guilabel>dialog.
+In &kplato;, each task has a task ID, a name and a responsible person.
+The timing, the cost and the assigned resources can also be set
+in the <guilabel>Task Settings</guilabel>dialog.
 </para>
 <para>A subtask is any node in the WBS tree that has a task as its
 parent.</para>
@@ -112,10 +112,12 @@ parent.</para>
 <sect1 id="resource">
 <title>Resource</title>
 <para>
-A resource is an item required to to complete a task. Resources can be
+A resource is an item required to complete a task. Resources can be
 people, equipment, facilities, funding or anything else needed to perform the
 work of a project. Resources can have a limited time availability (&ie; an
-employee that works 8 hours a day, 5 days a week). The availability is
+employee that works 8 hours a day, 5 days a week).
+</para>
+<para>The availability is
 defined by <link linkend="calendar">calendars</link>.
 </para>
 <para>
@@ -134,14 +136,12 @@ Calendars can be either a regular working week or special working times
 that can be individually defined for each day. This allows for very subtle
 control over the availability of resources.
 </para>
-<!--
-<para>
-TO BE WRITTEN: WHAT ABOUT HIERARCHICAL CALENDARS?
-</para>
--->
 <para>
 Every <link linkend="resource">resource</link> is usually connected to a
 calendar.
+</para>
+<para>
+In &kplato; you can even use hierarchical calendars.
 </para>
 </sect1>
 
@@ -172,13 +172,13 @@ longest overall duration, determining the shortest time to complete the project.
 The duration of the critical path determines the duration of the entire project.
 Any delay of a terminal element on the critical path directly impacts the
 planned project completion date (i.e. there is no float on the critical path).
-For example, if a task on the critical path is delayed by one day, then
+For example, if a task on the critical path is delayed by one day, then the
 entire project will be delayed by one day (unless another task on the
 critical path can be accelerated by one day).
 </para>
 <para>
 A project can have several, parallel critical paths. An additional parallel path
-through the network with the total durations just shorter than the critical path
+through the network with the total duration just shorter than the critical path
 is called a sub-critical path.
 </para>
 <para>
