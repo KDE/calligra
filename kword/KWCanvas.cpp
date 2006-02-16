@@ -2137,8 +2137,12 @@ void FrameResizePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint 
     //          << "  boundingrect: " << m_boundingRect << endl;
 
     bool keepAspect = keyState & Qt::AltButton;
-    if(m_frames.count() == 1 && m_frames[0]->frameSet()->type() == FT_PICTURE)
-        keepAspect = !keepAspect;
+    for(unsigned int i=0; !keepAspect && i < m_frames.count(); i++) {
+        KWPictureFrameSet *picFs = dynamic_cast<KWPictureFrameSet*>(m_frames[i]->frameSet());
+        if(picFs)
+            keepAspect = picFs->keepAspectRatio();
+    }
+
     bool noGrid = keyState & Qt::ShiftButton;
     bool scaleFromCenter = keyState & Qt::ControlButton;
 
