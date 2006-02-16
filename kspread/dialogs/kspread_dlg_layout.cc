@@ -67,6 +67,12 @@
 
 using namespace KSpread;
 
+/***************************************************************************
+ *
+ * PatternSelect
+ *
+ ***************************************************************************/
+
 PatternSelect::PatternSelect( QWidget *parent, const char * )
   : QFrame( parent )
 {
@@ -134,6 +140,12 @@ void PatternSelect::slotSelect()
 }
 
 
+
+/***************************************************************************
+ *
+ * GeneralTab
+ *
+ ***************************************************************************/
 
 GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   : QWidget( parent ),
@@ -298,6 +310,12 @@ bool GeneralTab::apply( CustomStyle * style )
 }
 
 
+
+/***************************************************************************
+ *
+ * CellFormatDialog
+ *
+ ***************************************************************************/
 
 CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   : QObject(),
@@ -694,6 +712,9 @@ void CellFormatDialog::initGUI()
   bHideFormula   = m_style->hasProperty( Style::PHideFormula );
   bHideAll       = m_style->hasProperty( Style::PHideAll );
   bIsProtected   = !m_style->hasProperty( Style::PNotProtected );
+
+  widthSize  = defaultWidthSize;
+  heightSize = defaultHeightSize;
 }
 
 CellFormatDialog::~CellFormatDialog()
@@ -739,6 +760,10 @@ void CellFormatDialog::initMembers()
 
   cCurrency.symbol = locale()->currencySymbol();
   cCurrency.type   = 0;
+
+  Sheet* sheet = m_pView->activeSheet();
+  defaultWidthSize  = sheet ? sheet->columnFormat(0)->dblWidth() : 0;
+  defaultHeightSize = sheet ? sheet->rowFormat(0)->dblHeight() : 0;
 }
 
 bool CellFormatDialog::checkCircle( QString const & name, QString const & parent )
@@ -1044,6 +1069,13 @@ void CellFormatDialog::slotApply()
   m_pView->updateEditWidget();
 }
 
+
+
+/***************************************************************************
+ *
+ * CellFormatPageFloat
+ *
+ ***************************************************************************/
 
 CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dlg )
   : QWidget ( parent ),
@@ -1840,6 +1872,14 @@ void CellFormatPageFloat::apply(FormatManipulator* _obj)
   }
 }
 
+
+
+/***************************************************************************
+ *
+ * CellFormatPageProtection
+ *
+ ***************************************************************************/
+
 CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatDialog * _dlg )
   : ProtectionTab( parent ),
     m_dlg( _dlg )
@@ -1903,6 +1943,14 @@ void CellFormatPageProtection::apply(FormatManipulator* _obj)
   if ( m_dlg->bHideFormula != m_bHideFormula->isChecked())
     _obj->setHideFormula( m_bHideFormula->isChecked() );
 }
+
+
+
+/***************************************************************************
+ *
+ * CellFormatPageFont
+ *
+ ***************************************************************************/
 
 CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg ) : FontTab( parent )
 {
@@ -2171,6 +2219,14 @@ void CellFormatPageFont::setCombos()
  }
 }
 
+
+
+/***************************************************************************
+ *
+ * CellFormatPagePosition
+ *
+ ***************************************************************************/
+
 CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialog *_dlg )
   : PositionTab(parent ),
     dlg( _dlg )
@@ -2224,7 +2280,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     if ( dlg->isRowSelected )
         width->setEnabled(false);
 
-    defaultWidth->setText(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue( 60, dlg->getDoc()->unit())).arg(dlg->getDoc()->unitName()));
+    defaultWidth->setText(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue(dlg->defaultWidthSize, dlg->getDoc()->unit()), 0, 'f', 2).arg(dlg->getDoc()->unitName()));
     if ( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
@@ -2239,9 +2295,15 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     if ( dlg->isColumnSelected )
         height->setEnabled(false);
 
-    defaultHeight->setText(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(  20 , dlg->getDoc()->unit())).arg(dlg->getDoc()->unitName())); //annma
+    defaultHeight->setText(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(dlg->defaultHeightSize, dlg->getDoc()->unit()), 0, 'f', 2).arg(dlg->getDoc()->unitName())); //annma
     if ( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
+
+    // in case we're editing a style, we disable the cell size settings
+    if (dlg->getStyle())
+    {
+      sizeCellGroup->setEnabled(false);
+    }
 
     connect(defaultWidth , SIGNAL(clicked() ),this, SLOT(slotChangeWidthState()));
     connect(defaultHeight , SIGNAL(clicked() ),this, SLOT(slotChangeHeightState()));
@@ -2279,8 +2341,8 @@ void CellFormatPagePosition::slotStateChanged(int)
         m_indent->setEnabled(false);
     else
         m_indent->setEnabled(true);
-
 }
+
 bool CellFormatPagePosition::getMergedCellState() const
 {
     return  mergeCell->isChecked();
@@ -2431,7 +2493,7 @@ void CellFormatPagePosition::apply(FormatManipulator* _obj)
 double CellFormatPagePosition::getSizeHeight() const
 {
   if ( defaultHeight->isChecked() )
-      return 20.0;
+    return dlg->defaultHeightSize; // guess who calls this!
   else
       return height->value();
 }
@@ -2439,10 +2501,18 @@ double CellFormatPagePosition::getSizeHeight() const
 double CellFormatPagePosition::getSizeWidth() const
 {
   if ( defaultWidth->isChecked() )
-        return 60.0;
+    return dlg->defaultWidthSize; // guess who calls this!
   else
         return width->value();
 }
+
+
+
+/***************************************************************************
+ *
+ * BorderButton
+ *
+ ***************************************************************************/
 
 BorderButton::BorderButton( QWidget *parent, const char *_name ) : QPushButton(parent,_name)
 {
@@ -2476,6 +2546,14 @@ void BorderButton::unselect()
   setColor( colorGroup().text() );
   setChanged(true);
 }
+
+
+
+/***************************************************************************
+ *
+ * Border
+ *
+ ***************************************************************************/
 
 Border::Border( QWidget *parent, const char *_name,bool _oneCol, bool _oneRow )
     : QFrame( parent, _name )
@@ -2528,6 +2606,14 @@ void Border::mousePressEvent( QMouseEvent* _ev )
 {
   emit choosearea(_ev);
 }
+
+
+
+/***************************************************************************
+ *
+ * CellFormatPageBorder
+ *
+ ***************************************************************************/
 
 CellFormatPageBorder::CellFormatPageBorder( QWidget* parent, CellFormatDialog *_dlg )
   : QWidget( parent ),
@@ -3385,6 +3471,14 @@ if (rect.contains(QPoint(_ev->x(),_ev->y())))
   area->repaint();
 }
 
+
+
+/***************************************************************************
+ *
+ * BrushSelect
+ *
+ ***************************************************************************/
+
 BrushSelect::BrushSelect( QWidget *parent, const char * ) : QFrame( parent )
 {
     brushStyle = Qt::NoBrush;
@@ -3438,6 +3532,13 @@ void BrushSelect::slotSelect()
     repaint();
 }
 
+
+
+/***************************************************************************
+ *
+ * CellFormatPagePattern
+ *
+ ***************************************************************************/
 
 CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog *_dlg ) : QWidget( parent )
 {

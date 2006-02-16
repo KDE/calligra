@@ -567,8 +567,8 @@ public:
     bool bHideAll;
     bool bIsProtected;
 
-
-
+    double defaultHeightSize;
+    double defaultWidthSize;
     double heightSize;
     double widthSize;
 
