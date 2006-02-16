@@ -580,6 +580,10 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 KexiDB::SchemaData*
 KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 {
+	if (!d->dataTable->dataAwareObject()->acceptRowEdit()) {
+		cancel = true;
+		return 0;
+	}
 	QString errMsg;
 	if (!buildSchema(&errMsg)) {
 		KMessageBox::sorry(this, errMsg);
@@ -606,6 +610,9 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 
 tristate KexiQueryDesignerGuiEditor::storeData(bool dontAsk)
 {
+	if (!d->dataTable->dataAwareObject()->acceptRowEdit())
+		return cancelled;
+
 	const bool was_dirty = dirty();
 	tristate res = KexiViewBase::storeData(dontAsk); //this clears dirty flag
 	if (true == res)

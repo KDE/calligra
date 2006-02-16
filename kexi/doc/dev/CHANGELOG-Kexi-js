@@ -1,21 +1,23 @@
--------------------------------------------------------------
+-----------------------------------------------------------------------------
  Kexi Development CHANGELOG Document
  From js's Point of View
  
- Copyright (C) 2003-2005 Jaroslaw Staniek js at iidea dot pl
- (C) OpenOffice Polska 2003-2006
+ Copyright (C) 2003-2006 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
  Kexi home page: http://www.kexi-project.org/
--------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
-2006-02-15
+2006-02-15,16
 General
 - when query design has been changed and saved, subsequent openings of a form using 
   it will reload it's definition. The same for 'page setup' dialogs, etc.
 - fixed crash when 'page setup' dialog is opened, closed, and opened again for 
   the same data object
+Query Designer
+- Row editing within the "Columns" area is accepted before saving.
+  If the editing cannot be accepted, saving is aborted. 
 
 2006-02-10, 14
 Main Window
