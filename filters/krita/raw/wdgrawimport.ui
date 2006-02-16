@@ -9,8 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>561</width>
-            <height>690</height>
+            <height>733</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>WdgRawImport</string>
     </property>
     <grid>
         <property name="name">
@@ -110,7 +113,10 @@
                         <cstring>radioGray</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Grayscale</string>
+                        <string>&amp;Document mode</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
@@ -125,276 +131,6 @@
                     </property>
                 </widget>
             </grid>
-        </widget>
-        <widget class="QGroupBox" row="4" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>grpColorSettings</cstring>
-            </property>
-            <property name="title">
-                <string>Color Settings</string>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout12</cstring>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer row="1" column="1">
-                            <property name="name">
-                                <cstring>spacer2</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>101</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QLayoutWidget" row="1" column="0">
-                            <property name="name">
-                                <cstring>layout6</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>lblBlackpoint</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Blackpoint:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>dblBlackpoint</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KDoubleSpinBox">
-                                    <property name="name">
-                                        <cstring>dblBlackpoint</cstring>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                        <spacer row="0" column="1">
-                            <property name="name">
-                                <cstring>spacer1</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>91</width>
-                                    <height>21</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>chkClip</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Clip colors to prevent &amp;pink highlights</string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>By default, dcraw clips all colors to prevent pink hues in the highlights. Combine this option with -b 0.25 to leave the image data completely unclipped.</string>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget" row="0" column="0">
-                            <property name="name">
-                                <cstring>layout5</cstring>
-                            </property>
-                            <hbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
-                                </property>
-                                <widget class="QLabel">
-                                    <property name="name">
-                                        <cstring>lblBrightness</cstring>
-                                    </property>
-                                    <property name="text">
-                                        <string>Brightness:</string>
-                                    </property>
-                                    <property name="buddy" stdset="0">
-                                        <cstring>dblBrightness</cstring>
-                                    </property>
-                                </widget>
-                                <widget class="KDoubleSpinBox">
-                                    <property name="name">
-                                        <cstring>dblBrightness</cstring>
-                                    </property>
-                                    <property name="value">
-                                        <number>3</number>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Brightness. 1.0 is default</string>
-                                    </property>
-                                </widget>
-                            </hbox>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QButtonGroup">
-                    <property name="name">
-                        <cstring>grpWhiteBalance</cstring>
-                    </property>
-                    <property name="title">
-                        <string>&amp;White Balance</string>
-                    </property>
-                    <property name="exclusive">
-                        <bool>true</bool>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QRadioButton" row="0" column="0">
-                            <property name="name">
-                                <cstring>radioAutomatic</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Automatic white balance</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="checked">
-                                <bool>true</bool>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Automatic color balance. The default is to use a fixed color balance based on a white card photographed in sunlight.</string>
-                            </property>
-                        </widget>
-                        <widget class="QRadioButton" row="1" column="0">
-                            <property name="name">
-                                <cstring>radioCamera</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Camera white balance</string>
-                            </property>
-                            <property name="accel">
-                                <string></string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>
- Use the color balance specified by the camera. If this cannot be found, dcraw prints a warning and reverts to the default. </string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>layout7</cstring>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout3</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>lblProfile</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>true</bool>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Profile:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring></cstring>
-                            </property>
-                        </widget>
-                        <widget class="KisCmbIDList">
-                            <property name="name">
-                                <cstring>cmbProfile</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>true</bool>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout4</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>lblCurve</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Curve:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>txtCurve</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QLineEdit">
-                            <property name="name">
-                                <cstring>txtCurve</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                        </widget>
-                        <widget class="QPushButton">
-                            <property name="name">
-                                <cstring>bnLoadCurve</cstring>
-                            </property>
-                            <property name="enabled">
-                                <bool>false</bool>
-                            </property>
-                            <property name="text">
-                                <string>...</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
         </widget>
         <widget class="QCheckBox" row="3" column="0">
             <property name="name">
@@ -433,6 +169,317 @@
                     <height>300</height>
                 </size>
             </property>
+        </widget>
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>layout10</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>chkProfile</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Clip colors to prevent pink highlights</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="KisCmbIDList">
+                    <property name="name">
+                        <cstring>cmbProfile</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="4" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>grpColorSettings</cstring>
+            </property>
+            <property name="title">
+                <string>Color Settings</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QButtonGroup" row="0" column="4" rowspan="3" colspan="1">
+                    <property name="name">
+                        <cstring>grpWhiteBalance</cstring>
+                    </property>
+                    <property name="title">
+                        <string>&amp;White Balance</string>
+                    </property>
+                    <property name="exclusive">
+                        <bool>true</bool>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioFixed</cstring>
+                            </property>
+                            <property name="text">
+                                <string>White card in sunlight</string>
+                            </property>
+                            <property name="checked">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioAutomatic</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Automatic white balance</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="checked">
+                                <bool>false</bool>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Automatic color balance. The default is to use a fixed color balance based on a white card photographed in sunlight.</string>
+                            </property>
+                        </widget>
+                        <widget class="QRadioButton">
+                            <property name="name">
+                                <cstring>radioCamera</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Camera white balance</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>
+ Use the color balance specified by the camera. If this cannot be found, dcraw prints a warning and reverts to the default. </string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QCheckBox" row="3" column="4">
+                    <property name="name">
+                        <cstring>chkClip</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Clip colors to prevent pink highlights</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>By default, dcraw clips all colors to prevent pink hues in the highlights. Combine this option with -b 0.25 to leave the image data completely unclipped.</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>chkBrightness</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="1">
+                    <property name="name">
+                        <cstring>lblBrightness</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Brightness:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>dblBrightness</cstring>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>chkBlackpoint</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1">
+                    <property name="name">
+                        <cstring>lblBlackpoint</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Blackpoint:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>dblBlackpoint</cstring>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="2" column="0">
+                    <property name="name">
+                        <cstring>chkRed</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="1">
+                    <property name="name">
+                        <cstring>lblRed</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Red multiplier:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>dblBlackpoint</cstring>
+                    </property>
+                </widget>
+                <widget class="KDoubleSpinBox" row="2" column="2">
+                    <property name="name">
+                        <cstring>dblRed</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0.1</number>
+                    </property>
+                    <property name="value">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <spacer row="2" column="3">
+                    <property name="name">
+                        <cstring>spacer2_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>36</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="3" column="0">
+                    <property name="name">
+                        <cstring>chkBlue</cstring>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="1">
+                    <property name="name">
+                        <cstring>lblBlue</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Blue multiplier:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>dblBlackpoint</cstring>
+                    </property>
+                </widget>
+                <widget class="KDoubleSpinBox" row="3" column="2">
+                    <property name="name">
+                        <cstring>dblBlue</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0.1</number>
+                    </property>
+                    <property name="value">
+                        <number>1</number>
+                    </property>
+                </widget>
+                <spacer row="3" column="3">
+                    <property name="name">
+                        <cstring>spacer2_3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>32</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <spacer row="1" column="3">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>50</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <spacer row="0" column="3">
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="KDoubleSpinBox" row="1" column="2">
+                    <property name="name">
+                        <cstring>dblBlackpoint</cstring>
+                    </property>
+                </widget>
+                <widget class="KDoubleSpinBox" row="0" column="2">
+                    <property name="name">
+                        <cstring>dblBrightness</cstring>
+                    </property>
+                    <property name="minValue">
+                        <number>0.1</number>
+                    </property>
+                    <property name="value">
+                        <number>2</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Brightness. 1.0 is default</string>
+                    </property>
+                </widget>
+            </grid>
         </widget>
     </grid>
 </widget>
@@ -494,14 +541,23 @@
     <tabstop>bnPreview</tabstop>
     <tabstop>radioRGB</tabstop>
     <tabstop>radio16</tabstop>
-    <tabstop>txtCurve</tabstop>
-    <tabstop>bnLoadCurve</tabstop>
+    <tabstop>chkFourColorRGB</tabstop>
+    <tabstop>chkCameraColors</tabstop>
+    <tabstop>chkBrightness</tabstop>
+    <tabstop>dblBrightness</tabstop>
+    <tabstop>chkBlackpoint</tabstop>
+    <tabstop>dblBlackpoint</tabstop>
+    <tabstop>chkClip</tabstop>
+    <tabstop>radioAutomatic</tabstop>
+    <tabstop>chkProfile</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>kis_cmb_idlist.h</includehint>
     <includehint>imageviewer.h</includehint>
+    <includehint>kiscmbidlist.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
 </includehints>
 </UI>

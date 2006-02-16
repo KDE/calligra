@@ -31,6 +31,8 @@
 #include <qcursor.h>
 #include <qeventloop.h>
 
+#include <kglobal.h>
+#include <kconfig.h>
 #include <knuminput.h>
 #include <kgenericfactory.h>
 #include <kdialogbase.h>
@@ -117,8 +119,51 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
     m_dialog->setCursor(Qt::ArrowCursor);
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
+    KConfig * cfg = KGlobal::config();
+    cfg->setGroup("rawimport");
+    
+    m_page->radioGray->setChecked(cfg->readBoolEntry("gray", false));
+    m_page->radioRGB->setChecked(cfg->readBoolEntry("rgb", true));
+    m_page->radio8->setChecked(cfg->readBoolEntry("8bit", false));
+    m_page->radio16->setChecked(cfg->readBoolEntry("16bit", true));
+    m_page->chkFourColorRGB->setChecked( cfg->readBoolEntry("four_color_rgb", false));
+    m_page->chkCameraColors->setChecked( cfg->readBoolEntry("camera_colors", false));
+    m_page->chkBrightness->setChecked( cfg->readBoolEntry("do_brightness", false));
+    m_page->chkBlackpoint->setChecked( cfg->readBoolEntry("do_blackpoint", false));
+    m_page->chkRed->setChecked( cfg->readBoolEntry("do_red", false));
+    m_page->chkBlue->setChecked( cfg->readBoolEntry("do_blue", false));
+    m_page->radioFixed->setChecked( cfg->readBoolEntry("fixed_wb", true));
+    m_page->radioAutomatic->setChecked( cfg->readBoolEntry("automatic_wb", false));
+    m_page->radioCamera->setChecked( cfg->readBoolEntry("camera_wb", false));
+    m_page->chkClip->setChecked( cfg->readBoolEntry("clip", true));
+    m_page->chkProfile->setChecked(cfg->readBoolEntry("useprofile", false));
+    m_page->dblBrightness->setValue(cfg->readDoubleNumEntry("brightness", 1.0));
+    m_page->dblBlackpoint->setValue(cfg->readDoubleNumEntry("blackpoint", 0));
+    m_page->dblRed->setValue(cfg->readDoubleNumEntry("red", 1.0));
+    m_page->dblBlue->setValue(cfg->readDoubleNumEntry("blue", 1.0));
+    
     if (m_dialog->exec() == QDialog::Accepted) {
 
+        cfg->writeEntry("gray", m_page->radioGray->isChecked());
+        cfg->writeEntry("rgb", m_page->radioRGB->isChecked());
+        cfg->writeEntry("8bit", m_page->radio8->isChecked());
+        cfg->writeEntry("16bit", m_page->radio16->isChecked());
+        cfg->writeEntry("four_color_rgb", m_page->chkFourColorRGB -> isChecked());
+        cfg->writeEntry("camera_colors", m_page->chkCameraColors -> isChecked());
+        cfg->writeEntry("do_brightness", m_page->chkBrightness -> isChecked());
+        cfg->writeEntry("do_blackpoint", m_page->chkBlackpoint -> isChecked());
+        cfg->writeEntry("do_red", m_page->chkRed -> isChecked());
+        cfg->writeEntry("do_blue", m_page->chkBlue -> isChecked());
+        cfg->writeEntry("fixed_wb", m_page->radioFixed -> isChecked());
+        cfg->writeEntry("automatic_wb", m_page->radioAutomatic -> isChecked());
+        cfg->writeEntry("camera_wb", m_page->radioCamera -> isChecked());
+        cfg->writeEntry("clip", m_page->chkClip->isChecked());
+        cfg->writeEntry("useprofile", m_page->chkProfile->isChecked());
+        cfg->writeEntry("brightness", m_page->dblBrightness->value());
+        cfg->writeEntry("blackpoint", m_page->dblBlackpoint->value());
+        cfg->writeEntry("red", m_page->dblRed->value());
+        cfg->writeEntry("blue", m_page->dblBlue->value());
+        
         QApplication::setOverrideCursor(Qt::waitCursor);
         doc -> undoAdapter() -> setUndo(false);
 
@@ -204,12 +249,24 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
                         pos += 2;
                     }
                     else {
-                        for (int c = 0; c < 6; c+=2) {
-                            Q_UINT16 d = (Q_INT16)*(data + pos);
-                            d = ntohs(d);
-                            memcpy(it.rawData() + c, &d, 2);
-                            pos += 2;
-                        }
+                        // Red
+                        Q_UINT16 d = (Q_INT16)*(data + pos);
+                        d = ntohs(d);
+                        memcpy(it.rawData() + 4, &d, 2);
+                        
+                        // Green
+                        pos += 2;
+                        d = (Q_INT16)*(data + pos );
+                        d = ntohs(d);
+                        memcpy(it.rawData() + 2, &d, 2);
+
+                        // Blue
+                        pos += 2;
+                        d = (Q_INT16)*(data + pos );
+                        d = ntohs(d);
+                        memcpy(it.rawData(), &d, 2);
+
+                        pos += 2;
                     }
                     cs->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                     ++it;
@@ -287,12 +344,24 @@ void KisRawImport::slotUpdatePreview()
                     pos += 2;
                 }
                 else {
-                    for (int c = 0; c < 6; c+=2) {
+                            // Red
                         Q_UINT16 d = (Q_INT16)*(data + pos);
                         d = ntohs(d);
-                        memcpy(it.rawData() + c, &d, 2);
+                        memcpy(it.rawData() + 4, &d, 2);
+                            
+                            // Green
                         pos += 2;
-                    }
+                        d = (Q_INT16)*(data + pos );
+                        d = ntohs(d);
+                        memcpy(it.rawData() + 2, &d, 2);
+    
+                            // Blue
+                        pos += 2;
+                        d = (Q_INT16)*(data + pos );
+                        d = ntohs(d);
+                        memcpy(it.rawData(), &d, 2);
+
+                        pos += 2;
                 }
                 cs->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
                 ++it;
@@ -402,7 +471,8 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     if (m_page->radioAutomatic->isChecked()) {
         args.append("-a"); // Automatic white balancing
     }
-    else {
+
+    if (m_page->radioCamera->isChecked()) {
         args.append("-w"); // Use camera white balance, if present
     }
 
@@ -414,15 +484,31 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
         args.append("-n"); // Do not clip colors
     }
 
-    args.append("-b " + QString::number(m_page->dblBrightness->value()));
-    args.append("-k " + QString::number(m_page->dblBlackpoint->value()));
+    if (m_page->chkBrightness->isChecked()) {
+        args.append("-b " + QString::number(m_page->dblBrightness->value()));
+    }
+    
+    if (m_page->chkBlackpoint->isChecked()) {
+        args.append("-k " + QString::number(m_page->dblBlackpoint->value()));
+    }
 
+    if (m_page->chkRed->isChecked()) {
+        args.append("-r " + QString::number(m_page->dblRed->value()));
+    }
+    
+    if (m_page->chkBlue->isChecked()) {
+        args.append("-l " + QString::number(m_page->dblBlue->value()));
+    }
+
+    
     KisProfile * pf  = profile();
-    if (!pf->filename().isNull()) {
-        // Use the user-set profile, if it's not an lcms internal
-        // profile. This does not add the profile to the image, we
-        // need to do that later.
-        args.append("-p \"" + pf->filename() + "\"");
+    if (m_page->chkProfile->isChecked()) {
+        if (!pf->filename().isNull()) {
+            // Use the user-set profile, if it's not an lcms internal
+            // profile. This does not add the profile to the image, we
+            // need to do that later.
+            args.append("-p \"" + pf->filename() + "\"");
+        }
     }
 
     // Don't forget the filename
@@ -470,7 +556,11 @@ QSize KisRawImport::determineSize(Q_UINT32 * startOfImageData)
 
 KisProfile * KisRawImport::profile()
 {
-    return KisMetaRegistry::instance()->csRegistry()->getProfileByName(m_page->cmbProfile->currentText());
+    if (m_page->chkProfile->isChecked()) {
+        return KisMetaRegistry::instance()->csRegistry()->getProfileByName(m_page->cmbProfile->currentText());
+    }
+    else
+        return 0;
 }
 
 void KisRawImport::slotFillCmbProfiles()
