@@ -65,7 +65,7 @@ QString ValueFormatter::formatText (const Value &value,
   //if we have an array, use its first element
   if (value.isArray())
     return formatText (value.element (0, 0), fmtType, precision,
-        floatFormat, prefix, postfix);
+        floatFormat, prefix, postfix, currencySymbol);
 
   QString str;
   
@@ -102,7 +102,7 @@ QString ValueFormatter::formatText (const Value &value,
     if ((floatFormat == Format::AlwaysUnsigned) && (v < 0))
       v *= -1;
     str = createNumberFormat (v, fmtType,
-        (floatFormat == Format::AlwaysSigned));
+        (floatFormat == Format::AlwaysSigned), currencySymbol);
   }
   else
   {
@@ -242,11 +242,10 @@ void ValueFormatter::removeTrailingZeros (QString &str, QChar decimal_point)
 
 
 QString ValueFormatter::createNumberFormat ( long value, FormatType fmt, 
-	 bool alwaysSigned)
+	 bool alwaysSigned, const QString& currencySymbol)
 {
   QString number;
-  int pos = 0;
-  
+
   //multiply value by 100 for percentage format
   if (fmt == Percentage_format)
     value *= 100;
@@ -261,8 +260,7 @@ QString ValueFormatter::createNumberFormat ( long value, FormatType fmt,
       number = QString::number(value) + " %";
       break;
     case Money_format:
-      number = converter->locale()->formatMoney (value, 
-          converter->locale()->currencySymbol());
+      number = converter->locale()->formatMoney (value, currencySymbol.isEmpty() ? converter->locale()->currencySymbol() : currencySymbol);
       break;
     default :
       //other formatting?
@@ -287,7 +285,7 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
   int p = (precision == -1) ? 8 : precision;
   QString localizedNumber;
   int pos = 0;
-  
+
   //multiply value by 100 for percentage format
   if (fmt == Percentage_format)
     value *= 100;
