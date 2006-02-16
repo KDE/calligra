@@ -12,6 +12,8 @@
 #include "kchart_params.h"
 #include "koffice_export.h"
 
+class KoXmlWriter;
+class KoGenStyles;
 namespace KChart
 {
 
@@ -71,7 +73,8 @@ public:
 				     KoOasisStyles& oasisStyles,
 				     const QDomDocument& settings,
 				     KoStore *store );
-    virtual bool          saveOasis(KoStore*, KoXmlWriter*);
+    virtual bool          saveOasis( KoStore* store,
+                                     KoXmlWriter* manifestWriter );
 
     bool  canChangeValue()   const             { return m_bCanChangeValue; }
 
@@ -95,6 +98,7 @@ protected:
     bool  loadAuxiliary( const QDomDocument& doc );
     bool  loadData( const QDomDocument& doc, KDChartTableData& currentData );
     bool  loadOasisData( const QDomElement& tableElem );
+    void  saveOasisData( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
 
 private:
     // Helper methods for painting.
@@ -133,7 +137,7 @@ public:
         : KoChart::WizardExtension( part ) {};
 
     virtual bool show( QString &area ) {
-        return static_cast<KChartPart *>( part() )->showWizard( area ); 
+        return static_cast<KChartPart *>( part() )->showWizard( area );
     }
 };
 

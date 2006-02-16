@@ -23,6 +23,7 @@
 #include <kdebug.h>
 
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include "kdchart/KDChartParams.h"
 #include "kdchart/KDChartAxisParams.h"
@@ -77,18 +78,18 @@ KChartParams::stringToChartType( const QString& _string )
 
 
 void KChartParams::setFirstRowAsLabel( bool _val )
-{ 
+{
     m_firstRowAsLabel = _val;
 
-    m_part->doSetData( *m_part->data(), 
+    m_part->doSetData( *m_part->data(),
 		       m_firstRowAsLabel, m_firstColAsLabel );
 }
 
 void KChartParams::setFirstColAsLabel( bool _val )
-{ 
-    m_firstColAsLabel = _val; 
+{
+    m_firstColAsLabel = _val;
 
-    m_part->doSetData( *m_part->data(), 
+    m_part->doSetData( *m_part->data(),
 		       m_firstRowAsLabel, m_firstColAsLabel );
 }
 
@@ -123,6 +124,7 @@ bool KChartParams::loadOasis( const QDomElement& chartElem,
             kdDebug(35001) << "found chart of type " << chartClass << endl;
             setChartType( oasisChartTypes[i].chartType );
             knownType = true;
+            break;
         }
     }
     if ( !knownType ) {
@@ -137,6 +139,22 @@ bool KChartParams::loadOasis( const QDomElement& chartElem,
     // TODO...
 
     return true;
+}
+
+void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
+{
+    Q_UNUSED( mainStyles );
+    bool knownType = false;
+    for ( unsigned int i = 0 ; i < numOasisChartTypes ; ++i ) {
+        if ( m_chartType == oasisChartTypes[i].chartType ) {
+            bodyWriter->addAttribute( "chart:class", oasisChartTypes[i].oasisClass );
+            knownType = true;
+            break;
+        }
+    }
+    if ( !knownType ) {
+        kdError(32001) << "Unknown chart type in KChartParams::saveOasis, extend oasisChartTypes!" << endl;
+    }
 }
 
 }  //KChart namespace

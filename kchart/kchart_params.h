@@ -22,6 +22,8 @@
 #define KCHART_PARAMS_H
 
 
+class KoXmlWriter;
+class KoGenStyles;
 class KoOasisStyles;
 class KDChartParams;
 class DCOPObject;
@@ -49,13 +51,13 @@ class KChartParams : public KDChartParams
 	Ring       = KDChartParams::Ring,
 	Polar      = KDChartParams::Polar,
 	BoxWhisker = KDChartParams::BoxWhisker,
-    
+
 	// Only in KChart
 	BarLines
     } ChartType;
 
     // Data direction
-    typedef  enum { 
+    typedef  enum {
 	DataRows    = 0,
 	DataColumns = 1
     } DataDirection;
@@ -91,8 +93,8 @@ class KChartParams : public KDChartParams
     // ----------------------------------------------------------------
     // BARLINES CHART-SPECIFIC
 
-    enum BarlinesChartSubType { 
-	BarlinesNormal, 
+    enum BarlinesChartSubType {
+	BarlinesNormal,
 	BarlinesStacked,
 	BarlinesPercent
     };
@@ -134,6 +136,7 @@ public slots:
     bool loadOasis( const QDomElement& chartElem,
                     KoOasisStyles& oasisStyles,
                     QString& errorMessage );
+    void saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles );
 
   private:
     KChartPart    *m_part;
@@ -144,7 +147,7 @@ public slots:
 
     bool           m_firstRowAsLabel;
     bool           m_firstColAsLabel;
-    
+
     DCOPObject    *m_dcop;
 };
 
