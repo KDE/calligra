@@ -127,6 +127,7 @@ QString KoSpell::getMoreText()
     kdDebug()<<"getMoreText: dialog = " << d->dialog << ", itr = "
              << d->itr << ", atEnd = "
              << ( ( d->itr ) ? d->itr->atEnd() : true )
+             << " d->parag=" << d->parag
              << endl;
 #endif
 
@@ -136,17 +137,15 @@ QString KoSpell::getMoreText()
             d->lastTxtDocument = d->itr->currentTextObject()->textDocument();
     }
 
-    bool iteratorAtEnd = d->itr && d->itr->atEnd();
+    if ( d->itr && d->itr->atEnd() )
+        return QString::null;
 
-    if ( !d->dialog && ( !d->itr || iteratorAtEnd ) ) {
+    if ( !d->dialog && !d->itr ) {
         QString str = d->parag ? d->parag->string()->stringToSpellCheck() : QString::null;
         if ( !str.isEmpty() )
             emit aboutToFeedText();
         return str;
     }
-
-    if ( iteratorAtEnd )
-        return QString::null;
 
     d->needsIncrement = true;
 
@@ -200,10 +199,16 @@ int KoSpell::currentStartIndex() const
 
 void KoSpell::slotCurrentParagraphDeleted()
 {
+#ifdef DEBUG_SPELL
+    kdDebug() << "KoSpell::slotCurrentParagraphDeleted itr=" << d->itr << endl;
+#endif
     stop();
     if ( d->itr ) {
         d->needsIncrement = false;
         d->parag = d->itr->currentParag();
+#ifdef DEBUG_SPELL
+        kdDebug() << "KoSpell::slotCurrentParagraphDeleted d->parag=" << d->parag << endl;
+#endif
         start();
     } else {
         d->parag = 0;
