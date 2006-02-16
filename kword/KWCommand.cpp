@@ -2058,12 +2058,14 @@ KWResizeColumnCommand::KWResizeColumnCommand( KWTableFrameSet *table, int col, d
 void KWResizeColumnCommand::execute()
 {
   m_table->resizeColumn(m_col, m_newSize);
+  m_table->kWordDocument()->layout();
   m_table->kWordDocument()->repaintAllViews();
 }
 
 void KWResizeColumnCommand::unexecute()
 {
   m_table->resizeColumn(m_col, m_oldSize);
+  m_table->kWordDocument()->layout();
   m_table->kWordDocument()->repaintAllViews();
 }
 
