@@ -73,7 +73,7 @@ int testLookup()
     kdDebug() << "The third style got assigned the name " << thirdName << endl;
     assert( thirdName == "P1" );
 
-    KoGenStyle user( KoGenStyle::STYLE_USER ); // differs from third since it doesn't inherit second, and has a different type
+    KoGenStyle user( KoGenStyle::STYLE_USER, "paragraph" ); // differs from third since it doesn't inherit second, and has a different type
     user.addProperty( "style:margin-left", "1.249cm" );
 
     QString userStyleName = coll.lookup( user, "User", KoGenStyles::DontForceNumbering );
@@ -125,6 +125,12 @@ int testLookup()
 
 int testDefaultStyle()
 {
+    /* Create a default style,
+     * and then an auto style with exactly the same attributes
+     * -> the lookup gives the default style.
+     *
+     * Also checks how the default style gets written out to XML.
+     */
     KoGenStyles coll;
 
     KoGenStyle defaultStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
@@ -151,12 +157,50 @@ int testDefaultStyle()
     return 0;
 }
 
+int testUserStyles()
+{
+    /* Two user styles with exactly the same attributes+properties will not get merged, since
+     * they don't have exactly the same attributes after all: the display-name obviously differs :)
+     */
+    KoGenStyles coll;
+
+    KoGenStyle user1( KoGenStyle::STYLE_USER, "paragraph" );
+    user1.addAttribute( "style:display-name", "User 1" );
+    user1.addProperty( "myfont", "isBold" );
+
+    QString user1StyleName = coll.lookup( user1, "User1", KoGenStyles::DontForceNumbering );
+    kdDebug() << "The user style got assigned the name " << user1StyleName << endl;
+    assert( user1StyleName == "User1" );
+
+    KoGenStyle user2( KoGenStyle::STYLE_USER, "paragraph" );
+    user2.addAttribute( "style:display-name", "User 2" );
+    user2.addProperty( "myfont", "isBold" );
+
+    QString user2StyleName = coll.lookup( user2, "User2", KoGenStyles::DontForceNumbering );
+    kdDebug() << "The user style got assigned the name " << user2StyleName << endl;
+    assert( user2StyleName == "User2" );
+
+    assert( coll.styles().count() == 2 );
+
+    TEST_BEGIN( 0, 0 );
+    user1.writeStyle( &writer, coll, "style:style", user1StyleName, "style:paragraph-properties" );
+    TEST_END( "XML for user style 1", "<r>\n <style:style style:name=\"User1\" style:display-name=\"User 1\" style:family=\"paragraph\">\n  <style:paragraph-properties myfont=\"isBold\"/>\n </style:style>\n</r>\n" );
+
+    TEST_BEGIN( 0, 0 );
+    user2.writeStyle( &writer, coll, "style:style", user2StyleName, "style:paragraph-properties" );
+    TEST_END( "XML for user style 2", "<r>\n <style:style style:name=\"User2\" style:display-name=\"User 2\" style:family=\"paragraph\">\n  <style:paragraph-properties myfont=\"isBold\"/>\n </style:style>\n</r>\n" );
+
+    return 0;
+}
+
 int main( int, char** ) {
     fprintf( stderr, "OK\n" );
 
     if ( testLookup() )
         return 1;
     if ( testDefaultStyle() )
+        return 1;
+    if ( testUserStyles() )
         return 1;
 
     return 0;
