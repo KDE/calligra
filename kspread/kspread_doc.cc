@@ -2290,16 +2290,6 @@ KoPictureCollection *Doc::pictureCollection()
   return &d->m_pictureCollection;
 }
 
-void Doc::repaint( bool erase )
-{
-  QPtrListIterator<KoView> it( views() );
-  for( ; it.current(); ++it )
-  {
-    Canvas* canvas = ((View*)it.current())->canvasWidget();
-    canvas->repaint( erase );
-  }
-}
-
 void Doc::repaint( const QRect& rect )
 {
   QRect r;

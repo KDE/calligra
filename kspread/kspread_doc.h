@@ -612,9 +612,7 @@ public:
   void loadConfigFromFile();
   bool configLoadFromFile() const;
 
-    // repaint all views
-  void repaint( bool );
-
+  // repaint (update) all views
   void repaint( const QRect& );
   void repaint( EmbeddedObject* );
 

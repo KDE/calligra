@@ -452,7 +452,7 @@ void Canvas::endChoose()
     return;
 
   choice()->clear();
-  repaint();
+  update();
 
   d->chooseCell = false;
 
@@ -866,10 +866,10 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     if ( !d->m_isMoving )
     {
       d->m_isMoving = true;
-      repaint();
+      update();
     }
     else
-      repaint( d->m_boundingRealRect );
+      update( d->m_boundingRealRect );
   
 
     QRect drawingRect;
@@ -920,7 +920,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 
     d->m_boundingRealRect = drawingRect; //redraw this area next time the mouse has been moved
 
-    //repaint( d->m_boundingRealRect );
+    //update( d->m_boundingRealRect );
     QPainter p(this);
     p.setRasterOp( NotROP );
     p.setPen( QPen( black, 0, DotLine ) );
@@ -1150,7 +1150,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* _ev)
     }
     d->m_resizeObject = 0;
     d->m_isMoving = false;
-    repaint( r );
+    update( r );
     return;
   }
 
@@ -2156,7 +2156,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   {
     d->m_resizeObject = 0;
     d->m_isMoving = false;
-    repaint( /*d->m_boundingRealRect*/ );
+    update( /*d->m_boundingRealRect*/ );
   }
   else if ( view()->isInsertingObject() )
   {
@@ -3672,12 +3672,12 @@ void Canvas::repaintObject( EmbeddedObject *obj )
 	canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) , 
 			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
 	
-    repaint( canvasRelativeGeometry );
+    update( canvasRelativeGeometry );
 
  /* if ( !obj->isSelected() )
   {
     QRect geometry( doc()->zoomRect( obj->geometry() ) );
-    repaint( geometry );
+    update( geometry );
   }
   else
   {
