@@ -24,6 +24,7 @@
 #include <KoUnit.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 #include <vglobal.h>
 #include <vdocument.h>
 #include <qdom.h>
@@ -197,27 +198,55 @@ VEllipse::loadOasis( const QDomElement &element, KoOasisLoadingContext &context 
 {
 	setState( normal );
 
-	m_rx = KoUnit::parseValue( element.attribute( "svg:rx" ) );
-	m_ry = KoUnit::parseValue( element.attribute( "svg:ry" ) );
+	if( element.tagName() == "ellipse" )
+	{
+		if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) )
+			m_rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx", QString::null ) );
+		else 
+			m_rx = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
 
-	m_center.setX( KoUnit::parseValue( element.attribute( "svg:cx" ) ) );
-	m_center.setY( KoUnit::parseValue( element.attribute( "svg:cy" ) ) );
+		if( element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
+			m_rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry", QString::null ) );
+		else 
+			m_ry = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
 
-	m_startAngle = element.attribute( "draw:start-angle" ).toDouble();
-	m_endAngle = element.attribute( "draw:end-angle" ).toDouble();
+	}
+	else if( element.tagName() == "circle" )
+	{
+		if( element.hasAttributeNS( KoXmlNS::svg, "r" ) )
+			m_rx = m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r", QString::null ) );
+		else 
+			m_rx = m_ry = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
+	}
 
-	if( element.attribute( "draw:kind" ) == "cut" )
+	if( element.hasAttributeNS( KoXmlNS::svg, "cx" ) )
+		m_center.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cx", QString::null ) ) );
+	else
+		m_center.setX( m_rx + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
+
+	if( element.hasAttributeNS( KoXmlNS::svg, "cy" ) )
+		m_center.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cy", QString::null ) ) );
+	else
+		m_center.setY( m_ry + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
+
+	m_startAngle = element.attributeNS( KoXmlNS::draw, "start-angle", QString::null ).toDouble();
+	m_endAngle = element.attributeNS( KoXmlNS::draw, "end-angle", QString::null ).toDouble();
+
+	QString kind = element.attributeNS( KoXmlNS::draw, "kind", QString::null );
+	if( kind == "cut" )
 		m_type = cut;
-	else if( element.attribute( "draw:kind" ) == "section" )
+	else if( kind == "section" )
 		m_type = section;
-	else if( element.attribute( "draw:kind" ) == "arc" )
+	else if( kind == "arc" )
 		m_type = arc;
 	else
 		m_type = full;
 
 	init();
 
-	QString trafo = element.attribute( "draw:transform" );
+	transformByViewbox( element );
+
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
 	if( !trafo.isEmpty() )
 		transform( trafo );
 
@@ -234,11 +263,11 @@ VEllipse::load( const QDomElement& element )
 		if( list.item( i ).isElement() )
 			VObject::load( list.item( i ).toElement() );
 
-	m_rx = KoUnit::parseValue( element.attribute( "rx" ) );
-	m_ry = KoUnit::parseValue( element.attribute( "ry" ) );
+	m_rx = KoUnit::parseValue( element.attribute( "width" ) );
+	m_ry = KoUnit::parseValue( element.attribute( "height" ) );
 
-	m_center.setX( KoUnit::parseValue( element.attribute( "cx" ) ) );
-	m_center.setY( KoUnit::parseValue( element.attribute( "cy" ) ) );
+	m_center.setX( KoUnit::parseValue( element.attribute( "x" ) ) );
+	m_center.setY( KoUnit::parseValue( element.attribute( "y" ) ) );
 
 	m_startAngle = element.attribute( "start-angle" ).toDouble();
 	m_endAngle = element.attribute( "end-angle" ).toDouble();

@@ -27,6 +27,7 @@
 #include <KoXmlWriter.h>
 #include <KoOasisLoadingContext.h>
 #include <KoStyleStack.h>
+#include <KoXmlNS.h>
 
 #include "vcomposite.h"
 #include "shapes/vellipse.h"
@@ -201,27 +202,34 @@ VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 		{
 			QDomElement e = list.item( i ).toElement();
 
+			kdDebug(38000) << "VGroup::loadOasis: e.tagName() = " << e.tagName() << endl;
+			kdDebug(38000) << "VGroup::loadOasis: e.namespaceURI() = " << e.namespaceURI() << endl;
+			kdDebug(38000) << "VGroup::loadOasis: e.localName() = " << e.localName() << endl;
+
+			if( e.namespaceURI() != KoXmlNS::draw )
+				continue;
+
 			context.styleStack().save();
 
-			if( e.tagName() == "draw:path" )
+			if( e.localName() == "path" )
 			{
 				VPath* composite = new VPath( this );
 				composite->loadOasis( e, context );
 				append( composite );
 			}
-			else if( e.tagName() == "draw:ellipse" )
+			else if( e.localName() == "circle" || e.localName() == "ellipse" )
 			{
 				VEllipse* ellipse = new VEllipse( this );
 				ellipse->loadOasis( e, context );
 				append( ellipse );
 			}
-			else if( e.tagName() == "draw:rect" )
+			else if( e.localName() == "rect" )
 			{
 				VRectangle* rectangle = new VRectangle( this );
 				rectangle->loadOasis( e, context );
 				append( rectangle );
 			}
-			else if( e.tagName() == "draw:g" )
+			else if( e.localName() == "g" )
 			{
 				VGroup* group = new VGroup( this );
 				group->loadOasis( e, context );

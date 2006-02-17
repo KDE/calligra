@@ -23,6 +23,7 @@
 #include <KoUnit.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 #include <qdom.h>
 #include <kdebug.h>
 #include "vglobal.h"
@@ -168,18 +169,19 @@ VRectangle::loadOasis( const QDomElement &element, KoOasisLoadingContext &contex
 {
 	setState( normal );
 
-	m_width  = KoUnit::parseValue( element.attribute( "svg:width" ), 10.0 );
-	m_height = KoUnit::parseValue( element.attribute( "svg:height" ), 10.0 );
+	m_width  = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ), 10.0 );
+	m_height = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ), 10.0 );
 
-	m_topLeft.setX( KoUnit::parseValue( element.attribute( "svg:x" ) ) );
-	m_topLeft.setY( KoUnit::parseValue( element.attribute( "svg:y" ) ) );
+	m_topLeft.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
+	m_topLeft.setY( m_height + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
 
-	m_rx  = KoUnit::parseValue( element.attribute( "svg:rx" ) );
-	m_ry  = KoUnit::parseValue( element.attribute( "svg:ry" ) );
+	m_rx = m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null ) );
 
 	init();
 
-	QString trafo = element.attribute( "draw:transform" );
+	transformByViewbox( element );
+
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
 	if( !trafo.isEmpty() )
 		transform( trafo );
 

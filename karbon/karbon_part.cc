@@ -52,6 +52,7 @@
 #include "vtoolcontroller.h"
 #include "KoApplication.h"
 #include "vtool.h"
+#include "commands/vtransformcmd.h"
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 // static const char * CURRENT_DTD_VERSION = "1.2";
@@ -307,7 +308,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 		return false;
 	}
 
-	QString masterPageName = "Standard"; // use default layout as fallback
+	QString masterPageName = "Default"; // use default layout as fallback
 	QDomElement *master = styles.masterPages()[ masterPageName ];
 	Q_ASSERT( master );
 	QDomElement *style =master ? styles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
@@ -322,7 +323,15 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 
 	KoOasisLoadingContext context( this, styles, store );
 	m_doc.loadOasis( page, context );
-        loadOasisSettings( settings );
+	// do y-mirroring here
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( 0, -m_doc.height() );
+	VTransformCmd trafo( 0L, mat );
+	trafo.visit( m_doc );
+
+	loadOasisSettings( settings );
+
 	return true;
 }
 

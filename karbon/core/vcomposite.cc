@@ -24,6 +24,7 @@
 
 #include <KoPoint.h>
 #include <KoRect.h>
+#include <KoUnit.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -378,6 +379,28 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 	}
 }
 
+void
+VPath::transformByViewbox( const QDomElement &element )
+{
+	if( element.hasAttributeNS( KoXmlNS::svg, "viewBox" ) )
+	{
+		// allow for viewbox def with ',' or whitespace
+		QString viewbox( element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplifyWhiteSpace() );
+
+		double w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
+		double h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
+		double x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) );
+		double y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
+
+		QWMatrix mat;
+		mat.translate( x, y );
+		mat.scale( w / points[2].toFloat() , h / points[3].toFloat() );
+		VTransformCmd cmd( 0L, mat );
+		cmd.visit( *this );
+	}
+}
+
 bool
 VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
@@ -390,6 +413,8 @@ VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 	}
 
 	m_fillRule = element.attributeNS( KoXmlNS::svg, "fill-rule", QString::null ) == "winding" ? winding : evenOdd;
+
+	transformByViewbox( element );
 
 	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
 	if( !trafo.isEmpty() )
