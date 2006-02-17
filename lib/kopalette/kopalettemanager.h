@@ -93,6 +93,7 @@ public:
     virtual ~KoPaletteManager();
 
 public:
+    
     /**
      * Add a new tab with the given name an description to the specified palette.
      * The widget's caption is used, where necessary. If there is no
@@ -113,6 +114,7 @@ public:
      */
     virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, int position = -1, enumKoPaletteStyle style = PALETTE_DOCKER);
 
+    
     /**
      * Get a certain widget by name
      */
@@ -196,6 +198,7 @@ private:
     QStringList               m_defaultPaletteOrder; // Order of palette creation
     QStringList               m_defaultWidgetOrder; // Order of widget addition
     QMap<QString, QString>  * m_currentMapping; // widget to docker
+
 };
 
 #endif

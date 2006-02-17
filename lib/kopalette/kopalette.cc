@@ -62,7 +62,7 @@ KoPalette::KoPalette(QWidget * parent, const char * name)
     cfg->setGroup("");
     m_font  = KGlobalSettings::generalFont();
     float ps = m_font.pointSize() * 0.7;
-    ps = cfg->readNumEntry("palettefontsize", ps);
+    ps = cfg->readNumEntry("palettefontsize", (int)ps);
     
     m_font.setPointSize((int)ps);
     setFont(m_font);
