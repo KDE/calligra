@@ -3678,6 +3678,8 @@ void View::addSheet( Sheet * _t )
   QObject::connect( _t->print(), SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
   QObject::connect( _t, SIGNAL( sig_updateView( Sheet *, const Region& ) ),
                     SLOT( slotUpdateView( Sheet*, const Region& ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateView( EmbeddedObject* )), SLOT( slotUpdateView( EmbeddedObject* ) ) );
+
   QObject::connect( _t, SIGNAL( sig_updateHBorder( Sheet * ) ),
                     SLOT( slotUpdateHBorder( Sheet * ) ) );
   QObject::connect( _t, SIGNAL( sig_updateVBorder( Sheet * ) ),
@@ -7135,12 +7137,14 @@ QWidget * View::canvas() const
 
 int View::canvasXOffset() const
 {
-  return int( canvasWidget()->xOffset() );
+  double zoomedResX = d->activeSheet->doc()->zoomedResolutionX();
+  return int( canvasWidget()->xOffset() * zoomedResX );
 }
 
 int View::canvasYOffset() const
 {
-  return int( canvasWidget()->yOffset() );
+  double zoomedResY = d->activeSheet->doc()->zoomedResolutionY();
+  return int( canvasWidget()->yOffset() * zoomedResY );
 }
 
 

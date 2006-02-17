@@ -2105,10 +2105,14 @@ void Doc::emitEndOperation()
      //###  t->update();
 
        // ElapsedTime etm2( "Sub: Updating cellbindings..." );
-       for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
+       /*
+	I don't understand why this is here.  Surely the cell bindings should only be updated when the data
+	changes - which is done in the Cell class.
+
+	for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
        {
          b->cellChanged(NULL);
-       }
+       }*/
      }
    }
 
@@ -2152,10 +2156,13 @@ void Doc::emitEndOperation( const Region& /*region*/ )
   }
 
   //  ElapsedTime etm2( "Sub: Updating cellbindings..." );
-  for ( b = d->activeSheet->firstCellBinding(); b != 0; b = d->activeSheet->nextCellBinding() )
+  /*
+   See comment about this in emitEndOperation() -- Robert Knight
+
+   for ( b = d->activeSheet->firstCellBinding(); b != 0; b = d->activeSheet->nextCellBinding() )
   {
     b->cellChanged( 0 );
-  }
+  }*/
 
   KoDocument::emitEndOperation();
 

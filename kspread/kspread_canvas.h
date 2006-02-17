@@ -373,10 +373,28 @@ private:
     QScrollBar* vertScrollBar() const;
 
     /**
-     * Clips out the children region from the painter
+     * Returns the area of the document currently visible in a painter's
+     * window, calculated by taking the painter's window() property and 
+     * translating it by the current x and y offset of the Canvas (taking
+     * the zoom level into account)
      */
-    void clipoutChildren( QPainter& painter, QWMatrix& matrix );
+    QRect painterWindowGeometry( const QPainter& painter ) const;
+    
+    /**
+     * Enables clipping and removes the areas on the canvas widget occupied by embedded objects from
+     * the clip region.  This ensures that subsequent drawing operations using the given painter
+     * don't paint over the area occupied by embedded objects
+     */
+    void clipoutChildren( QPainter& painter ) const;
 
+    /**
+     * Returns the range of cells which appear in the specified area of the Canvas widget
+     * For example, cellsInArea( QRect(0,0,width(),height()) ) returns a range containing all visible cells
+     * 
+     * @param area The area (in pixels) on the Canvas widget 
+     */
+    QRect cellsInArea( const QRect area ) const;
+    
     /**
      * Paints the children
      */

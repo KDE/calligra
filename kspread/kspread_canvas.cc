@@ -3655,7 +3655,14 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
 
 void Canvas::repaintObject( EmbeddedObject *obj )
 {
-  if ( !obj->isSelected() )
+	//Calculate where the object appears on the canvas widget and then repaint that part of the widget
+	QRect canvasRelativeGeometry = doc()->zoomRect( obj->geometry() );
+	canvasRelativeGeometry.moveBy( -xOffset()*doc()->zoomedResolutionX() , 
+			   			-yOffset() * doc()->zoomedResolutionY() );
+	
+    repaint( canvasRelativeGeometry );
+
+ /* if ( !obj->isSelected() )
   {
     QRect geometry( doc()->zoomRect( obj->geometry() ) );
     repaint( geometry );
@@ -3666,7 +3673,7 @@ void Canvas::repaintObject( EmbeddedObject *obj )
     p.translate( -xOffset() * doc()->zoomedResolutionX() , -yOffset() * doc()->zoomedResolutionY() );
     obj->draw(&p); //this goes faster than calling repaint
     p.end();
-  }
+  }*/
 }
 
 void Canvas::copyOasisObjects()
@@ -3869,19 +3876,26 @@ void Canvas::equalizeColumn()
   d->view->hBorderWidget()->equalizeColumn(size);
 }
 
+QRect Canvas::cellsInArea( const QRect area ) const
+{
+	KoRect unzoomedRect = d->view->doc()->unzoomRect( area );
+	
+       	unzoomedRect.moveBy( xOffset(), yOffset() );
+
+  	double tmp;
+  	int left_col = activeSheet()->leftColumn( unzoomedRect.left(), tmp );
+  	int right_col = activeSheet()->rightColumn( unzoomedRect.right() );
+  	int top_row = activeSheet()->topRow( unzoomedRect.top(), tmp );
+  	int bottom_row = activeSheet()->bottomRow( unzoomedRect.bottom() );
+
+  	return QRect( left_col, top_row,
+                right_col - left_col + 1, bottom_row - top_row + 1 );
+}
+
 QRect Canvas::visibleCells() const
 {
-  KoRect unzoomedRect = d->view->doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
-  unzoomedRect.moveBy( xOffset(), yOffset() );
+	return cellsInArea( QRect(0,0,width(),height()) );
 
-  double tmp;
-  int left_col = activeSheet()->leftColumn( unzoomedRect.left(), tmp );
-  int right_col = activeSheet()->rightColumn( unzoomedRect.right() );
-  int top_row = activeSheet()->topRow( unzoomedRect.top(), tmp );
-  int bottom_row = activeSheet()->bottomRow( unzoomedRect.bottom() );
-
-  return QRect( left_col, top_row,
-                right_col - left_col + 1, bottom_row - top_row + 1 );
 }
 
 
@@ -3910,8 +3924,11 @@ void Canvas::paintUpdates()
     matrix = painter.worldMatrix();
   }
 
+
+  paintChildren( painter, matrix );
+  
   painter.save();
-  clipoutChildren( painter, matrix );
+  clipoutChildren( painter );
 
   KoRect unzoomedRect = d->view->doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
   // unzoomedRect.moveBy( xOffset(), yOffset() );
@@ -4071,59 +4088,93 @@ void Canvas::paintUpdates()
 
   //restore clip region with children area
   painter.restore();
-  painter.setClipRegion( rgnComplete );
-  paintChildren( painter, matrix );
+  //painter.setClipRegion( rgnComplete );
 }
 
 
 
-void Canvas::clipoutChildren( QPainter& painter, QWMatrix& /*matrix*/ )
+void Canvas::clipoutChildren( QPainter& painter ) const
 {
   QRegion rgn = painter.clipRegion();
   if ( rgn.isEmpty() )
     rgn = QRegion( QRect( 0, 0, width(), height() ) );
 
-  painter.save();
-  painter.translate( -xOffset() * doc()->zoomedResolutionX() , -yOffset() * doc()->zoomedResolutionY() );
-
+  const double horizontalOffset = -xOffset() * doc()->zoomedResolutionX();
+  const double verticalOffset = -yOffset() * doc()->zoomedResolutionY();
+	  
   QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   for( ; itObject.current(); ++itObject )
   {
     if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject && d->m_isMoving ) )
     {
-      rgn -= doc()->zoomRect( itObject.current()->geometry() );
+	QRect childGeometry = doc()->zoomRect( itObject.current()->geometry());
+  
+	//The clipping region is given in device coordinates
+	//so subtract the current offset (scroll position) of the canvas 
+	childGeometry.moveBy( (int)horizontalOffset , (int)verticalOffset );
+	
+	if (painter.window().intersects(childGeometry))
+		rgn -= childGeometry;
+      
       //painter.fillRect( doc()->zoomRect( itObject.current()->geometry() ), QColor("red" ) );
     }
   }
 
   painter.setClipRegion( rgn );
-  painter.restore();
+}
+
+QRect Canvas::painterWindowGeometry( const QPainter& painter ) const
+{
+  QRect zoomedWindowGeometry = painter.window();
+	  
+  zoomedWindowGeometry.moveBy( (int)( xOffset() * doc()->zoomedResolutionX() ) , (int)( yOffset() * doc()->zoomedResolutionY() ) );
+
+	return zoomedWindowGeometry;		
 }
 
 void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 {
-  //painter.setWorldMatrix( matrix );
-  painter.end();
   QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   itObject.toFirst();
   if ( !itObject.current() )
     return;
 
   painter.save();
-  painter.begin(this);
   painter.translate( -xOffset() * doc()->zoomedResolutionX() , -yOffset() * doc()->zoomedResolutionY() );
 
-  QRect zoomedWindowGeometry = painter.window();
-  zoomedWindowGeometry.moveBy( (int)( xOffset() * doc()->zoomedResolutionX() ) , (int)( yOffset() * doc()->zoomedResolutionY() ) );
-
+  const QRect zoomedWindowGeometry = painterWindowGeometry( painter );
+  const Sheet* sheet = activeSheet();
+  
   for( ; itObject.current(); ++itObject )
   {
     QRect const zoomedObjectGeometry = doc()->zoomRect( itObject.current()->geometry() );
     if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject /*&& d->m_isMoving*/ ) &&
            zoomedWindowGeometry.intersects( zoomedObjectGeometry ) )
     {
-      // #### todo: paint only if child is visible inside rect
-      itObject.current()->draw( &painter );
+	    //To prevent unnecessary redrawing of the embedded object, we only repaint
+	    //if one or more of the cells underneath the object has been marked as 'dirty'.
+	    
+	   QRect canvasRelativeGeometry = zoomedObjectGeometry;
+	   canvasRelativeGeometry.moveBy( -xOffset()*doc()->zoomedResolutionX() , 
+			   			-yOffset() * doc()->zoomedResolutionY() );
+	   
+	   const QRect cellsUnderObject=cellsInArea( canvasRelativeGeometry );
+	   bool redraw=false;
+	   
+	   for (int x=cellsUnderObject.left();x<=cellsUnderObject.right();x++)
+	   {
+		for (int y=cellsUnderObject.top();y<=cellsUnderObject.bottom();y++)
+	     		if ( sheet->cellIsPaintDirty( QPoint(x,y) ) )
+			{
+				redraw=true;
+				break;
+			}
+		if (redraw)
+			break;
+	   }
+	   
+      	  if ( redraw )
+      		itObject.current()->draw( &painter );
     }
   }
   painter.restore();

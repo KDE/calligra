@@ -1430,9 +1430,9 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   // Set Flag_CellTooShortX if the text is vertical or angled, and too
   // high for the cell.
   if ( format()->verticalText( _col, _row ) || format()->getAngle( _col, _row ) != 0 ) {
-    RowFormat  *rl = format()->sheet()->rowFormat( _row );
+    //RowFormat  *rl = format()->sheet()->rowFormat( _row );
 
-    if ( d->textHeight >= rl->dblHeight() )
+    if ( d->textHeight >= height/*rl->dblHeight()*/ )
       setFlag( Flag_CellTooShortX );
   }
 
@@ -1538,18 +1538,20 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     // Check to make sure we haven't already force-merged enough cells.
-    if ( r - d->row > d->extra()->mergedYCells ) {
+    if ( r - d->row > d->extra()->mergedYCells ) 
+    {
       d->extra()->extraYCells = r - d->row;
       d->extra()->extraHeight = height;
 
-      for ( int i = d->row + 1; i <= r; ++i ) {
-  Cell  *cell = format()->sheet()->nonDefaultCell( d->column, i );
-  cell->obscure( this );
+      for ( int i = d->row + 1; i <= r; ++i )
+      {
+  	Cell  *cell = format()->sheet()->nonDefaultCell( d->column, i );
+  	cell->obscure( this );
       }
 
       // Not enough space?
       if ( end == -1 )
-  setFlag( Flag_CellTooShortY );
+  	setFlag( Flag_CellTooShortY );
     }
     else
       setFlag( Flag_CellTooShortY );

@@ -524,9 +524,9 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
     SLOT( triggerFunctionAutoComplete() ) );
 
   if (!cell()->format()->multiRow(cell()->column(),cell()->row()))
-  {
     d->textEdit->setWordWrap(QTextEdit::NoWrap);
-  }
+  else
+	d->textEdit->setWrapPolicy(QTextEdit::AtWordOrDocumentBoundary);
 
 //TODO - Custom KTextEdit class which supports text completion
 /*

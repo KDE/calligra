@@ -140,13 +140,24 @@ ChartBinding::~ChartBinding()
 {
 }
 
-void ChartBinding::cellChanged( Cell* )
+void ChartBinding::cellChanged( Cell* changedCell )
 {
-    //kdDebug(36001) << "######### void ChartBinding::cellChanged( Cell* )" << endl;
-
     if ( m_bIgnoreChanges )
         return;
 
+	//Ensure display gets updated by marking all cells underneath the chart as 
+	//dirty
+	    	
+	const QRect chartGeometry = m_child->geometry().toQRect();
+	
+	double tmp;
+  	int left = sheet()->leftColumn( chartGeometry.left() , tmp );
+  	int top = sheet()->topRow( chartGeometry.top() , tmp );
+	int right = sheet()->rightColumn( chartGeometry.right() );
+	int bottom = sheet()->bottomRow( chartGeometry.bottom() );
+
+	sheet()->setRegionPaintDirty( QRect(left,top,right-left,bottom-top) );	
+	
     //kdDebug(36001) << m_rctDataArea << endl;
 
     // Get the chart and resize its data if necessary.
@@ -7940,7 +7951,7 @@ bool Sheet::insertPicture( const KoPoint& point, const QPixmap& pixmap  )
 void Sheet::insertObject( EmbeddedObject *_obj )
 {
     doc()->insertObject( _obj );
-    updateView( doc()->zoomRect( _obj->geometry() ) );
+    emit sig_updateView( _obj );
 }
 
 void Sheet::changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _rect )
@@ -8225,7 +8236,7 @@ void Sheet::clearPaintDirtyData()
   d->paintDirtyList.clear();
 }
 
-bool Sheet::cellIsPaintDirty( QPoint const & cell )
+bool Sheet::cellIsPaintDirty( QPoint const & cell ) const
 {
   return d->paintDirtyList.contains(cell);
 }
