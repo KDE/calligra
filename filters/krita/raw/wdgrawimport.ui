@@ -177,7 +177,7 @@
                         <cstring>chkProfile</cstring>
                     </property>
                     <property name="text">
-                        <string>Clip colors to prevent pink highlights</string>
+                        <string></string>
                     </property>
                     <property name="accel">
                         <string></string>
@@ -546,11 +546,4 @@
     <tabstop>chkProfile</tabstop>
 </tabstops>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>imageviewer.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-</includehints>
 </UI>
