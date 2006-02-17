@@ -108,8 +108,6 @@
 
 #include "kivio_pluginmanager.h"
 
-#include "handler.h"
-
 #include "kivio_stackbar.h"
 #include "kivio_icon_view.h"
 
