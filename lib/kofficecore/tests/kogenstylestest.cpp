@@ -22,8 +22,8 @@
 #include <kdebug.h>
 #include <assert.h>
 
-int main( int, char** ) {
-
+int testLookup()
+{
     KoGenStyles coll;
 
     QMap<QString, QString> map1;
@@ -120,8 +120,44 @@ int main( int, char** ) {
     third.writeStyle( &writer, coll, "style:style", thirdName, "style:paragraph-properties" );
     TEST_END( "XML for third style", "<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n  <style:text-properties style:foobar=\"3\"/>\n </style:style>\n</r>\n" );
 
+    return 0;
+}
 
+int testDefaultStyle()
+{
+    KoGenStyles coll;
+
+    KoGenStyle defaultStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
+    defaultStyle.addAttribute( "style:master-page-name", "Standard" );
+    defaultStyle.addProperty( "myfont", "isBold" );
+    defaultStyle.setDefaultStyle( true );
+    QString defaultStyleName = coll.lookup( defaultStyle );
+    assert( !defaultStyleName.isEmpty() ); // whatever, but not empty
+    assert( defaultStyle.type() == KoGenStyle::STYLE_AUTO );
+    assert( defaultStyle.isDefaultStyle() );
+
+    KoGenStyle anotherStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
+    anotherStyle.addAttribute( "style:master-page-name", "Standard" );
+    anotherStyle.addProperty( "myfont", "isBold" );
+    QString anotherStyleName = coll.lookup( anotherStyle );
+    assert( anotherStyleName == defaultStyleName );
+
+    assert( coll.styles().count() == 1 );
+
+    TEST_BEGIN( 0, 0 );
+    defaultStyle.writeStyle( &writer, coll, "style:default-style", defaultStyleName, "style:paragraph-properties" );
+    TEST_END( "XML for default style", "<r>\n <style:default-style style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties myfont=\"isBold\"/>\n </style:default-style>\n</r>\n" );
+
+    return 0;
+}
+
+int main( int, char** ) {
     fprintf( stderr, "OK\n" );
+
+    if ( testLookup() )
+        return 1;
+    if ( testDefaultStyle() )
+        return 1;
 
     return 0;
 }

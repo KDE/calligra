@@ -230,6 +230,15 @@ public:
     /// @return the value passed to setAutoStyleInStylesDotXml; false by default
     bool autoStyleInStylesDotXml() const { return m_autoStyleInStylesDotXml; }
 
+    /*
+     * setDefaultStyle(true) marks a given style as being the default style.
+     * This means we expect that you will call writeStyle( ...,"style:default-style"),
+     * and its name will be ommitted in the output.
+     */
+    void setDefaultStyle( bool b ) { m_defaultStyle = b; }
+    /// @return the value passed to setDefaultStyle; false by default
+    bool isDefaultStyle() const { return m_defaultStyle; }
+
     /// Return the type of this style, as set in the constructor
     int type() const { return m_type; }
 
@@ -348,8 +357,9 @@ public:
      *  Write the definition of this style to @p writer, using the OASIS format.
      *  @param writer the KoXmlWriter in which @p elementName will be created and filled in
      *  @param styles the styles collection, used to look up the parent style
-     *  @param elementName the name of the XML element, e.g. "style:style"
-     *  @param name must come from the collection
+     *  @param elementName the name of the XML element, e.g. "style:style". Don't forget to
+     *  pass style:default-style if isDefaultStyle().
+     *  @param name must come from the collection. It will be ignored if isDefaultStyle() is true.
      *  @param propertiesElementName the name of the XML element with the style properties,
      *  e.g. "style:text-properties". Can be 0 in special cases where there should be no such item,
      *  in which case the attributes and elements are added under the style itself.
@@ -403,7 +413,7 @@ private:
     QValueVector<StyleMap> m_maps; // we can't really sort the maps between themselves...
 
     bool m_autoStyleInStylesDotXml;
-    bool m_unused;
+    bool m_defaultStyle;
     short m_unused2;
 
     // For lookup

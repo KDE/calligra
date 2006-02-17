@@ -140,7 +140,7 @@ static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, Q
 KoGenStyle::KoGenStyle( int type, const char* familyName,
                         const QString& parentName )
     : m_type( type ), m_familyName( familyName ), m_parentName( parentName ),
-      m_autoStyleInStylesDotXml( false )
+      m_autoStyleInStylesDotXml( false ), m_defaultStyle( false )
 {
 }
 
@@ -152,20 +152,25 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
 {
     //kdDebug(30003) << "writing out style " << name << " " << m_attributes["style:display-name"] << " " << m_familyName << endl;
     writer->startElement( elementName );
-    if ( !drawElement )
-        writer->addAttribute( "style:name", name );
-    else
-        writer->addAttribute( "draw:name", name );
     const KoGenStyle* parentStyle = 0;
-    if ( !m_parentName.isEmpty() ) {
-        writer->addAttribute( "style:parent-style-name", m_parentName );
-        parentStyle = styles.style( m_parentName );
-        if ( parentStyle && m_familyName.isEmpty() ) {
-            // get family from parent style, just in case
-            // Note: this is saving code, don't convert to attributeNS!
-            const_cast<KoGenStyle *>( this )->
-                m_familyName = parentStyle->attribute( "style:family" ).latin1();
+    if ( !m_defaultStyle ) {
+        if ( !drawElement )
+            writer->addAttribute( "style:name", name );
+        else
+            writer->addAttribute( "draw:name", name );
+        if ( !m_parentName.isEmpty() ) {
+            writer->addAttribute( "style:parent-style-name", m_parentName );
+            parentStyle = styles.style( m_parentName );
+            if ( parentStyle && m_familyName.isEmpty() ) {
+                // get family from parent style, just in case
+                // Note: this is saving code, don't convert to attributeNS!
+                const_cast<KoGenStyle *>( this )->
+                    m_familyName = parentStyle->attribute( "style:family" ).latin1();
+            }
         }
+    } else { // default-style
+        Q_ASSERT( qstrcmp( elementName, "style:default-style" ) == 0 );
+        Q_ASSERT( m_parentName.isEmpty() );
     }
     if ( !m_familyName.isEmpty() )
         const_cast<KoGenStyle *>( this )->
