@@ -115,6 +115,9 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
     if (!util_isPointValid(point))
         return;
 
+    if (!d->view->activeSheet())
+	    return;
+
   if (!sheet)
   {
     if (d->sheet)
@@ -832,6 +835,9 @@ QRect Selection::selection(bool extend) const
 
 QRect Selection::extendToMergedAreas(QRect area) const
 {
+  if (!d->view->activeSheet())
+	  return area;
+
   area = area.normalize(); // TODO Stefan: avoid this
   const Cell *cell = d->view->activeSheet()->cellAt(area.left(), area.top());
 

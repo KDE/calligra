@@ -1869,6 +1869,10 @@ void Canvas::dropEvent( QDropEvent * _ev )
 
 void Canvas::resizeEvent( QResizeEvent* _ev )
 {
+    if (!activeSheet())
+	    return;
+
+
     double ev_Width = d->view->doc()->unzoomItX( _ev->size().width() );
     double ev_Height = d->view->doc()->unzoomItY( _ev->size().height() );
 
@@ -3542,6 +3546,9 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
 
 void Canvas::createEditor(bool captureArrowKeys)
 {
+  if (!activeSheet())
+    return;
+
   Cell * cell = activeSheet()->nonDefaultCell( markerColumn(), markerRow(), false );
 
   if ( !createEditor( CellEditor , true , captureArrowKeys ) )
@@ -4566,8 +4573,9 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
     m_bMousePressed = true;
 
   const Sheet *sheet = m_pCanvas->activeSheet();
-  assert( sheet );
-
+  if (!sheet)
+	  return;
+  
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
   m_bResize = false;
@@ -4670,7 +4678,8 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
         return;
 
     Sheet *sheet = m_pCanvas->activeSheet();
-    assert( sheet );
+    if (!sheet)
+	    return;
 
     double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
 
@@ -4807,7 +4816,9 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   Sheet *sheet = m_pCanvas->activeSheet();
-  assert( sheet );
+  
+  if (!sheet)
+     return;
 
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
@@ -4904,7 +4915,8 @@ void VBorder::wheelEvent( QWheelEvent* _ev )
 void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
 {
     Sheet *sheet = m_pCanvas->activeSheet();
-    assert( sheet );
+    if (!sheet)
+	    return;
 
     QPainter painter;
     painter.begin( m_pCanvas );
@@ -5116,8 +5128,9 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     m_bMousePressed = true;
 
   const Sheet *sheet = m_pCanvas->activeSheet();
-  assert( sheet );
-
+  if (!sheet)
+	return;  
+  
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pCanvas->editor() )
   {
@@ -5281,7 +5294,8 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
       return;
 
     Sheet * sheet = m_pCanvas->activeSheet();
-    assert( sheet );
+    if (!sheet)
+	    return;
 
     if ( m_bResize )
     {
@@ -5427,8 +5441,10 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   Sheet *sheet = m_pCanvas->activeSheet();
-  assert( sheet );
 
+  if (!sheet)
+    return;
+  
   double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
@@ -5586,7 +5602,8 @@ void HBorder::resizeEvent( QResizeEvent* _ev )
 void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
 {
     Sheet *sheet = m_pCanvas->activeSheet();
-    assert( sheet );
+    if (!sheet)
+	    return;
 
     QPainter painter;
     painter.begin( m_pCanvas );

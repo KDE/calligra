@@ -7882,9 +7882,15 @@ bool Sheet::insertChild( const KoRect& _rect, KoDocumentEntry& _e )
     return true;
 }
 
-bool Sheet::insertPicture( const KoPoint& _point ,  KURL& _file )
+bool Sheet::insertPicture( const KoPoint& point , const KURL& url )
 {
-    KoPicture picture = doc()->pictureCollection()->downloadPicture( _file , 0 );
+    KoPicture picture = doc()->pictureCollection()->downloadPicture( url , 0 );
+
+    return insertPicture(point,picture);
+}
+
+bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
+{
 
     if (picture.isNull())
 	    return false;
@@ -7892,8 +7898,8 @@ bool Sheet::insertPicture( const KoPoint& _point ,  KURL& _file )
     KoPictureKey key = picture.getKey();
 
     KoRect destinationRect;
-    destinationRect.setLeft( _point.x()  );
-    destinationRect.setTop( _point.y()  );
+    destinationRect.setLeft( point.x()  );
+    destinationRect.setTop( point.y()  );
 
     //Generate correct pixel size - this is a bit tricky.  
     //This ensures that when we load the image it appears
@@ -7915,10 +7921,10 @@ bool Sheet::insertPicture( const KoPoint& _point ,  KURL& _file )
     
     destinationRect.setSize( destinationSize);
 
-    EmbeddedPictureObject* ch = new EmbeddedPictureObject( this, destinationRect, doc()->pictureCollection(),key);
+    EmbeddedPictureObject* object = new EmbeddedPictureObject( this, destinationRect, doc()->pictureCollection(),key);
    // ch->setPicture(key);
 
-    insertObject( ch );
+    insertObject( object );
     return true;
 }
 
@@ -7938,14 +7944,8 @@ bool Sheet::insertPicture( const KoPoint& point, const QPixmap& pixmap  )
 	picture.load( &buffer , "PNG" );
 
 	doc()->pictureCollection()->insertPicture(picture);
-
-	double width = pixmap.width();
-	double height = pixmap.height();
-
-	insertObject( new EmbeddedPictureObject( this, KoRect( point.x() , point.y() , width , height), 
-							doc()->pictureCollection(),picture.getKey() ) );
-
-	return true;
+	
+	return insertPicture( point , picture );
 }
 
 void Sheet::insertObject( EmbeddedObject *_obj )

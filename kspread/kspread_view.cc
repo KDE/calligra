@@ -2186,6 +2186,9 @@ void View::initCalcMenu()
 
 void View::recalcWorkBook()
 {
+  if (!activeSheet())
+	  return;
+
   Sheet * tbl;
   doc()->emitBeginOperation( true );
   for ( tbl = doc()->map()->firstSheet();
@@ -2694,6 +2697,9 @@ void View::initialPosition()
 
 void View::updateEditWidgetOnPress()
 {
+    if (!d->activeSheet)
+	    return;
+
     int column = d->canvas->markerColumn();
     int row    = d->canvas->markerRow();
 
@@ -2716,6 +2722,9 @@ void View::updateEditWidgetOnPress()
 
 void View::updateEditWidget()
 {
+    if (!d->activeSheet)
+	    return;
+    
     int column = d->canvas->markerColumn();
     int row    = d->canvas->markerRow();
 
@@ -2834,6 +2843,9 @@ void View::sheetFormat()
 
 void View::autoSum()
 {
+	if (!activeSheet())
+		return;
+
     // ######## Torben: Make sure that this can not be called
     // when canvas has a running editor
     if ( d->canvas->editor() )
@@ -3454,6 +3466,9 @@ void View::italic( bool b )
 
 void View::sortInc()
 {
+  if (!activeSheet())
+	  return;
+
   QRect range = d->selection->selection();
   if ( d->selection->isSingular() )
   {
@@ -4315,6 +4330,9 @@ void View::goalSeek()
 
 void View::subtotals()
 {
+  if (!activeSheet())
+	  return;
+
   QRect selection( d->selection->selection() );
   if ( ( selection.width() < 2 ) || ( selection.height() < 2 ) )
   {
@@ -4344,6 +4362,9 @@ void View::multipleOperations()
 
 void View::textToColumns()
 {
+  if (!activeSheet())
+	  return;
+
   d->canvas->closeEditor();
 
   QRect area=d->selection->selection();
@@ -4374,18 +4395,24 @@ void View::consolidate()
 
 void View::sortList()
 {
+  if (!activeSheet()) return;
+  
   ListDialog dlg( this, "List selection" );
   dlg.exec();
 }
 
 void View::gotoCell()
 {
+  if (!activeSheet()) return;
+  
   GotoDialog dlg( this, "GotoCell" );
   dlg.exec();
 }
 
 void View::find()
 {
+   if (!activeSheet()) return;
+   
     FindDlg dlg( this, "Find", d->findOptions, d->findStrings );
     dlg.setHasSelection( !d->selection->isSingular() );
     dlg.setHasCursor( true );
@@ -4747,6 +4774,9 @@ void View::removeHyperlink()
 
 void View::insertHyperlink()
 {
+    if (!activeSheet())
+    	return;
+
     d->canvas->closeEditor();
 
     QPoint marker( d->selection->marker() );
@@ -4821,6 +4851,9 @@ void View::insertFromClipboard()
 
 void View::setupPrinter( KPrinter &prt )
 {
+    if (!activeSheet())
+	    return;
+
     SheetPrint* print = d->activeSheet->print();
 
     //apply page layout parameters
@@ -4853,9 +4886,11 @@ void View::setupPrinter( KPrinter &prt )
 
 void View::print( KPrinter &prt )
 {
+    if (!activeSheet())
+	    return;
+
     //save the current active sheet for later, so we can restore it at the end
     Sheet* selectedsheet = this->activeSheet();
-    Q_ASSERT(selectedsheet);
     
     //print all sheets in the order given by the print dialog (Sheet Selection)
     QStringList sheetlist = KPSheetSelectPage::selectedSheets(prt);
@@ -5164,6 +5199,7 @@ void View::togglePageBorders( bool mode )
 
 void View::viewZoom( const QString & s )
 {
+	
   int oldZoom = doc()->zoom();
 
   bool ok = false;
@@ -5181,9 +5217,12 @@ void View::viewZoom( const QString & s )
     d->canvas->closeEditor();
     setZoom( newZoom, true );
 
-    QRect r( d->activeSheet->visibleRect( d->canvas ) );
-    r.setWidth( r.width() + 2 );
-    doc()->emitEndOperation( r );
+    if (activeSheet())
+    {
+    	QRect r( d->activeSheet->visibleRect( d->canvas ) );
+    	r.setWidth( r.width() + 2 );
+    	doc()->emitEndOperation( r );
+    }
   }
 }
 
@@ -5952,7 +5991,7 @@ void View::openPopupMenu( const QPoint & _point )
 
 void View::slotActivateTool( int _id )
 {
-  Q_ASSERT( d->activeSheet );
+  if (!activeSheet()) return;
 
   // Is it the id of a tool in the latest popupmenu ?
   if ( _id < d->popupMenuFirstToolId )
@@ -5984,7 +6023,8 @@ void View::slotActivateTool( int _id )
 
 void View::deleteSelection()
 {
-    Q_ASSERT( d->activeSheet );
+    if (!activeSheet()) return;
+  
     if ( canvasWidget()->isObjectSelected() )
     {
       deleteSelectedObjects();
@@ -6033,7 +6073,9 @@ void View::adjust()
 
 void View::clearTextSelection()
 {
-    Q_ASSERT( d->activeSheet );
+    if (!activeSheet())
+	    return;
+    
     doc()->emitBeginOperation( false );
     d->activeSheet->clearTextSelection( selectionInfo() );
 
@@ -6045,7 +6087,9 @@ void View::clearTextSelection()
 
 void View::clearCommentSelection()
 {
-    Q_ASSERT( d->activeSheet );
+    if (!activeSheet())
+	    return;
+    
     doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionRemoveComment( selectionInfo() );
 
@@ -6057,7 +6101,9 @@ void View::clearCommentSelection()
 
 void View::clearValiditySelection()
 {
-    Q_ASSERT( d->activeSheet );
+    if (!activeSheet())
+	    return;
+
     doc()->emitBeginOperation( false );
     d->activeSheet->clearValiditySelection( selectionInfo() );
 
@@ -6069,7 +6115,9 @@ void View::clearValiditySelection()
 
 void View::clearConditionalSelection()
 {
-    Q_ASSERT( d->activeSheet );
+    if (!activeSheet())
+	    return;
+
     doc()->emitBeginOperation( false );
     d->activeSheet->clearConditionalSelection( selectionInfo() );
 
@@ -6081,7 +6129,9 @@ void View::clearConditionalSelection()
 
 void View::fillRight()
 {
-  Q_ASSERT( d->activeSheet );
+  if (!activeSheet())
+	  return;
+
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Right );
   
@@ -6091,7 +6141,9 @@ void View::fillRight()
 
 void View::fillLeft()
 {
-  Q_ASSERT( d->activeSheet );
+  if (!activeSheet())
+	  return;
+  
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Left );
   
@@ -6101,7 +6153,9 @@ void View::fillLeft()
 
 void View::fillUp()
 {
-  Q_ASSERT( d->activeSheet );
+  if (!activeSheet())
+	  return;
+
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Up );
   
@@ -6111,7 +6165,9 @@ void View::fillUp()
 
 void View::fillDown()
 {
-  Q_ASSERT( d->activeSheet );
+  if (!activeSheet())
+	  return;
+  
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Down );
   
@@ -6121,7 +6177,9 @@ void View::fillDown()
 
 void View::defaultSelection()
 {
-  Q_ASSERT( d->activeSheet );
+  if (!activeSheet())
+	return;
+
   doc()->emitBeginOperation( false );
   d->activeSheet->defaultSelection( selectionInfo() );
 
@@ -6186,6 +6244,8 @@ void View::showAreaName()
 
 void View::resizeRow()
 {
+   if (!activeSheet()) return;
+  
   if ( d->selection->isColumnSelected() )
     KMessageBox::error( this, i18n("Area is too large."));
   else
@@ -6197,6 +6257,9 @@ void View::resizeRow()
 
 void View::resizeColumn()
 {
+  if (!activeSheet()) return;
+  
+  
   if ( d->selection->isRowSelected() )
     KMessageBox::error( this, i18n( "Area is too large." ) );
   else
@@ -6208,6 +6271,8 @@ void View::resizeColumn()
 
 void View::equalizeRow()
 {
+  if (!activeSheet()) return;
+  
   if ( d->selection->isColumnSelected() )
     KMessageBox::error( this, i18n( "Area is too large." ) );
   else
@@ -6220,6 +6285,9 @@ void View::equalizeRow()
 
 void View::equalizeColumn()
 {
+  if (!activeSheet())
+	  return;
+  
   if ( d->selection->isRowSelected() )
     KMessageBox::error( this, i18n( "Area is too large." ) );
   else
@@ -6233,11 +6301,16 @@ void View::equalizeColumn()
 
 void View::layoutDlg()
 {
+  if (!activeSheet())
+	  return;
+
   CellFormatDialog dlg( this, d->activeSheet );
 }
 
 void View::extraProperties()
 {
+    if (!activeSheet())
+	    return;
     //d->canvas->setToolEditMode( TEM_MOUSE );
 
     d->m_propertyEditor = new PropertyEditor( this, "KPrPropertyEditor", d->activeSheet, doc() );
@@ -6563,6 +6636,9 @@ void View::percent( bool b )
 
 void View::insertObject()
 {
+  if (!activeSheet())
+	  return;
+  
   doc()->emitBeginOperation( false );
   KoDocumentEntry e =  d->actions->insertPart->documentEntry();//KoPartSelectDia::selectPart( d->canvas );
   if ( e.isEmpty() )
@@ -6580,6 +6656,9 @@ void View::insertObject()
 
 void View::insertChart()
 {
+  if (!activeSheet())
+	  return;
+  
   if ( d->selection->isColumnOrRowSelected() )
   {
     KMessageBox::error( this, i18n("Area too large."));
@@ -6786,7 +6865,7 @@ void View::slotRefreshView()
 void View::slotUpdateView( Sheet *_sheet )
 {
   // Do we display this sheet ?
-  if ( _sheet != d->activeSheet )
+  if ( ( !activeSheet() ) || ( _sheet != d->activeSheet ) )
     return;
 
   d->activeSheet->setRegionPaintDirty( d->activeSheet->visibleRect( d->canvas ) );
@@ -7137,12 +7216,18 @@ QWidget * View::canvas() const
 
 int View::canvasXOffset() const
 {
+  if (!d->activeSheet)
+	  return 0;
+  
   double zoomedResX = d->activeSheet->doc()->zoomedResolutionX();
   return int( canvasWidget()->xOffset() * zoomedResX );
 }
 
 int View::canvasYOffset() const
 {
+  if (!d->activeSheet)
+	 return 0;
+
   double zoomedResY = d->activeSheet->doc()->zoomedResolutionY();
   return int( canvasWidget()->yOffset() * zoomedResY );
 }
@@ -7266,6 +7351,9 @@ void View::closeEditor()
 
 void View::markSelectionAsDirty()
 {
+    if (!d->activeSheet)
+      return;
+
     d->activeSheet->setRegionPaintDirty( *selectionInfo() );
 }
 

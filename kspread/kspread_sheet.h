@@ -52,6 +52,7 @@ class KoStyleStack;
 class KoGenStyles;
 class KoOasisSettings;
 class KoOasisLoadingContext;
+class KoPicture;
 
 namespace KoChart
 {
@@ -984,7 +985,7 @@ public:
      * @param file The URL of the file to insert.
      * @param point The the top-left point in the sheet where the picture should be inserted.
      */
-    bool insertPicture( const KoPoint& point ,  KURL& file );
+    bool insertPicture( const KoPoint& point , const KURL& file );
 
     /**
      * Creates a new embedded picture object and inserts it into the sheet at the specified position.
@@ -1330,6 +1331,12 @@ protected:
                                CellWorker& worker );
 
 private:
+    /**
+     * Inserts a picture into the sheet and the given position.  The picture should be added to the
+     * document's picture collection before calling this method.
+     */
+    bool insertPicture( const KoPoint& point, KoPicture& picture );
+    
     bool FillSequenceWithInterval (QPtrList<Cell>& _srcList,
            QPtrList<Cell>& _destList,
            QPtrList<AutoFillSequence>& _seqList,
