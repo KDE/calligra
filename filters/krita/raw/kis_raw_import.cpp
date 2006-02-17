@@ -191,7 +191,8 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
 
             image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
             if (image == 0) return KoFilter::CreationError;
-
+            image->blockSignals(true); // Don't send out signals while we're building the image
+            
             layer = dynamic_cast<KisPaintLayer*>( image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data() );
             if (layer == 0) return KoFilter::CreationError;
 

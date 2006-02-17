@@ -412,7 +412,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         if( ! m_img) {
             m_img = new KisImage(m_doc->undoAdapter(), image -> columns, image -> rows, cs, "built image");
             Q_CHECK_PTR(m_img);
-
+            m_img->blockSignals(true); // Don't send out signals while we're building the image
+            
             // XXX I'm assuming seperate layers won't have other profile things like EXIF
             setAnnotationsForImage(image, m_img);
         }

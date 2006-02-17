@@ -282,6 +282,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     if( ! m_img ) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
         Q_CHECK_PTR(m_img);
+        m_img->blockSignals(true); // Don't send out signals while we're building the image
         if(profile)
         {
             m_img -> addAnnotation( profile->annotation() );

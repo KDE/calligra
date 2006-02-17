@@ -269,6 +269,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     // Creating the KisImageSP
     if( ! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
+        m_img->blockSignals(true); // Don't send out signals while we're building the image
         Q_CHECK_PTR(m_img);
         if(profile)
         {

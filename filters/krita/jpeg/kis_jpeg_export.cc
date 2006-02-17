@@ -84,6 +84,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QCString& from, const QC
 
     KisImageSP img = output->currentImage();
     Q_CHECK_PTR(img);
+    img->blockSignals(true); // We don't want signals to be emitted while constructing an image
 
     KisJPEGConverter kpc(output, output->undoAdapter());
 
