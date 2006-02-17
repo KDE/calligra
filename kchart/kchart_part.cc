@@ -264,31 +264,51 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
     longLabels.clear();
     shortLabels.clear();
+    
+    const uint dataColumnCount = m_currentData.cols();
+    const uint dataRowCount = m_currentData.rows();
+    const uint columnLabelCount = m_colLabels.count();
+    const uint rowLabelCount = m_rowLabels.count();
+    
     if (m_params->dataDirection() == KChartParams::DataRows) {
 	// Data is handled in rows.  This is the way KDChart works also.
 
 	// Set X axis labels from column headers.
-	for ( uint col = 0; col < m_currentData.cols(); col++ ) {
-	    longLabels  << m_colLabels[col];
-	    shortLabels << m_colLabels[col].left( 3 );
+	for ( uint col = 0; col < dataColumnCount; col++ ) {
+	    
+            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+            
+            longLabels  << label;
+	    shortLabels << label.left( 3 );
 	}
 
 	// Set legend from row headers.
-	for ( uint row = 0; row < m_currentData.rows(); row++ )
-	    m_params->setLegendText( row, m_rowLabels[row] );
+        for ( uint row = 0; row < dataRowCount; row++ )
+        {
+            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+        
+            m_params->setLegendText( row, label );
+        }
     }
     else {
 	// Data is handled in columns.
 
 	// Set X axis labels from row headers.
-	for ( uint row = 0; row < m_currentData.rows(); row++ ) {
-	    longLabels  << m_rowLabels[row];
-	    shortLabels << m_rowLabels[row].left( 3 );
+	for ( uint row = 0; row < dataRowCount; row++ ) {
+	    
+            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+        
+            longLabels  << label;
+	    shortLabels << label.left( 3 );
 	}
 
 	// Set legend from column headers.
-	for ( uint col = 0; col < m_currentData.cols(); col++ )
-	    m_params->setLegendText( col, m_colLabels[col] );
+        for ( uint col = 0; col < dataColumnCount ; col++ )
+        {
+            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+        
+            m_params->setLegendText( col, label );
+        }
     }
 
     // FIXME: In a HiLo chart, the Legend should be the same as the
@@ -302,16 +322,22 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
 	    // If data are in rows, then the X axis labels should be
 	    // taken from the row headers.
-	    for ( uint row = 0; row < m_currentData.rows(); row++ ) {
-		longLabels  << m_rowLabels[row];
-		shortLabels << m_rowLabels[row].left( 3 );
+	    for ( uint row = 0; row < dataRowCount ; row++ ) {
+		
+                QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
+            
+                longLabels  << label;
+		shortLabels << label.left( 3 );
 	    }
 	}
 	else {
 	    // If data are in columns, then the X axis labels should
 	    // be taken from the column headers.
-	    for ( uint col = 0; col < m_currentData.cols(); col++ ) {
-		longLabels  << m_colLabels[col];
+	    for ( uint col = 0; col < dataColumnCount; col++ ) {
+		
+                QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
+            
+                longLabels  << m_colLabels[col];
 		shortLabels << m_colLabels[col].left( 3 );
 	    }
 	}
