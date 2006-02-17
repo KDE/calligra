@@ -354,6 +354,20 @@ public:
     }
 
     /**
+     * @return true if the style has no attributes, no properties, no style map etc.
+     * This can be used by applications which do not save all attributes unconditionally,
+     * but only those that differ from the parent. But note that lookup() can't find this out...
+     */
+    bool isEmpty() const {
+        if ( !m_attributes.isEmpty() || ! m_maps.isEmpty() )
+            return false;
+        for ( uint i = 0 ; i < N_NumTypes ; ++i )
+            if ( ! m_properties[i].isEmpty() )
+                return false;
+        return true;
+    }
+
+    /**
      *  Write the definition of this style to @p writer, using the OASIS format.
      *  @param writer the KoXmlWriter in which @p elementName will be created and filled in
      *  @param styles the styles collection, used to look up the parent style

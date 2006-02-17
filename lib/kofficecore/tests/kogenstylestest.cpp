@@ -24,6 +24,7 @@
 
 int testLookup()
 {
+    kdDebug() << k_funcinfo << endl;
     KoGenStyles coll;
 
     QMap<QString, QString> map1;
@@ -125,6 +126,7 @@ int testLookup()
 
 int testDefaultStyle()
 {
+    kdDebug() << k_funcinfo << endl;
     /* Create a default style,
      * and then an auto style with exactly the same attributes
      * -> the lookup gives the default style.
@@ -154,11 +156,20 @@ int testDefaultStyle()
     defaultStyle.writeStyle( &writer, coll, "style:default-style", defaultStyleName, "style:paragraph-properties" );
     TEST_END( "XML for default style", "<r>\n <style:default-style style:family=\"paragraph\" style:master-page-name=\"Standard\">\n  <style:paragraph-properties myfont=\"isBold\"/>\n </style:default-style>\n</r>\n" );
 
+    // The kspread case: not writing out all properties, only if they differ
+    // from the default style.
+    // KoGenStyles doesn't fetch info from the parent style when testing
+    // for equality, so KSpread uses isEmpty() to check for equality-to-parent.
+    KoGenStyle dataStyle( KoGenStyle::STYLE_AUTO, "paragraph", defaultStyleName );
+    assert( dataStyle.isEmpty() );
+    // and then it doesn't look up the auto style, but rather uses the parent style directly.
+
     return 0;
 }
 
 int testUserStyles()
 {
+    kdDebug() << k_funcinfo << endl;
     /* Two user styles with exactly the same attributes+properties will not get merged, since
      * they don't have exactly the same attributes after all: the display-name obviously differs :)
      */
@@ -180,7 +191,25 @@ int testUserStyles()
     kdDebug() << "The user style got assigned the name " << user2StyleName << endl;
     assert( user2StyleName == "User2" );
 
-    assert( coll.styles().count() == 2 );
+    // And now, what if the data uses that style?
+    // This is like sameAsParent in the other test, but this time the
+    // parent is a STYLE_USER...
+    KoGenStyle dataStyle( KoGenStyle::STYLE_AUTO, "paragraph", user2StyleName );
+    dataStyle.addProperty( "myfont", "isBold" );
+
+    QString dataStyleName = coll.lookup( dataStyle, "DataStyle" );
+    kdDebug() << "The auto style got assigned the name " << dataStyleName << endl;
+    assert( dataStyleName == "User2" ); // it found the parent as equal
+
+    // Let's do the opposite test, just to make sure
+    KoGenStyle dataStyle2( KoGenStyle::STYLE_AUTO, "paragraph", user2StyleName );
+    dataStyle2.addProperty( "myfont", "isNotBold" );
+
+    QString dataStyle2Name = coll.lookup( dataStyle2, "DataStyle" );
+    kdDebug() << "The different auto style got assigned the name " << dataStyle2Name << endl;
+    assert( dataStyle2Name == "DataStyle1" );
+
+    assert( coll.styles().count() == 3 );
 
     TEST_BEGIN( 0, 0 );
     user1.writeStyle( &writer, coll, "style:style", user1StyleName, "style:paragraph-properties" );

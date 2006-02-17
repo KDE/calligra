@@ -42,6 +42,15 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
                 kdDebug(30003) << "KoGenStyles::lookup(" << name << "): parent style '" << style.parentName() << "' not found in collection" << endl;
             } else {
                 testStyle.m_parentName = parentStyle->m_parentName;
+                // Exclude the type from the comparison. It's ok for an auto style
+                // to have a user style as parent; they can still be identical
+                testStyle.m_type = parentStyle->m_type;
+                // Also it's ok to not have the display name of the parent style
+                // in the auto style
+                QMap<QString, QString>::const_iterator it = parentStyle->m_attributes.find( "style:display-name" );
+                if ( it != parentStyle->m_attributes.end() )
+                    testStyle.addAttribute( "style:display-name", *it );
+
                 if ( *parentStyle == testStyle )
                     return style.parentName();
             }
