@@ -26,6 +26,7 @@ class KProcess;
 class KDialogBase;
 class WdgRawImport;
 class KisProfile;
+class QProgressDialog;
 
 class KisRawImport : public KoFilter {
     Q_OBJECT
@@ -45,11 +46,12 @@ private slots:
     void slotProcessDone();
     void slotReceivedStdout(KProcess *proc, char *buffer, int buflen);
     void slotReceivedStderr(KProcess *proc, char *buffer, int buflen);
+    void incrementProgress();
 
 private:
 
     QStringList createArgumentList(bool forPreview = false);
-    QSize determineSize(Q_UINT32 * startOfImageData);
+    QSize determineSize(Q_UINT32& startOfImageData);
     void getImageData(QStringList arguments);
     KisProfile * profile();
     KisID getColorSpace();
@@ -60,6 +62,7 @@ private:
     WdgRawImport * m_page;
     KisProfile * m_monitorProfile;
     KProcess * m_process;
+    QProgressDialog* m_progress;
 };
 
 #endif // KIS_RAW_IMPORT_H_

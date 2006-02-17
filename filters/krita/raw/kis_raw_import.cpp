@@ -30,6 +30,8 @@
 #include <qapplication.h>
 #include <qcursor.h>
 #include <qeventloop.h>
+#include <qprogressdialog.h>
+#include <qtimer.h>
 
 #include <kglobal.h>
 #include <kconfig.h>
@@ -69,6 +71,7 @@ KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&)
     : KoFilter()
     , m_data(0)
     , m_process(0)
+    , m_progress(0)
 {
     m_dialog = new KDialogBase();
     m_dialog->enableButtonApply(false);
@@ -163,8 +166,16 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
         cfg->writeEntry("blackpoint", m_page->dblBlackpoint->value());
         cfg->writeEntry("red", m_page->dblRed->value());
         cfg->writeEntry("blue", m_page->dblBlue->value());
-        
+
         QApplication::setOverrideCursor(Qt::waitCursor);
+        // Create a busy indicator to show that we didn't die or so
+        m_progress = new QProgressDialog();
+        m_progress -> setTotalSteps(0);
+        m_progress -> setCancelButton(0);
+        QTimer timer;
+        connect(&timer, SIGNAL(timeout()), this, SLOT(incrementProgress()));
+        timer.start(200);
+
         doc -> undoAdapter() -> setUndo(false);
 
         getImageData(createArgumentList(false));
@@ -174,6 +185,10 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
         KisPaintDeviceSP device = 0;
 
         QApplication::restoreOverrideCursor();
+
+        delete m_progress;
+        m_progress = 0;
+
         if (m_page->radio8->isChecked()) {
         // 8 bits
 
@@ -204,8 +219,8 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
         } else {
         // 16 bits
 
-            Q_UINT32 startOfImagedata;
-            QSize sz = determineSize(&startOfImagedata);
+            Q_UINT32 startOfImagedata = 0;
+            QSize sz = determineSize(startOfImagedata);
 
             kdDebug(41008) << "Total bytes: " << m_data->size()
                     << "\n start of image data: " << startOfImagedata
@@ -289,7 +304,10 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
     return KoFilter::UserCancelled;
 }
 
-
+void KisRawImport::incrementProgress()
+{
+    m_progress -> setProgress(m_progress -> progress() + 10);
+}
 
 
 void KisRawImport::slotUpdatePreview()
@@ -310,8 +328,8 @@ void KisRawImport::slotUpdatePreview()
     } else {
         // 16 bits
 
-        Q_UINT32 startOfImagedata;
-        QSize sz = determineSize(&startOfImagedata);
+        Q_UINT32 startOfImagedata = 0;
+        QSize sz = determineSize(startOfImagedata);
 
         kdDebug(41008) << "Total bytes: " << m_data->size()
                   << "\n start of image data: " << startOfImagedata
@@ -518,17 +536,17 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     return args;
 }
 
-QSize KisRawImport::determineSize(Q_UINT32 * startOfImageData)
+QSize KisRawImport::determineSize(Q_UINT32& startOfImageData)
 {
     if (m_data->isNull() || m_data->size() < 2048) {
-        * startOfImageData = 0;
+        startOfImageData = 0;
         return QSize(0,0);
     }
 
     QString magick = QString::fromAscii(m_data->data(), 2);
     if (magick != "P6") {
         kdDebug(41008) << " Bad magick! " << magick << "\n";
-        *startOfImageData = 0;
+        startOfImageData = 0;
         return QSize(0,0);
     }
 
@@ -550,7 +568,7 @@ QSize KisRawImport::determineSize(Q_UINT32 * startOfImageData)
     Q_INT32 w = sizelist[0].toInt();
     Q_INT32 h = sizelist[1].toInt();
 
-    *startOfImageData = i;
+    startOfImageData = i;
     return QSize(w, h);
 
 }
