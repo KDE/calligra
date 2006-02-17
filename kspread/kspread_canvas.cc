@@ -4257,20 +4257,22 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 
 void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 {
+  //Only the active element (the one with the anchor) will be drawn with a border
+
   if( d->chooseCell )
 	return;
 
   if (d->cellEditor)
 	return;
+  
+	if (!selectionInfo()->activeElement())
+			return;
 
-  double positions[4];
-  bool paintSides[4];
-
-  Region::ConstIterator end(selectionInfo()->constEnd());
-  for (Region::ConstIterator it = selectionInfo()->constBegin(); it != end; ++it)
-  {
-    QRect range = (*it)->rect().normalize();
-
+	QRect range=selectionInfo()->activeElement()->rect().normalize();
+	
+  	double positions[4];
+  	bool paintSides[4];
+  
     bool current = QRect(selectionInfo()->anchor(), selectionInfo()->marker()).normalize() == range;
     QPen pen( Qt::black, 2 );
     painter.setPen( pen );
@@ -4362,7 +4364,6 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
         }
       }
     }
-  }
 }
 
 void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)

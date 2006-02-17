@@ -2646,14 +2646,19 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
   // Determine the correct background color
   if ( selected )
   {
-    //If this is an empty cell or a cell with no custom background color then use 
-    //the default highlight color.  Otherwise use a lighter version of the cell's background color.
+    //If the cell's background color is too bright, use the default highlight color
+    //Otherwise use a lighter version of the cell's background color.
     QColor c; 
+   
+    int averageColor = (backgroundColor.red() + backgroundColor.green() + backgroundColor.blue()) / 3;
     
-    if (backgroundColor == Qt::white)
-       c = View::highlightColor();
+    if (averageColor > 180)
+	if (averageColor > 225)		
+       		c = View::highlightColor();
+    	else
+		c = backgroundColor.light( 115 ); //15% lighter
     else
-       c = backgroundColor.light( 125 );
+       c = backgroundColor.light( 125 ); //25% lighter
         
     painter.setBackgroundColor( c );
   }
