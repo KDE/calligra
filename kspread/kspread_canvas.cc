@@ -3494,7 +3494,11 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
   if ( !d->cellEditor )
     return;
 
-  d->editWidget->setEditMode( false );
+
+	//There may be highlighted areas on the sheet which will need to be erased
+	setSelectionChangePaintDirty( activeSheet() , *choice() ); 	  
+
+  	d->editWidget->setEditMode( false );
 
   QString t = d->cellEditor->text();
   // Delete the cell editor first and after that update the document.
@@ -3522,7 +3526,9 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
     d->view->setText (t, array);
   }
   else
+  {
     d->view->updateEditWidget();
+  }
 
   setFocus();
 }
@@ -3657,8 +3663,8 @@ void Canvas::repaintObject( EmbeddedObject *obj )
 {
 	//Calculate where the object appears on the canvas widget and then repaint that part of the widget
 	QRect canvasRelativeGeometry = doc()->zoomRect( obj->geometry() );
-	canvasRelativeGeometry.moveBy( -xOffset()*doc()->zoomedResolutionX() , 
-			   			-yOffset() * doc()->zoomedResolutionY() );
+	canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) , 
+			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
 	
     repaint( canvasRelativeGeometry );
 
@@ -3880,7 +3886,7 @@ QRect Canvas::cellsInArea( const QRect area ) const
 {
 	KoRect unzoomedRect = d->view->doc()->unzoomRect( area );
 	
-       	unzoomedRect.moveBy( xOffset(), yOffset() );
+       	unzoomedRect.moveBy( (int)xOffset(), (int)yOffset() );
 
   	double tmp;
   	int left_col = activeSheet()->leftColumn( unzoomedRect.left(), tmp );
@@ -4155,8 +4161,8 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 	    //if one or more of the cells underneath the object has been marked as 'dirty'.
 	    
 	   QRect canvasRelativeGeometry = zoomedObjectGeometry;
-	   canvasRelativeGeometry.moveBy( -xOffset()*doc()->zoomedResolutionX() , 
-			   			-yOffset() * doc()->zoomedResolutionY() );
+	   canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) , 
+			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
 	   
 	   const QRect cellsUnderObject=cellsInArea( canvasRelativeGeometry );
 	   bool redraw=false;
