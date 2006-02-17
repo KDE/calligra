@@ -1088,8 +1088,14 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   {
     setCursor( KCursor::handCursor() );
   }
+  else if ( d->chooseCell )
+  {
+	//Visual cue to indicate that the user can drag-select the choice selection
+	setCursor( KCursor::crossCursor() );
+  }
   else
   {
+	//Nothing special is happening, use a normal arrow cursor	  
     setCursor( arrowCursor );
   }
 
