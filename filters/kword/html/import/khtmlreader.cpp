@@ -30,7 +30,7 @@
 #include <qwidget.h>
 #include <kapplication.h>
 #include <dom/html_misc.h>
-
+#include <qregexp.h>
 
 KHTMLReader::KHTMLReader(KWDWriter *w){
 	_html=new KHTMLPart();
@@ -352,10 +352,11 @@ bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
         {
               _writer->formatAttribute(state()->paragraph,"FLOW","align",s);
         }
-        if (e.getAttribute("class")=="h1")
+        QRegExp rx( "h[0-9]+" );
+        if ( 0 == rx.search( e.getAttribute("class").string() ) )
         // example: <p class="h1" style="text-align:left; ">
         {
-              _writer->layoutAttribute(state()->paragraph,"NAME","value","h1");
+              _writer->layoutAttribute(state()->paragraph,"NAME","value",e.getAttribute("class").string());
         }
         return true;
 }
