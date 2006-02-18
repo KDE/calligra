@@ -263,11 +263,11 @@ VEllipse::load( const QDomElement& element )
 		if( list.item( i ).isElement() )
 			VObject::load( list.item( i ).toElement() );
 
-	m_rx = KoUnit::parseValue( element.attribute( "width" ) );
-	m_ry = KoUnit::parseValue( element.attribute( "height" ) );
+	m_rx = KoUnit::parseValue( element.attribute( "rx" ) );
+	m_ry = KoUnit::parseValue( element.attribute( "ry" ) );
 
-	m_center.setX( KoUnit::parseValue( element.attribute( "x" ) ) );
-	m_center.setY( KoUnit::parseValue( element.attribute( "y" ) ) );
+	m_center.setX( KoUnit::parseValue( element.attribute( "cx" ) ) );
+	m_center.setY( KoUnit::parseValue( element.attribute( "cy" ) ) );
 
 	m_startAngle = element.attribute( "start-angle" ).toDouble();
 	m_endAngle = element.attribute( "end-angle" ).toDouble();
