@@ -136,19 +136,21 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
         //kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
         //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
 
-        QString tmp = oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix;
+        str = element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null);
+
+        QString tmp = oasisStyles.dataFormats()[str].prefix;
         if ( !tmp.isEmpty() )
         {
             m_prefix = tmp;
             m_featuresSet |= SPrefix;
         }
-        tmp = oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix;
+        tmp = oasisStyles.dataFormats()[str].suffix;
         if ( !tmp.isEmpty() )
         {
             m_postfix = tmp;
             m_featuresSet |= SPostfix;
         }
-        tmp = oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr;
+        tmp = oasisStyles.dataFormats()[str].formatStr;
         if ( !tmp.isEmpty() )
         {
             m_formatType = Style::formatType( tmp );
@@ -157,10 +159,10 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     }
 
     styleStack.setTypeProperties( "text" );
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
     {
-        m_fontFamily = styleStack.attributeNS( KoXmlNS::style, "font-name" );
-        kdDebug()<<"styleStack.hasAttribute( style:font-name ) :"<<styleStack.hasAttributeNS( KoXmlNS::style, "font-name" )<<endl;
+        m_fontFamily = styleStack.attributeNS( KoXmlNS::fo, "font-family" );
+        kdDebug()<<"styleStack.hasAttribute( fo:font-family ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" )<<endl;
         m_featuresSet |= SFontFamily;
         m_featuresSet |= SFont;
         m_featuresSet |= SFontFlag;
@@ -661,7 +663,10 @@ FormatType Style::formatType( const QString &_format )
         return Number_format;
 }
 
-QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix, int _precision )
+QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles,
+                                      FormatType _style,
+                                      const QString &_prefix, const QString &_postfix,
+                                      int _precision, const QString& symbol )
 {
   kdDebug() << k_funcinfo << endl;
     QString styleName;
@@ -760,6 +765,10 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
       KoGenStyle::PropertyType pt = KoGenStyle::ParagraphType;
       style.addProperty( "office:value-type", valueType, pt );
     }
+    if ( !styleName.isEmpty() )
+    {
+      style.addAttribute( "style:data-style-name", styleName );
+    }
     return styleName;
 }
 
@@ -776,7 +785,7 @@ QString Style::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, FormatTyp
 QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, FormatType /*_style*/, int /*_precision*/ )
 {
     QString format;
-    return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format );
+    return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format, format );
 }
 
 QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, FormatType /*_style*/, int _precision )
@@ -1034,12 +1043,37 @@ QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatTyp
         break;
     }
 
-    return KoOasisStyles::saveOasisFractionStyle( mainStyles, format,_prefix, _suffix );
+    return KoOasisStyles::saveOasisFractionStyle( mainStyles, format, _prefix, _suffix );
 }
 
-
-QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
+QString Style::saveOasis( KoGenStyle& style, KoGenStyles& mainStyles )
 {
+  // KSpread::Style is definitly an OASIS auto style,
+  // but don't overwrite it, if it already exists
+  if (style.type() == 0)
+      style = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
+  // doing the real work
+  saveOasisStyle( style, mainStyles );
+  return QString::null;
+}
+
+void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
+{
+#ifndef NDEBUG
+    if (type() == BUILTIN )
+      kdDebug() << "BUILTIN" << endl;
+    else if (type() == CUSTOM )
+      kdDebug() << "CUSTOM" << endl;
+    else if (type() == AUTO )
+      kdDebug() << "AUTO" << endl;
+#endif
+
+    // don't store parent, if it's the default style
+    if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != i18n( "Default" )) )
+        // FIXME this is not the OASIS parent style's name. it's its display name!
+        style.addAttribute( "style:parent-style-name", m_parent->name() );
+
+
     if ( featureSet( SAlignX ) && alignX() != Format::Undefined )
     {
         QString value;
@@ -1144,15 +1178,13 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     {
         if ( isNotProtected && !hideFormula )
             style.addProperty( "style:cell-protect", "none" );
-        else
-        {
-            if ( isNotProtected && hideFormula )
-                style.addProperty( "style:cell-protect", "formula-hidden" );
-            else if ( hideFormula )
-                style.addProperty( "style:cell-protect", "protected formula-hidden" );
-            else if ( !isNotProtected )
-                style.addProperty( "style:cell-protect", "protected" );
-        }
+        else if ( isNotProtected && hideFormula )
+            style.addProperty( "style:cell-protect", "formula-hidden" );
+        else if ( hideFormula )
+            style.addProperty( "style:cell-protect", "protected formula-hidden" );
+        else if ( !isNotProtected && !m_parent )
+            // write out the default, only if no parent style exists
+            style.addProperty( "style:cell-protect", "protected" );
     }
 
     if ( featureSet( SLeftBorder ) &&featureSet( SRightBorder ) &&
@@ -1194,7 +1226,7 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     }
     if ( featureSet( SFontFamily ) )
     {
-        style.addProperty("style:font-name", m_fontFamily, KoGenStyle::TextType );
+        style.addProperty("fo:font-family", m_fontFamily, KoGenStyle::TextType );
     }
     if ( featureSet( SFontSize ) )
     {
@@ -1237,9 +1269,23 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     if ( featureSet( SPostfix ) && !postfix().isEmpty() )
         _postfix = m_postfix;
     if ( featureSet( SPrecision ) )
+    {
+        if ( m_precision > -1 )
+            style.addAttribute( "style:decimal-places", m_precision );
         _precision =  m_precision;
+    }
 
-    return saveOasisStyleNumeric( style, mainStyles, m_formatType, _prefix, _postfix, _precision );
+    QString symbol;
+    if ( featureSet( SFormatType ) && m_formatType == Money_format )
+    {
+      symbol = m_currency.symbol;
+    }
+
+    QString numericStyle = saveOasisStyleNumeric( style, mainStyles, m_formatType,
+                                                  _prefix, _postfix, _precision,
+                                                  symbol );
+    if ( !numericStyle.isEmpty() )
+        style.addAttribute( "style:data-style-name", numericStyle );
 }
 
 QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
@@ -2624,35 +2670,39 @@ CustomStyle::~CustomStyle()
 {
 }
 
-void CustomStyle::saveOasis( KoGenStyles &mainStyles )
+QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
 {
+    // TODO:
+    // If the type is undefined, we're called from Format
+    // and the OASIS style is not an automatic style. As
+    // the user styles are already created, we return here.
+    // TODO: CUSTOM styles
+//     if ( style.type() == 0 && ( m_type == BUILTIN ) && ( m_name == i18n( "Default" ) ) )
+//       return "Default";
+
     if ( m_name.isEmpty() )
-        return;
+        return QString::null; // TODO fallback to Style::saveOasis() ???
 
-    KoGenStyle gs = KoGenStyle(Doc::STYLE_CELL, "table-cell");
-
-    // only automatic styles should go into content.xml
-//    if ( m_type == BUILTIN || m_type == CUSTOM )
-        gs.setAutoStyleInStylesDotXml(true);
-
-    // don't store parent, if it's the default style
-    if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != i18n( "Default" )) )
-        gs.addAttribute( "style:parent-style-name", m_parent->name() );
-
-    // default style does not need display name    
+    // default style does not need display name
     if( type() != BUILTIN || m_name != i18n( "Default" ) )
-        gs.addAttribute( "style:display-name", m_name );
+        style.addAttribute( "style:display-name", m_name );
 
-    QString numericStyle = saveOasisStyle( gs, mainStyles );
-    if ( !numericStyle.isEmpty() )
-        gs.addAttribute( "style:data-style-name", numericStyle );
+    // doing the real work
+    saveOasisStyle( style, mainStyles );
+
+    // The lookup is done in the calling object (Format).
+    if ( style.type() == Doc::STYLE_CELL_AUTO )
+        return QString::null;
 
     if( ( m_type == BUILTIN ) && ( m_name == i18n( "Default" ) ) )
+    {
+        style.setDefaultStyle(true);
         // don't i18n'ize "Default" in this case
-        mainStyles.lookup( gs, "Default", KoGenStyles::DontForceNumbering );
-    else  
-        // this is auto or user style
-        mainStyles.lookup( gs, "custom-style" );
+        return mainStyles.lookup( style, "Default", KoGenStyles::DontForceNumbering );
+    }
+    else
+        // this is a custom style
+        return mainStyles.lookup( style, "custom-style" );
 }
 
 void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const QDomElement& style, const QString & name )

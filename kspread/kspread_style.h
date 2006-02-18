@@ -37,10 +37,23 @@ namespace KSpread
 {
 class CustomStyle;
 
+/**
+ * @brief The Style class represents a cell style.
+ * Built-in and custom styles, the ones shown in the StyleManager dialog,
+ * are CustomStyles. Pure Styles have no name, for instance, and are only
+ * used as AUTO styles.
+ */
 class Style
 {
- public:
-  typedef enum E1 { BUILTIN, CUSTOM, AUTO, TENTATIVE } StyleType;
+public:
+  /// The style type
+  enum StyleType
+  {
+    BUILTIN,   ///< built-in style (the default style)
+    CUSTOM,    ///< custom style (defined in the StyleManager dialog)
+    AUTO,      ///< automatically generated on cell format changes
+    TENTATIVE  ///< @internal temporary state
+  };
 
   enum FontFlags
     {
@@ -50,6 +63,7 @@ class Style
       FStrike    = 0x08
     };
 
+  /// @see Format::FormatFlags
   enum Properties
     {
       PDontPrintText = 0x01,
@@ -62,6 +76,7 @@ class Style
     };
 
     // TODO Stefan: merge with Format::Properties
+    /// @see Format::Properties
     enum FlagsSet
     {
       SAlignX          = 0x01,
@@ -105,7 +120,11 @@ class Style
 
     static FormatType formatType( const QString &_format );
 
-    static QString saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix,  int _precision);
+    /**
+     * @return the name of the data style (number, currency, percentage, date,
+     * boolean, text)
+     */
+    static QString saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol );
     static QString saveOasisStyleNumericDate( KoGenStyles &mainStyles, FormatType _style );
     static QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatType _style, const QString &_prefix, const QString _suffix );
     static QString saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _style );
@@ -122,9 +141,14 @@ class Style
   void saveXML( QDomDocument & doc, QDomElement & format ) const;
   bool loadXML( QDomElement & format );
 
-    QString saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
-    void loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element );
-    static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
+  /**
+   * Saves an OASIS automatic style.
+   * Reimplemented by CustomStyle for OASIS user styles.
+   * @return always QString::null
+   */
+  virtual QString saveOasis( KoGenStyle& style, KoGenStyles& mainStyles);
+  void loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element );
+  static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
 
   /**
    * Releases this style. The internal reference counter is decremented.
@@ -210,7 +234,12 @@ class Style
   QString const & parentName() const { return m_parentName; }
   void setParent( CustomStyle * parent );
 
- protected:
+protected:
+  /**
+   * Helper function for saveOasis
+   * Does the real work by determining the used attributes.
+   */
+  void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
 
   CustomStyle * m_parent;
   QString        m_parentName;
@@ -328,6 +357,9 @@ class Style
   bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 };
 
+/**
+ * @brief Built-in or custom style defined in StyleManager dialog.
+ */
 class CustomStyle : public Style
 {
  public:
@@ -335,10 +367,15 @@ class CustomStyle : public Style
   CustomStyle( QString const & name, CustomStyle * parent );
   ~CustomStyle();
 
-  QString const & name()       const { return m_name;       }
+  QString const & name() const { return m_name; }
 
   void save( QDomDocument & doc, QDomElement & styles );
-  void saveOasis( KoGenStyles &mainStyles );
+  /**
+   * @reimp
+   * Stores an OASIS user style.
+   * @return the OASIS style's name
+   */
+  virtual QString saveOasis( KoGenStyle& style, KoGenStyles &mainStyles );
   /**
    * Loads the style properties from @p style .
    * Determines also the parent's name.

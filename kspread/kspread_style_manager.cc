@@ -26,6 +26,7 @@
 #include <KoOasisStyles.h>
 #include <KoXmlNS.h>
 
+#include "kspread_doc.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
 
@@ -56,7 +57,8 @@ StyleManager::~StyleManager()
 void StyleManager::saveOasis( KoGenStyles &mainStyles )
 {
     kdDebug() << "Saving default oasis style" << endl;
-    m_defaultStyle->saveOasis( mainStyles );
+    KoGenStyle defaultStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
+    m_defaultStyle->saveOasis( defaultStyle, mainStyles );
 
     Styles::iterator iter = m_styles.begin();
     Styles::iterator end  = m_styles.end();
@@ -66,11 +68,11 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
         kdDebug() << "Saving style" << endl;
         CustomStyle * styleData = iter.data();
 
-        styleData->saveOasis( mainStyles );
+        KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
+        styleData->saveOasis( customStyle, mainStyles );
 
         ++iter;
     }
-
 }
 
 void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )

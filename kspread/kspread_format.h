@@ -34,11 +34,12 @@
 class QDomElement;
 class QDomDocument;
 class DCOPObject;
-class KoOasisStyles;
-class KoGenStyles;
 class KLocale;
-class KoStyleStack;
 class KoGenStyle;
+class KoGenStyles;
+class KoOasisLoadingContext;
+class KoOasisStyles;
+class KoStyleStack;
 
 namespace KSpread
 {
@@ -116,11 +117,15 @@ public:
     QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
+
+    void loadOasisStyle( const QDomElement& element, KoOasisLoadingContext& context );
     bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
-    QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle ,int _col, int _row , bool force = false, bool copy = false);
-    QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle );
-    void saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font );
     bool loadFontOasisStyle( KoStyleStack & font );
+    /**
+     * @return the OASIS style's name, if it was created. QString::null otherwise.
+     */
+    QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle );
+
     ////////////////////////////////
     //
     // Properties

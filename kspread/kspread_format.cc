@@ -29,9 +29,10 @@
 #include <klocale.h>
 
 #include <KoXmlNS.h>
+#include <KoGenStyles.h>
 #include <KoGlobal.h>
 #include <KoStyleStack.h>
-#include <KoGenStyles.h>
+#include <KoOasisLoadingContext.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
@@ -224,417 +225,7 @@ void Format::setNoFallBackProperties( Properties p )
 
 QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle )
 {
-    kdDebug()<<"void Format::saveOasisCellStyle( KoGenStyle &currentCellStyle )***************\n";
-    QString styleFormatName;
-    //FIXME fallback ????
-    Format::Align a = Format::Undefined;
-    if ( hasProperty( PFont,true ) || hasNoFallBackProperties( PFont ) )
-    {
-        //fo:font-size="13pt" fo:font-style="italic" style:text-underline="sing
-        //le" style:text-underline-color="font-color" fo:font-weight="bold"
-        saveOasisFontCellStyle( currentCellStyle, m_pStyle->font() );
-    }
-
-
-    if ( hasProperty( Format::PAlign,true ) || hasNoFallBackProperties( Format::PAlign ) )
-    {
-        a = m_pStyle->alignX(  );
-        QString value ="start";
-        if ( a == Format::Center )
-            value = "center";
-        else if ( a == Format::Right )
-            value = "end";
-        else if ( a == Format::Left )
-            value = "start";
-        currentCellStyle.addProperty( "fo:text-align", value );
-    }
-
-    if ( hasProperty( Format::PAlignY,true ) || hasNoFallBackProperties( Format::PAlignY ) )
-    {
-        Format::AlignY align = m_pStyle->alignY();
-        QString value;
-        if( align == Format::Top )
-            value = "top";
-        else if( align == Format::Middle )
-            value = "middle";
-        else if( align == Format::Bottom )
-            value = "bottom";
-
-        if( !value.isEmpty() ) // sanity
-            currentCellStyle.addProperty( "style:vertical-align", value );
-    }
-
-    if ( hasProperty( Format::PIndent,true ) || hasNoFallBackProperties( Format::PIndent ) )
-    {
-        double indent = m_pStyle->indent(  );
-        if ( indent > 0.0 )
-        {
-            currentCellStyle.addPropertyPt("fo:margin-left", indent );
-            if ( a == Format::Undefined )
-                currentCellStyle.addProperty("fo:text-align", "start" );
-        }
-    }
-
-    if ( hasProperty( Format::PAngle,true ) || hasNoFallBackProperties( Format::PAngle ) )
-    {
-        if ( m_pStyle->rotateAngle() != 0 )
-        {
-            currentCellStyle.addProperty( "style:rotation-align", "none" );
-            currentCellStyle.addProperty( "style:rotation-angle", QString::number( -1.0 * m_pStyle->rotateAngle() ) );
-        }
-    }
-
-    if ( ( hasProperty( Format::PMultiRow,true ) || hasNoFallBackProperties( Format::PMultiRow ) )
-         && m_pStyle->hasProperty( Style::PMultiRow ) )
-    {
-        currentCellStyle.addProperty( "fo:wrap-option", "wrap" );
-    }
-    if ((  hasProperty( Format::PVerticalText,true ) || hasNoFallBackProperties( Format::PVerticalText ) )&& m_pStyle->hasProperty( Style::PVerticalText ) )
-    {
-        currentCellStyle.addProperty( "style:direction", "ttb" );
-        currentCellStyle.addProperty( "style:rotation-angle", "0" );
-        currentCellStyle.addProperty( "style:rotation-align", "none" );
-    }
-    if ( ( hasProperty( Format::PDontPrintText,true ) || hasNoFallBackProperties( Format::PDontPrintText ) ) && m_pStyle->hasProperty( Style::PDontPrintText ) )
-    {
-        currentCellStyle.addProperty( "style:print-content", "false");
-    }
-    bool hideAll = false;
-    bool hideFormula = false;
-    bool isNotProtected = false;
-    if ( ( hasProperty( Format::PHideAll,true ) || hasNoFallBackProperties( Format::PHideAll ) )
-         && m_pStyle->hasProperty( Style::PHideAll ) )
-        hideAll = true;
-
-    if ( ( hasProperty( Format::PHideFormula,true ) || hasNoFallBackProperties( Format::PHideFormula ) )
-         && m_pStyle->hasProperty( Style::PHideFormula )/*fixme*/ )
-        hideFormula = true;
-    if ( ( hasProperty( Format::PNotProtected,true ) || hasNoFallBackProperties( Format::PNotProtected ) )
-         && m_pStyle->hasProperty( Style::PNotProtected ) )
-        isNotProtected = true;
-
-    if ( hideAll )
-        currentCellStyle.addProperty( "style:cell-protect", "hidden-and-protected" );
-    else
-    {
-        if ( isNotProtected && !hideFormula )
-            currentCellStyle.addProperty( "style:cell-protect", "none" );
-        else
-        {
-            if ( isNotProtected && hideFormula )
-                currentCellStyle.addProperty( "style:cell-protect", "formula-hidden" );
-            else if ( hideFormula )
-                currentCellStyle.addProperty( "style:cell-protect", "protected formula-hidden" );
-            else if ( !isNotProtected )
-                currentCellStyle.addProperty( "style:cell-protect", "protected" );
-        }
-    }
-    if ( ( hasProperty( Format::PBackgroundColor,true ) || hasNoFallBackProperties( Format::PBackgroundColor ) ) )
-        currentCellStyle.addProperty( "fo:background-color", m_pStyle->bgColor().name() );
-
-    QPen leftBorder;
-    QPen rightBorder;
-    QPen topBorder;
-    QPen bottomBorder;
-
-    if ( hasProperty( Format::PLeftBorder,true ) || hasNoFallBackProperties( Format::PLeftBorder ) )
-        leftBorder = m_pStyle->leftBorderPen();
-    if ( hasProperty( Format::PRightBorder,true ) || hasNoFallBackProperties( Format::PRightBorder ) )
-        rightBorder = m_pStyle->rightBorderPen();
-    if ( hasProperty( Format::PTopBorder,true ) || hasNoFallBackProperties( Format::PTopBorder ) )
-        topBorder = m_pStyle->topBorderPen();
-    if ( hasProperty( Format::PBottomBorder,true ) || hasNoFallBackProperties( Format::PBottomBorder ) )
-        bottomBorder = m_pStyle->bottomBorderPen();
-    if ( ( leftBorder == rightBorder ) &&
-         ( leftBorder == topBorder ) &&
-         ( leftBorder == bottomBorder ) )
-    {
-        if ( ( leftBorder.width() != 0 ) && ( leftBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty("fo:border", convertOasisPenToString( leftBorder ) );
-    }
-    else
-    {
-        if ( ( leftBorder.width() != 0 ) && ( leftBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "fo:border-left", convertOasisPenToString( leftBorder ) );
-
-        if ( ( rightBorder.width() != 0 ) && ( rightBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "fo:border-right", convertOasisPenToString( rightBorder ) );
-
-        if ( ( topBorder.width() != 0 ) && ( topBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "fo:border-top", convertOasisPenToString( topBorder ) );
-
-        if ( ( bottomBorder.width() != 0 ) && ( bottomBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "fo:border-bottom", convertOasisPenToString( bottomBorder ) );
-    }
-
-    if ( hasProperty( Format::PFallDiagonal,true ) || hasNoFallBackProperties( PFallDiagonal ) )
-    {
-        QPen pen( m_pStyle->fallDiagonalPen() );
-        if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "style:diagonal-tl-br", convertOasisPenToString( pen ) );
-    }
-    if ( hasProperty( Format::PGoUpDiagonal,true ) || hasNoFallBackProperties( PGoUpDiagonal ) )
-    {
-        QPen pen( m_pStyle->goUpDiagonalPen() );
-        if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "style:diagonal-bl-tr", convertOasisPenToString( pen ) );
-    }
-    if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )/*|| force*/ )
-    {
-        styleFormatName =  Style::saveOasisStyleNumeric( currentCellStyle, mainStyle, m_pStyle->formatType(), m_pStyle->prefix( ),  m_pStyle->postfix( ),m_pStyle->precision() );
-    }
-    return styleFormatName;
-
-}
-
-void Format::saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font )
-{
-    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
-    currentCellStyle.addProperty( "style:font-name", _font.family(),tt );
-    if ( _font.bold() )
-        currentCellStyle.addProperty("fo:font-weight","bold",tt );
-    if ( _font.italic() )
-        currentCellStyle.addProperty("fo:font-style", "italic",tt );
-    if ( _font.strikeOut() )
-        currentCellStyle.addProperty("style:text-line-through-style", "solid",tt );
-    if ( _font.underline() )
-    {
-        //style:text-underline-style="solid" style:text-underline-width="auto"
-        currentCellStyle.addProperty( "style:text-underline-style", "solid",tt );
-        //copy from oo-129
-        currentCellStyle.addProperty( "style:text-underline-width", "auto",tt );
-        currentCellStyle.addProperty( "style:text-underline-color", "font-color",tt );
-    }
-    currentCellStyle.addPropertyPt( "fo:font-size", _font.pointSize(),tt );
-}
-
-QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle, int _col, int _row, bool force, bool /*copy*/ )
-{
-#if 0
-    if ( m_pStyle->type() == Style::BUILTIN || m_pStyle->type() == Style::CUSTOM )
-    {
-        currentCellStyle.addAttribute( "style:parent-style-name", ((CustomStyle *) m_pStyle)->name() );
-        if ( !copy )
-            return ""; //FIXME
-    }
-    else //FIXME !!!!
-#endif
-    {
-        if ( m_pStyle->parent() && m_pStyle->parent()->name().length() > 0 && m_pStyle->parent()->name() != i18n( "Default" ) )
-            currentCellStyle.addAttribute( "style:parent-style-name", m_pStyle->parent()->name() );
-    }
-
-    //text attributes
-    if ( hasProperty( PFont, true ) || hasNoFallBackProperties( PFont ) || force )
-    {
-        //fo:font-size="13pt" fo:font-style="italic" style:text-underline="single" style:text-underline-color="font-color" fo:font-weight="bold"
-        saveOasisFontCellStyle( currentCellStyle, textFont( _col, _row ) );
-    }
-    if ( ( hasProperty( PTextPen, true ) || hasNoFallBackProperties( PTextPen ) || force )
-         && textPen( _col, _row ).color().isValid() )
-    {
-        currentCellStyle.addProperty( "fo:color", textColor( _col, _row ).name() , KoGenStyle::TextType);
-        //format.appendChild( util_createElement( "pen", textPen( _col, _row ), doc ) );
-    }
-
-    //FIXME fallback ????
-    // paragraph attributes.
-    Format::Align alignX = Format::Undefined;
-    if ( hasProperty( PAlign, true ) || hasNoFallBackProperties( PAlign ) || force  )
-    {
-        alignX = align( _col, _row );
-        QString value ="start";
-        if ( alignX == Format::Center )
-            value = "center";
-        else if ( alignX == Format::Right )
-            value = "end";
-        else if ( alignX == Format::Left )
-            value = "start";
-        currentCellStyle.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
-    }
-
-    if (hasProperty( PIndent, true ) || hasNoFallBackProperties( PIndent ) || force )
-    {
-        double indent = getIndent( _col, _row );
-        if ( indent > 0.0 )
-        {
-            currentCellStyle.addPropertyPt("fo:margin-left", indent,  KoGenStyle::ParagraphType );
-            if ( alignX == Format::Undefined )
-                currentCellStyle.addProperty("fo:text-align", "start", KoGenStyle::ParagraphType );
-        }
-    }
-    // end paragraph attributes.
-
-
-    // cell attributes
-    if (  hasProperty( PAlignY, true ) || hasNoFallBackProperties( PAlignY ) || force  )
-    {
-        QString value;
-
-        Format::AlignY align = alignY( _col, _row );
-        if ( align == Format::Top )
-            value = "top";
-        else if ( align == Format::Middle)
-            value = "middle";
-        else if ( align == Format::Bottom)
-            value = "bottom";
-
-        if (!value.isEmpty()) // sanity
-            currentCellStyle.addProperty( "style:vertical-align", value );
-    }
-
-
-    if ( hasProperty( PAngle, true ) || hasNoFallBackProperties( PAngle ) || force )
-    {
-        if ( getAngle( _col, _row ) != 0 )
-        {
-            currentCellStyle.addProperty( "style:rotation-angle", QString::number( -getAngle( _col, _row ) ) );
-            currentCellStyle.addProperty( "style:rotation-align", "none" );
-        }
-    }
-
-    if ( ( hasProperty( PMultiRow, true ) || hasNoFallBackProperties( PMultiRow )
-           || force ) && multiRow( _col, _row )  )
-    {
-        if ( multiRow( _col, _row ) )
-            currentCellStyle.addProperty( "fo:wrap-option", "wrap" );
-    }
-    if ( ( hasProperty( PVerticalText, true ) || hasNoFallBackProperties( PVerticalText )
-           || force ) && verticalText( _col, _row ) )
-    {
-        currentCellStyle.addProperty( "style:direction", "ttb" );
-        currentCellStyle.addProperty( "style:rotation-angle", "0" );
-        currentCellStyle.addProperty( "style:rotation-align", "none" );
-    }
-    if( hasProperty( PDontPrintText, true ) || hasNoFallBackProperties( PDontPrintText ) || force )
-    {
-        if ( !getDontprintText( _col, _row ) )
-        {
-            currentCellStyle.addProperty( "style:print-content", "false");
-        }
-    }
-    bool hideAll = false;
-    bool hideFormula = false;
-    bool isNotProtected = false;
-    if ( hasProperty( Format::PHideAll ) || !hasNoFallBackProperties( Format::PHideAll ) )
-        hideAll = isHideAll( _col, _row );
-
-    if ( hasProperty( PHideFormula, true ) || hasNoFallBackProperties( PHideFormula ) || force )
-        hideFormula = isHideFormula( _col, _row );
-    if ( hasProperty( PNotProtected, true ) || hasNoFallBackProperties( PNotProtected ) || force )
-        isNotProtected = notProtected( _col, _row );
-
-    if ( hideAll )
-        currentCellStyle.addProperty( "style:cell-protect", "hidden-and-protected" );
-    else
-    {
-        if ( isNotProtected && !hideFormula )
-            currentCellStyle.addProperty( "style:cell-protect", "none" );
-        else
-        {
-            if ( isNotProtected && hideFormula )
-                currentCellStyle.addProperty( "style:cell-protect", "formula-hidden" );
-            else if ( hideFormula )
-                currentCellStyle.addProperty( "style:cell-protect", "protected formula-hidden" );
-            else if ( !isNotProtected )
-                currentCellStyle.addProperty( "style:cell-protect", "protected" );
-        }
-    }
-    if ( ( hasProperty( PBackgroundColor, false ) || hasNoFallBackProperties( PBackgroundColor)
-           || force ) && bgColor( _col, _row ).isValid() )
-        currentCellStyle.addProperty( "fo:background-color", bgColor(_col, _row).name() );
-
-    if ( hasProperty( PBackgroundBrush, true ) || hasNoFallBackProperties( PBackgroundBrush ) || force )
-    {
-        QString tmp = Style::saveOasisBackgroundStyle( mainStyle, backGroundBrush( _col, _row ) );
-        if ( !tmp.isEmpty() )
-            currentCellStyle.addProperty("draw:style-name", tmp );
-    }
-
-
-    QPen leftBorder;
-    QPen rightBorder;
-    QPen topBorder;
-    QPen bottomBorder;
-
-    if ( hasProperty( PLeftBorder, true ) || hasNoFallBackProperties( PLeftBorder ) || force )
-        leftBorder = leftBorderPen( _col, _row );
-    if ( hasProperty( PRightBorder, true ) || hasNoFallBackProperties( PRightBorder ) || force )
-        rightBorder = rightBorderPen( _col, _row );
-    if ( hasProperty( PTopBorder, true ) || hasNoFallBackProperties( PTopBorder ) || force )
-        topBorder = topBorderPen( _col, _row );
-    if ( hasProperty( PBottomBorder, true ) || hasNoFallBackProperties( PBottomBorder ) || force )
-        bottomBorder = bottomBorderPen( _col, _row );
-    if ( ( leftBorder == rightBorder ) &&
-         ( leftBorder == topBorder ) &&
-         ( leftBorder == bottomBorder ) )
-    {
-        if ( ( leftBorder.width() != 0 ) && ( leftBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty("fo:border", convertOasisPenToString( leftBorder ) );
-    }
-    else
-    {
-        if ( ( leftBorder.width() != 0 ) && ( leftBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "fo:border-left", convertOasisPenToString( leftBorder ) );
-
-        if ( ( rightBorder.width() != 0 ) && ( rightBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "fo:border-right", convertOasisPenToString( rightBorder ) );
-
-        if ( ( topBorder.width() != 0 ) && ( topBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "fo:border-top", convertOasisPenToString( topBorder ) );
-
-        if ( ( bottomBorder.width() != 0 ) && ( bottomBorder.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "fo:border-bottom", convertOasisPenToString( bottomBorder ) );
-
-    }
-    if ( hasProperty( PFallDiagonal, true ) || hasNoFallBackProperties( PFallDiagonal ) || force )
-    {
-        QPen pen( fallDiagonalPen( _col, _row ) );
-        if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "style:diagonal-tl-br", convertOasisPenToString( pen ) );
-    }
-    if ( hasProperty( PGoUpDiagonal, true ) || hasNoFallBackProperties( PGoUpDiagonal ) || force )
-    {
-        QPen pen( goUpDiagonalPen( _col, _row ) );
-        if ( ( pen.width() != 0 ) && ( pen.style() != Qt::NoPen ) )
-            currentCellStyle.addProperty( "style:diagonal-bl-tr", convertOasisPenToString( pen ) );
-    }
-    QString styleFormatName;
-
-    QString _prefix;
-    QString _postfix;
-    int _precision = -1;
-
-    if ( hasProperty( PPrecision, true ) || hasNoFallBackProperties( PPrecision ) || force )
-        _precision =  precision( _col, _row );
-    if ( ( hasProperty( PPrefix, true ) || hasNoFallBackProperties( PPrefix ) || force )
-         && !prefix( _col, _row ).isEmpty() )
-        _prefix = prefix( _col, _row );
-    if ( ( hasProperty( PPostfix, true ) || hasNoFallBackProperties( PPostfix ) || force )
-         && !postfix( _col, _row ).isEmpty() )
-        _postfix = postfix( _col, _row );
-
-    if ( hasProperty( PFormatType, true ) || hasNoFallBackProperties( PFormatType )|| force )
-    {
-        styleFormatName =  Style::saveOasisStyleNumeric( currentCellStyle, mainStyle, getFormatType( _col, _row ), _prefix,  _postfix,_precision );
-    }
-
-#if 0
-    if ( hasProperty( PCustomFormat, true ) || hasNoFallBackProperties( PCustomFormat ) || force )
-  {
-    QString s( getFormatString( _col, _row ) );
-    if ( s.length() > 0 )
-      format.setAttribute( "custom", s );
-  }
-      if ( getFormatType( _col, _row ) == Money_format )
-  {
-    format.setAttribute( "type", (int) m_pStyle->currency().type ); // TODO: fallback?
-    format.setAttribute( "symbol", m_pStyle->currency().symbol );
-  }
-
-#endif
-
-    return styleFormatName;
+    return m_pStyle->saveOasis( currentCellStyle, mainStyle );
 }
 
 QDomElement Format::saveFormat( QDomDocument & doc, int _col, int _row, bool force, bool copy ) const
@@ -1164,6 +755,57 @@ bool Format::loadFontOasisStyle( KoStyleStack & font )
     return true;
 }
 
+void Format::loadOasisStyle( const QDomElement& style, KoOasisLoadingContext& context )
+{
+  QString str; // multi purpose string
+  KoOasisStyles& oasisStyles = context.oasisStyles();
+
+/*  context.styleStack().save();
+  context.addStyles( &style );*/
+  KoStyleStack styleStack;
+  styleStack.push( style );
+  styleStack.setTypeProperties( "table-cell" );
+  loadOasisStyleProperties( styleStack, context.oasisStyles() );
+/*  loadOasisStyleProperties( context.styleStack(), context.oasisStyles() );
+  context.styleStack().restore();*/
+
+  kdDebug() << "*** Loading style attributes *****" << endl;
+
+  if ( style.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
+  {
+    str = style.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
+    kdDebug() << " style:data-style-name: " <<  str << endl << endl;
+
+    if ( !str.isEmpty() )
+    {
+      QString tmp = oasisStyles.dataFormats()[str].prefix;
+      if ( !tmp.isEmpty() )
+      {
+        setPrefix( tmp );
+      }
+      tmp = oasisStyles.dataFormats()[str].suffix;
+      if ( !tmp.isEmpty() )
+      {
+        setPostfix( tmp );
+      }
+      tmp = oasisStyles.dataFormats()[str].formatStr;
+      if ( !tmp.isEmpty() )
+      {
+        setFormatType( Style::formatType( tmp ) );
+      }
+    }
+  }
+
+  if ( style.hasAttributeNS( KoXmlNS::style, "decimal-places" ) )
+  {
+    bool ok = false;
+    int p = style.attributeNS( KoXmlNS::style, "decimal-places", QString::null ).toInt( &ok );
+    kdDebug() << " style:decimal-places: " << p << endl;
+    if (ok )
+      setPrecision( p );
+  }
+}
+
 bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisStyles& oasisStyles )
 {
     kdDebug() << "*** Loading style properties *****" << endl;
@@ -1198,7 +840,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
             }
         }
 #endif
-    if (  styleStack.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
+    if ( styleStack.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
     {
         Style * s = m_pSheet->doc()->styleManager()->style( styleStack.attributeNS( KoXmlNS::style, "parent-style-name" ) );
 
@@ -1213,13 +855,6 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
       setStyle( m_pSheet->doc()->styleManager()->defaultStyle() );
     }
 
-    if ( styleStack.hasAttributeNS( KoXmlNS::style, "decimal-places" ) )
-    {
-        bool ok = false;
-        int p = styleStack.attributeNS( KoXmlNS::style, "decimal-places" ).toInt( &ok );
-        if (ok )
-            setPrecision( p );
-    }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {
@@ -1228,20 +863,22 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
         {
             styleStack.save();
             styleStack.push( *font );
-            loadFontOasisStyle( styleStack ); // generell font style
+            loadFontOasisStyle( styleStack ); // general font style
             styleStack.restore();
         }
     }
 
+    kdDebug() << " [text properties]" << endl;
     //Text properties
     loadFontOasisStyle( styleStack ); // specific font style
     //End Text properties
 
+    kdDebug() << " [paragraph properties]" << endl;
     //Paragraph properties
     styleStack.setTypeProperties( "paragraph" ); // load all style attributes from "style:paragraph-properties"
     if (  styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
     {
-        kdDebug()<<"margin-left :"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;
+        kdDebug()<<"  margin-left:"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;
         setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
     }
     //kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" )<<endl;
@@ -1259,6 +896,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
     }
     //end paragraph properties
 
+    kdDebug() << " [cell properties]" << endl;
     styleStack.setTypeProperties( "table-cell" ); // Default
 
     // TODO:
@@ -1332,7 +970,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
         }
         else
             kdDebug()<<" Protected cell not supported :"<<prot<<endl;
-        kdDebug() << "Cell protected type" << prot << endl;
+        kdDebug() << "  cell-protect: " << prot << endl;
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-left" ) )

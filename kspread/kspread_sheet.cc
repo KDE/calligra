@@ -7230,9 +7230,8 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         styleCurrent.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         //style default layout for column
-        KoGenStyle styleColCurrent( Doc::STYLE_CELL, "table-cell" );
-        column->saveOasisCellStyle( styleColCurrent, mainStyles );
-        QString nameDefaultCellStyle = mainStyles.lookup( styleColCurrent, "ce" );
+        KoGenStyle styleColCurrent; // the type is determined in saveOasisCellStyle
+        QString nameDefaultCellStyle = column->saveOasisCellStyle( styleColCurrent, mainStyles );
 
 
         bool hide = column->isHide();
@@ -7245,9 +7244,8 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             nextStyle.addPropertyPt( "style:column-width", nextColumn->dblWidth() );/*FIXME pt and not mm */
             nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
-            KoGenStyle nextStyleCol( Doc::STYLE_CELL, "table-cell" );
-            nextColumn->saveOasisCellStyle(nextStyleCol,mainStyles );
-            QString nextNameDefaultCellStyle = mainStyles.lookup( nextStyleCol, "ce" );
+            KoGenStyle nextStyleCol; // the type is determined in saveOasisCellStyle
+            QString nextNameDefaultCellStyle = nextColumn->saveOasisCellStyle(nextStyleCol,mainStyles );
 
             //FIXME all the time repeate == 2
             if ( ( nextStyle==styleCurrent ) && ( hide == nextColumn->isHide() ) && ( nextNameDefaultCellStyle == nameDefaultCellStyle ) )
@@ -7260,7 +7258,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( styleCurrent, "co" ) );
         //FIXME doesn't create format if it's default format
 
-        xmlWriter.addAttribute( "table:default-cell-style-name", nameDefaultCellStyle );//TODO fixme create style from cell
+        // skip 'table:default-cell-style-name' attribute for the default style
+        if ( !styleColCurrent.isDefaultStyle() )
+            xmlWriter.addAttribute( "table:default-cell-style-name", nameDefaultCellStyle );
+
         if ( hide )
             xmlWriter.addAttribute( "table:visibility", "collapse" );
 
@@ -7280,7 +7281,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         xmlWriter.startElement( "table:table-row" );
         xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( rowStyle, "ro" ) );
         int repeated = 1;
-        if ( !rowAsCell( i, maxRows ) )
+        if ( !rowAsCell( i, maxCols ) )
         {
             bool hide = row->isHide();
             int j = i + 1;
@@ -7292,7 +7293,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                 nextStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
                 //FIXME all the time repeate == 2
-                if ( ( nextStyle==rowStyle ) && ( hide == nextRow->isHide() ) &&!rowAsCell( j, maxRows ) )
+                if ( ( nextStyle==rowStyle ) && ( hide == nextRow->isHide() ) &&!rowAsCell( j, maxCols ) )
                     ++repeated;
                 else
                     break;
@@ -7308,7 +7309,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
             if ( row->isHide() )
                 xmlWriter.addAttribute( "table:visibility", "collapse" );
-            saveOasisCells(  xmlWriter, mainStyles, i, maxCols, valStyle );
+            saveOasisCells( xmlWriter, mainStyles, i, maxCols, valStyle );
         }
         xmlWriter.endElement();
     }
@@ -7327,14 +7328,14 @@ bool Sheet::rowAsCell( int row, int maxCols )
     return false;
 }
 
-void Sheet::saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, GenValidationStyles &valStyle )
+void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, GenValidationStyles &valStyle )
 {
     int i = 1;
     while ( i <= maxCols )
     {
         int repeated = 1;
         Cell* cell = cellAt( i, row );
-        cell->saveOasis( xmlWriter, mainStyles, row, i,  maxCols, repeated, valStyle );
+        cell->saveOasis( xmlWriter, mainStyles, row, i, maxCols, repeated, valStyle );
         i += repeated;
     }
 }

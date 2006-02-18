@@ -692,7 +692,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
     }
 
-    styles = mainStyles.styles( STYLE_CELL );
+    styles = mainStyles.styles( STYLE_CELL_AUTO );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
@@ -866,10 +866,10 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
-    styles = mainStyles.styles( Doc::STYLE_CELL, true );
+    styles = mainStyles.styles( Doc::STYLE_CELL_USER );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
-        if ( (*it).name == "Default" ) {
+        if ( (*it).style->isDefaultStyle() ) {
           (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-cell-properties" );
         }
         else {

@@ -5314,12 +5314,23 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 
 
 
-QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, bool force, bool copy)
+QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles )
 {
-  QString formatCellStyle = format()->saveOasisCellStyle( currentCellStyle, mainStyles, column(), row(), force, copy );
     if ( d->hasExtra() && d->extra()->conditions )
+    {
+        // this has to be an automatic style
+        currentCellStyle = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
         d->extra()->conditions->saveOasisConditions( currentCellStyle );
-    return formatCellStyle;
+    }
+    QString styleName;
+    styleName = format()->saveOasisCellStyle( currentCellStyle, mainStyles );
+
+    // user styles are already stored
+    if ( currentCellStyle.type() == Doc::STYLE_CELL_AUTO )
+    {
+        styleName = mainStyles.lookup( currentCellStyle, "ce" );
+    }
+    return styleName;
 }
 
 
@@ -5342,15 +5353,15 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
         hasComment = true;
     }
 #endif
-    KoGenStyle currentCellStyle( Doc::STYLE_CELL,"table-cell" );
-    QString cellNumericStyle = saveOasisCellStyle( currentCellStyle,mainStyles );
-    QString styleName = mainStyles.lookup( currentCellStyle, "ce" );
-    if ( styleName != "Default" )
-    {
-      xmlwriter.addAttribute( "table:style-name", styleName );
-      if ( !cellNumericStyle.isEmpty() )
-          xmlwriter.addAttribute( "style:data-style-name", cellNumericStyle );
-    }
+    // NOTE save the value before the style as long as the Formatter does not work correctly
+    if ( link().isEmpty() )
+      saveOasisValue (xmlwriter);
+
+    KoGenStyle currentCellStyle; // the type determined in saveOasisCellStyle
+    saveOasisCellStyle( currentCellStyle,mainStyles );
+    // skip 'table:style-name' attribute for the default style
+    if ( !currentCellStyle.isDefaultStyle() )
+      xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
 
     // group empty cells with the same style
     if ( isEmpty() && !format()->hasProperty( Format::PComment ) && !isPartOfMerged() && !doesMergeCells() )
@@ -5359,7 +5370,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
       while ( j <= maxCols )
       {
         Cell *nextCell = format()->sheet()->cellAt( j, row );
-        KoGenStyle nextCellStyle( Doc::STYLE_CELL,"table-cell" );
+        KoGenStyle nextCellStyle; // the type is determined in saveOasisCellStyle
         nextCell->saveOasisCellStyle( nextCellStyle,mainStyles );
 
         if ( nextCell->isEmpty() && !nextCell->format()->hasProperty( Format::PComment )
@@ -5373,9 +5384,6 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );
     }
 
-
-    if ( link().isEmpty() )
-      saveOasisValue (xmlwriter);
 
     if (d->hasExtra() && d->extra()->validity)
     {
@@ -5584,7 +5592,7 @@ void Cell::loadOasisConditional( QDomElement * style )
         QDomElement e;
         forEachElement( e, style->toElement() )
         {
-            kdDebug()<<"e.localName() :"<<e.localName()<<endl;
+//             kdDebug()<<"e.localName() :"<<e.localName()<<endl;
             if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
             {
                 if (d->hasExtra())
@@ -5601,18 +5609,20 @@ void Cell::loadOasisConditional( QDomElement * style )
 
 bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisContext )
 {
+  kdDebug() << "*** Loading cell properties *****" << endl;
+
     QString text;
-    kdDebug()<<" table:style-name :"<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
+    kdDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
+        oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName" );
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        kdDebug()<<" bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyles ) str :"<<str<<endl;
-        QDomElement * style = oasisContext.oasisStyles().styles()[str];
+        QDomElement* style = oasisContext.oasisStyles().styles()[str];
         //kdDebug()<<" style :"<<style<<endl;
-        KoStyleStack styleStack;
+/*        KoStyleStack styleStack;
         styleStack.push( *style );
-        styleStack.setTypeProperties( "table-cell" );
-        format()->loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
+        styleStack.setTypeProperties( "table-cell" );*/
+        format()->loadOasisStyle( *style, oasisContext );
         loadOasisConditional( style );
     }
    // QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
@@ -5621,6 +5631,9 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
     loadOasisCellText( element );
 
+    //
+    // formula
+    //
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
     {
@@ -5636,14 +5649,23 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
         convertFormula( formula, oasisFormula);
         setCellText( formula );
     }
+
+    //
+    // validation
+    //
     if ( element.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
     {
-        kdDebug()<<" Cel has a validation :"<<element.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
+        kdDebug()<<" validation-name: "<<element.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
         loadOasisValidation( element.attributeNS( KoXmlNS::table, "validation-name", QString::null ) );
     }
+
+    //
+    // value type
+    //
     if( element.hasAttributeNS( KoXmlNS::office, "value-type" ) )
     {
         QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString::null );
+        kdDebug()<<"  value-type: " << valuetype << endl;
         if( valuetype == "boolean" )
         {
           QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null ).lower();
@@ -5783,7 +5805,10 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
         else
             kdDebug()<<" type of value found : "<<valuetype<<endl;
     }
+
+    //
     // merged cells ?
+    //
     int colSpan = 1;
     int rowSpan = 1;
     if ( element.hasAttributeNS( KoXmlNS::table, "number-columns-spanned" ) )
@@ -5800,7 +5825,10 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
     }
     if ( colSpan > 1 || rowSpan > 1 )
         mergeCells( d->column, d->row, colSpan - 1, rowSpan - 1 );
+
+    //
     // cell comment/annotation
+    //
     QDomElement annotationElement = KoDom::namedItemNS( element, KoXmlNS::office, "annotation" );
     if ( !annotationElement.isNull() )
     {
@@ -5821,18 +5849,6 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
 
         if( !comment.isEmpty() )
             format()->setComment( comment );
-    }
-
-    if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
-    {
-        QString str = element.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
-        //kdDebug()<<" data-style-name !"<<str<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[str].formatStr<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[str].prefix<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[str].suffix<<endl;
-        format()->setPrefix( oasisContext.oasisStyles().dataFormats()[str].prefix );
-        format()->setPostfix( oasisContext.oasisStyles().dataFormats()[str].suffix );
-        format()->setFormatType( Style::formatType( oasisContext.oasisStyles().dataFormats()[str].formatStr ) );
     }
 
     QDomElement frame = KoDom::namedItemNS( element, KoXmlNS::draw, "frame" );

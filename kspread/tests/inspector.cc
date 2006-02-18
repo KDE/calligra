@@ -89,7 +89,8 @@ void Inspector::Private::handleCell()
   new QListViewItem( cellView, "Name", cell->name() );
   new QListViewItem( cellView, "Full Name", cell->fullName() );
 
-  new QListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );    
+  new QListViewItem( cellView, "Default", boolAsString( cell->isDefault() ) );
+  new QListViewItem( cellView, "Empty", boolAsString( cell->isEmpty() ) );
   new QListViewItem( cellView, "Formula", boolAsString( cell->isFormula() ) );
   new QListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell->format()->propertiesMask() ) ) );
   new QListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell->format()->style()->features() ) ) );
@@ -102,17 +103,17 @@ void Inspector::Private::handleCell()
   new QListViewItem( cellView, "Value", str );
 
   new QListViewItem( cellView, "Link", cell->link() );
-      
+
   new QListViewItem( cellView, "Width", QString::number( cell->dblWidth() ) );
   new QListViewItem( cellView, "Height", QString::number( cell->dblHeight() ) );
 }
 
 void Inspector::Private::handleFormat()
-{  
+{
   formatView->clear();
   int col = cell->column();
   int row = cell->row();
-  
+
   new QListViewItem( formatView, "Angle", QString::number( format->getAngle(col, row) ) );
   new QListViewItem( formatView, "Multirow", boolAsString( format->multiRow(col, row) ) );
   new QListViewItem( formatView, "Protected", format->hasProperty( Format::PVerticalText ) 

@@ -262,7 +262,10 @@ public:
 
     void saveOasisValue (KoXmlWriter &xmlWriter);
 
-    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, bool force = false, bool copy = false );
+    /**
+     * @return the OASIS style's name
+     */
+    QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles );
 
     bool load( const QDomElement& cell, int _xshift, int _yshift, Paste::Mode pm = Paste::Normal,
                Paste::Operation op = Paste::OverWrite, bool paste = false );

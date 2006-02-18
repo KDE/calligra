@@ -126,8 +126,16 @@ public:
    */
   ~Doc();
 
-  enum { STYLE_PAGE = 20, STYLE_COLUMN, STYLE_ROW, STYLE_CELL, STYLE_PAGEMASTER, STYLE_NUMERIC_NUMBER};
-
+  /**
+   * Possible values for the "type" argument of the KoGenStyle constructor.
+   */
+  enum { STYLE_PAGE = 20,
+         STYLE_COLUMN,
+         STYLE_ROW,
+         STYLE_CELL_USER,
+         STYLE_CELL_AUTO,
+         STYLE_PAGEMASTER,
+         STYLE_NUMERIC_NUMBER };
 
   /**
    * Returns list of all documents.
