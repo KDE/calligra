@@ -31,6 +31,7 @@ Name[sr]=Qt-SQL извор (једна табела)
 Name[sr@Latn]=Qt-SQL izvor (jedna tabela)
 Name[sv]=QT-SQL-källa (enkel tabell)
 Name[tr]=Qt-SQL Kaynağı (tek tablo)
+Name[uk]=Джерело Qt-SQL (одна таблиця)
 Name[xx]=xxQt-SQL Source (single table)xx
 Name[zh_CN]=Qt-SQL 源(单表)
 Comment=This datasource type lets you use SQL database tables stored on a SQL Server. Depending on your system configuration, MySQL, PostgreSQL and UnixODBC are among the supported database backends. There might even be more (Oracle in commercial Qt versions or 3rd party backends).

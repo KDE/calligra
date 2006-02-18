@@ -18,6 +18,7 @@ Name[pt_BR]=Filtro de Exportação de Imagem para o Kivio
 Name[sr]=Kivio-ов филтер за извоз слика
 Name[sr@Latn]=Kivio-ov filter za izvoz slika
 Name[sv]=Kivio bildexportfilter
+Name[uk]=Фільтр експорту зображення для Kivio
 X-KDE-Import=application/x-kivio
 X-KDE-Export=image/png,image/jpeg,image/x-bmp,image/x-eps,image/x-portable-bitmap,image/x-pcx,image/x-portable-pixmap,image/x-rgb,image/x-xpm,image/jp2
 X-KDE-Weight=1

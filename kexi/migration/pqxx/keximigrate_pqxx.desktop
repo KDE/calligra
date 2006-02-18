@@ -30,6 +30,7 @@ Comment[sr]=Драјвер Kexi-ја за миграцију са PostgreSQL-а
 Comment[sr@Latn]=Drajver Kexi-ja za migraciju sa PostgreSQL-a
 Comment[sv]=PostgreSQL-övergångsdrivrutin för Kexi
 Comment[tr]=Kexi için PostgreSQL Aktarma Sürücüsü
+Comment[uk]=PostgreSQL драйвер міграції даних для Kexi
 Comment[xx]=xxPostgreSQL Migration Driver for Kexixx
 Comment[zh_CN]=Kexi PostgreSQL 升迁驱动程序
 X-KDE-Library=keximigrate_pqxx

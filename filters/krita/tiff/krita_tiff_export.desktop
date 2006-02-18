@@ -18,6 +18,7 @@ Name[pt_BR]=Filtro de Exportação de TIFF para o Krita
 Name[sr]=Krita-ин филтер за извоз у TIFF
 Name[sr@Latn]=Krita-in filter za izvoz u TIFF
 Name[sv]=Krita TIFF-exportfilter
+Name[uk]=Фільтр експорту TIFF для Krita
 Name[xx]=xxKrita TIFF Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

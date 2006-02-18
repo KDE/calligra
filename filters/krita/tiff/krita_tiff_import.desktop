@@ -18,6 +18,7 @@ Name[pt_BR]=Filtro de Importação de TIFF para o Krita
 Name[sr]=Krita-ин филтер за увоз из TIFF-а
 Name[sr@Latn]=Krita-in filter za uvoz iz TIFF-a
 Name[sv]=Krita TIFF-importfilter
+Name[uk]=Фільтр імпорту TIFF для Krita
 Name[xx]=xxKrita TIFF Import Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
