@@ -1,1 +1,1 @@
-SUBDIRS = exportxhtml importxhtml projectdocumentor python
+SUBDIRS = exportxhtml importxhtml projectdocumentor copycenter python
