@@ -32,11 +32,16 @@
 
 KexiNewStuff::KexiNewStuff(QWidget *parent)
  : KNewStuff( "kexi/template"
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
+#if KDE_IS_VERSION(3,3,0)
 	, "http://download.kde.org/khotnewstuff/kexi-providers.xml"
 #endif
 	, parent)
 {
+	// Prevent GHNS to deny downloading a second time. If GHNS
+	// fails to download something, it still marks the thing as
+	// successfully downloaded and therefore we arn't able to
+	// download it again :-/
+	KGlobal::config()->deleteGroup("KNewStuffStatus");
 }
 
 KexiNewStuff::~KexiNewStuff()
@@ -49,19 +54,20 @@ KexiNewStuff::install(const QString &fileName)
 	kdDebug() << "KexiNewStuff::install(): " << fileName << endl;
 
 	KTar archive( fileName );
-	if ( !archive.open( IO_ReadOnly ) )
+	if ( !archive.open( IO_ReadOnly ) ) {
+		kdDebug() << QString("KexiNewStuff::install: Failed to open archivefile \"%1\"").arg(fileName) << endl;
 		return false;
+	}
 	const KArchiveDirectory *archiveDir = archive.directory();
 	const QString destDir = KFileDialog::getExistingDirectory(
 		":DownloadExampleDatabases", parentWidget(),
 		i18n("Choose Directory Where to Install Example Database"));
-	if (destDir.isEmpty())
+	if (destDir.isEmpty()) {
+		kdDebug() << QString("KexiNewStuff::install: Destination-directory is empty.") << endl;
 		return false;
+	}
 	archiveDir->copyTo(destDir);
 	archive.close();
-
-	// Prevent GHNS to deny downloading a second time.
-	KGlobal::config()->deleteGroup("KNewStuffStatus");
 
 	return true;
 }
