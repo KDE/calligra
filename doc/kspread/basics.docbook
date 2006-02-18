@@ -209,7 +209,7 @@ as this format is used, &kspread; autodetects the actual data type depending
 on the current cell data. For example if you enter some text into a cell and
 later enter a number into the same cell, &kspread; automatically interprets
 the new data as a number. If you want to define the type of data yourself, you
-can explicitely set it in the <link linkend="formatdata">cell format</link>.
+can explicitly set it in the <link linkend="formatdata">cell format</link>.
 You can change the format back to <quote>Generic</quote> at any time.
 </para>
 </sect2>
