@@ -963,7 +963,8 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 
 	// Save SQL without driver-escaped keywords.
 	KexiDB::Connection* dbConn = mainWin()->project()->dbConnection();
-	dbConn->setQuerySchemaObsolete( m_dialog->schemaData()->name() );
+	if (m_dialog->schemaData()) //set this instance as obsolete (only if it's stored)
+		dbConn->setQuerySchemaObsolete( m_dialog->schemaData()->name() );
 
 	QString sqlText = dbConn->selectStatement( 
 		*temp->query(), KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary );
