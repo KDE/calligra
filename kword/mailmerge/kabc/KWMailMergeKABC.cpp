@@ -42,55 +42,55 @@ KWMailMergeKABC::KWMailMergeKABC( KInstance *inst, QObject *parent )
 
     // init record list
     // Using names from kaddressbook.
-    sampleRecord[ ("KAddressbook identifier") ] = KABC::Addressee::uidLabel();
-    sampleRecord[ ("Name" ) ] = KABC::Addressee::nameLabel();
-    sampleRecord[ ("Formatted name" ) ] = KABC::Addressee::formattedNameLabel();
-    sampleRecord[ ("Family names" ) ] = KABC::Addressee::familyNameLabel();
-    sampleRecord[ ("Given name" ) ] = KABC::Addressee::givenNameLabel();
-    sampleRecord[ ("Additional names" ) ] = KABC::Addressee::additionalNameLabel();
-    sampleRecord[ ("Honorific prefixes" ) ] = KABC::Addressee::prefixLabel();
-    sampleRecord[ ("Honorific suffixes" ) ] = KABC::Addressee::suffixLabel();
-    sampleRecord[ ("Nick name" ) ] = KABC::Addressee::nickNameLabel();
-    sampleRecord[ ("Birthday" ) ] = KABC::Addressee::birthdayLabel();
-    sampleRecord[ ("Home address: Street" ) ] = KABC::Addressee::homeAddressStreetLabel();
-    sampleRecord[ ("Home address: Locality" ) ] = KABC::Addressee::homeAddressLocalityLabel();
-    sampleRecord[ ("Home address: Region" ) ] = KABC::Addressee::homeAddressRegionLabel();
-    sampleRecord[ ("Home address: Postal code" ) ] = KABC::Addressee::homeAddressPostalCodeLabel();
-    sampleRecord[ ("Home address: Country" ) ] = KABC::Addressee::homeAddressCountryLabel();
-    sampleRecord[ ("Home address: Label" ) ] = KABC::Addressee::homeAddressLabelLabel();
-    sampleRecord[ ("Business address: Street" ) ] = KABC::Addressee::businessAddressStreetLabel();
-    sampleRecord[ ("Business address: Locality" ) ] = KABC::Addressee::businessAddressLocalityLabel();
-    sampleRecord[ ("Business address: Region" ) ] = KABC::Addressee::businessAddressRegionLabel();
-    sampleRecord[ ("Business address: Postal code" ) ] = KABC::Addressee::businessAddressPostalCodeLabel();
-    sampleRecord[ ("Business address: Country" ) ] = KABC::Addressee::businessAddressCountryLabel();
-    sampleRecord[ ("Business address: Label" ) ] = KABC::Addressee::businessAddressLabelLabel();
-    sampleRecord[ ("Home phone" ) ] = KABC::Addressee::homePhoneLabel();
-    sampleRecord[ ("Business phone" ) ] = KABC::Addressee::businessPhoneLabel();
-    sampleRecord[ ("Mobile phone" ) ] = KABC::Addressee::mobilePhoneLabel();
-    sampleRecord[ ("Home fax" ) ] = KABC::Addressee::homeFaxLabel();
-    sampleRecord[ ("Business fax" ) ] = KABC::Addressee::businessFaxLabel();
-    sampleRecord[ ("Car phone" ) ] = KABC::Addressee::carPhoneLabel();
-    sampleRecord[ ("ISDN" ) ] = KABC::Addressee::isdnLabel();
-    sampleRecord[ ("Pager" ) ] = KABC::Addressee::pagerLabel();
-    sampleRecord[ ("Email" ) ] = KABC::Addressee::emailLabel();
-    sampleRecord[ ("Mailer" ) ] = KABC::Addressee::mailerLabel();
-    sampleRecord[ ("Time zone" ) ] = KABC::Addressee::timeZoneLabel();
-    sampleRecord[ ("Geographic position" ) ] = KABC::Addressee::geoLabel();
-    sampleRecord[ ("Title" ) ] = KABC::Addressee::titleLabel();
-    sampleRecord[ ("Role" ) ] = KABC::Addressee::roleLabel();
-    sampleRecord[ ("Organization" ) ] = KABC::Addressee::organizationLabel();
-    sampleRecord[ ("Note" ) ] = KABC::Addressee::noteLabel();
-    sampleRecord[ ("productId" ) ] = KABC::Addressee::productIdLabel();
-    sampleRecord[ ("Revision" ) ] = KABC::Addressee::revisionLabel();
-    sampleRecord[ ("sortString" ) ] = KABC::Addressee::sortStringLabel();
-    sampleRecord[ ("URL" ) ] = KABC::Addressee::urlLabel();
-    sampleRecord[ ("Secrecy" ) ] = KABC::Addressee::secrecyLabel();
-    sampleRecord[ ("Preferred address: Street" ) ] = QString( "preferedAddressStreet" );
-    sampleRecord[ ("Preferred address: Locality" ) ] = QString( "preferedAddressLocality" );
-    sampleRecord[ ("Preferred address: Region" ) ] = QString( "preferedAddressRegion" );
-    sampleRecord[ ("Preferred address: Postal code" ) ] = QString( "preferedAddressPostalCode" );
-    sampleRecord[ ("Preferred address: Country" ) ] = QString( "preferedAddressCountry" );
-    sampleRecord[ ("Preferred address: Label" ) ] = QString( "preferedAddressLabel" );
+    sampleRecord[ i18n("KAddressbook identifier") ] = KABC::Addressee::uidLabel();
+    sampleRecord[ i18n("Name" ) ] = KABC::Addressee::nameLabel();
+    sampleRecord[ i18n("Formatted name" ) ] = KABC::Addressee::formattedNameLabel();
+    sampleRecord[ i18n("Family names" ) ] = KABC::Addressee::familyNameLabel();
+    sampleRecord[ i18n("Given name" ) ] = KABC::Addressee::givenNameLabel();
+    sampleRecord[ i18n("Additional names" ) ] = KABC::Addressee::additionalNameLabel();
+    sampleRecord[ i18n("Honorific prefixes" ) ] = KABC::Addressee::prefixLabel();
+    sampleRecord[ i18n("Honorific suffixes" ) ] = KABC::Addressee::suffixLabel();
+    sampleRecord[ i18n("Nick name" ) ] = KABC::Addressee::nickNameLabel();
+    sampleRecord[ i18n("Birthday" ) ] = KABC::Addressee::birthdayLabel();
+    sampleRecord[ i18n("Home address: Street" ) ] = KABC::Addressee::homeAddressStreetLabel();
+    sampleRecord[ i18n("Home address: Locality" ) ] = KABC::Addressee::homeAddressLocalityLabel();
+    sampleRecord[ i18n("Home address: Region" ) ] = KABC::Addressee::homeAddressRegionLabel();
+    sampleRecord[ i18n("Home address: Postal code" ) ] = KABC::Addressee::homeAddressPostalCodeLabel();
+    sampleRecord[ i18n("Home address: Country" ) ] = KABC::Addressee::homeAddressCountryLabel();
+    sampleRecord[ i18n("Home address: Label" ) ] = KABC::Addressee::homeAddressLabelLabel();
+    sampleRecord[ i18n("Business address: Street" ) ] = KABC::Addressee::businessAddressStreetLabel();
+    sampleRecord[ i18n("Business address: Locality" ) ] = KABC::Addressee::businessAddressLocalityLabel();
+    sampleRecord[ i18n("Business address: Region" ) ] = KABC::Addressee::businessAddressRegionLabel();
+    sampleRecord[ i18n("Business address: Postal code" ) ] = KABC::Addressee::businessAddressPostalCodeLabel();
+    sampleRecord[ i18n("Business address: Country" ) ] = KABC::Addressee::businessAddressCountryLabel();
+    sampleRecord[ i18n("Business address: Label" ) ] = KABC::Addressee::businessAddressLabelLabel();
+    sampleRecord[ i18n("Home phone" ) ] = KABC::Addressee::homePhoneLabel();
+    sampleRecord[ i18n("Business phone" ) ] = KABC::Addressee::businessPhoneLabel();
+    sampleRecord[ i18n("Mobile phone" ) ] = KABC::Addressee::mobilePhoneLabel();
+    sampleRecord[ i18n("Home fax" ) ] = KABC::Addressee::homeFaxLabel();
+    sampleRecord[ i18n("Business fax" ) ] = KABC::Addressee::businessFaxLabel();
+    sampleRecord[ i18n("Car phone" ) ] = KABC::Addressee::carPhoneLabel();
+    sampleRecord[ i18n("ISDN" ) ] = KABC::Addressee::isdnLabel();
+    sampleRecord[ i18n("Pager" ) ] = KABC::Addressee::pagerLabel();
+    sampleRecord[ i18n("Email" ) ] = KABC::Addressee::emailLabel();
+    sampleRecord[ i18n("Mailer" ) ] = KABC::Addressee::mailerLabel();
+    sampleRecord[ i18n("Time zone" ) ] = KABC::Addressee::timeZoneLabel();
+    sampleRecord[ i18n("Geographic position" ) ] = KABC::Addressee::geoLabel();
+    sampleRecord[ i18n("Title" ) ] = KABC::Addressee::titleLabel();
+    sampleRecord[ i18n("Role" ) ] = KABC::Addressee::roleLabel();
+    sampleRecord[ i18n("Organization" ) ] = KABC::Addressee::organizationLabel();
+    sampleRecord[ i18n("Note" ) ] = KABC::Addressee::noteLabel();
+    sampleRecord[ i18n("productId" ) ] = KABC::Addressee::productIdLabel();
+    sampleRecord[ i18n("Revision" ) ] = KABC::Addressee::revisionLabel();
+    sampleRecord[ i18n("sortString" ) ] = KABC::Addressee::sortStringLabel();
+    sampleRecord[ i18n("URL" ) ] = KABC::Addressee::urlLabel();
+    sampleRecord[ i18n("Secrecy" ) ] = KABC::Addressee::secrecyLabel();
+    sampleRecord[ i18n("Preferred address: Street" ) ] = QString( "preferedAddressStreet" );
+    sampleRecord[ i18n("Preferred address: Locality" ) ] = QString( "preferedAddressLocality" );
+    sampleRecord[ i18n("Preferred address: Region" ) ] = QString( "preferedAddressRegion" );
+    sampleRecord[ i18n("Preferred address: Postal code" ) ] = QString( "preferedAddressPostalCode" );
+    sampleRecord[ i18n("Preferred address: Country" ) ] = QString( "preferedAddressCountry" );
+    sampleRecord[ i18n("Preferred address: Label" ) ] = QString( "preferedAddressLabel" );
 }
 
 
@@ -179,172 +179,172 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
     //
     // Return the asked variable.
     //
-    if ( name == "KAddressbook identifier" )
+    if ( name == i18n("KAddressbook identifier" ) )
         return addr.uid();
-    if ( name == "Name" )
+    if ( name == i18n("Name" ) )
         return addr.name();
-    if ( name == "Formatted name" )
+    if ( name == i18n("Formatted name" ) )
         return addr.formattedName();
-    if ( name == "Family names" )
+    if ( name == i18n("Family names" ) )
         return addr.familyName();
-    if ( name == "Given name" )
+    if ( name == i18n("Given name" ) )
         return addr.givenName();
-    if ( name == "Additional names" )
+    if ( name == i18n("Additional names" ) )
         return addr.additionalName();
-    if ( name == "Honorific prefixes" )
+    if ( name == i18n("Honorific prefixes" ) )
         return addr.prefix();
-    if ( name == "Honorific suffixes" )
+    if ( name == i18n("Honorific suffixes" ) )
         return addr.suffix();
-    if ( name == "Nick name" )
+    if ( name == i18n("Nick name" ) )
         return addr.nickName();
-    if ( name == "Birthday" )
+    if ( name == i18n("Birthday" ) )
         return KGlobal::locale()->formatDate( addr.birthday().date() );
 
-    if ( name == "Home address: Street" )
+    if ( name == i18n("Home address: Street" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Home );
         return a.street();
     }
-    if ( name == "Home address: Locality" )
+    if ( name == i18n("Home address: Locality" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Home );
         return a.locality();
     }
-    if ( name == "Home address: Region" )
+    if ( name == i18n("Home address: Region" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Home );
         return a.region();
     }
-    if ( name == "Home address: Postal code" )
+    if ( name == i18n("Home address: Postal code" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Home );
         return a.postalCode();
     }
-    if ( name == "Home address: Country" )
+    if ( name == i18n("Home address: Country" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Home );
         return a.country();
     }
-    if ( name == "Home address: Label" )
+    if ( name == i18n("Home address: Label" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Home );
         return a.label();
     }
 
-    if ( name == "Business address: Street" )
+    if ( name == i18n("Business address: Street" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Work );
         return a.street();
     }
-    if ( name == "Business address: Locality" )
+    if ( name == i18n("Business address: Locality" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Work );
         return a.locality();
     }
-    if ( name == "Business address: Region" )
+    if ( name == i18n("Business address: Region" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Work );
         return a.region();
     }
-    if ( name == "Business address: Postal code" )
+    if ( name == i18n("Business address: Postal code" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Work );
         return a.postalCode();
     }
-    if ( name == "Business address: Country" )
+    if ( name == i18n("Business address: Country" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Work );
         return a.country();
     }
-    if ( name == "Business address: Label" )
+    if ( name == i18n("Business address: Label" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Work );
         return a.label();
     }
 
-    if ( name == "Prefered address: Street" )
+    if ( name == i18n("Prefered address: Street" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Pref );
         return a.street();
     }
 
-    if ( name == "Prefered address: Locality" )
+    if ( name == i18n("Prefered address: Locality" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Pref );
         return a.locality();
     }
-    if ( name == "Prefered address: Region" )
+    if ( name == i18n("Prefered address: Region" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Pref );
         return a.region();
     }
-    if ( name == "Prefered address: Postal code" )
+    if ( name == i18n("Prefered address: Postal code" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Pref );
         return a.postalCode();
     }
-    if ( name == "Prefered address: Country" )
+    if ( name == i18n("Prefered address: Country" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Pref );
         return a.country();
     }
-    if ( name == "Prefered address: Label" )
+    if ( name == i18n("Prefered address: Label" ) )
     {
         KABC::Address a = addr.address( KABC::Address::Pref );
         return a.label();
     }
 
-    if ( name == "Home phone" )
+    if ( name == i18n("Home phone" ) )
     {
         KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Home );
         return phone.number();
     }
-    if ( name == "Business phone" )
+    if ( name == i18n("Business phone" ) )
     {
         KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Work );
         return phone.number();
     }
-    if ( name == "Mobile phone" )
+    if ( name == i18n("Mobile phone" ) )
     {
         KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Cell );
         return phone.number();
     }
-    if ( name == "Home fax" )
+    if ( name == i18n("Home fax" ) )
     {
         KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Home | KABC::PhoneNumber::Fax );
         return phone.number();
     }
-    if ( name == "Business fax" )
+    if ( name == i18n("Business fax" ) )
     {
         KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Work | KABC::PhoneNumber::Fax );
         return phone.number();
     }
-    if ( name == "Car phone" )
+    if ( name == i18n("Car phone" ) )
     {
         KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Car );
         return phone.number();
     }
-    if ( name == "ISDN" )
+    if ( name == i18n("ISDN" ) )
     {
         KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Isdn );
         return phone.number();
     }
-    if ( name == "Pager" )
+    if ( name == i18n("Pager" ) )
     {
         KABC::PhoneNumber phone = addr.phoneNumber( KABC::PhoneNumber::Pager );
         return phone.number();
     }
 
-    if ( name == "Email" )
+    if ( name == i18n("Email" ) )
         return addr.preferredEmail();
-    if ( name == "Mailer" )
+    if ( name == i18n("Mailer" ) )
         return addr.mailer();
-    if ( name == "Time zone" )
+    if ( name == i18n("Time zone" ) )
     {
         KABC::TimeZone zone = addr.timeZone();
         return QString::number( zone.offset() );
     }
-    if ( name == "Geographic position" )
+    if ( name == i18n("Geographic position" ) )
     {
         KABC::Geo geo = addr.geo();
         QString lat;
@@ -364,23 +364,23 @@ QString KWMailMergeKABC::getValue( const QString &name, int record ) const
         return i18n( "Geographic coordinates", "%1, %2" ).arg ( lat, longi );
     }
 
-    if ( name == "Title" )
+    if ( name == i18n("Title" ) )
         return addr.title();
-    if ( name == "Role" )
+    if ( name == i18n("Role" ) )
         return addr.role();
-    if ( name == "Organization" )
+    if ( name == i18n("Organization" ) )
         return addr.organization();
-    if ( name == "Note" )
+    if ( name == i18n("Note" ) )
         return addr.note();
-    if ( name == "productId" )
+    if ( name == i18n("productId" ) )
         return addr.productId();
-    if ( name == "Revision" )
+    if ( name == i18n("Revision" ) )
         return KGlobal::locale()->formatDate( addr.revision().date() );
-    if ( name == "sortString" )
+    if ( name == i18n("sortString" ) )
         return addr.sortString();
-    if ( name == "URL" )
+    if ( name == i18n("URL" ) )
         return addr.url().url();
-    if ( name == "Secrecy" )
+    if ( name == i18n("Secrecy" ) )
     {
         KABC::Secrecy secrecy = addr.secrecy();
         return KABC::Secrecy::typeLabel( secrecy.type() );
