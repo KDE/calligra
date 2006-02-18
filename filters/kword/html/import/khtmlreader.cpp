@@ -270,7 +270,7 @@ void KHTMLReader::parseStyle(DOM::Element e) {
      DOM::Document doc=_html->document();
      DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
 
-     kdDebug() << "font-weight=" << s1.getPropertyValue("font-weight").string();
+     kdDebug() << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
      if ( s1.getPropertyValue("font-weight").string() == "bolder" )
      {
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
@@ -298,6 +298,14 @@ void KHTMLReader::parseStyle(DOM::Element e) {
 }
 
 void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
+        // For the first paragraph ever, do nothing. 
+        // It has already been started.
+        static bool firstparagraph=true;
+        if (firstparagraph)
+        {
+          firstparagraph=false;
+          return;
+        }
 
 	QDomElement qf=state()->format;
 	QDomElement ql=state()->layout;
@@ -347,6 +355,8 @@ KHTMLReader::~KHTMLReader(){
 
 
 bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
+        kdDebug(30503) << "entering KHTMLReader::parse_CommonAttributes" << endl;
+        kdDebug(30503) << "tagName is " << e.tagName().string() << endl;
         QString s=e.getAttribute("align").string();
         if (!s.isEmpty()) 
         {
@@ -364,9 +374,11 @@ bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
 
 
 bool KHTMLReader::parse_p(DOM::Element e) {
+        kdDebug(30503) << "entering KHTMLReader::parse_p" << endl;
 	startNewParagraph();
 	parse_CommonAttributes(e);
 
+	kdDebug(30503) << "leaving KHTMLReader::parse_p" << endl;
 	return true;
 }
 
