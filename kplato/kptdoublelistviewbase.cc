@@ -31,17 +31,54 @@
 #include <qsplitter.h>
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qpoint.h>
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
-#include <klistview.h>
 #include <klocale.h>
 #include <kprinter.h>
+#include <qrect.h>
 
 #include <kdebug.h>
 
 namespace KPlato
 {
+void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
+    // draw header labels
+    p->save();
+    QColor bgc(Qt::blue);
+    bgc = bgc.light(185);
+    QBrush bg(bgc);
+    p->setBackgroundMode(Qt::OpaqueMode);
+    p->setBackgroundColor(bgc);
+    QHeader *h = header();
+    QRect b;
+    for (int s = 0; s < h->count(); ++s) {
+        QRect r = h->sectionRect(s);
+        //kdDebug()<<s<<": "<<h->label(s)<<" "<<r<<endl;
+        int x, y;
+        viewportToContents(r.x(), r.y(), x, y);
+        QRect sr(x, y, r.width(), r.height());
+        //kdDebug()<<s<<": "<<h->label(s)<<" "<<sr<<endl;
+        if (sr.x()+sr.width() <= cx || sr.x() >= cx+cw) {
+            //kdDebug()<<s<<": "<<h->label(s)<<" "<<sr<<": continue"<<endl;
+            continue;
+        }
+        QRect tr = sr;
+        if (sr.x() < cx) {
+            tr.setX(cx);
+            //kdDebug()<<s<<": "<<h->label(s)<<" "<<tr<<endl;
+        }
+        p->eraseRect(tr);
+        p->drawText(tr, columnAlignment(s), h->label(s), -1, &b);
+
+    }
+    p->restore();
+    p->save();
+    p->translate(0, b.height()+2);
+    drawContentsOffset(p, 0, 0, cx, cy, cw, ch);
+    p->restore();
+}
 
 DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListItem *master, QListView *parent, QListViewItem *after, bool highlight)
     : KListViewItem(parent, after),
@@ -306,7 +343,7 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
     setOrientation(QSplitter::Horizontal);
     setHandleWidth(QMIN(2, handleWidth()));
     
-    m_masterList = new KListView(this);
+    m_masterList = new ListView(this);
     m_masterList->setSelectionMode(QListView::NoSelection);
     m_masterList->setItemMargin(2);
     m_masterList->setRootIsDecorated(true);
@@ -319,7 +356,6 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
     m_masterList->setColumnAlignment(1, AlignRight);
     if (description) {
         m_masterList->addColumn(i18n("Description"));
-        m_masterList->setColumnAlignment(2, AlignLeft);
         m_masterList->header()->moveSection(2, 1);
         m_masterList->header()->setStretchEnabled(true, 1);
     } else {
@@ -328,7 +364,7 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
     m_masterList->setVScrollBarMode(QScrollView::AlwaysOff);
     m_masterList->setHScrollBarMode(QScrollView::AlwaysOn);
     
-    m_slaveList = new KListView(this);
+    m_slaveList = new ListView(this);
     m_slaveList->setSelectionMode(QListView::NoSelection);
     m_slaveList->setItemMargin(2);
     m_slaveList->setSortColumn(-1); // Disable sort!!
@@ -372,19 +408,19 @@ void DoubleListViewBase::print(KPrinter &printer) {
 }
 
 void DoubleListViewBase::setOpen(QListViewItem *item, bool open) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_masterList->setOpen(item, open);
 }
 
 void DoubleListViewBase::slotExpanded(QListViewItem* item) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (item) {
         static_cast<DoubleListViewBase::MasterListItem*>(item)->setSlaveOpen(true);
     }
 }
 
 void DoubleListViewBase::slotCollapsed(QListViewItem*item) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (item) {
         static_cast<DoubleListViewBase::MasterListItem*>(item)->setSlaveOpen(false);
     }
@@ -440,6 +476,30 @@ void DoubleListViewBase::setFormat(int fieldwidth, char fmt, int prec) {
     setSlaveFormat(fieldwidth, fmt, prec);
 }
 
+void DoubleListViewBase::paintContents(QPainter *p) {
+    //kdDebug()<<k_funcinfo<<endl;
+    QRect cm = m_masterList->contentsRect();
+    QRect cs = m_slaveList->contentsRect();
+    int mx, my, sx, sy;
+    m_masterList->contentsToViewport(cm.x(),cm.y(), mx, my);
+    m_slaveList->contentsToViewport(cs.x(),cs.y(), sx, sy);
+    if (sizes()[0] > 0) {
+        p->save();
+        p->translate(mx, my);
+        m_masterList->paintToPrinter(p, -mx, -my, cm.width(), cm.height());
+        p->restore();
+    }
+    if (sizes()[1] > 0) {
+        // QListView paints the whole section even if only a part is displayed
+        int spos = m_slaveList->header()->sectionPos(m_slaveList->header()->sectionAt(-sx));
+        //kdDebug()<<spos<<endl;
+        p->save();
+        p->translate(cm.width() + 8 - spos, sy);
+        m_slaveList->paintToPrinter(p, spos, -sy, cs.width(), cs.height());
+        p->fillRect(-8, 0, 0, sy, Qt::white);
+        p->restore();
+    }
+}
 
 }  //KPlato namespace
 

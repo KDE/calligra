@@ -29,7 +29,6 @@
 
 class QListViewItem;
 
-class KListView;
 class KListViewItem;
 class KPrinter;
 
@@ -38,6 +37,16 @@ namespace KPlato
 
 class View;
 class Project;
+
+class ListView : public KListView
+{
+public:
+    ListView(QWidget *parent)
+    : KListView(parent)
+    {}
+    
+    virtual void paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch);
+};
 
 /**
  * The class DoubleListViewBase provides a double listview
@@ -56,8 +65,8 @@ public:
 
     //~DoubleListViewBase();
 
-    KListView *masterListView() const { return m_masterList; }
-    KListView *slaveListView() const { return m_slaveList; }
+    ListView *masterListView() const { return m_masterList; }
+    ListView *slaveListView() const { return m_slaveList; }
     void setOpen(QListViewItem *item, bool open);
     
     void setNameHeader(QString text);
@@ -151,6 +160,9 @@ public:
         int m_prec;
     };
 
+public:
+    virtual void paintContents(QPainter *p);
+    
 protected slots:
     void slotExpanded(QListViewItem* item);
     void slotCollapsed(QListViewItem* item);
@@ -158,8 +170,8 @@ protected slots:
 private:
 
 private:
-    KListView *m_masterList;
-    KListView *m_slaveList;
+    ListView *m_masterList;
+    ListView *m_slaveList;
     
     int m_fieldwidth;
     char m_fmt;

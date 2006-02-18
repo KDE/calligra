@@ -39,6 +39,7 @@
 #include <qpopupmenu.h>
 #include <qsizepolicy.h>
 #include <qhbox.h>
+#include <qpaintdevicemetrics.h>
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
@@ -51,6 +52,16 @@
 namespace KPlato
 {
 
+class Label : public QLabel
+{
+public:
+    Label(QWidget *w)
+    : QLabel(w)
+    {}
+    void paintContents(QPainter *p) {
+        drawContents(p);
+    }
+};
 
 AccountsView::AccountItem::AccountItem(Account *a, QListView *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, a->name(), highlight),
@@ -95,7 +106,7 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
     QVBoxLayout *lay1 = new QVBoxLayout(this, 11, 6);
     
     QHBoxLayout *lay2 = new QHBoxLayout(0, 0, 6);
-    m_label = new QLabel(this);
+    m_label = new Label(this);
     m_label->setFrameShape(QLabel::StyledPanel);
     m_label->setFrameShadow(QLabel::Sunken);
     m_label->setAlignment(int(QLabel::WordBreak | QLabel::AlignVCenter));
@@ -313,12 +324,23 @@ void AccountsView::slotUpdate() {
 
 
 void AccountsView::print(KPrinter &printer) {
-    kdDebug()<<k_funcinfo<<endl;
-    Q_UNUSED(printer);
+    //kdDebug()<<k_funcinfo<<endl;
+    QPaintDeviceMetrics m = QPaintDeviceMetrics ( &printer );
+    uint top, left, bottom, right;
+    printer.margins(&top, &left, &bottom, &right);
+    //kdDebug()<<m.width()<<"x"<<m.height()<<" : "<<top<<", "<<left<<", "<<bottom<<", "<<right<<" : "<<size()<<endl;
+    QPainter p;
+    p.begin(&printer);
+    p.setViewport(left, top, m.width()-left-right, m.height()-top-bottom);
+    p.setClipRect(left, top, m.width()-left-right, m.height()-top-bottom);
+    m_label->paintContents(&p);
+    p.translate(0, m_label->size().height());
+    m_dlv->paintContents(&p);
+    p.end();
 }
 
 bool AccountsView::setContext(Context::Accountsview &context) {
-    kdDebug()<<k_funcinfo<<"---->"<<endl;
+    //kdDebug()<<k_funcinfo<<"---->"<<endl;
     QValueList<int> list;
     list << context.accountsviewsize << context.periodviewsize;
     m_dlv->setSizes(list);
@@ -328,7 +350,7 @@ bool AccountsView::setContext(Context::Accountsview &context) {
     m_period = context.period;
     m_cumulative = context.cumulative;
     setContextClosedItems(context);
-    kdDebug()<<k_funcinfo<<"<----"<<endl;
+    //kdDebug()<<k_funcinfo<<"<----"<<endl;
     return true;
 }
 

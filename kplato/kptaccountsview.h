@@ -44,6 +44,7 @@ class KPrinter;
 namespace KPlato
 {
 
+class Label;
 class Account;
 class View;
 class Project;
@@ -121,7 +122,7 @@ private:
 
     QStringList m_periodTexts;
     QPushButton *m_changeBtn;
-    QLabel *m_label;
+    Label *m_label;
     
 };
 
