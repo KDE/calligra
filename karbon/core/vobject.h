@@ -231,8 +231,6 @@ public:
 
 	/** 
 	 * Accept a VVisitor.
-	 *
-	 * @param visitor the visitor to accept
 	 */
 	virtual void accept( VVisitor& /*visitor*/ ) 
 		{ }

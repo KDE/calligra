@@ -84,7 +84,7 @@ public:
 	 *
 	 * @param painter abstraction that is used to render to a painting device.
 	 * @param pl layout describing the page to draw on (restricting the painter)
-	 * @param drawPagemargins if @c true, also draw the crop marks for the page margins,
+	 * @param drawPageMargins if @c true, also draw the crop marks for the page margins,
 	 *        otherwise, don't draw them.
 	 */
 	void drawPage( VPainter *painter, const KoPageLayout &pl, bool drawPageMargins ) const;
