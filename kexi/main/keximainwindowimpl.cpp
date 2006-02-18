@@ -232,6 +232,10 @@ KexiMainWindowImpl::KexiMainWindowImpl()
 //disabled (possible crash)	d->hideMenuItem("file", i18n("&Import"), true);
 //disabled (possible crash)	d->hideMenuItem("help", i18n( "&Report Bug..." ), true);
 #endif
+	KAction *kmdi_tooldock_menu_action = childClients()->getFirst() ? childClients()->getFirst()->actionCollection()->action("kmdi_tooldock_menu") : 0;
+	if (kmdi_tooldock_menu_action) {
+		kmdi_tooldock_menu_action->setEnabled(false);
+	}
 
 	if (!isFakingSDIApplication() && !d->final) {
 //		QPopupMenu *menu = (QPopupMenu*) child( "window", "KPopupMenu" );
