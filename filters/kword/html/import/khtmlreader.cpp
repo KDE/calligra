@@ -348,8 +348,14 @@ KHTMLReader::~KHTMLReader(){
 
 bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
         QString s=e.getAttribute("align").string();
-        if (!s.isEmpty()) {
+        if (!s.isEmpty()) 
+        {
               _writer->formatAttribute(state()->paragraph,"FLOW","align",s);
+        }
+        if (e.getAttribute("class")=="h1")
+        // example: <p class="h1" style="text-align:left; ">
+        {
+              _writer->layoutAttribute(state()->paragraph,"NAME","value","h1");
         }
         return true;
 }
