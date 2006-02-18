@@ -28,6 +28,7 @@
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 
 VPolyline::VPolyline( VObject* parent, VState state )
 	: VPath( parent, state )
@@ -51,22 +52,24 @@ VPolyline::init()
 	bool bFirst = true;
 
 	QString points = m_points.simplifyWhiteSpace();
-	points.remove( ',' );
+	points.replace( ',', ' ' );
 	points.remove( '\r' );
 	points.remove( '\n' );
 	QStringList pointList = QStringList::split( ' ', points );
 	QStringList::Iterator end(pointList.end());
 	for( QStringList::Iterator it = pointList.begin(); it != end; ++it )
 	{
+		KoPoint point;
+		point.setX( (*it).toDouble() );
+		point.setY( (*++it).toDouble() );
 		if( bFirst )
 		{
-			moveTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
+			moveTo( point );
 			bFirst = false;
 		}
 		else
-			lineTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
+			lineTo( point );
 	}
-	close();
 }
 
 QString
@@ -135,6 +138,47 @@ VPolyline::load( const QDomElement& element )
 	QString trafo = element.attribute( "transform" );
 	if( !trafo.isEmpty() )
 		transform( trafo );
+}
+
+bool
+VPolyline::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+{
+	setState( normal );
+
+	if( element.localName() == "line" )
+	{
+		KoPoint p1, p2;
+		m_points = "M ";
+		m_points += element.attributeNS( KoXmlNS::svg, "x1", QString::null );
+		m_points += ",";
+		m_points += element.attributeNS( KoXmlNS::svg, "y1", QString::null );
+		m_points += " L ";
+		m_points += element.attributeNS( KoXmlNS::svg, "x2", QString::null );
+		m_points += ",";
+		m_points += element.attributeNS( KoXmlNS::svg, "y2", QString::null );
+		init();
+		/*
+		p1.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", QString::null ) ) );
+		p1.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", QString::null ) ) );
+		p2.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString::null ) ) );
+		p2.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString::null ) ) );
+		moveTo( p1 );
+		lineTo( p2 );
+		*/
+	}
+	else if( element.localName() == "polyline" )
+	{
+		m_points = element.attributeNS( KoXmlNS::draw, "points", QString::null );
+		init();
+	}
+
+	transformByViewbox( element );
+
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+	if( !trafo.isEmpty() )
+		transform( trafo );
+
+	return VObject::loadOasis( element, context );
 }
 
 VPath* 

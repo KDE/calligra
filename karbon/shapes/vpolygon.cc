@@ -27,6 +27,7 @@
 #include <KoUnit.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
+#include <KoXmlNS.h>
 #include <vdocument.h>
 
 VPolygon::VPolygon( VObject* parent, VState state ) 
@@ -47,20 +48,23 @@ VPolygon::init()
 	bool bFirst = true;
 
 	QString points = m_points.simplifyWhiteSpace();
-	points.remove( ',' );
+	points.replace( ',', ' ' );
 	points.remove( '\r' );
 	points.remove( '\n' );
 	QStringList pointList = QStringList::split( ' ', points );
 	QStringList::Iterator end(pointList.end());
 	for( QStringList::Iterator it = pointList.begin(); it != end; ++it )
 	{
+		KoPoint point;
+		point.setX( (*it).toDouble() );
+		point.setY( (*++it).toDouble() );
 		if( bFirst )
 		{
-			moveTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
+			moveTo( point );
 			bFirst = false;
 		}
 		else
-			lineTo( KoPoint( (*(it++)).toDouble(), (*it).toDouble() ) );
+			lineTo( point );
 	}
 	close();
 
@@ -150,6 +154,24 @@ VPolygon::load( const QDomElement& element )
 	QString trafo = element.attribute( "transform" );
 	if( !trafo.isEmpty() )
 		transform( trafo );
+}
+
+bool
+VPolygon::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+{
+	setState( normal );
+
+	m_points = element.attributeNS( KoXmlNS::draw, "points", QString::null );
+
+	init();
+
+	transformByViewbox( element );
+
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+	if( !trafo.isEmpty() )
+		transform( trafo );
+
+	return VObject::loadOasis( element, context );
 }
 
 VPath* 

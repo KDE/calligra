@@ -20,6 +20,7 @@
 #include "svgpathparser.h"
 #include <qstring.h>
 #include <math.h>
+#include <kdebug.h>
 
 // parses the coord into number and forwards to the next token
 const char *
@@ -367,6 +368,13 @@ SVGPathParser::parseSVG( const QString &s, bool process )
 						calculateArc( relative, curx, cury, angle, tox, toy, rx, ry, largeArc, sweep );
 					else
 						svgArcTo( tox, toy, rx, ry, angle, largeArc, sweep, !relative );
+				}
+				default:
+				{
+					// when svg parser is used for a parsing an odf path an unknown command
+					// can be encountered, so we stop parsing here
+					kdDebug() << "SVGPathParser::parseSVG(): unknown command \"" << command << "\"" << endl;
+					return;
 				}
 			}
 

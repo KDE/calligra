@@ -211,7 +211,7 @@ VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 
 			context.styleStack().save();
 
-			if( e.localName() == "path" )
+			if( e.localName() == "path" || e.localName() == "custom-shape" )
 			{
 				VPath* composite = new VPath( this );
 				composite->loadOasis( e, context );
@@ -234,6 +234,18 @@ VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 				VGroup* group = new VGroup( this );
 				group->loadOasis( e, context );
 				append( group );
+			}
+			else if( e.localName() == "polyline" || e.localName() == "line" )
+			{
+				VPolyline* polyline = new VPolyline( this );
+				polyline->loadOasis( e, context );
+				append( polyline );
+			}
+			else if( e.localName() == "polygon" )
+			{
+				VPolygon* polygon = new VPolygon( this );
+				polygon->loadOasis( e, context );
+				append( polygon );
 			}
 
 			context.styleStack().restore();

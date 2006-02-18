@@ -406,15 +406,52 @@ VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
 
-	QString data = element.attributeNS( KoXmlNS::svg, "d", QString::null );
-	if( data.length() > 0 )
+	if( element.localName() == "path" )
 	{
-		loadSvgPath( data );
+		QString data = element.attributeNS( KoXmlNS::svg, "d", QString::null );
+		if( data.length() > 0 )
+		{
+			loadSvgPath( data );
+		}
+	
+		m_fillRule = element.attributeNS( KoXmlNS::svg, "fill-rule", QString::null ) == "winding" ? winding : evenOdd;
+
+		transformByViewbox( element );
 	}
+	else if( element.localName() == "custom-shape" )
+	{
+		QDomNodeList list = element.childNodes();
+		for( uint i = 0; i < list.count(); ++i )
+		{
+			if( list.item( i ).isElement() )
+			{
+				QDomElement e = list.item( i ).toElement();
+				if( e.namespaceURI() != KoXmlNS::draw )
+					continue;
+				
+				if( e.localName() == "enhanced-geometry" )
+				{
+					QString data = e.attributeNS( KoXmlNS::draw, "enhanced-path", QString::null );
+					if( ! data.isEmpty() )
+						loadSvgPath( data );
 
-	m_fillRule = element.attributeNS( KoXmlNS::svg, "fill-rule", QString::null ) == "winding" ? winding : evenOdd;
-
-	transformByViewbox( element );
+					QString viewbox( e.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+					QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplifyWhiteSpace() );
+			
+					double w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
+					double h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
+					double x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) );
+					double y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
+			
+					QWMatrix mat;
+					mat.translate( x, y );
+					mat.scale( w / points[2].toFloat() , h / points[3].toFloat() );
+					VTransformCmd cmd( 0L, mat );
+					cmd.visit( *this );
+				}
+			}
+		}
+	}
 
 	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
 	if( !trafo.isEmpty() )
