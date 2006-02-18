@@ -364,80 +364,6 @@ and means switching to the SQL View of the Query Designer.</para></listitem>
 <listitem><para><action>Display or hide the Project Navigator pane.</action></para></listitem>
 </varlistentry>
 
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;&Ctrl;&Shift;<keycap>T</keycap></keycombo>
-</shortcut>
-<guimenu>View</guimenu>
-<guisubmenu>Tool Docks</guisubmenu>
-<guimenuitem>Switch Top Dock</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Switch top dock of the main window, if present.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;&Ctrl;&Shift;<keycap>L</keycap></keycombo>
-</shortcut>
-<guimenu>View</guimenu>
-<guisubmenu>Tool Docks</guisubmenu>
-<guimenuitem>Switch Left Dock</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Switch left dock of the main window, if present.</action> 
-The dock usually contains the Project Navigator pane.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;&Ctrl;&Shift;<keycap>R</keycap></keycombo>
-</shortcut>
-<guimenu>View</guimenu>
-<guisubmenu>Tool Docks</guisubmenu>
-<guimenuitem>Switch Right Dock</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Switch right dock of the main window, if present.</action>
-The dock usually contains the Property Editor pane.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;&Ctrl;&Shift;<keycap>B</keycap></keycombo>
-</shortcut>
-<guimenu>View</guimenu>
-<guisubmenu>Tool Docks</guisubmenu>
-<guimenuitem>Switch Bottom Dock</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Switch bottom dock of the main window, if present.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;&Ctrl;<keycap>Left</keycap></keycombo>
-</shortcut>
-<guimenu>View</guimenu>
-<guisubmenu>Tool Docks</guisubmenu>
-<guimenuitem>Previous Tool View</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Switch previously visible tool dock, if present.</action></para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;&Ctrl;<keycap>Right</keycap></keycombo>
-</shortcut>
-<guimenu>View</guimenu>
-<guisubmenu>Tool Docks</guisubmenu>
-<guimenuitem>Next Tool View</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Switch previously hidden tool dock, if present.</action></para></listitem>
-</varlistentry>
-
 </variablelist>
 </sect1>
 
@@ -451,7 +377,7 @@ The dock usually contains the Property Editor pane.</para></listitem>
 <guimenuitem>Table...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a new, empty table design without saving it.</action> 
-Table Designer window will appear.</para></listitem>
+The Table Designer window will appear.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -460,7 +386,7 @@ Table Designer window will appear.</para></listitem>
 <guimenuitem>Query...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a new, empty query design without saving it.</action> 
-Query Designer window will appear.</para></listitem>
+The Query Designer window will appear.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -469,7 +395,7 @@ Query Designer window will appear.</para></listitem>
 <guimenuitem>Form...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a new, empty form design without saving it.</action> 
-Form Designer window will appear.</para></listitem>
+The Form Designer window will appear.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -478,7 +404,7 @@ Form Designer window will appear.</para></listitem>
 <guimenuitem>Script...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Inserts a new, empty script design without saving it.</action> 
-Script Editor window will appear. The command is available only if scripting 
+The Script Editor window will appear. The command is available only if scripting 
 is enabled in &kexi;.</para></listitem>
 </varlistentry>
 
@@ -550,7 +476,7 @@ To Fit, To Grid, To Shortest, To Tallest, To Narrowest, To Widest.</action></par
 <guimenu>Format</guimenu>
 <guimenuitem>Bring Widget to Front</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Bring the currently selected widgets' to front.</action></para></listitem>
+<listitem><para><action>Bring the currently selected widgets to front.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -558,7 +484,7 @@ To Fit, To Grid, To Shortest, To Tallest, To Narrowest, To Widest.</action></par
 <guimenu>Format</guimenu>
 <guimenuitem>Send Widget to Back</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Send the currently selected widgets' to back.</action></para></listitem>
+<listitem><para><action>Send the currently selected widgets to back.</action></para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -717,7 +643,7 @@ dialog</action> to execute, load, unload, install, unistall or download scripts.
 </varlistentry>
 
 </variablelist>
-<para>The last items show the exsting in this menu select tables and forms.</para>
+<para>The last items in this menu show the curently opened window names.</para>
 </sect1>
 
   <sect1 id="settingsmenu">
