@@ -3889,7 +3889,7 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
         KWMailMergeVariableInsertDia dia( m_canvas, doc->mailMergeDataBase() );
         if ( dia.exec() == QDialog::Accepted )
         {
-            var = new KWMailMergeVariable( textFrameSet()->textDocument(), dia.name(), doc->variableFormatCollection()->format( "STRING" ),doc->variableCollection(),doc );
+            var = new KWMailMergeVariable( textFrameSet()->textDocument(), dia.getName(), doc->variableFormatCollection()->format( "STRING" ),doc->variableCollection(),doc );
         }
     }
     else
