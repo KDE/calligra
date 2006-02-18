@@ -145,7 +145,7 @@ void EmbeddedObject::draw( QPainter *_painter )
 
 QPixmap EmbeddedObject::toPixmap()
 {
-	return QPixmap( 1.0 , 1.0 );
+	return toPixmap( 1.0 , 1.0 );
 }
 
 QPixmap EmbeddedObject::toPixmap(QSize size)
@@ -461,10 +461,10 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
 
 QPixmap EmbeddedKOfficeObject::toPixmap( double xZoom , double yZoom )
 {
-	QPixmap pixmap( (int) geometry().width()*xZoom , (int) geometry().height()*yZoom );
+	QPixmap pixmap( (int)( geometry().width()*xZoom ), (int)( geometry().height()*yZoom ) );
 
 	QPainter painter(&pixmap);
-	QRect  bound( 0,0,geometry().width()*xZoom,geometry().height()*yZoom );
+	QRect  bound( 0,0,(int)( geometry().width()*xZoom ), (int)(geometry().height()*yZoom) );
 	embeddedObject()->document()->paintEverything(painter,bound,
 					embeddedObject()->isTransparent(),
 					0,

@@ -2086,34 +2086,12 @@ void Doc::emitBeginOperation(void)
 
 void Doc::emitEndOperation()
 {
-  //  ElapsedTime et( "*Doc::emitEndOperation*" );
-   Sheet *t = NULL;
-   CellBinding* b = NULL;
    d->numOperations--;
 
    if (d->numOperations <= 0)
    {
      d->numOperations = 0;
      d->delayCalculation = false;
-     for ( t = map()->firstSheet(); t != NULL; t = map()->nextSheet() )
-     {
-      //PERF:  This caused *EVERY NON-DEFAULT CELL IN THE CURRENT SHEET* to be added to the paint dirty list
-      //This caused areas to be added to the paint dirty list multiple times, so calls to check whether a cell
-      //was in the paint dirty list became very time consuming because of the O(n) behaviour of Region::contains
-      // -- Robert Knight
-    
-     //###  t->update();
-
-       // ElapsedTime etm2( "Sub: Updating cellbindings..." );
-       /*
-	I don't understand why this is here.  Surely the cell bindings should only be updated when the data
-	changes - which is done in the Cell class.
-
-	for (b = t->firstCellBinding(); b != NULL; b = t->nextCellBinding())
-       {
-         b->cellChanged(NULL);
-       }*/
-     }
    }
 
    KoDocument::emitEndOperation();
@@ -2130,8 +2108,6 @@ void Doc::emitEndOperation()
 
 void Doc::emitEndOperation( const Region& /*region*/ )
 {
-  // ElapsedTime et( "*Doc::emitEndOperation - 2 -*" );
-  CellBinding  * b = 0;
   d->numOperations--;
 
   if ( d->numOperations > 0 || !d->activeSheet )
@@ -2154,15 +2130,6 @@ void Doc::emitEndOperation( const Region& /*region*/ )
     //### d->activeSheet->updateCellArea(region);
     
   }
-
-  //  ElapsedTime etm2( "Sub: Updating cellbindings..." );
-  /*
-   See comment about this in emitEndOperation() -- Robert Knight
-
-   for ( b = d->activeSheet->firstCellBinding(); b != 0; b = d->activeSheet->nextCellBinding() )
-  {
-    b->cellChanged( 0 );
-  }*/
 
   KoDocument::emitEndOperation();
 

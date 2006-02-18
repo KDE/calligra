@@ -140,7 +140,7 @@ ChartBinding::~ChartBinding()
 {
 }
 
-void ChartBinding::cellChanged( Cell* changedCell )
+void ChartBinding::cellChanged( Cell* /*changedCell*/ )
 {
     if ( m_bIgnoreChanges )
         return;
