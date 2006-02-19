@@ -63,3 +63,4 @@ AC_LANG_RESTORE
                 
 AM_CONDITIONAL(have_exif, test -n "$LIBEXIF")
 AM_CONDITIONAL(include_jpeg_filter, test -n "$LIBJPEG" -a -n "$LIBEXIF")
+AM_CONDITIONAL(include_tiff_filter, test -n "$LIBTIFF" -a -n "$LIBEXIF")

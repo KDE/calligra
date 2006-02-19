@@ -30,11 +30,49 @@
 
 #include <kis_doc.h>
 #include <kis_image.h>
+#include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_progress_display_interface.h>
+#include <kis_layer_visitor.h>
 
 #include "kis_jpeg_converter.h"
 #include "kis_wdg_options_jpeg.h"
+
+    
+class KisExifInfoVisitor : public KisLayerVisitor
+{
+    public:
+        KisExifInfoVisitor() :
+            m_exifInfo(0),
+            m_countPaintLayer(0)
+        { };
+    public:
+        virtual bool visit(KisPaintLayer* layer) {
+            m_countPaintLayer++;
+            if( layer->paintDevice()->hasExifInfo())
+                m_exifInfo = layer->paintDevice()->exifInfo();
+            return true;
+        };
+        virtual bool visit(KisGroupLayer* layer)
+        {
+            kdDebug(41008) << "Visiting on grouplayer " << layer->name() << "\n";
+            KisLayerSP child = layer->firstChild();
+            while (child) {
+                child->accept(*this);
+                child = child->nextSibling();
+            }
+            return true;
+        }
+        virtual bool visit(KisPartLayer *) { return true; };
+        virtual bool visit(KisAdjustmentLayer* ) {  return true; };
+    public:
+        inline uint countPaintLayer() { return m_countPaintLayer; }
+        inline KisExifInfo* exifInfo() {return m_exifInfo; }
+    private:
+        KisExifInfo* m_exifInfo;
+        uint m_countPaintLayer;
+};
+
 
 typedef KGenericFactory<KisJPEGExport, KoFilter> KisJPEGExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritajpegexport, KisJPEGExportFactory("kofficefilters"))
@@ -93,7 +131,15 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QCString& from, const QC
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
-    if ( (res = kpc.buildFile(url, l, beginIt, endIt, options)) == KisImageBuilder_RESULT_OK) {
+    
+    KisExifInfoVisitor eIV;
+    eIV.visit( img->rootLayer() );
+    
+    KisExifInfo* eI = 0;
+    if(eIV.countPaintLayer() == 1)
+        eI = eIV.exifInfo();
+    
+    if ( (res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         kdDebug(41008) << "success !" << endl;
         return KoFilter::OK;
     }

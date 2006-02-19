@@ -40,6 +40,8 @@ extern "C" {
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
 
+#include <kis_exif_io.h>
+
 extern "C" {
 #include <libexif/exif-loader.h>
 #include <libexif/exif-utils.h>
@@ -113,7 +115,13 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     }
     jpeg_stdio_src(&cinfo, fp);
     
-    setup_read_icc_profile(&cinfo);
+    jpeg_save_markers (&cinfo, JPEG_COM, 0xFFFF);
+    /* Save APP0..APP15 markers */
+    for (int m = 0; m < 16; m++)
+        jpeg_save_markers (&cinfo, JPEG_APP0 + m, 0xFFFF);
+
+    
+//     setup_read_icc_profile(&cinfo);
     // read header
     jpeg_read_header(&cinfo, TRUE);
     
@@ -188,10 +196,13 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     }
 
     KisPaintLayerSP layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
+    
+    // Read exif information if any
+    
     m_img->addLayer(layer.data(), m_img->rootLayer(), 0);
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
-        
+    
     for (; cinfo.output_scanline < cinfo.image_height;) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width, true);
         jpeg_read_scanlines(&cinfo, &row_pointer, 1);
@@ -235,34 +246,31 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
         }
     }
     
+    // Read exif informations
 
+    kdDebug(41008) << "Looking for exif information" << endl;
     
-    // Finish decompression
-    jpeg_finish_decompress(&cinfo);
-    jpeg_destroy_decompress(&cinfo);
-    fclose(fp);
+    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
+        kdDebug(41008) << "Marker is " << marker->marker << endl;
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 1) ||
+            marker->data_length < 14)
+            continue; /* Exif data is in an APP1 marker of at least 14 octets */
 
-    // Read exif information
-    ExifLoader *l = exif_loader_new ();
-    
-    exif_loader_write_file (l,uri.path().ascii());
-    
-    ExifData *ed = exif_loader_get_data (l);
-
-    ed = exif_loader_get_data (l);
-    exif_loader_unref (l);
-    if (ed) { // there are some exif tags
-        ExifTag tag = EXIF_TAG_ORIENTATION;
-        ExifIfd ifd = EXIF_IFD_0;
-        ExifEntry *e = exif_content_get_entry ( ed->ifd[ifd], tag);
-        if(e)
+        if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 ||
+            GETJOCTET (marker->data[1]) != (JOCTET) 0x78 ||
+            GETJOCTET (marker->data[2]) != (JOCTET) 0x69 ||
+            GETJOCTET (marker->data[3]) != (JOCTET) 0x66 ||
+            GETJOCTET (marker->data[4]) != (JOCTET) 0x00 ||
+            GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
+            continue; /* no Exif header */
+        kdDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
+        KisExifIO exifIO(layer->paintDevice()->exifInfo());
+        exifIO.readExifFromMem( marker->data , marker->data_length );
+        // Interpret orientation tag
+        ExifValue v;
+        if( layer->paintDevice()->exifInfo()->getValue("Orientation", v) && v.type() == ExifValue::EXIF_TYPE_SHORT)
         {
-            char buf[1024];
-            char value[1024];
-//             exif_entry_get_value (e, value, sizeof(value));
-            ExifShort v_short = exif_get_short (e->data, exif_data_get_byte_order (e->parent->parent));
-//             kdDebug(41008) << "tag orientation = " << value << " begin " << v_short << " end" << endl;
-            switch(v_short) //
+            switch(v.asShort(0)) //
             {
                 case 2:
                     layer->paintDevice()->mirrorY();
@@ -290,11 +298,17 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
                 default:
                     break;
             }
+            v.setValue(0, (Q_UINT16)1);
+            layer->paintDevice()->exifInfo()->setValue("Orientation", v);
         }
-    } else {
-        kdDebug(41008) << "no exif information" << endl;
+        break;
     }
     
+    // Finish decompression
+    jpeg_finish_decompress(&cinfo);
+    jpeg_destroy_decompress(&cinfo);
+    fclose(fp);
+
     return KisImageBuilder_RESULT_OK;
 }
 
@@ -328,7 +342,7 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisExifInfo* exifInfo)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -382,6 +396,23 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
     
     // Start compression
     jpeg_start_compress(&cinfo, TRUE);
+    // Save exif information if any available
+    if(exifInfo)
+    {
+        kdDebug(41008) << "Trying to save exif information" << endl;
+        KisExifIO exifIO(exifInfo);
+        unsigned char* exif_data;
+        unsigned int exif_size;
+        exifIO.saveExifToMem( &exif_data, &exif_size);
+        kdDebug(41008) << "Exif informations size is " << exif_size << endl;
+        if (exif_size < MAX_DATA_BYTES_IN_MARKER)
+        {
+            jpeg_write_marker(&cinfo, JPEG_APP0 + 1, exif_data, exif_size);
+        } else {
+            kdDebug(41008) << "exif informations couldn't be saved." << endl;
+        }
+    }
+    
 
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
@@ -404,6 +435,9 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
         ++it;
     }
 
+    
+    // Write data information
+    
     JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
     

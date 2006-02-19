@@ -14,8 +14,13 @@ if include_jpeg_filter
 JPEG_SUBDIR=jpeg
 endif
 
-if have_tiff
+if include_tiff_filter
 TIFF_SUBDIR=tiff
 endif
 
-SUBDIRS = $(IMAGEMAGICK_SUBDIR) $(OPENEXR_SUBDIR) $(PNG_SUBDIR) $(JPEG_SUBDIR) $(TIFF_SUBDIR) raw
+if have_exif
+LIBKISEXIF=libkisexif
+endif
+
+SUBDIRS = $(IMAGEMAGICK_SUBDIR) $(OPENEXR_SUBDIR) $(PNG_SUBDIR) $(LIBKISEXIF) \
+	$(JPEG_SUBDIR) $(TIFF_SUBDIR) raw 

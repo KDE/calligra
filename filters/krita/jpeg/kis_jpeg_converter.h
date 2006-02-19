@@ -37,6 +37,7 @@ extern "C" {
 #include "kis_annotation.h"
 class KisDoc;
 class KisUndoAdapter;
+class KisExifInfo;
 
 /**
  * Image import/export plugins can use these results to report about success or failure.
@@ -70,7 +71,7 @@ class KisJPEGConverter : public KisProgressSubject {
         virtual ~KisJPEGConverter();
     public:
         KisImageBuilder_Result buildImage(const KURL& uri);
-        KisImageBuilder_Result buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options);
+        KisImageBuilder_Result buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisExifInfo* exifInfo);
         /** Retrieve the constructed image
         */
         KisImageSP image();

@@ -3,6 +3,7 @@ kde_module_LTLIBRARIES = libkritajpegimport.la libkritajpegexport.la
 
 libkritaconverter_la_LDFLAGS = $(all_libraries)
 libkritaconverter_la_SOURCES = kis_jpeg_converter.cc iccjpeg.c
+libkritaconverter_la_LIBADD = $(top_builddir)/filters/krita/libkisexif/libkisexif.la
 
 libkritajpegexport_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries)
@@ -23,6 +24,7 @@ INCLUDES= \
 	-I$(top_srcdir)/krita/core/tiles \
 	-I$(top_srcdir)/krita/kritacolor \
 	-I$(top_srcdir)/krita/ui \
+	-I$(top_srcdir)/filters/krita/libkisexif \
         $(KOFFICE_INCLUDES) -I$(interfacedir) \
         $(KOPAINTER_INCLUDES) \
 	$(all_includes) 
@@ -40,3 +42,4 @@ METASOURCES = AUTO
 
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
+
