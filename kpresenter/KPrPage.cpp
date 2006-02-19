@@ -834,7 +834,7 @@ void KPrPage::unifyObjectName( KPrObject *object ) {
 
     while ( objectNameExists( object, list ) ) {
         count++;
-        QRegExp rx( " \\(\\d{1,3}\\)$" );
+        QRegExp rx( " \\(\\d{1,}\\)$" );
         if ( rx.search( objectName ) != -1 ) {
             objectName.remove( rx );
         }
@@ -847,6 +847,51 @@ void KPrPage::appendObject(KPrObject *_obj)
 {
     unifyObjectName(_obj);
     m_objectList.append(_obj);
+}
+
+void KPrPage::appendObjects( const QValueList<KPrObject *> &objects )
+{
+    QMap <QString, int> usedPageNames;
+    QPtrListIterator<KPrObject> it( m_objectList );
+    // find the biggest number 
+    for ( ; it.current() ; ++it )
+    {
+        QString objectName( it.current()->getObjectName() );
+
+        QRegExp rx( "(.*) \\((\\d{1,})\\)$" );
+        rx.setMinimal( true );
+        if ( rx.search( objectName ) != -1 && rx.numCaptures() == 2 ) 
+        {
+            int id = rx.cap( 2 ).toInt();
+            if ( usedPageNames[rx.cap( 1 )] < id );
+            {
+                usedPageNames[rx.cap( 1 )] = id;
+            }
+        }
+        else
+        {
+            usedPageNames[objectName] = 1;
+        }
+    }
+
+    QValueListConstIterator<KPrObject *> oIt( objects.begin() );
+    for ( ; oIt != objects.end(); ++oIt )
+    {
+        QString objectName( ( *oIt )->getObjectName() );
+        QRegExp rx( " \\(\\d{1,}\\)$" );
+        if ( rx.search( objectName ) != -1 ) 
+        {
+            objectName.remove( rx );
+        }
+
+        if ( usedPageNames.contains( objectName ) )
+        {
+            usedPageNames[objectName]++;
+            objectName += QString(" (%1)").arg( usedPageNames[objectName] );
+            ( *oIt )->setObjectName( objectName );
+        }
+        m_objectList.append( *oIt );
+    }
 }
 
 int KPrPage::takeObject( KPrObject *object )

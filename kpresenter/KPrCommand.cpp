@@ -592,49 +592,121 @@ void UnGroupObjCmd::unexecute()
     m_doc->updateSideBarItem( m_page );
 }
 
-KPrInsertCmd::KPrInsertCmd( const QString &_name, KPrObject *_object,
-                      KPrDocument *_doc, KPrPage *_page )
-    : KNamedCommand( _name )
+KPrInsertCmd::KPrInsertCmd( const QString &name, const QValueList<KPrObject *> objects, 
+                            KPrDocument *doc, KPrPage *page )
+: KNamedCommand( name )
+, m_objects( objects )    
+, m_object( 0 )
+, m_doc( doc )
+, m_page( page )    
 {
-    object = _object;
-    doc = _doc;
-    m_page=_page;
-    object->incCmdRef();
+    QValueListConstIterator<KPrObject *> it( m_objects.begin() );
+    for ( ; it != m_objects.end(); ++it )
+    {
+        ( *it )->incCmdRef();
+    }
+}
+
+KPrInsertCmd::KPrInsertCmd( const QString &name, KPrObject *object,
+                            KPrDocument *doc, KPrPage *page )
+: KNamedCommand( name )
+, m_object( object )
+, m_doc( doc )
+, m_page( page )    
+{
+    m_object->incCmdRef();
 }
 
 KPrInsertCmd::~KPrInsertCmd()
 {
-    object->decCmdRef();
+    if ( m_object )
+    {
+        m_object->decCmdRef();
+    }
+    else
+    {
+        QValueListConstIterator<KPrObject *> it( m_objects.begin() );
+        for ( ; it != m_objects.end(); ++it )
+        {
+            ( *it )->decCmdRef();
+        }
+    }
 }
 
 void KPrInsertCmd::execute()
 {
-    m_page->appendObject( object );
-    object->addToObjList();
-    if ( object->getType() == OT_TEXT )
-        doc->updateRuler();
-    doc->repaint( object );
+    if ( m_object )
+    {
+        m_page->appendObject( m_object );
+        m_object->addToObjList();
+        if ( m_object->getType() == OT_TEXT )
+            m_doc->updateRuler();
+        m_doc->repaint( m_object );
+    }
+    else
+    {
+        m_page->appendObjects( m_objects );
+        QValueListConstIterator<KPrObject *> it( m_objects.begin() );
+        bool updateRuler = false;
+        for ( ; it != m_objects.end(); ++it )
+        {
+            ( *it )->addToObjList();
+            if ( ( *it )->getType() == OT_TEXT )
+                updateRuler = true;
+            m_doc->repaint( *it );
+        }
+        if ( updateRuler )
+            m_doc->updateRuler();
+    }
 
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 void KPrInsertCmd::unexecute()
 {
-    QRect oldRect = doc->zoomHandler()->zoomRect( object->getRepaintRect() );
-    QPtrList<KPrObject> list(m_page->objectList());
-    if ( list.findRef( object ) != -1 ) {
-        m_page->takeObject(  object );
-        object->removeFromObjList();
-        if ( object->getType() == OT_TEXT )
-        {
-            doc->terminateEditing( (KPrTextObject*)object );
-            ((KPrTextObject*)object)->setEditingTextObj( false );
-            doc->updateRuler();
+    if ( m_object )
+    {
+        QRect oldRect = m_doc->zoomHandler()->zoomRect( m_object->getRepaintRect() );
+        QPtrList<KPrObject> list(m_page->objectList());
+        if ( list.findRef( m_object ) != -1 ) {
+            m_page->takeObject( m_object );
+            m_object->removeFromObjList();
+            if ( m_object->getType() == OT_TEXT )
+            {
+                m_doc->terminateEditing( (KPrTextObject*)m_object );
+                ((KPrTextObject*)m_object)->setEditingTextObj( false );
+                m_doc->updateRuler();
+            }
         }
+        m_doc->repaint( oldRect );
     }
-    doc->repaint( oldRect );
+    else
+    {
+        QPtrList<KPrObject> list(m_page->objectList());
+        bool updateRuler = false;
 
-    doc->updateSideBarItem( m_page );
+        QValueListConstIterator<KPrObject *> it( m_objects.begin() );
+        for ( ; it != m_objects.end(); ++it )
+        {
+            if ( list.findRef( *it ) != -1 )
+            {
+                m_page->takeObject( *it );
+                ( *it )->removeFromObjList();
+                if ( ( *it )->getType() == OT_TEXT )
+                {
+                    m_doc->terminateEditing( (KPrTextObject*)( *it ) );
+                    ( (KPrTextObject*) *it )->setEditingTextObj( false );
+                    updateRuler = true;
+                }
+            }
+        }
+        if ( updateRuler )
+            m_doc->updateRuler();
+
+        m_doc->repaint( false );
+    }
+
+    m_doc->updateSideBarItem( m_page );
 }
 
 KPrLowerRaiseCmd::KPrLowerRaiseCmd( const QString &_name, const QPtrList<KPrObject>& _oldList,

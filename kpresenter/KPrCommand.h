@@ -283,16 +283,17 @@ protected:
 class KPrInsertCmd : public KNamedCommand
 {
 public:
-    KPrInsertCmd( const QString &_name, KPrObject *_object, KPrDocument *_doc, KPrPage *_page );
+    KPrInsertCmd( const QString &name, const QValueList<KPrObject *> objects, KPrDocument *doc, KPrPage *page );
+    KPrInsertCmd( const QString &name, KPrObject *object, KPrDocument *doc, KPrPage *page );
     ~KPrInsertCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-
-    KPrObject *object;
-    KPrDocument *doc;
+    QValueList<KPrObject *> m_objects;
+    KPrObject *m_object;
+    KPrDocument *m_doc;
     KPrPage *m_page;
 };
 

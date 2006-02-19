@@ -2717,8 +2717,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
 {
     ObjType t = OT_LINE;
     QDomElement obj=element.firstChild().toElement();
-    bool createMacro = false;
-    KMacroCommand *macro = new KMacroCommand( i18n("Paste Objects"));
+    QValueList<KPrObject *> pasteObjects;
     while(!obj.isNull()) {
         if(obj.tagName()=="OBJECT" ) {
             bool sticky=false;
@@ -2742,10 +2741,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kplineobject->setOrig(kplineobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Line" ), kplineobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
-                    //insertCmd->execute();
+                    pasteObjects.append( kplineobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2765,9 +2761,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kprectobject->setOrig(kprectobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Rectangle" ), kprectobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
+                    pasteObjects.append( kprectobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2788,9 +2782,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 else if ( m_pageWhereLoadObject && paste)
                 {
                     kpellipseobject->setOrig(kpellipseobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
+                    pasteObjects.append( kpellipseobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2810,9 +2802,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kppieobject->setOrig(kppieobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
+                    pasteObjects.append( kppieobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2832,9 +2822,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject&& paste) {
                     kpautoformobject->setOrig(kpautoformobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
+                    pasteObjects.append( kpautoformobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2854,9 +2842,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kptextobject->setOrig(kptextobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Textbox" ), kptextobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
+                    pasteObjects.append( kptextobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2877,10 +2863,8 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kppixmapobject->setOrig(kppixmapobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Picture" ), kppixmapobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
+                    pasteObjects.append( kppixmapobject );
                     kppixmapobject->reload();
-                    createMacro=true;
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2901,9 +2885,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
+                    pasteObjects.append( kpfreehandobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2923,10 +2905,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kppolylineobject->setOrig(kppolylineobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
-
+                    pasteObjects.append( kppolylineobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2946,10 +2925,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject,
-                                                          this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
+                    pasteObjects.append( kpQuadricBezierCurveObject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2969,11 +2945,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject,
-                                                          this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
-
+                    pasteObjects.append( kpCubicBezierCurveObject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -2993,10 +2965,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this, m_pageWhereLoadObject);
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
-
+                    pasteObjects.append( kpPolygonObject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -3015,11 +2984,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste ) {
                     kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert %1" ).arg(kpClosedLinneObject->getTypeString()),
-                                                          kpClosedLinneObject, this , m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro = true;
-
+                    pasteObjects.append( kpClosedLinneObject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -3039,10 +3004,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpgroupobject->setOrig(kpgroupobject->getOrig().x(),offset);
-                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this, m_pageWhereLoadObject );
-                    macro->addCommand( insertCmd );
-                    createMacro=true;
-
+                    pasteObjects.append( kpgroupobject );
                 }
                 else if( m_pageWhereLoadObject &&!paste)
                 {
@@ -3058,16 +3020,14 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
         obj=obj.nextSibling().toElement();
     }
 
-    if ( createMacro )
+    KPrInsertCmd *insertCmd = 0;
+    if ( ! pasteObjects.empty() )
     {
-        macro->execute();
-        return macro;
+        insertCmd = new KPrInsertCmd( i18n( "Paste Objects" ), pasteObjects, 
+                                      this , m_pageWhereLoadObject );
+        insertCmd->execute();
     }
-    else
-    {
-        delete macro;
-        return 0L;
-    }
+    return insertCmd;
 }
 
 void KPrDocument::loadTitle( const QDomElement &element )

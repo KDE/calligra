@@ -171,6 +171,16 @@ public:
     void appendObject( KPrObject *_obj );
 
     /**
+     * @brief Appends object to page
+     *
+     * Appends the objects to the page. The name of the objects
+     * is unified.
+     *
+     * @param obj objects to append
+     */
+    void appendObjects( const QValueList<KPrObject *> &objects );
+
+    /**
      * @brief Replaces an object
      *
      * The object oldObject by the object newObject
