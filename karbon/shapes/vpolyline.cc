@@ -148,23 +148,15 @@ VPolyline::loadOasis( const QDomElement &element, KoOasisLoadingContext &context
 	if( element.localName() == "line" )
 	{
 		KoPoint p1, p2;
-		m_points = "M ";
-		m_points += element.attributeNS( KoXmlNS::svg, "x1", QString::null );
-		m_points += ",";
-		m_points += element.attributeNS( KoXmlNS::svg, "y1", QString::null );
-		m_points += " L ";
-		m_points += element.attributeNS( KoXmlNS::svg, "x2", QString::null );
-		m_points += ",";
-		m_points += element.attributeNS( KoXmlNS::svg, "y2", QString::null );
-		init();
-		/*
 		p1.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", QString::null ) ) );
 		p1.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", QString::null ) ) );
 		p2.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString::null ) ) );
 		p2.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString::null ) ) );
+		
+		m_points = QString( "%1,%2 %3,%4" ).arg( p1.x() ).arg( p1.y() ).arg( p2.x() ).arg( p2.y() );
+
 		moveTo( p1 );
 		lineTo( p2 );
-		*/
 	}
 	else if( element.localName() == "polyline" )
 	{
