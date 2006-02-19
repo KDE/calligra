@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  
+
    Copyright 2006 Robert Knight <robertknight@gmail.com>
    Copyright 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
@@ -257,7 +257,7 @@ Canvas::Canvas (View *_view)
   (void)new ToolTip( this );
   setAcceptDrops( true );
   setInputMethodEnabled( true ); // ensure using the InputMethod
-  
+
   setWFlags(Qt::WNoAutoErase);
 }
 
@@ -870,7 +870,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     }
     else
       update( d->m_boundingRealRect );
-  
+
 
     QRect drawingRect;
 
@@ -1095,7 +1095,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   }
   else
   {
-	//Nothing special is happening, use a normal arrow cursor	  
+	//Nothing special is happening, use a normal arrow cursor
     setCursor( arrowCursor );
   }
 
@@ -1395,7 +1395,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
         selectObject( obj );
         setCursor( Qt::SizeAllCursor );
       }
-      
+
       if ( _ev->button() == RightButton )
       {
         //updatePosWidget();
@@ -3506,7 +3506,7 @@ void Canvas::deleteEditor (bool saveChanges, bool array)
 
 
 	//There may be highlighted areas on the sheet which will need to be erased
-	setSelectionChangePaintDirty( activeSheet() , *choice() ); 	  
+	setSelectionChangePaintDirty( activeSheet() , *choice() );
 
   	d->editWidget->setEditMode( false );
 
@@ -3564,9 +3564,9 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
   //Ensure that the choice always has a sheet associated
   //with it.
   //
-  //FIXME:  This really doesn't make sense.  The concept of 
+  //FIXME:  This really doesn't make sense.  The concept of
   //the 'choice selection' having only one sheet is wrong - because
-  //different parts of the choice selection may be on different 
+  //different parts of the choice selection may be on different
   //sheets (at least, this doesn't work at the moment, but it should
   //do).  REVIEW after KSpread 1.5 has been released.
   //
@@ -3575,7 +3575,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
   //was not the active sheet.
   if (!choice()->sheet())
   	choice()->setSheet( activeSheet() );
-  
+
   if ( !d->cellEditor )
   {
     Cell * cell = sheet->nonDefaultCell( marker().x(), marker().y(), false );
@@ -3676,9 +3676,9 @@ void Canvas::repaintObject( EmbeddedObject *obj )
 {
 	//Calculate where the object appears on the canvas widget and then repaint that part of the widget
 	QRect canvasRelativeGeometry = doc()->zoomRect( obj->geometry() );
-	canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) , 
+	canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
 			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
-	
+
     update( canvasRelativeGeometry );
 
  /* if ( !obj->isSelected() )
@@ -3708,8 +3708,8 @@ void Canvas::copyOasisObjects()
 	//applications as raster graphics if they don't support pasting in OASIS format.
 	//Copying and pasting between OpenOffice and KOffice may be useful - thoughts?
 	//
-	//-- Robert Knight (10/02/2006) <robertknight@gmail.com> 
-	
+	//-- Robert Knight (10/02/2006) <robertknight@gmail.com>
+
  	QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   	itObject.toFirst();
   	if ( !itObject.current() )
@@ -3727,7 +3727,7 @@ void Canvas::copyOasisObjects()
 	{
 		QApplication::clipboard()->setPixmap(pixmap);
 	}
-	
+
 /*#ifdef 0 // ==== THIS IS THE ORIGINAL CODE WHICH COPIED OBJECTS IN OASIS FORMAT ====
 
 	    //todo copy object from selected object
@@ -3735,7 +3735,7 @@ void Canvas::copyOasisObjects()
 	QDragObject* dragObject = kd;
 	QByteArray arr;
 	QBuffer buffer(arr);
-	KoStore* store = KoStore::createStore( &buffer, KoStore::Write, 
+	KoStore* store = KoStore::createStore( &buffer, KoStore::Write,
 					"application/vnd.oasis.opendocument.spreadsheet" );
 
 	delete store;
@@ -3898,7 +3898,7 @@ void Canvas::equalizeColumn()
 QRect Canvas::cellsInArea( const QRect area ) const
 {
 	KoRect unzoomedRect = d->view->doc()->unzoomRect( area );
-	
+
        	unzoomedRect.moveBy( (int)xOffset(), (int)yOffset() );
 
   	double tmp;
@@ -3945,7 +3945,7 @@ void Canvas::paintUpdates()
 
 
   paintChildren( painter, matrix );
-  
+
   painter.save();
   clipoutChildren( painter );
 
@@ -4085,7 +4085,7 @@ void Canvas::paintUpdates()
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
 
-	cell->paintCell( unzoomedRect, painter, d->view, dblCorner, 
+	cell->paintCell( unzoomedRect, painter, d->view, dblCorner,
 			 QPoint( x, y), paintBorder,
 			 rightPen,bottomPen,leftPen,topPen,
 			 mergedCellsPainted);
@@ -4120,21 +4120,21 @@ void Canvas::clipoutChildren( QPainter& painter ) const
 
   const double horizontalOffset = -xOffset() * doc()->zoomedResolutionX();
   const double verticalOffset = -yOffset() * doc()->zoomedResolutionY();
-	  
+
   QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   for( ; itObject.current(); ++itObject )
   {
     if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject && d->m_isMoving ) )
     {
 	QRect childGeometry = doc()->zoomRect( itObject.current()->geometry());
-  
+
 	//The clipping region is given in device coordinates
-	//so subtract the current offset (scroll position) of the canvas 
+	//so subtract the current offset (scroll position) of the canvas
 	childGeometry.moveBy( (int)horizontalOffset , (int)verticalOffset );
-	
+
 	if (painter.window().intersects(childGeometry))
 		rgn -= childGeometry;
-      
+
       //painter.fillRect( doc()->zoomRect( itObject.current()->geometry() ), QColor("red" ) );
     }
   }
@@ -4145,10 +4145,10 @@ void Canvas::clipoutChildren( QPainter& painter ) const
 QRect Canvas::painterWindowGeometry( const QPainter& painter ) const
 {
   QRect zoomedWindowGeometry = painter.window();
-	  
+
   zoomedWindowGeometry.moveBy( (int)( xOffset() * doc()->zoomedResolutionX() ) , (int)( yOffset() * doc()->zoomedResolutionY() ) );
 
-	return zoomedWindowGeometry;		
+	return zoomedWindowGeometry;
 }
 
 void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
@@ -4163,7 +4163,7 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 
   const QRect zoomedWindowGeometry = painterWindowGeometry( painter );
   const Sheet* sheet = activeSheet();
-  
+
   for( ; itObject.current(); ++itObject )
   {
     QRect const zoomedObjectGeometry = doc()->zoomRect( itObject.current()->geometry() );
@@ -4172,14 +4172,14 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
     {
 	    //To prevent unnecessary redrawing of the embedded object, we only repaint
 	    //if one or more of the cells underneath the object has been marked as 'dirty'.
-	    
+
 	   QRect canvasRelativeGeometry = zoomedObjectGeometry;
-	   canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) , 
+	   canvasRelativeGeometry.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
 			   			(int)( -yOffset() * doc()->zoomedResolutionY()) );
-	   
+
 	   const QRect cellsUnderObject=cellsInArea( canvasRelativeGeometry );
 	   bool redraw=false;
-	   
+
 	   for (int x=cellsUnderObject.left();x<=cellsUnderObject.right();x++)
 	   {
 		for (int y=cellsUnderObject.top();y<=cellsUnderObject.bottom();y++)
@@ -4191,7 +4191,7 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 		if (redraw)
 			break;
 	   }
-	   
+
       	  if ( redraw )
       		itObject.current()->draw( &painter );
     }
@@ -4271,15 +4271,15 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 
   if (d->cellEditor)
 	return;
-  
+
 	if (!selectionInfo()->activeElement())
 			return;
 
 	QRect range=selectionInfo()->activeElement()->rect().normalize();
-	
+
   	double positions[4];
   	bool paintSides[4];
-  
+
     bool current = QRect(selectionInfo()->anchor(), selectionInfo()->marker()).normalize() == range;
     QPen pen( Qt::black, 2 );
     painter.setPen( pen );
@@ -4575,7 +4575,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   const Sheet *sheet = m_pCanvas->activeSheet();
   if (!sheet)
 	  return;
-  
+
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
   double dHeight = m_pCanvas->d->view->doc()->unzoomItY( height() );
   m_bResize = false;
@@ -4816,7 +4816,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   Sheet *sheet = m_pCanvas->activeSheet();
-  
+
   if (!sheet)
      return;
 
@@ -5129,8 +5129,8 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 
   const Sheet *sheet = m_pCanvas->activeSheet();
   if (!sheet)
-	return;  
-  
+	return;
+
   // We were editing a cell -> save value and get out of editing mode
   if ( m_pCanvas->editor() )
   {
@@ -5444,7 +5444,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
 
   if (!sheet)
     return;
-  
+
   double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
@@ -5896,7 +5896,7 @@ QLabel *tip_findLabel()
     QWidgetList  *list = QApplication::allWidgets();
     QWidgetListIt it( *list );
     QWidget * w;
-    while ( (w=it.current()) != 0 ) 
+    while ( (w=it.current()) != 0 )
     {
         if(w->isA("QTipLabel"))
             return static_cast<QLabel*>(w);
@@ -6025,13 +6025,13 @@ void ToolTip::maybeTip( const QPoint& p )
     if( !insideMarker )
         return;
 
-    // Find the tipLabel    
+    // Find the tipLabel
     // NOTE: if we failed, check again when the tip is shown already
     QLabel* tipLabel = tip_findLabel();
 
     // Ensure that it is plain text
     // Not funny if (intentional or not) <a> appears as hyperlink
-    if( tipLabel ) 
+    if( tipLabel )
          tipLabel->setTextFormat( Qt::PlainText );
 
     // Wrap the text if too long
@@ -6052,7 +6052,7 @@ void ToolTip::maybeTip( const QPoint& p )
     if( !tipLabel )
     {
       tipLabel = tip_findLabel();
-      if( tipLabel ) 
+      if( tipLabel )
             tipLabel->setTextFormat( Qt::PlainText );
     }
 
