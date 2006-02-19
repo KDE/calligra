@@ -1595,7 +1595,8 @@ void Cell::setOutputText()
   // Display a formula if warranted.  If not, display the value instead;
   // this is the most common case.
   if ( (!hasError()) && isFormula() && format()->sheet()->getShowFormula()
-       && !( format()->sheet()->isProtected() && format()->isHideFormula( d->column, d->row ) ) )
+       && !( format()->sheet()->isProtected() && format()->isHideFormula( d->column, d->row ) ) 
+       || isEmpty() )
     d->strOutText = d->strText;
   else {
     d->strOutText = sheet()->doc()->formatter()->formatText (this,
