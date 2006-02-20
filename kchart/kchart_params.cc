@@ -18,12 +18,18 @@
 */
 
 
+//#include <stdlib.h>
+#include <iostream>
+using std::cout;
+using std::cerr;
+
 #include <dcopobject.h>
 #include <klocale.h>
 #include <kdebug.h>
 
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
+#include <KoDom.h>
 
 #include "kdchart/KDChartParams.h"
 #include "kdchart/KDChartAxisParams.h"
@@ -101,13 +107,32 @@ DCOPObject* KChartParams::dcopObject()
     return m_dcop;
 }
 
+
+// ================================================================
+//                     Loading and Saving
+
+
+
 static const struct {
-    const char* oasisClass;
-    KChartParams::ChartType chartType;
+    const char              *oasisClass;
+    KChartParams::ChartType  chartType;
 } oasisChartTypes[] = {
-    { "chart:bar", KChartParams::Bar }
-// TODO...
+    { "chart:bar",    KChartParams::Bar },
+    { "chart:line",   KChartParams::Line },
+    { "chart:area",   KChartParams::Area },
+    { "chart:circle", KChartParams::Pie },
+    //{ "chart:xxx",    KChartParams::HiLo },
+    //{ "chart:stock",  KChartParams::??? },
+    //{ "chart:add-in", KChartParams::??? },
+    //{ "chart:scatter",KChartParams::??? },
+    { "chart:ring",   KChartParams::Ring },
+    { "chart:radar",  KChartParams::Polar }
+    //{ "chart:xxx",    KChartParams::BoxWhisker },
+
+    //{ "chart:xxx",    KChartParams::BarLines },
+    // FIXME: More?
 };
+
 
 static const unsigned int numOasisChartTypes
   = sizeof oasisChartTypes / sizeof *oasisChartTypes;
@@ -117,29 +142,46 @@ bool KChartParams::loadOasis( const QDomElement& chartElem,
                               KoOasisStyles& /*oasisStyles*/,
                               QString& errorMessage )
 {
-    const QString chartClass = chartElem.attributeNS( KoXmlNS::chart, "class", QString::null );
-    bool knownType = false;
+    const QString  chartClass = chartElem.attributeNS( KoXmlNS::chart, 
+						       "class",
+						       QString::null );
+    bool           knownType = false;
+
     for ( unsigned int i = 0 ; i < numOasisChartTypes ; ++i ) {
         if ( chartClass == oasisChartTypes[i].oasisClass ) {
             kdDebug(35001) << "found chart of type " << chartClass << endl;
+	    //cerr << "found chart of type " << chartClass.latin1() << "\n";
             setChartType( oasisChartTypes[i].chartType );
             knownType = true;
             break;
         }
     }
+
     if ( !knownType ) {
         errorMessage = i18n( "Unknown chart type %1" ).arg( chartClass );
         kdDebug(35001) << errorMessage << endl;
         return false;
     }
 
+    QDomElement  titleElem = KoDom::namedItemNS( chartElem,
+						 KoXmlNS::chart, "title" );
     // TODO title
+    if ( !titleElem.isNull() ) {
+	QDomElement  pElem = KoDom::namedItemNS( titleElem,
+						 KoXmlNS::text, "p" );
+	//kdDebug(35001) << "Title: " << pElem.text() << endl;
+
+	setHeader1Text( pElem.text() );
+    }
+
+    // TODO subtitle
     // TODO legend
     // TODO plot-area
     // TODO...
 
     return true;
 }
+
 
 void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
 {
@@ -152,9 +194,11 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
             break;
         }
     }
+
     if ( !knownType ) {
         kdError(32001) << "Unknown chart type in KChartParams::saveOasis, extend oasisChartTypes!" << endl;
     }
 }
+
 
 }  //KChart namespace
