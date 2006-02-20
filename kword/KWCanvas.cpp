@@ -527,7 +527,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                 terminateCurrentEdit();
             viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, e->state() ) );
         }
-        m_scrollTimer->start( 50 );
     }
     break;
     case MM_CREATE_TEXT: case MM_CREATE_PART: case MM_CREATE_TABLE:
@@ -541,6 +540,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         break;
     default: break;
     }
+    m_scrollTimer->start( 50 );
 
     if ( e->button() == MidButton ) {
         if ( m_doc->isReadWrite() && m_currentFrameSetEdit && m_mouseMode == MM_EDIT )
@@ -725,8 +725,9 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
         drawMovingRect( p );
 
     int page = m_doc->pageManager()->pageNumber( m_insRect );
-    if( page == -1)
+    if( page == -1) {
         return;
+    }
     KoRect oldRect = m_insRect;
 
     // Resize the rectangle
@@ -741,6 +742,8 @@ void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move 
     KoRect r = m_insRect.normalize();
     if ( !m_doc->pageManager()->page(page)->rect().contains(r) )
     {
+        // Even better would be to go to the limit of the page boundary, so that the result,
+        // when moving the mouse of the page, doesn't depend on how fast we're moving it...
         m_insRect = oldRect;
         // #### QCursor::setPos( viewport()->mapToGlobal( zoomPoint( m_insRect.bottomRight() ) ) );
     }

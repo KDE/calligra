@@ -39,6 +39,12 @@ int KWPageManager::pageNumber(const KoRect &frame) const {
         page++;
         ++pages;
     }
+    // Disable strict checks. Testcase: F10, drag rectangle, move the mouse under the bottom of the last page.
+    // Instead of a bunch of warnings and making the insertion-rectangle disappear, we simply want to bound
+    // the mouse position to the last page.
+    if ( !pages.current() )
+        page = m_firstPage + m_pageList.count() - 1;
+#if 0
     if(!pages.current() || frame.right() > pages.current()->width() ||
             frame.top() > pages.current()->height() + startOfpage) {
 #ifdef DEBUG_PAGES
@@ -53,6 +59,7 @@ kdDebug(31001) << kdBacktrace() << endl;
 #endif
         return -1; // not inside the page...
     }
+#endif
     return page;
 }
 int KWPageManager::pageNumber(const KoPoint &point) const {
