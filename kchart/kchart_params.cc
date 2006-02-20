@@ -163,9 +163,9 @@ bool KChartParams::loadOasis( const QDomElement& chartElem,
         return false;
     }
 
+    // TODO title (more details)
     QDomElement  titleElem = KoDom::namedItemNS( chartElem,
 						 KoXmlNS::chart, "title" );
-    // TODO title
     if ( !titleElem.isNull() ) {
 	QDomElement  pElem = KoDom::namedItemNS( titleElem,
 						 KoXmlNS::text, "p" );
@@ -174,7 +174,17 @@ bool KChartParams::loadOasis( const QDomElement& chartElem,
 	setHeader1Text( pElem.text() );
     }
 
-    // TODO subtitle
+    // TODO subtitle (more details)
+    QDomElement  subtitleElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart, 
+						    "subtitle" );
+    if ( !titleElem.isNull() ) {
+	QDomElement  pElem = KoDom::namedItemNS( subtitleElem,
+						 KoXmlNS::text, "p" );
+	//kdDebug(35001) << "Subtitle: " << pElem.text() << endl;
+
+	setHeader2Text( pElem.text() );
+    }
+
     // TODO legend
     // TODO plot-area
     // TODO...
