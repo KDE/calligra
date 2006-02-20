@@ -322,7 +322,6 @@ void AccountsView::slotUpdate() {
     }
 }
 
-
 void AccountsView::print(KPrinter &printer) {
     //kdDebug()<<k_funcinfo<<endl;
     QPaintDeviceMetrics m = QPaintDeviceMetrics ( &printer );
@@ -333,6 +332,14 @@ void AccountsView::print(KPrinter &printer) {
     p.begin(&printer);
     p.setViewport(left, top, m.width()-left-right, m.height()-top-bottom);
     p.setClipRect(left, top, m.width()-left-right, m.height()-top-bottom);
+    QRect preg = p.clipRegion(QPainter::CoordPainter).boundingRect();
+    //kdDebug()<<"p="<<preg<<endl;
+    //p.drawRect(preg.x(), preg.y(), preg.width()-1, preg.height()-1);
+    double scale = QMIN((double)preg.width()/(double)size().width(), (double)preg.height()/(double)(size().height()));
+    //kdDebug()<<"scale="<<scale<<endl;
+    if (scale < 1.0) {
+        p.scale(scale, scale);
+    }
     m_label->paintContents(&p);
     p.translate(0, m_label->size().height());
     m_dlv->paintContents(&p);

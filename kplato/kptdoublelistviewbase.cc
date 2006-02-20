@@ -44,15 +44,17 @@
 namespace KPlato
 {
 void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
+    //kdDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
     // draw header labels
     p->save();
+    p->setClipRegion(p->clipRegion(QPainter::CoordPainter).intersect(QRegion(cx, 0, cw, ch)), QPainter::CoordPainter);
     QColor bgc(Qt::blue);
     bgc = bgc.light(185);
     QBrush bg(bgc);
     p->setBackgroundMode(Qt::OpaqueMode);
     p->setBackgroundColor(bgc);
     QHeader *h = header();
-    QRect b;
+    int hei = 0;
     for (int s = 0; s < h->count(); ++s) {
         QRect r = h->sectionRect(s);
         //kdDebug()<<s<<": "<<h->label(s)<<" "<<r<<endl;
@@ -70,12 +72,14 @@ void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
             //kdDebug()<<s<<": "<<h->label(s)<<" "<<tr<<endl;
         }
         p->eraseRect(tr);
-        p->drawText(tr, columnAlignment(s), h->label(s), -1, &b);
-
+        p->drawText(tr, columnAlignment(s)|Qt::AlignVCenter, h->label(s), -1);
+        hei = QMAX(tr.height(), hei);
     }
     p->restore();
     p->save();
-    p->translate(0, b.height()+2);
+    p->translate(0, hei+2);
+    QRect r = p->clipRegion(QPainter::CoordPainter).boundingRect();
+    p->setClipRegion(p->clipRegion(QPainter::CoordPainter).intersect(QRegion(cx, cy, cw, ch)), QPainter::CoordPainter);
     drawContentsOffset(p, 0, 0, cx, cy, cw, ch);
     p->restore();
 }
@@ -481,8 +485,8 @@ void DoubleListViewBase::paintContents(QPainter *p) {
     QRect cm = m_masterList->contentsRect();
     QRect cs = m_slaveList->contentsRect();
     int mx, my, sx, sy;
-    m_masterList->contentsToViewport(cm.x(),cm.y(), mx, my);
-    m_slaveList->contentsToViewport(cs.x(),cs.y(), sx, sy);
+    m_masterList->contentsToViewport(cm.x(), cm.y(), mx, my);
+    m_slaveList->contentsToViewport(cs.x(), cs.y(), sx, sy);
     if (sizes()[0] > 0) {
         p->save();
         p->translate(mx, my);
@@ -490,13 +494,10 @@ void DoubleListViewBase::paintContents(QPainter *p) {
         p->restore();
     }
     if (sizes()[1] > 0) {
-        // QListView paints the whole section even if only a part is displayed
-        int spos = m_slaveList->header()->sectionPos(m_slaveList->header()->sectionAt(-sx));
-        //kdDebug()<<spos<<endl;
         p->save();
-        p->translate(cm.width() + 8 - spos, sy);
-        m_slaveList->paintToPrinter(p, spos, -sy, cs.width(), cs.height());
-        p->fillRect(-8, 0, 0, sy, Qt::white);
+        p->translate(cm.width() + 8 + sx, sy);
+        m_slaveList->paintToPrinter(p, -sx, -sy, cs.width(), cs.height());
+        //p->fillRect(-8, 0, 0, sy, Qt::white);
         p->restore();
     }
 }
