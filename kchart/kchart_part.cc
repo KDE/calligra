@@ -283,8 +283,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	}
 
 	// Set legend from row headers.
-        for ( uint row = 0; row < dataRowCount; row++ )
-        {
+        for ( uint row = 0; row < dataRowCount; row++ ) {
             QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
         
             m_params->setLegendText( row, label );
@@ -303,8 +302,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	}
 
 	// Set legend from column headers.
-        for ( uint col = 0; col < dataColumnCount ; col++ )
-        {
+        for ( uint col = 0; col < dataColumnCount ; col++ ) {
             QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
         
             m_params->setLegendText( col, label );
@@ -480,6 +478,7 @@ void KChartPart::analyzeHeaders()
 	       m_params->firstRowAsLabel(), m_params->firstColAsLabel());
 #endif
 }
+
 
 // This function sets the data from an external source.  It is called,
 // for instance, when the chart is initialized from a spreadsheet in
@@ -672,6 +671,15 @@ void KChartPart::setChartDefaults()
 }
 
 
+// ================================================================
+//                     Loading and Storing
+
+
+// ----------------------------------------------------------------
+//                 Save and Load program configuration
+
+
+
 void KChartPart::loadConfig( KConfig *conf )
 {
     conf->setGroup("ChartParameters");
@@ -717,11 +725,11 @@ void KChartPart::loadConfig( KConfig *conf )
     m_params->setThreeDBarAngle( conf->readNumEntry( "_3d_angle",
 						     m_params->threeDBarAngle() ) );
 
-    KDChartAxisParams leftparams;
+    KDChartAxisParams  leftparams;
     leftparams = m_params->axisParams( KDChartAxisParams::AxisPosLeft );
-    KDChartAxisParams rightparams;
+    KDChartAxisParams  rightparams;
     rightparams = m_params->axisParams( KDChartAxisParams::AxisPosRight );
-    KDChartAxisParams bottomparams;
+    KDChartAxisParams  bottomparams;
     bottomparams = m_params->axisParams( KDChartAxisParams::AxisPosBottom );
 
     bottomparams.setAxisLineColor( conf->readColorEntry( "XTitleColor", 0 ) );
@@ -869,9 +877,379 @@ void KChartPart::saveConfig( KConfig *conf )
 }
 
 
+// ----------------------------------------------------------------
+//              Save and Load OpenDocument file format
+
+
+bool KChartPart::loadOasis( const QDomDocument& doc,
+			    KoOasisStyles&      oasisStyles,
+			    const QDomDocument& /*settings*/,
+			    KoStore* )
+{
+    kdDebug(35001) << "kchart loadOasis called" << endl;
+    QDomElement  content = doc.documentElement();
+    QDomElement  bodyElem ( KoDom::namedItemNS( content, KoXmlNS::office,
+						"body" ) );
+    if ( bodyElem.isNull() ) {
+        kdError(32001) << "No office:body found!" << endl;
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
+        return false;
+    }
+
+    QDomElement officeChartElem = KoDom::namedItemNS( bodyElem,
+						      KoXmlNS::office, "chart" );
+    if ( officeChartElem.isNull() ) {
+        kdError(32001) << "No office:chart found!" << endl;
+        QDomElement childElem;
+        QString localName;
+        forEachElement( childElem, bodyElem ) {
+            localName = childElem.localName();
+        }
+
+        if ( localName.isEmpty() )
+            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
+        else
+            setErrorMessage( i18n( "This document is not a chart, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
+
+        return false;
+    }
+
+    QDomElement chartElem = KoDom::namedItemNS( officeChartElem, 
+						KoXmlNS::chart, "chart" );
+    if ( chartElem.isNull() ) {
+        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
+        return false;
+    }
+
+    // Load parameters
+    QString  errorMessage;
+    bool     ok = m_params->loadOasis( chartElem, oasisStyles, errorMessage );
+    if ( !ok ) {
+        setErrorMessage( errorMessage );
+        return false;
+    }
+
+    // TODO Load data direction (see loadAuxiliary)
+
+    // Load data
+    QDomElement tableElem = KoDom::namedItemNS( chartElem,
+						KoXmlNS::table, "table" );
+    if ( !tableElem.isNull() ) {
+        ok = loadOasisData( tableElem );
+        if ( !ok )
+            return false; // TODO setErrorMessage
+    }
+
+    // FIXME: Shouldn't this be done first of all, so it could be
+    //        overrided from the file?  /ingwa
+    setChartDefaults();
+
+    return true;
+}
+
+
+bool KChartPart::loadOasisData( const QDomElement& tableElem )
+{
+    int          numberHeaderColumns = 0;
+    QDomElement  tableHeaderColumns = KoDom::namedItemNS( tableElem, 
+							  KoXmlNS::table, 
+							  "table-header-columns" );
+
+    QDomElement  elem;
+    forEachElement( elem, tableHeaderColumns ) {
+        if ( elem.localName() == "table-column" ) {
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt();
+            numberHeaderColumns += QMAX( 1, repeated );
+        }
+    }
+
+    // With 0 you get no titles, and with more than 1 we ignore the others.
+    Q_ASSERT( numberHeaderColumns == 1 );
+
+    int numberDataColumns = 0;
+    QDomElement tableColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-columns" );
+    forEachElement( elem, tableColumns ) {
+        if ( elem.localName() == "table-column" ) {
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt();
+            numberDataColumns += QMAX( 1, repeated );
+        }
+    }
+
+    // Parse table-header-rows for the column names.
+    m_colLabels.clear();
+    QDomElement tableHeaderRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-header-rows" );
+    if ( tableHeaderRows.isNull() )
+        kdWarning(35001) << "No table-header-rows element found!" << endl;
+    QDomElement tableHeaderRow = KoDom::namedItemNS( tableHeaderRows, KoXmlNS::table, "table-row" );
+    if ( tableHeaderRow.isNull() )
+        kdWarning(35001) << "No table-row inside table-header-rows!" << endl;
+
+    int cellNum = 0;
+    forEachElement( elem, tableHeaderRow ) {
+        if ( elem.localName() == "table-cell" ) {
+            ++cellNum;
+            if ( cellNum > numberHeaderColumns ) {
+                QDomElement pElem = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
+                m_colLabels.append( pElem.text() );
+            }
+        }
+    }
+    if ( (int)m_colLabels.count() != numberDataColumns )
+        kdWarning(35001) << "Got " << m_colLabels.count()
+			 << " column titles, expected " << numberDataColumns
+			 << endl;
+
+    // Get the number of rows, and read row labels
+    int          numberDataRows = 0;
+    QDomElement  tableRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-rows" );
+
+    m_rowLabels.clear();
+    forEachElement( elem, tableRows ) {
+        if ( elem.localName() == "table-row" ) {
+            int repeated = elem.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt();
+            Q_ASSERT( repeated <= 1 ); // we don't handle yet the case where data rows are repeated (can this really happen?)
+            numberDataRows += QMAX( 1, repeated );
+            if ( numberHeaderColumns > 0 ) {
+                QDomElement firstCell = KoDom::namedItemNS( elem, KoXmlNS::table, "table-cell" );
+                QDomElement pElem = KoDom::namedItemNS( firstCell, KoXmlNS::text, "p" );
+                m_rowLabels.append( pElem.text() );
+            }
+        }
+    }
+
+    kdDebug(35001) << "numberHeaderColumns=" << numberHeaderColumns
+		   << " numberDataColumns=" << numberDataColumns
+                   << " numberDataRows=" << numberDataRows << endl;
+
+    if ( (int)m_rowLabels.count() != numberDataRows)
+        kdWarning(35001) << "Got " << m_rowLabels.count()
+			 << " row labels, expected " << numberDataRows << endl;
+
+    m_currentData.expand( numberDataRows, numberDataColumns );
+    m_currentData.setUsedCols( numberDataColumns );
+    m_currentData.setUsedRows( numberDataRows );
+
+    // Now really load the cells.
+    int row = 0;
+    QDomElement rowElem;
+    forEachElement( rowElem, tableRows ) {
+        if ( rowElem.localName() == "table-row" ) {
+            int col = 0;
+            int cellNum = 0;
+            QDomElement cellElem;
+            forEachElement( cellElem, rowElem ) {
+                if ( cellElem.localName() == "table-cell" ) {
+                    ++cellNum;
+                    if ( cellNum > numberHeaderColumns ) {
+                        QString valueType = cellElem.attributeNS( KoXmlNS::office, "value-type", QString::null );
+                        if ( valueType != "float" )
+                            kdWarning(35001) << "Don't know how to handle value-type " << valueType << endl;
+                        else {
+                            QString  value = cellElem.attributeNS( KoXmlNS::office, "value", QString::null );
+                            double   val = value.toDouble();
+
+                            m_currentData.setCell( row, col, val );
+                        }
+                        ++col;
+                    }
+                }
+            }
+            ++row;
+        }
+    }
+
+    return true;
+}
+
+
+bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+{
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    KoOasisStore oasisStore( store );
+
+    KoXmlWriter* contentWriter = oasisStore.contentWriter();
+    if ( !contentWriter )
+        return false;
+
+    KoGenStyles mainStyles;
+
+    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:chart" );
+    bodyWriter->startElement( "chart:chart" );
+
+    // Indent to indicate that this is inside some tags.
+    {
+        // Sets the chart:class attribute in chart:chart
+        m_params->saveOasis( bodyWriter, mainStyles );
+
+        bodyWriter->startElement( "chart:plot-area" );
+        // TODO axis, series, wall, floor...
+        bodyWriter->endElement(); // chart:plot-area
+
+	// Save the data table.
+        saveOasisData( bodyWriter, mainStyles );
+    }
+
+    bodyWriter->endElement(); // chart:chart
+    bodyWriter->endElement(); // office:chart
+    bodyWriter->endElement(); // office:body
+
+    contentWriter->startElement( "office:automatic-styles" );
+    {
+	// TODO writeAutomaticStyles( *contentWriter, mainStyles, false );
+    }
+    contentWriter->endElement(); // office:automatic-styles
+
+    oasisStore.closeContentWriter();
+
+    // Done with content.xml
+
+#if 0
+    if ( !store->open( "styles.xml" ) )
+        return false;
+    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+    saveOasisDocumentStyles( store, mainStyles, savingContext, saveFlag,
+			     headerFooterContent );
+    if ( !store->close() ) // done with styles.xml
+        return false;
+#endif
+
+    return true;
+}
+
+
+void KChartPart::saveOasisData( KoXmlWriter* bodyWriter, 
+				KoGenStyles& mainStyles ) const
+{
+    Q_UNUSED( mainStyles );
+
+    const int cols = m_currentData.usedCols()
+                     ? QMIN(m_currentData.usedCols(), m_currentData.cols())
+                     : m_currentData.cols();
+    const int rows = m_currentData.usedRows()
+                     ? QMIN(m_currentData.usedRows(), m_currentData.rows())
+                     : m_currentData.rows();
+
+    bodyWriter->startElement( "table:table" );
+    bodyWriter->addAttribute( "table:name", "local-table" );
+
+    // Exactly one header column, always.
+    bodyWriter->startElement( "table:table-header-columns" );
+    bodyWriter->startElement( "table:table-column" );
+    bodyWriter->endElement(); //table:table-column
+    bodyWriter->endElement(); // table:table-header-columns
+
+    // Then "cols" columns
+    bodyWriter->startElement( "table:table-columns" );
+    bodyWriter->startElement( "table:table-column" );
+    bodyWriter->addAttribute( "table:number-columns-repeated", cols );
+    bodyWriter->endElement(); //table:table-column
+    bodyWriter->endElement(); // table:table-columns
+
+    // Exactly one header row, always.
+    bodyWriter->startElement( "table:table-header-rows" );
+    bodyWriter->startElement( "table:table-row" );
+
+    // The first column in header row is just the header column - no title needed
+    bodyWriter->startElement( "table:table-cell" );
+    bodyWriter->addAttribute( "office:value-type", "string" );
+    bodyWriter->startElement( "text:p" );
+    bodyWriter->endElement(); // text:p
+    bodyWriter->endElement(); // table:table-cell
+
+    // Save column labels in the first header row, for instance:
+    //          <table:table-cell office:value-type="string">
+    //            <text:p>Column 1 </text:p>
+    //          </table:table-cell>
+    QStringList::const_iterator colLabelIt = m_colLabels.begin();
+    for ( int col = 0; col < cols ; ++col ) {
+        if ( colLabelIt != m_colLabels.end() ) {
+            bodyWriter->startElement( "table:table-cell" );
+            bodyWriter->addAttribute( "office:value-type", "string" );
+            bodyWriter->startElement( "text:p" );
+            bodyWriter->addTextNode( *colLabelIt );
+            bodyWriter->endElement(); // text:p
+            bodyWriter->endElement(); // table:table-cell
+            ++colLabelIt;
+        }
+    }
+
+    bodyWriter->endElement(); // table:table-row
+    bodyWriter->endElement(); // table:table-header-rows
+    bodyWriter->startElement( "table:table-rows" );
+
+    QStringList::const_iterator rowLabelIt = m_rowLabels.begin();
+    for ( int row = 0; row < rows ; ++row ) {
+        bodyWriter->startElement( "table:table-row" );
+
+        if ( rowLabelIt != m_rowLabels.end() ) {
+            // Save row labels, similar to column labels
+            bodyWriter->startElement( "table:table-cell" );
+            bodyWriter->addAttribute( "office:value-type", "string" );
+
+            bodyWriter->startElement( "text:p" );
+            bodyWriter->addTextNode( *rowLabelIt );
+            bodyWriter->endElement(); // text:p
+
+            bodyWriter->endElement(); // table:table-cell
+            ++rowLabelIt;
+        }
+
+        for ( int col = 0; col < cols; ++col ) {
+            QVariant value( m_currentData.cellVal( row, col ) );
+            QString  valType;
+            QString  valStr;
+
+            switch ( value.type() ) {
+            case QVariant::Invalid: 
+		break;
+            case QVariant::String:
+		valType = "string";
+		valStr  = value.toString();  
+		break;
+            case QVariant::Double:   
+		valType = "float"; 
+		valStr  = QString::number( value.toDouble(), 'g', DBL_DIG ); 
+		break;
+            case QVariant::DateTime:
+		valType = "date"; 
+		valStr  = ""; /* like in saveXML, but why? */  
+		break;
+            default: {
+                kdDebug(35001) << "ERROR: cell " << row << "," << col
+                               << " has unknown type." << endl;
+                }
+            }
+
+	    // Add the value type and the string to the XML tree.
+            bodyWriter->startElement( "table:table-cell" );
+            if ( !valType.isEmpty() ) {
+                bodyWriter->addAttribute( "office:value-type", valType );
+                if ( value.type() == QVariant::Double )
+                    bodyWriter->addAttribute( "office:value", valStr );
+
+                bodyWriter->startElement( "text:p" );
+                bodyWriter->addTextNode( valStr );
+                bodyWriter->endElement(); // text:p
+            }
+	    bodyWriter->endElement(); // table:table-cell
+        }
+        bodyWriter->endElement(); // table:table-row
+    }
+
+    bodyWriter->endElement(); // table:table-rows
+    bodyWriter->endElement(); // table:table
+}
+
+
+// ----------------------------------------------------------------
+//             Save and Load old KChart file format
+
+
 QDomDocument KChartPart::saveXML()
 {
-    kdDebug(35001) << "kchart saveXML called" << endl;
+    //kdDebug(35001) << "kchart saveXML called" << endl;
 
     // The biggest part of the saving is done by KDChart itself, so we
     // don't have to do it.
@@ -947,324 +1325,6 @@ QDomDocument KChartPart::saveXML()
 }
 
 
-bool KChartPart::loadOasis( const QDomDocument& doc,
-			    KoOasisStyles&      oasisStyles,
-			    const QDomDocument& /*settings*/,
-			    KoStore* )
-{
-    kdDebug(35001) << "kchart loadOasis called" << endl;
-    QDomElement  content = doc.documentElement();
-    QDomElement  bodyElem ( KoDom::namedItemNS( content, KoXmlNS::office,
-						"body" ) );
-    if ( bodyElem.isNull() ) {
-        kdError(32001) << "No office:body found!" << endl;
-        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
-        return false;
-    }
-
-    QDomElement officeChartElem = KoDom::namedItemNS( bodyElem,
-						      KoXmlNS::office, "chart" );
-    if ( officeChartElem.isNull() ) {
-        kdError(32001) << "No office:chart found!" << endl;
-        QDomElement childElem;
-        QString localName;
-        forEachElement( childElem, bodyElem ) {
-            localName = childElem.localName();
-        }
-        if ( localName.isEmpty() )
-            setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
-        else
-            setErrorMessage( i18n( "This document is not a chart, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
-        return false;
-    }
-
-    QDomElement chartElem = KoDom::namedItemNS( officeChartElem, KoXmlNS::chart, "chart" );
-    if ( chartElem.isNull() )
-    {
-        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
-        return false;
-    }
-
-    // Load parameters
-    QString errorMessage;
-    bool ok = m_params->loadOasis( chartElem, oasisStyles, errorMessage );
-    if ( !ok ) {
-        setErrorMessage( errorMessage );
-        return false;
-    }
-
-    // TODO Load data direction (see loadAuxiliary)
-
-    // Load data
-    QDomElement tableElem = KoDom::namedItemNS( chartElem, KoXmlNS::table, "table" );
-    if ( !tableElem.isNull() ) {
-        ok = loadOasisData( tableElem );
-        if ( !ok )
-            return false; // TODO setErrorMessage
-    }
-
-    // FIXME: Shouldn't this be done first of all, so it could be
-    //        overrided from the file?  /ingwa
-    setChartDefaults();
-
-    return true;
-}
-
-
-bool KChartPart::loadOasisData( const QDomElement& tableElem )
-{
-    int numberHeaderColumns = 0;
-    QDomElement tableHeaderColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-header-columns" );
-    QDomElement elem;
-    forEachElement( elem, tableHeaderColumns ) {
-        if ( elem.localName() == "table-column" ) {
-            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt();
-            numberHeaderColumns += QMAX( 1, repeated );
-        }
-    }
-    Q_ASSERT( numberHeaderColumns == 1 ); // with 0 you get no titles, and with more than 1 we ignore the others.
-
-    int numberDataColumns = 0;
-    QDomElement tableColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-columns" );
-    forEachElement( elem, tableColumns ) {
-        if ( elem.localName() == "table-column" ) {
-            int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt();
-            numberDataColumns += QMAX( 1, repeated );
-        }
-    }
-
-    // Parse table-header-rows for the column names.
-    m_colLabels.clear();
-    QDomElement tableHeaderRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-header-rows" );
-    if ( tableHeaderRows.isNull() )
-        kdWarning(35001) << "No table-header-rows element found!" << endl;
-    QDomElement tableHeaderRow = KoDom::namedItemNS( tableHeaderRows, KoXmlNS::table, "table-row" );
-    if ( tableHeaderRow.isNull() )
-        kdWarning(35001) << "No table-row inside table-header-rows!" << endl;
-    int cellNum = 0;
-    forEachElement( elem, tableHeaderRow ) {
-        if ( elem.localName() == "table-cell" ) {
-            ++cellNum;
-            if ( cellNum > numberHeaderColumns ) {
-                QDomElement pElem = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
-                m_colLabels.append( pElem.text() );
-            }
-        }
-    }
-    if ( (int)m_colLabels.count() != numberDataColumns )
-        kdWarning(35001) << "Got " << m_colLabels.count() << " column titles, expected " << numberDataColumns << endl;
-
-    // Get the number of rows, and read row labels
-    m_rowLabels.clear();
-    int numberDataRows = 0;
-    QDomElement tableRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-rows" );
-    forEachElement( elem, tableRows ) {
-        if ( elem.localName() == "table-row" ) {
-            int repeated = elem.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt();
-            Q_ASSERT( repeated <= 1 ); // we don't handle yet the case where data rows are repeated (can this really happen?)
-            numberDataRows += QMAX( 1, repeated );
-            if ( numberHeaderColumns > 0 ) {
-                QDomElement firstCell = KoDom::namedItemNS( elem, KoXmlNS::table, "table-cell" );
-                QDomElement pElem = KoDom::namedItemNS( firstCell, KoXmlNS::text, "p" );
-                m_rowLabels.append( pElem.text() );
-            }
-        }
-    }
-
-    kdDebug(35001) << "numberHeaderColumns=" << numberHeaderColumns << " numberDataColumns=" << numberDataColumns
-                   << " numberDataRows=" << numberDataRows << endl;
-
-    if ( (int)m_rowLabels.count() != numberDataRows)
-        kdWarning(35001) << "Got " << m_rowLabels.count() << " row labels, expected " << numberDataRows << endl;
-
-    m_currentData.expand( numberDataRows, numberDataColumns );
-    m_currentData.setUsedCols( numberDataColumns );
-    m_currentData.setUsedRows( numberDataRows );
-
-    // Now really load the cells
-    int row = 0;
-    QDomElement rowElem;
-    forEachElement( rowElem, tableRows ) {
-        if ( rowElem.localName() == "table-row" ) {
-            int col = 0;
-            int cellNum = 0;
-            QDomElement cellElem;
-            forEachElement( cellElem, rowElem ) {
-                if ( cellElem.localName() == "table-cell" ) {
-                    ++cellNum;
-                    if ( cellNum > numberHeaderColumns ) {
-                        QString valueType = cellElem.attributeNS( KoXmlNS::office, "value-type", QString::null );
-                        if ( valueType != "float" )
-                            kdWarning(35001) << "Don't know how to handle value-type " << valueType << endl;
-                        else {
-                            QString value = cellElem.attributeNS( KoXmlNS::office, "value", QString::null );
-                            double val = value.toDouble();
-                            m_currentData.setCell( row, col, val );
-                        }
-                        ++col;
-                    }
-                }
-            }
-            ++row;
-        }
-    }
-
-    return true;
-}
-
-
-bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
-{
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-    KoOasisStore oasisStore( store );
-
-    KoXmlWriter* contentWriter = oasisStore.contentWriter();
-    if ( !contentWriter )
-        return false;
-
-    KoGenStyles mainStyles;
-
-    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
-    bodyWriter->startElement( "office:body" );
-    bodyWriter->startElement( "office:chart" );
-    bodyWriter->startElement( "chart:chart" );
-
-    m_params->saveOasis( bodyWriter, mainStyles ); // sets the chart:class attribute in chart:chart
-
-    bodyWriter->startElement( "chart:plot-area" );
-    // TODO axis, series, wall, floor...
-    bodyWriter->endElement(); // chart:plot-area
-
-    saveOasisData( bodyWriter, mainStyles );
-    bodyWriter->endElement(); // chart:chart
-    bodyWriter->endElement(); // office:chart
-    bodyWriter->endElement(); // office:body
-
-    contentWriter->startElement( "office:automatic-styles" );
-// TODO writeAutomaticStyles( *contentWriter, mainStyles, false );
-    contentWriter->endElement(); // office:automatic-styles
-
-    oasisStore.closeContentWriter();
-
-    // Done with content.xml
-
-#if 0
-    if ( !store->open( "styles.xml" ) )
-        return false;
-    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    saveOasisDocumentStyles( store, mainStyles, savingContext, saveFlag, headerFooterContent );
-    if ( !store->close() ) // done with styles.xml
-        return false;
-#endif
-
-    return true;
-}
-
-void KChartPart::saveOasisData( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const
-{
-    Q_UNUSED( mainStyles );
-
-    const int cols = m_currentData.usedCols()
-                     ? QMIN(m_currentData.usedCols(), m_currentData.cols())
-                     : m_currentData.cols();
-    const int rows = m_currentData.usedRows()
-                     ? QMIN(m_currentData.usedRows(), m_currentData.rows())
-                     : m_currentData.rows();
-
-    bodyWriter->startElement( "table:table" );
-    bodyWriter->addAttribute( "table:name", "local-table" );
-
-    // Exactly one header column, always.
-    bodyWriter->startElement( "table:table-header-columns" );
-    bodyWriter->startElement( "table:table-column" );
-    bodyWriter->endElement(); //table:table-column
-    bodyWriter->endElement(); // table:table-header-columns
-
-    // Then "cols" columns
-    bodyWriter->startElement( "table:table-columns" );
-    bodyWriter->startElement( "table:table-column" );
-    bodyWriter->addAttribute( "table:number-columns-repeated", cols );
-    bodyWriter->endElement(); //table:table-column
-    bodyWriter->endElement(); // table:table-columns
-
-    // Exactly one header row, always.
-    bodyWriter->startElement( "table:table-header-rows" );
-    bodyWriter->startElement( "table:table-row" );
-
-    // The first column in header row is just the header column - no title needed
-    bodyWriter->startElement( "table:table-cell" );
-    bodyWriter->addAttribute( "office:value-type", "string" );
-    bodyWriter->startElement( "text:p" );
-    bodyWriter->endElement(); // text:p
-    bodyWriter->endElement(); // table:table-cell
-
-    // Save column labels in the first header row, for instance:
-    //          <table:table-cell office:value-type="string">
-    //            <text:p>Column 1 </text:p>
-    //          </table:table-cell>
-    QStringList::const_iterator colLabelIt = m_colLabels.begin();
-    for ( int col = 0; col < cols ; ++col ) {
-        if ( colLabelIt != m_colLabels.end() ) {
-            bodyWriter->startElement( "table:table-cell" );
-            bodyWriter->addAttribute( "office:value-type", "string" );
-            bodyWriter->startElement( "text:p" );
-            bodyWriter->addTextNode( *colLabelIt );
-            bodyWriter->endElement(); // text:p
-            bodyWriter->endElement(); // table:table-cell
-            ++colLabelIt;
-        }
-    }
-
-    bodyWriter->endElement(); // table:table-row
-    bodyWriter->endElement(); // table:table-header-rows
-    bodyWriter->startElement( "table:table-rows" );
-
-    QStringList::const_iterator rowLabelIt = m_rowLabels.begin();
-    for ( int row = 0; row < rows ; ++row ) {
-        bodyWriter->startElement( "table:table-row" );
-        if ( rowLabelIt != m_rowLabels.end() ) {
-            // Save row labels, similar to column labels
-            bodyWriter->startElement( "table:table-cell" );
-            bodyWriter->addAttribute( "office:value-type", "string" );
-            bodyWriter->startElement( "text:p" );
-            bodyWriter->addTextNode( *rowLabelIt );
-            bodyWriter->endElement(); // text:p
-            bodyWriter->endElement(); // table:table-cell
-            ++rowLabelIt;
-        }
-        for ( int col = 0; col < cols; ++col ) {
-            bodyWriter->startElement( "table:table-cell" );
-            QVariant value( m_currentData.cellVal( row, col ) );
-            QString valType;
-            QString valStr;
-            switch ( value.type() ) {
-            case QVariant::Invalid: break;
-            case QVariant::String:   valType = "string"; valStr = value.toString();  break;
-            case QVariant::Double:   valType = "float"; valStr = QString::number( value.toDouble(), 'g', DBL_DIG ); break;
-            case QVariant::DateTime: valType = "date"; valStr = ""; /* like in saveXML, but why? */  break;
-            default: {
-                kdDebug(35001) << "ERROR: cell " << row << "," << col
-                               << " has unknown type." << endl;
-                }
-            }
-            if ( !valType.isEmpty() ) {
-                bodyWriter->addAttribute( "office:value-type", valType );
-                if ( value.type() == QVariant::Double )
-                    bodyWriter->addAttribute( "office:value", valStr );
-                bodyWriter->startElement( "text:p" );
-                bodyWriter->addTextNode( valStr );
-                bodyWriter->endElement(); // text:p
-                bodyWriter->endElement(); // table:table-cell
-            }
-        }
-        bodyWriter->endElement(); // table:table-row
-    }
-
-    bodyWriter->endElement(); // table:table-rows
-    bodyWriter->endElement(); // table:table
-}
-
-
 bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 {
     kdDebug(35001) << "kchart loadXML called" << endl;
@@ -1313,6 +1373,7 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
 
 
 // Load the auxiliary data.
+//
 // Currently, that means the data direction.
 //
 bool KChartPart::loadAuxiliary( const QDomDocument& doc )
@@ -1457,6 +1518,10 @@ bool KChartPart::loadData( const QDomDocument& doc,
     */
     return true;
 }
+
+
+// ----------------------------------------------------------------
+//         Save and Load real old KChart file format
 
 
 bool KChartPart::loadOldXML( const QDomDocument& doc )
@@ -1921,6 +1986,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
             if (!ok) return false;
         }
     }
+
     QDomElement note = params.namedItem( "note" ).toElement();
     if ( !note.isNull()) {
         QString t = note.text();
@@ -1973,8 +2039,8 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
                 name = name.nextSibling();
             }
         }
-
     }
+
     QDomElement xlbl = chart.namedItem("xlbl").toElement();
     if (!xlbl.isNull()) {
         int number = xlbl.attribute("number").toInt(&ok);
@@ -2041,8 +2107,10 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
             }
         }
     }
+
     if ( !m_params->backgroundPixmapName.isNull() ) {
-        m_params->backgroundPixmap.load( locate( "wallpaper", m_params->backgroundPixmapName ));
+        m_params->backgroundPixmap.load( locate( "wallpaper", 
+						 m_params->backgroundPixmapName ));
         m_params->backgroundPixmapIsDirty = true;
     }
 #endif
@@ -2058,11 +2126,13 @@ void  KChartPart::slotModified()
     setModified(true);
 }
 
+
 bool KChartPart::showEmbedInitDialog(QWidget* /*parent*/)
 {
   // Don't show an embed dialog
   return true;
 }
+
 
 }  //KChart namespace
 
