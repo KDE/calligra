@@ -450,7 +450,7 @@ however it also helps to line up widgets precisely.</para></listitem>
 <guimenu>Format</guimenu>
 <guimenuitem>Break Layout</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Breaks the curently selected layout.</action></para></listitem>
+<listitem><para><action>Breaks the currently selected layout.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -643,7 +643,7 @@ dialog</action> to execute, load, unload, install, unistall or download scripts.
 </varlistentry>
 
 </variablelist>
-<para>The last items in this menu show the curently opened window names.</para>
+<para>The last items in this menu show the currently opened window names.</para>
 </sect1>
 
   <sect1 id="settingsmenu">
