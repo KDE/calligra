@@ -1147,7 +1147,7 @@ void
 VHistoryItem::init()
 {
 	kdDebug(38000) << "In VHistoryItem::init() : " << m_command->name() << endl;
-	char buffer[64];
+	char buffer[70];
 	sprintf( buffer, "%064ld", ++g_lastKey );
 	m_key = buffer;
 	setPixmap( 0, QPixmap( KGlobal::iconLoader()->iconPath( m_command->icon(), KIcon::Small ) ) );
