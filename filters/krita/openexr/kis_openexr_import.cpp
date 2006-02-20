@@ -148,6 +148,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
         }
     }
 
+    layer->setDirty();
     doc -> setCurrentImage(image);
     doc -> undoAdapter() -> setUndo(true);
     doc -> setModified(false);

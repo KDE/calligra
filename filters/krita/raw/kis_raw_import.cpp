@@ -289,7 +289,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
                 }
             }
         }
-
+        layer->setDirty();
         kdDebug() << "going to set image\n";
         doc -> setCurrentImage(image);
         doc -> undoAdapter() -> setUndo(true);

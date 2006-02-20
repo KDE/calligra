@@ -278,7 +278,6 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     }
 
     KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
-    m_img->addLayer(layer, m_img->rootLayer(), 0);
     for (png_uint_32 y = 0; y < height; y++) {
         KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
         switch(color_type)
@@ -364,6 +363,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
     }
+    m_img->addLayer(layer, m_img->rootLayer(), 0);
 
     // Freeing memory
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
