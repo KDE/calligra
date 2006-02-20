@@ -296,7 +296,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         }
     }
     KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
-    m_img->addLayer(layer, m_img->rootLayer(), 0, false);
+    m_img->addLayer(layer, m_img->rootLayer(), 0);
     tdata_t buf = 0;
     tdata_t* ps_buf = 0; // used only for planar configuration seperated
     TIFFStreamBase* tiffstream;

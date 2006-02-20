@@ -199,7 +199,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     
     // Read exif information if any
     
-    m_img->addLayer(layer.data(), m_img->rootLayer(), 0);
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
     
@@ -303,7 +302,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
         }
         break;
     }
-    
+
+    m_img->addLayer(layer.data(), m_img->rootLayer(), 0);
+
     // Finish decompression
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
