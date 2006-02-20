@@ -69,6 +69,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
 	m_fileBasedDstWasPresented = false;
 	m_setupFileBasedSrcNeeded = true;
 	m_importExecuted = false;
+	m_srcTypeCombo = 0;
 
 	setMinimumSize(400, 400);
 	parseArguments();
@@ -575,15 +576,8 @@ bool ImportWizard::fileBasedSrcSelected() const
 	if (m_predefinedConnectionData)
 		return false;
 
+//	kdDebug() << (m_srcConn->selectedConnectionType()==KexiConnSelectorWidget::FileBased) << endl;
 	return m_srcConn->selectedConnectionType()==KexiConnSelectorWidget::FileBased;
-/*	QString srcType(m_srcTypeCombo->currentText());
-
-	//! @todo Use MigrateManager to get src type property
-	if ((srcType == "PostgreSQL") || (srcType == "MySQL")) {
-		return false;
-	} else {
-		return true;
-	}*/
 }
 
 bool ImportWizard::fileBasedDstSelected() const
@@ -665,7 +659,10 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 	kdDebug() << "Creating destination driver..." << endl;
 
 	// Get a driver to the destination database
-	KexiDB::Driver *destDriver = manager.driver(m_dstTypeCombo->currentText());
+	KexiDB::Driver *destDriver = manager.driver(
+		m_dstConn->selectedConnectionData() ? m_dstConn->selectedConnectionData()->driverName //server based
+		 : m_dstTypeCombo->currentText() //file based
+	);
 	if (!destDriver || manager.error())
 	{
 		result.setStatus(&manager);
@@ -906,7 +903,7 @@ void ImportWizard::next()
 	}
 	else if (currentPage() == m_dstPage) {
 		if (m_fileBasedDstWasPresented) {
-			if (fileBasedSrcSelected() && !m_dstConn->m_fileDlg->checkFileName())
+			if (fileBasedDstSelected() && !m_dstConn->m_fileDlg->checkFileName())
 				return;
 		}
 	}
