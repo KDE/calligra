@@ -1182,8 +1182,8 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
             style.addProperty( "style:cell-protect", "formula-hidden" );
         else if ( hideFormula )
             style.addProperty( "style:cell-protect", "protected formula-hidden" );
-        else if ( !isNotProtected && !m_parent )
-            // write out the default, only if no parent style exists
+        else if ( featureSet( SNotProtected ) )// !isNotProtected
+            // write out, only if it is explicity set
             style.addProperty( "style:cell-protect", "protected" );
     }
 
