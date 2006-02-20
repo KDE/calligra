@@ -18,6 +18,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoOasisStore.h>
+#include <KoOasisLoadingContext.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -884,7 +885,7 @@ void KChartPart::saveConfig( KConfig *conf )
 bool KChartPart::loadOasis( const QDomDocument& doc,
 			    KoOasisStyles&      oasisStyles,
 			    const QDomDocument& /*settings*/,
-			    KoStore* )
+			    KoStore* store )
 {
     kdDebug(35001) << "kchart loadOasis called" << endl;
     QDomElement  content = doc.documentElement();
@@ -920,6 +921,17 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
         return false;
     }
+
+    KoOasisLoadingContext loadingContext( this, oasisStyles, store );
+    KoStyleStack& styleStack = loadingContext.styleStack();
+    styleStack.save();
+    styleStack.setTypeProperties( "graphic" ); // load graphic-properties
+    loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
+
+    const QString fillColor = styleStack.attributeNS( KoXmlNS::draw, "fill-color" );
+    kdDebug() << "fillColor=" << fillColor << endl;
+
+    styleStack.restore();
 
     // Load parameters
     QString  errorMessage;
