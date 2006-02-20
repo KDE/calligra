@@ -167,6 +167,10 @@ VObject::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 	styleStack.setTypeProperties( "graphic" );
 	m_stroke->loadOasis( styleStack );
 	m_fill->loadOasis( object, context );
+
+	if( object.hasAttributeNS( KoXmlNS::draw, "name" ) )
+		setName( object.attributeNS( KoXmlNS::draw, "name", QString::null ) );
+
 	return true;
 }
 
