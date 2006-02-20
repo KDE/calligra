@@ -2899,23 +2899,47 @@ class StyleTextPropAtom::Private
 {
 public:
   unsigned stringLength;
-  std::vector<int> charCount;
-  std::vector<int> depth;
-  std::vector<unsigned> bulletOn;
-  std::vector<unsigned> bulletHardFont;
-  std::vector<unsigned> bulletHardColor;
-  std::vector<unsigned> bulletChar;
-  std::vector<unsigned> bulletFont;
-  std::vector<unsigned> bulletHeight; 
-  std::vector<unsigned> bulletColor;
-  std::vector<unsigned> align;  
-  std::vector<unsigned> lineFeed; 
-  std::vector<int> upperDist; 
-  std::vector<int> lowerDist; 
-  std::vector<int> asianLB1;
-  std::vector<int> asianLB2;
-  std::vector<int> asianLB3;
-  std::vector<unsigned> biDi;
+  struct PropAtomData
+  {
+      PropAtomData()
+      : charCount(0)
+      , depth(0)
+      , bulletOn(0)
+      , bulletHardFont(0)
+      , bulletHardColor(0)
+      , bulletChar(0)
+      , bulletFont(0)
+      , bulletHeight(0)
+      , bulletColor(0)
+      , align(0)
+      , lineFeed(0)
+      , upperDist(0)
+      , lowerDist(0)
+      , asianLB1(0)
+      , asianLB2(0)
+      , asianLB3(0)
+      , biDi(0)
+      {}
+
+      int charCount;
+      int depth;
+      unsigned bulletOn;
+      unsigned bulletHardFont;
+      unsigned bulletHardColor;
+      unsigned bulletChar;
+      unsigned bulletFont;
+      unsigned bulletHeight; 
+      unsigned bulletColor;
+      unsigned align;  
+      unsigned lineFeed; 
+      int upperDist; 
+      int lowerDist; 
+      int asianLB1;
+      int asianLB2;
+      int asianLB3;
+      unsigned biDi;
+  };
+  std::vector<PropAtomData> atomData;
 
   int charMask;
   int charCount2;
@@ -2937,177 +2961,92 @@ StyleTextPropAtom::~StyleTextPropAtom()
 
 unsigned StyleTextPropAtom::listSize() const
 {
-  return d->charCount.size();
+  return d->atomData.size();
 }
   
 int StyleTextPropAtom::charCount( unsigned index ) const
 {
-  return d->charCount[index];
-}
-
-void StyleTextPropAtom::setCharCount( int charCount )
-{
-  d->charCount.push_back( charCount );
+  return d->atomData[index].charCount;
 }
 
 int StyleTextPropAtom::depth( unsigned index ) const
 {
-  return d->depth[index];
-}
-
-void StyleTextPropAtom::setDepth( int depth )
-{
-  d->depth.push_back( depth );
+  return d->atomData[index].depth;
 }
 
 int StyleTextPropAtom::bulletOn( unsigned index ) const
 {
-  return d->bulletOn[index];
+  return d->atomData[index].bulletOn;
 } 
-
-void StyleTextPropAtom::setBulletOn( unsigned bulletOn )
-{
-  d->bulletOn.push_back( bulletOn );
-}
 
 int StyleTextPropAtom::bulletHardFont( unsigned index ) const
 {
-  return d->bulletHardFont[index];
-}
-
-void StyleTextPropAtom::setBulletHardFont( unsigned bulletHardFont )
-{
-  d->bulletHardFont.push_back( bulletHardFont );
+  return d->atomData[index].bulletHardFont;
 }
 
 int StyleTextPropAtom::bulletHardColor( unsigned index ) const
 {
-  return d->bulletHardColor[index];
-}
-
-void StyleTextPropAtom::setBulletHardColor( unsigned bulletHardColor )
-{
-  d->bulletHardColor.push_back( bulletHardColor );
+  return d->atomData[index].bulletHardColor;
 }
 
 int StyleTextPropAtom::bulletChar( unsigned index ) const
 {
-  return d->bulletChar[index];
-}
-
-void StyleTextPropAtom::setBulletChar( unsigned bulletChar )
-{
-  d->bulletChar.push_back( bulletChar );
+  return d->atomData[index].bulletChar;
 }
 
 int StyleTextPropAtom::bulletFont( unsigned index ) const
 {
-  return d->bulletFont[index];
-}
-
-void StyleTextPropAtom::setBulletFont( unsigned bulletFont )
-{
-  d->bulletFont.push_back( bulletFont );
+  return d->atomData[index].bulletFont;
 }
 
 int StyleTextPropAtom::bulletHeight( unsigned index ) const
 {
-  return d->bulletHeight[index];
-}
-
-void StyleTextPropAtom::setBulletHeight( unsigned bulletHeight )
-{
-  d->bulletHeight.push_back( bulletHeight );
+  return d->atomData[index].bulletHeight;
 }
 
 int StyleTextPropAtom::bulletColor( unsigned index ) const
 {
-  return d->bulletColor[index];
-}
-
-void StyleTextPropAtom::setBulletColor( unsigned bulletColor )
-{
-  d->bulletColor.push_back( bulletColor );
+  return d->atomData[index].bulletColor;
 }
 
 int StyleTextPropAtom::lineFeed( unsigned index ) const
 {
-  return d->lineFeed[index];
-}
-
-void StyleTextPropAtom::setLineFeed( unsigned lineFeed )
-{
-  d->lineFeed.push_back( lineFeed );
+  return d->atomData[index].lineFeed;
 }
 
 int StyleTextPropAtom::upperDist( unsigned index ) const
 {
-  return d->upperDist[index];
-}
-
-void StyleTextPropAtom::setLowerDist( int lowerDist )
-{
-  d->lowerDist.push_back( lowerDist );
+  return d->atomData[index].upperDist;
 }
 
 int StyleTextPropAtom::lowerDist( unsigned index ) const
 {
-  return d->lowerDist[index];
-}
-
-void StyleTextPropAtom::setUpperDist( int upperDist )
-{
-  d->upperDist.push_back( upperDist );
+  return d->atomData[index].lowerDist;
 }
 
 int StyleTextPropAtom::align( unsigned index ) const
 {
-  return d->align[index];
-}
-
-void StyleTextPropAtom::setAlign (unsigned align)
-{
-  d->align.push_back( align );
+  return d->atomData[index].align;
 }
 
 int StyleTextPropAtom::asianLB1( unsigned index ) const
 {
-  return d->asianLB1[index];
-}
-
-void StyleTextPropAtom::setAsianLB1 (int asianLB1)
-{
-  d->asianLB1.push_back( asianLB1);
+  return d->atomData[index].asianLB1;
 }
 
 int StyleTextPropAtom::asianLB2( unsigned index ) const
 {
-  return d->asianLB2[index];
-}
-
-void StyleTextPropAtom::setAsianLB2 (int asianLB2)
-{
-  d->asianLB2.push_back( asianLB2 );
+  return d->atomData[index].asianLB2;
 }
 
 int StyleTextPropAtom::asianLB3( unsigned index ) const
 {
-  return d->asianLB3[index];
-}
-
-void StyleTextPropAtom::setAsianLB3 (int asianLB3)
-{
-  d->asianLB3.push_back( asianLB3 );
+  return d->atomData[index].asianLB3;
 }
 
 int StyleTextPropAtom::biDi( unsigned index ) const
 {
-  return d->biDi[index];
-}
-
-void StyleTextPropAtom::setBiDi( unsigned biDi )
-{
-  d->biDi.push_back( biDi );
+  return d->atomData[index].biDi;
 }
 
 int StyleTextPropAtom::charMask() const
@@ -3143,55 +3082,46 @@ void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsig
   { 
     if ( isTextPropAtom == true )
     {  
-     // there is still a problem when outline's align changes in a text
+      Private::PropAtomData atomData;  
       charCount = readU32(data+k) - 1;
       k += 4;
-      //std::cout << "charCount " << charCount << std::endl;
-      setCharCount( charCount ); 
-      setDepth( readU16(data+k) );
+      atomData.charCount = charCount;
+      atomData.depth = readU16(data+k); 
       k += 2; 
       unsigned mask = readU32(data+6); 
       k += 4;        
+
       if ( mask & 0xF )
       { 
         int bulletFlag = readU16(data+k);
         k += 2;
-        setBulletOn( ( bulletFlag & 1 ) ? 1 : 0 );      
-        setBulletHardFont( ( bulletFlag & 2 ) ? 1 : 0 );  
-        setBulletHardColor( ( bulletFlag & 4 ) ? 1 : 0 );  
+        atomData.bulletOn = ( bulletFlag & 1 ) ? 1 : 0;      
+        atomData.bulletHardFont = ( bulletFlag & 2 ) ? 1 : 0;  
+        atomData.bulletHardColor = ( bulletFlag & 4 ) ? 1 : 0;  
       }    
+
       if ( mask & 0x0080 )
       {
-        unsigned bulletChar = readU16(data+k);
-        setBulletChar( bulletChar );
+        atomData.bulletChar = readU16(data+k);
         k += 2; 
-        //std::cout << "bulletChar " << bulletChar << std::endl;
       } 
-      else setBulletChar( 0 );
       
       if ( mask & 0x0010 )
       { 
-        unsigned bulletFont = readU16(data+k);
-        setBulletFont ( bulletFont );
+        atomData.bulletFont = readU16(data+k);
         k += 2; 
-        //std::cout << "bulletFont " << bulletFont << std::endl;
       }
-      else setBulletFont ( 0 );
 
       if ( mask & 0x0040 )
       {
-        int bulletHeight = readU16(data+k); 
-        setBulletHeight( bulletHeight );
+        atomData.bulletHeight = readU16(data+k);
         k += 2; 
-        //std::cout << "bulletHeight " << bulletHeight << std::endl;        
       }
-      else setBulletHeight ( 0 );
 
       if ( mask & 0x0020 )
       { 
-        unsigned bulletColor =   readU32(data+k);
+        atomData.bulletColor = readU32(data+k);
         k += 4; 
-        setBulletColor( bulletColor );       
       }
 
       if ( mask & 0x0F00 )
@@ -3199,113 +3129,93 @@ void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsig
         if ( mask & 0x800 )
         {
           unsigned dummy = readU16(data+k);
+          atomData.align = ( dummy & 3 );
           k += 2;
-          setAlign( dummy & 3 );
-          // std::cout << "align " << (dummy & 3) << std::endl;          
         }                                             
         if ( mask & 0x400 )
         {
-          unsigned dummy = readU16(data+k);
+          /*unsigned dummy =*/ readU16(data+k);
           k += 2;
         }
         if ( mask & 0x200 )
         {
-          unsigned dummy = readU16(data+k);
+          /*unsigned dummy =*/ readU16(data+k);
           k += 2;
         }      
         if ( mask & 0x100 )
         {
-          unsigned dummy = readU16(data+k);
+          /*unsigned dummy =*/ readU16(data+k);
           k += 2;
         }      
       }
-      else setAlign(0);
 
       if ( mask & 0x1000 ) 
-      { unsigned lineFeed = readU16(data+k);
-        setLineFeed( lineFeed );
-        //std::cout << "lineFeed " << lineFeed << std::endl;
+      { 
+        atomData.lineFeed = readU16(data+k);
         k += 2; 
       }    
-      else setLineFeed (0);
  
       if ( mask & 0x2000 ) 
       {
-        setUpperDist( readU16(data+k) );
+        atomData.upperDist = readU16(data+k);
         k += 2; 
       }   
-      else setUpperDist (0);
 
       if ( mask & 0x4000 ) 
       {
-        setLowerDist( readU16(data+k) );
+        atomData.lowerDist = readU16(data+k);
         k += 2; 
       }  
-      else setLowerDist (0); 
 
       if ( mask & 0x8000 ) 
       {
-        unsigned dummy = readU16(data+k);
+        /*unsigned dummy =*/ readU16(data+k);
         k += 2; 
       }   
+      
       if ( mask & 0x10000 ) 
       {
-        unsigned dummy = readU16(data+k);
+        /*unsigned dummy =*/ readU16(data+k);
         k += 2; 
       }   
+
       if ( mask & 0xe0000 )
       {
         unsigned dummy = readU16(data+k);
         if ( mask & 0x20000 )
-          setAsianLB1( dummy & 1);
+          atomData.asianLB1 = dummy & 1;
         if ( mask & 0x40000 )
-          setAsianLB2( (dummy >> 1) & 1);
+          atomData.asianLB2 = (dummy >> 1) & 1;
         if ( mask & 0x80000 )
-          setAsianLB3( (dummy >> 2) & 1);
+          atomData.asianLB3 = (dummy >> 2) & 1;
 
         k += 2; 
       }    
 
       if ( mask & 0x200000 ) 
       {
-        unsigned biDi = readU16(data+k);
-        setBiDi( biDi );
-        //std::cout << "biDi " << biDi << std::endl;
+        atomData.biDi = readU16(data+k);
         k += 2;       
       }         
-
-      else setBiDi(0);
+      d->atomData.push_back( atomData );
     } 
     else            
     {
       std::cout << "isTextPropAtom == false " << std::endl;      
       charCount = stringLength;        
-      setCharCount(charCount);
-      setDepth(0);
-      setBulletOn(0);
-      setBulletHardFont(0);
-      setBulletHardColor(0);  
-      setBulletChar(0); 
-      setBulletFont(0); 
-      setBulletHeight(0);  
-      setBulletColor(0);
-      setAlign(0);  
-      setLineFeed(0); 
-      setUpperDist(0); 
-      setLowerDist(0); 
-      setAsianLB1(0);
-      setAsianLB2(0);
-      setAsianLB3(0);
-      setBiDi(0);  
+      Private::PropAtomData atomData;  
+      atomData.charCount = charCount;
+      d->atomData.push_back( atomData );
     } 
 
     if ( ( charCount > stringLength ) || ( stringLength - ( charRead + charCount ) < 0 ) )
-      {             
-        isTextPropAtom = false;
-        charCount = stringLength - charRead;
-        setCharCount(charCount);
-        
-       }
+    {             
+      isTextPropAtom = false;
+      charCount = stringLength - charRead;
+      Private::PropAtomData atomData;  
+      atomData.charCount = charCount;
+      d->atomData.push_back( atomData );
+    }
 
     charRead += charCount + 1;
  
@@ -5772,7 +5682,7 @@ void PPTReader::handleStyleTextPropAtom ( StyleTextPropAtom* atom )
   { 
     if (atom->bulletOn(i) == 1)
       text->setBulletFlag(true); 
-    else if (atom->bulletOn(i) == 0)
+    else /* if (atom->bulletOn(i) == 0) */
       text->setBulletFlag(false);  
   }
   
@@ -6049,6 +5959,7 @@ void PPTReader::handleEscherTextBoxAtom( msofbtClientTextboxAtom* atom )
     
   textObject->setType( TextObject::Other ); 
   textObject->setText( atom->ustring() );
+  textObject->setBulletFlag( false );
 }
 
 Color convertFromLong( unsigned long i )

@@ -1216,45 +1216,26 @@ public:
   
   // paragraph properties 
   int charCount( unsigned index ) const;
-  void setCharCount( int charCount );
   int depth( unsigned index ) const;
-  void setDepth( int depth);
   int bulletOn ( unsigned index ) const;
-  void setBulletOn ( unsigned bulletOn );
   int bulletHardFont( unsigned index ) const;
-  void setBulletHardFont( unsigned bulletHardFont );
   int bulletHardColor( unsigned index ) const;
-  void setBulletHardColor( unsigned bulletHardColor );
   int bulletChar ( unsigned index ) const;
-  void setBulletChar( unsigned bulletChar );
   int bulletFont( unsigned index ) const;
-  void setBulletFont( unsigned bulletFont );
   int bulletHeight( unsigned index ) const; 
-  void setBulletHeight (unsigned bulletHeight );
   int bulletColor( unsigned index ) const;
-  void setBulletColor( unsigned bulletColor ) ;
   int align( unsigned index ) const;
-  void setAlign( unsigned align ) ;
   int lineFeed( unsigned index ) const; 
-  void setLineFeed ( unsigned lineFeed );
   int upperDist( unsigned index ) const; 
-  void setUpperDist( int upperDist );
   int lowerDist( unsigned index ) const; 
-  void setLowerDist( int lowerDist);
   int asianLB1( unsigned index ) const; 
-  void setAsianLB1 ( int asianLB1 );
   int asianLB2( unsigned index ) const; 
-  void setAsianLB2 ( int asianLB2 );
   int asianLB3( unsigned index ) const; 
-  void setAsianLB3 ( int asianLB3 );
   int biDi( unsigned index ) const;
-  void setBiDi( unsigned biDi );
 
 // character properties
   int charMask() const; 
-  void setCharMask ( int charMask );
   int charFlags() const;
-  void setCharFlags( int charFlags );
 
   unsigned listSize() const;
 
@@ -1262,6 +1243,10 @@ public:
   const char* name(){ return "StyleTextPropAtom   "; }
   void dump( std::ostream& out ) const; 
 private:  
+  // character properties
+  void setCharMask ( int charMask );
+  void setCharFlags( int charFlags );
+
   // no copy or assign
   StyleTextPropAtom   ( const StyleTextPropAtom   & );
   StyleTextPropAtom   & operator=( const StyleTextPropAtom   & );   
