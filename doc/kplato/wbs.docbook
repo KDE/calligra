@@ -39,7 +39,7 @@ so, you can use the <menuchoice>
 </para>
 
 <sect1 id="define-wbs">
-<title>The <guilabel>Define WBS Pattern...</guilabel> Dialog</title>
+<title>The <guilabel>WBS Definition</guilabel> Dialog</title>
 
 <screenshot>
 <screeninfo>WBS Definition Dialog</screeninfo>

@@ -203,13 +203,14 @@ reports for a project.
 </para>
 <para>
 There are usually various scheduling modes, like optimistic, expected and
-pesimistic scheduling. When creating a task the additional estimation percentage
-for optimistic and pesimistic scheduling can be set. These settings are then
+pessimistic scheduling. When creating a task the additional estimation
+percentage
+for optimistic and pessimistic scheduling can be set. These settings are then
 used for the various scheduling modes.
 </para>
 <para>
 When scheduling a project with &kplato;, you can choose between optimistic,
-expected and pesimistic scheduling.
+expected and pessimistic scheduling.
 </para>
 </sect1>
 

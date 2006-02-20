@@ -33,8 +33,8 @@ project.</para>
 available from the menus, which are described in detail in <xref
 linkend="commands" />.</para>
 
-<para>Below the menubar are located the toolbars (2) and (3). You can add or
-remove them using the
+<para>Below the menubar are located the toolbars (2) and (3). You can show or
+hide them using the
 <menuchoice><guimenu>Settings</guimenu>
 <guimenuitem>Toolbars</guimenuitem></menuchoice> menu. You can also configure
 the toolbars (add or remove actions) using the
