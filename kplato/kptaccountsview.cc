@@ -253,12 +253,16 @@ void AccountsView::slotUpdate() {
 
         QDate dt = start;
         QDate pend = cal->addDays(dt, 7 + weekStartDay - 1 - cal->dayOfWeek(dt));
-        for (; pend <= end; pend = cal->addDays(pend, 7), ++c) {
+        for (; pend <= end; ++c) {
             int y;
             int w = cal->weekNumber(dt, &y);
             QString t = i18n("<week>-<year>", "%1-%2").arg(w).arg(y);
             m_dlv->addSlaveColumn(t);
             dt = pend.addDays(1);
+            pend = cal->addDays(pend, 7);
+            if (pend.weekNumber() == end.weekNumber()) {
+                pend = end;
+            }
         }
         if (c == 0)
             return;
@@ -273,12 +277,16 @@ void AccountsView::slotUpdate() {
             double cost = 0.0;
             QDate d = start;
             QDate pend = cal->addDays(d, 7 + weekStartDay - 1 - cal->dayOfWeek(d));
-            for (int col=0; pend <= end; pend = cal->addDays(pend, 7), ++col) {
+            for (int col=0; pend <= end; ++col) {
                 double cst = item->costMap.cost(d, d.daysTo(pend)+1);
                 cost = (m_cumulative ? cost + cst : cst);
                 item->setSlaveItem(col, cost);
                 m_cumulative ? item->setTotal(cost) : item->addToTotal(cost);
-                d = pend.addDays(1);
+                d = pend.addDays(1); // 1. next week
+                pend = cal->addDays(pend, 7);
+                if (pend.weekNumber() == end.weekNumber()) {
+                    pend = end;
+                }
             }
         }
         m_dlv->calculate();
@@ -289,12 +297,16 @@ void AccountsView::slotUpdate() {
         QDate dt = start;
         QDate pend; 
         cal->setYMD(pend, dt.year(), dt.month(), dt.daysInMonth());
-        for (; pend <= end; pend = cal->addDays(pend, dt.daysInMonth()), ++c) {
-            //kdDebug()<<k_funcinfo<<dt.toString()<<"-"<<pend.toString()<<endl;
+        for (; pend <= end; ++c) {
+            //kdDebug()<<k_funcinfo<<c<<": "<<dt<<"-"<<pend<<" : "<<end<<endl;
             QString m = cal->monthName(dt, true) + QString(" %1").arg( dt.year());
             m_dlv->addSlaveColumn(m);
         
-            dt = pend.addDays(1);
+            dt = pend.addDays(1); // 1. next month
+            pend = cal->addDays(pend, dt.daysInMonth());
+            if (pend.month() == end.month()) {
+                pend = end;
+            }
         }
         if (c == 0)
             return;
@@ -309,12 +321,16 @@ void AccountsView::slotUpdate() {
             double cost = 0.0;
             QDate d = start;
             cal->setYMD(pend, d.year(), d.month(), d.daysInMonth());
-            for (int col=0; pend <= end; pend = cal->addDays(pend, d.daysInMonth()), ++col) {
+            for (int col=0; pend <= end; ++col) {
                 double cst = item->costMap.cost(d, d.daysTo(pend)+1);
                 cost = (m_cumulative ? cost + cst : cst);
                 item->setSlaveItem(col, cost);
                 m_cumulative ? item->setTotal(cost) : item->addToTotal(cost);
-                d = pend.addDays(1);
+                d = pend.addDays(1); // 1. next month
+                pend = cal->addDays(pend, d.daysInMonth());
+                if (pend.month() == end.month()) {
+                    pend = end;
+                }
             }
         }
         m_dlv->calculate();
