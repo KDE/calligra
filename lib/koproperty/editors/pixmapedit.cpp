@@ -236,4 +236,10 @@ PixmapEdit::eventFilter(QObject *o, QEvent *ev)
 	return Widget::eventFilter(o, ev);
 }
 
+void
+PixmapEdit::setReadOnlyInternal(bool readOnly)
+{
+	m_button->setEnabled(!readOnly);
+}
+
 #include "pixmapedit.moc"

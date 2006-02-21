@@ -32,7 +32,7 @@
 
 #include "symbolcombo.h"
 
-namespace KoProperty {
+using namespace KoProperty;
 
 SymbolCombo::SymbolCombo(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -121,6 +121,10 @@ SymbolCombo::slotValueChanged(const QString&)
 	emit valueChanged(this);
 }
 
+void
+SymbolCombo::setReadOnlyInternal(bool readOnly)
+{
+	m_select->setEnabled(!readOnly);
 }
 
 #include "symbolcombo.moc"

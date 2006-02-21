@@ -44,6 +44,7 @@ class KOPROPERTY_EXPORT BoolEdit : public Widget
 		void  slotValueChanged(bool state);
 
 	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
 		void setState(bool state);
 		virtual void resizeEvent(QResizeEvent *ev);
 		virtual bool eventFilter(QObject* watched, QEvent* e);

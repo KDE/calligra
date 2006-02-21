@@ -82,4 +82,10 @@ PointEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const 
 //		QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
 }
 
+void
+PointEdit::setReadOnlyInternal(bool readOnly)
+{
+	Q_UNUSED(readOnly);
+}
+
 #include "pointedit.moc"

@@ -44,14 +44,18 @@ class WidgetPrivate
 		, editor(0)
 		, leaveTheSpaceForRevertButton(false)
 		, hasBorders(true)
+		, readOnly(false)
+		, visibleFlag(true)
 		{
 		}
 		~WidgetPrivate() {}
 
 		Property *property;
 		QWidget *editor;
-		bool  leaveTheSpaceForRevertButton;
-		bool  hasBorders;
+		bool leaveTheSpaceForRevertButton : 1;
+		bool hasBorders : 1;
+		bool readOnly : 1;
+		bool visibleFlag : 1;
 };
 }
 
@@ -155,6 +159,10 @@ Widget::setFocusWidget(QWidget*focusProxy)
 			setFocusProxy(focusProxy);
 		focusProxy->installEventFilter(this);
 	}
+	else if (this->focusProxy()) {
+		this->focusProxy()->removeEventFilter(this);
+		setFocusProxy(0);
+	}
 }
 
 bool
@@ -197,6 +205,31 @@ Widget::resizeEvent(QResizeEvent *e)
 	QWidget::resizeEvent(e);
 	if (d->editor)
 		d->editor->resize(size());
+}
+
+bool
+Widget::isReadOnly() const
+{
+	return d->readOnly;
+}
+
+void
+Widget::setReadOnly(bool readOnly)
+{
+	d->readOnly = readOnly;
+	setReadOnlyInternal(readOnly);
+}
+
+bool 
+Widget::visibleFlag() const
+{
+	return d->visibleFlag;
+}
+
+void
+Widget::setVisibleFlag(bool visible)
+{
+	d->visibleFlag = visible;
 }
 
 #include "widget.moc"

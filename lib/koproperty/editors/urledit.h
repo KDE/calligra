@@ -45,6 +45,9 @@ class KOPROPERTY_EXPORT URLEdit : public Widget
 
 		virtual void setProperty(Property *property);
 
+	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
+
 	protected slots:
 		void selectFile();
 		void slotValueChanged(const QString &url);

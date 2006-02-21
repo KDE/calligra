@@ -27,7 +27,7 @@
 #include <qlayout.h>
 #include <qvariant.h>
 
-namespace KoProperty {
+using namespace KoProperty;
 
     //! @internal
     static const char *nopen[]={
@@ -216,7 +216,10 @@ LineStyleEdit::slotValueChanged(int)
 	emit valueChanged(this);
 }
 
+void
+LineStyleEdit::setReadOnlyInternal(bool readOnly)
+{
+	setVisibleFlag(!readOnly);
 }
 
 #include "linestyleedit.moc"
-

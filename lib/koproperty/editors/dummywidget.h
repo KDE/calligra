@@ -40,6 +40,9 @@ class KOPROPERTY_EXPORT DummyWidget: public Widget
 
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
+	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
+
 	private:
 		QVariant  m_value;
 };

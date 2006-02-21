@@ -26,6 +26,7 @@
 #include <qstringlist.h>
 
 class QLineEdit;
+class QPushButton;
 
 namespace KoProperty {
 
@@ -42,12 +43,16 @@ class KOPROPERTY_EXPORT StringListEdit : public Widget
 
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
+	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
+
 	protected slots:
 		void  showEditor();
 
 	private:
 		QLineEdit  *m_edit;
 		QStringList  m_list;
+		QPushButton *m_selectButton;
 };
 
 }

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -95,6 +95,20 @@ class KOPROPERTY_EXPORT Set : public QObject
 		/*! Returns TRUE if the set is empty, i.e. count() == 0; otherwise it returns FALSE. */
 		bool isEmpty() const;
 
+		/*! \return true if the set is read-only. 
+		 In read-only property set, 
+		 no property can be modified regardless of read-only flag of any 
+		 property (see Property::isReadOnly()). On the other hand, if Property::isReadOnly()
+		 is true of a property and Set::isReadOnly() is false, the property is still read-only.
+		 Read-only property set prevents editing in the property editor. 
+		 By default the set is read-write. */
+		bool isReadOnly() const;
+
+		/*! Sets this set to be read-only. 
+		 @see isReadOnly */
+		void setReadOnly(bool readOnly);
+
+		/*! \return true if the set contains property names \a name. */
 		bool contains(const QCString &name);
 
 		/*! \return property named with \a name. If no such property is found,

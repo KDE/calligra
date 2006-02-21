@@ -130,4 +130,10 @@ BoolEdit::eventFilter(QObject* watched, QEvent* e)
     return Widget::eventFilter(watched, e);
 }
 
+void
+BoolEdit::setReadOnlyInternal(bool readOnly)
+{
+	setVisibleFlag(!readOnly);
+}
+
 #include "booledit.moc"

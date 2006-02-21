@@ -477,7 +477,7 @@ Property::isReadOnly() const
 }
 
 void
-Property::setReadOnly(const bool readOnly)
+Property::setReadOnly(bool readOnly)
 {
 	d->readOnly = readOnly;
 }
@@ -489,7 +489,7 @@ Property::isVisible() const
 }
 
 void
-Property::setVisible(const bool visible)
+Property::setVisible(bool visible)
 {
 	d->visible = visible;
 }

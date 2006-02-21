@@ -83,4 +83,10 @@ RectEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 //	 	.arg(value.toRect().width()).arg(value.toRect().height()));
 }
 
+void
+RectEdit::setReadOnlyInternal(bool readOnly)
+{
+	Q_UNUSED(readOnly);
+}
+
 #include "rectedit.moc"

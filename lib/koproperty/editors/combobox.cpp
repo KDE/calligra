@@ -180,6 +180,12 @@ ComboBox::slotValueChanged(int)
 	emit valueChanged(this);
 }
 
+void
+ComboBox::setReadOnlyInternal(bool readOnly)
+{
+	setVisibleFlag(!readOnly);
+}
+
 
 /*QString
 ComboBox::keyForValue(const QVariant &value)

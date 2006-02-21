@@ -24,7 +24,7 @@
 #include <qlineedit.h>
 #include <qvariant.h>
 
-namespace KoProperty {
+using namespace KoProperty;
 
 StringEdit::StringEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -65,7 +65,10 @@ StringEdit::slotValueChanged(const QString &)
 	emit valueChanged(this);
 }
 
+void
+StringEdit::setReadOnlyInternal(bool readOnly)
+{
+	m_edit->setReadOnly(readOnly);
 }
 
 #include "stringedit.moc"
-

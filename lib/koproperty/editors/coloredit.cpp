@@ -33,7 +33,7 @@
 #include <kcolorcombo.h>
 #endif
 
-namespace KoProperty {
+using namespace KoProperty;
 
 ColorButton::ColorButton(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -134,7 +134,10 @@ ColorButton::eventFilter(QObject* watched, QEvent* e)
 	return Widget::eventFilter(watched, e);
 }
 
+void
+ColorButton::setReadOnlyInternal(bool readOnly)
+{
+	setVisibleFlag(!readOnly);
 }
 
 #include "coloredit.moc"
-

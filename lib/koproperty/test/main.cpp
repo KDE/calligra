@@ -29,7 +29,8 @@ static const char version[] = "0.2";
 
 static KCmdLineOptions options[] =
 {
-    { "flat", I18N_NOOP( "Flat display: don't display groups\n(useful for testing)" ), 0 },
+    { "flat", "Flat display: don't display groups\n(useful for testing)", 0 },
+    { "ro", "Set all properties as read-only:\n(useful for testing read-only mode)", 0 },
     KCmdLineLastOption
 };
 

@@ -82,4 +82,10 @@ SizeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 //		QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
 }
 
+void
+SizeEdit::setReadOnlyInternal(bool readOnly)
+{
+	Q_UNUSED(readOnly);
+}
+
 #include "sizeedit.moc"

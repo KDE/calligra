@@ -314,11 +314,16 @@ class KOPROPERTY_EXPORT Property
 		//! \return true if this property value is changed.
 		bool isModified() const;
 
-		/*! \return true if the property is read only.*/
+		/*! \return true if the property is read-only. 
+		 The property can be read-write but still not editable because the property 
+		 set containing it may be set to read-only. 
+		 By default the property is read-write.
+		 See Set::isReadOnly() for more details. */
 		bool isReadOnly() const;
 
-		/*! Sets this property to be read-only. */
-		void setReadOnly(bool visible);
+		/*! Sets this property to be read-only. 
+		 @see isReadOnly() */
+		void setReadOnly(bool readOnly);
 
 		/*! \return true if the property is visible.*/
 		bool isVisible() const;

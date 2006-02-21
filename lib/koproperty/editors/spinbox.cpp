@@ -23,8 +23,12 @@
 #include "property.h"
 
 #include <qlayout.h>
+#include <qobjectlist.h>
 #include <qvariant.h>
 #include <qpainter.h>
+
+#include <kglobal.h>
+#include <klocale.h>
 
 #ifdef QT_ONLY
 //! \todo
@@ -34,10 +38,17 @@
 
 using namespace KoProperty;
 
-IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, QWidget *parent, const char *name)
+IntSpinBox::IntSpinBox(int lower, int upper, int step, int value, int base, IntEdit *parent, const char *name)
 : KIntSpinBox(lower, upper, step, value, base, parent, name)
 {
 	editor()->setAlignment(Qt::AlignLeft);
+	installEventFilter(editor());
+	installEventFilter(this);
+	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
+	QSpinWidget* spin = static_cast<QSpinWidget*>(spinwidgets->first());
+	if (spin)
+		spin->installEventFilter(this);
+	delete spinwidgets;
 }
 
 bool
@@ -55,9 +66,15 @@ IntSpinBox::eventFilter(QObject *o, QEvent *e)
 			}
 		}
 	}
+	if ((o == editor() || o == this || o->parent() == this) 
+		&& e->type() == QEvent::Wheel && static_cast<IntEdit*>(parentWidget())->isReadOnly())
+	{
+		return true; //avoid value changes for read-only widget
+	}
 
 	return KIntSpinBox::eventFilter(o, e);
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -98,6 +115,7 @@ IntEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_edit->blockSignals(true);
 	m_edit->setValue(value.toInt());
+	updateSpinWidgets();
 	m_edit->blockSignals(false);
 	if (emitChange)
 		emit valueChanged(this);
@@ -127,13 +145,42 @@ IntEdit::slotValueChanged(int)
 	emit valueChanged(this);
 }
 
+void
+IntEdit::updateSpinWidgets()
+{
+	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
+	QSpinWidget* spin = static_cast<QSpinWidget*>(spinwidgets->first());
+	if (spin) {
+		spin->setUpEnabled(!isReadOnly());
+		spin->setDownEnabled(!isReadOnly());
+	}
+	delete spinwidgets;
+}
+
+void
+IntEdit::setReadOnlyInternal(bool readOnly)
+{
+	//disable editor and spin widget
+	m_edit->editor()->setReadOnly(readOnly);
+	updateSpinWidgets();
+	if (readOnly)
+		setLeavesTheSpaceForRevertButton(false);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double value, int precision, QWidget *parent)
+DoubleSpinBox::DoubleSpinBox (double lower, double upper, double step, double value, int precision, DoubleEdit *parent)
 : KDoubleSpinBox(lower, upper, step, value, precision, parent)
 {
 	editor()->setAlignment(Qt::AlignLeft);
+	installEventFilter(editor());
+	installEventFilter(this);
+	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
+	QSpinWidget* spin = static_cast<QSpinWidget*>(spinwidgets->first());
+	if (spin)
+		spin->installEventFilter(this);
+	delete spinwidgets;
 }
 
 bool
@@ -151,8 +198,21 @@ DoubleSpinBox::eventFilter(QObject *o, QEvent *e)
 			}
 		}
 	}
+	if ((o == editor() || o == this || o->parent() == this) 
+		&& e->type() == QEvent::Wheel && static_cast<IntEdit*>(parentWidget())->isReadOnly())
+	{
+		return true; //avoid value changes for read-only widget
+	}
 
 	return KDoubleSpinBox::eventFilter(o, e);
+}
+
+
+void DoubleSpinBox::setValue ( double value )
+{
+	if (static_cast<IntEdit*>(parentWidget())->isReadOnly())
+		return;
+	KDoubleSpinBox::setValue(value);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +228,7 @@ DoubleEdit::DoubleEdit(Property *property, QWidget *parent, const char *name)
 	if (minVal.isNull())
 		minVal = 0;
 	if (maxVal.isNull())
-		maxVal = (float)INT_MAX;
+		maxVal = (double)(INT_MAX/100);
 	if(step.isNull())
 		step = 0.1;
 	if(precision.isNull())
@@ -184,7 +244,7 @@ DoubleEdit::DoubleEdit(Property *property, QWidget *parent, const char *name)
 
 	setLeavesTheSpaceForRevertButton(true);
 	setFocusWidget(m_edit);
-	connect(m_edit, SIGNAL(valueChanged(int)), this, SLOT(slotValueChanged(int)));
+	connect(m_edit, SIGNAL(valueChanged(double)), this, SLOT(slotValueChanged(double)));
 }
 
 DoubleEdit::~DoubleEdit()
@@ -201,7 +261,8 @@ void
 DoubleEdit::setValue(const QVariant &value, bool emitChange)
 {
 	m_edit->blockSignals(true);
-	m_edit->setValue(value.toInt());
+	m_edit->setValue(value.toDouble());
+	updateSpinWidgets();
 	m_edit->blockSignals(false);
 	if (emitChange)
 		emit valueChanged(this);
@@ -210,15 +271,17 @@ DoubleEdit::setValue(const QVariant &value, bool emitChange)
 void
 DoubleEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
-	QString valueText = value.toString();
+	QString valueText;
 	if (property() && property()->hasOptions()) {
 		//replace min value with minValueText if defined
 		QVariant minValue( property()->option("min") );
 		QVariant minValueText( property()->option("minValueText") );
-		if (!minValue.isNull() && !minValueText.isNull() && minValue.toInt() == value.toInt()) {
+		if (!minValue.isNull() && !minValueText.isNull() && minValue.toString().toDouble() == value.toString().toDouble()) {
 			valueText = minValueText.toString();
 		}
 	}
+	if (valueText.isEmpty())
+		valueText = QString(value.toString()).replace('.', KGlobal::locale()->decimalSymbol());
 
 	Widget::drawViewer(p, cg, r, valueText);
 //	p->eraseRect(r);
@@ -226,9 +289,31 @@ DoubleEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const
 }
 
 void
-DoubleEdit::slotValueChanged(int)
+DoubleEdit::slotValueChanged(double)
 {
 	emit valueChanged(this);
+}
+
+void
+DoubleEdit::updateSpinWidgets()
+{
+	QObjectList *spinwidgets = queryList( "QSpinWidget", 0, false, true );
+	QSpinWidget* spin = static_cast<QSpinWidget*>(spinwidgets->first());
+	if (spin) {
+		spin->setUpEnabled(!isReadOnly());
+		spin->setDownEnabled(!isReadOnly());
+	}
+	delete spinwidgets;
+}
+
+void
+DoubleEdit::setReadOnlyInternal(bool readOnly)
+{
+	//disable editor and spin widget
+	m_edit->editor()->setReadOnly(readOnly);
+	updateSpinWidgets();
+	if (readOnly)
+		setLeavesTheSpaceForRevertButton(false);
 }
 
 #include "spinbox.moc"

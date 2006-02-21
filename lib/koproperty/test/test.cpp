@@ -41,6 +41,7 @@ test::test()
 {
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	const bool flat = args->isSet("flat");
+	const bool readOnly = args->isSet("ro");
 
 //	setXMLFile("testui.rc");
 	QFont f;
@@ -49,6 +50,7 @@ test::test()
 
 //  Simple
 	m_set = new Set(this, "test");
+	m_set->setReadOnly( readOnly );
 	QCString group;
 	if (!flat)
 		group = "SimpleGroup";

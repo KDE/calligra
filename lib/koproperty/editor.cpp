@@ -217,7 +217,7 @@ Editor::fill()
 
 			QValueList<QCString>::ConstIterator it2 = it.data().constBegin();
 			for( ; it2 != it.data().constEnd(); ++it2)
-					addItem(*it2, groupItem);
+				addItem(*it2, groupItem);
 		}
 
 	}
@@ -388,7 +388,7 @@ Editor::clear(bool editorOnly)
 void
 Editor::undo()
 {
-	if(!d->currentWidget || !d->currentItem)
+	if(!d->currentWidget || !d->currentItem || (d->set && d->set->isReadOnly()) || (d->currentWidget && d->currentWidget->isReadOnly()))
 		return;
 
 	int propertySync = d->currentWidget->property()->autoSync();
@@ -480,7 +480,7 @@ Editor::slotPropertyReset(Set& set, Property& property)
 void
 Editor::slotWidgetValueChanged(Widget *widget)
 {
-	if(!widget || !d->set)
+	if(!widget || !d->set || (d->set && d->set->isReadOnly()) || (widget && widget->isReadOnly()))
 		return;
 
 	d->insideSlotValueChanged = true;
@@ -509,7 +509,7 @@ Editor::acceptInput()
 void
 Editor::slotWidgetAcceptInput(Widget *widget)
 {
-	if(!widget || !d->set || !widget->property())
+	if(!widget || !d->set || !widget->property() || (d->set && d->set->isReadOnly()) || (widget && widget->isReadOnly()))
 		return;
 
 	widget->property()->setValue(widget->value());
@@ -547,9 +547,11 @@ Editor::slotClicked(QListViewItem *it)
 	//moved up updateEditorGeometry();
 	showUndoButton( p->isModified() );
 	if (d->currentWidget) {
-		d->currentWidget->show();
-		if (hasParent( this, kapp->focusWidget() ))
-			d->currentWidget->setFocus();
+		if (d->currentWidget->visibleFlag()) {
+			d->currentWidget->show();
+			if (hasParent( this, kapp->focusWidget() ))
+				d->currentWidget->setFocus();
+		}
 	}
 
 	d->justClickedItem = true;
@@ -596,6 +598,7 @@ Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 		widget = FactoryManager::self()->createWidgetForProperty(property);
 		if (!widget)
 			return 0;
+		widget->setReadOnly( (d->set && d->set->isReadOnly()) || property->isReadOnly() );
 		d->widgetCache[property] = widget;
 		widget->setProperty(0); // to force reloading property later
 		widget->hide();
@@ -681,7 +684,7 @@ Editor::hideEditor()
 void
 Editor::showUndoButton( bool show )
 {
-	if (!d->currentItem || !d->currentWidget)
+	if (!d->currentItem || !d->currentWidget || (d->currentWidget && d->currentWidget->isReadOnly()))
 		return;
 
 	int y = viewportToContents(QPoint(0, itemRect(d->currentItem).y())).y();

@@ -49,8 +49,9 @@ class KOPROPERTY_EXPORT ComboBox : public Widget
 		void slotValueChanged(int value);
 
 	protected:
-		QString  keyForValue(const QVariant &value);
-		void  fillBox();
+		virtual void setReadOnlyInternal(bool readOnly);
+		QString keyForValue(const QVariant &value);
+		void fillBox();
 
 	private:
 #ifdef QT_ONLY

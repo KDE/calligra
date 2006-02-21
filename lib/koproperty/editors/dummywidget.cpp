@@ -22,7 +22,7 @@
 
 #include <qpainter.h>
 
-namespace KoProperty {
+using namespace KoProperty;
 
 DummyWidget::DummyWidget(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -53,6 +53,10 @@ DummyWidget::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, cons
 	p->drawRect(r);
 }
 
+void
+DummyWidget::setReadOnlyInternal(bool readOnly)
+{
+	Q_UNUSED(readOnly);
 }
 
 #include "dummywidget.moc"

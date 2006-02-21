@@ -38,6 +38,9 @@ class KOPROPERTY_EXPORT StringEdit : public Widget
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);
 
+	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
+
 	protected slots:
 		void slotValueChanged(const QString&);
 

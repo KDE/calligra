@@ -42,6 +42,9 @@ class KOPROPERTY_EXPORT SizeEdit : public Widget
 
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
+	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
+
 	private:
 		KActiveLabel *m_edit;
 		QVariant m_value;

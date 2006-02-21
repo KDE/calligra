@@ -40,7 +40,7 @@
 
 #include "property.h"
 
-namespace KoProperty {
+using namespace KoProperty;
 
 StringListEdit::StringListEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -55,12 +55,12 @@ StringListEdit::StringListEdit(Property *property, QWidget *parent, const char *
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);
 
-	QPushButton *selectButton = new QPushButton("...", this);
-	selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-	l->addWidget(selectButton);
-	setFocusWidget(selectButton);
+	m_selectButton = new QPushButton("...", this);
+	m_selectButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+	l->addWidget(m_selectButton);
+	setFocusWidget(m_selectButton);
 
-	connect(selectButton, SIGNAL(clicked()), this, SLOT(showEditor()));
+	connect(m_selectButton, SIGNAL(clicked()), this, SLOT(showEditor()));
 }
 
 StringListEdit::~StringListEdit()
@@ -137,10 +137,12 @@ StringListEdit::showEditor()
 	}
 
 #endif
-
 }
 
+void
+StringListEdit::setReadOnlyInternal(bool readOnly)
+{
+	m_selectButton->setEnabled(!readOnly);
 }
 
 #include "stringlistedit.moc"
-

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004 Alexander Dymo <cloudtemple@mskat.net>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,7 +41,7 @@ static Property Set_nonConstNull;
 class SetPrivate
 {
 	public:
-		SetPrivate() : dict(101, false){}
+		SetPrivate() : dict(101, false), readOnly(false) {}
 		~SetPrivate(){}
 
 	//dict of properties in form name: property
@@ -55,6 +55,7 @@ class SetPrivate
 	QMap<Property*, QCString> groupForProperty;
 
 	bool ownProperty : 1;
+	bool readOnly : 1;
 //	static Property nonConstNull;
 	QCString prevSelection;
 	QString typeName;
@@ -299,6 +300,18 @@ bool
 Set::isEmpty() const
 {
 	return d->dict.isEmpty();
+}
+
+bool
+Set::isReadOnly() const
+{
+	return d->readOnly;
+}
+
+void
+Set::setReadOnly(bool readOnly)
+{
+	d->readOnly = readOnly;
 }
 
 bool

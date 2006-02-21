@@ -21,6 +21,8 @@
 #include "dateedit.h"
 
 #include <qdatetimeedit.h>
+#include <qrangecontrol.h>
+#include <qobjectlist.h>
 #include <qlayout.h>
 #include <qvariant.h>
 #include <qpainter.h>
@@ -32,7 +34,7 @@
 #include <kglobal.h>
 #endif
 
-namespace KoProperty {
+using namespace KoProperty;
 
 DateEdit::DateEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -87,7 +89,10 @@ DateEdit::slotValueChanged(const QDate&)
 	emit valueChanged(this);
 }
 
+void
+DateEdit::setReadOnlyInternal(bool readOnly)
+{
+	setVisibleFlag(!readOnly);
 }
 
 #include "dateedit.moc"
-

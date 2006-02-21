@@ -45,6 +45,7 @@ class KOPROPERTY_EXPORT SizePolicyEdit : public Widget
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
 		QString findDescription(const QVariant &value) const;
 
 	private:

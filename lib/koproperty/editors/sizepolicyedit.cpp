@@ -34,7 +34,7 @@
 #include <klocale.h>
 #endif
 
-namespace KoProperty {
+using namespace KoProperty;
 
 QMap<QString, QVariant> *SizePolicyEdit::m_spValues = 0;
 
@@ -117,7 +117,10 @@ SizePolicyEdit::findDescription(const QVariant &value) const
 	return QString::null;;
 }
 
+void
+SizePolicyEdit::setReadOnlyInternal(bool readOnly)
+{
+	Q_UNUSED(readOnly);
 }
 
 #include "sizepolicyedit.moc"
-

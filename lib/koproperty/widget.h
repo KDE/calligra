@@ -61,7 +61,7 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		virtual void undo();
 
 		/*! Sets the widget that will receive focus when the Widget is selected. */
-		void  setFocusWidget(QWidget*focusProxy);
+		void setFocusWidget(QWidget*focusProxy);
 
 		//! \sa d->leaveTheSpaceForRevertButton description
 		bool leavesTheSpaceForRevertButton() const;
@@ -69,6 +69,22 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		/*! \return true if this editor has borders. 
 		 Editors with borders have slightly larger height and width set by property editor widget. */
 		bool hasBorders() const;
+
+		/*! \return true if the widget is read-only. 
+		 Read-only property widget does not allow to change its property value.
+		 The flag is inherited from the underlying property and property set.
+		 Editor::setValue() method will still work, however.
+		 @see Set::isReadOnly(). */
+		bool isReadOnly() const;
+
+		/*! Sets this widget to be read-only. 
+		 Disables or enables editing in the appropriate widget(s).
+		 @see isReadOnly() */
+		void setReadOnly(bool readOnly);
+
+		/*! @internal
+		 This flag is checked by Editor when the widget is about to show. */
+		bool visibleFlag() const;
 
 	signals:
 		void valueChanged(Widget *widget);
@@ -85,6 +101,15 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 
 		void setLeavesTheSpaceForRevertButton(bool set);
 		void setHasBorders(bool set);
+
+		/*! Called by setReadOnly(bool).
+		 For implementation: for read-only you should disable editing in the appropriate widget(s). */
+		virtual void setReadOnlyInternal(bool readOnly) = 0;
+
+		/*! Used only in setReadOnlyInternal() to make the widget visible or invisible.
+		 This flag is checked by Editor when the widget is about to show. 
+		 By default widgets are visible. */
+		void setVisibleFlag(bool visible);
 
 	protected:
 		WidgetPrivate  *d;

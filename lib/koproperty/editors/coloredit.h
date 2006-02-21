@@ -45,6 +45,7 @@ class KOPROPERTY_EXPORT ColorButton : public Widget
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
 	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
 		virtual bool eventFilter(QObject* watched, QEvent* e);
 
 	protected slots:

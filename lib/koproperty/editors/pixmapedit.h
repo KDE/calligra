@@ -46,6 +46,9 @@ class KOPROPERTY_EXPORT PixmapEdit : public Widget
 		void resizeEvent(QResizeEvent *ev);
 		bool eventFilter(QObject *o, QEvent *ev);
 
+	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
+
 	protected slots:
 		/*! Helper used by selectPixmap(). Can be also used by subclassess. 
 		 Selected path will be stored in "lastVisitedImagePath" config entry within "Recent Dirs" 

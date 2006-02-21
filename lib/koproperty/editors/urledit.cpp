@@ -25,6 +25,7 @@
 
 #ifndef QT_ONLY
 #include <kurlrequester.h>
+#include <klineedit.h>
 #else
 #include <qpushbutton.h>
 #include <qlineedit.h>
@@ -34,7 +35,7 @@
 #include "property.h"
 
 
-namespace KoProperty {
+using namespace KoProperty;
 
 URLEdit::URLEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -124,7 +125,16 @@ URLEdit::selectFile()
 #endif
 }
 
+void
+URLEdit::setReadOnlyInternal(bool readOnly)
+{
+#ifndef QT_ONLY
+	m_edit->lineEdit()->setReadOnly(readOnly);
+	m_edit->button()->setEnabled(!readOnly);
+#else
+	m_edit->setReadOnly(readOnly);
+	m_select->setEnabled(!readOnly);
+#endif
 }
 
 #include "urledit.moc"
-

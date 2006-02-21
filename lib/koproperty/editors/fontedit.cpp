@@ -147,4 +147,10 @@ FontEdit::eventFilter(QObject* watched, QEvent* e)
 	return Widget::eventFilter(watched, e);
 }
 
+void
+FontEdit::setReadOnlyInternal(bool readOnly)
+{
+	setVisibleFlag(!readOnly);
+}
+
 #include "fontedit.moc"

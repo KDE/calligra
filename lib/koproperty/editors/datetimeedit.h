@@ -41,6 +41,9 @@ class KOPROPERTY_EXPORT DateTimeEdit : public Widget
 
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
+	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
+
 	protected slots:
 		void  slotValueChanged(const QDateTime &dateTime);
 

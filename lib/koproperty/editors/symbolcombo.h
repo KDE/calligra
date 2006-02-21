@@ -41,6 +41,9 @@ class KOPROPERTY_EXPORT SymbolCombo : public Widget
 
 		virtual void drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value);
 
+	protected:
+		virtual void setReadOnlyInternal(bool readOnly);
+
 	protected slots:
 		void  selectChar();
 		void  slotValueChanged(const QString &text);

@@ -21,6 +21,8 @@
 #include "timeedit.h"
 
 #include <qdatetimeedit.h>
+#include <qrangecontrol.h>
+#include <qobjectlist.h>
 #include <qpainter.h>
 #include <qlayout.h>
 #include <qvariant.h>
@@ -33,7 +35,7 @@
 #include <kglobal.h>
 #endif
 
-namespace KoProperty {
+using namespace KoProperty;
 
 TimeEdit::TimeEdit(Property *property, QWidget *parent, const char *name)
  : Widget(property, parent, name)
@@ -86,7 +88,10 @@ TimeEdit::slotValueChanged(const QTime&)
 	emit valueChanged(this);
 }
 
+void
+TimeEdit::setReadOnlyInternal(bool readOnly)
+{
+	setVisibleFlag(!readOnly);
 }
 
 #include "timeedit.moc"
-
