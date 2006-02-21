@@ -47,7 +47,8 @@ void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
     //kdDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
     // draw header labels
     p->save();
-    p->setClipRegion(p->clipRegion(QPainter::CoordPainter).intersect(QRegion(cx, 0, cw, ch)), QPainter::CoordPainter);
+    QRegion r = p->clipRegion(QPainter::CoordPainter);
+    p->setClipRegion(r.intersect(QRegion(cx, 0, cw, ch)), QPainter::CoordPainter);
     QColor bgc(Qt::blue);
     bgc = bgc.light(185);
     QBrush bg(bgc);
@@ -75,12 +76,16 @@ void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
         p->drawText(tr, columnAlignment(s)|Qt::AlignVCenter, h->label(s), -1);
         hei = QMAX(tr.height(), hei);
     }
+    r = p->clipRegion(QPainter::CoordPainter);
     p->restore();
+//    p->drawRect(r.boundingRect());
     p->save();
     p->translate(0, hei+2);
-    QRect r = p->clipRegion(QPainter::CoordPainter).boundingRect();
-    p->setClipRegion(p->clipRegion(QPainter::CoordPainter).intersect(QRegion(cx, cy, cw, ch)), QPainter::CoordPainter);
+    r = p->clipRegion(QPainter::CoordPainter);
+    // FIXME: Doesn't clip correctly, haven't figured out why
+    p->setClipRegion(r.intersect(QRegion(cx, cy, cw, ch)), QPainter::CoordPainter);
     drawContentsOffset(p, 0, 0, cx, cy, cw, ch);
+//    p->drawRect(r.boundingRect());
     p->restore();
 }
 

@@ -327,15 +327,16 @@ void View::setZoom(double zoom) {
 
 void View::setupPrinter(KPrinter &printer) {
     //kdDebug()<<k_funcinfo<<endl;
-/*    if (m_tab->visibleWidget() == m_reportview) {
-        m_reportview->setup(printer);
-    }*/
-    
-    printer.setup(this);
 }
 
 void View::print(KPrinter &printer) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
+    if (printer.previewOnly()) {
+        //HACK: KoMainWindow shows setup on print, but not on print preview!
+        if (!printer.setup()) {
+            return;
+        }
+    }
 	if (m_tab->visibleWidget() == m_ganttview)
 	{
         m_ganttview->print(printer);
