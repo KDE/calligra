@@ -582,7 +582,7 @@ void KPrConfigureMiscPage::slotDefault()
     m_underlineLink->setChecked(true);
     m_displayFieldCode->setChecked( false );
     m_cbPrintNotes->setChecked(true);
-    KPrDocument* doc = m_pView->kPresenterDoc();
+    //KPrDocument* doc = m_pView->kPresenterDoc();
 
     resolutionY->setValue( MM_TO_POINT( 5.0 ));
     resolutionX->setValue( MM_TO_POINT( 5.0 ));

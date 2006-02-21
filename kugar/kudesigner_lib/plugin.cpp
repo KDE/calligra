@@ -21,8 +21,8 @@ KuDesignerPlugin::KuDesignerPlugin( QObject *parent, const char *name, const QSt
 {}
 KuDesignerPlugin::~KuDesignerPlugin()
 {}
-void KuDesignerPlugin::createPluggedInEditor( QWidget *&retVal, Editor *editor,
-        Property *property, Box *cb )
+void KuDesignerPlugin::createPluggedInEditor( QWidget *&/*retVal*/, Editor */*editor*/,
+        Property */*property*/, Box */*cb*/ )
 {}
 
 #include "plugin.moc"

@@ -377,14 +377,14 @@ void KPrEffectDia::disappearChanged()
         timerOfDisappear->setEnabled( disappear->isChecked() );
 }
 
-void KPrEffectDia::appearEffectChanged( int num )
+void KPrEffectDia::appearEffectChanged( int /*num*/ )
 {
     bool b = ( cEffect->currentItem() != 0 );
     lAppearSpeed->setEnabled( b );
     cAppearSpeed->setEnabled( b );
 }
 
-void KPrEffectDia::disappearEffectChanged( int num )
+void KPrEffectDia::disappearEffectChanged( int /*num*/ )
 {
     bool b = ( cDisappear->currentItem() !=0 && disappear->isChecked() );
     lDisappearSpeed->setEnabled( b );

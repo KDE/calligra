@@ -71,8 +71,8 @@ ImageExport::convert(const QCString& from, const QCString& to)
         return KoFilter::NotImplemented;
     }
     KoPageLayout layoutPage= kpresenterdoc->pageLayout();
-    width =  layoutPage.ptWidth;
-    height = layoutPage.ptHeight;
+    width =  int( layoutPage.ptWidth );
+    height = int( layoutPage.ptHeight );
     if (extraImageAttribute())
     {
         KPrView* view = static_cast<KPrView*>( kpresenterdoc->views().getFirst());

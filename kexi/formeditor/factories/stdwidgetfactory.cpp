@@ -623,8 +623,8 @@ StdWidgetFactory::changeText(const QString &text)
 	else if(n == "QRadioButton")
 		width = w->style().sizeFromContents( QStyle::CT_RadioButton, w, s).width();
 	else
-		return;*/
-	int width = w->sizeHint().width();
+		return;
+	int width = w->sizeHint().width();*/
 
 #if 0 //not needed here, size hint is used on creation in InsertWidgetCommand::execute()
 	if(w->width() < width)

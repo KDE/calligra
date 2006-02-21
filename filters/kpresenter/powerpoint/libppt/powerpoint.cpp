@@ -1196,7 +1196,7 @@ void TextCharsAtom::dump( std::ostream& out ) const
   out << "TextCharsAtom" << std::endl;
   out << "listSize " << listSize() << std::endl;
  
-  for (int i=0; i<listSize() ; i++)
+  for (uint i=0; i<listSize() ; i++)
   {
     out << "String " << i << " [" << strValue(i) << "]" << std::endl;
   }
@@ -3069,11 +3069,11 @@ void StyleTextPropAtom::setCharFlags( int charFlags )
   d->charFlags = charFlags;
 }
  
-void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsigned lastSize )
+void StyleTextPropAtom::setData( unsigned /*size*/, const unsigned char* data, unsigned lastSize )
 { 
   unsigned charRead = 0;
   unsigned charCount = 0;
-  unsigned stringLength = (0.5*lastSize) + 1;
+  unsigned stringLength = unsigned( (0.5*lastSize) + 1 );
   
   bool isTextPropAtom = true; 
   unsigned k=0;    
@@ -3899,7 +3899,7 @@ void TextBytesAtom::dump( std::ostream& out ) const
   out << "TextBytesAtom" << std::endl;
   out << "stringLength " << stringLength() << std::endl;
   out << "listSize " << listSize() << std::endl;  
-  for (int i=0; i<listSize() ; i++)
+  for (uint i=0; i<listSize() ; i++)
   {
     out << "String " << i << " [" << strValue(i) << "]" << std::endl;
   }
@@ -5575,7 +5575,7 @@ void PPTReader::handleSlidePersistAtom( SlidePersistAtom* atom )
   if( !atom ) return;
   if( !d->presentation ) return;
 
-  int id = atom->slideId();
+  //int id = atom->slideId();
   unsigned ref = atom->psrReference();
 
   d->currentSlide = d->slideMap[ ref ];
@@ -5614,7 +5614,7 @@ void PPTReader::handleTextCharsAtom( TextCharsAtom* atom )
 
   text->setType( d->currentTextType );
   
-  for (int i=0; i<atom->listSize(); i++)
+  for (uint i=0; i<atom->listSize(); i++)
   { 
      text->setText(atom->strValue(i));
      // qDebug("=====================text list ================"); 
@@ -5650,7 +5650,7 @@ void PPTReader::handleTextBytesAtom( TextBytesAtom* atom )
 
   text->setType( d->currentTextType );
   
-  for (int i=0; i<atom->listSize(); i++)
+  for (uint i=0; i<atom->listSize(); i++)
   { 
      text->setText(atom->strValue(i));
      // qDebug("=====================text list ================"); 
@@ -5678,7 +5678,7 @@ void PPTReader::handleStyleTextPropAtom ( StyleTextPropAtom* atom )
   int placeId = d->currentTextId-1;
   TextObject* text = d->currentSlide->textObject( placeId );
 
-  for (int i=0; i<atom->listSize(); i++)
+  for (uint i=0; i<atom->listSize(); i++)
   { 
     if (atom->bulletOn(i) == 1)
       text->setBulletFlag(true); 
@@ -5967,7 +5967,7 @@ Color convertFromLong( unsigned long i )
   unsigned r = (i & 0xff);
   unsigned g = (i>>8) & 0xff;
   unsigned b = (i>>16) & 0xff;
-  unsigned index = (i>>24) & 0xff;
+  //unsigned index = (i>>24) & 0xff;
   return Color( r, g, b );
 }
 

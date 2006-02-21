@@ -77,8 +77,8 @@ SvgExport::convert(const QCString& from, const QCString& to)
         return KoFilter::NotImplemented;
     }
     KoPageLayout layoutPage= kpresenterdoc->pageLayout();
-    int width =  layoutPage.ptWidth;
-    int height = layoutPage.ptHeight;
+    int width =  int( layoutPage.ptWidth );
+    int height = int( layoutPage.ptHeight );
     
     QPicture  picture;
     QPainter  painter(&picture);

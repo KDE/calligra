@@ -210,7 +210,7 @@ void GanttView::drawChanges(Project &project)
     currentItemChanged(m_currentItem);
 }
 
-void GanttView::drawOnPainter(QPainter* painter, QRect rect)
+void GanttView::drawOnPainter(QPainter* painter, QRect /*rect*/)
 {
 //   QValueList<int> sizes = m_taskView->sizes();
 //   if (sizes.count() >= 2)
@@ -1117,7 +1117,7 @@ void GanttView::slotModifyLink(KDGanttViewTaskLink* link) {
         emit modifyRelation(rel);
 }
 
-bool GanttView::setContext(Context::Ganttview &context, Project& project) {
+bool GanttView::setContext(Context::Ganttview &context, Project& /*project*/) {
     //kdDebug()<<k_funcinfo<<endl;
     
     QValueList<int> list = sizes();

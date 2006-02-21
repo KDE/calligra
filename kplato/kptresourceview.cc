@@ -176,7 +176,7 @@ ResourceView::ResourceView(View *view, QWidget *parent)
 
 }
 
-void ResourceView::zoom(double zoom)
+void ResourceView::zoom(double /*zoom*/)
 {
 }
 
@@ -297,7 +297,7 @@ void ResourceView::popupMenuRequested(QListViewItem* item, const QPoint & pos, i
         QPopupMenu *menu = m_mainview->popupMenu("resource_popup");
         if (menu)
         {
-            int id = menu->exec(pos);
+            menu->exec(pos);
             //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
         }
         else
@@ -305,17 +305,17 @@ void ResourceView::popupMenuRequested(QListViewItem* item, const QPoint & pos, i
     }
 }
 
-void ResourceView::print(KPrinter &printer) {
+void ResourceView::print(KPrinter &/*printer*/) {
     kdDebug()<<k_funcinfo<<endl;
 
 }
 
-bool ResourceView::setContext(Context::Resourceview &context) {
+bool ResourceView::setContext(Context::Resourceview &/*context*/) {
     //kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
-void ResourceView::getContext(Context::Resourceview &context) const {
+void ResourceView::getContext(Context::Resourceview &/*context*/) const {
     //kdDebug()<<k_funcinfo<<endl;
 }
 

@@ -82,7 +82,7 @@ const char * KPrPartObject::getOasisElementName() const
 }
 
 
-void KPrPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPrLoadingInfo *info)
+void KPrPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPrLoadingInfo */*info*/)
 {
     kdDebug()<<"void KPrPartObject::loadOasis(const QDomElement &element)******************\n";
     
@@ -101,7 +101,7 @@ void KPrPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
     double oh = ext.height();
 
     QSize size( _zoomhandler->zoomSize( ext ) );
-    int penw = ( ( pen.style() == Qt::NoPen ) ? 1 : pen.pointWidth() ) / 2;
+    int penw = ( ( pen.style() == Qt::NoPen ) ? 1 : int( pen.pointWidth() ) ) / 2;
 
     QPen pen2;
     if ( drawContour )
@@ -173,7 +173,7 @@ void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
     if ( !child || !child->document() )
         return;
 
-    int penw = pen.pointWidth();
+    int penw = int( pen.pointWidth() );
     KoRect r( KoPoint( penw, penw ), KoPoint( getSize().width() - ( penw * 2.0 ),
               getSize().height() - ( penw * 2.0 ) ) );
     child->document()->paintEverything( *_painter,

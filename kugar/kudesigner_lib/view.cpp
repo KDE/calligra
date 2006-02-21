@@ -94,7 +94,7 @@ void SelectionRect::draw( QPainter & painter )
 
 
 View::View( Canvas *canvas, QWidget *parent, const char *name, WFlags f ) :
-        QCanvasView( canvas, parent, name, f ), m_canvas( canvas ), selectionBuf( 0 ), m_plugin( 0 )
+        QCanvasView( canvas, parent, name, f ), selectionBuf( 0 ), m_plugin( 0 ), m_canvas( canvas )
 {
     itemToInsert = 0;
     moving = 0;
@@ -437,18 +437,18 @@ double rint( double x )
 
 void View::stickToGrid( double &x, double &y )
 {
-    int cx = rint( x / Config::gridSize() );
-    int cy = rint( y / Config::gridSize() );
+    int cx = int( rint( x / Config::gridSize() ) );
+    int cy = int( rint( y / Config::gridSize() ) );
     x = cx * Config::gridSize();
     y = cy * Config::gridSize();
 }
 
 void View::stickDimToGrid( double x, double y, double &w, double &h )
 {
-    int rightX = x + w;
-    int bottomY = y + h;
-    int nx = rint( rightX / Config::gridSize() ) * Config::gridSize();
-    int ny = rint( bottomY / Config::gridSize() ) * Config::gridSize();
+    int rightX = int( x + w );
+    int bottomY = int( y + h );
+    int nx = int( rint( rightX /Config::gridSize() ) * Config::gridSize() );
+    int ny = int( rint( bottomY / Config::gridSize() ) * Config::gridSize() );
     w = nx - x;
     h = ny - y;
 }

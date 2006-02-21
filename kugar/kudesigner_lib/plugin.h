@@ -41,19 +41,19 @@ public:
     {
         return false;
     }
-    virtual bool dragMove( QDragMoveEvent *, Box *cb )
+    virtual bool dragMove( QDragMoveEvent *, Box */*cb*/ )
     {
         return false;
     }
-    virtual void newCanvasBox( int type, Box *cb )
+    virtual void newCanvasBox( int /*type*/, Box */*cb*/ )
     {
         ;
     }
-    virtual void modifyItemPropertyOnSave( CanvasReportItem *item, const Property & p , QString &propertyName, QString &propertyValue )
+    virtual void modifyItemPropertyOnSave( CanvasReportItem */*item*/, const Property & /*p*/ , QString &/*propertyName*/, QString &/*propertyValue*/ )
     {
         ;
     }
-    virtual void modifyItemPropertyOnLoad( CanvasReportItem *item, const Property & p, QString &propertyName, QString &propertyValue )
+    virtual void modifyItemPropertyOnLoad( CanvasReportItem */*item*/, const Property & /*p*/, QString &/*propertyName*/, QString &/*propertyValue*/ )
     {
         ;
     }

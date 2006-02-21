@@ -55,9 +55,9 @@ VEllipse::init()
 	// to radials
 	int nsegs;
 	if( m_startAngle < m_endAngle )
-	    nsegs = floor( ( m_endAngle - m_startAngle ) / 90.0 );
+	    nsegs = int( floor( ( m_endAngle - m_startAngle ) / 90.0 ) );
 	else
-	    nsegs = 4 - ceil( ( m_startAngle - m_endAngle ) / 90.0 );
+	    nsegs = 4 - int( ceil( ( m_startAngle - m_endAngle ) / 90.0 ) );
 	double startAngle = m_startAngle - 90.0;
 	if( startAngle < 0 ) startAngle += 360.0;
 	startAngle = VGlobal::pi_2 * ( startAngle / 90.0 );

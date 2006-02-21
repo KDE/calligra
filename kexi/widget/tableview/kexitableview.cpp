@@ -1935,7 +1935,7 @@ void KexiTableView::updateRow(int row)
 //	kdDebug(44021) << "updateRow("<<row<<")"<<endl;
 	if (row < 0 || row >= (rows() + 2/* sometimes we want to refresh the row after last*/ ))
 		return;
-	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
+	//int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
 
 	//kdDebug() << contentsX() << " " << contentsY() << endl;
 	//kdDebug() << QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) << endl;

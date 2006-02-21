@@ -430,7 +430,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
             // FIXME
             kdDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
         } else { // Profile
-            char* name = new char[(*it)->type().length()+1];
+            //char* name = new char[(*it)->type().length()+1];
             write_icc_profile(& cinfo, (uchar*)(*it)->annotation().data(), (*it)->annotation().size());
         }
         ++it;

@@ -328,7 +328,7 @@ void View::setZoom(double zoom) {
 	m_pertview->setZoom(zoom);
 }
 
-void View::setupPrinter(KPrinter &printer) {
+void View::setupPrinter(KPrinter &/*printer*/) {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
@@ -1155,7 +1155,7 @@ void View::getContext(Context &context) const {
 //    m_reportview->getContext(context.reportview);
 }
 
-void View::setBaselineMode(bool on) {
+void View::setBaselineMode(bool /*on*/) {
     //kdDebug()<<k_funcinfo<<endl;
 /*    m_baselineMode = on;
     

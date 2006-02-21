@@ -52,7 +52,7 @@ PertView::~PertView()
 {
 }
 
-void PertView::init(QLayout *layout)
+void PertView::init(QLayout */*layout*/)
 {
     //kdDebug()<<k_funcinfo<<endl;
     QGridLayout *gl = new QGridLayout(this, 1, 1, -1, -1, "Pert QGridLayout");

@@ -666,7 +666,7 @@ FormatType Style::formatType( const QString &_format )
 QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles,
                                       FormatType _style,
                                       const QString &_prefix, const QString &_postfix,
-                                      int _precision, const QString& symbol )
+                                      int _precision, const QString& /*symbol*/ )
 {
   kdDebug() << k_funcinfo << endl;
     QString styleName;

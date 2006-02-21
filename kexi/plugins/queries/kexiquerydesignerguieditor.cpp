@@ -718,7 +718,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		kexidbg << eItem->toString() << endl;
 		KexiDB::BinaryExpr* binary = eItem->toBinary();
 		if (binary && eItem->exprClass()==KexiDBExpr_Relational) {
-			KexiDB::Field *leftField, *rightField;
+			KexiDB::Field *leftField = 0, *rightField = 0;
 			if (eItem->token()=='=' 
 				&& binary->left()->toVariable()
 				&& binary->right()->toVariable()

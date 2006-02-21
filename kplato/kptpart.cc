@@ -27,6 +27,7 @@
 #include "kptresource.h"
 #include "kptcontext.h"
 #include "kptganttview.h"
+#include "KDGanttViewTaskLink.h"
 
 #include <qpainter.h>
 #include <qfileinfo.h>

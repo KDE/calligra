@@ -24,7 +24,7 @@
 
 #include <qdom.h>
 
-#include <set.h>
+#include <set>
 
 class QLabel;
 class QSpinBox;
