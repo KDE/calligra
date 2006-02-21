@@ -665,6 +665,10 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		/*! true, if this table accepts dropping data on the rows (false by default). */
 		bool m_dropsAtRowEnabled : 1;
 
+		/*! true, if this entire (visible) row should be updated when boving to other row.
+		 False by default. For table view with 'row highlighting' flag enabled, it is true. */
+		bool m_updateEntireRowWhenMovingToOtherRow : 1;
+
 		DeletionPolicy m_deletionPolicy;
 
 //! @todo make generic interface out of KexiRecordMarker

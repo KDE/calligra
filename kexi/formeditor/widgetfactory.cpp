@@ -193,14 +193,23 @@ WidgetFactory::createEditor(const QCString &classname, const QString &text,
 		}
 		textedit->setPalette(w->palette());
 		textedit->setFont(w->font());
+		textedit->setResizePolicy(QScrollView::Manual);
 		textedit->setGeometry(geometry);
 		if(background == Qt::NoBackground)
 			textedit->setBackgroundMode(w->backgroundMode());
 		else
 			textedit->setBackgroundMode(background);
 //		textedit->setPaletteBackgroundColor(textedit->colorGroup().color( QColorGroup::Base ));
-//		for(int i =0; i <= textedit->paragraphs(); i++)
-//			textedit->setParagraphBackgroundColor(i, textedit->colorGroup().color( QColorGroup::Background ));
+		textedit->setPaletteBackgroundColor(w->paletteBackgroundColor());
+		for(int i =0; i <= textedit->paragraphs(); i++)
+			textedit->setParagraphBackgroundColor(i, w->paletteBackgroundColor());
+		textedit->selectAll(true);
+		textedit->setColor(w->paletteForegroundColor());
+		textedit->selectAll(false);
+		textedit->moveCursor(QTextEdit::MoveEnd, false);
+		textedit->setParagraphBackgroundColor(0, w->paletteBackgroundColor());
+		textedit->setVScrollBarMode(QScrollView::AlwaysOff); //ok?
+		textedit->setHScrollBarMode(QScrollView::AlwaysOff); //ok?
 		textedit->installEventFilter(this);
 		textedit->setFrameShape(useFrame ? QFrame::LineEditPanel : QFrame::NoFrame);
 		textedit->setMargin(2); //to move away from resize handle

@@ -31,6 +31,7 @@
 #include "kexiformscrollview.h"
 
 #include <formeditor/objecttree.h>
+#include <formeditor/formmanager.h> 
 #include <widget/tableview/kexidataawareobjectiface.h>
 #include <widget/kexiscrollview.h>
 
@@ -480,6 +481,15 @@ void KexiDBForm::dragMoveEvent( QDragMoveEvent *e )
 void KexiDBForm::dropEvent( QDropEvent *e ) 
 {
 	emit handleDropEvent(e);
+}
+
+void KexiDBForm::setCursor( const QCursor & cursor )
+{
+	//js: empty, to avoid fscking problems with random cursors!
+	//! @todo?
+
+	if (KFormDesigner::FormManager::self()->isInserting()) //exception
+		KexiDBFormBase::setCursor(cursor);
 }
 
 //! @todo: Qt4? XORed resize rectangles instead of black widgets

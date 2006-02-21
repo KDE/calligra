@@ -100,6 +100,8 @@ class KEXIFORMUTILS_EXPORT KexiDBForm :
 
 		bool preview() const;
 
+		virtual void setCursor( const QCursor & cursor );
+
 	public slots:
 		void setAutoTabStops(bool set);
 		inline void setDataSource(const QString &ds) { KexiFormDataItemInterface::setDataSource(ds); }

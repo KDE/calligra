@@ -105,6 +105,9 @@ void KexiSharedActionHost::setActionAvailable(const char *action_name, bool avai
 
 void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool avail, QObject *obj)
 {
+/*test	if (qstrcmp(action_name, "tablepart_toggle_pkey")==0) {
+		kdDebug() << "tablepart_toggle_pkey" << endl;
+	}*/
 	if (!d)
 		return; //sanity
 	QWidget *fw = d->mainWin->focusWidget();

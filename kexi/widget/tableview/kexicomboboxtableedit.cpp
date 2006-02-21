@@ -246,10 +246,11 @@ QString KexiComboBoxTableEdit::valueForString(const QString& str,
 	return str; //for sanity but it's veird to show id to the user
 }
 
-void KexiComboBoxTableEdit::showFocus( const QRect& r )
+void KexiComboBoxTableEdit::showFocus( const QRect& r, bool readOnly )
 {
 //	d->button->move( pos().x()+ width(), pos().y() );
 	updateFocus( r );
+	d->button->setEnabled(!readOnly);
 	d->button->show();
 }
 
@@ -409,6 +410,11 @@ void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, QVariant v
 
 void KexiComboBoxTableEdit::slotButtonClicked()
 {
+	// this method is sometimes called by hand: 
+	// do not allow to simulate clicks when the button is disabled
+	if (!d->button->isEnabled())
+		return;
+
 	if (d->mouseBtnPressedWhenPopupVisible) {// && !d->button->isOn()) {
 		d->mouseBtnPressedWhenPopupVisible = false;
 		d->button->setOn(false);

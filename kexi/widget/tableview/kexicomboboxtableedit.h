@@ -55,7 +55,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit
 		/*! Reimplemented: resizes a view(). */
 		virtual void resize(int w, int h);
 
-		virtual void showFocus( const QRect& r );
+		virtual void showFocus( const QRect& r, bool readOnly );
 
 		virtual void hideFocus();
 

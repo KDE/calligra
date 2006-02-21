@@ -303,7 +303,7 @@ void KexiViewBase::setAvailable(const char* action_name, bool set)
 		KAction* a;
 		if ( (ac = part()->actionCollectionForMode( viewMode() )) && (a = ac->action( action_name )) ) {
 			a->setEnabled(set);
-			return;
+//why?			return;
 		}
 	}
 	KexiActionProxy::setAvailable(action_name, set);

@@ -76,18 +76,19 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
 		textColor = p.active().text();
 		borderColor = QColor(200,200,200);
 		emptyAreaColor = p.active().color(QColorGroup::Base);
-		rowHighlightingColor = KexiUtils::blendedColors(alternateBackgroundColor, baseColor);
-//      QColor(
-//			(alternateBackgroundColor.red()+baseColor.red())/2,
-//    	(alternateBackgroundColor.green()+baseColor.green())/2,
-//			(alternateBackgroundColor.blue()+baseColor.blue())/2);
+		rowHighlightingColor = KexiUtils::blendedColors(p.active().highlight(), baseColor, 33, 66);
+		rowMouseOverHighlightingColor = KexiUtils::blendedColors(p.active().highlight(), baseColor, 10, 90);
+		rowMouseOverAlternateHighlightingColor = KexiUtils::blendedColors(p.active().highlight(), alternateBackgroundColor, 10, 90);
 		rowHighlightingTextColor = textColor;
+		rowMouseOverHighlightingTextColor = textColor;
 	}
 	backgroundAltering = true;
-	rowHighlightingEnabled = false;
-	persistentSelections = true;
+	rowMouseOverHighlightingEnabled = true; //false;
+	rowHighlightingEnabled = true; //false;
+	persistentSelections = false; //true;
 	navigatorEnabled = true;
 	fullRowSelection = false;
+	gridEnabled = true;
 }
 
 
@@ -625,8 +626,14 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 
 	int transly = rowp-cy;
 
-	if (d->appearance.rowHighlightingEnabled && r == d->highlightedRow) {
+	if (d->appearance.rowHighlightingEnabled && r == m_curRow && !d->appearance.fullRowSelection) {
 		pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.rowHighlightingColor);
+	}
+	else if (d->appearance.rowMouseOverHighlightingEnabled && r == d->highlightedRow) {
+		if(d->appearance.backgroundAltering && (r%2 != 0))
+			pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.rowMouseOverAlternateHighlightingColor);
+		else
+			pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.rowMouseOverHighlightingColor);
 	}
 	else {
 		if(d->appearance.backgroundAltering && (r%2 != 0))
@@ -774,7 +781,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	//	Draw our lines
 	QPen pen(p->pen());
 
-	if (!d->appearance.fullRowSelection) {
+	if (d->appearance.gridEnabled) {
 		p->setPen(d->appearance.borderColor);
 		p->drawLine( x2, 0, x2, y2 );	// right
 		p->drawLine( 0, y2, x2, y2 );	// bottom
@@ -834,7 +841,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		edit->setupContents( p, m_currentItem == item && col == m_curCol, 
 			cell_value, txt, align, x, y_offset, w, h );
 
-	if (d->appearance.fullRowSelection)
+	if (!d->appearance.gridEnabled)
 		y_offset++; //correction because we're not drawing cell borders
 
 /*
@@ -914,13 +921,10 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 
 	const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
 		= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections 
-			&& d->highlightedRow >= 0 && row != d->highlightedRow;
+			&& m_curRow /*d->highlightedRow*/ >= 0 && row != m_curRow; //d->highlightedRow;
 
 	if (m_currentItem == item && col == m_curCol) {
-/*		edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
-			has_focus ? colorGroup().highlight() : gray,
-			columnReadOnly, d->fullRowSelectionEnabled );*/
-		if (edit && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
+		if (edit && (d->appearance.rowHighlightingEnabled && !d->appearance.fullRowSelection || (row == m_curRow && d->highlightedRow==-1 && d->appearance.fullRowSelection))) //!dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
 				isEnabled() ? colorGroup().highlight() : QColor(200,200,200),//d->grayColor,
 				columnReadOnly, d->appearance.fullRowSelection );
@@ -979,14 +983,20 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 //		}
 		}
 	}
-
+	
 	// draw text
 	if (!txt.isEmpty()) {
-		if (m_currentItem == item && col == m_curCol && !columnReadOnly 
+		if (d->appearance.fullRowSelection && (row == d->highlightedRow || (row == m_curRow && d->highlightedRow==-1)) ) 
+			p->setPen(d->appearance.rowHighlightingTextColor); //special case
+		else if (d->appearance.fullRowSelection && row == m_curRow) 
+			p->setPen(d->appearance.textColor); //special case for full row selection
+		else if (m_currentItem == item && col == m_curCol && !columnReadOnly 
 			 && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			p->setPen(colorGroup().highlightedText());
-		else if (d->appearance.rowHighlightingEnabled && row == d->highlightedRow && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
+		else if (d->appearance.rowHighlightingEnabled && row == m_curRow /*d->highlightedRow*/ && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			p->setPen(d->appearance.rowHighlightingTextColor);
+		else if (d->appearance.rowMouseOverHighlightingEnabled && row == d->highlightedRow && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
+			p->setPen(d->appearance.rowMouseOverHighlightingTextColor);
 		else
 			p->setPen(d->appearance.textColor);
 		p->drawText(x, y_offset, w - (x + x)- ((align & AlignLeft)?2:0)/*right space*/, h,
@@ -1221,26 +1231,29 @@ void KexiTableView::showContextMenu(const QPoint& _pos)
 
 void KexiTableView::contentsMouseMoveEvent( QMouseEvent *e )
 {
-	if (d->appearance.rowHighlightingEnabled) {
+	if (d->appearance.rowMouseOverHighlightingEnabled /*rowHighlightingEnabled*/) {
 		int row;
-		if (columnAt(e->x())<0)
+		if (columnAt(e->x())<0) {
 			row = -1;
-		else
-			row = rowAt( e->y() );
+		} else {
+			row = rowAt( e->y(), true /*ignoreEnd*/ );
+			if (row > (rows() - 1 + (isInsertingEnabled()?1:0)))
+				row = -1; //no row to paint
+		}
 
 //	const col = columnAt(e->x());
 //	columnPos(col) + columnWidth(col)
 //	columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
 
 		if (row != d->highlightedRow) {
-			int oldRow = d->highlightedRow;
+			const int oldRow = d->highlightedRow;
 			d->highlightedRow = row;
 			updateRow(oldRow);
 			updateRow(d->highlightedRow);
-			if (m_curRow>=0 && oldRow!=m_curRow && d->highlightedRow!=m_curRow && !d->appearance.persistentSelections) {
+//			if (m_curRow>=0 && oldRow!=m_curRow && d->highlightedRow!=m_curRow && !d->appearance.persistentSelections) {
 				//currently selected (not necessary highlighted) row needs to be repainted
 				updateRow(m_curRow);
-			}
+//			}
 		}
 	}
 
@@ -1651,7 +1664,7 @@ void KexiTableView::editorShowFocus( int /*row*/, int col )
 		kdDebug()<< "KexiTableView::editorShowFocus() : IN" << endl;
 		QRect rect = cellGeometry( m_curRow, m_curCol );
 //		rect.moveBy( -contentsX(), -contentsY() );
-		edit->showFocus( rect );
+		edit->showFocus( rect, isReadOnly() || m_data->column(col)->isReadOnly() );
 	}
 }
 
@@ -1923,8 +1936,11 @@ void KexiTableView::updateRow(int row)
 	if (row < 0 || row >= (rows() + 2/* sometimes we want to refresh the row after last*/ ))
 		return;
 	int leftcol = d->pTopHeader->sectionAt( d->pTopHeader->offset() );
-//	int rightcol = d->pTopHeader->sectionAt( clipper()->width() );
-	updateContents( QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
+
+	//kdDebug() << contentsX() << " " << contentsY() << endl;
+	//kdDebug() << QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) << endl;
+	//	updateContents( QRect( columnPos( leftcol ), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
+	updateContents( QRect( contentsX(), rowPos(row), clipper()->width(), rowHeight() ) ); //columnPos(rightcol)+columnWidth(rightcol), rowHeight() ) );
 }
 
 void KexiTableView::slotColumnWidthChanged( int, int, int )
@@ -1934,13 +1950,15 @@ void KexiTableView::slotColumnWidthChanged( int, int, int )
 	viewport()->setUpdatesEnabled(false);
 	resizeContents( s.width(), s.height() );
 	viewport()->setUpdatesEnabled(true);
-	if (contentsWidth() < w)
+	if (contentsWidth() < w) {
 		updateContents(contentsX(), 0, viewport()->width(), contentsHeight());
 //		repaintContents( s.width(), 0, w - s.width() + 1, contentsHeight(), TRUE );
-	else
+	} 
+	else {
 	//	updateContents( columnPos(col), 0, contentsWidth(), contentsHeight() );
 		updateContents(contentsX(), 0, viewport()->width(), contentsHeight());
 	//	viewport()->repaint();
+	}
 
 //	updateContents(0, 0, d->pBufferPm->width(), d->pBufferPm->height());
 	QWidget *m_editorWidget = dynamic_cast<QWidget*>(m_editor);
@@ -2519,21 +2537,23 @@ bool KexiTableView::eventFilter( QObject *o, QEvent *e )
 			updateWidgetContentsSize();
 		}
 	}
-/*	else if (e->type()==QEvent::Leave) {
-		if (o==viewport() && d->appearance.rowHighlightingEnabled) {
+	else if (e->type()==QEvent::Leave) {
+		if (o==viewport() && d->appearance.rowMouseOverHighlightingEnabled
+			&& d->appearance.persistentSelections)
+		{
 			if (d->highlightedRow!=-1) {
 				int oldRow = d->highlightedRow;
 				d->highlightedRow = -1;
 				updateRow(oldRow);
 				const bool dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted 
 					= d->appearance.rowHighlightingEnabled && !d->appearance.persistentSelections;
-				if (oldRow!=m_curRow && m_curRow>=0 && dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted) {
+				if (oldRow!=m_curRow && m_curRow>=0 && !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted) {
 					//no highlight for now: show selection again
 					updateRow(m_curRow);
 				}
 			}
 		}
-	}*/
+	}
 /*	else if (e->type()==QEvent::FocusOut && o->inherits("QWidget")) {
 		//hp==true if currently focused widget is a child of this table view
 		const bool hp = KexiUtils::hasParent( static_cast<QWidget*>(o), focusWidget());
@@ -2651,6 +2671,8 @@ void KexiTableView::setAppearance(const Appearance& a)
 			d->pTopHeader->sizeHint().height(), 0, 0);
 	}
 //	}
+	if (a.rowHighlightingEnabled)
+		m_updateEntireRowWhenMovingToOtherRow = true;
 
 	if(!a.navigatorEnabled)
 		m_navPanel->hide();
@@ -2660,7 +2682,7 @@ void KexiTableView::setAppearance(const Appearance& a)
 
 	d->highlightedRow = -1;
 //! @todo is setMouseTracking useful for other purposes?
-	viewport()->setMouseTracking(a.rowHighlightingEnabled);
+	viewport()->setMouseTracking(a.rowMouseOverHighlightingEnabled);
 
 	d->appearance = a;
 
@@ -2675,7 +2697,8 @@ int KexiTableView::highlightedRow() const
 void KexiTableView::setHighlightedRow(int row)
 {
 	if (row!=-1) {
-		row = QMAX( 0, QMIN(rows()-1, row) );
+		row = QMIN(rows() - 1 + (isInsertingEnabled()?1:0), row);
+		row = QMAX(0, row);
 		ensureCellVisible(row, -1);
 	}
 	const int previouslyHighlightedRow = d->highlightedRow;

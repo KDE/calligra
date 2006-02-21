@@ -86,8 +86,10 @@ void KexiDataItemInterface::installListener(KexiDataItemChangesListener* listene
 	m_listener = listener;
 }
 
-void KexiDataItemInterface::showFocus( const QRect& /*r*/ )
+void KexiDataItemInterface::showFocus( const QRect& r, bool readOnly )
 {
+	Q_UNUSED(r);
+	Q_UNUSED(readOnly);
 }
 
 void KexiDataItemInterface::hideFocus()

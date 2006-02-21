@@ -462,7 +462,8 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		else
 		{
 			createEditor(classname, label->text(), label, container,
-				label->geometry(), label->alignment());
+				label->geometry(), label->alignment(), 
+				false, label->alignment() & Qt::WordBreak /*multiline*/);
 		}
 		return true;
 	}

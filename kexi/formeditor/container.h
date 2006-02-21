@@ -187,6 +187,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		void moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev=0);
 
 	private:
+		bool handleMouseReleaseEvent(QObject *s, QMouseEvent *mev);
+
 		// the watched container and it's toplevel one...
 		QGuardedPtr<QWidget> m_container;
 		QGuardedPtr<Container> m_toplevel;
@@ -212,6 +214,9 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		ObjectTreeItem *m_tree;
 
 		QGuardedPtr<Form> m_form;
+		bool m_mousePressEventReceived;
+		QMouseEvent m_mouseReleaseEvent;
+		QGuardedPtr<QObject> m_objectForMouseReleaseEvent;
 
 		friend class InsertWidgetCommand;
 		friend class PasteWidgetCommand;

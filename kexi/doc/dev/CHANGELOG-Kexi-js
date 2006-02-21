@@ -9,15 +9,49 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
-2006-02-15,16
+2006-02-21
+Table View
+- row highlighting fixed for combo box popup, now it's used for any table view
+
+2006-02-20
+Project Import Wizard
+- do not ask about overwriting file if server-based destination has been selected
+
+2006-02-17
+Query Designer
+- fixed crash on saving new query design
+Main Window
+- disabled complex and redundant action 'View -> Tool Docks' menu.
+  This comes from KMDI, not Kexi itself and will be completely removed 
+  in KDE4 version. IIRC, we could not hide it now as this may cause crashes.
+
+Form Designer
+- text label widgets: "word wrap" is turned on by default
+- fixed update "word wrap" property for label widgets
+- fixed random cursor setting for the mfor surface
+- fixed problems with inserting widgets in a random position 
+  and random rectangles painting problems 
+  (all this due to MouseButtonRelease event coming BEFORE MouseButtonPress event)
+
+2006-02-16
+Query Designer
+- Row editing within the "Columns" area is accepted before saving.
+  If the editing cannot be accepted, saving is aborted. 
+Table Designer
+- set property editor to read-only mode for read-only database connections
+Data Table
+- disable combobox editor's dropdown button for read-only database connections
+Property Editor
+- fix for read-only mode: support it also globally at property set level
+- disable editing for read-only widgets
+- fix for displaying double values for current locale
+
+2006-02-15
 General
 - when query design has been changed and saved, subsequent openings of a form using 
   it will reload it's definition. The same for 'page setup' dialogs, etc.
 - fixed crash when 'page setup' dialog is opened, closed, and opened again for 
   the same data object
-Query Designer
-- Row editing within the "Columns" area is accepted before saving.
-  If the editing cannot be accepted, saving is aborted. 
 
 2006-02-10, 14
 Main Window

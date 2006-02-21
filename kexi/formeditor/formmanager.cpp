@@ -280,6 +280,8 @@ FormManager::insertWidget(const QCString &classname)
 	if(m_drawingSlot)
 		stopCreatingConnection();
 
+	m_inserting = true;
+
 	Form *form;
 	for(form = m_forms.first(); form; form = m_forms.next())
 	{
@@ -300,7 +302,6 @@ FormManager::insertWidget(const QCString &classname)
 		delete l;
 	}
 
-	m_inserting = true;
 	m_selectedClass = classname;
 	m_pointer->setChecked(false);
 }

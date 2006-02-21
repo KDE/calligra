@@ -710,7 +710,8 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 
 	QStringList list;
 	QString value;
-	QStringList keys = QStringList::fromStrList( meta->valueToKeys(obj->property("alignment").toInt()) );
+	const int alignment = obj->property("alignment").toInt();
+	QStringList keys = QStringList::fromStrList( meta->valueToKeys(alignment) );
 
 	QStrList *enumKeys = new QStrList(meta->enumKeys());
 	QStringList possibleValues = QStringList::fromStrList(*enumKeys);
@@ -769,7 +770,8 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 	  && !obj->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
 	) {
 		// Create the wordbreak property
-		KoProperty::Property *p = new KoProperty::Property("wordbreak", QVariant(false, 3), i18n("Word Break"), i18n("Word Break") );
+		KoProperty::Property *p = new KoProperty::Property("wordbreak", 
+			QVariant(alignment & Qt::WordBreak, 3), i18n("Word Break"), i18n("Word Break") );
 		d->set.addProperty(p);
 		updatePropertyValue(tree, "wordbreak");
 		if(!isPropertyVisible(p->name(), isTopLevel)) {

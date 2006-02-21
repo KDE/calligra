@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -113,7 +113,11 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	//needed for custom "identifier" property editor widget
 	KexiCustomPropertyFactory::init();
 
+	KexiDB::Connection *conn = mainWin()->project()->dbConnection();
+
 	d->data = new KexiTableViewData();
+	if (conn->isReadOnly())
+		d->data->setReadOnly(true);
 	d->data->setInsertingEnabled( false );
 
 	KexiTableViewColumn *col = new KexiTableViewColumn("pk", KexiDB::Field::Text, i18n("Primary Key", "PK"),
@@ -175,6 +179,7 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 	plugSharedAction("tablepart_toggle_pkey", this, SLOT(slotTogglePrimaryKey()));
 	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
 	d->action_toggle_pkey->plug(d->view->contextMenu(), 0); //add at the beg.
+	setAvailable("tablepart_toggle_pkey", !conn->isReadOnly());
 }
 
 KexiAlterTableDialog::~KexiAlterTableDialog()
@@ -331,6 +336,8 @@ KexiAlterTableDialog::createPropertySet( int row, KexiDB::Field *field, bool new
 {
 	QString typeName = "KexiDB::Field::" + field->typeGroupString();
 	KoProperty::Set *set = new KoProperty::Set(d->sets, typeName);
+	if (mainWin()->project()->dbConnection()->isReadOnly())
+		set->setReadOnly( true );
 //	connect(buff,SIGNAL(propertyChanged(KexiPropertyBuffer&,KexiProperty&)),
 //		this, SLOT(slotPropertyChanged(KexiPropertyBuffer&,KexiProperty&)));
 
@@ -430,10 +437,11 @@ KexiAlterTableDialog::createPropertySet( int row, KexiDB::Field *field, bool new
 	return set;
 }
 
-void KexiAlterTableDialog::updateActions(bool /*activated*/)
+void KexiAlterTableDialog::updateActions(bool activated)
 {
+	Q_UNUSED(activated);
 /*! \todo check if we can set pkey for this column type (eg. BLOB?) */
-	setAvailable("tablepart_toggle_pkey", propertySet()!=0);
+	setAvailable("tablepart_toggle_pkey", propertySet()!=0 && !mainWin()->project()->dbConnection()->isReadOnly());
 	if (!propertySet())
 		return;
 	KoProperty::Set &set = *propertySet();

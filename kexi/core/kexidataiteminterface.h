@@ -139,8 +139,10 @@ class KEXICORE_EXPORT KexiDataItemInterface
 		/*! Displays additional elements that are needed for indicating that the current cell
 		 is selected. For example, combobox editor (KexiComboBoxTableEdit) moves and shows
 		 dropdown button. \a r is the rectangle for the cell. 
+		 If \a readOnly is true, additional elements should be visually disabled, 
+		 e.g. dropdown button of the combobox editor should be disabled.
 		 For reimplementation. By default does nothing. */
-		virtual void showFocus( const QRect& r );
+		virtual void showFocus( const QRect& r, bool readOnly );
 
 		/*! Hides additional elements that are needed for indicating that the current cell
 		 is selected. 

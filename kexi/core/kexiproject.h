@@ -321,6 +321,10 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 //		void objectCreated(const QCString &mime, const QCString& name);
 
 	protected:
+		/*! Checks whether the project's connection is read-only. 
+		 If so, error message is set and false is returned. */
+		bool checkWritable();
+
 		class Private;
 		Private *d;
 

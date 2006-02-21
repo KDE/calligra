@@ -234,6 +234,8 @@ KexiProject::create(bool forceOverwrite)
 		
 	if (!createConnection())
 		return false;
+	if (!checkWritable())
+		return false;
 	if (d->connection->databaseExists( d->data->databaseName() )) {
 		if (!forceOverwrite)
 			return cancelled;
@@ -703,10 +705,20 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QCString &mim
 	return it ? openObject(wnd, *it, viewMode) : 0;
 }
 
+bool KexiProject::checkWritable()
+{
+	if (!d->connection->isReadOnly())
+		return true;
+	setError(futureI18n("This project is opened as read only."));
+	return false;
+}
+
 bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 {
 	clearError();
 	KexiDB::MessageTitle et(this);
+	if (!checkWritable())
+		return false;
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return false;
@@ -760,6 +772,8 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 
 	KexiDB::MessageTitle et(this, 
 		i18n("Could not rename object \"%1\".").arg(item.name()) );
+	if (!checkWritable())
+		return false;
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return false;
@@ -924,6 +938,12 @@ tristate KexiProject::dropProject(KexiProjectData* data,
 	KexiProject prj( new KexiProjectData(*data), handler );
 	if (!prj.open())
 		return false;
+
+	if (prj.dbConnection()->isReadOnly()) {
+		handler->showErrorMessage(
+			futureI18n("Could not drop this project. Database connection project is opened as read only."));
+		return false;
+	}
 
 	return prj.dbConnection()->dropDatabase();
 }

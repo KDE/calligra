@@ -63,6 +63,10 @@ KexiDBInternalLabel::KexiDBInternalLabel( KexiDBLabel* parent )
 	: QLabel( parent )
 	, m_parentLabel(parent)
 {
+	int a = alignment() | Qt::WordBreak;
+	a &= (0xffffff ^ Qt::AlignVertical_Mask);
+	a |= Qt::AlignTop;
+	setAlignment( a );
 	updateFrame();
 }
 
@@ -421,6 +425,8 @@ void KexiDBLabel::init()
 	d->internalLabel = new KexiDBInternalLabel( this );
 	d->internalLabel->hide();
 	d->frameColor = palette().active().foreground();
+
+	setAlignment( d->internalLabel->alignment() );
 }
 
 void KexiDBLabel::updatePixmapLater() {

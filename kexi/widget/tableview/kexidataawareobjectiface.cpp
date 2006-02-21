@@ -62,6 +62,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_rowEditBuffer = 0;
 	m_spreadSheetMode = false;
 	m_dropsAtRowEnabled = false;
+	m_updateEntireRowWhenMovingToOtherRow = false;
 	m_dragIndicatorLine = -1;
 	m_emptyRowInsertingEnabled = false;
 	m_popup = 0;
@@ -569,7 +570,10 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 		//show editor-dependent focus, if needed
 		editorShowFocus( m_curRow, m_curCol );
 
-		updateCell( oldRow, oldCol );
+		if (m_updateEntireRowWhenMovingToOtherRow)
+			updateRow( oldRow );
+		else
+			updateCell( oldRow, oldCol );
 
 //		//quite clever: ensure the cell is visible:
 //		ensureCellVisible(m_curRow, m_curCol);
@@ -580,9 +584,16 @@ void KexiDataAwareObjectInterface::setCursorPosition(int row, int col/*=-1*/, bo
 //		ensureVisible(columnPos(d->curCol), rowPos(d->curRow) - contentsY(), columnWidth(d->curCol), rh);
 		if (m_verticalHeader && oldRow != m_curRow)
 			m_verticalHeader->setCurrentRow(m_curRow);
-		updateCell( m_curRow, m_curCol );
-		if (m_curCol != oldCol || m_curRow != oldRow ) //ensure this is also refreshed
-			updateCell( oldRow, m_curCol );
+
+		if (m_updateEntireRowWhenMovingToOtherRow)
+			updateRow( m_curRow );
+		else
+			updateCell( m_curRow, m_curCol );
+
+		if (m_curCol != oldCol || m_curRow != oldRow ) {//ensure this is also refreshed
+			if (!m_updateEntireRowWhenMovingToOtherRow) //only if entire row has not been updated
+				updateCell( oldRow, m_curCol );
+		}
 		//update row
 		if (forceSet || m_curRow != oldRow) {
 			if (isInsertingEnabled() && m_curRow == rows()) {

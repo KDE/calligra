@@ -90,6 +90,9 @@ EventEater::~EventEater()
 
 Container::Container(Container *toplevel, QWidget *container, QObject *parent, const char *name)
 : QObject(parent, name)
+, m_insertBegin(-1,-1)
+, m_mousePressEventReceived(false)
+, m_mouseReleaseEvent(QEvent::None, QPoint(), 0, 0)
 {
 	m_container = container;
 	m_toplevel = toplevel;
@@ -151,6 +154,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 	{
 		case QEvent::MouseButtonPress:
 		{
+			m_insertBegin = QPoint(-1, -1);
+			m_mousePressEventReceived = true;
+
 			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name()
 				<< "of type " << s->className() << endl;
 			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
@@ -217,77 +223,37 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 				if(!FormManager::self()->isInserting())
 					m_state = DrawingSelectionRect;
-				return true;
+			}
+			else {
+				if(s->inherits("QTabWidget")) // to allow changing page by clicking tab
+					return false;
 			}
 
-			if(s->inherits("QTabWidget")) // to allow changing page by clicking tab
-				return false;
+			if (m_objectForMouseReleaseEvent) {
+				const bool res = handleMouseReleaseEvent(m_objectForMouseReleaseEvent, &m_mouseReleaseEvent);
+				m_objectForMouseReleaseEvent = 0;
+				return res;
+			}
 			return true;
 		}
 
 		case QEvent::MouseButtonRelease:
 		{
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-			if(FormManager::self()->isInserting()) // we insert the widget at cursor pos
-			{
-				if(m_form->formWidget())
-					m_form->formWidget()->clearForm();
-				KCommand *com = new InsertWidgetCommand(this/*, mev->pos()*/);
-				m_form->addCommand(com, true);
-				m_insertRect = QRect();
+			if (!m_mousePressEventReceived) {
+				m_mouseReleaseEvent = *mev;
+				m_objectForMouseReleaseEvent = s;
 				return true;
 			}
-			else if(s == m_container && !m_toplevel && (mev->button() != RightButton) && m_insertRect.isValid()) // we are drawing a rect to select widgets
-			{
-				drawSelectionRect(mev);
-				return true;
-			}
-			if(mev->button() == RightButton) // Right-click -> context menu
-			{
-				FormManager::self()->createContextMenu(static_cast<QWidget*>(s), this);
-			}
-			else if(mev->state() == (Qt::LeftButton|Qt::ControlButton))// && (m_copyRect.isValid()))
-			{
-				// copying a widget by Ctrl+dragging
-
-				if(m_form->formWidget())
-					m_form->formWidget()->clearForm();
-				if(s == m_container) // should have no effect on form
-					return true;
-
-				// prevent accidental copying of widget (when moving mouse a little while selecting)
-				if( ( (mev->pos().x() - m_grab.x()) < form()->gridSize() &&  (m_grab.x() - mev->pos().x()) < form()->gridSize() ) &&
-					( (mev->pos().y() - m_grab.y()) < form()->gridSize() &&  (m_grab.y() - mev->pos().y()) < form()->gridSize() ) )
-				{
-					kdDebug() << "The widget has not been moved. No copying" << endl;
-					return true;
-				}
-
-				m_form->setInteractiveMode(false);
-				// We simulate copy and paste
-				FormManager::self()->copyWidget();
-				if(m_form->selectedWidgets()->count() > 1)
-					FormManager::self()->setInsertPoint( mev->pos() );
-				else
-					FormManager::self()->setInsertPoint( static_cast<QWidget*>(s)->mapTo(m_container, mev->pos() - m_grab) );
-				FormManager::self()->pasteWidget();
-				m_form->setInteractiveMode(true);
-
-				//m_initialPos = QPoint();
-			}
-			else if(m_state == MovingWidget) // one widget has been moved, so we need to update the layout
-				reloadLayout();
-
-			// cancel copying as user released Ctrl before releasing mouse button
-			m_insertRect = QRect();
-			m_state = DoingNothing;
-			return true; // eat
+			m_mousePressEventReceived = false;
+			m_objectForMouseReleaseEvent = 0;
+			return handleMouseReleaseEvent(s, mev);
 		}
 
 		case QEvent::MouseMove:
 		{
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
-			if(FormManager::self()->isInserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|ControlButton)) ||
+			if(m_insertBegin!=QPoint(-1,-1) && FormManager::self()->isInserting() && ((mev->state() == LeftButton) || (mev->state() == (LeftButton|ControlButton)) ||
 			(mev->state() == (LeftButton|ControlButton|AltButton)) || (mev->state() == (LeftButton|ShiftButton)) ) )
 			// draw the insert rect
 			{
@@ -304,7 +270,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 				if(m_form->formWidget() && (tree->widget() != s))
 					m_form->formWidget()->highlightWidgets(tree->widget(), static_cast<QWidget*>(s));
 			}
-			else if(s == m_container && !m_toplevel && (mev->state() != ControlButton) && !FormManager::self()->isCreatingConnection()) // draw the selection rect
+			else if(m_insertBegin!=QPoint(-1,-1) && s == m_container && !m_toplevel && (mev->state() != ControlButton) && !FormManager::self()->isCreatingConnection()) // draw the selection rect
 			{
 				if((mev->state() != LeftButton) || /*m_inlineEditing*/ m_state == InlineEditing)
 					return true;
@@ -506,6 +472,67 @@ Container::eventFilter(QObject *s, QEvent *e)
 			return false; // let the widget do the rest ...
 	}
 	return false;
+}
+
+bool
+Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
+{
+	if(FormManager::self()->isInserting()) // we insert the widget at cursor pos
+	{
+		if(m_form->formWidget())
+			m_form->formWidget()->clearForm();
+		KCommand *com = new InsertWidgetCommand(this/*, mev->pos()*/);
+		m_form->addCommand(com, true);
+		m_insertBegin = QPoint(-1,-1);
+		m_insertRect = QRect();
+		return true;
+	}
+	else if(s == m_container && !m_toplevel && (mev->button() != RightButton) && m_insertRect.isValid()) // we are drawing a rect to select widgets
+	{
+		drawSelectionRect(mev);
+		return true;
+	}
+	if(mev->button() == RightButton) // Right-click -> context menu
+	{
+		FormManager::self()->createContextMenu(static_cast<QWidget*>(s), this);
+	}
+	else if(mev->state() == (Qt::LeftButton|Qt::ControlButton))// && (m_copyRect.isValid()))
+	{
+		// copying a widget by Ctrl+dragging
+
+		if(m_form->formWidget())
+			m_form->formWidget()->clearForm();
+		if(s == m_container) // should have no effect on form
+			return true;
+
+		// prevent accidental copying of widget (when moving mouse a little while selecting)
+		if( ( (mev->pos().x() - m_grab.x()) < form()->gridSize() &&  (m_grab.x() - mev->pos().x()) < form()->gridSize() ) &&
+			( (mev->pos().y() - m_grab.y()) < form()->gridSize() &&  (m_grab.y() - mev->pos().y()) < form()->gridSize() ) )
+		{
+			kdDebug() << "The widget has not been moved. No copying" << endl;
+			return true;
+		}
+
+		m_form->setInteractiveMode(false);
+		// We simulate copy and paste
+		FormManager::self()->copyWidget();
+		if(m_form->selectedWidgets()->count() > 1)
+			FormManager::self()->setInsertPoint( mev->pos() );
+		else
+			FormManager::self()->setInsertPoint( static_cast<QWidget*>(s)->mapTo(m_container, mev->pos() - m_grab) );
+		FormManager::self()->pasteWidget();
+		m_form->setInteractiveMode(true);
+
+		//m_initialPos = QPoint();
+	}
+	else if(m_state == MovingWidget) // one widget has been moved, so we need to update the layout
+		reloadLayout();
+
+	// cancel copying as user released Ctrl before releasing mouse button
+	m_insertBegin = QPoint(-1,-1);
+	m_insertRect = QRect();
+	m_state = DoingNothing;
+	return true; // eat
 }
 
 void
