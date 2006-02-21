@@ -56,7 +56,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, cons
 
 KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
     kdDebug()<<k_funcinfo<<endl;
-    QString n = "Modify standard work time";
+    QString n = i18n("Modify Standard Worktime");
     KMacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
         if (cmd == 0) cmd = new KMacroCommand(n);
