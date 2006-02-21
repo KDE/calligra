@@ -156,9 +156,12 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     // The menu items
     // File (just for enable/disable)
-    actPrint = mainWindow()->actionCollection()->action("file_print");
-    actPrintPreview = mainWindow()->actionCollection()->action("file_print_preview");
-
+    actPrint = 0;
+    actPrintPreview = 0;
+    if (!getPart()->isEmbedded()) {
+        actPrint = mainWindow()->actionCollection()->action("file_print");
+        actPrintPreview = mainWindow()->actionCollection()->action("file_print_preview");
+    }
     // ------ Edit
     actionCut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
     actionCopy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
@@ -303,7 +306,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
 View::~View()
 {
-  delete m_dcop;
+    delete m_dcop;
 }
 
 DCOPObject * View::dcopObject()
