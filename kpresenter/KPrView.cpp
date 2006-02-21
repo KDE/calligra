@@ -400,7 +400,6 @@ KPrView::~KPrView()
     }
     clearSpellChecker();
 
-    delete rb_oalign;
     delete rb_lbegin;
     delete rb_lend;
     delete dcop;
@@ -1221,13 +1220,6 @@ void KPrView::extraShadow()
         m_canvas->setToolEditMode( TEM_MOUSE );
         shadowDia->exec();
     }
-}
-
-void KPrView::extraAlignObjs()
-{
-    m_canvas->setToolEditMode( TEM_MOUSE );
-    QPoint pnt( QCursor::pos() );
-    rb_oalign->popup( pnt );
 }
 
 void KPrView::extraBackground()
@@ -2538,9 +2530,9 @@ void KPrView::setupActions()
                                          this, SLOT( extraProperties() ),
                                          actionCollection(), "extra_properties" );
 
-    actionExtraArrangePopup = new KAction( i18n( "Arra&nge Objects" ), "arrange", 0,
-                                           this, SLOT(extraArrangePopup()),
-                                           actionCollection(), "extra_arrangepopup" );
+    actionExtraArrangePopup = new KActionMenu( i18n( "Arra&nge Objects" ), "arrange",
+                                               actionCollection(), "extra_arrangepopup" );
+    actionExtraArrangePopup->setDelayed( false ); 
 
     actionExtraRaise = new KAction( i18n( "Ra&ise Objects" ), "raise",
                                     CTRL+Qt::SHIFT+Qt::Key_R, this, SLOT( extraRaise() ),
@@ -2637,9 +2629,9 @@ void KPrView::setupActions()
                                               this, SLOT( extraDefaultTemplate() ),
                                               actionCollection(), "extra_defaulttemplate" );
 
-    actionExtraAlignObjs = new KAction( i18n("Align O&bjects"), "alignobjs", 0,
-                                        this, SLOT( extraAlignObjs() ),
-                                        actionCollection(), "extra_alignobjs" );
+    actionExtraAlignObjsPopup = new KActionMenu( i18n("Align O&bjects"), "alignobjs", 
+                                            actionCollection(), "extra_alignobjs" );
+    actionExtraAlignObjsPopup->setDelayed( false );
 
     actionExtraLineBegin = new KAction( i18n("Line Begin"), "line_begin", 0,
                                         this, SLOT( extraLineBegin() ),
@@ -3140,7 +3132,7 @@ void KPrView::objectSelectedChanged()
     actionExtraRotate->setEnabled(state && !headerfooterselected);
     actionExtraShadow->setEnabled(state && !m_canvas->haveASelectedPartObj() && !headerfooterselected);
 
-    actionExtraAlignObjs->setEnabled(state && !headerfooterselected);
+    actionExtraAlignObjsPopup->setEnabled(state && !headerfooterselected);
     actionExtraGroup->setEnabled(state && m_canvas->numberOfObjectSelected()>1);
     actionExtraUnGroup->setEnabled(state && m_canvas->haveASelectedGroupObj());
 
@@ -3558,23 +3550,6 @@ void KPrView::updateReadWrite( bool readwrite )
 
 void KPrView::setupPopupMenus()
 {
-    // create right button object align menu
-    rb_oalign = new QPopupMenu();
-    Q_CHECK_PTR( rb_oalign );
-    rb_oalign->insertItem( KPBarIcon("aoleft" ), this, SLOT( extraAlignObjLeft() ) );
-    rb_oalign->insertSeparator();
-    rb_oalign->insertItem( KPBarIcon("aocenterh" ), this, SLOT( extraAlignObjCenterH() ) );
-    rb_oalign->insertSeparator();
-    rb_oalign->insertItem( KPBarIcon("aoright" ), this, SLOT( extraAlignObjRight() ) );
-    rb_oalign->insertSeparator();
-    rb_oalign->insertItem( KPBarIcon("aotop" ) , this, SLOT( extraAlignObjTop() ) );
-    rb_oalign->insertSeparator();
-    rb_oalign->insertItem( KPBarIcon("aocenterv" ), this, SLOT( extraAlignObjCenterV() ) );
-    rb_oalign->insertSeparator();
-    rb_oalign->insertItem( KPBarIcon("aobottom" ), this, SLOT( extraAlignObjBottom() ) );
-    rb_oalign->setMouseTracking( true );
-    rb_oalign->setCheckable( false );
-
     // create right button line begin
     rb_lbegin = new QPopupMenu();
     Q_CHECK_PTR( rb_lbegin );
@@ -3648,6 +3623,18 @@ void KPrView::setupPopupMenus()
     actionToolsClosedLinePopup->insert(actionToolsClosedPolyline);
     actionToolsClosedLinePopup->insert(actionToolsClosedQuadricBezierCurve);
     actionToolsClosedLinePopup->insert(actionToolsClosedCubicBezierCurve);
+
+    actionExtraAlignObjsPopup->insert( actionExtraAlignObjLeft );
+    actionExtraAlignObjsPopup->insert( actionExtraAlignObjCenterV );
+    actionExtraAlignObjsPopup->insert( actionExtraAlignObjRight );
+    actionExtraAlignObjsPopup->insert( actionExtraAlignObjTop );
+    actionExtraAlignObjsPopup->insert( actionExtraAlignObjCenterH );
+    actionExtraAlignObjsPopup->insert( actionExtraAlignObjBottom );
+
+    actionExtraArrangePopup->insert( actionExtraLower );
+    actionExtraArrangePopup->insert( actionExtraSendBackward );
+    actionExtraArrangePopup->insert( actionExtraBringForward );
+    actionExtraArrangePopup->insert( actionExtraRaise );
 }
 
 void KPrView::setupScrollbars()

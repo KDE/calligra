@@ -256,7 +256,6 @@ public slots:
     void extraArrangePopup();
 
     void extraShadow();
-    //    void extraAlignObj();
     void extraBackground();
     void extraLayout();
     void extraConfigure();
@@ -279,8 +278,6 @@ public slots:
     void extraAlignObjTop();
     void extraAlignObjCenterV();
     void extraAlignObjBottom();
-
-    void extraAlignObjs();
 
     // screen menu
     void screenConfigPages();
@@ -829,7 +826,7 @@ private:
     bool m_screenSaverWasEnabled;
 
     // right button popup menus
-    QPopupMenu *rb_oalign, *rb_lbegin, *rb_lend;
+    QPopupMenu *rb_lbegin, *rb_lend;
     QPopupMenu *m_arrangeObjectsPopup;
     QPtrList<KAction> m_actionList; // for the kodatatools
     QPtrList<KAction> m_variableActionList;
@@ -983,11 +980,11 @@ private:
 
     KAction *actionExtraBringForward;
     KAction *actionExtraSendBackward;
-    KAction *actionExtraArrangePopup;
+    KActionMenu *actionExtraArrangePopup;
 
     KAction *actionExtraRotate;
     KAction *actionExtraShadow;
-    KAction *actionExtraAlignObjs;
+    KActionMenu *actionExtraAlignObjsPopup;
     KAction *actionExtraAlignObjLeft;
     KAction *actionExtraAlignObjCenterH;
     KAction *actionExtraAlignObjRight;

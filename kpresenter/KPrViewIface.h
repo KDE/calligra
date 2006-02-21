@@ -109,8 +109,6 @@ k_dcop:
     virtual void extraAlignObjCenterV();
     virtual void extraAlignObjBottom();
 
-    virtual void extraAlignObjs();
-
     virtual void extraAutoFormat();
 
     virtual void extraSendBackward();

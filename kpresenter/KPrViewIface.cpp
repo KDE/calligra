@@ -269,11 +269,6 @@ void KPrViewIface::extraAlignObjBottom()
     view->extraAlignObjBottom();
 }
 
-void KPrViewIface::extraAlignObjs()
-{
-    view->extraAlignObjs();
-}
-
 void KPrViewIface::extraGroup()
 {
     view->extraGroup();
