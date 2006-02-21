@@ -83,9 +83,9 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
 		rowMouseOverHighlightingTextColor = textColor;
 	}
 	backgroundAltering = true;
-	rowMouseOverHighlightingEnabled = true; //false;
-	rowHighlightingEnabled = true; //false;
-	persistentSelections = false; //true;
+	rowMouseOverHighlightingEnabled = true;
+	rowHighlightingEnabled = true;
+	persistentSelections = true;
 	navigatorEnabled = true;
 	fullRowSelection = false;
 	gridEnabled = true;
