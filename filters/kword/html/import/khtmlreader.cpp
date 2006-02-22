@@ -161,7 +161,7 @@ void KHTMLReader::parseNode(DOM::Node node) {
         // check if this is a text node.
 	DOM::Text t=node;
 	if (!t.isNull()) {
-	   _writer->addText(state()->paragraph,t.data().string());
+	   _writer->addText(state()->paragraph,t.data().string().stripWhiteSpace());
 	   return; // no children anymore...
 	}
 
@@ -589,7 +589,8 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
         	          		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");
 	                  		}
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1));
-                  		parseNode(items);
+                  		DOM::HTMLElement htmlelement(items);
+                  		parseNode(htmlelement);
                   		popState();
                   }
         }
