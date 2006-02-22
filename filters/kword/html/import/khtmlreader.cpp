@@ -519,9 +519,9 @@ bool KHTMLReader::parse_pre(DOM::Element e) {
 	//pushNewState();
 	/// \todo set fixed width font
 	DOM::HTMLElement htmlelement(e);
-	startNewParagraph();
 	if(! htmlelement.isNull())
 		_writer->addText(state()->paragraph,htmlelement.innerHTML().string());
+	startNewParagraph();
 	//popState();
 	return false; // children are already handled.
 }
