@@ -136,7 +136,9 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 )
  : KDialogBase( 
 	KDialogBase::Plain, 
-	i18n( "Import CSV Data File" ),
+	i18n( "Import CSV Data File" )
+//! @todo use "Paste CSV Data From Clipboard" caption for mode==Clipboard
+	,
 	(mode==File ? User1 : (ButtonCode)0) |Ok|Cancel, 
 	Ok,
 	parent, 
@@ -1088,7 +1090,7 @@ void KexiCSVImportDialog::formatChanged(int id)
 	else {
 		m_detectedTypes[m_table->currentColumn()]=id;
 		m_primaryKeyField->setEnabled( _NUMBER_TYPE == id );
-		m_primaryKeyField->setChecked( m_primaryKeyColumn == m_table->currentColumn() );
+		m_primaryKeyField->setChecked( m_primaryKeyColumn == m_table->currentColumn() && m_primaryKeyField->isEnabled() );
 	}
 	updateColumnText(m_table->currentColumn());
 }
@@ -1136,7 +1138,9 @@ void KexiCSVImportDialog::currentCellChanged(int, int col)
 	m_formatCombo->setCurrentItem( type );
 	m_formatLabel->setText( m_formatComboText.arg(col+1) );
 	m_primaryKeyField->setEnabled( _NUMBER_TYPE == m_detectedTypes[col]);
-	m_primaryKeyField->setChecked( m_primaryKeyColumn == col );
+	m_primaryKeyField->blockSignals(true); //block to disable executing slotPrimaryKeyFieldToggled()
+	 m_primaryKeyField->setChecked( m_primaryKeyColumn == col );
+	m_primaryKeyField->blockSignals(false);
 }
 
 void KexiCSVImportDialog::cellValueChanged(int row,int col)
