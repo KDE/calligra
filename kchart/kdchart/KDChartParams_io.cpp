@@ -2222,7 +2222,7 @@ bool KDChartParams::loadXML( const QDomDocument& doc )
                     node = node.nextSibling();
                 }
             } else {
-                qDebug( "Unknown second-level element found: %s", tagName.latin1() );
+                //qDebug( "Unknown second-level element found: %s", tagName.latin1() );
                 // NOTE: We do *not* 'return false' here but continue normal operation
                 //       since additional elements might have been added in future versions
             }
