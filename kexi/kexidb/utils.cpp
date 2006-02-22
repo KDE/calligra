@@ -484,7 +484,7 @@ int KexiDB::fieldCount(KexiDB::TableOrQuerySchema& tableOrQuery)
 	if (tableOrQuery.table())
 		return tableOrQuery.table()->fieldCount();
 	if (tableOrQuery.query())
-		tableOrQuery.query()->fieldsExpanded().count();
+		return tableOrQuery.query()->fieldsExpanded().count();
 	return -1;
 }
 
