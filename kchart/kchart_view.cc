@@ -252,7 +252,7 @@ void KChartView::edit()
 		   << " , rows = "     << dat->rows()
 		   << " , usedCols = " << dat->usedCols()
 		   << "  usedRows = "  << dat->usedRows() << endl;
-    repaint();
+    update();
 }
 
 
@@ -266,7 +266,7 @@ void KChartView::applyEdit(kchartDataEditor *ed)
     ed->getColLabels(((KChartPart*)koDocument())->colLabelTexts());
     ((KChartPart*)koDocument())->setModified(true);
 
-    repaint();
+    update();
 }
 
 
@@ -278,7 +278,7 @@ void KChartView::wizard()
     kdDebug(35001) << "Executed. Now, display it" << endl;
     if (wiz->exec()) {
 	((KChartPart*)koDocument())->setModified(true);
-        repaint();
+        update();
         updateGuiTypeOfChart();
         kdDebug(35001) << "Ok, executed..." << endl;
     }
@@ -349,7 +349,7 @@ void KChartView::config(int flags)
 void KChartView::slotRepaint()
 {
     ((KChartPart*)koDocument())->setModified(true);
-    repaint();
+    update();
 }
 
 
@@ -369,7 +369,7 @@ void KChartView::loadConfig()
 
     updateGuiTypeOfChart();
     //refresh chart when you load config
-    repaint();
+    update();
 }
 
 
@@ -377,7 +377,7 @@ void KChartView::defaultConfig()
 {
     ((KChartPart*)koDocument())->defaultConfig(  );
     updateGuiTypeOfChart();
-    repaint();
+    update();
 }
 
 
@@ -393,7 +393,7 @@ void KChartView::pieChart()
 	params->setExplode( true );
 
 	updateButton();
-	repaint();
+	update();
 	((KChartPart*)koDocument())->setModified(true);
     }
     else
@@ -424,7 +424,7 @@ void KChartView::lineChart()
 	params->setLineChartSubType( KDChartParams::LineNormal );
 
 	updateButton();
-	repaint();
+	update();
 	((KChartPart*)koDocument())->setModified(true);
     }
     else
@@ -444,7 +444,7 @@ void KChartView::barsChart()
 
 	updateButton();
     params->setThreeDBars( params->threeDPies() );
-	repaint();
+	update();
 	((KChartPart*)koDocument())->setModified(true);
     }
     else
@@ -462,7 +462,7 @@ void KChartView::areasChart()
 	params->setAreaChartSubType( KDChartParams::AreaNormal );
 
 	updateButton();
-	repaint();
+	update();
 	((KChartPart*)koDocument())->setModified(true);
     }
     else
@@ -481,7 +481,7 @@ void KChartView::hiLoChart()
 	params->setHiLoChartSubType( KDChartParams::HiLoNormal );
 
 	updateButton();
-	repaint();
+	update();
 	((KChartPart*)koDocument())->setModified(true);
     }
     else
@@ -498,7 +498,7 @@ void KChartView::ringChart()
 	params->setChartType( KChartParams::Ring );
 
 	updateButton();
-	repaint();
+	update();
 	((KChartPart*)koDocument())->setModified(true);
     }
     else
@@ -516,7 +516,7 @@ void KChartView::polarChart()
         params->setChartType( KDChartParams::Polar );
         params->setPolarChartSubType( KDChartParams::PolarNormal );
 
-        repaint();
+        update();
 	((KChartPart*)koDocument())->setModified(true);
     }
     else
@@ -533,7 +533,7 @@ void KChartView::bwChart()
         params->setChartType( KDChartParams::BoxWhisker );
         params->setBWChartSubType( KDChartParams::BWNormal );
 
-        repaint();
+        update();
 	((KChartPart*)koDocument())->setModified(true);
     }
     else
