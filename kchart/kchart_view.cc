@@ -52,6 +52,10 @@ namespace KChart
 KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
     : KoView( part, parent, name )
 {
+
+    // No flicker
+    setBackgroundMode( Qt::NoBackground );
+
     setInstance( KChartFactory::global() );
     if ( koDocument()->isReadWrite() )
         setXMLFile( "kchart.rc" );
@@ -188,18 +192,13 @@ DCOPObject* KChartView::dcopObject()
 
 void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 {
-    QPainter painter;
-    painter.begin( this );
+    QPainter painter( this );
 
     // ### TODO: Scaling
 
     // Let the document do the drawing
-    // PENDING(kalle) Do double-buffering if we are a widget
-    //    part()->paintEverything( painter, ev->rect(), FALSE, this );
-    // paint everything
-    koDocument()->paintEverything( painter, rect(), FALSE, this );
-
-    painter.end();
+    // This calls KChartPart::paintContent, basically.
+    koDocument()->paintEverything( painter, rect(), false, this );
 }
 
 
@@ -273,7 +272,7 @@ void KChartView::applyEdit(kchartDataEditor *ed)
 void KChartView::wizard()
 {
     kdDebug(35001) << "Wizard called" << endl;
-    KChartWizard *wiz = new KChartWizard((KChartPart*)koDocument(), this, 
+    KChartWizard *wiz = new KChartWizard((KChartPart*)koDocument(), this,
 					 "KChart Wizard", true);
     kdDebug(35001) << "Executed. Now, display it" << endl;
     if (wiz->exec()) {
@@ -650,9 +649,9 @@ void KChartView::print(KPrinter &printer)
     }
 
     QRect  rect(0, 0, width, height);
-    KDChart::print(&painter, 
+    KDChart::print(&painter,
 		   ((KChartPart*)koDocument())->params(),
-		   ((KChartPart*)koDocument())->data(), 
+		   ((KChartPart*)koDocument())->data(),
 		   0, 		// regions
 		   &rect);
 
@@ -734,7 +733,7 @@ void KChartView::importData()
 	}
     }
 
-    ((KChartPart*)koDocument())->doSetData( data, 
+    ((KChartPart*)koDocument())->doSetData( data,
 					    hasRowHeaders, hasColHeaders );
 }
 

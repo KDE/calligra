@@ -127,6 +127,8 @@ private:
     KDChartTableData         m_displayData;
     QStringList              m_rowLabels;
     QStringList              m_colLabels;
+
+    QPixmap                  m_bufferPixmap;
 };
 
 

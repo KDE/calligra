@@ -265,20 +265,20 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
     longLabels.clear();
     shortLabels.clear();
-    
+
     const uint dataColumnCount = m_currentData.cols();
     const uint dataRowCount = m_currentData.rows();
     const uint columnLabelCount = m_colLabels.count();
     const uint rowLabelCount = m_rowLabels.count();
-    
+
     if (m_params->dataDirection() == KChartParams::DataRows) {
 	// Data is handled in rows.  This is the way KDChart works also.
 
 	// Set X axis labels from column headers.
 	for ( uint col = 0; col < dataColumnCount; col++ ) {
-	    
+
             QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
-            
+
             longLabels  << label;
 	    shortLabels << label.left( 3 );
 	}
@@ -286,7 +286,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	// Set legend from row headers.
         for ( uint row = 0; row < dataRowCount; row++ ) {
             QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
-        
+
             m_params->setLegendText( row, label );
         }
     }
@@ -295,9 +295,9 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
 	// Set X axis labels from row headers.
 	for ( uint row = 0; row < dataRowCount; row++ ) {
-	    
+
             QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
-        
+
             longLabels  << label;
 	    shortLabels << label.left( 3 );
 	}
@@ -305,7 +305,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	// Set legend from column headers.
         for ( uint col = 0; col < dataColumnCount ; col++ ) {
             QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
-        
+
             m_params->setLegendText( col, label );
         }
     }
@@ -322,9 +322,9 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	    // If data are in rows, then the X axis labels should be
 	    // taken from the row headers.
 	    for ( uint row = 0; row < dataRowCount ; row++ ) {
-		
+
                 QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString::null;
-            
+
                 longLabels  << label;
 		shortLabels << label.left( 3 );
 	    }
@@ -333,9 +333,9 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	    // If data are in columns, then the X axis labels should
 	    // be taken from the column headers.
 	    for ( uint col = 0; col < dataColumnCount; col++ ) {
-		
+
                 QString label = (col < columnLabelCount) ? m_colLabels[col] : QString::null;
-            
+
                 longLabels  << m_colLabels[col];
 		shortLabels << m_colLabels[col].left( 3 );
 	    }
@@ -350,13 +350,27 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // suitable legends and axis labels.  Now start the real painting.
 
     // Handle transparency.
-    if ( !transparent )
-        painter.eraseRect( rect );
+    // Wrong: this flickers; better do this as part of the double-buffering.
+    //if ( !transparent )
+    //    painter.eraseRect( rect );
 
     // ## TODO: support zooming
 
+    // Double-buffering
+    if ( m_bufferPixmap.width() < rect.width() || m_bufferPixmap.height() < rect.height() )
+        m_bufferPixmap.resize( rect.size() );
+    QPainter bufferPainter( &m_bufferPixmap );
+
     // We only need to draw the document rectangle "rect".
-    KDChart::paint( &painter, m_params, &m_displayData, 0, &rect );
+    KDChart::paint( &bufferPainter, m_params, &m_displayData, 0, &rect );
+
+    // This is always the empty rect...
+    // Shouldn't creating a QPainter in a paintEvent set up clipping automatically?
+    // I thought it did (DF)
+    //const QRect clipRect = painter.clipRegion().boundingRect();
+    //painter.drawPixmap( clipRect.topLeft(), m_bufferPixmap, clipRect );
+
+    painter.drawPixmap( 0, 0, m_bufferPixmap );
 }
 
 
@@ -915,7 +929,7 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
         return false;
     }
 
-    QDomElement chartElem = KoDom::namedItemNS( officeChartElem, 
+    QDomElement chartElem = KoDom::namedItemNS( officeChartElem,
 						KoXmlNS::chart, "chart" );
     if ( chartElem.isNull() ) {
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
@@ -963,8 +977,8 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
 bool KChartPart::loadOasisData( const QDomElement& tableElem )
 {
     int          numberHeaderColumns = 0;
-    QDomElement  tableHeaderColumns = KoDom::namedItemNS( tableElem, 
-							  KoXmlNS::table, 
+    QDomElement  tableHeaderColumns = KoDom::namedItemNS( tableElem,
+							  KoXmlNS::table,
 							  "table-header-columns" );
 
     QDomElement  elem;
@@ -1131,7 +1145,7 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 }
 
 
-void KChartPart::saveOasisData( KoXmlWriter* bodyWriter, 
+void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
 				KoGenStyles& mainStyles ) const
 {
     Q_UNUSED( mainStyles );
@@ -1214,19 +1228,19 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
             QString  valStr;
 
             switch ( value.type() ) {
-            case QVariant::Invalid: 
+            case QVariant::Invalid:
 		break;
             case QVariant::String:
 		valType = "string";
-		valStr  = value.toString();  
+		valStr  = value.toString();
 		break;
-            case QVariant::Double:   
-		valType = "float"; 
-		valStr  = QString::number( value.toDouble(), 'g', DBL_DIG ); 
+            case QVariant::Double:
+		valType = "float";
+		valStr  = QString::number( value.toDouble(), 'g', DBL_DIG );
 		break;
             case QVariant::DateTime:
-		valType = "date"; 
-		valStr  = ""; /* like in saveXML, but why? */  
+		valType = "date";
+		valStr  = ""; /* like in saveXML, but why? */
 		break;
             default: {
                 kdDebug(35001) << "ERROR: cell " << row << "," << col
@@ -2121,7 +2135,7 @@ bool KChartPart::loadOldXML( const QDomDocument& doc )
     }
 
     if ( !m_params->backgroundPixmapName.isNull() ) {
-        m_params->backgroundPixmap.load( locate( "wallpaper", 
+        m_params->backgroundPixmap.load( locate( "wallpaper",
 						 m_params->backgroundPixmapName ));
         m_params->backgroundPixmapIsDirty = true;
     }
