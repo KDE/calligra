@@ -518,10 +518,9 @@ bool KHTMLReader::parse_img(DOM::Element e) {
 bool KHTMLReader::parse_pre(DOM::Element e) {
 	//pushNewState();
 	/// \todo set fixed width font
-	for (DOM::Node node=e.firstChild();!node.isNull();node=node.nextSibling()) {
-		startNewParagraph();
-		_writer->addText(state()->paragraph,node.toHTML());
-	}
+	DOM::HTMLElement htmlelement(e);
+	startNewParagraph();
+	_writer->addText(state()->paragraph,htmlelement.innerHTML().string());
 	//popState();
 	return false; // children are already handled.
 }
