@@ -254,7 +254,7 @@ onto the form.</para></listitem>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
 <guisubmenu>Paste Special</guisubmenu>
-<guimenuitem>Data Table...</guimenuitem>
+<guimenuitem>As Data Table...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Paste clipboard data to a new table within the current project.
 </action></para></listitem>
