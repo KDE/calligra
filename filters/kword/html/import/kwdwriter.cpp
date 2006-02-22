@@ -398,6 +398,10 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id) {
 	QDomText currentText=temp.toText();
 	if (temp.isNull()) { kdDebug(30503) << "no text" << endl; return; }
 	int oldLength=currentText.data().length();
+	if(oldLength <= 0) {
+		while(text.at(0).isSpace())
+			text.remove(0,1);
+	}
 	currentText.setData(currentText.data()+text);
 	int newLength=text.length();
 	QDomElement lastformat=currentFormat(paragraph,true);

@@ -161,7 +161,7 @@ void KHTMLReader::parseNode(DOM::Node node) {
         // check if this is a text node.
 	DOM::Text t=node;
 	if (!t.isNull()) {
-	   _writer->addText(state()->paragraph,t.data().string().stripWhiteSpace());
+	   _writer->addText(state()->paragraph,t.data().string());
 	   return; // no children anymore...
 	}
 
