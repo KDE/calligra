@@ -49,6 +49,13 @@ public:
 	QDomElement addFrameSet(QDomElement parent, int frametype=1,
 				   int frameinfo=0, QString name=QString::null,
 				   int visible=1);
+
+	/**
+	 * \returns true if we are currently in a table (\a createTable() got called,
+	 * but we are still waiting for a \a finishTable() ).
+	 */
+	bool isInTable() const;
+
 	/**
 	 * creates a table
 	 **/
@@ -197,6 +204,7 @@ protected:
 	QDomElement _docinfoMain;
 	KoTextZoomHandler *_zoomhandler;
 	int tableNo;
+	bool insidetable;
 	
 };
 

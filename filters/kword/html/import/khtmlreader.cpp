@@ -232,22 +232,7 @@ void KHTMLReader::parse_head(DOM::Element e) {
 bool KHTMLReader::parseTag(DOM::Element e) {
 	_PP(p);
 	_PP(br);
-
-	/*sebsauer 2006/02/22 Disabled cause to try to import following html-code results in a endless-loop
-	deep inside of kword.
-	<html><body>
-	<table>
-		<tr><td>
-			<table>
-				<tr><td></td><td></td></tr>
-				<tr><td></td></tr>
-			</table>
-		</td></tr>
-	</table>
-	</body></html>
-	*/
-	//_PP(table);
-
+	_PP(table);
 	_PP(pre);
 	_PP(ul);
 	_PP(ol);
@@ -465,6 +450,17 @@ QColor parsecolor(QString colorstring) {
 
 
 bool KHTMLReader::parse_table(DOM::Element e) {
+	if(_writer->isInTable()) {
+		// We are already inside of a table. Tables in tables are not supported
+		// yet. So, just add that table-content as text.
+		for (DOM::Node rows=e.firstChild().firstChild();!rows.isNull();rows=rows.nextSibling())
+			if (!rows.isNull() && rows.nodeName().string().lower() == "tr")
+				for (DOM::Node cols=rows.firstChild();!cols.isNull();cols=cols.nextSibling())
+					if (!cols.isNull() && cols.nodeName().string().lower() == "td")
+						parseNode(cols);
+		return false;
+	}
+
 	int tableno=_writer->createTable();
  	int nrow=0;
  	int ncol=0;

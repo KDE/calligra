@@ -37,6 +37,7 @@ KWDWriter::KWDWriter(KoStore *store){
 	_docinfo->appendChild(infodoc);
 
 	tableNo=1;
+	insidetable = false;
 	QDomElement kwdoc = _doc->createElement( "DOC" );
 	kwdoc.setAttribute( "editor", "HTML Import Filter" );
 	kwdoc.setAttribute( "mime", "application/x-kword" );
@@ -124,8 +125,12 @@ HEADINGSTYLE(h6,8);
 
 }
 
+bool KWDWriter::isInTable() const {
+	return insidetable;
+}
 
 int KWDWriter::createTable() {
+ insidetable = true;
  return tableNo++;
 }
 
@@ -208,6 +213,7 @@ void KWDWriter::createHR(QDomElement paragraph, int width) {
 void KWDWriter::finishTable(int tableno,QRect rect) {
 	int ncols=0;
 	int nrows=0;
+	insidetable = false;
 
 	int x=rect.x();
 	int y=rect.y();
