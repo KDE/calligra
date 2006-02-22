@@ -51,6 +51,10 @@
  *
  *  So this is some sort of inheritance where the styles on top of the stack overwrite
  *  the same attribute of a lower style on the stack.
+ *
+ *  In general though, you wouldn't use push/pop directly, but KoOasisLoadingContext::fillStyleStack
+ *  or KoOasisLoadingContext::addStyles to automatically push a style and all its
+ *  parent styles onto the stack.
  */
 class KOFFICECORE_EXPORT  KoStyleStack
 {
