@@ -204,15 +204,19 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     kdDebug(41008) << "Colorspace is : " << csName << " with a depth of " << depth << " and with a nb of channels of " << nbchannels << endl;
     
     // Read image profile
+    kdDebug() << "Reading profile" << endl;
     KisProfile* profile = 0;
     DWORD EmbedLen;
     LPBYTE EmbedBuffer;
 
     if (TIFFGetField(image, TIFFTAG_ICCPROFILE, &EmbedLen, &EmbedBuffer)) {
+        kdDebug(41008) << "Profile found" << endl;
         QByteArray rawdata;
         rawdata.resize(EmbedLen);
         memcpy(rawdata.data(), EmbedBuffer, EmbedLen);
         profile = new KisProfile(rawdata);
+    } else {
+        kdDebug(41008) << "No Profile found" << endl;
     }
     
     // Retrieve a pointer to the colorspace
@@ -235,6 +239,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     cmsHTRANSFORM transform = 0;
     if(profile && !profile->isSuitableForOutput())
     {
+        kdDebug(41008) << "The profile can't be used in krita, need conversion" << endl;
         transform = cmsCreateTransform(profile->profile(), cs->colorSpaceType(),
                                        cs->getProfile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
