@@ -520,7 +520,8 @@ bool KHTMLReader::parse_pre(DOM::Element e) {
 	/// \todo set fixed width font
 	DOM::HTMLElement htmlelement(e);
 	startNewParagraph();
-	_writer->addText(state()->paragraph,htmlelement.innerHTML().string());
+	if(! htmlelement.isNull())
+		_writer->addText(state()->paragraph,htmlelement.innerHTML().string());
 	//popState();
 	return false; // children are already handled.
 }
