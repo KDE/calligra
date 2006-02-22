@@ -562,8 +562,8 @@ bool KHTMLReader::parse_font(DOM::Element e) {
 
 bool KHTMLReader::parse_ul(DOM::Element e) {
         _list_depth++;
-        for (DOM::Element items=e.firstChild();!items.isNull();items=items.nextSibling()) {
-                  if (items.tagName().string().lower() == "li") {
+        for (DOM::Node items=e.firstChild();!items.isNull();items=items.nextSibling()) {
+                  if (items.nodeName().string().lower() == "li") {
                   	pushNewState();
                   		startNewLayout();
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
