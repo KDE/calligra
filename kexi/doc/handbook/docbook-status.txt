@@ -109,15 +109,16 @@ Chapter 4. Advanced database topics
 06_04_00_using_CLI.html                      NOT READY FOR CONVERSION YET
 
 Chapter 5. Work with external data
-07_01_00_data_import.html                    NOT READY FOR CONVERSION YET
-07_01_01_data_import_csv.html                NOT READY FOR CONVERSION YET
-07_01_02_data_pasting_csv.html               NOT READY FOR CONVERSION YET
-07_02_00_db_project_import.html              NOT READY FOR CONVERSION YET
-07_03_00_data_export.html                    NOT READY FOR CONVERSION YET
-07_03_01_data_export_csv.html                NOT READY FOR CONVERSION YET
-07_03_02_data_copying_csv.html               NOT READY FOR CONVERSION YET
-07_04_00_project_export.html                 NOT READY FOR CONVERSION YET
-07_05_00_working_with_multiple_projects.html NOT READY FOR CONVERSION YET
+07_01_00_data_formats.html                   NOT READY FOR CONVERSION YET
+07_02_00_data_import.html                    NOT READY FOR CONVERSION YET
+07_02_01_data_import_csv.html                NOT READY FOR CONVERSION YET
+07_02_02_data_pasting_csv.html               NOT READY FOR CONVERSION YET
+07_03_00_db_project_import.html              NOT READY FOR CONVERSION YET
+07_04_00_data_export.html                    NOT READY FOR CONVERSION YET
+07_04_01_data_export_csv.html                NOT READY FOR CONVERSION YET
+07_04_02_data_copying_csv.html               NOT READY FOR CONVERSION YET
+07_05_00_project_export.html                 NOT READY FOR CONVERSION YET
+07_06_00_working_with_multiple_projects.html NOT READY FOR CONVERSION YET
 
 
 Chapter 6: Configuring Kexi (Martin):
@@ -149,7 +150,7 @@ ac_00_00_widgets.html                    NOT READY FOR CONVERSION YET
 TODO
 
 Appendix D: Specifications
-ad_00_00_specs.html                      NOT READY FOR CONVERSION YET
+ad_01_01_csv_format.html                 NOT READY FOR CONVERSION YET
 TODO
 
 Appendix E: Example database projects
