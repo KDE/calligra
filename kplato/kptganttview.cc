@@ -210,34 +210,46 @@ void GanttView::drawChanges(Project &project)
     currentItemChanged(m_currentItem);
 }
 
-void GanttView::drawOnPainter(QPainter* painter, QRect /*rect*/)
+void GanttView::drawOnPainter(QPainter* painter, const QRect rect)
 {
-//   QValueList<int> sizes = m_taskView->sizes();
-//   if (sizes.count() >= 2)
-//   {
-//     int first = sizes[0];
-//     int second = sizes[1];
-//     sizes.pop_front();
-//     sizes.pop_front();
-//     sizes.prepend(first+second);
-//     sizes.prepend(0);
-//     m_taskView->setSizes(sizes);
-//   }
-//   else
-//     kdWarning() << "Apparently the task view splitter contains less than 2 parts!" << endl;
+    // Assume clipping is allready set
+    
+    // Fill out the rect by adding ticks to right side of the timeline
+    QSize s = m_gantt->drawContents(0, false, true);
+    while (s.width() < rect.width()) {
+        m_gantt->addTicksRight();
+        m_gantt->setTimelineToEnd();
+        s = m_gantt->drawContents(0, false, true);
+    }
+    kdDebug()<<k_funcinfo<<rect<<" : "<<s<<endl;
+    painter->save();
+    
+//    QValueList<int> sizes = m_taskView->sizes();
+//    if (sizes.count() >= 2)
+//    {
+//        int first = sizes[0];
+//        int second = sizes[1];
+//        sizes.pop_front();
+//        sizes.pop_front();
+//        sizes.prepend(first+second);
+//        sizes.prepend(0);
+//        m_taskView->setSizes(sizes);
+//    }
+//    else
+//        kdWarning() << "Apparently the task view splitter contains less than 2 parts!" << endl;
 
-//   bool showlistview = m_gantt->showListView();
-//   int listviewwidth = m_gantt->listViewWidth();
-//   m_gantt->setShowListView(false);
-//   m_gantt->setListViewWidth(0);
+//    bool showlistview = m_gantt->showListView();
+//    int listviewwidth = m_gantt->listViewWidth();
+//    m_gantt->setShowListView(false);
+//    m_gantt->setListViewWidth(0);
   
-//   m_gantt->setGanttMaximumWidth(rect.x());
-  m_gantt->drawContents(painter,false,true);
-  
-//   m_gantt->setShowListView(showlistview);
-//   m_gantt->setListViewWidth(listviewwidth);
+//    m_gantt->setGanttMaximumWidth(rect.x());
+    m_gantt->drawContents(painter,false,true);
+//    m_gantt->setShowListView(showlistview);
+//    m_gantt->setListViewWidth(listviewwidth);
 
 //   m_taskView->drawContents(painter); //TODO doesn't seem to do very much
+    painter->restore();
 }
 
 KDGanttViewItem *GanttView::findItem(Node *node)

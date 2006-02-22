@@ -40,6 +40,7 @@
 #include <kcommand.h>
 #include <KoTemplateChooseDia.h>
 #include <KoCommandHistory.h>
+#include <KoGlobal.h>
 
 #define CURRENT_SYNTAX_VERSION "0.2"
 
@@ -306,32 +307,38 @@ void Part::paintContent(QPainter &painter, const QRect &rect,
     kdDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
     if (isEmbedded() && m_embeddedGanttView && m_project)
     {
-      if (m_embeddedContext)
-      {
-        int ganttsize = m_embeddedContext->ganttview.ganttviewsize;
-        int tasksize = m_embeddedContext->ganttview.taskviewsize;
-        bool showtaskname = m_embeddedContext->ganttview.showTaskName;
+        if (m_embeddedContext)
+        {
+            int ganttsize = m_embeddedContext->ganttview.ganttviewsize;
+            int tasksize = m_embeddedContext->ganttview.taskviewsize;
+            bool showtaskname = m_embeddedContext->ganttview.showTaskName;
+            
+//            m_embeddedContext->ganttview.ganttviewsize += m_embeddedContext->ganttview.taskviewsize;
+//            m_embeddedContext->ganttview.taskviewsize = 0;  //TODO this doesn't have any effect?! (bug?)
+            m_embeddedContext->ganttview.showTaskName = true;  //since task view is not shown(?), show name in the gantt itself
+            
+            m_embeddedGanttView->setContext( m_embeddedContext->ganttview, *m_project );
+            
+            m_embeddedContext->ganttview.ganttviewsize = ganttsize;
+            m_embeddedContext->ganttview.taskviewsize = tasksize;
+            m_embeddedContext->ganttview.showTaskName = showtaskname;
+        }
+        else
+        {
+            kdWarning() << "Don't have any context to set!" << endl;
+        }
+        painter.setClipRect(rect, QPainter::CoordPainter);
+        // We don't support zoom yet, so use the painters scaling
+        double d_zoom = 1.0;
+        setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
+        if ( m_zoomedResolutionX != zoomX ) {
+            d_zoom *= ( zoomX / m_zoomedResolutionX );
+            painter.scale(d_zoom, d_zoom);
+        }
         
-//         m_embeddedContext->ganttview.ganttviewsize += m_embeddedContext->ganttview.taskviewsize;
-//         m_embeddedContext->ganttview.taskviewsize = 0;  //TODO this doesn't have any effect?! (bug?)
-        m_embeddedContext->ganttview.showTaskName = true;  //since task view is not shown(?), show name in the gantt itself
-        
-        m_embeddedGanttView->setContext( m_embeddedContext->ganttview, *m_project );
-        
-        m_embeddedContext->ganttview.ganttviewsize = ganttsize;
-        m_embeddedContext->ganttview.taskviewsize = tasksize;
-        m_embeddedContext->ganttview.showTaskName = showtaskname;
-      }
-      else
-        kdWarning() << "Don't have any context to set!" << endl;
-    
-      double zoom = zoomX;
-      if (zoomY < zoomX)
-        zoom = zoomY;
-      m_embeddedGanttView->clear();
-//       m_embeddedGanttView->setZoom(zoom); //behaves a bit weird
-      m_embeddedGanttView->draw(*m_project);
-      m_embeddedGanttView->drawOnPainter(&painter,rect);
+        m_embeddedGanttView->clear();
+        m_embeddedGanttView->draw(*m_project);
+        m_embeddedGanttView->drawOnPainter(&painter,rect);
     }
     // ####### handle transparency
 

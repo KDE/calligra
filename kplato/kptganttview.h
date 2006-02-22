@@ -70,7 +70,7 @@ class GanttView : public QSplitter
     /**
      * Call draw() or drawChanges() before calling this.
      */
-    void drawOnPainter(QPainter* painter, QRect rect);
+    void drawOnPainter(QPainter* painter, const QRect rect);
 
     Node *currentNode() const;
 
