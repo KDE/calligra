@@ -232,7 +232,22 @@ void KHTMLReader::parse_head(DOM::Element e) {
 bool KHTMLReader::parseTag(DOM::Element e) {
 	_PP(p);
 	_PP(br);
-	_PP(table);
+
+	/*sebsauer 2006/02/22 Disabled cause to try to import following html-code results in a endless-loop
+	deep inside of kword.
+	<html><body>
+	<table>
+		<tr><td>
+			<table>
+				<tr><td></td><td></td></tr>
+				<tr><td></td></tr>
+			</table>
+		</td></tr>
+	</table>
+	</body></html>
+	*/
+	//_PP(table);
+
 	_PP(pre);
 	_PP(ul);
 	_PP(ol);
