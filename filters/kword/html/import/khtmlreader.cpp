@@ -232,7 +232,7 @@ void KHTMLReader::parse_head(DOM::Element e) {
 bool KHTMLReader::parseTag(DOM::Element e) {
 	_PP(p);
 	_PP(br);
-	// _PP(table); <- disabled for beta.
+	_PP(table);
 	_PP(pre);
 	_PP(ul);
 	_PP(ol);
@@ -265,12 +265,12 @@ void KHTMLReader::parseStyle(DOM::Element e) {
   // styles are broken broken broken broken broken broken.
   //FIXME: wait until getComputedStyle is more than
   // 'return 0' in khtml
-  kdDebug() << "entering parseStyle" << endl;
+  kdDebug(30503) << "entering parseStyle" << endl;
      DOM::CSSStyleDeclaration s1=e.style();
      DOM::Document doc=_html->document();
      DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
 
-     kdDebug() << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
+     kdDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
      if ( s1.getPropertyValue("font-weight").string() == "bolder" )
      {
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
@@ -382,14 +382,14 @@ bool KHTMLReader::parse_p(DOM::Element e) {
 	return true;
 }
 
-bool KHTMLReader::parse_hr(DOM::Element e) {
+bool KHTMLReader::parse_hr(DOM::Element /*e*/) {
 	startNewParagraph();
 	_writer->createHR(state()->paragraph);
 	startNewParagraph();
 	return true;
 }
 
-bool KHTMLReader::parse_br(DOM::Element e) {
+bool KHTMLReader::parse_br(DOM::Element /*e*/) {
 	startNewParagraph(false,false); //keep the current format and layout
 	return false; // a BR tag has no childs.
 }
@@ -463,16 +463,17 @@ bool KHTMLReader::parse_table(DOM::Element e) {
 
  	// fixme rewrite this proper
  	//(maybe using computed sizes from khtml if thats once exported)
- 	for (DOM::Element rows=table_body.firstChild();!rows.isNull();rows=rows.nextSibling()) {
- 	if (rows.tagName().string().lower() == "tr") {
-
+ 	for (DOM::Node rowsnode=table_body.firstChild();!rowsnode.isNull();rowsnode=rowsnode.nextSibling()) {
+ 	DOM::Element rows = rowsnode;
+ 	if (!rows.isNull() && rows.tagName().string().lower() == "tr") {
  	    QColor obgcolor=bgcolor;
  	    if (!rows.getAttribute("bgcolor").string().isEmpty())
  	       	bgcolor=parsecolor(rows.getAttribute("bgcolor").string());
 
  		ncol=0;
- 		for (DOM::Element cols=rows.firstChild();!cols.isNull();cols=cols.nextSibling()) {
- 		        if (cols.tagName().string().lower() == "td") {
+ 		for (DOM::Node colsnode=rows.firstChild();!colsnode.isNull();colsnode=colsnode.nextSibling()) {
+ 		        DOM::Element cols = colsnode;
+ 		        if (!cols.isNull() && cols.nodeName().string().lower() == "td") {
  		             QColor bbgcolor=bgcolor;
 		 	    if (!cols.getAttribute("bgcolor").string().isEmpty())
  	       			bgcolor=parsecolor(cols.getAttribute("bgcolor").string());

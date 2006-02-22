@@ -256,7 +256,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	      if (must_resize == true) {
 	      QDomElement ee=e.firstChild().toElement(); // the frame in the frameset
 	          int cs=e.attribute("cols").toInt();
-	          int rs=e.attribute("cols").toInt();
+	          int rs=e.attribute("rows").toInt();
 	          kdDebug(30503) << "resizing" << endl;
 	          addRect(ee,QRect(x+step_x*curcol,0,step_x*cs,step_y*rs));
 	      }
