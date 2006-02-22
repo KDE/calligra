@@ -40,7 +40,7 @@ After the feature freeze
   + Grid setting for both directions				      1 ----
 
 * Data editor
-  + Better keyboard shortcuts?					      1 ----
+  + Better keyboard shortcuts?					      2 ----
     - Remove the spinboxes from the buddy list.				  ----
   + Show labels in the first row / column			      1 ----
     - Add "first row / column as label" checkboxes to the gui		  ----
@@ -50,19 +50,20 @@ After the feature freeze
   + Adjust labels when inserting / deleting rows / columns	      1 ----
 
 * OpenDocument
-  + Reading
-    - Read all types
-  + Writing
-    - Write all types
+  + Reading							      1 ----
+    - Read all chart types						  ----
+  + Writing							      1 ----
+    - Write all chart types						  ----
 
 * Scripting
-  + DCOP for data manipulation
+  + DCOP for data manipulation					      2 ----
     - class KChartData
-  + DCOP for chart manipulation
-    - class KChartParam
+  + DCOP for chart manipulation					      2 ----
+    - class KChartParam							  done
+
 
 * Structure
-  + put dialogs in their own directory
+  + put dialogs in their own directory				      3 ----
 
 
 After 1.5
