@@ -1220,7 +1220,9 @@ tristate KexiMainWindowImpl::closeProject()
 	{
 		d->navWasVisibleBeforeProjectClosing = manager()->findWidgetParentDock(d->nav)->isVisible();
 		d->nav->clear();
+#if 0 //do not confuse users 
 		d->navToolWindow->hide();
+#endif
 	}
 
 	if (d->propEditor)
