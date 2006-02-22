@@ -298,6 +298,7 @@ void KHTMLReader::parseStyle(DOM::Element e) {
 }
 
 void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
+/*
         // For the first paragraph ever, do nothing. 
         // It has already been started.
         static bool firstparagraph=true;
@@ -306,7 +307,7 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
           firstparagraph=false;
           return;
         }
-
+*/
 	QDomElement qf=state()->format;
 	QDomElement ql=state()->layout;
 
@@ -522,7 +523,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
 	return false; // we do our own recursion
 }
 
-bool KHTMLReader::parse_img(DOM::Element e) {
+bool KHTMLReader::parse_img(DOM::Element /*e*/) {
      	//QRect e=e.getRect();
     return true;
 }
@@ -571,7 +572,7 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
         _list_depth++;
         for (DOM::Node items=e.firstChild();!items.isNull();items=items.nextSibling()) {
                   if (items.nodeName().string().lower() == "li") {
-                  	pushNewState();
+                  		pushNewState();
                   		startNewLayout();
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
@@ -589,8 +590,7 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
 	                  		}
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1));
                   		parseNode(items);
-                  	popState();
-
+                  		popState();
                   }
         }
         _list_depth--;
