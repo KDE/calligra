@@ -89,7 +89,7 @@ In the <emphasis>Table designer</emphasis> window, every row corresponds to
 a single table field. You can recognize you are in <emphasis>design
 mode</emphasis> because the <!-- <img src="icons/state_edit.png" class="icon"> -->
 <emphasis>Switch to Design View mode</emphasis> button is toggled on within
-the main &kexi; toolbar<!-- (see the figure below) -->.
+the main &kexi; toolbar.
 </para>
 
 <itemizedlist>
