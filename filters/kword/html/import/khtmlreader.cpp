@@ -515,20 +515,15 @@ bool KHTMLReader::parse_img(DOM::Element e) {
     return true;
 }
 
-
 bool KHTMLReader::parse_pre(DOM::Element e) {
-	DOM::Text prething=e.firstChild();
-	if (prething.isNull()) return false;
-
-	QStringList k=QStringList::split("\n",prething.data().string());
-
-	startNewParagraph();
-
-	for (QStringList::Iterator b=k.begin();b!=k.end();++b) {
-		_writer->addText(state()->paragraph,*b);
+	//pushNewState();
+	/// \todo set fixed width font
+	for (DOM::Node node=e.firstChild();!node.isNull();node=node.nextSibling()) {
 		startNewParagraph();
+		_writer->addText(state()->paragraph,node.toHTML());
 	}
-	return false; // FIXME no support for tags in <PRE> sections ATM.
+	//popState();
+	return false; // children are already handled.
 }
 
 bool KHTMLReader::parse_ol(DOM::Element e) {
