@@ -182,7 +182,7 @@ QString LinkDialog::link() const
            str = d->fileLink->lineEdit()->text(); 
            if( !str.isEmpty() )
            if( str.find( "file:/" )==-1 )
-               str.prepend( "file:/" );
+               str.prepend( "file://" );
            break;
            
         case 3:  
@@ -249,7 +249,9 @@ void LinkDialog::setLink( const QString& link )
     
     if( link.startsWith( "file:/" ) )
     {
-      d->fileLink->lineEdit()->setText( link.mid( QString("file:/").length() ) );
+      QString s = link.mid( QString("file:/").length() );
+      while(s.startsWith("//")) s.remove(0,1);
+      d->fileLink->lineEdit()->setText(s);
       showPage( 2 );
       return;
     }
