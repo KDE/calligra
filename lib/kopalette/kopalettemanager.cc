@@ -278,6 +278,21 @@ void KoPaletteManager::showWidget(const QString & name)
     a->setChecked(true);
 }
 
+void KoPaletteManager::hideWidget(const QString & name)
+{
+    QWidget * w = m_widgets->find(name);
+    if (!w) return;
+
+    QString pname = *m_currentMapping->find(name);
+    if (pname.isNull()) return;
+
+    KoPalette * p = m_palettes->find(pname);
+    p->hidePage(w);
+
+    KToggleAction * a = m_actions->find(name);
+    a->setChecked(false);
+}
+
 void KoPaletteManager::removeWidget(const QString & name)
 {
     QString palette = *(m_currentMapping->find(name));

@@ -126,6 +126,11 @@ public:
     virtual void showWidget(const QString & name);
 
     /**
+     * hide the specified widget
+     */
+    virtual void hideWidget(const QString & name);
+    
+    /**
      * Remove the widget with the specified name from whichever
      * palette it is currently in. If it is the last widget in
      * the palette, the palette is destroyed. If the name does
