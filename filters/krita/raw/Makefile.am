@@ -30,7 +30,4 @@ METASOURCES = AUTO
 
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
-mimetypeimagedata_DATA = x-raw.desktop
-mimetypeimagedatadir = $(kde_mimedir)/image
-EXTRA_DIST = $(mimetypeimagedata_DATA)
 

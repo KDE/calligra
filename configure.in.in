@@ -168,6 +168,16 @@ AC_COMPILE_IFELSE([
 	need_kde34_compat="yes"
 )
 
+AC_COMPILE_IFELSE([
+#include <kdeversion.h>
+#if ! ( KDE_IS_VERSION( 3, 5, 2 ) )
+#error KDE 3.5.2
+#endif
+],
+	need_kde352_compat="no"
+,
+	need_kde352_compat="yes"
+)
 CXXFLAGS="$kdeversion_save_CXXFLAGS"
 LIBS="$kdeversion_safe_LIBS"
 AC_LANG_RESTORE
@@ -180,8 +190,12 @@ else
 	else 
 		if test "$need_kde34_compat" = "yes"; then
 			AC_MSG_RESULT([KDE 3.4.x])
-		else
-			AC_MSG_RESULT([KDE CVS HEAD])
+                else
+                        if test "$need_kde352_compat" = "yes"; then
+                                AC_MSG_RESULT([KDE 3.5.2])
+                        else
+			        AC_MSG_RESULT([KDE CVS HEAD])
+                        fi
 		fi
 	fi
 fi
@@ -189,6 +203,7 @@ fi
 AM_CONDITIONAL(need_kde32_compatibility, test "$need_kde32_compat" = "yes")
 AM_CONDITIONAL(need_kde33_compatibility, test "$need_kde33_compat" = "yes")
 AM_CONDITIONAL(need_kde34_compatibility, test "$need_kde34_compat" = "yes")
+AM_CONDITIONAL(need_kde352_compatibility, test "$need_kde352_compat" = "yes")
 
 # Keep the old KDE 3.1 test, as long as it is still used
 AM_CONDITIONAL(need_kde31_compatibility, test "supported" = "no")
