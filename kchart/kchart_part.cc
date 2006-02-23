@@ -239,7 +239,7 @@ KoView* KChartPart::createViewInstance( QWidget* parent, const char* name )
 
 
 void KChartPart::paintContent( QPainter& painter, const QRect& rect,
-			       bool transparent,
+			       bool /*transparent*/,
 			       double /*zoomX*/, double /*zoomY*/ )
 {
     // If params is 0, initDoc() has not been called.
@@ -899,9 +899,13 @@ void KChartPart::saveConfig( KConfig *conf )
 bool KChartPart::loadOasis( const QDomDocument& doc,
 			    KoOasisStyles&      oasisStyles,
 			    const QDomDocument& /*settings*/,
-			    KoStore* store )
+			    KoStore            *store )
 {
     kdDebug(35001) << "kchart loadOasis called" << endl;
+
+    // Set some sensible defaults.
+    setChartDefaults();
+
     QDomElement  content = doc.documentElement();
     QDomElement  bodyElem ( KoDom::namedItemNS( content, KoXmlNS::office,
 						"body" ) );
@@ -911,12 +915,13 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
         return false;
     }
 
+    // Get the office:chart element.
     QDomElement officeChartElem = KoDom::namedItemNS( bodyElem,
 						      KoXmlNS::office, "chart" );
     if ( officeChartElem.isNull() ) {
         kdError(32001) << "No office:chart found!" << endl;
-        QDomElement childElem;
-        QString localName;
+        QDomElement  childElem;
+        QString      localName;
         forEachElement( childElem, bodyElem ) {
             localName = childElem.localName();
         }
@@ -936,8 +941,10 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
         return false;
     }
 
-    KoOasisLoadingContext loadingContext( this, oasisStyles, store );
-    KoStyleStack& styleStack = loadingContext.styleStack();
+#if 0  // Example code!!
+    KoOasisLoadingContext  loadingContext( this, oasisStyles, store );
+    KoStyleStack          &styleStack = loadingContext.styleStack();
+
     styleStack.save();
     styleStack.setTypeProperties( "graphic" ); // load graphic-properties
     loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
@@ -946,10 +953,13 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
     kdDebug() << "fillColor=" << fillColor << endl;
 
     styleStack.restore();
+#endif
 
-    // Load parameters
+    // Load chart parameters parameters, most of these are stored in
+    // the chart:plot-area element within chart:chart.
     QString  errorMessage;
-    bool     ok = m_params->loadOasis( chartElem, oasisStyles, errorMessage );
+    bool     ok = m_params->loadOasis( chartElem, oasisStyles, errorMessage,
+				       store);
     if ( !ok ) {
         setErrorMessage( errorMessage );
         return false;
@@ -957,7 +967,7 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
 
     // TODO Load data direction (see loadAuxiliary)
 
-    // Load data
+    // Load the data table.
     QDomElement tableElem = KoDom::namedItemNS( chartElem,
 						KoXmlNS::table, "table" );
     if ( !tableElem.isNull() ) {
@@ -965,10 +975,6 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
         if ( !ok )
             return false; // TODO setErrorMessage
     }
-
-    // FIXME: Shouldn't this be done first of all, so it could be
-    //        overrided from the file?  /ingwa
-    setChartDefaults();
 
     return true;
 }
@@ -1163,14 +1169,14 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
     // Exactly one header column, always.
     bodyWriter->startElement( "table:table-header-columns" );
     bodyWriter->startElement( "table:table-column" );
-    bodyWriter->endElement(); //table:table-column
+    bodyWriter->endElement(); // table:table-column
     bodyWriter->endElement(); // table:table-header-columns
 
     // Then "cols" columns
     bodyWriter->startElement( "table:table-columns" );
     bodyWriter->startElement( "table:table-column" );
     bodyWriter->addAttribute( "table:number-columns-repeated", cols );
-    bodyWriter->endElement(); //table:table-column
+    bodyWriter->endElement(); // table:table-column
     bodyWriter->endElement(); // table:table-columns
 
     // Exactly one header row, always.
@@ -1358,14 +1364,13 @@ bool KChartPart::loadXML( QIODevice*, const QDomDocument& doc )
     // First try to load the KDChart parameters.
     bool  result = m_params->loadXML( doc );
 
-    // If that didn't go well, try to load old file format...
-    if (!result)
-        result = loadOldXML( doc );
+    // If went well, try to load the auxiliary data and the data...
+    if (result) {
+        result = loadAuxiliary(doc) && loadData( doc, m_currentData );
+    }
     else {
-	// ...but if it did, try to load the auxiliary data and the data.
-	// FIXME: Move this into loadOasis part of KChartParams
-        result = loadAuxiliary(doc)
-	    && loadData( doc, m_currentData );
+	// ...but if it did, try to load the old XML format.
+        result = loadOldXML( doc );
     }
 
     // If everything is OK, then get the headers from the KDChart parameters.

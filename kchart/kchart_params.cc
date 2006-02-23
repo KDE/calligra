@@ -30,6 +30,7 @@ using std::cerr;
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoDom.h>
+#include <KoOasisLoadingContext.h>
 
 #include "kdchart/KDChartParams.h"
 #include "kdchart/KDChartAxisParams.h"
@@ -138,39 +139,57 @@ static const unsigned int numOasisChartTypes
   = sizeof oasisChartTypes / sizeof *oasisChartTypes;
 
 
-bool KChartParams::loadOasis( const QDomElement& chartElem,
-                              KoOasisStyles& /*oasisStyles*/,
-                              QString& errorMessage )
-{
-    const QString  chartClass = chartElem.attributeNS( KoXmlNS::chart, 
-						       "class",
-						       QString::null );
-    bool           knownType = false;
+#if 0  // Example code!!
+    KoOasisLoadingContext  loadingContext( this, oasisStyles, store );
+    KoStyleStack          &styleStack = loadingContext.styleStack();
 
+    styleStack.save();
+    styleStack.setTypeProperties( "graphic" ); // load graphic-properties
+    loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
+
+    const QString fillColor = styleStack.attributeNS( KoXmlNS::draw, "fill-color" );
+    kdDebug() << "fillColor=" << fillColor << endl;
+
+    styleStack.restore();
+#endif
+
+
+// Load an the data from an OpenDocument chart:chart element.
+
+bool KChartParams::loadOasis( const QDomElement &chartElem,
+                              KoOasisStyles     &oasisStyles,
+                              QString           &errorMessage,
+			      KoStore           *store )
+{
+    const QString chartClass = chartElem.attributeNS( KoXmlNS::chart, 
+						      "class", QString::null );
+    bool          knownType = false;
+
+    // Find out what KChart charttype the OASIS charttype corresponds to.
     for ( unsigned int i = 0 ; i < numOasisChartTypes ; ++i ) {
         if ( chartClass == oasisChartTypes[i].oasisClass ) {
             kdDebug(35001) << "found chart of type " << chartClass << endl;
 	    //cerr << "found chart of type " << chartClass.latin1() << "\n";
+
             setChartType( oasisChartTypes[i].chartType );
             knownType = true;
             break;
         }
     }
 
+    // If we can't find out what charttype it is, we might as well end here.
     if ( !knownType ) {
         errorMessage = i18n( "Unknown chart type %1" ).arg( chartClass );
         kdDebug(35001) << errorMessage << endl;
         return false;
     }
 
-    // TODO title (more details)
+    // TODO title (more details, e.g. font, placement etc)
     QDomElement  titleElem = KoDom::namedItemNS( chartElem,
 						 KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
 	QDomElement  pElem = KoDom::namedItemNS( titleElem,
 						 KoXmlNS::text, "p" );
-	//kdDebug(35001) << "Title: " << pElem.text() << endl;
-
 	setHeader1Text( pElem.text() );
     }
 
@@ -180,17 +199,162 @@ bool KChartParams::loadOasis( const QDomElement& chartElem,
     if ( !titleElem.isNull() ) {
 	QDomElement  pElem = KoDom::namedItemNS( subtitleElem,
 						 KoXmlNS::text, "p" );
-	//kdDebug(35001) << "Subtitle: " << pElem.text() << endl;
-
 	setHeader2Text( pElem.text() );
     }
 
-    // TODO legend
-    // TODO plot-area
-    // TODO...
+    // TODO: Get legend settings
+
+    
+    // Get the plot-area.  This is where the action is.
+    QDomElement  plotareaElem = KoDom::namedItemNS( chartElem,
+						    KoXmlNS::chart, "plot-area" );
+    if ( !plotareaElem.isNull() ) {
+	return loadOasisPlotarea( plotareaElem, oasisStyles, errorMessage,
+				  store );
+    }
+
+    return false;
+}
+
+
+bool KChartParams::loadOasisPlotarea( const QDomElement &plotareaElem,
+				      KoOasisStyles     &oasisStyles,
+				      QString           &errorMessage,
+				      KoStore           *store)
+{
+    QString  tmp;
+
+    // FIXME: attribute table:cell-range-address  - the cells in a spreadsheet
+
+    // Get whether there is a label on first row or column.
+    // This info is in the attribute chart:data-source-has-labels.
+    tmp = plotareaElem.attributeNS( KoXmlNS::chart, 
+				    "data-source-has-labels", QString::null );
+    m_firstRowAsLabel = false;
+    m_firstColAsLabel = false;
+    if ( tmp == "none" )
+	; // NOTHING
+    else if ( tmp == "row" )
+	m_firstRowAsLabel = true;
+    else if ( tmp == "column" )
+	m_firstColAsLabel = true;
+    else if ( tmp == "both" ) {
+	m_firstRowAsLabel = true;
+	m_firstColAsLabel = true;
+    }
+    else {
+	errorMessage = "Unknown value for chart:data-source-has-labels";
+	return false;
+    }
+
+    // ----------------------------------------------------------------
+    // Now get the style and use it to get the contents.
+    // This is hidden in the attribute chart:style-name.
+    KoOasisLoadingContext  loadingContext( m_part, oasisStyles, store );
+    KoStyleStack          &styleStack = loadingContext.styleStack();
+
+    styleStack.save();
+    styleStack.setTypeProperties( "chart" ); // load chart properties
+    loadingContext.fillStyleStack( plotareaElem, KoXmlNS::chart, "style-name" );
+
+    // TODO:
+    // And get the info from the style.  Here is the contents:
+
+    // chart:lines       - true for line charts, false otherwise
+    // chart:symbol-type - used with line charts, should be "automatic"
+
+    // chart:interpolation     - "cubic-spline" if using cubic splines
+    // chart:splines           - 
+    // chart:spline-order      - "2" for cubic splines
+    // chart:spline-resolution - how smooth (default: 20)
+
+    // chart:vertical          - true if vertical bars (only bar charts)
+    // chart:stacked           - true for stacked bars
+    // chart:percentage        - true for percentage  (mut. excl with stacked)
+    // chart:connect-bars      - true if lines to connect bars should be drawn
+    //                           only used for stacked and percentage bars.
+    // chart:lines-used        - 0-n, number of lines on a bar chart. (def: 0)
+
+    // -- Used when chart:class == "stock:
+    // chart:stock-updown-bars      - boolean 
+    // chart:stock-with-volume      - boolean 
+    // chart:japanese-candle-sticks - boolean 
+
+    // chart:series-source     - "row" or "columns
+
+    // chart:data-label-number - "value" / "percentage" / "none" (def: none)
+
+    // chart:data-label-text   - true if data hapoints have text labels
+    // chart:data-label-symbol - true if data hapoints have legend symbol
+    //                           (default: false for both)
+
+
+    // ----------------------------------------------------------------
+    // In the plot-area element there are two chart:axis elements
+
+    // Get the chart:axis elements.
+    QDomNode     node      = plotareaElem.firstChild();
+    QDomElement  xAxisElem = node.toElement();
+
+    node = node.nextSibling();
+    QDomElement  yAxisElem = node.toElement();
+
+    if ( xAxisElem.tagName() != "chart:axis"
+	 || yAxisElem.tagName() != "chart:axis" )
+    {
+	// FIXME: Check that there is only these two children of plot-area.
+	// FIXME: Error handling.
+	errorMessage = "Error in axis loading";
+	return false;
+    }
+
+    // Attributes for the axes:
+    // chart:name       - either "primary-x" or "primary-y"
+    // chart:class      - "category" / "value" / "domain" (domain for scatter)
+    //    child: chart:categories
+
+    // child:  chart:title   - Name of title if any.
+    // child:  chart:grid
+    //           attr: chart:class  - "major" / "minor"
+
+    // chart:style-name - Associated style with the following info:
+    // --------------------------------
+    // chart:display-label          - true if an axis label should be shown.
+
+    // chart:tick-marks-major-inner - true if display tickmarks at major
+    // chart:tick-marks-major-outer   or minor intervals outside / inside
+    // chart:tick-minor-major-inner   the chart area.
+    // chart:tick-minor-major-outer
+
+    // chart:logarithmic            - true if logarithmic scale
+
+    // text:line-break              - true if categories can be broken
+
+    // chart:text-overlap           - true if labels can overlap
+
+    // chart:label-arrangement      - "side-by-side" / "stagger-even" / 
+    //                                "stagger-odd"  (def: side-by-side)
+
+    // chart:visible                - true if labels + ticks should be shown. 
+
+    // children: 
+    // chart:
+    // chart:
+    // chart:
+    // chart:
+    // chart:
+
+#if 0
+    const QString fillColor = styleStack.attributeNS( KoXmlNS::draw,
+						      "fill-color" );
+    kdDebug() << "fillColor=" << fillColor << endl;
+#endif
+
+    styleStack.restore();
 
     return true;
 }
+
 
 
 void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
@@ -208,6 +372,12 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     if ( !knownType ) {
         kdError(32001) << "Unknown chart type in KChartParams::saveOasis, extend oasisChartTypes!" << endl;
     }
+
+    // TODO title
+    // TODO subtitle
+    // TODO legend
+    // TODO plot-area
+    // TODO...
 }
 
 
