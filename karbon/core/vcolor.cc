@@ -63,7 +63,7 @@ VColor::operator QColor() const
 	copy.convertToColorSpace( rgb );
 
 	QColor color;
-	color.setRgb( 255 * copy[0], 255 * copy[1], 255 * copy[2] );
+	color.setRgb( int( 255 * copy[0] ), int( 255 * copy[1] ), int( 255 * copy[2] ) );
 
 	return color;
 }

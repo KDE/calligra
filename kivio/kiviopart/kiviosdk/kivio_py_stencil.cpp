@@ -473,7 +473,7 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
       QString text = getStringFromDict(shape,"text");
 
       if ( !text.isEmpty() ) {
-        d->painter->drawText( x, y, w, h, tf | Qt::WordBreak, text );
+        d->painter->drawText( int( x ), int( y ), int( w ), int( h ), tf | Qt::WordBreak, text );
       }
     }
 
@@ -693,7 +693,7 @@ KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, d
     return NULL;
 }
 
-KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, int targetID )
+KivioConnectorTarget *KivioPyStencil::connectToTarget( KivioConnectorPoint *p, int /*targetID*/ )
 {
     int id = p->targetId();
 

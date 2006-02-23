@@ -366,7 +366,7 @@ void KoDocumentInfoDlg::save( KoDocumentInfoAbout *aboutInfo )
   aboutInfo->setAbstract( d->m_aboutWidget->meDocAbstract->text() );
 }
 
-void KoDocumentInfoDlg::save( KoDocumentInfoUserMetadata *userMetadataInfo )
+void KoDocumentInfoDlg::save( KoDocumentInfoUserMetadata* )
 {
     // FIXME
 }

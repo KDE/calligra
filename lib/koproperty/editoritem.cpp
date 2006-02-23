@@ -353,7 +353,7 @@ EditorGroupItem::~EditorGroupItem()
 {}
 
 void
-EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align)
+EditorGroupItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int /*align*/)
 {
 	//if(column == 1)
 	//	return;

@@ -65,8 +65,8 @@ VStrokeFillPreview::VStrokeFillPreview(
 #endif
 
 	installEventFilter( this );
-	m_pixmap.resize( PANEL_SIZEX, PANEL_SIZEY );
-	m_painter = new VKoPainter( &m_pixmap, PANEL_SIZEX, PANEL_SIZEY );
+	m_pixmap.resize( int( PANEL_SIZEX ), int( PANEL_SIZEY ) );
+	m_painter = new VKoPainter( &m_pixmap, uint( PANEL_SIZEX ), uint( PANEL_SIZEY ) );
 }
 
 VStrokeFillPreview::~VStrokeFillPreview()
@@ -77,10 +77,11 @@ VStrokeFillPreview::~VStrokeFillPreview()
 void
 VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
+	const int x = int( PANEL_SIZEX ), int( y = PANEL_SIZEY );
 	bitBlt( this,
-		( width() - PANEL_SIZEX ) / 2, ( height() - PANEL_SIZEY ) / 2,
+		( width() - x ) / 2, ( height() - y ) / 2,
 		&m_pixmap,
-		0, 0, PANEL_SIZEX, PANEL_SIZEY );
+		0, 0, x, y );
 
 	QFrame::paintEvent( event );
 }

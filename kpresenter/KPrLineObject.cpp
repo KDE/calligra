@@ -72,7 +72,7 @@ void KPrLineObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainSty
 }
 
 
-bool KPrLineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrLineObject::saveOasisObjectAttributes( KPOasisSaveContext &/*sc*/ ) const
 {
     // nothing to do
     return true;
@@ -219,7 +219,7 @@ void KPrLineObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
 {
     double ow = ext.width();
     double oh = ext.height();
-    int _w = pen.pointWidth();
+    int _w = int( pen.pointWidth() );
 
     QPen pen2;
     if ( drawContour ) {

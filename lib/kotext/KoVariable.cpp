@@ -1741,12 +1741,12 @@ QString KoMailMergeVariable::fieldCode()
     return i18n("Mail Merge");
 }
 
-void KoMailMergeVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
+void KoMailMergeVariable::loadOasis( const QDomElement &/*elem*/, KoOasisContext& /*context*/ )
 {
     // TODO
 }
 
-void KoMailMergeVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context*/ ) const
+void KoMailMergeVariable::saveOasis( KoXmlWriter& /*writer*/, KoSavingContext& /*context*/ ) const
 {
         kdWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
 }

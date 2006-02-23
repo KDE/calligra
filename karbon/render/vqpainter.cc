@@ -202,6 +202,8 @@ VQPainter::setBrush( const VFill &fill )
 			// pixmap brushes not supported for printing
 			m_painter->setBrush( QBrush( fill.color(), fill.pattern().pixmap() ) );
 		break;
+		default:
+		break;
 	}
 }
 
@@ -250,13 +252,14 @@ VQPainter::setRasterOp( Qt::RasterOp r )
 void
 VQPainter::drawNode( const KoPoint &p, int width )
 {
-	m_painter->drawRect( QRect( p.x() * m_zoomFactor - width, p.y() * m_zoomFactor - width,  2 * width + 1,  2 * width + 1 ) );
+	m_painter->drawRect( QRect( int( p.x() * m_zoomFactor ) - width, int( p.y() * m_zoomFactor ) - width,
+	                            2 * width + 1,  2 * width + 1 ) );
 }
 
 void
 VQPainter::drawRect( const KoRect &rect )
 {
-	m_painter->drawRect( QRect( rect.x(), rect.y(), rect.width(),  rect.height() ) );
+	m_painter->drawRect( QRect( int( rect.x() ), int( rect.y() ), int( rect.width() ),  int( rect.height() ) ) );
 }
 
 void

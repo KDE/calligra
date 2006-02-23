@@ -197,7 +197,7 @@ void KPrClosedLineObject::updatePoints( double _fx, double _fy )
 void KPrClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
                                 int /* pageNum */, bool drawingShadow, bool drawContour )
 {
-    int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.pointWidth();
+    int _w = ( pen.style() == Qt::NoPen ) ? 1 : int( pen.pointWidth() );
 
     if ( drawContour ) {
         QPointArray pointArray2 = points.zoomPointArray( _zoomHandler );

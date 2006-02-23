@@ -121,7 +121,7 @@ void KoVersionDialog::slotOk()
     accept();
 }
 
-KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, const QString &_comment, const char* name )
+KoVersionModifyDialog::KoVersionModifyDialog(  QWidget* parent, const QString &/*comment*/, const char* name )
     : KDialogBase( parent, name, true, i18n("Comment"), Ok|Cancel )
 {
     QWidget* page = new QWidget( this );

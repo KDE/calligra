@@ -53,7 +53,7 @@ void KarbonToolRegistry::createTools(KActionCollection * ac, KarbonView* view)
 
 	QValueVector<KarbonAbstractToolFactory*>::iterator it;
 	for ( it = begin(); it != end(); ++it )
-		VTool * tool = (*it) -> createTool(ac, view);
+		(*it) -> createTool(ac, view);
 }
 
 void KarbonToolRegistry::add(KarbonAbstractToolFactory* factory)

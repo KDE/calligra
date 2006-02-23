@@ -507,7 +507,7 @@ void KoContextHelpPopup::keyReleaseEvent( QKeyEvent* e )
 	}
 } // KoContextHelpPopup::keyPressEvent
 
-KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* popupParent )
+KoContextHelpAction::KoContextHelpAction( KActionCollection* parent, QWidget* /*popupParent*/ )
 		: KToggleAction( i18n( "Context Help" ), BarIcon( "help" ), KShortcut( "CTRL+SHIFT+F1" ), 0, 0, parent, "help_context" )
 {
 	m_popup = new KoContextHelpPopup( 0L );

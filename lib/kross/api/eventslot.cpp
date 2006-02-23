@@ -43,7 +43,7 @@ const QString EventSlot::getClassName() const
     return "Kross::Api::EventSlot";
 }
 
-Object::Ptr EventSlot::call(const QString& name, List::Ptr arguments)
+Object::Ptr EventSlot::call(const QString& /*name*/, List::Ptr arguments)
 {
 #ifdef KROSS_API_EVENTSLOT_CALL_DEBUG
     kdDebug() << QString("EventSlot::call() name=%1 m_slot=%2 arguments=%3").arg(name).arg(m_slot).arg(arguments->toString()) << endl;

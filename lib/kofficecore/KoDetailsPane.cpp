@@ -82,7 +82,7 @@ class KoTemplatesPanePrivate
 
 
 KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
-                                 KoTemplateGroup *group, KoTemplate* defaultTemplate)
+                                 KoTemplateGroup *group, KoTemplate* /*defaultTemplate*/)
   : KoDetailsPaneBase(parent, "TemplatesPane")
 {
   d = new KoTemplatesPanePrivate;

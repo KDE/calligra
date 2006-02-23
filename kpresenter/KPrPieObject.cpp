@@ -282,11 +282,11 @@ void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
 
             if ( lineBegin != L_NORMAL )
                 drawFigureWithOffset( lineBegin, _painter, start,
-                            pen2.color(), pen.pointWidth(), s_angle, _zoomHandler, true );
+                            pen2.color(), int( pen.pointWidth() ), s_angle, _zoomHandler, true );
 
             if ( lineEnd != L_NORMAL )
                 drawFigureWithOffset( lineEnd, _painter, end,
-                            pen2.color(), pen.pointWidth(), e_angle, _zoomHandler, false );
+                            pen2.color(), int( pen.pointWidth() ), e_angle, _zoomHandler, false );
         }
     }
     switch ( pieType )
@@ -321,7 +321,7 @@ void KPrPieObject::flip( bool horizontal )
     {
         p_angle = 180*16 - p_angle - p_len;
     }
-    // angle smaller 0°
+    // angle smaller 0
     while ( p_angle < 0 ) {
         p_angle += 360*16;
     }

@@ -106,10 +106,10 @@ VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins )
 	// Draw page margins
 	if( showPageMargins )
 	{
-		int ml = pl.ptLeft;
-		int mt = pl.ptTop;
-		int mr = pl.ptRight;
-		int mb = pl.ptBottom;
+		int ml = int( pl.ptLeft );
+		int mt = int( pl.ptTop );
+		int mr = int( pl.ptRight );
+		int mb = int( pl.ptBottom );
 
 		VStroke s( 0, 1 );
 		s.setColor( Qt::blue );

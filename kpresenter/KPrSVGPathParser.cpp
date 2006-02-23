@@ -60,7 +60,7 @@ KoPointArray KPrSVGPathParser::getPoints( QString &d, bool convert2lines )
 }
 
 
-void KPrSVGPathParser::svgMoveTo( double x1, double y1, bool abs )
+void KPrSVGPathParser::svgMoveTo( double x1, double y1, bool /*abs*/ )
 {
     if ( m_type )
     {
@@ -80,7 +80,7 @@ void KPrSVGPathParser::svgMoveTo( double x1, double y1, bool abs )
 }
 
 
-void KPrSVGPathParser::svgLineTo( double x1, double y1, bool abs )
+void KPrSVGPathParser::svgLineTo( double x1, double y1, bool /*abs*/ )
 {
     if ( m_type )
     {
@@ -106,7 +106,7 @@ void KPrSVGPathParser::svgLineTo( double x1, double y1, bool abs )
 }
 
 
-void KPrSVGPathParser::svgCurveToCubic(  double x1, double y1, double x2, double y2, double x, double y, bool abs )
+void KPrSVGPathParser::svgCurveToCubic(  double x1, double y1, double x2, double y2, double x, double y, bool /*abs*/ )
 {
     if ( m_type )
     {

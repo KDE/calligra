@@ -55,7 +55,7 @@
 
 class KoTemplateCreateDiaPrivate {
 public:
-    KoTemplateCreateDiaPrivate( QWidget* parent, KInstance * instance)
+    KoTemplateCreateDiaPrivate( QWidget* /*parent*/, KInstance * instance)
          : m_instance( instance ), m_tempFile( QString::null, ".png" )
     {
         m_tree=0L;

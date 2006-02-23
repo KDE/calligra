@@ -227,7 +227,7 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
     new QLabel( i18n( "Number of lines: "), left );
     m_numLines    = new QSpinBox( left );
     // FIXME: Use a grid layout instead
-    QLabel  *lbl  = new QLabel( "", left);
+    new QLabel( "", left);
     left->setStretchFactor( left, 1 );
 
     QHGroupBox* exampleGB = new QHGroupBox( i18n( "Example" ), this );

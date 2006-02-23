@@ -155,7 +155,7 @@ const char * KPrGroupObject::getOasisElementName() const
 }
 
 
-void KPrGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPrLoadingInfo *info)
+void KPrGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPrLoadingInfo */*info*/ )
 {
     //KPrObject::loadOasis( element, context, info );
     updateObjs = false;

@@ -338,7 +338,9 @@ KoIconItem *KoIconChooser::itemAt(int row, int col)
 // return 0L if item is not found
 KoIconItem *KoIconChooser::itemAt(int index)
 {
-  return mIconList.count() > index ? mIconList.at(index) : 0;
+  if(index < 0)
+    return 0L;
+  return mIconList.count() > uint(index) ? mIconList.at(index) : 0;
 }
 
 // return the index of a cell, given row and column position

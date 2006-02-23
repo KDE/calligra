@@ -183,6 +183,8 @@ protected:
                     break;
 
                 //case monospace:
+                default:
+                    break;
                 }
             }
 

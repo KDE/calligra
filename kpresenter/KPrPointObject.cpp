@@ -196,7 +196,7 @@ void KPrPointObject::flip( bool horizontal )
 void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                            int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
-    int _w = pen.pointWidth();
+    int _w = int( pen.pointWidth() );
 
     QPen pen2;
     if ( drawContour ) {

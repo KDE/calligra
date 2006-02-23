@@ -2825,7 +2825,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 
 void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
                              int from /* default 0 */, int to /* usually length()-2 */,
-                             bool saveAnchorsFramesets /* default false */ ) const
+                             bool /*saveAnchorsFramesets*/ /* default false */ ) const
 {
     KoGenStyles& mainStyles = context.mainStyles();
 
@@ -3075,7 +3075,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
         KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );
         int w = format->charWidth( zh, true, &ch, this, 'X' );
         int size = QMIN( w, h_pix * 3 / 4 );
-        // x,y is the bottom right corner of the ¶
+        // x,y is the bottom right corner of the 
         //kdDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
         int x;
         if ( rightToLeft )

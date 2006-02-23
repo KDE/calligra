@@ -69,7 +69,7 @@ void KPrPBPreview::drawContents( QPainter *painter )
         painter->fillRect( 0, 0, contentsRect().width(), contentsRect().height(),
                            colorGroup().base() );
         KoSize diff1( 0, 0 ), diff2( 0, 0 );
-        int _w = pen.pointWidth();
+        int _w = int( pen.pointWidth() );
 
         if ( lineBegin != L_NORMAL )
             diff1 = getOffset( lineBegin, _w, + 180.0 );

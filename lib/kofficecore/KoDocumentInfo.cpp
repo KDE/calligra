@@ -927,13 +927,13 @@ bool KoDocumentInfoUserMetadata::loadOasis( const QDomNode& metaDoc )
 }
 
 // KOffice-1.3 format
-bool KoDocumentInfoUserMetadata::load( const QDomElement& e )
+bool KoDocumentInfoUserMetadata::load( const QDomElement& )
 {
     return true;
 }
 
 // KOffice-1.3 format
-QDomElement KoDocumentInfoUserMetadata::save( QDomDocument& doc )
+QDomElement KoDocumentInfoUserMetadata::save( QDomDocument& )
 {
     return QDomElement();
 }

@@ -663,7 +663,7 @@ KarbonPart::addShell( KoMainWindow *shell )
 
 
 void
-KarbonPart::slotUnitChanged( KoUnit::Unit unit )
+KarbonPart::slotUnitChanged( KoUnit::Unit /*unit*/ )
 {
 #if 0
 	// VDocument has its own storage of the unit...

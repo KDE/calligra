@@ -288,7 +288,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
         else
         {
             KoSize diff1( 0, 0 ), diff2( 0, 0 );
-            int _w = pen.pointWidth();
+            int _w = int( pen.pointWidth() );
 
             if ( lineBegin != L_NORMAL )
                 diff1 = getBoundingSize( lineBegin, _w, _zoomHandler );

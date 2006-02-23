@@ -249,7 +249,7 @@ VSelectObjects::visitVText( VText& text )
 			deselectedGlyphs++;
 		}
 	}
-	if( deselectedGlyphs == text.glyphs().count() )
+	if( deselectedGlyphs >= 0 && uint( deselectedGlyphs ) == text.glyphs().count() )
 	{
 		text.setState( VObject::normal );
 		m_selection.remove( &text );

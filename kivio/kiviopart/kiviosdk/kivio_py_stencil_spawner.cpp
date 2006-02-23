@@ -28,7 +28,7 @@
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
 
-#include <iostream.h>
+#include <iostream>
 #include <qdom.h>
 #include <qfile.h>
 #include <qiodevice.h>

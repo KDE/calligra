@@ -1676,6 +1676,8 @@ void KPrShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyl
             //TODO FIXME
             styleobjectauto.addProperty( "draw:stroke-dash", saveOasisStrokeStyle( mainStyles ) );
             break;
+        default:
+            break;
         }
         styleobjectauto.addProperty( "svg:stroke-color", pen.color().name() );
         styleobjectauto.addPropertyPt( "svg:stroke-width", pen.pointWidth() );
@@ -1720,6 +1722,8 @@ QString KPrShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
         stroke.addAttribute( "draw:dots2", "1" );
         stroke.addAttribute( "draw:dots2-length", "0.203cm" );
         stroke.addAttribute( "draw:distance", "0.203cm" );
+        break;
+    default:
         break;
     }
     return mainStyles.lookup( stroke, "stroke" );

@@ -115,7 +115,7 @@ KoSize KPrEllipseObject::getRealSize() const {
     return size;
 }
 
-bool KPrEllipseObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrEllipseObject::saveOasisObjectAttributes( KPOasisSaveContext &/*sc*/ ) const
 {
     // nothing to do
     return true;

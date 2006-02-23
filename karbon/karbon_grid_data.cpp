@@ -34,7 +34,7 @@ KarbonGridData::~KarbonGridData()
 {
 }
 
-void KarbonGridData::save(QDomElement& element, const QString& name)
+void KarbonGridData::save(QDomElement& /*element*/, const QString& /*name*/)
 {
 /*  Karbon::saveSize(element, name + "Freg", freq);
   Karbon::saveSize(element, name + "Snap", snap);
@@ -43,7 +43,7 @@ void KarbonGridData::save(QDomElement& element, const QString& name)
   element.setAttribute(name + "IsShow", (int)isShow);*/
 }
 
-void KarbonGridData::load(const QDomElement& element, const QString& name)
+void KarbonGridData::load(const QDomElement& /*element*/, const QString& /*name*/)
 {
 /*  KoSize sdef;
   sdef = KoSize(10.0, 10.0);
