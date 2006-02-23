@@ -517,7 +517,7 @@ QString fileLinkPage::createFileLink()
         return result;
 
     if(result.find("file:/")==-1)
-        result = "file:/"+result;
+        result = "file://"+result;
     return result;
 }
 
