@@ -79,6 +79,7 @@ Comment[pt_BR]=Cria uma carta com duas colunas por página.
 Comment[sr]=Прави документ писма са две колоне по страни
 Comment[sr@Latn]=Pravi dokument pisma sa dve kolone po strani
 Comment[sv]=Skapar ett US Letter-dokument med två kolumner per sida.
+Comment[xx]=xxCreates a letter document with two columns per page.xx
 Comment[zh_CN]=创建每页两栏的信函文档。
 Icon=template_twocolumns
 X-KDE-MeasureSystem=imperial
