@@ -94,6 +94,8 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	// actions
 	m_deleteAction = new KAction(i18n("&Delete"), "editdelete", 0/*Key_Delete*/, 
 		this, SLOT(slotRemove()), m_actions, "edit_delete");
+//! @todo 1.1: just add "Delete" tooltip and what's this
+	m_deleteAction->setToolTip(i18n("&Delete").replace("&",""));
 	m_renameAction = new KAction(i18n("&Rename"), "", 0, 
 		this, SLOT(slotRename()), m_actions, "edit_rename");
 #ifdef KEXI_SHOW_UNIMPLEMENTED
