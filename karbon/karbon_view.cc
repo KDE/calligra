@@ -406,7 +406,6 @@ KarbonView::print( KPrinter &printer )
 	KoRect rect( 0, 0, w, h );
 
 	QPixmap img( static_cast<int>( w ), static_cast<int>( h ) );
-	img.fill( QColor( 200, 200, 200 ) );
 
 	// first use the libarts painter to draw into the pixmap
 	VKoPainter kop( ( QPaintDevice * )&img, static_cast<int>( w ), static_cast<int>( h ) );
