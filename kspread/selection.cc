@@ -716,7 +716,7 @@ void Selection::setActiveElement(uint pos)
 {
   if (pos >= cells().count())
   {
-    kdWarning() << "Selection::setActiveElement: position exceeds list" << endl;
+    kdDebug() << "Selection::setActiveElement: position exceeds list" << endl;
     d->activeElement = cells().begin();
     return;
   }
@@ -770,14 +770,14 @@ void Selection::fixSubRegionDimension()
 {
   if (d->activeSubRegionStart > cells().count())
   {
-    kdWarning() << "Selection::fixSubRegionDimension: start position exceeds list" << endl;
+    kdDebug() << "Selection::fixSubRegionDimension: start position exceeds list" << endl;
     d->activeSubRegionStart = 0;
     d->activeSubRegionLength = cells().count();
     return;
   }
   if (d->activeSubRegionStart + d->activeSubRegionLength > cells().count())
   {
-    kdWarning() << "Selection::fixSubRegionDimension: length exceeds list" << endl;
+    kdDebug() << "Selection::fixSubRegionDimension: length exceeds list" << endl;
     d->activeSubRegionLength = cells().count() - d->activeSubRegionStart;
     return;
   }
