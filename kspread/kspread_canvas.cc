@@ -91,6 +91,8 @@
 //              properly or if we are sure, that they do. ;-)
 #define NONCONTIGUOUSSELECTION
 
+#define MIN_SIZE 10
+
 using namespace KSpread;
 
 class Canvas::Private
@@ -164,16 +166,25 @@ class Canvas::Private
     //---- stuff needed for resizing ----
     /// object which gets resized
     EmbeddedObject *m_resizeObject;
-    /// should the ratio of the object kept during resize
-    bool m_keepRatio;
     /// ratio of the object ( width / height )
     double m_ratio;
+    bool m_isResizing;
+    /// The last position of the mouse during moving
+    KoPoint m_origMousePos;
 
-    QRect m_boundingRealRect; ///< when moving object(s)
-    //KoRect m_boundingRect;
-    QSize m_origSize;  ///< The size of the object for move
-    QPoint m_origPos;  ///< Start point for move
+    //---- stuff needed for moving ----
     bool m_isMoving;
+    KoPoint m_moveStartPoint;
+
+    /// size of the object at when resizing is started
+    KoRect m_rectBeforeResize;
+    /// Start position for move with mouse
+    KoPoint m_moveStartPosMouse;
+
+    /// object which is selected and should be shown above all the other objects
+    EmbeddedObject * m_objectDisplayAbove;
+
+   // bool mouseOverHighlightRangeSizeGrip;
 
     // The row and column of 1) the last cell under mouse pointer, 2) the last focused cell, and
     // the last spoken cell.
@@ -234,8 +245,9 @@ Canvas::Canvas (View *_view)
 
   d->m_resizeObject = 0L;
   d->m_ratio = 0.0;
-  d->m_keepRatio = false;
   d->m_isMoving = false;
+  d->m_objectDisplayAbove = false;
+  d->m_isResizing = false;
 
   d->prevSpokenPointerRow = -1;
   d->prevSpokenPointerCol = -1;
@@ -246,6 +258,11 @@ Canvas::Canvas (View *_view)
 
   d->scrollTimer = new QTimer( this );
   connect (d->scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
+
+  if( d->view)
+  {
+    connect( d->view, SIGNAL( autoScroll( const QPoint & )), this, SLOT( slotAutoScroll( const QPoint &)));
+  }
   if (kospeaker)
   {
     connect (kospeaker, SIGNAL(customSpeakWidget(QWidget*, const QPoint&, uint)),
@@ -861,7 +878,38 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   if ( (!d->view->koDocument()->isReadWrite()) && (d->mouseAction!=Mark))
     return;
 
-  if ( d->mousePressed && d->m_resizeObject && d->modType != MT_NONE )
+  if ( d->mousePressed && d->modType != MT_NONE )
+  {
+    KoPoint docPoint ( doc()->unzoomPoint( _ev->pos() ) );
+    docPoint += KoPoint( xOffset(), yOffset() );
+
+    if ( d->modType == MT_MOVE )
+    {
+      if ( !d->m_isMoving )
+      {
+        d->m_moveStartPoint = objectRect( false ).topLeft();
+        d->m_isMoving = true;
+      }
+      moveObjectsByMouse( docPoint, _ev->state() & AltButton || _ev->state() & ControlButton );
+    }
+    else if ( d->m_resizeObject )
+    {
+      if ( !d->m_isResizing )
+        d->m_isResizing = true;
+
+      bool keepRatio = d->m_resizeObject->isKeepRatio();
+      if ( _ev->state() & AltButton )
+      {
+        keepRatio = true;
+      }
+      docPoint  = KoPoint( doc()->unzoomPoint( _ev->pos() ) );
+      resizeObject( d->modType, docPoint, keepRatio );
+    }
+    return;
+  }
+
+
+  /*if ( d->mousePressed && d->m_resizeObject && d->modType != MT_NONE )
   {
     if ( !d->m_isMoving )
     {
@@ -927,7 +975,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     p.drawRect( drawingRect );
     p.end();
     return;
-  }
+}*/
 
   if ( d->dragging )
   {
@@ -1107,50 +1155,42 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   (d->chooseCell ? choice() : selectionInfo())->update(QPoint(col,row));
 }
 
-void Canvas::mouseReleaseEvent( QMouseEvent* _ev)
+void Canvas::mouseReleaseEvent( QMouseEvent* /*_ev*/)
 {
   if ( d->scrollTimer->isActive() )
     d->scrollTimer->stop();
 
   d->mousePressed = false;
+  d->view->disableAutoScroll();
 
-  if ( d->modType != MT_NONE && d->m_resizeObject && d->m_resizeObject->isSelected() )
+  if ( d->modType != MT_NONE /*&& d->m_resizeObject && d->m_resizeObject->isSelected() */)
   {
-    EmbeddedObject *obj = d->m_resizeObject;
-    QRect r;
-    KoRect unzoomedRect;
-    if ( d->modType == MT_MOVE )
+    switch ( d->modType )
     {
-      r = QRect( _ev->pos() - QPoint( d->m_origPos.x(), d->m_origPos.y() ), d->m_origSize );
-      unzoomedRect = doc()->unzoomRect( r );
-      unzoomedRect.moveBy( xOffset() , yOffset() );
+      case MT_MOVE:
+      {
+        KoPoint move( objectRect( false ).topLeft() - d->m_moveStartPosMouse );
+        if ( move != KoPoint( 0, 0 ) )
+        {
+          KCommand *cmd= activeSheet()->moveObject( view(), move.x(), move.y() );
+          if(cmd)
+            doc()->addCommand( cmd );
+        } else
+        {
+          repaint();
+        }
+        d->m_isMoving = false;
+        break;
+      }
+      case MT_RESIZE_UP: case MT_RESIZE_LF: case MT_RESIZE_RT: case MT_RESIZE_LU: case MT_RESIZE_LD: case MT_RESIZE_RU: case MT_RESIZE_RD:
+        finishResizeObject( i18n("Resize Object") );
+        break;
+      case MT_RESIZE_DN:
+        finishResizeObject( i18n("Resize Object"), false );
+        break;
+      default:
+        break;
     }
-    else
-    {
-      unzoomedRect = calculateNewGeometry(d->modType,  _ev->pos().x(), _ev->pos().y() );
-      r = doc()->zoomRect( unzoomedRect );
-      r.moveBy( (int)( -xOffset() * doc()->zoomedResolutionX() ), (int)(-yOffset() * doc()->zoomedResolutionY() ) );
-    }
-
-    if ( unzoomedRect.left() < 0 )
-    {
-        unzoomedRect.setRight( unzoomedRect.right() - unzoomedRect.left() );
-        unzoomedRect.setLeft( 0 );
-    }
-    if ( unzoomedRect.top() < 0 )
-    {
-        unzoomedRect.setBottom( unzoomedRect.bottom() - unzoomedRect.top() );
-        unzoomedRect.setTop( 0 );
-    }
-    if ( unzoomedRect != obj->geometry() )
-    {
-      ChangeObjectGeometryCommand *cmd = new ChangeObjectGeometryCommand( obj, unzoomedRect );
-      d->view->doc()->addCommand( cmd );
-      cmd->execute();
-    }
-    d->m_resizeObject = 0;
-    d->m_isMoving = false;
-    update( r );
     return;
   }
 
@@ -1270,71 +1310,65 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   if ( _ev->button() == LeftButton )
   {
     d->mousePressed = true;
+    d->view->enableAutoScroll();
   }
 
-  if ( activeSheet() )
+  if ( activeSheet() && _ev->button() == LeftButton)
   {
-    EmbeddedObject *obj;
-    if ( (obj = getObject( _ev->pos(), activeSheet() ) ) )
+    d->m_moveStartPosMouse = objectRect( false ).topLeft();
+    EmbeddedObject *obj = getObject( _ev->pos(), activeSheet() );
+
+    if ( obj )
     {
-      if ( obj->isSelected() )
+       // use ctrl + Button to select / deselect object
+      if ( _ev->state() & ControlButton && obj->isSelected() )
+        deselectObject( obj );
+      else if ( _ev->state() & ControlButton )
       {
         if ( d->modType == MT_NONE)
           return;
 
-        deselectAllObjects();
         selectObject( obj );
-          //raiseObject( kpobject );
-
-        d->m_resizeObject = obj;
-
-        d->m_keepRatio = false;
-        if ( _ev->state() & ControlButton )
-          d->m_keepRatio = true;
-
-        if ( d->modType == MT_MOVE)
-        {
-          d->m_origSize = doc()->zoomRect( obj->geometry() ).size();
-          d->m_origPos = _ev->pos();
-          d->m_origPos-= doc()->zoomRect( obj->geometry() ).topLeft();
-          d->m_origPos+= QPoint( (int)( xOffset() * doc()->zoomedResolutionX() ), (int)( yOffset()  * doc()->zoomedResolutionY() ) );
-          d->m_boundingRealRect = QRect( d->m_origPos, d->m_origSize );
-        }
-        else/* if ( d->modType == MT_RESIZE_DN )*/
-        {
-//           d->m_keepRatio = d->m_keepRatio || d->m_resizeObject->isKeepRatio();
-//           d->m_ratio = static_cast<double>( obj->geometrygetSize().width() )
-//             / static_cast<double>( obj->getSizegeometry().height()*/ );
-
-          d->m_origSize = doc()->zoomRect( obj->geometry() ).size();
-          d->m_origPos = _ev->pos();
-          QPoint p = doc()->zoomRect( obj->geometry() ).topLeft();
-          d->m_origPos-= QPoint( abs( p.x() ), abs( p.y() ) );
-          d->m_origPos+= QPoint( (int)( xOffset() * doc()->zoomedResolutionX() ), (int)( yOffset()  * doc()->zoomedResolutionY() ) );
-          d->m_boundingRealRect = QRect( d->m_origPos, d->m_origSize );
-        }
+        raiseObject( obj );
+        d->m_moveStartPosMouse = objectRect( false ).topLeft();
       }
       else
       {
-        //QPoint tmp = applyGrid ( e->pos(),true );
-        QPoint tmp( _ev->pos() );;
-        //d->insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
-        deselectAllObjects();
+        if ( d->modType != MT_MOVE || !obj->isSelected() )
+            deselectAllObjects();
+
         selectObject( obj );
-        setCursor( Qt::SizeAllCursor );
+
+        raiseObject( obj );
+        d->m_moveStartPosMouse = objectRect( false ).topLeft();
       }
 
-      if ( _ev->button() == RightButton )
+      // start resizing
+      if ( d->modType != MT_MOVE && d->modType != MT_NONE )
       {
-        //updatePosWidget();
-//     // TODO: Handle anchor
-        QPoint p = mapToGlobal( _ev->pos() );
-        d->view->openPopupMenu( p );
+        deselectAllObjects();
+        selectObject( obj );
+        raiseObject( obj );
+
+        d->m_resizeObject = obj;
+
+        d->m_ratio = static_cast<double>( obj->geometry().width() ) /
+            static_cast<double>( obj->geometry().height() );
+        d->m_rectBeforeResize = obj->geometry();
       }
+
+      KoPoint docPoint ( doc()->unzoomPoint( _ev->pos() ) );
+      docPoint += KoPoint( xOffset(), yOffset() );
+      d->m_origMousePos = docPoint;
+      d->m_moveStartPosMouse = objectRect( false ).topLeft();
       return;
     }
-    else if ( d->mouseSelectedObject )
-      deselectAllObjects();
+    else
+    {
+      d->modType = MT_NONE;
+      if ( !( _ev->state() & ShiftButton ) && !( _ev->state() & ControlButton ) )
+        deselectAllObjects();
+    }
   }
 
   // Get info about where the event occurred - this is duplicated
@@ -1343,70 +1377,6 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   if ( !sheet )
   {
     return;
-  }
-
-  if ( activeSheet() )
-  {
-    EmbeddedObject *obj;
-    if ( (obj = getObject( _ev->pos(), activeSheet() ) ) )
-    {
-      if ( obj->isSelected() )
-      {
-        if ( d->modType == MT_NONE)
-          return;
-
-        deselectAllObjects();
-        selectObject( obj );
-          //raiseObject( kpobject );
-
-        d->m_resizeObject = obj;
-
-        d->m_keepRatio = false;
-        if ( _ev->state() & ControlButton )
-          d->m_keepRatio = true;
-
-        if ( d->modType == MT_MOVE)
-        {
-          d->m_origSize = doc()->zoomRect( obj->geometry() ).size();
-          d->m_origPos = _ev->pos();
-          d->m_origPos-= doc()->zoomRect( obj->geometry() ).topLeft();
-          d->m_origPos+= QPoint( (int)( xOffset() * doc()->zoomedResolutionX() ), (int)( yOffset()  * doc()->zoomedResolutionY() ) );
-          d->m_boundingRealRect = QRect( d->m_origPos, d->m_origSize );
-        }
-        else/* if ( d->modType == MT_RESIZE_DN )*/
-        {
-//           d->m_keepRatio = d->m_keepRatio || d->m_resizeObject->isKeepRatio();
-//           d->m_ratio = static_cast<double>( obj->geometrygetSize().width() )
-//             / static_cast<double>( obj->getSizegeometry().height()*/ );
-
-          d->m_origSize = doc()->zoomRect( obj->geometry() ).size();
-          d->m_origPos = _ev->pos();
-          QPoint p = doc()->zoomRect( obj->geometry() ).topLeft();
-          d->m_origPos-= QPoint( abs( p.x() ), abs( p.y() ) );
-          d->m_origPos+= QPoint( (int)( xOffset() * doc()->zoomedResolutionX() ), (int)( yOffset()  * doc()->zoomedResolutionY() ) );
-          d->m_boundingRealRect = QRect( d->m_origPos, d->m_origSize );
-        }
-      }
-      else
-      {
-        //QPoint tmp = applyGrid ( e->pos(),true );
-        QPoint tmp( _ev->pos() );;
-        //d->insRect = QRect( tmp.x(),tmp.y(), 0, 0 );
-        selectObject( obj );
-        setCursor( Qt::SizeAllCursor );
-      }
-
-      if ( _ev->button() == RightButton )
-      {
-        //updatePosWidget();
-//     // TODO: Handle anchor
-        QPoint p = mapToGlobal( _ev->pos() );
-        d->view->openPopupMenu( p );
-      }
-      return;
-    }
-    else if ( d->mouseSelectedObject )
-      deselectAllObjects();
   }
 
   double dwidth = d->view->doc()->unzoomItX( width() );
@@ -1733,6 +1703,7 @@ void Canvas::focusOutEvent( QFocusEvent* )
     if ( d->scrollTimer->isActive() )
         d->scrollTimer->stop();
     d->mousePressed = false;
+    d->view->disableAutoScroll();
 }
 
 void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
@@ -2156,13 +2127,7 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   if ( d->cellEditor )
     deleteEditor( false );
 
-  if ( d->m_isMoving ) //moving or resizing
-  {
-    d->m_resizeObject = 0;
-    d->m_isMoving = false;
-    update( /*d->m_boundingRealRect*/ );
-  }
-  else if ( view()->isInsertingObject() )
+  if ( view()->isInsertingObject() )
   {
     view()->resetInsertHandle();
     setCursor( arrowCursor );
@@ -2173,6 +2138,54 @@ void Canvas::processEscapeKey(QKeyEvent * event)
   QPoint cursor = cursorPos();
 
   d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
+
+  if ( d->mousePressed /*&& toolEditMode == TEM_MOUSE */)
+  {
+    switch (d->modType)
+    {
+      case MT_RESIZE_UP:
+      case MT_RESIZE_DN:
+      case MT_RESIZE_LF:
+      case MT_RESIZE_RT:
+      case MT_RESIZE_LU:
+      case MT_RESIZE_LD:
+      case MT_RESIZE_RU:
+      case MT_RESIZE_RD:
+      {
+        QRect oldBoundingRect = doc()->zoomRect( d->m_resizeObject->geometry()/*getRepaintRect()*/);
+        d->m_resizeObject->setGeometry( d->m_rectBeforeResize );
+        oldBoundingRect.moveBy( (int)( -xOffset()*doc()->zoomedResolutionX() ) ,
+                            (int)( -yOffset() * doc()->zoomedResolutionY()) );
+
+        activeSheet()->setRegionPaintDirty( oldBoundingRect );
+        repaint( oldBoundingRect );
+        repaintObject( d->m_resizeObject );
+        d->m_ratio = 0.0;
+        d->m_resizeObject = 0;
+        d->m_isResizing = false;
+        view()->disableAutoScroll();
+        d->mousePressed = false;
+        d->modType = MT_NONE;
+        break;
+      }
+      case MT_MOVE:
+      {
+        if ( d->m_isMoving )
+        {
+          KoPoint move( d->m_moveStartPoint - objectRect( false ).topLeft() );
+          activeSheet()->moveObject( view(), move, false );
+          view()->disableAutoScroll();
+          d->mousePressed = false;
+          d->modType = MT_NONE;
+          d->m_isMoving = false;
+          update();
+        }
+        break;
+      }
+      default:
+        break;
+    }
+  }
 }
 
 bool Canvas::processHomeKey(QKeyEvent* event)
@@ -3124,6 +3137,14 @@ bool Canvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
   return true;
 }
 
+
+void Canvas::slotAutoScroll(const QPoint &scrollDistance)
+{
+  QPoint d = scrollDistance;
+  horzScrollBar()->setValue( horzScrollBar()->value() + d.x() );
+  vertScrollBar()->setValue( vertScrollBar()->value() + d.y() );
+}
+
 void Canvas::doAutoScroll()
 {
     if ( !d->mousePressed )
@@ -3131,9 +3152,8 @@ void Canvas::doAutoScroll()
         d->scrollTimer->stop();
         return;
     }
-
     bool select = false;
-    QPoint pos( mapFromGlobal( QCursor::pos() ) );
+    QPoint pos = mapFromGlobal( QCursor::pos() );
 
     //Provide progressive scrolling depending on the mouse position
     if ( pos.y() < 0 )
@@ -3349,154 +3369,293 @@ bool Canvas::isObjectSelected()
 }
 
 
-KoRect Canvas::calculateNewGeometry( ModifyType _modType, int _x, int _y )
+void Canvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
 {
-  KoRect unzoomedRect = d->m_resizeObject->geometry();
-  double const x = doc()->unzoomItX( _x ) +  xOffset();
-  double const y = doc()->unzoomItY( _y ) +  yOffset();
+  KoRect rect( objectRect( false ) );
+  KoPoint move( 0, 0 );
+  double diffx = pos.x() - d->m_origMousePos.x();
+  double diffy = pos.y() - d->m_origMousePos.y();
 
-  switch ( _modType )
+  move = KoPoint( diffx, diffy );
+  d->m_origMousePos = pos;
+
+    // unwind last snapping
+  KoRect movedRect( rect );
+  movedRect.moveBy( diffx, diffy );
+
+    // don't move object off canvas
+  KoPoint diffDueToBorders(0,0);
+//   KoRect pageRect( m_activePage->getPageRect() );
+  if ( rect.left() + move.x() < 0/*pageRect.left()*/ )
+    diffDueToBorders.setX( -rect.left() - move.x() );
+//   else if ( rect.right() + move.x() > pageRect.right() )
+//     diffDueToBorders.setX( pageRect.right() - (rect.right() + move.x()) );
+
+
+  //kdDebug() << "rect.top() + move.y():" << rect.top() + move.y()<< endl;
+  if ( rect.top() + move.y() < 0 )
+    diffDueToBorders.setY( -rect.top() - move.y() );
+//   else if ( rect.bottom() + move.y() > pageRect.bottom() )
+//     diffDueToBorders.setY( pageRect.bottom() - (rect.bottom() + move.y()) );
+
+//   m_moveSnapDiff += diffDueToBorders;
+  move += diffDueToBorders;
+
+//   movedRect.moveBy( m_moveSnapDiff.x(), m_moveSnapDiff.y() );
+  if ( keepXorYunchanged )
   {
-    case MT_RESIZE_DN:
+    KoPoint diff( d->m_moveStartPosMouse - movedRect.topLeft() );
+    if ( fabs( diff.x() ) > fabs( diff.y() ) )
     {
-      if( y > unzoomedRect.top() )
-        unzoomedRect.setBottom( y );
-      else
-      {
-        double const new_bottom = unzoomedRect.top();
-        unzoomedRect.setTop( y );
-        unzoomedRect.setBottom( new_bottom );
-      }
-      break;
+//       m_moveSnapDiff.setY( /*m_moveSnapDiff.y() + */m_moveStartPosMouse.y() - movedRect.y() );
+      movedRect.moveTopLeft( KoPoint( movedRect.x(), d->m_moveStartPosMouse.y() ) );
+      move.setY( movedRect.y() - rect.y() );
     }
-    case MT_RESIZE_UP:
+    else
     {
-      if( y < unzoomedRect.bottom() )
-        unzoomedRect.setTop( y );
-      else
-      {
-        double const new_top = unzoomedRect.bottom();
-        unzoomedRect.setBottom( y );
-        unzoomedRect.setTop( new_top );
-      }
-      break;
+//       m_moveSnapDiff.setX( /*m_moveSnapDiff.x() + */m_moveStartPosMouse.x() - movedRect.x() );
+      movedRect.moveTopLeft( KoPoint( d->m_moveStartPosMouse.x(), movedRect.y() ) );
+      move.setX( movedRect.x() - rect.x() );
     }
-    case MT_RESIZE_LF:
-    {
-      if( x < unzoomedRect.right() )
-        unzoomedRect.setLeft( x );
-      else
-      {
-        double const new_left = unzoomedRect.right();
-        unzoomedRect.setRight( x );
-        unzoomedRect.setLeft( new_left );
-      }
-      break;
-    }
-    case MT_RESIZE_RT:
-    {
-      if( x > unzoomedRect.left() )
-        unzoomedRect.setRight( x );
-      else
-      {
-        double const new_right = unzoomedRect.left();
-        unzoomedRect.setLeft( x );
-        unzoomedRect.setRight( new_right );
-      }
-      break;
-    }
-    case MT_RESIZE_LU:
-    {
-      if( x < unzoomedRect.right() && y < unzoomedRect.bottom() )
-        unzoomedRect.setTopLeft( KoPoint( x, y ) );
-      else if( x < unzoomedRect.right() && y > unzoomedRect.bottom() )
-      {
-        unzoomedRect.setTop( unzoomedRect.bottom() );
-        unzoomedRect.setBottomLeft( KoPoint( x, y ) );
-      }
-      else if( x > unzoomedRect.right() && y < unzoomedRect.bottom() )
-      {
-        unzoomedRect.setLeft( unzoomedRect.right() );
-        unzoomedRect.setTopRight( KoPoint( x, y ) );
-      }
-      else
-      {
-        unzoomedRect.setLeft( unzoomedRect.right() );
-        unzoomedRect.setTop( unzoomedRect.bottom() );
-        unzoomedRect.setBottomRight( KoPoint( x, y ) );
-      }
-      break;
-    }
-    case MT_RESIZE_LD:
-    {
-      if( x < unzoomedRect.right() && y > unzoomedRect.top() )
-        unzoomedRect.setBottomLeft( KoPoint( x, y ) );
-      else if( x < unzoomedRect.right() && y < unzoomedRect.top() )
-      {
-        unzoomedRect.setBottom( unzoomedRect.top() );
-        unzoomedRect.setTopLeft( KoPoint( x, y ) );
-      }
-      else if( x > unzoomedRect.right() && y > unzoomedRect.top() )
-      {
-        unzoomedRect.setLeft( unzoomedRect.right() );
-        unzoomedRect.setBottomRight( KoPoint( x, y ) );
-      }
-      else
-      {
-        unzoomedRect.setLeft( unzoomedRect.right() );
-        unzoomedRect.setBottom( unzoomedRect.top() );
-        unzoomedRect.setTopRight( KoPoint( x, y ) );
-      }
-      break;
-    }
-    case MT_RESIZE_RU:
-    {
-      if( x > unzoomedRect.left() && y < unzoomedRect.bottom() )
-        unzoomedRect.setTopRight( KoPoint( x, y ) );
-      else if( x > unzoomedRect.left() && y > unzoomedRect.bottom() )
-      {
-        unzoomedRect.setTop( unzoomedRect.bottom() );
-        unzoomedRect.setBottomRight( KoPoint( x, y ) );
-      }
-      else if( x < unzoomedRect.right() && y < unzoomedRect.bottom() )
-      {
-        unzoomedRect.setRight( unzoomedRect.left() );
-        unzoomedRect.setTopLeft( KoPoint( x, y ) );
-      }
-      else
-      {
-        unzoomedRect.setTop( unzoomedRect.bottom() );
-        unzoomedRect.setRight( unzoomedRect.left() );
-        unzoomedRect.setBottomLeft( KoPoint( x, y ) );
-      }
-      break;
-    }
-    case MT_RESIZE_RD:
-    {
-      if( x > unzoomedRect.left() && y > unzoomedRect.top() )
-        unzoomedRect.setBottomRight( KoPoint( x, y ) );
-      else if( x > unzoomedRect.left() && y < unzoomedRect.top() )
-      {
-        unzoomedRect.setBottom( unzoomedRect.top() );
-        unzoomedRect.setTopRight( KoPoint( x, y ) );
-      }
-      else if( x < unzoomedRect.right() && y > unzoomedRect.top() )
-      {
-        unzoomedRect.setRight( unzoomedRect.left() );
-        unzoomedRect.setBottomLeft( KoPoint( x, y ) );
-      }
-      else
-      {
-        unzoomedRect.setBottom( unzoomedRect.top() );
-        unzoomedRect.setRight( unzoomedRect.left() );
-        unzoomedRect.setTopLeft( KoPoint( x, y ) );
-      }
-      break;
-    }
-    default:
-      break;
   }
-  return unzoomedRect;
+
+  if ( move != KoPoint( 0, 0 ) )
+  {
+        //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
+    activeSheet()->moveObject( view(), move, false );
+  }
+}
+
+
+void Canvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio )
+{
+    EmbeddedObject *obj = d->m_resizeObject;
+
+    KoRect objRect = obj->geometry();
+    objRect.moveBy( -xOffset(), -yOffset() );
+    QRect oldBoundingRect( doc()->zoomRect( objRect ) );
+
+    bool left = false;
+    bool right = false;
+    bool top = false;
+    bool bottom = false;
+    if ( _modType == MT_RESIZE_UP || _modType == MT_RESIZE_LU || _modType == MT_RESIZE_RU )
+    {
+        top = true;
+//         snapStatus |= KoGuides::SNAP_HORIZ;
+    }
+    if ( _modType == MT_RESIZE_DN || _modType == MT_RESIZE_LD || _modType == MT_RESIZE_RD )
+    {
+        bottom = true;
+//         snapStatus |= KoGuides::SNAP_HORIZ;
+    }
+    if ( _modType == MT_RESIZE_LF || _modType == MT_RESIZE_LU || _modType == MT_RESIZE_LD )
+    {
+        left = true;
+//         snapStatus |= KoGuides::SNAP_VERT;
+    }
+    if ( _modType == MT_RESIZE_RT || _modType == MT_RESIZE_RU || _modType == MT_RESIZE_RD )
+    {
+        right = true;
+//         snapStatus |= KoGuides::SNAP_VERT;
+    }
+    
+    double newLeft = objRect.left();
+    double newRight = objRect.right();
+    double newTop = objRect.top();
+    double newBottom = objRect.bottom();
+    if ( top )
+    {
+        if ( point.y() < objRect.bottom() - MIN_SIZE )
+        {
+            newTop = point.y();
+        }
+        else
+        {
+            newTop = objRect.bottom() - MIN_SIZE;
+        }
+    }
+    if ( bottom )
+    {
+        if ( point.y() > objRect.top() + MIN_SIZE )
+        {
+            newBottom = point.y();
+        }
+        else
+        {
+            newBottom = objRect.top() + MIN_SIZE;
+        }
+    }
+    if ( left )
+    {
+        if ( point.x() < objRect.right() - MIN_SIZE )
+        {
+            newLeft = point.x();
+        }
+        else
+        {
+            newLeft = objRect.right() - MIN_SIZE;
+        }
+    }
+    if ( right )
+    {
+        if ( point.x() > objRect.left() + MIN_SIZE )
+        {
+            newRight = point.x();
+        }
+        else
+        {
+            newRight = objRect.left() + MIN_SIZE;
+        }
+    }
+
+  double width = newRight - newLeft;
+  double height = newBottom - newTop;
+
+  if ( keepRatio && d->m_ratio != 0 )
+  {
+    if ( ( top || bottom ) && ( right || left ) )
+    {
+      if ( height * height * d->m_ratio > width * width / d->m_ratio )
+      {
+        width = height * d->m_ratio;
+      }
+      else
+      {
+        height = width / d->m_ratio;
+      }
+    }
+    else if ( top || bottom )
+    {
+      width = height * d->m_ratio;
+    }
+    else
+    {
+      height = width / d->m_ratio;
+    }
+
+    if ( top )
+    {
+      newTop = objRect.bottom() - height;
+    }
+    else
+    {
+      newBottom = objRect.top() + height;
+    }
+    if ( left )
+    {
+      newLeft = objRect.right() - width;
+    }
+    else
+    {
+      newRight = objRect.right() + width;
+    }
+  }
+
+  if ( newLeft != objRect.left() || newRight != objRect.right() || newTop != objRect.top() || newBottom != objRect.bottom() )
+  {
+        // resizeBy and moveBy have to been used to make it work with rotated objects
+        obj->resizeBy( width - objRect.width(), height - objRect.height() );
+
+        if ( objRect.left() != newLeft || objRect.top() != newTop )
+        {
+            obj->moveBy( KoPoint( newLeft - objRect.left(), newTop - objRect.top() ) );
+        }
+
+//     if ( doc()->showGuideLines() && !m_disableSnapping )
+//     {
+//       KoRect rect( obj->getRealRect() );
+//       KoPoint sp( rect.topLeft() );
+//       if ( right )
+//       {
+//         sp.setX( rect.right() );
+//       }
+//       if ( bottom )
+//       {
+//         sp.setY( rect.bottom() );
+//       }
+//       m_gl.repaintSnapping( sp, snapStatus );
+//     }
+
+    repaint( oldBoundingRect );
+    repaintObject( obj );
+    emit objectSizeChanged();
+  }
+}
+
+
+void Canvas::finishResizeObject( const QString &/*name*/, bool /*layout*/ )
+{
+  if ( d->m_resizeObject )
+  {
+    KoPoint move = KoPoint( d->m_resizeObject->geometry().x() - d->m_rectBeforeResize.x(),
+                            d->m_resizeObject->geometry().y() - d->m_rectBeforeResize.y() );
+    KoSize size = KoSize( d->m_resizeObject->geometry().width() - d->m_rectBeforeResize.width(),
+                          d->m_resizeObject->geometry().height() - d->m_rectBeforeResize.height() );
+
+    if ( ( d->m_resizeObject->geometry() ) != d->m_rectBeforeResize )
+    {
+        ChangeObjectGeometryCommand *resizeCmd = new ChangeObjectGeometryCommand( d->m_resizeObject, move, size );
+        // the command is not executed as the object is allready resized.
+        doc()->addCommand( resizeCmd );
+    }
+
+//     if ( layout )
+//       doc()->layout( m_resizeObject );
+
+    d->m_ratio = 0.0;
+    d->m_isResizing = false;
+    repaintObject( d->m_resizeObject );
+    d->m_resizeObject = NULL;
+  }
+}
+
+void Canvas::raiseObject( EmbeddedObject *object )
+{
+    if ( doc()->embeddedObjects().count() <= 1 )
+        return;
+
+    if ( d->m_objectDisplayAbove == 0 )
+    {
+        if ( activeSheet()->numSelected() == 1 )
+        {
+            d->m_objectDisplayAbove = object;
+        }
+    }
+}
+
+void Canvas::lowerObject()
+{
+    d->m_objectDisplayAbove = 0;
+}
+
+void Canvas::displayObjectList( QPtrList<EmbeddedObject> &list )
+{
+  list = doc()->embeddedObjects();
+  list.setAutoDelete( false );
+
+    if ( d->m_objectDisplayAbove )
+    {
+        // it can happen that the object is no longer there e.g. when 
+        // the insert of the object is undone
+        int pos = doc()->embeddedObjects().findRef( d->m_objectDisplayAbove );
+        if ( pos != -1 && d->m_objectDisplayAbove->isSelected() )
+        {
+            list.take( pos );
+            list.append( d->m_objectDisplayAbove );
+        }
+        else
+        {
+            //tz not possible due to const. should const be removed?
+            //m_objectDisplayAbove = 0;
+        }
+    }
+}
+
+
+KoRect Canvas::objectRect( bool all ) const
+{
+  return activeSheet()->getRealRect( all );
 }
 
 void Canvas::deleteEditor (bool saveChanges, bool array)
@@ -3683,7 +3842,10 @@ void Canvas::repaintObject( EmbeddedObject *obj )
 
  /* if ( !obj->isSelected() )
   {
-    QRect geometry( doc()->zoomRect( obj->geometry() ) );
+    KoRect g = obj->geometry();
+    g.moveBy( -xOffset(), -yOffset() );
+    QRect geometry( doc()->zoomRect( g ) );
+
     update( geometry );
   }
   else
@@ -4124,7 +4286,7 @@ void Canvas::clipoutChildren( QPainter& painter ) const
   QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
   for( ; itObject.current(); ++itObject )
   {
-    if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject && d->m_isMoving ) )
+    if ( ( itObject.current() )->sheet() == activeSheet() )
     {
 	QRect childGeometry = doc()->zoomRect( itObject.current()->geometry());
 
@@ -4167,7 +4329,7 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
   for( ; itObject.current(); ++itObject )
   {
     QRect const zoomedObjectGeometry = doc()->zoomRect( itObject.current()->geometry() );
-    if ( ( itObject.current() )->sheet() == activeSheet() && !( itObject.current() == d->m_resizeObject /*&& d->m_isMoving*/ ) &&
+    if ( ( itObject.current() )->sheet() == activeSheet() &&
            zoomedWindowGeometry.intersects( zoomedObjectGeometry ) )
     {
 	    //To prevent unnecessary redrawing of the embedded object, we only repaint
@@ -4192,7 +4354,7 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& /*matrix*/ )
 			break;
 	   }
 
-      	  if ( redraw )
+       	  if ( redraw )
       		itObject.current()->draw( &painter );
     }
   }

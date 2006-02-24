@@ -55,6 +55,7 @@ class QPainter;
 class QLabel;
 class QScrollBar;
 class KoRect;
+class KoPoint;
 
 namespace KSpread
 {
@@ -312,6 +313,46 @@ public:
     void setMouseSelectedObject(bool b);
     bool isObjectSelected();
 
+    /**
+     * @brief Move object by mouse
+     *
+     * @param pos The position of the mouse
+     * @param keepXorYunchanged if true keep x or y position unchanged
+     */
+    void moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged );
+
+    //---- stuff needed for resizing ----
+    /// resize the m_resizeObject
+    void resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio );
+    /// create KPrResizeCmd
+    void finishResizeObject( const QString &name, bool layout = true );
+
+    /**
+     * @brief Display object above the other objects in editiong mode
+     *
+     * This is used to bring a single slected object to front, so it is easier 
+     * to modify.
+     *
+     * @param object which should be displayed above the other objects
+     */
+    void raiseObject( EmbeddedObject *object );
+    /**
+     * @brief Don't display an object above the others
+     */
+    void lowerObject();
+    /**
+     * @brief Get the list of objects in the order they should be displayed.
+     *
+     * This takes into acount the object set in raiseObject so that it is 
+     * the last one in the list returned (the one that is displayed above all
+     * the others).
+     *
+     * @return List of objects
+     */
+    void displayObjectList( QPtrList<EmbeddedObject> &list );
+
+    KoRect objectRect( bool all ) const;
+
     void repaintObject( EmbeddedObject *obj );
 
     /**
@@ -361,6 +402,12 @@ protected:
     bool highlightRangeSizeGripAt(double x, double y);
 
 private slots:
+
+    /**
+     * Scroll canvas when receiving this signal
+     */
+    void slotAutoScroll(const QPoint &scrollDist);
+
     void doAutoScroll();
     void speakCell(QWidget* w, const QPoint& p, uint flags);
 
@@ -407,9 +454,6 @@ private:
 
 private:
   void moveObject( int x, int y, bool key );
-
-  //---- stuff needed for resizing objects----
-  KoRect calculateNewGeometry( ModifyType _modType, int _x, int _y );
 
   void startTheDrag();
 

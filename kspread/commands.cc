@@ -575,35 +575,54 @@ QString LinkCommand::name() const
   return newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link");
 }
 
-ChangeObjectGeometryCommand::ChangeObjectGeometryCommand( EmbeddedObject *_obj, KoRect &_newGeometry )
+ChangeObjectGeometryCommand::ChangeObjectGeometryCommand( EmbeddedObject *_obj, const KoPoint &_m_diff, const KoSize &_r_diff )
+  : m_diff( _m_diff ), r_diff( _r_diff )
 {
   obj = _obj;
-  newGeometry = _newGeometry;
+  obj->incCmdRef();
+  doc = obj->sheet()->doc();
+}
+
+ChangeObjectGeometryCommand::~ChangeObjectGeometryCommand()
+{
+  obj->decCmdRef();
 }
 
 void ChangeObjectGeometryCommand::execute()
 {
-  KoRect tmp = obj->geometry();
-  obj->setGeometry( newGeometry );
-  newGeometry = tmp;
-  obj->sheet()->doc()->repaint( obj );
-  obj->sheet()->doc()->repaint( obj->sheet()->doc()->zoomRect( newGeometry ) );
+    doc->repaint( obj->geometry() );
+
+    KoRect geometry = obj->geometry();
+    geometry.moveBy( m_diff.x(),  m_diff.y() );
+    geometry.setWidth( geometry.width() + r_diff.width() );
+    geometry.setHeight( geometry.height() + r_diff.height() );
+    obj->setGeometry( geometry );
+
+//     if ( object->isSelected())
+//       doc->updateObjectStatusBarItem();
+    doc->repaint( obj );
 }
 
 void ChangeObjectGeometryCommand::unexecute()
 {
-  KoRect tmp = obj->geometry();
-  obj->setGeometry( newGeometry );
-  newGeometry = tmp;
-  obj->sheet()->doc()->repaint( obj );
-  obj->sheet()->doc()->repaint( obj->sheet()->doc()->zoomRect( newGeometry ) );
+  doc->repaint( obj->geometry() );
+
+  KoRect geometry = obj->geometry();
+  geometry.moveBy( -m_diff.x(),  -m_diff.y() );
+  geometry.setWidth( geometry.width() - r_diff.width() );
+  geometry.setHeight( geometry.height() - r_diff.height() );
+  obj->setGeometry( geometry );
+
+//     if ( object->isSelected())
+//       doc->updateObjectStatusBarItem();
+  doc->repaint( obj );
 }
 
 QString ChangeObjectGeometryCommand::name() const
 {
-  if ( fabs( obj->geometry().width() - newGeometry.width() )<1e-3  && fabs( obj->geometry().height() - newGeometry.height() ) < 1e-3 )
+  /*if ( fabs( obj->geometry().width() - newGeometry.width() )<1e-3  && fabs( obj->geometry().height() - newGeometry.height() ) < 1e-3 )
     return i18n("Move Object");
-  else
+  else */
     return i18n("Resize Object");
 }
 
@@ -639,6 +658,11 @@ void RemoveObjectCommand::execute()
 //       doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 
   doc->embeddedObjects().removeRef( obj );
+  if ( obj->getType() == OBJECT_CHART ||  obj->getType()== OBJECT_KOFFICE_PART)
+  {
+    EmbeddedKOfficeObject *eko = dynamic_cast<EmbeddedKOfficeObject *>(obj);
+    eko->embeddedObject()->setDeleted(true);
+  }
 
   obj->setSelected( false );
   doc->repaint( obj );
@@ -648,6 +672,11 @@ void RemoveObjectCommand::execute()
 void RemoveObjectCommand::unexecute()
 {
   doc->embeddedObjects().append( obj );
+  if ( obj->getType() == OBJECT_CHART ||  obj->getType()== OBJECT_KOFFICE_PART)
+  {
+    EmbeddedKOfficeObject *eko = dynamic_cast<EmbeddedKOfficeObject *>(obj);
+    eko->embeddedObject()->setDeleted(false);
+  }
   doc->repaint( obj );
   executed = false;
 }
@@ -865,3 +894,53 @@ void GeometryPropertiesCommand::unexecute()
     }
 }
 
+MoveObjectByCmd::MoveObjectByCmd( const QString &_name, const KoPoint &_diff, QPtrList<EmbeddedObject> &_objects,
+                      Doc *_doc,Sheet *_page )
+    : KNamedCommand( _name ), diff( _diff ), objects( _objects )
+{
+    objects.setAutoDelete( false );
+    doc = _doc;
+    m_page=_page;
+    QPtrListIterator<EmbeddedObject> it( objects );
+    for ( ; it.current() ; ++it )
+    {
+        it.current()->incCmdRef();
+    }
+}
+
+MoveObjectByCmd::~MoveObjectByCmd()
+{
+    QPtrListIterator<EmbeddedObject> it( objects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+}
+
+void MoveObjectByCmd::execute()
+{
+    QRect oldRect;
+
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+        doc->repaint( objects.at( i )->geometry() );
+
+        KoRect r = objects.at( i )->geometry();
+        r.moveBy( diff.x(), diff.y() );
+        objects.at( i )->setGeometry( r );
+
+        doc->repaint( objects.at( i ) );
+    }
+}
+
+void MoveObjectByCmd::unexecute()
+{
+    QRect oldRect;
+
+    for ( unsigned int i = 0; i < objects.count(); i++ ) {
+        doc->repaint( objects.at( i )->geometry() );
+
+        KoRect r = objects.at( i )->geometry();
+        r.moveBy( -diff.x(), -diff.y() );
+        objects.at( i )->setGeometry( r );
+
+        doc->repaint( objects.at( i ) );
+    }
+}

@@ -295,12 +295,8 @@ KCommand * PropertyEditor::getCommand()
                     if ( change & GeneralProperty::Height )
                         newRect.setHeight( generalValue.m_rect.height() );
 
-                    KCommand *cmd = new ChangeObjectGeometryCommand( it.current(), newRect );
-// 
-//                     KCommand *cmd = new KPrResizeCmd( i18n( "Change Size" ),
-//                                                    newRect.topLeft() - oldRect.topLeft(),
-//                                                    newRect.size() - oldRect.size(),
-//                                                    it.current(), m_doc );
+                    KCommand *cmd = new ChangeObjectGeometryCommand(   it.current(),  newRect.topLeft() - oldRect.topLeft(),
+                                                    newRect.size() - oldRect.size() );
 
                     macro->addCommand( cmd );
                 }

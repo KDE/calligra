@@ -74,6 +74,26 @@ void EmbeddedObject::setGeometry( const KoRect &rect )
     m_geometry = rect;
 }
 
+void EmbeddedObject::moveBy( const KoPoint &_point )
+{
+  m_geometry.moveTopLeft( m_geometry.topLeft() + _point );
+}
+
+void EmbeddedObject::moveBy( double _dx, double _dy )
+{
+  m_geometry.moveTopLeft( m_geometry.topLeft() + KoPoint( _dx, _dy ) );
+}
+
+void EmbeddedObject::resizeBy( const KoSize & _size )
+{
+  resizeBy( _size.width(), _size.height() );
+}
+
+void EmbeddedObject::resizeBy( double _dx, double _dy)
+{
+  m_geometry.setSize( KoSize( m_geometry.width()+_dx, m_geometry.height()+_dy) );
+} // call (possibly reimplemented) setSize
+
 bool EmbeddedObject::load( const QDomElement& /*element*/ )
 {
     kdDebug() << "Loading EmbeddedObject" << endl;
@@ -382,7 +402,8 @@ bool EmbeddedKOfficeObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &
     ++sc.partIndexObj;
     m_embeddedObject->saveOasisAttributes( sc.xmlWriter, name );
 
-    sc.xmlWriter.endElement();
+    if ( getType() != OBJECT_CHART )
+        sc.xmlWriter.endElement();
     return true;
 }
 
@@ -586,6 +607,25 @@ void EmbeddedChart::loadOasis(const QDomElement &element, KoOasisLoadingContext 
     Point lr( str_range.mid(p + 1).section( '.', 1 ,1 ) );
 
     setDataArea( QRect(ul.pos(), lr.pos()));
+}
+
+
+bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
+{
+    kdDebug() << "EmbeddedChart::saveOasisPart " << sc.partIndexObj << endl;
+
+    EmbeddedKOfficeObject::saveOasisObjectAttributes( sc );
+
+    QRect dataArea = m_pBinding->dataArea();
+    QString rangeName = util_rangeName( dataArea);
+    rangeName.insert( rangeName.find(':') +1, sheet()->sheetName() + "." );
+    rangeName.prepend( sheet()->sheetName() + "." );
+    sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );
+
+    sc.xmlWriter.endElement();
+
+
+    return true;
 }
 
 QDomElement EmbeddedChart::save( QDomDocument& doc )
@@ -1186,10 +1226,10 @@ QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
     image.draw(paint, 0, 0, size.width(), size.height(), 0, 0, -1, -1, false); // Always slow mode!
     image.clearCache(); // Release the memoy of the picture cache
 
-    image.setAlphaBuffer(true);
-    QBitmap tmpMask;
-    tmpMask = image.createAlphaMask().scale(size);
-    pixmap.setMask(tmpMask);
+//     image.setAlphaBuffer(true);
+//     QBitmap tmpMask;
+//     tmpMask = image.createAlphaMask().scale(size);
+//     pixmap.setMask(tmpMask);
 
     paint.end();
     return pixmap;
@@ -1289,7 +1329,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
             m_cachedPar3 = m_ie_par3;
             //kdDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
-        //_painter->eraseRect( rect );
+        _painter->eraseRect( rect );
         _painter->drawPixmap( rect, m_cachedPixmap);
     }
 

@@ -358,15 +358,18 @@ protected:
 class ChangeObjectGeometryCommand : public KCommand
 {
   public:
-    ChangeObjectGeometryCommand( EmbeddedObject *_obj, KoRect &_newGeometry );
+    ChangeObjectGeometryCommand( EmbeddedObject *_obj, const KoPoint &_m_diff, const KoSize &_r_diff );
+    ~ChangeObjectGeometryCommand();
 
     virtual void execute();
     virtual void unexecute();
     virtual QString name() const;
 
   protected:
-    KoRect newGeometry;
+    KoPoint m_diff;
+    KoSize r_diff;
     EmbeddedObject *obj;
+    Doc *doc;
 };
 
 class RemoveObjectCommand : public KCommand
@@ -443,6 +446,24 @@ protected:
     bool m_newValue;
     KgpType m_type;
     Doc *m_doc;
+};
+
+class MoveObjectByCmd : public KNamedCommand
+{
+public:
+    MoveObjectByCmd( const QString &_name, const KoPoint &_diff, QPtrList<EmbeddedObject> &_objects,
+               Doc *_doc, Sheet *m_page );
+    ~MoveObjectByCmd();
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+
+    KoPoint diff;
+    QPtrList<EmbeddedObject> objects;
+    Doc *doc;
+    Sheet *m_page;
 };
 
 } // namespace KSpread

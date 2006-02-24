@@ -116,6 +116,11 @@ class EmbeddedObject
 
     KoRect geometry();
     void setGeometry( const KoRect &rect );
+    virtual void moveBy( const KoPoint &_point );
+    virtual void moveBy( double _dx, double _dy );
+    virtual void resizeBy( const KoSize & _size );
+    virtual void resizeBy( double _dx, double _dy );
+
     Sheet* sheet() const { return m_sheet; }
 
     void setSelected(bool s) { m_selected = s; }
@@ -296,6 +301,7 @@ class EmbeddedChart : public EmbeddedKOfficeObject
 
   protected:
     virtual const char * getOasisElementName() const;
+    virtual bool saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const;
 
   private:
     ChartBinding *m_pBinding;

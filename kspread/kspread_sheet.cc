@@ -80,6 +80,8 @@
 #include "manipulator.h"
 #include "manipulator_data.h"
 #include "kspread_object.h"
+#include "commands.h"
+#include "kspread_view.h"
 
 #include "kspread_sheet.moc"
 
@@ -6081,6 +6083,89 @@ QPtrList<EmbeddedObject> Sheet::getSelectedObjects()
      return objects;
 }
 
+KoRect Sheet::getRealRect( bool all )
+{
+    KoRect rect;
+
+    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects() );
+    for ( ; it.current() ; ++it )
+    {
+
+        if ( all || ( it.current()->isSelected() && ! it.current()->isProtect() ) )
+            rect |= it.current()->geometry();
+    }
+
+    return rect;
+}
+
+// move object for releasemouseevent
+KCommand *Sheet::moveObject(View *_view, double diffx, double diffy)
+{
+    bool createCommand=false;
+    MoveObjectByCmd *moveByCmd=0L;
+    Canvas * canvas = _view->canvasWidget();
+    QPtrList<EmbeddedObject> _objects;
+    _objects.setAutoDelete( false );
+    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects()/*m_objectList*/ );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() && !it.current()->isProtect())
+        {
+            _objects.append( it.current() );
+            KoRect geometry = it.current()->geometry();
+            geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
+            QRect br = doc()->zoomRect( geometry/*it.current()->geometry()*/ );
+            br.moveBy( doc()->zoomItX( diffx ), doc()->zoomItY( diffy ) );
+            br.moveBy( doc()->zoomItX( -canvas->xOffset() ), doc()->zoomItY( -canvas->yOffset() ) );
+            canvas->repaint( br ); // Previous position
+            canvas->repaintObject( it.current() ); // New position
+            createCommand=true;
+        }
+    }
+    if(createCommand) {
+        moveByCmd = new MoveObjectByCmd( i18n( "Move Objects" ), KoPoint( diffx, diffy ),
+                                   _objects, doc(), this );
+
+//         m_doc->updateSideBarItem( this );
+    }
+    return moveByCmd;
+}
+
+KCommand *Sheet::moveObject(View *_view,const KoPoint &_move,bool key)
+{
+    QPtrList<EmbeddedObject> _objects;
+    _objects.setAutoDelete( false );
+    MoveObjectByCmd *moveByCmd=0L;
+    Canvas * canvas = _view->canvasWidget();
+    QPtrListIterator<EmbeddedObject> it( doc()->embeddedObjects()/*m_objectList*/ );
+    for ( ; it.current() ; ++it )
+    {
+        if ( it.current()->isSelected() && !it.current()->isProtect()) {
+
+            KoRect geometry = it.current()->geometry();
+            geometry.moveBy( -canvas->xOffset(), -canvas->yOffset() );
+            QRect oldBoundingRect = doc()->zoomRect( geometry );
+
+
+            KoRect r = it.current()->geometry();
+            r.moveBy( _move.x(), _move.y() );
+
+            it.current()->setGeometry( r );
+            _objects.append( it.current() );
+
+            canvas->repaint( oldBoundingRect );
+            canvas->repaintObject( it.current() );
+        }
+    }
+
+    if ( key && !_objects.isEmpty())
+        moveByCmd = new MoveObjectByCmd( i18n( "Move Objects" ),
+                                   KoPoint( _move ),
+                                   _objects, doc() ,this );
+
+    return moveByCmd;
+}
+
 /*
  * Check if object name already exists.
  */
@@ -6382,7 +6467,12 @@ void Sheet::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& 
           EmbeddedObject *obj = 0;
           QDomNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
-            obj = new EmbeddedKOfficeObject( doc(), this );
+          {
+            if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null).isNull() )
+                obj = new EmbeddedChart( doc(), this );
+            else
+                obj = new EmbeddedKOfficeObject( doc(), this );
+          }
           else
           {
             QDomNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
@@ -6405,12 +6495,13 @@ void Sheet::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& 
 
 void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 {
-    float left = 0.0;
-    float right = 0.0;
-    float top = 0.0;
-    float bottom = 0.0;
-    float width = 0.0;
-    float height = 0.0;
+    // use "US Letter" as default page size
+    float left = 20.0;
+    float right = 20.0;
+    float top = 20.0;
+    float bottom = 20.0;
+    float width = 215.9;
+    float height = 279.4;
     QString orientation = "Portrait";
     QString format;
 
@@ -7856,7 +7947,7 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
     Range dataRange;
     dataRange.setRange( _data );
     dataRange.setSheet( this );
-   
+
     QString rangeString=dataRange.toString();
     
     if ( wiz )

@@ -1456,6 +1456,7 @@ void Doc::addCommand( KCommand* command )
 {
   if (undoLocked()) return;
   d->commandHistory->addCommand( command, false );
+  setModified( true );
 }
 
 void Doc::addCommand( UndoAction* undo )
@@ -1463,6 +1464,7 @@ void Doc::addCommand( UndoAction* undo )
   if (undoLocked()) return;
   UndoWrapperCommand* command = new UndoWrapperCommand( undo );
   addCommand( command );
+  setModified( true );
 }
 
 void Doc::undo()
@@ -2279,6 +2281,21 @@ void Doc::repaint( EmbeddedObject *obj )
     Canvas* canvas = ((View*)it.current())->canvasWidget();
     if ( obj->sheet() == canvas->activeSheet() )
         canvas->repaintObject( obj );
+  }
+}
+
+void Doc::repaint( const KoRect& rect )
+{
+  QRect r;
+  QPtrListIterator<KoView> it( views() );
+  for( ; it.current(); ++it )
+  {
+    Canvas* canvas = ((View*)it.current())->canvasWidget();
+
+    r = zoomRect( rect );
+    r.moveBy( (int)( -canvas->xOffset()*zoomedResolutionX() ) ,
+                        (int)( -canvas->yOffset() *zoomedResolutionY()) );
+    canvas->update( r );
   }
 }
 

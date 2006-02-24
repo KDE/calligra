@@ -52,6 +52,7 @@ class KoStyleStack;
 class KoGenStyles;
 class KoOasisSettings;
 class KoOasisLoadingContext;
+class KCommand;
 class KoPicture;
 
 namespace KoChart
@@ -272,6 +273,20 @@ public:
      */
     QPtrList<EmbeddedObject> getSelectedObjects();
 
+
+    /**
+     * @brief get the rect for the objects
+     *
+     * @param all true if the rect for all objects shoud be returned
+     *        false if only the rect for selected objects sould be returned
+     *
+     * @return rect of the objects
+     */
+    KoRect getRealRect( bool all );
+
+    //return command when we move object
+    KCommand *moveObject(View *_view, double diffx, double diffy);
+    KCommand *moveObject(View *m_view,const KoPoint &_move,bool key);
 
     /**
      * @brief Create a uniq name for an object.
