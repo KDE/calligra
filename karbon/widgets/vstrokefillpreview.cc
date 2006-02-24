@@ -77,11 +77,10 @@ VStrokeFillPreview::~VStrokeFillPreview()
 void
 VStrokeFillPreview::paintEvent( QPaintEvent* event )
 {
-	const int x = int( PANEL_SIZEX ), int( y = PANEL_SIZEY );
-	bitBlt( this,
-		( width() - x ) / 2, ( height() - y ) / 2,
+        bitBlt( this,
+                (int)( width() - PANEL_SIZEX ) / 2, (int)( height() - PANEL_SIZEY ) / 2,
 		&m_pixmap,
-		0, 0, x, y );
+                0, 0, (int)PANEL_SIZEX, (int)PANEL_SIZEY );
 
 	QFrame::paintEvent( event );
 }
