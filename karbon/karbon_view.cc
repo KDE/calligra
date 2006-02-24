@@ -24,6 +24,8 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qpopupmenu.h>
+#include <qpaintdevicemetrics.h>
+#include <qpainter.h>
 
 #include <kaction.h>
 #include <kcolordrag.h>
@@ -31,6 +33,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
+#include <kprinter.h>
 
 #include <KoMainWindow.h>
 #include <KoFilterManager.h>
@@ -87,6 +90,7 @@
 #include "vgroup.h"
 #include "vpainterfactory.h"
 #include "vqpainter.h"
+#include "vkopainter.h"
 #include "vstrokefillpreview.h"
 #include "vtypebuttonbox.h"
 #include "vstatebutton.h"
@@ -385,24 +389,44 @@ KarbonView::print( KPrinter &printer )
 {
 	// TODO : ultimately use plain QPainter here as that is better suited to print system
 	kdDebug(38000) << "KarbonView::print" << endl;
-	VQPainter p( ( QPaintDevice * ) & printer, width(), height() );
-	p.begin();
-	p.setZoomFactor( 1.0 );
+	
+	QPaintDeviceMetrics metrics( ( QPaintDevice * ) & printer );
+	printer.setFullPage( true );
+	
+	// we are using 72 dpi internally
+	double zoom = metrics.logicalDpiX() / 72.0;
+
 	QWMatrix mat;
 	mat.scale( 1, -1 );
-	mat.translate( 0, -part()->document().height() );
-	p.setWorldMatrix( mat );
+	mat.translate( 0, -part()->document().height()*zoom );
 
-	// print the doc using QPainter at zoom level 1
-	// TODO : better use eps export?
-	// TODO : use real page layout stuff
-	KoRect rect( 0, 0, part()->document().width(), part()->document().height());
-	p.setPen(Qt::NoPen);
-	p.setBrush(Qt::white);
-	p.drawRect(rect);
+	double w = zoom*part()->document().width();
+	double h = zoom*part()->document().height();
 
-	part()->document().draw( &p, &rect );
+	KoRect rect( 0, 0, w, h );
 
+	QPixmap img( static_cast<int>( w ), static_cast<int>( h ) );
+	img.fill( QColor( 200, 200, 200 ) );
+
+	// first use the libarts painter to draw into the pixmap
+	VKoPainter kop( ( QPaintDevice * )&img, static_cast<int>( w ), static_cast<int>( h ) );
+	
+	kop.setZoomFactor( zoom );
+	kop.setWorldMatrix( mat );
+
+	kop.begin();
+
+	part()->document().draw( &kop, &rect );
+
+	kop.end();
+
+	QPainter p;
+
+	// us kopainter to draw the pixmap
+	// note that it is looking unsmooth when previewing,
+	// but the print is actually ok as we are printing at 100% zoom anyway
+	p.begin( &printer );
+	p.drawPixmap( 0, 0, img );
 	p.end();
 }
 
