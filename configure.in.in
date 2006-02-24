@@ -203,7 +203,7 @@ fi
 AM_CONDITIONAL(need_kde32_compatibility, test "$need_kde32_compat" = "yes")
 AM_CONDITIONAL(need_kde33_compatibility, test "$need_kde33_compat" = "yes")
 AM_CONDITIONAL(need_kde34_compatibility, test "$need_kde34_compat" = "yes")
-AM_CONDITIONAL(need_kde352_compatibility, test "$need_kde351_compat" = "yes")
+AM_CONDITIONAL(need_kde351_compatibility, test "$need_kde351_compat" = "yes")
 
 # Keep the old KDE 3.1 test, as long as it is still used
 AM_CONDITIONAL(need_kde31_compatibility, test "supported" = "no")
