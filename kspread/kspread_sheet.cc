@@ -6495,13 +6495,13 @@ void Sheet::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& 
 
 void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 {
-    // use "US Letter" as default page size
+    // use A4 as default page size
     float left = 20.0;
     float right = 20.0;
     float top = 20.0;
     float bottom = 20.0;
-    float width = 215.9;
-    float height = 279.4;
+    float width = 210.0;
+    float height = 297.0;
     QString orientation = "Portrait";
     QString format;
 
