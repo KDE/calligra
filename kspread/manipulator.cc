@@ -40,9 +40,9 @@
 
 using namespace KSpread;
 
+//BEGIN Non-contiguous selection adaption todos
 // TODO Stefan: InsertColumn
 // TODO Stefan: InsertRow
-// TODO Stefan: Paste with insertion
 // TODO Stefan: DeleteColumn
 // TODO Stefan: DeleteRow
 
@@ -60,12 +60,13 @@ using namespace KSpread;
 // TODO Stefan: Cut (works, but not a manipulator yet)
 // TODO Stefan: Paste (works, but not a manipulator yet)
 // TODO Stefan: Paste Special (works, but not a manipulator yet)
+// TODO Stefan: Paste with insertion (works, but not a manipulator yet)
 
 // TODO Stefan: more ????
-// TODO Stefan: maybe make the undos optional
+//END
 
 
-// INFO Stefan: some words on some operations
+//BEGIN NOTE Stefan: some words on operations
 //
 // 1. SubTotal
 // a) Makes no sense to extend to non-contiguous selections (NCS) as
@@ -77,7 +78,7 @@ using namespace KSpread;
 //    is not empty
 // b) opens an editor, if the user's intention is fuzzy -> hard to
 //    convert to NCS
-
+//END
 
 /***************************************************************************
   class Manipulator
@@ -298,14 +299,14 @@ bool FormatManipulator::process (Element *element)
 {
   // see what is selected; if nothing, take marker position
   QRect range = element->rect().normalize();
-  
+
   if (!m_reverse) {
-  
+
     int top = range.top();
     int left = range.left();
     int bottom = range.bottom();
     int right  = range.right();
-  
+
     // create cells in rows if complete columns selected
     Cell * cell;
     if ( element->isColumn() )
@@ -321,7 +322,7 @@ bool FormatManipulator::process (Element *element)
         }
       }
     }
-  
+
     // complete rows selected ?
     if ( element->isRow() )
     {
@@ -351,7 +352,7 @@ bool FormatManipulator::process (Element *element)
         ColumnFormat * colFormat = m_sheet->nonDefaultColumnFormat( col );
         doWork(colFormat, false, false, col==left, col==right);
       }
-  
+
       for ( RowFormat * rowFormat = m_sheet->firstRow(); rowFormat; rowFormat = rowFormat->next() )
       {
         if ( !rowFormat->isDefault() && testCondition( rowFormat ) )

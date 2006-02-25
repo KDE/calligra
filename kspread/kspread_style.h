@@ -379,6 +379,8 @@ class CustomStyle : public Style
   /**
    * Loads the style properties from @p style .
    * Determines also the parent's name.
+   * @param oasisStyles map of all styles
+   * @param style the DOM element defining the style
    * @param name the style's new name
    */
   void loadOasis( KoOasisStyles& oasisStyles, const QDomElement & style, const QString & name );
