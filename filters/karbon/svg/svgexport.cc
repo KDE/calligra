@@ -500,7 +500,8 @@ SvgExport::visitVText( VText& text )
 	printIndentation( m_body, m_indent );
 	*m_body << "<textPath xlink:href=\"#" << id << "\"";
 	if( text.offset() > 0.0 )
-		*m_body << " startOffset=\"" << text.offset() * 100.0 << "%\">"; 
+		*m_body << " startOffset=\"" << text.offset() * 100.0 << "%\"";	
+	*m_body << ">";
 	*m_body << text.text();
 	*m_body << "</textPath>" << endl;
 	printIndentation( m_body, --m_indent );
