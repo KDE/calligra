@@ -272,10 +272,11 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     case Bar:
 	// Find out subtype
 	tmp = styleStack.attributeNS( KoXmlNS::chart, "vertical" );
-	// FIXME: Vertical is ignored.
-	//kdDebug(35001) << "  ======>  Vertical: " << tmp << "  <======" << endl;
-	// Set the bar subtype.
+	// FIXME: Vertical is ignored. At least store it so we can
+	//        save it again even if we don't support it.
 
+	//kdDebug(35001) << "  ======>  Vertical: " << tmp << "  <======" << endl;
+	// Set the bar chart subtype.
 	if ( styleStack.attributeNS( KoXmlNS::chart, "stacked" ) == "true" )
 	    setBarChartSubType( BarStacked );
 	else if ( styleStack.attributeNS( KoXmlNS::chart, "percentage" ) == "true" )
@@ -283,20 +284,46 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 	else
 	    setBarChartSubType( BarNormal );
 
-	// chart:vertical          - true if vertical bars (only bar charts)
-	// chart:stacked           - true for stacked bars
-	// chart:percentage        - true for percentage  (mut. excl with stacked)
-	// chart:connect-bars      - true if lines to connect bars should be drawn
-	//                           only used for stacked and percentage bars.
-	// chart:lines-used        - 0-n, number of lines on a bar chart. (def: 0)
-
 	break;
+
+	// chart:vertical      - true if vertical bars (only bar charts)
+	// chart:stacked       - true for stacked bars
+	// chart:percentage    - true for percentage  (mut. excl with stacked)
+	// chart:connect-bars  - true if lines to connect bars should be drawn
+	//                           only used for stacked and percentage bars.
+	// FIXME: Support lines on bar charts.
+	// chart:lines-used    - 0-n, number of lines on a bar chart. (def: 0)
 
     case Line:
+	// Set the line chart subtype.
+	if ( styleStack.attributeNS( KoXmlNS::chart, "stacked" ) == "true" )
+	    setLineChartSubType( LineStacked );
+	else if ( styleStack.attributeNS( KoXmlNS::chart, "percentage" ) == "true" )
+	    setLineChartSubType( LinePercent );
+	else
+	    setLineChartSubType( LineNormal );
+
 	break;
 
+	// chart:lines       - true for line charts, false otherwise
+	// chart:stacked       - true for stacked bars
+	// chart:percentage    - true for percentage  (mut. excl with stacked)
+
+	// chart:symbol-type - used with line charts, should be "automatic"
+
     case Area:
+	// Set the area chart subtype.
+	if ( styleStack.attributeNS( KoXmlNS::chart, "stacked" ) == "true" )
+	    setAreaChartSubType( AreaStacked );
+	else if ( styleStack.attributeNS( KoXmlNS::chart, "percentage" ) == "true" )
+	    setAreaChartSubType( AreaPercent );
+	else
+	    setAreaChartSubType( AreaNormal );
+
 	break;
+
+	// chart:stacked       - true for stacked bars
+	// chart:percentage    - true for percentage  (mut. excl with stacked)
 
     case Pie:
 	break;
@@ -316,20 +343,13 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     // TODO:
     // And get the info from the style.  Here is the contents:
 
-    // chart:lines       - true for line charts, false otherwise
-    // chart:symbol-type - used with line charts, should be "automatic"
 
+    // TODO: These items are currently not used.  They should be at least
+    //       be stored so that we can save them again.
     // chart:interpolation     - "cubic-spline" if using cubic splines
     // chart:splines           - 
     // chart:spline-order      - "2" for cubic splines
     // chart:spline-resolution - how smooth (default: 20)
-
-    // chart:vertical          - true if vertical bars (only bar charts)
-    // chart:stacked           - true for stacked bars
-    // chart:percentage        - true for percentage  (mut. excl with stacked)
-    // chart:connect-bars      - true if lines to connect bars should be drawn
-    //                           only used for stacked and percentage bars.
-    // chart:lines-used        - 0-n, number of lines on a bar chart. (def: 0)
 
     // -- Used when chart:class == "stock:
     // chart:stock-updown-bars      - boolean 
