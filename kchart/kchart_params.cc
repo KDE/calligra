@@ -15,13 +15,14 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
 
 //#include <stdlib.h>
 #include <iostream>
 using std::cout;
 using std::cerr;
+
 
 #include <dcopobject.h>
 #include <klocale.h>
@@ -42,6 +43,7 @@ using std::cerr;
 
 namespace KChart
 {
+
 
 KChartParams::KChartParams( KChartPart *_part )
     : KDChartParams(),
@@ -232,7 +234,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement &plotareaElem,
 				    "data-source-has-labels", QString::null );
     m_firstRowAsLabel = false;
     m_firstColAsLabel = false;
-    if ( tmp == "none" )
+    if ( tmp == "none" || tmp == "" )
 	; // NOTHING
     else if ( tmp == "row" )
 	m_firstRowAsLabel = true;
@@ -243,7 +245,8 @@ bool KChartParams::loadOasisPlotarea( const QDomElement &plotareaElem,
 	m_firstColAsLabel = true;
     }
     else {
-	errorMessage = "Unknown value for chart:data-source-has-labels";
+	errorMessage = "Unknown value for chart:data-source-has-labels:" 
+	    + tmp;
 	return false;
     }
 
@@ -302,10 +305,12 @@ bool KChartParams::loadOasisPlotarea( const QDomElement &plotareaElem,
     if ( xAxisElem.tagName() != "chart:axis"
 	 || yAxisElem.tagName() != "chart:axis" )
     {
+#if 0
 	// FIXME: Check that there is only these two children of plot-area.
 	// FIXME: Error handling.
 	errorMessage = "Error in axis loading";
 	return false;
+#endif
     }
 
     // Attributes for the axes:

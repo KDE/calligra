@@ -37,7 +37,7 @@ After the feature freeze
     - Use it when drawing						  done
     - Store the values in the file					  ----
     - Maybe call the analysis code and do sensible defaults		  ----
-  + Grid setting for both directions				      1 ----
+  + Grid setting for both directions				      2 ----
 
 * Data editor
   + Better keyboard shortcuts?					      2 ----
