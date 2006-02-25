@@ -186,7 +186,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         return false;
     }
 
-    // TODO title (more details, e.g. font, placement etc)
+    // Title TODO (more details, e.g. font, placement etc)
     QDomElement  titleElem = KoDom::namedItemNS( chartElem,
 						 KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
@@ -195,7 +195,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
 	setHeader1Text( pElem.text() );
     }
 
-    // TODO subtitle (more details)
+    // Subtitle TODO (more details)
     QDomElement  subtitleElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart, 
 						    "subtitle" );
     if ( !titleElem.isNull() ) {
@@ -228,8 +228,10 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 
     // FIXME: attribute table:cell-range-address  - the cells in a spreadsheet
 
-    // Get whether there is a label on first row or column.
+    // Get whether there is a label on the first row or column of the data.
     // This info is in the attribute chart:data-source-has-labels.
+    //
+    // NOTE: Only used in spreadsheets.
     tmp = plotareaElem.attributeNS( KoXmlNS::chart, 
 				    "data-source-has-labels", QString::null );
     m_firstRowAsLabel = false;
@@ -255,10 +257,62 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     // This is hidden in the attribute chart:style-name.
     KoStyleStack          &styleStack = loadingContext.styleStack();
 
+
+    tmp = plotareaElem.attributeNS( KoXmlNS::chart, 
+				    "style-name", QString::null );
+    kdDebug(35001) << "Style name for the plot area: " << tmp << endl;
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
     loadingContext.fillStyleStack( plotareaElem, KoXmlNS::chart, "style-name" );
 
+    switch ( m_chartType ) {
+    case NoType:
+	break;
+
+    case Bar:
+	// Find out subtype
+	tmp = styleStack.attributeNS( KoXmlNS::chart, "vertical" );
+	// FIXME: Vertical is ignored.
+	//kdDebug(35001) << "  ======>  Vertical: " << tmp << "  <======" << endl;
+	// Set the bar subtype.
+
+	if ( styleStack.attributeNS( KoXmlNS::chart, "stacked" ) == "true" )
+	    setBarChartSubType( BarStacked );
+	else if ( styleStack.attributeNS( KoXmlNS::chart, "percentage" ) == "true" )
+	    setBarChartSubType( BarPercent );
+	else
+	    setBarChartSubType( BarNormal );
+
+	// chart:vertical          - true if vertical bars (only bar charts)
+	// chart:stacked           - true for stacked bars
+	// chart:percentage        - true for percentage  (mut. excl with stacked)
+	// chart:connect-bars      - true if lines to connect bars should be drawn
+	//                           only used for stacked and percentage bars.
+	// chart:lines-used        - 0-n, number of lines on a bar chart. (def: 0)
+
+	break;
+
+    case Line:
+	break;
+
+    case Area:
+	break;
+
+    case Pie:
+	break;
+
+    case HiLo:
+	break;
+
+    case Ring:
+	break;
+
+    case Polar:
+	break;
+
+    case BoxWhisker:
+	break;
+    }
     // TODO:
     // And get the info from the style.  Here is the contents:
 

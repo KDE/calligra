@@ -943,7 +943,7 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
 
     // Get the loading context and stylestack from the styles.
     KoOasisLoadingContext  loadingContext( this, oasisStyles, store );
-    KoStyleStack          &styleStack = loadingContext.styleStack();
+    //KoStyleStack          &styleStack = loadingContext.styleStack();
 
 #if 0  // Example code!!
     // load chart properties into the stylestack.
