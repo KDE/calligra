@@ -7,6 +7,7 @@ Patterns=*.raw;*.RAW;*.dcr;*.DCR;*.dng;*.DNG;*.crw;*.CRW;*.cr2,*.CR2;*.nef;*.NEF
 Comment=RAW Camera Image
 Comment[da]=Ubehandlet kamerabillede
 Comment[de]=Kamera RAW-Bild
+Comment[es]=Imagen RAW de cámara
 Comment[pt]=Imagem RAW da Máquina
 Comment[pt_BR]=Imagem RAW da Máquina
 Comment[sv]=Obehandlad bild från kamera
