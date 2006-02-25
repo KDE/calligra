@@ -5650,6 +5650,8 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
         convertFormula( formula, oasisFormula);
         setCellText( formula );
     }
+    else if ( d->strText.at(0) == '=' ) //prepend ' to the text to avoid = to be painted
+        d->strText.prepend('\'');
 
     //
     // validation
