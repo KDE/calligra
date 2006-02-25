@@ -941,12 +941,14 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
         return false;
     }
 
-#if 0  // Example code!!
+    // Get the loading context and stylestack from the styles.
     KoOasisLoadingContext  loadingContext( this, oasisStyles, store );
     KoStyleStack          &styleStack = loadingContext.styleStack();
 
+#if 0  // Example code!!
+    // load chart properties into the stylestack.
     styleStack.save();
-    styleStack.setTypeProperties( "graphic" ); // load graphic-properties
+    styleStack.setTypeProperties( "chart" ); // load chart properties
     loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
 
     const QString fillColor = styleStack.attributeNS( KoXmlNS::draw, "fill-color" );
@@ -958,7 +960,7 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
     // Load chart parameters parameters, most of these are stored in
     // the chart:plot-area element within chart:chart.
     QString  errorMessage;
-    bool     ok = m_params->loadOasis( chartElem, oasisStyles, errorMessage,
+    bool     ok = m_params->loadOasis( chartElem, loadingContext, errorMessage,
 				       store);
     if ( !ok ) {
         setErrorMessage( errorMessage );

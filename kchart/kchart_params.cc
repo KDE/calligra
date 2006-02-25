@@ -158,10 +158,10 @@ static const unsigned int numOasisChartTypes
 
 // Load an the data from an OpenDocument chart:chart element.
 
-bool KChartParams::loadOasis( const QDomElement &chartElem,
-                              KoOasisStyles     &oasisStyles,
-                              QString           &errorMessage,
-			      KoStore           *store )
+bool KChartParams::loadOasis( const QDomElement     &chartElem,
+			      KoOasisLoadingContext &loadingContext,
+                              QString               &errorMessage,
+			      KoStore               *store )
 {
     const QString chartClass = chartElem.attributeNS( KoXmlNS::chart, 
 						      "class", QString::null );
@@ -211,7 +211,7 @@ bool KChartParams::loadOasis( const QDomElement &chartElem,
     QDomElement  plotareaElem = KoDom::namedItemNS( chartElem,
 						    KoXmlNS::chart, "plot-area" );
     if ( !plotareaElem.isNull() ) {
-	return loadOasisPlotarea( plotareaElem, oasisStyles, errorMessage,
+	return loadOasisPlotarea( plotareaElem, loadingContext, errorMessage,
 				  store );
     }
 
@@ -219,10 +219,10 @@ bool KChartParams::loadOasis( const QDomElement &chartElem,
 }
 
 
-bool KChartParams::loadOasisPlotarea( const QDomElement &plotareaElem,
-				      KoOasisStyles     &oasisStyles,
-				      QString           &errorMessage,
-				      KoStore           *store)
+bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
+				      KoOasisLoadingContext &loadingContext,
+				      QString               &errorMessage,
+				      KoStore               *store)
 {
     QString  tmp;
 
@@ -253,7 +253,6 @@ bool KChartParams::loadOasisPlotarea( const QDomElement &plotareaElem,
     // ----------------------------------------------------------------
     // Now get the style and use it to get the contents.
     // This is hidden in the attribute chart:style-name.
-    KoOasisLoadingContext  loadingContext( m_part, oasisStyles, store );
     KoStyleStack          &styleStack = loadingContext.styleStack();
 
     styleStack.save();

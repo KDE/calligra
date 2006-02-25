@@ -24,7 +24,7 @@
 
 class KoXmlWriter;
 class KoGenStyles;
-class KoOasisStyles;
+class KoOasisLoadingContext;
 class KoStore;
 class KDChartParams;
 class DCOPObject;
@@ -134,17 +134,17 @@ public slots:
 
     DCOPObject  *dcopObject();
 
-    bool loadOasis( const QDomElement &chartElem,
-                    KoOasisStyles     &oasisStyles,
-                    QString           &errorMessage,
-		    KoStore           *store );
+    bool loadOasis( const QDomElement     &chartElem,
+		    KoOasisLoadingContext &loadingContext,
+                    QString               &errorMessage,
+		    KoStore               *store );
     void saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles );
 
  private:
-    bool loadOasisPlotarea( const QDomElement &plotareaElem,
-			    KoOasisStyles     &oasisStyles,
-			    QString           &errorMessage,
-			    KoStore           *store );
+    bool loadOasisPlotarea( const QDomElement     &plotareaElem,
+			    KoOasisLoadingContext &loadingContext,
+			    QString               &errorMessage,
+			    KoStore               *store );
 
  private:
     KChartPart    *m_part;
