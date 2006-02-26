@@ -171,7 +171,7 @@ void KWFrameList::recalcFrames(KWDocument *doc, int pageFrom, int pageTo) {
 }
 
 void KWFrameList::recalcAllFrames(KWDocument *doc) {
-    recalcFrames(doc, 0, doc->pageCount());
+    recalcFrames(doc, doc->startPage(), doc->lastPage());
 }
 
 void KWFrameList::createFrameList(KWFrame *f, KWDocument *doc) {
