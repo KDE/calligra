@@ -2448,11 +2448,13 @@ void KWView::pasteData( QMimeSource* data, bool drop )
                     if ( macroCmd ) {
                         m_doc->addCommand( macroCmd );
                         KWFrameList::recalcAllFrames(m_doc);
+                        return;
                     }
                 }
             }
         }
-        else { // providesImage, must be after providesOasis
+        if ( provides & ProvidesImage )
+        { // providesImage, must be after providesOasis
             KoPoint docPoint( m_currentPage->leftMargin(),
                     m_currentPage->offsetInDocument() + m_currentPage->topMargin());
             m_gui->canvasWidget()->pasteImage( data, docPoint );
