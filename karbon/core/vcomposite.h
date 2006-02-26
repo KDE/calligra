@@ -210,6 +210,7 @@ public:
 
 protected:
 	QString buildSvgTransform() const;
+	QString buildSvgTransform( const QWMatrix &mat ) const;
 	void transformByViewbox( const QDomElement &element );
 
 	/// For svg path data parsing.

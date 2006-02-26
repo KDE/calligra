@@ -72,9 +72,11 @@ public:
 	void save( QDomElement& element ) const;
 	void saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const;
 	void load( const QDomElement& element );
-	void loadOasis( const QDomElement &object, KoOasisLoadingContext &context );
+	void loadOasis( const QDomElement &object, KoOasisLoadingContext &context, VObject* parent = 0L );
 
 	VFill& operator=( const VFill& fill );
+
+	void transform( const QWMatrix& m );
 
 private:
 	VColor		m_color;

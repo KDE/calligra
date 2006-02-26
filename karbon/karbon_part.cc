@@ -364,7 +364,7 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     QString layoutName = mainStyles.lookup( pageLayout, "PL" );
     KoGenStyle masterPage( KoGenStyle::STYLE_MASTER );
     masterPage.addAttribute( "style:page-layout-name", layoutName );
-    mainStyles.lookup( masterPage, "Standard", false );
+    mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
 
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );

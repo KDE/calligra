@@ -148,7 +148,7 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &main
 
 	//save all into pt
 	docWriter->addAttributePt( "svg:x",      m_topLeft.x() );
-	docWriter->addAttributePt( "svg:y",      m_topLeft.y() );
+	docWriter->addAttributePt( "svg:y",      m_topLeft.y()-m_height );
 	docWriter->addAttributePt( "svg:width",  m_width );
 	docWriter->addAttributePt( "svg:height", m_height );
 
@@ -157,7 +157,11 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &main
 
 	VObject::saveOasis( store, docWriter, mainStyles );
 
-	QString transform = buildSvgTransform();
+	QWMatrix tmpMat;
+	tmpMat.scale( 1, -1 );
+	tmpMat.translate( 0, -document()->height() );
+	
+	QString transform = buildSvgTransform( m_matrix*tmpMat );
 	if( !transform.isEmpty() )
 		docWriter->addAttribute( "draw:transform", transform );
 

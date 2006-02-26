@@ -251,3 +251,11 @@ VStroke::operator=( const VStroke& stroke )
 	return *this;
 }
 
+void 
+VStroke::transform( const QWMatrix& m )
+{
+	if( type() == VStroke::grad )
+		gradient().transform( m );
+	else if( type() == VStroke::patt )
+		pattern().transform( m );
+}

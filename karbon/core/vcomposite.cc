@@ -38,6 +38,7 @@
 #include "vvisitor.h"
 #include "vpath.h"
 #include "commands/vtransformcmd.h"
+#include "vdocument.h"
 
 #include <kdebug.h>
 
@@ -375,6 +376,14 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 			docWriter->addAttribute( "svg:fill-rule", "winding" );
 		VObject::saveOasis( store, docWriter, mainStyles );
 
+	QWMatrix tmpMat;
+	tmpMat.scale( 1, -1 );
+	tmpMat.translate( 0, -document()->height() );
+	
+	QString transform = buildSvgTransform( tmpMat );
+	if( !transform.isEmpty() )
+		docWriter->addAttribute( "draw:transform", transform );
+
 		docWriter->endElement();
 	}
 }
@@ -624,16 +633,21 @@ VPath::parseTransform( const QString &transform )
 QString
 VPath::buildSvgTransform() const
 {
+	return buildSvgTransform( m_matrix );
+}
+
+QString 
+VPath::buildSvgTransform( const QWMatrix &mat ) const
+{
 	QString transform;
-	if( !m_matrix.isIdentity() )
+	if( !mat.isIdentity() )
 	{
-		transform = QString(  "matrix(%1, %2, %3, %4, %5, %6)" ).arg( m_matrix.m11() )
-																.arg( m_matrix.m12() )
-																.arg( m_matrix.m21() )
-																.arg( m_matrix.m22() )
-																.arg( m_matrix.dx() )
-																.arg( m_matrix.dy() );
+		transform = QString(  "matrix(%1, %2, %3, %4, %5, %6)" ).arg( mat.m11() )
+																.arg( mat.m12() )
+																.arg( mat.m21() )
+																.arg( mat.m22() )
+																.arg( mat.dx() )
+																.arg( mat.dy() );
 	}
 	return transform;
 }
-

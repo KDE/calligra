@@ -186,7 +186,11 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 
 	VObject::saveOasis( store, docWriter, mainStyles );
 
-	QString transform = buildSvgTransform();
+	QWMatrix tmpMat;
+	tmpMat.scale( 1, -1 );
+	tmpMat.translate( 0, -document()->height() );
+	
+	QString transform = buildSvgTransform( m_matrix*tmpMat );
 	if( !transform.isEmpty() )
 		docWriter->addAttribute( "draw:transform", transform );
 
@@ -206,7 +210,7 @@ VEllipse::loadOasis( const QDomElement &element, KoOasisLoadingContext &context 
 			m_rx = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
 
 		if( element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
-			m_rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry", QString::null ) );
+			m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry", QString::null ) );
 		else 
 			m_ry = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
 

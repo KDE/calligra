@@ -118,11 +118,25 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles )
 	if( !name().isEmpty() )
 		docWriter->addAttribute( "draw:name", name() );
 
+	QWMatrix mat;
+	mat.scale( 1, -1 );
+	mat.translate( 0, -document()->height() );
+
 	KoGenStyle styleobjectauto( VDocument::STYLE_GRAPHICAUTO, "graphics" );
 	if( m_fill )
-		m_fill->saveOasis( mainStyles, styleobjectauto );
+	{
+		// mirror fill before saving
+		VFill fill( *m_fill );
+		fill.transform( mat );
+		fill.saveOasis( mainStyles, styleobjectauto );
+	}
 	if( m_stroke )
-		m_stroke->saveOasis( styleobjectauto );
+	{
+		// mirror stroke before saving
+		VStroke stroke( *m_stroke );
+		stroke.transform( mat );
+		stroke.saveOasis( styleobjectauto );
+	}
 	QString st = mainStyles.lookup( styleobjectauto, "st" );
 	docWriter->addAttribute( "draw:style-name", st );
 }
@@ -166,7 +180,7 @@ VObject::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 	KoStyleStack &styleStack = context.styleStack();
 	styleStack.setTypeProperties( "graphic" );
 	m_stroke->loadOasis( styleStack );
-	m_fill->loadOasis( object, context );
+	m_fill->loadOasis( object, context, this );
 
 	if( object.hasAttributeNS( KoXmlNS::draw, "name" ) )
 		setName( object.attributeNS( KoXmlNS::draw, "name", QString::null ) );

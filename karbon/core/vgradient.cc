@@ -181,6 +181,8 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 		double dx = m_vector.x() - m_origin.x();
 		double dy = m_vector.y() - m_origin.y();
 		gradientStyle.addAttributePt( "svg:r",  sqrt( dx * dx + dy * dy ) );
+		gradientStyle.addAttributePt( "svg:fx", m_focalPoint.x() );
+		gradientStyle.addAttributePt( "svg:fy", m_focalPoint.y() );
 	}
 	else
 	{
@@ -219,52 +221,111 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 }
 
 void
-VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack )
+VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack, VObject* parent )
 {
-	m_type = object.attributeNS( KoXmlNS::draw, "style", QString::null ) == "radial" ? VGradient::radial : VGradient::linear;
-	if( m_type == VGradient::radial )
+	kdDebug(38000) << "namespaceURI: " << object.namespaceURI() << endl;
+	kdDebug(38000) << "localName: " << object.localName() << endl;
+
+	KoRect bb;
+	
+	if( parent )
+		bb =  parent->boundingBox();
+
+	if( object.namespaceURI() == KoXmlNS::draw && object.localName() == "gradient" )
 	{
-		// TODO : find out whether Oasis works with boundingBox only?
-		m_origin.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cx", QString::null ) ) );
-		m_origin.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cy", QString::null ) ) );
-		double r = KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "r", QString::null ) );
-		m_vector.setX( m_origin.x() + r );
-		m_vector.setY( m_origin.y() );
-	}
-	else
-	{
-		m_origin.setX( KoUnit::parseValue( object.attribute( "svg:x1" ) ) );
-		m_origin.setY( KoUnit::parseValue( object.attribute( "svg:y1" ) ) );
-		m_vector.setX( KoUnit::parseValue( object.attribute( "svg:x2" ) ) );
-		m_vector.setY( KoUnit::parseValue( object.attribute( "svg:y2" ) ) );
-	}
-	m_focalPoint = m_origin;
-	if( object.attribute( "svg:spreadMethod" ) == "repeat" )
-		m_repeatMethod = VGradient::repeat;
-	else if( object.attribute( "svg:spreadMethod" ) == "reflect" )
 		m_repeatMethod = VGradient::reflect;
-	else
-		m_repeatMethod = VGradient::none;
-
-	m_colorStops.clear();
-
-	// load stops
-	QDomNodeList list = object.childNodes();
-	for( uint i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
+		QString strType = object.attributeNS( KoXmlNS::draw, "style", QString::null );
+		if( strType == "radial" )
 		{
-			QDomElement colorstop = list.item( i ).toElement();
+			m_type = VGradient::radial;
+			// TODO : find out whether Oasis works with boundingBox only?
+			double cx = KoUnit::parseValue( object.attributeNS( KoXmlNS::draw, "cx", QString::null ).remove("%") );
+			m_origin.setX( bb.bottomLeft().x() + bb.width() * 0.01 * cx );
+			double cy = KoUnit::parseValue( object.attributeNS( KoXmlNS::draw, "cy", QString::null ).remove("%") );
+			m_origin.setY(  bb.bottomLeft().y() - bb.height() * 0.01 * cy );
+			m_focalPoint = m_origin;
+			m_vector = bb.topRight();
+		}
+		else if( strType == "linear" )
+		{
+			m_type = VGradient::linear;
+			double angle = 90 + object.attributeNS( KoXmlNS::draw, "angle", "0" ).toDouble();
+			double radius = 0.5 * sqrt( bb.width()*bb.width() + bb.height()*bb.height() );
+			double sx = cos( angle * VGlobal::pi / 180 ) * radius;
+			double sy = sin( angle * VGlobal::pi / 180 ) * radius;
+			m_origin.setX( bb.center().x() + sx );
+			m_origin.setY( bb.center().y() + sy );
+			m_vector.setX( bb.center().x() - sx );
+			m_vector.setY( bb.center().y() - sy );
+			m_focalPoint = m_origin;
+		}
+		else return;
 
-			if( colorstop.tagName() == "svg:stop" )
+		VColor startColor( QColor( object.attributeNS( KoXmlNS::draw, "start-color", QString::null ) ) );
+		VColor endColor( QColor( object.attributeNS( KoXmlNS::draw, "end-color", QString::null ) ) );
+
+		double startOpacity = 0.01 * object.attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove("%").toDouble();
+		double endOpacity = 0.01 * object.attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove("%").toDouble();
+
+		startColor.setOpacity( startOpacity );
+		endColor.setOpacity( endOpacity );
+		m_colorStops.clear();
+		addStop( startColor, 0.0, 0.5 );
+		addStop( endColor, 1.0, 0.0 );
+		m_colorStops.sort();
+		
+	}
+	else if( object.namespaceURI() == KoXmlNS::svg )
+	{
+		if( object.localName() == "linearGradient" )
+		{
+			m_type = VGradient::linear;
+			m_origin.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "x1", QString::null ) ) );
+			m_origin.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "y1", QString::null ) ) );
+			m_vector.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "x2", QString::null ) ) );
+			m_vector.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "y2", QString::null ) ) );
+			m_focalPoint = m_origin;
+		}
+		else if( object.localName() == "radialGradient" )
+		{
+			m_type = VGradient::radial;
+			m_origin.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cx", QString::null ) ) );
+			m_origin.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cy", QString::null ) ) );
+			double r = KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "r", QString::null ) );
+			m_vector.setX( m_origin.x() + r );
+			m_vector.setY( m_origin.y() );
+			m_focalPoint.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "fx", QString::null ) ) );
+			m_focalPoint.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "fy", QString::null ) ) );
+		}
+
+		QString strSpread( object.attributeNS( KoXmlNS::svg, "spreadMethod", "pad" ) );
+		if( strSpread == "repeat" )
+			m_repeatMethod = VGradient::repeat;
+		else if( strSpread == "reflect" )
+			m_repeatMethod = VGradient::reflect;
+		else
+			m_repeatMethod = VGradient::none;
+	
+		m_colorStops.clear();
+	
+		// load stops
+		QDomNodeList list = object.childNodes();
+		for( uint i = 0; i < list.count(); ++i )
+		{
+			if( list.item( i ).isElement() )
 			{
-				VColor color( QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString::null ) ) );
-				color.setOpacity( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
-				addStop( color, colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble(), 0.5 );
+				QDomElement colorstop = list.item( i ).toElement();
+	
+				if( colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop" )
+				{
+					VColor color( QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString::null ) ) );
+					color.setOpacity( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
+					addStop( color, colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble(), 0.5 );
+				}
 			}
 		}
+		m_colorStops.sort();
 	}
-	m_colorStops.sort();
 }
 
 void

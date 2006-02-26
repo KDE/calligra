@@ -32,6 +32,7 @@ class QDomElement;
 class KoGenStyle;
 class KoGenStyles;
 class KoStyleStack;
+class VObject;
 
 class VColorStop
 {
@@ -108,7 +109,7 @@ public:
 	void save( QDomElement& element ) const;
 	QString saveOasis( KoGenStyles &mainStyles ) const;
 	void load( const QDomElement& element );
-	void loadOasis( const QDomElement &object, KoStyleStack &stack );
+	void loadOasis( const QDomElement &object, KoStyleStack &stack, VObject* parent = 0L );
 
 	void transform( const QWMatrix& m );
 

@@ -100,7 +100,7 @@ VFill::saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const
 }
 
 void
-VFill::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
+VFill::loadOasis( const QDomElement &object, KoOasisLoadingContext &context, VObject* parent )
 {
 	KoStyleStack &stack = context.styleStack();
 	if( stack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
@@ -118,7 +118,7 @@ VFill::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 			QDomElement *grad = context.oasisStyles().drawStyles()[ style ];
 			kdDebug()<<" style gradient name :"<< grad <<endl;
 			if( grad )
-				m_gradient.loadOasis( *grad, stack );
+				m_gradient.loadOasis( *grad, stack, parent );
 		}
 		if( stack.hasAttributeNS( KoXmlNS::draw, "opacity" ) )
 			m_color.setOpacity( stack.attributeNS( KoXmlNS::draw, "opacity" ).remove( '%' ).toFloat() / 100. );
@@ -171,4 +171,11 @@ VFill::operator=( const VFill& fill )
 	return *this;
 }
 
-
+void 
+VFill::transform( const QWMatrix& m )
+{
+	if( type() == VFill::grad )
+		gradient().transform( m );
+	else if( type() == VFill::patt )
+		pattern().transform( m );
+}

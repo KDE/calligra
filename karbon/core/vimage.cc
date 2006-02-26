@@ -55,7 +55,7 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 	{
 		return;
 	}
-	kdDebug(38000) << "VImage::draw" << endl;
+
 	if( state() == edit )
 	{
 		KoRect bbox = KoRect( 0, 0, m_image->width(), m_image->height() );
@@ -63,7 +63,7 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 		KoPoint tr = bbox.topRight().transform( m_matrix );
 		KoPoint bl = bbox.bottomLeft().transform( m_matrix );
 		KoPoint br = bbox.bottomRight().transform( m_matrix );
-		kdDebug(38000) << "m_boundingBox : " << m_boundingBox << endl;
+
 	    painter->moveTo( tl );
 	    painter->lineTo( tr );
 	    painter->lineTo( br );

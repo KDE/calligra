@@ -116,6 +116,8 @@ public:
 
 	VStroke& operator=( const VStroke& stroke );
 
+	void transform( const QWMatrix& m );
+
 private:
 	VObject			*m_parent;
 
