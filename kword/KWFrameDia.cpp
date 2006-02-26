@@ -783,8 +783,7 @@ void KWFrameDia::setupTab2() { // TAB Text Runaround
 
 void KWFrameDia::setupTab3(){ // TAB Frameset
     /*
-     * here the user can select from the current TEXT framesets, a new one is
-     * included in the list.
+     * here the user can select from the current TEXT framesets
      * Afterwards (on ok) the frame should be checked if it is already owned by a
      * frameset, if so that connection must be disconnected (if different) and
      * framebehaviour will be copied from the frameset
