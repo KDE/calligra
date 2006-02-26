@@ -51,7 +51,7 @@ class KChartParams : public KDChartParams
 	HiLo       = KDChartParams::HiLo,
 	Ring       = KDChartParams::Ring,
 	Polar      = KDChartParams::Polar,
-	BoxWhisker = KDChartParams::BoxWhisker,
+	BoxWhisker = KDChartParams::BoxWhisker
 
 #if 0
 	// Only in KChart
