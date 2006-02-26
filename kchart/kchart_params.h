@@ -145,6 +145,11 @@ public slots:
 			    KoOasisLoadingContext &loadingContext,
 			    QString               &errorMessage,
 			    KoStore               *store );
+    bool loadOasisAxis( const QDomElement         &axisElem,
+			KoOasisLoadingContext     &loadingContext,
+			QString                   &errorMessage,
+			KoStore                   *store,
+			KDChartAxisParams::AxisPos axisPos );
 
  private:
     KChartPart    *m_part;

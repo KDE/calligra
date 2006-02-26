@@ -226,6 +226,8 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 {
     QString  tmp;
 
+    cerr << ">>> ==========================================================\n";
+
     // FIXME: attribute table:cell-range-address  - the cells in a spreadsheet
 
     // Get whether there is a label on the first row or column of the data.
@@ -258,8 +260,8 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     KoStyleStack          &styleStack = loadingContext.styleStack();
 
 
-    tmp = plotareaElem.attributeNS( KoXmlNS::chart, 
-				    "style-name", QString::null );
+    tmp = plotareaElem.attributeNS( KoXmlNS::chart, "style-name",
+				    QString::null );
     kdDebug(35001) << "Style name for the plot area: " << tmp << endl;
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
@@ -305,9 +307,11 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 
 	break;
 
+	// FIXME: Why is this even there?  Seems like an unnecessary attr.
 	// chart:lines       - true for line charts, false otherwise
-	// chart:stacked       - true for stacked bars
-	// chart:percentage    - true for percentage  (mut. excl with stacked)
+
+	// chart:stacked     - true for stacked bars
+	// chart:percentage  - true for percentage  (mut. excl with stacked)
 
 	// chart:symbol-type - used with line charts, should be "automatic"
 
@@ -339,6 +343,10 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 
     case BoxWhisker:
 	break;
+
+    case BarLines:
+	break;
+
     }
     // TODO:
     // And get the info from the style.  Here is the contents:
@@ -364,30 +372,93 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     // chart:data-label-symbol - true if data hapoints have legend symbol
     //                           (default: false for both)
 
+    styleStack.restore();
 
     // ----------------------------------------------------------------
     // In the plot-area element there are two chart:axis elements
 
-    // Get the chart:axis elements.
-    QDomNode     node      = plotareaElem.firstChild();
-    QDomElement  xAxisElem = node.toElement();
+    QDomElement  xAxisElem;
+    QDomElement  yAxisElem;
 
-    node = node.nextSibling();
-    QDomElement  yAxisElem = node.toElement();
+    QDomElement  axisElem;
+    forEachElement( axisElem, plotareaElem ) {
+	
+	cerr << "plotarea element: " << axisElem.tagName().latin1() << "\n";
+	if ( axisElem.tagName() != "axis" )
+	    continue;
 
-    if ( xAxisElem.tagName() != "chart:axis"
-	 || yAxisElem.tagName() != "chart:axis" )
-    {
-#if 0
-	// FIXME: Check that there is only these two children of plot-area.
-	// FIXME: Error handling.
-	errorMessage = "Error in axis loading";
-	return false;
-#endif
+	tmp = axisElem.attributeNS( KoXmlNS::chart, "name",
+				    QString::null);
+	//kdDebug(35001) << "Got axis " << tmp << endl;
+	cerr << "Got axis " << tmp.latin1() << "\n";
+	if ( tmp == "primary-x" )
+	    xAxisElem = axisElem;
+	else if ( tmp == "primary-y" )
+	    yAxisElem = axisElem;
+	else
+	    // Only supports two axes so far.
+	    continue;
     }
+
+    // Load the axes.
+    if ( !loadOasisAxis( xAxisElem, loadingContext, errorMessage, store,
+			 KDChartAxisParams::AxisPosBottom) )
+	return false;
+    if ( m_chartType != Pie
+	 && !loadOasisAxis( yAxisElem, loadingContext, errorMessage, store,
+			    KDChartAxisParams::AxisPosLeft) )
+	return false;
 
     // Attributes for the axes:
     // chart:name       - either "primary-x" or "primary-y"
+
+#if 0
+    const QString fillColor = styleStack.attributeNS( KoXmlNS::draw,
+						      "fill-color" );
+    kdDebug() << "fillColor=" << fillColor << endl;
+#endif
+
+    cerr << "<<< ==========================================================\n";
+
+    return true;
+}
+
+
+bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
+				  KoOasisLoadingContext  &loadingContext,
+				  QString                &errorMessage,
+				  KoStore                *store,
+				  KDChartAxisParams::AxisPos  axisPos )
+{
+    QString        tmp;
+    QDomElement    tmpElem;
+    KoStyleStack  &styleStack = loadingContext.styleStack();
+
+    // Get the axis to manipulate.
+    // TODO
+
+    // Get the axis title if any.
+    QDomElement  titleElem = KoDom::namedItemNS( axisElem,
+						 KoXmlNS::chart, "title" );
+    if ( !titleElem.isNull() ) {
+	tmpElem = KoDom::namedItemNS( titleElem, KoXmlNS::text, "p" );
+	setAxisTitle( axisPos, tmpElem.text() );
+    }
+
+
+
+    cerr << ">>> ----------------------------------------------------------\n";
+    cerr << "Loading axis " << axisElem.attributeNS( KoXmlNS::chart, "name",
+						     QString::null).latin1()
+	 << "\n";
+
+    tmp = axisElem.attributeNS( KoXmlNS::chart, "style-name", QString::null );
+    //kdDebug(35001) << "Style name for the axis: " << tmp << endl;
+    cerr << "Style name for the axis: " << tmp.latin1() << "\n";
+    styleStack.save();
+    styleStack.setTypeProperties( "chart" ); // load chart properties
+    loadingContext.fillStyleStack( axisElem, KoXmlNS::chart, "style-name" );
+
     // chart:class      - "category" / "value" / "domain" (domain for scatter)
     //    child: chart:categories
 
@@ -421,18 +492,11 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     // chart:
     // chart:
     // chart:
-
-#if 0
-    const QString fillColor = styleStack.attributeNS( KoXmlNS::draw,
-						      "fill-color" );
-    kdDebug() << "fillColor=" << fillColor << endl;
-#endif
-
     styleStack.restore();
 
+    cerr << "<<< ----------------------------------------------------------\n";
     return true;
 }
-
 
 
 void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
