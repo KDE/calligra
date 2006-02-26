@@ -1610,7 +1610,11 @@ void Canvas::mouseDoubleClickEvent( QMouseEvent*  _ev)
         break;
       }
       default:
+      {
+        view()->extraProperties();
+        return;
         break;
+      }
     }
   }
 
@@ -3859,54 +3863,9 @@ void Canvas::repaintObject( EmbeddedObject *obj )
 
 void Canvas::copyOasisObjects()
 {
-	//Until copying and pasting of OASIS objects is implemented in a consistant way across KOffice components
-	//(ie. so parts from one app can be cut/copied and pasted directly into another, especially including
-	//charts and formulae) , embedded objects will just be copied as raster graphics.
-	//
-	//This at least allows users to copy graphs from KSpread into KWord documents or KPresenter presentations
-	//for example.  This also allows users to copy and paste into other applications.
-	//
-	//When we do get around to sorting this out, it is essential that components can be pasted into other
-	//applications as raster graphics if they don't support pasting in OASIS format.
-	//Copying and pasting between OpenOffice and KOffice may be useful - thoughts?
-	//
-	//-- Robert Knight (10/02/2006) <robertknight@gmail.com>
-
- 	QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
-  	itObject.toFirst();
-  	if ( !itObject.current() )
-    		return;
-
-	QPixmap pixmap;
-
-  	for( ; itObject.current(); ++itObject )
-  	{
-		if ( itObject.current()->isSelected() )
-			pixmap=itObject.current()->toPixmap( 1.0 , 1.0 );
-	}
-
-	if (!pixmap.isNull())
-	{
-		QApplication::clipboard()->setPixmap(pixmap);
-	}
-
-/*#ifdef 0 // ==== THIS IS THE ORIGINAL CODE WHICH COPIED OBJECTS IN OASIS FORMAT ====
-
-	    //todo copy object from selected object
-	KoStoreDrag *kd = new KoStoreDrag( "application/vnd.oasis.opendocument.spreadsheet", 0L );
-	QDragObject* dragObject = kd;
-	QByteArray arr;
-	QBuffer buffer(arr);
-	KoStore* store = KoStore::createStore( &buffer, KoStore::Write,
-					"application/vnd.oasis.opendocument.spreadsheet" );
-
-	delete store;
-	kd->setEncodedData( arr );
-
-
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
-    QCString mimeType = KWOasisSaver::selectionMimeType() "application/vnd.oasis.opendocument.spreadsheet";
+    QCString mimeType = "application/vnd.oasis.opendocument.spreadsheet";
     KoStore* store = KoStore::createStore( &buffer, KoStore::Write, mimeType );
     Q_ASSERT( store );
     Q_ASSERT( !store->bad() );
@@ -3916,28 +3875,49 @@ void Canvas::copyOasisObjects()
 
     QString plainText;
     KoPicture picture;
-    if ( !doc()->saveOasisHelper( store, manifestWriter, Doc::SaveSelected, &plainText, &picture, fs )
+    if ( !doc()->saveOasisHelper( store, manifestWriter, Doc::SaveSelected, &plainText, &picture )
          || !oasisStore.closeManifestWriter() )
     {
         delete store;
-        kdDebug() << "AAAAAA" << endl;
         return;
     }
     delete store;
 
-    KMultipleDrag* multiDrag = new KMultipleDrag( //parent// 0 );
+    KMultipleDrag* multiDrag = new KMultipleDrag();
     if ( !plainText.isEmpty() )
         multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
     if ( !picture.isNull() )
         multiDrag->addDragObject( picture.dragObject( 0 ) );
-    KoStoreDrag* storeDrag = new KoStoreDrag( mimeType//KWOasisSaver::selectionMimeType()//, 0 );
+    KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
     kdDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
     storeDrag->setEncodedData( buffer.buffer() );
     multiDrag->addDragObject( storeDrag );
 
-    QDragObject *dragObject = storeDrag;
+    //save the objects as pictures too so that other programs can access them
+    QPtrListIterator<EmbeddedObject> itObject( doc()->embeddedObjects() );
+    itObject.toFirst();
+    if ( itObject.current() )
+    {
+      KoRect kr = objectRect(false);
+      QRect r( kr.toQRect() );
+      QPixmap pixmap( r.width(), r.height() );
+      pixmap.fill( "white" );
+      QPainter p(&pixmap);
+      for( ; itObject.current(); ++itObject )
+      {
+        if ( itObject.current()->isSelected() )
+          p.drawPixmap( itObject.current()->geometry().toQRect().left() - r.left(), itObject.current()->geometry().toQRect().top() - r.top(), itObject.current()->toPixmap( 1.0 , 1.0 ) );
+      }
+      p.end();
+      if (!pixmap.isNull())
+      {
+        QImageDrag *imagedrag = new QImageDrag( pixmap.convertToImage() );
+        multiDrag->addDragObject( imagedrag );
+      }
+    }
+
+    QDragObject *dragObject = multiDrag;
     QApplication::clipboard()->setData( dragObject, QClipboard::Clipboard );
-#endif*/
 }
 
 void Canvas::closeEditor()

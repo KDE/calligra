@@ -4089,13 +4089,6 @@ void View::paste()
   if (!koDocument()->isReadWrite()) // don't paste into a read only document
     return;
 
-  //TODO:  What if the clipboard data is available in both pixmap and OASIS format? (ie. for embedded parts)
-  QPixmap clipboardPixmap = QApplication::clipboard()->pixmap();
-  if (!clipboardPixmap.isNull())
-  {
-	  d->activeSheet->insertPicture( markerDocumentPosition()  , clipboardPixmap );
-  }
-
   QMimeSource *data = QApplication::clipboard()->data();
   for ( int i=0; data->format(i) != 0; i++ )
     kdDebug() << "format:" << data->format(i) << endl;
@@ -4169,6 +4162,15 @@ void View::paste()
 //         1, 0.0, 0.0, 0.0, 20.0, 20.0 );
 //
 //     emit objectSelectedChanged();
+  }
+  else
+  {
+    //TODO:  What if the clipboard data is available in both pixmap and OASIS format? (ie. for embedded parts)
+    QPixmap clipboardPixmap = QApplication::clipboard()->pixmap();
+    if (!clipboardPixmap.isNull())
+    {
+        d->activeSheet->insertPicture( markerDocumentPosition()  , clipboardPixmap );
+    }
   }
 
   doc()->emitBeginOperation( false );

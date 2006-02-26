@@ -1185,10 +1185,9 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 
 QPixmap EmbeddedPictureObject::toPixmap( double xZoom , double yZoom )
 {
-	KoZoomHandler zoomHandler;
-	zoomHandler.setZoomedResolution( xZoom*zoomHandler.resolutionX() , yZoom*zoomHandler.resolutionY() );
-
-	return generatePixmap( &zoomHandler );
+ 	KoZoomHandler zoomHandler;
+ 	zoomHandler.setZoomedResolution( xZoom /* *zoomHandler.resolutionX()*/ , yZoom /* *zoomHandler.resolutionY()*/ );
+ 	return generatePixmap( &zoomHandler );
 }
 
 QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
