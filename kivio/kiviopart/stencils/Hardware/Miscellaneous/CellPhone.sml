@@ -379,7 +379,7 @@
 
         <KivioPoint x="43.643" y="155.262"/>
         <KivioLineStyle width="0.000" capStyle="32" pattern="1" joinStyle="128" color="#2c348e" />
-        <KivioFillStyle colorStyle="1" color="#OOOOOO" />
+        <KivioFillStyle colorStyle="1" color="#000000" />
 </KivioShape>
 <KivioShape type="TextBox" name="TextBox0"  x="10" y="95.0" w="50" h="40" />
 </KivioShapeStencil>
