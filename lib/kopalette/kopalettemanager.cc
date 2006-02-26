@@ -488,7 +488,7 @@ bool KoPaletteManager::eventFilter( QObject *o, QEvent *e )
          KParts::PartActivateEvent * pae = dynamic_cast<KParts::PartActivateEvent *>(e);
          if(pae && pae->widget() && pae->widget() == m_view) {
             if (pae->activated()) {
-//                showAllPalettes( m_allPalettesShown );
+                showAllPalettes( true );
             }
             else {
                 showAllPalettes( false );
