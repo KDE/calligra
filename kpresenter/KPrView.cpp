@@ -3745,8 +3745,6 @@ void KPrView::skipToPage( int num )
     m_pKPresenterDoc->repaint( FALSE );
 
     m_pKPresenterDoc->displayActivePage( page );
-
-    m_pKPresenterDoc->recalcPageNum();
 }
 
 void KPrView::refreshPageButton()
