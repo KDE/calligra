@@ -4609,13 +4609,8 @@ void Cell::setDisplayText( const QString& _text )
     setFlag(Flag_LayoutDirty);
     setFlag(Flag_TextFormatDirty);
 
-    if ( !isLoading )
-    {
-      if ( !makeFormula() )
-      {
-  kdError(36001) << "ERROR: Syntax ERROR" << endl;
-      }
-    }
+    if ( !makeFormula() )
+      kdError(36001) << "ERROR: Syntax ERROR" << endl;
     setCalcDirtyFlag ();
   }
 
@@ -6579,8 +6574,8 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           setValue( t );
         }
 
-        if ( clear )
-          clearFlag( Flag_CalcDirty );
+        // if ( clear )
+        //   clearFlag( Flag_CalcDirty );
       }
     }
 
@@ -6601,14 +6596,13 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
   if( t[0] == '=' )
   {
     t = decodeFormula( t, d->column, d->row );
-    d->strText = pasteOperation( t, d->strText, op );
+    setCellText (pasteOperation( t, d->strText, op ));
 
     setFlag(Flag_CalcDirty);
     clearAllErrors();
 
-    if ( !format()->sheet()->isLoading() ) // i.e. when pasting
-      if ( !makeFormula() )
-        kdError(36001) << "ERROR: Syntax ERROR" << endl;
+    if ( !makeFormula() )
+      kdError(36001) << "ERROR: Syntax ERROR" << endl;
   }
   // rich text ?
   else if (t[0] == '!' )
