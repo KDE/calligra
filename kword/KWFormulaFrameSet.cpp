@@ -55,14 +55,14 @@
 /******************************************************************/
 /* Class: KWFormulaFrameSet                                       */
 /******************************************************************/
-KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
-    : KWFrameSet( _doc ), m_changed( false ), m_edit( 0 )
+KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *doc, const QString & name )
+    : KWFrameSet( doc ), m_changed( false ), m_edit( 0 )
 {
     kdDebug() << k_funcinfo << endl;
 
     // The newly created formula is not yet part of the formula
     // document. It will be added when a frame is created.
-    formula = _doc->formulaDocument()->createFormula( -1, false );
+    formula = doc->formulaDocument()->createFormula( -1, false );
 
     // With the new drawing scheme (drawFrame being called with translated painter)
     // there is no need to move the KFormulaContainer anymore, it remains at (0,0).
@@ -73,7 +73,7 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *_doc, const QString & name )
     connect( formula, SIGNAL( errorMsg( const QString& ) ),
              this, SLOT( slotErrorMessage( const QString& ) ) );
     if ( name.isEmpty() )
-        m_name = _doc->generateFramesetName( i18n( "Formula %1" ) );
+        m_name = doc->generateFramesetName( i18n( "Formula %1" ) );
     else
         m_name = name;
 
@@ -106,24 +106,24 @@ KWFormulaFrameSet::~KWFormulaFrameSet()
     delete formula;
 }
 
-void KWFormulaFrameSet::addFrame( KWFrame *_frame, bool recalc )
+void KWFormulaFrameSet::addFrame( KWFrame *frame, bool recalc )
 {
     kdDebug() << k_funcinfo << endl;
     if ( formula ) {
-        _frame->setWidth( formula->width() );
-        _frame->setHeight( formula->height() );
+        frame->setWidth( formula->width() );
+        frame->setHeight( formula->height() );
     }
-    KWFrameSet::addFrame( _frame, recalc );
+    KWFrameSet::addFrame( frame, recalc );
     if ( formula ) {
         formula->registerFormula();
     }
 }
 
-void KWFormulaFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc )
+void KWFormulaFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 {
     kdDebug() << k_funcinfo << endl;
-    assert( _num == 0 );
-    KWFrameSet::deleteFrame( _num, remove, recalc );
+    assert( num == 0 );
+    KWFrameSet::deleteFrame( num, remove, recalc );
     formula->unregisterFormula();
 }
 

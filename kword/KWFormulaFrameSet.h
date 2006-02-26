@@ -44,7 +44,7 @@ class KWFormulaFrameSet : public KWFrameSet
 {
     Q_OBJECT
 public:
-    KWFormulaFrameSet( KWDocument *_doc, const QString & name );
+    KWFormulaFrameSet( KWDocument *doc, const QString & name );
     virtual ~KWFormulaFrameSet();
 
     virtual KWordFrameSetIface* dcopObject();
@@ -54,7 +54,7 @@ public:
      */
     virtual FrameSetType type() const { return FT_FORMULA; }
 
-    virtual void addFrame( KWFrame *_frame, bool recalc = true );
+    virtual void addFrame( KWFrame *frame, bool recalc = true );
 
     /**
      * Delete a frame from the set of frames this frameSet has.
@@ -62,7 +62,7 @@ public:
      * @param remove passing true means that there can not be an undo of the action.
      * @param recalc do an updateFrames()
      */
-    virtual void deleteFrame( unsigned int _num, bool remove = true, bool recalc = true );
+    virtual void deleteFrame( unsigned int num, bool remove = true, bool recalc = true );
 
     virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
 
