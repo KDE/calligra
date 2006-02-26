@@ -4564,8 +4564,10 @@ void Cell::setNumber( double number )
 void Cell::setCellText( const QString& _text, bool asText )
 {
   QString ctext = _text;
-  if( ctext.length() > 5000 )
-    ctext = ctext.left( 5000 );
+
+// (Tomas) is this trim necessary for anything ?  
+//  if( ctext.length() > 5000 )
+//    ctext = ctext.left( 5000 );
 
   // empty string ?
   if (ctext.length() == 0) {
