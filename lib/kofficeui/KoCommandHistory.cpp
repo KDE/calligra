@@ -149,6 +149,11 @@ KoCommandHistory::~KoCommandHistory() {
     delete d;
 }
 
+KCommand * KoCommandHistory::presentCommand ( )
+{   return d->m_present;
+}
+
+
 void KoCommandHistory::clear() {
     if (m_undo != 0) {
         m_undo->setEnabled(false);
@@ -220,8 +225,8 @@ void KoCommandHistory::undo() {
         return;
 
     d->m_present->unexecute();
-    emit commandExecuted();
-    emit commandExecuted(d->m_present);
+    KCommand *commandUndone = d->m_present;
+
     if (m_redo != 0) {
         m_redo->setEnabled(true);
         m_redo->setText(i18n("&Redo: %1").arg(d->m_present->name()));
@@ -229,6 +234,8 @@ void KoCommandHistory::undo() {
     int index;
     if((index=m_commands.findRef(d->m_present))!=-1 && m_commands.prev()!=0) {
         d->m_present=m_commands.current();
+        emit commandExecuted();
+        emit commandExecuted(commandUndone);
         if (m_undo != 0) {
             m_undo->setEnabled(true);
             m_undo->setText(i18n("&Undo: %1").arg(d->m_present->name()));
@@ -238,6 +245,8 @@ void KoCommandHistory::undo() {
             emit documentRestored();
     }
     else {
+        emit commandExecuted();
+        emit commandExecuted(commandUndone);
         if (m_undo != 0) {
             m_undo->setEnabled(false);
             m_undo->setText(i18n("&Undo"));

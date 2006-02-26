@@ -123,6 +123,11 @@ public:
      */
     void updateActions();
 
+    /**
+     * @return the current top item on the history stack
+     */
+    KCommand * presentCommand();
+
 public slots:
     /**
      * Undoes the last action.
@@ -167,7 +172,7 @@ signals:
      * You can use this to update the GUI, for instance.
      * @param command was executed
      */
-    void commandExecuted(KCommand *command);
+    void commandExecuted(KCommand *cmd);
 
     /**
      * Emitted every time we reach the index where you
