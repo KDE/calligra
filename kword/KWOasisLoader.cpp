@@ -240,7 +240,7 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
         const QString localName = elem.localName();
         if ( localName == "text-box" )
         {
-            kdDebug()<<" append text-box\n";
+            //kdDebug()<<" append text-box\n";
             frame = loadOasisTextBox( frameTag, elem, context );
             break;
         }
