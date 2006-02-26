@@ -24,8 +24,8 @@ LIBEXIF=no
 #        AC_DEFINE(HAVE_EXIF06,1,[check for libexif > 0.6]),
 #                AC_MSG_WARN([Using old version of libexif.]))
 
-PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.6.9 , ,
-        [ AC_MSG_WARN([libexif >= 0.6.9 not found.])
+PKG_CHECK_MODULES(LIBEXIF, libexif >= 0.6.12 , ,
+        [ AC_MSG_WARN([libexif >= 0.6.12 not found.])
           LIBEXIF=yes ])
 
 AC_SUBST(LIBEXIF_LIBS)
