@@ -69,9 +69,11 @@ KChartParams::~KChartParams()
 
 QString KChartParams::chartTypeToString( ChartType _type) const
 {
+#if 0
     if (_type == BarLines )
 	return "BarLines";
     else
+#endif
 	return KDChartParams::chartTypeToString( (KDChartParams::ChartType) _type );
 }
 
@@ -79,9 +81,11 @@ QString KChartParams::chartTypeToString( ChartType _type) const
 KChartParams::ChartType
 KChartParams::stringToChartType( const QString& _string )
 {
+#if 0
     if ( _string == "BarLines" )
 	return BarLines;
     else
+#endif
 	return (ChartType) KDChartParams::stringToChartType( _string );
 }
 
@@ -343,10 +347,6 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 
     case BoxWhisker:
 	break;
-
-    case BarLines:
-	break;
-
     }
     // TODO:
     // And get the info from the style.  Here is the contents:

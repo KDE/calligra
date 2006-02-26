@@ -120,12 +120,12 @@ KChartConfigDialog::KChartConfigDialog( KChartParams* params,
             _linepage3d= new KChartLine3dConfigPage(m_params,this);
             addTab( _linepage3d,i18n("Line"));
         }
-        else if ( m_params->chartType() == KChartParams::BarLines) {
 #if 0
+        else if ( m_params->chartType() == KChartParams::BarLines) {
             m_barslinesPage = new KChartBarslinesConfigPage(m_params, this);
             addTab( _linepage3d,i18n("Line"));
-#endif
         }
+#endif
 	else if ( m_params->chartType() == KChartParams::Pie ) {
 
             _parameterpiepage = new KChartParameterPieConfigPage(m_params, 

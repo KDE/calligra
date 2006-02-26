@@ -53,8 +53,10 @@ class KChartParams : public KDChartParams
 	Polar      = KDChartParams::Polar,
 	BoxWhisker = KDChartParams::BoxWhisker,
 
+#if 0
 	// Only in KChart
 	BarLines
+#endif
     } ChartType;
 
     // Data direction
@@ -72,7 +74,9 @@ class KChartParams : public KDChartParams
     ChartType  chartType() const            { return m_chartType; }
     void       setChartType( ChartType _type ) {
 	m_chartType = _type;
+#if 0
 	if ( _type != BarLines )
+#endif
 	    KDChartParams::setChartType( (KDChartParams::ChartType) _type );
     }
 
