@@ -407,7 +407,7 @@ bool Project::load(QDomElement &element) {
                 }
                 //kdDebug()<<k_funcinfo<<"Relation<---"<<endl;
             } else if (e.tagName() == "schedules") {
-                kdDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
+                //kdDebug()<<k_funcinfo<<"Project schedules & task appointments--->"<<endl;
                 // Prepare for multiple schedules
                 // References tasks and resources
                 QDomNodeList lst = e.childNodes();
@@ -601,7 +601,7 @@ bool Project::canIndentTask(Node* node)
         return false;
     }
     if (node->type() == Node::Type_Project) {
-        kdDebug()<<k_funcinfo<<"The root node cannot be indented"<<endl;
+        //kdDebug()<<k_funcinfo<<"The root node cannot be indented"<<endl;
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
@@ -615,11 +615,11 @@ bool Project::canIndentTask(Node* node)
     }
     Node *sib = node->siblingBefore();
     if (!sib) {
-        kdDebug()<<k_funcinfo<<"new parent node not found"<<endl;
+        //kdDebug()<<k_funcinfo<<"new parent node not found"<<endl;
         return false;
     }
     if (node->findParentRelation(sib) || node->findChildRelation(sib)) {
-        kdDebug()<<k_funcinfo<<"Cannot have relations to parent"<<endl;
+        //kdDebug()<<k_funcinfo<<"Cannot have relations to parent"<<endl;
         return false;
     }
     return true;
@@ -644,7 +644,7 @@ bool Project::canUnindentTask( Node* node )
         return false;
     }
     if ( Node::Type_Project == node->type() ) {
-        kdDebug()<<k_funcinfo<<"The root node cannot be unindented"<<endl;
+        //kdDebug()<<k_funcinfo<<"The root node cannot be unindented"<<endl;
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
@@ -655,7 +655,7 @@ bool Project::canUnindentTask( Node* node )
     }
     Node* grandParentNode = parentNode->getParent();
     if ( !grandParentNode ) {
-        kdDebug()<<k_funcinfo<<"This node already is at the top level"<<endl;
+        //kdDebug()<<k_funcinfo<<"This node already is at the top level"<<endl;
         return false;
     }
     int index = parentNode->findChildNode( node );
@@ -685,7 +685,7 @@ bool Project::canMoveTaskUp( Node* node )
     // we have to find the parent of task to manipulate its list of children
     Node* parentNode = node->getParent();
     if (!parentNode) {
-        kdDebug()<<k_funcinfo<<"No parent found"<<endl;
+        //kdDebug()<<k_funcinfo<<"No parent found"<<endl;
         return false;
     }
     if (parentNode->findChildNode(node) == -1) {
