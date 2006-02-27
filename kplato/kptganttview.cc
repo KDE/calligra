@@ -509,8 +509,8 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
         w += "\n" + i18n("Not scheduled");
         ok = false;
     } else {
-        if (!m_showNoInformation && m_project) {
-            ok = !(m_project->notScheduled());
+        if (!m_showNoInformation && m_project && m_project->notScheduled()) {
+            ok = false;
         }
     }
     if (ok) {
@@ -617,8 +617,8 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
             sts += "\n" + i18n("Scheduling conflict");
             ok = false;
         }
-        if (!m_showNoInformation && m_project) {
-            ok = !(m_project->notScheduled());
+        if (!m_showNoInformation && m_project && m_project->notScheduled()) {
+            ok = false;
         }
     }
     if (ok) {
@@ -697,8 +697,8 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
             w += "\n" + i18n("Scheduling conflict");
             ok = false;
         }
-        if (!m_showNoInformation && m_project) {
-            ok = !(m_project->notScheduled());
+        if (!m_showNoInformation && m_project && m_project->notScheduled()) {
+            ok = false;
         }
     }
     if (ok) {
