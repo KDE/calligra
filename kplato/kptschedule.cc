@@ -409,6 +409,7 @@ bool NodeSchedule::loadXML(const QDomElement &sch) {
     inCriticalPath = sch.attribute("in-critical-path", "0").toInt();
     resourceError = sch.attribute("resource-error", "0").toInt();
     resourceOverbooked = sch.attribute("resource-overbooked", "0").toInt();
+    resourceNotAvailable = sch.attribute("resource-not-available", "0").toInt();
     schedulingError = sch.attribute("scheduling-conflict", "0").toInt();
     notScheduled = sch.attribute("not-scheduled", "1").toInt();
 
@@ -439,6 +440,7 @@ void NodeSchedule::saveXML(QDomElement &element) const {
     sch.setAttribute("in-critical-path",inCriticalPath);
     sch.setAttribute("resource-error",resourceError);
     sch.setAttribute("resource-overbooked",resourceOverbooked);
+    sch.setAttribute("resource-not-available",resourceNotAvailable);
     sch.setAttribute("scheduling-conflict",schedulingError);
     sch.setAttribute("not-scheduled",notScheduled);
 }
