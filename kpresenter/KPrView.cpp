@@ -2677,7 +2677,7 @@ void KPrView::setupActions()
                                             actionCollection(), "screen_assigneffect");
 
     actionScreenTransEffect = new KAction( i18n( "Edit Slide &Transition..." ),
-                                           "effect", 0,
+                                           "slide_effect", 0,
                                            this, SLOT( screenTransEffect() ),
                                            actionCollection(), "screen_transeffect");
 
