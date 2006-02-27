@@ -179,16 +179,19 @@ int SheetPrint::pagesY( const QRect& cellsPrintRange )
 
 bool SheetPrint::pageNeedsPrinting( QRect& page_range )
 {
-    bool filled = false;
+   // bool filled = false;
 
     // Look at the cells
-    for( int r = page_range.top(); !filled && ( r <= page_range.bottom() ); ++r )
-        for( int c = page_range.left(); !filled && ( c <= page_range.right() ); ++c )
+    for( int r = page_range.top();  r <= page_range.bottom() ; ++r )
+        for( int c = page_range.left();  c <= page_range.right() ; ++c )
             if ( m_pSheet->cellAt( c, r )->needsPrinting() )
-                filled = true;
+	    {
+	    	return true;
+	    }
+               // filled = true;
 
-    if( !filled ) //Page empty, but maybe children on it?
-    {
+    //Page empty, but maybe children on it?
+    
         QRect intView = QRect( QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.left() ) ),
                                        m_pDoc->zoomItY( m_pSheet->dblRowPos( page_range.top() ) ) ),
                                QPoint( m_pDoc->zoomItX( m_pSheet->dblColumnPos( page_range.right() ) +
@@ -197,15 +200,19 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
                                                         m_pSheet->rowFormat( page_range.bottom() )->dblHeight() ) ) );
 
         QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
-        for( ; !filled && it.current(); ++it )
+        for( ;it.current(); ++it )
         {
             QRect bound = it.current()->boundingRect();
             if ( bound.intersects( intView ) )
-                filled = true;
+	    {
+                return true;
+	    }
+		//filled = true;
         }
-    }
+    
 
-    return filled;
+    //Page has no visible content on it, so we don't need to paint it
+    return false;
 }
 
 bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
@@ -1154,7 +1161,13 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
         NO_MODIFICATION_POSSIBLE;
 
     KoFormat f = paperFormat();
-    KoOrientation o = orientation();
+    KoOrientation newOrientation = orientation();
+
+    if ( _orientation == "Portrait" )
+        newOrientation = PG_PORTRAIT;
+    else if ( _orientation == "Landscape" )
+        newOrientation = PG_LANDSCAPE;
+
 
     QString paper( _paper );
     if ( paper[0].isDigit() ) // Custom format
@@ -1171,9 +1184,9 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
             m_paperWidth  = paper.left(i).toFloat();
             m_paperHeight = paper.mid(i+1).toFloat();
             if ( m_paperWidth < 10.0 )
-                m_paperWidth = KoPageFormat::width( PG_DIN_A4, PG_PORTRAIT );
+                m_paperWidth = KoPageFormat::width( PG_DIN_A4, newOrientation );
             if ( m_paperHeight < 10.0 )
-                m_paperWidth = KoPageFormat::height( PG_DIN_A4, PG_PORTRAIT );
+                m_paperHeight = KoPageFormat::height( PG_DIN_A4, newOrientation );
         }
     }
     else
@@ -1183,13 +1196,7 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
             // We have no idea about height or width, therefore assume ISO A4
             f = PG_DIN_A4;
     }
-
-    if ( _orientation == "Portrait" )
-        o = PG_PORTRAIT;
-    else if ( _orientation == "Landscape" )
-        o = PG_LANDSCAPE;
-
-    setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, o );
+    setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, newOrientation );
 }
 
 void SheetPrint::calcPaperSize()

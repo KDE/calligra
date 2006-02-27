@@ -773,8 +773,7 @@ bool Cell::needsPrinting() const
   if ( isDefault() )
     return false;
 
-  if ( !d->strText.isEmpty() ) {
-    //kdWarning(36001) << name() << ": not empty - needs printing" << endl;
+  if ( !d->strText.stripWhiteSpace().isEmpty() ) {
     return true;
   }
 
@@ -785,23 +784,29 @@ bool Cell::needsPrinting() const
        || format()->hasProperty( Format::PBottomBorder )
        || format()->hasProperty( Format::PFallDiagonal )
        || format()->hasProperty( Format::PGoUpDiagonal ) ) {
-    //kdDebug(36001) << name()
-    //     << ": has border property - needs printing" << endl;
     return true;
   }
 
   // Background color or brush?
   if ( format()->hasProperty( Format::PBackgroundBrush ) ) {
-    //kdDebug(36001) << name()
-    //     << ": has brush property - needs printing" << endl;
-    return true;
+    	
+	const QBrush& brush=backGroundBrush(column(),row()); 
+
+	//Only brushes that are visible (ie. they have a brush style and are not white)
+	//need to be drawn	
+	if ( (brush.style() != Qt::NoBrush) && 
+	     (brush.color() != Qt::white || brush.pixmap()) )
+		return true;
+  
   }
 
   if ( format()->hasProperty( Format::PBackgroundColor ) ) {
-    //kdDebug(36001) << name()
-    //     << ": has backgroundColor property - needs printing"
-    //     << endl;
-    return true;
+    kdDebug() << "needsPrinting: Has background colour" << endl; 
+    QColor backgroundColor=bgColor(column(),row());
+    
+    //We don't need to print anything if the background is white
+    if (backgroundColor != Qt::white)
+    	return true;
   }
 
   return false;
