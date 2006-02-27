@@ -7074,7 +7074,7 @@ bool Cell::operator < ( const Cell & cell ) const
 
 QRect Cell::cellRect()
 {
-  assert(!isDefault());
+  Q_ASSERT(!isDefault());
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
