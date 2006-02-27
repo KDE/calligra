@@ -527,7 +527,7 @@ void Resource::makeAppointment(Schedule *node) {
         }
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
-        addAppointment(node, i.first, i.second, 100); //FIXME units
+        addAppointment(node, i.first, i.second, m_units);
         //kdDebug()<<k_funcinfo<<"Add :"<<i.first.toString()<<" to "<<i.second.toString()<<endl;
         if (!(node->workStartTime.isValid()) || i.first < node->workStartTime)
             node->workStartTime = i.first;
@@ -877,7 +877,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
 }
 
 Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, bool backward) {
-    kdDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
     Duration e;
     if (_effort == Duration::zeroDuration) {
         return e;
@@ -977,7 +977,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         //kdDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     if (!match) {
-        kdError()<<k_funcinfo<<"Could not match effort."<<" Want: "<<_effort.toString(Duration::Format_Day)<<" got: "<<e.toString(Duration::Format_Day)<<" sts="<<sts<<endl;
+        kdError()<<k_funcinfo<<(task()?task()->name():"No task")<<" "<<time<<": Could not match effort."<<" Want: "<<_effort.toString(Duration::Format_Day)<<" got: "<<e.toString(Duration::Format_Day)<<" sts="<<sts<<endl;
     }
     DateTime t;
     if (e != Duration::zeroDuration) {
