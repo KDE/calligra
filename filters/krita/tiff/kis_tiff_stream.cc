@@ -19,11 +19,17 @@
  
 #include "kis_tiff_stream.h"
 
-TIFFStreamContigBase::TIFFStreamContigBase( uint8* src, uint16 depth ) : TIFFStreamBase(depth), m_src(src) { restart(); }
+TIFFStreamContigBase::TIFFStreamContigBase( uint8* src, uint16 depth, uint32 lineSize ) : TIFFStreamBase(depth), m_src(src), m_lineSize(lineSize) { restart(); }
 
 void TIFFStreamContigBase::restart()
 {
     m_srcit = m_src;
+    m_posinc = 8;
+}
+
+void TIFFStreamContigBase::moveToLine(uint32 lineNumber)
+{
+    m_srcit = m_src + lineNumber * m_lineSize;
     m_posinc = 8;
 }
 
@@ -99,25 +105,25 @@ uint32 TIFFStreamContigAbove32::nextValue()
     return value;
 }
 
-TIFFStreamSeperate::TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth) : TIFFStreamBase(depth), m_nb_samples(nb_samples)
+TIFFStreamSeperate::TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize) : TIFFStreamBase(depth), m_nb_samples(nb_samples)
 {
     streams = new TIFFStreamContigBase*[nb_samples];
     if(depth < 16)
     {
         for(uint8 i = 0; i < m_nb_samples; i++)
         {
-            streams[i] = new TIFFStreamContigBelow16(srcs[i], depth);
+            streams[i] = new TIFFStreamContigBelow16(srcs[i], depth, lineSize[i]);
         }
-    } if( depth < 32 )
+    } else if( depth < 32 )
     {
         for(uint8 i = 0; i < m_nb_samples; i++)
         {
-            streams[i] = new TIFFStreamContigBelow32(srcs[i], depth);
+            streams[i] = new TIFFStreamContigBelow32(srcs[i], depth, lineSize[i]);
         }
     } else {
         for(uint8 i = 0; i < m_nb_samples; i++)
         {
-            streams[i] = new TIFFStreamContigAbove32(srcs[i], depth);
+            streams[i] = new TIFFStreamContigAbove32(srcs[i], depth, lineSize[i]);
         }
     }
     restart();
@@ -146,5 +152,13 @@ void TIFFStreamSeperate::restart()
     for(uint8 i = 0; i < m_nb_samples; i++)
     {
         streams[i]->restart();
+    }
+}
+
+void TIFFStreamSeperate::moveToLine(uint32 lineNumber)
+{
+    for(uint8 i = 0; i < m_nb_samples; i++)
+    {
+        streams[i]->moveToLine(lineNumber);
     }
 }

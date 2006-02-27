@@ -118,13 +118,23 @@ class KisTIFFPostProcessorICCLABtoCIELAB : public KisTIFFPostProcessor {
 
 class KisTIFFReaderBase {
     public:
-        KisTIFFReaderBase(  Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : m_alphapos(alphapos), m_sourceDepth(sourceDepth), m_nbcolorssamples(nbcolorssamples), m_nbextrasamples(extrasamplescount), m_poses(poses), m_transformProfile(transformProfile), m_postprocess(postprocessor)
+        KisTIFFReaderBase( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : m_device(device), m_alphapos(alphapos), m_sourceDepth(sourceDepth), m_nbcolorssamples(nbcolorssamples), m_nbextrasamples(extrasamplescount), m_poses(poses), m_transformProfile(transformProfile), m_postprocess(postprocessor)
         {
             
         }
     public:
-        virtual void copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream) =0;
+        /**
+         * This function copy data from the tiff stream to the paint device starting at the given position.
+         * @param x horizontal start position
+         * @param y vertical start position
+         * @param dataWidth width of the data to copy
+         * @param tiffstream source of data
+         * 
+         * @return the number of line which were copied
+         */
+        virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream) =0;
     protected:
+        inline KisPaintDeviceSP paintDevice() { return m_device; }
         inline Q_UINT8 alphaPos() { return m_alphapos; }
         inline Q_UINT8 sourceDepth() { return m_sourceDepth; }
         inline Q_UINT8 nbColorsSamples() { return m_nbcolorssamples; }
@@ -133,6 +143,7 @@ class KisTIFFReaderBase {
         inline cmsHTRANSFORM transform() { return m_transformProfile; }
         inline KisTIFFPostProcessor* postProcessor() { return m_postprocess; }
     private:
+        KisPaintDeviceSP m_device;
         Q_UINT8 m_alphapos;
         Q_UINT8 m_sourceDepth;
         Q_UINT8 m_nbcolorssamples;
@@ -140,37 +151,38 @@ class KisTIFFReaderBase {
         Q_UINT8* m_poses;
         cmsHTRANSFORM m_transformProfile;
         KisTIFFPostProcessor* m_postprocess;
+        Q_UINT32 m_tiffDataWidth;
 };
 
 class KisTIFFReaderTarget8bit : public KisTIFFReaderBase {
     public:
-        KisTIFFReaderTarget8bit( Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
+        KisTIFFReaderTarget8bit( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
         {
             
         }
     public:
-        virtual void copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream);
+        virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream);
 };
 
 
 class KisTIFFReaderTarget16bit : public KisTIFFReaderBase {
     public:
-        KisTIFFReaderTarget16bit( Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
+        KisTIFFReaderTarget16bit( KisPaintDeviceSP device, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor )
         {
             
         }
     public:
-        virtual void copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream) ;
+        virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream) ;
 };
 
 class KisTIFFReaderFromPalette : public  KisTIFFReaderBase {
     public:
-        KisTIFFReaderFromPalette( uint16 *red, uint16 *green, uint16 *blue, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor ), m_red(red), m_green(green), m_blue(blue)
+        KisTIFFReaderFromPalette( KisPaintDeviceSP device, uint16 *red, uint16 *green, uint16 *blue, Q_UINT8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount, cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor ), m_red(red), m_green(green), m_blue(blue)
         {
             
         }
     public:
-        virtual void copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream) ;
+        virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream) ;
     private:
         uint16 *m_red,  *m_green, *m_blue;
 };

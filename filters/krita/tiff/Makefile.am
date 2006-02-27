@@ -41,8 +41,9 @@ libkritatiffexport_la_SOURCES = kis_tiff_export.cc kis_wdg_options_tiff.ui \
 	kis_dlg_options_tiff.cpp
 service_DATA = krita_tiff_export.desktop krita_tiff_import.desktop
 kdelnk_DATA = krita_tiff.desktop
-noinst_HEADERS = kis_dlg_options_tiff.h kis_tiff_writer_visitor.h
+noinst_HEADERS = kis_dlg_options_tiff.h kis_tiff_writer_visitor.h \
+	kis_ycbcr_u8_colorspace.h
 libkritatiffconverter_la_LDFLAGS = -no-undefined $(all_libraries)
 noinst_LTLIBRARIES = libkritatiffconverter.la
 libkritatiffconverter_la_SOURCES = kis_tiff_converter.cc kis_tiff_stream.cc \
-		kis_tiff_writer_visitor.cpp kis_tiff_reader.cc
+			kis_tiff_writer_visitor.cpp kis_tiff_reader.cc kis_ycbcr_u8_colorspace.cpp

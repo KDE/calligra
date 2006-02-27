@@ -21,6 +21,9 @@
 
 #include <kdebug.h>
 
+#include <kis_iterators_pixel.h>
+#include <kis_paint_device.h>
+
 #include "kis_tiff_stream.h"
 
 //     typedef void (*copyTransform)(Q_UINT8*, int, cmsHTRANSFORM);
@@ -70,10 +73,11 @@
     }
 #endif
 
-    void KisTIFFReaderTarget8bit::copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderTarget8bit::copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream)
     {
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
         double coeff = Q_UINT8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-//         kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
+        kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
         while (!it.isDone()) {
             Q_UINT8 *d = it.rawData();
             Q_UINT8 i;
@@ -93,11 +97,13 @@
             }
             ++it;
         }
+        return 1;
     }
-    void KisTIFFReaderTarget16bit::copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderTarget16bit::copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream)
     {
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
         double coeff = Q_UINT16_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-//         kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
+        kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
         while (!it.isDone()) {
             Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
             Q_UINT8 i;
@@ -117,20 +123,22 @@
             }
             ++it;
         }
+        return 1;
     }
     
-    void KisTIFFReaderFromPalette::copyDataToChannels( KisHLineIterator it, TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderFromPalette::copyDataToChannels(Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth,  TIFFStreamBase* tiffstream)
     {
-            while (!it.isDone()) {
-                Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                uint32 index = tiffstream->nextValue();
-                d[2] = m_red[index];
-                d[1] = m_green[index];
-                d[0] = m_blue[index];
-                d[3] = Q_UINT16_MAX;
-                ++it;
-            }
-
+        KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
+        while (!it.isDone()) {
+            Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+            uint32 index = tiffstream->nextValue();
+            d[2] = m_red[index];
+            d[1] = m_green[index];
+            d[0] = m_blue[index];
+            d[3] = Q_UINT16_MAX;
+            ++it;
+        }
+        return 1;
     }
 
 #if 0

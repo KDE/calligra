@@ -44,6 +44,9 @@
 #include "kis_tiff_stream.h"
 #include "kis_tiff_writer_visitor.h"
 
+#include <kis_ycbcr_u8_colorspace.h> // TODO: in the future YCbCrU8/16 will be moved in a plugins and we won't need anymore that cludge
+// #include <kis_ycbcr_u16_colorspace.h>
+
 namespace {
 
     QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 &extrasamplescount, uint8 &destDepth) {
@@ -59,7 +62,7 @@ namespace {
                 destDepth = 16;
                 return "GRAYA16";
             }
-        } else if(color_type == PHOTOMETRIC_RGB  /*|| color_type == PHOTOMETRIC_YCBCR*/ ) {
+        } else if(color_type == PHOTOMETRIC_RGB  /*|| color_type == */ ) {
             if(nbchannels == 0) nbchannels = 3;
             extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
             if(color_nb_bits <= 8)
@@ -69,6 +72,17 @@ namespace {
             } else {
                 destDepth = 16;
                 return "RGBA16";
+            }
+        } else if(color_type == PHOTOMETRIC_YCBCR ) {
+            if(nbchannels == 0) nbchannels = 3;
+            extrasamplescount = nbchannels - 3; // FIX the extrasamples count in case of
+            if(color_nb_bits <= 8)
+            {
+                destDepth = 8;
+                return "YCbCrAU8";
+            } else {
+                destDepth = 16;
+                return "YCbCrAU16";
             }
         } else if(color_type == PHOTOMETRIC_SEPARATED ) {
             if(nbchannels == 0) nbchannels = 4;
@@ -221,7 +235,23 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     
     // Retrieve a pointer to the colorspace
     KisColorSpace* cs;
-    if (profile && profile->isSuitableForOutput())
+    if( csName == "YCbCrAU8" ) { // TODO: in the future YCbCrU8/16 will be moved in a plugins and we won't need anymore that cludge
+        if (profile && profile->isSuitableForOutput())
+        {
+            kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
+            cs = new KisYCbCrU8ColorSpace( KisMetaRegistry::instance()->csRegistry(), profile);
+        } else {
+            cs = new KisYCbCrU8ColorSpace( KisMetaRegistry::instance()->csRegistry(), 0);
+        }
+    } else if( csName == "YCbCrAU16") {
+/*        if (profile && profile->isSuitableForOutput())
+        {
+            kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
+            cs = new KisYCbCrU16ColorSpace( KisMetaRegistry::instance()->csRegistry(), profile);
+        } else {
+            cs = new KisYCbCrU16ColorSpace( KisMetaRegistry::instance()->csRegistry(), 0);
+        }*/
+    } else if (profile && profile->isSuitableForOutput())
     {
         kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
@@ -310,6 +340,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     Q_UINT8 poses[5];
     KisTIFFPostProcessor* postprocessor;
     
+    // Configure poses
     uint8 nbcolorsamples = nbchannels - extrasamplescount;
     switch(color_type)
     {
@@ -353,6 +384,13 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         break;
     }
     
+    
+    // Initisalize tiffReader
+    uint16 lineSizeCoeffs[nbchannels];
+    for(uint i = 0; i < nbchannels; i++)
+    {
+        lineSizeCoeffs[i] = 1;
+    }
     if( color_type == PHOTOMETRIC_PALETTE)
     {
         uint16 *red; // No need to free them they are free by libtiff
@@ -365,12 +403,24 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             return KisImageBuilder_RESULT_INVALID_ARG;
         }
 
-        tiffReader = new KisTIFFReaderFromPalette( red, green, blue, poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
+        tiffReader = new KisTIFFReaderFromPalette( layer->paintDevice(), red, green, blue, poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
+    } else if(color_type == PHOTOMETRIC_YCBCR ) {
+        uint16 subsampling[2];
+        TIFFGetFieldDefaulted( image, TIFFTAG_YCBCRSUBSAMPLING, subsampling + 0, subsampling + 1 );
+        lineSizeCoeffs[1] = subsampling[0];
+        lineSizeCoeffs[2] = subsampling[1];
+        if( dstDepth == 8 )
+        {
+//             tiffReader = new KisTIFFYCbCrReaderTarget8Bit( alphapos, depth, extrasamplescount, transform, postprocessor);
+        } else if( dstDepth == 16 )
+        {
+//             tiffReader = new KisTIFFYCbCrReaderTarget16Bit( alphapos, depth, extrasamplescount, transform, postprocessor);
+        }
     } else if(dstDepth == 8)
     {
-        tiffReader = new KisTIFFReaderTarget8bit( poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
+        tiffReader = new KisTIFFReaderTarget8bit( layer->paintDevice(), poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
     } else if(dstDepth == 16) {
-        tiffReader = new KisTIFFReaderTarget16bit( poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
+        tiffReader = new KisTIFFReaderTarget16bit( layer->paintDevice(), poses, alphapos, depth, nbcolorsamples, extrasamplescount, transform, postprocessor);
     }
     
     if(TIFFIsTiled(image))
@@ -380,28 +430,30 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         uint32 x, y;
         TIFFGetField(image, TIFFTAG_TILEWIDTH, &tileWidth);
         TIFFGetField(image, TIFFTAG_TILELENGTH, &tileHeight);
+        uint32 linewidth = (tileWidth * depth * nbchannels) / 8;
         if(planarconfig == PLANARCONFIG_CONTIG)
         {
             buf = _TIFFmalloc(TIFFTileSize(image));
             if(depth < 16)
             {
-                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth);
+                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth, linewidth);
             } else if(depth < 32)
             {
-                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth);
+                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth, linewidth);
             } else {
-                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth);
+                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth, linewidth);
             }
         } else {
-             ps_buf = new tdata_t[nbchannels];
+            ps_buf = new tdata_t[nbchannels];
+            uint32 lineSizes[nbchannels];
+            uint16 baseSize = TIFFTileSize(image)/nbchannels;
             for(uint i = 0; i < nbchannels; i++)
             {
-                ps_buf[i] = _TIFFmalloc(TIFFTileSize(image)/nbchannels);
+                ps_buf[i] = _TIFFmalloc(baseSize);
+                lineSizes[i] = baseSize / lineSizeCoeffs[i];
             }
-            tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth);
+            tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
         }
-
-        uint32 linewidth = (tileWidth * depth * nbchannels) / 8;
         kdDebug(41008) << linewidth << " " << nbchannels << " " << layer->paintDevice()->colorSpace()->nColorChannels() << endl;
         for (y = 0; y < height; y+= tileHeight)
         {
@@ -418,9 +470,11 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                     }
                 }
                 uint32 realTileWidth =  (x + tileWidth) < width ? tileWidth : width - x;
-                for (uint yintile = 0; y + yintile < height && yintile < tileHeight; yintile++) {
-                    KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(x, y + yintile, realTileWidth, true);
-                    tiffReader->copyDataToChannels( it, tiffstream);
+                for (uint yintile = 0; y + yintile < height && yintile < tileHeight; ) {
+                    uint linesreaded = tiffReader->copyDataToChannels( x, y + yintile , realTileWidth, tiffstream);
+                    y += linesreaded;
+                    yintile += linesreaded;
+                    tiffstream->moveToLine( yintile );
                 }
                 tiffstream->restart();
             }
@@ -435,35 +489,48 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             buf = _TIFFmalloc(stripsize);
             if(depth < 16)
             {
-                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth);
+                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth, TIFFRasterScanlineSize(image));
             } else if(depth < 32)
             {
-                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth);
+                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth, TIFFRasterScanlineSize(image));
             } else {
-                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth);
+                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth, TIFFRasterScanlineSize(image));
             }
         } else {
             ps_buf = new tdata_t[nbchannels];
+            uint32 scanLineSize = TIFFRasterScanlineSize(image) / nbchannels;
+            kdDebug(41008) << " scanLineSize for each plan = " << scanLineSize << endl;
+            uint32 lineSizes[nbchannels];
             for(uint i = 0; i < nbchannels; i++)
             {
-                ps_buf[i] = _TIFFmalloc(stripsize/nbchannels);
+                ps_buf[i] = _TIFFmalloc(stripsize);
+                lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
-            tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth);
+            tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
         } 
+        uint32 scanlinesize = TIFFScanlineSize(image);
+        uint32 rowsPerStrip;
+        TIFFGetFieldDefaulted(image, TIFFTAG_ROWSPERSTRIP, &rowsPerStrip);
         uint32 y = 0;
-        for (y = 0; y < height; y++)
+        kdDebug(41008) << " NbOfStrips = " << TIFFNumberOfStrips(image) << " rowsPerStrip = " << rowsPerStrip << " stripsize = " << stripsize << endl;
+        for (uint32 strip = 0; y < height; strip++)
         {
             if( planarconfig == PLANARCONFIG_CONTIG )
             {
-                TIFFReadScanline(image, buf, y, (tsample_t) -1);
+                uint r = TIFFReadEncodedStrip(image, TIFFComputeStrip( image, y, 0 ) , buf, (tsize_t) -1);
             } else {
                 for(uint i = 0; i < nbchannels; i++)
                 {
-                    TIFFReadScanline(image, ps_buf[i], y, i);
+                    TIFFReadEncodedStrip(image, TIFFComputeStrip( image, y, i ), ps_buf[i], (tsize_t) -1);
                 }
             }
-            KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
-            tiffReader->copyDataToChannels( it, tiffstream);
+            for( uint32 yinstrip = 0 ; yinstrip < rowsPerStrip  ; )
+            {
+                uint linesreaded = tiffReader->copyDataToChannels( 0, y, width, tiffstream);
+                y += linesreaded;
+                yinstrip += linesreaded;
+                tiffstream->moveToLine( yinstrip );
+            }
             tiffstream->restart();
         }
     }

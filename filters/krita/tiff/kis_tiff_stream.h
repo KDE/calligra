@@ -24,40 +24,43 @@
 
 class TIFFStreamBase {
     public:
-        TIFFStreamBase( uint16 depth) : m_depth(depth) {};
+       TIFFStreamBase( uint16 depth ) : m_depth(depth) {};
         virtual uint32 nextValue() =0;
         virtual void restart() =0;
+        virtual void moveToLine(uint32 lineNumber) =0;
     protected:
         uint16 m_depth;
 };
 
 class TIFFStreamContigBase : public TIFFStreamBase {
     public:
-        TIFFStreamContigBase( uint8* src, uint16 depth );
+        TIFFStreamContigBase( uint8* src, uint16 depth, uint32 lineSize );
         virtual void restart();
+        virtual void moveToLine(uint32 lineNumber);
     protected:
         uint8* m_src;
         uint8* m_srcit;
         uint8 m_posinc;
+        uint32 m_lineSize;
 };
 
 class TIFFStreamContigBelow16 : public TIFFStreamContigBase {
     public:
-        TIFFStreamContigBelow16( uint8* src, uint16 depth ) : TIFFStreamContigBase(src, depth) { }
+        TIFFStreamContigBelow16( uint8* src, uint16 depth, uint32 lineSize ) : TIFFStreamContigBase(src, depth, lineSize) { }
     public:
         virtual uint32 nextValue();
 };
 
 class TIFFStreamContigBelow32 : public TIFFStreamContigBase {
     public:
-        TIFFStreamContigBelow32( uint8* src, uint16 depth ) : TIFFStreamContigBase(src, depth) { }
+        TIFFStreamContigBelow32( uint8* src, uint16 depth, uint32 lineSize ) : TIFFStreamContigBase(src, depth, lineSize) { }
     public:
         virtual uint32 nextValue();
 };
 
 class TIFFStreamContigAbove32 : public TIFFStreamContigBase {
     public:
-        TIFFStreamContigAbove32( uint8* src, uint16 depth ) : TIFFStreamContigBase(src, depth) { }
+        TIFFStreamContigAbove32( uint8* src, uint16 depth, uint32 lineSize ) : TIFFStreamContigBase(src, depth, lineSize) { }
     public:
         virtual uint32 nextValue();
 };
@@ -65,10 +68,11 @@ class TIFFStreamContigAbove32 : public TIFFStreamContigBase {
 
 class TIFFStreamSeperate : public TIFFStreamBase {
     public:
-        TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth );
+        TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize);
         ~TIFFStreamSeperate();
         virtual uint32 nextValue();
         virtual void restart();
+        virtual void moveToLine(uint32 lineNumber);
     private:
         TIFFStreamContigBase** streams;
         uint8 m_current_sample, m_nb_samples;
