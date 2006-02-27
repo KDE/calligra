@@ -33,8 +33,6 @@ BIG TOPICS:
 5) introduce renderstack. And dont forget to rewrite shadoweffect to use it.
 
 GUI:
--	split the dialog under "Object->Transform" into different non-tabbed dialogs
--	remove the "Selection property" docker, this is basically the same as the above docker
 -	remove the dialogs which show up when double clicking the strokefillpreview, this job is done
 	by "color manager" docker
 -	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
@@ -73,11 +71,12 @@ TODO:
 -	make VSelection a state pattern
 -	try to abstract rendering even more, preferably using kpainter abstraction.
 -	make layers tree robust, efficient and scalable.
--	support 2 roundness params (rx and ry) for round rectangles.
+-	write odf enhanced-path parser (use some code from svgpathparser in lib)
 
 WISHLIST:
 -	krita export filter (with layers)
 -	add a nice grid-like shape like in Illu and webdraw
+-	pdf import filter (based on poppler)
 
 OPTIMIZATION:
 -	in VShapeTool and all manipulation tools: store temporary objects so one doesnt
@@ -99,5 +98,4 @@ MAKE IT NICE:
 NEW IDEAS:
 - make VDocument a KoDocument?
 - use KParts::plugin for tools?
-- use KoToolBox ?
 
