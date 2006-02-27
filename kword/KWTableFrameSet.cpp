@@ -339,6 +339,9 @@ void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;
 
     Cell *activeCell = cell(row,col);
+    Q_ASSERT( activeCell );
+    if ( !activeCell ) // #122807
+        return;
     double difference = 0;
 
     if(activeCell->frame(0)->height() != activeCell->frame(0)->minimumFrameHeight() &&
