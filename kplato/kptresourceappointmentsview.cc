@@ -39,14 +39,14 @@ ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QListView *parent, bool hi
     : DoubleListViewBase::MasterListItem(parent, t->name(), highlight),
       node(t) {
       
-      setFormat(0, 'f', 2);
+      setFormat(0, 'f', 1);
     //kdDebug()<<k_funcinfo<<endl;
 }
 ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QListViewItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, t->name(), highlight),
       node(t) {
       
-      setFormat(0, 'f', 2);
+      setFormat(0, 'f', 1);
     //kdDebug()<<k_funcinfo<<endl;
 }
 
@@ -54,7 +54,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(QString text, QListViewItem *parent
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       node(0) {
       
-      setFormat(0, 'f', 2);
+      setFormat(0, 'f', 1);
     //kdDebug()<<k_funcinfo<<endl;
 }
 
@@ -62,7 +62,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(QString text, QListView *parent, bo
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       node(0) {
       
-      setFormat(0, 'f', 2);
+      setFormat(0, 'f', 1);
     //kdDebug()<<k_funcinfo<<endl;
 }
 
