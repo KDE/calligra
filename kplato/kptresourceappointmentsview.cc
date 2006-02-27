@@ -222,7 +222,7 @@ void ResourceAppointmentsView::clear() {
 
 void ResourceAppointmentsView::createSlaveItems() {
     DoubleListViewBase::createSlaveItems();
-    setSlaveFormat(0, 'f', 2);
+    setSlaveFormat(0, 'f', 1);
 }
 
 }  //KPlato namespace
