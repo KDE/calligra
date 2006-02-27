@@ -1276,9 +1276,9 @@ void Sheet::recalc( bool force )
 }
 
 void Sheet::valueChanged (Cell *cell)
-{
+{	
+	
   //TODO: call cell updating, when cell damaging implemented
-  //TODO: do nothing is updates are disabled
 
   //prepare the Point structure
   Point c;
@@ -8105,7 +8105,14 @@ bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenS
 
 Sheet::~Sheet()
 {
-    //kdDebug()<<" Sheet::~Sheet() :"<<this<<endl;
+    //Disable automatic recalculation of dependancies on this sheet to prevent crashes
+    //in certain situations:
+    //
+    //For example, suppose a cell in SheetB depends upon a cell in SheetA.  If the cell in SheetB is emptied
+    //after SheetA has already been deleted, the program would try to remove dependancies from the cell in SheetA
+    //causing a crash. 
+    setAutoCalc(false);
+
     s_mapSheets->remove( d->id );
 
     //when you remove all sheet (close file)
@@ -8134,6 +8141,9 @@ Sheet::~Sheet()
     delete d->dependencies;
 
     delete d;
+    
+    //this is for debugging a crash
+    d=0;
 }
 
 void Sheet::checkRangeHBorder ( int _column )

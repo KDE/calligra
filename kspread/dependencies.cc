@@ -310,7 +310,7 @@ void DependencyList::removeDependencies (const Point &cell)
     Sheet *sh = (*it1).sheet();
     if (!sh)
       sh = sheet;
-    
+
     if (!sh->dependencies()->deps->cellDeps.contains (*it1))
       continue;  //this should never happen
     

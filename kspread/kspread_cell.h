@@ -230,15 +230,11 @@ public:
     void move( int column, int row );
 
     /**
-     * The @ref KSpread::Sheet calls this method if the sheet becomes deleted.
-     * At the time this method is called other cells may already be deleted or
-     * in some inconsistent state.
-     *
-     * The purpose of this method is to clear up some variables so that the destructor
-     * runs without any crash. Especially all variables referencing other cells
-     * must be voided. This method may not call any other method since the whole sheet
-     * and all remaining cells are in an inconsistent state now.
+     * This method notifies the cell that the parent sheet is being deleted.  
      */
+    // Note:  This used to remove any links from this cell to other cells.  However, this caused a problem
+    // in other parts of the code which relied upon walking from one cell to the next using 
+    // nextCell().
     void sheetDies();
 
     /**

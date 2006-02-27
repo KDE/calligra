@@ -6958,8 +6958,9 @@ void Cell::sheetDies()
       d->extra()->mergedXCells = 0;
       d->extra()->mergedYCells = 0;
     }
-    d->nextCell = 0;
-    d->previousCell = 0;
+    
+    //d->nextCell = 0;
+    //d->previousCell = 0;
 }
 
 Cell::~Cell()
@@ -7073,7 +7074,7 @@ bool Cell::operator < ( const Cell & cell ) const
 
 QRect Cell::cellRect()
 {
-  Q_ASSERT(!isDefault());
+  assert(!isDefault());
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
