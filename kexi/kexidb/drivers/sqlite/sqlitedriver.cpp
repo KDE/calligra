@@ -128,7 +128,7 @@ QCString SQLiteDriver::escapeString(const QCString& str) const
 
 QString SQLiteDriver::escapeBLOB(const QByteArray& array) const
 {
-	return escapeBLOBInternal(array, false /* use X'ABCD' */);
+	return escapeBLOBInternal(array, BLOB_ESCAPING_TYPE_USE_X);
 }
 
 QString SQLiteDriver::drv_escapeIdentifier( const QString& str) const

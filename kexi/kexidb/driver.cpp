@@ -334,26 +334,57 @@ void Driver::initSQLKeywords(int hashSize) {
 	}
 }
 
-QString Driver::escapeBLOBInternal(const QByteArray& array, bool use0x) const
+#define BLOB_ESCAPING_TYPE_USE_X     0 //!< escaping like X'abcd0', used by sqlite
+#define BLOB_ESCAPING_TYPE_USE_0x    1 //!< escaping like 0xabcd0, used by mysql
+#define BLOB_ESCAPING_TYPE_USE_OCTAL 2 //!< escaping like 'abcd\\000', used by pgsql
+
+QString Driver::escapeBLOBInternal(const QByteArray& array, int type) const
 {
 	const int size = array.size();
 	int escaped_length = size*2 + 2/*0x or X'*/;
-	if (!use0x)
+	if (type == BLOB_ESCAPING_TYPE_USE_X)
 		escaped_length += 1; //last char: '
 	QString str;
 	str.reserve(escaped_length);
 	if (str.capacity() < (uint)escaped_length) {
-		KexiDBWarn << "MySqlDriver::escapeBLOB(): no enough memory (cannot allocate "<< escaped_length<<" chars)" << endl;
+		KexiDBWarn << "KexiDB::Driver::escapeBLOB(): no enough memory (cannot allocate "<< \
+			escaped_length<<" chars)" << endl;
 		return QString::fromLatin1("NULL");
 	}
-	str = use0x ? QString::fromLatin1("0x") : QString::fromLatin1("X'");
-	int new_length = 2; //after X'
-	for (int i = 0; i < size; i++) {
-		unsigned char val = array[i];
-		str[new_length++] = (val/16) < 10 ? ('0'+(val/16)) : ('A'+(val/16)-10);
-		str[new_length++] = (val%16) < 10 ? ('0'+(val%16)) : ('A'+(val%16)-10);
+	if (type == BLOB_ESCAPING_TYPE_USE_X)
+		str = QString::fromLatin1("X'");
+	else if (type == BLOB_ESCAPING_TYPE_USE_0x)
+		str = QString::fromLatin1("0x");
+	else if (type == BLOB_ESCAPING_TYPE_USE_OCTAL)
+		str = QString::fromLatin1("'");
+	
+	int new_length = str.length(); //after X' or 0x, etc.
+	if (type == BLOB_ESCAPING_TYPE_USE_OCTAL) {
+		// only escape nonprintable characters as in Table 8-7:
+		// http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
+		// i.e. escape for bytes: < 32, >= 127, 39 ('), 92(\). 
+		for (int i = 0; i < size; i++) {
+			const unsigned char val = array[i];
+			if (val<32 || val>=127 || val==39 || val==92) {
+				str[new_length++] = '\\';
+				str[new_length++] = '\\';
+				str[new_length++] = '0' + val/64;
+				str[new_length++] = '0' + (val % 64) / 8;
+				str[new_length++] = '0' + val % 8;
+			}
+			else {
+				str[new_length++] = val;
+			}
+		}
 	}
-	if (!use0x)
+	else {
+		for (int i = 0; i < size; i++) {
+			const unsigned char val = array[i];
+			str[new_length++] = (val/16) < 10 ? ('0'+(val/16)) : ('A'+(val/16)-10);
+			str[new_length++] = (val%16) < 10 ? ('0'+(val%16)) : ('A'+(val%16)-10);
+		}
+	}
+	if (type == BLOB_ESCAPING_TYPE_USE_X || type == BLOB_ESCAPING_TYPE_USE_OCTAL)
 		str[new_length++] = '\'';
 	return str;
 }

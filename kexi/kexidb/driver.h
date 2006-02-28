@@ -326,10 +326,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 eventually delete it. Better use Connection destructor. */
 		Connection* removeConnection( Connection *conn );
 
-		/*! Helper, used in escapeBLOB(). If \a use0x is true, \a array is encoded as 0xABCD,
-		 else \a array is encoded as X'ABCD'. For example, MySQL>=3 supports the former 
-		 and SQlite supports the latter. */
-		QString escapeBLOBInternal(const QByteArray& array, bool use0x) const;
+		/*! Helper, used in escapeBLOB(). 
+		 * use \a type == BLOB_ESCAPING_TYPE_USE_X to get escaping like X'ABCD0' (used by sqlite)
+		 * use \a type == BLOB_ESCAPING_TYPE_USE_0x to get escaping like 0xABCD0 (used by mysql)
+		 * use \a type == BLOB_ESCAPING_TYPE_USE_OCTAL to get escaping like '\\253\\315\\000' 
+		     (used by pgsql)
+		*/
+		QString escapeBLOBInternal(const QByteArray& array, int type) const;
 
 	friend class Connection;
 	friend class Cursor;

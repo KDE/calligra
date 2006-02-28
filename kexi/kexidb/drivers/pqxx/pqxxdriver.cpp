@@ -158,7 +158,7 @@ QCString pqxxSqlDriver::drv_escapeIdentifier( const QCString& str) const {
 //
 QString pqxxSqlDriver::escapeBLOB(const QByteArray& array) const
 {
-	return escapeBLOBInternal(array, false /* use X'ABCD' */);
+	return escapeBLOBInternal(array, BLOB_ESCAPING_TYPE_USE_OCTAL);
 }
 
 

@@ -181,7 +181,7 @@ QString MySqlDriver::escapeString(const QString& str) const
 
 QString MySqlDriver::escapeBLOB(const QByteArray& array) const
 {
-	return escapeBLOBInternal(array, true /*use0x*/);
+	return escapeBLOBInternal(array, BLOB_ESCAPING_TYPE_USE_0x);
 }
 
 QCString MySqlDriver::escapeString(const QCString& str) const
