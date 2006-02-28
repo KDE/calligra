@@ -279,11 +279,11 @@ QWidgetList* KKbdAccessExtensions::getAllPanels()
     QWidget* widget = allWidgets->first();
     while (widget) {
         if (widget->isVisible()) {
-            if (qt_cast<QSplitter*>( widget )) {
+            if (::qt_cast<QSplitter*>( widget )) {
                 // Only size QSplitters with at least two handles (there is always one hidden).
                 if (dynamic_cast<QSplitter *>(widget)->sizes().count() >= 2)
                     allPanels->append(widget);
-            } else if (qt_cast<QDockWindow*>( widget )) {
+            } else if (::qt_cast<QDockWindow*>( widget )) {
                 if (dynamic_cast<QDockWindow *>(widget)->isResizeEnabled()) {
                     // kdDebug() << "KKbdAccessExtensions::getAllPanels: QDockWindow = " << widget->name() << endl;
                     allPanels->append(widget);
@@ -303,7 +303,7 @@ void KKbdAccessExtensions::nextHandle()
     if (panel) {
         bool advance = true;
         d->handleNdx++;
-        if (qt_cast<QSplitter*>( panel ))
+        if (::qt_cast<QSplitter*>( panel ))
             advance = (d->handleNdx >= dynamic_cast<QSplitter *>(panel)->sizes().count());
         else
             // Undocked windows have only one "handle" (center).
@@ -345,7 +345,7 @@ void KKbdAccessExtensions::prevHandle()
             if (allWidgets->current()) panel = allWidgets->prev();
             delete allWidgets;
             if (panel) {
-                if (qt_cast<QSplitter*>( panel ))
+                if (::qt_cast<QSplitter*>( panel ))
                     d->handleNdx = dynamic_cast<QSplitter *>(panel)->sizes().count() - 1;
                 else {
                     if (dynamic_cast<QDockWindow *>(panel)->area())
@@ -361,7 +361,7 @@ void KKbdAccessExtensions::prevHandle()
         panel = allWidgets->last();
         delete allWidgets;
         if (panel) {
-            if (qt_cast<QSplitter*>( panel ))
+            if (::qt_cast<QSplitter*>( panel ))
                 d->handleNdx = dynamic_cast<QSplitter *>(panel)->sizes().count() - 1;
             else {
                 if (dynamic_cast<QDockWindow *>(panel)->area())
@@ -391,7 +391,7 @@ void KKbdAccessExtensions::showIcon()
     if (!d->panel) return;
     QPoint p;
     // kdDebug() << "KKbdAccessExtensions::showIcon: topLevelWidget = " << d->panel->topLevelWidget()->name() << endl;
-    if (qt_cast<QSplitter*>( d->panel )) {
+    if (::qt_cast<QSplitter*>( d->panel )) {
         QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
         int handleNdx = d->handleNdx - 1;
         QValueList<int> sizes = splitter->sizes();
@@ -461,7 +461,7 @@ void KKbdAccessExtensions::resizePanel(int dx, int dy, int state)
     int adj = dx + dy;
     if (adj == 0) return;
     // kdDebug() << "KKbdAccessExtensions::resizePanel: panel = " << d->panel->name() << endl;
-    if (qt_cast<QSplitter*>( d->panel )) {
+    if (::qt_cast<QSplitter*>( d->panel )) {
         QSplitter* splitter = dynamic_cast<QSplitter *>(d->panel);
         int handleNdx = d->handleNdx - 1;
         QValueList<int> sizes = splitter->sizes();
@@ -534,7 +534,7 @@ void KKbdAccessExtensions::resizePanelFromKey(int key, int state)
     if (adj != 0)
         resizePanel(dx, dy, state);
     else {
-        if (key == Qt::Key_Enter && qt_cast<QDockWindow*>( d->panel )) {
+        if (key == Qt::Key_Enter && ::qt_cast<QDockWindow*>( d->panel )) {
             QDockWindow* dockWindow = dynamic_cast<QDockWindow *>(d->panel);
             if (dockWindow->area())
                 dockWindow->undock();
