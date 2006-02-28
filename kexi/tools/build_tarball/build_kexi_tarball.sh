@@ -4,7 +4,7 @@
 # Usage within KDE svn tree.
 # Based on cvs2pack
 # Copyright 2002 Nikolas Zimmermann <wildfox@kde.org>
-# Copyright 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+# Copyright 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 # Copyright 2005 Martin Ellis <martin.ellis@kdemail.net>
 # License: GPL (http://www.gnu.org/)
 
@@ -19,7 +19,8 @@ MODULE_PATH=trunk/$MODULE
 
 # Admin from branch as trunk in for KDE4.
 # Bump to 3.5 when that branch is stable?
-KDEADMIN_PATH=branches/KDE/3.4/kde-common/admin
+KDESOURCEDIR=branches/KDE/3.5
+KDEADMIN_PATH=$KDESOURCEDIR/kde-common/admin
 
 PROJECT_PATH=koffice/kexi
 #For versions in a branch:
@@ -43,10 +44,12 @@ SVN_HOST=https://svn.kde.org/home/kde
 
 # Dist-settings
 # set empty if this is snapshot
-DIST_VER=`grep "# define KEXI_VERSION_STRING" ../../kexi_version.h | sed -e 's/.*\"\(.*\)\"/\1/;s/ //g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/;'`
+DIST_VER=`grep "# define KEXI_VERSION_STRING" ../../kexi_version.h | \
+	sed -e 's/.*\"\(.*\)\"/\1/;s/ //g;y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/;'`
 
 # Pick kexi_stable.lsm or kexi.lsm as a LSM file template
-echo $DIST_VER | grep -e "beta" -e "rc" > /dev/null && lsmsrcfile=kexi.lsm || lsmsrcfile=kexi_stable.lsm
+echo $DIST_VER | grep -e "beta" -e "rc" \
+	> /dev/null && lsmsrcfile=kexi.lsm || lsmsrcfile=kexi_stable.lsm
 
 fixAppSpecific()
 {
@@ -56,6 +59,7 @@ fixAppSpecific()
 }
 
 # Paths
+mkdir -p /tmp/kexi-dist
 DESTINATION=/tmp/kexi-dist/$DIST_VER		# CHANGE TO A NON-EXISTING DIR, WHICH WILL BE CREATED LATER!!!
 CONFIGURE_PREFIX=`kde-config --prefix`	# CHANGE
 EXPECT_PROGRAM=`which expect`				# CHANGE
@@ -67,6 +71,7 @@ SVN_PROGRAM="strace -o /dev/null "`which svn`
 DATE_PROGRAM=`which date`						# CHANGE
 PERL_PROGRAM=`which perl`				# CHANGE
 SVN2DIST_PROGRAM=`which svn2dist`			# CHANGE
+test -z $SVN2DIST_PROGRAM && exit 1
 NCFTPPUT_PROGRAM=`which ncftpput`				# CHANGE
 CONF= # CANGE OR LEAVE EMPTY IF NO SPECIAL configure.in.in should be copied
 
@@ -121,13 +126,17 @@ if ! [ -e $DESTINATION/source/$MODULE ]; then
 	echo "$SVN_PROGRAM co -N $SVN_HOST/$MODULE_PATH" >> $DESTINATION/LOG
 	$SVN_PROGRAM co -N $SVN_HOST/$MODULE_PATH >> $DESTINATION/LOG 2>&1 || exit 1
 
-  # Get KoProperty and KOfficeCore from lib
+  # Get KoProperty, KOffice{Core|UI} and KROSS from lib
 	echo "cd $MODULE && $SVN_PROGRAM up -N lib ; cd .. " >> $DESTINATION/LOG
 	(cd $MODULE && $SVN_PROGRAM up -N lib ; cd .. )  >> $DESTINATION/LOG 2>&1 || exit 1
 	echo "cd $MODULE/lib && $SVN_PROGRAM up koproperty ; cd .." >> $DESTINATION/LOG
 	(cd $MODULE/lib && $SVN_PROGRAM up koproperty ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
 	echo "cd $MODULE/lib && $SVN_PROGRAM up kofficecore ; cd .." >> $DESTINATION/LOG
 	(cd $MODULE/lib && $SVN_PROGRAM up kofficecore ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
+	echo "cd $MODULE/lib && $SVN_PROGRAM up kofficeui ; cd .." >> $DESTINATION/LOG
+	(cd $MODULE/lib && $SVN_PROGRAM up kofficeui ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
+	echo "cd $MODULE/lib && $SVN_PROGRAM up kross ; cd .." >> $DESTINATION/LOG
+	(cd $MODULE/lib && $SVN_PROGRAM up kross ; cd ..) >> $DESTINATION/LOG 2>&1 || exit 1
 
   # Get Kexi
 	echo "cd $MODULE && $SVN_PROGRAM up $PROJECT ; cd .." >> $DESTINATION/LOG
@@ -192,7 +201,7 @@ echo "4. Building tarballs..."
 $SVN2DIST_PROGRAM $MODULE $PROJECT -v $today \
 	--svn-root "$SVN_HOST/trunk" \
 	$SVN2DIST_OPTIONS \
-	--log "$DESTINATION/LOG.SVN2DIST" >> $DESTINATION/LOG 2>&1 || exit 1
+	--log="$DESTINATION/LOG.SVN2DIST" >> $DESTINATION/LOG 2>&1 || exit 1
 cat "svn2dist-$PROJECT.log" >> $DESTINATION/LOG
 rm -Rf $PROJECT-$today
 rm -f $PROJECT-$today.tar
