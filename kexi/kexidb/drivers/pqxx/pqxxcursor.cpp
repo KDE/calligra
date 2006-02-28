@@ -119,8 +119,8 @@ bool pqxxSqlCursor::drv_open()
 	}
 	catch (const std::exception &e)
 	{
-		setError(ERR_DB_SPECIFIC,e.what());
-		KexiDBDrvWarn << "pqxxSqlCursor::drv_open:exception - " << e.what() << endl;
+		setError(ERR_DB_SPECIFIC, QString::fromUtf8( e.what()) );
+		KexiDBDrvWarn << "pqxxSqlCursor::drv_open:exception - " << QString::fromUtf8( e.what() ) << endl;
 	}
 	catch(...)
 	{

@@ -204,7 +204,7 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 	catch(const std::exception &e)
 	{
 		KexiDBDrvDbg << "pqxxSqlConnection::drv_useDatabase:exception - " << e.what() << endl;
-		d->errmsg = e.what();
+		d->errmsg = QString::fromUtf8( e.what() );
 
 	}
 	catch(...)
@@ -284,7 +284,7 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 	catch (const std::exception &e)
 	{
 		//If an error ocurred then put the error description into _dbError
-		d->errmsg = e.what();
+		d->errmsg = QString::fromUtf8( e.what() );
 		KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << endl;
 	}
 	catch(...)
@@ -370,7 +370,7 @@ bool pqxxSqlConnection::drv_commitTransaction(TransactionData *tdata)
 	catch (const std::exception &e)
 	{
 		//If an error ocurred then put the error description into _dbError
-		d->errmsg = e.what();
+		d->errmsg = QString::fromUtf8( e.what() );
 		result = false;
 	}
 	catch (...) {
@@ -392,7 +392,7 @@ bool pqxxSqlConnection::drv_rollbackTransaction(TransactionData *tdata)
 	catch (const std::exception &e)
 	{
 		//If an error ocurred then put the error description into _dbError
-		d->errmsg = e.what();
+		d->errmsg = QString::fromUtf8( e.what() );
 		
 		result = false;
 	}
