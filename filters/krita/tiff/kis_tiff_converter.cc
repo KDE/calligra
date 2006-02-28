@@ -153,10 +153,10 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
 {
     kdDebug(41008) << "Start decoding TIFF File" << endl;
     // Opent the TIFF file
-    TIFF *image;
+    TIFF *image = 0;
     if((image = TIFFOpen(uri.path().ascii(), "r")) == NULL){
         kdDebug(41008) << "Could not open the file, either it doesn't exist, either it is not a TIFF : " << uri.path() << endl;
-        TIFFClose(image);
+        if (image) TIFFClose(image);
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
     do {
@@ -234,7 +234,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     }
     
     // Retrieve a pointer to the colorspace
-    KisColorSpace* cs;
+    KisColorSpace* cs = 0;
     if( csName == "YCbCrAU8" ) { // TODO: in the future YCbCrU8/16 will be moved in a plugins and we won't need anymore that cludge
         if (profile && profile->isSuitableForOutput())
         {
@@ -335,10 +335,10 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     tdata_t* ps_buf = 0; // used only for planar configuration seperated
     TIFFStreamBase* tiffstream;
     
-    KisTIFFReaderBase* tiffReader;
+    KisTIFFReaderBase* tiffReader = 0;
     
     Q_UINT8 poses[5];
-    KisTIFFPostProcessor* postprocessor;
+    KisTIFFPostProcessor* postprocessor = 0;
     
     // Configure poses
     uint8 nbcolorsamples = nbchannels - extrasamplescount;
@@ -386,7 +386,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     
     
     // Initisalize tiffReader
-    uint16 lineSizeCoeffs[nbchannels];
+    uint16 * lineSizeCoeffs = new uint16[nbchannels];
     for(uint i = 0; i < nbchannels; i++)
     {
         lineSizeCoeffs[i] = 1;
@@ -445,7 +445,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             }
         } else {
             ps_buf = new tdata_t[nbchannels];
-            uint32 lineSizes[nbchannels];
+            uint32 * lineSizes = new uint32[nbchannels];
             uint16 baseSize = TIFFTileSize(image)/nbchannels;
             for(uint i = 0; i < nbchannels; i++)
             {
@@ -453,6 +453,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 lineSizes[i] = baseSize / lineSizeCoeffs[i];
             }
             tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
+            delete [] lineSizes;
         }
         kdDebug(41008) << linewidth << " " << nbchannels << " " << layer->paintDevice()->colorSpace()->nColorChannels() << endl;
         for (y = 0; y < height; y+= tileHeight)
@@ -500,15 +501,18 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             ps_buf = new tdata_t[nbchannels];
             uint32 scanLineSize = TIFFRasterScanlineSize(image) / nbchannels;
             kdDebug(41008) << " scanLineSize for each plan = " << scanLineSize << endl;
-            uint32 lineSizes[nbchannels];
+            uint32 * lineSizes = new uint32[nbchannels];
             for(uint i = 0; i < nbchannels; i++)
             {
                 ps_buf[i] = _TIFFmalloc(stripsize);
                 lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
             tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
-        } 
-        uint32 scanlinesize = TIFFScanlineSize(image);
+            delete [] lineSizes;
+        }
+
+        delete lineSizeCoeffs;
+        
         uint32 rowsPerStrip;
         TIFFGetFieldDefaulted(image, TIFFTAG_ROWSPERSTRIP, &rowsPerStrip);
         uint32 y = 0;
@@ -517,7 +521,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         {
             if( planarconfig == PLANARCONFIG_CONTIG )
             {
-                uint r = TIFFReadEncodedStrip(image, TIFFComputeStrip( image, y, 0 ) , buf, (tsize_t) -1);
+                TIFFReadEncodedStrip(image, TIFFComputeStrip( image, y, 0 ) , buf, (tsize_t) -1);
             } else {
                 for(uint i = 0; i < nbchannels; i++)
                 {
