@@ -100,8 +100,8 @@ void VGradientListItem::paint( QPainter* painter )
 	painter->flush();
 } // VGradientListItem::paint
 
-VGradientPreview::VGradientPreview( VGradient*& gradient, QWidget* parent, const char* name )
-		: QWidget( parent, name ), m_lpgradient( &gradient )
+VGradientPreview::VGradientPreview( VGradient*& gradient, double& opacity, QWidget* parent, const char* name )
+		: QWidget( parent, name ), m_lpgradient( &gradient ), m_opacity( &opacity )
 {
 	setBackgroundMode( Qt::NoBackground );
 	setMinimumSize( 70, 70 );
@@ -137,6 +137,9 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	gp.fillPath();
 	fill.gradient() = gradient;
 	fill.setType( VFill::grad );
+	VColor c = fill.color();
+	c.setOpacity( *m_opacity );
+	fill.setColor( c, false );
 	gp.setBrush( fill );
 	gp.moveTo( KoPoint( 2, 2 ) );
 	gp.lineTo( KoPoint( 2, height() - 2 ) );
@@ -183,7 +186,7 @@ void VGradientTabWidget::setupUI()
 	editLayout->setSpacing( 3 );
 	editLayout->setMargin( 6 );
 	editLayout->addRowSpacing( 0, 12 );
-	editLayout->addMultiCellWidget( m_gradientPreview = new VGradientPreview( m_gradient, m_editGroup ), 1, 3, 0, 0 );
+	editLayout->addMultiCellWidget( m_gradientPreview = new VGradientPreview( m_gradient, m_gradOpacity, m_editGroup ), 1, 3, 0, 0 );
 	editLayout->addWidget( new QLabel( i18n( "Type:" ), m_editGroup ), 1, 1 );
 	editLayout->addWidget( new QLabel( i18n( "Repeat:" ), m_editGroup ), 2, 1 );
 	editLayout->addWidget( new QLabel( i18n( "Target:" ), m_editGroup ), 3, 1 );
@@ -227,6 +230,7 @@ void VGradientTabWidget::setupConnections()
 	connect( m_addToPredefs,		SIGNAL( clicked() ),					this, SLOT( addGradientToPredefs() ) );
 	connect( m_predefGradientsView, SIGNAL( doubleClicked( QListBoxItem *, const QPoint & ) ),	this, SLOT( changeToPredef( QListBoxItem* ) ) );
 	connect( m_predefDelete,		SIGNAL( clicked() ),					this, SLOT( deletePredef() ) );
+	connect( m_opacity,				SIGNAL( valueChanged( int ) ),			this, SLOT( opacityChanged( int ) ) );
 } // VGradientTabWidget::setupConnection
 
 void VGradientTabWidget::initUI()
@@ -234,7 +238,9 @@ void VGradientTabWidget::initUI()
 	m_gradientType->setCurrentItem( m_gradient->type() );
 	m_gradientRepeat->setCurrentItem( m_gradient->repeatMethod() );
 	m_gradientTarget->setCurrentItem( FILL );
+	m_opacity->setValue( 100 );
 
+	m_predefGradientsView->clear();
 	QPtrList<VGradientListItem>* gradientList = m_resourceServer->gradients();
 	if( gradientList->count() > 0 )
 		for( VGradientListItem* g = gradientList->first(); g != NULL; g = gradientList->next() )
@@ -245,6 +251,16 @@ double
 VGradientTabWidget::opacity() const
 {
 	return m_opacity->value() / 100.0;
+}
+
+void
+VGradientTabWidget::setOpacity( double opacity )
+{
+	if( opacity < 0.0 || opacity > 1.0 )
+		return;
+
+	m_gradOpacity = opacity;
+	m_opacity->setValue( int(opacity*100.0) );
 }
 
 const VGradient*
@@ -278,6 +294,12 @@ void VGradientTabWidget::combosChange( int )
 	m_gradientPreview->update();
 } // VGradientTabWidget::combosChange
 
+void VGradientTabWidget::opacityChanged( int value )
+{
+	m_gradOpacity = value / 100.0;
+	m_gradientPreview->update();
+}
+
 void VGradientTabWidget::addGradientToPredefs()
 {
 	VGradientListItem* item = m_resourceServer->addGradient( new VGradient( *m_gradient ) );
@@ -301,6 +323,7 @@ void VGradientTabWidget::changeToPredef( QListBoxItem* item )
 		(*m_gradient) = *( gradientItem->gradient() );
 		m_gradientType->setCurrentItem( m_gradient->type() );
 		m_gradientRepeat->setCurrentItem( m_gradient->repeatMethod() );
+		m_opacity->setValue( 100 );
 		m_gradientPreview->update();
 		m_gradientWidget->update();
 		showPage( m_editGroup );

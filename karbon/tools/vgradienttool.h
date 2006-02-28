@@ -67,6 +67,8 @@ protected:
 	 */
 	bool getGradient( VGradient &gradient );
 
+	bool getOpacity( double &opacity );
+
 protected slots:
 	void targetChanged();
 

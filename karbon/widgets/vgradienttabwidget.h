@@ -64,13 +64,14 @@ private:
 class VGradientPreview : public QWidget
 {
 	public:
-		VGradientPreview( VGradient*& gradient, QWidget* parent = 0L, const char* name = 0L );
+		VGradientPreview( VGradient*& gradient, double& opacity, QWidget* parent = 0L, const char* name = 0L );
 		~VGradientPreview();
 
 		virtual void paintEvent( QPaintEvent* );
 		
 	protected:
 		VGradient**     m_lpgradient;
+		double*         m_opacity;
 }; // VGradientPreview
 
 class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
@@ -93,6 +94,7 @@ class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 		void setTarget( VGradientTarget target );
 
 		double opacity() const;
+		void setOpacity( double opacity );
 
 	public slots:
 		void combosChange( int );
@@ -100,7 +102,8 @@ class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 		void changeToPredef( QListBoxItem* );
 		void predefSelected( QListBoxItem* );
 		void deletePredef();
-		
+		void opacityChanged( int );
+
 	protected:
 		void setupUI();
 		void initUI();
@@ -122,6 +125,7 @@ class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 		VGradient*            m_gradient;
 			/** The predefined gradients list. */
 		KarbonResourceServer* m_resourceServer;
+		double                m_gradOpacity;
 }; // VGradientTabWidget
 
 #endif /* _VGRADIENTTABWIDGET_H_ */

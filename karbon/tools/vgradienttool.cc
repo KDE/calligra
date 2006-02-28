@@ -148,6 +148,31 @@ VGradientTool::getGradient( VGradient &gradient )
 	return true;
 }
 
+bool
+VGradientTool::getOpacity( double &opacity )
+{
+	if( ! view() ) 
+		return false;
+	
+	// determine if stroke of fill is selected for editing
+	VStrokeFillPreview *preview = view()->strokeFillPreview();
+	bool strokeSelected = ( preview && preview->strokeIsSelected() );
+		
+	VSelection* selection = view()->part()->document().selection();
+	if( selection->objects().count() != 1 ) 
+		return false;
+	
+	VObject *obj = selection->objects().getFirst();
+	// get the opacity of the first selected object, if any
+	if( strokeSelected && obj->stroke()->type() == VStroke::grad )
+		opacity = obj->stroke()->color().opacity();
+	else if( ! strokeSelected && obj->fill()->type() == VFill::grad )
+		opacity = obj->fill()->color().opacity();
+	else return false;
+	
+	return true;
+}
+
 void 
 VGradientTool::draw( VPainter* painter )
 {
@@ -295,19 +320,32 @@ VGradientTool::mouseButtonRelease()
 
 	bool strokeSelected = false;
 
+	// determine the target from the stroke-fill-preview-widget
+	VStrokeFillPreview* preview = view()->strokeFillPreview();
+	if( preview && preview->strokeIsSelected() )
+		strokeSelected = true;
+
 	if( first() == last() )
 	{
-		if( showDialog() != QDialog::Accepted )
+		m_optionsWidget->gradientWidget()->setGradient( m_gradient );
+		if( strokeSelected )
+		{
+			m_optionsWidget->gradientWidget()->setTarget( VGradientTabWidget::STROKE );
+			m_optionsWidget->gradientWidget()->setOpacity( 1.0 );
+		}
+		else
+		{
+			m_optionsWidget->gradientWidget()->setTarget( VGradientTabWidget::FILL );
+			double opacity;
+			if( getOpacity( opacity ) )
+				m_optionsWidget->gradientWidget()->setOpacity( opacity );
+		}
+		
+		if( ! showDialog() )
 			return;
+		
 		// if the gradient dialog was shown and accepted, determine the target from the dialog
 		strokeSelected = ( m_optionsWidget->gradientWidget()->target() == VGradientTabWidget::STROKE );
-	}
-	else
-	{
-		// determine the target from the stroke-fill-preview-widget
-		VStrokeFillPreview* preview = view()->strokeFillPreview();
-		if( preview && preview->strokeIsSelected() )
-			strokeSelected = true;
 	}
 
 	// calculate a sane intial position for the new gradient
@@ -315,7 +353,8 @@ VGradientTool::mouseButtonRelease()
 	{
 		VObject *obj = view()->part()->document().selection()->objects().getFirst();
 
-		if( obj->fill()->type() != VFill::grad )
+		if( ( ! strokeSelected && obj->fill()->type() != VFill::grad ) 
+		|| ( strokeSelected && obj->stroke()->type() != VStroke::grad ) )
 		{
 			KoRect bbox = obj->boundingBox();
 			switch( m_gradient.type() )
@@ -353,16 +392,16 @@ VGradientTool::mouseButtonRelease()
 		VFill fill;
 		fill.gradient() = m_gradient;
 		fill.setType( VFill::grad );
+		VColor c = fill.color();
+		c.setOpacity( m_optionsWidget->gradientWidget()->opacity() );
+		fill.setColor( c, false );
 		view()->part()->addCommand(
 			new VFillCmd( &view()->part()->document(), fill, "14_gradient" ), true );
 	}
 	else
 	{
-		VStroke stroke;
-		stroke.gradient() = m_gradient;
-		stroke.setType( VStroke::grad );
 		view()->part()->addCommand(
-			new VStrokeCmd( &view()->part()->document(), &stroke, "14_gradient" ), true );
+			new VStrokeCmd( &view()->part()->document(), &m_gradient ), true );
 	}
 }
 
