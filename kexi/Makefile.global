@@ -20,6 +20,6 @@ KDE_CXXFLAGS += -DKEXI_NO_CURSOR_PROPERTY
 # temporary: turn off processEvents() to avoid possible crashes
 # KDE_CXXFLAGS += -DKEXI_NO_PROCESS_EVENTS
 
-KDE_CXXFLAGS += -DKEXI_NO_CTXT_HELP
+KDE_CXXFLAGS += -DKEXI_NO_CTXT_HELP -DKEXI_NO_SUBFORM
 
 VER_INFO = -version-info 1:0:0

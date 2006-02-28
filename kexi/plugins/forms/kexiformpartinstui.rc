@@ -47,7 +47,7 @@
    <Action name="library_widget_KexiFrame"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KFDTabWidget"/>
-   <Action name="library_widget_KexiDBSubForm"/>
+   <!-- TODO Action name="library_widget_KexiDBSubForm"/ -->
    <Separator/>
    <Action name="library_widget_Spring"/>
    <Separator/>

@@ -9,6 +9,11 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+2006-02-28
+PostgreSQL driver
+- fix for displaying unicode error messages
+- fixed escaping binary data (octal values are used for special characters)
+
 2006-02-21
 Table View
 - row highlighting fixed for combo box popup, now it's used for any table view
