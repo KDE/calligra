@@ -28,7 +28,7 @@ KoToolBoxPalette::KoToolBoxPalette(QWidget * parent, const char * name)
     : KoPalette(parent, name)
 {
     m_page = new QToolBox(this);
-    m_page->setFont(m_font);
+    m_page->unsetFont();
     setMainWidget(m_page);
     m_style = PALETTE_TOOLBOX;
 }
@@ -37,9 +37,17 @@ KoToolBoxPalette::~KoToolBoxPalette()
 {
 }
 
+
+void KoToolBoxPalette::resetFont()
+{
+    KoPalette::resetFont();
+    m_page->unsetFont();
+}
+
+
 void KoToolBoxPalette::plug(QWidget *w, const QString & label, int position)
 {
-    w->setFont(m_font);
+    w->unsetFont();
     m_page->insertItem( position, w,  label );
 }
 

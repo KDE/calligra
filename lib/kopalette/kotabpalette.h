@@ -42,7 +42,7 @@ public:
     virtual ~KoTabPalette();
 
 public:
-
+    virtual void resetFont();
     virtual void plug(QWidget * widget, const QString & name, int position = -1);
     virtual void unplug(const QWidget * widget);
     void showPage(QWidget *w);

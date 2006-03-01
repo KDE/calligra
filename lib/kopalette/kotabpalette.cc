@@ -47,10 +47,18 @@ KoTabPalette::~KoTabPalette()
 
 void KoTabPalette::plug(QWidget * w, const QString & /*name*/, int position)
 {
-    w -> setFont(m_font);
+    if (!w) return;
+    
+    w -> unsetFont(); // Use the parent font
 
     m_page -> insertTab(w, w -> caption(), position);
     show();
+}
+
+void KoTabPalette::resetFont() 
+{
+    KoPalette::resetFont();
+    m_page->unsetFont();
 }
 
 void KoTabPalette::unplug(const QWidget * w)

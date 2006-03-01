@@ -37,7 +37,7 @@ public:
     ~KoToolBoxPalette();
 
 public:
-
+    void resetFont();
     virtual void plug(QWidget * widget, const QString & name, int position = INT_MAX);
     virtual void unplug(const QWidget * widget);
     void showPage(QWidget *w);

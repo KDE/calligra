@@ -257,6 +257,14 @@ void KoPaletteManager::slotReset()
     }
 }
 
+void KoPaletteManager::slotResetFont()
+{
+    QDictIterator<KoPalette> it(*m_palettes);
+    for (; it.current(); ++it) {
+        it.current()->resetFont();
+    }
+
+}
 
 QWidget * KoPaletteManager::widget(const QString & name)
 {

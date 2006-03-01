@@ -47,6 +47,8 @@ public:
 
 public:
 
+    virtual void resetFont();
+    
     void setStyle(enumKoPaletteStyle style) { m_style = style; };
     enumKoPaletteStyle style() { return m_style; };
 

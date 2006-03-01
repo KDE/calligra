@@ -158,6 +158,7 @@ public:
      */
      virtual void addPalette(KoPalette * palette, const QString & name, Dock location = DockRight);
 
+
 public slots:
 
     void slotTogglePalette(int paletteIndex);
@@ -169,6 +170,12 @@ public slots:
      * preferred by each docker.
      */
     virtual void slotReset();
+
+    /**
+     * Reset the font for all palettes
+     */
+    virtual void slotResetFont();
+     
 
 protected:
 
