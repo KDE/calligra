@@ -202,6 +202,8 @@ namespace Kross { namespace Api {
         signals:
             /// Emitted if a \a ScriptActionCollection instances changed.
             void collectionChanged(ScriptActionCollection*);
+            /// This signal is emited when the execution of a script is started
+            void executionStarted(const Kross::Api::ScriptAction* );
             /// This signal is emited when the execution of a script is finished
             void executionFinished(const Kross::Api::ScriptAction* );
         private:

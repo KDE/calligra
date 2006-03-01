@@ -202,7 +202,7 @@ void ScriptAction::setInterpreterName(const QString& name)
     Kross::Api::ScriptContainer::setInterpreterName(name);
 }
 
-const QString ScriptAction::getPackagePath()
+const QString ScriptAction::getPackagePath() const
 {
     return d->packagepath;
 }
@@ -230,6 +230,7 @@ void ScriptAction::detachAll()
 
 void ScriptAction::activate()
 {
+    emit activated(this);
     Kross::Api::ScriptContainer::execute();
     if( Kross::Api::ScriptContainer::hadException() ) {
         QString errormessage = Kross::Api::ScriptContainer::getException()->getError();

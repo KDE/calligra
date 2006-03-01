@@ -251,6 +251,7 @@ bool ScriptGUIClient::loadScriptConfigDocument(const QString& scriptconfigfile, 
                 this, SLOT( executionFailed(const QString&, const QString&) ));
         connect(action.data(), SIGNAL( success() ),
                 this, SLOT( successfullyExecuted() ));
+        connect(action.data(), SIGNAL( activated(const Kross::Api::ScriptAction*) ), SIGNAL( executionStarted(const Kross::Api::ScriptAction*)));
     }
     emit collectionChanged(installedcollection);
     return true;
@@ -329,6 +330,7 @@ bool ScriptGUIClient::loadScriptFile()
                     this, SLOT( executionFailed(const QString&, const QString&) ));
             connect(action.data(), SIGNAL( success() ),
                     this, SLOT( successfullyExecuted() ));
+            connect(action.data(), SIGNAL( activated(const Kross::Api::ScriptAction*) ), SIGNAL( executionStarted(const Kross::Api::ScriptAction*)));
 
             loadedcollection->detach(action);
             loadedcollection->attach(action);
@@ -360,6 +362,7 @@ bool ScriptGUIClient::executeScriptAction(ScriptAction::Ptr action)
             this, SLOT( executionFailed(const QString&, const QString&) ));
     connect(action.data(), SIGNAL( success() ),
             this, SLOT( successfullyExecuted() ));
+    connect(action.data(), SIGNAL( activated(const Kross::Api::ScriptAction*) ), SIGNAL( executionStarted(const Kross::Api::ScriptAction*)));
     action->activate();
     bool ok = action->hadException();
     action->finalize(); // execution is done.

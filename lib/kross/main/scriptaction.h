@@ -117,7 +117,7 @@ namespace Kross { namespace Api {
              * belongs to or QString::null if it doesn't belong to
              * any package.
              */
-            const QString getPackagePath();
+            const QString getPackagePath() const;
 
             /**
              * \return a list of all kind of logs this \a ScriptAction
@@ -160,6 +160,11 @@ namespace Kross { namespace Api {
 
         signals:
 
+            /**
+             * This signal got emitted when this action is emitted before execution.
+             */
+            void activated(const Kross::Api::ScriptAction*);
+            
             /**
             * This signal got emitted after this \a ScriptAction got
             * executed successfully.
