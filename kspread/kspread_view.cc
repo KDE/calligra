@@ -6982,7 +6982,14 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   }
 
   d->canvas->validateSelection();
-  d->canvas->scrollToCell(selectionInfo()->marker());
+  
+  //Don't scroll to the marker if there is an active embedded object, since this may cause
+  //the canvas to scroll so that the object isn't in the visible area.
+  //There is still the problem of the object no longer being visible immediately after deactivating the child
+  //as the sheet jumps back to the marker though.
+  if (!activeChild())
+  	d->canvas->scrollToCell(selectionInfo()->marker());
+  
   // Perhaps the user is entering a value in the cell.
   // In this case we may not touch the EditWidget
   if ( !d->canvas->editor() && !d->canvas->chooseMode() )

@@ -58,7 +58,7 @@ KAboutData * newAboutData()
     aboutData->addAuthor("Tomas Mecir", 0, "mecirt@gmail.com");
     aboutData->addAuthor("Raphael Langerhorst", 0, "raphael.langerhorst@kdemail.net");
     aboutData->addAuthor("John Tapsell", 0, "john.tapsell@kdemail.net");
-
+    aboutData->addAuthor("Robert Knight", 0 , "robertknight@gmail.com");
     return aboutData;
 }
 
