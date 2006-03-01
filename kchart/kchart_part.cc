@@ -107,9 +107,12 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     QString f;
 
-    // If this is an embedded document, e.g. in KSpread, then we can't
-    // change the data.
-    if (flags == KoDocument::InitDocEmbedded) {
+    //Embedded documents are initially created like a normal empty document.  If this is in KSpread or another
+    //program where the data is external then the document will be updated later on in the creation process
+    //anyway.
+    if (flags == KoDocument::InitDocEmbedded) 
+    {
+	initEmpty();
 	return true;
     }
 
@@ -181,7 +184,8 @@ void KChartPart::initNullChart()
     //kdDebug(35001) << "Initialize null chart." << endl;
 
     // Empty data.
-    m_currentData.expand(0, 0);
+    // Note, we don't use (0,0) for the size here, because otherwise KDChart won't draw anything
+    m_currentData.expand(1, 1);
 
     // Fill column and row labels.
     m_colLabels << QString("");
@@ -358,7 +362,10 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 
     // Double-buffering
     if ( m_bufferPixmap.width() < rect.width() || m_bufferPixmap.height() < rect.height() )
-        m_bufferPixmap.resize( rect.size() );
+    {
+    	m_bufferPixmap.resize( rect.size() );
+    }
+    
     QPainter bufferPainter( &m_bufferPixmap );
 
     // We only need to draw the document rectangle "rect".
