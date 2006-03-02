@@ -157,6 +157,21 @@ KoGenStyle::~KoGenStyle()
 {
 }
 
+void KoGenStyle::writeStyleProperties( KoXmlWriter* writer, PropertyType i,
+                                       const char* elementName, const KoGenStyle* parentStyle ) const
+{
+    if ( !m_properties[i].isEmpty() ) {
+        writer->startElement( elementName );
+        QMap<QString, QString>::const_iterator it = m_properties[i].begin();
+        const QMap<QString, QString>::const_iterator end = m_properties[i].end();
+        for ( ; it != end; ++it ) {
+            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
+                writer->addAttribute( it.key().utf8(), it.data().utf8() );
+        }
+        writer->endElement();
+    }
+}
+
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
     //kdDebug(30003) << "writing out style " << name << " " << m_attributes["style:display-name"] << " " << m_familyName << endl;
@@ -232,26 +247,10 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
         if ( createPropertiesTag )
             writer->endElement();
     }
-    i = KoGenStyle::TextType;
-    if ( !m_properties[i].isEmpty() ) {
-        writer->startElement( "style:text-properties" );
-        it = m_properties[i].begin();
-        for ( ; it != m_properties[i].end(); ++it ) {
-            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
-                writer->addAttribute( it.key().utf8(), it.data().utf8() );
-        }
-        writer->endElement();
-    }
-    i = KoGenStyle::ParagraphType;
-    if ( !m_properties[i].isEmpty() ) {
-        writer->startElement( "style:paragraph-properties" );
-        it = m_properties[i].begin();
-        for ( ; it != m_properties[i].end(); ++it ) {
-            if ( !parentStyle || parentStyle->property( it.key(), i ) != it.data() )
-                writer->addAttribute( it.key().utf8(), it.data().utf8() );
-        }
-        writer->endElement();
-    }
+    writeStyleProperties( writer, KoGenStyle::GraphicType, "style:graphic-properties", parentStyle );
+    writeStyleProperties( writer, KoGenStyle::TextType, "style:text-properties", parentStyle );
+    writeStyleProperties( writer, KoGenStyle::ParagraphType, "style:paragraph-properties", parentStyle );
+
     // And now the style maps
     for ( uint i = 0; i < m_maps.count(); ++i ) {
         bool writeit = true;

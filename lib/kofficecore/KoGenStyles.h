@@ -249,7 +249,22 @@ public:
     QString parentName() const { return m_parentName; }
 
     /**
-     *  @brief The types of properties.
+     *  @brief The types of properties
+     *
+     *  Simple styles only write one foo-properties tag, in which case they can just use DefaultType.
+     *  However a given style might want to write several kinds of properties, in which case it would
+     *  need to use other property types than the default one.
+     *
+     *  For instance this style:
+     *  @code
+     *  <style:style style:family="chart">
+     *    <style:chart-properties .../>
+     *    <style:graphic-properties .../>
+     *    <style:text-properties .../>
+     *  </style:style>
+     *  @endcode
+     *  would use DefaultType for chart-properties (and would pass "style:chart-properties" to writeStyle(),
+     *  and would use GraphicType and TextType.
      */
     enum PropertyType
     {
@@ -263,8 +278,12 @@ public:
         TextType,
         /// ParagraphType is always paragraph-properties.
         ParagraphType,
+        /// GraphicType is always graphic-properties.
+        GraphicType,
+        Reserved1, ///< @internal for binary compatible extensions
+        Reserved2, ///< @internal for binary compatible extensions
         ChildElement, ///< @internal
-        N_NumTypes ///< @internal
+        N_NumTypes ///< @internal - warning, adding items here affects binary compatibility (size of KoGenStyle)
     };
 
     /// Add a property to the style
@@ -409,6 +428,9 @@ private:
             return it.data();
         return QString::null;
     }
+
+    void writeStyleProperties( KoXmlWriter* writer, PropertyType i,
+                               const char* elementName, const KoGenStyle* parentStyle ) const;
 
 #ifndef NDEBUG
     void printDebug() const;
