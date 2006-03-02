@@ -139,7 +139,8 @@ void ScriptGUIClient::reloadInstalledScripts()
     if(installedcollection)
         installedcollection->clear();
 
-    QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*/*.rc");
+    QCString partname = d->guiclient->instance()->instanceName();
+    QStringList files = KGlobal::dirs()->findAllResources("data", partname + "/scripts/*/*.rc");
     //files.sort();
     for(QStringList::iterator it = files.begin(); it != files.end(); ++it)
         loadScriptConfigFile(*it);
