@@ -30,10 +30,11 @@
 
 #include <kis_progress_subject.h> */
 
+#include <kis_paint_device.h>
+
 #include "kis_types.h"
 #include "kis_global.h"
 // #include "kis_annotation.h"
-
 
 #include <kis_iterator.h>
 
