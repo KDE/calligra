@@ -704,12 +704,17 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         width = img -> width();
 
         bool alpha = true;
-        if (QFileInfo(QFile::encodeName(uri.path())).extension(false).upper() == "BMP") {
+        QString ext = QFileInfo(QFile::encodeName(uri.path())).extension(false).upper();
+        if (ext == "BMP") {
             alpha = false;
             qstrncpy(ii->magick, "BMP2", MaxTextExtent - 1);
             kdDebug() << ii->magick << "|" << endl;
         }
-        
+        else if (ext == "RGB") {
+            qstrncpy(ii->magick, "SGI", MaxTextExtent - 1);
+            kdDebug() << ii->magick << "|" << endl;
+        }
+
         for (y = 0; y < height; y++) {
 
             // Allocate pixels for this scanline
