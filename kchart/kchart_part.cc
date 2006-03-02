@@ -1338,6 +1338,13 @@ QDomDocument KChartPart::saveXML()
     tmpElem.setAttribute( "value", (int) m_params->dataDirection() );
     aux.appendChild( tmpElem );
 
+    tmpElem = doc.createElement( "dataaslabel" );
+    tmpElem.setAttribute( "firstrow", 
+			  m_params->firstRowAsLabel() ? "true" : "false" );
+    tmpElem.setAttribute( "firstcol", 
+			  m_params->firstColAsLabel() ? "true" : "false" );
+    aux.appendChild( tmpElem );
+
     tmpElem = doc.createElement( "barnumlines" );
     tmpElem.setAttribute( "value", (int) m_params->barNumLines() );
     aux.appendChild( tmpElem );
@@ -1488,12 +1495,43 @@ bool KChartPart::loadAuxiliary( const QDomDocument& doc )
 	    }
 	}
 
-	// Check for direction
+	// Check for first row / col as label
+	else if ( e.tagName() == "dataaslabel" ) {
+	    QString  val;
+
+	    if ( e.hasAttribute("firstrow") ) {
+		// Read the direction. On failure, use the default.
+		val = e.attribute("firstrow");
+		if ( val == "true" )
+		    m_params->setFirstRowAsLabel( true );
+		else
+		    m_params->setFirstRowAsLabel( false );
+	    }
+	    else {
+		kdDebug(35001) << "Error in barnumlines tag." << endl;
+		m_params->setFirstRowAsLabel( false );
+	    }
+
+	    if ( e.hasAttribute("firstcol") ) {
+		// Read the direction. On failure, use the default.
+		val = e.attribute("firstcol");
+		if ( val == "true" )
+		    m_params->setFirstColAsLabel( true );
+		else
+		    m_params->setFirstColAsLabel( false );
+	    }
+	    else {
+		kdDebug(35001) << "Error in barnumlines tag." << endl;
+		m_params->setFirstColAsLabel( false );
+	    }
+	}
+
+	// Check for number of lines in a bar chart.
 	else if ( e.tagName() == "barnumlines" ) {
 	    if ( e.hasAttribute("value") ) {
 		bool  ok;
 
-		// Read the direction. On failure, use the default.
+		// Read the number of lines. On failure, use the default.
 		int   barNumLines = e.attribute("value").toInt(&ok);
 		if ( !ok )
 		    barNumLines = 0;

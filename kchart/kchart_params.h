@@ -129,10 +129,11 @@ public slots:
  private:
     KChartPart    *m_part;
 
-    // The chart itself.
+    // Info about the chart itself.
     ChartType      m_chartType;
-    DataDirection  m_dataDirection; // Rows or Columns
 
+    // Info about the data.
+    DataDirection  m_dataDirection; // Rows or Columns
     bool           m_firstRowAsLabel;
     bool           m_firstColAsLabel;
 
