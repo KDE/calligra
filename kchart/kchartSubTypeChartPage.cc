@@ -257,7 +257,7 @@ void KChartBarSubTypeChartPage::init()
         }
     }
 
-    m_numLines->setValue( m_params->barlinesNumLines() );
+    m_numLines->setValue( m_params->barNumLines() );
 
     slotChangeSubType( m_params->barChartSubType() );
 }
@@ -292,7 +292,7 @@ void KChartBarSubTypeChartPage::apply()
     }
 
     // FIXME: Error controls.
-    m_params->setBarlinesNumLines( m_numLines->value() );
+    m_params->setBarNumLines( m_numLines->value() );
 }
 
 KChartLineSubTypeChartPage::KChartLineSubTypeChartPage( KChartParams* params,

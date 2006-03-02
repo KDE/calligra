@@ -50,11 +50,11 @@ KChartParams::KChartParams( KChartPart *_part )
       m_part( _part )
 {
     // Default values for subtypes.
-    m_barlinesChartSubType = BarlinesNormal;
-    m_barlinesNumLines     = 1;
-
     m_firstRowAsLabel = false;
     m_firstColAsLabel = false;
+
+    // Default values for OpenDocument extensions.
+    m_barNumLines     = 0;
 
     m_dcop = 0;
     //dcopObject(); // build it
@@ -65,6 +65,9 @@ KChartParams::~KChartParams()
 {
     delete m_dcop;
 }
+
+
+// ----------------------------------------------------------------
 
 
 QString KChartParams::chartTypeToString( ChartType _type) const
@@ -554,7 +557,7 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
 	break;
 
     case Bar:
-        switch( m_barlinesChartSubType ) {
+        switch( barChartSubType() ) {
         case BarStacked:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
@@ -563,6 +566,8 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
             break;
         case BarNormal:
             break;
+	case BarMultiRows:
+	    break;
         }
         plotAreaStyle.addProperty( "chart:vertical", "false" ); // #### always?
         plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
@@ -618,6 +623,7 @@ void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyl
                                   KDChartAxisParams::AxisPos axisPos, const char* axisName ) const
 {
     bodyWriter->startElement( "chart:axis" );
+
     bodyWriter->addAttribute( "chart:dimension", axisName );
     bodyWriter->addAttribute( "chart:name", QCString( "primary-" ) + axisName );
 

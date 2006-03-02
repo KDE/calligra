@@ -396,8 +396,9 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 //
 void KChartPart::createDisplayData()
 {
-    int  rowOffset = 0;
-    int  colOffset = 0;
+    int  rowOffset   = 0;
+    int  colOffset   = 0;
+    int  numDatasets = 0;
 
     if ( m_params->firstRowAsLabel() )
 	rowOffset++;
@@ -413,8 +414,10 @@ void KChartPart::createDisplayData()
     if (m_params->dataDirection() == KChartParams::DataRows) {
 	// Data is handled in rows.  This is the way KDChart works also.
 
-	m_displayData.expand( m_currentData.usedRows() - rowOffset,
+	numDatasets = m_currentData.usedRows() - rowOffset;
+	m_displayData.expand( numDatasets, 
 			      m_currentData.usedCols() - colOffset );
+
 	for (uint row = rowOffset; row < m_currentData.usedRows(); row++) {
 	    for (uint col = colOffset; col < m_currentData.usedCols(); col++) {
 		if ( m_currentData.cellContent( row, col,
@@ -433,7 +436,8 @@ void KChartPart::createDisplayData()
 	// everything since KDChart wants its data in rows.
 
 	// Resize displayData so that the transposed data has room.
-	m_displayData.expand( m_currentData.usedCols() - colOffset,
+	numDatasets = m_currentData.usedCols() - colOffset;
+	m_displayData.expand( numDatasets,
 			      m_currentData.usedRows() - rowOffset );
 
 	// Copy data and transpose it.
@@ -449,6 +453,28 @@ void KChartPart::createDisplayData()
 	    }
 	}
     }
+
+    if ( m_params->chartType() == KChartParams::Bar
+	 && m_params->barNumLines() > 0 ) {
+
+        // Specify that we want to have an additional chart.
+        m_params->setAdditionalChartType( KDChartParams::Line );
+
+        const int numBarDatasets = numDatasets - m_params->barNumLines();
+
+        // assign the datasets to the charts: DataEntry, from, to, chart#
+        m_params->setChartSourceMode( KDChartParams::DataEntry,
+                                      0, numBarDatasets - 1,
+                                      0 ); // The bar chart
+        m_params->setChartSourceMode( KDChartParams::DataEntry,
+                                      numBarDatasets, numDatasets - 1,
+                                      1 ); // The line chart
+    } 
+    else {
+	// Otherwise we don't want any extra chart.
+        m_params->setAdditionalChartType( KDChartParams::NoType );
+    }
+
 
     // If this is a HiLo chart, we need to manually create the correct
     // values.  This is not done by KDChart.

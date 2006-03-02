@@ -53,10 +53,6 @@ class KChartParams : public KDChartParams
 	Polar      = KDChartParams::Polar,
 	BoxWhisker = KDChartParams::BoxWhisker
 
-#if 0
-	// Only in KChart
-	BarLines
-#endif
     } ChartType;
 
     // Data direction
@@ -70,14 +66,10 @@ class KChartParams : public KDChartParams
     ~KChartParams();
 
     // Reimplementation of selected KDChartParams methods
-    // FIXME: Enhance for BarLines
     ChartType  chartType() const            { return m_chartType; }
     void       setChartType( ChartType _type ) {
 	m_chartType = _type;
-#if 0
-	if ( _type != BarLines )
-#endif
-	    KDChartParams::setChartType( (KDChartParams::ChartType) _type );
+	KDChartParams::setChartType( (KDChartParams::ChartType) _type );
     }
 
     // Data in rows or columns.
@@ -96,41 +88,18 @@ class KChartParams : public KDChartParams
     void       setFirstColAsLabel( bool _val );
 
     // ----------------------------------------------------------------
-    // BARLINES CHART-SPECIFIC
-
-    enum BarlinesChartSubType {
-	BarlinesNormal,
-	BarlinesStacked,
-	BarlinesPercent
-    };
-
+    // BAR CHART EXTENSIONS TO SUPPORT OPENDOCUMENT
 
 public slots:
-    void setBarlinesChartSubType( BarlinesChartSubType _barlinesChartSubType ) {
-	m_barlinesChartSubType = _barlinesChartSubType;
+
+    void setBarNumLines( int _numLines ) {
+	m_barNumLines = _numLines;
 	emit changed();
     }
 
-    BarlinesChartSubType barlinesChartSubType() const {
-	return m_barlinesChartSubType;
+    int barNumLines() const {
+	return m_barNumLines;
     }
-
-    void setBarlinesNumLines( int _numLines ) {
-	m_barlinesNumLines = _numLines;
-	emit changed();
-    }
-
-    int barlinesNumLines() const {
-	return m_barlinesNumLines;
-    }
-
-
-    static QString barlinesChartSubTypeToString( BarlinesChartSubType type );
-    static BarChartSubType stringToBarlinesChartSubType( const QString& string );
-
- private:
-    BarlinesChartSubType  m_barlinesChartSubType;
-    int                   m_barlinesNumLines;
 
     // ----------------------------------------------------------------
 
@@ -166,6 +135,9 @@ public slots:
 
     bool           m_firstRowAsLabel;
     bool           m_firstColAsLabel;
+
+    // Extensions to support OpenDocument
+    int            m_barNumLines; // Number of lines in a bar chart.
 
     DCOPObject    *m_dcop;
 };
