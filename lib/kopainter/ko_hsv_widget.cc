@@ -97,13 +97,14 @@ KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name
     connect(mVIn, SIGNAL(valueChanged(int)), this, SLOT(slotVChanged(int)));
 
     //setFixedSize(mGrid -> minimumSize());
-    autovalue = true;
+    m_autovalue = true; // So on the initial selection of h or v, s gets set to 255.
 
     update(Qt::black, Qt::white);
 }
 
 void KoHSVWidget::slotHChanged(int h)
 {
+    //kdDebug() << "H changed: " << h << endl;
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgColor.setHSV(h, m_fgColor.S(), m_fgColor.V());
         changedFgColor();
@@ -116,6 +117,7 @@ void KoHSVWidget::slotHChanged(int h)
 
 void KoHSVWidget::slotSChanged(int s)
 {
+    //kdDebug() << "S changed: " << s << endl;
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgColor.setHSV(m_fgColor.H(), s, m_fgColor.V());
         changedFgColor();
@@ -128,7 +130,8 @@ void KoHSVWidget::slotSChanged(int s)
 
 void KoHSVWidget::slotVChanged(int v)
 {
-    autovalue = false;
+    //kdDebug() << "V changed: " << v << ", setting autovalue to false " << endl;
+    m_autovalue = false;
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
         changedFgColor();
@@ -141,18 +144,19 @@ void KoHSVWidget::slotVChanged(int v)
 
 void KoHSVWidget::slotWheelChanged(const KoColor& c)
 {
+    //kdDebug() << "Wheel changed: " << c.color() <<  endl;
     if (m_ColorButton->current() == KDualColorButton::Foreground){
-        if(autovalue)
+        if(m_autovalue)
             m_fgColor.setHSV(c.H(), c.S(), 255);
         else
             m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
         changedFgColor();
     }
     else{
-        if(autovalue)
+        if(m_autovalue)
             m_bgColor.setHSV(c.H(), c.S(), 255);
         else
-            m_bgColor.setHSV(c.H(), c.S(), m_fgColor.V());
+            m_bgColor.setHSV(c.H(), c.S(), m_bgColor.V());
         changedBgColor();
     }
 }
@@ -160,6 +164,7 @@ void KoHSVWidget::slotWheelChanged(const KoColor& c)
 
 void KoHSVWidget::setFgColor(const QColor & c)
 {
+    //kdDebug() << "setFGColor " << c << endl;
     blockSignals(true);
     slotFGColorSelected(c);
     blockSignals(false);
@@ -167,6 +172,7 @@ void KoHSVWidget::setFgColor(const QColor & c)
 
 void KoHSVWidget::setBgColor(const QColor & c)
 {
+    //kdDebug() << "setBgColor " << c << endl;
     blockSignals(true);
     slotBGColorSelected(c);
     blockSignals(false);
@@ -174,6 +180,7 @@ void KoHSVWidget::setBgColor(const QColor & c)
 
 void KoHSVWidget::changedFgColor()
 {
+    //kdDebug() << "ChangedFgColor\n";
     disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
     m_ColorButton->setForeground( m_fgColor.color() );
     connect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
@@ -185,6 +192,7 @@ void KoHSVWidget::changedFgColor()
 
 void KoHSVWidget::changedBgColor()
 {
+    //kdDebug() << "changedBgColor()\n";
     disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
     m_ColorButton->setBackground( m_bgColor.color() );
     connect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
@@ -196,6 +204,14 @@ void KoHSVWidget::changedBgColor()
 
 void KoHSVWidget::update(const KoColor & fgColor, const KoColor & bgColor)
 {
+    
+    mHIn->blockSignals(true);
+    mSIn->blockSignals(true);
+    mVIn->blockSignals(true);
+    m_VSelector->blockSignals(true);
+    m_colorwheel->blockSignals(true);
+            
+    //kdDebug() << "update. FG: " << fgColor.color() << ", bg: " << bgColor.color() << endl;
     m_fgColor = fgColor;
     m_bgColor = bgColor;
 
@@ -205,31 +221,28 @@ void KoHSVWidget::update(const KoColor & fgColor, const KoColor & bgColor)
     int s = color.S();
     int v = color.V();
 
-    mHIn->blockSignals(true);
-    mSIn->blockSignals(true);
-    mVIn->blockSignals(true);
     mHIn->setValue(h);
     mSIn->setValue(s);
     mVIn->setValue(v);
-    mHIn->blockSignals(false);
-    mSIn->blockSignals(false);
-    mVIn->blockSignals(false);
-
-    m_VSelector->blockSignals(true);
+    
     m_VSelector->setHue(h);
     m_VSelector->setSaturation(s);
     m_VSelector->setValue(v);
     m_VSelector->updateContents();
+    
+    m_colorwheel->slotSetValue(color);
+
+    mHIn->blockSignals(false);
+    mSIn->blockSignals(false);
+    mVIn->blockSignals(false);
     m_VSelector->blockSignals(false);
     m_VSelector->repaint(false);
-
-    m_colorwheel->blockSignals(true);
-    m_colorwheel->slotSetValue(color);
     m_colorwheel->blockSignals(false);
 }
 
 void KoHSVWidget::slotFGColorSelected(const QColor& c)
 {
+    //kdDebug() << "slotFGColorSelected " << c << endl;
     m_fgColor = KoColor(c);
 
     changedFgColor();
@@ -237,6 +250,7 @@ void KoHSVWidget::slotFGColorSelected(const QColor& c)
 
 void KoHSVWidget::slotBGColorSelected(const QColor& c)
 {
+    //kdDebug() << "slotBGColorSelected()" << c << endl;
     m_bgColor = KoColor(c);
 
     changedBgColor();
@@ -244,10 +258,11 @@ void KoHSVWidget::slotBGColorSelected(const QColor& c)
 
 void KoHSVWidget::currentChanged(KDualColorButton::DualColor s)
 {
-   if(s == KDualColorButton::Foreground)
-     slotFGColorSelected(m_ColorButton->currentColor());
-   else
-     slotBGColorSelected(m_ColorButton->currentColor());
+    //kdDebug() << "currentChanged\n";
+    if(s == KDualColorButton::Foreground)
+        slotFGColorSelected(m_ColorButton->currentColor());
+    else
+        slotBGColorSelected(m_ColorButton->currentColor());
 }
 
 #include "ko_hsv_widget.moc"

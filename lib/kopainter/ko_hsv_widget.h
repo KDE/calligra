@@ -90,7 +90,7 @@ private:
     KoColor m_fgColor;
     KoColor m_bgColor;
 
-    bool autovalue;
+    bool m_autovalue;
 };
 
 #endif

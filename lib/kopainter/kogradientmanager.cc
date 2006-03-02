@@ -32,6 +32,7 @@ KoGradientManager::KoGradientManager()
 
 KoGradientManager::~KoGradientManager()
 {
+    // XXX: Should we delete the gradients here?
 }
 
 KoGradient* KoGradientManager::loadGradient(const QString& filename)
