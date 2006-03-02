@@ -142,18 +142,18 @@ public slots:
 		    KoOasisLoadingContext &loadingContext,
                     QString               &errorMessage,
 		    KoStore               *store );
-    void saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles );
+    void saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
 
  private:
     bool loadOasisPlotarea( const QDomElement     &plotareaElem,
 			    KoOasisLoadingContext &loadingContext,
-			    QString               &errorMessage,
-			    KoStore               *store );
+			    QString               &errorMessage );
     bool loadOasisAxis( const QDomElement         &axisElem,
 			KoOasisLoadingContext     &loadingContext,
 			QString                   &errorMessage,
-			KoStore                   *store,
 			KDChartAxisParams::AxisPos axisPos );
+
+    void saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
 
  private:
     KChartPart    *m_part;

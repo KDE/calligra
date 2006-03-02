@@ -160,14 +160,14 @@ static const unsigned int numOasisChartTypes
 #endif
 
 
-// Load an the data from an OpenDocument chart:chart element.
+// Load the data from an OpenDocument chart:chart element.
 
 bool KChartParams::loadOasis( const QDomElement     &chartElem,
 			      KoOasisLoadingContext &loadingContext,
                               QString               &errorMessage,
 			      KoStore               *store )
 {
-    const QString chartClass = chartElem.attributeNS( KoXmlNS::chart, 
+    const QString chartClass = chartElem.attributeNS( KoXmlNS::chart,
 						      "class", QString::null );
     bool          knownType = false;
 
@@ -200,7 +200,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
     }
 
     // Subtitle TODO (more details)
-    QDomElement  subtitleElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart, 
+    QDomElement  subtitleElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
 						    "subtitle" );
     if ( !titleElem.isNull() ) {
 	QDomElement  pElem = KoDom::namedItemNS( subtitleElem,
@@ -210,13 +210,12 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
 
     // TODO: Get legend settings
 
-    
+
     // Get the plot-area.  This is where the action is.
     QDomElement  plotareaElem = KoDom::namedItemNS( chartElem,
 						    KoXmlNS::chart, "plot-area" );
     if ( !plotareaElem.isNull() ) {
-	return loadOasisPlotarea( plotareaElem, loadingContext, errorMessage,
-				  store );
+	return loadOasisPlotarea( plotareaElem, loadingContext, errorMessage );
     }
 
     return false;
@@ -225,8 +224,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
 
 bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 				      KoOasisLoadingContext &loadingContext,
-				      QString               &errorMessage,
-				      KoStore               *store)
+				      QString               &errorMessage )
 {
     QString  tmp;
 
@@ -238,7 +236,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     // This info is in the attribute chart:data-source-has-labels.
     //
     // NOTE: Only used in spreadsheets.
-    tmp = plotareaElem.attributeNS( KoXmlNS::chart, 
+    tmp = plotareaElem.attributeNS( KoXmlNS::chart,
 				    "data-source-has-labels", QString::null );
     m_firstRowAsLabel = false;
     m_firstColAsLabel = false;
@@ -253,7 +251,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 	m_firstColAsLabel = true;
     }
     else {
-	errorMessage = "Unknown value for chart:data-source-has-labels:" 
+	errorMessage = "Unknown value for chart:data-source-has-labels:"
 	    + tmp;
 	return false;
     }
@@ -355,14 +353,14 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     // TODO: These items are currently not used.  They should be at least
     //       be stored so that we can save them again.
     // chart:interpolation     - "cubic-spline" if using cubic splines
-    // chart:splines           - 
+    // chart:splines           -
     // chart:spline-order      - "2" for cubic splines
     // chart:spline-resolution - how smooth (default: 20)
 
     // -- Used when chart:class == "stock:
-    // chart:stock-updown-bars      - boolean 
-    // chart:stock-with-volume      - boolean 
-    // chart:japanese-candle-sticks - boolean 
+    // chart:stock-updown-bars      - boolean
+    // chart:stock-with-volume      - boolean
+    // chart:japanese-candle-sticks - boolean
 
     // chart:series-source     - "row" or "columns
 
@@ -382,7 +380,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 
     QDomElement  axisElem;
     forEachElement( axisElem, plotareaElem ) {
-	
+
 	cerr << "plotarea element: " << axisElem.tagName().latin1() << "\n";
 	if ( axisElem.tagName() != "axis" )
 	    continue;
@@ -401,11 +399,11 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     }
 
     // Load the axes.
-    if ( !loadOasisAxis( xAxisElem, loadingContext, errorMessage, store,
+    if ( !loadOasisAxis( xAxisElem, loadingContext, errorMessage,
 			 KDChartAxisParams::AxisPosBottom) )
 	return false;
     if ( m_chartType != Pie
-	 && !loadOasisAxis( yAxisElem, loadingContext, errorMessage, store,
+	 && !loadOasisAxis( yAxisElem, loadingContext, errorMessage,
 			    KDChartAxisParams::AxisPosLeft) )
 	return false;
 
@@ -427,9 +425,10 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
 				  KoOasisLoadingContext  &loadingContext,
 				  QString                &errorMessage,
-				  KoStore                *store,
 				  KDChartAxisParams::AxisPos  axisPos )
 {
+    Q_UNUSED( errorMessage );
+
     QString        tmp;
     QDomElement    tmpElem;
     KoStyleStack  &styleStack = loadingContext.styleStack();
@@ -481,12 +480,12 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
 
     // chart:text-overlap           - true if labels can overlap
 
-    // chart:label-arrangement      - "side-by-side" / "stagger-even" / 
+    // chart:label-arrangement      - "side-by-side" / "stagger-even" /
     //                                "stagger-odd"  (def: side-by-side)
 
-    // chart:visible                - true if labels + ticks should be shown. 
+    // chart:visible                - true if labels + ticks should be shown.
 
-    // children: 
+    // children:
     // chart:
     // chart:
     // chart:
@@ -499,7 +498,7 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
 }
 
 
-void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
+void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const
 {
     Q_UNUSED( mainStyles );
     bool knownType = false;
@@ -515,12 +514,97 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
         kdError(32001) << "Unknown chart type in KChartParams::saveOasis, extend oasisChartTypes!" << endl;
     }
 
-    // TODO title
-    // TODO subtitle
+    bodyWriter->startElement( "chart:title" );
+    bodyWriter->startElement( "text:p" );
+    bodyWriter->addTextNode( header1Text() );
+    bodyWriter->endElement(); // text:p
+    bodyWriter->endElement(); // chart:title
+
+    // TODO subtitle: very similar
+
     // TODO legend
-    // TODO plot-area
+
+    bodyWriter->startElement( "chart:plot-area" );
+    saveOasisPlotArea( bodyWriter, mainStyles );
+    bodyWriter->endElement();
+
     // TODO...
 }
 
+void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const
+{
+    QString dataSourceHasLabels;
+    if ( m_firstRowAsLabel )
+        if ( m_firstColAsLabel )
+            dataSourceHasLabels = "both";
+        else
+            dataSourceHasLabels = "row";
+    else
+        if ( m_firstColAsLabel )
+            dataSourceHasLabels = "column";
+        else
+            dataSourceHasLabels = "none";
+    bodyWriter->addAttribute( "chart:data-source-has-labels", dataSourceHasLabels );
+
+    // Prepare the style for the plot area
+    KoGenStyle plotAreaStyle( KoGenStyle::STYLE_AUTO, "chart" );
+
+    switch ( m_chartType ) {
+    case NoType:
+	break;
+
+    case Bar:
+        switch( m_barlinesChartSubType ) {
+        case BarStacked:
+            plotAreaStyle.addProperty( "chart:stacked", "true" );
+            break;
+        case BarPercent:
+            plotAreaStyle.addProperty( "chart:percentage", "true" );
+            break;
+        case BarNormal:
+            break;
+        }
+        plotAreaStyle.addProperty( "chart:vertical", "false" ); // #### always?
+        plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
+
+    case Line:
+        switch( lineChartSubType() ) {
+        case LineStacked:
+            plotAreaStyle.addProperty( "chart:stacked", "true" );
+            break;
+        case LinePercent:
+            plotAreaStyle.addProperty( "chart:percentage", "true" );
+            break;
+        case LineNormal:
+            break;
+        }
+        plotAreaStyle.addProperty( "chart:symbol-type", "automatic" );
+
+        break;
+
+    case Area:
+        // TODO - very similar
+
+    case Pie:
+	break;
+
+    case HiLo:
+	break;
+
+    case Ring:
+	break;
+
+    case Polar:
+	break;
+
+    case BoxWhisker:
+	break;
+    }
+
+    // Register the style, and get back its auto-generated name
+    const QString styleName = mainStyles.lookup( plotAreaStyle, "ch" );
+
+    bodyWriter->addAttribute( "chart:style-name", styleName );
+}
 
 }  //KChart namespace

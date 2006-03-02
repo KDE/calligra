@@ -99,6 +99,7 @@ protected:
     bool  loadData( const QDomDocument& doc, KDChartTableData& currentData );
     bool  loadOasisData( const QDomElement& tableElem );
     void  saveOasisData( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
+    void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const;
 
 private:
     // Helper methods for painting.

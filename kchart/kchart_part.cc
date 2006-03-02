@@ -31,8 +31,6 @@
 
 using namespace std;
 
-#include <float.h> // for DBL_DIG
-
 // Some hardcoded data for a chart
 
 /* ----- set some data ----- */
@@ -110,7 +108,7 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
     //Embedded documents are initially created like a normal empty document.  If this is in KSpread or another
     //program where the data is external then the document will be updated later on in the creation process
     //anyway.
-    if (flags == KoDocument::InitDocEmbedded) 
+    if (flags == KoDocument::InitDocEmbedded)
     {
 	initEmpty();
 	return true;
@@ -365,7 +363,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     {
     	m_bufferPixmap.resize( rect.size() );
     }
-    
+
     QPainter bufferPainter( &m_bufferPixmap );
 
     // We only need to draw the document rectangle "rect".
@@ -1121,12 +1119,8 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     // Indent to indicate that this is inside some tags.
     {
-        // Sets the chart:class attribute in chart:chart
+        // Saves chart class, title, legend, plot-area
         m_params->saveOasis( bodyWriter, mainStyles );
-
-        bodyWriter->startElement( "chart:plot-area" );
-        // TODO axis, series, wall, floor...
-        bodyWriter->endElement(); // chart:plot-area
 
 	// Save the data table.
         saveOasisData( bodyWriter, mainStyles );
@@ -1137,9 +1131,7 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     bodyWriter->endElement(); // office:body
 
     contentWriter->startElement( "office:automatic-styles" );
-    {
-	// TODO writeAutomaticStyles( *contentWriter, mainStyles, false );
-    }
+    writeAutomaticStyles( *contentWriter, mainStyles );
     contentWriter->endElement(); // office:automatic-styles
 
     oasisStore.closeContentWriter();
@@ -1283,6 +1275,15 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
     bodyWriter->endElement(); // table:table
 }
 
+void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const
+{
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:chart-properties" );
+    }
+
+}
 
 // ----------------------------------------------------------------
 //             Save and Load old KChart file format
