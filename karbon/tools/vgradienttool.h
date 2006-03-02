@@ -78,7 +78,7 @@ private:
 	class VGradientOptionsWidget : public KDialogBase
 	{
 	public:
-		VGradientOptionsWidget( VGradient *gradient );
+		VGradientOptionsWidget( VGradient& gradient );
 		VGradientTabWidget *gradientWidget() { return m_gradientWidget; }
 	private:
 		VGradientTabWidget *m_gradientWidget;

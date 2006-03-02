@@ -31,7 +31,7 @@ class KARBONBASE_EXPORT VGradientWidget : public QWidget
 	Q_OBJECT
 
 public:
-	VGradientWidget( VGradient*& gradient, QWidget* parent = 0L, const char* name = 0L );
+	VGradientWidget( VGradient& gradient, QWidget* parent = 0L, const char* name = 0L );
 	~VGradientWidget();
 
 	virtual void paintEvent( QPaintEvent* );
@@ -50,9 +50,11 @@ protected:
 	void paintMidPoint( QPainter& p, int x );
 
 	/** The gradient to modify. */
-	VGradient**             m_lpgradient;
+	VGradient*             m_gradient;
 	/** The point to modify. */
 	unsigned int currentPoint;
+	
+	QRect m_pntArea;
 }; // VGradientWidget
 
 #endif /* _VGRADIENTWIDGET_H_ */

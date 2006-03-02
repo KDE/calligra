@@ -63,6 +63,9 @@ public:
 
 	/** needle arrow with four way arrow */
 	static QCursor needleMoveArrow();
+
+	static QCursor horzMove();
+
 private:
 	// prevent instantiation
 	VCursor() {};

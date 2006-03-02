@@ -64,13 +64,13 @@ private:
 class VGradientPreview : public QWidget
 {
 	public:
-		VGradientPreview( VGradient*& gradient, double& opacity, QWidget* parent = 0L, const char* name = 0L );
+		VGradientPreview( VGradient& gradient, double& opacity, QWidget* parent = 0L, const char* name = 0L );
 		~VGradientPreview();
 
 		virtual void paintEvent( QPaintEvent* );
 		
 	protected:
-		VGradient**     m_lpgradient;
+		VGradient*     m_gradient;
 		double*         m_opacity;
 }; // VGradientPreview
 
@@ -87,7 +87,7 @@ class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 		VGradientTabWidget( VGradient& gradient, KarbonResourceServer* server, QWidget* parent = 0L, const char* name = 0L );
 		~VGradientTabWidget();
 
-		const VGradient* gradient();
+		const VGradient& gradient();
 		void setGradient( VGradient& gradient );
 
 		VGradientTarget target();
@@ -122,7 +122,7 @@ class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
 		QPushButton				*m_addToPredefs;
 		KIntNumInput			*m_opacity;
 
-		VGradient*            m_gradient;
+		VGradient             m_gradient;
 			/** The predefined gradients list. */
 		KarbonResourceServer* m_resourceServer;
 		double                m_gradOpacity;

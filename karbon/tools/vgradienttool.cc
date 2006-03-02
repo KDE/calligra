@@ -37,10 +37,10 @@
 
 #include <kdebug.h>
 
-VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient *gradient )
+VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient& gradient )
 	: KDialogBase( 0L, "", true, i18n( "Edit Gradient" ), Ok | Cancel )
 {
-	m_gradientWidget = new VGradientTabWidget( *gradient, KarbonFactory::rServer(), this );
+	m_gradientWidget = new VGradientTabWidget( gradient, KarbonFactory::rServer(), this );
 	setMainWidget( m_gradientWidget );
 	setFixedSize( baseSize() );
 }
@@ -49,7 +49,7 @@ VGradientTool::VGradientTool( KarbonView *view )
 	: VTool( view, "gradienttool" ), m_state( normal ), m_handleSize( 3 ), m_active( false )
 {
 	setName( "tool_gradient" );
-	m_optionsWidget = new VGradientOptionsWidget( &m_gradient );
+	m_optionsWidget = new VGradientOptionsWidget( m_gradient );
 	registerTool( this );
 }
 
@@ -344,6 +344,8 @@ VGradientTool::mouseButtonRelease()
 		if( ! showDialog() )
 			return;
 		
+		m_gradient = m_optionsWidget->gradientWidget()->gradient();
+
 		// if the gradient dialog was shown and accepted, determine the target from the dialog
 		strokeSelected = ( m_optionsWidget->gradientWidget()->target() == VGradientTabWidget::STROKE );
 	}

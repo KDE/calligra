@@ -100,8 +100,8 @@ void VGradientListItem::paint( QPainter* painter )
 	painter->flush();
 } // VGradientListItem::paint
 
-VGradientPreview::VGradientPreview( VGradient*& gradient, double& opacity, QWidget* parent, const char* name )
-		: QWidget( parent, name ), m_lpgradient( &gradient ), m_opacity( &opacity )
+VGradientPreview::VGradientPreview( VGradient& gradient, double& opacity, QWidget* parent, const char* name )
+		: QWidget( parent, name ), m_gradient( &gradient ), m_opacity( &opacity )
 {
 	setBackgroundMode( Qt::NoBackground );
 	setMinimumSize( 70, 70 );
@@ -117,7 +117,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 	VKoPainter gp( &pixmap, width(), height() );
 	gp.setRasterOp( Qt::XorROP );
 	gp.newPath();
-	VGradient gradient( **m_lpgradient );
+	VGradient gradient( *m_gradient );
 	if( gradient.type() == VGradient::radial || gradient.type() == VGradient::conic )
 	{
 		gradient.setOrigin( KoPoint( width() / 2, height() / 2 ) );
@@ -168,7 +168,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 } // VGradientPreview::paintEvent
 
 VGradientTabWidget::VGradientTabWidget( VGradient& gradient, KarbonResourceServer* server, QWidget* parent, const char* name )
-		: QTabWidget( parent, name ), m_gradient( &gradient ), m_resourceServer( server )
+		: QTabWidget( parent, name ), m_gradient( gradient ), m_resourceServer( server )
 {
 	setupUI();
 	setupConnections();
@@ -235,8 +235,8 @@ void VGradientTabWidget::setupConnections()
 
 void VGradientTabWidget::initUI()
 {
-	m_gradientType->setCurrentItem( m_gradient->type() );
-	m_gradientRepeat->setCurrentItem( m_gradient->repeatMethod() );
+	m_gradientType->setCurrentItem( m_gradient.type() );
+	m_gradientRepeat->setCurrentItem( m_gradient.repeatMethod() );
 	m_gradientTarget->setCurrentItem( FILL );
 	m_opacity->setValue( 100 );
 
@@ -263,7 +263,7 @@ VGradientTabWidget::setOpacity( double opacity )
 	m_opacity->setValue( int(opacity*100.0) );
 }
 
-const VGradient*
+const VGradient&
 VGradientTabWidget::gradient()
 {
 	return m_gradient;
@@ -271,7 +271,7 @@ VGradientTabWidget::gradient()
 
 void VGradientTabWidget::setGradient( VGradient& gradient )
 {
-	m_gradient = &gradient;
+	m_gradient = gradient;
 
 	initUI();
 } // VGradientTabWidget::setGradient
@@ -288,8 +288,8 @@ void VGradientTabWidget::setTarget( VGradientTarget target )
 
 void VGradientTabWidget::combosChange( int )
 {
-	m_gradient->setType( (VGradient::VGradientType)m_gradientType->currentItem() );
-	m_gradient->setRepeatMethod( (VGradient::VGradientRepeatMethod)m_gradientRepeat->currentItem() );
+	m_gradient.setType( (VGradient::VGradientType)m_gradientType->currentItem() );
+	m_gradient.setRepeatMethod( (VGradient::VGradientRepeatMethod)m_gradientRepeat->currentItem() );
 
 	m_gradientPreview->update();
 } // VGradientTabWidget::combosChange
@@ -302,7 +302,7 @@ void VGradientTabWidget::opacityChanged( int value )
 
 void VGradientTabWidget::addGradientToPredefs()
 {
-	VGradientListItem* item = m_resourceServer->addGradient( new VGradient( *m_gradient ) );
+	VGradientListItem* item = m_resourceServer->addGradient( new VGradient( m_gradient ) );
 	m_predefGradientsView->insertItem( item );
 } // VGradientTabWidget::addGradientToPredefs()
 
@@ -320,9 +320,9 @@ void VGradientTabWidget::changeToPredef( QListBoxItem* item )
 	if( item )
 	{
 		VGradientListItem* gradientItem = (VGradientListItem*)item;
-		(*m_gradient) = *( gradientItem->gradient() );
-		m_gradientType->setCurrentItem( m_gradient->type() );
-		m_gradientRepeat->setCurrentItem( m_gradient->repeatMethod() );
+		m_gradient = *gradientItem->gradient();
+		m_gradientType->setCurrentItem( m_gradient.type() );
+		m_gradientRepeat->setCurrentItem( m_gradient.repeatMethod() );
 		m_opacity->setValue( 100 );
 		m_gradientPreview->update();
 		m_gradientWidget->update();
