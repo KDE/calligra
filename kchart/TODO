@@ -31,7 +31,12 @@ After the feature freeze
      - small fonts everywhere, in fact
 
 * Features
-  + First Row / Col as label					      1 DONE
+  + First Row / Col as label					      1 ----
+    - Connect GUI to KChartParams in the config dialog			  done
+    - Connect GUI to KChartParams in the wizard				  done
+    - Use it when drawing						  done
+    - Save and load the values in the file				  ----
+  + Combined Bars and Lines charts				      1 DONE
     - Connect GUI to KChartParams in the config dialog			  done
     - Connect GUI to KChartParams in the wizard				  done
     - Use it when drawing						  done
