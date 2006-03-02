@@ -116,16 +116,28 @@ void KWPageManagerTester::getAddPages2() {
     CHECK(pageManager->pageNumber(KoRect(190,190,9,9)), 1);
 
     CHECK(pageManager->pageNumber(KoRect(201,201,2,2)), 2);
+#ifdef STRICT_PAGECHECKS // was true before KWPageManager.cpp -r511705:511706
     CHECK(pageManager->pageNumber(KoRect(300,3,2,2)), -1); // right of page 1
+#else
+    CHECK(pageManager->pageNumber(KoRect(300,3,2,2)), 1); // right of page 1
+#endif
     CHECK(pageManager->pageNumber(KoRect(2, 690,9,9)), 2);
     CHECK(pageManager->pageNumber(KoRect(300,300,10,10)), 2);
+#ifdef STRICT_PAGECHECKS // was true before KWPageManager.cpp -r511705:511706
     CHECK(pageManager->pageNumber(KoRect(600,700,10,10)), -1); // right of page 2
+#else
+    CHECK(pageManager->pageNumber(KoRect(600,700,10,10)), 2); // right of page 2
+#endif
 
     // KoPoint based
     CHECK(pageManager->pageNumber(KoPoint(201,201)), 2);
     // Y based
     CHECK(pageManager->pageNumber(201.0), 2);
+#ifdef STRICT_PAGECHECKS // was true before KWPageManager.cpp -r511705:511706
     CHECK(pageManager->pageNumber(900.0), -1);
+#else
+    CHECK(pageManager->pageNumber(900.0), 2);
+#endif
 }
 
 void KWPageManagerTester::createInsertPages() {
