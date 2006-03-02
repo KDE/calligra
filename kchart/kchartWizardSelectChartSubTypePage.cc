@@ -85,6 +85,8 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
         kdDebug(35001)<<"Error in chart_type\n";
     }
 
+    m_numLines->setValue( m_chart->params()->barNumLines() );
+
     if( m_chart->params()->chartType() == KChartParams::HiLo)
     {
         if( m_chart->params()->hiLoChartSubType()==KDChartParams::HiLoNormal)
@@ -112,6 +114,8 @@ void KChartWizardSelectChartSubTypePage::apply()
             switch( m_chart->params()->chartType() ) {
             case KChartParams::Bar:
                 m_chart->params()->setBarChartSubType( KDChartParams::BarNormal );
+		// FIXME: Error controls.
+		m_chart->params()->setBarNumLines( m_numLines->value() );
                 break;
             case KChartParams::Line:
                 m_chart->params()->setLineChartSubType( KDChartParams::LineNormal );

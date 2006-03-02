@@ -475,7 +475,6 @@ void KChartPart::createDisplayData()
         m_params->setAdditionalChartType( KDChartParams::NoType );
     }
 
-
     // If this is a HiLo chart, we need to manually create the correct
     // values.  This is not done by KDChart.
     //
