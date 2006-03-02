@@ -605,6 +605,37 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
     const QString styleName = mainStyles.lookup( plotAreaStyle, "ch" );
 
     bodyWriter->addAttribute( "chart:style-name", styleName );
+
+    saveOasisAxis( bodyWriter, mainStyles, KDChartAxisParams::AxisPosBottom, "x" );
+    saveOasisAxis( bodyWriter, mainStyles, KDChartAxisParams::AxisPosLeft, "y" );
+
+    // TODO chart:series
+    // TODO chart:wall
+    // TODO chart:floor
+}
+
+void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles,
+                                  KDChartAxisParams::AxisPos axisPos, const char* axisName ) const
+{
+    bodyWriter->startElement( "chart:axis" );
+    bodyWriter->addAttribute( "chart:dimension", axisName );
+    bodyWriter->addAttribute( "chart:name", QCString( "primary-" ) + axisName );
+
+    KoGenStyle axisStyle( KoGenStyle::STYLE_AUTO, "chart" );
+
+    // TODO save axis style properties, like
+    axisStyle.addProperty( "chart:display-label", "true" ); // ###
+
+
+    const QString styleName = mainStyles.lookup( axisStyle, "ch" );
+    bodyWriter->addAttribute( "chart:style-name", styleName );
+
+    // TODO x axis has chart:categories, y axis has chart:grid ?
+    // Maybe that part should be done by the caller of saveOasisAxis then
+    // including the opening/closing of the chart:axis element...
+
+    bodyWriter->endElement(); // chart:axis
 }
 
 }  //KChart namespace
+

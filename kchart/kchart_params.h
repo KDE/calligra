@@ -154,6 +154,8 @@ public slots:
 			KDChartAxisParams::AxisPos axisPos );
 
     void saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
+    void saveOasisAxis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles,
+                        KDChartAxisParams::AxisPos axisPos, const char* axisName ) const;
 
  private:
     KChartPart    *m_part;
