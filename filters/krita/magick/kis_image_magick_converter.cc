@@ -24,6 +24,7 @@
 #include <magick/api.h>
 
 #include <qfile.h>
+#include <qfileinfo.h>
 #include <qstring.h>
 
 #include <kdeversion.h>
@@ -697,14 +698,18 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         image -> matte = true;
 #endif
 
-
         Q_INT32 y, height, width;
 
         height = img -> height();
         width = img -> width();
 
-        bool alpha = true;//layer -> hasAlpha();
-
+        bool alpha = true;
+        if (QFileInfo(QFile::encodeName(uri.path())).extension(false).upper() == "BMP") {
+            alpha = false;
+            qstrncpy(ii->magick, "BMP2", MaxTextExtent - 1);
+            kdDebug() << ii->magick << "|" << endl;
+        }
+        
         for (y = 0; y < height; y++) {
 
             // Allocate pixels for this scanline
@@ -719,7 +724,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
             }
 
             KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width, false);
-            SetImageType(image, TrueColorMatteType);
+            if (alpha)
+                SetImageType(image, TrueColorMatteType);
+            else
+                SetImageType(image,  TrueColorType);
 
             if (image->colorspace== CMYKColorspace) {
 
