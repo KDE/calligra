@@ -1316,6 +1316,8 @@ void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& 
 
 QDomDocument KChartPart::saveXML()
 {
+    QDomElement  tmpElem;
+
     //kdDebug(35001) << "kchart saveXML called" << endl;
 
     // The biggest part of the saving is done by KDChart itself, so we
@@ -1331,10 +1333,14 @@ QDomDocument KChartPart::saveXML()
     QDomElement aux = doc.createElement( "KChartAuxiliary" );
     docRoot.appendChild( aux );
 
-    // Only one auxiliary element so far: the data direction (rows/columns).
-    QDomElement e = doc.createElement( "direction" );
-    e.setAttribute( "value", (int) m_params->dataDirection() );
-    aux.appendChild( e );
+    // The data direction (rows/columns).
+    tmpElem = doc.createElement( "direction" );
+    tmpElem.setAttribute( "value", (int) m_params->dataDirection() );
+    aux.appendChild( tmpElem );
+
+    tmpElem = doc.createElement( "barnumlines" );
+    tmpElem.setAttribute( "value", (int) m_params->barNumLines() );
+    aux.appendChild( tmpElem );
 
     // Save the data values.
     QDomElement data = doc.createElement( "data" );
@@ -1474,11 +1480,30 @@ bool KChartPart::loadAuxiliary( const QDomDocument& doc )
 		if ( !ok )
 		    dir = (int) KChartParams::DataColumns;
 
-		kdDebug(35001) << "Got aux value \"direction\": " << dir << endl;
+		//kdDebug(35001) << "Got aux value \"direction\": " << dir << endl;
 		m_params->setDataDirection( (KChartParams::DataDirection) dir );
 	    }
 	    else {
 		kdDebug(35001) << "Error in direction tag." << endl;
+	    }
+	}
+
+	// Check for direction
+	else if ( e.tagName() == "barnumlines" ) {
+	    if ( e.hasAttribute("value") ) {
+		bool  ok;
+
+		// Read the direction. On failure, use the default.
+		int   barNumLines = e.attribute("value").toInt(&ok);
+		if ( !ok )
+		    barNumLines = 0;
+
+		//kdDebug(35001) << "Got aux value \"barnumlines\": "
+		//	       << barNumLines << endl;
+		m_params->setBarNumLines( barNumLines );
+	    }
+	    else {
+		kdDebug(35001) << "Error in barnumlines tag." << endl;
 	    }
 	}
 #if 0

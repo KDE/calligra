@@ -31,12 +31,12 @@ After the feature freeze
      - small fonts everywhere, in fact
 
 * Features
-  + First Row / Col as label					      1 ----
+  + First Row / Col as label					      1 DONE
     - Connect GUI to KChartParams in the config dialog			  done
     - Connect GUI to KChartParams in the wizard				  done
     - Use it when drawing						  done
-    - Store the values in the file					  ----
-    - Maybe call the analysis code and do sensible defaults		  ----
+    - Save and load the values in the file				  done
+  + Maybe call the analysis code and do sensible defaults	      2 ----
   + Grid setting for both directions				      2 ----
 
 * Data editor
