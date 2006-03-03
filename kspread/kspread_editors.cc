@@ -560,16 +560,18 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 
 CellEditor::~CellEditor()
 {
-  delete d->highlighter;
-  delete d->functionCompletion;
-  delete d->functionCompletionTimer;
-  delete d;
   // Make sure the choose mode's activated before we stop it.
   // Canvas::endChoose() resets the sheet to where the choice started,
   // clears the choice and forces a repaint, so the highlighted ranges
   // will be cleared.
   canvas()->setChooseMode(true);
   canvas()->endChoose();
+
+  delete d->highlighter;
+  delete d->functionCompletion;
+  delete d->functionCompletionTimer;
+  delete d;
+  
 }
 
 Cell* CellEditor::cell() const
