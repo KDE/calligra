@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2006 David Faure <faure@kde.org>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -759,6 +760,11 @@ public:
     KWPageManager *pageManager() const { return m_pageManager; }
 
     KWBgSpellCheck* backSpeller() const { return m_bgSpellCheck; }
+
+    /// Load the given page layout; public for KWTextParag
+    bool loadOasisPageLayout( const QString& masterPageName, KoOasisContext& context );
+
+    // end of public methods
 signals:
 
     /// This is emitted by setPageLayout if updateViews=true
@@ -829,6 +835,7 @@ protected:
     void loadTableStyleTemplates( const QDomElement &styles );
     void loadDefaultTableStyleTemplates();
     void loadDefaultTableTemplates();
+    void loadMasterPageStyle( const QString& masterPageName, KoOasisContext& context );
 
     void saveOasisBody( KoXmlWriter& writer, KoSavingContext& context ) const;
     void saveOasisCustomFied( KoXmlWriter &writer )const;

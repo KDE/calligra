@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2002-2005 David Faure <faure@kde.org>
+   Copyright (C) 2002-2006 David Faure <faure@kde.org>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -392,7 +392,7 @@ void KWDocument::initConfig()
       //load default unit setting - this is only used for new files (from templates) or empty files
       if ( config->hasKey( "Units" ) )
           setUnit( KoUnit::unit( config->readEntry("Units") ) );
-      setDefaultColumnSpacing( config->readDoubleNumEntry("ColumnSpacing", 3.0) );
+      m_defaultColumnSpacing = config->readDoubleNumEntry( "ColumnSpacing", 3.0 );
   }
 
   if(undo!=-1)
@@ -1042,16 +1042,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     clear();
     kdDebug(32001) << "KWDocument::loadOasis" << endl;
 
-    KoColumns columns;
-    columns.columns = 1;
-    columns.ptColumnSpacing = m_defaultColumnSpacing;
-    KoKWHeaderFooter hf;
-    hf.header = HF_SAME;
-    hf.footer = HF_SAME;
-    hf.ptHeaderBodySpacing = 10.0;
-    hf.ptFooterBodySpacing = 10.0;
-    hf.ptFootNoteBodySpacing = 10.0;
-
     QDomElement content = doc.documentElement();
     QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
@@ -1078,9 +1068,133 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     // TODO check versions and mimetypes etc.
 
-    QString masterPageName = "Standard"; // use default layout as fallback
+    KoOasisContext context( this, *m_varColl, oasisStyles, store );
+    Q_ASSERT( !oasisStyles.officeStyle().isNull() );
+
+    createLoadingInfo();
+
     // In theory the page format is the style:master-page-name of the first paragraph...
     // But, hmm, in a doc with only a table there was no reference to the master page at all...
+    // So we load the standard page layout to start with, and in KWTextParag
+    // we might overwrite it with another one.
+    m_loadingInfo->m_currentMasterPage = "Standard";
+    if ( !loadOasisPageLayout( m_loadingInfo->m_currentMasterPage, context ) )
+        return false;
+
+    KWOasisLoader oasisLoader( this );
+
+    // <text:page-sequence> oasis extension for DTP (2003-10-27 post by Daniel)
+    m_processingType = ( !KoDom::namedItemNS( body, KoXmlNS::text, "page-sequence" ).isNull() )
+                       ? DTP : WP;
+
+    m_hasTOC = false;
+    m_tabStop = MM_TO_POINT(15);
+    QDomElement* defaultParagStyle = oasisStyles.defaultStyle( "paragraph" );
+    if ( defaultParagStyle ) {
+        KoStyleStack stack;
+        stack.push( *defaultParagStyle );
+        stack.setTypeProperties( "paragraph" );
+        QString tabStopVal = stack.attributeNS( KoXmlNS::style, "tab-stop-distance" );
+        if ( !tabStopVal.isEmpty() )
+            m_tabStop = KoUnit::parseValue( tabStopVal );
+    }
+    m_initialEditing = 0;
+
+    // TODO MAILMERGE
+
+    // Variable settings
+    // By default display real variable value
+    if ( !isReadWrite())
+        m_varColl->variableSetting()->setDisplayFieldCode(false);
+
+    // Load all styles before the corresponding paragraphs try to use them!
+    m_styleColl->loadOasisStyles( context );
+    if ( m_frameStyleColl->loadOasisStyles( context ) == 0 ) {
+         // no styles loaded -> load default styles
+        loadDefaultFrameStyleTemplates();
+    }
+
+    if ( m_tableStyleColl->loadOasisStyles( context, *m_styleColl, *m_frameStyleColl ) == 0 ) {
+        // no styles loaded -> load default styles
+        loadDefaultTableStyleTemplates();
+    }
+
+    static_cast<KWVariableSettings *>( m_varColl->variableSetting() )
+        ->loadNoteConfiguration( oasisStyles.officeStyle() );
+
+    loadDefaultTableTemplates();
+
+    if ( m_processingType == WP ) {
+        // Create main frameset
+        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
+        m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+        fs->loadOasisContent( body, context );
+        KWFrame* frame = new KWFrame( fs, 29, 42, 798-29, 566-42 );
+        frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
+        frame->setNewFrameBehavior( KWFrame::Reconnect );
+        fs->addFrame( frame );
+
+        fs->renumberFootNotes( false /*no repaint*/ );
+
+    } else {
+        // DTP mode: the items in the body are page-sequence and then frames
+        QDomElement tag;
+        forEachElement( tag, body )
+        {
+            context.styleStack().save();
+            const QString localName = tag.localName();
+            if ( localName == "page-sequence" && tag.namespaceURI() == KoXmlNS::text )
+            {
+                // We don't have support for changing the page layout yet, so just take the
+                // number of pages
+                int pages=1;
+                QDomElement page;
+                forEachElement( page, tag )
+                    ++pages;
+                kdDebug() << "DTP mode: found " << pages << "pages" << endl;
+                //setPageCount ( pages );
+            }
+            else if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
+                oasisLoader.loadFrame( tag, context, KoPoint() );
+            else
+                kdWarning(32001) << "Unsupported tag in DTP loading:" << tag.tagName() << endl;
+        }
+    }
+
+    loadMasterPageStyle( m_loadingInfo->m_currentMasterPage, context );
+
+    if ( context.cursorTextParagraph() ) {
+        // Maybe, once 1.3-support is dropped, we can get rid of InitialEditing and fetch the
+        // values from KoOasisContext? But well, it lives a bit longer.
+        // At least we could store a KWFrameSet* and a KoTextParag* instead of a name and an id.
+        m_initialEditing = new InitialEditing();
+        KWTextFrameSet* fs = static_cast<KWTextDocument *>( context.cursorTextParagraph()->textDocument() )->textFrameSet();
+        m_initialEditing->m_initialFrameSet = fs->name();
+        m_initialEditing->m_initialCursorParag = context.cursorTextParagraph()->paragId();
+        m_initialEditing->m_initialCursorIndex = context.cursorTextIndex();
+    }
+
+    if ( !settings.isNull() )
+    {
+        oasisLoader.loadOasisSettings( settings );
+    }
+
+    kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+    endOfLoading();
+
+    // This sets the columns and header/footer flags, and calls recalcFrames,
+    // so it must be done last.
+    setPageLayout( m_pageLayout, m_loadingInfo->columns, m_loadingInfo->hf, false );
+
+    //printDebug();
+    return true;
+}
+
+bool KWDocument::loadOasisPageLayout( const QString& masterPageName, KoOasisContext& context )
+{
+    KoColumns& columns = m_loadingInfo->columns;
+
+    const KoOasisStyles& oasisStyles = context.oasisStyles();
     QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
     QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
@@ -1146,9 +1260,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 m_footNoteSeparatorLinePos = SLP_LEFT;
         }
 
-        columns.columns = 1;
-        columns.ptColumnSpacing = m_defaultColumnSpacing;
-
         const QDomElement columnsElem = KoDom::namedItemNS( properties, KoXmlNS::style, "columns" );
         if ( !columnsElem.isNull() )
         {
@@ -1180,96 +1291,25 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         m_pageLayout = KoPageLayout::standardLayout();
         pageManager()->setDefaultPage(m_pageLayout);
     }
+    return true;
+}
 
-    createLoadingInfo();
-    KWOasisLoader oasisLoader( this );
+void KWDocument::loadMasterPageStyle( const QString& masterPageName, KoOasisContext& context )
+{
+    const KoOasisStyles& oasisStyles = context.oasisStyles();
+    QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
+    Q_ASSERT( masterPage );
+    QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
+    Q_ASSERT( masterPageStyle );
 
-    // <text:page-sequence> oasis extension for DTP (2003-10-27 post by Daniel)
-    m_processingType = ( !KoDom::namedItemNS( body, KoXmlNS::text, "page-sequence" ).isNull() )
-                       ? DTP : WP;
+    KoKWHeaderFooter& hf = m_loadingInfo->hf;
 
-    m_hasTOC = false;
-    m_tabStop = MM_TO_POINT(15);
-    QDomElement* defaultParagStyle = oasisStyles.defaultStyle( "paragraph" );
-    if ( defaultParagStyle ) {
-        KoStyleStack stack;
-        stack.push( *defaultParagStyle );
-        stack.setTypeProperties( "paragraph" );
-        QString tabStopVal = stack.attributeNS( KoXmlNS::style, "tab-stop-distance" );
-        if ( !tabStopVal.isEmpty() )
-            m_tabStop = KoUnit::parseValue( tabStopVal );
-    }
-    m_initialEditing = 0;
-
-    // TODO MAILMERGE
-
-    // Variable settings
-    // By default display real variable value
-    if ( !isReadWrite())
-        m_varColl->variableSetting()->setDisplayFieldCode(false);
-
-    KoOasisContext context( this, *m_varColl, oasisStyles, store );
-    Q_ASSERT( !oasisStyles.officeStyle().isNull() );
-
-    // Load all styles before the corresponding paragraphs try to use them!
-    m_styleColl->loadOasisStyles( context );
-    if ( m_frameStyleColl->loadOasisStyles( context ) == 0 ) {
-         // no styles loaded -> load default styles
-        loadDefaultFrameStyleTemplates();
-    }
-
-    if ( m_tableStyleColl->loadOasisStyles( context, *m_styleColl, *m_frameStyleColl ) == 0 ) {
-        // no styles loaded -> load default styles
-        loadDefaultTableStyleTemplates();
-    }
-
-    static_cast<KWVariableSettings *>( m_varColl->variableSetting() )
-        ->loadNoteConfiguration( oasisStyles.officeStyle() );
-
-    loadDefaultTableTemplates();
-
-    if ( m_processingType == WP ) {
-        // Create main frameset
-        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
-        m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
-        fs->loadOasisContent( body, context );
-        KWFrame* frame = new KWFrame( fs, 29, 42, 798-29, 566-42 );
-        frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
-        frame->setNewFrameBehavior( KWFrame::Reconnect );
-        fs->addFrame( frame );
-
-        fs->renumberFootNotes( false /*no repaint*/ );
-
-    } else {
-        // DTP mode: the items in the body are page-sequence and then frames
-        QDomElement tag;
-        forEachElement( tag, body )
-        {
-            context.styleStack().save();
-            const QString localName = tag.localName();
-            if ( localName == "page-sequence" && tag.namespaceURI() == KoXmlNS::text )
-            {
-                // We don't have support for changing the page layout yet, so just take the
-                // number of pages
-                int pages=1;
-                QDomElement page;
-                forEachElement( page, tag )
-                    ++pages;
-                kdDebug() << "DTP mode: found " << pages << "pages" << endl;
-                //setPageCount ( pages );
-            }
-            else if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
-                oasisLoader.loadFrame( tag, context, KoPoint() );
-            else
-                kdWarning(32001) << "Unsupported tag in DTP loading:" << tag.tagName() << endl;
-        }
-    }
-
-    // Header/Footer
     bool hasEvenOddHeader = false;
     bool hasEvenOddFooter = false;
     if ( masterPageStyle )
     {
+        KWOasisLoader oasisLoader( this );
+
         QDomElement headerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "header-style" );
         QDomElement footerStyle = KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "footer-style" );
         QDomElement headerLeftElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "header-left" );
@@ -1339,32 +1379,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         }
         // TODO ptFootNoteBodySpacing
     }
-
-    if ( context.cursorTextParagraph() ) {
-        // Maybe, once 1.3-support is dropped, we can get rid of InitialEditing and fetch the
-        // values from KoOasisContext? But well, it lives a bit longer.
-        // At least we could store a KWFrameSet* and a KoTextParag* instead of a name and an id.
-        m_initialEditing = new InitialEditing();
-        KWTextFrameSet* fs = static_cast<KWTextDocument *>( context.cursorTextParagraph()->textDocument() )->textFrameSet();
-        m_initialEditing->m_initialFrameSet = fs->name();
-        m_initialEditing->m_initialCursorParag = context.cursorTextParagraph()->paragId();
-        m_initialEditing->m_initialCursorIndex = context.cursorTextIndex();
-    }
-
-    if ( !settings.isNull() )
-    {
-        oasisLoader.loadOasisSettings( settings );
-    }
-
-    kdDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
-    endOfLoading();
-
-    // This sets the columns and header/footer flags, and calls recalcFrames,
-    // so it must be done last.
-    setPageLayout( m_pageLayout, columns, hf, false );
-
-    //printDebug();
-    return true;
 }
 
 // Called before loading
@@ -2417,6 +2431,7 @@ KWLoadingInfo* KWDocument::createLoadingInfo()
 {
     Q_ASSERT( !m_loadingInfo );
     m_loadingInfo = new KWLoadingInfo();
+    m_loadingInfo->columns.ptColumnSpacing = m_defaultColumnSpacing;
     return m_loadingInfo;
 }
 

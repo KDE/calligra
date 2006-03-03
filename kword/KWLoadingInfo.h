@@ -20,11 +20,20 @@
 #ifndef KWLOADINGINFO_H
 #define KWLOADINGINFO_H
 
+#include <qstring.h>
+#include <qvaluelist.h>
+#include <qdict.h>
+#include <KoPageLayout.h>
+
+class KoTextParag;
+class KWTextDocument;
+class KWFrame;
+
 /// Temporary information used only during loading
 class KWLoadingInfo
 {
 public:
-    KWLoadingInfo() {}
+    KWLoadingInfo();
     ~KWLoadingInfo() {}
 
     /// Current master-page name (OASIS loading)
@@ -72,7 +81,11 @@ public:
         return m_frameNameDict[name]; // returns 0 if not found
     }
 
+    KoColumns columns;
+    KoKWHeaderFooter hf;
+
 private:
+    // Ignore warnings about operator delete from those dicts; we don't use it here...
     QDict<KWFrame> m_nextFrameDict;
     QDict<KWFrame> m_frameNameDict;
 };
