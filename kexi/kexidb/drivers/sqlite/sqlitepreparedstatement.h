@@ -31,7 +31,7 @@ class SQLitePreparedStatement : public PreparedStatement, SQLiteConnectionIntern
 {
 	public:
 		SQLitePreparedStatement(StatementType type, ConnectionInternal& conn, 
-			TableSchema& tableSchema);
+			FieldList& fields);
 
 		virtual ~SQLitePreparedStatement();
 

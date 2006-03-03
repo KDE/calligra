@@ -35,7 +35,7 @@ namespace KexiDB
 class pqxxPreparedStatement : public PreparedStatement
 {
 	public:
-		pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, TableSchema& tableSchema);
+		pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
 
 		virtual ~pqxxPreparedStatement();
 

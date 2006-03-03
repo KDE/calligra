@@ -25,8 +25,8 @@
 using namespace KexiDB;
 
 SQLitePreparedStatement::SQLitePreparedStatement(StatementType type, ConnectionInternal& conn, 
-	TableSchema& tableSchema)
- : KexiDB::PreparedStatement(type, conn, tableSchema)
+	FieldList& fields)
+ : KexiDB::PreparedStatement(type, conn, fields)
  , SQLiteConnectionInternal(conn.connection)
  , prepared_st_handle(0)
  , m_resetRequired(false)

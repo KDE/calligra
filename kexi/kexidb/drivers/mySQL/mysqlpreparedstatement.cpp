@@ -27,8 +27,8 @@ using namespace KexiDB;
 // http://dev.mysql.com/doc/refman/4.1/en/mysql-stmt-execute.html
 
 MySqlPreparedStatement::MySqlPreparedStatement(StatementType type, ConnectionInternal& conn, 
-	TableSchema& tableSchema)
- : KexiDB::PreparedStatement(type, conn, tableSchema)
+	FieldList& fields)
+ : KexiDB::PreparedStatement(type, conn, fields)
  , MySqlConnectionInternal(conn.connection)
 #ifdef KEXI_USE_MYSQL_STMT
  , m_statement(0)

@@ -645,15 +645,21 @@ KexiFormView::storeData(bool dontAsk)
 //! @todo show message about missing kexi__blobs?
 		return false;
 	}
+	// Not all engines accept passing NULL to PKEY o_id, so we're omitting it.
+	QStringList blobsFieldNamesWithoutID(blobsTable->names());
+	blobsFieldNamesWithoutID.pop_front();
+	KexiDB::FieldList *blobsFieldsWithoutID = blobsTable->subList(blobsFieldNamesWithoutID);
+	
 	KexiDB::PreparedStatement::Ptr st = conn->prepareStatement(
-		KexiDB::PreparedStatement::InsertStatement, *blobsTable);
-#if 0 
-//! @todo reenable when all drivers get PreparedStatement support
+		KexiDB::PreparedStatement::InsertStatement, *blobsFieldsWithoutID);
+//#if 0 
+////! @todo reenable when all drivers get PreparedStatement support
 	if (!st) {
+		delete blobsFieldsWithoutID;
 		//! @todo show message 
 		return false;
 	}
-#endif
+//#endif
 	KexiBLOBBuffer *blobBuf = KexiBLOBBuffer::self();
 	for (QMapConstIterator<QWidget*, KexiBLOBBuffer::Id_t> it = m_unsavedLocalBLOBs.constBegin(); 
 		it!=m_unsavedLocalBLOBs.constEnd(); ++it)
@@ -674,21 +680,25 @@ KexiFormView::storeData(bool dontAsk)
 
 //		KexiDB::PreparedStatement st(KexiDB::PreparedStatement::InsertStatement, *conn, *blobsTable);
 		if (st) {
-			*st << QVariant()/*id*/ << h.data() << originalFileName << caption 
+			*st /* << NO, (pgsql doesn't support this):QVariant()*/ /*id*/ 
+				<< h.data() << originalFileName << caption 
 				<< h.mimeType() << (uint)/*! @todo unsafe */h.folderId();
 			if (!st->execute()) {
+				delete blobsFieldsWithoutID;
 				kexipluginsdbg << " execute error" << endl;
 				return false;
 			}
 		}
 ///////
 #if 0
-
-		if (!conn->insertRecord(*blobsTable, h.data(), originalFileName, caption, h.mimeType())) {
+		if (!conn->insertRecord(*blobsFieldsWithoutID, h.data(), originalFileName, caption, h.mimeType())) {
+			delete blobsFieldsWithoutID;
 //! @todo show message?
 			return false;
 		}
 #endif
+		delete blobsFieldsWithoutID;
+		blobsFieldsWithoutID=0;
 		const Q_ULLONG storedBLOBID = conn->lastInsertedAutoIncValue("o_id", "kexi__blobs");
 		if ((Q_ULLONG)-1 == storedBLOBID) {
 //! @todo show message?

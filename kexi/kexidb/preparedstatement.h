@@ -82,7 +82,7 @@ class KEXI_DB_EXPORT PreparedStatement : public KShared
 		};
 
 		//! Creates Prepared statement. In your code use KexiDB::Connection:prepareStatement() instead.
-		PreparedStatement(StatementType type, ConnectionInternal& conn, TableSchema& tableSchema,
+		PreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields,
 			const QStringList& where = QStringList());
 
 		virtual ~PreparedStatement();

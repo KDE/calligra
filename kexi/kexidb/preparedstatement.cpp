@@ -26,10 +26,10 @@
 using namespace KexiDB;
 
 PreparedStatement::PreparedStatement(StatementType type, ConnectionInternal& conn, 
-	TableSchema& tableSchema, const QStringList& where)
+	FieldList& fields, const QStringList& where)
  : KShared()
  , m_type(type)
- , m_fields(&tableSchema)
+ , m_fields(&fields)
  , m_where(where.isEmpty() ? new QStringList(where) : 0)
  , m_whereFields(0)
 {

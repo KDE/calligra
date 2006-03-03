@@ -46,7 +46,7 @@ class SQLiteConnection : public Connection
 
 //#ifndef SQLITE2 //TEMP IFDEF!
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
-			TableSchema& tableSchema);
+			FieldList& fields);
 //#endif
 		/*! Reimplemented to provide real read-only flag of the connection */
 		virtual bool isReadOnly() const;

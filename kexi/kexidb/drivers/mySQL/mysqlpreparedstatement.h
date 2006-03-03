@@ -33,7 +33,7 @@ namespace KexiDB
 class MySqlPreparedStatement : public PreparedStatement, public MySqlConnectionInternal
 {
 	public:
-		MySqlPreparedStatement(StatementType type, ConnectionInternal& conn, TableSchema& tableSchema);
+		MySqlPreparedStatement(StatementType type, ConnectionInternal& conn, FieldList& fields);
 
 		virtual ~MySqlPreparedStatement();
 

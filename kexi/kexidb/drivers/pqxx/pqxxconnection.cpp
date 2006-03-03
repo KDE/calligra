@@ -426,8 +426,8 @@ QString pqxxSqlConnection::serverErrorMsg()
 }
 
 PreparedStatement::Ptr pqxxSqlConnection::prepareStatement(PreparedStatement::StatementType type, 
-	TableSchema& tableSchema)
+	FieldList& fields)
 {
-	return new pqxxPreparedStatement(type, *d, tableSchema);
+	return new pqxxPreparedStatement(type, *d, fields);
 }
 #include "pqxxconnection.moc"

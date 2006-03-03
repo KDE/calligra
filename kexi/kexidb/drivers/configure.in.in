@@ -40,7 +40,7 @@ if test "$compile_mysql_plugin" = "yes"; then
 dnl *** Configure arguments for includes or libs given    ***
 dnl *** and MySQL not explicitly disabled.                ***
 dnl *** Check that the paths given to configure are valid ***
-    AC_MSG_CHECKING([for MYSQL headers])
+    AC_MSG_CHECKING([for MySQL headers])
     mysql_incdirs="$ac_mysql_incdir /usr/local/include /usr/include"
     AC_FIND_FILE(mysql/mysql.h, $mysql_incdirs, mysql_incdir)
     if test -r $mysql_incdir/mysql/mysql.h; then
@@ -52,7 +52,7 @@ dnl *** Check that the paths given to configure are valid ***
       AC_MSG_RESULT([not found])
     fi
 
-    AC_MSG_CHECKING([for MYSQL libraries])
+    AC_MSG_CHECKING([for MySQL libraries])
     mysql_libdirs="$ac_mysql_libdir /usr/local/lib$kdelibsuff /usr/lib$kdelibsuff"
     AC_FIND_FILE(mysql/libmysqlclient.so, $mysql_libdirs, mysql_libdir)
     if test -r $mysql_libdir/mysql/libmysqlclient.so; then

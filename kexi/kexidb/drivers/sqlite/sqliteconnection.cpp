@@ -318,10 +318,10 @@ QString SQLiteConnection::serverErrorMsg()
 }
 
 PreparedStatement::Ptr SQLiteConnection::prepareStatement(PreparedStatement::StatementType type, 
-	TableSchema& tableSchema)
+	FieldList& fields)
 {
 //#ifndef SQLITE2 //TEMP IFDEF!
-	return new SQLitePreparedStatement(type, *d, tableSchema);
+	return new SQLitePreparedStatement(type, *d, fields);
 //#endif
 }
 

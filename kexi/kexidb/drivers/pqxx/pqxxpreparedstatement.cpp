@@ -31,8 +31,9 @@
 using namespace KexiDB;
 
 pqxxPreparedStatement::pqxxPreparedStatement(
-	StatementType type, ConnectionInternal& conn, TableSchema& tableSchema) 
- : KexiDB::PreparedStatement(type, conn, tableSchema)
+	StatementType type, ConnectionInternal& conn, FieldList& fields) 
+ : KexiDB::PreparedStatement(type, conn, fields)
+ , m_conn(conn.connection)
 {
 //	KexiDBDrvDbg << "pqxxPreparedStatement: Construction" << endl;
 }
@@ -45,6 +46,10 @@ pqxxPreparedStatement::~pqxxPreparedStatement()
 bool pqxxPreparedStatement::execute()
 {
 //	KexiDBDrvDbg << "pqxxPreparedStatement::execute()" << endl;
+	m_resetRequired = true;
+	if (m_conn->insertRecord(*m_fields, m_args)) {
+		return true;
+	}
 	return false;
 }
 

@@ -48,7 +48,7 @@ class MySqlConnection : public Connection
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
 
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
-			TableSchema& tableSchema);
+			FieldList& fields);
 
 	protected:
 

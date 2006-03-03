@@ -55,7 +55,7 @@ class pqxxSqlConnection : public Connection
 		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
 		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
-			TableSchema& tableSchema);
+			FieldList& fields);
 	protected:
 
 		pqxxSqlConnection( Driver *driver, ConnectionData &conn_data );
