@@ -1844,6 +1844,17 @@ void KWDocument::endOfLoading()
         } else if (fs->type() == FT_TEXT) {
             for (int f=fs->frameCount()-1; f>=0; f--) {
                 KWFrame *frame = fs->frame(f);
+                if(frame->left() < 0) {
+                    kdWarning() << fs->name() << " frame " << f << " pos.x is < 0, moving frame" << endl;
+                    frame->moveBy( 0- frame->left(), 0);
+                }
+                if(frame->right() > m_pageLayout.ptWidth) {
+                    kdWarning() << fs->name() << " frame " << f << " rightborder outside page ("
+                        << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking" << endl;
+                    frame->setRight( m_pageLayout.ptWidth);
+                }
+                if(fs->isProtectSize())
+                    continue; // don't make frames bigger of protected frames.
                 if(frame->height() < s_minFrameHeight) {
                     kdWarning() << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
                                 << frame->height() << " is: " << s_minFrameHeight << ")" << endl;
@@ -1853,15 +1864,6 @@ void KWDocument::endOfLoading()
                     kdWarning() << fs->name() << " frame " << f << " width is so small no text will fit, adjusting (was: "
                                 << frame->width() << " is: " << s_minFrameWidth  << ")" << endl;
                     frame->setWidth(s_minFrameWidth);
-                }
-                if(frame->left() < 0) {
-                    kdWarning() << fs->name() << " frame " << f << " pos.x is < 0, moving frame" << endl;
-                    frame->moveBy( 0- frame->left(), 0);
-                }
-                if(frame->right() > m_pageLayout.ptWidth) {
-                    kdWarning() << fs->name() << " frame " << f << " rightborder outside page ("
-                        << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking" << endl;
-                    frame->setRight( m_pageLayout.ptWidth);
                 }
             }
             if(fs->frameCount() == 0) {
