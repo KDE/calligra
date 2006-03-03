@@ -87,7 +87,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
 
     img -> flatten();
 
-    KisPaintLayerSP layer = (KisPaintLayer*)img->activeLayer().data();
+    KisPaintLayerSP layer = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
     Q_ASSERT(layer);
     
     doc -> undoAdapter() -> setUndo(undo);

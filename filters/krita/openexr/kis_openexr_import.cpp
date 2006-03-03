@@ -112,7 +112,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
         return KoFilter::CreationError;
     }
 
-    KisPaintLayerSP layer = (KisPaintLayer*)(image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data());
+    KisPaintLayerSP layer = dynamic_cast<KisPaintLayer*>(image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data());
 
     if (layer == 0) {
         return KoFilter::CreationError;

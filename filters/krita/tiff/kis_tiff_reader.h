@@ -37,6 +37,7 @@
 // #include "kis_annotation.h"
 
 #include <kis_iterator.h>
+#include <kis_paint_device.h>
 
 #define Q_UINT32_MAX 4294967295
 
