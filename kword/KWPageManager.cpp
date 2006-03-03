@@ -198,7 +198,6 @@ void KWPageManager::removePage(KWPage *page) {
 
 void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
     m_defaultPageLayout = layout;
-kdDebug() << "setDefaultPage l:" << layout.ptLeft << ", r: " << layout.ptRight << ", a: " << layout.ptPageEdge << ", b: " << layout.ptBindingSide << endl;
     // make sure we have 1 default, either pageBound or left/right bound.
     if(m_defaultPageLayout.ptLeft < 0 || m_defaultPageLayout.ptRight < 0) {
         m_defaultPageLayout.ptLeft = -1;
@@ -209,6 +208,7 @@ kdDebug() << "setDefaultPage l:" << layout.ptLeft << ", r: " << layout.ptRight <
         m_defaultPageLayout.ptLeft = QMAX(m_defaultPageLayout.ptLeft, 0);
         m_defaultPageLayout.ptRight = QMAX(m_defaultPageLayout.ptRight, 0);
     }
+    kdDebug() << "setDefaultPage l:" << m_defaultPageLayout.ptLeft << ", r: " << m_defaultPageLayout.ptRight << ", a: " << m_defaultPageLayout.ptPageEdge << ", b: " << m_defaultPageLayout.ptBindingSide << endl;
 }
 
 KoPoint KWPageManager::clipToDocument(const KoPoint &point) {
