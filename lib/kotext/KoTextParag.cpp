@@ -2108,11 +2108,11 @@ int KoTextParag::nextTab( int chnum, int x, int availableWidth )
             //kdDebug(32500) << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
             int tab = tArray[ i ];
 
-            // Fix for small rounding problems (especially when importing documents from OOo)
-            // If a right-aligned tab is slightly after the right edge then assume
+            // If a right-aligned tab is after the right edge then assume
             // that it -is- on the right edge, otherwise the last letters will fall off.
-            if ( tab > availableWidth && tab - availableWidth < 100 /* 5pt */ ) {
-                kdDebug(32500) << "Tab position adjusted to availableWidth=" << availableWidth << endl;
+            // This is compatible with OOo's behavior.
+            if ( tab > availableWidth ) {
+                //kdDebug(32500) << "Tab position adjusted to availableWidth=" << availableWidth << endl;
                 tab = availableWidth;
             }
 
