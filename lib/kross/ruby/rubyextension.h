@@ -64,6 +64,10 @@ class RubyExtension{
          * @param argv the lists of arguments (the first argument is the Ruby ID of the function)
          */
         static VALUE call_method( Kross::Api::Object::Ptr obj, int argc, VALUE *argv);
+        /**
+         * This function is called by ruby to delete a RubyExtension object
+         */
+        static void delete_object(void* object);
     private: //Converting functions
         /**
          * This function iterats through a ruby hash

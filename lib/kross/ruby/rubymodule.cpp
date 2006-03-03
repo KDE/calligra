@@ -65,26 +65,6 @@ VALUE RubyModule::method_missing(int argc, VALUE *argv, VALUE self)
     Kross::Api::Object::Ptr object = (Kross::Api::Object*)objectModule->d->m_module;
     
     return RubyExtension::call_method(object, argc, argv);
-
-/*    QString funcname = rb_id2name(SYM2ID(argv[0]));
-
-    kdDebug() << funcname << endl;
-    QString funcname2 = rb_id2name(SYM2ID(argv[1]));
-    kdDebug() << funcname2 << endl;
-    
-    
-    QValueList<Api::Object::Ptr> argsList;
-#ifdef KROSS_RUBY_MODULE_DEBUG
-    kdDebug() << "Building arguments list for function : " << funcname << " there are " << (argc-1) << " arguments." << endl;
-#endif
-    for(int i = 1; i < argc; i++)
-    {
-        Kross::Api::Object::Ptr obj = RubyExtension::toObject(argv[i]);
-        if(obj) argsList.append(obj);
-    }
-
-    
-    return Qnil;*/
 }
 
 }

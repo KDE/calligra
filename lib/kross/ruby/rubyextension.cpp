@@ -87,6 +87,14 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
     
     return toVALUE(result);
 }
+
+void RubyExtension::delete_object(void* object)
+{
+    kdDebug() << "delete_object" << endl;
+    RubyExtension* obj = static_cast<RubyExtension*>(object);
+    if(obj)
+        delete obj;
+}
     
 RubyExtension::RubyExtension(Kross::Api::Object::Ptr object) : d(new RubyExtensionPrivate())
 {
@@ -96,6 +104,8 @@ RubyExtension::RubyExtension(Kross::Api::Object::Ptr object) : d(new RubyExtensi
 
 RubyExtension::~RubyExtension()
 {
+    kdDebug() << "Delete RubyExtension" << endl;
+    delete d;
 }
 
 typedef QMap<QString, Kross::Api::Object::Ptr> mStrObj;
@@ -293,7 +303,7 @@ VALUE RubyExtension::toVALUE(Kross::Api::Object::Ptr object)
         RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
         rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
     }
-    return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, free, new RubyExtension(object) );
+    return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, RubyExtension::delete_object, new RubyExtension(object) );
 }
 
 VALUE RubyExtension::toVALUE(Kross::Api::List::Ptr list)
