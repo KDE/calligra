@@ -4340,7 +4340,7 @@ void KPrCanvas::exitEditMode( bool repaint )
             return;
         }
     }
-    modType = MT_NONE;
+    //modType = MT_NONE;
 }
 
 bool KPrCanvas::getPixmapOrigAndCurrentSize( KPrPixmapObject *&obj, KoSize *origSize, KoSize *currentSize )
