@@ -1016,6 +1016,9 @@ void GanttView::print(KPrinter &prt) {
     //But KSpread uses fixed 300 dpis, so we can use it.
 
     QPaintDeviceMetrics metrics( &prt );
+    uint top, left, bottom, right;
+    prt.margins(&top, &left, &bottom, &right);
+    //kdDebug()<<m.width()<<"x"<<m.height()<<" : "<<top<<", "<<left<<", "<<bottom<<", "<<right<<" : "<<size()<<endl;
 
     // get the size of the desired output for scaling.
     // here we want to print: ListView and TimeLine (default)
@@ -1024,19 +1027,21 @@ void GanttView::print(KPrinter &prt) {
     
     QPainter p;
     p.begin( &prt );
+    p.setViewport(left, top, metrics.width()-left-right, metrics.height()-top-bottom);
+    p.setClipRect(left, top, metrics.width()-left-right, metrics.height()-top-bottom);
     
     // Make a simple header
     p.drawRect(0,0,metrics.width(),metrics.height());
     QString text;
     int hei = 0;
     QRect r = p.boundingRect(1,0,0,0, Qt::AlignLeft, text );
-//     if (m_mainview)
-//     {
-//       text = i18n("Project: %1").arg(m_mainview->getPart()->getProject().name());
-//       p.drawText( r, Qt::AlignLeft, text );
-//       hei = r.height();
-//       //kdDebug()<<"Project r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
-//     }
+    if (m_mainview)
+    {
+      text = m_mainview->getPart()->getProject().name();
+      p.drawText( r, Qt::AlignLeft, text );
+      hei = r.height();
+      //kdDebug()<<"Project r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
+    }
     text = KGlobal::locale()->formatDateTime(QDateTime::currentDateTime());
     r = p.boundingRect(metrics.width()-1,0,0,0, Qt::AlignRight, text );
     p.drawText( r, Qt::AlignRight, text );
