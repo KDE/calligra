@@ -183,8 +183,11 @@ FieldList* FieldList::subList(const QStringList& list)
 QStringList FieldList::names() const
 {
 	QStringList r;
-	for (QDictIterator<Field> it(m_fields_by_name);it.current();++it) {
-		r += it.currentKey().lower();
+//	for (QDictIterator<Field> it(m_fields_by_name);it.current();++it) {
+//		r += it.currentKey().lower();
+//	}
+	for (Field::ListIterator it(m_fields); it.current(); ++it) {
+		r += it.current()->name().lower();
 	}
 	return r;
 }
