@@ -645,6 +645,13 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     KoGenStyles mainStyles;//for compile
 
     KTempFile contentTmpFile;
+    //Check that temp file was successfully created
+    if (contentTmpFile.status() != 0)
+    {
+	    qWarning("Creation of temporary file to store document content failed.");
+	    return false;
+    }
+    
     contentTmpFile.setAutoDelete( true );
     QFile* tmpFile = contentTmpFile.file();
     KoXmlWriter contentTmpWriter( tmpFile, 1 );

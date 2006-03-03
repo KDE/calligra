@@ -2823,6 +2823,13 @@ void View::createTemplate()
   QPixmap pix = doc()->generatePreview(QSize(width, height));
 
   KTempFile tempFile( QString::null, ".kst" );
+  //Check that creation of temp file was successful
+  if (tempFile.status() != 0)
+  {
+	  qWarning("Creation of temprary file to store template failed.");
+	  return;
+  }
+  
   tempFile.setAutoDelete(true);
 
   doc()->saveNativeFormat( tempFile.name() );

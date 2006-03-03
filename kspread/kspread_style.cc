@@ -1254,7 +1254,9 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     {
         style.addProperty("fo:color", m_textPen.color().name(), KoGenStyle::TextType );
     }
-    if ( featureSet( SBackgroundBrush ) )
+    //I don't think there is a reason why the background brush should be saved if it is null,
+    //but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
+    if ( featureSet( SBackgroundBrush ) && (m_backGroundBrush.style() != Qt::NoBrush) )
     {
         QString tmp = saveOasisBackgroundStyle( mainStyles, m_backGroundBrush );
         if ( !tmp.isEmpty() )

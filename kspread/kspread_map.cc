@@ -200,6 +200,13 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     GenValidationStyles valStyle;
 
     KTempFile bodyTmpFile;
+    //Check that creation of temp file was successful
+    if (bodyTmpFile.status() != 0)
+    {
+	    qWarning("Creation of temporary file to store document body failed.");
+	    return false;
+    }
+    
     bodyTmpFile.setAutoDelete( true );
     QFile* tmpFile = bodyTmpFile.file();
     KoXmlWriter bodyTmpWriter( tmpFile );
