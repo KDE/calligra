@@ -575,6 +575,9 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
 
 DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, bool checkAppointments) const {
     DateTime t;
+    if (m_units == 0) {
+        return t;
+    }
     DateTime lmt = m_availableUntil;
     if (limit.isValid() && limit < lmt) {
         lmt = limit;
@@ -602,6 +605,9 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, bo
 
 DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, bool checkAppointments) const {
     DateTime t;
+    if (m_units == 0) {
+        return t;
+    }
     DateTime lmt = m_availableFrom;
     if (limit.isValid() && limit > lmt) {
         lmt = limit;
