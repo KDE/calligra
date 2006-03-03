@@ -166,7 +166,7 @@ public:
     int widthUsed() const;
 
     int nextTabDefault( int i, int x );
-    int nextTab( int i, int x );
+    int nextTab( int i, int x, int availableWidth );
     int *tabArray() const;
     void setTabArray( int *a );
     void setTabStops( int tw );

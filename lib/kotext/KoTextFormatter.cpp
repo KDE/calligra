@@ -104,7 +104,7 @@ QPair<int, int> KoTextFormatterCore::determineCharWidth()
 #endif
         }
     } else { // tab
-        int nx = parag->nextTab( i, x );
+        int nx = parag->nextTab( i, x, availableWidth );
         if ( nx < x )
             ww = availableWidth - x;
         else
@@ -503,7 +503,7 @@ bool KoTextFormatterCore::format()
                     initialLMargin = x;
                     availableWidth = dw - initialRMargin;
                     if ( parag->isNewLinesAllowed() && c->c == '\t' ) {
-                        int nx = parag->nextTab( i, x );
+                        int nx = parag->nextTab( i, x, availableWidth );
                         if ( nx < x )
                             ww = availableWidth - x;
                         else
