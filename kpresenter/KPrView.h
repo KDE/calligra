@@ -756,6 +756,8 @@ protected slots:
 
     virtual void slotChildActivated(bool a);
 
+    void loadingFinished();
+
 protected:
     virtual void resizeEvent( QResizeEvent* );
     virtual void dragEnterEvent( QDragEnterEvent *e );

@@ -331,6 +331,7 @@ KPrView::KPrView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     connect (m_pKPresenterDoc, SIGNAL(sig_updateMenuBar()),this, SLOT(updateSideBarMenu()));
     connect (m_pKPresenterDoc, SIGNAL(unitChanged(KoUnit::Unit)),this, SLOT(slotUnitChanged(KoUnit::Unit)));
     connect( m_pKPresenterDoc, SIGNAL( modified( bool ) ), this, SLOT( documentModified( bool )) );
+    connect( m_pKPresenterDoc, SIGNAL(completed()), this, SLOT(loadingFinished()));
 
     KStatusBar * sb = statusBar();
     m_sbPageLabel = 0L;
@@ -6361,6 +6362,16 @@ void KPrView::documentModified( bool b )
         m_sbModifiedLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "action-modified", KIcon::Small ) );
     else
         m_sbModifiedLabel->setText( "   " );
+}
+
+void KPrView::loadingFinished()
+{
+  setZoom( 100, true );
+  h_ruler->setPageLayout(m_pKPresenterDoc->pageLayout());
+  v_ruler->setPageLayout(m_pKPresenterDoc->pageLayout());
+  slotUpdateRuler();
+  m_pKPresenterDoc->updateZoomRuler();
+  updateSideBar();
 }
 
 #include "KPrView.moc"
