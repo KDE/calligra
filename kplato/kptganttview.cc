@@ -1034,19 +1034,21 @@ void GanttView::print(KPrinter &prt) {
     p.drawRect(0,0,metrics.width(),metrics.height());
     QString text;
     int hei = 0;
-    QRect r = p.boundingRect(1,0,0,0, Qt::AlignLeft, text );
-    if (m_mainview)
-    {
-      text = m_mainview->getPart()->getProject().name();
-      p.drawText( r, Qt::AlignLeft, text );
-      hei = r.height();
-      //kdDebug()<<"Project r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
-    }
     text = KGlobal::locale()->formatDateTime(QDateTime::currentDateTime());
-    r = p.boundingRect(metrics.width()-1,0,0,0, Qt::AlignRight, text );
+    QRect r = p.boundingRect(metrics.width()-1,0,0,0, Qt::AlignRight, text );
     p.drawText( r, Qt::AlignRight, text );
-    hei = QMAX(hei, r.height());
+    hei = r.height();
     //kdDebug()<<"Date r="<<r.left()<<","<<r.top()<<" "<<r.width()<<"x"<<r.height()<<endl;
+    if (m_project)
+    {
+      QRect re = p.boundingRect(1,0,0,0, Qt::AlignLeft, text );
+      re.setWidth(metrics.width()-r.width()-5); // don't print on top of date
+      p.drawText( re, Qt::AlignLeft, m_project->name() );
+      hei = r.height();
+      //kdDebug()<<"Project r="<<re.left()<<","<<re.top()<<" "<<re.width()<<"x"<<re.height()<<": "<<endl;
+      hei = QMAX(hei, re.height());
+    }
+    
     hei++;
     p.drawLine(0,hei,metrics.width(),hei);
     hei += 3;
