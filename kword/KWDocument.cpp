@@ -2038,11 +2038,10 @@ void KWDocument::loadFrameStyleTemplates( const QDomElement &stylesElem )
 
 void KWDocument::loadDefaultFrameStyleTemplates()
 {
-    // ### FIXME: why is this not working for $KDE_LANG != "en_US" (#61007)
-    const QString fsfileName( locate("appdata", "framestyles.xml") );
+    const QString fsfileName( locate("data", "kword/framestyles.xml") );
 
     kdDebug(30003) << "Data directory: " << KGlobal::dirs()->resourceDirs( "data" ) << endl;
-    kdDebug(30003) << "Directory searched: " << KGlobal::dirs()->resourceDirs( "appdata" ) << endl;
+    kdDebug(30003) << "Directory searched: " << KGlobal::dirs()->resourceDirs( "data" ) << endl;
     kdDebug(30003) << "File framestyles.xml searched at: " << fsfileName << endl;
 
     m_frameStyleColl->setDefault( true );
@@ -2123,7 +2122,7 @@ void KWDocument::loadDefaultTableStyleTemplates()
 
     m_tableStyleColl->setDefault( true );
 
-    if ( ! QFile::exists(locate("appdata", "tablestyles.xml")) )
+    if ( ! QFile::exists(locate("data", "kword/tablestyles.xml")) )
     {
         if (!m_tableStyleColl->findStyle("Plain")) {
             m_tableStyleColl->addStyle( new KWTableStyle( "Plain", m_styleColl->styleAt(0), m_frameStyleColl->frameStyleAt(0) ) );
@@ -2131,7 +2130,7 @@ void KWDocument::loadDefaultTableStyleTemplates()
         return;
     }
 
-    fsfile.setPath( locate("appdata", "tablestyles.xml") );
+    fsfile.setPath( locate("data", "kword/tablestyles.xml") );
 
     // Open file and parse it
     QFile in( fsfile.path() );
@@ -2176,7 +2175,7 @@ void KWDocument::loadDefaultTableTemplates()
 {
     KURL fsfile;
 
-    if ( ! QFile::exists(locate("appdata", "tabletemplates.xml")) )
+    if ( ! QFile::exists(locate("data", "kword/tabletemplates.xml")) )
     {
         if (!m_tableTemplateColl->findTableTemplate("Plain")) {
             KWTableTemplate * standardTableTemplate = new KWTableTemplate( "Plain" );
@@ -2195,7 +2194,7 @@ void KWDocument::loadDefaultTableTemplates()
         return;
     }
 
-    fsfile.setPath( locate("appdata", "tabletemplates.xml") );
+    fsfile.setPath( locate("data", "kword/tabletemplates.xml") );
 
     // Open file and parse it
     QFile in( fsfile.path() );

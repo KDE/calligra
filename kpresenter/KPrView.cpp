@@ -651,9 +651,9 @@ void KPrView::insertPage()
 {
     InsertPageDia dia( this, 0, TRUE );
 #if COPYOASISFORMAT
-    QString templ = locateLocal( "appdata", "default.oop" );
+    QString templ = locateLocal( "data", "kpresenter/default.oop" );
 #else
-    QString templ = locateLocal( "appdata", "default.kpr" );
+    QString templ = locateLocal( "data", "kpresenter/default.kpr" );
 #endif
     if ( !QFile::exists( templ ) ) {
         dia.radioDifferent->setChecked( TRUE );
@@ -665,10 +665,10 @@ void KPrView::insertPage()
     if (dia.radioCurrentDefault->isChecked())
     {
 #if COPYOASISFORMAT
-        QString file = locateLocal( "appdata", "default.oop" );
+        QString file = locateLocal( "data", "kpresenter/default.oop" );
         m_pKPresenterDoc->savePage( file, currPg, true /*ignore stickies*/ );
 #else
-        QString file = locateLocal( "appdata", "default.kpr" );
+        QString file = locateLocal( "data", "kpresenter/default.kpr" );
         m_pKPresenterDoc->savePage( file, currPg, true /*ignore stickies*/ );
 #endif
     }
@@ -1292,10 +1292,10 @@ void KPrView::extraCreateTemplate()
 void KPrView::extraDefaultTemplate()
 {
 #if COPYOASISFORMAT
-    QString file = locateLocal( "appdata", "default.oop" );
+    QString file = locateLocal( "data", "kpresenter/default.oop" );
     m_pKPresenterDoc->savePage( file, currPg );
 #else
-    QString file = locateLocal( "appdata", "default.kpr" );
+    QString file = locateLocal( "data", "kpresenter/default.kpr" );
     m_pKPresenterDoc->savePage( file, currPg );
 #endif
 }
