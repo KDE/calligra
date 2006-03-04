@@ -390,7 +390,7 @@ void AccountsPanel::slotListDoubleClicked(QListViewItem* item, const QPoint&, in
     slotStartRename(item, col);
 }
 
-void AccountsPanel::slotRenameStarted(QListViewItem *item, int col) {
+void AccountsPanel::slotRenameStarted(QListViewItem */*item*/, int /*col*/) {
     //kdDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     if (accountList->isRenaming()) {
         removeBtn->setEnabled(false);
@@ -437,7 +437,7 @@ void AccountsPanel::slotRemoveItem(QListViewItem *i) {
 }
 
 // We don't get notified when rename is cancelled, this is called from the item
-void AccountsPanel::renameStopped(QListViewItem *item) {
+void AccountsPanel::renameStopped(QListViewItem */*item*/) {
     //kdDebug()<<k_funcinfo<<endl;
     m_renameItem = 0;
     emit selectionChanged();

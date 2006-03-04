@@ -208,7 +208,7 @@ void KoOasisStyles::importDataStyle( const QDomElement& parent )
     int leadingZ  = 1;
     bool thousandsSep = false;
     //todo negred
-    bool negRed = false;
+    //bool negRed = false;
     bool ok = false;
     int i = 0;
     QDomElement e;

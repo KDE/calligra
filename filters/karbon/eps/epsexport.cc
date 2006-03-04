@@ -366,7 +366,7 @@ EpsExport::getFill( const VFill& fill )
 			if( ramp.size() > 2 || ramp.size() == 2 && ramp[0]->midPoint != 0.5 )
 			{
 				// Gradient with more than two colors or asymmetrical midpoint.
-				for( int i = 1;i < ramp.size();i++ )
+				for( uint i = 1;i < ramp.size();i++ )
 				{
 					char name[15];
 					sprintf( name, "Function%d", 2 * i - 1 );
@@ -409,10 +409,10 @@ EpsExport::getFill( const VFill& fill )
 			{
 				// Gradient with more than two colors or asymmetrical midpoint.
 				*m_stream << "\t\t/FunctionType 3\n" << "\t\t/Functions [ ";
-				for( int i = 1; i < ( 2 * ramp.size() - 1 );i++ )
+				for( uint i = 1; i < ( 2 * ramp.size() - 1 );i++ )
 					*m_stream << "Function" << i << " ";
 				*m_stream << "]\n" << "\t\t/Bounds [";
-				for( int i = 0;i < ramp.size() - 1;i++ )
+				for( uint i = 0;i < ramp.size() - 1;i++ )
 				{
 					VColorStop stop = *ramp[i];
 					if( i > 0 )
@@ -420,7 +420,7 @@ EpsExport::getFill( const VFill& fill )
 					*m_stream << " " << ( stop.rampPoint + ( ramp[i + 1]->rampPoint - stop.rampPoint ) * stop.midPoint );
 				}
 				*m_stream << " ]\n" << "\t\t/Encode [ ";
-				for( int i = 0;i < 2 * ramp.size() - 2;i++ )
+				for( uint i = 0;i < 2 * ramp.size() - 2;i++ )
 					*m_stream << "0 1 ";
 				*m_stream << "]\n";
 			}

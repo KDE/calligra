@@ -397,7 +397,7 @@ void CalendarListDialogImpl::slotItemRenamed(QListViewItem *itm, int col) {
 }
 
 // We don't get notified when rename is cancelled, this is called from the item
-void CalendarListDialogImpl::renameStopped(QListViewItem *item) {
+void CalendarListDialogImpl::renameStopped(QListViewItem */*item*/) {
     //kdDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     m_renameItem = 0;
     emit selectionChanged();
@@ -410,7 +410,7 @@ void CalendarListDialogImpl::slotListDoubleClicked(QListViewItem *item, const QP
     slotStartRename(item, col);
 }
 
-void CalendarListDialogImpl::slotRenameStarted(QListViewItem *item, int col) {
+void CalendarListDialogImpl::slotRenameStarted(QListViewItem */*item*/, int /*col*/) {
     //kdDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     if (calendarList->isRenaming()) {
         bDelete->setEnabled(false);

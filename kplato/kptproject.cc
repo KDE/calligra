@@ -762,7 +762,7 @@ Resource *Project::resource(QString id) {
 }
 
 // TODO
-EffortCostMap Project::plannedEffortCostPrDay(const QDate &start, const QDate &end) const {
+EffortCostMap Project::plannedEffortCostPrDay(const QDate &/*start*/, const QDate &/*end*/) const {
     //kdDebug()<<k_funcinfo<<endl;
     EffortCostMap ec;
     return ec;

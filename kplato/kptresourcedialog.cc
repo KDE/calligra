@@ -109,7 +109,7 @@ void ResourceDialogImpl::slotChooseResource()
         QStringList l = QStringList::split(' ', a.assembledName());
         QString in;
         QStringList::Iterator it = l.begin();
-        for (int i=0; it != l.end(); ++it) {
+        for (/*int i = 0*/; it != l.end(); ++it) {
             in += (*it)[0];
         }
         initialsEdit->setText(in);
@@ -181,7 +181,7 @@ void ResourceDialog::slotOk() {
     accept();
 }
 
-void ResourceDialog::slotCalendarChanged(int cal) {
+void ResourceDialog::slotCalendarChanged(int /*cal*/) {
     
 }
 

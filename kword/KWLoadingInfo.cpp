@@ -1,4 +1,5 @@
 #include "KWLoadingInfo.h"
+#include "KWFrame.h"
 
 KWLoadingInfo::KWLoadingInfo()
 {

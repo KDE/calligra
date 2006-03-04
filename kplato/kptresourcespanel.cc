@@ -530,7 +530,7 @@ void ResourcesPanel::slotItemRenamed(QListViewItem *item, int col) {
     emit changed();
 }
 
-void ResourcesPanel::slotRenameStarted(QListViewItem *item, int col) {
+void ResourcesPanel::slotRenameStarted(QListViewItem */*item*/, int /*col*/) {
     //kdDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     if (listOfGroups->isRenaming()) {
         bRemove->setEnabled(false);

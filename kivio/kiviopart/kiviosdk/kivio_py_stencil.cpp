@@ -297,7 +297,7 @@ void KivioPyStencil::rescaleShapes( PyObject *o )
         PyDict_SetItemString( o, "x2", Py_BuildValue( "d", x ) );
     }
 
-    PyObject *o_y2 = PyDict_GetItemString(o,"y2");
+    //PyObject *o_y2 = PyDict_GetItemString(o,"y2");
     if ( o_y ) {
         double y = getDoubleFromDict(o,"y2");
         y = m_y+(y-old_y)*m_h/old_h;
@@ -438,8 +438,8 @@ void KivioPyStencil::paint( KivioIntraStencilData *d, bool outlined )
     double y = zoomHandler->zoomItY(getDoubleFromDict(shape,"y"));
     double w = zoomHandler->zoomItX(getDoubleFromDict(shape,"w"));
     double h = zoomHandler->zoomItY(getDoubleFromDict(shape,"h"));
-    double x2 = zoomHandler->zoomItX(getDoubleFromDict(shape,"x2"));
-    double y2 = zoomHandler->zoomItY(getDoubleFromDict(shape,"y2"));
+    //double x2 = zoomHandler->zoomItX(getDoubleFromDict(shape,"x2"));
+    //double y2 = zoomHandler->zoomItY(getDoubleFromDict(shape,"y2"));
 
     // get points list
     QPtrList<KivioPoint> points;

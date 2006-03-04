@@ -508,7 +508,7 @@ void KWord13OasisGenerator::fillGenStyleWithLayout( const KWord13Layout& layout,
 }
 
 // Inspired by KoTextParag::saveOasis
-void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordTextFrameset* frameset, bool main )
+void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordTextFrameset* frameset, bool /*main*/ )
 {
     if ( ! frameset )
     {

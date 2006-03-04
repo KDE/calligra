@@ -482,6 +482,8 @@ QString CellIface::getFormatType() const
         case fraction_three_digits:
                 stringFormat="fraction_three_digits";
                 break;
+        default:
+                break;
         }
     return stringFormat;
 }

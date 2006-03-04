@@ -257,7 +257,7 @@ int ConfigTaskPanelImpl::pessimistic()
     return pessimisticValue->value();
 }
 
-void ConfigTaskPanelImpl::enableDateTime( int scheduleType )
+void ConfigTaskPanelImpl::enableDateTime( int /*scheduleType*/ )
 {
     scheduleStartTime->setEnabled(true);
     scheduleEndTime->setEnabled(true);
@@ -300,7 +300,7 @@ void ConfigTaskPanelImpl::enableDateTime( int scheduleType )
 }
 
 
-void ConfigTaskPanelImpl::estimationTypeChanged( int type )
+void ConfigTaskPanelImpl::estimationTypeChanged( int /*type*/ )
 {
     checkAllFieldsFilled();
 }

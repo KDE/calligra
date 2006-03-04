@@ -1597,7 +1597,7 @@ void OOWriterWorker::processNote( const VariableData& variable )
 }
 
 void OOWriterWorker::processVariable ( const QString&,
-    const TextFormatting& formatLayout,
+    const TextFormatting& /*formatLayout*/,
     const FormatData& formatData)
 {
     if (0==formatData.variable.m_type)

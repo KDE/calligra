@@ -168,7 +168,7 @@ static const unsigned int numOasisChartTypes
 bool KChartParams::loadOasis( const QDomElement     &chartElem,
 			      KoOasisLoadingContext &loadingContext,
                               QString               &errorMessage,
-			      KoStore               *store )
+			      KoStore               */*store*/ )
 {
     const QString chartClass = chartElem.attributeNS( KoXmlNS::chart,
 						      "class", QString::null );
@@ -620,7 +620,7 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
 }
 
 void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles,
-                                  KDChartAxisParams::AxisPos axisPos, const char* axisName ) const
+                                  KDChartAxisParams::AxisPos /*axisPos*/, const char* axisName ) const
 {
     bodyWriter->startElement( "chart:axis" );
 

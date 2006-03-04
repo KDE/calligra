@@ -49,7 +49,7 @@
 namespace KPlato
 {
 
-CalendarEdit::CalendarEdit (QWidget *parent, const char *name)
+CalendarEdit::CalendarEdit (QWidget *parent, const char */*name*/)
     : CalendarEditBase(parent),
       m_calendar(0)
  {

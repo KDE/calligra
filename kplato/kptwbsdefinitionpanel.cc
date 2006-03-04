@@ -77,10 +77,10 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     connect(addBtn, SIGNAL(clicked()), SLOT(slotAddBtnClicked()));
 }
 
-void WBSDefinitionPanel::setStartValues(Part *part) {
+void WBSDefinitionPanel::setStartValues(Part */*part*/) {
 }
 
-KMacroCommand *WBSDefinitionPanel::buildCommand(Part *part) {
+KMacroCommand *WBSDefinitionPanel::buildCommand(Part */*part*/) {
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify WBS Definition"));
 
     return cmd;
@@ -163,7 +163,7 @@ void WBSDefinitionPanel::slotLevelChanged(int value) {
     addBtn->setEnabled(levelsGroup->isChecked());
     slotChanged();
 }
-void WBSDefinitionPanel::slotLevelsGroupToggled(bool on) {
+void WBSDefinitionPanel::slotLevelsGroupToggled(bool /*on*/) {
     slotLevelChanged(level->value());
 }
 

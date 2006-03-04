@@ -944,6 +944,7 @@ QString KSpread::convertOasisPenToString( const QPen & pen )
     case Qt::DashDotDotLine:
         s+="dot-dot-dash";
         break;
+    default: break;
     }
     kdDebug()<<" convertOasisPenToString :"<<s<<endl;
     if ( pen.color().isValid() )

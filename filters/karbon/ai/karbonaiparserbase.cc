@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Dirk Schönberger <dirk.schoenberger@sz-online.de>
+   Copyright (C) 2002, Dirk SchÃ¶nberger <dirk.schoenberger@sz-online.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -517,12 +517,12 @@ void KarbonDocumentHandler::gotBoundingBox (int llx, int lly, int urx, int ury)
   delegate->gotBoundingBox(llx,lly,urx,ury);
 }
 
-void KarbonDocumentHandler::gotCreationDate (const char *val1,const char *val2)
+void KarbonDocumentHandler::gotCreationDate (const char */*val1*/,const char */*val2*/)
 {
 //  qDebug ("got creation date [%s], [%s]",val1,val2);
 }
 
-void KarbonDocumentHandler::gotProcessColors (int colors)
+void KarbonDocumentHandler::gotProcessColors (int /*colors*/)
 {
 /*  if (colors && PC_Cyan) qDebug ("contains cyan");
   if (colors && PC_Magenta) qDebug ("contains magenta");

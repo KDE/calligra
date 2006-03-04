@@ -535,7 +535,7 @@ double Task::effortPerformanceIndex(const QDate &date, bool *error) {
 //FIXME Handle summarytasks
 double Task::costPerformanceIndex(const QDate &date, bool *error) {
     double res = 0.0;
-    Duration ac = actualCostTo(date);
+    Duration ac = Q_INT64(actualCostTo(date));
     
     bool e = (ac == Duration::zeroDuration || m_progress.percentFinished == 0);
     if (error) {

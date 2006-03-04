@@ -198,7 +198,7 @@ void RequestResourcesPanel::groupChanged(QListViewItem *item) {
     grp->insert(resourceTable);
 }
 
-void RequestResourcesPanel::resourceChanged(int r, int c) {
+void RequestResourcesPanel::resourceChanged(int /*r*/, int /*c*/) {
     //kdDebug()<<k_funcinfo<<"("<<r<<","<<c<<")"<<endl;
     sendChanged();
 }

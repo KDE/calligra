@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <strstream>
+#include <sstream>
 
 #include <kdebug.h>
 #include <kmessagebox.h>

@@ -233,7 +233,7 @@ VStar::init()
 }
 
 double
-VStar::getOptimalInnerRadius( uint edges, double outerRadius, uint innerAngle )
+VStar::getOptimalInnerRadius( uint edges, double outerRadius, uint /*innerAngle*/ )
 {
 	int j = (edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
 

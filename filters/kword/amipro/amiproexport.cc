@@ -91,7 +91,7 @@ bool AmiProWorker::doOpenDocument(void)
    0, 1, 0, 1, 0, 2, 1, 1440, 10465, 12, 1, 720, 1, 1440,
    1, 2160, 1, 2880, 1, 3600, 1, 4320, 1, 5040, 1, 5760,
    1, 6480, 1, 7200, 1, 7920, 1, 8640 };
-  for( int i=0; i<sizeof(magic)/sizeof(magic[0]); i++ )
+  for( uint i=0; i<sizeof(magic)/sizeof(magic[0]); i++ )
     result += "\t\t" + QString::number(magic[i]) + "\n";
 
   result += "[elay]\n";
@@ -131,7 +131,7 @@ static QString AmiProEscape( const QString& text )
 }
 
 bool AmiProWorker::doFullParagraph(const QString& paraText, 
-  const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
+  const LayoutData& /*layout*/, const ValueListFormatData& paraFormatDataList)
 {
   QString amiproText = "";
   QString text = paraText;

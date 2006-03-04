@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Dirk Schönberger <dirk.schoenberger@sz-online.de>
+   Copyright (C) 2002, Dirk SchÃ¶nberger <dirk.schoenberger@sz-online.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -48,7 +48,7 @@ class AI88Handler;
 class AI3Handler;
 
 /**
-  *@author Dirk Schönberger
+  *@author Dirk SchÃ¶nberger
   */
 
 typedef enum { PET_MoveTo, PET_LineTo, PET_CurveTo, PET_CurveToOmitC1, PET_CurveToOmitC2 } PathElementType;
@@ -340,17 +340,17 @@ class GStateHandlerBase
    	 GStateHandlerBase() {}
 	  virtual ~GStateHandlerBase() {}
 
-    virtual void gotFillColor (AIColor &color) {}
-    virtual void gotStrokeColor (AIColor &color) {}
+    virtual void gotFillColor (AIColor &) {}
+    virtual void gotStrokeColor (AIColor &) {}
     virtual void gotFillPattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData);
     virtual void gotStrokePattern (const char *pname, double px, double py, double sx, double sy, double angle, double rf, double r, double k, double ka, const QValueVector<AIElement>& transformData);
-    virtual void gotFlatness (double val) {}
-    virtual void gotLineWidth (double val) {}
-    virtual void gotLineCaps (int val) {}
-    virtual void gotLineJoin (int val) {}
-    virtual void gotMiterLimit (double val) {}
-    virtual void gotWindingOrder (int val) {}
-    virtual void gotDash (const QValueVector<AIElement>& dashData, double phase) {}
+    virtual void gotFlatness (double) {}
+    virtual void gotLineWidth (double) {}
+    virtual void gotLineCaps (int) {}
+    virtual void gotLineJoin (int) {}
+    virtual void gotMiterLimit (double) {}
+    virtual void gotWindingOrder (int) {}
+    virtual void gotDash (const QValueVector<AIElement>& /*dashData*/, double /*phase*/) {}
 };
 
 class StructureHandlerBase {
@@ -358,8 +358,8 @@ class StructureHandlerBase {
    	 StructureHandlerBase() {}
 	  virtual ~StructureHandlerBase() {}
 
-    virtual void gotBeginGroup (bool clipping) {}
-    virtual void gotEndGroup (bool clipping) {}
+    virtual void gotBeginGroup (bool /*clipping*/) {}
+    virtual void gotEndGroup (bool /*clipping*/) {}
     virtual void gotBeginCombination () {}
     virtual void gotEndCombination () {}
 };
@@ -369,12 +369,12 @@ class PathHandlerBase {
    	 PathHandlerBase() {}
 	  virtual ~PathHandlerBase() {}
 
-    virtual void gotPathElement (PathElement &element) {}
-    virtual void gotFillPath (bool closed, bool reset) {}
-    virtual void gotStrokePath (bool closed) {}
-    virtual void gotIgnorePath (bool closed, bool reset) {}
-    virtual void gotClipPath (bool closed) {}
-    virtual void gotFillMode (FillMode fm) {}
+    virtual void gotPathElement (PathElement &) {}
+    virtual void gotFillPath (bool /*closed*/, bool /*reset*/) {}
+    virtual void gotStrokePath (bool /*closed*/) {}
+    virtual void gotIgnorePath (bool /*closed*/, bool /*reset*/) {}
+    virtual void gotClipPath (bool /*closed*/) {}
+    virtual void gotFillMode (FillMode) {}
 };
 
 class MiscGStateHandlerBase {
@@ -382,9 +382,9 @@ class MiscGStateHandlerBase {
    	 MiscGStateHandlerBase() {}
 	  virtual ~MiscGStateHandlerBase() {}
 
-    virtual void gotLockNextObject (bool value) {}
-    virtual void gotFillOverprinting (bool value) {}
-    virtual void gotStrokeOverprinting (bool value) {}
+    virtual void gotLockNextObject (bool /*value*/) {}
+    virtual void gotFillOverprinting (bool /*value*/) {}
+    virtual void gotStrokeOverprinting (bool /*value*/) {}
 };
 
 class DocumentHandlerBase {
@@ -392,18 +392,18 @@ class DocumentHandlerBase {
    	 DocumentHandlerBase() {}
 	  virtual ~DocumentHandlerBase() {}
 
-    virtual void gotBoundingBox (int llx, int lly, int urx, int ury) {}
-    virtual void gotTemplateBox (int llx, int lly, int urx, int ury) {}
-    virtual void gotMargin (int llx, int lly, int urx, int ury) {}
-    virtual void gotPrinterRect (int llx, int lly, int urx, int ury) {}
-    virtual void gotPrinterName (const char *data) {}
-    virtual void gotPageOrigin (int x, int y) {}
-    virtual void gotTemplate (const char *data) {}
-    virtual void gotTitle (const char *data) {}
-    virtual void gotCreator (const char *data) {}
-    virtual void gotPatternDefinition (const char *name, const QValueVector<AIElement>& layerData, double llx, double lly, double urx, double ury) {}
-    virtual void gotCreationDate (const char *val1,const char *val2) {}
-    virtual void gotProcessColors (int colors) {}
+    virtual void gotBoundingBox (int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/) {}
+    virtual void gotTemplateBox (int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/) {}
+    virtual void gotMargin (int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/) {}
+    virtual void gotPrinterRect (int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/) {}
+    virtual void gotPrinterName (const char *) {}
+    virtual void gotPageOrigin (int /*x*/, int /*y*/) {}
+    virtual void gotTemplate (const char *) {}
+    virtual void gotTitle (const char *) {}
+    virtual void gotCreator (const char *) {}
+    virtual void gotPatternDefinition (const char */*name*/, const QValueVector<AIElement>& /*layerData*/, double /*llx*/, double /*lly*/, double /*urx*/, double /*ury*/) {}
+    virtual void gotCreationDate (const char */*val1*/,const char */*val2*/) {}
+    virtual void gotProcessColors (int /*colors*/) {}
 };
 
 class ModuleHandlerBase {
@@ -411,8 +411,8 @@ class ModuleHandlerBase {
    	 ModuleHandlerBase() {}
 	  virtual ~ModuleHandlerBase() {}
 
-    virtual void gotBeginSection (SectionType st, const char *data) {}
-    virtual void gotEndSection (SectionType st, const char *data) {}
+    virtual void gotBeginSection (SectionType, const char *) {}
+    virtual void gotEndSection (SectionType, const char *) {}
 };
 
 class EmbeddedHandlerBase {
@@ -420,7 +420,7 @@ class EmbeddedHandlerBase {
    	 EmbeddedHandlerBase() {}
 	  virtual ~EmbeddedHandlerBase() {}
 
-    virtual void gotGsaveIncludeDocument (const QValueVector<AIElement>& transData, int llx, int lly, int urx, int ury, const char*fileName) {}
+    virtual void gotGsaveIncludeDocument (const QValueVector<AIElement>& /*transData*/, int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/, const char*/*fileName*/) {}
     virtual void gotGrestore () {}
 };
 

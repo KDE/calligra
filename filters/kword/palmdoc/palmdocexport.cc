@@ -101,7 +101,7 @@ bool PalmDocWorker::doFullDocumentInfo( const KWEFDocumentInfo& docInfo )
 }
 
 bool PalmDocWorker::doFullParagraph(const QString& paraText, 
-  const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
+  const LayoutData& /*layout*/, const ValueListFormatData& /*paraFormatDataList*/)
 {
   kdDebug(30525) << "Entering ::doFullParagraph" << endl;
   text.append( paraText );

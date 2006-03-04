@@ -29,7 +29,8 @@ protected:
 
 #else
 
-#include <iostream.h>
+#include <iostream>
+using namespace std;
 
 // ??? sort out how to do sizes
 

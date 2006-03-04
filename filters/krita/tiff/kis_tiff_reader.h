@@ -39,7 +39,7 @@
 #include <kis_iterator.h>
 #include <kis_paint_device.h>
 
-#define Q_UINT32_MAX 4294967295
+#define Q_UINT32_MAX 4294967295u
 
 class TIFFStreamBase;
 

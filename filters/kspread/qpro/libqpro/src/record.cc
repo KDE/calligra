@@ -9,7 +9,7 @@
 
 // -----------------------------------------------------------------------
 
-#include <iomanip.h>
+#include <iomanip>
 #include <strstream>
 
 void
@@ -573,7 +573,7 @@ QpRecFormulaCell::formulaReferences()
 
 // -----------------------------------------------------------------------
 
-QpRecUnknown::QpRecUnknown(QP_INT16 pType, QP_INT16 pLen, QpIStream& pIn)
+QpRecUnknown::QpRecUnknown(QP_INT16 /*pType*/, QP_INT16 pLen, QpIStream& pIn)
    : QpRec( QpUnknown )
 {
    QP_DEBUG("Unknown Type " << pType << ", len " << pLen << endl);

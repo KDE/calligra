@@ -221,7 +221,7 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 }
 
 void
-VGradient::loadOasis( const QDomElement &object, KoStyleStack &stack, VObject* parent )
+VGradient::loadOasis( const QDomElement &object, KoStyleStack &/*stack*/, VObject* parent )
 {
 	kdDebug(38000) << "namespaceURI: " << object.namespaceURI() << endl;
 	kdDebug(38000) << "localName: " << object.localName() << endl;

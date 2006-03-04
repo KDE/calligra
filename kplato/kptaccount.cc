@@ -504,9 +504,9 @@ bool Accounts::removeId(const QString &id) {
 }
 
 #ifndef NDEBUG
-void Accounts::printDebug(QString indent) {
+void Accounts::printDebug(QString /*indent*/) {
 }
-void Account::printDebug(QString indent) {
+void Account::printDebug(QString /*indent*/) {
 }
 #endif
 } //namespace KPlato

@@ -197,7 +197,7 @@ QByteArray HancomWordImport::Private::createContent()
   contentWriter->startElement( "text:sequence-decls" );
   contentWriter->endElement();  // text:sequence-decls
 
-  for( int i = 0; i < paragraphs.count(); i++ )
+  for( uint i = 0; i < paragraphs.count(); i++ )
   {
     QString text = paragraphs[i];
     text.replace( '\r', ' ' );

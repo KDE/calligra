@@ -372,13 +372,13 @@ DateTime Appointment::endTime() const {
     return t;
 }
 
-void Appointment::deleteAppointmentFromRepeatList(DateTime time) {
+void Appointment::deleteAppointmentFromRepeatList(DateTime) {
 }
 
-void Appointment::addAppointmentToRepeatList(DateTime time) {
+void Appointment::addAppointmentToRepeatList(DateTime) {
 }
 
-bool Appointment::isBusy(const DateTime &start, const DateTime &end) {
+bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
     return false;
 }
 

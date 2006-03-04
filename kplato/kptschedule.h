@@ -90,7 +90,7 @@ public:
     /// Adds appointment to this schedule only
     virtual bool add(Appointment *appointment);
     /// Adds appointment to both this resource schedule and node schedule
-    virtual void addAppointment(Schedule *other, DateTime &start, DateTime &end, double load=100) {}
+    virtual void addAppointment(Schedule */*other*/, DateTime &/*start*/, DateTime &/*end*/, double /*load*/=100) {}
     /// removes appointment and deletes it (independent of setAutoDelete)
     void removeAppointment(Appointment *appointment);
     /// removes appointment without deleting it (independent of setAutoDelete)
@@ -100,7 +100,7 @@ public:
     Appointment appointmentIntervals() const;
     
     virtual bool isOverbooked() const { return false; }
-    virtual bool isOverbooked(const DateTime &start, const DateTime &end) const { return false; }
+    virtual bool isOverbooked(const DateTime &/*start*/, const DateTime &/*end*/) const { return false; }
 
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const;
         

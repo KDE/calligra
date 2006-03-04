@@ -45,7 +45,7 @@ static inline QPixmap loadIcon( const char * name ) {
 }
 
 
-ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, const char *n)
+ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, const char *)
     : KDialogBase(KDialogBase::IconList, i18n("Configure KPlato"),
                   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
                   KDialogBase::Ok, parent),

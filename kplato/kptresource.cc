@@ -335,7 +335,7 @@ DateTime Resource::getBestAvailableTime(Duration /*duration*/) {
     return DateTime();
 }
 
-DateTime Resource::getBestAvailableTime(const DateTime after, const Duration duration) {
+DateTime Resource::getBestAvailableTime(const DateTime /*after*/, const Duration /*duration*/) {
     return DateTime();
 }
 
@@ -380,7 +380,7 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("overtime-rate", KGlobal::locale()->formatMoney(cost.overtimeRate));
 }
 
-bool Resource::isAvailable(Task *task) {
+bool Resource::isAvailable(Task */*task*/) {
     bool busy = false;
 /*    QPtrListIterator<Appointment> it(m_appointments);
     for (; it.current(); ++it) {
@@ -400,7 +400,7 @@ QPtrList<Appointment> Resource::appointments() {
     return lst;
 }
 
-Appointment *Resource::findAppointment(Node *node) {
+Appointment *Resource::findAppointment(Node */*node*/) {
 /*    QPtrListIterator<Appointment> it = m_appointments;
     for (; it.current(); ++it) {
         if (it.current()->node() == node)

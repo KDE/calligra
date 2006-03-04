@@ -33,9 +33,9 @@ public:
     virtual bool loadXML( QIODevice *, const QDomDocument & );
     //  virtual QDomDocument saveXML();
 
-    virtual void paintContent( QPainter& painter, const QRect& rect,
-                               bool transparent = FALSE, 
-                               double zoomX = 1.0, double zoomY = 1.0 )
+    virtual void paintContent( QPainter&, const QRect&,
+                               bool /*transparent*/ = false,
+                               double /*zoomX*/ = 1.0, double /*zoomY*/ = 1.0 )
     {
         ;
     }
@@ -49,7 +49,7 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );
 
 public slots:
-    void setForcedUserTemplate( const QString &name )
+    void setForcedUserTemplate( const QString &/*name*/ )
     {
         ;
     }

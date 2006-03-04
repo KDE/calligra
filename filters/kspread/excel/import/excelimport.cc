@@ -346,14 +346,14 @@ void ExcelImport::Private::processSheetForBody( Sheet* sheet, KoXmlWriter* xmlWr
   xmlWriter->addAttribute( "table:style-name", QString("ta%1").arg(sheetFormatIndex));
   sheetFormatIndex++;
   
-  int ci = 0;
+  unsigned ci = 0;
   while( ci <= sheet->maxColumn() )
   {
     Column* column = sheet->column( ci, false );
     if( column )
     {
       // forward search for columns with same properties
-      int cj = ci + 1;
+      unsigned cj = ci + 1;
       while( cj <= sheet->maxColumn() )
       {
         const Column* nextColumn = sheet->column( cj, false );
@@ -402,14 +402,14 @@ void ExcelImport::Private::processSheetForStyle( Sheet* sheet, KoXmlWriter* xmlW
   
   xmlWriter->endElement();  // style:style
 
-  int ci = 0;
+  unsigned ci = 0;
   while( ci <= sheet->maxColumn() )
   {
     Column* column = sheet->column( ci, false );
     if( column )
     {
       // forward search for similar column
-      int cj = ci + 1;
+      unsigned cj = ci + 1;
       while( cj <= sheet->maxColumn() )
       {
         Column* nextColumn = sheet->column( cj, false );
@@ -451,7 +451,7 @@ void ExcelImport::Private::processColumnForBody( Column* column, int repeat, KoX
   xmlWriter->endElement();  // table:table-column
 }
 
-void ExcelImport::Private::processColumnForStyle( Column* column, int repeat, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processColumnForStyle( Column* column, int /*repeat*/, KoXmlWriter* xmlWriter )
 {
   if( !column ) return;
   if( !xmlWriter ) return;
@@ -469,7 +469,7 @@ void ExcelImport::Private::processColumnForStyle( Column* column, int repeat, Ko
   xmlWriter->endElement();  // style:style
 }
 
-void ExcelImport::Private::processRowForBody( Row* row, int repeat, KoXmlWriter* xmlWriter )
+void ExcelImport::Private::processRowForBody( Row* row, int /*repeat*/, KoXmlWriter* xmlWriter )
 {
   if( !xmlWriter ) return;
   if( !row ) {
@@ -841,10 +841,10 @@ void ExcelImport::Private::processFormat( Format* format, KoXmlWriter* xmlWriter
 void ExcelImport::Private::processValueFormat( QString valueFormat, QString refName, 
 KoXmlWriter* xmlWriter )
 {
-  int decimalPlaces = 2;
+  /*int decimalPlaces = 2;
   int leadingZeroes = 1;
   int exponentDigits = -1;
-  bool percentage = false;
+  bool percentage = false;*/
 
   // TODO: someday we need a real MS Excel to OpenDocument format paraser
   // this just catches the most common format, not covers all possible cases

@@ -166,7 +166,7 @@ void PertCanvas::drawRelations()
 void PertCanvas::mapNode(PertNodeItem *item)
 {
 	//kdDebug()<<k_funcinfo<<endl;
-    if (! m_rows.at(item->row()) || m_rows.at(item->row())->count() <= item->column())
+    if (! m_rows.at(item->row()) || (item->column() >= 0 && m_rows.at(item->row())->count() <= uint(item->column())))
     {
         kdError()<<k_funcinfo<<item->node().name()<<": non existing map for: ("<<item->row()<<","<<item->column()<<")"<<endl;
         return;
@@ -200,7 +200,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
             if (chRow <= row)
             {
                 chRow = row+1;
-                if (m_rows.count() <= chRow) {
+                if (chRow >= 0 && m_rows.count() <= uint(chRow)) {
                     m_rows.append(new QMemArray<bool>(1)); // make a new row
                     chRow = m_rows.count()-1;  // to be safe
                 }
@@ -209,7 +209,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
             if (chCol < col)
             {
                 chCol = col;
-                if (m_rows.at(chRow)->count() <= chCol)  // col does not exist
+                if (chCol >= 0 && m_rows.at(chRow)->count() <= uint(chCol))  // col does not exist
                     m_rows.at(chRow)->resize(chCol+1);
                 
                 //kdDebug()<<k_funcinfo<<" Moved "<<childItem->node().name()<<" to col: "<<chCol<<endl;
@@ -223,7 +223,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
             {
                 m_rows.append(new QMemArray<bool>(col+1)); // make a new row
             }
-            else if (m_rows.at(row+1)->count() <= col)  // col does not exist
+            else if (col >= 0 && m_rows.at(row+1)->count() <= uint(col))  // col does not exist
                 m_rows.at(row)->resize(col+1);
 
             chRow = m_rows.count() -1;
@@ -242,13 +242,13 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
             {
                 chCol = col+1;
             }
-            if (m_rows.at(chRow)->count() <= chCol)  // col does not exist
+            if (chCol >= 0 && m_rows.at(chRow)->count() <= uint(chCol))  // col does not exist
                 m_rows.at(chRow)->resize(chCol+1);
         }
         else
         {
             ++col;
-            if (m_rows.at(row)->count() <= col)
+            if (col >= 0 && m_rows.at(row)->count() <= uint(col))
                 m_rows.at(row)->resize(col+1); // make new column
             else if (m_rows.at(row)->at(col) = true)
                 m_rows.append(new QMemArray<bool>(col+1)); // col not free, so make a new row

@@ -175,18 +175,18 @@ void KFormulaDoc::documentRestored()
 }
 
 
-bool KFormulaDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
+bool KFormulaDoc::initDoc(InitDocFlags /*flags*/, QWidget* /*parentWidget*/)
 {
     // If nothing is loaded, do initialize here
     return TRUE;
 }
 
-void KFormulaDoc::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
+void KFormulaDoc::showStartUpWidget(KoMainWindow* parent, bool /*alwaysShow*/)
 {
     parent->setRootDocument( this );
 }
 
-bool KFormulaDoc::showEmbedInitDialog(QWidget* parent)
+bool KFormulaDoc::showEmbedInitDialog(QWidget* /*parent*/)
 {
   return true;
 }

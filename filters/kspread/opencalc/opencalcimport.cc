@@ -224,7 +224,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
     if ( height != -1 )
     {
       kdDebug(30518) << "Setting row height to " << height << endl;
-      rowL->setHeight( height );
+      rowL->setHeight( int( height ) );
     }
 
     // if ( insertPageBreak ) TODO:
@@ -1116,7 +1116,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
 
       ColumnFormat * col = new ColumnFormat( table, column );
       col->copy( styleLayout );
-      col->setWidth( width );
+      col->setWidth( int( width ) );
 
       // if ( insertPageBreak )
       //   col->setPageBreak( true )
@@ -1973,7 +1973,7 @@ void OpenCalcImport::loadFontStyle( Format * layout, QDomElement const * font ) 
   if ( font->hasAttributeNS( ooNS::fo, "color" ) )
     layout->setTextColor( QColor( font->attributeNS( ooNS::fo, "color", QString::null ) ) );
   if ( font->hasAttributeNS( ooNS::fo, "font-size" ) )
-      layout->setTextFontSize( KoUnit::parseValue( font->attributeNS( ooNS::fo, "font-size", QString::null ), 10 ) );
+      layout->setTextFontSize( int( KoUnit::parseValue( font->attributeNS( ooNS::fo, "font-size", QString::null ), 10 ) ) );
   else
     layout->setTextFontSize( 10 );
   if ( font->hasAttributeNS( ooNS::fo, "font-style" ) )

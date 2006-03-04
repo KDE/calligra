@@ -205,7 +205,7 @@ void KprKword::convert()
     {
         QDomElement elem = it.current()->elem;
         // Detect the first object of each page
-        int page = it.current()->y / ptPageHeight;
+        int page = int( it.current()->y / ptPageHeight );
         bool isTitle = ( page > curPage );
         //kdDebug() << "KprKword::convert y=" << it.current()->y << " ptPageHeight=" << ptPageHeight
         //          << " isTitle=" << isTitle << endl;

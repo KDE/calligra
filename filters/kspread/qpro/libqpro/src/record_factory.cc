@@ -1,6 +1,6 @@
 #include <qpro/common.h>
 
-#include <iostream.h>
+#include <iostream>
 
 #include <qpro/record_factory.h>
 

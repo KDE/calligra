@@ -113,7 +113,7 @@ void KPrImportStyleDia::loadFile()
                     // Style created, now let's try to add it
                     sty = m_styleList.addStyle(sty);
 
-                    if(m_styleList.count() > followingStyles.count() )
+                    if( m_styleList.count() >= 0 && uint( m_styleList.count() ) > followingStyles.count() )
                     {
                         QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
                         followingStyles.append( following );
@@ -122,7 +122,7 @@ void KPrImportStyleDia::loadFile()
                         kdWarning(33001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
                 }
 
-                Q_ASSERT( followingStyles.count() == m_styleList.count() );
+                Q_ASSERT( m_styleList.count() >= 0 && followingStyles.count() == uint( m_styleList.count() ) );
 
                 unsigned int i=0;
                 for( QValueList<QString>::Iterator it = followingStyles.begin(); it != followingStyles.end(); ++it ) {

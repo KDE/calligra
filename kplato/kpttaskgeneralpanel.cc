@@ -52,7 +52,7 @@
 namespace KPlato
 {
 
-TaskGeneralPanel::TaskGeneralPanel(Task &task, StandardWorktime *workTime, bool baseline, QWidget *p, const char *n)
+TaskGeneralPanel::TaskGeneralPanel(Task &task, StandardWorktime *workTime, bool /*baseline*/, QWidget *p, const char *n)
     : TaskGeneralPanelImpl(p, n),
       m_task(task),
       m_dayLength(24)
@@ -328,7 +328,7 @@ void TaskGeneralPanelImpl::enableDateTime( int scheduleType )
 }
 
 
-void TaskGeneralPanelImpl::estimationTypeChanged( int type )
+void TaskGeneralPanelImpl::estimationTypeChanged( int /*type*/ )
 {
     checkAllFieldsFilled();
 }

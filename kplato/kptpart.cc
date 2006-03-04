@@ -302,7 +302,7 @@ void Part::slotDocumentRestored() {
 
 void Part::paintContent(QPainter &painter, const QRect &rect,
 			   bool /*transparent*/,
-			   double zoomX, double zoomY)
+			   double zoomX, double /*zoomY*/)
 {
     kdDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
     if (isEmbedded() && m_embeddedGanttView && m_project)

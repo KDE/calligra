@@ -29,8 +29,8 @@ QpIStream::~QpIStream()
 }
 
 #else
-#include <string.h>
-#include <fstream.h>
+#include <string>
+#include <fstream>
 #include <strstream>
 
 // For IRIX

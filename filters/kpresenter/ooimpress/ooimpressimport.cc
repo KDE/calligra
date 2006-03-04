@@ -1550,10 +1550,10 @@ void OoImpressImport::applyListStyle( QDomElement& paragraph )
     // Spec: see 3.3.5 p137
     if ( m_listStyleStack.hasListStyle() && m_nextItemIsListItem ) {
         //const QDomElement listStyle = m_listStyleStack.currentListStyle();
-        bool heading = paragraph.localName() == "h";
+        //bool heading = paragraph.localName() == "h";
         m_nextItemIsListItem = false;
-        int level = heading ? paragraph.attributeNS( ooNS::text, "level", QString::null ).toInt()
-                    : m_listStyleStack.level();
+        /*int level = heading ? paragraph.attributeNS( ooNS::text, "level", QString::null ).toInt()
+                    : m_listStyleStack.level();*/
 
         QDomElement counter = paragraph.ownerDocument().createElement( "COUNTER" );
         counter.setAttribute( "numberingtype", 0 );

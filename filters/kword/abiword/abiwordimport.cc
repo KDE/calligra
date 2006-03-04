@@ -1064,7 +1064,7 @@ static bool EndElementIW(StackItem* stackItem, StackItem* /*stackCurrent*/,
 
 // <foot>
 bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackCurrent*/,
-    const QXmlAttributes& attributes)
+    const QXmlAttributes& /*attributes*/)
 {
 #if 0
     stackItem->elementType=ElementTypeFoot;

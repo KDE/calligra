@@ -31,7 +31,7 @@ KugarNOPImport::KugarNOPImport( KoFilter *, const char *, const QStringList& )
 {
 }
 
-KoFilter::ConversionStatus KugarNOPImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus KugarNOPImport::convert( const QCString& /*from*/, const QCString& /*to*/ )
 {
 
 	QFile in( m_chain->inputFile());

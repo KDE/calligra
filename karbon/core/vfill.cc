@@ -100,7 +100,7 @@ VFill::saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const
 }
 
 void
-VFill::loadOasis( const QDomElement &object, KoOasisLoadingContext &context, VObject* parent )
+VFill::loadOasis( const QDomElement &/*object*/, KoOasisLoadingContext &context, VObject* parent )
 {
 	KoStyleStack &stack = context.styleStack();
 	if( stack.hasAttributeNS( KoXmlNS::draw, "fill" ) )

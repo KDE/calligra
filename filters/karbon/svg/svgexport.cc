@@ -359,7 +359,7 @@ SvgExport::getGradient( const VGradient& grad )
 
 // better than nothing
 void
-SvgExport::getPattern( const VPattern & patt )
+SvgExport::getPattern( const VPattern & )
 {
 	QString uid = createUID();
 	printIndentation( m_defs, m_indent2 );

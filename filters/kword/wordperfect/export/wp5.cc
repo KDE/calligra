@@ -155,7 +155,7 @@ static QCString WPFiveEscape( const QString& text )
 
 
 bool WPFiveWorker::doFullParagraph(const QString& paraText, 
-  const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
+  const LayoutData& /*layout*/, const ValueListFormatData& paraFormatDataList)
 {
   ValueListFormatData::ConstIterator it;
   for( it = paraFormatDataList.begin(); it!=paraFormatDataList.end(); ++it )

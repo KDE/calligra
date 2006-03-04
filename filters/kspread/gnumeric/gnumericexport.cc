@@ -880,6 +880,8 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
         case Custom_format:
             stringFormat = cell->format()->getFormatString(currentcolumn,currentrow);
             break;
+        default:
+            break;
     }
     cell_style.setAttribute("Format",stringFormat);
 

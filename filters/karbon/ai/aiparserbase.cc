@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Dirk Schönberger <dirk.schoenberger@sz-online.de>
+   Copyright (C) 2002, Dirk SchÃ¶nberger <dirk.schoenberger@sz-online.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -752,13 +752,13 @@ void AIParserBase::_handlePSDef() {
   if (m_gstateHandler) m_gstateHandler->gotStrokeColor (color);
 } */
 
-void AIParserBase::_handleDocumentFonts(const char *data) {
+void AIParserBase::_handleDocumentFonts(const char *) {
 }
 
-void AIParserBase::_handleDocumentFiles(const char *data) {
+void AIParserBase::_handleDocumentFiles(const char *) {
 }
 
-void AIParserBase::_handleDocumentCustomColors(const char *data) {
+void AIParserBase::_handleDocumentCustomColors(const char *) {
 }
 
 void AIParserBase::_handleDocumentNeededResources(const char *data) {
@@ -806,7 +806,7 @@ void AIParserBase::_handleDocumentProcessColors(const char *data) {
   if (m_documentHandler) m_documentHandler->gotProcessColors (colorSet);
 }
 
-void AIParserBase::_handleCMYKCustomColor(const char *data) {
+void AIParserBase::_handleCMYKCustomColor(const char *) {
 }
 
 /*Ai88*/ /* void AIParserBase::_handleGsaveIncludeDocument() {
@@ -998,6 +998,7 @@ bool AIParserBase::handlePS (const char *operand){
     case PSO_Put :
       _handlePSPut ();
       return true;
+    default: break;
   }
   return false;
 }
@@ -1180,7 +1181,7 @@ void TextHandlerBase::gotTextBlockEnd ()
   qDebug ("text block end");
 }
 
-const void elementtoa (const AIElement &data)
+const void elementtoa (const AIElement &/*data*/)
 {
 /*  AIElement::Type type = data.type();
   qDebug ("type: %s", AIElement::typeToName (type));
@@ -1212,7 +1213,7 @@ const void elementtoa (const AIElement &data)
   } */
 }
 
-const void arraytoa (const QValueVector<AIElement> &data)
+const void arraytoa (const QValueVector<AIElement> &/*data*/)
 {
 /*  qDebug ("array size is %d ",data.size());
   if (data.size() > 0)
@@ -1226,7 +1227,7 @@ const void arraytoa (const QValueVector<AIElement> &data)
   } */
 }
 
-const void stacktoa (const QValueStack<AIElement> &data)
+const void stacktoa (const QValueStack<AIElement> &/*data*/)
 {
 /*  qDebug ("stack size is %d",data.size());
   if (data.size() > 0)
@@ -1240,7 +1241,7 @@ const void stacktoa (const QValueStack<AIElement> &data)
   qDebug (">>>>>>>>>>>>>>>>>>"); */
 }
 
-const void stacktoa2 (const QValueStack<QValueVector<AIElement> >&data)
+const void stacktoa2 (const QValueStack<QValueVector<AIElement> >&/*data*/)
 {
 /*  qDebug ("stack size is %d",data.size());
 

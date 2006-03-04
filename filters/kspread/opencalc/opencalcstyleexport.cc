@@ -137,7 +137,7 @@ QString OpenCalcStyles::columnStyle( ColumnStyle const & cs )
   return t->name;
 }
 
-QString OpenCalcStyles::numberStyle( NumberStyle const & ns )
+QString OpenCalcStyles::numberStyle( NumberStyle const & )
 {
   return "";
 }
@@ -332,7 +332,7 @@ void OpenCalcStyles::addColumnStyles( QDomDocument & doc, QDomElement & autoStyl
   }
 }
 
-void OpenCalcStyles::addNumberStyles( QDomDocument & doc, QDomElement & autoStyles )
+void OpenCalcStyles::addNumberStyles( QDomDocument & /*doc*/, QDomElement & /*autoStyles*/ )
 {
 }
 
