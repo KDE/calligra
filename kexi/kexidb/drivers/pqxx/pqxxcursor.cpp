@@ -33,13 +33,65 @@ using namespace KexiDB;
 
 unsigned int pqxxSqlCursor_trans_num=0; //!< debug helper
 
+//! @todo move to KexiDB utils
+QByteArray processBinaryData(const pqxx::result::field r)
+{
+	const int size = r.size();
+	QByteArray array;
+	int output=0;
+	for (int pass=0; pass<2; pass++) {//2 passes to avoid allocating buffer twice:
+		                                //  0: count #of chars; 1: copy data
+		const char* s = r.c_str();
+		const char* end = s + size;
+		if (pass==1) {
+			KexiDBDrvDbg << "processBinaryData(): real size == " << output << endl;
+			array.resize(output);
+			output=0;
+		}
+		for (int input=0; s < end; output++) {
+	//		KexiDBDrvDbg<<(int)s[0]<<" "<<(int)s[1]<<" "<<(int)s[2]<<" "<<(int)s[3]<<" "<<(int)s[4]<<endl;
+			if (s[0]=='\\' && (s+1)<end) {
+				//special cases as in http://www.postgresql.org/docs/8.1/interactive/datatype-binary.html
+				if (s[1]=='\'') {// \'
+					if (pass==1)
+						array[output] = '\'';
+					s+=2;
+				}
+				else if (s[1]=='\\') { // 2 backslashes 
+					if (pass==1)
+						array[output] = '\\';
+					s+=2;
+				}
+				else if ((input+3)<size) {// \\xyz where xyz are 3 octal digits
+					if (pass==1)
+						array[output] = char( (int(s[1]-'0')*8+int(s[2]-'0'))*8+int(s[3]-'0') );
+					s+=4;
+				}
+				else {
+					KexiDBDrvWarn << "processBinaryData(): no octal value after backslash" << endl;
+					s++;
+				}
+			}
+			else {
+				if (pass==1)
+					array[output] = s[0];
+				s++;
+			}
+	//		KexiDBDrvDbg<<output<<": "<<(int)array[output]<<endl;
+		}
+	}
+	return array;
+}
+/*old
 QByteArray pqxxSqlCursor::processBinaryData(pqxx::binarystring *bs) const
 {
 	QByteArray ba;
+	kdDebug() << "pqxxSqlCursor::processBinaryData(): bs->data()=="<<(int)bs->data()[0]
+	 <<" "<<(int)bs->data()[1]<<" bs->size()=="<<bs->size()<<endl;
 	ba.setRawData((const char *)(bs->data()), bs->size());
 	ba.detach();
 	return ba;
-}
+}*/
 
 //==================================================================================
 //Constructor based on query statement
@@ -240,7 +292,9 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 		}
 		else if (f->typeGroup() == Field::BLOBGroup)
 		{
-			return QVariant(processBinaryData( new pqxx::binarystring((*m_res)[at()][pos]) ));
+//			pqxx::result::field r = (*m_res)[at()][pos];
+//			kdDebug() << r.name() << ", " << r.c_str() << ", " << r.type() << ", " << r.size() << endl;
+			return QVariant(processBinaryData( (*m_res)[at()][pos] ));
 		}
 	}
 	else // We probably have a raw type query so use pqxx to determin the column type
@@ -265,7 +319,7 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 			case TIMESTAMPOID:
 				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
 			case BYTEAOID:
-				return QVariant(processBinaryData( new pqxx::binarystring((*m_res)[at()][pos]) ));
+				return QVariant(processBinaryData( (*m_res)[at()][pos] ));
 			case BPCHAROID:
 			case VARCHAROID:
 			case TEXTOID:
@@ -318,7 +372,7 @@ void pqxxSqlCursor::storeCurrentRow(RowData &data) const
 		return;
 
 	const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
-	data.reserve(realCount);
+	data.resize(realCount);
 
 	for( uint i=0; i<realCount; i++)
 	{

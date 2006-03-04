@@ -294,6 +294,8 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 			rowData); 
 		if (res!=true || rowData.size()<4) {
 		//! @todo err msg
+			kdWarning() << "KexiBLOBBuffer::objectForId("<<id<<","<<stored
+			<<"): res!=true || rowData.size()<4; res=="<<res<<" rowData.size()=="<<rowData.size()<< endl;
 			return KexiBLOBBuffer::Handle();
 		}
 

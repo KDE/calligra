@@ -68,7 +68,7 @@ private:
 	pqxx::connection* my_conn;
 	QVariant pValue(uint pos)const;
 	bool m_implicityStarted : 1;
-	QByteArray processBinaryData(pqxx::binarystring*) const;
+	//QByteArray processBinaryData(pqxx::binarystring*) const;
 	friend class pqxxSqlConnection;
 };
 

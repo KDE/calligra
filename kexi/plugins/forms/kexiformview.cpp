@@ -283,7 +283,7 @@ KexiFormView::loadForm()
 {
 //@todo also load m_resizeMode !
 
-	kexipluginsdbg << "KexiDBForm::loadForm() Loading the form with id : " << parentDialog()->id() << endl;
+	kexipluginsdbg << "KexiFormView::loadForm() Loading the form with id : " << parentDialog()->id() << endl;
 	// If we are previewing the Form, use the tempData instead of the form stored in the db
 	if(viewMode()==Kexi::DataViewMode && !tempData()->tempForm.isNull() )
 	{
@@ -325,9 +325,7 @@ KexiFormView::loadForm()
 		}
 	}
 	else {
-		kexipluginswarn << "KexiFormView::slotHandleDropEvent(): no such table/query \""
-			<< dataSourceString << "\"" << endl;
-		return;
+//		kexipluginsdbg << "KexiFormView::loadForm(): no table/query" << endl;
 	}
 }
 
@@ -985,7 +983,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.latin1(), sourceMimeType=="kexi/table");
 	if (!tableOrQuery.table() && !tableOrQuery.query()) {
-		kexipluginswarn << "KexiFormView::slotHandleDropEvent(): no such table/query \""
+		kexipluginswarn << "KexiFormView::insertAutoFields(): no such table/query \""
 			<< sourceName << "\"" << endl;
 		return;
 	}
@@ -1014,7 +1012,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 	foreach( QStringList::ConstIterator, it, fields ) {
 		KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(*it);
 		if (!column) {
-			kexipluginswarn << "KexiFormView::slotHandleDropEvent(): no such field \""
+			kexipluginswarn << "KexiFormView::insertAutoFields(): no such field \""
 				<< *it << "\" in table/query \"" << sourceName << "\"" << endl;
 			continue;
 		}

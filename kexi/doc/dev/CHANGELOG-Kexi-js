@@ -9,10 +9,11 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
-2006-02-28
+2006-02-28, 03-03
 PostgreSQL driver
 - fix for displaying unicode error messages
 - fixed escaping binary data (octal values are used for special characters)
+- fixed loading and saving BLOB data (images within forms work now)
 
 2006-02-21
 Table View
