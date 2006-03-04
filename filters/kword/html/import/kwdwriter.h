@@ -159,6 +159,11 @@ public:
 	QDomElement currentFormat(QDomElement paragraph, bool start_new_one=false);
 
 	/**
+	 * create a Link (URL)
+	 **/
+	QDomElement createLink(QDomElement paragraph, QString linkName, QString hrefName);
+
+	/**
 	 * copy the given layout, and set it as layout of the given paragraph
 	 **/
 	QDomElement setLayout(QDomElement paragraph, QDomElement layout);
@@ -186,8 +191,13 @@ public:
         /**
          * returns the document root
          **/
-
         QDomElement docroot();
+
+        /**
+         * creates a KWord Variable (Link, ...)
+         **/
+	void appendKWordVariable(QDomDocument& doc, QDomElement& format,
+		const QString& text, const QString& key, int type, QDomElement& child);
 
 private:
 	/**

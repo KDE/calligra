@@ -300,6 +300,32 @@ QDomElement KWDWriter::addParagraph(QDomElement parent) {
 	return addParagraph(parent,k);
 }
 
+void KWDWriter::appendKWordVariable(QDomDocument& doc, QDomElement& format, 
+	const QString& text, const QString& key, int type, QDomElement& child) {
+
+	QDomElement variableElement ( doc.createElement("VARIABLE") );
+
+	QDomElement typeElement ( doc.createElement("TYPE") );
+	typeElement.setAttribute("key",key);
+	typeElement.setAttribute("type",type);
+	typeElement.setAttribute("text",text);
+	variableElement.appendChild(typeElement); //Append to <VARIABLE>
+
+	variableElement.appendChild(child); //Append to <VARIABLE>
+
+	format.appendChild(variableElement);
+}
+
+QDomElement KWDWriter::createLink(QDomElement paragraph, QString linkName, QString hrefName) {
+	QDomElement linkElement = _doc->createElement("LINK");
+	linkElement.setAttribute( "linkName", linkName );
+	linkElement.setAttribute( "hrefName", hrefName );
+	QDomElement format = currentFormat(paragraph,true);
+	format.setAttribute("id", 4); // change Variable
+        appendKWordVariable(*_doc, format, linkName, "STRING", 9, linkElement);
+
+	return linkElement;
+}
 
 
 QDomElement KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
@@ -398,14 +424,16 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id) {
 	QDomText currentText=temp.toText();
 	if (temp.isNull()) { kdDebug(30503) << "no text" << endl; return; }
 	int oldLength=currentText.data().length();
-	if(oldLength <= 0) {
-		while(text.at(0).isSpace())
-			text.remove(0,1);
-	}
-	currentText.setData(currentText.data()+text);
+	if (oldLength)
+		++oldLength; // add new trailing space char
+	text=text.simplifyWhiteSpace(); // drop all unprintable chars
+	QString newtext=currentText.data() + " " + text;
+	newtext=newtext.simplifyWhiteSpace(); // strip possible new space at beginning.
+	currentText.setData(newtext);
 	int newLength=text.length();
 	QDomElement lastformat=currentFormat(paragraph,true);
-	lastformat.setAttribute("id",format_id);
+	if (lastformat.attribute("id").isEmpty()) // keep old id value, e.g. LINK URL
+		lastformat.setAttribute("id",format_id);
 	lastformat.setAttribute("pos",QString("%1").arg(oldLength));
 	lastformat.setAttribute("len",QString("%1").arg(newLength));
 }

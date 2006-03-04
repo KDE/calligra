@@ -82,6 +82,7 @@ private:
         int _list_depth;
 // -----------------------------------------------------
 	bool parse_CommonAttributes(DOM::Element e);
+	bool parse_a(DOM::Element e);
 	bool parse_p(DOM::Element e);
 	bool parse_br(DOM::Element e);
 	bool parse_table(DOM::Element e);

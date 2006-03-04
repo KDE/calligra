@@ -230,6 +230,7 @@ void KHTMLReader::parse_head(DOM::Element e) {
 
 
 bool KHTMLReader::parseTag(DOM::Element e) {
+	_PP(a);
 	_PP(p);
 	_PP(br);
 	_PP(table);
@@ -256,6 +257,7 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 	_PL(h4,NAME,value,h4);
 	_PL(h5,NAME,value,h5);
 	_PL(h6,NAME,value,h6);
+
 	return true;
 }
 
@@ -372,14 +374,26 @@ bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
         return true;
 }
 
-
+bool KHTMLReader::parse_a(DOM::Element e) {
+        QString url = e.getAttribute("href").string();
+        if (!url.isEmpty()) 
+        {
+		QString linkName;
+		DOM::Text t = e.firstChild();
+		if (t.isNull()) {
+			/* Link without text -> just drop it*/
+			return false; /* stop parsing recursively */
+		}
+		linkName = t.data().string().simplifyWhiteSpace();
+		t.setData(DOM::DOMString("#")); // replace with '#'
+		_writer->createLink(state()->paragraph, linkName, url);
+        }
+	return true; /* stop parsing recursively */
+}
 
 bool KHTMLReader::parse_p(DOM::Element e) {
-        kdDebug(30503) << "entering KHTMLReader::parse_p" << endl;
 	startNewParagraph();
 	parse_CommonAttributes(e);
-
-	kdDebug(30503) << "leaving KHTMLReader::parse_p" << endl;
 	return true;
 }
 
@@ -395,7 +409,7 @@ bool KHTMLReader::parse_br(DOM::Element /*e*/) {
 	return false; // a BR tag has no childs.
 }
 
-QColor parsecolor(QString colorstring) {
+static const QColor parsecolor(const QString& colorstring) {
       QColor color;
       if (colorstring[0]=='#') {
             color.setRgb(
