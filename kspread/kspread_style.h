@@ -234,6 +234,12 @@ public:
   QString const & parentName() const { return m_parentName; }
   void setParent( CustomStyle * parent );
 
+  /**
+   * Returns the name of a colour.  This is the same as returned by QColor::name, but an internal cache
+   * is used to reduce the overhead when asking for the name of the same colour.
+   */
+  static QString colorName( const QColor& color );
+  
 protected:
   /**
    * Helper function for saveOasis
@@ -241,6 +247,7 @@ protected:
    */
   void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
 
+  
   CustomStyle * m_parent;
   QString        m_parentName;
   StyleType      m_type;

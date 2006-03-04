@@ -668,7 +668,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
                                       const QString &_prefix, const QString &_postfix,
                                       int _precision, const QString& /*symbol*/ )
 {
-  kdDebug() << k_funcinfo << endl;
+//  kdDebug() << k_funcinfo << endl;
     QString styleName;
     QString valueType;
     switch( _style )
@@ -1060,12 +1060,12 @@ QString Style::saveOasis( KoGenStyle& style, KoGenStyles& mainStyles )
 void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 {
 #ifndef NDEBUG
-    if (type() == BUILTIN )
-      kdDebug() << "BUILTIN" << endl;
-    else if (type() == CUSTOM )
-      kdDebug() << "CUSTOM" << endl;
-    else if (type() == AUTO )
-      kdDebug() << "AUTO" << endl;
+    //if (type() == BUILTIN )
+    //  kdDebug() << "BUILTIN" << endl;
+    //else if (type() == CUSTOM )
+    //  kdDebug() << "CUSTOM" << endl;
+    //else if (type() == AUTO )
+    //  kdDebug() << "AUTO" << endl;
 #endif
 
     // don't store parent, if it's the default style
@@ -1118,7 +1118,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     }
 
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
-        style.addProperty( "fo:background-color", m_bgColor.name() );
+        style.addProperty( "fo:background-color", colorName(m_bgColor) );
 
     if ( featureSet( SMultiRow ) && hasProperty( PMultiRow ) )
         style.addProperty( "fo:wrap-option", "wrap" );
@@ -1252,7 +1252,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 
     if ( featureSet( STextPen ) && m_textPen.color().isValid() )
     {
-        style.addProperty("fo:color", m_textPen.color().name(), KoGenStyle::TextType );
+        style.addProperty("fo:color", colorName(m_textPen.color()), KoGenStyle::TextType );
     }
     //I don't think there is a reason why the background brush should be saved if it is null,
     //but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
@@ -2596,6 +2596,22 @@ Style * Style::setFormatType( FormatType format )
   return this;
 }
 
+QString Style::colorName( const QColor& color )
+{
+	static QMap<QRgb , QString> map;
+
+	QRgb rgb = color.rgb();
+	
+	if (!map.contains( rgb ))
+	{
+		map[rgb] = color.name();
+		return map[rgb];
+	}
+	else
+	{
+		return map[rgb];
+	}
+}
 
 /**
  * ************************************************************

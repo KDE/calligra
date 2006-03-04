@@ -27,7 +27,7 @@
 #include "kspread_locale.h"
 #include "kspread_map.h"
 #include "kspread_sheet.h"
-
+#include "kspread_style.h"
 #include "kspread_util.h"
 
 using namespace KSpread;
@@ -950,7 +950,7 @@ QString KSpread::convertOasisPenToString( const QPen & pen )
     if ( pen.color().isValid() )
     {
         s+=' ';
-        s+=pen.color().name();
+        s+=Style::colorName(pen.color());
     }
     return s;
 }

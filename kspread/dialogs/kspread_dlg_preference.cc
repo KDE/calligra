@@ -160,18 +160,14 @@ parameterLocale::parameterLocale( View* _view, QVBox *box , char *name )
   KLocale* locale=_view->doc()->locale();
 
   m_language=new QLabel( tmpQGroupBox,"label");
-  m_language->setText( i18n("Language: %1").arg( locale->language() ));
   m_number=new QLabel( tmpQGroupBox,"label6");
-  m_number->setText( i18n("Default number format: %1").arg( locale->formatNumber(12.55) ));
   m_date=new QLabel( tmpQGroupBox,"label1");
-  m_date->setText( i18n("Long date format: %1").arg( locale->formatDate( QDate::currentDate() )));
   m_shortDate=new QLabel( tmpQGroupBox,"label5");
-  m_shortDate->setText( i18n("Short date format: %1").arg( locale->formatDate( QDate::currentDate() ,true) ));
   m_time=new QLabel( tmpQGroupBox,"label2");
-  m_time->setText( i18n("Time format: %1").arg( locale->formatTime( QTime::currentTime() ) ));
   m_money=new QLabel( tmpQGroupBox,"label3");
-  m_money->setText( i18n("Currency format: %1").arg( locale->formatMoney(12.55) ));
 
+  updateToMatchLocale(locale);
+  
   m_updateButton=new QPushButton ( i18n("&Update Locale Settings"), tmpQGroupBox);
   connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
 }
@@ -191,12 +187,17 @@ void parameterLocale::updateDefaultSystemConfig()
     m_bUpdateLocale=true;
     static_cast<Locale*>(m_pView->doc()->locale())->defaultSystemConfig( );
     KLocale* locale=m_pView->doc()->locale();
-    m_money->setText( i18n("Money: %1").arg( locale->formatMoney(12.55) ));
-    m_time->setText( i18n("Time: %1").arg( locale->formatTime(QTime(15,10,53)) ));
-    m_shortDate->setText( i18n("Short date: %1").arg( locale->formatDate(QDate(2000,10,23),true) ));
-    m_date->setText( i18n("Date: %1").arg( locale->formatDate(QDate(2000,10,23)) ));
-    m_number->setText( i18n("Number: %1").arg( locale->formatNumber(12.55) ));
-    m_language->setText( i18n("Language: %1").arg( locale->language() ));
+    updateToMatchLocale( locale );
+}
+
+void parameterLocale::updateToMatchLocale(KLocale* locale)
+{
+  m_language->setText( i18n("Language: %1").arg( locale->language() ));
+  m_number->setText( i18n("Default number format: %1").arg( locale->formatNumber(12.55) ));
+  m_date->setText( i18n("Long date format: %1").arg( locale->formatDate( QDate::currentDate() )));
+  m_shortDate->setText( i18n("Short date format: %1").arg( locale->formatDate( QDate::currentDate() ,true) ));
+  m_time->setText( i18n("Time format: %1").arg( locale->formatTime( QTime::currentTime() ) ));
+  m_money->setText( i18n("Currency format: %1").arg( locale->formatMoney(12.55) ));
 }
 
 configure::configure( View* _view, QVBox *box , char *name )

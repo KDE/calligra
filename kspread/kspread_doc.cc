@@ -619,7 +619,11 @@ bool Doc::loadChildren( KoStore* _store )
 
 bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-  return saveOasisHelper( store, manifestWriter, SaveAll );
+  emitBeginOperation(true);
+  	bool result=saveOasisHelper( store, manifestWriter, SaveAll );
+  emitEndOperation();
+
+  return result;
 }
 
 bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
@@ -2072,15 +2076,23 @@ void Doc::refreshLocale()
 
 void Doc::emitBeginOperation(bool waitCursor)
 {
-    if (waitCursor)
+    //If an emitBeginOperation occurs with waitCursor enabled, then the waiting cursor is set 
+    //until all operations have been completed.
+    //
+    //The reason being that any operations started before the first one with waitCursor set
+    //are expected to be completed in a short time anyway.
+    QCursor* activeOverride = QApplication::overrideCursor();
+    
+    if (waitCursor && ( (!activeOverride) || (activeOverride->shape() != Qt::waitCursor.shape()) )  )
     {
         QApplication::setOverrideCursor(Qt::waitCursor);
     }
-    /* just duplicate the current cursor on the stack, then */
-    else if (QApplication::overrideCursor() != NULL)
-    {
-        QApplication::setOverrideCursor(QApplication::overrideCursor()->shape());
-    }
+
+//    /* just duplicate the current cursor on the stack, then */
+//  else if (QApplication::overrideCursor() != NULL)
+//    {
+//        QApplication::setOverrideCursor(QApplication::overrideCursor()->shape());
+//    }
 
     KoDocument::emitBeginOperation();
     d->delayCalculation = true;
@@ -2104,10 +2116,11 @@ void Doc::emitEndOperation()
    }
 
    KoDocument::emitEndOperation();
-   QApplication::restoreOverrideCursor();
 
    if (d->numOperations == 0)
    {
+   	QApplication::restoreOverrideCursor();
+    
      /* do this after the parent class emitEndOperation because that allows updates
         on the view again
      */
@@ -2122,35 +2135,20 @@ void Doc::emitEndOperation( const Region& /*region*/ )
   if ( d->numOperations > 0 || !d->activeSheet )
   {
     KoDocument::emitEndOperation();
-    QApplication::restoreOverrideCursor();
     return;
   }
 
   d->numOperations = 0;
   d->delayCalculation = false;
 
-  {
-    //PERF:  This adds every cell in the region to the paint dirty list.  I don't think this is necessary since 
-    //Sheet::setRegionPaintDirty can be used for this.
-    //This caused areas to be added to the paint dirty list multiple times, so calls to check whether a cell
-    //was in the paint dirty list became very time consuming because of the O(n) behaviour of Region::contains
-    // -- Robert Knight
-    
-    //### d->activeSheet->updateCellArea(region);
-    
-  }
-
   KoDocument::emitEndOperation();
 
   QApplication::restoreOverrideCursor();
 
-  if ( d->numOperations == 0 )
-  {
     /* do this after the parent class emitEndOperation because that allows updates
     on the view again
     */
-    paintUpdates();
-  }
+  paintUpdates();
 }
 
 bool Doc::delayCalculation() const

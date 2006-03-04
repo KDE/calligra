@@ -696,13 +696,16 @@ void Sheet::fillSequence( QPtrList<Cell>& _srcList,
                                  QPtrList<AutoFillSequence>& _seqList,
                                  bool down)
 {
-
+    doc()->emitBeginOperation(true);
+	
     /* try finding an interval to use to fill the sequence */
     if (!FillSequenceWithInterval(_srcList, _destList, _seqList, down))
     {
       /* if no interval was found, just copy down through */
       FillSequenceWithCopy(_srcList, _destList, down);
     }
+
+    doc()->emitEndOperation();
 
 }
 

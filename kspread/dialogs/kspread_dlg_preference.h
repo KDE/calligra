@@ -53,6 +53,11 @@ public:
 public slots:
    void updateDefaultSystemConfig();
  protected:
+   /**
+    * Updates the GUI widgets to match the specified locale.  
+    */
+   void updateToMatchLocale(KLocale* locale);
+
    QLabel *m_shortDate,*m_time,*m_money,*m_date,*m_language,*m_number;
    QPushButton *m_updateButton;
    View* m_pView;
