@@ -150,7 +150,7 @@ public:
 	/**
 	 * adds some text to the current format in this paragraph
 	 **/
-	void addText(QDomElement paragraph, QString text, int format_id=1);
+	void addText(QDomElement paragraph, QString text, int format_id=1, bool keep_formatting=false);
 
 	/**
 	 * returns the current format

@@ -75,6 +75,7 @@ HTMLReader_state *KHTMLReader::state() {
 		s->paragraph = _writer->addParagraph(s->frameset);
 		s->format=_writer->currentFormat(s->paragraph,true);
 		s->layout=_writer->currentLayout(s->paragraph);
+		s->in_pre_mode = false;
 		_state.push(s);
 	}
 	return _state.top();
@@ -86,6 +87,7 @@ HTMLReader_state *KHTMLReader::pushNewState() {
         s->paragraph=state()->paragraph;
         s->format=state()->format;
         s->layout=state()->layout;
+	s->in_pre_mode=state()->in_pre_mode;
         _writer->cleanUpParagraph(s->paragraph);
         _state.push(s);
         return s;
@@ -161,7 +163,7 @@ void KHTMLReader::parseNode(DOM::Node node) {
         // check if this is a text node.
 	DOM::Text t=node;
 	if (!t.isNull()) {
-	   _writer->addText(state()->paragraph,t.data().string());
+	   _writer->addText(state()->paragraph,t.data().string(),state()->in_pre_mode);
 	   return; // no children anymore...
 	}
 
@@ -543,6 +545,7 @@ bool KHTMLReader::parse_img(DOM::Element /*e*/) {
 }
 
 bool KHTMLReader::parse_pre(DOM::Element e) {
+#if 0 // see Bug #74601 (normal): kword doesn't recognize PRE-tags in HTML
 	//pushNewState();
 	/// \todo set fixed width font
 	DOM::HTMLElement htmlelement(e);
@@ -551,6 +554,15 @@ bool KHTMLReader::parse_pre(DOM::Element e) {
 	startNewParagraph();
 	//popState();
 	return false; // children are already handled.
+#else
+	pushNewState();
+	state()->in_pre_mode=true;
+	for (DOM::Node q=e.firstChild(); !q.isNull(); q=q.nextSibling()) {
+		parseNode(q); // parse everything...
+	}
+	popState();
+	return false; // children are already handled.
+#endif
 }
 
 bool KHTMLReader::parse_ol(DOM::Element e) {

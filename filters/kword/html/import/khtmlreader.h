@@ -40,6 +40,7 @@ struct HTMLReader_state {
   QDomElement frameset;
   QDomElement paragraph;
   QDomElement layout;
+  bool in_pre_mode; // keep formatting as is.
 };
 
 class KHTMLReader: public QObject {

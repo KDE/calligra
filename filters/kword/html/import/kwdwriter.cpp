@@ -419,16 +419,29 @@ QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QStr
 	}
 }
 
-void KWDWriter::addText(QDomElement paragraph, QString text, int format_id) {
+void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool keep_formatting) {
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
 	QDomText currentText=temp.toText();
 	if (temp.isNull()) { kdDebug(30503) << "no text" << endl; return; }
-	int oldLength=currentText.data().length();
-	if (oldLength)
-		++oldLength; // add new trailing space char
-	text=text.simplifyWhiteSpace(); // drop all unprintable chars
-	QString newtext=currentText.data() + " " + text;
-	newtext=newtext.simplifyWhiteSpace(); // strip possible new space at beginning.
+	QString oldtext=currentText.data();
+	int oldLength=oldtext.length();
+	if (keep_formatting) {
+		if (oldLength) {
+			++oldLength;
+			oldtext.append('\n');
+		}
+	} else {
+		if (oldLength)
+			++oldLength; // add new trailing space char
+		text=text.simplifyWhiteSpace(); // drop all unprintable chars
+	}
+	QString newtext;
+	if (keep_formatting)
+		newtext=oldtext + text;
+	else {
+		newtext=oldtext + " " + text;
+		newtext=newtext.simplifyWhiteSpace(); // strip possible new space at beginning.
+	}
 	currentText.setData(newtext);
 	int newLength=text.length();
 	QDomElement lastformat=currentFormat(paragraph,true);
