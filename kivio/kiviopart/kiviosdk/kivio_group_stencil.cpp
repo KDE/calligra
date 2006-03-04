@@ -281,13 +281,9 @@ void KivioGroupStencil::setX( double newX )
   KivioStencil *pStencil = m_pGroupList->first();
   while( pStencil )
   {
-    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
-      pStencil->type() != kstConnector)
+    if( pStencil->protection()->at(kpX)==false )
     {
-      if( pStencil->protection()->at(kpX)==false )
-      {
-        pStencil->setX( pStencil->x() + dx );
-      }
+      pStencil->setX( pStencil->x() + dx );
     }
 
     pStencil = m_pGroupList->next();
@@ -303,13 +299,9 @@ void KivioGroupStencil::setY( double newY )
   KivioStencil *pStencil = m_pGroupList->first();
   while( pStencil )
   {
-    if(((pStencil->type() == kstConnector) && !pStencil->connected()) ||
-      pStencil->type() != kstConnector)
+    if( pStencil->protection()->at(kpY)==false )
     {
-      if( pStencil->protection()->at(kpY)==false )
-      {
-        pStencil->setY( pStencil->y() + dy );
-      }
+      pStencil->setY( pStencil->y() + dy );
     }
 
     pStencil = m_pGroupList->next();
