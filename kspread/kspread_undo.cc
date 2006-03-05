@@ -2236,9 +2236,10 @@ void UndoAutofill::undo()
 
     sheet->deleteCells( m_selection );
     sheet->paste( m_data, m_selection );
-    if(sheet->getAutoCalc()) sheet->recalc();
+    //if(sheet->getAutoCalc()) sheet->recalc();
 
-    sheet->updateView();
+    doc()->emitEndOperation();
+    //sheet->updateView();
 
     doc()->undoUnlock();
 }

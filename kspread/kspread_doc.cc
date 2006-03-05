@@ -444,22 +444,8 @@ void Doc::saveConfig()
 
 void Doc::initConfig()
 {
-    KSpellConfig ksconfig;
     KConfig *config = Factory::global()->config();
-    if( config->hasGroup("KSpell kspread" ) )
-    {
-        config->setGroup( "KSpell kspread" );
-        ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
-        ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
-        ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
-        ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", false));
-        ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
-        ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
-        setKSpellConfig(ksconfig);
-
-        setDontCheckUpperWord(config->readBoolEntry("KSpell_IgnoreUppercaseWords", false));
-        setDontCheckTitleCase(config->readBoolEntry("KSpell_IgnoreTitleCaseWords", false));
-    }
+    
     if( config->hasGroup("KSpread Page Layout" ))
     {
       config->setGroup( "KSpread Page Layout" );
@@ -1398,8 +1384,28 @@ void Doc::setKSpellConfig(KSpellConfig _kspell)
   d->spellConfig->setClient(_kspell.client());
 }
 
-KSpellConfig * Doc::getKSpellConfig()const
+KSpellConfig * Doc::getKSpellConfig()
 {
+    if (!d->spellConfig)
+    {
+    	KSpellConfig ksconfig;
+    
+    	KConfig *config = Factory::global()->config();
+    	if( config->hasGroup("KSpell kspread" ) )
+    	{
+        	config->setGroup( "KSpell kspread" );
+        	ksconfig.setNoRootAffix(config->readNumEntry ("KSpell_NoRootAffix", 0));
+        	ksconfig.setRunTogether(config->readNumEntry ("KSpell_RunTogether", 0));
+        	ksconfig.setDictionary(config->readEntry ("KSpell_Dictionary", ""));
+        	ksconfig.setDictFromList(config->readNumEntry ("KSpell_DictFromList", false));
+        	ksconfig.setEncoding(config->readNumEntry ("KSpell_Encoding", KS_E_ASCII));
+        	ksconfig.setClient(config->readNumEntry ("KSpell_Client", KS_CLIENT_ISPELL));
+        	setKSpellConfig(ksconfig);
+
+        	setDontCheckUpperWord(config->readBoolEntry("KSpell_IgnoreUppercaseWords", false));
+        	setDontCheckTitleCase(config->readBoolEntry("KSpell_IgnoreTitleCaseWords", false));
+    	}
+    }
   return d->spellConfig;
 }
 

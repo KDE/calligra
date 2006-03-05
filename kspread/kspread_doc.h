@@ -390,7 +390,7 @@ public:
    * get custom kspell config
    */
   void setKSpellConfig(KSpellConfig _kspell);
-  KSpellConfig * getKSpellConfig() const;
+  KSpellConfig * getKSpellConfig();
 
   bool dontCheckUpperWord() const;
   void setDontCheckUpperWord(bool _b);
