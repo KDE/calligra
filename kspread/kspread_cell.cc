@@ -4563,6 +4563,7 @@ void Cell::setNumber( double number )
   setValue( Value( number ) );
 
   d->strText.setNum( number );
+  setDisplayText(d->strText);
   checkNumberFormat();
 }
 

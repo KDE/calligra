@@ -1989,7 +1989,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   doc()->emitBeginOperation();
 
   QString cellText;
-
+  
   int x,y; /* just some loop counters */
 
   /* the actual number of columns or rows that the series will span.
@@ -2240,6 +2240,9 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
       }
     }
   }
+  
+  setRegionPaintDirty( undoRegion );
+  
   //  doc()->emitEndOperation();
   emit sig_updateView( this );
 }

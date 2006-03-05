@@ -709,14 +709,14 @@ void Sheet::fillSequence( QPtrList<Cell>& _srcList,
 
 }
 
-double getDiff(Cell * cell1, Cell * cell2, AutoFillSequenceItem::Type type)
+double getDiff( const Value& value1, const Value& value2, AutoFillSequenceItem::Type type)
 {
   // note: date and time difference can be calculated as
   // the difference of the serial number
   if( (type == AutoFillSequenceItem::FLOAT) ||
       (type == AutoFillSequenceItem::DATE) ||
       (type == AutoFillSequenceItem::TIME) )
-    return ( cell2->value().asFloat() - cell1->value().asFloat() );
+    return ( value2.asFloat() - value1.asFloat() );
   else
     return 0.0;
 }
@@ -746,6 +746,8 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
     Cell * cell = _srcList.first();
     Cell * cell2 = _srcList.next();
 
+    bool singleCellOnly = (cell2 == 0);
+    
     if ( cell->isDate() )
       type = AutoFillSequenceItem::DATE;
     else if ( cell->isTime() )
@@ -753,22 +755,47 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
     else if ( cell->value().isNumber() )
       type = AutoFillSequenceItem::FLOAT;
     else
-      return false; // Cannot happen du to if condition
+      return false; // Cannot happen due to if condition
 
-    while ( cell && cell2 )
+    while ( cell && (cell2 || singleCellOnly) )
     {
+      
+      Value cellValue = cell->value();
+      Value cell2Value;
 
-      // check if both cells contain the same type
-      if ( ( !cell2->value().isNumber() )
+      //If we only have a single cell, the interval will depend upon the data type.
+      //- For numeric values, set the interval to 0 as we don't know what might be useful as a sequence
+      //- For time values, set the interval to one hour, as this will probably be the most useful setting
+      //- For date values, set the interval to one day, as this will probably be the most useful setting
+      //
+      //Note that the above options were chosen for consistency with Excel.  Gnumeric (1.59) sets
+      //the interval to 0 for all types, OpenOffice.org (2.00) uses increments of 1.00, 1 hour and 1 day
+      //respectively
+      if (singleCellOnly)
+      {
+      	if (type == AutoFillSequenceItem::FLOAT)
+		cell2Value = cellValue;
+	else if ( type == AutoFillSequenceItem::TIME)
+		cell2Value = Value( cellValue.asTime().addSecs( 60*60 ) );
+	else if ( type == AutoFillSequenceItem::DATE)
+		cellValue = Value ( cellValue.asDate().addDays( 1 ) );
+      }
+      else
+      {
+	cell2Value = cell2->value();      
+	      
+      	// check if both cells contain the same type
+      	if ( ( !cellValue.isNumber() )
            || ( cell2->isDate() && type != AutoFillSequenceItem::DATE )
            || ( cell2->isTime() && type != AutoFillSequenceItem::TIME ) )
-      {
-        count = 0;
-        ok = false;
-        break;
+      	{
+        	count = 0;
+        	ok = false;
+       		break;
+      	}
       }
 
-      double delta = getDiff(cell, cell2, type);
+      double delta = getDiff(cellValue , cell2Value, type);
 
       if (count < 1)
       {
