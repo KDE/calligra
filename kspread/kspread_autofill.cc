@@ -40,7 +40,7 @@
 #include "kspread_sheet.h"
 #include "kspread_undo.h"
 #include "kspread_value.h"
-
+#include "valueconverter.h"
 #include "kspread_autofill.h"
 
 using namespace KSpread;
@@ -896,8 +896,22 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
 		else
 			cellValue = cellValue.asInt() - currentDiff.asInt();
 
-        dest->setCellText( cellValue.asString() );
-        dest->copyFormat( src );
+	if ( type == AutoFillSequenceItem::TIME)
+	{
+		Value timeValue = doc()->converter()->asTime( Value(cellValue.asInt()) );
+		Value stringValue = doc()->converter()->asString( timeValue );
+		dest->setCellText( stringValue.asString() );
+	}
+	else if ( type == AutoFillSequenceItem::DATE)
+	{
+		Value dateValue = doc()->converter()->asDate( Value(cellValue.asInt()) );
+		Value stringValue = doc()->converter()->asString( dateValue );
+		dest->setCellText( stringValue.asString() );
+	}
+	else
+        	dest->setCellText( cellValue.asString() );
+        
+	dest->copyFormat( src );
         dest->format()->setFormatType( src->formatType() );
 
         if (down)
