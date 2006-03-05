@@ -73,13 +73,13 @@ class DependencyList {
   void addRangeDependency (const RangeDependency &rd);
   /** remove all dependencies of a cell */
   void removeDependencies (const Point &cell);
-  
+
   /** update all cells depending on a range containing this cell */
   void processRangeDependencies (const Point &cell);
 
   /** update all cells depending on a range intersecting with this range */
   void processRangeDependencies (const Range &range);
-  
+
   /** update one cell due to changed dependencies */
   void updateCell (const Point &cell) const;
 
@@ -90,10 +90,10 @@ class DependencyList {
   QValueList<Point> leadingCells (const Range &range) const;
   /** retrieve a list of cells that a given cell depends on */
   RangeList computeDependencies (const Point &cell) const;
-  
+
   /** Sheet whose dependencies are managed by this instance */
   Sheet *sheet;
-  
+
   /** dependencies of each cell */
   QMap<Point, RangeList> dependencies;
   /** list of cells (but NOT ranges) that depend on a cell */
@@ -132,7 +132,7 @@ void DependencyManager::cellChanged (const Point &cell)
   //if the cell contains the circle error, we mustn't do anything
   if (c->testFlag (Cell::Flag_CircularCalculation))
     return;
-  
+
   //don't re-generate dependencies if we're updating dependencies
   if ( !(c->testFlag (Cell::Flag_Progress)))
     deps->generateDependencies (cell);
@@ -186,11 +186,11 @@ void DependencyList::cellChanged (const Point &cell)
   // empty or default cell? do nothing
   if( c->isDefault() )
     return;
-  
+
   //if the cell contains the circle error, we mustn't do anything
   if (c->testFlag (Cell::Flag_CircularCalculation))
     return;
-  
+
   //don't re-generate dependencies if we're updating dependencies
   if ( !(c->testFlag (Cell::Flag_Progress)))
     generateDependencies (cell);
@@ -204,7 +204,7 @@ RangeList DependencyList::getDependencies (const Point &cell)
   //look if the cell has any dependencies
   if (!dependencies.contains (cell))
     return rl;  //it doesn't - return an empty list
-  
+
   //the cell does have dependencies - return them!
   return dependencies[cell];
 }
@@ -222,7 +222,7 @@ QValueList<Point> DependencyList::getDependants (const Point &cell)
   QValueList<RangeDependency>::iterator it;
   if (!rangeDeps.count (leading))
     return list;  //no range dependencies in this cell chunk -> nothing more to do
-  
+
   for (it = rangeDeps[leading].begin();
       it != rangeDeps[leading].end(); ++it)
   {
@@ -237,7 +237,7 @@ QValueList<Point> DependencyList::getDependants (const Point &cell)
       list.push_back (c);
     }
   }
-  
+
   return list;
 }
 
@@ -249,7 +249,7 @@ void DependencyList::areaModified (const QString &name)
   // everything as necessary ...
   if (!areaDeps.contains (name))
     return;
-  
+
   QMap<Point, bool>::iterator it;
   for (it = areaDeps[name].begin(); it != areaDeps[name].end(); ++it)
   {
@@ -278,13 +278,13 @@ void DependencyList::addRangeDependency (const RangeDependency &rd)
   Sheet *sh = rd.range.sheet();
   if (!sh)
     sh = sheet;
-  
+
   Point cell;
   cell.setSheet (rd.cellsheet);
   cell.setRow (rd.cellrow);
   cell.setColumn (rd.cellcolumn);
   dependencies[cell].ranges.push_back (rd.range);
-  
+
   QValueList<Point> leadings = leadingCells (rd.range);
   QValueList<Point>::iterator it;
   for (it = leadings.begin(); it != leadings.end(); ++it)
@@ -313,14 +313,14 @@ void DependencyList::removeDependencies (const Point &cell)
 
     if (!sh->dependencies()->deps->cellDeps.contains (*it1))
       continue;  //this should never happen
-    
+
     //we no longer depend on this cell
     QValueList<Point>::iterator cit;
     cit = sh->dependencies()->deps->cellDeps[*it1].find (cell);
     if (cit != sh->dependencies()->deps->cellDeps[*it1].end())
       sh->dependencies()->deps->cellDeps[*it1].erase (cit);
   }
-  
+
   //then range-dependencies are removed
   QValueList<Range> ranges = dependencies[cell].ranges;
   QValueList<Range>::iterator it2;
@@ -357,7 +357,7 @@ void DependencyList::removeDependencies (const Point &cell)
         sh->dependencies()->deps->rangeDeps.erase (*it1);
     }
   }
-  
+
   // remove information about named area dependencies
   QMap<QString, QMap<Point, bool> >::iterator itr;
   for (itr = areaDeps.begin(); itr != areaDeps.end(); ++itr) {
@@ -382,15 +382,15 @@ void DependencyList::generateDependencies (const Point &cell)
     return;
   if (!c->isFormula())
     return;
- 
+
   //now we need to generate dependencies
   RangeList rl = computeDependencies (cell);
-  
+
   //now that we have the new dependencies, we put them into our data structures
   //and we're done
   QValueList<Point>::iterator it1;
   QValueList<Range>::iterator it2;
-  
+
   for (it1 = rl.cells.begin(); it1 != rl.cells.end(); ++it1)
     addDependency (cell, *it1);
   for (it2 = rl.ranges.begin(); it2 != rl.ranges.end(); ++it2)
@@ -400,10 +400,10 @@ void DependencyList::generateDependencies (const Point &cell)
     rd.cellcolumn = cell.column();
     rd.cellsheet = sheet;
     rd.range = *it2;
-    
-    if (rd.range.sheet() == 0) 
+
+    if (rd.range.sheet() == 0)
         rd.range.setSheet(sheet);
-        
+
     addRangeDependency (rd);
   }
 }
@@ -425,7 +425,7 @@ void DependencyList::generateDependencies (const RangeList &rangeList)
 {
   QValueList<Point>::const_iterator it1;
   QValueList<Range>::const_iterator it2;
-  
+
   for (it1 = rangeList.cells.begin(); it1 != rangeList.cells.end(); ++it1)
     generateDependencies (*it1);
   for (it2 = rangeList.ranges.begin(); it2 != rangeList.ranges.end(); ++it2)
@@ -441,7 +441,7 @@ void DependencyList::processDependencies (const Point &cell)
     for (it = d.begin(); it != d.end(); ++it)
       updateCell (*it);
   }
-  
+
   processRangeDependencies (cell);
 }
 
@@ -485,9 +485,9 @@ void DependencyList::processDependencies (const Range &range)
         QValueList<Point>::iterator it;
         for (it = d.begin(); it != d.end(); ++it)
           updateCell (*it);
-      }
     }
-  
+    }
+
   processRangeDependencies (range);
 }
 
@@ -497,7 +497,7 @@ void DependencyList::processRangeDependencies (const Range &range)
   //ranges more than once (now we recompute them once per cell-chunk used by their dependency)
   //This will probably happen as a part of splitting this into dep manager
   //and recalc manager
-  
+
   QValueList<Point> leadings = leadingCells (range);
   QValueList<Point>::iterator it;
   for (it = leadings.begin(); it != leadings.end(); ++it)
@@ -525,7 +525,7 @@ void DependencyList::processDependencies (const RangeList &rangeList)
 {
   QValueList<Point>::const_iterator it1;
   QValueList<Range>::const_iterator it2;
-  
+
   for (it1 = rangeList.cells.begin(); it1 != rangeList.cells.end(); ++it1)
     processDependencies (*it1);
   for (it2 = rangeList.ranges.begin(); it2 != rangeList.ranges.end(); ++it2)
@@ -558,13 +558,13 @@ void DependencyList::updateCell (const Point &cell) const
   }
   //set the computing-dependencies flag
   c->setFlag (Cell::Flag_Progress);
-  
+
   //mark the cell as calc-dirty
   c->setCalcDirtyFlag();
-  
+
   //recalculate the cell
   c->calc (false);
-  
+
   //clear the computing-dependencies flag
   c->clearFlag (Cell::Flag_Progress);
 }
@@ -582,14 +582,14 @@ QValueList<Point> DependencyList::leadingCells (const Range &range) const
 {
   QValueList<Point> cells;
   Point cell1, cell2, cell;
-  
+
   cell1.setRow (range.startRow());
   cell1.setColumn (range.startCol());
   cell2.setRow (range.endRow());
   cell2.setColumn (range.endCol());
   cell1.setSheet(range.sheet());
   cell2.setSheet(range.sheet());
-  
+
   cell1 = leadingCell (cell1);
   cell2 = leadingCell (cell2);
   for (int row = cell1.row(); row <= cell2.row(); row += CELLCHUNK_ROWS)
@@ -624,19 +624,19 @@ RangeList DependencyList::computeDependencies (const Point &cell) const
     kdDebug() << "Cell at row " << cell.row() << ", col " << cell.column() << " marked as formula, but formula is NULL" << endl;
     return RangeList();
   }
-  
+
   Tokens tokens = f->tokens();
 
   //return empty list if the tokens aren't valid
   if (!tokens.valid())
     return RangeList();
-  
+
   RangeList rl;
   for( unsigned i = 0; i < tokens.count(); i++ )
   {
     Token token = tokens[i];
     Token::Type tokenType = token.type();
-    
+
     //parse each cell/range and put it to our RangeList
     if (tokenType == Token::Cell)
     {
@@ -653,7 +653,7 @@ RangeList DependencyList::computeDependencies (const Point &cell) const
         rl.ranges.push_back (range);
     }
   }
-  
+
   return rl;
 }
 
