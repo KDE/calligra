@@ -4569,14 +4569,14 @@ void Cell::setNumber( double number )
 
 void Cell::setCellText( const QString& _text, bool asText )
 {
-  QString ctext = _text;
+ // QString ctext = _text;
 
 // (Tomas) is this trim necessary for anything ?  
 //  if( ctext.length() > 5000 )
 //    ctext = ctext.left( 5000 );
 
   // empty string ?
-  if (ctext.length() == 0) {
+  if (_text.length() == 0) {
     d->strOutText = d->strText = "";
     setValue (Value::empty());
     return;
@@ -4584,15 +4584,15 @@ void Cell::setCellText( const QString& _text, bool asText )
 
   // as text ?
   if (asText) {
-    d->strOutText = ctext;
-    d->strText    = ctext;
-    setValue (Value (ctext));
+    d->strOutText = _text;
+    d->strText    = _text;
+    setValue (Value (_text));
 
     return;
   }
 
   QString oldText = d->strText;
-  setDisplayText( ctext );
+  setDisplayText( _text );
   if(!format()->sheet()->isLoading() && !testValidity() )
   {
     //reapply old value if action == stop

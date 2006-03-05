@@ -315,7 +315,7 @@ Value ValueConverter::asTime (const Value &value) const
       val.setValue (QTime::currentTime());
     break;
     case Value::Integer:
-      val.setValue (value.asFloat());
+      val.setValue (value.asInteger());
       val.setFormat (Value::fmt_Time);
     break;
     case Value::Float:

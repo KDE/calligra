@@ -709,16 +709,22 @@ void Sheet::fillSequence( QPtrList<Cell>& _srcList,
 
 }
 
-double getDiff( const Value& value1, const Value& value2, AutoFillSequenceItem::Type type)
+QVariant getDiff( const Value& value1, const Value& value2  , AutoFillSequenceItem::Type type  )
 {
+  if ( type == AutoFillSequenceItem::FLOAT )
+	  return QVariant( value2.asFloat() - value1.asFloat() );
+  if ( type == AutoFillSequenceItem::TIME || type == AutoFillSequenceItem::DATE )
+	  return QVariant( (int)( value2.asInteger() - value1.asInteger() ) );
+
+  return QVariant( (int)0 );
   // note: date and time difference can be calculated as
   // the difference of the serial number
-  if( (type == AutoFillSequenceItem::FLOAT) ||
+ /* if( (type == AutoFillSequenceItem::FLOAT) ||
       (type == AutoFillSequenceItem::DATE) ||
       (type == AutoFillSequenceItem::TIME) )
     return ( value2.asFloat() - value1.asFloat() );
   else
-    return 0.0;
+    return 0.0;*/
 }
 
 bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
@@ -737,8 +743,8 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
   {
     AutoFillSequenceItem::Type type;
 
-    QMemArray<double> * tmp  = new QMemArray<double> ( _seqList.count() );
-    QMemArray<double> * diff = new QMemArray<double> ( _seqList.count() );
+    QValueVector< QVariant > tmp( _seqList.count() );  /*= new QValueList< QVariant > ( _seqList.count() )*/;
+    QValueVector< QVariant > diff( _seqList.count() ); /*= new QValueList< QVariant > ( _seqList.count() )*/;
     int p = -1;
     int count = 0;
     int tmpcount = 0;
@@ -778,7 +784,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
 	else if ( type == AutoFillSequenceItem::TIME)
 		cell2Value = Value( cellValue.asTime().addSecs( 60*60 ) );
 	else if ( type == AutoFillSequenceItem::DATE)
-		cellValue = Value ( cellValue.asDate().addDays( 1 ) );
+		cell2Value = Value ( cellValue.asDate().addDays( 1 ) );
       }
       else
       {
@@ -795,21 +801,21 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
       	}
       }
 
-      double delta = getDiff(cellValue , cell2Value, type);
-
+      QVariant delta = getDiff(cellValue , cell2Value , type ); 
+      
       if (count < 1)
       {
         p = count;
-        diff->at( count++ ) = delta;
+        diff[ count++ ] = delta;
       }
       else
       {
         // same value again?
-        if (diff->at( p ) == delta)
+        if (diff[ p ] == delta)
         {
           // store it somewhere else for the case we need it later
           ++p;
-          tmp->at( tmpcount++ ) = delta;
+          tmp[ tmpcount++ ] = delta;
         }
         else
         {
@@ -818,7 +824,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
           {
             for ( int i = 0; i < tmpcount; ++i )
             {
-              diff->at( count++ ) = tmp->at( i );
+              diff[ count++ ] = tmp.at( i );
             }
 
             tmpcount = 0;
@@ -826,7 +832,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
 
           // insert the value
           p = 0;
-          diff->at( count++ ) = delta;
+          diff[ count++ ] = delta;
         }
       }
 
@@ -838,7 +844,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
     // we have found something:
     if (count > 0 && (tmpcount > 0 || count == 1))
     {
-      double initDouble=0.0;
+      QVariant cellValue( (int) 0 );
 
       Cell * dest;
       Cell * src;
@@ -848,24 +854,19 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
       {
         dest = _destList.first();
         src  = _srcList.last();
-
-        if( (type == AutoFillSequenceItem::FLOAT) ||
-            (type == AutoFillSequenceItem::DATE) ||
-            (type == AutoFillSequenceItem::TIME) )
-          initDouble = src->value().asFloat();
       }
       else
       {
         dest = _destList.last();
         src  = _srcList.first();
 
-        if( (type == AutoFillSequenceItem::FLOAT) ||
-            (type == AutoFillSequenceItem::DATE) ||
-            (type == AutoFillSequenceItem::TIME) )
-          initDouble = src->value().asFloat();
-
         i   *= -1;
       }
+
+      if ( type == AutoFillSequenceItem::FLOAT )
+	      cellValue = src->value().asFloat();
+      else
+	      cellValue = (int)src->value().asInteger();
 
       QString res;
       // copy all the data
@@ -881,20 +882,21 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
           while ( i < 0)
             i += count;
         }
+	
+	QVariant currentDiff = diff.at( i );
+	
+	if (cellValue.type() == QVariant::Double)
+        	if (down)
+            		cellValue = cellValue.asDouble() + currentDiff.asDouble();  	
+          	else
+            		cellValue = cellValue.asDouble() -  currentDiff.asDouble();
+	else
+		if (down)
+			cellValue = cellValue.asInt() + currentDiff.asInt();
+		else
+			cellValue = cellValue.asInt() - currentDiff.asInt();
 
-        if( (type == AutoFillSequenceItem::FLOAT) ||
-            (type == AutoFillSequenceItem::DATE) ||
-            (type == AutoFillSequenceItem::TIME) )
-        {
-          if (down)
-            initDouble += diff->at( i );
-          else
-            initDouble -= diff->at( i );
-
-          res.sprintf("%f", initDouble );
-        }
-
-        dest->setCellText( res );
+        dest->setCellText( cellValue.asString() );
         dest->copyFormat( src );
         dest->format()->setFormatType( src->formatType() );
 
@@ -922,8 +924,8 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
       ok = false;
     }
 
-    delete tmp;
-    delete diff;
+   // delete tmp;
+   // delete diff;
 
     return ok;
   }

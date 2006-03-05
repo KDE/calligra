@@ -554,10 +554,10 @@ void Value::setValue( const QDateTime& dt )
   QDate refDate( 1899, 12, 31 );
   QTime refTime( 0, 0 );
 
-  double f = refDate.daysTo( dt.date() ) + 1.0;
-  f += refTime.secsTo( dt.time() ) / 86400.0;
+  int i = refDate.daysTo( dt.date() ) + 1;
+  i += refTime.secsTo( dt.time() ) / 86400;
 
-  setValue( f );
+  setValue( i );
   d->format = fmt_DateTime;
 }
 
@@ -565,9 +565,9 @@ void Value::setValue( const QTime& time )
 {
   // reference time is midnight
   QTime refTime( 0, 0 );
-  double f = refTime.msecsTo( time ) / 86400000.0;
+  int i = refTime.msecsTo( time ) /* / 86400000 */;
 
-  setValue( f );
+  setValue( i );
   d->format = fmt_Time;
 }
 
@@ -575,9 +575,9 @@ void Value::setValue( const QDate& date )
 {
   // reference date is 31 Dec, 1899
   QDate refDate = QDate( 1899, 12, 31 );
-  double f = refDate.daysTo( date ) + 1.0;
+  int i = refDate.daysTo( date ) + 1;
 
-  setValue( f );
+  setValue( i );
   d->format = fmt_Date;
 }
 
@@ -592,8 +592,8 @@ QDate Value::asDate() const
 {
   QDate dt( 1899, 12, 30 );
 
-  double f = asFloat();
-  dt = dt.addDays( (int) f );
+  int i = asInteger();
+  dt = dt.addDays( i );
   
   return dt;
 }
@@ -603,8 +603,8 @@ QTime Value::asTime() const
 {
   QTime dt;
   
-  double f = asFloat();
-  dt = dt.addMSecs( qRound( (f-(int)f) * 86400 * 1000 ) );
+  int i = asInteger();
+  dt = dt.addMSecs(i) /*( f * 86400 * 1000  )*/;
   
   return dt;
 }
