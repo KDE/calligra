@@ -1921,15 +1921,8 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
 QPoint Canvas::cursorPos()
 {
   QPoint cursor;
-  if (d->chooseCell)
-  {
+  if (d->chooseCell && !choice()->isEmpty())
     cursor = choice()->cursor();
-    /* if the cursor is unset, pretend we're starting at the regular cursor */
-    if (cursor.x() == 0 || cursor.y() == 0)
-    {
-      cursor = selectionInfo()->cursor();
-    }
-  }
   else
     cursor = selectionInfo()->cursor();
 
