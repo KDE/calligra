@@ -138,7 +138,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
             Range newRange( token.text() );
 
             if (!alreadyFoundRanges.contains(newRange))
-            { 
+            {
                 alreadyFoundRanges.append(newRange);
                 d->rangeCount++;
             }
@@ -202,13 +202,13 @@ void FormulaEditorHighlighter::handleBrace( uint index )
   if ( opType == Token::LeftPar )
   {
     //If cursor is directly to the left of this left brace, highlight it
-    if ( distance == 1 ) 
+    if ( distance == 1 )
       highlightBrace=true;
     else
         //Cursor is directly to the right of this left brace, highlight it unless
-        //there is another left brace to the right (in which case that should be highlighted instead as it 
+        //there is another left brace to the right (in which case that should be highlighted instead as it
         //is the inner-most brace)
-        if (distance==2) 
+        if (distance==2)
             if ( (index == d->tokens.count()-1) || ( d->tokens.at(index+1).asOperator() != Token::LeftPar) )
           highlightBrace=true;
 
@@ -271,7 +271,7 @@ int FormulaEditorHighlighter::findMatchingBrace(int pos)
         }
     }
 
-    return -1; 
+    return -1;
 }
 
 uint FormulaEditorHighlighter::rangeCount() const
@@ -308,7 +308,7 @@ public:
   QLabel* hintLabel;
 };
 
-FunctionCompletion::FunctionCompletion( CellEditor* editor ): 
+FunctionCompletion::FunctionCompletion( CellEditor* editor ):
 QObject( editor )
 {
   d = new Private;
@@ -378,7 +378,7 @@ void FunctionCompletion::itemSelected( const QString& item )
 
 bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
 {
-    if ( obj == d->completionPopup || obj == d->completionListBox ) 
+    if ( obj == d->completionPopup || obj == d->completionListBox )
     {
       if ( ev->type() == QEvent::KeyPress )
       {
@@ -391,7 +391,7 @@ bool FunctionCompletion::eventFilter( QObject *obj, QEvent *ev )
               else if ( ke->key() == Key_Left || ke->key() == Key_Right ||
               ke->key() == Key_Up || ke->key() == Key_Down ||
               ke->key() == Key_Home || ke->key() == Key_End ||
-              ke->key() == Key_Prior || ke->key() == Key_Next ) 
+              ke->key() == Key_Prior || ke->key() == Key_Next )
                   return false;
 
               d->hintLabel->hide();
@@ -447,7 +447,7 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
   if( pos.x() + w > screen.x()+screen.width() )
     pos.setX(  screen.x()+screen.width() - w );
 
-  d->completionPopup->move( pos );    
+  d->completionPopup->move( pos );
   d->completionListBox->setFocus();
   d->completionPopup->show();
 }
@@ -560,18 +560,12 @@ CellEditor::CellEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
 
 CellEditor::~CellEditor()
 {
-  // Make sure the choose mode's activated before we stop it.
-  // Canvas::endChoose() resets the sheet to where the choice started,
-  // clears the choice and forces a repaint, so the highlighted ranges
-  // will be cleared.
-  canvas()->setChooseMode(true);
   canvas()->endChoose();
 
   delete d->highlighter;
   delete d->functionCompletion;
   delete d->functionCompletionTimer;
   delete d;
-  
 }
 
 Cell* CellEditor::cell() const
@@ -609,12 +603,12 @@ void CellEditor::triggerFunctionAutoComplete()
 
   KSpread::Token lastToken = tokens[ tokens.count()-1 ];
 
-  // last token must be an identifier  
+  // last token must be an identifier
   if( !lastToken.isIdentifier() ) return;
   QString id = lastToken.text();
   if( id.length() < 1 ) return;
 
-  // find matches in function names  
+  // find matches in function names
   QStringList fnames = KSpread::FunctionRepository::self()->functionNames();
   QStringList choices;
   for( unsigned i=0; i<fnames.count(); i++ )

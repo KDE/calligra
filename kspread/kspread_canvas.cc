@@ -465,11 +465,17 @@ void Canvas::startChoose( const QRect& rect )
 
 void Canvas::endChoose()
 {
+  // While entering a formula the choose mode is turned on and off.
+  // Clear the choice even if we are not in choose mode. Otherwise,
+  // cell references will stay highlighted.
+  if (!choice()->isEmpty())
+  {
+    choice()->clear();
+    update();
+  }
+
   if ( !d->chooseCell )
     return;
-
-  choice()->clear();
-  update();
 
   d->chooseCell = false;
 
@@ -3463,7 +3469,7 @@ void Canvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keep
         right = true;
 //         snapStatus |= KoGuides::SNAP_VERT;
     }
-    
+
     double newLeft = objRect.left();
     double newRight = objRect.right();
     double newTop = objRect.top();
@@ -3640,7 +3646,7 @@ void Canvas::displayObjectList( QPtrList<EmbeddedObject> &list )
 
     if ( d->m_objectDisplayAbove )
     {
-        // it can happen that the object is no longer there e.g. when 
+        // it can happen that the object is no longer there e.g. when
         // the insert of the object is undone
         int pos = doc()->embeddedObjects().findRef( d->m_objectDisplayAbove );
         if ( pos != -1 && d->m_objectDisplayAbove->isSelected() )
