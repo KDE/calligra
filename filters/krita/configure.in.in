@@ -43,8 +43,8 @@ AC_CACHE_VAL(exif_build,
 [
     AC_TRY_COMPILE([
     extern "C" {
-#include <exif-loader.h>
-#include <exif-utils.h>
+#include <libexif/exif-loader.h>
+#include <libexif/exif-utils.h>
 }
     ],[
         ExifLoader *l = exif_loader_new ();
