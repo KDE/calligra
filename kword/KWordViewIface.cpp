@@ -104,6 +104,16 @@ void KWordViewIface::insertPicture()
     view->insertPicture();
 }
 
+void KWordViewIface::insertPictureFromFile( QString fileName, bool makeInline, bool keepRatio )
+{
+    KoPicture picture;
+    KoPictureKey key;
+    key.setKeyFromFile( fileName );
+    picture.setKey( key );
+    picture.loadFromFile( fileName );
+    view->insertPicture( picture, makeInline, keepRatio );
+}
+
 void KWordViewIface::formatPage()
 {
     view->formatPage();
