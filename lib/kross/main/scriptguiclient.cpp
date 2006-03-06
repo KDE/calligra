@@ -155,7 +155,9 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
         return false;
     }
 
-    QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts", true);
+    QCString partname = d->guiclient->instance()->instanceName();
+    QString destination = KGlobal::dirs()->saveLocation("data", partname + "/scripts/", true);
+    //QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts", true);
     if(destination.isNull()) {
         kdWarning() << "ScriptGUIClient::installScriptPackage() Failed to determinate location where the scriptpackage should be installed to!" << endl;
         return false;
@@ -176,6 +178,7 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
         }
     }
 
+    kdDebug() << QString("Copy script-package to destination directory: %1").arg(destination) << endl;
     const KArchiveDirectory* archivedir = archive.directory();
     archivedir->copyTo(destination, true);
 
