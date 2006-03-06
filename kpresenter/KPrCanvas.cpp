@@ -1501,8 +1501,13 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     {
                         keepRatio = true;
                     }
+                    bool scaleAroundCenter = false;
+                    if ( e->state() & ControlButton )
+                    {
+                        scaleAroundCenter = true;
+                    }
 
-                    resizeObject( modType, sp, keepRatio );
+                    resizeObject( modType, sp, keepRatio, scaleAroundCenter );
                 }
             } break;
             case TEM_ZOOM : {
@@ -2108,7 +2113,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                         m_gl.repaintAfterSnapping();
                     }
                     // undo snapping for move by mouse
-                    if ( e->state() & Qt::LeftButton )
+                    if ( e->state() & Qt::LeftButton && m_isMoving )
                     {
                         moveObjectsByMouse( m_origMousePos, e->state() & AltButton || e->state() & ControlButton );
                     }
@@ -4715,7 +4720,7 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
 }
 
 
-void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio )
+void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio, bool scaleAroundCenter )
 {
     KPrObject *kpobject = m_resizeObject;
 
@@ -4837,8 +4842,53 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool k
         }
         else
         {
-            newRight = objRect.right() + width;
+            newRight = objRect.left() + width;
         }
+    }
+
+    if ( scaleAroundCenter )
+    {
+        KoPoint center( m_rectBeforeResize.center() );
+
+        if ( newLeft != objRect.left() )
+        {
+            width = 2 * ( center.x() - newLeft );
+        }
+        else if ( newRight != objRect.right() )
+        {
+            width = 2 * ( newRight - center.x() );
+        }
+
+        // if keep ratio is set caluclate witdh by ratio
+        if ( keepRatio )
+        {
+            height = width / m_ratio;
+        }
+        else
+        {
+            if ( newTop != objRect.top() )
+            {
+                height = 2 * ( center.y() - newTop );
+            }
+            else if ( newBottom != objRect.bottom() )
+            {
+                height = 2 * ( newBottom - center.y() );
+            }
+        }
+
+        if ( width < MIN_SIZE )
+        {
+            width = MIN_SIZE;
+        }
+        if ( height < MIN_SIZE )
+        {
+            height = MIN_SIZE;
+        }
+
+        newLeft = center.x() - width / 2;
+        newRight = newLeft + width;
+        newTop = center.y() - height / 2;
+        newBottom = newTop + height;
     }
 
     if ( newLeft != objRect.left() || newRight != objRect.right() || newTop != objRect.top() || newBottom != objRect.bottom() )

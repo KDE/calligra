@@ -628,7 +628,7 @@ private:
 
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
-    void resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio );
+    void resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio, bool scaleAroundCenter );
     /// create KPrResizeCmd
     void finishResizeObject( const QString &name, bool layout = true );
 
