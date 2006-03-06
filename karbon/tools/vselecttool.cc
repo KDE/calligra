@@ -265,7 +265,7 @@ VSelectTool::mouseButtonRelease()
 			view()->part()->document().selection()->clear();
 
 		// get a list of all object under the mouse cursor
-		VSelectObjects selector( newSelection, first() );
+		VSelectObjects selector( newSelection, first(), true, true );
 		if( selector.visit( view()->part()->document() ) )
 		{
 			// determine the last selected object of the object stack

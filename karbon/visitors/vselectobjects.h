@@ -39,16 +39,15 @@ class VSelectObjects : public VVisitor
 {
 public:
 	VSelectObjects( VObjectList& selection, bool select = true )
-		: m_selection( selection ), m_select( select ) {}
+		: m_selection( selection ), m_select( select ), m_insideGroups( false ) {}
 
 	VSelectObjects( VObjectList& selection, const KoRect& rect, bool select = true )
-		: m_selection( selection ), m_select( select ), m_rect( rect ), m_rectMode( true ) { }
+		: m_selection( selection ), m_select( select ), m_rect( rect ), m_rectMode( true ), m_insideGroups( false ) { }
 
-	VSelectObjects( VObjectList& selection, const KoPoint& point, bool select = true )
-		: m_selection( selection ), m_select( select ), m_point( point ), m_rectMode( false ) {}
+	VSelectObjects( VObjectList& selection, const KoPoint& point, bool select = true, bool insideGroups = false )
+		: m_selection( selection ), m_select( select ), m_point( point ), m_rectMode( false ), m_insideGroups( insideGroups )  {}
 
-	virtual void visitVGroup( VGroup& group )
-		{ visitVObject( group ); }
+	virtual void visitVGroup( VGroup& group );
 	virtual void visitVPath( VPath& composite );
 	virtual void visitVText( VText& text );
 	virtual void visitVImage( VImage& img )
@@ -65,6 +64,7 @@ private:
 	KoRect m_rect;
 	KoPoint m_point;
 	bool m_rectMode;
+	bool m_insideGroups;
 };
 
 #endif

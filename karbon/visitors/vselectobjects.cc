@@ -255,3 +255,19 @@ VSelectObjects::visitVText( VText& text )
 		m_selection.remove( &text );
 	}
 }
+
+void 
+VSelectObjects::visitVGroup( VGroup& group )
+{ 
+	// Never select a deleted, locked or hidden object.
+	if( group.state() > VObject::normal &&
+		group.state() < VObject::selected )
+		return;
+
+	if( ! m_insideGroups )
+		visitVObject( group );
+	else
+	{
+		VVisitor::visitVGroup( group );
+	}
+}
