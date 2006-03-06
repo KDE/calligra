@@ -302,16 +302,16 @@ void KHTMLReader::parseStyle(DOM::Element e) {
 }
 
 void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
-/*
-        // For the first paragraph ever, do nothing. 
-        // It has already been started.
+
+        // For every starting paragraph, a line break has to be inserted.
+        // exception: the first paragraph, e.g. if the <body> starts with a <p>.
         static bool firstparagraph=true;
         if (firstparagraph)
         {
           firstparagraph=false;
           return;
         }
-*/
+
 	QDomElement qf=state()->format;
 	QDomElement ql=state()->layout;
 
