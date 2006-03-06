@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=KOffice Formula Component
-Name[bg]=Компонент за формули в KOffice
 Name[ca]=Component de fòrmules de KOffice
 Name[cy]=Cydran Fformiwla KOffice 
 Name[da]=KOffice formelkomponent
@@ -31,7 +30,6 @@ Name[tg]=Формулаи компоненти KOffice
 Name[tr]=KOffice Formül Bileşeni
 Name[uk]=Компонент формул KOffice
 Name[wa]=Componint formule matematike di KOffice
-Name[xx]=xxKOffice Formula Componentxx
 Name[zh_CN]=KOffice 公式组件
 X-KDE-Library=libkformulapart
 MimeType=application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;application/x-kformula
@@ -93,7 +91,6 @@ GenericName[uk]=Редактор формул
 GenericName[uz]=Формула таҳрирчи
 GenericName[wa]=Aspougneu d' formules
 GenericName[xh]=Umhleli wendlela yokubala
-GenericName[xx]=xxFormula Editorxx
 GenericName[zh_CN]=公式编辑器
 GenericName[zh_TW]=方程式編輯器
 Icon=kformula

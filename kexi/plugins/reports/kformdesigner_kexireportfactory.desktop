@@ -4,13 +4,11 @@ Type=Service
 ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi Report Widgets
-Name[bg]=Графични елементи за отчети на Kexi
 Name[ca]=Estris d'informe de Kexi
 Name[cy]=Celfigion Adroddiad i Kexi
 Name[da]=Kexi Rapportkontroller
 Name[de]=Kexi Bericht-Elemente
 Name[el]=Γραφικά συστατικά αναφοράς Kexi
-Name[eo]=Raport-fenestraĵoj
 Name[es]=Widgets para informes de Kexi
 Name[et]=Kexi aruandevidinad
 Name[eu]=Kexi-ren txosten-trepetak
@@ -32,9 +30,7 @@ Name[sl]=Gradniki za poročila za Kexi
 Name[sr]=Kexi-јеве контроле за извештаје
 Name[sr@Latn]=Kexi-jeve kontrole za izveštaje
 Name[sv]=Kexi-rapportkomponenter
-Name[tr]=Kexi Rapor Parçacıkları
 Name[uk]=Віджети звітів Kexi
-Name[xx]=xxKexi Report Widgetsxx
 Name[zh_CN]=Kexi 报表部件
 
 X-KDE-Library=kformdesigner_kexireportwidgets

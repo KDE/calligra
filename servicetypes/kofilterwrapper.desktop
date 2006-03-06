@@ -11,13 +11,13 @@ Comment[cy]=Lapiad Hidlen KOffice
 Comment[da]=KOffice-filteromslag
 Comment[de]=KOffice-Filter-Wrapper
 Comment[el]=Περίβλημα φίλτρου του KOffice
-Comment[eo]=Filtril-envolvaĵo de KOffice 
 Comment[es]=Filtro de interfaz (wrapper) de KOffice
 Comment[et]=KOffice'i filtrirakendus
 Comment[eu]=KOffice iragazkiaren zorroa
 Comment[fi]=KOfficen suotimien välitysohjelma
 Comment[fr]=Conteneur de filtre KOffice
 Comment[he]=עטיפת מסנן של KOffice
+Comment[hi]=के-ऑफ़िस फ़िल्टर रैपर
 Comment[hr]=KOffice filter omotač
 Comment[hu]=KOffice-szűrőprogram
 Comment[is]=KOffice síuhluti
@@ -40,10 +40,9 @@ Comment[sr@Latn]=KOffice-ov omotač filtera
 Comment[sv]=Koffice-filteromgivning
 Comment[ta]=Kஅலுவலக வடிகட்டி முடி
 Comment[tg]=Рӯмуқоваи Филтри KOffice
-Comment[tr]=KOffice Süzgeç Kaydırması
+Comment[tr]=KOffice Filtre Kaydırması
 Comment[uk]=Обгортка фільтрів KOffice
 Comment[xh]=Isisongeli Sesihluzi se KOffice
-Comment[xx]=xxKOffice Filter Wrapperxx
 Comment[zh_CN]=KOffice 过滤器包装
 
 [PropertyDef::X-KDE-Wrapper-Import]

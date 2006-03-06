@@ -7,7 +7,6 @@ Comment[bg]=Създаване на графични обекти
 Comment[ca]=Factoria base d'estris
 Comment[cy]=Bâs Ffatri Celfigion
 Comment[de]=Basis für die Erstellung von Bedienelementen
-Comment[eo]=Bazo por fenestraĵ-fabriko
 Comment[es]=Base de fábrica de elementos
 Comment[et]=Vidinate põhibaas
 Comment[eu]=Trepeten faktoriaren oinarria
@@ -32,9 +31,7 @@ Comment[sr@Latn]=Osnova fabrike kontrola
 Comment[sv]=Bas för att skapa grafiska komponenter
 Comment[ta]= widget  தொழிற்சாலை தளம்
 Comment[tg]=Гузориши база, ки таркиботи идораи офис дар дохил дорад
-Comment[tr]=Parçacık Üretim Temeli
 Comment[uk]=База фабрики віджетів
-Comment[xx]=xxWidget Factory Basexx
 Comment[zh_CN]=基础组件工厂
 
 [PropertyDef::X-KFormDesigner-FactoryGroup]

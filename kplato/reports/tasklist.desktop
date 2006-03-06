@@ -1,26 +1,23 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=List of Tasks
-Name[bg]=Списък със задачи
 Name[ca]=Llista de tasques
 Name[da]=Opgaveliste
 Name[de]=Liste von Aufgaben
 Name[es]=Lista de tareas
 Name[et]=Ülesannete nimekiri
+Name[hu]=Feladatlista
 Name[is]=Listi yfir verkefni
 Name[it]=Elenco di attività
 Name[ja]=タスクのリスト
 Name[nl]=Lijst van taken
 Name[pt]=Lista de Tarefas
 Name[pt_BR]=Lista de Tarefas
-Name[ru]=Список задач
 Name[sl]=Seznam opravil
 Name[sr]=Листа задатака
 Name[sr@Latn]=Lista zadataka
 Name[sv]=Aktivitetslista
 Name[uk]=Список завдань
-Name[xx]=xxList of Tasksxx
-Name[zh_CN]=任务列表
 Type=Link
 URL= .source/tasklist.ktf
 X-KDE-Hidden=false
