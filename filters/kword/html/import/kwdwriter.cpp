@@ -445,7 +445,7 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool
 	currentText.setData(newtext);
 	int newLength=text.length();
 	QDomElement lastformat=currentFormat(paragraph,true);
-	if (lastformat.attribute("id").isEmpty()) // keep old id value, e.g. LINK URL
+	if (lastformat.attribute("id").isEmpty()) // keep old id value, e.g. for LINK URL
 		lastformat.setAttribute("id",format_id);
 	lastformat.setAttribute("pos",QString("%1").arg(oldLength));
 	lastformat.setAttribute("len",QString("%1").arg(newLength));

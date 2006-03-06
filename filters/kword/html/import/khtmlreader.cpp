@@ -163,7 +163,7 @@ void KHTMLReader::parseNode(DOM::Node node) {
         // check if this is a text node.
 	DOM::Text t=node;
 	if (!t.isNull()) {
-	   _writer->addText(state()->paragraph,t.data().string(),state()->in_pre_mode);
+	   _writer->addText(state()->paragraph,t.data().string(),1,state()->in_pre_mode);
 	   return; // no children anymore...
 	}
 
@@ -550,7 +550,7 @@ bool KHTMLReader::parse_pre(DOM::Element e) {
 	/// \todo set fixed width font
 	DOM::HTMLElement htmlelement(e);
 	if(! htmlelement.isNull())
-		_writer->addText(state()->paragraph,htmlelement.innerHTML().string());
+		_writer->addText(state()->paragraph,htmlelement.innerHTML().string(),1);
 	startNewParagraph();
 	//popState();
 	return false; // children are already handled.
