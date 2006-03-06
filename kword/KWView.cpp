@@ -330,6 +330,9 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     connect( m_doc, SIGNAL( sig_refreshMenuCustomVariable()),
              this, SLOT( refreshCustomMenu()));
 
+    connect( m_doc, SIGNAL( completed() ),
+             this, SLOT( slotDocumentLoadingCompleted() ) );
+
     connect( frameViewManager(), SIGNAL(sigFrameSelectionChanged()),
              this, SLOT( frameSelectedChanged()));
 
@@ -7712,6 +7715,11 @@ QPoint KWView::reverseViewTransformations( const QPoint& p ) const
 
 int KWView::currentPage() const {
     return m_currentPage->pageNumber();
+}
+
+void KWView::slotDocumentLoadingCompleted()
+{
+    updateStyleList();
 }
 
 #include "KWView.moc"

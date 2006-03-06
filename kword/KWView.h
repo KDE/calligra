@@ -490,6 +490,9 @@ protected slots:
     void slotChangeCutState(bool b);
     void slotCorrectWord();
 
+    /// This slot is called when the document has finished loading.
+    void slotDocumentLoadingCompleted();
+
 protected:
     void addVariableActions( int type, const QStringList & texts,
                              KActionMenu * parentMenu, const QString & menuText );
