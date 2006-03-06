@@ -1432,6 +1432,16 @@ void KWCanvas::insertPicture( const KoPicture& newPicture, QSize pixmapSize, boo
     m_keepRatio = _keepRatio;
 }
 
+void KWCanvas::insertPictureDirect( const KoPicture& picture, const KoPoint& pos, const QSize& sz )
+{
+    // Prepare things for mrCreatePixmap
+    m_pixmapSize = sz.isEmpty() ? picture.getOriginalSize() : sz;
+    m_kopicture = picture;
+    m_insRect = KoRect( pos.x(), pos.y(), m_doc->unzoomItX( m_pixmapSize.width() ), m_doc->unzoomItY( m_pixmapSize.height() ) );
+    m_keepRatio = true;
+    mrCreatePixmap();
+}
+
 void KWCanvas::insertPart( const KoDocumentEntry &entry )
 {
     m_partEntry = entry;
@@ -1517,18 +1527,12 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
             if ( res && res->isValid() ) {
                 QString mimetype = res->name();
                 if ( mimetype.contains( "image" ) ) {
-                    QImage i( filename );
-                    m_pixmapSize = i.size();
-                    // Prepare things for mrCreatePixmap
                     KoPictureKey key;
                     key.setKeyFromFile( filename );
                     KoPicture newKoPicture;
                     newKoPicture.setKey( key );
                     newKoPicture.loadFromFile( filename );
-                    m_kopicture = newKoPicture;
-                    m_insRect = KoRect( docPoint.x(), docPoint.y(), m_doc->unzoomItX( i.width() ), m_doc->unzoomItY( i.height() ) );
-                    m_keepRatio = true;
-                    mrCreatePixmap();
+                    insertPictureDirect( newKoPicture, docPoint );
                 }
             }
             KIO::NetAccess::removeTempFile( filename );

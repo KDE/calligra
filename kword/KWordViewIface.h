@@ -62,8 +62,20 @@ k_dcop:
     void tableSplitCells(uint rows, uint cols);
     void tableUngroupTable();
 
-    void insertPicture();
-    void insertPictureFromFile( QString fileName, bool makeInline, bool keepRatio );
+    void insertPicture(); // not good, triggers the dialog
+
+    /**
+     * Insert an inline picture at the current character position
+     * TODO
+     */
+    //void insertInlinePicture( QString fileName, bool keepRatio );
+    /**
+     * Insert a (non-inline) picture at the given position
+     * If w and h are 0, the default size from the image is used
+     */
+    void insertPictureFromFile( QString fileName, double x, double y, int w = 0, int h = 0 );
+
+
     void toolsPart();
 
     double zoom();

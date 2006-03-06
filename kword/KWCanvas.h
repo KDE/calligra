@@ -119,9 +119,12 @@ public:
     void setMouseMode( MouseMode _mm );
     MouseMode mouseMode()const { return m_mouseMode; }
 
+    // makes the user draw the rect for inserting the picture
     void insertPicture( const KoPicture& newPicture, QSize pixmapSize, bool _keepRatio );
     void insertPart( const KoDocumentEntry &entry );
     void pasteImage( QMimeSource *e, const KoPoint &docPoint );
+    // insert a (non-inline) picture at the given position; used by dnd and dcop
+    void insertPictureDirect( const KoPicture& picture, const KoPoint& pos, const QSize& sz = QSize() );
 
     void updateCurrentFormat();
 

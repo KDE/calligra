@@ -471,8 +471,6 @@ public slots:
 
     void addWordToDictionary();
 
-    void insertPicture( const KoPicture& picture, const bool makeInline, const bool keepRatio );
-
 protected slots:
     virtual void slotChildActivated( bool a ); ///< from KoView
     void slotSetInitialPosition();
@@ -500,6 +498,8 @@ protected:
     void loadexpressionActions( KActionMenu * parentMenu);
 
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i , bool insertSepar, const QMap<QString, KShortcut>& personalShortCut );
+
+    void insertPicture( const KoPicture& picture, const bool makeInline, const bool keepRatio );
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 
