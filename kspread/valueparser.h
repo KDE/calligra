@@ -70,7 +70,7 @@ class ValueParser {
       bool & duration);
 
   /** a helper function to read numbers and distinguish integers and FPs */
-  double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt);
+  double readNumber(const QString &_str, bool * ok, bool * isInt);
   /** a helper function to read integers */
   int readInt (const QString &str, uint &pos);
   FormatType fmtType;
