@@ -91,13 +91,22 @@ class DependencyList {
   /** retrieve a list of cells that a given cell depends on */
   RangeList computeDependencies (const Point &cell) const;
 
+  QValueList<Point> getCellDeps(const Point& cell) const {
+      CellDepsMap::const_iterator it = cellDeps.find( cell );
+      return it == cellDeps.end() ? QValueList<Point>() : *it;
+  }
+
+  /** debug */
+  void dump();
+
   /** Sheet whose dependencies are managed by this instance */
   Sheet *sheet;
 
   /** dependencies of each cell */
   QMap<Point, RangeList> dependencies;
   /** list of cells (but NOT ranges) that depend on a cell */
-  QMap<Point, QValueList<Point> > cellDeps;
+  typedef QMap<Point, QValueList<Point> > CellDepsMap;
+  CellDepsMap cellDeps;
   /** all range dependencies splitted into cell-chunks (TODO: describe) */
   QMap<Point, QValueList<RangeDependency> > rangeDeps;
   /** list of cells referencing a given named area */
@@ -107,6 +116,37 @@ class DependencyList {
 } // namespace KSpread
 
 using namespace KSpread;
+
+// This is currently not called - but it's really convenient to call it from
+// gdb or from debug output to check that everything is set up ok.
+void DependencyList::dump()
+{
+  QMap<Point, RangeList>::const_iterator it = dependencies.begin();
+  for ( ; it != dependencies.end(); ++it ) {
+    Point p = it.key();
+    kdDebug() << "Cell " << p.sheetName() << " " << p.pos()
+              << " depends on :" << endl;
+    RangeList rl = (*it);
+    QValueList<Point>::const_iterator itp = rl.cells.begin();
+    for ( ; itp != rl.cells.end(); ++itp )
+      kdDebug() << "  cell " << (*itp).pos() << endl;
+    QValueList<Range>::const_iterator itr = rl.ranges.begin();
+    for ( ; itr != rl.ranges.end(); ++itr )
+      kdDebug() << "  range " << (*itr).toString() << endl;
+  }
+
+  CellDepsMap::const_iterator cit = cellDeps.begin();
+  for ( ; cit != cellDeps.end(); ++cit )
+  {
+    Point p = cit.key();
+    kdDebug() << "The cells that depend on " << p.sheetName() << " " << p.pos()
+              << " are :" << endl;
+    QValueList<Point>::const_iterator itp = (*cit).begin();
+    for ( ; itp != (*cit).end(); ++itp )
+      kdDebug() << "  cell " << (*itp).pos() << endl;
+  }
+
+}
 
 DependencyManager::DependencyManager (Sheet *s)
 {
@@ -127,17 +167,6 @@ void DependencyManager::reset ()
 void DependencyManager::cellChanged (const Point &cell)
 {
   deps->cellChanged (cell);
-  Cell *c = cell.cell();
-
-  //if the cell contains the circle error, we mustn't do anything
-  if (c->testFlag (Cell::Flag_CircularCalculation))
-    return;
-
-  //don't re-generate dependencies if we're updating dependencies
-  if ( !(c->testFlag (Cell::Flag_Progress)))
-    deps->generateDependencies (cell);
-
-  deps->processDependencies (cell);
 }
 
 void DependencyManager::rangeChanged (const Range &range)
@@ -211,12 +240,8 @@ RangeList DependencyList::getDependencies (const Point &cell)
 
 QValueList<Point> DependencyList::getDependants (const Point &cell)
 {
-  QValueList<Point> list;
-  
   //cell dependencies go first
-  if (cellDeps.contains (cell))
-    list = cellDeps[cell];
-  
+  QValueList<Point> list = getCellDeps( cell );
   //next, append range dependencies
   Point leading = leadingCell (cell);
   QValueList<RangeDependency>::iterator it;
@@ -434,13 +459,11 @@ void DependencyList::generateDependencies (const RangeList &rangeList)
 
 void DependencyList::processDependencies (const Point &cell)
 {
-  if (cellDeps.contains (cell))
-  {
-    QValueList<Point> d = cellDeps[cell];
-    QValueList<Point>::iterator it;
-    for (it = d.begin(); it != d.end(); ++it)
+  const QValueList<Point> d = getCellDeps(cell);
+  QValueList<Point>::const_iterator it = d.begin();
+  const QValueList<Point>::const_iterator end = d.end();
+  for (; it != end; ++it)
       updateCell (*it);
-  }
 
   processRangeDependencies (cell);
 }
@@ -448,12 +471,13 @@ void DependencyList::processDependencies (const Point &cell)
 void DependencyList::processRangeDependencies (const Point &cell)
 {
   Point leading = leadingCell (cell);
-  QValueList<RangeDependency>::iterator it;
   if (!rangeDeps.count (leading))
     return;  //no range dependencies in this cell chunk
 
-  for (it = rangeDeps[leading].begin();
-      it != rangeDeps[leading].end(); ++it)
+  const QValueList<RangeDependency> rd = rangeDeps[leading];
+
+  QValueList<RangeDependency>::const_iterator it;
+  for (it = rd.begin(); it != rd.end(); ++it)
   {
     //process all range dependencies, and for each range including the modified cell,
     //recalc the depending cell
@@ -479,13 +503,12 @@ void DependencyList::processDependencies (const Range &range)
       c.setRow (row);
       c.setColumn (col);
       c.setSheet( sheet );
-      if (cellDeps.contains (c))
-      {
-        QValueList<Point> d = cellDeps[c];
-        QValueList<Point>::iterator it;
-        for (it = d.begin(); it != d.end(); ++it)
+
+      const QValueList<Point> d = getCellDeps(c);
+      QValueList<Point>::const_iterator it = d.begin();
+      const QValueList<Point>::const_iterator end = d.end();
+      for (; it != end; ++it)
           updateCell (*it);
-    }
     }
 
   processRangeDependencies (range);
