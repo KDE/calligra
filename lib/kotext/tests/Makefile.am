@@ -1,9 +1,11 @@
-INCLUDES = $(KOFFICEUI_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
+INCLUDES = $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 METASOURCES = AUTO
 
 check_PROGRAMS = kotextformattertest kobordertest kovariabletest
+
+TESTS = kotextformattertest kovariabletest
 
 LDADD = ../libkotext.la
 AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
