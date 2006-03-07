@@ -22,10 +22,9 @@
 
 #include <qsplitter.h>
 #include <qdatetime.h>
+#include <qvaluelist.h>
 
 #include "kptcontext.h"
-
-class KListView;
 
 class QPoint;
 class QListViewItem;
@@ -34,6 +33,7 @@ class KPrinter;
 
 namespace KPlato
 {
+class ResListView;
 
 class View;
 class Project;
@@ -62,8 +62,9 @@ class ResourceItemPrivate;
 
     Resource *currentResource();
 
+    QValueList<int> listOffsets(int pageHeight) const;
     void print(KPrinter &printer);
-
+    
     Node *currentNode() const { return m_currentNode; }
     
     virtual bool setContext(Context::Resourceview &context);
@@ -88,7 +89,7 @@ private:
     int m_defaultFontSize;
 
     ResourceItemPrivate *m_selectedItem;
-    KListView *resList;
+    ResListView *resList;
     ResourceAppointmentsView *m_appview;
     Node *m_currentNode;
     QDate m_start;
