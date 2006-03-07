@@ -83,7 +83,6 @@ public:
 
     void setTaskActionsEnabled(QWidget *w, bool on);
     void setScheduleActionsEnabled();
-    void setPrintActionsEnabled(bool on);
     
 public slots:
     void slotUpdate(bool calculate);
@@ -189,10 +188,6 @@ private:
     int m_currentEstimateType;
     
     DCOPObject* m_dcop;
-
-    // File
-    KAction *actPrint;
-    KAction *actPrintPreview;
     
     // ------ Edit
     KAction *actionCut;

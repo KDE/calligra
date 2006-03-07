@@ -155,13 +155,6 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     connect(m_resourceview, SIGNAL(itemDoubleClicked()), SLOT(slotEditResource()));
 
     // The menu items
-    // File (just for enable/disable)
-    actPrint = 0;
-    actPrintPreview = 0;
-    if (!getPart()->isEmbedded()) {
-        actPrint = mainWindow()->actionCollection()->action("file_print");
-        actPrintPreview = mainWindow()->actionCollection()->action("file_print_preview");
-    }
     // ------ Edit
     actionCut = KStdAction::cut( this, SLOT( slotEditCut() ), actionCollection(), "edit_cut" );
     actionCopy = KStdAction::copy( this, SLOT( slotEditCopy() ), actionCollection(), "edit_copy" );
@@ -291,8 +284,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 #endif
     // Stupid compilers ;)
 #ifndef NDEBUG
-/*    Q_UNUSED( actPrintDebug );
-    Q_UNUSED( actPrintSelectedDebug );
+/*  Q_UNUSED( actPrintSelectedDebug );
     Q_UNUSED( actPrintCalendarDebug );*/
     Q_UNUSED( actExportGantt );
 #endif
@@ -1028,7 +1020,6 @@ void View::slotAboutToShow(QWidget *widget) {
 
 void View::updateView(QWidget *widget)
 {
-    setPrintActionsEnabled(false);
     setScheduleActionsEnabled();
     setTaskActionsEnabled(false);
     mainWindow()->toolBar("report")->hide();
@@ -1042,7 +1033,6 @@ void View::updateView(QWidget *widget)
         m_ganttview->drawChanges(getProject());
         m_ganttview->show();
         setTaskActionsEnabled(widget, true);
-        setPrintActionsEnabled(true);
     }
     else if (widget == m_pertview)
     {
@@ -1060,7 +1050,6 @@ void View::updateView(QWidget *widget)
     {
         //kdDebug()<<k_funcinfo<<"draw accountsview"<<endl;
         m_accountsview->draw();
-        setPrintActionsEnabled(true);
 
     }
 /*    else if (widget == m_reportview)
@@ -1222,12 +1211,6 @@ void View::setScheduleActionsEnabled() {
         actionViewPessimistic->setChecked(true);
 }
 
-void View::setPrintActionsEnabled(bool on) {
-    if (actPrint)
-        actPrint->setEnabled(on);
-    if (actPrintPreview)
-        actPrintPreview->setEnabled(on);
-}
 
 #ifndef NDEBUG
 void View::slotPrintDebug() {
