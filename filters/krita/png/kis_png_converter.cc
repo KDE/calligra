@@ -529,7 +529,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayer
     }
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     QString author = authorPage->fullName();
-    if(!author.isEmpty)
+    if(!author.isEmpty())
     {
         fillText(texts+nbtexts, "author", author);
         nbtexts++;
