@@ -49,8 +49,7 @@ void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
     p->save();
     QRegion r = p->clipRegion(QPainter::CoordPainter);
     p->setClipRegion(r.intersect(QRegion(cx, 0, cw, ch)), QPainter::CoordPainter);
-    QColor bgc(Qt::blue);
-    bgc = bgc.light(185);
+    QColor bgc(193, 223, 255);
     QBrush bg(bgc);
     p->setBackgroundMode(Qt::OpaqueMode);
     p->setBackgroundColor(bgc);
