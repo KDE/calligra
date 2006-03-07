@@ -205,6 +205,8 @@ QSize KWAnchor::size() const
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     QSize sz( zh->ptToLayoutUnitPixX( kosz.width() ), zh->ptToLayoutUnitPixY( kosz.height() ) );
     //kdDebug() << "KWAnchor::size in LU: " << sz.width() << "x" << sz.height() << endl;
+    //kdDebug() << "          size in pixels: " << zh->layoutUnitToPixelX( sz.width() ) << "x"
+    //          << zh->layoutUnitToPixelY( sz.height() ) << endl;
     if ( sz.isNull() ) // for some reason, we don't know the size yet
         sz = QSize( width, height ); // LU
     return sz;

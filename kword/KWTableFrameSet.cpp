@@ -227,10 +227,22 @@ KWTableFrameSet::removeRowVector(uint index)
 
 
 KoRect KWTableFrameSet::boundingRect() {
-    return KoRect(m_colPositions[0],    // left
-                m_rowPositions[0],      // top
-                m_colPositions.last()-m_colPositions[0], // width
-                m_rowPositions.last()-m_rowPositions[0]);// height
+    KoRect outerRect(m_colPositions[0],    // left
+                     m_rowPositions[0],      // top
+                     m_colPositions.last()-m_colPositions[0], // width
+                     m_rowPositions.last()-m_rowPositions[0]);// height
+
+    // Add 1 'pixel' (at current zoom level) like KWFrame::outerKoRect(),
+    // to avoid that the bottom line disappears due to rounding problems
+    // (i.e. that it doesn't fit in the calculated paragraph height in pixels,
+    // which depends on the paragraph's Y position)
+    // Better have one pixel too much (caret looks too big by one pixel)
+    // than one missing (bottom line of cell not painted)
+    outerRect.rRight() += m_doc->zoomItX( 1 ) / m_doc->zoomedResolutionX();
+    outerRect.rBottom() += m_doc->zoomItY( 1 ) / m_doc->zoomedResolutionY();
+
+    return outerRect;
+
 }
 
 double KWTableFrameSet::topWithoutBorder()
