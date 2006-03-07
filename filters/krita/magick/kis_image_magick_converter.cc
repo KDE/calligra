@@ -708,11 +708,9 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
         if (ext == "BMP") {
             alpha = false;
             qstrncpy(ii->magick, "BMP2", MaxTextExtent - 1);
-            kdDebug() << ii->magick << "|" << endl;
         }
         else if (ext == "RGB") {
             qstrncpy(ii->magick, "SGI", MaxTextExtent - 1);
-            kdDebug() << ii->magick << "|" << endl;
         }
 
         for (y = 0; y < height; y++) {

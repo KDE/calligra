@@ -123,14 +123,14 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     
 //     setup_read_icc_profile(&cinfo);
     // read header
-    jpeg_read_header(&cinfo, TRUE);
+    jpeg_read_header(&cinfo, true);
     
     // start reading
     jpeg_start_decompress(&cinfo);
     
     // Get the colorspace
     QString csName = getColorSpaceForColorType(cinfo.out_color_space);
-    if(csName == "") {
+    if(csName.isEmpty()) {
         kdDebug(41008) << "unsupported colorspace : " << cinfo.out_color_space << endl;
         jpeg_destroy_decompress(&cinfo);
         fclose(fp);
@@ -396,7 +396,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
     }
     
     // Start compression
-    jpeg_start_compress(&cinfo, TRUE);
+    jpeg_start_compress(&cinfo, true);
     // Save exif information if any available
     if(exifInfo)
     {

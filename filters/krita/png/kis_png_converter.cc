@@ -170,9 +170,15 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     int color_nb_bits, color_type;
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, NULL, NULL, NULL);
 
+    // swap byteorder on little endian machines.
+    #ifndef WORDS_BIGENDIAN
+    if (color_nb_bits > 8 )
+        png_set_swap(png_ptr);
+    #endif
+
     // Determine the colorspace
     QString csName = getColorSpaceForColorType(color_type, color_nb_bits);
-    if(csName == "") {
+    if(csName.isEmpty()) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
@@ -510,20 +516,20 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayer
     KoDocumentInfo * info = m_doc->documentInfo();
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     QString title = aboutPage->title();
-    if(title != "")
+    if(!title.isEmpty())
     {
         fillText(texts+nbtexts, "title", title);
         nbtexts++;
     }
     QString abstract = aboutPage->abstract();
-    if(abstract != "")
+    if(!abstract.isEmpty())
     {
         fillText(texts+nbtexts, "abstract", abstract);
         nbtexts++;
     }
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     QString author = authorPage->fullName();
-    if(author != "")
+    if(!author.isEmpty)
     {
         fillText(texts+nbtexts, "author", author);
         nbtexts++;
@@ -534,6 +540,13 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayer
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);
     png_write_flush(png_ptr);
+
+    // swap byteorder on little endian machines.
+    #ifndef WORDS_BIGENDIAN
+    if (color_nb_bits > 8 )
+        png_set_swap(png_ptr);
+    #endif
+
     // Write the PNG
 //     png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
     

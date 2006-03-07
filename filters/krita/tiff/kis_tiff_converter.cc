@@ -210,7 +210,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     }
     uint8 dstDepth;
     QString csName = getColorSpaceForColorType(color_type, depth, image, nbchannels, extrasamplescount, dstDepth);
-    if(csName == "") {
+    if(csName.isEmpty()) {
         kdDebug(41008) << "Image has an unsupported colorspace : " << color_type << " for this depth : "<< depth << endl;
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -285,6 +285,14 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         kdDebug(41008) << i << " " << extrasamplescount << " "  << (cs->nColorChannels()) <<  nbchannels << " " << sampleinfo[i] << endl;
         if(sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA)
         {
+            // XXX: dangelo: the color values are already multiplied with
+            // the alpha value.  This needs to be reversed later (postprocessor?)
+            alphapos = i;
+        }
+
+        if (sampleinfo[i] == EXTRASAMPLE_UNASSALPHA)
+        {
+            // color values are not premultiplied with alpha, and can be used as they are.
             alphapos = i;
         }
     }
@@ -606,18 +614,18 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP i
     KoDocumentInfo * info = m_doc->documentInfo();
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     QString title = aboutPage->title();
-    if(title != "")
+    if(title.isEmpty())
     {
         TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.ascii());
     }
     QString abstract = aboutPage->abstract();
-    if(abstract != "")
+    if(abstract.isEmpty())
     {
         TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.ascii());
     }
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     QString author = authorPage->fullName();
-    if(author != "")
+    if(author.isEmpty())
     {
         TIFFSetField(image, TIFFTAG_ARTIST, author.ascii());
     }

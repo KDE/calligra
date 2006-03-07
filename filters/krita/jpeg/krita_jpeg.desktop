@@ -30,7 +30,6 @@ NoDisplay=true
 Path=
 StartupNotify=true
 Terminal=false
-TerminalOptions=
 Type=Application
 X-DCOP-ServiceType=multi
 X-KDE-StartupNotify=true

@@ -114,7 +114,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     if(saveAlpha())
     {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->nChannels());
-        uint16 sampleinfo[1] = { EXTRASAMPLE_ASSOCALPHA };
+        uint16 sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo);
     } else {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->nChannels() - 1);
