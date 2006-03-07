@@ -2342,8 +2342,9 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
 
         // "difference" doesn't apply if we're pasting multiple paragraphs.
         // We want to compare the height of one paragraph, not all the missing height.
-        int paragHeight = lastFormatted ? lastFormatted->rect().height() : 0;
-        kdDebug(32002) << "height we will get in the new page:" << heightWeWillGet << " parag height:" << paragHeight << endl;
+        KoTextParag* parag = lastFormatted ? lastFormatted : textDocument()->lastParag();
+        int paragHeight = parag->rect().height();
+        kdDebug(32002) << "height we will get in the new page:" << heightWeWillGet << " parag " << parag << " height:" << paragHeight << endl;
         if ( heightWeWillGet < paragHeight && !m_groupmanager )
         {
             kdDebug(32002) << "not enough height on the new page, not worth it" << endl;
