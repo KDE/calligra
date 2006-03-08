@@ -3081,6 +3081,7 @@ KoLinkVariable* KWTextFrameSet::linkVariableUnderMouse( const KoPoint& dPoint )
 KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     : KoTextView( fs->textObject() ), KWFrameSetEdit( fs, canvas ), m_rtl( false )
 {
+    setBackSpeller( fs->kWordDocument()->backSpeller() );
     //kdDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->name() << endl;
     KoTextView::setReadWrite( fs->kWordDocument()->isReadWrite() );
     KoTextObject* textobj = fs->textObject();

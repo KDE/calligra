@@ -1774,6 +1774,7 @@ QPoint KPrTextObject::cursorPos(KPrCanvas *canvas, KoTextCursor *cursor) const
 KPrTextView::KPrTextView( KPrTextObject * txtObj, KPrCanvas *_canvas, bool temp )
     : KoTextView( txtObj->textObject() )
 {
+    setBackSpeller( txtObj->kPresenterDocument()->backSpeller() );
     m_canvas=_canvas;
     m_kptextobj=txtObj;
     if (temp)
