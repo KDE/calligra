@@ -232,7 +232,13 @@ Module::Ptr Manager::loadModule(const QString& modulename)
         return 0;
     }
 
-    module = (Kross::Api::Module*) (func)(this);
+    try {
+        module = (Kross::Api::Module*) (func)(this);
+    }
+    catch(Kross::Api::Exception::Ptr e) {
+        kdWarning() << e->toString() << endl;
+        module = 0;
+    }
     lib->unload();
 
     if(! module) {
