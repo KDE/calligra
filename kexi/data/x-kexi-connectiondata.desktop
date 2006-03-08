@@ -6,6 +6,7 @@ Icon=kexi_connectiondata
 Patterns=*.kexic
 Comment=Data for Database Server Connection
 Comment[ca]=Dades per a la connexió a servidor de bases de dades
+Comment[cy]=Data ar gyfer Cysylltiad Gweinydd Cronfa Ddata
 Comment[da]=Data for forbindelse til databaseserver
 Comment[de]=Daten für Verbindung mit Datenbankserver
 Comment[es]=Datos para la conexión con el servidor de bases de datos

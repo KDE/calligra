@@ -34,6 +34,7 @@ ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-vnd.kde.kplato
 GenericName=Project Management
 GenericName[bg]=Управление на проекти
+GenericName[br]=Mererezh raktresioù
 GenericName[ca]=Gestió de projectes
 GenericName[cy]=Rheoli Cywaith
 GenericName[da]=Projekthåndtering

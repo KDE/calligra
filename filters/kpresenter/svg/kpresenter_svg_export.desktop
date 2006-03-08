@@ -2,11 +2,14 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter SVG Export Filter
+Name[br]=Sil ezporzh SVG evit KPresenter
 Name[ca]=Filtre d'exportació SVG per a KPresenter
+Name[cy]=Hidlen Allforio SVG KPresenter
 Name[da]=KPræsenter SVG-eksportfilter
 Name[de]=KPresenter SVG-Exportfilter
 Name[es]=Filtro de exportación a SVG para KPresenter
 Name[et]=KPresenteri SVG ekspordifilter
+Name[ga]=Scagaire Easpórtála SVG KPresenter
 Name[hu]=KPresenter SVG exportszűrő
 Name[is]=KPresenter SVG útflutningssía
 Name[it]=Filtro di esportazione SVG per KPresenter
