@@ -1350,7 +1350,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       }
 
       // start resizing
-      if ( d->modType != MT_MOVE && d->modType != MT_NONE )
+      if ( d->modType != MT_MOVE && d->modType != MT_NONE && !obj->isProtect() )
       {
         deselectAllObjects();
         selectObject( obj );
