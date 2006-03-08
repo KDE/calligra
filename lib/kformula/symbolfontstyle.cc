@@ -185,8 +185,10 @@ void SymbolArtwork::draw(QPainter& painter, const LuPixelRect& r,
     luPt mySize = style.getAdjustedSize( tstyle );
     luPixel myX = origin.x() + getX();
     luPixel myY = origin.y() + getY();
+    /*
     if ( !LuPixelRect( myX, myY, getWidth(), getHeight() ).intersects( r ) )
         return;
+    */
 
     painter.setPen(style.getDefaultColor());
 

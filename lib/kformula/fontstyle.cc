@@ -172,8 +172,10 @@ void Artwork::draw(QPainter& painter, const LuPixelRect& r,
     luPt mySize = style.getAdjustedSize( tstyle );
     luPixel myX = parentOrigin.x() + getX();
     luPixel myY = parentOrigin.y() + getY();
+    /*
     if ( !LuPixelRect( myX, myY, getWidth(), getHeight() ).intersects( r ) )
         return;
+    */
 
     painter.setPen(style.getDefaultColor());
 
