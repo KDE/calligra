@@ -362,6 +362,13 @@ VObjectListViewItem::update()
 	setPixmap( 2, *KarbonFactory::rServer()->cachePixmap( s, KIcon::Small ) );
 }
 
+int 
+VObjectListViewItem::compare( QListViewItem *i, int /*col*/, bool /*ascending*/ ) const
+{
+	VObjectListViewItem *objectItem = dynamic_cast<VObjectListViewItem*>(i);
+	if( ! objectItem ) return 0;
+	return m_key < objectItem->m_key ? -1 : 1;
+}
 
 VLayerListViewItem::VLayerListViewItem( QListView* parent, VLayer* layer, VDocument *doc, QPtrDict<VLayerListViewItem> *map )
 	: QCheckListItem( parent, 0L, CheckBox ), m_layer( layer ), m_document( doc), m_map( map )
@@ -432,6 +439,14 @@ QString
 VLayerListViewItem::key( int, bool ) const
 {
 	return QString( "%1" ).arg( m_key );
+}
+
+int 
+VLayerListViewItem::compare( QListViewItem *i, int /*col*/, bool /*ascending*/ ) const
+{
+	VLayerListViewItem *layerItem = dynamic_cast<VLayerListViewItem*>(i);
+	if( ! layerItem ) return 0;
+	return m_key < layerItem->m_key ? -1 : 1;
 }
 
 VLayersTab::VLayersTab( KarbonView* view, QWidget* parent )
@@ -983,6 +998,8 @@ VLayersTab::updateObjects( VObject *object, QListViewItem *item )
 			if( dynamic_cast<VGroup *>( itr.current() ) )
 				updateObjects( itr.current(), objectItem );
 		}
+
+	item->sort();
 }
 
 void
@@ -1063,7 +1080,8 @@ VLayersTab::slotCommandExecuted( VCommand* command )
 	if( dynamic_cast<VLayerCmd*>( command ) 
 	|| dynamic_cast<VDeleteCmd*>( command ) 
 	|| dynamic_cast<VGroupCmd*>( command ) 
-	|| dynamic_cast<VUnGroupCmd*>( command ) )
+	|| dynamic_cast<VUnGroupCmd*>( command ) 
+	|| dynamic_cast<VZOrderCmd*>( command ) )
 		updateLayers();
 }
 

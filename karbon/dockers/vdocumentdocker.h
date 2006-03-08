@@ -99,6 +99,7 @@ public:
 	int pos();
 	void update();
 	virtual QString key( int column, bool ascending ) const;
+	virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 	void setKey( uint key ) { m_key = key; }
 
 protected:
@@ -120,6 +121,7 @@ public:
 	VObject* object() { return m_object; }
 	void update();
 	virtual QString key( int column, bool ascending ) const;
+	virtual int compare( QListViewItem *i, int col, bool ascending ) const;
 	void setKey( uint key ) { m_key = key; }
 private:
 	VObject		*m_object;
