@@ -468,46 +468,16 @@ ResourceSchedule *Resource::createSchedule(Schedule *parent) {
     return sch;
 }
 
-void Resource::makeAppointment(Schedule *node) {
-    //kdDebug()<<k_funcinfo<<m_name<< ": "<<node->node()->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
-    if (!node->startTime.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": startTime invalid"<<endl;
-        return;
-    }
-    if (!node->endTime.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": endTime invalid"<<endl;
-        return;
-    }
-    if (m_type == Type_Material) {
-        // we just allocate the whole task length (if  available)
-        DateTime from = availableAfter(node->startTime, node->endTime);
-        DateTime until = availableBefore(node->endTime, node->startTime);
-        if (from.isValid() && until.isValid()) {
-            addAppointment(node, from, until, 100); //FIXME
-        }
+void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
+    if (!from.isValid() || !end.isValid()) {
+        kdWarning()<<k_funcinfo<<"Invalid time"<<endl;
         return;
     }
     Calendar *cal = calendar();
-    if (!cal) {
-        kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
-        return; 
-    }
-    //TODO: units and standard non-working days
-    DateTime time = node->startTime;
-    DateTime end = node->endTime;
-    time = availableAfter(time, end);
-    if (!time.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": Resource not available (after="<<node->startTime<<", "<<end<<")"<<endl;
-        node->resourceNotAvailable = true;
+    if (cal == 0) {
         return;
     }
-    end = availableBefore(end, time);
-    if (!end.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": Resource not available (before="<<node->endTime<<", "<<time<<")"<<endl;
-        node->resourceNotAvailable = true;
-        return;
-    }
-    //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
+    DateTime time = from;
     while (time < end) {
         //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
         if (!time.isValid() || !end.isValid()) {
@@ -535,6 +505,53 @@ void Resource::makeAppointment(Schedule *node) {
             node->workEndTime = i.second;
         time = i.second;
     }
+    return;
+}
+void Resource::makeAppointment(Schedule *node) {
+    //kdDebug()<<k_funcinfo<<m_name<< ": "<<node->node()->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
+    if (!node->startTime.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": startTime invalid"<<endl;
+        return;
+    }
+    if (!node->endTime.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": endTime invalid"<<endl;
+        return;
+    }
+    Calendar *cal = calendar();
+    if (m_type == Type_Material) {
+        DateTime from = availableAfter(node->startTime, node->endTime);
+        DateTime end = availableBefore(node->endTime, node->startTime);
+        if (!from.isValid() || !end.isValid()) {
+            return;
+        }
+        if (cal == 0) {
+            // Allocate the whole period
+            addAppointment(node, from, end, m_units);
+            return;
+        }
+        makeAppointment(node, from, end);
+    }
+    if (!cal) {
+        kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
+        return; 
+    }
+    //TODO: units and standard non-working days
+    DateTime time = node->startTime;
+    DateTime end = node->endTime;
+    time = availableAfter(time, end);
+    if (!time.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": Resource not available (after="<<node->startTime<<", "<<end<<")"<<endl;
+        node->resourceNotAvailable = true;
+        return;
+    }
+    end = availableBefore(end, time);
+    if (!end.isValid()) {
+        kdWarning()<<k_funcinfo<<m_name<<": Resource not available (before="<<node->endTime<<", "<<time<<")"<<endl;
+        node->resourceNotAvailable = true;
+        return;
+    }
+    //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
+    makeAppointment(node, time, end);
 }
 
 // the amount of effort we can do within the duration

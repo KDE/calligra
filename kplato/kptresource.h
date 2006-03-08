@@ -321,6 +321,9 @@ public:
     ResourceSchedule *createSchedule(QString name, int type, int id);
     ResourceSchedule *createSchedule(Schedule *parent);
     
+protected:
+    void makeAppointment(Schedule *node, const DateTime &from, const DateTime &end);
+    
 private:
     Project *m_project;
     QIntDict<Schedule> m_schedules;
