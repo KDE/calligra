@@ -23,6 +23,7 @@
 #include "KoTextObject.h"
 #include "KoTextViewIface.h"
 #include "KoStyleCollection.h"
+#include "KoBgSpellCheck.h"
 #include "KoVariable.h"
 
 #include <klocale.h>
@@ -48,11 +49,15 @@ public:
     KoTextViewPrivate()
     {
         m_currentUnicodeNumber = 0;
+        m_backSpeller = 0;
     }
 
     void appendDigit( int digit ) { m_currentUnicodeNumber = 10 * m_currentUnicodeNumber + digit; }
     int currentUnicodeNumber() const { return m_currentUnicodeNumber; }
     void clearCurrentUnicodeNumber() { m_currentUnicodeNumber = 0; }
+
+    KoBgSpellCheck* m_backSpeller;
+
 private:
     int m_currentUnicodeNumber; // For the alt+123 feature
 };
@@ -224,17 +229,18 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
     case Key_Return: case Key_Enter:
 
         if (!doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
-                if ( (e->state() & (ShiftButton|ControlButton)) == 0 )
-                {
-                        if ( textObject()->hasSelection() )
-                                textObject()->removeSelectedText( m_cursor );
-                        clearUndoRedoInfo = FALSE;
-                        textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
-                        Q_ASSERT( m_cursor->parag()->prev() );
-                        if ( m_cursor->parag()->prev() )
-                                doAutoFormat( m_cursor, m_cursor->parag()->prev(),
-                                        m_cursor->parag()->prev()->length() - 1, '\n' );
-                }
+            if ( (e->state() & (ShiftButton|ControlButton)) == 0 )
+            {
+                if ( textObject()->hasSelection() )
+                    textObject()->removeSelectedText( m_cursor );
+                clearUndoRedoInfo = FALSE;
+                textObject()->doKeyboardAction( m_cursor, m_currentFormat, KoTextObject::ActionReturn );
+                Q_ASSERT( m_cursor->parag()->prev() );
+                if ( m_cursor->parag()->prev() )
+                    doAutoFormat( m_cursor, m_cursor->parag()->prev(),
+                                  m_cursor->parag()->prev()->length() - 1, '\n' );
+            }
+        clearUndoRedoInfo = true;
         break;
     case Key_Delete:
         if ( textObject()->hasSelection() ) {
@@ -269,23 +275,19 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         emit cut();
         break;
     case Key_Direction_L: {
-	if ( !m_cursor->parag() || m_cursor->parag()->direction() == QChar::DirL )
+	if ( m_cursor->parag() && m_cursor->parag()->direction() != QChar::DirL )
         {
-            removeToolTipCompletion();
-	    return;
+            KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirL );
+            textObject()->emitNewCommand( cmd );
         }
-        KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirL );
-        textObject()->emitNewCommand( cmd );
         break;
     }
     case Key_Direction_R: {
-	if ( !m_cursor->parag() || m_cursor->parag()->direction() == QChar::DirR )
+	if ( m_cursor->parag() && m_cursor->parag()->direction() != QChar::DirR )
         {
-            removeToolTipCompletion();
-	    return;
+            KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirR );
+            textObject()->emitNewCommand( cmd );
         }
-        KCommand* cmd = textObject()->setParagDirectionCommand( m_cursor, QChar::DirR );
-        textObject()->emitNewCommand( cmd );
         break;
     }
     default: {
@@ -311,6 +313,10 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
                  ( e->text() == "\t" && !( e->state() & ControlButton ) ) ) {
                 clearUndoRedoInfo = FALSE;
                 QString text = e->text();
+
+                if ( d->m_backSpeller ) {
+                    d->m_backSpeller->setIntraWordEditing( m_cursor->parag(), m_cursor->index() );
+                }
 
                 // Alt+123 feature
                 if ( ( e->state() & AltButton ) && text[0].isDigit() )
@@ -354,7 +360,6 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
             // and a kaccel makes it hard to
             else
 	    {
-	      removeToolTipCompletion();
 	      if ( e->state() & ControlButton )
 		switch ( e->key() )
 	      {
@@ -377,19 +382,15 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
 		  insertNonbreakingSpace();
 		  break;
 	      }
-	      break;
 	    }
-
-            if ( clearUndoRedoInfo )
-                textObject()->clearUndoRedoInfo();
-            textObject()->typingDone();
-            return;
-
+            break;
         }
     }
 
     if ( clearUndoRedoInfo ) {
         textObject()->clearUndoRedoInfo();
+        if ( d->m_backSpeller )
+            d->m_backSpeller->setIntraWordEditing( 0, 0 );
     }
     removeToolTipCompletion();
     textObject()->typingDone();
@@ -1532,4 +1533,10 @@ void KoTextView::removeLink()
     }
 }
 
+void KoTextView::setBackSpeller( KoBgSpellCheck* backSpeller )
+{
+    d->m_backSpeller = backSpeller;
+}
+
 #include "KoTextView.moc"
+class KoBgSpellCheck;

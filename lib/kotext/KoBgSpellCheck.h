@@ -48,6 +48,12 @@ public:
      */
     KSpell2::Settings *settings() const;
 
+    /**
+     * Tell KoBgSpellCheck to avoid spell-checking the word around this position yet,
+     * while the user is editing it
+     */
+    void setIntraWordEditing( KoTextParag* parag, int index );
+
 public slots:
     void start();
     void stop();

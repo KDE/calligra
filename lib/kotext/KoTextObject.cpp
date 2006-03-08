@@ -131,20 +131,16 @@ int KoTextObject::availableHeight() const
     return m_availableHeight;
 }
 
-void KoTextObject::slotParagraphModified(KoTextParag *parag, int /*ParagModifyType*/ _type, int , int)
+void KoTextObject::slotParagraphModified(KoTextParag * /*parag*/, int /*ParagModifyType*/ _type, int , int)
 {
     if ( _type == ChangeFormat)
         return;
     m_needsSpellCheck = true;
-    if (parag )
-        parag->string()->setNeedsSpellCheck( true );
 }
 
-void KoTextObject::slotParagraphCreated(KoTextParag * parag)
+void KoTextObject::slotParagraphCreated(KoTextParag * /*parag*/)
 {
     m_needsSpellCheck = true;
-    if (parag )
-        parag->string()->setNeedsSpellCheck( true );
 }
 
 void KoTextObject::slotParagraphDeleted(KoTextParag * /*parag*/)

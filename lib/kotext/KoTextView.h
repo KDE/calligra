@@ -27,6 +27,7 @@
 #include <KoRuler.h> // for KoTabulatorList
 #include <KoTextObject.h> // for KoTextView
 #include <koffice_export.h>
+class KoBgSpellCheck;
 class KoTextObject;
 class KoTextDocument;
 class KoTextParag;
@@ -60,7 +61,9 @@ public:
     KoTextView( KoTextObject *textobj );
     virtual ~KoTextView();
 
-     virtual KoTextViewIface* dcopObject();
+    void setBackSpeller( KoBgSpellCheck* backSpeller );
+
+    virtual KoTextViewIface* dcopObject();
 
     /** Call this before deleting */
     /** don't remove selection when we made dnd between different frame*/
@@ -278,6 +281,7 @@ protected:
 private:
     KoTextObject *m_textobj;
     KoTextCursor *m_cursor;
+
     // Store the index of the variable on which we last clicked, to position m_cursor
     int m_variablePosition;
     bool m_overwriteMode;

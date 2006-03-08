@@ -20,7 +20,6 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#ifdef HAVE_LIBKSPELL2
 
 #include "KoBgSpellCheck.h"
 #include "KoBgSpellCheck.moc"
@@ -45,7 +44,7 @@ using namespace KSpell2;
 #include <qtimer.h>
 #include <qptrdict.h>
 
-//#define DEBUG_BGSPELLCHECKING
+// #define DEBUG_BGSPELLCHECKING
 
 class KoBgSpellCheck::Private
 {
@@ -54,6 +53,8 @@ public:
     KoSpell *backSpeller;
     QPtrDict<KoTextParag> paragCache;
     bool startupChecking;
+    KoTextParag* intraWordParag;
+    int intraWordPosition;
 };
 
 static const int delayAfterMarked = 10;
@@ -68,6 +69,8 @@ KoBgSpellCheck::KoBgSpellCheck( const Broker::Ptr& broker, QObject *parent,
     d = new Private;
     d->startupChecking = false;
     d->marked = 0;
+    d->intraWordParag = 0;
+    d->intraWordPosition = 0;
     d->backSpeller = new KoSpell( broker, this, "KoSpell" );
 
     connect( d->backSpeller, SIGNAL(misspelling(const QString&, int)),
@@ -151,6 +154,12 @@ void KoBgSpellCheck::markWord( KoTextParag* parag, int pos, int length, bool mis
         kdDebug(32500) << "markWord: " << pos << " is out of parag (length=" << parag->length() << ")" << endl;
         return;
     }
+    if ( misspelled && parag == d->intraWordParag &&
+         d->intraWordPosition >= pos &&
+         d->intraWordPosition < pos+length ) {
+        kdDebug(32500) << "markWord: " << parag << " " << pos << " to " << pos+length << " - word being edited" << endl;
+        return; // not yet
+    }
 
     KoTextStringChar *ch = parag->at( pos );
     KoTextFormat format( *ch->format() );
@@ -193,6 +202,7 @@ void KoBgSpellCheck::stop()
 
 void KoBgSpellCheck::slotParagraphCreated( KoTextParag* parag )
 {
+    parag->string()->setNeedsSpellCheck( true );
     if ( !d->backSpeller->check( parag ) ) {
         d->paragCache.insert( parag, parag );
     }
@@ -201,6 +211,8 @@ void KoBgSpellCheck::slotParagraphCreated( KoTextParag* parag )
 void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModifyType*/,
                                             int pos, int length )
 {
+    parag->string()->setNeedsSpellCheck( true );
+
     if ( d->backSpeller->checking() ) {
         d->paragCache.insert( parag, parag );
         return;
@@ -218,6 +230,7 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
         // pos - 1 wasn't enough for the case a splitting a word into two misspelled halves
         filter.setCurrentPosition( QMAX( 0, pos - 2 ) );
         int curPos = filter.currentPosition(); // Filter adjusted it by going back to the last word
+        //kdDebug() << "str='" << str << "' set position " << QMAX(0, pos-2) << " got back curPos=" << curPos << endl;
         filter.setSettings( d->backSpeller->settings() );
 
         // Tricky: KSpell2::Filter::nextWord's behavior makes the for() loop skip ignored words,
@@ -250,6 +263,8 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
 void KoBgSpellCheck::slotParagraphDeleted( KoTextParag* parag )
 {
     d->paragCache.take( parag );
+    if ( parag == d->intraWordParag )
+        d->intraWordParag = 0;
 
     // don't do it here, let KoTextIterator do that after adjusting itself better...
     //if ( parag == d->backSpeller->currentParag() )
@@ -283,4 +298,17 @@ KSpell2::Settings * KoBgSpellCheck::settings() const
     return d->backSpeller->settings();
 }
 
-#endif
+void KoBgSpellCheck::setIntraWordEditing( KoTextParag* parag, int index )
+{
+    KoTextParag* oldIntraWordParag = d->intraWordParag;
+    int oldIntraWordPosition = d->intraWordPosition;
+
+    d->intraWordParag = parag;
+    d->intraWordPosition = index;
+
+    if ( oldIntraWordParag && !parag ) {
+        // When typing a letter into an existing word and then going somewhere else,
+        // we need to re-check that word - after moving d->intra* out of the way of course.
+        slotParagraphModified( oldIntraWordParag, 0 /*unused*/, oldIntraWordPosition, 1 );
+    }
+}
