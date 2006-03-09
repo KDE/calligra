@@ -3706,6 +3706,8 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
     //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
     setZoom( 100 );
+    m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
+
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
         kdDebug() << "m_zoomedResolutionX=" << m_zoomedResolutionX << " != " << zoomX << " -> calling setResolution(" << zoomX << ")" << endl;
