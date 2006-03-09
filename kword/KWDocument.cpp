@@ -1139,76 +1139,10 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         QDomElement *masterPageStyle = masterPage ? context.oasisStyles().styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
         if ( masterPageStyle )
         {
-            QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
-
-            if ( !properties.isNull() )
-            {
-               // padding. fo:padding for 4 values or padding-left/right/top/bottom
-              if ( properties.hasAttributeNS( KoXmlNS::fo, "padding" ) )
-              {
-                double const padding = KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "padding","" ) );
-                frame->setPaddingLeft( padding );
-                frame->setPaddingRight( padding );
-                frame->setPaddingTop( padding );
-                frame->setPaddingBottom( padding );
-              }
-              else
-              {
-                frame->setPaddingLeft( KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "padding-left","" ) ) );
-                frame->setPaddingRight( KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "padding-right","" ) ) );
-                frame->setPaddingTop( KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "padding-top","" ) ) );
-                frame->setPaddingBottom( KoUnit::parseValue( properties.attributeNS( KoXmlNS::fo, "padding-bottom","" ) ) );
-              }
-
-              // background color (3.11.25)
-              if ( properties.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
-                QString color = properties.attributeNS( KoXmlNS::fo, "background-color","" );
-                if ( color == "transparent" )
-                  frame->setBackgroundColor( QBrush( QColor(), Qt::NoBrush ) );
-                else
-                {
-                  frame->setBackgroundColor( QBrush( QColor( color ) ) /*, brush style is a dead feature, ignored */ );
-                }
-              }
-              // OOo compatibility: it uses background-transparency=100% instead of background-color="transparent"
-              if ( properties.hasAttributeNS( KoXmlNS::fo, "background-transparency" ) ) {
-                QString transp = properties.attributeNS( KoXmlNS::fo, "background-transparency","" );
-                if ( transp == "100%" )
-                  frame->setBackgroundColor( Qt::NoBrush );
-              }
-
-              if ( properties.hasAttributeNS( KoXmlNS::fo, "border" ) )
-              {
-                QString const border = properties.attributeNS( KoXmlNS::fo, "border","" );
-                KoBorder left = frame->leftBorder();
-                left.loadFoBorder( border );
-                frame->setLeftBorder( left );
-                KoBorder right = frame->rightBorder();
-                right.loadFoBorder( border );
-                frame->setRightBorder( right );
-                KoBorder top = frame->topBorder();
-                top.loadFoBorder( border );
-                frame->setTopBorder( top );
-                KoBorder bottom = frame->bottomBorder();
-                bottom.loadFoBorder( border );
-                frame->setBottomBorder( bottom );
-              }
-              else
-              {
-                KoBorder left = frame->leftBorder();
-                left.loadFoBorder( properties.attributeNS( KoXmlNS::fo, "border-left","" ) );
-                frame->setLeftBorder( left );
-                KoBorder right = frame->rightBorder();
-                right.loadFoBorder( properties.attributeNS( KoXmlNS::fo, "border-right","" ) );
-                frame->setRightBorder( right );
-                KoBorder top = frame->topBorder();
-                top.loadFoBorder( properties.attributeNS( KoXmlNS::fo, "border-top","" ) );
-                frame->setTopBorder( top );
-                KoBorder bottom = frame->bottomBorder();
-                bottom.loadFoBorder( properties.attributeNS( KoXmlNS::fo, "border-bottom","" ) );
-                frame->setBottomBorder( bottom );
-              }
-            }
+          KoStyleStack styleStack;
+          styleStack.push(  *masterPageStyle );
+          styleStack.setTypeProperties( "page-layout" );
+          frame->loadBorderProperties( styleStack );
         }
         fs->renumberFootNotes( false /*no repaint*/ );
 
