@@ -25,6 +25,7 @@
 #include "kptresource.h"
 #include "kptview.h"
 
+#include <qapplication.h>
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -123,6 +124,7 @@ void ResourceAppointmentsView::slotUpdate() {
     //kdDebug()<<k_funcinfo<<endl;
     if (!m_resource)
         return;
+    QApplication::setOverrideCursor(Qt::waitCursor);
     createSlaveItems();
     KLocale *locale = KGlobal::locale();
     const KCalendarSystem *cal = locale->calendar();
@@ -182,6 +184,7 @@ void ResourceAppointmentsView::slotUpdate() {
         //kdDebug()<<k_funcinfo<<"avail="<<m_availItem->value()<<endl;
     }
     calculate();
+    QApplication::restoreOverrideCursor();
 }
 
 

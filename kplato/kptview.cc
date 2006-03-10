@@ -190,9 +190,13 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     
 //    actionViewGanttNotScheduled = new KToggleAction(i18n("Not Scheduled"), 0, 0, this, SLOT(slotViewGanttNotScheduled()), actionCollection(), "view_gantt_showNotScheduled");
     
+    actionViewTaskAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewTaskAppointments()), actionCollection(), "view_task_appointments");
+
     actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
     
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
+    
+    actionViewResourceAppointments = new KToggleAction(i18n("Show allocations"), 0, 0, this, SLOT(slotViewResourceAppointments()), actionCollection(), "view_resource_appointments");
 
     actionViewAccounts = new KAction(i18n("Accounts"), "accounts", 0, this, SLOT(slotViewAccounts()), actionCollection(), "view_accounts");
 
@@ -444,6 +448,13 @@ void View::slotViewGanttNoInformation() {
         slotUpdate(false);
 }
 
+void View::slotViewTaskAppointments() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_ganttview->setShowAppointments(actionViewTaskAppointments->isChecked());
+    if (m_tab->visibleWidget() == m_ganttview)
+        slotUpdate(false);
+}
+
 void View::slotViewGantt() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_ganttview);
@@ -457,6 +468,13 @@ void View::slotViewPert() {
 void View::slotViewResources() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_resourceview);
+}
+
+void View::slotViewResourceAppointments() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_resourceview->setShowAppointments(actionViewResourceAppointments->isChecked());
+    if (m_tab->visibleWidget() == m_resourceview)
+        slotUpdate(false);
 }
 
 void View::slotViewAccounts() {

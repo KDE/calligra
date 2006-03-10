@@ -400,8 +400,9 @@ ResourceView::ResourceView(View *view, QWidget *parent)
     resList->setColumnAlignment(9, AlignRight);
     resList->addColumn(i18n("Overtime Rate"));
 
+    m_showAppointments = false;
     m_appview = new ResourceAppointmentsView(view, this);
-
+    m_appview->hide();
     draw(view->getProject());
 
     //connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
@@ -437,8 +438,9 @@ void ResourceView::draw(Project &project)
     }
     if (m_selectedItem) {
         resList->setSelected(m_selectedItem, true);
+    } else {
+        resSelectionChanged(m_selectedItem);
     }
-    resSelectionChanged(m_selectedItem);
 }
 
 
@@ -512,7 +514,12 @@ void ResourceView::resSelectionChanged(QListViewItem *item) {
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
         m_selectedItem = ritem;
-        m_appview->draw(ritem->resource, m_mainview->getProject().startTime().date(), m_mainview->getProject().endTime().date());
+        if (m_showAppointments) {
+            m_appview->show();
+            m_appview->draw(ritem->resource, m_mainview->getProject().startTime().date(), m_mainview->getProject().endTime().date());
+        } else {
+            m_appview->hide();
+        }
         return;
     }
     m_selectedItem = 0;

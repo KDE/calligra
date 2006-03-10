@@ -22,6 +22,7 @@
 #include "kptappointment.h"
 #include "kpttask.h"
 
+#include <qapplication.h>
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -105,6 +106,7 @@ void TaskAppointmentsView::slotUpdate() {
     //kdDebug()<<k_funcinfo<<endl;
     if (!m_task)
         return;
+    QApplication::setOverrideCursor(Qt::waitCursor);
     createSlaveItems();
     KLocale *locale = KGlobal::locale();
     const KCalendarSystem *cal = locale->calendar();
@@ -133,6 +135,7 @@ void TaskAppointmentsView::slotUpdate() {
         }
     }
     calculate();
+    QApplication::restoreOverrideCursor();
 }
 
 

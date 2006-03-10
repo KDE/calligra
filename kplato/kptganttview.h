@@ -123,7 +123,8 @@ public slots:
     void setShowCriticalTasks(bool on) { m_showCriticalTasks = on; }
     void setShowCriticalPath(bool on) { m_showCriticalPath = on; }
     void setShowNoInformation(bool on) { m_showNoInformation = on; }
-
+    void setShowAppointments(bool on) { m_showAppointments = on; }
+    
 private slots:
     void currentItemChanged(KDGanttViewItem *);
     void slotItemDoubleClicked(QListViewItem*);
@@ -199,6 +200,7 @@ private:
     bool m_showCriticalTasks;
     bool m_showCriticalPath;
     bool m_showNoInformation;
+    bool m_showAppointments;
     bool m_firstTime;
     QPtrList<KDGanttViewTaskLink> m_taskLinks;
     Project *m_project;

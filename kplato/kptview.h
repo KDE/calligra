@@ -103,8 +103,10 @@ public slots:
     void slotViewGanttCriticalTasks();
     void slotViewGanttCriticalPath();
     void slotViewGanttNoInformation();
+    void slotViewTaskAppointments();
     void slotViewPert();
     void slotViewResources();
+    void slotViewResourceAppointments();
     void slotViewAccounts();
     void slotAddTask();
     void slotAddSubTask();
@@ -213,8 +215,10 @@ private:
     KToggleAction *actionViewGanttCriticalTasks;
     KToggleAction *actionViewGanttCriticalPath;
     KToggleAction *actionViewGanttNotScheduled;
+    KToggleAction *actionViewTaskAppointments;
     KAction *actionViewPert;
     KAction *actionViewResources;
+    KToggleAction *actionViewResourceAppointments;
     KAction *actionViewAccounts;
     KAction *actionViewReports;
     

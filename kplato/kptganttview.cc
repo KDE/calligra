@@ -101,6 +101,7 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     m_showCriticalTasks = false; //FIXME
     m_showCriticalPath = false; //FIXME
     m_showNoInformation = false; //FIXME
+    m_showAppointments = false;
     
     m_gantt->setHeaderVisible(true);
     m_gantt->addColumn(i18n("Work Breakdown Structure", "WBS"));
@@ -939,13 +940,18 @@ void GanttView::currentItemChanged(KDGanttViewItem* item)
     m_currentItem = item;
     if (item) {
         m_gantt->setSelected(item, true);
-        GanttViewTaskItem *taskItem = dynamic_cast<GanttViewTaskItem *>(item);
-        if (taskItem) {
-            m_taskView->draw(taskItem->getTask());
+        if (m_showAppointments) {
+            m_taskView->show();
+            GanttViewTaskItem *taskItem = dynamic_cast<GanttViewTaskItem *>(item);
+            if (taskItem) {
+                m_taskView->draw(taskItem->getTask());
+            } else {
+                GanttViewEventItem *msItem = dynamic_cast<GanttViewEventItem *>(item);
+                if (msItem)
+                    m_taskView->draw(msItem->getTask());
+            }
         } else {
-            GanttViewEventItem *msItem = dynamic_cast<GanttViewEventItem *>(item);
-            if (msItem)
-                m_taskView->draw(msItem->getTask());
+            m_taskView->hide();
         }
     }
     emit enableActions(true);

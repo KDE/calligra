@@ -72,6 +72,9 @@ class ResourceItemPrivate;
 
     virtual QSize sizeHint() const;
     
+public slots:
+    void setShowAppointments(bool on) { m_showAppointments = on; }
+
 signals:
     void itemDoubleClicked();
     
@@ -94,6 +97,8 @@ private:
     Node *m_currentNode;
     QDate m_start;
     QDate m_end;
+
+    bool m_showAppointments;
 
 };
 
