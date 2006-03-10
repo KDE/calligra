@@ -103,14 +103,19 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
             return;
         }
 
-        // We have to define better what the rect that we pass, means. Does it include zooming ? (yes I think)
-        // Does it define the area to be repainted only ? (here it doesn't, really, but it should)
-        QRect rframe( 0, 0, kWordDocument()->zoomItX( frame->innerWidth() ),
-                      kWordDocument()->zoomItY( frame->innerHeight() ) );
+        KoTextZoomHandler* zh = kWordDocument();
+
+        // We have to define better the merning of the rect that we pass. Does it include zooming ? (yes I think)
+        // Does it define the area to be repainted only? (no, that's the painter clip rect)
+        // So it defines the whole area covered by the embedded document, in pixels.
+        QRect rframe( 0, 0,
+                      zh->zoomItX( frame->innerWidth() ),
+                      zh->zoomItY( frame->innerHeight() ) );
         //kdDebug(32001) << "rframe=" << rframe << endl;
 
-        m_child->document()->paintEverything( *painter, rframe, true, 0L,
-                                            kWordDocument()->zoomedResolutionX(), kWordDocument()->zoomedResolutionY() );
+        double zoomX = zh->zoom() / 100;
+        double zoomY = zh->zoom() / 100;
+        m_child->document()->paintEverything( *painter, rframe, true, 0L, zoomX, zoomY );
 
     } //else kdDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " onlychanged=true!" << endl;
 }

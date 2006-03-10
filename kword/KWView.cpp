@@ -544,14 +544,16 @@ void KWView::initGUIButton()
     updateHeaderFooterButton();
     m_actionAllowAutoFormat->setChecked( m_doc->allowAutoFormat() );
 
-    QString mode = viewMode()->type();
-    if (mode=="ModePreview")
-        m_actionViewPreviewMode->setChecked(true);
-    else if (mode=="ModeText")
-        m_actionViewTextMode->setChecked(true);
-    else //if (mode=="ModeNormal")
-        m_actionViewPageMode->setChecked(true);
-    switchModeView();
+    if ( !m_doc->isEmbedded() ) {
+        QString mode = viewMode()->type();
+        if (mode=="ModePreview")
+            m_actionViewPreviewMode->setChecked(true);
+        else if (mode=="ModeText")
+            m_actionViewTextMode->setChecked(true);
+        else //if (mode=="ModeNormal")
+            m_actionViewPageMode->setChecked(true);
+        switchModeView();
+    }
 }
 
 void KWView::setupActions()
@@ -631,28 +633,38 @@ void KWView::setupActions()
 
 
     // -------------- View menu
-    m_actionViewTextMode = new KToggleAction( i18n( "Text Mode" ), 0,
-                                            this, SLOT( viewTextMode() ),
-                                            actionCollection(), "view_textmode" );
-    m_actionViewTextMode->setToolTip( i18n( "Only show the text of the document." ) );
-    m_actionViewTextMode->setWhatsThis( i18n( "Do not show any pictures, formatting or layout. KWord will display only the text for editing." ) );
 
-    m_actionViewTextMode->setExclusiveGroup( "viewmodes" );
-    m_actionViewPageMode = new KToggleAction( i18n( "&Page Mode" ), 0,
-                                            this, SLOT( viewPageMode() ),
-                                            actionCollection(), "view_pagemode" );
-    m_actionViewPageMode->setWhatsThis( i18n( "Switch to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to preview mode." ) );
-    m_actionViewPageMode->setToolTip( i18n( "Switch to page editing mode." ) );
+    if ( !m_doc->isEmbedded() ) {
 
-    m_actionViewPageMode->setExclusiveGroup( "viewmodes" );
-    m_actionViewPageMode->setChecked( true );
-    m_actionViewPreviewMode = new KToggleAction( i18n( "Pre&view Mode" ), 0,
-                                            this, SLOT( viewPreviewMode() ),
-                                            actionCollection(), "view_previewmode" );
-    m_actionViewPreviewMode->setWhatsThis( i18n( "Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized." ) );
-    m_actionViewPreviewMode->setToolTip( i18n( "Zoom out to a multiple page view." ) );
+        m_actionViewTextMode = new KToggleAction( i18n( "Text Mode" ), 0,
+                                                  this, SLOT( viewTextMode() ),
+                                                  actionCollection(), "view_textmode" );
+        m_actionViewTextMode->setToolTip( i18n( "Only show the text of the document." ) );
+        m_actionViewTextMode->setWhatsThis( i18n( "Do not show any pictures, formatting or layout. KWord will display only the text for editing." ) );
 
-    m_actionViewPreviewMode->setExclusiveGroup( "viewmodes" );
+        m_actionViewTextMode->setExclusiveGroup( "viewmodes" );
+        m_actionViewPageMode = new KToggleAction( i18n( "&Page Mode" ), 0,
+                                                  this, SLOT( viewPageMode() ),
+                                                  actionCollection(), "view_pagemode" );
+        m_actionViewPageMode->setWhatsThis( i18n( "Switch to page mode.<br><br> Page mode is designed to make editing your text easy.<br><br>This function is most frequently used to return to text editing after switching to preview mode." ) );
+        m_actionViewPageMode->setToolTip( i18n( "Switch to page editing mode." ) );
+
+        m_actionViewPageMode->setExclusiveGroup( "viewmodes" );
+        m_actionViewPageMode->setChecked( true );
+        m_actionViewPreviewMode = new KToggleAction( i18n( "Pre&view Mode" ), 0,
+                                                     this, SLOT( viewPreviewMode() ),
+                                                     actionCollection(), "view_previewmode" );
+        m_actionViewPreviewMode->setWhatsThis( i18n( "Zoom out from your document to get a look at several pages of your document.<br><br>The number of pages per line can be customized." ) );
+        m_actionViewPreviewMode->setToolTip( i18n( "Zoom out to a multiple page view." ) );
+
+        m_actionViewPreviewMode->setExclusiveGroup( "viewmodes" );
+    }
+    else // no viewmode switching when embedded; at least "Page" makes no sense
+    {
+        m_actionViewTextMode = 0;
+        m_actionViewPageMode = 0;
+        m_actionViewPreviewMode = 0;
+    }
 
     m_actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
                                                    this, SLOT( slotViewFormattingChars() ),
@@ -3281,7 +3293,7 @@ void KWView::setZoom( int zoom, bool updateViews )
         m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
 
     // Also set the zoom in KoView (for embedded views)
-    //kdDebug() << "KWView::showZoom setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
+    kdDebug() << "KWView::setZoom " << zoom << " setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
     KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ );
 }
 
@@ -3292,7 +3304,7 @@ void KWView::insertPicture()
         KWInsertPicDia dia( this,m_gui->canvasWidget()->pictureInline(),m_gui->canvasWidget()->pictureKeepRatio(),m_doc );
         if ( dia.exec() == QDialog::Accepted && !dia.picture().isNull() )
         {
-            insertPicture( dia.picture(), dia.makeInline(), dia.keepRatio() );
+            insertPicture( dia.picture(), dia.makeInline(), dia.keepRatio(), 0, 0 );
             m_gui->canvasWidget()->setPictureInline( dia.makeInline());
             m_gui->canvasWidget()->setPictureKeepRatio( dia.keepRatio() );
         }
@@ -3314,11 +3326,15 @@ void KWView::slotEmbedImage( const QString &filename )
     key.setKeyFromFile( filename );
     picture.setKey( key );
     picture.loadFromFile( filename );
-    insertPicture( picture, false, true );
+    insertPicture( picture, false, true, 0, 0 );
 }
 
-void KWView::insertPicture( const KoPicture& picture, const bool makeInline, const bool keepRatio )
+void KWView::insertPicture( const KoPicture& picture, const bool makeInline, const bool keepRatio, int suggestedWidth, int suggestedHeight )
 {
+    QSize pixmapSize( picture.getOriginalSize() );
+    if ( suggestedWidth > 0 && suggestedHeight > 0 )
+        pixmapSize = QSize( suggestedWidth, suggestedHeight );
+
     if ( makeInline )
     {
         const double widthLimit = m_currentPage->width() - m_currentPage->leftMargin() -
@@ -3330,7 +3346,6 @@ void KWView::insertPicture( const KoPicture& picture, const bool makeInline, con
 
         frameset->insertPicture( picture );
 
-        QSize pixmapSize ( frameset->picture().getOriginalSize() );
         // This ensures 1-1 at 100% on screen, but allows zooming and printing with correct DPI values
         // ### TODO/FIXME: is the qRound really necessary?
         double width = m_doc->unzoomItX( qRound( (double)pixmapSize.width() * m_doc->zoomedResolutionX() / POINT_TO_INCH( KoGlobal::dpiX() ) ) );
@@ -3387,12 +3402,13 @@ void KWView::insertPicture( const KoPicture& picture, const bool makeInline, con
     }
     else
     {
-        m_gui->canvasWidget()->insertPicture( picture , picture.getOriginalSize(), keepRatio );
+        m_gui->canvasWidget()->insertPicture( picture, pixmapSize, keepRatio );
     }
 }
 
 bool KWView::insertInlinePicture()
 {
+    Q_ASSERT( m_fsInline );
     KWTextFrameSetEdit * edit = currentTextEdit();
     if(edit)
     {
@@ -5402,8 +5418,12 @@ void KWView::guiActivateEvent( KParts::GUIActivateEvent *ev )
     if ( ev->activated() )
     {
         initGui();
-        if (m_doc->isEmbedded() )
-            setZoom( m_doc->zoom(), true );
+        if (m_doc->isEmbedded() ) {
+            // Get zoom level from KoView, i.e. from the parent view
+            const int zoom = qRound( KoView::zoom() * 100 );
+            setZoom( zoom, true );
+            showZoom( zoom );
+        }
     }
     KoView::guiActivateEvent( ev );
 }
@@ -6494,15 +6514,11 @@ void KWView::createStyleFromSelection()
 void KWView::switchModeView()
 {
     KWCanvas* canvas = m_gui->canvasWidget();
-    // Apply the same viewmode to all views (due to limitations in the text formatter)
-    // So we get the viewmode to use from the document.
-    canvas->switchViewMode( m_doc->viewModeType() );
     slotUpdateRuler();
 
     // Now update the actions appropriately
     QString mode = canvas->viewMode()->type();
     bool isTextMode = mode == "ModeText";
-    bool isNormalMode = mode == "ModeNormal";
     bool state = !isTextMode;
     m_actionToolsCreateText->setEnabled(state);
     m_actionToolsCreatePix->setEnabled(state);
@@ -6519,7 +6535,7 @@ void KWView::switchModeView()
     m_actionFrameStyle->setEnabled( state );
     m_actionTableStyle->setEnabled ( state );
     m_actionViewShowGrid->setEnabled( state );
-    m_actionViewSnapToGrid->setEnabled( isNormalMode ); // TODO fix snapping in preview mode
+    m_actionViewSnapToGrid->setEnabled( mode == "ModeNormal" || mode == "ModeEmbedded" ); // TODO fix snapping in preview mode
     if ( m_gui->getHorzRuler())
     {
         m_gui->getHorzRuler()->setPageLayoutMenuItemEnabled( state );

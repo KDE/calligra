@@ -475,13 +475,11 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             if ( m_frameInline )
             {
                 bool inlineCreated = true;
-                if(m_frameInlineType==FT_TABLE)
+                if(m_frameInlineType == FT_TABLE)
                     inlineCreated = insertInlineTable();
-                else if(m_frameInlineType==FT_PICTURE)
-                    inlineCreated = m_gui->getView()->insertInlinePicture();
-                if (inlineCreated)
-                    m_frameInline=false;
-                else
+                else if(m_frameInlineType == FT_PICTURE)
+                    inlineCreated = insertInlinePicture();
+                if (!inlineCreated)
                     KMessageBox::information(0L, i18n("Read-only content cannot be changed. No modifications will be accepted."));
             }
             break;
@@ -608,6 +606,14 @@ void KWCanvas::createTable( unsigned int rows, unsigned int cols,
     }
 }
 
+bool KWCanvas::insertInlinePicture() // also called by DCOP
+{
+    bool inserted = m_gui->getView()->insertInlinePicture();
+    if ( inserted )
+        m_frameInline = false;
+    return inserted;
+}
+
 bool KWCanvas::insertInlineTable()
 {
     KWTextFrameSetEdit * edit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit);
@@ -631,11 +637,8 @@ bool KWCanvas::insertInlineTable()
         m_doc->updateAllFrames();
         m_doc->refreshDocStructure(Tables);
     }
-    else
-    {
-        m_frameInline=false;
-    }
     m_gui->getView()->updateFrameStatusBarItem();
+    m_frameInline = false;
     return true;
 }
 

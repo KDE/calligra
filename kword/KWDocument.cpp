@@ -625,11 +625,9 @@ void KWDocument::setPageLayout( const KoPageLayout& layout, const KoColumns& cl,
 {
     m_pageLayout = layout;
     if ( m_processingType == WP ) {
-        //kdDebug() << "KWDocument::setPageLayout WP" << endl;
         m_pageColumns = cl;
     }
-    else {
-        //kdDebug() << "KWDocument::setPageLayout NON-WP" << endl;
+    if ( m_processingType == DTP || isEmbedded() ) {
         m_pageLayout.ptLeft = 0;
         m_pageLayout.ptRight = 0;
         m_pageLayout.ptTop = 0;
@@ -3696,7 +3694,10 @@ void KWDocument::addShell( KoMainWindow *shell )
 
 KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 {
-    return new KWView( m_viewModeType, parent, name, this );
+    if ( isEmbedded() )
+        return new KWView( "ModeEmbedded", parent, name, this );
+    else
+        return new KWView( m_viewModeType, parent, name, this );
 }
 
 // Paint this document when it's embedded
@@ -3708,6 +3709,10 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
     setZoom( 100 );
     m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
 
+    // The caller doesn't care about DPI, that's our own internal zooming done on top of it:
+    zoomX *= POINT_TO_INCH( static_cast<double>( KoGlobal::dpiX() ) );
+    zoomY *= POINT_TO_INCH( static_cast<double>( KoGlobal::dpiY() ) );
+
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
         kdDebug() << "m_zoomedResolutionX=" << m_zoomedResolutionX << " != " << zoomX << " -> calling setResolution(" << zoomX << ")" << endl;
@@ -3716,15 +3721,14 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
         newZoomAndResolution( false, forPrint );
         if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() )
             formulaDocument->setZoomAndResolution( m_zoom, zoomX, zoomY, false, forPrint );
+        // Note that this zoom and resolution are then used when activating the embedded object!
     }
 
     QRect rect( rectangle );
-    // Translate the painter to avoid the margin
-    /*painter.translate( -leftBorder(), -topBorder() );
-    rect.moveBy( leftBorder(), topBorder() );*/
 
-    KWViewModeEmbedded * viewMode = new KWViewModeEmbedded( this );
+    KWViewModeEmbedded * viewMode = new KWViewModeEmbedded( this, 0 /*no canvas*/ );
     viewMode->setDrawFrameBackground( !transparent );
+    viewMode->setDrawSelections( false );
 
     QColorGroup cg = QApplication::palette().active();
 

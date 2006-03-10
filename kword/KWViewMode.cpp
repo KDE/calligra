@@ -160,7 +160,7 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc, 
     }
     else if(viewModeType=="ModeEmbedded")
     {
-        return new KWViewModeEmbedded( doc );
+        return new KWViewModeEmbedded( doc, canvas );
     }
     else if(viewModeType=="ModePreview")
     {

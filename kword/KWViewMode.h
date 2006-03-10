@@ -188,13 +188,15 @@ protected:
 class KWViewModeEmbedded : public KWViewMode
 {
 public:
-    KWViewModeEmbedded ( KWDocument * doc )
-        : KWViewMode( doc, 0 /*no canvas*/, false /*drawFrameBorders*/ ),
-          mDrawFrameBackground( true )
+    KWViewModeEmbedded ( KWDocument * doc, KWCanvas* canvas )
+        : KWViewMode( doc, canvas, false /*drawFrameBorders*/ ),
+          mDrawFrameBackground( true ),
+          mDrawSelections( true )
     {}
     virtual ~ KWViewModeEmbedded() {}
 
     void setDrawFrameBackground( bool b ) { mDrawFrameBackground = b; }
+    void setDrawSelections( bool b ) { mDrawSelections = b; }
 
     // This view mode is very easy to implement ;-P
     virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
@@ -203,13 +205,14 @@ public:
     virtual QSize contentsSize() { return QSize(); }
 
     virtual void drawPageBorders( QPainter *, const QRect &, const QRegion & ){}
-    virtual bool drawSelections() { return false; }
+    virtual bool drawSelections() { return mDrawSelections; }
 
     virtual const QString type() const { return "ModeEmbedded"; }
     virtual bool drawFrameBackground() { return mDrawFrameBackground; }
 
 private:
     bool mDrawFrameBackground;
+    bool mDrawSelections;
 };
 
 

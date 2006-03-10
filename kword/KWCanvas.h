@@ -218,6 +218,8 @@ public:
     // - a non-text frame is being edited
     KWTextFrameSetEdit* currentTextEdit() const;
 
+    bool insertInlinePicture();
+
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
 

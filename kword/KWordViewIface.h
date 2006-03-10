@@ -68,7 +68,7 @@ k_dcop:
      * Insert an inline picture at the current character position
      * TODO
      */
-    //void insertInlinePicture( QString fileName, bool keepRatio );
+    void insertInlinePicture( QString fileName, int w = 0, int h = 0 );
     /**
      * Insert a (non-inline) picture at the given position
      * If w and h are 0, the default size from the image is used
