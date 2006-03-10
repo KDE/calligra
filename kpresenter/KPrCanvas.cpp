@@ -887,8 +887,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         if ( !( e->state() & ShiftButton ) && !( e->state() & ControlButton ) )
                             deSelectAllObj();
 
-                            drawRubber = true;
-                            m_rubber = KoRect( docPoint.x(), docPoint.y(), 0, 0 );
+                        drawRubber = true;
+                        m_rubber = KoRect( docPoint.x(), docPoint.y(), 0, 0 );
                     }
                 }
                 m_origMousePos = docPoint;
