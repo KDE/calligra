@@ -2843,10 +2843,11 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
         headerFooterContent[headerFooterContent.size()-1] = '\0';
 
         // Now mark all autostyles as "for styles.xml" since headers/footers need them
-        QValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles( KoGenStyle::STYLE_AUTO, true );
+        QValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
         for ( QValueList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
-              it != autoStyles.end(); ++it )
+              it != autoStyles.end(); ++it ) {
             mainStyles.markStyleForStylesXml( (*it).name );
+        }
     }
 
     KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
