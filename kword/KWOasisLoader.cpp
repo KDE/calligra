@@ -310,7 +310,7 @@ KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDo
         frame = fs->loadOasis( frameTag, tag, context );
     } else { // Adding frame to existing frameset
         context.styleStack().save();
-        context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
+        context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name", "graphic" ); // get the style for the graphics element
         frame = fs->loadOasisTextFrame( frameTag, tag, context );
         context.styleStack().restore();
     }

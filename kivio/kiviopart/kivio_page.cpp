@@ -186,42 +186,42 @@ void KivioPage::saveOasis(KoStore* /*store*/, KoXmlWriter* docWriter, KoGenStyle
 {
   docWriter->startElement("draw:page");
   docWriter->addAttribute("draw:name", m_strName);
-  
+
   if(m_pPageLayout == Kivio::Config::defaultPageLayout()) {
     docWriter->addAttribute("draw:master-page-name", "Standard");
   } else {
     KoGenStyle pageLayout = m_pPageLayout.saveOasis();
     QString layoutName = styles->lookup(pageLayout, "PL");
-    
+
     KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
     masterPage.addAttribute("style:page-layout-name", layoutName);
     QString masterName = styles->lookup(masterPage, "MP");
-    
+
     docWriter->addAttribute("draw:master-page-name", masterName);
   }
-  
+
   // TODO OASIS: Save guidelines!
 
   QBuffer layerBuffer;
   layerBuffer.open(IO_WriteOnly);
   KoXmlWriter layerWriter(&layerBuffer);
   layerWriter.startElement("draw:layer-set");
-  
+
   // Iterate through all layers
   KivioLayer* layer = m_lstLayers.first();
-  
+
   while(layer) {
     layer->saveOasis(&layerWriter);
     layer = m_lstLayers.next();
   }
-  
+
   layerWriter.endElement(); // draw:layer-set
   QString layerSet = QString::fromUtf8(layerBuffer.buffer(), layerBuffer.buffer().size());
   KoGenStyle pageStyle(Kivio::STYLE_PAGE, "drawing-page");
   pageStyle.addChildElement("draw:layer-set", layerSet);
   QString styleName = styles->lookup(pageStyle, "PS");
   docWriter->addAttribute("draw:style-name", styleName);
-  
+
   docWriter->endElement(); // draw:page
 }
 
@@ -318,36 +318,36 @@ bool KivioPage::loadOasis(const QDomElement& page, KoOasisStyles& oasisStyles)
 {
   m_strName = page.attributeNS( KoXmlNS::draw, "name", QString::null);
   QDomElement* masterPage = oasisStyles.masterPages()[page.attributeNS( KoXmlNS::draw, "master-page-name", QString::null)];
-  
+
   if(!masterPage) {
     kdDebug(430000) << "Couldn't find the master page! " << page.attributeNS( KoXmlNS::draw, "master-page-name", QString::null) << endl;
     return false;
   }
-  
-  QDomElement *pageLayout = oasisStyles.styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )];
-  
+
+  const QDomElement *pageLayout = oasisStyles.findStyle(masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) );
+
   if(!pageLayout) {
     kdDebug(430000) << "Couldn't find the pagelayout!" << endl;
     return false;
   }
 
   m_pPageLayout.loadOasis(*pageLayout);
-  
+
   if(m_pPageLayout.ptWidth <= 1e-13 || m_pPageLayout.ptHeight <= 1e-13) {
     kdDebug(430000) << "Non valid pagelayout!" << endl;
     return false;
   }
-  
-  QDomElement* style = oasisStyles.styles()[page.attributeNS( KoXmlNS::draw, "style-name", QString::null)]; // Find the page style
-  
+
+  const QDomElement* style = oasisStyles.findStyle(page.attributeNS( KoXmlNS::draw, "style-name", QString::null) ); // Find the page style
+
   if(!style) {
     return false;
   }
-  
+
   QDomNode styleNode = KoDom::namedItemNS( *style, KoXmlNS::style, "properties");
   styleNode = KoDom::namedItemNS( styleNode, KoXmlNS::draw, "layer-set");
   QDomNode currentNode = styleNode.firstChild();
-  
+
   // Load the layers
   while(!currentNode.isNull()) {
     if(currentNode.nodeName() == "draw:layer") {
@@ -355,10 +355,10 @@ bool KivioPage::loadOasis(const QDomElement& page, KoOasisStyles& oasisStyles)
       layer->loadOasis(currentNode.toElement());
       m_lstLayers.append(layer);
     }
-    
+
     currentNode = currentNode.nextSibling();
   }
-  
+
   return true;
 }
 
@@ -1602,10 +1602,10 @@ bool KivioPage::checkForStencilTypeInSelection(KivioStencilType type)
     if(pStencil->type() == type) {
       return true;
     }
-    
+
     pStencil = m_lstSelection.next();
   }
-  
+
   return false;
 }
 

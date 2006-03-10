@@ -1864,7 +1864,7 @@ void KWTableFrameSet::loadOasis( const QDomElement& tableTag, KoOasisContext& co
             KoStyleStack& styleStack = context.styleStack();
             styleStack.setTypeProperties( "table-column" );
             styleStack.save();
-            context.fillStyleStack( elem, KoXmlNS::table, "style-name" );
+            context.fillStyleStack( elem, KoXmlNS::table, "style-name", "table-column" );
 
             QString strWidth = styleStack.attributeNS( KoXmlNS::style, "column-width" );
             double width = KoUnit::parseValue( strWidth );
@@ -1927,7 +1927,9 @@ void KWTableFrameSet::parseInsideOfTable( const QDomElement& parent, KoOasisCont
         }
         else if ( localName == "table-row" )
         {
-            context.fillStyleStack( e, KoXmlNS::table, "style-name" );
+            context.fillStyleStack( e, KoXmlNS::table, "style-name", "table-row" );
+            context.styleStack().setTypeProperties( "table-row" );
+
             // Load row height in case it was set - note that it might not be set (e.g. OOo)
             double rowHeight = styleStack.attributeNS( KoXmlNS::table, "row-height" ).toDouble();
             column = 0;
@@ -1991,7 +1993,7 @@ void KWTableFrameSet::loadOasisCell( const QDomElement& element, KoOasisContext&
     frame->setNewFrameBehavior( KWFrame::NoFollowup );
     daCell->addFrame( frame, false );
 
-    context.fillStyleStack( element, KoXmlNS::table, "style-name" );
+    context.fillStyleStack( element, KoXmlNS::table, "style-name", "table-cell" );
     styleStack.setTypeProperties( "table-cell" );
 
     daCell->frame( 0 )->loadBorderProperties( styleStack );

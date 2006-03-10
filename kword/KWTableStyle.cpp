@@ -201,7 +201,7 @@ void KWTableStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context, 
     styleStack.setTypeProperties( "table-cell" );
 
     styleStack.save();
-    context.addStyles( &styleElem ); // Load all parents - only because we don't support inheritance.
+    context.addStyles( &styleElem, "table-cell" ); // Load all parents - only because we don't support inheritance.
 
     const QString frameStyleName = styleStack.attributeNS( KoXmlNS::koffice, "frame-style-name" );
     m_frameStyle = frameStyles.findStyle( frameStyleName );

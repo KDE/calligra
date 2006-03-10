@@ -485,9 +485,9 @@ void Cell::setValue( const Value& v )
     clearAllErrors();
 
   //If the value has not changed then we don't need to do anything
-  //(ie. no need to relayout, update dependant cells etc.), 
+  //(ie. no need to relayout, update dependant cells etc.),
   //unless this cell contains a formula, in which case its dependancies might have changed
-  //even though the value has not.  For example, if this cell was previously empty (and its value is 
+  //even though the value has not.  For example, if this cell was previously empty (and its value is
   //therefore empty) and a new dependency upon an empty cell has been added.  The new value would still
   //be empty, but the dependencies need to be updated (via the call to valueChanged() below).
   if ( ( d->value == v ) && ( !isFormula() ) )
@@ -575,9 +575,9 @@ void Cell::copyFormat( Cell * _cell )
 void Cell::copyFormat( int _column, int _row )
 {
     const Cell * cell = format()->sheet()->cellAt( _column, _row );
-    
+
     Q_ASSERT(cell);
-    
+
     d->value.setFormat(cell->d->value.format());
 
     format()->setAlign( cell->format()->align( _column, _row ) );
@@ -779,7 +779,7 @@ bool Cell::needsPrinting() const
 
   // Cell borders?
   if ( format()->hasProperty( Format::PTopBorder )
-       || format()->hasProperty( Format::PLeftBorder ) 
+       || format()->hasProperty( Format::PLeftBorder )
        || format()->hasProperty( Format::PRightBorder )
        || format()->hasProperty( Format::PBottomBorder )
        || format()->hasProperty( Format::PFallDiagonal )
@@ -789,21 +789,21 @@ bool Cell::needsPrinting() const
 
   // Background color or brush?
   if ( format()->hasProperty( Format::PBackgroundBrush ) ) {
-    	
-	const QBrush& brush=backGroundBrush(column(),row()); 
+
+	const QBrush& brush=backGroundBrush(column(),row());
 
 	//Only brushes that are visible (ie. they have a brush style and are not white)
-	//need to be drawn	
-	if ( (brush.style() != Qt::NoBrush) && 
+	//need to be drawn
+	if ( (brush.style() != Qt::NoBrush) &&
 	     (brush.color() != Qt::white || brush.pixmap()) )
 		return true;
-  
+
   }
 
   if ( format()->hasProperty( Format::PBackgroundColor ) ) {
-    kdDebug() << "needsPrinting: Has background colour" << endl; 
+    kdDebug() << "needsPrinting: Has background colour" << endl;
     QColor backgroundColor=bgColor(column(),row());
-    
+
     //We don't need to print anything if the background is white
     if (backgroundColor != Qt::white)
     	return true;
@@ -1327,7 +1327,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     // Break the line at appropriate places, i.e. spaces, if
     // necessary.  This means to change the spaces where breaks occur
     // into newlines.
-    if ( o.find(' ') != -1 ) 
+    if ( o.find(' ') != -1 )
     {
       d->strOutText = "";
 
@@ -1543,7 +1543,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     }
 
     // Check to make sure we haven't already force-merged enough cells.
-    if ( r - d->row > d->extra()->mergedYCells ) 
+    if ( r - d->row > d->extra()->mergedYCells )
     {
       d->extra()->extraYCells = r - d->row;
       d->extra()->extraHeight = height;
@@ -1600,7 +1600,7 @@ void Cell::setOutputText()
   // Display a formula if warranted.  If not, display the value instead;
   // this is the most common case.
   if ( (!hasError()) && isFormula() && format()->sheet()->getShowFormula()
-       && !( format()->sheet()->isProtected() && format()->isHideFormula( d->column, d->row ) ) 
+       && !( format()->sheet()->isProtected() && format()->isHideFormula( d->column, d->row ) )
        || isEmpty() )
     d->strOutText = d->strText;
   else {
@@ -2013,7 +2013,7 @@ bool Cell::makeFormula()
 
   // we must recalc
   setCalcDirtyFlag ();
-  
+
   return true;
 }
 
@@ -2329,7 +2329,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 #if 0
     if (highlightBorder != Border_None)
       paintCellHighlight ( painter, cellRect, cellRef, highlightBorder,
-         rightHighlightPen, bottomHighlightPen, 
+         rightHighlightPen, bottomHighlightPen,
          leftHighlightPen,  topHighlightPen );
 #endif
 
@@ -2338,9 +2338,9 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     //  b) something indicates that the text should not be painted
     //  c) the sheet is protected and the cell is hidden.
     if ( !d->strOutText.isEmpty()
-   && ( !painter.device()->isExtDev() 
+   && ( !painter.device()->isExtDev()
         || !format()->getDontprintText( cellRef.x(), cellRef.y() ) )
-   && !( format()->sheet()->isProtected() 
+   && !( format()->sheet()->isProtected()
          && format()->isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
       paintText( painter, cellRect, cellRef );
@@ -2417,7 +2417,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
     //Note: Painting of highlight isn't quite right.  If several
     //      cells are merged, then the whole merged cell will be
-    //      painted with the colour of the last cell referenced 
+    //      painted with the colour of the last cell referenced
     //      which is inside the merged range.
           obscuringCell->paintCell( rect, painter, view,
                                     corner, obscuringCellRef,
@@ -2570,7 +2570,7 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 
   Cell  *cell = format()->sheet()->cellAt( column, row );
   KoPoint       corner( xpos, ypos );
-  
+
   // Check if the upper and lower borders should be painted, and
   // if so which pens we should use.  There used to be a nasty
   // bug here (#61452).
@@ -2654,18 +2654,18 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
   {
     //If the cell's background color is too bright, use the default highlight color
     //Otherwise use a lighter version of the cell's background color.
-    QColor c; 
-   
+    QColor c;
+
     int averageColor = (backgroundColor.red() + backgroundColor.green() + backgroundColor.blue()) / 3;
-    
+
     if (averageColor > 180)
-	if (averageColor > 225)		
+	if (averageColor > 225)
        		c = View::highlightColor();
     	else
 		c = backgroundColor.light( 115 ); //15% lighter
     else
        c = backgroundColor.light( 125 ); //25% lighter
-        
+
     painter.setBackgroundColor( c );
   }
   else {
@@ -2724,17 +2724,17 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 {
     /*
         *** Notes about optimisation ***
-        
+
         This function was painting the top , left , right & bottom lines in almost all cells previously, contrary to what the comment
         below says should happen.  There doesn't appear to be a UI option to enable or disable showing of the grid when printing at the moment,
         so I have disabled drawing of right and bottom borders for all cells.
-        
+
         I also couldn't work out under what conditions the variables dt / db would come out as anything other than 0 in the code
         for painting the various borders.  The effTopBorderPen / effBottomBorderPen calls were taking up a lot of time
-        according some profiling I did.  If that code really is necessary, we need to find a more efficient way of getting the widths 
+        according some profiling I did.  If that code really is necessary, we need to find a more efficient way of getting the widths
         than grabbing the whole QPen object and asking it.
-        
-        
+
+
         --Robert Knight (robertknight@gmail.com)
     */
   Doc* doc = sheet()->doc();
@@ -2761,7 +2761,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 //  paintBottom = ( paintBorderBottom && sheet()->getShowGrid()
 //                  && bottomPen.style() == Qt::NoPen );
 
-   
+
    //Set the single-pixel with pen for drawing the borders with.
    painter.setPen( QPen( sheet()->doc()->gridColor(), 1, Qt::SolidLine ) );
 
@@ -2832,13 +2832,13 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                           doc->zoomItY( cellRect.bottom() - db ) );
     }
   }
-  
+
 
   // The top border.
   if ( paintTop ) {
     int dl = 0;
     int dr = 0;
-    
+
     #if 0
     if ( cellRef.y() > 1 ) {
       Cell  *cell_north = format()->sheet()->cellAt( cellRef.x(),
@@ -2854,7 +2854,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     }
     #endif
 
-    
+
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
@@ -2871,7 +2871,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                         doc->zoomItY( cellRect.y() ) );
     }
   }
-  
+
 
   // The right border.
   if ( paintRight ) {
@@ -2922,7 +2922,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                           doc->zoomItY( cellRect.bottom() - db ) );
     }
   }
-  
+
   // The bottom border.
   /*if ( paintBottom ) {
     int dl = 0;
@@ -3081,7 +3081,7 @@ void Cell::paintMoreTextIndicator( QPainter& painter,
     QColor penColor = Qt::red;
     // If background has high red part, switch to blue.
     if ( qRed( backgroundColor.rgb() ) > 127
-   && qGreen( backgroundColor.rgb() ) < 80 
+   && qGreen( backgroundColor.rgb() ) < 80
    && qBlue( backgroundColor.rgb() ) < 80 )
     {
       penColor = Qt::blue;
@@ -3292,7 +3292,7 @@ void Cell::paintText( QPainter& painter,
     tmpMultiRow     = format()->multiRow( cellRef.x(), cellRef.y() );
   }
 
-  // Actually paint the text.  
+  // Actually paint the text.
   //    There are 4 possible cases:
   //        - One line of text , horizontal
   //        - Angled text
@@ -3433,12 +3433,12 @@ void Cell::paintPageBorders( QPainter& painter,
 
   // Draw page borders
 
-  if ( cellRef.x() >= print->printRange().left() 
+  if ( cellRef.x() >= print->printRange().left()
        && cellRef.x() <= print->printRange().right() + 1
-       && cellRef.y() >= print->printRange().top() 
+       && cellRef.y() >= print->printRange().top()
        && cellRef.y() <= print->printRange().bottom() + 1 )
   {
-    if ( print->isOnNewPageX( cellRef.x() ) 
+    if ( print->isOnNewPageX( cellRef.x() )
    && cellRef.y() <= print->printRange().bottom() )
     {
       painter.setPen( sheet()->doc()->pageBorderColor() );
@@ -3495,12 +3495,12 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
            QPen & _rightPen, QPen & _bottomPen,
            QPen & _leftPen,  QPen & _topPen )
 {
-  
+
   //Sanity check: If we are not painting any of the borders then the function
   //really shouldn't be called at all.
   if ( (!paintLeft) && (!paintRight) && (!paintTop) && (!paintBottom) )
         return;
-        
+
   Doc * doc = sheet()->doc();
 
   Sheet::LayoutDirection sheetDir =  format()->sheet()->layoutDirection();
@@ -4035,7 +4035,7 @@ QString Cell::textDisplaying( QPainter &_painter )
 
     // Start out with the whole text, cut one character at a time, and
     // when the text finally fits, return it.
-    for ( int i = d->strOutText.length(); i != 0; i-- ) 
+    for ( int i = d->strOutText.length(); i != 0; i-- )
     {
       //Note that numbers are always treated as left-aligned since if we have to cut digits off, they should
       //always be the least significant ones at the end of the string
@@ -4049,26 +4049,26 @@ QString Cell::textDisplaying( QPainter &_painter )
       if (isNumeric)
       {
 	  //For numeric values, we can cut off digits after the decimal point to make it fit,
-	  //but not the integer part of the number.  
+	  //but not the integer part of the number.
 	  //If this number still contains a fraction part then we don't need to do anything, if we have run
 	  //out of space to fit even the integer part of the number then display #########
 	  //TODO Perhaps try to display integer part in standard form if there is not enough room for it?
-	   
+
 	  if (!tmp.contains('.'))
 	  	d->strOutText=QString().fill('#',20);
       }
-      
+
       // 4 equal length of red triangle +1 point.
       if ( format()->sheet()->doc()->unzoomItX( fm.width( tmp ) ) + tmpIndent
      < len - 4.0 - 1.0 )
       {
-  	if ( format()->getAngle( column(), row() ) != 0 ) 
+  	if ( format()->getAngle( column(), row() ) != 0 )
 	{
     		QString tmp2;
     		RowFormat *rl = format()->sheet()->rowFormat( row() );
-    		if ( d->textHeight > rl->dblHeight() ) 
+    		if ( d->textHeight > rl->dblHeight() )
 		{
-      			for ( int j = d->strOutText.length(); j != 0; j-- ) 
+      			for ( int j = d->strOutText.length(); j != 0; j-- )
 			{
         			tmp2 = d->strOutText.left( j );
         			if ( format()->sheet()->doc()->unzoomItY( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
@@ -4571,7 +4571,7 @@ void Cell::setCellText( const QString& _text, bool asText )
 {
  // QString ctext = _text;
 
-// (Tomas) is this trim necessary for anything ?  
+// (Tomas) is this trim necessary for anything ?
 //  if( ctext.length() > 5000 )
 //    ctext = ctext.left( 5000 );
 
@@ -4603,10 +4603,10 @@ void Cell::setCellText( const QString& _text, bool asText )
 void Cell::setDisplayText( const QString& _text )
 {
   bool isLoading = format()->sheet()->isLoading();
-  
+
   if (!isLoading)
     format()->sheet()->doc()->emitBeginOperation( false );
-  
+
   d->strText = _text;
 
   /**
@@ -4640,7 +4640,7 @@ void Cell::setDisplayText( const QString& _text )
 
 void Cell::setLink( const QString& link )
 {
-  d->extra()->link = link; 
+  d->extra()->link = link;
 
   if( !link.isEmpty() && d->strText.isEmpty() )
     setCellText( link );
@@ -5619,19 +5619,20 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
     kdDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
-        oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName" );
+        oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
+
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        QDomElement* style = oasisContext.oasisStyles().styles()[str];
+        const QDomElement* style = oasisContext.oasisStyles().findStyle( str, "table-cell" );
         //kdDebug()<<" style :"<<style<<endl;
 /*        KoStyleStack styleStack;
         styleStack.push( *style );
         styleStack.setTypeProperties( "table-cell" );*/
         format()->loadOasisStyle( *style, oasisContext );
-        loadOasisConditional( style );
+        loadOasisConditional( const_cast<QDomElement *>( style ) );
     }
    // QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
-    
-     
+
+
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
     loadOasisCellText( element );
 
@@ -5872,12 +5873,12 @@ void Cell::loadOasisCellText( const QDomElement& parent )
     //Search and load each paragraph of text. Each paragraph is separated by a line break
     QDomElement textParagraphElement;
     QString cellText;
-    
+
     bool multipleTextParagraphsFound=false;
-    
+
     forEachElement( textParagraphElement , parent )
     {
-        if ( textParagraphElement.localName()=="p" && 
+        if ( textParagraphElement.localName()=="p" &&
              textParagraphElement.namespaceURI()== KoXmlNS::text )
         {
             // our text, could contain formating for value or result of formul
@@ -5885,8 +5886,8 @@ void Cell::loadOasisCellText( const QDomElement& parent )
                 cellText = textParagraphElement.text();
             else
             {
-                cellText += "\n"+textParagraphElement.text(); 
-                multipleTextParagraphsFound=true;   
+                cellText += "\n"+textParagraphElement.text();
+                multipleTextParagraphsFound=true;
             }
 
             QDomElement textA = KoDom::namedItemNS( textParagraphElement, KoXmlNS::text, "a" );
@@ -5905,13 +5906,13 @@ void Cell::loadOasisCellText( const QDomElement& parent )
             }
         }
     }
-    
+
     if (!cellText.isNull())
     {
         setCellText( cellText );
         setValue( cellText );
     }
-    
+
     //Enable word wrapping if multiple lines of text have been found.
     if ( multipleTextParagraphsFound )
     {
@@ -6964,7 +6965,7 @@ void Cell::sheetDies()
       d->extra()->mergedXCells = 0;
       d->extra()->mergedYCells = 0;
     }
-    
+
     //d->nextCell = 0;
     //d->previousCell = 0;
 }

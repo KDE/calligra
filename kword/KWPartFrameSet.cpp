@@ -55,7 +55,7 @@ KWPartFrameSet::KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
         m_name = doc->generateFramesetName( m_name + " %1" );
 
     context.styleStack().save();
-    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
+    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name", "graphic" ); // get the style for the graphics element
     KWFrame* frame = loadOasisFrame( frameTag, context );
     context.styleStack().restore();
 

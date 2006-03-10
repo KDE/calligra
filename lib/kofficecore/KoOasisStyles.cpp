@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2004-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,10 +29,17 @@
 #include <qbrush.h>
 #include <KoStyleStack.h>
 
-KoOasisStyles::KoOasisStyles()
+class KoOasisStyles::Private
 {
-    m_styles.setAutoDelete( true );
-    m_stylesAutoStyles.setAutoDelete( true );
+public:
+    // The key of the map is the family
+    QMap<QString, QDict<QDomElement> > m_styles;
+    QMap<QString, QDict<QDomElement> > m_stylesAutoStyles;
+};
+
+KoOasisStyles::KoOasisStyles()
+    : d( new Private )
+{
     m_defaultStyle.setAutoDelete( true );
     m_masterPages.setAutoDelete( true );
     m_listStyles.setAutoDelete( true );
@@ -41,7 +48,7 @@ KoOasisStyles::KoOasisStyles()
 
 KoOasisStyles::~KoOasisStyles()
 {
-
+    delete d;
 }
 
 void KoOasisStyles::createStyleMap( const QDomDocument& doc, bool stylesDotXml )
@@ -160,24 +167,33 @@ void KoOasisStyles::insertStyle( const QDomElement& e, bool styleAutoStyles )
     const QString ns = e.namespaceURI();
 
     const QString name = e.attributeNS( KoXmlNS::style, "name", QString::null );
-    if ( ns == KoXmlNS::style && (
-                localName == "style"
-             || localName == "page-master" // OO-1.1 compatibility (probably not useful)
-             || localName == "page-layout"
+    if ( ns == KoXmlNS::style && localName == "style" ) {
+        const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
+
+        if ( styleAutoStyles ) {
+            QDict<QDomElement>& dict = d->m_stylesAutoStyles[ family ];
+            dict.setAutoDelete( true );
+            if ( dict.find( name ) != 0 )
+                kdDebug(30003) << "Auto-style: '" << name << "' already exists" << endl;
+            dict.insert( name, new QDomElement( e ) );
+            //kdDebug(30003) << "Style: '" << name << "' loaded as a style auto style" << endl;
+        } else {
+            QDict<QDomElement>& dict = d->m_styles[ family ];
+            dict.setAutoDelete( true );
+
+            if ( dict.find( name ) != 0 )
+                kdDebug(30003) << "Style: '" << name << "' already exists" << endl;
+            dict.insert( name, new QDomElement( e ) );
+            //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
+        }
+    } else if ( ns == KoXmlNS::style && (
+                localName == "page-layout"
              || localName == "font-decl"
              || localName == "presentation-page-layout" ) )
     {
-        if ( styleAutoStyles && localName == "style" ) {
-            if ( m_stylesAutoStyles.find( name ) != 0 )
-                kdDebug(30003) << "Auto-style: '" << name << "' already exists" << endl;
-            m_stylesAutoStyles.insert( name, new QDomElement( e ) );
-            //kdDebug(30003) << "Style: '" << name << "' loaded as a style auto style" << endl;
-        } else {
-            if ( m_styles.find( name ) != 0 )
-                kdDebug(30003) << "Style: '" << name << "' already exists" << endl;
-            m_styles.insert( name, new QDomElement( e ) );
-            //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
-        }
+        if ( m_styles.find( name ) != 0 )
+            kdDebug(30003) << "Style: '" << name << "' already exists" << endl;
+        m_styles.insert( name, new QDomElement( e ) );
     } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
         const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );
         if ( !family.isEmpty() )
@@ -1437,7 +1453,38 @@ QBrush KoOasisStyles::loadOasisFillStyle( const KoStyleStack &styleStack, const 
     return tmpBrush;
 }
 
-QDomElement* KoOasisStyles::defaultStyle( const QString& family ) const
+const QDomElement* KoOasisStyles::defaultStyle( const QString& family ) const
 {
     return m_defaultStyle[family];
+}
+
+const QDomElement* KoOasisStyles::findStyle( const QString& name ) const
+{
+    return m_styles[ name ];
+}
+
+const QDomElement* KoOasisStyles::findStyle( const QString& styleName, const QString& family ) const
+{
+    const QDomElement* style = d->m_styles[ family ][ styleName ];
+    if ( style && !family.isEmpty() ) {
+        const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString::null );
+        if ( styleFamily != family ) {
+            kdWarning() << "KoOasisStyles: was looking for style " << styleName
+                        << " in family " << family << " but got " << styleFamily << endl;
+        }
+    }
+    return style;
+}
+
+const QDomElement* KoOasisStyles::findStyleAutoStyle( const QString& styleName, const QString& family ) const
+{
+    const QDomElement* style = d->m_stylesAutoStyles[ family ][ styleName ];
+    if ( style ) {
+        const QString styleFamily = style->attributeNS( KoXmlNS::style, "family", QString::null );
+        if ( styleFamily != family ) {
+            kdWarning() << "KoOasisStyles: was looking for style " << styleName
+                        << " in family " << family << " but got " << styleFamily << endl;
+        }
+    }
+    return style;
 }

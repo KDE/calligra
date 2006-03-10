@@ -2697,7 +2697,7 @@ void KoTextParag::loadOasisSpan( const QDomElement& parent, KoOasisContext& cont
         else if ( isTextNS && localName == "span" ) // text:span
         {
             context.styleStack().save();
-            context.fillStyleStack( ts, KoXmlNS::text, "style-name" );
+            context.fillStyleStack( ts, KoXmlNS::text, "style-name", "text" );
             loadOasisSpan( ts, context, pos ); // recurse
             context.styleStack().restore();
         }
@@ -3084,7 +3084,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
         KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );
         int w = format->charWidth( zh, true, &ch, this, 'X' );
         int size = QMIN( w, h_pix * 3 / 4 );
-        // x,y is the bottom right corner of the 
+        // x,y is the bottom right corner of the
         //kdDebug() << "startX=" << startX << " bw=" << bw << " w=" << w << endl;
         int x;
         if ( rightToLeft )

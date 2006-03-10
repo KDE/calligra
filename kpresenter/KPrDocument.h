@@ -139,7 +139,7 @@ class KPrDocument : public KoDocument
     virtual bool completeSaving( KoStore* _store );
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
-    enum SaveFlag { SaveAll, SaveSelected, SavePage }; 
+    enum SaveFlag { SaveAll, SaveSelected, SavePage };
     void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles, SaveFlag saveFlag = SaveAll ) const;
     enum { STYLE_BACKGROUNDPAGE = 20, STYLE_BACKGROUNDPAGEAUTO, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER, STYLE_PICTURE, STYLE_PRESENTATIONSTICKYOBJECT };
 
@@ -577,7 +577,7 @@ protected:
 
     void saveUsedSoundFileToStore( KoStore *_store, QStringList _list );
     void loadUsedSoundFileFromStore( KoStore *_store, QStringList _list );
-    void fillStyleStack( const QDomElement& object, KoOasisContext & context );
+    void fillStyleStack( const QDomElement& object, KoOasisContext & context, const char* family );
     /*
      * increaseOrder = true by default, put to false when we have group of animation
      */

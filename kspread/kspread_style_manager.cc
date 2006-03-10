@@ -78,7 +78,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
 void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
 {
     // loading default style first
-    QDomElement* defaultStyle = oasisStyles.defaultStyle( "table-cell" );
+    const QDomElement* defaultStyle = oasisStyles.defaultStyle( "table-cell" );
     if ( defaultStyle )
     {
       m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, i18n( "Default" ) );

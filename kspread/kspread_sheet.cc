@@ -147,19 +147,19 @@ void ChartBinding::cellChanged( Cell* /*changedCell*/ )
     if ( m_bIgnoreChanges )
         return;
 
-	//Ensure display gets updated by marking all cells underneath the chart as 
+	//Ensure display gets updated by marking all cells underneath the chart as
 	//dirty
-	    	
+
 	const QRect chartGeometry = m_child->geometry().toQRect();
-	
+
 	double tmp;
   	int left = sheet()->leftColumn( chartGeometry.left() , tmp );
   	int top = sheet()->topRow( chartGeometry.top() , tmp );
 	int right = sheet()->rightColumn( chartGeometry.right() );
 	int bottom = sheet()->bottomRow( chartGeometry.bottom() );
 
-	sheet()->setRegionPaintDirty( QRect(left,top,right-left,bottom-top) );	
-	
+	sheet()->setRegionPaintDirty( QRect(left,top,right-left,bottom-top) );
+
     //kdDebug(36001) << m_rctDataArea << endl;
 
     // Get the chart and resize its data if necessary.
@@ -536,17 +536,17 @@ void Sheet::setAutoCalc( bool _AutoCalc )
     //Avoid possible recalculation of dependancies if the auto calc setting hasn't changed
     if (d->autoCalc == _AutoCalc)
         return;
-    
+
     //If enabling automatic calculation, make sure that the dependencies are up-to-date
-    if (_AutoCalc == true)   
-    { 
+    if (_AutoCalc == true)
+    {
         updateAllDependencies();
-        recalc();    
+        recalc();
     }
-        
+
     d->autoCalc=_AutoCalc;
-    
-    
+
+
 }
 
 bool Sheet::getShowColumnNumber() const
@@ -1131,9 +1131,9 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
   dm->setParsing (!asString);
   dm->add (QPoint (_column, _row));
   dm->execute ();
-  
+
   /* PRE-MANIPULATOR CODE looked like this:
-  TODO remove this after the new code works  
+  TODO remove this after the new code works
   if ( !doc()->undoLocked() )
   {
       UndoSetText *undo = new UndoSetText( doc(), this, cell->text(), _column, _row,cell->formatType() );
@@ -1236,14 +1236,14 @@ void Sheet::recalc( bool force )
   //set.
   if ( !getAutoCalc() && !force )
         return;
-        
+
   //If automatic calculation is disabled, the dependencies won't be up to date, so they need
   //to be recalculated.
   //FIXME:  Tomas, is there a more efficient way to do this?
   if ( !getAutoCalc() )
     updateAllDependencies();
-  
-  
+
+
   // (Tomas): actually recalc each cell
   // this is FAR from being perfect, dependencies will cause some to be
   // recalculated a LOT, but it's still better than otherwise, where
@@ -1251,7 +1251,7 @@ void Sheet::recalc( bool force )
   // current one - then we only obtain the correct result AFTER we scroll
   // to the cell ... recalc should actually ... recalc :)
   Cell* c;
-  
+
   int count = 0;
   c = d->cells.firstCell();
   for( ; c; c = c->nextCell() )
@@ -1270,14 +1270,14 @@ void Sheet::recalc( bool force )
       kdDebug() << "Recalc: " << percent << "%" << endl;
     }
   }
-  
+
   //  emitEndOperation();
   emit sig_updateView( this );
 }
 
 void Sheet::valueChanged (Cell *cell)
-{	
-	
+{
+
   //TODO: call cell updating, when cell damaging implemented
 
   //prepare the Point structure
@@ -1989,7 +1989,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
   doc()->emitBeginOperation();
 
   QString cellText;
-  
+
   int x,y; /* just some loop counters */
 
   /* the actual number of columns or rows that the series will span.
@@ -2240,9 +2240,9 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
       }
     }
   }
-  
+
   setRegionPaintDirty( undoRegion );
-  
+
   //  doc()->emitEndOperation();
   emit sig_updateView( this );
 }
@@ -6361,7 +6361,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
     {
         QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString::null );
         kdDebug()<<" style of table :"<<stylename<<endl;
-        QDomElement *style = oasisContext.oasisStyles().styles()[stylename];
+        const QDomElement *style = oasisContext.oasisStyles().findStyle( stylename, "table" );
         Q_ASSERT( style );
         kdDebug()<<" style :"<<style<<endl;
         if ( style )
@@ -6386,9 +6386,9 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
                     loadSheetStyleFormat( masterStyle );
                     if ( masterStyle->hasAttributeNS( KoXmlNS::style, "page-layout-name" ) )
                     {
-                        QString masterPageLayoutStyleName=masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
+                        QString masterPageLayoutStyleName = masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
                         kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
-                        QDomElement *masterLayoutStyle = oasisContext.oasisStyles().styles()[masterPageLayoutStyleName];
+                        const QDomElement *masterLayoutStyle = oasisContext.oasisStyles().findStyle( masterPageLayoutStyleName );
                         kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
                         KoStyleStack styleStack;
                         styleStack.setTypeProperties( "page-layout" );
@@ -6665,7 +6665,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     {
         QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
         kdDebug()<<" default-cell-style-name :"<<str<<endl;
-        QDomElement *style = oasisStyles.styles()[str];
+        const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
         kdDebug()<<"default column style :"<<style<<endl;
         if ( style )
         {
@@ -6679,7 +6679,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     if ( column.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        QDomElement *style = oasisStyles.styles()[str];
+        const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
@@ -6739,7 +6739,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        QDomElement *style = oasisContext.oasisStyles().styles()[str];
+        const QDomElement *style = oasisContext.oasisStyles().findStyle( str, "table-row" );
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
@@ -7893,9 +7893,9 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
     if ( repaint )
     {
         //All the cells in this row, or below this row will need to be repainted
-        //So add that region of the sheet to the paint dirty list. 
+        //So add that region of the sheet to the paint dirty list.
         setRegionPaintDirty( QRect( 0 , _row , KS_colMax , KS_rowMax) );
-        
+
       emit sig_updateVBorder( this );
       emit sig_updateView( this );
     }
@@ -7920,9 +7920,9 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
     emit sig_maxColumn( maxColumn() );
-    
 
-    
+
+
     _format->clearDisplayDirtyFlag();
 }
 
@@ -7952,7 +7952,7 @@ bool Sheet::insertChart( const KoRect& _rect, KoDocumentEntry& _e, const QRect& 
     dataRange.setSheet( this );
 
     QString rangeString=dataRange.toString();
-    
+
     if ( wiz )
         wiz->show( rangeString );
 
@@ -7989,31 +7989,31 @@ bool Sheet::insertPicture( const KoPoint& point ,  KoPicture& picture )
 
     if (picture.isNull())
 	    return false;
-    
+
     KoPictureKey key = picture.getKey();
 
     KoRect destinationRect;
     destinationRect.setLeft( point.x()  );
     destinationRect.setTop( point.y()  );
 
-    //Generate correct pixel size - this is a bit tricky.  
+    //Generate correct pixel size - this is a bit tricky.
     //This ensures that when we load the image it appears
     //the same size on screen on a 100%-zoom KSpread spreadsheet as it would in an
-    //image viewer or another spreadsheet program such as OpenOffice.  
+    //image viewer or another spreadsheet program such as OpenOffice.
     //
-    //KoUnit assumes 72DPI, whereas the user's display resolution will probably be 
+    //KoUnit assumes 72DPI, whereas the user's display resolution will probably be
     //different (eg. 96*96).  So, we convert the actual size in pixels into inches
     //using the screen display resolution and then use KoUnit to convert back into
-    //the appropriate pixel size KSpread.        
-    
+    //the appropriate pixel size KSpread.
+
     KoSize destinationSize;
-    
+
     double inchWidth = (double)picture.getOriginalSize().width() / KoGlobal::dpiX();
     double inchHeight = (double)picture.getOriginalSize().height() / KoGlobal::dpiY();
 
     destinationSize.setWidth( KoUnit::fromUserValue(inchWidth,KoUnit::U_INCH) );
     destinationSize.setHeight( KoUnit::fromUserValue(inchHeight,KoUnit::U_INCH) );
-    
+
     destinationRect.setSize( destinationSize);
 
     EmbeddedPictureObject* object = new EmbeddedPictureObject( this, destinationRect, doc()->pictureCollection(),key);
@@ -8031,7 +8031,7 @@ bool Sheet::insertPicture( const KoPoint& point, const QPixmap& pixmap  )
 	buffer.open( IO_ReadWrite );
 	pixmap.save( &buffer , "PNG" );
 
-	//Reset the buffer so that KoPicture reads the whole file from the beginning 
+	//Reset the buffer so that KoPicture reads the whole file from the beginning
 	//(at the moment the read/write position is at the end)
 	buffer.reset();
 
@@ -8039,7 +8039,7 @@ bool Sheet::insertPicture( const KoPoint& point, const QPixmap& pixmap  )
 	picture.load( &buffer , "PNG" );
 
 	doc()->pictureCollection()->insertPicture(picture);
-	
+
 	return insertPicture( point , picture );
 }
 
@@ -8113,7 +8113,7 @@ Sheet::~Sheet()
     //
     //For example, suppose a cell in SheetB depends upon a cell in SheetA.  If the cell in SheetB is emptied
     //after SheetA has already been deleted, the program would try to remove dependancies from the cell in SheetA
-    //causing a crash. 
+    //causing a crash.
     setAutoCalc(false);
 
     s_mapSheets->remove( d->id );
@@ -8144,7 +8144,7 @@ Sheet::~Sheet()
     delete d->dependencies;
 
     delete d;
-    
+
     //this is for debugging a crash
     d=0;
 }

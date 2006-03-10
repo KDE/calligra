@@ -402,6 +402,7 @@ bool KoDocumentChild::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
         if ( d->m_doc->nativeOasisMimeType().isEmpty() ) {
             // Embedded object doesn't support OASIS OpenDocument, save in the old format.
+            kdDebug() << k_funcinfo << "Embedded object doesn't support OASIS OpenDocument, save in the old format." << endl;
 
             if ( !d->m_doc->saveToStore( store, name ) )
                 return false;

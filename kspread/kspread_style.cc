@@ -420,7 +420,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     {
         kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
-        QDomElement * style = oasisStyles.styles()[styleStack.attributeNS( KoXmlNS::draw, "style-name" )];
+        const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
         kdDebug()<<" style :"<<style<<endl;
         KoStyleStack drawStyleStack;
         drawStyleStack.push( *style );
@@ -2601,7 +2601,7 @@ QString Style::colorName( const QColor& color )
 	static QMap<QRgb , QString> map;
 
 	QRgb rgb = color.rgb();
-	
+
 	if (!map.contains( rgb ))
 	{
 		map[rgb] = color.name();

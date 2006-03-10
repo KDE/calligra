@@ -1380,7 +1380,7 @@ void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
             QString name = e.attributeNS( KoXmlNS::presentation, "name", QString::null );
             QStringList tmp = QStringList::split( ",", e.attributeNS( KoXmlNS::presentation, "pages", QString::null) );
             QValueList<KPrPage *> pageList;
-            for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it ) 
+            for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
             {
                 if ( m_loadingInfo->m_name2page.contains( *it ) )
                 {
@@ -1517,7 +1517,7 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
         {
             stylesWriter->startElement( "office:master-styles" );
             stylesWriter->addCompleteElement( masterStyles );
-            stylesWriter->endElement(); 
+            stylesWriter->endElement();
         }
     }
 
@@ -1600,7 +1600,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     // Load all styles before the corresponding paragraphs try to use them!
     m_styleColl->loadOasisStyles( context );
 
-    // if we only copy a page we have no master 
+    // if we only copy a page we have no master
     // also don't copy master when you insert file as long as we don't have multiple masters
     if ( !m_pageWhereLoadObject && _clean )
     {
@@ -1628,13 +1628,14 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         QDomElement masterElement = node.toElement();
         kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
         // add the correct styles
-        context.addStyles( context.oasisStyles().stylesAutoStyles()[masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null )] );
+        const QDomElement* masterPageStyle = context.oasisStyles().findStyle(masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null ) );
+        context.styleStack().push( *masterPageStyle );
 
         context.setUseStylesAutoStyles( true );
         m_masterPage->loadOasis( context );
 
         createPresentationAnimation( KoDom::namedItemNS( node, KoXmlNS::presentation, "animations"));
-        
+
         loadOasisObject( m_masterPage, node , context);
 
         m_loadingInfo->clearAnimationShowDict(); // clear all show animations style
@@ -1646,8 +1647,8 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         kdDebug()<<" end load oasis master style \n";
 
         Q_ASSERT( master );
-        QDomElement *style =master ? oasisStyles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
-        QDomElement *backgroundStyle = oasisStyles.styles()[ "Standard-background"];
+        const QDomElement *style = master ? oasisStyles.findStyle(master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )) : 0;
+        const QDomElement *backgroundStyle = oasisStyles.findStyle( "Standard-background", "presentation" );
         kdDebug()<<"Standard background "<<backgroundStyle<<endl;
         // parse all pages
         Q_ASSERT( style );
@@ -1674,7 +1675,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         if ( dp.tagName()== "page" && dp.namespaceURI() == KoXmlNS::draw ) // don't try to parse "</draw:page>" as page
         {
             context.styleStack().clear(); // remove all styles
-            fillStyleStack( dp, context );
+            fillStyleStack( dp, context, "drawing-page" );
             context.styleStack().save();
             kdDebug ()<<"insert new page "<<pos<<endl;
             KPrPage *newpage = 0L;
@@ -1706,7 +1707,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
             }
             else
             {
-                // OO uses /page[0-9]+$/ as default for no name set 
+                // OO uses /page[0-9]+$/ as default for no name set
                 QRegExp rx( "^page[0-9]+$" );
                 if ( rx.search( str ) == -1 )
                     newpage->insertManualTitle(str);
@@ -1783,10 +1784,10 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             context.styleStack().save();
             const bool isDrawNS = o.namespaceURI() == KoXmlNS::draw;
-            //"draw:text-box"
-            if ( name == "frame" && isDrawNS) // textbox
+            // draw:frame
+            if ( name == "frame" && isDrawNS )
             {
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
 
                 QDomNode imageBox = KoDom::namedItemNS( o, KoXmlNS::draw, "image" );
                 kdDebug()<<" imageBox:"<<imageBox.isNull()<<endl;
@@ -1805,7 +1806,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                     kdDebug()<<" object:"<<object.isNull()<<endl;
                     if ( !object.isNull() )
                     {
-                        fillStyleStack( o, context );
+                        fillStyleStack( o, context, "graphic" );
                         KPrChild *ch = new KPrChild( this );
                         QRect r;
                         KPrPartObject *kppartobject = new KPrPartObject( ch );
@@ -1821,6 +1822,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                     }
                     else
                     {
+                        //"draw:text-box"
                         KPrTextObject *kptextobject = new KPrTextObject( this );
                         kptextobject->loadOasis(o, context, m_loadingInfo);
                         if ( groupObject )
@@ -1832,7 +1834,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else if ( name == "rect" && isDrawNS) // rectangle
             {
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
                 KPrRectObject *kprectobject = new KPrRectObject();
                 kprectobject->loadOasis(o, context , m_loadingInfo);
                 if ( groupObject )
@@ -1842,7 +1844,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else if ( ( name == "circle" || name == "ellipse" )&& isDrawNS)
             {
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
                 if ( o.hasAttributeNS( KoXmlNS::draw, "kind" ) ) // pie, chord or arc
                 {
                     KPrPieObject *kppieobject = new KPrPieObject();
@@ -1864,7 +1866,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else if ( name == "line" && isDrawNS) // line
             {
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
                 KPrLineObject *kplineobject = new KPrLineObject();
                 kplineobject->loadOasis(o, context, m_loadingInfo);
                 if ( groupObject )
@@ -1873,7 +1875,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                     newpage->appendObject( kplineobject );
             }
             else if (name=="polyline" && isDrawNS) { // polyline
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
                 KPrPolylineObject *kppolylineobject = new KPrPolylineObject();
                 kppolylineobject->loadOasis(o, context, m_loadingInfo);
                 if ( groupObject )
@@ -1882,7 +1884,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                     newpage->appendObject(kppolylineobject);
             }
             else if (name=="polygon" && isDrawNS) { // plcloseobject
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
                 KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
                 kpClosedObject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
@@ -1891,7 +1893,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                     newpage->appendObject(kpClosedObject);
             }
             else if (name=="regular-polygon"&& isDrawNS) { // kppolygone object
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
                 KPrPolygonObject *kpPolygoneObject = new KPrPolygonObject();
                 kpPolygoneObject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
@@ -1901,7 +1903,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else if ( name == "path" && isDrawNS)
             {
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
                 QString d = o.attributeNS( KoXmlNS::svg, "d", QString::null);
 
                 KPrSVGPathParser parser;
@@ -1956,7 +1958,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else if ( name == "custom-shape" && isDrawNS )
             {
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
 
                 QDomElement enhancedGeometry = KoDom::namedItemNS( o, KoXmlNS::draw, "enhanced-geometry" );
 
@@ -2027,7 +2029,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else if ( name == "g" && isDrawNS)
             {
-                fillStyleStack( o, context );
+                fillStyleStack( o, context, "graphic" );
                 KPrGroupObject *kpgroupobject = new KPrGroupObject();
                 QDomNode nodegroup = object.firstChild();
 
@@ -2133,23 +2135,23 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
     return orderAnimation;
 }
 
-void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & context )
+void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & context, const char* family )
 {
     if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
-        context.fillStyleStack( object, KoXmlNS::presentation, "style-name" );
+        context.fillStyleStack( object, KoXmlNS::presentation, "style-name", family );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        context.fillStyleStack( object, KoXmlNS::draw, "style-name" );
+        context.fillStyleStack( object, KoXmlNS::draw, "style-name", family );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
     {
-        context.fillStyleStack( object, KoXmlNS::draw, "text-style-name" );
+        context.fillStyleStack( object, KoXmlNS::draw, "text-style-name", family );
     }
     if ( object.hasAttributeNS( KoXmlNS::text, "style-name" ) )
     {
-        context.fillStyleStack( object, KoXmlNS::text, "style-name" );
+        context.fillStyleStack( object, KoXmlNS::text, "style-name", family );
     }
 }
 
@@ -2594,7 +2596,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                     if(slide.tagName()=="CUSTOMSLIDESHOW") {
                         QStringList tmp = QStringList::split( ",", slide.attribute( "pages" ) );
                         QValueList<KPrPage *> pageList;
-                        for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it ) 
+                        for ( QStringList::Iterator it = tmp.begin(); it != tmp.end(); ++it )
                         {
                             if ( name2page.contains( *it ) )
                             {
@@ -3023,7 +3025,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
     KPrInsertCmd *insertCmd = 0;
     if ( ! pasteObjects.empty() )
     {
-        insertCmd = new KPrInsertCmd( i18n( "Paste Objects" ), pasteObjects, 
+        insertCmd = new KPrInsertCmd( i18n( "Paste Objects" ), pasteObjects,
                                       this , m_pageWhereLoadObject );
         insertCmd->execute();
     }

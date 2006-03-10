@@ -230,10 +230,10 @@ public:
     void move( int column, int row );
 
     /**
-     * This method notifies the cell that the parent sheet is being deleted.  
+     * This method notifies the cell that the parent sheet is being deleted.
      */
     // Note:  This used to remove any links from this cell to other cells.  However, this caused a problem
-    // in other parts of the code which relied upon walking from one cell to the next using 
+    // in other parts of the code which relied upon walking from one cell to the next using
     // nextCell().
     void sheetDies();
 
@@ -266,7 +266,7 @@ public:
     bool load( const QDomElement& cell, int _xshift, int _yshift, Paste::Mode pm = Paste::Normal,
                Paste::Operation op = Paste::OverWrite, bool paste = false );
 
-    bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext );   
+    bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext );
 
     QTime toTime(const QDomElement &element);
     QDate toDate(const QDomElement &element);
@@ -292,7 +292,7 @@ public:
      * @see #copyFormat
      */
     void copyAll( Cell *cell);
-    
+
     enum BorderSides
     {
       Border_None   =0x00,
@@ -333,7 +333,7 @@ public:
                     QPen & topPen,
 		    QValueList<QPoint> &mergedCellsPainted,
                     bool drawCursor = true );
-   
+
 
     /**
      * @param _col the column this cell is assumed to be in.
@@ -372,7 +372,7 @@ public:
     /**
      * @return a QRect for this cell (i.e., a 1x1 rect).  @see zoomedCellRect
      */
-    QRect cellRect();  
+    QRect cellRect();
 
     /**
      * @return true if the cell should be printed in a print out.
@@ -805,7 +805,7 @@ public:
      * return align X when align is undefined
      */
     int defineAlignX();
-    
+
 
 
 
@@ -939,19 +939,19 @@ protected:
     void checkNumberFormat();
 
    /**
-     * Load the text paragraphs from an OASIS XML cell description.  
+     * Load the text paragraphs from an OASIS XML cell description.
      * @param parent The DOM element representing the cell.
      */
     void loadOasisCellText( const QDomElement& parent );
     void loadOasisObjects( const QDomElement& e, KoOasisLoadingContext& oasisContext );
     void loadOasisValidation( const QString& validationName );
-    
+
     void loadOasisValidationCondition( QString &valExpression );
     void saveOasisAnnotation( KoXmlWriter &xmlwriter );
     void loadOasisConditional( QDomElement * style );
-    
-    
-    
+
+
+
 private:
 
     class Extra;
@@ -969,10 +969,10 @@ private:
           const QPen& leftPen,
           const QPen& topPen
          );*/
-   
-    
+
+
     void paintCellBorders( QPainter& painter, const KoRect &rect,
-                           const KoRect &cellRect, 
+                           const KoRect &cellRect,
          const QPoint &cellRef,
                            bool paintBorderRight, bool paintBorderBottom,
                            bool paintBorderLeft, bool paintBorderTop,
@@ -1010,7 +1010,7 @@ private:
                                  const QPoint &cellRef );
 
 
-   
+
 
   /** handle the fact that a cell has been updated - calls cellUpdated()
   in the parent Sheet object */

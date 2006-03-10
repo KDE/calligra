@@ -858,7 +858,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
 
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) )
     {
-        QDomElement * font = oasisStyles.styles()[ styleStack.attributeNS( KoXmlNS::style, "font-name" ) ];
+        const QDomElement * font = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::style, "font-name" ) );
         if ( font )
         {
             styleStack.save();
@@ -1043,7 +1043,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
     {
         //kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
-        QDomElement * style = oasisStyles.styles()[styleStack.attributeNS( KoXmlNS::draw, "style-name" )];
+        const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
         //kdDebug()<<" style :"<<style<<endl;
         KoStyleStack drawStyleStack;
         drawStyleStack.push( *style );

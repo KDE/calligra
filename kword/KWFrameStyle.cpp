@@ -270,7 +270,7 @@ void KWFrameStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context )
     styleStack.setTypeProperties( "graphic" );
 
     styleStack.save();
-    context.addStyles( &styleElem ); // Load all parents - only because we don't support inheritance.
+    context.addStyles( &styleElem, "graphic" ); // Load all parents - only because we don't support inheritance.
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
         QString color = styleStack.attributeNS( KoXmlNS::fo, "background-color" );

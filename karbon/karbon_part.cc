@@ -244,7 +244,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
             if( borders.hasAttribute( "ptBottom" ) )
                 m_pageLayout.ptBottom = borders.attribute( "ptBottom" ).toDouble();
 	}
- 
+
 	setUnit( m_doc.unit() );
 
 	return success;
@@ -311,7 +311,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	QString masterPageName = "Default"; // use default layout as fallback
 	QDomElement *master = styles.masterPages()[ masterPageName ];
 	Q_ASSERT( master );
-	QDomElement *style =master ? styles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
+	const QDomElement *style = master ? styles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
 	if( style )
 	{
 		m_pageLayout.loadOasis( *style );

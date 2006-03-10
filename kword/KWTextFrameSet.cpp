@@ -1700,7 +1700,7 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
 KWFrame* KWTextFrameSet::loadOasisTextFrame( const QDomElement& frameTag, const QDomElement &tag, KoOasisContext& context )
 {
     context.styleStack().save();
-    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name" ); // get the style for the graphics element
+    context.fillStyleStack( frameTag, KoXmlNS::draw, "style-name", "graphic" ); // get the style for the graphics element
 
     KWFrame* frame = loadOasisFrame( frameTag, context );
 

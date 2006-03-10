@@ -72,14 +72,16 @@ public:
      * @param element the dom element to read the attribute from
      * @param nsURI the namespace URI of the attribute to read
      * @param attrName the name of the attribute to read
+     * @param family the style family used for this object
      */
-    void fillStyleStack( const QDomElement& element, const char* nsURI, const char* attrName );
+    void fillStyleStack( const QDomElement& element, const char* nsURI, const char* attrName, const char* family );
 
     /**
      * Add @p style to the stack, as well as all its parent styles
      * and the default style for this style family.
      *
      * @param style the dom element containing the style to add to the stack
+     * @param family the family to use when looking up parent styles
      * @param usingStylesAutoStyles if true, the parent styles are looked up
      *   in the automatic styles from styles.xml, instead of looking up
      *   in the automatic styles from content.xml as we usually do.
@@ -88,7 +90,7 @@ public:
      *
      * Usually you would call fillStyleStack() instead.
      */
-    void addStyles( const QDomElement* style, bool usingStylesAutoStyles = false );
+    void addStyles( const QDomElement* style, const char* family, bool usingStylesAutoStyles = false );
 
     /// Set to true while loading headers and footers, to remember to use auto styles
     /// from styles.xml

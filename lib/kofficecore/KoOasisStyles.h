@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 David Faure <faure@kde.org>
+   Copyright (C) 2004-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,13 +45,27 @@ public:
     /// @param stylesDotXml true when loading styles.xml, false otherwise
     void createStyleMap( const QDomDocument& doc, bool stylesDotXml );
 
-    /// @return all styles (with tag "style:style", "style:page-layout" or "style:presentation-page-layout")
-    /// hashed by name
-    const QDict<QDomElement>& styles() const { return m_styles; }
+    /**
+     * Look up a style by name.
+     *  This method can find styles defined by the tags "style:page-layout",
+     *   "style:presentation-page-layout", or "style:font-decl".
+     * Do NOT use this method for style:style styles.
+     *
+     * @param name the style name
+     * @return the dom element representing the style, or QString::null if it wasn't found.
+     */
+    const QDomElement* findStyle( const QString& name ) const;
 
-    /// @return all automatic styles with tag "style:style" from styles.xml
-    /// hashed by name
-    const QDict<QDomElement>& stylesAutoStyles() const { return m_stylesAutoStyles; }
+    /**
+     * Look up a style:style by name.
+     * @param name the style name
+     * @param family the style family (for a style:style, use 0 otherwise)
+     * @return the dom element representing the style, or QString::null if it wasn't found.
+     */
+    const QDomElement* findStyle( const QString& name, const QString& family ) const;
+
+    /// Similar to findStyle but for auto-styles in styles.xml only.
+    const QDomElement* findStyleAutoStyle( const QString& name, const QString& family ) const;
 
     /// @return the style:styles that are "user styles", i.e. those from office:styles
     /// styles() is used for lookup. userStyles() is used to load all user styles upfront.
@@ -59,7 +73,7 @@ public:
 
     /// @return the default style for a given family ("graphic","paragraph","table" etc.)
     /// Returns 0 if no default style for this family is available
-    QDomElement* defaultStyle( const QString& family ) const;
+    const QDomElement* defaultStyle( const QString& family ) const;
 
     /// @return the office:style element
     const QDomElement& officeStyle() const { return m_officeStyle; }
@@ -118,8 +132,7 @@ private:
     KoOasisStyles& operator=( const KoOasisStyles & ); // forbidden
 
 private:
-    QDict<QDomElement>   m_styles;
-    QDict<QDomElement>   m_stylesAutoStyles;
+    QDict<QDomElement>   m_styles; // page-layout, font-decl etc.
     QDict<QDomElement>   m_defaultStyle;
     QDomElement m_officeStyle;
 
@@ -130,7 +143,7 @@ private:
     DataFormatsMap m_dataFormats;
 
     class Private;
-    Private *d;
+    Private * const d;
 };
 
 #endif /* KOOASISSTYLES_H */

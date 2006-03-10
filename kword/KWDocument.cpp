@@ -1087,7 +1087,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     m_hasTOC = false;
     m_tabStop = MM_TO_POINT(15);
-    QDomElement* defaultParagStyle = oasisStyles.defaultStyle( "paragraph" );
+    const QDomElement* defaultParagStyle = oasisStyles.defaultStyle( "paragraph" );
     if ( defaultParagStyle ) {
         KoStyleStack stack;
         stack.push( *defaultParagStyle );
@@ -1133,8 +1133,8 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         fs->addFrame( frame );
 
         // load padding, background and borders for the main frame
-        QDomElement* masterPage = context.oasisStyles().masterPages()[ m_loadingInfo->m_currentMasterPage ];
-        QDomElement *masterPageStyle = masterPage ? context.oasisStyles().styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
+        const QDomElement* masterPage = context.oasisStyles().masterPages()[ m_loadingInfo->m_currentMasterPage ];
+        const QDomElement *masterPageStyle = masterPage ? context.oasisStyles().findStyle(masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
         if ( masterPageStyle )
         {
           KoStyleStack styleStack;
@@ -1203,9 +1203,9 @@ bool KWDocument::loadOasisPageLayout( const QString& masterPageName, KoOasisCont
     KoColumns& columns = m_loadingInfo->columns;
 
     const KoOasisStyles& oasisStyles = context.oasisStyles();
-    QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
+    const QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
-    QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
+    const QDomElement *masterPageStyle = masterPage ? oasisStyles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
     Q_ASSERT( masterPageStyle );
     if ( masterPageStyle )
     {
@@ -1305,9 +1305,9 @@ bool KWDocument::loadOasisPageLayout( const QString& masterPageName, KoOasisCont
 void KWDocument::loadMasterPageStyle( const QString& masterPageName, KoOasisContext& context )
 {
     const KoOasisStyles& oasisStyles = context.oasisStyles();
-    QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
+    const QDomElement* masterPage = oasisStyles.masterPages()[ masterPageName ];
     Q_ASSERT( masterPage );
-    QDomElement *masterPageStyle = masterPage ? oasisStyles.styles()[masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
+    const QDomElement *masterPageStyle = masterPage ? oasisStyles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
     Q_ASSERT( masterPageStyle );
 
     KoKWHeaderFooter& hf = m_loadingInfo->hf;

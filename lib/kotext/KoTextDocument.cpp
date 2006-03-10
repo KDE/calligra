@@ -1421,7 +1421,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
         uint pos = 0;
         if ( isTextNS && localName == "p" ) {  // text paragraph
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
 
             KoTextParag *parag = createParag( this, lastParagraph, nextParagraph );
             parag->loadOasis( tag, context, styleColl, pos );
@@ -1432,7 +1432,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         else if ( isTextNS && localName == "h" ) // heading
         {
             //kdDebug(32500) << " heading " << endl;
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
             int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
             bool listOK = false;
             // When a heading is inside a list, it seems that the list prevails.
@@ -1470,7 +1470,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         else if ( isTextNS && localName == "section" ) // Temporary support (###TODO)
         {
             kdDebug(32500) << "Section found!" << endl;
-            context.fillStyleStack( tag, KoXmlNS::text, "style-name" );
+            context.fillStyleStack( tag, KoXmlNS::text, "style-name", "section" );
             lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl, nextParagraph );
         }
         else if ( isTextNS && localName == "variable-decls" )

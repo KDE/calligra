@@ -270,7 +270,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     kdDebug(35001) << "Style name for the plot area: " << tmp << endl;
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
-    loadingContext.fillStyleStack( plotareaElem, KoXmlNS::chart, "style-name" );
+    loadingContext.fillStyleStack( plotareaElem, KoXmlNS::chart, "style-name", "chart" );
 
     switch ( m_chartType ) {
     case NoType:
@@ -459,7 +459,7 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
     cerr << "Style name for the axis: " << tmp.latin1() << "\n";
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
-    loadingContext.fillStyleStack( axisElem, KoXmlNS::chart, "style-name" );
+    loadingContext.fillStyleStack( axisElem, KoXmlNS::chart, "style-name", "chart" );
 
     // chart:class      - "category" / "value" / "domain" (domain for scatter)
     //    child: chart:categories

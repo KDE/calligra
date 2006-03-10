@@ -93,7 +93,7 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
             lastParagraph = loadOasisText( t, context, lastParagraph, styleColl, nextParagraph ); // recurse again
             lastParagraph->setPartOfTableOfContents( true );
         } else if ( isTextNS && localName == "p" ) {
-            context.fillStyleStack( t, KoXmlNS::text, "style-name" );
+            context.fillStyleStack( t, KoXmlNS::text, "style-name", "paragraph" );
             lastParagraph = createParag( this, lastParagraph, nextParagraph );
             uint pos = 0;
             lastParagraph->loadOasis( t, context, styleColl, pos );
@@ -215,7 +215,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
                     // This allows to use the span's format for the variable.
                     //kdDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
-                    context.fillStyleStack( spanElem, KoXmlNS::text, "style-name" );
+                    context.fillStyleStack( spanElem, KoXmlNS::text, "style-name", "text" );
                     text = spanElem.text();
                 }
                 textData = KoTextObject::customItemChar(); // hyperlink placeholder

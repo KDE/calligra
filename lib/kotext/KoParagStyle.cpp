@@ -137,7 +137,7 @@ void KoParagStyle::loadStyle( QDomElement & styleElem, KoOasisContext& context )
     m_bOutline = styleElem.hasAttributeNS( KoXmlNS::style, "default-outline-level" );
 
     context.styleStack().save();
-    context.addStyles( &styleElem ); // Load all parents - only because we don't support inheritance.
+    context.addStyles( &styleElem, "paragraph" ); // Load all parents - only because we don't support inheritance.
     KoParagLayout layout;
     KoParagLayout::loadOasisParagLayout( layout, context );
 
