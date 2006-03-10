@@ -121,6 +121,14 @@ int testLookup()
     third.writeStyle( &writer, coll, "style:style", thirdName, "style:paragraph-properties" );
     TEST_END( "XML for third style", "<r>\n <style:style style:name=\"P1\" style:parent-style-name=\"A1\" style:family=\"paragraph\">\n  <style:paragraph-properties style:margin-left=\"1.249cm\"/>\n  <style:text-properties style:foobar=\"3\"/>\n </style:style>\n</r>\n" );
 
+    coll.markStyleForStylesXml( firstName );
+    {
+        QValueList<KoGenStyles::NamedStyle> stylesXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, true );
+        assert( stylesXmlStyles.count() == 2 );
+        QValueList<KoGenStyles::NamedStyle> contentXmlStyles = coll.styles( KoGenStyle::STYLE_AUTO, false );
+        assert( contentXmlStyles.count() == 1 );
+    }
+
     return 0;
 }
 
