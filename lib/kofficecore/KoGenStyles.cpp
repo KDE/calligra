@@ -61,7 +61,7 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
             styleName = 'A'; // for "auto".
             flags &= ~DontForceNumbering; // i.e. force numbering
         }
-        styleName = makeUniqueName( styleName, flags, style.autoStyleInStylesDotXml() );
+        styleName = makeUniqueName( styleName, flags );
         if ( style.autoStyleInStylesDotXml() )
             m_autoStylesInStylesDotXml.insert( styleName, true /*unused*/ );
         else
@@ -75,18 +75,20 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
     return it.data();
 }
 
-QString KoGenStyles::makeUniqueName( const QString& base, int flags, bool autoStyleInStylesDotXml ) const
+QString KoGenStyles::makeUniqueName( const QString& base, int flags ) const
 {
-    bool dontForceNumbering = flags & DontForceNumbering;
-    const NameMap& nameMap = autoStyleInStylesDotXml ? m_autoStylesInStylesDotXml : m_styleNames;
-    if ( dontForceNumbering && nameMap.find( base ) == nameMap.end() )
+    // If this name is not used yet, and numbering isn't forced, then the given name is ok.
+    if ( ( flags & DontForceNumbering )
+         && m_autoStylesInStylesDotXml.find( base ) == m_autoStylesInStylesDotXml.end()
+         && m_styleNames.find( base ) == m_styleNames.end() )
         return base;
     int num = 1;
     QString name;
     do {
         name = base;
         name += QString::number( num++ );
-    } while ( nameMap.find( name ) != nameMap.end() );
+    } while ( m_autoStylesInStylesDotXml.find( name ) != m_autoStylesInStylesDotXml.end()
+              || m_styleNames.find( name ) != m_styleNames.end() );
     return name;
 }
 
@@ -127,6 +129,25 @@ void KoGenStyles::markStyleForStylesXml( const QString& name )
     m_styleNames.remove( name );
     m_autoStylesInStylesDotXml.insert( name, true );
     styleForModification( name )->setAutoStyleInStylesDotXml( true );
+}
+
+void KoGenStyles::dump()
+{
+    kdDebug() << "Style array:" << endl;
+    StyleArray::const_iterator it = m_styleArray.begin();
+    const StyleArray::const_iterator end = m_styleArray.end();
+    for ( ; it != end ; ++it ) {
+        kdDebug() << (*it).name << endl;
+    }
+    for ( NameMap::const_iterator it = m_styleNames.begin(); it != m_styleNames.end(); ++it ) {
+        kdDebug() << "style: " << it.key() << endl;
+    }
+    for ( NameMap::const_iterator it = m_autoStylesInStylesDotXml.begin(); it != m_autoStylesInStylesDotXml.end(); ++it ) {
+        kdDebug() << "auto style for style.xml: " << it.key() << endl;
+        const KoGenStyle* s = style( it.key() );
+        Q_ASSERT( s );
+        Q_ASSERT( s->autoStyleInStylesDotXml() );
+    }
 }
 
 // Returns -1, 0 (equal) or 1

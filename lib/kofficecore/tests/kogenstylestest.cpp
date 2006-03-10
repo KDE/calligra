@@ -230,6 +230,30 @@ int testUserStyles()
     return 0;
 }
 
+int testStylesDotXml()
+{
+    kdDebug() << k_funcinfo << endl;
+    KoGenStyles coll;
+
+    // Check that an autostyle-in-style.xml and an autostyle-in-content.xml
+    // don't get the same name. It confuses KoGenStyle's named-based maps.
+    KoGenStyle headerStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
+    headerStyle.addAttribute( "style:master-page-name", "Standard" );
+    headerStyle.addProperty( "style:page-number", "0" );
+    headerStyle.setAutoStyleInStylesDotXml( true );
+    QString headerStyleName = coll.lookup( headerStyle, "P" );
+    assert( headerStyleName == "P1" );
+
+    //coll.dump();
+
+    KoGenStyle first( KoGenStyle::STYLE_AUTO, "paragraph" );
+    first.addAttribute( "style:master-page-name", "Standard" );
+    QString firstName = coll.lookup( first, "P" );
+    kdDebug() << "The auto style got assigned the name " << firstName << endl;
+    assert( firstName == "P2" ); // anything but not P1.
+    return 0;
+}
+
 int main( int, char** ) {
     fprintf( stderr, "OK\n" );
 
@@ -238,6 +262,8 @@ int main( int, char** ) {
     if ( testDefaultStyle() )
         return 1;
     if ( testUserStyles() )
+        return 1;
+    if ( testStylesDotXml() )
         return 1;
 
     return 0;

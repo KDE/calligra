@@ -146,9 +146,13 @@ public:
      */
     void markStyleForStylesXml( const QString& name );
 
+    /**
+     * Outputs debug information
+     */
+    void dump();
 
 private:
-    QString makeUniqueName( const QString& base, int flags, bool autoStyleInStylesDotXml ) const;
+    QString makeUniqueName( const QString& base, int flags ) const;
 
     /// style definition -> name
     StyleMap m_styleMap;
