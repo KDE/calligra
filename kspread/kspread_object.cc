@@ -466,12 +466,14 @@ void EmbeddedKOfficeObject::draw( QPainter *_painter )
 
    assert( embeddedObject()->document() != 0 );
 
-        embeddedObject()->document()->paintEverything( *_painter,
+   double zoomX = sheet()->doc()->zoom() / 100;
+   double zoomY = sheet()->doc()->zoom() / 100;
+   embeddedObject()->document()->paintEverything( *_painter,
         zoomedBound,
         embeddedObject()->isTransparent(),
         0 /* View isn't known from here - is that a problem? */,
-        sheet()->doc()->zoomedResolutionX() ,
-        sheet()->doc()->zoomedResolutionY() );
+        zoomX,
+        zoomY );
 
 
    embeddedObject()->setGeometry( new_geometry );

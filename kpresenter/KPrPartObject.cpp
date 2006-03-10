@@ -85,7 +85,7 @@ const char * KPrPartObject::getOasisElementName() const
 void KPrPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPrLoadingInfo */*info*/)
 {
     kdDebug()<<"void KPrPartObject::loadOasis(const QDomElement &element)******************\n";
-    
+
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     child->loadOasis( element, objectElement );
     if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
@@ -176,12 +176,14 @@ void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
     int penw = int( pen.pointWidth() );
     KoRect r( KoPoint( penw, penw ), KoPoint( getSize().width() - ( penw * 2.0 ),
               getSize().height() - ( penw * 2.0 ) ) );
+    double zoomX = _zoomHandler->zoom() / 100;
+    double zoomY = _zoomHandler->zoom() / 100;
     child->document()->paintEverything( *_painter,
                                         _zoomHandler->zoomRect( r ),
                                         true, // flicker?
                                         0 /* View isn't known from here - is that a problem? */,
-                                        _zoomHandler->zoomedResolutionX(),
-                                        _zoomHandler->zoomedResolutionY() );
+                                        zoomX,
+                                        zoomY );
 }
 
 void KPrPartObject::activate( QWidget *_widget )
