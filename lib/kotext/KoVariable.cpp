@@ -2111,11 +2111,11 @@ void KoFieldVariable::saveOasis( KoXmlWriter& writer, KoSavingContext& /*context
     case VST_NONE:
         break;
     case VST_FILENAME:
-        writer.startElement( "text:filename" );
+        writer.startElement( "text:file-name" );
         writer.addAttribute( "text:display", "name-and-extension" );
         break;
     case VST_DIRECTORYNAME:
-        writer.startElement( "text:filename" );
+        writer.startElement( "text:file-name" );
         writer.addAttribute( "text:display", "path" );
         break;
     case VST_AUTHORNAME:
