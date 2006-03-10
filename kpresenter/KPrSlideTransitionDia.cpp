@@ -113,6 +113,7 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     m_dialog->effectCombo->insertItem( i18n( "Uncover Left-Down" ) );
     m_dialog->effectCombo->insertItem( i18n( "Cover Right-Up" ) );
     m_dialog->effectCombo->insertItem( i18n( "Uncover Right-Up" ) );
+    //TODO change the strings to use Down instead of Bottome to make them consistent
     m_dialog->effectCombo->insertItem( i18n( "Cover Right-Bottom" ) );
     m_dialog->effectCombo->insertItem( i18n( "Uncover Right-Bottom" ) );
     m_dialog->effectCombo->insertItem( i18n( "Dissolve" ) );
