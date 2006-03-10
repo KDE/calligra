@@ -1017,6 +1017,7 @@ void View::slotAboutToShow(QWidget *widget) {
 
 void View::updateView(QWidget *widget)
 {
+    QApplication::setOverrideCursor(Qt::waitCursor);
     setScheduleActionsEnabled();
     setTaskActionsEnabled(false);
     mainWindow()->toolBar("report")->hide();
@@ -1054,6 +1055,7 @@ void View::updateView(QWidget *widget)
         mainWindow()->toolBar("report")->show();
         m_reportview->enableNavigationBtn();
     }*/
+    QApplication::restoreOverrideCursor();
 }
 
 void View::slotRenameNode(Node *node, const QString& name) {
