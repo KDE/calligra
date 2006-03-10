@@ -539,6 +539,7 @@ public:
                        int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter, QMap<QString, int> &pageNames ) const;
     QString saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const;
     QString saveOasisPageEffect() const;
+    QString saveOasisAdditionalPageEffect() const;
     bool saveOasisNote( KoXmlWriter &xmlWriter ) const;
 
     bool hasHeader() const { return m_bHasHeader; }

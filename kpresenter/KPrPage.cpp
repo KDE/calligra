@@ -375,7 +375,12 @@ void KPrPage::loadOasis(KoOasisContext & context )
         {
             //kdDebug()<<" have a presentation:transition-style------------\n";
             const QString effect = styleStack.attributeNS( KoXmlNS::presentation, "transition-style");
-            kdDebug() << "Transition name: " << effect << endl;
+            QString additionalEffect;
+            if ( styleStack.hasAttributeNS( KoXmlNS::koffice, "additional-transition-style" ) )
+            {
+                additionalEffect = styleStack.attributeNS( KoXmlNS::koffice, "additional-transition-style" );
+            }
+            kdDebug() << "Transition name: " << effect << "additional name: " << additionalEffect << endl;
             PageEffect pef;
             if ( effect=="none" )
                 pef=PEF_NONE;
@@ -386,14 +391,6 @@ void KPrPage::loadOasis(KoOasisContext & context )
             else if (effect=="spiralin-left" || effect=="spiralin-right"
                     || effect== "spiralout-left" || effect=="spiralout-right") // PEF_SURROUND1
                 pef=PEF_SURROUND1;
-            else if (effect=="fade-from-upperleft") // PEF_STRIPS_RIGHT_DOWN
-                pef=PEF_STRIPS_RIGHT_DOWN;
-            else if (effect=="fade-from-upperright") // PEF_STRIPS_LEFT_DOWN
-                pef=PEF_STRIPS_LEFT_DOWN;
-            else if (effect=="fade-from-lowerleft") // PEF_STRIPS_RIGHT_UP
-                pef=PEF_STRIPS_RIGHT_UP;
-            else if (effect=="fade-from-lowerright") // PEF_STRIPS_LEFT_UP
-                pef=PEF_STRIPS_LEFT_UP;
             else if (effect=="fade-from-top") // PEF_COVER_DOWN
                 pef=PEF_COVER_DOWN;
             else if (effect=="fade-from-bottom") // PEF_COVER_UP
@@ -402,14 +399,34 @@ void KPrPage::loadOasis(KoOasisContext & context )
                 pef=PEF_COVER_RIGHT;
             else if (effect=="fade-from-right") // PEF_COVER_LEFT
                 pef=PEF_COVER_LEFT;
-            else if (effect=="fade-from-lowerleft") // PEF_COVER_RIGHT_UP
-                pef=PEF_COVER_RIGHT_UP;
-            else if (effect=="fade-from-lowerright") // PEF_COVER_LEFT_UP
-                pef=PEF_COVER_LEFT_UP;
-            else if (effect=="fade-from-upperleft") // PEF_COVER_RIGHT_DOWN
-                pef=PEF_COVER_RIGHT_DOWN;
-            else if (effect=="fade-from-upperright") // PEF_COVER_LEFT_DOWN
-                pef=PEF_COVER_LEFT_DOWN;
+            else if (effect=="fade-from-lowerleft")
+            {   // PEF_COVER_RIGHT_UP
+                if ( additionalEffect.isEmpty() )
+                    pef=PEF_COVER_RIGHT_UP;
+                else
+                    pef=PEF_STRIPS_RIGHT_UP;
+            }
+            else if (effect=="fade-from-lowerright") 
+            {   // PEF_COVER_LEFT_UP
+                if ( additionalEffect.isEmpty() )
+                    pef=PEF_COVER_LEFT_UP;
+                else
+                    pef=PEF_STRIPS_LEFT_UP;
+            }
+            else if (effect=="fade-from-upperleft") 
+            {   // PEF_COVER_RIGHT_DOWN
+                if ( additionalEffect.isEmpty() )
+                    pef=PEF_COVER_RIGHT_DOWN;
+                else
+                    pef=PEF_STRIPS_RIGHT_DOWN;
+            }
+            else if (effect=="fade-from-upperright")
+            {   // PEF_COVER_LEFT_DOWN
+                if ( additionalEffect.isEmpty() )
+                    pef=PEF_COVER_LEFT_DOWN;
+                else
+                    pef=PEF_STRIPS_LEFT_DOWN;
+            }
             else if (effect=="fade-to-center") // PEF_BOX_IN
                 pef=PEF_BOX_IN;
             else if (effect=="fade-from-center") // PEF_BOX_OUT
@@ -529,7 +546,6 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
         if ( !styleName.isEmpty() )
             xmlWriter.addAttribute( "draw:style-name", styleName );
 
-        // TODO check the sticky true
         saveOasisObject( store, xmlWriter, context,  indexObj,partIndexObj, manifestWriter );
 
         xmlWriter.startElement( "style:header" );
@@ -584,6 +600,11 @@ QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
         if ( !transition.isEmpty() )
         {
             stylepageauto.addProperty( "presentation:transition-style", transition );
+            QString additionalTransition = saveOasisAdditionalPageEffect();
+            if ( !additionalTransition.isEmpty() )
+            {
+                stylepageauto.addProperty( "koffice:additional-transition-style", additionalTransition );    
+            }
         }
         stylepageauto.addProperty( "presentation:display-header", hasHeader());
         stylepageauto.addProperty( "presentation:display-footer", hasFooter());
@@ -791,6 +812,30 @@ QString KPrPage::saveOasisPageEffect() const
 
     }
     return transition;
+}
+
+
+QString KPrPage::saveOasisAdditionalPageEffect() const
+{
+    QString additionalEffect;
+    switch( m_pageEffect )
+    {
+        case PEF_STRIPS_LEFT_UP:
+            additionalEffect="stripe-from-lowerright";
+            break;
+        case PEF_STRIPS_LEFT_DOWN:
+            additionalEffect="stripe-from-upperright";
+            break;
+        case PEF_STRIPS_RIGHT_UP:
+            additionalEffect="stripe-from-lowerleft";
+            break;
+        case PEF_STRIPS_RIGHT_DOWN:
+            additionalEffect="stripe-from-upperleft";
+            break;
+        default:
+            break;
+    }
+    return additionalEffect;
 }
 
 
@@ -2285,8 +2330,14 @@ KPrObject* KPrPage::getObjectAt( const KoPoint &pos, bool withoutProtected ) con
     QPtrListIterator<KPrObject> it( m_objectList );
     KPrObject *o = it.toLast();
     while ( o ) {
-        if ( o->contains( pos ) && !( o->isProtect() && withoutProtected ) )
-            return o;
+        if ( o != m_doc->footer() || 
+             o != m_doc->header() || 
+             ( m_bHasFooter && o == m_doc->footer() ) || 
+             ( m_bHasHeader && o == m_doc->header() ) )
+        {
+            if ( o->contains( pos ) && !( o->isProtect() && withoutProtected ) )
+                return o;
+        }
         o = --it;
     }
     return 0L;
