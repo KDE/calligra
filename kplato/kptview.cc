@@ -452,19 +452,16 @@ void View::slotViewGantt() {
 void View::slotViewPert() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_pertview);
-    m_pertview->draw();
 }
 
 void View::slotViewResources() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_resourceview);
-	m_resourceview->draw(getPart()->getProject());
 }
 
 void View::slotViewAccounts() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_accountsview);
-    m_accountsview->draw();
 }
 
 void View::slotProjectEdit() {
