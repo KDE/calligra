@@ -1067,7 +1067,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     // TODO check versions and mimetypes etc.
 
     KoOasisContext context( this, *m_varColl, oasisStyles, store );
-    Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
     createLoadingInfo();
 

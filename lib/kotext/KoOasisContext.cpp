@@ -58,7 +58,6 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level
 bool KoOasisContext::pushOutlineListLevelStyle( int level )
 {
     QDomElement outlineStyle = KoDom::namedItemNS( oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
-    Q_ASSERT( !outlineStyle.isNull() );
     return pushListLevelStyle( "<outline-style>", outlineStyle, level );
 }
 

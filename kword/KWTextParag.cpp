@@ -802,35 +802,39 @@ void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& co
     {
         KWDocument * doc = textfs->kWordDocument();
         QString& currentMasterPageRef = doc->loadingInfo()->m_currentMasterPage;
-        const QDomElement* paragraphStyle = context.oasisStyles().findStyle( paragElement.attributeNS( KoXmlNS::text, "style-name", QString::null ), "paragraph" );
-        QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
-
-        // In KWord we don't support sections so the first paragraph is the one that determines the page layout.
-        if ( prev() == 0 ) {
-            if ( masterPageName.isEmpty() )
-                masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
-            currentMasterPageRef = masterPageName; // do this first to avoid recursion
-            context.styleStack().save();
-            context.styleStack().setTypeProperties( "paragraph" );
-            context.addStyles( paragraphStyle, "paragraph" );
-            // This is quite ugly... OOo stores the starting page-number in the first paragraph style...
-            QString pageNumber = context.styleStack().attributeNS( KoXmlNS::style, "page-number" );
-            if ( !pageNumber.isEmpty() )
-                doc->variableCollection()->variableSetting()->setStartingPageNumber( pageNumber.toInt() );
-            context.styleStack().restore();
-
-            doc->loadOasisPageLayout( masterPageName, context ); // page layout
-        }
-        else if ( !masterPageName.isEmpty() // empty means no change
-                  && masterPageName != currentMasterPageRef )
+        const QString styleName = paragElement.attributeNS( KoXmlNS::text, "style-name", QString::null );
+        if ( !styleName.isEmpty() )
         {
-            // Detected a change in the master page -> this means we have to use a new page layout
-            // and insert a frame break if not on the first paragraph.
-            kdDebug(32001) << "KWTextParag::loadOasis: change of master page detected: from " << currentMasterPageRef << " to " << masterPageName << " -> inserting page break" << endl;
-            currentMasterPageRef = masterPageName;
-            // [see also KoParagLayout for the 'normal' way to insert page breaks]
-            m_layout.pageBreaking |= KoParagLayout::HardFrameBreakBefore;
-            // We have no way to load/use the new page layout, KWord doesn't have "sections".
+            const QDomElement* paragraphStyle = context.oasisStyles().findStyle( styleName, "paragraph" );
+            QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( KoXmlNS::style, "master-page-name", QString::null ) : QString::null;
+
+            // In KWord we don't support sections so the first paragraph is the one that determines the page layout.
+            if ( prev() == 0 ) {
+                if ( masterPageName.isEmpty() )
+                    masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
+                currentMasterPageRef = masterPageName; // do this first to avoid recursion
+                context.styleStack().save();
+                context.styleStack().setTypeProperties( "paragraph" );
+                context.addStyles( paragraphStyle, "paragraph" );
+                // This is quite ugly... OOo stores the starting page-number in the first paragraph style...
+                QString pageNumber = context.styleStack().attributeNS( KoXmlNS::style, "page-number" );
+                if ( !pageNumber.isEmpty() )
+                    doc->variableCollection()->variableSetting()->setStartingPageNumber( pageNumber.toInt() );
+                context.styleStack().restore();
+
+                doc->loadOasisPageLayout( masterPageName, context ); // page layout
+            }
+            else if ( !masterPageName.isEmpty() // empty means no change
+                      && masterPageName != currentMasterPageRef )
+            {
+                // Detected a change in the master page -> this means we have to use a new page layout
+                // and insert a frame break if not on the first paragraph.
+                kdDebug(32001) << "KWTextParag::loadOasis: change of master page detected: from " << currentMasterPageRef << " to " << masterPageName << " -> inserting page break" << endl;
+                currentMasterPageRef = masterPageName;
+                // [see also KoParagLayout for the 'normal' way to insert page breaks]
+                m_layout.pageBreaking |= KoParagLayout::HardFrameBreakBefore;
+                // We have no way to load/use the new page layout, KWord doesn't have "sections".
+            }
         }
     }
 }
