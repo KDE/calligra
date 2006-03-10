@@ -2171,8 +2171,35 @@ void FrameResizePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint 
         sizeRect.setX(sizeRect.left() + p.x());
     if(m_right)
         sizeRect.setRight(sizeRect.right() + p.x());
-    if(keepAspect)
-        m_parent->applyAspectRatio(m_boundingRect.width() / m_boundingRect.height(), sizeRect);
+    if(keepAspect) {
+        double ratio = m_boundingRect.width() / m_boundingRect.height();
+        double width = sizeRect.width();
+        double height = sizeRect.height();
+        int toLargestEdge = (m_bottom?1:0) + (m_top?1:0) + // should be false when only one
+            (m_left?1:0) + (m_right?1:0);                  // of the direction bools is set
+        bool horizontal = m_left || m_right;
+
+        if(toLargestEdge != 1) { // one of the corners.
+            if (width < height) // the biggest border is the one in control
+                width = height * ratio;
+            else
+                height = width / ratio;
+        } else {
+            if (horizontal)
+                height = width / ratio;
+            else
+                width = height * ratio;
+        }
+        if(m_bottom)
+            sizeRect.setBottom(sizeRect.top() + height);
+        else
+            sizeRect.setTop(sizeRect.bottom() - height);
+
+        if(m_left)
+            sizeRect.setLeft(sizeRect.right() - width);
+        else
+            sizeRect.setRight(sizeRect.left() + width);
+    }
     if(scaleFromCenter) {
         KoPoint origCenter(m_boundingRect.x() + m_boundingRect.width() / 2,
                 m_boundingRect.y() + m_boundingRect.height() / 2);

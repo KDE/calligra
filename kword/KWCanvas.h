@@ -209,7 +209,6 @@ public:
         The current frame must be editable, i.e., a caret is possible. */
     KoPoint caretPos();
     void applyGrid( KoPoint &p );
-    void applyAspectRatio( double ratio, KoRect& insRect );
 
     bool overwriteMode() const { return m_overwriteMode; }
 
@@ -294,6 +293,13 @@ private:
 
     void drawMovingRect( QPainter & p );
     void deleteMovingRect();
+    /**
+     * make the parag rectangle have the aspect ratio by changing either the height
+     * or the width of the ratio.
+     * @param ratio the ratio the rectangle should have afterwards.
+     * @param insRect the rectangle that is to be changed in-place
+     */
+    void applyAspectRatio( double ratio, KoRect& insRect );
 
 #ifndef NDEBUG
     void printRTDebug( int );
