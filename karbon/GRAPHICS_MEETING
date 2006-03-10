@@ -1,0 +1,6 @@
+Ideas from graphics meeting (but also in my head before it):
+
+- use QPainterPath, get rid of libart
+- use color profiles/matching
+- get rid of the old freetype code to convert text to path, use
+  QPainterPath::addText instead.
