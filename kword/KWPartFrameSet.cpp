@@ -113,8 +113,8 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
                       zh->zoomItY( frame->innerHeight() ) );
         //kdDebug(32001) << "rframe=" << rframe << endl;
 
-        double zoomX = zh->zoom() / 100;
-        double zoomY = zh->zoom() / 100;
+        double zoomX = static_cast<double>( zh->zoom() ) / 100;
+        double zoomY = static_cast<double>( zh->zoom() ) / 100;
         m_child->document()->paintEverything( *painter, rframe, true, 0L, zoomX, zoomY );
 
     } //else kdDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " onlychanged=true!" << endl;
