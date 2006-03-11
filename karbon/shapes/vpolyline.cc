@@ -110,13 +110,13 @@ VPolyline::save( QDomElement& element ) const
 }
 
 void
-VPolyline::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
+VPolyline::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
 	docWriter->startElement( "draw:polyline" );
 
 	docWriter->addAttribute( "svg:points", m_points );
 
-	VObject::saveOasis( store, docWriter, mainStyles );
+	VObject::saveOasis( store, docWriter, mainStyles, index );
 
 	docWriter->endElement();
 }

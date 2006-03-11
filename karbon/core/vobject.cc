@@ -113,7 +113,7 @@ VObject::save( QDomElement& element ) const
 }
 
 void
-VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
+VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
 	if( !name().isEmpty() )
 		docWriter->addAttribute( "draw:name", name() );
@@ -122,7 +122,7 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles )
 	mat.scale( 1, -1 );
 	mat.translate( 0, -document()->height() );
 
-	KoGenStyle styleobjectauto( VDocument::STYLE_GRAPHICAUTO, "graphics" );
+	KoGenStyle styleobjectauto( VDocument::STYLE_GRAPHICAUTO, "graphic" );
 	if( m_fill )
 	{
 		// mirror fill before saving
@@ -138,6 +138,8 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles )
 		stroke.saveOasis( styleobjectauto );
 	}
 	QString st = mainStyles.lookup( styleobjectauto, "st" );
+	if(document())
+	        docWriter->addAttribute( "draw:id",  index );
 	docWriter->addAttribute( "draw:style-name", st );
 }
 
@@ -191,11 +193,13 @@ VObject::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 void
 VObject::addStyles( const QDomElement* style, KoOasisLoadingContext & context )
 {
-	// this function is necessary as parent styles can have parents themself
-	if( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
-		//addStyles( context.oasisStyles().styles()[style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null )], context );
-		addStyles( context.oasisStyles().findStyle( style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null ) ), context );
-	context.addStyles( style, "style-name" );
+	if(style)
+	{
+		// this function is necessary as parent styles can have parents themself
+		if( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
+			addStyles( context.oasisStyles().findStyle( style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null ) ), context );
+		context.addStyles( style, "style-name" );
+	}
 }
 
 VDocument *

@@ -216,13 +216,15 @@ void
 VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
 {
 	docWriter->startElement( "draw:page" );
-	//docWriter->addAttribute( "draw:name", name());
+	docWriter->addAttribute( "draw:name", name());
+	docWriter->addAttribute( "draw:id", "page1");
 
 	// save objects:
 	VLayerListIterator itr( m_layers );
 
+	int index = 0;
 	for ( ; itr.current(); ++itr )
-		itr.current()->saveOasis( store, docWriter, mainStyles );
+		itr.current()->saveOasis( store, docWriter, mainStyles, ++index );
 
 	docWriter->endElement(); // draw:page
 }

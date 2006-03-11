@@ -361,7 +361,7 @@ VPath::save( QDomElement& element ) const
 }
 
 void
-VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
+VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
 	if( state() != deleted )
 	{
@@ -374,15 +374,15 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 		// save fill rule if necessary:
 		if( !( m_fillRule == evenOdd ) )
 			docWriter->addAttribute( "svg:fill-rule", "winding" );
-		VObject::saveOasis( store, docWriter, mainStyles );
+		VObject::saveOasis( store, docWriter, mainStyles, index );
 
-	QWMatrix tmpMat;
-	tmpMat.scale( 1, -1 );
-	tmpMat.translate( 0, -document()->height() );
+		QWMatrix tmpMat;
+		tmpMat.scale( 1, -1 );
+		tmpMat.translate( 0, -document()->height() );
 	
-	QString transform = buildSvgTransform( tmpMat );
-	if( !transform.isEmpty() )
-		docWriter->addAttribute( "draw:transform", transform );
+		QString transform = buildSvgTransform( tmpMat );
+		if( !transform.isEmpty() )
+			docWriter->addAttribute( "draw:transform", transform );
 
 		docWriter->endElement();
 	}

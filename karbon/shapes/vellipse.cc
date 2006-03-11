@@ -159,7 +159,7 @@ VEllipse::save( QDomElement& element ) const
 }
 
 void
-VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const
+VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const
 {
 	docWriter->startElement( "draw:ellipse" );
 
@@ -184,7 +184,7 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 		docWriter->addAttribute( "draw:end-angle", m_endAngle );
 	}
 
-	VObject::saveOasis( store, docWriter, mainStyles );
+	VObject::saveOasis( store, docWriter, mainStyles, index );
 
 	QWMatrix tmpMat;
 	tmpMat.scale( 1, -1 );

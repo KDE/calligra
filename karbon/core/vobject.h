@@ -203,7 +203,7 @@ public:
 	 * @param docWriter FIXME
 	 * @param mainStyles FIXME
 	 */
-	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
+	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const;
 
 	/**
 	 * Load this object's state from xml and initialize
