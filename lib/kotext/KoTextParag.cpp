@@ -2996,8 +2996,14 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         }
         CHECKPOS( i ) // do cursor position and bookmarks
         if ( ch.isCustom() ) {
+            KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName );
+            curFormat->save( gs, context );
+            const QString autoStyleName = mainStyles.lookup( gs, "T" );
+            writer.startElement( "text:span" );
+            writer.addAttribute( "text:style-name", autoStyleName );
             KoTextCustomItem* customItem = ch.customItem();
             customItem->saveOasis( writer, context );
+            writer.endElement();
             startPos = i + 1;
         }
     }
