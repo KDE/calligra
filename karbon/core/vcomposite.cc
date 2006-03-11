@@ -28,6 +28,7 @@
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoGenStyles.h>
 
 #include "vcomposite.h"
 #include "vcomposite_iface.h"
@@ -371,9 +372,6 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 		saveSvgPath( d );
 		docWriter->addAttribute( "svg:d", d );
 
-		// save fill rule if necessary:
-		if( !( m_fillRule == evenOdd ) )
-			docWriter->addAttribute( "svg:fill-rule", "winding" );
 		VObject::saveOasis( store, docWriter, mainStyles, index );
 
 		QWMatrix tmpMat;
@@ -385,6 +383,25 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 			docWriter->addAttribute( "draw:transform", transform );
 
 		docWriter->endElement();
+	}
+}
+
+void
+VPath::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) const
+{
+	if( m_fill )
+	{
+		QWMatrix mat;
+		mat.scale( 1, -1 );
+		mat.translate( 0, -document()->height() );
+
+		// mirror fill before saving
+		VFill fill( *m_fill );
+		fill.transform( mat );
+		fill.saveOasis( mainStyles, stylesobjectauto );
+		// save fill rule if necessary:
+		if( !( m_fillRule == evenOdd ) )
+			stylesobjectauto.addProperty( "svg:fill-rule", "winding" );
 	}
 }
 

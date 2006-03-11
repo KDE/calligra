@@ -219,6 +219,8 @@ protected:
 	virtual void svgCurveToCubic( double x1, double y1, double x2, double y2, double x, double y, bool abs = true );
 	virtual void svgClosePath();
 
+	virtual void saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesojectauto ) const;
+
 protected:
 	QWMatrix m_matrix;
 

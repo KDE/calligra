@@ -37,6 +37,7 @@ class KoStore;
 class KoXmlWriter;
 class KoOasisLoadingContext;
 class KoGenStyles;
+class KoGenStyle;
 
 /**
  * The base class for all karbon objects. Every object should
@@ -277,6 +278,8 @@ protected:
 	 * @param context FIXME
 	 */
 	void addStyles( const QDomElement* style, KoOasisLoadingContext & context );
+
+	virtual void saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesojectauto ) const;
 
 protected:
 	mutable KoRect m_boundingBox; /**< the object's bounding box */

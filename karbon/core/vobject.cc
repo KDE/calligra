@@ -123,13 +123,7 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles, 
 	mat.translate( 0, -document()->height() );
 
 	KoGenStyle styleobjectauto( VDocument::STYLE_GRAPHICAUTO, "graphic" );
-	if( m_fill )
-	{
-		// mirror fill before saving
-		VFill fill( *m_fill );
-		fill.transform( mat );
-		fill.saveOasis( mainStyles, styleobjectauto );
-	}
+	saveOasisFill( mainStyles, styleobjectauto );
 	if( m_stroke )
 	{
 		// mirror stroke before saving
@@ -139,8 +133,24 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles, 
 	}
 	QString st = mainStyles.lookup( styleobjectauto, "st" );
 	if(document())
-	        docWriter->addAttribute( "draw:id",  index );
+	        docWriter->addAttribute( "draw:id",  "obj" + QString::number( index ) );
 	docWriter->addAttribute( "draw:style-name", st );
+}
+
+void
+VObject::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) const
+{
+	if( m_fill )
+	{
+		QWMatrix mat;
+		mat.scale( 1, -1 );
+		mat.translate( 0, -document()->height() );
+
+		// mirror fill before saving
+		VFill fill( *m_fill );
+		fill.transform( mat );
+		fill.saveOasis( mainStyles, stylesobjectauto );
+	}
 }
 
 void
