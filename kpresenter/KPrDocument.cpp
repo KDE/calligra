@@ -1034,6 +1034,21 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 //save page
 
     QMap<QString, int> pageNames;
+    
+    if ( !_duplicatePage )
+    {
+        m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
+
+        // Now mark all autostyles as "for styles.xml" since headers/footers need them
+        QValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles(  KoGenStyle::STYLE_AUTO );
+        for ( QValueList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
+                it != autoStyles.end(); ++it ) {
+            kdDebug() << "marking for styles.xml:" << (  *it ).name << endl;
+            mainStyles.markStyleForStylesXml(  ( *it ).name );
+        }
+
+    }
+    
     if ( saveOnlyPage != -1 )
     {
         m_pageList.at( saveOnlyPage )->saveOasisPage( store, contentTmpWriter, ( saveOnlyPage+1 ), savingContext, indexObj, partIndexObj , manifestWriter, pageNames );
@@ -1044,10 +1059,6 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         {
             m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter, pageNames );
         }
-    }
-    if ( !_duplicatePage )
-    {
-        m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
     }
     if ( saveOnlyPage == -1 ) //don't save setting when we save on page
     {
@@ -1063,7 +1074,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.endElement(); //office:presentation
     contentTmpWriter.endElement(); //office:body
 
-    writeAutomaticStyles( *contentWriter, mainStyles, savingContext );
+    writeAutomaticStyles( *contentWriter, mainStyles, savingContext, false );
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
@@ -1087,7 +1098,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     //todo fixme????
     masterStyles->close();
-    saveOasisDocumentStyles( store, mainStyles, masterStyles );
+    saveOasisDocumentStyles( store, mainStyles, masterStyles, savingContext );
     stickyTmpFile.close();
 
     if ( !store->close() ) // done with styles.xml
@@ -1181,46 +1192,52 @@ void KPrDocument::loadOasisIgnoreList( const KoOasisSettings& settings )
     }
 }
 
-void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context )
+void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context, bool stylesDotXml )
 {
     context.writeFontFaces( contentWriter );
-    contentWriter.startElement( "office:automatic-styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    if ( !stylesDotXml )
+    {
+        contentWriter.startElement( "office:automatic-styles" );
+    }
+    QValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_AUTO_LIST );
+    styles = mainStyles.styles( KoGenStyle::STYLE_AUTO_LIST, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         ( *it ).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( STYLE_BACKGROUNDPAGEAUTO );
+    styles = mainStyles.styles( STYLE_BACKGROUNDPAGEAUTO, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:drawing-page-properties" );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO );
+    styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:date-style", (*it).name, 0 /*TODO ????*/  );
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME );
+    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );
     }
 
-    contentWriter.endElement(); // office:automatic-styles
+    if ( !stylesDotXml )
+    {
+        contentWriter.endElement(); // office:automatic-styles
+    }
 }
 
 void KPrDocument::loadOasisHeaderFooter(QDomNode & drawPage, KoOasisContext & context)
@@ -1440,7 +1457,8 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
     //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
 }
 
-void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles, SaveFlag saveFlag ) const
+void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles, 
+                                           KoSavingContext & savingContext, SaveFlag saveFlag ) const
 {
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
@@ -1489,6 +1507,12 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
     if ( saveFlag == SaveAll )
     {
         stylesWriter->startElement( "office:automatic-styles" );
+        // this has to be the first
+        if ( masterStyles )
+        {
+            writeAutomaticStyles( *stylesWriter, mainStyles, savingContext, true );
+        }
+
         styles = mainStyles.styles( STYLE_BACKGROUNDPAGE );
         it = styles.begin();
         for ( ; it != styles.end() ; ++it ) {
@@ -1512,6 +1536,7 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
         }
 
         stylesWriter->endElement(); // office:automatic-styles
+
 
         if ( masterStyles )
         {

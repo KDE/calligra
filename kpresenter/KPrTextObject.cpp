@@ -2402,14 +2402,14 @@ QDragObject * KPrTextView::newDrag( QWidget * parent )
     Q_ASSERT( contentWriter );
 
     //KPrDocument * doc = kpTextObject()->kPresenterDocument();
-    doc->writeAutomaticStyles( *contentWriter, mainStyles, savingContext );
+    doc->writeAutomaticStyles( *contentWriter, mainStyles, savingContext, false );
 
     oasisStore.closeContentWriter();
 
     if ( !store->open( "styles.xml" ) )
         return false;
     //manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    doc->saveOasisDocumentStyles( store, mainStyles, 0, KPrDocument::SaveSelected /* simply means not SaveAll */ );
+    doc->saveOasisDocumentStyles( store, mainStyles, 0, savingContext, KPrDocument::SaveSelected /* simply means not SaveAll */ );
     if ( !store->close() ) // done with styles.xml
         return false;
 
