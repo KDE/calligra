@@ -175,7 +175,7 @@ VObject::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 		m_fill = new VFill();
 
 	if( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
-		addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "style-name", QString::null )], context );
+		addStyles( context.oasisStyles().findStyle( object.attributeNS( KoXmlNS::draw, "style-name", QString::null ) ), context );
 
 	KoStyleStack &styleStack = context.styleStack();
 	styleStack.setTypeProperties( "graphic" );
@@ -193,8 +193,9 @@ VObject::addStyles( const QDomElement* style, KoOasisLoadingContext & context )
 {
 	// this function is necessary as parent styles can have parents themself
 	if( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
-		addStyles( context.oasisStyles().styles()[style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null )], context );
-	context.addStyles( style );
+		//addStyles( context.oasisStyles().styles()[style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null )], context );
+		addStyles( context.oasisStyles().findStyle( style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null ) ), context );
+	context.addStyles( style, "style-name" );
 }
 
 VDocument *
