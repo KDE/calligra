@@ -423,18 +423,16 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
     }
     catch(Py::Exception& e) {
         const QString err = Py::value(e).as_string().c_str();
-        kdWarning() << QString("Py::Exception in Kross::Python::PythonExtension::proxyhandler %1").arg(err).latin1() << endl;
-        PyErr_SetString(Py::_Exc_RuntimeError(), err.latin1());
+        kdWarning() << QString("Py::Exception in Kross::Python::PythonExtension::proxyhandler %1").arg(err) << endl;
         //throw e;
     }
     catch(Kross::Api::Exception::Ptr e) {
         const QString err = e->toString();
-        kdWarning() << QString("Kross::Api::Exception in Kross::Python::PythonExtension::proxyhandler %1").arg(err).latin1() << endl;
-        PyErr_SetString(Py::_Exc_RuntimeError(), err.latin1());
+        kdWarning() << QString("Kross::Api::Exception in Kross::Python::PythonExtension::proxyhandler %1").arg(err) << endl;
         // Don't throw here cause it will end in a crash depp in python. The
         // error is already handled anyway.
         //throw Py::Exception( (char*) e->toString().latin1() );
     }
 
-    return Py::None().ptr();
+    return Py_None;
 }
