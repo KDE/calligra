@@ -390,15 +390,6 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 
     docWriter->endElement(); // office:automatic-styles
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_MASTER );
-    it = styles.begin();
-    docWriter->startElement("office:master-styles");
-
-    for( ; it != styles.end(); ++it)
-        (*it).style->writeStyle( docWriter, mainStyles, "style:master-page", (*it).name, "");
-
-    docWriter->endElement(); // office:master-styles
-
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
     docWriter->addCompleteElement( tmpFile );
@@ -441,6 +432,15 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
         (*it).style->writeStyle( styleWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
 
     styleWriter->endElement(); // office:automatic-styles
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_MASTER );
+    it = styles.begin();
+    styleWriter->startElement("office:master-styles");
+
+    for( ; it != styles.end(); ++it)
+        (*it).style->writeStyle( styleWriter, mainStyles, "style:master-page", (*it).name, "");
+
+    styleWriter->endElement(); // office:master-styles
 
     styleWriter->endElement(); // Root element
     styleWriter->endDocument();
