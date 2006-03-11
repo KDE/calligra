@@ -232,9 +232,18 @@ Kross::Api::Object::Ptr KexiDBConnection::queryNames(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr KexiDBConnection::executeQueryString(Kross::Api::List::Ptr args)
 {
-    ::KexiDB::Cursor* cursor = connection()->executeQuery(
-        Kross::Api::Variant::toString(args->item(0))
-    );
+    QString querystatement = Kross::Api::Variant::toString(args->item(0));
+
+    // The ::KexiDB::Connection::executeQuery() method does not check if we pass
+    // a valid SELECT-statement or e.g. a DROP TABLE operation. So, let's check
+    // for such dangerous operations right now.
+    ::KexiDB::Parser parser( connection() );
+    if(! parser.parse(querystatement))
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to parse query: %1 %2").arg(parser.error().type()).arg(parser.error().error())) );
+    if( parser.query() == 0 || parser.operation() != ::KexiDB::Parser::OP_Select )
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid query operation \"%1\"").arg(parser.operationString()) ) );
+
+    ::KexiDB::Cursor* cursor = connection()->executeQuery(querystatement);
     if(! cursor)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to execute querystring.")) );
     return new KexiDBCursor(this, cursor);
