@@ -308,8 +308,10 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 		return false;
 	}
 
-	QString masterPageName = "Default"; // use default layout as fallback
+	QString masterPageName = "Standard"; // use default layout as fallback
 	QDomElement *master = styles.masterPages()[ masterPageName ];
+	if ( !master ) //last test...
+		master = styles.masterPages()[ "Default" ];
 	Q_ASSERT( master );
 	const QDomElement *style = master ? styles.findStyle( master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
 	if( style )
