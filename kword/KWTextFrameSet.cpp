@@ -1709,7 +1709,7 @@ KWFrame* KWTextFrameSet::loadOasisTextFrame( const QDomElement& frameTag, const 
     if ( hasMinHeight ) {
         double height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-height", QString::null ) );
         frame->setMinimumFrameHeight( height );
-        if ( height > frame->height() ) // do apply the min frame height
+        if ( height > frame->height() || !tag.hasAttributeNS( KoXmlNS::fo, "height" ) )
             frame->setHeight( height );
     }
 
