@@ -44,8 +44,11 @@ public:
 
     virtual ~FontStyle() {}
 
-    /// lazy init support. Needs to be run before anything else.
-    virtual bool init( ContextStyle* context ) = 0;
+    /**
+     * lazy init support. Needs to be run before anything else.
+     * @param install if true fonts may be installed if needed
+     */
+    virtual bool init( ContextStyle* context, bool install = true ) = 0;
 
     /// the table for ordinary symbols (those that have a unicode value)
     virtual const SymbolTable* symbolTable() const { return &m_symbolTable; }

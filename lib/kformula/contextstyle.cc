@@ -69,20 +69,20 @@ ContextStyle::~ContextStyle()
 }
 
 
-void ContextStyle::init()
+void ContextStyle::init( bool init )
 {
     setup();
-    setFontStyle( m_fontStyleName );
+    setFontStyle( m_fontStyleName, init );
 }
 
 
-void ContextStyle::setFontStyle( const QString& fontStyle )
+void ContextStyle::setFontStyle( const QString& fontStyle, bool init )
 {
     delete m_fontStyle;
     m_fontStyleName = fontStyle;
     if ( m_fontStyleName == "tex" ) {
         m_fontStyle = new CMStyle();
-        if ( !m_fontStyle->init( this ) ) {
+        if ( !m_fontStyle->init( this , init ) ) {
         }
     }
     else if ( m_fontStyleName == "esstix" ) {
@@ -104,7 +104,7 @@ const SymbolTable& ContextStyle::symbolTable() const
 }
 
 
-void ContextStyle::readConfig( KConfig* config )
+void ContextStyle::readConfig( KConfig* config, bool init )
 {
     config->setGroup( "kformula Font" );
     QString fontName = config->readEntry( "defaultFont", "Times,12,-1,5,50,1,0,0,0,0" );
@@ -121,7 +121,7 @@ void ContextStyle::readConfig( KConfig* config )
     m_fontStyleName = config->readEntry( "fontStyle" );
 
     if ( m_fontStyleName.isEmpty() ) {
-        if (CMStyle::missingFonts().isEmpty())
+        if (CMStyle::missingFonts( init ).isEmpty())
             m_fontStyleName = "tex";
         else if (EsstixFontStyle::missingFonts().isEmpty())
     	    m_fontStyleName = "esstix";

@@ -236,7 +236,7 @@ void ConfigurePage::apply()
 
         QStringList missing = CMStyle::missingFonts();
 
-        if ( missing.count() > 0 ) {
+        if ( missing.count() > 0 && !CMStyle::m_installed) {
             QString text = i18n( "The fonts '%1' are missing."
                                  " Do you want to change the font style anyway?" )
                            .arg( missing.join( "', '" ) );

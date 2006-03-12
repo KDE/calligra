@@ -19,9 +19,14 @@
 
 #include <qpainter.h>
 #include <qpen.h>
+#include <qapplication.h>
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
+#include <kio/netaccess.h>
+#include <kio/job.h>
+#include <kmessagebox.h>
 
 #include "kformuladefs.h"
 #include "cmstyle.h"
@@ -31,8 +36,12 @@ KFORMULA_NAMESPACE_BEGIN
 
 #include "cmmapping.cc"
 
-bool CMStyle::init( ContextStyle* context )
+bool CMStyle::m_installed = false;
+
+bool CMStyle::init( ContextStyle* context, bool install )
 {
+    if (!m_installed && install)
+        installFonts();
     SymbolTable* st = symbolTable();
     st->init( context );
 
@@ -62,7 +71,16 @@ Artwork* CMStyle::createArtwork( SymbolType type ) const
     return new CMArtwork( type );
 }
 
-QStringList CMStyle::missingFonts()
+QStringList CMStyle::missingFonts( bool install )
+{
+    if (!m_installed && install)
+        installFonts();
+
+    QStringList missing = missingFontsInternal();
+    return missing;
+}
+
+QStringList CMStyle::missingFontsInternal()
 {
     QStringList missing;
 
@@ -77,6 +95,25 @@ QStringList CMStyle::missingFonts()
     return missing;
 }
 
+void CMStyle::installFonts()
+{
+    if (m_installed)
+        return;
+    QStringList missing = missingFontsInternal();
+    if (!missing.isEmpty())
+    {
+        QStringList urlList;
+        for (QStringList::iterator it = missing.begin(); it != missing.end(); ++it)
+        {
+            if (!KIO::NetAccess::exists("fonts:/Personal/" + *it + ".ttf", true, NULL))
+                urlList.append(locate("data", "kformula/fonts/" + *it + ".ttf"));
+        }
+        KIO::copy(urlList, "fonts:/Personal/", false);
+        KMessageBox::information(qApp->mainWidget(), 
+                                 i18n("Some fonts have been installed to assure that symbols in formulas are properly visualized. You must restart the application in order so that changes take effect"));
+    }
+    m_installed = true;
+}
 
 CMAlphaTable::CMAlphaTable()
 {

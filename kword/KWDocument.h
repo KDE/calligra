@@ -625,8 +625,11 @@ public:
     void setDefaultColumnSpacing(double val){ m_defaultColumnSpacing=val; }
     /**
      * @returns the document for the formulas
+     * @param init if true mathematical fonts may be installed if needed. 
+     * Should be true unless no real document is being used (i. e. in 
+     * configuration dialog>
      */
-    KFormula::Document* formulaDocument();
+    KFormula::Document* formulaDocument( bool init = true );
 
     void reorganizeGUI();
     /// Tell all views to stop editing this frameset, if they were doing so

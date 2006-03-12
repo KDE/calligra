@@ -99,7 +99,7 @@ KWConfig::KWConfig( KWView* parent )
 
   QVBox *page5 = addVBoxPage( i18n("Formula"), i18n("Formula Defaults"),
                               loadIcon("kformula") );
-  m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->formulaDocument(),
+  m_formulaPage=new KFormula::ConfigurePage( parent->kWordDocument()->formulaDocument( false ),
                                              this, KWFactory::instance()->config(), page5 );
 
   QVBox *page3 = addVBoxPage( i18n("Misc"), i18n("Misc Settings"),

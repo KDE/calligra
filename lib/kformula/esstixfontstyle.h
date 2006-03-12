@@ -43,8 +43,11 @@ private:
 class EsstixFontStyle : public FontStyle {
 public:
 
-    /// lazy init support. Needs to be run before anything else.
-    virtual bool init( ContextStyle* context );
+    /**
+     * lazy init support. Needs to be run before anything else.
+     * @param install if true fonts may be installed if needed
+     */
+    virtual bool init( ContextStyle* context, bool install = true );
 
     /// the table for special alphabets.
     virtual const AlphaTable* alphaTable() const;

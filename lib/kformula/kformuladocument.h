@@ -238,7 +238,7 @@ private:
      */
     void recalc();
 
-    void introduceWrapper( DocumentWrapper* wrapper );
+    void introduceWrapper( DocumentWrapper* wrapper, bool init );
 
     /**
      * The Wrapper we belong to.
@@ -295,7 +295,7 @@ public:
      * Inserts the document we are wrapping. This must be called once
      * before the wrapper can be used.
      */
-    void document( Document* document );
+    void document( Document* document, bool init = true );
 
     KAction* getAddNegThinSpaceAction()  { return m_addNegThinSpaceAction; }
     KAction* getAddThinSpaceAction()     { return m_addThinSpaceAction; }

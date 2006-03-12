@@ -82,8 +82,17 @@ public:
     ContextStyle();
     ~ContextStyle();
 
-    void init();
-    void readConfig( KConfig* config );
+    /**
+     * @param init if true fonts may be installed if needed.
+     */
+    void init( bool init = true );
+
+    /**
+     * @param init true if initialization may take place. This may cause font
+     * installation. Mark as false when this is not intended (i. e. creating
+     * configuration dialog from another component)
+     */
+    void readConfig( KConfig* config, bool init = true );
 
     bool edit() const { return m_edit; }
     void setEdit( bool e ) { m_edit = e; }
@@ -127,7 +136,7 @@ public:
     void setHelpColor( const QColor& );
 
     QString getFontStyle() const { return m_fontStyleName; }
-    void setFontStyle( const QString& fontStyle );
+    void setFontStyle( const QString& fontStyle, bool init = true );
 
     QFont getDefaultFont()    const { return defaultFont; }
     QFont getNameFont()       const { return nameFont; }

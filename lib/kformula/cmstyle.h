@@ -40,17 +40,25 @@ private:
 class CMStyle : public FontStyle {
 public:
 
-    /// lazy init support. Needs to be run before anything else.
-    virtual bool init( ContextStyle* context );
+    /**
+     * lazy init support. Needs to be run before anything else.
+     * @param install if true fonts may be installed if needed
+     */
+    virtual bool init( ContextStyle* context, bool install = true );
 
     /// the table for special alphabets.
     virtual const AlphaTable* alphaTable() const;
 
     virtual Artwork* createArtwork( SymbolType type = EmptyBracket ) const;
 
-    static QStringList missingFonts();
+    static QStringList missingFonts( bool install = true );
+
+    static bool m_installed;
 
 private:
+
+    static QStringList missingFontsInternal();
+    static void installFonts();
 
     CMAlphaTable m_alphaTable;
 };

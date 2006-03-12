@@ -4534,13 +4534,13 @@ void KWDocument::invalidate(const KWFrameSet *skipThisFrameSet)
             it.current()->invalidate();
 }
 
-KFormula::Document* KWDocument::formulaDocument()
+KFormula::Document* KWDocument::formulaDocument( bool init )
 {
     KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document();
     if (!formulaDocument) {
         kdDebug() << k_funcinfo << endl;
         formulaDocument = new KFormula::Document;
-        m_formulaDocumentWrapper->document( formulaDocument );
+        m_formulaDocumentWrapper->document( formulaDocument, init );
         if ( formulaDocument != 0 ) {
             // re-calculate dpiX and dpiY
             formulaDocument->setZoomAndResolution( m_zoom,

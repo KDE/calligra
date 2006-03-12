@@ -41,7 +41,7 @@ SymbolFontHelper::SymbolFontHelper()
 }
 
 
-bool SymbolFontStyle::init( ContextStyle* context )
+bool SymbolFontStyle::init( ContextStyle* context, bool /* install */)
 {
     // We require the symbol font to be there as it's the last resort
     // anyway.

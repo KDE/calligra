@@ -1,7 +1,7 @@
 
 INCLUDES= $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(all_includes)
 
-SUBDIRS = pics dtd
+SUBDIRS = pics fonts dtd
 
 ####### 
 # We have to name it kformulalib, not just kformula, since that's the name of the kdeinit module for kformula.

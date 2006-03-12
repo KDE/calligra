@@ -326,11 +326,11 @@ void Document::updateConfig()
 }
 
 
-void Document::introduceWrapper( DocumentWrapper* wrapper )
+void Document::introduceWrapper( DocumentWrapper* wrapper, bool init )
 {
     m_wrapper = wrapper;
-    m_contextStyle->readConfig( wrapper->config() );
-    m_contextStyle->init();
+    m_contextStyle->readConfig( wrapper->config(), init );
+    m_contextStyle->init( init );
 }
 
 
@@ -368,10 +368,10 @@ DocumentWrapper::~DocumentWrapper()
 }
 
 
-void DocumentWrapper::document( Document* document )
+void DocumentWrapper::document( Document* document, bool init )
 {
     m_document = document;
-    m_document->introduceWrapper( this );
+    m_document->introduceWrapper( this, init );
     initSymbolNamesAction();
     m_config->setGroup("General");
     if ( m_hasActions )

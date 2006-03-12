@@ -31,7 +31,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 #include "esstixfontmapping.cc"
 
-bool EsstixFontStyle::init( ContextStyle* context )
+bool EsstixFontStyle::init( ContextStyle* context, bool /* install */ )
 {
     SymbolTable* st = symbolTable();
     st->init( context );
