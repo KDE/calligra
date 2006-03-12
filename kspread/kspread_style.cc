@@ -122,6 +122,46 @@ Style::~Style()
 {
 }
 
+bool Style::operator == (const Style& style) const
+{
+	//This is prone to error because if someone adds additional
+	//properties to the style class they will have to remember
+	//to correct this function - can we do this a better way?
+	
+	if ( 	m_properties == style.m_properties &&
+		m_type == style.m_type &&
+		m_featuresSet == style.m_featuresSet &&
+		m_alignX == style.m_alignX &&
+		m_alignY == style.m_alignY &&
+		m_floatFormat == style.m_floatFormat &&
+		m_floatColor == style.m_floatColor &&
+		m_formatType == style.m_formatType &&
+		m_fontFamily == style.m_fontFamily &&
+		m_fontFlags == style.m_fontFlags &&
+		m_fontSize == style.m_fontSize &&
+		m_textPen == style.m_textPen &&
+		m_bgColor == style.m_bgColor &&
+		m_rightBorderPen == style.m_rightBorderPen &&
+		m_bottomBorderPen == style.m_bottomBorderPen &&
+		m_leftBorderPen == style.m_leftBorderPen &&
+		m_topBorderPen == style.m_topBorderPen &&
+		m_fallDiagonalPen == style.m_fallDiagonalPen &&
+	        m_goUpDiagonalPen == style.m_goUpDiagonalPen &&
+		m_backGroundBrush == style.m_backGroundBrush &&
+		m_rotateAngle == style.m_rotateAngle &&
+		m_indent == style.m_indent &&
+		m_strFormat == style.m_strFormat &&
+		m_precision == style.m_precision &&
+		m_prefix == style.m_prefix &&
+		m_postfix == style.m_postfix &&
+		m_currency.type == style.m_currency.type &&
+		m_properties == style.m_properties )
+	
+		return true;
+	else
+		return false;	
+}
+
 void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element )
 {
     kdDebug()<<"void Style::loadOasisStyle( const QDomElement & element )**************: name :"<<endl;

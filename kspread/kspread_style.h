@@ -118,6 +118,9 @@ public:
 
   virtual ~Style();
 
+  /** Returns true if both styles have the same properties */
+  bool operator == (const Style& style) const;
+  
     static FormatType formatType( const QString &_format );
 
     /**

@@ -567,20 +567,22 @@ void Cell::removeValidity()
 }
 
 
-void Cell::copyFormat( Cell * _cell )
+void Cell::copyFormat( const int column , const int row )
 {
-    copyFormat( _cell->column(), _cell->row() );
+    const Cell * cell = format()->sheet()->cellAt( column , row );
+    
+    copyFormat( cell );
 }
 
-void Cell::copyFormat( int _column, int _row )
+void Cell::copyFormat( const Cell* cell )
 {
-    const Cell * cell = format()->sheet()->cellAt( _column, _row );
 
     Q_ASSERT(cell);
 
     d->value.setFormat(cell->d->value.format());
-
-    format()->setAlign( cell->format()->align( _column, _row ) );
+    format()->copy(*(cell->format()));
+    
+    /*format()->setAlign( cell->format()->align( _column, _row ) );
     format()->setAlignY( cell->format()->alignY( _column, _row ) );
     format()->setTextFont( cell->format()->textFont( _column, _row ) );
     format()->setTextColor( cell->format()->textColor( _column, _row ) );
@@ -608,7 +610,7 @@ void Cell::copyFormat( int _column, int _row )
     format()->setFormatType( cell->format()->getFormatType(_column, _row) );
     Format::Currency c;
     if ( cell->format()->currencyInfo( c ) )
-      format()->setCurrency( c );
+      format()->setCurrency( c );*/
 
     QValueList<Conditional> conditionList = cell->conditionList();
     if (d->hasExtra())
@@ -619,7 +621,7 @@ void Cell::copyFormat( int _column, int _row )
       if (d->hasExtra())
         d->extra()->conditions = 0;
 
-    format()->setComment( cell->format()->comment( _column, _row ) );
+    /*format()->setComment( cell->format()->comment( _column, _row ) );*/
 }
 
 void Cell::copyAll( Cell *cell )
@@ -629,7 +631,7 @@ void Cell::copyAll( Cell *cell )
     copyContent( cell );
 }
 
-void Cell::copyContent( Cell* cell )
+void Cell::copyContent( const Cell* cell )
 {
     Q_ASSERT( !isDefault() ); // trouble ahead...
 
@@ -942,7 +944,7 @@ void Cell::unobscure( Cell * cell )
   format()->sheet()->setRegionPaintDirty( cellRect() );
 }
 
-QString Cell::encodeFormula( bool _era, int _col, int _row )
+QString Cell::encodeFormula( bool _era, int _col, int _row ) const
 {
     if ( _col == -1 )
         _col = d->column;
@@ -1076,7 +1078,7 @@ QString Cell::encodeFormula( bool _era, int _col, int _row )
     return erg;
 }
 
-QString Cell::decodeFormula( const QString &_text, int _col, int _row )
+QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
 {
     if ( _col == -1 )
         _col = d->column;

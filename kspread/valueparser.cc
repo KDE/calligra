@@ -51,14 +51,17 @@ void ValueParser::parse (const QString& str, Cell *cell)
   }
 
   QString strStripped = str.stripWhiteSpace();
+  
   // Try parsing as various datatypes, to find the type of the cell
-  // First as bool
+  
+  // First as number
+  if (tryParseNumber (strStripped, cell))
+    return;
+  
+  // Then as bool
   if (tryParseBool (strStripped, cell))
     return;
 
-  // Then as a number
-  if (tryParseNumber (strStripped, cell))
-    return;
 
   // Test for money number
   bool ok;
@@ -100,15 +103,19 @@ Value ValueParser::parse (const QString &str)
   
   QString strStripped = str.stripWhiteSpace();
   // Try parsing as various datatypes, to find the type of the string
-  // First as bool
+  
+  // First as number
+  val = tryParseNumber (strStripped, &ok);
+  if (ok)
+    return val;
+
+ // Then as bool
+ // Note - I swapped the order of these two to try parsing as a number
+ // first because that will probably be the most common case
   val = tryParseBool (strStripped, &ok);
   if (ok)
     return val;
 
-  // Then as a number
-  val = tryParseNumber (strStripped, &ok);
-  if (ok)
-    return val;
 
   // Test for money number
   double money = parserLocale->readMoney (strStripped, &ok);
@@ -173,14 +180,17 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
 {
   Value val;
   if (ok) *ok = false;
-  if ((str.lower() == "true") ||
-      (str.lower() == parserLocale->translate("True").lower()))
+
+  const QString& lowerStr = str.lower();
+  
+  if ((lowerStr == "true") ||
+      (lowerStr == parserLocale->translate("true").lower()))
   {
     val.setValue (true);
     if (ok) *ok = true;
   }
-  else if ((str.lower() == "false") ||
-      (str.lower() == parserLocale->translate("false").lower()))
+  else if ((lowerStr == "false") ||
+      (lowerStr == parserLocale->translate("false").lower()))
   {
     val.setValue (false);
     if (ok) *ok = true;

@@ -5604,7 +5604,7 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
   for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
   {
     QRect range = (*it)->rect().normalize();
-
+    
     // Entire rows selected ?
     if ( util_isRowSelected(range) )
     {
@@ -5629,6 +5629,7 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
     }
     else
     {
+	setRegionPaintDirty( range );
         deleteCells( range );
     }
   }

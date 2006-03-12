@@ -76,6 +76,8 @@ Format::Format( Sheet * _sheet, Style * _style )
 
 Format::~Format()
 {
+	if ( m_pStyle->release() )
+		delete m_pStyle;
 }
 
 void Format::defaultStyleFormat()
@@ -116,8 +118,14 @@ void Format::copy( const Format & _l )
   if ( m_pStyle && m_pStyle->release() )
     delete m_pStyle;
 
-  m_pStyle = new Style( _l.m_pStyle );
-
+  //WHY? - m_pStyle = new Style( _l.m_pStyle );
+  //NOTSUREABOUTHIS
+  //I don't know why a new style was created here (see commented out line above)
+  //, instead of just
+  //using the existing format's style and incrementing the style's
+  //reference count
+  setStyle( _l.m_pStyle );
+  
   m_mask        = _l.m_mask;
   m_flagsMask   = _l.m_flagsMask;
   m_bNoFallBack = _l.m_bNoFallBack;

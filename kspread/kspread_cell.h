@@ -276,14 +276,14 @@ public:
      *
      * @see #copyAll
      */
-    void copyFormat( int _column, int _row );
+    void copyFormat( const int column, const int row );
     /**
      * A convenience function.
      *
      * @see #copyAll
      */
-    void copyFormat( Cell *_cell );
-    void copyContent( Cell *_cell );
+    void copyFormat( const Cell* cell );
+    void copyContent( const Cell* cell );
     /**
      * Copies the format and the content. It does not copy the #m_row and #m_column attributes.
      * Besides that all persistent attributes are copied. @ref #setCellText is called to set the real
@@ -734,8 +734,8 @@ public:
      * @param _col row the formula is in
      * @param _row column the formula is in
      */
-    QString encodeFormula( bool _era = false, int _col = -1, int _row = -1 );
-    QString decodeFormula( const QString &_text, int _col = -1, int _row = -1 );
+    QString encodeFormula( bool _era = false, int _col = -1, int _row = -1 ) const;
+    QString decodeFormula( const QString &_text, int _col = -1, int _row = -1 ) const;
 
     /**
      * Merges the @p new_text with @p old_text during a paste operation.

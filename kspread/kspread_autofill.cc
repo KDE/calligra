@@ -582,6 +582,8 @@ void Sheet::autofill( QRect &src, QRect &dest )
         return;
     }
 
+    setRegionPaintDirty( dest );
+
     doc()->emitBeginOperation();
 
     if ( !doc()->undoLocked() )
@@ -912,7 +914,6 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
         	dest->setCellText( cellValue.asString() );
         
 	dest->copyFormat( src );
-        dest->format()->setFormatType( src->formatType() );
 
         if (down)
         {
