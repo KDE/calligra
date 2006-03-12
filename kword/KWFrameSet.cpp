@@ -1193,9 +1193,11 @@ void KWFrameSet::printDebug()
     static const char * runaroundSide[] = { "Biggest", "Left", "Right", "ERROR" };
 
     KWFrameViewManager *fvm = 0;
-    KWView *view = m_doc->getAllViews().first();
-    if(view)
-        fvm = view->frameViewManager();
+    if ( !m_doc->getAllViews().isEmpty() ) {
+        KWView *view = m_doc->getAllViews().first();
+        if(view)
+            fvm = view->frameViewManager();
+    }
 
     kdDebug() << " |  Visible: " << isVisible() << endl;
     kdDebug() << " |  Type: " << typeFrameset[ type() ] << endl;

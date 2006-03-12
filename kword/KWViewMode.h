@@ -203,6 +203,7 @@ public:
     virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
     virtual QRect viewPageRect( int pgNum );
     virtual QSize contentsSize() { return QSize(); }
+    virtual bool hasPages() { return false; }
 
     virtual void drawPageBorders( QPainter *, const QRect &, const QRegion & ){}
     virtual bool drawSelections() { return mDrawSelections; }

@@ -3704,7 +3704,10 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 // This is also used to paint the preview.png that goes into the ZIP file
 void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool transparent, double zoomX, double zoomY )
 {
-    //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+    //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << " rectangle=" << rectangle << endl;
+    printDebug();
+    Q_ASSERT( zoomX != 0 );
+    Q_ASSERT( zoomY != 0 );
 
     setZoom( 100 );
     m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
@@ -3725,6 +3728,9 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
     }
 
     QRect rect( rectangle );
+    painter.save();
+    painter.translate( rect.x(), rect.y() );
+    QRect clipRect( 0, 0, rect.width(), rect.height() );
 
     KWViewModeEmbedded * viewMode = new KWViewModeEmbedded( this, 0 /*no canvas*/ );
     viewMode->setDrawFrameBackground( !transparent );
@@ -3744,11 +3750,13 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
     {
         KWFrameSet * frameset = fit.current();
         if ( frameset->isVisible( viewMode ) && !frameset->isFloating() )
-            frameset->drawContents( &painter, rect, cg,
+            frameset->drawContents( &painter, clipRect, cg,
                                     false /*onlyChanged*/, true /*resetChanged*/,
                                     0L, viewMode, 0 );
     }
     delete viewMode;
+
+    painter.restore();
 }
 
 QPixmap KWDocument::generatePreview( const QSize& size )
@@ -4471,7 +4479,6 @@ void KWDocument::printDebug()
     kdDebug() << "                 Debug info"<<endl;
     kdDebug() << "Document:" << this <<endl;
     kdDebug() << "Type of document: (0=WP, 1=DTP) " << processingType() <<endl;
-    //kdDebug() << "size: x:" << ptLeftBorder()<< ", y:"<<ptTopBorder() << ", w:"<< ptPaperWidth() << ", h:"<<ptPaperHeight()<<endl;
     kdDebug() << "Header visible: " << isHeaderVisible() << endl;
     kdDebug() << "Footer visible: " << isFooterVisible() << endl;
     kdDebug() << "Units: " << unit() <<endl;
@@ -4488,8 +4495,9 @@ void KWDocument::printDebug()
             kdDebug() << "  [hidden] #" << frameset->frameCount() << " frames" << endl;
     }
 
-    for ( uint pgNum = 0 ; pgNum < m_sectionTitles.size() ; ++pgNum )
+    for ( uint pgNum = 0 ; pgNum < m_sectionTitles.size() ; ++pgNum ) {
         kdDebug() << "Page " << pgNum << "  Section: '" << m_sectionTitles[ pgNum ] << "'"<< endl;
+    }
     /*
     kdDebug() << "# Images: " << getImageCollection()->iterator().count() <<endl;
     QDictIterator<KWImage> it( getImageCollection()->iterator() );
@@ -4501,6 +4509,10 @@ void KWDocument::printDebug()
 
     kdDebug() << "PageManager holds "<< pageCount() << " pages in the range: " << startPage() <<
         "-" << lastPage() << endl;
+    for (int pgnum = startPage() ; pgnum <= lastPage() ; pgnum++) {
+        KWPage *page = pageManager()->page(pgnum);
+        kdDebug() << "Page " << pgnum << " width=" << page->width() << " height=" << page->height() << endl;
+    }
     kdDebug() << "  The height of the doc (in pt) is: " << pageManager()->
         bottomOfPage(lastPage()) << endl;
 }
