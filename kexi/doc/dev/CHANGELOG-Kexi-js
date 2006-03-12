@@ -9,6 +9,8 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+~~~~~~~~~~~~~~~~ 1.0 beta 2 (with KOffice 1.5) ~~~~~~~~~~~~~~~~
+
 2006-02-28, 03-03
 PostgreSQL driver
 - fix for displaying unicode error messages
@@ -34,7 +36,7 @@ Main Window
 Form Designer
 - text label widgets: "word wrap" is turned on by default
 - fixed update "word wrap" property for label widgets
-- fixed random cursor setting for the mfor surface
+- fixed random cursor setting for the form surface
 - fixed problems with inserting widgets in a random position 
   and random rectangles painting problems 
   (all this due to MouseButtonRelease event coming BEFORE MouseButtonPress event)
@@ -55,7 +57,7 @@ Property Editor
 2006-02-15
 General
 - when query design has been changed and saved, subsequent openings of a form using 
-  it will reload it's definition. The same for 'page setup' dialogs, etc.
+  it will reload its definition. The same for 'page setup' dialogs, etc.
 - fixed crash when 'page setup' dialog is opened, closed, and opened again for 
   the same data object
 
@@ -103,7 +105,7 @@ KexiDB
 Main Window
 - fixed usability: read-only flag of the db connection is now visible
   in the statusbar
-- added question about for opening db file as read-only when it is already opened
+- added question about opening db file as read-only when it is already opened
 - disable actions that require write access to the db if it's opened as readonly
 Startup
 - fixed support for "-print-preview" command line option
