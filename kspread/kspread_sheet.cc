@@ -6731,7 +6731,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 
 bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext, bool isLast )
 {
-    kdDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
+//    kdDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
     double height = -1.0;
     Format layout( this , doc()->styleManager()->defaultStyle() );
     KoStyleStack styleStack;
@@ -6742,14 +6742,14 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
         const QDomElement *style = oasisContext.oasisStyles().findStyle( str, "table-row" );
         styleStack.push( *style );
-        kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
+  //      kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
     layout.loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
     styleStack.setTypeProperties( "table-row" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
     {
         height = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::style, "row-height" ) , -1 );
-        kdDebug()<<" properties style:row-height : height :"<<height<<endl;
+    //    kdDebug()<<" properties style:row-height : height :"<<height<<endl;
     }
 
     int number = 1;
@@ -6759,13 +6759,13 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt( &ok );
         if ( ok )
             number = n;
-        kdDebug() << "Row repeated: " << number << endl;
+    //    kdDebug() << "Row repeated: " << number << endl;
     }
     bool collapse = false;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
         QString visible = row.attributeNS( KoXmlNS::table, "visibility", QString::null );
-        kdDebug()<<" row.attribute( table:visibility ) "<<visible<<endl;
+    //    kdDebug()<<" row.attribute( table:visibility ) "<<visible<<endl;
         if ( visible == "collapse" )
             collapse=true;
         else
@@ -6793,19 +6793,19 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         {
             insertPageBreak = true;
         }
-        else
-            kdDebug()<<" str :"<<str<<endl;
+      //  else
+      //      kdDebug()<<" str :"<<str<<endl;
     }
 
     //number == number of row to be copy. But we must copy cell too.
     for ( int i = 0; i < number; ++i )
     {
-        kdDebug()<<" create non defaultrow format :"<<rowIndex<<" repeate : "<<number<<" height :"<<height<<endl;
+       // kdDebug()<<" create non defaultrow format :"<<rowIndex<<" repeate : "<<number<<" height :"<<height<<endl;
         RowFormat * rowL = nonDefaultRowFormat( rowIndex );
         rowL->copy( layout );
         if ( height != -1 )
         {
-            kdDebug() << "Setting row height to " << height << endl;
+         //   kdDebug() << "Setting row height to " << height << endl;
             rowL->setHeight( (int) height );
         }
         if ( collapse )
@@ -6816,19 +6816,24 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
 
     int columnIndex = 0;
     QDomNode cellNode = row.firstChild();
+    
     while( !cellNode.isNull() )
     {
         QDomElement cellElement = cellNode.toElement();
         if( !cellElement.isNull() )
         {
-            ++columnIndex;
+            columnIndex++;
             //kdDebug()<<"bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast ) cellElement.tagName() :"<<cellElement.tagName()<<endl;
-            if( cellElement.localName() == "table-cell" && cellElement.namespaceURI() == KoXmlNS::table)
+            QString localName = cellElement.localName();
+	    
+	    if( ((localName == "table-cell") || (localName == "covered-table-cell")) && cellElement.namespaceURI() == KoXmlNS::table)
             {
-                kdDebug()<<" create cell at row index :"<<backupRow<<endl;
+                //kdDebug()<<" create cell at row index :"<<backupRow<<endl;
+		//kdDebug()<<" columnIndex: " << columnIndex << endl;
                 Cell* cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisContext );
-                bool haveStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
+                
+		bool haveStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
                 //kdDebug()<<" haveStyle ? :"<<haveStyle<<endl;
                 int cols = 1;
                 if( cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
