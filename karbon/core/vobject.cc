@@ -187,7 +187,7 @@ VObject::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 		m_fill = new VFill();
 
 	if( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
-		addStyles( context.oasisStyles().findStyle( object.attributeNS( KoXmlNS::draw, "style-name", QString::null ) ), context );
+		context.fillStyleStack( object, KoXmlNS::draw, "style-name", "graphic" );
 
 	KoStyleStack &styleStack = context.styleStack();
 	styleStack.setTypeProperties( "graphic" );
