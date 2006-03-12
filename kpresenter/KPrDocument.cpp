@@ -3830,7 +3830,8 @@ void KPrDocument::paintContent( QPainter& painter, const QRect& rect,
     m_zoomHandler->setZoom( 100 );
     if ( zoomHandler()->zoomedResolutionX() != zoomX || zoomHandler()->zoomedResolutionY() != zoomY )
     {
-        zoomHandler()->setResolution( zoomX, zoomY );
+        int zoomLevel = qRound( 100 * zoomY / zoomHandler()->zoomedResolutionY() ); // ## ignores the case where the x and y scaling differs
+        zoomHandler()->setZoom( zoomLevel );
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
     }
