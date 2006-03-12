@@ -3705,7 +3705,6 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool transparent, double zoomX, double zoomY )
 {
     //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << " rectangle=" << rectangle << endl;
-    printDebug();
     Q_ASSERT( zoomX != 0 );
     Q_ASSERT( zoomY != 0 );
 
@@ -3718,12 +3717,13 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
 
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
-        kdDebug() << "m_zoomedResolutionX=" << m_zoomedResolutionX << " != " << zoomX << " -> calling setResolution(" << zoomX << ")" << endl;
-        setResolution( zoomX, zoomY );
+        //kdDebug(32001) << "m_zoomedResolutionX=" << m_zoomedResolutionX << " != " << zoomX << " -> calling setResolution(" << zoomX << ")" << endl;
+        int zoomLevel = qRound( 100 * zoomY / m_zoomedResolutionY ); // ## ignores the case where the x and y scaling differs
+        setZoom( zoomLevel );
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
         if ( KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document() )
-            formulaDocument->setZoomAndResolution( m_zoom, zoomX, zoomY, false, forPrint );
+            formulaDocument->setZoomAndResolution( zoomLevel, zoomX, zoomY, false, forPrint );
         // Note that this zoom and resolution are then used when activating the embedded object!
     }
 
