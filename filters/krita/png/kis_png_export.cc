@@ -90,7 +90,8 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
 
-    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, img->projection());
+    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
+    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
     
     if ( (res = kpc.buildFile(url, l, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kdDebug(41008) << "success !" << endl;
