@@ -382,6 +382,11 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 		if( !transform.isEmpty() )
 			docWriter->addAttribute( "draw:transform", transform );
 
+		docWriter->addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( boundingBox().width() ).arg( boundingBox().height() ) );
+		docWriter->addAttribute( "svg:x", QString::number( boundingBox().x() ) );
+		docWriter->addAttribute( "svg:y", QString::number( boundingBox().y() ) );
+		docWriter->addAttribute( "svg:width", QString::number( boundingBox().width() ) );
+		docWriter->addAttribute( "svg:height", QString::number( boundingBox().height() ) );
 		docWriter->endElement();
 	}
 }

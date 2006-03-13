@@ -218,6 +218,7 @@ VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainS
 	docWriter->startElement( "draw:page" );
 	docWriter->addAttribute( "draw:name", name());
 	docWriter->addAttribute( "draw:id", "page1");
+	docWriter->addAttribute( "draw:master-page-name", "Default");
 
 	// save objects:
 	VLayerListIterator itr( m_layers );
