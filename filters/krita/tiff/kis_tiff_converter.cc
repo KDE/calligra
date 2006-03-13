@@ -24,6 +24,8 @@
 #include <config.h>
 #include LCMS_HEADER
 
+#include <qfile.h>
+
 #include <kapplication.h>
 #include <KoDocumentInfo.h>
 
@@ -154,7 +156,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     kdDebug(41008) << "Start decoding TIFF File" << endl;
     // Opent the TIFF file
     TIFF *image = 0;
-    if((image = TIFFOpen(uri.path().ascii(), "r")) == NULL){
+    if((image = TIFFOpen(QFile::encodeName(uri.path()), "r")) == NULL){
         kdDebug(41008) << "Could not open the file, either it doesn't exist, either it is not a TIFF : " << uri.path() << endl;
         if (image) TIFFClose(image);
         return (KisImageBuilder_RESULT_BAD_FETCH);
@@ -604,7 +606,7 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP i
     
     // Open file for writing
     TIFF *image;
-    if((image = TIFFOpen(uri.path().ascii(), "w")) == NULL){
+    if((image = TIFFOpen(QFile::encodeName(uri.path()), "w")) == NULL){
         kdDebug(41008) << "Could not open the file for writting " << uri.path() << endl;
         TIFFClose(image);
         return (KisImageBuilder_RESULT_FAILURE);

@@ -22,6 +22,8 @@
 
 #include <stdio.h>
 
+#include <qfile.h>
+
 #include <kapplication.h>
 #include <KoDocumentInfo.h>
 
@@ -120,7 +122,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 {
     kdDebug(41008) << "Start decoding PNG File" << endl;
     // open the file
-    FILE *fp = fopen(uri.path().ascii(), "rb");
+    FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
     if (!fp)
     {
         return (KisImageBuilder_RESULT_NOT_EXIST);
@@ -427,7 +429,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayer
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open file for writing
-    FILE *fp = fopen(uri.path().ascii(), "wb");
+    FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");
     if (!fp)
     {
         return (KisImageBuilder_RESULT_FAILURE);
