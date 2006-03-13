@@ -56,7 +56,7 @@ KoFilter::ConversionStatus KisJPEGImport::convert(const QCString&, const QCStrin
     if (!doc)
         return KoFilter::CreationError;
 
-    doc -> prepareForImport();
+    doc->prepareForImport();
         
 
     if (!filename.isEmpty()) {

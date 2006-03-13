@@ -51,7 +51,7 @@ KisTIFFExport::~KisTIFFExport()
 
 KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QCString& to)
 {
-    kdDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
+    kdDebug(41008) << "Tiff export! From: " << from << ", To: " << to << "\n";
     
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -67,14 +67,12 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
     KisTIFFOptions options = kdb->options();
 
     delete kdb;
-    // XXX: Add dialog about flattening layers here
 
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
     
     if (!output)
         return KoFilter::CreationError;
-    
     
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 

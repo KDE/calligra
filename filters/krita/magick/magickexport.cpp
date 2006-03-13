@@ -54,7 +54,6 @@ KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCS
     if (!output)
         return KoFilter::CreationError;
     
-    
     if (filename.isEmpty()) return KoFilter::FileNotFound;
 
     KURL url(filename);
