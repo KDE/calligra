@@ -382,6 +382,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
     J_COLOR_SPACE color_type = getColorTypeforColorSpace(img->colorSpace());
     if(color_type == JCS_UNKNOWN)
     {
+        KIO::del(uri);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
     cinfo.in_color_space = color_type;   // colorspace of input image
@@ -508,6 +509,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
                 }
                 break;
             default:
+                KIO::del(uri);
                 return KisImageBuilder_RESULT_UNSUPPORTED;
         }
         jpeg_write_scanlines(&cinfo, &row_pointer, 1);

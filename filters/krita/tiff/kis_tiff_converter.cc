@@ -636,11 +636,13 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP i
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());
     if(root == 0)
     {
+        KIO::del(uri);
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }
     if(!visitor->visit( root ))
     {
+        KIO::del(uri);
         TIFFClose(image);
         return KisImageBuilder_RESULT_FAILURE;
     }
