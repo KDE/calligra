@@ -189,6 +189,10 @@ private:
     int m_defaultFontSize;
     int m_currentEstimateType;
     
+    bool m_updateGanttview;
+    bool m_updateResourceview;
+    bool m_updateAccountsview;
+
     DCOPObject* m_dcop;
     
     // ------ Edit

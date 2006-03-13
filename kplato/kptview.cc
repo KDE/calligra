@@ -126,15 +126,18 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     m_ganttview = new GanttView(m_tab, part->isReadWrite());
     m_tab->addWidget(m_ganttview);
+    m_updateGanttview = false;
     m_ganttview->draw(getPart()->getProject());
 
     m_pertview = new PertView( this, m_tab, layout );
     m_tab->addWidget(m_pertview);
 
     m_resourceview = new ResourceView( this, m_tab );
+    m_updateResourceview = true;
     m_tab->addWidget(m_resourceview);
     
     m_accountsview = new AccountsView( getProject(), this, m_tab );
+    m_updateAccountsview = true;
     m_tab->addWidget(m_accountsview);
     
     //m_reportview = new ReportView(this, m_tab);
@@ -451,6 +454,7 @@ void View::slotViewGanttNoInformation() {
 void View::slotViewTaskAppointments() {
     //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowAppointments(actionViewTaskAppointments->isChecked());
+    m_updateGanttview = true;
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
@@ -473,6 +477,7 @@ void View::slotViewResources() {
 void View::slotViewResourceAppointments() {
     //kdDebug()<<k_funcinfo<<endl;
     m_resourceview->setShowAppointments(actionViewResourceAppointments->isChecked());
+    m_updateResourceview = true;
     if (m_tab->visibleWidget() == m_resourceview)
         slotUpdate(false);
 }
@@ -548,16 +553,25 @@ void View::slotProjectCalculate() {
 
 void View::slotProjectCalculateExpected() {
     m_currentEstimateType = Effort::Use_Expected;
+    m_updateGanttview = true;
+    m_updateResourceview = true;
+    m_updateAccountsview = true;
     slotUpdate(true);
 }
 
 void View::slotProjectCalculateOptimistic() {
     m_currentEstimateType = Effort::Use_Optimistic;
+    m_updateGanttview = true;
+    m_updateResourceview = true;
+    m_updateAccountsview = true;
     slotUpdate(true);
 }
 
 void View::slotProjectCalculatePessimistic() {
     m_currentEstimateType = Effort::Use_Pessimistic;
+    m_updateGanttview = true;
+    m_updateResourceview = true;
+    m_updateAccountsview = true;
     slotUpdate(true);
 }
 
@@ -1025,7 +1039,11 @@ void View::slotUpdate(bool calculate)
     //kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
         projectCalculate();
-
+        
+    m_updateGanttview = true;
+    m_updateResourceview = true;
+    m_updateAccountsview = true;
+    
     updateView(m_tab->visibleWidget());
 }
 
@@ -1042,31 +1060,32 @@ void View::updateView(QWidget *widget)
     if (widget == m_ganttview)
     {
         //kdDebug()<<k_funcinfo<<"draw gantt"<<endl;
-        //m_ganttview->hide();
         m_ganttview->setShowExpected(actionViewExpected->isChecked());
         m_ganttview->setShowOptimistic(actionViewOptimistic->isChecked());
         m_ganttview->setShowPessimistic(actionViewPessimistic->isChecked());
-        m_ganttview->drawChanges(getProject());
-        m_ganttview->show();
+        if (m_updateGanttview)
+            m_ganttview->drawChanges(getProject());
         setTaskActionsEnabled(widget, true);
+        m_updateGanttview = false;
     }
     else if (widget == m_pertview)
     {
         //kdDebug()<<k_funcinfo<<"draw pertview"<<endl;
         m_pertview->draw();
-        m_pertview->show();
     }
     else if (widget == m_resourceview)
     {
         //kdDebug()<<k_funcinfo<<"draw resourceview"<<endl;
-        m_resourceview->draw(getPart()->getProject());
-        m_resourceview->show();
+        if (m_updateResourceview)
+            m_resourceview->draw(getPart()->getProject());
+        m_updateResourceview = false;
     }
     else if (widget == m_accountsview)
     {
         //kdDebug()<<k_funcinfo<<"draw accountsview"<<endl;
-        m_accountsview->draw();
-
+        if (m_updateAccountsview)
+            m_accountsview->draw();
+        m_updateAccountsview = false;
     }
 /*    else if (widget == m_reportview)
     {
