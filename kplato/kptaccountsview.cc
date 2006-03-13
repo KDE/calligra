@@ -103,7 +103,7 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
     m_periodTexts<<i18n("Day")<<i18n("Week")<<i18n("Month");
     m_cumulative = false;
 
-    QVBoxLayout *lay1 = new QVBoxLayout(this, 11, 6);
+    QVBoxLayout *lay1 = new QVBoxLayout(this, 0, 3);
     
     QHBoxLayout *lay2 = new QHBoxLayout(0, 0, 6);
     m_label = new Label(this);
