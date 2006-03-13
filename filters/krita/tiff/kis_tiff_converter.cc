@@ -614,18 +614,18 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP i
     KoDocumentInfo * info = m_doc->documentInfo();
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     QString title = aboutPage->title();
-    if(title.isEmpty())
+    if(!title.isEmpty())
     {
         TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.ascii());
     }
     QString abstract = aboutPage->abstract();
-    if(abstract.isEmpty())
+    if(!abstract.isEmpty())
     {
         TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.ascii());
     }
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     QString author = authorPage->fullName();
-    if(author.isEmpty())
+    if(!author.isEmpty())
     {
         TIFFSetField(image, TIFFTAG_ARTIST, author.ascii());
     }
