@@ -26,6 +26,7 @@
 #include "kptview.h"
 #include "kpteffortcostmap.h"
 
+#include <qapplication.h>
 #include <qcombobox.h>
 #include <qdatetime.h>
 #include <qdatetimeedit.h>
@@ -206,6 +207,7 @@ void AccountsView::createPeriods() {
 
 void AccountsView::slotUpdate() {
     //kdDebug()<<k_funcinfo<<endl;
+    QApplication::setOverrideCursor(Qt::waitCursor);
     createPeriods();
     KLocale *locale = KGlobal::locale();
     const KCalendarSystem *cal = locale->calendar();
@@ -245,6 +247,7 @@ void AccountsView::slotUpdate() {
             }
         }
         m_dlv->calculate();
+        QApplication::restoreOverrideCursor();
         return;
     }
     if (m_period == 1) { //Weekly
@@ -264,9 +267,10 @@ void AccountsView::slotUpdate() {
                 pend = end;
             }
         }
-        if (c == 0)
+        if (c == 0) {
+            QApplication::restoreOverrideCursor();
             return;
-       
+        }
         QListViewItemIterator it(m_dlv->masterListView());
         for (;it.current(); ++it) {
             AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(it.current());
@@ -290,6 +294,7 @@ void AccountsView::slotUpdate() {
             }
         }
         m_dlv->calculate();
+        QApplication::restoreOverrideCursor();
         return;
     }
     if (m_period == 2) { //Monthly
@@ -308,9 +313,10 @@ void AccountsView::slotUpdate() {
                 pend = end;
             }
         }
-        if (c == 0)
+        if (c == 0) {
+            QApplication::restoreOverrideCursor();
             return;
-       
+        }
         QListViewItemIterator it(m_dlv->masterListView());
         for (;it.current(); ++it) {
             AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(it.current());
@@ -334,8 +340,10 @@ void AccountsView::slotUpdate() {
             }
         }
         m_dlv->calculate();
+        QApplication::restoreOverrideCursor();
         return;
     }
+    QApplication::restoreOverrideCursor();
 }
 
 void AccountsView::print(KPrinter &printer) {
