@@ -406,7 +406,7 @@ void KoPaletteManager::placePalette(const QString & name, Qt::Dock location)
             m_view->mainWindow()->addDockWindow(palette, Qt::DockTornOff);
             break;
         case (DOCK_SMART):
-            if (h > 1024) {
+            if (h > 768) {
                 m_view->mainWindow()->leftDock()->setAcceptDockWindow(palette, true);
                 m_view->mainWindow()->rightDock()->setAcceptDockWindow(palette, true);
                 m_view->mainWindow()->addDockWindow(palette, location);
