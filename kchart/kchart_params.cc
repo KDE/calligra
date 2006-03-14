@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001,2002,2003,2004 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -205,7 +206,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
     // Subtitle TODO (more details)
     QDomElement  subtitleElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
 						    "subtitle" );
-    if ( !titleElem.isNull() ) {
+    if ( !subtitleElem.isNull() ) {
 	QDomElement  pElem = KoDom::namedItemNS( subtitleElem,
 						 KoXmlNS::text, "p" );
 	setHeader2Text( pElem.text() );
@@ -523,7 +524,16 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     bodyWriter->endElement(); // text:p
     bodyWriter->endElement(); // chart:title
 
-    // TODO subtitle: very similar
+    QString subTitle( header2Text() );
+    if ( !subTitle.isEmpty() )
+    {
+        bodyWriter->startElement( "chart:subtitle" );
+        bodyWriter->startElement( "text:p" );
+        bodyWriter->addTextNode( header2Text() );
+        bodyWriter->endElement(); // text:p
+        bodyWriter->endElement(); // chart:title
+    }
+
 
     // TODO legend
 
