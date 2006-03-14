@@ -382,19 +382,19 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 	m_fontSize->setSuffix( " pt" );
 
 	m_textEditor->setMinimumHeight( 100 );
-	m_textEditor->setText( "New text" );
+	m_textEditor->setText( i18n( "New text") );
 	m_textEditor->selectAll();
 
 	m_convertToShapes->setEnabled( true );
 
 	// TODO: Find a way to display correctly the following icons...
-	m_textAlignment->insertItem( "Left" );
-	m_textAlignment->insertItem( "Center" );
-	m_textAlignment->insertItem( "Right" );
+	m_textAlignment->insertItem( i18n( "Left") );
+	m_textAlignment->insertItem( i18n( "Center") );
+	m_textAlignment->insertItem( i18n( "Right") );
 
-	m_textPosition->insertItem( "Above" );
-	m_textPosition->insertItem( "On" );
-	m_textPosition->insertItem( "Under" );
+	m_textPosition->insertItem( i18n( "Above") );
+	m_textPosition->insertItem( i18n( "On") );
+	m_textPosition->insertItem( i18n( "Under") );
 
 	m_textOffset->setRange( 0.0, 100.0, 1.0, true );
 
@@ -603,11 +603,11 @@ VTextTool::~VTextTool()
 
 QString VTextTool::contextHelp()
 {
-	QString s = "<qt><b>Text Tool</b><br>";
-	s += "Click on document to place horizontal text.<br>";
-	s += "Click and drag in document to place directional text.<br>";
-	s += "Click on a selected path object to place text along its outline.<br>";
-	s += "Click on a selected text object to change it.<br></qt>";
+	QString s = i18n( "<qt><b>Text Tool</b><br>" );
+	s += i18n("<i>Click</i> on document to place horizontal text.<br>" );
+	s += i18n("<i>Click and drag</i> in document to place directional text.<br>" );
+	s += i18n("<i>Click</i> on a selected path object to place text along its outline.<br>" );
+	s += i18n("<i>Click</i> on a selected text object to change it.<br></qt>" );
 
 	return s;
 }
@@ -693,9 +693,9 @@ VTextTool::mouseButtonRelease()
 	}
 
 	if( dynamic_cast<VText*>( selObj ) )
-		m_optionsWidget->setCaption( "Change Text" );
+		m_optionsWidget->setCaption( i18n( "Change Text") );
 	else 
-		m_optionsWidget->setCaption( "Insert Text" );
+		m_optionsWidget->setCaption( i18n( "Insert Text") );
 
 	m_optionsWidget->show();
 }
@@ -757,7 +757,7 @@ VTextTool::mouseDragRelease()
 
 	if( createText( path ) )
 	{
-		m_optionsWidget->setCaption( "Insert Text" );
+		m_optionsWidget->setCaption( i18n( "Insert Text") );
 		m_optionsWidget->show();
 	}
 }
