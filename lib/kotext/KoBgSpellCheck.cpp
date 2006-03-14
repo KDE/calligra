@@ -157,7 +157,9 @@ void KoBgSpellCheck::markWord( KoTextParag* parag, int pos, int length, bool mis
     if ( misspelled && parag == d->intraWordParag &&
          d->intraWordPosition >= pos &&
          d->intraWordPosition < pos+length ) {
+#ifdef DEBUG_BGSPELLCHECKING
         kdDebug(32500) << "markWord: " << parag << " " << pos << " to " << pos+length << " - word being edited" << endl;
+#endif
         return; // not yet
     }
 
