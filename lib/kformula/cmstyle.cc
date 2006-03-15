@@ -398,7 +398,7 @@ void CMArtwork::draw( QPainter& painter, const LuPixelRect& r,
 }
 
 
-void CMArtwork::draw(QPainter& painter, const LuPixelRect& r,
+void CMArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                      const ContextStyle& style, ContextStyle::TextStyle tstyle,
                      luPt /*parentSize*/, const LuPixelPoint& origin)
 {

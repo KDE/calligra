@@ -303,7 +303,7 @@ void EsstixArtwork::calcSizes( const ContextStyle& style,
 }
 
 
-void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& r,
+void EsstixArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                          const ContextStyle& style, ContextStyle::TextStyle tstyle,
                          luPt /*parentSize*/, const LuPixelPoint& origin)
 {

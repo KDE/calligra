@@ -165,7 +165,7 @@ void Artwork::calcSizes( const ContextStyle& style,
 }
 
 
-void Artwork::draw(QPainter& painter, const LuPixelRect& r,
+void Artwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                    const ContextStyle& style, ContextStyle::TextStyle tstyle,
                    const LuPixelPoint& parentOrigin)
 {

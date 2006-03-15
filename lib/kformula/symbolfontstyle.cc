@@ -178,7 +178,7 @@ void SymbolArtwork::calcSizes( const ContextStyle& style,
 }
 
 
-void SymbolArtwork::draw(QPainter& painter, const LuPixelRect& r,
+void SymbolArtwork::draw(QPainter& painter, const LuPixelRect& /*r*/,
                          const ContextStyle& style, ContextStyle::TextStyle tstyle,
                          luPt parentSize, const LuPixelPoint& origin)
 {
