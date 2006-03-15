@@ -68,7 +68,29 @@ class RubyExtension{
          * This function is called by ruby to delete a RubyExtension object
          */
         static void delete_object(void* object);
+        /**
+         * This function is called by ruby to delete a RubyExtension object
+         */
+        static void delete_exception(void* object);
+    private: // Tests
+        /**
+         * Test if the ruby object is an exception.
+         */
+        static bool isOfExceptionType(VALUE obj);
+        /**
+         * Test if the ruby object is an object
+         */
+        static bool RubyExtension::isOfObjectType(VALUE obj);
     private: //Converting functions
+        /**
+         * Convert a ruby object to the exception type.
+         * @return 0 if the object wasn't an exception.
+         */
+        static Kross::Api::Exception::Ptr convertToException(VALUE obj);
+        /**
+         * Wrap an exception in a ruby object.
+         */
+        static VALUE convertFromException(Kross::Api::Exception::Ptr exc);
         /**
          * This function iterats through a ruby hash
          */

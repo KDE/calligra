@@ -125,8 +125,15 @@ Kross::Api::Object::Ptr RubyScript::execute()
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
         kdDebug() << "Execution has failed" << endl;
 #endif
-        setException( new Kross::Api::Exception(QString("Failed to execute ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
-        d->m_compile = 0;
+        if( TYPE( ruby_errinfo )  == T_DATA && RubyExtension::isOfExceptionType( ruby_errinfo ) )
+        {
+#ifdef KROSS_RUBY_SCRIPT_DEBUG
+            kdDebug() << "Kross exception" << endl;
+#endif
+            setException( RubyExtension::convertToException( ruby_errinfo ) );
+        } else {
+            setException( new Kross::Api::Exception(QString("Failed to execute ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
+        }
     }
 
     unselectScript();

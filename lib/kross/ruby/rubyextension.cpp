@@ -38,9 +38,11 @@ class RubyExtensionPrivate {
     Kross::Api::Object::Ptr m_object;
     /// 
     static VALUE s_krossObject;
+    static VALUE s_krossException;
 };
 
 VALUE RubyExtensionPrivate::s_krossObject = 0;
+VALUE RubyExtensionPrivate::s_krossException = 0;
     
 VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
 {
@@ -72,19 +74,33 @@ VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALU
         if(obj) argsList.append(obj);
     }
     Kross::Api::Object::Ptr result;
-    if(object->hasChild(funcname)) {
+    try { // We need a double try/catch because, the cleaning is only done at the end of the catch, so if we had only one try/catch, kross would crash after the call to rb_exc_raise
+        try { // We can't let a C++ exceptions propagate in the C mechanism
+            if(object->hasChild(funcname)) {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-        kdDebug() << QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) << endl;
+                kdDebug() << QString("Kross::Ruby::RubyExtension::method_missing name='%1' is a child object of '%2'.").arg(funcname).arg(object->getName()) << endl;
 #endif
-        result = object->getChild(funcname)->call(QString::null, new Api::List(argsList));
-    }
-    else {
+                result = object->getChild(funcname)->call(QString::null, new Api::List(argsList));
+            }
+            else {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
-        kdDebug() << QString("Kross::Ruby::RubyExtension::method_missing try to call function with name '%1' in object '%2'.").arg(funcname).arg(object->getName()) << endl;
+                kdDebug() << QString("Kross::Ruby::RubyExtension::method_missing try to call function with name '%1' in object '%2'.").arg(funcname).arg(object->getName()) << endl;
 #endif
-        result = object->call(funcname, new Api::List(argsList));
+                result = object->call(funcname, new Api::List(argsList));
+            }
+        } catch(Kross::Api::Exception::Ptr exception)
+        {
+#ifdef KROSS_RUBY_EXTENSION_DEBUG
+            kdDebug() << "c++ exception catched, raise a ruby error" << endl;
+#endif
+            throw convertFromException(exception);
+        }  catch(...)
+        {
+            throw convertFromException(new Kross::Api::Exception( "Unknow error" )); // TODO: fix //i18n
+        }
+    } catch(VALUE v) {
+         rb_exc_raise(v );
     }
-    
     return toVALUE(result);
 }
 
@@ -95,6 +111,13 @@ void RubyExtension::delete_object(void* object)
     if(obj)
         delete obj;
 }
+
+void RubyExtension::delete_exception(void* object)
+{
+    Kross::Api::Exception* exc = static_cast<Kross::Api::Exception*>(object);
+    exc->_KShared_unref();
+}
+
     
 RubyExtension::RubyExtension(Kross::Api::Object::Ptr object) : d(new RubyExtensionPrivate())
 {
@@ -122,6 +145,41 @@ int RubyExtension::convertHash_i(VALUE key, VALUE value, VALUE  vmap)
     return ST_CONTINUE;
 }
 
+bool RubyExtension::isOfExceptionType(VALUE value)
+{
+    VALUE result = rb_funcall(value, rb_intern("kind_of?"), 1, RubyExtensionPrivate::s_krossException );
+    return (TYPE(result) == T_TRUE);
+}
+
+bool RubyExtension::isOfObjectType(VALUE value)
+{
+    VALUE result = rb_funcall(value, rb_intern("kind_of?"), 1, RubyExtensionPrivate::s_krossObject );
+    return (TYPE(result) == T_TRUE);
+}
+
+
+Kross::Api::Exception::Ptr RubyExtension::convertToException(VALUE value)
+{
+    if( isOfExceptionType(value) )
+    {
+        Kross::Api::Exception* exception;
+        Data_Get_Struct(value, Kross::Api::Exception, exception);
+        return exception;
+    }
+    return 0;
+}
+
+VALUE RubyExtension::convertFromException(Kross::Api::Exception::Ptr exc)
+{
+    if(RubyExtensionPrivate::s_krossException == 0)
+    {
+        RubyExtensionPrivate::s_krossException = rb_define_class("KrossException", rb_eRuntimeError);
+    }
+    exc->_KShared_ref();
+    return Data_Wrap_Struct(RubyExtensionPrivate::s_krossException, 0, RubyExtension::delete_exception, exc.data() );
+}
+
+
 Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
 {
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
@@ -134,8 +192,7 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
             kdDebug() << "Object is a Kross Object" << endl;
 #endif
-            VALUE result = rb_funcall(value, rb_intern("kind_of?"), 1, RubyExtensionPrivate::s_krossObject );
-            if(TYPE(result) == T_TRUE)
+            if( isOfObjectType(value) )
             {
                 RubyExtension* objectExtension;
                 Data_Get_Struct(value, RubyExtension, objectExtension);
