@@ -260,6 +260,11 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 	_PL(h5,NAME,value,h5);
 	_PL(h6,NAME,value,h6);
 
+	// Don't handle the content of comment- or script-nodes.
+	if(e.nodeType() == DOM::Node::COMMENT_NODE || e.tagName().lower() == "script") {
+		return false;
+	}
+
 	return true;
 }
 
