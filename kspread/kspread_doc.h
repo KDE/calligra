@@ -38,9 +38,6 @@
 #include <kcompletion.h>
 
 #include <KoDocument.h>
-#include <KoGenStyles.h>
-#include <KoPictureCollection.h>
-#include <KoUnit.h>
 #include <KoZoomHandler.h>
 
 #include "kspread_global.h"
@@ -48,7 +45,11 @@
 class KCommand;
 
 class KoCommandHistory;
+class KoGenStyles;
 class KoOasisSettings;
+class KoPicture;
+class KoPictureCollection;
+class KoPictureKey;
 class KoStore;
 class KoXmlWriter;
 

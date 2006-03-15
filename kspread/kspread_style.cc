@@ -25,6 +25,7 @@
 
 #include <KoGlobal.h>
 #include <KoGenStyles.h>
+#include <KoOasisStyles.h>
 #include <KoStyleStack.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -127,7 +128,7 @@ bool Style::operator == (const Style& style) const
 	//This is prone to error because if someone adds additional
 	//properties to the style class they will have to remember
 	//to correct this function - can we do this a better way?
-	
+
 	if ( 	m_properties == style.m_properties &&
 		m_type == style.m_type &&
 		m_featuresSet == style.m_featuresSet &&
@@ -156,10 +157,10 @@ bool Style::operator == (const Style& style) const
 		m_postfix == style.m_postfix &&
 		m_currency.type == style.m_currency.type &&
 		m_properties == style.m_properties )
-	
+
 		return true;
 	else
-		return false;	
+		return false;
 }
 
 void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element )

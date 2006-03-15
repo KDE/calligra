@@ -33,6 +33,7 @@
 #include <KoGlobal.h>
 #include <KoStyleStack.h>
 #include <KoOasisLoadingContext.h>
+#include <KoOasisStyles.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"

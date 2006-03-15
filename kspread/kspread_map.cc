@@ -29,6 +29,7 @@
 #include <KoGenStyles.h>
 #include <KoOasisSettings.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
@@ -206,7 +207,7 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
 	    qWarning("Creation of temporary file to store document body failed.");
 	    return false;
     }
-    
+
     bodyTmpFile.setAutoDelete( true );
     QFile* tmpFile = bodyTmpFile.file();
     KoXmlWriter bodyTmpWriter( tmpFile );

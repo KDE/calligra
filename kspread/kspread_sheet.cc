@@ -53,10 +53,11 @@
 #include <KoOasisLoadingContext.h>
 #include <KoOasisSettings.h>
 #include <KoOasisStyles.h>
-#include <KoStyleStack.h>
 #include <KoQueryTrader.h>
+#include <KoStyleStack.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include "dependencies.h"
 
@@ -6816,7 +6817,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
 
     int columnIndex = 0;
     QDomNode cellNode = row.firstChild();
-    
+
     while( !cellNode.isNull() )
     {
         QDomElement cellElement = cellNode.toElement();
@@ -6825,14 +6826,14 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
             columnIndex++;
             //kdDebug()<<"bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast ) cellElement.tagName() :"<<cellElement.tagName()<<endl;
             QString localName = cellElement.localName();
-	    
+
 	    if( ((localName == "table-cell") || (localName == "covered-table-cell")) && cellElement.namespaceURI() == KoXmlNS::table)
             {
                 //kdDebug()<<" create cell at row index :"<<backupRow<<endl;
 		//kdDebug()<<" columnIndex: " << columnIndex << endl;
                 Cell* cell = nonDefaultCell( columnIndex, backupRow );
                 cell->loadOasis( cellElement, oasisContext );
-                
+
 		bool haveStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
                 //kdDebug()<<" haveStyle ? :"<<haveStyle<<endl;
                 int cols = 1;

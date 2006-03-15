@@ -25,13 +25,12 @@
 #include <qfont.h>
 #include <qpen.h>
 
-#include <KoOasisStyles.h>
-
 #include "kspread_format.h"
 
 class QDomDocument;
 class QDomElement;
 class KoGenStyles;
+class KoOasisStyles;
 
 namespace KSpread
 {
@@ -120,7 +119,7 @@ public:
 
   /** Returns true if both styles have the same properties */
   bool operator == (const Style& style) const;
-  
+
     static FormatType formatType( const QString &_format );
 
     /**
@@ -242,7 +241,7 @@ public:
    * is used to reduce the overhead when asking for the name of the same colour.
    */
   static QString colorName( const QColor& color );
-  
+
 protected:
   /**
    * Helper function for saveOasis
@@ -250,7 +249,7 @@ protected:
    */
   void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles );
 
-  
+
   CustomStyle * m_parent;
   QString        m_parentName;
   StyleType      m_type;

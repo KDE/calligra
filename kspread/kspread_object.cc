@@ -42,6 +42,7 @@
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
 #include <KoDom.h>
+#include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 
 using namespace KSpread;

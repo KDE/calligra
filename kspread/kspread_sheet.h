@@ -30,8 +30,6 @@
 #include <qwidget.h>
 #include <qdragobject.h>
 
-#include <KoOasisStyles.h>
-#include <KoXmlWriter.h>
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
@@ -50,10 +48,12 @@ class KPrinter;
 class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;
-class KoOasisSettings;
 class KoOasisLoadingContext;
+class KoOasisSettings;
+class KoOasisStyles;
 class KCommand;
 class KoPicture;
+class KoXmlWriter;
 
 namespace KoChart
 {
@@ -493,11 +493,11 @@ public:
      */
     void recalc( bool force );
     /**
-     * Recalculates the current sheet, if automatic recalculation is enabled.  
+     * Recalculates the current sheet, if automatic recalculation is enabled.
      */
     void recalc();
-    
-    
+
+
     /** handles the fact that a cell has been changed - updates
     things that need to be updated */
     void valueChanged (Cell *cell);
@@ -988,15 +988,15 @@ public:
     bool insertChild( const KoRect& _geometry, KoDocumentEntry& );
 
     bool insertChart( const KoRect& _geometry, KoDocumentEntry&, const QRect& _data );
-    
-    
+
+
     /**
      * Creates a new embedded picture object and inserts it into the sheet next to the currently
      * selected cell.
      *
      * TODO:  Remove this method in future and provide a better way of opening pictures and inserting
      * them into the sheet.
-     * 
+     *
      * @param file The URL of the file to insert.
      * @param point The the top-left point in the sheet where the picture should be inserted.
      */
@@ -1009,7 +1009,7 @@ public:
      * @param pixmap The source pixmap for the new picture
      */
     bool insertPicture( const KoPoint& point, const QPixmap& pixmap );
-    
+
     void changeChildGeometry( EmbeddedKOfficeObject *_child, const KoRect& _geometry );
 
     const QColorGroup& colorGroup() { return widget()->colorGroup(); }
@@ -1270,7 +1270,7 @@ protected slots:
 protected:
      /** Updates dependencies for all cells on this sheet */
      void updateAllDependencies();
-     
+
     /**
      * Change the name of a sheet in all formulas.
      * When you change name sheet Sheet1 -> Price
@@ -1351,7 +1351,7 @@ private:
      * document's picture collection before calling this method.
      */
     bool insertPicture( const KoPoint& point, KoPicture& picture );
-    
+
     bool FillSequenceWithInterval (QPtrList<Cell>& _srcList,
            QPtrList<Cell>& _destList,
            QPtrList<AutoFillSequence>& _seqList,
