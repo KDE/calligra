@@ -347,6 +347,7 @@ void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 }
 
 KHTMLReader::~KHTMLReader(){
+	delete _html;
 }
 
 
