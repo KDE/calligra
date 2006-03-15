@@ -115,8 +115,8 @@ double Format::globalColWidth()
 void Format::copy( const Format & _l )
 {
   // TODO why is the sheet not copied?
-  if ( m_pStyle && m_pStyle->release() )
-    delete m_pStyle;
+//   if ( m_pStyle && m_pStyle->release() )
+//     delete m_pStyle;
 
   //WHY? - m_pStyle = new Style( _l.m_pStyle );
   //NOTSUREABOUTHIS
@@ -125,7 +125,7 @@ void Format::copy( const Format & _l )
   //using the existing format's style and incrementing the style's
   //reference count
   setStyle( _l.m_pStyle );
-  
+
   m_mask        = _l.m_mask;
   m_flagsMask   = _l.m_flagsMask;
   m_bNoFallBack = _l.m_bNoFallBack;
@@ -231,9 +231,18 @@ void Format::setNoFallBackProperties( Properties p )
 /////////////
 
 
-QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle )
+QString Format::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles )
 {
-    return m_pStyle->saveOasis( currentCellStyle, mainStyle );
+  QString styleName;
+  styleName = m_pStyle->saveOasis( currentCellStyle, mainStyles );
+
+    // user styles are already stored
+  if ( currentCellStyle.type() == Doc::STYLE_CELL_AUTO )
+  {
+    styleName = mainStyles.lookup( currentCellStyle, "ce" );
+  }
+
+  return styleName;
 }
 
 QDomElement Format::saveFormat( QDomDocument & doc, int _col, int _row, bool force, bool copy ) const
@@ -933,7 +942,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
             setVerticalText( false );
     }
 
-    //kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
+    kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
         setBgColor( QColor( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) ) );

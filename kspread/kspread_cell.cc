@@ -570,7 +570,7 @@ void Cell::removeValidity()
 void Cell::copyFormat( const int column , const int row )
 {
     const Cell * cell = format()->sheet()->cellAt( column , row );
-    
+
     copyFormat( cell );
 }
 
@@ -581,7 +581,7 @@ void Cell::copyFormat( const Cell* cell )
 
     d->value.setFormat(cell->d->value.format());
     format()->copy(*(cell->format()));
-    
+
     /*format()->setAlign( cell->format()->align( _column, _row ) );
     format()->setAlignY( cell->format()->alignY( _column, _row ) );
     format()->setTextFont( cell->format()->textFont( _column, _row ) );
@@ -5328,15 +5328,7 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
         currentCellStyle = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
         d->extra()->conditions->saveOasisConditions( currentCellStyle );
     }
-    QString styleName;
-    styleName = format()->saveOasisCellStyle( currentCellStyle, mainStyles );
-
-    // user styles are already stored
-    if ( currentCellStyle.type() == Doc::STYLE_CELL_AUTO )
-    {
-        styleName = mainStyles.lookup( currentCellStyle, "ce" );
-    }
-    return styleName;
+    return format()->saveOasisCellStyle( currentCellStyle, mainStyles );
 }
 
 

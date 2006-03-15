@@ -5604,7 +5604,7 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
   for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
   {
     QRect range = (*it)->rect().normalize();
-    
+
     // Entire rows selected ?
     if ( util_isRowSelected(range) )
     {
@@ -6666,7 +6666,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     {
         QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
         kdDebug()<<" default-cell-style-name :"<<str<<endl;
-        const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
+        const QDomElement *style = oasisStyles.findStyle( str, "table-cell" );
         kdDebug()<<"default column style :"<<style<<endl;
         if ( style )
         {
