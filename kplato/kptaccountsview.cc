@@ -257,13 +257,14 @@ void AccountsView::slotUpdate() {
         QDate dt = start;
         QDate pend = cal->addDays(dt, 7 + weekStartDay - 1 - cal->dayOfWeek(dt));
         for (; pend <= end; ++c) {
+            //kdDebug()<<k_funcinfo<<c<<": "<<dt<<"-"<<pend<<" : "<<end<<endl;
             int y;
             int w = cal->weekNumber(dt, &y);
             QString t = i18n("<week>-<year>", "%1-%2").arg(w).arg(y);
             m_dlv->addSlaveColumn(t);
             dt = pend.addDays(1);
             pend = cal->addDays(pend, 7);
-            if (pend.weekNumber() == end.weekNumber()) {
+            if ((pend.year() == end.year()) && (pend.weekNumber() == end.weekNumber())) {
                 pend = end;
             }
         }
@@ -288,7 +289,7 @@ void AccountsView::slotUpdate() {
                 m_cumulative ? item->setTotal(cost) : item->addToTotal(cost);
                 d = pend.addDays(1); // 1. next week
                 pend = cal->addDays(pend, 7);
-                if (pend.weekNumber() == end.weekNumber()) {
+                if ((pend.year() == end.year()) && (pend.weekNumber() == end.weekNumber())) {
                     pend = end;
                 }
             }
@@ -309,7 +310,7 @@ void AccountsView::slotUpdate() {
         
             dt = pend.addDays(1); // 1. next month
             pend = cal->addDays(pend, dt.daysInMonth());
-            if (pend.month() == end.month()) {
+            if ((pend.year() == end.year()) && (pend.month() == end.month())) {
                 pend = end;
             }
         }
@@ -334,7 +335,7 @@ void AccountsView::slotUpdate() {
                 m_cumulative ? item->setTotal(cost) : item->addToTotal(cost);
                 d = pend.addDays(1); // 1. next month
                 pend = cal->addDays(pend, d.daysInMonth());
-                if (pend.month() == end.month()) {
+                if ((pend.year() == end.year()) && (pend.month() == end.month())) {
                     pend = end;
                 }
             }
