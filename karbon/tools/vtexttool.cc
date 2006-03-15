@@ -387,14 +387,13 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	m_convertToShapes->setEnabled( true );
 
-	// TODO: Find a way to display correctly the following icons...
-	m_textAlignment->insertItem( i18n( "Left") );
-	m_textAlignment->insertItem( i18n( "Center") );
-	m_textAlignment->insertItem( i18n( "Right") );
+	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Left") );
+	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Center") );
+	m_textAlignment->insertItem( i18n( "Horizontal alignment", "Right") );
 
-	m_textPosition->insertItem( i18n( "Above") );
-	m_textPosition->insertItem( i18n( "On") );
-	m_textPosition->insertItem( i18n( "Under") );
+	m_textPosition->insertItem( i18n( "Vertical alignment", "Above") );
+	m_textPosition->insertItem( i18n( "Vertical alignment", "On") );
+	m_textPosition->insertItem( i18n( "Vertical alignment", "Under") );
 
 	m_textOffset->setRange( 0.0, 100.0, 1.0, true );
 
@@ -692,7 +691,7 @@ VTextTool::mouseButtonRelease()
 			return;
 	}
 
-	if( dynamic_cast<VText*>( selObj ) )
+	if( dynamic_cast<VText*>( selObj ) && selObj->boundingBox().contains( last() ) )
 		m_optionsWidget->setCaption( i18n( "Change Text") );
 	else 
 		m_optionsWidget->setCaption( i18n( "Insert Text") );
@@ -1120,9 +1119,9 @@ VTextTool::showDialog() const
 		return false;
 
 	if( dynamic_cast<VText*>( selection->objects().getFirst() ) )
-		m_optionsWidget->setCaption( "Change Text" );
+		m_optionsWidget->setCaption(i18n( "Change Text") );
 	else 
-		m_optionsWidget->setCaption( "Insert Text" );
+		m_optionsWidget->setCaption(i18n( "Insert Text") );
 
 	m_optionsWidget->show();
 	return true;

@@ -32,7 +32,7 @@ VSelectionDescription::visitVSelection( VSelection& selection )
 	if( selection.objects().count() == 1 )
 		VVisitor::visitVSelection( selection );
 	else
-		m_desc = i18n( QString( "%1 objects" ).arg( selection.objects().count() ).latin1() );
+		m_desc = i18n( "%1 objects" ).arg( selection.objects().count() );
 }
 
 void
@@ -44,7 +44,7 @@ VSelectionDescription::visitVPath( VPath& composite )
 void
 VSelectionDescription::visitVGroup( VGroup &group )
 {
-	m_desc = i18n( QString( "1 group, containing %1 objects" ).arg( group.objects().count() ).latin1() );
+	m_desc = i18n( "1 group, containing %1 objects" ).arg( group.objects().count() );
 	m_shortdesc = !group.name().isEmpty() ? group.name() : i18n( "group" );
 }
 
