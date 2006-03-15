@@ -576,7 +576,7 @@ void View::slotProjectCalculatePessimistic() {
 }
 
 void View::projectCalculate() {
-    if (getProject().actualEffort() > 0) {
+    if (false /*getProject().actualEffort() > 0*/) {
         // NOTE: This can be removed when proper baselining etc is implemented
         if (KMessageBox::warningContinueCancel(this, i18n("Progress information will be deleted if the project is recalculated."), i18n("Calculate"), i18n("Calculate")) == KMessageBox::Cancel) {
             return;
@@ -586,7 +586,7 @@ void View::projectCalculate() {
     Schedule *ns = getProject().findSchedule((Schedule::Type)m_currentEstimateType);
     KCommand *cmd;
     if (ns) {
-        cmd = new RecalculateProjectCmd(getPart(), getProject(), *ns, "Calculate");
+        cmd = new RecalculateProjectCmd(getPart(), getProject(), *ns, i18n("Calculate"));
     } else  {
         cmd = new CalculateProjectCmd(getPart(), getProject(), i18n("Standard"), (Effort::Use)m_currentEstimateType, i18n("Calculate"));
     }

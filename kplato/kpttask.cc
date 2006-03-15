@@ -397,9 +397,13 @@ Duration Task::actualEffort() {
         for (; it.current(); ++it) {
             eff += it.current()->actualEffort();
         }
+    } else {
+        eff = m_progress.totalPerformed;
+    }
+    /* If we want to register pr resource...
     } else if (m_currentSchedule) {
         eff = m_currentSchedule->actualEffort();
-    }
+    }*/
     return eff;
 }
 

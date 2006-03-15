@@ -157,7 +157,7 @@
                         <cstring>actualEffort</cstring>
                     </property>
                     <property name="enabled">
-                        <bool>false</bool>
+                        <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
                         <enum>TabFocus</enum>
