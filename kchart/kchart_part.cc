@@ -5,6 +5,11 @@
 
 #include <float.h> // For basic data types characteristics.
 
+// For debugging
+#include <iostream>
+using std::cout;
+using std::cerr;
+
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
@@ -82,6 +87,9 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 
     // Display parameters
     m_displayData = m_currentData;
+
+    // Set the size to minimal.
+    initEmpty();
 }
 
 
@@ -105,11 +113,11 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     QString f;
 
-    //Embedded documents are initially created like a normal empty document.  If this is in KSpread or another
-    //program where the data is external then the document will be updated later on in the creation process
-    //anyway.
-    if (flags == KoDocument::InitDocEmbedded)
-    {
+    // Embedded documents are initially created like a normal empty
+    // document.  If this is in KSpread or another program where the
+    // data is external then the document will be updated later on in
+    // the creation process anyway.
+    if (flags == KoDocument::InitDocEmbedded) {
 	initEmpty();
 	return true;
     }
@@ -181,9 +189,11 @@ void KChartPart::initNullChart()
     // Fill cells with data if there is none.
     //kdDebug(35001) << "Initialize null chart." << endl;
 
-    // Empty data.
-    // Note, we don't use (0,0) for the size here, because otherwise KDChart won't draw anything
-    m_currentData.expand(1, 1);
+    // Empty data.  Note, we don't use (0,0) or (1,1) for the size
+    // here, because otherwise KDChart won't draw anything
+    m_currentData.expand(2, 2);
+    m_params->setFirstRowAsLabel(true);
+    m_params->setFirstColAsLabel(true);
 
     // Fill column and row labels.
     m_colLabels << QString("");
