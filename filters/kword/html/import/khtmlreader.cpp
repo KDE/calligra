@@ -303,15 +303,6 @@ void KHTMLReader::parseStyle(DOM::Element e) {
 
 void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
 
-        // For every starting paragraph, a line break has to be inserted.
-        // exception: the first paragraph, e.g. if the <body> starts with a <p>.
-        static bool firstparagraph=true;
-        if (firstparagraph)
-        {
-          firstparagraph=false;
-          return;
-        }
-
 	QDomElement qf=state()->format;
 	QDomElement ql=state()->layout;
 
@@ -395,7 +386,16 @@ bool KHTMLReader::parse_a(DOM::Element e) {
 }
 
 bool KHTMLReader::parse_p(DOM::Element e) {
-	startNewParagraph();
+        // For every starting paragraph, a line break has to be inserted.
+        // exception: the first paragraph, e.g. if the <body> starts with a <p>.
+        static bool firstparagraph=true;
+        if (firstparagraph)
+        {
+          firstparagraph=false;
+        }
+        else {
+	  startNewParagraph();
+	}
 	parse_CommonAttributes(e);
 	return true;
 }
