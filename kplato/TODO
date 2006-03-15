@@ -14,25 +14,11 @@ Status      Description
 --------------------------------------------------------------------------------
 Taken       User manual (contact: raphael.langerhorst@kdemail.net)
             
-Taken       Cost Breakdown Structure:
-            - Define account class/list and necessary dialogs.
-            - Task cost specification (which shall link to accounts, resources).
-            - Resource cost specification.
-            - Implement calculation of planned cost (part of calculating/scheduling 
-              the project).
-            
             Find a solution for the durationwidget.
             It's now a custom widget mainly comprised by QLineEdits.
             This doesn't work well. One problem is that QLineEdit gives
             sizehints of approx 14 charachters minimum and we use 2-3, so
             it messes up layouting.
-            
-            Fix default values for "standard worktime" (and maybe a new name?).
-            This should maybe be part of templates.
-            
-            Remove Networkview.
-
-            Resourceview: Improve
             
             Resourceuseview: Scrap existing and use KChart instead.
             Removed for now. Charting probably not added until after release.
@@ -43,11 +29,7 @@ Taken       Cost Breakdown Structure:
             Task details view: Improve, make it stand-alone? Convert to
             a "infoview"? (as todos in KDE-PIM?)
             
-            Implement embedding into other koffice apps.
-            
-            Fix 'embedding' into koshell.
-            
-            Cut, copy, paste: Implement or remove.
+            Cut, copy, paste.
             
             Start-to-finish relation.
             
@@ -67,8 +49,6 @@ Taken       Cost Breakdown Structure:
             - etc
             
             Calendars:
-            - Improve calendars dialogs
-            - Implement hierachical calendars
             - Timezone handling
 
             Improve Progress info dialog/presentation.
@@ -93,8 +73,6 @@ Taken       Cost Breakdown Structure:
             
             Restrict modification of started/finished tasks.
 
-            Autogenerate task id.
-            
             Interface to PIM
             - Issue todos and docs
             - Fetch freebusy info (Prob: how to sync if we recalculate?)
@@ -116,15 +94,39 @@ Taken       Cost Breakdown Structure:
             
             Taskjuggler???
             
-            Implement multiple scheduling. (Expected, optimistic, pessimistic)
-            
-            Make a summarytask dialog.
-            
             Change source filenames to 'classname'.cpp and d:o .h
             Eg: kpttask.cc -> Task.cpp kpttask.h -> Task.h
             Also remove the .ui filename prefix.
 ------------------------------------------------------------------
+Done        Remove Networkview.
 
+Done        Resourceview: Improve
+            
+
+Done        Fix default values for "standard worktime" (and maybe a new name?).
+            This should maybe be part of templates.
+            
+Done        Implement embedding into other koffice apps.
+            
+Done        Fix 'embedding' into koshell.
+            
+Done        Calendars:
+            - Improve calendars dialogs
+            - Implement hierachical calendars
+
+Done        Autogenerate task id.
+            
+Done        Implement multiple scheduling. (Expected, optimistic, pessimistic)
+            
+Done        Make a summarytask dialog.
+            
+Done        Cost Breakdown Structure:
+            - Define account class/list and necessary dialogs.
+            - Task cost specification (which shall link to accounts, resources).
+            - Resource cost specification.
+            - Implement calculation of planned cost (part of calculating/scheduling 
+              the project).
+            
 Done        Remove KPT prefix from all KPlato classes (ask mailing list!)
 
 Done        Requirements specification
