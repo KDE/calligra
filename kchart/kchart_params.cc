@@ -502,9 +502,22 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
 }
 
 
+QString KChartParams::saveOasisFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color ) const
+{
+    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
+    KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "chart", 0 );
+    autoStyle.addProperty( "fo:font-family", font.family(), tt );
+    autoStyle.addPropertyPt( "fo:font-size", font.pointSize(), tt );
+    autoStyle.addProperty( "fo:color", color.isValid() ? color.name() : "#000000", tt );
+    int w = font.weight();
+    autoStyle.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound(  w / 10 ) * 100 ), tt );
+    autoStyle.addProperty( "fo:font-style", font.italic() ? "italic" : "normal", tt );
+
+    return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
+}
+
 void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const
 {
-    Q_UNUSED( mainStyles );
     bool knownType = false;
     for ( unsigned int i = 0 ; i < numOasisChartTypes ; ++i ) {
         if ( m_chartType == oasisChartTypes[i].chartType ) {
@@ -519,6 +532,10 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     }
 
     bodyWriter->startElement( "chart:title" );
+    QRect rect( headerFooterRect( KDChartParams::HdFtPosHeader ) );
+    bodyWriter->addAttribute( "svg:x", rect.x() );
+    bodyWriter->addAttribute( "svg:y", rect.y() );
+    bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, header1Font(), headerFooterColor( KDChartParams::HdFtPosHeader ) ) );
     bodyWriter->startElement( "text:p" );
     bodyWriter->addTextNode( header1Text() );
     bodyWriter->endElement(); // text:p
@@ -527,9 +544,18 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     QString subTitle( header2Text() );
     if ( !subTitle.isEmpty() )
     {
+
+        kdDebug(32001) << "header rect: " << headerFooterRect( KDChartParams::HdFtPosHeader2 ) << endl;
+        QRect rect( headerFooterRect( KDChartParams::HdFtPosHeader2 ) );
         bodyWriter->startElement( "chart:subtitle" );
+        bodyWriter->addAttribute( "svg:x", rect.x() );
+        bodyWriter->addAttribute( "svg:y", rect.y() );
+        bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
+                                                                     header2Font(), 
+                                                                     headerFooterColor( KDChartParams::HdFtPosHeader2 ) ) );
+
         bodyWriter->startElement( "text:p" );
-        bodyWriter->addTextNode( header2Text() );
+        bodyWriter->addTextNode( subTitle );
         bodyWriter->endElement(); // text:p
         bodyWriter->endElement(); // chart:title
     }

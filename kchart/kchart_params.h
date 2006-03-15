@@ -126,6 +126,8 @@ public slots:
     void saveOasisAxis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles,
                         KDChartAxisParams::AxisPos axisPos, const char* axisName ) const;
 
+    QString saveOasisFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color ) const;
+    
  private:
     KChartPart    *m_part;
 
