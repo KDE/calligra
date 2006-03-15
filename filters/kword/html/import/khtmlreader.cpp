@@ -55,6 +55,7 @@ bool KHTMLReader::filter(KURL url) {
 	_html->setJScriptEnabled(false);
 	_html->setPluginsEnabled(false);
 	_html->setJavaEnabled(false);
+	_html->setMetaRefreshEnabled(false);
 	if (_html->openURL(url) == false) {
 		kdWarning(30503) << "openURL returned false" << endl;
 		return false;
