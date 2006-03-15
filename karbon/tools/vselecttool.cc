@@ -417,8 +417,13 @@ VSelectTool::updateStatusBar() const
 	{
 		KoRect rect = view()->part()->document().selection()->boundingBox();
 
+		double x = KoUnit::toUserValue( rect.x(), view()->part()->unit() );
+		double y = KoUnit::toUserValue( rect.y(), view()->part()->unit() );
+		double r = KoUnit::toUserValue( rect.right(), view()->part()->unit() );
+		double b = KoUnit::toUserValue( rect.bottom(), view()->part()->unit() );
+
 		// print bottom-left (%1,%2), top-right (%3,%4) corner of selection bounding box and document unit (%5)
-		QString selectMessage = QString( i18n( "Selection [(%1, %2), (%3, %4)] (%5)") ).arg( KoUnit::toUserValue( rect.x(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::toUserValue( rect.y(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::toUserValue( rect.right(), view()->part()->unit() ), 0, 'f', 1 ).arg( KoUnit::toUserValue( rect.bottom(), view()->part()->unit() ), 0, 'f', 1 ).arg( view()->part()->unitName() );
+		QString selectMessage = i18n( "[(left,bottom), (right,top)] (actual unit)", "Selection [(%1, %2), (%3, %4)] (%5)").arg( x, 0, 'f', 1 ).arg( y, 0, 'f', 1 ).arg( r, 0, 'f', 1 ).arg( b, 0, 'f', 1 ).arg( view()->part()->unitName() );
 
 		VSelectionDescription selectionDesc;
 		selectionDesc.visit( *view()->part()->document().selection() );
