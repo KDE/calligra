@@ -937,8 +937,8 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
     setChartDefaults();
 
     QDomElement  content = doc.documentElement();
-    QDomElement  bodyElem ( KoDom::namedItemNS( content, KoXmlNS::office,
-						"body" ) );
+    QDomElement  bodyElem ( KoDom::namedItemNS( content, 
+						KoXmlNS::office, "body" ) );
     if ( bodyElem.isNull() ) {
         kdError(32001) << "No office:body found!" << endl;
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
