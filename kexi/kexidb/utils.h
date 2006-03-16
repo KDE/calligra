@@ -158,6 +158,7 @@ namespace KexiDB
 
 			//! \return name of a query or table
 			QCString name() const;
+
 			//! \return caption (if present) or name of the table/query
 			QString captionOrName() const;
 
@@ -171,6 +172,15 @@ namespace KexiDB
 			/*! Like Field* field(const QString& name);
 			 but returns all information associated with field/column \a name. */
 			QueryColumnInfo* columnInfo(const QString& name);
+
+			/*! \return connection object, for table or query or 0 if there's no table or query defined. */
+			Connection* connection() const;
+
+			/*! \return String for debugging purposes. */
+			QString debugString();
+
+			/*! Shows debug information about table or query. */
+			void debug();
 
 		protected:
 			QCString m_name; //!< the name is kept here because m_table and m_table can be 0
@@ -197,7 +207,7 @@ namespace KexiDB
 	/*! \return a number of columns that can be retrieved from table or query schema. 
 	 In case of query, expanded fields are counted. Can return -1 if \a tableOrQuery 
 	 has neither table or query assigned. */
-	KEXI_DB_EXPORT int fieldCount(KexiDB::TableOrQuerySchema& tableOrQuery);
+	KEXI_DB_EXPORT int fieldCount(TableOrQuerySchema& tableOrQuery);
 
 	/*! shows connection test dialog with a progress bar indicating connection testing 
 	 (within a second thread).

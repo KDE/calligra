@@ -279,6 +279,33 @@ QueryColumnInfo* TableOrQuerySchema::columnInfo(const QString& name)
 	return 0;
 }
 
+QString TableOrQuerySchema::debugString()
+{
+	if (m_table)
+		return m_table->debugString();
+	else if (m_query)
+		return m_query->debugString();
+	return QString::null;
+}
+
+void TableOrQuerySchema::debug()
+{
+	if (m_table)
+		return m_table->debug();
+	else if (m_query)
+		return m_query->debug();
+}
+
+Connection* TableOrQuerySchema::connection() const
+{
+	if (m_table)
+		return m_table->connection();
+	else if (m_query)
+		return m_query->connection();
+	return 0;
+}
+
+
 //------------------------------------------
 
 class ConnectionTestThread : public QThread {

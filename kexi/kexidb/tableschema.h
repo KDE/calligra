@@ -125,9 +125,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		/*! \return query schema object that is defined by "select * from <this_table_name>"
 		 This query schema object is owned by the table schema object.
-		 It is convenient way to get such a query when it is available otherwise.
-		 Always returns non-0.
-		*/
+		 It is convenient way to get such a query when it is not available otherwise.
+		 Always returns non-0. */
 		QuerySchema* query();
 
 		/*! \return any field not being a part of primary key of this table.
