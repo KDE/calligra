@@ -146,7 +146,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"expndtw",	ignoreKeyword,		0L, 0 ), // Expansion/compression of character inter-space not supported
 	MEMBER(	0L,		"f",		setNumericProperty,	state.format.font, 0 ),
 	MEMBER(	"@rtf",		"facingp",	setFlagProperty,	facingPages, true ),
-	PROP(	0L,		"fcharset",	ignoreKeyword,		0L, 0 ), // Not needed with Qt
+	PROP(	0L,		"fcharset",	setCharset,		0L, 0 ), // Not needed with Qt
 	PROP(	"@fonttbl",	"fdecor",	setFontStyleHint,	0L, QFont::Decorative ),
 	MEMBER(	0L,		"fi",		setNumericProperty,	state.layout.firstIndent, 0 ),
 	PROP(	"@fonttbl",	"fmodern",	setFontStyleHint,	0L, QFont::TypeWriter ),
@@ -865,6 +865,12 @@ void RTFImport::setToggleProperty( RTFProperty *property )
 void RTFImport::setFlagProperty( RTFProperty *property )
 {
     ((bool *)this)[property->offset] = property->value;
+}
+
+void RTFImport::setCharset( RTFProperty *property )
+{
+    if(token.value >= 0)
+        setCodepage(property);
 }
 
 void RTFImport::setNumericProperty( RTFProperty *property )

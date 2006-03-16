@@ -297,6 +297,12 @@ public:
      */
     void setFlagProperty( RTFProperty *property );
     /**
+     * Sets the charset.
+     * @param property the property to set
+     * @deprecated not portable, as it needs an out-of-specification use of offsetof
+     */
+    void setCharset( RTFProperty *property );
+    /**
      * Sets the value of a numeric RTF property specified by token.
      * @param property the property to set
      * @deprecated not portable, as it assumes that an enum is a char
