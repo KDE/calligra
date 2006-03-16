@@ -819,14 +819,10 @@ TODO: entering table/query name by hand doesn't work in 'form data source' combo
 TODO:
 - add --readonly option
 
-BETA1 TODO:
+TODO:
 - if you place e.g. a label in a container like a tabwidget and doubleclick it to edit the content, 
   the label jumps around. ccpasteur said he fixed it last year ;)
 - only change bg color of tab widget, not its outer area; fix changing tabs bg color
-
-Queries
-- when a field has been added to query, form designer should know about this; 
-  now even reopening the form doesn't refresh query schema (only reopening the project)
 
 HOT TODO:
 - ask for password when .kexis or .kexic file has no password defined
