@@ -64,7 +64,7 @@ class KChartParams : public KDChartParams
 
     KChartParams( KChartPart *_part );
     ~KChartParams();
-
+    void loadOasisFont(KoOasisLoadingContext&, QFont&, QColor&);
     // Reimplementation of selected KDChartParams methods
     ChartType  chartType() const            { return m_chartType; }
     void       setChartType( ChartType _type ) {
