@@ -67,12 +67,12 @@ using namespace KSpread;
 Format::Format( Sheet * _sheet, Style * _style )
   : m_pSheet( _sheet ),
     m_pStyle( _style ),
-    m_strComment( 0 )
+    m_mask( 0 ),
+    m_bNoFallBack( 0 ),
+    m_flagsMask( 0 ),
+    m_strComment( 0 ),
+    m_pCell( 0 )
 {
-  m_mask = 0;
-  m_flagsMask = 0;
-  m_bNoFallBack = 0;
-  m_pCell = 0;
 }
 
 Format::~Format()
@@ -512,7 +512,7 @@ bool Format::loadFormat( const QDomElement & f, Paste::Mode pm, bool paste )
     else
     if ( f.hasAttribute( "parent" ) )
     {
-      CustomStyle * s = (CustomStyle *) m_pSheet->doc()->styleManager()->style( f.attribute( "parent" ) );
+      CustomStyle* s = static_cast<CustomStyle*>( m_pSheet->doc()->styleManager()->style( f.attribute( "parent" ) ) );
       //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
 
       if ( s )
@@ -1061,7 +1061,9 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
     {
         //kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
-        const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
+      const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
+      if ( style )
+      {
         //kdDebug()<<" style :"<<style<<endl;
         KoStyleStack drawStyleStack;
         drawStyleStack.push( *style );
@@ -1080,6 +1082,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
             else
                 kdDebug()<<" fill style not supported by kspread : "<<fill<<endl;
         }
+      }
     }
 
     return true;

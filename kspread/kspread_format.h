@@ -97,12 +97,23 @@ public:
     };
 
     /**
-     * don't pass in 0 for _style: only if you copy another format on this directly after...
+     * Constructor.
+     * @param sheet The sheet this format belongs to.
+     * @todo The format should not belong to a sheet. The cell belongs to a sheet. Move
+     * the sheet pointer to Cell.
+     * @param style The style this format should use.
+     * You should pass @c 0 in here, only if you copy another Format on
+     * this directly after.
      */
-    Format( Sheet * _sheet, Style * _style );
+    Format( Sheet* sheet, Style* style );
+    /**
+     * Destructor.
+     * The associated style's reference counter is decremented and if it has no further
+     * references, it is deleted.
+     */
     virtual ~Format();
 
-    void copy( const Format & _l );
+    void copy( const Format& other );
 
     void defaultStyleFormat();
 
@@ -252,7 +263,7 @@ public:
     void setHideFormula( bool _b );
 
     void setCurrency( Currency const & c );
-    virtual void setCurrency( int type, QString const & symbol );
+    void setCurrency( int type, QString const & symbol );
 
     ////////////////////////////////
     //
@@ -292,7 +303,7 @@ public:
     Qt::PenStyle goUpDiagonalStyle( int col, int row ) const;
     const QColor& goUpDiagonalColor( int col, int row ) const;
 
-    virtual const QBrush& backGroundBrush( int col, int row ) const;
+    const QBrush& backGroundBrush( int col, int row ) const;
     Qt::BrushStyle backGroundBrushStyle( int col, int row ) const;
     const QColor& backGroundBrushColor(int col, int row ) const;
 
@@ -334,9 +345,9 @@ public:
      *
      * @return the background color.
      */
-    virtual const QColor& bgColor( int col, int row ) const;
+    const QColor& bgColor( int col, int row ) const;
 
-    virtual const QFont textFont( int col, int row ) const;
+    const QFont textFont( int col, int row ) const;
     int textFontSize( int col, int row ) const;
     QString const & textFontFamily( int col, int row ) const;
     bool textFontBold( int col, int row ) const;
@@ -448,11 +459,11 @@ public:
     RowFormat( Sheet * _sheet, int _row );
     ~RowFormat();
 
-    virtual DCOPObject* dcopObject();
+    DCOPObject* dcopObject();
 
-    virtual QDomElement save( QDomDocument&, int yshift = 0, bool copy = false ) const;
-    virtual bool load( const QDomElement& row, int yshift = 0, Paste::Mode sp = Paste::Normal, bool paste = false );
-    virtual bool loadOasis( const QDomElement& row, QDomElement * rowStyle );
+    QDomElement save( QDomDocument&, int yshift = 0, bool copy = false ) const;
+    bool load( const QDomElement& row, int yshift = 0, Paste::Mode sp = Paste::Normal, bool paste = false );
+    bool loadOasis( const QDomElement& row, QDomElement * rowStyle );
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -500,7 +511,7 @@ public:
     /**
      * @reimp
      */
-    bool isDefault() const;
+    virtual bool isDefault() const;
 
     /**
      * @return the row for this RowFormat. May be 0 if this is the default format.
@@ -546,11 +557,11 @@ protected:
     /**
      * @reimp
      */
-    Format* fallbackFormat( int col, int row );
+    virtual Format* fallbackFormat( int col, int row );
     /**
      * @reimp
      */
-    const Format* fallbackFormat( int col, int row ) const;
+    virtual const Format* fallbackFormat( int col, int row ) const;
 
     /**
      * Width of the cell in unzoomed points.
@@ -587,9 +598,9 @@ public:
     ColumnFormat( Sheet *_sheet, int _column );
     ~ColumnFormat();
 
-    virtual QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;
-    virtual bool load( const QDomElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
-    virtual DCOPObject* dcopObject();
+    QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;
+    bool load( const QDomElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
+    DCOPObject* dcopObject();
 
     /**
      * @param _canvas is needed to get information about the zooming factor.
@@ -640,7 +651,7 @@ public:
     /**
      * @reimp
      */
-    bool isDefault() const;
+    virtual bool isDefault() const;
 
     /**
      * @return the column of this ColumnFormat. May be 0 if this is the default format.
@@ -662,19 +673,19 @@ public:
     /**
      * @reimp
      */
-    const QPen& rightBorderPen( int col, int row ) const;
+    virtual const QPen& rightBorderPen( int col, int row ) const;
     /**
      * @reimp
      */
-    void setRightBorderPen( const QPen& p );
+    virtual void setRightBorderPen( const QPen& p );
     /**
      * @reimp
      */
-    const QPen& leftBorderPen( int col, int row ) const;
+    virtual const QPen& leftBorderPen( int col, int row ) const;
     /**
      * @reimp
      */
-    void setLeftBorderPen( const QPen& p );
+    virtual void setLeftBorderPen( const QPen& p );
 
     void setHide( bool _hide );
     bool isHide()const { return m_bHide;}

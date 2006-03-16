@@ -50,7 +50,7 @@ static uint calculateValue( QPen const & pen )
 Style::Style()
   : m_parent( 0 ),
     m_type( AUTO ),
-    m_usageCount( 0 ),
+    m_usageCount( 1 ),
     m_featuresSet( 0 ),
     m_alignX( Format::Undefined ),
     m_alignY( Format::Middle ),
@@ -463,6 +463,8 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
 
         const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
         kdDebug()<<" style :"<<style<<endl;
+      if ( style )
+      {
         KoStyleStack drawStyleStack;
         drawStyleStack.push( *style );
         drawStyleStack.setTypeProperties( "graphic" );
@@ -480,6 +482,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
             else
                 kdDebug()<<" fill style not supported into kspread : "<<fill<<endl;
         }
+      }
     }
 
 #if 0
@@ -2664,6 +2667,7 @@ CustomStyle::CustomStyle()
   : Style(),
     m_name( i18n("Default") )
 {
+  m_type   = BUILTIN;
   m_parent = 0;
 }
 

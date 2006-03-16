@@ -35,8 +35,6 @@ using namespace KSpread;
 StyleManager::StyleManager()
   : m_defaultStyle( new CustomStyle() )
 {
-  m_defaultStyle->setName( i18n( "Default" ) );
-  m_defaultStyle->setType( Style::BUILTIN );
 }
 
 StyleManager::~StyleManager()
@@ -75,7 +73,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     }
 }
 
-void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
+void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 {
     // loading default style first
     const QDomElement* defaultStyle = oasisStyles.defaultStyle( "table-cell" );
@@ -83,6 +81,7 @@ void StyleManager::loadOasisStyleTemplate(  KoOasisStyles& oasisStyles )
     {
       m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, i18n( "Default" ) );
       m_defaultStyle->setType( Style::BUILTIN );
+      kdDebug() << "StyleManager: default cell style loaded!" << endl;
     }
     else
     {

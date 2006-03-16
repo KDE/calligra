@@ -6391,11 +6391,14 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
                         QString masterPageLayoutStyleName = masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString::null );
                         kdDebug()<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
                         const QDomElement *masterLayoutStyle = oasisContext.oasisStyles().findStyle( masterPageLayoutStyleName );
+                      if ( masterLayoutStyle )
+                      {
                         kdDebug()<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
                         KoStyleStack styleStack;
                         styleStack.setTypeProperties( "page-layout" );
                         styleStack.push( *masterLayoutStyle );
                         loadOasisMasterLayoutPage( styleStack );
+                      }
                     }
                 }
             }
@@ -6682,8 +6685,11 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     {
         QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
         const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
+      if ( style )
+      {
         styleStack.push( *style );
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
+      }
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "column-width" ) )
@@ -6742,6 +6748,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     {
         QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
         const QDomElement *style = oasisContext.oasisStyles().findStyle( str, "table-row" );
+      if ( style )
         styleStack.push( *style );
   //      kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }

@@ -5618,11 +5618,14 @@ bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisCo
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         const QDomElement* style = oasisContext.oasisStyles().findStyle( str, "table-cell" );
         //kdDebug()<<" style :"<<style<<endl;
+        if ( style )
+        {
 /*        KoStyleStack styleStack;
         styleStack.push( *style );
         styleStack.setTypeProperties( "table-cell" );*/
-        format()->loadOasisStyle( *style, oasisContext );
-        loadOasisConditional( const_cast<QDomElement *>( style ) );
+          format()->loadOasisStyle( *style, oasisContext );
+          loadOasisConditional( const_cast<QDomElement *>( style ) );
+        }
     }
    // QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
 

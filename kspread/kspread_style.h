@@ -112,9 +112,23 @@ public:
       SFontFamily      = 0x80000000
     };
 
+  /**
+   * Constructor.
+   * Creates an empty automatic style.
+   */
   Style();
-  Style( Style * style );
+  /**
+   * Constructor.
+   * Creates an automatic style.
+   * If @p style is a custom or built-in style (e.g. the default style),
+   * @p style becomes the parent style. In this case, features are NOT SET.
+   * @param style The style which features are copied.
+   */
+  Style( Style* style );
 
+  /**
+   * Destructor.
+   */
   virtual ~Style();
 
   /** Returns true if both styles have the same properties */
@@ -371,8 +385,14 @@ protected:
  */
 class CustomStyle : public Style
 {
- public:
-  CustomStyle( Style * parent, QString const & name );
+public:
+  /**
+   * Constructor.
+   * Creates a custom style.
+   * @param style The style which's features are copied.
+   * @param name The name of this style.
+   */
+  CustomStyle( Style * style, QString const & name );
   CustomStyle( QString const & name, CustomStyle * parent );
   ~CustomStyle();
 
@@ -437,6 +457,10 @@ class CustomStyle : public Style
 
   QString              m_name;
 
+  /**
+   * Constructor.
+   * Constructs the default cell style.
+   */
   CustomStyle();
 };
 
