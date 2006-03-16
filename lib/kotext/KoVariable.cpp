@@ -877,8 +877,9 @@ void KoVariable::resize()
     QString txt = text();
 
     width = 0;
+     // size at 100%
     for ( int i = 0 ; i < (int)txt.length() ; ++i )
-        width += fm.charWidth( txt, i ); // size at 100%
+        width += fm.width( txt[i] ); // was fm.charWidth(txt,i), but see drawCustomItemHelper...
     // zoom to LU
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
@@ -972,7 +973,25 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
     else if ( fmt->offsetFromBaseLine() < 0 )
         posY -= 2*fmt->offsetFromBaseLine();
 
-    p->drawText( x, posY, str );
+    //p->drawText( x, posY, str );
+    // We can't just drawText, it wouldn't use the same kerning as the one
+    // that resize() planned for [which is zoom-independent].
+    // We need to do the layout using layout units instead, so for simplicity
+    // I just draw every char individually (whereas KoTextFormatter/KoTextParag
+    // detect runs of text that can be drawn together)
+    const int len = str.length();
+    int xLU = zh->pixelToLayoutUnitX( x );
+    QFontMetrics fm = fmt->refFontMetrics();
+    for ( int i = 0; i < len; ++i )
+    {
+        const QChar ch = str[i];
+        p->drawText( x, posY, ch );
+        // Do like KoTextFormatter: do the layout in layout units.
+        xLU += KoTextZoomHandler::ptToLayoutUnitPt( fm.width( ch ) );
+        // And then compute the X position in pixels from the layout unit X.
+        x = zh->layoutUnitToPixelX( xLU );
+    }
+
     p->restore();
 }
 

@@ -662,15 +662,6 @@ int KoTextParag::nextTabDefault( int, int x )
         return x;
 }
 
-/*void KoTextParag::setPainter( QPainter *p, bool adjust  )
-{
-    pntr = p;
-    for ( int i = 0; i < length(); ++i ) {
-	if ( at( i )->isCustom() )
-	    at( i )->customItem()->setPainter( p, adjust  );
-    }
-}*/
-
 KoTextFormatCollection *KoTextParag::formatCollection() const
 {
     if ( doc )
