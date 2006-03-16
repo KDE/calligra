@@ -119,6 +119,7 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     list[0] += list[1];
     list[1] = 0;
     setSizes(list);
+    m_taskView->hide();
     
     setReadWriteMode(readWrite);
     
