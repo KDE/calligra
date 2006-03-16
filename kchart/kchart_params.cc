@@ -34,6 +34,8 @@ using std::cerr;
 #include <KoDom.h>
 #include <KoOasisLoadingContext.h>
 
+#include <qregexp.h>
+
 #include "kdchart/KDChartParams.h"
 #include "kdchart/KDChartAxisParams.h"
 
@@ -166,6 +168,57 @@ static const unsigned int numOasisChartTypes
 
 // Load the data from an OpenDocument chart:chart element.
 
+void KChartParams::loadOasisFont( KoOasisLoadingContext& context, QFont& font, QColor& color )
+{
+    KoStyleStack& styleStack = context.styleStack();
+    styleStack.setTypeProperties( "text" ); // load all style attributes from "style:text-properties"
+
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "color" ) ) { // 3.10.3
+        color.setNamedColor( styleStack.attributeNS( KoXmlNS::fo, "color" ) ); // #rrggbb format
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" )  // 3.10.9
+            || styleStack.hasAttributeNS( KoXmlNS::style, "font-name" ) ) { // 3.10.8
+        // Hmm, the remove "'" could break it's in the middle of the fontname...
+        QString fontName = styleStack.attributeNS( KoXmlNS::fo, "font-family" ).remove( "'" );
+        if ( fontName.isEmpty() ) {
+            // ##### TODO. This is wrong. style:font-name refers to a font-decl entry.
+            // We have to look it up there, and retrieve _all_ font attributes from it, not just the name.
+            fontName = styleStack.attributeNS( KoXmlNS::style, "font-name" ).remove( "'" );
+        }
+        // 'Thorndale' is not known outside OpenOffice so we substitute it
+        // with 'Times New Roman' that looks nearly the same.
+        if ( fontName == "Thorndale" )
+            fontName = "Times New Roman";
+
+        fontName.remove( QRegExp( "\\sCE$" ) ); // Arial CE -> Arial
+        font.setFamily( fontName );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
+        double pointSize = styleStack.fontSize();
+        font.setPointSizeFloat( pointSize );
+        kdDebug(35001) << "font size: " << pointSize << endl;
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
+        QString fontWeight = styleStack.attributeNS( KoXmlNS::fo, "font-weight" );
+        int boldness;
+        if ( fontWeight == "normal" )
+            boldness = 50;
+        else if ( fontWeight == "bold" )
+            boldness = 75;
+        else
+            // XSL/CSS has 100,200,300...900. Not the same scale as Qt!
+            // See http://www.w3.org/TR/2001/REC-xsl-20011015/slice7.html#font-weight
+            boldness = fontWeight.toInt() / 10;
+        font.setWeight( boldness );
+    }
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-style" ) ) { // 3.10.19
+        if ( styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "italic" ||
+             styleStack.attributeNS( KoXmlNS::fo, "font-style" ) == "oblique" ) { // no difference in kotext
+            font.setItalic( true );
+        }
+    }
+}
+    
 bool KChartParams::loadOasis( const QDomElement     &chartElem,
 			      KoOasisLoadingContext &loadingContext,
                               QString               &errorMessage,
@@ -195,21 +248,57 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
     }
 
     // Title TODO (more details, e.g. font, placement etc)
-    QDomElement  titleElem = KoDom::namedItemNS( chartElem,
+    QDomElement titleElem = KoDom::namedItemNS( chartElem,
 						 KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
+        loadingContext.styleStack().save();
+        loadingContext.fillStyleStack( titleElem, KoXmlNS::chart, "style-name", "chart" );
+        QFont font;
+        QColor color;
+        loadOasisFont( loadingContext, font, color );
+        setHeader1Font( font );
+        setHeaderFooterColor( KDChartParams::HdFtPosHeader, color );
+        loadingContext.styleStack().restore();
+
 	QDomElement  pElem = KoDom::namedItemNS( titleElem,
 						 KoXmlNS::text, "p" );
 	setHeader1Text( pElem.text() );
     }
 
     // Subtitle TODO (more details)
-    QDomElement  subtitleElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
-						    "subtitle" );
+    QDomElement subtitleElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
+						   "subtitle" );
     if ( !subtitleElem.isNull() ) {
+        loadingContext.styleStack().save();
+        loadingContext.fillStyleStack( subtitleElem, KoXmlNS::chart, "style-name", "chart" );
+        QFont font;
+        QColor color;
+        loadOasisFont( loadingContext, font, color );
+        setHeader2Font( font );
+        setHeaderFooterColor( KDChartParams::HdFtPosHeader2, color );
+        loadingContext.styleStack().restore();
+
 	QDomElement  pElem = KoDom::namedItemNS( subtitleElem,
 						 KoXmlNS::text, "p" );
 	setHeader2Text( pElem.text() );
+    }
+
+    // Footer TODO (more details)
+    QDomElement footerElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
+						 "footer" );
+    if ( !footerElem.isNull() ) {
+        loadingContext.styleStack().save();
+        loadingContext.fillStyleStack( subtitleElem, KoXmlNS::chart, "style-name", "chart" );
+        QFont font;
+        QColor color;
+        loadOasisFont( loadingContext, font, color );
+        setFooterFont( font );
+        setHeaderFooterColor( KDChartParams::HdFtPosFooter, color );
+        loadingContext.styleStack().restore();
+
+	QDomElement  pElem = KoDom::namedItemNS( footerElem,
+						 KoXmlNS::text, "p" );
+	setFooterText( pElem.text() );
     }
 
     // TODO: Get legend settings
@@ -557,9 +646,26 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
         bodyWriter->startElement( "text:p" );
         bodyWriter->addTextNode( subTitle );
         bodyWriter->endElement(); // text:p
-        bodyWriter->endElement(); // chart:title
+        bodyWriter->endElement(); // chart:subtitle
     }
 
+
+    QString footer( footerText() );
+    if ( !footer.isEmpty() )
+    {
+        QRect rect( headerFooterRect( KDChartParams::HdFtPosFooter ) );
+        bodyWriter->startElement( "chart:footer" );
+        bodyWriter->addAttribute( "svg:x", rect.x() );
+        bodyWriter->addAttribute( "svg:y", rect.y() );
+        bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
+                                                                     footerFont(), 
+                                                                     headerFooterColor( KDChartParams::HdFtPosFooter ) ) );
+
+        bodyWriter->startElement( "text:p" );
+        bodyWriter->addTextNode( footer );
+        bodyWriter->endElement(); // text:p
+        bodyWriter->endElement(); // chart:footer
+    }
 
     // TODO legend
 
