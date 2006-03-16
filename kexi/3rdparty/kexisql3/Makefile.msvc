@@ -188,9 +188,9 @@ $(TARGET):  $(UICDECLS) $(OBJECTS) $(OBJMOC)
 	  $(OBJECTS) $(OBJMOC) $(LIBS)
 <<
 
-sqlite:	src/shell.c $(KDEDIR)/bin/kexisql3.lib
+sqlite:	src/shell.c $(KDEDIR)/bin/kexisql3_d.lib
 	link $(READLINE_FLAGS) $(LIBPTHREAD) \
-		/OUT:$(KDEDIR)/bin/ksqlite.exe obj/shell.obj $(KDEDIR)/bin/kexisql3.lib $(LIBREADLINE)
+		/OUT:$(KDEDIR)/bin/ksqlite.exe obj/shell.obj $(KDEDIR)/bin/kexisql3_d.lib $(LIBREADLINE)
 
 mocables: $(SRCMOC)
 uicables: $(UICIMPLS) $(UICDECLS)
