@@ -603,10 +603,16 @@ bool KHTMLReader::parse_font(DOM::Element e) {
 
 bool KHTMLReader::parse_ul(DOM::Element e) {
         _list_depth++;
+        bool popstateneeded = false;
         for (DOM::Node items=e.firstChild();!items.isNull();items=items.nextSibling()) {
                   if (items.nodeName().string().lower() == "li") {
+                  		if (popstateneeded) {
+                  			popState();
+                  			//popstateneeded = false;
+                  		}
                   		pushNewState();
                   		startNewLayout();
+                  		popstateneeded = true;
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","numberingtype","1");
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext",".");
                   		if (e.tagName().string().lower() == "ol")
@@ -624,9 +630,13 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1));
                   		DOM::HTMLElement htmlelement(items);
                   		parseNode(htmlelement);
-                  		popState();
+                  }
+                  else {
+                  	parseNode(items);
                   }
         }
+        if (popstateneeded)
+            popState();
         _list_depth--;
 	return false;
 }
