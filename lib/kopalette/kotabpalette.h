@@ -19,12 +19,14 @@
 #define _KO_TAB_PALETTE_
 
 #include <qdockwindow.h>
+#include <ktabwidget.h>
 
 #include "kopalette.h"
 
 class KoView;
 class QWidget;
-class QTabWidget;
+
+
 
 /**
  * This is a palette with a tabwidget. It supports
@@ -54,7 +56,7 @@ public:
 
 private:
 
-    QTabWidget * m_page;
+    KTabWidget * m_page;
 
     QMap<QWidget*, int> m_hiddenPages;
 };

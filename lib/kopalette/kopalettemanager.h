@@ -112,7 +112,8 @@ public:
      * @param position the position of the widget in the palettes
      * @param style docker, toolbox or slider
      */
-    virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, int position = -1, enumKoPaletteStyle style = PALETTE_DOCKER);
+    virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, int position = -1, 
+			   enumKoPaletteStyle style = PALETTE_DOCKER, bool shown = true);
 
     
     /**

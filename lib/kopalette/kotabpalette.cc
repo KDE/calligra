@@ -17,7 +17,6 @@
 
 
 #include <qdockwindow.h>
-#include <qtabwidget.h>
 
 #include <ktabwidget.h>
 #include <kdebug.h>
@@ -31,7 +30,7 @@
 KoTabPalette::KoTabPalette(QWidget * parent, const char * name)
     : KoPalette(parent, name)
 {
-    m_page = new QTabWidget(this);
+    m_page = new KTabWidget(this);
     m_page->setTabShape(QTabWidget::Triangular);
     m_page->setFocusPolicy(QWidget::TabFocus);
     //m_page->setFont(m_font);

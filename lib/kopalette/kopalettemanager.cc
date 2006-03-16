@@ -65,10 +65,10 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("palettes");
-    
+
     bool palettesShown = cfg->readBoolEntry("palettesshown", true);
     KToggleAction * m_toggleShowHidePalettes;
-    
+
     if ( palettesShown) {
         m_toggleShowHidePalettes = new KToggleAction(i18n("Hide All Palette Windows"),
                                     "CTRL+SHIFT+H", this,
@@ -86,22 +86,22 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
         m_toggleShowHidePalettes->setCheckedState(i18n("Hide All Palette Windows"));
     }
     m_viewActionMenu->insert(m_toggleShowHidePalettes);
-    
+
     // Recreate the palettes in the saved order
     QStringList paletteList = QStringList::split(",", cfg->readEntry("palettes"));
     QStringList::iterator it;
     for (it = paletteList.begin(); it != paletteList.end(); ++it) {
         if (cfg->hasGroup("palette-" + (*it))) {
-        
+
             cfg->setGroup("palette-" + (*it));
-            
+
             enumKoPaletteStyle style = (enumKoPaletteStyle)cfg->readNumEntry("style", 0);
             QString caption = cfg->readEntry("caption", "");
 
-            createPalette((*it), caption, style); 
+            createPalette((*it), caption, style);
         }
     }
-    
+
 /*
     KAction * a = new KAction(i18n("Restore Palettes"),
                   0, this,
@@ -116,7 +116,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
 KoPaletteManager::~KoPaletteManager()
 {
     save();
-    
+
     delete m_viewActionMenu;
     delete m_widgetNames;
     delete m_widgets;
@@ -128,16 +128,17 @@ KoPaletteManager::~KoPaletteManager()
 }
 
 void KoPaletteManager::addWidget(QWidget * widget,
-                 const QString & name,
-                 const QString & paletteName,
-                 int position,
-                 enumKoPaletteStyle style)
+                                 const QString & name,
+                                 const QString & paletteName,
+                                 int position,
+                                 enumKoPaletteStyle style,
+                                 bool shown)
 {
 
     if (!widget) return;
 
     QString pname = paletteName;
-    
+
     QWidget * w = m_widgets->find(name);
     if (w != 0 )
     {
@@ -145,7 +146,7 @@ void KoPaletteManager::addWidget(QWidget * widget,
     }
 
     bool visible = true;
-    
+
     KConfig * cfg = KGlobal::config();
     if (cfg->hasGroup("palettetab-" + name)) {
         cfg->setGroup("palettetab-" + name);
@@ -164,13 +165,13 @@ void KoPaletteManager::addWidget(QWidget * widget,
     KToggleAction * a;
     a = new KToggleAction(i18n("Show %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
     a->setCheckedState(i18n("Hide %1").arg(widget->caption()));
-        
+
     m_mapper->setMapping(a, m_widgetNames->count()); // This is the position at which we'll insert the action
     m_actions->insert( name, a );
     m_viewActionMenu->insert(a);
 
     palette->plug(widget, name, position);
-    
+
     m_widgets->insert(name, widget);
 
     // Default mappings ready for restoring
@@ -193,7 +194,7 @@ void KoPaletteManager::addWidget(QWidget * widget,
     else
     {
         cfg->setGroup("palettes");
-        if( cfg->readBoolEntry("palettesshown",true))
+        if( cfg->readBoolEntry("palettesshown", shown))
         {
             if (visible)
             {
@@ -330,7 +331,7 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
     palette = m_palettes->find(name);
     if (palette) return palette;
 
-    
+
     switch (style) {
         case (PALETTE_DOCKER):
             palette = new KoTabPalette(m_view, name.latin1());
@@ -518,7 +519,7 @@ void KoPaletteManager::save()
     //   * dock location of a docked palette
     //   * float location of a floated palette
     //   * order in which the palettes are docked.
-    
+
     if (!m_view) return;
     if (!m_view->mainWindow()) return;
 
@@ -527,16 +528,16 @@ void KoPaletteManager::save()
     cfg->setGroup("");
 
     QString widgets;
-    
+
     // Save the list of palettes
     QDictIterator<KoPalette> itP(*m_palettes);
-    
+
     QStringList paletteList;
-    
+
     for (; itP.current(); ++itP) {
-        
+
         KoPalette * p = itP.current();
-        
+
         cfg->setGroup("palette-" + itP.currentKey());
 
         if ( p->area() == m_view->mainWindow()->leftDock() ) {
@@ -575,13 +576,13 @@ void KoPaletteManager::save()
             }
         }
     }
-    
+
     cfg->setGroup("palettes");
-        
+
     cfg->writeEntry("palettes", paletteList.join(","));
     bool palettesShown = m_hiddenWidgets.isEmpty();
     cfg->writeEntry("palettesshown", palettesShown);
-    
+
     QDictIterator<QWidget> itW(*m_widgets);
     for (; itW.current(); ++itW) {
         cfg->setGroup("palettetab-" + itW.currentKey());
@@ -589,7 +590,7 @@ void KoPaletteManager::save()
         KoPalette * p = m_palettes->find(pname);
         QWidget * w = itW.current();
         cfg->writeEntry("docker", pname);
-        
+
         if(palettesShown)
             cfg->writeEntry("visible", !p->isHidden(w));
         else
