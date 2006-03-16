@@ -37,6 +37,7 @@ class KActionMenu;
 class KSelectAction;
 class KToggleAction;
 class KRadioAction;
+class KStatusBarLabel;
 
 class DCOPObject;
 
@@ -192,6 +193,8 @@ private:
     bool m_updateGanttview;
     bool m_updateResourceview;
     bool m_updateAccountsview;
+
+    KStatusBarLabel *m_estlabel;
 
     DCOPObject* m_dcop;
     

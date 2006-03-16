@@ -53,6 +53,7 @@
 #include <kstdaccel.h>
 #include <kaccelgen.h>
 #include <kdeversion.h>
+#include <kstatusbar.h>
 #include <kxmlguifactory.h>
 
 #include <kstandarddirs.h>
@@ -296,6 +297,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     Q_UNUSED( actExportGantt );
 #endif
 
+    m_estlabel = new KStatusBarLabel("", 0);
+    addStatusBarItem(m_estlabel, 0, true);
     actionViewExpected->setChecked(true); //TODO: context
     setScheduleActionsEnabled();
     slotViewExpected();
@@ -306,6 +309,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 View::~View()
 {
     delete m_dcop;
+    removeStatusBarItem(m_estlabel);
+    delete m_estlabel;
 }
 
 DCOPObject * View::dcopObject()
@@ -1037,6 +1042,15 @@ void View::slotChanged()
 void View::slotUpdate(bool calculate)
 {
     //kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
+    if (m_currentEstimateType == Effort::Use_Expected) {
+        m_estlabel->setText(i18n("Expected"));
+    } else if (m_currentEstimateType == Effort::Use_Optimistic) {
+        m_estlabel->setText(i18n("Optimistic"));
+    } else if (m_currentEstimateType == Effort::Use_Pessimistic) {
+        m_estlabel->setText(i18n("Pessimistic"));
+    } else {
+        m_estlabel->setText("");
+    }
     if (calculate)
         projectCalculate();
         
