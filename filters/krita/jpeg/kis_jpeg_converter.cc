@@ -152,10 +152,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
             profile = new KisProfile( profile_rawdata);
             Q_CHECK_PTR(profile);
             kdDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
-        }
-        if(!profile->isSuitableForOutput())
-        {
-            kdDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
+            if(!profile->isSuitableForOutput())
+            {
+                kdDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
+            }
         }
     }
     
@@ -191,7 +191,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     if( ! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
         Q_CHECK_PTR(m_img);
-        if(profile)
+        if(profile && !profile->isSuitableForOutput())
         {
             m_img -> addAnnotation( new KisAnnotation( profile->productName(), "", profile_rawdata) );
         }
