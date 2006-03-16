@@ -48,6 +48,7 @@ class Map;
 class Doc;
 class Sheet;
 class GenValidationStyles;
+class Style;
 
 /**
   A map is a simple container for all sheets. Usually a complete map
@@ -75,7 +76,7 @@ public:
 
     bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj );
 
-    bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext );
+  bool loadOasis( const QDomElement& mymap, KoOasisLoadingContext& oasisContext , QDict<Style>& styleMap );
   bool loadXML( const QDomElement& mymap );
   bool loadChildren( KoStore* _store );
 

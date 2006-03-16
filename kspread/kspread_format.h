@@ -129,7 +129,7 @@ public:
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
 
-    void loadOasisStyle( const QDomElement& element, KoOasisLoadingContext& context );
+    void loadOasisStyle(/* const QDomElement& element,*/ KoOasisLoadingContext& context );
     bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
     bool loadFontOasisStyle( KoStyleStack & font );
     /**

@@ -4158,17 +4158,31 @@ void View::paste()
     d->doc->loadOasisAreaName( body );
     d->doc->loadOasisCellValidation( body );
 
+    //Copied from kspread_doc.cc - refactor into one place asap. 
+    QDictIterator<QDomElement> it( oasisStyles.autoStyles("table-cell") );
+    QDict<Style> styleElements;
+    for (;it.current();++it)
+    {
+	if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
+	{
+		QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
+		styleElements.insert( name , new Style());
+		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) ); 
+	}
+    }
+    
     // all <sheet:sheet> goes to workbook
-    if ( !d->doc->map()->loadOasis( body, context ) )
+    bool result = d->doc->map()->loadOasis( body, context, styleElements );
+
+    //release unused styles (again, copied from kspread_doc.cc, needs to be refactored into one place asap.)
+    QDictIterator<Style> styleIter( styleElements );
+    for (;styleIter.current();++styleIter)
+	    if (styleIter.current()->release())
+		    delete styleIter.current();
+    
+    if (!result)
       return;
 
-//             //TODO : fix me !!
-//             // TODO: it would be nice to have no offset when pasting onto a different page...
-//     d->activeSheet->pasteObjs(
-//         data->encodedData(KoStoreDrag::mimeType("application/vnd.oasis.opendocument.spreadsheet")),
-//         1, 0.0, 0.0, 0.0, 20.0, 20.0 );
-//
-//     emit objectSelectedChanged();
   }
   else
   {

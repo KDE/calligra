@@ -266,7 +266,12 @@ public:
     bool load( const QDomElement& cell, int _xshift, int _yshift, Paste::Mode pm = Paste::Normal,
                Paste::Operation op = Paste::OverWrite, bool paste = false );
 
-    bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext );
+    /**
+     * Loads a cell from an OASIS XML element.
+     * @param element An OASIS XML element
+     * @param oasisContext The loading context assoiated with the XML element
+     */
+    bool loadOasis( const QDomElement & element, KoOasisLoadingContext &oasisContext , Style* style);
 
     QTime toTime(const QDomElement &element);
     QDate toDate(const QDomElement &element);

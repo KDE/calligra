@@ -267,7 +267,7 @@ QDomElement Map::save( QDomDocument& doc )
   return mymap;
 }
 
-bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContext )
+bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContext, QDict<Style>& styleMap )
 {
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
@@ -276,11 +276,8 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
         {
             QString p = body.attributeNS( KoXmlNS::table, "protection-key", QString::null );
             QCString str( p.latin1() );
-            kdDebug(30518) << "Decoding password: " << str << endl;
             passwd = KCodecs::base64Decode( str );
         }
-        //todo remove me !!!!!!!! FIXME
-        kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
         m_strPassword = passwd;
     }
     QDomNode sheetNode = KoDom::namedItemNS( body, KoXmlNS::table, "table" );
@@ -322,7 +319,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
                     QString name = sheetElement.attributeNS( KoXmlNS::table, "name", QString::null );
                     Sheet* sheet = findSheet( name );
                     if( sheet )
-                        sheet->loadOasis( sheetElement , oasisContext );
+                        sheet->loadOasis( sheetElement , oasisContext , styleMap);
                 }
             }
         }

@@ -36,6 +36,7 @@
 #include <qpicture.h>
 #include <qregexp.h>
 #include <qvbox.h>
+#include <qmap.h>
 
 #include <kdebug.h>
 #include <kmdcodec.h>
@@ -6356,7 +6357,7 @@ QString Sheet::getPart( const QDomNode & part )
 }
 
 
-bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& oasisContext )
+bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& oasisContext, QDict<Style>& styleMap )
 {
     d->layoutDirection = LeftToRight;
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
@@ -6405,6 +6406,9 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
         }
     }
 
+    //Maps from a column index to the name of the default cell style for that column
+    QMap<int,QString> defaultColumnCellStyles;
+    
     int rowIndex = 1;
     int indexCol = 1;
     QDomNode rowNode = sheetElement.firstChild();
@@ -6420,13 +6424,13 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
                 if ( rowElement.localName()=="table-column" )
                 {
                     kdDebug ()<<" table-column found : index column before "<< indexCol<<endl;
-                    loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol );
+                    loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol , styleMap);
                     kdDebug ()<<" table-column found : index column after "<< indexCol<<endl;
                 }
                 else if( rowElement.localName() == "table-row" )
                 {
                     kdDebug()<<" table-row found :index row before "<<rowIndex<<endl;
-                    loadRowFormat( rowElement, rowIndex, oasisContext, rowNode.isNull() );
+                    loadRowFormat( rowElement, rowIndex, oasisContext, /*rowNode.isNull() ,*/ styleMap );
                     kdDebug()<<" table-row found :index row after "<<rowIndex<<endl;
                 }
                 else if ( rowElement.localName() == "shapes" )
@@ -6647,7 +6651,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 }
 
 
-bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, int & indexCol )
+bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, int & indexCol, const QDict<Style>& styleMap)
 {
     kdDebug()<<"bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oasisStyles, unsigned int & indexCol ) index Col :"<<indexCol<<endl;
 
@@ -6669,15 +6673,11 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     if ( column.hasAttributeNS( KoXmlNS::table, "default-cell-style-name" ) )
     {
         QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
-        kdDebug()<<" default-cell-style-name :"<<str<<endl;
-        const QDomElement *style = oasisStyles.findStyle( str, "table-cell" );
-        kdDebug()<<"default column style :"<<style<<endl;
-        if ( style )
-        {
-            styleStack.push( *style );
-            layout.loadOasisStyleProperties( styleStack, oasisStyles );
-            styleStack.pop();
-        }
+        kdDebug()<<" default-cell-style-name:"<<str<<" for column " << indexCol <<endl;
+
+	//TODO - Code to look up the style in styleMap and store a reference to it in some map 
+	// between column indicies and Style instances.  This can then be used when rendering cells	
+       
     }
 
     styleStack.setTypeProperties("table-column");
@@ -6685,11 +6685,15 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     {
         QString str = column.attributeNS( KoXmlNS::table, "style-name", QString::null );
         const QDomElement *style = oasisStyles.findStyle( str, "table-column" );
-      if ( style )
-      {
-        styleStack.push( *style );
+        if (style)
+	{
+		styleStack.push( *style );
+	/*	FIX_BEFORE_COMMIT
+	 	layout.loadOasisStyleProperties( styleStack , oasisStyles );
+		styleStack.pop();*/
+	}
+	
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
-      }
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "column-width" ) )
@@ -6711,8 +6715,8 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     }
 
 
-    if ( number>30 )
-        number = 30; //TODO fixme !
+  //  if ( number>30 )
+  //      number = 30; //TODO fixme !
 
     for ( int i = 0; i < number; ++i )
     {
@@ -6736,7 +6740,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 }
 
 
-bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext, bool isLast )
+bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoadingContext& oasisContext,  QDict<Style>& styleMap )
 {
 //    kdDebug()<<"Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********\n";
     double height = -1.0;
@@ -6744,6 +6748,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     KoStyleStack styleStack;
     styleStack.setTypeProperties( "table-row" );
     int backupRow = rowIndex;
+    
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
@@ -6752,6 +6757,16 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         styleStack.push( *style );
   //      kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
+
+    if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
+    {
+	    QString str = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
+	
+	    //TODO - Code to look up this style name in the style map and store it in a map somewhere between
+	    //row indicies and Style instances for use when rendering cells later on.
+	    //	    defaultRowCellStyle = styleMap[str]; 
+    }
+    
     layout.loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
     styleStack.setTypeProperties( "table-row" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
@@ -6766,8 +6781,8 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         bool ok = true;
         int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt( &ok );
         if ( ok )
-            number = n;
-    //    kdDebug() << "Row repeated: " << number << endl;
+	    //Some spreadsheet programs may support more rows than KSpread so limit the number of repeated rows	    
+            number = min(n,KS_rowMax);
     }
     bool collapse = false;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
@@ -6779,18 +6794,6 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         else
             kdDebug()<<" visible row not implemented/supported : "<<visible<<endl;
 
-    }
-    //kdDebug()<<" height !!!!!!!!!!!!!!!!!!!!!!! :"<<height<<endl;
-    //code from opencalc filter, I don't know why it's necessary.
-    if ( isLast )
-    {
-        if ( number > 30 )
-            number = 30;
-    }
-    else
-    {
-        if ( number > 256 )
-            number = 256;
     }
 
     bool insertPageBreak = false;
@@ -6824,80 +6827,72 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
 
     int columnIndex = 0;
     QDomNode cellNode = row.firstChild();
-
+    int endRow = min(backupRow+number,KS_rowMax);
+   
+    
     while( !cellNode.isNull() )
     {
         QDomElement cellElement = cellNode.toElement();
         if( !cellElement.isNull() )
         {
             columnIndex++;
-            //kdDebug()<<"bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast ) cellElement.tagName() :"<<cellElement.tagName()<<endl;
             QString localName = cellElement.localName();
 
 	    if( ((localName == "table-cell") || (localName == "covered-table-cell")) && cellElement.namespaceURI() == KoXmlNS::table)
             {
-                //kdDebug()<<" create cell at row index :"<<backupRow<<endl;
-		//kdDebug()<<" columnIndex: " << columnIndex << endl;
-                Cell* cell = nonDefaultCell( columnIndex, backupRow );
-                cell->loadOasis( cellElement, oasisContext );
+	//	kdDebug() << "Loading cell #" << cellCount << endl;
 
-		bool haveStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
-                //kdDebug()<<" haveStyle ? :"<<haveStyle<<endl;
+                Cell* cell = nonDefaultCell( columnIndex, backupRow );
+		bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" ); 
+	
+		Style* style = 0;
+		
+		if ( cellHasStyle )
+		{
+			style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];		
+		}
+	
+                cell->loadOasis( cellElement, oasisContext, style );
+		
+	
+		bool haveStyle = cellHasStyle;	
                 int cols = 1;
-                if( cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
+
+		//Copy this cell across & down if it has repeated rows or columns, but only
+		//if the cell has some content or a style associated with it.
+                if( (number > 1) || cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
                     cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-                    //kdDebug()<<" cols :"<<cols<<endl;
-                    //TODO: correct ?????
-                    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
+                   
+		    if (!ok)
+			    cols = 1;
+		    
+		    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
                         //just increment it
                         columnIndex +=cols - 1;
                     }
                     else
                     {
-                        if( ok )
-                        {
-                            for( int i = 0; i < cols; i++ )
+                            for(int k = cols ; k ; --k )
                             {
-
-                                if ( i != 0 )
-                                {
-                                    ++columnIndex;
-                                    Cell* target = nonDefaultCell( columnIndex, backupRow );
-                                    target->copyAll( cell );
+				if (k != cols)
+					columnIndex++; 
+				
+				Style* targetStyle = style;
+                                
+				for ( int newRow = backupRow; newRow < endRow;++newRow )
+				{
+				    if ( targetStyle && (targetStyle->features() != 0 ) )
+				    {
+                                    	Cell* target = nonDefaultCell( columnIndex, newRow );
+                                    	
+					if (cell != target)
+						target->copyAll( cell );
+				    }
                                 }
-                                //copy contains of cell of each col
-                                for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
-                                {
-                                    Cell* target = nonDefaultCell( columnIndex, newRow );
-                                    target->copyAll( cell );
-                                }
-
-                            }
-                        }
-                        else
-                        {
-                            //just one cell
-                            for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
-                            {
-                                Cell* target = nonDefaultCell( columnIndex, newRow );
-                                target->copyAll( cell );
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    if ( haveStyle )
-                    {
-                        //just one cell
-                        for ( int newRow = backupRow+1; newRow < backupRow + number;++newRow )
-                        {
-                            Cell* target = nonDefaultCell( columnIndex, newRow );
-                            target->copyAll( cell );
-                        }
+			    }
                     }
                 }
             }

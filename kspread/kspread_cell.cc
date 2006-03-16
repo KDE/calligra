@@ -5605,30 +5605,30 @@ void Cell::loadOasisConditional( QDomElement * style )
     }
 }
 
-bool Cell::loadOasis( const QDomElement &element, KoOasisLoadingContext& oasisContext )
+bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisContext , Style* style )
 {
-  kdDebug() << "*** Loading cell properties *****" << endl;
+  kdDebug() << "*** Loading cell properties ***** at " << column() << "," << row () << endl;
 
     QString text;
     kdDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
+   
+    QDomElement* cellStyle=0;
+    
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
 
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
-        const QDomElement* style = oasisContext.oasisStyles().findStyle( str, "table-cell" );
-        //kdDebug()<<" style :"<<style<<endl;
-        if ( style )
-        {
-/*        KoStyleStack styleStack;
-        styleStack.push( *style );
-        styleStack.setTypeProperties( "table-cell" );*/
-          format()->loadOasisStyle( *style, oasisContext );
-          loadOasisConditional( const_cast<QDomElement *>( style ) );
-        }
-    }
-   // QDomElement textP = KoDom::namedItemNS( element, KoXmlNS::text, "p" );
+        cellStyle = const_cast<QDomElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
 
+	if ( cellStyle ) 
+		loadOasisConditional( const_cast<QDomElement *>( cellStyle ) );
+   }
+
+    if (style)
+    {
+    	format()->setStyle( style );
+    }
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
     loadOasisCellText( element );

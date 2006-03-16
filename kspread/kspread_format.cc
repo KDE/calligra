@@ -116,15 +116,7 @@ double Format::globalColWidth()
 void Format::copy( const Format & _l )
 {
   // TODO why is the sheet not copied?
-//   if ( m_pStyle && m_pStyle->release() )
-//     delete m_pStyle;
 
-  //WHY? - m_pStyle = new Style( _l.m_pStyle );
-  //NOTSUREABOUTHIS
-  //I don't know why a new style was created here (see commented out line above)
-  //, instead of just
-  //using the existing format's style and incrementing the style's
-  //reference count
   setStyle( _l.m_pStyle );
 
   m_mask        = _l.m_mask;
@@ -151,7 +143,7 @@ void Format::setStyle( Style * style )
   m_pStyle = style;
   m_pStyle->addRef();
   formatChanged();
-  kdDebug() << "Newly assigned style: " << m_pStyle << ", type: " << m_pStyle->type() << endl;
+ // kdDebug() << "Newly assigned style: " << m_pStyle << ", type: " << m_pStyle->type() << endl;
   if ( style->type() == Style::BUILTIN || style->type() == Style::CUSTOM )
     kdDebug() << "Style name: " << ((CustomStyle *) m_pStyle)->name() << endl;
 }
@@ -773,25 +765,27 @@ bool Format::loadFontOasisStyle( KoStyleStack & font )
     return true;
 }
 
-void Format::loadOasisStyle( const QDomElement& style, KoOasisLoadingContext& context )
+void Format::loadOasisStyle( /*const QDomElement& style,*/ KoOasisLoadingContext& context )
 {
   QString str; // multi purpose string
   KoOasisStyles& oasisStyles = context.oasisStyles();
 
 /*  context.styleStack().save();
   context.addStyles( &style );*/
-  KoStyleStack styleStack;
+/*  KoStyleStack styleStack;
   styleStack.push( style );
-  styleStack.setTypeProperties( "table-cell" );
+  styleStack.setTypeProperties( "table-cell" );*/
+  
+  KoStyleStack& styleStack = context.styleStack();
   loadOasisStyleProperties( styleStack, context.oasisStyles() );
 /*  loadOasisStyleProperties( context.styleStack(), context.oasisStyles() );
   context.styleStack().restore();*/
 
   kdDebug() << "*** Loading style attributes *****" << endl;
 
-  if ( style.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
   {
-    str = style.attributeNS( KoXmlNS::style, "data-style-name", QString::null );
+    str = styleStack.attributeNS( KoXmlNS::style, "data-style-name" );
     kdDebug() << " style:data-style-name: " <<  str << endl << endl;
 
     if ( !str.isEmpty() )
@@ -814,10 +808,10 @@ void Format::loadOasisStyle( const QDomElement& style, KoOasisLoadingContext& co
     }
   }
 
-  if ( style.hasAttributeNS( KoXmlNS::style, "decimal-places" ) )
+  if ( styleStack.hasAttributeNS( KoXmlNS::style, "decimal-places" ) )
   {
     bool ok = false;
-    int p = style.attributeNS( KoXmlNS::style, "decimal-places", QString::null ).toInt( &ok );
+    int p = styleStack.attributeNS( KoXmlNS::style, "decimal-places" ).toInt( &ok );
     kdDebug() << " style:decimal-places: " << p << endl;
     if (ok )
       setPrecision( p );
