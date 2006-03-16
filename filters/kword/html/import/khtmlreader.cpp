@@ -628,12 +628,8 @@ bool KHTMLReader::parse_ul(DOM::Element e) {
         	          		_writer->layoutAttribute(state()->paragraph,"COUNTER","righttext","");
 	                  		}
                   		_writer->layoutAttribute(state()->paragraph,"COUNTER","depth",QString("%1").arg(_list_depth-1));
-                  		DOM::HTMLElement htmlelement(items);
-                  		parseNode(htmlelement);
                   }
-                  else {
-                  	parseNode(items);
-                  }
+                  parseNode(items);
         }
         if (popstateneeded)
             popState();
