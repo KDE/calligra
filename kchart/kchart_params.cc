@@ -668,6 +668,86 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     }
 
     // TODO legend
+    LegendPosition lpos = legendPosition();
+    if ( lpos != NoLegend )
+    {
+        bodyWriter->startElement( "chart:legend" );
+        QString lp;
+        QString lalign;
+        switch ( lpos )
+        {
+            case LegendTop: 
+                lp = "top";
+                lalign = "center";
+                break;
+            case LegendBottom:
+                lp = "bottom";
+                lalign = "center";
+                break;
+            case LegendLeft: 
+                lp = "start";
+                lalign = "center";
+                break;
+            case LegendRight:
+                lp = "end";
+                lalign = "center";
+                break;
+            case LegendTopLeft:
+                lp = "top-start";
+                break;
+            case LegendTopLeftTop:
+                lp = "top";
+                lalign = "start";
+                break;
+            case LegendTopLeftLeft:
+                lp = "start";
+                lalign = "start";
+                break;
+            case LegendTopRight:
+                lp = "top-end";
+                break;
+            case LegendTopRightTop:
+                lp = "top";
+                lalign = "end";
+                break;
+            case LegendTopRightRight:
+                lp = "end";
+                lalign = "start";
+                break;
+            case LegendBottomLeft:
+                lp = "bottom-start";
+                break;
+            case LegendBottomLeftBottom:
+                lp = "bottom";
+                lalign = "start";
+                break;
+            case LegendBottomLeftLeft:
+                lp = "start";
+                lalign = "end";
+                break;
+            case LegendBottomRight:
+                lp = "bottom-end";
+                break;
+            case LegendBottomRightBottom:
+                lp = "bottom";
+                lalign = "end";
+                break;
+            case LegendBottomRightRight:
+                lp = "end";
+                lalign = "end";
+                break;
+            default:
+                lp = "end";
+                lalign = "center";
+                break;
+        }
+        bodyWriter->addAttribute( "chart:legend-position", lp );
+        bodyWriter->addAttribute( "chart:legend-align", lalign );
+        bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
+                                                                     legendFont(), 
+                                                                     legendTextColor() ) );
+        bodyWriter->endElement(); // chart:legend
+    }
 
     bodyWriter->startElement( "chart:plot-area" );
     saveOasisPlotArea( bodyWriter, mainStyles );
