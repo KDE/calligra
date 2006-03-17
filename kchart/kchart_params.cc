@@ -256,7 +256,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         QFont font;
         QColor color;
         loadOasisFont( loadingContext, font, color );
-        setHeader1Font( font );
+        setHeaderFooterFont( KDChartParams::HdFtPosHeader, font, true, font.pointSize() );
         setHeaderFooterColor( KDChartParams::HdFtPosHeader, color );
         loadingContext.styleStack().restore();
 
@@ -274,7 +274,7 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         QFont font;
         QColor color;
         loadOasisFont( loadingContext, font, color );
-        setHeader2Font( font );
+        setHeaderFooterFont( KDChartParams::HdFtPosHeader2, font, true, font.pointSize() );
         setHeaderFooterColor( KDChartParams::HdFtPosHeader2, color );
         loadingContext.styleStack().restore();
 
@@ -288,11 +288,11 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
 						 "footer" );
     if ( !footerElem.isNull() ) {
         loadingContext.styleStack().save();
-        loadingContext.fillStyleStack( subtitleElem, KoXmlNS::chart, "style-name", "chart" );
+        loadingContext.fillStyleStack( footerElem, KoXmlNS::chart, "style-name", "chart" );
         QFont font;
         QColor color;
         loadOasisFont( loadingContext, font, color );
-        setFooterFont( font );
+        setHeaderFooterFont( KDChartParams::HdFtPosFooter, font, true, font.pointSize() );
         setHeaderFooterColor( KDChartParams::HdFtPosFooter, color );
         loadingContext.styleStack().restore();
 
@@ -302,7 +302,98 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
     }
 
     // TODO: Get legend settings
+    QDomElement legendElem = KoDom::namedItemNS( chartElem, KoXmlNS::chart,
+						 "legend" );
+    if ( !legendElem.isNull() )
+    {
+        loadingContext.styleStack().save();
+        loadingContext.fillStyleStack( legendElem, KoXmlNS::chart, "style-name", "chart" );
+        QFont font;
+        QColor color;
+        loadOasisFont( loadingContext, font, color );
+        //tz I didn't find that Oasis support seperate font/colors for the title and the rest of the legent
+        setLegendFont( font, true );
+        setLegendTitleFont( font, true );
+        setLegendTextColor( color );
+        setLegendTitleTextColor( color );
+        loadingContext.styleStack().restore();
+        QString lp;
+        if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-position" ) )
+        {
+            lp = legendElem.attributeNS( KoXmlNS::chart, "legend-position", QString::null );
+        }
+        QString lalign;
+        if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-align" ) )
+        {
+            lalign = legendElem.attributeNS( KoXmlNS::chart, "legend-align", QString::null );
+        }
 
+        LegendPosition lpos = NoLegend;
+        int align = 1;
+        if ( lalign == "start" )
+        {
+            align = 0;
+        }
+        else if ( lalign == "end" )
+        {
+            align = 2;
+        }
+
+        if ( lp == "start" )
+        {
+            lpos = LegendLeft;
+            if ( align == 0 )
+                lpos = LegendTopLeftLeft;
+            else if ( align == 2 )    
+                lpos = LegendBottomLeftLeft;
+        }
+        else if ( lp == "end" )
+        {
+            lpos = LegendRight;
+            if ( align == 0 )
+                lpos = LegendTopRightRight;
+            else if ( align == 2 )    
+                lpos = LegendBottomRightRight;
+        }
+        else if ( lp == "top" )
+        {
+            lpos = LegendTop;
+            if ( align == 0 )
+                lpos = LegendTopLeftTop;
+            else if ( align == 2 )    
+                lpos = LegendTopRightTop;
+        }
+        else if ( lp == "bottom" )
+        {
+            lpos = LegendBottom;
+            if ( align == 0 )
+                lpos = LegendBottomLeftBottom;
+            else if ( align == 2 )    
+                lpos = LegendBottomRightBottom;
+        }
+        else if ( lp == "top-start" )
+        {
+            lpos = LegendTopLeft;
+        }
+        else if ( lp == "bottom-start" )
+        {
+            lpos = LegendBottomLeft;
+        }
+        else if ( lp == "top-end" )
+        {
+            lpos = LegendTopRight;
+        }
+        else if ( lp == "bottom-end" )
+        {
+            lpos = LegendBottomRight;
+        }
+
+        setLegendPosition( lpos );
+    }
+    else
+    {
+        setLegendPosition( NoLegend );
+    }
 
     // Get the plot-area.  This is where the action is.
     QDomElement  plotareaElem = KoDom::namedItemNS( chartElem,
