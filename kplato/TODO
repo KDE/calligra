@@ -50,6 +50,8 @@ Taken       User manual (contact: raphael.langerhorst@kdemail.net)
             
             Calendars:
             - Timezone handling
+            - Default calendar (See also Bug 123682)
+            - Localized holiday files (as in kdepim)
 
             Improve Progress info dialog/presentation.
             Make it stand-alone, add to task context menu.
