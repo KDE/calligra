@@ -869,8 +869,7 @@ void RTFImport::setFlagProperty( RTFProperty *property )
 
 void RTFImport::setCharset( RTFProperty *property )
 {
-    if(token.value >= 0)
-        setCodepage(property);
+    //!@todo see bugreport #123672
 }
 
 void RTFImport::setNumericProperty( RTFProperty *property )
