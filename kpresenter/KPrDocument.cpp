@@ -1813,25 +1813,34 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             if ( name == "frame" && isDrawNS )
             {
                 fillStyleStack( o, context, "graphic" );
-
-                QDomNode imageBox = KoDom::namedItemNS( o, KoXmlNS::draw, "image" );
-                kdDebug()<<" imageBox:"<<imageBox.isNull()<<endl;
-                if ( !imageBox.isNull() )
+                QDomElement elem;
+                forEachElement( elem, o )
                 {
-                    KPrPixmapObject *kppixmapobject = new KPrPixmapObject( pictureCollection() );
-                    kppixmapobject->loadOasis( o, context, m_loadingInfo);
-                    if ( groupObject )
-                        groupObject->addObjects( kppixmapobject );
-                    else
-                        newpage->appendObject(kppixmapobject);
-                }
-                else
-                {
-                    QDomNode object = KoDom::namedItemNS( o, KoXmlNS::draw, "object" );
-                    kdDebug()<<" object:"<<object.isNull()<<endl;
-                    if ( !object.isNull() )
+                    if ( elem.namespaceURI() != KoXmlNS::draw )
+                        continue;
+                    const QString localName = elem.localName();
+                    if ( localName == "text-box" )
                     {
-                        fillStyleStack( o, context, "graphic" );
+                        KPrTextObject *kptextobject = new KPrTextObject( this );
+                        kptextobject->loadOasis(o, context, m_loadingInfo);
+                        if ( groupObject )
+                            groupObject->addObjects( kptextobject );
+                        else
+                            newpage->appendObject(kptextobject);
+                        break;
+                    }
+                    else if ( localName == "image" )
+                    {
+                        KPrPixmapObject *kppixmapobject = new KPrPixmapObject( pictureCollection() );
+                        kppixmapobject->loadOasis( o, context, m_loadingInfo);
+                        if ( groupObject )
+                            groupObject->addObjects( kppixmapobject );
+                        else
+                            newpage->appendObject(kppixmapobject);
+                        break;
+                    } 
+                    else if ( localName == "object" )
+                    {
                         KPrChild *ch = new KPrChild( this );
                         QRect r;
                         KPrPartObject *kppartobject = new KPrPartObject( ch );
@@ -1844,16 +1853,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                         insertChild( ch );
                         kppartobject->setOrig( r.x(), r.y() );
                         kppartobject->setSize( r.width(), r.height() );
-                    }
-                    else
-                    {
-                        //"draw:text-box"
-                        KPrTextObject *kptextobject = new KPrTextObject( this );
-                        kptextobject->loadOasis(o, context, m_loadingInfo);
-                        if ( groupObject )
-                            groupObject->addObjects( kptextobject );
-                        else
-                            newpage->appendObject(kptextobject);
+                        break;
                     }
                 }
             }
