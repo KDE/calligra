@@ -403,7 +403,7 @@ Value ValueCalc::abs (const Value &a)
 bool ValueCalc::isZero (const Value &a)
 {
   if (a.isError()) return false;
-  return (converter->asFloat (a).asFloat() != 0.0);
+  return (converter->asFloat (a).asFloat() == 0.0);
 }
 
 bool ValueCalc::isEven (const Value &a)
