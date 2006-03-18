@@ -4159,7 +4159,7 @@ void View::paste()
     d->doc->loadOasisCellValidation( body );
 
     //Copied from kspread_doc.cc - refactor into one place asap. 
-    QDictIterator<QDomElement> it( oasisStyles.autoStyles("table-cell") );
+    QDictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
     QDict<Style> styleElements;
     for (;it.current();++it)
     {
