@@ -5611,9 +5611,9 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
 
     QString text;
     kdDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
-   
+
     QDomElement* cellStyle=0;
-    
+
     if ( element.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         oasisContext.fillStyleStack( element, KoXmlNS::table, "styleName", "table-cell" );
@@ -5621,7 +5621,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
         QString str = element.attributeNS( KoXmlNS::table, "style-name", QString::null );
         cellStyle = const_cast<QDomElement*>( oasisContext.oasisStyles().findStyle( str, "table-cell" ) );
 
-	if ( cellStyle ) 
+	if ( cellStyle )
 		loadOasisConditional( const_cast<QDomElement *>( cellStyle ) );
    }
 
@@ -5919,8 +5919,7 @@ void Cell::loadOasisCellText( const QDomElement& parent )
 
 void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& oasisContext )
 {
-    QDomElement e = parent;
-    while( !e.isNull() )
+    for( QDomElement e = parent; !e.isNull(); e = e.nextSibling().toElement() )
     {
         if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
         {
@@ -5945,23 +5944,37 @@ void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& o
           if ( obj )
           {
             obj->loadOasis( e, oasisContext );
+            sheet()->doc()->insertObject( obj );
+
+            QString ref = e.attributeNS( KoXmlNS::table, "end-cell-address", QString::null );
+            if ( ref.isNull() )
+              continue;
+
+            Point point( Sheet::translateOpenCalcPoint( ref ) );
+            if ( !point.isValid() )
+              continue;
+
             KoRect geometry = obj->geometry();
             geometry.setLeft( geometry.left() + sheet()->columnPos( d->column, 0 ) );
             geometry.setTop( geometry.top() + sheet()->rowPos( d->row, 0 ) );
 
-            QString cell = e.attributeNS( KoXmlNS::table, "end-cell-address", QString::null );
-            cell = cell.mid( cell.find('.') + 1 );
-            Point point( cell );
-            int end_x = (int) KoUnit::parseValue( e.attributeNS( KoXmlNS::table, "end-x", QString::null ) );
-            int end_y = (int) KoUnit::parseValue( e.attributeNS( KoXmlNS::table, "end-y", QString::null ) );
-            geometry.setRight( sheet()->columnPos( point.column(), 0) + end_x );
-            geometry.setBottom( sheet()->rowPos( point.row(), 0) + end_y );
+            QString str = e.attributeNS( KoXmlNS::table, "end-x", QString::null );
+            if ( !str.isNull() )
+            {
+              uint end_x = (uint) KoUnit::parseValue( str );
+              geometry.setRight( sheet()->columnPos( point.column(), 0) + end_x );
+            }
+
+            str = e.attributeNS( KoXmlNS::table, "end-y", QString::null );
+            if ( !str.isNull() )
+            {
+              uint end_y = (uint) KoUnit::parseValue( str );
+              geometry.setBottom( sheet()->rowPos( point.row(), 0) + end_y );
+            }
 
             obj->setGeometry( geometry );
-            sheet()->doc()->insertObject( obj );
           }
         }
-        e = e.nextSibling().toElement();
     }
 }
 
