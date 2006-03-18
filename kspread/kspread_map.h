@@ -26,6 +26,7 @@
 #include <qstringlist.h>
 #include <qintdict.h>
 #include <qobject.h>
+#include <qdict.h>
 
 #include <koffice_export.h>
 
