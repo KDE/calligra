@@ -965,7 +965,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
     loadOasisCellValidation( body );
 
     //pre-load auto styles
-    QDictIterator<QDomElement> it( oasisStyles.autoStyles("table-cell") );
+    QDictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
     QDict<Style> styleElements;
     for (;it.current();++it)
     {
