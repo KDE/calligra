@@ -389,6 +389,11 @@ bool KChartParams::loadOasis( const QDomElement     &chartElem,
         }
 
         setLegendPosition( lpos );
+        //bodyWriter->addAttribute( "koffice:title", legendTitleText() );
+        if ( legendElem.hasAttributeNS( KoXmlNS::koffice, "title" ) )
+        {
+            setLegendTitleText( legendElem.attributeNS( KoXmlNS::koffice, "title", QString::null ) );
+        }
     }
     else
     {
@@ -713,8 +718,8 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
 
     bodyWriter->startElement( "chart:title" );
     QRect rect( headerFooterRect( KDChartParams::HdFtPosHeader ) );
-    bodyWriter->addAttribute( "svg:x", rect.x() );
-    bodyWriter->addAttribute( "svg:y", rect.y() );
+    bodyWriter->addAttributePt( "svg:x", rect.x() );
+    bodyWriter->addAttributePt( "svg:y", rect.y() );
     bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, header1Font(), headerFooterColor( KDChartParams::HdFtPosHeader ) ) );
     bodyWriter->startElement( "text:p" );
     bodyWriter->addTextNode( header1Text() );
@@ -728,8 +733,8 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
         kdDebug(32001) << "header rect: " << headerFooterRect( KDChartParams::HdFtPosHeader2 ) << endl;
         QRect rect( headerFooterRect( KDChartParams::HdFtPosHeader2 ) );
         bodyWriter->startElement( "chart:subtitle" );
-        bodyWriter->addAttribute( "svg:x", rect.x() );
-        bodyWriter->addAttribute( "svg:y", rect.y() );
+        bodyWriter->addAttributePt( "svg:x", rect.x() );
+        bodyWriter->addAttributePt( "svg:y", rect.y() );
         bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
                                                                      header2Font(), 
                                                                      headerFooterColor( KDChartParams::HdFtPosHeader2 ) ) );
@@ -746,8 +751,8 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     {
         QRect rect( headerFooterRect( KDChartParams::HdFtPosFooter ) );
         bodyWriter->startElement( "chart:footer" );
-        bodyWriter->addAttribute( "svg:x", rect.x() );
-        bodyWriter->addAttribute( "svg:y", rect.y() );
+        bodyWriter->addAttributePt( "svg:x", rect.x() );
+        bodyWriter->addAttributePt( "svg:y", rect.y() );
         bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
                                                                      footerFont(), 
                                                                      headerFooterColor( KDChartParams::HdFtPosFooter ) ) );
@@ -837,6 +842,7 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
         bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
                                                                      legendFont(), 
                                                                      legendTextColor() ) );
+        bodyWriter->addAttribute( "koffice:title", legendTitleText() );
         bodyWriter->endElement(); // chart:legend
     }
 
