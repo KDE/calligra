@@ -875,11 +875,11 @@ void RTFImport::setCharset( RTFProperty *property )
         case 1: cp = "CP1252"; break; // DEFAULT_CHARSET
         //case 2: cp = ""; break; // SYMBOL_CHARSET not supported yet.
         case 77: cp = "Apple Roman"; break; // MAC_CHARSET
-        case 128: cp = "CP932"; break; // SHIFTJIS_CHARSET
-        case 129: cp = "CP949"; break; // HANGEUL_CHARSET
-        case 130: cp = "CP1361"; break; // JOHAB_CHARSET
-        case 134: cp = "CP936"; break; // GB2312_CHARSET
-        case 136: cp = "CP950"; break; // CHINESEBIG5_CHARSET
+        case 128: cp = "Shift-JIS"; break; // SHIFTJIS_CHARSET "CP932"
+        case 129: cp = "eucKR"; break; // HANGUL_CHARSET "CP949"
+        case 130: cp = "CP1361"; break; // JOHAB_CHARSET doesn't really seem to be supported by Qt :-(
+        case 134: cp = "GB2312"; break; // GB2312_CHARSET "CP936"
+        case 136: cp = "Big5-HKSCS"; break; // CHINESEBIG5_CHARSET "CP950"
         case 161: cp = "CP1253"; break; // GREEK_CHARSET
         case 162: cp = "CP1254"; break; // TURKISH_CHARSET
         case 163: cp = "CP1258"; break; // VIETNAMESE_CHARSET
@@ -889,7 +889,7 @@ void RTFImport::setCharset( RTFProperty *property )
         case 204: cp = "CP1251"; break; // RUSSIAN_CHARSET / CYRILLIC_CHARSET
         case 222: cp = "CP874"; break; // THAI_CHARSET
         case 238: cp = "CP1250"; break; // EASTEUROPE_CHARSET / EASTERNEUROPE_CHARSET
-        case 255: cp = "CP850"; break; // OEM_CHARSET
+        case 255: cp = "CP850"; break; // OEM_CHARSET "IBM 850"
         default: return;
     }
     QTextCodec* oldCodec = textCodec;
