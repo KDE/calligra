@@ -605,11 +605,15 @@ void EmbeddedChart::loadOasis(const QDomElement &element, KoOasisLoadingContext 
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     QString str_range = objectElement.attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString::null);
 
-    int const p = str_range.find(':');
-    Point ul( str_range.left(p).section( '.', 1 ,1 ) );
-    Point lr( str_range.mid(p + 1).section( '.', 1 ,1 ) );
+    if ( !str_range.isNull() )
+    {
+      str_range = Sheet::translateOpenCalcPoint( str_range );
+      int const p = str_range.find(':');
+      Point ul( str_range.left(p).section( '.', 1 ,1 ) );
+      Point lr( str_range.mid(p + 1).section( '.', 1 ,1 ) );
 
-    setDataArea( QRect(ul.pos(), lr.pos()));
+      setDataArea( QRect(ul.pos(), lr.pos()));
+    }
 }
 
 
