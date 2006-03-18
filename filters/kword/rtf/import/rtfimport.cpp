@@ -869,7 +869,34 @@ void RTFImport::setFlagProperty( RTFProperty *property )
 
 void RTFImport::setCharset( RTFProperty *property )
 {
-    //!@todo see bugreport #123672
+    QCString cp;
+    switch(token.value) {
+        case 0: cp = "CP1252"; break; // ANSI_CHARSET
+        case 1: cp = "CP1252"; break; // DEFAULT_CHARSET
+        //case 2: cp = ""; break; // SYMBOL_CHARSET not supported yet.
+        case 77: cp = "Apple Roman"; break; // MAC_CHARSET
+        case 128: cp = "CP932"; break; // SHIFTJIS_CHARSET
+        case 129: cp = "CP949"; break; // HANGEUL_CHARSET
+        case 130: cp = "CP1361"; break; // JOHAB_CHARSET
+        case 134: cp = "CP936"; break; // GB2312_CHARSET
+        case 136: cp = "CP950"; break; // CHINESEBIG5_CHARSET
+        case 161: cp = "CP1253"; break; // GREEK_CHARSET
+        case 162: cp = "CP1254"; break; // TURKISH_CHARSET
+        case 163: cp = "CP1258"; break; // VIETNAMESE_CHARSET
+        case 177: cp = "CP1255"; break; // HEBREW_CHARSET
+        case 178: cp = "CP1256"; break; // ARABIC_CHARSET / ARABICSIMPLIFIED_CHARSET
+        case 186: cp = "CP1257"; break; // BALTIC_CHARSET
+        case 204: cp = "CP1251"; break; // RUSSIAN_CHARSET / CYRILLIC_CHARSET
+        case 222: cp = "CP874"; break; // THAI_CHARSET
+        case 238: cp = "CP1250"; break; // EASTEUROPE_CHARSET / EASTERNEUROPE_CHARSET
+        case 255: cp = "CP850"; break; // OEM_CHARSET
+        default: return;
+    }
+    QTextCodec* oldCodec = textCodec;
+    textCodec=QTextCodec::codecForName(cp);
+    kdDebug(30515) << "\\fcharset: charset: " << token.value << " codepage: "<< cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    if ( ! textCodec )
+        textCodec = oldCodec;
 }
 
 void RTFImport::setNumericProperty( RTFProperty *property )
