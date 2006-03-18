@@ -124,7 +124,8 @@ public:
      * If the cursor is inside a sequence it needs to be drawn.
      */
     virtual void drawCursor( QPainter& painter, const ContextStyle& context,
-                             FormulaCursor* cursor, bool smallCursor );
+                             FormulaCursor* cursor, bool smallCursor,
+                             bool activeCursor );
 
     // navigation
     //
@@ -486,7 +487,8 @@ public:
      * If the cursor is inside a sequence it needs to be drawn.
      */
     virtual void drawCursor( QPainter& painter, const ContextStyle& context,
-                             FormulaCursor* cursor, bool smallCursor );
+                             FormulaCursor* cursor, bool smallCursor,
+                             bool activeCursor );
 
     /**
      * Moves to the beginning of this word or if we are there already

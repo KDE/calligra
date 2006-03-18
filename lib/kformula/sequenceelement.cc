@@ -370,7 +370,8 @@ void SequenceElement::calcCursorSize( const ContextStyle& context,
  * If the cursor is inside a sequence it needs to be drawn.
  */
 void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context,
-                                  FormulaCursor* cursor, bool smallCursor )
+                                  FormulaCursor* cursor, bool smallCursor,
+                                  bool activeCursor )
 {
     painter.setRasterOp( Qt::XorROP );
     if ( cursor->isSelection() ) {
@@ -381,28 +382,29 @@ void SequenceElement::drawCursor( QPainter& painter, const ContextStyle& context
                           context.layoutUnitToPixelY( r.height() ),
                           Qt::white );
     }
-    else {
-        painter.setPen( QPen( Qt::white,
-                              context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
-        const LuPixelPoint& point = cursor->getCursorPoint();
-        const LuPixelRect& size = cursor->getCursorSize();
-        if ( smallCursor ) {
-            painter.drawLine( context.layoutUnitToPixelX( point.x() ),
-                              context.layoutUnitToPixelY( size.top() ),
-                              context.layoutUnitToPixelX( point.x() ),
-                              context.layoutUnitToPixelY( size.bottom() )-1 );
-        }
-        else {
-            painter.drawLine( context.layoutUnitToPixelX( point.x() ),
-                              context.layoutUnitToPixelY( size.top() ),
-                              context.layoutUnitToPixelX( point.x() ),
-                              context.layoutUnitToPixelY( size.bottom() )-1 );
-            painter.drawLine( context.layoutUnitToPixelX( size.left() ),
-                              context.layoutUnitToPixelY( size.bottom() )-1,
-                              context.layoutUnitToPixelX( size.right() )-1,
-                              context.layoutUnitToPixelY( size.bottom() )-1 );
-        }
+    painter.setPen( QPen( Qt::white,
+                    context.layoutUnitToPixelX( context.getLineWidth()/2 ) ) );
+    const LuPixelPoint& point = cursor->getCursorPoint();
+    const LuPixelRect& size = cursor->getCursorSize();
+    if ( activeCursor )
+    {
+        int offset = 0;
+        if ( cursor->isSelection() && cursor->getPos() > cursor->getMark() )
+            offset = -1;
+        painter.drawLine( context.layoutUnitToPixelX( point.x() ) + offset,
+                          context.layoutUnitToPixelY( size.top() ),
+                          context.layoutUnitToPixelX( point.x() ) + offset,
+                          context.layoutUnitToPixelY( size.bottom() )-1 );
+        painter.drawLine( context.layoutUnitToPixelX( point.x() ) + offset + 1,
+                          context.layoutUnitToPixelY( size.top() ),
+                          context.layoutUnitToPixelX( point.x() ) + offset + 1,
+                          context.layoutUnitToPixelY( size.bottom() )-1 );
     }
+    if ( !smallCursor && !cursor->isSelection() )
+        painter.drawLine( context.layoutUnitToPixelX( size.left() ),
+                          context.layoutUnitToPixelY( size.bottom() )-1,
+                          context.layoutUnitToPixelX( size.right() )-1,
+                          context.layoutUnitToPixelY( size.bottom() )-1 );
     // This might be wrong but probably isn't.
     painter.setRasterOp( Qt::CopyROP );
 }
@@ -1533,7 +1535,8 @@ void NameSequence::calcCursorSize( const ContextStyle& context,
 }
 
 void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
-                               FormulaCursor* cursor, bool smallCursor )
+                               FormulaCursor* cursor, bool smallCursor,
+                               bool activeCursor )
 {
     LuPixelPoint point = widgetPos();
     painter.setPen( QPen( context.getEmptyColor(),
@@ -1545,7 +1548,7 @@ void NameSequence::drawCursor( QPainter& painter, const ContextStyle& context,
                       context.layoutUnitToPixelX( getWidth()+2*unitX ),
                       context.layoutUnitToPixelY( getHeight()+2*unitY ) );
 
-    inherited::drawCursor( painter, context, cursor, smallCursor );
+    inherited::drawCursor( painter, context, cursor, smallCursor, activeCursor );
 }
 
 void NameSequence::moveWordLeft( FormulaCursor* cursor )

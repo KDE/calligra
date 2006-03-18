@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include <qpainter.h>
+#include <qtimer.h>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -37,7 +38,7 @@ KFORMULA_NAMESPACE_BEGIN
 struct View::View_Impl {
 
     View_Impl(Container* doc, View* view)
-            : smallCursor(false), cursorHasChanged(true),
+            : smallCursor(false), activeCursor(true), cursorHasChanged(true),
               document(doc)
     {
         connect(document, SIGNAL(elementWillVanish(BasicElement*)),
@@ -48,14 +49,26 @@ struct View::View_Impl {
                 view, SLOT(slotCursorMoved(FormulaCursor*)));
 
         cursor = document->createCursor();
+        blinkTimer = new QTimer( view );
+        connect( blinkTimer, SIGNAL( timeout() ),
+                 view, SLOT( slotBlinkCursor() ) );
+        if ( QApplication::cursorFlashTime() > 0 )
+            blinkTimer->start( QApplication::cursorFlashTime() / 2 );
     }
 
+    void startTimer()
+    {
+        if ( QApplication::cursorFlashTime() > 0 )
+            blinkTimer->start( QApplication::cursorFlashTime() / 2 );
+    }
+    
     ~View_Impl()
     {
         if ( document->activeCursor() == cursor ) {
             document->setActiveCursor( 0 );
         }
         delete cursor;
+        delete blinkTimer;
     }
 
     /**
@@ -64,11 +77,21 @@ struct View::View_Impl {
     bool smallCursor;
 
     /**
+     * Whether the cursor is visible (for blinking)
+     */
+    bool activeCursor;
+    
+    /**
      * Whether the cursor changed since the last time
      * we emitted a cursorChanged signal.
      */
     bool cursorHasChanged;
 
+    /**
+     * Timer for cursor blinking
+     */
+    QTimer *blinkTimer;
+    
     /**
      * The formula we show.
      */
@@ -84,7 +107,9 @@ struct View::View_Impl {
 FormulaCursor* View::cursor() const        { return impl->cursor; }
 bool& View::cursorHasChanged()             { return impl->cursorHasChanged; }
 bool& View::smallCursor()                  { return impl->smallCursor; }
+bool& View::activeCursor()                 { return impl->activeCursor; }
 Container* View::container() const { return impl->document; }
+void View::startCursorTimer() { impl->startTimer(); }
 
 
 View::View(Container* doc)
@@ -122,7 +147,7 @@ void View::draw(QPainter& painter, const QRect& rect, const QColorGroup& cg)
 //                      << rect.width() << " " << rect.height() << endl;
     container()->draw( painter, rect, cg, true );
     if ( cursorVisible() ) {
-        cursor()->draw( painter, contextStyle(), smallCursor() );
+        cursor()->draw( painter, contextStyle(), smallCursor(), activeCursor() );
     }
 }
 
@@ -130,7 +155,7 @@ void View::draw(QPainter& painter, const QRect& rect)
 {
     container()->draw( painter, rect, true );
     if ( cursorVisible() ) {
-        cursor()->draw( painter, contextStyle(), smallCursor() );
+        cursor()->draw( painter, contextStyle(), smallCursor(), activeCursor() );
     }
 }
 
@@ -264,6 +289,12 @@ void View::slotElementWillVanish(BasicElement* element)
     emitCursorChanged();
 }
 
+void View::slotBlinkCursor()
+{
+    activeCursor() = ! activeCursor();
+    emitCursorChanged();
+}
+
 void View::slotSelectAll()
 {
     cursor()->moveHome(WordMovement);
@@ -344,9 +375,10 @@ void View::emitCursorChanged()
         cursor()->clearChangedFlag();
         cursorHasChanged() = false;
         cursor()->calcCursorSize( contextStyle(), smallCursor() );
-
-        emit cursorChanged(cursorVisible(), cursor()->isSelection());
+        activeCursor() = true;
+        startCursorTimer();
     }
+    emit cursorChanged(cursorVisible(), cursor()->isSelection());
 }
 
 const ContextStyle& View::contextStyle() const
@@ -356,8 +388,7 @@ const ContextStyle& View::contextStyle() const
 
 bool View::cursorVisible()
 {
-    //return !cursor()->isReadOnly() || cursor()->isSelection();
-    return true;
+    return !cursor()->isReadOnly() || cursor()->isSelection();
 }
 
 KFORMULA_NAMESPACE_END

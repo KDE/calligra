@@ -79,7 +79,8 @@ void FormulaCursor::calcCursorSize( const ContextStyle& context, bool smallCurso
     }
 }
 
-void FormulaCursor::draw( QPainter& painter, const ContextStyle& context, bool smallCursor )
+void FormulaCursor::draw( QPainter& painter, const ContextStyle& context, 
+                          bool smallCursor, bool activeCursor )
 {
     //if (readOnly && !isSelection())
     //return;
@@ -88,7 +89,7 @@ void FormulaCursor::draw( QPainter& painter, const ContextStyle& context, bool s
     SequenceElement* sequence = dynamic_cast<SequenceElement*>(current);
 
     if (sequence != 0) {
-        sequence->drawCursor( painter, context, this, smallCursor );
+        sequence->drawCursor( painter, context, this, smallCursor, activeCursor );
     }
 }
 

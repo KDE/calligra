@@ -154,6 +154,11 @@ protected slots:
      * our cursor must not be inside it.
      */
     void slotElementWillVanish(BasicElement*);
+    
+    /**
+     * Tell the cursor to change its visibility status
+     */
+    void slotBlinkCursor();
 
 protected:
 
@@ -168,7 +173,9 @@ private:
 
     bool& cursorHasChanged();
     bool& smallCursor();
+    bool& activeCursor();
     Container* container() const;
+    void startCursorTimer();
     const ContextStyle& contextStyle() const;
     FormulaCursor* cursor() const;
 
