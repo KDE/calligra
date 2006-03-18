@@ -123,6 +123,11 @@ QValueVector<QDomElement> KoOasisStyles::userStyles() const
     return vec;
 }
 
+QDict<QDomElement>& KoOasisStyles::styles(QString family) const
+{
+  return d->m_styles[family];
+}
+
 void KoOasisStyles::insertOfficeStyles( const QDomElement& styles )
 {
     QDomElement e;
