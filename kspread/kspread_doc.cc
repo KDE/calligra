@@ -45,21 +45,22 @@
 #include <ksconfig.h>
 #include <ktempfile.h>
 
-#include <KoDocumentInfo.h>
+#include <KoApplication.h>
 #include <KoCommandHistory.h>
-#include <KoTemplateChooseDia.h>
-#include <KoXmlWriter.h>
-#include <KoStoreDevice.h>
-#include <KoOasisSettings.h>
+#include <KoDocumentInfo.h>
+#include <KoDom.h>
 #include <KoMainWindow.h>
+#include <KoOasisSettings.h>
+#include <KoOasisStyles.h>
+#include <KoStoreDevice.h>
+#include <KoTemplateChooseDia.h>
 #include <KoVariable.h>
-
-#include "kspread_doc.h"
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include "kspread_canvas.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
-#include "selection.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_style.h"
@@ -67,11 +68,13 @@
 #include "kspread_undo.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
-#include "commands.h"
-#include "ksploadinginfo.h"
-#include "damages.h"
-#include "functions.h"
 
+#include "commands.h"
+#include "damages.h"
+#include "formula.h"
+#include "functions.h"
+#include "ksploadinginfo.h"
+#include "selection.h"
 #include "valuecalc.h"
 #include "valueconverter.h"
 #include "valueformatter.h"
@@ -79,10 +82,7 @@
 
 #include "KSpreadDocIface.h"
 
-#include <KoApplication.h>
-#include <KoXmlNS.h>
-#include <KoDom.h>
-#include <KoOasisStyles.h>
+#include "kspread_doc.h"
 
 using namespace std;
 using namespace KSpread;
@@ -447,7 +447,7 @@ void Doc::saveConfig()
 void Doc::initConfig()
 {
     KConfig *config = Factory::global()->config();
-    
+
     if( config->hasGroup("KSpread Page Layout" ))
     {
       config->setGroup( "KSpread Page Layout" );
@@ -643,7 +643,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
 	    qWarning("Creation of temporary file to store document content failed.");
 	    return false;
     }
-    
+
     contentTmpFile.setAutoDelete( true );
     QFile* tmpFile = contentTmpFile.file();
     KoXmlWriter contentTmpWriter( tmpFile, 1 );
@@ -974,10 +974,10 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 		QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
 		kdDebug() << "Preloading style: " << name << endl;
 		styleElements.insert( name , new Style());
-		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) ); 
+		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
 	}
     }
-    
+
     // all <sheet:sheet> goes to workbook
     if ( !map()->loadOasis( body, context, styleElements ) )
     {
@@ -1004,7 +1004,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 		delete style;
     }
 
-    
+
     //display loading time
     kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     deleteLoadingInfo();
@@ -1416,7 +1416,7 @@ KSpellConfig * Doc::getKSpellConfig()
     if (!d->spellConfig)
     {
     	KSpellConfig ksconfig;
-    
+
     	KConfig *config = Factory::global()->config();
     	if( config->hasGroup("KSpell kspread" ) )
     	{
@@ -1849,7 +1849,7 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 
 #if 0
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
-		       paintBordersRight, paintBordersBottom, 
+		       paintBordersRight, paintBordersBottom,
 		       paintBordersLeft, paintBordersTop,
 		       rightPen, bottomPen, leftPen, topPen,
 		       mergedCellsPainted, false );
@@ -1860,7 +1860,7 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
 		       paintBorder,
-		       rightPen, bottomPen, leftPen, topPen, 
+		       rightPen, bottomPen, leftPen, topPen,
 		       mergedCellsPainted, false );
 
 
@@ -2019,12 +2019,12 @@ void Doc::loadOasisAreaName( const QDomElement& body )
 
             // TODO: what is: sheet:base-cell-address
             QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
-            QString areaPoint = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
-            kdDebug()<<"area name : "<<name<<" areaPoint :"<<areaPoint<<endl;
+            QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
+            kdDebug()<<"area name : "<<name<<" range :"<<range<<endl;
             d->m_loadingInfo->addWordInAreaList( name );
-            kdDebug() << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
+            kdDebug() << "Reading in named area, name: " << name << ", area: " << range << endl;
 
-            QString range( Sheet::translateOpenCalcPoint( areaPoint ) );
+            Oasis::decodeFormula( range );
 
             if ( range.find( ':' ) == -1 )
             {
@@ -2109,13 +2109,13 @@ void Doc::refreshLocale()
 
 void Doc::emitBeginOperation(bool waitCursor)
 {
-    //If an emitBeginOperation occurs with waitCursor enabled, then the waiting cursor is set 
+    //If an emitBeginOperation occurs with waitCursor enabled, then the waiting cursor is set
     //until all operations have been completed.
     //
     //The reason being that any operations started before the first one with waitCursor set
     //are expected to be completed in a short time anyway.
     QCursor* activeOverride = QApplication::overrideCursor();
-    
+
     if (waitCursor && ( (!activeOverride) || (activeOverride->shape() != Qt::waitCursor.shape()) )  )
     {
         QApplication::setOverrideCursor(Qt::waitCursor);
@@ -2153,7 +2153,7 @@ void Doc::emitEndOperation()
    if (d->numOperations == 0)
    {
    	QApplication::restoreOverrideCursor();
-    
+
      /* do this after the parent class emitEndOperation because that allows updates
         on the view again
      */

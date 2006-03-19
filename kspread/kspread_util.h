@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -58,7 +59,7 @@ public:
   Point( const QString&, Map*, Sheet* default_sheet = 0 );
   Point( const Point& c ) {
     _pos = c._pos;
-    _sheet = c._sheet; 
+    _sheet = c._sheet;
     _sheetName = c._sheetName;
     _columnFixed = c._columnFixed;
     _rowFixed = c._rowFixed;
@@ -81,33 +82,33 @@ public:
   * Sets the sheet which this point lies on.
   */
   void      setSheet(Sheet* sheet);
-  Sheet*    sheet() const;     
-  
+  Sheet*    sheet() const;
+
   /**
   * Sets the name of the sheet which this point lies on.
-  */ 
-  void      setSheetName(QString name);  
+  */
+  void      setSheetName(QString name);
   QString   sheetName() const;
-  
+
   /**
   * Sets the position of this point (in rows and columns)
   */
   void      setPos(QPoint pos);
-  QPoint    pos() const;          
-  
+  QPoint    pos() const;
+
   /**
   * Sets whether or not the column (x coordinate) of this point is fixed (ie. it represents an absolute
   * coordinate - eg. the column letter B in the formula "=$B30" is fixed)
   */
   void      setColumnFixed(bool colFixed);
-  bool      columnFixed() const;   
-  
+  bool      columnFixed() const;
+
   /**
   * Sets whether or not the row (y coordinate) of this point is fixed (ie. it represents an absolute coordinate - eg. the row number 30 in the formula "=A$30" is fixed)
   */
   void      setRowFixed(bool rowFixed);
   bool      rowFixed() const;
-  
+
 
 private:
   Sheet* _sheet;
@@ -130,22 +131,22 @@ class KSPREAD_EXPORT Range
 {
 public:
   Range();
-  
+
   Range( const QString& );
   Range( const QString&, Map*, Sheet* default_sheet = 0 );
   Range( const Range& r );
   Range( const Point& ul, const Point& lr );
 
-  /** 
+  /**
   * Returns true if this Range represents a valid region of a spreadsheet.
   * A range is valid if:
   * - It has an associated Sheet
-  * - The area is non-negative (ie. 
+  * - The area is non-negative (ie.
   * - The left-most column is non-negative
   * - The top-most row is non-negative
   */
   bool isValid() const;
-  
+
   /** Returns true if this range has an associated Sheet or false otherwise */
   bool isSheetKnown() const { return ( !sheetName().isEmpty() && sheet() != 0 ); }
 
@@ -164,63 +165,63 @@ public:
   * @param newRange The new area for this range.
   */
   virtual void setRange(const QRect& newRange) {_range=newRange;}
-  
+
   void setRange(int newStartCol, int newStartRow, int newEndCol, int newEndRow)
   { _range=QRect(newStartCol,newStartRow,newEndCol-newStartCol,newEndRow-newStartRow); }
-  
+
   /** Returns the area on the spreadsheet occupied by this range. */
   QRect range() const;
 
   /** Returns true if this range includes the specified cell */
   bool contains (const Point &cell) const;
-  /** 
+  /**
   * Returns true if this range intersects Range @p r  (ie. there is at least one cell
   * which is common to both Ranges )
   */
   bool intersects (const Range &r) const;
 
-  /** 
+  /**
   * Returns a string representation of this range as it would appear in a formula.
-  * ie. In the format " SheetName! [StartCell] : [EndCell] " 
+  * ie. In the format " SheetName! [StartCell] : [EndCell] "
   * The string representation uses $ characters to mark fixed parts of the range, eg. Sheet1!$A1:$A20
   */
   QString toString() const;
-  
+
   /** Sets whether or not the left column is fixed . */
   void setLeftFixed(bool fixed);
   bool leftFixed() const;
-  
+
   /** Sets whether or not the right column is fixed. */
   void setRightFixed(bool fixed);
   bool rightFixed() const;
-  
+
   /** Sets whether or not the top row is fixed. */
   void setTopFixed(bool fixed);
   bool topFixed() const;
-  
+
   /** Sets whether or not the bottom row is fixed. */
   void setBottomFixed(bool fixed);
   bool bottomFixed() const;
-  
+
   /** Sets the Sheet object associated with this range.  The range can only span a single sheet. */
   void setSheet(Sheet* sheet);
   Sheet* sheet() const;
-  
+
   /** Sets the name of the sheet associated with this range. */
   void setSheetName(QString sheetName);
   QString sheetName() const;
-  
-  /** 
+
+  /**
   * Returns the named area represented by this range or an empty string otherwise.
   * This is the name of the area which was passed as a QString to the Range constructor
   */
   QString namedArea() const;
-  
+
   /**
   * Returns true if the other range occupies the same area on the same sheet as this range.
   */
   bool operator==(const Range& range) const;
-  
+
 
 private:
   Sheet* _sheet;
@@ -327,6 +328,27 @@ QPen convertOasisStringToPen( const QString &str );
 
 //Return true when it's a reference to cell from sheet.
 KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
+
+
+
+namespace Oasis
+{
+  /**
+   * Converts an OpenDocument representation of a formula/cell reference to a
+   * localized formula/cell reference.
+   * @param expr The expression to convert from OpenDocument format.
+   * @param locale The locale to which the expression should be converted.
+   */
+  // TODO check visibility
+  KSPREAD_EXPORT void decodeFormula(QString& expr, KLocale* locale = 0);
+  /**
+   * Converts a localized formula/cell reference to an OpenDocument
+   * representation of a formula/cell reference.
+   * @param expr The expression to convert to OpenDocument format.
+   * @param locale The locale from which the expression should be converted.
+   */
+  KSPREAD_EXPORT void encodeFormula(QString& expr, KLocale* locale = 0);
+}
 
 } // namespace KSpread
 

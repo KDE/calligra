@@ -1344,7 +1344,6 @@ public:
   class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const Region& region );
     };
 
-    static QString translateOpenCalcPoint( const QString & str );
 protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
     SelectionType workOnCells( Selection* selectionInfo,

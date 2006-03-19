@@ -82,12 +82,12 @@ class Token
      * Creates a token.
      */
     Token( Type type = Unknown, const QString& text = QString::null, int pos = -1 );
-    
+
     static const Token null;
 
     Token( const Token& );
     Token& operator=( const Token& );
-    
+
     /**
      * Returns type of the token.
      */
@@ -101,7 +101,7 @@ class Token
      * etc.
      */
     QString text() const { return m_text; }
-    
+
     int pos() const { return m_pos; };
 
     /**
@@ -148,7 +148,7 @@ class Token
      * Returns true if token is an identifier.
      */
     bool isIdentifier() const { return m_type == Identifier; }
-    
+
     /**
      * Returns boolean value for an boolean token.
      * For any other type of token, return value is undefined.
@@ -183,7 +183,7 @@ class Token
      * For any other type of token, returns Token::InvalidOp.
      */
     Op asOperator() const;
-    
+
     /**
      * Returns sheet name in a cell reference token.
      * For any other type of token, it returns QString::null.
@@ -203,7 +203,7 @@ class Token
      * Should be used only to assist debugging.
      */
     QString description() const;
-    
+
   protected:
 
     Type m_type;
@@ -230,31 +230,31 @@ protected:
 /**
  * Class Formula encapsulates a formula for a cell.
  *
- * A Formula is a equations which perform calculations on values in the cells 
- * and sheets. Every formula must start with an equal sign (=). 
+ * A Formula is a equations which perform calculations on values in the cells
+ * and sheets. Every formula must start with an equal sign (=).
  *
  *
  */
 class Formula
 {
   public:
-  
+
     /**
      * Creates a formula. It must be owned by a sheet, and optionally sheet.
      */
     Formula (Sheet *sheet,  Cell *cell = 0);
-    
+
     /**
      * Creates a formula that is not owned by any sheet.
      * This might be useful in some cases.
      */
     Formula();
-    
+
     /**
      * Destroys the formula.
      */
     ~Formula();
-    
+
     /**
      * Returns the cell which owns this formula.
      */
@@ -263,55 +263,55 @@ class Formula
      * Returns the cell which owns this formula.
      */
     Cell* cell() const;
-    
+
     /**
      * Sets the expression for this formula.
-     */    
+     */
     void setExpression( const QString& expr );
-    
+
     /**
      * Gets the expression of this formula.
-     */    
-    QString expression() const;    
-    
+     */
+    QString expression() const;
+
     /**
      * Clears everything, makes as like a newly constructed formula.
-     */    
+     */
     void clear();
-        
+
     /**
-     * Returns true if the specified expression is valid, i.e. it contains 
+     * Returns true if the specified expression is valid, i.e. it contains
      * no parsing error.
      * Empty formula (i.e. without expression) is always invalid.
-     */    
+     */
     bool isValid() const;
-        
+
     /**
-     * Returns list of tokens associated with this formula. This has nothing to 
-     * with the formula evaluation but might be useful, e.g. for syntax 
+     * Returns list of tokens associated with this formula. This has nothing to
+     * with the formula evaluation but might be useful, e.g. for syntax
      * highlight or similar features.
      * If the formula contains error, the returned tokens is invalid.
-     */    
+     */
     Tokens tokens() const;
-    
+
     /**
      * Evaluates the formula and returns the result.
-     */    
+     */
     Value eval() const;
-    
+
     /**
      * Given an expression, this function separates it into tokens.
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.
-     */     
+     */
     Tokens scan( const QString& expr, KLocale* locale = 0 ) const;
 
     QString dump() const;
 
   protected:
-  
-    void compile( const Tokens& tokens ) const;        
-    
+
+    void compile( const Tokens& tokens ) const;
+
   private:
     class Private;
     Private *d;
@@ -325,6 +325,17 @@ class Formula
  */
 QTextStream& operator<<( QTextStream& ts, Formula formula );
 
+
+/**
+ * helper function: return operator of given token text
+ * e.g. "*" yields Operator::Asterisk, and so on
+ */
+Token::Op matchOperator( const QString& text );
+
+/**
+ * helper function: return true for valid identifier character
+ */
+bool isIdentifier( QChar ch );
 
 } // namespace KSpread
 

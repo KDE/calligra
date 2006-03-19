@@ -1041,7 +1041,13 @@ private:
   void offsetAlign( int _col, int _row );
 
     void checkForNamedAreas( QString & formula ) const;
-    void convertFormula( QString & text, const QString & f ) const;
+    /**
+     * replacements:
+     * 1. "==" -> "="
+     * 2. "Sheet1!A1"  -> "[Sheet1.A1]"
+     *    "A1" -> "[.A1]"
+     * 3. ","  -> "."
+     */
     QString convertFormulaToOasisFormat( const QString & formula ) const;
     void loadOasisValidationValue( const QStringList &listVal );
 

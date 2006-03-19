@@ -17,14 +17,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <klocale.h>
+#include <kdebug.h>
+
 #include "tester.h"
 #include "formula_tester.h"
 
 #include <formula.h>
+#include <kspread_util.h>
 #include <kspread_value.h>
 
 #define CHECK_PARSE(x,y)  checkParse(__FILE__,__LINE__,#x,x,y)
 #define CHECK_EVAL(x,y)  checkEval(__FILE__,__LINE__,#x,x,y)
+#define CHECK_OASIS(x,y)  checkOasis(__FILE__,__LINE__,#x,x,y)
 
 using namespace KSpread;
 
@@ -57,7 +62,7 @@ static char encodeTokenType( const Token& token )
 static QString describeTokenCodes( const QString& tokenCodes )
 {
   QString result;
-  
+
   if( tokenCodes.isEmpty() )
     result = "(invalid)";
   else
@@ -76,21 +81,21 @@ static QString describeTokenCodes( const QString& tokenCodes )
       }
       if( i < tokenCodes.length()-1 ) result.append( ", " );
     }
-    
-  return result.prepend("{").append("}");  
+
+  return result.prepend("{").append("}");
 }
 
-void FormulaParserTester::checkParse( const char *file, int line, const char* msg, 
+void FormulaParserTester::checkParse( const char *file, int line, const char* msg,
   const QString& formula, const QString& tokenCodes )
 {
   testCount++;
-  
+
   Formula f;
   QString expr = formula;
   expr.prepend( '=' );
   f.setExpression( expr );
   Tokens tokens = f.tokens();
-  
+
   QString resultCodes;
   if( tokens.valid() )
     for( unsigned i = 0; i < tokens.count(); i++ )
@@ -120,7 +125,7 @@ void FormulaParserTester::run()
   CHECK_PARSE( "1e-9", "f" );
   CHECK_PARSE( "2e3", "f" );
   CHECK_PARSE( ".3333e0", "f" );
-  
+
   // cell/range/identifier
   CHECK_PARSE( "A1", "c" );
   CHECK_PARSE( "Sheet1!A1", "c" );
@@ -129,7 +134,7 @@ void FormulaParserTester::run()
   CHECK_PARSE( "Sheet1!A1:B100", "r" );
   CHECK_PARSE( "'Sheet One'!A1:B100", "r" );
   CHECK_PARSE( "SIN", "x" );
-  
+
   // operators
   CHECK_PARSE( "+", "o" );
   CHECK_PARSE( "-", "o" );
@@ -147,21 +152,21 @@ void FormulaParserTester::run()
   CHECK_PARSE( "<=", "o" );
   CHECK_PARSE( ">=", "o" );
   CHECK_PARSE( "%", "o" );
-  
+
   // commonly used formulas
-  CHECK_PARSE( "A1+A2", "coc" ); 
-  CHECK_PARSE( "2.5*B1", "foc" ); 
-  CHECK_PARSE( "SUM(A1:Z10)", "xoro" ); 
-  CHECK_PARSE( "MAX(Sheet1!Sales)", "xoro" ); 
-  
+  CHECK_PARSE( "A1+A2", "coc" );
+  CHECK_PARSE( "2.5*B1", "foc" );
+  CHECK_PARSE( "SUM(A1:Z10)", "xoro" );
+  CHECK_PARSE( "MAX(Sheet1!Sales)", "xoro" );
+
   // should be correctly parsed though they are nonsense (can't be evaluated)
-  CHECK_PARSE( "0E0.5", "ff" );  
-  CHECK_PARSE( "B3 D4:D5 Sheet1!K1", "crc" );  
-  CHECK_PARSE( "SIN A1", "xc" );  
-  CHECK_PARSE( "SIN A1:A20", "xr" );  
-  
-  // invalid formulas, can't be parsed correctly  
-  CHECK_PARSE( "+1.23E", QString::null );  
+  CHECK_PARSE( "0E0.5", "ff" );
+  CHECK_PARSE( "B3 D4:D5 Sheet1!K1", "crc" );
+  CHECK_PARSE( "SIN A1", "xc" );
+  CHECK_PARSE( "SIN A1:A20", "xr" );
+
+  // invalid formulas, can't be parsed correctly
+  CHECK_PARSE( "+1.23E", QString::null );
 }
 
 FormulaEvalTester::FormulaEvalTester(): Tester()
@@ -173,11 +178,11 @@ QString FormulaEvalTester::name()
   return QString("Formula (Eval)");
 }
 
-void FormulaEvalTester::checkEval( const char *file, int line, const char* msg, 
+void FormulaEvalTester::checkEval( const char *file, int line, const char* msg,
   const QString& formula, const Value& expected )
 {
   testCount++;
-  
+
   Formula f;
   QString expr = formula;
   expr.prepend( '=' );
@@ -200,19 +205,19 @@ void FormulaEvalTester::run()
 {
   testCount = 0;
   errorList.clear();
-  
+
   // simple constants
   CHECK_EVAL( "0", Value(0) );
   CHECK_EVAL( "1", Value(1) );
   CHECK_EVAL( "-1", Value(-1) );
   CHECK_EVAL( "3.14e7", Value(3.14e7) );
   CHECK_EVAL( "3.14e-7", Value(3.14e-7) );
-  
-  
-  // simple binary operation  
+
+
+  // simple binary operation
   CHECK_EVAL( "0+0", Value(0) );
   CHECK_EVAL( "1+1", Value(2) );
-  
+
   // unary minus
   CHECK_EVAL( "-1", Value(-1) );
   CHECK_EVAL( "--1", Value(1) );
@@ -224,7 +229,7 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "5---1", Value(4) );
   CHECK_EVAL( "5----1", Value(6) );
   CHECK_EVAL( "5-----1", Value(4) );
-  
+
   // no parentheses, checking operator precendences
   CHECK_EVAL( "14+3*77", Value(245) );
   CHECK_EVAL( "14-3*77", Value(-217) );
@@ -233,11 +238,11 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "30-45/3", Value(15) );
   CHECK_EVAL( "45+45/3", Value(60) );
   CHECK_EVAL( "4+3*2-1", Value(9) );
-  
+
   // power operator is right associative
   CHECK_EVAL( "2^3", Value(8) );
   CHECK_EVAL( "2^3^2", Value(512) );
-  
+
   // lead to division by zero
   CHECK_EVAL( "0/0", Value::errorDIV0() );
   CHECK_EVAL( "1/0", Value::errorDIV0() );
@@ -245,17 +250,17 @@ void FormulaEvalTester::run()
   CHECK_EVAL( "(2*3)/(6-2*3)", Value::errorDIV0() );
   CHECK_EVAL( "1e3+7/0", Value::errorDIV0() );
   CHECK_EVAL( "2^(99/0)", Value::errorDIV0() );
- 
+
   // string expansion ...
   CHECK_EVAL( "\"2\"+5", Value(7) );
   CHECK_EVAL( "2+\"5\"", Value(7) );
   CHECK_EVAL( "\"2\"+\"5\"", Value(7) );
-  
+
   //the built-in sine function
   CHECK_EVAL ("SIN(0)", Value(0));
   CHECK_EVAL ("2+sin(\"2\"-\"2\")", Value(2));
   CHECK_EVAL ("\"1\"+sin(\"0\")", Value(1));
-  
+
   // tests from the OpenFormula testing suite:
   // note that these get auto-generated using generate-openformula-tests
   CHECK_EVAL("=(1/3)*3=1", Value(true));  // row 51
@@ -327,5 +332,76 @@ void FormulaEvalTester::run()
   CHECK_EVAL("=DAY(\"5/21/06\")", Value(21));  // row 135
   CHECK_EVAL("=DAY(\"5-21-06\")", Value(21));  // row 136
 
-  
+
+}
+
+
+
+FormulaOasisConversionTester::FormulaOasisConversionTester(): Tester()
+{
+}
+
+QString FormulaOasisConversionTester::name()
+{
+  return QString("Formula (OpenDocument conversion)");
+}
+
+void FormulaOasisConversionTester::run()
+{
+  testCount = 0;
+  errorList.clear();
+
+  // cell references
+  CHECK_OASIS( "A1", "[.A1]" );
+  CHECK_OASIS( "=A1", "=[.A1]" );
+  CHECK_OASIS( "=A1:A4", "=[.A1:A4]" );
+  CHECK_OASIS( "=Sheet2!A1", "=[Sheet2.A1]" );
+
+  // equality
+  CHECK_OASIS( "=A1==A2", "=[.A1]=[.A2]" );
+
+  // decimal separator ','
+  CHECK_OASIS( "=,12", "=.12" );
+  CHECK_OASIS( "=12,12", "=12.12" );
+  CHECK_OASIS( "=368*7*(0,1738+0,1784)*(0,1738+0,1784)", "=368*7*(0.1738+0.1784)*(0.1738+0.1784)"  );
+  CHECK_OASIS( "=\",12\"", "=\",12\"" );
+
+  kdDebug() << errorList.join("\n") << endl;
+}
+
+void FormulaOasisConversionTester::checkOasis( const char *file, int line, const char* msg,
+                                      const QString& localeFormula, const QString& oasisFormula )
+{
+  testCount++;
+
+  KLocale locale("en_US");
+  locale.setDecimalSymbol(",");
+
+  // KSpread -> OpenDocument
+  QString formula = localeFormula;
+  Oasis::encodeFormula( formula, &locale );
+
+  if( formula != oasisFormula )
+  {
+    QString message = "[Locale->Oasis] ";
+    message.append( msg );
+    message.append( " Result: ").append( formula );
+    message.append( " Expected: ").append( oasisFormula );
+    fail( file, line, message );
+  }
+
+  testCount++;
+
+  // OpenDocument -> KSpread
+  formula = oasisFormula;
+  Oasis::decodeFormula( formula, &locale );
+
+  if( formula != localeFormula )
+  {
+    QString message = "[Oasis->Locale] ";
+    message.append( "\"" + oasisFormula + "\"" );
+    message.append( " Result: ").append( formula );
+    message.append( " Expected: ").append( localeFormula );
+    fail( file, line, message );
+  }
 }

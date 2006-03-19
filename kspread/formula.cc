@@ -44,7 +44,7 @@
 /*
   To understand how this formula engine works, please refer to the documentation
   in file DESIGN.html.
-      
+
   Useful references:
    - "Principles of Compiler Design", A.V.Aho, J.D.Ullman, Addison Wesley, 1978
    - "Writing Interactive Compilers and Interpreters", P.J. Brown,
@@ -127,7 +127,7 @@ const Token Token::null;
 
 // helper function: return operator of given token text
 // e.g. "*" yields Operator::Asterisk, and so on
-static Token::Op matchOperator( const QString& text )
+Token::Op KSpread::matchOperator( const QString& text )
 {
   Token::Op result = Token::InvalidOp;
 
@@ -355,7 +355,7 @@ void TokenStack::ensureSpace()
  **********************/
 
 // helper function: return true for valid identifier character
-static bool isIdentifier( QChar ch )
+bool KSpread::isIdentifier( QChar ch )
 {
   return ( ch.unicode() == '_' ) || (ch.unicode() == '$' ) || ( ch.isLetter() );
 }
@@ -395,12 +395,12 @@ Formula::~Formula()
 Cell* Formula::cell() const
 {
   return d->cell;
-}  
+}
 
 Sheet* Formula::sheet() const
 {
   return d->sheet;
-}  
+}
 
 // Sets a new expression for this formula.
 // note that both the real lex and parse processes will happen later on
@@ -482,14 +482,14 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
   QString ex = expr;
   QString tokenText;
   int tokenStart = 0;
-  
+
   // first character must be equal sign (=)
   if( ex[0] != '=' )
     return tokens;
 
   // but the scanner should not see this equal sign
-  ex.remove( 0, 1 );  
-    
+  ex.remove( 0, 1 );
+
   // force a terminator
   ex.append( QChar() );
 
@@ -827,8 +827,8 @@ Tokens Formula::scan( const QString& expr, KLocale* locale ) const
        break;
     };
   };
-  
-  if( state == Bad ) 
+
+  if( state == Bad )
     tokens.setValid( false );
 
   return tokens;
@@ -1168,7 +1168,7 @@ Value Formula::eval() const
   ValueParser* parser = 0;
   ValueConverter* converter = 0;
   ValueCalc* calc = 0;
-  
+
   if (d->sheet)
   {
     sheet = d->sheet;
@@ -1181,7 +1181,7 @@ Value Formula::eval() const
     converter = new ValueConverter( parser );
     calc = new ValueCalc( converter );
   }
-  
+
   Function* function;
   FuncExtra fe;
   fe.mycol = fe.myrow = 0;
@@ -1189,7 +1189,7 @@ Value Formula::eval() const
     fe.mycol = d->cell->column();
     fe.myrow = d->cell->row();
   }
-  
+
   if( d->dirty )
   {
     Tokens tokens = scan( d->expression );
@@ -1197,7 +1197,7 @@ Value Formula::eval() const
     if( tokens.valid() )
       compile( tokens );
   }
-  
+
   if( !d->valid )
     return Value::errorVALUE();
 
@@ -1365,7 +1365,7 @@ Value Formula::eval() const
         entry.val = val1;
         stack.push (entry);
         break;
-      
+
       case Opcode::Range:
         c = d->constants[index].asString();
         val1 = Value::empty();
@@ -1387,7 +1387,7 @@ Value Formula::eval() const
         entry.val = val1;
         stack.push (entry);
         break;
-      
+
       case Opcode::Ref:
         val1 = d->constants[index];
         entry.reset();
@@ -1401,7 +1401,7 @@ Value Formula::eval() const
           // (Tomas) umm, how could that be ? I mean, the index value
           //  is computed from the stack *confused*
           return Value::errorVALUE(); // not enough arguments
-        
+
         args.clear();
         fe.ranges.clear ();
         fe.ranges.reserve (index);
@@ -1426,12 +1426,12 @@ Value Formula::eval() const
         function = FunctionRepository::self()->function ( val1.asString() );
         if( !function )
           return Value::errorVALUE(); // no such function
-        
+
         ret = function->exec (args, calc, &fe);
         entry.reset();
         entry.val = ret;
         stack.push (entry);
-        
+
         break;
 
       default:
@@ -1444,7 +1444,7 @@ Value Formula::eval() const
     delete converter;
     delete calc;
   }
-  
+
   // more than one value in stack ? unsuccesful execution...
   if( stack.count() != 1 )
     return Value::errorVALUE();
@@ -1466,7 +1466,7 @@ QString Formula::dump() const
   }
 
   result = QString("Expression: [%1]\n").arg( d->expression );
-#if 0  
+#if 0
   Value value = eval();
   result.append( QString("Result: %1\n").arg(
       converter->asString(value).asString() ) );
@@ -1514,7 +1514,7 @@ QString Formula::dump() const
   return result;
 }
 
-QTextStream& operator<<( QTextStream& ts, Formula formula ) 
+QTextStream& operator<<( QTextStream& ts, Formula formula )
 {
   ts << formula.dump();
   return ts;

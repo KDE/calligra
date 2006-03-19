@@ -60,31 +60,30 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include "commands.h"
 #include "dependencies.h"
-
+#include "selection.h"
+#include "ksploadinginfo.h"
 #include "ksprsavinginfo.h"
+#include "kspread_canvas.h"
 #include "kspread_cluster.h"
 #include "kspread_condition.h"
-#include "kspread_sheet.h"
-#include "kspread_sheetprint.h"
-#include "kspread_locale.h"
-#include "selection.h"
-#include "kspread_global.h"
-#include "kspread_undo.h"
-#include "kspread_map.h"
 #include "kspread_doc.h"
-#include "kspread_util.h"
-#include "kspread_canvas.h"
+#include "kspread_global.h"
+#include "kspread_locale.h"
+#include "kspread_map.h"
+#include "kspread_object.h"
+#include "kspread_sheetprint.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
-#include "ksploadinginfo.h"
-#include "KSpreadTableIface.h"
+#include "kspread_undo.h"
+#include "kspread_util.h"
+#include "kspread_view.h"
 #include "manipulator.h"
 #include "manipulator_data.h"
-#include "kspread_object.h"
-#include "commands.h"
-#include "kspread_view.h"
+#include "KSpreadTableIface.h"
 
+#include "kspread_sheet.h"
 #include "kspread_sheet.moc"
 
 #define NO_MODIFICATION_POSSIBLE \
@@ -6408,7 +6407,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
 
     //Maps from a column index to the name of the default cell style for that column
     QMap<int,QString> defaultColumnCellStyles;
-    
+
     int rowIndex = 1;
     int indexCol = 1;
     QDomNode rowNode = sheetElement.firstChild();
@@ -6444,7 +6443,8 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
     {
         // e.g.: Sheet4.A1:Sheet4.E28
         QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString::null );
-        Range p( translateOpenCalcPoint( range ) );
+        Oasis::decodeFormula( range );
+        Range p( range );
         if ( sheetName() == p.sheetName() )
             d->print->setPrintRange( p.range() );
     }
@@ -6675,9 +6675,9 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
         QString str = column.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
         kdDebug()<<" default-cell-style-name:"<<str<<" for column " << indexCol <<endl;
 
-	//TODO - Code to look up the style in styleMap and store a reference to it in some map 
-	// between column indicies and Style instances.  This can then be used when rendering cells	
-       
+	//TODO - Code to look up the style in styleMap and store a reference to it in some map
+	// between column indicies and Style instances.  This can then be used when rendering cells
+
     }
 
     styleStack.setTypeProperties("table-column");
@@ -6692,7 +6692,7 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
 	 	layout.loadOasisStyleProperties( styleStack , oasisStyles );
 		styleStack.pop();*/
 	}
-	
+
         kdDebug()<<" style column:"<<style<<"style name : "<<str<<endl;
     }
 
@@ -6748,7 +6748,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     KoStyleStack styleStack;
     styleStack.setTypeProperties( "table-row" );
     int backupRow = rowIndex;
-    
+
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
         QString str = row.attributeNS( KoXmlNS::table, "style-name", QString::null );
@@ -6761,12 +6761,12 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     if ( row.hasAttributeNS( KoXmlNS::table,"default-cell-style-name" ) )
     {
 	    QString str = row.attributeNS( KoXmlNS::table, "default-cell-style-name", QString::null );
-	
+
 	    //TODO - Code to look up this style name in the style map and store it in a map somewhere between
 	    //row indicies and Style instances for use when rendering cells later on.
-	    //	    defaultRowCellStyle = styleMap[str]; 
+	    //	    defaultRowCellStyle = styleMap[str];
     }
-    
+
     layout.loadOasisStyleProperties( styleStack, oasisContext.oasisStyles() );
     styleStack.setTypeProperties( "table-row" );
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "row-height" ) )
@@ -6781,7 +6781,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         bool ok = true;
         int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt( &ok );
         if ( ok )
-	    //Some spreadsheet programs may support more rows than KSpread so limit the number of repeated rows	    
+	    //Some spreadsheet programs may support more rows than KSpread so limit the number of repeated rows
             number = min(n,KS_rowMax);
     }
     bool collapse = false;
@@ -6828,8 +6828,8 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     int columnIndex = 0;
     QDomNode cellNode = row.firstChild();
     int endRow = min(backupRow+number,KS_rowMax);
-   
-    
+
+
     while( !cellNode.isNull() )
     {
         QDomElement cellElement = cellNode.toElement();
@@ -6843,19 +6843,19 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
 	//	kdDebug() << "Loading cell #" << cellCount << endl;
 
                 Cell* cell = nonDefaultCell( columnIndex, backupRow );
-		bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" ); 
-	
+		bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
+
 		Style* style = 0;
-		
+
 		if ( cellHasStyle )
 		{
-			style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];		
+			style = styleMap[ cellElement.attributeNS( KoXmlNS::table , "style-name" , QString::null ) ];
 		}
-	
+
                 cell->loadOasis( cellElement, oasisContext, style );
-		
-	
-		bool haveStyle = cellHasStyle;	
+
+
+		bool haveStyle = cellHasStyle;
                 int cols = 1;
 
 		//Copy this cell across & down if it has repeated rows or columns, but only
@@ -6864,10 +6864,10 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
                 {
                     bool ok = false;
                     cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-                   
+
 		    if (!ok)
 			    cols = 1;
-		    
+
 		    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
                         //just increment it
@@ -6878,16 +6878,16 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
                             for(int k = cols ; k ; --k )
                             {
 				if (k != cols)
-					columnIndex++; 
-				
+					columnIndex++;
+
 				Style* targetStyle = style;
-                                
+
 				for ( int newRow = backupRow; newRow < endRow;++newRow )
 				{
 				    if ( targetStyle && (targetStyle->features() != 0 ) )
 				    {
                                     	Cell* target = nonDefaultCell( columnIndex, newRow );
-                                    	
+
 					if (cell != target)
 						target->copyAll( cell );
 				    }
@@ -6901,48 +6901,6 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
     }
 
     return true;
-}
-
-QString Sheet::translateOpenCalcPoint( const QString & str )
-{
-    bool inQuote = false;
-
-    int l = str.length();
-    int colonPos = -1;
-    QString range;
-    bool isRange = false;
-    // replace '.' with '!'
-    for ( int i = 0; i < l; ++i )
-    {
-        if ( str[i] == '$' )
-            continue;
-        if ( str[i] == '\'' )
-        {
-            inQuote = !inQuote;
-        }
-        else if ( str[i] == '.' )
-        {
-            if ( !inQuote )
-            {
-                if ( i != 0 && i != (colonPos + 1) ) // no empty sheet names
-                    range += '!';
-            }
-            else
-                range += '.';
-        }
-        else if ( str[i] == ':' )
-        {
-            if ( !inQuote )
-            {
-                isRange  = true;
-                colonPos = i;
-            }
-            range += ':';
-        }
-        else
-            range += str[i];
-    }
-    return range;
 }
 
 void Sheet::maxRowCols( int & maxCols, int & maxRows )

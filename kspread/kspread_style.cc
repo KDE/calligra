@@ -342,7 +342,8 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
     {
         m_bgColor = QColor(  styleStack.attributeNS( KoXmlNS::fo, "background-color" ) );
-        m_featuresSet |= SBackgroundColor;
+        if ( m_bgColor.isValid() && m_bgColor != Qt::white )
+          m_featuresSet |= SBackgroundColor;
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" )&&( styleStack.attributeNS( KoXmlNS::fo, "wrap-option" )=="wrap" ) )

@@ -5641,15 +5641,16 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
     {
         kdDebug()<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString::null )<<endl;
         isFormula = true;
-        QString formula;
         QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString::null ) );
         //necessary to remove it to load formula from oocalc2.0 (use namespace)
         if (oasisFormula.startsWith( "oooc:" ) )
             oasisFormula= oasisFormula.mid( 5 );
         else if (oasisFormula.startsWith( "kspr:" ) )
             oasisFormula= oasisFormula.mid( 5 );
-        convertFormula( formula, oasisFormula);
-        setCellText( formula );
+        // TODO Stefan: merge this into Oasis::decodeFormula
+        checkForNamedAreas( oasisFormula );
+        Oasis::decodeFormula( oasisFormula, locale() );
+        setCellText( oasisFormula );
     }
     else if ( d->strText.at(0) == '=' ) //prepend ' to the text to avoid = to be painted
         d->strText.prepend('\'');
@@ -5950,7 +5951,8 @@ void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& o
             if ( ref.isNull() )
               continue;
 
-            Point point( Sheet::translateOpenCalcPoint( ref ) );
+            Oasis::decodeFormula( ref );
+            Point point( ref );
             if ( !point.isValid() )
               continue;
 
@@ -7209,101 +7211,4 @@ void Cell::checkForNamedAreas( QString & formula ) const
       kdDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
     }
   }
-}
-
-void Cell::convertFormula( QString & text, const QString & f ) const
-{
-  kdDebug() << "Parsing formula: " << f << endl;
-
-  QString formula;
-  QString parameter;
-
-  int l = f.length();
-  int p = 0;
-
-  while ( p < l )
-  {
-    if ( f[p] == '(' )
-    {
-      break;
-    }
-    else if ( f[p] == '[' )
-      break;
-
-    formula += f[p];
-    ++p;
-  }
-
-  if ( parameter.isEmpty() )
-  {
-    checkForNamedAreas( formula );
-  }
-
-  kdDebug() << "Formula: " << formula << ", Parameter: " << parameter << ", P: " << p << endl;
-
-#if 0 //TODO replace formula name from oocalc if it's necessary (code from oo/import)
-  // replace formula names here
-  if ( formula == "=MULTIPLE.OPERATIONS" )
-    formula = "=MULTIPLEOPERATIONS";
-#endif
-  QString par;
-  const QString decimalSymbol = locale()->decimalSymbol();
-  bool isPar   = false;
-  bool inQuote = false;
-
-  while ( p < l )
-  {
-    if ( f[p] == '"' )
-    {
-      inQuote = !inQuote;
-      parameter += '"';
-    }
-    else if ( f[p] == '[' )
-    {
-      if ( !inQuote )
-        isPar = true;
-      else
-        parameter += '[';
-    }
-    else if ( f[p] == ']' )
-    {
-      if ( inQuote )
-      {
-        parameter += ']';
-        continue;
-      }
-
-      isPar = false;
-      parameter +=  Sheet::translateOpenCalcPoint( par );
-      par = "";
-    }
-    else if ( isPar )
-    {
-      par += f[p];
-    }
-    else if ( f[p] == '=' ) // TODO: check if StarCalc has a '==' sometimes
-    {
-      if ( inQuote )
-        parameter += '=';
-      else
-        parameter += "==";
-    }
-    else if ( f[p] == ')' )
-    {
-      if ( !inQuote )
-        parameter += ")";
-    }
-    else if ( f[p] == '.' && f[p+1].isNumber() && decimalSymbol != ".")
-      // Convert '.' to locale decimal symbol in floating point numbers
-      parameter += decimalSymbol;
-    else
-      parameter += f[p];
-
-    ++p;
-    if ( p == l )
-      checkForNamedAreas( parameter );
-  }
-
-  text = formula + parameter;
-  kdDebug() << "New formula: " << text << endl;
 }

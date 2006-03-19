@@ -6,6 +6,12 @@ INCLUDES = \
 	-I$(srcdir)/.. \
 	$(all_includes)
 
+check_PROGRAMS = formulatest
+TESTS = formulatest
+formulatest_SOURCES = test_formula.cc formula_tester.cc tester.cc
+formulatest_LDADD = ../libkspreadcommon.la
+
+
 noinst_LTLIBRARIES = \
 	libtests.la
 
@@ -22,6 +28,6 @@ noinst_HEADERS = \
 	value_tester.h \
 	formula_tester.h \
 	inspector.h
-        
+
 METASOURCES = AUTO
 

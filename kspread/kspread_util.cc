@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -23,6 +24,7 @@
 
 #include <kdebug.h>
 
+#include "formula.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
@@ -234,7 +236,7 @@ void Point::init(const QString & _str)
 {
     _columnFixed=false;
     _rowFixed=false;
-    
+
 //    kdDebug(36001) <<"Point::init ("<<_str<<")"<<endl;
     _pos.setX(-1);
 
@@ -357,16 +359,16 @@ bool util_isPointValid( QPoint point )
     if (    point.x() >= 0
         &&  point.y() >= 0
         &&  point.x() <= KS_colMax
-        &&  point.y() <= KS_rowMax 
+        &&  point.y() <= KS_rowMax
        )
         return true;
     else
-        return false;    
+        return false;
 }
 
 bool util_isRectValid( QRect rect )
 {
-    if (    util_isPointValid( rect.topLeft() ) 
+    if (    util_isPointValid( rect.topLeft() )
         &&  util_isPointValid( rect.bottomRight() )
        )
         return true;
@@ -377,7 +379,7 @@ bool util_isRectValid( QRect rect )
 Point::Point( const QString & str, Map * map,
                             Sheet * sheet )
 {
-    
+
     uint p = 0;
     int p2 = str.find( '!' );
     if ( p2 != -1 )
@@ -468,7 +470,7 @@ Range::Range(const QString & _str)
 
     Point ul;
     Point lr; ;
-    
+
     if ( p != -1)
     {
         ul = Point(_str.left(p));
@@ -479,7 +481,7 @@ Range::Range(const QString & _str)
         ul = Point(_str);
         lr = ul;
     }
-        
+
     _range = QRect(ul.pos(), lr.pos());
     _sheetName = ul.sheetName();
 
@@ -489,19 +491,19 @@ Range::Range(const QString & _str)
     _bottomFixed = lr.rowFixed();
 }
 
- Range::Range( const Range& r ) 
+ Range::Range( const Range& r )
  {
     _sheet = r.sheet();
     _sheetName = r.sheetName();
     _range = r.range();
     _namedArea = r.namedArea();
-    
+
     _leftFixed=r._leftFixed;
     _rightFixed=r._rightFixed;
     _topFixed=r._topFixed;
     _bottomFixed=r._bottomFixed;
   }
-  
+
  Range::Range( const Point& ul, const Point& lr )
   {
     _range = QRect( ul.pos(), lr.pos() );
@@ -559,7 +561,7 @@ Range::Range(const QString & str, Map * map,
       while ( true )
       {
         _sheet = map->findSheet(_sheetName);
-        
+
         if ( !_sheet && _sheetName[0] == ' ' )
         {
           _sheetName = _sheetName.right( _sheetName.length() - 1 );
@@ -1005,3 +1007,184 @@ bool KSpread::localReferenceAnchor( const QString &_ref )
     return isLocalRef;
 }
 
+
+void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
+{
+  // parsing state
+  enum { Start, Finish, InNumber, InString, InIdentifier, InReference } state;
+
+  // use locale settings
+  QString decimal = locale ? locale->decimalSymbol() : ".";
+
+  // initialize variables
+  state = Start;
+  unsigned int i = 0;
+  QString ex = expr;
+  QString result;
+
+  // first character could be equal sign (=)
+  // but the scanner should not see this equal sign
+  if( ex[0] == '=' )
+  {
+    ex.remove( 0, 1 );
+    result = "=";
+  }
+
+  // force a terminator
+  ex.append( QChar() );
+
+  // main loop
+  while( (state != Finish) && (i < ex.length()) )
+  {
+    QChar ch = ex[i];
+
+    switch( state )
+    {
+    case Start:
+    {
+       // check for number
+       if( ch.isDigit() )
+       {
+         state = InNumber;
+       }
+
+       // a string?
+       else if ( ch == '"' )
+       {
+         state = InString;
+       }
+
+       // beginning with alphanumeric ?
+       // could be identifier, cell, range, or function...
+       else if( isIdentifier( ch ) )
+       {
+//          state = InIdentifier;
+       }
+
+       // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
+       else if ( ch.unicode() == '[' )
+       {
+         i++;
+         state = InReference;
+       }
+
+       // decimal dot ?
+       else if ( ch == '.' )
+       {
+         state = InNumber;
+       }
+
+       // terminator character
+       else if ( ch == QChar::null )
+          state = Finish;
+
+       // look for operator match
+       else
+       {
+         int op;
+         QString s;
+
+         // check for two-chars operator, such as '<=', '>=', etc
+         s.append( ch ).append( ex[i+1] );
+         op = matchOperator( s );
+
+         // check for one-char operator, such as '+', ';', etc
+         if( op == Token::InvalidOp )
+         {
+           s = QString( ch );
+           op = matchOperator( s );
+         }
+
+         // any matched operator ?
+         if (  op == Token::Equal )
+         {
+           result.append( "==" );
+         }
+         else
+         {
+           result.append( s );
+         }
+         if( op != Token::InvalidOp )
+         {
+           int len = s.length();
+           i += len;
+         }
+         else
+         {
+           i++;
+           state = Start;
+         }
+        }
+       break;
+    }
+    case InReference:
+    {
+       // consume as long as alpha, dollar sign, underscore, or digit
+       if( isIdentifier( ch )  || ch.isDigit() || ch == ':' )
+         result.append( ex[i] );
+       else if ( ch == '.' && ex[i-1] != '[' && ex[i-1] != ':' )
+         result.append( '!' );
+       else if( ch == ']' )
+         state = Start;
+       i++;
+       break;
+    }
+    case InNumber:
+    {
+       // consume as long as it's digit
+       if( ch.isDigit() )
+         result.append( ex[i++] );
+       // convert '.' to decimal separator
+       else if ( ch == '.' )
+       {
+         result.append( decimal );
+         i++;
+       }
+       // exponent ?
+       else if( ch.upper() == 'E' )
+       {
+         result.append( 'E' );
+         i++;
+       }
+       // we're done with integer number
+       else
+         state = Start;
+       break;
+    }
+    case InString:
+    {
+       // consume until "
+       if( ch != '"' )
+         result.append( ex[i++] );
+       // we're done
+       else
+       {
+         result.append( ch );
+         i++;
+         state = Start;
+       }
+       break;
+    }
+    case InIdentifier:
+    {
+       // consume as long as alpha, dollar sign, underscore, or digit
+      if( isIdentifier( ch )  || ch.isDigit() )
+        result.append( ex[i++] );
+       // we're done
+      else
+        state = Start;
+      break;
+    }
+    default:
+       break;
+    }
+  }
+  expr = result;
+}
+
+void KSpread::Oasis::encodeFormula(QString& expr, KLocale* locale)
+{
+  // TODO move Cell::convertFormulaToOasisFormat to this point
+  expr = "not here yet";
+  Q_UNUSED(locale);
+}
