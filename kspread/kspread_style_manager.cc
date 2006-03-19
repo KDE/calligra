@@ -79,7 +79,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     const QDomElement* defaultStyle = oasisStyles.defaultStyle( "table-cell" );
     if ( defaultStyle )
     {
-      m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, i18n( "Default" ) );
+      m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, "Default" );
       m_defaultStyle->setType( Style::BUILTIN );
       kdDebug() << "StyleManager: default cell style loaded!" << endl;
     }
@@ -208,7 +208,7 @@ bool StyleManager::loadXML( QDomElement const & styles )
     ++iter;
   }
 
-  m_defaultStyle->setName( i18n( "Default" ) );
+  m_defaultStyle->setName( "Default" );
   m_defaultStyle->setType( Style::BUILTIN );
 
   return true;
@@ -242,7 +242,7 @@ CustomStyle * StyleManager::style( QString const & name ) const
   if ( iter != m_styles.end() )
     return iter.data();
 
-  if ( name == i18n( "Default" ) )
+  if ( name == "Default" )
     return m_defaultStyle;
 
   return 0;
@@ -285,7 +285,7 @@ bool StyleManager::checkCircle( QString const & name, QString const & parent )
 
 bool StyleManager::validateStyleName( QString const & name, CustomStyle * style )
 {
-  if ( m_defaultStyle->name() == name || name == i18n( "Default" ) )
+  if ( m_defaultStyle->name() == name || name == "Default" )
     return false;
 
   Styles::const_iterator iter = m_styles.begin();
@@ -328,7 +328,7 @@ QStringList StyleManager::styleNames() const
 {
   QStringList list;
 
-  list.push_back( i18n( "Default" ) );
+  list.push_back( "Default" );
 
   Styles::const_iterator iter = m_styles.begin();
   Styles::const_iterator end  = m_styles.end();

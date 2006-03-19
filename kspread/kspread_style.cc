@@ -1114,7 +1114,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 #endif
 
     // don't store parent, if it's the default style
-    if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != i18n( "Default" )) )
+    if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != "Default") )
         // FIXME this is not the OASIS parent style's name. it's its display name!
         style.addAttribute( "style:parent-style-name", m_parent->name() );
 
@@ -2666,7 +2666,7 @@ QString Style::colorName( const QColor& color )
 
 CustomStyle::CustomStyle()
   : Style(),
-    m_name( i18n("Default") )
+    m_name( "Default" )
 {
   m_type   = BUILTIN;
   m_parent = 0;
@@ -2741,14 +2741,14 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
     // and the OASIS style is not an automatic style. As
     // the user styles are already created, we return here.
     // TODO: CUSTOM styles
-//     if ( style.type() == 0 && ( m_type == BUILTIN ) && ( m_name == i18n( "Default" ) ) )
+//     if ( style.type() == 0 && ( m_type == BUILTIN ) && ( m_name == "Default" ) )
 //       return "Default";
 
     if ( m_name.isEmpty() )
         return QString::null; // TODO fallback to Style::saveOasis() ???
 
     // default style does not need display name
-    if( type() != BUILTIN || m_name != i18n( "Default" ) )
+    if( type() != BUILTIN || m_name != "Default" )
         style.addAttribute( "style:display-name", m_name );
 
     // doing the real work
@@ -2758,7 +2758,7 @@ QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles )
     if ( style.type() == Doc::STYLE_CELL_AUTO )
         return QString::null;
 
-    if( ( m_type == BUILTIN ) && ( m_name == i18n( "Default" ) ) )
+    if( ( m_type == BUILTIN ) && ( m_name == "Default" ) )
     {
         style.setDefaultStyle(true);
         // don't i18n'ize "Default" in this case
@@ -2774,8 +2774,8 @@ void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const QDomElement& styl
     m_name = name;
     if ( style.hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
         m_parentName = style.attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
-    else if ( m_name != i18n( "Default" ) )
-        m_parentName = i18n( "Default" );
+    else if ( m_name != "Default" )
+        m_parentName = "Default";
 
     m_type = CUSTOM;
 
