@@ -8,7 +8,7 @@ INCLUDES = \
 
 check_PROGRAMS = formulatest
 TESTS = formulatest
-formulatest_SOURCES = test_formula.cc formula_tester.cc tester.cc
+formulatest_SOURCES = test_formula.cc
 formulatest_LDADD = ../libkspreadcommon.la
 
 
