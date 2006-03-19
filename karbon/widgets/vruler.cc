@@ -251,8 +251,8 @@ void VRuler::drawRuler()
             start++;
         } while (pos < m_pixmapBuffer -> width());
     } else {
-        float cx = KoUnit::fromUserValue(8 * 4, m_unit) / m_zoom;
-        Q_INT32 step = ((Q_INT32)(cx / (float)stt) + 1) * stt;
+        float cx = KoUnit::fromUserValue(100, m_unit) / m_zoom;
+        Q_INT32 step = qRound(cx);
         Q_INT32 start = (Q_INT32)(KoUnit::toUserValue(m_firstVisible, m_unit) / m_zoom);
 
         do {
