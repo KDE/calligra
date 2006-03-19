@@ -1504,9 +1504,9 @@ bool KoDocument::openFile()
 
             if( d->m_autoErrorHandlingEnabled && !msg.isEmpty())
             {
-                QString errorMsg( i18n( "Could not open\n%1.\nReason: %2" ) );
+                QString errorMsg( i18n( "Could not open\n%2.\nReason: %1" ) );
                 QString docUrl = url().prettyURL( 0, KURL::StripFileProtocol );
-                KMessageBox::error( 0L, errorMsg.arg(docUrl).arg(msg) );
+                KMessageBox::error( 0L, errorMsg.arg(msg).arg(docUrl) );
             }
 
             d->m_bLoading = false;
