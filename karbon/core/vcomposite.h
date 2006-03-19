@@ -197,6 +197,8 @@ public:
 	virtual void accept( VVisitor& visitor );
 
 	void transform( const QString &transform );
+	void transformOasis( const QString &transform );
+
 	static QWMatrix parseTransform( const QString &transform );
 
 	void transform( const QWMatrix &mat )
@@ -211,7 +213,10 @@ public:
 protected:
 	QString buildSvgTransform() const;
 	QString buildSvgTransform( const QWMatrix &mat ) const;
-	void transformByViewbox( const QDomElement &element );
+	QString buildOasisTransform() const;
+	QString buildOasisTransform( const QWMatrix &mat ) const;
+
+	void transformByViewbox( const QDomElement &element, QString viewbox );
 
 	/// For svg path data parsing.
 	virtual void svgMoveTo( double x1, double y1, bool abs = true );
@@ -220,6 +225,7 @@ protected:
 	virtual void svgClosePath();
 
 	virtual void saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesojectauto ) const;
+	QWMatrix parseOasisTransform( const QString &transform );
 
 protected:
 	QWMatrix m_matrix;

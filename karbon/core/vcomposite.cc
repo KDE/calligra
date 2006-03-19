@@ -372,21 +372,27 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 		saveSvgPath( d );
 		docWriter->addAttribute( "svg:d", d );
 
+		double x = boundingBox().x();
+		double y = boundingBox().y();
+		double w = boundingBox().width();
+		double h = boundingBox().height();
+
+		docWriter->addAttribute( "svg:viewBox", QString( "%1 %2 %3 %4" ).arg( x ).arg( y ).arg( w ).arg( h ) );
+		docWriter->addAttributePt( "svg:x", x );
+		docWriter->addAttributePt( "svg:y", y );
+		docWriter->addAttributePt( "svg:width", w );
+		docWriter->addAttributePt( "svg:height", h );
+
 		VObject::saveOasis( store, docWriter, mainStyles, index );
 
 		QWMatrix tmpMat;
 		tmpMat.scale( 1, -1 );
 		tmpMat.translate( 0, -document()->height() );
 	
-		QString transform = buildSvgTransform( tmpMat );
+		QString transform = buildOasisTransform( tmpMat );
 		if( !transform.isEmpty() )
 			docWriter->addAttribute( "draw:transform", transform );
 
-		docWriter->addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( boundingBox().width() ).arg( boundingBox().height() ) );
-		docWriter->addAttribute( "svg:x", QString::number( boundingBox().x() ) );
-		docWriter->addAttribute( "svg:y", QString::number( boundingBox().y() ) );
-		docWriter->addAttribute( "svg:width", QString::number( boundingBox().width() ) );
-		docWriter->addAttribute( "svg:height", QString::number( boundingBox().height() ) );
 		docWriter->endElement();
 	}
 }
@@ -411,13 +417,12 @@ VPath::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) co
 }
 
 void
-VPath::transformByViewbox( const QDomElement &element )
+VPath::transformByViewbox( const QDomElement &element, QString viewbox )
 {
-	if( element.hasAttributeNS( KoXmlNS::svg, "viewBox" ) )
+	if( ! viewbox.isEmpty() )
 	{
 		// allow for viewbox def with ',' or whitespace
-		QString viewbox( element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
-		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplifyWhiteSpace() );
+		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ' ).simplifyWhiteSpace() );
 
 		double w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
 		double h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
@@ -425,10 +430,10 @@ VPath::transformByViewbox( const QDomElement &element )
 		double y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
 
 		QWMatrix mat;
-		mat.translate( x, y );
-		mat.scale( w / points[2].toFloat() , h / points[3].toFloat() );
+		mat.translate( x-KoUnit::parseValue( points[0] ), y-KoUnit::parseValue( points[1] ) );
+		mat.scale( w / KoUnit::parseValue( points[2] ) , h / KoUnit::parseValue( points[3] ) );
 		VTransformCmd cmd( 0L, mat );
-		cmd.visit( *this );
+		cmd.visitVPath( *this );
 	}
 }
 
@@ -436,6 +441,8 @@ bool
 VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
+
+	QString viewbox;
 
 	if( element.localName() == "path" )
 	{
@@ -447,7 +454,7 @@ VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 	
 		m_fillRule = element.attributeNS( KoXmlNS::svg, "fill-rule", QString::null ) == "winding" ? winding : evenOdd;
 
-		transformByViewbox( element );
+		viewbox = element.attributeNS( KoXmlNS::svg, "viewBox", QString::null );
 	}
 	else if( element.localName() == "custom-shape" )
 	{
@@ -466,27 +473,17 @@ VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 					if( ! data.isEmpty() )
 						loadSvgPath( data );
 
-					QString viewbox( e.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
-					QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplifyWhiteSpace() );
-			
-					double w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
-					double h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
-					double x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) );
-					double y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
-			
-					QWMatrix mat;
-					mat.translate( x, y );
-					mat.scale( w / points[2].toFloat() , h / points[3].toFloat() );
-					VTransformCmd cmd( 0L, mat );
-					cmd.visit( *this );
+					viewbox = e.attributeNS( KoXmlNS::svg, "viewBox", QString::null );
 				}
 			}
 		}
 	}
 
+	transformByViewbox( element, viewbox );
+
 	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
 	if( !trafo.isEmpty() )
-		transform( trafo );
+		transformOasis( trafo );
 
 	return VObject::loadOasis( element, context );
 }
@@ -587,6 +584,13 @@ VPath::transform( const QString &transform )
 	cmd.visitVPath( *this );
 }
 
+void
+VPath::transformOasis( const QString &transform )
+{
+	VTransformCmd cmd( 0L, parseOasisTransform( transform ) );
+	cmd.visitVPath( *this );
+}
+
 QWMatrix
 VPath::parseTransform( const QString &transform )
 {
@@ -652,6 +656,80 @@ VPath::parseTransform( const QString &transform )
 	return result;
 }
 
+QWMatrix
+VPath::parseOasisTransform( const QString &transform )
+{
+	QWMatrix result;
+
+	// Split string for handling 1 transform statement at a time
+	QStringList subtransforms = QStringList::split(')', transform);
+	QStringList::ConstIterator it = subtransforms.begin();
+	QStringList::ConstIterator end = subtransforms.end();
+	for(; it != end; ++it)
+	{
+		QStringList subtransform = QStringList::split('(', (*it));
+
+		subtransform[0] = subtransform[0].stripWhiteSpace().lower();
+		subtransform[1] = subtransform[1].simplifyWhiteSpace();
+		QRegExp reg("[,( ]");
+		QStringList params = QStringList::split(reg, subtransform[1]);
+
+		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
+			subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
+
+		if(subtransform[0] == "rotate")
+		{
+			// TODO find out what oo2 really does when rotating, it seems severly broken
+			if(params.count() == 3)
+			{
+				double x = KoUnit::parseValue( params[1] );
+				double y = KoUnit::parseValue( params[2] );
+
+				result.translate(x, y);
+				// oo2 rotates by radians
+				result.rotate( params[0].toDouble()*VGlobal::one_pi_180 );
+				result.translate(-x, -y);
+			}
+			else
+			{
+				// oo2 rotates by radians
+				result.rotate( params[0].toDouble()*VGlobal::one_pi_180 );
+			}
+		}
+		else if(subtransform[0] == "translate")
+		{
+			if(params.count() == 2)
+			{
+				double x = KoUnit::parseValue( params[0] );
+				double y = KoUnit::parseValue( params[1] );
+				result.translate(x, y);
+			}
+			else    // Spec : if only one param given, assume 2nd param to be 0
+				result.translate( KoUnit::parseValue( params[0] ) , 0);
+		}
+		else if(subtransform[0] == "scale")
+		{
+			if(params.count() == 2)
+				result.scale(params[0].toDouble(), params[1].toDouble());
+			else    // Spec : if only one param given, assume uniform scaling
+				result.scale(params[0].toDouble(), params[0].toDouble());
+		}
+		else if(subtransform[0] == "skewx")
+			result.shear(tan(params[0].toDouble()), 0.0F);
+		else if(subtransform[0] == "skewy")
+			result.shear(tan(params[0].toDouble()), 0.0F);
+		else if(subtransform[0] == "skewy")
+			result.shear(0.0F, tan(params[0].toDouble()));
+		else if(subtransform[0] == "matrix")
+		{
+			if(params.count() >= 6)
+				result.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), KoUnit::parseValue( params[4] ), KoUnit::parseValue( params[5] ) );
+		}
+	}
+
+	return result;
+}
+
 QString
 VPath::buildSvgTransform() const
 {
@@ -665,6 +743,28 @@ VPath::buildSvgTransform( const QWMatrix &mat ) const
 	if( !mat.isIdentity() )
 	{
 		transform = QString(  "matrix(%1, %2, %3, %4, %5, %6)" ).arg( mat.m11() )
+																.arg( mat.m12() )
+																.arg( mat.m21() )
+																.arg( mat.m22() )
+																.arg( mat.dx() )
+																.arg( mat.dy() );
+	}
+	return transform;
+}
+
+QString
+VPath::buildOasisTransform() const
+{
+	return buildSvgTransform( m_matrix );
+}
+
+QString 
+VPath::buildOasisTransform( const QWMatrix &mat ) const
+{
+	QString transform;
+	if( !mat.isIdentity() )
+	{
+		transform = QString(  "matrix(%1, %2, %3, %4, %5pt, %6pt)" ).arg( mat.m11() )
 																.arg( mat.m12() )
 																.arg( mat.m21() )
 																.arg( mat.m22() )

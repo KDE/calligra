@@ -165,11 +165,11 @@ VPolygon::loadOasis( const QDomElement &element, KoOasisLoadingContext &context 
 
 	init();
 
-	transformByViewbox( element );
+	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
 
 	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
 	if( !trafo.isEmpty() )
-		transform( trafo );
+		transformOasis( trafo );
 
 	return VObject::loadOasis( element, context );
 }

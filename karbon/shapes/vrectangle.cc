@@ -161,7 +161,7 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &main
 	tmpMat.scale( 1, -1 );
 	tmpMat.translate( 0, -document()->height() );
 	
-	QString transform = buildSvgTransform( m_matrix*tmpMat );
+	QString transform = buildOasisTransform( m_matrix*tmpMat );
 	if( !transform.isEmpty() )
 		docWriter->addAttribute( "draw:transform", transform );
 
@@ -183,11 +183,11 @@ VRectangle::loadOasis( const QDomElement &element, KoOasisLoadingContext &contex
 
 	init();
 
-	transformByViewbox( element );
+	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
 
 	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
 	if( !trafo.isEmpty() )
-		transform( trafo );
+		transformOasis( trafo );
 
 	return VObject::loadOasis( element, context );
 }
