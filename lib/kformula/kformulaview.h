@@ -176,6 +176,7 @@ private:
     bool& activeCursor();
     Container* container() const;
     void startCursorTimer();
+    void stopCursorTimer();
     const ContextStyle& contextStyle() const;
     FormulaCursor* cursor() const;
 

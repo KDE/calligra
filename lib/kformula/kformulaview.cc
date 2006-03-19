@@ -62,6 +62,11 @@ struct View::View_Impl {
             blinkTimer->start( QApplication::cursorFlashTime() / 2 );
     }
     
+    void stopTimer()
+    {
+        blinkTimer->stop();
+    }
+    
     ~View_Impl()
     {
         if ( document->activeCursor() == cursor ) {
@@ -110,6 +115,7 @@ bool& View::smallCursor()                  { return impl->smallCursor; }
 bool& View::activeCursor()                 { return impl->activeCursor; }
 Container* View::container() const { return impl->document; }
 void View::startCursorTimer() { impl->startTimer(); }
+void View::stopCursorTimer() { impl->stopTimer(); }
 
 
 View::View(Container* doc)
@@ -169,11 +175,19 @@ void View::focusInEvent(QFocusEvent*)
 {
     //cursor()->calcCursorSize( contextStyle(), smallCursor() );
     container()->setActiveCursor(cursor());
+    activeCursor() = true;
+    startCursorTimer();
+    smallCursor() = false;
+    emitCursorChanged();
 }
 
 void View::focusOutEvent(QFocusEvent*)
 {
     //container()->setActiveCursor(0);
+    activeCursor() = false;
+    stopCursorTimer();
+    smallCursor() = true;
+    emitCursorChanged();
 }
 
 void View::mousePressEvent( QMouseEvent* event )
