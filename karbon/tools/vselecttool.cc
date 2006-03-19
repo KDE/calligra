@@ -74,6 +74,7 @@ VSelectTool::VSelectTool( KarbonView *view )
 	m_objects.setAutoDelete( true );
 	m_optionsWidget = new VSelectOptionsWidget( view->part() );
 	registerTool( this );
+	connect( view, SIGNAL( selectionChange() ), this, SLOT( updateStatusBar() ) );
 }
 
 VSelectTool::~VSelectTool()

@@ -43,6 +43,8 @@ private:
 
 class VSelectTool : public VTool
 {
+Q_OBJECT
+
 public:
 	VSelectTool( KarbonView *view );
 	virtual ~VSelectTool();
@@ -79,6 +81,7 @@ protected:
 
 	virtual void cancel();
 
+protected slots:
 	void updateStatusBar() const;
 
 private:
