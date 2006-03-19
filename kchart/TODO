@@ -54,11 +54,13 @@ After the feature freeze
     - insert rows / columns before current cell				  ----
   + Adjust labels when inserting / deleting rows / columns	      1 ----
 
-* OpenDocument
-  + Reading							      1 ----
-    - Read all chart types						  ----
-  + Writing							      1 ----
-    - Write all chart types						  ----
+* OpenDocument Support
+  Item							Load	Save
+  ----------------------------------------------------------------------------
+  + Handle all chart types				----	----
+  + Plot area						----	----
+  + Legend						----	----
+  + Axes						----	----
 
 * Scripting
   + DCOP for data manipulation					      2 ----
