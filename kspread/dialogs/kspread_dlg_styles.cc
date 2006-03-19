@@ -309,7 +309,12 @@ void StyleDlg::slotSelectionChanged( QListViewItem * item )
   if ( !item )
     return;
 
-  CustomStyle * style = m_styleManager->style( item->text( 0 ) );
+  CustomStyle* style = 0;
+  QString name( item->text( 0 ) );
+  if ( name == i18n( "Default" ) )
+    style = m_styleManager->defaultStyle();
+  else
+    style = m_styleManager->style( name );
   if ( !style )
   {
     enableButton( KDialogBase::User3, false );
