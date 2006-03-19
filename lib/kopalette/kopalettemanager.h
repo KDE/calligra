@@ -115,7 +115,7 @@ public:
     virtual void addWidget(QWidget * widget, const QString & name, const QString & paletteName, int position = -1, 
 			   enumKoPaletteStyle style = PALETTE_DOCKER, bool shown = true);
 
-    
+
     /**
      * Get a certain widget by name
      */
@@ -159,6 +159,10 @@ public:
      */
      virtual void addPalette(KoPalette * palette, const QString & name, Dock location = DockRight);
 
+     /**
+      * Sets all palettes to the specified fixed width
+      */
+     virtual void setFixedWidth(int w);
 
 public slots:
 
@@ -212,6 +216,8 @@ private:
     QStringList               m_defaultWidgetOrder; // Order of widget addition
     QMap<QString, QString>  * m_currentMapping; // widget to docker
 
+    bool m_setFixedWidth;
+    int m_fixedWidth;
 };
 
 #endif

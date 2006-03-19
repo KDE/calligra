@@ -56,7 +56,9 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     m_palettes->setAutoDelete(true);
     m_defaultMapping = new QMap<QString, QString>();
     m_currentMapping = new QMap<QString, QString>();
-
+    m_fixedWidth = 0;
+    m_setFixedWidth = false;
+    
     m_widgetNames = new QStringList();
 
     m_mapper = new QSignalMapper(this);
@@ -325,9 +327,10 @@ void KoPaletteManager::removeWidget(const QString & name)
 
 KoPalette * KoPaletteManager::createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style)
 {
-   Q_ASSERT(m_view);
+    Q_ASSERT(m_view);
     KoPalette * palette = 0;
 
+    
     palette = m_palettes->find(name);
     if (palette) return palette;
 
@@ -346,6 +349,9 @@ KoPalette * KoPaletteManager::createPalette(const QString & name, const QString 
 
     if(!palette) return 0;
 
+    if (m_setFixedWidth)
+        palette->setFixedWidth(m_fixedWidth);
+    
     palette->setCaption(caption);
     m_palettes->insert(name, palette);
     placePalette(name);
@@ -601,5 +607,10 @@ void KoPaletteManager::save()
     }
 }
 
+void KoPaletteManager::setFixedWidth(int w)
+{
+    m_fixedWidth = w;
+    m_setFixedWidth = true;
+}
 
 #include "kopalettemanager.moc"
