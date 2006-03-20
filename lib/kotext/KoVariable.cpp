@@ -1335,7 +1335,10 @@ void KoDateVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*conte
     if ( localName == "date" ) // current (or fixed) date
     {
         // Standard form of the date is in text:date-value. Example: 2004-01-21T10:57:05
-        QDateTime dt(QDate::fromString(elem.attributeNS( KoXmlNS::text, "date-value", QString::null), Qt::ISODate));
+        const QString dateValue = elem.attributeNS( KoXmlNS::text, "date-value", QString::null);
+        QDateTime dt;
+        if ( !dateValue.isEmpty() ) // avoid QDate warning
+            dt = QDate::fromString(dateValue, Qt::ISODate);
 
         bool fixed = (elem.hasAttributeNS( KoXmlNS::text, "fixed") && elem.attributeNS( KoXmlNS::text, "fixed", QString::null)=="true");
         if (!dt.isValid())
