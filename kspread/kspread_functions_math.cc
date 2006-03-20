@@ -438,13 +438,13 @@ Value func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: product
 Value func_product (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->product (args[0], 0.0);
+  return calc->product (args, 0.0);
 }
 
 // Function: kproduct
 Value func_kproduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return calc->product (args[0], 1.0);
+  return calc->product (args, 1.0);
 }
 
 // Function: DIV

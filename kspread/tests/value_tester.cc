@@ -169,7 +169,7 @@ void ValueTester::run()
   // time value
   v1 = new Value();
   v1->setValue( QTime( 0, 0, 0 ) );
-  CHECK( v1->type(), Value::Float );
+  CHECK( v1->type(), Value::Integer );
   int time_error = 0; // used to  save time, bail on first error
   for( unsigned h = 0; !time_error && h < 24; h++ )
   for( unsigned m = 0; !time_error && m < 60; m++ )
@@ -189,7 +189,7 @@ void ValueTester::run()
   // time value (msec)
   v1 = new Value();
   v1->setValue( QTime( 0, 0, 0 ) );
-  CHECK( v1->type(), Value::Float );
+  CHECK( v1->type(), Value::Integer );
   int msec_error = 0; // used to  save time, bail on first error
   for( unsigned ms= 0;ms < 1000;ms++ )
   {

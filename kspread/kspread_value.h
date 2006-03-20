@@ -123,6 +123,7 @@ class KSPREAD_EXPORT Value
      */
     Value( const QString& s );
 
+    Value (const char *s);
     /**
      * Create a floating-point value from date/time.
      *

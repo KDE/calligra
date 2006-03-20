@@ -377,6 +377,13 @@ Value::Value( const QString& s )
   setValue( s );
 }
 
+// create a string value
+Value::Value (const char *s)
+{
+  d = ValueData::null();
+  setValue (QString (s));
+}
+
 // create a floating-point value from date/time
 Value::Value( const QDateTime& dt )
 {
@@ -900,16 +907,19 @@ int Value::compare( const Value& v ) const
 
 bool Value::equal( const Value& v ) const
 {
+  if (!allowComparison (v)) return false;
   return compare( v ) == 0;
 }
 
 bool Value::less( const Value& v ) const
 {
+  if (!allowComparison (v)) return false;
   return compare( v ) < 0;
 }
 
 bool Value::greater( const Value& v ) const
 {
+  if (!allowComparison (v)) return false;
   return compare( v ) > 0;
 }
 
