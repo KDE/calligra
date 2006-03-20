@@ -30,7 +30,21 @@ void run( Tester* test )
 {
   kdDebug() << test->name() << endl;
   test->run();
-  kdDebug() << endl;
+  int failed = test->failed();
+  if ( failed )
+  {
+    kdDebug() << test->failed() << " of " << test->count() << " tests failed:" << endl;
+    QStringList errors = test->errors();
+    QStringList::ConstIterator end = errors.end();
+    for (QStringList::ConstIterator it = errors.begin(); it != end; ++it )
+    {
+      kdDebug() << (*it) << endl;
+    }
+  }
+  else
+  {
+    kdDebug() << "All " << test->count() << " tests successfully passed." << endl;
+  }
   delete test;
 }
 

@@ -367,8 +367,6 @@ void FormulaOasisConversionTester::run()
 
   // function names
   CHECK_OASIS( "=sum(A1;A2;A3;A4;A5)", "=sum([.A1];[.A2];[.A3];[.A4];[.A5])" );
-
-  kdDebug() << errorList.join("\n") << endl;
 }
 
 void FormulaOasisConversionTester::checkOasis( const char *file, int line, const char* /*msg*/,
