@@ -43,7 +43,7 @@ public:
 /*================================================================*/
 
 ConnectionDataBase::ConnectionDataBase()
-	: id(-1), port(0), useLocalSocketFile(false), savePassword(false)
+	: id(-1), port(0), useLocalSocketFile(true), savePassword(false)
 {
 }
 

@@ -90,22 +90,29 @@ class ConnectionDataBase
 		/*! 
 		\brief True if local socket file should be used instead of TCP/IP port.
 		
-		For local connections only. False by default.
-		If true, @a hostName and @a port will be ignored.
+		Only meaningful for connections with localhost as server.
+		True by default, so local communication can be optimized, and users can avoid problems 
+		with TCP/IP connections disabled by firewalls.
+		
+		If true, @a hostName and @a port will be ignored and @a localSocketFileName will be used.
+		On MS Windows this option is often ignored and TCP/IP connection to the localhost is performed.
 		*/
 		bool useLocalSocketFile;
 
 		/*! 
 		\brief Name of local (named) socket file. 
 		
-		For local connections only. Empty by default.
+		For local connections only. If empty, it's driver will try to locate existing local socket
+		file. Empty by default.
 		*/
 		QString localSocketFileName;
 		
 		/*!
 		\brief Password used for the connection.
 
-		Can be empty. */
+		Can be empty string or null. If it is empty (equal to ""), empty password is passed to the driver.
+		If it is null (QString::null), no password is passed to the driver.
+		In this case, applications using KexiDB should ask for the password. */
 		QString password;
 
 		/*!

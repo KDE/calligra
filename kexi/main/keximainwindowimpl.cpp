@@ -294,7 +294,7 @@ void KexiMainWindowImpl::setWindowMenu(QPopupMenu *menu)
 	const QString txt = i18n("&Window");
 	int i;
 	for (i=0; i<count; i++) {
-		kdDebug() << menuBar()->text( menuBar()->idAt(i) ) << endl;
+		//kdDebug() << menuBar()->text( menuBar()->idAt(i) ) << endl;
 		if (txt==menuBar()->text( menuBar()->idAt(i) ))
 			break;
 	}
