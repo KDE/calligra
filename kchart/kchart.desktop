@@ -63,9 +63,7 @@ Exec=kchart %u
 Type=Application
 Icon=kchart
 MimeType=application/x-kchart;application/vnd.oasis.opendocument.chart
-#X-KDE-NativeMimeType=application/x-kchart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.chart
-#Disable this until KChart works with OASIS charts
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
