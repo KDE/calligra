@@ -104,9 +104,9 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
     m_periodTexts<<i18n("Day")<<i18n("Week")<<i18n("Month");
     m_cumulative = false;
 
-    QVBoxLayout *lay1 = new QVBoxLayout(this, 0, 3);
+    QVBoxLayout *lay1 = new QVBoxLayout(this, 0, KDialog::spacingHint());
     
-    QHBoxLayout *lay2 = new QHBoxLayout(0, 0, 6);
+    QHBoxLayout *lay2 = new QHBoxLayout(0, 0, KDialog::spacingHint());
     m_label = new Label(this);
     m_label->setFrameShape(QLabel::StyledPanel);
     m_label->setFrameShadow(QLabel::Sunken);
