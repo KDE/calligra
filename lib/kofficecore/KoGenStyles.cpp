@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2004-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,6 +41,11 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
             if( !parentStyle ) {
                 kdDebug(30003) << "KoGenStyles::lookup(" << name << "): parent style '" << style.parentName() << "' not found in collection" << endl;
             } else {
+                if ( testStyle.m_familyName != parentStyle->m_familyName )
+                {
+                    kdWarning(30003) << "KoGenStyles::lookup(" << name << ", family=" << testStyle.m_familyName << ") parent style '" << style.parentName() << "' has a different family: " << parentStyle->m_familyName << endl;
+                }
+
                 testStyle.m_parentName = parentStyle->m_parentName;
                 // Exclude the type from the comparison. It's ok for an auto style
                 // to have a user style as parent; they can still be identical
@@ -195,7 +200,7 @@ void KoGenStyle::writeStyleProperties( KoXmlWriter* writer, PropertyType i,
 
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
-    //kdDebug(30003) << "writing out style " << name << " " << m_attributes["style:display-name"] << " " << m_familyName << endl;
+    //kdDebug(30003) << "writing out style " << name << " display-name=" << m_attributes["style:display-name"] << " family=" << m_familyName << endl;
     writer->startElement( elementName );
     const KoGenStyle* parentStyle = 0;
     if ( !m_defaultStyle ) {
@@ -204,14 +209,15 @@ void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const cha
         else
             writer->addAttribute( "draw:name", name );
         if ( !m_parentName.isEmpty() ) {
-            writer->addAttribute( "style:parent-style-name", m_parentName );
             parentStyle = styles.style( m_parentName );
             if ( parentStyle && m_familyName.isEmpty() ) {
                 // get family from parent style, just in case
                 // Note: this is saving code, don't convert to attributeNS!
                 const_cast<KoGenStyle *>( this )->
                     m_familyName = parentStyle->attribute( "style:family" ).latin1();
+                //kdDebug(30003) << "Got familyname " << m_familyName << " from parent" << endl;
             }
+            writer->addAttribute( "style:parent-style-name", m_parentName );
         }
     } else { // default-style
         Q_ASSERT( qstrcmp( elementName, "style:default-style" ) == 0 );
