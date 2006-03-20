@@ -123,9 +123,11 @@ QValueVector<QDomElement> KoOasisStyles::userStyles() const
     return vec;
 }
 
-QDict<QDomElement>& KoOasisStyles::styles(QString family) const
+const QDict<QDomElement>& KoOasisStyles::styles(const QString& family) const
 {
-  return d->m_styles[family];
+    // hmm this can create an empty item in the map, but otherwise we couldn't
+    // return a const reference.
+    return d->m_styles[family];
 }
 
 void KoOasisStyles::insertOfficeStyles( const QDomElement& styles )

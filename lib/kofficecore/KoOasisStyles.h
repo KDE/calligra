@@ -68,7 +68,7 @@ public:
     const QDomElement* findStyleAutoStyle( const QString& name, const QString& family ) const;
 
     /// @return the style:styles that are "user styles", i.e. those from office:styles
-    /// styles() is used for lookup. userStyles() is used to load all user styles upfront.
+    /// findStyle() is used for lookup. userStyles() is used to load all user styles upfront.
     QValueVector<QDomElement> userStyles() const;
 
     /// @return the default style for a given family ("graphic","paragraph","table" etc.)
@@ -84,12 +84,14 @@ public:
     /// @return master pages ("style:master-page" elements), hashed by name
     const QDict<QDomElement>& masterPages() const { return m_masterPages; }
 
-    /// @return draw styles ("draw:name" element), hashed by name
+    /// @return draw styles, hashed by name
     const QDict<QDomElement>& drawStyles() const { return m_drawStyles; }
 
-    QDict<QDomElement>& styles(QString family) const;
-    //Prefix and suffix are always included into formatStr. Having them as separate fields simply
-    //allows to extract them from formatStr, to display them in separate widgets.
+    /// @return all styles ("style:style" elements) for a given family, hashed by name
+    const QDict<QDomElement>& styles(const QString& family) const;
+
+    /// Prefix and suffix are always included into formatStr. Having them as separate fields simply
+    /// allows to extract them from formatStr, to display them in separate widgets.
     struct NumericStyleFormat
     {
         QString formatStr;
