@@ -185,7 +185,8 @@ void FormulaEvalTester::checkEval( const char *file, int line, const char* msg,
 
   Formula f;
   QString expr = formula;
-  expr.prepend( '=' );
+  if ( expr[0] != '=' )
+    expr.prepend( '=' );
   f.setExpression( expr );
   Value result = f.eval();
 
