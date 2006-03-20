@@ -143,6 +143,16 @@ namespace KexiUtils
 	 - simplifing whitespace by removing redundant space characters using QString::simplifyWhiteSpace()
 	 Do not pass full paths here, but only filename strings. */
 	KEXIUTILS_EXPORT QString stringToFileName(const QString& string);
+
+	/*! Performs a simple \a string  encrypttion using rot47-like algorithm. 
+	 Each character's unicode value is increased by 47 + i (where i is index of the character). 
+	 The resulting string still contains redable characters.
+	 Do not use this for data that can be accessed by attackers! */
+	KEXIUTILS_EXPORT void simpleCrypt(QString& string);
+
+	/*! Performs a simple \a string decrypttion using rot47-like algorithm, 
+	 using opposite operations to KexiUtils::simpleCrypt(). */
+	KEXIUTILS_EXPORT void simpleDecrypt(QString& string);
 }
 
 

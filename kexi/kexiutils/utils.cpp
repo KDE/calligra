@@ -193,4 +193,16 @@ QString KexiUtils::stringToFileName(const QString& string)
 	return _string.simplifyWhiteSpace();
 }
 
+void KexiUtils::simpleCrypt(QString& string)
+{
+	for (uint i=0; i<string.length(); i++)
+		string[i] = QChar( string[i].unicode() + 47 + i );
+}
+
+void KexiUtils::simpleDecrypt(QString& string)
+{
+	for (uint i=0; i<string.length(); i++)
+		string[i] = QChar( string[i].unicode() - 47 - i );
+}
+
 #include "utils_p.moc"

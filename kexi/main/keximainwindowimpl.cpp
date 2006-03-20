@@ -942,6 +942,16 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 		return initFinalMode(newProjectData);
 	}
 	createKexiProject( newProjectData );
+	if (!newProjectData->connectionData()->savePassword && newProjectData->connectionData()->password.isEmpty()) {
+		//ask for password
+		KexiDBPasswordDialog pwdDlg(this, *newProjectData->connectionData(), 
+			false /*!showDetailsButton*/);
+		if (QDialog::Accepted!=pwdDlg.exec()) {
+			delete d->prj;
+			d->prj = 0;
+			return cancelled;
+		}
+	}
 	bool incompatibleWithKexi;
 	tristate res = d->prj->open(incompatibleWithKexi);
 	if (~res) {

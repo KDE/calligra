@@ -84,6 +84,13 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 		 It's public for convenience */
 		QValueList<ObjectInfo> autoopenObjects;
 
+		/*! @internal
+		 Format version used when saving the data to a shortcut file.
+		 This is set to 0 by default what means KexiDBShortcutFile_version should be used on saving.
+		 If KexiDBShortcutFile was used to create this KexiProjectData object,
+		 the version information is be retrieved from the file. */
+		uint formatVersion;
+
 	private:
 		KexiProjectDataPrivate *d;
 };

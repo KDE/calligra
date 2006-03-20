@@ -52,6 +52,7 @@ ConnectionDataBase::ConnectionDataBase()
 ConnectionData::ConnectionData()
 : QObject()
 , ConnectionDataBase()
+, formatVersion(0)
 , priv(new ConnectionData::Private())
 {
 }
@@ -62,11 +63,6 @@ ConnectionData::ConnectionData(const ConnectionData& cd)
 , priv(0)
 {
 	static_cast<ConnectionData&>(*this) = static_cast<const ConnectionData&>(cd);//copy data members
-/*	if (&cd != this) {
-		static_cast<ConnectionDataBase&>(*this) = static_cast<const ConnectionDataBase&>(cd);//copy data members
-	}
-	priv = new ConnectionData::Private();*/
-//todo: copy priv contents if not empty	*d = *cd.d;
 }
 
 ConnectionData::~ConnectionData()
@@ -77,10 +73,12 @@ ConnectionData::~ConnectionData()
 
 ConnectionData& ConnectionData::operator=(const ConnectionData& cd)
 {
-	delete priv; //this is old
-	static_cast<ConnectionDataBase&>(*this) = static_cast<const ConnectionDataBase&>(cd);//copy data members
-	priv = new ConnectionData::Private();
-	*priv = *cd.priv;
+	if (this != &cd) {
+		delete priv; //this is old
+		static_cast<ConnectionDataBase&>(*this) = static_cast<const ConnectionDataBase&>(cd);//copy data members
+		priv = new ConnectionData::Private();
+		*priv = *cd.priv;
+	}
 	return *this;
 }
 

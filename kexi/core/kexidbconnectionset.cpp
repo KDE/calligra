@@ -106,7 +106,7 @@ bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
 		return false;
 	const QString filename( it.data() );
 	KexiDBConnShortcutFile shortcutFile(filename);
-	if (!shortcutFile.saveConnectionData(*newData, true/*savePassword*/))
+	if (!shortcutFile.saveConnectionData(*newData, newData->savePassword)) // true/*savePassword*/))
 		return false;
 	if (oldData!=newData)
 		*oldData = *newData;

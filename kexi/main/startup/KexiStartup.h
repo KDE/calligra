@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qwidget.h>
+#include <kpassdlg.h>
 
 #include <core/kexistartupdata.h>
 #include <core/kexi.h>
@@ -34,6 +35,25 @@ class KexiStartupHandlerPrivate;
 namespace KexiDB {
 	class ConnectionData;
 }
+
+/*! */
+class KEXIMAIN_EXPORT KexiDBPasswordDialog : public KPasswordDialog
+{
+	Q_OBJECT
+	public:
+		KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton = false);
+		virtual ~KexiDBPasswordDialog();
+
+		bool showConnectionDetailsRequested() const { return m_showConnectionDetailsRequested; }
+
+	protected slots:
+		virtual void done(int r);
+		void slotShowConnectionDetails();
+
+	protected:
+		KexiDB::ConnectionData *m_cdata;
+		bool m_showConnectionDetailsRequested : 1;
+};
 
 /*! Handles startup actions for Kexi application.
 */
@@ -96,7 +116,7 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 
 	protected slots:
 		void slotSaveShortcutFileChanges();
-		void slotShowConnectionDetails();
+//		void slotShowConnectionDetails();
 
 	protected:
 		bool getAutoopenObjects(KCmdLineArgs *args, const QCString &action_name);

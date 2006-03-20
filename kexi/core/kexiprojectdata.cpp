@@ -56,6 +56,7 @@ public:
 KexiProjectData::KexiProjectData()
  : QObject(0, "KexiProjectData")
  , KexiDB::SchemaData()
+ , formatVersion(0)
  , d( new KexiProjectDataPrivate() )
 {
 }
@@ -64,6 +65,7 @@ KexiProjectData::KexiProjectData(
 	const KexiDB::ConnectionData &cdata, const QString& dbname, const QString& caption )
  : QObject(0, "KexiProjectData")
  , KexiDB::SchemaData()
+ , formatVersion(0)
  , d( new KexiProjectDataPrivate() )
 {
 	d->connData = cdata;

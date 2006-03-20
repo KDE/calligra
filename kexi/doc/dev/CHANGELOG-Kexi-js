@@ -9,9 +9,17 @@
 For most important commits use: CCMAIL:kexi-devel@kde.org
 Use CCMAIL:###-done@bugs.kde.org
 
+
 2006-03-20
 KexiDB
 - use local sockets by default for local server connections, if possible
+
+2006-03-16
+KexiDB
+- added simple encryption for stored passwords
+- allow to save empty password in .kexis and .kexic files
+Startup
+- ask for password (without storing it) for connection data without stored password
 
 ~~~~~~~~~~~~~~~~ 1.0 beta 2 (with KOffice 1.5) ~~~~~~~~~~~~~~~~
 

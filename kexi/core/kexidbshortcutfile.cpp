@@ -20,6 +20,7 @@
 #include "kexidbshortcutfile.h"
 #include <core/kexiprojectdata.h>
 #include <kexidb/connectiondata.h>
+#include <kexiutils/utils.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -27,7 +28,14 @@
 #include <qstringlist.h>
 #include <qdir.h>
 
-#define KexiDBShortcutFile_version 1
+//! Version of the KexiDBShortcutFile format.
+#define KexiDBShortcutFile_version 2
+/* CHANGELOG:
+ v1: initial version
+ v2: "encryptedPassword" field added. 
+     For backward compatibility, it is not used if the connection data has been loaded from 
+     a file saved with version 1. In such cases unencrypted "password" field is used.
+*/
 
 //! @internal
 class KexiDBShortcutFile::Private
@@ -56,9 +64,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 {
 	KConfig config(d->fileName, true /* readOnly */, false /* local */ );
 	config.setGroup("File Information");
-	int version = config.readNumEntry("version", KexiDBShortcutFile_version);
-
-	Q_UNUSED(version);
+	data.formatVersion = config.readNumEntry("version", KexiDBShortcutFile_version);
 
 	QString groupKey;
 	if (!_groupKey || _groupKey->isEmpty()) {
@@ -133,9 +139,17 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 	data.connectionData()->port = config.readNumEntry("port", 0);
 	data.connectionData()->useLocalSocketFile = config.readBoolEntry("useLocalSocketFile", false);
 	data.connectionData()->localSocketFileName = config.readEntry("localSocketFile");
-//UNSAFE!!!!
-	data.connectionData()->password = config.readEntry("password");
-	data.connectionData()->savePassword = !data.connectionData()->password.isEmpty();
+	data.connectionData()->savePassword = config.hasKey("password") || config.hasKey("encryptedPassword");
+	if (data.formatVersion >= 2) {
+		kdDebug() << config.hasKey("encryptedPassword") << endl;
+		data.connectionData()->password = config.readEntry("encryptedPassword");
+		KexiUtils::simpleDecrypt(data.connectionData()->password);
+	}
+	if (data.connectionData()->password.isEmpty()) {//no "encryptedPassword", for compatibility
+		//UNSAFE
+		data.connectionData()->password = config.readEntry("password");
+	}
+//	data.connectionData()->savePassword = !data.connectionData()->password.isEmpty();
 	data.connectionData()->userName = config.readEntry("user");
 /* @todo add "options=", eg. as string list? */
 	return true;
@@ -146,7 +160,11 @@ bool KexiDBShortcutFile::saveProjectData(const KexiProjectData& data,
 {
 	KConfig config(d->fileName, false /*rw*/, false /* local */);
 	config.setGroup("File Information");
-	config.writeEntry("version", KexiDBShortcutFile_version);
+
+	uint realFormatVersion = data.formatVersion;
+	if (realFormatVersion == 0) /* 0 means "default version"*/
+		realFormatVersion = KexiDBShortcutFile_version;
+	config.writeEntry("version", realFormatVersion);
 
 	const bool thisIsConnectionData = data.databaseName().isEmpty();
 
@@ -210,9 +228,18 @@ bool KexiDBShortcutFile::saveProjectData(const KexiProjectData& data,
 	if (!data.constConnectionData()->localSocketFileName.isEmpty())
 		config.writeEntry("localSocketFile", data.constConnectionData()->localSocketFileName);
 
-//UNSAFE!!!! @todo check if user wants to store her password!
-	if (!data.constConnectionData()->password.isEmpty())
-		config.writeEntry("password", (savePassword || data.constConnectionData()->savePassword) ? data.constConnectionData()->password : QString::null);
+	if (savePassword || data.constConnectionData()->savePassword) {
+		if (realFormatVersion < 2) {
+			config.writeEntry("password", data.constConnectionData()->password);
+		}
+		else {
+			QString encryptedPassword = data.constConnectionData()->password;
+			KexiUtils::simpleCrypt(encryptedPassword);
+			config.writeEntry("encryptedPassword", encryptedPassword);
+			encryptedPassword.fill(' '); //for security
+		}
+	}
+
 	if (!data.constConnectionData()->userName.isEmpty())
 		config.writeEntry("user", data.constConnectionData()->userName);
 /* @todo add "options=", eg. as string list? */

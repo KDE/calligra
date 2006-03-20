@@ -45,7 +45,6 @@
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 #include <kdeversion.h>
-#include <kpassdlg.h>
 #include <kprogress.h>
 #include <ktextedit.h>
 #include <kstaticdeleter.h>
@@ -79,7 +78,7 @@ class KexiStartupHandlerPrivate
 {
 	public:
 		KexiStartupHandlerPrivate()
-		 : passwordDialog(0), showConnectionDetailsExecuted(false)
+		 : passwordDialog(0)//, showConnectionDetailsExecuted(false)
 			, shortcutFile(0), connShortcutFile(0), connDialog(0), startupDialog(0)
 		{
 		}
@@ -91,8 +90,8 @@ class KexiStartupHandlerPrivate
 			delete startupDialog;
 		}
 
-		KPasswordDialog* passwordDialog;
-		bool showConnectionDetailsExecuted : 1;
+		KexiDBPasswordDialog* passwordDialog;
+//		bool showConnectionDetailsExecuted : 1;
 		KexiDBShortcutFile *shortcutFile;
 		KexiDBConnShortcutFile *connShortcutFile;
 		KexiDBConnectionDialog *connDialog;
@@ -134,6 +133,67 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
 			}
 		}
 	}
+}
+
+//---------------------------------
+
+KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton)
+ : KPasswordDialog( KPasswordDialog::Password, false/*keep*/, 
+	showDetailsButton ? KDialogBase::User1 : 0, parent )
+ , m_cdata(&cdata)
+ , m_showConnectionDetailsRequested(false)
+{
+	QString msg = "<H2>" + i18n("Opening database") + "</H2><p>"
+	 + i18n("Please enter the password.") + "</p>";
+/*		msg += cdata.userName.isEmpty() ?
+			"<p>"+i18n("Please enter the password.")
+			: "<p>"+i18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
+
+	QString srv = cdata.serverInfoString(false);
+	if (srv.isEmpty() || srv.lower()=="localhost")
+		srv = i18n("local database server");
+
+	msg += ("</p><p>"+i18n("Database server: %1").arg(srv)+"</p>");
+		
+	QString usr;
+	if (cdata.userName.isEmpty())
+		usr = i18n("unspecified user", "(unspecified)");
+	else
+		usr = cdata.userName;
+	
+	msg += ("<p>"+i18n("Username: %1").arg(usr)+"</p>");
+
+	setPrompt( msg );
+	if (showDetailsButton) {
+		connect( this, SIGNAL(user1Clicked()), 
+			this, SLOT(slotShowConnectionDetails()) );
+		setButtonText(KDialogBase::User1, i18n("&Details")+ " >>");
+	}
+	setButtonOK(KGuiItem(i18n("&Open"), "fileopen"));
+}
+
+KexiDBPasswordDialog::~KexiDBPasswordDialog()
+{
+}
+
+void KexiDBPasswordDialog::done(int r)
+{
+	if (r == QDialog::Accepted) {
+		m_cdata->password = QString::fromLatin1(password());
+	}
+//	if (d->showConnectionDetailsExecuted || ret == QDialog::Accepted) {
+/*			} else {
+				m_action = Exit;
+				return true;
+			}
+		}*/
+	KPasswordDialog::done(r);
+}
+
+void KexiDBPasswordDialog::slotShowConnectionDetails()
+{
+	m_showConnectionDetailsRequested = true;
+	close();
 }
 
 //---------------------------------
@@ -204,7 +264,7 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 {
 	m_action = DoNothing;
-	d->showConnectionDetailsExecuted = false;
+//	d->showConnectionDetailsExecuted = false;
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs(0);
 	if (!args)
 		return true;
@@ -328,41 +388,17 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 //TODO: add option for non-gui; integrate with KWallet; 
 //      move to static KexiProject method
 	if (!fileDriverSelected && !cdata.driverName.isEmpty() && cdata.password.isEmpty()) {
-		QString msg = "<H2>" + i18n("Opening database") + "</H2><p>"
-		 + i18n("Please enter the password.") + "</p>";
-/*		msg += cdata.userName.isEmpty() ?
-			"<p>"+i18n("Please enter the password.")
-			: "<p>"+i18n("Please enter the password for user.").arg("<b>"+cdata.userName+"</b>");*/
-
-		QString srv = cdata.serverInfoString(false);
-		if (srv.isEmpty() || srv.lower()=="localhost")
-			srv = i18n("local database server");
-		msg += ("</p><p>"+i18n("Database server: %1").arg(srv)+"</p>");
-		
-		QString usr;
-		if (cdata.userName.isEmpty())
-			usr = i18n("unspecified user", "(unspecified)");
-		else
-			usr = cdata.userName;
-		msg += ("<p>"+i18n("Username: %1").arg(usr)+"</p>");
 
 		if (cdata.password.isEmpty()) {
 			delete d->passwordDialog;
-			d->passwordDialog = new KPasswordDialog(
-				KPasswordDialog::Password, false/*keep*/, KDialogBase::User1 );
-			d->passwordDialog->setPrompt( msg );
-			connect( d->passwordDialog, SIGNAL(user1Clicked()), 
-				this, SLOT(slotShowConnectionDetails()) );
-			d->passwordDialog->setButtonText(KDialogBase::User1, i18n("&Details")+ " >>");
-			d->passwordDialog->setButtonOK(KGuiItem(i18n("&Open"), "fileopen"));
-			int ret = d->passwordDialog->exec();
-			QCString pwd( d->passwordDialog->password() );
-			delete d->passwordDialog;
-			d->passwordDialog = 0;
-			if (d->showConnectionDetailsExecuted || ret == QDialog::Accepted) {
+			d->passwordDialog = new KexiDBPasswordDialog(0, cdata, true);
+//			connect( d->passwordDialog, SIGNAL(user1Clicked()), 
+//				this, SLOT(slotShowConnectionDetails()) );
+			const int ret = d->passwordDialog->exec();
+			if (d->passwordDialog->showConnectionDetailsRequested() || ret == QDialog::Accepted) {
 //				if ( ret == QDialog::Accepted ) {
 		//		if (QDialog::Accepted == KPasswordDialog::getPassword(pwd, msg)) {
-				cdata.password = QString(pwd);
+//moved				cdata.password = QString(pwd);
 //				}
 			} else {
 				m_action = Exit;
@@ -527,7 +563,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	}
 
 	//let's show connection details, user asked for that in the "password dialog"
-	if (d->showConnectionDetailsExecuted) {
+	if (d->passwordDialog && d->passwordDialog->showConnectionDetailsRequested()) {
 		d->connDialog = new KexiDBConnectionDialog(*m_projectData);
 //		connect(d->connDialog->tabWidget->mainWidget, SIGNAL(saveChanges()), 
 //			this, SLOT(slotSaveShortcutFileChanges()));
@@ -657,7 +693,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 				//ok, now we will try to show projects for this connection to the user
 				bool cancelled;
 				m_projectData = selectProject( cdata, cancelled );
-				if (!m_projectData && !cancelled) {
+				if (!m_projectData && !cancelled || cancelled) {
 						//try again
 						return init(0, 0);
 				}
@@ -846,6 +882,17 @@ KexiStartupHandler::selectProject(KexiDB::ConnectionData *cdata, bool& cancelled
 	cancelled = false;
 	if (!cdata)
 		return 0;
+	if (!cdata->savePassword && cdata->password.isEmpty()) {
+		if (!d->passwordDialog)
+			d->passwordDialog = new KexiDBPasswordDialog(0, *cdata, false);
+		const int ret = d->passwordDialog->exec();
+		if (d->passwordDialog->showConnectionDetailsRequested() || ret == QDialog::Accepted) {
+
+		} else {
+			cancelled = true;
+			return 0;
+		}
+	}
 	KexiProjectData* projectData = 0;
 	//dialog for selecting a project
 	KexiProjectSelectorDialog prjdlg( parent, "prjdlg", cdata, true, false );
@@ -893,10 +940,10 @@ void KexiStartupHandler::slotSaveShortcutFileChanges()
 	}
 }
 
-void KexiStartupHandler::slotShowConnectionDetails()
+/*void KexiStartupHandler::slotShowConnectionDetails()
 {
 	d->passwordDialog->close();
 	d->showConnectionDetailsExecuted = true;
-}
+}*/
 
 #include "KexiStartup.moc"
