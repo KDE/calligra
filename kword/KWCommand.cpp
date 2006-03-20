@@ -1046,8 +1046,6 @@ void KWFrameSetInlineCommand::setValue( bool value )
     }
 
     m_pFrameSet->kWordDocument()->updateAllFrames();
-    m_pFrameSet->kWordDocument()->repaintAllViews();
-    m_pFrameSet->kWordDocument()->updateRulerFrameStartEnd();
 }
 
 void KWFrameSetInlineCommand::execute()

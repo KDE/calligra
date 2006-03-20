@@ -316,6 +316,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KoTextParag* parag, int in
     if ( isFloating() )
         deleteAnchors();
     m_anchorTextFs = textfs;
+    KWFrameList::createFrameList(textfs, m_doc); // remove ourselves from others list now we are inline
     if ( parag )
         createAnchors( parag, index, placeHolderExists, repaint );
 
@@ -365,6 +366,9 @@ void KWFrameSet::setFixed()
     QPtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         frameIt.current()->setZOrder( m_doc->maxZOrder( frameIt.current()->pageNumber(m_doc) ) + 1 );
+
+    m_doc->repaintAllViews();
+    m_doc->updateRulerFrameStartEnd();
 }
 
 KWAnchor * KWFrameSet::createAnchor( KoTextDocument *txt, int frameNum )
