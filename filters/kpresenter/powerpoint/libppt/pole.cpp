@@ -867,14 +867,16 @@ void StorageIO::load()
   {
     unsigned char* buffer2 = new unsigned char[ bbat->blockSize ];
     unsigned k = 109;
+    unsigned mblock = header->mbat_start;
     for( unsigned r = 0; r < header->num_mbat; r++ )
     {
-      loadBigBlock( header->mbat_start+r, buffer2, bbat->blockSize );
-      for( unsigned s=0; s < bbat->blockSize; s+=4 )
+      loadBigBlock( mblock, buffer2, bbat->blockSize );
+      for( unsigned s=0; s < bbat->blockSize-4; s+=4 )
       {
         if( k >= header->num_bat ) break;
         else  blocks[k++] = readU32( buffer2 + s );
-      }  
+      }
+      mblock = readU32( buffer2 + bbat->blockSize-4 );
      }    
     delete[] buffer2;
   }
