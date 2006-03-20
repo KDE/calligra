@@ -106,8 +106,9 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 	}
 
 /*! @todo is latin1() encoding here valid? what about using UTF for passwords? */
+	const char *pwd = data.password.isNull() ? 0 : data.password.latin1();
 	mysql_real_connect(mysql, hostName.latin1(), data.userName.latin1(), 
-		data.password.latin1(), 0, data.port, localSocket, 0);
+		pwd, 0, data.port, localSocket, 0);
 	if(mysql_errno(mysql) == 0)
 		return true;
 
