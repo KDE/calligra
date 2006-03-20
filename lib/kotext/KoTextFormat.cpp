@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -262,7 +262,7 @@ static void importTextPosition( const QString& text_position, double fontSize, K
             return;
         }
 
-        if ( textPos.endsWith("%") )
+        if ( textPos.endsWith("%") && textPos != "0% 100%" && textPos != "0%" )
         {
             textPos.truncate( textPos.length() - 1 );
             double val = textPos.toDouble();
@@ -539,77 +539,138 @@ void KoTextFormat::load( KoOasisContext& context )
     addRef();
 }
 
-void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context ) const
+void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context, KoTextFormat * refFormat ) const
 {
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
-    gs.addProperty( "fo:color", col.isValid() ? col.name() : "#000000", tt );
-    gs.addProperty( "style:font-name", fn.family(), tt );
-    context.addFontFace( fn.family() );
-    gs.addPropertyPt( "fo:font-size", fn.pointSize(), tt );
+    if ( !refFormat || this->color() != refFormat->color() )
+    {
+        gs.addProperty( "fo:color", col.isValid() ? col.name() : "#000000", tt );
+    }
+    if ( !refFormat || this->font().family() != refFormat->font().family() )
+    {
+        gs.addProperty( "style:font-name", fn.family(), tt );
+        context.addFontFace( fn.family() );
+    }
+    if ( !refFormat || this->pointSize() != refFormat->pointSize() )
+    {
+        gs.addPropertyPt( "fo:font-size", fn.pointSize(), tt );
+    }
     int w = fn.weight();
-    gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound( w / 10 ) * 100 ), tt );
-    gs.addProperty( "fo:font-style", fn.italic() ? "italic" : "normal", tt );
-    gs.addProperty( "style:text-underline-mode", d->m_bWordByWord ? "skip-white-space" : "continuous", tt );
-    gs.addProperty( "style:text-underline-type", m_underlineType == U_NONE ? "none" :
-                    m_underlineType == U_DOUBLE ? "double" : "single", tt );
-    QString styleline;
-    if ( m_underlineType == U_WAVE )
-        styleline = "wave";
-    else
-        styleline = exportOasisUnderline( m_underlineStyle );
-    gs.addProperty( "style:text-underline-style", m_underlineType == U_NONE ? "none" : styleline, tt );
-    gs.addProperty( "style:text-underline-color", m_textUnderlineColor.isValid() ? m_textUnderlineColor.name() : "font-color", tt );
-
-    if ( m_strikeOutType != S_NONE )
+    if ( !refFormat || w != refFormat->font().weight() )
     {
-        // TODO U_SIMPLE_BOLD
-        // TODO style:text-line-through-mode
-        gs.addProperty( "style:text-line-through-type", m_strikeOutType == S_DOUBLE ? "double" : "single", tt );
-        styleline = exportOasisUnderline( (UnderlineStyle) m_strikeOutStyle );
-        gs.addProperty( "style:text-line-through-style", styleline, tt );
-        //gs.addProperty( "style:text-line-through-color", ...) TODO in kotext
+        gs.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound( w / 10 ) * 100 ), tt );
     }
-    else
+    if ( !refFormat || this->font().italic() != refFormat->font().italic() )
     {
-        gs.addProperty( "style:text-line-through-type", "none" , tt );
-        gs.addProperty( "style:text-line-through-style", "none", tt );
+        gs.addProperty( "fo:font-style", fn.italic() ? "italic" : "normal", tt );
+    }
+    if ( !refFormat || this->wordByWord() != refFormat->wordByWord() )
+    {
+        gs.addProperty( "style:text-underline-mode", d->m_bWordByWord ? "skip-white-space" : "continuous", tt );
+    }
+    if ( !refFormat || this->underlineType() != refFormat->underlineType()
+                    || this->underlineStyle() !=refFormat->underlineStyle() )
+    {
+        gs.addProperty( "style:text-underline-type", m_underlineType == U_NONE ? "none" :
+                        m_underlineType == U_DOUBLE ? "double" : "single", tt );
+        QString styleline;
+        if ( m_underlineType == U_WAVE )
+            styleline = "wave";
+        else
+            styleline = exportOasisUnderline( m_underlineStyle );
+        gs.addProperty( "style:text-underline-style", m_underlineType == U_NONE ? "none" : styleline, tt );
+    }
+    if ( !refFormat || this->textUnderlineColor() !=refFormat->textUnderlineColor() )
+    {
+        gs.addProperty( "style:text-underline-color", m_textUnderlineColor.isValid() ? m_textUnderlineColor.name() : "font-color", tt );
     }
 
-    if ( va != AlignNormal )
+    if ( !refFormat
+        || this->strikeOutType() != refFormat->strikeOutType()
+        || this->strikeOutStyle()!= refFormat->strikeOutStyle() )
+    {
+        if ( m_strikeOutType != S_NONE )
+        {
+            // TODO U_SIMPLE_BOLD
+            // TODO style:text-line-through-mode
+            gs.addProperty( "style:text-line-through-type", m_strikeOutType == S_DOUBLE ? "double" : "single", tt );
+            const QString styleline = exportOasisUnderline( (UnderlineStyle) m_strikeOutStyle );
+            gs.addProperty( "style:text-line-through-style", styleline, tt );
+            //gs.addProperty( "style:text-line-through-color", ...) TODO in kotext
+        }
+        else
+        {
+            gs.addProperty( "style:text-line-through-type", "none", tt );
+            gs.addProperty( "style:text-line-through-style", "none", tt );
+        }
+    }
+    if ( !refFormat || (this->vAlign() != refFormat->vAlign())
+        || (this->relativeTextSize() != refFormat->relativeTextSize()) )
     {
         QString textPos;
         if ( d->m_offsetFromBaseLine != 0 )
             textPos = QString::number( 100 * d->m_offsetFromBaseLine / fn.pointSizeFloat() ) + '%';
         else if ( va == AlignSuperScript ) textPos = "super";
         else if ( va == AlignSubScript ) textPos = "sub";
-        else textPos = "0%";
-        textPos += ' ';
-        textPos += QString::number( d->m_relativeTextSize * 100 );
-        textPos += '%';
+        else textPos = "0%"; // AlignNormal
+        if ( va != AlignNormal )
+        {
+            textPos += ' ';
+            textPos += QString::number( d->m_relativeTextSize * 100 );
+            textPos += '%';
+        }
         gs.addProperty( "style:text-position", textPos, tt );
     }
 
-    if ( m_attributeFont == ATT_SMALL_CAPS )
-        gs.addProperty( "fo:font-variant", "small-caps", tt );
-    else if ( m_attributeFont == ATT_UPPER )
-        gs.addProperty( "fo:text-transform", "uppercase", tt );
-    else if ( m_attributeFont == ATT_LOWER )
-        gs.addProperty( "fo:text-transform", "lowercase", tt );
-
-    QString lang = m_language;
-    QString country;
-    const int pos = lang.find( '_' );
-    if ( pos != -1 ) {
-        country = lang.mid( pos + 1 );
-        lang = lang.left( pos );
+    if( !refFormat || this->attributeFont() != refFormat->attributeFont())
+    {
+        if ( m_attributeFont == ATT_SMALL_CAPS ) {
+            gs.addProperty( "fo:font-variant", "small-caps", tt );
+            gs.addProperty( "fo:text-transform", "none", tt );
+        }
+        else if ( m_attributeFont == ATT_UPPER ) {
+            gs.addProperty( "fo:font-variant", "normal", tt );
+            gs.addProperty( "fo:text-transform", "uppercase", tt );
+        }
+        else if ( m_attributeFont == ATT_LOWER ) {
+            gs.addProperty( "fo:font-variant", "normal", tt );
+            gs.addProperty( "fo:text-transform", "lowercase", tt );
+        }
+        else {
+            gs.addProperty( "fo:font-variant", "normal", tt );
+            gs.addProperty( "fo:text-transform", "none", tt );
+        }
     }
 
-    gs.addProperty( "fo:language", lang, tt );
-    gs.addProperty( "fo:country", country, tt );
-    gs.addProperty( "fo:background-color",
-                    m_textBackColor.isValid() ? m_textBackColor.name() : "transparent", tt );
-    gs.addProperty( "fo:text-shadow", shadowAsCss(), tt );
-    gs.addProperty( "fo:hyphenate", d->m_bHyphenation, tt );
+    if( !refFormat || this->language() != refFormat->language())
+    {
+        QString lang = m_language;
+        QString country;
+        const int pos = lang.find( '_' );
+        if ( pos != -1 ) {
+            country = lang.mid( pos + 1 );
+            lang = lang.left( pos );
+        }
+
+        gs.addProperty( "fo:language", lang, tt );
+        gs.addProperty( "fo:country", country, tt );
+    }
+    if( !refFormat || this->textBackgroundColor() != refFormat->textBackgroundColor() )
+    {
+        gs.addProperty( "fo:background-color",
+                        m_textBackColor.isValid() ? m_textBackColor.name() : "transparent", tt );
+    }
+    if( !refFormat ||
+        ( this->shadowDistanceX() != refFormat->shadowDistanceX()
+          || ( this->shadowDistanceY() != refFormat->shadowDistanceY() )
+          || ( this->shadowColor() != refFormat->shadowColor() ) ) )
+    {
+        gs.addProperty( "fo:text-shadow", shadowAsCss(), tt );
+    }
+    if ( !refFormat || this->hyphenation() != refFormat->hyphenation() )
+    {
+        gs.addProperty( "fo:hyphenate", d->m_bHyphenation, tt );
+    }
 }
 
 void KoTextFormat::update()

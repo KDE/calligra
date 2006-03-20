@@ -2911,11 +2911,13 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         if ( curFormat == paragFormat() ) {                             \
             writer.addTextSpan( text.mid( startPos, next - startPos ), m_tabCache ); \
         } else {                                                        \
-            KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName ); \
-            curFormat->save( gs, context );                             \
-            const QString autoStyleName = mainStyles.lookup( gs, "T" ); \
+            KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text" );            \
+            curFormat->save( gs, context, paragFormat() );              \
             writer.startElement( "text:span" );                         \
-            writer.addAttribute( "text:style-name", autoStyleName );    \
+            if ( !gs.isEmpty() ) {                                      \
+                const QString autoStyleName = mainStyles.lookup( gs, "T" ); \
+                writer.addAttribute( "text:style-name", autoStyleName );    \
+            }                                                           \
             writer.addTextSpan( text.mid( startPos, next - startPos ), m_tabCache ); \
             writer.endElement();                                        \
         }                                                               \
@@ -2989,11 +2991,13 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         }
         CHECKPOS( i ) // do cursor position and bookmarks
         if ( ch.isCustom() ) {
-            KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", autoParagStyleName );
-            curFormat->save( gs, context );
-            const QString autoStyleName = mainStyles.lookup( gs, "T" );
+            KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text" );
+            curFormat->save( gs, context, paragFormat() );
             writer.startElement( "text:span" );
-            writer.addAttribute( "text:style-name", autoStyleName );
+            if ( !gs.isEmpty() ) {
+                const QString autoStyleName = mainStyles.lookup( gs, "T" );
+                writer.addAttribute( "text:style-name", autoStyleName );
+            }
             KoTextCustomItem* customItem = ch.customItem();
             customItem->saveOasis( writer, context );
             writer.endElement();
