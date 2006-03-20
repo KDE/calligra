@@ -81,6 +81,10 @@ QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, Q
         text = cell->strOutText();
     else if ( !cell->link().isEmpty() )
         text = cell->text(); // untested
+    else if( cell->isTime() )
+        text = cell->value().asTime().toString("hh:mm:ss");
+    else if( cell->isDate() )
+        text = cell->value().asDate().toString("yyyy-MM-dd");
     else
         text = cell->strOutText();
   }
