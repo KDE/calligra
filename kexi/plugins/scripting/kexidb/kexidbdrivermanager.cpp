@@ -34,7 +34,6 @@
 #include <kexidb/field.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
-#include <kexiutils/utils.h>
 
 using namespace Kross::KexiDB;
 
@@ -149,7 +148,9 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::A
 
         if(version >= 2 && config.hasKey("encryptedPassword")) {
             data->password = config.readEntry("encryptedPassword");
-            KexiUtils::simpleDecrypt(data->password);
+            uint len = data->password.length();
+            for (uint i=0; i<len; i++)
+                data->password[i] = QChar( data->password[i].unicode() - 47 - i );
         }
         if(data->password.isEmpty())
             data->password = config.readEntry("password");
