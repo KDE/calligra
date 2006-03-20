@@ -135,6 +135,10 @@ class KisTIFFReaderBase {
          * @return the number of line which were copied
          */
         virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream) =0;
+        /**
+         * This function is called when all data has been read and should be used for any postprocessing.
+         */
+        virtual void finalize() { };
     protected:
         inline KisPaintDeviceSP paintDevice() { return m_device; }
         inline Q_UINT8 alphaPos() { return m_alphapos; }

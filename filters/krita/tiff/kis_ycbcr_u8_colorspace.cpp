@@ -28,10 +28,6 @@
 namespace {
     const Q_INT32 MAX_CHANNEL_YCbCr = 3;
     const Q_INT32 MAX_CHANNEL_YCbCrA = 4;
-    inline Q_UINT8 convertToDisplay(Q_UINT8 value, float exposureFactor, float gamma)
-    {
-        return (Q_UINT8)powf(value* exposureFactor, gamma);
-    }
 }
 
 KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* p)
@@ -196,24 +192,23 @@ QImage KisYCbCrU8ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width,
     Q_INT32 i = 0;
     uchar *j = img.bits();
 
-    // XXX: For now assume gamma 2.2.
-    float gamma = 1 / 2.2;
-    float exposureFactor = powf(2, exposure + 2.47393);
-
     while ( i < width * height * MAX_CHANNEL_YCbCrA) {
         Q_UINT8 Y = *( data + i + PIXEL_Y );
         Q_UINT8 Cb = *( data + i + PIXEL_Cb );
         Q_UINT8 Cr = *( data + i + PIXEL_Cr );
 #ifdef __BIG_ENDIAN__
         *( j + 0)  = *( data + i + PIXEL_ALPHA );
-        *( j + 1 ) = convertToDisplay(computeRed(Y,Cb,Cr), exposureFactor, gamma);
-        *( j + 2 ) = convertToDisplay(computeGreen(Y,Cb,Cr), exposureFactor, gamma);
-        *( j + 3 ) = convertToDisplay(computeBlue(Y,Cr,Cr), exposureFactor, gamma);
+        *( j + 1 ) = computeRed(Y,Cb,Cr);
+        *( j + 2 ) = computeGreen(Y,Cb,Cr);
+        *( j + 3 ) = computeBlue(Y,Cr,Cr);
 #else
         *( j + 3)  = *( data + i + PIXEL_ALPHA );
-        *( j + 2 ) = convertToDisplay(computeRed(Y,Cb,Cr), exposureFactor, gamma);
-        *( j + 1 ) = convertToDisplay(computeGreen(Y,Cb,Cr), exposureFactor, gamma);
-        *( j + 0 ) = convertToDisplay(computeBlue(Y,Cb,Cr), exposureFactor, gamma);
+        *( j + 2 ) = computeRed(Y,Cb,Cr);
+        *( j + 1 ) = computeGreen(Y,Cb,Cr);
+        *( j + 0 ) = computeBlue(Y,Cb,Cr);
+/*        *( j + 2 ) = Y;
+        *( j + 1 ) = Cb;
+        *( j + 0 ) = Cr;*/
 #endif
         i += MAX_CHANNEL_YCbCrA;
         j += MAX_CHANNEL_YCbCrA;
