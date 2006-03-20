@@ -92,10 +92,13 @@ cd ..
 # Some fixups - kword specific
 # 1) the name of the main text frameset changes, no big deal, so adjust in orig
 # 2) modification time obviously changed, remove it
-# 3) paragraph direction and text color are now explicitly saved, hide them from the diff
+# 3) paragraph direction, text color and relativetextsize are now explicitly saved, hide them from the diff
 perl -pi -e 's/\"Text Frameset 1\"/\"Main Text Frameset\"/;s,<WEIGHT value="48" />,<WEIGHT value="40" />,' oasisregtest-orig/maindoc.xml
-perl -pi -e 's/<FLOW dir="L"/<FLOW/' oasisregtest-final/maindoc.xml
+perl -pi -e 's/<FLOW dir="L"/<FLOW/ ; s/relativetextsize="0.58" //' oasisregtest-final/maindoc.xml
 perl -pi -e 's/modificationDate=\"[0-9-T:]*\"//; $_="" if (/<COLOR blue=\"0\" red=\"0\" green=\"0\" \/>/);' oasisregtest-final/maindoc.xml oasisregtest-orig/maindoc.xml
+
+# Some generic fixups: documentinfo was updated by the automated 'editing'
+perl -pi -e '$_ = "" if (/<editing-cycles>/ || /<date>/ || /<full-name>/ || /<company>/ || /<email>/ )' oasisregtest-final/documentinfo.xml oasisregtest-orig/documentinfo.xml
 
 # Compare initial and final "native format" files
 diff -urp oasisregtest-orig oasisregtest-final 2>&1 | tee oasisdiff | less
