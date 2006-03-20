@@ -139,7 +139,7 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
 
 KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionData& cdata, bool showDetailsButton)
  : KPasswordDialog( KPasswordDialog::Password, false/*keep*/, 
-	showDetailsButton ? KDialogBase::User1 : 0, parent )
+	showDetailsButton ? (int)KDialogBase::User1 : 0, parent )
  , m_cdata(&cdata)
  , m_showConnectionDetailsRequested(false)
 {
