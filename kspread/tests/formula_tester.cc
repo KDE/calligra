@@ -359,9 +359,13 @@ void FormulaOasisConversionTester::run()
   CHECK_OASIS( "=A1", "=[.A1]" );
   CHECK_OASIS( "=A1:A4", "=[.A1:A4]" );
   CHECK_OASIS( "=Sheet2!A1", "=[Sheet2.A1]" );
+  CHECK_OASIS( "='Sheet 2'!A1", "=['Sheet 2'.A1]" );
 
   // equality
   CHECK_OASIS( "=A1==A2", "=[.A1]=[.A2]" );
+
+  // strings
+  CHECK_OASIS( "=\"2,2\"+2,1+\"2,0\"", "=\"2,2\"+2.1+\"2,0\"" );
 
   // decimal separator ','
   CHECK_OASIS( "=,12", "=.12" );

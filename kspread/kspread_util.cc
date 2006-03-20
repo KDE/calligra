@@ -1011,7 +1011,7 @@ bool KSpread::localReferenceAnchor( const QString &_ref )
 void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
 {
   // parsing state
-  enum { Start, Finish, InNumber, InString, InIdentifier, InReference } state;
+  enum { Start, Finish, InNumber, InString, InIdentifier, InReference, InSheetName } state;
 
   // use locale settings
   QString decimal = locale ? locale->decimalSymbol() : ".";
@@ -1065,7 +1065,7 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
        // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
        else if ( ch.unicode() == '[' )
        {
-         i++;
+         ++i;
          state = InReference;
        }
 
@@ -1112,7 +1112,7 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
          }
          else
          {
-           i++;
+           ++i;
            state = Start;
          }
         }
@@ -1120,15 +1120,28 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
     }
     case InReference:
     {
-       // consume as long as alpha, dollar sign, underscore, or digit
+       // consume as long as alpha, dollar sign, underscore, or digit, or colon
        if( isIdentifier( ch )  || ch.isDigit() || ch == ':' )
          result.append( ex[i] );
        else if ( ch == '.' && ex[i-1] != '[' && ex[i-1] != ':' )
          result.append( '!' );
        else if( ch == ']' )
          state = Start;
-       i++;
+       else if ( ch.unicode() == 39 )
+       {
+         result.append( ex[i] );
+         state = InSheetName;
+       }
+       ++i;
        break;
+    }
+    case InSheetName:
+    {
+      if ( ch.unicode() == 39 )
+        state = InReference;
+      result.append( ex[i] );
+      ++i;
+      break;
     }
     case InNumber:
     {
@@ -1139,13 +1152,13 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
        else if ( ch == '.' )
        {
          result.append( decimal );
-         i++;
+         ++i;
        }
        // exponent ?
        else if( ch.upper() == 'E' )
        {
          result.append( 'E' );
-         i++;
+         ++i;
        }
        // we're done with integer number
        else
@@ -1163,7 +1176,7 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
        else
        {
          result.append( ch );
-         i++;
+         ++i;
          state = Start;
        }
        break;

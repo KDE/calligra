@@ -50,7 +50,7 @@ General bugs
 ------------
 
 * Miscellaneous
-  + Format->"Increase indent" sets cell alignment to left	      2	----
+  + Format->"Increase indent" sets cell alignment to left	      2 DONE
 
 
 
@@ -66,15 +66,10 @@ General bugs
 ------------
 
 * Crashes
-  + 101915: kspread crashes on exit if there is a chart in the sheet  2 ----
-  + 104420: Crash after entering a formula.			      1	done
 
 * Painting
 
 * Printing
-  + 101074: Charts are really small when printed from KSpread	      1 ----
-        Fix the zoom issue						done
-	Fix the disappearing legend (KChart bug?)			--
 
 * Format
   + 87471: format of whole column does not change		      2 ----
@@ -97,12 +92,8 @@ General bugs
   + 70708: undo of series broken when range contains merged cells     2 ----
   + 84738: Inserting a new line does not copy right settings to       2 ----
 	   new line.
-  + 104859: KSpread marks document as modified on opening	      1 ----
 
 * Investigate further if these are important.
-  + 48037: 1. Insert special doesn't work			      1 DONE
-	   2. Search and replace doesn't work on formulas.
-	   3. Whishlist for special paste
   + 69285: Pasting directly into the cell edit box is not 	      2 ----
 	   subsequently saved when changing cells.
 
