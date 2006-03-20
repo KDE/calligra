@@ -111,6 +111,8 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionData(Kross::Api::Li
 
 Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::Api::List::Ptr args)
 {
+//! @todo reuse the original code!
+
     QString const file = Kross::Api::Variant::toString(args->item(0));
 
     QString mimename = KMimeType::findByFileContent(file)->name();
