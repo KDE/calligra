@@ -34,6 +34,7 @@
 #include <kexidb/field.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/queryschema.h>
+#include <kexiutils/utils.h>
 
 using namespace Kross::KexiDB;
 
@@ -135,6 +136,7 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::A
         //bool isDatabaseShortcut = (type == "database");
 
         ::KexiDB::ConnectionData* data = new ::KexiDB::ConnectionData();
+        int version = config.readNumEntry("version", 2); //KexiDBShortcutFile_version
         data->setFileName(QString::null);
         data->caption = config.readEntry("caption");
         data->description = config.readEntry("comment");
@@ -144,8 +146,14 @@ Kross::Api::Object::Ptr KexiDBDriverManager::createConnectionDataByFile(Kross::A
         data->port = config.readNumEntry("port", 0);
         data->useLocalSocketFile = config.readBoolEntry("useLocalSocketFile", false);
         data->localSocketFileName = config.readEntry("localSocketFile");
-        //UNSAFE!!!!
-        data->password = config.readEntry("password");
+
+        if(version >= 2 && config.hasKey("encryptedPassword")) {
+            data->password = config.readEntry("encryptedPassword");
+            KexiUtils::simpleDecrypt(data->password);
+        }
+        if(data->password.isEmpty())
+            data->password = config.readEntry("password");
+
         data->savePassword = ! data->password.isEmpty();
         data->userName = config.readEntry("user");
 
