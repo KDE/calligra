@@ -153,7 +153,7 @@ KexiDBPasswordDialog::KexiDBPasswordDialog(QWidget *parent, KexiDB::ConnectionDa
 	if (srv.isEmpty() || srv.lower()=="localhost")
 		srv = i18n("local database server");
 
-	msg += ("</p><p>"+i18n("Database server: %1").arg(srv)+"</p>");
+	msg += ("</p><p>"+i18n("Database server: %1").arg(QString("<nobr>")+srv+"</nobr>")+"</p>");
 		
 	QString usr;
 	if (cdata.userName.isEmpty())

@@ -942,7 +942,11 @@ tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 		return initFinalMode(newProjectData);
 	}
 	createKexiProject( newProjectData );
-	if (!newProjectData->connectionData()->savePassword && newProjectData->connectionData()->password.isEmpty()) {
+	if (!newProjectData->connectionData()->savePassword 
+		&& newProjectData->connectionData()->password.isEmpty()
+		&& newProjectData->connectionData()->fileName().isEmpty() //! @todo temp.: change this if there are file-based drivers requiring a password
+	)
+	{
 		//ask for password
 		KexiDBPasswordDialog pwdDlg(this, *newProjectData->connectionData(), 
 			false /*!showDetailsButton*/);
