@@ -80,7 +80,7 @@ class RubyExtension{
         /**
          * Test if the ruby object is an object
          */
-        static bool RubyExtension::isOfObjectType(VALUE obj);
+        static bool isOfObjectType(VALUE obj);
     private: //Converting functions
         /**
          * Convert a ruby object to the exception type.
