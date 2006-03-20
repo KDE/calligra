@@ -1052,13 +1052,14 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
        else if ( ch == '"' )
        {
          state = InString;
+         result.append( ex[i++] );
        }
 
        // beginning with alphanumeric ?
        // could be identifier, cell, range, or function...
        else if( isIdentifier( ch ) )
        {
-//          state = InIdentifier;
+         state = InIdentifier;
        }
 
        // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
@@ -1155,7 +1156,9 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
     {
        // consume until "
        if( ch != '"' )
+       {
          result.append( ex[i++] );
+       }
        // we're done
        else
        {
