@@ -6443,7 +6443,7 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
     {
         // e.g.: Sheet4.A1:Sheet4.E28
         QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString::null );
-        Oasis::decodeFormula( range );
+        range = Oasis::decodeFormula( range );
         Range p( range );
         if ( sheetName() == p.sheetName() )
             d->print->setPrintRange( p.range() );

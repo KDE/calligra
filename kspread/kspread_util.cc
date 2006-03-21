@@ -1008,10 +1008,10 @@ bool KSpread::localReferenceAnchor( const QString &_ref )
 }
 
 
-void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
+QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale)
 {
   // parsing state
-  enum { Start, Finish, InNumber, InString, InIdentifier, InReference, InSheetName } state;
+  enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state;
 
   // use locale settings
   QString decimal = locale ? locale->decimalSymbol() : ".";
@@ -1019,22 +1019,17 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
   // initialize variables
   state = Start;
   unsigned int i = 0;
-  QString ex = expr;
+  const QString ex = expr;
   QString result;
 
-  // first character could be equal sign (=)
-  // but the scanner should not see this equal sign
-  if( ex[0] == '=' )
+  if (ex[0] == '=')
   {
-    ex.remove( 0, 1 );
-    result = "=";
+	result="=";
+	++i;
   }
 
-  // force a terminator
-  ex.append( QChar() );
-
   // main loop
-  while( (state != Finish) && (i < ex.length()) )
+  while( i < ex.length() )
   {
     QChar ch = ex[i];
 
@@ -1074,10 +1069,6 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
        {
          state = InNumber;
        }
-
-       // terminator character
-       else if ( ch == QChar::null )
-          state = Finish;
 
        // look for operator match
        else
@@ -1195,12 +1186,14 @@ void KSpread::Oasis::decodeFormula(QString& expr, KLocale* locale)
        break;
     }
   }
-  expr = result;
+  return result;
 }
 
-void KSpread::Oasis::encodeFormula(QString& expr, KLocale* locale)
+/*QString KSpread::Oasis::encodeFormula(const QString& expr, const KLocale* locale)
 {
   // TODO move Cell::convertFormulaToOasisFormat to this point
-  expr = "not here yet";
-  Q_UNUSED(locale);
-}
+  //expr = "not here yet";
+  //Q_UNUSED(locale);
+  kdDebug() << k_funcinfo << " not implemented"
+  qFatal(0);
+}*/

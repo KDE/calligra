@@ -402,8 +402,7 @@ void FormulaOasisConversionTester::checkOasis( const char *file, int line, const
 #endif
 
   // OpenDocument -> KSpread
-  formula = oasisFormula;
-  Oasis::decodeFormula( formula, &locale );
+  formula = Oasis::decodeFormula( oasisFormula, &locale );
 
   if( formula != localeFormula )
   {

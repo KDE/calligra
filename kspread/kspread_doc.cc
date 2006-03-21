@@ -2024,7 +2024,7 @@ void Doc::loadOasisAreaName( const QDomElement& body )
             d->m_loadingInfo->addWordInAreaList( name );
             kdDebug() << "Reading in named area, name: " << name << ", area: " << range << endl;
 
-            Oasis::decodeFormula( range );
+            range = Oasis::decodeFormula( range );
 
             if ( range.find( ':' ) == -1 )
             {

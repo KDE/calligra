@@ -340,14 +340,14 @@ namespace Oasis
    * @param locale The locale to which the expression should be converted.
    */
   // TODO check visibility
-  KSPREAD_EXPORT void decodeFormula(QString& expr, KLocale* locale = 0);
+  KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0);
   /**
    * Converts a localized formula/cell reference to an OpenDocument
    * representation of a formula/cell reference.
    * @param expr The expression to convert to OpenDocument format.
    * @param locale The locale from which the expression should be converted.
    */
-  KSPREAD_EXPORT void encodeFormula(QString& expr, KLocale* locale = 0);
+  KSPREAD_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
 }
 
 } // namespace KSpread

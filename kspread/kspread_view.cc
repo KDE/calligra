@@ -1388,14 +1388,15 @@ QButton* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget
   if ( _parent == 0L )
     _parent = view;
 
-  QButton *pb;
-  if ( !_kbutton )
-    pb = new QPushButton( _parent );
-  else
-    pb = new QToolButton( _parent );
-  pb->setPixmap( QPixmap( KSBarIcon(_file) ) );
-
-  return pb;
+  if ( !_kbutton ) {
+    QPushButton* pb = new QPushButton( _parent );
+    pb->setIconSet( SmallIconSet(_file) );
+    return pb;
+  } else {
+    QToolButton* pb = new QToolButton( _parent );
+    pb->setIconSet( SmallIconSet(_file) );
+    return pb;
+  }
 }
 
 KPSheetSelectPage::KPSheetSelectPage( QWidget *parent )

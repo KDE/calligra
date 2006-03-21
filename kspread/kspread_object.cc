@@ -607,7 +607,7 @@ void EmbeddedChart::loadOasis(const QDomElement &element, KoOasisLoadingContext 
 
     if ( !str_range.isNull() )
     {
-      Oasis::decodeFormula( str_range );
+      str_range = Oasis::decodeFormula( str_range );
       Range range( range );
       if ( range.isValid() )
         setDataArea( range.range() );

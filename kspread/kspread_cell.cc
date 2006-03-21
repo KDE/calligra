@@ -5649,7 +5649,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             oasisFormula= oasisFormula.mid( 5 );
         // TODO Stefan: merge this into Oasis::decodeFormula
         checkForNamedAreas( oasisFormula );
-        Oasis::decodeFormula( oasisFormula, locale() );
+        oasisFormula = Oasis::decodeFormula( oasisFormula, locale() );
         setCellText( oasisFormula );
     }
     else if ( d->strText.at(0) == '=' ) //prepend ' to the text to avoid = to be painted
@@ -5951,7 +5951,7 @@ void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& o
             if ( ref.isNull() )
               continue;
 
-            Oasis::decodeFormula( ref );
+            ref = Oasis::decodeFormula( ref );
             Point point( ref );
             if ( !point.isValid() )
               continue;
