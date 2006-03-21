@@ -57,8 +57,8 @@ void KWAnchor::finalize()
     KoPoint dPoint;
     if ( fs->internalToDocument( QPoint( x()+paragx, y()+paragy ), dPoint ) )
     {
-        kdDebug(32001) << "KWAnchor::finalize moving frame to [zoomed pos] " << nPoint.x() << "," << nPoint.y() << endl;
-        // Move the frame to position nPoint.
+        //kdDebug(32001) << "KWAnchor::finalize moving frame to " << dPoint.x() << "," << dPoint.y() << endl;
+        // Move the frame to position dPoint.
         m_frameset->moveFloatingFrame( m_frameNum, dPoint );
     } else
     {
