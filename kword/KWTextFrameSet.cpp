@@ -594,21 +594,22 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
             if ( var && !var->isDeleted() )
             {
                 QSize oldSize( var->width, var->height );
+                const int pageNumberOffset = kWordDocument()->variableCollection()->variableSetting()->startingPageNumber() - 1;
                 switch ( var->subType() )
                 {
                 case KWPgNumVariable::VST_PGNUM_CURRENT:
-                    //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNumber()+1
+                    //kdDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNumber()
                     //          << " and invalidating parag " << var->paragraph() << endl;
-                    var->setPgNum( theFrame->pageNumber() );
+                    var->setPgNum( theFrame->pageNumber() + pageNumberOffset );
                     break;
                 case KWPgNumVariable::VST_CURRENT_SECTION:
                     var->setSectionTitle( kWordDocument()->sectionTitle( theFrame->pageNumber() ) );
                     break;
                 case KWPgNumVariable::VST_PGNUM_PREVIOUS:
-                    var->setPgNum( QMAX(theFrame->pageNumber()-1,0)   + kWordDocument()->variableCollection()->variableSetting()->startingPageNumber());
+                    var->setPgNum( QMAX(theFrame->pageNumber()-1,0) + pageNumberOffset );
                     break;
                 case KWPgNumVariable::VST_PGNUM_NEXT:
-                    var->setPgNum( QMIN(theFrame->pageNumber()+1, theFrame->pageNumber()+1)  + kWordDocument()->variableCollection()->variableSetting()->startingPageNumber());
+                    var->setPgNum( theFrame->pageNumber() + 1 + pageNumberOffset );
                     break;
                 }
 

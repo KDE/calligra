@@ -798,7 +798,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, QVBox *box, char
 
     m_oldStartingPage=doc->variableCollection()->variableSetting()->startingPageNumber();
     m_variableNumberOffset=new KIntNumInput(hbStartingPage);
-    m_variableNumberOffset->setRange(1, 9999, 1, false);
+    m_variableNumberOffset->setRange(-1000, 9999, 1, false);
     m_variableNumberOffset->setValue(m_oldStartingPage);
     labelStartingPage->setBuddy( m_variableNumberOffset );
 
