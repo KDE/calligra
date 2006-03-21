@@ -35,6 +35,8 @@ void KWFrameTester::allTests() {
 
     testSimpleFrame();
     testFrameList();
+    testDeleteAllCopies();
+    testNestedFrames();
 }
 
 void KWFrameTester::testSimpleFrame() {
@@ -84,4 +86,67 @@ void KWFrameTester::testFrameList()
     CHECK( f3List->framesOnTop().isEmpty(), true );
 
     delete doc;
+}
+
+void KWFrameTester::testDeleteAllCopies() {
+    KWFrameSet *fs = new TestFrameSet();
+    KWFrame *f = new KWFrame(fs, 0, 1, 10, 11);
+    fs->addFrame(f);
+
+    fs->deleteAllCopies();
+    CHECK(fs->frameCount(), (unsigned int) 1);
+    CHECK(fs->frame(0), f);
+
+    KWFrame *f2 = f->getCopy();
+    f2->setCopy(true);
+    fs->addFrame(f2);
+
+    CHECK(fs->frameCount(), (unsigned int) 2);
+    CHECK(fs->frame(0), f);
+    CHECK(fs->frame(1), f2);
+
+    fs->deleteAllCopies();
+    f2=0;
+    CHECK(fs->frameCount(), (unsigned int) 1);
+    CHECK(fs->frame(0), f);
+}
+
+void KWFrameTester::testNestedFrames() {
+    KWDocument *doc = new KWDocument();
+    CHECK(doc->pageManager() != 0, true);
+
+    KWTextFrameSet *base = new TestTextFrameSet(doc, "base");
+    base->setPageManager(doc->pageManager());
+    KWFrame *f1 = new KWFrame(base, 0, 1, 10, 11);
+    base->addFrame(f1);
+    KWTextFrameSet *nested = new TestTextFrameSet(doc, "nested");
+    nested->setPageManager(doc->pageManager());
+    KWFrame *f2 = new KWFrame(nested, 0, 1, 10, 11);
+    nested->addFrame(f2);
+
+    nested->setAnchorFrameset(base);
+
+    KWFrameSet *deepNested = new TestTextFrameSet(doc, "deepNested");
+    deepNested->setPageManager(doc->pageManager());
+    KWFrame *f3 = new KWFrame(deepNested, 0, 1, 10, 11);
+    deepNested->addFrame(f3);
+
+    deepNested->setAnchorFrameset(nested);
+
+    doc->addFrameSet(base, false);
+    doc->addFrameSet(nested, false);
+    doc->addFrameSet(deepNested, false);
+
+    CHECK(f1->frameStack() != 0, true);
+    CHECK(f2->frameStack() != 0, true);
+    CHECK(f3->frameStack() != 0, true);
+
+    // since nested and deepNested are inline they are 'inside' the base frame and thuse
+    // all above and below lists should be empty.
+    CHECK(f1->frameStack()->framesBelow().isEmpty(), true);
+    CHECK(f2->frameStack()->framesBelow().isEmpty(), true);
+    CHECK(f3->frameStack()->framesBelow().isEmpty(), true);
+    CHECK(f1->frameStack()->framesOnTop().isEmpty(), true);
+    CHECK(f2->frameStack()->framesOnTop().isEmpty(), true);
+    CHECK(f3->frameStack()->framesOnTop().isEmpty(), true);
 }

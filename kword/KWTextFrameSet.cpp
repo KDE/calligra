@@ -126,6 +126,17 @@ KWTextFrameSet::KWTextFrameSet( KWDocument* doc, const QDomElement& tag, KoOasis
     // to get the frame it returns.
 }
 
+// protected constructor for testing purposes; does not do an init.
+KWTextFrameSet::KWTextFrameSet( const QString &name ) : KWFrameSet(0) {
+    m_name = name;
+
+    QObject::setName( m_name.utf8() ); // store name in the QObject, for DCOP users
+    m_currentViewMode = 0L;
+    m_currentDrawnFrame = 0L;
+    m_lastTextDocHeight = 0;
+    m_textobj = 0;
+}
+
 void KWTextFrameSet::init()
 {
     m_currentViewMode = 0L;

@@ -18,6 +18,7 @@
 #include <kunittest/tester.h>
 
 #include <KWFrameSet.h>
+#include <KWTextFrameSet.h>
 
 class KWDocument;
 class KoXmlWriter;
@@ -28,6 +29,8 @@ class KWFrameTester : public KUnitTest::Tester {
     private:
         void testSimpleFrame();
         void testFrameList();
+        void testDeleteAllCopies();
+        void testNestedFrames();
 };
 
 class TestFrameSet : public KWFrameSet {
@@ -38,4 +41,19 @@ public:
     void saveOasis( KoXmlWriter&, KoSavingContext&, bool) const { };
     void setProtectContent(bool) { }
     bool protectContent() const { return true; }
+};
+
+class TestTextFrameSet : public KWTextFrameSet {
+public:
+    TestTextFrameSet(KWDocument *doc, const QString name) : KWTextFrameSet(name) {
+        m_doc = doc;
+    }
+    QDomElement save(QDomElement&, bool) { return QDomElement(); }
+    void saveOasis( KoXmlWriter&, KoSavingContext&, bool) const { };
+    void setProtectContent(bool) { }
+    bool protectContent() const { return true; }
+    void updateFrames( int flags = 0xff ) {
+        flags = UpdateFramesInPage;
+        KWFrameSet::updateFrames(flags);
+    }
 };

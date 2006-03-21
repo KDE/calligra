@@ -1860,7 +1860,9 @@ void KWDocument::endOfLoading()
         if(!fs) {
             kdWarning() << "frameset " << i << " is NULL!!" << endl;
             m_lstFrameSet.remove(i);
-        } else if( fs->type()==FT_TABLE) {
+            continue;
+        }
+        if( fs->type()==FT_TABLE) {
             static_cast<KWTableFrameSet *>( fs )->validate();
         } else if (fs->type() == FT_TEXT) {
             for (int f=fs->frameCount()-1; f>=0; f--) {
@@ -1872,10 +1874,10 @@ void KWDocument::endOfLoading()
                 if(frame->right() > m_pageLayout.ptWidth) {
                     kdWarning() << fs->name() << " frame " << f << " rightborder outside page ("
                         << frame->right() << ">" << m_pageLayout.ptWidth << "), shrinking" << endl;
-                    frame->setRight( m_pageLayout.ptWidth);
+                    frame->setRight(m_pageLayout.ptWidth);
                 }
                 if(fs->isProtectSize())
-                    continue; // don't make frames bigger of protected frames.
+                    continue; // don't make frames bigger of a protected frameset.
                 if(frame->height() < s_minFrameHeight) {
                     kdWarning() << fs->name() << " frame " << f << " height is so small no text will fit, adjusting (was: "
                                 << frame->height() << " is: " << s_minFrameHeight << ")" << endl;
@@ -1901,6 +1903,14 @@ void KWDocument::endOfLoading()
             if ( fs->type() == FT_PART )
                 delete static_cast<KWPartFrameSet *>(fs)->getChild();
             delete fs;
+            continue;
+        }
+        if(fs->frameCount() > 0) {
+            KWFrame *frame = fs->frame(0);
+            if(frame->isCopy()) {
+                kdWarning() << "First frame in a frameset[" << fs->name() << "] was set to be a copy; resetting\n";
+                frame->setCopy(false);
+            }
         }
     }
 

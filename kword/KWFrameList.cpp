@@ -65,6 +65,7 @@ QValueList<KWFrame *> KWFrameList::framesOnTop() const {
 }
 
 void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
+    // kdDebug(31001) << "KWFrameList::setFrames for " << m_frame->frameSet()->name() << endl;
     m_frames.clear();
     if ( m_doc->layoutViewMode() && !m_doc->layoutViewMode()->hasFrames() )
         return;
@@ -95,7 +96,8 @@ void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
         // ## might need a for loop for the case of inline-inside-inline,
         // or maybe calling isPaintedBy instead [depending on what should happen for tables]
         if ( daFrame->frameSet()->isFloating() &&
-                parentFramesets.contains(daFrame->frameSet()->anchorFrameset()) )
+                (parentFramesets.contains(daFrame->frameSet()->anchorFrameset()) ||
+                 daFrame->frameSet()->isPaintedBy(m_frame->frameSet())) )
             continue;
         // Floating frames are not "on top", they are "inside".
         // They are not "below" anything either - the parent frameset is.
@@ -159,7 +161,7 @@ KWFrameList *KWFrameList::getFirstFrameList(KWDocument *doc) {
 }
 
 void KWFrameList::recalcFrames(KWDocument *doc, int pageFrom, int pageTo) {
-    for(int i=pageFrom; i >= pageTo; i--) {
+    for(int i=pageTo; i >= pageFrom; i--) {
         QPtrList<KWFrame> framesOnPage = doc->framesInPage( i, false );
         KWFrame *f = framesOnPage.first();
         while(f) {

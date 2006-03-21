@@ -341,6 +341,10 @@ protected slots:
     void slotParagraphCreated(KoTextParag*_parag);
     void slotParagraphModified(KoTextParag*_parag, int /*KoTextParag::ParagModifyType*/, int, int);
 
+
+protected: // for testing purposes
+    KWTextFrameSet( const QString & name );
+
 private:
     void init();
     bool slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *lastFormatted );
