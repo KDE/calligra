@@ -20,6 +20,7 @@
 #include "variant.h"
 #include "list.h"
 
+#include <klocale.h>
 #include <kdebug.h>
 
 using namespace Kross::Api;
@@ -84,7 +85,7 @@ const QString Variant::toString(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::String))
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::String expected, but got %1.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::String expected, but got %1.")).arg(variant.typeName()).latin1()) );
     return variant.toString();
 }
 
@@ -92,7 +93,7 @@ int Variant::toInt(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::Int))
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::Int expected, but got %1.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::Int expected, but got %1.")).arg(variant.typeName()).latin1()) );
     return variant.toInt();
 }
 
@@ -100,7 +101,7 @@ uint Variant::toUInt(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::UInt))
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::UInt expected, but got %1.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::UInt expected, but got %1.")).arg(variant.typeName()).latin1()) );
     return variant.toUInt();
 }
 
@@ -108,7 +109,7 @@ double Variant::toDouble(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::Double))
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::Double expected, but got %1.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::Double expected, but got %1.")).arg(variant.typeName()).latin1()) );
     return variant.toDouble();
 }
 
@@ -116,7 +117,7 @@ Q_LLONG Variant::toLLONG(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::LongLong))
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::LLONG expected, but got %1.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::LLONG expected, but got %1.")).arg(variant.typeName()).latin1()) );
     return variant.toLongLong();
 }
 
@@ -124,7 +125,7 @@ Q_ULLONG Variant::toULLONG(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::ULongLong))
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::ULLONG expected, but got %1.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::ULLONG expected, but got %1.")).arg(variant.typeName()).latin1()) );
     return variant.toULongLong();
 }
 
@@ -132,7 +133,7 @@ bool Variant::toBool(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::Bool))
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::Bool expected, but got %1.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::Bool expected, but got %1.")).arg(variant.typeName()).latin1()) );
     return variant.toBool();
 }
 
@@ -147,6 +148,6 @@ QValueList<QVariant> Variant::toList(Object::Ptr object)
     }
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::List))
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::List expected, but got '%1'.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::List expected, but got '%1'.")).arg(variant.typeName()).latin1()) );
     return variant.toList();
 }

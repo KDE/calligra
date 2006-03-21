@@ -31,9 +31,11 @@
 #include <qobject.h>
 #include <qfile.h>
 #include <qregexp.h>
+
 #include <kdebug.h>
-#include <kstaticdeleter.h>
 #include <klibloader.h>
+#include <klocale.h>
+#include <kstaticdeleter.h>
 
 extern "C"
 {
@@ -176,7 +178,7 @@ Interpreter* Manager::getInterpreter(const QString& interpretername)
     setException(0); // clear previous exceptions
 
     if(! d->interpreterinfos.contains(interpretername)) {
-        setException( new Exception(QString("No such interpreter '%1'").arg(interpretername)) );
+        setException( new Exception(QString(i18n("No such interpreter '%1'")).arg(interpretername)) );
         return 0;
     }
 

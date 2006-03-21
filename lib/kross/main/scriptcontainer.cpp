@@ -27,6 +27,8 @@
 
 #include <qfile.h>
 
+#include <klocale.h>
+
 using namespace Kross::Api;
 
 namespace Kross { namespace Api {
@@ -200,7 +202,7 @@ Object::Ptr ScriptContainer::callFunction(const QString& functionname, List::Ptr
         return 0;
 
     if(functionname.isEmpty()) {
-        setException( new Exception(QString("No functionname defined for ScriptContainer::callFunction().")) );
+        setException( new Exception(QString(i18n("No functionname defined for ScriptContainer::callFunction()."))) );
         finalize();
         return 0;
     }
@@ -247,14 +249,14 @@ bool ScriptContainer::initialize()
         if(d->interpretername.isNull()) {
             d->interpretername = Manager::scriptManager()->getInterpreternameForFile( d->scriptfile );
             if(d->interpretername.isNull()) {
-                setException( new Exception(QString("Failed to determinate interpreter for scriptfile '%1'").arg(d->scriptfile)) );
+                setException( new Exception(QString(i18n("Failed to determinate interpreter for scriptfile '%1'")).arg(d->scriptfile)) );
                 return false;
             }
         }
 
         QFile f( d->scriptfile );
         if(! f.open(IO_ReadOnly)) {
-            setException( new Exception(QString("Failed to open scriptfile '%1'").arg(d->scriptfile)) );
+            setException( new Exception(QString(i18n("Failed to open scriptfile '%1'")).arg(d->scriptfile)) );
             return false;
         }
         d->code = QString( f.readAll() );
@@ -263,13 +265,13 @@ bool ScriptContainer::initialize()
 
     Interpreter* interpreter = Manager::scriptManager()->getInterpreter(d->interpretername);
     if(! interpreter) {
-        setException( new Exception(QString("Unknown interpreter '%1'").arg(d->interpretername)) );
+        setException( new Exception(QString(i18n("Unknown interpreter '%1'")).arg(d->interpretername)) );
         return false;
     }
 
     d->script = interpreter->createScript(this);
     if(! d->script) {
-        setException( new Exception(QString("Failed to create script for interpreter '%1'").arg(d->interpretername)) );
+        setException( new Exception(QString(i18n("Failed to create script for interpreter '%1'")).arg(d->interpretername)) );
         return false;
     }
     if(d->script->hadException()) {
