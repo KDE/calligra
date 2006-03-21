@@ -254,12 +254,13 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     
     // Read image data
     png_bytepp row_pointers = new png_bytep[height];
+    png_uint_32 row_index = 0;
     try
     {
         png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-        for(png_uint_32 y=0; y < height; y++)
+        for(; row_index < height; row_index++)
         {
-            row_pointers[y] = new png_byte[rowbytes];
+            row_pointers[row_index] = new png_byte[rowbytes];
         }
     }
     catch(std::bad_alloc& e)
@@ -267,7 +268,8 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
         kdDebug(41008) << "bad alloc: " << e.what() << endl;
-        for (png_uint_32 y = 0; y < height; y++) {
+        // Free only the already allocated png_byte instances.
+        for (png_uint_32 y = 0; y <= row_index; y++) {
             delete[] row_pointers[y];
         }
         delete [] row_pointers;
