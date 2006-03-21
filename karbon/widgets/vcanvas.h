@@ -96,10 +96,6 @@ private:
 	QPixmap *m_pixmap;
 	KarbonPart* m_part;
 	KarbonView* m_view;
-
-	bool m_bScrolling;
-	int	m_scrollX;
-	int	m_scrollY;
 };
 
 #endif
