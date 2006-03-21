@@ -799,15 +799,15 @@ KarbonView::zoomChanged( const KoPoint &p )
 	else if( m_zoomAction->currentText() == i18n("Zoom Width") )
 	{
 		centerX = 0.5;
-		centerY = double( m_canvas->contentsY() + ( height() - rulerHeight ) / 2 ) / double( m_canvas->contentsHeight() );
-		zoomFactor = double( width() - rulerWidth ) / double( part()->document().width() + ( rulerWidth / 2 ) );
+		centerY = double( m_canvas->contentsY() + 0.5 * m_canvas->visibleHeight() ) / double( m_canvas->contentsHeight() );
+		zoomFactor = double( m_canvas->visibleWidth() ) / double( part()->document().width() );
 	}
 	else if( m_zoomAction->currentText() == i18n("Whole Page") )
 	{
 		centerX = 0.5;
 		centerY = 0.5;
-		double zoomFactorX = double( width() - rulerWidth ) / double( part()->document().width() + ( rulerWidth / 2 ) );
-		double zoomFactorY = double( height() - rulerHeight ) / double( part()->document().height() + ( rulerHeight / 2 ) );
+		double zoomFactorX = double( m_canvas->visibleWidth() ) / double( part()->document().width() );
+		double zoomFactorY = double( m_canvas->visibleHeight() ) / double( part()->document().height() );
 
 		if(zoomFactorX < 0 && zoomFactorY > 0)
 			zoomFactor = zoomFactorY;
@@ -817,16 +817,15 @@ KarbonView::zoomChanged( const KoPoint &p )
 			zoomFactor = 0.0001;
 		else
 			zoomFactor = kMin( zoomFactorX, zoomFactorY );
-		
 	}
 	else
 	{
-		if( m_canvas->contentsWidth() > width() - rulerWidth )
-			centerX = double( m_canvas->contentsX() + ( width() - rulerWidth ) / 2 ) / double( m_canvas->contentsWidth() );
+		if( m_canvas->contentsWidth() > m_canvas->visibleWidth() )
+			centerX = double( m_canvas->contentsX() + 0.5 * m_canvas->visibleWidth() ) / double( m_canvas->contentsWidth() );
 		else
 			centerX = 0.5;
-		if( m_canvas->contentsHeight() > height() - rulerHeight )
-			centerY = double( m_canvas->contentsY() + ( height() - rulerHeight ) / 2 ) / double( m_canvas->contentsHeight() );
+		if( m_canvas->contentsHeight() > m_canvas->visibleHeight() )
+			centerY = double( m_canvas->contentsY() + 0.5 * m_canvas->visibleHeight() ) / double( m_canvas->contentsHeight() );
 		else
 			centerY = 0.5;
 		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;

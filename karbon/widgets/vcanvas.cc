@@ -41,26 +41,20 @@ int
 VCanvas::pageOffsetX() const
 {
 	double zoomedWidth = m_part->document().width() * m_view->zoom();
-	if( contentsWidth() < viewport()->width() )
-	{
-		//kdDebug(38000) << "offsetx : " << int( ( viewport()->width() - zoomedWidth ) / 2.0 ) << endl;
-		return int( ( viewport()->width() - zoomedWidth ) / 2.0 );
-	}
+	if( contentsWidth() < visibleWidth() )
+		return int( 0.5 * ( visibleWidth() - zoomedWidth ) );
 	else
-		return int( ( contentsWidth() - zoomedWidth ) / 2.0 );
+		return int( 0.5 * ( contentsWidth() - zoomedWidth ) );
 }
 
 int
 VCanvas::pageOffsetY() const
 {
 	double zoomedHeight = m_part->document().height() * m_view->zoom();
-	if( contentsHeight() < viewport()->height() )
-	{
-		//kdDebug(38000) << "offsetx : " << int( ( viewport()->height() - zoomedHeight ) / 2.0 ) << endl;
-		return int( ( viewport()->height() - zoomedHeight ) / 2.0 );
-	}
+	if( contentsHeight() < visibleHeight() )
+		return int( 0.5 * ( visibleHeight() - zoomedHeight ) );
 	else
-		return int( ( contentsHeight() - zoomedHeight ) / 2.0 );
+		return int( 0.5 * ( contentsHeight() - zoomedHeight ) );
 }
 
 KoPoint VCanvas::snapToGrid( const KoPoint &point )
@@ -117,8 +111,6 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
 	m_pixmap = new QPixmap( 800, 600 );
 
 	setFocus();
-
-	m_bScrolling = false;
 
 	setAcceptDrops( true );
 }
@@ -211,10 +203,10 @@ VCanvas::setYMirroring( VPainter *p )
 	mat.scale( 1, -1 );
 	mat.translate( pageOffsetX(), pageOffsetY() );
 
-	if( contentsHeight() > height() )
+	if( contentsHeight() > visibleHeight() )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	else
-		mat.translate( 0, -height() );
+		mat.translate( 0, -visibleHeight() );
 
 	p->setWorldMatrix( mat );
 }
@@ -222,41 +214,38 @@ VCanvas::setYMirroring( VPainter *p )
 void
 VCanvas::viewportPaintEvent( QPaintEvent *e )
 {
+	QRect eventRect = e->rect();
+	KoRect rect = KoRect::fromQRect( eventRect );
+	
 	setYMirroring( m_view->painterFactory()->editpainter() );
-	//kdDebug(38000) << "viewp e->rect() : " << e->rect().x() << ", " << e->rect().y() << ", " << e->rect().width() << ", " << e->rect().height() << endl;
 	viewport()->setUpdatesEnabled( false );
-	KoRect rect( e->rect().x(), e->rect().y(), e->rect().width(), e->rect().height() );
 	VPainter *p = m_view->painterFactory()->painter();
-	//if( m_bScrolling )
-	//{
-		// TODO : only update ROIs
-		KoRect r( 0, 0, viewport()->width(), viewport()->height() );
-		p->begin();
-		p->clear( rect, QColor( 195, 194, 193 ) );
-		p->setZoomFactor( m_view->zoom() );
-		setYMirroring( p );
-		// TRICK : slightly adjust the matrix so libart AA looks better
-		QWMatrix mat = p->worldMatrix();
-		p->setWorldMatrix( mat.translate( -.5, -.5 ) );
 
-		// set up clippath
-		p->newPath();
-		p->moveTo( KoPoint( rect.x(), rect.y() ) );
-		p->lineTo( KoPoint( rect.right(), rect.y() ) );
-		p->lineTo( KoPoint( rect.right(), rect.bottom() ) );
-		p->lineTo( KoPoint( rect.x(), rect.bottom() ) );
-		p->lineTo( KoPoint( rect.x(), rect.y() ) );
-		p->setClipPath();
+	// TODO : only update ROIs
+	p->begin();
+	p->clear( rect, QColor( 195, 194, 193 ) );
+	p->setZoomFactor( m_view->zoom() );
+	setYMirroring( p );
+	
+	// TRICK : slightly adjust the matrix so libart AA looks better
+	QWMatrix mat = p->worldMatrix();
+	p->setWorldMatrix( mat.translate( -.5, -.5 ) );
 
-		m_part->document().drawPage( p, m_part->pageLayout(), m_view->showPageMargins() );
-		KoRect r2 = boundingBox();
-		m_part->document().draw( p, &r2 );
+	// set up clippath
+	p->newPath();
+	p->moveTo( rect.topLeft() );
+	p->lineTo( rect.topRight() );
+	p->lineTo( rect.bottomRight() );
+	p->lineTo( rect.bottomLeft() );
+	p->lineTo( rect.topLeft() );
+	p->setClipPath();
 
-		p->resetClipPath();
-		m_bScrolling = false;
+	m_part->document().drawPage( p, m_part->pageLayout(), m_view->showPageMargins() );
+	KoRect bbox = boundingBox();
+	m_part->document().draw( p, &bbox );
 
-	//}
-	p->blit( rect );
+	p->resetClipPath();
+	p->end();
 
 	// draw handle:
 	VQPainter qpainter( p->device() );
@@ -267,16 +256,15 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	if( m_view->toolController()->currentTool() )
 		m_view->toolController()->currentTool()->draw( &qpainter );
 
-	bitBlt( viewport(), QPoint( int( rect.x() ), int( rect.y() ) ), p->device(), rect.toQRect() );
+	bitBlt( viewport(), eventRect.topLeft(), p->device(), eventRect );
 	viewport()->setUpdatesEnabled( true );
-	//bitBlt( this, QPoint( rect.x(), rect.y() - pageOffsetY() ), p->device(), rect );
 }
 
 void
 VCanvas::setViewport( double centerX, double centerY )
 {
-	setContentsPos( int( centerX * contentsWidth() - visibleWidth() / 2 ),
-					int( centerY * contentsHeight() - visibleHeight() / 2 ) );
+	setContentsPos( int( centerX * contentsWidth() - 0.5 * visibleWidth() ),
+					int( centerY * contentsHeight() - 0.5 * visibleHeight() ) );
 }
 
 void
@@ -308,7 +296,7 @@ void
 VCanvas::drawDocument( QPainter* /*painter*/, const KoRect&, bool drawVObjects )
 {
 	setYMirroring( m_view->painterFactory()->editpainter() );
-	//kdDebug(38000) << "drawDoc rect : " << rect.x() << ", " << rect.y() << ", " << rect.width() << ", " << rect.height() << endl;
+
 	VPainter* p = m_view->painterFactory()->painter();
 	if( drawVObjects )
 	{
@@ -342,11 +330,7 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect&, bool drawVObjects )
 void
 VCanvas::repaintAll( bool drawVObjects )
 {
-	//if( m_view->layersDocker() )
-	//	m_view->layersDocker()->updatePreviews();
-	//drawContents( 0, 0, 0, width(), height() );
 	drawDocument( 0, KoRect( 0, 0, width(), height() ), drawVObjects );
-	//viewport()->repaint( erase );
 }
 
 /// repaints just a rect area (no scrolling)
@@ -359,8 +343,8 @@ VCanvas::repaintAll( const KoRect &r )
 void
 VCanvas::resizeEvent( QResizeEvent* event )
 {
-	double centerX = double( contentsX() + visibleWidth() / 2 ) / double( contentsWidth() );
-	double centerY = double( contentsY() + visibleHeight() / 2 ) / double( contentsHeight() );
+	double centerX = double( contentsX() + 0.5 * visibleWidth() ) / double( contentsWidth() );
+	double centerY = double( contentsY() + 0.5 * visibleHeight() ) / double( contentsHeight() );
 
 	QScrollView::resizeEvent( event );
 	if( !m_pixmap )
@@ -371,14 +355,12 @@ VCanvas::resizeEvent( QResizeEvent* event )
 	VPainter *p = m_view->painterFactory()->painter();
 	p->resize( width(), height() );
 	p->clear( QColor( 195, 194, 193 ) );
-	m_bScrolling = true;
 	setViewport( centerX, centerY );
 }
 
 void
 VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 {
-	m_bScrolling = true;
 	emit viewportChanged();
 }
 
