@@ -643,6 +643,9 @@ void KoMainWindow::slotLoadCanceled( const QString & errMsg )
     disconnect(newdoc, SIGNAL(sigProgress(int)), this, SLOT(slotProgress(int)));
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotLoadCanceled( const QString & )));
+
+    newdoc->removeShell(this);
+    delete newdoc;
 }
 
 void KoMainWindow::slotSaveCanceled( const QString &errMsg )
