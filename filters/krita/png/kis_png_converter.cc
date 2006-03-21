@@ -262,10 +262,16 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
             row_pointers[y] = new png_byte[rowbytes];
         }
     }
-    catch(std::bad_alloc)
+    catch(std::bad_alloc& e)
     {
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
+        kdDebug(41008) << "bad alloc: " << e.what() << endl;
+        for (png_uint_32 y = 0; y < height; y++) {
+            delete[] row_pointers[y];
+        }
+        delete [] row_pointers;
+        png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         return (KisImageBuilder_RESULT_FAILURE);
     }
     
