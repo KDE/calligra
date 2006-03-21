@@ -269,7 +269,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         // is invalid / to large.
         kdDebug(41008) << "bad alloc: " << e.what() << endl;
         // Free only the already allocated png_byte instances.
-        for (png_uint_32 y = 0; y <= row_index; y++) {
+        for (png_uint_32 y = 0; y < row_index; y++) {
             delete[] row_pointers[y];
         }
         delete [] row_pointers;
