@@ -254,10 +254,19 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     
     // Read image data
     png_bytepp row_pointers = new png_bytep[height];
-    int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-    for(png_uint_32 y=0; y < height; y++)
+    try
     {
-        row_pointers[y] = new png_byte[rowbytes];
+        png_uint_32 rowbytes = png_get_rowbytes(png_ptr, info_ptr);
+        for(png_uint_32 y=0; y < height; y++)
+        {
+            row_pointers[y] = new png_byte[rowbytes];
+        }
+    }
+    catch(std::bad_alloc)
+    {
+        // new png_byte[] may raise such an exception if the image
+        // is invalid / to large.
+        return (KisImageBuilder_RESULT_FAILURE);
     }
     
     // Read the palette if the file is indexed
