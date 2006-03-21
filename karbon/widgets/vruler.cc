@@ -245,18 +245,19 @@ void VRuler::drawRuler()
             if (step && start % step == 0) {
                 buf.setNum(QABS(start));
                 drawNums(&p, pos, 4, buf, true);
-
             }
 
             start++;
         } while (pos < m_pixmapBuffer -> width());
     } else {
+        m_firstVisible = 0;
         float cx = KoUnit::fromUserValue(100, m_unit) / m_zoom;
+        Q_INT32 height = m_pixmapBuffer -> height() - 1;
         Q_INT32 step = qRound(cx);
         Q_INT32 start = (Q_INT32)(KoUnit::toUserValue(m_firstVisible, m_unit) / m_zoom);
 
         do {
-            pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
+            pos = height - (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
             if (!s3 && s4 && start % st4 == 0)
                 p.drawLine(RULER_SIZE - 9, pos, RULER_SIZE, pos);
@@ -276,7 +277,7 @@ void VRuler::drawRuler()
             }
 
             start++;
-        } while (pos < m_pixmapBuffer -> height());
+        } while (pos > 0);
     }
 
     p.end();

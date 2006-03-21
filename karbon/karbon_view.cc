@@ -1152,7 +1152,7 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 
 	KoPoint xy;
 	xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
-	xy.setY(m_part->document().height() - (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
+	xy.setY( qRound(m_part->document().height()) - (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
 
 	xy.setX(KoUnit::toUserValue(xy.x(), part()->unit()));
 	xy.setY(KoUnit::toUserValue(xy.y(), part()->unit()));
@@ -1229,7 +1229,7 @@ KarbonView::togglePageMargins(bool b)
 void
 KarbonView::updateRuler()
 {
-	//if(!m_canvas->horizontalScrollBar()->isVisible())
+	if(!m_canvas->horizontalScrollBar()->isVisible())
 	{
 		if( (1 + m_canvas->pageOffsetX() - m_canvas->contentsX()) >= 0 )
 		{
@@ -1243,16 +1243,16 @@ KarbonView::updateRuler()
 		}
 	}
 
-	//if(!m_canvas->verticalScrollBar()->isVisible())
+	if(!m_canvas->verticalScrollBar()->isVisible())
 	{
 		if( (1 + m_canvas->pageOffsetY() - m_canvas->contentsY()) >= 0 )
 		{
-			m_vertRuler->setGeometry( 0, 1 + rulerHeight + m_canvas->pageOffsetY() - m_canvas->contentsY(), rulerWidth, qRound( 1 + part()->document().height() * zoom() ));
+			m_vertRuler->setGeometry( 0, 1 + rulerHeight + m_canvas->pageOffsetY() - m_canvas->contentsY(), rulerWidth, 1 + qRound( part()->document().height() * zoom() ));
 			m_vertRuler->updateVisibleArea(0,0);
 		}
 		else
 		{
-			m_vertRuler->setGeometry( 0, rulerHeight, rulerWidth, qRound( 1 + part()->document().height() * zoom() ) + m_canvas->contentsY() - m_canvas->pageOffsetY() );
+			m_vertRuler->setGeometry( 0, 1 + rulerHeight, rulerWidth, 1 + qRound( part()->document().height() * zoom() ) + m_canvas->contentsY() - m_canvas->pageOffsetY() );
 			m_vertRuler->updateVisibleArea(0, (m_canvas->contentsY() - m_canvas->pageOffsetY()));
 		}
 	}
@@ -1335,14 +1335,14 @@ KarbonView::canvasContentsMoving( int x, int y )
 	{
 		if( shell() && m_showRulerAction->isChecked() )
 		{
-			if( (1 + rulerHeight + m_canvas->pageOffsetY() - y) >= rulerHeight)
+			if( (1 + m_canvas->pageOffsetY() - y) >= 0)
 			{
-				m_vertRuler->setGeometry( 0, 1 + rulerHeight + m_canvas->pageOffsetY() - y , rulerWidth, qRound( 1 + part()->document().height() * zoom() ));
+				m_vertRuler->setGeometry( 0, 1 + rulerHeight + m_canvas->pageOffsetY() - y , rulerWidth, 1 + qRound( part()->document().height() * zoom() ));
 				m_vertRuler->updateVisibleArea(0,0);
 			}
 			else
 			{
-				m_vertRuler->setGeometry( 0, rulerHeight, rulerWidth, qRound( 1 + part()->document().height() * zoom() ) - y + m_canvas->pageOffsetY() );
+				m_vertRuler->setGeometry( 0, 1 + rulerHeight, rulerWidth, 1 + qRound( part()->document().height() * zoom() ) - y + m_canvas->pageOffsetY() );
 				m_vertRuler->updateVisibleArea(0, (y - m_canvas->pageOffsetY()));
 			}
 		}
