@@ -2195,12 +2195,12 @@ KCommand *KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextP
 
 bool KoAutoFormat::doIgnoreDoubleSpace( KoTextParag *parag, int index, QChar ch )
 {
-    if( m_ignoreDoubleSpace && ch==' ' && index >=  0 )
+    if( m_ignoreDoubleSpace && ch==' ' && index >=  0 && !parag->hasAnySelection() )
     {
         KoTextString *s = parag->string();
         QChar ch = s->at( index ).c;
         if ( ch==' ' )
-            return true;
+          return true;
     }
     return false;
 }
