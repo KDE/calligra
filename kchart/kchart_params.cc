@@ -417,7 +417,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 {
     QString  tmp;
 
-    cerr << ">>> ==========================================================\n";
+    //cerr << ">>> ==========================================================\n";
 
     // FIXME: attribute table:cell-range-address  - the cells in a spreadsheet
 
@@ -453,10 +453,15 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
 
     tmp = plotareaElem.attributeNS( KoXmlNS::chart, "style-name",
 				    QString::null );
-    kdDebug(35001) << "Style name for the plot area: " << tmp << endl;
+    //kdDebug(35001) << "Style name for the plot area: " << tmp << endl;
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
     loadingContext.fillStyleStack( plotareaElem, KoXmlNS::chart, "style-name", "chart" );
+
+    if ( styleStack.attributeNS( KoXmlNS::chart, "three-dimensional" ) == "true" )
+	setThreeDBars( true );
+    else
+	setThreeDBars( false );
 
     switch ( m_chartType ) {
     case NoType:
@@ -570,14 +575,14 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     QDomElement  axisElem;
     forEachElement( axisElem, plotareaElem ) {
 
-	cerr << "plotarea element: " << axisElem.tagName().latin1() << "\n";
+	//cerr << "plotarea element: " << axisElem.tagName().latin1() << "\n";
 	if ( axisElem.tagName() != "axis" )
 	    continue;
 
 	tmp = axisElem.attributeNS( KoXmlNS::chart, "name",
 				    QString::null);
 	//kdDebug(35001) << "Got axis " << tmp << endl;
-	cerr << "Got axis " << tmp.latin1() << "\n";
+	//cerr << "Got axis " << tmp.latin1() << "\n";
 	if ( tmp == "primary-x" )
 	    xAxisElem = axisElem;
 	else if ( tmp == "primary-y" )
@@ -605,7 +610,7 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     kdDebug() << "fillColor=" << fillColor << endl;
 #endif
 
-    cerr << "<<< ==========================================================\n";
+    //cerr << "<<< ==========================================================\n";
 
     return true;
 }
@@ -635,14 +640,14 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
 
 
 
-    cerr << ">>> ----------------------------------------------------------\n";
-    cerr << "Loading axis " << axisElem.attributeNS( KoXmlNS::chart, "name",
-						     QString::null).latin1()
-	 << "\n";
+    //cerr << ">>> ----------------------------------------------------------\n";
+    //cerr << "Loading axis " << axisElem.attributeNS( KoXmlNS::chart, "name",
+    //						     QString::null).latin1()
+    //	 << "\n";
 
     tmp = axisElem.attributeNS( KoXmlNS::chart, "style-name", QString::null );
     //kdDebug(35001) << "Style name for the axis: " << tmp << endl;
-    cerr << "Style name for the axis: " << tmp.latin1() << "\n";
+    //cerr << "Style name for the axis: " << tmp.latin1() << "\n";
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
     loadingContext.fillStyleStack( axisElem, KoXmlNS::chart, "style-name", "chart" );
@@ -682,7 +687,7 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
     // chart:
     styleStack.restore();
 
-    cerr << "<<< ----------------------------------------------------------\n";
+    //cerr << "<<< ----------------------------------------------------------\n";
     return true;
 }
 
