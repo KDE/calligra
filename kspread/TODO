@@ -73,11 +73,8 @@ General bugs
 
 * Format
   + 87471: format of whole column does not change		      2 ----
-  + Border on a cell in the cell format dialog -> the line width      1 ----
-    does not stick.
 
 * Load & Save, Import & Export
-  + 78040: font doesn't stick in cells				      1 ----
   + 87471: format of whole column does not change (actually import)   1 ----
 
 * Miscellaneous
