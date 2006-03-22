@@ -70,7 +70,7 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 	m_params = new KChartParams( this );
 	m_params->setChartType( KChartParams::Bar );
 	m_params->setBarChartSubType( KChartParams::BarNormal );
-	//m_params->setThreeDBars( true );
+	m_params->setThreeDBars( true );
 
         //Changed this to use columns rather than rows by default
         //because I believe that this is the more common format for
