@@ -192,8 +192,8 @@ void KChartPart::initNullChart()
     // Empty data.  Note, we don't use (0,0) or (1,1) for the size
     // here, because otherwise KDChart won't draw anything
     m_currentData.expand(2, 2);
-    m_params->setFirstRowAsLabel(true);
-    m_params->setFirstColAsLabel(true);
+    m_params->setFirstRowAsLabel(false);
+    m_params->setFirstColAsLabel(false);
 
     // Fill column and row labels.
     m_colLabels << QString("");
@@ -369,7 +369,8 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
     // ## TODO: support zooming
 
     // Double-buffering
-    if ( m_bufferPixmap.width() < rect.width() || m_bufferPixmap.height() < rect.height() )
+    if ( m_bufferPixmap.width() < rect.width()
+	 || m_bufferPixmap.height() < rect.height() )
     {
     	m_bufferPixmap.resize( rect.size() );
     }
