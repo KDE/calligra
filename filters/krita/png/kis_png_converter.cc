@@ -201,6 +201,13 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
             memcpy(profile_rawdata.data(), profile_data, proflen);
             profile = new KisProfile(profile_rawdata);
             Q_CHECK_PTR(profile);
+            if (profile) {
+                kdDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
+                if(!profile->isSuitableForOutput())
+                {
+                    kdDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
+                }
+            }
         }
     }
 
@@ -296,7 +303,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
         m_img->blockSignals(true); // Don't send out signals while we're building the image
         Q_CHECK_PTR(m_img);
-        if(profile)
+        if(profile && !profile->isSuitableForOutput())
         {
             m_img -> addAnnotation( profile->annotation() );
         }
