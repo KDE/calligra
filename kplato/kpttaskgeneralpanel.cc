@@ -191,10 +191,17 @@ void TaskGeneralPanel::estimationTypeChanged(int type) {
         Duration d = estimationValue();
         setEstimateScales(m_dayLength);
         //setEstimate(d);
+        estimate->setEnabled(true);
     } else {
         Duration d = estimationValue();
         setEstimateScales(24);
         //setEstimate(d);
+        if (schedulingType() == 6) { /*Fixed interval*/
+            estimate->setEnabled(false);
+        } else {
+            estimate->setEnabled(true);
+        }
+        
     }
     TaskGeneralPanelImpl::estimationTypeChanged(type);
 }
