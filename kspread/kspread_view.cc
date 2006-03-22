@@ -4097,7 +4097,7 @@ void View::paste()
   if (!koDocument()->isReadWrite()) // don't paste into a read only document
     return;
 
-  QMimeSource *data = QApplication::clipboard()->data();
+  QMimeSource *data = QApplication::clipboard()->data( QClipboard::Clipboard );
   for ( int i=0; data->format(i) != 0; i++ )
     kdDebug() << "format:" << data->format(i) << endl;
 
@@ -4159,7 +4159,7 @@ void View::paste()
     d->doc->loadOasisAreaName( body );
     d->doc->loadOasisCellValidation( body );
 
-    //Copied from kspread_doc.cc - refactor into one place asap. 
+    //Copied from kspread_doc.cc - refactor into one place asap.
     QDictIterator<QDomElement> it( oasisStyles.styles("table-cell") );
     QDict<Style> styleElements;
     for (;it.current();++it)
@@ -4168,10 +4168,10 @@ void View::paste()
 	{
 		QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
 		styleElements.insert( name , new Style());
-		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) ); 
+		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
 	}
     }
-    
+
     // all <sheet:sheet> goes to workbook
     bool result = d->doc->map()->loadOasis( body, context, styleElements );
 
@@ -4180,7 +4180,7 @@ void View::paste()
     for (;styleIter.current();++styleIter)
 	    if (styleIter.current()->release())
 		    delete styleIter.current();
-    
+
     if (!result)
       return;
 
@@ -4188,7 +4188,7 @@ void View::paste()
   else
   {
     //TODO:  What if the clipboard data is available in both pixmap and OASIS format? (ie. for embedded parts)
-    QPixmap clipboardPixmap = QApplication::clipboard()->pixmap();
+    QPixmap clipboardPixmap = QApplication::clipboard()->pixmap( QClipboard::Clipboard );
     if (!clipboardPixmap.isNull())
     {
         d->activeSheet->insertPicture( markerDocumentPosition()  , clipboardPixmap );

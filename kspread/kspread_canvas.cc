@@ -1543,7 +1543,8 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
       if ( d->view->koDocument()->isReadWrite() && !sheet->isProtected() )
       {
         (d->chooseCell ? choice() : selectionInfo())->initialize( QPoint( col, row ), activeSheet() );
-        sheet->paste(selectionInfo()->lastRange());
+        sheet->paste(selectionInfo()->lastRange(), true, Paste::Normal,
+                     Paste::OverWrite, false, 0, false, QClipboard::Selection);
         sheet->setRegionPaintDirty(*selectionInfo());
       }
       break;

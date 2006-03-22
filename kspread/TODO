@@ -76,9 +76,6 @@ General bugs
   + Border on a cell in the cell format dialog -> the line width      1 ----
     does not stick.
 
-* Cut/Copy & Paste
-  + 69283: content on middle mouse click			      1 ----
-
 * Load & Save, Import & Export
   + 78040: font doesn't stick in cells				      1 ----
   + 87471: format of whole column does not change (actually import)   1 ----
@@ -174,6 +171,8 @@ Things to do after the release of KOffice 1.4
       static members of Region.
     - Move all util_foo(..) functions to Util namespace and remove
       the prefix 'util_'.
+    - Reduce amount of parameters for methods which takes many of
+      them, e.g. Sheet::paste(). bools -> QFlags, static variables
 
 * GUI
   + Sheet layout:						      2 ----

@@ -22,13 +22,14 @@
 #ifndef KSPREAD_SHEET
 #define KSPREAD_SHEET
 
-#include <qpen.h>
-#include <qptrlist.h>
+#include <qclipboard.h>
+#include <qdragobject.h>
 #include <qintdict.h>
 #include <qmemarray.h>
+#include <qpen.h>
+#include <qptrlist.h>
 #include <qrect.h>
 #include <qwidget.h>
-#include <qdragobject.h>
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
@@ -614,9 +615,10 @@ public:
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( const QRect & pasteArea, bool makeUndo = true, Paste::Mode = Paste::Normal,
-                Paste::Operation = Paste::OverWrite, bool insert = false, int insertTo = 0,
-                bool pasteFC = false );
+    void paste( const QRect & pasteArea, bool makeUndo = true,
+                Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
+                bool insert = false, int insertTo = 0, bool pasteFC = false,
+                QClipboard::Mode clipboardMode = QClipboard::Clipboard );
     void paste( const QByteArray & data, const QRect & pasteArea,
                 bool makeUndo = false, Paste::Mode= Paste::Normal, Paste::Operation = Paste::OverWrite,
                 bool insert = false, int insertTo = 0, bool pasteFC = false );

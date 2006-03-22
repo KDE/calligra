@@ -5085,9 +5085,10 @@ void Sheet::cutSelection( Selection* selectionInfo )
 
 void Sheet::paste( const QRect& pasteArea, bool makeUndo,
                    Paste::Mode mode, Paste::Operation operation,
-                   bool insert, int insertTo, bool pasteFC )
+                   bool insert, int insertTo, bool pasteFC,
+                   QClipboard::Mode clipboardMode )
 {
-    QMimeSource * mime = QApplication::clipboard()->data();
+    QMimeSource * mime = QApplication::clipboard()->data( clipboardMode );
     if ( !mime )
         return;
 
@@ -5101,7 +5102,7 @@ void Sheet::paste( const QRect& pasteArea, bool makeUndo,
     {
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
         // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
-        QString _text = QApplication::clipboard()->text();
+        QString _text = QApplication::clipboard()->text( clipboardMode );
         doc()->emitBeginOperation();
         pasteTextPlain( _text, pasteArea );
         emit sig_updateView( this );
@@ -5493,7 +5494,7 @@ void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect& loadArea,
 
 bool Sheet::testAreaPasteInsert()const
 {
-   QMimeSource* mime = QApplication::clipboard()->data();
+    QMimeSource* mime = QApplication::clipboard()->data( QClipboard::Clipboard );
     if ( !mime )
         return false;
 
