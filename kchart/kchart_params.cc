@@ -892,6 +892,9 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
         plotAreaStyle.addProperty( "chart:vertical", "false" ); // #### always?
         plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
 
+	if ( threeDBars() )
+	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+
     case Line:
         switch( lineChartSubType() ) {
         case LineStacked:
@@ -905,12 +908,18 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
         }
         plotAreaStyle.addProperty( "chart:symbol-type", "automatic" );
 
+	if ( threeDLines() )
+	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+
         break;
 
     case Area:
         // TODO - very similar
 
     case Pie:
+	if ( threeDPies() )
+	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+
 	break;
 
     case HiLo:
