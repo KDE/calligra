@@ -27,7 +27,7 @@ namespace KisTIFFYCbCr {
         POSITION_CENTERED = 1,
         POSITION_COSITED = 2
     };
-};
+}
 
 class KisTIFFYCbCrReaderTarget8Bit : public KisTIFFReaderBase {
     public:

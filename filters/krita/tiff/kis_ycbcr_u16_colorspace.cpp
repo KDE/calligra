@@ -262,7 +262,7 @@ void KisYCbCrU16ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowSt
 
             if (srcAlpha != U16_OPACITY_TRANSPARENT) {
 
-                if (opacity != U16_OPACITY_OPAQUE) {
+                if (opacity != OPACITY_OPAQUE) {
                     srcAlpha = UINT16_MULT(srcAlpha, opacity);
                 }
 
