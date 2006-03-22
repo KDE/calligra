@@ -11,6 +11,7 @@
 
 class QLabel;
 class QSpinBox;
+class QCheckBox;
 
 
 namespace KChart
@@ -91,8 +92,8 @@ class kchartDataEditor : public KDialogBase
     Q_OBJECT
 public:
     kchartDataEditor(QWidget* parent = 0);
-    void setData(KDChartTableData* dat);
-    void getData(KDChartTableData* dat);
+    void setData(KChartParams *params, KDChartTableData *dat);
+    void getData(KChartParams *params, KDChartTableData *dat);
     void setRowLabels(const QStringList &rowLabels);
     void getRowLabels(QStringList &rowLabels);
     void setColLabels(const QStringList &colLabels);
@@ -156,6 +157,8 @@ private:
     kchartDataSpinBox  *m_rowsSB;
     QLabel             *m_colsLA;
     kchartDataSpinBox  *m_colsSB;
+    QCheckBox          *m_firstRowAsLabel;
+    QCheckBox          *m_firstColAsLabel;
 
     // This member is set to true if the user shrinks the data table,
     // and confirms this by clicking OK in a warning dialog.

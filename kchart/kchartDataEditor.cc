@@ -1,3 +1,4 @@
+#include <qcheckbox.h>
 #include <qlabel.h>
 #include <qspinbox.h>
 #include <qlayout.h>
@@ -171,7 +172,7 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     // Create the main table.
     m_table = new kchartDataTable(page);
     m_table->setSelectionMode(QTable::NoSelection);
-	m_table->setFocus();
+    m_table->setFocus();
     m_table->setRowMovingEnabled(true);
     m_table->setColumnMovingEnabled(true);
 
@@ -189,6 +190,10 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_colsSB->resize( m_colsSB->sizeHint() );
     m_colsSB->setMinValue(1);
     
+    // The row/column as label checkboxes. 
+    m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), page);
+    m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), page);
+
     //Buttons for Inserting / Removing rows & columns 
     QPushButton *insertRowButton = new QPushButton( i18n("Insert Row") , page);
     connect( insertRowButton, SIGNAL( clicked() ),
@@ -225,18 +230,24 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     // The table is below the buttons.
     topLayout->addWidget(m_table);
 
-    // Then, last, a horizontal layer with the rows and columns settings
-    QHBoxLayout  *rowColLayout = new QHBoxLayout(  );
-    rowColLayout->addWidget(m_rowsLA);
-    rowColLayout->addWidget(m_rowsSB);
-    rowColLayout->addSpacing(20);
-    rowColLayout->addWidget(m_colsLA);
-    rowColLayout->addWidget(m_colsSB);
-    
-    rowColLayout->addStretch(1);
-    rowColLayout->setMargin(10);
+    // Then, a horizontal layer with the rows and columns settings
+    QHBoxLayout  *hbl1 = new QHBoxLayout(  );
+    hbl1->addWidget(m_rowsLA);
+    hbl1->addWidget(m_rowsSB);
+    hbl1->addSpacing(20);
+    hbl1->addWidget(m_colsLA);
+    hbl1->addWidget(m_colsSB);
+    hbl1->addStretch(1);
+    hbl1->setMargin(10);
+    topLayout->addLayout(hbl1);
 
-    topLayout->addLayout(rowColLayout);
+    QHBoxLayout  *hbl2 = new QHBoxLayout(  );
+    hbl2->addWidget(m_firstRowAsLabel);
+    hbl2->addWidget(m_firstColAsLabel);
+    hbl2->addStretch(1);
+    hbl2->setMargin(10);
+    topLayout->addLayout(hbl2);
+
     topLayout->setStretchFactor(m_table, 1);
     topLayout->setStretchFactor(insertRemoveLayout,1);
 
@@ -333,7 +344,7 @@ void kchartDataEditor::addDocs()
 // The data is taken from the KDChart data.  This method is never
 // called when the chart is a part of a spreadsheet.
 //
-void kchartDataEditor::setData( KDChartTableData* dat )
+void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
 {
     unsigned int  rowsCount;
     unsigned int  colsCount;
@@ -362,6 +373,8 @@ void kchartDataEditor::setData( KDChartTableData* dat )
     // Initiate widgets with the correct rows and columns.
     m_rowsSB->setValue(rowsCount);
     m_colsSB->setValue(colsCount);
+    m_firstRowAsLabel->setChecked( params->firstRowAsLabel() );
+    m_firstColAsLabel->setChecked( params->firstColAsLabel() );
     m_table->setNumRows(rowsCount);
     m_table->setNumCols(colsCount);
 
@@ -398,15 +411,15 @@ void kchartDataEditor::setData( KDChartTableData* dat )
 
 // Get the data from the data editor and put it back into the chart.
 //
-void kchartDataEditor::getData( KDChartTableData* dat )
+void kchartDataEditor::getData( KChartParams *params, KDChartTableData *dat )
 {	
     //Number of rows used as headers
     int labelRows = headerRows();
     //Number of columns used as headers	
     int labelCols = headerCols();
     
-    int  numRows = m_table->numRows()-labelRows; //m_rowsSB->value() - labelRows;
-    int  numCols = m_table->numCols()-labelCols; //m_colsSB->value() - labelCols;
+    int  numRows = m_table->numRows()-labelRows;
+    int  numCols = m_table->numCols()-labelCols;
 	
     // Make sure that the data table for the chart is not smaller than
     // the data in the editor.
@@ -442,6 +455,9 @@ void kchartDataEditor::getData( KDChartTableData* dat )
             dat->setCell(row-labelRows,col-labelCols, val);
         }
     }
+
+    params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
+    params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
 }
 
 
@@ -462,14 +478,13 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
     }
 #endif
 
-    for (unsigned int i=0;i<rowLabels.count();i++)
-    {
-        m_table->setText(i+headerRows(),0,rowLabels[i]);    
+    for (unsigned int i=0; i < rowLabels.count(); i++) {
+        m_table->setText(i + headerRows(), 0, rowLabels[i]);    
     }
     
     updateRowHeaders();
-    
 }
+
 
 int kchartDataEditor::headerRows()
 {
@@ -543,15 +558,14 @@ void kchartDataEditor::getColLabels(QStringList &colLabels)
 
     colLabels.clear();
     for (col = 0; col < numCols; col++) {
-      colLabels << colHeader->label(col);
+	colLabels << colHeader->label(col);
     }
 #endif
     
     colLabels.clear();
 
-    for (int i = headerCols();i<m_table->numCols();i++)
-    {
-        colLabels << m_table->text(0,i); 
+    for (int i = headerCols(); i < m_table->numCols(); i++) {
+        colLabels << m_table->text(0, i); 
     }
 }
 

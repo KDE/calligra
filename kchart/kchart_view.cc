@@ -79,7 +79,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                             this, SLOT( wizard() ),
                             actionCollection(), "wizard");
     m_edit = new KAction( i18n("Edit &Data..."), "edit", 0,
-                          this, SLOT( edit() ),
+                          this, SLOT( editData() ),
                           actionCollection(), "editdata");
     m_config = new KAction( i18n( "&Chart..." ), "configure", 0,
 
@@ -214,19 +214,18 @@ void KChartView::updateReadWrite( bool /*readwrite*/ )
 // This opens a spreadsheet like editor with the data in it.
 //
 
-void KChartView::edit()
+void KChartView::editData()
 {
-    kchartDataEditor  ed(this);
-    //KChartParams     *params=((KChartPart*)koDocument())->params();
-
-    KDChartTableData   *dat = (( (KChartPart*)koDocument())->data());
+    kchartDataEditor   ed(this);
+    KChartParams      *params = ((KChartPart*)koDocument())->params();
+    KDChartTableData  *dat    = ((KChartPart*)koDocument())->data();
 
     kdDebug(35001) << "***Before calling editor: cols =" << dat->cols()
 		   << " , rows = "     << dat->rows()
 		   << " , usedCols = " << dat->usedCols()
 		   << "  usedRows = "  << dat->usedRows() << endl;
 
-    ed.setData(dat);
+    ed.setData( params, dat );
     ed.setRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed.setColLabels(((KChartPart*)koDocument())->colLabelTexts());
 
@@ -242,7 +241,7 @@ void KChartView::edit()
     return;
 
     // Get the data and legend back.
-    ed.getData(dat);
+    ed.getData(params, dat);
     ed.getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed.getColLabels(((KChartPart*)koDocument())->colLabelTexts());
     ((KChartPart*)koDocument())->setModified(true);
@@ -260,9 +259,11 @@ void KChartView::applyEdit(kchartDataEditor *ed)
     if (!ed->modified())
 	return;
 
-    ed->getData(( (KChartPart*)koDocument())->data());
+    ed->getData( ((KChartPart*)koDocument())->params(), 
+		 ((KChartPart*)koDocument())->data() );
     ed->getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
     ed->getColLabels(((KChartPart*)koDocument())->colLabelTexts());
+
     ((KChartPart*)koDocument())->setModified(true);
 
     update();

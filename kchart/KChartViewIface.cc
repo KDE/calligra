@@ -39,7 +39,7 @@ void KChartViewIface::wizard()
 
 void KChartViewIface::editData()
 {
-    view->edit();
+    view->editData();
 }
 
 void KChartViewIface::configureChart()

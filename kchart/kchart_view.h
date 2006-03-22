@@ -35,7 +35,7 @@ public:
     void config(int flag);
 
 public slots:
-    void  edit();
+    void  editData();
      void applyEdit(kchartDataEditor *ed);
     void  slotConfig();
     void  wizard();
