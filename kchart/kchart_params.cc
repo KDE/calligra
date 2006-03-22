@@ -458,10 +458,16 @@ bool KChartParams::loadOasisPlotarea( const QDomElement     &plotareaElem,
     styleStack.setTypeProperties( "chart" ); // load chart properties
     loadingContext.fillStyleStack( plotareaElem, KoXmlNS::chart, "style-name", "chart" );
 
-    if ( styleStack.attributeNS( KoXmlNS::chart, "three-dimensional" ) == "true" )
+    if ( styleStack.attributeNS( KoXmlNS::chart, "three-dimensional" ) == "true" ) {
 	setThreeDBars( true );
-    else
+	setThreeDLines( true );
+	setThreeDPies( true );
+    }
+    else {
 	setThreeDBars( false );
+	setThreeDLines( false );
+	setThreeDPies( false );
+    }
 
     switch ( m_chartType ) {
     case NoType:
@@ -692,19 +698,8 @@ bool KChartParams::loadOasisAxis( const QDomElement      &axisElem,
 }
 
 
-QString KChartParams::saveOasisFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color ) const
-{
-    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
-    KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "chart", 0 );
-    autoStyle.addProperty( "fo:font-family", font.family(), tt );
-    autoStyle.addPropertyPt( "fo:font-size", font.pointSize(), tt );
-    autoStyle.addProperty( "fo:color", color.isValid() ? color.name() : "#000000", tt );
-    int w = font.weight();
-    autoStyle.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound(  w / 10 ) * 100 ), tt );
-    autoStyle.addProperty( "fo:font-style", font.italic() ? "italic" : "normal", tt );
+// ----------------------------------------------------------------
 
-    return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
-}
 
 void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const
 {
@@ -732,17 +727,17 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     bodyWriter->endElement(); // chart:title
 
     QString subTitle( header2Text() );
-    if ( !subTitle.isEmpty() )
-    {
+    if ( !subTitle.isEmpty() ) {
 
         kdDebug(32001) << "header rect: " << headerFooterRect( KDChartParams::HdFtPosHeader2 ) << endl;
         QRect rect( headerFooterRect( KDChartParams::HdFtPosHeader2 ) );
         bodyWriter->startElement( "chart:subtitle" );
         bodyWriter->addAttributePt( "svg:x", rect.x() );
         bodyWriter->addAttributePt( "svg:y", rect.y() );
-        bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
-                                                                     header2Font(), 
-                                                                     headerFooterColor( KDChartParams::HdFtPosHeader2 ) ) );
+        bodyWriter->addAttribute( "chart:style-name", 
+				  saveOasisFont( mainStyles, 
+						 header2Font(), 
+						 headerFooterColor( KDChartParams::HdFtPosHeader2 ) ) );
 
         bodyWriter->startElement( "text:p" );
         bodyWriter->addTextNode( subTitle );
@@ -752,15 +747,15 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
 
 
     QString footer( footerText() );
-    if ( !footer.isEmpty() )
-    {
+    if ( !footer.isEmpty() ) {
         QRect rect( headerFooterRect( KDChartParams::HdFtPosFooter ) );
         bodyWriter->startElement( "chart:footer" );
         bodyWriter->addAttributePt( "svg:x", rect.x() );
         bodyWriter->addAttributePt( "svg:y", rect.y() );
-        bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
-                                                                     footerFont(), 
-                                                                     headerFooterColor( KDChartParams::HdFtPosFooter ) ) );
+        bodyWriter->addAttribute( "chart:style-name",
+				  saveOasisFont( mainStyles, 
+						 footerFont(), 
+						 headerFooterColor( KDChartParams::HdFtPosFooter ) ) );
 
         bodyWriter->startElement( "text:p" );
         bodyWriter->addTextNode( footer );
@@ -770,83 +765,83 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
 
     // TODO legend
     LegendPosition lpos = legendPosition();
-    if ( lpos != NoLegend )
-    {
+    if ( lpos != NoLegend ) {
         bodyWriter->startElement( "chart:legend" );
         QString lp;
         QString lalign;
-        switch ( lpos )
-        {
-            case LegendTop: 
-                lp = "top";
-                lalign = "center";
-                break;
-            case LegendBottom:
-                lp = "bottom";
-                lalign = "center";
-                break;
-            case LegendLeft: 
-                lp = "start";
-                lalign = "center";
-                break;
-            case LegendRight:
-                lp = "end";
-                lalign = "center";
-                break;
-            case LegendTopLeft:
-                lp = "top-start";
-                break;
-            case LegendTopLeftTop:
-                lp = "top";
-                lalign = "start";
-                break;
-            case LegendTopLeftLeft:
-                lp = "start";
-                lalign = "start";
-                break;
-            case LegendTopRight:
-                lp = "top-end";
-                break;
-            case LegendTopRightTop:
-                lp = "top";
-                lalign = "end";
-                break;
-            case LegendTopRightRight:
-                lp = "end";
-                lalign = "start";
-                break;
-            case LegendBottomLeft:
-                lp = "bottom-start";
-                break;
-            case LegendBottomLeftBottom:
-                lp = "bottom";
-                lalign = "start";
-                break;
-            case LegendBottomLeftLeft:
-                lp = "start";
-                lalign = "end";
-                break;
-            case LegendBottomRight:
-                lp = "bottom-end";
-                break;
-            case LegendBottomRightBottom:
-                lp = "bottom";
-                lalign = "end";
-                break;
-            case LegendBottomRightRight:
-                lp = "end";
-                lalign = "end";
-                break;
-            default:
-                lp = "end";
-                lalign = "center";
-                break;
+        switch ( lpos ) {
+	case LegendTop: 
+	    lp = "top";
+	    lalign = "center";
+	    break;
+	case LegendBottom:
+	    lp = "bottom";
+	    lalign = "center";
+	    break;
+	case LegendLeft: 
+	    lp = "start";
+	    lalign = "center";
+	    break;
+	case LegendRight:
+	    lp = "end";
+	    lalign = "center";
+	    break;
+	case LegendTopLeft:
+	    lp = "top-start";
+	    break;
+	case LegendTopLeftTop:
+	    lp = "top";
+	    lalign = "start";
+	    break;
+	case LegendTopLeftLeft:
+	    lp = "start";
+	    lalign = "start";
+	    break;
+	case LegendTopRight:
+	    lp = "top-end";
+	    break;
+	case LegendTopRightTop:
+	    lp = "top";
+	    lalign = "end";
+	    break;
+	case LegendTopRightRight:
+	    lp = "end";
+	    lalign = "start";
+	    break;
+	case LegendBottomLeft:
+	    lp = "bottom-start";
+	    break;
+	case LegendBottomLeftBottom:
+	    lp = "bottom";
+	    lalign = "start";
+	    break;
+	case LegendBottomLeftLeft:
+	    lp = "start";
+	    lalign = "end";
+	    break;
+	case LegendBottomRight:
+	    lp = "bottom-end";
+	    break;
+	case LegendBottomRightBottom:
+	    lp = "bottom";
+	    lalign = "end";
+	    break;
+	case LegendBottomRightRight:
+	    lp = "end";
+	    lalign = "end";
+	    break;
+	default:
+	    lp = "end";
+	    lalign = "center";
+	    break;
         }
+
         bodyWriter->addAttribute( "chart:legend-position", lp );
         bodyWriter->addAttribute( "chart:legend-align", lalign );
-        bodyWriter->addAttribute( "chart:style-name", saveOasisFont( mainStyles, 
-                                                                     legendFont(), 
-                                                                     legendTextColor() ) );
+        bodyWriter->addAttribute( "chart:style-name",
+				  saveOasisFont( mainStyles, 
+						 legendFont(), 
+						 legendTextColor() ) );
         bodyWriter->addAttribute( "koffice:title", legendTitleText() );
         bodyWriter->endElement(); // chart:legend
     }
@@ -857,6 +852,7 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
 
     // TODO...
 }
+
 
 void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const
 {
@@ -943,8 +939,11 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
     // TODO chart:floor
 }
 
-void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles,
-                                  KDChartAxisParams::AxisPos /*axisPos*/, const char* axisName ) const
+
+void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter, 
+				  KoGenStyles& mainStyles,
+                                  KDChartAxisParams::AxisPos /*axisPos*/, 
+				  const char* axisName ) const
 {
     bodyWriter->startElement( "chart:axis" );
 
@@ -966,6 +965,22 @@ void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyl
 
     bodyWriter->endElement(); // chart:axis
 }
+
+
+QString KChartParams::saveOasisFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color ) const
+{
+    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
+    KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "chart", 0 );
+    autoStyle.addProperty( "fo:font-family", font.family(), tt );
+    autoStyle.addPropertyPt( "fo:font-size", font.pointSize(), tt );
+    autoStyle.addProperty( "fo:color", color.isValid() ? color.name() : "#000000", tt );
+    int w = font.weight();
+    autoStyle.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound(  w / 10 ) * 100 ), tt );
+    autoStyle.addProperty( "fo:font-style", font.italic() ? "italic" : "normal", tt );
+
+    return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
+}
+
 
 }  //KChart namespace
 
