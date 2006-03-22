@@ -190,10 +190,11 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_colsSB->resize( m_colsSB->sizeHint() );
     m_colsSB->setMinValue(1);
     
+#if 0
     // The row/column as label checkboxes. 
     m_firstRowAsLabel = new QCheckBox( i18n( "First row as label" ), page);
     m_firstColAsLabel = new QCheckBox( i18n( "First column as label" ), page);
-
+#endif
     //Buttons for Inserting / Removing rows & columns 
     QPushButton *insertRowButton = new QPushButton( i18n("Insert Row") , page);
     connect( insertRowButton, SIGNAL( clicked() ),
@@ -241,12 +242,14 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     hbl1->setMargin(10);
     topLayout->addLayout(hbl1);
 
+#if 0
     QHBoxLayout  *hbl2 = new QHBoxLayout(  );
     hbl2->addWidget(m_firstRowAsLabel);
     hbl2->addWidget(m_firstColAsLabel);
     hbl2->addStretch(1);
     hbl2->setMargin(10);
     topLayout->addLayout(hbl2);
+#endif
 
     topLayout->setStretchFactor(m_table, 1);
     topLayout->setStretchFactor(insertRemoveLayout,1);
@@ -373,8 +376,10 @@ void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
     // Initiate widgets with the correct rows and columns.
     m_rowsSB->setValue(rowsCount);
     m_colsSB->setValue(colsCount);
+#if 0
     m_firstRowAsLabel->setChecked( params->firstRowAsLabel() );
     m_firstColAsLabel->setChecked( params->firstColAsLabel() );
+#endif
     m_table->setNumRows(rowsCount);
     m_table->setNumCols(colsCount);
 
@@ -456,8 +461,10 @@ void kchartDataEditor::getData( KChartParams *params, KDChartTableData *dat )
         }
     }
 
+#if 0
     params->setFirstRowAsLabel( m_firstRowAsLabel->isChecked() );
     params->setFirstColAsLabel( m_firstColAsLabel->isChecked() );
+#endif
 }
 
 
