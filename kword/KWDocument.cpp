@@ -4296,9 +4296,8 @@ void KWDocument::updateAllFrames( int flags )
 
 // Tell this method when a frame is moved / resized / created / deleted
 // and everything will be update / repainted accordingly
-void KWDocument::frameChanged( KWFrame * frame, KWView * view )
+void KWDocument::frameChanged( KWFrame * frame )
 {
-    Q_UNUSED( view ); // DF: seems my idea of excluding one view got thrown away
     if(! m_framesChangedHandler) {
         m_framesChangedHandler = new FramesChangedHandler(this);
         QTimer::singleShot( 0, this, SLOT( updateFramesChanged() ) );

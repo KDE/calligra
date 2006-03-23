@@ -290,9 +290,8 @@ public:
     /**
      * Tell this method when a frame is moved / resized / created / deleted
      * and everything will be update / repainted accordingly.
-     * If one view is already uptodate, pass it in @p view.
      */
-    void frameChanged( KWFrame * frame, KWView * view = 0L );
+    void frameChanged( KWFrame * frame );
     void framesChanged( const QPtrList<KWFrame> & frames, KWView * view = 0L );
 
     QString uniqueFramesetName( const QString& oldName );
