@@ -487,7 +487,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 uint32 realTileWidth =  (x + tileWidth) < width ? tileWidth : width - x;
                 for (uint yintile = 0; y + yintile < height && yintile < tileHeight/vsubsampling; ) {
                     uint linesreaded = tiffReader->copyDataToChannels( x, y + yintile , realTileWidth, tiffstream);
-                    y += linesreaded;
                     yintile += 1;
                     tiffstream->moveToLine( yintile );
                 }
