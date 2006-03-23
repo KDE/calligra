@@ -319,9 +319,9 @@ MouseMeaning PartFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
     Q_UNUSED(point);
     // Clicking on a selected part frame, but not on its border -> either resize or "activate part"
     if( keyState & Qt::ControlButton )
-      return MEANING_MOUSE_SELECT;
+        return MEANING_MOUSE_SELECT;
     if ( m_view->selected() )
-      return MEANING_ACTIVATE_PART;
+        return MEANING_ACTIVATE_PART;
     return MEANING_NONE;
 }
 QPopupMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
