@@ -1,0 +1,58 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="4">
+<MenuBar>
+ <Menu name="file"><text>&amp;File</text>
+  <Action name="file_statistics"/>
+ </Menu>
+ <Menu name="edit"><text>&amp;Edit</text>
+  <Action name="edit_copy"/>
+  <Action name="edit_selectall"/>
+  <Separator/>
+  <Action name="edit_find"/>
+ </Menu>
+ <Menu name="view"><text>&amp;View</text>
+  <Separator/>
+  <Menu name="view_displaymodes"><text>&amp;Display Mode</text>
+    <Action name="view_pagemode"/>
+    <Action name="view_previewmode"/>
+    <Action name="view_textmode"/>
+  </Menu>
+  <Separator/>
+  <Action name="view_formattingchars"/>
+  <Action name="view_frameborders"/>
+  <Separator/>
+  <Action name="show_docstruct"/>
+  <Action name="show_ruler"/>
+  <Action name="view_grid"/>
+  <Separator/>
+  <Action name="view_zoom"/>
+ </Menu>
+ <Menu name="tools"><text>&amp;Tools</text>
+  <Separator/>
+  <Action name="select_bookmark"/>
+ </Menu>
+</MenuBar>
+<ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
+  <Action name="view_zoom"/>
+</ToolBar>
+<Menu name="text_popup">
+</Menu>
+<Menu name="custom_var_popup">
+</Menu>
+<Menu name="variable_popup">
+</Menu>
+<Menu name="text_popup_link">
+</Menu>
+<Menu name="footnote_popup">
+</Menu>
+<Menu name="comment_popup">
+</Menu>
+<Menu name="action_popup">
+</Menu>
+<Menu name="frame_popup">
+</Menu>
+<Menu name="frame_popup_table">
+</Menu>
+<Menu name="docstruct_popup">
+</Menu>
+</kpartgui>
+
