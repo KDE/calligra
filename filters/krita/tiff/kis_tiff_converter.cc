@@ -498,24 +498,26 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         }
     } else {
         kdDebug(41008) << "striped image" << endl;
-        uint32 strip_height;
-        TIFFGetField( image, TIFFTAG_ROWSPERSTRIP, &strip_height );
         tsize_t stripsize = TIFFStripSize(image);
+        uint32 rowsPerStrip;
+        TIFFGetFieldDefaulted(image, TIFFTAG_ROWSPERSTRIP, &rowsPerStrip);
+        kdDebug() << rowsPerStrip << " " << height << endl;
+        rowsPerStrip = QMIN(rowsPerStrip, height); // when TIFFNumberOfStrips(image) == 1 it might happen that rowsPerStrip is incorrectly set
         if(planarconfig == PLANARCONFIG_CONTIG)
         {
             buf = _TIFFmalloc(stripsize);
             if(depth < 16)
             {
-                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth, TIFFRasterScanlineSize(image));
+                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth, stripsize/rowsPerStrip);
             } else if(depth < 32)
             {
-                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth, TIFFRasterScanlineSize(image));
+                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth, stripsize/rowsPerStrip);
             } else {
-                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth, TIFFRasterScanlineSize(image));
+                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth, stripsize/rowsPerStrip);
             }
         } else {
             ps_buf = new tdata_t[nbchannels];
-            uint32 scanLineSize = TIFFRasterScanlineSize(image) / nbchannels;
+            uint32 scanLineSize = stripsize/rowsPerStrip;
             kdDebug(41008) << " scanLineSize for each plan = " << scanLineSize << endl;
             uint32 * lineSizes = new uint32[nbchannels];
             for(uint i = 0; i < nbchannels; i++)
@@ -527,8 +529,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             delete [] lineSizes;
         }
 
-        uint32 rowsPerStrip;
-        TIFFGetFieldDefaulted(image, TIFFTAG_ROWSPERSTRIP, &rowsPerStrip);
+        kdDebug(41008) << "Scanline size = " << TIFFRasterScanlineSize(image) << " / strip size = " << TIFFStripSize(image) << " / rowsPerStrip = " << rowsPerStrip << " stripsize/rowsPerStrip = " << stripsize/rowsPerStrip << endl;
         uint32 y = 0;
         kdDebug(41008) << " NbOfStrips = " << TIFFNumberOfStrips(image) << " rowsPerStrip = " << rowsPerStrip << " stripsize = " << stripsize << endl;
         for (uint32 strip = 0; y < height; strip++)
@@ -542,11 +543,11 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                     TIFFReadEncodedStrip(image, TIFFComputeStrip( image, y, i ), ps_buf[i], (tsize_t) -1);
                 }
             }
-            for( uint32 yinstrip = 0 ; yinstrip < rowsPerStrip/vsubsampling && y < height ; )
+            for( uint32 yinstrip = 0 ; yinstrip < rowsPerStrip && y < height ; )
             {
                 uint linesreaded = tiffReader->copyDataToChannels( 0, y, width, tiffstream);
                 y += linesreaded;
-                yinstrip += 1;
+                yinstrip += linesreaded;
                 tiffstream->moveToLine( yinstrip );
             }
             tiffstream->restart();

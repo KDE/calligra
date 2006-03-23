@@ -48,8 +48,8 @@ uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q
 {
     int numcols = dataWidth / m_hsub;
     double coeff = Q_UINT8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-    kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
-    kdDebug(41008) << " y = " << y << endl;
+//     kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
+//     kdDebug(41008) << " y = " << y << endl;
     uint buffPos = y / m_vsub * m_bufferWidth + x / m_hsub ;
     for(int index = 0; index < numcols; index++)
     {
@@ -120,8 +120,8 @@ uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels( Q_UINT32 x, Q_UINT32 y, 
 {
     int numcols = dataWidth / m_hsub;
     double coeff = Q_UINT16_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-    kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
-    kdDebug(41008) << " y = " << y << endl;
+//     kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
+//     kdDebug(41008) << " y = " << y << endl;
     uint buffPos = y / m_vsub * m_bufferWidth + x / m_hsub ;
     for(int index = 0; index < numcols; index++)
     {
