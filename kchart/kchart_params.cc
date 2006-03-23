@@ -890,7 +890,7 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
 	    break;
         }
         plotAreaStyle.addProperty( "chart:vertical", "false" ); // #### always?
-        plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
+        plotAreaStyle.addProperty( "chart:lines-used", 0 ); // FIXME: for now
 
 	if ( threeDBars() )
 	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
@@ -914,6 +914,18 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
         break;
 
     case Area:
+        switch( areaChartSubType() ) {
+        case AreaStacked:
+            plotAreaStyle.addProperty( "chart:stacked", "true" );
+            break;
+        case AreaPercent:
+            plotAreaStyle.addProperty( "chart:percentage", "true" );
+            break;
+        case AreaNormal:
+            break;
+        }
+        //plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
+
         // TODO - very similar
 
     case Pie:
