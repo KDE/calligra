@@ -605,6 +605,11 @@ void KChartPart::doSetData( const KDChartTableData&  data,
     uint  col;
     uint  row;
 
+    // Disable this function.  Maybe we should remove this function
+    // altogether, since I was doing some pretty fuzzy thinking when I
+    // implemented it.
+    return;
+
     if (hasRowHeader)
       rowStart = 1;
     if (hasColHeader)
