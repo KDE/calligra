@@ -283,20 +283,23 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     int8 alphapos = -1; // <- no alpha
     // Check which extra is alpha if any
     kdDebug(41008) << "There are " << nbchannels << " channels and " << extrasamplescount << " extra channels" << endl;
-    for(int i = 0; i < extrasamplescount; i ++)
+    if(sampleinfo) // index images don't have any sampleinfo, and therefor sampleinfo == 0
     {
-        kdDebug(41008) << i << " " << extrasamplescount << " "  << (cs->nColorChannels()) <<  nbchannels << " " << sampleinfo[i] << endl;
-        if(sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA)
+        for(int i = 0; i < extrasamplescount; i ++)
         {
-            // XXX: dangelo: the color values are already multiplied with
-            // the alpha value.  This needs to be reversed later (postprocessor?)
-            alphapos = i;
-        }
-
-        if (sampleinfo[i] == EXTRASAMPLE_UNASSALPHA)
-        {
-            // color values are not premultiplied with alpha, and can be used as they are.
-            alphapos = i;
+            kdDebug(41008) << i << " " << extrasamplescount << " "  << (cs->nColorChannels()) <<  nbchannels << " " << sampleinfo[i] << endl;
+            if(sampleinfo[i] == EXTRASAMPLE_ASSOCALPHA)
+            {
+                // XXX: dangelo: the color values are already multiplied with
+                // the alpha value.  This needs to be reversed later (postprocessor?)
+                alphapos = i;
+            }
+    
+            if (sampleinfo[i] == EXTRASAMPLE_UNASSALPHA)
+            {
+                // color values are not premultiplied with alpha, and can be used as they are.
+                alphapos = i;
+            }
         }
     }
     
