@@ -194,8 +194,6 @@ private:
      */
     virtual void save();
 
-    int KoPaletteManager::countNormallyShownWidgets();
-
 
 private:
 
