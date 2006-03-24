@@ -426,7 +426,7 @@ void KChartPart::createDisplayData()
 	// Data is handled in rows.  This is the way KDChart works also.
 
 	numDatasets = m_currentData.usedRows() - rowOffset;
-	m_displayData.expand( numDatasets, 
+	m_displayData.expand( numDatasets,
 			      m_currentData.usedCols() - colOffset );
 
 	for (uint row = rowOffset; row < m_currentData.usedRows(); row++) {
@@ -480,7 +480,7 @@ void KChartPart::createDisplayData()
         m_params->setChartSourceMode( KDChartParams::DataEntry,
                                       numBarDatasets, numDatasets - 1,
                                       1 ); // The line chart
-    } 
+    }
     else {
 	// Otherwise we don't want any extra chart.
         m_params->setAdditionalChartType( KDChartParams::NoType );
@@ -953,7 +953,7 @@ bool KChartPart::loadOasis( const QDomDocument& doc,
     setChartDefaults();
 
     QDomElement  content = doc.documentElement();
-    QDomElement  bodyElem ( KoDom::namedItemNS( content, 
+    QDomElement  bodyElem ( KoDom::namedItemNS( content,
 						KoXmlNS::office, "body" ) );
     if ( bodyElem.isNull() ) {
         kdError(32001) << "No office:body found!" << endl;
@@ -1074,6 +1074,7 @@ bool KChartPart::loadOasisData( const QDomElement& tableElem )
             }
         }
     }
+    numberDataColumns = QMAX( numberDataColumns, cellNum - numberHeaderColumns );
     if ( (int)m_colLabels.count() != numberDataColumns )
         kdWarning(35001) << "Got " << m_colLabels.count()
 			 << " column titles, expected " << numberDataColumns
@@ -1355,9 +1356,9 @@ QDomDocument KChartPart::saveXML()
     aux.appendChild( tmpElem );
 
     tmpElem = doc.createElement( "dataaslabel" );
-    tmpElem.setAttribute( "firstrow", 
+    tmpElem.setAttribute( "firstrow",
 			  m_params->firstRowAsLabel() ? "true" : "false" );
-    tmpElem.setAttribute( "firstcol", 
+    tmpElem.setAttribute( "firstcol",
 			  m_params->firstColAsLabel() ? "true" : "false" );
     aux.appendChild( tmpElem );
 
