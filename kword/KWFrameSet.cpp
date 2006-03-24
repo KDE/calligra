@@ -151,7 +151,7 @@ void KWFrameSet::deleteAllCopies()
     if ( m_frames.count() > 1 )
     {
         KWFrame * firstFrame = m_frames.take(0);
-        m_frames.clear();
+        deleteAllFrames();
         m_frames.append( firstFrame );
         updateFrames();
     }
