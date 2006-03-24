@@ -56,7 +56,7 @@ namespace Kross { namespace KexiDB {
              *        used to create this connection or NULL if we don't
              *        know it jet.
              */
-            explicit KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
+            KexiDBConnection(::KexiDB::Connection* connection, KexiDBDriver* driver = 0, KexiDBConnectionData* connectiondata = 0);
 
             /**
              * Destructor.

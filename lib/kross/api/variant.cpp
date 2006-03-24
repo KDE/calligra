@@ -44,6 +44,7 @@ const QString Variant::toString()
     return getValue().toString();
 }
 
+/*
 const QString Variant::getVariantType(Object::Ptr object)
 {
     switch( toVariant(object).type() ) {
@@ -51,14 +52,11 @@ const QString Variant::getVariantType(Object::Ptr object)
         case QVariant::CString:
         case QVariant::String:
             return "Kross::Api::Variant::String";
-
         case QVariant::Map:
             return "Kross::Api::Variant::Dict";
-
         case QVariant::StringList:
         case QVariant::List:
             return "Kross::Api::Variant::List";
-
         case QVariant::Double:
             //return "Kross::Api::Variant::Double";
         case QVariant::UInt: 
@@ -67,14 +65,13 @@ const QString Variant::getVariantType(Object::Ptr object)
         case QVariant::ULongLong:
         case QVariant::Int:
             return "Kross::Api::Variant::Integer";
-
         case QVariant::Bool:
             return "Kross::Api::Variant::Bool";
-
         default: //Date, Time, DateTime, ByteArray, BitArray, Rect, Size, Color, Invalid, etc.
             return "Kross::Api::Variant";
     }
 }
+*/
 
 const QVariant& Variant::toVariant(Object::Ptr object)
 {
@@ -135,6 +132,21 @@ bool Variant::toBool(Object::Ptr object)
     if(! variant.canCast(QVariant::Bool))
         throw Exception::Ptr( new Exception(QString(i18n("Kross::Api::Variant::Bool expected, but got %1.")).arg(variant.typeName()).latin1()) );
     return variant.toBool();
+}
+
+QStringList Variant::toStringList(Object::Ptr object)
+{
+    if(object->getClassName() == "Kross::Api::List") {
+        QStringList l;
+        QValueList<Object::Ptr> list = Object::fromObject<List>( object.data() )->getValue();
+        for(QValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+            l.append( toString(*it) );
+        return l;
+    }
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::StringList))
+        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::StringList expected, but got '%1'.").arg(variant.typeName()).latin1()) );
+    return variant.toStringList();
 }
 
 QValueList<QVariant> Variant::toList(Object::Ptr object)

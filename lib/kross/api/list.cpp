@@ -47,10 +47,12 @@ const QString List::toString()
     return (s.endsWith(", ") ? s.left(s.length() - 2) : s) + "]";
 }
 
-Object::Ptr List::item(uint idx)
+Object::Ptr List::item(uint idx, Object* defaultobject)
 {
     QValueList<Object::Ptr>& list = getValue();
     if(idx >= list.count()) {
+        if(defaultobject)
+            return defaultobject;
         kdDebug() << "List::item index=" << idx << " is out of bounds. Raising TypeException." << endl;
         throw Exception::Ptr( new Exception(QString("List-index %1 out of bounds.").arg(idx)) );
     }

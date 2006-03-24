@@ -48,6 +48,11 @@ namespace Kross { namespace Api {
         public:
 
             /**
+             * Shared pointer to implement reference-counting.
+             */
+            typedef KSharedPtr<T> Ptr;
+
+            /**
              * Constructor.
              *
              * \param name The name this class has.
@@ -65,6 +70,12 @@ namespace Kross { namespace Api {
             virtual ~Class()
             {
             }
+
+            template<typename TYPE>
+            static Object::Ptr toObject(TYPE t) { return t; }
+
+            operator T* () { return (T*)this; }
+            //operator Ptr () { return (T*)this; }
 
             /*
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)

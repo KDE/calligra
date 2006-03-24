@@ -22,13 +22,15 @@
 
 #include <qstring.h>
 #include <qvariant.h>
-//#include <kdebug.h>
+#include <kdebug.h>
 
 #include "object.h"
 #include "value.h"
 #include "exception.h"
 
 namespace Kross { namespace Api {
+
+    class List;
 
     /**
      * Variant value to wrap a QVariant into a \a Kross::Api::Value
@@ -48,18 +50,38 @@ namespace Kross { namespace Api {
              */
             Variant(const QVariant& value, const QString& name = "variant");
 
-            operator bool () { return getValue().toBool(); }
-            operator int () { return getValue().toInt(); }
-            operator uint () { return getValue().toUInt(); }
-            operator double () { return getValue().toDouble(); }
-            operator const char* () { return getValue().toString().latin1(); }
-            operator QString () { return getValue().toString(); }
-            operator const QString () { return getValue().toString(); }
-            operator const QString& () { return getValue().asString(); }
-            operator QCString () { return getValue().toCString(); }
-            operator const QCString () { return getValue().toCString(); }
-            operator const QCString& () { return getValue().asCString(); }
-            operator const QVariant& () { return getValue(); }
+            inline operator bool () { return getValue().toBool(); }
+            inline operator int () { return getValue().toInt(); }
+            inline operator uint () { return getValue().toUInt(); }
+            inline operator double () { return getValue().toDouble(); }
+            inline operator const char* () { return getValue().toString().latin1(); }
+
+            inline operator QString () { return getValue().toString(); }
+            inline operator const QString () { return getValue().toString(); }
+            inline operator const QString& () { return getValue().asString(); }
+
+            inline operator QCString () { return getValue().toCString(); }
+            inline operator const QCString () { return getValue().toCString(); }
+            inline operator const QCString& () { return getValue().asCString(); }
+
+            /**
+             * Operator to return a QStringList.
+             *
+             * We can not just use getValue().toStringList() here cause maybe
+             * this Kross::Api::Variant is a Kross::Api::List which could be
+             * internaly used for list of strings as well. So, we use the
+             * toStringList() function which will take care of translating a
+             * Kross::Api::List to a QStringList if possible or to throw an
+             * exception if the Kross::Api::List isn't a QStringList.
+             */
+            inline operator QStringList () {
+                return Kross::Api::Variant::toStringList(this);
+            }
+            //inline operator const QStringList () { getValue().toStringList(); }
+            //inline operator const QStringList& () { return getValue().asStringList(); }
+
+            inline operator QVariant () { return getValue(); }
+            inline operator const QVariant& () { return getValue(); }
 
             /**
              * Destructor.
@@ -75,20 +97,6 @@ namespace Kross { namespace Api {
              * \see Kross::Api::Object::toString()
              */
             virtual const QString toString();
-
-            /**
-             * \return a more detailed classname for the passed \p object
-             * variant type.
-             *
-             * \throw TypeException If the \p object isn't a valid
-             *        \a Variant instance.
-             * \param object the variant object we should return a more
-             *        detailed classname for.
-             * \return If as example the passed \p object is a
-             *         QVariant::String then "Kross::Api::Variant::String"
-             *         will be returned.
-             */
-            static const QString getVariantType(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
@@ -169,6 +177,16 @@ namespace Kross { namespace Api {
              * \return The to a bool converted object.
              */
             static bool toBool(Object::Ptr object);
+
+            /**
+             * Try to convert the given \a Object into
+             * a QStringList.
+             *
+             * \throw TypeException If the convert failed.
+             * \param object The object to convert.
+             * \return The to a QValueList converted object.
+             */
+            static QStringList toStringList(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into

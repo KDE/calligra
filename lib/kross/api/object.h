@@ -203,6 +203,17 @@ namespace Kross { namespace Api {
                 return t;
             }
 
+            /**
+             * This method got used by the \a ProxyFunction classes
+             * to translate an unknown \p TYPE to a \a Object instance.
+             * Classes like \a Value or \a ListT or \a Class are
+             * overwriting this method to transparently translate these
+             * passed type while this method just assumes that the
+             * type is already a \a Object instance.
+             */
+            template<typename TYPE>
+            static Object::Ptr toObject(TYPE t) { return t; }
+
         private:
             /// Name of this object.
             QString m_name;

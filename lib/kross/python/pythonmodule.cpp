@@ -82,8 +82,9 @@ Py::Object PythonModule::import(const Py::Tuple& args)
     if(args.size() > 0) {
         QString modname = args[0].as_string().c_str();
         if(modname.startsWith("kross")) {
+#ifdef KROSS_PYTHON_MODULE_DEBUG
             kdDebug() << QString("Kross::Python::PythonModule::import() module=%1").arg(modname) << endl;
-
+#endif
             if( modname.find( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
                 kdWarning() << QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) << endl;
             }

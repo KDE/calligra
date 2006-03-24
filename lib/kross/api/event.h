@@ -78,7 +78,8 @@ namespace Kross { namespace Api {
              */
             virtual ~Event()
             {
-                for(QMapIterator<QString, Function* > it = m_functions.begin(); it != m_functions.end(); ++it)
+                QMapConstIterator<QString, Function* > endit = m_functions.constEnd();
+                for(QMapConstIterator<QString, Function* > it = m_functions.constBegin(); it != endit; ++it)
                     delete it.data();
             }
 
@@ -96,14 +97,14 @@ namespace Kross { namespace Api {
              * \param function A pointer to the methodfunction that
              *        should handle calls.
              * \param arglist A list of arguments for the function.
-	     *
-	     * \todo Remove this method as soon as there is no code using it
+             *
+             * \todo Remove this method as soon as there is no code using it
              */
-//TODO remove this method as soon as there is no code using it any longer.
+//TODO remove Argument+ArgumentList. They are replaced with ProxyFunction now.
             void addFunction(const QString& name, FunctionPtr function, const ArgumentList& arglist = ArgumentList())
             {
-                m_functions.replace(name, new VarFunction0<T>(static_cast<T*>(this), function));
-		Q_UNUSED(arglist);
+                Q_UNUSED(arglist);
+                m_functions.replace(name, new Function0<T>(static_cast<T*>(this), function));
             }
 
             /**
@@ -124,61 +125,56 @@ namespace Kross { namespace Api {
             }
 
             /**
-             * Template function to add a \a Kross::Api::ProxyFunction as
-             * builtin-function to this \a Event instance.
+             * Template function to add a \a ProxyFunction as builtin-function
+             * to this \a Event instance.
              */
-            template<class RET, class ARG1, class ARG2, class ARG3, class ARG4, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class ARG3OBJ, class ARG4OBJ, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0, ARG3OBJ* arg3 = 0, ARG4OBJ* arg4 = 0)
             {
                 m_functions.replace(name,
-                    new Kross::Api::ProxyFunction <
-                        INSTANCE, METHOD,
-                        RET, ARG1, ARG2, ARG3, ARG4
-                    > ( instance, method ) );
+                    new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ, ARG3OBJ, ARG4OBJ>
+                        (instance, method, arg1, arg2, arg3, arg4)
+                );
             }
 
-            /// Same as above, but with three arguments.
-            template<class RET, class ARG1, class ARG2, class ARG3, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            /// Same as above with three arguments.
+            template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class ARG3OBJ, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0, ARG3OBJ* arg3 = 0)
             {
                 m_functions.replace(name,
-                    new Kross::Api::ProxyFunction <
-                        INSTANCE, METHOD,
-                        RET, ARG1, ARG2, ARG3
-                    > ( instance, method ) );
+                    new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ, ARG3OBJ>
+                        (instance, method, arg1, arg2, arg3)
+                );
             }
 
-            /// Same as above, but with two arguments.
-            template<class RET, class ARG1, class ARG2, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            /// Same as above with two arguments.
+            template<class RETURNOBJ, class ARG1OBJ, class ARG2OBJ, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0, ARG2OBJ* arg2 = 0)
             {
                 m_functions.replace(name,
-                    new Kross::Api::ProxyFunction <
-                        INSTANCE, METHOD,
-                        RET, ARG1, ARG2
-                    > ( instance, method ) );
+                    new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ, ARG2OBJ>
+                        (instance, method, arg1, arg2)
+                );
             }
 
             /// Same as above, but with one argument.
-            template<class RET, class ARG1, class INSTANCE, typename METHOD>
-            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            template<class RETURNOBJ, class ARG1OBJ, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method, ARG1OBJ* arg1 = 0)
             {
                 m_functions.replace(name,
-                    new Kross::Api::ProxyFunction <
-                        INSTANCE, METHOD,
-                        RET, ARG1
-                    > ( instance, method ) );
+                    new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ, ARG1OBJ>
+                        (instance, method, arg1)
+                );
             }
 
-            /// Same as above, but with no arguments.
-            template<class RET, class INSTANCE, typename METHOD>
+            /// Same as above with no arguments.
+            template<class RETURNOBJ, class INSTANCE, typename METHOD>
             inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
             {
                 m_functions.replace(name,
-                    new Kross::Api::ProxyFunction <
-                        INSTANCE, METHOD,
-                        RET
-                    > ( instance, method ) );
+                    new Kross::Api::ProxyFunction<INSTANCE, METHOD, RETURNOBJ>
+                        (instance, method)
+                );
             }
 
            /**
@@ -220,8 +216,6 @@ namespace Kross { namespace Api {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
                     kdDebug() << QString("Event::call() name='%1' is a builtin function.").arg(name) << endl;
 #endif
-
-                    //FIXME checkArguments(arguments);
                     return function->call(arguments);
                 }
 
@@ -230,7 +224,7 @@ namespace Kross { namespace Api {
                     return this;
                 }
 
-                // Redirect the call to the Kross::Api::Callable we are inheritated from.
+                // Redirect the call to the Kross::Api::Callable we are inherited from.
                 return Callable::call(name, arguments);
             }
 

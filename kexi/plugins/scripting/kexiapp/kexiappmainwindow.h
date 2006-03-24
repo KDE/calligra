@@ -34,6 +34,7 @@ class KexiMainWindow;
 namespace Kross { namespace KexiApp {
 
     // Forward declarations.
+    class KexiAppPartItem;
     class KexiAppMainWindowPrivate;
 
     /**
@@ -59,19 +60,29 @@ namespace Kross { namespace KexiApp {
             /// \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
 
+            /** \return true if Kexi is connected with a project else
+            false is returned. */
+            bool isConnected();
+
+             /** \return the \a Kross::KexiDB::KexiDBConnection object that
+            belongs to the opened project or throw an exception if there
+            was no project opened (no connection established). Cause the
+            KexiApp-module doesn't know anything about the KexiDB-module
+            we have to use the base-class \a Kross::Api::Object to pass
+            the \a Kross::KexiDB::KexiDBConnection object around. */
+            Kross::Api::Object::Ptr getConnection();
+
+            /** \return a list of \a KexiAppPartItem objects for the defined
+            \p mimetype string. */
+            Kross::Api::List* getPartItems(const QString& mimetype);
+
+            /** Try to open the defined \a KexiAppPartItem and \return true
+            on success else false. */
+            bool openPartItem(KexiAppPartItem* partitem);
+
         private:
             /// Private d-pointer class.
             KexiAppMainWindowPrivate* d;
-
-            Kross::Api::Object::Ptr isConnected(Kross::Api::List::Ptr);
-
-            /** \return the \a Kross::KexiDB::KexiDBConnection object that 
-            belongs to the opened project or throw an exception if there 
-            was no project opened (no connection established). */
-            Kross::Api::Object::Ptr getConnection(Kross::Api::List::Ptr);
-
-            Kross::Api::Object::Ptr getPartItems(Kross::Api::List::Ptr);
-            Kross::Api::Object::Ptr openPartItem(Kross::Api::List::Ptr);
     };
 
 }}
