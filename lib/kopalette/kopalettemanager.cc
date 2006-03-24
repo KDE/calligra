@@ -446,7 +446,26 @@ void KoPaletteManager::slotTogglePalette(int paletteIndex)
     KoPalette * p = m_palettes->find(pname);
     p->togglePageHidden( w );
 
+/* This will enable /disable the "hide all" menu but somehow this crashes
+    if(countNormallyShownWidgets() > 0)
+        m_toggleShowHidePalettes->setEnabled(true);
+    else
+        m_toggleShowHidePalettes->setEnabled(false);
+*/
     m_hiddenWidgets.clear();
+}
+
+int KoPaletteManager::countNormallyShownWidgets()
+{
+    int cnt=0;
+
+    QDictIterator<KToggleAction> it(*m_actions);
+    for (; it.current(); ++it)
+    {
+        if((*it)->isEnabled())
+            cnt++;
+    }
+    return cnt;
 }
 
 void KoPaletteManager::slotToggleAllPalettes()
