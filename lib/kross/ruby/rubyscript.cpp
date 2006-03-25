@@ -102,6 +102,8 @@ const QStringList& RubyScript::getFunctionNames()
     if(d->m_compile == 0)
     {
         compile();
+        if(! d->m_compile)
+            return 0;
     }
     return d->m_functions;
 }
@@ -114,6 +116,8 @@ Kross::Api::Object::Ptr RubyScript::execute()
     if(d->m_compile == 0)
     {
         compile();
+        if(! d->m_compile)
+            return 0;
     }
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "Start execution" << endl;
@@ -161,6 +165,8 @@ Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api
     if(d->m_compile == 0)
     {
         compile();
+        if(! d->m_compile)
+            return 0;
     }
     selectScript();
     unselectScript();
@@ -175,6 +181,8 @@ const QStringList& RubyScript::getClassNames()
     if(d->m_compile == 0)
     {
         compile();
+        if(! d->m_compile)
+            return 0;
     }
     return d->m_classes;
 }
@@ -188,6 +196,8 @@ Kross::Api::Object::Ptr RubyScript::classInstance(const QString& name)
     if(d->m_compile == 0)
     {
         compile();
+        if(! d->m_compile)
+            return 0;
     }
     selectScript();
     unselectScript();
