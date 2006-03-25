@@ -119,7 +119,15 @@ Kross::Api::Object::Ptr RubyScript::execute()
     kdDebug() << "Start execution" << endl;
 #endif
     selectScript();
-    int result = ruby_exec();
+
+    int result = -1;
+    if (BUILTIN_TYPE(d->m_compile) != T_NODE) {
+        kdWarning() << QString("Not a node %1").arg(BUILTIN_TYPE(d->m_compile)) << endl;
+    }
+    else {
+        result = ruby_exec();
+    }
+
     if (result != 0)
     {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
