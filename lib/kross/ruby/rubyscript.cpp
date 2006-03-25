@@ -102,8 +102,7 @@ const QStringList& RubyScript::getFunctionNames()
     if(d->m_compile == 0)
     {
         compile();
-        if(! d->m_compile)
-            return 0;
+        //if(! d->m_compile) d->m_functions = QStringList();
     }
     return d->m_functions;
 }
@@ -181,8 +180,7 @@ const QStringList& RubyScript::getClassNames()
     if(d->m_compile == 0)
     {
         compile();
-        if(! d->m_compile)
-            return 0;
+        //if(! d->m_compile) d->m_classes = QStringList();
     }
     return d->m_classes;
 }
