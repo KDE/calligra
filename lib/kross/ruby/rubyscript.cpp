@@ -112,12 +112,23 @@ Kross::Api::Object::Ptr RubyScript::execute()
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "RubyScript::execute()" << endl;
 #endif
-    if(d->m_compile == 0)
-    {
-        compile();
-        if(! d->m_compile)
-            return 0;
+    while(true) {
+        if(d->m_compile == 0)
+        {
+            compile();
+            if(! d->m_compile)
+                return 0;
+        }
+        else if(BUILTIN_TYPE(d->m_compile) != T_NODE)
+        {
+            // this is a workaround of a bug in ruby where the
+            // node got sometimes invalid whyever.
+            d->m_compile = 0;
+            continue; // compile it again...
+        }
+        break;
     }
+
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "Start execution" << endl;
 #endif
