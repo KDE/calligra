@@ -46,7 +46,7 @@ class ValueFormatter {
   /** create a text representation of data in this Value */
   QString formatText (const Value &value,
       FormatType fmtType, int precision = -1,
-      Format::FloatFormat floatFormat = Format::OnlyNegSigned,
+      Style::FloatFormat floatFormat = Style::OnlyNegSigned,
       const QString &prefix = QString::null,
       const QString &postfix = QString::null,
       const QString &currencySymbol = QString::null);

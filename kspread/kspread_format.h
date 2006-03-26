@@ -30,6 +30,7 @@
 #include <koffice_export.h>
 
 #include "kspread_global.h"
+#include "kspread_style.h"
 
 class QDomElement;
 class QDomDocument;
@@ -47,23 +48,17 @@ class Canvas;
 class Cell;
 class Currency;
 class Sheet;
-class Style;
 
 /**
  */
 class KSPREAD_EXPORT Format
 {
 public:
-    enum Align { Left = 1, Center = 2, Right = 3, Undefined = 4 };
-    enum AlignY { Top = 1, Middle = 2, Bottom = 3, UndefinedY = 4 };
-    enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
-    enum FloatColor { NegRed = 1, AllBlack = 2, NegBrackets = 3, NegRedBrackets = 4 };
-
     // TODO Stefan: merge with Style::FlagsSet
-    enum Properties{ PAlign  = 0x01,
+/*    enum Properties{ PAlign  = 0x01,
 		     PAlignY = 0x02,
-         //PFactor was here
-         PPrefix = 0x08,
+         	//PFactor was here
+                     PPrefix = 0x08,
 		     PPostfix = 0x10,
 		     PLeftBorder = 0x20,
 		     PRightBorder = 0x40,
@@ -88,14 +83,7 @@ public:
                      PCustomFormat = 0x2000000,
                      PNotProtected = 0x4000000,
                      PHideAll = 0x8000000,
-                     PHideFormula = 0x10000000 };
-
-    struct Currency
-    {
-      int type;
-      QString symbol;
-    };
-
+                     PHideFormula = 0x10000000 }; */
     /**
      * Constructor.
      * @param sheet The sheet this format belongs to.
@@ -139,17 +127,17 @@ public:
 
     ////////////////////////////////
     //
-    // Properties
+    // Style::FlagsSet
     //
     ////////////////////////////////
     uint propertiesMask() { return m_mask; } // For the cell inspector only.
     void clearProperties();
-    void clearProperty( Properties p );
+    void clearProperty( Style::FlagsSet p );
 
     void clearNoFallBackProperties(  ) ;
-    void clearNoFallBackProperties( Properties p ) ;
-    void setNoFallBackProperties(Properties p);
-    bool hasNoFallBackProperties( Properties p ) const ;
+    void clearNoFallBackProperties( Style::FlagsSet p ) ;
+    void setNoFallBackProperties(Style::FlagsSet p);
+    bool hasNoFallBackProperties( Style::FlagsSet p ) const ;
 
     ///////////////////////////////
     //
@@ -189,8 +177,8 @@ public:
      */
     void setFormatString( QString const & format );
 
-    void setAlign( Align _align );
-    void setAlignY( AlignY _alignY );
+    void setAlign( Style::HAlign _align );
+    void setAlignY( Style::VAlign _alignY );
     void setPrefix( const QString& _prefix );
     void setPostfix( const QString& _postfix );
     void setPrecision( int _p );
@@ -242,8 +230,8 @@ public:
 
     void setBgColor( const QColor & _c );
 
-    void setFloatFormat( FloatFormat _f );
-    void setFloatColor( FloatColor _c );
+    void setFloatFormat( Style::FloatFormat _f );
+    void setFloatColor( Style::FloatColor _c );
 
     void setMultiRow( bool _b );
 
@@ -262,7 +250,7 @@ public:
     void setHideAll( bool _b );
     void setHideFormula( bool _b );
 
-    void setCurrency( Currency const & c );
+    void setCurrency( Style::Currency const & c );
     void setCurrency( int type, QString const & symbol );
 
     ////////////////////////////////
@@ -327,11 +315,11 @@ public:
     /**
      * @return the way of formatting a floating point value
      */
-    FloatFormat floatFormat( int col, int row ) const;
+    Style::FloatFormat floatFormat( int col, int row ) const;
     /**
      * @return the color format of a floating point value
      */
-    FloatColor floatColor( int col, int row ) const;
+    Style::FloatColor floatColor( int col, int row ) const;
 
     const QPen& textPen( int col, int row ) const;
     /**
@@ -355,8 +343,8 @@ public:
     bool textFontUnderline( int col, int row ) const;
     bool textFontStrike( int col, int row ) const;
 
-    Align align( int col, int row ) const;
-    AlignY alignY( int col, int row ) const;
+    Style::HAlign align( int col, int row ) const;
+    Style::VAlign alignY( int col, int row ) const;
 
     bool multiRow( int col, int row ) const;
 
@@ -382,13 +370,13 @@ public:
     Sheet* sheet() { return m_pSheet; }
     const Sheet* sheet() const { return m_pSheet; }
 
-    bool hasProperty( Properties p, bool withoutParent = false ) const;
+    bool hasProperty( Style::FlagsSet p, bool withoutParent = false ) const;
 
     /**
      * returns false if no currency information is set or
      * doesn't apply
      */
-    bool currencyInfo( Currency & currency) const;
+    bool currencyInfo( Style::Currency & currency) const;
 
     QString getCurrencySymbol() const;
     QFont font() const;
@@ -435,7 +423,7 @@ protected:
     QString * m_strComment;
 
 private:
-    void setProperty( Properties p );
+    void setProperty( Style::FlagsSet p );
 
     /**
      * Currently just used for better abstraction.

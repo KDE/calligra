@@ -73,29 +73,29 @@ void LayoutIface::setMultiRow(bool _multi)
 
 void LayoutIface::setAlign( const QString& _Align )
 {
-    Format::Align Align;
+    Style::HAlign Align;
     if(_Align=="Left")
-        Align=Format::Left;
+        Align=Style::Left;
     else if(_Align=="Right")
-        Align=Format::Right;
+        Align=Style::Right;
     else if(_Align=="Center")
-        Align=Format::Center;
+        Align=Style::Center;
     else
-        Align=Format::Undefined;
+        Align=Style::HAlignUndefined;
     layout->setAlign( Align);
 }
 
 void LayoutIface::setAlignY( const QString& _AlignY )
 {
-    Format::AlignY AlignY;
+    Style::VAlign AlignY;
     if(_AlignY=="Top")
-        AlignY=Format::Top;
+        AlignY=Style::Top;
     else if(_AlignY=="Middle")
-        AlignY=Format::Middle;
+        AlignY=Style::Middle;
     else if(_AlignY=="Bottom")
-        AlignY=Format::Bottom;
+        AlignY=Style::Bottom;
     else
-        AlignY=Format::Middle;
+        AlignY=Style::Middle;
     layout->setAlignY( AlignY);
 }
 

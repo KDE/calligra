@@ -225,15 +225,15 @@ void CellIface::setAlign( const QString& _Align )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    Format::Align Align;
+    Style::HAlign Align;
     if(_Align=="Left")
-        Align=Format::Left;
+        Align=Style::Left;
     else if(_Align=="Right")
-        Align=Format::Right;
+        Align=Style::Right;
     else if(_Align=="Center")
-        Align=Format::Center;
+        Align=Style::Center;
     else
-        Align=Format::Undefined;
+        Align=Style::HAlignUndefined;
     cell->format()->setAlign( Align);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
@@ -245,16 +245,16 @@ QString CellIface::align() const
     QString alignString;
     switch( cell->format()->align( m_point.x(), m_point.y() ) )
         {
-        case Format::Left :
+        case Style::Left :
                 alignString="Left";
                 break;
-        case Format::Right :
+        case Style::Right :
                 alignString="Right";
                 break;
-        case Format::Center :
+        case Style::Center :
                 alignString="Center";
                 break;
-        case Format::Undefined :
+        case Style::HAlignUndefined :
                 alignString="Undefined";
                 break;
         }
@@ -265,15 +265,15 @@ void CellIface::setAlignY( const QString& _AlignY )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    Format::AlignY AlignY;
+    Style::VAlign AlignY;
     if(_AlignY=="Top")
-        AlignY=Format::Top;
+        AlignY=Style::Top;
     else if(_AlignY=="Middle")
-        AlignY=Format::Middle;
+        AlignY=Style::Middle;
     else if(_AlignY=="Bottom")
-        AlignY=Format::Bottom;
+        AlignY=Style::Bottom;
     else
-        AlignY=Format::Middle;
+        AlignY=Style::Middle;
     cell->format()->setAlignY( AlignY);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
@@ -285,16 +285,16 @@ QString CellIface::alignY() const
     QString alignString;
     switch( cell->format()->alignY( m_point.x(), m_point.y() ) )
         {
-        case Format::Top :
+        case Style::Top :
                 alignString="Top";
                 break;
-        case Format::Middle :
+        case Style::Middle :
                 alignString="Middle";
                 break;
-        case Format::Bottom :
+        case Style::Bottom :
                 alignString="Bottom";
                 break;
-        case Format::UndefinedY :
+        case Style::VAlignUndefined :
                 alignString="UndefinedY";
                 break;
         }

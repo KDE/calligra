@@ -31,6 +31,7 @@
 #include <koffice_export.h>
 
 #include "kspread_format.h"
+#include "kspread_style.h"
 #include "kspread_undo.h"
 #include "region.h"
 
@@ -122,52 +123,52 @@ public:
   FormatManipulator();
   virtual ~FormatManipulator();
 
-  void setProperty(Format::Properties property) { m_properties |= property; }
+  void setProperty(Style::FlagsSet property) { m_properties |= property; }
   bool isEmpty() { return m_properties == 0; }
 
   // SetSelectionFontWorker
   // SetSelectionSizeWorker
-  void setFontFamily(const QString& font) { m_properties |= Format::PFont; m_font = font; }
-  void setFontSize(int size) { m_properties |= Format::PFont; m_size = size; }
-  void setFontBold(uint bold) { m_properties |= Format::PFont; m_bold = bold; }
-  void setFontItalic(uint italic) { m_properties |= Format::PFont; m_italic = italic; }
-  void setFontStrike(uint strike) { m_properties |= Format::PFont; m_strike = strike; }
-  void setFontUnderline(uint underline) { m_properties |= Format::PFont; m_underline = underline; }
+  void setFontFamily(const QString& font) { m_properties |= Style::SFont; m_font = font; }
+  void setFontSize(int size) { m_properties |= Style::SFont; m_size = size; }
+  void setFontBold(uint bold) { m_properties |= Style::SFont; m_bold = bold; }
+  void setFontItalic(uint italic) { m_properties |= Style::SFont; m_italic = italic; }
+  void setFontStrike(uint strike) { m_properties |= Style::SFont; m_strike = strike; }
+  void setFontUnderline(uint underline) { m_properties |= Style::SFont; m_underline = underline; }
   // SetSelectionAngleWorker
-  void setAngle(int angle) { m_properties |= Format::PAngle; m_angle = angle; }
+  void setAngle(int angle) { m_properties |= Style::SAngle; m_angle = angle; }
   // SetSelectionTextColorWorker
-  void setTextColor(const QColor& textColor) { m_properties |= Format::PTextPen; m_textColor = textColor; }
+  void setTextColor(const QColor& textColor) { m_properties |= Style::STextPen; m_textColor = textColor; }
   // SetSelectionBgColorWorker
-  void setBackgroundColor(const QColor& bgColor) { m_properties |= Format::PBackgroundColor; m_backgroundColor = bgColor; }
+  void setBackgroundColor(const QColor& bgColor) { m_properties |= Style::SBackgroundColor; m_backgroundColor = bgColor; }
   // SetSelectionBorderAllWorker
-  void setTopBorderPen(const QPen& pen) { m_properties |= Format::PTopBorder; m_topBorderPen = pen; }
-  void setBottomBorderPen(const QPen& pen) { m_properties |= Format::PBottomBorder; m_bottomBorderPen = pen; }
-  void setLeftBorderPen(const QPen& pen) { m_properties |= Format::PLeftBorder; m_leftBorderPen = pen; }
-  void setRightBorderPen(const QPen& pen) { m_properties |= Format::PRightBorder; m_rightBorderPen = pen; }
-  void setHorizontalPen(const QPen& pen) { m_properties |= Format::PTopBorder | Format::PBottomBorder; m_horizontalPen = pen; }
-  void setVerticalPen(const QPen& pen) { m_properties |= Format::PLeftBorder | Format::PRightBorder; m_verticalPen = pen; }
-  void setFallDiagonalPen(const QPen& pen) { m_properties |= Format::PFallDiagonal; m_fallDiagonalPen = pen; }
-  void setGoUpDiagonalPen(const QPen& pen) { m_properties |= Format::PGoUpDiagonal; m_goUpDiagonalPen = pen; }
+  void setTopBorderPen(const QPen& pen) { m_properties |= Style::STopBorder; m_topBorderPen = pen; }
+  void setBottomBorderPen(const QPen& pen) { m_properties |= Style::SBottomBorder; m_bottomBorderPen = pen; }
+  void setLeftBorderPen(const QPen& pen) { m_properties |= Style::SLeftBorder; m_leftBorderPen = pen; }
+  void setRightBorderPen(const QPen& pen) { m_properties |= Style::SRightBorder; m_rightBorderPen = pen; }
+  void setHorizontalPen(const QPen& pen) { m_properties |= Style::STopBorder | Style::SBottomBorder; m_horizontalPen = pen; }
+  void setVerticalPen(const QPen& pen) { m_properties |= Style::SLeftBorder | Style::SRightBorder; m_verticalPen = pen; }
+  void setFallDiagonalPen(const QPen& pen) { m_properties |= Style::SFallDiagonal; m_fallDiagonalPen = pen; }
+  void setGoUpDiagonalPen(const QPen& pen) { m_properties |= Style::SGoUpDiagonal; m_goUpDiagonalPen = pen; }
   // SetSelectionAlignWorker
-  void setHorizontalAlignment(Format::Align align) { m_properties |= Format::PAlign; m_horAlign = align; }
+  void setHorizontalAlignment(Style::HAlign align) { m_properties |= Style::SHAlign; m_horAlign = align; }
   // SetSelectionAlignWorker
-  void setVerticalAlignment(Format::AlignY align) { m_properties |= Format::PAlignY; m_verAlign = align; }
+  void setVerticalAlignment(Style::VAlign align) { m_properties |= Style::SVAlign; m_verAlign = align; }
 
-  void setBackgroundBrush(const QBrush& brush) { m_properties |= Format::PBackgroundBrush; m_backgroundBrush = brush; }
-  void setIndent(double indent) { m_properties |= Format::PIndent; m_indent = indent; }
-  void setMultiRow(bool multiRow) { m_properties |= Format::PMultiRow; m_multiRow = multiRow; }
-  void setVerticalText(bool verticalText) { m_properties |= Format::PVerticalText; m_verticalText = verticalText; }
-  void setDontPrintText(bool dontPrintText) { m_properties |= Format::PDontPrintText; m_dontPrintText = dontPrintText; }
-  void setNotProtected(bool notProtected) { m_properties |= Format::PNotProtected; m_notProtected = notProtected; }
-  void setHideAll(bool hideAll) { m_properties |= Format::PHideAll; m_hideAll = hideAll; }
-  void setHideFormula(bool hideFormula) { m_properties |= Format::PHideFormula; m_hideFormula = hideFormula; }
-  void setComment(const QString& comment) { m_properties |= Format::PComment; m_comment = comment; }
-  void setPrefix(const QString& prefix) { m_properties |= Format::PPrefix; m_prefix = prefix; }
-  void setPostfix(const QString& postfix) { m_properties |= Format::PPostfix; m_postfix = postfix; }
-  void setPrecision(int precision) { m_properties |= Format::PPrecision; m_precision = precision; }
-  void setFloatFormat(Format::FloatFormat floatFormat) { m_properties |= Format::PFloatFormat; m_floatFormat = floatFormat; }
-  void setFloatColor(Format::FloatColor floatColor) { m_properties |= Format::PFloatColor; m_floatColor = floatColor; }
-  void setFormatType(FormatType formatType) { m_properties |= Format::PFormatType; m_formatType = formatType; }
+  void setBackgroundBrush(const QBrush& brush) { m_properties |= Style::SBackgroundBrush; m_backgroundBrush = brush; }
+  void setIndent(double indent) { m_properties |= Style::SIndent; m_indent = indent; }
+  void setMultiRow(bool multiRow) { m_properties |= Style::SMultiRow; m_multiRow = multiRow; }
+  void setVerticalText(bool verticalText) { m_properties |= Style::SVerticalText; m_verticalText = verticalText; }
+  void setDontPrintText(bool dontPrintText) { m_properties |= Style::SDontPrintText; m_dontPrintText = dontPrintText; }
+  void setNotProtected(bool notProtected) { m_properties |= Style::SNotProtected; m_notProtected = notProtected; }
+  void setHideAll(bool hideAll) { m_properties |= Style::SHideAll; m_hideAll = hideAll; }
+  void setHideFormula(bool hideFormula) { m_properties |= Style::SHideFormula; m_hideFormula = hideFormula; }
+  void setComment(const QString& comment) { m_properties |= Style::SComment; m_comment = comment; }
+  void setPrefix(const QString& prefix) { m_properties |= Style::SPrefix; m_prefix = prefix; }
+  void setPostfix(const QString& postfix) { m_properties |= Style::SPostfix; m_postfix = postfix; }
+  void setPrecision(int precision) { m_properties |= Style::SPrecision; m_precision = precision; }
+  void setFloatFormat(Style::FloatFormat floatFormat) { m_properties |= Style::SFloatFormat; m_floatFormat = floatFormat; }
+  void setFloatColor(Style::FloatColor floatColor) { m_properties |= Style::SFloatColor; m_floatColor = floatColor; }
+  void setFormatType(FormatType formatType) { m_properties |= Style::SFormatType; m_formatType = formatType; }
   void setCurrency(int type, const QString& symbol) { m_currencyType = type; m_currencySymbol = symbol; }
 
 protected:
@@ -235,11 +236,11 @@ private:
   QString m_currencySymbol;
 
   // SetSelectionAlignWorker
-  Format::Align m_horAlign;
+  Style::HAlign m_horAlign;
   // SetSelectionAlignWorker
-  Format::AlignY m_verAlign;
-  Format::FloatFormat m_floatFormat;
-  Format::FloatColor m_floatColor;
+  Style::VAlign m_verAlign;
+  Style::FloatFormat m_floatFormat;
+  Style::FloatColor m_floatColor;
   FormatType m_formatType;
 };
 

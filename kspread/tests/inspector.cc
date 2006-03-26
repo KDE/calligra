@@ -116,11 +116,11 @@ void Inspector::Private::handleFormat()
 
   new QListViewItem( formatView, "Angle", QString::number( format->getAngle(col, row) ) );
   new QListViewItem( formatView, "Multirow", boolAsString( format->multiRow(col, row) ) );
-  new QListViewItem( formatView, "Protected", format->hasProperty( Format::PVerticalText ) 
+  new QListViewItem( formatView, "Protected", format->hasProperty( Style::SVerticalText ) 
     ? "Not specified" : boolAsString( format->isProtected(col, row) ) );
   new QListViewItem( formatView, "Vertical Text", boolAsString( format->verticalText(col, row ) ) );
 
-  Format::Currency currrency;
+  Style::Currency currrency;
   bool valid = format->currencyInfo(currrency);
   new QListViewItem( formatView, "Currency symbol", valid ? currrency.symbol : "Invalid" );
   bool ok = false;

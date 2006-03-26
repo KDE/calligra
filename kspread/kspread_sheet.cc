@@ -1734,7 +1734,7 @@ void Sheet::setSelectionFont( Selection* selectionInfo,
 {
   FontManipulator* manipulator = new FontManipulator();
   manipulator->setSheet(this);
-  manipulator->setProperty(Format::PFont);
+  manipulator->setProperty(Style::SFont);
   manipulator->setFontFamily(_font);
   manipulator->setFontSize(_size);
   manipulator->setFontBold(_bold);
@@ -1757,7 +1757,7 @@ void Sheet::setSelectionSize(Selection* selectionInfo,
 
   FontManipulator* manipulator = new FontManipulator();
   manipulator->setSheet(this);
-  manipulator->setProperty(Format::PFont);
+  manipulator->setProperty(Style::SFont);
   manipulator->setFontSize(_size+size);
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -1890,7 +1890,7 @@ void Sheet::setSelectionAngle( Selection* selectionInfo,
 {
   AngleManipulator* manipulator = new AngleManipulator();
   manipulator->setSheet(this);
-  manipulator->setProperty(Format::PAngle);
+  manipulator->setProperty(Style::SAngle);
   manipulator->setAngle(_value);
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -1928,7 +1928,7 @@ void Sheet::setSelectionTextColor( Selection* selectionInfo,
 {
   FontColorManipulator* manipulator = new FontColorManipulator();
   manipulator->setSheet(this);
-  manipulator->setProperty(Format::PTextPen);
+  manipulator->setProperty(Style::STextPen);
   manipulator->setTextColor(tb_Color);
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -1939,7 +1939,7 @@ void Sheet::setSelectionbgColor( Selection* selectionInfo,
 {
   BackgroundColorManipulator* manipulator = new BackgroundColorManipulator();
   manipulator->setSheet(this);
-  manipulator->setProperty(Format::PBackgroundColor);
+  manipulator->setProperty(Style::SBackgroundColor);
   manipulator->setBackgroundColor(bg_Color);
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -2267,8 +2267,8 @@ struct SetSelectionPercentWorker : public Sheet::CellWorkerTypeA
   cl->setFormatType( b ? Percentage_format : Generic_format);
     }
     void prepareCell( Cell* cell ) {
-  cell->format()->clearProperty(Format::PFormatType);
-  cell->format()->clearNoFallBackProperties( Format::PFormatType );
+  cell->format()->clearProperty(Style::SFormatType);
+  cell->format()->clearNoFallBackProperties( Style::SFormatType );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isPartOfMerged() );
@@ -3957,11 +3957,11 @@ void Sheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
 
   if (cpFormat)
   {
-    Format::Align a = ref1->format()->align( ref1->column(), ref1->row() );
+    Style::HAlign a = ref1->format()->align( ref1->column(), ref1->row() );
     ref1->format()->setAlign( ref2->format()->align( ref2->column(), ref2->row() ) );
     ref2->format()->setAlign(a);
 
-    Format::AlignY ay = ref1->format()->alignY( ref1->column(), ref1->row() );
+    Style::VAlign ay = ref1->format()->alignY( ref1->column(), ref1->row() );
     ref1->format()->setAlignY( ref2->format()->alignY( ref2->column(), ref2->row() ) );
     ref2->format()->setAlignY(ay);
 
@@ -4017,11 +4017,11 @@ void Sheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
     ref1->format()->setPostfix( ref2->format()->postfix( ref2->column(), ref2->row() ) );
     ref2->format()->setPostfix(postfix);
 
-    Format::FloatFormat f = ref1->format()->floatFormat( ref1->column(), ref1->row() );
+    Style::FloatFormat f = ref1->format()->floatFormat( ref1->column(), ref1->row() );
     ref1->format()->setFloatFormat( ref2->format()->floatFormat( ref2->column(), ref2->row() ) );
     ref2->format()->setFloatFormat(f);
 
-    Format::FloatColor c = ref1->format()->floatColor( ref1->column(), ref1->row() );
+    Style::FloatColor c = ref1->format()->floatColor( ref1->column(), ref1->row() );
     ref1->format()->setFloatColor( ref2->format()->floatColor( ref2->column(), ref2->row() ) );
     ref2->format()->setFloatColor(c);
 
@@ -4269,22 +4269,22 @@ QString Sheet::guessRowTitle(QRect& area, int row)
 }
 
 void Sheet::setSelectionAlign( Selection* selectionInfo,
-                               Format::Align _align )
+                               Style::HAlign _align )
 {
   HorAlignManipulator* manipulator = new HorAlignManipulator();
   manipulator->setSheet(this);
-  manipulator->setProperty(Format::PAlign);
+  manipulator->setProperty(Style::SHAlign);
   manipulator->setHorizontalAlignment(_align);
   manipulator->add(*selectionInfo);
   manipulator->execute();
 }
 
 void Sheet::setSelectionAlignY( Selection* selectionInfo,
-                                Format::AlignY _alignY )
+                                Style::VAlign _alignY )
 {
   VerAlignManipulator* manipulator = new VerAlignManipulator();
   manipulator->setSheet(this);
-  manipulator->setProperty(Format::PAlignY);
+  manipulator->setProperty(Style::SVAlign);
   manipulator->setVerticalAlignment(_alignY);
   manipulator->add(*selectionInfo);
   manipulator->execute();
@@ -4373,8 +4373,8 @@ struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
     SetSelectionMoneyFormatWorker( bool _b,Doc* _doc ) : b( _b ), m_pDoc(_doc) { }
     QString getUndoTitle() { return i18n("Format Money"); }
     bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Format::PFormatType )
-     || rw->hasProperty( Format::PPrecision ) );
+  return ( rw->hasProperty( Style::SFormatType )
+     || rw->hasProperty( Style::SPrecision ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setFormatType( b ? Money_format : Generic_format );
@@ -4385,10 +4385,10 @@ struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
   cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void prepareCell( Cell* c ) {
-  c->format()->clearProperty( Format::PPrecision );
-  c->format()->clearNoFallBackProperties( Format::PPrecision );
-  c->format()->clearProperty( Format::PFormatType );
-  c->format()->clearNoFallBackProperties( Format::PFormatType );
+  c->format()->clearProperty( Style::SPrecision );
+  c->format()->clearNoFallBackProperties( Style::SPrecision );
+  c->format()->clearProperty( Style::SFormatType );
+  c->format()->clearNoFallBackProperties( Style::SFormatType );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isPartOfMerged() );
@@ -4421,31 +4421,31 @@ struct IncreaseIndentWorker : public Sheet::CellWorkerTypeA {
 
     QString  getUndoTitle() { return i18n("Increase Indent"); }
     bool     testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Format::PIndent ) );
+  return ( rw->hasProperty( Style::SIndent ) );
     }
 
     void doWork( RowFormat* rw ) {
   rw->setIndent( tmpIndent+valIndent );
-  //rw->setAlign( Format::Left );
+  //rw->setAlign( Style::Left );
     }
     void doWork( ColumnFormat* cl ) {
   cl->setIndent( tmpIndent+valIndent );
-  //cl->setAlign( Format::Left );
+  //cl->setAlign( Style::Left );
     }
     void prepareCell( Cell* c ) {
-  c->format()->clearProperty( Format::PIndent );
-  c->format()->clearNoFallBackProperties( Format::PIndent );
-  //c->format()->clearProperty( Format::PAlign );
-  //c->format()->clearNoFallBackProperties( Format::PAlign );
+  c->format()->clearProperty( Style::SIndent );
+  c->format()->clearNoFallBackProperties( Style::SIndent );
+  //c->format()->clearProperty( Style::SAlign );
+  //c->format()->clearNoFallBackProperties( Style::SAlign );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int x, int y ) {
   if ( cellRegion ) {
-      if(cell->format()->align(x,y)!=Format::Left)
+      if(cell->format()->align(x,y)!=Style::Left)
       {
-    //cell->setAlign(Format::Left);
+    //cell->setAlign(Style::Left);
     //cell->format()->setIndent( 0.0 );
       }
       cell->setDisplayDirtyFlag();
@@ -4453,7 +4453,7 @@ struct IncreaseIndentWorker : public Sheet::CellWorkerTypeA {
       cell->clearDisplayDirtyFlag();
   } else {
       cell->format()->setIndent( tmpIndent+valIndent);
-      //cell->setAlign( Format::Left);
+      //cell->setAlign( Style::Left);
   }
     }
 };
@@ -4476,7 +4476,7 @@ struct DecreaseIndentWorker : public Sheet::CellWorkerTypeA {
     DecreaseIndentWorker( double _tmpIndent, double _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Decrease Indent"); }
     bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Format::PIndent ) );
+  return ( rw->hasProperty( Style::SIndent ) );
     }
     void doWork( RowFormat* rw ) {
         rw->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
@@ -4485,8 +4485,8 @@ struct DecreaseIndentWorker : public Sheet::CellWorkerTypeA {
         cl->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
     }
     void prepareCell( Cell* c ) {
-  c->format()->clearProperty( Format::PIndent );
-  c->format()->clearNoFallBackProperties( Format::PIndent );
+  c->format()->clearProperty( Style::SIndent );
+  c->format()->clearNoFallBackProperties( Style::SIndent );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isPartOfMerged() );
@@ -4523,15 +4523,15 @@ int Sheet::adjustColumnHelper( Cell * c, int _col, int _row )
     {
         double indent = 0.0;
         int a = c->format()->align( c->column(), c->row() );
-        if ( a == Format::Undefined )
+        if ( a == Style::HAlignUndefined )
         {
             if ( c->value().isNumber() || c->isDate() || c->isTime())
-                a = Format::Right;
+                a = Style::Right;
             else
-                a = Format::Left;
+                a = Style::Left;
         }
 
-        if ( a == Format::Left )
+        if ( a == Style::Left )
             indent = c->format()->getIndent( c->column(), c->row() );
         long_max = indent + c->textWidth()
             + c->format()->leftBorderWidth( c->column(), c->row() )
@@ -4955,13 +4955,13 @@ static QString cellAsText( Cell* cell, unsigned int max )
   if( !cell->isDefault() )
   {
     int l = max - cell->strOutText().length();
-    if (cell->defineAlignX() == Format::Right )
+    if (cell->defineAlignX() == Style::Right )
     {
         for ( int i = 0; i < l; ++i )
           result += " ";
         result += cell->strOutText();
     }
-    else if (cell->defineAlignX() == Format::Left )
+    else if (cell->defineAlignX() == Style::Left )
       {
           result += " ";
           result += cell->strOutText();

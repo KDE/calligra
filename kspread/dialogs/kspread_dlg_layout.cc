@@ -683,8 +683,8 @@ void CellFormatDialog::initGUI()
   precision      = m_style->precision();
   floatFormat    = m_style->floatFormat();
   floatColor     = m_style->floatColor();
-  alignX         = m_style->alignX();
-  alignY         = m_style->alignY();
+  alignX         = m_style->halign();
+  alignY         = m_style->valign();
   textColor      = m_style->pen().color();
   bgColor        = m_style->bgColor();
   textFontSize   = m_style->fontSize();
@@ -702,16 +702,16 @@ void CellFormatDialog::initGUI()
   brushColor = m_style->backGroundBrush().color();
   brushStyle = m_style->backGroundBrush().style();
 
-  bMultiRow     = m_style->hasProperty( Style::PMultiRow );
-  bVerticalText = m_style->hasProperty( Style::PVerticalText );
+  bMultiRow     = m_style->hasProperty( Style::SMultiRow );
+  bVerticalText = m_style->hasProperty( Style::SVerticalText );
   textRotation  = m_style->rotateAngle();
   formatType    = m_style->formatType();
   indent        = m_style->indent();
 
-  bDontPrintText = m_style->hasProperty( Style::PDontPrintText );
-  bHideFormula   = m_style->hasProperty( Style::PHideFormula );
-  bHideAll       = m_style->hasProperty( Style::PHideAll );
-  bIsProtected   = !m_style->hasProperty( Style::PNotProtected );
+  bDontPrintText = m_style->hasProperty( Style::SDontPrintText );
+  bHideFormula   = m_style->hasProperty( Style::SHideFormula );
+  bHideAll       = m_style->hasProperty( Style::SHideAll );
+  bIsProtected   = !m_style->hasProperty( Style::SNotProtected );
 
   widthSize  = defaultWidthSize;
   heightSize = defaultHeightSize;
@@ -876,7 +876,7 @@ void CellFormatDialog::initParameters(Format *obj,int x,int y)
   if (  bDontPrintText!=obj->getDontprintText( left, top ) )
     bDontPrintText= false;
 
-  Format::Currency cur;
+  Style::Currency cur;
   if (!obj->currencyInfo(cur))
     bCurrency = false;
   else
@@ -1234,15 +1234,15 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
 
     if ( !dlg->bFloatFormat || !dlg->bFloatColor )
         format->setCurrentItem( 5 );
-    else if ( dlg->floatFormat == Format::OnlyNegSigned && dlg->floatColor == Format::AllBlack )
+    else if ( dlg->floatFormat == Style::OnlyNegSigned && dlg->floatColor == Style::AllBlack )
         format->setCurrentItem( 0 );
-    else if ( dlg->floatFormat == Format::OnlyNegSigned && dlg->floatColor == Format::NegRed )
+    else if ( dlg->floatFormat == Style::OnlyNegSigned && dlg->floatColor == Style::NegRed )
         format->setCurrentItem( 1 );
-    else if ( dlg->floatFormat == Format::AlwaysUnsigned && dlg->floatColor == Format::NegRed )
+    else if ( dlg->floatFormat == Style::AlwaysUnsigned && dlg->floatColor == Style::NegRed )
         format->setCurrentItem( 2 );
-    else if ( dlg->floatFormat == Format::AlwaysSigned && dlg->floatColor == Format::AllBlack )
+    else if ( dlg->floatFormat == Style::AlwaysSigned && dlg->floatColor == Style::AllBlack )
         format->setCurrentItem( 3 );
-    else if ( dlg->floatFormat == Format::AlwaysSigned && dlg->floatColor == Format::NegRed )
+    else if ( dlg->floatFormat == Style::AlwaysSigned && dlg->floatColor == Style::NegRed )
         format->setCurrentItem( 4 );
     layout->addWidget(box);
 
@@ -1679,27 +1679,27 @@ void CellFormatPageFloat::makeformat()
 
   updateFormatType();
   QColor color;
-  Format::FloatFormat floatFormat;
+  Style::FloatFormat floatFormat;
   switch( format->currentItem() )
   {
     case 0:
-      floatFormat = Format::OnlyNegSigned;
+      floatFormat = Style::OnlyNegSigned;
       color = black;
       break;
     case 1:
-      floatFormat =  Format::OnlyNegSigned;
+      floatFormat =  Style::OnlyNegSigned;
       color = Qt::red;
       break;
     case 2:
-      floatFormat =  Format::AlwaysUnsigned;
+      floatFormat =  Style::AlwaysUnsigned;
       color = Qt::red;
       break;
     case 3:
-      floatFormat =  Format::AlwaysSigned;
+      floatFormat =  Style::AlwaysSigned;
       color = black;
       break;
     case 4:
-      floatFormat =  Format::AlwaysSigned;
+      floatFormat =  Style::AlwaysSigned;
       color = Qt::red;
       break;
   }
@@ -1743,24 +1743,24 @@ void CellFormatPageFloat::apply( CustomStyle * style )
     switch( format->currentItem() )
     {
      case 0:
-      style->changeFloatFormat( Format::OnlyNegSigned );
-      style->changeFloatColor( Format::AllBlack );
+      style->changeFloatFormat( Style::OnlyNegSigned );
+      style->changeFloatColor( Style::AllBlack );
       break;
      case 1:
-      style->changeFloatFormat( Format::OnlyNegSigned );
-      style->changeFloatColor( Format::NegRed );
+      style->changeFloatFormat( Style::OnlyNegSigned );
+      style->changeFloatColor( Style::NegRed );
       break;
      case 2:
-      style->changeFloatFormat( Format::AlwaysUnsigned );
-      style->changeFloatColor( Format::NegRed );
+      style->changeFloatFormat( Style::AlwaysUnsigned );
+      style->changeFloatColor( Style::NegRed );
       break;
      case 3:
-      style->changeFloatFormat( Format::AlwaysSigned );
-      style->changeFloatColor( Format::AllBlack );
+      style->changeFloatFormat( Style::AlwaysSigned );
+      style->changeFloatColor( Style::AllBlack );
       break;
      case 4:
-      style->changeFloatFormat( Format::AlwaysSigned );
-      style->changeFloatColor( Format::NegRed );
+      style->changeFloatFormat( Style::AlwaysSigned );
+      style->changeFloatColor( Style::NegRed );
       break;
     }
   }
@@ -1769,7 +1769,7 @@ void CellFormatPageFloat::apply( CustomStyle * style )
     style->changeFormatType (newFormatType);
     if ( money->isChecked() )
     {
-      Format::Currency cur;
+      Style::Currency cur;
       int index = currency->currentItem();
       if (index == 0)
       {
@@ -1820,24 +1820,24 @@ void CellFormatPageFloat::apply(FormatManipulator* _obj)
     switch( format->currentItem() )
       {
       case 0:
-        _obj->setFloatFormat( Format::OnlyNegSigned );
-        _obj->setFloatColor( Format::AllBlack );
+        _obj->setFloatFormat( Style::OnlyNegSigned );
+        _obj->setFloatColor( Style::AllBlack );
         break;
       case 1:
-        _obj->setFloatFormat( Format::OnlyNegSigned );
-        _obj->setFloatColor( Format::NegRed );
+        _obj->setFloatFormat( Style::OnlyNegSigned );
+        _obj->setFloatColor( Style::NegRed );
         break;
       case 2:
-        _obj->setFloatFormat( Format::AlwaysUnsigned );
-        _obj->setFloatColor( Format::NegRed );
+        _obj->setFloatFormat( Style::AlwaysUnsigned );
+        _obj->setFloatColor( Style::NegRed );
         break;
       case 3:
-        _obj->setFloatFormat( Format::AlwaysSigned );
-        _obj->setFloatColor( Format::AllBlack );
+        _obj->setFloatFormat( Style::AlwaysSigned );
+        _obj->setFloatColor( Style::AllBlack );
         break;
       case 4:
-        _obj->setFloatFormat( Format::AlwaysSigned );
-        _obj->setFloatColor( Format::NegRed );
+        _obj->setFloatFormat( Style::AlwaysSigned );
+        _obj->setFloatColor( Style::NegRed );
         break;
       }
   }
@@ -1846,7 +1846,7 @@ void CellFormatPageFloat::apply(FormatManipulator* _obj)
     _obj->setFormatType (newFormatType);
     if (money->isChecked())
     {
-      Format::Currency cur;
+      Style::Currency cur;
       int index = currency->currentItem();
       if (index == 0)
       {
@@ -1899,33 +1899,33 @@ void CellFormatPageProtection::apply( CustomStyle * style )
   if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked() )
   {
     if ( m_bDontPrint->isChecked() )
-      style->addProperty( Style::PDontPrintText );
+      style->addProperty( Style::SDontPrintText );
     else
-      style->removeProperty( Style::PDontPrintText );
+      style->removeProperty( Style::SDontPrintText );
   }
 
   if ( m_dlg->bIsProtected != m_bIsProtected->isChecked() )
   {
     if ( !m_bIsProtected->isChecked() )
-      style->addProperty( Style::PNotProtected );
+      style->addProperty( Style::SNotProtected );
     else
-      style->removeProperty( Style::PNotProtected );
+      style->removeProperty( Style::SNotProtected );
   }
 
   if ( m_dlg->bHideAll != m_bHideAll->isChecked() )
   {
     if ( m_bHideAll->isChecked() )
-      style->addProperty( Style::PHideAll );
+      style->addProperty( Style::SHideAll );
     else
-      style->removeProperty( Style::PHideAll );
+      style->removeProperty( Style::SHideAll );
   }
 
   if ( m_dlg->bHideFormula != m_bHideFormula->isChecked() )
   {
     if ( m_bHideFormula->isChecked() )
-      style->addProperty( Style::PHideFormula );
+      style->addProperty( Style::SHideFormula );
     else
-      style->removeProperty( Style::PHideFormula );
+      style->removeProperty( Style::SHideFormula );
   }
 }
 
@@ -2231,22 +2231,22 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
   : PositionTab(parent ),
     dlg( _dlg )
 {
-    if ( dlg->alignX == Format::Left )
+    if ( dlg->alignX == Style::Left )
         left->setChecked( true );
-    else if ( dlg->alignX == Format::Center )
+    else if ( dlg->alignX == Style::Center )
         center->setChecked( true );
-    else if ( dlg->alignX == Format::Right )
+    else if ( dlg->alignX == Style::Right )
         right->setChecked( true );
-    else if ( dlg->alignX == Format::Undefined )
+    else if ( dlg->alignX == Style::HAlignUndefined )
         standard->setChecked( true );
 
     connect(horizontalGroup,  SIGNAL(clicked(int)), this, SLOT(slotStateChanged(int)));
 
-    if ( dlg->alignY ==Format::Top )
+    if ( dlg->alignY ==Style::Top )
         top->setChecked( true );
-    else if ( dlg->alignY ==Format::Middle )
+    else if ( dlg->alignY ==Style::Middle )
         middle->setChecked(true );
-    else if ( dlg->alignY ==Format::Bottom )
+    else if ( dlg->alignY ==Style::Bottom )
         bottom->setChecked( true );
 
     multi->setChecked(dlg->bMultiRow);
@@ -2380,30 +2380,30 @@ void CellFormatPagePosition::slotChangeAngle(int _angle)
 
 void CellFormatPagePosition::apply( CustomStyle * style )
 {
-  if ( top->isChecked() && dlg->alignY != Format::Top )
-    style->changeAlignY( Format::Top );
-  else if ( bottom->isChecked() && dlg->alignY != Format::Bottom )
-    style->changeAlignY( Format::Bottom );
-  else if ( middle->isChecked() && dlg->alignY != Format::Middle )
-    style->changeAlignY( Format::Middle );
+  if ( top->isChecked() && dlg->alignY != Style::Top )
+    style->changeVAlign( Style::Top );
+  else if ( bottom->isChecked() && dlg->alignY != Style::Bottom )
+    style->changeVAlign( Style::Bottom );
+  else if ( middle->isChecked() && dlg->alignY != Style::Middle )
+    style->changeVAlign( Style::Middle );
 
-  if ( left->isChecked() && dlg->alignX != Format::Left )
-    style->changeAlignX( Format::Left );
-  else if ( right->isChecked() && dlg->alignX != Format::Right )
-    style->changeAlignX( Format::Right );
-  else if ( center->isChecked() && dlg->alignX != Format::Center )
-    style->changeAlignX( Format::Center );
-  else if ( standard->isChecked() && dlg->alignX != Format::Undefined )
-    style->changeAlignX( Format::Undefined );
+  if ( left->isChecked() && dlg->alignX != Style::Left )
+    style->changeHAlign( Style::Left );
+  else if ( right->isChecked() && dlg->alignX != Style::Right )
+    style->changeHAlign( Style::Right );
+  else if ( center->isChecked() && dlg->alignX != Style::Center )
+    style->changeHAlign( Style::Center );
+  else if ( standard->isChecked() && dlg->alignX != Style::HAlignUndefined )
+    style->changeHAlign( Style::HAlignUndefined );
 
   if ( m_bOptionText )
   {
     if ( multi->isEnabled() )
     {
       if ( multi->isChecked() )
-        style->addProperty( Style::PMultiRow );
+        style->addProperty( Style::SMultiRow );
       else
-        style->removeProperty( Style::PMultiRow );
+        style->removeProperty( Style::SMultiRow );
     }
   }
 
@@ -2412,9 +2412,9 @@ void CellFormatPagePosition::apply( CustomStyle * style )
     if ( vertical->isEnabled() )
     {
       if ( vertical->isChecked() )
-        style->addProperty( Style::PVerticalText );
+        style->addProperty( Style::SVerticalText );
       else
-        style->removeProperty( Style::PVerticalText );
+        style->removeProperty( Style::SVerticalText );
     }
   }
 
@@ -2428,44 +2428,44 @@ void CellFormatPagePosition::apply( CustomStyle * style )
 
 void CellFormatPagePosition::apply(FormatManipulator* _obj)
 {
-  Format::Align  ax;
-  Format::AlignY ay;
+  Style::HAlign  ax;
+  Style::VAlign ay;
 
   if ( top->isChecked() )
-    ay = Format::Top;
+    ay = Style::Top;
   else if ( bottom->isChecked() )
-    ay = Format::Bottom;
+    ay = Style::Bottom;
   else if ( middle->isChecked() )
-    ay = Format::Middle;
+    ay = Style::Middle;
   else
-    ay = Format::Middle; // Default, just in case
+    ay = Style::Middle; // Default, just in case
 
   if ( left->isChecked() )
-    ax = Format::Left;
+    ax = Style::Left;
   else if ( right->isChecked() )
-    ax = Format::Right;
+    ax = Style::Right;
   else if ( center->isChecked() )
-    ax = Format::Center;
+    ax = Style::Center;
   else if ( standard->isChecked() )
-    ax = Format::Undefined;
+    ax = Style::HAlignUndefined;
   else
-    ax = Format::Undefined; //Default, just in case
+    ax = Style::HAlignUndefined; //Default, just in case
 
   if ( top->isChecked() && ay != dlg->alignY )
-    _obj->setVerticalAlignment( Format::Top );
+    _obj->setVerticalAlignment( Style::Top );
   else if ( bottom->isChecked() && ay != dlg->alignY )
-    _obj->setVerticalAlignment( Format::Bottom );
+    _obj->setVerticalAlignment( Style::Bottom );
   else if ( middle->isChecked() && ay != dlg->alignY )
-    _obj->setVerticalAlignment( Format::Middle );
+    _obj->setVerticalAlignment( Style::Middle );
 
   if ( left->isChecked() && ax != dlg->alignX )
-    _obj->setHorizontalAlignment( Format::Left );
+    _obj->setHorizontalAlignment( Style::Left );
   else if ( right->isChecked() && ax != dlg->alignX )
-    _obj->setHorizontalAlignment( Format::Right );
+    _obj->setHorizontalAlignment( Style::Right );
   else if ( center->isChecked() && ax != dlg->alignX )
-    _obj->setHorizontalAlignment( Format::Center );
+    _obj->setHorizontalAlignment( Style::Center );
   else if ( standard->isChecked() && ax != dlg->alignX )
-    _obj->setHorizontalAlignment( Format::Undefined );
+    _obj->setHorizontalAlignment( Style::HAlignUndefined );
 
   if ( m_bOptionText )
   {

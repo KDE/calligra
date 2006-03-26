@@ -608,7 +608,7 @@ void Cell::copyFormat( const Cell* cell )
     format()->setIndent( cell->format()->getIndent(_column, _row ) );
     format()->setAngle( cell->format()->getAngle(_column, _row) );
     format()->setFormatType( cell->format()->getFormatType(_column, _row) );
-    Format::Currency c;
+    Style::Currency c;
     if ( cell->format()->currencyInfo( c ) )
       format()->setCurrency( c );*/
 
@@ -780,17 +780,17 @@ bool Cell::needsPrinting() const
   }
 
   // Cell borders?
-  if ( format()->hasProperty( Format::PTopBorder )
-       || format()->hasProperty( Format::PLeftBorder )
-       || format()->hasProperty( Format::PRightBorder )
-       || format()->hasProperty( Format::PBottomBorder )
-       || format()->hasProperty( Format::PFallDiagonal )
-       || format()->hasProperty( Format::PGoUpDiagonal ) ) {
+  if ( format()->hasProperty( Style::STopBorder )
+       || format()->hasProperty( Style::SLeftBorder )
+       || format()->hasProperty( Style::SRightBorder )
+       || format()->hasProperty( Style::SBottomBorder )
+       || format()->hasProperty( Style::SFallDiagonal )
+       || format()->hasProperty( Style::SGoUpDiagonal ) ) {
     return true;
   }
 
   // Background color or brush?
-  if ( format()->hasProperty( Format::PBackgroundBrush ) ) {
+  if ( format()->hasProperty( Style::SBackgroundBrush ) ) {
 
 	const QBrush& brush=backGroundBrush(column(),row());
 
@@ -802,7 +802,7 @@ bool Cell::needsPrinting() const
 
   }
 
-  if ( format()->hasProperty( Format::PBackgroundColor ) ) {
+  if ( format()->hasProperty( Style::SBackgroundColor ) ) {
     kdDebug() << "needsPrinting: Has background colour" << endl;
     QColor backgroundColor=bgColor(column(),row());
 
@@ -1431,7 +1431,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
 
   // Get indentation.  This is only used for left aligned text.
   double indent = 0.0;
-  if ( a == Format::Left && !isEmpty() )
+  if ( a == Style::Left && !isEmpty() )
     indent = format()->getIndent( _col, _row );
 
   // Set Flag_CellTooShortX if the text is vertical or angled, and too
@@ -1489,8 +1489,8 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
     // FIXME: Shouldn't we check to see if end == -1 here before
     //        setting Flag_CellTooShortX?
     //
-    if ( format()->align( _col, _row ) == Format::Left
-         || ( format()->align( _col, _row ) == Format::Undefined
+    if ( format()->align( _col, _row ) == Style::Left
+         || ( format()->align( _col, _row ) == Style::HAlignUndefined
         && !value().isNumber() ) )
     {
       if ( c - d->column > d->extra()->mergedXCells ) {
@@ -1624,7 +1624,7 @@ void Cell::setOutputText()
 void Cell::offsetAlign( int _col, int _row )
 {
   int     a;
-  Format::AlignY  ay;
+  Style::VAlign  ay;
   int     tmpAngle;
   bool    tmpVerticalText;
   bool    tmpMultiRow;
@@ -1636,23 +1636,23 @@ void Cell::offsetAlign( int _col, int _row )
   {
     Style  *style = d->extra()->conditions->matchedStyle();
 
-    if ( style->hasFeature( Style::SAlignX, true ) )
-      a = style->alignX();
+    if ( style->hasFeature( Style::SHAlign, true ) )
+      a = style->halign();
     else
       a = format()->align( _col, _row );
 
     if ( style->hasFeature( Style::SVerticalText, true ) )
-      tmpVerticalText = style->hasProperty( Style::PVerticalText );
+      tmpVerticalText = style->hasProperty( Style::SVerticalText );
     else
       tmpVerticalText = format()->verticalText( _col, _row );
 
     if ( style->hasFeature( Style::SMultiRow, true ) )
-      tmpMultiRow = style->hasProperty( Style::PMultiRow );
+      tmpMultiRow = style->hasProperty( Style::SMultiRow );
     else
       tmpMultiRow = format()->multiRow( _col, _row );
 
-    if ( style->hasFeature( Style::SAlignY, true ) )
-      ay = style->alignY();
+    if ( style->hasFeature( Style::SVAlign, true ) )
+      ay = style->valign();
     else
       ay = format()->alignY( _col, _row );
 
@@ -1683,7 +1683,7 @@ void Cell::offsetAlign( int _col, int _row )
   // Calculate d->textY based on the vertical alignment and a few
   // other inputs.
   switch( ay ) {
-  case Format::Top:
+  case Style::Top:
     if ( tmpAngle == 0 )
       d->textY = tmpTopBorderWidth + BORDER_SPACE
   + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
@@ -1695,7 +1695,7 @@ void Cell::offsetAlign( int _col, int _row )
       / format()->sheet()->doc()->zoomedResolutionY() );
     break;
 
-  case Format::Bottom:
+  case Style::Bottom:
     if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
       d->textY = h - BORDER_SPACE - effBottomBorderPen( _col, _row ).width();
     }
@@ -1744,8 +1744,8 @@ void Cell::offsetAlign( int _col, int _row )
     }
     break;
 
-  case Format::Middle:
-  case Format::UndefinedY:
+  case Style::Middle:
+  case Style::VAlignUndefined:
     if ( !tmpVerticalText && !tmpMultiRow && !tmpAngle ) {
       d->textY = ( h - d->textHeight ) / 2
   + (double) d->fmAscent / format()->sheet()->doc()->zoomedResolutionY();
@@ -1794,18 +1794,18 @@ void Cell::offsetAlign( int _col, int _row )
   a = effAlignX();
   if ( format()->sheet()->getShowFormula()
        && !( format()->sheet()->isProtected() && format()->isHideFormula( _col, _row ) ) )
-    a = Format::Left;
+    a = Style::Left;
 
   // Calculate d->textX based on alignment and textwidth.
   switch ( a ) {
-  case Format::Left:
+  case Style::Left:
     d->textX = effLeftBorderPen( _col, _row ).width() + BORDER_SPACE;
     break;
-  case Format::Right:
+  case Style::Right:
     d->textX = ( w - BORDER_SPACE - d->textWidth
      - effRightBorderPen( _col, _row ).width() );
     break;
-  case Format::Center:
+  case Style::Center:
     d->textX = ( w - d->textWidth ) / 2;
     break;
   }
@@ -1827,7 +1827,7 @@ void Cell::textSize( QPainter &_paint )
   int    _col = column();
   bool   tmpVerticalText;
   bool   fontUnderlined;
-  Format::AlignY ay;
+  Style::VAlign ay;
 
   // Set tmpAngle, tmpeVerticalText, ay and fontUnderlined according
   // to if there is a matching condition or not.
@@ -1843,12 +1843,12 @@ void Cell::textSize( QPainter &_paint )
       tmpAngle = format()->getAngle( _col, _row );
 
     if ( style->hasFeature( Style::SVerticalText, true ) )
-      tmpVerticalText = style->hasProperty( Style::PVerticalText );
+      tmpVerticalText = style->hasProperty( Style::SVerticalText );
     else
       tmpVerticalText = format()->verticalText( _col, _row );
 
-    if ( style->hasFeature( Style::SAlignY, true ) )
-      ay = style->alignY();
+    if ( style->hasFeature( Style::SVAlign, true ) )
+      ay = style->valign();
     else
       ay = format()->alignY( _col, _row );
 
@@ -1874,7 +1874,7 @@ void Cell::textSize( QPainter &_paint )
 
     d->textWidth = format()->sheet()->doc()->unzoomItX( fm.width( d->strOutText ) );
     int offsetFont = 0;
-    if ( ( ay == Format::Bottom ) && fontUnderlined ) {
+    if ( ( ay == Style::Bottom ) && fontUnderlined ) {
       offsetFont = fm.underlinePos() + 1;
     }
 
@@ -2973,7 +2973,7 @@ void Cell::paintCommentIndicator( QPainter& painter,
 
   // Point the little corner if there is a comment attached
   // to this cell.
-  if ( ( format()->propertiesMask() & (uint) Format::PComment )
+  if ( ( format()->propertiesMask() & (uint) Style::SComment )
        && cellRect.width() > 10.0
        && cellRect.height() > 10.0
        && ( sheet()->print()->printCommentIndicator()
@@ -3152,7 +3152,7 @@ void Cell::paintText( QPainter& painter,
          && format()->isHideFormula( d->column, d->row ) ) ) )
     {
       double v = value().asFloat();
-      if ( format()->floatColor( cellRef.x(), cellRef.y()) == Format::NegRed
+      if ( format()->floatColor( cellRef.x(), cellRef.y()) == Style::NegRed
      && v < 0.0 )
         tmpPen.setColor( Qt::red );
     }
@@ -3236,7 +3236,7 @@ void Cell::paintText( QPainter& painter,
   int a = effAlignX();
 
   // Apply indent if text is align to left not when text is at right or middle.
-  if (  a == Format::Left && !isEmpty() ) {
+  if (  a == Style::Left && !isEmpty() ) {
     // FIXME: The following condition should be remade into a call to
     //        a new convenience function:
     //   if ( hasConditionStyleFeature( Style::SIndent, true )...
@@ -3252,13 +3252,13 @@ void Cell::paintText( QPainter& painter,
   }
 
   // Made an offset, otherwise ### is under red triangle.
-  if ( a == Format::Right && !isEmpty() && testFlag( Flag_CellTooShortX ) )
+  if ( a == Style::Right && !isEmpty() && testFlag( Flag_CellTooShortX ) )
     offsetCellTooShort = format()->sheet()->doc()->unzoomItX( 4 );
 
   QFontMetrics fm2 = painter.fontMetrics();
   double offsetFont = 0.0;
 
-  if ( format()->alignY( column(), row() ) == Format::Bottom
+  if ( format()->alignY( column(), row() ) == Style::Bottom
        && format()->textFontUnderline( column(), row() ) )
     offsetFont = format()->sheet()->doc()->unzoomItX( fm2.underlinePos() + 1 );
 
@@ -3279,12 +3279,12 @@ void Cell::paintText( QPainter& painter,
       tmpAngle = format()->getAngle( cellRef.x(), cellRef.y() );
 
     if ( matchedStyle->hasFeature( Style::SVerticalText, true ) )
-      tmpVerticalText = matchedStyle->hasProperty( Style::PVerticalText );
+      tmpVerticalText = matchedStyle->hasProperty( Style::SVerticalText );
     else
       tmpVerticalText = format()->verticalText( cellRef.x(), cellRef.y() );
 
     if ( matchedStyle->hasFeature( Style::SMultiRow, true ) )
-      tmpMultiRow = matchedStyle->hasProperty( Style::PMultiRow );
+      tmpMultiRow = matchedStyle->hasProperty( Style::SMultiRow );
     else
       tmpMultiRow = format()->multiRow( cellRef.x(), cellRef.y() );
   }
@@ -3352,20 +3352,20 @@ void Cell::paintText( QPainter& painter,
       if ( format()->sheet()->getShowFormula()
      && !( format()->sheet()->isProtected()
      && format()->isHideFormula( d->column, d->row ) ) )
-        align = Format::Left;
+        align = Style::Left;
 
       // #### Torben: This looks duplicated for me
       switch ( align ) {
-       case Format::Left:
+       case Style::Left:
         d->textX = effLeftBorderPen( cellRef.x(), cellRef.y() ).width() + BORDER_SPACE;
         break;
 
-       case Format::Right:
+       case Style::Right:
         d->textX = cellRect.width() - BORDER_SPACE - doc->unzoomItX( fm.width( t ) )
           - effRightBorderPen( cellRef.x(), cellRef.y() ).width();
         break;
 
-       case Format::Center:
+       case Style::Center:
         d->textX = ( cellRect.width() - doc->unzoomItX( fm.width( t ) ) ) / 2;
       }
 
@@ -3978,19 +3978,19 @@ void Cell::paintCellDiagonalLines( QPainter& painter,
 int Cell::defineAlignX()
 {
   int a = format()->align( column(), row() );
-  if ( a == Format::Undefined )
+  if ( a == Style::HAlignUndefined )
   {
     //numbers should be right-aligned by default, as well as BiDi text
     if ((formatType() == Text_format) || value().isString())
       a = (d->strOutText.isRightToLeft()) ?
-                               Format::Right : Format::Left;
+                               Style::Right : Style::Left;
     else {
       Value val = value();
       while (val.isArray()) val = val.element (0, 0);
       if (val.isBoolean() || val.isNumber())
-        a = Format::Right;
+        a = Style::Right;
       else
-        a = Format::Left;
+        a = Style::Left;
     }
   }
   return a;
@@ -4000,8 +4000,8 @@ int Cell::effAlignX()
 {
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SAlignX, true ) )
-    return d->extra()->conditions->matchedStyle()->alignX();
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SHAlign, true ) )
+    return d->extra()->conditions->matchedStyle()->halign();
 
   return defineAlignX();
 }
@@ -4041,9 +4041,9 @@ QString Cell::textDisplaying( QPainter &_painter )
     {
       //Note that numbers are always treated as left-aligned since if we have to cut digits off, they should
       //always be the least significant ones at the end of the string
-      if ( a == Format::Left || a == Format::Undefined || isNumeric)
+      if ( a == Style::Left || a == Style::HAlignUndefined || isNumeric)
   		tmp = d->strOutText.left(i);
-      else if ( a == Format::Right)
+      else if ( a == Style::Right)
   		tmp = d->strOutText.right(i);
       else
   		tmp = d->strOutText.mid( ( d->strOutText.length() - i ) / 2, i);
@@ -4233,9 +4233,9 @@ void Cell::setLeftBorderPen( const QPen& p )
   if ( column() == 1 )
   {
     Cell* cell = format()->sheet()->cellAt( column() - 1, row() );
-    if ( cell && cell->format()->hasProperty( Format::PRightBorder )
+    if ( cell && cell->format()->hasProperty( Style::SRightBorder )
          && format()->sheet()->cellAt( column(), row() ) == this )
-        cell->format()->clearProperty( Format::PRightBorder );
+        cell->format()->clearProperty( Style::SRightBorder );
   }
 
   format()->setLeftBorderPen( p );
@@ -4246,9 +4246,9 @@ void Cell::setTopBorderPen( const QPen& p )
   if ( row() == 1 )
   {
     Cell* cell = format()->sheet()->cellAt( column(), row() - 1 );
-    if ( cell && cell->format()->hasProperty( Format::PBottomBorder )
+    if ( cell && cell->format()->hasProperty( Style::SBottomBorder )
          && format()->sheet()->cellAt( column(), row() ) == this )
-        cell->format()->clearProperty( Format::PBottomBorder );
+        cell->format()->clearProperty( Style::SBottomBorder );
   }
   format()->setTopBorderPen( p );
 }
@@ -4259,9 +4259,9 @@ void Cell::setRightBorderPen( const QPen& p )
     if ( column() < KS_colMax )
         cell = format()->sheet()->cellAt( column() + 1, row() );
 
-    if ( cell && cell->format()->hasProperty( Format::PLeftBorder )
+    if ( cell && cell->format()->hasProperty( Style::SLeftBorder )
          && format()->sheet()->cellAt( column(), row() ) == this )
-        cell->format()->clearProperty( Format::PLeftBorder );
+        cell->format()->clearProperty( Style::SLeftBorder );
 
     format()->setRightBorderPen( p );
 }
@@ -4272,19 +4272,19 @@ void Cell::setBottomBorderPen( const QPen& p )
     if ( row() < KS_rowMax )
         cell = format()->sheet()->cellAt( column(), row() + 1 );
 
-    if ( cell && cell->format()->hasProperty( Format::PTopBorder )
+    if ( cell && cell->format()->hasProperty( Style::STopBorder )
          && format()->sheet()->cellAt( column(), row() ) == this )
-        cell->format()->clearProperty( Format::PTopBorder );
+        cell->format()->clearProperty( Style::STopBorder );
 
     format()->setBottomBorderPen( p );
 }
 
 const QPen& Cell::rightBorderPen( int _col, int _row ) const
 {
-    if ( !format()->hasProperty( Format::PRightBorder ) && ( _col < KS_colMax ) )
+    if ( !format()->hasProperty( Style::SRightBorder ) && ( _col < KS_colMax ) )
     {
         Cell * cell = format()->sheet()->cellAt( _col + 1, _row );
-        if ( cell && cell->format()->hasProperty( Format::PLeftBorder ) )
+        if ( cell && cell->format()->hasProperty( Style::SLeftBorder ) )
             return cell->leftBorderPen( _col + 1, _row );
     }
 
@@ -4293,10 +4293,10 @@ const QPen& Cell::rightBorderPen( int _col, int _row ) const
 
 const QPen& Cell::leftBorderPen( int _col, int _row ) const
 {
-    if ( !format()->hasProperty( Format::PLeftBorder ) )
+    if ( !format()->hasProperty( Style::SLeftBorder ) )
     {
         const Cell * cell = format()->sheet()->cellAt( _col - 1, _row );
-        if ( cell && cell->format()->hasProperty( Format::PRightBorder ) )
+        if ( cell && cell->format()->hasProperty( Style::SRightBorder ) )
             return cell->rightBorderPen( _col - 1, _row );
     }
 
@@ -4305,10 +4305,10 @@ const QPen& Cell::leftBorderPen( int _col, int _row ) const
 
 const QPen& Cell::bottomBorderPen( int _col, int _row ) const
 {
-    if ( !format()->hasProperty( Format::PBottomBorder ) && ( _row < KS_rowMax ) )
+    if ( !format()->hasProperty( Style::SBottomBorder ) && ( _row < KS_rowMax ) )
     {
         const Cell * cell = format()->sheet()->cellAt( _col, _row + 1 );
-        if ( cell && cell->format()->hasProperty( Format::PTopBorder ) )
+        if ( cell && cell->format()->hasProperty( Style::STopBorder ) )
             return cell->topBorderPen( _col, _row + 1 );
     }
 
@@ -4317,10 +4317,10 @@ const QPen& Cell::bottomBorderPen( int _col, int _row ) const
 
 const QPen& Cell::topBorderPen( int _col, int _row ) const
 {
-    if ( !format()->hasProperty( Format::PTopBorder ) )
+    if ( !format()->hasProperty( Style::STopBorder ) )
     {
         const Cell * cell = format()->sheet()->cellAt( _col, _row - 1 );
-        if ( cell->format()->hasProperty( Format::PBottomBorder ) )
+        if ( cell->format()->hasProperty( Style::SBottomBorder ) )
             return cell->bottomBorderPen( _col, _row - 1 );
     }
 
@@ -5349,7 +5349,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
       font = cell->format()->textFont( i, row );
       m_styles.addFont( font );
 
-      if ( cell->format()->hasProperty( Format::PComment ) )
+      if ( cell->format()->hasProperty( Style::SComment ) )
         hasComment = true;
     }
 #endif
@@ -5364,8 +5364,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
       xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
 
     // group empty cells with the same style
-    if ( isEmpty() && !format()->hasProperty( Format::PComment ) &&
-         !isPartOfMerged() && !doesMergeCells() )
+    if ( isEmpty() && !format()->hasProperty( Style::SComment ) && !isPartOfMerged() && !doesMergeCells() )
     {
       int j = column + 1;
       Cell *nextCell = format()->sheet()->getNextCellRight( column, row );
@@ -5388,7 +5387,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         nextCell->saveOasisCellStyle( nextCellStyle,mainStyles );
 
         if ( nextCell->isPartOfMerged() || nextCell->doesMergeCells() ||
-             nextCell->format()->hasProperty( Format::PComment ) ||
+             nextCell->format()->hasProperty( Style::SComment ) ||
              !(nextCellStyle == currentCellStyle) )
         {
           break;

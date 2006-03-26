@@ -45,12 +45,12 @@ QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
 
   QString str;
 
-  Format::FloatFormat floatFormat =
+  Style::FloatFormat floatFormat =
       cell->format()->floatFormat (cell->column(), cell->row());
   int precision = cell->format()->precision (cell->column(), cell->row());
   QString prefix = cell->format()->prefix (cell->column(), cell->row());
   QString postfix = cell->format()->postfix (cell->column(), cell->row());
-  Format::Currency currency;
+  Style::Currency currency;
   bool valid = cell->format()->currencyInfo(currency);
   QString currencySymbol = valid ? currency.symbol : QString::null;
 
@@ -59,7 +59,7 @@ QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
 }
 
 QString ValueFormatter::formatText (const Value &value,
-    FormatType fmtType, int precision, Format::FloatFormat floatFormat,
+    FormatType fmtType, int precision, Style::FloatFormat floatFormat,
     const QString &prefix, const QString &postfix, const QString &currencySymbol)
 {
   //if we have an array, use its first element
@@ -99,10 +99,10 @@ QString ValueFormatter::formatText (const Value &value,
   {
 	long v = value.asInteger();
 	// Always unsigned ?
-    if ((floatFormat == Format::AlwaysUnsigned) && (v < 0))
+    if ((floatFormat == Style::AlwaysUnsigned) && (v < 0))
       v *= -1;
     str = createNumberFormat (v, fmtType,
-        (floatFormat == Format::AlwaysSigned), currencySymbol);
+        (floatFormat == Style::AlwaysSigned), currencySymbol);
   }
   else
   {
@@ -114,12 +114,12 @@ QString ValueFormatter::formatText (const Value &value,
     double v = converter->asFloat (value).asFloat();
 
     // Always unsigned ?
-    if ((floatFormat == Format::AlwaysUnsigned) && (v < 0.0))
+    if ((floatFormat == Style::AlwaysUnsigned) && (v < 0.0))
       v *= -1.0;
 
     // Make a string out of it.
     str = createNumberFormat (v, precision, fmtType,
-        (floatFormat == Format::AlwaysSigned), currencySymbol);
+        (floatFormat == Style::AlwaysSigned), currencySymbol);
 
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point

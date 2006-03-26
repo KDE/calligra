@@ -38,6 +38,7 @@
 #include <knuminput.h>
 #include <kcompletion.h>
 #include "kspread_view.h"
+#include "kspread_style.h"
 #include "kspread_format.h"
 #include "kspread_doc.h"
 #include "kspread_value.h"
@@ -530,10 +531,10 @@ public:
     QString prefix;
     QString postfix;
     int precision;
-    Format::FloatFormat floatFormat;
+    Style::FloatFormat floatFormat;
     bool bFloatFormat;
-    Format::FloatColor floatColor;
-    Format::Currency   cCurrency;
+    Style::FloatColor floatColor;
+    Style::Currency   cCurrency;
     bool bFloatColor;
     bool bCurrency;
     QColor textColor;
@@ -554,8 +555,8 @@ public:
     QColor bgColor;
     bool bBgColor;
     QString actionText;
-    Format::Align alignX;
-    Format::AlignY alignY;
+    Style::HAlign alignX;
+    Style::VAlign alignY;
     QString styleName;
     QString styleParent;
 

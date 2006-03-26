@@ -1356,13 +1356,13 @@ void View::Private::updateButton( Cell *cell, int column, int row)
       actions->underline->setChecked( cell->format()->textFontUnderline( column, row ) );
       actions->strikeOut->setChecked( cell->format()->textFontStrike( column, row ) );
 
-      actions->alignLeft->setChecked( cell->format()->align( column, row ) == Format::Left );
-      actions->alignCenter->setChecked( cell->format()->align( column, row ) == Format::Center );
-      actions->alignRight->setChecked( cell->format()->align( column, row ) == Format::Right );
+      actions->alignLeft->setChecked( cell->format()->align( column, row ) == Style::Left );
+      actions->alignCenter->setChecked( cell->format()->align( column, row ) == Style::Center );
+      actions->alignRight->setChecked( cell->format()->align( column, row ) == Style::Right );
 
-      actions->alignTop->setChecked( cell->format()->alignY( column, row ) == Format::Top );
-      actions->alignMiddle->setChecked( cell->format()->alignY( column, row ) == Format::Middle );
-      actions->alignBottom->setChecked( cell->format()->alignY( column, row ) == Format::Bottom );
+      actions->alignTop->setChecked( cell->format()->alignY( column, row ) == Style::Top );
+      actions->alignMiddle->setChecked( cell->format()->alignY( column, row ) == Style::Middle );
+      actions->alignBottom->setChecked( cell->format()->alignY( column, row ) == Style::Bottom );
 
       actions->verticalText->setChecked( cell->format()->verticalText( column,row ) );
 
@@ -6445,10 +6445,10 @@ void View::alignLeft( bool b )
     doc()->emitBeginOperation( false );
     if ( !b )
       d->activeSheet->setSelectionAlign( selectionInfo(),
-                                   Format::Undefined );
+                                   Style::HAlignUndefined );
     else
       d->activeSheet->setSelectionAlign( selectionInfo(),
-                                   Format::Left );
+                                   Style::Left );
 
     markSelectionAsDirty();
     doc()->emitEndOperation();
@@ -6464,9 +6464,9 @@ void View::alignRight( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlign( selectionInfo(), Format::Undefined );
+      d->activeSheet->setSelectionAlign( selectionInfo(), Style::HAlignUndefined );
     else
-      d->activeSheet->setSelectionAlign( selectionInfo(), Format::Right );
+      d->activeSheet->setSelectionAlign( selectionInfo(), Style::Right );
 
     markSelectionAsDirty();
     doc()->emitEndOperation();
@@ -6482,9 +6482,9 @@ void View::alignCenter( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlign( selectionInfo(), Format::Undefined );
+      d->activeSheet->setSelectionAlign( selectionInfo(), Style::HAlignUndefined );
     else
-      d->activeSheet->setSelectionAlign( selectionInfo(), Format::Center );
+      d->activeSheet->setSelectionAlign( selectionInfo(), Style::Center );
 
     markSelectionAsDirty();
     doc()->emitEndOperation();
@@ -6500,9 +6500,9 @@ void View::alignTop( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::UndefinedY );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::VAlignUndefined );
     else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Top );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::Top );
 
     markSelectionAsDirty();
     doc()->emitEndOperation();
@@ -6518,9 +6518,9 @@ void View::alignBottom( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::UndefinedY );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::VAlignUndefined );
     else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Bottom );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::Bottom );
 
     markSelectionAsDirty();
     doc()->emitEndOperation();
@@ -6536,9 +6536,9 @@ void View::alignMiddle( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::UndefinedY );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::VAlignUndefined );
     else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Middle );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Style::Middle );
 
     markSelectionAsDirty();
     doc()->emitEndOperation();

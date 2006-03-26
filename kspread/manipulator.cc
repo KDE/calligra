@@ -561,13 +561,13 @@ void FormatManipulator::copyFormat(QValueList<layoutCell> & list,
 
 bool FormatManipulator::testCondition(RowFormat* row)
 {
-  for (Q_UINT32 property = Format::PAlign;
-       property <= Format::PHideFormula;
+  for (Q_UINT32 property = Style::SHAlign;
+       property <= Style::SHideFormula;
        property *= 2)
   {
     if (m_properties & property)
     {
-      return ( row->hasProperty((Format::Properties) property) );
+      return ( row->hasProperty((Style::FlagsSet) property) );
     }
   }
   return false;
@@ -579,7 +579,7 @@ void FormatManipulator::doWork(Format* format,
 {
   // SetSelectionFontWorker
   // SetSelectionSizeWorker
-  if (m_properties & Format::PFont)
+  if (m_properties & Style::SFont)
   {
     if ( !m_font.isEmpty() )
       format->setTextFontFamily( m_font );
@@ -595,22 +595,22 @@ void FormatManipulator::doWork(Format* format,
       format->setTextFontStrike( (bool)m_strike );
   }
   // SetSelectionAngleWorker
-  if (m_properties & Format::PAngle)
+  if (m_properties & Style::SAngle)
   {
     format->setAngle( m_angle );
   }
   // SetSelectionTextColorWorker
-  if (m_properties & Format::PTextPen)
+  if (m_properties & Style::STextPen)
   {
     format->setTextColor( m_textColor );
   }
   // SetSelectionBgColorWorker
-  if (m_properties & Format::PBackgroundColor)
+  if (m_properties & Style::SBackgroundColor)
   {
     format->setBgColor( m_backgroundColor );
   }
   // SetSelectionBorderAllWorker
-  if (m_properties & Format::PLeftBorder)
+  if (m_properties & Style::SLeftBorder)
   {
     if (isLeft)
     {
@@ -627,7 +627,7 @@ void FormatManipulator::doWork(Format* format,
       }
     }
   }
-  if (m_properties & Format::PRightBorder)
+  if (m_properties & Style::SRightBorder)
   {
     if (isRight)
     {
@@ -644,7 +644,7 @@ void FormatManipulator::doWork(Format* format,
       }
     }
   }
-  if (m_properties & Format::PTopBorder)
+  if (m_properties & Style::STopBorder)
   {
     if (isTop)
     {
@@ -661,7 +661,7 @@ void FormatManipulator::doWork(Format* format,
       }
     }
   }
-  if (m_properties & Format::PBottomBorder)
+  if (m_properties & Style::SBottomBorder)
   {
     if (isBottom)
     {
@@ -678,57 +678,57 @@ void FormatManipulator::doWork(Format* format,
       }
     }
   }
-  if (m_properties & Format::PFallDiagonal)
+  if (m_properties & Style::SFallDiagonal)
   {
     format->setFallDiagonalPen(m_fallDiagonalPen);
   }
-  if (m_properties & Format::PGoUpDiagonal)
+  if (m_properties & Style::SGoUpDiagonal)
   {
     format->setGoUpDiagonalPen(m_goUpDiagonalPen);
   }
   // SetSelectionAlignWorker
-  if (m_properties & Format::PAlign)
+  if (m_properties & Style::SHAlign)
   {
     format->setAlign( m_horAlign );
   }
   // SetSelectionAlignYWorker
-  if (m_properties & Format::PAlignY)
+  if (m_properties & Style::SVAlign)
   {
     format->setAlignY( m_verAlign );
   }
-  if (m_properties & Format::PPrefix)
+  if (m_properties & Style::SPrefix)
   {
     format->setPrefix(m_prefix);
   }
-  if (m_properties & Format::PPostfix)
+  if (m_properties & Style::SPostfix)
   {
     format->setPostfix(m_postfix);
   }
-  if (m_properties & Format::PBackgroundBrush)
+  if (m_properties & Style::SBackgroundBrush)
   {
     format->setBackGroundBrush(m_backgroundBrush);
   }
-  if (m_properties & Format::PFloatFormat)
+  if (m_properties & Style::SFloatFormat)
   {
     format->setFloatFormat(m_floatFormat);
   }
-  if (m_properties & Format::PFloatColor)
+  if (m_properties & Style::SFloatColor)
   {
     format->setFloatColor(m_floatColor);
   }
-  if (m_properties & Format::PMultiRow)
+  if (m_properties & Style::SMultiRow)
   {
     format->setMultiRow(m_multiRow);
   }
-  if (m_properties & Format::PVerticalText)
+  if (m_properties & Style::SVerticalText)
   {
     format->setVerticalText(m_verticalText);
   }
-  if (m_properties & Format::PPrecision)
+  if (m_properties & Style::SPrecision)
   {
     format->setPrecision(m_precision);
   }
-  if (m_properties & Format::PFormatType)
+  if (m_properties & Style::SFormatType)
   {
     format->setFormatType(m_formatType);
     if (m_formatType == Money_format)
@@ -736,31 +736,31 @@ void FormatManipulator::doWork(Format* format,
       format->setCurrency(m_currencyType, m_currencySymbol);
     }
   }
-  if (m_properties & Format::PComment)
+  if (m_properties & Style::SComment)
   {
     format->setComment(m_comment);
   }
-  if (m_properties & Format::PIndent)
+  if (m_properties & Style::SIndent)
   {
     format->setIndent(m_indent);
   }
-  if (m_properties & Format::PDontPrintText)
+  if (m_properties & Style::SDontPrintText)
   {
     format->setDontPrintText(m_dontPrintText);
   }
-  if (m_properties & Format::PCustomFormat)
+  if (m_properties & Style::SCustomFormat)
   {
     //TODO
   }
-  if (m_properties & Format::PNotProtected)
+  if (m_properties & Style::SNotProtected)
   {
     format->setNotProtected(m_notProtected);
   }
-  if (m_properties & Format::PHideAll)
+  if (m_properties & Style::SHideAll)
   {
     format->setHideAll(m_hideAll);
   }
-  if (m_properties & Format::PHideFormula)
+  if (m_properties & Style::SHideFormula)
   {
     format->setHideFormula(m_hideFormula);
   }
@@ -768,14 +768,14 @@ void FormatManipulator::doWork(Format* format,
 
 void FormatManipulator::prepareCell(Cell* cell)
 {
-  for (Q_UINT32 property = Format::PAlign;
-       property <= Format::PHideFormula;
+  for (Q_UINT32 property = Style::SHAlign;
+       property <= Style::SHideFormula;
        property *= 2)
   {
     if (m_properties & property)
     {
-      cell->format()->clearProperty((Format::Properties) property);
-      cell->format()->clearNoFallBackProperties((Format::Properties) property);
+      cell->format()->clearProperty((Style::FlagsSet) property);
+      cell->format()->clearNoFallBackProperties((Style::FlagsSet) property);
     }
   }
 }
@@ -1440,20 +1440,20 @@ double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell, int col, int r
   if ( cell->textWidth() > long_max )
   {
     double indent = 0.0;
-    Format::Align alignment = cell->format()->align(cell->column(), cell->row());
-    if (alignment == Format::Undefined)
+    Style::HAlign alignment = cell->format()->align(cell->column(), cell->row());
+    if (alignment == Style::HAlignUndefined)
     {
       if (cell->value().isNumber() || cell->isDate() || cell->isTime())
       {
-        alignment = Format::Right;
+        alignment = Style::Right;
       }
       else
       {
-        alignment = Format::Left;
+        alignment = Style::Left;
       }
     }
 
-    if (alignment == Format::Left)
+    if (alignment == Style::Left)
     {
       indent = cell->format()->getIndent( cell->column(), cell->row() );
     }

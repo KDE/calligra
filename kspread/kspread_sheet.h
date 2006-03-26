@@ -38,6 +38,7 @@
 #include "kspread_autofill.h"
 #include "kspread_cell.h"
 #include "kspread_format.h"
+#include "kspread_style.h"
 #include "kspread_global.h"
 #include "kspread_object.h"
 
@@ -538,9 +539,9 @@ public:
 
     void setSelectionMoneyFormat( Selection* selectionInfo, bool b );
     void setSelectionAlign( Selection* selectionInfo,
-                            Format::Align _align );
+                            Style::HAlign _align );
     void setSelectionAlignY( Selection* selectionInfo,
-                             Format::AlignY _alignY );
+                             Style::VAlign _alignY );
     void setSelectionPrecision( Selection* selectionInfo, int _delta );
     void setSelectionPercent( Selection* selectionInfo, bool b );
     void setSelectionMultiRow( Selection* selectionInfo, bool enable );

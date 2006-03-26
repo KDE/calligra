@@ -25,12 +25,13 @@
 #include <qfont.h>
 #include <qpen.h>
 
-#include "kspread_format.h"
+//#include "kspread_format.h"
 
 class QDomDocument;
 class QDomElement;
 class KoGenStyles;
 class KoOasisStyles;
+class KoGenStyle;
 
 namespace KSpread
 {
@@ -45,6 +46,19 @@ class CustomStyle;
 class Style
 {
 public:
+  enum HAlign { Left = 1, Center = 2, Right = 3, HAlignUndefined = 4 };
+  enum VAlign { Top = 1, Middle = 2, Bottom = 3, VAlignUndefined = 4 };
+  enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
+  enum FloatColor { NegRed = 1, AllBlack = 2, NegBrackets = 3, NegRedBrackets = 4 };
+
+
+    struct Currency
+    {
+      int type;
+      QString symbol;
+    };
+
+
   /// The style type
   enum StyleType
   {
@@ -78,8 +92,8 @@ public:
     /// @see Format::Properties
     enum FlagsSet
     {
-      SAlignX          = 0x01,
-      SAlignY          = 0x02,
+      SHAlign          = 0x01,
+      SVAlign          = 0x02,
       //SFactor was here
       SPrefix          = 0x08,
       SPostfix         = 0x10,
@@ -100,7 +114,7 @@ public:
       SPrecision       = 0x80000,
       SFormatType      = 0x100000,
       SAngle           = 0x200000,
-      //SComment         = 0x400000,
+      SComment         = 0x400000,
       SIndent          = 0x800000,
       SDontPrintText   = 0x1000000,
       SCustomFormat    = 0x2000000,
@@ -180,7 +194,7 @@ public:
    */
   int usage() const { return m_usageCount; }
 
-  bool   hasProperty( Properties p ) const;
+  bool   hasProperty( Style::FlagsSet p ) const;
   bool   hasFeature( FlagsSet f, bool withoutParent ) const;
   uint   features() const { return m_featuresSet; }
 
@@ -203,13 +217,13 @@ public:
   QString const & postfix()         const;
   QString const & fontFamily()      const;
 
-  Format::Align       alignX()      const;
-  Format::AlignY      alignY()      const;
-  Format::FloatFormat floatFormat() const;
-  Format::FloatColor  floatColor()  const;
+  HAlign      halign()      const;
+  VAlign      valign()      const;
+  FloatFormat floatFormat() const;
+  FloatColor  floatColor()  const;
   FormatType  formatType()  const;
 
-  Format::Currency const & currency() const;
+  Currency const & currency() const;
 
   QFont  font()        const;
   uint   fontFlags()   const;
@@ -218,8 +232,8 @@ public:
   int    rotateAngle() const;
   double indent()      const;
 
-  Style * setAlignX( Format::Align  alignX );
-  Style * setAlignY( Format::AlignY alignY );
+  Style * setHAlign( HAlign  align );
+  Style * setVAlign( VAlign align );
   Style * setFont( QFont const & f );
   Style * setFontFamily( QString const & fam );
   Style * setFontFlags( uint flags );
@@ -235,16 +249,16 @@ public:
   Style * setRotateAngle( int angle );
   Style * setIndent( double indent );
   Style * setBackGroundBrush( QBrush const & brush );
-  Style * setFloatFormat( Format::FloatFormat format );
-  Style * setFloatColor( Format::FloatColor color );
+  Style * setFloatFormat( FloatFormat format );
+  Style * setFloatColor( FloatColor color );
   Style * setFormatType( FormatType format );
   Style * setStrFormat( QString const & strFormat );
   Style * setPrecision( int precision );
   Style * setPrefix( QString const & prefix );
   Style * setPostfix( QString const & postfix );
-  Style * setCurrency( Format::Currency const & currency );
-  Style * setProperty( Properties p );
-  Style * clearProperty( Properties p );
+  Style * setCurrency( Currency const & currency );
+  Style * setProperty( FlagsSet p );
+  Style * clearProperty( FlagsSet p );
 
   CustomStyle * parent() const;
   QString const & parentName() const { return m_parentName; }
@@ -273,17 +287,17 @@ protected:
   /**
    * Alignment of the text
    */
-  Format::Align m_alignX;
+  HAlign m_alignX;
   /**
    * Aligment of the text at top middle or bottom
    */
-  Format::AlignY m_alignY;
+  VAlign m_alignY;
 
-  Format::FloatFormat m_floatFormat;
+  FloatFormat m_floatFormat;
   /**
    * The color format of a floating point value
    */
-  Format::FloatColor m_floatColor;
+  FloatColor m_floatColor;
 
   FormatType m_formatType;
 
@@ -365,7 +379,7 @@ protected:
    * Currency information:
    * about which currency from which country
    */
-  Format::Currency m_currency;
+  Currency m_currency;
 
   /**
    * Stores information like: DonPrint, DontShowFormula, Protected...
@@ -422,8 +436,8 @@ public:
   void refreshParentName();
   bool definesAll() const;
 
-  void changeAlignX( Format::Align  alignX );
-  void changeAlignY( Format::AlignY alignY );
+  void changeHAlign( HAlign  alignX );
+  void changeVAlign( VAlign alignY );
   void changeFont( QFont const & f );
   void changeFontFamily( QString const & fam );
   void changeFontSize( int size );
@@ -440,17 +454,17 @@ public:
   void changeRotateAngle( int angle );
   void changeIndent( double indent );
   void changeBackGroundBrush( QBrush const & brush );
-  void changeFloatFormat( Format::FloatFormat format );
-  void changeFloatColor( Format::FloatColor color );
+  void changeFloatFormat( FloatFormat format );
+  void changeFloatColor( FloatColor color );
   void changeFormatType( FormatType format );
   void changeStrFormat( QString const & strFormat );
   void changePrecision( int precision );
   void changePrefix( QString const & prefix );
   void changePostfix( QString const & postfix );
-  void changeCurrency( Format::Currency const & currency );
+  void changeCurrency( Currency const & currency );
 
-  void addProperty( Properties p );
-  void removeProperty( Properties p );
+  void addProperty( FlagsSet p );
+  void removeProperty( FlagsSet p );
 
  private:
   friend class StyleManager;
