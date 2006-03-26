@@ -247,6 +247,8 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
         }
     }
     
+    m_img->addLayer(layer.data(), m_img->rootLayer(), 0);
+    
     // Read exif informations
 
     kdDebug(41008) << "Looking for exif information" << endl;
@@ -304,8 +306,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
         }
         break;
     }
-
-    m_img->addLayer(layer.data(), m_img->rootLayer(), 0);
 
     // Finish decompression
     jpeg_finish_decompress(&cinfo);
