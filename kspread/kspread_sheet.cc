@@ -6412,7 +6412,10 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, KoOasisLoadingContext& o
     int rowIndex = 1;
     int indexCol = 1;
     QDomNode rowNode = sheetElement.firstChild();
-    while( !rowNode.isNull() )
+    // Some spreadsheet programs may support more rows than
+    // KSpread so limit the number of repeated rows.
+    // FIXME POSSIBLE DATA LOSS!
+    while( !rowNode.isNull() && indexCol <= KS_colMax && rowIndex <= KS_rowMax )
     {
         kdDebug()<<" rowIndex :"<<rowIndex<<" indexCol :"<<indexCol<<endl;
         QDomElement rowElement = rowNode.toElement();
@@ -6663,9 +6666,12 @@ bool Sheet::loadColumnFormat(const QDomElement& column, const KoOasisStyles& oas
     if ( column.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
     {
         bool ok = true;
-        number = column.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
-        if ( !ok )
-            number = 1;
+        int n = column.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
+        if ( ok )
+          // Some spreadsheet programs may support more rows than KSpread so
+          // limit the number of repeated rows.
+          // FIXME POSSIBLE DATA LOSS!
+          number = QMIN( n, KS_colMax - indexCol + 1 );
         kdDebug() << "Repeated: " << number << endl;
     }
 
@@ -6782,8 +6788,10 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
         bool ok = true;
         int n = row.attributeNS( KoXmlNS::table, "number-rows-repeated", QString::null ).toInt( &ok );
         if ( ok )
-	    //Some spreadsheet programs may support more rows than KSpread so limit the number of repeated rows
-            number = min(n,KS_rowMax);
+            // Some spreadsheet programs may support more rows than KSpread so
+            // limit the number of repeated rows.
+            // FIXME POSSIBLE DATA LOSS!
+            number = QMIN( n, KS_rowMax - rowIndex + 1 );
     }
     bool collapse = false;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
@@ -6864,10 +6872,13 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex, KoOasisLoading
                 if( (number > 1) || cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
                 {
                     bool ok = false;
-                    cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
+                    int n = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
 
-		    if (!ok)
-			    cols = 1;
+                    if (ok)
+                      // Some spreadsheet programs may support more rows than
+                      // KSpread so limit the number of repeated rows.
+                      // FIXME POSSIBLE DATA LOSS!
+                      cols = QMIN( n, KS_colMax - columnIndex + 1 );
 
 		    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
