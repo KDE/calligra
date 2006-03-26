@@ -1054,14 +1054,14 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
   if (formatString.find("[RED]", lastPos) != -1)
   {
     red = true;
-    kspread_cell->format()->setFloatColor( Format::NegRed );
+    kspread_cell->format()->setFloatColor( Style::NegRed );
   }
   if ( formatString.find('(', lastPos) != -1 )
   {
     if ( red )
-      kspread_cell->format()->setFloatColor( Format::NegRedBrackets );
+      kspread_cell->format()->setFloatColor( Style::NegRedBrackets );
     else
-      kspread_cell->format()->setFloatColor( Format::NegBrackets );
+      kspread_cell->format()->setFloatColor( Style::NegBrackets );
   }
 }
 
@@ -1321,15 +1321,15 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         }
                         else if (halign_string == "2")
                         {
-                            kspread_cell->format()->setAlign(Format::Left);
+                            kspread_cell->format()->setAlign(Style::Left);
                         }
                         else if (halign_string == "4")
                         {
-                            kspread_cell->format()->setAlign(Format::Right);
+                            kspread_cell->format()->setAlign(Style::Right);
                         }
                         else if (halign_string == "8")
                         {
-                            kspread_cell->format()->setAlign(Format::Center);
+                            kspread_cell->format()->setAlign(Style::Center);
                         }
                         else if (halign_string == "16")
                         {
@@ -1353,15 +1353,15 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                         if (valign_string == "1")
                         {
                             /* General: No equivalent in Kspread. */
-                            kspread_cell->format()->setAlignY(Format::Top);
+                            kspread_cell->format()->setAlignY(Style::Top);
                         }
                         else if (valign_string == "2")
                         {
-                            kspread_cell->format()->setAlignY(Format::Bottom);
+                            kspread_cell->format()->setAlignY(Style::Bottom);
                         }
                         else if (valign_string == "4")
                         {
-                            kspread_cell->format()->setAlignY(Format::Middle);
+                            kspread_cell->format()->setAlignY(Style::Middle);
                         }
                         else if (valign_string == "8")
                         {

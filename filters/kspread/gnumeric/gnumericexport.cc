@@ -626,32 +626,32 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
 	cell_style.setAttribute("Fore",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
 
- if (cell->format()->align(currentcolumn,currentrow) ==  Format::Undefined)
+ if (cell->format()->align(currentcolumn,currentrow) ==  Style::HAlignUndefined)
     {
         cell_style.setAttribute("HAlign","1");
     }
-    else if (cell->format()->align(currentcolumn,currentrow) ==  Format::Left)
+    else if (cell->format()->align(currentcolumn,currentrow) ==  Style::Left)
 	{
         cell_style.setAttribute("HAlign","2");
     }
-    else if (cell->format()->align(currentcolumn,currentrow) ==  Format::Right)
+    else if (cell->format()->align(currentcolumn,currentrow) ==  Style::Right)
 	{
         cell_style.setAttribute("HAlign","4");
 	}
- else if (cell->format()->align(currentcolumn,currentrow) ==  Format::Center)
+ else if (cell->format()->align(currentcolumn,currentrow) ==  Style::Center)
 	{
         cell_style.setAttribute("HAlign","8");
     }
 
-    if (cell->format()->alignY(currentcolumn,currentrow) ==  Format::Top)
+    if (cell->format()->alignY(currentcolumn,currentrow) ==  Style::Top)
 	{
 	    cell_style.setAttribute("VAlign","1");
 	}
- else if (cell->format()->alignY(currentcolumn,currentrow) ==  Format::Bottom)
+ else if (cell->format()->alignY(currentcolumn,currentrow) ==  Style::Bottom)
 	{
         cell_style.setAttribute("VAlign","2");
     }
-    else if (cell->format()->alignY(currentcolumn,currentrow) ==  Format::Middle)
+    else if (cell->format()->alignY(currentcolumn,currentrow) ==  Style::Middle)
     {
         cell_style.setAttribute("VAlign","4");
 	}
@@ -699,7 +699,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
 	QString stringFormat;
 
- Format::Currency c;
+    Style::Currency c;
     Currency currency;
 
 	switch( cell->format()->getFormatType(currentcolumn, currentrow))

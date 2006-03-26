@@ -43,7 +43,7 @@
 #include <kspread_aboutdata.h>
 #include <kspread_cell.h>
 #include <kspread_doc.h>
-#include <kspread_format.h>
+//#include <kspread_format.h>
 #include <kspread_map.h>
 #include <kspread_view.h>
 #include <kspread_canvas.h>
@@ -607,7 +607,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       font = cell->format()->textFont( i, row );
       m_styles.addFont( font );
 
-      if ( cell->format()->hasProperty( Format::PComment ) )
+      if ( cell->format()->hasProperty( KSpread::Style::SComment ) )
         hasComment = true;
     }
 
@@ -627,7 +627,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
 
-        if ( cell1->isEmpty() && !cell->format()->hasProperty( Format::PComment )
+        if ( cell1->isEmpty() && !cell->format()->hasProperty( KSpread::Style::SComment )
              && CellStyle::isEqual( &c, c1 ) && !cell->isPartOfMerged() && !cell->doesMergeCells() )
           ++repeated;
         else

@@ -23,7 +23,6 @@
 
 #include <kspread_cell.h>
 #include <kspread_doc.h>
-#include <kspread_format.h>
 #include <kspread_sheet.h>
 #include <kspread_style.h>
 #include <kspread_style_manager.h>
@@ -194,6 +193,7 @@ QString convertPenToString( QPen const & pen )
 
 void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles )
 {
+
     CellStyle * t = m_cellStyles.first();
     while ( t )
     {
@@ -233,25 +233,25 @@ void OpenCalcStyles::addCellStyles( QDomDocument & doc, QDomElement & autoStyles
         if ( t->bgColor.name() != "#ffffff" )
             prop.setAttribute( "fo:background-color", t->bgColor.name() );
 
-        if ( t->alignX != Format::Undefined )
+        if ( t->alignX != KSpread::Style::HAlignUndefined )
         {
             QString value;
-            if ( t->alignX == Format::Center )
+            if ( t->alignX == KSpread::Style::Center )
                 value = "center";
-            else if ( t->alignX == Format::Right )
+            else if ( t->alignX == KSpread::Style::Right )
                 value = "end";
-            else if ( t->alignX == Format::Left )
+            else if ( t->alignX == KSpread::Style::Left )
                 value = "start";
             prop.setAttribute( "fo:text-align", value );
         }
 
-        if ( t->alignY != Format::Bottom ) // default in OpenCalc
-            prop.setAttribute( "fo:vertical-align", ( t->alignY == Format::Middle ? "middle" : "top" ) );
+        if ( t->alignY != KSpread::Style::Bottom ) // default in OpenCalc
+            prop.setAttribute( "fo:vertical-align", ( t->alignY == KSpread::Style::Middle ? "middle" : "top" ) );
 
         if ( t->indent > 0.0 )
         {
             prop.setAttribute( "fo:margin-left", QString( "%1pt" ).arg( t->indent ) );
-            if ( t->alignX == Format::Undefined )
+            if ( t->alignX == KSpread::Style::HAlignUndefined )
                 prop.setAttribute( "fo:text-align", "start" );
         }
 
@@ -400,8 +400,8 @@ CellStyle::CellStyle()
     hideAll( false ),
     hideFormula( false ),
     notProtected ( false ),
-    alignX( Format::Undefined ),
-    alignY( Format::Middle )
+    alignX( KSpread::Style::HAlignUndefined ),
+    alignY( KSpread::Style::Middle )
 {
 }
 
@@ -464,48 +464,48 @@ void CellStyle::loadData( CellStyle & cs, Cell const * const cell )
   if ( bgColor != f->bgColor( col, row ) )
     cs.bgColor = bgColor;
 
-  if ( cell->format()->hasProperty( Format::PAlign ) || !cell->format()->hasNoFallBackProperties( Format::PAlign ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SHAlign ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SHAlign ) )
     cs.alignX = cell->format()->align( col, row );
 
-  if ( cell->format()->hasProperty( Format::PAlignY ) || !cell->format()->hasNoFallBackProperties( Format::PAlignY ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SVAlign ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SVAlign ) )
     cs.alignY = cell->format()->alignY( col, row );
 
-  if ( cell->format()->hasProperty( Format::PIndent ) || !cell->format()->hasNoFallBackProperties( Format::PIndent ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SIndent ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SIndent ) )
     cs.indent = cell->format()->getIndent( col, row );
 
-  if ( cell->format()->hasProperty( Format::PAngle ) || !cell->format()->hasNoFallBackProperties( Format::PAngle ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SAngle ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SAngle ) )
     cs.angle  = -cell->format()->getAngle( col, row );
 
-  if ( cell->format()->hasProperty( Format::PMultiRow ) || !cell->format()->hasNoFallBackProperties( Format::PMultiRow ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SMultiRow ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SMultiRow ) )
     cs.wrap   = cell->format()->multiRow( col, row );
 
-  if ( cell->format()->hasProperty( Format::PVerticalText )
-       || !cell->format()->hasNoFallBackProperties( Format::PVerticalText ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SVerticalText )
+       || !cell->format()->hasNoFallBackProperties( KSpread::Style::SVerticalText ) )
     cs.vertical = cell->format()->verticalText( col, row );
 
-  if ( cell->format()->hasProperty( Format::PDontPrintText )
-       || !cell->format()->hasNoFallBackProperties( Format::PDontPrintText ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SDontPrintText )
+       || !cell->format()->hasNoFallBackProperties( KSpread::Style::SDontPrintText ) )
     cs.print = !cell->format()->getDontprintText( col, row );
 
-  if ( cell->format()->hasProperty( Format::PLeftBorder ) || !cell->format()->hasNoFallBackProperties( Format::PLeftBorder ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SLeftBorder ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SLeftBorder ) )
     cs.left  = cell->leftBorderPen( col, row );
 
-  if ( cell->format()->hasProperty( Format::PRightBorder ) || !cell->format()->hasNoFallBackProperties( Format::PRightBorder ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SRightBorder ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SRightBorder ) )
     cs.right = cell->rightBorderPen( col, row );
 
-  if ( cell->format()->hasProperty( Format::PTopBorder ) || !cell->format()->hasNoFallBackProperties( Format::PTopBorder ) )
+  if ( cell->format()->hasProperty( KSpread::Style::STopBorder ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::STopBorder ) )
     cs.top  = cell->topBorderPen( col, row );
 
-  if ( cell->format()->hasProperty( Format::PBottomBorder ) || !cell->format()->hasNoFallBackProperties( Format::PBottomBorder ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SBottomBorder ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SBottomBorder ) )
     cs.bottom  = cell->bottomBorderPen( col, row );
 
-  if ( cell->format()->hasProperty( Format::PNotProtected ) || !cell->format()->hasNoFallBackProperties( Format::PNotProtected ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SNotProtected ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SNotProtected ) )
     cs.notProtected = cell->format()->notProtected( col, row );
 
-  if ( cell->format()->hasProperty( Format::PHideAll ) || !cell->format()->hasNoFallBackProperties( Format::PHideAll ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SHideAll ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SHideAll ) )
     cs.hideAll = cell->format()->isHideAll( col, row );
 
-  if ( cell->format()->hasProperty( Format::PHideFormula ) || !cell->format()->hasNoFallBackProperties( Format::PHideFormula ) )
+  if ( cell->format()->hasProperty( KSpread::Style::SHideFormula ) || !cell->format()->hasNoFallBackProperties( KSpread::Style::SHideFormula ) )
     cs.hideFormula = cell->format()->isHideFormula( col, row );
 }
 

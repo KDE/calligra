@@ -301,32 +301,32 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
 
-            switch((Format::Align)cell->defineAlignX())
+            switch((Style::HAlign)cell->defineAlignX())
             {
-            case Format::Left:
+            case Style::Left:
                 line+=" align=\"" + html_left +"\"";
                 break;
-            case Format::Right:
+            case Style::Right:
                 line+=" align=\"" + html_right +"\"";
                 break;
-            case Format::Center:
+            case Style::Center:
                 line+=" align=\"" + html_center +"\"";
                 break;
-            case Format::Undefined:
+            case Style::HAlignUndefined:
                 break;
             }
-            switch((Format::AlignY)cell-> format()->alignY(currentrow, currentcolumn))
+            switch((Style::VAlign)cell-> format()->alignY(currentrow, currentcolumn))
             {
-            case Format::Top:
+            case Style::Top:
                 line+=" valign=\"" + html_top +"\"";
                 break;
-            case Format::Middle:
+            case Style::Middle:
                 line+=" valign=\"" + html_middle +"\"";
                 break;
-            case Format::Bottom:
+            case Style::Bottom:
                 line+=" valign=\"" + html_bottom +"\"";
                 break;
-            case Format::UndefinedY:
+            case Style::VAlignUndefined:
                 break;
             }
             line+=" width=\""+QString::number(cell->width())+"\"";

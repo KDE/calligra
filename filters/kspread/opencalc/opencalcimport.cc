@@ -2100,13 +2100,13 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
   {
     QString s = property.attributeNS( ooNS::fo, "text-align", QString::null );
     if ( s == "center" )
-      layout->setAlign( Format::Center );
+      layout->setAlign( Style::Center );
     else if ( s == "end" )
-      layout->setAlign( Format::Right );
+      layout->setAlign( Style::Right );
     else if ( s == "start" )
-      layout->setAlign( Format::Left );
+      layout->setAlign( Style::Left );
     else if ( s == "justify" ) // TODO in KSpread!
-      layout->setAlign( Format::Center );
+      layout->setAlign( Style::Center );
   }
   if (  property.hasAttributeNS( ooNS::fo, "margin-left" ) )
   {
@@ -2164,14 +2164,14 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
   {
     QString s = property.attributeNS( ooNS::fo, "vertical-align", QString::null );
     if ( s == "middle" )
-      layout->setAlignY( Format::Middle );
+      layout->setAlignY( Style::Middle );
     else if ( s == "bottom" )
-      layout->setAlignY( Format::Bottom );
+      layout->setAlignY( Style::Bottom );
     else
-      layout->setAlignY( Format::Top );
+      layout->setAlignY( Style::Top );
   }
   else
-      layout->setAlignY( Format::Bottom );
+      layout->setAlignY( Style::Bottom );
 
   if ( property.hasAttributeNS( ooNS::fo, "wrap-option" ) )
   {
