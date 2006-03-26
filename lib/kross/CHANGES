@@ -1,0 +1,8 @@
+== Kross CHANGES ==
+
+1.6
+* Integrated ProxyFunction's
+* Python: Added unittest
+
+1.5
+* Ruby: fix crash cause of invalid rNode.
