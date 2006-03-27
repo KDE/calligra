@@ -51,7 +51,7 @@ KoFilter::ConversionStatus KprKword::convert( const Q3CString& from, const Q3CSt
     KoStoreDevice* inpdev = m_chain->storageFile( "root", KoStore::Read );
     if ( !inpdev )
     {
-        kdError(30502) << "Unable to open input stream" << endl;
+        kError(30502) << "Unable to open input stream" << endl;
         return KoFilter::StorageCreationError;
     }
 
@@ -146,7 +146,7 @@ KoFilter::ConversionStatus KprKword::convert( const Q3CString& from, const Q3CSt
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if(!out) {
-        kdError(30502) << "Unable to open output file!" << endl;
+        kError(30502) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
     Q3CString cstring = outdoc.toCString(); // utf-8 already
@@ -201,7 +201,7 @@ void KprKword::convert()
     }
 
     int curPage = -1;
-    //kdDebug() << "found " << objList.count() << " objects" << endl;
+    //kDebug() << "found " << objList.count() << " objects" << endl;
 
     for ( Q3PtrListIterator<KprObject> it(objList); it.current(); ++it )
     {
@@ -209,7 +209,7 @@ void KprKword::convert()
         // Detect the first object of each page
         int page = int( it.current()->y / ptPageHeight );
         bool isTitle = ( page > curPage );
-        //kdDebug() << "KprKword::convert y=" << it.current()->y << " ptPageHeight=" << ptPageHeight
+        //kDebug() << "KprKword::convert y=" << it.current()->y << " ptPageHeight=" << ptPageHeight
         //          << " isTitle=" << isTitle << endl;
         curPage = page;
 
@@ -248,7 +248,7 @@ void KprKword::convert()
             {
                 int oldLen = text.length();
                 text += textElem.text();
-                //kdDebug() << "KprKword::convert text now " << text << endl;
+                //kDebug() << "KprKword::convert text now " << text << endl;
                 QDomElement outFormatElem = outdoc.createElement( "FORMAT" );
 
                 if ( textElem.attribute( "italic" ).toInt() )

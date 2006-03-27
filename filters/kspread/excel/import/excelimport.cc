@@ -137,7 +137,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const Q3CString& from, const Q3
 
   if ( !storeout )
   {
-    kdWarning() << "Couldn't open the requested file." << endl;
+    kWarning() << "Couldn't open the requested file." << endl;
     delete d->workbook;
     return KoFilter::FileNotFound;
   }
@@ -154,7 +154,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const Q3CString& from, const Q3
   d->valueFormatIndex = 1;
   if ( !d->createStyles( &oasisStore ) ) 
   {
-    kdWarning() << "Couldn't open the file 'styles.xml'." << endl;
+    kWarning() << "Couldn't open the file 'styles.xml'." << endl;
     delete d->workbook;
     delete storeout;
     return KoFilter::CreationError;
@@ -168,7 +168,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const Q3CString& from, const Q3
   d->valueFormatIndex = 1;
   if ( !d->createContent( &oasisStore ) )
   {
-    kdWarning() << "Couldn't open the file 'content.xml'." << endl;
+    kWarning() << "Couldn't open the file 'content.xml'." << endl;
     delete d->workbook;
     delete storeout;
     return KoFilter::CreationError;
@@ -177,7 +177,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const Q3CString& from, const Q3
   // store document manifest
   if ( !d->createManifest( &oasisStore ) )
   {
-    kdWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+    kWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
     delete d->workbook;
     delete storeout;
     return KoFilter::CreationError;

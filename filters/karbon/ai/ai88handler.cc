@@ -92,7 +92,7 @@ bool AI88Handler::handleAIOperation (AIOperation op) {
       return true;
       break;
     case AIO_SetLineWidth :
-      fval = kMax(0.2, m_delegate->getDoubleValue()); // Use thinnest pen stroke possible for 0 (Rob)
+      fval = qMax(0.2, m_delegate->getDoubleValue()); // Use thinnest pen stroke possible for 0 (Rob)
       if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotLineWidth (fval);
       return true;
       break;

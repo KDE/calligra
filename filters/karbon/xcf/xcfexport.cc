@@ -111,20 +111,20 @@ XcfExport::visitVDocument( VDocument& document )
 	m_stream->writeRawBytes( "gimp xcf file", 14 );
 
 	// Image width.
-	*m_stream << static_cast<Q_UINT32>( m_width );
+	*m_stream << static_cast<quint32>( m_width );
 
 	// Image height.
-	*m_stream << static_cast<Q_UINT32>( m_height );
+	*m_stream << static_cast<quint32>( m_height );
 
 	// Image type = RGB.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// Do not save any properties currently.
 	*m_stream
 		// "END".
-		<< static_cast<Q_UINT32>( 0 )
+		<< static_cast<quint32>( 0 )
 		// Property size in bytes.
-		<< static_cast<Q_UINT32>( 0 );
+		<< static_cast<quint32>( 0 );
 
 
 	// Save current offset.
@@ -170,107 +170,107 @@ XcfExport::visitVDocument( VDocument& document )
 	m_stream->device()->at( current );
 
 	// Append a zero offset to indicate end of layer offsets.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 
 	// Return to end offset.
 	m_stream->device()->at( end );
 
 	// Append a zero offset to indicate end of channel offsets.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 }
 
 void
 XcfExport::visitVLayer( VLayer& layer )
 {
 	// Layer width = image width.
-	*m_stream << static_cast<Q_UINT32>( m_width );
+	*m_stream << static_cast<quint32>( m_width );
 
 	// Layer height = image height.
-	*m_stream << static_cast<Q_UINT32>( m_height );
+	*m_stream << static_cast<quint32>( m_height );
 
 	// Layer type = RGBA.
-	*m_stream << static_cast<Q_UINT32>( 1 );
+	*m_stream << static_cast<quint32>( 1 );
 
 	// Layer name.
 	*m_stream << layer.name().latin1();
 
 	// Layer opacity.
-	*m_stream << static_cast<Q_UINT32>( 6 );
+	*m_stream << static_cast<quint32>( 6 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// Fully opaque = 255.
-	*m_stream << static_cast<Q_UINT32>( 255 );
+	*m_stream << static_cast<quint32>( 255 );
 
 	// Layer visible?
-	*m_stream << static_cast<Q_UINT32>( 8 );
+	*m_stream << static_cast<quint32>( 8 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// True.
-	*m_stream << static_cast<Q_UINT32>( 1 );
+	*m_stream << static_cast<quint32>( 1 );
 
 	// Layer linked?
-	*m_stream << static_cast<Q_UINT32>( 9 );
+	*m_stream << static_cast<quint32>( 9 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// False.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// Preserve transparency?
-	*m_stream << static_cast<Q_UINT32>( 10 );
+	*m_stream << static_cast<quint32>( 10 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// False.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// Apply mask?
-	*m_stream << static_cast<Q_UINT32>( 11 );
+	*m_stream << static_cast<quint32>( 11 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// False.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// Edit mask?
-	*m_stream << static_cast<Q_UINT32>( 12 );
+	*m_stream << static_cast<quint32>( 12 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// False.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// Show mask?
-	*m_stream << static_cast<Q_UINT32>( 13 );
+	*m_stream << static_cast<quint32>( 13 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// False.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// Layer offsets.
-	*m_stream << static_cast<Q_UINT32>( 15 );
+	*m_stream << static_cast<quint32>( 15 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 8 );
+	*m_stream << static_cast<quint32>( 8 );
 	// X-Offset.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 	// Y-Offset.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// Layer mode.
-	*m_stream << static_cast<Q_UINT32>( 7 );
+	*m_stream << static_cast<quint32>( 7 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// Normal mode.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// TODO: Tattoo.
-	*m_stream << static_cast<Q_UINT32>( 20 );
+	*m_stream << static_cast<quint32>( 20 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 4 );
+	*m_stream << static_cast<quint32>( 4 );
 	// False.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 	// Layer properties end.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 	// Property size in bytes.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 
 
 	// Offsets.
@@ -303,7 +303,7 @@ XcfExport::visitVLayer( VLayer& layer )
 
 
 	// Append a zero offset to indicate end of layer mask offsets.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 }
 
 void
@@ -321,13 +321,13 @@ XcfExport::writeHierarchy()
 	*m_stream << m_height;
 
 	// Color depth.
-	*m_stream << static_cast<Q_UINT32>( 3 );
+	*m_stream << static_cast<quint32>( 3 );
 
 
 	// Calculate level number.
 	int levX = levels( m_width, m_tileWidth );
 	int levY = levels( m_height, m_tileHeight );
-	int levels = QMAX( levX, levY );
+	int levels = qMax( levX, levY );
 
 	int width = m_width;
 	int height = m_height;
@@ -354,9 +354,9 @@ XcfExport::writeHierarchy()
 			width  /= 2;
 			height /= 2;
 
-			*m_stream << static_cast<Q_UINT32>( width );
-			*m_stream << static_cast<Q_UINT32>( height );
-			*m_stream << static_cast<Q_UINT32>( 0 );
+			*m_stream << static_cast<quint32>( width );
+			*m_stream << static_cast<quint32>( height );
+			*m_stream << static_cast<quint32>( 0 );
 		}
 
 		// Save end offset.
@@ -379,7 +379,7 @@ XcfExport::writeHierarchy()
 	m_stream->device()->at( current );
 
 	// Append a zero offset to indicate end of level offsets.
-	*m_stream << static_cast<Q_UINT32>( 0 );
+	*m_stream << static_cast<quint32>( 0 );
 }
 
 void
@@ -390,8 +390,8 @@ XcfExport::writeLevel()
 	qlonglong start = 0;
 	qlonglong end = 0;
 
-	*m_stream << static_cast<Q_UINT32>( m_width );
-	*m_stream << static_cast<Q_UINT32>( m_height );
+	*m_stream << static_cast<quint32>( m_width );
+	*m_stream << static_cast<quint32>( m_height );
 
 	int rows = ( m_height + m_tileHeight - 1 ) / m_tileHeight;
 	int cols = ( m_width  + m_tileWidth  - 1 ) / m_tileWidth;
@@ -410,18 +410,18 @@ XcfExport::writeLevel()
 
 
 		// TODO: Save tile.
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
-		*m_stream << static_cast<Q_UINT8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
+		*m_stream << static_cast<quint8>( 1 );
 
 
 		// Save end offset.

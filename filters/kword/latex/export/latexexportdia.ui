@@ -272,7 +272,7 @@
                 <attribute name="title">
                     <string>Pictures</string>
                 </attribute>
-                <widget class="KURLRequester">
+                <widget class="KUrlRequester">
                     <property name="name">
                         <cstring>pathPictures</cstring>
                     </property>

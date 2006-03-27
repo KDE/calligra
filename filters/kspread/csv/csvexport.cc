@@ -112,7 +112,7 @@ QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, Q
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3CString & to )
 {
-  kdDebug(30501) << "CSVExport::convert" << endl;
+  kDebug(30501) << "CSVExport::convert" << endl;
   KoDocument* document = m_chain->inputDocument();
 
   if ( !document )
@@ -120,12 +120,12 @@ KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3C
 
   if ( !::qt_cast<const KSpread::Doc *>( document ) )
   {
-    kdWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+    kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
     return KoFilter::NotImplemented;
   }
   if ( ( to != "text/x-csv" && to != "text/plain" ) || from != "application/x-kspread" )
   {
-    kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
+    kWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
     return KoFilter::NotImplemented;
   }
 
@@ -133,7 +133,7 @@ KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3C
 
   if ( ksdoc->mimeType() != "application/x-kspread" )
   {
-    kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+    kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
     return KoFilter::NotImplemented;
   }
 
@@ -144,7 +144,7 @@ KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3C
 
     if (!expDialog)
     {
-      kdError(30501) << "Dialog has not been created! Aborting!" << endl;
+      kError(30501) << "Dialog has not been created! Aborting!" << endl;
       return KoFilter::StupidError;
     }
     expDialog->fillSheet( ksdoc->map() );
@@ -190,7 +190,7 @@ KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3C
 
   if ( expDialog && expDialog->exportSelectionOnly() )
   {
-    kdDebug(30501) << "Export as selection mode" << endl;
+    kDebug(30501) << "Export as selection mode" << endl;
     View const * const view = static_cast<View*>(ksdoc->views().getFirst());
 
     if ( !view ) // no view if embedded document
@@ -247,7 +247,7 @@ KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3C
   }
   else
   {
-    kdDebug(30501) << "Export as full mode" << endl;
+    kDebug(30501) << "Export as full mode" << endl;
     Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
     for( ; it.current(); ++it )
     {
@@ -285,7 +285,7 @@ KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3C
       if ( CSVMaxRow + CSVMaxCol == 0)
         continue;
 
-      kdDebug(30501) << "Max row x column: " << CSVMaxRow << " x " << CSVMaxCol << endl;
+      kDebug(30501) << "Max row x column: " << CSVMaxRow << " x " << CSVMaxCol << endl;
 
       // Print sheet separators, except for the first sheet
       if ( !first || ( expDialog && expDialog->printAlwaysSheetDelimiter() ) )
@@ -345,7 +345,7 @@ KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3C
   QFile out(m_chain->outputFile());
   if ( !out.open( QIODevice::WriteOnly ) )
   {
-    kdError(30501) << "Unable to open output file!" << endl;
+    kError(30501) << "Unable to open output file!" << endl;
     out.close();
     delete expDialog;
     return KoFilter::StupidError;

@@ -56,7 +56,7 @@ KoFilter::ConversionStatus GenericFilter::convert( const Q3CString &from, const 
     KTrader::OfferList::ConstIterator it;
     for (it=offers.begin(); it!=offers.end(); ++it)
     {
-        kdDebug() << "Got a filter script, exec: " << (*it)->exec() <<
+        kDebug() << "Got a filter script, exec: " << (*it)->exec() <<
             ", imports: " << (*it)->property("X-KDE-Wrapper-Import").toString() <<
             ", exports: " << (*it)->property("X-KDE-Wrapper-Export").toString() << endl;
         if ((*it)->property("X-KDE-Wrapper-Import").toCString()==from
@@ -93,7 +93,7 @@ KoFilter::ConversionStatus GenericFilter::doImport()
 
     if (!m_out || !m_out->open("root"))
     {
-        kdError() << "Unable to create output store!" << endl;
+        kError() << "Unable to create output store!" << endl;
         m_out->close();
         return KoFilter::StorageCreationError;
     }
@@ -103,7 +103,7 @@ KoFilter::ConversionStatus GenericFilter::doImport()
                        + KProcess::quote(m_chain->outputFile());
         system(QFile::encodeName(exec));
 
-        kdDebug() << "Executing: " << exec << endl;
+        kDebug() << "Executing: " << exec << endl;
 
         QFile outFile(m_chain->outputFile());
         outFile.open(QIODevice::ReadOnly);

@@ -31,7 +31,7 @@
 #include <KoGlobal.h>
 #include <KoStore.h>
 #include <kapplication.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 #include "data.h"
 
@@ -47,7 +47,7 @@ class PdfImportFactory : KGenericFactory<PdfImport, KoFilter>
 
  protected:
     virtual void setupTranslations() {
-        KGlobal::locale()->insertCatalogue("kofficefilters");
+        KGlobal::locale()->insertCatalog("kofficefilters");
     }
 };
 
@@ -97,7 +97,7 @@ KoFilter::ConversionStatus PdfImport::convert(const Q3CString& from,
     // data
     KoPageLayout page;
     DRect rect = _doc.paperSize(page.format);
-    kdDebug(30516) << "paper size: " << rect.toString() << endl;
+    kDebug(30516) << "paper size: " << rect.toString() << endl;
     page.orientation = _doc.paperOrientation();
     Data data(m_chain, rect, page, _options);
     _doc.initDevice(data);
@@ -116,7 +116,7 @@ KoFilter::ConversionStatus PdfImport::convert(const Q3CString& from,
             pd.setLabel( s.arg(it.current()) );
             qApp->processEvents();
             if (pd.wasCancelled()) return KoFilter::UserCancelled;
-            kdDebug(30516) << "-- " << "pass #" << k
+            kDebug(30516) << "-- " << "pass #" << k
                            << "  treat page: " << it.current()
                            << "----------------" << endl;
             if (first) _doc.treatPage( it.current() );
@@ -126,15 +126,15 @@ KoFilter::ConversionStatus PdfImport::convert(const Q3CString& from,
         }
     }
     data.endDump();
-    kdDebug(30516) << "treatement elapsed=" << time.elapsed() << endl;
+    kDebug(30516) << "treatement elapsed=" << time.elapsed() << endl;
 
     // output
     KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
     if( !out ) {
-        kdError(30516) << "Unable to open output file!" << endl;
+        kError(30516) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-//    kdDebug(30516) << data.document().toCString() << endl;
+//    kDebug(30516) << data.document().toCString() << endl;
     Q3CString cstr = data.document().toCString();
     out->writeBlock(cstr, cstr.length());
     out->close();
@@ -172,7 +172,7 @@ void PdfImport::treatInfoDocument()
     KoStoreDevice *out =
         m_chain->storageFile("documentinfo.xml", KoStore::Write);
     if ( !out )
-        kdWarning(30516) << "unable to open doc info. continuing anyway\n";
+        kWarning(30516) << "unable to open doc info. continuing anyway\n";
 	else {
 		Q3CString cstr = infoDocument.toCString();
 		out->writeBlock(cstr, cstr.length());

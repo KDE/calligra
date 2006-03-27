@@ -77,18 +77,18 @@ typedef struct _XcfInfo  XcfInfo;
 struct _XcfInfo
 {
   FILE               *fp;
-  Q_UINT32           cp;
+  quint32           cp;
   const Q3CString     filename;
   //GimpTattoo         tattoo_state;
   KisLayer           *active_layer;
   //GimpChannel        *active_channel;
   //GimpDrawable       *floating_sel_drawable;
   KisLayer           *floating_sel;
-  Q_UINT32           floating_sel_offset;
-  Q_INT32            swap_num;
-  Q_INT32            *ref_count;
+  quint32           floating_sel_offset;
+  qint32            swap_num;
+  qint32            *ref_count;
   XcfCompressionType compression;
-  Q_INT32            file_version;
+  qint32            file_version;
 };
 
 

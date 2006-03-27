@@ -40,14 +40,14 @@ KWord13Picture::~KWord13Picture( void )
 
 bool KWord13Picture::loadPicture( KoStore* store )
 {
-    kdDebug(30520) << "Loading picture: " << m_storeName << endl;
+    kDebug(30520) << "Loading picture: " << m_storeName << endl;
  
     m_tempFile = new KTempFile( QString::null, ".bin" );
     m_tempFile->setAutoDelete( true );
  
     if ( ! store->extractFile( m_storeName, m_tempFile->name() ) )   
     {
-        kdWarning(30520) << "Could not write temporary file!" << endl;
+        kWarning(30520) << "Could not write temporary file!" << endl;
         delete m_tempFile;
         m_tempFile = 0;
         m_valid = false;

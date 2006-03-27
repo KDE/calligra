@@ -34,7 +34,7 @@ KSpreadBaseWorker::~KSpreadBaseWorker() {
 KoFilter::ConversionStatus KSpreadBaseWorker::startDocument(KSpreadFilterProperty property) {
 	KSpreadFilterProperty::Iterator it;
 	for (it = property.begin(); it != property.end(); ++it) {
-		kdDebug(30508) << "startDocument: " << it.key() << "->" << it.data() << endl;
+		kDebug(30508) << "startDocument: " << it.key() << "->" << it.data() << endl;
 	}
 	return KoFilter::OK;
 }
@@ -43,7 +43,7 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startDocument(KSpreadFilterPropert
 KoFilter::ConversionStatus KSpreadBaseWorker::startInfoLog(KSpreadFilterProperty property) {
 	KSpreadFilterProperty::Iterator it;
 	for (it = property.begin(); it != property.end(); ++it) {
-		kdDebug(30508) << "startInfoLog: " << it.key() << "->" << it.data() << endl;
+		kDebug(30508) << "startInfoLog: " << it.key() << "->" << it.data() << endl;
 	}
 	return KoFilter::OK;
 }
@@ -52,7 +52,7 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startInfoLog(KSpreadFilterProperty
 KoFilter::ConversionStatus KSpreadBaseWorker::startInfoAuthor(KSpreadFilterProperty property) {
 	KSpreadFilterProperty::Iterator it;
 	for (it = property.begin(); it != property.end(); ++it) {
-		kdDebug(30508) << "startInfoAuthor: " << it.key() << "->" << it.data() << endl;
+		kDebug(30508) << "startInfoAuthor: " << it.key() << "->" << it.data() << endl;
 	}
 	return KoFilter::OK;
 }
@@ -61,7 +61,7 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startInfoAuthor(KSpreadFilterPrope
 KoFilter::ConversionStatus KSpreadBaseWorker::startInfoAbout(KSpreadFilterProperty property) {
 	KSpreadFilterProperty::Iterator it;
 	for (it = property.begin(); it != property.end(); ++it) {
-		kdDebug(30508) << "startInfoAbout: " << it.key() << "->" << it.data() << endl;
+		kDebug(30508) << "startInfoAbout: " << it.key() << "->" << it.data() << endl;
 	}
 	return KoFilter::OK;
 }
@@ -70,7 +70,7 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startInfoAbout(KSpreadFilterProper
 KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadBook(KSpreadFilterProperty property) {
 	KSpreadFilterProperty::Iterator it;
 	for (it = property.begin(); it != property.end(); ++it) {
-		kdDebug(30508) << "startSpreadBook: " << it.key() << "->" << it.data() << endl;
+		kDebug(30508) << "startSpreadBook: " << it.key() << "->" << it.data() << endl;
 	}
 	return KoFilter::OK;
 }
@@ -79,7 +79,7 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadBook(KSpreadFilterPrope
 KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadSheet(KSpreadFilterProperty property) {
 	KSpreadFilterProperty::Iterator it;
 	for (it = property.begin(); it != property.end(); ++it) {
-		kdDebug(30508) << "startSpreadSheet: " << it.key() << "->" << it.data() << endl;
+		kDebug(30508) << "startSpreadSheet: " << it.key() << "->" << it.data() << endl;
 	}
 	return KoFilter::OK;
 }
@@ -88,7 +88,7 @@ KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadSheet(KSpreadFilterProp
 KoFilter::ConversionStatus KSpreadBaseWorker::startSpreadCell(KSpreadFilterProperty property) {
 	KSpreadFilterProperty::Iterator it;
 	for (it = property.begin(); it != property.end(); ++it) {
-		kdDebug(30508) << "startSpreadCell: " << it.key() << "->" << it.data() << endl;
+		kDebug(30508) << "startSpreadCell: " << it.key() << "->" << it.data() << endl;
 	}
 	return KoFilter::OK;
 }

@@ -23,7 +23,7 @@
 **
 */
 
-#include <kdebug.h>				/* for kdDebug() stream */
+#include <kdebug.h>				/* for kDebug() stream */
 
 #include "variablezone.h"
 #include "para.h"
@@ -63,7 +63,7 @@ VariableZone::VariableZone(QString text, Para* para): VariableFormat(para)
 /*******************************************/
 VariableZone::~VariableZone()
 {
-	kdDebug(30522) << "Destruction of an area" << endl;
+	kDebug(30522) << "Destruction of an area" << endl;
 }
 
 /*******************************************/
@@ -74,7 +74,7 @@ VariableZone::~VariableZone()
 /*******************************************/
 void VariableZone::analyse(const QDomNode balise)
 {
-	kdDebug(30522) << "FORMAT" << endl;
+	kDebug(30522) << "FORMAT" << endl;
 	/* Get header information (size, position)
 	 * Get infos. to format the text
 	 */
@@ -84,9 +84,9 @@ void VariableZone::analyse(const QDomNode balise)
 	/* Format the text */
 	setTexte(getTexte().mid(getPos(), getLength()));
 	
-	kdDebug(30522) << getTexte().length() << endl;
-	kdDebug(30522) << getTexte().latin1() << endl;
-	kdDebug(30522) << "END FORMAT" << endl;
+	kDebug(30522) << getTexte().length() << endl;
+	kDebug(30522) << getTexte().latin1() << endl;
+	kDebug(30522) << "END FORMAT" << endl;
 }
 
 /*******************************************/
@@ -101,7 +101,7 @@ void VariableZone::generate(QTextStream &out)
 		generate_format_begin(out);
 
 	/* Display the text */
-	kdDebug(30522) << "type : " << getType() << endl;
+	kDebug(30522) << "type : " << getType() << endl;
 	if((getType() == VAR_DATE) && !isFix())
 		out << "\\today" << endl;
 	else if(getType() == VAR_FOOTNOTE)

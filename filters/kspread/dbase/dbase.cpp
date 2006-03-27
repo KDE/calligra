@@ -64,7 +64,7 @@ bool DBase::load( const QString& filename )
   unsigned filesize = m_file.size();
 
   // read dBASE version
-  Q_UINT8 ver;
+  quint8 ver;
   m_stream >> ver;
   m_version = ver & 0x7f; // bit 7: has memo ?
 
@@ -73,7 +73,7 @@ bool DBase::load( const QString& filename )
      return false;
 
   // date of last update
-  Q_UINT8 y, m, d;
+  quint8 y, m, d;
   m_stream >> y >> m >> d;
   // because dBASE saves 102 instead of 2002 (very Y2K-save ;-)
   m_lastUpdate.setYMD( y+1900, m, d );
@@ -82,22 +82,22 @@ bool DBase::load( const QString& filename )
   if( !m_lastUpdate.isValid() ) return false;
 
   // number of records
-  Q_UINT32 norec;
+  quint32 norec;
   m_stream >> norec;
   m_recordCount = norec;
 
   // header-length
-  Q_UINT16 header_length;
+  quint16 header_length;
   m_stream >> header_length;
   m_headerLength = header_length;
 
   // record-length
-  Q_UINT16 record_length;
+  quint16 record_length;
   m_stream >> record_length;
   m_recordLength = record_length;
 
   // read the remaining chars
-  Q_UINT8 dummy;
+  quint8 dummy;
   for (int foo = 0; foo < 20; ++foo)
     m_stream >> dummy;
 
@@ -122,14 +122,14 @@ bool DBase::load( const QString& filename )
     DBaseField* field = new DBaseField;
 
     // columnn-name
-    Q_UINT8 colname[12];
+    quint8 colname[12];
     for ( int j = 0; j < 11; ++j)
        m_stream >> colname[j];
     colname[11] = '\0';
     field->name = QString( (const char*) &colname[0] );
       
     // type of column
-    Q_UINT8 coltype;
+    quint8 coltype;
     m_stream >> coltype;
     switch( coltype )
     {
@@ -142,21 +142,21 @@ bool DBase::load( const QString& filename )
     }
       
     // fileddataaddress
-    Q_UINT32 addr;
+    quint32 addr;
     m_stream >> addr;
 
     // columnlength
-    Q_UINT8 colsize;
+    quint8 colsize;
     m_stream >> colsize;
     field->length = colsize; 
 
     // decimals
-    Q_UINT8 decimals;
+    quint8 decimals;
     m_stream >> decimals;
     field->decimals = decimals;
 
     // read remaining chars
-    Q_UINT8 dummy;
+    quint8 dummy;
     for ( int foo = 0; foo < 14; ++foo )
       m_stream >> dummy;
 
@@ -188,7 +188,7 @@ QStringList DBase::readRecord( unsigned recno )
 
   // first char == '*' means the record is deleted
   // so we just skip it
-  Q_UINT8 delmarker;
+  quint8 delmarker;
   m_stream >> delmarker;
   if( delmarker == 0x2a )
    return result;
@@ -202,7 +202,7 @@ QStringList DBase::readRecord( unsigned recno )
       case DBaseField::Character:
       {
         QString str;
-        Q_UINT8 ch;
+        quint8 ch;
         for( unsigned j=0; j<fields.at(i)->length; j++ )
         {  m_stream >> ch; str += QChar(ch); }
         result.append( str );
@@ -211,7 +211,7 @@ QStringList DBase::readRecord( unsigned recno )
       // Logical
       case DBaseField::Logical:
       {
-        Q_UINT8 ch;
+        quint8 ch;
         m_stream >> ch;
         switch( ch )
         {
@@ -226,7 +226,7 @@ QStringList DBase::readRecord( unsigned recno )
       case DBaseField::Date:
       {
         QString str;
-        Q_UINT8 ch;
+        quint8 ch;
         for( unsigned j=0; j<fields.at(i)->length; j++ )
         {  m_stream >> ch; str += QChar(ch); }
         str.insert( 6, '-' );

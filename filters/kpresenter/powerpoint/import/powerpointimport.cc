@@ -107,14 +107,14 @@ KoFilter::ConversionStatus PowerPointImport::convert( const Q3CString& from, con
 
   if ( !storeout )
   {
-    kdWarning() << "Couldn't open the requested file." << endl;
+    kWarning() << "Couldn't open the requested file." << endl;
     return KoFilter::FileNotFound;
   }
 
   // store document content
   if ( !storeout->open( "content.xml" ) )
   {
-    kdWarning() << "Couldn't open the file 'content.xml'." << endl;
+    kWarning() << "Couldn't open the file 'content.xml'." << endl;
     return KoFilter::CreationError;
   }
   storeout->write( createContent() );
@@ -123,7 +123,7 @@ KoFilter::ConversionStatus PowerPointImport::convert( const Q3CString& from, con
   // store document styles
   if ( !storeout->open( "styles.xml" ) )
   {
-    kdWarning() << "Couldn't open the file 'styles.xml'." << endl;
+    kWarning() << "Couldn't open the file 'styles.xml'." << endl;
     return KoFilter::CreationError;
   }
   storeout->write( createStyles() );
@@ -133,7 +133,7 @@ KoFilter::ConversionStatus PowerPointImport::convert( const Q3CString& from, con
   storeout->enterDirectory( "META-INF" );
   if ( !storeout->open( "manifest.xml" ) )
   {
-     kdWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+     kWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
      return KoFilter::CreationError;
   }
   storeout->write( createManifest() );

@@ -26,25 +26,25 @@
 
 #include "kis_tiff_stream.h"
 
-    uint KisTIFFReaderTarget8bit::copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderTarget8bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
-        double coeff = Q_UINT8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-//         kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
+        double coeff = quint8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
+//         kDebug(41008) << " depth expension coefficient : " << coeff << endl;
         while (!it.isDone()) {
-            Q_UINT8 *d = it.rawData();
-            Q_UINT8 i;
+            quint8 *d = it.rawData();
+            quint8 i;
             for(i = 0; i < nbColorsSamples() ; i++)
             {
-                d[poses()[i]] = (Q_UINT8)( tiffstream->nextValue() * coeff );
+                d[poses()[i]] = (quint8)( tiffstream->nextValue() * coeff );
             }
             postProcessor()->postProcess8bit( d);
             if(transform()) cmsDoTransform(transform(), d, d, 1);
-            d[poses()[i]] = Q_UINT8_MAX;
+            d[poses()[i]] = quint8_MAX;
             for(int k = 0; k < nbExtraSamples(); k++)
             {
                 if(k == alphaPos())
-                    d[poses()[i]] = (Q_UINT32) ( tiffstream->nextValue() * coeff );
+                    d[poses()[i]] = (quint32) ( tiffstream->nextValue() * coeff );
                 else
                     tiffstream->nextValue();
             }
@@ -52,25 +52,25 @@
         }
         return 1;
     }
-    uint KisTIFFReaderTarget16bit::copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderTarget16bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
-        double coeff = Q_UINT16_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-//         kdDebug(41008) << " depth expension coefficient : " << coeff << endl;
+        double coeff = quint16_MAX / (double)( pow(2, sourceDepth() ) - 1 );
+//         kDebug(41008) << " depth expension coefficient : " << coeff << endl;
         while (!it.isDone()) {
-            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-            Q_UINT8 i;
+            quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
+            quint8 i;
             for(i = 0; i < nbColorsSamples(); i++)
             {
-                d[poses()[i]] = (Q_UINT16)( tiffstream->nextValue() * coeff );
+                d[poses()[i]] = (quint16)( tiffstream->nextValue() * coeff );
             }
             postProcessor()->postProcess16bit( d);
             if(transform()) cmsDoTransform(transform(), d, d, 1);
-            d[poses()[i]] = Q_UINT16_MAX;
+            d[poses()[i]] = quint16_MAX;
             for(int k = 0; k < nbExtraSamples(); k++)
             {
                 if(k == alphaPos())
-                    d[poses()[i]] = (Q_UINT16) ( tiffstream->nextValue() * coeff );
+                    d[poses()[i]] = (quint16) ( tiffstream->nextValue() * coeff );
                 else
                     tiffstream->nextValue();
             }
@@ -79,16 +79,16 @@
         return 1;
     }
     
-    uint KisTIFFReaderFromPalette::copyDataToChannels(Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth,  TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderFromPalette::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth,  TIFFStreamBase* tiffstream)
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth, true);
         while (!it.isDone()) {
-            Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+            quint16* d = reinterpret_cast<quint16 *>(it.rawData());
             uint32 index = tiffstream->nextValue();
             d[2] = m_red[index];
             d[1] = m_green[index];
             d[0] = m_blue[index];
-            d[3] = Q_UINT16_MAX;
+            d[3] = quint16_MAX;
             ++it;
         }
         return 1;

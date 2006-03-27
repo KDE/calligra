@@ -48,7 +48,7 @@ QString CheckAndEscapeXmlText(const QString& strText)
             // - could be a bug in the RTF file
             // - could be not supported encoding.
             // In any case, we must replace this character.
-            kdDebug(30515) << "Control character in XML stream: " << test << endl;
+            kDebug(30515) << "Control character in XML stream: " << test << endl;
             strReturn.replace(i, 1, '?'); // Replacement character
         }
     }
@@ -112,7 +112,7 @@ void DomNode::addTextNode( const char *text, QTextCodec* codec )
 
     if (!codec)
     {
-        kdError(30515) << "No QTextCodec available!" << endl;
+        kError(30515) << "No QTextCodec available!" << endl;
         return;
     }
 

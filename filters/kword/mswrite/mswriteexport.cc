@@ -55,7 +55,7 @@ public:
 protected:
 	virtual void setupTranslations (void)
 	{
-		KGlobal::locale()->insertCatalogue ("kofficefilters");
+		KGlobal::locale()->insertCatalog ("kofficefilters");
 	}
 };
 
@@ -150,7 +150,7 @@ public:
 
 		if (absloc > m_outfp_eof)
 		{
-			kdDebug (30509) << "Want to seek to " << absloc
+			kDebug (30509) << "Want to seek to " << absloc
 					  				<< " but EOF is at " << m_outfp_eof
 									<< "; so writing " << absloc - m_outfp_eof
 									<< " zeros" << endl;
@@ -199,22 +199,22 @@ public:
 
 	void debug (const char *s)
 	{
-		kdDebug (30509) << s;
+		kDebug (30509) << s;
 	}
 	void debug (const int i)
 	{
-		kdDebug (30509) << i;
+		kDebug (30509) << i;
 	}
 	void error (const int errorCode, const char *message,
 					const char * /*file*/ = "", const int /*lineno*/ = 0,
 					MSWrite::DWord /*token*/ = MSWrite::Device::NoToken)
 	{
 		if (errorCode == MSWrite::Error::Warn)
-			kdWarning (30509) << message;
+			kWarning (30509) << message;
 		else
 		{
 			m_error = errorCode;
-			kdError (30509) << message;
+			kError (30509) << message;
 		}
 	}
 };
@@ -265,12 +265,12 @@ public:
 		if (m_codec)
 			m_encoder = m_codec->makeEncoder();
 		else
-			kdWarning (30509) << "Cannot convert to Win Charset!" << endl;
+			kWarning (30509) << "Cannot convert to Win Charset!" << endl;
 
 		m_device = new WRIDevice;
 		if (!m_device)
 		{
-			kdError (30509) << "Could not allocate memory for Device" << endl;
+			kError (30509) << "Could not allocate memory for Device" << endl;
 			return;
 		}
 
@@ -315,7 +315,7 @@ public:
 
 	bool doOpenDocument (void)
 	{
-		kdDebug (30509) << "doOpenDocument ()" << endl;
+		kDebug (30509) << "doOpenDocument ()" << endl;
 
 		// We can't open the document here because we don't yet have
 		// PageLayout * as doFullPaperFormat() and doFullPaperBorders()
@@ -351,7 +351,7 @@ public:
 
 	bool doCloseDocument (void)
 	{
-		kdDebug (30509) << "doCloseDocument ()" << endl;
+		kDebug (30509) << "doCloseDocument ()" << endl;
 
 		if (!m_generator->writeDocumentEnd (MSWrite::Format::Write_3_0,
 														&m_pageLayout)) return false;
@@ -363,7 +363,7 @@ public:
 						 			const double width, const double height,
 									const int orientation)
 	{
-		kdDebug (30509) << "doFullPaperFormat ("
+		kDebug (30509) << "doFullPaperFormat ("
 								<< format << ", "
 								<< width << ", "
 								<< height << ", "
@@ -380,7 +380,7 @@ public:
 	bool doFullPaperBorders (const double top, const double left,
 						 				const double bottom, const double right)
 	{
-		kdDebug (30509) << "doFullPaperBorders ("
+		kDebug (30509) << "doFullPaperBorders ("
 								<< top << ", "
 								<< left << ", "
 								<< bottom << ", "
@@ -398,7 +398,7 @@ public:
 	{
 		m_pageNumberStart = MSWrite::Word (varSettings.startingPageNumber);
 
-		kdDebug (30509) << "doVariableSettings pageNumberStart="
+		kDebug (30509) << "doVariableSettings pageNumberStart="
 								<< m_pageNumberStart << endl;
 		return true;
 	}
@@ -415,7 +415,7 @@ public:
 	//
 	bool doPageInfo (int headerType, int footerType)
 	{
-		kdDebug (30509) << "doPageInfo (headerType=" << headerType
+		kDebug (30509) << "doPageInfo (headerType=" << headerType
 								<< ", footerType=" << footerType
 								<< ")" << endl;
 
@@ -431,7 +431,7 @@ public:
 			m_isHeaderOnFirstPage = false;
 			break;
 		default:
-			kdWarning (30509) << "Unknown headerType: " << headerType << endl;
+			kWarning (30509) << "Unknown headerType: " << headerType << endl;
 			m_isHeaderOnFirstPage = false;	// just a guess
 			break;
 		}
@@ -448,7 +448,7 @@ public:
 			m_isFooterOnFirstPage = false;
 			break;
 		default:
-			kdWarning (30590) << "Unknown footerType: " << footerType << endl;
+			kWarning (30590) << "Unknown footerType: " << footerType << endl;
 			m_isFooterOnFirstPage = false;	// just a guess
 			break;
 		}
@@ -469,11 +469,11 @@ public:
 
 	bool doHeader (const HeaderData &header)
 	{
-		kdDebug (30509) << "doHeader (header.page=" << header.page << ")" << endl;
+		kDebug (30509) << "doHeader (header.page=" << header.page << ")" << endl;
 
 		if (isParaListEmpty (header.para))
 		{
-			kdDebug (30509) << "\tEmpty, ignoring" << endl;
+			kDebug (30509) << "\tEmpty, ignoring" << endl;
 			return true;
 		}
 
@@ -507,11 +507,11 @@ public:
 
 	bool doFooter (const FooterData &footer)
 	{
-		kdDebug (30509) << "doFooter (footer.page=" << footer.page << ")" << endl;
+		kDebug (30509) << "doFooter (footer.page=" << footer.page << ")" << endl;
 
 		if (isParaListEmpty (footer.para))
 		{
-			kdDebug (30509) << "\tEmpty, ignoring" << endl;
+			kDebug (30509) << "\tEmpty, ignoring" << endl;
 			return true;
 		}
 
@@ -545,7 +545,7 @@ public:
 
 	bool doOpenBody (void)
 	{
-		kdDebug (30509) << "doOpenBody ()" << endl;
+		kDebug (30509) << "doOpenBody ()" << endl;
 
 		//
 		// Document Start
@@ -618,7 +618,7 @@ public:
 				it != m_headerData.end ();
 				it++)
 		{
-			kdDebug (30509) << "BODY START ADDING HEADER: " << (*it).page << endl;
+			kDebug (30509) << "BODY START ADDING HEADER: " << (*it).page << endl;
 			if (!doFullParagraphList ((*it).para)) return false;
 			it = --m_headerData.erase (it);
 		}
@@ -628,7 +628,7 @@ public:
 				it != m_footerData.end ();
 				it++)
 		{
-			kdDebug (30509) << "BODY START ADDING FOOTER: " << (*it).page << endl;
+			kDebug (30509) << "BODY START ADDING FOOTER: " << (*it).page << endl;
 			if (!doFullParagraphList ((*it).para)) return false;
 			it = --m_footerData.erase (it);
 		}
@@ -639,7 +639,7 @@ public:
 
 	bool doCloseBody (void)
 	{
-		kdDebug (30509) << "doCloseBody ()" << endl;
+		kDebug (30509) << "doCloseBody ()" << endl;
 
 		if (!m_generator->writeBodyEnd ()) return false;
 
@@ -724,11 +724,11 @@ public:
 
 		void debug (const char *s)
 		{
-			kdDebug (30509) << s;
+			kDebug (30509) << s;
 		}
 		void debug (const int i)
 		{
-			kdDebug (30509) << i;
+			kDebug (30509) << i;
 		}
 
 		void error (const int errorCode, const char *message,
@@ -736,11 +736,11 @@ public:
 						MSWrite::DWord /*token*/ = MSWrite::Device::NoToken)
 		{
 			if (errorCode == MSWrite::Error::Warn)
-				kdWarning (30509) << message;
+				kWarning (30509) << message;
 			else
 			{
 				m_error = errorCode;
-				kdError (30509) << message;
+				kError (30509) << message;
 			}
 		}
 	};
@@ -885,11 +885,11 @@ public:
 
 
 		// Note: not from LibMSWrite's wmf.cpp
-		kdDebug (30509) << "\t\tBIH: width(pt)=" << width
+		kDebug (30509) << "\t\tBIH: width(pt)=" << width
 								<< " height(pt)=" << height
 								<< " BPP=" << bih.getBitsPerPixel ()
 								<< endl;
-		kdDebug (30509) << "\t\tBIH: xPixelsPerMeter=" << bih.getXPixelsPerMeter ()
+		kDebug (30509) << "\t\tBIH: xPixelsPerMeter=" << bih.getXPixelsPerMeter ()
 								<< " yPixelsPerMeter=" << bih.getYPixelsPerMeter ()
 								<< endl;
 
@@ -971,7 +971,7 @@ public:
 	// all windows measurements depend on there being 72 dots/points per inch
 	static double getDimen72DPI (const int measurement, const int dotsPerMeter)
 	{
-		kdDebug (30509) << "\t\tgetDimen72DPI (measurement=" << measurement
+		kDebug (30509) << "\t\tgetDimen72DPI (measurement=" << measurement
 								<< ",dotsPerMeter=" << dotsPerMeter << ")" << endl;
 
 		// Can't get resolution?
@@ -1002,7 +1002,7 @@ public:
 								const MSWrite::FormatCharProperty *charPropIn,
 								const bool ignoreIndent)
 	{
-		kdDebug (30509) << "--------------------------" << endl
+		kDebug (30509) << "--------------------------" << endl
 								<< "processImage()" << endl;
 
 
@@ -1030,10 +1030,10 @@ public:
 		QString imageType;
 		int pos = frameAnchor.picture.koStoreName.findRev ('.');
 		if (pos != -1) imageType = frameAnchor.picture.koStoreName.mid (pos).lower ();
-		kdDebug (30509) << "\timageType: " << imageType << endl;
+		kDebug (30509) << "\timageType: " << imageType << endl;
 
 		QByteArray imageData;
-		kdDebug (30509) << "\tReading image: " << frameAnchor.picture.koStoreName << endl;
+		kDebug (30509) << "\tReading image: " << frameAnchor.picture.koStoreName << endl;
 		if (!loadSubFile (frameAnchor.picture.koStoreName, imageData))
 			ErrorAndQuit (MSWrite::Error::FileError, "could not open image from store\n");
 
@@ -1049,7 +1049,7 @@ public:
 					KoWmfPaint wmf;
 					if (!wmf.load (imageData))
 					{
-						kdError (30509) << "Could not open WMF - Invalid Format!" << endl;
+						kError (30509) << "Could not open WMF - Invalid Format!" << endl;
 						return true;
 					}
 
@@ -1057,17 +1057,17 @@ public:
 					QRect dimen = wmf.boundingRect ();
 					int width = abs (dimen.width ());
 					int height = abs (dimen.height ());
-					kdDebug (30509) << "\tRaw WMF dimensions: " << width << "x" << height << endl;
+					kDebug (30509) << "\tRaw WMF dimensions: " << width << "x" << height << endl;
 
 					if (wmf.isPlaceable ())
 					{
-						kdDebug (30509) << "\tConverting Placeable WMF" << endl;
+						kDebug (30509) << "\tConverting Placeable WMF" << endl;
 
 						// convert twip measurements that aren't in 72dpi
 						int defaultDpi = wmf.defaultDpi ();
 						if (defaultDpi <= 0)
 						{
-							kdWarning (30509) << "Invalid defaultDPI: " << defaultDpi << endl;
+							kWarning (30509) << "Invalid defaultDPI: " << defaultDpi << endl;
 							defaultDpi = 1440;
 						}
 						imageActualWidth = width * 1440 / defaultDpi;
@@ -1082,14 +1082,14 @@ public:
 					}
 					else if (wmf.isEnhanced ())
 					{
-						kdError (30509) << "Enhanced WMF unsupported by QWmf, internal error!" << endl;
+						kError (30509) << "Enhanced WMF unsupported by QWmf, internal error!" << endl;
 
 						return true;
 					}
 					// Standard WMF
 					else
 					{
-						kdDebug (30509) << "\tStandard WMF - no conversion required" << endl;
+						kDebug (30509) << "\tStandard WMF - no conversion required" << endl;
 
 						// assume width & height were in 72dpi points
 						imageActualWidth = Point2Twip (width);
@@ -1097,7 +1097,7 @@ public:
 					}
 				}
 
-				kdDebug (30509) << "\tNow WMF: width=" << imageActualWidth
+				kDebug (30509) << "\tNow WMF: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
 										<< " size=" << imageSize
 										<< endl;
@@ -1111,7 +1111,7 @@ public:
 				QImage image (imageData);
 				if (image.isNull ())
 				{
-					kdError (30509) << "QImage IsNull: Line=" << __LINE__ << endl;
+					kError (30509) << "QImage IsNull: Line=" << __LINE__ << endl;
 					return true;
 				}
 
@@ -1121,7 +1121,7 @@ public:
 					imageActualHeight = Point2Twip (getDimen72DPI (image.height (), image.dotsPerMeterY ()));
 				}
 
-				kdDebug (30509) << "\tNow BMP: width=" << imageActualWidth
+				kDebug (30509) << "\tNow BMP: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
 										<< " size=" << imageSize
 										<< endl;
@@ -1140,7 +1140,7 @@ public:
 					// BMP --> WMF
 					if (!BMP2WMF (inDevice, outDevice))
 					{
-						kdError (30509) << "BMP to WMF conversion error" << endl;
+						kError (30509) << "BMP to WMF conversion error" << endl;
 						return true;
 					}
 
@@ -1157,7 +1157,7 @@ public:
 					QImage image (imageData);
 					if (image.isNull())
 					{
-						kdError (30509) << "QImage isNull: Line=" << __LINE__ << endl;
+						kError (30509) << "QImage isNull: Line=" << __LINE__ << endl;
 						return true;
 					}
 
@@ -1165,7 +1165,7 @@ public:
 					imageActualHeight = Point2Twip (getDimen72DPI (image.height (), image.dotsPerMeterY ()));
 				}
 
-				kdDebug (30509) << "\tForeign format: width=" << imageActualWidth
+				kDebug (30509) << "\tForeign format: width=" << imageActualWidth
 										<< " height=" << imageActualHeight
 										<< " size=" << imageSize
 										<< endl;
@@ -1179,7 +1179,7 @@ public:
 					QImageIO imageIO (&inBuffer, NULL);
 					if (!imageIO.read ())
 					{
-						kdError (30509) << "Could not read foreign format" << endl;
+						kError (30509) << "Could not read foreign format" << endl;
 						return true;
 					}
 
@@ -1192,7 +1192,7 @@ public:
 					imageIO.setFormat ("BMP");
 					if (!imageIO.write ())
 					{
-						kdError (30509) << "Could not convert to BMP" << endl;
+						kError (30509) << "Could not convert to BMP" << endl;
 						return true;
 					}
 
@@ -1205,23 +1205,23 @@ public:
 		}
 
 
-		kdDebug (30509) << "\tActual dimensions: width=" << imageActualWidth
+		kDebug (30509) << "\tActual dimensions: width=" << imageActualWidth
 								<< " height=" << imageActualHeight << endl;
 
-		kdDebug (30509) << "\tKOffice position: left=" << frameAnchor.frame.left
+		kDebug (30509) << "\tKOffice position: left=" << frameAnchor.frame.left
 								<< " right=" << frameAnchor.frame.right
 								<< " top=" << frameAnchor.frame.top
 								<< " bottom=" << frameAnchor.frame.bottom
 								<< endl;
 
-		kdDebug (30509) << "\tIndent=" << MSWrite::Word (Point2Twip (frameAnchor.frame.left)) - m_leftMargin << endl;
+		kDebug (30509) << "\tIndent=" << MSWrite::Word (Point2Twip (frameAnchor.frame.left)) - m_leftMargin << endl;
 		if (ignoreIndent)
-			kdDebug (30509) << "\t\tIgnoring indent - already exported at least one image in a KWord paragraph" << endl;
+			kDebug (30509) << "\t\tIgnoring indent - already exported at least one image in a KWord paragraph" << endl;
 
 		double displayedWidth = Point2Twip (frameAnchor.frame.right - frameAnchor.frame.left + 1);
 		double displayedHeight = Point2Twip (frameAnchor.frame.bottom - frameAnchor.frame.top + 1);
 
-		kdDebug (30509) << "\tdisplayedWidth=" << displayedWidth
+		kDebug (30509) << "\tdisplayedWidth=" << displayedWidth
 								<< " displayedHeight=" << displayedHeight
 								<< endl;
 
@@ -1242,7 +1242,7 @@ public:
 			else
 			{
 				// TODO: what is the image offset relative to (it's not always rel. to the left margin)?
-				kdDebug (30509) << "\tCentred paragraph, cannot position image" << endl;
+				kDebug (30509) << "\tCentred paragraph, cannot position image" << endl;
 			}
 		}
 
@@ -1277,7 +1277,7 @@ public:
 			return false;
 
 
-		kdDebug (30509) << "processImage() successful!" << endl
+		kDebug (30509) << "processImage() successful!" << endl
 								<< "==========================" << endl
 																			<< endl
 																			<< endl;
@@ -1299,7 +1299,7 @@ public:
 
 	bool processCounter (const CounterData &counter)
 	{
-		//kdDebug (30509) << "processCounter(counter.text=" << counter.text << ")" << endl;
+		//kDebug (30509) << "processCounter(counter.text=" << counter.text << ")" << endl;
 
 		if (!counter.text.isEmpty ())
 		{
@@ -1322,7 +1322,7 @@ public:
 			// create new Font with Name
 			MSWrite::Font font ((const MSWrite::Byte *) (const char *) f.fontName.utf8 ());
 		#ifdef KMF_DEBUG_FONT
-			kdDebug (30509) << "FontName " << f.fontName << endl;
+			kDebug (30509) << "FontName " << f.fontName << endl;
 		#endif
 
 			// get Font Family
@@ -1331,31 +1331,31 @@ public:
 			{
 			case QFont::Serif:
 			#ifdef KMF_DEBUG_FONT
-				kdDebug (30509) << "FontFamily Serif" << endl;
+				kDebug (30509) << "FontFamily Serif" << endl;
 			#endif
 				font.setFamily (MSWrite::Font::Roman);
 				break;
 			case QFont::SansSerif:
 			#ifdef KMF_DEBUG_FONT
-				kdDebug (30509) << "FontFamily SansSerif" << endl;
+				kDebug (30509) << "FontFamily SansSerif" << endl;
 			#endif
 				font.setFamily (MSWrite::Font::Swiss);
 				break;
 			case QFont::Courier:
 			#ifdef KMF_DEBUG_FONT
-				kdDebug (30509) << "FontFamily Courier" << endl;
+				kDebug (30509) << "FontFamily Courier" << endl;
 			#endif
 				font.setFamily (MSWrite::Font::Modern);
 				break;
 			case QFont::OldEnglish:
 			#ifdef KMF_DEBUG_FONT
-				kdDebug (30509) << "FontFamily OldEnglish" << endl;
+				kDebug (30509) << "FontFamily OldEnglish" << endl;
 			#endif
 				font.setFamily (MSWrite::Font::Decorative);
 				break;
 			default:
 			#ifdef KMF_DEBUG_FONT
-				kdDebug (30509) << "FontFamily DontKnow" << endl;
+				kDebug (30509) << "FontFamily DontKnow" << endl;
 			#endif
 				// it's either DontCare or MSWrite::Font::Script
 				font.setFamily (MSWrite::Font::DontCare);
@@ -1458,7 +1458,7 @@ public:
 			else if (layout.alignment == "justify")
 				paraProp.setAlignment (MSWrite::Alignment::Justify);
 			else
-				kdWarning (30509) << "Unknown Alignment: " << layout.alignment << endl;
+				kWarning (30509) << "Unknown Alignment: " << layout.alignment << endl;
 		}
 
 		// Indentation
@@ -1466,7 +1466,7 @@ public:
 		if (layout.indentLeft >= 0) paraProp.setLeftIndent (MSWrite::Word (Point2Twip (layout.indentLeft)));
 		if (layout.indentRight >= 0) paraProp.setRightIndent (MSWrite::Word (Point2Twip (layout.indentRight)));
 	#if 0
-		kdDebug (30509) << "Indent: " << Point2Twip (layout.indentFirst) << " "
+		kDebug (30509) << "Indent: " << Point2Twip (layout.indentFirst) << " "
 												<< Point2Twip (layout.indentLeft) << " "
 												<< Point2Twip (layout.indentRight) << endl;
 	#endif
@@ -1492,7 +1492,7 @@ public:
 		case LayoutData::LS_MULTIPLE:
 			break;
 		default:
-			kdWarning (30509) << "unknown lineSpacingType \'" << layout.lineSpacingType << "\'" << endl;
+			kWarning (30509) << "unknown lineSpacingType \'" << layout.lineSpacingType << "\'" << endl;
 		}
 		paraProp.setLineSpacing (lineSpacing);
 
@@ -1512,7 +1512,7 @@ public:
 			// Actually, KWord's UI also only supports 12 so this should never be true
 			if (numTabs >= 12)
 			{
-				kdWarning (30509) << "Write does not support more 12 tabulators, not writing out all tabulators" << endl;
+				kWarning (30509) << "Write does not support more 12 tabulators, not writing out all tabulators" << endl;
 				break;
 			}
 
@@ -1528,7 +1528,7 @@ public:
 			// int m_filling;
 			// double m_width;
 			if ((*tabIt).m_filling != TabulatorData::TF_NONE)
-				kdWarning (30509) <<  "Write does not support Tabulator Filling" << endl;
+				kWarning (30509) <<  "Write does not support Tabulator Filling" << endl;
 
 			paraProp.addTabulator (&tab);
 			numTabs++;
@@ -1555,7 +1555,7 @@ public:
 		// empty paragraph
 		if (numBytes == 0)
 		{
-			//kdDebug (30509) << "Outputting empty paragraph!" << endl;
+			//kDebug (30509) << "Outputting empty paragraph!" << endl;
 
 			// write default character property start
 			if (!m_generator->writeCharInfoBegin (&charPropDefault)) return false;
@@ -1672,7 +1672,7 @@ public:
 
 					if (!startOfWRIParagraph)
 					{
-						kdDebug (30509) << "Writing CRLF to end text paragraph" << endl;
+						kDebug (30509) << "Writing CRLF to end text paragraph" << endl;
 
 						// If you don't have CRLF at the end of the text
 						// paragraph, Write will think that the next paragraph
@@ -1681,7 +1681,7 @@ public:
 						if (!m_generator->writeNewLine (true/*end of paragraph*/)) return false;
 					}
 					else
-						kdDebug (30509) << "Inline frame is anchored at start of paragraph, no CRLF" << endl;
+						kDebug (30509) << "Inline frame is anchored at start of paragraph, no CRLF" << endl;
 
 					if (!m_generator->writeCharInfoEnd (&charProp)) return false;
 					if (!m_generator->writeParaInfoEnd (&paraProp)) return false;
@@ -1689,7 +1689,7 @@ public:
 
 					if ((*formatIt).frameAnchor.type == 6)
 					{
-						kdDebug (30509) << "Table detected" << endl;
+						kDebug (30509) << "Table detected" << endl;
 
 						// this will make its own paragraph(s)...
 						processTable ((*formatIt).frameAnchor.table);
@@ -1697,12 +1697,12 @@ public:
 						// HACK: inline tables are flushed to the left and right
 						// margins, despite being inline, hence the next image
 						// indent will be sensible and should not be ignored.
-						kdDebug (30509) << "Table hack: resetting image-ignore-indent flag" << endl;
+						kDebug (30509) << "Table hack: resetting image-ignore-indent flag" << endl;
 						exportedAtLeastOneImage = false;
 					}
 					else if ((*formatIt).frameAnchor.type == 2)
 					{
-						kdDebug (30509) << "Image detected" << endl;
+						kDebug (30509) << "Image detected" << endl;
 
 						// this will make its own paragraph...
 						if (!processImage ((*formatIt).frameAnchor, &paraProp, &charProp,
@@ -1711,7 +1711,7 @@ public:
 						exportedAtLeastOneImage = true;
 					}
 					else
-						kdWarning (30509) << "Unknown type of anchor: " << (*formatIt).frameAnchor.type << endl;
+						kWarning (30509) << "Unknown type of anchor: " << (*formatIt).frameAnchor.type << endl;
 
 
 					// recontinue paragraph
@@ -1742,7 +1742,7 @@ public:
 		}
 
 		if (!m_generator->writeParaInfoEnd (&paraProp)) return false;
-		//if (numBytes) kdDebug (30509) << "Just Output " << uptoByte << "/" << numBytes << " with text \'" << paraText.utf8 () << "\'" << endl;
+		//if (numBytes) kDebug (30509) << "Just Output " << uptoByte << "/" << numBytes << " with text \'" << paraText.utf8 () << "\'" << endl;
 
 		return true;
 	}
@@ -1810,9 +1810,9 @@ public:
 			QString substring = stringUnicode.mid (upto, length);
 
 		#ifdef DEBUG_PROCESS_TEXT
-			kdDebug (30509) << "Parent string:  upto=" << upto
+			kDebug (30509) << "Parent string:  upto=" << upto
 									<< ",length=" << stringUnicode.length () << endl;
-			kdDebug (30509) << "Child string:   length=" << length
+			kDebug (30509) << "Child string:   length=" << length
 									<< " (specialLoc=" << specialLocation << ")" << endl;
 		#endif
 
@@ -1848,14 +1848,14 @@ public:
 			if (specialLocation != INT_MAX)
 			{
 			#ifdef DEBUG_PROCESS_TEXT
-				kdDebug (30509) << "Found special character!" << endl;
+				kDebug (30509) << "Found special character!" << endl;
 			#endif
 
 				// output special character
 				if (specialLocation == softHyphen)
 				{
 				#ifdef DEBUG_PROCESS_TEXT
-					kdDebug (30509) << "\tSoft Hyphen" << endl;
+					kDebug (30509) << "\tSoft Hyphen" << endl;
 				#endif
 					if (!m_generator->writeOptionalHyphen ()) return false;
 					softHyphen = -2;
@@ -1863,7 +1863,7 @@ public:
 				else if (specialLocation == nonBreakingSpace)
 				{
 				#ifdef DEBUG_PROCESS_TEXT
-					kdDebug (30509) << "\tNon-breaking Space" << endl;
+					kDebug (30509) << "\tNon-breaking Space" << endl;
 				#endif
 					// don't think Write supports nonBreakingSpace
 					if (!m_generator->writeText ((const MSWrite::Byte *) " ")) return false;
@@ -1872,7 +1872,7 @@ public:
 				else if (specialLocation == newLine)
 				{
 				#ifdef DEBUG_PROCESS_TEXT
-					kdDebug (30509) << "\tNew Line" << endl;
+					kDebug (30509) << "\tNew Line" << endl;
 				#endif
 					// \r\n, not just \n
 					if (!m_generator->writeCarriageReturn ()) return false;
@@ -1905,26 +1905,26 @@ MSWriteExport::~MSWriteExport ()
 
 KoFilter::ConversionStatus MSWriteExport::convert (const Q3CString &from, const Q3CString &to)
 {
-	kdDebug (30509) << "MSWriteExport $Date$ using LibMSWrite "
+	kDebug (30509) << "MSWriteExport $Date$ using LibMSWrite "
 			  				<< MSWrite::Version << endl;
 
 	if (to != "application/x-mswrite" || from != "application/x-kword")
 	{
-		kdError (30509) << "Internal error!  Filter not implemented?" << endl;
+		kError (30509) << "Internal error!  Filter not implemented?" << endl;
 		return KoFilter::NotImplemented;
 	}
 
 	KWordMSWriteWorker *worker = new KWordMSWriteWorker;
 	if (!worker)
 	{
-		kdError (30509) << "Could not allocate memory for worker" << endl;
+		kError (30509) << "Could not allocate memory for worker" << endl;
 		return KoFilter::OutOfMemory;
 	}
 
 	KWEFKWordLeader *leader = new KWEFKWordLeader (worker);
 	if (!leader)
 	{
-		kdError (30509) << "Could not allocate memory for leader" << endl;
+		kError (30509) << "Could not allocate memory for leader" << endl;
 		delete worker;
 		return KoFilter::OutOfMemory;
 	}
@@ -1940,35 +1940,35 @@ KoFilter::ConversionStatus MSWriteExport::convert (const Q3CString &from, const 
 	switch (errorCode)
 	{
 	case MSWrite::Error::Ok:
-		kdDebug (30509) << "Returning error code " << ret << endl;
+		kDebug (30509) << "Returning error code " << ret << endl;
 		return ret;	// not KoFilter::OK in case KWEFKWordLeader wants to report something
 
 	case MSWrite::Error::Warn:
-		kdDebug (30509) << "Error::Warn" << endl;
+		kDebug (30509) << "Error::Warn" << endl;
 		return KoFilter::InternalError;	// warnings should _never_ set m_error
 
 	case MSWrite::Error::InvalidFormat:
-		kdDebug (30509) << "Error::InvalidFormat" << endl;
+		kDebug (30509) << "Error::InvalidFormat" << endl;
 		return KoFilter::InternalError;	// how can the file I'm _writing_ be of an invalid format?
 
 	case MSWrite::Error::OutOfMemory:
-		kdDebug (30509) << "Error::OutOfMemory" << endl;
+		kDebug (30509) << "Error::OutOfMemory" << endl;
 		return KoFilter::OutOfMemory;
 
 	case MSWrite::Error::InternalError:
-		kdDebug (30509) << "Error::InternalError" << endl;
+		kDebug (30509) << "Error::InternalError" << endl;
 		return KoFilter::InternalError;
 
 	case MSWrite::Error::Unsupported:
-		kdDebug (30509) << "Error::Unsupported" << endl;
+		kDebug (30509) << "Error::Unsupported" << endl;
 		return KoFilter::InternalError;
 
 	case MSWrite::Error::FileError:
-		kdDebug (30509) << "Error::FileError" << endl;
+		kDebug (30509) << "Error::FileError" << endl;
 		return KoFilter::CreationError;
 	}
 
-	kdWarning (30509) << "Unknown error" << endl;
+	kWarning (30509) << "Unknown error" << endl;
 	return KoFilter::StupidError;
 }
 

@@ -138,8 +138,8 @@ int ExportSizeDia::height() const
 void ExportSizeDia::widthChanged( int width )
 {
     disconnectAll();
-    width = QMIN( width, m_realWidth * 10 );
-    width = QMAX( width, m_realWidth / 10 );
+    width = qMin( width, m_realWidth * 10 );
+    width = qMax( width, m_realWidth / 10 );
     double percent = (100.0 * static_cast<double>( width ) 
 		      / static_cast<double>( m_realWidth ));
     m_percWidthEdit->setValue(  percent  );
@@ -155,8 +155,8 @@ void ExportSizeDia::widthChanged( int width )
 void ExportSizeDia::heightChanged( int height )
 {
     disconnectAll();
-    height = QMIN( height, m_realHeight * 10 );
-    height = QMAX( height, m_realHeight / 10 );
+    height = qMin( height, m_realHeight * 10 );
+    height = qMax( height, m_realHeight / 10 );
     double percent = (100.0 * static_cast<double>( height )
 		      / static_cast<double>( m_realHeight ));
     m_percHeightEdit->setValue( percent  );
@@ -172,8 +172,8 @@ void ExportSizeDia::heightChanged( int height )
 void ExportSizeDia::percentWidthChanged( double percent )
 {
     disconnectAll();
-    percent = QMIN( percent, 1000 );
-    percent = QMAX( percent, 10 );
+    percent = qMin( percent, 1000 );
+    percent = qMax( percent, 10 );
     int width = static_cast<int>( m_realWidth * percent / 100. );
     m_widthEdit->setValue(  width  );
     if ( m_proportional->isChecked() ) {
@@ -188,8 +188,8 @@ void ExportSizeDia::percentWidthChanged( double percent )
 void ExportSizeDia::percentHeightChanged( double percent )
 {
     disconnectAll();
-    percent = QMIN( percent, 1000 );
-    percent = QMAX( percent, 10 );
+    percent = qMin( percent, 1000 );
+    percent = qMax( percent, 10 );
     if ( m_proportional->isChecked() ) {
         int width = static_cast<int>( m_realWidth * percent / 100. );
         m_widthEdit->setValue(  width  );
@@ -206,8 +206,8 @@ void ExportSizeDia::proportionalClicked()
     if ( m_proportional->isChecked() ) {
         disconnectAll();
         int width = m_widthEdit->value( );
-        width = QMIN( width, m_realWidth * 10 );
-        width = QMAX( width, m_realWidth / 10 );
+        width = qMin( width, m_realWidth * 10 );
+        width = qMax( width, m_realWidth / 10 );
         double percent = (100.0 * static_cast<double>( width )
 			  / static_cast<double>( m_realWidth ));
         m_percHeightEdit->setValue(  percent  );
@@ -257,7 +257,7 @@ void ExportSizeDia::slotOk()
     //doc->newZoomAndResolution( false, false );
     int width = widthEdit->value();
     int height = heightEdit->value();
-//     kdDebug( KFormula::DEBUGID ) << k_funcinfo
+//     kDebug( KFormula::DEBUGID ) << k_funcinfo
 //                                  << "(" << width << " " << height << ")"
 //                                  << endl;
 //     width = realWidth;

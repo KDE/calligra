@@ -36,13 +36,13 @@ Env::Env(const char* command)
 	/* Remove \begin{ at the begining and the } at the end. */
 	if(pos != -1)
 		_name = pattern.mid(pos + 1, pattern.length() - pos - 2);
-	_name = _name.stripWhiteSpace();
+	_name = _name.trimmed();
 }
 
 Env::Env(QString name) : _name(name)
 {
 	setType(Element::LATEX_ENV);
-	_name = _name.stripWhiteSpace();
+	_name = _name.trimmed();
 }
 
 Env::~Env()

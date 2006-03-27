@@ -58,7 +58,7 @@ public:
 protected:
     virtual void setupTranslations(void)
     {
-        KGlobal::locale()->insertCatalogue("kofficefilters");
+        KGlobal::locale()->insertCatalog("kofficefilters");
     }
 };
 
@@ -124,29 +124,29 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     if (!m_ioDevice)
     {
-        kdError(30502) << "No output file! Aborting!" << endl;
+        kError(30502) << "No output file! Aborting!" << endl;
         return false;
     }
 
     if (!m_ioDevice->open(QIODevice::WriteOnly))
     {
-        kdError(30502) << "Unable to open output file!" << endl;
+        kError(30502) << "Unable to open output file!" << endl;
         return false;
     }
 
     m_streamOut = new QTextStream(m_ioDevice);
     if (!m_streamOut)
     {
-        kdError(30502) << "Could not create output stream! Aborting!" << endl;
+        kError(30502) << "Could not create output stream! Aborting!" << endl;
         m_ioDevice->close();
         return false;
     }
 
-    kdDebug(30502) << "Charset used: " << getCodec()->name() << endl;
+    kDebug(30502) << "Charset used: " << getCodec()->name() << endl;
 
     if (!getCodec())
     {
-        kdError(30502) << "Could not create QTextCodec! Aborting" << endl;
+        kError(30502) << "Could not create QTextCodec! Aborting" << endl;
         return false;
     }
 
@@ -196,7 +196,7 @@ bool ASCIIWorker::doFullParagraph(const ParaData& para)
 bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
     const ValueListFormatData& paraFormatDataList)
 {
-    kdDebug(30502) << "Entering ASCIIWorker::doFullParagraph" << endl;
+    kDebug(30502) << "Entering ASCIIWorker::doFullParagraph" << endl;
 
 #if 0
     // As KWord has only one depth of lists, we can process lists very simply.
@@ -334,14 +334,14 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
     if (!ProcessParagraphData(paraText, paraFormatDataList)) return false;
 #endif
 
-    kdDebug(30502) << "Exiting ASCIIWorker::doFullParagraph" << endl;
+    kDebug(30502) << "Exiting ASCIIWorker::doFullParagraph" << endl;
     return true;
 }
 
 
 bool ASCIIWorker::ProcessTable(const Table& table)
 {
-    kdDebug(30502) << "processTable CALLED!" << endl;
+    kDebug(30502) << "processTable CALLED!" << endl;
 
     // just dump the table out (no layout for now)
     for (Q3ValueList<TableCell>::ConstIterator it = table.cellList.begin();
@@ -408,7 +408,7 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                     }
                     else
                     {
-                        kdWarning(30502) << "Unsupported frame anchor type: "
+                        kWarning(30502) << "Unsupported frame anchor type: "
                             << (*paraFormatDataIt).frameAnchor.type << endl;
                     }
 
@@ -417,7 +417,7 @@ bool ASCIIWorker::ProcessParagraphData(const QString& paraText,
                 }
                 default:
                 {
-                    kdWarning(30502) << "Not supported paragraph type: "
+                    kWarning(30502) << "Not supported paragraph type: "
                         << (*paraFormatDataIt).id << endl;
                     break;
                 }
@@ -449,13 +449,13 @@ KoFilter::ConversionStatus ASCIIExport::convert(const Q3CString& from, const Q3C
       dialog = new AsciiExportDialog();
       if (!dialog)
       {
-	kdError(30502) << "Dialog has not been created! Aborting!" << endl;
+	kError(30502) << "Dialog has not been created! Aborting!" << endl;
 	return KoFilter::StupidError;
       }
       
       if (!dialog->exec())
       {
-	kdError(30502) << "Dialog was aborted! Aborting filter!" << endl;
+	kError(30502) << "Dialog was aborted! Aborting filter!" << endl;
 	return KoFilter::UserCancelled;
       }
     }
@@ -463,7 +463,7 @@ KoFilter::ConversionStatus ASCIIExport::convert(const Q3CString& from, const Q3C
 
     if (!worker)
     {
-        kdError(30502) << "Cannot create Worker! Aborting!" << endl;
+        kError(30502) << "Cannot create Worker! Aborting!" << endl;
         delete dialog;
         return KoFilter::StupidError;
     }
@@ -475,7 +475,7 @@ KoFilter::ConversionStatus ASCIIExport::convert(const Q3CString& from, const Q3C
     
     if ( !codec )
     {
-        kdError(30502) << "No codec!" << endl;
+        kError(30502) << "No codec!" << endl;
         delete dialog;
         return KoFilter::StupidError;
     }
@@ -492,7 +492,7 @@ KoFilter::ConversionStatus ASCIIExport::convert(const Q3CString& from, const Q3C
 
     if (!leader)
     {
-        kdError(30502) << "Cannot create Worker! Aborting!" << endl;
+        kError(30502) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }

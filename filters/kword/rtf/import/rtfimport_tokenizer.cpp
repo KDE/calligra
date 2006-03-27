@@ -148,10 +148,10 @@ void RTFTokenizer::next()
             *_text = 0; // Just put an end of string for the test, it can then be over-written again
             if ( !memcmp( tokenText.data()+1, "bin", 4 ) )
             {   // We have \bin, so we need to read the bytes
-                kdDebug(30515) << "Token:" << tokenText << endl;
+                kDebug(30515) << "Token:" << tokenText << endl;
                 if (value > 0)
                 {
-                    kdDebug(30515) << "\\bin" << value << endl;
+                    kDebug(30515) << "\\bin" << value << endl;
                     type = RTFTokenizer::BinaryData;
                     binaryData.resize(value);
                     for (int i=0; i<value; i++)

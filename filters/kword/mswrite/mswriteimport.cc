@@ -55,7 +55,7 @@ public:
 protected:
 	virtual void setupTranslations (void)
 	{
-		KGlobal::locale()->insertCatalogue ("kofficefilters");
+		KGlobal::locale()->insertCatalog ("kofficefilters");
 	}
 };
 
@@ -144,12 +144,12 @@ public:
 
 	void debug (const char *s)
 	{
-		kdDebug (30509) << s;
+		kDebug (30509) << s;
 	}
 
 	void debug (const int i)
 	{
-		kdDebug (30509) << i;
+		kDebug (30509) << i;
 	}
 
 	void error (const int errorCode, const char *message,
@@ -157,11 +157,11 @@ public:
 					MSWrite::DWord /*tokenValue*/ = NoToken)
 	{
 		if (errorCode == MSWrite::Error::Warn)
-			kdWarning (30509) << message;
+			kWarning (30509) << message;
 		else
 		{
 			m_error = errorCode;
-			kdError (30509) << message;
+			kError (30509) << message;
 		}
 	}
 };
@@ -312,7 +312,7 @@ public:
 		if (m_codec)
 			m_decoder = m_codec->makeDecoder();
 		else
-			kdWarning (30509) << "Cannot convert from Win Charset!" << endl;
+			kWarning (30509) << "Cannot convert from Win Charset!" << endl;
 	}
 
 	virtual ~KWordGenerator ()
@@ -328,7 +328,7 @@ public:
 	bool writeDocumentBegin (const MSWrite::Word,
 						 				const MSWrite::PageLayout *pageLayout)
 	{
-		kdDebug (30509) << "writeDocumentBegin()" << endl;
+		kDebug (30509) << "writeDocumentBegin()" << endl;
 
 		// open maindoc.xml
 		m_outfile = m_chain->storageFile ("root", KoStore::Write);
@@ -356,16 +356,16 @@ public:
 		m_topMargin = m_top;
 		m_bottomMargin = Twip2Point (pageLayout->getBottomMargin ());
 
-		kdDebug (30509) << "leftMargin: " << m_leftMargin << endl;
-		kdDebug (30509) << "rightMargin: " << m_rightMargin << endl;
-		kdDebug (30509) << "topMargin: " << m_topMargin << endl;
-		kdDebug (30509) << "bottomMargin: " << m_bottomMargin << endl;
+		kDebug (30509) << "leftMargin: " << m_leftMargin << endl;
+		kDebug (30509) << "rightMargin: " << m_rightMargin << endl;
+		kDebug (30509) << "topMargin: " << m_topMargin << endl;
+		kDebug (30509) << "bottomMargin: " << m_bottomMargin << endl;
 
 		// offset of header & footer
 		m_headerFromTop = Twip2Point (pageLayout->getHeaderFromTop ());
 		m_footerFromTop = Twip2Point (pageLayout->getFooterFromTop ());
 
-		kdDebug (30509) << "headerFromTop: " << m_headerFromTop
+		kDebug (30509) << "headerFromTop: " << m_headerFromTop
 				  				<< " footerFromTop: " << m_footerFromTop << endl;
 
 		m_startingPageNumber = pageLayout->getPageNumberStart ();
@@ -375,7 +375,7 @@ public:
 
 	bool writeDocumentBeginForReal (void)
 	{
-		kdDebug (30509) << "writeDocumentBeginForReal()" << endl;
+		kDebug (30509) << "writeDocumentBeginForReal()" << endl;
 
 		// adjust margins/PAPERBORDERS to ensure that the header & footer are
 		// within them
@@ -389,7 +389,7 @@ public:
 			if (m_pageHeight - m_footerFromTop < m_bottomMargin)
 				m_bottomMargin = m_pageHeight - m_footerFromTop;
 
-		kdDebug (30509) << "adjusted::: leftMargin: " << m_leftMargin
+		kDebug (30509) << "adjusted::: leftMargin: " << m_leftMargin
 								<< "  rightMargin: " << m_rightMargin
 								<< "  topMargin: " << m_topMargin
 								<< "  bottomMargin: " << m_bottomMargin
@@ -437,7 +437,7 @@ public:
 
 	bool writeDocumentEnd (const MSWrite::Word, const MSWrite::PageLayout *)
 	{
-		kdDebug (30509) << "writeDocumentEnd()" << endl;
+		kDebug (30509) << "writeDocumentEnd()" << endl;
 
 		// write framesets for the objects
 		writeTextInternal (m_objectFrameset);
@@ -488,7 +488,7 @@ public:
 		MSWrite::List <WRIObject>::Iterator end(m_objectList.end ());
 		for (it = m_objectList.begin (); it != end; ++it)
 		{
-			kdDebug (30509) << "outputting object \'" << (*it).m_nameInStore
+			kDebug (30509) << "outputting object \'" << (*it).m_nameInStore
 					  				<< "\'   (length: " << (*it).m_dataLength << ")"
 									<< endl;
 
@@ -515,7 +515,7 @@ public:
 
 	bool writeFooterBegin (void)
 	{
-		kdDebug (30509) << "writeFooterBegin()" << endl;
+		kDebug (30509) << "writeFooterBegin()" << endl;
 
 		inWhat = Footer;
 		m_hasFooter = true;
@@ -530,7 +530,7 @@ public:
 
 	bool writeFooterEnd (void)
 	{
-		kdDebug (30509) << "writeFooterEnd()" << endl;
+		kDebug (30509) << "writeFooterEnd()" << endl;
 
 		inWhat = Nothing;
 
@@ -543,7 +543,7 @@ public:
 
 	bool writeHeaderBegin (void)
 	{
-		kdDebug (30509) << "writeHeaderBegin()" << endl;
+		kDebug (30509) << "writeHeaderBegin()" << endl;
 
 		inWhat = Header;
 		m_hasHeader = true;
@@ -558,7 +558,7 @@ public:
 
 	bool writeHeaderEnd (void)
 	{
-		kdDebug (30509) << "writeHeaderEnd()" << endl;
+		kDebug (30509) << "writeHeaderEnd()" << endl;
 
 		inWhat = Nothing;
 
@@ -571,7 +571,7 @@ public:
 
 	bool writeBodyBegin (void)
 	{
-		kdDebug (30509) << "writeBodyBegin()" << endl;
+		kDebug (30509) << "writeBodyBegin()" << endl;
 
 		inWhat = Body;
 
@@ -590,7 +590,7 @@ public:
 
 	bool writeBodyEnd (void)
 	{
-		kdDebug (30509) << "writeBodyEnd()" << endl;
+		kDebug (30509) << "writeBodyEnd()" << endl;
 
 		inWhat = Nothing;
 
@@ -598,7 +598,7 @@ public:
 		// and for "hardFrameBreakAfter" to do its work, we need one more final paragraph!
 		if (m_needAnotherParagraph)
 		{
-			kdDebug (30509) << "needAnotherParagraph in bodyEndWrite()" << endl;
+			kDebug (30509) << "needAnotherParagraph in bodyEndWrite()" << endl;
 			writeTextInternal ("<PARAGRAPH><TEXT></TEXT><LAYOUT></LAYOUT></PARAGRAPH>");
 			m_needAnotherParagraph = false;
 		}
@@ -615,7 +615,7 @@ public:
 										const MSWrite::OLE *ole,
 										const MSWrite::Image *image)
 	{
-		//kdDebug (30509) << "writeParaInfoBegin()" << endl;
+		//kDebug (30509) << "writeParaInfoBegin()" << endl;
 
 		// reset charInfo counters
 		m_charInfoCountStart = 0;
@@ -692,7 +692,7 @@ public:
 
 		if (image)
 		{
-			kdDebug (30509) << "Paragraph is an image!" << endl;
+			kDebug (30509) << "Paragraph is an image!" << endl;
 
 			QString imageName;
 			QString fileInStore;
@@ -710,7 +710,7 @@ public:
 
 			fileInStore = "pictures/picture" + QString::number (m_numPictures + 1);
 
-			kdDebug (30509) << "\tGetting type..." << endl;
+			kDebug (30509) << "\tGetting type..." << endl;
 
 			// append extension
 			if (image->getIsBMP ())
@@ -723,7 +723,7 @@ public:
 
 			// indicate anchored image in formatting
 			//
-			kdDebug (30509) << "\tIndicating anchored image in formatting" << endl;
+			kDebug (30509) << "\tIndicating anchored image in formatting" << endl;
 			if (!writeTextInternal ("#")) return false;
 
 			m_formatOutput += "<FORMAT id=\"6\" pos=\"0\" len=\"1\">";
@@ -735,7 +735,7 @@ public:
 
 			// write framesets (truly written in documentEndWrite())
 			//
-			kdDebug (30509) << "\tWriting framesets!" << endl;
+			kDebug (30509) << "\tWriting framesets!" << endl;
 
 			m_objectFrameset += "<FRAMESET frameType=\"2\" frameInfo=\"0\" name=\"";
 			m_objectFrameset += imageName;
@@ -787,7 +787,7 @@ public:
 
 			// store object properties
 			//
-			kdDebug (30509) << "\tStoring object" << endl;
+			kDebug (30509) << "\tStoring object" << endl;
 
 			if (!m_objectList.addToBack ())
 				ErrorAndQuit (MSWrite::Error::OutOfMemory, "could not allocate memory for object\n");
@@ -822,7 +822,7 @@ public:
 									const MSWrite::Image *image)
 
 	{
-		//kdDebug (30509) << "writeParaInfoEnd()" << endl;
+		//kDebug (30509) << "writeParaInfoEnd()" << endl;
 
 		if (image)
 		{
@@ -830,7 +830,7 @@ public:
 
 			// consistency check: wrote exactly the right amount of data?
 			if (obj.m_dataUpto != obj.m_dataLength)
-				kdWarning (30509) << "obj.dataUpto (" << obj.m_dataUpto
+				kWarning (30509) << "obj.dataUpto (" << obj.m_dataUpto
 						  				<< ") != obj.dataLength (" << obj.m_dataLength
 										<< ")" << endl;
 		}
@@ -878,7 +878,7 @@ public:
 				if (align == MSWrite::Align::Center)
 				{
 					// TODO: I don't know what m_objectHorizOffset is relative to!
-					kdDebug (30509) <<  "ignoring image offset with centred image" << endl;
+					kDebug (30509) <<  "ignoring image offset with centred image" << endl;
 					m_objectHorizOffset = 0;
 				}
 				else
@@ -888,7 +888,7 @@ public:
 					// TODO: proper image positioning (see doc IMPERFECT)
 					if (m_simulateImageOffset && m_objectHorizOffset > indentLeft)
 					{
-						kdDebug (30509) << "image is further away from left margin by itself, rather than using indentLeft ("
+						kDebug (30509) << "image is further away from left margin by itself, rather than using indentLeft ("
 												<< m_objectHorizOffset << " > " << indentLeft << ")" << endl;
 						indentLeft = m_objectHorizOffset;
 					}
@@ -924,7 +924,7 @@ public:
 						output += "double";
 						break;
 					default:
-						kdWarning (30509) << "non-\"standard\" linespacing value: " <<  lineSpacing << endl;
+						kWarning (30509) << "non-\"standard\" linespacing value: " <<  lineSpacing << endl;
 						output += "atleast\" ";
 						output += "spacingvalue=\"";
 							output += QString::number (Twip2Point (lineSpacing));
@@ -957,7 +957,7 @@ public:
 						amount = 14;
 						break;
 					default:
-						kdWarning (30509) << "unknown linespacing value: " << lineSpacing << endl;
+						kWarning (30509) << "unknown linespacing value: " << lineSpacing << endl;
 						break;
 					}
 
@@ -1059,7 +1059,7 @@ public:
 
 	bool writeCharInfoBegin (const MSWrite::FormatCharProperty * /*charProperty*/)
 	{
-		//kdDebug (30509) << "writeCharInfoBegin()" << endl;
+		//kDebug (30509) << "writeCharInfoBegin()" << endl;
 
 		return true;
 	}
@@ -1068,7 +1068,7 @@ public:
 	bool writeCharInfoEnd (const MSWrite::FormatCharProperty *charProperty,
 						 			const bool = false)
 	{
-		//kdDebug (30509) << "writeCharInfoEnd()" << endl;
+		//kDebug (30509) << "writeCharInfoEnd()" << endl;
 
 		// output type of format information (page number or normal text)
 		m_formatOutput += "<FORMAT id=\"";
@@ -1130,7 +1130,7 @@ public:
 
 	bool writeBinary (const MSWrite::Byte *buffer, const MSWrite::DWord length)
 	{
-		kdDebug (30509) << "writeBinary()" << endl;
+		kDebug (30509) << "writeBinary()" << endl;
 
 		// must be OLE, TODO: implement OLE properly
 		if (!m_paraIsImage)
@@ -1144,7 +1144,7 @@ public:
 		// consistency check: aren't going to write past end of array?
 		if (obj.m_dataUpto + length > obj.m_dataLength)
 		{
-			kdDebug (30509) << "object image overrun: "
+			kDebug (30509) << "object image overrun: "
 									<< obj.m_dataUpto << " + " << length
 									<< " > " << obj.m_dataLength  << endl;
 			ErrorAndQuit (MSWrite::Error::InternalError, "object image overrun\n");
@@ -1349,12 +1349,12 @@ MSWriteImport::~MSWriteImport ()
 
 KoFilter::ConversionStatus MSWriteImport::convert (const Q3CString &from, const Q3CString &to)
 {
-	kdDebug (30509) << "MSWriteImport $Date$ using LibMSWrite "
+	kDebug (30509) << "MSWriteImport $Date$ using LibMSWrite "
 			  				<< MSWrite::Version << endl;
 
 	if (to != "application/x-kword" || from != "application/x-mswrite")
 	{
-		kdError (30509) << "Internal error!  Filter not implemented?" << endl;
+		kError (30509) << "Internal error!  Filter not implemented?" << endl;
 		return KoFilter::NotImplemented;
 	}
 
@@ -1393,14 +1393,14 @@ KoFilter::ConversionStatus MSWriteImport::convert (const Q3CString &from, const 
 	m_device = new WRIDevice;
 	if (!m_device)
 	{
-		kdError (30509) << "Could not allocate memory for device" << endl;
+		kError (30509) << "Could not allocate memory for device" << endl;
 		return KoFilter::OutOfMemory;
 	}
 
 	// open the .WRI file
 	if (!m_device->openFile (QFile::encodeName (m_chain->inputFile ())))
 	{
-		kdError (30509) << "Could not open \'" << m_chain->inputFile () << "\'" << endl;
+		kError (30509) << "Could not open \'" << m_chain->inputFile () << "\'" << endl;
 		return KoFilter::FileNotFound;
 	}
 
@@ -1409,7 +1409,7 @@ KoFilter::ConversionStatus MSWriteImport::convert (const Q3CString &from, const 
 	m_parser = new MSWrite::InternalParser;
 	if (!m_parser)
 	{
-		kdError (30509) << "Could not allocate memory for parser" << endl;
+		kError (30509) << "Could not allocate memory for parser" << endl;
 		return KoFilter::OutOfMemory;
 	}
 
@@ -1421,7 +1421,7 @@ KoFilter::ConversionStatus MSWriteImport::convert (const Q3CString &from, const 
 	m_generator = new KWordGenerator;
 	if (!m_generator)
 	{
-		kdError (30509) << "Could not allocate memory for generator" << endl;
+		kError (30509) << "Could not allocate memory for generator" << endl;
 		return KoFilter::OutOfMemory;
 	}
 
@@ -1448,35 +1448,35 @@ KoFilter::ConversionStatus MSWriteImport::convert (const Q3CString &from, const 
 		switch (errorCode)
 		{
 		case MSWrite::Error::Ok:
-			kdDebug (30509) << "Error::Ok but aborted???" << endl;
+			kDebug (30509) << "Error::Ok but aborted???" << endl;
 			return KoFilter::InternalError;
 
 		case MSWrite::Error::Warn:
-			kdDebug (30509) << "Error::Warn" << endl;
+			kDebug (30509) << "Error::Warn" << endl;
 			return KoFilter::InternalError;	// warnings should _never_ set m_error
 
 		case MSWrite::Error::InvalidFormat:
-			kdDebug (30509) << "Error::InvalidFormat" << endl;
+			kDebug (30509) << "Error::InvalidFormat" << endl;
 			return KoFilter::WrongFormat;
 
 		case MSWrite::Error::OutOfMemory:
-			kdDebug (30509) << "Error::OutOfMemory" << endl;
+			kDebug (30509) << "Error::OutOfMemory" << endl;
 			return KoFilter::OutOfMemory;
 
 		case MSWrite::Error::InternalError:
-			kdDebug (30509) << "Error::InternalError" << endl;
+			kDebug (30509) << "Error::InternalError" << endl;
 			return KoFilter::InternalError;
 
 		case MSWrite::Error::Unsupported:
-			kdDebug (30509) << "Error::Unsupported" << endl;
+			kDebug (30509) << "Error::Unsupported" << endl;
 			return KoFilter::InternalError;
 
 		case MSWrite::Error::FileError:
-			kdDebug (30509) << "Error::FileError" << endl;
+			kDebug (30509) << "Error::FileError" << endl;
 			return KoFilter::StupidError;	// got a better return value?
 		}
 
-		kdWarning (30509) << "Unknown error: " << errorCode << endl;
+		kWarning (30509) << "Unknown error: " << errorCode << endl;
 		return KoFilter::StupidError;
 	}
 

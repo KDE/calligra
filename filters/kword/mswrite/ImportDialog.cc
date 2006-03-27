@@ -54,7 +54,7 @@ MSWriteImportDialog :: MSWriteImportDialog(QWidget* parent)
 
 MSWriteImportDialog :: ~MSWriteImportDialog(void)
 {
-    kapp->setOverrideCursor(Qt::waitCursor);
+    kapp->setOverrideCursor(Qt::WaitCursor);
 }
 
 QTextCodec* MSWriteImportDialog::getCodec(void) const
@@ -63,18 +63,18 @@ QTextCodec* MSWriteImportDialog::getCodec(void) const
 
     if (m_dialog->radioEncodingDefault==m_dialog->buttonGroupEncoding->selected())
     {
-        kdDebug(30509) << "Encoding: CP 1252" << endl;
+        kDebug(30509) << "Encoding: CP 1252" << endl;
         codec=QTextCodec::codecForName("CP 1252");
     }
     /*else if (m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
     {
-        kdDebug(30503) << "Encoding: Locale" << endl;
+        kDebug(30503) << "Encoding: Locale" << endl;
         codec=QTextCodec::codecForLocale();
     }*/
     else if (m_dialog->radioEncodingOther==m_dialog->buttonGroupEncoding->selected())
     {
         QString strCodec=m_dialog->comboBoxEncoding->currentText();
-        kdDebug(30509) << "Encoding: " << strCodec << endl;
+        kDebug(30509) << "Encoding: " << strCodec << endl;
         if (strCodec.isEmpty())
         {
             codec=QTextCodec::codecForLocale();
@@ -90,7 +90,7 @@ QTextCodec* MSWriteImportDialog::getCodec(void) const
     if (!codec)
     {
         // Default: UTF-8
-        kdWarning(30509) << "No codec set, assuming UTF-8" << endl;
+        kWarning(30509) << "No codec set, assuming UTF-8" << endl;
         codec=QTextCodec::codecForName("UTF-8");
     }
 

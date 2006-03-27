@@ -78,13 +78,13 @@ KoFilter::ConversionStatus SvgImport::convert(const Q3CString& from, const Q3CSt
 	else
 		strMime="text/plain";
 
-	/*kdDebug(30514) << "File extension: -" << strExt << "- Compression: " << strMime << endl;*/
+	/*kDebug(30514) << "File extension: -" << strExt << "- Compression: " << strMime << endl;*/
 
 	QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
 	if (!in->open(QIODevice::ReadOnly))
 	{
-		kdError(30514) << "Cannot open file! Aborting!" << endl;
+		kError(30514) << "Cannot open file! Aborting!" << endl;
 		delete in;
 		return KoFilter::FileNotFound;
 	}
@@ -99,7 +99,7 @@ KoFilter::ConversionStatus SvgImport::convert(const Q3CString& from, const Q3CSt
 
 	if ( ! parsed )
 	{
-		kdError(30514) << "Error while parsing file: "
+		kError(30514) << "Error while parsing file: "
 		        << "at line " << line << " column: " << col
 		        << " message: " << errormessage << endl;
 		// ### TODO: feedback to the user
@@ -118,7 +118,7 @@ KoFilter::ConversionStatus SvgImport::convert(const Q3CString& from, const Q3CSt
 	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
 	if( !out )
 	{
-		kdError(30514) << "Unable to open output file!" << endl;
+		kError(30514) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
 	}
 	Q3CString cstring = outdoc.toCString(); // utf-8 already
@@ -145,7 +145,7 @@ void SvgImport::convert()
 	{
 		// allow for viewbox def with ',' or whitespace
 		QString viewbox( docElem.attribute( "viewBox" ) );
-		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplifyWhiteSpace() );
+		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplified() );
 
 		gc->matrix.scale( width / points[2].toFloat() , height / points[3].toFloat() );
 		m_outerRect.setWidth( m_outerRect.width() * ( points[2].toFloat() / width ) );
@@ -452,7 +452,7 @@ void SvgImport::parseColor( VColor &color, const QString &s )
 {
 	if( s.startsWith( "rgb(" ) )
 	{
-		QString parse = s.stripWhiteSpace();
+		QString parse = s.trimmed();
 		QStringList colors = QStringList::split( ',', parse );
 		QString r = colors[0].right( ( colors[0].length() - 4 ) );
 		QString g = colors[1];
@@ -486,7 +486,7 @@ void SvgImport::parseColor( VColor &color, const QString &s )
 	}
 	else
 	{
-		QString rgbColor = s.stripWhiteSpace();
+		QString rgbColor = s.trimmed();
 		QColor c;
 		if( rgbColor.startsWith( "#" ) )
 			c.setNamedColor( rgbColor );
@@ -519,13 +519,13 @@ void SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 			else
 			{
 				// try style attr
-				QString style = stop.attribute( "style" ).simplifyWhiteSpace();
+				QString style = stop.attribute( "style" ).simplified();
 				QStringList substyles = QStringList::split( ';', style );
 				for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
 				{
 					QStringList substyle = QStringList::split( ':', (*it) );
-					QString command	= substyle[0].stripWhiteSpace();
-					QString params	= substyle[1].stripWhiteSpace();
+					QString command	= substyle[0].trimmed();
+					QString params	= substyle[1].trimmed();
 					if( command == "stop-color" )
 						parseColor( c, params );
 					if( command == "stop-opacity" )
@@ -600,13 +600,13 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
 	else
 	{
 		// try style attr
-		QString style = b.attribute( "style" ).simplifyWhiteSpace();
+		QString style = b.attribute( "style" ).simplified();
 		QStringList substyles = QStringList::split( ';', style );
 		for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
 		{
 			QStringList substyle = QStringList::split( ':', (*it) );
-			QString command	= substyle[0].stripWhiteSpace();
-			QString params	= substyle[1].stripWhiteSpace();
+			QString command	= substyle[0].trimmed();
+			QString params	= substyle[1].trimmed();
 			if( command == "color" )
 				parseColor( c, params );
 		}
@@ -690,10 +690,10 @@ void SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &co
 				{
 					// adjust to bbox
 					KoRect bbox = obj->boundingBox();
-					//kdDebug() << "bbox x : " << bbox.x() << endl;
-					//kdDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
-					//kdDebug() << gc->fill.gradient().origin().x() << endl;
-					//kdDebug() << gc->fill.gradient().vector().x() << endl;
+					//kDebug() << "bbox x : " << bbox.x() << endl;
+					//kDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
+					//kDebug() << gc->fill.gradient().origin().x() << endl;
+					//kDebug() << gc->fill.gradient().vector().x() << endl;
 					double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
 					double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
 					gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
@@ -706,11 +706,11 @@ void SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &co
 					offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
 					offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
 					gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
-					//kdDebug() << offsety << endl;
-					//kdDebug() << gc->fill.gradient().origin().x() << endl;
-					//kdDebug() << gc->fill.gradient().origin().y() << endl;
-					//kdDebug() << gc->fill.gradient().vector().x() << endl;
-					//kdDebug() << gc->fill.gradient().vector().y() << endl;
+					//kDebug() << offsety << endl;
+					//kDebug() << gc->fill.gradient().origin().x() << endl;
+					//kDebug() << gc->fill.gradient().origin().y() << endl;
+					//kDebug() << gc->fill.gradient().vector().x() << endl;
+					//kDebug() << gc->fill.gradient().vector().y() << endl;
 				}
 				gc->fill.gradient().transform( gradHelper->gradientTransform );
 
@@ -949,13 +949,13 @@ void SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		parsePA( obj, gc, "opacity", e.attribute( "opacity" ) );
 
 	// try style attr
-	QString style = e.attribute( "style" ).simplifyWhiteSpace();
+	QString style = e.attribute( "style" ).simplified();
 	QStringList substyles = QStringList::split( ';', style );
 	for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
 	{
 		QStringList substyle = QStringList::split( ':', (*it) );
-		QString command	= substyle[0].stripWhiteSpace();
-		QString params	= substyle[1].stripWhiteSpace();
+		QString command	= substyle[0].trimmed();
+		QString params	= substyle[1].trimmed();
 		parsePA( obj, gc, command, params );
 	}
 
@@ -1236,7 +1236,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 			if( ! e.attribute( "text-anchor" ).isEmpty() )
 				anchor = e.attribute( "text-anchor" );
 		}
-		text = new VText( m_gc.current()->font, base, VText::Above, VText::Left, content.simplifyWhiteSpace() );
+		text = new VText( m_gc.current()->font, base, VText::Above, VText::Left, content.simplified() );
 	}
 	else
 	{
@@ -1245,7 +1245,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 		double y = parseUnit( b.attribute( "y" ) );
 		base.moveTo( KoPoint( x, y ) );
 		base.lineTo( KoPoint( x + pathLength, y ) );
-		text = new VText( m_gc.current()->font, base, VText::Above, VText::Left, b.text().simplifyWhiteSpace() );
+		text = new VText( m_gc.current()->font, base, VText::Above, VText::Left, b.text().simplified() );
 	}
 
 	if( text )
@@ -1325,7 +1325,7 @@ void SvgImport::createObject( VGroup *grp, const QDomElement &b, const VObject::
 		VPath *path = new VPath( &m_document );
 		bool bFirst = true;
 
-		QString points = b.attribute( "points" ).simplifyWhiteSpace();
+		QString points = b.attribute( "points" ).simplified();
 		points.replace( ',', ' ' );
 		points.remove( '\r' );
 		points.remove( '\n' );

@@ -51,7 +51,7 @@ KisPNGExport::~KisPNGExport()
 
 KoFilter::ConversionStatus KisPNGExport::convert(const Q3CString& from, const Q3CString& to)
 {
-    kdDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
+    kDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
     
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -96,10 +96,10 @@ KoFilter::ConversionStatus KisPNGExport::convert(const Q3CString& from, const Q3
     KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
     
     if ( (res = kpc.buildFile(url, l, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
-        kdDebug(41008) << "success !" << endl;
+        kDebug(41008) << "success !" << endl;
         return KoFilter::OK;
     }
-    kdDebug(41008) << " Result = " << res << endl;
+    kDebug(41008) << " Result = " << res << endl;
     return KoFilter::InternalError;
 }
 

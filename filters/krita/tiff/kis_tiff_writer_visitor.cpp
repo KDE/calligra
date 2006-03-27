@@ -53,7 +53,7 @@ namespace {
             return true;
         }
 
-        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+        kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return false;
 
     }
@@ -69,13 +69,13 @@ KisTIFFWriterVisitor::~KisTIFFWriterVisitor()
 
 bool KisTIFFWriterVisitor::saveAlpha() { return m_options->alpha; }
 
-bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, Q_UINT8* poses)
+bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses)
 {
     if(depth == 16)
     {
-        Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(buff);
+        quint16 *dst = reinterpret_cast<quint16 *>(buff);
         while (!it.isDone()) {
-            const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+            const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
             int i;
             for(i = 0; i < nbcolorssamples; i++)
             {
@@ -86,9 +86,9 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, 
         }
         return true;
     } else if(depth == 8) {
-        Q_UINT8 *dst = reinterpret_cast<Q_UINT8 *>(buff);
+        quint8 *dst = reinterpret_cast<quint8 *>(buff);
         while (!it.isDone()) {
-            const Q_UINT8 *d = it.rawData();
+            const quint8 *d = it.rawData();
             int i;
             for(i = 0; i < nbcolorssamples; i++)
             {
@@ -105,7 +105,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, 
 
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
-    kdDebug(41008) << "visiting on paint layer " << layer->name() << "\n";
+    kDebug(41008) << "visiting on paint layer " << layer->name() << "\n";
     KisPaintDeviceSP pd = layer->paintDevice();
     // Save depth
     int depth = 8 * pd->pixelSize() / pd->nChannels();
@@ -154,8 +154,8 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     }
     tsize_t stripsize = TIFFStripSize(image());
     tdata_t buff = _TIFFmalloc(stripsize);
-    Q_INT32 height = layer->image()->height();
-    Q_INT32 width = layer->image()->width();
+    qint32 height = layer->image()->height();
+    qint32 width = layer->image()->width();
     bool r = true;
     for (int y = 0; y < height; y++) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width, false);
@@ -163,25 +163,25 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
         {
             case PHOTOMETRIC_MINISBLACK:
             {
-                Q_UINT8 poses[]={ 0,1 };
+                quint8 poses[]={ 0,1 };
                 r = copyDataToStrips(it, buff, depth, 1, poses);
             }
                 break;
             case PHOTOMETRIC_RGB:
             {
-                Q_UINT8 poses[]={ 2, 1, 0, 3};
+                quint8 poses[]={ 2, 1, 0, 3};
                 r = copyDataToStrips(it, buff, depth, 3, poses);
             }
                 break;
             case PHOTOMETRIC_SEPARATED:
             {
-                Q_UINT8 poses[]={ 0, 1, 2, 3, 4 };
+                quint8 poses[]={ 0, 1, 2, 3, 4 };
                 r = copyDataToStrips(it, buff, depth, 4, poses);
             }
                 break;
             case PHOTOMETRIC_CIELAB:
             {
-                Q_UINT8 poses[]={ 0, 1, 2, 3 };
+                quint8 poses[]={ 0, 1, 2, 3 };
                 r = copyDataToStrips(it, buff, depth, 3, poses);
             }
                 break;
@@ -196,7 +196,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 }
 bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
 {
-    kdDebug(41008) << "Visiting on grouplayer " << layer->name() << "\n";
+    kDebug(41008) << "Visiting on grouplayer " << layer->name() << "\n";
     KisLayerSP child = layer->firstChild();
     while (child) {
         child->accept(*this);

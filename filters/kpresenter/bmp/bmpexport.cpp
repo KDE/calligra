@@ -54,7 +54,7 @@ bool BmpExport::extraImageAttribute()
 	width  = exportDialog->width();
 	height = exportDialog->height();
 	ret = true;
-	kdDebug() << "PNG Export: size = [" << width << "," << height << "]" << endl;
+	kDebug() << "PNG Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
     return ret;

@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug stream */
+#include <kdebug.h>		/* for kDebug stream */
 #include <qbitarray.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -56,7 +56,7 @@ void Table::setMaxRow(int row)
 
 void Table::analyse(const QDomNode balise)
 {
-	kdDebug(30522) << "New table" << endl;
+	kDebug(30522) << "New table" << endl;
 	if(getAttr(balise, "columnnumber") == "1")
 		setColumnNumber();
 	if(getAttr(balise, "borders") == "1")
@@ -91,7 +91,7 @@ void Table::analyse(const QDomNode balise)
 		QString name = getChildName(balise, index);		
 		if(name == "cell")
 		{
-			kdDebug(30522) << "----- cell -----" << endl;
+			kDebug(30522) << "----- cell -----" << endl;
 			Cell* cell = new Cell();
 			cell->analyse(getChild(balise, index));
 			_cells.append(cell);
@@ -100,20 +100,20 @@ void Table::analyse(const QDomNode balise)
 		}
 		else if(name == "column")
 		{
-			kdDebug(30522) << "----- column -----" << endl;
+			kDebug(30522) << "----- column -----" << endl;
 			Column* column = new Column();
 			column->analyse(getChild(balise, index));
 			_columns.append(column);
 		}
 		else if(name == "row")
 		{
-			kdDebug(30522) << "----- row -----" << endl;
+			kDebug(30522) << "----- row -----" << endl;
 			Row* row = new Row();
 			row->analyse(getChild(balise, index));
 			_rows.append(row);
 		}
 		else
-			kdDebug(30522) << "name : " << name << endl;
+			kDebug(30522) << "name : " << name << endl;
 	}
 }
 
@@ -134,12 +134,12 @@ Cell* Table::searchCell(int col, int row)
 {
 	Q3PtrListIterator<Cell> it(_cells);
 
-	kdDebug(30522) << "search in list of " << _cells.count() << " cells" << endl;
+	kDebug(30522) << "search in list of " << _cells.count() << " cells" << endl;
 	Cell *cell = 0;
 	while ( (cell = it.current()) != 0 )
 	{
 		++it;
-		kdDebug(30522) << "cell: " << cell->getRow() << "-" << cell->getCol() << endl;
+		kDebug(30522) << "cell: " << cell->getRow() << "-" << cell->getCol() << endl;
 		if(cell->getCol() == col && cell->getRow() == row)
 			return cell;
 	}
@@ -179,7 +179,7 @@ Row* Table::searchRow(int rowNumber)
 /*******************************************/
 void Table::generate(QTextStream& out)
 {
-	kdDebug(30522) << "GENERATION OF A TABLE " << getMaxRow() << " - " << getMaxColumn()
+	kDebug(30522) << "GENERATION OF A TABLE " << getMaxRow() << " - " << getMaxColumn()
 		<< endl;
 	out << endl << "%% " << getName() << endl;
 	if(getOrientation() == "Portrait")
@@ -224,7 +224,7 @@ void Table::generate(QTextStream& out)
 		desindent();
 	}
 	/*Element* elt = 0;
-	kdDebug(30522) << "GENERATION OF A TABLE " << count() << endl;
+	kDebug(30522) << "GENERATION OF A TABLE " << count() << endl;
 	out << endl << "\\begin{tabular}";
 	generateTableHeader(out);
 	out << endl;
@@ -262,7 +262,7 @@ void Table::generate(QTextStream& out)
 	generateBottomLineBorder(out, row - 1);
 	out << "\\end{tabular}" << endl << endl;
 	desindent();*/
-	kdDebug(30522) << "END OF GENERATINO OF A TABLE" << endl;
+	kDebug(30522) << "END OF GENERATINO OF A TABLE" << endl;
 }
 
 /*******************************************/
@@ -277,7 +277,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 	for(int index = 1; index <= getMaxColumn(); index++)
 	{
 		/* Search the cell in the list */
-		kdDebug(30522) << "search " << row << ", " << index << endl;
+		kDebug(30522) << "search " << row << ", " << index << endl;
 		cell = searchCell(index, row);
 
 		if(cell == NULL)
@@ -378,17 +378,17 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 /*******************************************/
 void Table::generateCell(QTextStream& out, int row, int col)
 {
-	kdDebug(30522) << "GENERATE CELL : " << row << "," << col << endl;
+	kDebug(30522) << "GENERATE CELL : " << row << "," << col << endl;
 
 	/* Search the cell in the list */
 	Cell *cell = searchCell(col, row);
 	if(cell != NULL)
 	{	
-		kdDebug(30522) << "generate cell with text: " << cell->getText() << endl;
+		kDebug(30522) << "generate cell with text: " << cell->getText() << endl;
 		cell->generate(out, this);
 	}
 
-	kdDebug(30522) << "END OF A CELL" << endl;
+	kDebug(30522) << "END OF A CELL" << endl;
 }
 
 /*******************************************/

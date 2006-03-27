@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug() stream */
+#include <kdebug.h>		/* for kDebug() stream */
 #include "key.h"
 //Added by qt3to4:
 #include <QTextStream>
@@ -38,7 +38,7 @@ Key::Key(eKeyType type): _type(type)
 /*******************************************/
 Key::~Qt::Key()
 {
-	kdDebug(30522) << "Destruction of a key." << endl;
+	kDebug(30522) << "Destruction of a key." << endl;
 }
 
 /*******************************************/
@@ -48,8 +48,8 @@ void Key::analyse(const QDomNode balise)
 {
 	/* MARKUP TYPE :  PARAGRAPH */
 
-	kdDebug(30522) << "**** KEY ****" << endl;
-	kdDebug(30522) << getAttr(balise, "name") << endl;
+	kDebug(30522) << "**** KEY ****" << endl;
+	kDebug(30522) << getAttr(balise, "name") << endl;
 	setName(getAttr(balise, "name"));
 	setFilename(getAttr(balise, "filename"));
 	setHour(getAttr(balise, "hour").toInt());
@@ -59,7 +59,7 @@ void Key::analyse(const QDomNode balise)
 	setSecond(getAttr(balise, "second").toInt());
 	setMonth(getAttr(balise, "month").toInt());
 	setYear(getAttr(balise, "year").toInt());
-	kdDebug(30522) << "**** END KEY ****" << endl;
+	kDebug(30522) << "**** END KEY ****" << endl;
 }
 
 /*******************************************/
@@ -71,7 +71,7 @@ void Key::analyse(const QDomNode balise)
 void Key::generate(QTextStream &out)
 {
 
-	kdDebug(30522) << "  GENERATION KEY" << endl;
+	kDebug(30522) << "  GENERATION KEY" << endl;
 
-	kdDebug(30522) << "PARA KEY" << endl;
+	kDebug(30522) << "PARA KEY" << endl;
 }

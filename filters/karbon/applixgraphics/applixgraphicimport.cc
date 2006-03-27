@@ -146,7 +146,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
     QFile in (m_chain->inputFile());
     if (!in.open (QIODevice::ReadOnly) )
     {
-        kdError(30502) << "Unable to open input file!" << endl;
+        kError(30502) << "Unable to open input file!" << endl;
         in.close ();
         return KoFilter::FileNotFound;
     }
@@ -180,13 +180,13 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
     rueck = sscanf ((const char *) mystr.latin1() ,
                     "*BEGIN GRAPHICS VERSION=%d/%d ENCODING=%dBIT",
 	             &vers[0], &vers[1], &vers[2]);
-    kdDebug (s_area) << "Versions info: " << vers[0] << vers[1] << vers[2] << endl;
+    kDebug (s_area) << "Versions info: " << vers[0] << vers[1] << vers[2] << endl;
 
     // Check the headline
     if (rueck <= 0)
     {
-      kdDebug (s_area) << "Header not correkt - May be it is not an applixgraphics file" << endl;
-      kdDebug (s_area) << "Headerline: " << mystr << endl;
+      kDebug (s_area) << "Header not correkt - May be it is not an applixgraphics file" << endl;
+      kDebug (s_area) << "Headerline: " << mystr << endl;
 
       QMessageBox::critical (0L, "Applixgraphics header problem",
                                   QString ("The Applixgraphics header is not correct. "
@@ -204,7 +204,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 
         // Read one line
         mystr = stream.readLine ();
-        kdDebug (s_area) << "<<" << mystr << ">>" << endl;
+        kDebug (s_area) << "<<" << mystr << ">>" << endl;
 
         if      (mystr == "PICTURE")     picture_rememberer = 1;
         else if (mystr == "END PICTURE") picture_rememberer = 0;
@@ -215,7 +215,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 	{
           // Delete point at the first place of the ascii_linie
           mystr.remove (0, 1);
-          kdDebug (s_area) << "StartPoint recognized <" << mystr << ">" << endl;
+          kDebug (s_area) << "StartPoint recognized <" << mystr << ">" << endl;
 
 
           /********************************************************************
@@ -228,7 +228,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 
             //str += agLine.read (int, mystr);
 
-            kdDebug (s_area) << " Linie recognized: " << endl;
+            kDebug (s_area) << " Linie recognized: " << endl;
             mystr.remove (0, 8);
             //mystr.remove (0, 7);
 
@@ -242,11 +242,11 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
             //agLine.offY= mystr.toInt();
             rueck = sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                             &agLine.offX, &agLine.offY);
-	    kdDebug (s_area) << "  Offset ->   x:" << agLine.offX << "  y:" << agLine.offY << endl;
+	    kDebug (s_area) << "  Offset ->   x:" << agLine.offX << "  y:" << agLine.offY << endl;
             if (rueck <= 0)
 	    {
-              kdDebug (s_area) << "LINE tag not correkt" << endl;
-              kdDebug (s_area) << "LINE: <" << mystr << ">" << endl;
+              kDebug (s_area) << "LINE tag not correkt" << endl;
+              kDebug (s_area) << "LINE: <" << mystr << ">" << endl;
               return KoFilter::StupidError;
 	    }
 
@@ -259,38 +259,38 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                kdDebug (s_area) << "  Recolor  ";
+                kDebug (s_area) << "  Recolor  ";
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
                 {
-                  kdDebug (s_area) << "On" << endl;
+                  kDebug (s_area) << "On" << endl;
                   agLine.reColor = true;
                 }
                 else if (mystr == "OFF")
                 {
-                  kdDebug (s_area) << "Off" << endl;
+                  kDebug (s_area) << "Off" << endl;
                   agLine.reColor = false;
                 }
                 else
                 {
-                   kdDebug (s_area) << "!!!!!    Unknown RECOLOR item <" << mystr << ">" << endl;
+                   kDebug (s_area) << "!!!!!    Unknown RECOLOR item <" << mystr << ">" << endl;
                 }
 	      }
 	      else if (mystr.startsWith (" THICKNESS ") )
 	      {
-                kdDebug (s_area) << "  Thickness: ";
+                kDebug (s_area) << "  Thickness: ";
                 mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agLine.thickNess);
                 //
-                kdDebug (s_area) <<  agLine.thickNess << endl;
+                kDebug (s_area) <<  agLine.thickNess << endl;
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                kdDebug (s_area) << "  Pnts    : ";
+                kDebug (s_area) << "  Pnts    : ";
                 mystr.remove (0, 6);
                 sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)",
                         &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1]);
-                kdDebug (s_area) << agLine.ptX[0] << " " << agLine.ptY[0] << " "  << agLine.ptX[1] << " "  << agLine.ptY[1] << endl;
+                kDebug (s_area) << agLine.ptX[0] << " " << agLine.ptY[0] << " "  << agLine.ptX[1] << " "  << agLine.ptY[1] << endl;
 	      }
 
 	    }
@@ -335,16 +335,16 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 
             //str += agLine.read (int, mystr);
 
-            kdDebug (s_area) << " RPOL recognized: " << endl;
+            kDebug (s_area) << " RPOL recognized: " << endl;
             mystr.remove (0, 8);
 
             rueck = sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                             &agLine.offX, &agLine.offY);
-	    kdDebug (s_area) << "  Offset ->   x:" << agLine.offX << "  y:" << agLine.offY << endl;
+	    kDebug (s_area) << "  Offset ->   x:" << agLine.offX << "  y:" << agLine.offY << endl;
             if (rueck <= 0)
 	    {
-              kdDebug (s_area) << "RPOL tag not correkt " << endl;
-              kdDebug (s_area) << "RPOL: <" << mystr << ">" << endl;
+              kDebug (s_area) << "RPOL tag not correkt " << endl;
+              kDebug (s_area) << "RPOL: <" << mystr << ">" << endl;
               return KoFilter::StupidError;
 	    }
 
@@ -357,39 +357,39 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 //checkSubElement (mystr, subelements)
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                kdDebug (s_area) << "  Recolor  " ;
+                kDebug (s_area) << "  Recolor  " ;
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
                 {
-                  kdDebug (s_area) << "On" << endl;
+                  kDebug (s_area) << "On" << endl;
                   agLine.reColor = true;
                 }
                 else if (mystr == "OFF")
                 {
-                  kdDebug (s_area) << "Off" << endl;
+                  kDebug (s_area) << "Off" << endl;
                   agLine.reColor = false;
                 }
                 else
                 {
-                   kdDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
+                   kDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
                 }
 	      }
 	      else if (mystr.startsWith (" NSIDES") )
 	      {
-                kdDebug (s_area) << "  NSIDES: " ;
+                kDebug (s_area) << "  NSIDES: " ;
                 mystr.remove (0, 8);
                 pos = sscanf ((const char *) mystr.latin1(), "%d", &nsides);
-                kdDebug (s_area) << nsides << "(" << pos << ")" << endl;
+                kDebug (s_area) << nsides << "(" << pos << ")" << endl;
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                kdDebug (s_area) << "  Pnts    : ";
+                kDebug (s_area) << "  Pnts    : ";
                 mystr.remove (0, 6);
                 sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                         &agLine.ptX[0], &agLine.ptY[0], &agLine.ptX[1], &agLine.ptY[1],
                         &agLine.ptX[2], &agLine.ptY[2], &agLine.ptX[3], &agLine.ptY[3],
                         &agLine.ptX[4], &agLine.ptY[4]);
-                kdDebug (s_area) << agLine.ptX[0] << " " << agLine.ptY[0] << "   " <<
+                kDebug (s_area) << agLine.ptX[0] << " " << agLine.ptY[0] << "   " <<
                                     agLine.ptX[1] << " " << agLine.ptY[1] << "   " <<
                                     agLine.ptX[2] << " " << agLine.ptY[2] << "   " <<
                                     agLine.ptX[3] << " " << agLine.ptY[3] << "   " <<
@@ -448,11 +448,11 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
             //applixGraphicsText agText;
             applixGraphicsLine agText;
 
-            kdDebug (s_area) << " Habe Text erkannt (keine Werte uebernommen)" << endl;
+            kDebug (s_area) << " Habe Text erkannt (keine Werte uebernommen)" << endl;
             mystr.remove (0, 7);
             sscanf ((const char *) mystr.latin1(), "(%d,%d)",
                     &agText.offX, &agText.offY);
-	    kdDebug (s_area) << "  Offset ->   x:" << agText.offX << "  y:" << agText.offY << endl;
+	    kDebug (s_area) << "  Offset ->   x:" << agText.offX << "  y:" << agText.offY << endl;
 
 
             do
@@ -464,46 +464,46 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 //checkSubElement()
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                kdDebug (s_area) << "  Recolor  : ";
+                kDebug (s_area) << "  Recolor  : ";
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
                 {
-                  kdDebug (s_area) << "On" << endl;
+                  kDebug (s_area) << "On" << endl;
                   agText.reColor = true;
                 }
                 else if (mystr == "OFF")
                 {
-                  kdDebug (s_area) << "Off" << endl;
+                  kDebug (s_area) << "Off" << endl;
                   agText.reColor = false;
                 }
                 else
                 {
-                   kdDebug (s_area) << "!!!!!     Whats that <" << mystr << ">" << endl;
+                   kDebug (s_area) << "!!!!!     Whats that <" << mystr << ">" << endl;
                 }
 	      }
 	      else if (mystr.startsWith (" .STR") )
 	      {
-                kdDebug (s_area) << " Textstring: ";
+                kDebug (s_area) << " Textstring: ";
 
                 // Zeile einlesen
                 agText.str = stream.readLine ();
                 agText.str.remove (0, 3);  // delete ront part
-                kdDebug (s_area) << agText.str;
+                kDebug (s_area) << agText.str;
 	      }
 	      else if (mystr.startsWith (" THICKNESS ") )
 	      {
-                kdDebug (s_area) << "  Thickness: ";
+                kDebug (s_area) << "  Thickness: ";
                 mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agText.thickNess);
-                kdDebug (s_area) <<  agText.thickNess << endl;
+                kDebug (s_area) <<  agText.thickNess << endl;
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                kdDebug (s_area) << "  Pnts    : ";
+                kDebug (s_area) << "  Pnts    : ";
                 mystr.remove (0, 6);
                 sscanf ((const char *) mystr.latin1(), "(%d,%d)(%d,%d)",
                         &agText.ptX[0], &agText.ptY[0], &agText.ptX[1], &agText.ptY[1]);
-                kdDebug (s_area) << agText.ptX[0] << " " << agText.ptY[0] << " " << agText.ptX[1] << " " << agText.ptY[1];
+                kDebug (s_area) << agText.ptX[0] << " " << agText.ptY[0] << " " << agText.ptX[1] << " " << agText.ptY[1];
 	      }
 //checkSubElement() ende
 
@@ -536,11 +536,11 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 	  {
             applixGraphicsRect agRect;
 
-            kdDebug (s_area) << " Habe Rectangle erkannt " << endl;
+            kDebug (s_area) << " Habe Rectangle erkannt " << endl;
             mystr.remove (0, 8);
             rueck = sscanf ((const char *)mystr.latin1(), "(%d,%d)",    &agRect.offX, &agRect.offY);
-	    if (rueck < 1) kdDebug (s_area) <<"Fehler im String <" << mystr.latin1() << ">" << endl;
-	    kdDebug (s_area) << "  Offset ->   x:" << agRect.offX << "  y:" << agRect.offY << endl;
+	    if (rueck < 1) kDebug (s_area) <<"Fehler im String <" << mystr.latin1() << ">" << endl;
+	    kDebug (s_area) << "  Offset ->   x:" << agRect.offX << "  y:" << agRect.offY << endl;
 
 
             do
@@ -554,27 +554,27 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
               // option RECOLOR
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                kdDebug (s_area) <<("  Recolor : ");
+                kDebug (s_area) <<("  Recolor : ");
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
-                {  kdDebug (s_area) << "On" << endl;  agRect.reColor = true;}
+                {  kDebug (s_area) << "On" << endl;  agRect.reColor = true;}
                 else if (mystr == "OFF")
-                { kdDebug (s_area) << "Off" << endl;  agRect.reColor = false;}
+                { kDebug (s_area) << "Off" << endl;  agRect.reColor = false;}
                 else
                 {
-                   kdDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
+                   kDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
                 }
 	      }
               // option BACKFILL
 	      else if (mystr.startsWith (" BACKFILL ") )
 	      {
-                kdDebug (s_area) <<("  Backfill: ");
+                kDebug (s_area) <<("  Backfill: ");
                 mystr.remove (0, 12);
                 sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>",
                         &agRect.bf[0], &agRect.bf[1], &agRect.bf[2],
                         &agRect.bf[3], &agRect.bf[4], &agRect.bf[5],
                         &agRect.bf[6]);
-                kdDebug (s_area) << agRect.bf[0] << " " << agRect.bf[1] << " "  <<
+                kDebug (s_area) << agRect.bf[0] << " " << agRect.bf[1] << " "  <<
                                     agRect.bf[2] << " " << agRect.bf[3] << " "  <<
                                     agRect.bf[4] << " " << agRect.bf[5] << " "  <<
                                     agRect.bf[6];
@@ -583,13 +583,13 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
               // option LINEFILL
 	      else if (mystr.startsWith (" LINEFILL ") )
 	      {
-                kdDebug (s_area) << "  Linefill: ";
+                kDebug (s_area) << "  Linefill: ";
                 mystr.remove (0, 12);
                 sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d>",
                         &agRect.lf[0], &agRect.lf[1], &agRect.lf[2],
                         &agRect.lf[3], &agRect.lf[4], &agRect.lf[5],
                         &agRect.lf[6]);
-                kdDebug (s_area) << agRect.lf[0] << " " << agRect.lf[1] << " "  <<
+                kDebug (s_area) << agRect.lf[0] << " " << agRect.lf[1] << " "  <<
                                     agRect.lf[2] << " " << agRect.lf[3] << " "  <<
                                     agRect.lf[4] << " " << agRect.lf[5] << " "  <<
                                     agRect.lf[6];
@@ -598,25 +598,25 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
               // option SHADOW
 	      else if (mystr.startsWith (" SHADOW ")  )
 	      {
-                kdDebug (s_area) << "  Shadow  : ";
+                kDebug (s_area) << "  Shadow  : ";
                 mystr.remove (0, 12);
                 sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d>",
                         &agRect.sh[0], &agRect.sh[1], &agRect.sh[2],
                         &agRect.sh[3], &agRect.sh[4]);
-                kdDebug (s_area) << agRect.sh[0] << " " << agRect.sh[1] << " "  <<
+                kDebug (s_area) << agRect.sh[0] << " " << agRect.sh[1] << " "  <<
                                     agRect.sh[2] << " " << agRect.sh[3] << " "  <<
                                     agRect.sh[4];
 	      }
               // option PARA
 	      else if (mystr.startsWith (" PARA ")  )
 	      {
-                kdDebug (s_area) << "  Para    : ";
+                kDebug (s_area) << "  Para    : ";
                 mystr.remove (0, 12);
                 sscanf ((const char *)mystr.latin1(), "<%d %d %d %d %d %d %d %d>",
                         &agRect.pa[0], &agRect.pa[1], &agRect.pa[2],
                         &agRect.pa[3], &agRect.pa[4], &agRect.pa[5],
                         &agRect.pa[6], &agRect.pa[7]);
-                kdDebug (s_area) << agRect.pa[0] << " " << agRect.pa[1] << " "  <<
+                kDebug (s_area) << agRect.pa[0] << " " << agRect.pa[1] << " "  <<
                                     agRect.pa[2] << " " << agRect.pa[3] << " "  <<
                                     agRect.pa[4] << " " << agRect.pa[5] << " "  <<
                                     agRect.pa[6] << " " << agRect.pa[7] ;
@@ -625,39 +625,39 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
               // option THICKNESS
 	      else if (mystr.startsWith (" THICKNESS ") )
 	      {
-                kdDebug (s_area) << "  Thickness: ";
+                kDebug (s_area) << "  Thickness: ";
                 mystr.remove (0, 11);
                 sscanf ((const char *) mystr.latin1(), "%d", &agRect.thickNess);
-                kdDebug (s_area) << agRect.thickNess << endl;
+                kDebug (s_area) << agRect.thickNess << endl;
 	      }
               // option V_SPACE
 	      else if (mystr.startsWith (" V_SPACE ") )
 	      {
-                kdDebug (s_area) << "  V_Space : ";
+                kDebug (s_area) << "  V_Space : ";
                 mystr.remove (0, 9);
                 sscanf ((const char *)mystr.latin1(), "(%d %d %d)",
                          &agRect.vs[0], &agRect.vs[1], &agRect.vs[2]);
-                kdDebug (s_area) << agRect.vs[0] << " " << agRect.vs[1] << " " <<  agRect.vs[2];
+                kDebug (s_area) << agRect.vs[0] << " " << agRect.vs[1] << " " <<  agRect.vs[2];
 	      }
               // option XYRAD
 	      else if (mystr.startsWith (" XYRAD ") )
 	      {
-                kdDebug (s_area) << "  XYRad   : ";
+                kDebug (s_area) << "  XYRad   : ";
                 mystr.remove (0, 7);
                 sscanf ((const char *)mystr.latin1(), "<%d %d>",
                          &agRect.xr[0], &agRect.xr[1]);
-                kdDebug (s_area) << agRect.xr[0] << " " << agRect.xr[1];
+                kDebug (s_area) << agRect.xr[0] << " " << agRect.xr[1];
 	      }
               // option PNTS
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                kdDebug (s_area) << "  Pnts    : ";
+                kDebug (s_area) << "  Pnts    : ";
                 mystr.remove (0, 6);
                 sscanf ((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                         &agRect.ptX[0], &agRect.ptY[0], &agRect.ptX[1], &agRect.ptY[1],
                         &agRect.ptX[2], &agRect.ptY[2], &agRect.ptX[3], &agRect.ptY[3],
                         &agRect.ptX[4], &agRect.ptY[4]);
-                kdDebug (s_area) << agRect.ptX[0] << " " << agRect.ptY[0] << "  " <<
+                kDebug (s_area) << agRect.ptX[0] << " " << agRect.ptY[0] << "  " <<
                                     agRect.ptX[1] << " " << agRect.ptY[1] << "   " <<
                                     agRect.ptX[2] << " " << agRect.ptY[2] << "  " <<
                                     agRect.ptX[3] << " " << agRect.ptY[3] << "  " <<
@@ -728,11 +728,11 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 	  {
             applixGraphicsRect agEll;
 
-            kdDebug (s_area) << " Habe ELL erkannt (keine Werte uebernommen " << endl;
+            kDebug (s_area) << " Habe ELL erkannt (keine Werte uebernommen " << endl;
             mystr.remove (0, 7);
             sscanf ((const char *)mystr.latin1(), "(%d,%d)",
                     &agEll.offX, &agEll.offY);
-	    kdDebug (s_area) << "  Offset ->   x:" << agEll.offX << "  y:" << agEll.offY << endl;
+	    kDebug (s_area) << "  Offset ->   x:" << agEll.offX << "  y:" << agEll.offY << endl;
 
             do
 	    {
@@ -745,33 +745,33 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
               // option RECOLOR
 	      if      (mystr.startsWith (" RECOLOR ") )
 	      {
-                kdDebug (s_area) << "  Recolor: ";
+                kDebug (s_area) << "  Recolor: ";
                 mystr.remove (0, 9);
                 if      (mystr == "ON")
                 {
-                  kdDebug (s_area) << "On" << endl;
+                  kDebug (s_area) << "On" << endl;
                   agEll.reColor = true;
                 }
                 else if (mystr == "OFF")
                 {
-                  kdDebug (s_area) << "Off" << endl;
+                  kDebug (s_area) << "Off" << endl;
                   agEll.reColor = false;
                 }
                 else
                 {
-                   kdDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
+                   kDebug (s_area) << "!!!!!    Whats that <" << mystr << ">" << endl;
                 }
 	      }
 	      else if (mystr.startsWith (" PNTS ") )
 	      {
-                kdDebug (s_area) <<("  Pnts   : ");
+                kDebug (s_area) <<("  Pnts   : ");
                 mystr.remove (0, 6);
 		//
                 sscanf ((const char *)mystr.latin1(), "(%d,%d)(%d,%d)(%d,%d)(%d,%d)(%d,%d)",
                         &agEll.ptX[0], &agEll.ptY[0], &agEll.ptX[1], &agEll.ptY[1],
                         &agEll.ptX[2], &agEll.ptY[2], &agEll.ptX[3], &agEll.ptY[3],
                         &agEll.ptX[4], &agEll.ptY[4]);
-                kdDebug (s_area) << agEll.ptX[0] << " " << agEll.ptY[0] << "  " <<
+                kDebug (s_area) << agEll.ptX[0] << " " << agEll.ptY[0] << "  " <<
                                     agEll.ptX[1] << " " << agEll.ptY[1] << "   " <<
                                     agEll.ptX[2] << " " << agEll.ptY[2] << "  " <<
                                     agEll.ptX[3] << " " << agEll.ptY[3] << "  " <<
@@ -791,7 +791,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
 	  }
           else
 	  {
-            kdDebug (s_area) << "Unbekannt : " << mystr << endl;
+            kDebug (s_area) << "Unbekannt : " << mystr << endl;
 	  }
 
 	}
@@ -810,12 +810,12 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, 
     str += " </karbon>\n";
 //  str += "</DOC>\n";
 
-    kdDebug (s_area) << "Text " << str.utf8() << endl;
+    kDebug (s_area) << "Text " << str.utf8() << endl;
 
     KoStoreDevice* out= m_chain->storageFile( "root", KoStore::Write );
     if (!out)
     {
-        kdError(s_area) << "Unable to open output file!" << endl;
+        kError(s_area) << "Unable to open output file!" << endl;
         in.close  ();
         return KoFilter::StorageCreationError;
     }

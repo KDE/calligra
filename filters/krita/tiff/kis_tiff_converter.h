@@ -56,14 +56,14 @@ enum KisImageBuilder_Result {
 };
 
 struct KisTIFFOptions {
-    Q_UINT16 compressionType;
-    Q_UINT16 predictor;
+    quint16 compressionType;
+    quint16 predictor;
     bool alpha;
     bool flatten;
-    Q_UINT16 jpegQuality;
-    Q_UINT16 deflateCompress;
-    Q_UINT16 faxMode;
-    Q_UINT16 pixarLogCompress;
+    quint16 jpegQuality;
+    quint16 deflateCompress;
+    quint16 faxMode;
+    quint16 pixarLogCompress;
 };
 
 class KisTIFFConverter : public KisProgressSubject {

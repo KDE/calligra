@@ -44,10 +44,10 @@ bool KWord13PostParsing::postParsePictures( KoStore* store )
         
     for ( Q3DictIterator<KWord13Picture> it( m_kwordDocument->m_pictureDict ) ; it.current(); ++it )
     {
-        kdDebug(30520) << "Loading... " << it.currentKey() << endl;
+        kDebug(30520) << "Loading... " << it.currentKey() << endl;
         if ( ! it.current()->loadPicture( store ) )
         {
-            kdWarning(30520) << "Could not load picture!" << endl;
+            kWarning(30520) << "Could not load picture!" << endl;
             return false;
         }
     }

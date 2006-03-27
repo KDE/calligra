@@ -62,13 +62,13 @@ KoFilter::ConversionStatus OOWRITERExport::convert( const Q3CString& from, const
     }
 
     // We need KimageIO's help in OOWriterWorker::convertUnknownImage
-    KImageIO::registerFormats();
+    
 
     OOWriterWorker* worker=new OOWriterWorker();
 
     if (!worker)
     {
-        kdError(30506) << "Cannot create Worker! Aborting!" << endl;
+        kError(30506) << "Cannot create Worker! Aborting!" << endl;
         return KoFilter::StupidError;
     }
 
@@ -76,7 +76,7 @@ KoFilter::ConversionStatus OOWRITERExport::convert( const Q3CString& from, const
 
     if (!leader)
     {
-        kdError(30506) << "Cannot create Worker! Aborting!" << endl;
+        kError(30506) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }

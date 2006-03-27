@@ -106,27 +106,27 @@ KoFilter::ConversionStatus QpImport::convert( const Q3CString& from, const Q3CSt
     if ( !document )
         return KoFilter::StupidError;
 
-    kdDebug(30523) << "here we go... " << document->className() << endl;
+    kDebug(30523) << "here we go... " << document->className() << endl;
 
     if( !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-        kdWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+        kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if(from!="application/x-quattropro" || to!="application/x-kspread")
     {
-        kdWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
+        kWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
     }
 
-    kdDebug(30523) << "...still here..." << endl;
+    kDebug(30523) << "...still here..." << endl;
 
     // No need for a dynamic cast here, since we use Qt's moc magic
     Doc *ksdoc=(Doc*)document;
 
     if(ksdoc->mimeType()!="application/x-kspread")
     {
-        kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
         return KoFilter::NotImplemented;
     }
 

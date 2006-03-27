@@ -70,12 +70,12 @@ namespace {
         {
             return JCS_CMYK;
         }
-        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+        kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return JCS_UNKNOWN;
     }
 
     QString getColorSpaceForColorType(J_COLOR_SPACE color_type) {
-        kdDebug(41008) << "color_type = " << color_type << endl;
+        kDebug(41008) << "color_type = " << color_type << endl;
         if(color_type == JCS_GRAYSCALE)
         {
             return "GRAYA";
@@ -133,7 +133,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     // Get the colorspace
     QString csName = getColorSpaceForColorType(cinfo.out_color_space);
     if(csName.isEmpty()) {
-        kdDebug(41008) << "unsupported colorspace : " << cinfo.out_color_space << endl;
+        kDebug(41008) << "unsupported colorspace : " << cinfo.out_color_space << endl;
         jpeg_destroy_decompress(&cinfo);
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -151,10 +151,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         if (hProfile != (cmsHPROFILE) NULL) {
             profile = new KisProfile( profile_rawdata);
             Q_CHECK_PTR(profile);
-            kdDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
+            kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
             if(!profile->isSuitableForOutput())
             {
-                kdDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
+                kDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
             }
         }
     }
@@ -163,7 +163,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     KisColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
-        kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
+        kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
     }
     else
@@ -171,7 +171,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     if(cs == 0)
     {
-        kdDebug(41008) << "unknown colorspace" << endl;
+        kDebug(41008) << "unknown colorspace" << endl;
         jpeg_destroy_decompress(&cinfo);
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -197,7 +197,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         }
     }
 
-    KisPaintLayerSP layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
+    KisPaintLayerSP layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), quint8_MAX);
     
     // Read exif information if any
     
@@ -207,38 +207,38 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     for (; cinfo.output_scanline < cinfo.image_height;) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width, true);
         jpeg_read_scanlines(&cinfo, &row_pointer, 1);
-        Q_UINT8 *src = row_pointer;
+        quint8 *src = row_pointer;
         switch(cinfo.out_color_space)
         {
             case JCS_GRAYSCALE:
                 while (!it.isDone()) {
-                    Q_UINT8 *d = it.rawData();
+                    quint8 *d = it.rawData();
                     d[0] = *(src++);
                     if(transform) cmsDoTransform(transform, d, d, 1);
-                    d[1] = Q_UINT8_MAX;
+                    d[1] = quint8_MAX;
                     ++it;
                 }
                 break;
             case JCS_RGB:
                 while (!it.isDone()) {
-                    Q_UINT8 *d = it.rawData();
+                    quint8 *d = it.rawData();
                     d[2] = *(src++);
                     d[1] = *(src++);
                     d[0] = *(src++);
                     if(transform) cmsDoTransform(transform, d, d, 1);
-                    d[3] = Q_UINT8_MAX;
+                    d[3] = quint8_MAX;
                     ++it;
                 }
                 break;
             case JCS_CMYK:
                 while (!it.isDone()) {
-                    Q_UINT8 *d = it.rawData();
-                    d[0] = Q_UINT8_MAX - *(src++);
-                    d[1] = Q_UINT8_MAX - *(src++);
-                    d[2] = Q_UINT8_MAX - *(src++);
-                    d[3] = Q_UINT8_MAX - *(src++);
+                    quint8 *d = it.rawData();
+                    d[0] = quint8_MAX - *(src++);
+                    d[1] = quint8_MAX - *(src++);
+                    d[2] = quint8_MAX - *(src++);
+                    d[3] = quint8_MAX - *(src++);
                     if(transform) cmsDoTransform(transform, d, d, 1);
-                    d[4] = Q_UINT8_MAX;
+                    d[4] = quint8_MAX;
                     ++it;
                 }
                 break;
@@ -251,10 +251,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     
     // Read exif informations
 
-    kdDebug(41008) << "Looking for exif information" << endl;
+    kDebug(41008) << "Looking for exif information" << endl;
     
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
-        kdDebug(41008) << "Marker is " << marker->marker << endl;
+        kDebug(41008) << "Marker is " << marker->marker << endl;
         if (marker->marker != (JOCTET) (JPEG_APP0 + 1) ||
             marker->data_length < 14)
             continue; /* Exif data is in an APP1 marker of at least 14 octets */
@@ -266,7 +266,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             GETJOCTET (marker->data[4]) != (JOCTET) 0x00 ||
             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
             continue; /* no Exif header */
-        kdDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
+        kDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
         KisExifIO exifIO(layer->paintDevice()->exifInfo());
         exifIO.readExifFromMem( marker->data , marker->data_length );
         // Interpret orientation tag
@@ -301,7 +301,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                 default:
                     break;
             }
-            v.setValue(0, (Q_UINT16)1);
+            v.setValue(0, (quint16)1);
             layer->paintDevice()->exifInfo()->setValue("Orientation", v);
         }
         break;
@@ -403,17 +403,17 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Save exif information if any available
     if(exifInfo)
     {
-        kdDebug(41008) << "Trying to save exif information" << endl;
+        kDebug(41008) << "Trying to save exif information" << endl;
         KisExifIO exifIO(exifInfo);
         unsigned char* exif_data;
         unsigned int exif_size;
         exifIO.saveExifToMem( &exif_data, &exif_size);
-        kdDebug(41008) << "Exif informations size is " << exif_size << endl;
+        kDebug(41008) << "Exif informations size is " << exif_size << endl;
         if (exif_size < MAX_DATA_BYTES_IN_MARKER)
         {
             jpeg_write_marker(&cinfo, JPEG_APP0 + 1, exif_data, exif_size);
         } else {
-            kdDebug(41008) << "exif informations couldn't be saved." << endl;
+            kDebug(41008) << "exif informations couldn't be saved." << endl;
         }
     }
     
@@ -422,16 +422,16 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
         if (!(*it) || (*it) -> type() == QString()) {
-            kdDebug(41008) << "Warning: empty annotation" << endl;
+            kDebug(41008) << "Warning: empty annotation" << endl;
             ++it;
             continue;
         }
 
-        kdDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
+        kDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME
-            kdDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
+            kDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
         } else { // Profile
             //char* name = new char[(*it)->type().length()+1];
             write_icc_profile(& cinfo, (uchar*)(*it)->annotation().data(), (*it)->annotation().size());
@@ -447,20 +447,20 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     
     for (; cinfo.next_scanline < height;) {
         KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.next_scanline, width, false);
-        Q_UINT8 *dst = row_pointer;
+        quint8 *dst = row_pointer;
         switch(color_type)
         {
             case JCS_GRAYSCALE:
                 if(color_nb_bits == 16)
                 {
                     while (!it.isDone()) {
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
-                        *(dst++) = d[0] / Q_UINT8_MAX;
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
+                        *(dst++) = d[0] / quint8_MAX;
                         ++it;
                     }
                 } else {
                     while (!it.isDone()) {
-                        const Q_UINT8 *d = it.rawData();
+                        const quint8 *d = it.rawData();
                         *(dst++) = d[0];
                         ++it;
                     }
@@ -470,15 +470,15 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 if(color_nb_bits == 16)
                 {
                     while (!it.isDone()) {
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
-                        *(dst++) = d[2] / Q_UINT8_MAX;
-                        *(dst++) = d[1] / Q_UINT8_MAX;
-                        *(dst++) = d[0] / Q_UINT8_MAX;
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
+                        *(dst++) = d[2] / quint8_MAX;
+                        *(dst++) = d[1] / quint8_MAX;
+                        *(dst++) = d[0] / quint8_MAX;
                         ++it;
                     }
                 } else {
                     while (!it.isDone()) {
-                        const Q_UINT8 *d = it.rawData();
+                        const quint8 *d = it.rawData();
                         *(dst++) = d[2];
                         *(dst++) = d[1];
                         *(dst++) = d[0];
@@ -490,20 +490,20 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 if(color_nb_bits == 16)
                 {
                     while (!it.isDone()) {
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
-                        *(dst++) = Q_UINT8_MAX - d[0] / Q_UINT8_MAX;
-                        *(dst++) = Q_UINT8_MAX - d[1] / Q_UINT8_MAX;
-                        *(dst++) = Q_UINT8_MAX - d[2] / Q_UINT8_MAX;
-                        *(dst++) = Q_UINT8_MAX - d[3] / Q_UINT8_MAX;
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
+                        *(dst++) = quint8_MAX - d[0] / quint8_MAX;
+                        *(dst++) = quint8_MAX - d[1] / quint8_MAX;
+                        *(dst++) = quint8_MAX - d[2] / quint8_MAX;
+                        *(dst++) = quint8_MAX - d[3] / quint8_MAX;
                         ++it;
                     }
                 } else {
                     while (!it.isDone()) {
-                        const Q_UINT8 *d = it.rawData();
-                        *(dst++) = Q_UINT8_MAX - d[0];
-                        *(dst++) = Q_UINT8_MAX - d[1];
-                        *(dst++) = Q_UINT8_MAX - d[2];
-                        *(dst++) = Q_UINT8_MAX - d[3];
+                        const quint8 *d = it.rawData();
+                        *(dst++) = quint8_MAX - d[0];
+                        *(dst++) = quint8_MAX - d[1];
+                        *(dst++) = quint8_MAX - d[2];
+                        *(dst++) = quint8_MAX - d[3];
                         ++it;
                     }
                 }

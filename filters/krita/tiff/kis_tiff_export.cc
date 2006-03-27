@@ -53,7 +53,7 @@ KisTIFFExport::~KisTIFFExport()
 
 KoFilter::ConversionStatus KisTIFFExport::convert(const Q3CString& from, const Q3CString& to)
 {
-    kdDebug(41008) << "Tiff export! From: " << from << ", To: " << to << "\n";
+    kDebug(41008) << "Tiff export! From: " << from << ", To: " << to << "\n";
     
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -98,10 +98,10 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const Q3CString& from, const Q
     vKisAnnotationSP_it endIt = img->endAnnotations();*/
     KisImageBuilder_Result res;
     if ( (res = ktc.buildFile(url, img, options)) == KisImageBuilder_RESULT_OK) {
-        kdDebug(41008) << "success !" << endl;
+        kDebug(41008) << "success !" << endl;
         return KoFilter::OK;
     }
-    kdDebug(41008) << " Result = " << res << endl;
+    kDebug(41008) << " Result = " << res << endl;
     return KoFilter::InternalError;
 }
 

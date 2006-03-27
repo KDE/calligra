@@ -253,7 +253,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	      QDomElement e=fetchTableCell(tableno,currow,curcol);
 	      if (e.isNull()) {
 	              // a missing cell !
-	              kdDebug(30503) << QString("creating %1 %2").arg(currow).arg(curcol).latin1() << endl;
+	              kDebug(30503) << QString("creating %1 %2").arg(currow).arg(curcol).latin1() << endl;
 	              createTableCell(tableno,currow,curcol,1,
 		      			QRect(x+step_x*curcol,y+step_y*currow,step_x,step_y)
 				);
@@ -265,7 +265,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	      QDomElement ee=e.firstChild().toElement(); // the frame in the frameset
 	          int cs=e.attribute("cols").toInt();
 	          int rs=e.attribute("rows").toInt();
-	          kdDebug(30503) << "resizing" << endl;
+	          kDebug(30503) << "resizing" << endl;
 	          addRect(ee,QRect(x+step_x*curcol,0,step_x*cs,step_y*rs));
 	      }
 	      if (curcol==0) currow_inc=e.attribute("rows").toInt();
@@ -424,7 +424,7 @@ QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, QString name, QStr
 void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool keep_formatting) {
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
 	QDomText currentText=temp.toText();
-	if (temp.isNull()) { kdDebug(30503) << "no text" << endl; return; }
+	if (temp.isNull()) { kDebug(30503) << "no text" << endl; return; }
 	QString oldtext=currentText.data();
 	int oldLength=oldtext.length();
 	if (keep_formatting) {
@@ -435,14 +435,14 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool
 	} else {
 		if (oldLength)
 			++oldLength; // add new trailing space char
-		text=text.simplifyWhiteSpace(); // drop all unprintable chars
+		text=text.simplified(); // drop all unprintable chars
 	}
 	QString newtext;
 	if (keep_formatting)
 		newtext=oldtext + text;
 	else {
 		newtext=oldtext + " " + text;
-		newtext=newtext.simplifyWhiteSpace(); // strip possible new space at beginning.
+		newtext=newtext.simplified(); // strip possible new space at beginning.
 	}
 	currentText.setData(newtext);
 	int newLength=text.length();
@@ -456,13 +456,13 @@ void KWDWriter::addText(QDomElement paragraph, QString text, int format_id, bool
 QString KWDWriter::getText(QDomElement paragraph) {
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
 	QDomText currentText=temp.toText();
-	if (temp.isNull()) { kdWarning(30503) << "no text" << endl; }
+	if (temp.isNull()) { kWarning(30503) << "no text" << endl; }
 	return currentText.data();
 }
 
 
 QDomElement KWDWriter::startFormat(QDomElement paragraph) {
-        if (paragraph.isNull()) { kdWarning(30503) << "startFormat on empty paragraph" << endl; }
+        if (paragraph.isNull()) { kWarning(30503) << "startFormat on empty paragraph" << endl; }
 	QDomElement format=_doc->createElement("FORMAT");
 	paragraph.elementsByTagName("FORMATS").item(0).appendChild(format);
 	return format;
@@ -471,8 +471,8 @@ QDomElement KWDWriter::startFormat(QDomElement paragraph) {
 
 QDomElement KWDWriter::startFormat(QDomElement paragraph, QDomElement formatToClone) {
 	QDomElement format=formatToClone.cloneNode().toElement();
-	if (format.isNull()) { kdWarning(30503) << "startFormat: null format cloned" << endl; }
-        if (paragraph.isNull()) { kdWarning(30503) << "startFormat on empty paragraph" << endl; }
+	if (format.isNull()) { kWarning(30503) << "startFormat: null format cloned" << endl; }
+        if (paragraph.isNull()) { kWarning(30503) << "startFormat on empty paragraph" << endl; }
 
 	format.removeAttribute("len");
 	format.removeAttribute("pos");
@@ -492,7 +492,7 @@ QDomElement KWDWriter::currentFormat(QDomElement paragraph, bool start_new_one) 
 	if (e.isNull()) {
 	   // no current format, start a new one
 	   if (start_new_one) return startFormat(paragraph);
-	   else { kdWarning(30503) << "warning: returning null format" << endl; }
+	   else { kWarning(30503) << "warning: returning null format" << endl; }
 	}
 	if (!e.attribute("len").isNull()) {
 	   // current format already has length, clone it.
@@ -504,7 +504,7 @@ QDomElement KWDWriter::currentFormat(QDomElement paragraph, bool start_new_one) 
 
 void KWDWriter::cleanUpParagraph(QDomElement paragraph) {
 	QDomElement e=paragraph.elementsByTagName("FORMATS").item(0).toElement();
-	if (e.isNull()) { kdWarning(30503) << "cleanup : no valid paragraph" << endl; return; }
+	if (e.isNull()) { kWarning(30503) << "cleanup : no valid paragraph" << endl; return; }
 	for (QDomElement k=e.firstChild().toElement();!k.isNull();k=k.nextSibling().toElement()) {
 	     if (k.attribute("len",QString::null).isNull()) {
 	         e.removeChild(k);
@@ -534,7 +534,7 @@ QDomElement KWDWriter::docroot() {
 
 bool KWDWriter::writeDoc() {
 	Q3CString str=_doc->toCString();
-	kdWarning(30503) << str << endl;
+	kWarning(30503) << str << endl;
 
 	if (!_store->open("root")) {
 	    return false;
@@ -544,7 +544,7 @@ bool KWDWriter::writeDoc() {
 	}
 
 	if (!_store->open("documentinfo.xml")) {
-		kdWarning(30503) << "WARNING: unable to write out doc info. continuing anyway" << endl;
+		kWarning(30503) << "WARNING: unable to write out doc info. continuing anyway" << endl;
 	} else {
 		str=_docinfo->toCString();
 		_store->write((const char *)str, str.length());

@@ -162,7 +162,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
             firstCellInRow=false;
         }
 
-        kdDebug(30515) << "Cell: " << debugRowCurrent << "," << debugCellCurrent
+        kDebug(30515) << "Cell: " << debugRowCurrent << "," << debugCellCurrent
             << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom << endl;
         textCellHeader += writeBorder('t',qRound(PT_TO_TWIP(frame.tWidth)),frame.tColor);
         textCellHeader += writeBorder('l',qRound(PT_TO_TWIP(frame.lWidth)),frame.lColor);
@@ -201,7 +201,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     QString strExt;
     QByteArray image;
 
-    kdDebug(30515) << "RTFWorker::makeImage" << endl << anchor.picture.koStoreName << endl;
+    kDebug(30515) << "RTFWorker::makeImage" << endl << anchor.picture.koStoreName << endl;
 
     const int pos=strImageName.findRev('.');
     if(pos!=-1) strExt = strImageName.mid(pos+1).lower();
@@ -221,12 +221,12 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     {
         // either without extension or format is unknown
         // let's try to convert it to PNG format
-        kdDebug(30515) << "Converting image " << anchor.picture.koStoreName << endl;
+        kDebug(30515) << "Converting image " << anchor.picture.koStoreName << endl;
 
         strTag="\\pngblip";
         if( !loadAndConvertToImage(anchor.picture.koStoreName,strExt,"PNG",image) )
         {
-            kdWarning(30515) << "Unable to convert " << anchor.picture.koStoreName << endl;
+            kWarning(30515) << "Unable to convert " << anchor.picture.koStoreName << endl;
             return QString::null;
         }
     }
@@ -236,7 +236,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     if( !image.size() )
         if (!loadSubFile(anchor.picture.koStoreName,image))
         {
-            kdWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName << endl;
+            kWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName << endl;
             return QString::null;
         }
 
@@ -252,7 +252,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     {
         // special treatment for WMF with metaheader
         // d7cdc69a is metaheader magic id
-        Q_UINT8* data = (Q_UINT8*) image.data();
+        quint8* data = (quint8*) image.data();
         if( ( data[0] == 0xd7 ) && ( data[1] == 0xcd ) &&
             ( data[2] == 0xc6 ) && ( data[3] == 0x9a ) &&
             ( image.size() > 22 ) )
@@ -277,7 +277,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
         QImage img( image );
         if( img.isNull() )
         {
-            kdWarning(30515) << "Unable to load picture as image " << anchor.picture.koStoreName << endl;
+            kWarning(30515) << "Unable to load picture as image " << anchor.picture.koStoreName << endl;
             return QString::null;
         }
         // check resolution, assume 2835 dpm (72 dpi) if not available
@@ -582,7 +582,7 @@ if (layout.counter.style)
                     else
                         content += "TIME ";
                     QString key((*paraFormatDataIt).variable.m_key.mid(4));
-                    kdDebug(30515) << "Time format: " << key << endl;
+                    kDebug(30515) << "Time format: " << key << endl;
                     if (key.startsWith("locale"))
                     {
                         if (key == "locale" )
@@ -607,7 +607,7 @@ if (layout.counter.style)
                             key += KGlobal::locale()->timeFormat();
                         }
 
-                        kdDebug(30515) << "Locale date in KLocale format:  " << key << endl;
+                        kDebug(30515) << "Locale date in KLocale format:  " << key << endl;
 
                         // KLocale's key differ from KWord
 
@@ -633,7 +633,7 @@ if (layout.counter.style)
                         key.replace( "%M", "mm" );      // minute 2 digits (KLocale knows it with 2 digits)
                         key.replace( "%S", "ss" );      // second 2 digits (KLocale knows it with 2 digits)
 
-                        kdDebug(30515) << "Locale date in RTF format:  " << key << endl;
+                        kDebug(30515) << "Locale date in RTF format:  " << key << endl;
                     }
                     else if (!key.isEmpty())
                     {
@@ -653,7 +653,7 @@ if (layout.counter.style)
                         key.replace("PPP","MMM");
                         key.replace("PPPP","MMMM");
                         key.replace("zzz","000"); // replace microseconds by 000
-                        kdDebug(30515) << "New format:  " << key << endl;
+                        kDebug(30515) << "New format:  " << key << endl;
                         content += "\\@ \"";
                         content += key;
                         content += "\" ";
@@ -749,7 +749,7 @@ if (layout.counter.style)
             }
             else if (6==(*paraFormatDataIt).id)
             {
-                kdDebug(30515) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
+                kDebug(30515) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
                 // We have an image, a clipart or a table
 
 		if (6==(*paraFormatDataIt).frameAnchor.type)
@@ -811,10 +811,10 @@ if (layout.counter.style)
 bool RTFWorker::doFullParagraph(const QString& paraText,
     const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-    kdDebug(30515) << "Entering RTFWorker::doFullParagraph" << endl << paraText << endl;
+    kDebug(30515) << "Entering RTFWorker::doFullParagraph" << endl << paraText << endl;
     QString par = ProcessParagraphData( paraText, layout, paraFormatDataList);
     m_textBody += par;
-    kdDebug(30515) << "Quiting RTFWorker::doFullParagraph" << endl;
+    kDebug(30515) << "Quiting RTFWorker::doFullParagraph" << endl;
     return true;
 }
 
@@ -894,13 +894,13 @@ bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     if (!m_ioDevice)
     {
-        kdError(30515) << "No output file! Aborting!" << endl;
+        kError(30515) << "No output file! Aborting!" << endl;
         return false;
     }
 
     if ( !m_ioDevice->open (QIODevice::WriteOnly) )
     {
-        kdError(30515) << "Unable to open output file!" << endl;
+        kError(30515) << "Unable to open output file!" << endl;
         return false;
     }
 
@@ -916,7 +916,7 @@ bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
 bool RTFWorker::doCloseFile(void)
 {
-    kdDebug(30515) << __FILE__ << ":" << __LINE__ << endl;
+    kDebug(30515) << __FILE__ << ":" << __LINE__ << endl;
     delete m_streamOut;
     m_streamOut=NULL;
     if (m_ioDevice)
@@ -945,7 +945,7 @@ bool RTFWorker::doOpenDocument(void)
 
 void RTFWorker::writeFontData(void)
 {
-    kdDebug(30515) << "Fonts:" << m_fontList << endl;
+    kDebug(30515) << "Fonts:" << m_fontList << endl;
     *m_streamOut << "{\\fonttbl";
     uint count;
     QFontDatabase fontDatabase;
@@ -1235,7 +1235,7 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
             // (Of course this only works with Latin letters.)
             // WARNING: QChar::decomposition is not re-entrant in Qt 3.x
             QChar replacement ( QCh.decomposition().at(0) );
-            kdDebug(30515) << "Proposed replacement character: " << QString(replacement) << endl;
+            kDebug(30515) << "Proposed replacement character: " << QString(replacement) << endl;
 
             if (replacement.isNull() || replacement<=' ' || replacement>=char(127)
                 || replacement=='{' || replacement=='}' || replacement=='\\')
@@ -1290,7 +1290,7 @@ static QString writeDate(const QString keyword, const QDateTime& now)
     QString str;
     if (now.isValid())
     {
-        kdDebug(30515) << "Date " << keyword << " " << now.toString() << endl;
+        kDebug(30515) << "Date " << keyword << " " << now.toString() << endl;
         str += '{';
         str += keyword;
         const QDate nowDate(now.date());
@@ -1310,7 +1310,7 @@ static QString writeDate(const QString keyword, const QDateTime& now)
         str += '}';
     }
     else
-        kdWarning(30515) << "Date " << keyword << " is not valid! Skipping!" << endl;
+        kWarning(30515) << "Date " << keyword << " is not valid! Skipping!" << endl;
 
     return str;
 }
@@ -1483,7 +1483,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         }
         else
         {
-            kdWarning(30515) << "Unknown alignment: " << layout.alignment << endl;
+            kWarning(30515) << "Unknown alignment: " << layout.alignment << endl;
         }
     }
 
@@ -1568,7 +1568,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
         else
-            kdWarning(30515) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+            kWarning(30515) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
     }
 
     if (!layout.tabulatorList.isEmpty()
@@ -1636,7 +1636,7 @@ QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
     if (cookedFontName.isEmpty())
         cookedFontName=fontName;
 
-    kdDebug(30515) << "RTFWorker::lookupFont " << fontName << " cooked: " << cookedFontName << endl;
+    kDebug(30515) << "RTFWorker::lookupFont " << fontName << " cooked: " << cookedFontName << endl;
 
     uint counter=0;  // counts position in font table (starts at 0)
     QString strFont(markup); // markup for font selection
@@ -1648,12 +1648,12 @@ QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
         if((*it) == cookedFontName)  // check for match
         {
             strFont += QString::number(counter);
-            kdDebug(30515) << strFont << endl;
+            kDebug(30515) << strFont << endl;
             return strFont;
         }
     }  // end for()
 
-    kdDebug(30515) << "New font: " << cookedFontName << " count: " << counter << endl;
+    kDebug(30515) << "New font: " << cookedFontName << " count: " << counter << endl;
     m_fontList << cookedFontName;
 
     strFont += QString::number(counter);
@@ -1680,7 +1680,7 @@ QString RTFWorker::lookupColor(const QString& markup, const QColor& color)
         }
     }
 
-    kdDebug(30515) << "New color: " << color.name() << " count: " << counter << endl;
+    kDebug(30515) << "New color: " << color.name() << " count: " << counter << endl;
     m_colorList << color;
 
     strColor += QString::number(counter);
@@ -1709,7 +1709,7 @@ QString RTFWorker::lookupStyle(const QString& styleName, LayoutData& returnLayou
         }
     }
 
-    kdDebug(30515) << "New style: " << styleName << " count: " << counter << endl;
+    kDebug(30515) << "New style: " << styleName << " count: " << counter << endl;
     LayoutData layout;
     m_styleList << layout;
     returnLayout=layout;

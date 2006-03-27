@@ -53,7 +53,7 @@ private slots:
 private:
 
     QStringList createArgumentList(bool forPreview = false);
-    QSize determineSize(Q_UINT32& startOfImageData);
+    QSize determineSize(quint32& startOfImageData);
     void getImageData(QStringList arguments);
     KisProfile * profile();
     KisID getColorSpace();

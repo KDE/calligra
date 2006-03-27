@@ -22,18 +22,18 @@
 #define __XCF_READ_H__
 
 
-Q_UINT32   xcf_read_int32  (FILE     *fp,
-			 Q_INT32  *data,
-			 Q_INT32      count);
-Q_UINT32   xcf_read_float  (FILE     *fp,
+quint32   xcf_read_int32  (FILE     *fp,
+			 qint32  *data,
+			 qint32      count);
+quint32   xcf_read_float  (FILE     *fp,
 			 float   *data,
-			 Q_INT32      count);
-Q_UINT32   xcf_read_int8   (FILE     *fp,
-			 Q_UINT8   *data,
-			 Q_INT32      count);
-Q_UINT32   xcf_read_string (FILE     *fp,
+			 qint32      count);
+quint32   xcf_read_int8   (FILE     *fp,
+			 quint8   *data,
+			 qint32      count);
+quint32   xcf_read_string (FILE     *fp,
 			 Q3CString   **data,
-			 Q_INT32      count);
+			 qint32      count);
 
 
 #endif  /* __XCF_READ_H__ */

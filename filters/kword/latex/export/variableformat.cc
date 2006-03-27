@@ -81,7 +81,7 @@ void VariableFormat::analyseFormat(const QDomNode balise)
 	
 	/* Parameters Analyse */
 	analyseParam(balise);
-	kdDebug(30522) << "ANALYSE A FORMAT" << endl;
+	kDebug(30522) << "ANALYSE A FORMAT" << endl;
 	
 	/* Children Markups Analyse */
 	if(isChild(balise, "FONT"))
@@ -108,7 +108,7 @@ void VariableFormat::analyseFormat(const QDomNode balise)
 		analyseNote(getChild(balise, "NOTE"));
 	if(isChild(balise, "TYPE"))
 		analyseType(getChild(balise, "TYPE"));
-	kdDebug(30522) << "END OF A FORMAT" << endl;
+	kDebug(30522) << "END OF A FORMAT" << endl;
 }
 
 /*******************************************/

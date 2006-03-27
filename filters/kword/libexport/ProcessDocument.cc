@@ -258,7 +258,7 @@ static void ProcessUnderlineTag (QDomNode myNode, void *tagData, KWEFKWordLeader
         ;
     ProcessAttributes (myNode, attrProcessingList);
 
-    str=str.stripWhiteSpace();
+    str=str.trimmed();
     text->underlineValue=str;
     if ( (str=="0") || (str.isEmpty()) )
     {
@@ -316,12 +316,12 @@ void ProcessAnchorTag ( QDomNode       myNode,
 
     if ( type != "frameset" )
     {
-        kdWarning (30508) << "Unknown ANCHOR type " << type << "!" << endl;
+        kWarning (30508) << "Unknown ANCHOR type " << type << "!" << endl;
     }
 
     if ( (*instance).isEmpty () )
     {
-        kdWarning (30508) << "Bad ANCHOR instance name!" << endl;
+        kWarning (30508) << "Bad ANCHOR instance name!" << endl;
     }
 
     AllowNoSubtags (myNode, leader);
@@ -502,14 +502,14 @@ static void SubProcessFormatOneTag(QDomNode myNode,
         // It can happen in a child of <STYLE>, just put secure values
         formatPos=0;
         formatLen=0;
-        kdDebug (30508) << "Missing formatting! Style? "
+        kDebug (30508) << "Missing formatting! Style? "
                         << myNode.nodeName()
                         << " = " << myNode.nodeValue()
                         << endl;
 
         // In the old syntax (KWord 0.8), the comment would be displayed for each paragraph, so do not show it.
         if ( ! leader->m_oldSyntax )
-            kdDebug (30508) << "Missing formatting for <FORMAT> (style or syntax version 1 ?)" << endl;
+            kDebug (30508) << "Missing formatting for <FORMAT> (style or syntax version 1 ?)" << endl;
     }
 
     FormatData formatData(1, formatPos, formatLen);
@@ -528,7 +528,7 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
     if ( (formatPos == -1) )
     {
         // We have no position defined
-        kdWarning(30508) << "Missing text image position!" << endl;
+        kWarning(30508) << "Missing text image position!" << endl;
         return;
     }
     // In KWord 0.8, the len attribute was not defined
@@ -546,12 +546,12 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
 
     if ( !fileName.isEmpty() )
     {
-        kdDebug(30508) << "KWord 0.8 text image: " << fileName << endl;
+        kDebug(30508) << "KWord 0.8 text image: " << fileName << endl;
         key = KoPictureKey( fileName );
     }
     else
     {
-        kdDebug(30508) << "KWord 1.2/1.3 text image: " << key.toString() << endl;
+        kDebug(30508) << "KWord 1.2/1.3 text image: " << key.toString() << endl;
     }
 
     formatData.frameAnchor.key = key;
@@ -568,7 +568,7 @@ static void SubProcessFormatThreeTag(QDomNode myNode,
     if ( (formatPos == -1) ) // formatLen is never there but is 1.
     {
         // We have no position and no length defined
-        kdWarning(30508) << "Missing variable formatting!" << endl;
+        kWarning(30508) << "Missing variable formatting!" << endl;
         return;
     }
     AllowNoSubtags (myNode, leader);
@@ -584,7 +584,7 @@ static void SubProcessFormatFourTag(QDomNode myNode,
     if ( (formatPos == -1) || (formatLen == -1) )
     {
         // We have no position and no length defined
-        kdWarning(30508) << "Missing variable formatting!" << endl;
+        kWarning(30508) << "Missing variable formatting!" << endl;
         return;
     }
     FormatData formatData(4, formatPos, formatLen);
@@ -614,14 +614,14 @@ static void SubProcessFormatSixTag(QDomNode myNode,
                             << TagProcessing ( "ANCHOR", ProcessAnchorTag, &instance );
         ProcessSubtags (myNode, tagProcessingList, leader);
 #if 0
-        kdDebug (30508) << "DEBUG: Adding frame anchor " << instance << endl;
+        kDebug (30508) << "DEBUG: Adding frame anchor " << instance << endl;
 #endif
 
         (*formatDataList) << FormatData ( formatPos, formatLen, FrameAnchor (instance) );
     }
     else
     {
-        kdWarning (30508) << "Missing or bad anchor formatting!" << endl;
+        kWarning (30508) << "Missing or bad anchor formatting!" << endl;
     }
 }
 
@@ -672,13 +672,13 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
         }
     case -1:
         {
-            kdWarning (30508) << "FORMAT attribute id value not set!" << endl;
+            kWarning (30508) << "FORMAT attribute id value not set!" << endl;
             AllowNoSubtags (myNode, leader);
             break;
         }
     case 5: // KWord 0.8 footnote
     default:
-            kdWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << endl;
+            kWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << endl;
             AllowNoSubtags (myNode, leader);
     }
 
@@ -955,7 +955,7 @@ static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *le
             const int align = oldAlign.toInt();
             if ( ( align < 0 ) || ( align > 3) )
             {
-                kdWarning(30508) << "KWord 0.8 flow unknown: " << oldAlign << endl;
+                kWarning(30508) << "KWord 0.8 flow unknown: " << oldAlign << endl;
                 layout->alignment = "left"; // Unknown, so assume left
             }
             else
@@ -964,7 +964,7 @@ static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *le
                 layout->alignment = flows[ align ];
             }
         }
-        kdDebug(30508) << "KWord 0.8 flow: " << oldAlign << " corrected: " << layout->alignment << endl;
+        kDebug(30508) << "KWord 0.8 flow: " << oldAlign << " corrected: " << layout->alignment << endl;
     }
     else
     {
@@ -1019,7 +1019,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 
     if ( formatDataList.isEmpty () )
     {
-        kdWarning (30508) << "No FORMAT tag within LAYOUT/STYLE!" << endl;
+        kWarning (30508) << "No FORMAT tag within LAYOUT/STYLE!" << endl;
     }
     else
     {
@@ -1027,14 +1027,14 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 
         if ( formatDataList.count () > 1 )
         {
-            kdWarning (30508) << "More than one FORMAT tag within LAYOUT/STYLE!" << endl;
+            kWarning (30508) << "More than one FORMAT tag within LAYOUT/STYLE!" << endl;
         }
     }
 
     if ( layout->styleName.isEmpty () )
     {
         layout->styleName = "Standard";
-        kdWarning (30508) << "Empty layout name!" << endl;
+        kWarning (30508) << "Empty layout name!" << endl;
     }
 
 }

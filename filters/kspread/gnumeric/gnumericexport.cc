@@ -484,7 +484,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
 QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,Cell * cell, int currentcolumn, int currentrow)
 {
     QDomElement font_style;
-    kdDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow<<endl;
+    kDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow<<endl;
     font_style = gnumeric_doc.createElement("gmr:Font");
     font_style.appendChild(gnumeric_doc.createTextNode(cell->format()->textFontFamily(currentcolumn, currentrow)));
 
@@ -943,7 +943,7 @@ void GNUMERICExport::addSummaryItem(QDomDocument gnumeric_doc, QDomElement summa
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus GNUMERICExport::convert( const Q3CString& from, const Q3CString& to )
 {
-    kdDebug(30521) << "Exporting GNUmeric" << endl;
+    kDebug(30521) << "Exporting GNUmeric" << endl;
 
     QDomDocument gnumeric_doc=QDomDocument();
 
@@ -955,12 +955,12 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const Q3CString& from, const
 
     if ( !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-      kdWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+      kWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread")
     {
-        kdWarning(30521) << "Invalid mimetypes " << to << " " << from << endl;
+        kWarning(30521) << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -968,7 +968,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const Q3CString& from, const
 
     if (ksdoc->mimeType() != "application/x-kspread")
     {
-        kdWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        kWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -1395,7 +1395,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const Q3CString& from, const
                             domNode = domNode.firstChild();
                         }
 
-                        //kdDebug(30521) << "---> link, text = " << text << endl;
+                        //kDebug(30521) << "---> link, text = " << text << endl;
 
                         linkUrl = domRoot.attribute("href");
                         linkText = text;
@@ -1505,13 +1505,13 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const Q3CString& from, const
 
     if (!out)
     {
-        kdError(30521) << "No output file! Aborting!" << endl;
+        kError(30521) << "No output file! Aborting!" << endl;
         return KoFilter::FileNotFound;
     }
 
     if (!out->open(QIODevice::WriteOnly))
     {
-        kdError(30521) << "Unable to open output file! Aborting!" << endl;
+        kError(30521) << "Unable to open output file! Aborting!" << endl;
         delete out;
         return KoFilter::FileNotFound;
     }

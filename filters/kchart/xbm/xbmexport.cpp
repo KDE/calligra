@@ -50,7 +50,7 @@ void XbmExport::extraImageAttribute()
 	width  = exportDialog->width();
 	height = exportDialog->height();
 
-	kdDebug() << "Xbm Export: size = [" << width << "," << height << "]" << endl;
+	kDebug() << "Xbm Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
 }

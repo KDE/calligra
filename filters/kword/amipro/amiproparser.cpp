@@ -326,18 +326,18 @@ bool AmiProParser::parseStyle( const QStringList& lines )
 {
   AmiProStyle style;
 
-  style.name = AmiProUnescape( lines[0].stripWhiteSpace() );
+  style.name = AmiProUnescape( lines[0].trimmed() );
   if( style.name.isEmpty() ) return true;
 
   // font
-  if( lines[2].stripWhiteSpace() != "[fnt]" ) return true;
-  style.fontFamily = lines[3].stripWhiteSpace();
-  style.fontSize = lines[4].stripWhiteSpace().toFloat() / 20.0;
+  if( lines[2].trimmed() != "[fnt]" ) return true;
+  style.fontFamily = lines[3].trimmed();
+  style.fontSize = lines[4].trimmed().toFloat() / 20.0;
 
-  unsigned color = lines[5].stripWhiteSpace().toUInt();
+  unsigned color = lines[5].trimmed().toUInt();
   style.fontColor.setRgb( color&255, (color>>8)&255, (color>>16)&255);
 
-  unsigned flag = lines[6].stripWhiteSpace().toUInt();
+  unsigned flag = lines[6].trimmed().toUInt();
   style.bold = flag & 1;
   style.italic = flag & 2;
   style.underline = flag & 4;
@@ -345,23 +345,23 @@ bool AmiProParser::parseStyle( const QStringList& lines )
   style.double_underline = flag & 64;
 
   // alignment
-  if( lines[7].stripWhiteSpace() != "[algn]" ) return true;
-  unsigned align_flag = lines[8].stripWhiteSpace().toUInt();
+  if( lines[7].trimmed() != "[algn]" ) return true;
+  unsigned align_flag = lines[8].trimmed().toUInt();
   if( align_flag & 1 ) style.align = Qt::AlignLeft;
   if( align_flag & 2 ) style.align = Qt::AlignRight;
   if( align_flag & 4 ) style.align = Qt::AlignCenter;
   if( align_flag & 8 ) style.align = Qt::AlignJustify;
 
   // linespace
-  if( lines[13].stripWhiteSpace() != "[spc]" ) return true;
-  unsigned ls_flag = lines[14].stripWhiteSpace().toUInt();
+  if( lines[13].trimmed() != "[spc]" ) return true;
+  unsigned ls_flag = lines[14].trimmed().toUInt();
   if( ls_flag & 1 ) style.linespace = AmiPro::LS_Single;
   if( ls_flag & 2 ) style.linespace = AmiPro::LS_OneAndHalf;
   if( ls_flag & 4 ) style.linespace = AmiPro::LS_Double;
   if( ls_flag & 8 ) 
-    style.linespace = lines[15].stripWhiteSpace().toFloat() / 20.0;
-  style.spaceBefore = lines[17].stripWhiteSpace().toFloat() / 20.0;
-  style.spaceAfter = lines[18].stripWhiteSpace().toFloat() / 20.0;
+    style.linespace = lines[15].trimmed().toFloat() / 20.0;
+  style.spaceBefore = lines[17].trimmed().toFloat() / 20.0;
+  style.spaceAfter = lines[18].trimmed().toFloat() / 20.0;
 
   m_styleList.append( style );
 

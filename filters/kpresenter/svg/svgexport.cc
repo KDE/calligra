@@ -60,7 +60,7 @@ SvgExport::convert(const Q3CString& from, const Q3CString& to)
 
     if ( strcmp(document->className(), "KPrDocument") != 0)
     {
-        kdWarning() << "document isn't a KPrDocument but a "
+        kWarning() << "document isn't a KPrDocument but a "
                      << document->className() << endl;
         return KoFilter::NotImplemented;
     }
@@ -68,14 +68,14 @@ SvgExport::convert(const Q3CString& from, const Q3CString& to)
     // Check for proper conversion.
     if ( from != "application/x-kpresenter" || to != "image/svg+xml" )
     {
-        kdWarning() << "Invalid mimetypes " << to << " " << from << endl;
+        kWarning() << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;
     }
     KPrDocument * kpresenterdoc = const_cast<KPrDocument *>(static_cast<const KPrDocument *>(document));
 
     if ( kpresenterdoc->mimeType() != "application/x-kpresenter" )
     {
-        kdWarning() << "Invalid document mimetype " << kpresenterdoc->mimeType() << endl;
+        kWarning() << "Invalid document mimetype " << kpresenterdoc->mimeType() << endl;
         return KoFilter::NotImplemented;
     }
     KoPageLayout layoutPage= kpresenterdoc->pageLayout();

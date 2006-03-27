@@ -137,7 +137,7 @@ static const Unicode LIGATURE_DATA[][MaxLigatureLength+1] = {
 
 uint checkLigature(Unicode u, Unicode res[MaxLigatureLength])
 {
-    if ( type(u)==Unknown ) kdDebug(30516) << "unknown char " << u << endl;
+    if ( type(u)==Unknown ) kDebug(30516) << "unknown char " << u << endl;
     if ( type(u)!=Ligature ) {
         res[0] = u;
         return 1;
@@ -155,7 +155,7 @@ uint checkLigature(Unicode u, Unicode res[MaxLigatureLength])
         }
         i++;
     }
-    kdDebug(30516) << "undefined ligature !! " << u <<endl;
+    kDebug(30516) << "undefined ligature !! " << u <<endl;
     res[0] = u;
     return 1;
 }
@@ -193,14 +193,14 @@ CharType checkSpecial(Unicode u, Unicode &res)
     // special mapping
     switch (t) {
     case Unknown:
-        kdDebug(30516) << "unknown special " << QString(QChar(u))
+        kDebug(30516) << "unknown special " << QString(QChar(u))
                        << " (" << u << ")" << endl;
         break;
     case SuperScript: {
         uint i = 0;
         for (;;) {
             if ( SUPER_DATA[i][0]==0 ) {
-                kdDebug(30516) << "undefined superscript !!" << endl;
+                kDebug(30516) << "undefined superscript !!" << endl;
                 break;
             }
             if ( SUPER_DATA[i][0]==u ) {
@@ -215,7 +215,7 @@ CharType checkSpecial(Unicode u, Unicode &res)
         uint i = 0;
         for (;;) {
             if ( BULLET_DATA[i][0]==0 ) {
-                kdDebug(30516) << "undefined bullet !!" << endl;
+                kDebug(30516) << "undefined bullet !!" << endl;
                 break;
             }
             if ( BULLET_DATA[i][0]==u ) {

@@ -64,7 +64,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "kofficefilters" );
+        KGlobal::locale()->insertCatalog( "kofficefilters" );
     }
 };
 
@@ -152,7 +152,7 @@ QString AbiWordWorker::escapeAbiWordText(const QString& strText) const
 
 bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
 {
-    kdDebug(30506) << "Opening file: " << filenameOut
+    kDebug(30506) << "Opening file: " << filenameOut
         << " (in AbiWordWorker::doOpenFile)" << endl;
     //Find the last extension
     QString strExt;
@@ -182,19 +182,19 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         strMimeType="text/plain";
     }
 
-    kdDebug(30506) << "Compression: " << strMimeType << endl;
+    kDebug(30506) << "Compression: " << strMimeType << endl;
 
     m_ioDevice = KFilterDev::deviceForFile(filenameOut,strMimeType);
 
     if (!m_ioDevice)
     {
-        kdError(30506) << "No output file! Aborting!" << endl;
+        kError(30506) << "No output file! Aborting!" << endl;
         return false;
     }
 
     if ( !m_ioDevice->open (QIODevice::WriteOnly) )
     {
-        kdError(30506) << "Unable to open output file! Aborting!" << endl;
+        kError(30506) << "Unable to open output file! Aborting!" << endl;
         return false;
     }
 
@@ -216,7 +216,7 @@ bool AbiWordWorker::doCloseFile(void)
 
 bool AbiWordWorker::doOpenDocument(void)
 {
-    kdDebug(30506)<< "AbiWordWorker::doOpenDocument" << endl;
+    kDebug(30506)<< "AbiWordWorker::doOpenDocument" << endl;
     // Make the file header
 
     // First the XML header in UTF-8 version
@@ -251,7 +251,7 @@ bool AbiWordWorker::doOpenDocument(void)
 
 void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& keyName)
 {
-    kdDebug(30506) << "AbiWordWorker::writeImageData" << endl;
+    kDebug(30506) << "AbiWordWorker::writeImageData" << endl;
 
     QByteArray image;
 
@@ -289,7 +289,7 @@ void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& 
     }
     else
     {
-        kdWarning(30506) << "Unable to load picture: " << koStoreName << endl;
+        kWarning(30506) << "Unable to load picture: " << koStoreName << endl;
     }
 }
 
@@ -523,7 +523,7 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
 
 bool AbiWordWorker::makePicture(const FrameAnchor& anchor)
 {
-    kdDebug(30506) << "New image/clipart: " << anchor.picture.koStoreName
+    kDebug(30506) << "New image/clipart: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
 
     const double height=anchor.frame.bottom - anchor.frame.top;
@@ -688,7 +688,7 @@ void AbiWordWorker::processAnchor ( const QString&,
     }
     else
     {
-        kdWarning(30506) << "Unsupported anchor type: "
+        kWarning(30506) << "Unsupported anchor type: "
             << formatData.frameAnchor.type << endl;
     }
 }
@@ -743,7 +743,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
         }
         else
         {
-            kdWarning(30506) << "Unknown alignment: " << layout.alignment << endl;
+            kWarning(30506) << "Unknown alignment: " << layout.alignment << endl;
         }
     }
 
@@ -877,7 +877,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
             }
         default:
             {
-                kdWarning(30506) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                kWarning(30506) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
                 break;
             }
         }
@@ -1088,14 +1088,14 @@ bool AbiWordWorker::doCloseHead(void)
 
 bool AbiWordWorker::doOpenSpellCheckIgnoreList (void)
 {
-    kdDebug(30506) << "AbiWordWorker::doOpenSpellCheckIgnoreList" << endl;
+    kDebug(30506) << "AbiWordWorker::doOpenSpellCheckIgnoreList" << endl;
     m_inIgnoreWords=false; // reset
     return true;
 }
 
 bool AbiWordWorker::doCloseSpellCheckIgnoreList (void)
 {
-    kdDebug(30506) << "AbiWordWorker::doCloseSpellCheckIgnoreList" << endl;
+    kDebug(30506) << "AbiWordWorker::doCloseSpellCheckIgnoreList" << endl;
     if (m_inIgnoreWords)
         *m_streamOut << "</ignorewords>\n";
     return true;
@@ -1103,7 +1103,7 @@ bool AbiWordWorker::doCloseSpellCheckIgnoreList (void)
 
 bool AbiWordWorker::doFullSpellCheckIgnoreWord (const QString& ignoreword)
 {
-    kdDebug(30506) << "AbiWordWorker::doFullSpellCheckIgnoreWord: " << ignoreword << endl;
+    kDebug(30506) << "AbiWordWorker::doFullSpellCheckIgnoreWord: " << ignoreword << endl;
     if (!m_inIgnoreWords)
     {
         *m_streamOut << "<ignorewords>\n";
@@ -1236,13 +1236,13 @@ KoFilter::ConversionStatus ABIWORDExport::convert( const Q3CString& from, const 
     }
 
     // We need KimageIO's help in AbiWordWorker::convertUnknownImage
-    KImageIO::registerFormats();
+    
 
     AbiWordWorker* worker=new AbiWordWorker();
 
     if (!worker)
     {
-        kdError(30506) << "Cannot create Worker! Aborting!" << endl;
+        kError(30506) << "Cannot create Worker! Aborting!" << endl;
         return KoFilter::StupidError;
     }
 
@@ -1250,7 +1250,7 @@ KoFilter::ConversionStatus ABIWORDExport::convert( const Q3CString& from, const 
 
     if (!leader)
     {
-        kdError(30506) << "Cannot create Worker! Aborting!" << endl;
+        kError(30506) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }

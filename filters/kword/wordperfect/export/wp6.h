@@ -42,7 +42,7 @@ class WPSixWorker : public KWEFBaseWorker
     QString filename;
     QFile outfile;
     QDataStream output;
-    Q_UINT32 document_area_ptr;
+    quint32 document_area_ptr;
 };
 
 #endif //__WP6_H

@@ -104,7 +104,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const Q3CString& from, const Q3
   QFontMetrics fm( font );
   for( unsigned i=0; i<dbase.fields.count(); i++ )
   {
-    int mw = QMAX( dbase.fields.at(i)->length, dbase.fields.at(i)->name.length());
+    int mw = qMax( dbase.fields.at(i)->length, dbase.fields.at(i)->name.length());
     double w = POINT_TO_MM( fm.maxWidth() * mw );
     root += "<column column=\"" + QString::number(i+1) + "\"";
     root += " width=\"" + QString::number( w ) + "\"><format/></column>\n";

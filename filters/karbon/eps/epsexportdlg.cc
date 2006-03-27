@@ -31,7 +31,7 @@
 EpsExportDlg::EpsExportDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "EPS Export" ), Ok | Cancel )
 {
-	Q3VBox* page = makeVBoxMainWidget();
+	KVBox* page = makeVBoxMainWidget();
 
 	m_psLevelButtons = new Q3ButtonGroup( 1, Qt::Horizontal,
 		i18n( "Options" ), page );

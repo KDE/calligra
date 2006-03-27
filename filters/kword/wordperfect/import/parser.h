@@ -153,7 +153,7 @@ namespace WP
   {
     public:
       unsigned type, size, pos;
-      Q3MemArray<Q_UINT8> data;
+      Q3MemArray<quint8> data;
   };
 
 /**
@@ -196,7 +196,7 @@ namespace WP
 
   private:
 
-    void handleTab ( Q3MemArray <Q_UINT8> data );
+    void handleTab ( Q3MemArray <quint8> data );
 
     void parsePacketWP5( const QString & filename );
     void parseDocWP5( const QString & filename, int start );

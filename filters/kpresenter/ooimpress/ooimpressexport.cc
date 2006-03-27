@@ -59,11 +59,11 @@ OoImpressExport::~OoImpressExport()
 KoFilter::ConversionStatus OoImpressExport::convert( const Q3CString & from,
                                                      const Q3CString & to )
 {
-    kdDebug(30518) << "Entering Ooimpress Export filter: " << from << " - " << to << endl;
+    kDebug(30518) << "Entering Ooimpress Export filter: " << from << " - " << to << endl;
 
     if ( ( to != "application/vnd.sun.xml.impress") || (from != "application/x-kpresenter" ) )
     {
-        kdWarning(30518) << "Invalid mimetypes " << to << " " << from << endl;
+        kWarning(30518) << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -85,18 +85,18 @@ KoFilter::ConversionStatus OoImpressExport::convert( const Q3CString & from,
 
     if ( !m_storeout )
     {
-        kdWarning(30518) << "Couldn't open the requested file." << endl;
+        kWarning(30518) << "Couldn't open the requested file." << endl;
         return KoFilter::FileNotFound;
     }
 
     if ( !m_storeout->open( "meta.xml" ) )
     {
-        kdWarning(30518) << "Couldn't open the file 'meta.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'meta.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     Q3CString metaString = meta.toCString();
-    //kdDebug(30518) << "meta :" << metaString << endl;
+    //kDebug(30518) << "meta :" << metaString << endl;
     m_storeout->write( metaString , metaString.length() );
     m_storeout->close();
 
@@ -112,12 +112,12 @@ KoFilter::ConversionStatus OoImpressExport::convert( const Q3CString & from,
     // store document content
     if ( !m_storeout->open( "content.xml" ) )
     {
-        kdWarning(30518) << "Couldn't open the file 'content.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'content.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     Q3CString contentString = content.toCString();
-    //kdDebug(30518) << "content :" << contentString << endl;
+    //kDebug(30518) << "content :" << contentString << endl;
     m_storeout->write( contentString , contentString.length() );
     m_storeout->close();
 
@@ -130,12 +130,12 @@ KoFilter::ConversionStatus OoImpressExport::convert( const Q3CString & from,
     // store document content
     if ( !m_storeout->open( "settings.xml" ) )
     {
-        kdWarning(30518) << "Couldn't open the file 'settings.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'settings.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     Q3CString settingsString = settings.toCString();
-    //kdDebug(30518) << "content :" << settingsString << endl;
+    //kDebug(30518) << "content :" << settingsString << endl;
     m_storeout->write( settingsString , settingsString.length() );
     m_storeout->close();
 
@@ -149,12 +149,12 @@ KoFilter::ConversionStatus OoImpressExport::convert( const Q3CString & from,
     // store document styles
     if ( !m_storeout->open( "styles.xml" ) )
     {
-        kdWarning(30518) << "Couldn't open the file 'styles.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'styles.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     Q3CString stylesString = styles.toCString();
-    //kdDebug(30518) << "styles :" << stylesString << endl;
+    //kDebug(30518) << "styles :" << stylesString << endl;
     m_storeout->write( stylesString , stylesString.length() );
     m_storeout->close();
 
@@ -168,12 +168,12 @@ KoFilter::ConversionStatus OoImpressExport::convert( const Q3CString & from,
     m_storeout->enterDirectory( "META-INF" );
     if ( !m_storeout->open( "manifest.xml" ) )
     {
-        kdWarning(30518) << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
         return KoFilter::CreationError;
     }
 
     Q3CString manifestString = manifest.toCString();
-    //kdDebug(30518) << "manifest :" << manifestString << endl;
+    //kDebug(30518) << "manifest :" << manifestString << endl;
     m_storeout->write( manifestString , manifestString.length() );
     m_storeout->close();
 
@@ -186,13 +186,13 @@ KoFilter::ConversionStatus OoImpressExport::openFile()
 
     if ( !m_storeinp )
     {
-        kdWarning(30518) << "Couldn't open the requested file." << endl;
+        kWarning(30518) << "Couldn't open the requested file." << endl;
         return KoFilter::FileNotFound;
     }
 
     if ( !m_storeinp->open( "maindoc.xml" ) )
     {
-        kdWarning(30518) << "This file doesn't seem to be a valid KPresenter file" << endl;
+        kWarning(30518) << "This file doesn't seem to be a valid KPresenter file" << endl;
         return KoFilter::WrongFormat;
     }
 
@@ -205,7 +205,7 @@ KoFilter::ConversionStatus OoImpressExport::openFile()
         m_storeinp->close();
     }
     else
-        kdWarning(30518) << "Documentinfo do not exist!" << endl;
+        kWarning(30518) << "Documentinfo do not exist!" << endl;
 
     emit sigProgress( 10 );
 
@@ -514,11 +514,11 @@ void OoImpressExport::createPictureList( QDomNode &pictures )
             QDomElement element = pictures.toElement();
             if ( element.tagName() ==  "KEY" )
             {
-                //kdDebug(30518)<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
+                //kDebug(30518)<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
                 m_kpresenterPictureLst.insert( pictureKey( element ), element.attribute( "name" ) );
             }
             else
-                kdDebug(30518)<<" Tag not recognize :"<<element.tagName()<<endl;
+                kDebug(30518)<<" Tag not recognize :"<<element.tagName()<<endl;
         }
     }
 }
@@ -564,7 +564,7 @@ void OoImpressExport::createHelpLine( QDomNode &helpline )
             }
         }
     }
-    //kdDebug(30518)<<"m_helpLine :"<<m_helpLine<<endl;
+    //kDebug(30518)<<"m_helpLine :"<<m_helpLine<<endl;
 }
 
 
@@ -707,22 +707,22 @@ void OoImpressExport::appendObjects(QDomDocument & doccontent, QDomNode &objects
             appendTextbox( doccontent, o, drawPage );
             break;
         case 5:
-            kdDebug(30518)<<" autoform not implemented\n";
+            kDebug(30518)<<" autoform not implemented\n";
             break;
         case 6:
-            kdDebug(30518)<<" clipart not implemented\n";
+            kDebug(30518)<<" clipart not implemented\n";
             break;
         case 8: // pie, chord, arc
             appendEllipse( doccontent, o, drawPage, true );
             break;
         case 9: //part
-            kdDebug(30518)<<" part object not implemented \n";
+            kDebug(30518)<<" part object not implemented \n";
             break;
         case 10:
             appendGroupObject( doccontent, o, drawPage );
             break;
         case 11:
-            kdDebug(30518)<<" free hand not implemented\n";
+            kDebug(30518)<<" free hand not implemented\n";
             break;
         case 12: // polyline
             appendPolyline( doccontent, o, drawPage );
@@ -753,7 +753,7 @@ void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & sourc
 void OoImpressExport::appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QString noteText = source.attribute("note");
-    //kdDebug(30518)<<"noteText :"<<noteText<<endl;
+    //kDebug(30518)<<"noteText :"<<noteText<<endl;
     if ( noteText.isEmpty() )
         return;
     QDomElement noteElement = doc.createElement( "presentation:notes" );
@@ -1024,7 +1024,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
                 target.setAttribute( "draw:kind", "cut");
                 break;
             default:
-                kdDebug(30518)<<" type unknown : "<<typePie<<endl;
+                kDebug(30518)<<" type unknown : "<<typePie<<endl;
                 break;
             }
         }
@@ -1078,8 +1078,8 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
                         listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
                     else
                         listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
-                    maxX = QMAX( maxX, tmpX );
-                    maxY = QMAX( maxY, tmpY );
+                    maxX = qMax( maxX, tmpX );
+                    maxY = qMax( maxY, tmpY );
                 }
                 elemPoint = elemPoint.nextSibling().toElement();
             }

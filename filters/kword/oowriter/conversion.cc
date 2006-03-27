@@ -10,7 +10,7 @@ QString Conversion::importAlignment( const QString& align )
         return "left";
     if ( align == "end" )
         return "right";
-    kdWarning(30518) << "Conversion::importAlignment unknown alignment " << align << endl;
+    kWarning(30518) << "Conversion::importAlignment unknown alignment " << align << endl;
     return "auto";
 }
 
@@ -22,7 +22,7 @@ QString Conversion::exportAlignment( const QString& align )
         return "start";
     if ( align == "right" )
         return "end";
-    kdWarning(30518) << "Conversion::exportAlignment unknown alignment " << align << endl;
+    kWarning(30518) << "Conversion::exportAlignment unknown alignment " << align << endl;
     return "auto";
 }
 
@@ -68,7 +68,7 @@ int Conversion::importOverflowBehavior( const QString& oasisOverflowBehavior )
         return 1; // AutoCreateNewFrame
     if ( oasisOverflowBehavior == "ignore" )
         return 2; // Ignore extra text
-    kdWarning(30518) << "Invalid overflow behavior " << oasisOverflowBehavior << endl;
+    kWarning(30518) << "Invalid overflow behavior " << oasisOverflowBehavior << endl;
     return 0;
 }
 
@@ -110,7 +110,7 @@ QString Conversion::headerTypeToFramesetName( const QString& localName, bool has
         return hasEvenOdd ? i18n("Odd Pages Footer") : i18n( "Footer" );
     if ( localName == "footer-left" )
         return i18n("Even Pages Footer");
-    kdWarning(30518) << "Unknown tag in headerTypeToFramesetName: " << localName << endl;
+    kWarning(30518) << "Unknown tag in headerTypeToFramesetName: " << localName << endl;
     // ######
     //return i18n("First Page Header");
     //return i18n("First Page Footer");

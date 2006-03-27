@@ -88,7 +88,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3C
 
         if (!dialog.exec())
         {
-            kdDebug(30503) << "Dialog was aborted! Aborting filter!" << endl;
+            kDebug(30503) << "Dialog was aborted! Aborting filter!" << endl;
             return KoFilter::UserCancelled;
         }
 
@@ -116,7 +116,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3C
 
     if (!leader)
     {
-        kdError(30503) << "Cannot create Worker! Aborting!" << endl;
+        kError(30503) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }

@@ -193,12 +193,12 @@ static bool xcf_save_vectors       (XcfInfo           *info,
     } G_STMT_END
 
 #define xcf_write_prop_type_check_error(info, prop_type) G_STMT_START { \
-        Q_INT32 _prop_int32 = prop_type;                                \
+        qint32 _prop_int32 = prop_type;                                \
         xcf_write_int32_check_error (info, &_prop_int32, 1);            \
     } G_STMT_END
 
 #define xcf_write_prop_type_print_error(info, prop_type) G_STMT_START { \
-        Q_INT32 _prop_int32 = prop_type;                                \
+        qint32 _prop_int32 = prop_type;                                \
         xcf_write_int32_print_error (info, &_prop_int32, 1);            \
     } G_STMT_END
 
@@ -224,7 +224,7 @@ xcf_save_choose_format (XcfInfo   *info,
     KisLayer *layer;
     GList     *list;
 
-    Q_INT32 save_version = 0;                /* default to oldest */
+    qint32 save_version = 0;                /* default to oldest */
 
     if (gimage->cmap)
         save_version = 1;                   /* need version 1 for colormaps */
@@ -253,20 +253,20 @@ xcf_save_choose_format (XcfInfo   *info,
     info->file_version = save_version;
 }
 
-Q_INT32
+qint32
 xcf_save_image (XcfInfo   *info,
 		KisImage *gimage)
 {
     KisLayer   *layer;
     KisLayer   *floating_layer;
     GimpChannel *channel;
-    Q_INT32      saved_pos;
-    Q_INT32      offset;
-    Q_UINT32        nlayers;
-    Q_UINT32        nchannels;
+    qint32      saved_pos;
+    qint32      offset;
+    quint32        nlayers;
+    quint32        nchannels;
     GList       *list;
     bool     have_selection;
-    Q_INT32         t1, t2, t3, t4;
+    qint32         t1, t2, t3, t4;
     Q3CString        version_tag[14];
     GError      *error = NULL;
 
@@ -283,16 +283,16 @@ xcf_save_image (XcfInfo   *info,
     {
         strcpy (version_tag, "gimp xcf file");
     }
-    xcf_write_int8_print_error  (info, (Q_UINT8 *) version_tag, 14);
+    xcf_write_int8_print_error  (info, (quint8 *) version_tag, 14);
 
     /* write out the width, height and image type information for the image */
-    xcf_write_int32_print_error (info, (Q_INT32 *) &gimage->width, 1);
-    xcf_write_int32_print_error (info, (Q_INT32 *) &gimage->height, 1);
-    xcf_write_int32_print_error (info, (Q_INT32 *) &gimage->base_type, 1);
+    xcf_write_int32_print_error (info, (qint32 *) &gimage->width, 1);
+    xcf_write_int32_print_error (info, (qint32 *) &gimage->height, 1);
+    xcf_write_int32_print_error (info, (qint32 *) &gimage->base_type, 1);
 
     /* determine the number of layers and channels in the image */
-    nlayers   = (Q_UINT32) gimp_container_num_children (gimage->layers);
-    nchannels = (Q_UINT32) gimp_container_num_children (gimage->channels);
+    nlayers   = (quint32) gimp_container_num_children (gimage->layers);
+    nchannels = (quint32) gimp_container_num_children (gimage->channels);
 
     /* check and see if we have to save out the selection */
     have_selection = gimp_channel_bounds (gimp_image_get_mask (gimage),
@@ -538,7 +538,7 @@ xcf_save_layer_props (XcfInfo   *info,
     if (GIMP_IS_TEXT_LAYER (layer) && GIMP_TEXT_LAYER (layer)->text)
     {
         GimpTextLayer *text_layer = GIMP_TEXT_LAYER (layer);
-        Q_INT32        flags      = gimp_text_layer_get_xcf_flags (text_layer);
+        qint32        flags      = gimp_text_layer_get_xcf_flags (text_layer);
 
         gimp_text_layer_xcf_save_prepare (text_layer);
 
@@ -611,7 +611,7 @@ xcf_save_prop (XcfInfo   *info,
 	       GError   **error,
 	       ...)
 {
-    Q_INT32 size;
+    qint32 size;
     va_list args;
 
     GError *tmp_error = NULL;
@@ -629,10 +629,10 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_COLORMAP:
     {
-	Q_INT32  ncolors;
+	qint32  ncolors;
 	guchar  *colors;
 
-	ncolors = va_arg (args, Q_INT32);
+	ncolors = va_arg (args, qint32);
 	colors = va_arg (args, guchar*);
 	size = 4 + ncolors * 3;
 
@@ -654,7 +654,7 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_FLOATING_SELECTION:
     {
-	Q_INT32 dummy;
+	qint32 dummy;
 
 	dummy = 0;
 	size = 4;
@@ -669,7 +669,7 @@ xcf_save_prop (XcfInfo   *info,
     case PROP_OPACITY:
     {
 	gdouble opacity;
-        Q_INT32 uint_opacity;
+        qint32 uint_opacity;
 
 	opacity = va_arg (args, gdouble);
 
@@ -685,22 +685,22 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_MODE:
     {
-	Q_INT3232 mode;
+	qint3232 mode;
 
-	mode = va_arg (args, Q_INT3232);
+	mode = va_arg (args, qint3232);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
 	xcf_write_int32_check_error (info, &size, 1);
-	xcf_write_int32_check_error (info, (Q_INT32 *) &mode, 1);
+	xcf_write_int32_check_error (info, (qint32 *) &mode, 1);
     }
     break;
 
     case PROP_VISIBLE:
     {
-	Q_INT32 visible;
+	qint32 visible;
 
-	visible = va_arg (args, Q_INT32);
+	visible = va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -711,9 +711,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_LINKED:
     {
-	Q_INT32 linked;
+	qint32 linked;
 
-	linked = va_arg (args, Q_INT32);
+	linked = va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -724,9 +724,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_LOCK_ALPHA:
     {
-	Q_INT32 lock_alpha;
+	qint32 lock_alpha;
 
-	lock_alpha = va_arg (args, Q_INT32);
+	lock_alpha = va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -737,9 +737,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_APPLY_MASK:
     {
-	Q_INT32 apply_mask;
+	qint32 apply_mask;
 
-	apply_mask = va_arg (args, Q_INT32);
+	apply_mask = va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -750,9 +750,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_EDIT_MASK:
     {
-	Q_INT32 edit_mask;
+	qint32 edit_mask;
 
-	edit_mask = va_arg (args, Q_INT32);
+	edit_mask = va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -763,9 +763,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_SHOW_MASK:
     {
-	Q_INT32 show_mask;
+	qint32 show_mask;
 
-	show_mask = va_arg (args, Q_INT32);
+	show_mask = va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -776,9 +776,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_SHOW_MASKED:
     {
-	Q_INT32 show_masked;
+	qint32 show_masked;
 
-	show_masked = va_arg (args, Q_INT32);
+	show_masked = va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -789,15 +789,15 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_OFFSETS:
     {
-	Q_INT3232 offsets[2];
+	qint3232 offsets[2];
 
-	offsets[0] = va_arg (args, Q_INT3232);
-	offsets[1] = va_arg (args, Q_INT3232);
+	offsets[0] = va_arg (args, qint3232);
+	offsets[1] = va_arg (args, qint3232);
 	size = 8;
 
         xcf_write_prop_type_check_error (info, prop_type);
 	xcf_write_int32_check_error (info, &size, 1);
-	xcf_write_int32_check_error (info, (Q_INT32 *) offsets, 2);
+	xcf_write_int32_check_error (info, (qint32 *) offsets, 2);
     }
     break;
 
@@ -816,9 +816,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_COMPRESSION:
     {
-	Q_UINT8 compression;
+	quint8 compression;
 
-	compression = (Q_UINT8) va_arg (args, Q_INT32);
+	compression = (quint8) va_arg (args, qint32);
 	size = 1;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -831,9 +831,9 @@ xcf_save_prop (XcfInfo   *info,
     {
 	GList     *guides;
 	GimpGuide *guide;
-	Q_INT3232     position;
-	Q_INT328      orientation;
-	Q_INT32       nguides;
+	qint3232     position;
+	qint328      orientation;
+	qint32       nguides;
 
 	guides = va_arg (args, GList *);
 	nguides = g_list_length (guides);
@@ -865,8 +865,8 @@ xcf_save_prop (XcfInfo   *info,
                 continue;
             }
 
-	    xcf_write_int32_check_error (info, (Q_INT32 *) &position,    1);
-	    xcf_write_int8_check_error  (info, (Q_UINT8 *)  &orientation, 1);
+	    xcf_write_int32_check_error (info, (qint32 *) &position,    1);
+	    xcf_write_int8_check_error  (info, (quint8 *)  &orientation, 1);
         }
     }
     break;
@@ -892,9 +892,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_TATTOO:
     {
-	Q_INT32 tattoo;
+	qint32 tattoo;
 
-	tattoo =  va_arg (args, Q_INT32);
+	tattoo =  va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -906,7 +906,7 @@ xcf_save_prop (XcfInfo   *info,
     case PROP_PARASITES:
     {
 	KisAnnotationList *list;
-	Q_INT32           base, length;
+	qint32           base, length;
 	long              pos;
 
 	list = va_arg (args, KisAnnotationList *);
@@ -941,9 +941,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_UNIT:
     {
-	Q_INT32 unit;
+	qint32 unit;
 
-	unit = va_arg (args, Q_INT32);
+	unit = va_arg (args, qint32);
 
 	size = 4;
 
@@ -955,7 +955,7 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_PATHS:
     {
-	Q_INT32 base, length;
+	qint32 base, length;
 	glong   pos;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -990,9 +990,9 @@ xcf_save_prop (XcfInfo   *info,
 	GimpUnit     unit;
 	const Q3CString *unit_strings[5];
 	float       factor;
-	Q_INT32      digits;
+	qint32      digits;
 
-	unit = va_arg (args, Q_INT32);
+	unit = va_arg (args, qint32);
 
 	/* write the entire unit definition */
 	unit_strings[0] = _gimp_unit_get_identifier (gimage->gimp, unit);
@@ -1021,7 +1021,7 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_VECTORS:
     {
-	Q_INT32 base, length;
+	qint32 base, length;
 	glong   pos;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -1053,9 +1053,9 @@ xcf_save_prop (XcfInfo   *info,
 
     case PROP_TEXT_LAYER_FLAGS:
     {
-	Q_INT32 flags;
+	qint32 flags;
 
-	flags = va_arg (args, Q_INT32);
+	flags = va_arg (args, qint32);
 	size = 4;
 
         xcf_write_prop_type_check_error (info, prop_type);
@@ -1076,8 +1076,8 @@ xcf_save_layer (XcfInfo   *info,
 		KisLayer *layer,
 		GError   **error)
 {
-    Q_INT32 saved_pos;
-    Q_INT32 offset;
+    qint32 saved_pos;
+    qint32 offset;
 
     GError *tmp_error = NULL;
 
@@ -1094,11 +1094,11 @@ xcf_save_layer (XcfInfo   *info,
 
     /* write out the width, height and image type information for the layer */
     xcf_write_int32_check_error (info,
-                                 (Q_INT32 *) &GIMP_ITEM (layer)->width, 1);
+                                 (qint32 *) &GIMP_ITEM (layer)->width, 1);
     xcf_write_int32_check_error (info,
-                                 (Q_INT32 *) &GIMP_ITEM (layer)->height, 1);
+                                 (qint32 *) &GIMP_ITEM (layer)->height, 1);
     xcf_write_int32_check_error (info,
-                                 (Q_INT32 *) &GIMP_DRAWABLE (layer)->type, 1);
+                                 (qint32 *) &GIMP_DRAWABLE (layer)->type, 1);
 
     /* write out the layers name */
     xcf_write_string_check_error (info, &GIMP_OBJECT (layer)->name, 1);
@@ -1147,8 +1147,8 @@ xcf_save_channel (XcfInfo      *info,
 		  GimpChannel  *channel,
 		  GError      **error)
 {
-    Q_INT32 saved_pos;
-    Q_INT32 offset;
+    qint32 saved_pos;
+    qint32 offset;
 
     GError *tmp_error = NULL;
 
@@ -1165,9 +1165,9 @@ xcf_save_channel (XcfInfo      *info,
 
     /* write out the width and height information for the channel */
     xcf_write_int32_check_error (info,
-                                 (Q_INT32 *) &GIMP_ITEM (channel)->width, 1);
+                                 (qint32 *) &GIMP_ITEM (channel)->width, 1);
     xcf_write_int32_check_error (info,
-                                 (Q_INT32 *) &GIMP_ITEM (channel)->height, 1);
+                                 (qint32 *) &GIMP_ITEM (channel)->height, 1);
 
     /* write out the channels name */
     xcf_write_string_check_error (info, &GIMP_OBJECT (channel)->name, 1);
@@ -1194,9 +1194,9 @@ xcf_save_channel (XcfInfo      *info,
     return TRUE;
 }
 
-static Q_INT32
-xcf_calc_levels (Q_INT32 size,
-		 Q_INT32 tile_size)
+static qint32
+xcf_calc_levels (qint32 size,
+		 qint32 tile_size)
 {
     int levels;
 
@@ -1216,14 +1216,14 @@ xcf_save_hierarchy (XcfInfo     *info,
 		    TileManager *tiles,
 		    GError     **error)
 {
-    Q_INT32 saved_pos;
-    Q_INT32 offset;
-    Q_INT32 width;
-    Q_INT32 height;
-    Q_INT32 bpp;
-    Q_INT32    i;
-    Q_INT32    nlevels;
-    Q_INT32    tmp1, tmp2;
+    qint32 saved_pos;
+    qint32 offset;
+    qint32 width;
+    qint32 height;
+    qint32 bpp;
+    qint32    i;
+    qint32    nlevels;
+    qint32    tmp1, tmp2;
 
     GError *tmp_error = NULL;
 
@@ -1231,9 +1231,9 @@ xcf_save_hierarchy (XcfInfo     *info,
     height = tile_manager_height (tiles);
     bpp    = tile_manager_bpp (tiles);
 
-    xcf_write_int32_check_error (info, (Q_INT32 *) &width, 1);
-    xcf_write_int32_check_error (info, (Q_INT32 *) &height, 1);
-    xcf_write_int32_check_error (info, (Q_INT32 *) &bpp, 1);
+    xcf_write_int32_check_error (info, (qint32 *) &width, 1);
+    xcf_write_int32_check_error (info, (qint32 *) &height, 1);
+    xcf_write_int32_check_error (info, (qint32 *) &bpp, 1);
 
     saved_pos = info->cp;
 
@@ -1258,9 +1258,9 @@ xcf_save_hierarchy (XcfInfo     *info,
             tmp1 = 0;
             width  /= 2;
             height /= 2;
-            xcf_write_int32_check_error (info, (Q_INT32 *) &width,  1);
-            xcf_write_int32_check_error (info, (Q_INT32 *) &height, 1);
-            xcf_write_int32_check_error (info, (Q_INT32 *) &tmp1,   1);
+            xcf_write_int32_check_error (info, (qint32 *) &width,  1);
+            xcf_write_int32_check_error (info, (qint32 *) &height, 1);
+            xcf_write_int32_check_error (info, (qint32 *) &tmp1,   1);
 	}
 
         /* seek back to where we are to write out the next
@@ -1295,12 +1295,12 @@ xcf_save_level (XcfInfo     *info,
 		TileManager *level,
 		GError     **error)
 {
-    Q_INT32  saved_pos;
-    Q_INT32  offset;
-    Q_INT32  width;
-    Q_INT32  height;
-    Q_UINT32    ntiles;
-    Q_INT32     i;
+    qint32  saved_pos;
+    qint32  offset;
+    qint32  width;
+    qint32  height;
+    quint32    ntiles;
+    qint32     i;
     guchar  *rlebuf;
 
     GError *tmp_error = NULL;
@@ -1308,8 +1308,8 @@ xcf_save_level (XcfInfo     *info,
     width  = tile_manager_width (level);
     height = tile_manager_height (level);
 
-    xcf_write_int32_check_error (info, (Q_INT32 *) &width, 1);
-    xcf_write_int32_check_error (info, (Q_INT32 *) &height, 1);
+    xcf_write_int32_check_error (info, (qint32 *) &width, 1);
+    xcf_write_int32_check_error (info, (qint32 *) &height, 1);
 
     saved_pos = info->cp;
 
@@ -1402,13 +1402,13 @@ xcf_save_tile_rle (XcfInfo  *info,
 {
     guchar *data, *t;
     unsigned int last;
-    Q_INT32 state;
-    Q_INT32 length;
-    Q_INT32 count;
-    Q_INT32 size;
-    Q_INT32 bpp;
-    Q_INT32 i, j;
-    Q_INT32 len = 0;
+    qint32 state;
+    qint32 length;
+    qint32 count;
+    qint32 size;
+    qint32 bpp;
+    qint32 i, j;
+    qint32 len = 0;
 
     GError *tmp_error = NULL;
 
@@ -1570,15 +1570,15 @@ xcf_save_old_paths (XcfInfo    *info,
                     GError    **error)
 {
     GimpVectors *active_vectors;
-    Q_INT32      num_paths;
-    Q_INT32      active_index = 0;
+    qint32      num_paths;
+    qint32      active_index = 0;
     GList       *list;
     GError      *tmp_error = NULL;
 
     /* Write out the following:-
      *
-     * last_selected_row (Q_INT32)
-     * number_of_paths (Q_INT32)
+     * last_selected_row (qint32)
+     * number_of_paths (qint32)
      *
      * then each path:-
      */
@@ -1600,25 +1600,25 @@ xcf_save_old_paths (XcfInfo    *info,
     {
         GimpVectors            *vectors = list->data;
         Q3CString                  *name;
-        Q_INT32                 locked;
-        Q_UINT8                  state;
-        Q_INT32                 version;
-        Q_INT32                 pathtype;
-        Q_INT32                 tattoo;
+        qint32                 locked;
+        quint8                  state;
+        qint32                 version;
+        qint32                 pathtype;
+        qint32                 tattoo;
         GimpVectorsCompatPoint *points;
-        Q_INT3232                  num_points;
-        Q_INT3232                  closed;
-        Q_INT32                    i;
+        qint3232                  num_points;
+        qint3232                  closed;
+        qint32                    i;
 
         /*
          * name (string)
-         * locked (Q_INT32)
+         * locked (qint32)
          * state (QCString)
-         * closed (Q_INT32)
-         * number points (Q_INT32)
-         * version (Q_INT32)
-         * pathtype (Q_INT32)
-         * tattoo (Q_INT32)
+         * closed (qint32)
+         * number points (qint32)
+         * version (qint32)
+         * pathtype (qint32)
+         * tattoo (qint32)
          * then each point.
          */
 
@@ -1654,7 +1654,7 @@ xcf_save_old_paths (XcfInfo    *info,
             y = points[i].y;
 
             /*
-             * type (Q_INT32)
+             * type (qint32)
              * x (float)
              * y (float)
              */
@@ -1676,18 +1676,18 @@ xcf_save_vectors (XcfInfo    *info,
                   GError    **error)
 {
     GimpVectors *active_vectors;
-    Q_INT32      version      = 1;
-    Q_INT32      active_index = 0;
-    Q_INT32      num_paths;
+    qint32      version      = 1;
+    qint32      active_index = 0;
+    qint32      num_paths;
     GList       *list;
     GList       *stroke_list;
     GError      *tmp_error = NULL;
 
     /* Write out the following:-
      *
-     * version (Q_INT32)
-     * active_index (Q_INT32)
-     * num_paths (Q_INT32)
+     * version (qint32)
+     * active_index (qint32)
+     * num_paths (qint32)
      *
      * then each path:-
      */
@@ -1711,19 +1711,19 @@ xcf_save_vectors (XcfInfo    *info,
         GimpVectors      *vectors = list->data;
         KisAnnotationList *parasites;
         Q3CString            *name;
-        Q_INT32           tattoo;
-        Q_INT32           visible;
-        Q_INT32           linked;
-        Q_INT32           num_parasites;
-        Q_INT32           num_strokes;
+        qint32           tattoo;
+        qint32           visible;
+        qint32           linked;
+        qint32           num_parasites;
+        qint32           num_strokes;
 
         /*
          * name (string)
-         * tattoo (Q_INT32)
-         * visible (Q_INT32)
-         * linked (Q_INT32)
-         * num_parasites (Q_INT32)
-         * num_strokes (Q_INT32)
+         * tattoo (qint32)
+         * visible (qint32)
+         * linked (qint32)
+         * num_parasites (qint32)
+         * num_strokes (qint32)
          *
          * then each parasite
          * then each stroke
@@ -1752,20 +1752,20 @@ xcf_save_vectors (XcfInfo    *info,
              stroke_list = g_list_next (stroke_list))
         {
             GimpStroke *stroke;
-            Q_INT32     stroke_type;
-            Q_INT32     closed;
-            Q_INT32     num_axes;
+            qint32     stroke_type;
+            qint32     closed;
+            qint32     num_axes;
             GArray     *control_points;
-            Q_INT32        i;
+            qint32        i;
 
-            Q_INT32     type;
+            qint32     type;
             float      coords[6];
 
             /*
-             * stroke_type (Q_INT32)
-             * closed (Q_INT32)
-             * num_axes (Q_INT32)
-             * num_control_points (Q_INT32)
+             * stroke_type (qint32)
+             * closed (qint32)
+             * num_axes (qint32)
+             * num_control_points (qint32)
              *
              * then each control point.
              */
@@ -1805,7 +1805,7 @@ xcf_save_vectors (XcfInfo    *info,
                 coords[5] = anchor->position.wheel;
 
                 /*
-                 * type (Q_INT32)
+                 * type (qint32)
                  *
                  * the first num_axis elements of:
                  * [0] x (float)

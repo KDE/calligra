@@ -22,7 +22,7 @@
 #include <qdir.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <kdebug.h>		/* for kdDebug() stream */
+#include <kdebug.h>		/* for kDebug() stream */
 #include <config.h>
 /* Needed to convert picture in eps file. Use ImageMagick. */
 #ifdef HAVE_MAGICK
@@ -48,7 +48,7 @@ PixmapFrame::PixmapFrame()
 /*******************************************/
 PixmapFrame::~PixmapFrame()
 {
-	kdDebug(30522) << "Destruction of a pixmap" << endl;
+	kDebug(30522) << "Destruction of a pixmap" << endl;
 }
 void PixmapFrame::setKeepAspectRatio(const QString ratio)
 {
@@ -71,7 +71,7 @@ void PixmapFrame::analyse(const QDomNode balise)
 	/* Parameters Analyse */
 	Element::analyse(balise);
 
-	kdDebug(30522) << "FRAME ANALYSE (Pixmap)" << endl;
+	kDebug(30522) << "FRAME ANALYSE (Pixmap)" << endl;
 
 	/* Chlidren markups Analyse */
 	for(int index = 0; index < getNbChild(balise); index++)
@@ -86,7 +86,7 @@ void PixmapFrame::analyse(const QDomNode balise)
 		}
 
 	}
-	kdDebug(30522) << "END OF A FRAME" << endl;
+	kDebug(30522) << "END OF A FRAME" << endl;
 }
 
 /*******************************************/
@@ -97,7 +97,7 @@ void PixmapFrame::analyse(const QDomNode balise)
 /*******************************************/
 void PixmapFrame::getPixmap(const QDomNode balise_initiale)
 {
-	kdDebug(30522) << "PIXMAP" << endl;
+	kDebug(30522) << "PIXMAP" << endl;
 	setKeepAspectRatio(getAttr(balise_initiale, "keepAspectRatio"));
 	QDomNode balise = getChild(balise_initiale, "KEY");
 	setKey(getAttr(balise, "filename"));
@@ -109,8 +109,8 @@ void PixmapFrame::getPixmap(const QDomNode balise_initiale)
 	/* Remove the path */
 	file = file.section('/', -1);
 	setFilenamePS(file + ".eps");
-	kdDebug(30522) << "PS : " << getFilenamePS() << endl;
-	kdDebug(30522) << "END PIXMAP" << endl;
+	kDebug(30522) << "PS : " << getFilenamePS() << endl;
+	kDebug(30522) << "END PIXMAP" << endl;
 }
 
 /*******************************************/
@@ -137,7 +137,7 @@ void PixmapFrame::analyseParamFrame(const QDomNode balise)
 void PixmapFrame::convert()
 {
 #ifdef HAVE_MAGICK
-	kdDebug(30522) << "CONVERT PICTURE IN EPS" << endl;
+	kDebug(30522) << "CONVERT PICTURE IN EPS" << endl;
 	ExceptionInfo exception;
 
 	Image* image;
@@ -172,8 +172,8 @@ void PixmapFrame::convert()
 		}
 		else
 			dir = Config::instance()->getPicturesDir();
-		kdDebug(30522) << "file " << getFilename() << endl;
-		kdDebug(30522) << "path " << dir << endl;
+		kDebug(30522) << "file " << getFilename() << endl;
+		kDebug(30522) << "path " << dir << endl;
 		(void) strcpy(image->filename, (dir + "/" + getFilenamePS()).latin1());
 		WriteImage(image_info, image);
 		DestroyImage(image);
@@ -181,7 +181,7 @@ void PixmapFrame::convert()
 	DestroyImageInfo(image_info);
 	DestroyExceptionInfo(&exception);
 	DestroyMagick();
-	kdDebug(30522) << "CONVERTION DONE" << endl;
+	kDebug(30522) << "CONVERTION DONE" << endl;
 #endif
 }
 

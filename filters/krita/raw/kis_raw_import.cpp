@@ -110,7 +110,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const Q3CString& from, const Q3
         return KoFilter::NotImplemented;
     }
 
-    kdDebug(41008) << "Krita importing from Raw\n";
+    kDebug(41008) << "Krita importing from Raw\n";
 
     KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
     if (!doc) {
@@ -176,7 +176,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const Q3CString& from, const Q3
         cfg->writeEntry("red", m_page->dblRed->value());
         cfg->writeEntry("blue", m_page->dblBlue->value());
 
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
         // Create a busy indicator to show that we didn't die or so
         m_progress = new Q3ProgressDialog();
         m_progress -> setTotalSteps(0);
@@ -211,7 +211,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const Q3CString& from, const Q3
             else {
                cs  = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA"), profile() );
             }
-            if (cs == 0) { kdDebug() << "No CS\n"; return KoFilter::InternalError; }
+            if (cs == 0) { kDebug() << "No CS\n"; return KoFilter::InternalError; }
 
             image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
             if (image == 0) return KoFilter::CreationError;
@@ -228,10 +228,10 @@ KoFilter::ConversionStatus KisRawImport::convert(const Q3CString& from, const Q3
         } else {
         // 16 bits
 
-            Q_UINT32 startOfImagedata = 0;
+            quint32 startOfImagedata = 0;
             QSize sz = determineSize(startOfImagedata);
 
-            kdDebug(41008) << "Total bytes: " << m_data->size()
+            kDebug(41008) << "Total bytes: " << m_data->size()
                     << "\n start of image data: " << startOfImagedata
                     << "\n bytes for pixels left: " << m_data->size() - startOfImagedata
                     << "\n total pixels: " << sz.width() * sz.height()
@@ -268,26 +268,26 @@ KoFilter::ConversionStatus KisRawImport::convert(const Q3CString& from, const Q3
 
                 while (!it.isDone()) {
                     if (m_page->radioGray->isChecked()) {
-                        Q_UINT16 d = (Q_INT16)*(data + pos);
+                        quint16 d = (qint16)*(data + pos);
                         d = ntohs(d);
                         memcpy(it.rawData(), &d, 2);
                         pos += 2;
                     }
                     else {
                         // Red
-                        Q_UINT16 d = (Q_INT16)*(data + pos);
+                        quint16 d = (qint16)*(data + pos);
                         d = ntohs(d);
                         memcpy(it.rawData() + 4, &d, 2);
                         
                         // Green
                         pos += 2;
-                        d = (Q_INT16)*(data + pos );
+                        d = (qint16)*(data + pos );
                         d = ntohs(d);
                         memcpy(it.rawData() + 2, &d, 2);
 
                         // Blue
                         pos += 2;
-                        d = (Q_INT16)*(data + pos );
+                        d = (qint16)*(data + pos );
                         d = ntohs(d);
                         memcpy(it.rawData(), &d, 2);
 
@@ -299,11 +299,11 @@ KoFilter::ConversionStatus KisRawImport::convert(const Q3CString& from, const Q3
             }
         }
         layer->setDirty();
-        kdDebug() << "going to set image\n";
+        kDebug() << "going to set image\n";
         doc -> setCurrentImage(image);
         doc -> undoAdapter() -> setUndo(true);
         doc -> setModified(false);
-        kdDebug() << "everything ok\n";
+        kDebug() << "everything ok\n";
 
         QApplication::restoreOverrideCursor();
         return KoFilter::OK;
@@ -321,10 +321,10 @@ void KisRawImport::incrementProgress()
 
 void KisRawImport::slotUpdatePreview()
 {
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     getImageData(createArgumentList(true));
 
-    kdDebug(41008) << "Retrieved " << m_data->size() << " bytes of image data\n";
+    kDebug(41008) << "Retrieved " << m_data->size() << " bytes of image data\n";
 
     if (m_data->isNull()) return;
 
@@ -337,10 +337,10 @@ void KisRawImport::slotUpdatePreview()
     } else {
         // 16 bits
 
-        Q_UINT32 startOfImagedata = 0;
+        quint32 startOfImagedata = 0;
         QSize sz = determineSize(startOfImagedata);
 
-        kdDebug(41008) << "Total bytes: " << m_data->size()
+        kDebug(41008) << "Total bytes: " << m_data->size()
                   << "\n start of image data: " << startOfImagedata
                   << "\n bytes for pixels left: " << m_data->size() - startOfImagedata
                   << "\n total pixels: " << sz.width() * sz.height()
@@ -366,26 +366,26 @@ void KisRawImport::slotUpdatePreview()
 
             while (!it.isDone()) {
                 if (m_page->radioGray->isChecked()) {
-                    Q_UINT16 d = (Q_INT16)*(data + pos);
+                    quint16 d = (qint16)*(data + pos);
                     d = ntohs(d);
                     memcpy(it.rawData(), &d, 2);
                     pos += 2;
                 }
                 else {
                             // Red
-                        Q_UINT16 d = (Q_INT16)*(data + pos);
+                        quint16 d = (qint16)*(data + pos);
                         d = ntohs(d);
                         memcpy(it.rawData() + 4, &d, 2);
                             
                             // Green
                         pos += 2;
-                        d = (Q_INT16)*(data + pos );
+                        d = (qint16)*(data + pos );
                         d = ntohs(d);
                         memcpy(it.rawData() + 2, &d, 2);
     
                             // Blue
                         pos += 2;
-                        d = (Q_INT16)*(data + pos );
+                        d = (qint16)*(data + pos );
                         d = ntohs(d);
                         memcpy(it.rawData(), &d, 2);
 
@@ -409,7 +409,7 @@ void KisRawImport::getImageData( QStringList arguments )
     //    delete m_process;
     delete m_data;
 
-    kdDebug(41008) << "getImageData " << arguments.join(" ") << "\n";
+    kDebug(41008) << "getImageData " << arguments.join(" ") << "\n";
     KProcess process (this);
     m_data = new QByteArray(0);
 
@@ -423,22 +423,22 @@ void KisRawImport::getImageData( QStringList arguments )
     connect(&process, SIGNAL(processExited(KProcess *)), this, SLOT(slotProcessDone()));
 
 
-    kdDebug(41008) << "Starting process\n";
+    kDebug(41008) << "Starting process\n";
 
     if (!process.start(KProcess::NotifyOnExit, KProcess::AllOutput)) {
         KMessageBox::error( 0, i18n("Cannot convert RAW files because the dcraw executable could not be started."));
     }
     while (process.isRunning()) {
-        //kdDebug(41008) << "Waiting...\n";
+        //kDebug(41008) << "Waiting...\n";
         qApp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
         //process.wait(2);
     }
 
     if (process.normalExit()) {
-        kdDebug(41008) << "Return value of process: " << process.exitStatus() << "\n";
+        kDebug(41008) << "Return value of process: " << process.exitStatus() << "\n";
     }
     else {
-        kdDebug(41008) << "Process did not exit normally. Exit signal: " << process.exitSignal() << "\n";
+        kDebug(41008) << "Process did not exit normally. Exit signal: " << process.exitSignal() << "\n";
     }
 
 }
@@ -446,13 +446,13 @@ void KisRawImport::getImageData( QStringList arguments )
 
 void KisRawImport::slotProcessDone()
 {
-    kdDebug(41008) << "process done!\n";
+    kDebug(41008) << "process done!\n";
 }
 
 void KisRawImport::slotReceivedStdout(KProcess *, char *buffer, int buflen)
 {
-    //kdDebug(41008) << "stdout received " << buflen << " bytes on stdout.\n";
-    //kdDebug(41008) << QString::fromAscii(buffer, buflen) << "\n";
+    //kDebug(41008) << "stdout received " << buflen << " bytes on stdout.\n";
+    //kDebug(41008) << QString::fromAscii(buffer, buflen) << "\n";
     int oldSize = m_data->size();
     m_data->resize(oldSize + buflen, Q3GArray::SpeedOptim);
     memcpy(m_data->data() + oldSize, buffer, buflen);
@@ -462,7 +462,7 @@ void KisRawImport::slotReceivedStderr(KProcess *, char *buffer, int buflen)
 {
     QByteArray b(buflen);
     memcpy(b.data(), buffer, buflen);
-    kdDebug(41008) << QString(b) << "\n";
+    kDebug(41008) << QString(b) << "\n";
     //KMessageBox::error(0, i18n("dcraw says: ") + QString(b));
 }
 
@@ -545,7 +545,7 @@ QStringList KisRawImport::createArgumentList(bool forPreview)
     return args;
 }
 
-QSize KisRawImport::determineSize(Q_UINT32& startOfImageData)
+QSize KisRawImport::determineSize(quint32& startOfImageData)
 {
     if (m_data->isNull() || m_data->size() < 2048) {
         startOfImageData = 0;
@@ -554,14 +554,14 @@ QSize KisRawImport::determineSize(Q_UINT32& startOfImageData)
 
     QString magick = QString::fromAscii(m_data->data(), 2);
     if (magick != "P6") {
-        kdDebug(41008) << " Bad magick! " << magick << "\n";
+        kDebug(41008) << " Bad magick! " << magick << "\n";
         startOfImageData = 0;
         return QSize(0,0);
     }
 
     // Find the third newline that marks the header end in a dcraw generated ppm.
-    Q_UINT32 i = 0;
-    Q_UINT32 counter = 0;
+    quint32 i = 0;
+    quint32 counter = 0;
 
     while (true) {
         if (counter == 3) break;
@@ -572,10 +572,10 @@ QSize KisRawImport::determineSize(Q_UINT32& startOfImageData)
     }
 
     QString size = QStringList::split("\n", QString::fromAscii(m_data->data(), i))[1];
-    kdDebug(41008) << "Header: " << QString::fromAscii(m_data->data(), i) << "\n";
+    kDebug(41008) << "Header: " << QString::fromAscii(m_data->data(), i) << "\n";
     QStringList sizelist = QStringList::split(" ", size);
-    Q_INT32 w = sizelist[0].toInt();
-    Q_INT32 h = sizelist[1].toInt();
+    qint32 w = sizelist[0].toInt();
+    qint32 h = sizelist[1].toInt();
 
     startOfImageData = i;
     return QSize(w, h);

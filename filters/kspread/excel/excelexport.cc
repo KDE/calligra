@@ -18,7 +18,7 @@ ExcelExport::ExcelExport(KoFilter *, const char *, const QStringList&) : KoFilte
 KoFilter::ConversionStatus ExcelExport::convert(const Q3CString& from, const Q3CString& to) {
 	// Double check that's we really what we want to do
 	if ( ( (to != "application/excel") && (to != "application/msexcel") ) || from != "application/x-kspread") {
-		kdWarning(0) << "Invalid mimetypes " << to << ", " << from << endl;
+		kWarning(0) << "Invalid mimetypes " << to << ", " << from << endl;
 		return KoFilter::NotImplemented;
 	}
 

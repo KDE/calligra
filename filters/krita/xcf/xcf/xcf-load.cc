@@ -74,12 +74,12 @@ static bool xcf_load_layer_props (XcfInfo * info,
 				  bool * apply_mask,
 				  bool * edit_mask,
 				  bool * show_mask,
-				  Q_INT32 * text_layer_flags);
+				  qint32 * text_layer_flags);
 static bool xcf_load_channel_props (XcfInfo * info,
 				    KisImage * gimage,
 				    GimpChannel ** channel);
 static bool xcf_load_prop (XcfInfo * info,
-			   PropType * prop_type, Q_INT32 * prop_size);
+			   PropType * prop_type, qint32 * prop_size);
 static KisLayer *xcf_load_layer (XcfInfo * info, KisImage * gimage);
 //static GimpChannel   * xcf_load_channel       (XcfInfo      *info,
 //                                               KisImage    *gimage);
@@ -89,7 +89,7 @@ static bool xcf_load_hierarchy (XcfInfo * info, TileManager * tiles);
 static bool xcf_load_level (XcfInfo * info, TileManager * tiles);
 static bool xcf_load_tile (XcfInfo * info, Tile * tile);
 static bool xcf_load_tile_rle (XcfInfo * info,
-			       Tile * tile, Q_INT32 data_length);
+			       Tile * tile, qint32 data_length);
 //static GimpParasite  * xcf_load_parasite      (XcfInfo      *info);
 static bool xcf_load_old_paths (XcfInfo * info, KisImage * gimage);
 static bool xcf_load_old_path (XcfInfo * info, KisImage * gimage);
@@ -97,8 +97,8 @@ static bool xcf_load_vectors (XcfInfo * info, KisImage * gimage);
 static bool xcf_load_vector (XcfInfo * info, KisImage * gimage);
 
 #ifdef SWAP_FROM_FILE
-static bool xcf_swap_func (Q_INT32 fd,
-			   Tile * tile, Q_INT32 cmd, gpointer user_data);
+static bool xcf_swap_func (qint32 fd,
+			   Tile * tile, qint32 cmd, gpointer user_data);
 #endif
 
 
@@ -109,17 +109,17 @@ xcf_load_image (XcfInfo * info)
     KisLayer *layer;
     //GimpChannel  *channel;
     //KisAnnotation *parasite;
-    Q_INT32 saved_pos;
-    Q_INT32 offset;
-    Q_INT32 width;
-    Q_INT32 height;
-    Q_INT32 image_type;
-    Q_INT32 num_successful_elements = 0;
+    qint32 saved_pos;
+    qint32 offset;
+    qint32 width;
+    qint32 height;
+    qint32 image_type;
+    qint32 num_successful_elements = 0;
 
     /* read in the image width, height and type */
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & width, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & height, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & image_type, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & width, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & height, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & image_type, 1);
 
     gimage = gimp_create_image (gimp, width, height, image_type, FALSE);
 
@@ -264,7 +264,7 @@ static bool
 xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 {
     PropType prop_type;
-    Q_INT32 prop_size;
+    qint32 prop_size;
 
     while (TRUE)
     {
@@ -279,13 +279,13 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 	case PROP_COLORMAP:
             if (info->file_version == 0)
 	    {
-                Q_INT32 i;
+                qint32 i;
 
                 g_message (_("XCF warning: version 0 of XCF file format\n"
                              "did not save indexed colormaps correctly.\n"
                              "Substituting grayscale map."));
                 info->cp +=
-                    xcf_read_int32 (info->fp, (Q_INT32 *) & gimage->num_cols, 1);
+                    xcf_read_int32 (info->fp, (qint32 *) & gimage->num_cols, 1);
                 gimage->cmap = g_new (guchar, gimage->num_cols * 3);
                 if (!xcf_seek_pos (info, info->cp + gimage->num_cols, NULL))
                     return FALSE;
@@ -300,11 +300,11 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
             else
 	    {
                 info->cp +=
-                    xcf_read_int32 (info->fp, (Q_INT32 *) & gimage->num_cols, 1);
+                    xcf_read_int32 (info->fp, (qint32 *) & gimage->num_cols, 1);
                 gimage->cmap = g_new (guchar, gimage->num_cols * 3);
                 info->cp +=
                     xcf_read_int8 (info->fp,
-                                   (Q_UINT8 *) gimage->cmap,
+                                   (quint8 *) gimage->cmap,
                                    gimage->num_cols * 3);
 	    }
 
@@ -322,10 +322,10 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 
 	case PROP_COMPRESSION:
         {
-	    Q_UINT8 compression;
+	    quint8 compression;
 
 	    info->cp +=
-                xcf_read_int8 (info->fp, (Q_UINT8 *) & compression, 1);
+                xcf_read_int8 (info->fp, (quint8 *) & compression, 1);
 
 	    if ((compression != COMPRESS_NONE) &&
 		(compression != COMPRESS_RLE) &&
@@ -342,17 +342,17 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 
 	case PROP_GUIDES:
         {
-	    Q_INT3232 position;
-	    Q_INT328 orientation;
-	    Q_INT32 i, nguides;
+	    qint3232 position;
+	    qint328 orientation;
+	    qint32 i, nguides;
 
 	    nguides = prop_size / (4 + 1);
 	    for (i = 0; i < nguides; i++)
             {
 		info->cp +=
-                    xcf_read_int32 (info->fp, (Q_INT32 *) & position, 1);
+                    xcf_read_int32 (info->fp, (qint32 *) & position, 1);
 		info->cp +=
-                    xcf_read_int8 (info->fp, (Q_UINT8 *) & orientation, 1);
+                    xcf_read_int8 (info->fp, (quint8 *) & orientation, 1);
 
 		/*  skip -1 guides from old XCFs  */
 		if (position < 0)
@@ -424,7 +424,7 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 
 	case PROP_UNIT:
         {
-	    Q_INT32 unit;
+	    qint32 unit;
 
 	    info->cp += xcf_read_int32 (info->fp, &unit, 1);
 
@@ -449,10 +449,10 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
         {
 	    Q3CString *unit_strings[5];
 	    float factor;
-	    Q_INT32 digits;
+	    qint32 digits;
 	    GimpUnit unit;
-	    Q_INT32 num_units;
-	    Q_INT32 i;
+	    qint32 num_units;
+	    qint32 i;
 
 	    info->cp += xcf_read_float (info->fp, &factor, 1);
 	    info->cp += xcf_read_int32 (info->fp, &digits, 1);
@@ -500,7 +500,7 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 
 	case PROP_VECTORS:
         {
-	    Q_INT32 base = info->cp;
+	    qint32 base = info->cp;
 
 	    if (xcf_load_vectors (info, gimage))
             {
@@ -528,8 +528,8 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
                         prop_type);
 #endif
             {
-                Q_UINT8 buf[16];
-                Q_UINT32 amount;
+                quint8 buf[16];
+                quint32 amount;
 
                 while (prop_size > 0)
                 {
@@ -551,10 +551,10 @@ xcf_load_layer_props (XcfInfo * info,
 		      KisLayer * layer,
 		      bool * apply_mask,
 		      bool * edit_mask,
-		      bool * show_mask, Q_INT32 * text_layer_flags)
+		      bool * show_mask, qint32 * text_layer_flags)
 {
     PropType prop_type;
-    Q_INT32 prop_size;
+    qint32 prop_size;
 
     while (TRUE)
     {
@@ -574,12 +574,12 @@ xcf_load_layer_props (XcfInfo * info,
             info->floating_sel = layer;
             info->cp +=
                 xcf_read_int32 (info->fp,
-                                (Q_INT32 *) & info->floating_sel_offset, 1);
+                                (qint32 *) & info->floating_sel_offset, 1);
             break;
 
 	case PROP_OPACITY:
         {
-	    Q_INT32 opacity;
+	    qint32 opacity;
 
 	    info->cp += xcf_read_int32 (info->fp, &opacity, 1);
 	    layer->opacity = CLAMP ((gdouble) opacity / 255.0,
@@ -592,7 +592,7 @@ xcf_load_layer_props (XcfInfo * info,
         {
 	    bool visible;
 
-	    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & visible, 1);
+	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & visible, 1);
 	    gimp_item_set_visible (GIMP_ITEM (layer),
 				   visible ? TRUE : FALSE, FALSE);
         }
@@ -602,7 +602,7 @@ xcf_load_layer_props (XcfInfo * info,
         {
 	    bool linked;
 
-	    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & linked, 1);
+	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & linked, 1);
 	    gimp_item_set_linked (GIMP_ITEM (layer),
 				  linked ? TRUE : FALSE, FALSE);
         }
@@ -610,37 +610,37 @@ xcf_load_layer_props (XcfInfo * info,
 
 	case PROP_LOCK_ALPHA:
             info->cp +=
-                xcf_read_int32 (info->fp, (Q_INT32 *) & layer->lock_alpha, 1);
+                xcf_read_int32 (info->fp, (qint32 *) & layer->lock_alpha, 1);
             break;
 
 	case PROP_APPLY_MASK:
-            info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) apply_mask, 1);
+            info->cp += xcf_read_int32 (info->fp, (qint32 *) apply_mask, 1);
             break;
 
 	case PROP_EDIT_MASK:
-            info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) edit_mask, 1);
+            info->cp += xcf_read_int32 (info->fp, (qint32 *) edit_mask, 1);
             break;
 
 	case PROP_SHOW_MASK:
-            info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) show_mask, 1);
+            info->cp += xcf_read_int32 (info->fp, (qint32 *) show_mask, 1);
             break;
 
 	case PROP_OFFSETS:
             info->cp +=
                 xcf_read_int32 (info->fp,
-                                (Q_INT32 *) & GIMP_ITEM (layer)->offset_x, 1);
+                                (qint32 *) & GIMP_ITEM (layer)->offset_x, 1);
             info->cp +=
                 xcf_read_int32 (info->fp,
-                                (Q_INT32 *) & GIMP_ITEM (layer)->offset_y, 1);
+                                (qint32 *) & GIMP_ITEM (layer)->offset_y, 1);
             break;
 
 	case PROP_MODE:
-            info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & layer->mode, 1);
+            info->cp += xcf_read_int32 (info->fp, (qint32 *) & layer->mode, 1);
             break;
 
 	case PROP_TATTOO:
             info->cp += xcf_read_int32 (info->fp,
-                                        (Q_INT32 *) & GIMP_ITEM (layer)->tattoo,
+                                        (qint32 *) & GIMP_ITEM (layer)->tattoo,
                                         1);
             break;
 
@@ -666,8 +666,8 @@ xcf_load_layer_props (XcfInfo * info,
 
 	default:
         {
-	    Q_UINT8 buf[16];
-	    Q_UINT32 amount;
+	    quint8 buf[16];
+	    quint32 amount;
 
 #ifdef GIMP_UNSTABLE
 	    g_printerr ("unexpected/unknown layer property: %d (skipping)",
@@ -692,7 +692,7 @@ xcf_load_channel_props (XcfInfo * info,
 			KisImage * gimage, GimpChannel ** channel)
 {
     PropType prop_type;
-    Q_INT32 prop_size;
+    qint32 prop_size;
 
     while (TRUE)
     {
@@ -729,7 +729,7 @@ xcf_load_channel_props (XcfInfo * info,
 
 	case PROP_OPACITY:
         {
-	    Q_INT32 opacity;
+	    qint32 opacity;
 
 	    info->cp += xcf_read_int32 (info->fp, &opacity, 1);
 	    (*channel)->color.a = opacity / 255.0;
@@ -740,7 +740,7 @@ xcf_load_channel_props (XcfInfo * info,
         {
 	    bool visible;
 
-	    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & visible, 1);
+	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & visible, 1);
 	    gimp_item_set_visible (GIMP_ITEM (*channel),
 				   visible ? TRUE : FALSE, FALSE);
         }
@@ -750,7 +750,7 @@ xcf_load_channel_props (XcfInfo * info,
         {
 	    bool linked;
 
-	    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & linked, 1);
+	    info->cp += xcf_read_int32 (info->fp, (qint32 *) & linked, 1);
 	    gimp_item_set_linked (GIMP_ITEM (*channel),
 				  linked ? TRUE : FALSE, FALSE);
         }
@@ -761,7 +761,7 @@ xcf_load_channel_props (XcfInfo * info,
 	    bool show_masked;
 
 	    info->cp +=
-                xcf_read_int32 (info->fp, (Q_INT32 *) & show_masked, 1);
+                xcf_read_int32 (info->fp, (qint32 *) & show_masked, 1);
 	    gimp_channel_set_show_masked (*channel, show_masked);
         }
         break;
@@ -770,7 +770,7 @@ xcf_load_channel_props (XcfInfo * info,
         {
 	    guchar col[3];
 
-	    info->cp += xcf_read_int8 (info->fp, (Q_UINT8 *) col, 3);
+	    info->cp += xcf_read_int8 (info->fp, (quint8 *) col, 3);
 
 	    gimp_rgb_set_uchar (&(*channel)->color, col[0], col[1], col[2]);
         }
@@ -804,8 +804,8 @@ xcf_load_channel_props (XcfInfo * info,
 #endif
 
             {
-                Q_UINT8 buf[16];
-                Q_UINT32 amount;
+                quint8 buf[16];
+                quint32 amount;
 
                 while (prop_size > 0)
                 {
@@ -822,10 +822,10 @@ xcf_load_channel_props (XcfInfo * info,
 }
 
 static bool
-xcf_load_prop (XcfInfo * info, PropType * prop_type, Q_INT32 * prop_size)
+xcf_load_prop (XcfInfo * info, PropType * prop_type, qint32 * prop_size)
 {
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) prop_type, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) prop_size, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) prop_type, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) prop_size, 1);
     return TRUE;
 }
 
@@ -834,17 +834,17 @@ xcf_load_layer (XcfInfo * info, KisImage * gimage)
 {
     KisLayer *layer;
     GimpLayerMask *layer_mask;
-    Q_INT32 hierarchy_offset;
-    Q_INT32 layer_mask_offset;
+    qint32 hierarchy_offset;
+    qint32 layer_mask_offset;
     bool apply_mask = TRUE;
     bool edit_mask = FALSE;
     bool show_mask = FALSE;
     bool active;
     bool floating;
-    Q_INT32 text_layer_flags = 0;
-    Q_INT32 width;
-    Q_INT32 height;
-    Q_INT32 type;
+    qint32 text_layer_flags = 0;
+    qint32 width;
+    qint32 height;
+    qint32 type;
     bool is_fs_drawable;
     Q3CString *name;
 
@@ -854,9 +854,9 @@ xcf_load_layer (XcfInfo * info, KisImage * gimage)
     is_fs_drawable = (info->cp == info->floating_sel_offset);
 
     /* read in the layer width, height, type and name */
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & width, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & height, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & type, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & width, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & height, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & type, 1);
     info->cp += xcf_read_string (info->fp, &name, 1);
 
     /* create a new layer */
@@ -930,9 +930,9 @@ static GimpChannel *
 xcf_load_channel (XcfInfo * info, KisImage * gimage)
 {
     GimpChannel *channel;
-    Q_INT32 hierarchy_offset;
-    Q_INT32 width;
-    Q_INT32 height;
+    qint32 hierarchy_offset;
+    qint32 width;
+    qint32 height;
     bool is_fs_drawable;
     Q3CString *name;
     GimpRGB color = { 0.0, 0.0, 0.0, GIMP_OPACITY_OPAQUE };
@@ -943,8 +943,8 @@ xcf_load_channel (XcfInfo * info, KisImage * gimage)
     is_fs_drawable = (info->cp == info->floating_sel_offset);
 
     /* read in the layer width, height and name */
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & width, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & height, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & width, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & height, 1);
     info->cp += xcf_read_string (info->fp, &name, 1);
 
     /* create a new channel */
@@ -982,9 +982,9 @@ xcf_load_layer_mask (XcfInfo * info, KisImage * gimage)
 {
     GimpLayerMask *layer_mask;
     GimpChannel *channel;
-    Q_INT32 hierarchy_offset;
-    Q_INT32 width;
-    Q_INT32 height;
+    qint32 hierarchy_offset;
+    qint32 width;
+    qint32 height;
     bool is_fs_drawable;
     Q3CString *name;
     GimpRGB color = { 0.0, 0.0, 0.0, GIMP_OPACITY_OPAQUE };
@@ -995,8 +995,8 @@ xcf_load_layer_mask (XcfInfo * info, KisImage * gimage)
     is_fs_drawable = (info->cp == info->floating_sel_offset);
 
     /* read in the layer width, height and name */
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & width, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & height, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & width, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & height, 1);
     info->cp += xcf_read_string (info->fp, &name, 1);
 
     /* create a new layer mask */
@@ -1034,16 +1034,16 @@ error:
 static bool
 xcf_load_hierarchy (XcfInfo * info, TileManager * tiles)
 {
-    Q_INT32 saved_pos;
-    Q_INT32 offset;
-    Q_INT32 junk;
-    Q_INT32 width;
-    Q_INT32 height;
-    Q_INT32 bpp;
+    qint32 saved_pos;
+    qint32 offset;
+    qint32 junk;
+    qint32 width;
+    qint32 height;
+    qint32 bpp;
 
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & width, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & height, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & bpp, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & width, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & height, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & bpp, 1);
 
     /* make sure the values in the file correspond to the values
      *  calculated when the TileManager was created.
@@ -1094,18 +1094,18 @@ xcf_load_hierarchy (XcfInfo * info, TileManager * tiles)
 static bool
 xcf_load_level (XcfInfo * info, TileManager * tiles)
 {
-    Q_INT32 saved_pos;
-    Q_INT32 offset, offset2;
-    Q_UINT32 ntiles;
-    Q_INT32 width;
-    Q_INT32 height;
-    Q_INT32 i;
-    Q_INT32 fail;
+    qint32 saved_pos;
+    qint32 offset, offset2;
+    quint32 ntiles;
+    qint32 width;
+    qint32 height;
+    qint32 i;
+    qint32 fail;
     Tile *previous;
     Tile *tile;
 
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & width, 1);
-    info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & height, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & width, 1);
+    info->cp += xcf_read_int32 (info->fp, (qint32 *) & height, 1);
 
     if (width != tile_manager_width (tiles) ||
         height != tile_manager_height (tiles))
@@ -1254,12 +1254,12 @@ xcf_load_tile_rle (XcfInfo * info, Tile * tile, int data_length)
 {
     guchar *data;
     guchar val;
-    Q_INT32 size;
-    Q_INT32 count;
-    Q_INT32 length;
-    Q_INT32 bpp;
-    Q_INT32 i, j;
-    Q_INT32 nmemb_read_successfully;
+    qint32 size;
+    qint32 count;
+    qint32 length;
+    qint32 bpp;
+    qint32 i, j;
+    qint32 nmemb_read_successfully;
     guchar *xcfdata, *xcfodata, *xcfdatalimit;
 
     data = tile_data_pointer (tile, 0, 0);
@@ -1388,8 +1388,8 @@ xcf_load_parasite (XcfInfo * info)
 static bool
 xcf_load_old_paths (XcfInfo * info, KisImage * gimage)
 {
-    Q_INT32 num_paths;
-    Q_INT32 last_selected_row;
+    qint32 num_paths;
+    qint32 last_selected_row;
     GimpVectors *active_vectors;
 
     info->cp += xcf_read_int32 (info->fp, &last_selected_row, 1);
@@ -1411,15 +1411,15 @@ static bool
 xcf_load_old_path (XcfInfo * info, KisImage * gimage)
 {
     Q3CString *name;
-    Q_INT32 locked;
-    Q_UINT8 state;
-    Q_INT32 closed;
-    Q_INT32 num_points;
-    Q_INT32 version;		/* changed from num_paths */
+    qint32 locked;
+    quint8 state;
+    qint32 closed;
+    qint32 num_points;
+    qint32 version;		/* changed from num_paths */
     GimpTattoo tattoo = 0;
     GimpVectors *vectors;
     GimpVectorsCompatPoint *points;
-    Q_INT32 i;
+    qint32 i;
 
     info->cp += xcf_read_string (info->fp, &name, 1);
     info->cp += xcf_read_int32 (info->fp, &locked, 1);
@@ -1430,18 +1430,18 @@ xcf_load_old_path (XcfInfo * info, KisImage * gimage)
 
     if (version == 2)
     {
-        Q_INT32 dummy;
+        qint32 dummy;
 
         /* Had extra type field and points are stored as doubles */
-        info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & dummy, 1);
+        info->cp += xcf_read_int32 (info->fp, (qint32 *) & dummy, 1);
     }
     else if (version == 3)
     {
-        Q_INT32 dummy;
+        qint32 dummy;
 
         /* Has extra tatto field */
-        info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & dummy, 1);
-        info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & tattoo, 1);
+        info->cp += xcf_read_int32 (info->fp, (qint32 *) & dummy, 1);
+        info->cp += xcf_read_int32 (info->fp, (qint32 *) & tattoo, 1);
     }
     else if (version != 1)
     {
@@ -1460,12 +1460,12 @@ xcf_load_old_path (XcfInfo * info, KisImage * gimage)
     {
         if (version == 1)
 	{
-            Q_INT3232 x;
-            Q_INT3232 y;
+            qint3232 x;
+            qint3232 y;
 
             info->cp += xcf_read_int32 (info->fp, &points[i].type, 1);
-            info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & x, 1);
-            info->cp += xcf_read_int32 (info->fp, (Q_INT32 *) & y, 1);
+            info->cp += xcf_read_int32 (info->fp, (qint32 *) & x, 1);
+            info->cp += xcf_read_int32 (info->fp, (qint32 *) & y, 1);
 
             points[i].x = x;
             points[i].y = y;
@@ -1504,11 +1504,11 @@ xcf_load_old_path (XcfInfo * info, KisImage * gimage)
 static bool
 xcf_load_vectors (XcfInfo * info, KisImage * gimage)
 {
-    Q_INT32 version;
-    Q_INT32 active_index;
-    Q_INT32 num_paths;
+    qint32 version;
+    qint32 active_index;
+    qint32 num_paths;
     GimpVectors *active_vectors;
-    Q_INT32 base;
+    qint32 base;
 
 #ifdef GIMP_XCF_PATH_DEBUG
     g_printerr ("xcf_load_vectors\n");
@@ -1552,12 +1552,12 @@ xcf_load_vector (XcfInfo * info, KisImage * gimage)
 {
     Q3CString *name;
     GimpTattoo tattoo = 0;
-    Q_INT32 visible;
-    Q_INT32 linked;
-    Q_INT32 num_parasites;
-    Q_INT32 num_strokes;
+    qint32 visible;
+    qint32 linked;
+    qint32 num_parasites;
+    qint32 num_strokes;
     GimpVectors *vectors;
-    Q_INT32 i;
+    qint32 i;
 
 #ifdef GIMP_XCF_PATH_DEBUG
     g_printerr ("xcf_load_vector\n");
@@ -1600,14 +1600,14 @@ xcf_load_vector (XcfInfo * info, KisImage * gimage)
 
     for (i = 0; i < num_strokes; i++)
     {
-        Q_INT32 stroke_type_id;
-        Q_INT32 closed;
-        Q_INT32 num_axes;
-        Q_INT32 num_control_points;
-        Q_INT32 type;
+        qint32 stroke_type_id;
+        qint32 closed;
+        qint32 num_axes;
+        qint32 num_control_points;
+        qint32 type;
         float coords[6] = { 0.0, 0.0, 1.0, 0.5, 0.5, 0.5 };
         GimpStroke *stroke;
-        Q_INT32 j;
+        qint32 j;
 
         GValueArray *control_points;
         GValue value = { 0, };
@@ -1684,12 +1684,12 @@ xcf_load_vector (XcfInfo * info, KisImage * gimage)
 #ifdef SWAP_FROM_FILE
 
 static bool
-xcf_swap_func (Q_INT32 fd, Tile * tile, Q_INT32 cmd, gpointer user_data)
+xcf_swap_func (qint32 fd, Tile * tile, qint32 cmd, gpointer user_data)
 {
-    Q_INT32 bytes;
-    Q_INT32 err;
-    Q_INT32 nleft;
-    Q_INT32 *ref_count;
+    qint32 bytes;
+    qint32 err;
+    qint32 nleft;
+    qint32 *ref_count;
 
     switch (cmd)
     {

@@ -184,7 +184,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         case 30:
         case 31:
             {
-                kdWarning(30518) << "Not allowed XML character: " << ch.unicode() << endl;
+                kWarning(30518) << "Not allowed XML character: " << ch.unicode() << endl;
                 strReturn += '?';
                 break;
             }
@@ -216,14 +216,14 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
 
 bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
 {
-    kdDebug(30518) << "Opening file: " << filenameOut
+    kDebug(30518) << "Opening file: " << filenameOut
         << " (in OOWriterWorker::doOpenFile)" << endl;
 
     m_zip=new KZip(filenameOut); // How to check failure?
 
     if (!m_zip->open(QIODevice::WriteOnly))
     {
-        kdError(30518) << "Could not open ZIP file for writing! Aborting!" << endl;
+        kError(30518) << "Could not open ZIP file for writing! Aborting!" << endl;
         delete m_zip;
         m_zip=NULL;
         return false;
@@ -569,7 +569,7 @@ void OOWriterWorker::writeMetaXml(void)
 
 bool OOWriterWorker::doCloseFile(void)
 {
-    kdDebug(30518)<< "OOWriterWorker::doCloseFile" << endl;
+    kDebug(30518)<< "OOWriterWorker::doCloseFile" << endl;
     if (m_zip)
     {
         writeContentXml();
@@ -585,7 +585,7 @@ bool OOWriterWorker::doCloseFile(void)
 
 bool OOWriterWorker::doOpenDocument(void)
 {
-    kdDebug(30518)<< "OOWriterWorker::doOpenDocument" << endl;
+    kDebug(30518)<< "OOWriterWorker::doOpenDocument" << endl;
 
     *m_streamOut << " <office:body>\n";
 
@@ -603,24 +603,24 @@ bool OOWriterWorker::doOpenBody(void)
     Q3ValueList<FrameAnchor>::Iterator it;
 
     // We have to process all non-inline pictures
-    kdDebug(30518) << "=== Processing non-inlined pictures ===" << endl;
+    kDebug(30518) << "=== Processing non-inlined pictures ===" << endl;
     for ( it = m_nonInlinedPictureAnchors.begin(); it != m_nonInlinedPictureAnchors.end(); ++it )
     {
         *m_streamOut << "  ";
         makePicture( *it, AnchorNonInlined );
         *m_streamOut << "\n";
     }
-    kdDebug(30518) << "=== Non-inlined pictures processed ===" << endl;
+    kDebug(30518) << "=== Non-inlined pictures processed ===" << endl;
 
     // We have to process all non-inline tables
-    kdDebug(30518) << "=== Processing non-inlined tables ===" << endl;
+    kDebug(30518) << "=== Processing non-inlined tables ===" << endl;
     for ( it = m_nonInlinedTableAnchors.begin(); it != m_nonInlinedTableAnchors.end(); ++it )
     {
         *m_streamOut << "  ";
         makeTable( *it, AnchorNonInlined );
         *m_streamOut << "\n";
     }
-    kdDebug(30518) << "=== Non-inlined tables processed ===" << endl;
+    kDebug(30518) << "=== Non-inlined tables processed ===" << endl;
 
     return true;
 }
@@ -872,7 +872,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
 
             if ( res >= 0 )
             {
-                kdDebug(30518) << "Language: " << lang << " => " << lang.left( res ) << " - " << lang.mid( res + 1 ) << endl;
+                kDebug(30518) << "Language: " << lang << " => " << lang.left( res ) << " - " << lang.mid( res + 1 ) << endl;
                 strElement += "fo:language=\"";
                 strElement += lang.left( res );
                 strElement += "\" ";
@@ -882,7 +882,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
             }
             else
             {
-                kdDebug(30518) << "Language without country: " << lang << endl;
+                kDebug(30518) << "Language without country: " << lang << endl;
                 strElement += "fo:language=\"";
                 strElement += lang;
                 strElement += "\" ";
@@ -940,7 +940,7 @@ QString OOWriterWorker::textFormatToStyle(const TextFormatting& formatOrigin,
         // ### TODO: how to reset it? "0pt" ?
     }
 
-    return strElement.stripWhiteSpace(); // Remove especially trailing spaces
+    return strElement.trimmed(); // Remove especially trailing spaces
 }
 
 #define ALLOW_TABLE
@@ -1063,7 +1063,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         {
             automaticCellStyle = makeAutomaticStyleName( tableName + ".Cell", cellNumber );
             mapCellStyleKeys [ key ] = automaticCellStyle;
-            kdDebug(30518) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+            kDebug(30518) << "Creating automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
             m_contentAutomaticStyles += "  <style:style";
             m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticCellStyle ) + "\"";
             m_contentAutomaticStyles += " style:family=\"table-cell\"";
@@ -1076,7 +1076,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
         else
         {
             automaticCellStyle = it.data();
-            kdDebug(30518) << "Using automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
+            kDebug(30518) << "Using automatic cell style: " << automaticCellStyle  << " key: " << key << endl;
         }
 
         *m_streamOut << "<table:table-cell table:value-type=\"string\" table:style-name=\""
@@ -1125,7 +1125,7 @@ static uint getColumnWidths( const Table& table, Q3MemArray<double>& widthArray,
     for ( itCell = table.cellList.begin();
         itCell != table.cellList.end(); ++itCell )
     {
-        kdDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+        kDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
 
         if ( (*itCell).row != tryingRow )
         {
@@ -1179,7 +1179,7 @@ static uint getFirstRowColumnWidths( const Table& table, Q3MemArray<double>& wid
     for ( itCell = table.cellList.begin();
         itCell != table.cellList.end(); ++itCell )
     {
-        kdDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
+        kDebug(30518) << "Column: " << (*itCell).col << " (Row: " << (*itCell).row << ")" << endl;
         if ( (*itCell).row != firstRowNumber )
             break; // We have finished the first row
 
@@ -1214,18 +1214,18 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     const QString automaticFrameStyle ( makeAutomaticStyleName( "TableFrame", m_textBoxNumber ) ); // It also increases m_textBoxNumber
     const QString translatedFrameName( i18n( "Object name", "Table Frame %1").arg( m_textBoxNumber ) );
 
-    kdDebug(30518) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
+    kDebug(30518) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
     const Q3ValueList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
 
     if ( firstCell == anchor.table.cellList.end() )
     {
-        kdError(30518) << "Table has not any cell!" << endl;
+        kError(30518) << "Table has not any cell!" << endl;
         return false;
     }
 
     const int firstRowNumber = (*firstCell).row;
-    kdDebug(30518) << "First row: " << firstRowNumber << endl;
+    kDebug(30518) << "First row: " << firstRowNumber << endl;
 
     Q3MemArray<double> widthArray(4);
 
@@ -1233,18 +1233,18 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
 
     if ( numberColumns <= 0 )
     {
-        kdDebug(30518) << "Could not get correct column widths, so approximating" << endl;
+        kDebug(30518) << "Could not get correct column widths, so approximating" << endl;
         // There was a problem, the width array cannot be trusted, so try to do a column width array with the first row
         numberColumns = getFirstRowColumnWidths( anchor.table, widthArray, firstRowNumber );
         if ( numberColumns <= 0 )
         {
             // Still not right? Then it is an error!
-            kdError(30518) << "Cannot get column widths of table " << anchor.key.toString() << endl;
+            kError(30518) << "Cannot get column widths of table " << anchor.key.toString() << endl;
             return false;
         }
     }
 
-    kdDebug(30518) << "Number of columns: " << numberColumns << endl;
+    kDebug(30518) << "Number of columns: " << numberColumns << endl;
 
 
     double tableWidth = 0.0; // total width of table
@@ -1253,7 +1253,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     {
         tableWidth += widthArray.at( i );
     }
-    kdDebug(30518) << "Table width: " << tableWidth << endl;
+    kDebug(30518) << "Table width: " << tableWidth << endl;
 
     // An inlined table, is an "as-char" text-box
     *m_streamOut << "<draw:text-box";
@@ -1281,7 +1281,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
 
     // Now we have enough information to generate the style for the table and its frame
 
-    kdDebug(30518) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
+    kDebug(30518) << "Creating automatic frame style: " << automaticFrameStyle /* << " key: " << styleKey */ << endl;
     m_contentAutomaticStyles += "  <style:style"; // for frame
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticFrameStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"graphics\"";
@@ -1297,7 +1297,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     m_contentAutomaticStyles += "/>\n";
     m_contentAutomaticStyles += "  </style:style>\n";
 
-    kdDebug(30518) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
+    kDebug(30518) << "Creating automatic table style: " << automaticTableStyle /* << " key: " << styleKey */ << endl;
     m_contentAutomaticStyles += "  <style:style"; // for table
     m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticTableStyle ) + "\"";
     m_contentAutomaticStyles += " style:family=\"table\"";
@@ -1314,7 +1314,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     for ( i=0; i < numberColumns; ++i )
     {
         const QString automaticColumnStyle ( makeAutomaticStyleName( tableName + ".Column", columnNumber ) );
-        kdDebug(30518) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
+        kDebug(30518) << "Creating automatic column style: " << automaticColumnStyle /* << " key: " << styleKey */ << endl;
 
         m_contentAutomaticStyles += "  <style:style";
         m_contentAutomaticStyles += " style:name=\"" + escapeOOText( automaticColumnStyle ) + "\"";
@@ -1345,7 +1345,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
 
 bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType anchorType )
 {
-    kdDebug(30518) << "New picture: " << anchor.picture.koStoreName
+    kDebug(30518) << "New picture: " << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
 
     const QString koStoreName(anchor.picture.koStoreName);
@@ -1389,11 +1389,11 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
 
     if (!isImageLoaded)
     {
-        kdWarning(30518) << "Unable to load picture: " << koStoreName << endl;
+        kWarning(30518) << "Unable to load picture: " << koStoreName << endl;
         return true;
     }
 
-    kdDebug(30518) << "Picture loaded: " << koStoreName << endl;
+    kDebug(30518) << "Picture loaded: " << koStoreName << endl;
 
     double height = 0.0;
     double width = 0.0;
@@ -1412,7 +1412,7 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
         }
         else
         {
-            kdWarning(30518) << "Could not load KoPicture: " << koStoreName << endl;
+            kWarning(30518) << "Could not load KoPicture: " << koStoreName << endl;
         }
         buffer.close();
     }
@@ -1425,12 +1425,12 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
 
     if ( height < 1.0 )
     {
-        kdWarning(30518) << "Silly height for " << koStoreName << " : "  << height << endl;
+        kWarning(30518) << "Silly height for " << koStoreName << " : "  << height << endl;
         height = 72.0;
     }
     if ( width < 1.0 )
     {
-        kdWarning(30518) << "Silly width for " << koStoreName << " : "  << width << endl;
+        kWarning(30518) << "Silly width for " << koStoreName << " : "  << width << endl;
         width = 72.0;
     }
 
@@ -1445,7 +1445,7 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
     ooName += '.';
     ooName += strExtension;
 
-    kdDebug(30518) << "Picture " << koStoreName << " => " << ooName << endl;
+    kDebug(30518) << "Picture " << koStoreName << " => " << ooName << endl;
 
     // TODO: we are only using the filename, not the rest of the key
     // TODO:  (bad if there are two images of the same name, but of a different key)
@@ -1500,14 +1500,14 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         const QString props ( textFormatToStyle(formatLayout,formatData.text,false,styleKey) );
 
         QMap<QString,QString>::ConstIterator it ( m_mapTextStyleKeys.find(styleKey) );
-        kdDebug(30518) << "Searching text key: " << styleKey << endl;
+        kDebug(30518) << "Searching text key: " << styleKey << endl;
 
         QString automaticStyle;
         if (it==m_mapTextStyleKeys.end())
         {
             // We have not any match, so we need a new automatic text style
             automaticStyle=makeAutomaticStyleName("T", m_automaticTextStyleNumber);
-            kdDebug(30518) << "Creating automatic text style: " << automaticStyle << " key: " << styleKey << endl;
+            kDebug(30518) << "Creating automatic text style: " << automaticStyle << " key: " << styleKey << endl;
             m_mapTextStyleKeys[styleKey]=automaticStyle;
 
             m_contentAutomaticStyles += "  <style:style";
@@ -1523,7 +1523,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
         {
             // We have a match, so use the already defined automatic text style
             automaticStyle=it.data();
-            kdDebug(30518) << "Using automatic text style: " << automaticStyle << " key: " << styleKey << endl;
+            kDebug(30518) << "Using automatic text style: " << automaticStyle << " key: " << styleKey << endl;
         }
 
         *m_streamOut << " text:style-name=\"" << escapeOOText(automaticStyle) << "\" ";
@@ -1670,7 +1670,7 @@ void OOWriterWorker::processAnchor ( const QString&,
     }
     else
     {
-        kdWarning(30518) << "Unsupported anchor type: "
+        kWarning(30518) << "Unsupported anchor type: "
             << formatData.frameAnchor.type << endl;
     }
 }
@@ -1679,7 +1679,7 @@ void OOWriterWorker::processTextImage ( const QString&,
     const TextFormatting& /*formatLayout*/,
     const FormatData& formatData)
 {
-    kdDebug(30518) << "Text Image: " << formatData.frameAnchor.key.toString() << endl;
+    kDebug(30518) << "Text Image: " << formatData.frameAnchor.key.toString() << endl;
     makePicture( formatData.frameAnchor, AnchorTextImage );
 }
 
@@ -1774,7 +1774,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         }
         else
         {
-            kdWarning(30518) << "Unknown alignment: " << layout.alignment << endl;
+            kWarning(30518) << "Unknown alignment: " << layout.alignment << endl;
         }
     }
 
@@ -1896,7 +1896,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             }
         default:
             {
-                kdWarning(30518) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                kWarning(30518) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
                 break;
             }
         }
@@ -1994,7 +1994,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
     if (!props.isEmpty())
     {
         QMap<QString,QString>::ConstIterator it ( m_mapParaStyleKeys.find(styleKey) );
-        kdDebug(30518) << "Searching paragraph key: " << styleKey << endl;
+        kDebug(30518) << "Searching paragraph key: " << styleKey << endl;
 
         QString automaticStyle;
 
@@ -2002,7 +2002,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
         {
             // We have additional properties, so we need an automatic style for the paragraph
             automaticStyle = makeAutomaticStyleName("P", m_automaticParagraphStyleNumber);
-            kdDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << " key: " << styleKey << endl;
+            kDebug(30518) << "Creating automatic paragraph style: " << automaticStyle << " key: " << styleKey << endl;
             m_mapParaStyleKeys[styleKey]=automaticStyle;
 
             m_contentAutomaticStyles += "  <style:style";
@@ -2019,7 +2019,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
         {
             // We have a match, so use the already defined automatic paragraph style
             automaticStyle=it.data();
-            kdDebug(30518) << "Using automatic paragraph style: " << automaticStyle << " key: " << styleKey << endl;
+            kDebug(30518) << "Using automatic paragraph style: " << automaticStyle << " key: " << styleKey << endl;
         }
 
         actualStyle=automaticStyle;
@@ -2031,7 +2031,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
     }
     else
     {   // SHould not happen
-        kdWarning(30518) << "No style for a paragraph!" << endl;
+        kWarning(30518) << "No style for a paragraph!" << endl;
     }
 
     *m_streamOut << ">";
@@ -2073,7 +2073,7 @@ bool OOWriterWorker::doFullDefineStyle(LayoutData& layout)
 
     QString debugKey; // Not needed
     m_styles += layoutToParagraphStyle(layout,layout,true,debugKey);
-    kdDebug(30518) << "Defining style: " << debugKey << endl;
+    kDebug(30518) << "Defining style: " << debugKey << endl;
 
     m_styles += "</style:properties>\n";
     m_styles += "  </style:style>\n";
@@ -2094,7 +2094,7 @@ bool OOWriterWorker::doFullPaperFormat(const int format,
         || ( width < 1.0 )
         || ( height < 1.0 ) )
     {
-        kdWarning(30518) << "Page size problem: format: " << format << " width: " << width << " height: " << height << endl;
+        kWarning(30518) << "Page size problem: format: " << format << " width: " << width << " height: " << height << endl;
         // Something is wrong with the page size
         KoFormat newFormat = KoFormat ( format );
         if ( ( format < 0 ) || ( format > PG_LAST_FORMAT ) )
@@ -2227,7 +2227,7 @@ QString OOWriterWorker::makeAutomaticStyleName(const QString& prefix, ulong& cou
     if (m_styleMap.find(str2)==m_styleMap.end())
         return str2;
 
-    kdWarning(30518) << "Could not make an unique style name: " << str2 << endl;
+    kWarning(30518) << "Could not make an unique style name: " << str2 << endl;
     return str2; // Still return, as we have nothing better
 }
 

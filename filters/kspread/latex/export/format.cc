@@ -99,28 +99,28 @@ void Format::analyse(const QDomNode balise)
 		analysePen(getChild(balise, "pen"));
 	if(isChild(balise, "bottom-border"))
 	{
-		kdDebug(30522) << "bottom-border" << endl;
+		kDebug(30522) << "bottom-border" << endl;
 		_isValidFormat = true;
 		_bottomBorder = new Pen();
 		_bottomBorder->analyse(getChild(getChild(balise, "bottom-border"), "pen"));
 	}
 	if(isChild(balise, "top-border"))
 	{
-		kdDebug(30522) << "top-border" << endl;
+		kDebug(30522) << "top-border" << endl;
 		_isValidFormat = true;
 		_topBorder = new Pen();
 		_topBorder->analyse(getChild(getChild(balise, "top-border"), "pen"));
 	}
 	if(isChild(balise, "left-border"))
 	{
-		kdDebug(30522) << "left-border" << endl;
+		kDebug(30522) << "left-border" << endl;
 		_isValidFormat = true;
 		_leftBorder = new Pen();
 		_leftBorder->analyse(getChild(getChild(balise, "left-border"), "pen"));
 	}
 	if(isChild(balise, "right-border"))
 	{
-		kdDebug(30522) << "right-border" << endl;
+		kDebug(30522) << "right-border" << endl;
 		_isValidFormat = true;
 		_rightBorder = new Pen();
 		_rightBorder->analyse(getChild(getChild(balise, "right-border"), "pen"));

@@ -57,19 +57,19 @@
 
 namespace {
 
-    const Q_UINT8 PIXEL_BLUE = 0;
-    const Q_UINT8 PIXEL_GREEN = 1;
-    const Q_UINT8 PIXEL_RED = 2;
-    const Q_UINT8 PIXEL_ALPHA = 3;
+    const quint8 PIXEL_BLUE = 0;
+    const quint8 PIXEL_GREEN = 1;
+    const quint8 PIXEL_RED = 2;
+    const quint8 PIXEL_ALPHA = 3;
 
-    static const Q_UINT8 PIXEL_CYAN = 0;
-    static const Q_UINT8 PIXEL_MAGENTA = 1;
-    static const Q_UINT8 PIXEL_YELLOW = 2;
-    static const Q_UINT8 PIXEL_BLACK = 3;
-    static const Q_UINT8 PIXEL_CMYK_ALPHA = 4;
+    static const quint8 PIXEL_CYAN = 0;
+    static const quint8 PIXEL_MAGENTA = 1;
+    static const quint8 PIXEL_YELLOW = 2;
+    static const quint8 PIXEL_BLACK = 3;
+    static const quint8 PIXEL_CMYK_ALPHA = 4;
 
-    static const Q_UINT8 PIXEL_GRAY = 0;
-    static const Q_UINT8 PIXEL_GRAY_ALPHA = 1;
+    static const quint8 PIXEL_GRAY = 0;
+    static const quint8 PIXEL_GRAY_ALPHA = 1;
 
     /**
      * Make this more flexible -- although... ImageMagick
@@ -92,7 +92,7 @@ namespace {
             }
         }
         else if (type == LABColorspace) {
-            kdDebug(41008) << "Lab!\n";
+            kDebug(41008) << "Lab!\n";
             return "LABA";
         }
         else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
@@ -112,7 +112,7 @@ namespace {
         if ( cs->id() == KisID("CMYK") || cs->id() == KisID("CMYK16") ) return CMYKColorspace;
         if ( cs->id() == KisID("LABA") ) return LABColorspace;
 
-        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+        kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return RGBColorspace;
 
     }
@@ -226,24 +226,24 @@ namespace {
 #else
         while(it != annotationsEnd) {
             if (!(*it) || (*it) -> type() == QString()) {
-                    kdDebug(41008) << "Warning: empty annotation" << endl;
+                    kDebug(41008) << "Warning: empty annotation" << endl;
                     ++it;
                     continue;
             }
 
-            kdDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
+            kDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
 
             if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
                 if (!SetImageAttribute(dst,
                                         (*it) -> type().mid(strlen("krita_attribute:")).ascii(),
                                         (*it) -> annotation() . data()) ) {
-                        kdDebug(41008) << "Storing of attribute " << (*it) -> type() << "failed!\n";
+                        kDebug(41008) << "Storing of attribute " << (*it) -> type() << "failed!\n";
                     }
             } else { // Profile
                     if (!ProfileImage(dst, (*it) -> type().ascii(),
                                     (unsigned char*)(*it) -> annotation() . data(),
                                     (*it) -> annotation() . size(), MagickFalse)) {
-                        kdDebug(41008) << "Storing failed!" << endl;
+                        kDebug(41008) << "Storing failed!" << endl;
                     }
             }
             ++it;
@@ -369,7 +369,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
         // Determine image depth -- for now, all channels of an imported image are of the same depth
         unsigned long imageDepth = image->depth;
-        kdDebug(41008) << "Image depth: " << imageDepth << "\n";
+        kDebug(41008) << "Image depth: " << imageDepth << "\n";
 
         QString csName;
         KisColorSpace * cs = 0;
@@ -388,19 +388,19 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             csName = getColorSpaceName(image -> colorspace, imageDepth);
         }
 
-        kdDebug(41008) << "image has " << csName << " colorspace\n";
+        kDebug(41008) << "image has " << csName << " colorspace\n";
         
         KisProfile * profile = getProfileForProfileInfo(image);
         if (profile)
         {
-            kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
+            kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
             cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
         }
         else
             cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID(csName,""),"");
 
         if (!cs) {
-            kdDebug(41008) << "Krita does not support colorspace " << image -> colorspace << "\n";
+            kDebug(41008) << "Krita does not support colorspace " << image -> colorspace << "\n";
             CloseCacheView(vi);
             DestroyImage(image);
             DestroyExceptionInfo(&ei);
@@ -422,10 +422,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         if (image -> columns && image -> rows) {
 
             // Opacity (set by the photoshop import filter)
-            Q_UINT8 opacity = OPACITY_OPAQUE;
+            quint8 opacity = OPACITY_OPAQUE;
             const ImageAttribute * attr = GetImageAttribute(image, "[layer-opacity]");
             if (attr != 0) {
-                opacity = Q_UINT8_MAX - Downscale(QString(attr->value).toInt());
+                opacity = quint8_MAX - Downscale(QString(attr->value).toInt());
             }
 
             KisPaintLayerSP layer = 0;
@@ -441,8 +441,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             Q_ASSERT(layer);
 
             // Layerlocation  (set by the photoshop import filter)
-            Q_INT32 x_offset = 0;
-            Q_INT32 y_offset = 0;
+            qint32 x_offset = 0;
+            qint32 y_offset = 0;
 
             attr = GetImageAttribute(image, "[layer-xpos]");
             if (attr != 0) {
@@ -455,7 +455,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             }
 
 
-            for (Q_UINT32 y = 0; y < image->rows; y ++)
+            for (quint32 y = 0; y < image->rows; y ++)
             {
                 const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
 
@@ -478,7 +478,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         int x = 0;
                         while (!hiter.isDone())
                         {
-                            Q_UINT8 *ptr= hiter.rawData();
+                            quint8 *ptr= hiter.rawData();
                             *(ptr++) = Downscale(pp->red); // cyan
                             *(ptr++) = Downscale(pp->green); // magenta
                             *(ptr++) = Downscale(pp->blue); // yellow
@@ -503,7 +503,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 else if (colorspaceType == LABColorspace) {
                     while(! hiter.isDone())
                     {
-                        Q_UINT16 *ptr = reinterpret_cast<Q_UINT16 *>(hiter.rawData());
+                        quint16 *ptr = reinterpret_cast<quint16 *>(hiter.rawData());
                         
                         *(ptr++) = ScaleQuantumToShort(pp->red);
                         *(ptr++) = ScaleQuantumToShort(pp->green);
@@ -521,7 +521,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         if (imageDepth == 8) {
                             while(! hiter.isDone())
                             {
-                                Q_UINT8 *ptr= hiter.rawData();
+                                quint8 *ptr= hiter.rawData();
                                 // XXX: not colorstrategy and bitdepth independent
                                 *(ptr++) = Downscale(pp->blue);
                                 *(ptr++) = Downscale(pp->green);
@@ -535,7 +535,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         else if (imageDepth == 16) {
                             while(! hiter.isDone())
                             {
-                                Q_UINT16 *ptr = reinterpret_cast<Q_UINT16 *>(hiter.rawData());
+                                quint16 *ptr = reinterpret_cast<quint16 *>(hiter.rawData());
                                 // XXX: not colorstrategy independent
                                 *(ptr++) = ScaleQuantumToShort(pp->blue);
                                 *(ptr++) = ScaleQuantumToShort(pp->green);
@@ -551,7 +551,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         if (imageDepth == 8) {
                             while(! hiter.isDone())
                             {
-                                Q_UINT8 *ptr= hiter.rawData();
+                                quint8 *ptr= hiter.rawData();
                                 // XXX: not colorstrategy and bitdepth independent
                                 *(ptr++) = Downscale(pp->blue);
                                 *(ptr++) = OPACITY_OPAQUE - Downscale(pp->opacity);
@@ -563,7 +563,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         else if (imageDepth == 16) {
                             while(! hiter.isDone())
                             {
-                                Q_UINT16 *ptr = reinterpret_cast<Q_UINT16 *>(hiter.rawData());
+                                quint16 *ptr = reinterpret_cast<quint16 *>(hiter.rawData());
                                 // XXX: not colorstrategy independent
                                 *(ptr++) = ScaleQuantumToShort(pp->blue);
                                 *(ptr++) = 65535/*OPACITY_OPAQUE*/ - ScaleQuantumToShort(pp->opacity);
@@ -655,7 +655,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             return KisImageBuilder_RESULT_NOT_LOCAL;
 
 
-        Q_UINT32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
+        quint32 layerBytesPerChannel = layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
 
         GetExceptionInfo(&ei);
 
@@ -685,8 +685,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         image -> columns = img -> width();
         image -> rows = img -> height();
 
-        kdDebug(41008) << "Saving with colorspace " << image->colorspace << ", (" << layer->paintDevice()->colorSpace()->id().name() << ")\n";
-        kdDebug(41008) << "IM Image thinks it has depth: " << image->depth << "\n";
+        kDebug(41008) << "Saving with colorspace " << image->colorspace << ", (" << layer->paintDevice()->colorSpace()->id().name() << ")\n";
+        kDebug(41008) << "IM Image thinks it has depth: " << image->depth << "\n";
 
 #ifdef HAVE_MAGICK6
         //    if ( layer-> hasAlpha() )
@@ -698,7 +698,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         image -> matte = true;
 #endif
 
-        Q_INT32 y, height, width;
+        qint32 y, height, width;
 
         height = img -> height();
         width = img -> width();
@@ -739,7 +739,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 if (layerBytesPerChannel == 2) {
                     while (!it.isDone()) {
 
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
                         pp -> red = ScaleShortToQuantum(d[PIXEL_CYAN]);
                         pp -> green = ScaleShortToQuantum(d[PIXEL_MAGENTA]);
                         pp -> blue = ScaleShortToQuantum(d[PIXEL_YELLOW]);
@@ -754,7 +754,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 else {
                     while (!it.isDone()) {
 
-                        Q_UINT8 * d = it.rawData();
+                        quint8 * d = it.rawData();
                         pp -> red = Upscale(d[PIXEL_CYAN]);
                         pp -> green = Upscale(d[PIXEL_MAGENTA]);
                         pp -> blue = Upscale(d[PIXEL_YELLOW]);
@@ -776,7 +776,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 if (layerBytesPerChannel == 2) {
                     while (!it.isDone()) {
 
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
                         pp -> red = ScaleShortToQuantum(d[PIXEL_RED]);
                         pp -> green = ScaleShortToQuantum(d[PIXEL_GREEN]);
                         pp -> blue = ScaleShortToQuantum(d[PIXEL_BLUE]);
@@ -790,7 +790,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 else {
                     while (!it.isDone()) {
 
-                        Q_UINT8 * d = it.rawData();
+                        quint8 * d = it.rawData();
                         pp -> red = Upscale(d[PIXEL_RED]);
                         pp -> green = Upscale(d[PIXEL_GREEN]);
                         pp -> blue = Upscale(d[PIXEL_BLUE]);
@@ -808,7 +808,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 if (layerBytesPerChannel == 2) {
                     while (!it.isDone()) {
 
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
                         pp -> red = ScaleShortToQuantum(d[PIXEL_GRAY]);
                         pp -> green = ScaleShortToQuantum(d[PIXEL_GRAY]);
                         pp -> blue = ScaleShortToQuantum(d[PIXEL_GRAY]);
@@ -821,7 +821,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
                 else {
                     while (!it.isDone()) {
-                        Q_UINT8 * d = it.rawData();
+                        quint8 * d = it.rawData();
                         pp -> red = Upscale(d[PIXEL_GRAY]);
                         pp -> green = Upscale(d[PIXEL_GRAY]);
                         pp -> blue = Upscale(d[PIXEL_GRAY]);
@@ -834,7 +834,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
             }
             else {
-                kdDebug(41008) << "Unsupported image format\n";
+                kDebug(41008) << "Unsupported image format\n";
                 return KisImageBuilder_RESULT_INVALID_ARG;
             }
 
@@ -842,10 +842,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
 #ifdef HAVE_MAGICK6
             if (SyncImagePixels(image) == MagickFalse)
-                kdDebug(41008) << "Syncing pixels failed\n";
+                kDebug(41008) << "Syncing pixels failed\n";
 #else
             if (!SyncImagePixels(image))
-                kdDebug(41008) << "Syncing pixels failed\n";
+                kDebug(41008) << "Syncing pixels failed\n";
 #endif
         }
 
@@ -966,7 +966,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             if (info -> decoder) {
                 name = info -> name;
                 description = info -> description;
-                kdDebug(41008) << "Found import filter for: " << name << "\n";
+                kDebug(41008) << "Found import filter for: " << name << "\n";
 
                 if (!description.isEmpty() && !description.contains('/')) {
                     all += "*." + name.lower() + " *." + name + " ";
@@ -983,7 +983,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             if (mi -> decoder) {
                 name = mi -> name;
                 description = mi -> description;
-                kdDebug(41008) << "Found import filter for: " << name << "\n";
+                kDebug(41008) << "Found import filter for: " << name << "\n";
 
                 if (!description.isEmpty() && !description.contains('/')) {
                     all += "*." + name.lower() + " *." + name + " ";
@@ -1029,14 +1029,14 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 #endif // HAVE_MAGICK6
 
         if (!mi) {
-            kdDebug(41008) << "Eek, no magick info!\n";
+            kDebug(41008) << "Eek, no magick info!\n";
             return s;
         }
 
 #ifdef HAVE_MAGICK6
         for (unsigned long i = 0; i < matches; i++) {
             const MagickInfo *info = mi[i];
-            kdDebug(41008) << "Found export filter for: " << info -> name << "\n";
+            kDebug(41008) << "Found export filter for: " << info -> name << "\n";
             if (info -> stealth)
                 continue;
 
@@ -1055,7 +1055,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         }
 #else
         for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
-            kdDebug(41008) << "Found export filter for: " << mi -> name << "\n";
+            kDebug(41008) << "Found export filter for: " << mi -> name << "\n";
             if (mi -> stealth)
                 continue;
 

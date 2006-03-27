@@ -32,7 +32,7 @@
 
 bool
 xcf_seek_pos (XcfInfo  *info,
-	      Q_UINT32     pos,
+	      quint32     pos,
 	      GError  **error)
 {
     if (info->cp != pos)

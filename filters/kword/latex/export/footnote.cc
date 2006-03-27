@@ -20,7 +20,7 @@
 */
 
 #include <stdlib.h>		/* for atoi function */
-#include <kdebug.h>		/* for kdDebug() stream */
+#include <kdebug.h>		/* for kDebug() stream */
 #include "footnote.h"
 #include "textFrame.h"		/* for generate function (catch text footnote) */
 #include "document.h"
@@ -33,7 +33,7 @@ Footnote::Footnote(Para* para): Format(para)
 
 Footnote::~Footnote()
 {
-	kdDebug(30522) << "Destruction of a footnote." << endl;
+	kDebug(30522) << "Destruction of a footnote." << endl;
 }
 
 /* Modifiers */
@@ -63,38 +63,38 @@ void Footnote::analyse(const QDomNode balise)
 	/* MARKUPS FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* Parameters Analyse */
-	kdDebug(30522) << "ANALYSE A FOOTNOTE" << endl;
+	kDebug(30522) << "ANALYSE A FOOTNOTE" << endl;
 	
 	/* Children Markups Analyse */
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		if(getChildName(balise, index).compare("INTERNAL")== 0)
 		{
-			kdDebug(30522) << "INTERNAL : " << endl;
+			kDebug(30522) << "INTERNAL : " << endl;
 			analyseInternal(balise);
 		}
 		else if(getChildName(balise, index).compare("RANGE")== 0)
 		{
-			kdDebug(30522) << "RANGE : " << endl;
+			kDebug(30522) << "RANGE : " << endl;
 			analyseRange(balise);
 		}
 		else if(getChildName(balise, index).compare("TEXT")== 0)
 		{
-			kdDebug(30522) << "TEXT : " << endl;
+			kDebug(30522) << "TEXT : " << endl;
 			analyseText(balise);
 		}
 		else if(getChildName(balise, index).compare("DESCRIPT")== 0)
 		{
-			kdDebug(30522) << "DESCRIPT : " << endl;
+			kDebug(30522) << "DESCRIPT : " << endl;
 			analyseDescript(balise);
 		}
 		else if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
-			kdDebug(30522) << "SUBFORMAT : " << endl;
+			kDebug(30522) << "SUBFORMAT : " << endl;
 			Format::analyse(balise);
 		}
 	}
-	kdDebug(30522) << "END OF FOOTNOTE" << endl;
+	kDebug(30522) << "END OF FOOTNOTE" << endl;
 }
 
 void Footnote::analyseInternal(const QDomNode balise)
@@ -108,7 +108,7 @@ void Footnote::analyseInternal(const QDomNode balise)
 	{
 		if(getChildName(balise, index).compare("PART")== 0)
 		{
-			kdDebug(30522) << "PART : " << endl;
+			kDebug(30522) << "PART : " << endl;
 			setFrom(getAttr(balise, "FROM").toInt());
 			setTo(getAttr(balise, "TO").toInt());
 			setSpace(getAttr(balise, "SPACE"));
@@ -119,21 +119,21 @@ void Footnote::analyseInternal(const QDomNode balise)
 
 void Footnote::analyseRange(const QDomNode balise)
 {
-	kdDebug(30522) << "PARAM" << endl;
+	kDebug(30522) << "PARAM" << endl;
 	setStart(getAttr(balise, "START").toInt());
 	setEnd(getAttr(balise, "END").toInt());
 }
 
 void Footnote::analyseText(const QDomNode balise)
 {
-	kdDebug(30522) << "PARAM" << endl;
+	kDebug(30522) << "PARAM" << endl;
 	setBefore(getAttr(balise, "BEFORE"));
 	setAfter(getAttr(balise, "AFTER"));
 }
 
 void Footnote::analyseDescript(const QDomNode balise)
 {
-	kdDebug(30522) << "PARAM" << endl;
+	kDebug(30522) << "PARAM" << endl;
 	setRef(getAttr(balise, "REF"));
 }
 
@@ -141,16 +141,16 @@ void Footnote::generate(QTextStream &out)
 {
 	Element *footnote = 0;
 
-	kdDebug(30522) << "  GENERATION FOOTNOTE" << endl;
+	kDebug(30522) << "  GENERATION FOOTNOTE" << endl;
 	// Go to keep the footnote parag.
 	// then write it with this format.
 	// like this : \,\footnote{the parag. }
 	out << "\\,\\footnote{";
-	kdDebug(30522) << "footnote : " << _ref << endl;
+	kDebug(30522) << "footnote : " << _ref << endl;
 	if((footnote = getRoot()->searchFootnote(_ref)) != 0)
 		footnote->generate(out);
 	out << "}";
-	kdDebug(30522) << "FOOTNOTE GENERATED" << endl;
+	kDebug(30522) << "FOOTNOTE GENERATED" << endl;
 }
 
 

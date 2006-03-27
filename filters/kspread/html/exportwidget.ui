@@ -182,7 +182,7 @@
                         <string>Select this option to specify a separate stylesheet for the HTML page. You can select or type on in the field below.</string>
                     </property>
                 </widget>
-                <widget class="KURLRequester">
+                <widget class="KUrlRequester">
                     <property name="name">
                         <cstring>mCustomURL</cstring>
                     </property>

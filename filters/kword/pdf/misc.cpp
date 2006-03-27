@@ -61,10 +61,10 @@ void DRect::unite(const DRect &r)
         *this = r;
         return;
     }
-    _left = kMin(_left, r._left);
-    _right = kMax(_right, r._right);
-    _top = kMin(_top, r._top);
-    _bottom = kMax(_bottom, r._bottom);
+    _left = qMin(_left, r._left);
+    _right = qMax(_right, r._right);
+    _top = qMin(_top, r._top);
+    _bottom = qMax(_bottom, r._bottom);
 }
 
 QString DRect::toString() const
@@ -88,10 +88,10 @@ DRect DPath::boundingRect() const
     if ( size()==0 ) return DRect();
     DRect r(at(0).x, at(0).x, at(0).y, at(0).y);
     for (uint i=1; i<size(); i++) {
-        r.setTop( kMin(r.top(), at(i).y) );
-        r.setBottom( kMax(r.bottom(), at(i).y) );
-        r.setLeft( kMin(r.left(), at(i).x) );
-        r.setRight( kMax(r.right(), at(i).x) );
+        r.setTop( qMin(r.top(), at(i).y) );
+        r.setBottom( qMax(r.bottom(), at(i).y) );
+        r.setLeft( qMin(r.left(), at(i).x) );
+        r.setRight( qMax(r.right(), at(i).x) );
     }
     return r;
 }
@@ -124,7 +124,7 @@ Font::Font()
 
 Font::Font(const GfxState *state, double size)
 {
-    if ( size<1 ) kdDebug(30516) << "very small font size=" << size << endl;
+    if ( size<1 ) kDebug(30516) << "very small font size=" << size << endl;
     _pointSize = qRound(size);
 
     GfxRGB rgb;
@@ -134,7 +134,7 @@ Font::Font(const GfxState *state, double size)
     GfxFont *font = state->getFont();
     GString *gname = (font ? font->getName() : 0);
     QString name = (gname ? gname->getCString() : 0);
-//    kdDebug(30516) << "font: " << name << endl;
+//    kDebug(30516) << "font: " << name << endl;
     name = name.section('+', 1, 1).lower();
     if ( name.isEmpty() ) name = "##dummy"; // dummy name
     init(name);
@@ -179,7 +179,7 @@ void Font::init(const QString &n)
     // check if font already parsed
     _data = _dict->find(n);
     if ( _data==0 ) {
-//        kdDebug(30516) << "font " << n << endl;
+//        kDebug(30516) << "font " << n << endl;
         QString name = n;
         name.replace("oblique", "italic");
 
@@ -188,7 +188,7 @@ void Font::init(const QString &n)
         uint i = 0;
         while ( KNOWN_DATA[i].name!=0 ) {
             if ( name.find(KNOWN_DATA[i].name)!=-1 ) {
-//                kdDebug(30516) << "found " << KNOWN_DATA[i].name
+//                kDebug(30516) << "found " << KNOWN_DATA[i].name
 //                               << " " << isBold(KNOWN_DATA[i].style) << endl;
                 _data->family = FAMILY_DATA[KNOWN_DATA[i].family];
                 _data->style = KNOWN_DATA[i].style;
@@ -200,7 +200,7 @@ void Font::init(const QString &n)
 
         if ( _data->family.isEmpty() ) { // let's try harder
             // simple heuristic
-            kdDebug(30516) << "unknown font : " << n << endl;
+            kDebug(30516) << "unknown font : " << n << endl;
             if ( name.find("times")!=-1 )
             _data->family = FAMILY_DATA[Times];
             else if ( name.find("helvetica")!=-1 )
@@ -215,10 +215,10 @@ void Font::init(const QString &n)
                 list = list.grep(name, false);
                 if ( !list.isEmpty() ) {
                     _data->family = list[0];
-                    kdDebug(30516) << "in Qt database as " << list[0] << endl;
+                    kDebug(30516) << "in Qt database as " << list[0] << endl;
                 }
                 else {
-                    kdDebug(30516) << "really unknown font !" << endl;
+                    kDebug(30516) << "really unknown font !" << endl;
                     _data->family = name;
                 }
             }
@@ -358,7 +358,7 @@ Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
         }
 
         _href = QString("bkm://") + pageLinkName(page);
-//        kdDebug(30516) << "link to page " << page << endl;
+//        kDebug(30516) << "link to page " << page << endl;
         break;
     }
 
@@ -374,7 +374,7 @@ Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
             delete dest;
         }
 
-        kdDebug(30516) << "link to filename \"" << _href << "\" (page "
+        kDebug(30516) << "link to filename \"" << _href << "\" (page "
                        << page << ")" <<endl;
         break;
     }
@@ -385,7 +385,7 @@ Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
         if ( llaunch.getFileName() )
             _href += llaunch.getFileName()->getCString();
 
-        kdDebug(30516) << "link to launch/open \"" << _href << "\"" << endl;
+        kDebug(30516) << "link to launch/open \"" << _href << "\"" << endl;
         break;
     }
 
@@ -393,14 +393,14 @@ Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
         LinkURI &luri = static_cast<LinkURI &>(action);
         if ( luri.getURI() ) _href = luri.getURI()->getCString();
 
-        kdDebug(30516) << "link to URI \"" << _href << "\"" << endl;
+        kDebug(30516) << "link to URI \"" << _href << "\"" << endl;
         break;
     }
 
     case actionMovie:
     case actionNamed:
     case actionUnknown:
-        kdDebug(30516) << "unsupported link=" << action.getKind() << endl;
+        kDebug(30516) << "unsupported link=" << action.getKind() << endl;
         break;
     }
 }

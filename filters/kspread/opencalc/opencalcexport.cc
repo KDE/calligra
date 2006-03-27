@@ -67,7 +67,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "kofficefilters" );
+        KGlobal::locale()->insertCatalog( "kofficefilters" );
     }
 };
 
@@ -108,14 +108,14 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const Q3CString & from,
 
   if (  !::qt_cast<const KSpread::Doc *>( document ) )
   {
-    kdWarning(30518) << "document isn't a KSpread::Doc but a "
+    kWarning(30518) << "document isn't a KSpread::Doc but a "
                      << document->className() << endl;
     return KoFilter::NotImplemented;
   }
 
   if ( ( to != "application/vnd.sun.xml.calc") || (from != "application/x-kspread" ) )
   {
-    kdWarning(30518) << "Invalid mimetypes " << to << " " << from << endl;
+    kWarning(30518) << "Invalid mimetypes " << to << " " << from << endl;
     return KoFilter::NotImplemented;
   }
 
@@ -123,7 +123,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const Q3CString & from,
 
   if ( ksdoc->mimeType() != "application/x-kspread" )
   {
-    kdWarning(30518) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+    kWarning(30518) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
     return KoFilter::NotImplemented;
   }
 
@@ -255,7 +255,7 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const Doc* ksdoc )
   meta.appendChild( content );
 
   Q3CString doc( meta.toCString() );
-  kdDebug(30518) << "Meta: " << doc << endl;
+  kDebug(30518) << "Meta: " << doc << endl;
 
   store->write( doc, doc.length() );
 
@@ -347,7 +347,7 @@ bool OpenCalcExport::exportSettings( KoStore * store, const Doc * ksdoc )
   doc.appendChild( settings );
 
   Q3CString f( doc.toCString() );
-  kdDebug(30518) << "Settings: " << (char const * ) f << endl;
+  kDebug(30518) << "Settings: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
 
@@ -394,7 +394,7 @@ bool OpenCalcExport::exportContent( KoStore * store, const Doc * ksdoc )
   doc.appendChild( content );
 
   Q3CString f( doc.toCString() );
-  kdDebug(30518) << "Content: " << (char const * ) f << endl;
+  kDebug(30518) << "Content: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
 
@@ -479,9 +479,9 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     int n = name.find( ' ' );
     if ( n != -1 )
     {
-      kdDebug(30518) << "Sheet name converting: " << name << endl;
+      kDebug(30518) << "Sheet name converting: " << name << endl;
       name[n] == '_';
-      kdDebug(30518) << "Sheet name converted: " << name << endl;
+      kDebug(30518) << "Sheet name converted: " << name << endl;
     }
     name = name.replace( ' ', "_" );
 
@@ -489,7 +489,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
     {
         QString range= convertRangeToRef( name, _printRange );
-        //kdDebug(30518)<<" range : "<<range<<endl;
+        //kDebug(30518)<<" range : "<<range<<endl;
         tabElem.setAttribute( "table:print-ranges", range );
     }
 
@@ -528,7 +528,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
 void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
                                   const Sheet * sheet, int maxCols, int maxRows )
 {
-  kdDebug(30518) << "exportSheet: " << sheet->tableName() << endl;
+  kDebug(30518) << "exportSheet: " << sheet->tableName() << endl;
   int i = 1;
 
   while ( i <= maxCols )
@@ -642,13 +642,13 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
     if ( value.isBoolean() )
     {
-      kdDebug(30518) << "Type: Boolean" << endl;
+      kDebug(30518) << "Type: Boolean" << endl;
       cellElem.setAttribute( "table:value-type", "boolean" );
       cellElem.setAttribute( "table:boolean-value", ( value.asBoolean() ? "true" : "false" ) );
     }
     else if ( value.isNumber() )
     {
-      kdDebug(30518) << "Type: Number" << endl;
+      kDebug(30518) << "Type: Number" << endl;
       FormatType type = cell->format()->getFormatType( i, row );
 
       if ( type == Percentage_format )
@@ -660,12 +660,12 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     }
     else
     {
-      kdDebug(30518) << "Type: " << value.type() << endl;
+      kDebug(30518) << "Type: " << value.type() << endl;
     }
 
     if ( cell->isFormula() )
     {
-      kdDebug(30518) << "Formula found" << endl;
+      kDebug(30518) << "Formula found" << endl;
 
       QString formula( convertFormula( cell->text() ) );
       cellElem.setAttribute( "table:formula", formula );
@@ -692,7 +692,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       textElem.appendChild( doc.createTextNode( cell->strOutText() ) );
 
       cellElem.appendChild( textElem );
-      kdDebug(30518) << "Cell StrOut: " << cell->strOutText() << endl;
+      kDebug(30518) << "Cell StrOut: " << cell->strOutText() << endl;
     }
 
     if ( cell->doesMergeCells() )
@@ -815,7 +815,7 @@ bool OpenCalcExport::exportStyles( KoStore * store, const Doc *ksdoc )
   doc.appendChild( content );
 
   Q3CString f( doc.toCString() );
-  kdDebug(30518) << "Content: " << (char const * ) f << endl;
+  kDebug(30518) << "Content: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
 
@@ -1177,7 +1177,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
   QString s;
   QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
   int n = exp.search( formula, 0 );
-  kdDebug(30518) << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length()
+  kDebug(30518) << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length()
             << ", Matched length: " << exp.matchedLength() << endl;
 
   bool inQuote1 = false;
@@ -1191,7 +1191,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
     if ( ( n != -1 ) && ( n < i ) )
     {
       n = exp.search( formula, i );
-      kdDebug(30518) << "Exp: " << formula.right( l - i ) << ", n: " << n << endl;
+      kDebug(30518) << "Exp: " << formula.right( l - i ) << ", n: " << n << endl;
     }
     if ( formula[i] == '"' )
     {
@@ -1237,7 +1237,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
       int ml = exp.matchedLength();
       if ( formula[ i + ml ] == '!' )
       {
-        kdDebug(30518) << "No cell ref but sheet name" << endl;
+        kDebug(30518) << "No cell ref but sheet name" << endl;
         s += formula[i];
         ++i;
         continue;
@@ -1318,7 +1318,7 @@ bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
   meta.appendChild( content );
 
   Q3CString doc( meta.toCString() );
-  kdDebug(30518) << "Manifest: " << doc << endl;
+  kDebug(30518) << "Manifest: " << doc << endl;
 
   store->write( doc, doc.length() );
 

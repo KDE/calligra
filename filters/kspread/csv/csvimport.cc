@@ -68,26 +68,26 @@ KoFilter::ConversionStatus CSVFilter::convert( const Q3CString& from, const Q3CS
     if ( !document )
         return KoFilter::StupidError;
 
-    kdDebug(30501) << "here we go... " << document->className() << endl;
+    kDebug(30501) << "here we go... " << document->className() << endl;
 
     if ( !::qt_cast<const KSpread::Doc *>( document ) )
     {
-      kdWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+      kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if(from!="text/x-csv" && from!="text/plain" || to!="application/x-kspread")
     {
-        kdWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
+        kWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
     }
 
-    kdDebug(30501) << "...still here..." << endl;
+    kDebug(30501) << "...still here..." << endl;
 
     Doc *ksdoc = static_cast<Doc *>( document ); // type checked above
 
     if(ksdoc->mimeType()!="application/x-kspread")
     {
-        kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -126,7 +126,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const Q3CString& from, const Q3CS
     int value = 0;
 
     emit sigProgress(value);
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     int i;
     double init = sheet->nonDefaultColumnFormat( 1 )->dblWidth();
@@ -197,7 +197,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const Q3CString& from, const Q3CS
                     QString tmp ( text );
                     tmp.remove ( QRegExp( "[^0-9,Ee+-]" ) ); // Keep only 0 to 9, comma, E, e, plus, minus
                     tmp.replace ( ',', '.' );
-                    kdDebug(30501) << "Comma: " << text << " => " << tmp << endl;
+                    kDebug(30501) << "Comma: " << text << " => " << tmp << endl;
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
@@ -218,7 +218,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const Q3CString& from, const Q3CS
                     QString tmp ( text );
                     tmp.remove ( QRegExp( "[^0-9\\.EeD+-]" ) ); // Keep only 0 to 9, dot, E, e, D, plus, minus
                     tmp.replace ( 'D', 'E' ); // double from FORTRAN use D instead of E
-                    kdDebug(30501) << "Point: " << text << " => " << tmp << endl;
+                    kDebug(30501) << "Point: " << text << " => " << tmp << endl;
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {

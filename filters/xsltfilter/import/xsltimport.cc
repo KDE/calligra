@@ -52,13 +52,13 @@ KoFilter::ConversionStatus XSLTImport::convert( const Q3CString&, const Q3CStrin
     KoStore* out = KoStore::createStore(QString(m_chain->outputFile()), KoStore::Write);
     if(!out || !out->open("root"))
     {
-        kdError() << "Unable to create output file!" << endl;
+        kError() << "Unable to create output file!" << endl;
         delete out;
         return KoFilter::FileNotFound;
     }
     /* input file Reading */
     out->close();
-    kdDebug() << "here" << endl;
+    kDebug() << "here" << endl;
     XSLTImportDia* dialog = new XSLTImportDia(out, to, 0, "Importation", true);
     dialog->setInputFile(m_chain->inputFile());
 

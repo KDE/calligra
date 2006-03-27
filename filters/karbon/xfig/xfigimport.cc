@@ -183,7 +183,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
 
   fin.getline (buf, 255);
   if (::strncmp (buf, "#FIG 3", 6)) {
-    kdDebug() << "ERROR: no xfig file or wrong header" << endl;
+    kDebug() << "ERROR: no xfig file or wrong header" << endl;
     return false;
   }
 
@@ -194,7 +194,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
       version = 310;
   }
   else {
-    kdDebug() << "ERROR: unsupported xfig version" << endl;
+    kDebug() << "ERROR: unsupported xfig version" << endl;
     return false;
   }
 
@@ -209,7 +209,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
   else if (::strcmp (buf, "Portrait") == 0)
       layout.orientation = PG_PORTRAIT;
   else
-      kdDebug() << "ERROR: invalid orientation" << endl;
+      kDebug() << "ERROR: invalid orientation" << endl;
 
   // justification (don't know how to handle this)
   fin.getline (buf, 255);
@@ -221,7 +221,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
   else if (::strcmp (buf, "Inches") == 0)
       layout.unit = PG_INCH;
   else
-      kdDebug() << "ERROR: invalid units" << endl;
+      kDebug() << "ERROR: invalid units" << endl;
 
   if (version >= 320) {
       // paper size (don't know how to handle this)
@@ -290,7 +290,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
       break;
     default:
       // should not occur
-      kdDebug() << "unknown object type: " << tag << endl;
+      kDebug() << "unknown object type: " << tag << endl;
       break;
     }
   }
@@ -466,7 +466,7 @@ void XFIGImport::parsePolyline (istream& fin, GDocument* doc) {
     break;
   default:
     // doesn't occur
-    kdDebug() << "unknown subtype: " << sub_type << endl;
+    kDebug() << "unknown subtype: " << sub_type << endl;
     break;
   }
 
@@ -718,7 +718,7 @@ void XFIGImport::buildDocument (GDocument *doc) {
   Q3ValueList<GObjectListItem>::Iterator it=objList.begin();
   for ( ; it != objList.end() ; ++it )
   {
-      //kdDebug() << "Inserting object with depth=" << (*it).depth << endl;
+      //kDebug() << "Inserting object with depth=" << (*it).depth << endl;
       GObject* obj = (*it).object;
       obj->ref ();
       doc->activePage()->insertObject (obj);

@@ -149,8 +149,8 @@ DRect Document::paperSize(KoFormat &format) const
     w = _document->getPageWidth(1);
     h = _document->getPageHeight(1);
     format = PG_CUSTOM;
-    double min = kMin(w, h);
-    double max = kMax(w, h);
+    double min = qMin(w, h);
+    double max = qMax(w, h);
     double best = 2;
     double width = w;
     double height = h;

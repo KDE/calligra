@@ -44,7 +44,7 @@ void qt_leave_modal( QWidget *widget );
 
 
 bool KHTMLReader::filter(KUrl url) {
-	kdDebug(30503) << "KHTMLReader::filter" << endl;
+	kDebug(30503) << "KHTMLReader::filter" << endl;
 	QObject::connect(_html,SIGNAL(completed()),this,SLOT(completed()));
 
 	_state.clear();
@@ -57,7 +57,7 @@ bool KHTMLReader::filter(KUrl url) {
 	_html->setJavaEnabled(false);
 	_html->setMetaRefreshEnabled(false);
 	if (_html->openURL(url) == false) {
-		kdWarning(30503) << "openURL returned false" << endl;
+		kWarning(30503) << "openURL returned false" << endl;
 		return false;
 	}
 
@@ -132,14 +132,14 @@ void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) {
 
 
 void KHTMLReader::completed() {
-	kdDebug(30503) << "KHTMLReader::completed" << endl;
+	kDebug(30503) << "KHTMLReader::completed" << endl;
         qApp->exit_loop();
 	DOM::Document doc=_html->document(); // FIXME parse <HEAD> too
 	DOM::NodeList list=doc.getElementsByTagName("body");
 	DOM::Node docbody=list.item(0);
 
 	if (docbody.isNull()) {
-		kdWarning(30503) << "no <BODY>, giving up" << endl;
+		kWarning(30503) << "no <BODY>, giving up" << endl;
 		_it_worked=false;
 		return;
 	}
@@ -152,7 +152,7 @@ void KHTMLReader::completed() {
 	if (!dochead.isNull())
 		parse_head(dochead);
 	else
-		kdWarning(30503) << "WARNING: no html <HEAD> section" << endl;
+		kWarning(30503) << "WARNING: no html <HEAD> section" << endl;
 
 	_writer->cleanUpParagraph(state()->paragraph);
         _it_worked=_writer->writeDoc();
@@ -275,12 +275,12 @@ void KHTMLReader::parseStyle(DOM::Element e) {
   // styles are broken broken broken broken broken broken.
   //FIXME: wait until getComputedStyle is more than
   // 'return 0' in khtml
-  kdDebug(30503) << "entering parseStyle" << endl;
+  kDebug(30503) << "entering parseStyle" << endl;
      DOM::CSSStyleDeclaration s1=e.style();
      DOM::Document doc=_html->document();
      DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
 
-     kdDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
+     kDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
      if ( s1.getPropertyValue("font-weight").string() == "bolder" )
      {
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
@@ -296,13 +296,13 @@ void KHTMLReader::parseStyle(DOM::Element e) {
      */
 /*
      // debugging code.
-     kdDebug(30503) << "e.style()" << endl;
+     kDebug(30503) << "e.style()" << endl;
      for (unsigned int i=0;i<s1.length();i++) {
-        kdDebug(30503) << QString("%1: %2").arg(s1.item(i).string()).arg(s1.getPropertyValue(s1.item(i)).string()) << endl;
+        kDebug(30503) << QString("%1: %2").arg(s1.item(i).string()).arg(s1.getPropertyValue(s1.item(i)).string()) << endl;
      }
-     kdDebug(30503) << "override style" << endl;
+     kDebug(30503) << "override style" << endl;
      for (unsigned int i=0;i<s2.length();i++) {
-        kdDebug(30503) << QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string()) << endl;
+        kDebug(30503) << QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string()) << endl;
      }
 */
 }
@@ -358,8 +358,8 @@ KHTMLReader::~KHTMLReader(){
 
 
 bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
-        kdDebug(30503) << "entering KHTMLReader::parse_CommonAttributes" << endl;
-        kdDebug(30503) << "tagName is " << e.tagName().string() << endl;
+        kDebug(30503) << "entering KHTMLReader::parse_CommonAttributes" << endl;
+        kDebug(30503) << "tagName is " << e.tagName().string() << endl;
         QString s=e.getAttribute("align").string();
         if (!s.isEmpty()) 
         {
@@ -384,7 +384,7 @@ bool KHTMLReader::parse_a(DOM::Element e) {
 			/* Link without text -> just drop it*/
 			return false; /* stop parsing recursively */
 		}
-		linkName = t.data().string().simplifyWhiteSpace();
+		linkName = t.data().string().simplified();
 		t.setData(DOM::DOMString("#")); // replace with '#'
 		_writer->createLink(state()->paragraph, linkName, url);
         }

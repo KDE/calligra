@@ -28,17 +28,17 @@ Param::Param()
 Param::Param(const char* key, const char* value)
 {
 	_key = key;
-	_key = _key.stripWhiteSpace();
+	_key = _key.trimmed();
 	_value = value;
-	_value = _value.stripWhiteSpace();
+	_value = _value.trimmed();
 }
 
 Param::Param(QString key, QString value)
 {
 	_key = key;
-	_key = _key.stripWhiteSpace();
+	_key = _key.trimmed();
 	_value = value;
-	_value = _value.stripWhiteSpace();
+	_value = _value.trimmed();
 }
 
 

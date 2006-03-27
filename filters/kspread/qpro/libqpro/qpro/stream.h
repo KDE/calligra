@@ -8,10 +8,10 @@
 #include <qdatastream.h>
 #include <qbuffer.h>
 
-typedef Q_UINT8  QP_UINT8;
-typedef Q_INT8   QP_INT8;
-typedef Q_INT16  QP_INT16;
-typedef Q_INT32  QP_INT32;
+typedef quint8  QP_UINT8;
+typedef qint8   QP_INT8;
+typedef qint16  QP_INT16;
+typedef qint32  QP_INT32;
 
 class QpStream : public QDataStream
 {

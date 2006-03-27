@@ -53,11 +53,11 @@ KoFilter::ConversionStatus Leader::convert() {
 
 	// Validate the filter chain and the worker
 	if (!m_filterChain) {
-		kdWarning(30508) << "koFilterChain is NULL!" << endl;
+		kWarning(30508) << "koFilterChain is NULL!" << endl;
 		return KoFilter::StupidError;
 	}
 	if (!m_worker) {
-		kdWarning(30508) << "the KSpreadWorker is NULL!" << endl;
+		kWarning(30508) << "the KSpreadWorker is NULL!" << endl;
 		return KoFilter::StupidError;
 	}
 
@@ -71,20 +71,20 @@ KoFilter::ConversionStatus Leader::convert() {
 	// Get the document in memory
 	KSpreadDoc *document = (KSpreadDoc *) m_filterChain->inputDocument();
 	if (!document) {
-		kdWarning(30508) << "the KSpreadDoc is NULL!" << endl;
+		kWarning(30508) << "the KSpreadDoc is NULL!" << endl;
 		return KoFilter::StupidError;
 	}
 	if ( !::qt_cast<const KSpread::Doc *>( document ) ) {
-		kdWarning(30508) << "the document is not a KSpreadDoc!" << endl;
+		kWarning(30508) << "the document is not a KSpreadDoc!" << endl;
 		return KoFilter::StupidError;
 	}
 	if (document->mimeType() != "application/x-kspread") {
-		kdWarning(30508) << "the mime type document is not application/x-kspread!" << endl;
+		kWarning(30508) << "the mime type document is not application/x-kspread!" << endl;
 		return KoFilter::StupidError;
 	}
 	KoDocumentInfo *info = document->documentInfo();
 	if (!document) {
-		kdWarning(30508) << "the KoDocumentInfo is NULL!" << endl;
+		kWarning(30508) << "the KoDocumentInfo is NULL!" << endl;
 		return KoFilter::StupidError;
 	}
 

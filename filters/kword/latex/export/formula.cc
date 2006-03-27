@@ -20,7 +20,7 @@
 */
 
 #include <stdlib.h>		/* for atoi function */
-#include <kdebug.h>		/* for kdDebug() stream */
+#include <kdebug.h>		/* for kDebug() stream */
 #include <q3ptrstack.h>		/* for getFormula() */
 #include <qdom.h>
 //Added by qt3to4:
@@ -30,6 +30,7 @@
 
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
+#include <kglobal.h>
 
 /*******************************************/
 /* Constructor                             */
@@ -58,7 +59,7 @@ void Formula::analyse(const QDomNode balise)
 	/* Parameters Analyse */
 	Element::analyse(balise);
 
-	kdDebug(30522) << "FRAME ANALYSE (Formula)" << endl;
+	kDebug(30522) << "FRAME ANALYSE (Formula)" << endl;
 
 	/* Chlidren markups Analyse */
 	for(int index= 0; index < getNbChild(balise); index++)
@@ -70,11 +71,11 @@ void Formula::analyse(const QDomNode balise)
 		else if(getChildName(balise, index).compare("FORMULA")== 0)
 		{
 			getFormula(getChild(getChild(balise, "FORMULA"), "FORMULA"), 0);
-			kdDebug(30522) << _formula << endl;
+			kDebug(30522) << _formula << endl;
 		}
 
 	}
-	kdDebug(30522) << "END OF A FRAME" << endl;
+	kDebug(30522) << "END OF A FRAME" << endl;
 }
 
 /*******************************************/
@@ -132,7 +133,7 @@ void Formula::getFormula(QDomNode p, int indent)
 		case QDomNode::CharacterDataNode:
 			break;*/
                         //default:
-                        //kdError(30522) << "Can't happen" << endl;
+                        //kError(30522) << "Can't happen" << endl;
                         //break;
 
 	}
@@ -161,19 +162,19 @@ void Formula::analyseParamFrame(const QDomNode balise)
 /*******************************************/
 void Formula::generate(QTextStream &out)
 {
-	kdDebug(30522) << "FORMULA GENERATION" << endl;
+	kDebug(30522) << "FORMULA GENERATION" << endl;
 	QDomDocument doc;
 	doc.setContent(_formula);
 
    	// a new KFormula::Document for every formula is not the best idea.
 	// better to have only one such beast for the whole document.
-        KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+        KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
         KFormula::Document* formulaDoc = new KFormula::Document;
         wrapper->document( formulaDoc );
 
 	KFormula::Container* formula = formulaDoc->createFormula();
 	if ( !formula->load( doc.documentElement () ) ) {
-		kdError(30522) << "Failed." << endl;
+		kError(30522) << "Failed." << endl;
 	}
 
  	out << "$" << formula->texString() << "$";

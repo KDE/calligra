@@ -36,7 +36,7 @@ Command::Command(const char* name)
 	_options.setAutoDelete(true);
 	_params.setAutoDelete(true);
 	_name = name;
-	_name = _name.stripWhiteSpace();
+	_name = _name.trimmed();
 }
 
 Command::Command(const char* name, Q3PtrList<Q3PtrList<Element> >* groups)
@@ -47,7 +47,7 @@ Command::Command(const char* name, Q3PtrList<Q3PtrList<Element> >* groups)
 	_name = name;
 	if(groups != NULL)
 		_elements = *groups;
-	_name = _name.stripWhiteSpace();
+	_name = _name.trimmed();
 }
 
 Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params,
@@ -61,7 +61,7 @@ Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params,
 		_elements = *groups;
 	if(params != NULL)
 		_params = *params;
-	_name = _name.stripWhiteSpace();
+	_name = _name.trimmed();
 }
 
 Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params, Q3PtrList<Param>* options,
@@ -78,7 +78,7 @@ Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params, Q3PtrLi
 	if(options != NULL)
 		_options = *options;
 	_name = name;
-	_name = _name.stripWhiteSpace();
+	_name = _name.trimmed();
 }
 
 Command::~Command()

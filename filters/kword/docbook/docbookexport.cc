@@ -173,14 +173,14 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture )
         }
         else
         {
-            kdError (30507) << "Unable to open picture file " << pictureFileName << "!" << endl;
+            kError (30507) << "Unable to open picture file " << pictureFileName << "!" << endl;
 
             pictureFile.close ();
         }
     }
     else
     {
-        kdError (30507) << "Unable to open KoStore file " << picture.koStoreName << "!" << endl;
+        kError (30507) << "Unable to open KoStore file " << picture.koStoreName << "!" << endl;
     }
 }
 
@@ -191,7 +191,7 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture )
 void DocBookWorker::ProcessTableData ( const Table &table )
 {
 #if 0
-    kdError (30507) << "DEBUG: ProcessTableData ()" << endl;
+    kError (30507) << "DEBUG: ProcessTableData ()" << endl;
 #endif
 
     QString tableText;
@@ -259,7 +259,7 @@ void DocBookWorker::ProcessTableData ( const Table &table )
     outputText += tableText;
 
 #if 0
-    kdError (30507) << "DEBUG: ProcessTableData (): " << tableText << endl;
+    kError (30507) << "DEBUG: ProcessTableData (): " << tableText << endl;
 #endif
 }
 
@@ -351,7 +351,7 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
 
                case 6:   // anchors
 #if 0
-                  kdError (30507) << "Processing anchor " << (*formattingIt).frameAnchor.name << endl;
+                  kError (30507) << "Processing anchor " << (*formattingIt).frameAnchor.name << endl;
 #endif
 
 #if INSERT_TABLE_IN_PARA
@@ -373,7 +373,7 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
                           break;
 
                       default:
-                          kdError (30507) << "Unhandled anchor type "
+                          kError (30507) << "Unhandled anchor type "
                                           << (*formattingIt).frameAnchor.type << "!" << endl;
                   }
 #else
@@ -385,7 +385,7 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
                   break;
 
                default:
-                  kdError (30507) << "Unhandled format id "
+                  kError (30507) << "Unhandled format id "
                                   << (*formattingIt).id << "!" << endl;
              }
         }
@@ -512,7 +512,7 @@ void DocBookWorker::OpenArticleUnlessHead1 ( void )
 bool DocBookWorker::doFullDocument ( const Q3ValueList<ParaData> &paraList )
 {
 #if 0
-    kdError (30507) << "doFullDocument () - Begin" << endl;
+    kError (30507) << "doFullDocument () - Begin" << endl;
 #endif
 
     Q3ValueList<ParaData>::ConstIterator paraIt;
@@ -584,7 +584,7 @@ bool DocBookWorker::doFullDocument ( const Q3ValueList<ParaData> &paraList )
                         break;
 
                     default:
-                        kdError (30507) << "Unknown counter style " << (*paraIt).layout.counter.style << "!" << endl;
+                        kError (30507) << "Unknown counter style " << (*paraIt).layout.counter.style << "!" << endl;
                         CloseLists ();
                         OpenArticleUnlessHead1 ();
                         ProcessParagraphData (*paraIt, "PARA" );
@@ -632,7 +632,7 @@ bool DocBookWorker::doFullDocument ( const Q3ValueList<ParaData> &paraList )
                         break;
 
                     default:
-                        kdError (30507) << "Unexpected chapter depth " << (*paraIt).layout.counter.depth << "!" << endl;
+                        kError (30507) << "Unexpected chapter depth " << (*paraIt).layout.counter.depth << "!" << endl;
                         CloseLists ();
                         OpenArticleUnlessHead1 ();
                         ProcessParagraphData (*paraIt, "PARA" );
@@ -648,7 +648,7 @@ bool DocBookWorker::doFullDocument ( const Q3ValueList<ParaData> &paraList )
     }
 
 #if 0
-    kdError (30507) << "doFullDocument () - End" << outputText << endl;
+    kError (30507) << "doFullDocument () - End" << outputText << endl;
 #endif
     return true;
 }
@@ -700,13 +700,13 @@ bool DocBookWorker::doOpenFile ( const QString &filenameOut, const QString & /*t
 
     if ( !fileOut )
     {
-        kdError(30507) << "No output file! Aborting!" << endl;
+        kError(30507) << "No output file! Aborting!" << endl;
         return false;
     }
 
     if ( !fileOut->open (QIODevice::WriteOnly) )
     {
-        kdError(30507) << "Unable to open output file!" << endl;
+        kError(30507) << "Unable to open output file!" << endl;
 
         fileOut->close ();
         delete fileOut;
@@ -788,7 +788,7 @@ bool DocBookWorker::doFullDocumentInfo ( const KWEFDocumentInfo &docInfo )
 KoFilter::ConversionStatus DocBookExport::convert( const Q3CString& from, const Q3CString& to )
 {
 #if 0
-    kdError (30507) << "to = " << to << ", from = " << from << endl;
+    kError (30507) << "to = " << to << ", from = " << from << endl;
 #endif
 
     if ( to != "text/sgml" && to != "text/docbook" || from != "application/x-kword" )
@@ -797,7 +797,7 @@ KoFilter::ConversionStatus DocBookExport::convert( const Q3CString& from, const 
     }
 
 #if 1
-    kdError (30507) << "let's get on with it" << endl;
+    kError (30507) << "let's get on with it" << endl;
 #endif
 
     DocBookWorker worker;
@@ -805,7 +805,7 @@ KoFilter::ConversionStatus DocBookExport::convert( const Q3CString& from, const 
     leader.convert (m_chain, from, to);
 
 #if 1
-    kdError (30507) << "done here" << endl;
+    kError (30507) << "done here" << endl;
 #endif
 
     return KoFilter::OK;

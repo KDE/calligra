@@ -68,11 +68,11 @@ SelectionRange::SelectionRange(const QString &s)
     // coalesce
     for (uint i=0; i<r.size(); i++)
         if ( i!=0 && r[i].first<=tmp.second )
-            tmp.second = kMax(tmp.second, r[i].second);
+            tmp.second = qMax(tmp.second, r[i].second);
         else {
             _ranges.push_back(r[i]);
             tmp = r[i];
-            kdDebug(30516) << "selection range: (" << tmp.first << ","
+            kDebug(30516) << "selection range: (" << tmp.first << ","
                            << tmp.second << ") " << endl;
         }
 }
@@ -171,7 +171,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
 Dialog::~Dialog()
 {
     delete _group;
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 }
 
 void Dialog::rangeChanged(const QString &)

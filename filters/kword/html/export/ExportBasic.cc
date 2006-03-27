@@ -325,7 +325,7 @@ void HtmlBasicWorker::openParagraph(const QString& strTag,
     }
     else
     {
-        kdWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
+        kWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
     }
 
     *m_streamOut << ">";

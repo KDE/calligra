@@ -70,32 +70,32 @@ void Device::init()
         const DRect &br = page->rects()[Body];
         const DRect &fr = page->rects()[Footer];
         if ( hr.isValid() ) {
-            maxHeaderBottom = kMax(maxHeaderBottom, hr.bottom());
+            maxHeaderBottom = qMax(maxHeaderBottom, hr.bottom());
             if ( br.isValid() )
                 minHeaderBodyDelta =
-                    kMin(minHeaderBodyDelta, br.top() - hr.bottom());
-            minLeft = kMin(minLeft, hr.left());
-            maxRight = kMax(maxRight, hr.right());
+                    qMin(minHeaderBodyDelta, br.top() - hr.bottom());
+            minLeft = qMin(minLeft, hr.left());
+            maxRight = qMax(maxRight, hr.right());
         }
         if ( fr.isValid() ) {
-            minFooterTop = kMin(minFooterTop, fr.top());
+            minFooterTop = qMin(minFooterTop, fr.top());
             if ( br.isValid() )
                 minBodyFooterDelta =
-                    kMin(minBodyFooterDelta, fr.top() - br.bottom());
-            minLeft = kMin(minLeft, fr.left());
-            maxRight = kMax(maxRight, fr.right());
+                    qMin(minBodyFooterDelta, fr.top() - br.bottom());
+            minLeft = qMin(minLeft, fr.left());
+            maxRight = qMax(maxRight, fr.right());
         }
         if ( br.isValid() ) {
-            minBodyTop = kMin(minBodyTop, br.top());
-            maxBodyBottom = kMax(maxBodyBottom, br.bottom());
-            minLeft = kMin(minLeft, br.left());
-            maxRight = kMax(maxRight, br.right());
+            minBodyTop = qMin(minBodyTop, br.top());
+            maxBodyBottom = qMax(maxBodyBottom, br.bottom());
+            minLeft = qMin(minLeft, br.left());
+            maxRight = qMax(maxRight, br.right());
         }
     }
 
     // set minimal top and maximal bottom to body frame
-    double minTop = kMax(maxHeaderBottom+minHeaderBodyDelta, minBodyTop);
-    double maxBottom = kMin(minFooterTop-minBodyFooterDelta, maxBodyBottom);
+    double minTop = qMax(maxHeaderBottom+minHeaderBodyDelta, minBodyTop);
+    double maxBottom = qMin(minFooterTop-minBodyFooterDelta, maxBodyBottom);
     for (Page *page = _pages.first(); page; page = _pages.next()) {
         DRect &r = page->rects()[Body];
         if ( r.top()>minTop ) r.setTop(minTop);
@@ -135,7 +135,7 @@ void Device::endPage()
     if ( !_currentImage.image.isNull() ) addImage();
     current()->endPage();
     clear();
-    kdDebug(30516) << "-- end page --------------------------" << endl;
+    kDebug(30516) << "-- end page --------------------------" << endl;
 }
 
 void Device::updateFont(GfxState *state)
@@ -169,16 +169,16 @@ void Device::drawLink(::Link* link, Catalog *cat)
     cvtUserToDev(x1, y1, &ux1, &uy1);
     cvtUserToDev(x2, y2, &ux2, &uy2);
 
-    DRect r(kMin(ux1, ux2), kMax(ux1, ux2), kMin(uy1, uy2), kMax(uy1, uy2));
+    DRect r(qMin(ux1, ux2), qMax(ux1, ux2), qMin(uy1, uy2), qMax(uy1, uy2));
     Link *l = new Link(r, *link->getAction(), *cat);
     current()->addLink(l);
 }
 
 void Device::addImage()
 {
-//    kdDebug(30516) << "-> add image" << endl;
+//    kDebug(30516) << "-> add image" << endl;
     if ( _currentImage.image.width()==0 || _currentImage.image.height()==0 ) {
-        kdDebug(30516) << "image has null width or height !" << endl;
+        kDebug(30516) << "image has null width or height !" << endl;
         _currentImage = Image();
         return;
     }
@@ -189,7 +189,7 @@ void Device::addImage()
     for (it=_images.begin(); it!=_images.end(); ++it) {
         if ( (*it).rect==_currentImage.rect
              && (*it).image==_currentImage.image ) {
-            kdDebug(30516) << "image already there !\n";
+            kDebug(30516) << "image already there !\n";
             _currentImage = Image();
             return;
         }
@@ -259,12 +259,12 @@ uint Device::initImage(GfxState *state, int width, int height,
     computeGeometry(state, image);
 
     // check if new image
-//    kdDebug(30516) << "current image " << _currentImage.image.width()
+//    kDebug(30516) << "current image " << _currentImage.image.width()
 //                   << " " << _currentImage.rect.left()
 //                   << " " << _currentImage.rect.right()
 //                   << " " << _currentImage.rect.bottom()
 //                   << " " << _currentImage.mask << endl;
-//    kdDebug(30516) << "new image " << width
+//    kDebug(30516) << "new image " << width
 //                   << " " << image.rect.left() << " " << image.rect.right()
 //                   << " " << image.rect.top()
 //                   << " " << image.mask << endl;
@@ -281,7 +281,7 @@ uint Device::initImage(GfxState *state, int width, int height,
     image.image = QImage(width, offset + height, 32);
     image.image.setAlphaBuffer(withMask);
     if ( !_currentImage.image.isNull() ) { // copy previous
-//        kdDebug(30516) << "image continued..." << endl;
+//        kDebug(30516) << "image continued..." << endl;
         for (int j=0; j<_currentImage.image.height(); j++) {
             QRgb *pix = (QRgb *)_currentImage.image.scanLine(j);
             QRgb *newPix = (QRgb *)image.image.scanLine(j);
@@ -297,7 +297,7 @@ void Device::drawImage(GfxState *state, Object *, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
                              int *maskColors, GBool inlineImg)
 {
-    kdDebug(30516) << "image kind=" << str->getKind()
+    kDebug(30516) << "image kind=" << str->getKind()
                    << " inline=" << inlineImg
                    << " maskColors=" << (maskColors!=0) << endl;
     if ( !_data.options().importImages ) return;
@@ -335,7 +335,7 @@ void Device::drawImageMask(GfxState *state, Object *, Stream *str,
                                  int width, int height, GBool invert,
                                  GBool inlineImg)
 {
-    kdDebug(30516) << "image mask ! kind=" << str->getKind()
+    kDebug(30516) << "image mask ! kind=" << str->getKind()
                    << "inline=" << inlineImg << endl;
     if ( !_data.options().importImages ) return;
 
@@ -384,11 +384,11 @@ void Device::updateStrokeColor(GfxState *state)
 
 void Device::stroke(GfxState */*state*/)
 {
-//    kdDebug(30516) << "stroke" << endl;
+//    kDebug(30516) << "stroke" << endl;
 //    DPathVector path = convertPath(state);
 //    for (uint i=0; i<path.size(); i++) {
 //        if ( path[i].isHorizontalSegment() ) {
-//            kdDebug(30516) << "  horizontal segment" << endl;
+//            kDebug(30516) << "  horizontal segment" << endl;
             // #### FIXME correctly draw the line
 //            if ( !_currentImage.image.isNull() ) addImage();
 //            _currentImage.rect = path[i].boundingRect();
@@ -399,20 +399,20 @@ void Device::stroke(GfxState */*state*/)
 //            _currentImage.image.fill(_fillColor.pixel());
 //            addImage();
 //        } else if ( path[i].isVerticalSegment() ) {
-//            kdDebug(30516) << "  vertical segment" << endl;
+//            kDebug(30516) << "  vertical segment" << endl;
 //        }
 //    }
 }
 
 void Device::fill(GfxState */*state*/)
 {
-//    kdDebug(30516) << "fill" << endl;
+//    kDebug(30516) << "fill" << endl;
 //    doFill(state);
 }
 
 void Device::eoFill(GfxState */*state*/)
 {
-//    kdDebug(30516) << "eoFill" << endl;
+//    kDebug(30516) << "eoFill" << endl;
 //    convertPath(state);
 //    doFill(state);
 }
@@ -422,7 +422,7 @@ void Device::doFill(const DPathVector &path)
     for (uint i=0; i<path.size(); i++) {
         if ( path[i].isSegment() ) continue;
         if ( path[i].isRectangle() ) {
-            kdDebug(30516) << "fill rectangle" << endl;
+            kDebug(30516) << "fill rectangle" << endl;
             if ( !_currentImage.image.isNull() ) addImage();
             _currentImage.rect = path[i].boundingRect();
             _currentImage.image =
@@ -445,7 +445,7 @@ DPathVector Device::convertPath(GfxState *state)
         DPath dpath;
         for (uint k=0; k<nbPoints; k++) {
             if ( k>=1 && spath->getCurve(k) ) {
-                kdDebug(30516) << "    bezier curve : ignore !" << endl;
+                kDebug(30516) << "    bezier curve : ignore !" << endl;
                 dpath = DPath();
                 break;
             } else {

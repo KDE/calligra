@@ -93,7 +93,7 @@ class Layout: public Qt::TextFormat
 		 * Nothing to do.
 		 */
 		virtual ~Layout() {
-			kdDebug(30522) << "Destruction of a layout." << endl;
+			kDebug(30522) << "Destruction of a layout." << endl;
 		}
 
 		/**

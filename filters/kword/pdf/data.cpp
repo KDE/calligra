@@ -123,7 +123,7 @@ QDomElement Data::createFrameset(FramesetType type, const QString &n)
     frameset.setAttribute("name", name);
     frameset.setAttribute("frameInfo", 0);
 
-//    kdDebug(30516) << "new frameset " << index << (text ? " text" : " image")
+//    kDebug(30516) << "new frameset " << index << (text ? " text" : " image")
 //                   << endl;
     index++;
     return frameset;
@@ -153,7 +153,7 @@ void Data::initPage(const Q3ValueVector<DRect> &rects,
                     const Q3ValueList<QDomElement> &pictures)
 {
     for (uint i=0; i<Nb_ParagraphTypes; i++) {
-//        kdDebug(30516) << "page #" << pageIndex << " rect #" << i
+//        kDebug(30516) << "page #" << pageIndex << " rect #" << i
 //                       << ": " << rects[i].toString() << endl;
         if ( !rects[i].isValid() ) continue;
         QString name = i18n(TEXT_FRAMESET_NAMES[i]).arg(pageIndex);

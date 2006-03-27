@@ -39,7 +39,7 @@ KoFilter::ConversionStatus KugarNOPImport::convert( const Q3CString& /*from*/, c
 	QFile in( m_chain->inputFile());
 	if (!in.open( QIODevice::ReadOnly ))
 	{
-	        kdError() << "Unable to open input file!" << endl;
+	        kError() << "Unable to open input file!" << endl;
 	        in.close();
 	        return KoFilter::FileNotFound;
 	}

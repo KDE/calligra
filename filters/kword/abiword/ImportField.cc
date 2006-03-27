@@ -189,7 +189,7 @@ bool ProcessField(QDomDocument& mainDocument,
         QDomElement element=mainDocument.createElement("FOOTNOTE");
         element.setAttribute("numberingtype","auto"); // ### TODO: support other types
         element.setAttribute("notetype","footnote");
-        QString reference(attributes.value("endnote-id").stripWhiteSpace());
+        QString reference(attributes.value("endnote-id").trimmed());
         element.setAttribute("frameset", getFootnoteFramesetName(reference)); // ### TODO: better name
         element.setAttribute("value","?"); // Should be the same as the text attribute
         variableElement.appendChild(element); //Append to <VARIABLE>

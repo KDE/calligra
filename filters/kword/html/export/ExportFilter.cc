@@ -87,15 +87,15 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
 
 QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
 {
-    kdDebug(30503) << "HtmlWorker::getAdditionalFileName " << additionalName << endl;
+    kDebug(30503) << "HtmlWorker::getAdditionalFileName " << additionalName << endl;
 
     QDir dir(m_strFileDir);
-    kdDebug(30503) << "Base directory: " << m_strFileDir << endl;
+    kDebug(30503) << "Base directory: " << m_strFileDir << endl;
 
     if (!dir.exists(m_strSubDirectoryName))
     {
         // Make the directory, as it does not exist yet!
-        kdDebug(30503) << "Creating directory: " << m_strSubDirectoryName << endl;
+        kDebug(30503) << "Creating directory: " << m_strSubDirectoryName << endl;
         dir.mkdir(m_strSubDirectoryName);
     }
 
@@ -115,10 +115,10 @@ QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
 
     QString strBackupName(strFileName);
     strBackupName+="~";
-    kdDebug(30503) << "Remove backup file: " << strBackupName << endl;
+    kDebug(30503) << "Remove backup file: " << strBackupName << endl;
     // We need to remove the backup file, as not all filesystems or ports can do it themselves on a rename.
     dir.remove(strBackupName);
-    kdDebug(30503) << "Moving file: " << additionalName << " => " << strBackupName << endl;
+    kDebug(30503) << "Moving file: " << additionalName << " => " << strBackupName << endl;
     dir.rename(strFileName,strBackupName);
 
     return strFileName;
@@ -134,7 +134,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
     QByteArray image;
 
-    kdDebug(30503) << "Image " << anchor.picture.koStoreName << " will be written in " << strImageName << endl;
+    kDebug(30503) << "Image " << anchor.picture.koStoreName << " will be written in " << strImageName << endl;
 
     if (loadSubFile(anchor.picture.koStoreName,image))
     {
@@ -189,10 +189,10 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
                 *m_streamOut << "</object>"; // <object> is *not* an empty element in HTML!
                 // TODO: other props for image
 
-                kdDebug(30506) << "Trying to save clipart to " << strImageName << endl;
+                kDebug(30506) << "Trying to save clipart to " << strImageName << endl;
                 if (!picture.save(strImagePath,"svg"))
                 {
-                    kdError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
+                    kError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
                         << " to " << strImageName << endl;
                     return false;
                 }
@@ -205,7 +205,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
             image.resize( 0 );
             if ( ! loadAndConvertToImage( anchor.picture.koStoreName, extension, "PNG", image ) )
             {
-                kdWarning(30503) << "Could not convert picture to PNG!" << endl;
+                kWarning(30503) << "Could not convert picture to PNG!" << endl;
                 return false;
             }
             *m_streamOut << "<img "; // This is an empty element!
@@ -222,7 +222,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
             if ( !file.open (QIODevice::WriteOnly) )
             {
-                kdError(30503) << "Unable to open image output file!" << endl;
+                kError(30503) << "Unable to open image output file!" << endl;
                 return false;
             }
 
@@ -232,7 +232,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
     }
     else
     {
-        kdWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName << endl;
+        kWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName << endl;
     }
 
     return true;
@@ -365,7 +365,7 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
                 }
                 else
                 {
-                    kdWarning(30503) << "Unknown anchor type: "
+                    kWarning(30503) << "Unknown anchor type: "
                         << (*paraFormatDataIt).frameAnchor.type << endl;
                 }
             }
@@ -381,7 +381,7 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
 bool HtmlWorker::doFullParagraph(const QString& paraText,
     const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-    kdDebug(30503) << "Entering HtmlWorker::doFullParagraph" << endl << paraText << endl;
+    kDebug(30503) << "Entering HtmlWorker::doFullParagraph" << endl << paraText << endl;
     QString strParaText=paraText;
     QString strTag; // Tag that will be written.
 
@@ -469,7 +469,7 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
 
     ProcessParagraphData(strTag, strParaText, layout, paraFormatDataList);
 
-    kdDebug(30503) << "Quiting HtmlWorker::doFullParagraph" << endl;
+    kDebug(30503) << "Quiting HtmlWorker::doFullParagraph" << endl;
     return true;
 }
 
@@ -479,13 +479,13 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     if (!m_ioDevice)
     {
-        kdError(30503) << "No output file! Aborting!" << endl;
+        kError(30503) << "No output file! Aborting!" << endl;
         return false;
     }
 
     if ( !m_ioDevice->open (QIODevice::WriteOnly) )
     {
-        kdError(30503) << "Unable to open output file!" << endl;
+        kError(30503) << "Unable to open output file!" << endl;
         return false;
     }
 
@@ -493,11 +493,11 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
     if (!getCodec())
     {
-        kdError(30503) << "Could not create QTextCodec! Aborting" << endl;
+        kError(30503) << "Could not create QTextCodec! Aborting" << endl;
         return false;
     }
 
-    kdDebug(30503) << "Charset used: " << getCodec()->name() << endl;
+    kDebug(30503) << "Charset used: " << getCodec()->name() << endl;
 
     m_streamOut->setCodec( getCodec() );
 
@@ -513,7 +513,7 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
 bool HtmlWorker::doCloseFile(void)
 {
-    kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
+    kDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
     delete m_streamOut;
     m_streamOut=NULL;
     if (m_ioDevice)
@@ -561,7 +561,7 @@ bool HtmlWorker::doOpenDocument(void)
 
 bool HtmlWorker::doCloseDocument(void)
 {
-    kdDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
+    kDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
     *m_streamOut << "</html>\n";
     return true;
 }
@@ -572,7 +572,7 @@ bool HtmlWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     if (!strText.isEmpty())
     {
         m_strTitle=strText; // Set title only if it is not empty!
-        kdDebug(30503) << "Found new title " << m_strTitle << endl;
+        kDebug(30503) << "Found new title " << m_strTitle << endl;
     }
     return true;
 }
@@ -598,7 +598,7 @@ bool HtmlWorker::doOpenHead(void)
     if (m_strTitle.isEmpty())
     {
         // Somehow we have still an empty title (this should not happen!)
-        kdWarning(30503) << "Title still empty! (HtmlWorker::doOpenHead)" << endl;
+        kWarning(30503) << "Title still empty! (HtmlWorker::doOpenHead)" << endl;
         m_strTitle=i18n("Untitled Document");
     }
     *m_streamOut << "<title>"<< escapeHtmlText(m_strTitle) <<"</title>\n";  // <TITLE> is mandatory!

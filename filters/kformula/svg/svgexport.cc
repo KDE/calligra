@@ -71,7 +71,7 @@ SvgExport::convert(const Q3CString& from, const Q3CString& to)
     QDomElement   docNode = domIn.documentElement();
 
     // Read the document from the XML tree.
-    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
     KFormula::Document* kformulaDoc = new KFormula::Document;
     wrapper->document( kformulaDoc );
     KFormula::Container* formula = kformulaDoc->createFormula();
@@ -102,3 +102,4 @@ SvgExport::convert(const Q3CString& from, const Q3CString& to)
 
 
 #include <svgexport.moc>
+#include <kglobal.h>

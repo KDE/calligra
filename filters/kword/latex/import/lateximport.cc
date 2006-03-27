@@ -47,7 +47,7 @@ KoFilter::ConversionStatus LATEXImport::convert( const Q3CString& from, const Q3
     KoStore* out = KoStore::createStore(QString(m_chain->outputFile()),
 				KoStore::Write, "application/x-kword");
     /*if(!out || !out->open("root")) {
-        kdError(30503) << "Unable to open output file!" << endl;
+        kError(30503) << "Unable to open output file!" << endl;
 				delete out;
         return KoFilter::FileNotFound;
     }

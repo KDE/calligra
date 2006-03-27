@@ -48,8 +48,8 @@ MathMLImport::MathMLImport(KoFilter *, const char *, const QStringList&)
 
 KoFilter::ConversionStatus MathMLImport::convert( const Q3CString& from, const Q3CString& to )
 {
-    kdDebug( KFormula::DEBUGID ) << "From: " << from << endl;
-    kdDebug( KFormula::DEBUGID ) << "To:   " << to << endl;
+    kDebug( KFormula::DEBUGID ) << "From: " << from << endl;
+    kDebug( KFormula::DEBUGID ) << "To:   " << to << endl;
 
     if(from != "application/mathml+xml" || to != "application/x-kformula")
         return KoFilter::NotImplemented;
@@ -61,7 +61,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const Q3CString& from, const Q
         return KoFilter::FileNotFound;
     }
 
-    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
     KFormula::Document* doc = new KFormula::Document;
     wrapper->document( doc );
     KFormula::Container* formula = doc->createFormula();
@@ -82,7 +82,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const Q3CString& from, const Q
     if ( !mathML.setContent( &f, true, &errorMsg, &errorLine, &errorColumn ) ) {
         delete wrapper;
         QApplication::restoreOverrideCursor();
-        kdError(KFormula::DEBUGID) << "Parsing error in " << filename << "! Aborting!" << endl
+        kError(KFormula::DEBUGID) << "Parsing error in " << filename << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
             << " Error message: " << errorMsg << endl;
         KMessageBox::error( 0, i18n( "Parsing error in MathML file %4 at line %1, column %2\nError message: %3" )
@@ -100,7 +100,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const Q3CString& from, const Q
     const Q3CString s = doc->saveXML().toCString(); // utf8 already
     const int nwritten = dev.writeBlock( s.data(), s.size()-1 );
     if ( nwritten != (int)s.size()-1 ) {
-        kdWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;
+        kWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;
         KMessageBox::error( 0, i18n( "Failed to write formula." ), i18n( "MathML Import Error" ) );
     }
 

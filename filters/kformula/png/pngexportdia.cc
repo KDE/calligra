@@ -41,18 +41,19 @@
 
 #include "pngexportdia.h"
 #include <knuminput.h>
+#include <kglobal.h>
 
 PNGExportDia::PNGExportDia( const QDomDocument &dom, const QString &outFile, QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, i18n("PNG Export Filter Parameters" ), Ok|Cancel ),
       _fileOut( outFile )
 {
     kapp->restoreOverrideCursor();
-    wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+    wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
     KFormula::Document* doc = new KFormula::Document;
     wrapper->document( doc );
     formula = doc->createFormula();
     if ( !doc->loadXML( dom ) ) {
-        kdError() << "Failed." << endl;
+        kError() << "Failed." << endl;
     }
 
     setupGUI();
@@ -102,8 +103,8 @@ void PNGExportDia::disconnectAll()
 void PNGExportDia::widthChanged( int width )
 {
     disconnectAll();
-    width = QMIN( width, realWidth*10 );
-    width = QMAX( width, realWidth/10 );
+    width = qMin( width, realWidth*10 );
+    width = qMax( width, realWidth/10 );
     double percent = 100.*static_cast<double>( width )/static_cast<double>( realWidth );
     percWidthEdit->setValue(  percent  );
     if ( proportional->isChecked() ) {
@@ -117,8 +118,8 @@ void PNGExportDia::widthChanged( int width )
 void PNGExportDia::heightChanged( int height )
 {
     disconnectAll();
-    height = QMIN( height, realHeight*10 );
-    height = QMAX( height, realHeight/10 );
+    height = qMin( height, realHeight*10 );
+    height = qMax( height, realHeight/10 );
     double percent = 100.*static_cast<double>( height )/static_cast<double>( realHeight );
     percHeightEdit->setValue(  percent  );
     if ( proportional->isChecked() ) {
@@ -132,8 +133,8 @@ void PNGExportDia::heightChanged( int height )
 void PNGExportDia::percentWidthChanged( double percent )
 {
     disconnectAll();
-    percent = QMIN( percent, 1000 );
-    percent = QMAX( percent, 10 );
+    percent = qMin( percent, 1000 );
+    percent = qMax( percent, 10 );
     int width = static_cast<int>( realWidth*percent/100. );
     widthEdit->setValue(  width  );
     if ( proportional->isChecked() ) {
@@ -147,8 +148,8 @@ void PNGExportDia::percentWidthChanged( double percent )
 void PNGExportDia::percentHeightChanged( double percent )
 {
     disconnectAll();
-    percent = QMIN( percent, 1000 );
-    percent = QMAX( percent, 10 );
+    percent = qMin( percent, 1000 );
+    percent = qMax( percent, 10 );
     if ( proportional->isChecked() ) {
         int width = static_cast<int>( realWidth*percent/100. );
         widthEdit->setValue(  width  );
@@ -164,8 +165,8 @@ void PNGExportDia::proportionalClicked()
     if ( proportional->isChecked() ) {
         disconnectAll();
         int width = widthEdit->value( );
-        width = QMIN( width, realWidth*10 );
-        width = QMAX( width, realWidth/10 );
+        width = qMin( width, realWidth*10 );
+        width = qMax( width, realWidth/10 );
         double percent = 100.*static_cast<double>( width )/static_cast<double>( realWidth );
         percHeightEdit->setValue(  percent  );
         int height = static_cast<int>( realHeight*percent/100. );
@@ -230,7 +231,7 @@ void PNGExportDia::slotOk()
     //doc->newZoomAndResolution( false, false );
     int width = widthEdit->value();
     int height = heightEdit->value();
-//     kdDebug( KFormula::DEBUGID ) << k_funcinfo
+//     kDebug( KFormula::DEBUGID ) << k_funcinfo
 //                                  << "(" << width << " " << height << ")"
 //                                  << endl;
 //     width = realWidth;

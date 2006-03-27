@@ -34,6 +34,7 @@
 #include <kformuladocument.h>
 #include <kformulacontainer.h>
 #include <kformulamimesource.h>
+#include <kglobal.h>
 
 #include "latexexport.h"
 
@@ -74,12 +75,12 @@ KoFilter::ConversionStatus LATEXExport::convert( const Q3CString& from, const Q3
         return KoFilter::FileNotFound;
     }
 
-    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
     KFormula::Document* doc = new KFormula::Document;
     wrapper->document( doc );
     KFormula::Container* formula = doc->createFormula();
     if ( !doc->loadXML( dom ) ) {
-        kdError(30522) << "Failed." << endl;
+        kError(30522) << "Failed." << endl;
     }
 
     QTextStream stream(&f);

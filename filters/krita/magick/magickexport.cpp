@@ -43,7 +43,7 @@ MagickExport::~MagickExport()
 
 KoFilter::ConversionStatus MagickExport::convert(const Q3CString& from, const Q3CString& to)
 {
-    kdDebug(41008) << "magick export! From: " << from << ", To: " << to << "\n";
+    kDebug(41008) << "magick export! From: " << from << ", To: " << to << "\n";
     
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;

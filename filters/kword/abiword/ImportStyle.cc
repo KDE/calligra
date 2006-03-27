@@ -122,7 +122,7 @@ void StyleDataMap::defineDefaultStyles(void)
     QFontInfo fixedInfo(KGlobalSettings::fixedFont());
     QString strPlainText=QString("font-family: %1")
         .arg(fixedInfo.family()); // TODO: should be "Courier New"
-    kdDebug(30506) << "Plain Text: " << strPlainText << endl;
+    kDebug(30506) << "Plain Text: " << strPlainText << endl;
     defineNewStyle("Plain Text",-1,strPlainText);
     // TODO: all list and numbered types
 }

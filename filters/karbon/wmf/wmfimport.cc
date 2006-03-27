@@ -63,12 +63,12 @@ KoFilter::ConversionStatus WMFImport::convert( const Q3CString& from, const Q3CS
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if( !out ) {
-        kdError(3800) << "Unable to open output file!" << endl;
+        kError(3800) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
     QDomDocument outdoc = document.saveXML();
     Q3CString content = outdoc.toCString();
-    // kdDebug() << " content : " << content << endl;
+    // kDebug() << " content : " << content << endl;
     out->writeBlock( content , content.length() );
 
     return KoFilter::OK;

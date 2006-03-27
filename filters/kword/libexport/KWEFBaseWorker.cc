@@ -82,7 +82,7 @@ bool KWEFBaseWorker::loadSubFile(const QString& fileName, QByteArray& array) con
     }
     else
     {
-        kdWarning(30508) << "Leader is unknown! (KWEFBaseWorker::loadSubFile)" << endl;
+        kWarning(30508) << "Leader is unknown! (KWEFBaseWorker::loadSubFile)" << endl;
     }
     return flag;
 }
@@ -91,7 +91,7 @@ QIODevice* KWEFBaseWorker::getSubFileDevice(const QString& fileName) const
 {
     if (!m_kwordLeader)
     {
-        kdWarning(30508) << "Leader is unknown! (KWEFBaseWorker::getSubFileDevice)" << endl;
+        kWarning(30508) << "Leader is unknown! (KWEFBaseWorker::getSubFileDevice)" << endl;
         return NULL;
     }
     return m_kwordLeader->getSubFileDevice(fileName);
@@ -106,12 +106,12 @@ QImage KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QStri
         return QImage();
     }
 
-    kdDebug(30508) << "Picture " << strName << " has size: " << io->size() << endl;
+    kDebug(30508) << "Picture " << strName << " has size: " << io->size() << endl;
     
     KoPicture picture;
     if (!picture.load(io, inExtension)) // we do not care about KoPictureKey
     {
-        kdWarning(30508) << "Could not read picture: " << strName << " (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        kWarning(30508) << "Could not read picture: " << strName << " (KWEFBaseWorker::loadAndConvertToImage)" << endl;
         return QImage();
     }
     
@@ -124,7 +124,7 @@ bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString
     
     if (qimage.isNull())
     {
-        kdWarning(30508) << "Could not load image (KWEFBaseWorker::loadAndConvertToImage)" <<endl;
+        kWarning(30508) << "Could not load image (KWEFBaseWorker::loadAndConvertToImage)" <<endl;
         return false;
     }
     
@@ -134,7 +134,7 @@ bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString
     QBuffer buffer(image); // A QBuffer is a QIODevice
     if (!buffer.open(QIODevice::WriteOnly))
     {
-        kdWarning(30508) << "Could not open buffer! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        kWarning(30508) << "Could not open buffer! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
         return false;
     }
 
@@ -143,7 +143,7 @@ bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString
 
     if (!imageIO.write())
     {
-        kdWarning(30508) << "Could not write converted image! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
+        kWarning(30508) << "Could not write converted image! (KWEFBaseWorker::loadAndConvertToImage)" << endl;
         return false;
     }
     buffer.close();
@@ -159,7 +159,7 @@ bool KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QString
 #define DO_FALSE_DEFINITION(string) \
     bool KWEFBaseWorker::string \
     {\
-        kdWarning(30508) << "KWEFBaseWorker::" << #string << " was called (Worker not correctly defined?)" << endl; \
+        kWarning(30508) << "KWEFBaseWorker::" << #string << " was called (Worker not correctly defined?)" << endl; \
         return false;\
     }
 

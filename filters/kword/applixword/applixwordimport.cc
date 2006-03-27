@@ -97,7 +97,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
     QFile in(m_chain->inputFile());
     if (!in.open (QIODevice::ReadOnly))
     {
-        kdError(30517) << "Unable to open input file!" << endl;
+        kError(30517) << "Unable to open input file!" << endl;
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -156,7 +156,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
             if (mystr == "<end_styles>")
 	    {
              ok = false;
-             kdDebug(30517)<<"End styles\n\n";
+             kDebug(30517)<<"End styles\n\n";
 	    }
 	    else
 	    {
@@ -169,7 +169,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
                 rueck = sscanf ((const char *) mystr.latin1() ,
                                 ":%d:%d:%d:%d>",
 	                         &col->c, &col->m, &col->y, &col->k);
-		kdDebug(30517)<<"  Color " <<  zaehler<<"  : "<<col->c << "  " << col->m<< " "<< col->y<<" "<< col->k<<" "<<coltxt<<" "<<endl;
+		kDebug(30517)<<"  Color " <<  zaehler<<"  : "<<col->c << "  " << col->m<< " "<< col->y<<" "<< col->k<<" "<<coltxt<<" "<<endl;
                 zaehler ++;
 
                 // Color transformation cmyk -> rgb
@@ -195,18 +195,18 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
          ***********************************************************************/
         else if (mystr == "<start_data Applix>")
 	{
-          kdDebug(30517)<<"\nEmbedded Applix object starts:\n";
+          kDebug(30517)<<"\nEmbedded Applix object starts:\n";
           do
 	  {
             mystr = readTagLine (stream, in);
             if (mystr == "<end_data>") ok = false;
 	    else
 	    {
-              kdDebug(30517)<<"   "<<mystr<<endl;
+              kDebug(30517)<<"   "<<mystr<<endl;
 	    }
 	  }
           while (ok == true);
-          kdDebug(30517)<<"Embedded Applix object ends\n\n";
+          kDebug(30517)<<"Embedded Applix object ends\n\n";
 
         }
         /**********************************************************************
@@ -214,18 +214,18 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
          **********************************************************************/
         else if (mystr.startsWith ("<start_hdrftr "))
 	{
-          kdDebug(30517)<<"\nHeader/Footer starts:\n";
+          kDebug(30517)<<"\nHeader/Footer starts:\n";
           do
 	  {
             mystr = readTagLine (stream, in);
             if (mystr == "<end_hdrftr>") ok = false;
 	    else
 	    {
-              kdDebug(30517)<<"    "<<mystr<<endl;
+              kDebug(30517)<<"    "<<mystr<<endl;
 	    }
 	  }
           while (ok == true);
-          kdDebug(30517)<<"\nHeader/Footer ends\n";
+          kDebug(30517)<<"\nHeader/Footer ends\n";
         }
         /**********************************************************************
          * found a paragraph string                                           *
@@ -234,8 +234,8 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
 	{
 	   sscanf ( (const char *) mystr.latin1(), "<P \"%99s\"", stylename);
            mystr.remove (0, 5+strlen(stylename));
-           kdDebug(30517)<<" Para  Name: "<< stylename<<endl;
-           kdDebug(30517)<<"       Rest: "<<mystr<<endl;
+           kDebug(30517)<<" Para  Name: "<< stylename<<endl;
+           kDebug(30517)<<"       Rest: "<<mystr<<endl;
 	}
         /**********************************************************************
          * found a textstring                                                 *
@@ -256,17 +256,17 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
           do
 	  {
              pos = mystr.find ("\"", y);
-	     kdDebug(30517)<<"POS:"<<pos<<" length:"<< mystr.length()<<" y:"<<y <<endl;
+	     kDebug(30517)<<"POS:"<<pos<<" length:"<< mystr.length()<<" y:"<<y <<endl;
 
-             kdDebug(30517)<<"< "<<mystr<<" >\n";
+             kDebug(30517)<<"< "<<mystr<<" >\n";
              if(  (pos-1 > -1) && (mystr[pos-1] == '\\'))
              {
-               kdDebug(30517)<<" No string end - but Gänsefüsschen\n";
+               kDebug(30517)<<" No string end - but Gänsefüsschen\n";
                y=pos+1;
              }
              else
              {
-               kdDebug(30517)<<" String end //\n";
+               kDebug(30517)<<" String end //\n";
                ok = false;
              }
 	  }
@@ -274,8 +274,8 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
 
           textstr = mystr.left (pos);
           mystr.remove (0, pos+1);
-          mystr.stripWhiteSpace();
-	  kdDebug(30517) <<"Text:<" <<textstr <<" > "<< pos<<"  Rest:<"<< mystr<<"> \n";
+          mystr.trimmed();
+	  kDebug(30517) <<"Text:<" <<textstr <<" > "<< pos<<"  Rest:<"<< mystr<<"> \n";
 
           // split format
           QStringList typeList;
@@ -286,51 +286,51 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
           int nn=0;
           for (QStringList::Iterator it = typeList.begin(); it != typeList.end(); ++it )
           {
-            kdDebug(30517) <<"   No: "<< nn<< "   > "<< (*it)<< "< = \n";
+            kDebug(30517) <<"   No: "<< nn<< "   > "<< (*it)<< "< = \n";
 
             // Looking for bold
             if      ((*it) == "bold")
             {
               bold = 1;
-              kdDebug(30517)<<"bold\n";
+              kDebug(30517)<<"bold\n";
 	    }
             else if ((*it) == "no-bold")
             {
               bold = 0;
-              kdDebug(30517)<<"no bold\n";
+              kDebug(30517)<<"no bold\n";
 	    }
             else if ((*it) == "italic")
             {
               italic = 1;
-              kdDebug(30517)<<"italic\n";
+              kDebug(30517)<<"italic\n";
 	    }
             else if ((*it) == "no-italic")
             {
               italic = 0;
-              kdDebug(30517) <<"no italic\n";
+              kDebug(30517) <<"no italic\n";
 	    }
             else if ((*it) == "underline")
             {
               underline = 1;
-              kdDebug(30517)<<"underline\n";
+              kDebug(30517)<<"underline\n";
 	    }
             else if ((*it) == "no-underline")
             {
               underline = 0;
-              kdDebug(30517) <<"no underline\n";
+              kDebug(30517) <<"no underline\n";
 	    }
             else if ((*it).startsWith ("size"))
             {
               (*it).remove (0, 5);
 	      sscanf ( (const char *) (*it).latin1(), "%d", &fontsize);
-              kdDebug(30517)<<"fontsize: "<< fontsize<<endl;
+              kDebug(30517)<<"fontsize: "<< fontsize<<endl;
 	    }
             else if ((*it).startsWith ("face"))
             {
               (*it).remove (0, 6);
 	      (*it).remove ((*it).length()-1, 1);
   	      fontname = *it;
-              kdDebug(30517)<<"fontname: "<<fontname<<endl;
+              kDebug(30517)<<"fontname: "<<fontname<<endl;
 	    }
             else if ((*it).startsWith ("color:"))
             {
@@ -338,16 +338,16 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
 	      (*it).remove ((*it).length()-1, 1);
               colname = *it;
               colpos = mcoltxt.findIndex (colname);
-	      kdDebug(30517) <<"  Color: "<< colname<<" "<< colpos <<" \n";
+	      kDebug(30517) <<"  Color: "<< colname<<" "<< colpos <<" \n";
 	    }
             else
             {
-	      kdDebug(30517)<<" "<< (*it)<<endl;
+	      kDebug(30517)<<" "<< (*it)<<endl;
             }
 
 
 	  }
-          kdDebug(30517) <<"\n";
+          kDebug(30517) <<"\n";
 
           // Replaces Part for & <>, applixwear special characters and qouts
           replaceSpecial (textstr);
@@ -420,12 +420,12 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
     str += "  </FRAMESET>\n";
     str += " </FRAMESETS>\n";
     str += "</DOC>\n";
-    kdDebug(30517)<<"Text "<< str <<endl;
+    kDebug(30517)<<"Text "<< str <<endl;
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if (!out)
     {
-        kdError(30517) << "Unable to open output file!" << endl;
+        kError(30517) << "Unable to open output file!" << endl;
         in.close  ();
         return KoFilter::StorageCreationError;
     }
@@ -638,7 +638,7 @@ APPLIXWORDImport::readTagLine (QTextStream &stream, QFile &in)
    mystr = nextLine (stream);
 
    // Delete whitespaces
-   mystr.stripWhiteSpace();
+   mystr.trimmed();
 
    // Look if the tag continues on the next line
    if ((mystr.length() == 80) && (mystr[mystr.length()-1] == '\\') )

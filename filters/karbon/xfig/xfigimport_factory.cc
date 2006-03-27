@@ -54,7 +54,7 @@ QObject *XFIGImportFactory::createObject(
 {
     if (parent && !parent->inherits("KoFilter"))
     {
-	    kdDebug(30502) << "XFIGImportFactory: parent does not inherit KoFilter" << endl;
+	    kDebug(30502) << "XFIGImportFactory: parent does not inherit KoFilter" << endl;
 	    return 0L;
     }
     XFIGImport *f = new XFIGImport((KoFilter*)parent, name);

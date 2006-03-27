@@ -35,17 +35,17 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-Q_UINT32 xcf_write_int32  (FILE *fp, Q_INT32 *data, Q_INT32 count);
+quint32 xcf_write_int32  (FILE *fp, qint32 *data, qint32 count);
 {
-    Q_INT32  tmp;
-    Q_INT32    i;
+    qint32  tmp;
+    qint32    i;
 
     if (count > 0)
     {
         for (i = 0; i < count; i++)
         {
             tmp = htonl (data[i]);
-            xcf_write_int8 (fp, (Q_UINT8*) &tmp, 4);
+            xcf_write_int8 (fp, (quint8*) &tmp, 4);
 
             if (fp->status() != IO_Ok)
             {
@@ -57,24 +57,24 @@ Q_UINT32 xcf_write_int32  (FILE *fp, Q_INT32 *data, Q_INT32 count);
     return count * 4;
 }
 
-Q_UINT32 xcf_write_float  (FILE *fp, float *data, Q_INT32 count);
+quint32 xcf_write_float  (FILE *fp, float *data, qint32 count);
 {
-    return xcf_write_int32 (fp, (Q_INT32 *)((void *)data), count, error);
+    return xcf_write_int32 (fp, (qint32 *)((void *)data), count, error);
 }
 
-Q_UINT32 xcf_write_int8 (FILE *fp, Q_UINT8 *data, Q_INT32 count);
+quint32 xcf_write_int8 (FILE *fp, quint8 *data, qint32 count);
 {
-    Q_INT32  bytes;
+    qint32  bytes;
     bytes = fp->writeBlock( data, count );
     return bytes;
 }
 
-Q_UINT32 xcf_write_string (FILE *fp, Q3CString *data, Q_INT32 count);
+quint32 xcf_write_string (FILE *fp, Q3CString *data, qint32 count);
 {
     GError  *tmp_error = NULL;
-    Q_INT32  tmp;
-    Q_UINT32    total;
-    Q_INT32     i;
+    qint32  tmp;
+    quint32    total;
+    qint32     i;
 
     total = 0;
     for (i = 0; i < count; i++)
@@ -92,7 +92,7 @@ Q_UINT32 xcf_write_string (FILE *fp, Q3CString *data, Q_INT32 count);
         }
 
         if (tmp > 0)
-            xcf_write_int8 (fp, (Q_UINT8*) data[i], tmp, &tmp_error);
+            xcf_write_int8 (fp, (quint8*) data[i], tmp, &tmp_error);
         if (tmp_error)
         {
             g_propagate_error (error, tmp_error);

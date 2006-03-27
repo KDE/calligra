@@ -113,7 +113,7 @@ void TextFormat::analyseFormat(const QDomNode balise)
 	
 	/* Parameters Analyse */
 	analyseParam(balise);
-	kdDebug(30522) << "ANALYSE A FORMAT" << endl;
+	kDebug(30522) << "ANALYSE A FORMAT" << endl;
 	
 	/* Children Markups Analyse */
 	if(isChild(balise, "FONT"))
@@ -135,7 +135,7 @@ void TextFormat::analyseFormat(const QDomNode balise)
 	if(isChild(balise, "TEXTBACKGROUNDCOLOR"))
 		analyseBackgroundColor(getChild(balise, "TEXTBACKGROUNDCOLOR"));
 
-	kdDebug(30522) << "END OF A FORMAT" << endl;
+	kDebug(30522) << "END OF A FORMAT" << endl;
 }
 
 void TextFormat::analyseBackgroundColor(const QDomNode balise)
@@ -151,7 +151,7 @@ void TextFormat::analyseBackgroundColor(const QDomNode balise)
 
 	if(!(red == 255 && green == 255 && blue == 255))
 	{
-		kdDebug(30522) << "bk color = " << red << "," << green << "," << blue << endl;
+		kDebug(30522) << "bk color = " << red << "," << green << "," << blue << endl;
 		/* white color is default value */
 		setBkColor(red, green, blue);
 		FileHeader::instance()->useColor();
@@ -207,7 +207,7 @@ void TextFormat::analyseUnderlined(const QDomNode balise)
 	setUnderlined(getAttr(balise, "value"));
 	if(isUnderlined())
 		FileHeader::instance()->useUnderline();
-	kdDebug(30522) << "Underlined ? " << isUnderlined() << endl;
+	kDebug(30522) << "Underlined ? " << isUnderlined() << endl;
 }
 
 /*******************************************/
@@ -221,7 +221,7 @@ void TextFormat::analyseStrikeout(const QDomNode balise)
 	setStrikeout(getAttr(balise, "value").toInt());
 	if(isStrikeout())
 		FileHeader::instance()->useUnderline();
-	kdDebug(30522) << "Strikeout ? " << isUnderlined() << endl;
+	kDebug(30522) << "Strikeout ? " << isUnderlined() << endl;
 }
 
 /*******************************************/
@@ -233,7 +233,7 @@ void TextFormat::analyseWeight(const QDomNode balise)
 {
 	/* <WEIGHT value="75" /> */
 	setWeight(getAttr(balise, "value").toInt());
-	kdDebug(30522) << "Weight = " << getWeight() << endl;
+	kDebug(30522) << "Weight = " << getWeight() << endl;
 }
 
 /*******************************************/
@@ -267,7 +267,7 @@ void TextFormat::analyseColor(const QDomNode balise)
 	if(!(red == 0 && green == 0 && blue == 0))
 	{
 		/* black color is default value */
-		kdDebug(30522) << "color = " << red << "," << green << "," << blue << endl;
+		kDebug(30522) << "color = " << red << "," << green << "," << blue << endl;
 		setColor(red, green, blue);
 		FileHeader::instance()->useColor();
 	}
@@ -282,5 +282,5 @@ void TextFormat::analyseSize(const QDomNode balise)
 {
 	/* <SIZE value="11"> */
 	setSize(getAttr(balise, "value").toInt());
-	kdDebug(30522) << "font size : " << getSize() << endl;
+	kDebug(30522) << "font size : " << getSize() << endl;
 }

@@ -155,11 +155,11 @@ void LATEXImportDia::slotOk()
 {
 	hide();
 	state();
-	kdDebug(30522) << "LATEX FILTER --> BEGIN" << endl;
+	kDebug(30522) << "LATEX FILTER --> BEGIN" << endl;
 	LatexParser parser(_fileIn);
 	Q3PtrList<Element>* root = parser.parse();
-	kdDebug(30522) << "---------- generate file -------------" << endl;
-	kdDebug(30522) << "command: " << root->count() << endl;
+	kDebug(30522) << "---------- generate file -------------" << endl;
+	kDebug(30522) << "command: " << root->count() << endl;
 	Element* elt;
 	for(elt = root->first(); elt; elt = root->next())
 	{
@@ -167,6 +167,6 @@ void LATEXImportDia::slotOk()
 	}
 	KwordGenerator generator(root);
 	generator.convert(_out);
-	kdDebug(30522) << "LATEX FILTER --> END" << endl;
+	kDebug(30522) << "LATEX FILTER --> END" << endl;
 	reject();
 }

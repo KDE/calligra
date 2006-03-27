@@ -52,7 +52,7 @@ bool WPSixWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 bool WPSixWorker::doCloseFile(void)
 {
   // asssume we're at the end of the file
-  Q_UINT32 total_filesize = outfile.at();
+  quint32 total_filesize = outfile.at();
 
   // close the file first
   outfile.close();
@@ -82,47 +82,47 @@ bool WPSixWorker::doOpenDocument(void)
   // note that some fields are still "dummy"
 
   // magic id: -1, "WPC"
-  Q_UINT8 magic[] = { 0xff, 0x57, 0x50, 0x43 };
+  quint8 magic[] = { 0xff, 0x57, 0x50, 0x43 };
   for( int i=0; i<4; i++ ) output << magic[i];
 
   // pointer to document area (dummy, will be fixed later)
-  Q_UINT8 docptr[] = { 0x0E, 0x02, 0x00, 0x00 } ;
+  quint8 docptr[] = { 0x0E, 0x02, 0x00, 0x00 } ;
   for( int i=0; i<4; i++ ) output << docptr[i];
 
   // write product type ( 1 = WordPerfect )
-  Q_UINT8 product_type = 1;
+  quint8 product_type = 1;
   output << product_type;
 
   // write file type ( 10 = WordPerfect document )
-  Q_UINT8 file_type = 10;
+  quint8 file_type = 10;
   output << file_type;
 
   // write version (TODO explain)
-  Q_UINT16 version = 0x0202;
+  quint16 version = 0x0202;
   output << version;
 
   // write encryption flag ( 0 = not encrypted )
-  Q_UINT16 encrypt = 0;
+  quint16 encrypt = 0;
   output << encrypt;
 
   // offset to index header (always 0x200?)
-  Q_UINT16 index_header_ptr = 0x200;
+  quint16 index_header_ptr = 0x200;
   output << index_header_ptr;
 
   // beginning of extended file header (always 5)
-  Q_UINT32 extheader = 5;
+  quint32 extheader = 5;
   output << extheader;
 
   // filesize (dummy, will be fixed later)
-  Q_UINT32 filesize = 0;
+  quint32 filesize = 0;
   output << filesize;
 
   // filler 488 bytes
-  Q_UINT8 dummy = 0;
+  quint8 dummy = 0;
   for( int i=0; i<488; i++ ) output << dummy;
 
   // index header (specified 0 index!)
-  Q_UINT8 index_header[] = { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  quint8 index_header[] = { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0 };
   for( int i=0; i<14; i++ ) output << index_header[i];
 
@@ -176,7 +176,7 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
     if( formatData.id == 1 )
     {
 
-       Q_UINT8 attr = 0; //invalid
+       quint8 attr = 0; //invalid
        if( formatData.text.weight >= 75 ) attr = 12; // bold
        if( formatData.text.italic ) attr = 8; 
        if( formatData.text.underline )
@@ -197,24 +197,24 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        // write some refix-code (such as Bold On) and possibly appropriate suffix-code (Bold Off)
         
        // attribute on
-       if( attr > 0 ) output << (Q_UINT8)0xf2 << attr << (Q_UINT8)0xf2;
+       if( attr > 0 ) output << (quint8)0xf2 << attr << (quint8)0xf2;
 
        // set font color
        if( fgColor.isValid() )
        {
-         Q_UINT8 wp_color[] = { 0xd4, 0x18, 16, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0xd4 }; 
-         wp_color[7] = (Q_UINT8) fgColor.Qt::red();
-         wp_color[8] = (Q_UINT8) fgColor.Qt::green();
-         wp_color[9] = (Q_UINT8) fgColor.Qt::blue();
+         quint8 wp_color[] = { 0xd4, 0x18, 16, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0xd4 }; 
+         wp_color[7] = (quint8) fgColor.Qt::red();
+         wp_color[8] = (quint8) fgColor.Qt::green();
+         wp_color[9] = (quint8) fgColor.Qt::blue();
          output.writeRawBytes( (const char*)wp_color, 16 );
        }
 
        // highlight on (background color)
        if( bgColor.isValid() )
        {
-         output << (Q_UINT8) 0xfb;
-         output << (Q_UINT8)bgColor.Qt::red() << (Q_UINT8)bgColor.Qt::green() << (Q_UINT8)bgColor.Qt::blue();
-         output << (Q_UINT8) 100 << (Q_UINT8) 0xfb;
+         output << (quint8) 0xfb;
+         output << (quint8)bgColor.Qt::red() << (quint8)bgColor.Qt::green() << (quint8)bgColor.Qt::blue();
+         output << (quint8) 100 << (quint8) 0xfb;
        }
 
        // the text itself, "escape" it first 
@@ -222,21 +222,21 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        output.writeRawBytes( (const char*)out, out.length() );
 
        // attribute off
-       if( attr > 0 ) output << (Q_UINT8)0xf3 << attr << (Q_UINT8)0xf3;
+       if( attr > 0 ) output << (quint8)0xf3 << attr << (quint8)0xf3;
 
        // highlight off
        if( bgColor.isValid() )
        {
-         output << (Q_UINT8) 0xfc;
-         output << (Q_UINT8)bgColor.Qt::red() << (Q_UINT8)bgColor.Qt::green() << (Q_UINT8)bgColor.Qt::blue();
-         output << (Q_UINT8) 100 << (Q_UINT8) 0xfc;
+         output << (quint8) 0xfc;
+         output << (quint8)bgColor.Qt::red() << (quint8)bgColor.Qt::green() << (quint8)bgColor.Qt::blue();
+         output << (quint8) 100 << (quint8) 0xfc;
        }
     }
 
   }
     
   // write hard-return
-  output << (Q_UINT8) 0xcc;
+  output << (quint8) 0xcc;
  
   return true;
 }

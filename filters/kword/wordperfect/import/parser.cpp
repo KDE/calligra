@@ -114,7 +114,7 @@ Parser::parse (const QString & filename)
   stream.setByteOrder (QDataStream::LittleEndian);
 
   // read 16-bytes document header
-  Q_UINT8 header[16];
+  quint8 header[16];
   for (int k = 0; k < 16; k++)
     stream >> header[k];
 
@@ -179,7 +179,7 @@ Parser::parsePacketWP5( const QString & filename )
 
   for( unsigned next_block=16; next_block>0; )
   {
-    Q3MemArray<Q_UINT8> buf( 10 );
+    Q3MemArray<quint8> buf( 10 );
     stream.device()->at( next_block );
     for( int c=0; c<10; c++ )
       stream >> buf.at( c );
@@ -194,8 +194,8 @@ Parser::parsePacketWP5( const QString & filename )
 
     for( unsigned v=0; v<count; v++ )
     {
-      Q_UINT16 packet_type;
-      Q_UINT32 packet_size, packet_pos;
+      quint16 packet_type;
+      quint32 packet_size, packet_pos;
       stream >> packet_type;
       stream >> packet_size;
       stream >> packet_pos;
@@ -256,9 +256,9 @@ Parser::parsePacketWP5( const QString & filename )
       for( c++; (c<p->data.size())&&(p->data[c]); c++)
         abstract.append( p->data[c] );
 
-      docTitle = desc.stripWhiteSpace();
-      docAuthor = author.stripWhiteSpace();
-      docAbstract = abstract.stripWhiteSpace();
+      docTitle = desc.trimmed();
+      docAuthor = author.trimmed();
+      docAbstract = abstract.trimmed();
     }
 
   }
@@ -279,7 +279,7 @@ Parser::parsePacketWP6( const QString & filename )
   // must be little-endian
   stream.setByteOrder (QDataStream::LittleEndian);
 
-  Q_UINT16 flag, count;
+  quint16 flag, count;
   stream.device()->at( 0x200 );
 
   stream >> flag;  // FIXME should be checked == 2 ?
@@ -288,9 +288,9 @@ Parser::parsePacketWP6( const QString & filename )
   stream.device()->at( 0x20e );
   for( unsigned c=0; c<count; c++ )
   {
-    Q_UINT8 packet_type, packet_flag;
-    Q_UINT16 count, hidcount;
-    Q_UINT32 packet_size, packet_pos;
+    quint8 packet_type, packet_flag;
+    quint16 count, hidcount;
+    quint32 packet_size, packet_pos;
 
     stream >> packet_flag;
     stream >> packet_type;
@@ -339,7 +339,7 @@ Parser::parsePacketWP6( const QString & filename )
             if( p->data[j+8+k]==0 ) break;
             else str.append( p->data[j+8+k] );
 
-        str = str.stripWhiteSpace();
+        str = str.trimmed();
 
         if( tag==1 ) docAbstract = str;
         if( tag==5 ) docAuthor = str;
@@ -379,7 +379,7 @@ Parser::parseDocWP5( const QString & filename, int start )
     {
 
       // read one byte
-      Q_UINT8 code;
+      quint8 code;
       stream >> code;
 
       // ASCII printable characters ?
@@ -389,13 +389,13 @@ Parser::parseDocWP5( const QString & filename, int start )
         {
           // either fixed-length or variable-length function
 
-          Q3MemArray < Q_UINT8 > data;
-          Q3MemArray < Q_UINT16 > pid;
-          Q_UINT8 subfunction = 0;
+          Q3MemArray < quint8 > data;
+          Q3MemArray < quint16 > pid;
+          quint8 subfunction = 0;
 
           if ((code >= 0xC0) && (code <= 0xCF))
             {
-              Q_UINT8 dummy;
+              quint8 dummy;
               unsigned lentab[] =
                 { 2, 7, 9, 1, 1, 3, 4, 5, 2, 3, 4, 4, 6, 8, 8, 10 };
               unsigned length = lentab[code & 0x0F];
@@ -406,7 +406,7 @@ Parser::parseDocWP5( const QString & filename, int start )
             }
           else if ((code >= 0xD0) && (code <= 0xFF))
             {
-              Q_UINT16 length;
+              quint16 length;
               stream >> subfunction;
               stream >> length;
 
@@ -588,7 +588,7 @@ Parser::parseDocWP6 (const QString & filename, int start)
     {
 
       // read one byte
-      Q_UINT8 code;
+      quint8 code;
       stream >> code;
 
       // ASCII printable characters ?
@@ -617,13 +617,13 @@ Parser::parseDocWP6 (const QString & filename, int start)
         {
           // either fixed-length or variable-length function
 
-          Q3MemArray < Q_UINT8 > data;
-          Q3MemArray < Q_UINT16 > pid;
-          Q_UINT8 subfunction = 0;
+          Q3MemArray < quint8 > data;
+          Q3MemArray < quint16 > pid;
+          quint8 subfunction = 0;
 
           if ((code >= 0xF0) && (code <= 0xFF))
             {
-              Q_UINT8 dummy;
+              quint8 dummy;
               unsigned lentab[] =
                 { 2, 3, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6, 0 };
               unsigned length = lentab[code & 0x0F];
@@ -634,8 +634,8 @@ Parser::parseDocWP6 (const QString & filename, int start)
             }
           else if ((code >= 0xD0) && (code <= 0xFF))
             {
-              Q_UINT16 length;
-              Q_UINT8 flag = 0, numpid = 0;
+              quint16 length;
+              quint8 flag = 0, numpid = 0;
               stream >> subfunction;
               stream >> length;
               stream >> flag;
@@ -650,15 +650,15 @@ Parser::parseDocWP6 (const QString & filename, int start)
                   length = length - 1 - numpid * 2;
                 }
 
-              Q_UINT16 nondel;
+              quint16 nondel;
               stream >> nondel;
 
               data.resize (length);
               for (int c = 0; length && !stream.atEnd (); length--, c++)
                 stream >> data[c];
 
-              Q_UINT16 dummy_length;
-              Q_UINT8 dummy_code;
+              quint16 dummy_length;
+              quint8 dummy_code;
               stream >> dummy_length;   // FIXME should be checked == length ?
               stream >> dummy_code;     // FIXME should be checked == code ?
 
@@ -830,12 +830,12 @@ Parser::parseDocWP6 (const QString & filename, int start)
                   for( unsigned i=24; strlen && (i<p->data.size()); i+=2, strlen-=2 )
                     if( p->data[i]) typeface.append( p->data[i] );
                     else break;
-                  typeface = typeface.stripWhiteSpace();
+                  typeface = typeface.trimmed();
 
                   // hack: get rid of "Regular" as font name suffix
                   QString suffix = "Regular";
                   if( typeface.right( suffix.length() ) == suffix )
-                     typeface = typeface.left( typeface.length() -  suffix.length() ).stripWhiteSpace();
+                     typeface = typeface.left( typeface.length() -  suffix.length() ).trimmed();
 
                   tokens.append( new Token( Token::FontFace, typeface ) );
                 }
@@ -959,7 +959,7 @@ mapToTabType (int t)
 }
 
 void
-Parser::handleTab (Q3MemArray < Q_UINT8 > data)
+Parser::handleTab (Q3MemArray < quint8 > data)
 {
   Q3PtrList < Token::Tab > tabs;
   bool relative = data[0];

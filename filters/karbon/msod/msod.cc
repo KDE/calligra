@@ -51,7 +51,7 @@ Msod::~Msod()
 
 void Msod::drawShape(
     unsigned shapeType,
-    Q_UINT32 bytes,
+    quint32 bytes,
     QDataStream &operands)
 {
     static const char *funcTab[] =
@@ -262,26 +262,26 @@ void Msod::drawShape(
     };
     struct
     {
-        Q_UINT32 spid;                  // The shape id
+        quint32 spid;                  // The shape id
         union
         {
-            Q_UINT32 info;
+            quint32 info;
             struct
             {
-                Q_UINT32 fGroup : 1;    // This shape is a group shape
-                Q_UINT32 fChild : 1;    // Not a top-level shape
-                Q_UINT32 fPatriarch : 1; // This is the topmost group shape.
+                quint32 fGroup : 1;    // This shape is a group shape
+                quint32 fChild : 1;    // Not a top-level shape
+                quint32 fPatriarch : 1; // This is the topmost group shape.
                                         // Exactly one of these per drawing.
-                Q_UINT32 fDeleted : 1;  // The shape has been deleted
-                Q_UINT32 fOleShape : 1; // The shape is an OLE object
-                Q_UINT32 fHaveMaster : 1; // Shape has a hspMaster property
-                Q_UINT32 fFlipH : 1;    // Shape is flipped horizontally
-                Q_UINT32 fFlipV : 1;    // Shape is flipped vertically
-                Q_UINT32 fConnector : 1; // Connector type of shape
-                Q_UINT32 fHaveAnchor : 1; // Shape has an anchor of some kind
-                Q_UINT32 fBackground : 1; // Background shape
-                Q_UINT32 fHaveSpt : 1;  // Shape has a shape type property
-                Q_UINT32 reserved : 20; // Not yet used
+                quint32 fDeleted : 1;  // The shape has been deleted
+                quint32 fOleShape : 1; // The shape is an OLE object
+                quint32 fHaveMaster : 1; // Shape has a hspMaster property
+                quint32 fFlipH : 1;    // Shape is flipped horizontally
+                quint32 fFlipV : 1;    // Shape is flipped vertically
+                quint32 fConnector : 1; // Connector type of shape
+                quint32 fHaveAnchor : 1; // Shape has an anchor of some kind
+                quint32 fBackground : 1; // Background shape
+                quint32 fHaveSpt : 1;  // Shape has a shape type property
+                quint32 reserved : 20; // Not yet used
             } fields;
         } grfPersistent;
     } data;
@@ -291,7 +291,7 @@ void Msod::drawShape(
     operands >> data.spid;
     operands >> data.grfPersistent.info;
     bytes -= 8;
-	kdDebug(s_area) << "shape-id: " << data.spid << " type: " << funcTab[shapeType] << " (" << shapeType << ")" <<
+	kDebug(s_area) << "shape-id: " << data.spid << " type: " << funcTab[shapeType] << " (" << shapeType << ")" <<
         (data.grfPersistent.fields.fGroup ? " group" : "") <<
         (data.grfPersistent.fields.fChild ? " child" : "") <<
         (data.grfPersistent.fields.fPatriarch ? " patriarch" : "") <<
@@ -359,15 +359,15 @@ void Msod::drawShape(
 
 void Msod::invokeHandler(
     Header &op,
-    Q_UINT32 bytes,
+    quint32 bytes,
     QDataStream &operands)
 {
-    typedef void (Msod::*method)(Header &op, Q_UINT32 bytes, QDataStream &operands);
+    typedef void (Msod::*method)(Header &op, quint32 bytes, QDataStream &operands);
 
     typedef struct
     {
         const char *name;
-        Q_UINT16 opcode;
+        quint16 opcode;
         method handler;
     } opcodeEntry;
 
@@ -427,11 +427,11 @@ void Msod::invokeHandler(
     if (!result)
     {
         if (funcTab[i].name)
-            kdWarning(s_area) << "invokeHandler: unsupported opcode: " <<
+            kWarning(s_area) << "invokeHandler: unsupported opcode: " <<
                 funcTab[i].name <<
                 " operands: " << bytes << endl;
         else
-            kdWarning(s_area) << "invokeHandler: unsupported opcode: 0x" <<
+            kWarning(s_area) << "invokeHandler: unsupported opcode: 0x" <<
                 QString::number(op.opcode.fields.fbt, 16) <<
                 " operands: " << bytes << endl;
 
@@ -441,7 +441,7 @@ void Msod::invokeHandler(
     }
     else
     {
-        kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
+        kDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
             " operands: " << bytes << endl;
 
         // We don't invoke the handler directly on the incoming operands, but
@@ -475,8 +475,8 @@ void Msod::invokeHandler(
 QPoint Msod::normalisePoint(
     QDataStream &operands)
 {
-    Q_UINT16 x;
-    Q_UINT16 y;
+    quint16 x;
+    quint16 y;
 
     operands >> x >> y;
     return QPoint(x / m_dpi, y / m_dpi);
@@ -485,8 +485,8 @@ QPoint Msod::normalisePoint(
 QSize Msod::normaliseSize(
     QDataStream &operands)
 {
-    Q_UINT16 width;
-    Q_UINT16 height;
+    quint16 width;
+    quint16 height;
 
     operands >> width >> height;
     return QSize(width / m_dpi, height / m_dpi);
@@ -500,7 +500,7 @@ bool Msod::parse(
     QFile in(file);
     if (!in.open(QIODevice::ReadOnly))
     {
-        kdError(s_area) << "Unable to open input file!" << endl;
+        kError(s_area) << "Unable to open input file!" << endl;
         in.close();
         return false;
     }
@@ -529,26 +529,26 @@ bool Msod::parse(
 
 void Msod::opAlignrule(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 void Msod::opAnchor(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 void Msod::opArcrule(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
-void Msod::opBlip(Header &, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opBlip(Header &, quint32 bytes, QDataStream &operands)
 {
     typedef enum
     {
@@ -568,25 +568,25 @@ void Msod::opBlip(Header &, Q_UINT32 bytes, QDataStream &operands)
     } MSOBLIPCOMPRESSION;
 
     bool hasPrimaryId;
-    Q_UINT32 length = 0;
+    quint32 length = 0;
     struct
     {
-        Q_UINT32 cb;
+        quint32 cb;
         struct
         {
-            Q_UINT32 x;
-            Q_UINT32 y;
-            Q_UINT32 w;
-            Q_UINT32 h;
+            quint32 x;
+            quint32 y;
+            quint32 w;
+            quint32 h;
         } bounds;
         struct
         {
-            Q_UINT32 w;
-            Q_UINT32 h;
+            quint32 w;
+            quint32 h;
         } ptSize;
-        Q_UINT32 cbSave;
-        Q_UINT8 compression;
-        Q_UINT8 filter;
+        quint32 cbSave;
+        quint8 compression;
+        quint8 filter;
     } data;
 
     // Skip any explicit primary header (m_rgbUidprimary).
@@ -684,14 +684,14 @@ void Msod::opBlip(Header &, Q_UINT32 bytes, QDataStream &operands)
         int result;
 
         tmp = new char[data.cb];
-        result = uncompress((Q_UINT8 *)tmp, &destLen, (Q_UINT8 *)image->data, image->length);
+        result = uncompress((quint8 *)tmp, &destLen, (quint8 *)image->data, image->length);
         if (result != Z_OK)
         {
-            kdError(s_area) << "opBlip: uncompress failed: " << result << endl;
+            kError(s_area) << "opBlip: uncompress failed: " << result << endl;
         }
         if (destLen != data.cb)
         {
-            kdError(s_area) << "opBlip: uncompressed " << destLen << " instead of " << data.cb << endl;
+            kError(s_area) << "opBlip: uncompressed " << destLen << " instead of " << data.cb << endl;
         }
         delete [] image->data;
         image->data = tmp;
@@ -703,21 +703,21 @@ void Msod::opBlip(Header &, Q_UINT32 bytes, QDataStream &operands)
 
 // FBSE - File Blip Store Entry
 
-void Msod::opBse(Header &op, Q_UINT32, QDataStream &operands)
+void Msod::opBse(Header &op, quint32, QDataStream &operands)
 {
     struct
     {
-        Q_UINT8 btWin32;     // Required type on Win32.
-        Q_UINT8 btMacOS;     // Required type on Mac.
-        Q_UINT8 rgbUid[16];  // Identifier of blip.
-        Q_UINT16 tag;        // currently unused.
-        Q_UINT32 size;       // Blip size in stream.
-        Q_UINT32 cRef;       // Reference count on the blip.
-        Q_UINT32 foDelay;    // File offset in the delay stream.
-        Q_UINT8 usage;       // How this blip is used (MSOBLIPUSAGE).
-        Q_UINT8 cbName;      // length of the blip name.
-        Q_UINT8 unused2;     // for the future.
-        Q_UINT8 unused3;     // for the future.
+        quint8 btWin32;     // Required type on Win32.
+        quint8 btMacOS;     // Required type on Mac.
+        quint8 rgbUid[16];  // Identifier of blip.
+        quint16 tag;        // currently unused.
+        quint32 size;       // Blip size in stream.
+        quint32 cRef;       // Reference count on the blip.
+        quint32 foDelay;    // File offset in the delay stream.
+        quint8 usage;       // How this blip is used (MSOBLIPUSAGE).
+        quint8 cbName;      // length of the blip name.
+        quint8 unused2;     // for the future.
+        quint8 unused3;     // for the future.
     } data;
     unsigned i;
 
@@ -758,145 +758,145 @@ void Msod::opBse(Header &op, Q_UINT32, QDataStream &operands)
     }
 }
 
-void Msod::opBstorecontainer(Header &, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opBstorecontainer(Header &, quint32 bytes, QDataStream &operands)
 {
     walk(bytes, operands);
 }
 
 void Msod::opCalloutrule(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 void Msod::opChildanchor(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
-void Msod::opClientanchor(Header &, Q_UINT32, QDataStream &operands)
+void Msod::opClientanchor(Header &, quint32, QDataStream &operands)
 {
     struct
     {
-        Q_UINT32 unknown;
+        quint32 unknown;
     } data;
 
     operands >> data.unknown;
-    kdDebug(s_area) << "client anchor: " << data.unknown << endl;
+    kDebug(s_area) << "client anchor: " << data.unknown << endl;
 }
 
-void Msod::opClientdata(Header &, Q_UINT32, QDataStream &operands)
+void Msod::opClientdata(Header &, quint32, QDataStream &operands)
 {
     struct
     {
-        Q_UINT32 unknown;
+        quint32 unknown;
     } data;
 
     operands >> data.unknown;
-    kdDebug(s_area) << "client data: " << data.unknown << endl;
+    kDebug(s_area) << "client data: " << data.unknown << endl;
 }
 
 void Msod::opClientrule(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 void Msod::opClienttextbox(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &operands)
 {
     struct
     {
-        Q_UINT32 unknown;
+        quint32 unknown;
     } data;
 
     operands >> data.unknown;
-    kdDebug(s_area) << "client textbox: 0x" << QString::number(data.unknown,16) << endl;
+    kDebug(s_area) << "client textbox: 0x" << QString::number(data.unknown,16) << endl;
 }
 
 void Msod::opClsid(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 void Msod::opColormru(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 void Msod::opConnectorrule(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 void Msod::opDeletedpspl(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 // FDG - File DG
 
-void Msod::opDg(Header &, Q_UINT32, QDataStream &operands)
+void Msod::opDg(Header &, quint32, QDataStream &operands)
 {
     struct
     {
-        Q_UINT32 csp;        // The number of shapes in this drawing.
-        Q_UINT32 spidCur;    // The last shape ID given to an SP in this DG.
+        quint32 csp;        // The number of shapes in this drawing.
+        quint32 spidCur;    // The last shape ID given to an SP in this DG.
     } data;
 
     operands >> data.csp >> data.spidCur;
-    kdDebug(s_area) << "drawing id: " << data.spidCur << endl;
+    kDebug(s_area) << "drawing id: " << data.spidCur << endl;
     m_isRequiredDrawing = (m_requestedShapeId == data.spidCur);
     if (m_isRequiredDrawing)
     {
-        kdDebug(s_area) << "found requested drawing" << endl;
+        kDebug(s_area) << "found requested drawing" << endl;
     }
 }
 
-void Msod::opDgcontainer(Header &, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opDgcontainer(Header &, quint32 bytes, QDataStream &operands)
 {
     walk(bytes, operands);
 }
 
 // FDGG - File DGG
 
-void Msod::opDgg(Header &, Q_UINT32, QDataStream &operands)
+void Msod::opDgg(Header &, quint32, QDataStream &operands)
 {
     struct
     {
-        Q_UINT32 spidMax;    // The current maximum shape ID.
-        Q_UINT32 cidcl;      // The number of ID clusters (FIDCLs).
-        Q_UINT32 cspSaved;   // The total number of shapes saved.
+        quint32 spidMax;    // The current maximum shape ID.
+        quint32 cidcl;      // The number of ID clusters (FIDCLs).
+        quint32 cspSaved;   // The total number of shapes saved.
                         // (including deleted shapes, if undo
                         // information was saved).
-        Q_UINT32 cdgSaved;   // The total number of drawings saved.
+        quint32 cdgSaved;   // The total number of drawings saved.
     } data;
 
     // File ID Cluster - used to save IDCLs
 
     struct
     {
-        Q_UINT32 dgid;       // DG owning the SPIDs in this cluster
-        Q_UINT32 cspidCur;   // number of SPIDs used so far
+        quint32 dgid;       // DG owning the SPIDs in this cluster
+        quint32 cspidCur;   // number of SPIDs used so far
     } data1;
     unsigned i;
 
     operands >> data.spidMax >> data.cidcl >> data.cspSaved >> data.cdgSaved;
-    kdDebug(s_area) << data.cspSaved << " shapes in " <<
+    kDebug(s_area) << data.cspSaved << " shapes in " <<
         data.cidcl - 1 << " clusters in " <<
         data.cdgSaved << " drawings" << endl;
     for (i = 0; i < data.cidcl - 1; i++)
@@ -905,43 +905,43 @@ void Msod::opDgg(Header &, Q_UINT32, QDataStream &operands)
     }
 }
 
-void Msod::opDggcontainer(Header &, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opDggcontainer(Header &, quint32 bytes, QDataStream &operands)
 {
     walk(bytes, operands);
 }
 
 void Msod::opOleobject(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
-void Msod::opOpt(Header &, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opOpt(Header &, quint32 bytes, QDataStream &operands)
 {
     m_opt->walk(bytes, operands);
 }
 
 void Msod::opRegroupitems(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
 void Msod::opSelection(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
-void Msod::opSolvercontainer(Header &, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opSolvercontainer(Header &, quint32 bytes, QDataStream &operands)
 {
     walk(bytes, operands);
 }
 
-void Msod::opSp(Header &op, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opSp(Header &op, quint32 bytes, QDataStream &operands)
 {
     // We want to defer the act of drawing a shape until we have seen any options
     // that may affect it. Thus, we merely store the data away, and let opSpContainer
@@ -953,7 +953,7 @@ void Msod::opSp(Header &op, Q_UINT32 bytes, QDataStream &operands)
     operands.readRawBytes(m_shape.data, bytes);
 }
 
-void Msod::opSpcontainer(Header &, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opSpcontainer(Header &, quint32 bytes, QDataStream &operands)
 {
     walk(bytes, operands);
 
@@ -970,32 +970,32 @@ void Msod::opSpcontainer(Header &, Q_UINT32 bytes, QDataStream &operands)
     m_shape.data = 0L;
 }
 
-void Msod::opSpgr(Header &, Q_UINT32, QDataStream &operands)
+void Msod::opSpgr(Header &, quint32, QDataStream &operands)
 {
     struct
     {
-        Q_UINT32 x;
-        Q_UINT32 y;
-        Q_UINT32 w;
-        Q_UINT32 h;
+        quint32 x;
+        quint32 y;
+        quint32 w;
+        quint32 h;
     } data;
 
     operands >> data.x >> data.y >> data.w >> data.h;
 }
 
-void Msod::opSpgrcontainer(Header &, Q_UINT32 bytes, QDataStream &operands)
+void Msod::opSpgrcontainer(Header &, quint32 bytes, QDataStream &operands)
 {
     walk(bytes, operands);
 }
 
-void Msod::opSplitmenucolors(Header &, Q_UINT32, QDataStream &operands)
+void Msod::opSplitmenucolors(Header &, quint32, QDataStream &operands)
 {
     struct
     {
-        Q_UINT32 fill;
-        Q_UINT32 line;
-        Q_UINT32 shadow;
-        Q_UINT32 threeDee;
+        quint32 fill;
+        quint32 line;
+        quint32 shadow;
+        quint32 threeDee;
     } data;
 
     operands >> data.fill >> data.line >> data.shadow >> data.threeDee;
@@ -1003,24 +1003,24 @@ void Msod::opSplitmenucolors(Header &, Q_UINT32, QDataStream &operands)
 
 void Msod::opTextbox(
     Header &,
-    Q_UINT32,
+    quint32,
     QDataStream &)
 {
 }
 
-void Msod::skip(Q_UINT32 bytes, QDataStream &operands)
+void Msod::skip(quint32 bytes, QDataStream &operands)
 {
     if ((int)bytes < 0)
     {
-        kdError(s_area) << "skip: " << (int)bytes << endl;
+        kError(s_area) << "skip: " << (int)bytes << endl;
         return;
     }
     if (bytes)
     {
-        Q_UINT32 i;
-        Q_UINT8 discard;
+        quint32 i;
+        quint8 discard;
 
-        kdDebug(s_area) << "skip: " << bytes << endl;
+        kDebug(s_area) << "skip: " << bytes << endl;
         for (i = 0; i < bytes; i++)
         {
             operands >> discard;
@@ -1028,10 +1028,10 @@ void Msod::skip(Q_UINT32 bytes, QDataStream &operands)
     }
 }
 
-void Msod::walk(Q_UINT32 bytes, QDataStream &operands)
+void Msod::walk(quint32 bytes, QDataStream &operands)
 {
     Header op;
-    Q_UINT32 length = 0;
+    quint32 length = 0;
 
     // Stop parsing when there are no more records. Note that we stop as soon
     // as we cannot get a complete header.
@@ -1073,7 +1073,7 @@ Msod::Options::~Options()
     delete m_pVertices;
 }
 
-double Msod::Options::from1616ToDouble(Q_UINT32 value)
+double Msod::Options::from1616ToDouble(quint32 value)
 {
     return (value >> 16) + 65535.0 / (double)(value & 0xffff);
 }
@@ -1133,11 +1133,11 @@ void Msod::Options::initialise()
     m_fBackground = false;
 }
 
-void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
+void Msod::Options::walk(quint32 bytes, QDataStream &operands)
 {
     Header op;
-    Q_UINT16 length = 0;
-    Q_UINT16 complexLength = 0;
+    quint16 length = 0;
+    quint16 complexLength = 0;
 
     // Reset all options to default values.
 
@@ -1172,7 +1172,7 @@ void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
             break;
         case 128:
             m_lTxid = op.value;
-    kdDebug(s_area) << "textbox: 0x" << QString::number(op.value,16) << endl;
+    kDebug(s_area) << "textbox: 0x" << QString::number(op.value,16) << endl;
             break;
         case 260:
             if (op.opcode.fields.fBid)
@@ -1205,7 +1205,7 @@ void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
             }
             else
             {
-                kdError(s_area) << "Cannot handle IMsoBlip" << endl;
+                kError(s_area) << "Cannot handle IMsoBlip" << endl;
             }
             break;
         case 262:
@@ -1281,12 +1281,12 @@ void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
             break;
         default:
             unsupported = true;
-            kdWarning(s_area) << "unsupported simple option: " <<
+            kWarning(s_area) << "unsupported simple option: " <<
                 op.opcode.fields.pid << endl;
             break;
         }
         if (!unsupported)
-            kdDebug(s_area) << "simple option: " <<
+            kDebug(s_area) << "simple option: " <<
                 op.opcode.fields.pid << endl;
     }
 
@@ -1294,7 +1294,7 @@ void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
 
     while (complexOpts.count())
     {
-        Q_INT16 t16;
+        qint16 t16;
         unsigned i;
 
         op = *complexOpts.getFirst();
@@ -1327,13 +1327,13 @@ void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
             break;
         default:
             unsupported = true;
-            kdWarning(s_area) << "unsupported complex option: " <<
+            kWarning(s_area) << "unsupported complex option: " <<
                 op.opcode.fields.pid << " operands: " << op.value << endl;
             m_parent.skip(op.value, operands);
             break;
         }
         if (!unsupported)
-            kdDebug(s_area) << "complex option: " <<
+            kDebug(s_area) << "complex option: " <<
                 op.opcode.fields.pid << " operands: " << op.value  << endl;
         complexLength -= op.value;
     }

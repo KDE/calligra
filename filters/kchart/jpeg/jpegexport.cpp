@@ -50,7 +50,7 @@ void JpegExport::extraImageAttribute()
 	width  = exportDialog->width();
 	height = exportDialog->height();
 
-	kdDebug() << "MNG Export: size = [" << width << "," << height << "]" << endl;
+	kDebug() << "MNG Export: size = [" << width << "," << height << "]" << endl;
     }
     delete exportDialog;
 }

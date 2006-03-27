@@ -67,11 +67,11 @@ OoDrawImport::~OoDrawImport()
 
 KoFilter::ConversionStatus OoDrawImport::convert( Q3CString const & from, Q3CString const & to )
 {
-    kdDebug() << "Entering Oodraw Import filter: " << from << " - " << to << endl;
+    kDebug() << "Entering Oodraw Import filter: " << from << " - " << to << endl;
 
     if( from != "application/vnd.sun.xml.draw" || to != "application/x-karbon" )
     {
-        kdWarning() << "Invalid mimetypes " << from << " " << to << endl;
+        kWarning() << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
     }
 
@@ -79,7 +79,7 @@ KoFilter::ConversionStatus OoDrawImport::convert( Q3CString const & from, Q3CStr
 
     if ( !m_zip->open( QIODevice::ReadOnly ) )
     {
-        kdError(30518) << "Couldn't open the requested file "<< m_chain->inputFile() << endl;
+        kError(30518) << "Couldn't open the requested file "<< m_chain->inputFile() << endl;
         delete m_zip;
         return KoFilter::FileNotFound;
     }
@@ -100,7 +100,7 @@ KoStoreDevice* out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
 if( out )
 {
 QCString info = docinfo.toCString();
-//kdDebug() << " info :" << info << endl;
+//kDebug() << " info :" << info << endl;
 // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
 out->writeBlock( info , info.length() );
 }*/
@@ -111,7 +111,7 @@ out->writeBlock( info , info.length() );
     if( out )
     {
         Q3CString info = docinfo.toCString();
-        //kdDebug(30518) << " info :" << info << endl;
+        //kDebug(30518) << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( info , info.length() );
     }
@@ -130,13 +130,13 @@ out->writeBlock( info , info.length() );
     if( out )
     {
         Q3CString content = outdoc.toCString();
-        kdDebug() << " content :" << content << endl;
+        kDebug() << " content :" << content << endl;
         out->writeBlock( content , content.length() );
     }
     m_zip->close();
     delete m_zip;
 
-    kdDebug() << "######################## OoDrawImport::convert done ####################" << endl;
+    kDebug() << "######################## OoDrawImport::convert done ####################" << endl;
 
     return KoFilter::OK;
 }
@@ -147,7 +147,7 @@ void OoDrawImport::createDocumentInfo( QDomDocument &docinfo )
     docinfo = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
 
     OoUtils::createDocumentInfo(m_meta, docinfo);
-    //kdDebug(30518) << " meta-info :" << m_meta.toCString() << endl;
+    //kDebug(30518) << " meta-info :" << m_meta.toCString() << endl;
 }
 
 
@@ -157,7 +157,7 @@ KoFilter::ConversionStatus OoDrawImport::openFile()
     KoFilter::ConversionStatus status = loadAndParse( "content.xml", m_content );
     if ( status != KoFilter::OK )
     {
-        kdError(30518) << "Content.xml could not be parsed correctly! Aborting!" << endl;
+        kError(30518) << "Content.xml could not be parsed correctly! Aborting!" << endl;
         return status;
     }
 
@@ -353,7 +353,7 @@ appendImage( doc, e, pictureElement, o );
 }*/
 		else
 		{
-			kdDebug() << "Unsupported object '" << name << "'" << endl;
+			kDebug() << "Unsupported object '" << name << "'" << endl;
 			continue;
 		}
 		if( parent && obj )
@@ -473,7 +473,7 @@ OoDrawImport::appendBrush( VObject &obj )
 					KoRect rect = obj.boundingBox();
 					KoPoint origin, vector;
 					// nearAngle should now be one of: 0, 45, 90, 135, 180...
-					kdDebug() << "nearAngle: " << nearAngle << endl;
+					kDebug() << "nearAngle: " << nearAngle << endl;
 					if( nearAngle == 0 || nearAngle == 180 )
 					{
 						origin.setX( rect.x() + rect.width() );
@@ -615,7 +615,7 @@ OoDrawImport::insertStyles( const QDomElement& styles )
 
 		QString name = e.attributeNS( ooNS::style, "name", QString::null );
 		m_styles.insert( name, new QDomElement( e ) );
-		//kdDebug() << "Style: '" << name << "' loaded " << endl;
+		//kDebug() << "Style: '" << name << "' loaded " << endl;
 	}
 }
 
@@ -662,7 +662,7 @@ OoDrawImport::parseViewBox( const QDomElement& object )
 	{
 		// allow for viewbox def with ',' or whitespace
 		QString viewbox( object.attributeNS( ooNS::svg, "viewBox", QString::null ) );
-		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplifyWhiteSpace() );
+		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplified() );
 
 		rect.setX( points[0].toFloat() );
 		rect.setY( points[1].toFloat() );
@@ -712,7 +712,7 @@ OoDrawImport::parseColor( VColor &color, const QString &s )
 {
 	if( s.startsWith( "rgb(" ) )
 	{
-		QString parse = s.stripWhiteSpace();
+		QString parse = s.trimmed();
 		QStringList colors = QStringList::split( ',', parse );
 		QString r = colors[0].right( ( colors[0].length() - 4 ) );
 		QString g = colors[1];
@@ -741,7 +741,7 @@ OoDrawImport::parseColor( VColor &color, const QString &s )
 	}
 	else
 	{
-		QString rgbColor = s.stripWhiteSpace();
+		QString rgbColor = s.trimmed();
 		QColor c;
 		if( rgbColor.startsWith( "#" ) )
 			c.setNamedColor( rgbColor );

@@ -83,14 +83,14 @@ void KarbonAIParserBase::parsingFinished(){
   // handle bounding box
   if (m_document)
   {
-    kdDebug() << "bbox 1 is " << m_bbox << endl;
+    kDebug() << "bbox 1 is " << m_bbox << endl;
 
     if (m_bbox.width() > 0. )
       m_document->setWidth (m_bbox.width());
     if (m_bbox.height() > 0. )
       m_document->setHeight (m_bbox.height());
 
-/*    QWMatrix matrix;
+/*    QMatrix matrix;
     matrix.translate (-m_bbox.x(),-m_bbox.y());
 
     VTransformNodes translator (matrix);

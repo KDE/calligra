@@ -58,7 +58,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "kofficefilters" );
+        KGlobal::locale()->insertCatalog( "kofficefilters" );
     }
 };
 
@@ -208,12 +208,12 @@ KoFilter::ConversionStatus ASCIIImport::convert( const Q3CString& from, const Q3
     	dialog = new AsciiImportDialog();
 	if (!dialog)
 	{
-	  kdError(30502) << "Dialog has not been created! Aborting!" << endl;
+	  kError(30502) << "Dialog has not been created! Aborting!" << endl;
 	  return KoFilter::StupidError;
 	}
 	if (!dialog->exec())
 	{
-	  kdDebug(30502) << "Dialog was aborted! Aborting filter!" << endl; // this isn't an error!
+	  kDebug(30502) << "Dialog was aborted! Aborting filter!" << endl; // this isn't an error!
 	  return KoFilter::UserCancelled;
 	}
     }
@@ -234,7 +234,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const Q3CString& from, const Q3
 
     QFile in(m_chain->inputFile());
     if(!in.open(QIODevice::ReadOnly)) {
-        kdError(30502) << "Unable to open input file!" << endl;
+        kError(30502) << "Unable to open input file!" << endl;
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -250,12 +250,12 @@ KoFilter::ConversionStatus ASCIIImport::convert( const Q3CString& from, const Q3
 
     if (!codec)
     {
-        kdError(30502) << "Could not create QTextCodec! Aborting" << endl;
+        kError(30502) << "Could not create QTextCodec! Aborting" << endl;
         in.close();
         return KoFilter::StupidError;
     }
 
-    kdDebug(30502) << "Charset used: " << codec->name() << endl;
+    kDebug(30502) << "Charset used: " << codec->name() << endl;
 
     stream.setCodec(codec);
 
@@ -268,12 +268,12 @@ KoFilter::ConversionStatus ASCIIImport::convert( const Q3CString& from, const Q3
 
 
 #if 0
-    kdDebug(30502) << mainDocument.toString() << endl;
+    kDebug(30502) << mainDocument.toString() << endl;
 #endif
 
     KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
     if(!out) {
-        kdError(30502) << "Unable to open output file!" << endl;
+        kError(30502) << "Unable to open output file!" << endl;
         in.close();
         return KoFilter::StorageCreationError;
     }
@@ -287,7 +287,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const Q3CString& from, const Q3
 void ASCIIImport::oldWayConvert(QTextStream& stream, QDomDocument& mainDocument,
     QDomElement& mainFramesetElement)
 {
-    kdDebug(30502) << "Entering: ASCIIImport::oldWayConvert" << endl;
+    kDebug(30502) << "Entering: ASCIIImport::oldWayConvert" << endl;
     QStringList paragraph;  // lines of the paragraph
     int linecount = 0;  // line counter used to position tables
     //int table_no = 0;  // used for table identifiers
@@ -356,7 +356,7 @@ void ASCIIImport::asIsConvert(QTextStream& stream, QDomDocument& mainDocument,
     QDomElement& mainFramesetElement)
 // Paragraph strategy: one line, one paragraph
 {
-    kdDebug(30502) << "Entering: ASCIIImport::asIsConvert" << endl;
+    kDebug(30502) << "Entering: ASCIIImport::asIsConvert" << endl;
     bool lastCharWasCr=false; // Was the previous character a Carriage Return?
     QString strLine;
     while(!stream.atEnd())
@@ -376,7 +376,7 @@ void ASCIIImport::sentenceConvert(QTextStream& stream, QDomDocument& mainDocumen
 // - an empty line also ends the paragraph
 // TODO/FIXME: we have a little problem with empty lines. Perhaps we should not allow empty paragraphs!
 {
-    kdDebug(30502) << "Entering: ASCIIImport::sentenceConvert" << endl;
+    kDebug(30502) << "Entering: ASCIIImport::sentenceConvert" << endl;
     QStringList paragraph;  // lines of the paragraph
     bool lastCharWasCr=false; // Was the previous character a Carriage Return?
     QString strLine;
@@ -420,7 +420,7 @@ void ASCIIImport::sentenceConvert(QTextStream& stream, QDomDocument& mainDocumen
         }
 #if 1
         writeOutParagraph(mainDocument,mainFramesetElement, "Standard",
-            paragraph.join(" ").simplifyWhiteSpace(), 0, 0);
+            paragraph.join(" ").simplified(), 0, 0);
 #else
         // FIXME/TODO: why is this not working?
         //processParagraph(mainDocument,mainFramesetElement,paragraph);
@@ -449,7 +449,7 @@ void ASCIIImport::processParagraph(QDomDocument& mainDocument,
             {
                 const int secondindent = Indent(*previousLine);
                 writeOutParagraph(mainDocument,mainFramesetElement,
-                    "Standard", text.simplifyWhiteSpace(), firstindent, secondindent);
+                    "Standard", text.simplified(), firstindent, secondindent);
 
                 firstindent = Indent(*it);
                 text = QString::null;  // reinitialize paragraph text
@@ -460,7 +460,7 @@ void ASCIIImport::processParagraph(QDomDocument& mainDocument,
     // write out paragraph begin to end
     const int secondindent = Indent(*previousLine);
     writeOutParagraph(mainDocument,mainFramesetElement,
-        "Standard", text.simplifyWhiteSpace(), firstindent, secondindent);
+        "Standard", text.simplified(), firstindent, secondindent);
 }
 
 void ASCIIImport::writeOutParagraph(QDomDocument& mainDocument,
@@ -664,7 +664,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
          while((index2 = Line->find( QRegExp("\t"),index)) > index
          || (index3 = MultSpaces( *Line, index)) > index )
            {
-           index1 = kMax(index2, index3);
+           index1 = qMax(index2, index3);
            if( index2 > index3)
            index1 = Line->find( QRegExp("[^\t]"), index1);
            tabcount++;
@@ -710,7 +710,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
 
            // calculate the column widths
            for(j = 0; j <= tabs[i].columns; j++)
-              width[j] = kMax(tabs[i].width[j], width[j] );
+              width[j] = qMax(tabs[i].width[j], width[j] );
            }  // else
 
         if(i > 0)
@@ -735,7 +735,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
                     beginline++;   // increment pointer
                     }
                  // process the white space to eliminate unwanted spaces
-                 QString text1 = text.simplifyWhiteSpace();
+                 QString text1 = text.simplified();
                  WriteOutParagraph( "Standard", "", text1 , firstindent, secondindent, str);
                  *linecount += (i - begin);
 
@@ -759,7 +759,7 @@ bool ASCIIImport::Table( QString *Line, int *linecount, int no_lines,
 
                        text = tabs[j].field[k];
                        // process the white space to eliminate unwanted spaces
-                       text1 = text.simplifyWhiteSpace();
+                       text1 = text.simplified();
 
                        // calculate position of table cell
                        pos.right = pos.left + (double)width[k] * ptsperchar;
@@ -794,11 +794,11 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
     QChar c;
     QChar lastchar = 'c'; // previous character - initialize non blank
     bool found = false;
-    // kdDebug(30502) << "length = "  << text.length() << endl;
+    // kDebug(30502) << "length = "  << text.length() << endl;
     for (uint i = index; i < text.length(); i++)
     {
         c = text.at(i);
-    // kdDebug(30502) << "i = " << i << " found = " << found << " c = " << c << " lastchar = " << lastchar << endl;
+    // kDebug(30502) << "i = " << i << " found = " << found << " c = " << c << " lastchar = " << lastchar << endl;
         if ( (c != ' ') && found)
             return i;
         else if (c == ' ' && lastchar == ' ')
@@ -896,7 +896,7 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
                      else secondindent = 0;
 
                      // process the white space to eliminate unwanted spaces
-                     QString text1 = text.simplifyWhiteSpace();
+                     QString text1 = text.simplified();
                      WriteOutParagraph( "Standard", type, text1 , firstindent, secondindent, str);
 
                      begin = i;
@@ -940,7 +940,7 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
          else secondindent = 0;
 
          // process the white space to eliminate unwanted spaces
-         QString text1 = text.simplifyWhiteSpace();
+         QString text1 = text.simplified();
          WriteOutParagraph( "Standard", type, text1 , firstindent, secondindent, str);
 
 

@@ -42,7 +42,7 @@ public:
 protected:
 	virtual void setupTranslations( void )
 	{
-		KGlobal::locale()->insertCatalogue( "kofficefilters" );
+		KGlobal::locale()->insertCatalog( "kofficefilters" );
 	}
 };
 

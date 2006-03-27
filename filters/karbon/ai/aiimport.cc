@@ -41,7 +41,7 @@ public:
 protected:
 	virtual void setupTranslations( void )
 	{
-		KGlobal::locale()->insertCatalogue( "kofficefilters" );
+		KGlobal::locale()->insertCatalog( "kofficefilters" );
 	}
 };
 
@@ -80,7 +80,7 @@ AiImport::convert( const Q3CString& from, const Q3CString& to )
         }
 	QString result = doc.toString();
 
-        kdDebug() << result << endl;
+        kDebug() << result << endl;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
 	if( !storeOut )
 	{

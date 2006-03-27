@@ -74,18 +74,18 @@ bool PalmDB::load( const char* filename )
   // read and encode database name
   // The name field is 32 bytes long, and is NUL terminated.
   // Use the length parameter of fromLatin1() anyway.
-  Q_UINT8 name[32];
+  quint8 name[32];
   for(int k = 0; k < 32; k++)
     stream >> name[k];
   m_name = QString::fromLatin1( (char*) name, 31 );
 
   // read database attribute
-  Q_UINT16 attr;
+  quint16 attr;
   stream >> attr;
   m_attributes = attr;
 
   // read database version (app-specific)
-  Q_UINT16 ver;
+  quint16 ver;
   stream >> ver;
   m_version = ver;
 
@@ -95,41 +95,41 @@ bool PalmDB::load( const char* filename )
   const int adjust = 2082844800;
 
   // read creation date
-  Q_UINT32 creation;
+  quint32 creation;
   stream >> creation;
   m_creationDate.setTime_t( creation - adjust );
 
   // read modification date
-  Q_UINT32 modification;
+  quint32 modification;
   stream >> modification;
   m_modificationDate.setTime_t( modification - adjust );
 
   // read last backup date
-  Q_UINT32 lastbackup;
+  quint32 lastbackup;
   stream >> lastbackup;
   m_lastBackupDate.setTime_t( lastbackup - adjust );
 
   // read modification number
-  Q_UINT32 modnum;
+  quint32 modnum;
   stream >> modnum;
 
   // read app info id and sort info id
-  Q_UINT32 appid, sortid;
+  quint32 appid, sortid;
   stream >> appid;
   stream >> sortid;
 
   // read and encode database type
-  Q_UINT8 dbt[4];
+  quint8 dbt[4];
   stream >> dbt[0] >> dbt[1] >> dbt[2] >> dbt[3];
   m_type = QString::fromLatin1( (char*) dbt, 4 );
 
   // read and encode database creator
-  Q_UINT8 dbc[4];
+  quint8 dbc[4];
   stream >> dbc[0] >> dbc[1] >> dbc[2] >> dbc[3];
   m_creator = QString::fromLatin1( (char*) dbc, 4 );
 
   // read unique id seed
-  Q_UINT32 idseed;
+  quint32 idseed;
   stream >> idseed;
   m_uniqueIDSeed = idseed;
 
@@ -137,11 +137,11 @@ bool PalmDB::load( const char* filename )
 
   // next record list
   // FIXME what to do with this ?
-  Q_UINT32 nextlist;
+  quint32 nextlist;
   stream >> nextlist;
 
   // number of records
-  Q_UINT16 numrec;
+  quint16 numrec;
   stream >> numrec;
 
   // read entries in record list
@@ -152,8 +152,8 @@ bool PalmDB::load( const char* filename )
   // FIXME any other better way to find record size ?
   for( int r = 0; r < numrec; r++ )
   {
-    Q_UINT32 pos;
-    Q_UINT8 flag, dummy;
+    quint32 pos;
+    quint8 flag, dummy;
     stream >> pos >> flag >> dummy >> dummy >> dummy;
     recpos[r] = pos; recsize[r] = filesize - pos;
     if( r> 0 ) recsize[r-1] = pos - recpos[r-1]; // fixup
@@ -186,7 +186,7 @@ bool PalmDB::load( const char* filename )
           data->resize( recsize[r] );
           stream.device()->at( recpos[r] );
           for( int q = 0; q < recsize[r]; q++ )
-            { Q_UINT8 c; stream >> c; data->at(q) = c; }
+            { quint8 c; stream >> c; data->at(q) = c; }
         }
     records.append( data );
   }
@@ -217,23 +217,23 @@ bool PalmDB::save( const char* filename )
   const char *dbname = m_name.latin1();
   for( unsigned k=0; k<31; k++ )
   {
-    Q_UINT8 c = (k<m_name.length()) ? dbname[k] : 0;
+    quint8 c = (k<m_name.length()) ? dbname[k] : 0;
     stream << c;
   }
   {
     // NUL-terminate the database name
-    Q_UINT8 c = 0;
+    quint8 c = 0;
     stream << c;
   }
 
 
 
   // write database attribute
-  Q_UINT16 attr = m_attributes;
+  quint16 attr = m_attributes;
   stream << attr;
 
   // write database version (app-specific)
-  Q_UINT16 ver = m_version;
+  quint16 ver = m_version;
   stream << ver;
 
   // reference date is 1 Jan 1904
@@ -241,61 +241,61 @@ bool PalmDB::save( const char* filename )
   QDateTime ref = QDate( 1904, 1, 1 );
 
   // write creation date
-  Q_UINT32 creation = -m_creationDate.secsTo( ref );
+  quint32 creation = -m_creationDate.secsTo( ref );
   stream << creation;
 
   // write modification date
-  Q_UINT32 modification = -m_modificationDate.secsTo( ref );
+  quint32 modification = -m_modificationDate.secsTo( ref );
   stream << modification;
 
   // write last backup date
-  Q_UINT32 lastbackup = -m_lastBackupDate.secsTo( ref );
+  quint32 lastbackup = -m_lastBackupDate.secsTo( ref );
   stream << lastbackup;
 
   // write modification number
-  Q_UINT32 modnum = 0;
+  quint32 modnum = 0;
   stream << modnum;
 
   // write app info id and sort info id
-  Q_UINT32 appid = 0, sortid = 0;
+  quint32 appid = 0, sortid = 0;
   stream << appid;
   stream << sortid;
 
   // write and encode database type
-  Q_UINT8 dbt[4];
+  quint8 dbt[4];
   const char *dbtype = m_type.latin1();
   for( int p=0; p<4; p++ ) dbt[p]=dbtype[p];
   stream << dbt[0] << dbt[1] << dbt[2] << dbt[3];
 
   // write and encode database creator
-  Q_UINT8 dbc[4];
+  quint8 dbc[4];
   const char *dbcreator = m_creator.latin1();
   for( int p=0; p<4; p++ ) dbc[p]=dbcreator[p];
   stream << dbc[0] << dbc[1] << dbc[2] << dbc[3];
 
   // write unique id seed
-  Q_UINT32 idseed = 0;
+  quint32 idseed = 0;
   stream << idseed;
 
   // now start to read PDB record list (variable-length)
 
   // next record list
-  Q_UINT32 nextlist = 0;
+  quint32 nextlist = 0;
   stream << nextlist;
 
   // number of records
-  Q_UINT16 numrec = records.count();
+  quint16 numrec = records.count();
   stream << numrec;
 
   // where is the first record ?
   // 78 is size of PDB header, 2 is filler before data
-  Q_UINT32 pos = 78 + 2;
+  quint32 pos = 78 + 2;
   pos += records.count()*8;
 
   // write record list
   for( unsigned r = 0; r < records.count(); r++ )
   {
-    Q_UINT8 flag = 0, dummy = 0;
+    quint8 flag = 0, dummy = 0;
     stream << pos;
     stream << flag;
     stream  << dummy << dummy << dummy;
@@ -303,7 +303,7 @@ bool PalmDB::save( const char* filename )
   }
 
   // write 2-byte dummy
-  Q_UINT16 filler = 0;
+  quint16 filler = 0;
   stream << filler;
 
   // write all records
@@ -313,7 +313,7 @@ bool PalmDB::save( const char* filename )
     if( !data ) continue;
     for( unsigned j=0; j<data->count(); j++ )
       {
-        Q_UINT8 c = data->at( j ); 
+        quint8 c = data->at( j ); 
         stream << c;  
       }
   }

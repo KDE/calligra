@@ -83,7 +83,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3C
 {
     if(to!="text/html" || from!="application/x-kspread")
     {
-      kdWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
+      kWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
       return KoFilter::NotImplemented;
     }
 
@@ -94,7 +94,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3C
 
     if( !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-      kdWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+      kWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
       return KoFilter::NotImplemented;
     }
 
@@ -102,7 +102,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3C
 
     if( ksdoc->mimeType() != "application/x-kspread" )
     {
-      kdWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+      kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
       return KoFilter::NotImplemented;
     }
 
@@ -152,7 +152,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3C
         closePage( str );
         QFile out(file);
         if(!out.open(QIODevice::WriteOnly)) {
-          kdError(30501) << "Unable to open output file!" << endl;
+          kError(30501) << "Unable to open output file!" << endl;
           out.close();
           return KoFilter::FileNotFound;
         }
@@ -227,7 +227,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
     int iMaxRow = sheet->maxRow();
 
     if( !m_dialog->separateFiles() )
-        str += "<a name=\"" + sheet->sheetName().lower().stripWhiteSpace() + "\">\n";
+        str += "<a name=\"" + sheet->sheetName().lower().trimmed() + "\">\n";
 
     str += ("<h1>" + sheet->sheetName() + "</h1><br>\n");
 
@@ -342,7 +342,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                 line += " colspan=\"" + tmp.setNum(extra_cells+1) + "\"";
                 currentcolumn += extra_cells;
             }
-            text = text.stripWhiteSpace();
+            text = text.trimmed();
             if( text.at(0) == '!' ) {
                 // this is supposed to be markup, just remove the '!':
                 text = text.right(text.length()-1);
@@ -423,7 +423,7 @@ void HTMLExport::writeTOC( const QStringList &sheets, const QString &base, QStri
     }
     else
     {
-      str += "#" + sheets[i].lower().stripWhiteSpace();
+      str += "#" + sheets[i].lower().trimmed();
     }
 
     str += "\">" + sheets[i] + "</a>\n";

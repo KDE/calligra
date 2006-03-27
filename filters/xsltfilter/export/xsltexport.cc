@@ -49,12 +49,12 @@ KoFilter::ConversionStatus XSLTExport::convert( const Q3CString& from, const Q3C
        from != "application/x-kivio" && from != "application/x-kchart" &&
        from != "application/x-kpresenter")
         return KoFilter::NotImplemented;
-    kdDebug() << "In the xslt filter" << endl;
+    kDebug() << "In the xslt filter" << endl;
 
     KoStoreDevice* in = m_chain->storageFile("root", KoStore::Read);
 
     if(!in) {
-        kdError() << "Unable to open input file!" << endl;
+        kError() << "Unable to open input file!" << endl;
         return KoFilter::FileNotFound;
     }
 

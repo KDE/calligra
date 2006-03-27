@@ -76,7 +76,7 @@ public:
 protected:
 	virtual void setupTranslations( void )
 	{
-		KGlobal::locale()->insertCatalogue( "kofficefilters" );
+		KGlobal::locale()->insertCatalog( "kofficefilters" );
 	}
 };
 
@@ -109,7 +109,7 @@ EpsExport::convert( const Q3CString& from, const Q3CString& to )
 	// Ask questions about PS level etc.
 	EpsExportDlg* dialog = new EpsExportDlg();
 
-	QApplication::setOverrideCursor( Qt::arrowCursor );
+	QApplication::setOverrideCursor( Qt::ArrowCursor );
 
 	if( dialog->exec() )
 	{

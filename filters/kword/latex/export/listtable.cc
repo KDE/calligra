@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug stream */
+#include <kdebug.h>		/* for kDebug stream */
 #include "listtable.h"
 
 /*******************************************/
@@ -67,14 +67,14 @@ void ListTable::add(Element* elt)
 	 */
 	if((newTable = isNewTable(elt->getGrpMgr())) == 0)
 	{
-		kdDebug(30522) << "NEW TABLE !!" << endl;
+		kDebug(30522) << "NEW TABLE !!" << endl;
 		newTable = new Table(elt->getGrpMgr());
 		newTable->append(elt);
 		append(newTable);
 	}
 	else
 	{
-		kdDebug(30522) << "UPDATE TABLE : " << elt->getGrpMgr() << endl;
+		kDebug(30522) << "UPDATE TABLE : " << elt->getGrpMgr() << endl;
 		newTable->append(elt);
 	}
 }

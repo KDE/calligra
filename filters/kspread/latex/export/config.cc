@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug() stream */
+#include <kdebug.h>		/* for kDebug() stream */
 #include "config.h"
 //Added by qt3to4:
 #include <QTextStream>
@@ -60,7 +60,7 @@ Config::~Config()
 
 void Config::indent()
 {
-	kdDebug(30522) << "Indent tab = " << (_tabulation + getTabSize()) << endl;
+	kDebug(30522) << "Indent tab = " << (_tabulation + getTabSize()) << endl;
 	_tabulation = _tabulation + getTabSize();
 }
 
@@ -68,12 +68,12 @@ void Config::desindent()
 {
 	if ((_tabulation - getTabSize()) > 0)
 	{
-		kdDebug(30522) << "Desindent tab = " << (_tabulation - getTabSize()) << endl;
+		kDebug(30522) << "Desindent tab = " << (_tabulation - getTabSize()) << endl;
 		_tabulation = _tabulation - getTabSize();
 	}
 	else
 	{
-		kdDebug(30522) << "Desindent tab = 0" << endl;
+		kDebug(30522) << "Desindent tab = 0" << endl;
 		_tabulation = 0;
 	}
 }

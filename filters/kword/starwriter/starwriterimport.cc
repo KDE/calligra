@@ -36,17 +36,17 @@ typedef KGenericFactory<StarWriterImport, KoFilter> StarWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libstarwriterimport, StarWriterImportFactory("kofficefilters"))
 
 // Get unsigned 24-bits integer at given offset
-static inline Q_UINT32 readU24(QByteArray array, Q_UINT32 p)
+static inline quint32 readU24(QByteArray array, quint32 p)
 {
-   Q_UINT8* ptr = (Q_UINT8*) array.data();
-   return (Q_UINT32) (ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
+   quint8* ptr = (quint8*) array.data();
+   return (quint32) (ptr[p] + (ptr[p+1] << 8) + (ptr[p+2] << 16));
 }
 
 // Get unsigned 16-bits integer at given offset
-static inline Q_UINT16 readU16(QByteArray array, Q_UINT32 p)
+static inline quint16 readU16(QByteArray array, quint32 p)
 {
-   Q_UINT8* ptr = (Q_UINT8*) array.data();
-   return (Q_UINT16) (ptr[p] + (ptr[p+1] << 8));
+   quint8* ptr = (quint8*) array.data();
+   return (quint16) (ptr[p] + (ptr[p+1] << 8));
 }
 
 StarWriterImport::StarWriterImport(KoFilter *, const char *, const QStringList&) : KoFilter()
@@ -131,7 +131,7 @@ bool StarWriterImport::checkDocumentVersion()
     if (StarWriterDocument[0x05] != 'R') return false;
 
     // Password-protection is not supported for the moment
-    Q_UINT16 flags = readU16(StarWriterDocument, 0x0A);
+    quint16 flags = readU16(StarWriterDocument, 0x0A);
     if (flags & 0x0008) return false;
 
     return true;
@@ -185,8 +185,8 @@ bool StarWriterImport::addBody()
 {
     // Find the starting point, by:
     // 1. skipping the header
-    Q_UINT32 len = StarWriterDocument[0x07];
-    Q_UINT32 p = len;
+    quint32 len = StarWriterDocument[0x07];
+    quint32 p = len;
 
     // 2. skipping 8 more bytes
     p += 0x08;
@@ -202,7 +202,7 @@ bool StarWriterImport::addBody()
     // Select nodes and pass them to parseNodes()
     len = readU24(StarWriterDocument, p+1);
     QByteArray data(len);
-    for (Q_UINT32 k=0; k<len; k++)
+    for (quint32 k=0; k<len; k++)
       data[k] = StarWriterDocument[p+k];
     bool retval = parseNodes(data);
 
@@ -218,7 +218,7 @@ QString StarWriterImport::convertToKWordString(QByteArray s)
 {
     QString result;
 
-    for (Q_UINT32 i = 0x00; i < s.size(); i++)
+    for (quint32 i = 0x00; i < s.size(); i++)
         if (s[i] == '&') result += "&amp;";
         else if (s[i] == '<') result += "&lt;";
         else if (s[i] == '>') result += "&gt;";
@@ -235,7 +235,7 @@ QString StarWriterImport::convertToKWordString(QByteArray s)
 bool StarWriterImport::parseNodes(QByteArray n)
 {
     QByteArray s;
-    Q_UINT32 len, p;
+    quint32 len, p;
 
     // Loop
     p = 0x09;   // is this a fixed value? is it the same for headers/footers?
@@ -245,7 +245,7 @@ bool StarWriterImport::parseNodes(QByteArray n)
         len = readU24(n, p+1);
 
         s.resize(len);
-        for (Q_UINT32 k = 0x00; k < len; k++)
+        for (quint32 k = 0x00; k < len; k++)
             s[k] = n[p+k];
 
         switch (c) {
@@ -272,17 +272,17 @@ bool StarWriterImport::parseNodes(QByteArray n)
 bool StarWriterImport::parseText(QByteArray n)
 {
     QByteArray s;
-    Q_UINT16 len;
-    Q_UINT32 p;
+    quint16 len;
+    quint32 p;
     QString text;
-    // Q_UINT16 attributeStart, attributeEnd, formatPos, formatLen;
+    // quint16 attributeStart, attributeEnd, formatPos, formatLen;
     // QString pAttributes, cAttributes, tempCAttributes;
     // QStringList cAttributesList;
 
     // Retrieve the paragraph (text-only)
     len = readU16(n, 0x09);
     s.resize(len);
-    for (Q_UINT16 k = 0x00; k < len; k++)
+    for (quint16 k = 0x00; k < len; k++)
         s[k] = n[0x0B+k];
 
     /*
@@ -339,12 +339,12 @@ bool StarWriterImport::parseTable(QByteArray n)
 {
 /*
     QByteArray s;
-    Q_UINT32 len, len2;
-    Q_UINT16 len3;
-    Q_UINT32 p, p2;
+    quint32 len, len2;
+    quint16 len3;
+    quint32 p, p2;
     QString text;
     QString tableCell, tableText, tableName;
-    Q_UINT8 row, column;
+    quint8 row, column;
 
     // Set table name
     tableName = QString("Table %1").arg(tablesNumber);
@@ -378,7 +378,7 @@ bool StarWriterImport::parseTable(QByteArray n)
             // Get cell text/value
             len3 = readU16(n, p+0x09);
             s.resize(len3);
-            for (Q_UINT16 k = 0x00; k < len3; k++)
+            for (quint16 k = 0x00; k < len3; k++)
                 s[k] = n[p+0x0B+k];
             text = convertToKWordString(s);
 

@@ -42,7 +42,7 @@ bool Document::analyse(Q3PtrList<Element>* root)
 
 bool Document::analyseDocumentClass(Command* documentclass)
 {
-	kdWarning(documentclass != NULL) << "no documentclass found !" << endl;
+	kWarning(documentclass != NULL) << "no documentclass found !" << endl;
 	Q3PtrList<Param> params = documentclass->getOptions();
 	Param* param;
 	for ( param = params.first(); param; param = params.next() )
@@ -80,7 +80,7 @@ bool Document::generate(KoStore* store)
 	/* generate body */
 	_body.generate(body, doc);
 	
-	kdDebug(30522) << "serialize" << endl;
+	kDebug(30522) << "serialize" << endl;
 	serialize(store, doc);
 	return true;
 }

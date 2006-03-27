@@ -48,16 +48,16 @@ void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
         {
             name=(*it);
             value=QString::null;
-            kdWarning(30506) << "Property without value: " << name << endl;
+            kWarning(30506) << "Property without value: " << name << endl;
         }
         else
         {
             name=(*it).left(result);
             value=(*it).mid(result+1);
         }
-        // kdDebug(30506) << "========== (Property :" << name.stripWhiteSpace()<< "=" << value.stripWhiteSpace() <<":)"<<endl;
+        // kDebug(30506) << "========== (Property :" << name.trimmed()<< "=" << value.trimmed() <<":)"<<endl;
         // Now set the property
-        setProperty(name.stripWhiteSpace(),value.stripWhiteSpace());
+        setProperty(name.trimmed(),value.trimmed());
     }
 }
 
@@ -75,7 +75,7 @@ double ValueWithLengthUnit( const QString& _str, bool* atleast )
         bool flag=false;
         result=_str.toDouble(&flag);
         if (!flag)
-            kdWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)" << endl;
+            kWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)" << endl;
     }
     else
     {
@@ -93,7 +93,7 @@ double ValueWithLengthUnit( const QString& _str, bool* atleast )
             result=PicaToPoints(rawValue);
         else
         {
-            kdWarning(30506) << "Value " << _str << " has non-supported unit: "
+            kWarning(30506) << "Value " << _str << " has non-supported unit: "
                 << strUnit << " (ValueWithLengthUnit)" << endl;
             result=rawValue;
         }
@@ -103,7 +103,7 @@ double ValueWithLengthUnit( const QString& _str, bool* atleast )
             *atleast = ( unitExp.cap(2) == "+" );
         }
 
-        // kdDebug(30506) << "Value: " << _str << " Unit: " << strUnit << " Result: " << result << endl;
+        // kDebug(30506) << "Value: " << _str << " Unit: " << strUnit << " Result: " << result << endl;
     }
     return result;
 }

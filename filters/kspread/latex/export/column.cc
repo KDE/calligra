@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug stream */
+#include <kdebug.h>		/* for kDebug stream */
 
 #include "column.h"
 //Added by qt3to4:

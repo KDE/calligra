@@ -49,7 +49,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const Q3CString& from, const Q
     if ( to != "application/x-kword" || from != "application/msword" )
         return KoFilter::NotImplemented;
 
-    kdDebug(30513) << "######################## MSWordImport::convert ########################" << endl;
+    kDebug(30513) << "######################## MSWordImport::convert ########################" << endl;
 
     QDomDocument mainDocument;
     QDomElement framesetsElem;
@@ -71,7 +71,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const Q3CString& from, const Q
 
     KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
     if ( !out ) {
-        kdError(30502) << "Unable to open output file!" << endl;
+        kError(30502) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
     Q3CString cstr = mainDocument.toCString();
@@ -88,7 +88,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const Q3CString& from, const Q
     out->writeBlock( cstr, cstr.length() );
     out->close();
 
-    kdDebug(30513) << "######################## MSWordImport::convert done ####################" << endl;
+    kDebug(30513) << "######################## MSWordImport::convert done ####################" << endl;
     return KoFilter::OK;
 }
 

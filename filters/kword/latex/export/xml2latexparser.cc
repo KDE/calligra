@@ -28,8 +28,8 @@
 Xml2LatexParser::Xml2LatexParser(const KoStore* in, QString fileOut, Config* config):
 		XmlParser(config, in), _file(fileOut), _in( in )
 {
-	//kdDebug(30522) << fileIn.latin1() << endl;
-	kdDebug(30522) << fileOut.latin1() << endl;
+	//kDebug(30522) << fileIn.latin1() << endl;
+	kDebug(30522) << fileOut.latin1() << endl;
 	_filename = fileOut;
 	//setFileHeader(_fileHeader);
 	setRoot(&_document);
@@ -40,26 +40,26 @@ void Xml2LatexParser::analyse()
 	QDomNode balise;
 	balise = init();
 	//balise = getChild(balise, "DOC");
-	kdDebug(30522) <<"HEADER -> PAPER" << endl;
+	kDebug(30522) <<"HEADER -> PAPER" << endl;
 	FileHeader::instance()->analysePaper(getChild(balise, "PAPER"));
-	kdDebug(30522) <<"HEADER -> ATTRIBUTES" << endl;
+	kDebug(30522) <<"HEADER -> ATTRIBUTES" << endl;
 	FileHeader::instance()->analyseAttributs(getChild(balise, "ATTRIBUTES"));
-	kdDebug(30522) <<"HEADER -> FRAMESETS" << endl;
+	kDebug(30522) <<"HEADER -> FRAMESETS" << endl;
 	_document.analyse(getChild(balise, "FRAMESETS"));
-	kdDebug(30522) <<"HEADER -> END FRAMESETS" << endl;
-	//kdDebug(30522) <<"HEADER -> STYLES" << endl;
+	kDebug(30522) <<"HEADER -> END FRAMESETS" << endl;
+	//kDebug(30522) <<"HEADER -> STYLES" << endl;
 	//
-	kdDebug(30522) <<"HEADER -> PICTURES" << endl;
+	kDebug(30522) <<"HEADER -> PICTURES" << endl;
 	_document.analysePixmaps(getChild(balise, "PICTURES"));
-	//kdDebug(30522) <<"HEADER -> SERIALL" << endl;
-	kdDebug(30522) << "END ANALYSE" << endl;
+	//kDebug(30522) <<"HEADER -> SERIALL" << endl;
+	kDebug(30522) << "END ANALYSE" << endl;
 }
 
 void Xml2LatexParser::generate()
 {
 	if(_file.open(QIODevice::WriteOnly))
 	{
-		kdDebug(30522) << "GENERATION" << endl;
+		kDebug(30522) << "GENERATION" << endl;
 		_out.setDevice(&_file);
 		if(!Config::instance()->isEmbeded())
 			FileHeader::instance()->generate(_out);
@@ -68,5 +68,5 @@ void Xml2LatexParser::generate()
 		_file.close();
 	}
 	else
-		kdDebug(30522) << "Can't use the file ..." << endl;
+		kDebug(30522) << "Can't use the file ..." << endl;
 }

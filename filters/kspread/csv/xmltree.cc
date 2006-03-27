@@ -66,11 +66,11 @@ XMLTree::~XMLTree()
 //const QString XMLTree::part()
 //{
 //  QString s;
-//  QTextStream t(s, IO_WriteOnly);
+//  QTextStream t(s, QIODevice::WriteOnly);
 
 //  QTime tmr;
 //  tmr.start();
-//  kdDebug(30501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+//  kDebug(30501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
 //  root.save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 with a
                  // quite small file :( )
@@ -81,8 +81,8 @@ XMLTree::~XMLTree()
 //
 // And this looks related to the UTF 8 encoding ...
 
-//  kdDebug(30501) << (const char*)QString::number((int)tmr.elapsed()) << endl;
-//  kdDebug(30501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+//  kDebug(30501) << (const char*)QString::number((int)tmr.elapsed()) << endl;
+//  kDebug(30501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
 //  t << '\0';
 

@@ -26,16 +26,16 @@
 #include <Q3CString>
 
 // Write count integers to the file
-Q_UINT32 xcf_write_int32 (QFile *fp, Q_INT32 *data, Q_INT32 count);
+quint32 xcf_write_int32 (QFile *fp, qint32 *data, qint32 count);
 
 // Write count of floats to the file
-Q_UINT32 xcf_write_float (QFile *fp, float *data, Q_INT32 count);
+quint32 xcf_write_float (QFile *fp, float *data, qint32 count);
 
 // Write count chars to the file
-Q_UINT32 xcf_write_int8 (QFile *fp, Q_UINT8 *data, Q_INT32 count);
+quint32 xcf_write_int8 (QFile *fp, quint8 *data, qint32 count);
 
 // Write count zero-terminated strings to the file, each string preceded by its length as an integer
-Q_UINT32 xcf_write_string (QFile *fp, Q3CString *data, Q_INT32 count);
+quint32 xcf_write_string (QFile *fp, Q3CString *data, qint32 count);
 
 
 #endif  /* __XCF_WRITE_H__ */

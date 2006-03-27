@@ -121,7 +121,7 @@ void String::addChar(GfxState *state, double x, double y,
         TextString::addChar(state, x + ddx*i, y, ddx, dy, res[i]);
         if ( nb>1 ) sdebug += QChar(res[i]);
     }
-    if ( nb>1 ) kdDebug(30516) << sdebug << endl;
+    if ( nb>1 ) kDebug(30516) << sdebug << endl;
     else checkCombination(this);
 }
 
@@ -156,29 +156,29 @@ bool String::checkCombination(TextString *str)
     // #### above/below detection is not right !!!
 //    bool above = more(accent.r.bottom, letter.r.top);
 //    bool below = more(accent.r.top, letter.r.bottom);
-//    kdDebug(30516) << "found combi " << QString(QChar(res))
+//    kDebug(30516) << "found combi " << QString(QChar(res))
 //                   << " accent: " << accent.r.toString() << endl;
-//    kdDebug(30516) << "letter: " << letter.r.toString()
+//    kDebug(30516) << "letter: " << letter.r.toString()
 //                   << endl;
     // #### FIXME we should check for above or below accent !!!
     if ( !ok ) return false;
 //    if (below) {
         // #### TODO
-//        kdDebug(30516) << "accent below !" << endl;
+//        kDebug(30516) << "accent below !" << endl;
 //        return false;
 //    } else if ( !above ) {
-//        kdDebug(30516) << "accent inside letter ??" << endl;
+//        kDebug(30516) << "accent inside letter ??" << endl;
 //        return false;
 //    }
-//    kdDebug(30516) << "combi ok" << endl;
+//    kDebug(30516) << "combi ok" << endl;
 
     // replace accent by accented letter
     text[accent.i] = res;
     xMax = letter.r.right();
     if ( accent.i==0 ) xMin = letter.r.left();
     else xRight[accent.i-1] = letter.r.left();
-    yMin = kMin(yMin, str->yMin);
-    yMax = kMax(yMax, str->yMax);
+    yMin = qMin(yMin, str->yMin);
+    yMax = qMax(yMax, str->yMax);
 
     // append remaining string
     if ( str==this ) {

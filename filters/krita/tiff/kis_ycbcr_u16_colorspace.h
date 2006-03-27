@@ -38,84 +38,84 @@ class KisYCbCrU16ColorSpace : public KisU16BaseColorSpace
             return false;
         };
     public:
-        void setPixel(Q_UINT8 *pixel, Q_UINT16 Y, Q_UINT16 Cb, Q_UINT16 Cr, Q_UINT16 alpha) const;
-        void getPixel(const Q_UINT8 *pixel, Q_UINT16 *Y, Q_UINT16 *Cb, Q_UINT16 *Cr, Q_UINT16 *alpha) const;
+        void setPixel(quint8 *pixel, quint16 Y, quint16 Cb, quint16 Cr, quint16 alpha) const;
+        void getPixel(const quint8 *pixel, quint16 *Y, quint16 *Cb, quint16 *Cr, quint16 *alpha) const;
 
-        virtual void fromQColor(const QColor& c, Q_UINT8 *dst, KisProfile * profile = 0);
-        virtual void fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 *dst, KisProfile * profile = 0);
+        virtual void fromQColor(const QColor& c, quint8 *dst, KisProfile * profile = 0);
+        virtual void fromQColor(const QColor& c, quint8 opacity, quint8 *dst, KisProfile * profile = 0);
 
-        virtual void toQColor(const Q_UINT8 *src, QColor *c, KisProfile * profile = 0);
-        virtual void toQColor(const Q_UINT8 *src, QColor *c, Q_UINT8 *opacity, KisProfile * profile = 0);
+        virtual void toQColor(const quint8 *src, QColor *c, KisProfile * profile = 0);
+        virtual void toQColor(const quint8 *src, QColor *c, quint8 *opacity, KisProfile * profile = 0);
 
-        virtual Q_UINT8 difference(const Q_UINT8 *src1, const Q_UINT8 *src2);
-        virtual void mixColors(const Q_UINT8 **colors, const Q_UINT8 *weights, Q_UINT32 nColors, Q_UINT8 *dst) const;
+        virtual quint8 difference(const quint8 *src1, const quint8 *src2);
+        virtual void mixColors(const quint8 **colors, const quint8 *weights, quint32 nColors, quint8 *dst) const;
 
         virtual Q3ValueVector<KisChannelInfo *> channels() const;
-        virtual Q_UINT32 nChannels() const;
-        virtual Q_UINT32 nColorChannels() const;
-        virtual Q_UINT32 pixelSize() const;
+        virtual quint32 nChannels() const;
+        virtual quint32 nColorChannels() const;
+        virtual quint32 pixelSize() const;
 
-        virtual QImage convertToQImage(const Q_UINT8 *data, Q_INT32 width, Q_INT32 height,
+        virtual QImage convertToQImage(const quint8 *data, qint32 width, qint32 height,
                                        KisProfile *  dstProfile,
-                                       Q_INT32 renderingIntent,
+                                       qint32 renderingIntent,
                                        float exposure = 0.0f);
 
         virtual KisCompositeOpList userVisiblecompositeOps() const;
 
     protected:
 
-        virtual void bitBlt(Q_UINT8 *dst,
-                            Q_INT32 dstRowStride,
-                            const Q_UINT8 *src,
-                            Q_INT32 srcRowStride,
-                            const Q_UINT8 *srcAlphaMask,
-                            Q_INT32 maskRowStride,
-                            Q_UINT8 opacity,
-                            Q_INT32 rows,
-                            Q_INT32 cols,
+        virtual void bitBlt(quint8 *dst,
+                            qint32 dstRowStride,
+                            const quint8 *src,
+                            qint32 srcRowStride,
+                            const quint8 *srcAlphaMask,
+                            qint32 maskRowStride,
+                            quint8 opacity,
+                            qint32 rows,
+                            qint32 cols,
                             const KisCompositeOp& op);
 
-        void compositeOver(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
-        void compositeErase(Q_UINT8 *dst, Q_INT32 dstRowStride, const Q_UINT8 *src, Q_INT32 srcRowStride, const Q_UINT8 *mask, Q_INT32 maskRowStride, Q_INT32 rows, Q_INT32 columns, Q_UINT8 opacity);
+        void compositeOver(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
+        void compositeErase(quint8 *dst, qint32 dstRowStride, const quint8 *src, qint32 srcRowStride, const quint8 *mask, qint32 maskRowStride, qint32 rows, qint32 columns, quint8 opacity);
 
     private:
-#define CLAMP_TO_16BITCHANNEL(a) CLAMP(a, 0, Q_UINT16_MAX)
-        inline Q_UINT16 computeRed(Q_UINT16 Y, Q_UINT16 /*Cb*/, Q_UINT16 Cr)
+#define CLAMP_TO_16BITCHANNEL(a) CLAMP(a, 0, quint16_MAX)
+        inline quint16 computeRed(quint16 Y, quint16 /*Cb*/, quint16 Cr)
         {
-            return (Q_UINT16)( CLAMP_TO_16BITCHANNEL( (Cr - 32768)* (2-2*LUMA_RED) + Y )  );
+            return (quint16)( CLAMP_TO_16BITCHANNEL( (Cr - 32768)* (2-2*LUMA_RED) + Y )  );
         }
-        inline Q_UINT16 computeGreen(Q_UINT16 Y, Q_UINT16 Cb, Q_UINT16 Cr)
+        inline quint16 computeGreen(quint16 Y, quint16 Cb, quint16 Cr)
         {
-            return (Q_UINT16)( CLAMP_TO_16BITCHANNEL( (Y - LUMA_BLUE * computeBlue(Y,Cb,Cr) - LUMA_RED * computeRed(Y,Cb,Cr) ) / LUMA_GREEN ) );
+            return (quint16)( CLAMP_TO_16BITCHANNEL( (Y - LUMA_BLUE * computeBlue(Y,Cb,Cr) - LUMA_RED * computeRed(Y,Cb,Cr) ) / LUMA_GREEN ) );
         }
-        inline Q_UINT16 computeBlue(Q_UINT16 Y, Q_UINT16 Cb, Q_UINT16 /*Cr*/)
+        inline quint16 computeBlue(quint16 Y, quint16 Cb, quint16 /*Cr*/)
         {
-            return (Q_UINT16)( CLAMP_TO_16BITCHANNEL( (Cb - 32768)*(2 - 2 * LUMA_BLUE) + Y) );
+            return (quint16)( CLAMP_TO_16BITCHANNEL( (Cb - 32768)*(2 - 2 * LUMA_BLUE) + Y) );
         }
-        inline Q_UINT16 computeY( Q_UINT16 r, Q_UINT16 b, Q_UINT16 g)
+        inline quint16 computeY( quint16 r, quint16 b, quint16 g)
         {
-            return (Q_UINT16)( CLAMP_TO_16BITCHANNEL( LUMA_RED*r + LUMA_GREEN*g + LUMA_BLUE*b ) );
+            return (quint16)( CLAMP_TO_16BITCHANNEL( LUMA_RED*r + LUMA_GREEN*g + LUMA_BLUE*b ) );
         }
-        inline Q_UINT16 computeCb( Q_UINT16 r, Q_UINT16 b, Q_UINT16 g)
+        inline quint16 computeCb( quint16 r, quint16 b, quint16 g)
         {
-            return (Q_UINT16)( CLAMP_TO_16BITCHANNEL( (b - computeY(r,g,b))/(2-2*LUMA_BLUE) + 32768) );
+            return (quint16)( CLAMP_TO_16BITCHANNEL( (b - computeY(r,g,b))/(2-2*LUMA_BLUE) + 32768) );
         }
-        inline Q_UINT16 computeCr( Q_UINT16 r, Q_UINT16 b, Q_UINT16 g)
+        inline quint16 computeCr( quint16 r, quint16 b, quint16 g)
         {
-            return (Q_UINT8)( CLAMP_TO_16BITCHANNEL( (r - computeY(r,g,b))/(2-2*LUMA_RED) + 32768) );
+            return (quint8)( CLAMP_TO_16BITCHANNEL( (r - computeY(r,g,b))/(2-2*LUMA_RED) + 32768) );
         }
 #undef CLAMP_TO_16BITCHANNEL
         
-        static const Q_UINT8 PIXEL_Y = 0;
-        static const Q_UINT8 PIXEL_Cb = 1;
-        static const Q_UINT8 PIXEL_Cr = 2;
-        static const Q_UINT8 PIXEL_ALPHA = 3;
+        static const quint8 PIXEL_Y = 0;
+        static const quint8 PIXEL_Cb = 1;
+        static const quint8 PIXEL_Cr = 2;
+        static const quint8 PIXEL_ALPHA = 3;
 
         struct Pixel {
-            Q_UINT16 Y;
-            Q_UINT16 Cb;
-            Q_UINT16 Cr;
-            Q_UINT16 alpha;
+            quint16 Y;
+            quint16 Cb;
+            quint16 Cr;
+            quint16 alpha;
         };
 };
 

@@ -19,7 +19,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug stream */
+#include <kdebug.h>		/* for kDebug stream */
 #include "listelement.h"
 
 /*******************************************/
@@ -38,7 +38,7 @@ ListElement::ListElement()
 ListElement::~ListElement()
 {
 	Element *elt = 0;
-	kdDebug(30522) << "Destruction of a list of elements" << endl;
+	kDebug(30522) << "Destruction of a list of elements" << endl;
 	while(_start != 0)
 	{
 		elt    = _start;

@@ -68,7 +68,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "kofficefilters" );
+        KGlobal::locale()->insertCatalog( "kofficefilters" );
     }
 };
 
@@ -166,7 +166,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
   if ( rowStyle )
   {
     node = rowStyle->firstChild();
-    kdDebug(30518) << "RowStyle: " << rowStyle << ", " << rowStyle->tagName() << endl;
+    kDebug(30518) << "RowStyle: " << rowStyle << ", " << rowStyle->tagName() << endl;
   }
 
   double height = -1.0;
@@ -177,7 +177,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
   {
     QDomElement property = node.toElement();
 
-    kdDebug(30518) << "Row: Child exists: " << property.tagName() << endl;
+    kDebug(30518) << "Row: Child exists: " << property.tagName() << endl;
     if ( !property.isNull() && property.localName() == "properties" && property.namespaceURI() == ooNS::style )
     {
       if ( property.hasAttributeNS( ooNS::style, "row-height" ) )
@@ -205,7 +205,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
     int n = rowNode.attributeNS( ooNS::table, "number-rows-repeated", QString::null ).toInt( &ok );
     if ( ok )
       number = n;
-    kdDebug(30518) << "Row repeated: " << number << endl;
+    kDebug(30518) << "Row repeated: " << number << endl;
   }
 
   if ( isLast )
@@ -226,14 +226,14 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
 
     if ( height != -1 )
     {
-      kdDebug(30518) << "Setting row height to " << height << endl;
+      kDebug(30518) << "Setting row height to " << height << endl;
       rowL->setHeight( int( height ) );
     }
 
     // if ( insertPageBreak ) TODO:
     //   rowL->setPageBreak( true )
 
-    //    kdDebug(30518) << "Added RowFormat: " << row << endl;
+    //    kDebug(30518) << "Added RowFormat: " << row << endl;
     ++row;
   }
 
@@ -243,7 +243,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
 QString OpenCalcImport::translatePar( QString & par ) const
 {
   OpenCalcPoint point( par );
-  kdDebug(30518) << "   Parameter: " << par << ", Translation: " << point.translation << endl;
+  kDebug(30518) << "   Parameter: " << par << ", Translation: " << point.translation << endl;
 
   return point.translation;
 }
@@ -269,7 +269,7 @@ void OpenCalcImport::checkForNamedAreas( QString & formula ) const
         formula = formula.replace( start, word.length(), "'" + word + "'" );
         l = formula.length();
         ++i;
-        kdDebug(30518) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
+        kDebug(30518) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
       }
     }
 
@@ -284,14 +284,14 @@ void OpenCalcImport::checkForNamedAreas( QString & formula ) const
       formula = formula.replace( start, word.length(), "'" + word + "'" );
       l = formula.length();
       ++i;
-      kdDebug(30518) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
+      kDebug(30518) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
     }
   }
 }
 
 void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
 {
-  kdDebug(30518) << "Parsing formula: " << f << endl;
+  kDebug(30518) << "Parsing formula: " << f << endl;
 
   QString formula;
   QString parameter;
@@ -315,7 +315,7 @@ void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
     checkForNamedAreas( formula );
   }
 
-  kdDebug(30518) << "Formula: " << formula << ", Parameter: " << parameter << ", P: " << p << endl;
+  kDebug(30518) << "Formula: " << formula << ", Parameter: " << parameter << ", P: " << p << endl;
 
 
   // replace formula names here
@@ -377,7 +377,7 @@ void OpenCalcImport::convertFormula( QString & text, QString const & f ) const
   }
 
   text = formula + parameter;
-  kdDebug(30518) << "New formula: " << text << endl;
+  kDebug(30518) << "New formula: " << text << endl;
 }
 
 bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, int & columns )
@@ -404,7 +404,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
 
     Cell* cell = 0;
 
-    kdDebug(30518) << " Cell: " << columns << ", " << row << endl;
+    kDebug(30518) << " Cell: " << columns << ", " << row << endl;
 
     // ="3" table:number-rows-spanned="1"
     if ( e.hasAttributeNS( ooNS::table, "number-columns-spanned" ) )
@@ -465,12 +465,12 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
         {
             if ( !cell )
                 cell = table->nonDefaultCell( columns, row );
-            kdDebug(30518)<<" columns :"<<columns<<" row :"<<row<<endl;
+            kDebug(30518)<<" columns :"<<columns<<" row :"<<row<<endl;
             cell->format()->setComment( comment );
         }
     }
 
-    kdDebug(30518) << "Contains: " << text << endl;
+    kDebug(30518) << "Contains: " << text << endl;
     bool isFormula = false;
 
     if ( e.hasAttributeNS( ooNS::table, "style-name" ) )
@@ -482,7 +482,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
       if ( e.hasAttributeNS( ooNS::style, "parent-style-name" ) )
         psName = e.attributeNS( ooNS::style, "parent-style-name", QString::null );
 
-      kdDebug(30518) << "Default style: " << psName << endl;
+      kDebug(30518) << "Default style: " << psName << endl;
       Format * layout = m_defaultStyles[psName];
 
       if ( layout )
@@ -491,12 +491,12 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
       QDomElement * st = 0;
       if ( e.hasAttributeNS( ooNS::table, "style-name" ) )
       {
-        kdDebug(30518) << "Style: " << e.attributeNS( ooNS::table, "style-name", QString::null ) << endl;
+        kDebug(30518) << "Style: " << e.attributeNS( ooNS::table, "style-name", QString::null ) << endl;
         st = m_styles[ e.attributeNS( ooNS::table, "style-name", QString::null ) ];
       }
       if ( st )
       {
-        kdDebug(30518) << "Style: adapting " << endl;
+        kDebug(30518) << "Style: adapting " << endl;
         QDomNode node = st->firstChild();
         bool foundValidation = false;
         while( !node.isNull() )
@@ -504,7 +504,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           QDomElement property = node.toElement();
           if ( !property.isNull() )
           {
-            kdDebug(30518)<<"property.tagName() :"<<property.tagName()<<endl;
+            kDebug(30518)<<"property.tagName() :"<<property.tagName()<<endl;
             if ( property.localName()=="map" && property.namespaceURI() == ooNS::style && !foundValidation)
             {
               loadCondition( cell, property );
@@ -527,7 +527,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
                   + fm.width( cell->strOutText() )
                   * cos( tmpAngle * M_PI / 180 ) );
                   */
-                kdDebug(30518) << "Rotation: height: " << textHeight << endl;
+                kDebug(30518) << "Rotation: height: " << textHeight << endl;
 
                 RowFormat * l = table->rowFormat( row );
                 if ( l->height() < textHeight )
@@ -550,7 +550,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
         cell = table->nonDefaultCell( columns, row );
 
       QString psName( "Default" );
-      kdDebug(30518) << "Default style: " << psName << endl;
+      kDebug(30518) << "Default style: " << psName << endl;
       Format * layout = m_defaultStyles[psName];
 
       if ( layout )
@@ -568,7 +568,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
     }
     if ( e.hasAttributeNS( ooNS::table, "validation-name" ) )
     {
-        kdDebug(30518)<<" Celle has a validation :"<<e.attributeNS( ooNS::table, "validation-name", QString::null )<<endl;
+        kDebug(30518)<<" Celle has a validation :"<<e.attributeNS( ooNS::table, "validation-name", QString::null )<<endl;
         loadOasisValidation( cell->getValidity(), e.attributeNS( ooNS::table, "validation-name", QString::null ) );
     }
     if ( e.hasAttributeNS( ooNS::table, "value-type" ) )
@@ -581,7 +581,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
       QString value = e.attributeNS( ooNS::table, "value", QString::null );
       QString type  = e.attributeNS( ooNS::table, "value-type", QString::null );
 
-      kdDebug(30518) << "Value: " << value << ", type: " << type << endl;
+      kDebug(30518) << "Value: " << value << ", type: " << type << endl;
 
       bool ok = false;
       double dv = 0.0;
@@ -620,7 +620,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           if ( value.isEmpty() )
             value = e.attributeNS( ooNS::table, "boolean-value", QString::null );
 
-          kdDebug(30518) << "Type: boolean" << endl;
+          kDebug(30518) << "Type: boolean" << endl;
           if ( value == "true" )
             cell->setValue( true );
           else
@@ -632,7 +632,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
         {
           if ( value.isEmpty() )
             value = e.attributeNS( ooNS::table, "date-value", QString::null );
-          kdDebug(30518) << "Type: date, value: " << value << endl;
+          kDebug(30518) << "Type: date, value: " << value << endl;
 
           // "1980-10-15"
           int year=0, month=0, day=0;
@@ -642,19 +642,19 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           if ( p1 > 0 )
             year  = value.left( p1 ).toInt( &ok );
 
-          kdDebug(30518) << "year: " << value.left( p1 ) << endl;
+          kDebug(30518) << "year: " << value.left( p1 ) << endl;
 
           int p2 = value.find( '-', ++p1 );
 
           if ( ok )
             month = value.mid( p1, p2 - p1  ).toInt( &ok );
 
-          kdDebug(30518) << "month: " << value.mid( p1, p2 - p1 ) << endl;
+          kDebug(30518) << "month: " << value.mid( p1, p2 - p1 ) << endl;
 
           if ( ok )
             day = value.right( value.length() - p2 - 1 ).toInt( &ok );
 
-          kdDebug(30518) << "day: " << value.right( value.length() - p2 ) << endl;
+          kDebug(30518) << "day: " << value.right( value.length() - p2 ) << endl;
 
           if ( ok )
           {
@@ -662,7 +662,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             //            KSpreadValue kval( dt );
             // cell->setValue( kval );
             cell->setValue( QDate( year, month, day ) );
-            kdDebug(30518) << "Set QDate: " << year << " - " << month << " - " << day << endl;
+            kDebug(30518) << "Set QDate: " << year << " - " << month << " - " << day << endl;
           }
         }
         else if ( type == "time" )
@@ -670,7 +670,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           if ( value.isEmpty() )
             value = e.attributeNS( ooNS::table, "time-value", QString::null );
 
-          kdDebug(30518) << "Type: time: " << value << endl;
+          kDebug(30518) << "Type: time: " << value << endl;
           // "PT15H10M12S"
           int hours=0, minutes=0, seconds=0;
           int l = value.length();
@@ -692,14 +692,14 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             else
               continue;
 
-            kdDebug(30518) << "Num: " << num << endl;
+            kDebug(30518) << "Num: " << num << endl;
 
             num = "";
             if ( !ok )
               break;
           }
 
-          kdDebug(30518) << "Hours: " << hours << ", " << minutes << ", " << seconds << endl;
+          kDebug(30518) << "Hours: " << hours << ", " << minutes << ", " << seconds << endl;
 
           if ( ok )
           {
@@ -765,7 +765,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
 
 void OpenCalcImport::loadCondition( Cell*cell,const QDomElement &property )
 {
-    kdDebug(30518)<<"void OpenCalcImport::loadCondition( Cell*cell,const QDomElement &property )*******\n";
+    kDebug(30518)<<"void OpenCalcImport::loadCondition( Cell*cell,const QDomElement &property )*******\n";
     loadOasisCondition( cell, property );
 }
 
@@ -777,17 +777,17 @@ void OpenCalcImport::loadOasisCondition(Cell*cell,const QDomElement &property )
     Q3ValueList<Conditional> cond;
     while ( !elementItem.isNull() )
     {
-        kdDebug(30518)<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
+        kDebug(30518)<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
 
         if ( elementItem.localName()== "map" && property.namespaceURI() == ooNS::style )
         {
             bool ok = true;
-            kdDebug(30518)<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( ooNS::style, "condition", QString::null )<<endl;
+            kDebug(30518)<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( ooNS::style, "condition", QString::null )<<endl;
             Conditional newCondition;
             loadOasisConditionValue( elementItem.attributeNS( ooNS::style, "condition", QString::null ), newCondition );
             if ( elementItem.hasAttributeNS( ooNS::style, "apply-style-name" ) )
             {
-                kdDebug(30518)<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( ooNS::style, "apply-style-name", QString::null )<<endl;
+                kDebug(30518)<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( ooNS::style, "apply-style-name", QString::null )<<endl;
                 newCondition.styleName = new QString( elementItem.attributeNS( ooNS::style, "apply-style-name", QString::null ) );
                 newCondition.style = manager->style( *newCondition.styleName );
                 if ( !newCondition.style )
@@ -799,7 +799,7 @@ void OpenCalcImport::loadOasisCondition(Cell*cell,const QDomElement &property )
             if ( ok )
                 cond.append( newCondition );
             else
-                kdDebug(30518) << "Error loading condition " << elementItem.nodeName()<< endl;
+                kDebug(30518) << "Error loading condition " << elementItem.nodeName()<< endl;
         }
         elementItem = elementItem.nextSibling().toElement();
     }
@@ -872,8 +872,8 @@ void OpenCalcImport::loadOasisCondition( QString &valExpression, Conditional &ne
         newCondition.cond = Conditional::Equal;
     }
     else
-        kdDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
-    kdDebug(30518)<<" value :"<<value<<endl;
+        kDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
+    kDebug(30518)<<" value :"<<value<<endl;
     bool ok = false;
     newCondition.val1 = value.toDouble(&ok);
     if ( !ok )
@@ -882,7 +882,7 @@ void OpenCalcImport::loadOasisCondition( QString &valExpression, Conditional &ne
         if ( !ok )
         {
             newCondition.strVal1 = new QString( value );
-            kdDebug(30518)<<" Try to parse this value :"<<value<<endl;
+            kDebug(30518)<<" Try to parse this value :"<<value<<endl;
         }
 
     }
@@ -892,7 +892,7 @@ void OpenCalcImport::loadOasisCondition( QString &valExpression, Conditional &ne
 void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition )
 {
     bool ok = false;
-    kdDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
     newCondition.val1 = listVal[0].toDouble(&ok);
     if ( !ok )
@@ -901,7 +901,7 @@ void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, Condi
         if ( !ok )
         {
             newCondition.strVal1 = new QString( listVal[0] );
-            kdDebug(30518)<<" Try to parse this value :"<<listVal[0]<<endl;
+            kDebug(30518)<<" Try to parse this value :"<<listVal[0]<<endl;
         }
     }
     ok=false;
@@ -912,7 +912,7 @@ void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, Condi
         if ( !ok )
         {
             newCondition.strVal2 = new QString( listVal[1] );
-            kdDebug(30518)<<" Try to parse this value :"<<listVal[1]<<endl;
+            kDebug(30518)<<" Try to parse this value :"<<listVal[1]<<endl;
         }
     }
 }
@@ -920,7 +920,7 @@ void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, Condi
 
 bool OpenCalcImport::readRowsAndCells( QDomElement & content, Sheet * table )
 {
-  kdDebug(30518) << endl << "Reading in rows " << endl;
+  kDebug(30518) << endl << "Reading in rows " << endl;
 
   int i   = 1;
   int row = 1;
@@ -946,7 +946,7 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, Sheet * table )
     {
       QString style = r.attributeNS( ooNS::table, "style-name", QString::null );
       rowStyle = m_styles[ style ];
-      kdDebug(30518) << "Row style: " << style << endl;
+      kDebug(30518) << "Row style: " << style << endl;
     }
 
     collapsed = ( r.attributeNS( ooNS::table, "visibility", QString::null ) == "collapse" );
@@ -980,7 +980,7 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, Sheet * table )
       {
         Cell* cell = table->cellAt( j, backupRow );
 
-        kdDebug(30518) << "Cell: " << cell << "DefCell: " << defCell << endl;
+        kDebug(30518) << "Cell: " << cell << "DefCell: " << defCell << endl;
         if ( cell && (cell != defCell) )
         {
           cellDest = table->nonDefaultCell( j, backupRow + i );
@@ -994,14 +994,14 @@ bool OpenCalcImport::readRowsAndCells( QDomElement & content, Sheet * table )
     columns = 1;
   }
 
-  kdDebug(30518) << "Reading in rows done" << endl << endl;
+  kDebug(30518) << "Reading in rows done" << endl << endl;
 
   return true;
 }
 
 bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
 {
-  kdDebug(30518) << endl << "Reading in columns..." << endl;
+  kDebug(30518) << endl << "Reading in columns..." << endl;
 
   QDomNode colLayout = KoDom::namedItemNS( content, ooNS::table, "table-column" );
   int column = 1;
@@ -1016,7 +1016,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
     if ( e.isNull() )
       return false; // error, that's it...
 
-    kdDebug(30518) << "New column: " << column << endl;
+    kDebug(30518) << "New column: " << column << endl;
 
     int number     = 1;
     double width   = colWidth;
@@ -1024,7 +1024,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
     bool insertPageBreak = false;
     Format styleLayout( table, table->doc()->styleManager()->defaultStyle() );
 
-    kdDebug(30518) << "Check table:number-columns-repeated" << endl;
+    kDebug(30518) << "Check table:number-columns-repeated" << endl;
     if ( e.hasAttributeNS( ooNS::table, "number-columns-repeated" ) )
     {
       bool ok = true;
@@ -1032,21 +1032,21 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
       if ( !ok )
         number = 1;
 
-      kdDebug(30518) << "Repeated: " << number << endl;
+      kDebug(30518) << "Repeated: " << number << endl;
     }
 
-    kdDebug(30518) << "Checking table:default-cell-style-name" << endl;
+    kDebug(30518) << "Checking table:default-cell-style-name" << endl;
     if ( e.hasAttributeNS( ooNS::table, "default-cell-style-name" ) )
     {
       QString n( e.attributeNS( ooNS::table, "default-cell-style-name", QString::null ) );
-      kdDebug(30518) << "Has attribute default-cell-style-name: " << n << endl;
+      kDebug(30518) << "Has attribute default-cell-style-name: " << n << endl;
       Format * defaultStyle = m_defaultStyles[ n ];
       if ( !defaultStyle )
       {
         QString name = e.attributeNS( ooNS::table, "default-cell-style-name", QString::null );
         QDomElement * st = m_styles[ name ];
 
-        kdDebug(30518) << "Default cell style: " << name << endl;
+        kDebug(30518) << "Default cell style: " << name << endl;
 
         if ( st && !st->isNull() )
         {
@@ -1055,7 +1055,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
           readInStyle( layout, *st );
 
           m_defaultStyles.insert( name, layout );
-          kdDebug(30518) << "Insert default cell style: " << name << endl;
+          kDebug(30518) << "Insert default cell style: " << name << endl;
 
           defaultStyle = layout;
         }
@@ -1063,7 +1063,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
 
       if ( defaultStyle )
       {
-        //        kdDebug(30518) << "Copying default style, Font: " << defaultStyle->font().toString() << endl;
+        //        kDebug(30518) << "Copying default style, Font: " << defaultStyle->font().toString() << endl;
         styleLayout.copy( *defaultStyle );
       }
     }
@@ -1074,7 +1074,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
       QString style = e.attributeNS( ooNS::table, "style-name", QString::null );
       colStyle = m_styles[ style ];
 
-      kdDebug(30518) << "Col Style: " << style << endl;
+      kDebug(30518) << "Col Style: " << style << endl;
     }
 
     QDomNode node;
@@ -1091,7 +1091,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
         {
           QString sWidth = property.attributeNS( ooNS::style, "column-width", QString::null );
           width = KoUnit::parseValue( property.attributeNS( ooNS::style, "column-width", QString::null ), width );
-          kdDebug(30518) << "Col Width: " << sWidth << endl;
+          kDebug(30518) << "Col Width: " << sWidth << endl;
         }
 
         if ( property.hasAttributeNS( ooNS::fo, "break-before" ) )
@@ -1115,7 +1115,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
 
     for ( int i = 0; i < number; ++i )
     {
-      kdDebug(30518) << "Inserting colLayout: " << column << endl;
+      kDebug(30518) << "Inserting colLayout: " << column << endl;
 
       ColumnFormat * col = new ColumnFormat( table, column );
       col->copy( styleLayout );
@@ -1149,7 +1149,7 @@ QString getPart( QDomNode const & part )
   while ( !e.isNull() )
   {
     QString text = e.text();
-    kdDebug(30518) << "PART: " << text << endl;
+    kDebug(30518) << "PART: " << text << endl;
 
     QDomElement macro = KoDom::namedItemNS( e, ooNS::text, "time" );
     if ( !macro.isNull() )
@@ -1191,44 +1191,44 @@ QString getPart( QDomNode const & part )
 void OpenCalcImport::loadTableMasterStyle( Sheet * table,
                                            QString const & stylename )
 {
-  kdDebug(30518) << "Loading table master style: " << stylename << endl;
+  kDebug(30518) << "Loading table master style: " << stylename << endl;
 
   QDomElement * style = m_styles[ stylename ];
 
   if ( !style )
   {
-    kdDebug(30518) << "Master style not found! " << endl;
+    kDebug(30518) << "Master style not found! " << endl;
     return;
   }
 
   QDomNode header = KoDom::namedItemNS( *style, ooNS::style, "header" );
-  kdDebug(30518) << "Style header " << endl;
+  kDebug(30518) << "Style header " << endl;
 
   QString hleft, hmiddle, hright;
   QString fleft, fmiddle, fright;
 
   if ( !header.isNull() )
   {
-    kdDebug(30518) << "Header exists" << endl;
+    kDebug(30518) << "Header exists" << endl;
     QDomNode part = KoDom::namedItemNS( header, ooNS::style, "region-left" );
     if ( !part.isNull() )
     {
       hleft = getPart( part );
-      kdDebug(30518) << "Header left: " << hleft << endl;
+      kDebug(30518) << "Header left: " << hleft << endl;
     }
     else
-      kdDebug(30518) << "Style:region:left doesn't exist!" << endl;
+      kDebug(30518) << "Style:region:left doesn't exist!" << endl;
     part = KoDom::namedItemNS( header, ooNS::style, "region-center" );
     if ( !part.isNull() )
     {
       hmiddle = getPart( part );
-      kdDebug(30518) << "Header middle: " << hmiddle << endl;
+      kDebug(30518) << "Header middle: " << hmiddle << endl;
     }
     part = KoDom::namedItemNS( header, ooNS::style, "region-right" );
     if ( !part.isNull() )
     {
       hright = getPart( part );
-      kdDebug(30518) << "Header right: " << hright << endl;
+      kDebug(30518) << "Header right: " << hright << endl;
     }
   }
 
@@ -1240,19 +1240,19 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
     if ( !part.isNull() )
     {
       fleft = getPart( part );
-      kdDebug(30518) << "Footer left: " << fleft << endl;
+      kDebug(30518) << "Footer left: " << fleft << endl;
     }
     part = KoDom::namedItemNS( footer, ooNS::style, "region-center" );
     if ( !part.isNull() )
     {
       fmiddle = getPart( part );
-      kdDebug(30518) << "Footer middle: " << fmiddle << endl;
+      kDebug(30518) << "Footer middle: " << fmiddle << endl;
     }
     part = KoDom::namedItemNS( footer, ooNS::style, "region-right" );
     if ( !part.isNull() )
     {
       fright = getPart( part );
-      kdDebug(30518) << "Footer right: " << fright << endl;
+      kDebug(30518) << "Footer right: " << fright << endl;
     }
   }
 
@@ -1261,9 +1261,9 @@ void OpenCalcImport::loadTableMasterStyle( Sheet * table,
   if ( style->hasAttributeNS( ooNS::style, "page-master-name" ) )
   {
       QString masterPageLayoutStyleName=style->attributeNS( ooNS::style, "page-master-name", QString::null );
-      kdDebug(30518)<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
+      kDebug(30518)<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName<<endl;
       QDomElement *masterLayoutStyle = m_styles[masterPageLayoutStyleName];
-      kdDebug(30518)<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
+      kDebug(30518)<<"masterLayoutStyle :"<<masterLayoutStyle<<endl;
       if ( !masterLayoutStyle )
           return;
       KoStyleStack styleStack( ooNS::style, ooNS::fo );
@@ -1312,7 +1312,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
     }
     if ( styleStack.hasAttributeNS( ooNS::style, "writing-mode" ) )
     {
-        kdDebug(30518)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( ooNS::style, "writing-mode" )<<endl;
+        kDebug(30518)<<"styleStack.hasAttribute( style:writing-mode ) :"<<styleStack.hasAttributeNS( ooNS::style, "writing-mode" )<<endl;
     }
     if ( styleStack.hasAttributeNS( ooNS::style, "print-orientation" ) )
     {
@@ -1320,19 +1320,19 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
     }
     if ( styleStack.hasAttributeNS( ooNS::style, "num-format" ) )
     {
-        kdDebug(30518)<<" num-format :"<<styleStack.attributeNS( ooNS::style, "num-format" )<<endl;
+        kDebug(30518)<<" num-format :"<<styleStack.attributeNS( ooNS::style, "num-format" )<<endl;
         //todo fixme
     }
         if ( styleStack.hasAttributeNS( ooNS::fo, "background-color" ) )
     {
         //todo
-        kdDebug(30518)<<" fo:background-color :"<<styleStack.attributeNS( ooNS::fo, "background-color" )<<endl;
+        kDebug(30518)<<" fo:background-color :"<<styleStack.attributeNS( ooNS::fo, "background-color" )<<endl;
     }
     if ( styleStack.hasAttributeNS( ooNS::style, "print" ) )
     {
         //todo parsing
         QString str = styleStack.attributeNS( ooNS::style, "print" );
-        kdDebug(30518)<<" style:print :"<<str<<endl;
+        kDebug(30518)<<" style:print :"<<str<<endl;
 
         if (str.contains( "headers" ) )
         {
@@ -1371,7 +1371,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
     {
         QString str = styleStack.attributeNS( ooNS::style, "table-centering" );
         //not implemented into kspread
-        kdDebug(30518)<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
+        kDebug(30518)<<" styleStack.attribute( style:table-centering ) :"<<str<<endl;
 #if 0
         if ( str == "horizontal" )
         {
@@ -1386,14 +1386,14 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
         {
         }
         else
-            kdDebug(30518)<<" table-centering unknown :"<<str<<endl;
+            kDebug(30518)<<" table-centering unknown :"<<str<<endl;
 #endif
     }
     format = QString( "%1x%2" ).arg( width ).arg( height );
-    kdDebug(30518)<<" format : "<<format<<endl;
+    kDebug(30518)<<" format : "<<format<<endl;
     table->print()->setPaperLayout( left, top, right, bottom, format, orientation );
 
-    kdDebug(30518)<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
+    kDebug(30518)<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom<<endl;
 //<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
 //          QString format = paper.attribute( "format" );
 //      QString orientation = paper.attribute( "orientation" );
@@ -1416,7 +1416,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
   Sheet * table;
   QDomNode sheet = KoDom::namedItemNS( body, ooNS::table, "table" );
 
-  kdDebug()<<" sheet :"<<sheet.isNull()<<endl;
+  kDebug()<<" sheet :"<<sheet.isNull()<<endl;
   if ( sheet.isNull() )
     return false;
 
@@ -1437,7 +1437,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
     table = m_doc->map()->addNewSheet();
 
     table->setSheetName( t.attributeNS( ooNS::table, "name", QString::null ), true, false );
-    kdDebug()<<" table->name()"<<table->name()<<endl;
+    kDebug()<<" table->name()"<<table->name()<<endl;
     sheet = sheet.nextSibling();
   }
 
@@ -1448,7 +1448,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
 
   Format::setGlobalColWidth( MM_TO_POINT( 22.7 ) );
   Format::setGlobalRowHeight( MM_TO_POINT( 4.3 ) );
-  kdDebug(30518) << "Global Height: " << MM_TO_POINT( 4.3 ) << ", Global width: " << MM_TO_POINT( 22.7) << endl;
+  kDebug(30518) << "Global Height: " << MM_TO_POINT( 4.3 ) << ", Global width: " << MM_TO_POINT( 22.7) << endl;
 
   while ( !sheet.isNull() )
   {
@@ -1477,13 +1477,13 @@ bool OpenCalcImport::parseBody( int numOfTables )
     if ( defaultStyle )
     {
       Cell* defaultCell = table->defaultCell();
-      kdDebug(30518) << "Copy default style to default cell" << endl;
+      kDebug(30518) << "Copy default style to default cell" << endl;
       defaultCell->format()->copy( *defaultStyle );
     }
     table->setDefaultHeight( MM_TO_POINT( 4.3 ) );
     table->setDefaultWidth( MM_TO_POINT( 22.7 ) );
 
-    kdDebug(30518) << "Added table: " << t.attributeNS( ooNS::table, "name", QString::null ) << endl;
+    kDebug(30518) << "Added table: " << t.attributeNS( ooNS::table, "name", QString::null ) << endl;
 
     if ( t.hasAttributeNS( ooNS::table, "style-name" ) )
     {
@@ -1504,7 +1504,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
           {
             bool visible = (property.attributeNS( ooNS::table, "display", QString::null ) == "true" ? true : false );
             table->hideSheet( !visible );
-            kdDebug(30518) << "Table: " << table->tableName() << ", hidden: " << !visible << endl;
+            kDebug(30518) << "Table: " << table->tableName() << ", hidden: " << !visible << endl;
           }
         }
 
@@ -1525,10 +1525,10 @@ bool OpenCalcImport::parseBody( int numOfTables )
       QString range = t.attributeNS( ooNS::table, "print-ranges", QString::null );
       OpenCalcPoint point( range );
 
-      kdDebug(30518) << "Print range: " << point.translation << endl;
+      kDebug(30518) << "Print range: " << point.translation << endl;
       KSpread::Range p( point.translation );
 
-      kdDebug(30518) << "Print table: " << p.sheetName() << endl;
+      kDebug(30518) << "Print table: " << p.sheetName() << endl;
 
       if ( table->sheetName() == p.sheetName() )
         table->print()->setPrintRange( p.range() );
@@ -1547,10 +1547,10 @@ bool OpenCalcImport::parseBody( int numOfTables )
       {
         QString p = t.attributeNS( ooNS::table, "protection-key", QString::null );
         Q3CString str( p.latin1() );
-        kdDebug(30518) << "Decoding password: " << str << endl;
+        kDebug(30518) << "Decoding password: " << str << endl;
         passwd = KCodecs::base64Decode( str );
       }
-      kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
+      kDebug(30518) << "Password hash: '" << passwd << "'" << endl;
       table->setProtected( passwd );
     }
 
@@ -1567,10 +1567,10 @@ bool OpenCalcImport::parseBody( int numOfTables )
     {
       QString p = b.attributeNS( ooNS::table, "protection-key", QString::null );
       Q3CString str( p.latin1() );
-      kdDebug(30518) << "Decoding password: " << str << endl;
+      kDebug(30518) << "Decoding password: " << str << endl;
       passwd = KCodecs::base64Decode( str );
     }
-    kdDebug(30518) << "Password hash: '" << passwd << "'" << endl;
+    kDebug(30518) << "Password hash: '" << passwd << "'" << endl;
 
     m_doc->map()->setProtected( passwd );
   }
@@ -1594,7 +1594,7 @@ void OpenCalcImport::insertStyles( QDomElement const & element )
     }
 
     QString name = e.attributeNS( ooNS::style, "name", QString::null );
-    kdDebug(30518) << "Style: '" << name << "' loaded " << endl;
+    kDebug(30518) << "Style: '" << name << "' loaded " << endl;
     m_styles.insert( name, new QDomElement( e ) );
   }
 }
@@ -1610,7 +1610,7 @@ void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
     {
       if ( e.isNull() || !e.hasAttributeNS( ooNS::table, "name" ) || !e.hasAttributeNS( ooNS::table, "cell-range-address" ) )
       {
-        kdDebug(30518) << "Reading in named area failed" << endl;
+        kDebug(30518) << "Reading in named area failed" << endl;
         continue;
       }
 
@@ -1619,10 +1619,10 @@ void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
       QString areaPoint = e.attributeNS( ooNS::table, "cell-range-address", QString::null );
 
       m_namedAreas.append( name );
-      kdDebug(30518) << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
+      kDebug(30518) << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
 
       OpenCalcPoint point( areaPoint );
-      kdDebug(30518) << "Area: " << point.translation << endl;
+      kDebug(30518) << "Area: " << point.translation << endl;
 
       QString range( point.translation );
 
@@ -1634,13 +1634,13 @@ void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
         if ( n > 0 )
           range = range + ":" + range.right( range.length() - n - 1);
 
-        kdDebug(30518) << "=> Area: " << range << endl;
+        kDebug(30518) << "=> Area: " << range << endl;
       }
 
       KSpread::Range p( range );
 
       m_doc->addAreaName( p.range(), name, p.sheetName() );
-      kdDebug(30518) << "Area range: " << p.sheetName() << endl;
+      kDebug(30518) << "Area range: " << p.sheetName() << endl;
     }
   }
 }
@@ -1655,10 +1655,10 @@ void OpenCalcImport::loadOasisCellValidation( const QDomElement&body )
         {
             if ( element.localName() ==  "content-validation" ) {
                 m_validationList.insert( element.attributeNS( ooNS::table, "name", QString::null ), element);
-                kdDebug(30518)<<" validation found :"<<element.attributeNS( ooNS::table, "name", QString::null )<<endl;
+                kDebug(30518)<<" validation found :"<<element.attributeNS( ooNS::table, "name", QString::null )<<endl;
             }
             else {
-                kdDebug(30518)<<" Tag not recognize :"<<element.tagName()<<endl;
+                kDebug(30518)<<" Tag not recognize :"<<element.tagName()<<endl;
             }
         }
     }
@@ -1720,7 +1720,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
     else if ( e.localName() == "currency-symbol" && e.namespaceURI()==ooNS::number)
     {
       QString sym( e.text() );
-      kdDebug(30518) << "Currency: " << sym << endl;
+      kDebug(30518) << "Currency: " << sym << endl;
       format->append( sym );
       // number:language="de" number:country="DE">€</number:currency-symbol>
     }
@@ -1957,7 +1957,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
     format->append( f );
   }
 
-  kdDebug(30518) << "*** New FormatString: " << *format << endl << endl;
+  kDebug(30518) << "*** New FormatString: " << *format << endl << endl;
 
   m_formats.insert( name, format );
 
@@ -1969,7 +1969,7 @@ void OpenCalcImport::loadFontStyle( Format * layout, QDomElement const * font ) 
   if ( !font || !layout )
     return;
 
-  kdDebug(30518) << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
+  kDebug(30518) << "Copy font style from the layout " << font->tagName() << ", " << font->nodeName() << endl;
 
   if ( font->hasAttributeNS( ooNS::fo, "font-family" ) )
     layout->setTextFontFamily( font->attributeNS( ooNS::fo, "font-family", QString::null ) );
@@ -1981,7 +1981,7 @@ void OpenCalcImport::loadFontStyle( Format * layout, QDomElement const * font ) 
     layout->setTextFontSize( 10 );
   if ( font->hasAttributeNS( ooNS::fo, "font-style" ) )
   {
-    kdDebug(30518) << "italic" << endl;
+    kDebug(30518) << "italic" << endl;
     layout->setTextFontItalic( true ); // only thing we support
   }
   if ( font->hasAttributeNS( ooNS::fo, "font-weight" ) )
@@ -2016,7 +2016,7 @@ void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPo
   int p2 = borderDef.find( ' ', p );
   QString s = borderDef.mid( p, p2 - p );
 
-  kdDebug(30518) << "Borderstyle: " << s << endl;
+  kDebug(30518) << "Borderstyle: " << s << endl;
 
   if ( s == "solid" || s == "double" )
     pen.setStyle( Qt::SolidLine );
@@ -2059,7 +2059,7 @@ void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPo
 
 void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & property ) const
 {
-  kdDebug(30518) << "*** Loading style properties *****" << endl;
+  kDebug(30518) << "*** Loading style properties *****" << endl;
 
   if ( property.hasAttributeNS( ooNS::style, "decimal-places" ) )
   {
@@ -2113,7 +2113,7 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
   }
   if (  property.hasAttributeNS( ooNS::fo, "margin-left" ) )
   {
-      kdDebug(30518)<<"margin-left :"<<KoUnit::parseValue( property.attributeNS( ooNS::fo, "margin-left", QString::null ),0.0 )<<endl;
+      kDebug(30518)<<"margin-left :"<<KoUnit::parseValue( property.attributeNS( ooNS::fo, "margin-left", QString::null ),0.0 )<<endl;
       layout->setIndent( KoUnit::parseValue( property.attributeNS( ooNS::fo, "margin-left", QString::null ),0.0 ) );
   }
   if ( property.hasAttributeNS( ooNS::fo, "background-color" ) )
@@ -2157,7 +2157,7 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
       layout->setHideFormula( false );
       layout->setHideAll( false );
     }
-    kdDebug(30518) << "Cell " << prot << endl;
+    kDebug(30518) << "Cell " << prot << endl;
   }
 
   if ( property.hasAttributeNS( ooNS::fo, "padding-left" ) )
@@ -2220,14 +2220,14 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
 
 void OpenCalcImport::readInStyle( Format * layout, QDomElement const & style )
 {
-  kdDebug(30518) << "** Reading Style: " << style.tagName() << "; " << style.attributeNS( ooNS::style, "name", QString::null) << endl;
+  kDebug(30518) << "** Reading Style: " << style.tagName() << "; " << style.attributeNS( ooNS::style, "name", QString::null) << endl;
   if ( style.localName() == "style" && style.namespaceURI()==ooNS::style)
   {
     if ( style.hasAttributeNS( ooNS::style, "parent-style-name" ) )
     {
       Format * cp
         = m_defaultStyles.find( style.attributeNS( ooNS::style, "parent-style-name", QString::null ) );
-      kdDebug(30518) << "Copying layout from " << style.attributeNS( ooNS::style, "parent-style-name", QString::null ) << endl;
+      kDebug(30518) << "Copying layout from " << style.attributeNS( ooNS::style, "parent-style-name", QString::null ) << endl;
 
       if ( cp != 0 )
         layout->copy( *cp );
@@ -2237,7 +2237,7 @@ void OpenCalcImport::readInStyle( Format * layout, QDomElement const & style )
       QString name = style.attribute( "style-family" ) + "default";
       Format * cp = m_defaultStyles.find( name );
 
-      kdDebug(30518) << "Copying layout from " << name << ", " << !cp << endl;
+      kDebug(30518) << "Copying layout from " << name << ", " << !cp << endl;
 
       if ( cp != 0 )
         layout->copy( *cp );
@@ -2271,7 +2271,7 @@ void OpenCalcImport::readInStyle( Format * layout, QDomElement const & style )
     if ( property.localName() == "properties" && property.namespaceURI() == ooNS::style )
       loadStyleProperties( layout, property );
 
-    kdDebug(30518) << layout->textFontFamily( 0, 0 ) << endl;
+    kDebug(30518) << layout->textFontFamily( 0, 0 ) << endl;
   }
 }
 
@@ -2287,7 +2287,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
     if ( ok )
     {
-      kdDebug(30518) << "OpenCalc version: " << d << endl;
+      kDebug(30518) << "OpenCalc version: " << d << endl;
       if ( d > 1.0 )
       {
         QString message( i18n("This document was created with OpenOffice.org version '%1'. This filter was written for version 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
@@ -2302,29 +2302,29 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
   if ( !fontStyles.isNull() )
   {
-    kdDebug(30518) << "Starting reading in font-decl..." << endl;
+    kDebug(30518) << "Starting reading in font-decl..." << endl;
 
     insertStyles( fontStyles.toElement() );
   }
   else
-    kdDebug(30518) << "No items found" << endl;
+    kDebug(30518) << "No items found" << endl;
 
-  kdDebug(30518) << "Starting reading in auto:styles" << endl;
+  kDebug(30518) << "Starting reading in auto:styles" << endl;
 
   QDomNode autoStyles = KoDom::namedItemNS( content, ooNS::office, "automatic-styles" );
   if ( !autoStyles.isNull() )
     insertStyles( autoStyles.toElement() );
   else
-    kdDebug(30518) << "No items found" << endl;
+    kDebug(30518) << "No items found" << endl;
 
 
-  kdDebug(30518) << "Reading in master styles" << endl;
+  kDebug(30518) << "Reading in master styles" << endl;
 
   QDomNode masterStyles = KoDom::namedItemNS( content, ooNS::office, "master-styles" );
 
   if ( masterStyles.isNull() )
   {
-    kdDebug(30518) << "Nothing found " << endl;
+    kDebug(30518) << "Nothing found " << endl;
   }
 
   QDomElement master = KoDom::namedItemNS( masterStyles, ooNS::style, "master-page");
@@ -2332,25 +2332,25 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
   {
     QString name( "pm" );
     name += master.attributeNS( ooNS::style, "name", QString::null );
-    kdDebug(30518) << "Master style: '" << name << "' loaded " << endl;
+    kDebug(30518) << "Master style: '" << name << "' loaded " << endl;
     m_styles.insert( name, new QDomElement( master ) );
 
     master = master.nextSibling().toElement();
   }
 
 
-  kdDebug(30518) << "Starting reading in office:styles" << endl;
+  kDebug(30518) << "Starting reading in office:styles" << endl;
 
   QDomNode fixedStyles = KoDom::namedItemNS( content, ooNS::office, "styles" );
 
-  kdDebug(30518) << "Reading in default styles" << endl;
+  kDebug(30518) << "Reading in default styles" << endl;
 
   QDomNode def = KoDom::namedItemNS( fixedStyles, ooNS::style, "default-style" );
-  kdDebug()<<" def !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<def.isNull()<<endl;
+  kDebug()<<" def !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<def.isNull()<<endl;
   while ( !def.isNull() )
   {
     QDomElement e = def.toElement();
-    kdDebug(30518) << "Style found " << e.nodeName() << ", tag: " << e.tagName() << endl;
+    kDebug(30518) << "Style found " << e.nodeName() << ", tag: " << e.tagName() << endl;
 
     if ( e.nodeName() != "style:default-style" )
     {
@@ -2363,11 +2363,11 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
       Format * layout = new Format( 0, m_doc->styleManager()->defaultStyle() );
 
       readInStyle( layout, e );
-      kdDebug(30518) << "Default style " << e.attributeNS( ooNS::style, "family", QString::null ) << "default" << " loaded " << endl;
+      kDebug(30518) << "Default style " << e.attributeNS( ooNS::style, "family", QString::null ) << "default" << " loaded " << endl;
 
       m_defaultStyles.insert( e.attributeNS( ooNS::style, "family", QString::null ) + "default", layout );
       //      QFont font = layout->font();
-      //      kdDebug(30518) << "Font: " << font.family() << ", " << font.toString() << endl;
+      //      kDebug(30518) << "Font: " << font.family() << ", " << font.toString() << endl;
     }
 
     def = def.nextSibling();
@@ -2388,10 +2388,10 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
     Format * layout = new Format( 0, m_doc->styleManager()->defaultStyle() );
     readInStyle( layout, defs );
-    kdDebug(30518) << "Default style " << defs.attributeNS( ooNS::style, "name", QString::null ) << " loaded " << endl;
+    kDebug(30518) << "Default style " << defs.attributeNS( ooNS::style, "name", QString::null ) << " loaded " << endl;
 
     m_defaultStyles.insert( defs.attributeNS( ooNS::style, "name", QString::null ), layout );
-    //    kdDebug(30518) << "Font: " << layout->font().family() << ", " << layout->font().toString() << endl;
+    //    kDebug(30518) << "Font: " << layout->font().family() << ", " << layout->font().toString() << endl;
 
     defs = defs.nextSibling().toElement();
   }
@@ -2399,7 +2399,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
   if ( !fixedStyles.isNull() )
     insertStyles( fixedStyles.toElement() );
 
-  kdDebug(30518) << "Starting reading in automatic styles" << endl;
+  kDebug(30518) << "Starting reading in automatic styles" << endl;
 
   content = m_content.documentElement();
   autoStyles = KoDom::namedItemNS( content, ooNS::office, "automatic-styles" );
@@ -2411,24 +2411,24 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
   if ( !fontStyles.isNull() )
   {
-    kdDebug(30518) << "Starting reading in special font decl" << endl;
+    kDebug(30518) << "Starting reading in special font decl" << endl;
 
     insertStyles( fontStyles.toElement() );
   }
 
-  kdDebug(30518) << "Styles read in." << endl;
+  kDebug(30518) << "Styles read in." << endl;
 
   return true;
 }
 
 void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validationName )
 {
-    kdDebug(30518)<<"validationName:"<<validationName<<endl;
+    kDebug(30518)<<"validationName:"<<validationName<<endl;
     QDomElement element = m_validationList[validationName];
     if ( element.hasAttributeNS( ooNS::table, "condition" ) )
     {
         QString valExpression = element.attributeNS( ooNS::table, "condition", QString::null );
-        kdDebug(30518)<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        kDebug(30518)<<" element.attribute( table:condition ) "<<valExpression<<endl;
         //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
@@ -2446,7 +2446,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
         {
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("cell-content-text-length()" );
-            kdDebug(30518)<<" valExpression = :"<<valExpression<<endl;
+            kDebug(30518)<<" valExpression = :"<<valExpression<<endl;
             val->m_restriction = Restriction::TextLength;
 
             loadOasisValidationCondition( val, valExpression );
@@ -2457,7 +2457,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             val->m_restriction = Restriction::TextLength;
             val->m_cond = Conditional::Between;
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
-            kdDebug(30518)<<" valExpression :"<<valExpression<<endl;
+            kDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             QStringList listVal = QStringList::split( ",", valExpression );
             loadOasisValidationValue( val, listVal );
@@ -2467,9 +2467,9 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             val->m_restriction = Restriction::TextLength;
             val->m_cond = Conditional::Different;
             valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
-            kdDebug(30518)<<" valExpression :"<<valExpression<<endl;
+            kDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
-            kdDebug(30518)<<" valExpression :"<<valExpression<<endl;
+            kDebug(30518)<<" valExpression :"<<valExpression<<endl;
             QStringList listVal = QStringList::split( ",", valExpression );
             loadOasisValidationValue( val, listVal );
 
@@ -2497,7 +2497,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
                 val->m_restriction = Restriction::Time;
                 valExpression = valExpression.remove( "cell-content-is-time() and " );
             }
-            kdDebug(30518)<<"valExpression :"<<valExpression<<endl;
+            kDebug(30518)<<"valExpression :"<<valExpression<<endl;
 
             if ( valExpression.contains( "cell-content()" ) )
             {
@@ -2562,12 +2562,12 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             else if ( str == "stop" )
               val->m_action = Action::Stop;
             else
-                kdDebug(30518)<<"validation : message type unknown  :"<<str<<endl;
+                kDebug(30518)<<"validation : message type unknown  :"<<str<<endl;
         }
 
         if ( error.hasAttributeNS( ooNS::table, "display" ) )
         {
-            kdDebug(30518)<<" display message :"<<error.attributeNS( ooNS::table, "display", QString::null )<<endl;
+            kDebug(30518)<<" display message :"<<error.attributeNS( ooNS::table, "display", QString::null )<<endl;
             val->displayMessage = (error.attributeNS( ooNS::table, "display", QString::null )=="true");
         }
         QDomElement attrText = KoDom::namedItemNS( error, ooNS::text, "p" );
@@ -2579,7 +2579,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
 void OpenCalcImport::loadOasisValidationValue( Validity* val, const QStringList &listVal )
 {
     bool ok = false;
-    kdDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
     if ( val->m_restriction == Restriction::Date )
     {
@@ -2598,7 +2598,7 @@ void OpenCalcImport::loadOasisValidationValue( Validity* val, const QStringList 
         {
             val->valMin = listVal[0].toInt(&ok);
             if ( !ok )
-                kdDebug(30518)<<" Try to parse this value :"<<listVal[0]<<endl;
+                kDebug(30518)<<" Try to parse this value :"<<listVal[0]<<endl;
 
 #if 0
             if ( !ok )
@@ -2611,7 +2611,7 @@ void OpenCalcImport::loadOasisValidationValue( Validity* val, const QStringList 
         {
             val->valMax = listVal[1].toInt(&ok);
             if ( !ok )
-                kdDebug(30518)<<" Try to parse this value :"<<listVal[1]<<endl;
+                kDebug(30518)<<" Try to parse this value :"<<listVal[1]<<endl;
 
 #if 0
             if ( !ok )
@@ -2657,8 +2657,8 @@ void OpenCalcImport::loadOasisValidationCondition( Validity* val,QString &valExp
         val->m_cond = Conditional::Equal;
     }
     else
-        kdDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
-    kdDebug(30518)<<" value :"<<value<<endl;
+        kDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
+    kDebug(30518)<<" value :"<<value<<endl;
     if ( val->m_restriction == Restriction::Date )
     {
         val->dateMin = QDate::fromString( value );
@@ -2675,7 +2675,7 @@ void OpenCalcImport::loadOasisValidationCondition( Validity* val,QString &valExp
         {
             val->valMin = value.toInt(&ok);
             if ( !ok )
-                kdDebug(30518)<<" Try to parse this value :"<<value<<endl;
+                kDebug(30518)<<" Try to parse this value :"<<value<<endl;
 
 #if 0
             if ( !ok )
@@ -2739,7 +2739,7 @@ int OpenCalcImport::readMetaData()
 
 KoFilter::ConversionStatus OpenCalcImport::convert( Q3CString const & from, Q3CString const & to )
 {
-  kdDebug(30518) << "Entering OpenCalc Import filter: " << from << " - " << to << endl;
+  kDebug(30518) << "Entering OpenCalc Import filter: " << from << " - " << to << endl;
 
   KoDocument * document = m_chain->outputDocument();
   if ( !document )
@@ -2747,13 +2747,13 @@ KoFilter::ConversionStatus OpenCalcImport::convert( Q3CString const & from, Q3CS
 
   if (  !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
   {
-    kdWarning(30518) << "document isn't a KSpread::Doc but a " << document->className() << endl;
+    kWarning(30518) << "document isn't a KSpread::Doc but a " << document->className() << endl;
     return KoFilter::NotImplemented;
   }
 
   if ( ( from != "application/vnd.sun.xml.calc" && from != "application/vnd.sun.xml.calc.template") || to != "application/x-kspread" )
   {
-    kdWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
+    kWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
     return KoFilter::NotImplemented;
   }
 
@@ -2761,11 +2761,11 @@ KoFilter::ConversionStatus OpenCalcImport::convert( Q3CString const & from, Q3CS
 
   if ( m_doc->mimeType() != "application/x-kspread" )
   {
-    kdWarning(30518) << "Invalid document mimetype " << m_doc->mimeType() << endl;
+    kWarning(30518) << "Invalid document mimetype " << m_doc->mimeType() << endl;
     return KoFilter::NotImplemented;
   }
 
-  kdDebug(30518) << "Opening file " << endl;
+  kDebug(30518) << "Opening file " << endl;
 
   KoFilter::ConversionStatus preStatus = openFile();
 
@@ -2788,21 +2788,21 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
 {
   KoStore * store = KoStore::createStore( m_chain->inputFile(), KoStore::Read);
 
-  kdDebug(30518) << "Store created" << endl;
+  kDebug(30518) << "Store created" << endl;
 
   if ( !store )
   {
-    kdWarning(30518) << "Couldn't open the requested file." << endl;
+    kWarning(30518) << "Couldn't open the requested file." << endl;
     return KoFilter::FileNotFound;
   }
 
-  kdDebug(30518) << "Trying to open content.xml" << endl;
+  kDebug(30518) << "Trying to open content.xml" << endl;
   QString messageError;
   loadAndParse( m_content, "content.xml", store);
-  kdDebug(30518) << "Opened" << endl;
+  kDebug(30518) << "Opened" << endl;
 
   QDomDocument styles;
-  kdDebug(30518) << "file content.xml loaded " << endl;
+  kDebug(30518) << "file content.xml loaded " << endl;
 
   loadAndParse( styles, "styles.xml", store);
 

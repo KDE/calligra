@@ -45,7 +45,7 @@ KisJPEGImport::~KisJPEGImport()
 
 KoFilter::ConversionStatus KisJPEGImport::convert(const Q3CString&, const Q3CString& to)
 {
-    kdDebug(41008) << "Importing using JPEGImport!\n";
+    kDebug(41008) << "Importing using JPEGImport!\n";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

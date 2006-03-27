@@ -31,10 +31,10 @@
 #include <Q3ValueList>
 
 #define TIME_START(str) { \
-    kdDebug(30516) << str << endl; \
+    kDebug(30516) << str << endl; \
     _time.restart(); \
 }
-#define TIME_END { kdDebug(30516) << "elapsed=" << _time.elapsed() << endl; }
+#define TIME_END { kDebug(30516) << "elapsed=" << _time.elapsed() << endl; }
 
 
 namespace PDFImport
@@ -66,30 +66,30 @@ void Page::beginString(GfxState *state, double x0, double y0)
 
 //    _data.checkTextFrameset();
     curStr = new String(state, x0, y0, fontSize, _data.textIndex());
-//    kdDebug(30516) << "---" << endl;
+//    kDebug(30516) << "---" << endl;
 }
 
 void Page::endString()
 {
-//    kdDebug(30516) << "endString..." << " len=" << curStr->len
+//    kDebug(30516) << "endString..." << " len=" << curStr->len
 //                   << " " << _lastStr
 //                   << " len=" << (_lastStr ? _lastStr->len : -1) << endl;
     TextPage::endString();
-//    kdDebug(30516) << "  ...endString done" << endl;
+//    kDebug(30516) << "  ...endString done" << endl;
 }
 
 void Page::addString(TextString *str)
 {
-//    kdDebug(30516) << "addString..." << endl;
-//    if ( str->len==0 ) kdDebug(30516) << "empty string !" << endl;
+//    kDebug(30516) << "addString..." << endl;
+//    if ( str->len==0 ) kDebug(30516) << "empty string !" << endl;
     if (_lastStr) _lastStr->checkCombination(str);
     _lastStr = (str->len==0 ? 0 : static_cast<String *>(str));
 //    QString s;
 //    for (int i=0; i<str->len; i++) s += QChar(str->text[i]);
-//    kdDebug(30516) << "string: " << s << " ("
+//    kDebug(30516) << "string: " << s << " ("
 //                   << (str->len>0 ? s[0].unicode() : 0) << ")" << endl;
     TextPage::addString(str);
-//    kdDebug(30516) << " ...addString done" << endl;
+//    kDebug(30516) << " ...addString done" << endl;
 }
 
 TextBlock *Page::block(TextLine *line, int index)
@@ -158,9 +158,9 @@ void Page::checkHeader()
     const TextLine *first = par.lines().first();
     const TextLine *second = (s>1 ? _pars[1].lines().first() : 0);
     double limit = 0.2 * _data.pageRect().height();
-    double delta = 2 * kMin(first->yMax - first->yMin, 12.0);
-//    kdDebug(30516) << "first: " << first->yMax << " (" << limit << ")" << endl;
-//    if (second) kdDebug(30516) << "second: " << second->yMin << " "
+    double delta = 2 * qMin(first->yMax - first->yMin, 12.0);
+//    kDebug(30516) << "first: " << first->yMax << " (" << limit << ")" << endl;
+//    if (second) kDebug(30516) << "second: " << second->yMin << " "
 //                               << second->yMin-first->yMax << " (" << delta
 //                               << ")" << endl;
     if ( first->yMax>limit ) return;
@@ -183,9 +183,9 @@ void Page::checkFooter()
     const TextLine *last = par.lines().first();
     const TextLine *blast = (s>1 ? _pars[s-2].lines().last() : 0);
     double limit = 0.8 * _data.pageRect().height();
-    double delta = 2 * kMin(last->yMax-last->yMin, 12.0);
-//    kdDebug(30516) << "last: " << last->yMax << " (" << limit << ")" << endl;
-//    if (blast) kdDebug(30516) << "blast: " << blast->yMin << " "
+    double delta = 2 * qMin(last->yMax-last->yMin, 12.0);
+//    kDebug(30516) << "last: " << last->yMax << " (" << limit << ")" << endl;
+//    if (blast) kDebug(30516) << "blast: " << blast->yMin << " "
 //                              <<  last->yMin-blast->yMax << " (" << delta
 //                              << ")" << endl;
     if ( last->yMin<limit ) return;
@@ -210,9 +210,9 @@ void Page::endPage()
 
     // check header and footer
     checkHeader();
-//    if ( hasHeader() ) kdDebug(30516) << "has header" << endl;
+//    if ( hasHeader() ) kDebug(30516) << "has header" << endl;
     checkFooter();
-//    if ( hasFooter() ) kdDebug(30516) << "has footer" << endl;
+//    if ( hasFooter() ) kDebug(30516) << "has footer" << endl;
 
     // compute body rect
     uint begin = (hasHeader() ? 1 : 0);
@@ -248,7 +248,7 @@ void Page::initParagraph(Paragraph &par) const
                 tab.pos = dx;
                 if (tabRightAligned) {
                     tab.alignment = Tabulator::Right;
-                    kdDebug(30516) << "tabulated text right aligned.." << endl;
+                    kDebug(30516) << "tabulated text right aligned.." << endl;
                 } else tab.alignment = Tabulator::Left;
                 par.tabs.push_back(tab);
             }
@@ -261,7 +261,7 @@ void Page::initParagraph(Paragraph &par) const
             par.firstIndent = left;
             par.leftIndent = left;
         } else if ( par.isSecond(*it) ) par.leftIndent = left;
-        else par.leftIndent = kMin(par.leftIndent, left);
+        else par.leftIndent = qMin(par.leftIndent, left);
     }
 
     // compute alignment
@@ -272,19 +272,19 @@ void Page::initParagraph(Paragraph &par) const
 //        QString text;
 //        for (int i=0; i<kMin(4, (*it)->blocks->len); i++)
 //            text += QChar((*it)->blocks->text[i]);
-//        kdDebug(30516) << text << " left=" << left
+//        kDebug(30516) << text << " left=" << left
 //                       << " pleft=" << pleft + par.leftIndent
 //                       << " indent=" << par.leftIndent
 //                       << " findent=" << par.firstIndent << endl;
         if ( centered && !equal(mean, pmean) ) centered = false;
         if ( leftAligned && (!par.isFirst(*it) || par.hasOneLine())
              && !equal(left, pleft + par.leftIndent, 0.05) ) {
-            kdDebug(30516) << "not left aligned" << endl;
+            kDebug(30516) << "not left aligned" << endl;
             leftAligned = false;
         }
         if ( rightAligned && (!par.isLast(*it) || par.hasOneLine())
              && !equal(right, pright, 0.05) ) {
-            kdDebug(30516) << "not right aligned" << endl;
+            kDebug(30516) << "not right aligned" << endl;
             rightAligned = false;
         }
     }
@@ -299,7 +299,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
     const double pleft = _rects[par.type].left();
     const double pright = _rects[par.type].right();
     par.offset = par.lines().first()->yMin - offset;
-//    kdDebug(30516) << "offset=" << offset
+//    kDebug(30516) << "offset=" << offset
 //                   << " yMin=" << par.lines().first()->yMin
 //                   << " paroffset=" << par.offset << endl;
     if ( par.offset>0 ) offset += par.offset;
@@ -318,7 +318,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
                 int psi = par.charFromEnd(1, pbi);
                 QChar prev = (psi<0 ? QChar::Null : par.blocks[pbi].text[psi]);
                 if ( !prev.isNull() && type(c.unicode())==Hyphen )
-                    kdDebug(30516) << "hyphen ? " << QString(prev)
+                    kDebug(30516) << "hyphen ? " << QString(prev)
                                    << " type=" << type(prev.unicode())
                                    << endl;
                 TextString *next =
@@ -327,7 +327,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
                      && isLetter( type(prev.unicode()) )
                      && next && next->len>0
                      && isLetter( type(next->text[next->len-1]) ) ) {
-                    kdDebug(30516) << "found hyphen" << endl;
+                    kDebug(30516) << "found hyphen" << endl;
                     hyphen = true;
                     par.blocks[bi].text.remove(si, 1);
                 }
@@ -378,7 +378,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
                 b.font = fstr->font();
                 b.link = fstr->link;
                 par.blocks.push_back(b);
-                lineHeight = kMax(lineHeight, b.font.height());
+                lineHeight = qMax(lineHeight, b.font.height());
             }
 
             prevBlk = blk;
@@ -393,21 +393,21 @@ FontFamily Page::checkSpecial(QChar &c, const Font &font) const
     Unicode res = 0;
     switch ( PDFImport::checkSpecial(c.unicode(), res) ) {
     case Bullet:
-        kdDebug(30516) << "found bullet" << endl;
+        kDebug(30516) << "found bullet" << endl;
         // #### FIXME : if list, use a COUNTER
         // temporarly replace by symbol
         c = res;
         return Symbol;
     case SuperScript:
-        kdDebug(30516) << "found superscript" << endl;
+        kDebug(30516) << "found superscript" << endl;
         // #### FIXME
         break;
     case LatexSpecial:
         if ( !font.isLatex() ) break;
-        kdDebug(30516) << "found latex special" << endl;
+        kDebug(30516) << "found latex special" << endl;
         return Times;
     case SpecialSymbol:
-        kdDebug(30516) << "found symbol=" << c.unicode() << endl;
+        kDebug(30516) << "found symbol=" << c.unicode() << endl;
         return Times;
         //return Symbol;
     default:
@@ -423,7 +423,7 @@ void Page::checkSpecialChars(Paragraph &par) const
     for (uint k=0; k<par.blocks.size(); k++) {
         const Block &b = par.blocks[k];
         QString res;
-//            kdDebug(30516) << "check \"" << b.text << "\"" << endl;
+//            kDebug(30516) << "check \"" << b.text << "\"" << endl;
         for (uint l=0; l<b.text.length(); l++) {
             QChar c = b.text[l];
             FontFamily family = checkSpecial(c, b.font);
@@ -465,13 +465,13 @@ void Page::prepare()
     TIME_START("associate links");
     for (Link *link=_links.first(); link; link=_links.next()) {
         const DRect &r = link->rect();
-//        kdDebug(30516) << "link " << r.toString() << endl;
+//        kDebug(30516) << "link " << r.toString() << endl;
         for (TextLine *line = lines; line; line = line->next)
             for (TextBlock *blk = line->blocks; blk; blk = blk->next)
                 for (TextString *str = blk->strings; str; str = str->next) {
                     String *fstr = static_cast<String *>(str);
                     DRect sr = fstr->rect();
-//                    kdDebug(30516) << "str " << sr.toString() << " "
+//                    kDebug(30516) << "str " << sr.toString() << " "
 //                                   << r.isInside(sr) << endl;
                     if ( r.isInside(sr) ) fstr->link = link;
                 }
@@ -560,7 +560,7 @@ void Page::dump(const Paragraph &par)
     // flow
     if (_data.options().smart) {
         QString flow;
-//        kdDebug(30516) << "flow=" << par.align << endl;
+//        kDebug(30516) << "flow=" << par.align << endl;
         switch (par.align) {
         case Qt::AlignLeft: break;
         case Qt::AlignRight: flow = "right"; break;

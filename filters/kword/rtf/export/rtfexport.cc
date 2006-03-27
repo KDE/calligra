@@ -66,7 +66,7 @@ KoFilter::ConversionStatus RTFExport::convert( const Q3CString& from, const Q3CS
         return KoFilter::NotImplemented;
     }
 
-    KImageIO::registerFormats();
+    
 
     RTFWorker* worker=new RTFWorker();
 
@@ -74,7 +74,7 @@ KoFilter::ConversionStatus RTFExport::convert( const Q3CString& from, const Q3CS
 
     if (!leader)
     {
-        kdError(30515) << "Cannot create Worker! Aborting!" << endl;
+        kError(30515) << "Cannot create Worker! Aborting!" << endl;
         delete worker;
         return KoFilter::StupidError;
     }

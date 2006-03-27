@@ -58,7 +58,7 @@ void ExportDialog::selectAll()
 
 ExportDialog::~ExportDialog()
 {
-  kapp->setOverrideCursor(Qt::waitCursor);
+  kapp->setOverrideCursor(Qt::WaitCursor);
 }
 
 QTextCodec *ExportDialog::encoding() const

@@ -21,7 +21,7 @@
 
 #include <stdlib.h>	/* for atoi function */
 
-#include <kdebug.h>	/* for kdDebug() stream */
+#include <kdebug.h>	/* for kDebug() stream */
 
 #include "fileheader.h"	/* for _header use */
 #include "layout.h"
@@ -56,49 +56,49 @@ void Layout::analyseLayout(const QDomNode balise)
 	/* Markup type : FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* No parameters for this markup */
-	kdDebug(30522) << "ANALYSE OF THE BEGINING OF A LAYOUT" << endl;
+	kDebug(30522) << "ANALYSE OF THE BEGINING OF A LAYOUT" << endl;
 	
 	/* Analyse children markups */
 	for(int index= 0; index < getNbChild(balise); index++)
 	{
 		if(getChildName(balise, index).compare("NAME")== 0)
 		{
-			kdDebug(30522) << "NAME : " << endl;
+			kDebug(30522) << "NAME : " << endl;
 			analyseName(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("FOLLOWING")== 0)
 		{
-			kdDebug(30522) << "FOLLOWING : " << endl;
+			kDebug(30522) << "FOLLOWING : " << endl;
 			analyseFollowing(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("FLOW")== 0)
 		{
-			kdDebug(30522) << "FLOW : " << endl;
+			kDebug(30522) << "FLOW : " << endl;
 			analyseEnv(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("PAGEBREAKING")== 0)
 		{
-			kdDebug(30522) << "PAGEBREAKING : " << endl;
+			kDebug(30522) << "PAGEBREAKING : " << endl;
 			analyseBreakLine(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("COUNTER")== 0)
 		{
-			kdDebug(30522) << "COUNTER : " << endl;
+			kDebug(30522) << "COUNTER : " << endl;
 			analyseCounter(getChild(balise, index));
 		}
 		else if(getChildName(balise, index).compare("FORMAT")== 0)
 		{
-			kdDebug(30522) << "FORMAT : " << endl;
+			kDebug(30522) << "FORMAT : " << endl;
 			analyseFormat(getChild(balise, index));
 		}
 	}
-	kdDebug(30522) << "END OF THE BEGINING OF A LAYOUT" << endl;
+	kDebug(30522) << "END OF THE BEGINING OF A LAYOUT" << endl;
 }
 
 void Layout::analyseName(const QDomNode balise)
 {
 	/* <NAME value="times"> */
-	kdDebug(30522) << "PARAM" << endl;
+	kDebug(30522) << "PARAM" << endl;
 	setName(getAttr(balise, "value"));
 }
 
@@ -110,7 +110,7 @@ void Layout::analyseName(const QDomNode balise)
 void Layout::analyseFollowing(const QDomNode balise)
 {
 	/* <FOLLOWING name="times"> */
-	kdDebug(30522) << "PARAM" << endl;
+	kDebug(30522) << "PARAM" << endl;
 	setFollowing(getAttr(balise, "name"));
 }
 
@@ -123,7 +123,7 @@ void Layout::analyseEnv(const QDomNode balise)
 {
 	/* <FLOW align="0"> */
 	// ERROR: Enter first in flow ????
-	kdDebug(30522) << "PARAM" << endl;
+	kDebug(30522) << "PARAM" << endl;
 	if(getAttr(balise,"align").compare("justify")== 0)
 		setEnv(ENV_JUSTIFY);
 	else if(getAttr(balise, "align").compare("left")== 0)
@@ -137,7 +137,7 @@ void Layout::analyseEnv(const QDomNode balise)
 void Layout::analyseBreakLine(const QDomNode balise)
 {
 	/* <NAME hardFrameBreakAfter="true"> */
-	kdDebug(30522) << "PARAM" << endl;
+	kDebug(30522) << "PARAM" << endl;
 	if(getAttr(balise, "linesTogether") != 0)
 		keepLinesTogether();
 	else if(getAttr(balise, "hardFrameBreak") != 0)
@@ -156,11 +156,11 @@ void Layout::analyseBreakLine(const QDomNode balise)
 void Layout::analyseCounter(const QDomNode balise)
 {
 	/* <COUNTER type="1"> */
-	kdDebug(30522) << "PARAM" << endl;
+	kDebug(30522) << "PARAM" << endl;
 	setCounterType(getAttr(balise, "type").toInt());
 	if(getCounterType() > TL_ARABIC && getCounterType() < TL_DISC_BULLET)
 	{
-		kdDebug(30522) <<  getCounterType() << endl;
+		kDebug(30522) <<  getCounterType() << endl;
 		FileHeader::instance()->useEnumerate();
 	}
 	setCounterDepth(getAttr(balise, "depth").toInt());

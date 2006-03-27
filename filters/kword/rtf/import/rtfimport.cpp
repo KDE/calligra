@@ -302,11 +302,11 @@ RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
     }
     // DEBUG START
     // Check the hash size (see QDict doc)
-    kdDebug(30515) << properties.count() << " normal and " << destinationProperties.count() << " destination keywords loaded" << endl;
+    kDebug(30515) << properties.count() << " normal and " << destinationProperties.count() << " destination keywords loaded" << endl;
     if (properties.size() < properties.count())
-        kdWarning(30515) << "Hash size of properties too small: " << properties.size() << ". It should be at least " << properties.count() << " and be a prime number"<< endl;
+        kWarning(30515) << "Hash size of properties too small: " << properties.size() << ". It should be at least " << properties.count() << " and be a prime number"<< endl;
     if (destinationProperties.size() < destinationProperties.count())
-        kdWarning(30515) << "Hash size of destinationProperties too small: " << destinationProperties.size() << ". It should be at least " << destinationProperties.count() << " and be a prime number"<< endl;
+        kWarning(30515) << "Hash size of destinationProperties too small: " << destinationProperties.size() << ". It should be at least " << destinationProperties.count() << " and be a prime number"<< endl;
     // DEBUG END
     fnnum=0;
 }
@@ -331,7 +331,7 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
 
     if (!in.open( QIODevice::ReadOnly ))
     {
-	kdError(30515) << "Unable to open input file!" << endl;
+	kError(30515) << "Unable to open input file!" << endl;
 	in.close();
         if ( !m_batch )
         {
@@ -348,7 +348,7 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
 
     if (token.type != RTFTokenizer::OpenGroup)
     {
-	kdError(30515) << "Not an RTF file" << endl;
+	kError(30515) << "Not an RTF file" << endl;
 	in.close();
         if ( !m_batch )
         {
@@ -365,7 +365,7 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
 
     if (token.type != RTFTokenizer::ControlWord)
     {
-	kdError(30515) << "Wrong document type" << endl;
+	kError(30515) << "Wrong document type" << endl;
 	in.close();
         if ( !m_batch )
         {
@@ -382,7 +382,7 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
         // RTF is normally version 1 but at least Ted uses 0 as version number
         if ( token.value > 1 )
         {
-            kdError(30515) << "Wrong RTF version (" << token.value << "); version 0 or 1 expected" << endl;
+            kError(30515) << "Wrong RTF version (" << token.value << "); version 0 or 1 expected" << endl;
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
@@ -401,7 +401,7 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
         // PocketWord's PWD format is similar to RTF but has a version number of 2.
         if ( token.value != 2 )
         {
-            kdError(30515) << "Wrong PWD version (" << token.value << "); version 2 expected" << endl;
+            kError(30515) << "Wrong PWD version (" << token.value << "); version 2 expected" << endl;
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
@@ -420,7 +420,7 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
         // URTF seems to have either no version or having version 1
         if ( token.value > 1 )
         {
-            kdError(30515) << "Wrong URTF version (" << token.value << "); version 0 or 1 expected" << endl;
+            kError(30515) << "Wrong URTF version (" << token.value << "); version 0 or 1 expected" << endl;
             if ( !m_batch )
             {
                 force = ( KMessageBox::warningYesNo( 0L,
@@ -436,7 +436,7 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
     }
     else
     {
-        kdError(30515) << "Wrong RTF document type (\\" << token.text << "); \\rtf, \\pwd or \\urtf expected" << endl;
+        kError(30515) << "Wrong RTF document type (\\" << token.text << "); \\rtf, \\pwd or \\urtf expected" << endl;
         in.close();
         if ( !m_batch )
         {
@@ -490,11 +490,11 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
     state.ignoreGroup = false;
 
     utf8TextCodec=QTextCodec::codecForName("UTF-8");
-    kdDebug(30515) << "UTF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
+    kDebug(30515) << "UTF-8 asked, given: " << (utf8TextCodec?utf8TextCodec->name():QString("-none-")) << endl;
 
     // There is no default encoding in RTF, it must be always declared. (But beware of buggy files!)
     textCodec=QTextCodec::codecForName("CP 1252"); // Or IBM 437 ?
-    kdDebug(30515) << "CP 1252 asked, given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kDebug(30515) << "CP 1252 asked, given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
 
     // Parse RTF document
     while (true)
@@ -527,10 +527,10 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
 	    {
 		// Close the current destination
 		(this->*destination.destproc)(0L);
-                //kdDebug(30515) << "Closing destination... " << destinationStack.count() << endl;
+                //kDebug(30515) << "Closing destination... " << destinationStack.count() << endl;
                 if (destinationStack.isEmpty())
                 {
-                    kdWarning(30515) << "Destination stack is empty! Document might be buggy!" << endl;
+                    kWarning(30515) << "Destination stack is empty! Document might be buggy!" << endl;
                     // Keep the destination to save what can still be saved!
                 }
                 else
@@ -586,9 +586,9 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
 		}
                 else if ( !property )
                 {
-                    kdWarning(30515) << "Unknown first non-ignorable token of a group: " << token.text << endl; kdDebug(30515) << "Destination: " << ( (void*) destination.name ) << " Destination stack depth: " << destinationStack.count() << endl;
+                    kWarning(30515) << "Unknown first non-ignorable token of a group: " << token.text << endl; kDebug(30515) << "Destination: " << ( (void*) destination.name ) << " Destination stack depth: " << destinationStack.count() << endl;
                     // Put the second warning separately, as it can crash if destination.name is dangling
-                    kdWarning(30515) << " Assuming destination: " << destination.name << endl;
+                    kWarning(30515) << " Assuming destination: " << destination.name << endl;
                     debugUnknownKeywords[token.text]++;
                 }
 	    }
@@ -614,7 +614,7 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
         (facingPages && !evenPagesFooter.node.isEmpty()) ||
         (state.section.titlePage && !firstPageFooter.node.isEmpty());
 
-    kdDebug(30515) << "hType " << hType << " hasHeader " << hasHeader << " hasFooter " << hasFooter << endl;
+    kDebug(30515) << "hType " << hType << " hasHeader " << hasHeader << " hasFooter " << hasFooter << endl;
 
     // Create main document
     DomNode mainDoc( "DOC" );
@@ -791,11 +791,11 @@ KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CS
     writeOutPart( "documentinfo.xml", docInfo );
     in.close();
 
-    kdDebug(30515) << "RTF FILTER TIME: " << debugTime.elapsed() << endl;
+    kDebug(30515) << "RTF FILTER TIME: " << debugTime.elapsed() << endl;
 
     for (QMap<QString,int>::ConstIterator it=debugUnknownKeywords.begin();
         it!=debugUnknownKeywords.end();it++)
-        kdDebug(30515) << "Unknown keyword: " << QString( "%1" ).arg( it.data(), 4 )  << " * " << it.key() << endl;
+        kDebug(30515) << "Unknown keyword: " << QString( "%1" ).arg( it.data(), 4 )  << " * " << it.key() << endl;
 
     return KoFilter::OK;
 }
@@ -818,7 +818,7 @@ void RTFImport::setCodepage( RTFProperty * )
         cp.prepend("CP");
     }
     textCodec=QTextCodec::codecForName(cp);
-    kdDebug(30515) << "\\ansicpg: codepage: " << token.value << "asked: "<< cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kDebug(30515) << "\\ansicpg: codepage: " << token.value << "asked: "<< cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
     if ( ! textCodec )
         textCodec = oldCodec;
 }
@@ -827,7 +827,7 @@ void RTFImport::setMacCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("Apple Roman");
-    kdDebug(30515) << "\\mac " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kDebug(30515) << "\\mac " << (textCodec?textCodec->name():QString("-none-")) << endl;
     if ( ! textCodec )
         textCodec = oldCodec;
 }
@@ -836,7 +836,7 @@ void RTFImport::setAnsiCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("CP1252");
-    kdDebug(30515) << "\\ansi " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kDebug(30515) << "\\ansi " << (textCodec?textCodec->name():QString("-none-")) << endl;
     if ( ! textCodec )
         textCodec = oldCodec;
 }
@@ -845,7 +845,7 @@ void RTFImport::setPcaCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("IBM 850"); // Qt writes the name with a space
-    kdDebug(30515) << "\\pca " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kDebug(30515) << "\\pca " << (textCodec?textCodec->name():QString("-none-")) << endl;
     if ( ! textCodec )
         textCodec = oldCodec;
 }
@@ -854,7 +854,7 @@ void RTFImport::setPcCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName("IBM 850"); // This is an approximation
-    kdDebug(30515) << "\\pc (approximation) " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kDebug(30515) << "\\pc (approximation) " << (textCodec?textCodec->name():QString("-none-")) << endl;
     if ( ! textCodec )
         textCodec = oldCodec;
 }
@@ -896,7 +896,7 @@ void RTFImport::setCharset( RTFProperty *property )
     }
     QTextCodec* oldCodec = textCodec;
     textCodec=QTextCodec::codecForName(cp);
-    kdDebug(30515) << "\\fcharset: charset: " << token.value << " codepage: "<< cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
+    kDebug(30515) << "\\fcharset: charset: " << token.value << " codepage: "<< cp << " given: " << (textCodec?textCodec->name():QString("-none-")) << endl;
     if ( ! textCodec )
         textCodec = oldCodec;
 }
@@ -950,7 +950,7 @@ void RTFImport::setBorderStyle( RTFProperty *property )
 
 void RTFImport::setBorderProperty( RTFProperty *property )
 {
-    //kdDebug() << "setBorderProperty: " << endl;
+    //kDebug() << "setBorderProperty: " << endl;
     if (state.layout.border)
     {
         state.layout.border->width = token.value;
@@ -1213,7 +1213,7 @@ void RTFImport::insertTabDef( RTFProperty * )
 
 void RTFImport::insertUTF8( int ch )
 {
-    kdDebug(30515) << "insertUTF8: " << ch << endl;
+    kDebug(30515) << "insertUTF8: " << ch << endl;
     char buf[4];
     char *text = buf;
     char *tk = token.text;
@@ -1242,7 +1242,7 @@ void RTFImport::insertUTF8( int ch )
     if (utf8TextCodec)
         textCodec=utf8TextCodec;
     else
-        kdError(30515) << "No UTF-8 QTextCodec available" << endl;
+        kError(30515) << "No UTF-8 QTextCodec available" << endl;
 
     (this->*destination.destproc)(0L);
 
@@ -1257,7 +1257,7 @@ void RTFImport::insertSymbol( RTFProperty *property )
 
 void RTFImport::insertHexSymbol( RTFProperty * )
 {
-    //kdDebug(30515) << "insertHexSymbol: " << token.value << endl;
+    //kDebug(30515) << "insertHexSymbol: " << token.value << endl;
 
     // Be careful, the value given in \' could be only one byte of a multi-byte character.
     // So it cannot be assumed that it will result in one character.
@@ -1266,7 +1266,7 @@ void RTFImport::insertHexSymbol( RTFProperty * )
     // (e.g. attachment #7758 of bug #90649)
     if ( !token.value )
     {
-        kdWarning(30515) << "Trying to insert NUL character!" << endl;
+        kWarning(30515) << "Trying to insert NUL character!" << endl;
         return;
     }
 
@@ -1330,7 +1330,7 @@ void RTFImport::parseFontTable( RTFProperty * )
     {
         if (!textCodec)
         {
-            kdError(30515) << "No text codec for font!" << endl;
+            kError(30515) << "No text codec for font!" << endl;
             return; // We have no text codec, so we cannot proceed!
         }
         // ### TODO VERIFY: a RTF group could be in the middle of the font name
@@ -1357,7 +1357,7 @@ void RTFImport::parseFontTable( RTFProperty * )
 	    }
             const QFontInfo info( qFont );
             const QString newFontName ( info.family() );
-            kdDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << newFontName << endl;
+            kDebug(30515) << "Font " << state.format.font << " asked: " << font.name << " given: " << newFontName << endl;
 
             if ( newFontName.isEmpty() )
                fontTable.insert(  state.format.font, font.name );
@@ -1430,7 +1430,7 @@ void RTFImport::parseBlipUid( RTFProperty * )
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {
-        kdDebug(30515) << "\\blipuid: " << picture.identifier << endl;
+        kDebug(30515) << "\\blipuid: " << picture.identifier << endl;
     }
 }
 
@@ -1480,7 +1480,7 @@ void RTFImport::parsePicture( RTFProperty * )
     else if (token.type == RTFTokenizer::BinaryData)
     {
         picture.bits = token.binaryData;
-        kdDebug(30515) << "Binary data of length: " << picture.bits.size() << endl;
+        kDebug(30515) << "Binary data of length: " << picture.bits.size() << endl;
     }
     else if (token.type == RTFTokenizer::CloseGroup)
     {
@@ -1523,18 +1523,18 @@ void RTFImport::parsePicture( RTFProperty * )
         }
         else
         {
-            idStr += picture.identifier.stripWhiteSpace();
+            idStr += picture.identifier.trimmed();
             idStr += ext;
         }
 
-        kdDebug(30515) << "Picture: " << pictName << " Frame: " << frameName << endl;
+        kDebug(30515) << "Picture: " << pictName << " Frame: " << frameName << endl;
 
         // Store picture
         KoStoreDevice* dev = m_chain->storageFile( pictName, KoStore::Write );
         if ( dev )
             dev->writeBlock(picture.bits.data(),picture.bits.size());
         else
-            kdError(30515) << "Could not save: " << pictName << endl;
+            kError(30515) << "Could not save: " << pictName << endl;
 
 
         // Add anchor to rich text destination
@@ -1548,8 +1548,8 @@ void RTFImport::parsePicture( RTFProperty * )
 
         // Add picture or clipart frameset
         frameSets.addFrameSet( frameName, 2, 0 );
-        //kdDebug(30515) << "Width: " << picture.desiredWidth << " scalex: " << picture.scalex << "%" << endl;
-        //kdDebug(30515) << "Height: " << picture.desiredHeight<< " scaley: " << picture.scaley << "%" << endl;
+        //kDebug(30515) << "Width: " << picture.desiredWidth << " scalex: " << picture.scalex << "%" << endl;
+        //kDebug(30515) << "Height: " << picture.desiredHeight<< " scaley: " << picture.scaley << "%" << endl;
         frameSets.addFrame( 0, 0,
                 (picture.desiredWidth  * picture.scalex) /100 ,
                 (picture.desiredHeight * picture.scaley) /100 , 0, 1, 0 );
@@ -1564,11 +1564,11 @@ void RTFImport::parsePicture( RTFProperty * )
 
 void RTFImport::addImportedPicture( const QString& rawFileName )
 {
-    kdDebug(30515) << "Import field: reading " << rawFileName << endl;
+    kDebug(30515) << "Import field: reading " << rawFileName << endl;
 
     if (rawFileName=="\\*")
     {
-        kdError(30515) << "Import field without file name!" << endl;
+        kError(30515) << "Import field without file name!" << endl;
         return;
     }
 
@@ -1582,13 +1582,13 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     KUrl url;
     url.setPath(dir.filePath( rawFileName ));
 
-    kdDebug(30515) << "Path: " << url.prettyURL() << endl;
+    kDebug(30515) << "Path: " << url.prettyURL() << endl;
 
     KoPicture pic;
     pic.setKeyAndDownloadPicture(url, 0); // ### TODO: find a better parent if possible
     if (pic.isNull())
     {
-        kdError(30515) << "Import field: file is empty: " << rawFileName << endl;
+        kError(30515) << "Import field: file is empty: " << rawFileName << endl;
         return;
     }
 
@@ -1604,14 +1604,14 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     frameName.prepend("Picture ");
 
 
-    kdDebug(30515) << "Imported picture: " << pictName << " Frame: " << frameName << endl;
+    kDebug(30515) << "Imported picture: " << pictName << " Frame: " << frameName << endl;
 
     // Store picture
     KoStoreDevice* dev = m_chain->storageFile( pictName, KoStore::Write );
     if ( dev )
         pic.save(dev);
     else
-        kdError(30515) << "Could not save: " << pictName << endl;
+        kError(30515) << "Could not save: " << pictName << endl;
 
     // Add anchor to rich text destination
     addAnchor( frameName );
@@ -1645,7 +1645,7 @@ void RTFImport::insertPageNumber( RTFProperty * )
 
 void RTFImport::insertDateTime( RTFProperty *property )
 {
-    kdDebug(30515) << "insertDateTime: " << property->value << endl;
+    kDebug(30515) << "insertDateTime: " << property->value << endl;
     addDateTime( QString::null, bool(property->value), state.format );
 }
 
@@ -1711,7 +1711,7 @@ void RTFImport::parseField( RTFProperty * )
 	{
 	    DomNode node;
 	    QStringList list ( QStringList::split( ' ', fldinst, false ) );
-            kdDebug(30515) << "Field: " << list << endl;
+            kDebug(30515) << "Field: " << list << endl;
 	    uint i;
 
             QString fieldName ( list[0].upper() );
@@ -1723,14 +1723,14 @@ void RTFImport::parseField( RTFProperty * )
 	    {
 		if (fieldName == fieldTable[i].id)
 		{
-		    kdDebug(30515) << "Field found: " << fieldTable[i].id << endl;
+		    kDebug(30515) << "Field found: " << fieldTable[i].id << endl;
 		    ok=true;
 		    break;
 		}
 	    }
                 if (!ok)
                 {
-                    kdWarning(30515) << "Field not supported: " << fieldName << endl;
+                    kWarning(30515) << "Field not supported: " << fieldName << endl;
                     return;
                 }
 	    if (fieldTable[i].type == 4)
@@ -1796,13 +1796,13 @@ void RTFImport::parseField( RTFProperty * )
                 QRegExp regexp("\\\\@\\s*\"(.+)\""); // \@ "Text"
                 if (regexp.search(strFldinst)==-1)
                 { // Not found? Perhaps it is not in quotes (even if it is rare)
-                    kdWarning(30515) << "Date/time field format not in quotes!" << endl;
+                    kWarning(30515) << "Date/time field format not in quotes!" << endl;
                     strFldinst += ' '; // Add a space at the end to simplify the regular expression
                     regexp = QRegExp("\\\\@(\\S+)\\s+"); // \@some_text_up_to_a_space
                     regexp.search(strFldinst);
                 }
                 QString format(regexp.cap(1));
-                kdDebug(30515) << "Date/time field format: " << format << endl;
+                kDebug(30515) << "Date/time field format: " << format << endl;
 		format.replace("am/pm", "ap");
 		format.replace("a/p", "ap"); // Approximation
 		format.replace("AM/PM", "AP");
@@ -1996,7 +1996,7 @@ void RTFImport::parseGroup( RTFProperty * )
 
 void RTFImport::skipGroup( RTFProperty * )
 {
-    kdDebug(30515) << "Skip Group: " << token.type << endl;
+    kDebug(30515) << "Skip Group: " << token.type << endl;
     state.ignoreGroup = true;
 }
 
@@ -2010,7 +2010,7 @@ void RTFImport::resetState()
 
 void RTFImport::changeDestination( RTFProperty *property )
 {
-    kdDebug(30515) << "changeDestination: " << property->name << endl;
+    kDebug(30515) << "changeDestination: " << property->name << endl;
     destinationStack.push( destination );
     destination.name	 = property->name;
     destination.destproc = property->cwproc;
@@ -2446,7 +2446,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
 
     if ( name.isEmpty() )
     {
-        kdWarning(30515) << "Style name empty! Assuming Standard!" << endl;
+        kWarning(30515) << "Style name empty! Assuming Standard!" << endl;
         name = "Standard";
     }
     
@@ -2485,7 +2485,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
 
 void RTFImport::finishTable()
 {
-    kdDebug(30515) << "Starting TFImport::finishTable..." << endl;
+    kDebug(30515) << "Starting TFImport::finishTable..." << endl;
     Q3CString emptyArray;
     Q3ValueList<int> cellx;
     int left = 0, right = 0;
@@ -2609,7 +2609,7 @@ void RTFImport::finishTable()
     }
     textState->table = 0;
     textState->rows.clear();
-    kdDebug(30515) << "Quitting TFImport::finishTable..." << endl;
+    kDebug(30515) << "Quitting TFImport::finishTable..." << endl;
 }
 
 void RTFImport::writeOutPart( const char *name, const DomNode& node )
@@ -2622,5 +2622,5 @@ void RTFImport::writeOutPart( const char *name, const DomNode& node )
         stream << node.toString();
     }
     else
-        kdError(30515) << "Could not write part " << name << endl;
+        kError(30515) << "Could not write part " << name << endl;
 }

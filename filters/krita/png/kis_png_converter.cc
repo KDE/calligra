@@ -42,10 +42,10 @@
 
 namespace {
 
-    const Q_UINT8 PIXEL_BLUE = 0;
-    const Q_UINT8 PIXEL_GREEN = 1;
-    const Q_UINT8 PIXEL_RED = 2;
-    const Q_UINT8 PIXEL_ALPHA = 3;
+    const quint8 PIXEL_BLUE = 0;
+    const quint8 PIXEL_GREEN = 1;
+    const quint8 PIXEL_RED = 2;
+    const quint8 PIXEL_ALPHA = 3;
 
     
     int getColorTypeforColorSpace( KisColorSpace * cs , bool alpha)
@@ -59,7 +59,7 @@ namespace {
             return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
         }
 
-        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+        kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return -1;
 
     }
@@ -120,7 +120,7 @@ KisPNGConverter::~KisPNGConverter()
 
 KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
 {
-    kdDebug(41008) << "Start decoding PNG File" << endl;
+    kDebug(41008) << "Start decoding PNG File" << endl;
     // open the file
     FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
     if (!fp)
@@ -202,10 +202,10 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
             profile = new KisProfile(profile_rawdata);
             Q_CHECK_PTR(profile);
             if (profile) {
-                kdDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
+                kDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
                 if(!profile->isSuitableForOutput())
                 {
-                    kdDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
+                    kDebug(41008) << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile" << endl; // TODO: in ko2 popup a selection menu to inform the user
                 }
             }
         }
@@ -215,7 +215,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     KisColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
-        kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
+        kDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
     }
     else
@@ -243,10 +243,10 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     KoDocumentInfo * info = m_doc->documentInfo();
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author"));
-    kdDebug(41008) << "There are " << num_comments << " comments in the text" << endl;
+    kDebug(41008) << "There are " << num_comments << " comments in the text" << endl;
     for(int i = 0; i < num_comments; i++)
     {
-        kdDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
+        kDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
         if(QString::compare(text_ptr[i].key, "title") == 0)
         {
                 aboutPage->setTitle(text_ptr[i].text);
@@ -274,7 +274,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
     {
         // new png_byte[] may raise such an exception if the image
         // is invalid / to large.
-        kdDebug(41008) << "bad alloc: " << e.what() << endl;
+        kDebug(41008) << "bad alloc: " << e.what() << endl;
         // Free only the already allocated png_byte instances.
         for (png_uint_32 y = 0; y < row_index; y++) {
             delete[] row_pointers[y];
@@ -309,7 +309,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
         }
     }
 
-    KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
+    KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), quint8_MAX);
     for (png_uint_32 y = 0; y < height; y++) {
         KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
         switch(color_type)
@@ -318,23 +318,23 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
             case PNG_COLOR_TYPE_GRAY_ALPHA:
                 if(color_nb_bits == 16)
                 {
-                    Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointers[y]);
+                    quint16 *src = reinterpret_cast<quint16 *>(row_pointers[y]);
                     while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                        quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
                         d[0] = *(src++);
                         if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[1] = *(src++);
-                        else d[1] = Q_UINT16_MAX;
+                        else d[1] = quint16_MAX;
                         ++it;
                     }
                 } else {
-                    Q_UINT8 *src = row_pointers[y];
+                    quint8 *src = row_pointers[y];
                     while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
+                        quint8 *d = it.rawData();
                         d[0] = *(src++);
                         if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[1] = *(src++);
-                        else d[1] = Q_UINT8_MAX;
+                        else d[1] = quint8_MAX;
                         ++it;
                     }
                 }
@@ -344,27 +344,27 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
             case PNG_COLOR_TYPE_RGB_ALPHA:
                 if(color_nb_bits == 16)
                 {
-                    Q_UINT16 *src = reinterpret_cast<Q_UINT16 *>(row_pointers[y]);
+                    quint16 *src = reinterpret_cast<quint16 *>(row_pointers[y]);
                     while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                        quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
                         d[2] = *(src++);
                         d[1] = *(src++);
                         d[0] = *(src++);
                         if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[3] = *(src++);
-                        else d[3] = Q_UINT16_MAX;
+                        else d[3] = quint16_MAX;
                         ++it;
                     }
                 } else {
-                    Q_UINT8 *src = row_pointers[y];
+                    quint8 *src = row_pointers[y];
                     while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
+                        quint8 *d = it.rawData();
                         d[2] = *(src++);
                         d[1] = *(src++);
                         d[0] = *(src++);
                         if(transform) cmsDoTransform(transform, d, d, 1);
                         if(hasalpha) d[3] = *(src++);
-                        else d[3] = Q_UINT8_MAX;
+                        else d[3] = quint8_MAX;
                         ++it;
                     }
                 }
@@ -374,14 +374,14 @@ KisImageBuilder_Result KisPNGConverter::decode(const KUrl& uri)
                 {
                     case 8:
                     {
-                        Q_UINT8 *src = row_pointers[y];
+                        quint8 *src = row_pointers[y];
                         while (!it.isDone()) {
-                            Q_UINT8 *d = it.rawData();
+                            quint8 *d = it.rawData();
                             png_color c = palette[*(src++)];
                             d[2] = c.red;
                             d[1] = c.green;
                             d[0] = c.blue;
-                            d[3] = Q_UINT8_MAX;
+                            d[3] = quint8_MAX;
                             ++it;
                         }
                         break;
@@ -439,7 +439,7 @@ KisImageSP KisPNGConverter::image()
 
 KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
-    kdDebug(41008) << "Start writing PNG File" << endl;
+    kDebug(41008) << "Start writing PNG File" << endl;
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
@@ -524,16 +524,16 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
         if (!(*it) || (*it) -> type() == QString()) {
-            kdDebug(41008) << "Warning: empty annotation" << endl;
+            kDebug(41008) << "Warning: empty annotation" << endl;
             ++it;
             continue;
         }
 
-        kdDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
+        kDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
-            kdDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
+            kDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().ascii());
@@ -594,17 +594,17 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
             case PNG_COLOR_TYPE_GRAY_ALPHA:
                 if(color_nb_bits == 16)
                 {
-                    Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(row_pointers[y]);
+                    quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[y]);
                     while (!it.isDone()) {
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
                         *(dst++) = d[0];
                         if(alpha) *(dst++) = d[1];
                         ++it;
                     }
                 } else {
-                    Q_UINT8 *dst = row_pointers[y];
+                    quint8 *dst = row_pointers[y];
                     while (!it.isDone()) {
-                        const Q_UINT8 *d = it.rawData();
+                        const quint8 *d = it.rawData();
                         *(dst++) = d[0];
                         if(alpha) *(dst++) = d[1];
                         ++it;
@@ -615,9 +615,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
             case PNG_COLOR_TYPE_RGB_ALPHA:
                 if(color_nb_bits == 16)
                 {
-                    Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(row_pointers[y]);
+                    quint16 *dst = reinterpret_cast<quint16 *>(row_pointers[y]);
                     while (!it.isDone()) {
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
+                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
                         *(dst++) = d[2];
                         *(dst++) = d[1];
                         *(dst++) = d[0];
@@ -625,9 +625,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KUrl& uri, KisPaintLayer
                         ++it;
                     }
                 } else {
-                    Q_UINT8 *dst = row_pointers[y];
+                    quint8 *dst = row_pointers[y];
                     while (!it.isDone()) {
-                        const Q_UINT8 *d = it.rawData();
+                        const quint8 *d = it.rawData();
                         *(dst++) = d[2];
                         *(dst++) = d[1];
                         *(dst++) = d[0];

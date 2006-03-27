@@ -163,7 +163,7 @@ void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormat
         if ( (*paraFormatDataIt).pos > lastPos )
         {
 #if 0
-            kdDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
+            kDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
                             << ", pos = " << (*paraFormatDataIt).pos
                             << ", len = " << (*paraFormatDataIt).len << " (bad)" << endl;
 #endif
@@ -175,7 +175,7 @@ void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormat
 #if 0
         else
         {
-            kdDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
+            kDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
                             << ", pos = " << (*paraFormatDataIt).pos
                             << ", len = " << (*paraFormatDataIt).len << " (ok)" << endl;
         }
@@ -193,7 +193,7 @@ void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormat
     if ( (int) paraText.length () > lastPos )
     {
 #if 0
-        kdDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
+        kDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
                         << ", total len = " << paraText.length () << " (bad)" << endl;
 #endif
 
@@ -203,7 +203,7 @@ void CreateMissingFormatData (QString &paraText, ValueListFormatData &paraFormat
 #if 0
     else
     {
-        kdDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
+        kDebug (30508) << "CreateMissingFormatData: lastPos = " << lastPos
                         << ", total len = " << paraText.length () << " (ok)" << endl;
     }
 #endif

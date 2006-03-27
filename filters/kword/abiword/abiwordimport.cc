@@ -57,7 +57,7 @@ public:
 protected:
     virtual void setupTranslations( void )
     {
-        KGlobal::locale()->insertCatalogue( "kofficefilters" );
+        KGlobal::locale()->insertCatalog( "kofficefilters" );
     }
 };
 
@@ -156,7 +156,7 @@ bool StructureParser::StartElementC(StackItem* stackItem, StackItem* stackCurren
         // Contents can have styles, however KWord cannot have character style.
         // Therefore we use the style if it exist, but we do not create it if not.
         QString strStyleProps;
-        QString strStyleName=attributes.value("style").stripWhiteSpace();
+        QString strStyleName=attributes.value("style").trimmed();
         if (!strStyleName.isEmpty())
         {
             StyleDataMap::Iterator it=styleDataMap.find(strStyleName);
@@ -182,7 +182,7 @@ bool StructureParser::StartElementC(StackItem* stackItem, StackItem* stackCurren
     }
     else
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "parse error <c> tag nested neither in <p> nor in <c> nor in <a> but in "
+        kError(30506) << "parse error <c> tag nested neither in <p> nor in <c> nor in <a> but in "
             << stackCurrent->itemName << endl;
         return false;
     }
@@ -214,7 +214,7 @@ bool charactersElementC (StackItem* stackItem, QDomDocument& mainDocument, const
     }
     else
     {
-        kdError(30506) << "Internal error (in charactersElementC)" << endl;
+        kError(30506) << "Internal error (in charactersElementC)" << endl;
     }
 
 	return true;
@@ -233,7 +233,7 @@ bool EndElementC (StackItem* stackItem, StackItem* stackCurrent)
     }
     else
     {
-        kdError(30506) << "Wrong element type!! Aborting! (</c> in StructureParser::endElement)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (</c> in StructureParser::endElement)" << endl;
         return false;
     }
     return true;
@@ -254,14 +254,14 @@ bool StructureParser::StartElementA(StackItem* stackItem, StackItem* stackCurren
         stackItem->stackElementText=stackCurrent->stackElementText;   // <TEXT>
         stackItem->stackElementFormatsPlural=stackCurrent->stackElementFormatsPlural; // <FORMATS>
         stackItem->pos=stackCurrent->pos; //Propagate the position
-        stackItem->strTemp1=attributes.value("xlink:href").stripWhiteSpace(); // link reference
+        stackItem->strTemp1=attributes.value("xlink:href").trimmed(); // link reference
         stackItem->strTemp2=QString::null; // link name
 
         // We must be careful: AbiWord permits anchors to bookmarks.
         //  However, KWord does not know what a bookmark is.
         if (stackItem->strTemp1[0]=='#')
         {
-            kdWarning(30506) << "Anchor <a> to bookmark: " << stackItem->strTemp1 << endl
+            kWarning(30506) << "Anchor <a> to bookmark: " << stackItem->strTemp1 << endl
                 << " Processing <a> like <c>" << endl;
             // We have a reference to a bookmark. Therefore treat it as a normal content <c>
             return StartElementC(stackItem, stackCurrent, attributes);
@@ -269,7 +269,7 @@ bool StructureParser::StartElementA(StackItem* stackItem, StackItem* stackCurren
     }
     else
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "parse error <a> tag not a child of <p> but of "
+        kError(30506) << "parse error <a> tag not a child of <p> but of "
             << stackCurrent->itemName << endl;
         return false;
     }
@@ -287,7 +287,7 @@ static bool EndElementA (StackItem* stackItem, StackItem* stackCurrent, QDomDocu
 {
     if (!stackItem->elementType==ElementTypeAnchor)
     {
-        kdError(30506) << "Wrong element type!! Aborting! (</a> in StructureParser::endElement)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (</a> in StructureParser::endElement)" << endl;
         return false;
     }
 
@@ -389,7 +389,7 @@ bool EndElementP (StackItem* stackItem)
 {
     if (!stackItem->elementType==ElementTypeParagraph)
     {
-        kdError(30506) << "Wrong element type!! Aborting! (in endElementP)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in endElementP)" << endl;
         return false;
     }
     stackItem->stackElementText.normalize();
@@ -402,8 +402,8 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
     // <field> element elements can be nested in <p>
     if (stackCurrent->elementType==ElementTypeParagraph)
     {
-        QString strType=attributes.value("type").stripWhiteSpace();
-        kdDebug(30506)<<"<field> type:"<<strType<<endl;
+        QString strType=attributes.value("type").trimmed();
+        kDebug(30506)<<"<field> type:"<<strType<<endl;
 
         AbiPropsMap abiPropsMap;
         PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
@@ -417,7 +417,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         {
             // The field type was not recognised,
             //   therefore write the field type in red as normal text
-            kdWarning(30506) << "Unknown <field> type: " << strType << endl;
+            kWarning(30506) << "Unknown <field> type: " << strType << endl;
             QDomElement formatElement=mainDocument.createElement("FORMAT");
             formatElement.setAttribute("id",1); // Variable
             formatElement.setAttribute("pos",stackItem->pos); // Start position
@@ -455,7 +455,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
     }
     else
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "parse error <field> tag not nested in <p> but in "
+        kError(30506) << "parse error <field> tag not nested in <p> but in "
             << stackCurrent->itemName << endl;
         return false;
     }
@@ -470,11 +470,11 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
     // We also do not care if a style is defined multiple times.
     stackItem->elementType=ElementTypeEmpty;
 
-    QString strStyleName=attributes.value("name").stripWhiteSpace();
+    QString strStyleName=attributes.value("name").trimmed();
 
     if (strStyleName.isEmpty())
     {
-        kdWarning(30506) << "Style has no name!" << endl;
+        kWarning(30506) << "Style has no name!" << endl;
     }
     else
     {
@@ -484,9 +484,9 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
             level=-1; //TODO/FIXME: might be wrong if the style is based on another
         else
             level=strLevel.toInt();
-        QString strBasedOn=attributes.value("basedon").simplifyWhiteSpace();
+        QString strBasedOn=attributes.value("basedon").simplified();
         styleDataMap.defineNewStyleFromOld(strStyleName,strBasedOn,level,attributes.value("props"));
-        kdDebug(30506) << " Style name: " << strStyleName << endl
+        kDebug(30506) << " Style name: " << strStyleName << endl
             << " Based on: " << strBasedOn  << endl
             << " Level: " << level << endl
             << " Props: " << attributes.value("props") << endl;
@@ -502,13 +502,13 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
     // <image> elements can be nested in <p> or <c> elements
     if ((stackCurrent->elementType!=ElementTypeParagraph) && (stackCurrent->elementType!=ElementTypeContent))
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "parse error <image> tag nested neither in <p> nor in <c> but in "
+        kError(30506) << "parse error <image> tag nested neither in <p> nor in <c> but in "
             << stackCurrent->itemName << endl;
         return false;
     }
     stackItem->elementType=ElementTypeEmpty;
 
-    QString strDataId=attributes.value("dataid").stripWhiteSpace();
+    QString strDataId=attributes.value("dataid").trimmed();
 
     AbiPropsMap abiPropsMap;
     abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
@@ -516,17 +516,17 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
     double height=ValueWithLengthUnit(abiPropsMap["height"].getValue());
     double width =ValueWithLengthUnit(abiPropsMap["width" ].getValue());
 
-    kdDebug(30506) << "Image: " << strDataId << " height: " << height << " width: " << width << endl;
+    kDebug(30506) << "Image: " << strDataId << " height: " << height << " width: " << width << endl;
 
     // TODO: image properties
 
     if (strDataId.isEmpty())
     {
-        kdWarning(30506) << "Image has no data id!" << endl;
+        kWarning(30506) << "Image has no data id!" << endl;
     }
     else
     {
-        kdDebug(30506) << "Image: " << strDataId << endl;
+        kDebug(30506) << "Image: " << strDataId << endl;
     }
 
     QString strPictureFrameName(i18n("Frameset name","Picture %1").arg(++m_pictureFrameNumber));
@@ -596,15 +596,15 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
     // However, we assume that we are after all <image> elements
     stackItem->elementType=ElementTypeRealData;
 
-    QString strName=attributes.value("name").stripWhiteSpace();
-    kdDebug(30506) << "Data: " << strName << endl;
+    QString strName=attributes.value("name").trimmed();
+    kDebug(30506) << "Data: " << strName << endl;
 
-    QString strBase64=attributes.value("base64").stripWhiteSpace();
-    QString strMime=attributes.value("mime").stripWhiteSpace();
+    QString strBase64=attributes.value("base64").trimmed();
+    QString strMime=attributes.value("mime").trimmed();
 
     if (strName.isEmpty())
     {
-        kdWarning(30506) << "Data has no name!" << endl;
+        kWarning(30506) << "Data has no name!" << endl;
         stackItem->elementType=ElementTypeEmpty;
         return true;
     }
@@ -635,12 +635,12 @@ bool StructureParser::EndElementD (StackItem* stackItem)
 {
     if (!stackItem->elementType==ElementTypeRealData)
     {
-        kdError(30506) << "Wrong element type!! Aborting! (in endElementD)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in endElementD)" << endl;
         return false;
     }
     if (!m_chain)
     {
-        kdError(30506) << "No filter chain! Aborting! (in endElementD)" << endl;
+        kError(30506) << "No filter chain! Aborting! (in endElementD)" << endl;
         return false;
     }
 
@@ -664,7 +664,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     }
     else
     {
-        kdWarning(30506) << "Unknown or unsupported mime type: "
+        kWarning(30506) << "Unknown or unsupported mime type: "
             << stackItem->strTemp1 << endl;
         return true;
     }
@@ -690,13 +690,13 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     KoStoreDevice* out=m_chain->storageFile(strStoreName, KoStore::Write);
     if(!out)
     {
-        kdError(30506) << "Unable to open output file for: " << stackItem->fontName << " Storage: " << strStoreName << endl;
+        kError(30506) << "Unable to open output file for: " << stackItem->fontName << " Storage: " << strStoreName << endl;
         return false;
     }
 
     if (stackItem->bold) // Is base64-coded?
     {
-        kdDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
+        kDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
         // We need to decode the base64 stream
         // However KCodecs has no QString to QByteArray decoder!
         QByteArray base64Stream=stackItem->strTemp2.utf8(); // Use utf8 to avoid corruption of data
@@ -707,9 +707,9 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     else
     {
         // Unknown text format!
-        kdDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
+        kDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
         // We strip the white space in front to avoid white space before a XML declaration
-        Q3CString strOut=stackItem->strTemp2.stripWhiteSpace().utf8();
+        Q3CString strOut=stackItem->strTemp2.trimmed().utf8();
         out->writeBlock(strOut,strOut.length());
     }
 
@@ -723,12 +723,12 @@ static bool StartElementM(StackItem* stackItem, StackItem* /*stackCurrent*/,
     // We do not assume when we are called or if we are or not a child of <metadata>
     stackItem->elementType=ElementTypeRealMetaData;
 
-    QString strKey=attributes.value("key").stripWhiteSpace();
-    kdDebug(30506) << "Metadata key: " << strKey << endl;
+    QString strKey=attributes.value("key").trimmed();
+    kDebug(30506) << "Metadata key: " << strKey << endl;
 
     if (strKey.isEmpty())
     {
-        kdWarning(30506) << "Metadata has no key!" << endl;
+        kWarning(30506) << "Metadata has no key!" << endl;
         stackItem->elementType=ElementTypeIgnore;
         return true;
     }
@@ -750,14 +750,14 @@ bool StructureParser::EndElementM (StackItem* stackItem)
 {
     if (!stackItem->elementType==ElementTypeRealData)
     {
-        kdError(30506) << "Wrong element type!! Aborting! (in endElementM)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in endElementM)" << endl;
         return false;
     }
 
     if (stackItem->strTemp1.isEmpty())
     {
         // Probably an internal error!
-        kdError(30506) << "Key name was erased! Aborting! (in endElementM)" << endl;
+        kError(30506) << "Key name was erased! Aborting! (in endElementM)" << endl;
         return false;
     }
 
@@ -796,7 +796,7 @@ static bool StartElementBR(StackItem* stackItem, StackItem* stackCurrent,
     }
     else
     {//we are not nested correctly, so consider it a parse error!
-        kdError(30506) << "parse error <br> tag not nested in <p> or <c> but in "
+        kError(30506) << "parse error <br> tag not nested in <p> or <c> but in "
             << stackCurrent->itemName << endl;
         return false;
     }
@@ -825,7 +825,7 @@ static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
 
     if (!nodeList.count())
     {
-        kdError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        kError(30506) << "Unable to find <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
         return false;
     }
 
@@ -833,7 +833,7 @@ static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
     QDomNode newNode=nodeList.item(0).cloneNode(true); // We make a deep cloning of the first element/node
     if (newNode.isNull())
     {
-        kdError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        kError(30506) << "Unable to clone <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
         return false;
     }
     paragraphElementOut.appendChild(newNode);
@@ -842,7 +842,7 @@ static bool StartElementPBR(StackItem* /*stackItem*/, StackItem* stackCurrent,
     QDomElement oldLayoutElement=nodeList.item(0).toElement();
     if (oldLayoutElement.isNull())
     {
-        kdError(30506) << "Cannot find old <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
+        kError(30506) << "Cannot find old <LAYOUT> element! Aborting! (in StartElementPBR)" <<endl;
         return false;
     }
     // We have now to add a element <PAGEBREAKING>
@@ -870,11 +870,11 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
 {
     if (attributes.value("page-scale").toDouble()!=1.0)
     {
-        kdWarning(30506) << "Ignoring unsupported page scale: " << attributes.value("page-scale") << endl;
+        kWarning(30506) << "Ignoring unsupported page scale: " << attributes.value("page-scale") << endl;
     }
 
     int kwordOrientation;
-    QString strOrientation=attributes.value("orientation").stripWhiteSpace();
+    QString strOrientation=attributes.value("orientation").trimmed();
 
     if (strOrientation=="portrait")
     {
@@ -886,14 +886,14 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
     }
     else
     {
-        kdWarning(30506) << "Unknown page orientation: " << strOrientation << "! Ignoring! " << endl;
+        kWarning(30506) << "Unknown page orientation: " << strOrientation << "! Ignoring! " << endl;
         kwordOrientation=0;
     }
 
     double kwordHeight;
     double kwordWidth;
 
-    QString strPageType=attributes.value("pagetype").stripWhiteSpace();
+    QString strPageType=attributes.value("pagetype").trimmed();
 
     // Do we know the page size or do we need to measure?
     // For page formats that KWord knows, use our own values in case the values in the file would be wrong.
@@ -902,14 +902,14 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
 
     if (kwordFormat==PG_CUSTOM)
     {
-        kdDebug(30506) << "Custom or other page format found: " << strPageType << endl;
+        kDebug(30506) << "Custom or other page format found: " << strPageType << endl;
 
         double height = attributes.value("height").toDouble();
         double width  = attributes.value("width" ).toDouble();
 
-        QString strUnits = attributes.value("units").stripWhiteSpace();
+        QString strUnits = attributes.value("units").trimmed();
 
-        kdDebug(30506) << "Explicit page size: "
+        kDebug(30506) << "Explicit page size: "
          << height << " " << strUnits << " x " << width << " " << strUnits
          << endl;
 
@@ -932,7 +932,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
         {
             kwordHeight = 0.0;
             kwordWidth  = 0.0;
-            kdWarning(30506) << "Unknown unit type: " << strUnits << endl;
+            kWarning(30506) << "Unknown unit type: " << strUnits << endl;
         }
     }
     else
@@ -945,7 +945,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
     if ((kwordHeight <= 1.0) || (kwordWidth <= 1.0))
         // At least one of the two values is ridiculous
     {
-        kdWarning(30506) << "Page width or height is too small: "
+        kWarning(30506) << "Page width or height is too small: "
          << kwordHeight << "x" << kwordWidth << endl;
         // As we have no correct page size, we assume we have A4
         kwordFormat = PG_DIN_A4;
@@ -957,7 +957,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
 
     if (paperElement.isNull())
     {
-        kdError(30506) << "<PAPER> element cannot be accessed! Aborting!" << endl;
+        kError(30506) << "<PAPER> element cannot be accessed! Aborting!" << endl;
         return false;
     }
 
@@ -978,7 +978,7 @@ bool StructureParser::complexForcedPageBreak(StackItem* stackItem)
 
     if (!clearStackUntilParagraph(auxilaryStack))
     {
-        kdError(30506) << "Could not clear stack until a paragraph!" << endl;
+        kError(30506) << "Could not clear stack until a paragraph!" << endl;
         return false;
     }
 
@@ -1015,7 +1015,7 @@ bool StructureParser::StartElementSection(StackItem* stackItem, StackItem* /*sta
 
     AbiPropsMap abiPropsMap;
     // Treat the props attributes in the two available flavors: lower case and upper case.
-    kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
+    kDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
     abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
     abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
 
@@ -1055,11 +1055,11 @@ static bool EndElementIW(StackItem* stackItem, StackItem* /*stackCurrent*/,
 {
     if (!stackItem->elementType==ElementTypeIgnoreWord)
     {
-        kdError(30506) << "Wrong element type!! Aborting! (in endElementIW)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in endElementIW)" << endl;
         return false;
     }
     QDomElement wordElement=mainDocument.createElement("SPELLCHECKIGNOREWORD");
-    wordElement.setAttribute("word",stackItem->strTemp2.stripWhiteSpace());
+    wordElement.setAttribute("word",stackItem->strTemp2.trimmed());
     m_ignoreWordsElement.appendChild(wordElement);
     return true;
 }
@@ -1071,12 +1071,12 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
 #if 0
     stackItem->elementType=ElementTypeFoot;
 
-    const QString id(attributes.value("endnote-id").stripWhiteSpace());
-    kdDebug(30506) << "Foot note id: " << id << endl;
+    const QString id(attributes.value("endnote-id").trimmed());
+    kDebug(30506) << "Foot note id: " << id << endl;
 
     if (id.isEmpty())
     {
-        kdWarning(30506) << "Footnote has no id!" << endl;
+        kWarning(30506) << "Footnote has no id!" << endl;
         stackItem->elementType=ElementTypeIgnore;
         return true;
     }
@@ -1123,7 +1123,7 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
     uint i;
     for ( i=0, it=widthList.begin(); i<columns; ++i, ++it )
     {
-        kdDebug(30506) << "Column width: " << (*it) << " cooked " << ValueWithLengthUnit(*it) << endl;
+        kDebug(30506) << "Column width: " << (*it) << " cooked " << ValueWithLengthUnit(*it) << endl;
         stackItem->m_doubleArray[i+1] = ValueWithLengthUnit(*it) + stackItem->m_doubleArray[i];
     }
     // ### TODO: in case of automatic column widths, we have not any width given by AbiWord
@@ -1181,18 +1181,18 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
 #if 1
     if (stackCurrent->elementType!=ElementTypeTable)
     {
-        kdError(30506) << "Wrong element type!! Aborting! (in StructureParser::endElementCell)" << endl;
+        kError(30506) << "Wrong element type!! Aborting! (in StructureParser::endElementCell)" << endl;
         return false;
     }
 
     stackItem->elementType=ElementTypeCell;
 
     const QString tableName(stackCurrent->strTemp1);
-    kdDebug(30506) << "Table name: " << tableName << endl;
+    kDebug(30506) << "Table name: " << tableName << endl;
 
     if (tableName.isEmpty())
     {
-        kdError(30506) << "Table name is empty! Aborting!" << endl;
+        kError(30506) << "Table name is empty! Aborting!" << endl;
         return false;
     }
 
@@ -1255,12 +1255,12 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
 {
     //Warning: be careful that some element names can be lower case or upper case (not very XML)
-    kdDebug(30506) << indent << " <" << name << ">" << endl; //DEBUG
+    kDebug(30506) << indent << " <" << name << ">" << endl; //DEBUG
     indent += "*"; //DEBUG
 
     if (structureStack.isEmpty())
     {
-        kdError(30506) << "Stack is empty!! Aborting! (in StructureParser::startElement)" << endl;
+        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::startElement)" << endl;
         return false;
     }
 
@@ -1269,7 +1269,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 
     if (!stackItem)
     {
-        kdError(30506) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)" << endl;
+        kError(30506) << "Could not create Stack Item! Aborting! (in StructureParser::startElement)" << endl;
         return false;
     }
 
@@ -1307,17 +1307,17 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         StackItem* stackCurrent=structureStack.current();
         if (stackCurrent->elementType==ElementTypeContent)
         {
-            kdWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
+            kWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
             success=complexForcedPageBreak(stackItem);
         }
         else if (stackCurrent->elementType==ElementTypeParagraph)
         {
-            kdWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
+            kWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
             success=StartElementPBR(stackItem,stackCurrent,mainDocument);
         }
         else
         {
-            kdError(30506) << "Forced column break found out of turn! Aborting! Parent: "
+            kError(30506) << "Forced column break found out of turn! Aborting! Parent: "
                 << stackCurrent->itemName <<endl;
             success=false;
         }
@@ -1337,7 +1337,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         }
         else
         {
-            kdError(30506) << "Forced page break found out of turn! Aborting! Parent: "
+            kError(30506) << "Forced page break found out of turn! Aborting! Parent: "
                 << stackCurrent->itemName <<endl;
             success=false;
         }
@@ -1408,11 +1408,11 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 bool StructureParser :: endElement( const QString&, const QString& , const QString& name)
 {
     indent.remove( 0, 1 ); // DEBUG
-    kdDebug(30506) << indent << " </" << name << ">" << endl;
+    kDebug(30506) << indent << " </" << name << ">" << endl;
 
     if (structureStack.isEmpty())
     {
-        kdError(30506) << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
+        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
         return false;
     }
 
@@ -1459,7 +1459,7 @@ bool StructureParser :: endElement( const QString&, const QString& , const QStri
     if (!success)
     {
         // If we have no success, then it was surely a tag mismatch. Help debugging!
-        kdError(30506) << "Found tag name: " << name
+        kError(30506) << "Found tag name: " << name
             << " expected: " << stackItem->itemName << endl;
     }
     delete stackItem;
@@ -1471,20 +1471,20 @@ bool StructureParser :: characters ( const QString & ch )
     // DEBUG start
     if (ch=="\n")
     {
-        kdDebug(30506) << indent << " (LINEFEED)" << endl;
+        kDebug(30506) << indent << " (LINEFEED)" << endl;
     }
     else if (ch.length()> 40)
     {   // 40 characters are enough (especially for image data)
-        kdDebug(30506) << indent << " :" << ch.left(40) << "..." << endl;
+        kDebug(30506) << indent << " :" << ch.left(40) << "..." << endl;
     }
     else
     {
-        kdDebug(30506) << indent << " :" << ch << ":" << endl;
+        kDebug(30506) << indent << " :" << ch << ":" << endl;
     }
     // DEBUG end
     if (structureStack.isEmpty())
     {
-        kdError(30506) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
+        kError(30506) << "Stack is empty!! Aborting! (in StructureParser::characters)" << endl;
         return false;
     }
 
@@ -1507,11 +1507,11 @@ bool StructureParser :: characters ( const QString & ch )
     }
     else if (stackItem->elementType==ElementTypeEmpty)
     {
-        success=ch.stripWhiteSpace().isEmpty();
+        success=ch.trimmed().isEmpty();
         if (!success)
         {
             // We have a parsing error, so abort!
-            kdError(30506) << "Empty element "<< stackItem->itemName
+            kError(30506) << "Empty element "<< stackItem->itemName
                 <<" is not empty! Aborting! (in StructureParser::characters)" << endl;
         }
     }
@@ -1585,34 +1585,34 @@ bool StructureParser::endDocument(void)
     // insert before <PICTURES>, as <PICTURES> must remain last.
     mainDocument.documentElement().insertBefore(stylesPluralElement,m_picturesElement);
 
-    kdDebug(30506) << "###### Start Style List ######" << endl;
+    kDebug(30506) << "###### Start Style List ######" << endl;
     StyleDataMap::ConstIterator it;
 
     // At first, we put the Normal style
     it=styleDataMap.find("Normal");
     if (it!=styleDataMap.end())
     {
-        kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
+        kDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
         QDomElement styleElement=mainDocument.createElement("STYLE");
         stylesPluralElement.appendChild(styleElement);
         AddStyle(styleElement, it.key(),it.data(),mainDocument);
     }
     else
-        kdWarning(30506) << "No 'Normal' style" << endl;
+        kWarning(30506) << "No 'Normal' style" << endl;
 
     for (it=styleDataMap.begin();it!=styleDataMap.end();++it)
     {
         if (it.key()=="Normal")
             continue;
 
-        kdDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
+        kDebug(30506) << "\"" << it.key() << "\" => " << it.data().m_props << endl;
 
         QDomElement styleElement=mainDocument.createElement("STYLE");
         stylesPluralElement.appendChild(styleElement);
 
         AddStyle(styleElement, it.key(),it.data(),mainDocument);
     }
-    kdDebug(30506) << "######  End Style List  ######" << endl;
+    kDebug(30506) << "######  End Style List  ######" << endl;
 
     createDocInfo();
 
@@ -1621,7 +1621,7 @@ bool StructureParser::endDocument(void)
 
 bool StructureParser::warning(const QXmlParseException& exception)
 {
-    kdWarning(30506) << "XML parsing warning: line " << exception.lineNumber()
+    kWarning(30506) << "XML parsing warning: line " << exception.lineNumber()
         << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
     return true;
 }
@@ -1629,14 +1629,14 @@ bool StructureParser::warning(const QXmlParseException& exception)
 bool StructureParser::error(const QXmlParseException& exception)
 {
     // A XML error is recoverable, so it is only a KDE warning
-    kdWarning(30506) << "XML parsing error: line " << exception.lineNumber()
+    kWarning(30506) << "XML parsing error: line " << exception.lineNumber()
         << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
     return true;
 }
 
 bool StructureParser::fatalError (const QXmlParseException& exception)
 {
-    kdError(30506) << "XML parsing fatal error: line " << exception.lineNumber()
+    kError(30506) << "XML parsing fatal error: line " << exception.lineNumber()
         << " col " << exception.columnNumber() << " message: " << exception.message() << endl;
     m_fatalerror=true;
     KMessageBox::error(NULL, i18n("An error has occurred while parsing the AbiWord file.\nAt line: %1, column %2\nError message: %3")
@@ -1747,7 +1747,7 @@ bool StructureParser::clearStackUntilParagraph(StackItemStack& auxilaryStack)
         default:
             {
                 // Something has gone wrong!
-                kdError(30506) << "Cannot clear this element: "
+                kError(30506) << "Cannot clear this element: "
                     << item->itemName << endl;
                 return false;
             }
@@ -1764,7 +1764,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
     if ((to != "application/x-kword") || (from != "application/x-abiword"))
         return KoFilter::NotImplemented;
 
-    kdDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
+    kDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
 
     StructureParser handler(m_chain);
 
@@ -1782,7 +1782,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
         strExt=fileIn.mid(result);
     }
 
-    kdDebug(30506) << "File extension: -" << strExt << "-" << endl;
+    kDebug(30506) << "File extension: -" << strExt << "-" << endl;
 
     QString strMime; // Mime type of the compressor (default: unknown)
 
@@ -1791,27 +1791,27 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
     {
         // Compressed with gzip
         strMime="application/x-gzip";
-        kdDebug(30506) << "Compression: gzip" << endl;
+        kDebug(30506) << "Compression: gzip" << endl;
     }
     else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2
         strMime="application/x-bzip2";
-        kdDebug(30506) << "Compression: bzip2" << endl;
+        kDebug(30506) << "Compression: bzip2" << endl;
     }
 
     QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
     if ( !in )
     {
-        kdError(30506) << "Cannot create device for uncompressing! Aborting!" << endl;
+        kError(30506) << "Cannot create device for uncompressing! Aborting!" << endl;
         return KoFilter::FileNotFound; // ### TODO: better error?
     }
 
     if (!in->open(QIODevice::ReadOnly))
     {
-        kdError(30506) << "Cannot open file for uncompressing! Aborting!" << endl;
+        kError(30506) << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -1822,7 +1822,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
 
     if (!reader.parse( source ))
     {
-        kdError(30506) << "Import: Parsing unsuccessful. Aborting!" << endl;
+        kError(30506) << "Import: Parsing unsuccessful. Aborting!" << endl;
         delete in;
         if (!handler.wasFatalError())
         {
@@ -1837,11 +1837,11 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
     Q3CString strOut;
     KoStoreDevice* out;
 
-    kdDebug(30506) << "Creating documentinfo.xml" << endl;
+    kDebug(30506) << "Creating documentinfo.xml" << endl;
     out=m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if(!out)
     {
-        kdError(30506) << "AbiWord Import unable to open output file! (Documentinfo)" << endl;
+        kError(30506) << "AbiWord Import unable to open output file! (Documentinfo)" << endl;
         KMessageBox::error(NULL, i18n("Unable to save document information."),i18n("AbiWord Import Filter"),0);
         return KoFilter::StorageCreationError;
     }
@@ -1851,11 +1851,11 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
     out->writeBlock(strOut,strOut.length());
 
-    kdDebug(30506) << "Creating maindoc.xml" << endl;
+    kDebug(30506) << "Creating maindoc.xml" << endl;
     out=m_chain->storageFile( "root", KoStore::Write );
     if(!out)
     {
-        kdError(30506) << "AbiWord Import unable to open output file! (Root)" << endl;
+        kError(30506) << "AbiWord Import unable to open output file! (Root)" << endl;
         KMessageBox::error(NULL, i18n("Unable to save main document."),i18n("AbiWord Import Filter"),0);
         return KoFilter::StorageCreationError;
     }
@@ -1866,10 +1866,10 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
     out->writeBlock(strOut,strOut.length());
 
 #if 0
-    kdDebug(30506) << documentOut.toString();
+    kDebug(30506) << documentOut.toString();
 #endif
 
-    kdDebug(30506) << "Now importing to KWord!" << endl;
+    kDebug(30506) << "Now importing to KWord!" << endl;
 
     return KoFilter::OK;
 }

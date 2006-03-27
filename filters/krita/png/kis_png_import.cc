@@ -45,7 +45,7 @@ KisPNGImport::~KisPNGImport()
 
 KoFilter::ConversionStatus KisPNGImport::convert(const Q3CString&, const Q3CString& to)
 {
-    kdDebug(41008) << "Importing using PNGImport!\n";
+    kDebug(41008) << "Importing using PNGImport!\n";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

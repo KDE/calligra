@@ -67,7 +67,7 @@ XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const Q3CString &format, QWidget
 	while(i < 10)
 	{
 		value = _config->readPathEntry( QString("Recent%1").arg(i) );
-		kdDebug() << "recent : " << value << endl;
+		kDebug() << "recent : " << value << endl;
 		if(!value.isEmpty())
 		{
 			_recentList.append( value );
@@ -80,12 +80,12 @@ XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const Q3CString &format, QWidget
 
 	/* Common xslt files box */
 	QString appName = (const char*) KGlobal::instance()->instanceName();
-	kdDebug() << "app name = " << appName << endl;
+	kDebug() << "app name = " << appName << endl;
 
 	QString filenames = QString("xsltfilter") + QDir::separator() + QString("export") +
 			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
 	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, true);
-	kdDebug() << "There are " << commonFilesList.size() << " entries like  " << filenames << endl;
+	kDebug() << "There are " << commonFilesList.size() << " entries like  " << filenames << endl;
 
 	QStringList tempList;
 	QString name;
@@ -98,13 +98,13 @@ XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const Q3CString &format, QWidget
 		tempList.pop_back();
 		name = tempList.last();
 		tempList.pop_back();
-		kdDebug() << name << " " << file << endl;
+		kDebug() << name << " " << file << endl;
 		if(!_namesList.contains(name) && file == "main.xsl")
 		{
 			_filesList.append(file);
 			_namesList.append(name);
 			_dirsList.append(tempList.join("/"));
-			kdDebug() << file << " get" << endl;
+			kDebug() << file << " get" << endl;
 		}
 	}
 
@@ -125,7 +125,7 @@ XSLTExportDia::~XSLTExportDia()
  */
 void XSLTExportDia::cancelSlot()
 {
-	kdDebug() << "export cancelled" << endl;
+	kDebug() << "export cancelled" << endl;
 	reject();
 }
 
@@ -140,7 +140,7 @@ void XSLTExportDia::chooseSlot()
 	/* Use dir from currently selected file */
     QString dir = QString::null;
     if ( _currentFile.isLocalFile() && QFile::exists( _currentFile.path() ) )
-        dir = QFileInfo( _currentFile.path() ).absFilePath();
+        dir = QFileInfo( _currentFile.path() ).absoluteFilePath();
 
     KFileDialog *dialog = new KFileDialog(dir, QString::null, 0L, "file dialog", true);
     dialog->setCaption( i18n("Open Document") );
@@ -183,7 +183,7 @@ void XSLTExportDia::chooseSlot()
  */
 void XSLTExportDia::chooseRecentSlot()
 {
-	kdDebug() << "recent slot : " << recentBox->currentText() << endl;
+	kDebug() << "recent slot : " << recentBox->currentText() << endl;
 	_currentFile = recentBox->currentText();
 }
 
@@ -196,7 +196,7 @@ void XSLTExportDia::chooseCommonSlot()
 	int num = xsltList->currentItem();
 	_currentFile = QDir::separator() + _dirsList[num] + QDir::separator() +
 			xsltList->currentText() + QDir::separator() + _filesList[num];
-	kdDebug() << "common slot : " << _currentFile.url() << endl;
+	kDebug() << "common slot : " << _currentFile.url() << endl;
 }
 
 /**
@@ -208,13 +208,13 @@ void XSLTExportDia::okSlot()
 	hide();
 	if(_currentFile.url().isEmpty())
 		return;
-	kdDebug() << "XSLT FILTER --> BEGIN" << endl;
+	kDebug() << "XSLT FILTER --> BEGIN" << endl;
 	QString stylesheet = _currentFile.directory() + QDir::separator() + _currentFile.fileName();
 
 	/* Add the current file in the recent list if is not and save the list. */
 	if(_recentList.contains(stylesheet) == 0)
 	{
-		kdDebug() << "Style sheet add to recent list" << endl;
+		kDebug() << "Style sheet add to recent list" << endl;
 		/* Remove the older stylesheet used */
 		if(_recentList.size() >= 10)
 			_recentList.pop_back();
@@ -223,11 +223,11 @@ void XSLTExportDia::okSlot()
 		_recentList.prepend(stylesheet);
 
 		/* Save the new list */
-		kdDebug() << "Recent list save " << _recentList.size() << " entrie(s)" << endl;
+		kDebug() << "Recent list save " << _recentList.size() << " entrie(s)" << endl;
 		int i = 0;
 		while(_recentList.size() > 0)
 		{
-			kdDebug() << "save : " << _recentList.first() << endl;
+			kDebug() << "save : " << _recentList.first() << endl;
 #if KDE_IS_VERSION(3,1,3)
 			_config->writePathEntry( QString("Recent%1").arg(i), _recentList.first());
 #else
@@ -256,13 +256,13 @@ void XSLTExportDia::okSlot()
 	}
 	temp.close();
 
-	kdDebug() << stylesheet << endl;
+	kDebug() << stylesheet << endl;
 	XSLTProc* xsltproc = new XSLTProc(temp.name(), _fileOut, stylesheet);
 	xsltproc->parse();
 
 	delete xsltproc;
 
-	kdDebug() << "XSLT FILTER --> END" << endl;
+	kDebug() << "XSLT FILTER --> END" << endl;
 	reject(); // ###### accept() ? (Werner)
 }
 

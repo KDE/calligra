@@ -139,7 +139,7 @@ void WMFImportParser::setWindowExt( int width, int height ) {
 }
 
 
-void WMFImportParser::setWorldMatrix( const QMatrix &, bool  ) {
+void WMFImportParser::setMatrix( const QMatrix &, bool  ) {
 }
 
 

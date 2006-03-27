@@ -58,16 +58,16 @@ KoFilter::ConversionStatus MSODImport::convert( const Q3CString& from, const Q3C
     emit commSignalShapeID( shapeId );
     const char *delayStream = 0L;
     emit commSignalDelayStream( delayStream );
-    kdDebug( s_area ) << "##################################################################" << endl;
-    kdDebug( s_area ) << "shape id: " << shapeId << endl;
-    kdDebug( s_area ) << "delay stream: " << delayStream << endl;
-    kdDebug( s_area ) << "##################################################################" << endl;
+    kDebug( s_area ) << "##################################################################" << endl;
+    kDebug( s_area ) << "shape id: " << shapeId << endl;
+    kDebug( s_area ) << "delay stream: " << delayStream << endl;
+    kDebug( s_area ) << "##################################################################" << endl;
 /*
     QString config = ""; // ###### FIXME: We aren't able to pass config data right now
     QStringList args = QStringList::split(";", config);
     unsigned i;
 
-    kdDebug(s_area) << "MSODImport::filter: config: " << config << endl;
+    kDebug(s_area) << "MSODImport::filter: config: " << config << endl;
     for (i = 0; i < args.count(); i++)
     {
         if (args[i].startsWith("shape-id="))
@@ -81,7 +81,7 @@ KoFilter::ConversionStatus MSODImport::convert( const Q3CString& from, const Q3C
         }
         else
         {
-            kdError(s_area) << "Invalid argument: " << args[i] << endl;
+            kError(s_area) << "Invalid argument: " << args[i] << endl;
             return KoFilter::StupidError;
         }
     }
@@ -105,7 +105,7 @@ KoFilter::ConversionStatus MSODImport::convert( const Q3CString& from, const Q3C
     KoStoreDevice* dev = m_chain->storageFile( "root", KoStore::Write );
     if (!dev)
     {
-        kdError(s_area) << "Cannot open output file" << endl;
+        kError(s_area) << "Cannot open output file" << endl;
         return KoFilter::StorageCreationError;
     }
     Q3CString cstring ( m_text.utf8() );
@@ -159,8 +159,8 @@ void MSODImport::gotPicture(
 {
 // ### TODO
 #if 0
-    kdDebug() << "##########################################MSODImport::gotPicture" << endl;
-    kdDebug() << "MSODImport::gotPicture -- " << extension << endl;
+    kDebug() << "##########################################MSODImport::gotPicture" << endl;
+    kDebug() << "MSODImport::gotPicture -- " << extension << endl;
     if ((extension == "wmf") ||
         (extension == "emf") ||
         (extension == "pict"))
@@ -174,7 +174,7 @@ void MSODImport::gotPicture(
 
             QString srcMime( KoEmbeddingFilter::mimeTypeByExtension( extension ) );
             if ( srcMime == KMimeType::defaultMimeType() )
-                kdWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
+                kWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
 
             Q3CString destMime; // intentionally empty, the filter manager will do the rest
             KoFilter::ConversionStatus status;
@@ -184,7 +184,7 @@ void MSODImport::gotPicture(
             m_embeddeeLength = 0;
 
             if ( status != KoFilter::OK ) {
-                kdWarning(s_area) << "Couldn't convert the image!" << endl;
+                kWarning(s_area) << "Couldn't convert the image!" << endl;
                 return;
             }
         }
@@ -214,9 +214,9 @@ void MSODImport::gotPolygon(
     const DrawContext &dc,
     const Q3PointArray &points)
 {
-    kdDebug(s_area) << "MSODImport::gotPolygon" << endl;
-    kdDebug(s_area) << QString::number(dc.m_penWidth, 16) << endl;
-    kdDebug(s_area) << dc.m_penStyle << endl;
+    kDebug(s_area) << "MSODImport::gotPolygon" << endl;
+    kDebug(s_area) << QString::number(dc.m_penWidth, 16) << endl;
+    kDebug(s_area) << dc.m_penStyle << endl;
     m_text += "<COMPOSITE>\n";
     if( dc.m_penWidth > 0 )
     {
@@ -245,7 +245,7 @@ void MSODImport::gotPolyline(
     const DrawContext &dc,
     const Q3PointArray &points)
 {
-	kdDebug(s_area) << "MSODImport::gotPolyline" << endl;
+	kDebug(s_area) << "MSODImport::gotPolyline" << endl;
 	return; // ### TODO
     m_text += "<COMPOSITE>\n";
     m_text += "<STROKE lineWidth=\"" + QString::number(dc.m_penWidth) + "\">\n";
@@ -297,7 +297,7 @@ void MSODImport::pointArray(
     m_text += "<MOVE x=\"" + QString::number(points.point(0).x()) +
                 "\" y=\"" + QString::number(points.point(0).y()) +
                 "\" />\n";
-    kdDebug(s_area) << "\n<MOVE x=\"" + QString::number(points.point(0).x()) +
+    kDebug(s_area) << "\n<MOVE x=\"" + QString::number(points.point(0).x()) +
                             "\" y=\"" + QString::number(points.point(0).y()) +
                                         "\" />" << endl;
     for (unsigned int i = 1; i < points.count(); i++)
@@ -305,7 +305,7 @@ void MSODImport::pointArray(
         m_text += "<LINE x=\"" + QString::number(points.point(i).x()) +
                     "\" y=\"" + QString::number(points.point(i).y()) +
                     "\" />\n";
-        kdDebug(s_area) << "<LINE x=\"" + QString::number(points.point(i).x()) +
+        kDebug(s_area) << "<LINE x=\"" + QString::number(points.point(i).x()) +
                             "\" y=\"" + QString::number(points.point(i).y()) +
                                             "\" />" << endl;
     }

@@ -70,7 +70,7 @@ KWEFKWordLeader::~KWEFKWordLeader(void)
 static FrameAnchor *findAnchor ( const KoPictureKey& key,
                                  Q3ValueList<ParaData>& paraList )
 {
-    kdDebug(30508) << "findAnchor " << key.toString() << endl;
+    kDebug(30508) << "findAnchor " << key.toString() << endl;
     Q3ValueList<ParaData>::Iterator paraIt;
 
     for ( paraIt = paraList.begin (); paraIt != paraList.end (); ++paraIt )
@@ -84,13 +84,13 @@ static FrameAnchor *findAnchor ( const KoPictureKey& key,
             if ( (*formattingIt).id              == 6    &&
                  (*formattingIt).frameAnchor.key == key )
             {
-                kdDebug(30508) << "Found anchor " << (*formattingIt).frameAnchor.key.toString() << endl;
+                kDebug(30508) << "Found anchor " << (*formattingIt).frameAnchor.key.toString() << endl;
                 return &(*formattingIt).frameAnchor;
             }
         }
     }
 
-    kdWarning(30508) << "findAnchor returning NULL!" << endl;
+    kWarning(30508) << "findAnchor returning NULL!" << endl;
     return NULL;
 }
 
@@ -102,7 +102,7 @@ static void ProcessHardBrkTag ( QDomNode myNode, void* tagData, KWEFKWordLeader*
     attrProcessingList << AttrProcessing ( "frame", *flag );
     ProcessAttributes (myNode, attrProcessingList);
     if (*flag)
-        kdDebug(30508) << "<HARDBRK frame=\"1\"> found" << endl;
+        kDebug(30508) << "<HARDBRK frame=\"1\"> found" << endl;
 }
 
 static void InsertBookmarkFormatData (const int pos, const QString& name, const bool start,
@@ -156,13 +156,13 @@ void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
         // As we always insert before, make first endings, then startings (problem is zero-length bookmark)
         if ( (*(it)).m_endparag == paraCount )
         {
-            kdDebug(30508) << "Paragraph: " << paraCount << " end: " << (*(it)).m_name << endl;
+            kDebug(30508) << "Paragraph: " << paraCount << " end: " << (*(it)).m_name << endl;
             InsertBookmarkFormatData( (*(it)).m_cursorIndexEnd, (*(it)).m_name, false, paraData.formattingList);
 
         }
         if ( (*(it)).m_startparag == paraCount )
         {
-            kdDebug(30508) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
+            kDebug(30508) << "Paragraph: " << paraCount << " begin: " << (*(it)).m_name << endl;
             InsertBookmarkFormatData( (*(it)).m_cursorIndexStart, (*(it)).m_name, true, paraData.formattingList);
         }
     }
@@ -173,7 +173,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
                                   KWEFKWordLeader *leader )
 {
 #if 0
-    kdDebug (30508) << "ProcessParagraphTag () - Begin" << endl;
+    kDebug (30508) << "ProcessParagraphTag () - Begin" << endl;
 #endif
 
     Q3ValueList<ParaData> *paraList = (Q3ValueList<ParaData> *) tagData;
@@ -212,7 +212,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
         }
         else
         {
-            kdWarning (30508) << "No useful FORMAT tag found for text in PARAGRAPH" << endl;
+            kWarning (30508) << "No useful FORMAT tag found for text in PARAGRAPH" << endl;
         }
     }
 
@@ -220,7 +220,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     *paraList << paraData;
 
 #if 0
-    kdDebug (30508) << "ProcessParagraphTag () - End " << paraText << endl;
+    kDebug (30508) << "ProcessParagraphTag () - End " << paraText << endl;
 #endif
 }
 
@@ -337,7 +337,7 @@ static void ProcessPictureAnchor( QDomNode myNode, KWEFKWordLeader *leader, Fram
         ;
     ProcessSubtags (myNode, tagProcessingList, leader);
 
-    kdDebug (30508) << "FRAMESET PICTURE KEY " << frameAnchor->picture.key.toString() << endl;
+    kDebug (30508) << "FRAMESET PICTURE KEY " << frameAnchor->picture.key.toString() << endl;
 
     frameAnchor->key = frameAnchor->picture.key;
 }
@@ -361,7 +361,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                                 KWEFKWordLeader *leader )
 {
 #if 0
-    kdDebug (30508) << "ProcessFramesetTag () - Begin" << endl;
+    kDebug (30508) << "ProcessFramesetTag () - Begin" << endl;
 #endif
 
     Q3ValueList<ParaData> *paraList = (Q3ValueList<ParaData> *) tagData;
@@ -401,7 +401,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 if (frameInfo==0)
                 {
                     // Normal Text
-                    kdDebug(30508) << "Processing Frameset: " << leader->m_currentFramesetName << endl;
+                    kDebug(30508) << "Processing Frameset: " << leader->m_currentFramesetName << endl;
                     Q3ValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  paraList ));
@@ -482,7 +482,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     if ( cols > 0 && rows > 0 )
                     {
 #if 0
-                        kdDebug (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
+                        kDebug (30508) << "DEBUG - FRAMESET: table " << name << " col, row = "
                                         << col << ", " << row << ", Mgr = "<< grpMgr << endl;
 #endif
                         FrameAnchor *frameAnchor = findAnchor (grpMgr, *paraList);
@@ -499,7 +499,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                             {
                                 if ( (*it).key == key )
                                 {
-                                    kdDebug(30508) << "Found pseudo-anchor for table: " << (*it).key.toString() << endl;
+                                    kDebug(30508) << "Found pseudo-anchor for table: " << (*it).key.toString() << endl;
                                     found = true;
                                     break;
                                 }
@@ -511,7 +511,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                             }
                             else
                             {
-                                kdWarning(30508) << "Table anchor not found: " << grpMgr << endl;
+                                kWarning(30508) << "Table anchor not found: " << grpMgr << endl;
                                 FrameAnchor anchor;
                                 ProcessTableAnchor( myNode, leader, &anchor, col, row, cols, rows );
                                 anchor.key = key; // Needed, so that the pseudo-anchor can be found again
@@ -522,14 +522,14 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     }
                     else
                     {
-                        kdWarning (30508) << "Unexpected value for one of, or all FRAMESET attribute cols, rows: "
+                        kWarning (30508) << "Unexpected value for one of, or all FRAMESET attribute cols, rows: "
                                         << cols << ", " << rows << "!" << endl;
                         AllowNoSubtags (myNode, leader);
                     }
                 }
                 else
                 {
-                    kdWarning (30508) << "Unset value for one of, or all FRAMESET attributes col, row: "
+                    kWarning (30508) << "Unset value for one of, or all FRAMESET attributes col, row: "
                                     << col << ", " << row << "!" << endl;
                     AllowNoSubtags (myNode, leader);
                     leader->m_unanchoredFramesets.append( leader->m_currentFramesetName );
@@ -541,7 +541,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     case 5: // CLIPART: deprecated (up to KOffice 1.2 Beta 2)
         {
 #if 0
-            kdDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
+            kDebug (30508) << "DEBUG: FRAMESET name of picture is " << name << endl;
 #endif
 
             FrameAnchor *frameAnchor = findAnchor ( leader->m_currentFramesetName, *paraList );
@@ -554,7 +554,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
             {
                 // ### TODO: non-inlined picture?
                 // No anchor found, so the picture is not inlined
-                kdDebug (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
+                kDebug (30508) << "ProcessFramesetTag: Couldn't find anchor " << leader->m_currentFramesetName << endl;
                 FrameAnchor anchor;
                 ProcessPictureAnchor( myNode, leader, &anchor, frameType );
                 leader->m_nonInlinedPictureAnchors << anchor;
@@ -566,17 +566,17 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 
     case 4: // KFormula
         {
-            kdWarning(30508) << "KFormula frameset not supported yet!" << endl; // ### TODO
+            kWarning(30508) << "KFormula frameset not supported yet!" << endl; // ### TODO
             break;
         }
     default:
-            kdWarning (30508) << "Unexpected frametype " << frameType << " (in ProcessFramesetTag)" << endl;
+            kWarning (30508) << "Unexpected frametype " << frameType << " (in ProcessFramesetTag)" << endl;
     }
 
     leader->m_currentFramesetName = oldName;
     
 #if 0
-    kdDebug (30508) << "ProcessFramesetTag () - End" << endl;
+    kDebug (30508) << "ProcessFramesetTag () - End" << endl;
 #endif
 }
 
@@ -771,7 +771,7 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
     }
     else
         vs.creationTime=QDateTime::fromString(creation, Qt::ISODate);
-    //kdDebug(30508) << "Creation time: " << vs.creationTime.toString( Qt::ISODate ) << endl;
+    //kDebug(30508) << "Creation time: " << vs.creationTime.toString( Qt::ISODate ) << endl;
 
     if ( modification.isEmpty() )
     {
@@ -782,11 +782,11 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
     }
     else
         vs.modificationTime=QDateTime::fromString(modification, Qt::ISODate);
-    //kdDebug(30508) << "Modification time: " << vs.modificationTime.toString( Qt::ISODate ) << endl;
+    //kDebug(30508) << "Modification time: " << vs.modificationTime.toString( Qt::ISODate ) << endl;
 
     if (!print.isEmpty())
         vs.printTime=QDateTime::fromString(print, Qt::ISODate);
-    //kdDebug(30508) << "Print time: " << vs.printTime.toString( Qt::ISODate ) << endl;
+    //kDebug(30508) << "Print time: " << vs.printTime.toString( Qt::ISODate ) << endl;
 
     leader->doVariableSettings (vs);
 }
@@ -833,7 +833,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     key.loadAttributes(myNode.toElement());
     const QString name(myNode.toElement().attribute("name"));
 
-    kdDebug(30508) << "search anchors: " << key.toString() << endl;
+    kDebug(30508) << "search anchors: " << key.toString() << endl;
     bool found = false;
 
     // NOTE: we must always search in both inlined and non-inlined pictures. A picture can be used in both ways and a few times in each!
@@ -851,7 +851,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
             if ( ( ( (*formattingIt).id == 6 ) || ( (*formattingIt).id == 2 ) )
                  && (*formattingIt).frameAnchor.key == key )
             {
-                kdDebug(30508) << "Found anchor for inlined picture: " << (*formattingIt).frameAnchor.key.toString() << endl;
+                kDebug(30508) << "Found anchor for inlined picture: " << (*formattingIt).frameAnchor.key.toString() << endl;
                 (*formattingIt).frameAnchor.picture.koStoreName = name;
                 found = true;
             }
@@ -863,7 +863,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     {
         if ( (*it).key == key )
         {
-            kdDebug(30508) << "Found pseudo-anchor for non-inlined picture: " << (*it).key.toString() << endl;
+            kDebug(30508) << "Found pseudo-anchor for non-inlined picture: " << (*it).key.toString() << endl;
             (*it).picture.koStoreName = name;
             found = true;
         }
@@ -871,7 +871,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     
     if ( !found )
     {
-        kdWarning (30508) << "Could not find any anchor for picture " << key.toString() << endl;
+        kWarning (30508) << "Could not find any anchor for picture " << key.toString() << endl;
     }
 
     AllowNoSubtags (myNode, leader);
@@ -986,7 +986,7 @@ static void ProcessBookmarkItemTag ( QDomNode myNode, void* tag, KWEFKWordLeader
     
     // ### TODO: some verifications
 
-    kdDebug(30508) << "Bookmark: " << bookmark.m_name << " in frameset " << bookmark.m_frameset << endl;
+    kDebug(30508) << "Bookmark: " << bookmark.m_name << " in frameset " << bookmark.m_frameset << endl;
 
     bookmarkList->append( bookmark );
 }
@@ -1003,7 +1003,7 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
 void ProcessDocTag ( QDomNode         myNode,
     void* /*tagData*/, KWEFKWordLeader* leader )
 {
-    //kdDebug (30508) << "Entering ProcessDocTag" << endl;
+    //kDebug (30508) << "Entering ProcessDocTag" << endl;
 
     QString editor, author;
     
@@ -1020,8 +1020,8 @@ void ProcessDocTag ( QDomNode         myNode,
 
     ProcessAttributes( myNode, attrProcessingList );
 
-    kdDebug(30508) << "Document written by " << editor << endl;
-    kdDebug(30508) << "Document of syntax version " << leader->m_syntaxVersion << endl;
+    kDebug(30508) << "Document written by " << editor << endl;
+    kDebug(30508) << "Document of syntax version " << leader->m_syntaxVersion << endl;
 
     if ( leader->m_syntaxVersion == 1 )
     {
@@ -1033,12 +1033,12 @@ void ProcessDocTag ( QDomNode         myNode,
         // However such old documents have still an author attribute, so check its value
         if ( author == "Reginald Stadlbauer and Torben Weis" )
         {
-            kdDebug(30508) << "No syntax version but author attribute matches => assuming old syntax" << endl;
+            kDebug(30508) << "No syntax version but author attribute matches => assuming old syntax" << endl;
             leader->m_oldSyntax = true;
         }
         else
         {
-            kdWarning(30508) << "No syntax version found, author attribute does not match => assuming new syntax" << endl;
+            kWarning(30508) << "No syntax version found, author attribute does not match => assuming new syntax" << endl;
         }
     }
 
@@ -1047,28 +1047,28 @@ void ProcessDocTag ( QDomNode         myNode,
     // At first, process <SPELLCHECKIGNORELIST>, even if mostly it will not be needed
     QDomNode nodeIgnoreList=myNode.namedItem("SPELLCHECKIGNORELIST");
     if ( nodeIgnoreList.isNull () )
-        kdDebug (30508) << "No <SPELLCHECKIGNORELIST>" << endl; // Most files will not have it!
+        kDebug (30508) << "No <SPELLCHECKIGNORELIST>" << endl; // Most files will not have it!
     else
         ProcessSpellCheckIgnoreListTag (nodeIgnoreList, NULL, leader);
 
     // Process <PAPER> now, even if mostly the output will need to be delayed.
     QDomNode nodePaper=myNode.namedItem("PAPER");
     if ( nodePaper.isNull () )
-        kdWarning (30508) << "No <PAPER>" << endl;
+        kWarning (30508) << "No <PAPER>" << endl;
     else
         ProcessPaperTag (nodePaper, NULL, leader);
 
     // Process <VARIABLESETTINGS>
     QDomNode nodeVariableSettings=myNode.namedItem("VARIABLESETTINGS");
     if ( nodeVariableSettings.isNull () )
-	kdWarning (30508) << "No <VARIABLESETTINGS>" << endl;
+	kWarning (30508) << "No <VARIABLESETTINGS>" << endl;
     else
 	ProcessVariableSettingsTag (nodeVariableSettings, NULL, leader);
 
     // Then we process the styles
     QDomNode nodeStyles=myNode.namedItem("STYLES");
     if ( nodeStyles.isNull () )
-        kdWarning (30508) << "No <STYLES>" << endl;
+        kWarning (30508) << "No <STYLES>" << endl;
     else
         ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
@@ -1106,19 +1106,19 @@ void ProcessDocTag ( QDomNode         myNode,
 
     leader->doFullDocument (paraList);
 
-    kdDebug(30508) << "Unachored Framesets : START" << endl;
+    kDebug(30508) << "Unachored Framesets : START" << endl;
     QStringList::ConstIterator it;
     for ( it = leader->m_unanchoredFramesets.begin(); it != leader->m_unanchoredFramesets.end(); ++it )
     {
-        kdDebug(30508) << (*it) << endl;
+        kDebug(30508) << (*it) << endl;
     }
-    kdDebug(30508) << "Unachored Framesets : END" << endl;
+    kDebug(30508) << "Unachored Framesets : END" << endl;
     
     FreeCellParaLists (paraList);
 
     leader->doCloseBody();
 
-    //kdDebug (30508) << "Exiting ProcessDocTag" << endl;
+    //kDebug (30508) << "Exiting ProcessDocTag" << endl;
 }
 
 
@@ -1153,7 +1153,7 @@ bool KWEFKWordLeader::doOpenFile ( const QString &filenameOut, const QString &to
         return m_worker->doOpenFile (filenameOut, to);
 
     // As it would be the first method to be called, warn if worker is NULL
-    kdError (30508) << "No Worker! (in KWEFKWordLeader::doOpenFile)" << endl;
+    kError (30508) << "No Worker! (in KWEFKWordLeader::doOpenFile)" << endl;
 
     return false;
 }
@@ -1278,7 +1278,7 @@ static bool ParseFile ( QIODevice* subFile, QDomDocument& doc)
 
     if ( !doc.setContent (subFile, &errorMsg, &errorLine, &errorColumn) )
     {
-        kdError (30508) << "Parsing Error! Aborting! (in ParseFile)" << endl
+        kError (30508) << "Parsing Error! Aborting! (in ParseFile)" << endl
             << "  Line: " << errorLine << " Column: " << errorColumn << endl
             << "  Message: " << errorMsg << endl;
         // ### TODO: the error is in which sub-file?
@@ -1296,11 +1296,11 @@ static bool ProcessStoreFile ( QIODevice* subFile,
 {
     if (!subFile)
     {
-        kdWarning(30508) << "Could not get a device for the document!" << endl;
+        kWarning(30508) << "Could not get a device for the document!" << endl;
     }
     else if ( subFile->open ( QIODevice::ReadOnly ) )
     {
-        kdDebug (30508) << "Processing Document..." << endl;
+        kDebug (30508) << "Processing Document..." << endl;
         QDomDocument doc;
         if (!ParseFile(subFile, doc))
         {
@@ -1319,7 +1319,7 @@ static bool ProcessStoreFile ( QIODevice* subFile,
     else
     {
         // Note: we do not worry too much if we cannot open the document info!
-        kdWarning (30508) << "Unable to open document!" << endl;
+        kWarning (30508) << "Unable to open document!" << endl;
     }
     return false;
 }
@@ -1332,7 +1332,7 @@ QIODevice* KWEFKWordLeader::getSubFileDevice(const QString& fileName)
 
     if (!subFile)
     {
-        kdError(30508) << "Could not get a device for sub-file: " << fileName << endl;
+        kError(30508) << "Could not get a device for sub-file: " << fileName << endl;
         return NULL;
     }
     return subFile;
@@ -1347,7 +1347,7 @@ bool KWEFKWordLeader::loadSubFile(const QString& fileName, QByteArray& array)
 
     if (!subFile)
     {
-        kdError(30508) << "Could not get a device for sub-file: " << fileName << endl;
+        kError(30508) << "Could not get a device for sub-file: " << fileName << endl;
         return false;
     }
     else if ( subFile->open ( QIODevice::ReadOnly ) )
@@ -1357,7 +1357,7 @@ bool KWEFKWordLeader::loadSubFile(const QString& fileName, QByteArray& array)
     }
     else
     {
-        kdError(30508) << "Unable to open " << fileName << " sub-file" << endl;
+        kError(30508) << "Unable to open " << fileName << " sub-file" << endl;
         return false;
     }
 
@@ -1374,7 +1374,7 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
 
     if (!chain)
     {
-        kdError(30508) << "'Chain' is NULL! Internal error of the filter system?" << endl;
+        kError(30508) << "'Chain' is NULL! Internal error of the filter system?" << endl;
         return KoFilter::StupidError;
     }
 
@@ -1382,13 +1382,13 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
 
     if ( !doOpenFile (chain->outputFile(),to) )
     {
-        kdError (30508) << "Worker could not open export file! Aborting!" << endl;
+        kError (30508) << "Worker could not open export file! Aborting!" << endl;
         return KoFilter::StupidError;
     }
 
     if ( !doOpenDocument () )
     {
-        kdError (30508) << "Worker could not open document! Aborting!" << endl;
+        kError (30508) << "Worker could not open document! Aborting!" << endl;
         doAbortFile ();
         return KoFilter::StupidError;
     }
@@ -1396,20 +1396,20 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     KoStoreDevice* subFile;
 
     subFile=chain->storageFile("documentinfo.xml",KoStore::Read);
-    kdDebug (30508) << "Processing documentinfo.xml..." << endl;
+    kDebug (30508) << "Processing documentinfo.xml..." << endl;
     // Do not care if we cannot open the document info.
     ProcessStoreFile (subFile, ProcessDocumentInfoTag, this);
 
     subFile=chain->storageFile("root",KoStore::Read);
-    kdDebug (30508) << "Processing root..." << endl;
+    kDebug (30508) << "Processing root..." << endl;
     if (!ProcessStoreFile (subFile, ProcessDocTag, this))
     {
-        kdWarning(30508) << "Opening root has failed. Trying raw XML file!" << endl;
+        kWarning(30508) << "Opening root has failed. Trying raw XML file!" << endl;
 
         const QString filename( chain->inputFile() );
         if (filename.isEmpty() )
         {
-            kdError(30508) << "Could not open document as raw XML! Aborting!" << endl;
+            kError(30508) << "Could not open document as raw XML! Aborting!" << endl;
             doAbortFile();
             return KoFilter::StupidError;
         }
@@ -1418,7 +1418,7 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
             QFile file( filename );
             if ( ! ProcessStoreFile( &file, ProcessDocTag, this ) )
             {
-                kdError(30508) << "Could not process document! Aborting!" << endl;
+                kError(30508) << "Could not process document! Aborting!" << endl;
                 doAbortFile();
                 return KoFilter::StupidError;
             }

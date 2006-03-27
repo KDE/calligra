@@ -98,16 +98,16 @@ void KisExifIO::readExifData( ExifData* exifData)
     for(int ifd = 0; ifd < 5; ifd ++)
     {
         ExifContent* content = exifData->ifd[ifds[ifd]];
-        kdDebug() << "There are " << content->count << " values in ifd=" << ifd << endl;
+        kDebug() << "There are " << content->count << " values in ifd=" << ifd << endl;
         for (uint i = 0; i < content->count; i++)
         {
             ExifEntry* entry = content->entries[i];
             QString tagname = exif_tag_get_name ( entry->tag );
-//             kdDebug() << "found tag : " << tagname << endl;
+//             kDebug() << "found tag : " << tagname << endl;
             //         QString tagname = exif_tag_get_name_in_ifd ( entry->tag, EXIF_IFD_0 ); TODO: would be better to rely on 0.6.13 when it becomes more common, as it supports better other IFD (GPS and interoperrabilibity)
             ExifValue value( format2type(entry->format), entry->data, entry->size, ifds[ifd], entry->components, bO );
 //             exif_entry_dump( entry, 4);
-//             kdDebug() << "value = " << value.toString() << endl;
+//             kDebug() << "value = " << value.toString() << endl;
             m_exifInfo->setValue( tagname, value);
         }
     }
@@ -165,7 +165,7 @@ void KisExifIO::writeExifData( ExifData* exifData)
             ExifEntry * entry = exif_entry_new();
             ExifContent* content = exifData->ifd[ev.ifd()];
             exif_content_add_entry(content, entry);
-            kdDebug() << "Saving tag:" << it.key() << " " << ev.toString() << endl;
+            kDebug() << "Saving tag:" << it.key() << " " << ev.toString() << endl;
             ExifTag tag = exif_tag_from_name( it.key().ascii());
             entry->components = ev.components();
             entry->format = type2format( ev.type());

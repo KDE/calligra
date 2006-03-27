@@ -24,7 +24,7 @@
 **
 */
 
-#include <kdebug.h>		/* for kdDebug() stream */
+#include <kdebug.h>		/* for kDebug() stream */
 #include "listeformat.h"
 
 /* PRIVATE METHODS         */
@@ -38,7 +38,7 @@
 /* Destructors             */
 FormatElt::~FormatElt()
 {
-	kdDebug(30522) << "Destruction d'un elementT" << endl;
+	kDebug(30522) << "Destruction d'un elementT" << endl;
 	remFormat();
 }
 
@@ -78,7 +78,7 @@ FormatElt& FormatElt::operator = (const FormatElt & elt)
 //////////////////////////////////////////////////////////
 ListeFormat::ListeFormat()
 {
-	kdDebug(30522) << "Create format list" << endl;
+	kDebug(30522) << "Create format list" << endl;
 	_first  = 0;
 	_end    = 0;
 	_size   = 0;
@@ -86,9 +86,9 @@ ListeFormat::ListeFormat()
 
 ListeFormat::~ListeFormat()
 {
-	kdDebug(30522) << "Destruction of a list of format" << endl;
+	kDebug(30522) << "Destruction of a list of format" << endl;
 	vider();
-	kdDebug(30522) << "ok" << endl;
+	kDebug(30522) << "ok" << endl;
 }
 
 void ListeFormat::addLast(Format *elt)

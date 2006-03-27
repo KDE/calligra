@@ -20,7 +20,7 @@
 */
 
 #include <stdlib.h>		/* for atoi function    */
-#include <kdebug.h>		/* for kdDebug() stream */
+#include <kdebug.h>		/* for kDebug() stream */
 #include "map.h"
 //Added by qt3to4:
 #include <QTextStream>
@@ -37,7 +37,7 @@ Map::Map()
 /*******************************************/
 Map::~Map()
 {
-	kdDebug(30522) << "Destruction of a map." << endl;
+	kDebug(30522) << "Destruction of a map." << endl;
 }
 
 /*******************************************/
@@ -46,7 +46,7 @@ Map::~Map()
 void Map::analyse(const QDomNode balise)
 {
 	/* Analyse of the parameters */
-	kdDebug(30522) << "ANALYSE A MAP" << endl;
+	kDebug(30522) << "ANALYSE A MAP" << endl;
 
 	/* Analyse of the children markups */
 	for(int index = 0; index < getNbChild(balise); index++)
@@ -56,7 +56,7 @@ void Map::analyse(const QDomNode balise)
 		table->analyse(getChild(balise, index));
 		_tables.append(table);
 	}
-	kdDebug(30522) << "END OF MAP" << endl;
+	kDebug(30522) << "END OF MAP" << endl;
 }
 
 /*******************************************/
@@ -68,7 +68,7 @@ void Map::analyse(const QDomNode balise)
 void Map::generate(QTextStream &out)
 {
 	Table *table = NULL;
-	kdDebug(30522) << "  MAP GENERATION" << endl;
+	kDebug(30522) << "  MAP GENERATION" << endl;
 	Q3PtrListIterator<Table> it(_tables);
 	while ( (table = it.current()) != 0 )
 	{
@@ -76,6 +76,6 @@ void Map::generate(QTextStream &out)
 		table->generate(out);
 	}
 
-	kdDebug(30522) << "MAP GENERATED" << endl;
+	kDebug(30522) << "MAP GENERATED" << endl;
 }
 

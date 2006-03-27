@@ -235,7 +235,7 @@
                                         <string>Use external CSS sheet:</string>
                                     </property>
                                 </widget>
-                                <widget class="KURLRequester">
+                                <widget class="KUrlRequester">
                                     <property name="name">
                                         <cstring>KURL_ExternalCSS</cstring>
                                     </property>

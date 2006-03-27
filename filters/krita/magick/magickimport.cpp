@@ -45,7 +45,7 @@ MagickImport::~MagickImport()
 
 KoFilter::ConversionStatus MagickImport::convert(const Q3CString&, const Q3CString& to)
 {
-    kdDebug(41008) << "Importing using MagickImport!\n";
+    kDebug(41008) << "Importing using MagickImport!\n";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

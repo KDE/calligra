@@ -64,7 +64,7 @@ HtmlExportDialog :: HtmlExportDialog(QWidget* parent)
 
 HtmlExportDialog :: ~HtmlExportDialog(void)
 {
-    kapp->setOverrideCursor(Qt::waitCursor);
+    kapp->setOverrideCursor(Qt::WaitCursor);
 }
 
 void HtmlExportDialog::setCSSEnabled( bool b )
@@ -85,7 +85,7 @@ bool HtmlExportDialog::isXHtml(void) const
 QTextCodec* HtmlExportDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kdDebug(30503) << "Encoding: " << strCodec << endl;
+    kDebug(30503) << "Encoding: " << strCodec << endl;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
@@ -104,7 +104,7 @@ QTextCodec* HtmlExportDialog::getCodec(void) const
     if ( !codec || !ok )
     {
         // Default: UTF-8
-        kdWarning(30503) << "Cannot find encoding:" << strCodec << endl;
+        kWarning(30503) << "Cannot find encoding:" << strCodec << endl;
         // ### TODO: what parent to use?
         KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
         return 0;

@@ -67,7 +67,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
     QFile in (m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly))
     {
-        kdError(30502) << "Unable to open input file!" << endl;
+        kError(30502) << "Unable to open input file!" << endl;
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -116,7 +116,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
         // Read one line
         mystr = nextLine( stream );
 
-        kdDebug()<<"INPUT : "<<mystr<<endl;
+        kDebug()<<"INPUT : "<<mystr<<endl;
 
 
         /**********************************************************************
@@ -161,7 +161,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
           alllenght = mystr.length ();
           if (alllenght >= 80-1)
           {
-              kdDebug()<< " Line >= 80 chars \n";
+              kDebug()<< " Line >= 80 chars \n";
             int ok = true;
             do
 	    {
@@ -219,7 +219,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
 
 
           pos = cellnostr.find (QRegExp ("[0-9]"));
-          kdDebug()<<" findpos :"<<pos<<endl;
+          kDebug()<<" findpos :"<<pos<<endl;
 
 
 
@@ -229,7 +229,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
           rowstr = cellnostr.mid (pos, cellnostr.length()-pos);
           irow   = rowstr.toInt(&ok);
 
-          kdDebug()<<" findpos :"<< rowstr<<" "<<irow<<endl;
+          kDebug()<<" findpos :"<< rowstr<<" "<<irow<<endl;
           sscanf (cellnostr.latin1(), "%299s%d",tmp, &bla);
           sprintf (tmp1, "%d", irow);
           leni = strlen (tmp1);
@@ -237,7 +237,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
           cellcolstr = cellnostr;
           cellcolstr.remove (cellcolstr.length()-leni, leni);
 
-          kdDebug()<<" Info: length :"<<len<<" cellnostr :"<<cellnostr<<" tmp :"<<tmp<<" irow :"<<irow<<" cellcolstr :"<<cellcolstr<<endl;
+          kDebug()<<" Info: length :"<<len<<" cellnostr :"<<cellnostr<<" tmp :"<<tmp<<" irow :"<<irow<<" cellcolstr :"<<cellcolstr<<endl;
 
           // Transformat ascii column to int column
           icol = translateColumnNumber (cellcolstr);
@@ -320,7 +320,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
              if (pos > -1) str += my_rc.rc[pos];
           }
 
-          kdDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<" "<< cellnostr <<" " <<ccol<<" " << irow<<" "<< typeFormStr<<" " <<typeCharStr<<" " <<typeCellStr<<endl;
+          kDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<" "<< cellnostr <<" " <<ccol<<" " << irow<<" "<< typeFormStr<<" " <<typeCharStr<<" " <<typeCellStr<<endl;
 
 
           /********************************************************************
@@ -335,47 +335,47 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
                it != typeCharList.end(); ++it )
 	  {
 	    // Output
-              kdDebug()<<" Char ("<<nn<<" )  >"<<*it<<"< "<<endl;
+              kDebug()<<" Char ("<<nn<<" )  >"<<*it<<"< "<<endl;
             nn++;
 
             if      ((*it) == "B")
             {
-                kdDebug()<<" bold\n";
+                kDebug()<<" bold\n";
               bold  = 1;
 	    }
             else if ((*it) == "I")
             {
 
-                kdDebug()<<"   = italic\n";
+                kDebug()<<"   = italic\n";
               italic = 1;
 	    }
             else if ((*it) == "U")
             {
-                kdDebug()<<"   = underline\n";
+                kDebug()<<"   = underline\n";
               underline = 1;
 	    }
             else if ((*it).startsWith("FG") )
 	    {
               sscanf ((*it).latin1(), "FG%d", &fg);
-              kdDebug()<<"  = Colornr "<< fg<<endl;
+              kDebug()<<"  = Colornr "<< fg<<endl;
 	    }
             else if ((*it).startsWith("TF") )
 	    {
               sscanf ((*it).latin1(), "TF%d", &fontnr);
-              kdDebug()<<" = Font :"<<fontnr<<" "<<typefacetab[fontnr]<<endl;
+              kDebug()<<" = Font :"<<fontnr<<" "<<typefacetab[fontnr]<<endl;
 	    }
             else if ((*it).startsWith("P") )
 	    {
               sscanf ((*it).latin1(), "P%d", &fontsize);
-              kdDebug()<<"   = Fontsize "<<fontsize<<endl;
+              kDebug()<<"   = Fontsize "<<fontsize<<endl;
 	    }
             else
 	    {
 
-                kdDebug()<<"   = ???\n";
+                kDebug()<<"   = ???\n";
 	    }
 	  }
-          kdDebug()<<""<<endl;
+          kDebug()<<""<<endl;
 
 
 
@@ -390,45 +390,45 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
           for (QStringList::Iterator it = typeFormList.begin(); it != typeFormList.end(); ++it )
           {
 	    // Output
-              //kdDebug()<< "   Type (%2d)   >%s< ",
+              //kDebug()<< "   Type (%2d)   >%s< ",
               //    nn, (*it).latin1() );
             nn++;
             // Grep horizontal alignment
             if      ( (*it) == "1")
             {
-                kdDebug()<< " = left align\n";
+                kDebug()<< " = left align\n";
               align = 1; // left
 	    }
             else if ( (*it) == "2")
             {
-                kdDebug()<< " = right align\n";
+                kDebug()<< " = right align\n";
               align = 3; // right
 	    }
             else if ( (*it) == "3")
             {
-                kdDebug()<< " = center align\n";
+                kDebug()<< " = center align\n";
               align = 2; // center
 	    }
 
             // Grep verticale alignment
             else if ( (*it) == "VT")
             {
-                kdDebug()<<" = top valign\n";
+                kDebug()<<" = top valign\n";
               valign =  1; // top
 	    }
             else if ( (*it) == "VC")
             {
-                kdDebug()<<" = center valign\n";
+                kDebug()<<" = center valign\n";
               valign =  0; // center - default (2)
 	    }
             else if ( (*it) == "VB")
             {
-                kdDebug()<<" = bottom valign\n";
+                kDebug()<<" = bottom valign\n";
               valign =  3; // bottom
 	    }
             else
 	    {
-                kdDebug()<<"   = ???\n";
+                kDebug()<<"   = ???\n";
 	    }
 	  }
 
@@ -456,7 +456,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
 
 	    if ((*it)[0] == 'T')
 	    {
-                kdDebug()<<" = top    \n";
+                kDebug()<<" = top    \n";
               transPenFormat ((*it), &topPenWidth, &topPenStyle);
 
               if ((*it).length() > 2)
@@ -469,7 +469,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
 
 	    else if ( (*it)[0] == 'B')
 	    {
-                kdDebug()<<" = bottom \n";
+                kDebug()<<" = bottom \n";
               transPenFormat ((*it), &bottomPenWidth, &bottomPenStyle);
 
               if ((*it).length() > 2)
@@ -481,7 +481,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
 
 	    else if ( (*it)[0] == 'L')
 	    {
-                kdDebug()<<" = left   \n";
+                kDebug()<<" = left   \n";
               transPenFormat ((*it), &leftPenWidth, &leftPenStyle);
 
               if ((*it).length() > 2)
@@ -493,7 +493,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
 
 	    else if ( (*it)[0] == 'R')
 	    {
-                kdDebug()<<" = right  \n";
+                kDebug()<<" = right  \n";
               transPenFormat ((*it), &rightPenWidth, &rightPenStyle);
 
               if ((*it).length() > 2)
@@ -506,13 +506,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
             else if ( ((*it).startsWith ("SH")) || ((*it).startsWith ("FG")) ||
                       ((*it).startsWith ("BG")) )
 	    {
-                kdDebug()<<" = \n";
+                kDebug()<<" = \n";
               filterSHFGBG ((*it), &brushstyle, &fg_bg, &brushcolor);
 	    }
 
             else
 	    {
-                kdDebug()<<"   = ???\n";
+                kDebug()<<"   = ???\n";
 	    }
 
           }
@@ -635,13 +635,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
     str += "</spreadsheet>\n";
 //  str += "</DOC>\n";
 
-    kdDebug ()<<"Text "<< str<<endl;
+    kDebug ()<<"Text "<< str<<endl;
 
     KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
 
     if (!out)
     {
-        kdError(38000/*30502*/) << "Unable to open output file!" << endl;
+        kError(38000/*30502*/) << "Unable to open output file!" << endl;
         in.close  ();
         return KoFilter::StorageCreationError;
     }
@@ -893,7 +893,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
    QString mystr;
 
    // Read the colormap
-   kdDebug()<<"Reading typeface table: \n";
+   kDebug()<<"Reading typeface table: \n";
 
    ok = true;
    do
@@ -909,7 +909,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
     }
     while (ok == true );
 
-   kdDebug()<<"... done \n";
+   kDebug()<<"... done \n";
 }
 
 
@@ -923,7 +923,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
   int contcount, ok, pos;
 
   QString colstr, mystr;
-  kdDebug ()<<"Reading colormap: \n";
+  kDebug ()<<"Reading colormap: \n";
 
   ok = true;
 
@@ -931,16 +931,16 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
   {
 
      mystr = nextLine( stream );
-     mystr.stripWhiteSpace ();
+     mystr.trimmed ();
 
      if (mystr == "END COLORMAP") ok = false;
      else
      {
-         kdDebug()<<"  ->  "<< mystr<<endl;
+         kDebug()<<"  ->  "<< mystr<<endl;
 
        // Count the number of  whitespaces
        contcount = mystr.contains (' ');
-       kdDebug()<< "contcount: "<< contcount<<endl;
+       kDebug()<< "contcount: "<< contcount<<endl;
        contcount -= 5;
 
        // Begin off interest
@@ -949,7 +949,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
        // get colorname
        colstr = mystr.left (pos);
        mystr.remove (0, pos+1);
-       mystr.stripWhiteSpace ();
+       mystr.trimmed ();
 
        t_mycolor *tmc = new t_mycolor;
 
@@ -978,7 +978,7 @@ APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mc
    }
    while (ok == true );
 
-  kdDebug()<< "... done "<< mcol.count()<<endl;
+  kDebug()<< "... done "<< mcol.count()<<endl;
 
 
    t_mycolor *emp;
@@ -1002,29 +1002,29 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
   QString mystr, tabname;
   int ok;
 
-  kdDebug()<<"Reading View\n";
+  kDebug()<<"Reading View\n";
 
    tabname = instr;
 
    tabname.remove (0, 19);
    tabname.remove (tabname.length()-2, 2);
-   kdDebug()<< "  - Table name: "<< tabname<<endl;
+   kDebug()<< "  - Table name: "<< tabname<<endl;
 
    ok = true;
    do
    {
      mystr = nextLine( stream );
 
-     kdDebug()<<"  "<< mystr<<endl;
+     kDebug()<<"  "<< mystr<<endl;
      if (mystr.startsWith ("View End, Name:")) ok = false;
      else
      {
        // COLUMN Widths
        if  (mystr.startsWith ("View Column Widths"))
        {
-           kdDebug()<< "   - Column Widths\n";
+           kDebug()<< "   - Column Widths\n";
 	  mystr.remove (0, 20);
-          kdDebug()<< "      "<<mystr<<endl;
+          kDebug()<< "      "<<mystr<<endl;
 
           int  colwidth, icolumn;
           char ccolumn;
@@ -1064,9 +1064,9 @@ APPLIXSPREADImport::readView (QTextStream &stream, QString instr, t_rc &rc)
        // ROW Heights
        else if  (mystr.startsWith ("View Row Heights"))
        {
-           kdDebug()<< "   - Row Heights\n";
+           kDebug()<< "   - Row Heights\n";
 	 mystr.remove (0, 17);
-         kdDebug()<<"      "<< mystr<<endl;
+         kDebug()<<"      "<< mystr<<endl;
 
          int irow, rowheight;
 
@@ -1306,19 +1306,19 @@ APPLIXSPREADImport::translateColumnNumber (QString colstr)
      // Upper chars
      if      ((colstr[p] >= 'A') && (colstr[p] <= 'Z'))
      {
-         kdDebug ()<<" UPPER\n";
+         kDebug ()<<" UPPER\n";
        icol = icol + ((int)pow ((double)x, 26) * (colstr[p].latin1() - 'A' + 1)  );
        x++;
      }
      // lower chars
      else if ((colstr[p] >= 'a') && (colstr[p] <= 'z'))
      {
-         kdDebug()<<" lower\n";
+         kDebug()<<" lower\n";
        icol = icol + ((int)pow ((double)x, 26) * (colstr[p].latin1() - 'a' + 1)  );
        x++;
      }
      p--;
-     kdDebug ()<< "HI 2\n";
+     kDebug ()<< "HI 2\n";
 
    }
 

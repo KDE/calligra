@@ -92,7 +92,7 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
 
 CSVExportDialog::~CSVExportDialog()
 {
-  kapp->setOverrideCursor(Qt::waitCursor);
+  kapp->setOverrideCursor(Qt::WaitCursor);
   delete m_delimiterValidator;
 }
 
@@ -232,7 +232,7 @@ bool CSVExportDialog::exportSelectionOnly() const
 QTextCodec* CSVExportDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kdDebug(30502) << "Encoding: " << strCodec << endl;
+    kDebug(30502) << "Encoding: " << strCodec << endl;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
@@ -251,7 +251,7 @@ QTextCodec* CSVExportDialog::getCodec(void) const
     if ( !codec || !ok )
     {
         // Default: UTF-8
-        kdWarning(30502) << "Cannot find encoding:" << strCodec << endl;
+        kWarning(30502) << "Cannot find encoding:" << strCodec << endl;
         // ### TODO: what parent to use?
         KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
         return 0;

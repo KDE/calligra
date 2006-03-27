@@ -20,12 +20,12 @@
 */
 
 #include <stdlib.h>		/* for atoi function */
-#include <kdebug.h>		/* for kdDebug() stream */
+#include <kdebug.h>		/* for kDebug() stream */
 #include "listepara.h"
 
 ListPara::ListPara()
 {
-	kdDebug(30522) << "Create liste para empty" << endl;
+	kDebug(30522) << "Create liste para empty" << endl;
 	_start  = 0;
 	_end    = 0;
 	_size   = 0;
@@ -33,14 +33,14 @@ ListPara::ListPara()
 
 ListPara::~ListPara()
 {
-	kdDebug(30522) << "Destruction of a list of parag" << endl;
+	kDebug(30522) << "Destruction of a list of parag" << endl;
 	vider();
-	kdDebug(30522) << "ok" << endl;
+	kDebug(30522) << "ok" << endl;
 }
 
 void ListPara::initialiser(Para *elt)
 {
-	kdDebug(30522) << "initialise a list of parag at " << elt << endl;
+	kDebug(30522) << "initialise a list of parag at " << elt << endl;
 	_end = _start = elt;
 }
 
@@ -53,7 +53,7 @@ void ListPara::add(Para *elt)
 	}
 	else
 	{
-		kdDebug(30522) << "add a parag." << endl;
+		kDebug(30522) << "add a parag." << endl;
 		_end->setNext(elt);
 		elt->setPrevious(_end);
 		_end  = elt;

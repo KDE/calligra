@@ -264,8 +264,8 @@ KWordFilter::parse (const QString & filename)
           layout.append( "  <BOTTOMBORDER width=\"0\" style=\"0\" />\n" );
           lm = LeftMargin + LeftMarginAdjust - frameLeftMargin;
           rm = RightMargin + RightMarginAdjust - frameRightMargin;
-          layout.append( "  <INDENTS left=\"" + QString::number( QMAX( 0, lm ) ) + "\"" + 
-                         " right=\"" + QString::number( QMAX( 0 , rm ) ) + "\"" +
+          layout.append( "  <INDENTS left=\"" + QString::number( qMax( 0, lm ) ) + "\"" + 
+                         " right=\"" + QString::number( qMax( 0 , rm ) ) + "\"" +
                          " first=\"0\" />\n" );
           layout.append( "  <OFFSETS />\n" );
           layout.append( "  <PAGEBREAKING />\n" );

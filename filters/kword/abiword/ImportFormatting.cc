@@ -61,10 +61,10 @@ void PopulateProperties(StackItem* stackItem, const QString& strStyleProps,
     }
 
     // Style goes first
-    kdDebug(30506)<< "===== from style=\"" << strStyleProps << "\"" << endl;
+    kDebug(30506)<< "===== from style=\"" << strStyleProps << "\"" << endl;
     abiPropsMap.splitAndAddAbiProps(strStyleProps);
     // Treat the props attributes in the two available flavors: lower case and upper case.
-    kdDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
+    kDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
     abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
     abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
 
@@ -326,7 +326,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
             }
             else
             {
-                kdWarning(30506) << "Unsupported line height " << lineHeight << " (Ignoring !)" << endl;
+                kWarning(30506) << "Unsupported line height " << lineHeight << " (Ignoring !)" << endl;
             }
         }
         else
@@ -338,7 +338,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
             {
                 if ( atleast )
                 {
-                    kdDebug(30506) << "at-least" << endl;
+                    kDebug(30506) << "at-least" << endl;
                     element.setAttribute( "type", "atleast" );
                 }
                 else
@@ -376,7 +376,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
                 type=0;
             else
             {
-                kdWarning(30506)<<"Unknown tabulator type: " << QString(tabType) << endl;
+                kWarning(30506)<<"Unknown tabulator type: " << QString(tabType) << endl;
                 type=0;
             }
             int filling;

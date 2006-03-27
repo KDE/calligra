@@ -45,7 +45,7 @@ KisTIFFImport::~KisTIFFImport()
 
 KoFilter::ConversionStatus KisTIFFImport::convert(const Q3CString&, const Q3CString& to)
 {
-    kdDebug(41008) << "Importing using TIFFImport!\n";
+    kDebug(41008) << "Importing using TIFFImport!\n";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

@@ -48,7 +48,7 @@ void ProcessSubtags ( const QDomNode             &parentNode,
                       Q3ValueList<TagProcessing>  &tagProcessingList,
                       KWEFKWordLeader            *leader)
 {
-    //kdDebug(30508) << "Starting ProcessSubtags for node: " << parentNode.nodeName() << endl;
+    //kDebug(30508) << "Starting ProcessSubtags for node: " << parentNode.nodeName() << endl;
 
     QDomNode childNode;
 
@@ -75,7 +75,7 @@ void ProcessSubtags ( const QDomNode             &parentNode,
 #ifdef DEBUG_KWORD_IGNORED_TAGS
                     else
                     {
-                        kdDebug(30508) << "Ignoring " << childNode.nodeName ()
+                        kDebug(30508) << "Ignoring " << childNode.nodeName ()
                             << " tag in " << parentNode.nodeName () << endl;
                     }
 #endif
@@ -85,12 +85,12 @@ void ProcessSubtags ( const QDomNode             &parentNode,
 
             if ( !found )
             {
-                kdDebug(30508) << "Unexpected tag " << childNode.nodeName ()
+                kDebug(30508) << "Unexpected tag " << childNode.nodeName ()
                     << " in " << parentNode.nodeName () << "!" << endl;
             }
         }
     }
-    //kdDebug(30508) << "Ending ProcessSubtags for node: " << parentNode.nodeName() << endl;
+    //kDebug(30508) << "Ending ProcessSubtags for node: " << parentNode.nodeName() << endl;
 }
 
 void AllowNoSubtags ( const QDomNode& myNode, KWEFKWordLeader *leader )
@@ -119,7 +119,7 @@ AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
         type = AttrNull;
     else
     {
-        kdWarning(30508) << "Unknown type: " << t << " for element " << n << " assuming NULL" << endl;
+        kWarning(30508) << "Unknown type: " << t << " for element " << n << " assuming NULL" << endl;
         type = AttrNull;
     }
 }
@@ -128,10 +128,10 @@ AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
 void ProcessAttributes ( const QDomNode              &myNode,
                          Q3ValueList<AttrProcessing>  &attrProcessingList )
 {
-    //kdDebug(30508) << "Starting ProcessAttributes for node: " << myNode.nodeName() << endl;
+    //kDebug(30508) << "Starting ProcessAttributes for node: " << myNode.nodeName() << endl;
 
     QDomNamedNodeMap myAttribs ( myNode.attributes () );
-    //kdDebug(30508) << "Attributes = " << myAttribs.length () <<endl;
+    //kDebug(30508) << "Attributes = " << myAttribs.length () <<endl;
     for ( uint i = 0; i <  myAttribs.length (); i++ )
     {
         QDomAttr myAttrib ( myAttribs.item (i).toAttr () );
@@ -146,7 +146,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
                   attrProcessingIt != attrProcessingList.end ();
                   attrProcessingIt++ )
             {
-              //kdDebug(30508) << "NAME: " << myAttrib.name () << " == " << (*attrProcessingIt).name <<endl;
+              //kDebug(30508) << "NAME: " << myAttrib.name () << " == " << (*attrProcessingIt).name <<endl;
                 if ( myAttrib.name () == (*attrProcessingIt).name )
                 {
                     found = true;
@@ -172,7 +172,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
                             }
                         case AttrProcessing::AttrBool:
                             {
-                                const QString strAttr ( myAttrib.value().simplifyWhiteSpace() );
+                                const QString strAttr ( myAttrib.value().simplified() );
                                 bool flag;
                                 if ((strAttr=="yes")||(strAttr=="1")||(strAttr=="true"))
                                 {
@@ -185,7 +185,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
                                 else
                                 {
                                     flag=false;
-                                    kdWarning(30508) << "Unknown value for a boolean: " << strAttr
+                                    kWarning(30508) << "Unknown value for a boolean: " << strAttr
                                         << " in tag " << myNode.nodeName () << ", attribute "
                                         << myAttrib.name() << endl;
                                 }
@@ -196,7 +196,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
                             break;
                         default:
                             {
-                                kdDebug(30508) << "Unexpected data type " << int( (*attrProcessingIt).type )
+                                kDebug(30508) << "Unexpected data type " << int( (*attrProcessingIt).type )
                                     << " in " << myNode.nodeName ()
                                     << " attribute " << (*attrProcessingIt).name
                                     << endl;
@@ -207,7 +207,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
 #ifdef DEBUG_KWORD_IGNORED_TAGS
                     else
                     {
-                        kdDebug(30508) << "Ignoring " << myNode.nodeName()
+                        kDebug(30508) << "Ignoring " << myNode.nodeName()
                             << " attribute " << (*attrProcessingIt).name
                             << endl;
                     }
@@ -218,12 +218,12 @@ void ProcessAttributes ( const QDomNode              &myNode,
 
             if ( !found )
             {
-                kdWarning(30508) << "Unexpected attribute " << myAttrib.name ()
+                kWarning(30508) << "Unexpected attribute " << myAttrib.name ()
                     << " in " << myNode.nodeName () << "!" << endl;
             }
         }
     }
-    //kdDebug(30508) << "Ending ProcessAttributes for node: " << myNode.nodeName() << endl;
+    //kDebug(30508) << "Ending ProcessAttributes for node: " << myNode.nodeName() << endl;
 }
 
 void AllowNoAttributes ( const QDomNode & myNode )

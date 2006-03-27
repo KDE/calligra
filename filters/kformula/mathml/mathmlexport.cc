@@ -34,6 +34,7 @@
 #include <kformuladocument.h>
 #include <kformulacontainer.h>
 #include <kformulamimesource.h>
+#include <kglobal.h>
 
 #include "mathmlexport.h"
 
@@ -74,12 +75,12 @@ KoFilter::ConversionStatus MathMLExport::convert( const Q3CString& from, const Q
         return KoFilter::FileNotFound;
     }
 
-    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( kapp->config(), 0 );
+    KFormula::DocumentWrapper* wrapper = new KFormula::DocumentWrapper( KGlobal::config(), 0 );
     KFormula::Document* doc = new KFormula::Document;
     wrapper->document( doc );
     KFormula::Container* formula = doc->createFormula();
     if ( !doc->loadXML( dom ) ) {
-        kdError() << "Failed." << endl;
+        kError() << "Failed." << endl;
     }
 
     QTextStream stream(&f);

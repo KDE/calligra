@@ -326,7 +326,7 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
         }
         else
         {
-            kdWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
+            kWarning(30503) << "Unknown alignment: " << layout.alignment << endl;
         }
     }
 
@@ -422,7 +422,7 @@ QString HtmlCssWorker::layoutToCss(const LayoutData& layoutOrigin,
             }
         default:
             {
-                kdWarning(30503) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                kWarning(30503) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
                 break;
             }
         }

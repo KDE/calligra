@@ -88,7 +88,7 @@ PngExport::convert( const Q3CString& from, const Q3CString& to )
 	// Create painter and set up objects to draw
 	VKoPainter p( img.bits(), rect.width(), rect.height() );
 	p.clear( qRgba( 0xFF, 0xFF, 0xFF, 0xFF ) );
-	p.setWorldMatrix( QMatrix().translate( -rect.x(), -rect.y() ) );
+	p.setMatrix( QMatrix().translate( -rect.x(), -rect.y() ) );
 	VObjectList objects = doc.selection()->objects();
 	VObjectListIterator itr = objects;
 

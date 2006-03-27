@@ -22,7 +22,7 @@
 
 void   xcf_save_choose_format (XcfInfo   *info,
 			       KisImage *gimage);
-Q_INT32   xcf_save_image         (XcfInfo   *info,
+qint32   xcf_save_image         (XcfInfo   *info,
 			       KisImage *gimage);
 
 

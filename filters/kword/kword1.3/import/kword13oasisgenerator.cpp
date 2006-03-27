@@ -55,7 +55,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
 {
     if ( ! frameset )
     {
-        kdWarning(30520) << "Tried to prepare a NULL text frameset!" << endl;
+        kWarning(30520) << "Tried to prepare a NULL text frameset!" << endl;
         return;
     }
 
@@ -73,7 +73,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
                 KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", (*it).m_layout.m_autoStyleName );
                 fillGenStyleWithFormatOne( *data , gs, false );
                 data->m_autoStyleName = m_oasisGenStyles.lookup( gs, "T" );
-                kdDebug(30520) << "Format: Parent " << (*it).m_layout.m_autoStyleName << " => " << data->m_autoStyleName << endl;
+                kDebug(30520) << "Format: Parent " << (*it).m_layout.m_autoStyleName << " => " << data->m_autoStyleName << endl;
             }
         }
     }
@@ -129,7 +129,7 @@ void KWord13OasisGenerator::preparePageLayout( void )
         style.addChildElement( "style:columns", strElement );
     }
     const QString automaticPageStyle ( m_oasisGenStyles.lookup( style, "pm" ) );
-    kdDebug(30520) << "Automatic page style: " << automaticPageStyle << endl;
+    kDebug(30520) << "Automatic page style: " << automaticPageStyle << endl;
 }
 
 
@@ -137,7 +137,7 @@ bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
 {
     if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
     {
-        kdWarning(30520) << "KWord Document is different!" <<endl;
+        kWarning(30520) << "KWord Document is different!" <<endl;
     }
 
     m_kwordDocument = &kwordDocument;
@@ -199,7 +199,7 @@ void KWord13OasisGenerator::declareLayout( KWord13Layout& layout )
 
     layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, "P", true );
 
-    kdDebug(30520) << "Layout: Parent " << layout.m_name << " => " << layout.m_autoStyleName << endl;
+    kDebug(30520) << "Layout: Parent " << layout.m_name << " => " << layout.m_autoStyleName << endl;
 }
 
 
@@ -223,7 +223,7 @@ void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
 
     layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, layout.m_name, false );
 
-    kdDebug(30520) << "Style: " << layout.m_name << " => " << layout.m_autoStyleName << endl;
+    kDebug(30520) << "Style: " << layout.m_name << " => " << layout.m_autoStyleName << endl;
 }
 
 
@@ -514,7 +514,7 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
 {
     if ( ! frameset )
     {
-        kdWarning(30520) << "Tried to generate a NULL text frameset!" << endl;
+        kWarning(30520) << "Tried to generate a NULL text frameset!" << endl;
         return;
     }
 
@@ -584,7 +584,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kdError(30520) << "Not possible to generate style.xml" << endl;
+        kError(30520) << "Not possible to generate style.xml" << endl;
         return;
     }
 
@@ -653,7 +653,7 @@ void KWord13OasisGenerator::writeContentXml(void)
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kdError(30520) << "Not possible to generate content.xml" << endl;
+        kError(30520) << "Not possible to generate content.xml" << endl;
         return;
     }
 
@@ -705,7 +705,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kdError(30520) << "Not possible to generate meta.xml" << endl;
+        kError(30520) << "Not possible to generate meta.xml" << endl;
         return;
     }
 
@@ -722,7 +722,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
     writer->startElement( "meta:generator" );
     QString strVersion;
     strVersion += "KWord-OneDotThree-Import-Filter/";
-    strVersion += QString( "$Revision$" ).mid( 10 ).remove( '$' ).stripWhiteSpace();
+    strVersion += QString( "$Revision$" ).mid( 10 ).remove( '$' ).trimmed();
     strVersion += " KOffice/";
     strVersion += KOFFICE_VERSION_STRING;
     writer->addTextSpan( strVersion );
@@ -828,7 +828,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kdError(30520) << "Not possible to generate preview file" << endl;
+        kError(30520) << "Not possible to generate preview file" << endl;
         return;
     }
 
@@ -836,7 +836,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
     QImage image( m_kwordDocument->m_previewFile->name() );
     if ( image.isNull() )
     {
-        kdWarning(30520) << "Could not re-read preview from temp file!" << endl;
+        kWarning(30520) << "Could not re-read preview from temp file!" << endl;
         return;
     }
 
@@ -844,7 +844,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
     QImage preview( image.convertDepth( 32, Qt::ColorOnly ).smoothScale( 128, 128 ) );
     if ( preview.isNull() )
     {
-        kdWarning(30520) << "Could not create preview!" << endl;
+        kWarning(30520) << "Could not create preview!" << endl;
         return;
     }
     if ( !preview.hasAlphaBuffer() )
@@ -865,7 +865,7 @@ void KWord13OasisGenerator::writePictures( void )
 {
     if ( !m_store || !m_kwordDocument )
     {
-        kdError(30520) << "Not possible to generate preview file" << endl;
+        kError(30520) << "Not possible to generate preview file" << endl;
         return;
     }
 
@@ -873,22 +873,22 @@ void KWord13OasisGenerator::writePictures( void )
     {
         if ( !it.current()->m_valid || !it.current()->m_tempFile )
         {
-            kdDebug(30520) << "No data for picture: " << it.currentKey() << endl;
+            kDebug(30520) << "No data for picture: " << it.currentKey() << endl;
             continue;
         }
         const QString fileName( it.current()->m_tempFile->name() );
         const QString oasisName( it.current()->getOasisPictureName() );
-        kdDebug(30520) << "Copying... " << it.currentKey() << endl << " => " << oasisName << endl;
+        kDebug(30520) << "Copying... " << it.currentKey() << endl << " => " << oasisName << endl;
         QFile file( fileName );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
-            kdWarning(30520) << "Cannot open: " << fileName << endl;
+            kWarning(30520) << "Cannot open: " << fileName << endl;
             continue;
         }
         QByteArray array( file.readAll() );
         if ( array.isNull() )
         {
-            kdWarning(30520) << "Null picture for " << fileName << endl;
+            kWarning(30520) << "Null picture for " << fileName << endl;
             file.close();
             continue;
         }
@@ -903,7 +903,7 @@ void KWord13OasisGenerator::writePictures( void )
             const QString mimeType ( KMimeType::findByContent( array, 0 )->name() );
             if ( mimeType == "application/octet-stream" )
             {
-                kdWarning(30520) << "Generic mime type for " << it.currentKey() << endl;
+                kWarning(30520) << "Generic mime type for " << it.currentKey() << endl;
                 // ### TODO: try harder to find a mime type
             }
             m_manifestWriter->addManifestEntry( oasisName, mimeType );
@@ -917,7 +917,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
 {
     if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
     {
-        kdWarning(30520) << "KWord Document is different!" <<endl;
+        kWarning(30520) << "KWord Document is different!" <<endl;
     }
 
     m_kwordDocument = &kwordDocument;
@@ -925,7 +925,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     m_store = KoStore::createStore( fileName, KoStore::Write, "application/vnd.sun.xml.writer", KoStore::Zip );
     if ( ! m_store )
     {
-        kdError(30520) << "Cannot create output KoStore" << endl;
+        kError(30520) << "Cannot create output KoStore" << endl;
         return false;
     }
     m_store->disallowNameExpansion();
@@ -963,7 +963,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     }
     else
     {
-        kdDebug(30520) << "No preview file available to make an OASIS thumbnail!" << endl;
+        kDebug(30520) << "No preview file available to make an OASIS thumbnail!" << endl;
     }
 
 

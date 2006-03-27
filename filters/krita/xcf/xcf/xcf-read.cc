@@ -31,17 +31,17 @@
 #include <Q3CString>
 
 
-Q_UINT32
+quint32
 xcf_read_int32 (FILE    *fp,
-		Q_INT32 *data,
-		Q_INT32     count)
+		qint32 *data,
+		qint32     count)
 {
-  Q_UINT32 total;
+  quint32 total;
 
   total = count;
   if (count > 0)
     {
-      xcf_read_int8 (fp, (Q_UINT8 *) data, count * 4);
+      xcf_read_int8 (fp, (quint8 *) data, count * 4);
 
       while (count--)
         {
@@ -53,21 +53,21 @@ xcf_read_int32 (FILE    *fp,
   return total * 4;
 }
 
-Q_UINT32
+quint32
 xcf_read_float (FILE   *fp,
 		float *data,
-		Q_INT32    count)
+		qint32    count)
 {
-  return xcf_read_int32 (fp, (Q_INT32 *) ((void *) data), count);
+  return xcf_read_int32 (fp, (qint32 *) ((void *) data), count);
 }
 
-Q_UINT32
+quint32
 xcf_read_int8 (FILE   *fp,
-	       Q_UINT8 *data,
-	       Q_INT32    count)
+	       quint8 *data,
+	       qint32    count)
 {
-  Q_UINT32 total;
-  Q_INT32  bytes;
+  quint32 total;
+  qint32  bytes;
 
   total = count;
   while (count > 0)
@@ -82,14 +82,14 @@ xcf_read_int8 (FILE   *fp,
   return total;
 }
 
-Q_UINT32
+quint32
 xcf_read_string (FILE   *fp,
 		 Q3CString **data,
-		 Q_INT32    count)
+		 qint32    count)
 {
-  Q_INT32 tmp;
-  Q_UINT32   total;
-  Q_INT32    i;
+  qint32 tmp;
+  quint32   total;
+  qint32    i;
 
   total = 0;
   for (i = 0; i < count; i++)
@@ -100,7 +100,7 @@ xcf_read_string (FILE   *fp,
           Q3CString *str;
 
           str = g_new (Q3CString, tmp);
-          total += xcf_read_int8 (fp, (Q_UINT8*) str, tmp);
+          total += xcf_read_int8 (fp, (quint8*) str, tmp);
 
           if (str[tmp - 1] != '\0')
             str[tmp - 1] = '\0';

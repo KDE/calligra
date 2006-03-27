@@ -129,7 +129,7 @@ KoFilter::ConversionStatus ImageExport::convert(const Q3CString& from, const Q3C
   page = doc.map()->findPage(dlg.selectedPage());
 
   if(!page) {
-    kdDebug() << "The page named " << dlg.selectedPage() << " wasn't found!!" << endl;
+    kDebug() << "The page named " << dlg.selectedPage() << " wasn't found!!" << endl;
     return KoFilter::InternalError;
   }
 
@@ -143,7 +143,7 @@ KoFilter::ConversionStatus ImageExport::convert(const Q3CString& from, const Q3C
     QSize customSize = dlg.customSize();
     float zw = (float)customSize.width() / (float)size.width();
     float zh = (float)customSize.height() / (float)size.height();
-    float z = QMIN(zw, zh);
+    float z = qMin(zw, zh);
 
     zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(), KoGlobal::dpiY());
     size = customSize;
