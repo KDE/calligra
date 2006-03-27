@@ -61,6 +61,7 @@ RubyScript::~RubyScript()
     NODE* old_tree = ruby_eval_tree; \
     ruby_eval_tree = d->m_compile;
 #define unselectScript() \
+    d->m_compile = 0; \
     ruby_eval_tree = old_tree;
 
 void RubyScript::compile()
