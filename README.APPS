@@ -1,10 +1,24 @@
-Here is the list of apps that will be develloped in the 1.6 cycle:
+This directory contains the source code for the upcoming KOffice 1.6.
+The 1.6 release is a kind of "in-between" release, and not program
+will be actively developed here.  The real development will happen in
+trunk, and will eventually lead to KOffice version 2.0, which will be
+based on Qt4 and kdelibs4.
+
+The maintainers of some programs have announced that they think that
+the release cycle for 2.0 is too long and want a feature release in
+between 1.5 and 2.0.  For all the rest of the programs, bugfixes that
+are committed in the 1.5 branch will be forward ported to 1.6 at the
+time of the release. 
+
+Here is the list of applications that will be developed in the 1.6
+cycle:
+
 - kchart
 - kexi
 - krita
 - kdgantt
 
-It's up to the maintainer of those apps to merge their change with trunk, and with 1.5 for bug fixed.
-
-Here is the list of apps that won't be develloped in the 1.6 cycle, which mean that any modification made here will be lost when 1.6 is released:
-- kword
+It is up to the maintainer of those applications to merge their change with
+trunk, and with 1.5 for fixed bugs.  For all the rest of the
+applications / subdirectories, all changes for 1.5 will be forward
+ported as described above.
