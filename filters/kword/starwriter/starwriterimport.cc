@@ -103,7 +103,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const Q3CString& from, cons
     if (out) {
         Q3CString cstring = maindoc.utf8();
         cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        out->writeBlock((const char*) cstring, cstring.length());
+        out->write((const char*) cstring, cstring.length());
     }
 
     return KoFilter::OK;

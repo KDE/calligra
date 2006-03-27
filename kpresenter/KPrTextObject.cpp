@@ -747,7 +747,7 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
             if ( paragLayout.margins[ QStyleSheetItem::MarginBottom ] == 0 )
                 paragLayout.margins[ QStyleSheetItem::MarginBottom ] = bottomBorder;
             lastParag->setParagLayout( paragLayout );
-            //lastParag->setAlign(Qt::AlignAuto);
+            //lastParag->setAlign(Qt::AlignLeft);
 
             if(e.hasAttribute(attrAlign))
             {
@@ -1840,7 +1840,7 @@ void KPrTextView::paste()
 #if 0
             QFile paste( "/tmp/oasis.tmp" );
             paste.open( QIODevice::WriteOnly );
-            paste.writeBlock( arr );
+            paste.write( arr );
             paste.close();
 #endif
             KCommand *cmd = kpTextObject()->pasteOasis( cursor(), arr, true );

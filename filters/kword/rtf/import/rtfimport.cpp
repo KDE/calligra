@@ -1532,7 +1532,7 @@ void RTFImport::parsePicture( RTFProperty * )
         // Store picture
         KoStoreDevice* dev = m_chain->storageFile( pictName, KoStore::Write );
         if ( dev )
-            dev->writeBlock(picture.bits.data(),picture.bits.size());
+            dev->write(picture.bits.data(),picture.bits.size());
         else
             kError(30515) << "Could not save: " << pictName << endl;
 

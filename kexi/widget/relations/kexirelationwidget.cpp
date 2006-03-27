@@ -56,7 +56,7 @@ KexiRelationWidget::KexiRelationWidget(KexiMainWindow *win, QWidget *parent,
 	m_tableCombo->setMinimumWidth(QFontMetrics(font()).width("w")*20);
 	QLabel *lbl = new QLabel(m_tableCombo, i18n("Table")+": ", this);
 	lbl->setIndent(3);
-	m_tableCombo->setInsertionPolicy(QComboBox::NoInsertion);
+	m_tableCombo->setInsertPolicy(QComboBox::NoInsert);
 	hlyr->addWidget(lbl);
 	hlyr->addWidget(m_tableCombo);
 	m_tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));

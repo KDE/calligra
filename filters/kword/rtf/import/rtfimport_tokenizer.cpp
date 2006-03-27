@@ -37,7 +37,7 @@ void RTFTokenizer::open( QFile *in )
 int RTFTokenizer::nextChar()
 {
     if ( fileBufferPtr == fileBufferEnd ) {
-        int n = infile->readBlock( fileBuffer.data(), fileBuffer.size() );
+        int n = infile->read( fileBuffer.data(), fileBuffer.size() );
         fileBufferPtr = ( uchar* ) fileBuffer.data();
         fileBufferEnd = fileBufferPtr;
 

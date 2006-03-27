@@ -439,7 +439,7 @@ QString Document::extractData(QString key)
 
 	while ( readBytes > 0 )
 	{
-		tempFile->writeBlock( buffer, readBytes );
+		tempFile->write( buffer, readBytes );
 		readBytes = getStorage()->read( buffer, buflen );
 	}
 	temp.close();

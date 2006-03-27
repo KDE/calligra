@@ -156,7 +156,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( Q3CString const & from, Q3CS
         Q3CString cstr = mainDocument.toCString();
         kDebug(30518)<<" maindoc: " << cstr << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-        out->writeBlock( cstr, cstr.length() );
+        out->write( cstr, cstr.length() );
     }
 
     QDomDocument docinfo;
@@ -169,7 +169,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( Q3CString const & from, Q3CS
         Q3CString info = docinfo.toCString();
         kDebug(30518)<<" info :"<<info<<endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-        out->writeBlock( info , info.length() );
+        out->write( info , info.length() );
     }
 
     // store preview

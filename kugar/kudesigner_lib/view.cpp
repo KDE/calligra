@@ -83,7 +83,7 @@ void SelectionRect::draw( QPainter & painter )
             mp.convertFromImage(im,  Qt::OrderedAlphaDither);
 
             kDebug(31000) << "creating brush" << endl;
-            QBrush br(KGlobalSettings::highlightColor(),Qt::CustomPattern);
+            QBrush br(KGlobalSettings::highlightColor(),Qt::TexturePattern);
             br.setPixmap(mp);
             painter.setBrush(br);
         }

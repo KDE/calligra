@@ -47,8 +47,8 @@ The default font is set for all cells in the Format -&gt; Style Manager menu wit
                     <property name="name">
                         <cstring>style_combo</cstring>
                     </property>
-                    <property name="insertionPolicy">
-                        <enum>NoInsertion</enum>
+                    <property name="insertPolicy">
+                        <enum>NoInsert</enum>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to Varying (No Change) and leaving it that way will keep all your current style settings for each cell. Changing to Roman for example will change all the selected cells style text to Roman.</string>
@@ -73,8 +73,8 @@ The default font is set for all cells in the Format -&gt; Style Manager menu wit
                     <property name="name">
                         <cstring>weight_combo</cstring>
                     </property>
-                    <property name="insertionPolicy">
-                        <enum>NoInsertion</enum>
+                    <property name="insertPolicy">
+                        <enum>NoInsert</enum>
                     </property>
                     <property name="whatsThis" stdset="0">
                         <string>Choose the weight for your font for the currently selected cells. When you select several cells with different font weight, the displayed weight is set to Varying (No Change) and leaving it that way will keep all your current weight settings for each cell. Changing to Bold for example will change all the selected cells font weight to Bold.</string>

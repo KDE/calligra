@@ -69,7 +69,7 @@ KoFilter::ConversionStatus WMFImport::convert( const Q3CString& from, const Q3CS
     QDomDocument outdoc = document.saveXML();
     Q3CString content = outdoc.toCString();
     // kDebug() << " content : " << content << endl;
-    out->writeBlock( content , content.length() );
+    out->write( content , content.length() );
 
     return KoFilter::OK;
 }

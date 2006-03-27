@@ -525,7 +525,7 @@ StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesig
 		QRadioButton *radio = static_cast<QRadioButton*>(w);
 		QRect r = w->style().subRect(QStyle::SR_RadioButtonContents, w);
 		QRect editorRect = QRect(radio->x() + r.x(), radio->y() + r.y(), r.width(), r.height());
-		createEditor(classname, radio->text(), radio, container, editorRect, Qt::AlignAuto);
+		createEditor(classname, radio->text(), radio, container, editorRect, Qt::AlignLeft);
 		return true;
 	}
 	else if(classname == "QCheckBox")
@@ -535,7 +535,7 @@ StdWidgetFactory::startEditing(const QCString &classname, QWidget *w, KFormDesig
 		//r.setX(r.x() + 20);
 		QRect r = w->style().subRect(QStyle::SR_CheckBoxContents, w);
 		QRect editorRect = QRect(check->x() + r.x(), check->y() + r.y(), r.width(), r.height());
-		createEditor(classname, check->text(), check, container, editorRect, Qt::AlignAuto);
+		createEditor(classname, check->text(), check, container, editorRect, Qt::AlignLeft);
 		return true;
 	}
 	else if((classname == "KComboBox") || (classname == "KListBox"))

@@ -2591,8 +2591,8 @@ void KexiTableView::vScrollBarValueChanged(int v)
 		d->scrollBarTip->adjustSize();
 		d->scrollBarTip->move( 
 		 mapToGlobal( r.topLeft() + verticalScrollBar()->pos() ) + QPoint( - d->scrollBarTip->width()-5, r.height()/2 - d->scrollBarTip->height()/2) );
-		if (verticalScrollBar()->draggingSlider()) {
-			kDebug(44021) << "  draggingSlider()  " << endl;
+		if (verticalScrollBar()->isSliderDown()) {
+			kDebug(44021) << "  isSliderDown()  " << endl;
 			d->scrollBarTipTimer.stop();
 			d->scrollBarTip->show();
 			d->scrollBarTip->raise();

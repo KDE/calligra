@@ -109,7 +109,7 @@ KoFilter::ConversionStatus MSODImport::convert( const Q3CString& from, const Q3C
         return KoFilter::StorageCreationError;
     }
     Q3CString cstring ( m_text.utf8() );
-    dev->writeBlock(cstring.data(), cstring.size()-1);
+    dev->write(cstring.data(), cstring.size()-1);
 
     return KoFilter::OK;
 }
@@ -196,7 +196,7 @@ void MSODImport::gotPicture(
     {
         // We could not import it as a part. Try as an image.
         KTempFile tempFile( QString::null, '.' + extension );
-        tempFile.file()->writeBlock( data, length );
+        tempFile.file()->write( data, length );
         tempFile.close();
 
         m_text += "<pixmap src=\"" + tempFile.name() + "\">\n"
@@ -287,7 +287,7 @@ void MSODImport::gotRectangle(
 void MSODImport::savePartContents( QIODevice* file )
 {
     if ( m_embeddeeData != 0 && m_embeddeeLength != 0 )
-        file->writeBlock( m_embeddeeData, m_embeddeeLength );
+        file->write( m_embeddeeData, m_embeddeeLength );
 }
 
 void MSODImport::pointArray(

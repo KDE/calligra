@@ -60,7 +60,7 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
     Q_LONG len = reader.size();
     while ( len > 0 )  {
         size_t n = reader.read( buf, qMin( len, IMG_BUF_SIZE ) );
-        Q_LONG n1 = dev->writeBlock( (const char*)buf, n );
+        Q_LONG n1 = dev->write( (const char*)buf, n );
         Q_ASSERT( (size_t)n1 == n );
         if ( (size_t)n1 != n )
             return; // ouch

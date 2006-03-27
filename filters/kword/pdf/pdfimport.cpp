@@ -136,7 +136,7 @@ KoFilter::ConversionStatus PdfImport::convert(const Q3CString& from,
     }
 //    kDebug(30516) << data.document().toCString() << endl;
     Q3CString cstr = data.document().toCString();
-    out->writeBlock(cstr, cstr.length());
+    out->write(cstr, cstr.length());
     out->close();
 
     treatInfoDocument();
@@ -175,7 +175,7 @@ void PdfImport::treatInfoDocument()
         kWarning(30516) << "unable to open doc info. continuing anyway\n";
 	else {
 		Q3CString cstr = infoDocument.toCString();
-		out->writeBlock(cstr, cstr.length());
+		out->write(cstr, cstr.length());
 		out->close();
 	}
 }

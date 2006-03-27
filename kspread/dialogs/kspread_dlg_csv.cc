@@ -225,7 +225,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
       return;
     }
     m_fileArray = QByteArray(in.size());
-    in.readBlock(m_fileArray.data(), in.size());
+    in.read(m_fileArray.data(), in.size());
     in.close();
   }
   else

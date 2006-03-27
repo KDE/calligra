@@ -311,7 +311,7 @@ KoFilter::ConversionStatus WPImport::convert( const Q3CString& from, const Q3CSt
       Q3CString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       //qDebug("RESULT:\n%s", (const char*)cstring );
-      out->writeBlock( (const char*) cstring, cstring.length() );
+      out->write( (const char*) cstring, cstring.length() );
     }
 
   return KoFilter::OK;

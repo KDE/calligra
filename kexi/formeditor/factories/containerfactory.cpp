@@ -659,14 +659,14 @@ ContainerFactory::startEditing(const QCString &classname, QWidget *w, KFormDesig
 	{
 		QButtonGroup *group = static_cast<QButtonGroup*>(w);
 		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
-		createEditor(classname, group->title(), group, container, r, Qt::AlignAuto);
+		createEditor(classname, group->title(), group, container, r, Qt::AlignLeft);
 		return true;
 	}
 	if(classname == "QGroupBox")
 	{
 		QGroupBox *group = static_cast<QGroupBox*>(w);
 		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
-		createEditor(classname, group->title(), group, container, r, Qt::AlignAuto);
+		createEditor(classname, group->title(), group, container, r, Qt::AlignLeft);
 		return true;
 	}
 	return false;

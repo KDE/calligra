@@ -759,7 +759,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
         if ( hasFrames ) {
             reg = frameClipRegion( p, theFrame, clip, m_currentViewMode );
             if ( !isFloating() ) // problem with multiparent inline frames
-                reg &= p->xForm( viewFrameRect );
+                reg &= p->transformed( viewFrameRect );
         }
 
         if ( !hasFrames || !reg.isEmpty() )

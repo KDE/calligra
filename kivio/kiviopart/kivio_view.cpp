@@ -198,7 +198,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ),
       SLOT( popupTabBarMenu( const QPoint& ) ) );
   connect(m_pTabBar, SIGNAL(tabMoved(unsigned, unsigned)), this, SLOT(moveTab(unsigned, unsigned)));
-  m_pTabBar->setReverseLayout( QApplication::reverseLayout() );
+  m_pTabBar->setReverseLayout( QApplication::isRightToLeft() );
 
   // Scroll Bar
   m_vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
@@ -1960,7 +1960,7 @@ void KivioView::textSubScript()
 void KivioView::showAlign( int align )
 {
   switch ( align ) {
-    case Qt::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
+    case Qt::AlignLeft: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
       kWarning(43000) << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
       // fallthrough
     case Qt::AlignLeft:

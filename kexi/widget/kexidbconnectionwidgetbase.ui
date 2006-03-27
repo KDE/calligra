@@ -384,8 +384,8 @@
                     <property name="editable">
                         <bool>true</bool>
                     </property>
-                    <property name="insertionPolicy">
-                        <enum>NoInsertion</enum>
+                    <property name="insertPolicy">
+                        <enum>NoInsert</enum>
                     </property>
                     <property name="autoCompletion">
                         <bool>true</bool>

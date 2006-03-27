@@ -494,7 +494,7 @@ KexiDBFactory::startEditing(const QCString &classname, QWidget *w, KFormDesigner
 		KexiDBCheckBox *cb = static_cast<KexiDBCheckBox*>(w);
 		QRect r( cb->geometry() );
 		r.setLeft( r.left() + 2 + cb->style().subRect( QStyle::SR_CheckBoxIndicator, cb ).width() );
-		createEditor(classname, cb->text(), cb, container, r, Qt::AlignAuto);
+		createEditor(classname, cb->text(), cb, container, r, Qt::AlignLeft);
 		return true;
 	}
 	else if(classname == "KexiDBImageBox") {

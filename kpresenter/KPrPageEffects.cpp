@@ -766,7 +766,7 @@ bool KPrPageEffects::effectFlyAway1()
 
         QMatrix m;
         m.scale( dw, dw );
-        QPixmap pix( m_pageFrom.xForm( m ) );
+        QPixmap pix( m_pageFrom.transformed( m ) );
 
         if ( m_effectStep == pSteps )
             m_pageFrom = pix;

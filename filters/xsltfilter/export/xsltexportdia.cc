@@ -247,12 +247,12 @@ void XSLTExportDia::okSlot()
 
 	const Q_LONG buflen = 4096;
 	char buffer[ buflen ];
-	Q_LONG readBytes = _in->readBlock( buffer, buflen );
+	Q_LONG readBytes = _in->read( buffer, buflen );
 
 	while ( readBytes > 0 )
 	{
-		tempFile->writeBlock( buffer, readBytes );
-		readBytes = _in->readBlock( buffer, buflen );
+		tempFile->write( buffer, readBytes );
+		readBytes = _in->read( buffer, buflen );
 	}
 	temp.close();
 

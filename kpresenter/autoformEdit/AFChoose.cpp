@@ -68,7 +68,7 @@ void AFChoose::getGroups()
                 grpPtr->dir.setFile(directory);
                 QDir d(directory);
                 if(d.exists(".directory")) {
-                    KSimpleConfig config(d.absPath()+"/.directory", true);
+                    KSimpleConfig config(d.absolutePath()+"/.directory", true);
                     config.setDesktopGroup();
                     grpPtr->name=config.readEntry("Name");
                 }

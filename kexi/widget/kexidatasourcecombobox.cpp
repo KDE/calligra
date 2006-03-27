@@ -67,7 +67,7 @@ KexiDataSourceComboBox::KexiDataSourceComboBox(QWidget *parent, const char *name
  : KComboBox(true/*rw*/, parent, name)
  , d(new Private())
 {
-	setInsertionPolicy(NoInsertion);
+	setInsertPolicy(NoInsert);
 	setCompletionMode(KGlobalSettings::CompletionPopupAuto);
 	setSizeLimit( 16 );
 	connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));

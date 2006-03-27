@@ -236,7 +236,7 @@ QString KexiStartupFileDialog::currentFileName()
 //	QString path = selectedFile();
 	//js @todo
 //	kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text() << endl;
-	QString path = dir()->absPath();
+	QString path = dir()->absolutePath();
 	if (!path.endsWith("/") && !path.endsWith("\\"))
 		path.append("/");
   path += m_lineEdit->text();

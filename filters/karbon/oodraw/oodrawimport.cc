@@ -102,7 +102,7 @@ if( out )
 QCString info = docinfo.toCString();
 //kDebug() << " info :" << info << endl;
 // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-out->writeBlock( info , info.length() );
+out->write( info , info.length() );
 }*/
     QDomDocument docinfo;
     createDocumentInfo( docinfo );
@@ -113,7 +113,7 @@ out->writeBlock( info , info.length() );
         Q3CString info = docinfo.toCString();
         //kDebug(30518) << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-        out->writeBlock( info , info.length() );
+        out->write( info , info.length() );
     }
 
     convert();
@@ -131,7 +131,7 @@ out->writeBlock( info , info.length() );
     {
         Q3CString content = outdoc.toCString();
         kDebug() << " content :" << content << endl;
-        out->writeBlock( content , content.length() );
+        out->write( content , content.length() );
     }
     m_zip->close();
     delete m_zip;

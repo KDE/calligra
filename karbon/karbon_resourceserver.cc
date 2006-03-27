@@ -207,7 +207,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 	out.open( QIODevice::WriteOnly );
 
 	while( !in.atEnd() )
-		out.writeBlock( buffer, in.readBlock( buffer, 1024 ) );
+		out.write( buffer, in.read( buffer, 1024 ) );
 
 	out.close();
 	in.close();

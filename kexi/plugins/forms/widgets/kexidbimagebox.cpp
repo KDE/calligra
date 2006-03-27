@@ -84,7 +84,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	: QWidget( parent, name, WNoAutoErase )
 	, KexiFormDataItemInterface()
 	, m_actionCollection(this)
-	, m_alignment(Qt::AlignAuto|Qt::AlignTop)
+	, m_alignment(Qt::AlignLeft|Qt::AlignTop)
 	, m_designMode(designMode)
 	, m_readOnly(false)
 	, m_scaledContents(false)
@@ -408,7 +408,7 @@ void KexiDBImageBox::saveAs()
 		//! @todo err msg
 		return;
 	}
-	f.writeBlock( data() );
+	f.write( data() );
 	if (f.status()!=IO_Ok) {
 		//! @todo err msg
 		f.close();
@@ -527,7 +527,7 @@ void KexiDBImageBox::slotChooserPressed()
 		return;
 	QRect screen = qApp->desktop()->availableGeometry( m_chooser );
 	QPoint p;
-	if ( QApplication::reverseLayout() ) {
+	if ( QApplication::isRightToLeft() ) {
 		if ( mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popup->sizeHint().height() <= screen.height() )
 			p = m_chooser->mapToGlobal( m_chooser->rect().bottomRight() );
 		else

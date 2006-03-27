@@ -76,7 +76,7 @@ XMLTree::~XMLTree()
                  // quite small file :( )
 
 // David: gdb says that QString::replace calls itself recursively an enormous amount of time
-// This is called by QStringBuffer::writeBlock (), called by QTextStream::writeBlock ()
+// This is called by QStringBuffer::write (), called by QTextStream::writeBlock ()
 // called by QTextStream::operator<< () in QDOM_AttrPrivate::save ().
 //
 // And this looks related to the UTF 8 encoding ...

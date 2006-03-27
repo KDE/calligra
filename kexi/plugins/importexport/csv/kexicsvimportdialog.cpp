@@ -207,7 +207,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	glyr->addMultiCellWidget( m_delimiterWidget, 1, 2, 0, 0 );
 
 	QLabel *delimiterLabel = new QLabel(m_delimiterWidget, i18n("Delimiter:"), page);
-	delimiterLabel->setAlignment(Qt::AlignAuto | Qt::AlignBottom);
+	delimiterLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	glyr->addMultiCellWidget( delimiterLabel, 0, 0, 0, 0 );
 
 	// Format: number, text, currency,
@@ -221,7 +221,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	glyr->addMultiCellWidget( m_formatCombo, 1, 1, 1, 1 );
 
 	m_formatLabel = new QLabel(m_formatCombo, "", page);
-	m_formatLabel->setAlignment(Qt::AlignAuto | Qt::AlignBottom);
+	m_formatLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	glyr->addWidget( m_formatLabel, 0, 1 );
 
 	m_primaryKeyField = new QCheckBox( i18n( "Primary key" ), page, "m_primaryKeyField" );
@@ -233,7 +233,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 
 	TextLabel2 = new QLabel( m_comboQuote, i18n( "Text quote:" ), page, "TextLabel2" );
 	TextLabel2->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
-	TextLabel2->setAlignment(Qt::AlignAuto | Qt::AlignBottom);
+	TextLabel2->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	glyr->addWidget( TextLabel2, 0, 2 );
 
 	m_startAtLineSpinBox = new KIntSpinBox( page, "m_startAtLineSpinBox" );
@@ -245,7 +245,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_startAtLineLabel = new QLabel( m_startAtLineSpinBox, "", 
 		page, "TextLabel3" );
 	m_startAtLineLabel->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
-	m_startAtLineLabel->setAlignment(Qt::AlignAuto | Qt::AlignBottom);
+	m_startAtLineLabel->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
 	glyr->addWidget( m_startAtLineLabel, 0, 3 );
 
 	QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );

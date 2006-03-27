@@ -351,7 +351,7 @@ KoFilter::ConversionStatus AmiProImport::convert( const Q3CString& from, const Q
     {
       Q3CString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-      out->writeBlock( (const char*) cstring, cstring.length() );
+      out->write( (const char*) cstring, cstring.length() );
     }
 
   // store document info
@@ -361,7 +361,7 @@ KoFilter::ConversionStatus AmiProImport::convert( const Q3CString& from, const Q
        Q3CString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
-       out->writeBlock( (const char*) cstring, cstring.length() );
+       out->write( (const char*) cstring, cstring.length() );
      }
 
   return KoFilter::OK;

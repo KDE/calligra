@@ -89,7 +89,7 @@ AiImport::convert( const Q3CString& from, const Q3CString& to )
 	}
 
 	Q3CString cStr = result.latin1();
-	storeOut->writeBlock( cStr, cStr.size() - 1 );
+	storeOut->write( cStr, cStr.size() - 1 );
 
 	return KoFilter::OK;
 }

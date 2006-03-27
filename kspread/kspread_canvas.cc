@@ -1861,12 +1861,12 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     // workaround to allow horizontal resizing and zoom changing when sheet
     // direction and interface direction don't match (e.g. an RTL sheet on an
     // LTR interface)
-    if ( activeSheet() && activeSheet()->layoutDirection()==Sheet::RightToLeft && !QApplication::reverseLayout() )
+    if ( activeSheet() && activeSheet()->layoutDirection()==Sheet::RightToLeft && !QApplication::isRightToLeft() )
     {
         int dx = _ev->size().width() - _ev->oldSize().width();
         scroll(dx, 0);
     }
-    else if ( activeSheet() && activeSheet()->layoutDirection()==Sheet::LeftToRight && QApplication::reverseLayout() )
+    else if ( activeSheet() && activeSheet()->layoutDirection()==Sheet::LeftToRight && QApplication::isRightToLeft() )
     {
         int dx = _ev->size().width() - _ev->oldSize().width();
         scroll(-dx, 0);
@@ -5729,12 +5729,12 @@ void HBorder::resizeEvent( QResizeEvent* _ev )
   // workaround to allow horizontal resizing and zoom changing when sheet
   // direction and interface direction don't match (e.g. an RTL sheet on an
   // LTR interface)
-  if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==Sheet::RightToLeft && !QApplication::reverseLayout() )
+  if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==Sheet::RightToLeft && !QApplication::isRightToLeft() )
   {
     int dx = _ev->size().width() - _ev->oldSize().width();
     scroll(dx, 0);
   }
-  else if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==Sheet::LeftToRight && QApplication::reverseLayout() )
+  else if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==Sheet::LeftToRight && QApplication::isRightToLeft() )
   {
     int dx = _ev->size().width() - _ev->oldSize().width();
     scroll(-dx, 0);

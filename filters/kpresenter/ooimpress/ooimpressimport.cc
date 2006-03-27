@@ -108,7 +108,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( Q3CString const & from, Q3C
         Q3CString info = docinfo.toCString();
         //kDebug(30518) << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-        out->writeBlock( info , info.length() );
+        out->write( info , info.length() );
     }
 
     QDomDocument doccontent;
@@ -120,7 +120,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( Q3CString const & from, Q3C
     {
         Q3CString content = doccontent.toCString();
         kDebug(30518) << " content :" << content << endl;
-        out->writeBlock( content , content.length() );
+        out->write( content , content.length() );
     }
 
     m_zip->close();
@@ -2047,7 +2047,7 @@ QString OoImpressImport::storeImage( const QDomElement& object )
     if ( file && out )
     {
         QByteArray buffer = file->data();
-        out->writeBlock( buffer.data(), buffer.size() );
+        out->write( buffer.data(), buffer.size() );
     }
 
     return fileName;
@@ -2079,9 +2079,9 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
         QByteArray data(8*1024);
 
         uint total = 0;
-        for ( int block = 0; ( block = file.readBlock(data.data(), data.size()) ) > 0;
+        for ( int block = 0; ( block = file.read(data.data(), data.size()) ) > 0;
               total += block )
-            out->writeBlock(data.data(), data.size());
+            out->write(data.data(), data.size());
 
         Q_ASSERT(total == fi.size());
 

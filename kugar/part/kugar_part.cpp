@@ -207,7 +207,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
 /*            kDebug() << "localtpl opened" << endl;*/
             // Try to find out whether it is a mime multi part file
             char buf[ 5 ];
-            if ( f.readBlock( buf, 4 ) == 4 )
+            if ( f.read( buf, 4 ) == 4 )
             {
                 bool isRawXML = ( strncasecmp( buf, "<?xm", 4 ) == 0 );
                 f.close();

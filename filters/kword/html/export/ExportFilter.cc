@@ -226,7 +226,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
                 return false;
             }
 
-            file.writeBlock(image);
+            file.write(image);
             file.close();
         }
     }

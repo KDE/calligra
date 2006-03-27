@@ -181,7 +181,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const Q3CString& from, const 
                 QFile file( kwordDocument.m_previewFile->name() );
                 // ### TODO: check if file is correctly written
                 file.open( QIODevice::WriteOnly );
-                file.writeBlock( image );
+                file.write( image );
                 file.close();
             }
             ioPreview.close();

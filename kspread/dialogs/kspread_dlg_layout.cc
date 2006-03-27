@@ -2001,7 +2001,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
   size_combo->insertStringList( lst );
 
 
-  size_combo->setInsertionPolicy(QComboBox::NoInsertion);
+  size_combo->setInsertPolicy(QComboBox::NoInsert);
 
   connect( size_combo, SIGNAL(activated(const QString &)),
            SLOT(size_chosen_slot(const QString &)) );

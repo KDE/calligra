@@ -76,7 +76,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const Q3CString& from, const Q
     }
     Q3CString cstr = mainDocument.toCString();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-    out->writeBlock( cstr, cstr.length() );
+    out->write( cstr, cstr.length() );
     out->close();
 
     out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
@@ -85,7 +85,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const Q3CString& from, const Q
     }
 
     cstr = documentInfo.toCString();
-    out->writeBlock( cstr, cstr.length() );
+    out->write( cstr, cstr.length() );
     out->close();
 
     kDebug(30513) << "######################## MSWordImport::convert done ####################" << endl;

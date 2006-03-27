@@ -371,7 +371,7 @@ void KexiStartupDialog::setupPageTemplates()
 	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 	lbl_blank = new QLabel( 
 		i18n("Kexi will create a new blank database project.")+clickMsg, templPageFrame );
-	lbl_blank->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::TextWordWrap);
+	lbl_blank->setAlignment(Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap);
 	lbl_blank->setMargin(0);
 	tmplyr->addWidget( lbl_blank );
 	tmplyr->addStretch(1);
@@ -385,7 +385,7 @@ void KexiStartupDialog::setupPageTemplates()
 	lbl_blank = new QLabel( 
 		i18n("Kexi will import the structure and data of an existing database as a new database project.")
 		+clickMsg, templPageFrame );
-	lbl_blank->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::TextWordWrap);
+	lbl_blank->setAlignment(Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap);
 	lbl_blank->setMargin(0);
 	tmplyr->addWidget( lbl_blank );
 	tmplyr->addStretch(1);

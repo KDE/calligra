@@ -114,7 +114,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const Q3CString& from, const Q3CS
 		return KoFilter::StorageCreationError;
 	}
 	Q3CString cstring = outdoc.toCString(); // utf-8 already
-	out->writeBlock( cstring.data(), cstring.length() );
+	out->write( cstring.data(), cstring.length() );
 
 	return KoFilter::OK; // was successful
 }

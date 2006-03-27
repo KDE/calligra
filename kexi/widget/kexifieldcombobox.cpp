@@ -77,7 +77,7 @@ KexiFieldComboBox::KexiFieldComboBox(QWidget *parent, const char *name)
 	bmp.fill(Qt::color0);
 	d->noIcon.setMask(bmp);
 
-	setInsertionPolicy(NoInsertion);
+	setInsertPolicy(NoInsert);
 	setCompletionMode(KGlobalSettings::CompletionPopupAuto);
 	setSizeLimit( 16 );
 	connect(this, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));

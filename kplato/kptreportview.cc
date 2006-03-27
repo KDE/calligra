@@ -434,7 +434,7 @@ void ReportView::openTemplateFile(const QString &file) {
     }
     // Try to find out whether it is a mime multi part file
     char buf[5];
-    if ( in.readBlock( buf, 4 ) < 4 )
+    if ( in.read( buf, 4 ) < 4 )
     {
         in.close();
         KMessageBox::sorry( this, i18n("Cannot read report template file!"),

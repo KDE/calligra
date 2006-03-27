@@ -571,12 +571,12 @@ void View::Private::initActions()
   actions->verticalText->setToolTip(i18n("Print cell contents vertically"));
 
   actions->increaseIndent = new KAction( i18n("Increase Indent"),
-      QApplication::reverseLayout() ? "format_decreaseindent":"format_increaseindent",
+      QApplication::isRightToLeft() ? "format_decreaseindent":"format_increaseindent",
       0, view, SLOT( increaseIndent() ), ac, "increaseindent" );
   actions->increaseIndent->setToolTip(i18n("Increase the indentation"));
 
   actions->decreaseIndent = new KAction( i18n("Decrease Indent"),
-      QApplication::reverseLayout() ? "format_increaseindent" : "format_decreaseindent",
+      QApplication::isRightToLeft() ? "format_increaseindent" : "format_decreaseindent",
       0, view, SLOT( decreaseIndent() ), ac, "decreaseindent");
   actions->decreaseIndent->setToolTip(i18n("Decrease the indentation"));
 
@@ -5539,7 +5539,7 @@ void View::refreshView()
   d->vBorderWidget->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
 
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
-  bool interfaceIsRTL = QApplication::reverseLayout();
+  bool interfaceIsRTL = QApplication::isRightToLeft();
 
   kDebug()<<" sheetDir == Sheet::LeftToRight :"<<( sheetDir == Sheet::LeftToRight )<<endl;
   if ((sheetDir == Sheet::LeftToRight && !interfaceIsRTL) ||

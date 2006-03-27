@@ -2505,11 +2505,11 @@ void KPrView::setupActions()
         else
             actionFormatNumber->insert( act );
     }
-    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ),  QApplication::reverseLayout() ?"format_decreaseindent" : "format_increaseindent",
+    actionTextDepthPlus = new KAction( i18n( "&Increase Depth" ),  QApplication::isRightToLeft() ?"format_decreaseindent" : "format_increaseindent",
                                        CTRL + Qt::Key_Plus, this, SLOT( textDepthPlus() ),
                                        actionCollection(), "text_depthPlus" );
 
-    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), QApplication::reverseLayout() ?"format_increaseindent" : "format_decreaseindent",
+    actionTextDepthMinus = new KAction( i18n( "&Decrease Depth" ), QApplication::isRightToLeft() ?"format_increaseindent" : "format_decreaseindent",
                                         CTRL + Qt::Key_Minus, this, SLOT( textDepthMinus() ),
                                         actionCollection(), "text_depthMinus" );
 
@@ -5786,7 +5786,7 @@ void KPrView::slotObjectEditChanged()
         if(paragLayout->counter)
             counter = *(paragLayout->counter);
         int align = paragLayout->alignment;
-        if ( align == Qt::AlignAuto )
+        if ( align == Qt::AlignLeft )
             align = Qt::AlignLeft; // ## seems hard to detect RTL here
         alignChanged( align );
     }

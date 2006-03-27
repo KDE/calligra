@@ -142,7 +142,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_conn_sel_widget = new QWidget(this);
 	QVBoxLayout* conn_sel_lyr = new QVBoxLayout(m_conn_sel_widget);
 	QLabel *conn_sel_label = new QLabel(i18n("Enter a new Kexi project's file name:"), m_conn_sel_widget);
-	conn_sel_label->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::TextWordWrap);
+	conn_sel_label->setAlignment(Qt::AlignLeft|Qt::AlignTop|Qt::TextWordWrap);
 	conn_sel_lyr->addWidget( conn_sel_label );
 	conn_sel_lyr->addSpacing(KDialogBase::spacingHint());
 

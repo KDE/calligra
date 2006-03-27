@@ -702,7 +702,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         QByteArray base64Stream=stackItem->strTemp2.utf8(); // Use utf8 to avoid corruption of data
         QByteArray binaryStream;
         KCodecs::base64Decode(base64Stream, binaryStream);
-        out->writeBlock(binaryStream, binaryStream.count());
+        out->write(binaryStream, binaryStream.count());
     }
     else
     {
@@ -710,7 +710,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         kDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
         // We strip the white space in front to avoid white space before a XML declaration
         Q3CString strOut=stackItem->strTemp2.trimmed().utf8();
-        out->writeBlock(strOut,strOut.length());
+        out->write(strOut,strOut.length());
     }
 
     return true;
@@ -1849,7 +1849,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
     //Write the document information!
     strOut=handler.getDocInfo().toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
-    out->writeBlock(strOut,strOut.length());
+    out->write(strOut,strOut.length());
 
     kDebug(30506) << "Creating maindoc.xml" << endl;
     out=m_chain->storageFile( "root", KoStore::Write );
@@ -1863,7 +1863,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const 
     //Write the document!
     strOut=handler.getDocument().toCString(); // UTF-8
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end.
-    out->writeBlock(strOut,strOut.length());
+    out->write(strOut,strOut.length());
 
 #if 0
     kDebug(30506) << documentOut.toString();

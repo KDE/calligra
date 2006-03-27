@@ -279,7 +279,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const Q3CString& from, const Q3
     }
     Q3CString cstr=mainDocument.toCString();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
-    out->writeBlock(cstr,cstr.length());
+    out->write(cstr,cstr.length());
     in.close();
     return KoFilter::OK;
 }

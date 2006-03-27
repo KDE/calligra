@@ -432,7 +432,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, con
 
     Q3CString cstring = str.utf8 ();
 
-    out->writeBlock ((const char*) cstring, cstring.length());
+    out->write ((const char*) cstring, cstring.length());
 
     in.close ();
     return KoFilter::OK;

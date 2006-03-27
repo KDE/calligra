@@ -285,7 +285,7 @@ private:
 		Q3CString strUtf8 = m_heldOutput.utf8 ();
 		int strLength = strUtf8.length ();
 
-		if (m_outfile->writeBlock (strUtf8, strLength) != strLength)
+		if (m_outfile->write (strUtf8, strLength) != strLength)
 			ErrorAndQuit (MSWrite::Error::FileError, "could not write delayed output\n");
 
 		m_heldOutput = "";
@@ -500,7 +500,7 @@ public:
 			if (!m_outfile)
 				ErrorAndQuit (MSWrite::Error::FileError, "could not open image in store\n");
 
-			if (m_outfile->writeBlock ((const char *) (*it).m_data, (*it).m_dataLength)
+			if (m_outfile->write ((const char *) (*it).m_data, (*it).m_dataLength)
 				!= (Q_LONG) (*it).m_dataLength)
 				ErrorAndQuit (MSWrite::Error::FileError, "could not write image to store\n");
 
@@ -1209,7 +1209,7 @@ public:
 		{
 			int strLength = strlen ((const char *) str);
 
-			if (m_outfile->writeBlock ((const char *) str, strLength) != strLength)
+			if (m_outfile->write ((const char *) str, strLength) != strLength)
 			{
 				ErrorAndQuit (MSWrite::Error::FileError, "could not write to maindoc.xml\n");
 			}
@@ -1232,7 +1232,7 @@ public:
 			Q3CString strUtf8 = str.utf8 ();
 			int strLength = strUtf8.length ();
 
-			if (m_outfile->writeBlock (strUtf8, strLength) != strLength)
+			if (m_outfile->write (strUtf8, strLength) != strLength)
 			{
 				ErrorAndQuit (MSWrite::Error::FileError, "could not write to maindoc.xml (2)\n");
 			}

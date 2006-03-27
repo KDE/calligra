@@ -143,7 +143,7 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture )
 
         if ( pictureFile.open (QIODevice::WriteOnly) )
         {
-            pictureFile.writeBlock ( byteArray, byteArray.size () );
+            pictureFile.write ( byteArray, byteArray.size () );
 
             QString pictureText;
 
@@ -728,7 +728,7 @@ bool DocBookWorker::doCloseFile ( void )
     // As a QChar can be transformed into many bytes,
     //  we need to use QCString::length instead of QString::length
     Q3CString cstr = outputText.local8Bit ();
-    fileOut->writeBlock ( cstr, cstr.length () );
+    fileOut->write ( cstr, cstr.length () );
 
     fileOut->close ();
     delete fileOut;

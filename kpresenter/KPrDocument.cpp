@@ -956,7 +956,7 @@ void KPrDocument::saveUsedSoundFileToStore( KoStore *_store, QStringList _list )
             KoStoreDevice dev( _store );
             QFile _file( soundFileName );
             if ( _file.open( QIODevice::ReadOnly ) ) {
-                dev.writeBlock( ( _file.readAll() ).data(), _file.size() );
+                dev.write( ( _file.readAll() ).data(), _file.size() );
                 _file.close();
             }
             _store->close();
@@ -2200,7 +2200,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
         KTempFile tmpFileIn;
         tmpFileIn.setAutoDelete( true );
         dev->reset();
-        tmpFileIn.file()->writeBlock( dev->readAll() ); // copy stresm to temp file
+        tmpFileIn.file()->write( dev->readAll() ); // copy stresm to temp file
         tmpFileIn.close();
 
         // Launch the perl script on it
@@ -3202,13 +3202,13 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
             KoStoreDevice dev( _store );
             int size = _store->size();
             char *data = new char[size];
-            dev.readBlock( data, size );
+            dev.read( data, size );
 
             int position = soundFile.findRev( '.' );
             QString format = soundFile.right( soundFile.length() - position );
             KTempFile *tmpFile = new KTempFile( QString::null, format );
             tmpFile->setAutoDelete( true );
-            tmpFile->file()->writeBlock( data, size );
+            tmpFile->file()->write( data, size );
             tmpFile->close();
 
             QString tmpFileName = tmpFile->name();

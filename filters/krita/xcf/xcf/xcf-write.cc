@@ -65,7 +65,7 @@ quint32 xcf_write_float  (FILE *fp, float *data, qint32 count);
 quint32 xcf_write_int8 (FILE *fp, quint8 *data, qint32 count);
 {
     qint32  bytes;
-    bytes = fp->writeBlock( data, count );
+    bytes = fp->write( data, count );
     return bytes;
 }
 

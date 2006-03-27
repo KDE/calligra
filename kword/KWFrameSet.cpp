@@ -734,7 +734,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             if ( drawUnderlyingFrames )
                 reg = frameClipRegion( painter, frame, outerCRect, viewMode );
             else // false means we are being drawn _as_ an underlying frame, so no clipping!
-                reg = painter->xForm( outerCRect );
+                reg = painter->transformed( outerCRect );
             if ( !reg.isEmpty() )
             {
                 painter->save();
@@ -835,7 +835,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
             {
                 doubleBufPainter->end();
 #ifdef DEBUG_DRAW
-                kDebug(32001) << "  painting double-buf pixmap at position " << outerCRect.topLeft() << " (real painter pos:" << painter->xForm( outerCRect.topLeft() ) << ")" << endl;
+                kDebug(32001) << "  painting double-buf pixmap at position " << outerCRect.topLeft() << " (real painter pos:" << painter->transformed( outerCRect.topLeft() ) << ")" << endl;
 #endif
                 painter->drawPixmap( outerCRect.topLeft(), *pix );
                 delete doubleBufPainter;
@@ -1075,7 +1075,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
                                      KWViewMode * viewMode )
 {
 //    KWDocument * doc = kWordDocument();
-    QRect rc = painter->xForm( crect );
+    QRect rc = painter->transformed( crect );
 #ifdef DEBUG_DRAW
     //kDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;
 #endif
@@ -1084,7 +1084,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 #if 0 // done later
     if ( clipFrame )
     {
-        rc &= painter->xForm( viewMode->normalToView( doc->zoomRect( (*frame) ) ) ); // intersect
+        rc &= painter->transformed( viewMode->normalToView( doc->zoomRect( (*frame) ) ) ); // intersect
 #ifdef DEBUG_DRAW
         kDebug(32002) << "KWFrameSet::frameClipRegion frame=" << *frame
                        << " clip region rect=" << rc
@@ -1106,7 +1106,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         {
             KWFrame* frameOnTop = (*fIt);
             Q_ASSERT( frameOnTop->frameSet() );
-            QRect r = painter->xForm( viewMode->normalToView( frameOnTop->outerRect( viewMode ) ) );
+            QRect r = painter->transformed( viewMode->normalToView( frameOnTop->outerRect( viewMode ) ) );
 #ifdef DEBUG_DRAW
             //kDebug(32002) << "frameClipRegion subtract rect "<< r << endl;
 #endif

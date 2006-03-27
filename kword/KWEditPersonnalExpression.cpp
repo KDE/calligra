@@ -368,7 +368,7 @@ void KWEditPersonnalExpression::saveFile()
         kDebug()<<"Error \n";
         return;
     }
-    file.writeBlock(s,s.length());
+    file.write(s,s.length());
     file.close();
 }
 

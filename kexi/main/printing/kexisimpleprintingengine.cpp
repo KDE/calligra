@@ -287,7 +287,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		m_headerTextRect = painter.fontMetrics().boundingRect(
 			(int)leftMargin, (int)topMargin,
 			m_pageWidth - m_dateTimeWidth,
-			m_pageHeight, Qt::AlignAuto|Qt::TextWordWrap, m_headerText);
+			m_pageHeight, Qt::AlignLeft|Qt::TextWordWrap, m_headerText);
 		m_headerTextRect.setRight(m_headerTextRect.right()+10);
 		m_headerTextRect.setWidth(
 			qMin(int(m_pageWidth - m_dateTimeWidth), m_headerTextRect.width()));
@@ -315,7 +315,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 	//paint header
 	painter.setFont(m_headerFont);
 	if (paint) {
-		painter.drawText(m_headerTextRect, Qt::AlignAuto|Qt::TextWordWrap, m_headerText);
+		painter.drawText(m_headerTextRect, Qt::AlignLeft|Qt::TextWordWrap, m_headerText);
 	}
 	painter.setFont(m_mainFont);
 	if (paint) {
@@ -442,7 +442,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 		QRect rect( painter.fontMetrics().boundingRect(
 			(int)leftMargin + m_maxFieldNameWidth + cellMargin, y,
 			m_pageWidth - m_maxFieldNameWidth - cellMargin*2, m_pageHeight - y, 
-			Qt::AlignAuto|Qt::TextWordWrap, text) );
+			Qt::AlignLeft|Qt::TextWordWrap, text) );
 		if (paint) {
 			painter.drawText(
 				rect.x(), rect.y(), rect.width(), rect.height(),

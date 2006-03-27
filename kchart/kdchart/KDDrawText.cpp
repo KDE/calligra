@@ -252,7 +252,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
         }
     }
     if( infos && !useInfos ) {
-         painter->xForm( pos );
+         painter->transformed( pos );
         infos->x = x - 4;
         infos->y = y - 4;
         //PENDING Michel updating info using x , y from pos 
@@ -268,10 +268,10 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
                     text ) );
         //painter->fillRect (rect, Qt::blue );
         
-        QPoint topLeft(     painter->xForm( rect.topLeft()     ) );
-        QPoint topRight(    painter->xForm( rect.topRight()    ) );
-        QPoint bottomRight( painter->xForm( rect.bottomRight() ) );
-        QPoint bottomLeft(  painter->xForm( rect.bottomLeft()  ) );
+        QPoint topLeft(     painter->transformed( rect.topLeft()     ) );
+        QPoint topRight(    painter->transformed( rect.topRight()    ) );
+        QPoint bottomRight( painter->transformed( rect.bottomRight() ) );
+        QPoint bottomLeft(  painter->transformed( rect.bottomLeft()  ) );
       
         int additor = addPercentOfHeightToRegion * txtHeight / 100;
         Q3PointArray points;
@@ -363,7 +363,7 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
             pm.setMask( mask );
             QMatrix m;
             m.rotate( degrees );
-            QPixmap theRotatedPixmap = pm.xForm(m);
+            QPixmap theRotatedPixmap = pm.transformed(m);
 
             // where are our four corner points now:
             double degreesRad = degrees;

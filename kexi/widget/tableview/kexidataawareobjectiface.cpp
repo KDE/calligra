@@ -889,7 +889,7 @@ bool KexiDataAwareObjectInterface::acceptEditor()
 					m_errorMessagePopup->setAutoMask( FALSE );
 					m_errorMessagePopup->setFrameStyle( QFrame::Plain | QFrame::Box );
 					m_errorMessagePopup->setLineWidth( 2 );
-					m_errorMessagePopup->setAlignment( Qt::AlignAuto | Qt::AlignTop );
+					m_errorMessagePopup->setAlignment( Qt::AlignLeft | Qt::AlignTop );
 					m_errorMessagePopup->setIndent(0);
 					m_errorMessagePopup->polish();
 					m_errorMessagePopup->adjustSize();

@@ -220,8 +220,8 @@
                                     <verstretch>0</verstretch>
                                 </sizepolicy>
                             </property>
-                            <property name="insertionPolicy">
-                                <enum>NoInsertion</enum>
+                            <property name="insertPolicy">
+                                <enum>NoInsert</enum>
                             </property>
                             <property name="duplicatesEnabled">
                                 <bool>false</bool>

@@ -68,7 +68,7 @@ void KDFrame::paintBackground( QPainter& painter, const QRect& innerRect ) const
         QPoint oldOrig(  painter.brushOrigin() );
         QBrush oldBrush( painter.brush() );
         painter.setPen( Qt::NoPen );
-        const QPoint newTopLeft( painter.xForm( innerRect.topLeft() ) );
+        const QPoint newTopLeft( painter.transformed( innerRect.topLeft() ) );
         painter.setBrushOrigin( newTopLeft.x(), newTopLeft.y() );
         painter.setBrush( _background );
         painter.drawRect( innerRect.x(), innerRect.y(),
@@ -102,7 +102,7 @@ void KDFrame::paintBackground( QPainter& painter, const QRect& innerRect ) const
                                 m.scale( zW, zH );
                                 break;
             }
-            QPixmap pm = _backPixmap.xForm( m );
+            QPixmap pm = _backPixmap.transformed( m );
             ol.setX( innerRect.center().x() - pm.width() / 2 );
             ol.setY( innerRect.center().y() - pm.height()/ 2 );
             bitBlt( painter.device(), ol, &pm );

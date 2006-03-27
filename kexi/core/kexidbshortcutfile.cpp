@@ -52,7 +52,7 @@ class KexiDBShortcutFile::Private
 KexiDBShortcutFile::KexiDBShortcutFile( const QString& fileName )
  : d( new KexiDBShortcutFile::Private() )
 {
-	d->fileName = QDir(fileName).absPath();
+	d->fileName = QDir(fileName).absolutePath();
 }
 
 KexiDBShortcutFile::~KexiDBShortcutFile()

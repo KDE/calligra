@@ -258,7 +258,7 @@ KoFilter::ConversionStatus WMLImport::convert( const Q3CString& from, const Q3CS
     {
       Q3CString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
-      out->writeBlock( (const char*) cstring, cstring.length() );
+      out->write( (const char*) cstring, cstring.length() );
     }
 
 
@@ -271,7 +271,7 @@ KoFilter::ConversionStatus WMLImport::convert( const Q3CString& from, const Q3CS
        Q3CString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
-       out->writeBlock( (const char*) cstring, cstring.length() );
+       out->write( (const char*) cstring, cstring.length() );
      }
 
   return KoFilter::OK;

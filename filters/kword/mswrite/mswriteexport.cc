@@ -661,7 +661,7 @@ public:
 
 		bool read (MSWrite::Byte *buf, const MSWrite::DWord numBytes)
 		{
-			if (m_buffer->readBlock ((char *) buf, (Q_ULONG) numBytes) != Q_LONG (numBytes))
+			if (m_buffer->read ((char *) buf, (Q_ULONG) numBytes) != Q_LONG (numBytes))
 			{
 				error (MSWrite::Error::FileError, "could not read from QBuffer (not really a FileError)\n");
 				return false;
@@ -672,7 +672,7 @@ public:
 
 		bool write (const MSWrite::Byte *buf, const MSWrite::DWord numBytes)
 		{
-			if (m_buffer->writeBlock ((char *) buf, (Q_ULONG) numBytes) != Q_LONG (numBytes))
+			if (m_buffer->write ((char *) buf, (Q_ULONG) numBytes) != Q_LONG (numBytes))
 			{
 				error (MSWrite::Error::FileError, "could not write to QBuffer (not really a FileError)\n");
 				return false;

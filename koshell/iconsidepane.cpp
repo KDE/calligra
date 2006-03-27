@@ -183,7 +183,7 @@ void EntryItem::paint( QPainter *p )
 
     if ( isCurrent() || isSelected() || mHasHover ) {
       p->setPen( box->colorGroup().highlight().dark(115) );
-      p->drawText( x + ( QApplication::reverseLayout() ? -1 : 1),
+      p->drawText( x + ( QApplication::isRightToLeft() ? -1 : 1),
                    y + 1, text() );
       p->setPen( box->colorGroup().highlightedText() );
     }

@@ -98,7 +98,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const Q3CString& from, const Q
     // taken from KoDocument::saveToStore
     KoStoreDevice dev( out );
     const Q3CString s = doc->saveXML().toCString(); // utf8 already
-    const int nwritten = dev.writeBlock( s.data(), s.size()-1 );
+    const int nwritten = dev.write( s.data(), s.size()-1 );
     if ( nwritten != (int)s.size()-1 ) {
         kWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;
         KMessageBox::error( 0, i18n( "Failed to write formula." ), i18n( "MathML Import Error" ) );

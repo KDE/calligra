@@ -144,7 +144,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	m_mousePointerLabel->setPixmap( SmallIcon("mouse_pointer") );
 	m_mousePointerLabel->setFixedWidth( m_mousePointerLabel->pixmap() ? m_mousePointerLabel->pixmap()->width() : 0);
 	m_availableFieldsDescriptionLabel = new QLabel(i18n("Select fields from the list below and drag them onto a form or click the \"Insert\" button"), this);
-	m_availableFieldsDescriptionLabel->setAlignment( Qt::AlignAuto | Qt::TextWordWrap );
+	m_availableFieldsDescriptionLabel->setAlignment( Qt::AlignLeft | Qt::TextWordWrap );
 	hlyr->addWidget(m_availableFieldsDescriptionLabel);
 
 	//Available Fields

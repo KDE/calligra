@@ -343,8 +343,8 @@ void KPrDefineCustomSlideShow::init()
   connect( listSlide, SIGNAL( clicked ( QListBoxItem * ) ), this, SLOT( updateButton() ) );
   connect( listSlide, SIGNAL( doubleClicked ( QListBoxItem * ) ), this, SLOT( slotMoveInsertSlide() ) );
   connect( listSlideShow, SIGNAL( doubleClicked( QListBoxItem * ) ), this, SLOT( slotMoveRemoveSlide() ) );
-  m_insertSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout() ? "back" : "forward" ) ) );
-  m_removeSlide->setIconSet( SmallIconSet( ( QApplication::reverseLayout() ? "forward" : "back") ) );
+  m_insertSlide->setIconSet( SmallIconSet( ( QApplication::isRightToLeft() ? "back" : "forward" ) ) );
+  m_removeSlide->setIconSet( SmallIconSet( ( QApplication::isRightToLeft() ? "forward" : "back") ) );
   m_moveUpSlide->setIconSet( SmallIconSet( "up" ) );
   m_moveDownSlide->setIconSet( SmallIconSet( "down" ) );
 

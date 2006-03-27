@@ -460,16 +460,16 @@ QString KexiStartupFileDialogBase::realStartDir(const QString& startDir)
 	if (path.isEmpty())
 		return QString::null;
 	QFileInfo fi(path);
-	return fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absPath();
+	return fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absolutePath();
 }
 
 void KexiStartupFileDialogBase::saveLastVisitedPath(const QString& path)
 {
 	if (!m_lastVisitedPathsVariable.isEmpty()) {
 		//save last visited dir path
-//		QString dir = QDir(path).absPath();
+//		QString dir = QDir(path).absolutePath();
 		QFileInfo fi(path);
-		QString dir( fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absPath() );
+		QString dir( fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absolutePath() );
 		if (!dir.isEmpty())
 			KRecentDirs::add(m_lastVisitedPathsVariable, dir);
 	}

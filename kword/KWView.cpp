@@ -975,12 +975,12 @@ void KWView::setupActions()
     //m_actionFormatSub->setExclusiveGroup( "valign" );
 
     m_actionFormatIncreaseIndent= new KAction( i18n( "Increase Indent" ),
-            QApplication::reverseLayout() ? "format_decreaseindent" : "format_increaseindent", 0,
+            QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent", 0,
                                              this, SLOT( textIncreaseIndent() ),
                                              actionCollection(), "format_increaseindent" );
 
     m_actionFormatDecreaseIndent= new KAction( i18n( "Decrease Indent" ),
-                                             QApplication::reverseLayout() ? "format_increaseindent" :"format_decreaseindent", 0,
+                                             QApplication::isRightToLeft() ? "format_increaseindent" :"format_decreaseindent", 0,
                                              this, SLOT( textDecreaseIndent() ),
                                              actionCollection(), "format_decreaseindent" );
 
@@ -7401,7 +7401,7 @@ void KWView::addPersonalExpression()
         kDebug()<<"Error in addPersonalExpression()\n";
         return;
     }
-    file.writeBlock(s,s.length());
+    file.write(s,s.length());
     file.close();
     m_doc->refreshMenuExpression();
 }

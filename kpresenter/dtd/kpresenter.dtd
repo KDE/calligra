@@ -417,7 +417,7 @@ TODO: finish documentation
                 for export filters.
 
         align   Counter alignment. Possible values include:
-	            int(Qt::AlignAuto), //left for LTR text and right for RTL text
+	            int(Qt::AlignLeft), //left for LTR text and right for RTL text
 		    int(Qt::AlignLeft),
 		    int(Qt::AlignRight).
 -->

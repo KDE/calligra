@@ -647,7 +647,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, c
     }
 
     Q3CString cstring = str.utf8();
-    out->writeBlock ( cstring, cstring.length() );
+    out->write ( cstring, cstring.length() );
 
     in.close  ();
     return KoFilter::OK;
