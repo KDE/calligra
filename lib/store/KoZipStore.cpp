@@ -124,7 +124,7 @@ bool KoZipStore::init( Mode _mode, const Q3CString& appIdentification )
         m_pZip->setCompression( KZip::NoCompression );
         m_pZip->setExtraField( KZip::NoExtraField );
         // Write identification
-        (void)m_pZip->writeFile( "mimetype", "", "", appIdentification.length(), appIdentification.data() );
+        (void)m_pZip->writeFile( "mimetype", "", "",appIdentification.data() , appIdentification.length() );
         m_pZip->setCompression( KZip::DeflateCompression );
         // We don't need the extra field in KOffice - so we leave it as "no extra field".
     }
@@ -193,7 +193,7 @@ bool KoZipStore::closeWrite()
 {
     kDebug(s_area) << "Wrote file " << m_sName << " into ZIP archive. size "
                     << m_iSize << endl;
-    return m_pZip->doneWriting( m_iSize );
+    return m_pZip->finishWriting( m_iSize );
 #if 0
     if ( !m_pZip->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() ) )
         kWarning( s_area ) << "Failed to write " << m_sName << endl;

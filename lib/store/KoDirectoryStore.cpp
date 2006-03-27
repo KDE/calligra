@@ -74,7 +74,7 @@ bool KoDirectoryStore::openReadOrWrite( const QString& name, int iomode )
             return false;
     }
     m_stream = new QFile( m_basePath + name );
-    if ( !m_stream->open( iomode ) )
+    if ( !m_stream->open( (QIODevice::OpenModeFlag)iomode ) )
     {
         delete m_stream;
         m_stream = 0L;
