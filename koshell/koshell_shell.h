@@ -31,10 +31,11 @@
 #include <q3valuelist.h>
 //Added by qt3to4:
 #include <QLabel>
+#include <kvbox.h>
 
 #include "iconsidepane.h"
 
-class Q3VBox;
+class KVBox;
 class Q3IconView;
 class Q3IconViewItem;
 class QSplitter;

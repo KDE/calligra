@@ -20,7 +20,7 @@
 #include "dialog.h"
 #include "dialog.moc"
 
-#include <q3hbox.h>
+
 
 #include <qregexp.h>
 #include <qapplication.h>
@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <klineedit.h>
+#include <kvbox.h>
 
 
 //-----------------------------------------------------------------------------
@@ -133,7 +134,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     _allButton = new QRadioButton(i18n("All (%1 pages)").arg(nbPages), gbox);
     _allButton->setChecked(true);
     _group->insert(_allButton);
-    Q3HBox *hbox = new Q3HBox(gbox);
+    KHBox *hbox = new KHBox(gbox);
     _rangeButton = new QRadioButton(i18n("Range:"), hbox);
     _group->insert(_rangeButton);
     _range = new KLineEdit(hbox);

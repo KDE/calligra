@@ -11,7 +11,7 @@
 #include <q3ptrcollection.h>
 #include <qobject.h>
 #include <qlayout.h>
-#include <q3hbox.h>
+
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
@@ -21,6 +21,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "kchart_params.h"
 
@@ -53,7 +54,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
     m_stacked = new QRadioButton( i18n( "Stacked" ), grp );
     m_percent = new QRadioButton( i18n( "Percent" ), grp );
 
-    Q3HBox   *hbox = new Q3HBox( this );
+    KHBox   *hbox = new KHBox( this );
     /*QLabel  *lbl  =*/ new QLabel( i18n( "Number of lines: "), hbox );
     m_numLines    = new QSpinBox( hbox );
 

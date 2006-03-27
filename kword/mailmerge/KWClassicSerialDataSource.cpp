@@ -23,9 +23,9 @@
 #include "KWMailMergeDataBase.h"
 #include <kinputdialog.h>
 #include <qlabel.h>
-#include <q3hbox.h>
+
 #include <qlayout.h>
-#include <q3vbox.h>
+
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qvalidator.h>
@@ -38,6 +38,7 @@
 #include <qtooltip.h>
 #include <kiconloader.h>
 #include <q3header.h>
+#include <kvbox.h>
 #include "KWDocument.h"
 #include "defs.h"
 
@@ -341,7 +342,7 @@ KWClassicMailMergeEditor::KWClassicMailMergeEditor( QWidget *parent, KWClassicSe
     l->setAutoAdd(true);
     l->setSpacing( KDialog::spacingHint() );
 
-    Q3HBox *toolbar = new Q3HBox( back );
+    KHBox *toolbar = new KHBox( back );
 
     first = new QToolButton( toolbar );
     first->setIconSet( SmallIconSet( "start" ) );

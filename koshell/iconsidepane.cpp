@@ -47,6 +47,7 @@
 #include <klocale.h>
 #include <kmenu.h>
 #include <kpushbutton.h>
+#include <kvbox.h>
 
 #include "iconsidepane.h"
 
@@ -409,7 +410,7 @@ void Navigator::slotShowRMBMenu( Q3ListBoxItem *, const QPoint &pos )
 // ************************************************
 
 IconSidePane::IconSidePane(QWidget *parent, const char *name )
-  : Q3VBox( parent, name )
+  : KVBox( parent, name )
 {
   m_buttongroup = new Q3ButtonGroup(1, Qt::Horizontal, this);
   m_buttongroup->setExclusive(true);

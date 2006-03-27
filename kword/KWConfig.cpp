@@ -29,7 +29,7 @@
 
 #include <qcheckbox.h>
 #include <qlabel.h>
-#include <q3vbox.h>
+
 #include <qcombobox.h>
 
 
@@ -74,6 +74,7 @@ using namespace KSpell2;
 #include <qtabwidget.h>
 #include <keditlistbox.h>
 #include <KoGlobal.h>
+#include <kvbox.h>
 
 // little helper stolen from kmail
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)
@@ -214,7 +215,7 @@ void KWConfig::slotDefault()
 
 ////
 
-ConfigureSpellPage::ConfigureSpellPage( KWView *view, Q3VBox *box, char *name )
+ConfigureSpellPage::ConfigureSpellPage( KWView *view, KVBox *box, char *name )
     : QObject( box->parent(), name )
 {
     m_pView=view;
@@ -242,7 +243,7 @@ void ConfigureSpellPage::slotDefault()
     m_spellConfigWidget->slotDefault();
 }
 
-ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char *name )
+ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, KVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=view;
@@ -273,7 +274,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
         oldShowScrollBar = config->readBoolEntry("ShowScrollBar", true);
     }
 
-    Q3HBox *hbUnit = new Q3HBox(gbInterfaceGroup);
+    KHBox *hbUnit = new KHBox(gbInterfaceGroup);
     hbUnit->setSpacing(KDialog::spacingHint());
     QLabel *unitLabel= new QLabel(i18n("&Units:"),hbUnit);
 
@@ -303,7 +304,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
                          "move the text caret, as in other KDE applications. "
                          "If it is disabled, they move the scrollbars, as in most other word processors." ) );
 
-    Q3HBox* hbRecent = new Q3HBox( gbInterfaceGroup );
+    KHBox* hbRecent = new KHBox( gbInterfaceGroup );
     QString recentHelp = i18n("The number of files remembered in the file open dialog and in the "
                               "recent files menu item.");
     QLabel* labelRecent = new QLabel( i18n("Number of recent &files:"), hbRecent );
@@ -313,7 +314,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
     labelRecent->setBuddy( recentFiles );
     recentFiles->setWhatsThis( recentHelp );
 
-    Q3HBox* hbGridX = new Q3HBox( gbInterfaceGroup );
+    KHBox* hbGridX = new KHBox( gbInterfaceGroup );
     QString gridxHelp = i18n("The grid size on which frames, tabs and other content snaps while "
                              "moving and scaling.");
     QLabel* labelGridX = new QLabel( i18n("&Horizontal grid size:"), hbGridX );
@@ -327,7 +328,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
     labelGridX->setBuddy( gridX );
     gridX->setWhatsThis( gridxHelp );
 
-    Q3HBox* hbGridY = new Q3HBox( gbInterfaceGroup );
+    KHBox* hbGridY = new KHBox( gbInterfaceGroup );
     QString gridyHelp = i18n("The grid size on which frames and other content snaps while "
                              "moving and scaling.");
     QLabel* labelGridY = new QLabel( i18n("&Vertical grid size:"), hbGridY );
@@ -342,7 +343,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
 
     gridY->setWhatsThis( gridyHelp );
 
-    Q3HBox* hbIndent = new Q3HBox( gbInterfaceGroup );
+    KHBox* hbIndent = new KHBox( gbInterfaceGroup );
     QString indentHelp = i18n("Configure the indent width used when using the 'Increase' "
                               "or 'Decrease' indentation buttons on a paragraph.<p>The lower the value, "
                               "the more often the buttons will have to be pressed to gain the same "
@@ -358,7 +359,7 @@ ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, Q3VBox *box, char 
     labelIndent->setBuddy( indent );
     indent->setWhatsThis( indentHelp );
 
-    Q3HBox* hbPagePerRow = new Q3HBox( gbInterfaceGroup );
+    KHBox* hbPagePerRow = new KHBox( gbInterfaceGroup );
     QString pagePerRowHelp = i18n("After selecting Preview Mode (from the \"View\" menu,) "
                                   "this is the number of pages KWord will "
                                   "position on one horizontal row.");
@@ -484,7 +485,7 @@ void ConfigureInterfacePage::slotDefault()
 
 ////
 
-ConfigureMiscPage::ConfigureMiscPage( KWView *view, Q3VBox *box, char *name )
+ConfigureMiscPage::ConfigureMiscPage( KWView *view, KVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=view;
@@ -504,7 +505,7 @@ ConfigureMiscPage::ConfigureMiscPage( KWView *view, Q3VBox *box, char *name )
         m_oldNbRedo=config->readNumEntry("UndoRedo",m_oldNbRedo);
     }
 
-    Q3HBox* hbUndoRedo = new Q3HBox( gbMiscGroup );
+    KHBox* hbUndoRedo = new KHBox( gbMiscGroup );
     QLabel* labelUndoRedo = new QLabel( i18n("Undo/&redo limit:"), hbUndoRedo );
     QString undoHelp = i18n("Limit the number of undo/redo actions remembered. "
                             "A lower value helps to save memory, a higher value allows "
@@ -684,7 +685,7 @@ void ConfigureMiscPage::setUnit( KoUnit::Unit )
 
 ////
 
-ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, char *name )
+ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, KVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=view;
@@ -704,7 +705,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
     }
 
 
-    Q3HBox* hbColumnSpacing = new Q3HBox( gbDocumentDefaults );
+    KHBox* hbColumnSpacing = new KHBox( gbDocumentDefaults );
     QLabel* columnSpacingLabel = new QLabel( i18n("Default column spacing:"), hbColumnSpacing );
     m_columnSpacing = new KoUnitDoubleSpinBox( hbColumnSpacing,
                                                0.1,
@@ -777,7 +778,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
     gbDocumentSettings->setMargin( KDialog::marginHint() );
     gbDocumentSettings->setInsideSpacing( KDialog::spacingHint() );
 
-    Q3HBox* hbAutoSave = new Q3HBox( gbDocumentSettings );
+    KHBox* hbAutoSave = new KHBox( gbDocumentSettings );
     QLabel* labelAutoSave = new QLabel( i18n("Autosave every (min):"), hbAutoSave );
     autoSave = new KIntNumInput( oldAutoSaveValue, hbAutoSave );
     autoSave->setRange(0, 60, 1);
@@ -797,7 +798,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
     m_createBackupFile = new QCheckBox( i18n("Create backup file"), gbDocumentSettings);
     m_createBackupFile->setChecked( m_oldBackupFile );
 
-    Q3HBox* hbStartingPage = new Q3HBox( gbDocumentSettings );
+    KHBox* hbStartingPage = new KHBox( gbDocumentSettings );
     QLabel* labelStartingPage = new QLabel(i18n("Starting page number:"), hbStartingPage);
 
     m_oldStartingPage=doc->variableCollection()->variableSetting()->startingPageNumber();
@@ -806,7 +807,7 @@ ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, Q3VBox *box, cha
     m_variableNumberOffset->setValue(m_oldStartingPage);
     labelStartingPage->setBuddy( m_variableNumberOffset );
 
-    Q3HBox* hbTabStop = new Q3HBox( gbDocumentSettings );
+    KHBox* hbTabStop = new KHBox( gbDocumentSettings );
     tabStop = new QLabel(i18n("Tab stop (%1):").arg(doc->unitName()), hbTabStop);
     m_tabStopWidth = new KoUnitDoubleSpinBox( hbTabStop,
                                               MM_TO_POINT(2),
@@ -943,7 +944,7 @@ void ConfigureDefaultDocPage::setUnit( KoUnit::Unit unit )
 
 ////
 
-ConfigurePathPage::ConfigurePathPage( KWView *view, Q3VBox *box, char *name )
+ConfigurePathPage::ConfigurePathPage( KWView *view, KVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     m_pView=view;
@@ -1033,7 +1034,7 @@ void ConfigurePathPage::apply()
 
 ////
 
-ConfigureTTSPage::ConfigureTTSPage( KWView *view, Q3VBox *box, char *name )
+ConfigureTTSPage::ConfigureTTSPage( KWView *view, KVBox *box, char *name )
  : QObject( box->parent(), name )
 {
     Q_UNUSED(view);
@@ -1050,7 +1051,7 @@ ConfigureTTSPage::ConfigureTTSPage( KWView *view, Q3VBox *box, char *name )
     m_cbSpeakDisabled = new QCheckBox(i18n("Verbal indication if widget is disabled (grayed)",
         "&Say whether disabled"), m_gbScreenReaderOptions);
     m_cbSpeakAccelerators = new QCheckBox(i18n("Spea&k accelerators"), m_gbScreenReaderOptions);
-    Q3HBox* hbAcceleratorPrefix = new Q3HBox(m_gbScreenReaderOptions);
+    KHBox* hbAcceleratorPrefix = new KHBox(m_gbScreenReaderOptions);
     QWidget* spacer = new QWidget(hbAcceleratorPrefix);
     spacer->setMinimumWidth(2 * KDialog::marginHint());
     m_lblAcceleratorPrefix =
@@ -1059,7 +1060,7 @@ ConfigureTTSPage::ConfigureTTSPage( KWView *view, Q3VBox *box, char *name )
     m_leAcceleratorPrefixWord = new QLineEdit(i18n("Keyboard accelerator, such as Alt+F", "Accelerator"),
         hbAcceleratorPrefix);
     m_lblAcceleratorPrefix->setBuddy(m_leAcceleratorPrefixWord);
-    Q3HBox* hbPollingInterval = new Q3HBox(m_gbScreenReaderOptions);
+    KHBox* hbPollingInterval = new KHBox(m_gbScreenReaderOptions);
     hbPollingInterval->setMargin( 0 );
     QLabel* lblPollingInterval = new QLabel(i18n("&Polling interval:"), hbPollingInterval);
     m_iniPollingInterval = new KIntNumInput(hbPollingInterval);

@@ -37,13 +37,14 @@
 #include "KWMailMergeDataSource.h"
 #include "KWordMailMergeDatabaseIface.h"
 #include <koffice_export.h>
+#include <kvbox.h>
 
 class Q3ListBox;
 class QPushButton;
 class QLineEdit;
 class QSpinBox;
 class KWDocument;
-class Q3VBox;
+class KVBox;
 
 //class KWMailMergeDataBase;
 

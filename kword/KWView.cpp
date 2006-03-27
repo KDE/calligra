@@ -143,6 +143,7 @@
 #include <kspell2/dialog.h>
 #include <kspell2/defaultdictionary.h>
 #include <q3tl.h>
+#include <kvbox.h>
 #include "KoSpell.h"
 
 using namespace KSpell2;
@@ -7584,7 +7585,7 @@ void KWView::deleteSelectedFrames() {
 /* Class: KWGUI                                                */
 /******************************************************************/
 KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
-  : Q3HBox( parent, "" ),
+  : KHBox( parent, "" ),
     m_view ( daView )
 {
 

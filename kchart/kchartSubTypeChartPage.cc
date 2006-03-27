@@ -33,9 +33,10 @@
 #include <qhgroupbox.h>
 #include <qlayout.h>
 
-#include <q3vbox.h>
+
 //Added by qt3to4:
 #include <Q3HBoxLayout>
+#include <kvbox.h>
 
 #include "kchart_params.h"
 
@@ -208,7 +209,7 @@ KChartBarSubTypeChartPage::KChartBarSubTypeChartPage( KChartParams* params,
     KChartSubTypeChartPage( params, parent )
 {
     Q3HBoxLayout* toplevel = new Q3HBoxLayout( this, 10 );
-    Q3VBox       *left = new Q3VBox( this );
+    KVBox       *left = new KVBox( this );
     Q3VButtonGroup* subtypeBG = new Q3VButtonGroup( i18n( "Sub-type" ), left );
     subtypeBG->setWhatsThis( i18n("Select the desired sub-type of a chart. The available sub-types depend on the chart type. Some chart types have no sub-type at all, in which case this configuration page is not shown."));
     //toplevel->addWidget( subtypeBG, AlignCenter );

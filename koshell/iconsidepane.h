@@ -28,7 +28,7 @@
 #include <q3buttongroup.h> 
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <q3vbox.h>
+
 #include <q3widgetstack.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -36,6 +36,7 @@
 #include <Q3ValueList>
 #include <QResizeEvent>
 #include <QMouseEvent>
+#include <kvbox.h>
 
 #include "koshellsettings.h"
 
@@ -166,7 +167,7 @@ class Navigator : public KListBox
     Q3ListBoxItem* mMouseOn;
 };
 
-class IconSidePane :public Q3VBox
+class IconSidePane :public KVBox
 {
     Q_OBJECT
   public:

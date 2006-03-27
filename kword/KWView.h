@@ -38,7 +38,7 @@
 #include <KoZoomMode.h>
 
 #include <qbrush.h>
-#include <q3hbox.h>
+
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QResizeEvent>
@@ -88,6 +88,7 @@ class QResizeEvent;
 class QSplitter;
 
 #include <kspell2/broker.h>
+#include <kvbox.h>
 namespace KSpell2 {
     class Dialog;
 }
@@ -821,7 +822,7 @@ private: // variables
 /* Class: KWGUI                                                   */
 /******************************************************************/
 
-class KWGUI : public Q3HBox
+class KWGUI : public KHBox
 {
     Q_OBJECT
 

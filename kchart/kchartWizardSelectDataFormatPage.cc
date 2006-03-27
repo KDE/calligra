@@ -3,7 +3,7 @@
 #include "kchart_view.h"
 #include "kchart_part.h"
 
-#include <q3hbox.h>
+
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -23,6 +23,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdialog.h>
+#include <kvbox.h>
 
 #include "kchart_params.h"
 
@@ -40,7 +41,7 @@ KChartWizardSelectDataFormatPage::KChartWizardSelectDataFormatPage( QWidget* par
     // The Data Area
     Q3ButtonGroup *gb1 = new Q3VButtonGroup( i18n( "Data Area" ), this );
 
-    Q3HBox   *hbox = new Q3HBox( gb1 );
+    KHBox   *hbox = new KHBox( gb1 );
     (void) new QLabel( i18n("Area: "), hbox);
     m_dataArea = new QLineEdit( hbox );
     grid1->addWidget(gb1, 0, 0);

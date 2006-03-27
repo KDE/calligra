@@ -26,7 +26,7 @@
 #include <kcolorbutton.h>
 #include <kdebug.h>
 
-#include <q3hbox.h>
+
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qlineedit.h>
@@ -42,6 +42,7 @@
 #include <Q3GridLayout>
 
 #include <kfontdialog.h>
+#include <kvbox.h>
 
 // For IRIX
 namespace std {}
@@ -67,7 +68,7 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
 
     // ================================================================
     // This code is copied from kchartWizardSelectDataFormatPage.cc
-    Q3HBox   *hbox = new Q3HBox( gb1 );
+    KHBox   *hbox = new KHBox( gb1 );
     (void) new QLabel( i18n("Area: "), hbox);
     m_dataArea = new QLineEdit( hbox );
     //grid1->addWidget(gb1, 0, 0);

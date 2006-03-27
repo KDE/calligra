@@ -32,7 +32,7 @@
 #include <q3buttongroup.h>
 #include <qspinbox.h>
 #include <qlayout.h>
-#include <q3hbox.h>
+
 #include <qpushbutton.h>
 #include <qlabel.h>
 
@@ -43,6 +43,7 @@
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 #include <kcolorbutton.h>
+#include <kvbox.h>
 
 #include "kchart_params.h"
 
@@ -128,7 +129,7 @@ KChartBackgroundPixmapConfigPage::KChartBackgroundPixmapConfigPage( KChartParams
                                   "displayed." ) );
     toplevel->addWidget( right );
 
-    Q3HBox* intensityHB = new Q3HBox( right );
+    KHBox* intensityHB = new KHBox( right );
     intensityHB->setSpacing( 10 );
     QLabel* intensityLA = new QLabel(
       // xgettext:no-c-format

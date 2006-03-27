@@ -28,13 +28,14 @@
 #include <qlabel.h>
 #include <q3buttongroup.h>
 
-#include <q3hbox.h>
+
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3GridLayout>
 #include <klistbox.h>
 #include "kchart_params.h"
 #include <kdebug.h>
+#include <kvbox.h>
 
 namespace KChart
 {
@@ -158,7 +159,7 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     _ylabel2CB->setWhatsThis( wtstr );
 #endif
 
-    Q3HBox* dataColorHB = new Q3HBox( gb );
+    KHBox* dataColorHB = new KHBox( gb );
     grid->addMultiCellWidget( dataColorHB,  0, 7, 2, 2 );
     _dataColorLB = new KListBox(dataColorHB);
     _dataColorCB = new KColorButton( dataColorHB);

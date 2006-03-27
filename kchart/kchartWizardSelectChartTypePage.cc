@@ -16,13 +16,14 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kvbox.h>
 
 namespace KChart
 {
 
 
 KChartButton::KChartButton(QWidget *parent, const QString & _text, const QPixmap &_pixmap)
-  : Q3VBox(parent)
+  : KVBox(parent)
 {
   // The button
   m_button = new QPushButton(this);

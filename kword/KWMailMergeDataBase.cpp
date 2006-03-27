@@ -35,7 +35,7 @@
 #include <kmainwindow.h>
 
 #include <qfile.h>
-#include <q3vbox.h>
+
 #include <qspinbox.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -44,6 +44,7 @@
 #include <Q3CString>
 #include <Q3Frame>
 #include <Q3VBoxLayout>
+#include <kvbox.h>
 
 /******************************************************************
  *
@@ -402,7 +403,7 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
 //    l->setMaximumHeight( l->sizeHint().height() );
     layout->addWidget(l);
 
-    Q3HBox *row1=new Q3HBox(back);
+    KHBox *row1=new KHBox(back);
     layout->addWidget(row1);
     row1->setSpacing( KDialog::spacingHint() );
     edit=new QPushButton(i18n("Edit Current..."),row1);
@@ -415,7 +416,7 @@ KWMailMergeConfigDialog::KWMailMergeConfigDialog(QWidget *parent,KWMailMergeData
     l = new QLabel( i18n( "Merging:" ),back );
     layout->addWidget(l);
 //  l->setMaximumHeight( l->sizeHint().height() );
-    Q3HBox *row2=new Q3HBox(back);
+    KHBox *row2=new KHBox(back);
     layout->addWidget(row2);
     row2->setSpacing( KDialog::spacingHint() );
     preview=new QPushButton(i18n("Print Preview..."),row2);

@@ -31,9 +31,10 @@
 #include <KoCustomVariablesDia.h>
 #include "KWMailMergeDataSource.h"
 #include <qspinbox.h>
+#include <kvbox.h>
 
-class Q3HBox;
-class Q3VBox;
+class KHBox;
+class KVBox;
 class QPushButton;
 class Q3ListBox;
 class QLabel;
