@@ -128,14 +128,14 @@ bool KoTarStore::openWrite( const QString& /*name*/ )
 {
     // Prepare memory buffer for writing
     m_byteArray.resize( 0 );
-    m_stream = new QBuffer( m_byteArray );
+    m_stream = new QBuffer( &m_byteArray );
     m_stream->open( QIODevice::WriteOnly );
     return true;
 }
 
 bool KoTarStore::openRead( const QString& name )
 {
-    const KTarEntry * entry = m_pTar->directory()->entry( name );
+    const KArchiveEntry * entry = m_pTar->directory()->entry( name );
     if ( entry == 0L )
     {
         //kdWarning(s_area) << "Unknown filename " << name << endl;
@@ -148,7 +148,7 @@ bool KoTarStore::openRead( const QString& name )
         //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
-    KTarFile * f = (KTarFile *) entry;
+    KArchiveFile * f = (KArchiveFile *) entry;
     m_byteArray.resize( 0 );
     delete m_stream;
     m_stream = f->device();
@@ -162,7 +162,7 @@ bool KoTarStore::closeWrite()
 
     kdDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
                     << m_iSize << endl;
-    if ( !m_pTar->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() ) )
+    if ( !m_pTar->writeFile( m_sName , "user", "group", m_byteArray.data(),m_iSize ) )
         kdWarning( s_area ) << "Failed to write " << m_sName << endl;
     m_byteArray.resize( 0 ); // save memory
     return true;
