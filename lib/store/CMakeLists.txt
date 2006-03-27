@@ -20,7 +20,7 @@ kde4_automoc(${kstore_LIB_SRCS})
 
 kde4_add_library(kstore SHARED ${kstore_LIB_SRCS})
 
-target_link_libraries(kstore  ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} )
+target_link_libraries(kstore  ${KDE4_KIO_LIBS} )
 
 set_target_properties(kstore PROPERTIES VERSION 3.0.0 SOVERSION 3 )
 install_targets(${LIB_INSTALL_DIR} kstore )
