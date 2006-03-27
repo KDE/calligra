@@ -7,7 +7,7 @@
 /* #undef HAVE_COREAUDIO */
 
 /* Define to 1 if you have the <crt_externs.h> header file. */
-/* #undef HAVE_CRT_EXTERNS_H */
+#cmakedefine HAVE_CRT_EXTERNS_H 1
 
 /* Defines if your system has the crypt function */
 #define HAVE_CRYPT 1
@@ -21,13 +21,13 @@
 #define HAVE_DIRENT_H 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#define HAVE_DLFCN_H 1
+#cmakedefine HAVE_DLFCN_H 1
 
 /* Define to 1 if you have the `fabsl' function. */
 /* #undef HAVE_FABSL */
 
 /* Define to 1 if you have the <floatingpoint.h> header file. */
-/* #undef HAVE_FLOATINGPOINT_H */
+#cmakedefine HAVE_FLOATINGPOINT_H 1
 
 /* Defines if your system has the libfontconfig library */
 #define HAVE_FONTCONFIG 1
@@ -48,10 +48,10 @@
 #define HAVE_GL 1
 
 /* Define to 1 if you have the <ieeefp.h> header file. */
-/* #undef HAVE_IEEEFP_H */
+#cmakedefine HAVE_IEEEFP_H 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-#define HAVE_INTTYPES_H 1
+#cmakedefine HAVE_INTTYPES_H 1
 
 /* Defines if your system has the fontconfig and freetype libraries */
 #define HAVE_KARBONTEXT 1
@@ -72,7 +72,7 @@
 #define HAVE_LIBPTHREAD 1
 
 /* Define if you have libz */
-#define HAVE_LIBZ 1
+#cmakedefine HAVE_LIBZ 1
 
 /* Define if you have support for long double in printf */
 /* #undef HAVE_LONG_DOUBLE */
@@ -87,10 +87,10 @@
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `mkstemp' function. */
-#define HAVE_MKSTEMP 1
+#cmakedefine HAVE_MKSTEMP 1
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
-/* #undef HAVE_NDIR_H */
+#cmakedefine HAVE_NDIR_H 1
 
 /* Define if your system needs _NSGetEnviron to set up the environment */
 /* #undef HAVE_NSGETENVIRON */
@@ -130,57 +130,57 @@
 #define HAVE_SGI_STL 1
 
 /* Define to 1 if you have the `snprintf' function. */
-#define HAVE_SNPRINTF 1
+#cmakedefine HAVE_SNPRINTF 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
-#define HAVE_STDINT_H 1
+#cmakedefine HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-#define HAVE_STDLIB_H 1
+#cmakedefine HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-#define HAVE_STRINGS_H 1
+#cmakedefine HAVE_STRINGS_H 1
 
 /* Define to 1 if you have the <string.h> header file. */
-#define HAVE_STRING_H 1
+#cmakedefine HAVE_STRING_H 1
 
 /* Define if you have strlcat */
-/* #undef HAVE_STRLCAT */
+#cmakedefine HAVE_STRLCAT 1
 
 /* Define if you have the strlcat prototype */
-/* #undef HAVE_STRLCAT_PROTO */
+#cmakedefine HAVE_STRLCAT_PROTO 1
 
 /* Define if you have strlcpy */
-/* #undef HAVE_STRLCPY */
+#cmakedefine HAVE_STRLCPY 1
 
 /* Define if you have the strlcpy prototype */
-/* #undef HAVE_STRLCPY_PROTO */
+#cmakedefine HAVE_STRLCPY_PROTO 1
 
 /* Define to 1 if you have the <sys/bitypes.h> header file. */
-#define HAVE_SYS_BITYPES_H 1
+#cmakedefine HAVE_SYS_BITYPES_H 1
 
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
-/* #undef HAVE_SYS_DIR_H */
+#cmakedefine HAVE_SYS_DIR_H 1
 
 /* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
    */
-/* #undef HAVE_SYS_NDIR_H */
+#cmakedefine HAVE_SYS_NDIR_H 1
 
 /* Define to 1 if you have the <sys/param.h> header file. */
-#define HAVE_SYS_PARAM_H 1
+#cmakedefine HAVE_SYS_PARAM_H 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
-#define HAVE_SYS_STAT_H 1
+#cmakedefine HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/types.h> header file. */
-#define HAVE_SYS_TYPES_H 1
+#cmakedefine HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#define HAVE_UNISTD_H 1
+#cmakedefine HAVE_UNISTD_H 1
 
 /* Define to 1 if you have the `vsnprintf' function. */
-#define HAVE_VSNPRINTF 1
+#cmakedefine HAVE_VSNPRINTF 1
 
 /* Defines if your system has the libwpd library */
 /* #undef HAVE_WPD */
@@ -192,7 +192,7 @@
 #define HAVE_XINPUTEXT 1
 
 /* Suffix for lib directories */
-#define KDELIBSUFF ""
+#define KDELIBSUFF "${KDELIBSUFF}"
 
 /* Define a safe value for MAXPATHLEN */
 #define KDEMAXPATHLEN 4096
@@ -228,22 +228,22 @@
 #define PREFIX "/usr"
 
 /* The size of a `char *', as computed by sizeof. */
-#define SIZEOF_CHAR_P 4
+#define SIZEOF_CHAR_P ${SIZEOF_CHAR_P}
 
 /* The size of a `int', as computed by sizeof. */
-#define SIZEOF_INT 4
+#define SIZEOF_INT ${SIZEOF_INT}
 
 /* The size of a `long', as computed by sizeof. */
-#define SIZEOF_LONG 4
+#define SIZEOF_LONG ${SIZEOF_LONG}
 
 /* The size of a `short', as computed by sizeof. */
-#define SIZEOF_SHORT 2
+#define SIZEOF_SHORT ${SIZEOF_SHORT}
 
 /* The size of a `size_t', as computed by sizeof. */
-#define SIZEOF_SIZE_T 4
+#define SIZEOF_SIZE_T ${SIZEOF_SIZE_T}
 
 /* The size of a `unsigned long', as computed by sizeof. */
-#define SIZEOF_UNSIGNED_LONG 4
+#define SIZEOF_UNSIGNED_LONG ${SIZEOF_UNSIGNED_LONG}
 
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
