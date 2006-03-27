@@ -41,8 +41,8 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 #include <q3hbox.h>
-#include <qvgroupbox.h>
-#include <qhbuttongroup.h>
+//#include <qvgroupbox.h>
+//#include <qhbuttongroup.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
