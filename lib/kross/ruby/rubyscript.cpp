@@ -61,6 +61,7 @@ RubyScript::~RubyScript()
     NODE* old_tree = ruby_eval_tree; \
     ruby_eval_tree = d->m_compile;
 #define unselectScript() \
+    d->m_compile = 0; \
     ruby_eval_tree = old_tree;
 
 void RubyScript::compile()
@@ -102,7 +103,6 @@ const QStringList& RubyScript::getFunctionNames()
     if(d->m_compile == 0)
     {
         compile();
-        //if(! d->m_compile) d->m_functions = QStringList();
     }
     return d->m_functions;
 }
@@ -112,36 +112,15 @@ Kross::Api::Object::Ptr RubyScript::execute()
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "RubyScript::execute()" << endl;
 #endif
-    while(true) {
-        if(d->m_compile == 0)
-        {
-            compile();
-            if(! d->m_compile)
-                return 0;
-        }
-        else if(BUILTIN_TYPE(d->m_compile) != T_NODE)
-        {
-            // this is a workaround of a bug in ruby where the
-            // node got sometimes invalid whyever.
-            d->m_compile = 0;
-            continue; // compile it again...
-        }
-        break;
+    if(d->m_compile == 0)
+    {
+        compile();
     }
-
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "Start execution" << endl;
 #endif
     selectScript();
-
-    int result = -1;
-    if (BUILTIN_TYPE(d->m_compile) != T_NODE) {
-        kdWarning() << QString("Not a node %1").arg(BUILTIN_TYPE(d->m_compile)) << endl;
-    }
-    else {
-        result = ruby_exec();
-    }
-
+    int result = ruby_exec();
     if (result != 0)
     {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -175,8 +154,6 @@ Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api
     if(d->m_compile == 0)
     {
         compile();
-        if(! d->m_compile)
-            return 0;
     }
     selectScript();
     unselectScript();
@@ -191,7 +168,6 @@ const QStringList& RubyScript::getClassNames()
     if(d->m_compile == 0)
     {
         compile();
-        //if(! d->m_compile) d->m_classes = QStringList();
     }
     return d->m_classes;
 }
@@ -205,8 +181,6 @@ Kross::Api::Object::Ptr RubyScript::classInstance(const QString& name)
     if(d->m_compile == 0)
     {
         compile();
-        if(! d->m_compile)
-            return 0;
     }
     selectScript();
     unselectScript();
