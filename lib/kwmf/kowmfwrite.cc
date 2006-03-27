@@ -71,7 +71,7 @@ bool KoWmfWrite::begin() {
     
     if ( !d->mFileOut.open( QIODevice::WriteOnly ) )
     {
-        kdDebug() << "Cannot open file " << QFile::encodeName(d->mFileOut.name()) << endl;
+        kDebug() << "Cannot open file " << QFile::encodeName(d->mFileOut.name()) << endl;
         return false;
     }
     d->mSt.setDevice( &d->mFileOut );
@@ -79,18 +79,18 @@ bool KoWmfWrite::begin() {
 
     // reserved placeable and standard header
     for ( int i=0 ; i < 10 ; i++ ) {
-        d->mSt << (Q_UINT32)0;
+        d->mSt << (quint32)0;
     }
 
     // initialize the stack of objects
     // Pen
-    d->mSt << (Q_UINT32)8 << (Q_UINT16)0x02FA;
-    d->mSt << (Q_UINT16)5 << (Q_UINT16)0 << (Q_UINT16)0 << (Q_UINT32)0;
+    d->mSt << (quint32)8 << (quint16)0x02FA;
+    d->mSt << (quint16)5 << (quint16)0 << (quint16)0 << (quint32)0;
     // Brush
-    d->mSt << (Q_UINT32)7 << (Q_UINT16)0x02FC;
-    d->mSt << (Q_UINT16)1 << (Q_UINT32)0 << (Q_UINT16)0;
+    d->mSt << (quint32)7 << (quint16)0x02FC;
+    d->mSt << (quint16)1 << (quint32)0 << (quint16)0;
     for ( int i=0 ; i < 4 ; i++ ) {
-        d->mSt << (Q_UINT32)8 << (Q_UINT16)0x02FA << (Q_UINT16)0 << (Q_UINT32)0 << (Q_UINT32)0;
+        d->mSt << (quint32)8 << (quint16)0x02FA << (quint16)0 << (quint32)0 << (quint32)0;
     }
     d->mMaxRecordSize = 8;
 
@@ -100,10 +100,10 @@ bool KoWmfWrite::begin() {
 
 bool KoWmfWrite::end() {
     WmfPlaceableHeader pheader = { 0x9AC6CDD7, 0, 0, 0, 0, 0, 0, 0, 0 };
-    Q_UINT16  checksum;
+    quint16  checksum;
 
     // End of the wmf file
-    d->mSt << (Q_UINT32)3 << (Q_UINT16)0;
+    d->mSt << (quint32)3 << (quint16)0;
 
     // adjust header
     pheader.left = d->mBBox.left();
@@ -115,11 +115,11 @@ bool KoWmfWrite::end() {
     
     // write headers
     d->mFileOut.at( 0 );
-    d->mSt << (Q_UINT32)0x9AC6CDD7 << (Q_UINT16)0;
-    d->mSt << (Q_INT16)d->mBBox.left() << (Q_INT16)d->mBBox.top() << (Q_INT16)d->mBBox.right() << (Q_INT16)d->mBBox.bottom();
-    d->mSt << (Q_UINT16)d->mDpi << (Q_UINT32)0 << checksum;
-    d->mSt << (Q_UINT16)1 << (Q_UINT16)9 << (Q_UINT16)0x300 << (Q_UINT32)(d->mFileOut.size()/2);
-    d->mSt << (Q_UINT16)6 << (Q_UINT32)d->mMaxRecordSize << (Q_UINT16)0;
+    d->mSt << (quint32)0x9AC6CDD7 << (quint16)0;
+    d->mSt << (qint16)d->mBBox.left() << (qint16)d->mBBox.top() << (qint16)d->mBBox.right() << (qint16)d->mBBox.bottom();
+    d->mSt << (quint16)d->mDpi << (quint32)0 << checksum;
+    d->mSt << (quint16)1 << (quint16)9 << (quint16)0x300 << (quint32)(d->mFileOut.size()/2);
+    d->mSt << (quint16)6 << (quint32)d->mMaxRecordSize << (quint16)0;
 
     d->mFileOut.close();
     
@@ -128,12 +128,12 @@ bool KoWmfWrite::end() {
 
 
 void KoWmfWrite::save() {
-    d->mSt << (Q_UINT32)3 << (Q_UINT16)0x001E;
+    d->mSt << (quint32)3 << (quint16)0x001E;
 }
 
 
 void KoWmfWrite::restore() {
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x0127 << (Q_UINT16)1;
+    d->mSt << (quint32)4 << (quint16)0x0127 << (quint16)1;
 }
 
 
@@ -143,9 +143,9 @@ void KoWmfWrite::setPen( const QPen &pen ) {
 
     // we can't delete an object currently selected
     // select another object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)0;
+    d->mSt << (quint32)4 << (quint16)0x012D << (quint16)0;
     // delete object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x01f0 << (Q_UINT16)2;
+    d->mSt << (quint32)4 << (quint16)0x01f0 << (quint16)2;
 
     for ( style=0 ; style < max ; style++ ) {
         if ( koWmfStylePen[ style ] == pen.style() ) break;
@@ -154,11 +154,11 @@ void KoWmfWrite::setPen( const QPen &pen ) {
         // SolidLine
         style = 0;
     }
-    d->mSt << (Q_UINT32)8 << (Q_UINT16)0x02FA;
-    d->mSt << (Q_UINT16)style << (Q_UINT16)pen.width() << (Q_UINT16)0 << (Q_UINT32)winColor( pen.color() );
+    d->mSt << (quint32)8 << (quint16)0x02FA;
+    d->mSt << (quint16)style << (quint16)pen.width() << (quint16)0 << (quint32)winColor( pen.color() );
 
     // select object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)2;
+    d->mSt << (quint32)4 << (quint16)0x012D << (quint16)2;
 }
 
 
@@ -168,9 +168,9 @@ void KoWmfWrite::setBrush( const QBrush &brush ) {
 
     // we can't delete an object currently selected
     // select another object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)1;
+    d->mSt << (quint32)4 << (quint16)0x012D << (quint16)1;
     // delete object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x01f0 << (Q_UINT16)3;
+    d->mSt << (quint32)4 << (quint16)0x01f0 << (quint16)3;
 
     for ( style=0 ; style < max ; style++ ) {
         if ( koWmfStyleBrush[ style ] == brush.style() ) break;
@@ -179,11 +179,11 @@ void KoWmfWrite::setBrush( const QBrush &brush ) {
         // SolidPattern
         style = 0;
     }
-    d->mSt << (Q_UINT32)7 << (Q_UINT16)0x02FC;
-    d->mSt << (Q_UINT16)style << (Q_UINT32)winColor( brush.color() ) << (Q_UINT16)0;
+    d->mSt << (quint32)7 << (quint16)0x02FC;
+    d->mSt << (quint16)style << (quint32)winColor( brush.color() ) << (quint16)0;
 
     // select object
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x012D << (Q_UINT16)3;
+    d->mSt << (quint32)4 << (quint16)0x012D << (quint16)3;
 }
 
 
@@ -192,21 +192,21 @@ void KoWmfWrite::setFont( const QFont & ) {
 
 
 void KoWmfWrite::setBackgroundColor( const QColor &c ) {
-    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x0201 << (Q_UINT32)winColor( c );
+    d->mSt << (quint32)5 << (quint16)0x0201 << (quint32)winColor( c );
 }
 
 
 void KoWmfWrite::setBackgroundMode( Qt::BGMode mode ) {
-    d->mSt << (Q_UINT32)4 << (Q_UINT16)0x0102;
+    d->mSt << (quint32)4 << (quint16)0x0102;
     if ( mode == Qt::TransparentMode )
-        d->mSt << (Q_UINT16)1;
+        d->mSt << (quint16)1;
     else
-        d->mSt << (Q_UINT16)0;
+        d->mSt << (quint16)0;
 }
 
 
 void KoWmfWrite::setRasterOp( Qt::RasterOp op ) {
-    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x0104 << (Q_UINT32)qtRasterToWin32( op );
+    d->mSt << (quint32)5 << (quint16)0x0104 << (quint32)qtRasterToWin32( op );
 }
 
 
@@ -214,10 +214,10 @@ void KoWmfWrite::setWindow( int left, int top, int width, int height ) {
     d->mBBox.setRect( left, top, width, height );
 
     // windowOrg
-    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x020B << (Q_UINT16)top << (Q_UINT16)left;
+    d->mSt << (quint32)5 << (quint16)0x020B << (quint16)top << (quint16)left;
 
     // windowExt
-    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x020C << (Q_UINT16)height << (Q_UINT16)width;
+    d->mSt << (quint32)5 << (quint16)0x020C << (quint16)height << (quint16)width;
 }
 
 
@@ -235,20 +235,20 @@ void KoWmfWrite::clipping( bool enable ) {
 
 
 void KoWmfWrite::moveTo( int left, int top ) {
-    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x0214 << (Q_UINT16)top << (Q_UINT16)left;
+    d->mSt << (quint32)5 << (quint16)0x0214 << (quint16)top << (quint16)left;
 }
 
 
 void KoWmfWrite::lineTo( int left, int top ) {
-    d->mSt << (Q_UINT32)5 << (Q_UINT16)0x0213 << (Q_UINT16)top << (Q_UINT16)left;
+    d->mSt << (quint32)5 << (quint16)0x0213 << (quint16)top << (quint16)left;
 }
 
 
 void KoWmfWrite::drawRect( int left, int top, int width, int height ) {
     QRect rec( left, top, width, height );
 
-    d->mSt << (Q_UINT32)7 << (Q_UINT16)0x041B;
-    d->mSt << (Q_UINT16)rec.bottom() << (Q_UINT16)rec.right() << (Q_UINT16)rec.top() << (Q_UINT16)rec.left();
+    d->mSt << (quint32)7 << (quint16)0x041B;
+    d->mSt << (quint16)rec.bottom() << (quint16)rec.right() << (quint16)rec.top() << (quint16)rec.left();
 }
 
 
@@ -260,18 +260,18 @@ void KoWmfWrite::drawRoundRect( int left, int top, int width, int height , int r
     widthCorner = ( roudw * width ) / 100;
     heightCorner = ( roudh * height ) / 100;
 
-    d->mSt << (Q_UINT32)9 << (Q_UINT16)0x061C << (Q_UINT16)heightCorner << (Q_UINT16)widthCorner;
-    d->mSt << (Q_UINT16)rec.bottom() << (Q_UINT16)rec.right() << (Q_UINT16)rec.top() << (Q_UINT16)rec.left();
+    d->mSt << (quint32)9 << (quint16)0x061C << (quint16)heightCorner << (quint16)widthCorner;
+    d->mSt << (quint16)rec.bottom() << (quint16)rec.right() << (quint16)rec.top() << (quint16)rec.left();
     
-    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, 9 );
+    d->mMaxRecordSize = qMax( d->mMaxRecordSize, 9 );
 }
 
 
 void KoWmfWrite::drawEllipse( int left, int top, int width, int height  ) {
     QRect rec( left, top, width, height );
 
-    d->mSt << (Q_UINT32)7 << (Q_UINT16)0x0418;
-    d->mSt << (Q_UINT16)rec.bottom() << (Q_UINT16)rec.right() << (Q_UINT16)rec.top() << (Q_UINT16)rec.left();
+    d->mSt << (quint32)7 << (quint16)0x0418;
+    d->mSt << (quint16)rec.bottom() << (quint16)rec.right() << (quint16)rec.top() << (quint16)rec.left();
 }
 
 
@@ -283,13 +283,13 @@ void KoWmfWrite::drawArc( int left, int top, int width, int height , int a, int 
     xCenter = left + (width / 2);
     yCenter = top + (height / 2);
     
-    d->mSt << (Q_UINT32)11 << (Q_UINT16)0x0817;
-    d->mSt << (Q_UINT16)(yCenter + offYEnd) << (Q_UINT16)(xCenter + offXEnd);
-    d->mSt << (Q_UINT16)(yCenter + offYStart) << (Q_UINT16)(xCenter + offXStart);
-    d->mSt << (Q_UINT16)(top + height) << (Q_UINT16)(left + width);
-    d->mSt << (Q_UINT16)top << (Q_UINT16)left;
+    d->mSt << (quint32)11 << (quint16)0x0817;
+    d->mSt << (quint16)(yCenter + offYEnd) << (quint16)(xCenter + offXEnd);
+    d->mSt << (quint16)(yCenter + offYStart) << (quint16)(xCenter + offXStart);
+    d->mSt << (quint16)(top + height) << (quint16)(left + width);
+    d->mSt << (quint16)top << (quint16)left;
 
-    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, 11 );
+    d->mMaxRecordSize = qMax( d->mMaxRecordSize, 11 );
 }
 
 
@@ -301,13 +301,13 @@ void KoWmfWrite::drawPie( int left, int top, int width, int height , int a, int 
     xCenter = left + (width / 2);
     yCenter = top + (height / 2);
 
-    d->mSt << (Q_UINT32)11 << (Q_UINT16)0x081A;
-    d->mSt << (Q_UINT16)(yCenter + offYEnd) << (Q_UINT16)(xCenter + offXEnd);
-    d->mSt << (Q_UINT16)(yCenter + offYStart) << (Q_UINT16)(xCenter + offXStart);
-    d->mSt << (Q_UINT16)(top + height) << (Q_UINT16)(left + width);
-    d->mSt << (Q_UINT16)top << (Q_UINT16)left;
+    d->mSt << (quint32)11 << (quint16)0x081A;
+    d->mSt << (quint16)(yCenter + offYEnd) << (quint16)(xCenter + offXEnd);
+    d->mSt << (quint16)(yCenter + offYStart) << (quint16)(xCenter + offXStart);
+    d->mSt << (quint16)(top + height) << (quint16)(left + width);
+    d->mSt << (quint16)top << (quint16)left;
 
-    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, 11 );
+    d->mMaxRecordSize = qMax( d->mMaxRecordSize, 11 );
 }
 
 
@@ -319,33 +319,33 @@ void KoWmfWrite::drawChord( int left, int top, int width, int height , int a, in
     xCenter = left + (width / 2);
     yCenter = top + (height / 2);
     
-    d->mSt << (Q_UINT32)11 << (Q_UINT16)0x0830;
-    d->mSt << (Q_UINT16)(yCenter + offYEnd) << (Q_UINT16)(xCenter + offXEnd);
-    d->mSt << (Q_UINT16)(yCenter + offYStart) << (Q_UINT16)(xCenter + offXStart);
-    d->mSt << (Q_UINT16)(top + height) << (Q_UINT16)(left + width);
-    d->mSt << (Q_UINT16)top << (Q_UINT16)left;
+    d->mSt << (quint32)11 << (quint16)0x0830;
+    d->mSt << (quint16)(yCenter + offYEnd) << (quint16)(xCenter + offXEnd);
+    d->mSt << (quint16)(yCenter + offYStart) << (quint16)(xCenter + offXStart);
+    d->mSt << (quint16)(top + height) << (quint16)(left + width);
+    d->mSt << (quint16)top << (quint16)left;
 
-    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, 11 );
+    d->mMaxRecordSize = qMax( d->mMaxRecordSize, 11 );
 }
 
 
 void KoWmfWrite::drawPolyline( const Q3PointArray &pa ) {
     int size = 4 + (pa.size() * 2);
     
-    d->mSt << (Q_UINT32)size << (Q_UINT16)0x0325 << (Q_UINT16)pa.size();
+    d->mSt << (quint32)size << (quint16)0x0325 << (quint16)pa.size();
     pointArray( pa );
 
-    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, size );
+    d->mMaxRecordSize = qMax( d->mMaxRecordSize, size );
 }
 
 
 void KoWmfWrite::drawPolygon( const Q3PointArray &pa, bool  ) {
     int size = 4 + (pa.size() * 2);
     
-    d->mSt << (Q_UINT32)size << (Q_UINT16)0x0324 << (Q_UINT16)pa.size();
+    d->mSt << (quint32)size << (quint16)0x0324 << (quint16)pa.size();
     pointArray( pa );
     
-    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, size );
+    d->mMaxRecordSize = qMax( d->mMaxRecordSize, size );
 }
 
 
@@ -358,11 +358,11 @@ void KoWmfWrite::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool ) {
         sizeArrayPoly += (pa->size() * 2);
     }
     int size = 4 + listPa.count() + sizeArrayPoly;
-    d->mSt << (Q_UINT32)size << (Q_UINT16)0x0538 << (Q_UINT16)listPa.count();
+    d->mSt << (quint32)size << (quint16)0x0538 << (quint16)listPa.count();
 
     // number of point for each Polygon
     for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
-        d->mSt << (Q_UINT16)pa->size();
+        d->mSt << (quint16)pa->size();
     }
 
     // list of points
@@ -370,7 +370,7 @@ void KoWmfWrite::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool ) {
         pointArray( *pa );
     }
 
-    d->mMaxRecordSize = QMAX( d->mMaxRecordSize, size );
+    d->mMaxRecordSize = qMax( d->mMaxRecordSize, size );
 
 }
 
@@ -390,7 +390,7 @@ void KoWmfWrite::drawImage( int , int , const QImage &, int , int , int , int  )
 
 
 void KoWmfWrite::drawText( int , int , int , int , int , const QString& , double ) {
-//    d->mSt << (Q_UINT32)3 << (Q_UINT16)0x0A32;
+//    d->mSt << (quint32)3 << (quint16)0x0A32;
 }
 
 //-----------------------------------------------------------------------------
@@ -401,13 +401,13 @@ void KoWmfWrite::pointArray( const Q3PointArray &pa ) {
 
     for ( i=0, max=pa.size() ; i < max ; i++ ) {
         pa.point( i, &left, &top );
-        d->mSt << (Q_INT16)left << (Q_INT16)top;
+        d->mSt << (qint16)left << (qint16)top;
     }
 }
 
 
-Q_UINT32 KoWmfWrite::winColor( QColor color ) {
-    Q_UINT32 c;
+quint32 KoWmfWrite::winColor( QColor color ) {
+    quint32 c;
 
     c = (color.Qt::red() & 0xFF);
     c += ( (color.Qt::green() & 0xFF) << 8 );
@@ -430,7 +430,7 @@ void KoWmfWrite::angleToxy( int &xStart, int &yStart, int &xEnd, int &yEnd, int 
 }
 
 
-Q_UINT16  KoWmfWrite::qtRasterToWin16( Qt::RasterOp op ) const {
+quint16  KoWmfWrite::qtRasterToWin16( Qt::RasterOp op ) const {
     int i;
 
     for ( i=0 ; i < 17 ; i++ ) {
@@ -438,13 +438,13 @@ Q_UINT16  KoWmfWrite::qtRasterToWin16( Qt::RasterOp op ) const {
     }
 
     if ( i < 17 )
-        return  (Q_UINT16)i;
+        return  (quint16)i;
     else
-        return (Q_UINT16)0;
+        return (quint16)0;
 }
 
 
-Q_UINT32  KoWmfWrite::qtRasterToWin32( Qt::RasterOp op ) const {
+quint32  KoWmfWrite::qtRasterToWin32( Qt::RasterOp op ) const {
     int i;
 
     for ( i=0 ; i < 15 ; i++ ) {

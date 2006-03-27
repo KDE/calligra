@@ -32,7 +32,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
-#include <kaccelmanager.h>
+#include <kacceleratormanager.h>
 #include <kconfig.h>
 
 #include <KoView.h>
@@ -67,7 +67,7 @@ void KoPalette::resetFont()
     Q_ASSERT(cfg);
     cfg->setGroup("");
     m_font  = KGlobalSettings::generalFont();
-    float ps = QMIN(9, KGlobalSettings::generalFont().pointSize() * 0.8);
+    float ps = qMin(9, KGlobalSettings::generalFont().pointSize() * 0.8);
     ps = cfg->readNumEntry("palettefontsize", (int)ps);
     if (ps < 6) ps = 6;
     m_font.setPointSize((int)ps);

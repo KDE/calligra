@@ -42,7 +42,7 @@ URLEdit::URLEdit(Property *property, QWidget *parent, const char *name)
 {
 	QHBoxLayout *l = new QHBoxLayout(this, 0, 0);
 #ifndef QT_ONLY
-	m_edit = new KURLRequester(this);
+	m_edit = new KUrlRequester(this);
 	m_edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	m_edit->setMinimumHeight(5);
 	l->addWidget(m_edit);

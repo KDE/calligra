@@ -53,7 +53,7 @@ KoSearchContext::KoSearchContext()
     m_size = 12;
     m_vertAlign = KoTextFormat::AlignNormal;
     m_optionsMask = 0;
-    m_options = KFindDialog::FromCursor | KReplaceDialog::PromptOnReplace;
+    m_options = KFind::FromCursor | KReplaceDialog::PromptOnReplace;
     m_underline = KoTextFormat::U_NONE;
     m_strikeOut = KoTextFormat::S_NONE;
     m_attribute = KoTextFormat::ATT_NONE;
@@ -207,7 +207,7 @@ KoFindReplace::~KoFindReplace()
 {
     removeHighlight();
     emitUndoRedo();
-    //kdDebug(32500) << "KoFindReplace::~KoFindReplace" << endl;
+    //kDebug(32500) << "KoFindReplace::~KoFindReplace" << endl;
     delete m_find;
     delete m_replace;
 }
@@ -256,7 +256,7 @@ bool KoFindReplace::findNext()
 {
     KFind::Result res = KFind::NoMatch;
     while ( res == KFind::NoMatch && !m_textIterator.atEnd() ) {
-        //kdDebug(32500) << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << " m_currentParagraphModified=" << m_currentParagraphModified << endl;
+        //kDebug(32500) << "findNext loop. m_bInit=" << m_bInit << " needData=" << needData() << " m_currentParagraphModified=" << m_currentParagraphModified << endl;
         if ( needData() || m_currentParagraphModified ) {
             if ( !m_bInit && !m_currentParagraphModified ) {
                 ++m_textIterator;
@@ -280,13 +280,13 @@ bool KoFindReplace::findNext()
             res = m_replace->replace();
     }
 
-    //kdDebug(32500) << k_funcinfo << "we're done. res=" << res << endl;
+    //kDebug(32500) << k_funcinfo << "we're done. res=" << res << endl;
     if ( res == KFind::NoMatch ) // i.e. at end
     {
         emitUndoRedo();
         removeHighlight();
         if ( shouldRestart() ) {
-            m_textIterator.setOptions( m_textIterator.options() & ~KFindDialog::FromCursor );
+            m_textIterator.setOptions( m_textIterator.options() & ~KFind::FromCursor );
             m_textIterator.restart();
             m_bInit = true;
             if ( m_find )
@@ -315,11 +315,11 @@ void KoFindReplace::slotFindNext() // called by the button in the small "find ne
 bool KoFindReplace::findPrevious()
 {
     int opt = options();
-    bool forw = ! ( options() & KFindDialog::FindBackwards );
+    bool forw = ! ( options() & KFind::FindBackwards );
     if ( forw )
-        setOptions( opt | KFindDialog::FindBackwards );
+        setOptions( opt | KFind::FindBackwards );
     else
-        setOptions( opt & ~KFindDialog::FindBackwards );
+        setOptions( opt & ~KFind::FindBackwards );
 
     bool ret = findNext();
 
@@ -356,7 +356,7 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
     if ( m_lastTextObjectHighlighted )
         m_lastTextObjectHighlighted->removeHighlight(true);
     m_lastTextObjectHighlighted = m_textIterator.currentTextObject();
-    //kdDebug(32500) << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
+    //kDebug(32500) << "KoFindReplace::highlight " << matchingIndex << "," << matchingLength << endl;
     KDialogBase* dialog = m_find ? m_find->findNextDialog() : m_replace->replaceNextDialog();
     highlightPortion(m_textIterator.currentParag(), m_offset + matchingIndex, matchingLength, m_lastTextObjectHighlighted->textDocument(), dialog );
 }
@@ -365,7 +365,7 @@ void KoFindReplace::highlight( const QString &, int matchingIndex, int matchingL
 void KoFindReplace::replace( const QString &text, int matchingIndex,
                              int replacementLength, int matchedLength )
 {
-    //kdDebug(32500) << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " options=" << options() << endl;
+    //kDebug(32500) << "KoFindReplace::replace m_offset=" << m_offset << " matchingIndex=" << matchingIndex << " matchedLength=" << matchedLength << " options=" << options() << endl;
     m_matchingIndex = matchingIndex;
     int index = m_offset + matchingIndex;
 

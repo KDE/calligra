@@ -455,7 +455,7 @@ inline void KoTextParag::append( const QString &s, bool reallyAtEnd )
     if ( reallyAtEnd )
 	insert( str->length(), s );
     else
-	insert( QMAX( str->length() - 1, 0 ), s );
+	insert( qMax( str->length() - 1, 0 ), s );
 }
 
 inline KoTextParag *KoTextParag::prev() const
@@ -493,7 +493,7 @@ inline void KoTextParag::setParagId( int i )
 inline int KoTextParag::paragId() const
 {
     //if ( id == -1 )
-    //	kdWarning() << "invalid parag id!!!!!!!! (" << (void*)this << ")" << endl;
+    //	kWarning() << "invalid parag id!!!!!!!! (" << (void*)this << ")" << endl;
     return id;
 }
 

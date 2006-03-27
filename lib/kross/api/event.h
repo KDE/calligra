@@ -212,13 +212,13 @@ namespace Kross { namespace Api {
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
-                kdDebug() << QString("Event::call() name='%1' getName()='%2'").arg(name).arg(getName()) << endl;
+                kDebug() << QString("Event::call() name='%1' getName()='%2'").arg(name).arg(getName()) << endl;
 #endif
 
                 Function* function = m_functions[name];
                 if(function) {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
-                    kdDebug() << QString("Event::call() name='%1' is a builtin function.").arg(name) << endl;
+                    kDebug() << QString("Event::call() name='%1' is a builtin function.").arg(name) << endl;
 #endif
 
                     //FIXME checkArguments(arguments);

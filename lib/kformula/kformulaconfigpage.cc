@@ -41,7 +41,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kfontdialog.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
@@ -121,7 +121,8 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 //     defaultLabel->setText( i18n( "Default color:" ) );
 //     grid->addWidget( defaultLabel, 0, 0 );
 
-//     defaultColorBtn = new KColorButton( hlBox, "defaultColor" );
+//     defaultColorBtn = new KColorButton( hlBox );
+//defaultColorBtn->setObjectName( "defaultColor" );
 //     defaultColorBtn->setColor( contextStyle.getDefaultColor() );
 //     grid->addWidget( defaultColorBtn, 0, 1 );
 
@@ -130,7 +131,8 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 //     numberLabel->setText( i18n( "Number color:" ) );
 //     grid->addWidget( numberLabel, 1, 0 );
 
-//     numberColorBtn = new KColorButton( hlBox, "numberColor" );
+//     numberColorBtn = new KColorButton( hlBox );
+//numberColorBtn->setObjectName( "numberColor" );
 //     numberColorBtn->setColor( contextStyle.getNumberColorPlain() );
 //     grid->addWidget( numberColorBtn, 1, 1 );
 
@@ -139,7 +141,8 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 //     operatorLabel->setText( i18n( "Operator color:" ) );
 //     grid->addWidget( operatorLabel, 2, 0 );
 
-//     operatorColorBtn = new KColorButton( hlBox, "operatorColor" );
+//     operatorColorBtn = new KColorButton( hlBox );
+//operatorColorBtn->setObjectName( "operatorColor" );
 //     operatorColorBtn->setColor( contextStyle.getOperatorColorPlain() );
 //     grid->addWidget( operatorColorBtn, 2, 1 );
 
@@ -148,7 +151,8 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 //     emptyLabel->setText( i18n( "Empty color:" ) );
 //     grid->addWidget( emptyLabel, 3, 0 );
 
-//     emptyColorBtn = new KColorButton( hlBox, "emptyColor" );
+//     emptyColorBtn = new KColorButton( hlBox );
+//emptyColorBtn->setObjectName( "emptyColor" );
 //     emptyColorBtn->setColor( contextStyle.getEmptyColorPlain() );
 //     grid->addWidget( emptyColorBtn, 3, 1 );
 
@@ -157,7 +161,8 @@ ConfigurePage::ConfigurePage( Document* document, QWidget* view, KConfig* config
 //     errorLabel->setText( i18n( "Error color:" ) );
 //     grid->addWidget( errorLabel, 4, 0 );
 
-//     errorColorBtn = new KColorButton( hlBox, "errorColor" );
+//     errorColorBtn = new KColorButton( hlBox );
+//errorColorBtn->setObjectName( "errorColor" );
 //     errorColorBtn->setColor( contextStyle.getErrorColorPlain() );
 //     grid->addWidget( errorColorBtn, 4, 1 );
 
@@ -401,10 +406,10 @@ void ConfigurePage::slotChanged()
     m_changed = true;
 }
 
-// class UsedFontItem : public KListViewItem {
+// class UsedFontItem : public K3ListViewItem {
 // public:
 //     UsedFontItem( MathFontsConfigurePage* page, QListView* parent, QString font )
-//         : KListViewItem( parent, font ), m_page( page ) {}
+//         : K3ListViewItem( parent, font ), m_page( page ) {}
 
 //     int compare( QListViewItem* i, int col, bool ascending ) const;
 
@@ -434,7 +439,7 @@ void ConfigurePage::slotChanged()
 
 //     QHBoxLayout* hLayout = new QHBoxLayout( 0, 0, 6 );
 
-//     availableFonts = new KListView( fontWidget );
+//     availableFonts = new K3ListView( fontWidget );
 //     availableFonts->addColumn( i18n( "Available Fonts" ) );
 //     hLayout->addWidget( availableFonts );
 
@@ -461,7 +466,7 @@ void ConfigurePage::slotChanged()
 //     moveUp->setText( i18n( "Up" ) );
 //     vLayout->addWidget( moveUp );
 
-//     requestedFonts = new KListView( fontWidget );
+//     requestedFonts = new K3ListView( fontWidget );
 //     requestedFonts->addColumn( i18n( "Used Fonts" ) );
 //     vLayout->addWidget( requestedFonts );
 
@@ -555,7 +560,7 @@ void ConfigurePage::slotChanged()
 //         }
 //     }
 //     for ( QMap<QString, QString>::iterator it = fontMap.begin(); it != fontMap.end(); ++it ) {
-//         new KListViewItem( availableFonts, it.key() );
+//         new K3ListViewItem( availableFonts, it.key() );
 //     }
 // }
 
@@ -583,7 +588,7 @@ void ConfigurePage::slotChanged()
 //         }
 //         //requestedFonts->takeItem( fontItem );
 //         delete fontItem;
-//         new KListViewItem( availableFonts, fontName );
+//         new K3ListViewItem( availableFonts, fontName );
 //     }
 // }
 

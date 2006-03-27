@@ -78,7 +78,7 @@ RectEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 		QString(RECTEDIT_MASK).arg(value.toRect().x()).arg(value.toRect().y())
 	 	.arg(value.toRect().width()).arg(value.toRect().height()));
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
 //	 	QString("[ %1, %2, %3, %4 ]").arg(value.toRect().x()).arg(value.toRect().y())
 //	 	.arg(value.toRect().width()).arg(value.toRect().height()));
 }

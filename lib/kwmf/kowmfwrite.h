@@ -119,18 +119,18 @@ private:
     //-----------------------------------------------------------------------------
     // Utilities and conversion Qt --> Wmf
 
-    /** Convert QPointArray into Q_INT16 position (result in mSt) */
+    /** Convert QPointArray into qint16 position (result in mSt) */
     void pointArray( const Q3PointArray& pa );
 
     /** Convertion between windows color and QColor */
-    Q_UINT32 winColor( QColor color );
+    quint32 winColor( QColor color );
 
     /** Convert angle a and alen in coordinate (xStart,yStart) and (xEnd, yEnd) */
     void angleToxy( int& xStart, int& yStart, int& xEnd, int& yEnd, int a, int alen );
 
     /** Convert windows rasterOp in QT rasterOp */
-    Q_UINT16 qtRasterToWin16( Qt::RasterOp op ) const;
-    Q_UINT32 qtRasterToWin32( Qt::RasterOp op ) const;
+    quint16 qtRasterToWin16( Qt::RasterOp op ) const;
+    quint32 qtRasterToWin32( Qt::RasterOp op ) const;
 
 
 private:

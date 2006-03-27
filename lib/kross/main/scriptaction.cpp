@@ -30,6 +30,7 @@
 #include <kstandarddirs.h>
 #include <kmimetype.h>
 #include <kdebug.h>
+#include <QTextDocument>
 
 using namespace Kross::Api;
 
@@ -90,13 +91,13 @@ ScriptAction::ScriptAction(const QString& file)
     , Kross::Api::ScriptContainer(file)
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
-    //kdDebug() << QString("Kross::Api::ScriptAction::ScriptAction(const char*, const QString&) name='%1' text='%2'").arg(name).arg(text) << endl;
+    //kDebug() << QString("Kross::Api::ScriptAction::ScriptAction(const char*, const QString&) name='%1' text='%2'").arg(name).arg(text) << endl;
 
     KUrl url(file);
     if(url.isLocalFile()) {
         setFile(file);
         setText(url.fileName());
-        setIcon(KMimeType::iconForURL(url));
+        setIcon(KMimeType::iconNameForURL(url));
     }
     else {
         setText(file);
@@ -111,7 +112,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
     , Kross::Api::ScriptContainer()
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
-    //kdDebug() << "Kross::Api::ScriptAction::ScriptAction(const QDomElement&)" << endl;
+    //kDebug() << "Kross::Api::ScriptAction::ScriptAction(const QDomElement&)" << endl;
 
     QString name = element.attribute("name");
     QString text = element.attribute("text");
@@ -144,7 +145,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         setInterpreterName( interpreter );
 
     if(file.isNull()) {
-        setCode( element.text().stripWhiteSpace() );
+        setCode( element.text().trimmed() );
         if(description.isNull())
             description = text;
         ScriptContainer::setName(name);
@@ -153,11 +154,11 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
         QDir dir = QFileInfo(scriptconfigfile).dir(true);
         d->packagepath = dir.absPath();
         QFileInfo fi(dir, file);
-        file = fi.absFilePath();
+        file = fi.absoluteFilePath();
         setEnabled(fi.exists());
         setFile(file);
         if(icon.isNull())
-            icon = KMimeType::iconForURL( KUrl(file) );
+            icon = KMimeType::iconNameForURL( KUrl(file) );
         if(description.isEmpty())
             description = QString("%1<br>%2").arg(text.isEmpty() ? name : text).arg(file);
         else
@@ -176,7 +177,7 @@ ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& e
 
 ScriptAction::~ScriptAction()
 {
-    //kdDebug() << QString("Kross::Api::ScriptAction::~ScriptAction() name='%1' text='%2'").arg(name()).arg(text()) << endl;
+    //kDebug() << QString("Kross::Api::ScriptAction::~ScriptAction() name='%1' text='%2'").arg(name()).arg(text()) << endl;
     detachAll();
     delete d;
 }
@@ -238,8 +239,8 @@ void ScriptAction::activate()
         QString errormessage = Kross::Api::ScriptContainer::getException()->getError();
         QString tracedetails = Kross::Api::ScriptContainer::getException()->getTrace();
         d->logs << QString("<b>%1</b><br>%2")
-                   .arg( Q3StyleSheet::escape(errormessage) )
-                   .arg( Q3StyleSheet::escape(tracedetails) );
+                   .arg( Qt::escape(errormessage) )
+                   .arg( Qt::escape(tracedetails) );
         emit failed(errormessage, tracedetails);
     }
     else {

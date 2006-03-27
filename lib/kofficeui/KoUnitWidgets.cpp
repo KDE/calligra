@@ -43,7 +43,7 @@ QValidator::State
 KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 {
 
-    kdDebug(30004) << "KoUnitDoubleValidator::validate : " << s << " at " << pos << endl;
+    kDebug(30004) << "KoUnitDoubleValidator::validate : " << s << " at " << pos << endl;
     QValidator::State result = Acceptable;
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
@@ -52,15 +52,15 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
     if ( res == -1 )
     {
         // Nothing like an unit? The user is probably editing the unit
-        kdDebug(30004) << "Intermediate (no unit)" << endl;
+        kDebug(30004) << "Intermediate (no unit)" << endl;
         return Intermediate;
     }
 
-    // ### TODO: are all the QString::stripWhiteSpace really necessary?
-    const QString number ( s.left( res ).stripWhiteSpace() );
-    const QString unitName ( regexp.cap( 1 ).stripWhiteSpace().lower() );
+    // ### TODO: are all the QString::trimmed really necessary?
+    const QString number ( s.left( res ).trimmed() );
+    const QString unitName ( regexp.cap( 1 ).trimmed().lower() );
 
-    kdDebug(30004) << "Split:" << number << ":" << unitName << ":" << endl;
+    kDebug(30004) << "Split:" << number << ":" << unitName << ":" << endl;
 
     bool ok = false;
     const double value = m_base->toDouble( number, &ok );
@@ -73,13 +73,13 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
         else
         {
             // Probably the user is trying to edit the unit
-            kdDebug(30004) << "Intermediate (unknown unit)" << endl;
+            kDebug(30004) << "Intermediate (unknown unit)" << endl;
             return Intermediate;
         }
     }
     else
     {
-        kdWarning(30004) << "Not a number: " << number << endl;
+        kWarning(30004) << "Not a number: " << number << endl;
         return Invalid;
     }
 
@@ -94,7 +94,7 @@ KoUnitDoubleValidator::validate( QString &s, int &pos ) const
 QString KoUnitDoubleBase::getVisibleText( double value ) const
 {
     const QString num ( QString( "%1%2").arg( KGlobal::locale()->formatNumber( value, m_precision ), KoUnit::unitName( m_unit ) ) );
-    kdDebug(30004) << "getVisibleText: " << QString::number( value, 'f', 12 ) << " => " << num << endl;
+    kDebug(30004) << "getVisibleText: " << QString::number( value, 'f', 12 ) << " => " << num << endl;
     return num;
 }
 
@@ -109,9 +109,9 @@ double KoUnitDoubleBase::toDouble( const QString& str, bool* ok ) const
     str2.remove( KoUnit::unitName( m_unit ) );
     const double dbl = KGlobal::locale()->readNumber( str2, ok );
     if ( ok )
-      kdDebug(30004) << "toDouble:" << str << ": => :" << str2 << ": => " << QString::number( dbl, 'f', 12 ) << endl;
+      kDebug(30004) << "toDouble:" << str << ": => :" << str2 << ": => " << QString::number( dbl, 'f', 12 ) << endl;
     else
-        kdWarning(30004) << "toDouble error:" << str << ": => :" << str2 << ":" << endl;
+        kWarning(30004) << "toDouble error:" << str << ": => :" << str2 << ":" << endl;
     return dbl;
 }
 

@@ -200,7 +200,7 @@ void ElementType::append( ElementType* element )
 
 void ElementType::output()
 {
-    kdDebug( DEBUGID ) << start() << " - " << end() << endl;
+    kDebug( DEBUGID ) << start() << " - " << end() << endl;
 }
 
 void ElementType::saveMathML( SequenceElement* se, QDomDocument& doc, QDomElement de, bool oasisFormat )

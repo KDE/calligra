@@ -229,7 +229,7 @@ QString KoVariableDateFormat::convert( const QVariant& data ) const
 {
     if ( data.type() != QVariant::Date && data.type() != QVariant::DateTime )
     {
-        kdWarning(32500)<<" Error in KoVariableDateFormat::convert. Value is a "
+        kWarning(32500)<<" Error in KoVariableDateFormat::convert. Value is a "
                       << data.typeName() << "(" << data.type() << ")" << endl;
         // dateTime will be invalid, then set to 1970-01-01
     }
@@ -347,7 +347,7 @@ QString KoVariableTimeFormat::convert( const QVariant & time ) const
 {
     if ( time.type() != QVariant::Time )
     {
-        kdDebug(32500)<<" Error in KoVariableTimeFormat::convert. Value is a "
+        kDebug(32500)<<" Error in KoVariableTimeFormat::convert. Value is a "
                       << time.typeName() << "(" << time.type() << ")" << endl;
         return QString::null;
     }
@@ -400,7 +400,7 @@ QString KoVariableStringFormat::convert( const QVariant & string ) const
 {
     if ( string.type() != QVariant::String )
     {
-        kdDebug(32500)<<" Error in KoVariableStringFormat::convert. Value is a " << string.typeName() << endl;
+        kDebug(32500)<<" Error in KoVariableStringFormat::convert. Value is a " << string.typeName() << endl;
         return QString::null;
     }
 
@@ -424,7 +424,7 @@ QString KoVariableNumberFormat::convert( const QVariant &value ) const
 {
     if ( value.type() != QVariant::Int )
     {
-        kdDebug(32500)<<" Error in KoVariableNumberFormat::convert. Value is a " << value.typeName() << endl;
+        kDebug(32500)<<" Error in KoVariableNumberFormat::convert. Value is a " << value.typeName() << endl;
         return QString::null;
     }
 
@@ -459,7 +459,7 @@ KoVariableFormat * KoVariableFormatCollection::format( const Q3CString &key )
 
 KoVariableFormat * KoVariableFormatCollection::createFormat( const Q3CString &key )
 {
-    kdDebug(32500) << "KoVariableFormatCollection: creating format for key=" << key << endl;
+    kDebug(32500) << "KoVariableFormatCollection: creating format for key=" << key << endl;
     KoVariableFormat * format = 0L;
     // The first 4 chars identify the class
     Q3CString type = key.left(4);
@@ -532,7 +532,7 @@ Q3ValueList<KoVariable *> KoVariableCollection::recalcVariables(int type)
             KoTextParag * parag = variable->paragraph();
             if ( parag )
             {
-                //kdDebug(32500) << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
+                //kDebug(32500) << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
                 parag->invalidate( 0 );
                 parag->setChanged( true );
             }
@@ -576,7 +576,7 @@ Q3PtrList<KAction> KoVariableCollection::popupActionList() const
     Q3PtrList<KAction> listAction;
     // Insert list of actions that change the subtype
     const QStringList subTypeList = m_varSelected->subTypeList();
-    kdDebug() << k_funcinfo << "current subtype=" << m_varSelected->subType() << endl;
+    kDebug() << k_funcinfo << "current subtype=" << m_varSelected->subType() << endl;
     QStringList::ConstIterator it = subTypeList.begin();
     for ( int i = 0; it != subTypeList.end() ; ++it, ++i )
     {
@@ -626,7 +626,7 @@ void KoVariableCollection::slotChangeSubType()
     KAction * act = (KAction *)(sender());
     int menuNumber = Q3CString(act->name()).toInt();
     int newSubType = m_varSelected->variableSubType(menuNumber);
-    kdDebug(32500) << "slotChangeSubType: menuNumber=" << menuNumber << " newSubType=" << newSubType << endl;
+    kDebug(32500) << "slotChangeSubType: menuNumber=" << menuNumber << " newSubType=" << newSubType << endl;
     if ( m_varSelected->subType() != newSubType )
     {
         KoChangeVariableSubType *cmd=new KoChangeVariableSubType(
@@ -698,10 +698,10 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
             varFormat = coll->format( "STRING" );
             break;
         case VT_FOOTNOTE: // this is a KWord-specific variable
-            kdError() << "Footnote type not handled in KoVariableCollection: VT_FOOTNOTE" << endl;
+            kError() << "Footnote type not handled in KoVariableCollection: VT_FOOTNOTE" << endl;
             return 0L;
         case VT_STATISTIC:
-            kdError() << " Statistic type not handled in KoVariableCollection: VT_STATISTIC" << endl;
+            kError() << " Statistic type not handled in KoVariableCollection: VT_STATISTIC" << endl;
             return 0L;
         }
     }
@@ -709,7 +709,7 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
     if ( varFormat == 0L ) // still 0 ? Impossible!
         return 0L ;
 
-    kdDebug(32500) << "Creating variable. Format=" << varFormat->key() << " type=" << type << endl;
+    kDebug(32500) << "Creating variable. Format=" << varFormat->key() << " type=" << type << endl;
     KoVariable * var = 0L;
     switch ( type ) {
         case VT_DATE:
@@ -721,7 +721,7 @@ KoVariable * KoVariableCollection::createVariable( int type, short int subtype, 
             var = new KoTimeVariable( textdoc, subtype, varFormat, this, _correct );
             break;
         case VT_PGNUM:
-            kdError() << "VT_PGNUM must be handled by the application's reimplementation of KoVariableCollection::createVariable" << endl;
+            kError() << "VT_PGNUM must be handled by the application's reimplementation of KoVariableCollection::createVariable" << endl;
             //var = new KoPageVariable( textdoc, subtype, varFormat, this );
             break;
         case VT_FIELD:
@@ -861,7 +861,7 @@ KoVariable::KoVariable( KoTextDocument *textdoc, KoVariableFormat *varFormat, Ko
 
 KoVariable::~KoVariable()
 {
-    //kdDebug(32500) << "KoVariable::~KoVariable " << this << endl;
+    //kDebug(32500) << "KoVariable::~KoVariable " << this << endl;
     m_varColl->unregisterVariable( this );
     //delete d;
 }
@@ -887,7 +887,7 @@ void KoVariable::resize()
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
     m_ascent = fmt->ascent();
-    //kdDebug(32500) << "KoVariable::resize text=" << txt << " width=" << width << " height=" << height << " ascent=" << m_ascent << endl;
+    //kDebug(32500) << "KoVariable::resize text=" << txt << " width=" << width << " height=" << height << " ascent=" << m_ascent << endl;
 }
 
 void KoVariable::recalcAndRepaint()
@@ -896,7 +896,7 @@ void KoVariable::recalcAndRepaint()
     KoTextParag * parag = paragraph();
     if ( parag )
     {
-        //kdDebug(32500) << "KoVariable::recalcAndRepaint -> invalidating parag " << parag->paragId() << endl;
+        //kDebug(32500) << "KoVariable::recalcAndRepaint -> invalidating parag " << parag->paragId() << endl;
         parag->invalidate( 0 );
         parag->setChanged( true );
     }
@@ -1000,7 +1000,7 @@ void KoVariable::drawCustomItemHelper( QPainter* p, int x, int y, int wpix, int 
 
 void KoVariable::save( QDomElement &parentElem )
 {
-    //kdDebug(32500) << "KoVariable::save" << endl;
+    //kDebug(32500) << "KoVariable::save" << endl;
     QDomElement variableElem = parentElem.ownerDocument().createElement( "VARIABLE" );
     parentElem.appendChild( variableElem );
     QDomElement typeElem = parentElem.ownerDocument().createElement( "TYPE" );
@@ -1773,7 +1773,7 @@ void KoMailMergeVariable::loadOasis( const QDomElement &/*elem*/, KoOasisContext
 
 void KoMailMergeVariable::saveOasis( KoXmlWriter& /*writer*/, KoSavingContext& /*context*/ ) const
 {
-        kdWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
+        kWarning(32500) << "Not implemented: OASIS saving of mail merge variables" << endl;
 }
 
 
@@ -2049,7 +2049,7 @@ QString KoFieldVariable::text(bool realValue)
 
 void KoFieldVariable::saveVariable( QDomElement& parentElem )
 {
-    //kdDebug(32500) << "KoFieldVariable::saveVariable" << endl;
+    //kDebug(32500) << "KoFieldVariable::saveVariable" << endl;
     QDomElement elem = parentElem.ownerDocument().createElement( "FIELD" );
     parentElem.appendChild( elem );
     elem.setAttribute( "subtype", m_subtype );
@@ -2064,10 +2064,10 @@ void KoFieldVariable::load( QDomElement& elem )
     {
         m_subtype = e.attribute( "subtype" ).toInt();
         if ( m_subtype == VST_NONE )
-            kdWarning() << "Field subtype of -1 found in the file !" << endl;
+            kWarning() << "Field subtype of -1 found in the file !" << endl;
         m_varValue = QVariant( e.attribute( "value" ) );
     } else
-        kdWarning() << "FIELD element not found !" << endl;
+        kWarning() << "FIELD element not found !" << endl;
 }
 
 void KoFieldVariable::loadOasis( const QDomElement &elem, KoOasisContext& /*context*/ )
@@ -2212,7 +2212,7 @@ void KoFieldVariable::recalc()
     QString value;
     switch( m_subtype ) {
         case VST_NONE:
-            kdWarning() << "KoFieldVariable::recalc() called with m_subtype = VST_NONE !" << endl;
+            kWarning() << "KoFieldVariable::recalc() called with m_subtype = VST_NONE !" << endl;
             break;
         case VST_FILENAME:
             value = m_doc->url().fileName();
@@ -2250,7 +2250,7 @@ void KoFieldVariable::recalc()
             KoDocumentInfo * info = m_doc->documentInfo();
             KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
             if ( !authorPage )
-                kdWarning() << "Author information not found in documentInfo !" << endl;
+                kWarning() << "Author information not found in documentInfo !" << endl;
             else
             {
                 if ( m_subtype == VST_AUTHORNAME )
@@ -2290,7 +2290,7 @@ void KoFieldVariable::recalc()
             KoDocumentInfo * info = m_doc->documentInfo();
             KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
             if ( !aboutPage )
-                kdWarning() << "'About' page not found in documentInfo !" << endl;
+                kWarning() << "'About' page not found in documentInfo !" << endl;
             else
             {
                 if ( m_subtype == VST_TITLE )
@@ -2603,7 +2603,7 @@ void KoNoteVariable::drawCustomItem( QPainter* p, int x, int y, int wpix, int hp
         return;
 
     KoTextFormat * fmt = format();
-    //kdDebug(32500) << "KoNoteVariable::drawCustomItem index=" << index() << " x=" << x << " y=" << y << endl;
+    //kDebug(32500) << "KoNoteVariable::drawCustomItem index=" << index() << " x=" << x << " y=" << y << endl;
 
     p->save();
     p->setPen( QPen( fmt->color() ) );

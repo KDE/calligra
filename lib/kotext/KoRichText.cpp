@@ -153,7 +153,7 @@ KoTextCursor *KoTextDocDeleteCommand::execute( KoTextCursor *c )
 {
     KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
-	kdWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+	kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
 	return 0;
     }
 
@@ -181,7 +181,7 @@ KoTextCursor *KoTextDocDeleteCommand::unexecute( KoTextCursor *c )
 {
     KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
-	kdWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+	kWarning(32500) << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
 	return 0;
     }
 
@@ -590,7 +590,7 @@ void KoTextCursor::gotoUp()
     if ( !c )
 	return;
 
-    tmpIndex = QMAX( tmpIndex, idx - indexOfLineStart );
+    tmpIndex = qMax( tmpIndex, idx - indexOfLineStart );
     if ( indexOfLineStart == 0 ) {
 	if ( !string->prev() ) {
             return;
@@ -626,7 +626,7 @@ void KoTextCursor::gotoDown()
     if ( !c )
 	return;
 
-    tmpIndex = QMAX( tmpIndex, idx - indexOfLineStart );
+    tmpIndex = qMax( tmpIndex, idx - indexOfLineStart );
     if ( line == string->lines() - 1 ) {
 	if ( !string->next() ) {
             return;
@@ -706,7 +706,7 @@ void KoTextCursor::gotoEnd()
     // Don't prevent going to the end of the text, even if it's not visible.
     //if ( doc && !doc->lastParag()->isValid() )
     //{
-//	kdDebug(32500) << "Last parag, " << doc->lastParag()->paragId() << ", is invalid - aborting gotoEnd() !" << endl;
+//	kDebug(32500) << "Last parag, " << doc->lastParag()->paragId() << ", is invalid - aborting gotoEnd() !" << endl;
 //	return;
 //    }
 
@@ -1114,7 +1114,7 @@ void KoTextString::insert( int index, const QString &s, KoTextFormat *f )
 	ch.startOfRun = 0;
         ch.c = s[ i ];
 #ifdef DEBUG_COLLECTION
-	kdDebug(32500) << "KoTextString::insert setting format " << f << " to character " << (int)index+i << endl;
+	kDebug(32500) << "KoTextString::insert setting format " << f << " to character " << (int)index+i << endl;
 #endif
 	ch.setFormat( f );
     }
@@ -1152,8 +1152,8 @@ void KoTextString::insert( int index, KoTextStringChar *c )
 
 void KoTextString::truncate( int index )
 {
-    index = QMAX( index, 0 );
-    index = QMIN( index, (int)data.size() - 1 );
+    index = qMax( index, 0 );
+    index = qMin( index, (int)data.size() - 1 );
     if ( index < (int)data.size() ) {
 	for ( int i = index + 1; i < (int)data.size(); ++i ) {
 	    KoTextStringChar &ch = data[ i ];
@@ -1221,10 +1221,10 @@ void KoTextString::clear()
 void KoTextString::setFormat( int index, KoTextFormat *f, bool useCollection, bool setFormatAgain )
 {
     KoTextStringChar &ch = data[ index ];
-//    kdDebug(32500) << "KoTextString::setFormat index=" << index << " f=" << f << endl;
+//    kDebug(32500) << "KoTextString::setFormat index=" << index << " f=" << f << endl;
     if ( useCollection && ch.format() )
     {
-	//kdDebug(32500) << "KoTextString::setFormat removing ref on old format " << ch.format() << endl;
+	//kDebug(32500) << "KoTextString::setFormat removing ref on old format " << ch.format() << endl;
 	ch.format()->removeRef();
     }
     ch.setFormat( f, setFormatAgain );
@@ -1493,7 +1493,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 {
     int start = (startChar - &text->at(0));
     int last = (lastChar - &text->at(0) );
-    //kdDebug(32500) << "doing BiDi reordering from " << start << " to " << last << "!" << endl;
+    //kDebug(32500) << "doing BiDi reordering from " << start << " to " << last << "!" << endl;
 
     KoBidiControl *control = new KoBidiControl( line->context(), line->status );
     QString str;
@@ -1589,7 +1589,7 @@ KoTextParagLineStart *KoTextFormatterBase::bidiReorderLine( KoTextParag * /*para
 		} else {
 		    ww = c->format()->width( ' ' );
 		}
-		//kdDebug(32500) << "setting char " << pos << " at pos " << x << endl;
+		//kDebug(32500) << "setting char " << pos << " at pos " << x << endl;
 		if ( xmax < x + toAdd + ww ) xmax = x + toAdd + ww;
 		x += ww;
 		pos++;
@@ -1633,7 +1633,7 @@ void KoTextParag::insertLineStart( int index, KoTextParagLineStart *ls )
     if ( ( it = lineStarts.find( index ) ) == lineStarts.end() ) {
 	lineStarts.insert( index, ls );
     } else {
-        kdWarning(32500) << "insertLineStart: there's already a line for char index=" << index << endl;
+        kWarning(32500) << "insertLineStart: there's already a line for char index=" << index << endl;
 	delete *it;
 	lineStarts.remove( it );
 	lineStarts.insert( index, ls );
@@ -1674,7 +1674,7 @@ int KoTextFormatterBase::formatVertically( KoTextDocument* doc, KoTextParag* par
     }
     int m = parag->bottomMargin();
     if ( parag->next() && doc && !doc->addMargins() )
-	m = QMAX( m, parag->next()->topMargin() );
+	m = qMax( m, parag->next()->topMargin() );
     //if ( parag->next() && parag->next()->isLineBreak() )
     //	m = 0;
     h += m;

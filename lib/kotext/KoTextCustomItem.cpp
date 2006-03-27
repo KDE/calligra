@@ -65,7 +65,7 @@ int KoTextCustomItem::index() const
 KoTextFormat * KoTextCustomItem::format() const
 {
     KoTextParag * parag = paragraph();
-    //kdDebug(32500) << "KoTextCustomItem::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
+    //kDebug(32500) << "KoTextCustomItem::format index=" << index() << " format=" << parag->at( index() )->format() << endl;
     return parag->at( index() )->format();
 }
 
@@ -73,7 +73,7 @@ KoTextFormat * KoTextCustomItem::format() const
 void KoTextCustomItem::draw(QPainter* p, int _x, int _y, int cx, int cy, int cw, int ch, const QColorGroup& cg, bool selected )
 {
     KoTextZoomHandler *zh=textDocument()->paintingZoomHandler();
-    //kdDebug(32500)<<" x :"<<_x<<" y :"<<_y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
+    //kDebug(32500)<<" x :"<<_x<<" y :"<<_y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
 
     // Calculate index only once
     // Hmm, should pass it to drawCustomItem...
@@ -89,7 +89,7 @@ void KoTextCustomItem::draw(QPainter* p, int _x, int _y, int cx, int cy, int cw,
     ch = zh->layoutUnitToPixelY(_y,ch);
     int wpix = zh->layoutUnitToPixelX(_x,width);
     int hpix = zh->layoutUnitToPixelX(_y,height);
-    //kdDebug(32500)<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
+    //kDebug(32500)<<"After  x :"<<x<<" y :"<<y<<" cx :"<<cx<<" cy :"<<cy<<" ch :"<<ch<<" cw :"<<cw<<endl;
     int ascentpix = zh->layoutUnitToPixelY( _y, ascent() );
 
     KoTextFormat * fmt = stringChar->format();
@@ -128,7 +128,7 @@ void CustomItemsMap::insertItems( const KoTextCursor & startCursor, int size )
         CustomItemsMap::Iterator it = find( i );
         if ( it != end() )
         {
-            kdDebug(32500) << "CustomItemsMap::insertItems setting custom item " << it.data() << endl;
+            kDebug(32500) << "CustomItemsMap::insertItems setting custom item " << it.data() << endl;
             cursor.parag()->setCustomItem( cursor.index(), it.data(), 0 );
             it.data()->setDeleted( false );
         }

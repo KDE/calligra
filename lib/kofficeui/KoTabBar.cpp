@@ -702,7 +702,7 @@ void KoTabBar::paintEvent( QPaintEvent* )
     // draw the move marker
     if( d->targetTab > 0 )
     {
-        int p = QMIN( d->targetTab, (int)d->tabRects.count() );
+        int p = qMin( d->targetTab, (int)d->tabRects.count() );
         QRect rect = d->tabRects[ p-1 ];
         if( !rect.isNull() )
         {

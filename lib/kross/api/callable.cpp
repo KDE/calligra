@@ -45,7 +45,7 @@ const QString Callable::getClassName() const
 Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
 {
 #ifdef KROSS_API_CALLABLE_CALL_DEBUG
-    kdDebug() << QString("Kross::Api::Callable::call() name=%1 getName()=%2 arguments=%3").arg(name).arg(getName()).arg(arguments ? arguments->toString() : QString("")) << endl;
+    kDebug() << QString("Kross::Api::Callable::call() name=%1 getName()=%2 arguments=%3").arg(name).arg(getName()).arg(arguments ? arguments->toString() : QString("")) << endl;
 #endif
 
     if(name == "get") {
@@ -76,7 +76,7 @@ Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
 void Callable::checkArguments(List::Ptr arguments)
 {
 #ifdef KROSS_API_CALLABLE_CHECKARG_DEBUG
-    kdDebug() << QString("Kross::Api::Callable::checkArguments() getName()=%1 arguments=%2")
+    kDebug() << QString("Kross::Api::Callable::checkArguments() getName()=%1 arguments=%2")
                  .arg(getName()).arg(arguments ? arguments->toString() : QString::null) << endl;
 #endif
 
@@ -140,7 +140,7 @@ argend = ( argit == arglist.end() );
 
 Object::Ptr Callable::hasChild(List::Ptr args)
 {
-    //kdDebug() << QString("Kross::Api::Callable::hasChild() getName()=%1").arg(getName()) << endl;
+    //kDebug() << QString("Kross::Api::Callable::hasChild() getName()=%1").arg(getName()) << endl;
     return new Variant( Object::hasChild( Variant::toString(args->item(0)) ),
                         "Kross::Api::Callable::hasChild::Bool" );
 }
@@ -148,7 +148,7 @@ Object::Ptr Callable::hasChild(List::Ptr args)
 Object::Ptr Callable::getChild(List::Ptr args)
 {
     QString s = Variant::toString(args->item(0));
-    //kdDebug() << QString("Kross::Api::Callable::getChild() getName()=%1 childName=%2").arg(getName()).arg(s) << endl;
+    //kDebug() << QString("Kross::Api::Callable::getChild() getName()=%1 childName=%2").arg(getName()).arg(s) << endl;
     Object::Ptr obj = Object::getChild(s);
     if(! obj)
         throw Exception::Ptr( new Exception(QString("The object '%1' has no child object '%2'").arg(getName()).arg(s)) );
@@ -167,12 +167,12 @@ Object::Ptr Callable::getChildrenList(List::Ptr)
 
 Object::Ptr Callable::getChildrenDict(List::Ptr)
 {
-    //kdDebug()<<"Kross::Api::Callable::getChildrenDict()"<<endl;
+    //kDebug()<<"Kross::Api::Callable::getChildrenDict()"<<endl;
     return new Dict(Object::getChildren(), "Kross::Api::Callable::getChildrenDict::Dict");
 }
 
 Object::Ptr Callable::callChild(List::Ptr args)
 {
-    //kdDebug() << QString("Kross::Api::Callable::callChild() getName()=%1").arg(getName()) << endl;
+    //kDebug() << QString("Kross::Api::Callable::callChild() getName()=%1").arg(getName()) << endl;
     return Object::call(Variant::toString(args->item(0)), args);
 }

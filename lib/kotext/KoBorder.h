@@ -85,7 +85,7 @@ private:
 };
 
 /******************************
-  kdDebug support
+  kDebug support
 *******************************/
 #include <kdebug.h>
 

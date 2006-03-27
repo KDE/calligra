@@ -114,7 +114,7 @@ static int shapeBufSize = 0;
 */
 static inline const QChar *prevChar( const QString &str, int pos )
 {
-    //kdDebug() << "leftChar: pos=" << pos << endl;
+    //kDebug() << "leftChar: pos=" << pos << endl;
     pos--;
     const QChar *ch = str.unicode() + pos;
     while( pos > -1 ) {
@@ -132,7 +132,7 @@ static inline const QChar *nextChar( const QString &str, int pos)
     int len = str.length();
     const QChar *ch = str.unicode() + pos;
     while( pos < len ) {
-	//kdDebug() << "rightChar: " << pos << " isLetter=" << ch.isLetter() << ", joining=" << ch.joining() << endl;
+	//kDebug() << "rightChar: " << pos << " isLetter=" << ch.isLetter() << ", joining=" << ch.joining() << endl;
 	if( !ch->isMark() )
 	    return ch;
 	// assume it's a transparent char, this might not be 100% correct
@@ -158,7 +158,7 @@ KoComplexText::Shape KoComplexText::glyphVariant( const QString &str, int pos)
 {
     // ignores L1 - L3, done in the codec
     QChar::Joining joining = str[pos].joining();
-    //kdDebug() << "checking " << str[pos].unicode() << ", joining=" << joining << endl;
+    //kDebug() << "checking " << str[pos].unicode() << ", joining=" << joining << endl;
     switch ( joining ) {
 	case QChar::OtherJoining:
 	case QChar::Center:
@@ -172,7 +172,7 @@ KoComplexText::Shape KoComplexText::glyphVariant( const QString &str, int pos)
 	case QChar::Dual:
 	    bool right = nextVisualCharJoins( str, pos );
 	    bool left = prevVisualCharJoins( str, pos );
-	    //kdDebug() << "dual: right=" << right << ", left=" << left << endl;
+	    //kDebug() << "dual: right=" << right << ", left=" << left << endl;
 	    if( right && left )
 		return XMedial;
 	    else if ( right )
@@ -203,7 +203,7 @@ KoComplexText::Shape KoComplexText::glyphVariantLogical( const QString &str, int
 {
     // ignores L1 - L3, ligatures are job of the codec
     QChar::Joining joining = str[pos].joining();
-    //kdDebug() << "checking " << str[pos].unicode() << ", joining=" << joining << endl;
+    //kDebug() << "checking " << str[pos].unicode() << ", joining=" << joining << endl;
     switch ( joining ) {
 	case QChar::OtherJoining:
 	case QChar::Center:
@@ -217,7 +217,7 @@ KoComplexText::Shape KoComplexText::glyphVariantLogical( const QString &str, int
 	case QChar::Dual:
 	    bool right = nextLogicalCharJoins( str, pos );
 	    bool left = prevLogicalCharJoins( str, pos );
-	    //kdDebug() << "dual: right=" << right << ", left=" << left << endl;
+	    //kDebug() << "dual: right=" << right << ", left=" << left << endl;
 	    if( right && left )
 		return XMedial;
 	    else if ( right )
@@ -605,7 +605,7 @@ QString KoComplexText::shapedString(const QString& uc, int from, int len, QPaint
 	    if ( dir == QPainter::RTL )
 		pos = from + len - 1 - i;
 	    int shape = glyphVariantLogical( uc, pos );
-	    //kdDebug() << "mapping U+" << ch->unicode() << " to shape " << shape << " glyph=0x" << arabicUnicodeMapping[ch->cell()][shape] << endl;
+	    //kDebug() << "mapping U+" << ch->unicode() << " to shape " << shape << " glyph=0x" << arabicUnicodeMapping[ch->cell()][shape] << endl;
 	    // take care of lam-alef ligatures (lam right of alef)
 	    ushort map;
 	    switch ( c ) {
@@ -617,7 +617,7 @@ QString KoComplexText::shapedString(const QString& uc, int from, int len, QPaint
 			    case 0x23:
 			    case 0x25:
 			    case 0x27:
-				//kdDebug() << " lam of lam-alef ligature" << endl;
+				//kDebug() << " lam of lam-alef ligature" << endl;
 				map = arabicUnicodeLamAlefMapping[pch->cell() - 0x22][shape];
 				goto next;
 			    default:
@@ -632,7 +632,7 @@ QString KoComplexText::shapedString(const QString& uc, int from, int len, QPaint
 		case 0x27: // alef
 		    if ( prevChar( uc, pos )->unicode() == 0x0644 ) {
 			// have a lam alef ligature
-			//kdDebug() << " alef of lam-alef ligature" << endl;
+			//kDebug() << " alef of lam-alef ligature" << endl;
 			goto skip;
 		    }
 		default:
@@ -697,7 +697,7 @@ QChar KoComplexText::shapedCharacter( const QString &str, int pos, const QFontMe
 	return *ch;
     else {
 	int shape = glyphVariantLogical( str, pos );
-	//kdDebug() << "mapping U+" << ch->unicode() << " to shape " << shape << " glyph=0x" << arabicUnicodeMapping[ch->cell()][shape] << endl;
+	//kDebug() << "mapping U+" << ch->unicode() << " to shape " << shape << " glyph=0x" << arabicUnicodeMapping[ch->cell()][shape] << endl;
 	// lam aleph ligatures
 	switch ( ch->cell() ) {
 	    case 0x44: { // lam
@@ -746,9 +746,9 @@ Q3PointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
     QRect baseRect = f->boundingRect( baseChar );
     int baseOffset = f->textWidth( str, pos, 1 );
 
-    //kdDebug() << "base char: bounding rect at " << baseRect.x() << "/" << baseRect.y() << " (" << baseRect.width() << "/" << baseRect.height() << ")" << endl;
+    //kDebug() << "base char: bounding rect at " << baseRect.x() << "/" << baseRect.y() << " (" << baseRect.width() << "/" << baseRect.height() << ")" << endl;
     int offset = f->actual.pixelSize / 10 + 1;
-    //kdDebug() << "offset = " << offset << endl;
+    //kDebug() << "offset = " << offset << endl;
     Q3PointArray pa( nmarks );
     int i;
     unsigned char lastCmb = 0;
@@ -789,7 +789,7 @@ Q3PointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
 
 	// combining marks of different class don't interact. Reset the rectangle.
 	if ( cmb != lastCmb ) {
-	    //kdDebug() << "resetting rect" << endl;
+	    //kDebug() << "resetting rect" << endl;
 	    attachmentRect = baseRect;
 	}
 
@@ -845,7 +845,7 @@ Q3PointArray KoComplexText::positionMarks( QFontPrivate *f, const QString &str,
 	    default:
 		break;
 	}
-	//kdDebug() << "char=" << mark.unicode() << " combiningClass = " << cmb << " offset=" << p.x() << "/" << p.y() << endl;
+	//kDebug() << "char=" << mark.unicode() << " combiningClass = " << cmb << " offset=" << p.x() << "/" << p.y() << endl;
 	markRect.moveBy( p.x(), p.y() );
 	p += QPoint( -baseOffset, 0 );
 	attachmentRect |= markRect;
@@ -906,7 +906,7 @@ Q3PtrList<KoTextRun> *KoComplexText::bidiReorderLine( KoBidiControl *control, co
     if ( !context ) {
 	// first line
 	//if( start != 0 )
-	//    kdDebug() << "bidiReorderLine::internal error" << endl;
+	//    kDebug() << "bidiReorderLine::internal error" << endl;
 	if( basicDir == QChar::DirR || (basicDir == QChar::DirON && text.isRightToLeft() ) ) {
 	    context = new KoBidiContext( 1, QChar::DirR );
 	    control->status.last = QChar::DirR;

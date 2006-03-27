@@ -95,7 +95,7 @@ Interpreter* InterpreterInfo::getInterpreter()
     if(m_interpreter) // buffered
         return m_interpreter;
 
-    kdDebug() << QString("Loading the interpreter library for %1").arg(m_interpretername) << endl;
+    kDebug() << QString("Loading the interpreter library for %1").arg(m_interpretername) << endl;
 
     // Load the krosspython library.
     KLibLoader *libloader = KLibLoader::self();
@@ -107,7 +107,7 @@ Interpreter* InterpreterInfo::getInterpreter()
             new Exception( QString("Could not load library \"%1\" for the \"%2\" interpreter.").arg(m_library).arg(m_interpretername) )
         );
         */
-        kdWarning() << QString("Could not load library \"%1\" for the \"%2\" interpreter.").arg(m_library).arg(m_interpretername) << endl;
+        kWarning() << QString("Could not load library \"%1\" for the \"%2\" interpreter.").arg(m_library).arg(m_interpretername) << endl;
         return 0;
     }
 
@@ -116,18 +116,18 @@ Interpreter* InterpreterInfo::getInterpreter()
     interpreter_func = (def_interpreter_func) library->symbol("krossinterpreter");
     if(! interpreter_func) {
         //setException( new Exception("Failed to load symbol in krosspython library.") );
-        kdWarning() << "Failed to load the 'krossinterpreter' symbol from the library." << endl;
+        kWarning() << "Failed to load the 'krossinterpreter' symbol from the library." << endl;
     }
     else {
         // and execute the extern krosspython_instance function.
         m_interpreter = (Interpreter*) (interpreter_func)(this);
         if(! m_interpreter) {
-            kdWarning() << "Failed to load the Interpreter instance from library." << endl;
+            kWarning() << "Failed to load the Interpreter instance from library." << endl;
         }
         else {
             // Job done. The library is loaded and our Interpreter* points
             // to the external Kross::Python::Interpreter* instance.
-            kdDebug()<<"Successfully loaded Interpreter instance from library."<<endl;
+            kDebug()<<"Successfully loaded Interpreter instance from library."<<endl;
         }
     }
 

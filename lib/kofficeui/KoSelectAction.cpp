@@ -26,20 +26,21 @@
 //Added by qt3to4:
 #include <Q3PopupMenu>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
+#include <kauthorized.h>
 
 class KoSelectAction::KoSelectActionPrivate
 {
   public:
     KoSelectActionPrivate()
     {
-      m_popup = new KPopupMenu(0L,"KoLineStyleAction::popup");
+      m_popup = new KMenu(0L,"KoLineStyleAction::popup");
       m_currentSelection = 0;
     }
     
@@ -49,7 +50,7 @@ class KoSelectAction::KoSelectActionPrivate
       m_popup = 0;
     }
     
-    KPopupMenu* m_popup;
+    KMenu* m_popup;
     int m_currentSelection;
 };
 
@@ -76,7 +77,7 @@ KoSelectAction::~KoSelectAction()
   delete d;
 }
 
-KPopupMenu* KoSelectAction::popupMenu() const
+KMenu* KoSelectAction::popupMenu() const
 {
   return d->m_popup;
 }
@@ -89,9 +90,9 @@ void KoSelectAction::popup(const QPoint& global)
 int KoSelectAction::plug(QWidget* widget, int index)
 {
   // This function is copied from KActionMenu::plug
-  if (kapp && !kapp->authorizeKAction(name()))
+  if (kapp && !KAuthorized::authorizeKAction(name()))
     return -1;
-  kdDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
+  kDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
   if ( widget->inherits("QPopupMenu") )
   {
     Q3PopupMenu* menu = static_cast<Q3PopupMenu*>( widget );

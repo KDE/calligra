@@ -52,7 +52,7 @@ const QString EventAction::getClassName() const
 /*
 Object::Ptr EventAction::call(const QString& name, KSharedPtr<List> arguments)
 {
-    kdDebug() << QString("=============> EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) << endl;
+    kDebug() << QString("=============> EventAction::call() name=%1 arguments=%2").arg(name).arg(arguments->toString()) << endl;
     //TODO
     return 0;
 }

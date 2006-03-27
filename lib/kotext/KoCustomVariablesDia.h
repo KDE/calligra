@@ -28,7 +28,7 @@
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QCloseEvent>
-#include <klistview.h>
+#include <k3listview.h>
 #include <koffice_export.h>
 class QComboBox;
 class Q3VBox;
@@ -92,7 +92,7 @@ protected:
  * The listview.
  * Used by KoCustomVariablesDia
  */
-class KoCustomVariablesList : public KListView
+class KoCustomVariablesList : public K3ListView
 {
     Q_OBJECT
 

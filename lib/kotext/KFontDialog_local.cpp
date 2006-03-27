@@ -70,7 +70,7 @@ static int minimumListWidth( const Q3ListBox *list )
   for( uint i=0; i<list->count(); i++ )
   {
     int itemWidth = list->item(i)->width(list);
-    w = QMAX(w,itemWidth);
+    w = qMax(w,itemWidth);
   }
   if( w == 0 ) { w = 40; }
   w += list->frameWidth() * 2;
@@ -560,7 +560,7 @@ void KFontChooser_local::style_chosen_slot(const QString& style)
     sizeListBox->blockSignals(false);
     sizeListBox->ensureCurrentVisible();
 
-    //kdDebug() << "Showing: " << familyListBox->currentText() << ", " << currentStyles[currentStyle] << ", " << selectedSize-diff << endl;
+    //kDebug() << "Showing: " << familyListBox->currentText() << ", " << currentStyles[currentStyle] << ", " << selectedSize-diff << endl;
     selFont = dbase.font(familyListBox->currentText(), currentStyles[currentStyle], selectedSize-diff);
     emit fontSelected(selFont);
     if (!style.isEmpty())
@@ -575,8 +575,8 @@ void KFontChooser_local::displaySample(const QFont& font)
   xlfdEdit->setCursorPosition(0);
 
   //QFontInfo a = QFontInfo(font);
-  //kdDebug() << "font: " << a.family () << ", " << a.pointSize () << endl;
-  //kdDebug() << "      (" << font.toString() << ")\n";
+  //kDebug() << "font: " << a.family () << ", " << a.pointSize () << endl;
+  //kDebug() << "      (" << font.toString() << ")\n";
 }
 
 void KFontChooser_local::setupDisplay()
@@ -605,7 +605,7 @@ void KFontChooser_local::setupDisplay()
   {
     if (family.contains('['))
     {
-      family = family.left(family.find('[')).stripWhiteSpace();
+      family = family.left(family.find('[')).trimmed();
       for (i = 0; i < numEntries; i++) {
         if (family == familyListBox->text(i).lower()) {
           familyListBox->setCurrentItem(i);

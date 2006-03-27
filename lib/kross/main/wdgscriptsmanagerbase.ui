@@ -36,7 +36,7 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="KListView">
+        <widget class="K3ListView">
             <property name="name">
                 <cstring>scriptsList</cstring>
             </property>

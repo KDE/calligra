@@ -30,7 +30,7 @@
 
 #include <ktextedit.h>
 #include <kpushbutton.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
@@ -44,17 +44,17 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     manager->addModule( new TestPluginModule("krosstestpluginmodule") );
     m_scriptcontainer = manager->getScriptContainer("test");
 
-    KPopupMenu *menuFile = new KPopupMenu( this );
+    KMenu *menuFile = new KMenu( this );
     menuBar()->insertItem( "&File", menuFile );
 
     m_scriptextension = new Kross::Api::ScriptGUIClient(this, this);
 
     QString file = KGlobal::dirs()->findResource("appdata", "testscripting.rc");
     if(file.isNull())
-        file = QDir(QDir::currentDirPath()).filePath("testscripting.rc");
-    else kdDebug()<<"-------------------------222222"<<endl;
+        file = QDir(QDir::currentPath()).filePath("testscripting.rc");
+    else kDebug()<<"-------------------------222222"<<endl;
 
-    kdDebug()<<"XML-file: "<<file<<endl;
+    kDebug()<<"XML-file: "<<file<<endl;
     m_scriptextension->setXMLFile(file);
 
     //menuFile->insertSeparator();
@@ -100,11 +100,11 @@ void TestWindow::execute()
     m_scriptcontainer->setCode(m_codeedit->text());
     Kross::Api::Object::Ptr result = m_scriptcontainer->execute();
     if(m_scriptcontainer->hadException()) {
-        kdDebug() << "EXCEPTION => " << m_scriptcontainer->getException()->toString() << endl;
+        kDebug() << "EXCEPTION => " << m_scriptcontainer->getException()->toString() << endl;
     }
     else {
         QString s = result ? result->toString() : QString::null;
-        kdDebug() << "DONE => " << s << endl;
+        kDebug() << "DONE => " << s << endl;
     }
 }
 

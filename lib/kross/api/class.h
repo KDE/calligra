@@ -69,7 +69,7 @@ namespace Kross { namespace Api {
             /*
             virtual Object::Ptr call(const QString& name, List::Ptr arguments)
             {
-                kdDebug() << QString("Class::call(%1)").arg(name) << endl;
+                kDebug() << QString("Class::call(%1)").arg(name) << endl;
                 return Event<T>::call(name, arguments);
             }
             */

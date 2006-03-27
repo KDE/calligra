@@ -78,7 +78,7 @@ KoTextFormat::KoTextFormat()
     m_attributeFont = ATT_NONE;
     ////
 //#ifdef DEBUG_COLLECTION
-//    kdDebug(32500) << "KoTextFormat simple ctor, no addRef, no generateKey ! " << this << endl;
+//    kDebug(32500) << "KoTextFormat simple ctor, no addRef, no generateKey ! " << this << endl;
 //#endif
 }
 
@@ -86,7 +86,7 @@ KoTextFormat::KoTextFormat( const QFont &f, const QColor &c, const QString &_lan
     : fn( f ), col( c ) /*fm( QFontMetrics( f ) ),*/ //linkColor( TRUE )
 {
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << "KoTextFormat with font & color & parent (" << parent << "), addRef. " << this << endl;
+    kDebug(32500) << "KoTextFormat with font & color & parent (" << parent << "), addRef. " << this << endl;
 #endif
     int pointSize;
     if ( f.pointSize() == -1 ) // font was set with a pixelsize, we need a pointsize!
@@ -199,7 +199,7 @@ KoTextFormat::~KoTextFormat()
 KoTextFormat& KoTextFormat::operator=( const KoTextFormat &f )
 {
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << "KoTextFormat::operator= " << this << " (copying " << &f << "). Will addRef" << endl;
+    kDebug(32500) << "KoTextFormat::operator= " << this << " (copying " << &f << "). Will addRef" << endl;
 #endif
     ref = 0;
     collection = 0; // f might be in the collection, but we are not
@@ -248,16 +248,16 @@ static void importTextPosition( const QString& text_position, double fontSize, K
     QStringList lst = QStringList::split( ' ', text_position );
     if ( !lst.isEmpty() )
     {
-        QString textPos = lst.front().stripWhiteSpace();
+        QString textPos = lst.front().trimmed();
         QString textSize;
         lst.pop_front();
         if ( !lst.isEmpty() )
-            textSize = lst.front().stripWhiteSpace();
+            textSize = lst.front().trimmed();
         Q_ASSERT( lst.count() == 1 );
         // Workaround bug in KOffice-1.4: it saved '0% 66%' for normal text
         if ( context.generator().startsWith( "KOffice/1.4" )
              && text_position.startsWith( "0%" ) ) {
-            //kdDebug(32500) << "Detected koffice-1.4 bug in text-position, assuming Normal text" << endl;
+            //kDebug(32500) << "Detected koffice-1.4 bug in text-position, assuming Normal text" << endl;
             value = KoTextFormat::AlignNormal;
             return;
         }
@@ -370,7 +370,7 @@ static void importUnderline( const QString& in,
     } else if( in == "bold" ) {
         underline = KoTextFormat::U_SIMPLE_BOLD;
     } else
-        kdWarning() << k_funcinfo << " unsupported text-underline value: " << in << endl;
+        kWarning() << k_funcinfo << " unsupported text-underline value: " << in << endl;
 }
 
 void KoTextFormat::load( KoOasisContext& context )
@@ -675,7 +675,7 @@ void KoTextFormat::save( KoGenStyle& gs, KoSavingContext& context, KoTextFormat 
 
 void KoTextFormat::update()
 {
-    //kdDebug(32500) << this << " KoTextFormat::update " << fn.family() << " " << pointSize() << endl;
+    //kDebug(32500) << this << " KoTextFormat::update " << fn.family() << " " << pointSize() << endl;
     m_key = QString::null; // invalidate key, recalc at the next key() call
     assert( d );
     d->clearCache(); // i.e. recalc at the next screenFont[Metrics]() call
@@ -732,7 +732,7 @@ void KoTextFormat::copyFormat( const KoTextFormat & nf, int flags )
         setUnderLineWidth( nf.underLineWidth());
     //////
     update();
-    //kdDebug(32500) << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
+    //kDebug(32500) << "KoTextFormat " << (void*)this << " copyFormat nf=" << (void*)&nf << " " << nf.key() << " flags=" << flags
     //        << " ==> result " << this << " " << key() << endl;
 }
 
@@ -929,7 +929,7 @@ void KoTextFormat::addRef()
     ref++;
 #ifdef DEBUG_COLLECTION
     if ( collection )
-        kdDebug(32500) << "  add ref of '" << k << "' to " << ref << " (" << this << ") (coll " << collection << ")" << endl;
+        kDebug(32500) << "  add ref of '" << k << "' to " << ref << " (" << this << ") (coll " << collection << ")" << endl;
 #endif
 }
 
@@ -939,7 +939,7 @@ void KoTextFormat::removeRef()
     if ( !collection )
         return;
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << "  remove ref of '" << k << "' to " << ref << " (" << this << ") (coll " << collection << ")" << endl;
+    kDebug(32500) << "  remove ref of '" << k << "' to " << ref << " (" << this << ") (coll " << collection << ")" << endl;
 #endif
     if ( ref == 0 )
         collection->remove( this );
@@ -1116,7 +1116,7 @@ QFont KoTextFormat::refFont() const
         d->m_refFont->setPointSizeFloat( pointSize );
         delete d->m_refFontMetrics;
         d->m_refFontMetrics = 0;
-        //kdDebug(32500) << "KoTextFormat::refFont created new font with size " << pointSize << endl;
+        //kDebug(32500) << "KoTextFormat::refFont created new font with size " << pointSize << endl;
     }
     return *d->m_refFont;
 }
@@ -1124,20 +1124,20 @@ QFont KoTextFormat::refFont() const
 QFont KoTextFormat::screenFont( const KoTextZoomHandler* zh ) const
 {
     float pointSize = screenPointSize( zh );
-    //kdDebug(32500) << "KoTextFormat::screenFont pointSize=" << pointSize << endl;
+    //kDebug(32500) << "KoTextFormat::screenFont pointSize=" << pointSize << endl;
     // Compare if this is the size for which we cached the font metrics.
     // We have to do this very dynamically, because 2 views could be painting the same
     // stuff, with different zoom levels. So no absolute caching possible.
     /*if ( d->m_screenFont )
-      kdDebug(32500) << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;*/
-    if ( !d->m_screenFont || kAbs( pointSize - d->m_screenFont->pointSizeFloat() ) > 1E-4 )
+      kDebug(32500) << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;*/
+    if ( !d->m_screenFont || qAbs( pointSize - d->m_screenFont->pointSizeFloat() ) > 1E-4 )
     {
         delete d->m_screenFont;
         d->m_screenFont = new QFont( font() );
         d->m_screenFont->setPointSizeFloat( pointSize );
         delete d->m_screenFontMetrics;
         d->m_screenFontMetrics = 0;
-        //kdDebug(32500) << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
+        //kDebug(32500) << "KoTextFormat::screenFont created new font with size " << pointSize << endl;
     }
     return *d->m_screenFont;
 }
@@ -1148,9 +1148,9 @@ const QFontMetrics& KoTextFormat::screenFontMetrics( const KoTextZoomHandler* zh
 
     if ( !d->m_screenFontMetrics ) // not calculated, or invalidated by screenFont above
     {
-        //kdDebug(32500) << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;
+        //kDebug(32500) << this << " KoTextFormat::screenFontMetrics pointSize=" << pointSize << " d->m_screenFont->pointSizeFloat()=" << d->m_screenFont->pointSizeFloat() << endl;
         d->m_screenFontMetrics = new QFontMetrics( f );
-        //kdDebug(32500) << "KoTextFormat::screenFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_screenFontMetrics->height() << endl;
+        //kDebug(32500) << "KoTextFormat::screenFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_screenFontMetrics->height() << endl;
     }
     return *d->m_screenFontMetrics;
 }
@@ -1161,9 +1161,9 @@ const QFontMetrics& KoTextFormat::refFontMetrics() const
 
     if ( !d->m_refFontMetrics )
     {
-        //kdDebug(32500) << this << " KoTextFormat::refFontMetrics pointSize=" << pointSize << " d->m_refFont->pointSizeFloat()=" << d->m_refFont->pointSizeFloat() << endl;
+        //kDebug(32500) << this << " KoTextFormat::refFontMetrics pointSize=" << pointSize << " d->m_refFont->pointSizeFloat()=" << d->m_refFont->pointSizeFloat() << endl;
         d->m_refFontMetrics = new QFontMetrics( f );
-        //kdDebug(32500) << "KoTextFormat::refFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_refFontMetrics->height() << endl;
+        //kDebug(32500) << "KoTextFormat::refFontMetrics created new metrics with size " << pointSize << "   height:" << d->m_refFontMetrics->height() << endl;
     }
     return *d->m_refFontMetrics;
 }
@@ -1233,7 +1233,7 @@ int KoTextFormat::charWidth( const KoTextZoomHandler* zh, bool applyZoom, const 
         if( i > 8 )
             pos = i - 8;
         int off = i - pos;
-        int end = QMIN( parag->length(), i + 8 );
+        int end = qMin( parag->length(), i + 8 );
         while ( pos < end ) {
             str += displayedChar( parag->at(pos)->c );
             pos++;
@@ -1242,7 +1242,7 @@ int KoTextFormat::charWidth( const KoTextZoomHandler* zh, bool applyZoom, const 
     }
 
 #if 0
-        kdDebug(32500) << "KoTextFormat::charWidth: char=" << QString(c->c) << " format=" << key()
+        kDebug(32500) << "KoTextFormat::charWidth: char=" << QString(c->c) << " format=" << key()
                        << ", applyZoom=" << applyZoom << " pixel-width=" << pixelww << endl;
 #endif
     return pixelww;
@@ -1265,7 +1265,7 @@ int KoTextFormat::height() const
             h += (int)(POINT_TO_INCH( static_cast<double>( KoGlobal::dpiY() ) ) * QABS( d->m_shadowDistanceY ) );
         }
 
-        //kdDebug(32500) << "KoTextFormat::height 100%-zoom font says h=" << h << " in LU:" << KoTextZoomHandler::ptToLayoutUnitPt(h) << endl;
+        //kDebug(32500) << "KoTextFormat::height 100%-zoom font says h=" << h << " in LU:" << KoTextZoomHandler::ptToLayoutUnitPt(h) << endl;
         // Then scale to LU
         d->m_refHeight = qRound( KoTextZoomHandler::ptToLayoutUnitPt( h ) );
     }
@@ -1313,7 +1313,7 @@ QString KoTextFormat::displayedString( const QString& str )const
     case ATT_LOWER:
         return str.lower();
     default:
-        kdDebug(32500)<<" Error in AttributeStyle \n";
+        kDebug(32500)<<" Error in AttributeStyle \n";
         return str;
     }
 }
@@ -1331,7 +1331,7 @@ QChar KoTextFormat::displayedChar( QChar c )const
     case ATT_LOWER:
         return c.lower();
     default:
-        kdDebug(32500)<<" Error in AttributeStyle \n";
+        kDebug(32500)<<" Error in AttributeStyle \n";
         return c;
     }
 }
@@ -1413,7 +1413,7 @@ QString KoTextFormat::shadowAsCss() const
 
 void KoTextFormat::parseShadowFromCss( const QString& _css )
 {
-    QString css = _css.simplifyWhiteSpace();
+    QString css = _css.simplified();
     if ( css.isEmpty() || css == "none" )
     {
         d->m_shadowDistanceX = 0;
@@ -1423,7 +1423,7 @@ void KoTextFormat::parseShadowFromCss( const QString& _css )
     {
         QStringList tokens = QStringList::split(' ', css);
         if ( tokens.isEmpty() ) {
-            kdWarning(32500) << "Parse error in text-shadow: " << css << endl;
+            kWarning(32500) << "Parse error in text-shadow: " << css << endl;
             return;
         }
         // Check which token looks like a color
@@ -1664,7 +1664,7 @@ QStringList KoTextFormat::strikeOutStyleList()
 void KoTextFormat::printDebug()
 {
     QString col = color().isValid() ? color().name() : QString("(default)");
-    kdDebug(32500) << "format '" << key() << "' (" << (void*)this << "):"
+    kDebug(32500) << "format '" << key() << "' (" << (void*)this << "):"
                    << " refcount: " << ref
                    << " realfont: " << QFontInfo( font() ).family()
                    << " color: " << col << " shadow=" << shadowAsCss() << endl;
@@ -1677,7 +1677,7 @@ KoTextFormatCollection::KoTextFormatCollection()
     : cKey( 307 )//, sheet( 0 )
 {
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << "KoTextFormatCollection::KoTextFormatCollection " << this << endl;
+    kDebug(32500) << "KoTextFormatCollection::KoTextFormatCollection " << this << endl;
 #endif
     defFormat = new KoTextFormat( QApplication::font(), QColor(), KGlobal::locale()->language(), false );
     lastFormat = cres = 0;
@@ -1690,7 +1690,7 @@ KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const 
     : cKey( 307 )
 {
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << "KoTextFormatCollection::KoTextFormatCollection " << this << endl;
+    kDebug(32500) << "KoTextFormatCollection::KoTextFormatCollection " << this << endl;
 #endif
     defFormat = new KoTextFormat( defaultFont, defaultColor, defaultLanguage, defaultHyphenation );
     lastFormat = cres = 0;
@@ -1702,7 +1702,7 @@ KoTextFormatCollection::KoTextFormatCollection( const QFont& defaultFont, const 
 KoTextFormatCollection::~KoTextFormatCollection()
 {
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << "KoTextFormatCollection::~KoTextFormatCollection " << this << endl;
+    kDebug(32500) << "KoTextFormatCollection::~KoTextFormatCollection " << this << endl;
 #endif
     delete defFormat;
     defFormat = 0;
@@ -1712,7 +1712,7 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *f )
 {
     if ( f->parent() == this || f == defFormat ) {
 #ifdef DEBUG_COLLECTION
-        kdDebug(32500) << " format(f) need '" << f->key() << "', best case!" << endl;
+        kDebug(32500) << " format(f) need '" << f->key() << "', best case!" << endl;
 #endif
 	lastFormat = const_cast<KoTextFormat*>(f);
 	lastFormat->addRef();
@@ -1721,7 +1721,7 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *f )
 
     if ( f == lastFormat || ( lastFormat && f->key() == lastFormat->key() ) ) {
 #ifdef DEBUG_COLLECTION
-        kdDebug(32500) << " format(f) need '" << f->key() << "', good case!" << endl;
+        kDebug(32500) << " format(f) need '" << f->key() << "', good case!" << endl;
 #endif
 	lastFormat->addRef();
 	return lastFormat;
@@ -1741,7 +1741,7 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *f )
     KoTextFormat *fm = cKey.find( f->key() );
     if ( fm ) {
 #ifdef DEBUG_COLLECTION
-        kdDebug(32500) << " format(f) need '" << f->key() << "', normal case!" << endl;
+        kDebug(32500) << " format(f) need '" << f->key() << "', normal case!" << endl;
 #endif
 	lastFormat = fm;
 	lastFormat->addRef();
@@ -1752,7 +1752,7 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *f )
 	return defFormat;
 
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << " format(f) need '" << f->key() << "', worst case!" << endl;
+    kDebug(32500) << " format(f) need '" << f->key() << "', worst case!" << endl;
 #endif
     lastFormat = createFormat( *f );
     lastFormat->collection = this;
@@ -1765,14 +1765,14 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *of, const KoTe
 {
     if ( cres && kof == of->key() && knf == nf->key() && cflags == flags ) {
 #ifdef DEBUG_COLLECTION
-	kdDebug(32500) << " format(of,nf,flags) mix of '" << of->key() << "' and '" << nf->key() << "', best case!" << endl;
+	kDebug(32500) << " format(of,nf,flags) mix of '" << of->key() << "' and '" << nf->key() << "', best case!" << endl;
 #endif
 	cres->addRef();
 	return cres;
     }
 
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << " format(of,nf," << flags << ") calling createFormat(of=" << of << " " << of->key() << ")" << endl;
+    kDebug(32500) << " format(of,nf," << flags << ") calling createFormat(of=" << of << " " << of->key() << ")" << endl;
 #endif
     cres = createFormat( *of );
     kof = of->key();
@@ -1780,20 +1780,20 @@ KoTextFormat *KoTextFormatCollection::format( const KoTextFormat *of, const KoTe
     cflags = flags;
 
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << " format(of,nf," << flags << ") calling copyFormat(nf=" << nf << " " << nf->key() << ")" << endl;
+    kDebug(32500) << " format(of,nf," << flags << ") calling copyFormat(nf=" << nf << " " << nf->key() << ")" << endl;
 #endif
     cres->copyFormat( *nf, flags );
 
     KoTextFormat *fm = cKey.find( cres->key() );
     if ( !fm ) {
 #ifdef DEBUG_COLLECTION
-	kdDebug(32500) << " format(of,nf,flags) mix of '" << of->key() << "' and '" << nf->key() << ", worst case!" << endl;
+	kDebug(32500) << " format(of,nf,flags) mix of '" << of->key() << "' and '" << nf->key() << ", worst case!" << endl;
 #endif
 	cres->collection = this;
 	cKey.insert( cres->key(), cres );
     } else {
 #ifdef DEBUG_COLLECTION
-	kdDebug(32500) << " format(of,nf,flags) mix of '" << of->key() << "' and '" << nf->key() << ", good case!" << endl;
+	kDebug(32500) << " format(of,nf,flags) mix of '" << of->key() << "' and '" << nf->key() << ", good case!" << endl;
 #endif
 	delete cres;
 	cres = fm;
@@ -1808,7 +1808,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
 {
     if ( cachedFormat && cfont == f && ccol == c ) {
 #ifdef DEBUG_COLLECTION
-	kdDebug(32500) << " format of font and col '" << cachedFormat->key() << "' - best case" << endl;
+	kDebug(32500) << " format of font and col '" << cachedFormat->key() << "' - best case" << endl;
 #endif
 	cachedFormat->addRef();
 	return cachedFormat;
@@ -1821,7 +1821,7 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
 
     if ( cachedFormat ) {
 #ifdef DEBUG_COLLECTION
-	kdDebug(32500) << " format of font and col '" << cachedFormat->key() << "' - good case" << endl;
+	kDebug(32500) << " format of font and col '" << cachedFormat->key() << "' - good case" << endl;
 #endif
 	cachedFormat->addRef();
 	return cachedFormat;
@@ -1834,9 +1834,9 @@ KoTextFormat *KoTextFormatCollection::format( const QFont &f, const QColor &c, c
     cachedFormat->collection = this;
     cKey.insert( cachedFormat->key(), cachedFormat );
     if ( cachedFormat->key() != key )
-	kdWarning() << "ASSERT: keys for format not identical: '" << cachedFormat->key() << " '" << key << "'" << endl;
+	kWarning() << "ASSERT: keys for format not identical: '" << cachedFormat->key() << " '" << key << "'" << endl;
 #ifdef DEBUG_COLLECTION
-    kdDebug(32500) << " format of font and col '" << cachedFormat->key() << "' - worst case" << endl;
+    kDebug(32500) << " format of font and col '" << cachedFormat->key() << "' - worst case" << endl;
 #endif
     return cachedFormat;
 }
@@ -1876,15 +1876,15 @@ void KoTextFormatCollection::setPainter( QPainter *p )
 #ifndef NDEBUG
 void KoTextFormatCollection::debug()
 {
-    kdDebug(32500) << "------------ KoTextFormatCollection: debug --------------- BEGIN" << endl;
-    kdDebug(32500) << "Default Format: '" << defFormat->key() << "' (" << (void*)defFormat << "): realfont: " << QFontInfo( defFormat->font() ).family() << endl;
+    kDebug(32500) << "------------ KoTextFormatCollection: debug --------------- BEGIN" << endl;
+    kDebug(32500) << "Default Format: '" << defFormat->key() << "' (" << (void*)defFormat << "): realfont: " << QFontInfo( defFormat->font() ).family() << endl;
     Q3DictIterator<KoTextFormat> it( cKey );
     for ( ; it.current(); ++it ) {
          Q_ASSERT(it.currentKey() == it.current()->key());
          if(it.currentKey() != it.current()->key())
-             kdDebug(32500) << "**** MISMATCH key=" << it.currentKey() << " (see line below for format)" << endl;
+             kDebug(32500) << "**** MISMATCH key=" << it.currentKey() << " (see line below for format)" << endl;
 	 it.current()->printDebug();
     }
-    kdDebug(32500) << "------------ KoTextFormatCollection: debug --------------- END" << endl;
+    kDebug(32500) << "------------ KoTextFormatCollection: debug --------------- END" << endl;
 }
 #endif

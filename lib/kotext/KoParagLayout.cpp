@@ -193,7 +193,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
                 else if ( dir == "R" )
                     layout.direction = QChar::DirR;
                 else
-                    kdWarning() << "Unexpected value for paragraph direction: " << dir << endl;
+                    kWarning() << "Unexpected value for paragraph direction: " << dir << endl;
             }
         } else {
             flow = element.attribute( "value" ); // KWord-0.8
@@ -399,7 +399,7 @@ void KoParagLayout::loadParagLayout( KoParagLayout& layout, const QDomElement& p
         if ( !shadowCssCompat )
             shadowCssCompat = new QString;
         *shadowCssCompat = KoTextFormat::shadowAsCss( distanceX, distanceY, shadowColor );
-        kdDebug(32500) << "setting shadow compat to " << ( *shadowCssCompat ) << endl;
+        kDebug(32500) << "setting shadow compat to " << ( *shadowCssCompat ) << endl;
     }
     else
     {
@@ -492,7 +492,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
                 double percent = value.toDouble();
                 layout.lineSpacingType = KoParagLayout::LS_MULTIPLE;
                 layout.lineSpacing = percent / 100.0;
-                kdDebug(33001) << "line-height =" << percent << ", " << layout.lineSpacing << ", " << percent/100 << endl;
+                kDebug(33001) << "line-height =" << percent << ", " << layout.lineSpacing << ", " << percent/100 << endl;
             }
             else // fixed value
             {
@@ -508,7 +508,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
         // kotext has "at least" but that's for the linespacing, not for the entire line height!
         // Strange. kotext also has "at least" for the whole line height....
         // Did we make the wrong choice in kotext?
-        //kdWarning() << "Unimplemented support for style:line-height-at-least: " << value << endl;
+        //kWarning() << "Unimplemented support for style:line-height-at-least: " << value << endl;
         // Well let's see if this makes a big difference.
         layout.lineSpacingType = KoParagLayout::LS_AT_LEAST;
         layout.lineSpacing = KoUnit::parseValue( value );
@@ -528,7 +528,7 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     KoTabulatorList tabList;
     if ( context.styleStack().hasChildNodeNS( KoXmlNS::style, "tab-stops" ) ) { // 3.11.10
         QDomElement tabStops = context.styleStack().childNodeNS( KoXmlNS::style, "tab-stops" );
-        //kdDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
+        //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
         QDomElement tabStop;
         forEachElement( tabStop, tabStops )
         {
@@ -663,7 +663,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
     if ( layout.style )
         element.setAttribute( "value", layout.style->displayName() );
     //else
-    //    kdWarning() << "KoParagLayout::saveParagLayout: style==0!" << endl;
+    //    kWarning() << "KoParagLayout::saveParagLayout: style==0!" << endl;
 
     element = doc.createElement( "FLOW" );
     parentElem.appendChild( element );
@@ -737,7 +737,7 @@ void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) c
             element.setAttribute( "spacingvalue", layout.lineSpacing);
         }
         else
-            kdDebug()<<" error in lineSpacing Type\n";
+            kDebug()<<" error in lineSpacing Type\n";
     }
 
     if ( layout.pageBreaking != 0 )

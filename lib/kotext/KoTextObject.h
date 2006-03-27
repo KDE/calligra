@@ -621,7 +621,7 @@ private:
         Any operation on a paragraph pushes this backward. */
     KoTextParag *m_lastFormatted;
     /** Idle-time formatting */
-    QTimer *formatTimer, *changeIntervalTimer;
+    QTimer *formatTimer, *startTimer;
     int interval;
 
     /** The total height available for our text object at the moment */

@@ -150,7 +150,7 @@ void TKToolBarButton::modeChange()
 
   if (pixmap()) {
     w += pixmap()->width();
-    h = QMAX(h,pixmap()->height()+2*border);
+    h = qMax(h,pixmap()->height()+2*border);
     if (d->m_iconMode == TK::IconAndText && !d->m_text.isEmpty())
       w += border;
   }
@@ -160,7 +160,7 @@ void TKToolBarButton::modeChange()
     QFont tmp_font = KGlobalSettings::toolBarFont();
     QFontMetrics fm(tmp_font);
 
-    h = QMAX(h,fm.lineSpacing()+2*border);
+    h = qMax(h,fm.lineSpacing()+2*border);
     w += fm.width(d->m_text);
   }
 

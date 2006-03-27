@@ -85,7 +85,7 @@ void
 StringListEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toStringList().join(", "));
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toStringList().join(", "));
 	Widget::drawViewer(p, cg, r, value.toStringList().join(", "));
 }
 

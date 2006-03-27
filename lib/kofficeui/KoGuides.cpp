@@ -31,7 +31,7 @@
 #include <QEvent>
 
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <KoDocument.h>
 #include <KoPoint.h>
@@ -41,7 +41,7 @@
 
 #include "KoGuideLineDia.h"
 
-class KoGuides::Popup : public KPopupMenu
+class KoGuides::Popup : public KMenu
 {
 public: 
     Popup( KoGuides * guides )
@@ -98,8 +98,8 @@ void KoGuides::paintGuides( QPainter &painter )
 {
     //painter.setRasterOp( NotROP );
     const KoPageLayout& pl = m_view->koDocument()->pageLayout();
-    int width = QMAX( m_view->canvas()->width(), m_zoomHandler->zoomItX( pl.ptWidth ) );
-    int height = QMAX( m_view->canvas()->height(), m_zoomHandler->zoomItY( pl.ptHeight ) );
+    int width = qMax( m_view->canvas()->width(), m_zoomHandler->zoomItX( pl.ptWidth ) );
+    int height = qMax( m_view->canvas()->height(), m_zoomHandler->zoomItY( pl.ptHeight ) );
 
     for ( int i = 0; i < GL_END; ++i )
     {
@@ -224,7 +224,7 @@ bool KoGuides::mouseMoveEvent( QMouseEvent *e )
         KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
         if ( guideLine )
         {
-            m_view->canvas()->setCursor( guideLine->orientation == Qt::Vertical ? Qt::sizeHorCursor : Qt::sizeVerCursor );
+            m_view->canvas()->setCursor( guideLine->orientation == Qt::Vertical ? Qt::SizeHorCursor : Qt::SizeHorCursor );
             eventProcessed = true;
         }
     }
@@ -257,7 +257,7 @@ bool KoGuides::mouseReleaseEvent( QMouseEvent *e )
         KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
         if ( guideLine )
         {
-            m_view->canvas()->setCursor( guideLine->orientation == Qt::Vertical ? Qt::sizeHorCursor : Qt::sizeVerCursor );
+            m_view->canvas()->setCursor( guideLine->orientation == Qt::Vertical ? Qt::SizeHorCursor : Qt::SizeHorCursor );
         }
         m_mouseSelected = false;
         eventProcessed = true;
@@ -733,11 +733,11 @@ void KoGuides::slotChangePosition()
     double max = 0.0;
     if ( guideLine->orientation == Qt::Vertical )
     {
-        max = QMAX( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->size().width() + m_view->canvasXOffset() - 1 ) );
+        max = qMax( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->size().width() + m_view->canvasXOffset() - 1 ) );
     }
     else
     {
-        max = QMAX( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->size().height() + m_view->canvasYOffset() - 1 ) );
+        max = qMax( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->size().height() + m_view->canvasYOffset() - 1 ) );
     }
 
     KoGuideLineDia dia( 0, guideLine->position, 0.0, max, m_view->koDocument()->unit() );
@@ -861,8 +861,8 @@ void KoGuides::moveSelectedBy( QPoint &p )
     if ( m_guideLines[GL_SELECTED].count() > 1 )
     {
         const KoPageLayout& pl = m_view->koDocument()->pageLayout();
-        double right = QMAX( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
-        double bottom = QMAX( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
+        double right = qMax( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
+        double bottom = qMax( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
 
         Q3ValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
         for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )

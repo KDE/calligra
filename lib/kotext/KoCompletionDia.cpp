@@ -38,7 +38,7 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
     : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1,
       Ok, true, KGuiItem( i18n( "&Reset" ), "undo" ) )
 {
-    Q3VBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
     m_widget = new KoCompletion(page, autoFormat);
     m_widget->layout()->setMargin(0);
     connect( this, SIGNAL( user1Clicked() ), m_widget, SLOT(slotResetConf()));

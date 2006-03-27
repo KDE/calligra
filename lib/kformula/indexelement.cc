@@ -392,7 +392,7 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
 
     // get the contents size
     content->calcSizes(style, tstyle, istyle);
-    luPixel width = QMAX(content->getWidth(), QMAX(umWidth, lmWidth));
+    luPixel width = qMax(content->getWidth(), qMax(umWidth, lmWidth));
     luPixel toMidline = content->axis( style, tstyle );
     luPixel fromMidline = content->getHeight() - toMidline;
 
@@ -422,7 +422,7 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
     if (hasLowerRight()) {
         lowerRight->setX(width);
     }
-    width += QMAX(urWidth, lrWidth);
+    width += qMax(urWidth, lrWidth);
 
     // calculate the y offsets
     luPixel ulOffset = 0;
@@ -449,14 +449,14 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
     else {
 
         // the upper half
-        ulOffset = QMAX(ulMidline, ulHeight-toMidline);
-        urOffset = QMAX(urMidline, urHeight-toMidline);
+        ulOffset = qMax(ulMidline, ulHeight-toMidline);
+        urOffset = qMax(urMidline, urHeight-toMidline);
 
         // the lower half
-        llOffset = QMAX(content->getHeight()-llMidline, toMidline);
-        lrOffset = QMAX(content->getHeight()-lrMidline, toMidline);
+        llOffset = qMax(content->getHeight()-llMidline, toMidline);
+        lrOffset = qMax(content->getHeight()-lrMidline, toMidline);
     }
-    luPixel height = QMAX(umHeight, QMAX(ulOffset, urOffset));
+    luPixel height = qMax(umHeight, qMax(ulOffset, urOffset));
 
     // the upper half
     content->setY(height);
@@ -482,7 +482,7 @@ void IndexElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle 
         lowerRight->setY(height+lrOffset);
     }
 
-    fromMidline += QMAX(QMAX(llHeight+llOffset, lrHeight+lrOffset) - content->getHeight(), lmHeight);
+    fromMidline += qMax(qMax(llHeight+llOffset, lrHeight+lrOffset) - content->getHeight(), lmHeight);
 
     // set the result
     setWidth(width);
@@ -1248,7 +1248,7 @@ bool IndexElement::readContentFromDom(QDomNode& node)
     }
 
     if ( !buildChild( content, node, "CONTENT" ) ) {
-        kdWarning( DEBUGID ) << "Empty content in IndexElement." << endl;
+        kWarning( DEBUGID ) << "Empty content in IndexElement." << endl;
         return false;
     }
     node = node.nextSibling();

@@ -93,7 +93,7 @@ void
 SymbolCombo::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, QChar(value.toInt()));
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, QChar(value.toInt()));
 	Widget::drawViewer(p, cg, r, QString( QChar(value.toInt()) ));
 }
 

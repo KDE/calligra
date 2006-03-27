@@ -87,7 +87,7 @@ ScriptContainer::ScriptContainer(const QString& name)
     : MainModule(name)
     , d( new ScriptContainerPrivate() ) // initialize d-pointer class
 {
-    kdDebug() << QString("ScriptContainer::ScriptContainer() Ctor name='%1'").arg(name) << endl;
+    kDebug() << QString("ScriptContainer::ScriptContainer() Ctor name='%1'").arg(name) << endl;
 
     d->script = 0;
     d->name = name;
@@ -95,7 +95,7 @@ ScriptContainer::ScriptContainer(const QString& name)
 
 ScriptContainer::~ScriptContainer()
 {
-    kdDebug() << QString("ScriptContainer::~ScriptContainer() Dtor name='%1'").arg(d->name) << endl;
+    kDebug() << QString("ScriptContainer::~ScriptContainer() Dtor name='%1'").arg(d->name) << endl;
 
     finalize();
     delete d;
@@ -164,8 +164,8 @@ bool ScriptContainer::setOption(const QString name, const QVariant& value)
         if(info->hasOption(name)) {
             d->options.replace(name, value);
             return true;
-        } else kdWarning() << QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such option").arg(name).arg(value.toString()) << endl;
-    } else kdWarning() << QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such interpreterinfo").arg(name).arg(value.toString()) << endl;
+        } else kWarning() << QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such option").arg(name).arg(value.toString()) << endl;
+    } else kWarning() << QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such interpreterinfo").arg(name).arg(value.toString()) << endl;
     return false;
 }
 
@@ -244,7 +244,7 @@ bool ScriptContainer::initialize()
     finalize();
 
     if(! d->scriptfile.isNull()) {
-        kdDebug() << QString("Kross::Api::ScriptContainer::initialize() file=%1").arg(d->scriptfile) << endl;
+        kDebug() << QString("Kross::Api::ScriptContainer::initialize() file=%1").arg(d->scriptfile) << endl;
 
         if(d->interpretername.isNull()) {
             d->interpretername = Manager::scriptManager()->getInterpreternameForFile( d->scriptfile );

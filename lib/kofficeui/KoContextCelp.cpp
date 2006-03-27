@@ -44,6 +44,7 @@
 #include <kcursor.h>
 #include <kapplication.h>
 #include <qstring.h>
+#include <ktoolinvocation.h>
 
 KoVerticalLabel::KoVerticalLabel( QWidget* parent, const char* name )
 		: QWidget( parent, name, Qt::WNoAutoErase )
@@ -230,7 +231,7 @@ void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 		e->accept();
 		if (currentAnchor.startsWith("help://#")) {
 			//that's not really useful, since koffice documents can be embedded
-			kapp->invokeHelp(currentAnchor.right(currentAnchor.length()-8));
+			KToolInvocation::invokeHelp(currentAnchor.right(currentAnchor.length()-8));
 		}
 		else
 		if (currentAnchor.startsWith("help://")) {
@@ -242,7 +243,7 @@ void KoHelpView::mouseReleaseEvent( QMouseEvent* e )
 				helpanchor=helpapp.right(helpapp.length()-pos-1);
 				helpapp=helpapp.left(pos);
 			}
-			kapp->invokeHelp(helpanchor,helpapp);
+			KToolInvocation::invokeHelp(helpanchor,helpapp);
 		}
 		else
 		emit linkClicked( currentAnchor );

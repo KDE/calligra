@@ -32,7 +32,7 @@ KoChangeCaseDia::KoChangeCaseDia( QWidget *parent, const char *name )
 {
 
     setCaption( i18n("Change Case") );
-    Q3VBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
 
     Q3ButtonGroup *grp = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Case" ),page );
     grp->setRadioButtonExclusive( TRUE );

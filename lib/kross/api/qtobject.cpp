@@ -124,14 +124,14 @@ QUObject* QtObject::toQUObject(const QString& signature, List::Ptr arguments)
 
 //QString t;
 //for(int j=0; j<argcount; j++) t += "'" + Variant::toString(arguments->item(j)) + "' ";
-//kdDebug()<<"1 --------------------- ("<<argcount<<"): "<<t<<endl;
+//kDebug()<<"1 --------------------- ("<<argcount<<"): "<<t<<endl;
 
     // Fill parameters.
     uint argcount = arguments ? arguments->count() : 0;
     for(uint i = 0; i < paramcount; i++) {
         if(paramlist[i].find("QString") >= 0) {
             const QString s = (argcount > i) ? Variant::toString(arguments->item(i)) : QString::null;
-            //kdDebug()<<"EventSlot::toQUObject s="<<s<<endl;
+            //kDebug()<<"EventSlot::toQUObject s="<<s<<endl;
             static_QUType_QString.set( &(uo[i + 1]), s );
         }
         //TODO handle int, long, char*, QStringList, etc.
@@ -140,7 +140,7 @@ QUObject* QtObject::toQUObject(const QString& signature, List::Ptr arguments)
         }
     }
 
-//kdDebug()<<"2 --------------------- "<<endl;
+//kDebug()<<"2 --------------------- "<<endl;
     return uo;
 }
 

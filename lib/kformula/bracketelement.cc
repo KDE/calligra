@@ -183,7 +183,7 @@ bool SingleContentElement::readContentFromDom(QDomNode& node)
     }
 
     if ( !buildChild( content, node, "CONTENT" ) ) {
-        kdWarning( DEBUGID ) << "Empty content in " << getTagName() << endl;
+        kWarning( DEBUGID ) << "Empty content in " << getTagName() << endl;
         return false;
     }
     node = node.nextSibling();
@@ -281,28 +281,28 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
         left->calcSizes(style, tstyle);
         right->calcSizes(style, tstyle);
 
-        setBaseline(QMAX(content->getBaseline(),
-                         QMAX(left->getBaseline(), right->getBaseline())));
+        setBaseline(qMax(content->getBaseline(),
+                         qMax(left->getBaseline(), right->getBaseline())));
 
         content->setY(getBaseline() - content->getBaseline());
         left   ->setY(getBaseline() - left   ->getBaseline());
         right  ->setY(getBaseline() - right  ->getBaseline());
 
         //setMidline(content->getY() + content->getMidline());
-        setHeight(QMAX(content->getY() + content->getHeight(),
-                       QMAX(left ->getY() + left ->getHeight(),
+        setHeight(qMax(content->getY() + content->getHeight(),
+                       qMax(left ->getY() + left ->getHeight(),
                             right->getY() + right->getHeight())));
     }
     else {
-        //kdDebug( DEBUGID ) << "BracketElement::calcSizes " << content->axis( style, tstyle ) << " " << content->getHeight() << endl;
-        luPixel contentHeight = 2 * QMAX( content->axis( style, tstyle ),
+        //kDebug( DEBUGID ) << "BracketElement::calcSizes " << content->axis( style, tstyle ) << " " << content->getHeight() << endl;
+        luPixel contentHeight = 2 * qMax( content->axis( style, tstyle ),
                                           content->getHeight() - content->axis( style, tstyle ) );
         left->calcSizes( style, tstyle, contentHeight );
         right->calcSizes( style, tstyle, contentHeight );
 
         // height
-        setHeight(QMAX(contentHeight,
-                       QMAX(left->getHeight(), right->getHeight())));
+        setHeight(qMax(contentHeight,
+                       qMax(left->getHeight(), right->getHeight())));
         //setMidline(getHeight() / 2);
 
         content->setY(getHeight() / 2 - content->axis( style, tstyle ));
@@ -321,7 +321,7 @@ void BracketElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyl
             right->setY((getHeight() - right->getHeight())/2);
         }
 
-//         kdDebug() << "BracketElement::calcSizes" << endl
+//         kDebug() << "BracketElement::calcSizes" << endl
 //                   << "getHeight(): " << getHeight() << endl
 //                   << "left->getHeight():  " << left->getHeight() << endl
 //                   << "right->getHeight(): " << right->getHeight() << endl
@@ -360,7 +360,7 @@ void BracketElement::draw( QPainter& painter, const LuPixelRect& r,
         right->draw(painter, r, style, tstyle, myPos);
     }
     else {
-        luPixel contentHeight = 2 * QMAX(content->axis( style, tstyle ),
+        luPixel contentHeight = 2 * qMax(content->axis( style, tstyle ),
                                          content->getHeight() - content->axis( style, tstyle ));
         left->draw(painter, r, style, tstyle, contentHeight, myPos);
         right->draw(painter, r, style, tstyle, contentHeight, myPos);

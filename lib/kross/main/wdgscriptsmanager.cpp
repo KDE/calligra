@@ -31,7 +31,7 @@
 #include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kiconloader.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
@@ -90,7 +90,7 @@ class ListItem : public Q3ListViewItem
 class ToolTip : public QToolTip
 {
     public:
-        ToolTip(KListView* parent) : QToolTip(parent->viewport()), m_parent(parent) {}
+        ToolTip(K3ListView* parent) : QToolTip(parent->viewport()), m_parent(parent) {}
         virtual ~ToolTip () { remove(m_parent->viewport()); }
     protected:
         virtual void maybeTip(const QPoint& p) {
@@ -103,7 +103,7 @@ class ToolTip : public QToolTip
             }
         }
     private:
-        KListView* m_parent;
+        K3ListView* m_parent;
 };
 
 class WdgScriptsManagerPrivate
@@ -267,7 +267,7 @@ void WdgScriptsManager::slotInstallScript()
         return;
 
     if(! d->m_scripguiclient->installScriptPackage( filedialog->selectedURL().path() )) {
-        kdWarning() << "Failed to install scriptpackage" << endl;
+        kWarning() << "Failed to install scriptpackage" << endl;
         return;
     }
 
@@ -297,7 +297,7 @@ void WdgScriptsManager::slotUninstallScript()
     }
 
     if(! d->m_scripguiclient->uninstallScriptPackage(packagepath)) {
-        kdWarning() << "Failed to uninstall scriptpackage" << endl;
+        kWarning() << "Failed to uninstall scriptpackage" << endl;
         return;
     }
 

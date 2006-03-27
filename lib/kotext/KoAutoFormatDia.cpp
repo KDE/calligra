@@ -25,7 +25,7 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kstandarddirs.h>
 
 #include <qlayout.h>
@@ -115,7 +115,7 @@ void KoAutoFormatExceptionWidget::textChanged ( const QString &_text )
 
 void KoAutoFormatExceptionWidget::slotAddException()
 {
-    QString text=exceptionLine->text().stripWhiteSpace();
+    QString text=exceptionLine->text().trimmed();
     if(!text.isEmpty())
     {
         if(text.at(text.length()-1)!='.' && m_bAbbreviation)
@@ -590,7 +590,7 @@ void KoAutoFormatDia::setupTab3()
 
     connect(pbAdd,SIGNAL(clicked()),this, SLOT(slotAddEntry()));
 
-    m_pListView = new KListView( tab3 );
+    m_pListView = new K3ListView( tab3 );
     m_pListView->addColumn( i18n( "Find" ) );
     m_pListView->addColumn( i18n( "Replace" ) );
     m_pListView->setAllColumnsShowFocus( true );

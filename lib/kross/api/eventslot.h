@@ -72,7 +72,7 @@ namespace Kross { namespace Api {
 /*
         private:
             EventManager* m_eventmanager;
-            QGuardedPtr<QObject> m_sender;
+            QPointer<QObject> m_sender;
             QCString m_signal;
             QCString m_slot;
             QString m_function;

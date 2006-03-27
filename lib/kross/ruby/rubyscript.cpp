@@ -66,7 +66,7 @@ RubyScript::~RubyScript()
 void RubyScript::compile()
 {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "RubyScript::compile()" << endl;
+    kDebug() << "RubyScript::compile()" << endl;
 #endif
     int critical;
 
@@ -84,20 +84,20 @@ void RubyScript::compile()
     if (ruby_nerrs != 0)
     {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        kdDebug() << "Compilation has failed" << endl;
+        kDebug() << "Compilation has failed" << endl;
 #endif
         setException( new Kross::Api::Exception(QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
         d->m_compile = 0;
     }
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "Compilation was successfull" << endl;
+    kDebug() << "Compilation was successfull" << endl;
 #endif
 }
 
 const QStringList& RubyScript::getFunctionNames()
 {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "RubyScript::getFunctionNames()" << endl;
+    kDebug() << "RubyScript::getFunctionNames()" << endl;
 #endif
     if(d->m_compile == 0)
     {
@@ -109,26 +109,26 @@ const QStringList& RubyScript::getFunctionNames()
 Kross::Api::Object::Ptr RubyScript::execute()
 {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "RubyScript::execute()" << endl;
+    kDebug() << "RubyScript::execute()" << endl;
 #endif
     if(d->m_compile == 0)
     {
         compile();
     }
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "Start execution" << endl;
+    kDebug() << "Start execution" << endl;
 #endif
     selectScript();
     int result = ruby_exec();
     if (result != 0)
     {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-        kdDebug() << "Execution has failed" << endl;
+        kDebug() << "Execution has failed" << endl;
 #endif
         if( TYPE( ruby_errinfo )  == T_DATA && RubyExtension::isOfExceptionType( ruby_errinfo ) )
         {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-            kdDebug() << "Kross exception" << endl;
+            kDebug() << "Kross exception" << endl;
 #endif
             setException( RubyExtension::convertToException( ruby_errinfo ) );
         } else {
@@ -138,7 +138,7 @@ Kross::Api::Object::Ptr RubyScript::execute()
 
     unselectScript();
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "Execution is finished" << endl;
+    kDebug() << "Execution is finished" << endl;
 #endif
     return 0;
 }
@@ -148,7 +148,7 @@ Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api
     Q_UNUSED(name)
     Q_UNUSED(args)
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "RubyScript::callFunction()" << endl;
+    kDebug() << "RubyScript::callFunction()" << endl;
 #endif
     if(d->m_compile == 0)
     {
@@ -162,7 +162,7 @@ Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api
 const QStringList& RubyScript::getClassNames()
 {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "RubyScript::getClassNames()" << endl;
+    kDebug() << "RubyScript::getClassNames()" << endl;
 #endif
     if(d->m_compile == 0)
     {
@@ -175,7 +175,7 @@ Kross::Api::Object::Ptr RubyScript::classInstance(const QString& name)
 {
     Q_UNUSED(name)
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
-    kdDebug() << "RubyScript::classInstance()" << endl;
+    kDebug() << "RubyScript::classInstance()" << endl;
 #endif
     if(d->m_compile == 0)
     {

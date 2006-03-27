@@ -138,7 +138,7 @@ void KoParagCounter::load( QDomElement & element )
         m_startNumber = s.lower()[0].latin1() - 'a' + 1;
     s = element.attribute("display-levels");
     if ( !s.isEmpty() )
-        m_displayLevels = QMIN( s.toInt(), m_depth+1 ); // can't be > depth+1
+        m_displayLevels = qMin( s.toInt(), m_depth+1 ); // can't be > depth+1
     else // Not specified -> compat with koffice-1.2: make equal to depth+1
         m_displayLevels = m_depth+1;
     m_customBulletFont = element.attribute("bulletfont");
@@ -204,7 +204,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
     // styles have a start-value, but that doesn't mean restartNumbering, as it does for paragraphs
     m_restartCounter = loadingStyle ? false : ( restartNumbering != -1 );
     m_startNumber = ( restartNumbering != -1 ) ? restartNumbering : 1;
-    //kdDebug() << k_funcinfo << "IN: restartNumbering=" << restartNumbering << " OUT: m_restartCounter=" << m_restartCounter << " m_startNumber=" << m_startNumber << endl;
+    //kDebug() << k_funcinfo << "IN: restartNumbering=" << restartNumbering << " OUT: m_restartCounter=" << m_restartCounter << " m_startNumber=" << m_startNumber << endl;
 
     if ( orderedList || heading ) {
         m_style = static_cast<Style>( importCounterType( listStyle.attributeNS( KoXmlNS::style, "num-format", QString::null)[0] ) );
@@ -236,7 +236,7 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                 m_style = STYLE_BOXBULLET;
                 break;
             default:
-                kdWarning() << "Unhandled bullet code 0x" << QString::number( (uint)m_customBulletChar.unicode(), 16 ) << endl;
+                kWarning() << "Unhandled bullet code 0x" << QString::number( (uint)m_customBulletChar.unicode(), 16 ) << endl;
                 // fallback
             case 0x2794: // arrow
             case 0x2717: // cross
@@ -246,12 +246,12 @@ void KoParagCounter::loadOasisListStyle( const QDomElement& listStyle,
                 if ( listStyleProperties.hasAttributeNS( KoXmlNS::style, "font-name" ) )
                 {
                     m_customBulletFont = listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null );
-                    kdDebug() << "m_customBulletFont style:font-name = " << listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null ) << endl;
+                    kDebug() << "m_customBulletFont style:font-name = " << listStyleProperties.attributeNS( KoXmlNS::style, "font-name", QString::null ) << endl;
                 }
                 else if ( listStyleTextProperties.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
                 {
                     m_customBulletFont = listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null );
-                    kdDebug() << "m_customBulletFont fo:font-family = " << listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null ) << endl;
+                    kDebug() << "m_customBulletFont fo:font-family = " << listStyleTextProperties.attributeNS( KoXmlNS::fo, "font-family", QString::null ) << endl;
                 }
                 // ## TODO in fact we're supposed to read it from the style pointed to by text:style-name
                 break;
@@ -715,9 +715,9 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
     if ( m_displayLevels > 1 && m_numbering != NUM_NONE )
     {
         KoTextParag* p = parent( paragraph );
-        int displayLevels = QMIN( m_displayLevels, m_depth+1 ); // can't be >depth+1
+        int displayLevels = qMin( m_displayLevels, m_depth+1 ); // can't be >depth+1
         for ( int level = 1 ; level < displayLevels ; ++level ) {
-            //kdDebug() << "additional level=" << level << "/" << displayLevels-1 << endl;
+            //kDebug() << "additional level=" << level << "/" << displayLevels-1 << endl;
             if ( p )
             {
                 KoParagCounter* counter = p->counter();
@@ -731,7 +731,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
 
                 // Find the number of missing parents, and add dummy text for them.
                 int missingParents = m_depth - level - p->counter()->m_depth;
-                //kdDebug() << "levelText = " << str << " missingParents=" << missingParents << endl;
+                //kDebug() << "levelText = " << str << " missingParents=" << missingParents << endl;
                 level += missingParents;
                 for ( ; missingParents > 0 ; --missingParents )
                     // Each missing level adds a "0"
@@ -755,7 +755,7 @@ QString KoParagCounter::text( const KoTextParag *paragraph )
 
     }
 
-    //kdDebug() << "result: " << m_cache.text << " + " << levelText( paragraph ) << endl;
+    //kDebug() << "result: " << m_cache.text << " + " << levelText( paragraph ) << endl;
     // Now add text for this level.
     m_cache.text.append( levelText( paragraph ) );
 
@@ -801,7 +801,7 @@ int KoParagCounter::width( const KoTextParag *paragraph )
     // Now go from 100%-zoom to LU
     m_cache.width = KoTextZoomHandler::ptToLayoutUnitPt( m_cache.width );
 
-    //kdDebug(32500) << "KoParagCounter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
+    //kDebug(32500) << "KoParagCounter::width recalculated parag=" << paragraph << " text='" << text << "' width=" << m_cache.width << endl;
     return m_cache.width;
 }
 
@@ -844,7 +844,7 @@ QString KoParagCounter::makeRomanNumber( int n )
                                     RNTens[ ( n / 10 ) % 10 ] +
                                     RNUnits[ ( n ) % 10 ] );
     else { // should never happen, but better not crash if it does
-        kdWarning(32500) << "makeRomanNumber: n=" << n << endl;
+        kWarning(32500) << "makeRomanNumber: n=" << n << endl;
         return QString::number( n );
     }
 }
@@ -976,7 +976,7 @@ void KoParagCounter::printRTDebug( KoTextParag* parag )
         additionalInfo += " [customBullet: " + QString::number( m_customBulletChar.unicode() )
                           + " in font '" + m_customBulletFont + "']";
     static const char * const s_numbering[] = { "List", "Chapter", "None", "Footnote" };
-    kdDebug(32500) << "  Counter style=" << style()
+    kDebug(32500) << "  Counter style=" << style()
                    << " numbering=" << s_numbering[ numbering() ]
                    << " depth=" << depth()
                    << " number=" << number( parag )

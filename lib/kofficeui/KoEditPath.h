@@ -24,7 +24,7 @@
 #include <qstringlist.h>
 #include <koffice_export.h>
 class KEditListBox;
-class KURLRequester;
+class KUrlRequester;
 class QCheckBox;
 
 class KOFFICEUI_EXPORT KoEditPathDia : public KDialogBase
@@ -36,7 +36,7 @@ public:
 
 private:
     KEditListBox *m_listpath;
-    KURLRequester *urlReq;
+    KUrlRequester *urlReq;
 };
 
 class KOFFICEUI_EXPORT KoChangePathDia : public KDialogBase
@@ -48,7 +48,7 @@ public:
 private slots:
     void slotChangeDefaultValue( bool );
 private:
-    KURLRequester *m_urlReq;
+    KUrlRequester *m_urlReq;
     QCheckBox *m_defaultPath;
 };
 

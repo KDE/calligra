@@ -38,7 +38,7 @@ KFORMULA_NAMESPACE_BEGIN
 
 const int DEBUGID = 40000;
 
-// to make kdDebug a litte more interessting...
+// to make kDebug a litte more interessting...
 //#define TERM_RESET "[0m"
 //#define TERM_ERROR "[40;31;m"
 

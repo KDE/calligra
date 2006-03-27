@@ -121,7 +121,7 @@ protected:
     QPushButton *pbChangeFormat, *pbClearFormat;
     KCharSelect *charselect;
     KoAutoFormatLineEdit *m_find, *m_replace;
-    KListView *m_pListView;
+    K3ListView *m_pListView;
 
     QChar oSimpleBegin, oSimpleEnd;
     QChar oDoubleBegin, oDoubleEnd;

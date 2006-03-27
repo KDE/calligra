@@ -70,7 +70,7 @@ public:
 
 // Equality test for tab positions in particular
 static inline bool equals( double a, double b )  {
-    return kAbs( a - b ) < 1E-4;
+    return qAbs( a - b ) < 1E-4;
 }
 
 
@@ -210,7 +210,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
 {
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm( font );
-    resize( width(), QMAX( fm.height() + 4, 20 ) );
+    resize( width(), qMax( fm.height() + 4, 20 ) );
 
     // Use a double-buffer pixmap
     QPainter p( &buffer );
@@ -244,7 +244,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
-        maxwidth = QMAX( maxwidth, textwidth );
+        maxwidth = qMax( maxwidth, textwidth );
     }
 
     // Make sure that the ruler stays readable at lower zoom levels
@@ -255,7 +255,7 @@ void KoRuler::drawHorizontal( QPainter *_painter )
     for ( double i = 0.0;i <= (double)totalw;i += dist ) {
         str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
         int textwidth = fm.width( str );
-        maxwidth = QMAX( maxwidth, textwidth );
+        maxwidth = qMax( maxwidth, textwidth );
         p.drawText( qRound(i) - diffx - qRound(textwidth * 0.5),
                     qRound(( height() - fm.height() ) * 0.5),
                     textwidth, height(), Qt::AlignLeft | Qt::AlignTop, str );
@@ -373,7 +373,7 @@ void KoRuler::drawVertical( QPainter *_painter )
 {
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm( font );
-    resize( QMAX( fm.height() + 4, 20 ), height() );
+    resize( qMax( fm.height() + 4, 20 ), height() );
 
     QPainter p( &buffer );
     p.fillRect( 0, 0, width(), height(), QBrush( colorGroup().brush( QColorGroup::Background ) ) );
@@ -412,7 +412,7 @@ void KoRuler::drawVertical( QPainter *_painter )
         for ( double i = 0.0;i <= (double)totalh;i += dist ) {
             str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
             int textwidth = fm.width( str );
-            maxheight = QMAX( maxheight, textwidth );
+            maxheight = qMax( maxheight, textwidth );
         }
 
         // Make sure that the ruler stays readable at lower zoom levels
@@ -424,7 +424,7 @@ void KoRuler::drawVertical( QPainter *_painter )
             str = QString::number( KoUnit::toUserValue( i / m_zoom, m_unit ) );
             int textheight = fm.height();
             int textwidth = fm.width( str );
-            maxheight = QMAX( maxheight, textwidth );
+            maxheight = qMax( maxheight, textwidth );
             p.save();
             p.translate( qRound(( width() - textheight ) * 0.5),
                          qRound(i) - diffy + qRound(textwidth * 0.5) );
@@ -571,7 +571,7 @@ void KoRuler::mousePressEvent( QMouseEvent *e )
         else if ( d->flags & F_HELPLINES )
         {
 	    setCursor( orientation == Qt::Horizontal ?
-		       Qt::sizeVerCursor : Qt::sizeHorCursor );
+		       Qt::SizeHorCursor : Qt::SizeHorCursor );
             d->action = A_HELPLINES;
         }
     default:
@@ -703,10 +703,10 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                 if ( !m_bFrameStartSet )
                 {
                     if ( mx > left - 5 && mx < left + 5 ) {
-                        setCursor( Qt::sizeHorCursor );
+                        setCursor( Qt::SizeHorCursor );
                         d->action = A_BR_LEFT;
                     } else if ( mx > right - 5 && mx < right + 5 ) {
-                        setCursor( Qt::sizeHorCursor );
+                        setCursor( Qt::SizeHorCursor );
                         d->action = A_BR_RIGHT;
                     }
                 }
@@ -878,11 +878,11 @@ void KoRuler::mouseMoveEvent( QMouseEvent *e )
                     break;
                 if ( my > top - 5 && my < top + 5 ) {
                     QToolTip::add( this, i18n("Top margin") );
-                    setCursor( Qt::sizeVerCursor );
+                    setCursor( Qt::SizeHorCursor );
                     d->action = A_BR_TOP;
                 } else if ( my > bottom - 5 && my < bottom + 5 ) {
                     QToolTip::add( this, i18n("Bottom margin") );
-                    setCursor( Qt::sizeVerCursor );
+                    setCursor( Qt::SizeHorCursor );
                     d->action = A_BR_BOTTOM;
                 }
             } else {
@@ -1078,7 +1078,7 @@ void KoRuler::searchTab(int mx) {
     for ( ; it != d->tabList.end() ; ++it ) {
         pos = qRound(applyRtlAndZoom((*it).ptPos)) - diffx + frameStart;
         if ( mx > pos - 5 && mx < pos + 5 ) {
-            setCursor( Qt::sizeHorCursor );
+            setCursor( Qt::SizeHorCursor );
             d->action = A_TAB;
             d->currTab = *it;
             break;
@@ -1107,7 +1107,7 @@ void KoRuler::showMousePos( bool _showMPos )
 
 void KoRuler::setOffset( int _diffx, int _diffy )
 {
-    //kdDebug() << "KoRuler::setOffset " << _diffx << "," << _diffy << endl;
+    //kDebug() << "KoRuler::setOffset " << _diffx << "," << _diffy << endl;
     diffx = _diffx;
     diffy = _diffy;
     update();
@@ -1181,8 +1181,8 @@ QSize KoRuler::minimumSizeHint() const
     QFont font = KGlobalSettings::toolBarFont();
     QFontMetrics fm( font );
 
-    size.setWidth( QMAX( fm.height() + 4, 20 ) );
-    size.setHeight( QMAX( fm.height() + 4, 20 ) );
+    size.setWidth( qMax( fm.height() + 4, 20 ) );
+    size.setHeight( qMax( fm.height() + 4, 20 ) );
 
     return size;
 }

@@ -231,7 +231,7 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
     }
 
     // widths
-    luPixel xOffset = QMAX(symbol->getWidth(), QMAX(upperWidth, lowerWidth));
+    luPixel xOffset = qMax(symbol->getWidth(), qMax(upperWidth, lowerWidth));
     if (style.getCenterSymbol()) {
         symbol->setX((xOffset - symbol->getWidth()) / 2);
     }
@@ -243,15 +243,15 @@ void SymbolElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
                   static_cast<luPixel>( symbol->slant()*symbol->getHeight()/2 ) +
                   distX/2);
 
-    setWidth(QMAX(content->getX() + content->getWidth(),
-                  QMAX(upperWidth, lowerWidth)));
+    setWidth(qMax(content->getX() + content->getWidth(),
+                  qMax(upperWidth, lowerWidth)));
 
     // heights
-    //int toMidline = QMAX(content->getHeight() / 2,
-    luPixel toMidline = QMAX(content->axis( style, tstyle ),
+    //int toMidline = qMax(content->getHeight() / 2,
+    luPixel toMidline = qMax(content->axis( style, tstyle ),
                              upperHeight + symbol->getHeight()/2);
-    //int fromMidline = QMAX(content->getHeight() / 2,
-    luPixel fromMidline = QMAX(content->getHeight() - content->axis( style, tstyle ),
+    //int fromMidline = qMax(content->getHeight() / 2,
+    luPixel fromMidline = qMax(content->getHeight() - content->axis( style, tstyle ),
                                lowerHeight + symbol->getHeight()/2);
     setHeight(toMidline + fromMidline);
     //setMidline(toMidline);
@@ -756,7 +756,7 @@ bool SymbolElement::readContentFromDom(QDomNode& node)
     }
 
     if ( !buildChild( content, node, "CONTENT" ) ) {
-        kdWarning( DEBUGID ) << "Empty content in SymbolElement." << endl;
+        kWarning( DEBUGID ) << "Empty content in SymbolElement." << endl;
         return false;
     }
     node = node.nextSibling();

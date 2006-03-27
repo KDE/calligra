@@ -61,117 +61,117 @@ public:
     /* Metafile painter methods */
 
     /// set window origin
-    void setWindowOrg( Q_UINT32 size, QDataStream& stream );
+    void setWindowOrg( quint32 size, QDataStream& stream );
     /// set window extents
-    void setWindowExt( Q_UINT32 size, QDataStream& stream );
+    void setWindowExt( quint32 size, QDataStream& stream );
     /// scale window extents
-    void ScaleWindowExt( Q_UINT32, QDataStream& stream );
+    void ScaleWindowExt( quint32, QDataStream& stream );
     /// offset in window origin
-    void OffsetWindowOrg( Q_UINT32, QDataStream& stream );
+    void OffsetWindowOrg( quint32, QDataStream& stream );
 
     /****************** Drawing *******************/
     /// draw line to coord
-    void lineTo( Q_UINT32 size, QDataStream& stream );
+    void lineTo( quint32 size, QDataStream& stream );
     /// move pen to coord
-    void moveTo( Q_UINT32 size, QDataStream& stream );
+    void moveTo( quint32 size, QDataStream& stream );
     /// draw ellipse
-    void ellipse( Q_UINT32 size, QDataStream& stream );
+    void ellipse( quint32 size, QDataStream& stream );
     /// draw polygon
-    void polygon( Q_UINT32 size, QDataStream& stream );
+    void polygon( quint32 size, QDataStream& stream );
     /// draw a list of polygons
-    void polyPolygon( Q_UINT32 size, QDataStream& stream );
+    void polyPolygon( quint32 size, QDataStream& stream );
     /// draw series of lines
-    void polyline( Q_UINT32 size, QDataStream& stream );
+    void polyline( quint32 size, QDataStream& stream );
     /// draw a rectangle
-    void rectangle( Q_UINT32 size, QDataStream& stream );
+    void rectangle( quint32 size, QDataStream& stream );
     /// draw round rectangle
-    void roundRect( Q_UINT32 size, QDataStream& stream );
+    void roundRect( quint32 size, QDataStream& stream );
     /// draw arc
-    void arc( Q_UINT32 size, QDataStream& stream );
+    void arc( quint32 size, QDataStream& stream );
     /// draw chord
-    void chord( Q_UINT32 size, QDataStream& stream );
+    void chord( quint32 size, QDataStream& stream );
     /// draw pie
-    void pie( Q_UINT32 size, QDataStream& stream );
+    void pie( quint32 size, QDataStream& stream );
     /// set polygon fill mode
-    void setPolyFillMode( Q_UINT32 size, QDataStream& stream );
+    void setPolyFillMode( quint32 size, QDataStream& stream );
     /// set background pen color
-    void setBkColor( Q_UINT32 size, QDataStream& stream );
+    void setBkColor( quint32 size, QDataStream& stream );
     /// set background pen mode
-    void setBkMode( Q_UINT32 size, QDataStream& stream );
+    void setBkMode( quint32 size, QDataStream& stream );
     /// set a pixel
-    void setPixel( Q_UINT32 size, QDataStream& stream );
+    void setPixel( quint32 size, QDataStream& stream );
     /// set raster operation mode
-    void setRop( Q_UINT32 size, QDataStream& stream );
+    void setRop( quint32 size, QDataStream& stream );
     /// save device context */
-    void saveDC( Q_UINT32 size, QDataStream& stream );
+    void saveDC( quint32 size, QDataStream& stream );
     /// restore device context
-    void restoreDC( Q_UINT32 size, QDataStream& stream );
+    void restoreDC( quint32 size, QDataStream& stream );
     ///  clipping region is the intersection of this region and the original region
-    void intersectClipRect( Q_UINT32 size, QDataStream& stream );
+    void intersectClipRect( quint32 size, QDataStream& stream );
     /// delete a clipping rectangle of the original region
-    void excludeClipRect( Q_UINT32 size, QDataStream& stream );
+    void excludeClipRect( quint32 size, QDataStream& stream );
 
     /****************** Text *******************/
     /// set text color
-    void setTextColor( Q_UINT32 size, QDataStream& stream );
+    void setTextColor( quint32 size, QDataStream& stream );
     /// set text alignment
-    void setTextAlign( Q_UINT32 size, QDataStream& stream );
+    void setTextAlign( quint32 size, QDataStream& stream );
     /// draw text
-    void textOut( Q_UINT32 size, QDataStream& stream );
-    void extTextOut( Q_UINT32 size, QDataStream& stream );
+    void textOut( quint32 size, QDataStream& stream );
+    void extTextOut( quint32 size, QDataStream& stream );
 
     /****************** Bitmap *******************/
-    void SetStretchBltMode( Q_UINT32, QDataStream& stream );
+    void SetStretchBltMode( quint32, QDataStream& stream );
     /// copies a DIB into a dest location
-    void dibBitBlt( Q_UINT32 size, QDataStream& stream );
+    void dibBitBlt( quint32 size, QDataStream& stream );
     /// stretches a DIB into a dest location
-    void dibStretchBlt( Q_UINT32 size, QDataStream& stream );
-    void stretchDib( Q_UINT32 size, QDataStream& stream );
+    void dibStretchBlt( quint32 size, QDataStream& stream );
+    void stretchDib( quint32 size, QDataStream& stream );
     /// create a pattern brush
-    void dibCreatePatternBrush( Q_UINT32 size, QDataStream& stream );
+    void dibCreatePatternBrush( quint32 size, QDataStream& stream );
 
     /****************** Object handle *******************/
     /// activate object handle
-    void selectObject( Q_UINT32 size, QDataStream& stream );
+    void selectObject( quint32 size, QDataStream& stream );
     /// free object handle
-    void deleteObject( Q_UINT32 size, QDataStream& stream );
+    void deleteObject( quint32 size, QDataStream& stream );
     /// create an empty object in the object list
     void createEmptyObject();
     /// create a logical brush
-    void createBrushIndirect( Q_UINT32 size, QDataStream& stream );
+    void createBrushIndirect( quint32 size, QDataStream& stream );
     /// create a logical pen
-    void createPenIndirect( Q_UINT32 size, QDataStream& stream );
+    void createPenIndirect( quint32 size, QDataStream& stream );
     /// create a logical font
-    void createFontIndirect( Q_UINT32 size, QDataStream& stream );
+    void createFontIndirect( quint32 size, QDataStream& stream );
 
     /****************** misc *******************/
     /// end of meta file
-    void end( Q_UINT32, QDataStream& stream );
+    void end( quint32, QDataStream& stream );
 
     /** Calculate header checksum */
-    static Q_UINT16 calcCheckSum( WmfPlaceableHeader* );
+    static quint16 calcCheckSum( WmfPlaceableHeader* );
 
     // function unimplemented
-    void notyet( Q_UINT32, QDataStream& stream );
-    void region( Q_UINT32, QDataStream& stream );
-    void palette( Q_UINT32, QDataStream& stream );
-    void escape( Q_UINT32, QDataStream& stream );
-    void setRelAbs( Q_UINT32, QDataStream& stream );
-    void setMapMode( Q_UINT32, QDataStream& stream );
-    void extFloodFill( Q_UINT32, QDataStream& stream );
-    void startDoc( Q_UINT32, QDataStream& stream );
-    void startPage( Q_UINT32, QDataStream& stream );
-    void endDoc( Q_UINT32, QDataStream& stream );
-    void endPage( Q_UINT32, QDataStream& stream );
-    void resetDC( Q_UINT32, QDataStream& stream );
-    void bitBlt( Q_UINT32, QDataStream& stream );
-    void setDibToDev( Q_UINT32, QDataStream& stream );
-    void createBrush( Q_UINT32, QDataStream& stream );
-    void createPatternBrush( Q_UINT32, QDataStream& stream );
-    void createBitmap( Q_UINT32, QDataStream& stream );
-    void createBitmapIndirect( Q_UINT32, QDataStream& stream );
-    void createPalette( Q_UINT32, QDataStream& stream );
-    void createRegion( Q_UINT32, QDataStream& stream );
+    void notyet( quint32, QDataStream& stream );
+    void region( quint32, QDataStream& stream );
+    void palette( quint32, QDataStream& stream );
+    void escape( quint32, QDataStream& stream );
+    void setRelAbs( quint32, QDataStream& stream );
+    void setMapMode( quint32, QDataStream& stream );
+    void extFloodFill( quint32, QDataStream& stream );
+    void startDoc( quint32, QDataStream& stream );
+    void startPage( quint32, QDataStream& stream );
+    void endDoc( quint32, QDataStream& stream );
+    void endPage( quint32, QDataStream& stream );
+    void resetDC( quint32, QDataStream& stream );
+    void bitBlt( quint32, QDataStream& stream );
+    void setDibToDev( quint32, QDataStream& stream );
+    void createBrush( quint32, QDataStream& stream );
+    void createPatternBrush( quint32, QDataStream& stream );
+    void createBitmap( quint32, QDataStream& stream );
+    void createBitmapIndirect( quint32, QDataStream& stream );
+    void createPalette( quint32, QDataStream& stream );
+    void createRegion( quint32, QDataStream& stream );
 
 private:
     //-----------------------------------------------------------------------------
@@ -185,18 +185,18 @@ private:
     void pointArray( QDataStream& stream, Q3PointArray& pa );
 
     /** Convertion between windows color and QColor */
-    QColor qtColor( Q_UINT32 color ) const
+    QColor qtColor( quint32 color ) const
     { return QColor( color & 0xFF, (color>>8) & 0xFF, (color>>16) & 0xFF ); }
 
     /** Convert (x1,y1) and (x2, y2) positions in angle and angleLength */
     void xyToAngle( int xStart, int yStart, int xEnd, int yEnd, int& angle, int& aLength );
 
     /** Convert windows rasterOp in QT rasterOp */
-    Qt::RasterOp winToQtRaster( Q_UINT16 param ) const;
-    Qt::RasterOp winToQtRaster( Q_UINT32 param ) const;
+    Qt::RasterOp winToQtRaster( quint16 param ) const;
+    Qt::RasterOp winToQtRaster( quint32 param ) const;
 
     /** Converts DIB to BMP */
-    bool dibToBmp( QImage& bmp, QDataStream& stream, Q_UINT32 size);
+    bool dibToBmp( QImage& bmp, QDataStream& stream, quint32 size);
 
 
 public:
@@ -223,7 +223,7 @@ private:
     QRect  mWindow;
     // current state of the drawing
     QColor  mTextColor;
-    Q_UINT16  mTextAlign;
+    quint16  mTextAlign;
     int     mTextRotation;
     bool    mWinding;
 
@@ -242,7 +242,7 @@ private:
  *  static data
  */
     static const struct KoWmfFunc {
-        void ( KoWmfReadPrivate::*method )( Q_UINT32, QDataStream& );
+        void ( KoWmfReadPrivate::*method )( quint32, QDataStream& );
     } koWmfFunc[] = {
       { &KoWmfReadPrivate::end }, // 0
       { &KoWmfReadPrivate::setBkColor }, // 1

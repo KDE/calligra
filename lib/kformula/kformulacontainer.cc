@@ -517,11 +517,11 @@ bool Container::load( const QDomElement &fe )
         }
         else {
             delete root;
-            kdWarning( DEBUGID ) << "Error constructing element tree." << endl;
+            kWarning( DEBUGID ) << "Error constructing element tree." << endl;
         }
     }
     else {
-        kdWarning( DEBUGID ) << "Empty element." << endl;
+        kWarning( DEBUGID ) << "Empty element." << endl;
     }
     return false;
 }
@@ -587,13 +587,13 @@ QImage Container::drawImage( int width, int height )
     int realWidth = context.layoutUnitToPixelX( impl->rootElement->getWidth() );
     int realHeight = context.layoutUnitToPixelY( impl->rootElement->getHeight() );
 
-    double f = QMAX( static_cast<double>( width )/static_cast<double>( realWidth ),
+    double f = qMax( static_cast<double>( width )/static_cast<double>( realWidth ),
                      static_cast<double>( height )/static_cast<double>( realHeight ) );
 
     int oldZoom = context.zoom();
     context.setZoomAndResolution( qRound( oldZoom*f ), KoGlobal::dpiX(), KoGlobal::dpiY() );
 
-    kdDebug( DEBUGID ) << "Container::drawImage "
+    kDebug( DEBUGID ) << "Container::drawImage "
                        << "(" << width << " " << height << ")"
                        << "(" << context.layoutUnitToPixelX( impl->rootElement->getWidth() )
                        << " " << context.layoutUnitToPixelY( impl->rootElement->getHeight() ) << ")"

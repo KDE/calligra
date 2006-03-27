@@ -45,7 +45,7 @@ class QWidget;
 
 class KColorButton;
 class KConfig;
-class KListView;
+class K3ListView;
 class KPushButton;
 class KIntNumInput;
 
@@ -144,8 +144,8 @@ private:
 //     QWidget* m_view;
 //     KConfig* m_config;
 
-//     KListView* availableFonts;
-//     KListView* requestedFonts;
+//     K3ListView* availableFonts;
+//     K3ListView* requestedFonts;
 
 //     KPushButton* addFont;
 //     KPushButton* removeFont;

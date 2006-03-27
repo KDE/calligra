@@ -40,7 +40,7 @@
 
 #include <ktempfile.h>
 #include <klineedit.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <KoTemplates.h>
 #include <kicondialog.h>
@@ -87,7 +87,7 @@ public:
     QLabel *m_preview;
     QString m_customFile;
     QPixmap m_customPixmap;
-    KListView *m_groups;
+    K3ListView *m_groups;
     QPushButton *m_add, *m_remove;
     QCheckBox *m_defaultTemplate;
     KInstance *m_instance;
@@ -110,7 +110,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const Q3CString &templateType, KInstan
 
     d=new KoTemplateCreateDiaPrivate( parent, instance );
 
-    Q3Frame *mainwidget=makeMainWidget();
+    QFrame *mainwidget=makeMainWidget();
     Q3HBoxLayout *mbox=new Q3HBoxLayout(mainwidget, 0, KDialogBase::spacingHint());
     Q3VBoxLayout *leftbox=new Q3VBoxLayout(mbox);
 
@@ -126,7 +126,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const Q3CString &templateType, KInstan
 
     label=new QLabel(i18n("Group:"), mainwidget);
     leftbox->addWidget(label);
-    d->m_groups=new KListView(mainwidget);
+    d->m_groups=new K3ListView(mainwidget);
     leftbox->addWidget(d->m_groups);
     d->m_groups->addColumn("");
     d->m_groups->header()->hide();
@@ -253,7 +253,7 @@ void KoTemplateCreateDia::slotOk() {
     QString templateDir=dir+"/.source/";
     QString iconDir=dir+"/.icon/";
 
-    QString file=KoTemplates::stripWhiteSpace(d->m_name->text());
+    QString file=KoTemplates::trimmed(d->m_name->text());
     QString tmpIcon=".icon/"+file;
     tmpIcon+=".png";
     QString icon=iconDir+file;
@@ -265,7 +265,7 @@ void KoTemplateCreateDia::slotOk() {
     if ( pos > -1 )
         ext = m_file.mid( pos );
     else
-        kdWarning(30004) << "Template extension not found!" << endl;
+        kWarning(30004) << "Template extension not found!" << endl;
 
     KUrl dest;
     dest.setPath(templateDir+file+ext);
@@ -281,7 +281,7 @@ void KoTemplateCreateDia::slotOk() {
         while ( KIO::NetAccess::exists( dest, true, this ) );
     }
     bool ignore = false;
-    kdDebug(30004) << "Trying to create template: " << d->m_name->text() << "URL=" << ".source/"+file+ext << " ICON=" << tmpIcon << endl;
+    kDebug(30004) << "Trying to create template: " << d->m_name->text() << "URL=" << ".source/"+file+ext << " ICON=" << tmpIcon << endl;
     KoTemplate *t=new KoTemplate(d->m_name->text(), QString::null, ".source/"+file+ext, tmpIcon, "", "", false, true);
     if(!group->add(t)) {
         KoTemplate *existingTemplate=group->find(d->m_name->text());
@@ -320,7 +320,7 @@ void KoTemplateCreateDia::slotOk() {
         else if(!d->m_customPixmap.isNull())
             d->m_customPixmap.save(icon, "PNG");
         else
-            kdWarning(30004) << "Could not save the preview picture!" << endl;
+            kWarning(30004) << "Could not save the preview picture!" << endl;
     }
 
     // if there's a .directory file, we copy this one, too
@@ -390,7 +390,7 @@ void KoTemplateCreateDia::slotSelect() {
 
 void KoTemplateCreateDia::slotNameChanged(const QString &name) {
 
-    if( ( name.stripWhiteSpace().isEmpty() || !d->m_groups->firstChild() ) && !d->m_changed )
+    if( ( name.trimmed().isEmpty() || !d->m_groups->firstChild() ) && !d->m_changed )
         enableButtonOK(false);
     else
         enableButtonOK(true);
@@ -469,13 +469,13 @@ void KoTemplateCreateDia::updatePixmap() {
         d->m_preview->setPixmap(m_pixmap);
     else if(d->m_custom->isChecked() && !d->m_customFile.isEmpty()) {
         if(d->m_customPixmap.isNull()) {
-            kdDebug(30004) << "Trying to load picture " << d->m_customFile << endl;
+            kDebug(30004) << "Trying to load picture " << d->m_customFile << endl;
             // use the code in KoTemplate to load the image... hacky, I know :)
             KoTemplate t("foo", "bar", QString::null, d->m_customFile);
             d->m_customPixmap=t.loadPicture(d->m_tree->instance());
         }
         else
-            kdWarning(30004) << "Trying to load picture" << endl;
+            kWarning(30004) << "Trying to load picture" << endl;
 
         if(!d->m_customPixmap.isNull())
             d->m_preview->setPixmap(d->m_customPixmap);

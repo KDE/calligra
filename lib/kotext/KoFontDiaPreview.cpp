@@ -236,7 +236,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
     int y = yorg;
     int sx = sxorg;
     int sy = syorg;
-    int bx= QMIN( x, sx );
+    int bx= qMin( x, sx );
     int xend = bx;
     int yUnderline;
     int widthUnderline;
@@ -257,7 +257,7 @@ void KoFontDiaPreview::drawContents( QPainter* p )
             xend = x;
             x = xorg;
             sx = sxorg;
-            bx= QMIN( x, sx );
+            bx= qMin( x, sx );
             count = 1;
         }
         QString textDraw;
@@ -271,15 +271,15 @@ void KoFontDiaPreview::drawContents( QPainter* p )
         if ( count == 1 ) boffset = QABS( int( m_shadowDistanceX ) );
         else boffset = 0;
 
-        if ( bx < xend && (bx + fm2.width( textDraw ) + boffset ) < xend && ( QMIN( y, sy ) - fm2.ascent() ) < ( QMIN( yorg, syorg ) - fm2.ascent() + fm2.height() + QABS( m_shadowDistanceY ) ) ) {
-            p->fillRect( bx, QMIN( yorg, syorg ) - fm2.ascent() + fm2.height() + QABS( int( m_shadowDistanceY ) ), fm2.width( textDraw ) + boffset , fm2.height() + QABS( int( m_shadowDistanceY ) ) - ( QMIN( yorg, syorg ) - QMIN( y, sy ) + fm2.height() + QABS( int( m_shadowDistanceY ) ) ), m_backgroundColor );
+        if ( bx < xend && (bx + fm2.width( textDraw ) + boffset ) < xend && ( qMin( y, sy ) - fm2.ascent() ) < ( qMin( yorg, syorg ) - fm2.ascent() + fm2.height() + QABS( m_shadowDistanceY ) ) ) {
+            p->fillRect( bx, qMin( yorg, syorg ) - fm2.ascent() + fm2.height() + QABS( int( m_shadowDistanceY ) ), fm2.width( textDraw ) + boffset , fm2.height() + QABS( int( m_shadowDistanceY ) ) - ( qMin( yorg, syorg ) - qMin( y, sy ) + fm2.height() + QABS( int( m_shadowDistanceY ) ) ), m_backgroundColor );
         }
-        else if ( bx < xend && (bx + fm2.width( textDraw ) + boffset ) >= xend && ( QMIN( y, sy ) - fm2.ascent() ) < ( QMIN( yorg, syorg ) - fm2.ascent() + fm2.height() + QABS( m_shadowDistanceY ) ) ) {
-            p->fillRect( bx, QMIN( yorg, syorg ) - fm2.ascent() + fm2.height() + QABS( int( m_shadowDistanceY ) ), xend - bx , fm2.height() + QABS( int( m_shadowDistanceY ) ) - ( QMIN( yorg, syorg ) - QMIN( y, sy ) + fm2.height() + QABS( int( m_shadowDistanceY ) ) ), m_backgroundColor );
-            p->fillRect( xend, QMIN( y, sy ) - fm2.ascent(), fm2.width( textDraw ) + boffset - xend + bx, fm2.height() + QABS( int( m_shadowDistanceY ) ), m_backgroundColor );
+        else if ( bx < xend && (bx + fm2.width( textDraw ) + boffset ) >= xend && ( qMin( y, sy ) - fm2.ascent() ) < ( qMin( yorg, syorg ) - fm2.ascent() + fm2.height() + QABS( m_shadowDistanceY ) ) ) {
+            p->fillRect( bx, qMin( yorg, syorg ) - fm2.ascent() + fm2.height() + QABS( int( m_shadowDistanceY ) ), xend - bx , fm2.height() + QABS( int( m_shadowDistanceY ) ) - ( qMin( yorg, syorg ) - qMin( y, sy ) + fm2.height() + QABS( int( m_shadowDistanceY ) ) ), m_backgroundColor );
+            p->fillRect( xend, qMin( y, sy ) - fm2.ascent(), fm2.width( textDraw ) + boffset - xend + bx, fm2.height() + QABS( int( m_shadowDistanceY ) ), m_backgroundColor );
         }
         else {
-            p->fillRect( bx, QMIN( y, sy ) - fm2.ascent(), fm2.width( textDraw ) + boffset , fm2.height() + QABS( int( m_shadowDistanceY ) ), m_backgroundColor );
+            p->fillRect( bx, qMin( y, sy ) - fm2.ascent(), fm2.width( textDraw ) + boffset , fm2.height() + QABS( int( m_shadowDistanceY ) ), m_backgroundColor );
         }
 
         if ( count == 1 ) boffset = QABS( int( m_shadowDistanceX ) );

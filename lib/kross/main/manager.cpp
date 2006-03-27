@@ -121,7 +121,7 @@ Manager::Manager()
                                                      )
                                  );
     } else {
-        kdDebug() << "Ruby interpreter for kross in unavailable" << endl;
+        kDebug() << "Ruby interpreter for kross in unavailable" << endl;
     }
 #endif
 }
@@ -215,22 +215,22 @@ Module::Ptr Manager::loadModule(const QString& modulename)
         if(module)
             return module;
         else
-            kdDebug() << QString("Manager::loadModule(%1) =======> Modulename registered, but module is invalid!").arg(modulename) << endl;
+            kDebug() << QString("Manager::loadModule(%1) =======> Modulename registered, but module is invalid!").arg(modulename) << endl;
     }
 
     KLibLoader* loader = KLibLoader::self();
     KLibrary* lib = loader->globalLibrary( modulename.latin1() );
     if(! lib) {
-        kdWarning() << QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) << endl;
+        kWarning() << QString("Failed to load module '%1': %2").arg(modulename).arg(loader->lastErrorMessage()) << endl;
         return 0;
     }
-    kdDebug() << QString("Successfully loaded module '%1'").arg(modulename) << endl;
+    kDebug() << QString("Successfully loaded module '%1'").arg(modulename) << endl;
 
     def_module_func func;
     func = (def_module_func) lib->symbol("init_module");
 
     if(! func) {
-        kdWarning() << QString("Failed to determinate init function in module '%1'").arg(modulename) << endl;
+        kWarning() << QString("Failed to determinate init function in module '%1'").arg(modulename) << endl;
         return 0;
     }
 
@@ -238,20 +238,20 @@ Module::Ptr Manager::loadModule(const QString& modulename)
         module = (Kross::Api::Module*) (func)(this);
     }
     catch(Kross::Api::Exception::Ptr e) {
-        kdWarning() << e->toString() << endl;
+        kWarning() << e->toString() << endl;
         module = 0;
     }
     lib->unload();
 
     if(! module) {
-        kdWarning() << QString("Failed to load module '%1'").arg(modulename) << endl;
+        kWarning() << QString("Failed to load module '%1'").arg(modulename) << endl;
         return 0;
     }
 
     // Don't remember module cause we like to have freeing it handled by the caller.
     //d->modules.replace(modulename, module);
 
-    //kdDebug() << QString("Kross::Api::Manager::loadModule modulename='%1' module='%2'").arg(modulename).arg(module->toString()) << endl;
+    //kDebug() << QString("Kross::Api::Manager::loadModule modulename='%1' module='%2'").arg(modulename).arg(module->toString()) << endl;
     return module;
 }
 

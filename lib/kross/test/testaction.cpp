@@ -41,11 +41,11 @@ TestAction::~TestAction()
 
 void TestAction::activatedAction1()
 {
-    kdDebug() << "TestAction::activatedAction1()" << endl;
+    kDebug() << "TestAction::activatedAction1()" << endl;
 }
 
 void TestAction::activatedAction2()
 {
-    kdDebug() << "TestAction::activatedAction2()" << endl;
+    kDebug() << "TestAction::activatedAction2()" << endl;
 }
 

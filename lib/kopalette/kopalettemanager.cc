@@ -25,7 +25,7 @@
 
 #include <kparts/event.h>
 #include <kapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kaction.h>
 #include <kactionclasses.h>
 #include <kdebug.h>

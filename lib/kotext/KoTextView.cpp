@@ -296,7 +296,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
         break;
     }
     default: {
-            //kdDebug(32500) << "KoTextView::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << " state=" << e->state() << endl;
+            //kDebug(32500) << "KoTextView::keyPressEvent ascii=" << e->ascii() << " text=" << e->text()[0].unicode() << " state=" << e->state() << endl;
             if (e->key() == Qt::Key_Tab)
             {
                 if (doToolTipCompletion(m_cursor, m_cursor->parag(), m_cursor->index() - 1, e->key()) )
@@ -737,7 +737,7 @@ bool KoTextView::handleMousePressEvent( QMouseEvent *e, const QPoint &iPoint, bo
         }
     }
 
-    //kdDebug(32500) << "KoTextView::mousePressEvent redraw=" << redraw << endl;
+    //kDebug(32500) << "KoTextView::mousePressEvent redraw=" << redraw << endl;
     if ( !redraw ) {
         showCursor();
     } else {
@@ -928,14 +928,14 @@ bool KoTextView::placeCursor( const QPoint &pos, bool insertDirectCursor )
         s = textDocument()->firstParag();
     m_cursor->place( pos, s, false, &m_variablePosition );
     if ( m_variablePosition != -1 )
-        kdDebug() << k_funcinfo << " m_variablePosition set to " << m_variablePosition << endl;
+        kDebug() << k_funcinfo << " m_variablePosition set to " << m_variablePosition << endl;
     updateUI( true );
     return addParag;
 }
 
 void KoTextView::blinkCursor()
 {
-    //kdDebug(32500) << "KoTextView::blinkCursor m_cursorVisible=" << m_cursorVisible
+    //kDebug(32500) << "KoTextView::blinkCursor m_cursorVisible=" << m_cursorVisible
     //          << " blinkCursorVisible=" << blinkCursorVisible << endl;
     if ( !m_cursorVisible )
         return;
@@ -1000,18 +1000,18 @@ void KoTextView::updateUI( bool updateFormat, bool /*force*/ )
             --i;
 #ifdef DEBUG_FORMATS
         if ( currentFormat() )
-            kdDebug(32500) << "KoTextView::updateUI old currentFormat=" << currentFormat()
+            kDebug(32500) << "KoTextView::updateUI old currentFormat=" << currentFormat()
                            << " " << currentFormat()->key()
                            << " parag format=" << cursor()->parag()->at( i )->format()->key() << endl;
         else
-            kdDebug(32500) << "KoTextView::updateUI old currentFormat=0" << endl;
+            kDebug(32500) << "KoTextView::updateUI old currentFormat=0" << endl;
 #endif
         if ( !currentFormat() || currentFormat()->key() != cursor()->parag()->at( i )->format()->key() )
         {
             if ( currentFormat() )
                 currentFormat()->removeRef();
 #ifdef DEBUG_FORMATS
-            kdDebug(32500) << "Setting currentFormat from format " << cursor()->parag()->at( i )->format()
+            kDebug(32500) << "Setting currentFormat from format " << cursor()->parag()->at( i )->format()
                       << " ( character " << i << " in paragraph " << cursor()->parag()->paragId() << " )" << endl;
 #endif
             setCurrentFormat( textDocument()->formatCollection()->format( cursor()->parag()->at( i )->format() ) );
@@ -1028,7 +1028,7 @@ void KoTextView::updateUI( bool updateFormat, bool /*force*/ )
 
 void KoTextView::showCurrentFormat()
 {
-    //kdDebug(32500) << "KoTextView::showCurrentFormat currentFormat=" << currentFormat() << " " << currentFormat()->key() << endl;
+    //kDebug(32500) << "KoTextView::showCurrentFormat currentFormat=" << currentFormat() << " " << currentFormat()->key() << endl;
     KoTextFormat format = *currentFormat();
     //format.setPointSize( textObject()->docFontSize( currentFormat() ) ); // "unzoom" the font size
     showFormat( &format );
@@ -1147,11 +1147,11 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
     KDataTool* tool = info.createTool( );
     if ( !tool )
     {
-        kdWarning() << "Could not create Tool !" << endl;
+        kWarning() << "Could not create Tool !" << endl;
         return;
     }
 
-    kdDebug(32500) << "KWTextFrameSetEdit::slotToolActivated command=" << command
+    kDebug(32500) << "KWTextFrameSetEdit::slotToolActivated command=" << command
               << " dataType=" << info.dataType() << endl;
 
     QString text;
@@ -1173,12 +1173,12 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
     if ( !info.mimeTypes().contains( mimetype ) && m_singleWord )
         mimetype = "application/x-singleword";
 
-    kdDebug(32500) << "Running tool with datatype=" << datatype << " mimetype=" << mimetype << endl;
+    kDebug(32500) << "Running tool with datatype=" << datatype << " mimetype=" << mimetype << endl;
 
     QString origText = text;
     if ( tool->run( command, &text, datatype, mimetype) )
     {
-        kdDebug(32500) << "Tool ran. Text is now " << text << endl;
+        kDebug(32500) << "Tool ran. Text is now " << text << endl;
         if ( origText != text )
         {
             if ( !textObject()->hasSelection() )
@@ -1196,7 +1196,7 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
 
 bool KoTextView::openLink( KoLinkVariable* variable )
 {
-    kdDebug() << k_funcinfo << variable->url() << endl;
+    kDebug() << k_funcinfo << variable->url() << endl;
     KUrl url( variable->url() );
     if( url.isValid() )
     {
@@ -1427,9 +1427,9 @@ KCommand *KoTextView::prepareDropMove( KoTextCursor dropCursor )
             int dropIndex = dropCursor.index();
             dropCursor.setParag( startSel.parag() );
             // If dropCursor - endSel < 0, selection ends after, we're dropping into selection (no-op)
-            dropCursor.setIndex( dropIndex - QMIN( endSel.index(), dropIndex ) + startSel.index() );
+            dropCursor.setIndex( dropIndex - qMin( endSel.index(), dropIndex ) + startSel.index() );
         }
-        kdDebug(32500) << "dropCursor: parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
+        kDebug(32500) << "dropCursor: parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
     }
     KCommand* cmd = textObject()->removeSelectedTextCommand( cursor(), KoTextDocument::Standard );
 

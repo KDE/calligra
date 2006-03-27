@@ -35,7 +35,7 @@ KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidge
 {
     setCaption( i18n("Import Styles") );
     m_currentCollection = currentCollection;
-    Q3VBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
     new QLabel(i18n("Select styles to import:"), page);
     m_listStyleName = new Q3ListBox( page );
     m_listStyleName->setSelectionMode( Q3ListBox::Multi );

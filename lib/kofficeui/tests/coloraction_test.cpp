@@ -96,7 +96,7 @@ void TopLevel::clearColors()
 
 void TopLevel::slotColorSelected( const QColor& color )
 {
-    kdDebug() << "#### selected: " << color.name() << endl;
+    kDebug() << "#### selected: " << color.name() << endl;
 }
 
 

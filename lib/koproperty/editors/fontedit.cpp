@@ -33,7 +33,7 @@
 
 #include <kdeversion.h>
 #include <kfontrequester.h>
-#include <kaccelmanager.h>
+#include <kacceleratormanager.h>
 
 #ifdef QT_ONLY
 //! \todo
@@ -125,7 +125,7 @@ FontEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVa
 	QRect r2(r);
 	r2.setLeft(r2.left()+KPROPEDITOR_ITEM_MARGIN);
 	r2.setBottom(r2.bottom()+1);
-	p->drawText(r2, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, sampleText(value));
+	p->drawText(r2, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, sampleText(value));
 }
 
 void

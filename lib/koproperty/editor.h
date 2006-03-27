@@ -28,8 +28,8 @@
 #ifdef QT_ONLY
 #include <qlistview.h>
 #else
-#include <klistview.h>
-//#define QListView KListView
+#include <k3listview.h>
+//#define QListView K3ListView
 #endif
 
 class QSize;
@@ -58,7 +58,7 @@ class EditorItem;
    \author Alexander Dymo <cloudtemple@mskat.net>
    \author Jaroslaw Staniek <js@iidea.pl>
  */
-class KOPROPERTY_EXPORT Editor : public KListView
+class KOPROPERTY_EXPORT Editor : public K3ListView
 {
 	Q_OBJECT
 

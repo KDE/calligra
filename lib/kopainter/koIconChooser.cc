@@ -41,7 +41,7 @@
 KoPixmapWidget::KoPixmapWidget(const QPixmap &aPixmap, QWidget *parent, const char *name):
 Q3Frame(parent, name, Qt::WType_Popup)
 {
-  kdDebug() << "Popup created: " << name << "\n";
+  kDebug() << "Popup created: " << name << "\n";
   setFrameStyle(Q3Frame::WinPanel | Q3Frame::Raised);
   mPixmap = aPixmap;
   int w = mPixmap.width() + 2 * lineWidth();
@@ -101,7 +101,7 @@ KoIconChooser::~KoIconChooser()
 
 void KoIconChooser::addItem(KoIconItem *item)
 {
-  Q_INT32 n = mItemCount;
+  qint32 n = mItemCount;
   KoIconItem *current = currentItem();
 
   Q_ASSERT(item);
@@ -141,7 +141,7 @@ bool KoIconChooser::removeItem(KoIconItem *item)
     mItemCount--;
     // select same cell as deleted cell, or new last cell if we deleted
     // last cell.
-    setCurrentItem(itemAt(kMin(index, mItemCount - 1)));
+    setCurrentItem(itemAt(qMin(index, mItemCount - 1)));
     calculateCells();
   }
   return ok;

@@ -143,7 +143,7 @@ public:
     virtual void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation ) = 0;
 
     // matrix transformation : only used for bitmap manipulation
-    virtual void  setWorldMatrix( const QMatrix &, bool combine=FALSE ) = 0;
+    virtual void  setMatrix( const QMatrix &, bool combine=FALSE ) = 0;
 
 private:
     KoWmfReadPrivate  *mKwmf;

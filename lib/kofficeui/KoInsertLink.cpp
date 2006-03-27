@@ -44,7 +44,7 @@ KoInsertLinkDia::KoInsertLinkDia( QWidget *parent, const char *name, bool displa
 		   KDialogBase::Ok, parent, name )
 {
   bookmarkLink = 0L;
-  Q3VBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",K3Icon::SizeMedium));
+  KVBox *page=addVBoxPage(i18n("Internet"), QString::null,BarIcon("html",K3Icon::SizeMedium));
   internetLink = new  internetLinkPage(page );
   connect(internetLink,SIGNAL(textChanged()),this,SLOT(slotTextChanged (  )));
 
@@ -89,7 +89,7 @@ void KoInsertLinkDia::tabChanged(QWidget *)
     }
     break;
     default:
-      kdDebug()<<"Error in linkName\n";
+      kDebug()<<"Error in linkName\n";
     }
     enableButtonOK( !(linkName().isEmpty()  || hrefName().isEmpty()) );
 }
@@ -182,7 +182,7 @@ QString KoInsertLinkDia::linkName() const
     }
     break;
     default:
-      kdDebug()<<"Error in linkName\n";
+      kDebug()<<"Error in linkName\n";
     }
   return result;
 }
@@ -208,7 +208,7 @@ QString KoInsertLinkDia::hrefName() const
     }
     break;
     default:
-      kdDebug()<<"Error in hrefName\n";
+      kDebug()<<"Error in hrefName\n";
     }
   return result;
 }
@@ -249,7 +249,7 @@ internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
 
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
-  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  KSeparator* bar1 = new KSeparator( Qt::Horizontal, this);
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 }
@@ -322,7 +322,7 @@ bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char *name  )
 
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
-  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  KSeparator* bar1 = new KSeparator( Qt::Horizontal, this);
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 }
@@ -401,7 +401,7 @@ mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
   
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
-  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  KSeparator* bar1 = new KSeparator( Qt::Horizontal, this);
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 }
@@ -494,7 +494,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   lay2->addWidget(tmpQLabel);
 
   tmpQLabel->setText(i18n("File location:"));
-  m_hrefName = new KURLRequester( this );
+  m_hrefName = new KUrlRequester( this );
 
   lay2->addWidget(m_hrefName);
   lay2->addStretch( 1 );
@@ -502,7 +502,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   connect(m_linkName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
   connect(m_hrefName,SIGNAL(textChanged ( const QString & )),this,SLOT(textChanged ( const QString & )));
 
-  KSeparator* bar1 = new KSeparator( KSeparator::HLine, this);
+  KSeparator* bar1 = new KSeparator( Qt::Horizontal, this);
   bar1->setFixedHeight( 10 );
   lay2->addWidget( bar1 );
 }

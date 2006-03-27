@@ -33,8 +33,8 @@ KoCommentDia::KoCommentDia( QWidget *parent, const QString &_note, const QString
 {
     setCaption( i18n("Edit Comment") );
     authorName = _authorName;
-    Q3VBox *page = makeVBoxMainWidget();
-    kdDebug()<<"_createNote :"<<_createNote<<endl;
+    KVBox *page = makeVBoxMainWidget();
+    kDebug()<<"_createNote :"<<_createNote<<endl;
     if ( !_createNote.isEmpty() )
         new QLabel( _createNote, page );
 

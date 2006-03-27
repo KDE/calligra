@@ -134,7 +134,7 @@ void KoStyleManager::addTab( KoStyleManagerTab * tab )
 
 void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
 {
-    Q3Frame * frame1 = makeMainWidget();
+    QFrame * frame1 = makeMainWidget();
     Q3GridLayout *frame1Layout = new Q3GridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
     numStyles = styleCollection.count();
@@ -249,7 +249,7 @@ void KoStyleManager::addGeneralTab( int flags ) {
 }
 
 void KoStyleManager::switchStyle() {
-    kdDebug(32500) << "KoStyleManager::switchStyle noSignals=" << noSignals << endl;
+    kDebug(32500) << "KoStyleManager::switchStyle noSignals=" << noSignals << endl;
     if(noSignals) return;
     noSignals=true;
 
@@ -258,7 +258,7 @@ void KoStyleManager::switchStyle() {
 
     m_currentStyle = 0L;
     int num = styleIndex( m_stylesList->currentItem() );
-    kdDebug(32500) << "KoStyleManager::switchStyle switching to " << num << endl;
+    kDebug(32500) << "KoStyleManager::switchStyle switching to " << num << endl;
     if(m_origStyles.at(num) == m_changedStyles.at(num)) {
         m_currentStyle = new KoParagStyle( *m_origStyles.at(num) );
         m_changedStyles.take(num);
@@ -294,7 +294,7 @@ int KoStyleManager::styleIndex( int pos ) {
             return i;
         ++p;
     }
-    kdWarning() << "KoStyleManager::styleIndex no style found at pos " << pos << endl;
+    kWarning() << "KoStyleManager::styleIndex no style found at pos " << pos << endl;
 
 #ifdef __GNUC_
 #warning implement undo/redo
@@ -305,7 +305,7 @@ int KoStyleManager::styleIndex( int pos ) {
 
 // Update the GUI so that it shows m_currentStyle
 void KoStyleManager::updateGUI() {
-    kdDebug(32500) << "KoStyleManager::updateGUI m_currentStyle=" << m_currentStyle << " " << m_currentStyle->name() << endl;
+    kDebug(32500) << "KoStyleManager::updateGUI m_currentStyle=" << m_currentStyle << " " << m_currentStyle->name() << endl;
     Q3PtrListIterator<KoStyleManagerTab> it( m_tabsList );
     for ( ; it.current() ; ++it )
     {
@@ -316,21 +316,21 @@ void KoStyleManager::updateGUI() {
     m_nameString->setText(m_currentStyle->displayName());
 
     QString followingName = m_currentStyle->followingStyle() ? m_currentStyle->followingStyle()->displayName() : QString::null;
-    kdDebug(32500) << "KoStyleManager::updateGUI updating combo to " << followingName << endl;
+    kDebug(32500) << "KoStyleManager::updateGUI updating combo to " << followingName << endl;
     for ( int i = 0; i < m_styleCombo->count(); i++ ) {
         if ( m_styleCombo->text( i ) == followingName ) {
             m_styleCombo->setCurrentItem( i );
-            kdDebug(32500) << "found at " << i << endl;
+            kDebug(32500) << "found at " << i << endl;
             break;
         }
     }
 
     QString inheritName = m_currentStyle->parentStyle() ? m_currentStyle->parentStyle()->displayName() : QString::null;
-    kdDebug(32500) << "KoStyleManager::updateGUI updating combo to " << inheritName << endl;
+    kDebug(32500) << "KoStyleManager::updateGUI updating combo to " << inheritName << endl;
     for ( int i = 0; i < m_inheritCombo->count(); i++ ) {
         if ( m_inheritCombo->text( i ) == inheritName ) {
             m_inheritCombo->setCurrentItem( i );
-            kdDebug(32500) << "found at " << i << endl;
+            kDebug(32500) << "found at " << i << endl;
             break;
         }
         else
@@ -548,11 +548,11 @@ void KoStyleManager::apply() {
     Q3PtrList<KoParagStyle> removeStyle;
     for (unsigned int i =0 ; m_origStyles.count() > i ; i++) {
         if(m_origStyles.at(i) == 0L && m_changedStyles.at(i)!=0L) {           // newly added style
-            kdDebug(32500) << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
+            kDebug(32500) << "adding new " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
             KoParagStyle *tmp = addStyleTemplate(m_changedStyles.take(i));
             m_changedStyles.insert(i, tmp);
         } else if(m_changedStyles.at(i) == 0L && m_origStyles.at(i) != 0L) { // deleted style
-            kdDebug(32500) << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
+            kDebug(32500) << "deleting orig " << m_origStyles.at(i)->name() << " (" << i << ")" << endl;
 
             KoParagStyle *orig = m_origStyles.at(i);
             //applyStyleChange( orig, -1, -1 );
@@ -563,15 +563,15 @@ void KoStyleManager::apply() {
             // Note that the style is never deleted (we'll need it for undo/redo purposes)
 
         } else if(m_changedStyles.at(i) != 0L && m_origStyles.at(i)!=0L) { // simply updated style
-            kdDebug(32500) << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
+            kDebug(32500) << "update style " << m_changedStyles.at(i)->name() << " (" << i << ")" << endl;
             KoParagStyle *orig = m_origStyles.at(i);
             KoParagStyle *changed = m_changedStyles.at(i);
             if ( orig != changed )
             {
                 int paragLayoutChanged = orig->paragLayout().compare( changed->paragLayout() );
                 int formatChanged = orig->format().compare( changed->format() );
-                //kdDebug(32500) << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
-                //kdDebug(32500) << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
+                //kDebug(32500) << "old format " << orig->format().key() << " pointsize " << orig->format().pointSizeFloat() << endl;
+                //kDebug(32500) << "new format " << changed->format().key() << " pointsize " << changed->format().pointSizeFloat() << endl;
 
                 // Copy everything from changed to orig
                 *orig = *changed;
@@ -586,7 +586,7 @@ void KoStyleManager::apply() {
             }
 
         }// else
-         //     kdDebug(32500) << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
+         //     kDebug(32500) << "has not changed " <<  m_changedStyles.at(i)->name() << " (" << i << ")" <<  endl;
     }
 
     applyStyleChange( styleChanged );
@@ -605,14 +605,14 @@ void KoStyleManager::renameStyle(const QString &theText) {
     noSignals=true;
 
     int index = m_stylesList->currentItem();
-    kdDebug(32500) << "KoStyleManager::renameStyle " << index << " to " << theText << endl;
+    kDebug(32500) << "KoStyleManager::renameStyle " << index << " to " << theText << endl;
 
     // rename only in the GUI, not even in the underlying objects (save() does it).
-    kdDebug(32500) << "KoStyleManager::renameStyle before " << m_styleCombo->currentText() << endl;
+    kDebug(32500) << "KoStyleManager::renameStyle before " << m_styleCombo->currentText() << endl;
     m_styleCombo->changeItem( theText, index );
     m_inheritCombo->changeItem( theText, index+1 );
     //m_styleOrder[index]=theText; // not needed anymore, we use internal names
-    kdDebug(32500) << "KoStyleManager::renameStyle after " << m_styleCombo->currentText() << endl;
+    kDebug(32500) << "KoStyleManager::renameStyle after " << m_styleCombo->currentText() << endl;
     m_stylesList->changeItem( theText, index );
 
     // Check how many styles with that name we have now
@@ -716,8 +716,8 @@ void KoStyleFontTab::update()
     bool subScript = m_style->format().vAlign() == KoTextFormat::AlignSubScript;
     bool superScript = m_style->format().vAlign() == KoTextFormat::AlignSuperScript;
     QFont fn = m_style->format().font();
-    kdDebug()<<" fn.bold() :"<<fn.bold()<<" fn.italic():"<<fn.italic()<<endl;
-    kdDebug()<<" fn.family() :"<<fn.family()<<endl;
+    kDebug()<<" fn.bold() :"<<fn.bold()<<" fn.italic():"<<fn.italic()<<endl;
+    kDebug()<<" fn.family() :"<<fn.family()<<endl;
     m_chooser->setFont( fn, subScript, superScript );
     m_chooser->setColor( m_style->format().color() );
     QColor col=m_style->format().textBackgroundColor();

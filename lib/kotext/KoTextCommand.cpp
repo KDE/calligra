@@ -54,7 +54,7 @@ KoTextCursor * KoTextDeleteCommand::execute( KoTextCursor *c )
 {
     KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
-        kdWarning() << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+        kWarning() << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
         return 0;
     }
     cursor.setParag( s );
@@ -83,7 +83,7 @@ KoTextCursor * KoTextDeleteCommand::unexecute( KoTextCursor *c )
 
     KoTextParag *s = doc ? doc->paragAt( id ) : parag;
     if ( !s ) {
-        kdWarning() << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
+        kWarning() << "can't locate parag at " << id << ", last parag: " << doc->lastParag()->paragId() << endl;
         return 0;
     }
     cursor.setParag( s );
@@ -93,13 +93,13 @@ KoTextCursor * KoTextDeleteCommand::unexecute( KoTextCursor *c )
 
     // Now restore the parag layouts (i.e. libkotext specific stuff)
     Q3ValueList<KoParagLayout>::Iterator lit = m_oldParagLayouts.begin();
-    kdDebug(32500) << "KoTextDeleteCommand::unexecute " << m_oldParagLayouts.count() << " parag layouts. First parag=" << s->paragId() << endl;
+    kDebug(32500) << "KoTextDeleteCommand::unexecute " << m_oldParagLayouts.count() << " parag layouts. First parag=" << s->paragId() << endl;
     Q_ASSERT( id == s->paragId() );
     KoTextParag *p = s;
     while ( p ) {
         if ( lit != m_oldParagLayouts.end() )
         {
-            kdDebug(32500) << "KoTextDeleteCommand::unexecute applying paraglayout to parag " << p->paragId() << endl;
+            kDebug(32500) << "KoTextDeleteCommand::unexecute applying paraglayout to parag " << p->paragId() << endl;
             p->setParagLayout( *lit );
         }
         else
@@ -126,11 +126,11 @@ KoTextParagCommand::KoTextParagCommand( KoTextDocument *d, int fParag, int lPara
 
 KoTextCursor * KoTextParagCommand::execute( KoTextCursor *c )
 {
-    //kdDebug(32500) << "KoTextParagCommand::execute" << endl;
+    //kDebug(32500) << "KoTextParagCommand::execute" << endl;
     KoTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
-        kdWarning() << "KoTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
+        kWarning() << "KoTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
         return c;
     }
     while ( p ) {
@@ -157,7 +157,7 @@ KoTextCursor * KoTextParagCommand::execute( KoTextCursor *c )
         doc->paragAt( firstParag )->setTopBorder( m_newParagLayout.topBorder);
     }
 
-    //kdDebug(32500) << "KoTextParagCommand::execute done" << endl;
+    //kDebug(32500) << "KoTextParagCommand::execute done" << endl;
     // Set cursor to end of selection. Like in KoTextFormatCommand::[un]execute...
     c->setParag( p );
     c->setIndex( p->length()-1 );
@@ -166,18 +166,18 @@ KoTextCursor * KoTextParagCommand::execute( KoTextCursor *c )
 
 KoTextCursor * KoTextParagCommand::unexecute( KoTextCursor *c )
 {
-    kdDebug(32500) << "KoTextParagCommand::unexecute" << endl;
+    kDebug(32500) << "KoTextParagCommand::unexecute" << endl;
     KoTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
-        kdDebug(32500) << "KoTextParagCommand::unexecute paragraph " << firstParag << "not found" << endl;
+        kDebug(32500) << "KoTextParagCommand::unexecute paragraph " << firstParag << "not found" << endl;
         return c;
     }
     Q3ValueList<KoParagLayout>::Iterator lit = m_oldParagLayouts.begin();
     while ( p ) {
         if ( lit == m_oldParagLayouts.end() )
         {
-            kdDebug(32500) << "KoTextParagCommand::unexecute m_oldParagLayouts not big enough!" << endl;
+            kDebug(32500) << "KoTextParagCommand::unexecute m_oldParagLayouts not big enough!" << endl;
             break;
         }
         if ( m_flags & KoParagLayout::Margins && m_margin != (Q3StyleSheetItem::Margin)-1 ) // just one
@@ -222,7 +222,7 @@ KoTextCursor * KoParagFormatCommand::execute( KoTextCursor *c )
     KoTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
-        kdDebug(32500) << "KoTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
+        kDebug(32500) << "KoTextParagCommand::execute paragraph " << firstParag << "not found" << endl;
         return c;
     }
     while ( p ) {
@@ -237,18 +237,18 @@ KoTextCursor * KoParagFormatCommand::execute( KoTextCursor *c )
 
 KoTextCursor * KoParagFormatCommand::unexecute( KoTextCursor *c )
 {
-    kdDebug(32500) << "KoParagFormatCommand::unexecute" << endl;
+    kDebug(32500) << "KoParagFormatCommand::unexecute" << endl;
     KoTextParag *p = doc->paragAt( firstParag );
     if ( !p )
     {
-        kdDebug(32500) << "KoParagFormatCommand::unexecute paragraph " << firstParag << "not found" << endl;
+        kDebug(32500) << "KoParagFormatCommand::unexecute paragraph " << firstParag << "not found" << endl;
         return c;
     }
     Q3ValueList<KoTextFormat *>::Iterator lit = m_oldFormats.begin();
     while ( p ) {
         if ( lit == m_oldFormats.end() )
         {
-            kdDebug(32500) << "KoParagFormatCommand::unexecute m_oldFormats not big enough!" << endl;
+            kDebug(32500) << "KoParagFormatCommand::unexecute m_oldFormats not big enough!" << endl;
             break;
         }
         p->setFormat( (*lit) );
@@ -343,9 +343,9 @@ KoTextCursor *KoTextFormatCommand::execute( KoTextCursor *c )
 
 KoTextCursor *KoTextFormatCommand::unexecute( KoTextCursor *c )
 {
-    kdDebug(32500) << "KoTextFormatCommand::unexecute c:" << c << " index:" << c->index() << endl;
+    kDebug(32500) << "KoTextFormatCommand::unexecute c:" << c << " index:" << c->index() << endl;
     c = KoTextDocFormatCommand::unexecute( c );
-    kdDebug(32500) << "KoTextFormatCommand::unexecute after KoTextFormatCommand c:" << c << " index:" << c->index() << endl;
+    kDebug(32500) << "KoTextFormatCommand::unexecute after KoTextFormatCommand c:" << c << " index:" << c->index() << endl;
     resizeCustomItems();
     return c;
 }

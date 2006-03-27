@@ -116,7 +116,7 @@ private:
     void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation );
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setWorldMatrix( const QMatrix &, bool combine=FALSE );
+    void  setMatrix( const QMatrix &, bool combine=FALSE );
 
 private:
     QPainter mPainter;

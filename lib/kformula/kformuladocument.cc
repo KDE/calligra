@@ -1133,7 +1133,7 @@ void DocumentWrapper::initSymbolNamesAction()
 
 void DocumentWrapper::setEnabled( bool enabled )
 {
-    kdDebug( DEBUGID ) << "DocumentWrapper::setEnabled " << enabled << endl;
+    kDebug( DEBUGID ) << "DocumentWrapper::setEnabled " << enabled << endl;
     getAddNegThinSpaceAction()->setEnabled( enabled );
     getMakeGreekAction()->setEnabled( enabled );
     getAddGenericUpperAction()->setEnabled( enabled );

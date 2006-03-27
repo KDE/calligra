@@ -44,7 +44,7 @@ static bool fontAvailable( const QString& fontName )
     if ( db.families().findIndex( fontName ) != -1 ) // ## TODO remove foundry from families list?
         return true;
     else {
-        kdWarning(39001) << "Font '" << fontName << "' not found" << endl;
+        kWarning(39001) << "Font '" << fontName << "' not found" << endl;
         return false;
     }
 }
@@ -288,7 +288,7 @@ void Artwork::calcRoundBracket( const ContextStyle& style, const QChar chars[],
     //luPt lineHeight = style.ptToLayoutUnitPt( lineBound.height() );
 
     //setHeight( edgeHeight + ( ( height-edgeHeight-1 ) / lineHeight + 1 ) * lineHeight );
-    setHeight( QMAX( edgeHeight, height ) );
+    setHeight( qMax( edgeHeight, height ) );
 }
 
 void Artwork::drawBigRoundBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
@@ -362,7 +362,7 @@ void Artwork::calcCurlyBracket( const ContextStyle& style, const QChar chars[],
     //luPt lineHeight = style.ptToLayoutUnitPt( lineBound.height() );
 
     //setHeight( edgeHeight + ( ( height-edgeHeight-1 ) / lineHeight + 1 ) * lineHeight );
-    setHeight( QMAX( edgeHeight, height ) );
+    setHeight( qMax( edgeHeight, height ) );
 }
 
 void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const QChar chars[],
@@ -412,14 +412,14 @@ void Artwork::drawBigCurlyBracket( QPainter& p, const ContextStyle& style, const
 
         pixel start = (height - middleBound.height()) / 2 + safety;
         for (int i = 0; i < lineCount; i++) {
-            p.drawText( ptX, ptY-lineBound.top()+QMAX( start-(i+1)*lineHeight,
+            p.drawText( ptX, ptY-lineBound.top()+qMax( start-(i+1)*lineHeight,
                                                        upperBound.width() ),
                         ch );
         }
 
         start = (height + middleBound.height()) / 2 - safety;
         for (int i = 0; i < lineCount; i++) {
-            p.drawText( ptX, ptY-lineBound.top()+QMIN( start+i*lineHeight,
+            p.drawText( ptX, ptY-lineBound.top()+qMin( start+i*lineHeight,
                                                        height-upperBound.width()-lineBound.height() ),
                         ch );
         }

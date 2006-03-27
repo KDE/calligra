@@ -86,37 +86,37 @@ const QString TestPluginObject::getClassName() const
 
 uint TestPluginObject::internalfunc1(uint i)
 {
-    kdDebug() << "CALLED => TestPluginObject::internalfunc1" << endl;
+    kDebug() << "CALLED => TestPluginObject::internalfunc1" << endl;
     return i;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func1(Kross::Api::List::Ptr /*args*/)
 {
-    //kdDebug() << "CALLED => TestPluginObject::func1 args=" << args->toString() << endl;
+    //kDebug() << "CALLED => TestPluginObject::func1 args=" << args->toString() << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func2(Kross::Api::List::Ptr /*args*/)
 {
-    //kdDebug() << "CALLED => TestPluginObject::func2 args=" << args->toString() << endl;
+    //kDebug() << "CALLED => TestPluginObject::func2 args=" << args->toString() << endl;
     return new Kross::Api::Variant("func2returnvalue");
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func3(Kross::Api::List::Ptr /*args*/)
 {
-    //kdDebug() << "CALLED => TestPluginObject::func3 args=" << args->toString() << endl;
+    //kDebug() << "CALLED => TestPluginObject::func3 args=" << args->toString() << endl;
     return new Kross::Api::Variant("func3returnvalue");
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func4(Kross::Api::List::Ptr /*args*/)
 {
-    //kdDebug() << "CALLED => TestPluginObject::func4 args=" << args->toString() << endl;
+    //kDebug() << "CALLED => TestPluginObject::func4 args=" << args->toString() << endl;
     return new Kross::Api::Variant("func4returnvalue");
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func5(Kross::Api::List::Ptr /*args*/)
 {
-    //kdDebug() << "CALLED => TestPluginObject::func5 args=" << args->toString() << endl;
+    //kDebug() << "CALLED => TestPluginObject::func5 args=" << args->toString() << endl;
     return new Kross::Api::Variant("func5returnvalue");
 }
 

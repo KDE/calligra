@@ -28,7 +28,7 @@
 #include <kcommand.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kshortcutlist.h>
 #include <kstdaccel.h>
 #include <kstdaction.h>
@@ -57,8 +57,8 @@ void KoListBox::contentsMouseMoveEvent ( QMouseEvent * e)
 
 QSize KoListBox::sizeHint() const
 {
-  return QSize(QMIN(maxItemWidth() + verticalScrollBar()->width() + 4, 400),
-               QMIN(count() * itemHeight() + horizontalScrollBar()->height() + 4,300));
+  return QSize(qMin(maxItemWidth() + verticalScrollBar()->width() + 4, 400),
+               qMin(count() * itemHeight() + horizontalScrollBar()->height() + 4,300));
 }
 
 class KoCommandHistory::KoCommandHistoryPrivate {
@@ -199,7 +199,7 @@ void KoCommandHistory::addCommand(KCommand *command, bool execute) {
         clipCommands();
     }
     else { // either this is the first time we add a Command or something has gone wrong
-        kdDebug(230) << "KoCommandHistory: Initializing the Command History" << endl;
+        kDebug(230) << "KoCommandHistory: Initializing the Command History" << endl;
         m_commands.clear();
         m_commands.append(command);
         d->m_present=command;
@@ -375,7 +375,7 @@ void KoCommandHistory::slotUndoAboutToShow()
 
 void KoCommandHistory::slotUndoActivated( int pos )
 {
-    kdDebug(230) << "KoCommandHistory::slotUndoActivated " << pos << endl;
+    kDebug(230) << "KoCommandHistory::slotUndoActivated " << pos << endl;
     for ( int i = 0 ; i < pos+1; ++i )
         undo();
     m_undoPopup->hide();
@@ -427,7 +427,7 @@ void KoCommandHistory::slotRedoAboutToShow()
 
 void KoCommandHistory::slotRedoActivated( int pos )
 {
-    kdDebug(230) << "KoCommandHistory::slotRedoActivated " << pos << endl;
+    kDebug(230) << "KoCommandHistory::slotRedoActivated " << pos << endl;
     for ( int i = 0 ; i < pos+1; ++i )
         redo();
     m_redoPopup->hide();

@@ -103,7 +103,7 @@ KoFontDia::KoFontDia( const KoTextFormat& initialFormat,
     connect( languageTab, SIGNAL( languageChanged( int ) ), this, SLOT( slotLanguageChanged( int ) ) );
 
     //Related properties List View
-    //relatedPropertiesListView = new KListView( mainHBox );
+    //relatedPropertiesListView = new K3ListView( mainHBox );
 
     //Preview
     fontDiaPreview = new KoFontDiaPreview( mainWidget );

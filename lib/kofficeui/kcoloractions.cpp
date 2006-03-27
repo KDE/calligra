@@ -234,10 +234,10 @@ KSelectColorAction::~KSelectColorAction()
 int KSelectColorAction::plug( QWidget* w, int index )
 {
     if (w == 0) {
-	kdWarning() << "KSelectColorAction::plug called with 0 argument\n";
+	kWarning() << "KSelectColorAction::plug called with 0 argument\n";
  	return -1;
     }
-    if (kapp && !kapp->authorizeKAction(name()))
+    if (kapp && !KAuthorized::authorizeKAction(name()))
         return -1;
 
     if ( w->inherits("QPopupMenu") )
@@ -290,7 +290,7 @@ int KSelectColorAction::plug( QWidget* w, int index )
         else
             instance = KGlobal::instance();
 
-        if ( icon().isEmpty() ) // old code using QIconSet directly
+        if ( icon().isEmpty() ) // old code using QIcon directly
         {
             bar->insertButton( iconSet( K3Icon::Small ).pixmap(), id_, SIGNAL( clicked() ), this,
                                SLOT( slotActivated() ),
@@ -349,3 +349,4 @@ QString KSelectColorAction::whatsThisWithIcon() const
 }
 
 #include <kcoloractions.moc>
+#include <kauthorized.h>

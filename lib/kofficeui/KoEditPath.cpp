@@ -42,7 +42,7 @@ KoEditPathDia::KoEditPathDia( const QString & _path, QWidget *parent, const char
     setMainWidget(page);
     Q3GridLayout * grid = new Q3GridLayout(page, 5, 2, KDialog::marginHint(), KDialog::spacingHint());
 
-    urlReq = new KURLRequester();
+    urlReq = new KUrlRequester();
     urlReq->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
 
     KEditListBox::CustomEditor tmp(urlReq, urlReq->lineEdit());
@@ -74,9 +74,9 @@ KoChangePathDia::KoChangePathDia( const QString & _path, QWidget *parent, const 
 {
     setCaption( i18n("Edit Path") );
 
-    Q3VBox *page =makeVBoxMainWidget();
+    KVBox *page =makeVBoxMainWidget();
     new QLabel( i18n("Location:"), page);
-    m_urlReq = new KURLRequester(page);
+    m_urlReq = new KUrlRequester(page);
     m_urlReq->setMinimumWidth( m_urlReq->sizeHint().width() * 3 );
 
     m_urlReq->lineEdit()->setText( _path );

@@ -158,7 +158,7 @@ KCommand* MatrixSequenceElement::buildCommand( Container* container, Request* re
                 }
             }
         }
-        kdWarning( DEBUGID ) << "MatrixSequenceElement::buildCommand: Sequence not found." << endl;
+        kWarning( DEBUGID ) << "MatrixSequenceElement::buildCommand: Sequence not found." << endl;
         break;
     }
     default:
@@ -444,10 +444,10 @@ void MatrixElement::calcSizes(const ContextStyle& style, ContextStyle::TextStyle
         for (uint c = 0; c < columns; c++) {
             SequenceElement* element = list->at(c);
             element->calcSizes( style, i_tstyle, i_istyle );
-            toMidlines[r] = QMAX(toMidlines[r], element->axis( style, i_tstyle ));
-            fromMidlines[r] = QMAX(fromMidlines[r],
+            toMidlines[r] = qMax(toMidlines[r], element->axis( style, i_tstyle ));
+            fromMidlines[r] = qMax(fromMidlines[r],
                                    element->getHeight()-element->axis( style, i_tstyle ));
-            widths[c] = QMAX(widths[c], element->getWidth());
+            widths[c] = qMax(widths[c], element->getWidth());
         }
     }
 
@@ -769,7 +769,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement element)
         rows = rowStr.toInt();
     }
     if (rows == 0) {
-        kdWarning( DEBUGID ) << "Rows <= 0 in MatrixElement." << endl;
+        kWarning( DEBUGID ) << "Rows <= 0 in MatrixElement." << endl;
         return false;
     }
 
@@ -779,7 +779,7 @@ bool MatrixElement::readAttributesFromDom(QDomElement element)
         cols = columnStr.toInt();
     }
     if (cols == 0) {
-        kdWarning( DEBUGID ) << "Columns <= 0 in MatrixElement." << endl;
+        kWarning( DEBUGID ) << "Columns <= 0 in MatrixElement." << endl;
         return false;
     }
 
@@ -1352,8 +1352,8 @@ void MultilineElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
                 }
             }
             else {
-                kdDebug( DEBUGID ) << k_funcinfo << endl;
-                kdDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
+                kDebug( DEBUGID ) << k_funcinfo << endl;
+                kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
             }
         }
     }
@@ -1382,8 +1382,8 @@ void MultilineElement::moveRight( FormulaCursor* cursor, BasicElement* from )
                     return;
                 }
             }
-            kdDebug( DEBUGID ) << k_funcinfo << endl;
-            kdDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
+            kDebug( DEBUGID ) << k_funcinfo << endl;
+            kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
         }
     }
 }
@@ -1421,7 +1421,7 @@ void MultilineElement::moveUp( FormulaCursor* cursor, BasicElement* from )
                             cursorPos += newTabPos-oldTabPos;
                             int nextNewTabPos = newLine->tabPos( tabNum+1 );
                             if ( nextNewTabPos > -1 ) {
-                                cursorPos = QMIN( cursorPos, nextNewTabPos );
+                                cursorPos = qMin( cursorPos, nextNewTabPos );
                             }
                         }
                         else {
@@ -1431,11 +1431,11 @@ void MultilineElement::moveUp( FormulaCursor* cursor, BasicElement* from )
                     else {
                         int nextNewTabPos = newLine->tabPos( 0 );
                         if ( nextNewTabPos > -1 ) {
-                            cursorPos = QMIN( cursorPos, nextNewTabPos );
+                            cursorPos = qMin( cursorPos, nextNewTabPos );
                         }
                     }
                     cursor->setTo( newLine,
-                                   QMIN( cursorPos,
+                                   qMin( cursorPos,
                                          newLine->countChildren() ) );
                 }
                 else {
@@ -1443,8 +1443,8 @@ void MultilineElement::moveUp( FormulaCursor* cursor, BasicElement* from )
                 }
             }
             else {
-                kdDebug( DEBUGID ) << k_funcinfo << endl;
-                kdDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
+                kDebug( DEBUGID ) << k_funcinfo << endl;
+                kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
             }
         }
     }
@@ -1479,7 +1479,7 @@ void MultilineElement::moveDown( FormulaCursor* cursor, BasicElement* from )
                                 cursorPos += newTabPos-oldTabPos;
                                 int nextNewTabPos = newLine->tabPos( tabNum+1 );
                                 if ( nextNewTabPos > -1 ) {
-                                    cursorPos = QMIN( cursorPos, nextNewTabPos );
+                                    cursorPos = qMin( cursorPos, nextNewTabPos );
                                 }
                             }
                             else {
@@ -1489,11 +1489,11 @@ void MultilineElement::moveDown( FormulaCursor* cursor, BasicElement* from )
                         else {
                             int nextNewTabPos = newLine->tabPos( 0 );
                             if ( nextNewTabPos > -1 ) {
-                                cursorPos = QMIN( cursorPos, nextNewTabPos );
+                                cursorPos = qMin( cursorPos, nextNewTabPos );
                             }
                         }
                         cursor->setTo( newLine,
-                                       QMIN( cursorPos,
+                                       qMin( cursorPos,
                                              newLine->countChildren() ) );
                     }
                     else {
@@ -1502,8 +1502,8 @@ void MultilineElement::moveDown( FormulaCursor* cursor, BasicElement* from )
                     return;
                 }
             }
-            kdDebug( DEBUGID ) << k_funcinfo << endl;
-            kdDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
+            kDebug( DEBUGID ) << k_funcinfo << endl;
+            kDebug( DEBUGID ) << "Serious confusion. Must never happen." << endl;
         }
     }
 }
@@ -1527,13 +1527,13 @@ void MultilineElement::calcSizes( const ContextStyle& context,
     for ( uint i = 0; i < count; ++i ) {
         MultilineSequenceElement* line = content.at(i);
         line->calcSizes( context, tstyle, istyle );
-        tabCount = QMAX( tabCount, line->tabCount() );
+        tabCount = qMax( tabCount, line->tabCount() );
 
         height += leading;
         line->setX( 0 );
         line->setY( height );
         height += line->getHeight() + distY;
-        width = QMAX( line->getWidth(), width );
+        width = qMax( line->getWidth(), width );
     }
 
     // calculate the tab positions
@@ -1542,17 +1542,17 @@ void MultilineElement::calcSizes( const ContextStyle& context,
         for ( uint i = 0; i < count; ++i ) {
             MultilineSequenceElement* line = content.at(i);
             if ( t < line->tabCount() ) {
-                pos = QMAX( pos, line->tab( t )->getX() );
+                pos = qMax( pos, line->tab( t )->getX() );
             }
             else {
-                pos = QMAX( pos, line->getWidth() );
+                pos = qMax( pos, line->getWidth() );
             }
         }
         for ( uint i = 0; i < count; ++i ) {
             MultilineSequenceElement* line = content.at(i);
             if ( t < line->tabCount() ) {
                 line->moveTabTo( t, pos );
-                width = QMAX( width, line->getWidth() );
+                width = qMax( width, line->getWidth() );
             }
         }
     }
@@ -1738,7 +1738,7 @@ bool MultilineElement::readAttributesFromDom(QDomElement element)
         lineCount = lineCountStr.toInt();
     }
     if (lineCount == 0) {
-        kdWarning( DEBUGID ) << "lineCount <= 0 in MultilineElement." << endl;
+        kWarning( DEBUGID ) << "lineCount <= 0 in MultilineElement." << endl;
         return false;
     }
 

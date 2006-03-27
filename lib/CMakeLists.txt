@@ -1,5 +1,11 @@
 kde4_header()
 
+include_directories( 
+	${CMAKE_SOURCE_DIR}/lib/kofficecore/
+	${CMAKE_SOURCE_DIR}/lib/store/
+	${KDE4_INCLUDE_DIR} 
+	${QT_INCLUDES}  )
+
 add_subdirectory( store ) 
 add_subdirectory( kwmf ) 
 add_subdirectory( kofficecore ) 
@@ -17,7 +23,6 @@ add_subdirectory( kopalette )
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KROSSDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KOPAINTERDIR)")
 message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(KROSSDIR)")
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES}  )
 
 
 ########### install files ###############

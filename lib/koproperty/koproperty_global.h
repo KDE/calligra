@@ -23,7 +23,7 @@
 #include <koffice_export.h>
 
 //convenience defines
-#define kopropertydbg  kdDebug(30007)
-#define kopropertywarn kdWarning(30007)
+#define kopropertydbg  kDebug(30007)
+#define kopropertywarn kWarning(30007)
 
 #endif

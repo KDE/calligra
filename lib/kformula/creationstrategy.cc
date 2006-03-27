@@ -47,7 +47,7 @@ BasicElement* OrdinaryCreationStrategy::createElement( QString type )
     else if ( type == "UNDERLINE" )    return new UnderlineElement();
     else if ( type == "MULTILINE" )    return new MultilineElement();
     else if ( type == "SEQUENCE" ) {
-        kdWarning() << "malformed data: sequence inside sequence." << endl;
+        kWarning() << "malformed data: sequence inside sequence." << endl;
         return 0;
     }
     return 0;

@@ -21,7 +21,7 @@
 
 #include <kaction.h>
 #include <koffice_export.h>
-class KPopupMenu;
+class KMenu;
 class QPoint;
 
 /** An action that provides a menu with items that can be selected.
@@ -52,7 +52,7 @@ class KOFFICEUI_EXPORT KoSelectAction : public KAction
     ~KoSelectAction();
 
     /** Returns a pointer to the popup menu. */
-    KPopupMenu* popupMenu() const;
+    KMenu* popupMenu() const;
     /** Shows the popup menu.
      * @param global Position at which the popup menu is shown.
      */

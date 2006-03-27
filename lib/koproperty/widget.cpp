@@ -29,7 +29,7 @@
 #ifdef QT_ONLY
 #include <qlistview.h>
 #else
-#include <klistview.h>
+#include <k3listview.h>
 #include <kdebug.h>
 #endif
 
@@ -97,7 +97,7 @@ Widget::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const QVari
 //		rect.setTop(rect.top()+1); //+1 to have the same vertical position as editor
 //	else
 //		rect.setHeight(rect.height()-1); //don't place over listviews's border
-	p->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toString());
+	p->drawText(rect, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toString());
 }
 
 void

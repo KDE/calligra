@@ -81,7 +81,7 @@ EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, Q3C
 {
     EventSignal* event = new EventSignal(name, this, sender, signal);
     if(! addChild(event)) {
-        kdWarning() << QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) << endl;
+        kWarning() << QString("Failed to add signal name='%1' signature='%2'").arg(name).arg(signal) << endl;
         return 0;
     }
     return event;
@@ -91,7 +91,7 @@ EventSlot::Ptr MainModule::addSlot(const QString& name, QObject* receiver, Q3CSt
 {
     EventSlot* event = new EventSlot(name, this, receiver, slot);
     if(! addChild(event)) {
-        kdWarning() << QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) << endl;
+        kWarning() << QString("Failed to add slot name='%1' signature='%2'").arg(name).arg(slot) << endl;
         delete event;
         return 0;
     }
@@ -102,7 +102,7 @@ QtObject::Ptr MainModule::addQObject(QObject* object, const QString& name)
 {
     QtObject* qtobject = new QtObject(this, object, name);
     if(! addChild(qtobject)) {
-        kdWarning() << QString("Failed to add QObject name='%1'").arg(object->name()) << endl;
+        kWarning() << QString("Failed to add QObject name='%1'").arg(object->name()) << endl;
         delete qtobject;
         return 0;
     }
@@ -113,7 +113,7 @@ EventAction::Ptr MainModule::addKAction(KAction* action, const QString& name)
 {
     EventAction* event = new EventAction(name, this, action);
     if(! addChild(event)) {
-        kdWarning() << QString("Failed to add KAction name='%1'").arg(action->name()) << endl;
+        kWarning() << QString("Failed to add KAction name='%1'").arg(action->name()) << endl;
         delete event;
         return 0;
     }

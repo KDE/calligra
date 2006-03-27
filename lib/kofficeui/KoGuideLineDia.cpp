@@ -39,9 +39,9 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, double pos, double minPos, doub
 , m_vButton( 0 )
 {
     setCaption( i18n("Set Guide Line Position") );
-    Q3HBox *page = makeHBoxMainWidget();
+    KHBox *page = makeHBoxMainWidget();
     new QLabel( i18n( "Position:" ), page );
-    m_position= new KoUnitDoubleSpinBox( page, QMAX( 0.00, minPos ), QMAX( 0.00, maxPos ), 1, QMAX( 0.00, pos ), unit );
+    m_position= new KoUnitDoubleSpinBox( page, qMax( 0.00, minPos ), qMax( 0.00, maxPos ), 1, qMax( 0.00, pos ), unit );
     m_position->setFocus();
 }
 
@@ -56,7 +56,7 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
 , m_vButton( 0 )
 {
     setCaption( i18n("Add Guide Line") );
-    Q3VBox * vbox = makeVBoxMainWidget();
+    KVBox * vbox = makeVBoxMainWidget();
 
     Q3ButtonGroup *group = new Q3ButtonGroup( 1, Qt::Horizontal, i18n( "Orientation" ), vbox );
     group->setRadioButtonExclusive( true );
@@ -70,7 +70,7 @@ KoGuideLineDia::KoGuideLineDia( QWidget *parent, KoPoint &pos, KoRect &rect,
 
     Q3HBox *hbox = new Q3HBox( vbox );
     QLabel *label = new QLabel( i18n( "&Position:" ), hbox );
-    m_position= new KoUnitDoubleSpinBox( hbox, QMAX( 0.0, m_rect.left() ), QMAX( 0.0, m_rect.right() ), 1, QMAX( 0.0, pos.x() ), unit );
+    m_position= new KoUnitDoubleSpinBox( hbox, qMax( 0.0, m_rect.left() ), qMax( 0.0, m_rect.right() ), 1, qMax( 0.0, pos.x() ), unit );
     m_position->setFocus();
     label->setBuddy( m_position );
 
@@ -101,8 +101,8 @@ void KoGuideLineDia::slotOrientationChanged()
     {
         if ( m_hButton->isChecked() )
         {
-            m_position->setMinValue( QMAX( 0.0, m_rect.top() ) );
-            m_position->setMaxValue( QMAX( 0.0, m_rect.bottom() ) );
+            m_position->setMinValue( qMax( 0.0, m_rect.top() ) );
+            m_position->setMaxValue( qMax( 0.0, m_rect.bottom() ) );
             if ( ! m_positionChanged )
             {
                 disconnect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );
@@ -112,8 +112,8 @@ void KoGuideLineDia::slotOrientationChanged()
         }
         else if ( m_vButton->isChecked() )
         {
-            m_position->setMinValue( QMAX( 0.0, m_rect.left() ) );
-            m_position->setMaxValue( QMAX( 0.0, m_rect.right() ) );
+            m_position->setMinValue( qMax( 0.0, m_rect.left() ) );
+            m_position->setMaxValue( qMax( 0.0, m_rect.right() ) );
             if ( ! m_positionChanged )
             {
                 disconnect( m_position, SIGNAL( valueChanged( double ) ), this, SLOT( slotPositionChanged() ) );

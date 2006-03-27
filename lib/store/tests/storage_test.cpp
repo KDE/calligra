@@ -50,7 +50,7 @@ int cleanUp( KoStore* store, const QString& testFile, const char* error )
 {
     QFile::remove( testFile );
     delete store;
-    kdDebug() << error << endl;
+    kDebug() << error << endl;
     return 1;
 }
 
@@ -63,7 +63,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         system( Q3CString( "rm -rf " ) + QFile::encodeName( testFile ) ); // QDir::rmdir isn't recursive!
     }
 
-    kdDebug() << "======================="<<testName<<"====================================" << endl;
+    kDebug() << "======================="<<testName<<"====================================" << endl;
     KoStore* store = KoStore::createStore( testFile, KoStore::Write, "", backend );
     if ( store->bad() )
         return cleanUp( store, testFile, badStorage );
@@ -110,7 +110,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
         store->close();
     delete store;
 
-    kdDebug() << "===========================================================" << endl;
+    kDebug() << "===========================================================" << endl;
 
     store = KoStore::createStore( testFile, KoStore::Read, "", backend );
     if ( store->bad() )
@@ -170,13 +170,13 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
                 return cleanUp( store, testFile, unableToRead );
         }
         else {
-            kdError() << "Wrong size! maindoc.xml is " << store->size() << " should be 22." << endl;
+            kError() << "Wrong size! maindoc.xml is " << store->size() << " should be 22." << endl;
             delete store;
             return 1;
         }
     }
     else {
-        kdError() << "Couldn't open storage!" << endl;
+        kError() << "Couldn't open storage!" << endl;
         delete store;
         return 1;
     }
@@ -201,7 +201,7 @@ int test( const char* testName, KoStore::Backend backend, const QString& testFil
     delete store;
     QFile::remove( testFile );
 
-    kdDebug() << "===========================================================" << endl;
+    kDebug() << "===========================================================" << endl;
     return 0;
 }
 
@@ -212,7 +212,7 @@ int main( int argc, char **argv )
 
     // KZip (due to KSaveFile) doesn't support relative filenames
     // So use $PWD as base for the paths explicitely.
-    const QString testDir = QDir::currentDirPath();
+    const QString testDir = QDir::currentPath();
     if ( test( "Tar", KoStore::Tar, testDir+"test.tgz" ) != 0 )
       return 1;
     if ( test( "Directory", KoStore::Directory, testDir+"testdir/maindoc.xml" ) != 0 )

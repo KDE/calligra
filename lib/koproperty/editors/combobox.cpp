@@ -137,7 +137,7 @@ ComboBox::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 
 	Widget::drawViewer(p, cg, r, txt); //keyForValue(value));
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, keyForValue(value));
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, keyForValue(value));
 }
 
 void

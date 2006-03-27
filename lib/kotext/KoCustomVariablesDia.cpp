@@ -109,7 +109,7 @@ KoCustomVariablesListItem::KoCustomVariablesListItem( Q3ListView *parent )
 void KoCustomVariablesListItem::setup()
 {
     Q3ListViewItem::setup();
-    setHeight( QMAX( listView()->fontMetrics().height(),
+    setHeight( qMax( listView()->fontMetrics().height(),
                      editWidget->sizeHint().height() ) );
     //if ( listView()->columnWidth( 1 ) < editWidget->sizeHint().width() )
     //    listView()->setColumnWidth( 1, editWidget->sizeHint().width() );
@@ -161,7 +161,7 @@ int KoCustomVariablesListItem::width( const QFontMetrics & fm, const Q3ListView 
  ******************************************************************/
 
 KoCustomVariablesList::KoCustomVariablesList( QWidget *parent )
-    : KListView( parent )
+    : K3ListView( parent )
 {
     header()->setMovingEnabled( FALSE );
     addColumn( i18n( "Variable" ) );

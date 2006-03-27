@@ -428,7 +428,7 @@ inline int KoTextDocument::y() const
 inline int KoTextDocument::width() const
 {
     return flow_->width();
-    //return QMAX( cw, flow_->width() );
+    //return qMax( cw, flow_->width() );
 }
 
 //inline int KoTextDocument::visibleWidth() const
@@ -458,7 +458,7 @@ inline void KoTextDocument::setLastParag( KoTextParag *p )
 
 inline void KoTextDocument::setWidth( int w )
 {
-    //cw = QMAX( w, minw );
+    //cw = qMax( w, minw );
     flow_->setWidth( w );
     //vw = w;
 }

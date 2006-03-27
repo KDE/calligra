@@ -41,7 +41,7 @@ RubyModule::RubyModule(Kross::Api::Module* mod, QString modname) : d(new RubyMod
 {
     d->m_module = mod;
     modname = modname.left(1).upper() + modname.right(modname.length() - 1 );
-    kdDebug() << modname << endl;
+    kDebug() << modname << endl;
     VALUE rmodule = rb_define_module(modname.ascii());
     rb_define_module_function(rmodule,"method_missing",  (VALUE (*)(...))RubyModule::method_missing, -1);
     VALUE rm = RubyExtension::toVALUE((Kross::Api::Object*)mod);
@@ -56,7 +56,7 @@ VALUE RubyModule::method_missing(int argc, VALUE *argv, VALUE self)
 {
 #ifdef KROSS_RUBY_MODULE_DEBUG
     QString funcname = rb_id2name(SYM2ID(argv[0]));
-    kdDebug() << "Function " << funcname << " \"missing\" in a module" << endl;
+    kDebug() << "Function " << funcname << " \"missing\" in a module" << endl;
 #endif
 
     VALUE rubyObjectModule = rb_funcall( self, rb_intern("const_get"), 1, ID2SYM(rb_intern("MODULEOBJ")) );

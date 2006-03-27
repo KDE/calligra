@@ -24,7 +24,7 @@
 #include "../widget.h"
 
 #ifndef QT_ONLY
-class KURLRequester;
+class KUrlRequester;
 #else
 class QPushButton;
 class QLineEdit;
@@ -54,7 +54,7 @@ class KOPROPERTY_EXPORT URLEdit : public Widget
 
 	private:
 #ifndef QT_ONLY
-		KURLRequester *m_edit;
+		KUrlRequester *m_edit;
 #else
 		QLineEdit *m_edit;
 		QPushButton *m_select;

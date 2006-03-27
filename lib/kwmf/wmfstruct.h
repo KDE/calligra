@@ -6,7 +6,7 @@
 
 typedef short WORD;
 typedef int DWORD;
-typedef Q_INT32 LONG;
+typedef qint32 LONG;
 typedef void* _HANDLE;
 
 typedef struct _RECT

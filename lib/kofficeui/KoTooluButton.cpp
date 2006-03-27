@@ -36,7 +36,7 @@
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
 #include <KoTooluButton.h>
-#include <kcolordrag.h>
+#include <k3colordrag.h>
 #include <klocale.h>
 #include <kcolordialog.h>
 #include <kdebug.h>
@@ -329,7 +329,7 @@ void KoColorPanel::mouseMoveEvent( QMouseEvent* e )
         if ( p.manhattanLength() > QApplication::startDragDistance() ) {
             QColor color( mapToColor( m_pressedPos ) );
             if ( color.isValid() ) {
-                KColorDrag *drag = new KColorDrag( color, this, name() );
+                K3ColorDrag *drag = new K3ColorDrag( color, this, name() );
                 drag->dragCopy();
             }
         }
@@ -451,13 +451,13 @@ void KoColorPanel::focusInEvent( QFocusEvent* e )
 
 void KoColorPanel::dragEnterEvent( QDragEnterEvent* e )
 {
-    e->accept( KColorDrag::canDecode( e ) );
+    e->accept( K3ColorDrag::canDecode( e ) );
 }
 
 void KoColorPanel::dropEvent( QDropEvent* e )
 {
     QColor color;
-    if ( KColorDrag::decode( e, color ) )
+    if ( K3ColorDrag::decode( e, color ) )
         insertColor( color );
 }
 
@@ -690,7 +690,7 @@ QSize KoToolButton::minimumSize() const
 
 void KoToolButton::colorSelected( const QColor& color )
 {
-    kdDebug() << "selected::: " << color.name() << endl;
+    kDebug() << "selected::: " << color.name() << endl;
 }
 
 void KoToolButton::drawButton(QPainter *_painter)
@@ -820,7 +820,7 @@ bool KoToolButton::eventFilter( QObject* o, QEvent* e )
     if ( o == m_popup ) {
         if ( e->type() == QEvent::MouseButtonPress )
             if ( hitArrow( mapFromGlobal( static_cast<QMouseEvent*>( e )->globalPos() ) ) ) {
-                kdDebug() << "KoToolButton::eventFilter-------------->" << endl;
+                kDebug() << "KoToolButton::eventFilter-------------->" << endl;
                 m_popup->close();
                 m_arrowPressed = false;
                 return true;
@@ -847,7 +847,7 @@ void KoToolButton::init()
     m_popup->installEventFilter( this );
 
     ARROW_WIDTH = style().pixelMetric(QStyle::PM_MenuButtonIndicator) + 4;
-    kdDebug() << "##################### Arrow: " << ARROW_WIDTH << endl;
+    kDebug() << "##################### Arrow: " << ARROW_WIDTH << endl;
 }
 
 void KoToolButton::buttonShift( int& dx, int& dy )

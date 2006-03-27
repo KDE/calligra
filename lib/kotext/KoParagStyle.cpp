@@ -116,7 +116,7 @@ void KoParagStyle::loadStyle( QDomElement & parentElem, int docVersion )
         m_name = nameElem.attribute("value");
         m_displayName = i18n( "Style name", m_name.utf8() );
     } else
-        kdWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
+        kWarning() << "No NAME tag in LAYOUT -> no name for this style!" << endl;
 
     // The followingStyle stuff has to be done after loading all styles.
 

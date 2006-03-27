@@ -51,7 +51,7 @@ KoHyphenator::KoHyphenator()
 
     QString path = kapp->dirs()->findResource("data", "koffice/hyphdicts/dicts.xml");
 #ifdef DEBUG_HYPHENATOR
-    kdDebug() << path << endl;
+    kDebug() << path << endl;
 #endif
 
     QFile *f;
@@ -75,7 +75,7 @@ KoHyphenator::KoHyphenator()
                     QString lang = attr.namedItem("lang").nodeValue();
                     QString encoding = attr.namedItem("encoding").nodeValue();
 #ifdef DEBUG_HYPHENATOR
-                    kdDebug() << "KoHyphenator: found lang=" << lang << " encoding=" << encoding << endl;
+                    kDebug() << "KoHyphenator: found lang=" << lang << " encoding=" << encoding << endl;
 #endif
                     encodings.insert( lang,
                                       EncodingStruct( encoding.latin1() ) );
@@ -106,7 +106,7 @@ char *KoHyphenator::hyphens(const QString& str, const QString& lang) const
     catch (KoHyphenatorException &e)
     {
 #ifdef DEBUG_HYPHENATOR
-        kdDebug() << e.message().latin1() << endl;
+        kDebug() << e.message().latin1() << endl;
 #endif
         for (uint j = 0; j < str.length(); j++)
             x[j] = '0';
@@ -127,7 +127,7 @@ QString KoHyphenator::hyphenate(const QString& str, const QString& lang) const
     catch (KoHyphenatorException &e)
     {
 #ifdef DEBUG_HYPHENATOR
-        kdDebug() << e.message() << endl;
+        kDebug() << e.message() << endl;
 #endif
         delete[] x;
         return str;
@@ -137,7 +137,7 @@ QString KoHyphenator::hyphenate(const QString& str, const QString& lang) const
     for (; i < len; i++)
     {
 #ifdef DEBUG_HYPHENATOR
-        kdDebug() << "loop: i=" << i << ", j=" << j << ", x=" << x << ", res=" << res << endl;
+        kDebug() << "loop: i=" << i << ", j=" << j << ", x=" << x << ", res=" << res << endl;
 #endif
         if ((x[i] % 2) != 0)
         {
@@ -153,14 +153,14 @@ QString KoHyphenator::hyphenate(const QString& str, const QString& lang) const
 bool KoHyphenator::checkHyphenPos(const QString& str, int pos, const QString& lang) const
 {
 #ifdef DEBUG_HYPHENATOR
-    kdDebug() << "string: " << str << endl;
+    kDebug() << "string: " << str << endl;
 #endif
 
     char *hyph = hyphens(str, lang);
 
 #ifdef DEBUG_HYPHENATOR
-    kdDebug() << "result: " << hyph << endl;
-    kdDebug() << "checked position: " << pos << endl;
+    kDebug() << "result: " << hyph << endl;
+    kDebug() << "checked position: " << pos << endl;
 #endif
     bool ret = ((hyph[pos] % 2) != 0);
     delete[] hyph;
@@ -185,19 +185,19 @@ HyphenDict *KoHyphenator::dict(const QString &_lang) const
     if (dicts.find(lang) == dicts.end())
     {
 #ifdef DEBUG_HYPHENATOR
-        kdDebug() << "Searching dictionary for '" << lang << "' language..." << endl;
+        kDebug() << "Searching dictionary for '" << lang << "' language..." << endl;
 #endif
         QString path = kapp->dirs()->findResource("data", "koffice/hyphdicts/hyph_" + lang + ".dic");
         if (!path.isNull())
         {
 #ifdef DEBUG_HYPHENATOR
-            kdDebug() << "Loading dictionary for '" << lang << "' language: path = " << path << endl;
+            kDebug() << "Loading dictionary for '" << lang << "' language: path = " << path << endl;
 #endif
             const_cast<KoHyphenator*>(this)->dicts.insert( lang, hnj_hyphen_load(QFile::encodeName(path)) );
             if (dicts.find(lang) == dicts.end())
             {
 #ifdef DEBUG_HYPHENATOR
-                kdDebug() << "No dictionary loaded" << endl;
+                kDebug() << "No dictionary loaded" << endl;
 #endif
                 throw(KoHyphenatorException( QString("Could not load dictionary for the language: %1").arg(lang) ));
             }

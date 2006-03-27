@@ -52,7 +52,7 @@ namespace Kross { namespace Api {
             explicit Module(const QString& name)
                 : Class<Module>(name)
             {
-                kdDebug() << QString("Kross::Api::Module %1 created").arg(name) << endl;
+                kDebug() << QString("Kross::Api::Module %1 created").arg(name) << endl;
             }
 
             /**
@@ -60,7 +60,7 @@ namespace Kross { namespace Api {
              */
             virtual ~Module()
             {
-                kdDebug() << QString("Kross::Api::Module %1 destroyed").arg(getName()) << endl;
+                kDebug() << QString("Kross::Api::Module %1 destroyed").arg(getName()) << endl;
             }
 
             /**

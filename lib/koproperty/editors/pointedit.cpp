@@ -78,7 +78,7 @@ PointEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const 
 	rect.setBottom(r.bottom()+1);
 	Widget::drawViewer(p, cg, rect, QString(POINTEDIT_MASK).arg(value.toPoint().x()).arg(value.toPoint().y()));
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
 //		QString("[ %1, %2 ]").arg(value.toPoint().x()).arg(value.toPoint().y()));
 }
 

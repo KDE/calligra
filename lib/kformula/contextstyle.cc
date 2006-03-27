@@ -40,7 +40,7 @@ ContextStyle::ContextStyle()
       emptyColor(Qt::blue), helpColor( Qt::gray ),
       m_sizeFactor( 0 )
 {
-//     kdDebug() << "ContextStyle::ContextStyle" << endl
+//     kDebug() << "ContextStyle::ContextStyle" << endl
 //               << "defaultFont: " << defaultFont.rawName() << endl
 //               << "nameFont: " << nameFont.rawName() << endl
 //               << "numberFont: " << numberFont.rawName() << endl
@@ -316,7 +316,7 @@ luPt ContextStyle::getBaseSize() const
 
 void ContextStyle::setBaseSize( int size )
 {
-    //kdDebug( 40000 ) << "ContextStyle::setBaseSize" << endl;
+    //kDebug( 40000 ) << "ContextStyle::setBaseSize" << endl;
     if ( size != m_baseSize ) {
         m_baseSize = size;
         setup();

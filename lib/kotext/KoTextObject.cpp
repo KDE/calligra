@@ -91,8 +91,8 @@ void KoTextObject::init()
     m_lastFormatted = textdoc->firstParag();
     m_highlightSelectionAdded = false;
     interval = 0;
-    changeIntervalTimer = new QTimer( this );
-    connect( changeIntervalTimer, SIGNAL( timeout() ),
+    startTimer = new QTimer( this );
+    connect( startTimer, SIGNAL( timeout() ),
              this, SLOT( doChangeInterval() ) );
 
     formatTimer = new QTimer( this );
@@ -161,7 +161,7 @@ int KoTextObject::docFontSize( KoTextFormat * format ) const
 
 int KoTextObject::zoomedFontSize( int docFontSize ) const
 {
-    kdDebug(32500) << "KoTextObject::zoomedFontSize: docFontSize=" << docFontSize
+    kDebug(32500) << "KoTextObject::zoomedFontSize: docFontSize=" << docFontSize
               << " - in LU: " << KoTextZoomHandler::ptToLayoutUnitPt( docFontSize ) << endl;
     return KoTextZoomHandler::ptToLayoutUnitPt( docFontSize );
 }
@@ -332,7 +332,7 @@ void KoTextObject::copyCharFormatting( KoTextParag *parag, int position, int ind
     }
     if ( ch->isCustom() )
     {
-        kdDebug(32500) << "KoTextObject::copyCharFormatting moving custom item " << ch->customItem() << " to text's " << index << " char"  << endl;
+        kDebug(32500) << "KoTextObject::copyCharFormatting moving custom item " << ch->customItem() << " to text's " << index << " char"  << endl;
         undoRedoInfo.customItemsMap.insert( index, ch->customItem() );
         // We copy the custom item to customItemsMap in all cases (see setFormat)
         // We only remove from 'ch' if moveCustomItems was specified
@@ -345,7 +345,7 @@ void KoTextObject::copyCharFormatting( KoTextParag *parag, int position, int ind
 // Based on QTextView::readFormats - with all code duplication moved to copyCharFormatting
 void KoTextObject::readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyParagLayouts, bool moveCustomItems )
 {
-    //kdDebug(32500) << "KoTextObject::readFormats moveCustomItems=" << moveCustomItems << endl;
+    //kDebug(32500) << "KoTextObject::readFormats moveCustomItems=" << moveCustomItems << endl;
     int oldLen = undoRedoInfo.text.length();
     if ( c1.parag() == c2.parag() ) {
         undoRedoInfo.text += c1.parag()->string()->toString().mid( c1.index(), c2.index() - c1.index() );
@@ -354,7 +354,7 @@ void KoTextObject::readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyPar
     } else {
         int lastIndex = oldLen;
         int i;
-        //kdDebug(32500) << "KoTextObject::readFormats copying from " << c1.index() << " to " << c1.parag()->length()-1 << " into lastIndex=" << lastIndex << endl;
+        //kDebug(32500) << "KoTextObject::readFormats copying from " << c1.index() << " to " << c1.parag()->length()-1 << " into lastIndex=" << lastIndex << endl;
         // Replace the trailing spaces with '\n'. That char carries the formatting for the trailing space.
         undoRedoInfo.text += c1.parag()->string()->toString().mid( c1.index(), c1.parag()->length() - 1 - c1.index() ) + '\n';
         for ( i = c1.index(); i < c1.parag()->length(); ++i, ++lastIndex )
@@ -363,14 +363,14 @@ void KoTextObject::readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyPar
         KoTextParag *p = c1.parag()->next();
         while ( p && p != c2.parag() ) {
             undoRedoInfo.text += p->string()->toString().left( p->length() - 1 ) + '\n';
-            //kdDebug(32500) << "KoTextObject::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
+            //kDebug(32500) << "KoTextObject::readFormats (mid) copying from 0 to "  << p->length()-1 << " into i+" << lastIndex << endl;
             for ( i = 0; i < p->length(); ++i )
                 copyCharFormatting( p, i, i + lastIndex, moveCustomItems );
             lastIndex += p->length(); // + 1; // skip the '\n'
-            //kdDebug(32500) << "KoTextObject::readFormats lastIndex now " << lastIndex << " - text is now " << undoRedoInfo.text.toString() << endl;
+            //kDebug(32500) << "KoTextObject::readFormats lastIndex now " << lastIndex << " - text is now " << undoRedoInfo.text.toString() << endl;
             p = p->next();
         }
-        //kdDebug(32500) << "KoTextObject::readFormats copying [last] from 0 to " << c2.index() << " into i+" << lastIndex << endl;
+        //kDebug(32500) << "KoTextObject::readFormats copying [last] from 0 to " << c2.index() << " into i+" << lastIndex << endl;
         undoRedoInfo.text += c2.parag()->string()->toString().left( c2.index() );
         for ( i = 0; i < c2.index(); ++i )
             copyCharFormatting( c2.parag(), i, i + lastIndex, moveCustomItems );
@@ -390,7 +390,7 @@ void KoTextObject::readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyPar
 void KoTextObject::newPlaceHolderCommand( const QString & name )
 {
     Q_ASSERT( !undoRedoInfo.placeHolderCmd );
-    if ( undoRedoInfo.placeHolderCmd ) kdDebug(32500) << kdBacktrace();
+    if ( undoRedoInfo.placeHolderCmd ) kDebug(32500) << kBacktrace();
     undoRedoInfo.placeHolderCmd = new KMacroCommand( name );
     emit newCommand( undoRedoInfo.placeHolderCmd );
 }
@@ -416,7 +416,7 @@ void KoTextObject::storeParagUndoRedoInfo( KoTextCursor * cursor, KoTextDocument
         for ( ; start && start != end->next() ; start = start->next() )
         {
             undoRedoInfo.oldParagLayouts << start->paragLayout();
-            //kdDebug(32500) << "KoTextObject:storeParagUndoRedoInfo storing counter " << start->paragLayout().counter.counterType << endl;
+            //kDebug(32500) << "KoTextObject:storeParagUndoRedoInfo storing counter " << start->paragLayout().counter.counterType << endl;
         }
     }
 }
@@ -540,7 +540,7 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
             {
                 doUpdateCurrentFormat = true;
                 //currentFormat = textdoc->formatCollection()->format( cursor->parag()->paragFormat() );
-                //kdDebug(32500) << "KoTextFrameSet::doKeyboardAction currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
+                //kDebug(32500) << "KoTextFrameSet::doKeyboardAction currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
             }
         }
         if ( cursor->parag()->joinBorder() && cursor->parag()->bottomBorder().width() > 0 )
@@ -601,12 +601,12 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     const bool checkNewLine = insertFlags & CheckNewLine;
     const bool removeSelected = ( insertFlags & DoNotRemoveSelected ) == 0;
     const bool repaint = ( insertFlags & DoNotRepaint ) == 0;
-    //kdDebug(32500) << "KoTextObject::insert txt=" << txt << endl;
+    //kDebug(32500) << "KoTextObject::insert txt=" << txt << endl;
     bool tinyRepaint = !checkNewLine;
     if ( repaint )
         emit hideCursor();
     if ( textdoc->hasSelection( selectionId, true ) && removeSelected ) {
-        kdDebug() << k_funcinfo << "removing selection " << selectionId << endl;
+        kDebug() << k_funcinfo << "removing selection " << selectionId << endl;
         // call replaceSelectionCommand, which will call insert() back, but this time without a selection.
         emitNewCommand(replaceSelectionCommand( cursor, txt, commandName, selectionId, insertFlags, customItemsMap ));
         return;
@@ -615,9 +615,9 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     if ( insertFlags & OverwriteMode ) {
         textdoc->setSelectionStart( KoTextDocument::Temp, cursor );
         KoTextCursor oc = *cursor;
-        kdDebug(32500) << "overwrite: going to insert " << txt.length() << " chars; idx=" << oc.index() << endl;
-        oc.setIndex( QMIN( oc.index() + (int)txt.length(), oc.parag()->lastCharPos() + 1 ) );
-        kdDebug(32500) << "overwrite: removing from " << cursor->index() << " to " << oc.index() << endl;
+        kDebug(32500) << "overwrite: going to insert " << txt.length() << " chars; idx=" << oc.index() << endl;
+        oc.setIndex( qMin( oc.index() + (int)txt.length(), oc.parag()->lastCharPos() + 1 ) );
+        kDebug(32500) << "overwrite: removing from " << cursor->index() << " to " << oc.index() << endl;
         if ( oc.index() > cursor->index() )
         {
             textdoc->setSelectionEnd( KoTextDocument::Temp, &oc );
@@ -658,7 +658,7 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
 
     textdoc->setSelectionStart( KoTextDocument::Temp, &oldCursor );
     textdoc->setSelectionEnd( KoTextDocument::Temp, cursor );
-    //kdDebug(32500) << "KoTextObject::insert setting format " << currentFormat << endl;
+    //kDebug(32500) << "KoTextObject::insert setting format " << currentFormat << endl;
     textdoc->setFormat( KoTextDocument::Temp, currentFormat, KoTextFormat::Format );
     textdoc->setFormat( KoTextDocument::InputMethodPreedit, currentFormat, KoTextFormat::Format );
     textdoc->removeSelection( KoTextDocument::Temp );
@@ -742,7 +742,7 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
 {
     if ( protectContent() )
         return;
-    kdDebug(32500) << "KoTextObject::pasteText cursor parag=" << cursor->parag()->paragId() << endl;
+    kDebug(32500) << "KoTextObject::pasteText cursor parag=" << cursor->parag()->paragId() << endl;
     QString t = text;
     // Need to convert CRLF to NL
     QRegExp crlf( QString::fromLatin1("\r\n") );
@@ -796,7 +796,7 @@ KCommand* KoTextObject::setParagLayoutCommand( KoTextCursor * cursor, const KoPa
 
         if ( createUndoRedo )
         {
-            //kdDebug(32500) << "KoTextObject::applyStyle KoTextParagCommand" << endl;
+            //kDebug(32500) << "KoTextObject::applyStyle KoTextParagCommand" << endl;
             KoTextDocCommand * cmd = new KoTextParagCommand( textdoc, undoRedoInfo.id, undoRedoInfo.eid,
                                                              undoRedoInfo.oldParagLayouts,
                                                              paragLayout, paragLayoutFlags,
@@ -843,13 +843,13 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagS
                                                                    arg(newStyle->displayName() ) ) : 0;
 
     // 1
-    //kdDebug(32500) << "KoTextObject::applyStyle setParagLayout" << endl;
+    //kDebug(32500) << "KoTextObject::applyStyle setParagLayout" << endl;
     KCommand* cmd = setParagLayoutCommand( cursor, newStyle->paragLayout(), selectionId, paragLayoutFlags, -1, createUndoRedo );
     if ( cmd )
         macroCmd->addCommand( cmd );
 
     // 2
-    //kdDebug(32500) << "KoTextObject::applyStyle gathering text and formatting" << endl;
+    //kDebug(32500) << "KoTextObject::applyStyle gathering text and formatting" << endl;
     KoTextParag * firstParag;
     KoTextParag * lastParag;
     if ( !textdoc->hasSelection( selectionId, true ) ) {
@@ -903,13 +903,13 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagS
         // apply '2' and '3' (format)
         for ( KoTextParag * parag = firstParag ; parag && parag != lastParag->next() ; parag = parag->next() )
         {
-            //kdDebug(32500) << "KoTextObject::applyStyle parag:" << parag->paragId()
+            //kDebug(32500) << "KoTextObject::applyStyle parag:" << parag->paragId()
             //               << ", from 0 to " << parag->string()->length() << ", format=" << newFormat << endl;
             parag->setFormat( 0, parag->string()->length(), newFormat, true, formatFlags );
             parag->setFormat( newFormat );
         }
         //currentFormat = textdoc->formatCollection()->format( newFormat );
-        //kdDebug(32500) << "KoTextObject::applyStyle currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
+        //kDebug(32500) << "KoTextObject::applyStyle currentFormat=" << currentFormat << " " << currentFormat->key() << endl;
     }
 
     //resize all variables after applying the style
@@ -935,9 +935,9 @@ KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagS
 void KoTextObject::applyStyleChange( KoStyleChangeDefMap changed )
 {
 #if 0 //#ifndef NDEBUG
-    kdDebug(32500) << "KoTextObject::applyStyleChange " << changed.count() << " styles." << endl;
+    kDebug(32500) << "KoTextObject::applyStyleChange " << changed.count() << " styles." << endl;
     for( KoStyleChangeDefMap::const_iterator it = changed.begin(); it != changed.end(); ++it ) {
-        kdDebug(32500) << " " << it.key()->name()
+        kDebug(32500) << " " << it.key()->name()
                        << " paragLayoutChanged=" << (*it).paragLayoutChanged
                        << " formatChanged=" << (*it).formatChanged
                        << endl;
@@ -960,14 +960,14 @@ void KoTextObject::applyStyleChange( KoStyleChangeDefMap changed )
                 KoTextCursor cursor( textdoc );
                 cursor.setParag( p );
                 cursor.setIndex( 0 );
-                //kdDebug(32500) << "KoTextObject::applyStyleChange applying to paragraph " << p << " " << p->paragId() << endl;
+                //kDebug(32500) << "KoTextObject::applyStyleChange applying to paragraph " << p << " " << p->paragId() << endl;
                 applyStyle( &cursor, it.key(),
                             KoTextDocument::Temp, // A selection we can't have at this point
                             (*it).paragLayoutChanged, (*it).formatChanged,
                             false, false ); // don't create undo/redo, not interactive
             }
         } else {
-            //kdDebug(32500) << "KoTextObject::applyStyleChange leaving paragraph unchanged: " << p << " " << p->paragId() << endl;
+            //kDebug(32500) << "KoTextObject::applyStyleChange leaving paragraph unchanged: " << p << " " << p->paragId() << endl;
         }
 
         p = p->next();
@@ -1006,7 +1006,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
         {
             origFontSize = format->pointSize();
             format->setPointSize( zoomedFontSize( origFontSize ) );
-            //kdDebug(32500) << "KoTextObject::setFormatCommand format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
+            //kDebug(32500) << "KoTextObject::setFormatCommand format " << format->key() << " zoomed from " << origFontSize << " to " << format->font().pointSizeFloat() << endl;
         }
 #endif
         // Remove ref to current format, if caller wanted that
@@ -1034,7 +1034,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
         int eid = c2.parag()->paragId();
         int eindex = c2.index();
         readFormats( c1, c2 ); // read previous formatting info
-        //kdDebug(32500) << "KoTextObject::setFormatCommand undoredo info done" << endl;
+        //kDebug(32500) << "KoTextObject::setFormatCommand undoredo info done" << endl;
         textdoc->setFormat( selectionId, format, flags );
         if ( !undoRedoInfo.customItemsMap.isEmpty() )
         {
@@ -1056,7 +1056,7 @@ KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat *
     }
     if ( isNewFormat ) {
         emit showCurrentFormat();
-        //kdDebug(32500) << "KoTextObject::setFormatCommand index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
+        //kDebug(32500) << "KoTextObject::setFormatCommand index=" << cursor->index() << " length-1=" << cursor->parag()->length() - 1 << endl;
         if ( cursor && cursor->index() == cursor->parag()->length() - 1 ) {
             newFormat->addRef();
             cursor->parag()->string()->setFormat( cursor->index(), newFormat, TRUE );
@@ -1178,8 +1178,8 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, Q3StyleSheetIt
     if ( protectContent() )
         return 0L;
 
-    //kdDebug(32500) << "KoTextObject::setMargin " << m << " to value " << margin << endl;
-    //kdDebug(32500) << "Current margin is " << cursor->parag()->margin(m) << endl;
+    //kDebug(32500) << "KoTextObject::setMargin " << m << " to value " << margin << endl;
+    //kDebug(32500) << "Current margin is " << cursor->parag()->margin(m) << endl;
     if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
          cursor->parag()->margin(m) == margin )
         return 0L; // No change needed.
@@ -1267,10 +1267,10 @@ KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double sp
 {
     if ( protectContent() )
         return 0L;
-    //kdDebug(32500) << "KoTextObject::setLineSpacing to value " << spacing << endl;
-    //kdDebug(32500) << "Current spacing is " << cursor->parag()->kwLineSpacing() << endl;
-    //kdDebug(32500) << "Comparison says " << ( cursor->parag()->kwLineSpacing() == spacing ) << endl;
-    //kdDebug(32500) << "hasSelection " << textdoc->hasSelection( selectionId ) << endl;
+    //kDebug(32500) << "KoTextObject::setLineSpacing to value " << spacing << endl;
+    //kDebug(32500) << "Current spacing is " << cursor->parag()->kwLineSpacing() << endl;
+    //kDebug(32500) << "Comparison says " << ( cursor->parag()->kwLineSpacing() == spacing ) << endl;
+    //kDebug(32500) << "hasSelection " << textdoc->hasSelection( selectionId ) << endl;
     if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
          cursor->parag()->kwLineSpacing() == spacing
         && cursor->parag()->kwLineSpacingType() == _type)
@@ -1536,7 +1536,7 @@ void KoTextObject::removeSelectedText( KoTextCursor * cursor, KoTextDocument::Se
     KoTextCursor c1 = textdoc->selectionStartCursor( selectionId );
     KoTextCursor c2 = textdoc->selectionEndCursor( selectionId );
     readFormats( c1, c2, true, true );
-    //kdDebug(32500) << "KoTextObject::removeSelectedText text=" << undoRedoInfo.text.toString() << endl;
+    //kDebug(32500) << "KoTextObject::removeSelectedText text=" << undoRedoInfo.text.toString() << endl;
 
     textdoc->removeSelectedText( selectionId, cursor );
 
@@ -1709,7 +1709,7 @@ void KoTextObject::setViewArea( QWidget* w, int maxY )
 
 void KoTextObject::setLastFormattedParag( KoTextParag *parag )
 {
-    //kdDebug() << k_funcinfo << parag << " (" << ( parag ? QString::number(parag->paragId()) : QString("(null)") ) << ")" << endl;
+    //kDebug() << k_funcinfo << parag << " (" << ( parag ? QString::number(parag->paragId()) : QString("(null)") ) << ")" << endl;
     if ( !m_lastFormatted || !parag || m_lastFormatted->paragId() >= parag->paragId() ) {
         m_lastFormatted = parag;
     }
@@ -1719,24 +1719,24 @@ void KoTextObject::ensureFormatted( KoTextParag * parag, bool emitAfterFormattin
 {
     if ( !textdoc->lastParag() )
         return; // safety test
-    //kdDebug(32500) << name() << " ensureFormatted " << parag->paragId() << endl;
+    //kDebug(32500) << name() << " ensureFormatted " << parag->paragId() << endl;
     if ( !parag->isValid() && m_lastFormatted == 0 )
         m_lastFormatted = parag; // bootstrap
 
     while ( !parag->isValid() )
     {
         if ( !m_lastFormatted ) {
-            kdWarning() << "ensureFormatted for parag " << parag << " " << parag->paragId() << " still not formatted, but m_lastFormatted==0" << endl;
+            kWarning() << "ensureFormatted for parag " << parag << " " << parag->paragId() << " still not formatted, but m_lastFormatted==0" << endl;
             return;
         }
         // The paragid diff is "a good guess". The >=1 is a safety measure ;)
-        bool ret = formatMore( QMAX( 1, parag->paragId() - m_lastFormatted->paragId() ), emitAfterFormatting );
+        bool ret = formatMore( qMax( 1, parag->paragId() - m_lastFormatted->paragId() ), emitAfterFormatting );
         if ( !ret ) { // aborted
-            //kdDebug(32500) << "ensureFormatted aborted!" << endl;
+            //kDebug(32500) << "ensureFormatted aborted!" << endl;
             break;
         }
     }
-    //kdDebug(32500) << name() << " ensureFormatted " << parag->paragId() << " done" << endl;
+    //kDebug(32500) << name() << " ensureFormatted " << parag->paragId() << " done" << endl;
 }
 
 bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /* = true */ )
@@ -1767,10 +1767,10 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
         int viewsBottom = 0;
         QMapIterator<QWidget *, int> mapIt = m_mapViewAreas.begin();
         for ( ; mapIt != m_mapViewAreas.end() ; ++mapIt )
-            viewsBottom = QMAX( viewsBottom, mapIt.data() );
+            viewsBottom = qMax( viewsBottom, mapIt.data() );
 
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32500) << "formatMore " << name()
+        kDebug(32500) << "formatMore " << name()
                        << " lastFormatted id=" << m_lastFormatted->paragId()
                        << " lastFormatted's top=" << m_lastFormatted->rect().top()
                        << " lastFormatted's height=" << m_lastFormatted->rect().height()
@@ -1781,7 +1781,7 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
         {
             emit formattingFirstParag();
 #ifdef TIMING_FORMAT
-            kdDebug(32500) << "formatMore " << name() << ". First parag -> starting timer" << endl;
+            kDebug(32500) << "formatMore " << name() << ". First parag -> starting timer" << endl;
             m_time.start();
 #endif
         }
@@ -1796,13 +1796,13 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
         {
             KoTextParag* parag = m_lastFormatted;
 #ifdef DEBUG_FORMAT_MORE
-            kdDebug(32500) << "formatMore formatting " << parag << " id=" << parag->paragId() << endl;
+            kDebug(32500) << "formatMore formatting " << parag << " id=" << parag->paragId() << endl;
 #endif
             assert( parag->string() ); // i.e. not deleted
             parag->format();
             bottom = parag->rect().top() + parag->rect().height();
 #if 0 //def DEBUG_FORMAT_MORE
-            kdDebug(32500) << "formatMore(inside) top=" << parag->rect().top()
+            kDebug(32500) << "formatMore(inside) top=" << parag->rect().top()
                       << " height=" << parag->rect().height()
                       << " bottom=" << bottom << " m_lastFormatted(next parag) = " << m_lastFormatted->next() << endl;
 #endif
@@ -1814,17 +1814,17 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
 
             if ( d->abortFormatting ) {
 #ifdef DEBUG_FORMAT_MORE
-                kdDebug(32500) << "formatMore formatting aborted. " << endl;
+                kDebug(32500) << "formatMore formatting aborted. " << endl;
 #endif
                 d->abortFormatting = false;
                 return false;
             }
 
             if ( parag != m_lastFormatted )
-                kdWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId() << endl;
+                kWarning() << "Some code changed m_lastFormatted during formatting! Was " << parag->paragId() << ", is now " << m_lastFormatted->paragId() << endl;
 #if 0 // This happens now that formatting can 'abort' (e.g. due to page not yet created)
             else if (!parag->isValid())
-                kdWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
+                kWarning() << "PARAGRAPH " << parag->paragId() << " STILL INVALID AFTER FORMATTING" << endl;
 #endif
             m_lastFormatted = parag->next();
         }
@@ -1837,7 +1837,7 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
 #ifdef DEBUG_FORMAT_MORE
     QString id;
     if ( m_lastFormatted ) id = QString(" (%1)").arg(m_lastFormatted->paragId());
-    kdDebug(32500) << "formatMore finished formatting. "
+    kDebug(32500) << "formatMore finished formatting. "
                    << " bottom=" << bottom
                    << " m_lastFormatted=" << m_lastFormatted << id
                    << endl;
@@ -1863,18 +1863,18 @@ bool KoTextObject::formatMore( int count /* = 10 */, bool emitAfterFormatting /*
     {
         formatTimer->start( interval, TRUE );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32500) << name() << " formatMore: will have to format more. formatTimer->start with interval=" << interval << endl;
+        kDebug(32500) << name() << " formatMore: will have to format more. formatTimer->start with interval=" << interval << endl;
 #endif
     }
     else
     {
-        interval = QMAX( 0, interval );
+        interval = qMax( 0, interval );
 #ifdef DEBUG_FORMAT_MORE
-        kdDebug(32500) << name() << " formatMore: all formatted interval=" << interval << endl;
+        kDebug(32500) << name() << " formatMore: all formatted interval=" << interval << endl;
 #endif
 #ifdef TIMING_FORMAT
         //if ( frameSetInfo() == FI_BODY )
-        kdDebug(32500) << "formatMore: " << name() << " all formatted. Took "
+        kDebug(32500) << "formatMore: " << name() << " all formatted. Took "
                        << (double)(m_time.elapsed()) / 1000 << " seconds." << endl;
 #endif
     }
@@ -1888,20 +1888,20 @@ void KoTextObject::abortFormatting()
 
 void KoTextObject::doChangeInterval()
 {
-    //kdDebug(32500) << "KoTextObject::doChangeInterval back to interval=0" << endl;
+    //kDebug(32500) << "KoTextObject::doChangeInterval back to interval=0" << endl;
     interval = 0;
 }
 
 void KoTextObject::typingStarted()
 {
-    //kdDebug(32500) << "KoTextObject::typingStarted" << endl;
-    changeIntervalTimer->stop();
+    //kDebug(32500) << "KoTextObject::typingStarted" << endl;
+    startTimer->stop();
     interval = 10;
 }
 
 void KoTextObject::typingDone()
 {
-    changeIntervalTimer->start( 100, TRUE );
+    startTimer->start( 100, TRUE );
 }
 
 
@@ -1920,7 +1920,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
     int posEnd = cursorPosStart;
     KoTextCursor c1( textdoc );
     KoTextCursor c2( textdoc );
-    //kdDebug() << k_funcinfo << "from " << cursorPosStart << " to " << cursorPosEnd << " (excluded). Parag=" << parag << " length=" << parag->length() << endl;
+    //kDebug() << k_funcinfo << "from " << cursorPosStart << " to " << cursorPosEnd << " (excluded). Parag=" << parag << " length=" << parag->length() << endl;
     for ( int i = cursorPosStart; i < cursorPosEnd; ++i )
     {
         KoTextStringChar & ch = *(parag->at(i));
@@ -1932,7 +1932,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
             c1.setIndex( posStart );
             c2.setParag( parag );
             c2.setIndex( posEnd );
-            //kdDebug() << k_funcinfo << "found custom at " << i << " : doing from " << posStart << " to " << posEnd << endl;
+            //kDebug() << k_funcinfo << "found custom at " << i << " : doing from " << posStart << " to " << posEnd << endl;
 
             const QString repl = text.mid( posStart, posEnd - posStart );
             textdoc->setSelectionStart( KoTextDocument::Temp, &c1 );
@@ -1957,7 +1957,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
                 c1.setIndex( posStart );
                 c2.setParag( parag );
                 c2.setIndex( posEnd );
-                //kdDebug() << k_funcinfo << "found new format at " << i << " : doing from " << posStart << " to " << posEnd << endl;
+                //kDebug() << k_funcinfo << "found new format at " << i << " : doing from " << posStart << " to " << posEnd << endl;
 
                 const QString repl = text.mid( posStart, posEnd - posStart );
                 textdoc->setSelectionStart( KoTextDocument::Temp, &c1 );
@@ -1973,7 +1973,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
     }
     if ( posStart != cursorPosEnd )
     {
-        //kdDebug() << k_funcinfo << "finishing: doing from " << posStart << " to " << cursorPosEnd << endl;
+        //kDebug() << k_funcinfo << "finishing: doing from " << posStart << " to " << cursorPosEnd << endl;
         c1.setParag( parag );
         c1.setIndex( posStart );
         c2.setParag( parag );
@@ -2002,7 +2002,7 @@ KCommand *KoTextObject::changeCaseOfText(KoTextCursor *cursor,KoChangeCaseDia::T
 
     if ( start.parag() == end.parag() )
     {
-        int endIndex = QMIN( start.parag()->length() - 1, end.index() );
+        int endIndex = qMin( start.parag()->length() - 1, end.index() );
         macroCmd->addCommand( changeCaseOfTextParag( start.index(), endIndex, _type,
                                                      cursor, start.parag() ) );
     }
@@ -2016,7 +2016,7 @@ KCommand *KoTextObject::changeCaseOfText(KoTextCursor *cursor,KoChangeCaseDia::T
             macroCmd->addCommand( changeCaseOfTextParag(0, p->length() - 1, _type, cursor, p ) );
             p = p->next();
         }
-        int endIndex = QMIN( p->length() - 1, end.index() );
+        int endIndex = qMin( p->length() - 1, end.index() );
         macroCmd->addCommand( changeCaseOfTextParag(0, endIndex, _type, cursor, end.parag() ));
     }
     formatMore( 2 );
@@ -2043,7 +2043,7 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
             {
                 if(text.at(i)!=' ')
                 {
-                    QChar prev = text.at(QMAX(i-1,0));
+                    QChar prev = text.at(qMax(i-1,0));
                     if(i==0 || prev  == ' ' || prev == '\n' || prev == '\t')
                         text=text.replace(i, 1, text.at(i).upper() );
                     else
@@ -2067,14 +2067,14 @@ QString KoTextObject::textChangedCase(const QString& _text,KoChangeCaseDia::Type
             {
                 if(text.at(i)!=' ')
                 {
-                    QChar prev = text.at(QMAX(i-1,0));
+                    QChar prev = text.at(qMax(i-1,0));
                     if(i==0 || prev == '\n' ||prev.isPunct())
                         text=text.replace(i, 1, text.at(i).upper() );
                 }
             }
             break;
         default:
-            kdDebug(32500)<<"Error in changeCaseOfText !\n";
+            kDebug(32500)<<"Error in changeCaseOfText !\n";
             break;
 
     }
@@ -2367,7 +2367,7 @@ bool KoTextObject::statistics( Q3ProgressDialog *progress, ulong & charsWithSpac
 
         // Sentence count
         // Clean up for better result, destroys the original text but we only want to count
-        s = s.stripWhiteSpace();
+        s = s.trimmed();
         QChar lastchar = s.at(s.length());
         if( ! s.isEmpty() && ! KoAutoFormat::isMark( lastchar ) ) {  // e.g. for headlines
             s = s + ".";
@@ -2682,7 +2682,7 @@ KCommand *KoTextFormatInterface::setDefaultFormatCommand()
         KoTextFormat * format = coll->defaultFormat();
         return setFormatCommand( format, KoTextFormat::Format );
     } else {
-        kdDebug() << "useless call to setDefaultFormatCommand at: " << kdBacktrace() << endl;
+        kDebug() << "useless call to setDefaultFormatCommand at: " << kBacktrace() << endl;
     }
     return 0;
 }

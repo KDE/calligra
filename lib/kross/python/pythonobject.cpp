@@ -28,7 +28,7 @@ PythonObject::PythonObject(const Py::Object& object)
     : Kross::Api::Object(object.as_string().c_str(), 0)
     , m_pyobject(object)
 {
-    kdDebug() << QString("PythonObject::PythonObject() constructor") << endl;
+    kDebug() << QString("PythonObject::PythonObject() constructor") << endl;
 
     Py::List x( object.dir() );
     for(Py::Sequence::iterator i= x.begin(); i != x.end(); ++i) {
@@ -48,7 +48,7 @@ PythonObject::PythonObject(const Py::Object& object)
         if(o.isSequence()) t += "isSequence ";
         if(o.isTrue()) t += "isTrue ";
         if(o.isInstance()) t += "isInstance ";
-        kdDebug() << QString("PythonObject::PythonObject() method '%1' (%2)").arg( (*i).str().as_string().c_str() ).arg(t) << endl;
+        kDebug() << QString("PythonObject::PythonObject() method '%1' (%2)").arg( (*i).str().as_string().c_str() ).arg(t) << endl;
 
         if(o.isCallable())
             m_calls.append( (*i).str().as_string().c_str() );
@@ -66,7 +66,7 @@ const QString PythonObject::getClassName() const
 
 Kross::Api::Object::Ptr PythonObject::call(const QString& name, Kross::Api::List::Ptr arguments)
 {
-    kdDebug() << QString("PythonObject::call(%1)").arg(name) << endl;
+    kDebug() << QString("PythonObject::call(%1)").arg(name) << endl;
 
     if(m_pyobject.isInstance()) {
         //if(! m_calls.contains(n)) throw ...
@@ -78,7 +78,7 @@ Kross::Api::Object::Ptr PythonObject::call(const QString& name, Kross::Api::List
         }
         Py::Object result(r, true);
 
-        //kdDebug() << QString("PythonObject::call(%1) call return value = '%2'").arg(name).arg(result.as_string().c_str()) << endl;
+        //kDebug() << QString("PythonObject::call(%1) call return value = '%2'").arg(name).arg(result.as_string().c_str()) << endl;
         return PythonExtension::toObject(result);
     }
     /*TODO??? ELSE create class instance for class-definitions???

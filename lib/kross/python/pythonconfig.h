@@ -69,7 +69,7 @@ namespace Python {
     // this number only if you really know what you're doing.
     #define KROSS_PYTHON_VERSION 1
 
-    // Enable kdDebug()-debugging for Kross::Python::PythonScript
+    // Enable kDebug()-debugging for Kross::Python::PythonScript
     //#define KROSS_PYTHON_SCRIPT_CTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_DTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_INIT_DEBUG
@@ -78,10 +78,10 @@ namespace Python {
     //#define KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
     //#define KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
 
-    // Enable kdDebug()-debugging for Kross::Python::PythonModule
+    // Enable kDebug()-debugging for Kross::Python::PythonModule
     //#define KROSS_PYTHON_MODULE_DEBUG
 
-    // Enable kdDebug()-debugging for Kross::Python::PythonExtension
+    // Enable kDebug()-debugging for Kross::Python::PythonExtension
     //#define KROSS_PYTHON_EXTENSION_CTOR_DEBUG
     //#define KROSS_PYTHON_EXTENSION_DTOR_DEBUG
 

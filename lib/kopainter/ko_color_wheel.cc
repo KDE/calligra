@@ -49,7 +49,7 @@ void KoColorWheel::drawContents( QPainter *painter )
 
 void KoColorWheel::drawWheel( QPixmap *pixmap )
 {
-    int size = QMIN(contentsRect().width(), contentsRect().height());
+    int size = qMin(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
 
     QImage image( size, size, 32 );
@@ -82,7 +82,7 @@ void KoColorWheel::drawWheel( QPixmap *pixmap )
 
 void KoColorWheel::mousePressEvent( QMouseEvent *e )
 {
-    int size = QMIN(contentsRect().width(), contentsRect().height());
+    int size = qMin(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
 
     int xVal, yVal;
@@ -109,7 +109,7 @@ void KoColorWheel::mouseMoveEvent( QMouseEvent *e )
 
 void KoColorWheel::slotSetValue(const KoColor& c)
 {
-    int size = QMIN(contentsRect().width(), contentsRect().height());
+    int size = qMin(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
 
     int xVal, yVal;

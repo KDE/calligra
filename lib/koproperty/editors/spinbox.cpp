@@ -136,7 +136,7 @@ IntEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QV
 
 	Widget::drawViewer(p, cg, r, valueText);
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, valueText);
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, valueText);
 }
 
 void
@@ -285,7 +285,7 @@ DoubleEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const
 
 	Widget::drawViewer(p, cg, r, valueText);
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, valueText);
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, valueText);
 }
 
 void

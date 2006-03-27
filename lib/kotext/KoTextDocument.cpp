@@ -165,7 +165,7 @@ int KoTextDocument::widthUsed() const
 	p->setAlignment( Qt::AlignLeft );
 	p->invalidate( 0 );
 	p->format();
-	w = QMAX( w, p->rect().width() );
+	w = qMax( w, p->rect().width() );
 	p->setAlignment( a );
 	p->invalidate( 0 );
 	p = p->next();
@@ -180,7 +180,7 @@ int KoTextDocument::height() const
     if ( lParag )
 	h = lParag->rect().top() + lParag->rect().height() + 1;
     //int fh = flow_->boundingRect().height();
-    //return QMAX( h, fh );
+    //return qMax( h, fh );
     return h;
 }
 
@@ -363,7 +363,7 @@ KoTextParag *KoTextDocument::selectionEnd( int id )
 
 void KoTextDocument::addSelection( int id )
 {
-    nSelections = QMAX( nSelections, id + 1 );
+    nSelections = qMax( nSelections, id + 1 );
 }
 
 static void setSelectionEndHelper( int id, KoTextDocumentSelection &sel, KoTextCursor &start, KoTextCursor &end )
@@ -381,7 +381,7 @@ static void setSelectionEndHelper( int id, KoTextDocumentSelection &sel, KoTextC
 	c1.parag()->setSelection( id, c1.index(), c1.parag()->length() - 1 );
 	c2.parag()->setSelection( id, 0, c2.index() );
     } else {
-	c1.parag()->setSelection( id, QMIN( c1.index(), c2.index() ), QMAX( c1.index(), c2.index() ) );
+	c1.parag()->setSelection( id, qMin( c1.index(), c2.index() ), qMax( c1.index(), c2.index() ) );
     }
 
     sel.startCursor = start;
@@ -466,7 +466,7 @@ bool KoTextDocument::setSelectionEnd( int id, KoTextCursor *cursor )
 	c.parag()->removeSelection( id );
 	if ( inSelection ) {
 	    if ( c.parag() == start.parag() && start.parag() == end.parag() ) {
-		c.parag()->setSelection( id, QMIN( start.index(), end.index() ), QMAX( start.index(), end.index() ) );
+		c.parag()->setSelection( id, qMin( start.index(), end.index() ), qMax( start.index(), end.index() ) );
 	    } else if ( c.parag() == start.parag() && !hadEndParag ) {
 		c.parag()->setSelection( id, start.index(), c.parag()->length() - 1 );
 	    } else if ( c.parag() == end.parag() && !hadStartParag ) {
@@ -609,7 +609,7 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
 	QString s;
 	KoTextParag *p = c1.parag();
 	int end = c2.index();
-	if ( p->at( QMAX( 0, end - 1 ) )->isCustom() )
+	if ( p->at( qMax( 0, end - 1 ) )->isCustom() )
 	    ++end;
 	if ( !withCustom || !p->customItems() ) {
 	    s += p->string()->toString().mid( c1.index(), end - c1.index() );
@@ -640,7 +640,7 @@ QString KoTextDocument::selectedText( int id, bool withCustom ) const
     int start = c1.index();
     while ( p ) {
 	int end = p == c2.parag() ? c2.index() : p->length() - 1;
-	if ( p == c2.parag() && p->at( QMAX( 0, end - 1 ) )->isCustom() )
+	if ( p == c2.parag() && p->at( qMax( 0, end - 1 ) )->isCustom() )
 	    ++end;
 	if ( !withCustom || !p->customItems() ) {
 	    s += p->string()->toString().mid( start, end - start );
@@ -948,8 +948,8 @@ QPixmap *KoTextDocument::bufferPixmap( const QSize &s )
     } else {
 	if ( buf_pixmap->width() < s.width() ||
 	     buf_pixmap->height() < s.height() ) {
-	    buf_pixmap->resize( QMAX( s.width(), buf_pixmap->width() ),
-				QMAX( s.height(), buf_pixmap->height() ) );
+	    buf_pixmap->resize( qMax( s.width(), buf_pixmap->width() ),
+				qMax( s.height(), buf_pixmap->height() ) );
 	}
     }
 
@@ -962,7 +962,7 @@ void KoTextDocument::registerCustomItem( KoTextCustomItem *i, KoTextParag *p )
 	flow_->registerFloatingItem( i );
     p->registerFloatingItem( i );
     i->setParagraph( p );
-    //kdDebug(32500) << "KoTextDocument::registerCustomItem " << (void*)i << endl;
+    //kDebug(32500) << "KoTextDocument::registerCustomItem " << (void*)i << endl;
     customItems.append( i );
 }
 
@@ -1104,7 +1104,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
     QRect crect( cx, cy, cw, ch );
     Q_ASSERT( ch > 0 );
 #ifdef DEBUG_PAINTING
-    kdDebug(32500) << "\nKoTextDocument::drawWYSIWYG crect=" << crect << endl;
+    kDebug(32500) << "\nKoTextDocument::drawWYSIWYG crect=" << crect << endl;
 #endif
 
     // Space above first parag
@@ -1116,7 +1116,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
         r &= crect;
         if ( !r.isEmpty() ) {
 #ifdef DEBUG_PAINTING
-            kdDebug(32500) << " drawWYSIWYG: space above first parag: " << r << " (pixels)" << endl;
+            kDebug(32500) << " drawWYSIWYG: space above first parag: " << r << " (pixels)" << endl;
 #endif
             p->fillRect( r, cg.brush( QColorGroup::Base ) );
         }
@@ -1129,7 +1129,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 
 	QRect ir = parag->pixelRect( zoomHandler );
 #ifdef DEBUG_PAINTING
-        kdDebug(32500) << " drawWYSIWYG: ir=" << ir << endl;
+        kDebug(32500) << " drawWYSIWYG: ir=" << ir << endl;
 #endif
 	if ( isPageBreakEnabled() && parag->next() && ( drawingFlags & TransparentBackground ) == 0 )
         {
@@ -1144,7 +1144,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 		if ( !r.isEmpty() )
                 {
 #ifdef DEBUG_PAINTING
-                    kdDebug(32500) << " drawWYSIWYG: space between parag " << parag->paragId() << " and " << parag->next()->paragId() << " : " << r << " (pixels)" << endl;
+                    kDebug(32500) << " drawWYSIWYG: space between parag " << parag->paragId() << " and " << parag->next()->paragId() << " : " << r << " (pixels)" << endl;
 #endif
 		    p->fillRect( r, cg.brush( QColorGroup::Base ) );
                 }
@@ -1210,7 +1210,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 
     Q_ASSERT( (m_drawingFlags & DrawSelections) == 0 );
     if (m_drawingFlags & DrawSelections)
-           kdDebug() << kdBacktrace();
+           kDebug() << kBacktrace();
     if ( paper && ( m_drawingFlags & TransparentBackground ) == 0 ) {
         p->setBrushOrigin(  -(int)p->translationX(),  -(int)p->translationY() );
         p->fillRect( cr, *paper );
@@ -1263,7 +1263,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 {
     if ( cw <= 0 || ch <= 0 ) { Q_ASSERT( cw > 0 ); Q_ASSERT( ch > 0 ); return; }
 #ifdef DEBUG_PAINTING
-    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
+    kDebug(32500) << "KoTextDocument::drawParagWYSIWYG " << (void*)parag << " id:" << parag->paragId() << endl;
 #endif
     m_drawingFlags = drawingFlags;
     QPainter *painter = 0;
@@ -1276,7 +1276,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     {
         offsetY = zoomHandler->layoutUnitToPixelY( parag->lineY( parag->lineChanged() ) - parag->topMargin() );
 #ifdef DEBUG_PAINTING
-        kdDebug(32500) << " Repainting from lineChanged=" << parag->lineChanged() << " -> adding " << offsetY << " to rect" << endl;
+        kDebug(32500) << " Repainting from lineChanged=" << parag->lineChanged() << " -> adding " << offsetY << " to rect" << endl;
 #endif
         // Skip the lines that are not repainted by moving Top. The bottom doesn't change.
         rect.rTop() += offsetY;
@@ -1308,7 +1308,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
         useDoubleBuffer = FALSE;
 
 #ifdef DEBUG_PAINTING
-    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG parag->rect=" << parag->rect()
+    kDebug(32500) << "KoTextDocument::drawParagWYSIWYG parag->rect=" << parag->rect()
                    << " pixelRect(ir)=" << ir
                    << " crect (pixels)=" << crect
                    << " useDoubleBuffer=" << useDoubleBuffer << endl;
@@ -1332,7 +1332,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 	painter->translate( ir.x(), ir.y() );
     }
     // Until the next translate(), (0,0) in the painter will be at ir.topLeft() in reality
-    //kdDebug() << "KoTextDocument::drawParagWYSIWYG ir=" << ir << endl;
+    //kDebug() << "KoTextDocument::drawParagWYSIWYG ir=" << ir << endl;
 
 
     // Cumulate ir.x(), ir.y() with the current brush origin
@@ -1353,14 +1353,14 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     // Now revert the previous painter translation, and instead make (0,0) the topleft of the PARAGRAPH
     painter->translate( rect.x() - ir.x(), rect.y() - ir.y() );
 #ifdef DEBUG_PAINTING
-    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
+    kDebug(32500) << "KoTextDocument::drawParagWYSIWYG translate " << rect.x() - ir.x() << "," << rect.y() - ir.y() << endl;
 #endif
     //painter->setBrushOrigin( painter->brushOrigin() + rect.topLeft() - ir.topLeft() );
 
     // The cliprect is checked in layout units, in KoTextParag::paint
     QRect crect_lu( zoomHandler->pixelToLayoutUnit( crect ) );
 #ifdef DEBUG_PAINTING
-    kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG crect_lu=" << crect_lu << endl;
+    kDebug(32500) << "KoTextDocument::drawParagWYSIWYG crect_lu=" << crect_lu << endl;
 #endif
 
     // paintDefault will paint line 'lineChanged' at its normal Y position.
@@ -1393,11 +1393,11 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     if ( needBrush ) {
         int docright = zoomHandler->layoutUnitToPixelX( parag->document()->x() + parag->document()->width() );
 #ifdef DEBUG_PAINTING
-//        kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG my rect is: " << rect << endl;
+//        kDebug(32500) << "KoTextDocument::drawParagWYSIWYG my rect is: " << rect << endl;
 #endif
         if ( rect.x() + rect.width() < docright ) {
 #ifdef DEBUG_PAINTING
-            kdDebug(32500) << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
+            kDebug(32500) << "KoTextDocument::drawParagWYSIWYG rect doesn't go up to docright=" << docright << endl;
 #endif
             p->fillRect( rect.x() + rect.width(), rect.y(),
                          docright - ( rect.x() + rect.width() ),
@@ -1436,7 +1436,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         }
         else if ( isTextNS && localName == "h" ) // heading
         {
-            //kdDebug(32500) << " heading " << endl;
+            //kDebug(32500) << " heading " << endl;
             context.fillStyleStack( tag, KoXmlNS::text, "style-name", "paragraph" );
             int level = tag.attributeNS( KoXmlNS::text, "outline-level", QString::null ).toInt();
             bool listOK = false;
@@ -1474,7 +1474,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         }
         else if ( isTextNS && localName == "section" ) // Temporary support (###TODO)
         {
-            kdDebug(32500) << "Section found!" << endl;
+            kDebug(32500) << "Section found!" << endl;
             context.fillStyleStack( tag, KoXmlNS::text, "style-name", "section" );
             lastParagraph = loadOasisText( tag, context, lastParagraph, styleColl, nextParagraph );
         }
@@ -1504,7 +1504,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         }
         else if ( !loadOasisBodyTag( tag, context, lastParagraph, styleColl, nextParagraph ) )
         {
-            kdWarning(32500) << "Unsupported body element '" << localName << "'" << endl;
+            kWarning(32500) << "Unsupported body element '" << localName << "'" << endl;
         }
 
         context.styleStack().restore(); // remove the styles added by the paragraph or list
@@ -1516,7 +1516,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
 
 KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& context, KoTextParag* lastParagraph, KoStyleCollection * styleColl, KoTextParag* nextParagraph )
 {
-    //kdDebug(32500) << "loadList: " << list.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
+    //kDebug(32500) << "loadList: " << list.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
 
     const QString oldListStyleName = context.currentListStyleName();
     if ( list.hasAttributeNS( KoXmlNS::text, "style-name" ) )

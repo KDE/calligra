@@ -28,6 +28,7 @@
 #include <kglobalsettings.h>
 #include <ktoolbar.h>
 #include <kdebug.h>
+#include <kauthorized.h>
 
 #include "symbolaction.h"
 
@@ -70,7 +71,7 @@ SymbolComboItem::SymbolComboItem( const QString &name, const QFont &font,
 {
     setText( name );
     int charWidth = QFontMetrics( m_font ).width( QChar( m_symbol ) );
-    widest = QMAX( widest, charWidth );
+    widest = qMax( widest, charWidth );
 }
 
 SymbolComboItem::~SymbolComboItem()
@@ -86,7 +87,7 @@ int SymbolComboItem::height( const Q3ListBox * /*lb*/ ) const
 {
     int generalHeight = QFontMetrics( KGlobalSettings::generalFont() ).lineSpacing();
     int fontHeight = QFontMetrics( m_font ).lineSpacing();
-    return QMAX( generalHeight, fontHeight ) + 2;
+    return qMax( generalHeight, fontHeight ) + 2;
 }
 
 void SymbolComboItem::paint( QPainter *p )
@@ -120,7 +121,7 @@ SymbolAction::SymbolAction( const QString& text, const KShortcut& cut,
 
 int SymbolAction::plug( QWidget* w, int index )
 {
-    if (kapp && !kapp->authorizeKAction(name()))
+    if (kapp && !KAuthorized::authorizeKAction(name()))
         return -1;
     if ( w->inherits( "KToolBar" ) )
     {

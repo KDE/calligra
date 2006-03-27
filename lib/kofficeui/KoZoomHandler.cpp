@@ -34,7 +34,7 @@ void KoZoomHandler::setZoomAndResolution( int zoom, int dpiX, int dpiY )
     m_resolutionX = POINT_TO_INCH( static_cast<double>(dpiX) );
     m_resolutionY = POINT_TO_INCH( static_cast<double>(dpiY) );
     setZoom( zoom );
-    /*kdDebug(32500) << "KoZoomHandler::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
+    /*kDebug(32500) << "KoZoomHandler::setZoomAndResolution " << zoom << " " << dpiX << "," << dpiY
               << " m_resolutionX=" << m_resolutionX
               << " m_zoomedResolutionX=" << m_zoomedResolutionX
               << " m_resolutionY=" << m_resolutionY

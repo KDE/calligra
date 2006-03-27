@@ -53,7 +53,7 @@ PythonModule::PythonModule(PythonInterpreter* interpreter)
     , d(new PythonModulePrivate())
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
-    kdDebug() << QString("Kross::Python::PythonModule::Constructor") << endl;
+    kDebug() << QString("Kross::Python::PythonModule::Constructor") << endl;
 #endif
 
     d->m_interpreter = interpreter;
@@ -66,7 +66,7 @@ PythonModule::PythonModule(PythonInterpreter* interpreter)
 PythonModule::~PythonModule()
 {
 #ifdef KROSS_PYTHON_MODULE_DEBUG
-    kdDebug() << QString("Kross::Python::PythonModule::Destructor name='%1'").arg(name().c_str()) << endl;
+    kDebug() << QString("Kross::Python::PythonModule::Destructor name='%1'").arg(name().c_str()) << endl;
 #endif
 
     delete d;
@@ -82,16 +82,16 @@ Py::Object PythonModule::import(const Py::Tuple& args)
     if(args.size() > 0) {
         QString modname = args[0].as_string().c_str();
         if(modname.startsWith("kross")) {
-            kdDebug() << QString("Kross::Python::PythonModule::import() module=%1").arg(modname) << endl;
+            kDebug() << QString("Kross::Python::PythonModule::import() module=%1").arg(modname) << endl;
 
             if( modname.find( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
-                kdWarning() << QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) << endl;
+                kWarning() << QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) << endl;
             }
             else {
                 Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule(modname);
                 if(module)
                     return PythonExtension::toPyObject( Kross::Api::Object::Ptr(module) );
-                kdWarning() << QString("Loading of Kross module '%1' failed.").arg(modname) << endl;
+                kWarning() << QString("Loading of Kross module '%1' failed.").arg(modname) << endl;
             }
 
         }

@@ -200,14 +200,14 @@ void SequenceElement::calcSizes(const ContextStyle& style,
 
                 luPixel childBaseline = child->getBaseline();
                 if ( childBaseline > -1 ) {
-                    toBaseline = QMAX( toBaseline, childBaseline );
-                    fromBaseline = QMAX( fromBaseline,
+                    toBaseline = qMax( toBaseline, childBaseline );
+                    fromBaseline = qMax( fromBaseline,
                                          child->getHeight() - childBaseline );
                 }
                 else {
                     luPixel bl = child->getHeight()/2 + style.axisHeight( tstyle );
-                    toBaseline = QMAX( toBaseline, bl );
-                    fromBaseline = QMAX( fromBaseline, child->getHeight() - bl );
+                    toBaseline = qMax( toBaseline, bl );
+                    fromBaseline = qMax( fromBaseline, child->getHeight() - bl );
                 }
             }
             else {
@@ -342,7 +342,7 @@ void SequenceElement::calcCursorSize( const ContextStyle& context,
     if ( cursor->isSelection() ) {
         uint mark = cursor->getMark();
         luPixel markX = getChildPosition( context, mark );
-        luPixel x = QMIN(posX, markX);
+        luPixel x = qMin(posX, markX);
         luPixel width = abs(posX - markX);
 
         if ( smallCursor ) {
@@ -874,8 +874,8 @@ void SequenceElement::selectAllChildren(FormulaCursor* cursor)
 bool SequenceElement::onlyTextSelected( FormulaCursor* cursor )
 {
     if ( cursor->isSelection() ) {
-        uint from = QMIN( cursor->getPos(), cursor->getMark() );
-        uint to = QMAX( cursor->getPos(), cursor->getMark() );
+        uint from = qMin( cursor->getPos(), cursor->getMark() );
+        uint to = qMax( cursor->getPos(), cursor->getMark() );
         for ( uint i = from; i < to; i++ ) {
             BasicElement* element = getChild( i );
             if ( element->getCharacter() == QChar::Null ) {

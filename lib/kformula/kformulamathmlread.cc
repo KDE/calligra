@@ -122,7 +122,7 @@ protected:
 
         void styleChange()
             {
-                kdDebug( DEBUGID ) << "Style Change:"
+                kDebug( DEBUGID ) << "Style Change:"
                                    << "\n scriptlevel = " << scriptlevel
                                    << "\n displaystyle = " << displaystyle
                                    << "\n scriptsizemultiplier = "
@@ -282,7 +282,7 @@ void MathML2KFormulaPrivate::math( QDomElement element )
 
     style.scriptlevel = 0;
 
-    /*kdDebug( DEBUGID ) << "<math> element:\n displaystyle = "
+    /*kDebug( DEBUGID ) << "<math> element:\n displaystyle = "
                        << style.displaystyle << "\n scriptlevel = "
                        << style.scriptlevel << endl;*/
 
@@ -300,7 +300,7 @@ void MathML2KFormulaPrivate::mi( QDomElement element, QDomNode docnode )
     //style.mathvariant = italic;
     style.readStyles( element );
 
-    QString text = element.text().stripWhiteSpace();
+    QString text = element.text().trimmed();
     createTextElements( text, docnode );
 
     style = previousStyle;
@@ -311,7 +311,7 @@ void MathML2KFormulaPrivate::mo( QDomElement element, QDomNode docnode )
     MathStyle previousStyle( style );
     style.readStyles( element );
 
-    QString text = element.text().stripWhiteSpace();
+    QString text = element.text().trimmed();
     createTextElements( text, docnode );
 
     style = previousStyle;
@@ -322,7 +322,7 @@ void MathML2KFormulaPrivate::mn( QDomElement element, QDomNode docnode )
     MathStyle previousStyle( style );
     style.readStyles( element );
 
-    QString text = element.text().stripWhiteSpace();
+    QString text = element.text().trimmed();
     createTextElements( text, docnode );
 
     style = previousStyle;
@@ -337,14 +337,14 @@ void MathML2KFormulaPrivate::mtext( QDomElement element, QDomNode docnode )
 
     while ( !n.isNull() ) {
         if ( n.isText() ) {
-            QString text = n.toText().data().stripWhiteSpace();
+            QString text = n.toText().data().trimmed();
             createTextElements( text, docnode );
         }
         else if ( n.isElement() ) {
             filter->processElement( n, doc, docnode );
         }
         else {
-            kdDebug( DEBUGID ) << "<mtext> child: " << n.nodeName() << endl;
+            kDebug( DEBUGID ) << "<mtext> child: " << n.nodeName() << endl;
         }
 
         n = n.nextSibling();
@@ -360,7 +360,7 @@ void MathML2KFormulaPrivate::ms( QDomElement element, QDomNode docnode )
     QString text;
 
     text = lquote;
-    text += element.text().stripWhiteSpace();
+    text += element.text().trimmed();
     text += rquote;
 
     createTextElements( text, docnode );
@@ -466,7 +466,7 @@ void MathML2KFormulaPrivate::mrow( QDomElement element, QDomNode docnode )
             filter->processElement( e, doc, docnode );
         }
         else {
-            kdDebug( DEBUGID ) << "<mrow> child: " << n.nodeName() << endl;
+            kDebug( DEBUGID ) << "<mrow> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -507,7 +507,7 @@ void MathML2KFormulaPrivate::mfrac( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<mfrac> child: " << n.nodeName() << endl;
+            kDebug( DEBUGID ) << "<mfrac> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -551,7 +551,7 @@ void MathML2KFormulaPrivate::mroot( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<mroot> child: " << n.nodeName() << endl;
+            kDebug( DEBUGID ) << "<mroot> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -573,7 +573,7 @@ void MathML2KFormulaPrivate::msqrt( QDomElement element, QDomNode docnode )
             filter->processElement( n.toElement(), doc, sequence );
         }
         else {
-            kdDebug( DEBUGID ) << "<msqrt> child: " << n.nodeName() << endl;
+            kDebug( DEBUGID ) << "<msqrt> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -703,7 +703,7 @@ void MathML2KFormulaPrivate::mfenced( QDomElement element, QDomNode docnode )
             filter->processElement( e, doc, sequence );
         }
         else {
-            kdDebug( DEBUGID ) << "<mfenced> child: " << n.nodeName() << endl;
+            kDebug( DEBUGID ) << "<mfenced> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -753,7 +753,7 @@ void MathML2KFormulaPrivate::mtable( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<mtable> child: " << n.nodeName() << endl;
+            kDebug( DEBUGID ) << "<mtable> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -838,7 +838,7 @@ void MathML2KFormulaPrivate::msub_msup( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
+            kDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
                                << n.nodeName() << endl;
         }
         n = n.nextSibling();
@@ -915,7 +915,7 @@ void MathML2KFormulaPrivate::munder( QDomElement element, QDomNode docnode, bool
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
+            kDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
                                << n.nodeName() << endl;
         }
         n = n.nextSibling();
@@ -993,7 +993,7 @@ void MathML2KFormulaPrivate::mover( QDomElement element, QDomNode docnode, bool 
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
+            kDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
                                << n.nodeName() << endl;
         }
         n = n.nextSibling();
@@ -1037,7 +1037,7 @@ void MathML2KFormulaPrivate::munderover( QDomElement element, QDomNode docnode, 
         QDomElement mo;
         // is overscript an embellished operator?
         if ( isEmbellishedOperator( element.childNodes().item( 2 ), &mo,oasisFormat ) ) {
-            kdDebug( DEBUGID ) << "embellished operator" << endl;
+            kDebug( DEBUGID ) << "embellished operator" << endl;
             if ( mo.attribute( "accent" ) == "true" )
                 accent = true;
             else
@@ -1046,7 +1046,7 @@ void MathML2KFormulaPrivate::munderover( QDomElement element, QDomNode docnode, 
         else
             accent = false;
     }
-    kdDebug( DEBUGID ) << "munderover:\n accentunder = " << accentunder
+    kDebug( DEBUGID ) << "munderover:\n accentunder = " << accentunder
                        << "\n accent = " << accent << endl;
 
     QDomNode n = element.firstChild();
@@ -1122,7 +1122,7 @@ void MathML2KFormulaPrivate::munderover( QDomElement element, QDomNode docnode, 
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
+            kDebug( DEBUGID ) << "<" << element.tagName() << "> child: "
                                << n.nodeName() << endl;
         }
         n = n.nextSibling();
@@ -1179,7 +1179,7 @@ void MathML2KFormulaPrivate::msubsup( QDomElement element, QDomNode docnode )
             }
         }
         else {
-            kdDebug( DEBUGID ) << "<msubsup> child: " << n.nodeName() << endl;
+            kDebug( DEBUGID ) << "<msubsup> child: " << n.nodeName() << endl;
         }
         n = n.nextSibling();
     }
@@ -1342,7 +1342,7 @@ QDomDocument MathML2KFormula::getKFormulaDom()
 void MathML2KFormula::startConversion()
 {
     //TODO:let it be async
-    //kdDebug() << origdoc.toString() << endl;
+    //kDebug() << origdoc.toString() << endl;
     done = false;
     formuladoc = QDomDocument( "KFORMULA" );
     impl = new MathML2KFormulaPrivate( this, context, formuladoc );
@@ -1352,7 +1352,7 @@ void MathML2KFormula::startConversion()
         m_error = false;
     }
     else {
-        kdError() << "Not a MathML document!" << endl;
+        kError() << "Not a MathML document!" << endl;
         KMessageBox::error( 0, i18n( "The document does not seem to be MathML." ), i18n( "MathML Import Error" ) );
         m_error = true;
     }
@@ -1612,20 +1612,20 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
             QString type = element.attribute( "type", "real" );
 
             if ( type == "real" || type == "constant" ) {
-                impl->createTextElements( element.text().stripWhiteSpace(),
+                impl->createTextElements( element.text().trimmed(),
                                           docnode );
             }
             else if ( type == "integer" ) {
                 QString base = element.attribute( "base" );
                 if ( !base ) {
-                    impl->createTextElements( element.text().stripWhiteSpace(),
+                    impl->createTextElements( element.text().trimmed(),
                                               docnode );
                 }
                 else {
                     QDomElement index = doc.createElement( "INDEX" );
                     QDomElement content = doc.createElement( "CONTENT" );
                     QDomElement sequence = doc.createElement( "SEQUENCE" );
-                    impl->createTextElements( element.text().stripWhiteSpace(),
+                    impl->createTextElements( element.text().trimmed(),
                                               sequence );
                     content.appendChild( sequence );
                     index.appendChild( content );
@@ -1643,26 +1643,26 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
             }
             else if ( type == "rational" ) {
                 QDomNode n = element.firstChild();
-                impl->createTextElements( n.toText().data().stripWhiteSpace(),
+                impl->createTextElements( n.toText().data().trimmed(),
                                           docnode );
 
                 n = n.nextSibling(); // <sep/>
                 impl->createTextElements( "/", docnode );
 
                 n = n.nextSibling();
-                impl->createTextElements( n.toText().data().stripWhiteSpace(),
+                impl->createTextElements( n.toText().data().trimmed(),
                                           docnode );
             }
             else if ( type == "complex-cartesian" ) {
                 QDomNode n = element.firstChild();
-                impl->createTextElements( n.toText().data().stripWhiteSpace(),
+                impl->createTextElements( n.toText().data().trimmed(),
                                           docnode );
 
                 n = n.nextSibling(); // <sep/>
                 impl->createTextElements( "+", docnode );
 
                 n = n.nextSibling();
-                impl->createTextElements( n.toText().data().stripWhiteSpace(),
+                impl->createTextElements( n.toText().data().trimmed(),
                                           docnode );
 
                 impl->createTextElements( "i", docnode );
@@ -1670,7 +1670,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
 
             else if ( type == "complex-polar" ) {
                 QDomNode n = element.firstChild();
-                impl->createTextElements( n.toText().data().stripWhiteSpace(),
+                impl->createTextElements( n.toText().data().trimmed(),
                                           docnode );
 
                 n = n.nextSibling(); // <sep/>
@@ -1690,7 +1690,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
                 sequence.appendChild( textelement );
 
                 n = n.nextSibling();
-                impl->createTextElements( n.toText().data().stripWhiteSpace(),
+                impl->createTextElements( n.toText().data().trimmed(),
                                           sequence );
 
                 upperright.appendChild( sequence );
@@ -1705,7 +1705,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
             QDomNode n = element.firstChild();
 
             if ( n.isText() ) {
-                impl->createTextElements( n.toText().data().stripWhiteSpace(),
+                impl->createTextElements( n.toText().data().trimmed(),
                                           docnode );
             }
             else if ( n.isElement() ) {
@@ -1713,12 +1713,12 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
                 processElement( e, doc, docnode );
             }
             else if ( n.isEntityReference() ) {
-                kdDebug( DEBUGID ) << "isEntityReference: "
+                kDebug( DEBUGID ) << "isEntityReference: "
                                    << n.toEntityReference().nodeName().latin1()
                                    << endl;
             }
             else
-                kdDebug( DEBUGID ) << "ci: " << n.nodeName().latin1() << endl;
+                kDebug( DEBUGID ) << "ci: " << n.nodeName().latin1() << endl;
         }
 
         else if ( tag == "list" ) {
@@ -1754,7 +1754,7 @@ bool MathML2KFormula::processElement( QDomNode node, QDomDocument& doc, QDomNode
     }
 
     if ( type == UNKNOWN && node.nodeType() != QDomNode::AttributeNode ) {
-        kdDebug() << "Not an element: " << node.nodeName() << endl;
+        kDebug() << "Not an element: " << node.nodeName() << endl;
 	QDomNode n = node.firstChild();
 	while ( !n.isNull() ) {
 	    processElement( n, doc, docnode );

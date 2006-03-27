@@ -201,8 +201,8 @@ public:
     // The range that is selected. Makes no sense if there is
     // no selection.
 
-    int getSelectionStart() const { return QMIN(getPos(), getMark()); }
-    int getSelectionEnd() const { return QMAX(getPos(), getMark()); }
+    int getSelectionStart() const { return qMin(getPos(), getMark()); }
+    int getSelectionEnd() const { return qMax(getPos(), getMark()); }
 
 
     /**

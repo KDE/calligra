@@ -100,19 +100,19 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         /*Kross::Api::Object* o =*/ scriptcontainer->execute();
 
         // Call a function.
-        //kdDebug()<<"--------------------------"<<endl;
+        //kDebug()<<"--------------------------"<<endl;
         //scriptcontainer->callFunction("testobjectCallback" /*, Kross::Api::List* functionarguments */);
 
         // Call a class.
         /*
-        kdDebug()<<"--------------------------"<<endl;
+        kDebug()<<"--------------------------"<<endl;
         Kross::Api::Object* testclassinstance = scriptcontainer->classInstance("testClass");
         if(testclassinstance) {
             QValueList<Kross::Api::Object*> ll;
             Kross::Api::Object* instancecallresult = testclassinstance->call("testClassFunction1", Kross::Api::List::create(ll));
-            //kdDebug() << QString("testClass.testClassFunction1 returnvalue => '%1'").arg( instancecallresult.toString() ) << endl;
+            //kDebug() << QString("testClass.testClassFunction1 returnvalue => '%1'").arg( instancecallresult.toString() ) << endl;
         }
-        kdDebug()<<"--------------------------"<<endl;
+        kDebug()<<"--------------------------"<<endl;
         */
 
 
@@ -136,7 +136,7 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         sc2->execute();
     }
     catch(Kross::Api::Exception& e) {
-        kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
+        kDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
     }
     //delete sc2;
 */
@@ -185,7 +185,7 @@ int main(int argc, char **argv)
         }
     }
     else {
-        kdWarning() << "Failed to load scriptfile: " << scriptfilename << endl;
+        kWarning() << "Failed to load scriptfile: " << scriptfilename << endl;
         result = -1;
     }
 

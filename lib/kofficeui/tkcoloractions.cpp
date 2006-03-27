@@ -41,7 +41,7 @@
 #include <qapplication.h>
 
 TKColorPopupMenu::TKColorPopupMenu( QWidget* parent, const char* name )
-: KPopupMenu(parent,name)
+: KMenu(parent,name)
 {
 }
 
@@ -270,7 +270,7 @@ void TKSelectColorAction::selectColorDialog()
 // Called when activating the menu item
 void TKSelectColorAction::slotActivated()
 {
-  //kdDebug() << "TKSelectColorAction::slotActivated" << endl;
+  //kDebug() << "TKSelectColorAction::slotActivated" << endl;
   selectColorDialog();
 }
 

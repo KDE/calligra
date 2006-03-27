@@ -85,7 +85,7 @@ void KoToolBox::slotButtonPressed( int id )
 
 }
 
-void KoToolBox::registerTool( KAction *tool, int toolType, Q_UINT32 priority )
+void KoToolBox::registerTool( KAction *tool, int toolType, quint32 priority )
 {
     uint prio = priority;
     ToolList * tl = m_tools.at(toolType);
@@ -173,7 +173,7 @@ void KoToolBox::enableTools(bool enable)
                 it.data()->setEnabled(enable);
     }
     m_buttonGroup->setEnabled(enable);
-    for (Q_UINT32 i = 0; i < m_numberOfButtons; ++i) {
+    for (quint32 i = 0; i < m_numberOfButtons; ++i) {
         m_buttonGroup->find( i )->setEnabled( enable );
     }
 }

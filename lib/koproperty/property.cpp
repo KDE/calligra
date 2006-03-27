@@ -53,8 +53,8 @@ class PropertyPrivate
 		inline void setCaptionForDisplaying(const QString& captionForDisplaying)
 		{
 			delete caption;
-			if (captionForDisplaying.simplifyWhiteSpace()!=captionForDisplaying)
-				caption = new QString(captionForDisplaying.simplifyWhiteSpace());
+			if (captionForDisplaying.simplified()!=captionForDisplaying)
+				caption = new QString(captionForDisplaying.simplified());
 			else
 				caption = 0;
 			this->captionForDisplaying = captionForDisplaying;
@@ -94,9 +94,9 @@ class PropertyPrivate
 	bool useCustomProperty;
 
 	//! Used when a single set is assigned for the property
-	QGuardedPtr<Set> set;
+	QPointer<Set> set;
 	//! Used when multiple sets are assigned for the property
-	QPtrDict< QGuardedPtr<Set> > *sets;
+	QPtrDict< QPointer<Set> > *sets;
 //	QValueList<Set*>  sets;
 
 	Property  *parent;
@@ -392,7 +392,7 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		d->value = value;
 
 	if (d->sets) {
-		for (QPtrDictIterator< QGuardedPtr<Set> > it(*d->sets); it.current(); ++it) {
+		for (QPtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
 			if (it.current()) {//may be destroyed in the meantime
 				emit (*it.current())->propertyChanged(**it.current(), *this, prevValue);
 				emit (*it.current())->propertyChanged(**it.current(), *this);
@@ -417,7 +417,7 @@ Property::resetValue()
 		d->parent->d->changed = false;
 
 	if (d->sets) {
-		for (QPtrDictIterator< QGuardedPtr<Set> > it(*d->sets); it.current(); ++it) {
+		for (QPtrDictIterator< QPointer<Set> > it(*d->sets); it.current(); ++it) {
 			if (it.current()) //may be destroyed in the meantime
 				emit (*it.current())->propertyReset(**it.current(), *this);
 		}
@@ -681,15 +681,15 @@ Property::addSet(Set *set)
 	}
 	if ((Set*)d->set==set)
 		return;
-	QGuardedPtr<Set> *pset = d->sets ? d->sets->find(set) : 0;
+	QPointer<Set> *pset = d->sets ? d->sets->find(set) : 0;
 	if (pset && (Set*)*pset == set)
 		return;
 	if (!d->sets) {
-		d->sets = new QPtrDict< QGuardedPtr<Set> >( 101 );
+		d->sets = new QPtrDict< QPointer<Set> >( 101 );
 		d->sets->setAutoDelete(true);
 	}
 
-	d->sets->replace(set, new QGuardedPtr<Set>( set ));
+	d->sets->replace(set, new QPointer<Set>( set ));
 
 //	QValueList<Set*>::iterator it = qFind( d->sets.begin(), d->sets.end(), set);
 //	if(it == d->sets.end()) // not in our list

@@ -29,7 +29,7 @@
 //Added by qt3to4:
 #include <Q3GridLayout>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kapplication.h>
 #include <kdebug.h>
 #include <ktoolbar.h>
@@ -82,7 +82,7 @@ KoLineWidthAction::~KoLineWidthAction()
 
 void KoLineWidthAction::createMenu()
 {
-  KPopupMenu* popup = popupMenu();
+  KMenu* popup = popupMenu();
   QBitmap mask;
   QPixmap pix(70, 21);
   QPainter p(&pix, popup);

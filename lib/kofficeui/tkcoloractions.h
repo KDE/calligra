@@ -23,7 +23,7 @@
 
 #include "tkaction.h"
 #include <koffice_export.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <q3dict.h>
 //Added by qt3to4:
 #include <QMouseEvent>
@@ -37,7 +37,7 @@ class Q3GridLayout;
 class TKColorPanel;
 class TKSelectColorActionPrivate;
 
-class TKColorPopupMenu : public KPopupMenu
+class TKColorPopupMenu : public KMenu
 { Q_OBJECT
 public:
   TKColorPopupMenu( QWidget* parent = 0, const char* name = 0 );
@@ -66,7 +66,7 @@ public:
 
   QColor color() const { return m_pCurrentColor; }
 
-  KPopupMenu* popupMenu() const { return m_pMenu; }
+  KMenu* popupMenu() const { return m_pMenu; }
   void setDefaultColor(const QColor &_col);
 
 

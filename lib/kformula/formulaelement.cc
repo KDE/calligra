@@ -141,7 +141,7 @@ void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
  */
 void FormulaElement::calcSizes( ContextStyle& context )
 {
-    //kdDebug( DEBUGID ) << "FormulaElement::calcSizes" << endl;
+    //kDebug( DEBUGID ) << "FormulaElement::calcSizes" << endl;
     if ( ownBaseSize ) {
         context.setSizeFactor( static_cast<double>( getBaseSize() )/context.baseSize() );
     }
@@ -158,7 +158,7 @@ void FormulaElement::calcSizes( ContextStyle& context )
 void FormulaElement::draw( QPainter& painter, const LuPixelRect& r,
                            ContextStyle& context )
 {
-    //kdDebug( DEBUGID ) << "FormulaElement::draw" << endl;
+    //kDebug( DEBUGID ) << "FormulaElement::draw" << endl;
     if ( ownBaseSize ) {
         context.setSizeFactor( static_cast<double>( getBaseSize() )/context.baseSize() );
     }

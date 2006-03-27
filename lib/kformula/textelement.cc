@@ -111,7 +111,7 @@ bool TextElement::isInvisible() const
 void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle tstyle, ContextStyle::IndexStyle /*istyle*/)
 {
     luPt mySize = context.getAdjustedSize( tstyle );
-    //kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
+    //kDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = getFont( context );
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );
@@ -137,8 +137,8 @@ void TextElement::calcSizes(const ContextStyle& context, ContextStyle::TextStyle
         setBaseline( getHeight() );
     }
 
-    //kdDebug( DEBUGID ) << "height: " << getHeight() << endl;
-    //kdDebug( DEBUGID ) << "width: " << getWidth() << endl;
+    //kDebug( DEBUGID ) << "height: " << getHeight() << endl;
+    //kDebug( DEBUGID ) << "width: " << getWidth() << endl;
 }
 
 /**
@@ -163,18 +163,18 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
     font.setPointSizeFloat( context.layoutUnitToFontSize( mySize, false ) );
     painter.setFont( font );
 
-    //kdDebug( DEBUGID ) << "TextElement::draw font=" << font.rawName() << endl;
-    //kdDebug( DEBUGID ) << "TextElement::draw size=" << mySize << endl;
-    //kdDebug( DEBUGID ) << "TextElement::draw size=" << context.layoutUnitToFontSize( mySize, false ) << endl;
-    //kdDebug( DEBUGID ) << "TextElement::draw height: " << getHeight() << endl;
-    //kdDebug( DEBUGID ) << "TextElement::draw width: " << getWidth() << endl;
-    //kdDebug( DEBUGID ) << endl;
+    //kDebug( DEBUGID ) << "TextElement::draw font=" << font.rawName() << endl;
+    //kDebug( DEBUGID ) << "TextElement::draw size=" << mySize << endl;
+    //kDebug( DEBUGID ) << "TextElement::draw size=" << context.layoutUnitToFontSize( mySize, false ) << endl;
+    //kDebug( DEBUGID ) << "TextElement::draw height: " << getHeight() << endl;
+    //kDebug( DEBUGID ) << "TextElement::draw width: " << getWidth() << endl;
+    //kDebug( DEBUGID ) << endl;
 
     // Each starting element draws the whole token
     ElementType* token = getElementType();
     if ( ( token != 0 ) && !symbol ) {
         QString text = token->text( static_cast<SequenceElement*>( getParent() ) );
-//         kdDebug() << "draw text: " << text[0].unicode()
+//         kDebug() << "draw text: " << text[0].unicode()
 //                   << " " << painter.font().family().latin1()
 //                   << endl;
         painter.drawText( context.layoutUnitToPixelX( myPos.x() ),
@@ -182,7 +182,7 @@ void TextElement::draw( QPainter& painter, const LuPixelRect& /*r*/,
                           text );
     }
     else {
-        //kdDebug() << "draw char" << endl;
+        //kDebug() << "draw char" << endl;
         QChar ch = getRealCharacter(context);
         if ( ch != QChar::Null ) {
             luPixel bl = getBaseline();
@@ -423,7 +423,7 @@ bool TextElement::readAttributesFromDom(QDomElement element)
         charFamily( anyFamily );
     }
 
-//     kdDebug() << "charStyle=" << charStyle()
+//     kDebug() << "charStyle=" << charStyle()
 //               << "  charFamily=" << charFamily()
 //               << "  format=" << int( format() ) << endl;
 
@@ -489,7 +489,7 @@ void EmptyElement::calcSizes( const ContextStyle& context,
                               ContextStyle::IndexStyle /*istyle*/ )
 {
     luPt mySize = context.getAdjustedSize( tstyle );
-    //kdDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
+    //kDebug( DEBUGID ) << "TextElement::calcSizes size=" << mySize << endl;
 
     QFont font = context.getDefaultFont();
     font.setPointSizeFloat( context.layoutUnitPtToPt( mySize ) );

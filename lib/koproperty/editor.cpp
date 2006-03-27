@@ -85,10 +85,10 @@ class EditorPrivate
 		{
 		}
 
-		QGuardedPtr<Set> set;
+		QPointer<Set> set;
 		//! widget cache for property types, widget will be deleted
 		QMap<Property*, Widget* >  widgetCache;
-		QGuardedPtr<Widget> currentWidget;
+		QPointer<Widget> currentWidget;
 		EditorItem *currentItem;
 		EditorItem *topItem; //! The top item is used to control the drawing of every branches.
 		QPushButton *undoButton; //! "Revert to defaults" button
@@ -120,7 +120,7 @@ class EditorPrivate
 using namespace KoProperty;
 
 Editor::Editor(QWidget *parent, bool autoSync, const char *name)
- : KListView(parent, name)
+ : K3ListView(parent, name)
 {
 	d = new EditorPrivate(this);
 	d->itemDict.setAutoDelete(false);
@@ -185,7 +185,7 @@ Editor::fill()
 	setUpdatesEnabled(false);
 	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
 	hideEditor();
-	KListView::clear();
+	K3ListView::clear();
 	d->itemDict.clear();
 	clearWidgetCache();
 	if(!d->set) {
@@ -377,7 +377,7 @@ Editor::clear(bool editorOnly)
 	if(!editorOnly) {
 		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
 		clearWidgetCache();
-		KListView::clear();
+		K3ListView::clear();
 		d->itemDict.clear();
 		d->topItem = 0;
 		if(d->set)
@@ -592,7 +592,7 @@ Widget*
 Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 {
 //	int type = property->type();
-	QGuardedPtr<Widget> widget = d->widgetCache[property];
+	QPointer<Widget> widget = d->widgetCache[property];
 
 	if(!widget) {
 		widget = FactoryManager::self()->createWidgetForProperty(property);
@@ -804,7 +804,7 @@ QSize
 Editor::sizeHint() const
 {
 	return QSize( QFontMetrics(font()).width(columnText(0)+columnText(1)+"   "),
-		KListView::sizeHint().height());
+		K3ListView::sizeHint().height());
 }
 
 void
@@ -829,15 +829,15 @@ Editor::setFocus()
 		d->currentWidget->setFocus();
 	}
 	else {
-//		kopropertydbg << "KListView::setFocus()" << endl;
-		KListView::setFocus();
+//		kopropertydbg << "K3ListView::setFocus()" << endl;
+		K3ListView::setFocus();
 	}
 }
 
 void
 Editor::resizeEvent(QResizeEvent *ev)
 {
-	KListView::resizeEvent(ev);
+	K3ListView::resizeEvent(ev);
 	if(d->undoButton->isVisible())
 		showUndoButton(true);
 	update();
@@ -850,7 +850,7 @@ Editor::eventFilter( QObject * watched, QEvent * e )
 		if (handleKeyPress(static_cast<QKeyEvent*>(e)))
 			return true;
 	}
-	return KListView::eventFilter(watched, e);
+	return K3ListView::eventFilter(watched, e);
 }
 
 bool
@@ -928,7 +928,7 @@ Editor::event( QEvent * e )
 	if (e->type()==QEvent::ParentFontChange) {
 		updateFont();
 	}
-	return KListView::event(e);
+	return K3ListView::event(e);
 }
 
 void
@@ -939,7 +939,7 @@ Editor::contentsMousePressEvent( QMouseEvent * e )
 		setOpen( item, !isOpen(item) );
 		return;
 	}
-	KListView::contentsMousePressEvent(e);
+	K3ListView::contentsMousePressEvent(e);
 }
 
 #include "editor.moc"

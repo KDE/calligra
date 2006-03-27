@@ -30,7 +30,7 @@ Exception::Exception(const QString& error, long lineno, Object::Ptr parent)
     , m_error(error)
     , m_lineno(lineno)
 {
-    kdWarning() << QString("Kross::Api::Exception error='%1' lineno='%3'").arg(m_error).arg(m_lineno) << endl;
+    kWarning() << QString("Kross::Api::Exception error='%1' lineno='%3'").arg(m_error).arg(m_lineno) << endl;
 }
 
 Exception::~Exception()

@@ -51,7 +51,7 @@ extern "C"
             return new Kross::Python::PythonInterpreter(info);
         }
         catch(Kross::Api::Exception::Ptr e) {
-            kdWarning() << "krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception." << endl;
+            kWarning() << "krossinterpreter(Kross::Api::InterpreterInfo* info): Unhandled exception." << endl;
         }
         return 0;
     }
@@ -123,14 +123,14 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
     // Set the extended sys.path.
     PySys_SetPath( (char*) path.latin1() );
 
-    kdDebug() << "Python ProgramName: " << Py_GetProgramName() << endl;
-    kdDebug() << "Python ProgramFullPath: " << Py_GetProgramFullPath() << endl;
-    kdDebug() << "Python Version: " << Py_GetVersion() << endl;
-    kdDebug() << "Python Platform: " << Py_GetPlatform() << endl;
-    kdDebug() << "Python Prefix: " << Py_GetPrefix() << endl;
-    kdDebug() << "Python ExecPrefix: " << Py_GetExecPrefix() << endl;
-    kdDebug() << "Python Path: " << Py_GetPath() << endl;
-    kdDebug() << "Python System Path: " << path << endl;
+    kDebug() << "Python ProgramName: " << Py_GetProgramName() << endl;
+    kDebug() << "Python ProgramFullPath: " << Py_GetProgramFullPath() << endl;
+    kDebug() << "Python Version: " << Py_GetVersion() << endl;
+    kDebug() << "Python Platform: " << Py_GetPlatform() << endl;
+    kDebug() << "Python Prefix: " << Py_GetPrefix() << endl;
+    kDebug() << "Python ExecPrefix: " << Py_GetExecPrefix() << endl;
+    kDebug() << "Python Path: " << Py_GetPath() << endl;
+    kDebug() << "Python System Path: " << path << endl;
 
     // Initialize the main module.
     d->mainmodule = new PythonModule(this);

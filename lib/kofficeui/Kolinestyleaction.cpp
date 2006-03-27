@@ -23,7 +23,7 @@
 #include <qpixmap.h>
 #include <qbitmap.h>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -65,7 +65,7 @@ KoLineStyleAction::~KoLineStyleAction()
 
 void KoLineStyleAction::createMenu()
 {
-  KPopupMenu* popup = popupMenu();
+  KMenu* popup = popupMenu();
   QBitmap mask;
   QPixmap pix(70, 21);
   QPainter p(&pix, popup);

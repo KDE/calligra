@@ -26,8 +26,8 @@
 #ifdef QT_ONLY
 #include <qlistview.h>
 #else
-#include <klistview.h>
-//#define KListViewItem QListViewItem
+#include <k3listview.h>
+//#define K3ListViewItem QListViewItem
 #endif
 
 #define KPROPEDITOR_ITEM_MARGIN 2
@@ -48,7 +48,7 @@ class Editor;
    \author Jaroslaw Staniek <js@iidea.pl>
    @internal
  */
-class EditorItem : public KListViewItem
+class EditorItem : public K3ListViewItem
 {
 	public:
 		typedef QAsciiDict<EditorItem> Dict;
@@ -60,7 +60,7 @@ class EditorItem : public KListViewItem
 			QListViewItem *after=0);
 
 		//! Two helper contructors for subclass
-		EditorItem(KListView *parent);
+		EditorItem(K3ListView *parent);
 		EditorItem(EditorItem *parent, const QString &text);
 
 		virtual ~EditorItem();
@@ -69,12 +69,12 @@ class EditorItem : public KListViewItem
 		Property* property();
 
 	protected:
-		/*! Reimplemented from KListViewItem to draw custom contents. Properties names are wriiten in bold if
+		/*! Reimplemented from K3ListViewItem to draw custom contents. Properties names are wriiten in bold if
 		    modified. Also takes care of drawing borders around the cells as well as pixmaps or colors if necessary.
 		*/
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 
-		/*! Reimplemented from KListViewItem to draw custom contents. It takes care of drawing the [+] and [-]
+		/*! Reimplemented from K3ListViewItem to draw custom contents. It takes care of drawing the [+] and [-]
 		    signs only if the item has children.
 		*/
 		virtual void paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h);
@@ -97,7 +97,7 @@ class EditorGroupItem : public EditorItem
 		virtual ~EditorGroupItem();
 
 	protected:
-		/*! Reimplemented from KListViewItem to draw custom contents. */
+		/*! Reimplemented from K3ListViewItem to draw custom contents. */
 		virtual void paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align);
 		virtual void setup();
 };
@@ -106,7 +106,7 @@ class EditorGroupItem : public EditorItem
 class EditorDummyItem : public EditorItem
 {
 	public:
-		EditorDummyItem(KListView *parent);
+		EditorDummyItem(K3ListView *parent);
 		virtual ~EditorDummyItem();
 
 	protected:

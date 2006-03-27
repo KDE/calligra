@@ -127,7 +127,7 @@ void FractionElement::calcSizes(const ContextStyle& style, ContextStyle::TextSty
 
     luPixel distY = style.ptToPixelY( style.getThinSpace( tstyle ) );
 
-    setWidth( QMAX( numerator->getWidth(), denominator->getWidth() ) );
+    setWidth( qMax( numerator->getWidth(), denominator->getWidth() ) );
     setHeight( numerator->getHeight() + denominator->getHeight() +
                2*distY + style.getLineWidth() );
     setBaseline( qRound( numerator->getHeight() + distY + .5*style.getLineWidth() +
@@ -433,13 +433,13 @@ bool FractionElement::readContentFromDom(QDomNode& node)
     }
 
     if ( !buildChild( numerator, node, "NUMERATOR" ) ) {
-        kdWarning( DEBUGID ) << "Empty numerator in FractionElement." << endl;
+        kWarning( DEBUGID ) << "Empty numerator in FractionElement." << endl;
         return false;
     }
     node = node.nextSibling();
 
     if ( !buildChild( denominator, node, "DENOMINATOR" ) ) {
-        kdWarning( DEBUGID ) << "Empty denominator in FractionElement." << endl;
+        kWarning( DEBUGID ) << "Empty denominator in FractionElement." << endl;
         return false;
     }
     node = node.nextSibling();

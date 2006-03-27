@@ -31,13 +31,13 @@
 
 KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification )
 {
-    kdDebug(s_area) << "KoTarStore Constructor filename = " << _filename
+    kDebug(s_area) << "KoTarStore Constructor filename = " << _filename
                     << " mode = " << int(_mode) << endl;
 
     m_pTar = new KTar( _filename, "application/x-gzip" );
 
     m_bGood = init( _mode ); // open the targz file and init some vars
-    kdDebug()<<"appIdentification :"<<appIdentification<<endl;
+    kDebug()<<"appIdentification :"<<appIdentification<<endl;
     if ( m_bGood && _mode == Write )
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
@@ -54,7 +54,7 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const Q3CString & appIdentifi
 
 KoTarStore::KoTarStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const Q3CString & appIdentification )
 {
-    kdDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL()
+    kDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL()
                     << " filename = " << _filename
                     << " mode = " << int(_mode) << endl;
 
@@ -100,13 +100,13 @@ KoTarStore::~KoTarStore()
 
 Q3CString KoTarStore::completeMagic( const Q3CString& appMimetype )
 {
-    kdDebug()<<"QCString KoTarStore::completeMagic( const QCString& appMimetype )********************\n";
+    kDebug()<<"QCString KoTarStore::completeMagic( const QCString& appMimetype )********************\n";
     Q3CString res( "KOffice " );
     res += appMimetype;
     res += '\004'; // Two magic bytes to make the identification
     res += '\006'; // more reliable (DF)
-    kdDebug()<<"sssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
-    kdDebug()<<" return :!!!!!!!!!!!!!!! :"<<res<<endl;
+    kDebug()<<"sssssssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n";
+    kDebug()<<" return :!!!!!!!!!!!!!!! :"<<res<<endl;
     return res;
 }
 
@@ -138,13 +138,13 @@ bool KoTarStore::openRead( const QString& name )
     const KArchiveEntry * entry = m_pTar->directory()->entry( name );
     if ( entry == 0L )
     {
-        //kdWarning(s_area) << "Unknown filename " << name << endl;
+        //kWarning(s_area) << "Unknown filename " << name << endl;
         //return KIO::ERR_DOES_NOT_EXIST;
         return false;
     }
     if ( entry->isDirectory() )
     {
-        kdWarning(s_area) << name << " is a directory !" << endl;
+        kWarning(s_area) << name << " is a directory !" << endl;
         //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
@@ -160,10 +160,10 @@ bool KoTarStore::closeWrite()
 {
     // write the whole bytearray at once into the tar file
 
-    kdDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
+    kDebug(s_area) << "Writing file " << m_sName << " into TAR archive. size "
                     << m_iSize << endl;
     if ( !m_pTar->writeFile( m_sName , "user", "group", m_byteArray.data(),m_iSize ) )
-        kdWarning( s_area ) << "Failed to write " << m_sName << endl;
+        kWarning( s_area ) << "Failed to write " << m_sName << endl;
     m_byteArray.resize( 0 ); // save memory
     return true;
 }

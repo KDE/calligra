@@ -365,7 +365,7 @@ QDomElement Compatibility::readSequence(const QDomDocument& doc)
                 break;
             }
             case OF_SYMBOL:
-                kdDebug() << "OF_SYMBOL" << endl;
+                kDebug() << "OF_SYMBOL" << endl;
                 break;
             case INTEGRAL:
             case SUM:

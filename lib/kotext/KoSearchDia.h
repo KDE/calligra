@@ -64,19 +64,19 @@ public:
 
     typedef enum
     {
-        Family = 1 * KFindDialog::MinimumUserOption,
-        Color = 2 * KFindDialog::MinimumUserOption,
-        Size = 4 * KFindDialog::MinimumUserOption,
-        Bold = 8 * KFindDialog::MinimumUserOption,
-        Italic = 16 * KFindDialog::MinimumUserOption,
-        Qt::TextUnderline = 32 * KFindDialog::MinimumUserOption,
-        VertAlign = 64 * KFindDialog::MinimumUserOption,
-        Qt::TextStrikeOut = 128 * KFindDialog::MinimumUserOption,
-        BgColor = 256 * KFindDialog::MinimumUserOption,
-        Shadow = 512 * KFindDialog::MinimumUserOption,
-        WordByWord = 1024 * KFindDialog::MinimumUserOption,
-        Attribute = 2048 * KFindDialog::MinimumUserOption,
-        Language = 4096 * KFindDialog::MinimumUserOption
+        Family = 1 * KFind::MinimumUserOption,
+        Color = 2 * KFind::MinimumUserOption,
+        Size = 4 * KFind::MinimumUserOption,
+        Bold = 8 * KFind::MinimumUserOption,
+        Italic = 16 * KFind::MinimumUserOption,
+        Qt::TextUnderline = 32 * KFind::MinimumUserOption,
+        VertAlign = 64 * KFind::MinimumUserOption,
+        Qt::TextStrikeOut = 128 * KFind::MinimumUserOption,
+        BgColor = 256 * KFind::MinimumUserOption,
+        Shadow = 512 * KFind::MinimumUserOption,
+        WordByWord = 1024 * KFind::MinimumUserOption,
+        Attribute = 2048 * KFind::MinimumUserOption,
+        Language = 4096 * KFind::MinimumUserOption
     } Options;
 
     KoSearchContext();

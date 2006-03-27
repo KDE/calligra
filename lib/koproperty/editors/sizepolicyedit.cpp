@@ -94,7 +94,7 @@ void
 SizePolicyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const QVariant &value)
 {
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
 	QRect rect(r);
 	rect.setBottom(r.bottom()+1);
 	Widget::drawViewer(p, cg, rect, 

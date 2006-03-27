@@ -78,7 +78,7 @@ SizeEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 	Widget::drawViewer(p, cg, rect, 
 		QString(SIZEEDIT_MASK).arg(value.toSize().width()).arg(value.toSize().height()));
 //	p->eraseRect(r);
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine,
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine,
 //		QString("[ %1, %2 ]").arg(value.toSize().width()).arg(value.toSize().height()));
 }
 

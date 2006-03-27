@@ -209,7 +209,7 @@ void KoCounterStyleWidget::alignmentChanged(const QString& s)
     else if(s==i18n("Align Auto"))
         a=Qt::AlignLeft;
     else {
-        kdError()<<"Not Implemented"<<endl;
+        kError()<<"Not Implemented"<<endl;
         return;
     }
     m_counter.setAlignment(a);
@@ -310,7 +310,7 @@ void KoCounterStyleWidget::displayStyle( KoParagCounter::Style style )
     else if(m_counter.alignment()==Qt::AlignLeft)
         cbAlignment->setCurrentText(i18n("Align Auto"));
     else
-        kdError()<<"Not Implemented"<<endl;
+        kError()<<"Not Implemented"<<endl;
 }
 
 void KoCounterStyleWidget::display( const KoParagLayout & lay ) {
@@ -681,7 +681,7 @@ void KoBorderPreview::setBorder( KoBorder::BorderType which, const KoBorder& bor
         setRightBorder( border );
         break;
     default:
-        kdError() << "KoBorderPreview: unknown border type" << endl;
+        kError() << "KoBorderPreview: unknown border type" << endl;
     }
 }
 
@@ -815,7 +815,7 @@ void KoStylePreview::drawContents( QPainter *painter )
 {
     painter->save();
     QRect r = contentsRect();
-    //kdDebug(32500) << "KoStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
+    //kDebug(32500) << "KoStylePreview::drawContents contentsRect=" << DEBUGRECT(r) << endl;
 
     QRect whiteRect( r.x() + 10, r.y() + 10,
                      r.width() - 20, r.height() - 20 );
@@ -840,7 +840,7 @@ void KoStylePreview::drawContents( QPainter *painter )
     // Move it from the left border a little
     textRect.rLeft() += 4;
     textRect.rRight() += 4;
-    //kdDebug(32500) << "KoStylePreview::drawContents textRect=" << DEBUGRECT(textRect)
+    //kDebug(32500) << "KoStylePreview::drawContents textRect=" << DEBUGRECT(textRect)
     //          << " textSize=" << textSize.width() << "," << textSize.height() << endl;
     painter->setClipRect( textRect.intersect( whiteRect ) );
     painter->translate( textRect.x(), textRect.y() );
@@ -996,12 +996,12 @@ KoIndentSpacingWidget::KoIndentSpacingWidget( KoUnit::Unit unit,  double _frameW
 
 double KoIndentSpacingWidget::leftIndent() const
 {
-    return QMAX(0, eLeft->value() );
+    return qMax(0, eLeft->value() );
 }
 
 double KoIndentSpacingWidget::rightIndent() const
 {
-    return QMAX(0,eRight->value() );
+    return qMax(0,eRight->value() );
 }
 
 double KoIndentSpacingWidget::firstLineIndent() const
@@ -1011,12 +1011,12 @@ double KoIndentSpacingWidget::firstLineIndent() const
 
 double KoIndentSpacingWidget::spaceBeforeParag() const
 {
-    return QMAX(0, eBefore->value() );
+    return qMax(0, eBefore->value() );
 }
 
 double KoIndentSpacingWidget::spaceAfterParag() const
 {
-    return QMAX(0, eAfter->value() );
+    return qMax(0, eAfter->value() );
 }
 
 KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
@@ -1038,7 +1038,7 @@ KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
     case 6:
         return KoParagLayout::LS_FIXED;
     default:
-        kdError(32500) << "Error in KoIndentSpacingWidget::lineSpacingType" << endl;
+        kError(32500) << "Error in KoIndentSpacingWidget::lineSpacingType" << endl;
         return KoParagLayout::LS_SINGLE;
     }
 }
@@ -1046,8 +1046,8 @@ KoParagLayout::SpacingType KoIndentSpacingWidget::lineSpacingType() const
 double KoIndentSpacingWidget::lineSpacing() const
 {
     return (lineSpacingType() == KoParagLayout::LS_MULTIPLE)
-                               ? QMAX( 1, eSpacingPercent->value() ) / 100.0
-                               : QMAX( 0, eSpacing->value() );
+                               ? qMax( 1, eSpacingPercent->value() ) / 100.0
+                               : qMax( 0, eSpacing->value() );
 }
 
 
@@ -1104,7 +1104,7 @@ void KoIndentSpacingWidget::display( const KoParagLayout & lay )
     }
 
     updateLineSpacing( _type );
-    eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? QMAX( 1, _spacing )
+    eSpacing->setValue( (_type == KoParagLayout::LS_MULTIPLE) ? qMax( 1, _spacing )
                         : KoUnit::toUserValue( _spacing, m_unit ) );
     eSpacingPercent->setValue( ( _type == KoParagLayout::LS_MULTIPLE ) ? qRound( _spacing * 100 ) : 100 );
 }
@@ -1129,7 +1129,7 @@ void KoIndentSpacingWidget::leftChanged( double _val )
 {
     prev1->setLeft( KoUnit::fromUserValue( _val, m_unit ) );
     // The minimum first-line margin is -leftMargin() (where leftMargin>=0)
-    eFirstLine->setMinValue( -QMAX( 0, _val ) );
+    eFirstLine->setMinValue( -qMax( 0, _val ) );
 }
 
 void KoIndentSpacingWidget::rightChanged( double _val )
@@ -1961,7 +1961,7 @@ void KoParagTabulatorsWidget::deleteClicked() {
     lstTabs->removeItem(selected);
     m_tabList.remove(m_tabList[selected]);
     if(lstTabs->count() >0) {
-        lstTabs->setCurrentItem(QMIN(static_cast<unsigned int>(selected), lstTabs->count()-1 ));
+        lstTabs->setCurrentItem(qMin(static_cast<unsigned int>(selected), lstTabs->count()-1 ));
     } else {
         bDeleteAll->setEnabled(false);
         bDelete->setEnabled(false);
@@ -2036,7 +2036,7 @@ void KoParagTabulatorsWidget::setCurrentTab( double tabPos ) {
             setActiveItem( i );
             return;
         }
-    kdWarning() << "KoParagTabulatorsWidget::setCurrentTab: no tab found at pos=" << tabPos << endl;
+    kWarning() << "KoParagTabulatorsWidget::setCurrentTab: no tab found at pos=" << tabPos << endl;
 }
 
 QString KoParagTabulatorsWidget::tabToString(const KoTabulator &tab) {
@@ -2083,7 +2083,7 @@ void KoParagTabulatorsWidget::updateFilling(int selected) {
 
 void KoParagTabulatorsWidget::updateWidth() {
     KoTabulator *selectedTab = &m_tabList[lstTabs->currentItem()];
-    selectedTab->ptWidth = QMAX( 0, eWidth->value() );
+    selectedTab->ptWidth = qMax( 0, eWidth->value() );
 }
 
 void KoParagTabulatorsWidget::sortLists() {
@@ -2143,31 +2143,31 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
 
     if ( m_flags & PD_SPACING )
     {
-        Q3VBox * page = addVBoxPage( i18n( "Indent && S&pacing" ) );
+        KVBox * page = addVBoxPage( i18n( "Indent && S&pacing" ) );
         m_indentSpacingWidget = new KoIndentSpacingWidget( unit,_frameWidth,page, "indent-spacing" );
         m_indentSpacingWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_ALIGN )
     {
-        Q3VBox * page = addVBoxPage( i18n( "General &Layout" ) );
+        KVBox * page = addVBoxPage( i18n( "General &Layout" ) );
         m_alignWidget = new KoParagAlignWidget( breakLine, page, "align" );
         m_alignWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_DECORATION )
     {
-        Q3VBox * page = addVBoxPage( i18n( "D&ecorations" ) );
+        KVBox * page = addVBoxPage( i18n( "D&ecorations" ) );
         m_decorationsWidget = new KoParagDecorationWidget( page, "decorations");
         m_decorationsWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_NUMBERING )
     {
-        Q3VBox * page = addVBoxPage( i18n( "B&ullets/Numbers" ) );
+        KVBox * page = addVBoxPage( i18n( "B&ullets/Numbers" ) );
         m_counterWidget = new KoParagCounterWidget( disableAll , page, "numbers" );
         m_counterWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_TABS )
     {
-        Q3VBox * page = addVBoxPage( i18n( "&Tabulators" ) );
+        KVBox * page = addVBoxPage( i18n( "&Tabulators" ) );
         m_tabulatorsWidget = new KoParagTabulatorsWidget( unit,_frameWidth, page, "tabs");
         m_tabulatorsWidget->layout()->setMargin(0);
     }

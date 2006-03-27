@@ -112,7 +112,7 @@ int KWmf::handleIndex(void) const
         if (!m_objectHandles[i])
             return i;
     }
-    kdError(s_area) << "handle table full !" << endl;
+    kError(s_area) << "handle table full !" << endl;
     return -1;
 }
 
@@ -257,11 +257,11 @@ void KWmf::invokeHandler(
     if (!result)
     {
         if (funcTab[i].name)
-            kdError(s_area) << "invokeHandler: unsupported opcode: " <<
+            kError(s_area) << "invokeHandler: unsupported opcode: " <<
                 funcTab[i].name <<
                 " operands: " << words << endl;
         else
-            kdError(s_area) << "invokeHandler: unsupported opcode: 0x" <<
+            kError(s_area) << "invokeHandler: unsupported opcode: 0x" <<
                 QString::number(opcode, 16) <<
                 " operands: " << words << endl;
 
@@ -276,7 +276,7 @@ void KWmf::invokeHandler(
     }
     else
     {
-        kdDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
+        kDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
             " operands: " << words << endl;
 
         // We don't invoke the handler directly on the incoming operands, but
@@ -333,7 +333,7 @@ bool KWmf::parse(
     QFile in(file);
     if (!in.open(QIODevice::ReadOnly))
     {
-        kdError(s_area) << "Unable to open input file!" << endl;
+        kError(s_area) << "Unable to open input file!" << endl;
         in.close();
         return false;
     }
@@ -515,7 +515,7 @@ bool KWmf::parse(
         stream >> eheader.szlMillimeters.width;
         stream >> eheader.szlMillimeters.height;
 
-        kdError(s_area) << "WMF Extended Header NOT YET IMPLEMENTED, SORRY." << endl;
+        kError(s_area) << "WMF Extended Header NOT YET IMPLEMENTED, SORRY." << endl;
         /*
         if (mSingleStep)
         {
@@ -610,7 +610,7 @@ void KWmf::opBrushCreateIndirect(
         }
         else
         {
-            kdError(s_area) << "createBrushIndirect: invalid hatched brush " << arg << endl;
+            kError(s_area) << "createBrushIndirect: invalid hatched brush " << arg << endl;
             style = Qt::SolidPattern;
         }
     }
@@ -622,7 +622,7 @@ void KWmf::opBrushCreateIndirect(
     }
     else
     {
-        kdError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
+        kError(s_area) << "createBrushIndirect: invalid brush " << arg << endl;
         style = Qt::SolidPattern;
         operands >> discard;
     }
@@ -729,7 +729,7 @@ void KWmf::opPenCreateIndirect(
     }
     else
     {
-        kdError(s_area) << "createPenIndirect: invalid pen " << arg << endl;
+        kError(s_area) << "createPenIndirect: invalid pen " << arg << endl;
         handle->m_style = Qt::SolidLine;
     }
     operands >> arg;
@@ -875,7 +875,7 @@ void KWmf::skip(
 {
     if ((int)words < 0)
     {
-        kdError(s_area) << "skip: " << (int)words << endl;
+        kError(s_area) << "skip: " << (int)words << endl;
         return;
     }
     if (words)
@@ -883,7 +883,7 @@ void KWmf::skip(
         U32 i;
         S16 discard;
 
-        kdDebug(s_area) << "skip: " << words << endl;
+        kDebug(s_area) << "skip: " << words << endl;
         for (i = 0; i < words; i++)
         {
             operands >> discard;

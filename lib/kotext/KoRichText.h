@@ -109,7 +109,7 @@ public:
     uint rightToLeft : 1;
 
     // --- added for WYSIWYG ---
-    Q_INT8 pixelxadj; // adjustment to apply to lu2pixel(x)
+    qint8 pixelxadj; // adjustment to apply to lu2pixel(x)
     short int pixelwidth; // width in pixels
     short int width; // width in LU
 

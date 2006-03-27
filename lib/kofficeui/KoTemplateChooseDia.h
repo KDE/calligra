@@ -26,7 +26,7 @@
 
 #include <kdialogbase.h>
 #include <kicondialog.h>
-#include <kiconview.h>
+#include <k3iconview.h>
 #include <koffice_export.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -66,16 +66,16 @@ class KoTCDIconCanvas : public KIconCanvas
 };
 
 /// @internal
-class KoTCDIconViewItem : public KIconViewItem
+class KoTCDIconViewItem : public K3IconViewItem
 {
     public:
 	KoTCDIconViewItem(Q3IconView *parent=0)
-	    : KIconViewItem ( parent )
+	    : K3IconViewItem ( parent )
 	    {}
 
 	KoTCDIconViewItem(Q3IconView *parent=0, const QString &text=0, const QPixmap &icon=0,
                       const QString &descr=0, const QString &fullname=0)
-	    : KIconViewItem(parent, text, icon)
+	    : K3IconViewItem(parent, text, icon)
 	    {
             m_descr = descr;
             m_full = fullname;

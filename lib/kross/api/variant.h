@@ -145,21 +145,21 @@ namespace Kross { namespace Api {
 
             /**
              * Try to convert the given \a Object into
-             * a Q_LLONG.
+             * a qint64.
              *
              * \throw TypeException If the convert failed.
              * \param object The object to convert.
-             * \return The to a Q_LLONG converted object.
+             * \return The to a qint64 converted object.
              */
             static qlonglong toLLONG(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into
-             * a Q_ULLONG.
+             * a quint64.
              *
              * \throw TypeException If the convert failed.
              * \param object The object to convert.
-             * \return The to a Q_ULLONG converted object.
+             * \return The to a quint64 converted object.
              */
             static qulonglong toULLONG(Object::Ptr object);
 

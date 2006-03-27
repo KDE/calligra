@@ -58,7 +58,7 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
 
         if( !defaultStyleDeleted ) { // we are going to import at least one style.
             KoParagStyle *s = defaultStyle();
-            //kdDebug() << "loadOasisStyles looking for Standard, to delete it. Found " << s << endl;
+            //kDebug() << "loadOasisStyles looking for Standard, to delete it. Found " << s << endl;
             if(s) // delete the standard style.
                 removeStyle(s);
             defaultStyleDeleted = true;
@@ -73,7 +73,7 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
         // the real value of followingStyle is set below after loading all styles
         sty->setFollowingStyle( sty );
 
-        kdDebug() << " Loaded style " << sty->name() << endl;
+        kDebug() << " Loaded style " << sty->name() << endl;
 
         if ( count() > oldStyleCount )
         {
@@ -82,11 +82,11 @@ int KoStyleCollection::loadOasisStyles( KoOasisContext& context )
             ++stylesLoaded;
         }
         else
-            kdWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+            kWarning() << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
     }
 
     if( followingStyles.count() != styleList().count() ) {
-        kdDebug() << "Ouch, " << followingStyles.count() << " following-styles, but "
+        kDebug() << "Ouch, " << followingStyles.count() << " following-styles, but "
                        << styleList().count() << " styles in styleList" << endl;
     }
 
@@ -117,7 +117,7 @@ void KoStyleCollection::saveOasis( KoGenStyles& styles, int styleType, KoSavingC
     for ( Q3ValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
         KoParagStyle* style = static_cast<KoParagStyle *>( *styleIt );
         style->saveStyle( styles, styleType, refStyleName, context );
-        kdDebug() << k_funcinfo << "Saved style " << style->displayName() << " to OASIS format as " << style->name() << endl;
+        kDebug() << k_funcinfo << "Saved style " << style->displayName() << " to OASIS format as " << style->name() << endl;
         if ( refStyleName.isEmpty() ) // i.e. first style
             refStyleName = style->name();
     }
@@ -156,7 +156,7 @@ void KoStyleCollection::importStyles( const KoStyleCollection& styleCollection )
         KoParagStyle * style = findStyle(itFollow.key());
         const QString followingStyleName = followStyle[ itFollow.key() ];
         KoParagStyle * styleFollow = findStyle(followingStyleName);
-        //kdDebug() << "    " << style << "  " << itFollow.key() << ": followed by " << styleFollow << " (" << followingStyleName << ")" << endl;
+        //kDebug() << "    " << style << "  " << itFollow.key() << ": followed by " << styleFollow << " (" << followingStyleName << ")" << endl;
         Q_ASSERT(styleFollow);
         if ( styleFollow )
             style->setFollowingStyle( styleFollow );
@@ -239,16 +239,16 @@ void KoStyleCollection::printDebug() const
         KoParagStyle* style = static_cast<KoParagStyle *>( *styleIt );
 
         // short version:
-        // kdDebug() << style << "  " << style->name() << "    " << style->displayName() << "  followingStyle=" << style->followingStyle() << endl;
+        // kDebug() << style << "  " << style->name() << "    " << style->displayName() << "  followingStyle=" << style->followingStyle() << endl;
 
-        kdDebug() << "Style " << style << "  " << style->name() << "  isOutline=" << style->isOutline() << endl;
-        kdDebug() << "   format: " << style->format().key() <<endl;
+        kDebug() << "Style " << style << "  " << style->name() << "  isOutline=" << style->isOutline() << endl;
+        kDebug() << "   format: " << style->format().key() <<endl;
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
-        kdDebug() << "  align: " << s_align[(Qt::AlignmentFlags)style->paragLayout().alignment] << endl;
+        kDebug() << "  align: " << s_align[(Qt::AlignmentFlags)style->paragLayout().alignment] << endl;
         if ( style->paragLayout().counter )
-            kdDebug() << "  counter level=" << style->paragLayout().counter->depth() << endl;
+            kDebug() << "  counter level=" << style->paragLayout().counter->depth() << endl;
 
-        kdDebug() << "   following style: " << style->followingStyle() << " "
+        kDebug() << "   following style: " << style->followingStyle() << " "
                   << ( style->followingStyle() ? style->followingStyle()->name() : QString::null ) << endl;
 
     }

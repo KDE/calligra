@@ -309,33 +309,33 @@ void KoCMYKWidget::slotBGColorSelected(const QColor& c)
 
 CMYKColor KoCMYKWidget::RgbToCmyk(const QColor& col)
 {
-	kdDebug() << "--[ KoCMYKWidget::RgbToCmyk ]--------------------------------------" << endl;
-	kdDebug() << endl;
+	kDebug() << "--[ KoCMYKWidget::RgbToCmyk ]--------------------------------------" << endl;
+	kDebug() << endl;
 
     // RGB to CMY
     float r = col.red() / 255.0;
     float g = col.green() / 255.0;
     float b = col.blue() / 255.0;
 
-	kdDebug() << "float r = col.red() / 255.0;" << endl;
-	kdDebug() << "      r = " << col.red() << " / 255.0 = " << r << endl;
-	kdDebug() << "float g = col.green() / 255.0;" << endl;
-	kdDebug() << "      g = " << col.green() << " / 255.0 = " << g << endl;
-	kdDebug() << "float b = col.blue() / 255.0;" << endl;
-	kdDebug() << "      b = " << col.blue() << " / 255.0 = " << b << endl;
-	kdDebug() << endl;
+	kDebug() << "float r = col.red() / 255.0;" << endl;
+	kDebug() << "      r = " << col.red() << " / 255.0 = " << r << endl;
+	kDebug() << "float g = col.green() / 255.0;" << endl;
+	kDebug() << "      g = " << col.green() << " / 255.0 = " << g << endl;
+	kDebug() << "float b = col.blue() / 255.0;" << endl;
+	kDebug() << "      b = " << col.blue() << " / 255.0 = " << b << endl;
+	kDebug() << endl;
 
     float ac = 1.0 - r;
     float am = 1.0 - g;
     float ay = 1.0 - b;
 
-	kdDebug() << "float ac = 1.0 - r;" << endl;
-	kdDebug() << "      ac = 1.0 - " << r << " = " << ac << endl;
-	kdDebug() << "float am = 1.0 - g;" << endl;
-	kdDebug() << "      am = 1.0 - " << g << " = " << am << endl;
-	kdDebug() << "float ay = 1.0 - b;" << endl;
-	kdDebug() << "      ay = 1.0 - " << b << " = " << ay << endl;
-	kdDebug() << endl;
+	kDebug() << "float ac = 1.0 - r;" << endl;
+	kDebug() << "      ac = 1.0 - " << r << " = " << ac << endl;
+	kDebug() << "float am = 1.0 - g;" << endl;
+	kDebug() << "      am = 1.0 - " << g << " = " << am << endl;
+	kDebug() << "float ay = 1.0 - b;" << endl;
+	kDebug() << "      ay = 1.0 - " << b << " = " << ay << endl;
+	kDebug() << endl;
 
     // CMY to CMYK
     float c = 0.0;
@@ -345,33 +345,33 @@ CMYKColor KoCMYKWidget::RgbToCmyk(const QColor& col)
 
     if ((r == 0.0) && (g == 0.0) && (b == 0.0))
     {
-		kdDebug() << "r = g = b = 0.0: Therefor k = 1.0" << endl;
+		kDebug() << "r = g = b = 0.0: Therefor k = 1.0" << endl;
         k = 1.0;
     }
     else
     {
-		kdDebug() << "r = g = b != 0.0: Therefor k = min(ac,am,ay)" << endl;
+		kDebug() << "r = g = b != 0.0: Therefor k = min(ac,am,ay)" << endl;
 
-        if (kMin(ac,am) == ac)
-            k = kMin(ac,ay);
+        if (qMin(ac,am) == ac)
+            k = qMin(ac,ay);
         else
-            k = kMin(am,ay);
+            k = qMin(am,ay);
 
         c = (ac - k) / (1.0 - k);
         m = (am - k) / (1.0 - k);
         y = (ay - k) / (1.0 - k);
     }
 
-	kdDebug() << "float k = " << k << endl;
-	kdDebug() << endl;
+	kDebug() << "float k = " << k << endl;
+	kDebug() << endl;
 
-	kdDebug() << "float c = (ac - k) / (1.0 - k);" << endl;
-	kdDebug() << "      c = (" << ac << " - " << k << ") / (1.0 - " << k << ") = " << c << endl;
-	kdDebug() << "float m = (am - k) / (1.0 - k);" << endl;
-	kdDebug() << "      m = (" << am << " - " << k << ") / (1.0 - " << k << ") = " << m << endl;
-	kdDebug() << "float y = (ay - k) / (1.0 - k);" << endl;
-	kdDebug() << "      y = (" << ay << " - " << k << ") / (1.0 - " << k << ") = " << y << endl;
-	kdDebug() << endl;
+	kDebug() << "float c = (ac - k) / (1.0 - k);" << endl;
+	kDebug() << "      c = (" << ac << " - " << k << ") / (1.0 - " << k << ") = " << c << endl;
+	kDebug() << "float m = (am - k) / (1.0 - k);" << endl;
+	kDebug() << "      m = (" << am << " - " << k << ") / (1.0 - " << k << ") = " << m << endl;
+	kDebug() << "float y = (ay - k) / (1.0 - k);" << endl;
+	kDebug() << "      y = (" << ay << " - " << k << ") / (1.0 - " << k << ") = " << y << endl;
+	kDebug() << endl;
 
     CMYKColor color;
     color.C = c;
@@ -379,7 +379,7 @@ CMYKColor KoCMYKWidget::RgbToCmyk(const QColor& col)
     color.Y = y;
     color.K = k;
 
-	kdDebug() << "===================================================================" << endl;
+	kDebug() << "===================================================================" << endl;
 
     return color;
 }
@@ -387,9 +387,9 @@ CMYKColor KoCMYKWidget::RgbToCmyk(const QColor& col)
 QColor KoCMYKWidget::CmykToRgb(const CMYKColor& c)
 {
     // CMYK to CMY
-    float ac = kMin(1.0, c.C * (1.0 - c.K) + c.K);
-    float am = kMin(1.0, c.M * (1.0 - c.K) + c.K);
-    float ay = kMin(1.0, c.Y * (1.0 - c.K) + c.K);
+    float ac = qMin(1.0, c.C * (1.0 - c.K) + c.K);
+    float am = qMin(1.0, c.M * (1.0 - c.K) + c.K);
+    float ay = qMin(1.0, c.Y * (1.0 - c.K) + c.K);
 
     // CMY to RGB
     int r = int((1.0 - ac) * 255.0);

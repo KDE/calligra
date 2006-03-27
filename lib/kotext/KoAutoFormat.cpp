@@ -250,7 +250,7 @@ void KoAutoFormat::updateMaxWords()
         if (maxword >  m_countMaxWords )
                 m_countMaxWords = maxword;
     }
-    kdDebug() << "m_countMaxWords: " << m_countMaxWords << endl;
+    kDebug() << "m_countMaxWords: " << m_countMaxWords << endl;
 }
 
 void KoAutoFormat::loadListOfWordCompletion()
@@ -398,7 +398,7 @@ void KoAutoFormat::readAutoCorrectConfig()
     KLocale klocale(m_doc->instance()->instanceName());
     QString kdelang = klocale.languageList().front();
     kdelang.remove( QRegExp( "@.*" ) );
-    kdDebug(32500) << "KoAutoFormat: m_autoFormatLanguage=" << m_autoFormatLanguage << " kdelang=" << kdelang << endl;
+    kDebug(32500) << "KoAutoFormat: m_autoFormatLanguage=" << m_autoFormatLanguage << " kdelang=" << kdelang << endl;
     QString fname;
     if ( !m_autoFormatLanguage.isEmpty() )
     {
@@ -681,7 +681,7 @@ void KoAutoFormat::saveConfig()
     for ( ; it.current() ; ++it )
     {
 	items.appendChild(saveEntry( it, doc));
-        //m_maxFindLength=QMAX(m_maxFindLength,it.currentKey().length());
+        //m_maxFindLength=qMax(m_maxFindLength,it.currentKey().length());
     }
     buildMaxLen();
     begin.appendChild(items);
@@ -741,7 +741,7 @@ void KoAutoFormat::saveConfig()
     else
         f.setName(locateLocal("data", "koffice/autocorrect/"+m_autoFormatLanguage + ".xml",m_doc->instance()));
     if(!f.open(QIODevice::WriteOnly)) {
-        kdWarning()<<"Error during saving autoformat to " << f.name() << endl;
+        kWarning()<<"Error during saving autoformat to " << f.name() << endl;
 	return;
     }
     QTextStream ts(&f);
@@ -941,7 +941,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                     if ( (*it).length() > maxlength )
                       maxlength = (*it).length();
                     new_wordlist.append(*it);
-                    //kdDebug() << "adding word completion:" << *it << endl;
+                    //kDebug() << "adding word completion:" << *it << endl;
                   }
                 }
                 if ( new_wordlist.isEmpty() )
@@ -959,7 +959,7 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
                       if ( (*it).at(i).lower() != ch.lower() )
                       {
                         word = (*it).left(i); //the completion word is truncated here
-                        //kdDebug() << "set the word completion to:" << word << endl;
+                        //kDebug() << "set the word completion to:" << word << endl;
                         part=true; // completion of a part of a word; a space-character after the completion should not be inserted
                         break;
                       }
@@ -1161,7 +1161,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
             doAutoIncludeAbbreviation(textEditCursor, parag, txtObj );
     }
 
-    //kdDebug(32500) << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
+    //kDebug(32500) << "KoAutoFormat::doAutoFormat ch=" << QString(ch) << endl;
     //if ( !m_enabled )
     //    return;
     // Auto-correction happens when pressing space, tab, CR, punct etc.
@@ -1170,7 +1170,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
         KCommand *cmd = 0L;
         KMacroCommand *macro = 0L;
         QString lastWord = getWordAfterSpace(parag, index);
-        //kdDebug(32500) << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
+        //kDebug(32500) << "KoAutoFormat::doAutoFormat lastWord=" << lastWord << endl;
 
         if ( ch == '.')
                 detectStartOfLink( parag, index, true );
@@ -1248,7 +1248,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
         if (ch=='.')
                 return;
 
-        //kdDebug(32500)<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
+        //kDebug(32500)<<" m_listCompletion->items() :"<<m_listCompletion->items()<<endl;
         if( !m_ignoreUpperCase && m_completion && m_addCompletionWord && m_listCompletion->items().count() < m_nbMaxCompletionWord )
         {
                 QString completionWord("");
@@ -1263,7 +1263,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
 
                                 if (completionWord.length()>= m_minCompletionWordLength  && !completionWord.isEmpty() && m_listCompletion->makeCompletion(completionWord).isEmpty())
                                 {
-                                        kdDebug() << "Adding:" << completionWord << endl;
+                                        kDebug() << "Adding:" << completionWord << endl;
                                         m_listCompletion->addItem( completionWord );
                                         if ( completionWord.length() > m_countMaxWords )
                                             m_countMaxWords = completionWord.length();
@@ -1283,7 +1283,7 @@ void KoAutoFormat::doAutoFormat( KoTextCursor* textEditCursor, KoTextParag *para
                                         completionWord.remove('=');
                                         if (completionWord.length()>= m_minCompletionWordLength && !completionWord.isEmpty() && m_listCompletion->makeCompletion(completionWord).isEmpty())
                                         {
-                                                kdDebug() << "Adding:" << completionWord << endl;
+                                                kDebug() << "Adding:" << completionWord << endl;
                                                 m_listCompletion->addItem( completionWord );
                                                 if ( completionWord.length() > m_countMaxWords )
                                                     m_countMaxWords = completionWord.length();
@@ -1403,7 +1403,7 @@ KCommand *KoAutoFormat::autoFormatWord( KoTextCursor* textEditCursor, KoTextPara
                 cursor.setIndex( start + length );
                 textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
                 KCommand *cmd = 0L;
-                kdDebug()<<"it->replace() :"<<it->replace()<<endl;
+                kDebug()<<"it->replace() :"<<it->replace()<<endl;
                 if (!it->formatEntryContext() || !m_bAutoCorrectionWithFormat)
                 {
                     cmd = txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
@@ -1461,7 +1461,7 @@ KCommand *KoAutoFormat::autoFormatWord( KoTextCursor* textEditCursor, KoTextPara
 
 KCommand *KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTextParag *parag, int index, KoTextObject *txtObj, bool doubleQuotes )
 {
-    //kdDebug(32500) << "KoAutoFormat::doTypographicQuotes" << endl;
+    //kDebug(32500) << "KoAutoFormat::doTypographicQuotes" << endl;
     KoTextDocument * textdoc = parag->textDocument();
     KoTextCursor cursor( parag->document() );
     cursor.setParag( parag );
@@ -1538,7 +1538,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
             QChar const punct = backCursor.parag()->at( backCursor.index() )->c;
             QString const text = getLastWord( backCursor.parag(), backCursor.index() )
                            + punct;
-                           kdDebug() << "text: " << text << endl;
+                           kDebug() << "text: " << text << endl;
             // text has the word at the end of the 'sentence', including the termination. Example: "Mr."
             beginningOfSentence = (m_upperCaseExceptions.findIndex(text)==-1); // Ok if we can't find it
         }
@@ -1561,7 +1561,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
     {
         backCursor.setIndex( backCursor.index() + 1 );
         QChar secondChar = backCursor.parag()->at( backCursor.index() )->c;
-        //kdDebug(32500)<<" secondChar :"<<secondChar<<endl;
+        //kDebug(32500)<<" secondChar :"<<secondChar<<endl;
         if ( isUpper( secondChar ) )
         {
             // Check next letter - we still want to be able to write fully uppercase words...
@@ -1656,7 +1656,7 @@ void KoAutoFormat::detectStartOfLink(KoTextParag * parag, int const index, bool 
 
 void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *parag, int &index, QString & word, KoTextObject *txtObj )
 {
-    kdDebug() << "link:" << word << endl;
+    kDebug() << "link:" << word << endl;
     char link_type = 0;
     int pos = word.find("http://");
     int tmp_pos = word.find("https://");
@@ -1755,7 +1755,7 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
         {
             if (word.length()>= m_minCompletionWordLength  && !word.isEmpty() && m_listCompletion->makeCompletion(word).isEmpty())
             {
-                kdDebug() << "Adding:" << word << endl;
+                kDebug() << "Adding:" << word << endl;
                 m_listCompletion->addItem( word );
                 if ( word.length() > m_countMaxWords )
                     m_countMaxWords = word.length();
@@ -2346,12 +2346,12 @@ void KoAutoFormat::buildMaxLen()
     Q3DictIterator<KoAutoFormatEntry> it( m_entries );
     for( ; it.current(); ++it )
     {
-	m_maxFindLength = QMAX( m_maxFindLength, it.currentKey().length() );
+	m_maxFindLength = qMax( m_maxFindLength, it.currentKey().length() );
     }
     Q3DictIterator<KoAutoFormatEntry> it2( m_allLanguages );
     for( ; it2.current(); ++it2 )
     {
-	m_maxFindLength = QMAX( m_maxFindLength, it2.currentKey().length() );
+	m_maxFindLength = qMax( m_maxFindLength, it2.currentKey().length() );
     }
 }
 
@@ -2402,7 +2402,7 @@ KCommand *KoAutoFormat::applyAutoFormat( KoTextObject * obj )
     for (int i=0;i<parag->length();i++)
     {
       cursor->gotoRight();
-      //kdDebug() << "ch:" << parag->string()->at(i).c << endl;
+      //kDebug() << "ch:" << parag->string()->at(i).c << endl;
       if (i == parag->length()-1)
 	doAutoFormat(cursor,parag,i,'\n',obj);
       else

@@ -628,7 +628,7 @@ bool FormulaCursor::isReadOnly() const
     const SequenceElement* sequence = normal();
     if ( sequence != 0 ) {
         bool ro = sequence->readOnly( this );
-        //kdDebug() << k_funcinfo << "readOnly=" << ro << endl;
+        //kDebug() << k_funcinfo << "readOnly=" << ro << endl;
         return ro;
     }
     return false;

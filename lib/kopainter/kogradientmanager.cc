@@ -479,13 +479,13 @@ KoGradient* KoGradientManager::parseSvgGradient(const QDomElement& element)
 			else
 			{
 				// try style attr
-				QString style = colorstop.attribute( "style" ).simplifyWhiteSpace();
+				QString style = colorstop.attribute( "style" ).simplified();
 				QStringList substyles = QStringList::split( ';', style );
 			    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
 				{
 					QStringList substyle = QStringList::split( ':', (*it) );
-					QString command	= substyle[0].stripWhiteSpace();
-					QString params	= substyle[1].stripWhiteSpace();
+					QString command	= substyle[0].trimmed();
+					QString params	= substyle[1].trimmed();
 					if( command == "stop-color" )
 						parseSvgColor( c, params );
 					if( command == "stop-opacity" )
@@ -515,7 +515,7 @@ void KoGradientManager::parseSvgColor(QColor &color, const QString &s)
 {
 	if( s.startsWith( "rgb(" ) )
 	{
-		QString parse = s.stripWhiteSpace();
+		QString parse = s.trimmed();
 		QStringList colors = QStringList::split( ',', parse );
 		QString r = colors[0].right( ( colors[0].length() - 4 ) );
 		QString g = colors[1];
@@ -543,7 +543,7 @@ void KoGradientManager::parseSvgColor(QColor &color, const QString &s)
 	}
 	else
 	{
-		QString rgbColor = s.stripWhiteSpace();
+		QString rgbColor = s.trimmed();
 		QColor c;
 		if( rgbColor.startsWith( "#" ) )
 			c.setNamedColor( rgbColor );

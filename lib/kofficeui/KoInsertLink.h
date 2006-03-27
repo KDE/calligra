@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 #include <koffice_export.h>
 class QLineEdit;
-class KURLRequester;
+class KUrlRequester;
 
 namespace KOfficePrivate {
 /**
@@ -111,7 +111,7 @@ private slots:
 private:
     QString createFileLink();
     QLineEdit* m_linkName;
-    KURLRequester* m_hrefName;
+    KUrlRequester* m_hrefName;
 signals:
     void textChanged();
 };

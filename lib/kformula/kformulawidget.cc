@@ -163,7 +163,7 @@ void KFormulaWidget::slotSelectAll()
 void KFormulaWidget::slotCursorChanged(bool visible, bool selecting)
 {
     emit cursorChanged(visible, selecting);
-//     kdDebug( 40000 ) << "KFormulaWidget::slotCursorChanged "
+//     kDebug( 40000 ) << "KFormulaWidget::slotCursorChanged "
 //                      << formulaView.getDirtyArea().x() << " "
 //                      << formulaView.getDirtyArea().y() << " "
 //                      << formulaView.getDirtyArea().width() << " "

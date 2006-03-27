@@ -112,7 +112,7 @@ void KoXmlWriter::startElement( const char* tagName, bool indentInside )
     m_tags.push( Tag( tagName, parentIndent && indentInside ) );
     writeChar( '<' );
     writeCString( tagName );
-    //kdDebug() << k_funcinfo << tagName << endl;
+    //kDebug() << k_funcinfo << tagName << endl;
 }
 
 void KoXmlWriter::addCompleteElement( const char* cstr )
@@ -142,12 +142,12 @@ void KoXmlWriter::addCompleteElement( QIODevice* indev )
 void KoXmlWriter::endElement()
 {
     if ( m_tags.isEmpty() )
-        kdWarning() << "Ouch, endElement() was called more times than startElement(). "
+        kWarning() << "Ouch, endElement() was called more times than startElement(). "
             "The generated XML will be invalid! "
             "Please report this bug (by saving the document to another format...)" << endl;
 
     Tag tag = m_tags.pop();
-    //kdDebug() << k_funcinfo << " tagName=" << tag.tagName << " hasChildren=" << tag.hasChildren << endl;
+    //kDebug() << k_funcinfo << " tagName=" << tag.tagName << " hasChildren=" << tag.hasChildren << endl;
     if ( !tag.hasChildren ) {
         writeCString( "/>" );
     }
@@ -209,7 +209,7 @@ void KoXmlWriter::addAttributePt( const char* attrName, double value )
 void KoXmlWriter::writeIndent()
 {
     // +1 because of the leading '\n'
-    m_dev->writeBlock( m_indentBuffer, kMin( indentLevel() + 1,
+    m_dev->writeBlock( m_indentBuffer, qMin( indentLevel() + 1,
                                              s_indentBufferLength ) );
 }
 

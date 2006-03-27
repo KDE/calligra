@@ -58,7 +58,7 @@ public:
     // there is a separate list, and the tool is categorized correctly.
     // The tool is not yet added to the widgets; call setupTools()
     // to do that. We don't store the tool.
-    void registerTool(KAction * tool, int toolType, Q_UINT32 priority);
+    void registerTool(KAction * tool, int toolType, quint32 priority);
 
     // Called when all tools have been added by the tool controller
     void setupTools();
@@ -80,7 +80,7 @@ private:
 
 
 private:
-    Q_UINT32 m_numberOfButtons;
+    quint32 m_numberOfButtons;
 
     Q3ButtonGroup * m_buttonGroup; // The invisible group of all toolbuttons, so only one can be active at a given time
 

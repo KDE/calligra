@@ -23,6 +23,7 @@
 #include <kcommand.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
+#include <kglobal.h>
 
 #include "elementtype.h"
 #include "kformulacommand.h"
@@ -50,7 +51,7 @@ void save( const QString &filename, const QDomDocument& doc )
 {
     QFile f( filename );
     if(!f.open(QIODevice::Truncate | QIODevice::ReadWrite)) {
-        kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
+        kWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
         return;
     }
 
@@ -65,20 +66,20 @@ void load( KFormula::Document* document, const QString &filename )
 {
     QFile f(filename);
     if (!f.open(QIODevice::ReadOnly)) {
-        kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
+        kWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
         return;
     }
     QTextStream stream(&f);
     stream.setEncoding(QTextStream::UnicodeUTF8);
     QString content = stream.read();
     f.close();
-    //kdDebug( DEBUGID ) << content << endl;
+    //kDebug( DEBUGID ) << content << endl;
     QDomDocument doc;
     if ( !doc.setContent( content ) ) {
         return;
     }
     if ( !document->loadXML( doc ) ) {
-        kdWarning( DEBUGID ) << "Failed." << endl;
+        kWarning( DEBUGID ) << "Failed." << endl;
     }
 }
 
@@ -87,7 +88,7 @@ void saveMathML( KFormula::Container* formula, const QString &filename, bool oas
 {
     QFile f( filename );
     if ( !f.open( QIODevice::Truncate | QIODevice::ReadWrite ) ) {
-        kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
+        kWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
         return;
     }
 
@@ -102,7 +103,7 @@ void loadMathML( KFormula::Container* formula, const QString &filename )
 {
     QFile f( filename );
     if ( !f.open( QIODevice::ReadOnly ) ) {
-        kdWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
+        kWarning( DEBUGID ) << "Error opening file " << filename.latin1() << endl;
         return;
     }
     QTextStream stream( &f );
@@ -115,18 +116,18 @@ void loadMathML( KFormula::Container* formula, const QString &filename )
     int errorColumn;
     if ( !doc.setContent( content, true,
                           &errorMsg, &errorLine, &errorColumn ) ) {
-        kdWarning( DEBUGID ) << "MathML built error: " << errorMsg
+        kWarning( DEBUGID ) << "MathML built error: " << errorMsg
                              << " at line " << errorLine
                              << " and column " << errorColumn << endl;
         f.close();
         return;
     }
 
-    /*kdDebug( DEBUGID ) << "Container::loadMathML\n"
+    /*kDebug( DEBUGID ) << "Container::loadMathML\n"
       << doc.toCString() << endl;*/
 
     if ( !formula->loadMathML( doc ) ) {
-        kdWarning( DEBUGID ) << "Failed." << endl;
+        kWarning( DEBUGID ) << "Failed." << endl;
     }
     f.close();
 }
@@ -150,7 +151,7 @@ void TestWidget::keyPressEvent(QKeyEvent* event)
             case Qt::Key_M: saveMathML( document, "test.mml", false ); return;
             case Qt::Key_O: {
                 QString file = KFileDialog::getOpenFileName();
-                kdDebug( DEBUGID ) << file << endl;
+                kDebug( DEBUGID ) << file << endl;
                 if( !file.isEmpty() ) {
                     QFileInfo fi( file );
                     if ( fi.extension() == "mml" ) {
@@ -251,7 +252,7 @@ int main(int argc, char** argv)
 
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    DocumentWrapper* wrapper = new DocumentWrapper( kapp->config(), 0 );
+    DocumentWrapper* wrapper = new DocumentWrapper( KGlobal::config(), 0 );
     Document* document = new Document;
     wrapper->document( document );
     Container* container1 = document->createFormula();

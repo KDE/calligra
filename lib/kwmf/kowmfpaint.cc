@@ -191,8 +191,8 @@ void KoWmfPaint::setWindowExt( int w, int h ) {
 }
 
 
-void KoWmfPaint::setWorldMatrix( const QMatrix &wm, bool combine ) {
-    mPainter.setWorldMatrix( wm, combine );
+void KoWmfPaint::setMatrix( const QMatrix &wm, bool combine ) {
+    mPainter.setMatrix( wm, combine );
 }
 
 

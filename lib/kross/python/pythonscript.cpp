@@ -67,7 +67,7 @@ PythonScript::PythonScript(Kross::Api::Interpreter* interpreter, Kross::Api::Scr
     , d(new PythonScriptPrivate())
 {
 #ifdef KROSS_PYTHON_SCRIPT_CTOR_DEBUG
-    kdDebug() << "PythonScript::PythonScript() Constructor." << endl;
+    kDebug() << "PythonScript::PythonScript() Constructor." << endl;
 #endif
     d->m_module = 0;
     d->m_code = 0;
@@ -76,7 +76,7 @@ PythonScript::PythonScript(Kross::Api::Interpreter* interpreter, Kross::Api::Scr
 PythonScript::~PythonScript()
 {
 #ifdef KROSS_PYTHON_SCRIPT_DTOR_DEBUG
-    kdDebug() << "PythonScript::~PythonScript() Destructor." << endl;
+    kDebug() << "PythonScript::~PythonScript() Destructor." << endl;
 #endif
     finalize();
     delete d;
@@ -100,7 +100,7 @@ void PythonScript::initialize()
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to initialize local module context for script '%1'").arg( m_scriptcontainer->getName() )) );
 
 #ifdef KROSS_PYTHON_SCRIPT_INIT_DEBUG
-        kdDebug() << QString("PythonScript::initialize() module='%1' refcount='%2'").arg(d->m_module->as_string().c_str()).arg(d->m_module->reference_count()) << endl;
+        kDebug() << QString("PythonScript::initialize() module='%1' refcount='%2'").arg(d->m_module->as_string().c_str()).arg(d->m_module->reference_count()) << endl;
 #endif
 
         // Set the "self" variable to point to the ScriptContainer
@@ -132,7 +132,7 @@ void PythonScript::initialize()
         PyObject* code = 0;
         bool restricted = m_scriptcontainer->getOption("restricted", QVariant(false,0), true).toBool();
 
-        kdDebug() << QString("PythonScript::initialize() name=%1 restricted=%2").arg(m_scriptcontainer->getName()).arg(restricted) << endl;
+        kDebug() << QString("PythonScript::initialize() name=%1 restricted=%2").arg(m_scriptcontainer->getName()).arg(restricted) << endl;
         if(restricted) {
 
             // Use the RestrictedPython module wrapped by the PythonSecurity class.
@@ -171,7 +171,7 @@ void PythonScript::finalize()
 {
 #ifdef KROSS_PYTHON_SCRIPT_FINALIZE_DEBUG
     if(d->m_module)
-        kdDebug() << QString("PythonScript::finalize() module='%1' refcount='%2'").arg(d->m_module->as_string().c_str()).arg(d->m_module->reference_count()) << endl;
+        kDebug() << QString("PythonScript::finalize() module='%1' refcount='%2'").arg(d->m_module->as_string().c_str()).arg(d->m_module->reference_count()) << endl;
 #endif
 
     delete d->m_module; d->m_module = 0;
@@ -202,12 +202,12 @@ Kross::Api::Exception::Ptr PythonScript::toException(const QString& error)
             tblist = tbfunc.apply(args);
             uint length = tblist.length();
             for(Py::List::size_type i = 0; i < length; ++i)
-                kdDebug() << Py::Object(tblist[i]).as_string().c_str() << endl;
+                kDebug() << Py::Object(tblist[i]).as_string().c_str() << endl;
         }
         catch(Py::Exception& e) {
             QString err = Py::value(e).as_string().c_str();
             e.clear(); // exception is handled. clear it now.
-            kdWarning() << QString("Kross::Python::PythonScript::toException() Failed to fetch a traceback: %1").arg(err) << endl;
+            kWarning() << QString("Kross::Python::PythonScript::toException() Failed to fetch a traceback: %1").arg(err) << endl;
         }
     }
 
@@ -252,7 +252,7 @@ const QStringList& PythonScript::getFunctionNames()
 Kross::Api::Object::Ptr PythonScript::execute()
 {
 #ifdef KROSS_PYTHON_SCRIPT_EXEC_DEBUG
-    kdDebug() << QString("PythonScript::execute()") << endl;
+    kDebug() << QString("PythonScript::execute()") << endl;
 #endif
 
     try {
@@ -292,26 +292,26 @@ Kross::Api::Object::Ptr PythonScript::execute()
         PyGILState_Release(gilstate);
 
         if(! pyresult) {
-            kdWarning() << "Kross::Python::PythonScript::execute(): Failed to PyEval_EvalCode" << endl;
+            kWarning() << "Kross::Python::PythonScript::execute(): Failed to PyEval_EvalCode" << endl;
             throw Py::Exception();
         }
         Py::Object result(pyresult, true);
 
 #ifdef KROSS_PYTHON_SCRIPT_EXEC_DEBUG
-        kdDebug()<<"PythonScript::execute() result="<<result.as_string().c_str()<<endl;
+        kDebug()<<"PythonScript::execute() result="<<result.as_string().c_str()<<endl;
 #endif
 
         for(Py::Dict::iterator it = moduledict.begin(); it != moduledict.end(); ++it) {
             Py::Dict::value_type vt(*it);
             if(PyClass_Check( vt.second.ptr() )) {
 #ifdef KROSS_PYTHON_SCRIPT_EXEC_DEBUG
-                kdDebug() << QString("PythonScript::execute() class '%1' added.").arg(vt.first.as_string().c_str()) << endl;
+                kDebug() << QString("PythonScript::execute() class '%1' added.").arg(vt.first.as_string().c_str()) << endl;
 #endif
                 d->m_classes.append( vt.first.as_string().c_str() );
             }
             else if(vt.second.isCallable()) {
 #ifdef KROSS_PYTHON_SCRIPT_EXEC_DEBUG
-                kdDebug() << QString("PythonScript::execute() function '%1' added.").arg(vt.first.as_string().c_str()) << endl;
+                kDebug() << QString("PythonScript::execute() function '%1' added.").arg(vt.first.as_string().c_str()) << endl;
 #endif
                 d->m_functions.append( vt.first.as_string().c_str() );
             }
@@ -348,7 +348,7 @@ Kross::Api::Object::Ptr PythonScript::execute()
 Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::Api::List::Ptr args)
 {
 #ifdef KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
-    kdDebug() << QString("PythonScript::callFunction(%1, %2)")
+    kDebug() << QString("PythonScript::callFunction(%1, %2)")
                  .arg(name)
                  .arg(args ? QString::number(args->count()) : QString("NULL"))
                  << endl;
@@ -423,7 +423,7 @@ Kross::Api::Object::Ptr PythonScript::classInstance(const QString& name)
         Py::Object classobject(pyobj, true);
 
 #ifdef KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
-        kdDebug() << QString("PythonScript::classInstance() inst='%1'").arg(classobject.as_string().c_str()) << endl;
+        kDebug() << QString("PythonScript::classInstance() inst='%1'").arg(classobject.as_string().c_str()) << endl;
 #endif
         return PythonExtension::toObject(classobject);
     }

@@ -309,7 +309,7 @@ void KoTemplateChooseDia::setupRecentDialog(QWidget * widgetbase, Q3GridLayout *
 
         d->m_recent = new KoTCDRecentFilesIconView(widgetbase, "recent files");
         // I prefer the icons to be in "most recent first" order (DF)
-        d->m_recent->setSorting( static_cast<QDir::SortSpec>( QDir::Time | QDir::Reversed ) );
+        d->m_recent->setSorting( static_cast<QDir::SortFlags>( QDir::Time | QDir::Reversed ) );
         layout->addWidget(d->m_recent,0,0);
 
         QString oldGroup = d->m_instance->config()->group();
@@ -430,7 +430,7 @@ void KoTemplateChooseDia::setupTemplateDialog(QWidget * widgetbase, Q3GridLayout
 	if ( d->tree->defaultGroup() == group )
 		defaultTemplateGroup = entriesnumber; //select the default template group for the app
 
-	Q3Frame * frame = d->m_jwidget->addPage (
+	QFrame * frame = d->m_jwidget->addPage (
 		group->name(),
 		group->name(),
 		group->first()->loadPicture(d->m_instance));
@@ -670,7 +670,7 @@ void KoTemplateChooseDia::slotOk()
 	}
 	else
 	{
-	    kdWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
+	    kWarning(30003) << "Unsupported template chooser result: " << d->m_returnType << endl;
 	    grp.writeEntry( "LastReturnType", QString::null );
 	}
 	KDialogBase::slotOk();

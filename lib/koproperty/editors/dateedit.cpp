@@ -76,10 +76,10 @@ DateEdit::drawViewer(QPainter *p, const QColorGroup &cg, const QRect &r, const Q
 	p->eraseRect(r);
 #ifdef QT_ONLY
 	Widget::drawViewer(p, cg, r, value.toTime().toString(Qt::LocalDate));
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, value.toTime().toString(Qt::LocalDate));
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, value.toTime().toString(Qt::LocalDate));
 #else
 	Widget::drawViewer(p, cg, r, KGlobal::locale()->formatDate(value.toDate(), true /* use short format*/ ));
-//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, KGlobal::locale()->formatDate(value.toDate(), true /* use short format*/ ));
+//	p->drawText(r, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextSingleLine, KGlobal::locale()->formatDate(value.toDate(), true /* use short format*/ ));
 #endif
 }
 

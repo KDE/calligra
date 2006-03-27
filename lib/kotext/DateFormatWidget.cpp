@@ -168,7 +168,7 @@ QString DateFormatWidget::resultString()
     Q_ASSERT( it != listRaw.end() );
     if ( it != listRaw.end() )
         return *it;
-    kdError(32500) << "Internal error: could not find correcponding date format: " << lookup << endl;
+    kError(32500) << "Internal error: could not find correcponding date format: " << lookup << endl;
     return QString::null; // Something is wrong, give back a default
 }
 

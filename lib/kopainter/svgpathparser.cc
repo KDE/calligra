@@ -94,7 +94,7 @@ SVGPathParser::parseSVG( const QString &s, bool process )
 	{
 		QString d = s;
 		d = d.replace( ',', ' ' );
-		d = d.simplifyWhiteSpace();
+		d = d.simplified();
 
 		const char *ptr = d.latin1();
 		const char *end = d.latin1() + d.length() + 1;
@@ -373,7 +373,7 @@ SVGPathParser::parseSVG( const QString &s, bool process )
 				{
 					// when svg parser is used for a parsing an odf path an unknown command
 					// can be encountered, so we stop parsing here
-					kdDebug() << "SVGPathParser::parseSVG(): unknown command \"" << command << "\"" << endl;
+					kDebug() << "SVGPathParser::parseSVG(): unknown command \"" << command << "\"" << endl;
 					return;
 				}
 			}
