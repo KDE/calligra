@@ -33,6 +33,7 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <QX11Info>
 
 StencilBarDockManager::StencilBarDockManager( KivioView* parent, const char* name )
 : QWidget(parent,name)
@@ -317,14 +318,14 @@ KoToolDockMoveManager::KoToolDockMoveManager()
 
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
     scr = qt_xscreen();
-    root = qt_xrootwin();
+    root = QX11Info::appRootWindow();
 
     gv.function = GXxor;
     gv.line_width = 2;
-    gv.foreground = WhitePixel(qt_xdisplay(), scr)^BlackPixel(qt_xdisplay(), scr);
+    gv.foreground = WhitePixel(QX11Info::display(), scr)^BlackPixel(qt_xdisplay(), scr);
     gv.subwindow_mode = IncludeInferiors;
     long mask = GCForeground | GCFunction | GCLineWidth | GCSubwindowMode;
-    rootgc = XCreateGC(qt_xdisplay(), qt_xrootwin(), mask, &gv);
+    rootgc = XCreateGC(QX11Info::display(), QX11Info::appRootWindow(), mask, &gv);
 #endif
 
     timer = new QTimer(this);
@@ -387,8 +388,8 @@ void KoToolDockMoveManager::doMoveInternal()
     paintProcess(false,xp, yp, w, h);
 
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
-        XFlush(qt_xdisplay());
-        XSync(qt_xdisplay(),false);
+        XFlush(QX11Info::display());
+        XSync(QX11Info::display(),false);
 #endif
   }
 }
@@ -403,7 +404,7 @@ void KoToolDockMoveManager::stop()
 
   paintProcess();
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
-    XFlush(qt_xdisplay());
+    XFlush(QX11Info::display());
 #endif
 
     working = false;
@@ -425,8 +426,8 @@ void KoToolDockMoveManager::setGeometry(int _x, int _y, int _w, int _h)
   paintProcess(false,_x, _y, _w, _h);
 
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
-    XFlush(qt_xdisplay());
-    XSync(qt_xdisplay(),false);
+    XFlush(QX11Info::display());
+    XSync(QX11Info::display(),false);
 #endif
 }
 
@@ -441,7 +442,7 @@ void KoToolDockMoveManager::drawRectangle( int _x, int _y, int _w, int _h)
   oh = _h;
 
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
-    XDrawRectangle(qt_xdisplay(), root, rootgc, _x, _y, _w, _h);
+    XDrawRectangle(QX11Info::display(), root, rootgc, _x, _y, _w, _h);
 #endif
     noLast = false;
 }
@@ -455,7 +456,7 @@ void KoToolDockMoveManager::paintProcess( bool onlyDelete, int _x, int _y, int _
     return;
 
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
-    XDrawRectangle(qt_xdisplay(), root, rootgc, ox, oy, ow, oh);
+    XDrawRectangle(QX11Info::display(), root, rootgc, ox, oy, ow, oh);
 #endif
     noLast = true;
 
@@ -547,8 +548,8 @@ void KoToolDockMoveManager::doResizeInternal()
     paintProcess(false,xp, yp, w, h);
 
 #if defined Q_WS_X11 && !defined K_WS_QTONLY
-        XFlush(qt_xdisplay());
-        XSync(qt_xdisplay(),false);
+        XFlush(QX11Info::display());
+        XSync(QX11Info::display(),false);
 #endif
   }
 }
