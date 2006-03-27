@@ -84,7 +84,7 @@ void KChartHiloSubTypeChartPage::init()
         break;
     default:
         {
-            kdDebug( 35001 ) << "Error in stack_type" << endl;
+            kDebug( 35001 ) << "Error in stack_type" << endl;
             abort();
             break;
         }
@@ -119,7 +119,7 @@ void KChartHiloSubTypeChartPage::apply()
     else if( percent->isChecked() )
         m_params->setHiLoChartSubType( KDChartParams::HiLoOpenClose );
     else {
-        kdDebug( 35001 ) << "Error in groupbutton" << endl;
+        kDebug( 35001 ) << "Error in groupbutton" << endl;
     }
 }
 
@@ -164,7 +164,7 @@ void KChartAreaSubTypeChartPage::init()
         break;
     default:
         {
-            kdDebug( 35001 ) << "Error in stack_type" << endl;
+            kDebug( 35001 ) << "Error in stack_type" << endl;
             abort();
             break;
         }
@@ -199,7 +199,7 @@ void KChartAreaSubTypeChartPage::apply()
     else if( percent->isChecked() )
         m_params->setAreaChartSubType( KDChartParams::AreaPercent );
     else {
-        kdDebug( 35001 ) << "Error in groupbutton" << endl;
+        kDebug( 35001 ) << "Error in groupbutton" << endl;
     }
 }
 
@@ -254,7 +254,7 @@ void KChartBarSubTypeChartPage::init()
         break;
     default:
         {
-            kdDebug( 35001 ) << "Error in stack_type" << endl;
+            kDebug( 35001 ) << "Error in stack_type" << endl;
             break;
         }
     }
@@ -290,7 +290,7 @@ void KChartBarSubTypeChartPage::apply()
     } else if( percent->isChecked() )	{
         m_params->setBarChartSubType( KDChartParams::BarPercent );
     } else {
-        kdDebug( 35001 ) << "Error in groupbutton" << endl;
+        kDebug( 35001 ) << "Error in groupbutton" << endl;
     }
 
     // FIXME: Error controls.
@@ -337,7 +337,7 @@ void KChartLineSubTypeChartPage::init()
         break;
     default:
         {
-            kdDebug( 35001 ) << "Error in stack_type" << endl;
+            kDebug( 35001 ) << "Error in stack_type" << endl;
             abort();
             break;
         }
@@ -372,7 +372,7 @@ void KChartLineSubTypeChartPage::apply()
     else if( percent->isChecked() )
         m_params->setLineChartSubType( KDChartParams::LinePercent );
     else {
-        kdDebug( 35001 ) << "Error in groupbutton" << endl;
+        kDebug( 35001 ) << "Error in groupbutton" << endl;
     }
 }
 
@@ -416,7 +416,7 @@ void KChartPolarSubTypeChartPage::init()
         break;
     default:
         {
-            kdDebug( 35001 ) << "Error in stack_type" << endl;
+            kDebug( 35001 ) << "Error in stack_type" << endl;
             abort();
             break;
         }
@@ -451,7 +451,7 @@ void KChartPolarSubTypeChartPage::apply()
     else if( percent->isChecked() )
         m_params->setPolarChartSubType( KDChartParams::PolarPercent );
     else {
-        kdDebug( 35001 ) << "Error in groupbutton" << endl;
+        kDebug( 35001 ) << "Error in groupbutton" << endl;
     }
 }
 

@@ -22,7 +22,7 @@
 #include <qheader.h>
 #include <qptrlist.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -37,11 +37,11 @@
 
 namespace Kivio {
 
-class ObjectListItem : public KListViewItem
+class ObjectListItem : public K3ListViewItem
 {
   public:
-    ObjectListItem(KListView* parent, KivioStencil* _stencil)
-      : KListViewItem(parent, "")
+    ObjectListItem(K3ListView* parent, KivioStencil* _stencil)
+      : K3ListViewItem(parent, "")
     {
       m_stencil = _stencil;
       setPixmap(0, Kivio::generatePixmapFromStencil(22, 22, m_stencil));
@@ -87,7 +87,7 @@ ObjectListPalette::ObjectListPalette(KivioView* parent, const char* name)
 
   QVBoxLayout* layout = new QVBoxLayout(this, 0, 2);
 
-  m_objectList = new KListView(this);
+  m_objectList = new K3ListView(this);
   m_objectList->setFullWidth(true);
   m_objectList->setAllColumnsShowFocus(true);
   m_objectList->setSorting(-1);

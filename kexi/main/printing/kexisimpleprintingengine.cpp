@@ -44,6 +44,7 @@
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
 #include <kexidb/queryschema.h>
+#include <kglobal.h>
 
 KexiSimplePrintingSettings::KexiSimplePrintingSettings()
 {
@@ -64,7 +65,7 @@ KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
 {
 	KexiSimplePrintingSettings settings; //this will set defaults
 
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->setGroup("Simple Printing");
 	if (config->hasKey("pageTitleFont"))
 		settings.pageTitleFont = config->readFontEntry("pageTitleFont");
@@ -96,7 +97,7 @@ KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
 
 void KexiSimplePrintingSettings::save()
 {
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->setGroup("Simple Printing");
 	config->writeEntry( "pageTitleFont", pageTitleFont );
 	config->writeEntry( "pageFormat", KoPageFormat::formatString( pageLayout.format ) );
@@ -286,10 +287,10 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		m_headerTextRect = painter.fontMetrics().boundingRect(
 			(int)leftMargin, (int)topMargin,
 			m_pageWidth - m_dateTimeWidth,
-			m_pageHeight, Qt::AlignAuto|Qt::WordBreak, m_headerText);
+			m_pageHeight, Qt::AlignAuto|Qt::TextWordWrap, m_headerText);
 		m_headerTextRect.setRight(m_headerTextRect.right()+10);
 		m_headerTextRect.setWidth(
-			QMIN(int(m_pageWidth - m_dateTimeWidth), m_headerTextRect.width()));
+			qMin(int(m_pageWidth - m_dateTimeWidth), m_headerTextRect.width()));
 
 		//--compute max width of field names
 		m_maxFieldNameWidth = 0;
@@ -298,7 +299,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		for (uint i=0; i < m_fieldsExpanded.count(); i++) {
 			const int newW =
 				painter.fontMetrics().width(m_fieldsExpanded[i]->captionOrAliasOrName()+":");
-//			kdDebug() << "row"<<i<<": "<<m_fieldsExpanded[i]->captionOrAliasOrName()<<" " 
+//			kDebug() << "row"<<i<<": "<<m_fieldsExpanded[i]->captionOrAliasOrName()<<" " 
 //				<< newW <<endl;
 			if (m_maxFieldNameWidth < newW)
 				m_maxFieldNameWidth = newW;
@@ -314,7 +315,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 	//paint header
 	painter.setFont(m_headerFont);
 	if (paint) {
-		painter.drawText(m_headerTextRect, Qt::AlignAuto|Qt::WordBreak, m_headerText);
+		painter.drawText(m_headerTextRect, Qt::AlignAuto|Qt::TextWordWrap, m_headerText);
 	}
 	painter.setFont(m_mainFont);
 	if (paint) {
@@ -371,7 +372,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 			//do not break records between pages
 			break;
 		}*/
-//		kdDebug() << " -------- " << y << " / " << m_pageHeight << endl;
+//		kDebug() << " -------- " << y << " / " << m_pageHeight << endl;
 		if (paint)
 			paintRecord(painter, item, count, cellMargin, y, paintedRows, paint);
 		else
@@ -399,7 +400,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 	}
 
 	for (uint i=0; i<count; i++) {
-//			kdDebug() << "row"<<i<<": "<<row.at(i).toString()<<endl;
+//			kDebug() << "row"<<i<<": "<<row.at(i).toString()<<endl;
 		if (paint) {
 			painter.drawText(
 				(int)leftMargin+cellMargin, y, m_maxFieldNameWidth-cellMargin*2, m_mainLineSpacing, 
@@ -441,11 +442,11 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 		QRect rect( painter.fontMetrics().boundingRect(
 			(int)leftMargin + m_maxFieldNameWidth + cellMargin, y,
 			m_pageWidth - m_maxFieldNameWidth - cellMargin*2, m_pageHeight - y, 
-			Qt::AlignAuto|Qt::WordBreak, text) );
+			Qt::AlignAuto|Qt::TextWordWrap, text) );
 		if (paint) {
 			painter.drawText(
 				rect.x(), rect.y(), rect.width(), rect.height(),
-				Qt::AlignTop|Qt::WordBreak, text);
+				Qt::AlignTop|Qt::TextWordWrap, text);
 		}
 		if (m_settings->addTableBorders) {
 			if (paint) {

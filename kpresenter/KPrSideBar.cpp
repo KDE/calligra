@@ -34,7 +34,7 @@
 #include <klocale.h>
 #include <kinputdialog.h>
 #include <knotifyclient.h>
-#include <kiconview.h>
+#include <k3iconview.h>
 #include <kdebug.h>
 
 #include "KPrSideBar.h"
@@ -56,7 +56,7 @@
 
 QValidator::State KPrRenamePageValidator::validate( QString & input, int& ) const
 {
-  QString str = input.stripWhiteSpace();
+  QString str = input.trimmed();
   if ( str.isEmpty() ) // we want to allow empty titles. Empty == automatic.
     return Acceptable;
 
@@ -89,11 +89,11 @@ private:
 };
 
 
-class OutlineSlideItem: public KListViewItem
+class OutlineSlideItem: public K3ListViewItem
 {
 public:
-    OutlineSlideItem( KListView * parent, KPrPage* page, bool _masterPage );
-    OutlineSlideItem( KListView * parent, OutlineSlideItem *after, KPrPage* page, bool _masterPage );
+    OutlineSlideItem( K3ListView * parent, KPrPage* page, bool _masterPage );
+    OutlineSlideItem( K3ListView * parent, OutlineSlideItem *after, KPrPage* page, bool _masterPage );
 
     KPrPage* page() const { return m_page; }
 
@@ -107,7 +107,7 @@ private:
     bool m_masterPage;
 };
 
-class OutlineObjectItem: public KListViewItem
+class OutlineObjectItem: public K3ListViewItem
 {
 public:
     OutlineObjectItem( OutlineSlideItem * parent, KPrObject* object,
@@ -234,7 +234,7 @@ void KPrSideBarBase::setViewMasterPage( bool _b )
 }
 
 KPrThumbBar::KPrThumbBar(QWidget *parent, KPrDocument *d, KPrView *v)
-    :KIconView(parent), KPrSideBarBase( d,v)
+    :K3IconView(parent), KPrSideBarBase( d,v)
 {
     uptodate = false;
     m_offsetX = 0;
@@ -291,12 +291,12 @@ QRect KPrThumbBar::tip(const QPoint &pos, QString &title)
 
 void KPrThumbBar::rebuildItems()
 {
-    kdDebug()<<" void KPrThumbBar::rebuildItems() beofre \n";
+    kDebug()<<" void KPrThumbBar::rebuildItems() beofre \n";
     if( !isVisible())
         return;
-    kdDebug(33001) << "KPrThumbBar::rebuildItems" << endl;
+    kDebug(33001) << "KPrThumbBar::rebuildItems" << endl;
 
-    QApplication::setOverrideCursor( Qt::waitCursor );
+    QApplication::setOverrideCursor( Qt::WaitCursor );
 
     clear();
     if ( m_viewMasterPage )
@@ -366,7 +366,7 @@ void KPrThumbBar::refreshItems(bool offset)
     QIconViewItem *it = findFirstVisibleItem( vRect );
     while ( it )
     {
-        kdDebug(33001) << "visible page = " << it->text().toInt() << endl;
+        kDebug(33001) << "visible page = " << it->text().toInt() << endl;
         if ( ! dynamic_cast<ThumbItem *>(it)->isUptodate( ) ){
             //todo refresh picture
             it->setPixmap( getSlideThumb( it->text().toInt() - 1 ) );
@@ -423,13 +423,13 @@ void KPrThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
     } while ( it );
 
     if ( ! sticky )
-        kdWarning(33001) << "Item for page " << pagenr << " not found" << endl;
+        kWarning(33001) << "Item for page " << pagenr << " not found" << endl;
 }
 
 // add a thumb item without recreating all thumbs
 void KPrThumbBar::addItem( int pos )
 {
-    kdDebug(33001)<< "KPrThumbBar::addItem" << endl;
+    kDebug(33001)<< "KPrThumbBar::addItem" << endl;
     int page = 0;
     for ( QIconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         // find page which should move
@@ -456,7 +456,7 @@ void KPrThumbBar::addItem( int pos )
 // moves a item without recreating all pages
 void KPrThumbBar::moveItem( int oldPos, int newPos )
 {
-    kdDebug(33001)<< "KPrThumbBar::moveItem " << oldPos << " to " << newPos << endl;
+    kDebug(33001)<< "KPrThumbBar::moveItem " << oldPos << " to " << newPos << endl;
     int page = 0;
     QIconViewItem *after = 0;
     QIconViewItem *take = 0;
@@ -504,7 +504,7 @@ void KPrThumbBar::moveItem( int oldPos, int newPos )
 
 void KPrThumbBar::removeItem( int pos )
 {
-    kdDebug(33001)<< "KPrThumbBar::removeItem" << endl;
+    kDebug(33001)<< "KPrThumbBar::removeItem" << endl;
     int page = 0;
     bool change = false;
     QIconViewItem *itemToDelete = 0;
@@ -525,7 +525,7 @@ void KPrThumbBar::removeItem( int pos )
 
 QPixmap KPrThumbBar::getSlideThumb(int slideNr) const
 {
-    //kdDebug(33001) << "KPrThumbBar::getSlideThumb: " << slideNr << endl;
+    //kDebug(33001) << "KPrThumbBar::getSlideThumb: " << slideNr << endl;
     QPixmap pix( 10, 10 );
 
     m_view->getCanvas()->drawPageInPix( pix, slideNr, 60 );
@@ -568,7 +568,7 @@ void KPrThumbBar::slotContentsMoving(int x, int y)
 {
     m_offsetX = x;
     m_offsetY = y;
-    kdDebug(33001) << "offset x,y = " << x << ", " << y << endl;
+    kDebug(33001) << "offset x,y = " << x << ", " << y << endl;
     refreshItems( true );
 }
 
@@ -577,16 +577,16 @@ void KPrThumbBar::slotRefreshItems()
     refreshItems();
 }
 
-OutlineSlideItem::OutlineSlideItem( KListView* parent, KPrPage* _page, bool _masterPage )
-    : KListViewItem( parent ), m_page( _page ), m_masterPage( _masterPage )
+OutlineSlideItem::OutlineSlideItem( K3ListView* parent, KPrPage* _page, bool _masterPage )
+    : K3ListViewItem( parent ), m_page( _page ), m_masterPage( _masterPage )
 {
     setDragEnabled(true);
     setPage( _page );
     setPixmap( 0, KPBarIcon( "slide" ) );
 }
 
-OutlineSlideItem::OutlineSlideItem( KListView* parent, OutlineSlideItem * after, KPrPage* _page, bool _masterPage )
-    : KListViewItem( parent, after ), m_page( _page ), m_masterPage( _masterPage )
+OutlineSlideItem::OutlineSlideItem( K3ListView* parent, OutlineSlideItem * after, KPrPage* _page, bool _masterPage )
+    : K3ListViewItem( parent, after ), m_page( _page ), m_masterPage( _masterPage )
 {
     setDragEnabled(true);
     setPage( _page );
@@ -678,7 +678,7 @@ void OutlineSlideItem::updateTitle()
 
 OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPrObject* _object,
                                       const QString& name )
-    : KListViewItem( parent ), m_object( _object )
+    : K3ListViewItem( parent ), m_object( _object )
 {
     setObject( m_object );
     setDragEnabled( false );
@@ -756,7 +756,7 @@ void OutlineObjectItem::setObject( KPrObject* object )
 }
 
 KPrOutline::KPrOutline( QWidget *parent, KPrDocument *d, KPrView *v )
-    : KListView( parent ), KPrSideBarBase( d, v)
+    : K3ListView( parent ), KPrSideBarBase( d, v)
 {
     rebuildItems();
     setSorting( -1 );
@@ -767,8 +767,8 @@ KPrOutline::KPrOutline( QWidget *parent, KPrDocument *d, KPrView *v )
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
     connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
              this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
-    connect( this, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
-             this, SLOT( slotContextMenu( KListView*, QListViewItem*, const QPoint&) ) );
+    connect( this, SIGNAL( contextMenu( K3ListView*, QListViewItem*, const QPoint& ) ),
+             this, SLOT( slotContextMenu( K3ListView*, QListViewItem*, const QPoint&) ) );
 
     connect( this, SIGNAL( doubleClicked ( QListViewItem * )),
              this, SLOT(renamePageTitle()));
@@ -839,7 +839,7 @@ void KPrOutline::updateItem( int pagenr /* 0-based */, bool sticky )
 
 void KPrOutline::addItem( int pos )
 {
-    kdDebug(33001)<< "KPrOutline::addItem" << endl;
+    kDebug(33001)<< "KPrOutline::addItem" << endl;
 
     KPrPage *page=m_doc->pageList().at( pos );
     OutlineSlideItem *item;
@@ -860,7 +860,7 @@ void KPrOutline::addItem( int pos )
 // move an KPrOutline Item so that not the hole list has to be recreated
 void KPrOutline::moveItem( int oldPos, int newPos )
 {
-    kdDebug(33001)<< "KPrOutline::moveItem " << oldPos << " to " << newPos << endl;
+    kDebug(33001)<< "KPrOutline::moveItem " << oldPos << " to " << newPos << endl;
 
     int lowPage = oldPos > newPos ? newPos : oldPos;
     int highPage = oldPos < newPos ? newPos : oldPos;
@@ -883,12 +883,12 @@ void KPrOutline::moveItem( int oldPos, int newPos )
             item->updateTitle();
     }
 
-    KListView::moveItem( itemToMove, 0, itemAfter );
+    K3ListView::moveItem( itemToMove, 0, itemAfter );
 }
 
 void KPrOutline::removeItem( int pos )
 {
-    kdDebug(33001)<< "KPrOutline::removeItem" << endl;
+    kDebug(33001)<< "KPrOutline::removeItem" << endl;
 
     OutlineSlideItem* item = slideItem( pos );
     if( !item ) return;
@@ -948,13 +948,13 @@ void KPrOutline::itemClicked( QListViewItem *item )
  */
 void KPrOutline::slotDropped( QDropEvent * /* e */, QListViewItem *parent, QListViewItem *target )
 {
-    kdDebug(33001) << "slotDropped" << endl;
+    kDebug(33001) << "slotDropped" << endl;
     /* slide doesn't have parent (always 0)
      * Only slides can move at the moment, objects can't. */
     if ( parent )
         return;
 
-    // This code is taken from KListView
+    // This code is taken from K3ListView
     for (QListViewItem *i = firstChild(), *iNext = 0; i != 0; i = iNext)
     {
         iNext = i->itemBelow();
@@ -1000,7 +1000,7 @@ void KPrOutline::setCurrentPage( int pg )
 void KPrOutline::contentsDropEvent( QDropEvent *e )
 {
     disconnect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
-    KListView::contentsDropEvent( e );
+    K3ListView::contentsDropEvent( e );
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
 }
 
@@ -1058,7 +1058,7 @@ void KPrOutline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
     }
 }
 
-void KPrOutline::slotContextMenu( KListView*, QListViewItem* item, const QPoint& p )
+void KPrOutline::slotContextMenu( K3ListView*, QListViewItem* item, const QPoint& p )
 {
     rightButtonPressed( item, p, 0 );
 }
@@ -1092,7 +1092,7 @@ void KPrOutline::renamePageTitle()
     if ( ok ) { // User pushed an OK button.
         if ( newTitle != activeTitle ) { // Title changed.
             KPrChangeTitlePageNameCommand *cmd=new KPrChangeTitlePageNameCommand( i18n("Rename Slide"),
-                                                                                  m_doc, activeTitle, newTitle.stripWhiteSpace(), page  );
+                                                                                  m_doc, activeTitle, newTitle.trimmed(), page  );
             cmd->execute();
             m_doc->addCommand(cmd);
         }
@@ -1105,7 +1105,7 @@ QDragObject* KPrOutline::dragObject()
       return 0;
     }
 
-    return KListView::dragObject();
+    return K3ListView::dragObject();
 }
 
 #include "KPrSideBar.moc"

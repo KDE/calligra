@@ -28,7 +28,7 @@
 #include <qmenubar.h>
 #include <qwhatsthis.h>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <ktoolbar.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -36,6 +36,7 @@
 
 #include <kstandarddirs.h>
 #include <kiconloader.h>
+#include <kauthorized.h>
 
 KivioArrowHeadAction::KivioArrowHeadAction(const QString &text, const QString &pix,
   QObject* parent, const char *name)
@@ -43,9 +44,9 @@ KivioArrowHeadAction::KivioArrowHeadAction(const QString &text, const QString &p
 {
   m_emitSignals = true;
   setShortcutConfigurable( false );
-  m_popup = new KPopupMenu(0L,"KivioArrowHeadAction::popup");
-  m_startPopup = new KPopupMenu;
-  m_endPopup = new KPopupMenu;
+  m_popup = new KMenu(0L,"KivioArrowHeadAction::popup");
+  m_startPopup = new KMenu;
+  m_endPopup = new KMenu;
   m_startPopup->setCheckable(true);
   m_endPopup->setCheckable(true);
   m_popup->insertItem(SmallIconSet("start_arrowhead", 16), i18n("Arrowhead at Origin"), m_startPopup);
@@ -69,7 +70,7 @@ KivioArrowHeadAction::~KivioArrowHeadAction()
   m_popup = 0;
 }
 
-KPopupMenu* KivioArrowHeadAction::popupMenu() const
+KMenu* KivioArrowHeadAction::popupMenu() const
 {
   return m_popup;
 }
@@ -82,9 +83,9 @@ void KivioArrowHeadAction::popup( const QPoint& global )
 int KivioArrowHeadAction::plug( QWidget* widget, int index)
 {
   // This function is copied from KActionMenu::plug
-  if (kapp && !kapp->authorizeKAction(name()))
+  if (kapp && !KAuthorized::authorizeKAction(name()))
     return -1;
-  kdDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
+  kDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
   if ( widget->inherits("QPopupMenu") )
   {
     QPopupMenu* menu = static_cast<QPopupMenu*>( widget );
@@ -159,7 +160,7 @@ int KivioArrowHeadAction::plug( QWidget* widget, int index)
   return -1;
 }
 
-void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup)
+void KivioArrowHeadAction::loadArrowHeads(KMenu* popup)
 {
   QBitmap mask;
   QPixmap pixAll = Kivio::arrowHeadPixmap();  

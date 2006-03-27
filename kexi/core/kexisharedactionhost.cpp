@@ -106,7 +106,7 @@ void KexiSharedActionHost::setActionAvailable(const char *action_name, bool avai
 void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool avail, QObject *obj)
 {
 /*test	if (qstrcmp(action_name, "tablepart_toggle_pkey")==0) {
-		kdDebug() << "tablepart_toggle_pkey" << endl;
+		kDebug() << "tablepart_toggle_pkey" << endl;
 	}*/
 	if (!d)
 		return; //sanity
@@ -127,7 +127,7 @@ void KexiSharedActionHost::updateActionAvailable(const char *action_name, bool a
 
 void KexiSharedActionHost::plugActionProxy(KexiActionProxy *proxy)
 {
-//	kdDebug() << "KexiSharedActionHost::plugActionProxy():" << proxy->receiver()->name() << endl;
+//	kDebug() << "KexiSharedActionHost::plugActionProxy():" << proxy->receiver()->name() << endl;
 	d->actionProxies.insert( proxy->receiver(), proxy );
 }
 
@@ -173,7 +173,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 		}
 //		a->setEnabled(p && p->isAvailable(a->name()));
 		a->setEnabled(avail);
-//		kdDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.") << endl;
+//		kDebug() << "Action " << a->name() << (avail ? " enabled." : " disabled.") << endl;
 	}
 }
 
@@ -227,7 +227,7 @@ KActionPtrList KexiSharedActionHost::sharedActions() const
 /*class KexiAction : public KAction
 {
 	public:
-		KexiAction(const QString &text, const QIconSet &pix,
+		KexiAction(const QString &text, const QIcon &pix,
 			const KShortcut &cut, const QObject *receiver,
 			const char *slot, KActionCollection *parent, const char *name)
 		 : KAction(text,pix,cut,receiver,slot,parent,name)

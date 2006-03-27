@@ -20,7 +20,7 @@
 #ifndef OBJECTTREEVIEW_H
 #define OBJECTTREEVIEW_H
 
-#include <klistview.h>
+#include <k3listview.h>
 
 namespace KFormDesigner {
 
@@ -28,11 +28,11 @@ class ObjectTreeItem;
 class Form;
 
 //! @short An item in ObjectTreeView associated with an ObjectTreeItem.
-class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
+class KFORMEDITOR_EXPORT ObjectTreeViewItem : public K3ListViewItem
 {
 	public:
 		ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item);
-		ObjectTreeViewItem(KListView *list, ObjectTreeItem *item=0);
+		ObjectTreeViewItem(K3ListView *list, ObjectTreeItem *item=0);
 		virtual ~ObjectTreeViewItem();
 
 		//! \return the item name, ie the ObjectTreeItem name
@@ -60,10 +60,10 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 };
 
 /*! @short A graphical view of Form's ObjectTree.
- This is a KListView which represents an item for each widget in the form. The actually selected widget is written bold
+ This is a K3ListView which represents an item for each widget in the form. The actually selected widget is written bold
  and selected. Clicking on a list item selects the corresponding widget in the Form.
  */
-class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
+class KFORMEDITOR_EXPORT ObjectTreeView : public K3ListView
 {
 	Q_OBJECT
 
@@ -96,7 +96,7 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 
 	protected slots:
 		/*! This slot is called when the user right-click a list item. The widget context menu is shown, as inisde the Form. */
-		void displayContextMenu(KListView *list, QListViewItem *item, const QPoint &p);
+		void displayContextMenu(K3ListView *list, QListViewItem *item, const QPoint &p);
 
 		void slotColumnSizeChanged(int);
 

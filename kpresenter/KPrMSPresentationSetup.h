@@ -32,9 +32,9 @@
 class KPrDocument;
 class KPrView;
 
-class KURLRequester;
+class KUrlRequester;
 class KColorButton;
-class KListView;
+class K3ListView;
 class KIntNumInput;
 class KLineEdit;
 class KComboBox;
@@ -116,7 +116,7 @@ protected:
     KColorButton *textColour, *backColour;
     QGroupBox *colourGroup;
     QVBoxLayout *mainLayout;
-    KURLRequester *path;
+    KUrlRequester *path;
 
 protected slots:
     void slotChoosePath(const QString &);

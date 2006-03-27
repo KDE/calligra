@@ -78,11 +78,13 @@ void KexiNameWidget::init(
 		this, "lbl_name" );
 	lyr->addWidget( lbl_name, 2, 0 );
 
-	le_caption = new KLineEdit( nameText, this, "le_caption" );
+	le_caption = new KLineEdit( nameText, this );
+	le_caption->setObjectName( "le_caption" );
 	le_caption->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed, 1, 0));
 	lyr->addWidget( le_caption, 1, 1 );
 
-	le_name = new KLineEdit( nameText, this, "le_name" );
+	le_name = new KLineEdit( nameText, this );
+	le_name->setObjectName( "le_name" );
 	le_name->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed,1,0));
 	Validator *idValidator = new IdentifierValidator(0, "id_val");
 	le_name->setValidator( m_validator = new MultiValidator(idValidator, this, "val") );
@@ -136,7 +138,7 @@ void KexiNameWidget::clear()
 
 bool KexiNameWidget::empty() const
 {
-	return le_name->text().isEmpty() || le_caption->text().stripWhiteSpace().isEmpty();
+	return le_name->text().isEmpty() || le_caption->text().trimmed().isEmpty();
 }
 
 void KexiNameWidget::setNameRequired( bool set ) 
@@ -159,11 +161,11 @@ void KexiNameWidget::setNameText(const QString& name)
 
 void KexiNameWidget::setMessageText(const QString& msg)
 {
-	if (msg.stripWhiteSpace().isEmpty()) {
+	if (msg.trimmed().isEmpty()) {
 		lbl_message->setText("");
 		lbl_message->hide();
 	} else {
-		lbl_message->setText(msg.stripWhiteSpace()+"<br>");
+		lbl_message->setText(msg.trimmed()+"<br>");
 		lbl_message->show();
 	}
 	messageChanged();
@@ -181,12 +183,12 @@ QString KexiNameWidget::nameText() const
 
 bool KexiNameWidget::checkValidity()
 {
-	if (isNameRequired() && le_name->text().stripWhiteSpace().isEmpty()) {
+	if (isNameRequired() && le_name->text().trimmed().isEmpty()) {
 		KMessageBox::sorry(0, m_nameWarning);
 		le_name->setFocus();
 		return false;
 	}
-	if (isCaptionRequired() && le_caption->text().stripWhiteSpace().isEmpty()) {
+	if (isCaptionRequired() && le_caption->text().trimmed().isEmpty()) {
 		KMessageBox::sorry(0, m_captionWarning);
 		le_caption->setFocus();
 		return false;

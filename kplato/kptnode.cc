@@ -35,7 +35,7 @@ namespace KPlato
 {
 
 Node::Node(Node *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
-    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_parent = parent;
     init();
     m_id = QString(); // Not mapped
@@ -45,7 +45,7 @@ Node::Node(Node &node, Node *parent)
     : m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes() {
-    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_parent = parent;
     init();
     m_name = node.name();
@@ -113,12 +113,12 @@ Node *Node::projectNode() {
     if (m_parent)
         return m_parent->projectNode();
 
-    kdError()<<k_funcinfo<<"Ooops, no parent and no project found"<<endl;
+    kError()<<k_funcinfo<<"Ooops, no parent and no project found"<<endl;
     return 0;
 }
 
 void Node::delChildNode( Node *node, bool remove) {
-    //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
+    //kDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
     if ( m_nodes.findRef(node) != -1 ) {
         removeId(node->id());
         if(remove)
@@ -140,7 +140,7 @@ void Node::delChildNode( int number, bool remove) {
 
 void Node::insertChildNode( unsigned int index, Node *node) {
     if (!node->setId(node->id())) {
-        kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
+        kError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
     }
     m_nodes.insert(index,node);
     node->setParent(this);
@@ -150,7 +150,7 @@ void Node::addChildNode( Node *node, Node *after) {
     int index = m_nodes.findRef(after);
     if (index == -1) {
         if (!node->setId(node->id())) {
-            kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
+            kError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
         }
         m_nodes.append(node);
         node->setParent(this);
@@ -335,7 +335,7 @@ Relation *Node::findRelation(Node *node) {
 }
 
 bool Node::isDependChildOf(Node *node) {
-    //kdDebug()<<k_funcinfo<<" '"<<m_name<<"' checking against '"<<node->name()<<"'"<<endl;
+    //kDebug()<<k_funcinfo<<" '"<<m_name<<"' checking against '"<<node->name()<<"'"<<endl;
     for (int i=0; i<numDependParentNodes(); i++) {
         Relation *rel = getDependParentNode(i);
         if (rel->parent() == node)
@@ -347,19 +347,19 @@ bool Node::isDependChildOf(Node *node) {
 }
 
 Duration Node::duration(const DateTime &time, int use, bool backward) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     // TODO: handle risc
     if (!time.isValid()) {
-        kdError()<<k_funcinfo<<"Time is invalid"<<endl;
+        kError()<<k_funcinfo<<"Time is invalid"<<endl;
         return Duration::zeroDuration;
     }
     if (m_effort == 0) {
-        kdError()<<k_funcinfo<<"m_effort == 0"<<endl;
+        kError()<<k_funcinfo<<"m_effort == 0"<<endl;
         return Duration::zeroDuration;
     }
     if (m_currentSchedule == 0) {
         return Duration::zeroDuration;
-        kdError()<<k_funcinfo<<"No current schedule"<<endl;
+        kError()<<k_funcinfo<<"No current schedule"<<endl;
     }
     return calcDuration(time, m_effort->effort(use), backward);
 }
@@ -433,7 +433,7 @@ void Node::propagateEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->earliestStart = time;
-    //kdDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->earliestStart.toString()<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->earliestStart.toString()<<endl;
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateEarliestStart(time);
@@ -444,7 +444,7 @@ void Node::propagateLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->latestFinish = time;
-    //kdDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->latestFinish<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->latestFinish<<endl;
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateLatestFinish(time);
@@ -490,14 +490,14 @@ void Node::resetVisited() {
 }
 
 Node *Node::siblingBefore() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (getParent())
         return getParent()->childBefore(this);
     return 0;
 }
 
 Node *Node::childBefore(Node *node) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     int index = m_nodes.findRef(node);
     if (index > 0){
         return m_nodes.at(index-1);
@@ -506,7 +506,7 @@ Node *Node::childBefore(Node *node) {
 }
 
 Node *Node::siblingAfter() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (getParent())
         return getParent()->childAfter(this);
     return 0;
@@ -514,7 +514,7 @@ Node *Node::siblingAfter() {
 
 Node *Node::childAfter(Node *node)
 {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     uint index = m_nodes.findRef(node);
     if (index < m_nodes.count()-1) {
         return m_nodes.at(index+1);    }
@@ -565,30 +565,30 @@ bool Node::isStartNode() const {
 }
 
 bool Node::setId(QString id) {
-    //kdDebug()<<k_funcinfo<<id<<endl;
+    //kDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
-        kdError()<<k_funcinfo<<"id is empty"<<endl;
+        kError()<<k_funcinfo<<"id is empty"<<endl;
         m_id = id;
         return false;
     }
     if (!m_id.isEmpty()) {
         Node *n = findNode();
         if (n == this) {
-            //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+            //kDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
             removeId();
         } else if (n) {
             //Hmmm, shouldn't happen
-            kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
+            kError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
         }
     }
     if (findNode(id)) {
-        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name()<<endl;
+        kError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name()<<endl;
         m_id = QString(); // hmmm
         return false;
     }
     m_id = id;
     insertId(id);
-    //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
     return true;
 }
 
@@ -608,7 +608,7 @@ void Node::setEndTime(DateTime endTime) {
 }
 
 void Node::saveAppointments(QDomElement &element, long id) const {
-    //kdDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
     QPtrListIterator<Node> it(m_nodes);
     for (; it.current(); ++it ) {
         it.current()->saveAppointments(element, id);
@@ -634,7 +634,7 @@ bool Node::addAppointment(Appointment *appointment) {
 }
 
 bool Node::addAppointment(Appointment *appointment, Schedule &main) {
-    //kdDebug()<<k_funcinfo<<this<<endl;
+    //kDebug()<<k_funcinfo<<this<<endl;
     Schedule *s = findSchedule(main.id());
     if (s == 0) {
         s = createSchedule(&main);
@@ -666,14 +666,14 @@ void Node::addSchedule(Schedule *schedule) {
 }
 
 Schedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
-    //kdDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
+    //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
     NodeSchedule *sch = new NodeSchedule(this, name, type, id);
     addSchedule(sch);
     return sch;
 }
 
 Schedule *Node::createSchedule(Schedule *parent) {
-    //kdDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
+    //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
     NodeSchedule *sch = new NodeSchedule(parent, this);
     addSchedule(sch);
     return sch;
@@ -690,7 +690,7 @@ Schedule *Node::findSchedule(const QString name, const Schedule::Type type) cons
 }
 
 Schedule *Node::findSchedule(const Schedule::Type type) const {
-    //kdDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count()<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count()<<endl;
     QIntDictIterator<Schedule> it = m_schedules;
     for (; it.current(); ++it) {
         if (!it.current()->isDeleted() && it.current()->type() == type) {
@@ -703,7 +703,7 @@ Schedule *Node::findSchedule(const Schedule::Type type) const {
 void Node::setScheduleDeleted(long id, bool on) {
     Schedule *ns = findSchedule(id);
     if (ns == 0) {
-        kdError()<<k_funcinfo<<m_name<<" Could not find schedule with id="<<id<<endl;
+        kError()<<k_funcinfo<<m_name<<" Could not find schedule with id="<<id<<endl;
     } else {
         ns->setDeleted(on);
     }
@@ -723,7 +723,7 @@ void Node::setParentSchedule(Schedule *sch) {
 bool Node::calcCriticalPath(bool fromEnd) {
     if (m_currentSchedule == 0)
         return false;
-    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<endl;
     if (!isCritical()) {
         return false;
     }
@@ -751,7 +751,7 @@ int Node::level() {
 
 void Node::generateWBS(int count, WBSDefinition &def, QString wbs) {
     m_wbs = wbs + def.code(count, level());
-    //kdDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
     QString w = wbs + def.wbs(count, level());
     QPtrListIterator<Node> it = m_nodes;
     for (int i=0; it.current(); ++it) {
@@ -765,7 +765,7 @@ void Node::setCurrentSchedule(long id) {
     for (; it.current(); ++it) {
         it.current()->setCurrentSchedule(id);
     }
-    //kdDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
 }
 //////////////////////////   Effort   /////////////////////////////////
 
@@ -792,25 +792,25 @@ void Effort::set( Duration e, Duration p, Duration o ) {
     m_expectedEffort = e;
     m_pessimisticEffort = (p == Duration::zeroDuration) ? e :  p;
     m_optimisticEffort = (o == Duration::zeroDuration) ? e :  o;
-    //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
+    //kDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
 }
 
 void Effort::set( int e, int p, int o ) {
     m_expectedEffort = Duration(e);
     m_pessimisticEffort = (p < 0) ? Duration(e) :  Duration(p);
     m_optimisticEffort = (o < 0) ? Duration(e) :  Duration(o);
-    //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
-    //kdDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEffort.toString()<<endl;
-    //kdDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
+    //kDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
+    //kDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEffort.toString()<<endl;
+    //kDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
 
-    //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.duration()<<" manseconds"<<endl;
+    //kDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.duration()<<" manseconds"<<endl;
 }
 
 //TODO (?): effort is not really a duration, should maybe not use Duration for storage
 void Effort::set(unsigned days, unsigned hours, unsigned minutes) {
     Duration dur(days, hours, minutes);
     set(dur);
-    //kdDebug()<<k_funcinfo<<"effort="<<dur.toString()<<endl;
+    //kDebug()<<k_funcinfo<<"effort="<<dur.toString()<<endl;
 }
 
 void Effort::expectedEffort(unsigned *days, unsigned *hours, unsigned *minutes) {
@@ -878,43 +878,43 @@ int Effort::pessimisticRatio() const {
 // Debugging
 #ifndef NDEBUG
 void Node::printDebug(bool children, QCString indent) {
-    kdDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
+    kDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
     if (m_constraint == MustStartOn || m_constraint == StartNotEarlier || m_constraint == FixedInterval)
-        kdDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")"<<endl;
+        kDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")"<<endl;
     if (m_constraint == MustFinishOn || m_constraint == FinishNotLater || m_constraint == FixedInterval)
-        kdDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")"<<endl;
+        kDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")"<<endl;
     Schedule *cs = m_currentSchedule; 
     if (cs) {
-        kdDebug()<<indent<<"  Current schedule: "<<"id="<<cs->id()<<" '"<<cs->name()<<"' type: "<<cs->type()<<endl;
+        kDebug()<<indent<<"  Current schedule: "<<"id="<<cs->id()<<" '"<<cs->name()<<"' type: "<<cs->type()<<endl;
     } else {
-        kdDebug()<<indent<<"  Current schedule: None"<<endl;
+        kDebug()<<indent<<"  Current schedule: None"<<endl;
     }
     QIntDictIterator<Schedule> it = m_schedules;
     for (; it.current(); ++it) {
         it.current()->printDebug(indent+"  ");
     }
-    kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
-    kdDebug()<<indent<<"  Level: "<<level()<<endl;
-    kdDebug()<<indent<<"  No of predecessors: "<<m_dependParentNodes.count()<<endl;
+    kDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
+    kDebug()<<indent<<"  Level: "<<level()<<endl;
+    kDebug()<<indent<<"  No of predecessors: "<<m_dependParentNodes.count()<<endl;
     QPtrListIterator<Relation> pit(m_dependParentNodes);
-    //kdDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
+    //kDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
     if (pit.count() > 0) {
         for ( ; pit.current(); ++pit ) {
             pit.current()->printDebug(indent);
         }
     }
-    kdDebug()<<indent<<"  No of successors: "<<m_dependChildNodes.count()<<endl;
+    kDebug()<<indent<<"  No of successors: "<<m_dependChildNodes.count()<<endl;
     QPtrListIterator<Relation> cit(m_dependChildNodes);
-    //kdDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
+    //kDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
     if (cit.count() > 0) {
         for ( ; cit.current(); ++cit ) {
             cit.current()->printDebug(indent);
         }
     }
 
-    //kdDebug()<<indent<<endl;
+    //kDebug()<<indent<<endl;
     indent += "  ";
     if (children) {
         QPtrListIterator<Node> it(m_nodes);
@@ -929,11 +929,11 @@ void Node::printDebug(bool children, QCString indent) {
 
 #ifndef NDEBUG
 void Effort::printDebug(QCString indent) {
-    kdDebug()<<indent<<"  Effort:"<<endl;
+    kDebug()<<indent<<"  Effort:"<<endl;
     indent += "  ";
-    kdDebug()<<indent<<"  Expected: "<<m_expectedEffort.toString()<<endl;
-    kdDebug()<<indent<<"  Optimistic: "<<m_optimisticEffort.toString()<<endl;
-    kdDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
+    kDebug()<<indent<<"  Expected: "<<m_expectedEffort.toString()<<endl;
+    kDebug()<<indent<<"  Optimistic: "<<m_optimisticEffort.toString()<<endl;
+    kDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
 }
 #endif
 

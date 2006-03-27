@@ -296,7 +296,7 @@ QString InputMask::clearString( uint pos, uint len ) const
         return QString::null;
 
     QString s;
-    int end = QMIN( ( uint ) m_maxLength, pos + len );
+    int end = qMin( ( uint ) m_maxLength, pos + len );
     for ( int i = pos; i < end; i++ )
         if ( m_maskData[ i ].separator )
             s += m_maskData[ i ].maskChar;
@@ -312,7 +312,7 @@ QString InputMask::stripString( const QString &str ) const
         return str;
 
     QString s;
-    int end = QMIN( m_maxLength, ( int ) str.length() );
+    int end = qMin( m_maxLength, ( int ) str.length() );
     for ( int i = 0; i < end; i++ )
         if ( m_maskData[ i ].separator )
             s += m_maskData[ i ].maskChar;

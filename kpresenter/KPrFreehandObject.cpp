@@ -88,7 +88,7 @@ const char * KPrFreehandObject::getOasisElementName() const
 
 void KPrFreehandObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo* info )
 {
-    kdDebug(33001) << "KPrFreehandObject::loadOasis" << endl;
+    kDebug(33001) << "KPrFreehandObject::loadOasis" << endl;
     KPrPointObject::loadOasis( element, context, info );
 
     //load marker

@@ -93,7 +93,7 @@ public:
     // get parent
     KPrDocument* parent()const { return m_parent; }
 
-    virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
+    virtual KoDocument *hitTest( const QPoint &, const QMatrix & );
 
 protected:
     KPrDocument *m_parent;

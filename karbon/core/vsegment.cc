@@ -89,7 +89,7 @@ VSegment::setDegree( unsigned short deg )
 	else
 	{
 		// Copy old node data (from the knot "backwards".
-		unsigned short offset = kMax( 0, deg - m_degree );
+		unsigned short offset = qMax( 0, deg - m_degree );
 
 		for( unsigned short i = offset; i < deg; ++i )
 		{
@@ -551,10 +551,10 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	// Set f(u)-values.
 	for( unsigned short k = 0; k <= 2 * degree() - 1; ++k )
 	{
-		unsigned short min = kMin( k, degree() );
+		unsigned short min = qMin( k, degree() );
 
 		for(
-			unsigned short i = kMax( 0, k - ( degree() - 1 ) );
+			unsigned short i = qMax( 0, k - ( degree() - 1 ) );
 			i <= min;
 			++i )
 		{
@@ -575,13 +575,13 @@ VSegment::nearestPointParam( const KoPoint& p ) const
 	delete[]( products );
 	delete[]( z );
 
-kdDebug(38000) << "results" << endl;
+kDebug(38000) << "results" << endl;
 for( int i = 0; i <= 2 * degree() - 1; ++i )
 {
-kdDebug(38000) << newCurve.getLast()->p( i ).x() << " "
+kDebug(38000) << newCurve.getLast()->p( i ).x() << " "
 << newCurve.getLast()->p( i ).y() << endl;
 }
-kdDebug(38000) << endl;
+kDebug(38000) << endl;
 
 	// Find roots.
 	QValueList<double> params;
@@ -647,7 +647,7 @@ VSegment::rootParams( QValueList<double>& params ) const
 				// Calculate intersection of chord with x-axis.
 				KoPoint chord = knot() - prev()->knot();
 
-kdDebug(38000) << prev()->knot().x()  << " " << prev()->knot().y()
+kDebug(38000) << prev()->knot().x()  << " " << prev()->knot().y()
 << knot().x() << " " << knot().y() << " ---> "
 << ( chord.x() * prev()->knot().y() - chord.y() * prev()->knot().x() ) / - chord.y() << endl;
 				params.append(

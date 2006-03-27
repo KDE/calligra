@@ -189,7 +189,7 @@ namespace KexiDB
 			QuerySchema* m_query;
 	};
 
-//! @todo perhaps use Q_ULLONG here?
+//! @todo perhaps use quint64 here?
 	/*! \return a number of rows that can be retrieved from \a tableSchema. 
 	 The table must be created or retrieved using a Connection object,
 	 i.e. tableSchema.connection() must not return 0.

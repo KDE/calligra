@@ -66,7 +66,7 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     
     setEstimateFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
     if (workTime) {
-        //kdDebug()<<k_funcinfo<<"daylength="<<workTime->day()<<endl;
+        //kDebug()<<k_funcinfo<<"daylength="<<workTime->day()<<endl;
         m_dayLength = workTime->day();
         if (task.effort()->type() == Effort::Type_Effort) {
             setEstimateScales(m_dayLength);
@@ -89,7 +89,7 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     } else {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime())); 
     }
-    //kdDebug()<<k_funcinfo<<"Effort: "<<task.effort()->expected().toString()<<endl;
+    //kDebug()<<k_funcinfo<<"Effort: "<<task.effort()->expected().toString()<<endl;
     setEstimate(task.effort()->expected()); 
     setOptimistic(task.effort()->optimisticRatio());
     setPessimistic(task.effort()->pessimisticRatio());
@@ -132,7 +132,7 @@ KMacroCommand *TaskDefaultPanel::buildCommand(Part *part) {
         modified = true;
     }
     dt = estimationValue();
-    kdDebug()<<k_funcinfo<<"Estimate: "<<dt.toString()<<endl;
+    kDebug()<<k_funcinfo<<"Estimate: "<<dt.toString()<<endl;
     bool expchanged = dt != m_task.effort()->expected();
     if ( expchanged ) {
         cmd->addCommand(new ModifyEffortCmd(part, m_task.effort(), m_task.effort()->expected(), dt));

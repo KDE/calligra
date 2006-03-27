@@ -111,9 +111,9 @@ bool Conditions::currentCondition( Conditional & condition )
     condition = *it;
 
 	if ( (*it).styleName )
-		kdDebug()<<"*it :"<<  *( ( *it ).styleName ) <<endl;
+		kDebug()<<"*it :"<<  *( ( *it ).styleName ) <<endl;
     	
-	kdDebug()<<"*it style :"<<(  *it ).style <<endl;
+	kDebug()<<"*it style :"<<(  *it ).style <<endl;
 
 
     if ( condition.strVal1 && m_cell->value().isNumber() )
@@ -194,8 +194,8 @@ bool Conditions::currentCondition( Conditional & condition )
           return true;
       }
       else
-      if ( ( value > QMIN(condition.val1, condition.val2 ) )
-           && ( value < QMAX(condition.val1, condition.val2 ) ) )
+      if ( ( value > qMin(condition.val1, condition.val2 ) )
+           && ( value < qMax(condition.val1, condition.val2 ) ) )
       {
         return true;
       }
@@ -208,8 +208,8 @@ bool Conditions::currentCondition( Conditional & condition )
           return true;
       }
       else
-      if ( ( value < QMIN(condition.val1, condition.val2 ) )
-           || ( value > QMAX(condition.val1, condition.val2) ) )
+      if ( ( value < qMin(condition.val1, condition.val2 ) )
+           || ( value > qMax(condition.val1, condition.val2) ) )
       {
         return true;
       }
@@ -422,22 +422,22 @@ QDomElement Conditions::saveConditions( QDomDocument & doc ) const
 
 void Conditions::loadOasisConditions( const QDomElement & element )
 {
-    kdDebug()<<"void Conditions::loadOasisConditions( const QDomElement & element )\n";
+    kDebug()<<"void Conditions::loadOasisConditions( const QDomElement & element )\n";
     QDomElement elementItem( element );
     StyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
     while ( !elementItem.isNull() )
     {
-        kdDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
+        kDebug()<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
         if ( elementItem.tagName()== "map" && elementItem.namespaceURI() == KoXmlNS::style  )
         {
             bool ok = true;
-            kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
+            kDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
             Conditional newCondition;
             loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString::null ), newCondition );
             if ( elementItem.hasAttributeNS( KoXmlNS::style, "apply-style-name" ) )
             {
-                kdDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
+                kDebug()<<"elementItem.attribute( style:apply-style-name ) :"<<elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null )<<endl;
                 newCondition.styleName = new QString( elementItem.attributeNS( KoXmlNS::style, "apply-style-name", QString::null ) );
                 newCondition.style = manager->style( *newCondition.styleName );
                 if ( !newCondition.style )
@@ -449,7 +449,7 @@ void Conditions::loadOasisConditions( const QDomElement & element )
             if ( ok )
                 m_condList.append( newCondition );
             else
-                kdDebug(36001) << "Error loading condition " << elementItem.nodeName()<< endl;
+                kDebug(36001) << "Error loading condition " << elementItem.nodeName()<< endl;
         }
         elementItem = elementItem.nextSibling().toElement();
     }
@@ -520,8 +520,8 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
         newCondition.cond = Conditional::Equal;
     }
     else
-        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
-    kdDebug()<<" value :"<<value<<endl;
+        kDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+    kDebug()<<" value :"<<value<<endl;
     bool ok = false;
     newCondition.val1 = value.toDouble(&ok);
     if ( !ok )
@@ -530,7 +530,7 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
         if ( !ok )
         {
             newCondition.strVal1 = new QString( value );
-            kdDebug()<<" Try to parse this value :"<<value<<endl;
+            kDebug()<<" Try to parse this value :"<<value<<endl;
         }
 
     }
@@ -540,7 +540,7 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
 void Conditions::loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition )
 {
     bool ok = false;
-    kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
     newCondition.val1 = listVal[0].toDouble(&ok);
     if ( !ok )
@@ -549,7 +549,7 @@ void Conditions::loadOasisValidationValue( const QStringList &listVal, Condition
         if ( !ok )
         {
             newCondition.strVal1 = new QString( listVal[0] );
-            kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+            kDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
         }
     }
     ok=false;
@@ -560,7 +560,7 @@ void Conditions::loadOasisValidationValue( const QStringList &listVal, Condition
         if ( !ok )
         {
             newCondition.strVal2 = new QString( listVal[1] );
-            kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+            kDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
         }
     }
 }
@@ -626,7 +626,7 @@ void Conditions::loadConditions( const QDomElement & element )
     }
     else
     {
-      kdDebug(36001) << "Error loading condition " << conditionElement.nodeName()<< endl;
+      kDebug(36001) << "Error loading condition " << conditionElement.nodeName()<< endl;
     }
   }
 }

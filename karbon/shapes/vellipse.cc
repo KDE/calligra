@@ -94,7 +94,7 @@ VEllipse::init()
 		close();
 
 	// Translate and scale:
-	QWMatrix m;
+	QMatrix m;
 	m.translate( m_center.x(), m_center.y() );
 	m.scale( 2.0 * m_rx, 2.0 * m_ry );
 
@@ -186,7 +186,7 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 
 	VObject::saveOasis( store, docWriter, mainStyles, index );
 
-	QWMatrix tmpMat;
+	QMatrix tmpMat;
 	tmpMat.scale( 1, -1 );
 	tmpMat.translate( 0, -document()->height() );
 	

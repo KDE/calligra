@@ -33,7 +33,7 @@
 #include <qptrlist.h>
 #include <qdict.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 
 namespace KPlato

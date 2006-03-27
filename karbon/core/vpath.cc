@@ -523,7 +523,7 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 		}
 	}
 	
-	kdDebug(38000) << "intersection count: " << rparams.count() << endl;
+	kDebug(38000) << "intersection count: " << rparams.count() << endl;
 
 	// sort all intersections
 	qHeapSort( rparams );
@@ -531,7 +531,7 @@ VSubpath::pointIsInside( const KoPoint& p ) const
 	QValueList<double>::iterator itr, etr = rparams.end();
 	
 	for( itr = rparams.begin(); itr != etr; ++itr )
-		kdDebug(38000) << "intersection: " << *itr << endl;
+		kDebug(38000) << "intersection: " << *itr << endl;
 
 	if( closed )
 	{

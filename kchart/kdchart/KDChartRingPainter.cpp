@@ -139,7 +139,7 @@ void KDChartRingPainter::paintData( QPainter* painter,
         _numValues = data->usedCols();
 
     // compute position
-    _size = QMIN( _dataRect.width(), _dataRect.height() ); // initial size
+    _size = qMin( _dataRect.width(), _dataRect.height() ); // initial size
     // if the rings explode, we need to give them additional space =>
     // make the basic size smaller
     if ( params()->explode() ) {

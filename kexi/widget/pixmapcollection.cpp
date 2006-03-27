@@ -32,7 +32,7 @@
 #include <klineedit.h>
 #include <kicontheme.h>
 #include <kpixmapio.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -93,7 +93,7 @@ PixmapCollection::getPixmap(const QString &name)
 {
 	if(!m_pixmaps.contains(name))
 	{
-		kdDebug() << " The icon " << name << " you requested is not in the collection" << endl;
+		kDebug() << " The icon " << name << " you requested is not in the collection" << endl;
 		return QPixmap();
 	}
 
@@ -264,11 +264,11 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 	vlayout->addStretch();
 
 	// Setup the iconView
-	m_iconView = new KIconView(frame, "pixcollection_iconView");
+	m_iconView = new K3IconView(frame, "pixcollection_iconView");
 	m_iconView->resize(100,100);
 	m_iconView->setArrangement(QIconView::LeftToRight);
 	m_iconView->setAutoArrange(true);
-	m_iconView->setMode(KIconView::Select);
+	m_iconView->setMode(K3IconView::Select);
 	l->addWidget(m_iconView);
 	connect(m_iconView, SIGNAL(contextMenuRequested(QIconViewItem*, const QPoint&)), this, SLOT(displayMenu(QIconViewItem*, const QPoint&)));
 	connect(m_iconView, SIGNAL(itemRenamed(QIconViewItem*, const QString &)), this, SLOT(renameCollectionItem(QIconViewItem*, const QString&)));
@@ -365,7 +365,7 @@ void
 PixmapCollectionEditor::displayMenu(QIconViewItem *it, const QPoint &p)
 {
 	if(!it) return;
-	KPopupMenu *menu = new KPopupMenu();
+	KMenu *menu = new KMenu();
 	menu->insertItem(SmallIconSet("edit"), i18n("Rename Item"), this, SLOT(renameItem()));
 	menu->insertItem(SmallIconSet("remove"), i18n("Remove Item"), this, SLOT(removeItem()));
 	menu->exec(p);
@@ -379,11 +379,11 @@ PixmapCollectionChooser::PixmapCollectionChooser(PixmapCollection *collection, c
 	m_collection = collection;
 	setInitialSize(QSize(400, 200), true);
 
-	m_iconView = new KIconView(this, "pixchooser_iconView");
+	m_iconView = new K3IconView(this, "pixchooser_iconView");
 	setMainWidget(m_iconView);
 	m_iconView->setArrangement(QIconView::LeftToRight);
 	m_iconView->setAutoArrange(true);
-	m_iconView->setMode(KIconView::Select);
+	m_iconView->setMode(K3IconView::Select);
 
 	PixmapMap::ConstIterator it;
 	PixmapMap::ConstIterator endIt = collection->m_pixmaps.constEnd();

@@ -42,7 +42,7 @@ namespace KexiDB {
 		protected:
 			virtual KexiUtils::Validator::Result internalCheck(const QString &valueName, const QVariant& v, 
 				QString &message, QString &details);
-			QGuardedPtr<KexiDB::Driver> m_drv;
+			QPointer<KexiDB::Driver> m_drv;
 	};
 }
 

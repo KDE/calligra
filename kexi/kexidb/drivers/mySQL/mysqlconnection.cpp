@@ -116,10 +116,10 @@ bool MySqlConnection::drv_executeSQL( const QString& statement ) {
   return d->executeSQL(statement);
 }
 
-Q_ULLONG MySqlConnection::drv_lastInsertRowID()
+quint64 MySqlConnection::drv_lastInsertRowID()
 {
 	//! @todo
-	return (Q_ULLONG)mysql_insert_id(d->mysql);
+	return (quint64)mysql_insert_id(d->mysql);
 }
 
 int MySqlConnection::serverResult()

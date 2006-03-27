@@ -29,7 +29,7 @@
 #include <qpaintdevicemetrics.h>
 #include <qwmatrix.h>
 #include <qapplication.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <qimage.h>
 #include <qdatetime.h>
 #include <qdropsite.h>
@@ -234,7 +234,7 @@ bool KPrCanvas::eventFilter( QObject *o, QEvent *e )
         if ( m_currentTextObjectView &&
                 (keyev->key()==Qt::Key_Home ||keyev->key()==Key_End
                  || keyev->key()==Qt::Key_Tab || keyev->key()==Key_Prior
-                 || keyev->key()==Qt::Key_Next || keyev->key() == Key_Backtab) )
+                 || keyev->key()==Qt::Key_PageDown || keyev->key() == Key_Backtab) )
         {
             m_currentTextObjectView->keyPressEvent( keyev );
             return true;
@@ -284,12 +284,12 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 {
     if ( isUpdatesEnabled() )
     {
-        //kdDebug(33001) << "KPrCanvas::paintEvent m_paintGuides = " << m_paintGuides << endl; //<< " " << kdBacktrace( 10 ) << endl;
+        //kDebug(33001) << "KPrCanvas::paintEvent m_paintGuides = " << m_paintGuides << endl; //<< " " << kBacktrace( 10 ) << endl;
         KPrDocument *doc =m_view->kPresenterDoc();
 
         if ( ! m_paintGuides  )
         {
-            //kdDebug(33001) << "KPrCanvas::paintEvent" << endl;
+            //kDebug(33001) << "KPrCanvas::paintEvent" << endl;
             QPainter bufPainter;
             bufPainter.begin( &buffer, this ); // double-buffering - (the buffer is as big as the widget)
             bufPainter.translate( -diffx(), -diffy() );
@@ -298,10 +298,10 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             QRect crect( paintEvent->rect() ); // the rectangle that needs to be repainted, in widget coordinates
             bufPainter.setClipRect( crect );
 
-            //kdDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << ", " << size() << endl;
+            //kDebug(33001) << "KPrCanvas::paintEvent " << DEBUGRECT( crect ) << ", " << size() << endl;
 
             crect.moveBy( diffx(), diffy() ); // now in contents coordinates
-            //kdDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
+            //kDebug(33001) << "KPrCanvas::paintEvent after applying diffx/diffy: " << DEBUGRECT( crect ) << endl;
 
             if ( editMode || !fillBlack )
                 bufPainter.fillRect( crect, white );
@@ -450,7 +450,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         topPainter.end();
         bitBlt( this, paintEvent->rect().topLeft(), &topBuffer, paintEvent->rect() );
     }
-    //else kdDebug(33001) << "KPrCanvas::paintEvent with updates disabled" << endl;
+    //else kDebug(33001) << "KPrCanvas::paintEvent with updates disabled" << endl;
 }
 
 
@@ -508,7 +508,7 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
     painter->setClipRegion( emptySpaceRegion, QPainter::CoordPainter );
     painter->setPen( Qt::NoPen );
 
-    //kdDebug(33001) << "KWDocument::eraseEmptySpace emptySpaceRegion: " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
+    //kDebug(33001) << "KWDocument::eraseEmptySpace emptySpaceRegion: " << DEBUGRECT( emptySpaceRegion.boundingRect() ) << endl;
     painter->fillRect( emptySpaceRegion.boundingRect(), brush );
     painter->restore();
 }
@@ -997,7 +997,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             m_view->zoomHandler()->zoomPoint( m_pointArray.at( m_indexPointArray - 2 ) ) );
                 p.restore();
 
-                m_indexPointArray = QMAX( 1, m_indexPointArray - 1 );
+                m_indexPointArray = qMax( 1, m_indexPointArray - 1 );
                 m_pointArray.resize( m_indexPointArray );
                 m_startPoint = m_pointArray.at( m_indexPointArray - 1 );
 
@@ -1934,7 +1934,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             setSwitchingMode( false );
             m_view->screenNext();
             break;
-        case Qt::Key_Next:
+        case Qt::Key_PageDown:
             setSwitchingMode( false );
             m_view->screenNext( true );
             break;
@@ -1944,7 +1944,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             finishPageEffect( true );
             m_view->screenPrev();
             break;
-        case Qt::Key_Prior:
+        case Qt::Key_PageUp:
             setSwitchingMode( false );
             finishObjectEffects();
             finishPageEffect( true );
@@ -1998,10 +1998,10 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
     {
         switch ( e->key() )
         {
-            case Qt::Key_Next:
+            case Qt::Key_PageDown:
                 m_view->nextPage();
                 break;
-            case Qt::Key_Prior:
+            case Qt::Key_PageUp:
                 m_view->prevPage();
                 break;
             case Qt::Key_Home:  // go to first page
@@ -2023,8 +2023,8 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 
             if ( e->state() & ControlButton )
             {
-                offsetx = QMAX(1,m_view->zoomHandler()->zoomItX(10));
-                offsety = QMAX(1,m_view->zoomHandler()->zoomItY(10));
+                offsetx = qMax(1,m_view->zoomHandler()->zoomItX(10));
+                offsety = qMax(1,m_view->zoomHandler()->zoomItY(10));
             }
 
             if ( !m_keyPressEvent )
@@ -2293,7 +2293,7 @@ void KPrCanvas::setMouseSelectedObject(bool b)
 void KPrCanvas::setupMenus()
 {
     // create right button presentation menu
-    m_presMenu = new KPopupMenu();
+    m_presMenu = new KMenu();
     Q_CHECK_PTR( m_presMenu );
     m_presMenu->setCheckable( true );
     m_presMenu->insertTitle( i18n( "Slide Show" ) );
@@ -2365,7 +2365,7 @@ bool KPrCanvas::exportPage( int nPage,
             tmpFile->setAutoDelete( true );
         if( bLocalFile || 0 == tmpFile->status() ){
             QFile file( bLocalFile ? fileURL.path(0) : tmpFile->name() );
-            if ( file.open( IO_ReadWrite ) ) {
+            if ( file.open( QIODevice::ReadWrite ) ) {
                 res = pix.save( &file, format, quality );
                 file.close();
             }
@@ -2728,7 +2728,7 @@ void KPrCanvas::setTextDepthMinus()
     double newVal = leftMargin - indent;
     KMacroCommand* macroCmd = 0L;
     for ( ; it.current() ; ++it ) {
-        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, QMAX( newVal, 0 ));
+        KCommand* cmd = it.current()->setMarginCommand(QStyleSheetItem::MarginLeft, qMax( newVal, 0 ));
         if ( cmd )
         {
             if ( !macroCmd )
@@ -2900,7 +2900,7 @@ QPtrList<KPrTextObject> KPrCanvas::selectedTextObjs() const
 
 void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNum /* 1-based */)
 {
-    //kdDebug(33001) << "KPrCanvas::startScreenPresentation curPgNum=" << curPgNum << endl;
+    //kDebug(33001) << "KPrCanvas::startScreenPresentation curPgNum=" << curPgNum << endl;
 
     //setup presentation menu
     m_presMenu->setItemChecked( PM_DM, false );
@@ -2913,12 +2913,12 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
 
     // Text can't zoom with a different x and y factor, yet.
     // So we have to choose the smallest zoom (but still paint background everywhere)
-    double zoom = kMin( zoomX, zoomY );
+    double zoom = qMin( zoomX, zoomY );
 
-    kdDebug() << "zoomX=" << zoomX << " zoomY=" << zoomY << " zoom=" << zoom << endl;
+    kDebug() << "zoomX=" << zoomX << " zoomY=" << zoomY << " zoom=" << zoom << endl;
 
     m_zoomBeforePresentation = doc->zoomHandler()->zoom();
-    kdDebug() << "old zoomed resolutions =" << doc->zoomHandler()->zoomedResolutionX() << "," << doc->zoomHandler()->zoomedResolutionY() << endl;
+    kDebug() << "old zoomed resolutions =" << doc->zoomHandler()->zoomedResolutionX() << "," << doc->zoomHandler()->zoomedResolutionY() << endl;
     // Seems to fail (Qt uses the wrong font sizes...)
     //doc->zoomHandler()->setZoomedResolution( zoomX * doc->zoomHandler()->zoomedResolutionX(),
     //                                         zoomY * doc->zoomHandler()->zoomedResolutionY() );
@@ -2942,7 +2942,7 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
     // no slide selected ? end the slide show immediately...
     if( !m_presentationSlides.count() )
     {
-        //kdDebug(33001) << "No slide: end the slide show" << endl;
+        //kDebug(33001) << "No slide: end the slide show" << endl;
         stopScreenPresentation();
         return;
     }
@@ -2960,12 +2960,12 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
 
     m_step.m_pageNumber = (unsigned int) -1; // force gotoPage to do something
     gotoPage( slide );
-    //kdDebug(33001) << "Page::startScreenPresentation - done" << endl;
+    //kDebug(33001) << "Page::startScreenPresentation - done" << endl;
 }
 
 void KPrCanvas::stopScreenPresentation()
 {
-    //kdDebug(33001) << "KPrCanvas::stopScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
+    //kDebug(33001) << "KPrCanvas::stopScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
     setCursor( waitCursor );
 
     KPrDocument * doc = m_view->kPresenterDoc();
@@ -2997,7 +2997,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         // clear drawed lines
         m_drawModeLines.clear();
 
-        //kdDebug(33001) << "\n-------\nKPrCanvas::pNext m_step =" << m_step.m_step << " m_subStep =" << m_step.m_subStep << endl;
+        //kDebug(33001) << "\n-------\nKPrCanvas::pNext m_step =" << m_step.m_step << " m_subStep =" << m_step.m_subStep << endl;
 
         // First try to go one sub-step further, if any object requires it
         // ### should we also objects on the sticky page be checked for sub steps?
@@ -3011,7 +3011,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
                 if ( static_cast<int>( m_step.m_subStep + 1 ) < kpobject->getSubPresSteps() )
                 {
                     m_step.m_subStep++;
-                    //kdDebug(33001) << "Page::pNext addSubPres m_subStep is now " << m_subStep << endl;
+                    //kDebug(33001) << "Page::pNext addSubPres m_subStep is now " << m_subStep << endl;
                     doObjEffects();
                     return false;
                 }
@@ -3024,7 +3024,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
             QValueList<int>::ConstIterator it = m_pageEffectSteps.find( m_step.m_step );
             m_step.m_step = *( ++it );
             m_step.m_subStep = 0;
-            //kdDebug(33001) << "Page::pNext setting currentEffectStep to " << m_step.m_step << endl;
+            //kDebug(33001) << "Page::pNext setting currentEffectStep to " << m_step.m_step << endl;
 
             // if first step on page, draw background
             if ( m_step.m_step == 0 )
@@ -3111,7 +3111,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         return true;
     }
 
-    //kdDebug(33001) << "Page::pNext last slide -> End of presentation" << endl;
+    //kDebug(33001) << "Page::pNext last slide -> End of presentation" << endl;
 
     // When we are in manual mode or in automatic mode with no infinite loop
     // we display the 'End of presentation' slide.
@@ -3227,7 +3227,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
                                int forceWidth,
                                int forceHeight )
 {
-    //kdDebug(33001) << "Page::drawPageInPix" << endl;
+    //kDebug(33001) << "Page::drawPageInPix" << endl;
 
     KPrDocument *doc = m_view->kPresenterDoc();
     int oldZoom = doc->zoomHandler()->zoom();
@@ -3307,7 +3307,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
 // page effects.
 void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
 {
-    //kdDebug(33001) << "Page::drawCurrentPageInPix" << endl;
+    //kDebug(33001) << "Page::drawCurrentPageInPix" << endl;
 
     // avoid garbage on "weird" DPIs
     _pix.fill(Qt::black);
@@ -3324,7 +3324,7 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
 
 void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, int rows, int cols )
 {
-    //kdDebug(33001) << "KPrCanvas::printPage" << endl;
+    //kDebug(33001) << "KPrCanvas::printPage" << endl;
     KPrDocument *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( step.m_pageNumber );
     QRect const rect = page->getZoomPageRect();
@@ -3337,7 +3337,7 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, 
     int begin_left = ( metrics.width() - rect.width() );
     int begin_top = ( metrics.height() - rect.height() );
 
-    rows = cols = QMAX( rows, cols ); // all slides have the same size
+    rows = cols = qMax( rows, cols ); // all slides have the same size
 
     if ( rows > 1 )
     {
@@ -3390,7 +3390,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
     // YABADABADOOOOOOO.... That's a hack :-)
     if ( m_step.m_subStep == 0 && !isAllreadyPainted && isUpdatesEnabled() )
     {
-        //kdDebug(33001) << "Page::doObjEffects - in the strange hack" << endl;
+        //kDebug(33001) << "Page::doObjEffects - in the strange hack" << endl;
         QPainter p;
         p.begin( &screen_orig );
         QRect desktopRect = QRect( 0, 0, kapp->desktop()->width(), kapp->desktop()->height() );
@@ -4028,8 +4028,8 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                     QFile f( filename );
                     QTextStream t( &f );
                     QString text = QString::null, tmp;
-                    kdDebug()<<" filename :"<<filename<<endl;
-                    if ( f.open( IO_ReadOnly ) ) {
+                    kDebug()<<" filename :"<<filename<<endl;
+                    if ( f.open( QIODevice::ReadOnly ) ) {
                         while ( !t.eof() ) {
                             tmp = t.readLine();
                             tmp += "\n";
@@ -4037,7 +4037,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                         }
                         f.close();
                     }
-                    kdDebug()<<" text :"<<endl;
+                    kDebug()<<" text :"<<endl;
                     m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect(QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                                     text, m_view );
 
@@ -4057,7 +4057,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
 
         QString text;
         QTextDrag::decode( e, text );
-        //kdDebug()<<" QTextDrag::decode( e, text ); :"<<text<<endl;
+        //kDebug()<<" QTextDrag::decode( e, text ); :"<<text<<endl;
         m_activePage->insertTextObject( m_view->zoomHandler()->unzoomRect( QRect( e->pos().x(), e->pos().y(), 250, 250 )),
                                         text, m_view );
         e->accept();
@@ -4092,7 +4092,7 @@ void KPrCanvas::gotoPage( int pg )
         goingBack = false;
 
         m_step.m_pageNumber = page;
-        kdDebug(33001) << "Page::gotoPage m_step.m_pageNumber =" << m_step.m_pageNumber << endl;
+        kDebug(33001) << "Page::gotoPage m_step.m_pageNumber =" << m_step.m_pageNumber << endl;
         m_presentationSlidesIterator = m_presentationSlides.find( m_step.m_pageNumber + 1 );
         editMode = false;
         m_drawMode = false;
@@ -4194,7 +4194,7 @@ void KPrCanvas::copyObjs()
     if ( store->open( "root" ) )
     {
         QCString s = doc.toCString(); // this is already Utf8!
-        //kdDebug(33001) << "KPrCanvas::copyObject: " << s << endl;
+        //kDebug(33001) << "KPrCanvas::copyObject: " << s << endl;
         (void)store->write( s.data(), s.size()-1 );
         store->close();
     }
@@ -4369,7 +4369,7 @@ void KPrCanvas::picViewOriginalSize()
     if ( newSize.width() > pageRect.width() )
         fakt = pageRect.width() / newSize.width();
     if ( newSize.height() > pageRect.height() )
-        fakt = QMIN( fakt, pageRect.height() / newSize.height() );
+        fakt = qMin( fakt, pageRect.height() / newSize.height() );
 
     KoSize diff( newSize.width() * fakt - object->getSize().width(),
                  newSize.height() * fakt - object->getSize().height() );
@@ -4625,7 +4625,7 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
 
     if ( move != KoPoint( 0, 0 ) )
     {
-        //kdDebug(33001) << "moveObjectsByKey move = " << move << endl;
+        //kDebug(33001) << "moveObjectsByKey move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
         m_view->updateObjectStatusBarItem();
     }
@@ -4714,7 +4714,7 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
 
     if ( move != KoPoint( 0, 0 ) )
     {
-        //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
+        //kDebug(33001) << "moveObjectsByMouse move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
     }
 }
@@ -5113,7 +5113,7 @@ void KPrCanvas::drawPolygon( QPainter &p, const KoRect &rect )
 
     KoRect _rect( 0, 0, nRect.width(), nRect.height() );
     double angle = 2 * M_PI / cornersValue;
-    double diameter = static_cast<double>( QMAX( _rect.width(), _rect.height() ) );
+    double diameter = static_cast<double>( qMax( _rect.width(), _rect.height() ) );
     double radius = diameter * 0.5;
 
     KoPointArray _points( checkConcavePolygon ? cornersValue * 2 : cornersValue );
@@ -5197,7 +5197,7 @@ KPrPage* KPrCanvas::activePage() const
 void KPrCanvas::setActivePage( KPrPage* active )
 {
     Q_ASSERT(active);
-    //kdDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* active) :"<<active<<endl;
+    //kDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* active) :"<<active<<endl;
     // reset the m_objectDisplayAbove so that it is not display wrong on the other page
     m_objectDisplayAbove = 0;
     m_activePage = active;

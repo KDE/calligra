@@ -153,7 +153,7 @@ int pnt_on_line( const int* p, const int* q, const int* t )
     }
 
     if ( QABS((q[1]-p[1])*(t[0]-p[0])-(t[1]-p[1])*(q[0]-p[0])) >=
-         (QMAX(QABS(q[0]-p[0]), QABS(q[1]-p[1])))) return 0;
+         (qMax(QABS(q[0]-p[0]), QABS(q[1]-p[1])))) return 0;
 
     if (((q[0]<p[0])&&(p[0]<t[0])) || ((q[1]<p[1])&&(p[1]<t[1])))
         return 1 ;
@@ -262,7 +262,7 @@ KoPointArray KoPointArray::cubicBezier() const
         return pa;
     } else {
         KoRect r = boundingRect();
-        int m = (int)(4+2*QMAX(r.width(),r.height()));
+        int m = (int)(4+2*qMax(r.width(),r.height()));
         double *p = new double[m];
         double ctrl[8];
         int i;

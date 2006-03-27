@@ -27,7 +27,7 @@
 #include <koffice_export.h>
 
 class QDomElement;
-class QWMatrix;
+class QMatrix;
 class VSubpathIteratorList;
 class VSegment;
 class VVisitor;

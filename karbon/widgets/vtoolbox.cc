@@ -28,14 +28,14 @@ VToolBox::VToolBox( KMainWindow *mainWin, const char* name, KInstance* instance 
 void
 VToolBox::registerTool( VTool *tool )
 {
-	kdDebug(38000) << "VToolBox::registerTool : " << tool->name() << endl;
+	kDebug(38000) << "VToolBox::registerTool : " << tool->name() << endl;
 	KoToolBox::registerTool( tool->action(), tool->toolType(), tool->priority() );
 }
 
 void
 VToolBox::setupTools()
 {
-	kdDebug(38000) << k_funcinfo << endl;
+	kDebug(38000) << k_funcinfo << endl;
 	KoToolBox::setupTools();
 }
 

@@ -92,7 +92,7 @@ class KFORMEDITOR_EXPORT MyTabWidget : public KTabWidget
 		}
 
 	private:
-		QGuardedPtr<QObject>   m_container;
+		QPointer<QObject>   m_container;
 };*/
 
 QSize

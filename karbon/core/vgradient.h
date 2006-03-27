@@ -111,7 +111,7 @@ public:
 	void load( const QDomElement& element );
 	void loadOasis( const QDomElement &object, KoStyleStack &stack, VObject* parent = 0L );
 
-	void transform( const QWMatrix& m );
+	void transform( const QMatrix& m );
 
 protected:
 	VColorStopList        m_colorStops;

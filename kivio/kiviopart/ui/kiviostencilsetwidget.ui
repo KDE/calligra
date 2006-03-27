@@ -44,7 +44,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
             <property name="orientation">
                 <enum>Horizontal</enum>
             </property>
-            <widget class="KListView">
+            <widget class="K3ListView">
                 <column>
                     <property name="text">
                         <string>Stencil Set</string>

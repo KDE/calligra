@@ -65,7 +65,7 @@ KivioPyStencilSpawner::~KivioPyStencilSpawner()
         m_pTargets = NULL;
     }
 
-    kdDebug(43000) << "* PyStencilSpawner "<< m_pInfo->id() << " deleted" << endl;
+    kDebug(43000) << "* PyStencilSpawner "<< m_pInfo->id() << " deleted" << endl;
 }
 
 QDomElement KivioPyStencilSpawner::saveXML( QDomDocument &doc )
@@ -85,9 +85,9 @@ bool KivioPyStencilSpawner::load( const QString &file )
     m_filename = QString(file);
     QFile f(file);
 
-    if( f.open( IO_ReadOnly )==false )
+    if( f.open( QIODevice::ReadOnly )==false )
     {
-       kdDebug(43000) << "KivioPyStencilSpawner::load() - Error opening stencil: " << file << endl;
+       kDebug(43000) << "KivioPyStencilSpawner::load() - Error opening stencil: " << file << endl;
         return false;
     }
 
@@ -136,7 +136,7 @@ bool KivioPyStencilSpawner::load( const QString &file )
         }
         else
         {
-           kdDebug(43000) << "KivioPyStencilSpawner::load() - Unknown node " << nodeName << " while loading " << file << endl;
+           kDebug(43000) << "KivioPyStencilSpawner::load() - Unknown node " << nodeName << " while loading " << file << endl;
         }
 
         node = node.nextSibling();

@@ -35,7 +35,7 @@ class QResizeEvent;
 class QLineEdit;
 class KPrObject;
 class KIntNumInput;
-class KURLRequester;
+class KUrlRequester;
 class KPrSoundPlayer;
 class QSpinBox;
 
@@ -63,7 +63,7 @@ protected:
 
     QCheckBox *appearSoundEffect, *disappearSoundEffect;
     QLabel *lSoundEffect1, *lSoundEffect2;
-    KURLRequester *requester1, *requester2;
+    KUrlRequester *requester1, *requester2;
     QPushButton *buttonTestPlaySoundEffect1, *buttonTestStopSoundEffect1;
     QPushButton *buttonTestPlaySoundEffect2, *buttonTestStopSoundEffect2;
 
@@ -81,7 +81,7 @@ protected slots:
     void disappearEffectChanged( int num );
     void appearSoundEffectChanged();
     void disappearSoundEffectChanged();
-    void slotRequesterClicked( KURLRequester * );
+    void slotRequesterClicked( KUrlRequester * );
     void slotAppearFileChanged( const QString& );
     void slotDisappearFileChanged( const QString& );
     void playSound1();

@@ -36,14 +36,14 @@ VFill::VFill()
 	m_gradient.setOrigin( KoPoint( 0, 0 ) );
 	m_gradient.setVector( KoPoint( 0, 50 ) );
 	m_gradient.setSpreadMethod( gradient_spread_reflect );*/
-	//kdDebug(38000) << "Size of VFill : " << sizeof(*this) << endl;
+	//kDebug(38000) << "Size of VFill : " << sizeof(*this) << endl;
 }
 
 VFill::VFill( const VColor &c )
 	: m_type( solid )
 {
 	m_color = c;
-	//kdDebug(38000) << "Size of VFill : " << sizeof(*this) << endl;
+	//kDebug(38000) << "Size of VFill : " << sizeof(*this) << endl;
 }
 
 VFill::VFill( const VFill& fill )
@@ -114,9 +114,9 @@ VFill::loadOasis( const QDomElement &/*object*/, KoOasisLoadingContext &context,
 		{
 			setType( VFill::grad );
 			QString style = stack.attributeNS( KoXmlNS::draw, "fill-gradient-name" );
-			kdDebug()<<" style gradient name :"<<style<<endl;
+			kDebug()<<" style gradient name :"<<style<<endl;
 			QDomElement *grad = context.oasisStyles().drawStyles()[ style ];
-			kdDebug()<<" style gradient name :"<< grad <<endl;
+			kDebug()<<" style gradient name :"<< grad <<endl;
 			if( grad )
 				m_gradient.loadOasis( *grad, stack, parent );
 		}
@@ -172,7 +172,7 @@ VFill::operator=( const VFill& fill )
 }
 
 void 
-VFill::transform( const QWMatrix& m )
+VFill::transform( const QMatrix& m )
 {
 	if( type() == VFill::grad )
 		gradient().transform( m );

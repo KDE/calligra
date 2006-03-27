@@ -26,7 +26,7 @@
 #include <kaction.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <ktoolbar.h>
 #include <KoMainWindow.h>
 #include <kdebug.h>
@@ -197,7 +197,7 @@ void ZoomTool::setActivated(bool a)
     m_pCurrent = m_pPlus;
     emit activated(this);
   } else {
-    kdDebug(43000) << "ZoomTool DeActivate" << endl;
+    kDebug(43000) << "ZoomTool DeActivate" << endl;
   
     m_pCurrent = 0L;
   
@@ -269,7 +269,7 @@ void ZoomTool::zoomWidth()
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
     KoGlobal::dpiY());
-  int cw = QMAX(10,canvas->width()-20);
+  int cw = qMax(10,canvas->width()-20);
   KoPageLayout pl = canvas->activePage()->paperLayout();
   float w = zoom.zoomItX(pl.ptWidth);
   float z = cw/w;
@@ -285,7 +285,7 @@ void ZoomTool::zoomHeight()
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
     KoGlobal::dpiY());
-  int ch = QMAX(10,canvas->height()-20);
+  int ch = qMax(10,canvas->height()-20);
   KoPageLayout pl = canvas->activePage()->paperLayout();
   float h = zoom.zoomItY(pl.ptHeight);
   float zh = ch/h;
@@ -301,14 +301,14 @@ void ZoomTool::zoomPage()
   KoZoomHandler zoom;
   zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
     KoGlobal::dpiY());
-  int cw = QMAX(10,canvas->width()-20);
-  int ch = QMAX(10,canvas->height()-20);
+  int cw = qMax(10,canvas->width()-20);
+  int ch = qMax(10,canvas->height()-20);
 
   KoPageLayout pl = canvas->activePage()->paperLayout();
   float w = zoom.zoomItX(pl.ptWidth);
   float h = zoom.zoomItY(pl.ptHeight);
 
-  float z = QMIN(cw/w,ch/h);
+  float z = qMin(cw/w,ch/h);
 
   canvas->setUpdatesEnabled(false);
   view()->viewZoom(qRound(z * 100));
@@ -318,13 +318,13 @@ void ZoomTool::zoomPage()
 void ZoomTool::showPopupMenu(const QPoint& p )
 {
   if(!m_pMenu) {
-    m_pMenu = static_cast<KPopupMenu*>(factory()->container("ZoomPopup", this));
+    m_pMenu = static_cast<KMenu*>(factory()->container("ZoomPopup", this));
   }
   
   if(m_pMenu) {
     m_pMenu->popup(p);
   } else {
-    kdDebug(43000) << "What no popup! *ARGH*!" << endl;
+    kDebug(43000) << "What no popup! *ARGH*!" << endl;
   }
 }
 

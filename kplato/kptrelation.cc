@@ -53,7 +53,7 @@ Relation::Relation(Relation *rel) {
 }
 
 Relation::~Relation() {
-    //kdDebug()<<k_funcinfo<<"parent: "<<(m_parent ? m_parent->name():"none")<<" child: "<<(m_child ? m_child->name():"None")<<endl;
+    //kDebug()<<k_funcinfo<<"parent: "<<(m_parent ? m_parent->name():"none")<<" child: "<<(m_child ? m_child->name():"None")<<endl;
     if (m_parent)
         m_parent->takeDependChildNode(this);
     if (m_child)
@@ -90,16 +90,16 @@ bool Relation::load(QDomElement &element, Project &project) {
     m_lag = Duration::fromString(element.attribute("lag"));
 
     if (!m_parent->addDependChildNode(this)) {
-        kdError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+        kError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
         return false;
     }
     if (!m_child->addDependParentNode(this)) {
         m_parent->delDependChildNode(this, false/*do not delete*/);
-        kdError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+        kError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
         return false;
     }
 
-    //kdDebug()<<k_funcinfo<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
     return true;
 }
 
@@ -129,9 +129,9 @@ void Relation::save(QDomElement &element) const {
 #ifndef NDEBUG
 void Relation::printDebug(QCString indent) {
     indent += "  ";
-    kdDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
-    kdDebug()<<indent<<"  Child: "<<m_child->name()<<endl;
-    kdDebug()<<indent<<"  Type: "<<m_type<<endl;
+    kDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
+    kDebug()<<indent<<"  Child: "<<m_child->name()<<endl;
+    kDebug()<<indent<<"  Type: "<<m_type<<endl;
 }
 #endif
 

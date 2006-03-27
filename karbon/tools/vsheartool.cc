@@ -47,7 +47,7 @@ VShearTool::~VShearTool()
 void
 VShearTool::activate()
 {
-	view()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->setCursor( QCursor( Qt::ArrowCursor ) );
 	view()->part()->document().selection()->showHandle( true );
 	view()->part()->document().selection()->setState( VObject::selected );
 	VTool::activate();
@@ -93,7 +93,7 @@ VShearTool::setCursor() const
 			view()->setCursor( QCursor( Qt::SizeVerCursor ) );
 			break;
 		default:
-			view()->setCursor( QCursor( Qt::arrowCursor ) );
+			view()->setCursor( QCursor( Qt::ArrowCursor ) );
 	}
 }
 

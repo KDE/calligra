@@ -230,7 +230,7 @@ void KivioShapeData::copyInto( KivioShapeData *pTarget ) const
         }
         else
         {
-	   kdWarning(43000) << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
+	   kWarning(43000) << "KivioShapeData::copyInto() - Shape is of type text-box, but our text data doens't exist." << endl;
             pTarget->m_pTextData->setText("");
             pTarget->m_pTextData->setIsHtml(false);
             pTarget->m_pTextData->setHTextAlign(Qt::AlignHCenter);
@@ -341,7 +341,7 @@ bool KivioShapeData::loadXML( const QDomElement &e )
             } // end if m_shapeType==kstTextBox
             else
             {
-	       kdDebug(43000) << "KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!" << endl;
+	       kDebug(43000) << "KivioShapeData::loadXML() - Loading KivioText, but this is not a textbox!" << endl;
             }
         }
 

@@ -71,8 +71,8 @@ KoVariable *KPrVariableCollection::createVariable( int type, short int subtype, 
     switch(type) {
     case VT_PGNUM:
     {
-        kdDebug(33001)<<" subtype == KoPageVariable::VST_CURRENT_SECTION :"<<(subtype == KPrPgNumVariable::VST_CURRENT_SECTION)<<endl;
-        kdDebug(33001)<<" varFormat :"<<varFormat<<endl;
+        kDebug(33001)<<" subtype == KoPageVariable::VST_CURRENT_SECTION :"<<(subtype == KPrPgNumVariable::VST_CURRENT_SECTION)<<endl;
+        kDebug(33001)<<" varFormat :"<<varFormat<<endl;
         if ( !varFormat )
             varFormat = (subtype == KPrPgNumVariable::VST_CURRENT_SECTION) ? coll->format("STRING") : coll->format("NUMBER");
         var = new KPrPgNumVariable( textdoc,subtype, varFormat,this,m_doc  );

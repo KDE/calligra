@@ -85,7 +85,7 @@ KChartWizardSelectChartSubTypePage::KChartWizardSelectChartSubTypePage( QWidget*
           m_chart->params()->areaChartSubType() == KDChartParams::AreaPercent ) )
         m_percent->setChecked( true );
     else {
-        kdDebug(35001)<<"Error in chart_type\n";
+        kDebug(35001)<<"Error in chart_type\n";
     }
 
     m_numLines->setValue( m_chart->params()->barNumLines() );
@@ -132,7 +132,7 @@ void KChartWizardSelectChartSubTypePage::apply()
             case KChartParams::Polar:
                 m_chart->params()->setPolarChartSubType( KDChartParams::PolarNormal );
             default:
-                kdDebug( 35001 ) << "Error in group button\n";
+                kDebug( 35001 ) << "Error in group button\n";
             }
         else if ( m_stacked->isChecked() )
             switch( m_chart->params()->chartType() ) {
@@ -152,7 +152,7 @@ void KChartWizardSelectChartSubTypePage::apply()
                 m_chart->params()->setPolarChartSubType( KDChartParams::PolarStacked );
                 break;
             default:
-                kdDebug( 35001 ) << "Error in group button\n";
+                kDebug( 35001 ) << "Error in group button\n";
             }
         else if( m_percent->isChecked() )
             switch( m_chart->params()->chartType() ) {
@@ -172,10 +172,10 @@ void KChartWizardSelectChartSubTypePage::apply()
                 m_chart->params()->setPolarChartSubType( KDChartParams::PolarPercent );
                 break;
             default:
-                kdDebug( 35001 ) << "Error in group button\n";
+                kDebug( 35001 ) << "Error in group button\n";
             }
         else
-            kdDebug(35001)<<"Error in groupbutton\n";
+            kDebug(35001)<<"Error in groupbutton\n";
     }
 }
 

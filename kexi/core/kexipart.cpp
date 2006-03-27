@@ -140,7 +140,7 @@ KAction* Part::createSharedAction(int mode, const QString &text,
 {
 	GUIClient *instanceGuiClient = m_instanceGuiClients[mode];
 	if (!instanceGuiClient) {
-		kdDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
+		kDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
 		return 0;
 	}
 	return m_mainWin->createSharedAction(text, pix_name, cut, name, 
@@ -173,7 +173,7 @@ KAction* Part::createSharedPartToggleAction(const QString &text,
 {
 	GUIClient *instanceGuiClient = m_instanceGuiClients[mode];
 	if (!instanceGuiClient) {
-		kdDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
+		kDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
 		return 0;
 	}
 	return instanceGuiClient->actionCollection()->action(name, classname);

@@ -164,7 +164,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 			case Field::Integer:
 				return QVariant( sqlite3_column_int(prepared_st_handle, i) );
 			case Field::BigInteger:
-				return QVariant( (Q_LLONG)sqlite3_column_int64(prepared_st_handle, i) );
+				return QVariant( (qint64)sqlite3_column_int64(prepared_st_handle, i) );
 			case Field::Boolean:
 				return QVariant( sqlite3_column_int(prepared_st_handle, i)!=0, 1 );
 			default:;
@@ -230,7 +230,7 @@ bool SQLiteCursor::drv_open()
 		// this may as example be the case if SQLiteConnection::drv_useDatabase()
 		// wasn't called before. Normaly sqlite_compile/sqlite3_prepare
 		// should handle it, but it crashes in in sqlite3SafetyOn at util.c:786
-		kdWarning() << "SQLiteCursor::drv_open(): Database handle undefined." << endl;
+		kWarning() << "SQLiteCursor::drv_open(): Database handle undefined." << endl;
 		return false;
 	}
 
@@ -365,7 +365,7 @@ void SQLiteCursor::drv_bufferMovePointerPrev()
 
 //compute a place in the buffer that contain next record's data
 //and move internal buffer pointer to that place
-void SQLiteCursor::drv_bufferMovePointerTo(Q_LLONG at)
+void SQLiteCursor::drv_bufferMovePointerTo(qint64 at)
 {
 	d->curr_coldata = d->records.at(at);
 }

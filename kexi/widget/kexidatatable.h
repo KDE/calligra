@@ -28,7 +28,7 @@ class KexiMainWindow;
 class KexiDataTableView;
 class KexiTableView;
 class KexiTableViewData;
-class KPopupMenu;
+class KMenu;
 
 namespace KexiDB
 {

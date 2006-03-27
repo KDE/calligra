@@ -101,7 +101,7 @@ bool Context::load(QDomElement &element) {
                     }
                 }
             } else {
-                kdError()<<k_funcinfo<<"Unknown tag: "<<e.tagName()<<endl;
+                kError()<<k_funcinfo<<"Unknown tag: "<<e.tagName()<<endl;
             }
         }
     }

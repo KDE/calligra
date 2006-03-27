@@ -86,7 +86,7 @@ float KDChartCustomBox::trueFontSize( double areaWidthP1000,
     if( 0 > _fontSize ) {
       if( _fontScaleGlobal ) {
 
-        size = _fontSize * QMIN(areaWidthP1000, areaHeightP1000) * -1.0;//(areaWidthP1000 + areaHeightP1000) / -2.0;
+        size = _fontSize * qMin(areaWidthP1000, areaHeightP1000) * -1.0;//(areaWidthP1000 + areaHeightP1000) / -2.0;
 
       }  else {
              
@@ -188,12 +188,12 @@ QRect KDChartCustomBox::trueRect( QPoint anchor, double areaWidthP1000, double a
         if ( _fontSize ) {
             font.setPointSizeFloat(
                 (0 > _fontSize)
-            ? (_fontSize * QMIN(areaWidthP1000, areaHeightP1000) * -1.0)//(areaWidthP1000 + areaHeightP1000) / -2.0
+            ? (_fontSize * qMin(areaWidthP1000, areaHeightP1000) * -1.0)//(areaWidthP1000 + areaHeightP1000) / -2.0
             : _fontSize );
-	    //qDebug("\n_fontSize * QMIN(areaWidthP1000, areaHeightP1000)    %i * QMIN(%f, %f) text: %s", _fontSize , areaWidthP1000, areaHeightP1000, content().text().latin1());
+	    //qDebug("\n_fontSize * qMin(areaWidthP1000, areaHeightP1000)    %i * qMin(%f, %f) text: %s", _fontSize , areaWidthP1000, areaHeightP1000, content().text().latin1());
         }
         QString txt(     content().text() );
-        QString txtTest( txt.stripWhiteSpace().lower() );
+        QString txtTest( txt.trimmed().lower() );
 #if QT_VERSION >= 200 && QT_VERSION < 300
 // version 2.x
         if( !(txtTest.left(4) == "<qt>") )

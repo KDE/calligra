@@ -24,7 +24,7 @@
 #include <qmap.h>
 #include <qintdict.h>
 
-#include <kmdimainfrm.h>
+#include <k3mdimainfrm.h>
 #include <kexiutils/tristate.h>
 
 #include "kexisharedactionhost.h"

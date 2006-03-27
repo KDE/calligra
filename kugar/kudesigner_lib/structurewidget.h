@@ -21,7 +21,7 @@
 #ifndef KUDESIGNERSTRUCTUREWIDGET_H
 #define KUDESIGNERSTRUCTUREWIDGET_H
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <qmap.h>
 
 class KudesignerDoc;
@@ -34,7 +34,7 @@ class Band;
 class Canvas;
 class StructureItem;
 
-class StructureWidget: public KListView
+class StructureWidget: public K3ListView
 {
     Q_OBJECT
 public:

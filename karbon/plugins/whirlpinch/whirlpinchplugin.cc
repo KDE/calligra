@@ -159,7 +159,7 @@ VWhirlPinchCmd::visitVPath( VPath& composite )
 void
 VWhirlPinchCmd::visitVSubpath( VSubpath& path )
 {
-	QWMatrix m;
+	QMatrix m;
 	KoPoint delta;
 	double dist;
 

@@ -35,7 +35,7 @@ static const KCmdLineOptions options[] =
 
 extern "C" KUGARDESIGNER_EXPORT int kdemain( int argc, char **argv )
 {
-    KLocale::setMainCatalogue( "kugar" );
+    KLocale::setMainCatalog( "kugar" );
     KCmdLineArgs::init( argc, argv, newKudesignerAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
     KoApplication app;

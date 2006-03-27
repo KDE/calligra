@@ -141,7 +141,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		IndexSchema::List m_indices;
 
-		QGuardedPtr<Connection> m_conn;
+		QPointer<Connection> m_conn;
 		
 		IndexSchema *m_pkey;
 

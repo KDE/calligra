@@ -50,7 +50,7 @@ VRotateTool::~VRotateTool()
 void
 VRotateTool::activate()
 {
-	view()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->setCursor( QCursor( Qt::ArrowCursor ) );
 	view()->part()->document().selection()->setState( VObject::selected );
 	view()->part()->document().selection()->showHandle( false );
 	VTool::activate();

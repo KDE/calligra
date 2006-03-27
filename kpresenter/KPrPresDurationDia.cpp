@@ -26,7 +26,7 @@
 #include <qheader.h>
 #include <qvbox.h>
 #include <qlayout.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -58,7 +58,7 @@ KPrPresDurationDia::KPrPresDurationDia( QWidget *parent, const char *name,
 
 void KPrPresDurationDia::setupSlideList( QWidget *_page )
 {
-    slides = new KListView( _page );
+    slides = new K3ListView( _page );
     slides->addColumn( i18n( "No." ) );
     slides->addColumn( i18n( "Display Duration" ) );
     slides->addColumn( i18n( "Slide Title" ) );
@@ -69,7 +69,7 @@ void KPrPresDurationDia::setupSlideList( QWidget *_page )
 
     for ( int i = doc->getPageNums() - 1; i >= 0; --i ) {
         if ( doc->pageList().at( i )->isSlideSelected() ) {
-            KListViewItem *item = new KListViewItem( slides );
+            K3ListViewItem *item = new K3ListViewItem( slides );
             item->setPixmap( 0, KPBarIcon( "slide" ) );
             item->setText( 0, QString( "%1" ).arg( i + 1 ) );
             item->setText( 1, *m_durationListString.at( i ) );

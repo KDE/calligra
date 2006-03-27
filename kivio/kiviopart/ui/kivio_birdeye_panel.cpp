@@ -135,7 +135,7 @@ void KivioBirdEyePanel::updateView()
 
   double zx = (double)s1.width()/(double)s2.width();
   double zy = (double)s1.height()/(double)s2.height();
-  double zxy = QMIN(zx,zy);
+  double zxy = qMin(zx,zy);
 
   m_zoomHandler->setZoomAndResolution(qRound(zxy * 100), KoGlobal::dpiX(),
     KoGlobal::dpiY());
@@ -240,21 +240,21 @@ void KivioBirdEyePanel::handleMouseMoveAction(QPoint p)
 
   KoRect vr = m_pCanvas->visibleArea();
   if (apos == AlignRight) {
-    vr.setWidth(QMAX(10.0, vr.width() + dx));
+    vr.setWidth(qMax(10.0, vr.width() + dx));
     m_pCanvas->setVisibleAreaByWidth(vr);
   }
   else if (apos == AlignLeft) {
     vr.setX(vr.x() + dx);
-    vr.setWidth(QMAX(10.0, vr.width() - dx));
+    vr.setWidth(qMax(10.0, vr.width() - dx));
     m_pCanvas->setVisibleAreaByWidth(vr);
   }
   else if (apos == AlignTop) {
     vr.setY(vr.y() + dy);
-    vr.setHeight(QMAX(10.0 ,vr.height() - dy));
+    vr.setHeight(qMax(10.0 ,vr.height() - dy));
     m_pCanvas->setVisibleAreaByHeight(vr);
   }
   else if (apos == AlignBottom) {
-    vr.setHeight(QMAX(10.0 ,vr.height() + dy));
+    vr.setHeight(qMax(10.0 ,vr.height() + dy));
     m_pCanvas->setVisibleAreaByHeight(vr);
   }
 }

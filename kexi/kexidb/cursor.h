@@ -151,7 +151,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		 Value -1 means that cursor does not point to any valid record
 		 (this happens eg. after open(), close(), 
 		 and after moving after last record or before first one. */
-		Q_LLONG at() const;
+		qint64 at() const;
 
 		/*! \return number of fields available for this cursor. 
 		 This never includes ROWID column. */
@@ -293,7 +293,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		virtual void drv_bufferMovePointerPrev() = 0;
 		/*! Moves pointer (that points to the buffer) to a new place: \a at.
 		*/
-		virtual void drv_bufferMovePointerTo(Q_LLONG at) = 0;
+		virtual void drv_bufferMovePointerTo(qint64 at) = 0;
 
 		/*DISABLED: ! This is called only once in open(), after successful drv_open().
 			Reimplement this if you need (or not) to do get the first record after drv_open(),
@@ -312,7 +312,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		 the same that is returend by serverResult(). */
 		virtual void drv_clearServerResult() = 0;
 
-		QGuardedPtr<Connection> m_conn;
+		QPointer<Connection> m_conn;
 		QuerySchema *m_query;
 //		CursorData *m_data;
 		QString m_rawStatement;
@@ -323,7 +323,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 //		bool m_atLast;
 		bool m_validRecord : 1; //! true if valid record is currently retrieved @ current position
 		bool m_containsROWIDInfo : 1;
-		Q_LLONG m_at;
+		qint64 m_at;
 		uint m_fieldCount; //! cached field count information
 		uint m_options; //! cursor options that describes its behaviour
 

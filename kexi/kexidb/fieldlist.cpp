@@ -71,7 +71,7 @@ FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
 	if (!field)
 		return *this;
 	if (index>m_fields.count()) {
-		kdWarning() << "FieldList::insertField(): index (" << index << ") out of range" << endl;
+		kWarning() << "FieldList::insertField(): index (" << index << ") out of range" << endl;
 		return *this;
 	}
 	if (!m_fields.insert(index, field))

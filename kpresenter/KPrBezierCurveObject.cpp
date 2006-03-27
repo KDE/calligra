@@ -101,7 +101,7 @@ const char * KPrBezierCurveObject::getOasisElementName() const
 
 void KPrBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPrLoadingInfo* info )
 {
-    kdDebug(33001) << "KPrBezierCurveObject::loadOasis" << endl;
+    kDebug(33001) << "KPrBezierCurveObject::loadOasis" << endl;
     KPrPointObject::loadOasis( element, context, info );
 
     allPoints = bezier2polyline( points );

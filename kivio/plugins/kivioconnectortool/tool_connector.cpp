@@ -232,7 +232,7 @@ bool ConnectorTool::startRubberBanding( QMouseEvent *e )
   KivioStencilSpawner* ss = doc->findInternalStencilSpawner(spawnerId);
     
   if(!ss) {
-    kdDebug(43000) << "ConnectorTool: Failed to find StencilSpawner!" << endl;
+    kDebug(43000) << "ConnectorTool: Failed to find StencilSpawner!" << endl;
     return false;
   }
     

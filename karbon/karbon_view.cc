@@ -28,7 +28,7 @@
 #include <qpainter.h>
 
 #include <kaction.h>
-#include <kcolordrag.h>
+#include <k3colordrag.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -211,7 +211,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 KarbonView::~KarbonView()
 {
-	kdDebug(38000) << "Handling KarbonView dtor" << endl;
+	kDebug(38000) << "Handling KarbonView dtor" << endl;
 
 	// widgets:
 	delete m_smallPreview;
@@ -256,7 +256,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 		m_toolbox = new VToolBox( mainWindow(), "Tools", KarbonFactory::instance() );
 		toolController()->setUp( actionCollection(), m_toolbox );
 
-		kdDebug() << "Toolbox position: " << element.attribute( "position" ) << "\n";
+		kDebug() << "Toolbox position: " << element.attribute( "position" ) << "\n";
 	        Dock dock = stringToDock( element.attribute( "position" ).lower() );
 
 	        mainWindow()->addDockWindow( m_toolbox, dock, false);
@@ -293,7 +293,7 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 							 QDomElement &element, int id )
 {
 	if( container )
-		kdDebug(38000) << container << endl;
+		kDebug(38000) << container << endl;
 
 	if( shell() && container == m_toolbox )
 	{
@@ -354,7 +354,7 @@ KarbonView::dropEvent( QDropEvent *e )
 	VColor realcolor;
 	VObjectList selection;
 
-	if( KColorDrag::decode( e, color ) )
+	if( K3ColorDrag::decode( e, color ) )
 	{
 		float r = color.red() / 255.0;
 		float g = color.green() / 255.0;
@@ -373,7 +373,7 @@ KarbonView::dropEvent( QDropEvent *e )
 		VObject *clipart = selection.first();
 		KoPoint p( e->pos() );
 		p = m_canvas->toContents( p );
-		QWMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
+		QMatrix mat( 1, 0, 0, 1, p.x(), p.y() );
 
 		VTransformCmd trafo( 0L, mat );
 		trafo.visit( *clipart );
@@ -387,7 +387,7 @@ void
 KarbonView::print( KPrinter &printer )
 {
 	// TODO : ultimately use plain QPainter here as that is better suited to print system
-	kdDebug(38000) << "KarbonView::print" << endl;
+	kDebug(38000) << "KarbonView::print" << endl;
 	
 	QPaintDeviceMetrics metrics( ( QPaintDevice * ) & printer );
 	printer.setFullPage( true );
@@ -395,7 +395,7 @@ KarbonView::print( KPrinter &printer )
 	// we are using 72 dpi internally
 	double zoom = metrics.logicalDpiX() / 72.0;
 
-	QWMatrix mat;
+	QMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( 0, -part()->document().height()*zoom );
 
@@ -410,7 +410,7 @@ KarbonView::print( KPrinter &printer )
 	VKoPainter kop( ( QPaintDevice * )&img, static_cast<int>( w ), static_cast<int>( h ) );
 	
 	kop.setZoomFactor( zoom );
-	kop.setWorldMatrix( mat );
+	kop.setMatrix( mat );
 
 	kop.begin();
 
@@ -440,9 +440,9 @@ KarbonView::fileImportGraphic()
 		return;
 	}
 	QString fname = dialog->selectedFile();
-	//kdDebug(38000) << "in : " << fname.latin1() << endl;
-	//kdDebug(38000) << "part()->document()->nativeFormatMimeType().latin1() : " << part()->nativeFormatMimeType() << endl;
-	//kdDebug(38000) << "dialog->currentMimeFilter().latin1() : " << dialog->currentMimeFilter().latin1() << endl;
+	//kDebug(38000) << "in : " << fname.latin1() << endl;
+	//kDebug(38000) << "part()->document()->nativeFormatMimeType().latin1() : " << part()->nativeFormatMimeType() << endl;
+	//kDebug(38000) << "dialog->currentMimeFilter().latin1() : " << dialog->currentMimeFilter().latin1() << endl;
 	if( part()->nativeFormatMimeType() == dialog->currentMimeFilter().latin1() )
 		part()->mergeNativeFormat( fname );
 	else
@@ -531,7 +531,7 @@ KarbonView::editDeselectAll()
 void
 KarbonView::editDeleteSelection()
 {
-	kdDebug(38000) << "*********" << endl;
+	kDebug(38000) << "*********" << endl;
 
 	if( part()->document().selection()->objects().count() > 0 )
 	{
@@ -816,7 +816,7 @@ KarbonView::zoomChanged( const KoPoint &p )
 		else if(zoomFactorX < 0 && zoomFactorY < 0)
 			zoomFactor = 0.0001;
 		else
-			zoomFactor = kMin( zoomFactorX, zoomFactorY );
+			zoomFactor = qMin( zoomFactorX, zoomFactorY );
 	}
 	else
 	{
@@ -830,9 +830,9 @@ KarbonView::zoomChanged( const KoPoint &p )
 			centerY = 0.5;
 		zoomFactor = m_zoomAction->currentText().remove( '%' ).toDouble() / 100.0;
 	}
-	kdDebug(38000) << "centerX : " << centerX << endl;
-	kdDebug(38000) << "centerY : " << centerY << endl;
-	kdDebug(38000) << "zoomFactor : " << zoomFactor << endl;
+	kDebug(38000) << "centerX : " << centerX << endl;
+	kDebug(38000) << "centerY : " << centerY << endl;
+	kDebug(38000) << "zoomFactor : " << zoomFactor << endl;
 	if( zoomFactor == 0.0 ) return;
 
 	// above 2000% probably doesn't make sense... (Rob)
@@ -1126,7 +1126,7 @@ KarbonView::initActions()
 void
 KarbonView::paintEverything( QPainter& /*p*/, const QRect& /*rect*/, bool /*transparent*/ )
 {
-	kdDebug(38000) << "view->paintEverything()" << endl;
+	kDebug(38000) << "view->paintEverything()" << endl;
 }
 
 bool

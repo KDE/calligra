@@ -88,7 +88,7 @@ QCursor VCursor::createCursor( CursorType type )
 		case NeedleArrow:
 			return needleArrow();
 		break;
-		default: return QCursor( Qt::arrowCursor );
+		default: return QCursor( Qt::ArrowCursor );
 	}
 }
 

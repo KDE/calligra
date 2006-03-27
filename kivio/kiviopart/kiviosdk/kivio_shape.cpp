@@ -90,7 +90,7 @@ bool KivioShape::loadXML( const QDomElement &e )
     if( m_shapeData.name().isEmpty() ||
         m_shapeData.shapeType() == -1 )
     {
-       kdWarning(43000) << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted." << endl;
+       kWarning(43000) << "-LOAD KivioShape::loadXML() - Unknown shape or bad name read. Shape load aborted." << endl;
        return false;
     }
 
@@ -230,7 +230,7 @@ KivioShape *KivioShape::loadShapeBezier( const QDomElement &e )
             pPoint->loadXML( node.toElement() );
             if( pPoint->pointType() != KivioPoint::kptBezier )
             {
-	       kdDebug(43000) << "KivioShape::loadShapeBezier() - Non-bezier point found.  Aborting shape." << endl;
+	       kDebug(43000) << "KivioShape::loadShapeBezier() - Non-bezier point found.  Aborting shape." << endl;
                 delete pPoint;
                 delete pShape;
                 return NULL;
@@ -248,7 +248,7 @@ KivioShape *KivioShape::loadShapeBezier( const QDomElement &e )
     
     if( pShape->m_shapeData.m_pOriginalPointList->count() != 4 )
     {
-       kdDebug(43000) << "KivioShape::loadShapeBezier() - Wrong number of points loaded, should be 4, shape aborted" << endl;
+       kDebug(43000) << "KivioShape::loadShapeBezier() - Wrong number of points loaded, should be 4, shape aborted" << endl;
         delete pShape;
         return NULL;
     }

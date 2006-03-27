@@ -81,12 +81,12 @@ void KPrTextPreview::drawContents( QPainter* painter )
 
     painter->setViewport( ( width() - pw ) / 2, ( height() - ph ) / 2, width(), height() );
 
-    QWMatrix m, mtx;
+    QMatrix m, mtx;
     mtx.rotate( angle );
     m.translate( pw / 2, ph / 2 );
     m = mtx * m;
 
-    painter->setWorldMatrix( m );
+    painter->setMatrix( m );
     painter->setFont( font );
 
     if ( shadowDistance > 0 ) {

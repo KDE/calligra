@@ -252,7 +252,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 		KexiViewBase *m_parentView;
 
-		QGuardedPtr<QWidget> m_lastFocusedChildBeforeFocusOut;
+		QPointer<QWidget> m_lastFocusedChildBeforeFocusOut;
 
 	private:
 		/*! Member set to newly assigned object's ID in storeNewData()

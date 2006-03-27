@@ -36,7 +36,7 @@
 #include "kivio_stencil.h"
 
 #include <kactionclasses.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 #include <KoZoomHandler.h>
 #include <KoPoint.h>
@@ -659,7 +659,7 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
   
   KivioSelectDragData *pData = m_lstOldGeometry.first();
 
-/*  QWMatrix m;
+/*  QMatrix m;
   double w2 = m_pResizingStencil->w() / 2.0;
   double h2 = m_pResizingStencil->h() / 2.0;
   m.translate(m_pResizingStencil->x(), m_pResizingStencil->y());
@@ -674,7 +674,7 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
   
   if( !pData )
   {
-      kdDebug(43000) << "SelectTool::continueResizing() - Original geometry not found" << endl;
+      kDebug(43000) << "SelectTool::continueResizing() - Original geometry not found" << endl;
       return;
   }
 
@@ -801,7 +801,7 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
         break;
   
       default:
-        kdDebug(43000) << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
+        kDebug(43000) << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
         break;
     }
   
@@ -897,7 +897,7 @@ int SelectTool::isOverResizeHandle( KivioStencil *pStencil, const double x, cons
 
   int available;
 
-  QWMatrix m;
+  QMatrix m;
   double w = pStencil->w();
   double h = pStencil->h();
   double w2 = pStencil->w() / 2.0;
@@ -1107,12 +1107,12 @@ void SelectTool::endResizing(const QPoint&)
  */
 void SelectTool::showPopupMenu( const QPoint &pos )
 {
-  KPopupMenu* menu = 0;
+  KMenu* menu = 0;
 
   if(view()->activePage()->selectedStencils()->count() < 1) {
-    menu = static_cast<KPopupMenu*>(view()->factory()->container("PagePopup", view()));
+    menu = static_cast<KMenu*>(view()->factory()->container("PagePopup", view()));
   } else {
-    menu = static_cast<KPopupMenu*>(view()->factory()->container("StencilPopup", view()));
+    menu = static_cast<KMenu*>(view()->factory()->container("StencilPopup", view()));
     m_arrowHeadAction->setEnabled(view()->activePage()->checkForStencilTypeInSelection(kstConnector));
 
     if(view()->activePage()->checkForTextBoxesInSelection()) {
@@ -1126,7 +1126,7 @@ void SelectTool::showPopupMenu( const QPoint &pos )
     m_lastPoint = view()->canvasWidget()->mapFromScreen(pos);
     menu->popup(pos);
   } else {
-    kdDebug(43000) << "What no popup! *ARGH*!" << endl;
+    kDebug(43000) << "What no popup! *ARGH*!" << endl;
   }
 }
 
@@ -1156,7 +1156,7 @@ void SelectTool::leftDoubleClick(const QPoint& pos)
     
     if( !p )
     {
-      kdDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
+      kDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
       return;
     }
     
@@ -1170,7 +1170,7 @@ void SelectTool::editText(QPtrList<KivioStencil>* stencils)
   Kivio::Plugin *p = view()->pluginManager()->findPlugin("Text Mouse Tool");
   if( !p )
   {
-    kdDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
+    kDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
     return;
   }
   

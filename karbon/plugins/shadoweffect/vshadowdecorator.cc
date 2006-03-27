@@ -69,12 +69,12 @@ VShadowDecorator::draw( VPainter* painter, const KoRect* rect ) const
 	if( m_object->fill()->type() != VFill::none )
 		m_object->fill()->setColor( black );
 	m_object->stroke()->setColor( black );
-	QWMatrix mat = painter->worldMatrix();
-	painter->setWorldMatrix( mat.translate( shadowDx * painter->zoomFactor(), -shadowDy * painter->zoomFactor()) );
+	QMatrix mat = painter->worldMatrix();
+	painter->setMatrix( mat.translate( shadowDx * painter->zoomFactor(), -shadowDy * painter->zoomFactor()) );
 	m_object->draw( painter, rect );
 	m_object->setFill( *fill );
 	m_object->setStroke( *stroke );
-	painter->setWorldMatrix( mat.translate( -shadowDx* painter->zoomFactor() , shadowDy * painter->zoomFactor() ) );
+	painter->setMatrix( mat.translate( -shadowDx* painter->zoomFactor() , shadowDy * painter->zoomFactor() ) );
 	}
 	m_object->draw( painter, rect );
 }
@@ -137,7 +137,7 @@ VShadowDecorator::save( QDomElement& element ) const
 		if( shadow->fill()->type() != VFill::none )
 			shadow->fill()->setColor( black );
 		shadow->stroke()->setColor( black );
-		QWMatrix mat;
+		QMatrix mat;
 		mat.translate( shadowDx, -shadowDy );
 		VTransformCmd trafo( 0L, mat );
 		trafo.visit( *shadow );

@@ -422,7 +422,7 @@ using namespace KexiDB;
 #line 501 "sqlparser.y"
 typedef union {
 	char stringValue[255];
-	Q_LLONG integerValue;
+	qint64 integerValue;
 	struct realType realValue;
 	KexiDB::Field::Type colType;
 	KexiDB::Field *field;
@@ -1378,7 +1378,7 @@ case 10:
 case 11:
 #line 618 "sqlparser.y"
 {
-	kdDebug() << "adding field " << yyvsp[-1].stringValue << endl;
+	kDebug() << "adding field " << yyvsp[-1].stringValue << endl;
 	field->setName(yyvsp[-1].stringValue);
 	parser->table()->addField(field);
 
@@ -1389,7 +1389,7 @@ case 11:
 case 12:
 #line 627 "sqlparser.y"
 {
-	kdDebug() << "adding field " << yyvsp[-2].stringValue << endl;
+	kDebug() << "adding field " << yyvsp[-2].stringValue << endl;
 	field->setName(yyvsp[-2].stringValue);
 	parser->table()->addField(field);
 
@@ -1409,21 +1409,21 @@ case 15:
 #line 648 "sqlparser.y"
 {
 	field->setPrimaryKey(true);
-	kdDebug() << "primary" << endl;
+	kDebug() << "primary" << endl;
 ;
     break;}
 case 16:
 #line 653 "sqlparser.y"
 {
 	field->setNotNull(true);
-	kdDebug() << "not_null" << endl;
+	kDebug() << "not_null" << endl;
 ;
     break;}
 case 17:
 #line 658 "sqlparser.y"
 {
 	field->setAutoIncrement(true);
-	kdDebug() << "ainc" << endl;
+	kDebug() << "ainc" << endl;
 ;
     break;}
 case 18:
@@ -1436,7 +1436,7 @@ case 18:
 case 19:
 #line 671 "sqlparser.y"
 {
-	kdDebug() << "sql + length" << endl;
+	kDebug() << "sql + length" << endl;
 	field = new Field();
 	field->setPrecision(yyvsp[-1].integerValue);
 	field->setType(yyvsp[-3].colType);
@@ -1461,7 +1461,7 @@ case 21:
 case 22:
 #line 693 "sqlparser.y"
 {
-	kdDebug() << "Select ColViews=" << yyvsp[0].exprList->debugString() << endl;
+	kDebug() << "Select ColViews=" << yyvsp[0].exprList->debugString() << endl;
 
 	if (!(yyval.querySchema = parseSelect( yyvsp[-1].querySchema, yyvsp[0].exprList )))
 		return 0;
@@ -1477,7 +1477,7 @@ case 23:
 case 24:
 #line 705 "sqlparser.y"
 {
-	kdDebug() << "Select ColViews Tables" << endl;
+	kDebug() << "Select ColViews Tables" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-1].querySchema, 0, yyvsp[0].exprList )))
 		return 0;
 ;
@@ -1485,7 +1485,7 @@ case 24:
 case 25:
 #line 711 "sqlparser.y"
 {
-	kdDebug() << "Select ColViews Conditions" << endl;
+	kDebug() << "Select ColViews Conditions" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-2].querySchema, yyvsp[-1].exprList, 0, yyvsp[0].expr )))
 		return 0;
 ;
@@ -1493,7 +1493,7 @@ case 25:
 case 26:
 #line 717 "sqlparser.y"
 {
-	kdDebug() << "Select ColViews Tables Conditions" << endl;
+	kDebug() << "Select ColViews Tables Conditions" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-3].querySchema, yyvsp[-2].exprList, yyvsp[-1].exprList, yyvsp[0].expr )))
 		return 0;
 ;
@@ -1501,7 +1501,7 @@ case 26:
 case 27:
 #line 723 "sqlparser.y"
 {
-	kdDebug() << "Select Tables Conditions" << endl;
+	kDebug() << "Select Tables Conditions" << endl;
 	if (!(yyval.querySchema = parseSelect( yyvsp[-2].querySchema, 0, yyvsp[-1].exprList, yyvsp[0].expr )))
 		return 0;
 ;
@@ -1509,7 +1509,7 @@ case 27:
 case 28:
 #line 732 "sqlparser.y"
 {
-	kdDebug() << "SELECT" << endl;
+	kDebug() << "SELECT" << endl;
 //	parser->createSelect();
 //	parser->setOperation(Parser::OP_Select);
 	yyval.querySchema = new QuerySchema();
@@ -1524,7 +1524,7 @@ case 29:
 case 31:
 #line 754 "sqlparser.y"
 {
-//	kdDebug() << "AND " << $3.debugString() << endl;
+//	kDebug() << "AND " << $3.debugString() << endl;
 	yyval.expr = new BinaryExpr( KexiDBExpr_Logical, yyvsp[-2].expr, AND, yyvsp[0].expr );
 ;
     break;}
@@ -1703,7 +1703,7 @@ case 67:
 	yyval.expr = new VariableExpr( QString::fromUtf8(yyvsp[0].stringValue) );
 	
 //TODO: simplify this later if that's 'only one field name' expression
-	kdDebug() << "  + identifier: " << yyvsp[0].stringValue << endl;
+	kDebug() << "  + identifier: " << yyvsp[0].stringValue << endl;
 //	$$ = new Field();
 //	$$->setName($1);
 //	$$->setTable(dummy);
@@ -1715,7 +1715,7 @@ case 67:
 case 68:
 #line 929 "sqlparser.y"
 {
-	kdDebug() << "  + function: " << yyvsp[-1].stringValue << "(" << yyvsp[0].exprList->debugString() << ")" << endl;
+	kDebug() << "  + function: " << yyvsp[-1].stringValue << "(" << yyvsp[0].exprList->debugString() << ")" << endl;
 	yyval.expr = new FunctionExpr(yyvsp[-1].stringValue, yyvsp[0].exprList);
 ;
     break;}
@@ -1723,7 +1723,7 @@ case 69:
 #line 935 "sqlparser.y"
 {
 	yyval.expr = new VariableExpr( QString::fromUtf8(yyvsp[-2].stringValue) + "." + QString::fromUtf8(yyvsp[0].stringValue) );
-	kdDebug() << "  + identifier.identifier: " << yyvsp[0].stringValue << "." << yyvsp[-2].stringValue << endl;
+	kDebug() << "  + identifier.identifier: " << yyvsp[0].stringValue << "." << yyvsp[-2].stringValue << endl;
 //	$$ = new Field();
 //	s->setTable($1);
 //	$$->setName($3);
@@ -1736,7 +1736,7 @@ case 70:
 #line 946 "sqlparser.y"
 {
 	yyval.expr = new ConstExpr( SQL_NULL, QVariant() );
-	kdDebug() << "  + NULL" << endl;
+	kDebug() << "  + NULL" << endl;
 //	$$ = new Field();
 	//$$->setName(QString::null);
 ;
@@ -1746,7 +1746,7 @@ case 71:
 {
 	QString s( QString::fromUtf8(yyvsp[0].stringValue) );
 	yyval.expr = new ConstExpr( CHARACTER_STRING_LITERAL, s.mid(1,s.length()-2) );
-	kdDebug() << "  + constant " << s << endl;
+	kDebug() << "  + constant " << s << endl;
 ;
     break;}
 case 72:
@@ -1758,27 +1758,27 @@ case 72:
 	else if (yyvsp[0].integerValue <= UINT_MAX && yyvsp[0].integerValue >= 0)
 		val = (uint)yyvsp[0].integerValue;
 	else if (yyvsp[0].integerValue <= LLONG_MAX && yyvsp[0].integerValue >= LLONG_MIN)
-		val = (Q_LLONG)yyvsp[0].integerValue;
+		val = (qint64)yyvsp[0].integerValue;
 
 //	if ($1 < ULLONG_MAX)
-//		val = (Q_ULLONG)$1;
+//		val = (quint64)$1;
 //TODO ok?
 
 	yyval.expr = new ConstExpr( INTEGER_CONST, val );
-	kdDebug() << "  + int constant: " << val.toString() << endl;
+	kDebug() << "  + int constant: " << val.toString() << endl;
 ;
     break;}
 case 73:
 #line 976 "sqlparser.y"
 {
 	yyval.expr = new ConstExpr( REAL_CONST, QPoint( yyvsp[0].realValue.integer, yyvsp[0].realValue.fractional ) );
-	kdDebug() << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
+	kDebug() << "  + real constant: " << yyvsp[0].realValue.integer << "." << yyvsp[0].realValue.fractional << endl;
 ;
     break;}
 case 75:
 #line 987 "sqlparser.y"
 {
-	kdDebug() << "(expr)" << endl;
+	kDebug() << "(expr)" << endl;
 	yyval.expr = new UnaryExpr('(', yyvsp[-1].expr);
 ;
     break;}
@@ -1829,7 +1829,7 @@ case 81:
 case 82:
 #line 1073 "sqlparser.y"
 {
-	kdDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
+	kDebug() << "FROM: '" << yyvsp[0].stringValue << "'" << endl;
 
 //	TableSchema *schema = parser->db()->tableSchema($1);
 //	parser->select()->setParentTable(schema);
@@ -1890,7 +1890,7 @@ case 85:
 {
 	yyval.exprList = yyvsp[-2].exprList;
 	yyval.exprList->add( yyvsp[0].expr );
-	kdDebug() << "ColViews: ColViews , ColItem" << endl;
+	kDebug() << "ColViews: ColViews , ColItem" << endl;
 ;
     break;}
 case 86:
@@ -1898,7 +1898,7 @@ case 86:
 {
 	yyval.exprList = new NArgExpr(0,0);
 	yyval.exprList->add( yyvsp[0].expr );
-	kdDebug() << "ColViews: ColItem" << endl;
+	kDebug() << "ColViews: ColItem" << endl;
 ;
     break;}
 case 87:
@@ -1909,14 +1909,14 @@ case 87:
 //	$$->setExpression( $1 );
 //	parser->select()->addField($$);
 	yyval.expr = yyvsp[0].expr;
-	kdDebug() << " added column expr: '" << yyvsp[0].expr->debugString() << "'" << endl;
+	kDebug() << " added column expr: '" << yyvsp[0].expr->debugString() << "'" << endl;
 ;
     break;}
 case 88:
 #line 1155 "sqlparser.y"
 {
 	yyval.expr = yyvsp[0].expr;
-	kdDebug() << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
+	kDebug() << " added column wildcard: '" << yyvsp[0].expr->debugString() << "'" << endl;
 ;
     break;}
 case 89:
@@ -1930,7 +1930,7 @@ case 89:
 		new VariableExpr(QString::fromUtf8(yyvsp[0].stringValue))
 //		new ConstExpr(IDENTIFIER, QString::fromLocal8Bit($3))
 	);
-	kdDebug() << " added column expr: " << yyval.expr->debugString() << endl;
+	kDebug() << " added column expr: " << yyval.expr->debugString() << endl;
 ;
     break;}
 case 90:
@@ -1944,7 +1944,7 @@ case 90:
 		new VariableExpr(QString::fromUtf8(yyvsp[0].stringValue))
 //		new ConstExpr(IDENTIFIER, QString::fromLocal8Bit($2))
 	);
-	kdDebug() << " added column expr: " << yyval.expr->debugString() << endl;
+	kDebug() << " added column expr: " << yyval.expr->debugString() << endl;
 ;
     break;}
 case 91:
@@ -1965,7 +1965,7 @@ case 93:
 #line 1240 "sqlparser.y"
 {
 	yyval.expr = new VariableExpr("*");
-	kdDebug() << "all columns" << endl;
+	kDebug() << "all columns" << endl;
 
 //	QueryAsterisk *ast = new QueryAsterisk(parser->select(), dummy);
 //	parser->select()->addAsterisk(ast);
@@ -1978,7 +1978,7 @@ case 94:
 	QString s = QString::fromUtf8(yyvsp[-2].stringValue);
 	s+=".*";
 	yyval.expr = new VariableExpr(s);
-	kdDebug() << "  + all columns from " << s << endl;
+	kDebug() << "  + all columns from " << s << endl;
 ;
     break;}
 }

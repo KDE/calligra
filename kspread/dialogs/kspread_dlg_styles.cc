@@ -24,7 +24,7 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 
 #include "kspread_canvas.h"
@@ -44,12 +44,13 @@ StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
 {
   QVBoxLayout * layout = new QVBoxLayout( this, 11, 6, "layout");
 
-  m_styleList = new KListView( this, "m_styleList" );
+  m_styleList = new K3ListView( this, "m_styleList" );
   m_styleList->addColumn( i18n( "Styles" ) );
-  m_styleList->setResizeMode( KListView::AllColumns );
+  m_styleList->setResizeMode( K3ListView::AllColumns );
   layout->addWidget( m_styleList );
 
-  m_displayBox = new KComboBox( FALSE, this, "m_displayBox" );
+  m_displayBox = new KComboBox( FALSE, this );
+  m_displayBox->setObjectName( "m_displayBox" );
   layout->addWidget( m_displayBox );
 
   m_styleList->header()->setLabel( 0, i18n( "Styles" ) );
@@ -99,11 +100,11 @@ StyleDlg::~StyleDlg()
 
 void StyleDlg::fillComboBox()
 {
-  class Map : public QMap<CustomStyle *, KListViewItem *> {};
+  class Map : public QMap<CustomStyle *, K3ListViewItem *> {};
   Map entries;
 
   entries.clear();
-  entries[m_styleManager->defaultStyle()] = new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
+  entries[m_styleManager->defaultStyle()] = new K3ListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
 
   StyleManager::Styles::const_iterator iter = m_styleManager->m_styles.begin();
   StyleManager::Styles::const_iterator end  = m_styleManager->m_styles.end();
@@ -114,12 +115,12 @@ void StyleDlg::fillComboBox()
     if ( entries.find( iter.data() ) == entries.end() )
     {
       if ( iter.data()->parent() == 0 )
-        entries[iter.data()] = new KListViewItem( m_dlg->m_styleList, iter.data()->name() );
+        entries[iter.data()] = new K3ListViewItem( m_dlg->m_styleList, iter.data()->name() );
       else
       {
         Map::const_iterator i = entries.find( iter.data()->parent() );
         if ( i != entries.end() )
-          entries[iter.data()] = new KListViewItem( i.data(), iter.data()->name() );
+          entries[iter.data()] = new K3ListViewItem( i.data(), iter.data()->name() );
       }
     }
 
@@ -144,7 +145,7 @@ void StyleDlg::slotDisplayMode( int mode )
   }
 
   if ( mode != 2 )
-    new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
+    new K3ListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
 
   StyleManager::Styles::iterator iter = m_styleManager->m_styles.begin();
   StyleManager::Styles::iterator end  = m_styleManager->m_styles.end();
@@ -161,15 +162,15 @@ void StyleDlg::slotDisplayMode( int mode )
     if ( mode == 2 )
     {
       if ( styleData->type() == Style::CUSTOM )
-        new KListViewItem( m_dlg->m_styleList, styleData->name() );
+        new K3ListViewItem( m_dlg->m_styleList, styleData->name() );
     }
     else if ( mode == 1 )
     {
       if ( styleData->usage() > 0 )
-        new KListViewItem( m_dlg->m_styleList, styleData->name() );
+        new K3ListViewItem( m_dlg->m_styleList, styleData->name() );
     }
     else
-      new KListViewItem( m_dlg->m_styleList, styleData->name() );
+      new K3ListViewItem( m_dlg->m_styleList, styleData->name() );
 
     ++iter;
   }
@@ -177,7 +178,7 @@ void StyleDlg::slotDisplayMode( int mode )
 
 void StyleDlg::slotOk()
 {
-  KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
+  K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
   if ( !item )
   {
@@ -218,7 +219,7 @@ void StyleDlg::slotUser1()
 {
   CustomStyle * s = 0;
 
-  KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
+  K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
   if ( item )
   {
@@ -257,7 +258,7 @@ void StyleDlg::slotUser1()
 
 void StyleDlg::slotUser2()
 {
-  KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
+  K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
   if ( !item )
     return;
@@ -279,7 +280,7 @@ void StyleDlg::slotUser2()
 
 void StyleDlg::slotUser3()
 {
-  KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
+  K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
   if ( !item )
     return;

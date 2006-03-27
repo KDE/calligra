@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 #include <KoPageLayout.h>
 #include <KoUnit.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 class KivioView;
 class QComboBox;
@@ -31,13 +31,13 @@ class QCheckBox;
 class QLabel;
 class QRadioButton;
 class KColorButton;
-class KURLRequester;
+class KUrlRequester;
 class KoUnitDoubleSpinBox;
 class KivioGuideLineData;
 class QGroupBox;
 class QFont;
 
-// class GuidesListViewItem : public KListViewItem
+// class GuidesListViewItem : public K3ListViewItem
 // {
 //   public:
 //     GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u);

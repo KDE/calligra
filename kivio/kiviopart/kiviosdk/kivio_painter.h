@@ -145,7 +145,7 @@ public:
     virtual void rotateBy(int) {;}
     virtual int rotation() { return 0; }
 
-    virtual void setWorldMatrix(QWMatrix, bool) {;}
+    virtual void setMatrix(QMatrix, bool) {;}
 };
 
 #endif

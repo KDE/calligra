@@ -39,7 +39,7 @@ KFormDesigner::removeChildrenFromList(WidgetList &list)
 			QWidget *widg = it2.current();
 			if((w != widg) && (w->child(widg->name())))
 			{
-				kdDebug() << "Removing the widget " << widg->name() << "which is a child of " << w->name() << endl;
+				kDebug() << "Removing the widget " << widg->name() << "which is a child of " << w->name() << endl;
 				list.remove(widg);
 			}
 		}
@@ -53,7 +53,7 @@ KFormDesigner::installRecursiveEventFilter(QObject *object, QObject *container)
 	if(!object || !container|| !object->isWidgetType())
 		return;
 
-	kdDebug() << "Installing event filter on widget: " << object->name() << " directed to " << container->name() << endl;
+	kDebug() << "Installing event filter on widget: " << object->name() << " directed to " << container->name() << endl;
 	object->installEventFilter(container);
 	if(((QWidget*)object)->ownCursor())
 		((QWidget*)object)->setCursor(QCursor(Qt::ArrowCursor));
@@ -105,8 +105,8 @@ KFormDesigner::getSizeFromChildren(QWidget *w, const char *inheritClass)
 	QObjectList *list = w->queryList(inheritClass, 0, false, false);
 	for(QObject *o = list->first(); o; o = list->next()) {
 		QRect  r = ((QWidget*)o)->geometry();
-		tmpw = QMAX(tmpw, r.right());
-		tmph = QMAX(tmph, r.bottom());
+		tmpw = qMax(tmpw, r.right());
+		tmph = qMax(tmph, r.bottom());
 	}
 
 	delete list;

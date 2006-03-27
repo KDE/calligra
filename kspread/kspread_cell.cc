@@ -222,7 +222,7 @@ public:
   Extra      *extra();
 
   Format     *format;
-  Q_UINT32   flags;
+  quint32   flags;
 
 private:
   // "Extra stuff", see explanation for Cell::Extra.
@@ -338,7 +338,7 @@ int Cell::row() const
 
   if ( isDefault() )
   {
-    kdWarning(36001) << "Error: Calling Cell::row() for default cell" << endl;
+    kWarning(36001) << "Error: Calling Cell::row() for default cell" << endl;
     return 0;
   }
 
@@ -355,7 +355,7 @@ int Cell::column() const
   // obscure bugs.
   if ( isDefault() )
   {
-    kdWarning(36001) << "Error: Calling Cell::column() for default cell" << endl;
+    kWarning(36001) << "Error: Calling Cell::column() for default cell" << endl;
     return 0;
   }
   return d->column;
@@ -775,7 +775,7 @@ bool Cell::needsPrinting() const
   if ( isDefault() )
     return false;
 
-  if ( !d->strText.stripWhiteSpace().isEmpty() ) {
+  if ( !d->strText.trimmed().isEmpty() ) {
     return true;
   }
 
@@ -803,7 +803,7 @@ bool Cell::needsPrinting() const
   }
 
   if ( format()->hasProperty( Style::SBackgroundColor ) ) {
-    kdDebug() << "needsPrinting: Has background colour" << endl;
+    kDebug() << "needsPrinting: Has background colour" << endl;
     QColor backgroundColor=bgColor(column(),row());
 
     //We don't need to print anything if the background is white
@@ -1149,7 +1149,7 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
             ++pos;
             if ( row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax )
             {
-                kdDebug(36001) << "Cell::decodeFormula: row or column out of range (col: " << col << " | row: " << row << ")" << endl;
+                kDebug(36001) << "Cell::decodeFormula: row or column out of range (col: " << col << " | row: " << row << ")" << endl;
                 erg = "=\"#### " + i18n("REFERENCE TO COLUMN OR ROW IS OUT OF RANGE") + "\"";
                 return erg;
             }
@@ -1348,7 +1348,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
         breakpos = o.find( ' ', breakpos );
         int linefeed = o.find( '\n', pos1 );
 
-//         kdDebug() << "start: " << start << "; breakpos: " << breakpos << "; pos1: " << pos1 << "; linefeed: " << linefeed << endl;
+//         kDebug() << "start: " << start << "; breakpos: " << breakpos << "; pos1: " << pos1 << "; linefeed: " << linefeed << endl;
 
         //don't miss LF as a position to calculate current lineWidth
         int work_breakpos = breakpos;
@@ -1362,7 +1362,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
         //linefeed could be -1 when no linefeed is found!
         if (breakpos > linefeed && linefeed > 0)
         {
-//           kdDebug() << "applying linefeed to start;" << endl;
+//           kDebug() << "applying linefeed to start;" << endl;
           start = linefeed;
           lines++;
         }
@@ -1900,7 +1900,7 @@ void Cell::textSize( QPainter &_paint )
     // Vertical text.
     int width = 0;
     for ( unsigned int i = 0; i < d->strOutText.length(); i++ )
-      width = QMAX( width, fm.width( d->strOutText.at( i ) ) );
+      width = qMax( width, fm.width( d->strOutText.at( i ) ) );
 
     d->textWidth  = format()->sheet()->doc()->unzoomItX( width );
     d->textHeight = format()->sheet()->doc()->unzoomItY( ( fm.ascent() + fm.descent() )
@@ -2115,9 +2115,9 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
 #if 0
   if (paintingObscured == 0)
-    kdDebug(36001) << "painting cell " << name() << endl;
+    kDebug(36001) << "painting cell " << name() << endl;
   else
-    kdDebug(36001) << "  painting obscured cell " << name() << endl;
+    kDebug(36001) << "  painting obscured cell " << name() << endl;
 #endif
 
   // Sanity check: If we're working on drawing an obscured cell, that
@@ -2267,7 +2267,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
   if (d->hasExtra() && (d->extra()->extraXCells > 0
       || d->extra()->extraYCells > 0)) {
-    //kdDebug(36001) << "painting obscured cells for " << name() << endl;
+    //kDebug(36001) << "painting obscured cells for " << name() << endl;
 
     paintObscuredCells( rect, painter, view, cellRect, cellRef,
       paintBorderRight, paintBorderBottom,
@@ -2356,7 +2356,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
        !( sheetDir == Sheet::RightToLeft && painter.device()->isExtDev() ) )
   {
 
-    //kdDebug(36001) << "painting cells that obscure " << name() << endl;
+    //kDebug(36001) << "painting cells that obscure " << name() << endl;
 
     // Store the obscuringCells list in a list of QPoint(column, row)
     // This avoids crashes during the iteration through
@@ -2413,7 +2413,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
                obscuringCellRef.y() ) );
 
 
-    //kdDebug(36001) << "  painting obscuring cell "
+    //kDebug(36001) << "  painting obscuring cell "
     //     << obscuringCell->name() << endl;
     // QPen highlightPen;
 
@@ -2593,7 +2593,7 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
              cellUp->row() );
 
 #if 0
-      int  penWidth = QMAX(1, sheet()->doc()->zoomItY( topPen.width() ));
+      int  penWidth = qMax(1, sheet()->doc()->zoomItY( topPen.width() ));
       topPen.setWidth( penWidth );
 #endif
     }
@@ -2614,7 +2614,7 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
     QPen highlightPen;*/
 
 
-  //kdDebug(36001) << "calling paintcell for obscured cell "
+  //kDebug(36001) << "calling paintcell for obscured cell "
   //       << cell->name() << endl;
   cell->paintCell( rect, painter, view,
        corner,
@@ -2811,15 +2811,15 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     // On paper, we always have full cells, on screen not.
     if ( paintingToExternalDevice ) {
       if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.right() ) ),
-                          doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
-                          doc->zoomItX( QMIN( rect.right(),  cellRect.right() ) ),
-                          doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() - db ) ) );
+        painter.drawLine( doc->zoomItX( qMax( rect.left(),   cellRect.right() ) ),
+                          doc->zoomItY( qMax( rect.top(),    cellRect.y() + dt ) ),
+                          doc->zoomItX( qMin( rect.right(),  cellRect.right() ) ),
+                          doc->zoomItY( qMin( rect.bottom(), cellRect.bottom() - db ) ) );
       else
-        painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() ) ),
-                          doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
-                          doc->zoomItX( QMIN( rect.right(),  cellRect.x() ) ),
-                          doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() - db ) ) );
+        painter.drawLine( doc->zoomItX( qMax( rect.left(),   cellRect.x() ) ),
+                          doc->zoomItY( qMax( rect.top(),    cellRect.y() + dt ) ),
+                          doc->zoomItX( qMin( rect.right(),  cellRect.x() ) ),
+                          doc->zoomItY( qMin( rect.bottom(), cellRect.bottom() - db ) ) );
     }
     else {
       if ( sheetDir == Sheet::RightToLeft )
@@ -2861,10 +2861,10 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( paintingToExternalDevice ) {
-      painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() + dl ) ),
-                        doc->zoomItY( QMAX( rect.top(),    cellRect.y() ) ),
-                        doc->zoomItX( QMIN( rect.right(),  cellRect.right() - dr ) ),
-                        doc->zoomItY( QMIN( rect.bottom(), cellRect.y() ) ) );
+      painter.drawLine( doc->zoomItX( qMax( rect.left(),   cellRect.x() + dl ) ),
+                        doc->zoomItY( qMax( rect.top(),    cellRect.y() ) ),
+                        doc->zoomItX( qMin( rect.right(),  cellRect.right() - dr ) ),
+                        doc->zoomItY( qMin( rect.bottom(), cellRect.y() ) ) );
     }
     else {
       painter.drawLine( doc->zoomItX( cellRect.x() + dl ),
@@ -2901,15 +2901,15 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() )     {
       if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() ) ),
-                          doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
-                          doc->zoomItX( QMIN( rect.right(),  cellRect.x() ) ),
-                          doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() - db ) ) );
+        painter.drawLine( doc->zoomItX( qMax( rect.left(),   cellRect.x() ) ),
+                          doc->zoomItY( qMax( rect.top(),    cellRect.y() + dt ) ),
+                          doc->zoomItX( qMin( rect.right(),  cellRect.x() ) ),
+                          doc->zoomItY( qMin( rect.bottom(), cellRect.bottom() - db ) ) );
       else
-        painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.right() ) ),
-                          doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
-                          doc->zoomItX( QMIN( rect.right(),  cellRect.right() ) ),
-                          doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() - db ) ) );
+        painter.drawLine( doc->zoomItX( qMax( rect.left(),   cellRect.right() ) ),
+                          doc->zoomItY( qMax( rect.top(),    cellRect.y() + dt ) ),
+                          doc->zoomItX( qMin( rect.right(),  cellRect.right() ) ),
+                          doc->zoomItY( qMin( rect.bottom(), cellRect.bottom() - db ) ) );
     }
     else {
       if ( sheetDir == Sheet::RightToLeft )
@@ -2947,10 +2947,10 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
-      painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() + dl ) ),
-                        doc->zoomItY( QMAX( rect.top(),    cellRect.bottom() ) ),
-                        doc->zoomItX( QMIN( rect.right(),  cellRect.right() - dr ) ),
-                        doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() ) ) );
+      painter.drawLine( doc->zoomItX( qMax( rect.left(),   cellRect.x() + dl ) ),
+                        doc->zoomItY( qMax( rect.top(),    cellRect.bottom() ) ),
+                        doc->zoomItX( qMin( rect.right(),  cellRect.right() - dr ) ),
+                        doc->zoomItY( qMin( rect.bottom(), cellRect.bottom() ) ) );
     }
     else {
       painter.drawLine( doc->zoomItX( cellRect.x() + dl ),
@@ -3558,10 +3558,10 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   // Determine the pens that should be used for drawing
   // the borders.
   //
-  int left_penWidth   = QMAX( 1, doc->zoomItX( leftPen.width() ) );
-  int right_penWidth  = QMAX( 1, doc->zoomItX( rightPen.width() ) );
-  int top_penWidth    = QMAX( 1, doc->zoomItY( topPen.width() ) );
-  int bottom_penWidth = QMAX( 1, doc->zoomItY( bottomPen.width() ) );
+  int left_penWidth   = qMax( 1, doc->zoomItX( leftPen.width() ) );
+  int right_penWidth  = qMax( 1, doc->zoomItX( rightPen.width() ) );
+  int top_penWidth    = qMax( 1, doc->zoomItY( topPen.width() ) );
+  int bottom_penWidth = qMax( 1, doc->zoomItY( bottomPen.width() ) );
 
   leftPen.setWidth( left_penWidth );
   rightPen.setWidth( right_penWidth );
@@ -3569,21 +3569,21 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   bottomPen.setWidth( bottom_penWidth );
 
   if ( paintLeft && leftPen.style() != Qt::NoPen ) {
-    int top = ( QMAX( 0, -1 + top_penWidth ) ) / 2 +
-              ( ( QMAX( 0, -1 + top_penWidth ) ) % 2 );
-    int bottom = ( QMAX( 0, -1 + bottom_penWidth ) ) / 2 + 1;
+    int top = ( qMax( 0, -1 + top_penWidth ) ) / 2 +
+              ( ( qMax( 0, -1 + top_penWidth ) ) % 2 );
+    int bottom = ( qMax( 0, -1 + bottom_penWidth ) ) / 2 + 1;
 
     painter.setPen( leftPen );
 
-    //kdDebug(36001) << "    painting left border of cell " << name() << endl;
+    //kDebug(36001) << "    painting left border of cell " << name() << endl;
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       // FIXME: There is probably Cut&Paste bugs here as well as below.
-      //        The QMIN/QMAX and left/right pairs don't really make sense.
+      //        The qMin/qMax and left/right pairs don't really make sense.
       //
-      //    UPDATE: In fact, most of these QMIN/QMAX combinations
+      //    UPDATE: In fact, most of these qMin/qMax combinations
       //            are TOTALLY BOGUS.  For one thing, the idea
       //            that we always have full cells on paper is wrong
       //            since we can have embedded sheets in e.g. kword,
@@ -3591,15 +3591,15 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       //            REVISE THIS WHOLE BORDER PAINTING SECTION!
       //
       if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( QMIN( zrect_right,  zcellRect_right ),
-                          QMAX( zrect_top,    zcellRect_top - top ),
-                          QMIN( zrect_right,  zcellRect_right ),
-                          QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
+        painter.drawLine( qMin( zrect_right,  zcellRect_right ),
+                          qMax( zrect_top,    zcellRect_top - top ),
+                          qMin( zrect_right,  zcellRect_right ),
+                          qMin( zrect_bottom, zcellRect_bottom + bottom ) );
       else
-        painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
-                          QMAX( zrect_top,    zcellRect_top - top ),
-                          QMAX( zrect_left,   zcellRect_left ),
-                          QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
+        painter.drawLine( qMax( zrect_left,   zcellRect_left ),
+                          qMax( zrect_top,    zcellRect_top - top ),
+                          qMax( zrect_left,   zcellRect_left ),
+                          qMin( zrect_bottom, zcellRect_bottom + bottom ) );
     }
     else {
       if ( sheetDir == Sheet::RightToLeft )
@@ -3616,22 +3616,22 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   }
 
   if ( paintRight && rightPen.style() != Qt::NoPen ) {
-    int top = ( QMAX( 0, -1 + top_penWidth ) ) / 2 +
-              ( ( QMAX( 0, -1 + top_penWidth ) ) % 2 );
-    int bottom = ( QMAX( 0, -1 + bottom_penWidth ) ) / 2 + 1;
+    int top = ( qMax( 0, -1 + top_penWidth ) ) / 2 +
+              ( ( qMax( 0, -1 + top_penWidth ) ) % 2 );
+    int bottom = ( qMax( 0, -1 + bottom_penWidth ) ) / 2 + 1;
 
     painter.setPen( rightPen );
 
-    //kdDebug(36001) << "    painting right border of cell " << name() << endl;
+    //kDebug(36001) << "    painting right border of cell " << name() << endl;
 
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( QMAX( zrect_left, zcellRect_left ),
-                          QMAX( zrect_top, zcellRect_top - top ),
-                          QMAX( zrect_left, zcellRect_left ),
-                          QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
+        painter.drawLine( qMax( zrect_left, zcellRect_left ),
+                          qMax( zrect_top, zcellRect_top - top ),
+                          qMax( zrect_left, zcellRect_left ),
+                          qMin( zrect_bottom, zcellRect_bottom + bottom ) );
       else {
   // FIXME: This is the way all these things should look.
   //        Make it so.
@@ -3639,9 +3639,9 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   // Only print the right border if it is visible.
   if ( zcellRect_right <= zrect_right + right_penWidth / 2)
     painter.drawLine( zcellRect_right,
-          QMAX( zrect_top, zcellRect_top - top ),
+          qMax( zrect_top, zcellRect_top - top ),
           zcellRect_right,
-          QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
+          qMin( zrect_bottom, zcellRect_bottom + bottom ) );
       }
     }
     else {
@@ -3661,7 +3661,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   if ( paintTop && topPen.style() != Qt::NoPen ) {
     painter.setPen( topPen );
 
-    //kdDebug(36001) << "    painting top border of cell " << name()
+    //kDebug(36001) << "    painting top border of cell " << name()
     //       << " [" << zcellRect_left << "," << zcellRect_right
     //       << ": " << zcellRect_right - zcellRect_left << "]" << endl;
 
@@ -3669,9 +3669,9 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       if ( zcellRect_top >= zrect_top + top_penWidth / 2)
-  painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
+  painter.drawLine( qMax( zrect_left,   zcellRect_left ),
         zcellRect_top,
-        QMIN( zrect_right,  zcellRect_right ),
+        qMin( zrect_right,  zcellRect_right ),
         zcellRect_top );
     }
     else {
@@ -3683,7 +3683,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   if ( paintBottom && bottomPen.style() != Qt::NoPen ) {
     painter.setPen( bottomPen );
 
-    //kdDebug(36001) << "    painting bottom border of cell " << name()
+    //kDebug(36001) << "    painting bottom border of cell " << name()
     //       << " [" << zcellRect_left << "," << zcellRect_right
     //       << ": " << zcellRect_right - zcellRect_left << "]" << endl;
 
@@ -3691,9 +3691,9 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       if ( zcellRect_bottom <= zrect_bottom + bottom_penWidth / 2)
-  painter.drawLine( QMAX( zrect_left,   zcellRect_left ),
+  painter.drawLine( qMax( zrect_left,   zcellRect_left ),
         zcellRect_bottom,
-        QMIN( zrect_right,  zcellRect_right ),
+        qMin( zrect_right,  zcellRect_right ),
         zcellRect_bottom );
     }
     else {
@@ -3744,7 +3744,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     vert_pen = cell_northwest->effRightBorderPen( cellRef.x() - 1,
               cellRef.y() - 1 );
 
-  vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
+  vert_penWidth = qMax( 1, doc->zoomItX( vert_pen.width() ) );
   vert_pen.setWidth( vert_penWidth );
 
   if ( vert_pen.style() != Qt::NoPen ) {
@@ -3755,23 +3755,23 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       horz_pen = cell_northwest->effBottomBorderPen( cellRef.x() - 1,
                  cellRef.y() - 1 );
 
-    horz_penWidth = QMAX( 1, doc->zoomItY( horz_pen.width() ) );
-    int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2 + 1;
+    horz_penWidth = qMax( 1, doc->zoomItY( horz_pen.width() ) );
+    int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2 + 1;
 
     painter.setPen( vert_pen );
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
       if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( QMAX( zrect_left, zcellRect_right ),
-                          QMAX( zrect_top, zcellRect_top ),
-                          QMIN( zrect_right, zcellRect_right ),
-                          QMIN( zrect_bottom, zcellRect_top + bottom ) );
+        painter.drawLine( qMax( zrect_left, zcellRect_right ),
+                          qMax( zrect_top, zcellRect_top ),
+                          qMin( zrect_right, zcellRect_right ),
+                          qMin( zrect_bottom, zcellRect_top + bottom ) );
       else
-        painter.drawLine( QMAX( zrect_left, zcellRect_left ),
-                          QMAX( zrect_top, zcellRect_top ),
-                          QMIN( zrect_right, zcellRect_left ),
-                          QMIN( zrect_bottom, zcellRect_top + bottom ) );
+        painter.drawLine( qMax( zrect_left, zcellRect_left ),
+                          qMax( zrect_top, zcellRect_top ),
+                          qMin( zrect_right, zcellRect_left ),
+                          qMin( zrect_bottom, zcellRect_top + bottom ) );
     }
     else {
       if ( sheetDir == Sheet::RightToLeft )
@@ -3793,7 +3793,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
              cellRef.y() - 1 );
 
   // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() - 1 );
-  vert_penWidth = QMAX( 1, doc->zoomItX( vert_pen.width() ) );
+  vert_penWidth = qMax( 1, doc->zoomItX( vert_pen.width() ) );
   vert_pen.setWidth( vert_penWidth );
   if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
     if ( cell_east->effTopBorderValue( cellRef.x() + 1, cellRef.y() )
@@ -3805,23 +3805,23 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                  cellRef.y() - 1 );
 
     // horz_pen = effTopBorderPen( cellRef.x() + 1, cellRef.y() );
-    horz_penWidth = QMAX( 1, doc->zoomItY( horz_pen.width() ) );
-    int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2 + 1;
+    horz_penWidth = qMax( 1, doc->zoomItY( horz_pen.width() ) );
+    int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2 + 1;
 
     painter.setPen( vert_pen );
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() ) {
       if ( sheetDir == Sheet::RightToLeft )
-        painter.drawLine( QMAX( zrect_left, zcellRect_left ),
-                          QMAX( zrect_top, zcellRect_top ),
-                          QMIN( zrect_right, zcellRect_left ),
-                          QMIN( zrect_bottom, zcellRect_top + bottom ) );
+        painter.drawLine( qMax( zrect_left, zcellRect_left ),
+                          qMax( zrect_top, zcellRect_top ),
+                          qMin( zrect_right, zcellRect_left ),
+                          qMin( zrect_bottom, zcellRect_top + bottom ) );
       else
-        painter.drawLine( QMAX( zrect_left, zcellRect_right ),
-                          QMAX( zrect_top, zcellRect_top ),
-                          QMIN( zrect_right, zcellRect_right ),
-                          QMIN( zrect_bottom, zcellRect_top + bottom ) );
+        painter.drawLine( qMax( zrect_left, zcellRect_right ),
+                          qMax( zrect_top, zcellRect_top ),
+                          qMin( zrect_right, zcellRect_right ),
+                          qMin( zrect_bottom, zcellRect_top + bottom ) );
     }
     else {
       if ( sheetDir == Sheet::RightToLeft )
@@ -3845,7 +3845,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                 cellRef.y() + 1 );
 
     // vert_pen = effLeftBorderPen( cellRef.x(), cellRef.y() + 1 );
-    vert_penWidth = QMAX( 1, doc->zoomItY( vert_pen.width() ) );
+    vert_penWidth = qMax( 1, doc->zoomItY( vert_pen.width() ) );
     vert_pen.setWidth( vert_penWidth );
     if ( vert_pen.style() != Qt::NoPen ) {
       if ( cell_west->effBottomBorderValue( cellRef.x() - 1, cellRef.y() )
@@ -3858,23 +3858,23 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                 cellRef.y() + 1 );
 
       // horz_pen = effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
-      horz_penWidth = QMAX( 1, doc->zoomItX( horz_pen.width() ) );
-      int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2;
+      horz_penWidth = qMax( 1, doc->zoomItX( horz_pen.width() ) );
+      int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2;
 
       painter.setPen( vert_pen );
       // If we are on paper printout, we limit the length of the lines.
       // On paper, we always have full cells, on screen not.
       if ( painter.device()->isExtDev() ) {
         if ( sheetDir == Sheet::RightToLeft )
-          painter.drawLine( QMAX( zrect_left, zcellRect_right ),
-                            QMAX( zrect_top, zcellRect_bottom - bottom ),
-                            QMIN( zrect_right, zcellRect_right ),
-                            QMIN( zrect_bottom, zcellRect_bottom ) );
+          painter.drawLine( qMax( zrect_left, zcellRect_right ),
+                            qMax( zrect_top, zcellRect_bottom - bottom ),
+                            qMin( zrect_right, zcellRect_right ),
+                            qMin( zrect_bottom, zcellRect_bottom ) );
         else
-          painter.drawLine( QMAX( zrect_left, zcellRect_left ),
-                            QMAX( zrect_top, zcellRect_bottom - bottom ),
-                            QMIN( zrect_right, zcellRect_left ),
-                            QMIN( zrect_bottom, zcellRect_bottom ) );
+          painter.drawLine( qMax( zrect_left, zcellRect_left ),
+                            qMax( zrect_top, zcellRect_bottom - bottom ),
+                            qMin( zrect_right, zcellRect_left ),
+                            qMin( zrect_bottom, zcellRect_bottom ) );
       }
       else {
         if ( sheetDir == Sheet::RightToLeft )
@@ -3896,7 +3896,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                cellRef.y() + 1 );
 
     // vert_pen = effRightBorderPen( cellRef.x(), cellRef.y() + 1 );
-    vert_penWidth = QMAX( 1, doc->zoomItY( vert_pen.width() ) );
+    vert_penWidth = qMax( 1, doc->zoomItY( vert_pen.width() ) );
     vert_pen.setWidth( vert_penWidth );
     if ( ( vert_pen.style() != Qt::NoPen ) && ( cellRef.x() < KS_colMax ) ) {
       if ( cell_east ->effBottomBorderValue( cellRef.x() + 1, cellRef.y() )
@@ -3910,23 +3910,23 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     ->effTopBorderPen( cellRef.x() + 1, cellRef.y() + 1 );
 
       // horz_pen = effBottomBorderPen( cellRef.x() + 1, cellRef.y() );
-      horz_penWidth = QMAX( 1, doc->zoomItX( horz_pen.width() ) );
-      int bottom = ( QMAX( 0, -1 + horz_penWidth ) ) / 2;
+      horz_penWidth = qMax( 1, doc->zoomItX( horz_pen.width() ) );
+      int bottom = ( qMax( 0, -1 + horz_penWidth ) ) / 2;
 
       painter.setPen( vert_pen );
       // If we are on paper printout, we limit the length of the lines.
       // On paper, we always have full cells, on screen not.
       if ( painter.device()->isExtDev() )      {
         if ( sheetDir == Sheet::RightToLeft )
-          painter.drawLine( QMAX( zrect_left, zcellRect_left ),
-                            QMAX( zrect_top, zcellRect_bottom - bottom ),
-                            QMIN( zrect_right, zcellRect_left ),
-                            QMIN( zrect_bottom, zcellRect_bottom ) );
+          painter.drawLine( qMax( zrect_left, zcellRect_left ),
+                            qMax( zrect_top, zcellRect_bottom - bottom ),
+                            qMin( zrect_right, zcellRect_left ),
+                            qMin( zrect_bottom, zcellRect_bottom ) );
         else
-          painter.drawLine( QMAX( zrect_left, zcellRect_right ),
-                            QMAX( zrect_top, zcellRect_bottom - bottom ),
-                            QMIN( zrect_right, zcellRect_right ),
-                            QMIN( zrect_bottom, zcellRect_bottom ) );
+          painter.drawLine( qMax( zrect_left, zcellRect_right ),
+                            qMax( zrect_top, zcellRect_bottom - bottom ),
+                            qMin( zrect_right, zcellRect_right ),
+                            qMin( zrect_bottom, zcellRect_bottom ) );
       }
       else {
         if ( sheetDir == Sheet::RightToLeft )
@@ -4075,7 +4075,7 @@ QString Cell::textDisplaying( QPainter &_painter )
         			tmp2 = d->strOutText.left( j );
         			if ( format()->sheet()->doc()->unzoomItY( fm.width( tmp2 ) ) < rl->dblHeight() - 1.0 )
         			{
-    					return d->strOutText.left( QMIN( tmp.length(), tmp2.length() ) );
+    					return d->strOutText.left( qMin( tmp.length(), tmp2.length() ) );
         			}
       			}
     		}
@@ -4512,8 +4512,8 @@ void Cell::incPrecision()
       else if ( (start=d->strOutText.find('E')) != -1 )
         start = d->strOutText.length() - start;
 
-      //kdDebug(36001) << "start=" << start << " pos=" << pos << " length=" << d->strOutText.length() << endl;
-      format()->setPrecision( QMAX( 0, (int)d->strOutText.length() - start - pos ) );
+      //kDebug(36001) << "start=" << start << " pos=" << pos << " length=" << d->strOutText.length() << endl;
+      format()->setPrecision( qMax( 0, (int)d->strOutText.length() - start - pos ) );
     }
   }
   else if ( tmpPreci < 10 )
@@ -4530,7 +4530,7 @@ void Cell::decPrecision()
   if ( !value().isNumber() )
     return;
   int preciTmp = format()->precision( column(), row() );
-//  kdDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
+//  kDebug(36001) << "decPrecision: tmpPreci = " << tmpPreci << endl;
   if ( format()->precision(column(),row()) == -1 )
   {
     int pos = d->strOutText.find( decimal_point );
@@ -4620,7 +4620,7 @@ void Cell::setDisplayText( const QString& _text )
     setFlag(Flag_TextFormatDirty);
 
     if ( !makeFormula() )
-      kdError(36001) << "ERROR: Syntax ERROR" << endl;
+      kError(36001) << "ERROR: Syntax ERROR" << endl;
     setCalcDirtyFlag ();
   }
 
@@ -5395,7 +5395,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         ++repeated;
         nextCell = format()->sheet()->getNextCellRight( j++, row );
       }
-      kdDebug() << "Cell::saveOasis: empty cell in column " << column << " "
+      kDebug() << "Cell::saveOasis: empty cell in column " << column << " "
                 << "repeated " << repeated << " time(s)" << endl;
 
       if ( repeated > 1 )
@@ -5410,13 +5410,13 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     }
     if ( isFormula() )
     {
-        //kdDebug() << "Formula found" << endl;
+        //kDebug() << "Formula found" << endl;
       QString formula( convertFormulaToOasisFormat( text() ) );
       xmlwriter.addAttribute( "table:formula", formula );
     }
     else if ( !link().isEmpty() )
     {
-        //kdDebug()<<"Link found \n";
+        //kDebug()<<"Link found \n";
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
         //Reference cell is started by "#"
@@ -5518,7 +5518,7 @@ QString Cell::convertFormulaToOasisFormat( const QString & formula ) const
     QString s;
     QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)");
     int n = exp.search( formula, 0 );
-    kdDebug() << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length()
+    kDebug() << "Exp: " << formula << ", n: " << n << ", Length: " << formula.length()
               << ", Matched length: " << exp.matchedLength() << endl;
 
     bool inQuote1 = false;
@@ -5532,7 +5532,7 @@ QString Cell::convertFormulaToOasisFormat( const QString & formula ) const
         if ( ( n != -1 ) && ( n < i ) )
         {
             n = exp.search( formula, i );
-            kdDebug() << "Exp: " << formula.right( l - i ) << ", n: " << n << endl;
+            kDebug() << "Exp: " << formula.right( l - i ) << ", n: " << n << endl;
         }
         if ( formula[i] == '"' )
         {
@@ -5578,7 +5578,7 @@ QString Cell::convertFormulaToOasisFormat( const QString & formula ) const
             int ml = exp.matchedLength();
             if ( formula[ i + ml ] == '!' )
             {
-                kdDebug() << "No cell ref but sheet name" << endl;
+                kDebug() << "No cell ref but sheet name" << endl;
                 s += formula[i];
                 ++i;
                 continue;
@@ -5603,14 +5603,14 @@ QString Cell::convertFormulaToOasisFormat( const QString & formula ) const
 
 void Cell::loadOasisConditional( QDomElement * style )
 {
-    //kdDebug()<<" void Cell::loadOasisConditional( QDomElement * style  :"<<style<<endl;
+    //kDebug()<<" void Cell::loadOasisConditional( QDomElement * style  :"<<style<<endl;
     if ( style )//safe
     {
         //TODO fixme it doesn't work :(((
         QDomElement e;
         forEachElement( e, style->toElement() )
         {
-//             kdDebug()<<"e.localName() :"<<e.localName()<<endl;
+//             kDebug()<<"e.localName() :"<<e.localName()<<endl;
             if ( e.localName() == "map" && e.namespaceURI() == KoXmlNS::style )
             {
                 if (d->hasExtra())
@@ -5627,10 +5627,10 @@ void Cell::loadOasisConditional( QDomElement * style )
 
 bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisContext , Style* style )
 {
-  kdDebug() << "*** Loading cell properties ***** at " << column() << "," << row () << endl;
+  kDebug() << "*** Loading cell properties ***** at " << column() << "," << row () << endl;
 
     QString text;
-    kdDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
+    kDebug()<<" table:style-name: "<<element.attributeNS( KoXmlNS::table, "style-name", QString::null )<<endl;
 
     QDomElement* cellStyle=0;
 
@@ -5659,7 +5659,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
     {
-        kdDebug()<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString::null )<<endl;
+        kDebug()<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString::null )<<endl;
         isFormula = true;
         QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString::null ) );
         //necessary to remove it to load formula from oocalc2.0 (use namespace)
@@ -5680,7 +5680,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
     //
     if ( element.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
     {
-        kdDebug()<<" validation-name: "<<element.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
+        kDebug()<<" validation-name: "<<element.attributeNS( KoXmlNS::table, "validation-name", QString::null )<<endl;
         loadOasisValidation( element.attributeNS( KoXmlNS::table, "validation-name", QString::null ) );
     }
 
@@ -5690,7 +5690,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
     if( element.hasAttributeNS( KoXmlNS::office, "value-type" ) )
     {
         QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString::null );
-        kdDebug()<<"  value-type: " << valuetype << endl;
+        kDebug()<<"  value-type: " << valuetype << endl;
         if( valuetype == "boolean" )
         {
           QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null ).lower();
@@ -5741,7 +5741,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
             if ( value.isEmpty() )
                 value = element.attributeNS( KoXmlNS::office, "date-value", QString::null );
-            kdDebug() << "Type: date, value: " << value << endl;
+            kDebug() << "Type: date, value: " << value << endl;
 
             // "1980-10-15"
             int year = 0, month = 0, day = 0;
@@ -5751,25 +5751,25 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             if ( p1 > 0 )
                 year  = value.left( p1 ).toInt( &ok );
 
-            kdDebug() << "year: " << value.left( p1 ) << endl;
+            kDebug() << "year: " << value.left( p1 ) << endl;
 
             int p2 = value.find( '-', ++p1 );
 
             if ( ok )
                 month = value.mid( p1, p2 - p1  ).toInt( &ok );
 
-            kdDebug() << "month: " << value.mid( p1, p2 - p1 ) << endl;
+            kDebug() << "month: " << value.mid( p1, p2 - p1 ) << endl;
 
             if ( ok )
                 day = value.right( value.length() - p2 - 1 ).toInt( &ok );
 
-            kdDebug() << "day: " << value.right( value.length() - p2 ) << endl;
+            kDebug() << "day: " << value.right( value.length() - p2 ) << endl;
 
             if ( ok )
             {
                 setValue( QDate( year, month, day ) );
                 format()->setFormatType (ShortDate_format);
-                kdDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
+                kDebug() << "Set QDate: " << year << " - " << month << " - " << day << endl;
             }
 
         }
@@ -5778,7 +5778,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             QString value = element.attributeNS( KoXmlNS::office, "value", QString::null );
             if ( value.isEmpty() )
                 value = element.attributeNS( KoXmlNS::office, "time-value", QString::null );
-            kdDebug() << "Type: time: " << value << endl;
+            kDebug() << "Type: time: " << value << endl;
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
             int l = value.length();
@@ -5800,13 +5800,13 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
                 else
                     continue;
 
-                kdDebug() << "Num: " << num << endl;
+                kDebug() << "Num: " << num << endl;
 
                 num = "";
                 if ( !ok )
                     break;
             }
-            kdDebug() << "Hours: " << hours << ", " << minutes << ", " << seconds << endl;
+            kDebug() << "Hours: " << hours << ", " << minutes << ", " << seconds << endl;
 
             if ( ok )
             {
@@ -5828,7 +5828,7 @@ bool Cell::loadOasis( const QDomElement& element , KoOasisLoadingContext& oasisC
             format()->setFormatType (Text_format);
         }
         else
-            kdDebug()<<" type of value found : "<<valuetype<<endl;
+            kDebug()<<" type of value found : "<<valuetype<<endl;
     }
 
     //
@@ -5959,7 +5959,7 @@ void Cell::loadOasisObjects( const QDomElement &parent, KoOasisLoadingContext& o
             if ( !image.isNull() )
               obj = new EmbeddedPictureObject( sheet(), sheet()->doc()->pictureCollection() );
             else
-              kdDebug() << "Object type wasn't loaded!" << endl;
+              kDebug() << "Object type wasn't loaded!" << endl;
           }
 
           if ( obj )
@@ -6009,7 +6009,7 @@ void Cell::loadOasisValidation( const QString& validationName )
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
         QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString::null );
-        kdDebug()<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        kDebug()<<" element.attribute( table:condition ) "<<valExpression<<endl;
         //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
@@ -6027,7 +6027,7 @@ void Cell::loadOasisValidation( const QString& validationName )
         {
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("oooc:cell-content-text-length()" );
-            kdDebug()<<" valExpression = :"<<valExpression<<endl;
+            kDebug()<<" valExpression = :"<<valExpression<<endl;
             d->extra()->validity->m_restriction = Restriction::TextLength;
 
             loadOasisValidationCondition( valExpression );
@@ -6042,7 +6042,7 @@ void Cell::loadOasisValidation( const QString& validationName )
             d->extra()->validity->m_restriction = Restriction::TextLength;
             d->extra()->validity->m_cond = Conditional::Between;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
-            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             QStringList listVal = QStringList::split( ",", valExpression );
             loadOasisValidationValue( listVal );
@@ -6052,9 +6052,9 @@ void Cell::loadOasisValidation( const QString& validationName )
             d->extra()->validity->m_restriction = Restriction::TextLength;
             d->extra()->validity->m_cond = Conditional::Different;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-not-between(" );
-            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
-            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            kDebug()<<" valExpression :"<<valExpression<<endl;
             QStringList listVal = QStringList::split( ",", valExpression );
             loadOasisValidationValue( listVal );
         }
@@ -6062,7 +6062,7 @@ void Cell::loadOasisValidation( const QString& validationName )
         {
             d->extra()->validity->m_restriction = Restriction::List;
             valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
-            kdDebug()<<" valExpression :"<<valExpression<<endl;
+            kDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
             d->extra()->validity->listValidity = QStringList::split( ";", valExpression );
 
@@ -6090,7 +6090,7 @@ void Cell::loadOasisValidation( const QString& validationName )
                 d->extra()->validity->m_restriction = Restriction::Time;
                 valExpression = valExpression.remove( "oooc:cell-content-is-time() and " );
             }
-            kdDebug()<<"valExpression :"<<valExpression<<endl;
+            kDebug()<<"valExpression :"<<valExpression<<endl;
 
             if ( valExpression.contains( "cell-content()" ) )
             {
@@ -6119,7 +6119,7 @@ void Cell::loadOasisValidation( const QString& validationName )
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" ) )
     {
-        kdDebug()<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
+        kDebug()<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
         d->extra()->validity->allowEmptyCell = ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString::null )=="true" ) ? true : false );
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "base-cell-address" ) )
@@ -6132,18 +6132,18 @@ void Cell::loadOasisValidation( const QString& validationName )
     {
         if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
         {
-            kdDebug()<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString::null )<<endl;
+            kDebug()<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString::null )<<endl;
             d->extra()->validity->titleInfo = help.attributeNS( KoXmlNS::table, "title", QString::null );
         }
         if ( help.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kdDebug()<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            kDebug()<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             d->extra()->validity->displayValidationInformation = ( ( help.attributeNS( KoXmlNS::table, "display", QString::null )=="true" ) ? true : false );
         }
         QDomElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
         {
-            kdDebug()<<"help text :"<<attrText.text()<<endl;
+            kDebug()<<"help text :"<<attrText.text()<<endl;
             d->extra()->validity->messageInfo = attrText.text();
         }
     }
@@ -6163,12 +6163,12 @@ void Cell::loadOasisValidation( const QString& validationName )
             else if ( str == "stop" )
               d->extra()->validity->m_action = Action::Stop;
             else
-                kdDebug()<<"validation : message type unknown  :"<<str<<endl;
+                kDebug()<<"validation : message type unknown  :"<<str<<endl;
         }
 
         if ( error.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kdDebug()<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
+            kDebug()<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString::null )<<endl;
             d->extra()->validity->displayMessage = (error.attributeNS( KoXmlNS::table, "display", QString::null )=="true");
         }
         QDomElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
@@ -6181,7 +6181,7 @@ void Cell::loadOasisValidation( const QString& validationName )
 void Cell::loadOasisValidationValue( const QStringList &listVal )
 {
     bool ok = false;
-    kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
     if ( d->extra()->validity->m_restriction == Restriction::Date )
     {
@@ -6200,7 +6200,7 @@ void Cell::loadOasisValidationValue( const QStringList &listVal )
         {
             d->extra()->validity->valMin = listVal[0].toInt(&ok);
             if ( !ok )
-                kdDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
+                kDebug()<<" Try to parse this value :"<<listVal[0]<<endl;
 
 #if 0
             if ( !ok )
@@ -6213,7 +6213,7 @@ void Cell::loadOasisValidationValue( const QStringList &listVal )
         {
             d->extra()->validity->valMax = listVal[1].toInt(&ok);
             if ( !ok )
-                kdDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
+                kDebug()<<" Try to parse this value :"<<listVal[1]<<endl;
 
 #if 0
             if ( !ok )
@@ -6258,7 +6258,7 @@ void Cell::loadOasisValidationCondition( QString &valExpression )
         d->extra()->validity->m_cond = Conditional::Equal;
     }
     else
-        kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
+        kDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
     if ( d->extra()->validity->m_restriction == Restriction::Date )
     {
         d->extra()->validity->dateMin = QDate::fromString( value );
@@ -6275,7 +6275,7 @@ void Cell::loadOasisValidationCondition( QString &valExpression )
         {
             d->extra()->validity->valMin = value.toInt(&ok);
             if ( !ok )
-                kdDebug()<<" Try to parse this value :"<<value<<endl;
+                kDebug()<<" Try to parse this value :"<<value<<endl;
 
 #if 0
             if ( !ok )
@@ -6303,12 +6303,12 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     // Validation
     if ( d->row < 1 || d->row > KS_rowMax )
     {
-        kdDebug(36001) << "Cell::load: Value out of Range Cell:row=" << d->row << endl;
+        kDebug(36001) << "Cell::load: Value out of Range Cell:row=" << d->row << endl;
         return false;
     }
     if ( d->column < 1 || d->column > KS_colMax )
     {
-        kdDebug(36001) << "Cell::load: Value out of Range Cell:column=" << d->column << endl;
+        kDebug(36001) << "Cell::load: Value out of Range Cell:column=" << d->column << endl;
         return false;
     }
 
@@ -6331,7 +6331,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             // Validation
             if ( i < 0 || i > KS_spanMax )
             {
-                kdDebug(36001) << "Value out of range Cell::colspan=" << i << endl;
+                kDebug(36001) << "Value out of range Cell::colspan=" << i << endl;
                 return false;
             }
             if (i || d->hasExtra())
@@ -6349,7 +6349,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             // Validation
             if ( i < 0 || i > KS_spanMax )
             {
-                kdDebug(36001) << "Value out of range Cell::rowspan=" << i << endl;
+                kDebug(36001) << "Value out of range Cell::rowspan=" << i << endl;
                 return false;
             }
             if (i || d->hasExtra())
@@ -6499,7 +6499,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     if ( !comment.isNull() && ( pm == Paste::Normal || pm == Paste::Comment || pm == Paste::NoBorder ))
     {
         QString t = comment.text();
-        //t = t.stripWhiteSpace();
+        //t = t.trimmed();
         format()->setComment( t );
     }
 
@@ -6628,7 +6628,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
   //TODO: use converter()->asString() to generate strText
 
   QString t = text.text();
-  t = t.stripWhiteSpace();
+  t = t.trimmed();
 
   setFlag(Flag_LayoutDirty);
   setFlag(Flag_TextFormatDirty);
@@ -6643,7 +6643,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
     clearAllErrors();
 
     if ( !makeFormula() )
-      kdError(36001) << "ERROR: Syntax ERROR" << endl;
+      kError(36001) << "ERROR: Syntax ERROR" << endl;
   }
   // rich text ?
   else if (t[0] == '!' )
@@ -6712,7 +6712,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
       {
         d->strText = pasteOperation( t, d->strText, op );
         checkTextInput();
-        //kdDebug(36001) << "Cell::load called checkTextInput, got dataType=" << dataType << "  t=" << t << endl;
+        //kDebug(36001) << "Cell::load called checkTextInput, got dataType=" << dataType << "  t=" << t << endl;
         newStyleLoading = false;
       }
     }
@@ -6739,7 +6739,7 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
           setValue ( Value( t.toLong(&ok) ) );
         if ( !ok )
   {
-          kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
+          kWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
   }
   /* We will need to localize the text version of the number */
   KLocale* locale = format()->sheet()->doc()->locale();
@@ -6836,7 +6836,7 @@ QTime Cell::toTime(const QDomElement &element)
 {
     //TODO: can't we use tryParseTime (after modification) instead?
     QString t = element.text();
-    t = t.stripWhiteSpace();
+    t = t.trimmed();
     int hours = -1;
     int minutes = -1;
     int second = -1;
@@ -7178,17 +7178,17 @@ bool Cell::doesMergeCells() const
 
 void Cell::clearFlag( CellFlags flag )
 {
-  d->flags &= ~(Q_UINT32)flag;
+  d->flags &= ~(quint32)flag;
 }
 
 void Cell::setFlag( CellFlags flag )
 {
-  d->flags |= (Q_UINT32)flag;
+  d->flags |= (quint32)flag;
 }
 
 bool Cell::testFlag( CellFlags flag ) const
 {
-  return ( d->flags & (Q_UINT32)flag );
+  return ( d->flags & (quint32)flag );
 }
 
 
@@ -7213,7 +7213,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
         formula = formula.replace( start, word.length(), "'" + word + "'" );
         l = formula.length();
         ++i;
-        kdDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
+        kDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
       }
     }
 
@@ -7228,7 +7228,7 @@ void Cell::checkForNamedAreas( QString & formula ) const
       formula = formula.replace( start, word.length(), "'" + word + "'" );
       l = formula.length();
       ++i;
-      kdDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
+      kDebug() << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
     }
   }
 }

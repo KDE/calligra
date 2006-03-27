@@ -503,7 +503,7 @@ using namespace KexiDB;
 
 %union {
 	char stringValue[255];
-	Q_LLONG integerValue;
+	qint64 integerValue;
 	struct realType realValue;
 	KexiDB::Field::Type colType;
 	KexiDB::Field *field;
@@ -619,7 +619,7 @@ ColDefs ',' ColDef|ColDef
 ColDef:
 IDENTIFIER ColType
 {
-	kdDebug() << "adding field " << $1 << endl;
+	kDebug() << "adding field " << $1 << endl;
 	field->setName($1);
 	parser->table()->addField(field);
 
@@ -628,7 +628,7 @@ IDENTIFIER ColType
 }
 | IDENTIFIER ColType ColKeys
 {
-	kdDebug() << "adding field " << $1 << endl;
+	kDebug() << "adding field " << $1 << endl;
 	field->setName($1);
 	parser->table()->addField(field);
 
@@ -650,17 +650,17 @@ ColKey:
 PRIMARY KEY
 {
 	field->setPrimaryKey(true);
-	kdDebug() << "primary" << endl;
+	kDebug() << "primary" << endl;
 }
 | NOT SQL_NULL
 {
 	field->setNotNull(true);
-	kdDebug() << "not_null" << endl;
+	kDebug() << "not_null" << endl;
 }
 | AUTO_INCREMENT
 {
 	field->setAutoIncrement(true);
-	kdDebug() << "ainc" << endl;
+	kDebug() << "ainc" << endl;
 }
 ;
 
@@ -672,7 +672,7 @@ SQL_TYPE
 }
 | SQL_TYPE '(' INTEGER_CONST ')'
 {
-	kdDebug() << "sql + length" << endl;
+	kDebug() << "sql + length" << endl;
 	field = new Field();
 	field->setPrecision($3);
 	field->setType($1);
@@ -694,7 +694,7 @@ SQL_TYPE
 SelectStatement:
 Select ColViews
 {
-	kdDebug() << "Select ColViews=" << $2->debugString() << endl;
+	kDebug() << "Select ColViews=" << $2->debugString() << endl;
 
 	if (!($$ = parseSelect( $1, $2 )))
 		return 0;
@@ -706,25 +706,25 @@ Select ColViews
 }
 | Select Tables
 {
-	kdDebug() << "Select ColViews Tables" << endl;
+	kDebug() << "Select ColViews Tables" << endl;
 	if (!($$ = parseSelect( $1, 0, $2 )))
 		return 0;
 }
 | Select ColViews WhereClause
 {
-	kdDebug() << "Select ColViews Conditions" << endl;
+	kDebug() << "Select ColViews Conditions" << endl;
 	if (!($$ = parseSelect( $1, $2, 0, $3 )))
 		return 0;
 }
 | Select ColViews Tables WhereClause
 {
-	kdDebug() << "Select ColViews Tables Conditions" << endl;
+	kDebug() << "Select ColViews Tables Conditions" << endl;
 	if (!($$ = parseSelect( $1, $2, $3, $4 )))
 		return 0;
 }
 | Select Tables WhereClause
 {
-	kdDebug() << "Select Tables Conditions" << endl;
+	kDebug() << "Select Tables Conditions" << endl;
 	if (!($$ = parseSelect( $1, 0, $2, $3 )))
 		return 0;
 }
@@ -733,7 +733,7 @@ Select ColViews
 Select:
 SELECT
 {
-	kdDebug() << "SELECT" << endl;
+	kDebug() << "SELECT" << endl;
 //	parser->createSelect();
 //	parser->setOperation(Parser::OP_Select);
 	$$ = new QuerySchema();
@@ -755,7 +755,7 @@ aExpr2
 aExpr2:
 aExpr3 AND aExpr2
 {
-//	kdDebug() << "AND " << $3.debugString() << endl;
+//	kDebug() << "AND " << $3.debugString() << endl;
 	$$ = new BinaryExpr( KexiDBExpr_Logical, $1, AND, $3 );
 }
 | aExpr3 OR aExpr2
@@ -920,7 +920,7 @@ aExpr9:
 	$$ = new VariableExpr( QString::fromUtf8($1) );
 	
 //TODO: simplify this later if that's 'only one field name' expression
-	kdDebug() << "  + identifier: " << $1 << endl;
+	kDebug() << "  + identifier: " << $1 << endl;
 //	$$ = new Field();
 //	$$->setName($1);
 //	$$->setTable(dummy);
@@ -930,14 +930,14 @@ aExpr9:
 }
 | IDENTIFIER aExprList
 {
-	kdDebug() << "  + function: " << $1 << "(" << $2->debugString() << ")" << endl;
+	kDebug() << "  + function: " << $1 << "(" << $2->debugString() << ")" << endl;
 	$$ = new FunctionExpr($1, $2);
 }
 /*TODO: shall we also support db name? */
 | IDENTIFIER '.' IDENTIFIER
 {
 	$$ = new VariableExpr( QString::fromUtf8($1) + "." + QString::fromUtf8($3) );
-	kdDebug() << "  + identifier.identifier: " << $3 << "." << $1 << endl;
+	kDebug() << "  + identifier.identifier: " << $3 << "." << $1 << endl;
 //	$$ = new Field();
 //	s->setTable($1);
 //	$$->setName($3);
@@ -948,7 +948,7 @@ aExpr9:
 | SQL_NULL
 {
 	$$ = new ConstExpr( SQL_NULL, QVariant() );
-	kdDebug() << "  + NULL" << endl;
+	kDebug() << "  + NULL" << endl;
 //	$$ = new Field();
 	//$$->setName(QString::null);
 }
@@ -956,7 +956,7 @@ aExpr9:
 {
 	QString s( QString::fromUtf8($1) );
 	$$ = new ConstExpr( CHARACTER_STRING_LITERAL, s.mid(1,s.length()-2) );
-	kdDebug() << "  + constant " << s << endl;
+	kDebug() << "  + constant " << s << endl;
 }
 | INTEGER_CONST
 {
@@ -966,19 +966,19 @@ aExpr9:
 	else if ($1 <= UINT_MAX && $1 >= 0)
 		val = (uint)$1;
 	else if ($1 <= LLONG_MAX && $1 >= LLONG_MIN)
-		val = (Q_LLONG)$1;
+		val = (qint64)$1;
 
 //	if ($1 < ULLONG_MAX)
-//		val = (Q_ULLONG)$1;
+//		val = (quint64)$1;
 //TODO ok?
 
 	$$ = new ConstExpr( INTEGER_CONST, val );
-	kdDebug() << "  + int constant: " << val.toString() << endl;
+	kDebug() << "  + int constant: " << val.toString() << endl;
 }
 | REAL_CONST
 {
 	$$ = new ConstExpr( REAL_CONST, QPoint( $1.integer, $1.fractional ) );
-	kdDebug() << "  + real constant: " << $1.integer << "." << $1.fractional << endl;
+	kDebug() << "  + real constant: " << $1.integer << "." << $1.fractional << endl;
 }
 |
 aExpr10
@@ -988,7 +988,7 @@ aExpr10
 aExpr10:
 '(' aExpr ')'
 {
-	kdDebug() << "(expr)" << endl;
+	kDebug() << "(expr)" << endl;
 	$$ = new UnaryExpr('(', $2);
 }
 ;
@@ -1025,27 +1025,27 @@ FROM FlatTableList
 /*
 | Tables LEFT JOIN IDENTIFIER SQL_ON ColExpression
 {
-	kdDebug() << "LEFT JOIN: '" << $4 << "' ON " << $6 << endl;
+	kDebug() << "LEFT JOIN: '" << $4 << "' ON " << $6 << endl;
 	addTable($4);
 }
 | Tables LEFT OUTER JOIN IDENTIFIER SQL_ON ColExpression
 {
-	kdDebug() << "LEFT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
+	kDebug() << "LEFT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
 	addTable($5);
 }
 | Tables INNER JOIN IDENTIFIER SQL_ON ColExpression
 {
-	kdDebug() << "INNER JOIN: '" << $4 << "' ON " << $6 << endl;
+	kDebug() << "INNER JOIN: '" << $4 << "' ON " << $6 << endl;
 	addTable($4);
 }
 | Tables RIGHT JOIN IDENTIFIER SQL_ON ColExpression
 {
-	kdDebug() << "RIGHT JOIN: '" << $4 << "' ON " << $6 << endl;
+	kDebug() << "RIGHT JOIN: '" << $4 << "' ON " << $6 << endl;
 	addTable($4);
 }
 | Tables RIGHT OUTER JOIN IDENTIFIER SQL_ON ColExpression
 {
-	kdDebug() << "RIGHT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
+	kDebug() << "RIGHT OUTER JOIN: '" << $5 << "' ON " << $7 << endl;
 	addTable($5);
 }*/
 ;
@@ -1074,7 +1074,7 @@ FlatTableList ',' FlatTable
 FlatTable:
 IDENTIFIER
 {
-	kdDebug() << "FROM: '" << $1 << "'" << endl;
+	kDebug() << "FROM: '" << $1 << "'" << endl;
 
 //	TableSchema *schema = parser->db()->tableSchema($1);
 //	parser->select()->setParentTable(schema);
@@ -1134,13 +1134,13 @@ ColViews ',' ColItem
 {
 	$$ = $1;
 	$$->add( $3 );
-	kdDebug() << "ColViews: ColViews , ColItem" << endl;
+	kDebug() << "ColViews: ColViews , ColItem" << endl;
 }
 |ColItem
 {
 	$$ = new NArgExpr(0,0);
 	$$->add( $1 );
-	kdDebug() << "ColViews: ColItem" << endl;
+	kDebug() << "ColViews: ColItem" << endl;
 }
 ;
 
@@ -1152,12 +1152,12 @@ ColExpression
 //	$$->setExpression( $1 );
 //	parser->select()->addField($$);
 	$$ = $1;
-	kdDebug() << " added column expr: '" << $1->debugString() << "'" << endl;
+	kDebug() << " added column expr: '" << $1->debugString() << "'" << endl;
 }
 | ColWildCard
 {
 	$$ = $1;
-	kdDebug() << " added column wildcard: '" << $1->debugString() << "'" << endl;
+	kDebug() << " added column wildcard: '" << $1->debugString() << "'" << endl;
 }
 | ColExpression AS IDENTIFIER
 {
@@ -1169,7 +1169,7 @@ ColExpression
 		new VariableExpr(QString::fromUtf8($3))
 //		new ConstExpr(IDENTIFIER, QString::fromLocal8Bit($3))
 	);
-	kdDebug() << " added column expr: " << $$->debugString() << endl;
+	kDebug() << " added column expr: " << $$->debugString() << endl;
 }
 | ColExpression IDENTIFIER
 {
@@ -1181,7 +1181,7 @@ ColExpression
 		new VariableExpr(QString::fromUtf8($2))
 //		new ConstExpr(IDENTIFIER, QString::fromLocal8Bit($2))
 	);
-	kdDebug() << " added column expr: " << $$->debugString() << endl;
+	kDebug() << " added column expr: " << $$->debugString() << endl;
 }
 ;
 
@@ -1242,7 +1242,7 @@ ColWildCard:
 '*'
 {
 	$$ = new VariableExpr("*");
-	kdDebug() << "all columns" << endl;
+	kDebug() << "all columns" << endl;
 
 //	QueryAsterisk *ast = new QueryAsterisk(parser->select(), dummy);
 //	parser->select()->addAsterisk(ast);
@@ -1253,12 +1253,12 @@ ColWildCard:
 	QString s = QString::fromUtf8($1);
 	s+=".*";
 	$$ = new VariableExpr(s);
-	kdDebug() << "  + all columns from " << s << endl;
+	kDebug() << "  + all columns from " << s << endl;
 }
 /*| ERROR_DIGIT_BEFORE_IDENTIFIER
 {
 	$$ = new VariableExpr($1);
-	kdDebug() << "  Invalid identifier! " << $1 << endl;
+	kDebug() << "  Invalid identifier! " << $1 << endl;
 	setError(i18n("Invalid identifier \"%1\"").arg($1));
 }*/
 ;

@@ -21,7 +21,7 @@
 #ifndef KEXIBROWSERITEM_H
 #define KEXIBROWSERITEM_H
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <qstring.h>
 
 #include "kexipartitem.h"
@@ -32,11 +32,11 @@ namespace KexiPart
 }
 
 //! @internal
-class KexiBrowserItem : public KListViewItem
+class KexiBrowserItem : public K3ListViewItem
 {
 	public:
-		KexiBrowserItem(KListView *parent, KexiPart::Info *i);
-		KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
+		KexiBrowserItem(K3ListView *parent, KexiPart::Info *i);
+		KexiBrowserItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
 
 		void clearChildren();
 

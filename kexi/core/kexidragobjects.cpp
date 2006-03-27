@@ -31,7 +31,7 @@ KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourc
  : QStoredDrag("kexi/field", parent, name)
 {
 	QByteArray data;
-	QDataStream stream1(data,IO_WriteOnly);
+	QDataStream stream1(data,QIODevice::WriteOnly);
 	stream1 << sourceMimeType << sourceName << field;
 	setEncodedData(data);
 }
@@ -41,7 +41,7 @@ KexiFieldDrag::KexiFieldDrag(const QString& sourceMimeType, const QString& sourc
  : QStoredDrag((fields.count() > 1) ? "kexi/fields" : "kexi/field", parent, name)
 {
 	QByteArray data;
-	QDataStream stream1(data,IO_WriteOnly);
+	QDataStream stream1(data,QIODevice::WriteOnly);
 	if (fields.count() > 1)
 		stream1 << sourceMimeType << sourceName << fields;
 	else {
@@ -79,11 +79,11 @@ KexiFieldDrag::decodeSingle( QDropEvent* e, QString& sourceMimeType,
 	if (payload.isEmpty())
 		return false;
 	e->accept();
-	QDataStream stream1(payload, IO_ReadOnly);
+	QDataStream stream1(payload, QIODevice::ReadOnly);
 	stream1 >> sourceMimeType;
 	stream1 >> sourceName;
 	stream1 >> field;
-//	kdDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<field << endl;
+//	kDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<field << endl;
 	return true;
 }
 
@@ -101,11 +101,11 @@ KexiFieldDrag::decodeMultiple( QDropEvent* e, QString& sourceMimeType,
 		return true;
 	}
 	e->accept();
-	QDataStream stream1(payload, IO_ReadOnly);
+	QDataStream stream1(payload, QIODevice::ReadOnly);
 	stream1 >> sourceMimeType;
 	stream1 >> sourceName;
 	stream1 >> fields;
-//	kdDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<fields << endl;
+//	kDebug() << "KexiFieldDrag::decode() decoded: " << sourceMimeType<<"/"<<sourceName<<"/"<<fields << endl;
 	return true;
 }
 
@@ -116,7 +116,7 @@ KexiDataProviderDrag::KexiDataProviderDrag(const QString& sourceMimeType, const 
  : QStoredDrag("kexi/dataprovider", parent, name)
 {
 	QByteArray data;
-	QDataStream stream1(data,IO_WriteOnly);
+	QDataStream stream1(data,QIODevice::WriteOnly);
 	stream1 << sourceMimeType << sourceName;
 	setEncodedData(data);
 }
@@ -136,10 +136,10 @@ KexiDataProviderDrag::decode( QDropEvent* e, QString& sourceMimeType, QString& s
 	if(payload.size())
 	{
 		e->accept();
-		QDataStream stream1(payload, IO_ReadOnly);
+		QDataStream stream1(payload, QIODevice::ReadOnly);
 		stream1 >> sourceMimeType;
 		stream1 >> sourceName;
-//		kdDebug() << "KexiDataProviderDrag::decode() decoded: " << sourceMimeType <<"/"<<sourceName<< endl;
+//		kDebug() << "KexiDataProviderDrag::decode() decoded: " << sourceMimeType <<"/"<<sourceName<< endl;
 		return true;
 	}
 	return false;

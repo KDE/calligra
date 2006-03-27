@@ -37,7 +37,7 @@ Config::~Config()
 }
 
 void Config::load() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     KConfig *config = Factory::global()->config();
     
 /*    if( config->hasGroup("Behavior"))
@@ -55,14 +55,14 @@ void Config::load() {
         m_taskDefaults.setConstraintStartTime(config->readDateTimeEntry("ConstraintStartTime"));
         m_taskDefaults.setConstraintEndTime(config->readDateTimeEntry("ConstraintEndTime"));
         m_taskDefaults.effort()->setType((Effort::Type)config->readNumEntry("EffortType"));
-        m_taskDefaults.effort()->set(Duration((Q_INT64)config->readNumEntry("ExpectedEffort")));
+        m_taskDefaults.effort()->set(Duration((qint64)config->readNumEntry("ExpectedEffort")));
         m_taskDefaults.effort()->setPessimisticRatio(config->readNumEntry("PessimisticEffort"));
         m_taskDefaults.effort()->setOptimisticRatio(config->readNumEntry("OptimisticEffort"));
     }
 }
 
 void Config::save() {
-    //kdDebug()<<k_funcinfo<<m_readWrite<<endl;
+    //kDebug()<<k_funcinfo<<m_readWrite<<endl;
     if (!m_readWrite)
         return;
         

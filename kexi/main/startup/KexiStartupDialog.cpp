@@ -60,11 +60,11 @@
 #define KEXI_STARTUP_SHOW_RECENT
 #endif
 
-class TemplateItem : public KIconViewItem
+class TemplateItem : public K3IconViewItem
 {
 	public:
-		TemplateItem(KIconView* parent, const QString& name, const QPixmap& icon)
-		: KIconViewItem(parent,name,icon)
+		TemplateItem(K3IconView* parent, const QString& name, const QPixmap& icon)
+		: K3IconViewItem(parent,name,icon)
 		{}
 		~TemplateItem() {}
 		QString key, name, description;
@@ -73,7 +73,7 @@ class TemplateItem : public KIconViewItem
 TemplatesPage::TemplatesPage( Orientation o, QWidget * parent, const char * name )
 	: QSplitter(o, parent, name)
 {
-	templates = new KIconView(this, "templates");
+	templates = new K3IconView(this, "templates");
 	templates->setItemsMovable(false);
 	templates->setShowToolTips(false);
 	info = new KTextBrowser(this,"info");
@@ -287,7 +287,7 @@ void KexiStartupDialog::done(int r)
 	if (d->result!=-1) //already done!
 		return;
 
-//	kdDebug() << "KexiStartupDialog::done(" << r << ")" << endl;
+//	kDebug() << "KexiStartupDialog::done(" << r << ")" << endl;
 	updateSelectedTemplateKeyInfo();
 
 	if (r==QDialog::Rejected) {
@@ -371,7 +371,7 @@ void KexiStartupDialog::setupPageTemplates()
 	tmplyr = new QVBoxLayout(templPageFrame, 0, KDialogBase::spacingHint());
 	lbl_blank = new QLabel( 
 		i18n("Kexi will create a new blank database project.")+clickMsg, templPageFrame );
-	lbl_blank->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
+	lbl_blank->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::TextWordWrap);
 	lbl_blank->setMargin(0);
 	tmplyr->addWidget( lbl_blank );
 	tmplyr->addStretch(1);
@@ -385,7 +385,7 @@ void KexiStartupDialog::setupPageTemplates()
 	lbl_blank = new QLabel( 
 		i18n("Kexi will import the structure and data of an existing database as a new database project.")
 		+clickMsg, templPageFrame );
-	lbl_blank->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
+	lbl_blank->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::TextWordWrap);
 	lbl_blank->setMargin(0);
 	tmplyr->addWidget( lbl_blank );
 	tmplyr->addStretch(1);
@@ -423,9 +423,9 @@ void KexiStartupDialog::setupPageTemplates()
 void KexiStartupDialog::templatesPageShown(QWidget *page)
 {
 	int idx = d->templatesWidget->pageIndex(page);
-//	KIconView *templ = 0;
+//	K3IconView *templ = 0;
 	if (idx==d->templatesSectionID_blank) {//blank
-//		kdDebug() << "blank" << endl;
+//		kDebug() << "blank" << endl;
 	}
 	else if (idx==d->templatesSectionID_import) {
 	}
@@ -508,7 +508,7 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 
 void KexiStartupDialog::tabShown(QWidget *w)
 {
-//	kdDebug() << "KexiStartupDialog::tabShown " << (long)w << " "<< long(d->pageTemplates)<<endl;
+//	kDebug() << "KexiStartupDialog::tabShown " << (long)w << " "<< long(d->pageTemplates)<<endl;
 
 	updateDialogOKButton(w);
 
@@ -602,7 +602,7 @@ void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataL
 }
 
 void KexiStartupDialog::slotOk() {
-//	kdDebug()<<"KexiStartupDialog::slotOk()"<<endl;
+//	kDebug()<<"KexiStartupDialog::slotOk()"<<endl;
 	if (activePageIndex()==d->pageOpenExistingID) {
 		if (d->openExistingFileDlg) {
 			if (d->openExistingFileDlg->okButton())
@@ -615,19 +615,19 @@ void KexiStartupDialog::slotOk() {
 
 void KexiStartupDialog::showSimpleConnForOpenExisting()
 {
-//	kdDebug() << "simple" << endl;
+//	kDebug() << "simple" << endl;
 	d->openExistingConnWidget->showSimpleConn();
 }
 
 void KexiStartupDialog::showAdvancedConnForOpenExisting()
 {
-//	kdDebug() << "adv" << endl;
+//	kDebug() << "adv" << endl;
 	d->openExistingConnWidget->showAdvancedConn();
 }
 
 QString KexiStartupDialog::selectedExistingFile() const
 {
-//	kdDebug() << activePageIndex() << " " << d->openExistingFileDlg->isVisible()
+//	kDebug() << activePageIndex() << " " << d->openExistingFileDlg->isVisible()
 //		<< ": " << d->existingFileToOpen << endl;
 	return d->existingFileToOpen;
 }
@@ -694,10 +694,10 @@ bool KexiStartupDialog::eventFilter( QObject *o, QEvent *e )
 int KexiStartupDialog::activePageIndex() const
 {
 	if (!d->singlePage) {
-//		kdDebug() << "int KexiStartupDialog::activePageIndex()" << KDialogBase::activePageIndex() << endl;
+//		kDebug() << "int KexiStartupDialog::activePageIndex()" << KDialogBase::activePageIndex() << endl;
 		return KDialogBase::activePageIndex();
 	}
-	kdDebug() << "int KexiStartupDialog::activePageIndex() == " << 0 << endl;
+	kDebug() << "int KexiStartupDialog::activePageIndex() == " << 0 << endl;
 	return 0; //there is always "plain page" #0 selected
 }
 

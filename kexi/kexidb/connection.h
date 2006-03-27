@@ -456,7 +456,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return true if there is at least one record in \a table. */
 		bool isEmpty( TableSchema& table, bool &success );
 
-//! @todo perhaps use Q_ULLONG here?
+//! @todo perhaps use quint64 here?
 		/*! \return number of records in \a sql query.
 		 Does not fetch any records. -1 is returned on query execution errors (>0 otherwise).
 		 Note: real executed query is: "SELECT COUNT() FROM (\a sql) LIMIT 1" 
@@ -618,19 +618,19 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Simply, method internally fetches last inserted record and returns selected 
 		 field's value. Requirements: field must be of integer type, there must be a
 		 record inserted in current database session (whatever this means).
-		 On error (Q_ULLONG)-1 is returned.
+		 On error (quint64)-1 is returned.
 		 Last inserted record is identified by magical row identifier, usually called 
 		 ROWID (PostgreSQL has it as well as SQLite; 
 		 see DriverBehaviour::ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE). 
 		 ROWID's value will be assigned back to \a ROWID if this pointer is not null.
 		*/
-		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName, 
-			Q_ULLONG* ROWID = 0);
+		quint64 lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName, 
+			quint64* ROWID = 0);
 		
-		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&, Q_ULLONG*)
+		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&, quint64*)
 		*/
-		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, 
-			const TableSchema& table, Q_ULLONG* ROWID = 0);
+		quint64 lastInsertedAutoIncValue(const QString& aiFieldName, 
+			const TableSchema& table, quint64* ROWID = 0);
 
 		/*! Executes query \a statement, but without returning resulting 
 		 rows (used mostly for functional queries). 
@@ -886,7 +886,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 just inserted row.
 		 Note for driver developers: contact js (at) iidea.pl 
 		 if your engine do not offers this information. */
-		virtual Q_ULLONG drv_lastInsertRowID() = 0;
+		virtual quint64 drv_lastInsertRowID() = 0;
 
 		/*! Note for driver developers: begins new transaction
 		 and returns handle to it. Default implementation just
@@ -1072,7 +1072,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Only works if connection is not yet established. */
 		void setReadOnly(bool set);
 
-		QGuardedPtr<ConnectionData> m_data;
+		QPointer<ConnectionData> m_data;
 		QString m_name;
 		QString m_usedDatabase; //!< database name that is opened now
 

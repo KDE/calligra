@@ -133,7 +133,7 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     KoOasisSettings::Items firstView = viewMap.entry( 0 );
 
     KoOasisSettings::NamedMap sheetsMap = firstView.namedMap( "Tables" );
-    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !sheetsMap.isNull() <<endl;
+    kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !sheetsMap.isNull() <<endl;
     if ( !sheetsMap.isNull() )
     {
         QPtrListIterator<Sheet> it( m_lstSheets );
@@ -144,7 +144,7 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     }
 
     QString activeSheet = firstView.parseConfigItemString( "ActiveTable" );
-    kdDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet<<endl;
+    kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet<<endl;
 
     if (!activeSheet.isEmpty())
     {
@@ -290,8 +290,8 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
         QDomElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
-            //kdDebug()<<"  Map::loadOasis tableElement is not null \n";
-            //kdDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName()<<endl;
+            //kDebug()<<"  Map::loadOasis tableElement is not null \n";
+            //kDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName()<<endl;
             if( sheetElement.nodeName() == "table:table" )
             {
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )
@@ -311,7 +311,7 @@ bool Map::loadOasis( const QDomElement& body, KoOasisLoadingContext& oasisContex
         QDomElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
-            kdDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
+            kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
             if( sheetElement.nodeName() == "table:table" )
             {
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString::null ).isEmpty() )

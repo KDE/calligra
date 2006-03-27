@@ -67,8 +67,8 @@ public:
         matrix.resize( _rows * _cols, KDChartData() );
 
         // Copy over the old data
-        for( uint row = 0; row < QMIN( row_count, _rows ); row++ )
-            for( uint col = 0; col < QMIN( col_count, _cols ); col++ )
+        for( uint row = 0; row < qMin( row_count, _rows ); row++ )
+            for( uint col = 0; col < qMin( col_count, _cols ); col++ )
                 matrix[ row * _cols + col ].setAll( save[ row * col_count + col ] );
 
         // set the new counts

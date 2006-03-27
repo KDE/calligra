@@ -27,7 +27,7 @@
 #include <kparts/componentfactory.h>
 #include <ktrader.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include "widgetfactory.h"
 #include "widgetlibrary.h"
@@ -122,13 +122,13 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 		if (!w->m_parentFactoryName.isEmpty() && !w->m_inheritedClassName.isEmpty()) {
 			WidgetFactory *parentFactory = d->factories[w->m_parentFactoryName];
 			if (!parentFactory) {
-				kdWarning() << "WidgetLibrary::loadFactoryWidgets(): class '" << w->className()
+				kWarning() << "WidgetLibrary::loadFactoryWidgets(): class '" << w->className()
 					<< "' - no such parent factory '" << w->m_parentFactoryName << "'" << endl;
 				continue;
 			}
 			WidgetInfo* inheritedClass = parentFactory->m_classesByName[ w->m_inheritedClassName ];
 			if (!inheritedClass) {
-				kdWarning() << "WidgetLibrary::loadFactoryWidgets(): class '" << w->m_inheritedClassName
+				kWarning() << "WidgetLibrary::loadFactoryWidgets(): class '" << w->m_inheritedClassName
 					<< "' - no such class to inherit in factory '" << w->m_parentFactoryName << "'" << endl;
 				continue;
 			}
@@ -150,7 +150,7 @@ WidgetLibrary::loadFactoryWidgets(WidgetFactory *f)
 				w->setDescription( inheritedClass->description() );
 		}
 
-//		kdDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
+//		kDebug() << "WidgetLibrary::addFactory(): adding class " << w->className() << endl;
 		QValueList<QCString> l = w->alternateClassNames();
 		l.prepend( w->className() );
 		//d->widgets.insert(w->className(), w);
@@ -187,22 +187,22 @@ WidgetLibrary::lookupFactories()
 		KService::Ptr ptr = (*it);
 		KService::Ptr* existingService = (d->services)[ptr->library().latin1()];
 		if (existingService) {
-			kdWarning() << "WidgetLibrary::lookupFactories(): factory '" << ptr->name()
+			kWarning() << "WidgetLibrary::lookupFactories(): factory '" << ptr->name()
 				<< "' already found (library="<< (*existingService)->library()
 				<<")! skipping this one: library=" << ptr->library() << endl;
 			continue;
 		}
-		kdDebug() << "WidgetLibrary::lookupFactories(): found factory: " << ptr->name() << endl;
+		kDebug() << "WidgetLibrary::lookupFactories(): found factory: " << ptr->name() << endl;
 
 		QCString groupName = ptr->property("X-KFormDesigner-FactoryGroup").toCString();
 		if (!groupName.isEmpty() && !d->supportedFactoryGroups[groupName]) {
-			kdDebug() << "WidgetLibrary::lookupFactories(): factory group '" << groupName
+			kDebug() << "WidgetLibrary::lookupFactories(): factory group '" << groupName
 				<< "' is unsupported by this application (library=" << ptr->library() << ")"<< endl;
 			continue;
 		}
 		const uint factoryVersion = ptr->property("X-KFormDesigner-WidgetFactoryVersion").toUInt();
 		if (KFormDesigner::version()!=factoryVersion) {
-			kdWarning() << QString("WidgetLibrary::lookupFactories(): factory '%1'" 
+			kWarning() << QString("WidgetLibrary::lookupFactories(): factory '%1'" 
 				" has version '%2' but required Widget Factory version is '%3'\n"
 				" -- skipping this factory!").arg(ptr->library()).arg(factoryVersion)
 				.arg(KFormDesigner::version()) << endl;
@@ -222,7 +222,7 @@ WidgetLibrary::loadFactories()
 		WidgetFactory *f = KParts::ComponentFactory::createInstanceFromService<WidgetFactory>(
 			*it.current(), this, (*it.current())->library().latin1(), QStringList());
 		if (!f) {
-			kdWarning() << "WidgetLibrary::loadFactories(): creating factory failed! "
+			kWarning() << "WidgetLibrary::loadFactories(): creating factory failed! "
 				<< (*it.current())->library() << endl;
 			continue;
 		}
@@ -699,7 +699,7 @@ WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
 	if (textVertical.isEmpty()) //default
 		textVertical = i18n("Insert Vertical Widget", "Insert Vertical");
 
-	KPopupMenu* popup = new KPopupMenu(parent, "orientationSelectionPopup");
+	KMenu* popup = new KMenu(parent, "orientationSelectionPopup");
 	popup->insertTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1").arg(wclass->name()));
 	popup->insertItem(iconHorizontal, textHorizontal, 1);
 	popup->insertItem(iconVertical, textVertical, 2);

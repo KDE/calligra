@@ -150,7 +150,7 @@ bool SQLitePreparedStatement::execute()
 		{
 //! @todo what about unsigned > LLONG_MAX ?
 			bool ok;
-			Q_LLONG value = (*it).toLongLong(&ok);
+			qint64 value = (*it).toLongLong(&ok);
 			if (ok) {
 				res = sqlite3_bind_int64(prepared_st_handle, arg, value);
 				if (SQLITE_OK != res) {

@@ -150,10 +150,10 @@ void KPrGeneralProperty::apply()
 
 KoRect KPrGeneralProperty::getRect() const
 {
-    double x = QMAX( 0, m_ui->xInput->value() );
-    double y = QMAX( 0, m_ui->yInput->value() );
-    double w = QMAX( 0, m_ui->widthInput->value() );
-    double h = QMAX( 0, m_ui->heightInput->value() );
+    double x = qMax( 0, m_ui->xInput->value() );
+    double y = qMax( 0, m_ui->yInput->value() );
+    double w = qMax( 0, m_ui->widthInput->value() );
+    double h = qMax( 0, m_ui->heightInput->value() );
 
     KoRect rect( x, y, w, h );
     return rect;
@@ -162,10 +162,10 @@ KoRect KPrGeneralProperty::getRect() const
 
 void KPrGeneralProperty::setRect( KoRect &rect )
 {
-    m_ui->xInput->changeValue( QMAX( 0.00, rect.left() ) );
-    m_ui->yInput->changeValue( QMAX( 0.00, rect.top() ) );
-    m_ui->widthInput->changeValue( QMAX( 0.00, rect.width() ) );
-    m_ui->heightInput->changeValue( QMAX( 0.00, rect.height() ) );
+    m_ui->xInput->changeValue( qMax( 0.00, rect.left() ) );
+    m_ui->yInput->changeValue( qMax( 0.00, rect.top() ) );
+    m_ui->widthInput->changeValue( qMax( 0.00, rect.width() ) );
+    m_ui->heightInput->changeValue( qMax( 0.00, rect.height() ) );
 }
 
 

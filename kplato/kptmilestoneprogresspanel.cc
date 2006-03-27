@@ -38,7 +38,7 @@ MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, cons
     : MilestoneProgressPanelImpl(parent, name),
       m_task(task)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     m_progress = task.progress();
     finished->setChecked(m_progress.finished);
     finishTime->setDateTime(m_progress.finishTime);

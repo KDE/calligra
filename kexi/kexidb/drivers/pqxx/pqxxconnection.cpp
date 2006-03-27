@@ -308,7 +308,7 @@ bool pqxxSqlConnection::drv_isDatabaseUsed() const
 
 //==================================================================================
 //Return the oid of the last insert - only works if sql was insert of 1 row
-Q_ULLONG pqxxSqlConnection::drv_lastInsertRowID()
+quint64 pqxxSqlConnection::drv_lastInsertRowID()
 {
 	if (d->m_res)
 	{
@@ -316,7 +316,7 @@ Q_ULLONG pqxxSqlConnection::drv_lastInsertRowID()
 
 		if (theOid != pqxx::oid_none)
 		{
-			return (Q_ULLONG)theOid;
+			return (quint64)theOid;
 		}
 		else
 		{

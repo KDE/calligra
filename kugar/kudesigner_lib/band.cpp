@@ -76,7 +76,7 @@ int Band::minHeight()
     int result = static_cast<int>( y() + 10 );
     for ( QCanvasItemList::Iterator it = items.begin(); it != items.end(); ++it )
     {
-        result = QMAX( result, static_cast<int>( static_cast<QCanvasRectangle*>( *it ) ->y() +
+        result = qMax( result, static_cast<int>( static_cast<QCanvasRectangle*>( *it ) ->y() +
                        static_cast<QCanvasRectangle*>( *it ) ->height() ) );
     }
     return result - static_cast<int>( y() );

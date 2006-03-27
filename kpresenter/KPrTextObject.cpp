@@ -229,7 +229,7 @@ const char * KPrTextObject::getOasisElementName() const
 
 void KPrTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto ) const
 {
-    kdDebug()<<"void KPrTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto )\n";
+    kDebug()<<"void KPrTextObject::saveOasisMarginElement( KoGenStyle &styleobjectauto )\n";
     if ( btop != 0.0 )
         styleobjectauto.addPropertyPt("fo:padding-top", btop );
     if ( bbottom != 0.0 )
@@ -271,7 +271,7 @@ void KPrTextObject::loadOasis(const QDomElement &element, KoOasisContext& contex
         bleft = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-left" ) );
     if( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-right" ) )
         bright = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "padding-right" ) );
-    kdDebug()<<" KPrTextObject::loadOasis : btp :"<<btop<<" bbottom :"<<bbottom<<" bleft :"<<bleft<<" bright :"<<bright<<endl;
+    kDebug()<<" KPrTextObject::loadOasis : btp :"<<btop<<" bbottom :"<<bbottom<<" bleft :"<<bleft<<" bright :"<<bright<<endl;
     // vertical alignment
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-vertical-align" ) )
     {
@@ -283,7 +283,7 @@ void KPrTextObject::loadOasis(const QDomElement &element, KoOasisContext& contex
         else if ( alignment == "bottom" )
             m_textVertAlign= KP_BOTTOM;
     }
-    kdDebug()<<" vertical Alignment :"<< ( ( m_textVertAlign== KP_TOP ) ? "top" : ( m_textVertAlign==  KP_CENTER ) ? "center": "bottom" )<<endl;
+    kDebug()<<" vertical Alignment :"<< ( ( m_textVertAlign== KP_TOP ) ? "top" : ( m_textVertAlign==  KP_CENTER ) ? "center": "bottom" )<<endl;
     QDomElement tmp = KoDom::namedItemNS( element, KoXmlNS::draw, "text-box");
     m_textobj->loadOasisContent( tmp, context, m_doc->styleCollection() );
     resizeTextDocument(); // this will to formatMore()
@@ -471,7 +471,7 @@ void KPrTextObject::paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 // Assumes the painter is already set up correctly.
 void KPrTextObject::drawText( QPainter* _painter, KoTextZoomHandler *zoomHandler, bool onlyChanged, KoTextCursor* cursor, bool resetChanged )
 {
-    //kdDebug(33001) << "KPrTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
+    //kDebug(33001) << "KPrTextObject::drawText onlyChanged=" << onlyChanged << " cursor=" << cursor << " resetChanged=" << resetChanged << endl;
     recalcVerticalAlignment();
     QColorGroup cg = QApplication::palette().active();
     _painter->save();
@@ -501,7 +501,7 @@ void KPrTextObject::drawText( QPainter* _painter, KoTextZoomHandler *zoomHandler
         switch ( effect2 )
         {
         case EF2T_PARA:
-            //kdDebug(33001) << "KPrTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
+            //kDebug(33001) << "KPrTextObject::draw onlyCurrStep=" << onlyCurrStep << " subPresStep=" << subPresStep << endl;
             drawParags( _painter, zoomHandler, cg, ( onlyCurrStep ? subPresStep : 0 ), subPresStep );
             break;
         default:
@@ -514,7 +514,7 @@ void KPrTextObject::drawText( QPainter* _painter, KoTextZoomHandler *zoomHandler
     else
     {
 
-        //kdDebug(33001) << "KPrTextObject::drawText r=" << DEBUGRECT(r) << endl;
+        //kDebug(33001) << "KPrTextObject::drawText r=" << DEBUGRECT(r) << endl;
         /*KoTextParag * lastFormatted = */ textDocument()->drawWYSIWYG(
             _painter, r.x(), r.y(), r.width(), r.height(),
             cg, zoomHandler,
@@ -663,7 +663,7 @@ QDomElement KPrTextObject::saveHelper(const QString &tmpText,KoTextFormat*lastFo
 
     saveFormat ( element, lastFormat );
 
-    if(tmpText.stripWhiteSpace().isEmpty())
+    if(tmpText.trimmed().isEmpty())
         // working around a bug in QDom
         element.setAttribute(attrWhitespace, tmpText.length());
     element.appendChild(doc.createTextNode(tmpText));
@@ -711,14 +711,14 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
                 paragLayout.margins[QStyleSheetItem::MarginLeft] = depth * MM_TO_POINT(10.0);
             }
 
-            //kdDebug(33001) << k_funcinfo << "old bullet depth is: " << depth  << endl;
+            //kDebug(33001) << k_funcinfo << "old bullet depth is: " << depth  << endl;
 
             // 1.1 compatibility (bullets)
             QString type;
             if( e.hasAttribute(attrType) )
                 type = e.attribute( attrType );
 
-            //kdDebug(33001) << k_funcinfo << "old PARAG type is: " << type  << endl;
+            //kDebug(33001) << k_funcinfo << "old PARAG type is: " << type  << endl;
 
             // Do not import type="2" (enum list). The enum was there in 1.1, but not the code!
             if(type == "1")
@@ -761,7 +761,7 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
                 else if(tmpAlign==8)
                     lastParag->setAlign(Qt::AlignJustify);
                 else
-                    kdDebug(33001) << "Error in e.attribute( attrAlign ).toInt()" << endl;
+                    kDebug(33001) << "Error in e.attribute( attrAlign ).toInt()" << endl;
             }
             // ######## TODO  paragraph direction (LTR or RTL)
 
@@ -788,7 +788,7 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
                         txt += ' '; // trailing space at end of paragraph
                     lastParag->append( txt, true );
                     lastParag->setFormat( i, txt.length(), textDocument()->formatCollection()->format( &fm ) );
-                    //kdDebug(33001)<<"setFormat :"<<txt<<" i :"<<i<<" txt.length() "<<txt.length()<<endl;
+                    //kDebug(33001)<<"setFormat :"<<txt<<" i :"<<i<<" txt.length() "<<txt.length()<<endl;
                     i += txt.length();
                 }
                 else if ( n.tagName() == "CUSTOM" )
@@ -835,7 +835,7 @@ void KPrTextObject::loadVariable( QValueList<QDomElement> & listVariable,KoTextP
             int correct = 0;
             if (typeElem.hasAttribute( "correct" ))
                 correct = typeElem.attribute("correct").toInt();
-            kdDebug(33001) << "loadKTextObject variable type=" << type << " key=" << key << endl;
+            kDebug(33001) << "loadKTextObject variable type=" << type << " key=" << key << endl;
             KoVariableFormat * varFormat = key.isEmpty() ? 0 : m_doc->variableFormatCollection()->format( key.latin1() );
             // If varFormat is 0 (no key specified), the default format will be used.
             KoVariable * var =m_doc->getVariableCollection()->createVariable( type, -1, m_doc->variableFormatCollection(),
@@ -934,7 +934,7 @@ KoTextFormat KPrTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat
     fn.setPointSize( size );
     fn.setBold( bold );
     fn.setItalic( italic );
-    //kdDebug(33001) << "KPrTextObject::loadFormat: family=" << fn.family() << " size=" << fn.pointSize() << endl;
+    //kDebug(33001) << "KPrTextObject::loadFormat: family=" << fn.family() << " size=" << fn.pointSize() << endl;
     QColor col( color );
 
     format.setFont( fn );
@@ -966,7 +966,7 @@ KoTextFormat KPrTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat
         format.setLanguage( defaultLanguage);
     }
 
-    //kdDebug(33001)<<"loadFormat :"<<format.key()<<endl;
+    //kDebug(33001)<<"loadFormat :"<<format.key()<<endl;
     return format;
 }
 
@@ -987,14 +987,14 @@ KoParagLayout KPrTextObject::loadParagLayout( QDomElement & parentElem, KPrDocum
             style = doc->styleCollection()->findStyle( styleName );
             if (!style)
             {
-                kdError(33001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
+                kError(33001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
                 style = doc->styleCollection()->findStyle( "Standard" );
             }
-            //else kdDebug(33001) << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
+            //else kDebug(33001) << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
         }
         else
         {
-            kdError(33001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
+            kError(33001) << "Missing NAME tag in paragraph LAYOUT - using Standard" << endl;
             style = doc->styleCollection()->findStyle( "Standard" );
         }
         Q_ASSERT(style);
@@ -1011,12 +1011,12 @@ KoParagLayout KPrTextObject::loadParagLayout( QDomElement & parentElem, KPrDocum
         val=0.0;
         if(element.hasAttribute( "left"))
             // The GUI prevents a negative indent, so let's fixup broken docs too
-            val=QMAX(0, element.attribute( "left").toDouble());
+            val=qMax(0, element.attribute( "left").toDouble());
         layout.margins[QStyleSheetItem::MarginLeft] = val;
         val=0.0;
         if(element.hasAttribute("right"))
             // The GUI prevents a negative indent, so let's fixup broken docs too
-            val=QMAX(0, element.attribute("right").toDouble());
+            val=qMax(0, element.attribute("right").toDouble());
         layout.margins[QStyleSheetItem::MarginRight] = val;
     }
     element = parentElem.namedItem( "LINESPACING" ).toElement();
@@ -1078,11 +1078,11 @@ KoParagLayout KPrTextObject::loadParagLayout( QDomElement & parentElem, KPrDocum
     {
         double val =0.0;
         if(element.hasAttribute("before"))
-            val=QMAX(0, element.attribute("before").toDouble());
+            val=qMax(0, element.attribute("before").toDouble());
         layout.margins[QStyleSheetItem::MarginTop] = val;
         val = 0.0;
         if(element.hasAttribute("after"))
-            val=QMAX(0, element.attribute("after").toDouble());
+            val=qMax(0, element.attribute("after").toDouble());
         layout.margins[QStyleSheetItem::MarginBottom] = val;
     }
 
@@ -1154,7 +1154,7 @@ void KPrTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & 
     if ( layout.style )
         element.setAttribute( "value", layout.style->name() );
     else
-        kdWarning() << "KWTextParag::saveParagLayout: style==0L!" << endl;
+        kWarning() << "KWTextParag::saveParagLayout: style==0L!" << endl;
 
 
     if ( layout.margins[QStyleSheetItem::MarginFirstLine] != 0 ||
@@ -1207,7 +1207,7 @@ void KPrTextObject::saveParagLayout( const KoParagLayout& layout, QDomElement & 
             element.setAttribute( "spacingvalue", layout.lineSpacingValue());
         }
         else
-            kdDebug(33001) << " error in lineSpacing Type" << endl;
+            kDebug(33001) << " error in lineSpacing Type" << endl;
     }
 
     if ( layout.leftBorder.penWidth() > 0 )
@@ -1275,11 +1275,11 @@ void KPrTextObject::recalcPageNum( KPrPage *page )
                 var->setSectionTitle( page->pageTitle() );
                 break;
             case KPrPgNumVariable::VST_PGNUM_PREVIOUS:
-                var->setPgNum( QMAX( pgnum -1 , 0) +
+                var->setPgNum( qMax( pgnum -1 , 0) +
                                kPresenterDocument()->getVariableCollection()->variableSetting()->startingPageNumber());
                 break;
             case KPrPgNumVariable::VST_PGNUM_NEXT:
-                var->setPgNum( QMIN( (int)m_doc->getPageNums(), pgnum+1 ) +
+                var->setPgNum( qMin( (int)m_doc->getPageNums(), pgnum+1 ) +
                                kPresenterDocument()->getVariableCollection()->variableSetting()->startingPageNumber());
                 break;
             default:
@@ -1302,7 +1302,7 @@ void KPrTextObject::layout()
 
 void KPrTextObject::invalidate()
 {
-    //kdDebug(33001) << "KWTextFrameSet::invalidate " << getName() << endl;
+    //kDebug(33001) << "KWTextFrameSet::invalidate " << getName() << endl;
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     textDocument()->formatter()->setViewFormattingChars( m_doc->viewFormattingChars() );
     textDocument()->invalidate(); // lazy layout, real update follows upon next repaint
@@ -1396,11 +1396,11 @@ void KPrTextObject::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVi
     parag->lineStartOfChar( cursor->index(), 0, &line );
     parag->setChanged( false ); // not all changed, only from a given line
     parag->setLineChanged( line );
-    //kdDebug(33001) << "KPrTextObject::drawCursor cursorVisible=" << cursorVisible << " line=" << line << endl;
+    //kDebug(33001) << "KPrTextObject::drawCursor cursorVisible=" << cursorVisible << " line=" << line << endl;
 
     textDocument()->drawParagWYSIWYG(
         p, parag,
-        QMAX(0, iPoint.x() - 5), // negative values create problems
+        qMax(0, iPoint.x() - 5), // negative values create problems
         iPoint.y(), clip.width(), clip.height(),
         pix, cg, m_doc->zoomHandler(),
         cursorVisible, cursor, FALSE /*resetChanged*/, drawingFlags );
@@ -1436,7 +1436,7 @@ void KPrTextObject::slotAvailableHeightNeeded()
 {
     int ah = m_doc->zoomHandler()->ptToLayoutUnitPixY( innerHeight() );
     m_textobj->setAvailableHeight( ah );
-    //kdDebug(33001)<<"slotAvailableHeightNeeded: height=:"<<ah<<endl;
+    //kDebug(33001)<<"slotAvailableHeightNeeded: height=:"<<ah<<endl;
 }
 
 void KPrTextObject::slotRepaintChanged()
@@ -1464,7 +1464,7 @@ void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length
         // Is this object in the current active page?
         if ( canvas->activePage()->findTextObject( this ) )
         {
-            kdDebug(33001) << k_funcinfo << "object in current page" << endl;
+            kDebug(33001) << k_funcinfo << "object in current page" << endl;
         }
         else
         {
@@ -1479,7 +1479,7 @@ void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length
                     canvas->getView()->skipToPage( pageNum );
                 }
             } else
-                kdWarning(33001) << "object " << this << " not found in any page!?" << endl;
+                kWarning(33001) << "object " << this << " not found in any page!?" << endl;
         }
         // Now ensure text is fully visible
         QRect rect = m_doc->zoomHandler()->zoomRect( getRect() );
@@ -1501,7 +1501,7 @@ void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length
 
 KCommand * KPrTextObject::pasteOasis( KoTextCursor * cursor, const QByteArray & data, bool removeSelected )
 {
-    //kdDebug(33001) << "KPrTextObject::pasteOasis" << endl;
+    //kDebug(33001) << "KPrTextObject::pasteOasis" << endl;
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste Text") );
     if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
@@ -1589,12 +1589,12 @@ void KPrTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted,
         }
 #if 0
         if(lastFormatted)
-            kdDebug(33001) << "slotAfterFormatting We need more space in " << this
+            kDebug(33001) << "slotAfterFormatting We need more space in " << this
                            << " bottom=" << bottom + lastFormatted->rect().height()
                            << " availHeight=" << availHeight
                            << " ->difference=" << difference << endl;
         else
-            kdDebug(33001) << "slotAfterFormatting We need more space in " << this
+            kDebug(33001) << "slotAfterFormatting We need more space in " << this
                            << " bottom2=" << bottom << " availHeight=" << availHeight
                            << " ->difference=" << difference << endl;
 #endif
@@ -1605,9 +1605,9 @@ void KPrTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted,
                                     + getRect().bottom();
             const KoPageLayout& p = m_doc->pageLayout();
             double pageBottom = p.ptHeight - p.ptBottom;
-            double newBottom = QMIN( wantedPosition, pageBottom ); // don't grow bigger than the page
-            newBottom = QMAX( newBottom, getOrig().y() ); // avoid negative heights
-            //kdDebug(33001) << k_funcinfo << " current bottom=" << getRect().bottom() << " newBottom=" << newBottom << endl;
+            double newBottom = qMin( wantedPosition, pageBottom ); // don't grow bigger than the page
+            newBottom = qMax( newBottom, getOrig().y() ); // avoid negative heights
+            //kDebug(33001) << k_funcinfo << " current bottom=" << getRect().bottom() << " newBottom=" << newBottom << endl;
             if ( getRect().bottom() != newBottom )
             {
                 // We resize the text object, but skipping the KPrTextObject::setSize code
@@ -1654,7 +1654,7 @@ KCommand * KPrTextObject::textContentsToHeight()
 
     double textHeight = m_doc->zoomHandler()->layoutUnitPtToPt( textHeightLU );
     double lineSpacing = ( innerHeight() - textHeight ) /  numLines; // this gives the linespacing diff to apply, in pt
-    //kdDebug(33001) << k_funcinfo << "lineSpacing=" << lineSpacing << endl;
+    //kDebug(33001) << k_funcinfo << "lineSpacing=" << lineSpacing << endl;
 
     if ( KABS( innerHeight() - textHeight ) < DBL_EPSILON ) // floating-point equality test
         return 0L; // nothing to do
@@ -1681,7 +1681,7 @@ KCommand * KPrTextObject::textObjectToContents()
     KoTextParag * parag = textDocument()->firstParag();
     double txtWidth = 10;
     for ( ; parag ; parag = parag->next() )
-        txtWidth = QMAX( txtWidth, m_doc->zoomHandler()->layoutUnitPtToPt( parag->widthUsed() ));
+        txtWidth = qMax( txtWidth, m_doc->zoomHandler()->layoutUnitPtToPt( parag->widthUsed() ));
 
     // Calculate text height
     int heightLU = textDocument()->height();
@@ -1735,7 +1735,7 @@ void KPrTextObject::recalcVerticalAlignment()
     double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( textDocument()->height() ) ) + btop + bbottom;
     double diffy = getSize().height() - txtHeight;
 
-    //kdDebug(33001) << k_funcinfo << "txtHeight: " << txtHeight << " rectHeight:" << getSize().height() << " -> diffy=" << diffy << endl;
+    //kDebug(33001) << k_funcinfo << "txtHeight: " << txtHeight << " rectHeight:" << getSize().height() << " -> diffy=" << diffy << endl;
 
     if ( diffy <= 0.0 ) {
         alignVertical = 0.0;
@@ -1819,7 +1819,7 @@ void KPrTextView::cut()
 
 void KPrTextView::copy()
 {
-    //kdDebug(33001)<<"void KPrTextView::copy() "<<endl;
+    //kDebug(33001)<<"void KPrTextView::copy() "<<endl;
     if ( textDocument()->hasSelection( KoTextDocument::Standard ) ) {
         QDragObject *drag = newDrag( 0 );
         QApplication::clipboard()->setData( drag );
@@ -1828,7 +1828,7 @@ void KPrTextView::copy()
 
 void KPrTextView::paste()
 {
-    //kdDebug(33001) << "KPrTextView::paste()" << endl;
+    //kDebug(33001) << "KPrTextView::paste()" << endl;
 
     QMimeSource *data = QApplication::clipboard()->data();
     QCString returnedMimeType = KoTextObject::providesOasis( data );
@@ -1839,7 +1839,7 @@ void KPrTextView::paste()
         {
 #if 0
             QFile paste( "/tmp/oasis.tmp" );
-            paste.open( IO_WriteOnly );
+            paste.open( QIODevice::WriteOnly );
             paste.writeBlock( arr );
             paste.close();
 #endif
@@ -1898,7 +1898,7 @@ void KPrTextView::updateUI( bool updateFormat, bool force  )
     }
 
     if ( !parag->style() )
-        kdWarning(33001) << "Paragraph " << parag->paragId() << " has no style" << endl;
+        kWarning(33001) << "Paragraph " << parag->paragId() << " has no style" << endl;
     else if ( m_paragLayout.style != parag->style() || force )
     {
         m_paragLayout.style = parag->style();
@@ -1930,7 +1930,7 @@ void KPrTextView::updateUI( bool updateFormat, bool force  )
 
 void KPrTextView::ensureCursorVisible()
 {
-    //kdDebug(33001) << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << endl;
+    //kDebug(33001) << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << endl;
     KoTextParag * parag = cursor()->parag();
     kpTextObject()->textObject()->ensureFormatted( parag );
     KoTextStringChar *chr = parag->at( cursor()->index() );
@@ -2129,7 +2129,7 @@ QPoint KPrTextView::viewToInternal( const QPoint & pos ) const
 #if 0
     KoTextZoomHandler* zh = kpTextObject()->kPresenterDocument()->zoomHandler();
     QPoint tmp(pos);
-    QWMatrix m;
+    QMatrix m;
     m.translate( zh->zoomItX(kpTextObject()->getSize().width() / 2.0),
                  zh->zoomItY(kpTextObject()->getSize().height() /  2.0) );
     m.rotate( kpTextObject()->getAngle() );
@@ -2141,7 +2141,7 @@ QPoint KPrTextView::viewToInternal( const QPoint & pos ) const
     //m = m.invert();
     tmp = m * pos;
 
-    kdDebug(33001)<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
+    kDebug(33001)<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 
     KoRect br = KoRect( 0, 0, kpTextObject()->getSize().width(), kpTextObject()->getSize().height() );
     double pw = br.width();
@@ -2161,7 +2161,7 @@ QPoint KPrTextView::viewToInternal( const QPoint & pos ) const
 
     tmp = m * pos;
 
-    kdDebug(33001)<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
+    kDebug(33001)<<" tmp.x() :"<<tmp.x()<<" tmp.y() "<<tmp.y()<<endl;
 #endif
 
     return kpTextObject()->viewToInternal( pos, m_canvas );
@@ -2242,7 +2242,7 @@ void KPrTextView::showPopup( KPrView *view, const QPoint &point, QPtrList<KActio
     {
         bool singleWord= false;
         actionList = dataToolActionList(view->kPresenterDoc()->instance(), word, singleWord);
-        //kdDebug(33001) << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
+        //kDebug(33001) << "KWView::openPopupMenuInsideFrame plugging actionlist with " << actionList.count() << " actions" << endl;
         KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
         QPopupMenu * popup;
         if ( !linkVar )
@@ -2345,9 +2345,9 @@ void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format, bool re
         customItemsMap.insert( 0, var );
         if (!format)
             format = currentFormat();
-        //kdDebug(33001) << "KPrTextView::insertVariable inserting into paragraph" << endl;
+        //kDebug(33001) << "KPrTextView::insertVariable inserting into paragraph" << endl;
 #ifdef DEBUG_FORMATS
-        kdDebug(33001) << "KPrTextView::insertVariable currentFormat=" << currentFormat() << endl;
+        kDebug(33001) << "KPrTextView::insertVariable currentFormat=" << currentFormat() << endl;
 #endif
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
                               i18n("Insert Variable"),
@@ -2419,7 +2419,7 @@ QDragObject * KPrTextView::newDrag( QWidget * parent )
     if (  !plainText.isEmpty() )
         multiDrag->addDragObject( new QTextDrag( plainText, 0 ) );
     KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
-    kdDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
+    kDebug() << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
     storeDrag->setEncodedData( buffer.buffer() );
     multiDrag->addDragObject( storeDrag );
     return multiDrag;
@@ -2461,14 +2461,14 @@ void KPrTextView::dropEvent( QDropEvent * e )
         KMacroCommand *macroCmd=new KMacroCommand(i18n("Paste Text"));
         bool addMacroCmd = false;
         dropCursor.place( dropPoint, textDocument()->firstParag() );
-        kdDebug(33001) << "KPrTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
+        kDebug(33001) << "KPrTextView::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
 
         if ( ( e->source() == m_canvas ) &&
              e->action() == QDropEvent::Move &&
              // this is the indicator that the source and dest text objects are the same
              textDocument()->hasSelection( KoTextDocument::Standard )
             ) {
-            //kdDebug(33001)<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;
+            //kDebug(33001)<<"decodeFrameSetNumber( QMimeSource *e ) :"<<numberFrameSet<<endl;
             KCommand *cmd = textView()->prepareDropMove( dropCursor );
             if(cmd)
             {

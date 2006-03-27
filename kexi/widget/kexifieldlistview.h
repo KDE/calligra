@@ -22,7 +22,7 @@
 
 #include <qframe.h>
 #include <qpixmap.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 namespace KexiDB {
 	class TableOrQuerySchema;
@@ -30,7 +30,7 @@ namespace KexiDB {
 
 /*! This widget provides a list of fields from a table or query.
 */
-class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public KListView
+class KEXIEXTWIDGETS_EXPORT KexiFieldListView : public K3ListView
 {
 	Q_OBJECT
 

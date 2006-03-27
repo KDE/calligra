@@ -28,7 +28,7 @@
 // Transform object(s) with a specified matrix and allow undo.
 
 
-class QWMatrix;
+class QMatrix;
 class VPath;
 class VSubpath;
 class VSegment;
@@ -38,7 +38,7 @@ class VSelection;
 class KARBONCOMMAND_EXPORT VTransformCmd : public VCommand
 {
 public:
-	VTransformCmd( VDocument *doc, const QWMatrix& mat, bool duplicate = false );
+	VTransformCmd( VDocument *doc, const QMatrix& mat, bool duplicate = false );
 	virtual ~VTransformCmd();
 
 	virtual void execute();
@@ -50,7 +50,7 @@ public:
 	virtual void visitVImage( VImage& img );
 	virtual void visitVObject( VObject& object );
 
-	void setMatrix( const QWMatrix& m )
+	void setMatrix( const QMatrix& m )
 	{
 		m_mat = m;
 	}
@@ -61,7 +61,7 @@ protected:
 	VSelection* m_selection;
 	VObjectList m_duplicates;
 
-	QWMatrix m_mat;
+	QMatrix m_mat;
 
 	bool m_duplicate;
 };
@@ -106,7 +106,7 @@ public:
 	virtual void visitVSubpath( VSubpath& path );
 
 protected:
-	QWMatrix m_mat;
+	QMatrix m_mat;
 	VSegment *m_segment;
 	VSegment *m_segmenttwo;
 	bool	  m_firstControl;
@@ -127,7 +127,7 @@ public:
 protected:
 	void translatePoints();
 
-	QWMatrix m_mat;
+	QMatrix m_mat;
 	QMap<VSegment*, QValueVector<int> > m_segPnts;
 	VObjectList m_subpaths;
 };

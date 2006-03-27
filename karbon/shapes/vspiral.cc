@@ -86,7 +86,7 @@ VSpiral::init()
 	}
 
 	// translate path to center:
-	QWMatrix m;
+	QMatrix m;
 	m.translate( m_center.x(), m_center.y() );
 
 	// sadly it's not feasible to simply add angle while creation.

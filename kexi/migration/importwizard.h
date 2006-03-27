@@ -23,7 +23,7 @@
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
 #include <kwizard.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kapplication.h>
 
 #include <kexiutils/tristate.h> 
@@ -35,7 +35,7 @@ class QHBoxLayout;
 class QVBoxLayout;
 class QVButtonGroup;
 class KComboBox;
-class KListView;
+class K3ListView;
 class KLineEdit;
 class KActiveLabel;
 class KexiConnSelectorWidget;

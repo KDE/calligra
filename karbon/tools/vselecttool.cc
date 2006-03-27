@@ -86,7 +86,7 @@ void
 VSelectTool::activate()
 {
 	VTool::activate();
-	view()->setCursor( QCursor( Qt::arrowCursor ) );
+	view()->setCursor( QCursor( Qt::ArrowCursor ) );
 	view()->part()->document().selection()->showHandle();
 	view()->part()->document().selection()->setSelectObjects();
 	view()->part()->document().selection()->setState( VObject::selected );
@@ -166,7 +166,7 @@ VSelectTool::setCursor() const
 			view()->setCursor( QCursor( Qt::SizeVerCursor ) );
 			break;
 		default:
-			view()->setCursor( QCursor( Qt::arrowCursor ) );
+			view()->setCursor( QCursor( Qt::ArrowCursor ) );
 	}
 }
 
@@ -558,7 +558,7 @@ VSelectTool::recalc()
 			}
 
 			if( shiftPressed() )
-				m_s1 = m_s2 = kMax( m_s1, m_s2 );
+				m_s1 = m_s2 = qMax( m_s1, m_s2 );
 			cmd = new VScaleCmd( 0L, m_sp, m_s1, m_s2 );
 		}
 

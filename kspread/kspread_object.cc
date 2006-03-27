@@ -97,7 +97,7 @@ void EmbeddedObject::resizeBy( double _dx, double _dy)
 
 bool EmbeddedObject::load( const QDomElement& /*element*/ )
 {
-    kdDebug() << "Loading EmbeddedObject" << endl;
+    kDebug() << "Loading EmbeddedObject" << endl;
     return false;
 }
 
@@ -109,7 +109,7 @@ void EmbeddedObject::loadOasis(const QDomElement &element, KoOasisLoadingContext
   m_geometry.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
   m_geometry.setWidth(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null )) );
   m_geometry.setHeight(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) ) );
-    //kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+    //kDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
   KoStyleStack &styleStack = context.styleStack();
 
   styleStack.setTypeProperties( "" ); //no type default type
@@ -118,7 +118,7 @@ void EmbeddedObject::loadOasis(const QDomElement &element, KoOasisLoadingContext
 
 QDomElement EmbeddedObject::save( QDomDocument& /*doc*/ )
 {
-    kdDebug() << "Saving EmbeddedObject..." << endl;
+    kDebug() << "Saving EmbeddedObject..." << endl;
     return QDomElement();
 }
 
@@ -131,7 +131,7 @@ void EmbeddedObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) 
     xmlWriter.addAttributePt( "svg:width", m_geometry.width() );
     xmlWriter.addAttributePt( "svg:height", m_geometry.height() );
 
-//     if ( kAbs( angle ) > 1E-6 )
+//     if ( qAbs( angle ) > 1E-6 )
 //     {
 //         double value = -1 * ( ( double )angle* M_PI )/180.0;
 //         QString str=QString( "rotate (%1)" ).arg( value );
@@ -141,7 +141,7 @@ void EmbeddedObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) 
 
 bool EmbeddedObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &/* sc */ ) const
 {
-    kdDebug() << "bool saveOasisObjectAttributes not implemented";
+    kDebug() << "bool saveOasisObjectAttributes not implemented";
     return true;
 }
 
@@ -280,79 +280,79 @@ QCursor EmbeddedObject::getCursor( const QPoint &_point, ModifyType &_modType, Q
 //     }
 
     int sz = 4;
-    if ( px >= ox && py >= oy && px <= ox + QMIN( ow / 3, sz ) && py <= oy + QMIN( oh / 3, sz ) )
+    if ( px >= ox && py >= oy && px <= ox + qMin( ow / 3, sz ) && py <= oy + qMin( oh / 3, sz ) )
     {
         _modType = MT_RESIZE_LU;
         if ( m_protect )
             return Qt::ForbiddenCursor;
-        return Qt::sizeFDiagCursor;
+        return Qt::SizeFDiagCursor;
     }
 
-    if ( px >= ox && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 )
-         && px <= ox + QMIN( ow / 3, sz)
-         && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2 ) )
+    if ( px >= ox && py >= oy + oh / 2 - qMin( oh / 6, sz / 2 )
+         && px <= ox + qMin( ow / 3, sz)
+         && py <= oy + oh / 2 + qMin( oh / 6, sz / 2 ) )
     {
         _modType = MT_RESIZE_LF;
         if ( m_protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeHorCursor;
+        return Qt::SizeHorCursor;
     }
 
-    if ( px >= ox && py >= oy + oh - QMIN( oh / 3, sz ) && px <= ox + QMIN( ow / 3, sz ) && py <= oy + oh )
+    if ( px >= ox && py >= oy + oh - qMin( oh / 3, sz ) && px <= ox + qMin( ow / 3, sz ) && py <= oy + oh )
     {
         _modType = MT_RESIZE_LD;
         if ( m_protect )
             return Qt::ForbiddenCursor;
-        return Qt::sizeBDiagCursor;
+        return Qt::SizeBDiagCursor;
     }
 
-    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy
-         && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 )
-         && py <= oy + QMIN( oh / 3, sz ) )
+    if ( px >= ox + ow / 2 - qMin( ow / 6, sz / 2 ) && py >= oy
+         && px <= ox + ow / 2 + qMin( ow / 6, sz / 2 )
+         && py <= oy + qMin( oh / 3, sz ) )
     {
         _modType = MT_RESIZE_UP;
         if ( m_protect )
             return Qt::ForbiddenCursor;
-        return Qt::sizeVerCursor;
+        return Qt::SizeHorCursor;
     }
 
-    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy + oh - QMIN( oh / 3, sz )
-         && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 ) && py <= oy + oh )
+    if ( px >= ox + ow / 2 - qMin( ow / 6, sz / 2 ) && py >= oy + oh - qMin( oh / 3, sz )
+         && px <= ox + ow / 2 + qMin( ow / 6, sz / 2 ) && py <= oy + oh )
     {
         _modType = MT_RESIZE_DN;
         if ( m_protect )
             return Qt::ForbiddenCursor;
-        return Qt::sizeVerCursor;
+        return Qt::SizeHorCursor;
     }
 
-    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy && px <= ox + ow && py <= oy + QMIN( oh / 3, sz) )
+    if ( px >= ox + ow - qMin( ow / 3, sz ) && py >= oy && px <= ox + ow && py <= oy + qMin( oh / 3, sz) )
     {
         _modType = MT_RESIZE_RU;
         if ( m_protect )
             return Qt::ForbiddenCursor;
-        return Qt::sizeBDiagCursor;
+        return Qt::SizeBDiagCursor;
     }
 
-    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 )
-         && px <= ox + ow && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2) )
+    if ( px >= ox + ow - qMin( ow / 3, sz ) && py >= oy + oh / 2 - qMin( oh / 6, sz / 2 )
+         && px <= ox + ow && py <= oy + oh / 2 + qMin( oh / 6, sz / 2) )
     {
         _modType = MT_RESIZE_RT;
         if ( m_protect )
             return Qt::ForbiddenCursor;
-        return Qt::sizeHorCursor;
+        return Qt::SizeHorCursor;
     }
 
-    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh - QMIN( oh / 3, sz)
+    if ( px >= ox + ow - qMin( ow / 3, sz ) && py >= oy + oh - qMin( oh / 3, sz)
          && px <= ox + ow && py <= oy + oh )
     {
         _modType = MT_RESIZE_RD;
         if ( m_protect )
             return Qt::ForbiddenCursor;
-        return Qt::sizeFDiagCursor;
+        return Qt::SizeFDiagCursor;
     }
 
     _modType = MT_MOVE;
-    return Qt::sizeAllCursor;
+    return Qt::SizeAllCursor;
 }
 
 
@@ -396,7 +396,7 @@ KoDocumentChild* EmbeddedKOfficeObject::embeddedObject()
 
 bool EmbeddedKOfficeObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
 {
-    kdDebug() << "EmbeddedKOfficeObject::saveOasisPart " << sc.partIndexObj << endl;
+    kDebug() << "EmbeddedKOfficeObject::saveOasisPart " << sc.partIndexObj << endl;
 
     sc.xmlWriter.startElement( "draw:object" );
     const QString name = QString( "Object_%1" ).arg( sc.partIndexObj + 1 );
@@ -415,7 +415,7 @@ const char * EmbeddedKOfficeObject::getOasisElementName() const
 
 bool EmbeddedKOfficeObject::load( const QDomElement& element )
 {
-    kdDebug() << "Loading EmbeddedKOfficeObject" << endl;
+    kDebug() << "Loading EmbeddedKOfficeObject" << endl;
     bool result = embeddedObject()->load( element );
     setGeometry( KoRect::fromQRect( embeddedObject()->geometry() ) );
     return result;
@@ -423,7 +423,7 @@ bool EmbeddedKOfficeObject::load( const QDomElement& element )
 
 void EmbeddedKOfficeObject::loadOasis(const QDomElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kdDebug()<<"void EmbeddedKOfficeObject::loadOasis(const QDomElement &element)******************\n";
+    kDebug()<<"void EmbeddedKOfficeObject::loadOasis(const QDomElement &element)******************\n";
     EmbeddedObject::loadOasis( element, context );
 
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
@@ -435,14 +435,14 @@ void EmbeddedKOfficeObject::loadOasis(const QDomElement &element, KoOasisLoading
 
 QDomElement EmbeddedKOfficeObject::save( QDomDocument& doc )
 {
-    kdDebug() << "Saving EmbeddedKOfficeObject" << endl;
+    kDebug() << "Saving EmbeddedKOfficeObject" << endl;
     embeddedObject()->setGeometry( geometry().toQRect() );
     return m_embeddedObject->save( doc );
 }
 
 void EmbeddedKOfficeObject::draw( QPainter *_painter )
 {
-  kdDebug() << "Painting..." << endl;
+  kDebug() << "Painting..." << endl;
 
   int const penw = pen.width() ;
   KoRect bound( 0, 0,
@@ -502,7 +502,7 @@ void EmbeddedKOfficeObject::activate( View *_view, Canvas* /* canvas */ )
     KoDocument* part = embeddedObject()->document();
     if ( !part )
         return;
-    kdDebug() << "Activating..." << endl;
+    kDebug() << "Activating..." << endl;
 
     _view->partManager()->addPart( part, false );
     _view->partManager()->setActivePart( part, _view );
@@ -522,10 +522,10 @@ void EmbeddedKOfficeObject::updateChildGeometry()
 //   QRect r = sheet()->doc()->zoomRect( geometry() );
 //   if ( _canvas )
 //   {
-//     kdDebug() << "_canvas->xOffset():" << _canvas->xOffset() << endl;
-//     kdDebug() << "         _canvas->xOffset()*_canvas->doc()->zoomedResolutionX():" << _canvas->xOffset() * _canvas->doc()->zoomedResolutionX() << endl;
-//     kdDebug() << "_canvas->yOffset():" << _canvas->yOffset() << endl;
-//     kdDebug() << "         _canvas->yOffset()*_canvas->doc()->zoomedResolutionY():" << _canvas->yOffset() * _canvas->doc()->zoomedResolutionY() << endl;
+//     kDebug() << "_canvas->xOffset():" << _canvas->xOffset() << endl;
+//     kDebug() << "         _canvas->xOffset()*_canvas->doc()->zoomedResolutionX():" << _canvas->xOffset() * _canvas->doc()->zoomedResolutionX() << endl;
+//     kDebug() << "_canvas->yOffset():" << _canvas->yOffset() << endl;
+//     kDebug() << "         _canvas->yOffset()*_canvas->doc()->zoomedResolutionY():" << _canvas->yOffset() * _canvas->doc()->zoomedResolutionY() << endl;
 //     r.moveBy( -_canvas->xOffset() / _canvas->doc()->zoomedResolutionX() , -_canvas->yOffset() / _canvas->doc()->zoomedResolutionY() );
 //   }
 //   embeddedObject()->setGeometry( r , true );
@@ -576,7 +576,7 @@ const char * EmbeddedChart::getOasisElementName() const
 
 bool EmbeddedChart::load( const QDomElement& element )
 {
-    kdDebug() << "Loading EmbeddedChart" << endl;
+    kDebug() << "Loading EmbeddedChart" << endl;
     if ( !EmbeddedKOfficeObject::load( element ) )
         return false;
 
@@ -599,7 +599,7 @@ bool EmbeddedChart::load( const QDomElement& element )
 
 void EmbeddedChart::loadOasis(const QDomElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kdDebug()<<"void EmbeddedChart::loadOasis(const QDomElement &element)******************\n";
+    kDebug()<<"void EmbeddedChart::loadOasis(const QDomElement &element)******************\n";
     EmbeddedKOfficeObject::loadOasis( element, context );
 
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
@@ -617,7 +617,7 @@ void EmbeddedChart::loadOasis(const QDomElement &element, KoOasisLoadingContext 
 
 bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
 {
-    kdDebug() << "EmbeddedChart::saveOasisPart " << sc.partIndexObj << endl;
+    kDebug() << "EmbeddedChart::saveOasisPart " << sc.partIndexObj << endl;
 
     EmbeddedKOfficeObject::saveOasisObjectAttributes( sc );
 
@@ -635,7 +635,7 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
 
 QDomElement EmbeddedChart::save( QDomDocument& doc )
 {
-    kdDebug() << "Saving EmbeddedChart" << endl;
+    kDebug() << "Saving EmbeddedChart" << endl;
     QDomElement element = EmbeddedKOfficeObject::save( doc );
     element.setTagName( "chart" );
 
@@ -750,7 +750,7 @@ bool EmbeddedPictureObject::load( const QDomElement& /*element*/ )
 
 QDomElement EmbeddedPictureObject::save( QDomDocument& /*doc*/ )
 {
-    kdDebug() << "Saving EmbeddedPictureObject" << endl;
+    kDebug() << "Saving EmbeddedPictureObject" << endl;
     return QDomElement();
 }
 
@@ -996,7 +996,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
     loadOasisPictureEffect( context );
     QDomNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString::null) );
-    kdDebug()<<" href: "<<href<<endl;
+    kDebug()<<" href: "<<href<<endl;
     if ( !href.isEmpty() /*&& href[0] == '#'*/ )
     {
         QString strExtension;
@@ -1014,7 +1014,7 @@ void EmbeddedPictureObject::loadOasis(const QDomElement &element, KoOasisLoading
         {
             KoStoreDevice dev(store);
             if ( !image.load( &dev, strExtension ) )
-                kdWarning() << "Cannot load picture: " << filename << " " << href << endl;
+                kWarning() << "Cannot load picture: " << filename << " " << href << endl;
             store->close();
         }
         imageCollection->insertPicture( key, image );
@@ -1159,7 +1159,7 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 //     _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
 //     _painter->setPen( QPen( shadowColor ) );
 //     _painter->setBrush( shadowColor );
-//     if ( kAbs(angle) <= DBL_EPSILON )
+//     if ( qAbs(angle) <= DBL_EPSILON )
 //         _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
 //                             _zoomHandler->zoomItX( ext.width() ), _zoomHandler->zoomItY( ext.height() ) );
 //     else
@@ -1174,13 +1174,13 @@ void EmbeddedPictureObject::drawShadow( QPainter* /*_painter*/,  KoZoomHandler* 
 //         br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
 //         rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 //
-//         QWMatrix m;
+//         QMatrix m;
 //         m.translate( pw / 2, ph / 2 );
 //         m.rotate( angle );
 //         m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
 //                      rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
 //
-//         _painter->setWorldMatrix( m, true );
+//         _painter->setMatrix( m, true );
 //
 //         _painter->drawRect( 0, 0, bs.width(), bs.height() );
 //     }
@@ -1200,7 +1200,7 @@ QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
     const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSize( m_geometry.size() /*ext*/ ) );
-    //kdDebug(33001) << "EmbeddedPictureObject::generatePixmap size= " << size << endl;
+    //kDebug(33001) << "EmbeddedPictureObject::generatePixmap size= " << size << endl;
     QPixmap pixmap(size);
     QPainter paint;
 
@@ -1261,7 +1261,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
 
     _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
 
-    if ( kAbs(angle)> DBL_EPSILON ) {
+    if ( qAbs(angle)> DBL_EPSILON ) {
         QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
@@ -1272,11 +1272,11 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
         br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
         rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-        QWMatrix m;
+        QMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
         m.translate( rr.left() + pixXPos, rr.top() + pixYPos );
-        _painter->setWorldMatrix( m, true );
+        _painter->setMatrix( m, true );
     }
 
     if ( !drawContour )
@@ -1313,7 +1313,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
 #endif
             )
         {
-            //kdDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
         else
         {
@@ -1331,7 +1331,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
             m_cachedPar1 = m_ie_par1;
             m_cachedPar2 = m_ie_par2;
             m_cachedPar3 = m_ie_par3;
-            //kdDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
         _painter->eraseRect( rect );
         _painter->drawPixmap( rect, m_cachedPixmap);
@@ -1364,7 +1364,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
 QPixmap EmbeddedPictureObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
-    kdDebug(33001) << "EmbeddedPictureObject::getOriginalPixmap size= " << _pixSize << endl;
+    kDebug(33001) << "EmbeddedPictureObject::getOriginalPixmap size= " << _pixSize << endl;
     QPixmap _pixmap = image.generatePixmap( _pixSize, true );
     image.clearCache(); // Release the memoy of the picture cache
 

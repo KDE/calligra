@@ -45,7 +45,7 @@ using namespace KFormDesigner;
 namespace KFormDesigner {
 
 //! @internal
-typedef QValueList< QGuardedPtr<QWidget> > QGuardedWidgetList;
+typedef QValueList< QPointer<QWidget> > QGuardedWidgetList;
 
 //! @internal
 class WidgetPropertySetPrivate
@@ -192,8 +192,8 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 	}
 
 	// don't add a widget twice
-	if(d->widgets.contains(QGuardedPtr<QWidget>(w))) {
-		kdWarning() << "WidgetPropertySet::setSelectedWidget() Widget is already selected" << endl;
+	if(d->widgets.contains(QPointer<QWidget>(w))) {
+		kWarning() << "WidgetPropertySet::setSelectedWidget() Widget is already selected" << endl;
 		return;
 	}
 	// if our list is empty,don't use add parameter value
@@ -204,7 +204,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 		addWidget(w);
 	else {
 		clearSet(true); //clear but do not reload to avoid blinking
-		d->widgets.append(QGuardedPtr<QWidget>(w));
+		d->widgets.append(QPointer<QWidget>(w));
 		createPropertiesForWidget(w);
 
 		w->installEventFilter(this);
@@ -217,7 +217,7 @@ WidgetPropertySet::setSelectedWidget(QWidget *w, bool add)
 void
 WidgetPropertySet::addWidget(QWidget *w)
 {
-	d->widgets.append(QGuardedPtr<QWidget>(w));
+	d->widgets.append(QPointer<QWidget>(w));
 
 	// Reset some stuff
 	d->lastCommand = 0;
@@ -253,7 +253,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 		|| !(form = KFormDesigner::FormManager::self()->activeForm()) 
 		|| !KFormDesigner::FormManager::self()->activeForm()->objectTree())
 	{
-		kdWarning() << "WidgetPropertySet::createPropertiesForWidget() no manager or active form!!!" << endl;
+		kWarning() << "WidgetPropertySet::createPropertiesForWidget() no manager or active form!!!" << endl;
 		return;
 	}
 	ObjectTreeItem *tree = form->objectTree()->lookup(w->name());
@@ -267,7 +267,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	KoProperty::Property *newProp = 0;
 	WidgetInfo *winfo = form->library()->widgetInfoForClassName(w->className());
 	if (!winfo) {
-		kdWarning() << "WidgetPropertySet::createPropertiesForWidget() no widget info for class " 
+		kWarning() << "WidgetPropertySet::createPropertiesForWidget() no widget info for class " 
 			<< w->className() << endl;
 		return;
 	}
@@ -547,7 +547,7 @@ WidgetPropertySet::createPropertyCommandsInDesignMode(QWidget* widget,
 	for(QMap<QCString, QVariant>::ConstIterator it = propValues.constBegin(); it != endIt; ++it)
 	{
 		if (!d->set.contains(it.key())) {
-			kdWarning() << "WidgetPropertySet::createPropertyCommandsInDesignMode(): \"" <<it.key()<<"\" property not found"<<endl;
+			kWarning() << "WidgetPropertySet::createPropertyCommandsInDesignMode(): \"" <<it.key()<<"\" property not found"<<endl;
 			continue;
 		}
 		PropertyCommand *subCommand = new PropertyCommand(this, widget->name(),
@@ -655,7 +655,7 @@ WidgetPropertySet::slotPropertyReset(KoProperty::Set& set, KoProperty::Property&
 void
 WidgetPropertySet::slotWidgetDestroyed()
 {
-//	if(d->widgets.contains(QGuardedPtr<const QWidget>( dynamic_cast<const QWidget*>(sender()) ))) {
+//	if(d->widgets.contains(QPointer<const QWidget>( dynamic_cast<const QWidget*>(sender()) ))) {
 	//only clear this set if it contains the destroyed widget
 	foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
 		if (dynamic_cast<const QWidget*>(sender()) == *it) {
@@ -771,7 +771,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 	) {
 		// Create the wordbreak property
 		KoProperty::Property *p = new KoProperty::Property("wordbreak", 
-			QVariant(alignment & Qt::WordBreak, 3), i18n("Word Break"), i18n("Word Break") );
+			QVariant(alignment & Qt::TextWordWrap, 3), i18n("Word Break"), i18n("Word Break") );
 		d->set.addProperty(p);
 		updatePropertyValue(tree, "wordbreak");
 		if(!isPropertyVisible(p->name(), isTopLevel)) {

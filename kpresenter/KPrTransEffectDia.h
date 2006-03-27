@@ -41,7 +41,7 @@ class QComboBox;
 class KPrBackGround;
 class KPrObject;
 class KPPresStructObjectItem;
-class KURLRequester;
+class KUrlRequester;
 class KIntNumInput;
 class KPrSoundPlayer;
 class KPrPageEffects;
@@ -111,7 +111,7 @@ protected:
 
     QCheckBox *checkSoundEffect;
     QLabel *lSoundEffect;
-    KURLRequester *requester;
+    KUrlRequester *requester;
     QPushButton *buttonTestPlaySoundEffect, *buttonTestStopSoundEffect;
 
     KIntNumInput* timeSlider;
@@ -129,7 +129,7 @@ protected slots:
     void timeChanged( int );
 
     void soundEffectChanged();
-    void slotRequesterClicked( KURLRequester * );
+    void slotRequesterClicked( KUrlRequester * );
     void slotSoundFileChanged( const QString& );
     void playSound();
     void stopSound();

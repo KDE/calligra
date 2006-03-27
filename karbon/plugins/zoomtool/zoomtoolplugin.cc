@@ -35,7 +35,7 @@ ZoomToolPlugin::ZoomToolPlugin(QObject *parent, const char *name, const QStringL
 {
 	setInstance(ZoomToolPluginFactory::instance());
 
-	kdDebug() << "Zoom tool plugin. Class: "
+	kDebug() << "Zoom tool plugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

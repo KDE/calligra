@@ -1872,7 +1872,7 @@ void ValueCalc::getCond (Condition &cond, Value val)
   }
   QString text = converter->asString (val).asString();
   cond.comp = isEqual;
-  text = text.stripWhiteSpace();
+  text = text.trimmed();
 
   if ( text.startsWith( "<=" ) )
   {
@@ -1910,7 +1910,7 @@ void ValueCalc::getCond (Condition &cond, Value val)
     text = text.remove( 0, 1 );
   }
 
-  text = text.stripWhiteSpace();
+  text = text.trimmed();
 
   bool ok = false;
   double d = text.toDouble( &ok );

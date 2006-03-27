@@ -128,7 +128,7 @@ void KDChartPiePainter::paintData( QPainter* painter,
     _angleLens.resize( _numValues );
 
     // compute position
-    _size = QMIN( _dataRect.width(), _dataRect.height() ); // initial size
+    _size = qMin( _dataRect.width(), _dataRect.height() ); // initial size
     // if the pies explode, we need to give them additional space =>
     // make the basic size smaller
     if ( params()->explode() ) {
@@ -722,8 +722,8 @@ void KDChartPiePainter::drawArcEffectSegment( QPainter* painter,
         QRegion* region )
 {
     // Start with getting the points for the inner arc.
-    const int startA = QMIN(startAngle, endAngle);
-    const int endA   = QMAX(startAngle, endAngle);
+    const int startA = qMin(startAngle, endAngle);
+    const int endA   = qMax(startAngle, endAngle);
     const int arcPoints = endA-startA+1;
     Q3PointArray collect(arcPoints * 2);
     for ( int angle=endA; angle>=startA; --angle){

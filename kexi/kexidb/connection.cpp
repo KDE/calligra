@@ -666,7 +666,7 @@ bool Connection::dropDatabase( const QString &dbName )
 			dbToDrop = m_usedDatabase;
 		} else {
 			if (m_driver->isFileDriver()) //lets get full path
-				dbToDrop = QFileInfo(dbName).absFilePath();
+				dbToDrop = QFileInfo(dbName).absoluteFilePath();
 			else
 				dbToDrop = dbName;
 		}
@@ -1165,10 +1165,10 @@ Field* Connection::findSystemFieldName(KexiDB::FieldList* fieldlist)
 	return 0;
 }
 
-Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName,
-	Q_ULLONG* ROWID)
+quint64 Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const QString& tableName,
+	quint64* ROWID)
 {
-	Q_ULLONG row_id = drv_lastInsertRowID();
+	quint64 row_id = drv_lastInsertRowID();
 	if (ROWID)
 		*ROWID = row_id;
 	if (m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE) {
@@ -1180,13 +1180,13 @@ Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName, const 
 		+ QString::fromLatin1(" WHERE ") + m_driver->beh->ROW_ID_FIELD_NAME + QString::fromLatin1("=") + QString::number(row_id), rdata))
 	{
 //		KexiDBDbg << "Connection::lastInsertedAutoIncValue(): row_id<=0 || true!=querySingleRecord()" << endl;
-	 	return (Q_ULLONG)-1; //ULL;
+	 	return (quint64)-1; //ULL;
 	}
 	return rdata[0].toULongLong();
 }
 
-Q_ULLONG Connection::lastInsertedAutoIncValue(const QString& aiFieldName,
-	const KexiDB::TableSchema& table, Q_ULLONG* ROWID)
+quint64 Connection::lastInsertedAutoIncValue(const QString& aiFieldName,
+	const KexiDB::TableSchema& table, quint64* ROWID)
 {
 	return lastInsertedAutoIncValue(aiFieldName,table.name(), ROWID);
 }
@@ -1505,8 +1505,8 @@ bool Connection::alterTableName(TableSchema& tableSchema, const QString& newName
 		setError(ERR_INVALID_IDENTIFIER, i18n("Invalid table name \"%1\"").arg(newName));
 		return false;
 	}
-	const QString& newTableName = newName.lower().stripWhiteSpace();
-	if (tableSchema.name().lower().stripWhiteSpace() == newTableName) {
+	const QString& newTableName = newName.lower().trimmed();
+	if (tableSchema.name().lower().trimmed() == newTableName) {
 		setError(ERR_OBJECT_THE_SAME, i18n("Could rename table \"%1\" using the same name.")
 			.arg(newTableName));
 		return false;
@@ -2759,14 +2759,14 @@ bool Connection::insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf
 
 	//fetch autoincremented values
 	QueryColumnInfo::List *aif_list = query.autoIncrementFields();
-	Q_ULLONG ROWID = 0;
+	quint64 ROWID = 0;
 	if (pkey && !aif_list->isEmpty()) {
 		//! @todo now only if PKEY is present, this should also work when there's no PKEY
 		QueryColumnInfo *id_fieldinfo = aif_list->first();
 //! @todo safe to cast it?
-		Q_ULLONG last_id = lastInsertedAutoIncValue(
+		quint64 last_id = lastInsertedAutoIncValue(
 			id_fieldinfo->field->name(), id_fieldinfo->field->table()->name(), &ROWID);
-		if (last_id==(Q_ULLONG)-1 || last_id<=0) {
+		if (last_id==(quint64)-1 || last_id<=0) {
 			//! @todo show error
 //! @todo remove just inserted row. How? Using ROLLBACK?
 			return false;

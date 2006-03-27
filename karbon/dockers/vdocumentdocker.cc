@@ -144,7 +144,7 @@ VDocumentPreview::eventFilter( QObject* object, QEvent* event )
 		{
 			KoPoint p3( mouseEvent->pos().x() / scaleFactor - xoffset,
 						( height() - mouseEvent->pos().y() ) / scaleFactor - yoffset );
-			setCursor( rect.contains( p3 ) ? QCursor::SizeAllCursor : QCursor( Qt::arrowCursor ) );
+			setCursor( rect.contains( p3 ) ? QCursor::SizeAllCursor : QCursor( Qt::ArrowCursor ) );
 		}
 	}
 
@@ -177,7 +177,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 		m_docpixmap = new QPixmap( width(), height() );
 		VKoPainter p( m_docpixmap, width(), height() );
 		p.clear( QColor( 195, 194, 193 ) );
-		p.setWorldMatrix( QWMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
+		p.setMatrix( QMatrix( 1, 0, 0, -1, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
 		p.setZoomFactor( scaleFactor );
 		KoRect rect( -xoffset, -yoffset, m_document->width() + xoffset, m_document->height() + yoffset );
 		// draw doc outline
@@ -194,7 +194,7 @@ VDocumentPreview::paintEvent( QPaintEvent* )
 	// draw viewport rect
 	{
 		QPainter p( &pixmap );
-		p.setWorldMatrix( QWMatrix( scaleFactor, 0, 0, -scaleFactor, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
+		p.setMatrix( QMatrix( scaleFactor, 0, 0, -scaleFactor, xoffset * scaleFactor, height() - yoffset * scaleFactor ) );
 		p.setPen( Qt::red );
 		double dx = ( m_lastPoint.x() - m_firstPoint.x() ) * m_view->zoom();
 		double dy = ( m_lastPoint.y() - m_firstPoint.y() ) * m_view->zoom();
@@ -336,19 +336,19 @@ VObjectListViewItem::update()
 	preview.resize( 16, 16 );
 	VKoPainter p( &preview, 16, 16, false );
 	// Y mirroring
-	QWMatrix mat;
+	QMatrix mat;
 	mat.scale( 1, -1 );
 	KoRect bbox = m_object->boundingBox();
 	mat.translate( 0, -16 );
-	double factor = 16. / kMax( bbox.width(), bbox.height() );
+	double factor = 16. / qMax( bbox.width(), bbox.height() );
 	mat.translate( -bbox.x() * factor, -bbox.y() * factor );
-	p.setWorldMatrix( mat );
+	p.setMatrix( mat );
 
 	// TODO: When the document will support page size, change the following line.
 	p.setZoomFactor( factor );
 	m_object->draw( &p );
 	p.setZoomFactor( 1 );
-	p.setWorldMatrix( QWMatrix() );
+	p.setMatrix( QMatrix() );
 	p.setPen( Qt::black );
 	p.setBrush( Qt::NoBrush );
 	p.drawRect( KoRect( 0, 0, 16, 16 ) );
@@ -392,16 +392,16 @@ VLayerListViewItem::update()
 	preview.resize( 16, 16 );
 	VKoPainter p( &preview, 16, 16, false );
 	// Y mirroring
-	QWMatrix mat;
+	QMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( 0,  -16 );
-	p.setWorldMatrix( mat );
+	p.setMatrix( mat );
 
 	// TODO: When the document will support page size, change the following line.
 	p.setZoomFactor( 16. / 800. );
 	m_layer->draw( &p );
 	p.setZoomFactor( 1 );
-	p.setWorldMatrix( QWMatrix() );
+	p.setMatrix( QMatrix() );
 	p.setPen( Qt::black );
 	p.setBrush( Qt::NoBrush );
 	p.drawRect( KoRect( 0, 0, 16, 16 ) );
@@ -564,7 +564,7 @@ VLayersTab::selectActiveLayer()
 	{
 		layerItem->setSelected( true );
 		layerItem->repaint();
-		kdDebug(38000) << "selecting active layer: " << layerItem->text() << endl;
+		kDebug(38000) << "selecting active layer: " << layerItem->text() << endl;
 	}
 }
 
@@ -1164,7 +1164,7 @@ VHistoryItem::VHistoryItem( VCommand* command, VHistoryGroupItem* parent, QListV
 void
 VHistoryItem::init()
 {
-	kdDebug(38000) << "In VHistoryItem::init() : " << m_command->name() << endl;
+	kDebug(38000) << "In VHistoryItem::init() : " << m_command->name() << endl;
 	char buffer[70];
 	sprintf( buffer, "%064ld", ++g_lastKey );
 	m_key = buffer;

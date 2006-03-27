@@ -99,7 +99,7 @@ void KChartComboPage::init()
             }
         default:
             {
-                kdDebug(35001)<<"Error in hlc_style\n";
+                kDebug(35001)<<"Error in hlc_style\n";
                 break;
             }
         }
@@ -131,7 +131,7 @@ void KChartComboPage::apply()
         }
     else
         {
-            kdDebug(35001)<<"Error in groupbutton\n";
+            kDebug(35001)<<"Error in groupbutton\n";
         }
 #endif
 }

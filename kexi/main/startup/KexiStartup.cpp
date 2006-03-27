@@ -45,7 +45,7 @@
 #include <kmessagebox.h>
 #include <kcmdlineargs.h>
 #include <kdeversion.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <ktextedit.h>
 #include <kstaticdeleter.h>
 
@@ -127,7 +127,7 @@ void updateProgressBar(KProgressDialog *pd, char *buffer, int buflen)
 			--i; --p;
 			int percent = line.toInt(&ok);
 			if (ok && percent>=0 && percent<=100 && pd->progressBar()->progress()<percent) {
-//				kdDebug() << percent << endl;
+//				kDebug() << percent << endl;
 				pd->progressBar()->setProgress(percent);
 				qApp->processEvents(100);
 			}
@@ -407,9 +407,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		}
 	}
 
-/*	kdDebug() << "ARGC==" << args->count() << endl;
+/*	kDebug() << "ARGC==" << args->count() << endl;
 	for (int i=0;i<args->count();i++) {
-		kdDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
+		kDebug() << "ARG" <<i<< "= " << args->arg(i) <<endl;
 	}*/
 
 	if (m_forcedFinalMode && m_forcedDesignMode) {
@@ -428,7 +428,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		
 		if (fileDriverSelected) {
 			QFileInfo finfo(prjName);
-			cdata.setFileName( finfo.absFilePath() );
+			cdata.setFileName( finfo.absoluteFilePath() );
 			projectFileExists = finfo.exists();
 
 			if (dropDB && !projectFileExists) {
@@ -650,7 +650,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
 		int r = d->startupDialog->result();
 		if (r==KexiStartupDialog::TemplateResult) {
-//			kdDebug() << "Template key == " << d->startupDialog->selectedTemplateKey() << endl;
+//			kDebug() << "Template key == " << d->startupDialog->selectedTemplateKey() << endl;
 			QString selectedTemplateKey( d->startupDialog->selectedTemplateKey() );
 			if (selectedTemplateKey=="blank") {
 				m_action = CreateBlankProject;
@@ -665,11 +665,11 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 			return true;
 		}
 		else if (r==KexiStartupDialog::OpenExistingResult) {
-//			kdDebug() << "Existing project --------" << endl;
+//			kDebug() << "Existing project --------" << endl;
 			QString selFile = d->startupDialog->selectedExistingFile();
 			if (!selFile.isEmpty()) {
 				//file-based project
-//				kdDebug() << "Project File: " << selFile << endl;
+//				kDebug() << "Project File: " << selFile << endl;
 				cdata.setFileName( selFile );
 				QString detectedDriverName;
 				const tristate res = detectActionForFile( m_importActionData, detectedDriverName, 
@@ -687,7 +687,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 				m_projectData = new KexiProjectData(cdata, selFile);
 			}
 			else if (d->startupDialog->selectedExistingConnection()) {
-//				kdDebug() << "Existing connection: " <<
+//				kDebug() << "Existing connection: " <<
 //					d->startupDialog->selectedExistingConnection()->serverInfoString() << endl;
 				KexiDB::ConnectionData *cdata = d->startupDialog->selectedExistingConnection();
 				//ok, now we will try to show projects for this connection to the user
@@ -703,10 +703,10 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 			}
 		}
 		else if (r==KexiStartupDialog::OpenRecentResult) {
-//			kdDebug() << "Recent project --------" << endl;
+//			kDebug() << "Recent project --------" << endl;
 			const KexiProjectData *data = d->startupDialog->selectedProjectData();
 			if (data) {
-//				kdDebug() << "Selected project: database=" << data->databaseName()
+//				kDebug() << "Selected project: database=" << data->databaseName()
 //					<< " connection=" << data->constConnectionData()->serverInfoString() << endl;
 			}
 //! @todo
@@ -753,7 +753,7 @@ tristate KexiStartupHandler::detectActionForFile(
 		//try this detection if "project file" mode is forced or no type is forced:
 		ptr = KMimeType::findByFileContent(dbFileName);
 		mimename = ptr.data()->name();
-		kdDebug() << "KexiStartupHandler::detectActionForFile(): found mime is: " 
+		kDebug() << "KexiStartupHandler::detectActionForFile(): found mime is: " 
 			<< mimename << endl;
 		if (mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain") {
 			//try by URL:
@@ -764,7 +764,7 @@ tristate KexiStartupHandler::detectActionForFile(
 	if (mimename.isEmpty() || mimename=="application/octet-stream") {
 		// perhaps the file is locked
 		QFile f(dbFileName);
-		if (!f.open(IO_ReadOnly)) {
+		if (!f.open(QIODevice::ReadOnly)) {
 			// BTW: similar error msg is provided in SQLiteConnection::drv_useDatabase()
 			KMessageBox::sorry(parent, i18n("<p>Could not open project.</p>")
 				+i18n("<p>The file <nobr>\"%1\"</nobr> is not readable.</p>")
@@ -828,7 +828,7 @@ tristate KexiStartupHandler::detectActionForFile(
 	else {//use suggested driver
 		detectedDriverName = suggestedDriverName;
 	}
-//	kdDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName << endl;
+//	kDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName << endl;
 //hardcoded for convenience:
 	const QString newFileFormat = "SQLite3";
 	if (!(options & DontConvert) 
@@ -839,9 +839,9 @@ tristate KexiStartupHandler::detectActionForFile(
 			.arg(detectedDriverName).arg(QDir::convertSeparators(dbFileName)).arg(newFileFormat)) )
 	{
 //		SQLite2ToSQLite3Migration *migr = new 
-		SQLite2ToSQLite3Migration migr( finfo.absFilePath() );
+		SQLite2ToSQLite3Migration migr( finfo.absoluteFilePath() );
 		tristate res = migr.run();
-//		kdDebug() << "--- migr.run() END ---" <<endl;
+//		kDebug() << "--- migr.run() END ---" <<endl;
 		if (!res) {
 			//TODO msg
 			KMessageBox::sorry(parent, i18n(

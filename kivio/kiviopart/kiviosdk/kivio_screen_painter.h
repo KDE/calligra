@@ -103,7 +103,7 @@ public:
     virtual void rotateBy(int);
     virtual int rotation();
 
-    virtual void setWorldMatrix(QWMatrix, bool);
+    virtual void setMatrix(QMatrix, bool);
 };
 
 #endif

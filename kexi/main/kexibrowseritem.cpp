@@ -25,9 +25,9 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 
-KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
- : KListViewItem(parent, i->groupName())
-// : KListViewItem(parent, " "+ i->groupName() + " ")
+KexiBrowserItem::KexiBrowserItem(K3ListView *parent, KexiPart::Info *i)
+ : K3ListViewItem(parent, i->groupName())
+// : K3ListViewItem(parent, " "+ i->groupName() + " ")
 {
 	m_item = 0;
 	m_info = i;
@@ -39,9 +39,9 @@ KexiBrowserItem::KexiBrowserItem(KListView *parent, KexiPart::Info *i)
 	m_fifoSorting = 1; //because this is top level item
 }
 
-KexiBrowserItem::KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item)
- : KListViewItem(parent, item->name())
-// : KListViewItem(parent, " "+ item->name() + " ")
+KexiBrowserItem::KexiBrowserItem(K3ListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item)
+ : K3ListViewItem(parent, item->name())
+// : K3ListViewItem(parent, " "+ item->name() + " ")
 {
 	m_item = item;
 	m_info = i;
@@ -60,7 +60,7 @@ void KexiBrowserItem::initItem()
 		sortKey = listView()->childCount();
 	}
 	m_sortKey.sprintf("%2.2d",sortKey);
-//	kdDebug() << "m_sortKey=" << m_sortKey << endl;
+//	kDebug() << "m_sortKey=" << m_sortKey << endl;
 }
 
 void
@@ -76,7 +76,7 @@ KexiBrowserItem::clearChildren()
 
 QString KexiBrowserItem::key( int column, bool ascending ) const
 {
-//	kdDebug() << "KexiBrowserItem::key() : " << (m_fifoSorting ? m_sortKey : KListViewItem::key(column,ascending)) << endl;
-	return m_fifoSorting ? m_sortKey : KListViewItem::key(column,ascending);
+//	kDebug() << "KexiBrowserItem::key() : " << (m_fifoSorting ? m_sortKey : K3ListViewItem::key(column,ascending)) << endl;
+	return m_fifoSorting ? m_sortKey : K3ListViewItem::key(column,ascending);
 }
 

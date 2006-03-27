@@ -39,39 +39,39 @@ ResourceGroup::ResourceGroup(Project *project) {
     m_type = Type_Work;
     m_resources.setAutoDelete(true);
     generateId();
-    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
 ResourceGroup::~ResourceGroup() {
     if (findId() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
-    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
 bool ResourceGroup::setId(QString id) {
-    //kdDebug()<<k_funcinfo<<id<<endl;
+    //kDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
-        kdError()<<k_funcinfo<<"id is empty"<<endl;
+        kError()<<k_funcinfo<<"id is empty"<<endl;
         m_id = id;
         return false;
     }
     ResourceGroup *g = findId();
     if (g == this) {
-        //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+        //kDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
         removeId();
     } else if (g) {
         //Hmmm, shouldn't happen
-        kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different group: "<<g->name()<<endl;
+        kError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different group: "<<g->name()<<endl;
     }
     if (findId(id)) {
-        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different group: "<<findId(id)->name()<<endl;
+        kError()<<k_funcinfo<<"id '"<<id<<"' is already used for different group: "<<findId(id)->name()<<endl;
         m_id = QString(); // hmmm
         return false;
     }
     m_id = id;
     insertId(id);
-    //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
     return true;
 }
 
@@ -123,7 +123,7 @@ void ResourceGroup::removeRequiredResource(int) {
 }
 
 bool ResourceGroup::load(QDomElement &element) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     setId(element.attribute("id"));
     m_name = element.attribute("name");
 
@@ -146,7 +146,7 @@ bool ResourceGroup::load(QDomElement &element) {
 }
 
 void ResourceGroup::save(QDomElement &element)  const {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 
     QDomElement me = element.ownerDocument().createElement("resource-group");
     element.appendChild(me);
@@ -212,16 +212,16 @@ Resource::Resource(Project *project) : m_project(project), m_schedules(), m_work
     m_calendar = 0;
     m_currentSchedule = 0;
     generateId();
-    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
 Resource::Resource(Resource *resource) { 
-    //kdDebug()<<k_funcinfo<<"("<<this<<") from ("<<resource<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<") from ("<<resource<<")"<<endl;
     copy(resource); 
 }
 
 Resource::~Resource() {
-    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     if (findId() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
@@ -236,28 +236,28 @@ Resource::~Resource() {
 }
 
 bool Resource::setId(QString id) {
-    //kdDebug()<<k_funcinfo<<id<<endl;
+    //kDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
-        kdError()<<k_funcinfo<<"id is empty"<<endl;
+        kError()<<k_funcinfo<<"id is empty"<<endl;
         m_id = id;
         return false;
     }
     Resource *r = findId();
     if (r == this) {
-        //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+        //kDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
         removeId();
     } else if (r) {
         //Hmmm, shouldn't happen
-        kdError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different resource: "<<r->name()<<endl;
+        kError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different resource: "<<r->name()<<endl;
     }
     if (findId(id)) {
-        kdError()<<k_funcinfo<<"id '"<<id<<"' is already used for different resource: "<<findId(id)->name()<<endl;
+        kError()<<k_funcinfo<<"id '"<<id<<"' is already used for different resource: "<<findId(id)->name()<<endl;
         m_id = QString(); // hmmm
         return false;
     }
     m_id = id;
     insertId(id);
-    //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
     return true;
 }
 
@@ -269,7 +269,7 @@ void Resource::generateId() {
         m_id = m_id.setNum(i);
         if (!findId()) {
             insertId(m_id);
-            //kdDebug()<<k_funcinfo<<m_name<<": inserted id="<<m_id<<endl;
+            //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<m_id<<endl;
             return;
         }
     }
@@ -316,7 +316,7 @@ void Resource::copy(Resource *resource) {
 }
 
 void Resource::addWorkingHour(QTime from, QTime until) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_workingHours.append(new QTime(from));
     m_workingHours.append(new QTime(until));
 }
@@ -340,7 +340,7 @@ DateTime Resource::getBestAvailableTime(const DateTime /*after*/, const Duration
 }
 
 bool Resource::load(QDomElement &element) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QString s;
     setId(element.attribute("id"));
     m_name = element.attribute("name");
@@ -362,7 +362,7 @@ bool Resource::load(QDomElement &element) {
 }
 
 void Resource::save(QDomElement &element) const {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QDomElement me = element.ownerDocument().createElement("resource");
     element.appendChild(me);
 
@@ -396,7 +396,7 @@ QPtrList<Appointment> Resource::appointments() {
     QPtrList<Appointment> lst;
     if (m_currentSchedule)
         lst = m_currentSchedule->appointments();
-    //kdDebug()<<k_funcinfo<<lst.count()<<endl;
+    //kDebug()<<k_funcinfo<<lst.count()<<endl;
     return lst;
 }
 
@@ -425,7 +425,7 @@ bool Resource::addAppointment(Appointment *appointment, Schedule &main) {
 }
 
 void Resource::addAppointment(Schedule *node, DateTime &start, DateTime &end, double load) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     Schedule *s = findSchedule(node->id());
     if (s == 0) {
         s = createSchedule(node->parent());
@@ -470,7 +470,7 @@ ResourceSchedule *Resource::createSchedule(Schedule *parent) {
 
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
     if (!from.isValid() || !end.isValid()) {
-        kdWarning()<<k_funcinfo<<"Invalid time"<<endl;
+        kWarning()<<k_funcinfo<<"Invalid time"<<endl;
         return;
     }
     Calendar *cal = calendar();
@@ -479,26 +479,26 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
     }
     DateTime time = from;
     while (time < end) {
-        //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
+        //kDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
         if (!time.isValid() || !end.isValid()) {
-            kdWarning()<<k_funcinfo<<"Invalid time"<<endl;
+            kWarning()<<k_funcinfo<<"Invalid time"<<endl;
             return;
         }
         if (!cal->hasInterval(time, end)) {
-            //kdDebug()<<time.toString()<<" to "<<end.toString()<<": No (more) interval(s)"<<endl;
-            kdWarning()<<k_funcinfo<<m_name<<": Resource only partially available"<<endl;
+            //kDebug()<<time.toString()<<" to "<<end.toString()<<": No (more) interval(s)"<<endl;
+            kWarning()<<k_funcinfo<<m_name<<": Resource only partially available"<<endl;
             //node->resourceNotAvailable = true;
             return; // nothing more to do
         }
         QPair<DateTime, DateTime> i = cal->firstInterval(time, end);
         if (!i.second.isValid()) {
-            kdWarning()<<k_funcinfo<<"Invalid interval: "<<time<<", "<<end<<endl;
+            kWarning()<<k_funcinfo<<"Invalid interval: "<<time<<", "<<end<<endl;
             return;
         }
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
         addAppointment(node, i.first, i.second, m_units);
-        //kdDebug()<<k_funcinfo<<"Add :"<<i.first.toString()<<" to "<<i.second.toString()<<endl;
+        //kDebug()<<k_funcinfo<<"Add :"<<i.first.toString()<<" to "<<i.second.toString()<<endl;
         if (!(node->workStartTime.isValid()) || i.first < node->workStartTime)
             node->workStartTime = i.first;
         if (!(node->workEndTime.isValid()) || i.second > node->workEndTime)
@@ -508,13 +508,13 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
     return;
 }
 void Resource::makeAppointment(Schedule *node) {
-    //kdDebug()<<k_funcinfo<<m_name<< ": "<<node->node()->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
+    //kDebug()<<k_funcinfo<<m_name<< ": "<<node->node()->name()<<": "<<node->startTime.toString()<<" dur "<<node->duration.toString()<<endl;
     if (!node->startTime.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": startTime invalid"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": startTime invalid"<<endl;
         return;
     }
     if (!node->endTime.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": endTime invalid"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": endTime invalid"<<endl;
         return;
     }
     Calendar *cal = calendar();
@@ -532,7 +532,7 @@ void Resource::makeAppointment(Schedule *node) {
         makeAppointment(node, from, end);
     }
     if (!cal) {
-        kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
         return; 
     }
     //TODO: units and standard non-working days
@@ -540,32 +540,32 @@ void Resource::makeAppointment(Schedule *node) {
     DateTime end = node->endTime;
     time = availableAfter(time, end);
     if (!time.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": Resource not available (after="<<node->startTime<<", "<<end<<")"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": Resource not available (after="<<node->startTime<<", "<<end<<")"<<endl;
         node->resourceNotAvailable = true;
         return;
     }
     end = availableBefore(end, time);
     if (!end.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": Resource not available (before="<<node->endTime<<", "<<time<<")"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": Resource not available (before="<<node->endTime<<", "<<time<<")"<<endl;
         node->resourceNotAvailable = true;
         return;
     }
-    //kdDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
+    //kDebug()<<k_funcinfo<<time.toString()<<" to "<<end.toString()<<endl;
     makeAppointment(node, time, end);
 }
 
 // the amount of effort we can do within the duration
 Duration Resource::effort(const DateTime &start, const Duration &duration, bool backward, bool *ok) const {
-    //kdDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(Duration::Format_Day)<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(Duration::Format_Day)<<endl;
     bool sts=false;
     Duration e;
     if (duration == 0) {
-        kdWarning()<<k_funcinfo<<"zero duration"<<endl;
+        kWarning()<<k_funcinfo<<"zero duration"<<endl;
         return e;
     }
     Calendar *cal = calendar();
     if (cal == 0) {
-        kdWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": No calendar defined"<<endl;
         return e;
     }
     if (backward) {
@@ -575,7 +575,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
             sts = true;
             e = (cal->effort(limit, t) * m_units)/100;
         } else {
-            //kdDebug()<<k_funcinfo<<m_name<<": Not available (start="<<start<<", "<<limit<<")"<<endl;
+            //kDebug()<<k_funcinfo<<m_name<<": Not available (start="<<start<<", "<<limit<<")"<<endl;
         }
     } else {
         DateTime limit = start + duration;
@@ -585,7 +585,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
             e = (cal->effort(t, limit) * m_units)/100;
         }
     }
-    //kdDebug()<<k_funcinfo<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
+    //kDebug()<<k_funcinfo<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
     if (ok) *ok = sts;
     return e;
 }
@@ -604,7 +604,7 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, bo
     }
     if (type() == Type_Material) {
         t = time > m_availableFrom ? time : m_availableFrom;
-        //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+        //kDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
         return t;
     }
     Calendar *cal = calendar();
@@ -616,7 +616,7 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, bo
     if (checkAppointments) {
         //TODO
     }
-    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+    //kDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
     return t;
 }
 
@@ -634,7 +634,7 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, b
     }
     if (type() == Type_Material) {
         t = time < m_availableUntil ? time : m_availableUntil;
-        //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
+        //kDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
         return t;
     }
     Calendar *cal = calendar();
@@ -642,17 +642,17 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, b
         return t;
     }
     if (!m_availableUntil.isValid()) {
-        kdWarning()<<k_funcinfo<<m_name<<": availabelUntil is invalid"<<endl;
+        kWarning()<<k_funcinfo<<m_name<<": availabelUntil is invalid"<<endl;
         t = time;
     } else {
         t = m_availableUntil < time ? m_availableUntil : time;
     }
-    //kdDebug()<<k_funcinfo<<t<<", "<<lmt<<endl;
+    //kDebug()<<k_funcinfo<<t<<", "<<lmt<<endl;
     t = cal->firstAvailableBefore(t, lmt);
     if (checkAppointments) {
         //TODO
     }
-    //kdDebug()<<k_funcinfo<<m_name<<" returns: "<<time<<"="<<t<<" "<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" returns: "<<time<<"="<<t<<" "<<endl;
     return t;
 }
 
@@ -682,7 +682,7 @@ bool Resource::isOverbooked(const QDate &date) const {
 }
 
 bool Resource::isOverbooked(const DateTime &start, const DateTime &end) const {
-    //kdDebug()<<k_funcinfo<<m_name<<": "<<start.toString()<<" - "<<end.toString()<<" cs=("<<m_currentSchedule<<")"<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": "<<start.toString()<<" - "<<end.toString()<<" cs=("<<m_currentSchedule<<")"<<endl;
     return m_currentSchedule ? m_currentSchedule->isOverbooked(start, end) : false;
 }
 
@@ -715,21 +715,21 @@ ResourceRequest::ResourceRequest(Resource *resource, int units)
     : m_resource(resource),
       m_units(units),
       m_parent(0) {
-    //kdDebug()<<k_funcinfo<<"("<<this<<") Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<") Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
 }
 
 ResourceRequest::~ResourceRequest() {
-    //kdDebug()<<k_funcinfo<<"("<<this<<") resource: "<<(m_resource ? m_resource->name() : QString("None"))<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<") resource: "<<(m_resource ? m_resource->name() : QString("None"))<<endl;
     if (m_resource)
         m_resource->unregisterRequest(this);
     m_resource = 0;
 }
 
 bool ResourceRequest::load(QDomElement &element, Project &project) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_resource = project.resource(element.attribute("resource-id"));
     if (m_resource == 0) {
-        kdWarning()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id")<<endl;
+        kWarning()<<k_funcinfo<<"The referenced resource does not exist: resource id="<<element.attribute("resource-id")<<endl;
         return false;
     }
     m_units  = element.attribute("units").toInt();
@@ -744,7 +744,7 @@ void ResourceRequest::save(QDomElement &element) const {
 }
 
 int ResourceRequest::units() const {
-    //kdDebug()<<k_funcinfo<<m_resource->name()<<": units="<<m_units<<endl;
+    //kDebug()<<k_funcinfo<<m_resource->name()<<": units="<<m_units<<endl;
     return m_units;
 }
 
@@ -752,7 +752,7 @@ int ResourceRequest::workUnits() const {
     if (m_resource->type() == Resource::Type_Work)
         return units();
         
-    //kdDebug()<<k_funcinfo<<"units=0"<<endl;
+    //kDebug()<<k_funcinfo<<"units=0"<<endl;
     return 0;
 }
 
@@ -764,21 +764,21 @@ Task *ResourceRequest::task() const {
 ResourceGroupRequest::ResourceGroupRequest(ResourceGroup *group, int units)
     : m_group(group), m_units(units) {
 
-    //kdDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
+    //kDebug()<<k_funcinfo<<"Request to: "<<(group ? group->name() : QString("None"))<<endl;
     if (group)
         group->registerRequest(this);
     m_resourceRequests.setAutoDelete(true);
 }
 
 ResourceGroupRequest::~ResourceGroupRequest() {
-    //kdDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
     if (m_group)
         m_group->unregisterRequest(this);
     m_resourceRequests.clear();
 }
 
 void ResourceGroupRequest::addResourceRequest(ResourceRequest *request) {
-    //kdDebug()<<k_funcinfo<<"("<<request<<") to Group: "<<m_group->name()<<endl;
+    //kDebug()<<k_funcinfo<<"("<<request<<") to Group: "<<m_group->name()<<endl;
     request->setParent(this);
     m_resourceRequests.append(request);
     request->registerRequest();
@@ -800,10 +800,10 @@ ResourceRequest *ResourceGroupRequest::find(Resource *resource) const {
 }
 
 bool ResourceGroupRequest::load(QDomElement &element, Project &project) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_group = project.findResourceGroup(element.attribute("group-id"));
     if (m_group == 0) {
-        //kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<element.attribute("group-id")<<endl;
+        //kDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<element.attribute("group-id")<<endl;
         return false;
     }
     m_group->registerRequest(this);
@@ -819,7 +819,7 @@ bool ResourceGroupRequest::load(QDomElement &element, Project &project) {
                 if (r->load(e, project))
                     addResourceRequest(r);
                 else {
-                    kdError()<<k_funcinfo<<"Failed to load resource request"<<endl;
+                    kError()<<k_funcinfo<<"Failed to load resource request"<<endl;
                     delete r;
                 }
             }
@@ -846,7 +846,7 @@ int ResourceGroupRequest::units() const {
     for (; it.current(); ++it) {
         units += it.current()->units();
     }
-    //kdDebug()<<k_funcinfo<<"units="<<units<<endl;
+    //kDebug()<<k_funcinfo<<"units="<<units<<endl;
     return units;
 }
 
@@ -858,7 +858,7 @@ int ResourceGroupRequest::workUnits() const {
     for (; it.current(); ++it) {
         units += it.current()->workUnits();
     }
-    //kdDebug()<<k_funcinfo<<"units="<<units<<endl;
+    //kDebug()<<k_funcinfo<<"units="<<units<<endl;
     return units;
 }
 
@@ -871,9 +871,9 @@ Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &dura
     for (; it.current(); ++it) {
         e += it.current()->resource()->effort(time, duration, backward, &sts);
         if (sts && ok) *ok = sts;
-        //kdDebug()<<k_funcinfo<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="<<duration.toString()<<"gave e="<<e.toString()<<endl;
+        //kDebug()<<k_funcinfo<<(backward?"(B)":"(F)" )<<it.current()->resource()->name()<<": time="<<time<<" dur="<<duration.toString()<<"gave e="<<e.toString()<<endl;
     }
-    //kdDebug()<<k_funcinfo<<time.toString()<<"d="<<duration.toString()<<": e="<<e.toString()<<endl;
+    //kDebug()<<k_funcinfo<<time.toString()<<"d="<<duration.toString()<<": e="<<e.toString()<<endl;
     return e;
 }
 
@@ -886,7 +886,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
             if (!t2.isValid() || t2 > t1)
                 t2 = t1;
         }
-        //kdDebug()<<k_funcinfo<<"bw "<<time.toString()<<": "<<t2.daysTo(time)<<endl;
+        //kDebug()<<k_funcinfo<<"bw "<<time.toString()<<": "<<t2.daysTo(time)<<endl;
         return t2.daysTo(time);
     }
     QPtrListIterator<ResourceRequest> it = m_resourceRequests;
@@ -895,12 +895,12 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
         if (!t2.isValid() || t2 < t1)
             t2 = t1;
     }
-    //kdDebug()<<k_funcinfo<<"fw "<<time.toString()<<": "<<time.daysTo(t2)<<endl;
+    //kDebug()<<k_funcinfo<<"fw "<<time.toString()<<": "<<time.daysTo(t2)<<endl;
     return time.daysTo(t2);
 }
 
 Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, bool backward) {
-    //kdDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
     Duration e;
     if (_effort == Duration::zeroDuration) {
         return e;
@@ -917,7 +917,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         // days
         end = end.addDays(inc);
         e1 = effort(start, d, backward, &sts);
-        //kdDebug()<<"["<<i<<"of"<<nDays<<"] "<<(backward?"(B)":"(F):")<<"  start="<<start<<" e+e1="<<(e+e1).toString()<<" match "<<_effort.toString()<<endl;
+        //kDebug()<<"["<<i<<"of"<<nDays<<"] "<<(backward?"(B)":"(F):")<<"  start="<<start<<" e+e1="<<(e+e1).toString()<<" match "<<_effort.toString()<<endl;
         if (e + e1 < _effort) {
             e += e1;
             start = end;
@@ -929,7 +929,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             break;
         }
     }
-    //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    //kDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
     d = Duration(0, 1, 0); // 1 hour
     for (int i=0; !match && i < 24; ++i) {
         // hours
@@ -945,9 +945,9 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             end = start;
             break;
         }
-        //kdDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward ":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+        //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward ":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    //kDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
     d = Duration(0, 0, 1); // 1 minute
     for (int i=0; !match && i < 60; ++i) {
         //minutes
@@ -963,9 +963,9 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             end = start;
             break;
         }
-        //kdDebug()<<"duration(m) "<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+        //kDebug()<<"duration(m) "<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    //kdDebug()<<"duration "<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts<<endl;
+    //kDebug()<<"duration "<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts<<endl;
     d = Duration(0, 0, 0, 1); // 1 second
     for (int i=0; !match && i < 60 && sts; ++i) {
         //seconds
@@ -981,7 +981,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             end = start;
             break;
         }
-        //kdDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+        //kDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     d = Duration(0, 0, 0, 0, 1); // 1 millisecond
     for (int i=0; !match && i < 1000; ++i) {
@@ -997,17 +997,17 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         } else if (e + e1 > _effort) {
             break;
         }
-        //kdDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
+        //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
     if (!match) {
-        kdError()<<k_funcinfo<<(task()?task()->name():"No task")<<" "<<time<<": Could not match effort."<<" Want: "<<_effort.toString(Duration::Format_Day)<<" got: "<<e.toString(Duration::Format_Day)<<" sts="<<sts<<endl;
+        kError()<<k_funcinfo<<(task()?task()->name():"No task")<<" "<<time<<": Could not match effort."<<" Want: "<<_effort.toString(Duration::Format_Day)<<" got: "<<e.toString(Duration::Format_Day)<<" sts="<<sts<<endl;
     }
     DateTime t;
     if (e != Duration::zeroDuration) {
         t = backward ? availableAfter(end) : availableBefore(end);
     }
     end = t.isValid() ? t : time;
-    //kdDebug()<<k_funcinfo<<"<---"<<(backward?"(B) ":"(F) ")<<m_group->name()<<": "<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort: "<<_effort.toString(Duration::Format_Day)<<endl;
+    //kDebug()<<k_funcinfo<<"<---"<<(backward?"(B) ":"(F) ")<<m_group->name()<<": "<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" effort: "<<_effort.toString(Duration::Format_Day)<<endl;
     return (end>time?end-time:time-end);
 }
 
@@ -1021,7 +1021,7 @@ DateTime ResourceGroupRequest::availableAfter(const DateTime &time) {
     }
     if (start.isValid() && start < time)
         start = time;
-    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<start.toString()<<" "<<m_group->name()<<endl;
+    //kDebug()<<k_funcinfo<<time.toString()<<"="<<start.toString()<<" "<<m_group->name()<<endl;
     return start;
 }
 
@@ -1035,12 +1035,12 @@ DateTime ResourceGroupRequest::availableBefore(const DateTime &time) {
     }
     if (!end.isValid() || end > time)
         end = time;
-    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<end.toString()<<" "<<m_group->name()<<endl;
+    //kDebug()<<k_funcinfo<<time.toString()<<"="<<end.toString()<<" "<<m_group->name()<<endl;
     return end;
 }
 
 void ResourceGroupRequest::makeAppointments(Schedule *schedule) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         it.current()->makeAppointment(schedule);
@@ -1067,7 +1067,7 @@ ResourceRequestCollection::ResourceRequestCollection(Task &task)
 }
 
 ResourceRequestCollection::~ResourceRequestCollection() {
-    //kdDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
     m_requests.clear();
 }
 
@@ -1091,12 +1091,12 @@ ResourceRequest *ResourceRequestCollection::find(Resource *resource) const {
 }
 
 // bool ResourceRequestCollection::load(QDomElement &element, Project &project) {
-//     //kdDebug()<<k_funcinfo<<endl;
+//     //kDebug()<<k_funcinfo<<endl;
 //     return true;
 // }
 
 void ResourceRequestCollection::save(QDomElement &element) const {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceGroupRequest> it(m_requests);
     for ( ; it.current(); ++it ) {
         it.current()->save(element);
@@ -1104,24 +1104,24 @@ void ResourceRequestCollection::save(QDomElement &element) const {
 }
 
 int ResourceRequestCollection::units() const {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     int units = 0;
     QPtrListIterator<ResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         units += it.current()->units();
-        //kdDebug()<<k_funcinfo<<" Group: "<<it.current()->group()->name()<<" now="<<units<<endl;
+        //kDebug()<<k_funcinfo<<" Group: "<<it.current()->group()->name()<<" now="<<units<<endl;
     }
     return units;
 }
 
 int ResourceRequestCollection::workUnits() const {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     int units = 0;
     QPtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         units += it.current()->workUnits();
     }
-    //kdDebug()<<k_funcinfo<<" units="<<units<<endl;
+    //kDebug()<<k_funcinfo<<" units="<<units<<endl;
     return units;
 }
 
@@ -1130,7 +1130,7 @@ int ResourceRequestCollection::workUnits() const {
 // the amount of resources requested for each group.
 // "Material type" of resourcegroups does not (atm) affect the duration.
 Duration ResourceRequestCollection::duration(const DateTime &time, const Duration &effort, bool backward) {
-    //kdDebug()<<k_funcinfo<<"time="<<time.toString()<<" effort="<<effort.toString(Duration::Format_Day)<<" backward="<<backward<<endl;
+    //kDebug()<<k_funcinfo<<"time="<<time.toString()<<" effort="<<effort.toString(Duration::Format_Day)<<" backward="<<backward<<endl;
     if (isEmpty()) {
         return effort;
     }
@@ -1165,7 +1165,7 @@ DateTime ResourceRequestCollection::availableAfter(const DateTime &time) {
     }
     if (start.isValid() && start < time)
         start = time;
-    //kdDebug()<<k_funcinfo<<time.toString()<<"="<<start.toString()<<endl;
+    //kDebug()<<k_funcinfo<<time.toString()<<"="<<start.toString()<<endl;
     return start;
 }
 
@@ -1184,7 +1184,7 @@ DateTime ResourceRequestCollection::availableBefore(const DateTime &time) {
 
 
 void ResourceRequestCollection::makeAppointments(Schedule *schedule) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         it.current()->makeAppointments(schedule);
@@ -1192,7 +1192,7 @@ void ResourceRequestCollection::makeAppointments(Schedule *schedule) {
 }
 
 void ResourceRequestCollection::reserve(const DateTime &start, const Duration &duration) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         it.current()->reserve(start, duration);
@@ -1211,7 +1211,7 @@ bool ResourceRequestCollection::isEmpty() const {
 
 void ResourceGroup::printDebug(QString indent)
 {
-    kdDebug()<<indent<<"  + Resource group: "<<m_name<<" id="<<m_id<<endl;
+    kDebug()<<indent<<"  + Resource group: "<<m_name<<" id="<<m_id<<endl;
     indent += "   !";
     QPtrListIterator<Resource> it(m_resources);
     for ( ; it.current(); ++it)
@@ -1219,7 +1219,7 @@ void ResourceGroup::printDebug(QString indent)
 }
 void Resource::printDebug(QString indent)
 {
-    kdDebug()<<indent<<"  + Resource: "<<m_name<<" id="<<m_id/*<<" Overbooked="<<isOverbooked()*/<<endl;
+    kDebug()<<indent<<"  + Resource: "<<m_name<<" id="<<m_id/*<<" Overbooked="<<isOverbooked()*/<<endl;
     QIntDictIterator<Schedule> it(m_schedules);
     indent += "      ";
     for (; it.current(); ++it) {
@@ -1230,7 +1230,7 @@ void Resource::printDebug(QString indent)
 
 void ResourceGroupRequest::printDebug(QString indent)
 {
-    kdDebug()<<indent<<"  + Request to group: "<<(m_group ? m_group->name() : "None")<<" units="<<m_units<<"%"<<endl;
+    kDebug()<<indent<<"  + Request to group: "<<(m_group ? m_group->name() : "None")<<" units="<<m_units<<"%"<<endl;
     indent += "  !";
     QPtrListIterator<ResourceRequest> it(m_resourceRequests);
     for (; it.current(); ++it) {
@@ -1240,12 +1240,12 @@ void ResourceGroupRequest::printDebug(QString indent)
 
 void ResourceRequest::printDebug(QString indent)
 {
-    kdDebug()<<indent<<"  + Request to resource: "<<(m_resource ? m_resource->name() : "None")<<" units="<<m_units<<"%"<<endl;
+    kDebug()<<indent<<"  + Request to resource: "<<(m_resource ? m_resource->name() : "None")<<" units="<<m_units<<"%"<<endl;
 }
 
 void ResourceRequestCollection::printDebug(QString indent)
 {
-    kdDebug()<<indent<<"  + Resource requests:"<<endl;
+    kDebug()<<indent<<"  + Resource requests:"<<endl;
     QPtrListIterator<ResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->printDebug(indent+"  ");

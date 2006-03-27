@@ -52,11 +52,11 @@ bool KivioPluginStencilSpawner::load( const QString &f )
     return false;
   }
 
-  fac = KParts::ComponentFactory::createInstanceFromLibrary<KivioStencilFactory>(m_fileName.local8Bit());
+  fac = KLibLoader::createInstance<KivioStencilFactory>(m_fileName.local8Bit());
 
   if( !fac)
   {
-    kdDebug(43000) << "Failed to load: " << m_fileName << endl;
+    kDebug(43000) << "Failed to load: " << m_fileName << endl;
     return false;
   }
   

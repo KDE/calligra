@@ -28,7 +28,7 @@
 
 #include <qguardedptr.h>
 
-#include <kmdichildview.h>
+#include <k3mdichildview.h>
 #include <kxmlguiclient.h>
 
 class QWidgetStack;
@@ -312,14 +312,14 @@ class KEXICORE_EXPORT KexiDialogBase :
 		KexiContextHelpInfo *m_contextHelpInfo;
 #endif
 		int m_id;
-		QGuardedPtr<KexiPart::Part> m_part;
+		QPointer<KexiPart::Part> m_part;
 		KexiPart::Item *m_item;
 		QWidgetStack *m_stack;
 		QString m_origCaption; //!< helper
 		KexiDB::SchemaData* m_schemaData;
 		KexiViewBase *m_newlySelectedView; //!< Used in dirty(), temporary set in switchToViewMode()
 		                                   //!< during view setup, when a new view is not yet raised.
-		QGuardedPtr<KexiDialogTempData> m_tempData; //!< temporary data shared between views
+		QPointer<KexiDialogTempData> m_tempData; //!< temporary data shared between views
 
 		/*! Created view's mode - helper for switchToViewMode(),
 		 KexiViewBase ctor uses that info. >0 values are useful. */

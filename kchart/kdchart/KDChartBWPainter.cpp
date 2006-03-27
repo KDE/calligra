@@ -145,9 +145,9 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
             stats[ KDChartParams::Median ] = values[ nUd2 ];
         else
             stats[ KDChartParams::Median ] =
-                (values[ QMAX(nUd2-1, 0) ] + values[ nUd2 ]) /2;
+                (values[ qMax(nUd2-1, 0) ] + values[ nUd2 ]) /2;
         // find last value of lower quartile
-        nLastQ1  = QMAX( nUd2-1, 0 );
+        nLastQ1  = qMax( nUd2-1, 0 );
         // find 1st value of lower quartile
         nFirstQ1 = nLastQ1 / 2;
 
@@ -155,7 +155,7 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
         int nLowerCount = nLastQ1 - nFirstQ1 + 1;
 
         // find 1st value of upper quartile
-        nFirstQ3 = bOdd ? QMIN( nUd2+1, nUsed-1 ) : nUd2;
+        nFirstQ3 = bOdd ? qMin( nUd2+1, nUsed-1 ) : nUd2;
         // find last value of upper quartile
         nLastQ3  = nFirstQ3 + nLowerCount - 1;
 
@@ -166,16 +166,16 @@ int KDChartBWPainter::calculateStats( KDChartTableDataBase& data,
             stats[ KDChartParams::Quartile1 ] = values[ nFirstQ1 ];
         else
             stats[ KDChartParams::Quartile1 ] =
-                (values[ QMAX(nFirstQ1-1, 0) ] + values[ nFirstQ1 ]) /2;
+                (values[ qMax(nFirstQ1-1, 0) ] + values[ nFirstQ1 ]) /2;
         // find upper quartile
         if( bOdd2 ){
             stats[ KDChartParams::Quartile3 ] = values[ nLastQ3 ];
 }
         else{
             //qDebug("  "+QString::number(nLastQ3)+"  "+QString::number(KDChartParams::Quartile3)
-            //      +"  "+QString::number(nUsed)+"  "+QString::number(QMIN(nLastQ3+1, nUsed-1)));
+            //      +"  "+QString::number(nUsed)+"  "+QString::number(qMin(nLastQ3+1, nUsed-1)));
             stats[ KDChartParams::Quartile3 ] =
-                (values[ nLastQ3 ] + values[ QMIN(nLastQ3+1, nUsed-1) ]) /2;
+                (values[ nLastQ3 ] + values[ qMin(nLastQ3+1, nUsed-1) ]) /2;
 }
         // find the interquartile range (IQR)
         double iqr = stats[ KDChartParams::Quartile3 ] - stats[ KDChartParams::Quartile1 ];
@@ -286,7 +286,7 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
     // compute the position of the 0 axis
     double zeroXAxisI = axisPara->axisZeroLineStartY() - _dataRect.y();
 
-    const int lineWidth   = static_cast<int>( pointDist / 66.0 ) * QMAX(params()->lineWidth(), 1);
+    const int lineWidth   = static_cast<int>( pointDist / 66.0 ) * qMax(params()->lineWidth(), 1);
     const int lineWidthD2 = lineWidth * 2 / 3;
 
     const bool noBrush = Qt::NoBrush == params()->bWChartBrush().style();
@@ -312,18 +312,18 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
             double drawMin = stats[ KDChartParams::MinValue        ] * pixelsPerUnit;
             double drawMean= stats[ KDChartParams::MeanValue       ] * pixelsPerUnit;
             // get whisker values
-            double drawUWhisker = QMIN(drawUIF, drawMax);
-            double drawLWhisker = QMAX(drawLIF, drawMin);
+            double drawUWhisker = qMin(drawUIF, drawMax);
+            double drawLWhisker = qMax(drawLIF, drawMin);
             // get the box width
-            const int boxWidth = QMAX( 6, static_cast<int>( pointDist * 0.2 ) );
+            const int boxWidth = qMax( 6, static_cast<int>( pointDist * 0.2 ) );
             // get marker size (for the outliers and/or for the median value)
             int markWidth = params()->bWChartOutValMarkerSize();
             bool drawOutliers = ( 0 != markWidth );
             if( drawOutliers ){
                 if( 0 > markWidth)
-                    markWidth = QMAX( 4, markWidth * boxWidth / -100 );
+                    markWidth = qMax( 4, markWidth * boxWidth / -100 );
                 else
-                    markWidth = QMAX( 4, markWidth );
+                    markWidth = qMax( 4, markWidth );
             }
             else
                 markWidth = boxWidth * 25 / 100; // use the default for the Median marker
@@ -365,9 +365,9 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
             int xPos2 = static_cast<int>(
                     pointDist * ( (double)(dataset - chartDatasetStart) + 0.5 )
                     - lineWidthD2 / 2);
-            int markWidthD2 =  QMAX(markWidth / 2, 2);
-            int markWidthD25 = QMAX(static_cast<int>( 0.85 * markWidth / 2.0), 2);
-            int markWidthD35 = QMAX(static_cast<int>( 0.85 * markWidth / 3.0), 2);
+            int markWidthD2 =  qMax(markWidth / 2, 2);
+            int markWidthD25 = qMax(static_cast<int>( 0.85 * markWidth / 2.0), 2);
+            int markWidthD35 = qMax(static_cast<int>( 0.85 * markWidth / 3.0), 2);
             // draw the outliers
             if( drawOutliers ){
                 const uint nMax = data->usedCols();
@@ -467,7 +467,7 @@ void KDChartBWPainter::specificPaintData( QPainter* painter,
                     painter->drawRect( xPos + xDelta - 1,
                             y,
                             tw + 2,
-                            QMAX(static_cast < int > ( nTxtHeight ), 8) + 1 );
+                            qMax(static_cast < int > ( nTxtHeight ), 8) + 1 );
                     statText.draw( painter,
                             xPos + xDelta,
                             y,

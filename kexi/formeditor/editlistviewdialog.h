@@ -27,8 +27,8 @@
 class QFrame;
 class QListView;
 class QListViewItem;
-class KListViewItem;
-class KListView;
+class K3ListViewItem;
+class K3ListView;
 class KListBox;
 class QListBoxItem;
 
@@ -40,12 +40,12 @@ namespace KoProperty {
 
 namespace KFormDesigner {
 
-//! A dialog to edit the contents of a listvuew (KListView or QListView)
+//! A dialog to edit the contents of a listvuew (K3ListView or QListView)
 /*! The dialog contains two pages, one to edit columns and one to edit ist items. 
  KoProperty::Editor is used in columns to edit column properties
  (there are two properties not supported by Qt Designer: 'width' and 'resizable'). 
  The user can enter list contents inside the list
- using KListViewItem::setRenameable(). Pixmaps are not yet supported. */
+ using K3ListViewItem::setRenameable(). Pixmaps are not yet supported. */
 class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 {
 	Q_OBJECT
@@ -84,7 +84,7 @@ class KFORMEDITOR_EXPORT EditListViewDialog : public KDialogBase
 		KoProperty::Set  *m_propSet;
 		QFrame   *m_contents, *m_column;
 		KListBox  *m_listbox;
-		KListView  *m_listview;
+		K3ListView  *m_listview;
 		QIntDict<QToolButton>  m_buttons;
 };
 

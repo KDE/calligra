@@ -47,7 +47,7 @@ VTool::~VTool()
 		toolController()->unregisterTool( this );
 
 	delete m_action;
-	//kdDebug(38000) << "Deleting : " << name().latin1() << endl;
+	//kDebug(38000) << "Deleting : " << name().latin1() << endl;
 }
 
 void
@@ -79,9 +79,9 @@ VTool::mouseEvent( QMouseEvent* mouseEvent, const KoPoint &canvasCoordinate )
 
 	setCursor();
 
-	m_altPressed = mouseEvent->state() & Qt::AltButton;
-	m_shiftPressed = mouseEvent->state() & Qt::ShiftButton;
-	m_ctrlPressed = mouseEvent->state() & Qt::ControlButton;
+	m_altPressed = mouseEvent->state() & Qt::AltModifier;
+	m_shiftPressed = mouseEvent->state() & Qt::ShiftModifier;
+	m_ctrlPressed = mouseEvent->state() & Qt::ControlModifier;
 
 	// Mouse events:
 	if( mouseEvent->type() == QEvent::MouseButtonDblClick )
@@ -251,7 +251,7 @@ VTool::keyEvent( QEvent* event )
 void
 VTool::activate()
 {
-	kdDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo << endl;
 	refreshUnit();
 	QPixmap Icon = BarIcon( icon() );
 	view()->contextHelpAction()->updateHelp( uiname(), contextHelp(), &Icon );

@@ -137,7 +137,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 const char * /*objName */=0) { return 0; }
 		
 		//! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
-		QGuardedPtr<QWidget> m_uniqueWidget; 
+		QPointer<QWidget> m_uniqueWidget; 
 		
 		bool m_uniqueDialog : 1; //!< true if createDialogInstance() should return only one dialog
 

@@ -30,7 +30,7 @@
 KexiContextHelp::KexiContextHelp(KexiMainWindow *view, QWidget *parent)
 	:KoContextHelpWidget(parent,"kexi_contexthelp")
 {
-	kdDebug()<<"KexiContextHelp::KexiContextHelp()"<<endl;
+	kDebug()<<"KexiContextHelp::KexiContextHelp()"<<endl;
 	setCaption(i18n("Context Help"));
 	setIcon(SmallIcon("help"));
 	connect(this,SIGNAL(linkClicked( const QString& )),
@@ -38,7 +38,7 @@ KexiContextHelp::KexiContextHelp(KexiMainWindow *view, QWidget *parent)
 }
 
 void KexiContextHelp::linkClickedInternal(const QString& link) {
-	kdDebug()<<"KexiContextHelp: Link: "<<link<<endl;
+	kDebug()<<"KexiContextHelp: Link: "<<link<<endl;
 	unhandledLink(link);
 }
 

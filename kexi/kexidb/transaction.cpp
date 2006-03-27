@@ -26,7 +26,7 @@
 
 //remove debug
 #undef KexiDBDbg
-#define KexiDBDbg if (0) kdDebug()
+#define KexiDBDbg if (0) kDebug()
 
 using namespace KexiDB;
 

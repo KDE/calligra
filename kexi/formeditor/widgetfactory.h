@@ -106,7 +106,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		 If this name is found when loading a .ui file, the className() will be used instead.
 		 It allows to support both KDE and Qt versions of widget, without duplicating code.
 		 As a rule, className() should always return a class name which is inherited from
-		 alternate class. For example KListView class has alternate QListView class.
+		 alternate class. For example K3ListView class has alternate QListView class.
 
 		 \a override parameter overrides class name of a widget,
 		 even if it was implemented in other factory.
@@ -173,7 +173,7 @@ class KFORMEDITOR_EXPORT WidgetInfo
 		QValueList<QCString> m_alternateNames;
 		QAsciiDict<char> *m_overriddenAlternateNames;
 		QString m_saveName;
-		QGuardedPtr<WidgetFactory> m_factory;
+		QPointer<WidgetFactory> m_factory;
 		QAsciiDict<char> *m_propertiesWithDisabledAutoSync;
 		QMap<QCString,int> *m_customTypesForProperty;
 
@@ -465,13 +465,13 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		WidgetLibrary *m_library;
 		QCString m_editedWidgetClass;
 //#ifdef KEXI_KTEXTEDIT
-//		QGuardedPtr<KTextEdit>  m_editor;
+//		QPointer<KTextEdit>  m_editor;
 //#else
-//		QGuardedPtr<KLineEdit>  m_editor;
+//		QPointer<KLineEdit>  m_editor;
 //#endif
 		QString m_firstText;
-		QGuardedPtr<ResizeHandleSet> m_handles;
-		QGuardedPtr<Container> m_container;
+		QPointer<ResizeHandleSet> m_handles;
+		QPointer<Container> m_container;
 //		WidgetInfo::List m_classes;
 		WidgetInfo::Dict m_classesByName;
 		QAsciiDict<char>* m_hiddenClasses;
@@ -486,8 +486,8 @@ class KFORMEDITOR_EXPORT WidgetFactory : public QObject
 		 It's value is inherited from WidgetLibrary. */
 		bool m_showAdvancedProperties;
 
-		QGuardedPtr<QWidget> m_widget;
-		QGuardedPtr<QWidget> m_editor;
+		QPointer<QWidget> m_widget;
+		QPointer<QWidget> m_editor;
 
 	friend class WidgetLibrary;
 };

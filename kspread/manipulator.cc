@@ -104,7 +104,7 @@ void Manipulator::execute()
 {
   if (!m_sheet)
   {
-    kdWarning() << "Manipulator::execute(): No explicit m_sheet is set. "
+    kWarning() << "Manipulator::execute(): No explicit m_sheet is set. "
                 << "Manipulating all sheets of the region." << endl;
   }
 
@@ -112,7 +112,7 @@ void Manipulator::execute()
   successfully = preProcessing();
   if (!successfully)
   {
-    kdWarning() << "Manipulator::execute(): preprocessing was not successful!" << endl;
+    kWarning() << "Manipulator::execute(): preprocessing was not successful!" << endl;
     return;   // do nothing if pre-processing fails
   }
 
@@ -129,14 +129,14 @@ void Manipulator::execute()
 
   if (!successfully)
   {
-    kdWarning() << "Manipulator::execute(): processing was not successful!" << endl;
+    kWarning() << "Manipulator::execute(): processing was not successful!" << endl;
   }
 
   successfully = true;
   successfully = postProcessing();
   if (!successfully)
   {
-    kdWarning() << "Manipulator::execute(): postprocessing was not successful!" << endl;
+    kWarning() << "Manipulator::execute(): postprocessing was not successful!" << endl;
   }
 
   m_sheet->setRegionPaintDirty( *this );
@@ -174,7 +174,7 @@ bool Manipulator::process(Element* element)
   {
     for (int col = range.left(); col <= range.right(); ++col)
     {
-      kdDebug() << "Processing column " << col << "." << endl;
+      kDebug() << "Processing column " << col << "." << endl;
       ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
       process(format);
         // TODO Stefan: process cells with this property
@@ -184,7 +184,7 @@ bool Manipulator::process(Element* element)
   {
     for (int row = range.top(); row <= range.bottom(); ++row)
     {
-      kdDebug() << "Processing row " << row << "." << endl;
+      kDebug() << "Processing row " << row << "." << endl;
       RowFormat* format = sheet->nonDefaultRowFormat(row);
       process(format);
         // TODO Stefan: process cells with this property
@@ -192,7 +192,7 @@ bool Manipulator::process(Element* element)
   }
   else
   {
-    kdDebug() << "Processing cell(s) at " << range << "." << endl;
+    kDebug() << "Processing cell(s) at " << range << "." << endl;
     for (int col = range.left(); col <= range.right(); ++col)
     {
       for (int row = range.top(); row <= range.bottom(); ++row)
@@ -561,7 +561,7 @@ void FormatManipulator::copyFormat(QValueList<layoutCell> & list,
 
 bool FormatManipulator::testCondition(RowFormat* row)
 {
-  for (Q_UINT32 property = Style::SHAlign;
+  for (quint32 property = Style::SHAlign;
        property <= Style::SHideFormula;
        property *= 2)
   {
@@ -768,7 +768,7 @@ void FormatManipulator::doWork(Format* format,
 
 void FormatManipulator::prepareCell(Cell* cell)
 {
-  for (Q_UINT32 property = Style::SHAlign;
+  for (quint32 property = Style::SHAlign;
        property <= Style::SHideFormula;
        property *= 2)
   {
@@ -836,7 +836,7 @@ bool MergeManipulator::process(Element* element)
           Cell *cell = m_sheet->cellAt( col, row );
           if (cell->doesMergeCells())
           {
-            rows = QMAX(rows, cell->mergedYCells());
+            rows = qMax(rows, cell->mergedYCells());
             cell->mergeCells( col, row, 0, 0 );
           }
         }
@@ -857,7 +857,7 @@ bool MergeManipulator::process(Element* element)
           Cell *cell = m_sheet->cellAt( col, row );
           if (cell->doesMergeCells())
           {
-            cols = QMAX(cols, cell->mergedXCells());
+            cols = qMax(cols, cell->mergedXCells());
             cell->mergeCells( col, row, 0, 0 );
           }
         }
@@ -1115,7 +1115,7 @@ void DilationManipulator::execute()
 
 void DilationManipulator::unexecute()
 {
-  kdError() << "DilationManipulator::unexecute(): "
+  kError() << "DilationManipulator::unexecute(): "
             << "An undo of dilating a region is not possible." << endl;
 }
 
@@ -1139,7 +1139,7 @@ bool ResizeColumnManipulator::process(Element* element)
   for (int col = range.right(); col >= range.left(); --col)
   {
     ColumnFormat *format = m_sheet->nonDefaultColumnFormat( col );
-    format->setDblWidth( QMAX( 2.0, m_reverse ? m_oldSize : m_newSize ) );
+    format->setDblWidth( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
   }
   return true;
 }
@@ -1164,7 +1164,7 @@ bool ResizeRowManipulator::process(Element* element)
   for (int row = range.bottom(); row >= range.top(); --row)
   {
     RowFormat* rl = m_sheet->nonDefaultRowFormat( row );
-    rl->setDblHeight( QMAX( 2.0, m_reverse ? m_oldSize : m_newSize ) );
+    rl->setDblHeight( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
   }
   return true;
 }
@@ -1223,9 +1223,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
             if (widths.contains(col) && widths[col] != -1.0)
             {
               ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
-              if ( kAbs(format->dblWidth() - widths[col] ) > DBL_EPSILON )
+              if ( qAbs(format->dblWidth() - widths[col] ) > DBL_EPSILON )
               {
-                format->setDblWidth( QMAX( 2.0, widths[col] ) );
+                format->setDblWidth( qMax( 2.0, widths[col] ) );
               }
             }
           }
@@ -1240,9 +1240,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
         if (widths.contains(col) && widths[col] != -1.0)
         {
           ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
-          if ( kAbs(format->dblWidth() - widths[col] ) > DBL_EPSILON )
+          if ( qAbs(format->dblWidth() - widths[col] ) > DBL_EPSILON )
           {
-            format->setDblWidth( QMAX( 2.0, widths[col] ) );
+            format->setDblWidth( qMax( 2.0, widths[col] ) );
           }
         }
       }
@@ -1263,9 +1263,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
             if (heights.contains(row) && heights[row] != -1.0)
             {
               RowFormat* format = sheet->nonDefaultRowFormat(row);
-              if ( kAbs(format->dblHeight() - heights[row] ) > DBL_EPSILON )
+              if ( qAbs(format->dblHeight() - heights[row] ) > DBL_EPSILON )
               {
-                format->setDblHeight( QMAX( 2.0, heights[row] ) );
+                format->setDblHeight( qMax( 2.0, heights[row] ) );
               }
             }
           }
@@ -1280,9 +1280,9 @@ bool AdjustColumnRowManipulator::process(Element* element)
         if (heights.contains(row) && heights[row] != -1.0)
         {
           RowFormat* format = sheet->nonDefaultRowFormat(row);
-          if ( kAbs(format->dblHeight() - heights[row] ) > DBL_EPSILON )
+          if ( qAbs(format->dblHeight() - heights[row] ) > DBL_EPSILON )
           {
-            format->setDblHeight( QMAX( 2.0, heights[row] ) );
+            format->setDblHeight( qMax( 2.0, heights[row] ) );
           }
         }
       }
@@ -1327,7 +1327,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (!cell->isEmpty() && !cell->isObscured())
               {
-                m_newWidths[col] = QMAX(adjustColumnHelper(cell, col, row),
+                m_newWidths[col] = qMax(adjustColumnHelper(cell, col, row),
                                         m_newWidths[col] );
               }
             }
@@ -1341,7 +1341,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (!cell->isEmpty() && !cell->isObscured())
               {
-                m_newHeights[row] = QMAX(adjustRowHelper(cell, col, row),
+                m_newHeights[row] = qMax(adjustRowHelper(cell, col, row),
                                         m_newHeights[row]);
               }
             }
@@ -1367,7 +1367,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
               {
-                m_newWidths[col] = QMAX(adjustColumnHelper(cell, col, row),
+                m_newWidths[col] = qMax(adjustColumnHelper(cell, col, row),
                                         m_newWidths[col] );
               }
             }
@@ -1381,7 +1381,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
               {
-                m_newHeights[row] = QMAX(adjustRowHelper(cell, col, row),
+                m_newHeights[row] = qMax(adjustRowHelper(cell, col, row),
                                         m_newHeights[row]);
               }
             }
@@ -1407,7 +1407,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
               {
-                  m_newWidths[col] = QMAX(adjustColumnHelper(cell, col, row),
+                  m_newWidths[col] = qMax(adjustColumnHelper(cell, col, row),
                                           m_newWidths[col] );
               }
             }
@@ -1421,7 +1421,7 @@ bool AdjustColumnRowManipulator::preProcessing()
               }
               if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
               {
-                m_newHeights[row] = QMAX(adjustRowHelper(cell, col, row),
+                m_newHeights[row] = qMax(adjustRowHelper(cell, col, row),
                                         m_newHeights[row]);
               }
             }
@@ -1704,16 +1704,16 @@ Manipulator* ManipulatorManager::create(const QString& type)
 {
   if (type == "bgcolor")
   {
-    kdDebug() << "Background color manipulator created." << endl;
+    kDebug() << "Background color manipulator created." << endl;
 //     return new FontColorManipulator();
   }
   else if (type == "textcolor")
   {
-    kdDebug() << "Text color manipulator created." << endl;
+    kDebug() << "Text color manipulator created." << endl;
 //     return new FontColorManipulator();
   }
 
   // no manipulator of this type found
-  kdError() << "Unknown manipulator!" << endl;
+  kError() << "Unknown manipulator!" << endl;
   return 0;
 }

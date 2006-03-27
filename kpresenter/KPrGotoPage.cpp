@@ -66,7 +66,7 @@ KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
     }
 
     if ( parent )
-        parent->setCursor( Qt::forbiddenCursor );
+        parent->setCursor( Qt::ForbiddenCursor );
 }
 
 int KPrGotoPage::gotoPage( const KPrDocument *doc,
@@ -87,5 +87,5 @@ int KPrGotoPage::page() const {
 
 void KPrGotoPage::resetCursor() {
     if ( parentWidget() )
-        parentWidget()->setCursor( Qt::blankCursor );
+        parentWidget()->setCursor( Qt::BlankCursor );
 }

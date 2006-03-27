@@ -40,7 +40,7 @@ KivioStackBar::KivioStackBar(KivioView* view, QWidget* parent, const char* name)
 
 KivioStackBar::~KivioStackBar()
 {
-  kdDebug(43000) << "KivioStackBar::~KivioStackBar()" << endl;
+  kDebug(43000) << "KivioStackBar::~KivioStackBar()" << endl;
 }
 
 void KivioStackBar::insertPage( QWidget* w, const QString& title )
@@ -52,8 +52,8 @@ void KivioStackBar::insertPage( QWidget* w, const QString& title )
   w->hide();
   w->setFocusPolicy(NoFocus);
 
-  setMinimumWidth( QMAX(minimumSize().width(),w->minimumSize().width() ) );
-  setMaximumWidth( QMAX(maximumSize().width(),w->maximumSize().width() ) );
+  setMinimumWidth( qMax(minimumSize().width(),w->minimumSize().width() ) );
+  setMaximumWidth( qMax(maximumSize().width(),w->maximumSize().width() ) );
 
   DragBarButton* b = new DragBarButton( title, this );
   b->setOrientation(orientation());
@@ -77,7 +77,7 @@ void KivioStackBar::insertPage( QWidget* w, const QString& title )
 void KivioStackBar::slotDeleteButton( DragBarButton *b )
 {
   QWidget *pWidget = m_data[b];
-  kdDebug(43000) << "Emitting deleteButton" << endl;
+  kDebug(43000) << "Emitting deleteButton" << endl;
   emit deleteButton(b, pWidget, this);
 }
 
@@ -141,18 +141,18 @@ void KivioStackBar::deletePageAndButton( DragBarButton *pBtn )
   QWidget *pPage;
 
   if( !pBtn ) {
-    kdDebug(43000) << "KivioStackBar::deletePageAndButton() - pBtn is NULL!" << endl;
+    kDebug(43000) << "KivioStackBar::deletePageAndButton() - pBtn is NULL!" << endl;
     return;
   }
 
   pPage = m_data[pBtn];
   if( !pPage ) {
-    kdDebug(43000) << "KivioStackBar::deletePageAndButton() - failed to find the key/value pair" << endl;
+    kDebug(43000) << "KivioStackBar::deletePageAndButton() - failed to find the key/value pair" << endl;
     return;
   }
 
   if( m_data.remove( pBtn )==false ) {
-    kdDebug(43000) << "KivioStackBar::deletePageAndButton() - remove failed" << endl;
+    kDebug(43000) << "KivioStackBar::deletePageAndButton() - remove failed" << endl;
     return;
   }
 

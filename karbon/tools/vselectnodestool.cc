@@ -356,7 +356,7 @@ VSelectNodesTool::recalc()
 		double distx = _last.x() - first().x();
 		double disty = _last.y() - first().y();
 		// move operation
-		QWMatrix mat;
+		QMatrix mat;
 		mat.translate( distx, disty );
 
 		// Copy selected objects and transform:

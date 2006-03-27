@@ -68,7 +68,7 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
 
   if(e.hasAttribute("unit")) {
     // Compatibility with Kivio <= 1.2.x
-    kdDebug(43000) << "Compatibility mode..." << endl;
+    kDebug(43000) << "Compatibility mode..." << endl;
     KoUnit::Unit unit = Kivio::convToKoUnit(XmlReadInt(e, "unit", 0));
     layout.ptWidth = KoUnit::fromUserValue(XmlReadFloat(e, "width", 0.0), unit);
     layout.ptHeight = KoUnit::fromUserValue(XmlReadFloat(e, "height", 0.0), unit);
@@ -77,7 +77,7 @@ KoPageLayout Kivio::loadPageLayout(const QDomElement& e)
     layout.ptTop = KoUnit::fromUserValue(XmlReadFloat(e, "marginTop", 0.0), unit);
     layout.ptBottom = KoUnit::fromUserValue(XmlReadFloat(e, "marginBottom", 0.0), unit);
     Kivio::setFormatOrientation(layout);
-    kdDebug(43000) << "Ready." << endl;
+    kDebug(43000) << "Ready." << endl;
   } else {
     layout.ptWidth = XmlReadFloat(e, "width", 0.0);
     layout.ptHeight = XmlReadFloat(e, "height", 0.0);
@@ -1299,7 +1299,7 @@ QPixmap Kivio::generatePixmapFromStencil(int width, int height, KivioStencil* st
 
   double zw = (double)(width - 2) / (double)rect.width();
   double zh = (double)(height - 2) / (double)rect.height();
-  zoomHandler.setZoomAndResolution(qRound(kMin(zw, zh) * 100.0), KoGlobal::dpiX(), KoGlobal::dpiY());
+  zoomHandler.setZoomAndResolution(qRound(qMin(zw, zh) * 100.0), KoGlobal::dpiX(), KoGlobal::dpiY());
   rect = zoomHandler.zoomRect(stencil->rect());
 
   QPixmap pix(width, height);

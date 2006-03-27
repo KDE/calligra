@@ -67,9 +67,9 @@ void KexiDataItemInterface::signalValueChanged()
 bool KexiDataItemInterface::valueChanged()
 {
 //	bool ok;
-//	kdDebug() << m_origValue.toString() << " ? " << value(ok).toString() << endl;
+//	kDebug() << m_origValue.toString() << " ? " << value(ok).toString() << endl;
 //	return (m_origValue != value(ok)) && ok;
-	kdDebug() << "KexiDataItemInterface::valueChanged(): " << m_origValue.toString() << " ? " << value().toString() << endl;
+	kDebug() << "KexiDataItemInterface::valueChanged(): " << m_origValue.toString() << " ? " << value().toString() << endl;
 	return m_origValue != value();
 }
 

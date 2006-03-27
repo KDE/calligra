@@ -286,8 +286,8 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 		int prevRP = actRP - 1;
 		int nextRP = int( 0.5 * ( currentPoint + 1 ) );
 		// Clip the color stop between to others.
-		x = kMin( x, ( actRP < int( colorStops.count() - 1 ) ) ? int( colorStops.at( nextRP )->rampPoint * m_pntArea.width() ) : m_pntArea.width() );
-		x = kMax( x, ( actRP > 0 ) ? int( colorStops.at( prevRP )->rampPoint * m_pntArea.width() ) : 0 );
+		x = qMin( x, ( actRP < int( colorStops.count() - 1 ) ) ? int( colorStops.at( nextRP )->rampPoint * m_pntArea.width() ) : m_pntArea.width() );
+		x = qMax( x, ( actRP > 0 ) ? int( colorStops.at( prevRP )->rampPoint * m_pntArea.width() ) : 0 );
 		colorStops.at( actRP )->rampPoint = (float)( x ) / m_pntArea.width();
 		update();
 		emit changed();
@@ -298,8 +298,8 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
 		int prevRP = int( 0.5 * ( currentPoint - 1 ) );
 		int nextRP = int( 0.5 * ( currentPoint + 1 ) );
 		// Clip the mid point between to ramp points.
-		x = kMin( x, int( colorStops.at( nextRP )->rampPoint * m_pntArea.width() ) );
-		x = kMax( x, int( colorStops.at( prevRP )->rampPoint * m_pntArea.width() ) );
+		x = qMin( x, int( colorStops.at( nextRP )->rampPoint * m_pntArea.width() ) );
+		x = qMax( x, int( colorStops.at( prevRP )->rampPoint * m_pntArea.width() ) );
 		colorStops.at( prevRP )->midPoint = ( (float)( x ) / m_pntArea.width() - ( colorStops.at( prevRP )->rampPoint ) ) / ( colorStops.at( nextRP )->rampPoint - colorStops.at( prevRP )->rampPoint );
 		update();
 		emit changed();

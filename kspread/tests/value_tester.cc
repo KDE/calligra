@@ -46,7 +46,7 @@ void ValueTester::check( const char *file, int line, const char* msg, const T& r
   if( result != expected )
   {
     QString message;
-    QTextStream ts( &message, IO_WriteOnly );
+    QTextStream ts( &message, QIODevice::WriteOnly );
     ts << msg;
     ts << "  Result:";
     ts << result;
@@ -63,7 +63,7 @@ void ValueTester::check( const char *file, int line, const char* msg, bool resul
   if( result != expected )
   {
     QString message;
-    QTextStream ts( &message, IO_WriteOnly );
+    QTextStream ts( &message, QIODevice::WriteOnly );
     ts << msg;
     ts << "  Result: ";
     if( result ) ts << "True"; else ts << "False";

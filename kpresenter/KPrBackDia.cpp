@@ -188,10 +188,10 @@ KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
     picChooseLabel = new QLabel( i18n("&Location:"), picTab );
     picChooseLabel->setFixedHeight( picChooseLabel->sizeHint().height() );
 
-    picChoose = new KURLRequester( picTab, "picChoose" );
+    picChoose = new KUrlRequester( picTab, "picChoose" );
     picChoose->setFixedHeight( picChoose->sizeHint().height() );
     picChoose->setMode( KFile::ExistingOnly );
-    connect( picChoose, SIGNAL( openFileDialog( KURLRequester * ) ),
+    connect( picChoose, SIGNAL( openFileDialog( KUrlRequester * ) ),
              SLOT( aboutToSelectPic() ) );
     connect( picChoose, SIGNAL( urlSelected( const QString & ) ),
              SLOT( afterSelectPic( const QString & ) ) );

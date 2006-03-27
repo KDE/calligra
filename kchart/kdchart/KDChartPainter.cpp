@@ -442,7 +442,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
         QFont font0( params()->dataValuesFont( 0 ) );
          
         if( params()->dataValuesUseFontRelSize(  0 ) ) {
-            float size = QMIN(_areaWidthP1000, _areaHeightP1000) * abs(params()->dataValuesFontRelSize( 0 ));        
+            float size = qMin(_areaWidthP1000, _areaHeightP1000) * abs(params()->dataValuesFontRelSize( 0 ));        
             if ( 9.0 > size )
                 size = 9.0;
             font0.setPixelSize( static_cast < int > ( size ) );
@@ -453,7 +453,7 @@ void KDChartPainter::paintDataValues( QPainter* painter,
         QFont font1( params()->dataValuesFont( 1 ) );
 
         if( params()->dataValuesUseFontRelSize(  1 ) ) {
-            float size = QMIN(_areaWidthP1000, _areaHeightP1000) * abs(params()->dataValuesFontRelSize( 1 ));
+            float size = qMin(_areaWidthP1000, _areaHeightP1000) * abs(params()->dataValuesFontRelSize( 1 ));
             if ( 9.0 > size )
                 size = 9.0;
             font1.setPixelSize( static_cast < int > ( size ) );
@@ -1241,7 +1241,7 @@ QFont KDChartPainter::trueLegendFont() const
 {
     QFont trueFont = params()->legendFont();
     if ( params()->legendFontUseRelSize() ) {
-        const double averageValueP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+        const double averageValueP1000 = qMin(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
         trueFont.setPixelSize(
             static_cast < int > ( params()->legendFontRelSize() * averageValueP1000 ) );
     }
@@ -1316,7 +1316,7 @@ void KDChartPainter::calculateHorizontalLegendSize( QPainter* painter,
                 ypos += bFirstLFWithTitle ? legendTitleVertGap() : _legendSpacing;
                 bFirstLFWithTitle = false;
             }
-            maxX = QMAX(maxX, x2+txtWidth+_legendEMSpace);
+            maxX = qMax(maxX, x2+txtWidth+_legendEMSpace);
             
             xpos += txtWidth + em4;
             x2   += txtWidth + em4;
@@ -1563,8 +1563,8 @@ void internSetAxisArea( KDChartParams* params, int axis,
         int x0, int y0, int w0, int h0 )
 {
     // axis may never occupy more than 1000 per mille of the available space
-    int nFrom = QMAX(-1000, params->axisParams( axis ).axisUseAvailableSpaceFrom());
-    int nTo   = QMAX(-1000, params->axisParams( axis ).axisUseAvailableSpaceTo());
+    int nFrom = qMax(-1000, params->axisParams( axis ).axisUseAvailableSpaceFrom());
+    int nTo   = qMax(-1000, params->axisParams( axis ).axisUseAvailableSpaceTo());
     adjustFromTo(nFrom,nTo);
 
     KDChartAxisParams::AxisPos basicPos = KDChartAxisParams::basicAxisPos( axis );
@@ -1622,7 +1622,7 @@ void internSetAxisArea( KDChartParams* params, int axis,
 void KDChartPainter::paintHeaderFooter( QPainter* painter,
         KDChartTableDataBase* /*data*/ )
 {
-    const double averageValueP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+    const double averageValueP1000 = qMin(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
 
     painter->save();
 
@@ -1696,7 +1696,7 @@ int KDChartPainter::calculateHdFtRects(
                 }
                 painter->setFont( actFont );
                 metrics[ iRange*rangeSize + i ] = new QFontMetrics( painter->fontMetrics() );
-                leading = QMAX( leading, metrics[ iRange*rangeSize + i ]->lineSpacing() / 2 );
+                leading = qMax( leading, metrics[ iRange*rangeSize + i ]->lineSpacing() / 2 );
             }
         }
     }
@@ -1730,8 +1730,8 @@ int KDChartPainter::calculateHdFtRects(
                 // bounding rect sometimes is too small, if using italicized fonts
                 widths[ i] = m.boundingRect( params()->headerFooterText( iHdFt )+"  " ).width() + leading23;
 
-                maxAscent = QMAX( maxAscent, ascents[i] );
-                maxHeight = QMAX( maxHeight, heights[i] );
+                maxAscent = qMax( maxAscent, ascents[i] );
+                maxHeight = qMax( maxHeight, heights[i] );
             }else{
                 heights[i] = 0;
             }
@@ -1820,7 +1820,7 @@ void KDChartPainter::calculateAllAxesRects(
 
     const int trueWidth  = _outermostRect.width();
     const int trueHeight = _outermostRect.height();
-    const double averageValueP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+    const double averageValueP1000 = qMin(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
 
     // store the axes' 0 offsets
     int nAxesLeft0   = _axesRect.left() - _outermostRect.left();
@@ -1914,12 +1914,12 @@ void KDChartPainter::calculateAllAxesRects(
                         if(    dataCellsHaveSeveralCoordinates
                             && QVariant::DateTime == valType ){
                             if( KDCHART_AXIS_LABELS_AUTO_DATETIME_FORMAT == format )
-                                areaMin = QMAX( areaMin, static_cast < int > ( fntHeight * 6.75 ) );
+                                areaMin = qMax( areaMin, static_cast < int > ( fntHeight * 6.75 ) );
                             else
-                                areaMin = QMAX( areaMin, fntHeight * ( 3 + format.contains("\n") ) );
+                                areaMin = qMax( areaMin, fntHeight * ( 3 + format.contains("\n") ) );
                         }
                         else
-                            areaMin = QMAX( areaMin, fntHeight * 3 );
+                            areaMin = qMax( areaMin, fntHeight * 3 );
                     }
                     break;
                 case KDChartAxisParams::AxisPosLeft:
@@ -1957,7 +1957,7 @@ void KDChartPainter::calculateAllAxesRects(
                                 int maxLabelsWidth = 0;
                                 for ( uint i = 0; i < nLabels; ++i )
                                     maxLabelsWidth =
-                                        QMAX( maxLabelsWidth,
+                                        qMax( maxLabelsWidth,
                                               axisLabelsFontMetrics.boundingRect(*labelTexts->at(i)).width() );
                                 if( nUsableAxisWidth < maxLabelsWidth )
                                     areaSize = maxLabelsWidth
@@ -1985,7 +1985,7 @@ void KDChartPainter::calculateAllAxesRects(
 
                 case KDChartAxisParams::AxisAreaModeFixedSize:
                 {
-                    areaSize = areaMax ? QMIN( areaMin, areaMax ) : areaMin;
+                    areaSize = areaMax ? qMin( areaMin, areaMax ) : areaMin;
                 }
                 break;
             }
@@ -1995,25 +1995,25 @@ void KDChartPainter::calculateAllAxesRects(
                     if( bAddBottom )
                         nAxesBottomADD += areaSize;
                     else
-                        nAxesBottomADD = QMAX( nAxesBottomADD, areaSize );
+                        nAxesBottomADD = qMax( nAxesBottomADD, areaSize );
                     break;
                 case KDChartAxisParams::AxisPosLeft:
                     if( bAddLeft )
                         nAxesLeftADD += areaSize;
                     else
-                        nAxesLeftADD = QMAX( nAxesLeftADD, areaSize );
+                        nAxesLeftADD = qMax( nAxesLeftADD, areaSize );
                     break;
                 case KDChartAxisParams::AxisPosTop:
                     if( bAddTop )
                         nAxesTopADD += areaSize;
                     else
-                        nAxesTopADD = QMAX( nAxesTopADD, areaSize );
+                        nAxesTopADD = qMax( nAxesTopADD, areaSize );
                     break;
                 case KDChartAxisParams::AxisPosRight:
                     if( bAddRight )
                         nAxesRightADD += areaSize;
                     else
-                        nAxesRightADD = QMAX( nAxesRightADD, areaSize );
+                        nAxesRightADD = qMax( nAxesRightADD, areaSize );
                     break;
                 default:
                     break;
@@ -2027,16 +2027,16 @@ void KDChartPainter::calculateAllAxesRects(
     }
     int nMinDistance = static_cast < int > ( 30.0 * averageValueP1000 );
 
-    int nAxesBottom = QMAX( nAxesBottom0 + nAxesBottomADD, nMinDistance );
+    int nAxesBottom = qMax( nAxesBottom0 + nAxesBottomADD, nMinDistance );
 
     // for micro alignment with the X axis, we adjust the Y axis - but not for Area Charts:
     // otherwise the areas drawn would overwrite the Y axis line.
-    int nAxesLeft   = QMAX( nAxesLeft0   + nAxesLeftADD,   nMinDistance )
+    int nAxesLeft   = qMax( nAxesLeft0   + nAxesLeftADD,   nMinDistance )
                       - (bIsAreaChart ? 0 : 1);
 
-    int nAxesTop    = QMAX( nAxesTop0    + nAxesTopADD,    nMinDistance );
+    int nAxesTop    = qMax( nAxesTop0    + nAxesTopADD,    nMinDistance );
 
-    int nAxesRight  = QMAX( nAxesRight0  + nAxesRightADD,  nMinDistance );
+    int nAxesRight  = qMax( nAxesRight0  + nAxesRightADD,  nMinDistance );
 
     int nBottom  = params()->axisParams( KDChartAxisParams::AxisPosBottom ).axisTrueAreaSize();
     int nLeft    = params()->axisParams( KDChartAxisParams::AxisPosLeft ).axisTrueAreaSize();
@@ -2168,7 +2168,7 @@ void KDChartPainter::setupGeometry( QPainter* painter,
     _areaWidthP1000 =  _logicalWidth  / 1000.0;
     _areaHeightP1000 = _logicalHeight / 1000.0;
 
-    double averageValueP1000 = QMIN(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
+    double averageValueP1000 = qMin(_areaWidthP1000, _areaHeightP1000);//( _areaWidthP1000 + _areaHeightP1000 ) / 2.0;
 
     // new code design:
     //        1. now min-header-leading is text height/2
@@ -2237,7 +2237,7 @@ void KDChartPainter::setupGeometry( QPainter* painter,
         int sizeY = 0;
 
         for ( int dataset = 0; dataset < _numLegendTexts; dataset++ ) {
-            sizeX = QMAX( sizeX, legendMetrics.width( _legendTexts[ dataset ] ) );
+            sizeX = qMax( sizeX, legendMetrics.width( _legendTexts[ dataset ] ) );
             if( !_legendTexts[ dataset ].isEmpty() )
                 sizeY += _legendSpacing;
         }
@@ -2256,7 +2256,7 @@ void KDChartPainter::setupGeometry( QPainter* painter,
         // color box (where the title does not start yet, it is
         // left-aligned with the color boxes) and after the title (to
         // have some space before the boundary line comes).
-        sizeX = QMAX( sizeX, _legendTitleWidth + _legendEMSpace*2 );
+        sizeX = qMax( sizeX, _legendTitleWidth + _legendEMSpace*2 );
 
 	//qDebug("setupGeometry  mustDrawVerticalLegend: %s", mustDrawVerticalLegend() ? "YES":"NO ");
 
@@ -2273,7 +2273,7 @@ void KDChartPainter::setupGeometry( QPainter* painter,
         switch ( params()->legendPosition() ) {
             case KDChartParams::LegendTop:
                 if ( headerLineLeading )
-                    yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
+                    yposTop += qMax( (int)params()->legendSpacing(), headerLineLeading );
                 _legendRect = QRect( xposLeft + ( (xposRight-xposLeft) - sizeX ) / 2,
                                      yposTop, sizeX, sizeY );
                 yposTop = _legendRect.bottom() + params()->legendSpacing();
@@ -2305,26 +2305,26 @@ void KDChartPainter::setupGeometry( QPainter* painter,
                 break;
             case KDChartParams::LegendTopLeft:
                 if ( headerLineLeading )
-                    yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
+                    yposTop += qMax( (int)params()->legendSpacing(), headerLineLeading );
                 _legendRect = QRect( xposLeft + 1, yposTop, sizeX, sizeY );
                 yposTop = _legendRect.bottom() + params()->legendSpacing();
                 xposLeft = _legendRect.right() + params()->legendSpacing();
                 break;
             case KDChartParams::LegendTopLeftTop:
                 if ( headerLineLeading )
-                    yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
+                    yposTop += qMax( (int)params()->legendSpacing(), headerLineLeading );
                 _legendRect = QRect( xposLeft + 1, yposTop, sizeX, sizeY );
                 yposTop = _legendRect.bottom() + params()->legendSpacing();
                 break;
             case KDChartParams::LegendTopLeftLeft:
                 if ( headerLineLeading )
-                    yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
+                    yposTop += qMax( (int)params()->legendSpacing(), headerLineLeading );
                 _legendRect = QRect( xposLeft + 1, yposTop, sizeX, sizeY );
                 xposLeft = _legendRect.right() + params()->legendSpacing();
                 break;
             case KDChartParams::LegendTopRight:
                 if ( headerLineLeading )
-                    yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
+                    yposTop += qMax( (int)params()->legendSpacing(), headerLineLeading );
                 _legendRect = QRect( xposRight - sizeX - 1,
                         yposTop, sizeX, sizeY );
                 yposTop = _legendRect.bottom() + params()->legendSpacing();
@@ -2332,14 +2332,14 @@ void KDChartPainter::setupGeometry( QPainter* painter,
                 break;
             case KDChartParams::LegendTopRightTop:
                 if ( headerLineLeading )
-                    yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
+                    yposTop += qMax( (int)params()->legendSpacing(), headerLineLeading );
                 _legendRect = QRect( xposRight - sizeX - 1,
                         yposTop, sizeX, sizeY );
                 yposTop = _legendRect.bottom() + params()->legendSpacing();
                 break;
             case KDChartParams::LegendTopRightRight:
                 if ( headerLineLeading )
-                    yposTop += QMAX( (int)params()->legendSpacing(), headerLineLeading );
+                    yposTop += qMax( (int)params()->legendSpacing(), headerLineLeading );
                 _legendRect = QRect( xposRight - sizeX - 1,
                         yposTop, sizeX, sizeY );
                 xposRight = _legendRect.left() - params()->legendSpacing();
@@ -2599,7 +2599,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                                uint align )
 {
     KDChartDataRegion* datReg = 0;
-    const double areaSizeP1000 = QMIN(areaWidthP1000, areaHeightP1000);
+    const double areaSizeP1000 = qMin(areaWidthP1000, areaHeightP1000);
     int xsize  = width ? *width : (params ? params->lineMarkerSize().width() : 12);
     if( 0 > xsize )
         xsize = static_cast < int > (xsize * -areaSizeP1000);
@@ -2607,8 +2607,8 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
     if( 0 > ysize )
         ysize = static_cast < int > (ysize * -areaSizeP1000);
     if( KDChartParams::LineMarkerCross != style ){
-        xsize = QMAX( xsize, 4 );
-        ysize = QMAX( ysize, 4 );
+        xsize = qMax( xsize, 4 );
+        ysize = qMax( ysize, 4 );
     }
     uint xsize2 = xsize / 2;
     uint ysize2 = ysize / 2;
@@ -2617,7 +2617,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
     uint xsize6 = xsize / 6;
     uint ysize6 = ysize / 6;
     painter->setPen( color );
-    const uint xysize2 = QMIN( xsize2, ysize2 );
+    const uint xysize2 = qMin( xsize2, ysize2 );
 
     int x = _p.x();
     int y = _p.y();
@@ -2700,7 +2700,7 @@ KDChartDataRegion* KDChartPainter::drawMarker( QPainter* painter,
                                               }
         case KDChartParams::LineMarkerRing:   {
                                                 const QPen oldPen( painter->pen() );
-                                                painter->setPen( QPen( color, QMIN(xsize4, ysize4) ) );
+                                                painter->setPen( QPen( color, qMin(xsize4, ysize4) ) );
                                                 const QBrush oldBrush( painter->brush() );
                                                 painter->setBrush( Qt::NoBrush );
                                                 painter->drawEllipse( p.x() - xsize2, p.y() - ysize2, xsize, ysize );
@@ -2835,7 +2835,7 @@ void KDChartPainter::drawExtraLinesAndMarkers(
         bool extraLinesInFront = false;
         propSet.hasOwnExtraLinesInFront( iDummy, extraLinesInFront );
         if( bDrawInFront == extraLinesInFront ){
-            const double areaSizeP1000 = QMIN(areaWidthP1000, areaHeightP1000);
+            const double areaSizeP1000 = qMin(areaWidthP1000, areaHeightP1000);
             int          extraLinesLength = -20;
             int          extraLinesWidth = defaultPen.width();
             QColor       extraLinesColor = defaultPen.color();

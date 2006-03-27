@@ -406,20 +406,20 @@ Field::setDefaultValue(const QCString& def)
 			if (!ok || (!(m_options & Unsigned) && (-v > (int)0x07FFFFFFF || v > (int)(0x080000000-1))))
 				m_defaultValue = QVariant();
 			else
-				m_defaultValue = QVariant((Q_LLONG)v);
+				m_defaultValue = QVariant((qint64)v);
 			break;
 		}case BigInteger: {//8 bytes
 //! @todo BigInteger support
 /*
-			Q_LLONG long v = def.toLongLong(&ok);
+			qint64 long v = def.toLongLong(&ok);
 //TODO: 2-part decoding
 			if (!ok || (!(m_options & Unsigned) && (-v > 0x080000000 || v > (0x080000000-1))))
 				m_defaultValue = QVariant();
 			else
 				if (m_options & Unsigned)
-					m_defaultValue=QVariant((Q_ULLONG) v);
+					m_defaultValue=QVariant((quint64) v);
 				else
-					m_defaultValue = QVariant((Q_LLONG)v);*/
+					m_defaultValue = QVariant((qint64)v);*/
 			break;
 		}case Boolean: {
 			unsigned short v = def.toUShort(&ok);

@@ -223,7 +223,7 @@ AddReportItemCommand::AddReportItemCommand( Canvas *doc, View *rc, int x, int y,
 
 void AddReportItemCommand::execute()
 {
-    //    kdDebug() << "Execute: rtti = " << m_rtti << endl;
+    //    kDebug() << "Execute: rtti = " << m_rtti << endl;
     switch ( m_rtti )
     {
     case Rtti_Label:
@@ -248,7 +248,7 @@ void AddReportItemCommand::execute()
 
     m_item->setX( m_x );
     m_item->setY( m_y );
-    //    kdDebug() << "Execute: item created" << endl;
+    //    kDebug() << "Execute: item created" << endl;
     m_item->setSection( m_doc->kugarTemplate() ->band( m_section, m_sectionLevel ) );
     m_item->updateGeomProps();
 

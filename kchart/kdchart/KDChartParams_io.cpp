@@ -1007,7 +1007,7 @@ QDomDocument KDChartParams::saveXML( bool withPI ) const
             KDChartFrameSettings::createFrameSettingsNode( doc, areaMapElement,
                     "FrameSettings",
                     it.current(),
-                    it.currentKey().left(5).stripWhiteSpace().toUInt() );
+                    it.currentKey().left(5).trimmed().toUInt() );
         }
     }
 

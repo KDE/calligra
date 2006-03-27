@@ -60,7 +60,7 @@ QObject* CalcFactory::createObject( QObject* parent, const char* name, const cha
 {
     if ( !parent->inherits("KSpread::View") )
     {
-        kdError() << "CalcFactory: KSpread::View expected. Parent is " << parent->className() << endl;
+        kError() << "CalcFactory: KSpread::View expected. Parent is " << parent->className() << endl;
         return 0;
     }
 
@@ -85,7 +85,7 @@ Calculator::Calculator( View* parent, const char* name )
     m_calc = 0;
     m_view = parent;
 
-    KGlobal::locale()->insertCatalogue("kspreadcalc_calc");
+    KGlobal::locale()->insertCatalog("kspreadcalc_calc");
     parent->installEventFilter( this );
 
     (void)new KAction( i18n("Calculator"), SmallIcon("kcalc", CalcFactory::global()),

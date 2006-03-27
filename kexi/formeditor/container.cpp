@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <cstdlib> // for abs()
 
@@ -135,7 +135,7 @@ Container::Container(Container *toplevel, QWidget *container, QObject *parent, c
 
 Container::~Container()
 {
-	kdDebug() << " Container being deleted this == " << name() << endl;
+	kDebug() << " Container being deleted this == " << name() << endl;
 }
 
 void
@@ -149,7 +149,7 @@ Container::setForm(Form *form)
 bool
 Container::eventFilter(QObject *s, QEvent *e)
 {
-//	kdDebug() << e->type() << endl;
+//	kDebug() << e->type() << endl;
 	switch(e->type())
 	{
 		case QEvent::MouseButtonPress:
@@ -157,9 +157,9 @@ Container::eventFilter(QObject *s, QEvent *e)
 			m_insertBegin = QPoint(-1, -1);
 			m_mousePressEventReceived = true;
 
-			kdDebug() << "QEvent::MouseButtonPress sender object = " << s->name()
+			kDebug() << "QEvent::MouseButtonPress sender object = " << s->name()
 				<< "of type " << s->className() << endl;
-			kdDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
+			kDebug() << "QEvent::MouseButtonPress this          = " << this->name() << endl;
 
 			m_moving = static_cast<QWidget*>(s);
 			QMouseEvent *mev = static_cast<QMouseEvent*>(e);
@@ -447,7 +447,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 
 		case QEvent::MouseButtonDblClick: // editing
 		{
-			kdDebug() << "Container: Mouse dbl click for widget " << s->name() << endl;
+			kDebug() << "Container: Mouse dbl click for widget " << s->name() << endl;
 			QWidget *w = static_cast<QWidget*>(s);
 			if(!w)
 				return false;
@@ -496,7 +496,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 	{
 		FormManager::self()->createContextMenu(static_cast<QWidget*>(s), this);
 	}
-	else if(mev->state() == (Qt::LeftButton|Qt::ControlButton))// && (m_copyRect.isValid()))
+	else if(mev->state() == (Qt::LeftButton|Qt::ControlModifier))// && (m_copyRect.isValid()))
 	{
 		// copying a widget by Ctrl+dragging
 
@@ -509,7 +509,7 @@ Container::handleMouseReleaseEvent(QObject *s, QMouseEvent *mev)
 		if( ( (mev->pos().x() - m_grab.x()) < form()->gridSize() &&  (m_grab.x() - mev->pos().x()) < form()->gridSize() ) &&
 			( (mev->pos().y() - m_grab.y()) < form()->gridSize() &&  (m_grab.y() - mev->pos().y()) < form()->gridSize() ) )
 		{
-			kdDebug() << "The widget has not been moved. No copying" << endl;
+			kDebug() << "The widget has not been moved. No copying" << endl;
 			return true;
 		}
 
@@ -539,7 +539,7 @@ void
 Container::setSelectedWidget(QWidget *w, bool add, bool dontRaise)
 {
 	if (w)
-		kdDebug() << "slotSelectionChanged " << w->name()<< endl;
+		kDebug() << "slotSelectionChanged " << w->name()<< endl;
 
 	if(!w)
 	{
@@ -573,7 +573,7 @@ Container::deleteWidget(QWidget *w)
 {
 	if(!w)
 		return;
-//	kdDebug() << "Deleting a widget: " << w->name() << endl;
+//	kDebug() << "Deleting a widget: " << w->name() << endl;
 	m_form->objectTree()->removeItem(w->name());
 	FormManager::self()->deleteWidgetLater( w );
 	m_form->setSelectedWidget(m_container);
@@ -801,7 +801,7 @@ Container::createGridLayout(bool testOnly)
 				end = w->geometry().bottom();
 		}
 	}
-	kdDebug() << "the new grid will have n rows: n == " << rows.size() << endl;
+	kDebug() << "the new grid will have n rows: n == " << rows.size() << endl;
 
 	end = -10000;
 	same = false;
@@ -828,7 +828,7 @@ Container::createGridLayout(bool testOnly)
 				end = w->geometry().right();
 		}
 	}
-	kdDebug() << "the new grid will have n columns: n == " << cols.size() << endl;
+	kDebug() << "the new grid will have n columns: n == " << cols.size() << endl;
 
 	// We create the layout ..
 	QGridLayout *layout=0;
@@ -868,7 +868,7 @@ Container::createGridLayout(bool testOnly)
 			}
 			i++;
 		}
-		//kdDebug() << "the widget " << w->name() << " wil be in the row " << wrow <<
+		//kDebug() << "the widget " << w->name() << " wil be in the row " << wrow <<
 		   //" and will go to the row " << endrow << endl;
 
 		// .. and column(s)
@@ -895,7 +895,7 @@ Container::createGridLayout(bool testOnly)
 			}
 			i++;
 		}
-		//kdDebug() << "the widget " << w->name() << " wil be in the col " << wcol <<
+		//kDebug() << "the widget " << w->name() << " wil be in the col " << wcol <<
 		 // " and will go to the col " << endcol << endl;
 
 		ObjectTreeItem *item = m_form->objectTree()->lookup(w->name());
@@ -1114,14 +1114,14 @@ Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 		int tmpx = w->x() + realdx;
 		int tmpy = w->y() + realdy;
 		if(tmpx < 0)
-			dx = QMAX(0 - w->x(), dx); // because dx is <0
+			dx = qMax(0 - w->x(), dx); // because dx is <0
 		else if(tmpx > w->parentWidget()->width() - gridX)
-			dx = QMIN(w->parentWidget()->width() - gridX - w->x(), dx);
+			dx = qMin(w->parentWidget()->width() - gridX - w->x(), dx);
 
 		if(tmpy < 0)
-			dy = QMAX(0 - w->y(), dy); // because dy is <0
+			dy = qMax(0 - w->y(), dy); // because dy is <0
 		else if(tmpy > w->parentWidget()->height() - gridY)
-			dy = QMIN(w->parentWidget()->height() - gridY - w->y(), dy);
+			dy = qMin(w->parentWidget()->height() - gridY - w->y(), dy);
 	}
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())

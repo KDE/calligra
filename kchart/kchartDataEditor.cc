@@ -78,7 +78,7 @@ bool kchartDataSpinBox::eventFilter( QObject *obj, QEvent *ev )
 {
     if ( obj == editor() ) {
         if ( ev->type() == QEvent::FocusOut ) {
-            //kdDebug() << "Focus out" << endl;
+            //kDebug() << "Focus out" << endl;
             setValue(editor()->text().toInt());
 
             // Don't emit valueChangedSpecial(int) twice when
@@ -401,7 +401,7 @@ void kchartDataEditor::setData( KChartParams *params, KDChartTableData *dat )
 				     QString("%1").arg(t.toDouble()));
 		}
                 else if ( t.type() == QVariant::String )
-                    kdDebug(35001) << "I cannot handle strings in the table yet"
+                    kDebug(35001) << "I cannot handle strings in the table yet"
                                    << endl;
                 else {
                     // nothing on purpose
@@ -651,7 +651,7 @@ static int askUserForConfirmation(QWidget *parent)
 //
 void kchartDataEditor::setRows(int rows)
 {
-    kdDebug(35001) << "setRows called: rows = " << rows << endl;;
+    kDebug(35001) << "setRows called: rows = " << rows << endl;;
 
     // Sanity check.  This should never happen since the spinbox has a
     // minvalue of 1, but just to be sure...
@@ -706,7 +706,7 @@ void kchartDataEditor::setRows(int rows)
 //
 void kchartDataEditor::setCols(int cols)
 {
-    kdDebug(35001) << "setCols called: cols = " << cols << endl;;
+    kDebug(35001) << "setCols called: cols = " << cols << endl;;
 
     // Sanity check.  This should never happen since the spinbox has a
     // minvalue of 1, but just to be sure...

@@ -122,25 +122,25 @@ void KPrStartEndLine::load( const QDomElement &element )
 
 void KPrStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element )
 {
-    //kdDebug()<<"void KPrStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element ) :"<<attr<<endl;
+    //kDebug()<<"void KPrStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element ) :"<<attr<<endl;
 
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
     if ( styleStack.hasAttributeNS( KoXmlNS::draw,attr.latin1() ) )
     {
         QString style = styleStack.attributeNS( KoXmlNS::draw, attr.latin1() );
-        //kdDebug()<<" marker style is  : "<<style<<endl;
+        //kDebug()<<" marker style is  : "<<style<<endl;
 
         //type not defined by default
         //try to use style.
         QDomElement* draw = context.oasisStyles().drawStyles()[style];
-        //kdDebug()<<" marker have oasis style defined :"<<draw<<endl;
+        //kDebug()<<" marker have oasis style defined :"<<draw<<endl;
         if ( draw )
         {
             if( draw->hasAttributeNS( KoXmlNS::svg, "d" ))
             {
                 QString str = draw->attributeNS( KoXmlNS::svg, "d", QString::null );
-                kdDebug()<<" svg type = "<<str<<endl;
+                kDebug()<<" svg type = "<<str<<endl;
                 if ( str == lineEndBeginSvg( L_ARROW ) )
                     _element = L_ARROW;
                 else if ( str == lineEndBeginSvg( L_CIRCLE ) )
@@ -157,7 +157,7 @@ void KPrStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QS
                     _element = L_DOUBLE_LINE_ARROW;
                 else
                 {
-                    kdDebug()<<" element not defined :"<<str<<endl;
+                    kDebug()<<" element not defined :"<<str<<endl;
                     _element = L_NORMAL;
                 }
             }
@@ -342,10 +342,10 @@ void KPrObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
     xmlWriter.addAttributePt( "svg:width", ext.width() );
     xmlWriter.addAttributePt( "svg:height", ext.height() );
 
-    if ( kAbs( angle ) > 1E-6 )
+    if ( qAbs( angle ) > 1E-6 )
     {
         double angInRad = -angle * M_PI / 180.0;
-        QWMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+        QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
         KoPoint center( ext.width() / 2, ext.height() / 2 );
         double rotX = 0.0;
         double rotY = 0.0;
@@ -378,7 +378,7 @@ void KPrObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const
 
 QString KPrObject::getStyle( KPOasisSaveContext &sc ) const
 {
-    kdDebug(33001) << "KPrObject::getStyle" << endl;
+    kDebug(33001) << "KPrObject::getStyle" << endl;
     KoGenStyle styleObjectAuto;
     KoGenStyles &mainStyles( sc.context.mainStyles() );
     if ( sc.onMaster )
@@ -399,14 +399,14 @@ QString KPrObject::getStyle( KPOasisSaveContext &sc ) const
 
 void KPrObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /* mainStyles */ ) const
 {
-    kdDebug(33001) << "KPrObject::fillStyle" << endl;
+    kDebug(33001) << "KPrObject::fillStyle" << endl;
     saveOasisObjectProtectStyle( styleObjectAuto );
     saveOasisShadowElement( styleObjectAuto );
 }
 
 bool KPrObject::saveOasisObjectAttributes( KPOasisSaveContext &/* sc */ ) const
 {
-    kdDebug()<<"bool saveOasisObjectAttributes not implemented";
+    kDebug()<<"bool saveOasisObjectAttributes not implemented";
     return true;
 }
 
@@ -619,7 +619,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
     orig.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
     ext.setWidth(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null )) );
     ext.setHeight(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) ) );
-    //kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+    //kDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "" ); //no type default type
     if ( element.hasAttributeNS( KoXmlNS::draw, "transform" ) )
@@ -627,7 +627,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         // there is some more stuff in the spezification
         // TODO make it work for all cases
         QString transform = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
-        kdDebug()<<" transform action :"<<transform<<endl;
+        kDebug()<<" transform action :"<<transform<<endl;
         QRegExp rx( "rotate ?\\(([^)]+)\\) translate ?\\(([^ ]+) ([^)]+)\\)" );
         if ( rx.search( transform ) != - 1 && rx.numCaptures() == 3 )
         {
@@ -642,7 +642,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
                 angle = 0.0;
                 angInRad = 0.0;
             }
-            QWMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+            QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
             KoPoint center( ext.width() / 2, ext.height() / 2 );
             double transX = 0.0;
             double transY = 0.0;
@@ -650,7 +650,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             KoPoint diff( transX, transY );
             KoPoint trans( KoUnit::parseValue( rx.cap( 2 ) ), KoUnit::parseValue( rx.cap( 3 ) ) );
             orig = trans - center + diff;
-            kdDebug(33001) << "trans = " << trans << ", center = " << center << ", diff = " << diff << ", orig = " << orig << endl;
+            kDebug(33001) << "trans = " << trans << ", center = " << center << ", diff = " << diff << ", orig = " << orig << endl;
         }
     }
     QDomElement *animation = 0L;
@@ -668,7 +668,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         QString dir = animation->attributeNS( KoXmlNS::presentation, "direction", QString::null);
         QString speed = animation->attributeNS( KoXmlNS::presentation, "speed", QString::null );
         appearStep = tmp->order;
-        kdDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
+        kDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
 
         if ( speed =="medium" )
         {
@@ -683,7 +683,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             m_appearSpeed = ES_FAST;
         }
         else
-            kdDebug()<<" speed argument is not defined :"<<speed<<endl;
+            kDebug()<<" speed argument is not defined :"<<speed<<endl;
 
         if ( animation->hasAttributeNS( KoXmlNS::presentation, "animation-delay" ) )
         {
@@ -700,7 +700,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             else if (dir=="from-bottom")
                 effect = EF_WIPE_BOTTOM;
             else
-                kdDebug(33001)<<" dir not supported: " << dir << endl;
+                kDebug(33001)<<" dir not supported: " << dir << endl;
         }
         else if (effectStr=="move")
         {
@@ -721,7 +721,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             else if (dir=="from-lower-left")
                 effect = EF_COME_LEFT_BOTTOM;
             else
-                kdDebug(33001) << " dir not supported:" << dir << endl;
+                kDebug(33001) << " dir not supported:" << dir << endl;
         }
         else if ( effectStr == "appear" )
         {
@@ -729,7 +729,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         }
         else
         {
-            kdDebug(33001) << " appear effect not supported: " << effectStr << endl;
+            kDebug(33001) << " appear effect not supported: " << effectStr << endl;
             effect = EF_NONE;
         }
 
@@ -742,7 +742,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         QDomElement sound = KoDom::namedItemNS( *animation, KoXmlNS::presentation, "sound" );
         if ( !sound.isNull() )
         {
-            kdDebug()<<" object has sound effect \n";
+            kDebug()<<" object has sound effect \n";
             if ( sound.hasAttributeNS( KoXmlNS::xlink, "href" ) )
             {
                 a_fileName =sound.attributeNS( KoXmlNS::xlink, "href", QString::null );
@@ -765,7 +765,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         QString effectStr = animation->attributeNS( KoXmlNS::presentation, "effect", QString::null);
         QString dir = animation->attributeNS( KoXmlNS::presentation, "direction", QString::null);
         QString speed = animation->attributeNS( KoXmlNS::presentation, "speed", QString::null );
-        kdDebug()<<" disappear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
+        kDebug()<<" disappear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
         disappearStep = tmp->order;
 
         if ( speed =="medium" )
@@ -781,7 +781,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             m_disappearSpeed = ES_FAST;
         }
         else
-            kdDebug()<<" speed argument is not defined :"<<speed<<endl;
+            kDebug()<<" speed argument is not defined :"<<speed<<endl;
 
         if ( animation->hasAttributeNS( KoXmlNS::presentation, "animation-delay" ) )
         {
@@ -798,7 +798,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             else if (dir=="from-bottom")
                 effect3 = EF3_WIPE_BOTTOM;
             else
-                kdDebug(33001) << " dir not supported: " << dir << endl;
+                kDebug(33001) << " dir not supported: " << dir << endl;
         }
         else if (effectStr=="move")
         {
@@ -819,7 +819,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             else if (dir=="from-lower-left")
                 effect3 = EF3_GO_LEFT_BOTTOM;
             else
-                kdDebug(33001) << " dir not supported: " << dir << endl;
+                kDebug(33001) << " dir not supported: " << dir << endl;
         }
         else if ( effectStr == "hide" )
         {
@@ -827,7 +827,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         }
         else
         {
-            kdDebug(33001) << " hide effect not supported: " << effectStr << endl;
+            kDebug(33001) << " hide effect not supported: " << effectStr << endl;
             effect3 = EF3_NONE;
         }
 
@@ -836,7 +836,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         QDomElement sound = KoDom::namedItemNS( *animation, KoXmlNS::presentation, "sound" );
         if ( !sound.isNull() )
         {
-            kdDebug()<<" object has sound effect \n";
+            kDebug()<<" object has sound effect \n";
             if ( sound.hasAttributeNS( KoXmlNS::xlink, "href" ) )
             {
                 d_fileName =sound.attributeNS( KoXmlNS::xlink, "href", QString::null );
@@ -849,7 +849,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
     if ( !element.hasAttribute( "type" ) ||
          ( element.hasAttribute( "type" ) && element.attribute( "type" ) == "4" ) )
     {
-        kdDebug()<<" text document !!!!!\n";
+        kDebug()<<" text document !!!!!\n";
         if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-shadow" ) &&
              styleStack.attributeNS( KoXmlNS::fo, "text-shadow" ) != "none" )
         {
@@ -867,23 +867,23 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
     styleStack.setTypeProperties( "graphic" );
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "move-protect" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attributeNS( KoXmlNS::draw, "move-protect" )<<endl;
+        kDebug()<<" styleStack.attribute(draw:move-protect ) :"<<styleStack.attributeNS( KoXmlNS::draw, "move-protect" )<<endl;
         protect = ( styleStack.attributeNS( KoXmlNS::draw, "move-protect" ) == "true" );
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "size-protect" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attributeNS( KoXmlNS::draw, "size-protect" )<<endl;
+        kDebug()<<" styleStack.attribute(draw:size-protect ) :"<<styleStack.attributeNS( KoXmlNS::draw, "size-protect" )<<endl;
         protect = ( styleStack.attributeNS( KoXmlNS::draw, "size-protect" ) == "true" );
     }
 
     //not supported into kpresenter
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-vertical-align" ) )
     {
-        kdDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attributeNS( KoXmlNS::draw, "textarea-vertical-align" )<<endl;
+        kDebug()<<" styleStack.attribute(draw:textarea-vertical-align ) :"<<styleStack.attributeNS( KoXmlNS::draw, "textarea-vertical-align" )<<endl;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "textarea-horizontal-align") )
     {
-        kdDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attributeNS( KoXmlNS::draw, "textarea-horizontal-align" )<<endl;
+        kDebug()<<" styleStack.attribute(draw:textarea-horizontal-align ) :"<<styleStack.attributeNS( KoXmlNS::draw, "textarea-horizontal-align" )<<endl;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "shadow" ) &&
               styleStack.attributeNS( KoXmlNS::draw, "shadow") == "visible" )
@@ -891,7 +891,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         // use the shadow attribute to indicate an object-shadow
         double x = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::draw, "shadow-offset-x" ) );
         double y = KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::draw, "shadow-offset-y" ) );
-        kdDebug()<<" shadow x : "<<x<<" shadow y :"<<y<<endl;
+        kDebug()<<" shadow x : "<<x<<" shadow y :"<<y<<endl;
         if ( x < 0 && y < 0 )
         {
             shadowDirection = SD_LEFT_UP;
@@ -934,7 +934,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         }
         if ( styleStack.hasAttributeNS( KoXmlNS::draw, "shadow-color" ) )
             shadowColor= QColor(styleStack.attributeNS( KoXmlNS::draw, "shadow-color" ) );
-        kdDebug()<<" shadow color : "<<shadowColor.name()<<endl;
+        kDebug()<<" shadow color : "<<shadowColor.name()<<endl;
     }
 }
 
@@ -1223,7 +1223,7 @@ KoRect KPrObject::rotateRectObject() const
     double yPos = -rr.y();
     double xPos = -rr.x();
     rr.moveTopLeft( KoPoint( -rr.width() / 2.0, -rr.height() / 2.0 ) );
-    QWMatrix m;
+    QMatrix m;
     m.translate( pw / 2.0, ph / 2.0 );
     m.rotate( angle );
     m.translate( rr.left() + xPos, rr.top() + yPos );
@@ -1236,12 +1236,12 @@ void KPrObject::rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler)
 {
     KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
     rr.moveTopLeft( KoPoint( -ext.width() / 2.0, -ext.height() / 2.0 ) );
-    QWMatrix m;
+    QMatrix m;
     m.translate( _zoomHandler->zoomItX(ext.width() / 2.0), _zoomHandler->zoomItY(ext.height() / 2.0 ));
     m.rotate( angle );
     m.translate( _zoomHandler->zoomItX(rr.left()), _zoomHandler->zoomItY(rr.top()) );
 
-    paint->setWorldMatrix( m, true );
+    paint->setMatrix( m, true );
 }
 
 bool KPrObject::contains( const KoPoint &point ) const
@@ -1270,75 +1270,75 @@ QCursor KPrObject::getCursor( const KoPoint &_point, ModifyType &_modType,
     bool headerFooter=doc->isHeaderFooter(this);
 
     int sz = 4;
-    if ( px >= ox && py >= oy && px <= ox + QMIN( ow / 3, sz ) && py <= oy + QMIN( oh / 3, sz ) )
+    if ( px >= ox && py >= oy && px <= ox + qMin( ow / 3, sz ) && py <= oy + qMin( oh / 3, sz ) )
     {
         _modType = MT_RESIZE_LU;
         if ( protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeFDiagCursor;
+        return Qt::SizeFDiagCursor;
     }
 
-    if ( px >= ox && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 )
-         && px <= ox + QMIN( ow / 3, sz)
-         && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2 ) )
+    if ( px >= ox && py >= oy + oh / 2 - qMin( oh / 6, sz / 2 )
+         && px <= ox + qMin( ow / 3, sz)
+         && py <= oy + oh / 2 + qMin( oh / 6, sz / 2 ) )
     {
         _modType = MT_RESIZE_LF;
         if ( protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeHorCursor;
+        return Qt::SizeHorCursor;
     }
 
-    if ( px >= ox && py >= oy + oh - QMIN( oh / 3, sz ) && px <= ox + QMIN( ow / 3, sz ) && py <= oy + oh )
+    if ( px >= ox && py >= oy + oh - qMin( oh / 3, sz ) && px <= ox + qMin( ow / 3, sz ) && py <= oy + oh )
     {
         _modType = MT_RESIZE_LD;
         if ( protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeBDiagCursor;
+        return Qt::SizeBDiagCursor;
     }
 
-    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy
-         && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 )
-         && py <= oy + QMIN( oh / 3, sz ) )
+    if ( px >= ox + ow / 2 - qMin( ow / 6, sz / 2 ) && py >= oy
+         && px <= ox + ow / 2 + qMin( ow / 6, sz / 2 )
+         && py <= oy + qMin( oh / 3, sz ) )
     {
         _modType = MT_RESIZE_UP;
         if ( protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeVerCursor;
+        return Qt::SizeHorCursor;
     }
 
-    if ( px >= ox + ow / 2 - QMIN( ow / 6, sz / 2 ) && py >= oy + oh - QMIN( oh / 3, sz )
-         && px <= ox + ow / 2 + QMIN( ow / 6, sz / 2 ) && py <= oy + oh )
+    if ( px >= ox + ow / 2 - qMin( ow / 6, sz / 2 ) && py >= oy + oh - qMin( oh / 3, sz )
+         && px <= ox + ow / 2 + qMin( ow / 6, sz / 2 ) && py <= oy + oh )
     {
         _modType = MT_RESIZE_DN;
         if ( protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeVerCursor;
+        return Qt::SizeHorCursor;
     }
 
-    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy && px <= ox + ow && py <= oy + QMIN( oh / 3, sz) )
+    if ( px >= ox + ow - qMin( ow / 3, sz ) && py >= oy && px <= ox + ow && py <= oy + qMin( oh / 3, sz) )
     {
         _modType = MT_RESIZE_RU;
         if ( protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeBDiagCursor;
+        return Qt::SizeBDiagCursor;
     }
 
-    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh / 2 - QMIN( oh / 6, sz / 2 )
-         && px <= ox + ow && py <= oy + oh / 2 + QMIN( oh / 6, sz / 2) )
+    if ( px >= ox + ow - qMin( ow / 3, sz ) && py >= oy + oh / 2 - qMin( oh / 6, sz / 2 )
+         && px <= ox + ow && py <= oy + oh / 2 + qMin( oh / 6, sz / 2) )
     {
         _modType = MT_RESIZE_RT;
         if ( protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeHorCursor;
+        return Qt::SizeHorCursor;
     }
 
-    if ( px >= ox + ow - QMIN( ow / 3, sz ) && py >= oy + oh - QMIN( oh / 3, sz)
+    if ( px >= ox + ow - qMin( ow / 3, sz ) && py >= oy + oh - qMin( oh / 3, sz)
          && px <= ox + ow && py <= oy + oh )
     {
         _modType = MT_RESIZE_RD;
         if ( protect)
             return Qt::ForbiddenCursor;
-        return Qt::sizeFDiagCursor;
+        return Qt::SizeFDiagCursor;
     }
 
     //header footer can't move
@@ -1347,7 +1347,7 @@ QCursor KPrObject::getCursor( const KoPoint &_point, ModifyType &_modType,
     if ( protect )
         return Qt::ForbiddenCursor;
     else
-        return Qt::sizeAllCursor;
+        return Qt::SizeAllCursor;
 }
 
 void KPrObject::getShadowCoords( double& _x, double& _y ) const
@@ -1746,8 +1746,8 @@ bool KPrShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSa
             listOfPoint += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
         else
             listOfPoint = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
-        maxX = QMAX( maxX, tmpX );
-        maxY = QMAX( maxY, tmpY );
+        maxX = qMax( maxX, tmpX );
+        maxY = qMax( maxY, tmpY );
     }
     sc.xmlWriter.addAttribute("draw:points", listOfPoint );
     sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
@@ -1773,7 +1773,7 @@ bool KPrShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomEleme
 
 bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPointArray &points )
 {
-    kdDebug(33001) << "loadOasisApplayViewBox svg:viewBox = " << element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) << endl;
+    kDebug(33001) << "loadOasisApplayViewBox svg:viewBox = " << element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) << endl;
     QStringList viewBoxPoints = QStringList::split( ' ', element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
 
     KoRect viewBox;
@@ -1786,7 +1786,7 @@ bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPoint
         viewBox.setRight( ( *it++ ).toInt() );
         viewBox.setBottom( ( *it ).toInt() );
         
-        kdDebug(33001) << "viewBox supplied = " << viewBox << endl;
+        kDebug(33001) << "viewBox supplied = " << viewBox << endl;
     }
     else
     {
@@ -1803,13 +1803,13 @@ bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPoint
             }
             else
             {
-                viewBox.setLeft( QMIN( viewBox.left(), p.x() ) );
-                viewBox.setRight( QMAX( viewBox.right(), p.x() ) );
-                viewBox.setTop( QMIN( viewBox.top(), p.y() ) );
-                viewBox.setBottom( QMAX( viewBox.bottom(), p.y() ) );
+                viewBox.setLeft( qMin( viewBox.left(), p.x() ) );
+                viewBox.setRight( qMax( viewBox.right(), p.x() ) );
+                viewBox.setTop( qMin( viewBox.top(), p.y() ) );
+                viewBox.setBottom( qMax( viewBox.bottom(), p.y() ) );
             }
         }
-        kdDebug(33001) << "viewBox calculated = " << viewBox << endl;
+        kDebug(33001) << "viewBox calculated = " << viewBox << endl;
     }
 
     if ( viewBox.width() != 0 && viewBox.height() != 0 )
@@ -1824,7 +1824,7 @@ bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPoint
     }
     else
     {
-        kdDebug(33001) << "problem in viewBox: " << viewBox << endl;
+        kDebug(33001) << "problem in viewBox: " << viewBox << endl;
     }
     return true;
 }
@@ -1832,14 +1832,14 @@ bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPoint
 
 void KPrShadowObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    kdDebug(33001) << "KPrShadowObject::fillStyle" << endl;
+    kDebug(33001) << "KPrShadowObject::fillStyle" << endl;
     KPrObject::fillStyle( styleObjectAuto, mainStyles );
     saveOasisStrokeElement( mainStyles, styleObjectAuto );
 }
 
 void KPrShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    //kdDebug()<<"void KPrShadowObject::loadOasis(const QDomElement &element)**********************\n";
+    //kDebug()<<"void KPrShadowObject::loadOasis(const QDomElement &element)**********************\n";
     KPrObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
@@ -1853,11 +1853,11 @@ void KPrShadowObject::loadOasis(const QDomElement &element, KoOasisContext & con
         {
             QString style = styleStack.attributeNS( KoXmlNS::draw, "stroke-dash" );
 
-            kdDebug()<<" stroke style is  : "<<style<<endl;
+            kDebug()<<" stroke style is  : "<<style<<endl;
             //type not defined by default
             //try to use style.
             QDomElement* draw = context.oasisStyles().drawStyles()[style];
-            kdDebug()<<" stroke have oasis style defined :"<<draw<<endl;
+            kDebug()<<" stroke have oasis style defined :"<<draw<<endl;
             if ( draw )
             {
                 //FIXME
@@ -1885,7 +1885,7 @@ void KPrShadowObject::loadOasis(const QDomElement &element, KoOasisContext & con
                         pen.setStyle(Qt::DashDotDotLine );
                     else
                     {
-                        kdDebug()<<" stroke style undefined \n";
+                        kDebug()<<" stroke style undefined \n";
                         pen.setStyle(Qt::SolidLine );
                     }
 
@@ -1900,7 +1900,7 @@ void KPrShadowObject::loadOasis(const QDomElement &element, KoOasisContext & con
     }
     else
         pen = defaultPen();
-    kdDebug()<<"pen style :"<<pen<<endl;
+    kDebug()<<"pen style :"<<pen<<endl;
 }
 
 double KPrShadowObject::load(const QDomElement &element)
@@ -2038,7 +2038,7 @@ QDomDocumentFragment KPr2DObject::save( QDomDocument& doc,double offset )
 
 void KPr2DObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    kdDebug(33001) << "KPr2DObject::fillStyle" << endl;
+    kDebug(33001) << "KPr2DObject::fillStyle" << endl;
     KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
     m_brush.saveOasisFillStyle( styleObjectAuto, mainStyles );
 }
@@ -2046,7 +2046,7 @@ void KPr2DObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyle
 
 void KPr2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    kdDebug()<<"void KPr2DObject::loadOasis(const QDomElement &element)\n";
+    kDebug()<<"void KPr2DObject::loadOasis(const QDomElement &element)\n";
     QBrush tmpBrush;
 
     KPrShadowObject::loadOasis(element, context, info);

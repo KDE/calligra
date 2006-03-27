@@ -185,7 +185,7 @@ protected:
   void prepareCell(Cell*);
 
 private:
-  Q_UINT32 m_properties;
+  quint32 m_properties;
 
   // TODO Stefan: find a more elegant way to store the format
   Q3ValueList<layoutCell> m_lstFormats;

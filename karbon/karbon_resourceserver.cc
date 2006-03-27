@@ -52,10 +52,10 @@
 
 KarbonResourceServer::KarbonResourceServer()
 {
-	kdDebug(38000) << "-- Karbon ResourceServer --" << endl;
+	kDebug(38000) << "-- Karbon ResourceServer --" << endl;
 
 	// PATTERNS
-	kdDebug(38000) << "Loading patterns:" << endl;
+	kDebug(38000) << "Loading patterns:" << endl;
 	m_patterns.setAutoDelete( true );
 
 	// image formats
@@ -80,14 +80,14 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	{
 		file = *it;
-		kdDebug(38000) << " - " << file << endl;
+		kDebug(38000) << " - " << file << endl;
 		loadPattern( file );
 	}
 
-	kdDebug(38000) << m_patterns.count() << " patterns loaded." << endl;
+	kDebug(38000) << m_patterns.count() << " patterns loaded." << endl;
 
 	// GRADIENTS
-	kdDebug(38000) << "Loading gradients:" << endl;
+	kDebug(38000) << "Loading gradients:" << endl;
 	m_gradients = new QPtrList<VGradientListItem>();
 	m_gradients->setAutoDelete( true );
 
@@ -109,14 +109,14 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	{
 		file = *it;
-		kdDebug(38000) << " - " << file << endl;
+		kDebug(38000) << " - " << file << endl;
 		loadGradient( file );
 	}
 
-	kdDebug(38000) << m_gradients->count() << " gradients loaded." << endl;
+	kDebug(38000) << m_gradients->count() << " gradients loaded." << endl;
 
 	// CLIPARTS
-	kdDebug(38000) << "Loading cliparts:" << endl;
+	kDebug(38000) << "Loading cliparts:" << endl;
 	m_cliparts = new QPtrList<VClipartIconItem>();
 	m_cliparts->setAutoDelete( true );
 
@@ -138,13 +138,13 @@ KarbonResourceServer::KarbonResourceServer()
 	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	{
 		file = *it;
-		kdDebug(38000) << " - " << file << endl;
+		kDebug(38000) << " - " << file << endl;
 		loadClipart( file );
 	}
 
 	m_pixmaps.setAutoDelete( true );
 
-	kdDebug(38000) << m_cliparts->count() << " cliparts loaded." << endl;
+	kDebug(38000) << m_cliparts->count() << " cliparts loaded." << endl;
 } // KarbonResourceServer::KarbonResourceServer
 
 KarbonResourceServer::~KarbonResourceServer()
@@ -197,14 +197,14 @@ KarbonResourceServer::addPattern( const QString& tilename )
 	{
 		filename = KarbonFactory::instance()->dirs()->saveLocation("kis_pattern" ) + name + i + ext;
 		fi.setFile( filename );
-		kdDebug(38000) << fi.fileName() << endl;
+		kDebug(38000) << fi.fileName() << endl;
 	}
 
 	char buffer[ 1024 ];
 	QFile in( tilename );
-	in.open( IO_ReadOnly );
+	in.open( QIODevice::ReadOnly );
 	QFile out( filename );
-	out.open( IO_WriteOnly );
+	out.open( QIODevice::WriteOnly );
 
 	while( !in.atEnd() )
 		out.writeBlock( buffer, in.readBlock( buffer, 1024 ) );
@@ -245,7 +245,7 @@ KarbonResourceServer::addGradient( VGradient* gradient )
 	{
 		sprintf( buffer, "%04d.kgr", i++ );
 		fi.setFile( KarbonFactory::instance()->dirs()->saveLocation( "karbon_gradient" ) + buffer );
-		kdDebug(38000) << fi.fileName() << endl;
+		kDebug(38000) << fi.fileName() << endl;
 	}
 
 	QString filename = KarbonFactory::instance()->dirs()->saveLocation( "karbon_gradient" ) + buffer;
@@ -355,7 +355,7 @@ KarbonResourceServer::saveGradient( VGradient* gradient, const QString& filename
 	doc.appendChild( me );
 	gradient->save( me );
 
-	if( !( file.open( IO_WriteOnly ) ) )
+	if( !( file.open( QIODevice::WriteOnly ) ) )
 		return ;
 
 	QTextStream ts( &file );
@@ -401,7 +401,7 @@ KarbonResourceServer::loadClipart( const QString& filename )
 {
 	QFile f( filename );
 
-	if( f.open( IO_ReadOnly ) )
+	if( f.open( QIODevice::ReadOnly ) )
 	{
 		QDomDocument doc;
 
@@ -475,7 +475,7 @@ KarbonResourceServer::saveClipart( VObject* clipart, double width, double height
 	me.setAttribute( "height", height );
 	clipart->save( me );
 
-	if( !( file.open( IO_WriteOnly ) ) )
+	if( !( file.open( QIODevice::WriteOnly ) ) )
 		return ;
 
 	QTextStream ts( &file );
@@ -507,7 +507,7 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 
 	m_pixmap.resize( 64, 64 );
 	VKoPainter p( &m_pixmap, 64, 64 );
-	QWMatrix mat( 64., 0, 0, 64., 0, 0 );
+	QMatrix mat( 64., 0, 0, 64., 0, 0 );
 
 	VTransformCmd trafo( 0L, mat );
 	trafo.visit( *m_clipart );

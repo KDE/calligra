@@ -95,7 +95,7 @@ void KexiCharacterEncodingComboBox::setSelectedEncoding(const QString& encodingN
 {
 	QString desc = m_encodingDescriptionForName[encodingName];
 	if (desc.isEmpty()) {
-		kdWarning() << "KexiCharacterEncodingComboBox::setSelectedEncoding(): "
+		kWarning() << "KexiCharacterEncodingComboBox::setSelectedEncoding(): "
 			"no such encoding \"" << encodingName << "\"" << endl;
 		return;
 	}

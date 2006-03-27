@@ -54,11 +54,11 @@ DCOPRef MapIface::sheetByIndex( int index )
     Sheet* t = m_map->sheetList().at( index );
     if ( !t )
     {
-        kdDebug(36001) << "+++++ No table found at index " << index << endl;
+        kDebug(36001) << "+++++ No table found at index " << index << endl;
         return DCOPRef();
     }
 
-    kdDebug(36001) << "+++++++ Returning table " << t->QObject::name() << endl;
+    kDebug(36001) << "+++++++ Returning table " << t->QObject::name() << endl;
 
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
@@ -119,7 +119,7 @@ bool MapIface::processDynamic(const QCString &fun, const QByteArray &/*data*/,
         return false;
 
     replyType = "DCOPRef";
-    QDataStream out( replyData, IO_WriteOnly );
+    QDataStream out( replyData, QIODevice::WriteOnly );
     out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
     return true;
 }

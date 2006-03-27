@@ -17,7 +17,7 @@ int parserTest(const char *st)
 	}
 	else {
 		KexiDB::ParserError	err = parser.error();
-		kdDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.error())
+		kDebug() << QString("Error = %1\ntype = %2\nat = %3").arg(err.error())
 			.arg(err.type()).arg(err.at()) << endl;
 		r = 1;
 	}

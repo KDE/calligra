@@ -47,7 +47,7 @@ KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
 {
   delete m_pSpawners;
   m_pSpawners = NULL;
-  kdDebug(43000) << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - " <<  m_name << endl;
+  kDebug(43000) << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - " <<  m_name << endl;
 }
 
 
@@ -163,9 +163,9 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
   QString title, origTitle;
   QFile f(dir+"/desc");
 
-  if( f.open( IO_ReadOnly )==false )
+  if( f.open( QIODevice::ReadOnly )==false )
   {
-    kdDebug(43000) << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set title: " <<
+    kDebug(43000) << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set title: " <<
         dir << "/desc" << endl;
     return dir.right(dir.length() - dir.findRev('/')-1);
   }
@@ -210,9 +210,9 @@ QString KivioStencilSpawnerSet::readId( const QString &dir )
   QString theid;
   QFile f(dir+"/desc");
 
-  if( f.open( IO_ReadOnly )==false )
+  if( f.open( QIODevice::ReadOnly )==false )
   {
-    kdDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
+    kDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
         dir << "/desc" << endl;
     return "";
   }
@@ -235,7 +235,7 @@ QString KivioStencilSpawnerSet::readId( const QString &dir )
     node = node.nextSibling();
   }
 
-  kdDebug(43000) << "KivioStencilSpawnerSet::readId() - No id found in "
+  kDebug(43000) << "KivioStencilSpawnerSet::readId() - No id found in "
   << dir << "/desc" << endl;
 
   return "";
@@ -249,9 +249,9 @@ QString KivioStencilSpawnerSet::readDescription(const QString& dir)
   QString nodeName;
   QFile f(dir + "/desc");
 
-  if( f.open( IO_ReadOnly )==false )
+  if( f.open( QIODevice::ReadOnly )==false )
   {
-    kdDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
+    kDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
       dir << "/desc" << endl;
     return "";
   }

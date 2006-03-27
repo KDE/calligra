@@ -401,11 +401,11 @@
 <functions>
     <function access="private">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
-    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueMilliseconds( Q_INT64 milliseconds )</function>
-    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueSeconds( Q_INT64 seconds )</function>
-    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueMinutes( Q_INT64 mins )</function>
-    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueHours( Q_INT64 mins )</function>
-    <function access="private" specifier="non virtual" returnType="Q_INT64">setValueDays( Q_INT64 mins )</function>
+    <function access="private" specifier="non virtual" returnType="qint64">setValueMilliseconds( qint64 milliseconds )</function>
+    <function access="private" specifier="non virtual" returnType="qint64">setValueSeconds( qint64 seconds )</function>
+    <function access="private" specifier="non virtual" returnType="qint64">setValueMinutes( qint64 mins )</function>
+    <function access="private" specifier="non virtual" returnType="qint64">setValueHours( qint64 mins )</function>
+    <function access="private" specifier="non virtual" returnType="qint64">setValueDays( qint64 mins )</function>
     <function returnType="Duration">value() const</function>
     <function>setVisibleFields( int fieldMask )</function>
     <function returnType="int">visibleFields()</function>

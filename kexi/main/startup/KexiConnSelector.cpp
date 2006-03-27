@@ -36,7 +36,7 @@
 #include <kconfig.h>
 #include <kurlcombobox.h>
 #include <ktoolbar.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <kactionclasses.h>
 
@@ -91,7 +91,7 @@ public:
 	KexiPrjTypeSelector* prjTypeSelector;
 	QString startDirOrVariable;
 	QWidgetStack *stack;
-	QGuardedPtr<KexiDBConnectionSet> conn_set;
+	QPointer<KexiDBConnectionSet> conn_set;
 	KexiDB::DriverManager manager;
 	bool conn_sel_shown;//! helper
 	bool file_sel_shown;
@@ -192,7 +192,7 @@ void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
 				addConnectionData( it.current() );
 	//			else {
 	//this error should be more verbose:
-	//				kdWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << it.current()->driverName << "'!" << endl;
+	//				kWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << it.current()->driverName << "'!" << endl;
 	//			}
 			}
 			if (m_remote->list->firstChild()) {

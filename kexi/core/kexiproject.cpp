@@ -73,8 +73,8 @@ class KexiProject::Private
 			delete sqlParser;
 		}
 
-		QGuardedPtr<KexiDB::Connection> connection;
-		QGuardedPtr<KexiProjectData> data;
+		QPointer<KexiDB::Connection> connection;
+		QPointer<KexiProjectData> data;
 		
 		QString error_title;
 
@@ -130,7 +130,7 @@ KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler
 	if (d->data->connectionData() == d->connection->data())
 		d->connection = conn;
 	else
-		kdWarning() << "KexiProject::KexiProject(): passed connection's data ("
+		kWarning() << "KexiProject::KexiProject(): passed connection's data ("
 			<< conn->data()->serverInfoString() << ") is not compatible with project's conn. data ("
 			<< d->data->connectionData()->serverInfoString() << ")" << endl;
 //! @todo partmanager is outside project, so can be initialised just once:
@@ -190,12 +190,12 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
 {
 	if (incompatibleWithKexi)
 		*incompatibleWithKexi = false;
-	kdDebug() << "KexiProject::open(): " << d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
+	kDebug() << "KexiProject::open(): " << d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
 	KexiDB::MessageTitle et(this, 
 		i18n("Could not open project \"%1\".").arg(d->data->databaseName()));
 	
 	if (!createConnection()) {
-		kdDebug() << "KexiProject::open(): !createConnection()" << endl;
+		kDebug() << "KexiProject::open(): !createConnection()" << endl;
 		return false;
 	}
 	bool cancel = false;
@@ -205,7 +205,7 @@ KexiProject::openInternal(bool *incompatibleWithKexi)
 		if (cancel) {
 			return cancelled;
 		}
-		kdDebug() << "KexiProject::open(): !d->connection->useDatabase() " 
+		kDebug() << "KexiProject::open(): !d->connection->useDatabase() " 
 			<< d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
 
 		if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
@@ -244,23 +244,23 @@ KexiProject::create(bool forceOverwrite)
 			closeConnection();
 			return false;
 		}
-		kdDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---"<< endl;
+		kDebug() << "--- DB '" << d->data->databaseName() << "' dropped ---"<< endl;
 	}
 	if (!d->connection->createDatabase( d->data->databaseName() )) {
 		setError(d->connection);
 		closeConnection();
 		return false;
 	}
-	kdDebug() << "--- DB '" << d->data->databaseName() << "' created ---"<< endl;
+	kDebug() << "--- DB '" << d->data->databaseName() << "' created ---"<< endl;
 	// and now: open
 	if (!d->connection->useDatabase(d->data->databaseName()))
 	{
-		kdDebug() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---"<< endl;
+		kDebug() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---"<< endl;
 		setError(d->connection);
 		closeConnection();
 		return false;
 	}
-	kdDebug() << "--- DB '" << d->data->databaseName() << "' used ---"<< endl;
+	kDebug() << "--- DB '" << d->data->databaseName() << "' used ---"<< endl;
 
 	//<add some data>
 	KexiDB::Transaction trans = d->connection->beginTransaction();
@@ -435,7 +435,7 @@ KexiProject::createConnection()
 	d->connection = driver->createConnection(*d->data->connectionData());
 	if (!d->connection)
 	{
-		kdDebug() << "KexiProject::open(): uuups failed " << driver->errorMsg()  << endl;
+		kDebug() << "KexiProject::open(): uuups failed " << driver->errorMsg()  << endl;
 		setError(driver);
 		return false;
 	}
@@ -443,7 +443,7 @@ KexiProject::createConnection()
 	if (!d->connection->connect())
 	{
 		setError(d->connection);
-		kdDebug() << "KexiProject::createConnection(): error connecting: " << (d->connection ? d->connection->errorMsg() : QString::null) << endl;
+		kDebug() << "KexiProject::createConnection(): error connecting: " << (d->connection ? d->connection->errorMsg() : QString::null) << endl;
 		closeConnection();
 		return false;
 	}
@@ -469,7 +469,7 @@ bool
 KexiProject::initProject()
 {
 //	emit dbAvailable();
-	kdDebug() << "KexiProject::open(): checking project parts..." << endl;
+	kDebug() << "KexiProject::open(): checking project parts..." << endl;
 	
 	if (!Kexi::partManager().checkProject(d->connection)) {
 		setError(Kexi::partManager().error() ? (KexiDB::Object*)&Kexi::partManager() : (KexiDB::Connection*)d->connection);
@@ -506,7 +506,7 @@ KexiProject::isConnected()
 KexiPart::ItemDict*
 KexiProject::items(KexiPart::Info *i)
 {
-	kdDebug() << "KexiProject::items()" << endl;
+	kDebug() << "KexiProject::items()" << endl;
 	if(!i || !isConnected())
 		return 0;
 
@@ -518,7 +518,7 @@ KexiProject::items(KexiPart::Info *i)
 	KexiDB::Cursor *cursor = d->connection->executeQuery(
 		"SELECT o_id, o_name, o_caption  FROM kexi__objects WHERE o_type = " 
 		+ QString::number(i->projectPartID()));//, KexiDB::Cursor::Buffered);
-//	kdDebug() << "KexiProject::items(): cursor handle is:" << cursor << endl;
+//	kDebug() << "KexiProject::items(): cursor handle is:" << cursor << endl;
 	if(!cursor)
 		return 0;
 
@@ -541,11 +541,11 @@ KexiProject::items(KexiPart::Info *i)
 			it->setCaption(cursor->value(2).toString());
 		}
 		dict->insert(it->identifier(), it);
-//		kdDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident<<endl;
+//		kDebug() << "KexiProject::items(): ITEM ADDED == "<<objName <<" id="<<ident<<endl;
 	}
 
 	d->connection->deleteCursor(cursor);
-//	kdDebug() << "KexiProject::items(): end with count " << dict->count() << endl;
+//	kDebug() << "KexiProject::items(): end with count " << dict->count() << endl;
 	d->itemDictsCache.insert( i->projectPartID(), dict );
 	return dict;
 }
@@ -756,7 +756,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 {
 	KexiUtils::WaitCursor wait;
 	clearError();
-	QString newName = _newName.stripWhiteSpace();
+	QString newName = _newName.trimmed();
 	{
 		KexiDB::MessageTitle et(this);
 		if (newName.isEmpty()) {
@@ -921,7 +921,7 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 		delete prj;
 		return 0;
 	}
-	kdDebug() << "KexiProject::createBlankProject(): new project created --- " << endl;
+	kDebug() << "KexiProject::createBlankProject(): new project created --- " << endl;
 //todo?	Kexi::recentProjects().addProjectData( data );
 
 	return prj;

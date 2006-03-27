@@ -81,7 +81,7 @@ public:
 	;
 #else
 	{
-//		kdDebug() << "^^^^^^^^^^^^^^^^^^^^^ separatorPosInPercent() " << separatorPos() / (factor/100) << " " << separatorPos() / 100 << endl;
+//		kDebug() << "^^^^^^^^^^^^^^^^^^^^^ separatorPosInPercent() " << separatorPos() / (factor/100) << " " << separatorPos() / 100 << endl;
 		return separatorPos() / 100;
 	}
 #endif
@@ -94,7 +94,7 @@ public:
 	;
 #else
 	{
-//		kdDebug() << "^^^^^^^^^^^^^^^^^^^^^ setSeparatorPosInPercent() " << percent << " " << separatorPos() / 100 << endl;
+//		kDebug() << "^^^^^^^^^^^^^^^^^^^^^ setSeparatorPosInPercent() " << percent << " " << separatorPos() / 100 << endl;
 		setSeparatorPos( percent * 100, false );
 	}
 #endif

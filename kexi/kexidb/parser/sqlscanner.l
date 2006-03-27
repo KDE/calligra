@@ -259,7 +259,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 }
 
 {identifier} {
-	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+	kDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
 	strncpy(yylval.stringValue, yytext, yyleng + 1);
 	if (yytext[0]>='0' && yytext[0]<='9') {
@@ -272,7 +272,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 }
 
 {quoted_identifier} {
-	kdDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
+	kDebug() << "yytext: '" << yytext << "' (" << yyleng << ")" << endl;
 	ECOUNT;
 	strncpy(yylval.stringValue, yytext + 1, yyleng - 1);
 	yylval.stringValue[yyleng - 2] = 0x00;
@@ -290,7 +290,7 @@ real				((({digit}*\.{digit}+)|({digit}+\.{digit}*)|({digit}+))([Ee][-+]?{digit}
 }
 
 [\~\!\@\#\^\&\|\`\?,()\[\]\.;\:\+\-\*\/\%\^\<\>\=] {
-	kdDebug() << "char: '" << yytext[0] << "'" << endl;
+	kDebug() << "char: '" << yytext[0] << "'" << endl;
 	ECOUNT;
 	return yytext[0];
 }

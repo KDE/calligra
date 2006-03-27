@@ -32,8 +32,8 @@ class QListViewItem;
 class QLabel;
 class QPushButton;
 
-class KListView;
-class KListViewItem;
+class K3ListView;
+class K3ListViewItem;
 class KPrinter;
 
 namespace KPlato

@@ -67,7 +67,7 @@ VRuler::~VRuler()
     delete m_pixmapBuffer;
 }
 
-void VRuler::initMarker(Q_INT32 w, Q_INT32 h)
+void VRuler::initMarker(qint32 w, qint32 h)
 {
     QPainter p;
 
@@ -81,8 +81,8 @@ void VRuler::initMarker(Q_INT32 w, Q_INT32 h)
 
 void VRuler::recalculateSize()
 {
-    Q_INT32 w;
-    Q_INT32 h;
+    qint32 w;
+    qint32 h;
 
     if (m_pixmapBuffer) {
         delete m_pixmapBuffer;
@@ -126,7 +126,7 @@ void VRuler::setZoom(double zoom)
     repaint();
 }
 
-void VRuler::updatePointer(Q_INT32 x, Q_INT32 y)
+void VRuler::updatePointer(qint32 x, qint32 y)
 {
     if (m_pixmapBuffer) {
         if (m_orientation == Qt::Horizontal) {
@@ -149,18 +149,18 @@ void VRuler::updatePointer(Q_INT32 x, Q_INT32 y)
     }
 }
 
-void VRuler::updateVisibleArea(Q_INT32 xpos, Q_INT32 ypos)
+void VRuler::updateVisibleArea(qint32 xpos, qint32 ypos)
 {
     if (m_orientation == Qt::Horizontal)
         m_firstVisible = xpos;
     else
         m_firstVisible = ypos;
 
-	//kdDebug() << "--###-- VRuler::updateVisibleArea(" << xpos << ", " << ypos << ")" << endl;
+	//kDebug() << "--###-- VRuler::updateVisibleArea(" << xpos << ", " << ypos << ")" << endl;
     drawRuler();
     repaint();
     updatePointer(m_currentPosition, m_currentPosition);
-	//kdDebug() << "--###-- VRuler::updatePointer(" << m_currentPosition << ", " << m_currentPosition << ")" << endl;
+	//kDebug() << "--###-- VRuler::updatePointer(" << m_currentPosition << ", " << m_currentPosition << ")" << endl;
 }
 
 void VRuler::paintEvent(QPaintEvent *e)
@@ -177,11 +177,11 @@ void VRuler::drawRuler()
 {
     QPainter p;
     QString buf;
-    Q_INT32 st1 = 0;
-    Q_INT32 st2 = 0;
-    Q_INT32 st3 = 0;
-    Q_INT32 st4 = 0;
-    Q_INT32 stt = 0;
+    qint32 st1 = 0;
+    qint32 st2 = 0;
+    qint32 st3 = 0;
+    qint32 st4 = 0;
+    qint32 stt = 0;
 
     if (!m_pixmapBuffer)
         return;
@@ -215,7 +215,7 @@ void VRuler::drawRuler()
             break;
     }
 
-    Q_INT32 pos = 0;
+    qint32 pos = 0;
     bool s1 = KoUnit::fromUserValue(st1, m_unit) * m_zoom > 3.0;
     bool s2 = KoUnit::fromUserValue(st2, m_unit) * m_zoom > 3.0;
     bool s3 = KoUnit::fromUserValue(st3, m_unit) * m_zoom > 3.0;
@@ -224,11 +224,11 @@ void VRuler::drawRuler()
     if (m_orientation == Qt::Horizontal) {
         // XXX: This was 7 * 4 -- why? what was the idea about having 30 point intervals?
         float cx = KoUnit::fromUserValue(100, m_unit) / m_zoom;
-        Q_INT32 step = qRound(cx);//((Q_INT32)(cx / (float)stt) + 1) * stt;
-        Q_INT32 start = (Q_INT32)(KoUnit::toUserValue(m_firstVisible, m_unit) / m_zoom);
+        qint32 step = qRound(cx);//((qint32)(cx / (float)stt) + 1) * stt;
+        qint32 start = (qint32)(KoUnit::toUserValue(m_firstVisible, m_unit) / m_zoom);
 
         do {
-            pos = (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
+            pos = (qint32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
             if (!s3 && s4 && start % st4 == 0)
                 p.drawLine(pos, RULER_SIZE - 9, pos, RULER_SIZE);
@@ -252,12 +252,12 @@ void VRuler::drawRuler()
     } else {
         m_firstVisible = 0;
         float cx = KoUnit::fromUserValue(100, m_unit) / m_zoom;
-        Q_INT32 height = m_pixmapBuffer -> height() - 1;
-        Q_INT32 step = qRound(cx);
-        Q_INT32 start = (Q_INT32)(KoUnit::toUserValue(m_firstVisible, m_unit) / m_zoom);
+        qint32 height = m_pixmapBuffer -> height() - 1;
+        qint32 step = qRound(cx);
+        qint32 start = (qint32)(KoUnit::toUserValue(m_firstVisible, m_unit) / m_zoom);
 
         do {
-            pos = height - (Q_INT32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
+            pos = height - (qint32)(KoUnit::fromUserValue(start, m_unit) * m_zoom - m_firstVisible);
 
             if (!s3 && s4 && start % st4 == 0)
                 p.drawLine(RULER_SIZE - 9, pos, RULER_SIZE, pos);
@@ -309,15 +309,15 @@ void VRuler::hide()
         setFixedWidth(1);
 }
 
-void VRuler::drawNums(QPainter *p, Q_INT32 x, Q_INT32 y, QString& num, bool orientationHoriz)
+void VRuler::drawNums(QPainter *p, qint32 x, qint32 y, QString& num, bool orientationHoriz)
 {
     if (orientationHoriz)
         x -= 7;
     else
         y -= 8;
 
-    for (Q_UINT32 k = 0; k < num.length(); k++) {
-        Q_INT32 st = num.at(k).digitValue() * 7;
+    for (quint32 k = 0; k < num.length(); k++) {
+        qint32 st = num.at(k).digitValue() * 7;
 
         p -> drawPixmap(x, y, m_pixmapNums, st, 0, 7, 7);
 

@@ -38,7 +38,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kurlcombobox.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -67,14 +67,14 @@ class KexiNewProjectWizardPrivate
 //		delete project_set_to_show;
 		delete msgHandler;
 	}
-//	KListView *lv_types;
-	KListViewItem *lvi_file, *lvi_server;
+//	K3ListView *lv_types;
+	K3ListViewItem *lvi_file, *lvi_server;
 	QString chk_file_txt, chk_server_txt; //!< helper
 
 	QString server_db_name_dblist_lbl_txt; //!< helper
 
 	//for displaying db list of the selected conn.
-	QGuardedPtr<KexiDB::ConnectionData> conndata_to_show;
+	QPointer<KexiDB::ConnectionData> conndata_to_show;
 	KexiProjectSet *project_set_to_show;
 
 	KexiGUIMessageHandler* msgHandler;
@@ -95,7 +95,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 
 	//page: type selector
 	m_prjtype_sel = new KexiNewPrjTypeSelector(this, "KexiNewPrjTypeSelector");
-//	lv_types = new KListView(m_prjtype_sel, "types listview");
+//	lv_types = new K3ListView(m_prjtype_sel, "types listview");
 //	m_prjtype_sel->lv_types->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum, 0, 2));
 #if KDE_IS_VERSION(3,3,9)
 	m_prjtype_sel->lv_types->setShadeSortColumn(false);
@@ -105,14 +105,14 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_prjtype_sel->lv_types->setAlternateBackground(QColor()); //disable altering
 	m_prjtype_sel->lv_types->setItemMargin( KDialogBase::marginHint() );
 	QString none;
-	d->lvi_file = new KListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
+	d->lvi_file = new K3ListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
 	d->lvi_file->setPixmap(0, 
 		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( 
 			KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), K3Icon::Desktop 
 		)
 	);
 	d->lvi_file->setMultiLinesEnabled( true );
-	d->lvi_server = new KListViewItem( m_prjtype_sel->lv_types, d->lvi_file, 
+	d->lvi_server = new K3ListViewItem( m_prjtype_sel->lv_types, d->lvi_file, 
 		i18n("New Project Stored on Database Server") );
 	d->lvi_server->setPixmap(0, DesktopIcon("network") );
 	d->lvi_server->setMultiLinesEnabled( true );
@@ -132,7 +132,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 //	updateGeometry();
 
 	addPage(m_prjtype_sel, i18n("Select Storage Method"));
-//	d->m_prjtype_sel->lv_types->setMinimumHeight(QMAX(d->lvi_file->height(),d->lvi_server->height())+25);
+//	d->m_prjtype_sel->lv_types->setMinimumHeight(qMax(d->lvi_file->height(),d->lvi_server->height())+25);
 
 	//page: db title
 	m_db_title = new KexiDBTitlePage(QString::null, this, "KexiDBTitlePage");
@@ -142,7 +142,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_conn_sel_widget = new QWidget(this);
 	QVBoxLayout* conn_sel_lyr = new QVBoxLayout(m_conn_sel_widget);
 	QLabel *conn_sel_label = new QLabel(i18n("Enter a new Kexi project's file name:"), m_conn_sel_widget);
-	conn_sel_label->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::WordBreak);
+	conn_sel_label->setAlignment(Qt::AlignAuto|Qt::AlignTop|Qt::TextWordWrap);
 	conn_sel_lyr->addWidget( conn_sel_label );
 	conn_sel_lyr->addSpacing(KDialogBase::spacingHint());
 
@@ -262,7 +262,7 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 		m_prjtype_sel->lv_types->setFocus();
 		m_prjtype_sel->lv_types->setCurrentItem(m_prjtype_sel->lv_types->currentItem());
 	} else if (page==m_db_title) {//p 2
-		if (m_db_title->le_caption->text().stripWhiteSpace().isEmpty())
+		if (m_db_title->le_caption->text().trimmed().isEmpty())
 			m_db_title->le_caption->setText(i18n("New database"));
 		m_db_title->le_caption->selectAll();
 		m_db_title->le_caption->setFocus();
@@ -306,7 +306,7 @@ void KexiNewProjectWizard::next()
 {
 	//let's check if move to next page is allowed:
 	if (currentPage()==m_db_title) { //pg 2
-		if (m_db_title->le_caption->text().stripWhiteSpace().isEmpty()) {
+		if (m_db_title->le_caption->text().trimmed().isEmpty()) {
 			KMessageBox::information(this, i18n("Enter project caption."));
 			m_db_title->le_caption->setText("");
 			m_db_title->le_caption->setFocus();
@@ -335,9 +335,9 @@ void KexiNewProjectWizard::accept()
 {
 	if (m_prjtype_sel->lv_types->currentItem()==d->lvi_file) {//FILE:
 		//check if new db file name is ok
-		kdDebug() << "********** sender() " << sender()->className() << endl;
+		kDebug() << "********** sender() " << sender()->className() << endl;
 		if (sender()==finishButton()) { /*(only if signal does not come from filedialog)*/
-			kdDebug() << "********** sender()==finishButton() ********" << endl;
+			kDebug() << "********** sender()==finishButton() ********" << endl;
 //			if (!m_conn_sel->m_fileDlg->checkURL()) {
 			if (!m_conn_sel->m_fileDlg->checkFileName()) {
 				return;
@@ -345,13 +345,13 @@ void KexiNewProjectWizard::accept()
 		}
 	} else {//SERVER:
 		//check if we have enough of data
-		if (m_server_db_name->le_caption->text().stripWhiteSpace().isEmpty()) {
+		if (m_server_db_name->le_caption->text().trimmed().isEmpty()) {
 			KMessageBox::information(this, i18n("Enter project caption."));
 			m_server_db_name->le_caption->setText("");
 			m_server_db_name->le_caption->setFocus();
 			return;
 		}
-		QString dbname = m_server_db_name->le_dbname->text().stripWhiteSpace();
+		QString dbname = m_server_db_name->le_dbname->text().trimmed();
 		if (dbname.isEmpty()) {
 			KMessageBox::information(this, i18n("Enter project's database name."));
 			m_server_db_name->le_dbname->setText("");

@@ -76,7 +76,7 @@ void Canvas::scaleCanvas( int scale )
 
 void Canvas::drawForeground ( QPainter & painter, const QRect & /*clip*/ )
 {
-    //kdDebug()<<"Canvas::drawForeGround"<<endl;
+    //kDebug()<<"Canvas::drawForeGround"<<endl;
     //     qWarning("drawForeground ");
     for ( BoxList::iterator it = selected.begin(); it != selected.end(); ++it )
     {

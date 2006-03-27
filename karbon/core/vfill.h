@@ -76,7 +76,7 @@ public:
 
 	VFill& operator=( const VFill& fill );
 
-	void transform( const QWMatrix& m );
+	void transform( const QMatrix& m );
 
 private:
 	VColor		m_color;

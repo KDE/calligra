@@ -116,7 +116,7 @@
     - Made the move to the KDE CVS and a few things were re-arranged.
     - Removed many warnings
     - #include'd moc files instead of compiling them separately
-    - Changed all debug() statements to kdDebug << etc...
+    - Changed all debug() statements to kDebug << etc...
     - Makefile overhaul
     - A few changes to the way saving and loading is handled in KivioBaseTargetStencil
     - Added a parameter to drawContent() of the doc and page classes so you could

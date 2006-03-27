@@ -194,7 +194,7 @@ void KexiStartupFileDialog::updateFilters()
 	QStringList allfiltersUnique;
 	QDict<char> uniqueDict(499, false);
 	foreach (QStringList::ConstIterator, it, allfilters) {
-//		kdDebug() << *it << endl;
+//		kDebug() << *it << endl;
 		uniqueDict.insert(*it, (char*)1);
 	}
 	foreach_dict (QDictIterator<char>, it, uniqueDict) {
@@ -235,49 +235,49 @@ QString KexiStartupFileDialog::currentFileName()
 #ifdef Q_WS_WIN
 //	QString path = selectedFile();
 	//js @todo
-//	kdDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text() << endl;
+//	kDebug() << "selectedFile() == " << path << " '" << url().fileName() << "' " << m_lineEdit->text() << endl;
 	QString path = dir()->absPath();
 	if (!path.endsWith("/") && !path.endsWith("\\"))
 		path.append("/");
   path += m_lineEdit->text();
 //	QString path = QFileInfo(selectedFile()).dirPath(true) + "/" + m_lineEdit->text();
 #else
-//	QString path = locationEdit->currentText().stripWhiteSpace(); //url.path().stripWhiteSpace(); that does not work, if the full path is not in the location edit !!!!!
+//	QString path = locationEdit->currentText().trimmed(); //url.path().trimmed(); that does not work, if the full path is not in the location edit !!!!!
 	QString path=KexiStartupFileDialogBase::selectedURL().path();
-	kdDebug() << "prev selectedURL() == " << path <<endl;
-	kdDebug() << "locationEdit == " << locationEdit->currentText().stripWhiteSpace() <<endl;
+	kDebug() << "prev selectedURL() == " << path <<endl;
+	kDebug() << "locationEdit == " << locationEdit->currentText().trimmed() <<endl;
 	//make sure user-entered path is acceped:
-	setSelection( locationEdit->currentText().stripWhiteSpace() );
+	setSelection( locationEdit->currentText().trimmed() );
 	
 	path=KexiStartupFileDialogBase::selectedURL().path();
-	kdDebug() << "selectedURL() == " << path <<endl;
+	kDebug() << "selectedURL() == " << path <<endl;
 	
 #endif
 	
 	if (!currentFilter().isEmpty()) {
 		if (m_mode & SavingFileBasedDB) {
-			QStringList filters = QStringList::split(" ", currentFilter()); //.first().stripWhiteSpace();
-			kdDebug()<< " filter == " << filters << endl;
+			QStringList filters = QStringList::split(" ", currentFilter()); //.first().trimmed();
+			kDebug()<< " filter == " << filters << endl;
 			QString ext = QFileInfo(path).extension(false);
 			bool hasExtension = false;
 			for (QStringList::ConstIterator filterIt = filters.constBegin(); 
 				filterIt != filters.constEnd() && !hasExtension; ++filterIt)
 			{
-				QString f( (*filterIt).stripWhiteSpace() );
+				QString f( (*filterIt).trimmed() );
 				hasExtension = !f.mid(2).isEmpty() && ext==f.mid(2);
 			}
 			if (!hasExtension) {
 				//no extension: add one
 				QString defaultExtension( m_defaultExtension );
 				if (defaultExtension.isEmpty())
-					defaultExtension = filters.first().stripWhiteSpace().mid(2); //first one
+					defaultExtension = filters.first().trimmed().mid(2); //first one
 				path+=(QString(".")+defaultExtension);
-				kdDebug() << "KexiStartupFileDialog::checkURL(): append extension, " << path << endl;
+				kDebug() << "KexiStartupFileDialog::checkURL(): append extension, " << path << endl;
 				setSelection( path );
 			}
 		}
 	}
-	kdDebug() << "KexiStartupFileDialog::currentFileName() == " << path <<endl;
+	kDebug() << "KexiStartupFileDialog::currentFileName() == " << path <<endl;
 	return path;
 //	return KFileDialog::selectedURL();
 }
@@ -286,17 +286,17 @@ QString KexiStartupFileDialog::currentFileName()
 bool KexiStartupFileDialog::checkFileName()
 {
 //	KUrl url = currentURL();
-//	QString path = url.path().stripWhiteSpace();
-	QString path = currentFileName().stripWhiteSpace();
+//	QString path = url.path().trimmed();
+	QString path = currentFileName().trimmed();
 	
-//	if (url.fileName().stripWhiteSpace().isEmpty()) {
+//	if (url.fileName().trimmed().isEmpty()) {
 	if (path.isEmpty()) {
 		KMessageBox::error( this, i18n( "Enter a filename." ));
 		return false;
 	}
 	
-	kdDebug() << "KexiStartupFileDialog::checkURL() path: " << path  << endl;
-//	kdDebug() << "KexiStartupFileDialog::checkURL() fname: " << url.fileName() << endl;
+	kDebug() << "KexiStartupFileDialog::checkURL() path: " << path  << endl;
+//	kDebug() << "KexiStartupFileDialog::checkURL() fname: " << url.fileName() << endl;
 //todo	if ( url.isLocalFile() ) {
 		QFileInfo fi(path);
 		if (mode() & KFile::ExistingOnly) {
@@ -334,18 +334,18 @@ void KexiStartupFileDialog::accept()
 //	QApplication::sendEvent(locationEdit, &ev);
 //	QApplication::postEvent(locationEdit, &ev);
 	
-//	kdDebug() << "KexiStartupFileDialog::accept() m_lastUrl == " << m_lastUrl.path() << endl;
+//	kDebug() << "KexiStartupFileDialog::accept() m_lastUrl == " << m_lastUrl.path() << endl;
 //	if (m_lastUrl.path()==currentURL().path()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
 	if (m_lastFileName==currentFileName()) {//(js) to prevent more multiple kjob signals (i dont know why this is)
 //		m_lastUrl=KUrl();
 		m_lastFileName=QString::null;
-		kdDebug() << "m_lastFileName==currentFileName()" << endl;
+		kDebug() << "m_lastFileName==currentFileName()" << endl;
 #ifdef Q_WS_WIN
 		return;
 #endif
 	}
-//	kdDebug() << "KexiStartupFileDialog::accept(): url = " << currentURL().path() << " " << endl;
-	kdDebug() << "KexiStartupFileDialog::accept(): path = " << currentFileName() << endl;
+//	kDebug() << "KexiStartupFileDialog::accept(): url = " << currentURL().path() << " " << endl;
+	kDebug() << "KexiStartupFileDialog::accept(): path = " << currentFileName() << endl;
 //	if ( checkURL() ) {
 	if ( checkFileName() ) {
 		emit accepted();
@@ -363,12 +363,12 @@ void KexiStartupFileDialog::accept()
 
 void KexiStartupFileDialog::reject()
 {
-	kdDebug() << "KexiStartupFileDialog: reject!" << endl;
+	kDebug() << "KexiStartupFileDialog: reject!" << endl;
 	emit rejected();
 }
 
 /*#ifndef Q_WS_WIN
-KURLComboBox *KexiStartupFileDialog::locationWidget() const
+KUrlComboBox *KexiStartupFileDialog::locationWidget() const
 {
 	return locationEdit;
 }

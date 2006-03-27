@@ -174,7 +174,7 @@ private slots:
 private:
     KPrView* m_pView;
     KConfig* config;
-    KListView* m_pPathView;
+    K3ListView* m_pPathView;
     QPushButton *m_modifyPath;
 };
 

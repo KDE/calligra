@@ -12,18 +12,18 @@ int main(int argc, char * argv[])
 	KInstance instance("newapi");
 	KexiDB::DriverManager manager;
 	QStringList names = manager.driverNames();
-	kdDebug() << "DRIVERS: " << endl;
+	kDebug() << "DRIVERS: " << endl;
 	for (QStringList::ConstIterator it = names.constBegin(); it != names.constEnd() ; ++it)
-		kdDebug() << *it << endl;
+		kDebug() << *it << endl;
 	if (manager.error()) {
-		kdDebug() << manager.errorMsg() << endl;
+		kDebug() << manager.errorMsg() << endl;
 		return 1;
 	}
 
 	//get driver
 	KexiDB::Driver *driver = manager.driver("mySQL");
 	if (manager.error()) {
-		kdDebug() << manager.errorMsg() << endl;
+		kDebug() << manager.errorMsg() << endl;
 		return 1;
 	}
 
@@ -39,64 +39,64 @@ int main(int argc, char * argv[])
 
 	KexiDB::Connection *conn = driver->createConnection(conn_data);
 	if (driver->error()) {
-		kdDebug() << driver->errorMsg() << endl;
+		kDebug() << driver->errorMsg() << endl;
 		return 1;
 	}
 	if (!conn->connect()) {
-		kdDebug() << conn->errorMsg() << endl;
+		kDebug() << conn->errorMsg() << endl;
 		return 1;
 	}
 	if (!conn->useDatabase( "test" )) {
-		kdDebug() <<"use db:"<< conn->errorMsg() << endl;
+		kDebug() <<"use db:"<< conn->errorMsg() << endl;
 		return 1;
 	}
 
-	kdDebug()<<"Creating first cursor"<<endl;
+	kDebug()<<"Creating first cursor"<<endl;
 	KexiDB::Cursor *c=conn->executeQuery("select * from Applications");
-	if (!c) kdDebug()<<conn->errorMsg()<<endl;
-	kdDebug()<<"Creating second cursor"<<endl;
+	if (!c) kDebug()<<conn->errorMsg()<<endl;
+	kDebug()<<"Creating second cursor"<<endl;
 	KexiDB::Cursor *c2=conn->executeQuery("select * from Applications");
-	if (!c2) kdDebug()<<conn->errorMsg()<<endl;
+	if (!c2) kDebug()<<conn->errorMsg()<<endl;
 
 	QStringList l=conn->databaseNames();
-	if (l.isEmpty()) kdDebug()<<conn->errorMsg()<<endl;
-	kdDebug()<<"Databases:"<<endl;
+	if (l.isEmpty()) kDebug()<<conn->errorMsg()<<endl;
+	kDebug()<<"Databases:"<<endl;
 	for (QStringList::ConstIterator it = l.constBegin(); it != l.constEnd() ; ++it)
-		kdDebug() << *it << endl;
+		kDebug() << *it << endl;
 
 	if (c) {
 		while (c->moveNext()) {
-			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
 		}
-		kdDebug()<<"Cursor error:"<<c->errorMsg()<<endl;
+		kDebug()<<"Cursor error:"<<c->errorMsg()<<endl;
 	}
 	if (c2) {
 		while (c2->moveNext()) {
-			kdDebug()<<"Cursor2: Value(0)"<<c2->value(0).asString()<<endl;
-			kdDebug()<<"Cursor2: Value(1)"<<c2->value(1).asString()<<endl;
+			kDebug()<<"Cursor2: Value(0)"<<c2->value(0).asString()<<endl;
+			kDebug()<<"Cursor2: Value(1)"<<c2->value(1).asString()<<endl;
 		}
 	}
 	if (c) {
-		kdDebug()<<"Cursor::prev"<<endl;
+		kDebug()<<"Cursor::prev"<<endl;
 		while (c->movePrev()) {
-			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
 
 		}
-		kdDebug()<<"up/down"<<endl;
+		kDebug()<<"up/down"<<endl;
 			c->moveNext();
-			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
 			c->moveNext();
-			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
 			c->movePrev();
-			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
 			c->movePrev();
-			kdDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
-			kdDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
+			kDebug()<<"Cursor: Value(0)"<<c->value(0).asString()<<endl;
+			kDebug()<<"Cursor: Value(1)"<<c->value(1).asString()<<endl;
 
 	}
 #if 0
@@ -110,7 +110,7 @@ int main(int argc, char * argv[])
 //	conn->tableNames();
 
 	if (!conn->disconnect()) {
-		kdDebug() << conn->errorMsg() << endl;
+		kDebug() << conn->errorMsg() << endl;
 		return 1;
 	}
 	debug("before del");

@@ -245,7 +245,7 @@
                         </size>
                     </property>
                 </spacer>
-                <widget class="KURLLabel" row="2" column="0">
+                <widget class="KUrlLabel" row="2" column="0">
                     <property name="name">
                         <cstring>saveSetupLink</cstring>
                     </property>
@@ -268,7 +268,7 @@
                         <string></string>
                     </property>
                 </widget>
-                <widget class="KURLLabel" row="1" column="0">
+                <widget class="KUrlLabel" row="1" column="0">
                     <property name="name">
                         <cstring>openDataLink</cstring>
                     </property>

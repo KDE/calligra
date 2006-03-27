@@ -239,7 +239,7 @@ private:
 
 
 /***************************************************************************
-  kdDebug support
+  kDebug support
 ****************************************************************************/
 
 inline kdbgstream operator<<( kdbgstream str, const KSpread::Selection& s )

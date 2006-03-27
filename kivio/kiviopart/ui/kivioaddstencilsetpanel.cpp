@@ -29,7 +29,7 @@
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_stencil_spawner.h"
@@ -97,7 +97,7 @@ namespace Kivio {
     {
       if((colFInfo->fileName() != "..") && (colFInfo->fileName() != "."))
       {
-        cId = KivioStencilSpawnerSet::readId(colFInfo->absFilePath());
+        cId = KivioStencilSpawnerSet::readId(colFInfo->absoluteFilePath());
         QListViewItem* li = m_stencilSetLView->firstChild();
         
         while(li) {
@@ -109,10 +109,10 @@ namespace Kivio {
         }
         
         if(!li) {
-          li = new KListViewItem(m_stencilSetLView,
-            KivioStencilSpawnerSet::readTitle(colFInfo->absFilePath()),
-            KivioStencilSpawnerSet::readId(colFInfo->absFilePath()));
-          li->setPixmap(0, loadIcon("icon", colFInfo->absFilePath()));
+          li = new K3ListViewItem(m_stencilSetLView,
+            KivioStencilSpawnerSet::readTitle(colFInfo->absoluteFilePath()),
+            KivioStencilSpawnerSet::readId(colFInfo->absoluteFilePath()));
+          li->setPixmap(0, loadIcon("icon", colFInfo->absoluteFilePath()));
         }
         
         loadStencilSet(li, dir + "/" + colFInfo->fileName());
@@ -137,11 +137,11 @@ namespace Kivio {
     {
       if( setFInfo->fileName() != ".." && setFInfo->fileName() != "." )
       {
-        KListViewItem* tmp = new KListViewItem(li, KivioStencilSpawnerSet::readTitle(setFInfo->absFilePath()),
+        K3ListViewItem* tmp = new K3ListViewItem(li, KivioStencilSpawnerSet::readTitle(setFInfo->absoluteFilePath()),
           dir + "/" + setFInfo->fileName());
-        tmp->setPixmap(0, loadIcon("icon", setFInfo->absFilePath()));
+        tmp->setPixmap(0, loadIcon("icon", setFInfo->absoluteFilePath()));
 
-        if(m_currentDir == setFInfo->absFilePath()) {
+        if(m_currentDir == setFInfo->absoluteFilePath()) {
           tmp->setSelected(true);
           m_stencilSetLView->ensureItemVisible(tmp);
         }

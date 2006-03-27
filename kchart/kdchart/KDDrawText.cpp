@@ -384,8 +384,8 @@ void KDDrawText::drawRotatedTxt( QPainter* painter,
             // make our four corner points relative
             // to the bounding rect of the rotated pixmap
             {
-                QPoint pDeltaTL( QMIN(0, QMIN(pBotLeft.x(), QMIN(pTopRight.x(), pBotRight.x()))),
-                                 QMIN(0, QMIN(pBotLeft.y(), QMIN(pTopRight.y(), pBotRight.y()))) );
+                QPoint pDeltaTL( qMin(0, qMin(pBotLeft.x(), qMin(pTopRight.x(), pBotRight.x()))),
+                                 qMin(0, qMin(pBotLeft.y(), qMin(pTopRight.y(), pBotRight.y()))) );
                 pTopLeft  -= pDeltaTL;
                 pBotLeft  -= pDeltaTL;
                 pTopRight -= pDeltaTL;

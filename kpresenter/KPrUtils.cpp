@@ -296,7 +296,7 @@ LineEnd lineEndBeginFromString( const QString & type )
     else if (type=="DOUBLE_LINE_ARROW")
         return L_DOUBLE_LINE_ARROW;
     else
-        kdDebug(33001)<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
+        kDebug(33001)<<"Error in LineEnd lineEndBeginFromString( const QString & name )\n";
     return L_NORMAL;
 }
 
@@ -376,9 +376,9 @@ QString saveOasisTimer( int second )
 {
     QTime time;
     time = time.addSecs( second );
-    QString hours( QString::number( time.hour() ).rightJustify( 2, '0' ) );
-    QString ms( QString::number( time.minute() ).rightJustify( 2, '0' ) );
-    QString sec( QString::number( time.second() ).rightJustify( 2, '0' ) );
+    QString hours( QString::number( time.hour() ).rightJustified( 2, '0' ) );
+    QString ms( QString::number( time.minute() ).rightJustified( 2, '0' ) );
+    QString sec( QString::number( time.second() ).rightJustified( 2, '0' ) );
 
 
     //ISO8601 chapter 5.5.3.2

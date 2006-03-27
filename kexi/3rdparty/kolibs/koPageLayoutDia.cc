@@ -74,7 +74,7 @@ void KoPagePreview::setPageLayout( const KoPageLayout &layout )
 
     double zh = 110.0 / m_pageHeight;
     double zw = 110.0 / m_pageWidth;
-    double z = QMIN( zw, zh );
+    double z = qMin( zw, zh );
 
     m_pageWidth *= z;
     m_pageHeight *= z;

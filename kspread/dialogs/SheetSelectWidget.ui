@@ -83,7 +83,7 @@
                 <string>Remove sheets</string>
             </property>
         </widget>
-        <widget class="KListView" row="0" column="0" rowspan="4" colspan="1">
+        <widget class="K3ListView" row="0" column="0" rowspan="4" colspan="1">
             <column>
                 <property name="text">
                     <string>Available Sheets</string>
@@ -175,7 +175,7 @@ You can insert a sheet as often as you like, this way it will be printed multipl
                 <string>Move selected sheet to the bottom</string>
             </property>
         </widget>
-        <widget class="KListView" row="0" column="2" rowspan="4" colspan="1">
+        <widget class="K3ListView" row="0" column="2" rowspan="4" colspan="1">
             <column>
                 <property name="text">
                     <string>Selected Sheets</string>

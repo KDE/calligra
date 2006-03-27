@@ -37,7 +37,7 @@ MouseToolAction::MouseToolAction(const QString& text, const KShortcut& cut,
 {
 }
 
-MouseToolAction::MouseToolAction(const QString& text, const QIconSet& pix,
+MouseToolAction::MouseToolAction(const QString& text, const QIcon& pix,
                             const KShortcut& cut,
                             QObject* parent, const char* name)
   : KRadioAction(text, pix, cut, parent, name)
@@ -51,7 +51,7 @@ MouseToolAction::MouseToolAction(const QString& text, const QString& pix,
 {
 }
 
-MouseToolAction::MouseToolAction(const QString& text, const QIconSet& pix,
+MouseToolAction::MouseToolAction(const QString& text, const QIcon& pix,
                             const KShortcut& cut,
                             const QObject* receiver, const char* slot,
                             QObject* parent, const char* name)

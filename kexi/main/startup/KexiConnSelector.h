@@ -25,7 +25,7 @@
 #include "KexiStartupFileDialog.h"
 
 #include <kdialogbase.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 #include <qguardedptr.h>
 

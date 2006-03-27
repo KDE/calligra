@@ -26,7 +26,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kaction.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 #include <kexidb/cursor.h>
 
@@ -143,7 +143,7 @@ void KexiDataTable::reloadActions()
 //	m_view->initActions(guiClient()->actionCollection());
 //warning FIXME Move this to the table part
 /*
-	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
+	kDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
 	setXMLFile("kexidatatableui.rc");
 */

@@ -51,7 +51,7 @@ class KexiBLOBBuffer::Private
 		QIntDict<Item> inMemoryItems; //!< for unstored BLOBs
 		QIntDict<Item> storedItems; //!< for stored items
 		QDict<Item> itemsByURL;
-		QGuardedPtr<KexiDB::Connection> conn;
+		QPointer<KexiDB::Connection> conn;
 };
 
 //-----------------
@@ -95,7 +95,7 @@ void KexiBLOBBuffer::Handle::setStoredWidthID(KexiBLOBBuffer::Id_t id)
 	if (!m_item)
 		return;
 	if (m_item->stored) {
-		kdWarning() << "KexiBLOBBuffer::Handle::setStoredWidthID(): object for id=" << id 
+		kWarning() << "KexiBLOBBuffer::Handle::setStoredWidthID(): object for id=" << id 
 			<< " is aleady stored" << endl;
 		return;
 	}
@@ -162,7 +162,7 @@ QByteArray KexiBLOBBuffer::Item::data() const
 		//convert pixmap to byte array
 		//(do it only on demand)
 		QBuffer buffer( *m_data );
-		buffer.open( IO_WriteOnly );
+		buffer.open( QIODevice::WriteOnly );
 		m_pixmap->save( &buffer, mimeType.isEmpty() ? (const char*)"PNG"/*! @todo default? */ : mimeType.latin1() );
 	}
 	return *m_data;
@@ -200,7 +200,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
 	QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
 //! @todo download the file if remote, then set fileName properly
 	QFile f(fileName);
-	if (!f.open(IO_ReadOnly)) {
+	if (!f.open(QIODevice::ReadOnly)) {
 		//! @todo err msg
 		return KexiBLOBBuffer::Handle();
 	}
@@ -212,7 +212,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
 		return KexiBLOBBuffer::Handle();
 	}
 	QFileInfo fi(url.fileName());
-	QString caption(fi.baseName().replace('_', " ").simplifyWhiteSpace());
+	QString caption(fi.baseName().replace('_', " ").simplified());
 
 	item = new Item(data, ++d->maxId, /*!stored*/false, url.fileName(), caption, mimeType);
 	insertItem(item);
@@ -284,7 +284,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 		schema.addField( blobsTable->field("o_caption") );
 		schema.addField( blobsTable->field("o_mime") );
 		schema.addField( blobsTable->field("o_folder_id") );
-		schema.addToWhereExpression(blobsTable->field("o_id"), QVariant((Q_LLONG)id));
+		schema.addToWhereExpression(blobsTable->field("o_id"), QVariant((qint64)id));
 
 		KexiDB::RowData rowData;
 		tristate res = d->conn->querySingleRecord(
@@ -294,7 +294,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 			rowData); 
 		if (res!=true || rowData.size()<4) {
 		//! @todo err msg
-			kdWarning() << "KexiBLOBBuffer::objectForId("<<id<<","<<stored
+			kWarning() << "KexiBLOBBuffer::objectForId("<<id<<","<<stored
 			<<"): res!=true || rowData.size()<4; res=="<<res<<" rowData.size()=="<<rowData.size()<< endl;
 			return KexiBLOBBuffer::Handle();
 		}

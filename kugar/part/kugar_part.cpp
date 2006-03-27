@@ -155,7 +155,7 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
 
     if ( !url.isValid() )
     {
-/*        kdDebug() << "mailformed url" << endl;*/
+/*        kDebug() << "mailformed url" << endl;*/
         if ( tpl.find( '/' ) >= 0 )
         {
             if ( tpl.startsWith( "." ) )
@@ -195,14 +195,14 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
             KMessageBox::sorry( 0, i18n( "Unable to download template file: %1" ).arg( url.prettyURL() ) );
     }
 
-/*    kdDebug() << "localtpl: " << localtpl.latin1() << endl;*/
+/*    kDebug() << "localtpl: " << localtpl.latin1() << endl;*/
     if ( !localtpl.isEmpty() )
     {
         QFile f( localtpl );
 
-        if ( f.open( IO_ReadOnly ) )
+        if ( f.open( QIODevice::ReadOnly ) )
         {
-/*            kdDebug() << "localtpl opened" << endl;*/
+/*            kDebug() << "localtpl opened" << endl;*/
             // Try to find out whether it is a mime multi part file
             char buf[ 5 ];
             if ( f.readBlock( buf, 4 ) == 4 )
@@ -212,14 +212,14 @@ void KugarPart::slotPreferredTemplate( const QString &tpl )
 
                 if ( isRawXML )
                 {
-/*                    kdDebug() << "RawXML" << endl;*/
-                    f.open( IO_ReadOnly );
+/*                    kDebug() << "RawXML" << endl;*/
+                    f.open( QIODevice::ReadOnly );
                     if ( !m_reportEngine -> setReportTemplate( &f ) )
                         KMessageBox::sorry( 0, i18n( "Invalid template file: %1" ).arg( localtpl ) );
                     else
                     {
                         m_templateOk = true;
-/*                        kdDebug() << "Setting m_templateOk" << endl;*/
+/*                        kDebug() << "Setting m_templateOk" << endl;*/
                     }
                     f.close();
                 }

@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 
 class KPrDocument;
-class KListView;
+class K3ListView;
 class QLabel;
 
 class KPrPresDurationDia : public KDialogBase
@@ -42,7 +42,7 @@ protected:
 
 private:
     KPrDocument *doc;
-    KListView *slides;
+    K3ListView *slides;
     QLabel *label;
 
     QStringList m_durationListString;

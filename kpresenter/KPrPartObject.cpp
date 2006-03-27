@@ -65,7 +65,7 @@ void KPrPartObject::rotate( float _angle )
 
 bool KPrPartObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug() << "KPrPartObject::saveOasisPart " << sc.partIndexObj << endl;
+    kDebug() << "KPrPartObject::saveOasisPart " << sc.partIndexObj << endl;
 
     sc.xmlWriter.startElement( "draw:object" );
     const QString name = QString( "Object_%1" ).arg( sc.partIndexObj + 1 );
@@ -84,7 +84,7 @@ const char * KPrPartObject::getOasisElementName() const
 
 void KPrPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPrLoadingInfo */*info*/)
 {
-    kdDebug()<<"void KPrPartObject::loadOasis(const QDomElement &element)******************\n";
+    kDebug()<<"void KPrPartObject::loadOasis(const QDomElement &element)******************\n";
 
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     child->loadOasis( element, objectElement );

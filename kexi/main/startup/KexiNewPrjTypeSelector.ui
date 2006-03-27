@@ -36,7 +36,7 @@
                 </size>
             </property>
         </spacer>
-        <widget class="KListView" row="1" column="0">
+        <widget class="K3ListView" row="1" column="0">
             <column>
                 <property name="text">
                     <string></string>

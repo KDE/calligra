@@ -623,7 +623,7 @@ void KivioView::renamePage()
     // Have a different name ?
     if ( ok ) // User pushed an OK button.
     {
-        if ( (newName.stripWhiteSpace()).isEmpty() ) // Page name is empty.
+        if ( (newName.trimmed()).isEmpty() ) // Page name is empty.
         {
             KNotifyClient::beep();
             KMessageBox::information( this, i18n("Page name cannot be empty."),
@@ -941,7 +941,7 @@ void KivioView::addStencilSet( const QString& name )
 void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
   if(!pSpawner) {
-    kdDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
+    kDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
     return;
   }
 
@@ -1707,7 +1707,7 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
 
     // Use default properties if we held ctrl down
 #if KDE_IS_VERSION(3, 4, 0)
-    if(kapp->keyboardMouseState() & Qt::ControlButton) {
+    if(kapp->keyboardMouseState() & Qt::ControlModifier) {
 #else
     if(KApplication::keyboardModifiers() & KApplication::ControlModifier) {
 #endif
@@ -1893,7 +1893,7 @@ void KivioView::viewZoom(const QString& s)
 {
   QString z(s);
   z.remove('%');
-  z.simplifyWhiteSpace();
+  z.simplified();
   bool ok = false;
   int zoom = z.toInt(&ok);
 
@@ -1961,7 +1961,7 @@ void KivioView::showAlign( int align )
 {
   switch ( align ) {
     case Qt::AlignAuto: // In left-to-right mode it's align left. TODO: alignright if text->isRightToLeft()
-      kdWarning(43000) << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
+      kWarning(43000) << k_funcinfo << "shouldn't be called with AlignAuto" << endl;
       // fallthrough
     case Qt::AlignLeft:
       m_textAlignLeft->setChecked( true );

@@ -764,7 +764,7 @@ bool KPrPageEffects::effectFlyAway1()
     {
         double dw = 1.0 - 83.0 / 100.0 * m_effectStep / (double)pSteps;
 
-        QWMatrix m;
+        QMatrix m;
         m.scale( dw, dw );
         QPixmap pix( m_pageFrom.xForm( m ) );
 

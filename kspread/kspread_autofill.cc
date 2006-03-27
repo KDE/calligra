@@ -320,7 +320,7 @@ bool AutoFillSequenceItem::getDelta( AutoFillSequenceItem *seq, double &_delta )
                 _delta = -1.0;
             else
                 _delta = ( double )( k - i );
-            kdDebug() << m_String << " i: " << i << " j: " << j << " k: " << k << " delta: " << _delta << endl;
+            kDebug() << m_String << " i: " << i << " j: " << j << " k: " << k << " delta: " << _delta << endl;
             return true;
         }
 
@@ -667,8 +667,8 @@ void Sheet::autofill( QRect &src, QRect &dest )
     {
         if (src.top() != dest.bottom() )
             dest.setBottom(dest.bottom() - 1);
-        int startVal = QMIN( dest.left(), src.left());
-        int endVal = QMAX(src.right(), dest.right());
+        int startVal = qMin( dest.left(), src.left());
+        int endVal = qMax(src.right(), dest.right());
         for ( int x = startVal; x <= endVal; x++ )
         {
             int y;
@@ -958,7 +958,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
   // We try to find the shortest interval.
   for ( unsigned int step = 1; step <= _seqList.count() / 2; step++ )
   {
-    kdDebug() << "Looking for interval: " << step << " seqList count: " << _seqList.count() << endl;
+    kDebug() << "Looking for interval: " << step << " seqList count: " << _seqList.count() << endl;
     // If the interval is of length 'step' then the _seqList size must
     // be a multiple of 'step'
     if ( _seqList.count() % step == 0 )
@@ -1016,7 +1016,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
 	// Loop over all destination cells
 	while ( cell )
 	{
-          kdDebug() << "Valid interval, cell: " << cell->row() << " block: " << block << endl;
+          kDebug() << "Valid interval, cell: " << cell->row() << " block: " << block << endl;
 
 	  // End of block? -> start again from beginning
           if (down)
@@ -1036,7 +1036,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
             }
           }
 
-          kdDebug() << "Step: " << step << " S: " << s << " Block " << block
+          kDebug() << "Step: " << step << " S: " << s << " Block " << block
                     << " SeqList: " << _seqList.count()
                     << " SrcList: " << _srcList.count() << " DeltaList: " << deltaList.count()
                     << endl;

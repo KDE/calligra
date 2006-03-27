@@ -64,10 +64,10 @@ for the database that has stored project's meta-data (see example below).
 5. Example usage of db engine, to get both project metadata and raw db connection
 
 {
-    kdDebug() << "DRIVERS:" << KexiDBEnginesManager::enginesNames() << endl;
+    kDebug() << "DRIVERS:" << KexiDBEnginesManager::enginesNames() << endl;
   KexiDBEngine *engine = KexiDBEngineManager::engine("mysql");
   if (!engine) {
-    kdDebug() << "no engine" << endl;
+    kDebug() << "no engine" << endl;
     return 1;
   }
 
@@ -80,10 +80,10 @@ for the database that has stored project's meta-data (see example below).
 
   KexiDBConnection *conn = engine->createConnection(conn_data);
   if (!conn->connect()) {
-    kdDebug() << "err. connect" << endl;
+    kDebug() << "err. connect" << endl;
     return 1;
   }
-  kdDebug() << "DATABASES:" << conn->dbNames() << endl;
+  kDebug() << "DATABASES:" << conn->dbNames() << endl;
 
 //we want use this connection to load given Kexi Project:
 
@@ -101,25 +101,25 @@ for the database that has stored project's meta-data (see example below).
     ..and data connection will be established as before.
   */
   if (!prj)
-    kdDebug() << "err. open db" << endl;
+    kDebug() << "err. open db" << endl;
     return 1;
   }
-  kdDebug() << "TABLE DEFS:" << prj->tableDefsNames() << endl;
-  kdDebug() << "QUERY DEFS:" << prj->queryDefsNames() << endl;
+  kDebug() << "TABLE DEFS:" << prj->tableDefsNames() << endl;
+  kDebug() << "QUERY DEFS:" << prj->queryDefsNames() << endl;
 
   KexiDBTableDef *tab_def = prj->tableDef("people") << endl;
   if (!tab_def)
-    kdDebug() << "no table def" << endl;
+    kDebug() << "no table def" << endl;
     return 1;
   }
-  kdDebug() << "TABLE DEF FIELDS:" << tab_def->fieldsNames() << endl;
+  kDebug() << "TABLE DEF FIELDS:" << tab_def->fieldsNames() << endl;
   
   KexiDBFieldDef *field = tab_def->field("age");
   if (!field)
-    kdDebug() << "no such field" << endl;
+    kDebug() << "no such field" << endl;
     return 1;
   }
-  kdDebug() << "FIELD TYPE:" << field->typeName() << endl;
+  kDebug() << "FIELD TYPE:" << field->typeName() << endl;
 
   return 0;
 }

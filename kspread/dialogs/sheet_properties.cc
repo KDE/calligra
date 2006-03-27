@@ -36,7 +36,7 @@ SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
   i18n("Sheet Properties"), 
   KDialogBase::Ok|KDialogBase::Cancel|KDialogBase::Default )
 {
-  QVBox* mainWidget = makeVBoxMainWidget();
+  KVBox* mainWidget = makeVBoxMainWidget();
   d = new SheetPropertiesBase( mainWidget );
   QWidget* spacer = new QWidget( mainWidget );
   spacer->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Expanding );

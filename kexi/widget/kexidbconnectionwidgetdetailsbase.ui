@@ -90,7 +90,7 @@
                                 <string></string>
                             </property>
                         </widget>
-                        <widget class="KURLRequester">
+                        <widget class="KUrlRequester">
                             <property name="name">
                                 <cstring>customSocketEdit</cstring>
                             </property>

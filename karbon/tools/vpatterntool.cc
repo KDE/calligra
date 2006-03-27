@@ -140,7 +140,7 @@ VPatternTool::activate()
 	m_state = normal;
 	VTool::activate();
 	view()->statusMessage()->setText( i18n( "Pattern" ) );
-	view()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::CrossCursor ) );
 
 	if( view() )
 	{
@@ -471,7 +471,7 @@ VPatternTool::setCursor() const
 	if( m_origin.contains( last() ) || m_vector.contains( last() ) )
 		view()->setCursor( QCursor( Qt::SizeAllCursor ) );
 	else
-		view()->setCursor( QCursor( Qt::arrowCursor ) );
+		view()->setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
 bool 

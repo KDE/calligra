@@ -133,7 +133,7 @@ QString ValueFormatter::formatText (const Value &value,
   if( !postfix.isEmpty())
     str += ' ' + postfix;
 
-  //kdDebug() << "ValueFormatter says: " << str << endl;
+  //kDebug() << "ValueFormatter says: " << str << endl;
   return str;
 }
 
@@ -265,7 +265,7 @@ QString ValueFormatter::createNumberFormat ( long value, FormatType fmt,
     default :
       //other formatting?
       // This happens with Custom_format...
-      kdDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "\n";
+      kDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "\n";
       break;
   }
 
@@ -326,7 +326,7 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
     default :
       //other formatting?
       // This happens with Custom_format...
-      kdDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "\n";
+      kDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "\n";
       break;
   }
 
@@ -380,7 +380,7 @@ QString ValueFormatter::fractionFormat (double value, FormatType fmtType)
     limit = 999;
     break;
   default:
-    kdDebug(36001) << "Error in Fraction format\n";
+    kDebug(36001) << "Error in Fraction format\n";
     return QString::number(value);
     break;
   } /* switch */
@@ -685,7 +685,7 @@ QString ValueFormatter::errorFormat (Cell *cell)
   else
   {
     err = "####";
-    kdDebug(36001) << "Unhandled error type." << endl;
+    kDebug(36001) << "Unhandled error type." << endl;
   }
   return err;
 }

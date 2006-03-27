@@ -43,9 +43,9 @@ KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double li
 
     setButtonText( KDialogBase::User1, i18n("Remove") );
     setCaption( i18n("Change Help Line Position") );
-    QVBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
     new QLabel(i18n("Position:"), page);
-    position= new KoUnitDoubleSpinBox( page, QMAX(0.00, limitTop), QMAX(0.00, limitBottom), 1, QMAX(0.00, value));
+    position= new KoUnitDoubleSpinBox( page, qMax(0.00, limitTop), qMax(0.00, limitBottom), 1, qMax(0.00, value));
     position->setUnit(m_doc->unit() );
 
     connect( this, SIGNAL( user1Clicked() ), this ,SLOT( slotRemoveHelpLine() ));
@@ -71,7 +71,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
     limitOfPage=_pageRect;
     m_doc=_doc;
     setCaption( i18n("Add New Help Line") );
-    QVBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
     QButtonGroup *group = new QButtonGroup( 1, QGroupBox::Horizontal,i18n("Orientation"), page );
     group->setRadioButtonExclusive( TRUE );
     group->layout();
@@ -82,7 +82,7 @@ KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pag
 
     new QLabel(i18n("Position:"), page);
 
-    position= new KoUnitDoubleSpinBox( page,QMAX(0.00, limitOfPage.top() ), QMAX(0.00, limitOfPage.bottom()),1,0.00 );
+    position= new KoUnitDoubleSpinBox( page,qMax(0.00, limitOfPage.top() ), qMax(0.00, limitOfPage.bottom()),1,0.00 );
 
     position->setUnit( m_doc->unit() );
     m_rbHoriz->setChecked( true );
@@ -103,13 +103,13 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
 {
     if ( m_rbHoriz->isChecked() )
     {
-        position->setMinValue( QMAX(0.00, limitOfPage.top() ) );
-        position->setMaxValue( QMAX(0.00, limitOfPage.bottom() ) );
+        position->setMinValue( qMax(0.00, limitOfPage.top() ) );
+        position->setMaxValue( qMax(0.00, limitOfPage.bottom() ) );
     }
     else if ( m_rbVert->isChecked() )
     {
-        position->setMinValue( QMAX(0.00, limitOfPage.left()) );
-        position->setMaxValue( QMAX(0.00, limitOfPage.right()) );
+        position->setMinValue( qMax(0.00, limitOfPage.left()) );
+        position->setMaxValue( qMax(0.00, limitOfPage.right()) );
     }
 }
 
@@ -122,14 +122,14 @@ KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _p
     m_doc=_doc;
     setButtonText( KDialogBase::User1, i18n("Remove") );
     setCaption( i18n("Add New Help Point") );
-    QVBox *page = makeVBoxMainWidget();
+    KVBox *page = makeVBoxMainWidget();
     QLabel *lab=new QLabel(i18n("X position:"), page);
-    positionX= new KoUnitDoubleSpinBox( page, QMAX(0.00, limitOfPage.left()),QMAX(0.00, limitOfPage.right()),1,QMAX(0.00, posX) ) ;
+    positionX= new KoUnitDoubleSpinBox( page, qMax(0.00, limitOfPage.left()),qMax(0.00, limitOfPage.right()),1,qMax(0.00, posX) ) ;
     positionX->setUnit( m_doc->unit() );
 
 
     lab=new QLabel(i18n("Y position:"), page);
-    positionY= new KoUnitDoubleSpinBox( page, QMAX(0.00, limitOfPage.top()),QMAX(0.00, limitOfPage.bottom()),1,  QMAX(0.00, posY) );
+    positionY= new KoUnitDoubleSpinBox( page, qMax(0.00, limitOfPage.top()),qMax(0.00, limitOfPage.bottom()),1,  qMax(0.00, posY) );
     positionY->setUnit( m_doc->unit() );
 
     showButton( KDialogBase::User1, (posX!=0.0 || posY!=0.0) );

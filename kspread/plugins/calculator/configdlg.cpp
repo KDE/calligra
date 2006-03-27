@@ -61,7 +61,8 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   label1->setText(i18n("Foreground color:"));
   grid1->addWidget(label1,0,0);
 
-  button1 = new KColorButton( box, "button1" );
+  button1 = new KColorButton( box );
+  button1->setObjectName( "button1" );
   grid1->addWidget(button1,0,1);
   button1->setColor( defst->forecolor );
 
@@ -72,7 +73,8 @@ ConfigDlg::ConfigDlg(QWidget *parent, const char *name, DefStruct *defstruct)
   grid1->addWidget(label2,1,0);
   label2->setText(i18n("Background color:"));
 
-  button2 = new KColorButton( box, "button2" );
+  button2 = new KColorButton( box );
+  button2->setObjectName( "button2" );
   grid1->addWidget(button2,1,1);
   button2->setColor( defst->backcolor );
 

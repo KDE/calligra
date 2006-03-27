@@ -53,11 +53,12 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kstandarddirs.h>
 #include <kurlrequester.h>
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
+#include <ktoolinvocation.h>
 
 KPrMSPresentation::KPrMSPresentation( KPrDocument *_doc, KPrView *_view )
 {
@@ -140,7 +141,7 @@ void KPrMSPresentation::initCreation( KProgress *progressBar )
     QFont textFont( "SansSerif", 96 );
     painter.setFont( textFont );
     painter.setPen( textColour );
-    painter.drawText( titleSlide.rect(), Qt::AlignCenter | Qt::WordBreak, title );
+    painter.drawText( titleSlide.rect(), Qt::AlignCenter | Qt::TextWordWrap, title );
     filename = path + slidePath + "/SPJT0001.JPG";
 
     KTempFile tmp2;
@@ -190,25 +191,25 @@ void KPrMSPresentation::createIndexFile( KProgress *progressBar )
     kapp->processEvents();
 
     // We are doing little endian
-    sppStream << (Q_UINT32)0x00505053; // SPP magic header
-    sppStream << (Q_UINT32)0x00000000; // four null bytes
-    sppStream << (Q_UINT32)0x30303130; // version(?) 0100
-    sppStream << (Q_UINT32)0x00000000; // more nulls
-    sppStream << (Q_UINT32)(slideInfos.count());
+    sppStream << (quint32)0x00505053; // SPP magic header
+    sppStream << (quint32)0x00000000; // four null bytes
+    sppStream << (quint32)0x30303130; // version(?) 0100
+    sppStream << (quint32)0x00000000; // more nulls
+    sppStream << (quint32)(slideInfos.count());
 
     // DCIM path 1, 68 bytes null padded
     char buff[68];
     strncpy( buff, QString("%1").arg(slidePath).ascii(), 67 );
     buff[67] = 0x00;
     sppStream.writeRawBytes( buff, 68 );
-    sppStream << (Q_UINT32)0x00000001; // fixed value
-    sppStream << (Q_UINT32)0x00000005; // fixed value
-    sppStream << (Q_UINT32)0x00000000; // more nulls
-    sppStream << (Q_UINT32)0x00000000; // more nulls
-    sppStream << (Q_UINT32)0x00000000; // more nulls
-    sppStream << (Q_UINT32)0x00000000; // more nulls
-    sppStream << (Q_UINT32)0x00000000; // more nulls
-    sppStream << (Q_UINT32)0x00000000; // more nulls
+    sppStream << (quint32)0x00000001; // fixed value
+    sppStream << (quint32)0x00000005; // fixed value
+    sppStream << (quint32)0x00000000; // more nulls
+    sppStream << (quint32)0x00000000; // more nulls
+    sppStream << (quint32)0x00000000; // more nulls
+    sppStream << (quint32)0x00000000; // more nulls
+    sppStream << (quint32)0x00000000; // more nulls
+    sppStream << (quint32)0x00000000; // more nulls
     p = progressBar->progress();
     progressBar->setProgress( ++p );
     kapp->processEvents();
@@ -230,13 +231,13 @@ void KPrMSPresentation::createIndexFile( KProgress *progressBar )
     sppStream.writeRawBytes( buff, 44 );
 
     //not really sure what this is about
-    sppStream << (Q_UINT32)0xffff0000;
-    sppStream << (Q_UINT32)0xffff00ff;
-    sppStream << (Q_UINT32)0xffff00ff;
-    sppStream << (Q_UINT32)0x000000ff;
-    sppStream << (Q_UINT32)0x00000002;
+    sppStream << (quint32)0xffff0000;
+    sppStream << (quint32)0xffff00ff;
+    sppStream << (quint32)0xffff00ff;
+    sppStream << (quint32)0x000000ff;
+    sppStream << (quint32)0x00000002;
     for (int i = 0; i < (296/4); i++) {
-        sppStream << (Q_UINT32)0x00000000;
+        sppStream << (quint32)0x00000000;
     }
     p = progressBar->progress();
     progressBar->setProgress( ++p );
@@ -258,7 +259,7 @@ void KPrMSPresentation::createIndexFile( KProgress *progressBar )
     // the logic is 16384 bytes total, lead in is 512 bytes, and there
     // is 64 bytes for each real slide
     for(unsigned int i = 0;  i < (16384-512-64*(slideInfos.count()))/4; i++) {
-        sppStream << (Q_UINT32)0x00000000;
+        sppStream << (quint32)0x00000000;
     }
 
     p = progressBar->progress();
@@ -283,7 +284,7 @@ void KPrMSPresentation::init()
         }
     }
     if ( slideInfos.isEmpty() )
-        kdWarning() << "No slides selected!" << endl;
+        kWarning() << "No slides selected!" << endl;
     backColour = Qt::black;
     textColour = Qt::white;
 
@@ -298,14 +299,14 @@ KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_vie
 
 
     QLabel *helptext = new QLabel( this );
-    helptext->setAlignment( Qt::WordBreak | Qt::AlignTop| Qt::AlignLeft );
+    helptext->setAlignment( Qt::TextWordWrap | Qt::AlignTop| Qt::AlignLeft );
     helptext->setText( i18n( "Please enter the directory where the memory stick "
                              "presentation should be saved. Please also enter a "
                              "title for the slideshow presentation. " ) );
 
     QLabel *lable2 = new QLabel( i18n("Path:"), this );
     lable2->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    path=new KURLRequester( this );
+    path=new KUrlRequester( this );
     path->setMode( KFile::Directory);
     path->lineEdit()->setText(msPres.getPath());
     lable2->setBuddy(path);
@@ -421,7 +422,7 @@ void KPrMSPresentationSetup::showColourGroup(bool on)
 
 void KPrMSPresentationSetup::helpMe()
 {
-    kapp->invokeHelp("ms-export");
+    KToolInvocation::invokeHelp("ms-export");
 }
 
 void KPrMSPresentationSetup::finish()

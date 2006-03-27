@@ -84,7 +84,7 @@ void ConfigDialog::slotOk() {
 }
 
 void ConfigDialog::slotDefault() {
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     m_taskDefaultPage->setStartValues(m_config.taskDefaults());
 //    m_behaviorPage->setStartValues();
     

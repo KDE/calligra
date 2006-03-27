@@ -47,7 +47,7 @@ unsigned Tester::failed() const
 void Tester::fail( const char *file, int line, const QString& msg )
 {
   QString error;
-  QTextStream ts( &error, IO_WriteOnly );
+  QTextStream ts( &error, QIODevice::WriteOnly );
   ts << file << "["<< line <<"]:   " << msg;
   errorList.append( error );
 }

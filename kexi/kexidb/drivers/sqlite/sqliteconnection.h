@@ -89,7 +89,7 @@ class SQLiteConnection : public Connection
 		virtual bool drv_executeSQL( const QString& statement );
 //		virtual bool drv_executeQuery( const QString& statement );
 
-		virtual Q_ULLONG drv_lastInsertRowID();
+		virtual quint64 drv_lastInsertRowID();
 
 		virtual int serverResult();
 		virtual QString serverResultName();

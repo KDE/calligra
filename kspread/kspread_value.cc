@@ -338,7 +338,7 @@ bool Value::operator==( const Value& v ) const
     case Error:   return *n->ps == *d->ps;
     default: break;
   }
-  kdWarning() << "Unhandled type in Value::operator==: " << d->type << endl;
+  kWarning() << "Unhandled type in Value::operator==: " << d->type << endl;
   return false;
 }
 

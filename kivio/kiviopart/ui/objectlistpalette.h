@@ -21,7 +21,7 @@
 
 #include <qwidget.h>
 
-class KListView;
+class K3ListView;
 class KivioView;
 
 namespace Kivio {
@@ -43,7 +43,7 @@ class ObjectListPalette : public QWidget
 
   private:
     KivioView* m_view;
-    KListView* m_objectList;
+    K3ListView* m_objectList;
 
     bool m_blockUpdate;
 };

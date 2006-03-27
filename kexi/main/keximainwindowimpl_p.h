@@ -23,7 +23,7 @@
 #endif
 
 //! @internal safer dictionary
-typedef QMap< int, QGuardedPtr<KexiDialogBase> > KexiDialogDict; 
+typedef QMap< int, QPointer<KexiDialogBase> > KexiDialogDict; 
 
 //! @internal
 class KexiMainWindowImpl::Private
@@ -129,7 +129,7 @@ public:
 
 	void insertDialog(KexiDialogBase *dlg) {
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		dialogs.insert(dlg->id(), QGuardedPtr<KexiDialogBase>(dlg));
+		dialogs.insert(dlg->id(), QPointer<KexiDialogBase>(dlg));
 #ifndef KEXI_NO_PENDING_DIALOGS
 		pendingDialogs.remove(dlg->id());
 #endif
@@ -143,7 +143,7 @@ public:
 
 	bool pendingDialogsExist() {
 		if (pendingDialogs.constBegin()!=pendingDialogs.constEnd())
-			kdDebug() << 	pendingDialogs.constBegin().key() << " " << (int)pendingDialogs.constBegin().data() << endl;
+			kDebug() << 	pendingDialogs.constBegin().key() << " " << (int)pendingDialogs.constBegin().data() << endl;
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
 		return !pendingDialogs.isEmpty();
 	}
@@ -155,7 +155,7 @@ public:
 #ifndef KEXI_NO_PENDING_DIALOGS
 		pendingDialogs.remove(oldItemID);
 #endif
-		dialogs.insert(dlg->id(), QGuardedPtr<KexiDialogBase>(dlg));
+		dialogs.insert(dlg->id(), QPointer<KexiDialogBase>(dlg));
 	}
 
 	void removeDialog(int identifier) {
@@ -229,8 +229,8 @@ void updatePropEditorDockWidthInfo() {
 		uint i=0;
 		const uint c = pm->count();
 		for (;i<c;i++) {
-			kdDebug() << pm->text( pm->idAt(i) ) <<endl;
-			if (pm->text( pm->idAt(i) ).lower().stripWhiteSpace()==itemText.lower().stripWhiteSpace())
+			kDebug() << pm->text( pm->idAt(i) ) <<endl;
+			if (pm->text( pm->idAt(i) ).lower().trimmed()==itemText.lower().trimmed())
 				break;
 		}
 		if (i<c) {
@@ -275,12 +275,12 @@ void updatePropEditorDockWidthInfo() {
 				if (wasAutoOpen) //(dw2->isVisible())
 //				ds->setSeparatorPosInPercent( 100 * nav->width() / wnd->width() );
 					ds->setSeparatorPosInPercent(
-						QMAX(QMAX( config->readNumEntry("LeftDockPositionWithAutoOpen",20),
+						qMax(qMax( config->readNumEntry("LeftDockPositionWithAutoOpen",20),
 						config->readNumEntry("LeftDockPosition",20)),20)
 					);
 				else
 					ds->setSeparatorPosInPercent(
-					QMAX(20, config->readNumEntry("LeftDockPosition", 20/* % */)));
+					qMax(20, config->readNumEntry("LeftDockPosition", 20/* % */)));
 
 	//			dw->resize( d->config->readNumEntry("LeftDockPosition", 115/* % */), dw->height() );
 # else
@@ -297,7 +297,7 @@ void updatePropEditorDockWidthInfo() {
 	type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name)
 	{
 		if (!item || !name) {
-			kdWarning() << 
+			kWarning() << 
 				"KexiMainWindowImpl::Private::openedCustomObjectsForItem(): !item || !name" << endl;
 			return 0;
 		}
@@ -322,14 +322,14 @@ void updatePropEditorDockWidthInfo() {
 		KTabWidget *propEditorTabWidget;
 		//! poits to kexi part which has been previously used to setup proppanel's tabs using 
 		//! KexiPart::setupCustomPropertyPanelTabs(), in updateCustomPropertyPanelTabs().
-		QGuardedPtr<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;
+		QPointer<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;
 		QMap<KexiPart::Part*, int> recentlySelectedPropertyPanelPages;
-		QGuardedPtr<KexiPropertyEditorView> propEditor;
-		QGuardedPtr<KoProperty::Set> propBuffer;
+		QPointer<KexiPropertyEditorView> propEditor;
+		QPointer<KoProperty::Set> propBuffer;
 
 		KXMLGUIClient *curDialogGUIClient, *curDialogViewGUIClient,
 			*closedDialogGUIClient, *closedDialogViewGUIClient;
-		QGuardedPtr<KexiDialogBase> curDialog;
+		QPointer<KexiDialogBase> curDialog;
 
 		KexiNameDialog *nameDialog;
 
@@ -398,7 +398,7 @@ void updatePropEditorDockWidthInfo() {
 		KMdiToolViewAccessor* navToolWindow;
 		KMdiToolViewAccessor* propEditorToolWindow;
 
-		QGuardedPtr<QWidget> focus_before_popup;
+		QPointer<QWidget> focus_before_popup;
 //		KexiRelationPart *relationPart;
 
 		int privateIDCounter; //!< counter: ID for private "document" like Relations window

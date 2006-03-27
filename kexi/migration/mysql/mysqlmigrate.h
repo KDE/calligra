@@ -51,7 +51,7 @@ namespace KexiMigration
 				KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);
 
 			virtual bool drv_progressSupported() { return true; }
-			virtual bool drv_getTableSize(const QString& table, Q_ULLONG& size);
+			virtual bool drv_getTableSize(const QString& table, quint64& size);
 
 //TODO: move this somewhere to low level class (MIGRATION?)
 //			virtual bool drv_getTablesList( QStringList &list );

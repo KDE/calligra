@@ -149,7 +149,7 @@ void ImportWizard::setupIntro()
 	QVBoxLayout *vbox = new QVBoxLayout(m_introPage, KDialog::marginHint());
 	
 	QLabel *lblIntro = new QLabel(m_introPage);
-	lblIntro->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
+	lblIntro->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::TextWordWrap );
 	QString msg;
 	if (m_predefinedConnectionData) { //predefined import: server source
 		msg = i18n("<qt>Database Importing wizard is about to import \"%1\" database "
@@ -332,10 +332,10 @@ void ImportWizard::setupImporting()
 	m_importingPage->hide();
 	QVBoxLayout *vbox = new QVBoxLayout(m_importingPage, KDialog::marginHint());
 	m_lblImportingTxt = new QLabel(m_importingPage);
-	m_lblImportingTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
+	m_lblImportingTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::TextWordWrap );
 
 	m_lblImportingErrTxt = new KActiveLabel(m_importingPage);
-	m_lblImportingErrTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
+	m_lblImportingErrTxt->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::TextWordWrap );
 
 	m_progressBar = new KProgress(100, m_importingPage);
 	m_progressBar->hide();
@@ -367,7 +367,7 @@ void ImportWizard::setupFinish()
 	m_finishPage->hide();
 	QVBoxLayout *vbox = new QVBoxLayout(m_finishPage, KDialog::marginHint());
 	m_finishLbl = new KActiveLabel(m_finishPage);
-	m_finishLbl->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
+	m_finishLbl->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::TextWordWrap );
 
 	vbox->addWidget( m_finishLbl );
 	m_openImportedProjectCheckBox = new QCheckBox(i18n("Open imported project"), 
@@ -458,7 +458,7 @@ void ImportWizard::arriveSrcDBPage()
 	}
 	else if (!m_srcDBName) {
 		m_srcDBPage->hide();
-		kdDebug() << "Looks like we need a project selector widget!" << endl;
+		kDebug() << "Looks like we need a project selector widget!" << endl;
 
 		KexiDB::ConnectionData* condata = m_srcConn->selectedConnectionData();
 		if(condata) {
@@ -576,7 +576,7 @@ bool ImportWizard::fileBasedSrcSelected() const
 	if (m_predefinedConnectionData)
 		return false;
 
-//	kdDebug() << (m_srcConn->selectedConnectionType()==KexiConnSelectorWidget::FileBased) << endl;
+//	kDebug() << (m_srcConn->selectedConnectionType()==KexiConnSelectorWidget::FileBased) << endl;
 	return m_srcConn->selectedConnectionType()==KexiConnSelectorWidget::FileBased;
 }
 
@@ -656,7 +656,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 	// Start with a driver manager
 	KexiDB::DriverManager manager;
 
-	kdDebug() << "Creating destination driver..." << endl;
+	kDebug() << "Creating destination driver..." << endl;
 
 	// Get a driver to the destination database
 	KexiDB::Driver *destDriver = manager.driver(
@@ -666,7 +666,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 	if (!destDriver || manager.error())
 	{
 		result.setStatus(&manager);
-		kdDebug() << "Manager error..." << endl;
+		kDebug() << "Manager error..." << endl;
 		manager.debugError();
 		result.setStatus(&manager);
 	}
@@ -680,21 +680,21 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 		if (m_dstConn->selectedConnectionData())
 		{
 			//server-based project
-			kdDebug() << "Server destination..." << endl;
+			kDebug() << "Server destination..." << endl;
 			cdata = m_dstConn->selectedConnectionData();
 			dbname = m_dstNewDBNameLineEdit->text();
 		}
 		else if (m_dstTypeCombo->currentText().lower() == KexiDB::Driver::defaultFileBasedDriverName()) 
 		{
 			//file-based project
-			kdDebug() << "File Destination..." << endl;
+			kDebug() << "File Destination..." << endl;
 			cdata = new KexiDB::ConnectionData();
 			cdataOwned = true;
 			cdata->caption = m_dstNewDBNameLineEdit->text();
 			cdata->driverName = KexiDB::Driver::defaultFileBasedDriverName();
 			dbname = m_dstConn->selectedFileName();
 			cdata->setFileName( dbname );
-			kdDebug() << "Current file name: " << dbname << endl;
+			kDebug() << "Current file name: " << dbname << endl;
 		}
 		else
 		{
@@ -722,7 +722,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 	{
 		sourceDriver = migrateManager.driver( sourceDriverName );
 		if(!sourceDriver || migrateManager.error()) {
-			kdDebug() << "Import migrate driver error..." << endl;
+			kDebug() << "Import migrate driver error..." << endl;
 			result.setStatus(&migrateManager);
 		}
 	}
@@ -745,17 +745,17 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 		bool keepData;
 		if (m_importTypeButtonGroup->selectedId() == 0)
 		{
-			kdDebug() << "Structure and data selected" << endl;
+			kDebug() << "Structure and data selected" << endl;
 			keepData = true;
 		}
 		else if (m_importTypeButtonGroup->selectedId() == 1)
 		{
-			kdDebug() << "structure only selected" << endl;
+			kDebug() << "structure only selected" << endl;
 			keepData = false;
 		}
 		else
 		{
-			kdDebug() << "Neither radio button is selected (not possible?) presume keep data" << endl;
+			kDebug() << "Neither radio button is selected (not possible?) presume keep data" << endl;
 			keepData = true;
 		}
 		
@@ -809,8 +809,8 @@ tristate ImportWizard::import()
 		sourceDriver->checkIfDestinationDatabaseOverwritingNeedsAccepting(
 			&result, acceptingNeeded);
 
-		kdDebug() << sourceDriver->data()->destination->databaseName() << endl;
-		kdDebug() << "Performing import..." << endl;
+		kDebug() << sourceDriver->data()->destination->databaseName() << endl;
+		kDebug() << "Performing import..." << endl;
 	}
 
 	if (!result.error() && acceptingNeeded && KMessageBox::Yes != KMessageBox::warningYesNo(this,
@@ -852,7 +852,7 @@ tristate ImportWizard::import()
 		KexiTextMessageHandler handler(msg, details);
 		handler.showErrorMessage(&result);
 
-		kdDebug() << msg << "\n" << details << endl;
+		kDebug() << msg << "\n" << details << endl;
 		setTitle(m_finishPage, i18n("Failure"));
 		m_finishLbl->setText(	
 			i18n("<p>Import failed.</p>%1<p>%2</p><p>You can click \"Back\" button and try again.</p>")

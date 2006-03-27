@@ -95,7 +95,7 @@ VImageTool::VInsertImageCmd::execute()
 	else
 	{
 		m_image->setState( VObject::normal );
-		m_image->transform( QWMatrix().translate( m_pos.x(), m_pos.y() ) );
+		m_image->transform( QMatrix().translate( m_pos.x(), m_pos.y() ) );
 		document()->append( m_image );
 		document()->selection()->clear();
 		document()->selection()->append( m_image );

@@ -87,15 +87,15 @@ KexiSimplePrintPreviewScrollView::KexiSimplePrintPreviewScrollView(
 void KexiSimplePrintPreviewScrollView::resizeEvent( QResizeEvent *re )
 {
 	QScrollView::resizeEvent(re);
-//	kdDebug() << re->size().width() << " " << re->size().height() << endl;
-//	kdDebug() << contentsWidth() << " " << contentsHeight() << endl;
-//	kdDebug() << widget->width() << " " << widget->height() << endl;
+//	kDebug() << re->size().width() << " " << re->size().height() << endl;
+//	kDebug() << contentsWidth() << " " << contentsHeight() << endl;
+//	kDebug() << widget->width() << " " << widget->height() << endl;
 	setUpdatesEnabled(false);
 	if (re->size().width() > (widget->width()+2*KexiSimplePrintPreviewScrollView_MARGIN)
 		|| re->size().height() > (widget->height()+2*KexiSimplePrintPreviewScrollView_MARGIN)) {
 		resizeContents(
-			QMAX(re->size().width(), widget->width()+2*KexiSimplePrintPreviewScrollView_MARGIN),
-			QMAX(re->size().height(), widget->height()+2*KexiSimplePrintPreviewScrollView_MARGIN));
+			qMax(re->size().width(), widget->width()+2*KexiSimplePrintPreviewScrollView_MARGIN),
+			qMax(re->size().height(), widget->height()+2*KexiSimplePrintPreviewScrollView_MARGIN));
 		int vscrbarWidth = verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0;
 		moveChild(widget, (contentsWidth() - vscrbarWidth - widget->width())/2, 
 			(contentsHeight() - widget->height())/2);
@@ -114,11 +114,11 @@ void KexiSimplePrintPreviewScrollView::setFullWidth()
 //	int constantWidth = m_window->width()- KexiSimplePrintPreviewScrollView_MARGIN*6;
 	double constantWidth = width()- KexiSimplePrintPreviewScrollView_MARGIN*6;
 	double heightForWidth = constantWidth * heightMM / widthMM;
-//	heightForWidth = QMIN(kapp->desktop()->height()*4/5, heightForWidth);
-	kdDebug() << "1: " << heightForWidth << endl;
+//	heightForWidth = qMin(kapp->desktop()->height()*4/5, heightForWidth);
+	kDebug() << "1: " << heightForWidth << endl;
 #if 0 //todo we can use this if we want to fix the height to width of the page
-	heightForWidth = QMIN(height(), heightForWidth);
-	kdDebug() << "2: " << heightForWidth << endl;
+	heightForWidth = qMin(height(), heightForWidth);
+	kDebug() << "2: " << heightForWidth << endl;
 #endif
 	constantWidth = heightForWidth * widthMM / heightMM;
 	widget->resize((int)constantWidth, (int)heightForWidth); //keep aspect
@@ -134,7 +134,7 @@ void KexiSimplePrintPreviewScrollView::setFullWidth()
 
 void KexiSimplePrintPreviewScrollView::setContentsPos(int x, int y)
 {
-//	kdDebug() << "############" << x << " " << y << " " << contentsX()<< " " <<contentsY() << endl;
+//	kDebug() << "############" << x << " " << y << " " << contentsX()<< " " <<contentsY() << endl;
 	if (x<0 || y<0) //to avoid endless loop on Linux
 		return;
 	QScrollView::setContentsPos(x,y);

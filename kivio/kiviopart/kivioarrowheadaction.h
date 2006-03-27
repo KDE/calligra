@@ -24,7 +24,7 @@
 
 #include <kaction.h>
 
-class KPopupMenu;
+class KMenu;
 
 class KivioArrowHeadAction : public KActionMenu
 {
@@ -34,7 +34,7 @@ class KivioArrowHeadAction : public KActionMenu
       QObject* parent = 0, const char *name = 0);
     ~KivioArrowHeadAction();
 
-    KPopupMenu* popupMenu() const;
+    KMenu* popupMenu() const;
     void popup( const QPoint& global );
 
     virtual int plug( QWidget* widget, int index = -1 );
@@ -52,12 +52,12 @@ class KivioArrowHeadAction : public KActionMenu
     void endChanged(int);
 
   protected:
-    void loadArrowHeads(KPopupMenu* combo);
+    void loadArrowHeads(KMenu* combo);
 
   protected:
-    KPopupMenu* m_popup;
-    KPopupMenu* m_startPopup;
-    KPopupMenu* m_endPopup;
+    KMenu* m_popup;
+    KMenu* m_startPopup;
+    KMenu* m_endPopup;
     int m_currentStart;
     int m_currentEnd;
     bool m_emitSignals;

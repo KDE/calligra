@@ -228,7 +228,7 @@ bool ReportItem::intersects( ReportItem *item )
     bool intersects = r1.intersects( r2 );
 
     if ( intersects )
-        kdDebug(30001) << rttiName( rtti() ) << " " << r1 << "\n"
+        kDebug(30001) << rttiName( rtti() ) << " " << r1 << "\n"
                   << "...is intersected by..." << "\n"
                   << rttiName( item->rtti() ) << " " << r2
                   << endl;

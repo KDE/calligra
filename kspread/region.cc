@@ -122,7 +122,7 @@ Region::Region(const QRect& rect, Sheet* sheet)
 
   if (rect.isNull())
   {
-    kdError(36001) << "Region::Region(const QRect&): QRect is empty!" << endl;
+    kError(36001) << "Region::Region(const QRect&): QRect is empty!" << endl;
     return;
   }
   add(rect, sheet);
@@ -134,7 +134,7 @@ Region::Region(const QPoint& point, Sheet* sheet)
 
   if (point.isNull())
   {
-    kdError(36001) << "Region::Region(const QPoint&): QPoint is empty!" << endl;
+    kError(36001) << "Region::Region(const QPoint&): QPoint is empty!" << endl;
     return;
   }
   add(point, sheet);
@@ -168,7 +168,7 @@ Region::Region(int x, int y, Sheet* sheet)
 
   if (x<1 || y<1)
   {
-    kdError(36001) << "Region::Region(int x, int y): Coordinates are invalid!" << endl;
+    kError(36001) << "Region::Region(int x, int y): Coordinates are invalid!" << endl;
     return;
   }
   add(QPoint(x,y), sheet);
@@ -180,7 +180,7 @@ Region::Region(int x, int y, int width, int height, Sheet* sheet)
 
   if (x<1 || y<1 || width<1 || height<1)
   {
-    kdError(36001) << "Region::Region(int x, int y, int width, int height): Dimensions are invalid!" << endl;
+    kError(36001) << "Region::Region(int x, int y, int width, int height): Dimensions are invalid!" << endl;
     return;
   }
   add(QRect(x,y,width,height), sheet);
@@ -249,7 +249,7 @@ QString Region::name(Sheet* originSheet) const
 
 Region::Element* Region::add(const QPoint& point, Sheet* sheet)
 {
-//   kdDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
   if (point.x() < 1 || point.y() < 1)
   {
     return 0;
@@ -362,16 +362,16 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     // left range
     left = fullRange.left();
     top = y;
-    width = QMAX(0, x - left);
+    width = qMax(0, x - left);
     height = 1;
     if (width > 0)
     {
       insert(it, QRect(left, top, width, height), sheet);
     }
     // right range
-    left = QMIN(x+1, fullRange.right());
+    left = qMin(x+1, fullRange.right());
     top = y;
-    width = QMAX(0, fullRange.right() - x);
+    width = qMax(0, fullRange.right() - x);
     height = 1;
     if (width > 0)
     {
@@ -381,7 +381,7 @@ Region::Element* Region::eor(const QPoint& point, Sheet* sheet)
     left = fullRange.left();
     top = y+1;
     width = fullRange.width();
-    height = QMAX(0, fullRange.bottom() - y);
+    height = qMax(0, fullRange.bottom() - y);
     if (height > 0)
     {
       insert(it, QRect(left, top, width, height), sheet);
@@ -703,7 +703,7 @@ Sheet* Region::filterSheetName(QString& sRegion)
     sheet = d->view->doc()->map()->findSheet(sheetName);
     if (!sheet)
     {
-      kdDebug() << "Sheet " << sheetName << " not found. Using active sheet!" << endl;
+      kDebug() << "Sheet " << sheetName << " not found. Using active sheet!" << endl;
       sheet = d->view->activeSheet();
     }
   }
@@ -772,7 +772,7 @@ Region::Point::Point(const QString& sCell)
 
     if (length == 0)
     {
-      kdDebug(36001) << "Region::Point::init: length = 0" << endl;
+      kDebug(36001) << "Region::Point::init: length = 0" << endl;
       return;
     }
 
@@ -789,7 +789,7 @@ Region::Point::Point(const QString& sCell)
     // Malformed ?
     if (p == length)
     {
-      kdDebug(36001) << "Region::Point::init: no point after '$' (string: '" << string.mid(p) << "'" << endl;
+      kDebug(36001) << "Region::Point::init: no point after '$' (string: '" << string.mid(p) << "'" << endl;
         return;
     }
 
@@ -797,7 +797,7 @@ Region::Point::Point(const QString& sCell)
     {
         if (string[p] < 'a' || string[p] > 'z')
         {
-          kdDebug(36001) << "Region::Point::init: wrong first character in point (string: '" << string.mid(p) << "'" << endl;
+          kDebug(36001) << "Region::Point::init: wrong first character in point (string: '" << string.mid(p) << "'" << endl;
             return;
         }
     }
@@ -813,7 +813,7 @@ Region::Point::Point(const QString& sCell)
     }
     else  // If there isn't any, then this is not a point -> return
     {
-      kdDebug(36001) << "Region::Point::init: no number in string (string: '" << string.mid( p, result ) << "'" << endl;
+      kDebug(36001) << "Region::Point::init: no number in string (string: '" << string.mid( p, result ) << "'" << endl;
         return;
     }
     p = result;
@@ -821,14 +821,14 @@ Region::Point::Point(const QString& sCell)
     //limit is KS_colMax
     if ( x > KS_colMax )
     {
-      kdDebug(36001) << "Region::Point::init: column value too high (col: " << x << ")" << endl;
+      kDebug(36001) << "Region::Point::init: column value too high (col: " << x << ")" << endl;
         return;
     }
 
     // Malformed ?
     if (p == length)
     {
-        kdDebug(36001) << "Region::Point::init: p==length after cols" << endl;
+        kDebug(36001) << "Region::Point::init: p==length after cols" << endl;
         return;
     }
 
@@ -838,7 +838,7 @@ Region::Point::Point(const QString& sCell)
   // Malformed ?
         if ( p == length )
         {
-            kdDebug(36001) << "Region::Point::init: p==length after $ of row" << endl;
+            kDebug(36001) << "Region::Point::init: p==length after $ of row" << endl;
             return;
         }
     }
@@ -848,7 +848,7 @@ Region::Point::Point(const QString& sCell)
     {
         if (!QChar(string[p++]).isDigit())
         {
-            kdDebug(36001) << "Region::Point::init: no number" << endl;
+            kDebug(36001) << "Region::Point::init: no number" << endl;
             return;
         }
     }
@@ -857,17 +857,17 @@ Region::Point::Point(const QString& sCell)
     int y = string.mid( p2, p-p2 ).toInt( &ok );
     if ( !ok )
     {
-        kdDebug(36001) << "Region::Point::init: Invalid number (string: '" << string.mid( p2, p-p2 ) << "'" << endl;
+        kDebug(36001) << "Region::Point::init: Invalid number (string: '" << string.mid( p2, p-p2 ) << "'" << endl;
         return;
     }
     if ( y > KS_rowMax )
     {
-        kdDebug(36001) << "Region::Point::init: row value too high (row: " << y << ")" << endl;
+        kDebug(36001) << "Region::Point::init: row value too high (row: " << y << ")" << endl;
         return;
     }
     if ( y <= 0 )
     {
-        kdDebug(36001) << "Region::Point::init: y <= 0" << endl;
+        kDebug(36001) << "Region::Point::init: y <= 0" << endl;
         return;
     }
 

@@ -51,8 +51,8 @@ public:
 	virtual void clear( const KoRect &, const QColor & );
 
 	// matrix manipulation
-	virtual void setWorldMatrix( const QWMatrix & );
-	virtual const QWMatrix worldMatrix() { return m_matrix; }
+	virtual void setMatrix( const QMatrix & );
+	virtual const QMatrix worldMatrix() { return m_matrix; }
 	virtual void setZoomFactor( double );
 	virtual double zoomFactor() { return m_zoomFactor; }
 
@@ -80,7 +80,7 @@ public:
 	virtual void setBrush( const QColor & );
 	virtual void setBrush( Qt::BrushStyle style );
 
-	virtual void drawImage( const QImage &, const QWMatrix & );
+	virtual void drawImage( const QImage &, const QMatrix & );
 
 	// stack management
 	virtual void save();
@@ -109,7 +109,7 @@ private:
 	QPaintDevice *m_target;
 	unsigned int m_width;
 	unsigned int m_height;
-	QWMatrix m_matrix;
+	QMatrix m_matrix;
 	VStroke *m_stroke;
 	VFill *m_fill;
 	VFillRule m_fillRule;

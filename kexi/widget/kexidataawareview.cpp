@@ -24,7 +24,7 @@
 
 #include <qlayout.h>
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 
 KexiDataAwareView::KexiDataAwareView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
  : KexiViewBase(mainWin, parent, name)
@@ -144,7 +144,7 @@ void KexiDataAwareView::reloadActions()
 //	m_view->initActions(guiClient()->actionCollection());
 //warning FIXME Move this to the table part
 /*
-	kdDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
+	kDebug()<<"INIT ACTIONS***********************************************************************"<<endl;
 	new KAction(i18n("Filter"), "filter", 0, this, SLOT(filter()), actionCollection(), "tablepart_filter");
 	setXMLFile("kexidatatableui.rc");
 */

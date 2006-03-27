@@ -219,8 +219,8 @@ bool KexiViewBase::eventFilter( QObject *o, QEvent *e )
 				emit focus(true);
 			}
 			if (e->type()==QEvent::FocusOut) { // && focusWidget() && Kexi::hasParent( this, focusWidget())) { // && focusWidget()->inherits("KexiViewBase")) {
-//				kdDebug() << focusWidget()->className() << " " << focusWidget()->name()<< endl;
-//				kdDebug() << o->className() << " " << o->name()<< endl;
+//				kDebug() << focusWidget()->className() << " " << focusWidget()->name()<< endl;
+//				kDebug() << o->className() << " " << o->name()<< endl;
 				KexiViewBase *v = KexiUtils::findParent<KexiViewBase>(o, "KexiViewBase") ;
 //				QWidget *www=v->focusWidget();
 				if (v) {
@@ -269,7 +269,7 @@ void KexiViewBase::addChildView( KexiViewBase* childView )
 void KexiViewBase::setFocus()
 {
 	if (!m_lastFocusedChildBeforeFocusOut.isNull()) {
-//		kdDebug() << "FOCUS: " << m_lastFocusedChildBeforeFocusOut->className() << " " << m_lastFocusedChildBeforeFocusOut->name()<< endl;
+//		kDebug() << "FOCUS: " << m_lastFocusedChildBeforeFocusOut->className() << " " << m_lastFocusedChildBeforeFocusOut->name()<< endl;
 		QWidget *w = m_lastFocusedChildBeforeFocusOut;
 		m_lastFocusedChildBeforeFocusOut = 0;
 		w->setFocus();

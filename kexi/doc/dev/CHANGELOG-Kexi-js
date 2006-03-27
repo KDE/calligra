@@ -3387,7 +3387,7 @@ e.g. for KexiDialogBase.
 2004-01-03
 - KexiDB, core:
 	-ConnectionData and KexiProjectData now inherit QObject 
-	 (useful for QGuardedPtr, sharing and for notifications about changes)
+	 (useful for QPointer, sharing and for notifications about changes)
 	-project_caption, project_desc properties are now created and stored in projects
 	-some utility functions added in kexidb/utils.cpp
 - KexiMainWindow: application's caption now also contain current project's caption (or name)
@@ -3883,7 +3883,7 @@ TODO: update on lostfocus
 - KexiDB::Object::debugError() added for convenience
 - Object: serverErrorMsg(), serverResult(), serverResultName(),
 	drv_clearServerResult() added
-- virtual Q_ULLONG Connection::drv_lastInsertRowID() added - returns unique
+- virtual quint64 Connection::drv_lastInsertRowID() added - returns unique
    identifier of last inserted row. 
 - DriverBehaviour::AUTO_INCREMENT_FIELD_OPTION added; autoinc field's option is now 
 	used in "CREATE TABLE" statement building; bool SPECIAL_AUTO_INCREMENT_DEF added
@@ -4047,7 +4047,7 @@ TODO: add
   - simplification: now bof() is computed as m_at==0
   - we are internally counting records from 1 and externally from 0
      (what is visible using at()).
-  - m_at and thus at() has now Q_LLONG type
+  - m_at and thus at() has now qint64 type
 
 2003-09-14
 - KexiDB::Object::setErrorMsg renamed to setError
@@ -4196,7 +4196,7 @@ TODO: add drag from browser
 	- moving TableViews back from outside of scroll view area automatically shrinks scroll view's 
 	area to smallest possible size
 	- field that we drag over now is highlighted
-TODO: fix KListView::viewportPaintEvent() like in KexiRelationViewTable::drawItemHighlighter()
+TODO: fix K3ListView::viewportPaintEvent() like in KexiRelationViewTable::drawItemHighlighter()
       and commit to cvs (kdeui)
 - KexiRelationViewTableContainer got now focus/unfocus/z-order functionality. Colors of table headers 
 	are consistent with focusing and OS settings
@@ -4227,7 +4227,7 @@ TODO: like above: "Print" and "Print to"
 
 2003-07-18
 - " " prepended to Project Browsers' list items' texts for better look (maybe add this feature 
-	to KListView or make its generic subclass?)
+	to K3ListView or make its generic subclass?)
 - Some fixes with text positioning in tableview cells: float and date type y-offset, 
 	date type editor frames removed
 TODO: maybe optionally use KDateWidget (this needs to extend and improve this class)?

@@ -130,33 +130,33 @@ void DurationWidget::destroy()
     //delete m_validator;  //QWidget takes care of this
 }
 
-Q_INT64 DurationWidget::setValueMilliseconds(Q_INT64 milliseconds)
+qint64 DurationWidget::setValueMilliseconds(qint64 milliseconds)
 {
     unsigned sc = (unsigned)m_fields[4].leftScale;
-    Q_INT64 secs = milliseconds / sc;
-    Q_INT64 ms = milliseconds % sc;
+    qint64 secs = milliseconds / sc;
+    qint64 ms = milliseconds % sc;
     QString tmp;
     tmp.sprintf(m_fields[4].format, ms);
     m_fields[4].current->setText(tmp);
     return secs;
 }
 
-Q_INT64 DurationWidget::setValueSeconds(Q_INT64 seconds)
+qint64 DurationWidget::setValueSeconds(qint64 seconds)
 {
     unsigned sc = (unsigned)m_fields[3].leftScale;
-    Q_INT64 mins = seconds / sc;
-    Q_INT64 s = seconds % sc;
+    qint64 mins = seconds / sc;
+    qint64 s = seconds % sc;
     QString tmp;
     tmp.sprintf(m_fields[3].format, s);
     m_fields[3].current->setText(tmp);
     return mins;
 }
 
-Q_INT64 DurationWidget::setValueMinutes(Q_INT64 mins)
+qint64 DurationWidget::setValueMinutes(qint64 mins)
 {
     unsigned sc = (unsigned)m_fields[2].leftScale;
-    Q_INT64 hours = mins / sc;
-    Q_INT64 m = mins % sc;
+    qint64 hours = mins / sc;
+    qint64 m = mins % sc;
     QString tmp;
     tmp.sprintf(m_fields[2].format, m);
     m_fields[2].current->setText(tmp);
@@ -164,14 +164,14 @@ Q_INT64 DurationWidget::setValueMinutes(Q_INT64 mins)
 }
 
 // NOTE: Input is minutes and also returns minutes!
-Q_INT64 DurationWidget::setValueHours(Q_INT64 mins)
+qint64 DurationWidget::setValueHours(qint64 mins)
 {
     if (m_fields[1].current->isHidden())
         return mins;
     unsigned sc = (unsigned)m_fields[1].rightScale;
-    Q_INT64 hours = (Q_INT64)(mins / sc);
-    Q_INT64 m = mins - (Q_INT64)(hours * sc);
-    //kdDebug()<<k_funcinfo<<"mins="<<mins<<" -> hours="<<hours<<" rem="<<m<<endl;
+    qint64 hours = (qint64)(mins / sc);
+    qint64 m = mins - (qint64)(hours * sc);
+    //kDebug()<<k_funcinfo<<"mins="<<mins<<" -> hours="<<hours<<" rem="<<m<<endl;
     QString tmp;
     tmp.sprintf(m_fields[1].format, hours);
     m_fields[1].current->setText(tmp);
@@ -179,14 +179,14 @@ Q_INT64 DurationWidget::setValueHours(Q_INT64 mins)
 }
 
 // NOTE: Input is minutes and also returns minutes!
-Q_INT64 DurationWidget::setValueDays(Q_INT64 mins)
+qint64 DurationWidget::setValueDays(qint64 mins)
 {
     if (m_fields[0].current->isHidden())
         return mins;
     double sc = m_fields[1].rightScale * m_fields[0].rightScale;
-    Q_INT64 days = (Q_INT64)(mins / sc);
-    Q_INT64 m = mins - (Q_INT64)(days * sc);
-    //kdDebug()<<k_funcinfo<<"mins="<<mins<<" -> days="<<days<<" rem="<<m<<endl;
+    qint64 days = (qint64)(mins / sc);
+    qint64 m = mins - (qint64)(days * sc);
+    //kDebug()<<k_funcinfo<<"mins="<<mins<<" -> days="<<days<<" rem="<<m<<endl;
     QString tmp;
     tmp.sprintf(m_fields[0].format, days);
     m_fields[0].current->setText(tmp);
@@ -195,15 +195,15 @@ Q_INT64 DurationWidget::setValueDays(Q_INT64 mins)
 
 void DurationWidget::setValue(const KPlato::Duration &newDuration)
 {
-    Q_INT64 value = newDuration.milliseconds();
-    //kdDebug()<<k_funcinfo<<f<<": value="<<value<<endl;
+    qint64 value = newDuration.milliseconds();
+    //kDebug()<<k_funcinfo<<f<<": value="<<value<<endl;
     value = setValueMilliseconds(value); // returns seconds
     value = setValueSeconds(value); // returns minutes
     // Now call days first to allow for fractional scales
     value = setValueDays(value); // NOTE  returns minutes
     value = setValueHours(value); // NOTE  returns minutes
     value = setValueMinutes(value); // returns hours: Should be 0
-    if (value > 0) kdError()<<k_funcinfo<<"Remainder > 0: "<<value<<endl;
+    if (value > 0) kError()<<k_funcinfo<<"Remainder > 0: "<<value<<endl;
     
     emit valueChanged();
 }
@@ -218,7 +218,7 @@ Duration DurationWidget::value() const
     {
         double v = m_fields[i].current->text().toDouble();
         v = v * m_fields[i].scale / m_fields[i].fullScale;;
-        d.addMilliseconds((Q_INT64)(v*(1000*60*60*24)));
+        d.addMilliseconds((qint64)(v*(1000*60*60*24)));
     }
     ++i;
     if (!m_fields[i].current->isHidden() &&
@@ -227,7 +227,7 @@ Duration DurationWidget::value() const
     {
         double v = m_fields[i].current->text().toDouble();
         v = v * m_fields[i].scale / m_fields[i].fullScale;;
-        d.addMilliseconds((Q_INT64)(v*(1000*60*60)));
+        d.addMilliseconds((qint64)(v*(1000*60*60)));
     }
     ++i;
     if (!m_fields[i].current->isHidden() &&
@@ -236,7 +236,7 @@ Duration DurationWidget::value() const
     {
         double v = m_fields[i].current->text().toDouble();
         v = v * m_fields[i].scale / m_fields[i].fullScale;;
-        d.addMilliseconds((Q_INT64)(v*(1000*60)));
+        d.addMilliseconds((qint64)(v*(1000*60)));
     }
     ++i;
     if (!m_fields[i].current->isHidden() &&
@@ -245,12 +245,12 @@ Duration DurationWidget::value() const
     {
         double v = m_fields[i].current->text().toDouble();
         v = v * m_fields[i].scale / m_fields[i].fullScale;;
-        d.addMilliseconds((Q_INT64)(v*(1000)));
+        d.addMilliseconds((qint64)(v*(1000)));
     }
     ++i;
     if (!m_fields[i].current->isHidden())
     {
-        Q_INT64 v = m_fields[i].current->text().toUInt();
+        qint64 v = m_fields[i].current->text().toUInt();
         d.addMilliseconds(v);
     }
     return d;
@@ -308,10 +308,10 @@ void DurationWidget::handleLostFocus(
     double v = KGlobal::locale()->readNumber(newValue);
     unsigned currentValue = 0;
     QString tmp;
-    //kdDebug()<<k_funcinfo<<field<<": value="<<v<<" v="<<v<<endl;
+    //kDebug()<<k_funcinfo<<field<<": value="<<v<<" v="<<v<<endl;
     if (left && v >= leftScale)
     {
-        //kdDebug()<<k_funcinfo<<field<<": value="<<v<<" leftScale="<<leftScale<<endl;
+        //kDebug()<<k_funcinfo<<field<<": value="<<v<<" leftScale="<<leftScale<<endl;
         // Carry overflow, recurse as required.
         tmp.sprintf(leftFormat, (unsigned)(v / leftScale));
         left->setText(tmp);
@@ -329,11 +329,11 @@ void DurationWidget::handleLostFocus(
         double frac = fraction(newValue, &p);
         if (right && frac > 0.0)
         {
-            //kdDebug()<<k_funcinfo<<field<<": value="<<newValue<<" rightScale="<<rightScale<<" frac="<<frac<<" ("<<newValue.mid(point)<<")"<<endl;
+            //kDebug()<<k_funcinfo<<field<<": value="<<newValue<<" rightScale="<<rightScale<<" frac="<<frac<<" ("<<newValue.mid(point)<<")"<<endl;
             // Propagate fraction
             v = rightScale * (frac*power(10.0, -p));
             frac = fraction(KGlobal::locale()->formatNumber(v, 19), 0);
-            //kdDebug()<<k_funcinfo<<field<<": v="<<v<<" ("<<(unsigned)v<<") rest="<<frac<<endl;
+            //kDebug()<<k_funcinfo<<field<<": v="<<v<<" ("<<(unsigned)v<<") rest="<<frac<<endl;
             if (frac > 0.0)
             {
                 tmp = KGlobal::locale()->formatNumber(v, 19);

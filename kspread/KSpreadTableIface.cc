@@ -80,14 +80,14 @@ bool KSpread::CellProxy::process( const QCString& obj, const QCString& fun, cons
                                         QCString& replyType, QByteArray &replyData )
 {
 
-	kdDebug()<<"CellProxy::process: requested object:"<<obj<<endl;
-	kdDebug()<<"CellProxy::process: prefix:"<<m_prefix<<endl;
+	kDebug()<<"CellProxy::process: requested object:"<<obj<<endl;
+	kDebug()<<"CellProxy::process: prefix:"<<m_prefix<<endl;
     if ( strncmp( m_prefix.data(), obj.data(), m_prefix.length() ) != 0 )
         return false;
 
 	if ( fun == "functions()" ) {
         	replyType = "QCStringList";
-	        QDataStream reply( replyData, IO_WriteOnly );
+	        QDataStream reply( replyData, QIODevice::WriteOnly );
 		 QCStringList repList=m_cell->functions();
 		reply<<repList;
 	        return true;
@@ -96,15 +96,15 @@ bool KSpread::CellProxy::process( const QCString& obj, const QCString& fun, cons
     QString cellID=QString::fromUtf8(obj.data() + m_prefix.length());
     cellID=m_sheet->sheetName()+"!"+cellID;
 
-    kdDebug()<<"CellProxy::process: cellID="<<cellID<<endl;
+    kDebug()<<"CellProxy::process: cellID="<<cellID<<endl;
 
     Point p( cellID); //obj.data() + m_prefix.length() );
     if ( p.pos().x()<0 ) {
-	kdDebug(36001)<<"CellProyxy::process: resulting Point is not valid"<<endl;
+	kDebug(36001)<<"CellProyxy::process: resulting Point is not valid"<<endl;
         return false;
     }
 
-    kdDebug(36001)<<"all checks finsihed, trying to access cell (x):"<<p.pos().x()<<endl;
+    kDebug(36001)<<"all checks finsihed, trying to access cell (x):"<<p.pos().x()<<endl;
 
     m_cell->setCell( m_sheet, p.pos() );
     return m_cell->process( fun, data, replyType, replyData );
@@ -143,7 +143,7 @@ void SheetIface::sheetNameHasChanged() {
            delete m_proxy;
            QCString str = objId();
            str += "/";
-	   kdDebug(36001)<<"SheetIface::tableNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
+	   kDebug(36001)<<"SheetIface::tableNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
            m_proxy = new CellProxy( m_sheet, str );
    }
 
@@ -214,7 +214,7 @@ int SheetIface::maxColumn() const
 
 bool SheetIface::areaHasNoContent(QRect area) const
 {
-	kdDebug(36001) << "SheetIface::areaHasNoContent("<<area<<");"<<endl;
+	kDebug(36001) << "SheetIface::areaHasNoContent("<<area<<");"<<endl;
 	return m_sheet->areaIsEmpty(area);
 }
 
@@ -231,7 +231,7 @@ int SheetIface::maxRow() const
 bool SheetIface::processDynamic( const QCString& fun, const QByteArray&/*data*/,
                                         QCString& replyType, QByteArray &replyData )
 {
-    kdDebug(36001) << "Calling '" << fun.data() << "'" << endl;
+    kDebug(36001) << "Calling '" << fun.data() << "'" << endl;
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
     if ( len < 3 )
@@ -248,7 +248,7 @@ bool SheetIface::processDynamic( const QCString& fun, const QByteArray&/*data*/,
     QCString str = objId() + "/" + fun.left( len - 2 );
 
     replyType = "DCOPRef";
-    QDataStream out( replyData, IO_WriteOnly );
+    QDataStream out( replyData, QIODevice::WriteOnly );
     out << DCOPRef( kapp->dcopClient()->appId(), str );
     return true;
 }

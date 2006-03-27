@@ -47,7 +47,7 @@ VPolygon::init()
 {
 	bool bFirst = true;
 
-	QString points = m_points.simplifyWhiteSpace();
+	QString points = m_points.simplified();
 	points.replace( ',', ' ' );
 	points.remove( '\r' );
 	points.remove( '\n' );
@@ -68,7 +68,7 @@ VPolygon::init()
 	}
 	close();
 
-	QWMatrix m;
+	QMatrix m;
 	m.translate( m_topLeft.x(), m_topLeft.y() );
 
 	// only tranform the path data

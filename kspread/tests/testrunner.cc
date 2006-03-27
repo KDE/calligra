@@ -110,7 +110,7 @@ void TestRunner::runTest()
     d->logView->clear();
     d->logView->append( QString("Test: %1").arg( testName ) );
 
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     tester->run();
     QApplication::restoreOverrideCursor();
 

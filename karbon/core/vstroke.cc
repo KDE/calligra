@@ -252,7 +252,7 @@ VStroke::operator=( const VStroke& stroke )
 }
 
 void 
-VStroke::transform( const QWMatrix& m )
+VStroke::transform( const QMatrix& m )
 {
 	if( type() == VStroke::grad )
 		gradient().transform( m );

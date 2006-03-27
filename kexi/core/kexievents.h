@@ -60,9 +60,9 @@ class KEXICORE_EXPORT Event
 		void  setSlot(const QCString &s) { m_slot = s; }
 
 	protected:
-		QGuardedPtr<QObject> m_sender;
+		QPointer<QObject> m_sender;
 		QCString m_signal;
-		QGuardedPtr<QObject> m_receiver;
+		QPointer<QObject> m_receiver;
 		QCString m_slot;
 		int  m_type;
 };

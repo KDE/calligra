@@ -54,7 +54,7 @@ PertView::~PertView()
 
 void PertView::init(QLayout */*layout*/)
 {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QGridLayout *gl = new QGridLayout(this, 1, 1, -1, -1, "Pert QGridLayout");
     m_canvasview = new PertCanvas(this);
         gl->addWidget(m_canvasview, 0, 0);
@@ -68,21 +68,21 @@ void PertView::init(QLayout */*layout*/)
 
 void PertView::draw() 
 {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_canvasview->draw(m_mainview->getPart()->getProject());
     m_canvasview->show();
 }
 
 void PertView::slotRMBPressed(Node *node, const QPoint & point)
 {
-    //kdDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
     m_node = node;
     if (node && (node->type() == Node::Type_Task || node->type() == Node::Type_Milestone)) {
         QPopupMenu *menu = m_mainview->popupMenu("task_popup");
         if (menu)
         {
             /*int id =*/ menu->exec(point);
-            //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+            //kDebug()<<k_funcinfo<<"id="<<id<<endl;
         }
         return;
     }
@@ -91,7 +91,7 @@ void PertView::slotRMBPressed(Node *node, const QPoint & point)
         if (menu)
         {
             /*int id =*/ menu->exec(point);
-            //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
+            //kDebug()<<k_funcinfo<<"id="<<id<<endl;
         }
         return;
     }
@@ -100,20 +100,20 @@ void PertView::slotRMBPressed(Node *node, const QPoint & point)
 
 void PertView::slotAddRelation(Node* par, Node* child)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     emit addRelation(par, child);
 }
 
 void PertView::slotModifyRelation(Relation *rel)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     emit modifyRelation(rel);
 }
 
 void PertView::print(KPrinter &printer)
 {
     Q_UNUSED(printer);
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
 
 }
 
@@ -125,14 +125,14 @@ Node *PertView::currentNode()
 bool PertView::setContext(Context::Pertview &context)
 {
     Q_UNUSED(context);
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     return true;
 }
 
 void PertView::getContext(Context::Pertview &context) const
 {
     Q_UNUSED(context);
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 }  //KPlato namespace

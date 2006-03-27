@@ -118,7 +118,7 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles, 
 	if( !name().isEmpty() )
 		docWriter->addAttribute( "draw:name", name() );
 
-	QWMatrix mat;
+	QMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( 0, -document()->height() );
 
@@ -142,7 +142,7 @@ VObject::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) 
 {
 	if( m_fill )
 	{
-		QWMatrix mat;
+		QMatrix mat;
 		mat.scale( 1, -1 );
 		mat.translate( 0, -document()->height() );
 

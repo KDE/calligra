@@ -42,7 +42,7 @@
 #include <kexidragobjects.h>
 
 KexiFieldListView::KexiFieldListView(QWidget *parent, const char *name, int options)
- : KListView(parent, name)
+ : K3ListView(parent, name)
  , m_schema(0)
  , m_options(options)
 {
@@ -85,7 +85,7 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 
 	int order=0;
 	bool hasPKeys = true; //t->hasPrimaryKeys();
-	KListViewItem *item = 0;
+	K3ListViewItem *item = 0;
 	KexiDB::QueryColumnInfo::Vector columns = m_schema->columns(true /*unique*/);
 	const int count = columns.count();
 	for(int i=-1; i < count; i++)
@@ -94,11 +94,11 @@ void KexiFieldListView::setSchema(KexiDB::TableOrQuerySchema* schema)
 		if (i==-1) {
 			if (! (m_options & ShowAsterisk))
 				continue;
-			item = new KListViewItem(this, item, "*");
+			item = new K3ListViewItem(this, item, "*");
 		}
 		else {
 			colinfo = columns[i];
-			item = new KListViewItem(this, item, colinfo->aliasOrName());
+			item = new K3ListViewItem(this, item, colinfo->aliasOrName());
 			if (m_options & ShowDataTypes)
 				item->setText(1, colinfo->field->typeName());
 		}
@@ -118,10 +118,10 @@ QSize KexiFieldListView::sizeHint()
 {
 	QFontMetrics fm(font());
 
-	kdDebug() << m_table->name() << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.width(m_table->name()+"  ") << endl; 
+	kDebug() << m_table->name() << " cw=" << columnWidth(1) + fm.width("i") << ", " << fm.width(m_table->name()+"  ") << endl; 
 
 	QSize s( 
-		QMAX( columnWidth(1) + fm.width("i"), fm.width(m_table->name()+"  ")), 
+		qMax( columnWidth(1) + fm.width("i"), fm.width(m_table->name()+"  ")), 
 		childCount()*firstChild()->totalHeight() + 4 );
 //	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
 	return s;

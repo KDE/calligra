@@ -23,7 +23,7 @@
 #include <qtoolbutton.h>
 #include <kaction.h>
 
-class QIconSet;
+class QIcon;
 
 //! A small tool button with icon and optional text
 class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
@@ -35,7 +35,7 @@ class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
 			const QString& icon = QString::null, const char* name = 0);
 
 		KexiSmallToolButton(QWidget* parent, const QString& text, 
-			const QIconSet& iconSet, const char* name = 0);
+			const QIcon& iconSet, const char* name = 0);
 
 		KexiSmallToolButton(QWidget* parent, KAction *action);
 		
@@ -43,17 +43,17 @@ class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
 
 		void updateAction();
 
-		virtual void setIconSet( const QIconSet& iconSet );
+		virtual void setIconSet( const QIcon& iconSet );
 		virtual void setIconSet( const QString& icon );
 		virtual void setTextLabel( const QString & newLabel, bool tipToo );
 		virtual void setTextLabel( const QString & newLabel ) { setTextLabel(newLabel, false); }
 
 	protected:
-		void update(const QString& text, const QIconSet& iconSet, bool tipToo = false);
+		void update(const QString& text, const QIcon& iconSet, bool tipToo = false);
 		void init();
 		virtual void drawButton( QPainter *_painter );
 
-		QGuardedPtr<KAction> m_action;
+		QPointer<KAction> m_action;
 };
 
 #endif

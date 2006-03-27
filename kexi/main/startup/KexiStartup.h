@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 #include <qwidget.h>
-#include <kpassdlg.h>
+#include <kpassworddialog.h>
 
 #include <core/kexistartupdata.h>
 #include <core/kexi.h>

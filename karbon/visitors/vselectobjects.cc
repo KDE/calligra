@@ -236,7 +236,7 @@ VSelectObjects::visitVText( VText& text )
 		visitVPath( c );
 		if( m_select && c.state() == VObject::selected )
 		{
-			kdDebug(38000) << "selected: " << itr.current() << endl;
+			kDebug(38000) << "selected: " << itr.current() << endl;
 			m_selection.remove( &c );
 			text.setState( VObject::selected );
 			if( ! m_selection.containsRef( &text ) )
@@ -245,7 +245,7 @@ VSelectObjects::visitVText( VText& text )
 		}
 		else if( c.state() == VObject::normal )
 		{
-			kdDebug(38000) << "deselected: " << itr.current() << endl;
+			kDebug(38000) << "deselected: " << itr.current() << endl;
 			deselectedGlyphs++;
 		}
 	}

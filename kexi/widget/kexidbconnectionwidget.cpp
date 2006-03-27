@@ -30,10 +30,10 @@
 #include <kiconloader.h>
 #include <klineedit.h>
 #include <knuminput.h>
-#include <kpassdlg.h>
+#include <kpassworddialog.h>
 #include <kurlrequester.h>
 #include <ktextedit.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 #include <qlabel.h>
 #include <qcheckbox.h>

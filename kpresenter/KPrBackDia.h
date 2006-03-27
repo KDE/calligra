@@ -39,7 +39,7 @@ class KPrBackGround;
 class QCheckBox;
 class QTabWidget;
 class KPrPage;
-class KURLRequester;
+class KUrlRequester;
 
 
 class KPrBackPreview : public QFrame
@@ -93,7 +93,7 @@ private:
     QCheckBox *unbalanced;
     QComboBox *cType, *backCombo, *picView;
     QLabel *picChooseLabel;
-    KURLRequester *picChoose;
+    KUrlRequester *picChoose;
     KColorButton *color1Choose, *color2Choose;
     QSlider *xfactor, *yfactor;
     KPrBackPreview *preview;

@@ -119,7 +119,7 @@ namespace Kexi
 
 			QString message, description;
 		protected:
-			QGuardedPtr<QObject> dbObj; //! This is in fact KexiDB::Object
+			QPointer<QObject> dbObj; //! This is in fact KexiDB::Object
 			KexiDB::MessageHandler* msgHandler;
 	};
 

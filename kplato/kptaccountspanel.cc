@@ -29,7 +29,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 
 #include <kdebug.h>
@@ -37,25 +37,25 @@
 namespace KPlato
 {
 
-class AccountItem : public KListViewItem {
+class AccountItem : public K3ListViewItem {
 public:
     AccountItem(AccountsPanel &pan, QListView *parent)
-    : KListViewItem(parent), account(0), panel(pan)
+    : K3ListViewItem(parent), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListViewItem *parent)
-    : KListViewItem(parent), account(0), panel(pan)
+    : K3ListViewItem(parent), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListView *parent, QString label1, QString label2 = QString::null)
-    : KListViewItem(parent, label1, label2), account(0), panel(pan)
+    : K3ListViewItem(parent, label1, label2), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListViewItem *parent, QString label1, QString label2 = QString::null)
-    : KListViewItem(parent, label1, label2), account(0), panel(pan)
+    : K3ListViewItem(parent, label1, label2), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListView *parent, QListViewItem *after)
-    : KListViewItem(parent, after), account(0), panel(pan)
+    : K3ListViewItem(parent, after), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListViewItem *parent, QListViewItem *after)
-    : KListViewItem(parent, after), account(0), panel(pan)
+    : K3ListViewItem(parent, after), account(0), panel(pan)
     { init(); }
 
     Account *account;
@@ -65,7 +65,7 @@ public:
     AccountsPanel &panel;
 protected:
     virtual void cancelRename(int col) {
-        //kdDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo<<endl;
         if ((col == 0 && oldText.isEmpty()) ||
             (!panel.isUnique(this))) {
             return;
@@ -117,7 +117,7 @@ AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p, const char *n)
 }
     
 void AccountsPanel::addItems(QListView *lv, Accounts &acc) {
-    //kdDebug()<<k_funcinfo<<"No of accs: "<<acc.accountList().count()<<endl;
+    //kDebug()<<k_funcinfo<<"No of accs: "<<acc.accountList().count()<<endl;
     AccountListIterator it = acc.accountList();
     for (; it.current(); ++it) {
         QString n = it.current()->name();
@@ -152,7 +152,7 @@ void AccountsPanel::addElement(const QListViewItem *item) {
         removeElement(item->parent());
     }
     m_elements.replace(item->text(0), item);
-    //kdDebug()<<k_funcinfo<<item->text(0)<<endl;
+    //kDebug()<<k_funcinfo<<item->text(0)<<endl;
     refreshDefaultAccount();
 }
 
@@ -172,15 +172,15 @@ void AccountsPanel::refreshDefaultAccount() {
         if (static_cast<AccountItem*>(it.current())->isDefault) {
             m_currentIndex = i;
             accountsComboBox->setCurrentItem(i);
-            //kdDebug()<<k_funcinfo<<"Default="<<it.current()->text(0)<<endl;
+            //kDebug()<<k_funcinfo<<"Default="<<it.current()->text(0)<<endl;
         }
     }
-    //kdDebug()<<k_funcinfo<<"size="<<accountsComboBox->count()<<endl;
+    //kDebug()<<k_funcinfo<<"size="<<accountsComboBox->count()<<endl;
 }
 void AccountsPanel::slotActivated(int index) {
-    //kdDebug()<<k_funcinfo<<index<<endl;
+    //kDebug()<<k_funcinfo<<index<<endl;
     if (m_currentIndex >= (int)m_elements.count()) {
-        kdError()<<k_funcinfo<<"currentIndex ("<<m_currentIndex<<") out of range ("<<m_elements.count()<<")"<<endl;
+        kError()<<k_funcinfo<<"currentIndex ("<<m_currentIndex<<") out of range ("<<m_elements.count()<<")"<<endl;
     } else if (m_currentIndex > 0) {
         AccountItem *i = static_cast<AccountItem*>(m_elements[accountsComboBox->text(m_currentIndex)]);
         if (i) 
@@ -192,7 +192,7 @@ void AccountsPanel::slotActivated(int index) {
         if (i) {
             i->isDefault = true;
             m_currentIndex = index;
-            //kdDebug()<<k_funcinfo<<"currentIndex="<<m_currentIndex<<", "<<m_elements[accountsComboBox->currentText()]->text(0)<<endl;
+            //kDebug()<<k_funcinfo<<"currentIndex="<<m_currentIndex<<", "<<m_elements[accountsComboBox->currentText()]->text(0)<<endl;
         }
     }
     slotChanged();
@@ -203,7 +203,7 @@ void AccountsPanel::slotChanged() {
 }
 
 void AccountsPanel::slotSelectionChanged() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_renameItem) {
         removeBtn->setEnabled(false);
         newBtn->setEnabled(false);
@@ -224,7 +224,7 @@ void AccountsPanel::slotSelectionChanged() {
 }
 
 void AccountsPanel::slotItemRenamed(QListViewItem *item, int col) {
-    //kdDebug()<<k_funcinfo<<item->text(0)<<endl;
+    //kDebug()<<k_funcinfo<<item->text(0)<<endl;
     item->setRenameEnabled(col, false);
     m_renameItem = 0;
     if (col != 0) {
@@ -237,7 +237,7 @@ void AccountsPanel::slotItemRenamed(QListViewItem *item, int col) {
     }
     if (item->text(0).isEmpty()) {
         // Not allowed
-        //kdDebug()<<k_funcinfo<<"name empty"<<endl;
+        //kDebug()<<k_funcinfo<<"name empty"<<endl;
         emit startRename(item, 0);
         return;
     }
@@ -270,7 +270,7 @@ void AccountsPanel::slotRemoveBtn() {
 }
 
 void AccountsPanel::slotNewBtn() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QListViewItem *item = accountList->selectedItem();
     if (item && item->text(0).isEmpty()) {
         return;
@@ -289,7 +289,7 @@ void AccountsPanel::slotNewBtn() {
 }
 
 void AccountsPanel::slotSubBtn() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QListViewItem *item = accountList->selectedItem();
     if (item && item->text(0).isEmpty()) {
         return;
@@ -309,7 +309,7 @@ KCommand *AccountsPanel::buildCommand(Part *part) {
     QPtrListIterator<QListViewItem> rit = m_removedItems;
     for (;rit.current(); ++rit) {
         AccountItem *item = static_cast<AccountItem*>(rit.current());
-        //kdDebug()<<k_funcinfo<<"Removed item"<<endl;
+        //kDebug()<<k_funcinfo<<"Removed item"<<endl;
         if (!cmd) cmd = new KMacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(new RemoveAccountCmd(part, part->getProject(), item->account));
     }
@@ -341,11 +341,11 @@ KCommand *AccountsPanel::save(Part *part, Project &project, QListViewItem *i) {
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item->account == 0) {
         if (!item->text(0).isEmpty()) {
-            //kdDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
+            //kDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
             if (!cmd) cmd = new KMacroCommand("");
             item->account = new Account(item->text(0), item->text(1));
             if (item->parent()) {
-                //kdDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
+                //kDebug()<<k_funcinfo<<"New account: "<<item->text(0)<<endl;
                 cmd->addCommand(new AddAccountCmd(part, project, item->account, item->parent()->text(0)));
             } else {
                 cmd->addCommand(new AddAccountCmd(part, project, item->account));
@@ -354,12 +354,12 @@ KCommand *AccountsPanel::save(Part *part, Project &project, QListViewItem *i) {
     } else {
         if (!item->text(0).isEmpty() && (item->text(0) != item->account->name())) {
             if (!cmd) cmd = new KMacroCommand("");
-            //kdDebug()<<k_funcinfo<<"Renamed: "<<item->account->name()<<" to "<<item->text(0)<<endl;
+            //kDebug()<<k_funcinfo<<"Renamed: "<<item->account->name()<<" to "<<item->text(0)<<endl;
             cmd->addCommand(new RenameAccountCmd(part, item->account, item->text(0)));
         }
         if (item->text(1) != item->account->description()) {
             if (!cmd) cmd = new KMacroCommand("");
-            //kdDebug()<<k_funcinfo<<"New description: "<<item->account->description()<<" to "<<item->text(1)<<endl;
+            //kDebug()<<k_funcinfo<<"New description: "<<item->account->description()<<" to "<<item->text(1)<<endl;
             cmd->addCommand(new ModifyAccountDescriptionCmd(part, item->account, item->text(1)));
         }
     }
@@ -384,14 +384,14 @@ KCommand *AccountsPanel::save(Part *part, Project &project, QListViewItem *i) {
 }
 
 void AccountsPanel::slotListDoubleClicked(QListViewItem* item, const QPoint&, int col) {
-    //kdDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
+    //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     if (m_renameItem)
         return;
     slotStartRename(item, col);
 }
 
 void AccountsPanel::slotRenameStarted(QListViewItem */*item*/, int /*col*/) {
-    //kdDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
+    //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     if (accountList->isRenaming()) {
         removeBtn->setEnabled(false);
         newBtn->setEnabled(false);
@@ -400,7 +400,7 @@ void AccountsPanel::slotRenameStarted(QListViewItem */*item*/, int /*col*/) {
 }
 
 void AccountsPanel::slotStartRename(QListViewItem *item, int col) {
-    //kdDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
+    //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     static_cast<AccountItem*>(item)->oldText = item->text(col);
     item->setRenameEnabled(col, true);
     item->startRename(col);
@@ -413,7 +413,7 @@ void AccountsPanel::slotRemoveItem(QListViewItem *i) {
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item == 0)
         return;
-    //kdDebug()<<k_funcinfo<<item->text(0)<<endl;
+    //kDebug()<<k_funcinfo<<item->text(0)<<endl;
     removeElement(item);
     QListViewItem *p = item->parent();
     if (p) {
@@ -438,7 +438,7 @@ void AccountsPanel::slotRemoveItem(QListViewItem *i) {
 
 // We don't get notified when rename is cancelled, this is called from the item
 void AccountsPanel::renameStopped(QListViewItem */*item*/) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_renameItem = 0;
     emit selectionChanged();
 }

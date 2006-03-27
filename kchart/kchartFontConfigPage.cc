@@ -163,7 +163,7 @@ void KChartFontConfigPage::changeLabelFont()
         state = &labelIsRelative;
     }
     else
-        kdDebug( 35001 ) << "Pb in listBox" << endl;
+        kDebug( 35001 ) << "Pb in listBox" << endl;
 
     if ( diffAxes ) {
         QFont newFont;

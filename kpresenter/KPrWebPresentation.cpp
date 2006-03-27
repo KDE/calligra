@@ -61,13 +61,13 @@
 #include <kbuttonbox.h>
 #include <ksimpleconfig.h>
 #include <kapplication.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kcharsets.h>
 #include <kurlrequester.h>
 #include <klineedit.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <knuminput.h>
 #include <kcombobox.h>
 #include <kurl.h>
@@ -206,7 +206,7 @@ void KPrWebPresentation::loadConfig()
     title = cfg.readEntry( "Title", title );
     email = cfg.readEntry( "EMail", email );
     unsigned int num = cfg.readNumEntry( "Slides", slideInfos.count() );
-    //kdDebug(33001) << "KPrWebPresentation::loadConfig num=" << num << endl;
+    //kDebug(33001) << "KPrWebPresentation::loadConfig num=" << num << endl;
 
     if ( num <= slideInfos.count() ) {
         for ( unsigned int i = 0; i < num; i++ )
@@ -216,8 +216,8 @@ void KPrWebPresentation::loadConfig()
             {
                 // We'll assume that the selected pages haven't changed... Hmm.
                 slideInfos[ i ].slideTitle = cfg.readEntry( key );
-                kdDebug(33001) << "KPrWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
-            } else kdDebug(33001) << " key not found " << key << endl;
+                kDebug(33001) << "KPrWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
+            } else kDebug(33001) << " key not found " << key << endl;
         }
     }
 
@@ -399,7 +399,7 @@ void KPrWebPresentation::createSlidesHTML( KProgress *progressBar )
         QString next= QString( "slide_%2.html" ).arg( pgNum<slideInfos.count() ? pgNum+1 : (m_bLoopSlides ? 1 : pgNum ) ); // Ugly, but it works
 
         QFile file( tmp.name() );
-        file.open( IO_WriteOnly );
+        file.open( QIODevice::WriteOnly );
         QTextStream streamOut( &file );
         streamOut.setCodec( codec );
 
@@ -534,7 +534,7 @@ void KPrWebPresentation::createMainPage( KProgress *progressBar )
     KTempFile tmp;
     QString dest = QString( "%1/index.html" ).arg( path );
     QFile file( tmp.name() );
-    file.open( IO_WriteOnly );
+    file.open( QIODevice::WriteOnly );
     QTextStream streamOut( &file );
     streamOut.setCodec( codec );
 
@@ -580,7 +580,7 @@ void KPrWebPresentation::init()
     KoDocumentInfo * info = doc->documentInfo();
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     else
     {
         author = authorPage->fullName();
@@ -588,7 +588,7 @@ void KPrWebPresentation::init()
     }
 
     title = i18n("Slideshow");
-    kdDebug(33001) << "KPrWebPresentation::init : " << doc->getPageNums() << " pages." << endl;
+    kDebug(33001) << "KPrWebPresentation::init : " << doc->getPageNums() << " pages." << endl;
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
     {
         if ( doc->isSlideSelected( i ) )
@@ -600,7 +600,7 @@ void KPrWebPresentation::init()
         }
     }
     if ( slideInfos.isEmpty() )
-        kdWarning() << "No slides selected!" << endl;
+        kWarning() << "No slides selected!" << endl;
     backColor = Qt::white;
     textColor = Qt::black;
     titleColor = Qt::red;
@@ -668,7 +668,7 @@ void KPrWebPresentationWizard::setupPage1()
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
-    helptext->setAlignment( Qt::WordBreak | Qt::AlignTop| Qt::AlignLeft );
+    helptext->setAlignment( Qt::TextWordWrap | Qt::AlignTop| Qt::AlignLeft );
     helptext->setText( i18n( "Enter your name, email address and "
                              "the title of the web presentation. "
                              "Also enter the output directory where the "
@@ -722,7 +722,7 @@ void KPrWebPresentationWizard::setupPage1()
                                  "the presentation.") );
     layout->addWidget( email, 4, 1 );
 
-    path=new KURLRequester( canvas );
+    path=new KUrlRequester( canvas );
     path->setMode( KFile::Directory);
     path->lineEdit()->setText(webPres.getPath());
     QWhatsThis::add( path, i18n("The value entered for the path is the directory "
@@ -766,7 +766,7 @@ void KPrWebPresentationWizard::setupPage2()
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
-    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setAlignment( Qt::TextWordWrap | Qt::AlignVCenter| Qt::AlignLeft );
     QString help = i18n("Here you can configure the style of the web pages.");
     help += i18n( "You can also specify the zoom for the slides." );
     helptext->setText(help);
@@ -856,7 +856,7 @@ void KPrWebPresentationWizard::setupPage3()
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
-    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setAlignment( Qt::TextWordWrap | Qt::AlignVCenter| Qt::AlignLeft );
     helptext->setText( i18n( "Now you can customize the colors of the web pages." ) );
     layout->addMultiCellWidget( helptext, 0, 0, 0, 1 );
 
@@ -913,7 +913,7 @@ void KPrWebPresentationWizard::setupPage4()
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
-    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setAlignment( Qt::TextWordWrap | Qt::AlignVCenter| Qt::AlignLeft );
     helptext->setText( i18n( "Here you can specify titles for "
                              "each slide. Click on a slide in "
                              "the list and then enter the title "
@@ -932,7 +932,7 @@ void KPrWebPresentationWizard::setupPage4()
     connect( slideTitle, SIGNAL( textChanged( const QString & ) ), this,
              SLOT( slideTitleChanged( const QString & ) ) );
 
-    slideTitles = new KListView( canvas );
+    slideTitles = new K3ListView( canvas );
     layout->addMultiCellWidget( slideTitles, 2, 2, 0, 1 );
     slideTitles->addColumn( i18n( "No." ) );
     slideTitles->addColumn( i18n( "Slide Title" ) );
@@ -945,9 +945,9 @@ void KPrWebPresentationWizard::setupPage4()
 
     QValueList<KPrWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
     for ( int i = infos.count() - 1; i >= 0; --i ) {
-        KListViewItem *item = new KListViewItem( slideTitles );
+        K3ListViewItem *item = new K3ListViewItem( slideTitles );
         item->setText( 0, QString::number( i + 1 ) );
-        //kdDebug(33001) << "KPrWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
+        //kDebug(33001) << "KPrWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
         item->setText( 1, infos[ i ].slideTitle );
     }
 
@@ -981,7 +981,7 @@ void KPrWebPresentationWizard::setupPage5()
                                            KDialog::marginHint(), KDialog::spacingHint() );
 
     QLabel *helptext = new QLabel( canvas );
-    helptext->setAlignment( Qt::WordBreak | Qt::AlignVCenter| Qt::AlignLeft );
+    helptext->setAlignment( Qt::TextWordWrap | Qt::AlignVCenter| Qt::AlignLeft );
     QString help = i18n("Here you can configure some options for unattended "
                         "presentations, such as time elapsed before automatically advance to "
                         "the next slide, looping and the presence of headers.");
@@ -1284,7 +1284,7 @@ void KPrWebPresentationCreateDialog::saveConfig()
 {
     QString filename = webPres.getConfig();
     if ( QFileInfo( filename ).exists() )
-        filename = QFileInfo( filename ).absFilePath();
+        filename = QFileInfo( filename ).absoluteFilePath();
     else
         filename = QString::null;
 

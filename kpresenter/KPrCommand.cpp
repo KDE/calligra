@@ -1884,7 +1884,7 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
     }
-    //kdDebug() << "KWOasisPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //kDebug() << "KWOasisPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
     //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
@@ -1896,9 +1896,9 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
 
     if ( store->bad() || !store->hasFile( "content.xml" ) )
     {
-        kdError(33001) << "Invalid ZIP store in memory" << endl;
+        kError(33001) << "Invalid ZIP store in memory" << endl;
         if ( !store->hasFile( "content.xml" ) )
-            kdError(33001) << "No content.xml file" << endl;
+            kError(33001) << "No content.xml file" << endl;
         return c;
     }
     store->disallowNameExpansion();
@@ -1908,7 +1908,7 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
     QString errorMessage;
     bool ok = oasisStore.loadAndParse( "content.xml", contentDoc, errorMessage );
     if ( !ok ) {
-        kdError(33001) << "Error parsing content.xml: " << errorMessage << endl;
+        kError(33001) << "Error parsing content.xml: " << errorMessage << endl;
         return c;
     }
 
@@ -1931,7 +1931,7 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
         realBody = iter;
     }
     if ( realBody.isNull() ) {
-        kdError(33001) << "No element found inside office:body!" << endl;
+        kError(33001) << "No element found inside office:body!" << endl;
         return c;
     }
 
@@ -1967,7 +1967,7 @@ KoTextCursor * KPrOasisPasteTextCommand::unexecute( KoTextCursor *c )
     // Get hold of the document before deleting the parag
     //KoTextDocument* textdoc = lastParag->document();
 
-    //kdDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
+    //kDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
     //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
 
     cursor.setParag( lastParag );
@@ -2065,14 +2065,14 @@ KPrDeletePageCmd::~KPrDeletePageCmd()
 void KPrDeletePageCmd::execute()
 {
     m_doc->deSelectAllObj();
-    m_doc->takePage( m_page, QMAX( m_pageNum - 1, 0 ) );
+    m_doc->takePage( m_page, qMax( m_pageNum - 1, 0 ) );
     m_doc->updatePresentationButton();
 }
 
 void KPrDeletePageCmd::unexecute()
 {
     m_doc->deSelectAllObj();
-    m_doc->insertPage( m_page, QMAX( m_pageNum - 1, 0 ), m_pageNum );
+    m_doc->insertPage( m_page, qMax( m_pageNum - 1, 0 ), m_pageNum );
     m_doc->updatePresentationButton();
 }
 
@@ -2308,7 +2308,7 @@ void KPrHideShowHeaderFooter::execute()
     else if( m_textObject==m_doc->header())
         m_page->setHeader( newValue );
     else
-        kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::execute()\n";
+        kDebug(33001)<<"Error in void KPrHideShowHeaderFooter::execute()\n";
 
     m_doc->updateSideBarItem( m_doc->masterPage() );
 }
@@ -2320,7 +2320,7 @@ void KPrHideShowHeaderFooter::unexecute()
     else if( m_textObject==m_doc->header())
         m_page->setHeader( !newValue );
     else
-        kdDebug(33001)<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
+        kDebug(33001)<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
 
     m_doc->updateSideBarItem( m_doc->masterPage() );
 }

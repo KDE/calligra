@@ -143,24 +143,24 @@ void Format::setStyle( Style * style )
   m_pStyle = style;
   m_pStyle->addRef();
   formatChanged();
- // kdDebug() << "Newly assigned style: " << m_pStyle << ", type: " << m_pStyle->type() << endl;
+ // kDebug() << "Newly assigned style: " << m_pStyle << ", type: " << m_pStyle->type() << endl;
   if ( style->type() == Style::BUILTIN || style->type() == Style::CUSTOM )
-    kdDebug() << "Style name: " << ((CustomStyle *) m_pStyle)->name() << endl;
+    kDebug() << "Style name: " << ((CustomStyle *) m_pStyle)->name() << endl;
 }
 
 void Format::clearFlag( FormatFlags flag )
 {
-  m_flagsMask &= ~(Q_UINT32)flag;
+  m_flagsMask &= ~(quint32)flag;
 }
 
 void Format::setFlag( FormatFlags flag )
 {
-  m_flagsMask |= (Q_UINT32)flag;
+  m_flagsMask |= (quint32)flag;
 }
 
 bool Format::testFlag( FormatFlags flag ) const
 {
-  return ( m_flagsMask & (Q_UINT32)flag );
+  return ( m_flagsMask & (quint32)flag );
 }
 
 void Format::clearProperties()
@@ -489,7 +489,7 @@ bool Format::loadFormat( const QDomElement & f, Paste::Mode pm, bool paste )
     {
       Style * s = m_pSheet->doc()->styleManager()->style( f.attribute( "style-name" ) );
 
-      //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
+      //kDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
       if ( s )
       {
         setStyle( s );
@@ -503,7 +503,7 @@ bool Format::loadFormat( const QDomElement & f, Paste::Mode pm, bool paste )
     if ( f.hasAttribute( "parent" ) )
     {
       CustomStyle* s = static_cast<CustomStyle*>( m_pSheet->doc()->styleManager()->style( f.attribute( "parent" ) ) );
-      //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
+      //kDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
 
       if ( s )
       {
@@ -556,7 +556,7 @@ bool Format::loadFormat( const QDomElement & f, Paste::Mode pm, bool paste )
         int i = f.attribute( "precision" ).toInt( &ok );
         if ( i < -1 )
         {
-            kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
+            kDebug(36001) << "Value out of range Cell::precision=" << i << endl;
             return false;
         }
         // Assignment
@@ -736,7 +736,7 @@ bool Format::loadFontOasisStyle( KoStyleStack & font )
 
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-style" ) && ( font.attributeNS( KoXmlNS::fo,"font-style" )== "italic" ))
     {
-        kdDebug(30518) << "italic" << endl;
+        kDebug(30518) << "italic" << endl;
         setTextFontItalic( true ); // only thing we support
     }
     if ( font.hasAttributeNS( KoXmlNS::fo, "font-weight" )
@@ -773,12 +773,12 @@ void Format::loadOasisStyle( /*const QDomElement& style,*/ KoOasisLoadingContext
   KoStyleStack& styleStack = context.styleStack();
   loadOasisStyleStyle( styleStack, context.oasisStyles() );
 
-  kdDebug() << "*** Loading style attributes *****" << endl;
+  kDebug() << "*** Loading style attributes *****" << endl;
 
   if ( styleStack.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
   {
     str = styleStack.attributeNS( KoXmlNS::style, "data-style-name" );
-    kdDebug() << " style:data-style-name: " <<  str << endl << endl;
+    kDebug() << " style:data-style-name: " <<  str << endl << endl;
 
     if ( !str.isEmpty() )
     {
@@ -804,7 +804,7 @@ void Format::loadOasisStyle( /*const QDomElement& style,*/ KoOasisLoadingContext
   {
     bool ok = false;
     int p = styleStack.attributeNS( KoXmlNS::style, "decimal-places" ).toInt( &ok );
-    kdDebug() << " style:decimal-places: " << p << endl;
+    kDebug() << " style:decimal-places: " << p << endl;
     if (ok )
       setPrecision( p );
   }
@@ -814,13 +814,13 @@ void Format::loadOasisStyle( /*const QDomElement& style,*/ KoOasisLoadingContext
 bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOasisStyles& /*oasisStyles*/ )
 {
 /*
-    kdDebug() << "*** Loading style properties *****" << endl;
+    kDebug() << "*** Loading style properties *****" << endl;
 #if 0
     if ( f.hasAttribute( "style-name" ) )
     {
         Style * s = m_pSheet->doc()->styleManager()->style( f.attribute( "style-name" ) );
 
-        //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
+        //kDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
         if ( s )
         {
             setStyle( s );
@@ -834,7 +834,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
         if ( f.hasAttribute( "parent" ) )
         {
             CustomStyle * s = (CustomStyle *) m_pSheet->doc()->styleManager()->style( f.attribute( "parent" ) );
-            //kdDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
+            //kDebug() << "Loading Style, parent: " << s->name() << ": " << s << endl;
 
             if ( s )
             {
@@ -850,7 +850,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
     {
         Style * s = m_pSheet->doc()->styleManager()->style( styleStack.attributeNS( KoXmlNS::style, "parent-style-name" ) );
 
-        //kdDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
+        //kDebug() << "Using style: " << f.attribute( "style-name" ) << ", s: " << s << endl;
         if ( s )
         {
             setStyle( s );
@@ -874,20 +874,20 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
         }
     }
 
-    kdDebug() << " [text properties]" << endl;
+    kDebug() << " [text properties]" << endl;
     //Text properties
     loadFontOasisStyle( styleStack ); // specific font style
     //End Text properties
 
-    kdDebug() << " [paragraph properties]" << endl;
+    kDebug() << " [paragraph properties]" << endl;
     //Paragraph properties
     styleStack.setTypeStyle( "paragraph" ); // load all style attributes from "style:paragraph-properties"
     if (  styleStack.hasAttributeNS( KoXmlNS::fo, "margin-left" ) )
     {
-        kdDebug()<<"  margin-left:"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;
+        kDebug()<<"  margin-left:"<<KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 )<<endl;
         setIndent( KoUnit::parseValue( styleStack.attributeNS( KoXmlNS::fo, "margin-left" ),0.0 ) );
     }
-    //kdDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" )<<endl;
+    //kDebug()<<"property.hasAttribute( fo:text-align ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" )<<endl;
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "text-align" ) )
     {
         QString s = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
@@ -902,7 +902,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
     }
     //end paragraph properties
 
-    kdDebug() << " [cell properties]" << endl;
+    kDebug() << " [cell properties]" << endl;
     styleStack.setTypeStyle( "table-cell" ); // Default
 
     // TODO:
@@ -931,7 +931,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
             setVerticalText( false );
     }
 
-    kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
+    kDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
         setBgColor( QColor( styleStack.attributeNS( KoXmlNS::fo, "background-color" ) ) );
@@ -975,8 +975,8 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
             setHideAll( false );
         }
         else
-            kdDebug()<<" Protected cell not supported :"<<prot<<endl;
-        kdDebug() << "  cell-protect: " << prot << endl;
+            kDebug()<<" Protected cell not supported :"<<prot<<endl;
+        kDebug() << "  cell-protect: " << prot << endl;
     }
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "padding-left" ) )
@@ -1047,19 +1047,19 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
 
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        //kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+        //kDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
       const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
       if ( style )
       {
-        //kdDebug()<<" style :"<<style<<endl;
+        //kDebug()<<" style :"<<style<<endl;
         KoStyleStack drawStyleStack;
         drawStyleStack.push( *style );
         drawStyleStack.setTypeStyle( "graphic" );
         if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
         {
             const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
-            kdDebug()<<" load object gradient fill type :"<<fill<<endl;
+            kDebug()<<" load object gradient fill type :"<<fill<<endl;
 
             if ( fill == "solid" || fill == "hatch" )
             {
@@ -1068,7 +1068,7 @@ bool Format::loadOasisStyleProperties( KoStyleStack & /*styleStack*/, const KoOa
                 setBackGroundBrushColor( brush.color() );
             }
             else
-                kdDebug()<<" fill style not supported by kspread : "<<fill<<endl;
+                kDebug()<<" fill style not supported by kspread : "<<fill<<endl;
         }
       }
     }
@@ -1130,16 +1130,16 @@ void Format::setAlign( Style::HAlign _align )
 
 void Format::setAlignY( Style::VAlign _alignY)
 {
-    //kdDebug() << "Format: AlignY: " << _alignY << endl;
+    //kDebug() << "Format: AlignY: " << _alignY << endl;
   if ( _alignY == Style::Middle )
   {
-      //kdDebug() << "Middle" << endl;
+      //kDebug() << "Middle" << endl;
     clearProperty( Style::SVAlign );
     setNoFallBackProperties(Style::SVAlign );
   }
   else
   {
-      //kdDebug() << "Not middle: " << _alignY << endl;
+      //kDebug() << "Not middle: " << _alignY << endl;
     setProperty( Style::SVAlign );
     clearNoFallBackProperties( Style::SVAlign );
   }
@@ -1541,7 +1541,7 @@ void Format::setTextPen( const QPen & _p )
 
   //setProperty( Style::STextPen );
   m_pStyle = m_pStyle->setPen( _p );
-  //kdDebug(36001) << "setTextPen: this=" << this << " pen=" << m_textPen.color().name() << " valid:" << m_textPen.color().isValid() << endl;
+  //kDebug(36001) << "setTextPen: this=" << this << " pen=" << m_textPen.color().name() << " valid:" << m_textPen.color().isValid() << endl;
   formatChanged();
 }
 
@@ -1769,7 +1769,7 @@ void Format::setCurrency( int type, QString const & symbol )
 {
   Style::Currency c;
 
-  c.symbol = symbol.simplifyWhiteSpace();
+  c.symbol = symbol.simplified();
   c.type   = type;
 
   if (c.symbol.length() == 0)
@@ -2532,7 +2532,7 @@ void RowFormat::setDblHeight( double _h, const Canvas * _canvas )
   Sheet *_sheet = _canvas ? _canvas->activeSheet() : m_pSheet;
 
   // avoid unnecessary updates
-  if ( kAbs( _h - dblHeight( _canvas ) ) < DBL_EPSILON )
+  if ( qAbs( _h - dblHeight( _canvas ) ) < DBL_EPSILON )
     return;
 
 //  UPDATE_BEGIN;
@@ -2614,12 +2614,12 @@ bool RowFormat::load( const QDomElement & row, int yshift, Paste::Mode sp, bool 
     // Validation
     if ( m_fHeight < 0 )
     {
-	kdDebug(36001) << "Value height=" << m_fHeight << " out of range" << endl;
+	kDebug(36001) << "Value height=" << m_fHeight << " out of range" << endl;
 	return false;
     }
     if ( m_iRow < 1 || m_iRow > KS_rowMax )
     {
-	kdDebug(36001) << "Value row=" << m_iRow << " out of range" << endl;
+	kDebug(36001) << "Value row=" << m_iRow << " out of range" << endl;
 	return false;
     }
 
@@ -2781,7 +2781,7 @@ void ColumnFormat::setDblWidth( double _w, const Canvas * _canvas )
   Sheet *_sheet = _canvas ? _canvas->activeSheet() : m_pSheet;
 
   // avoid unnecessary updates
-  if ( kAbs( _w - dblWidth( _canvas ) ) < DBL_EPSILON )
+  if ( qAbs( _w - dblWidth( _canvas ) ) < DBL_EPSILON )
     return;
 
  // UPDATE_BEGIN;
@@ -2862,12 +2862,12 @@ bool ColumnFormat::load( const QDomElement & col, int xshift, Paste::Mode sp, bo
     // Validation
     if ( m_fWidth < 0 )
     {
-	kdDebug(36001) << "Value width=" << m_fWidth << " out of range" << endl;
+	kDebug(36001) << "Value width=" << m_fWidth << " out of range" << endl;
 	return false;
     }
     if ( m_iColumn < 1 || m_iColumn > KS_colMax )
     {
-	kdDebug(36001) << "Value col=" << m_iColumn << " out of range" << endl;
+	kDebug(36001) << "Value col=" << m_iColumn << " out of range" << endl;
 	return false;
     }
     if ( col.hasAttribute( "hide" ) )

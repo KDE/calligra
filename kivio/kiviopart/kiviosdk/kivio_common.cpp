@@ -48,7 +48,7 @@ float XmlReadFloat( const QDomElement &e, const QString &att, const float &def)
     float fVal = val.toFloat( &ok );
     if( !ok )
     {
-	kdDebug(43000) << "Invalid XML-value read for " << att.ascii() << ", expected float\n" << endl;
+	kDebug(43000) << "Invalid XML-value read for " << att.ascii() << ", expected float\n" << endl;
 	return 1.0;
     }
     
@@ -96,7 +96,7 @@ int XmlReadInt( const QDomElement &e, const QString &att, const int &def)
     int iVal = val.toInt( &ok );
     if( !ok )
     {
-       kdDebug(43000) << "Invalid XML-value read for " << att << " expected int\n" << endl;
+       kDebug(43000) << "Invalid XML-value read for " << att << " expected int\n" << endl;
 	  return 1;
     }
 
@@ -144,7 +144,7 @@ uint XmlReadUInt( const QDomElement &e, const QString &att, const uint &def)
     uint iVal = val.toUInt( &ok );
     if( !ok )
     {
-       kdDebug(43000) << "Invalid XML-value read for " << att.ascii() << ", expected uint\n" << endl;
+       kDebug(43000) << "Invalid XML-value read for " << att.ascii() << ", expected uint\n" << endl;
         return 1;
     }
 
@@ -235,7 +235,7 @@ QColor XmlReadColor( const QDomElement &e, const QString &att, const QColor &def
     uint iVal = val.toUInt( &ok );
     if( !ok )
     {
-       kdDebug(43000) << "Invalid XML-value read for " << att.ascii() << ", expected QColor" << endl;
+       kDebug(43000) << "Invalid XML-value read for " << att.ascii() << ", expected QColor" << endl;
         return 1;
     }
 
@@ -284,7 +284,7 @@ double XmlReadDouble( const QDomElement &e, const QString &att, const double &de
     double dVal = val.toDouble( &ok );
     if( !ok )
     {
-       kdDebug(43000) << "Invalid XML-value read for ," << att.ascii() << " expected double" << endl;
+       kDebug(43000) << "Invalid XML-value read for ," << att.ascii() << " expected double" << endl;
         return 1.0;
     }
 
@@ -444,7 +444,7 @@ float shortestDistance( KivioConnectorPoint *pStart, KivioConnectorPoint *pEnd, 
    
    if( magU == 0.0f )
    {
-      kdDebug(43000) << "shortestDistance() - SERIOUS ERROR: magU is 0.0f!\n";
+      kDebug(43000) << "shortestDistance() - SERIOUS ERROR: magU is 0.0f!\n";
       return 10.0f;
    }
 

@@ -597,7 +597,7 @@ void miscParameters::slotDefault()
 
 void miscParameters::apply()
 {
-    kdDebug() << "Applying misc preferences" << endl;
+    kDebug() << "Applying misc preferences" << endl;
 
     config->setGroup( "Misc" );
     int const newUndo=m_undoRedoLimit->value();

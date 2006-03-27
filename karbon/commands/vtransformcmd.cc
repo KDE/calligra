@@ -33,7 +33,7 @@
 
 #include <kdebug.h>
 
-VTransformCmd::VTransformCmd( VDocument *doc, const QWMatrix& mat, bool duplicate )
+VTransformCmd::VTransformCmd( VDocument *doc, const QMatrix& mat, bool duplicate )
 	: VCommand( doc, i18n( "Transform Objects" ) ), m_mat( mat ), m_duplicate( duplicate )
 {
 	m_selection = ( document() && document()->selection() )
@@ -301,7 +301,7 @@ VTranslateBezierCmd::execute()
 {
 	if( m_segment->degree() == 3 )
 	{
-		QWMatrix m2( m_mat.m11(), m_mat.m12(), m_mat.m21(), m_mat.m22(), -m_mat.dx(), -m_mat.dy() );
+		QMatrix m2( m_mat.m11(), m_mat.m12(), m_mat.m21(), m_mat.m22(), -m_mat.dx(), -m_mat.dy() );
 		if( m_firstControl )
 		{
 			if( m_segment->prev() &&
@@ -351,7 +351,7 @@ VTranslateBezierCmd::execute()
 void
 VTranslateBezierCmd::unexecute()
 {
-	QWMatrix m2( m_mat.m11(), m_mat.m12(), m_mat.m21(), m_mat.m22(), -m_mat.dx(), -m_mat.dy() );
+	QMatrix m2( m_mat.m11(), m_mat.m12(), m_mat.m21(), m_mat.m22(), -m_mat.dx(), -m_mat.dy() );
 	if( m_segment )
 	{
 		for( uint i = 0;i < m_segment->degree();i++ )

@@ -46,7 +46,7 @@ public:
     virtual bool contains(QDate date) const { return DateMapType::contains(date.toString(Qt::ISODate)); }
 
     void insert(QString date, int state=Map::NonWorking) {
-        //kdDebug()<<k_funcinfo<<date<<"="<<state<<endl;
+        //kDebug()<<k_funcinfo<<date<<"="<<state<<endl;
         if (state == Map::None)
             DateMapType::remove(date);
         else
@@ -55,7 +55,7 @@ public:
     void insert(QDate date, int state=Map::NonWorking) { insert(date.toString(Qt::ISODate), state); }
 
     void remove(QDate date) {
-        //kdDebug()<<k_funcinfo<<date.toString(Qt::ISODate)<<endl;
+        //kDebug()<<k_funcinfo<<date.toString(Qt::ISODate)<<endl;
         DateMapType::remove(date.toString(Qt::ISODate));
     }
 
@@ -75,7 +75,7 @@ public:
     
     // boolean use
     void toggle(QString date, int state=Map::NonWorking) {
-        //kdDebug()<<k_funcinfo<<date<<"="<<state<<endl;
+        //kDebug()<<k_funcinfo<<date<<"="<<state<<endl;
         if (DateMapType::contains(date))
             DateMapType::remove(date);
         else
@@ -83,7 +83,7 @@ public:
     }
     void toggle(QDate date, int state=Map::NonWorking) { return toggle(date.toString(Qt::ISODate)); }
     void toggleClear(QString date, int state=Map::NonWorking) {
-        //kdDebug()<<k_funcinfo<<date<<"="<<state<<endl;
+        //kDebug()<<k_funcinfo<<date<<"="<<state<<endl;
         bool s = DateMapType::contains(date);
         clear();
         if (!s) insert(date, state);
@@ -133,7 +133,7 @@ public:
     bool contains(QPair<int,int> week) { return contains(week.first,  week.second); }
 
     void insert(int week, int year, int state=Map::NonWorking) {
-        if (week < 1 || week > 53) { kdError()<<k_funcinfo<<"Illegal week number: "<<week<<endl; return; }
+        if (week < 1 || week > 53) { kError()<<k_funcinfo<<"Illegal week number: "<<week<<endl; return; }
         IntMap::insert(week*10000 + year, state);
     }
     void insert(QPair<int,int> week, int state=Map::NonWorking) { insert(week.first, week.second, state); }
@@ -148,11 +148,11 @@ public:
     int state(int week, int year) { return state(QPair<int, int>(week, year)); }
 
     void toggle(QPair<int,int> week, int state=Map::NonWorking) {
-        if (week.first < 1 || week.first > 53) { kdError()<<k_funcinfo<<"Illegal week number: "<<week.first<<endl; return; }
+        if (week.first < 1 || week.first > 53) { kError()<<k_funcinfo<<"Illegal week number: "<<week.first<<endl; return; }
         IntMap::toggle(week.first*10000 + week.second, state);
     }
     void toggleClear(QPair<int,int> week, int state=Map::NonWorking) {
-        if (week.first < 1 || week.first > 53) { kdError()<<k_funcinfo<<"Illegal week number: "<<week.first<<endl; return; }
+        if (week.first < 1 || week.first > 53) { kError()<<k_funcinfo<<"Illegal week number: "<<week.first<<endl; return; }
         IntMap::toggleClear(week.first*10000 + week.second, state);
     }
 };

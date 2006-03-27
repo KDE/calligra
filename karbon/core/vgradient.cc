@@ -118,11 +118,11 @@ void
 VGradient::addStop( const VColor &color, float rampPoint, float midPoint )
 {
 	// Clamping between 0.0 and 1.0
-	rampPoint = kMax( 0.0f, rampPoint );
-	rampPoint = kMin( 1.0f, rampPoint );
+	rampPoint = qMax( 0.0f, rampPoint );
+	rampPoint = qMin( 1.0f, rampPoint );
 	// Clamping between 0.0 and 1.0
-	midPoint = kMax( 0.0f, midPoint );
-	midPoint = kMin( 1.0f, midPoint );
+	midPoint = qMax( 0.0f, midPoint );
+	midPoint = qMin( 1.0f, midPoint );
 
 	// Work around stops with the same position
 	VColorStop *v;
@@ -199,7 +199,7 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 	else
 		gradientStyle.addAttribute( "svg:spreadMethod", "pad" );
 	QBuffer buffer;
-	buffer.open( IO_WriteOnly );
+	buffer.open( QIODevice::WriteOnly );
 	KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
 
 	// save stops
@@ -223,8 +223,8 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 void
 VGradient::loadOasis( const QDomElement &object, KoStyleStack &/*stack*/, VObject* parent )
 {
-	kdDebug(38000) << "namespaceURI: " << object.namespaceURI() << endl;
-	kdDebug(38000) << "localName: " << object.localName() << endl;
+	kDebug(38000) << "namespaceURI: " << object.namespaceURI() << endl;
+	kDebug(38000) << "localName: " << object.localName() << endl;
 
 	KoRect bb;
 	
@@ -362,7 +362,7 @@ VGradient::load( const QDomElement& element )
 }
 
 void
-VGradient::transform( const QWMatrix &m )
+VGradient::transform( const QMatrix &m )
 {
 	m_origin	= m_origin.transform( m );
 	m_focalPoint	= m_focalPoint.transform( m );

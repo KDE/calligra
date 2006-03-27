@@ -125,7 +125,7 @@ Form::widget() const
 void
 Form::createToplevel(QWidget *container, FormWidget *formWidget, const QCString &)
 {
-	kdDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
+	kDebug() << "Form::createToplevel() container= "<< (container ? container->name() : "<NULL>")
 		<< " formWidget=" << formWidget << "className=" << name() << endl;
 
 	setFormWidget( formWidget );
@@ -142,7 +142,7 @@ Form::createToplevel(QWidget *container, FormWidget *formWidget, const QCString 
 
 	connect(container, SIGNAL(destroyed()), this, SLOT(formDeleted()));
 
-	kdDebug() << "Form::createToplevel(): d->toplevel=" << d->toplevel << endl;
+	kDebug() << "Form::createToplevel(): d->toplevel=" << d->toplevel << endl;
 }
 
 
@@ -369,7 +369,7 @@ Form::changeName(const QCString &oldname, const QCString &newname)
 //		KMessageBox::sorry(widget()->topLevelWidget(),
 //		i18n("A widget with this name already exists. "
 //			"Please choose another name or rename existing widget."));
-		kdDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
+		kDebug() << "Form::changeName() : ERROR : A widget named " << newname << " already exists" << endl;
 		FormManager::self()->propertySet()->property("name") = QVariant(oldname);
 	}
 	else
@@ -524,7 +524,7 @@ Form::autoAssignTabStops()
 		for(WidgetListIterator it2(hlist); it2.current() != 0; ++it2) {
 			ObjectTreeItem *tree = d->topTree->lookup(it2.current()->name());
 			if(tree) {
-				kdDebug() << "Form::autoAssignTabStops() adding " << tree->name() << endl;
+				kDebug() << "Form::autoAssignTabStops() adding " << tree->name() << endl;
 				d->tabstops.append(tree);
 			}
 		}

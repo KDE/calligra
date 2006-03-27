@@ -28,7 +28,7 @@
 #include "kspread_view.h"
 
 #include <kdebug.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
@@ -189,7 +189,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_SelectSheetLabel->setText( i18n( "Select tables:" ) );
   Frame5_2Layout->addWidget( m_SelectSheetLabel, 1, 0 );
 
-  m_sheetView = new KListView( Frame5_2, "m_tableView" );
+  m_sheetView = new K3ListView( Frame5_2, "m_tableView" );
   m_sheetView->addColumn( i18n( "Sheet" ) );
   m_sheetView->setRootIsDecorated( FALSE );
 
@@ -219,7 +219,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   Frame5_2_2Layout->addWidget( TextLabel11_2, 0, 0 );
 
-  m_columnView = new KListView( Frame5_2_2, "m_columnView" );
+  m_columnView = new K3ListView( Frame5_2_2, "m_columnView" );
   m_columnView->addColumn( i18n( "Column" ) );
   m_columnView->addColumn( i18n( "Sheet" ) );
   m_columnView->addColumn( i18n( "Data Type" ) );
@@ -1170,7 +1170,7 @@ void DatabaseDialog::sheetViewClicked( QListViewItem * )
 //     QCheckListItem * i = (QCheckListItem *) item;
 //     i->setOn( !i->isOn() );
 //   }
-//   kdDebug() << "clicked" << endl;
+//   kDebug() << "clicked" << endl;
 }
 
 

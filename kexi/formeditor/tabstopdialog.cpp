@@ -72,7 +72,7 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 	l->addMultiCellWidget(m_check, 1, 1, 0, 1);
 
 	updateGeometry();
-	setInitialSize(QSize(500+m_btnUp->width(), QMAX(400,m_treeview->height())));
+	setInitialSize(QSize(500+m_btnUp->width(), qMax(400,m_treeview->height())));
 }
 
 TabStopDialog::~TabStopDialog()

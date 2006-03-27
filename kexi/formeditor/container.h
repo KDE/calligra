@@ -60,8 +60,8 @@ class KFORMEDITOR_EXPORT EventEater : public QObject
 		bool eventFilter(QObject *o, QEvent *ev);
 
 	private:
-		QGuardedPtr<QWidget>  m_widget;
-		QGuardedPtr<QObject>  m_container;
+		QPointer<QWidget>  m_widget;
+		QPointer<QObject>  m_container;
 };
 
 /**
@@ -190,8 +190,8 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		bool handleMouseReleaseEvent(QObject *s, QMouseEvent *mev);
 
 		// the watched container and it's toplevel one...
-		QGuardedPtr<QWidget> m_container;
-		QGuardedPtr<Container> m_toplevel;
+		QPointer<QWidget> m_container;
+		QPointer<Container> m_toplevel;
 
 		int m_state;
 		enum { DoingNothing = 100, DrawingSelectionRect, CopyingWidget,
@@ -205,7 +205,7 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		// moving etc.
 		QPoint m_grab;
 		//QPoint		m_initialPos;
-		QGuardedPtr<QWidget> m_moving;
+		QPointer<QWidget> m_moving;
 		//QRect		m_copyRect;
 
 		//inserting
@@ -213,10 +213,10 @@ class KFORMEDITOR_EXPORT Container : public QObject
 		QRect m_insertRect;
 		ObjectTreeItem *m_tree;
 
-		QGuardedPtr<Form> m_form;
+		QPointer<Form> m_form;
 		bool m_mousePressEventReceived;
 		QMouseEvent m_mouseReleaseEvent;
-		QGuardedPtr<QObject> m_objectForMouseReleaseEvent;
+		QPointer<QObject> m_objectForMouseReleaseEvent;
 
 		friend class InsertWidgetCommand;
 		friend class PasteWidgetCommand;

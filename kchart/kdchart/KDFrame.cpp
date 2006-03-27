@@ -94,7 +94,7 @@ void KDFrame::paintBackground( QPainter& painter, const QRect& innerRect ) const
                     break;
                 case PixScaled: {
                                     double z;
-                                    z = QMIN( zW, zH );
+                                    z = qMin( zW, zH );
                                     m.scale( z, z );
                                 }
                                 break;
@@ -128,7 +128,7 @@ void KDFrame::paintEdges( QPainter& painter, const QRect& innerRect ) const
             const QBrush oldBrush = painter.brush();
             QPen thePen;
             thePen = section->pen();
-            int penWidth = QMAX(thePen.width(), 1) * QMAX(section->width(), 1);
+            int penWidth = qMax(thePen.width(), 1) * qMax(section->width(), 1);
 //qDebug("paintEdges: thePen.width() = %i", thePen.width());
 //qDebug("paintEdges: section->width() = %i", section->width());
 //qDebug("paintEdges: penWidth = %i", penWidth);

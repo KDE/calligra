@@ -34,6 +34,7 @@
 #include <qpainter.h>
 #include <qapplication.h>
 #include <qrect.h>
+#include <QTextDocument>
 
 KDChartTextPiece::KDChartTextPiece()
     :QObject(0)
@@ -52,7 +53,7 @@ KDChartTextPiece::KDChartTextPiece()
 KDChartTextPiece::KDChartTextPiece( const QString& text, const QFont& font )
     :QObject(0)
 {
-    if( Q3StyleSheet::mightBeRichText( text ) ) {
+    if( Qt::mightBeRichText( text ) ) {
         _isRichText = true;
         _richText = new Q3SimpleRichText( text, font );
         _richText->adjustSize();
@@ -73,7 +74,7 @@ KDChartTextPiece::KDChartTextPiece( QPainter *p, const QString& text, const QFon
     :QObject(0)
 {
     
-    if( Q3StyleSheet::mightBeRichText( text ) ) {
+    if( Qt::mightBeRichText( text ) ) {
         _isRichText = true;
         _richText = new Q3SimpleRichText( text, font );
         //qDebug( "richtext width %s", QString::number(_richText->width()).latin1());
@@ -185,7 +186,7 @@ QRect KDChartTextPiece::rect( QPainter *p, const QRect& clipRect) const
      
     // Pending Michel make sure the fonts are not too large
       if ( _richText->height() > clipRect.height() || _richText->width() > clipRect.width() ) 
-	font.setPixelSize( QMIN( (int)clipRect.width(),(int)clipRect.height() ) );
+	font.setPixelSize( qMin( (int)clipRect.width(),(int)clipRect.height() ) );
 
       _richText->setDefaultFont( font );
       _richText->setWidth( p, clipRect.width() ); 

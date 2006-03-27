@@ -629,11 +629,11 @@ QStringList KPrViewIface::exportPage( int _nPage,
         KPrCanvas* canvas = view->getCanvas();
         if( canvas ){
             if( canvas->exportPage( nPage,
-                                    QMAX(8, _nWidth),
-                                    QMAX(8, _nHeight),
+                                    qMax(8, _nWidth),
+                                    qMax(8, _nHeight),
                                     KUrl::fromPathOrURL( _fileName ),
                                     _format.isEmpty() ? "PNG" : _format.latin1(),
-                                    QMAX(-1, QMIN(100, _quality))) ){
+                                    qMax(-1, qMin(100, _quality))) ){
                 if( 0 < _verbose ){
                     KPrPage* page = view->kPresenterDoc()->pageList().at( nPage );
                     if( page ){

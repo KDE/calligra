@@ -56,7 +56,7 @@ class KexiDataSourceComboBox::Private
 			return firstTableIndex() + tablesCount;
 		}
 
-		QGuardedPtr<KexiProject> prj;
+		QPointer<KexiProject> prj;
 		QPixmap tableIcon, queryIcon;
 		int tablesCount;
 };

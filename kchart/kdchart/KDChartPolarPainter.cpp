@@ -118,7 +118,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
         numValues = data->usedCols();
 
     // compute position
-    int size = QMIN( _dataRect.width(), _dataRect.height() ); // initial size
+    int size = qMin( _dataRect.width(), _dataRect.height() ); // initial size
 
     const double minSizeP1000 = size / 1000.0;
 
@@ -139,7 +139,7 @@ void KDChartPolarPainter::paintData( QPainter* painter,
             maxValue = 100.0;
             break;
         default:
-            maxValue = QMAX( data->maxColSum(), 0.0 );
+            maxValue = qMax( data->maxColSum(), 0.0 );
     }
 
     double pixelsPerUnit = 0.0;

@@ -36,13 +36,13 @@ DateTime::DateTime(const QDate &date, const QTime &time) : QDateTime(date, time)
 void DateTime::add(const Duration &duration) {
     if (isValid())
         *this = addSecs(duration.seconds());
-    //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
+    //kDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
 void DateTime::subtract(const Duration &duration) {
     if (isValid())
         *this = addSecs(-duration.seconds());
-    //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
+    //kDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
 Duration DateTime::duration(const DateTime &dt) const {

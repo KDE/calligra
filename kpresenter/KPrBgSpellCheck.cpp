@@ -50,7 +50,7 @@ KoTextIterator *KPrBgSpellCheck::createWholeDocIterator() const
 {
     QValueList<KoTextObject *> objects = m_doc->visibleTextObjects( );
 
-    kdDebug()<<"Number of visible text objects = "<< objects.count() << endl;
+    kDebug()<<"Number of visible text objects = "<< objects.count() << endl;
 
     if ( objects.isEmpty() )
         return 0;

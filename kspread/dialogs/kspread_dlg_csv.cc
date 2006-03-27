@@ -216,7 +216,7 @@ CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode
         return;
     }
     QFile in(file);
-    if (!in.open(IO_ReadOnly))
+    if (!in.open(QIODevice::ReadOnly))
     {
       KMessageBox::sorry( this, i18n("Cannot open input file.") );
       in.close();
@@ -304,7 +304,7 @@ void CSVDialog::fillSheet()
     m_fileArray.resize(0);
   }
 
-  QTextStream inputStream(m_data, IO_ReadOnly);
+  QTextStream inputStream(m_data, QIODevice::ReadOnly);
   inputStream.setEncoding(QTextStream::Locale);
 
   while (!inputStream.atEnd())

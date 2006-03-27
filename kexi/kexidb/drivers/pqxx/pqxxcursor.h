@@ -56,7 +56,7 @@ protected:
 	virtual void drv_appendCurrentRecordToBuffer();
 	virtual void drv_bufferMovePointerNext();
 	virtual void drv_bufferMovePointerPrev();
-	virtual void drv_bufferMovePointerTo(Q_LLONG to);
+	virtual void drv_bufferMovePointerTo(qint64 to);
 	virtual bool drv_open();
 	virtual bool drv_close();
 	virtual void drv_getNextRecord();

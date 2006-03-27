@@ -25,7 +25,7 @@ KChartWizardSelectDataPage::KChartWizardSelectDataPage( QWidget* parent ) :
   tmpQLabel->setGeometry( 10, 50, 360, 20 );
   tmpQLabel->setText( "you must select another rectangular area here." );
 
-  kdDebug(35001) << "send needNewData() signal here and update area field in KChartWizard" << endl;
+  kDebug(35001) << "send needNewData() signal here and update area field in KChartWizard" << endl;
 
   setMinimumSize( 600, 300 );
 }

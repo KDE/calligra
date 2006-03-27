@@ -285,7 +285,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 			return res;
 	}
 
-	kdDebug() << "KexiDialogBase::switchToViewMode()" << endl;
+	kDebug() << "KexiDialogBase::switchToViewMode()" << endl;
 	bool dontStore = false;
 	KexiViewBase *view = selectedView();
 
@@ -327,7 +327,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 		KexiUtils::removeWaitCursor();
 		if (!newView) {
 			//js TODO error?
-			kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
+			kDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 				<< m_currentViewMode << " restored." << endl;
 			return false;
 		}
@@ -341,7 +341,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 	}
 	res = newView->beforeSwitchTo(newViewMode, dontStore);
 	if (!res) {
-		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
+		kDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< m_currentViewMode << " restored." << endl;
 		return false;
 	}
@@ -353,7 +353,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 	res = newView->afterSwitchFrom(
 			designModePreloadedForTextModeHack ? Kexi::NoViewMode : prevViewMode);
 	if (!res) {
-		kdDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
+		kDebug() << "Switching to mode " << newViewMode << " failed. Previous mode "
 			<< prevViewMode << " restored." << endl;
 		m_currentViewMode = prevViewMode;
 		return false;
@@ -495,7 +495,7 @@ tristate KexiDialogBase::storeNewData()
 	if (!part()->info()->isIdStoredInPartDatabase()) {
 		//this part's ID is not stored within kexi__parts:
 		KexiDB::TableSchema *ts = m_parentWindow->project()->dbConnection()->tableSchema("kexi__parts");
-		kdDebug() << "KexiMainWindowImpl::newObject(): schema: " << ts << endl;
+		kDebug() << "KexiMainWindowImpl::newObject(): schema: " << ts << endl;
 		if (!ts)
 			return false;
 
@@ -515,7 +515,7 @@ tristate KexiDialogBase::storeNewData()
 			} else {
 			       	// Got a maximum part ID, or there were no parts
 				p_id = p_id + 1;
-				p_id = QMAX(p_id, (int)KexiPart::UserObjectType);
+				p_id = qMax(p_id, (int)KexiPart::UserObjectType);
 			}
 		}
 
@@ -536,10 +536,10 @@ tristate KexiDialogBase::storeNewData()
 				QVariant(part()->info()->mimeType()), QVariant("http://www.koffice.org/kexi/" /*always ok?*/)))
 			return false;
 
-		kdDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
+		kDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
 		part()->info()->setProjectPartID( p_id );
 			//(int) project()->dbConnection()->lastInsertedAutoIncValue("p_id", "kexi__parts"));
-		kdDebug() << "KexiMainWindowImpl::newObject(): new id is: " 
+		kDebug() << "KexiMainWindowImpl::newObject(): new id is: " 
 			<< part()->info()->projectPartID()  << endl;
 
 		part()->info()->setIdStoredInPartDatabase(true);
@@ -595,7 +595,7 @@ tristate KexiDialogBase::storeData(bool dontAsk)
 void KexiDialogBase::activate()
 {
 	KexiViewBase *v = selectedView();
-	//kdDebug() << "focusWidget(): " << focusWidget()->name() << endl;
+	//kDebug() << "focusWidget(): " << focusWidget()->name() << endl;
 	if (KexiUtils::hasParent( v, KMdiChildView::focusedChildWidget()))//focusWidget()))
 		KMdiChildView::activate();
 	else {//ah, focused widget is not in this view, move focus:

@@ -29,7 +29,7 @@ KexiUserAction::setMethod(int method, Arguments args)
 void
 KexiUserAction::execute()
 {
-	kdDebug() << "KexiUserAction::execute(): " << KexiUserActionMethod::methodName(m_method) << endl;
+	kDebug() << "KexiUserAction::execute(): " << KexiUserActionMethod::methodName(m_method) << endl;
 
 	switch(m_method)
 	{

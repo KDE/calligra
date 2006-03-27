@@ -68,7 +68,7 @@ class SQLiteCursor : public Cursor
 		virtual void drv_appendCurrentRecordToBuffer();
 		virtual void drv_bufferMovePointerNext();
 		virtual void drv_bufferMovePointerPrev();
-		virtual void drv_bufferMovePointerTo(Q_LLONG at);
+		virtual void drv_bufferMovePointerTo(qint64 at);
 
 //TODO		virtual void drv_storeCurrentRecord();
 

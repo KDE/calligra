@@ -74,7 +74,7 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
         if (sch)
             st = project.startTime();
     } else {
-        kdWarning()<<k_funcinfo<<"Illegal constraint: "<<project.constraint()<<endl;
+        kWarning()<<k_funcinfo<<"Illegal constraint: "<<project.constraint()<<endl;
         schedulingGroup->setButton(0);
         if (sch)
             et = project.endTime();

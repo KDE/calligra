@@ -50,7 +50,7 @@ class KexiInternalPartManager
 			if (!part) {
 				QCString fullname("kexihandler_");
 				fullname += QCString(partName).lower();
-				part = KParts::ComponentFactory::createInstanceFromLibrary<KexiInternalPart>(
+				part = KLibLoader::createInstance<KexiInternalPart>(
 					fullname, 0, fullname);
 				if (!part) {
 					if (msgHdr)
@@ -132,7 +132,7 @@ KexiDialogBase* KexiInternalPart::createKexiDialogInstance(
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part) {
-		kdDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
+		kDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
 		return 0; //fatal!
 	}
 	return part->findOrCreateKexiDialog(mainWin, objName ? objName : partName);
@@ -145,7 +145,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part) {
-		kdDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
+		kDebug() << "KexiInternalPart::createDialogInstance() !part" << endl;
 		return 0; //fatal!
 	}
 	QWidget *w;

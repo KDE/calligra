@@ -62,12 +62,12 @@ PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char *name, c
       }
       else
       {
-        kdWarning() << "Parent does not inherit View!!!" << endl;
+        kWarning() << "Parent does not inherit View!!!" << endl;
       }
     }
     else
     {
-      kdWarning() << "Plugin created without a parent!!!" << endl;
+      kWarning() << "Plugin created without a parent!!!" << endl;
     }
 
 
@@ -99,7 +99,7 @@ KAboutData* PluginInsertCalendar::createAboutData()
 
 void PluginInsertCalendar::slotShowDialog()
 {
-  kdDebug() << "slotShowDialog..." << endl;
+  kDebug() << "slotShowDialog..." << endl;
 
   if (this->m_dialog == NULL)
   {
@@ -120,7 +120,7 @@ void PluginInsertCalendar::slotShowDialog()
 void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &end)
 {
   //@todo implement
-  kdDebug() << "slotInsert... still to be implemented" << endl;
+  kDebug() << "slotInsert... still to be implemented" << endl;
 
   Doc* document = m_kspreadView->doc();
 
@@ -229,7 +229,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
     if (yearheader)
     {
-      kdDebug() << "inserting year " + QString::number(current.year()) << endl;      
+      kDebug() << "inserting year " + QString::number(current.year()) << endl;      
       sheet->setText(row,colstart+6,cs->yearString(current,false));
       
       row+=2;
@@ -237,7 +237,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
     }
     if (monthheader)
     {
-      kdDebug() << "inserting month " + QString::number(current.month()) << endl;      
+      kDebug() << "inserting month " + QString::number(current.month()) << endl;      
       sheet->setText(row,colstart+6,cs->monthName(current,false));
       row+=2;
       //we always have the week number in the first column
@@ -273,7 +273,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
   document->emitEndOperation();
 
-  kdDebug() << "inserting calendar completed" << endl;
+  kDebug() << "inserting calendar completed" << endl;
 }
 
 }

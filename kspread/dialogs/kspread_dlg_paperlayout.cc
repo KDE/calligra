@@ -341,10 +341,10 @@ void PaperLayout::slotOk()
                 if ( point2.isValid() )
                 {
                     error = false;
-                    print->setPrintRange ( QRect( QPoint( QMIN( point1.pos().x(), point2.pos().x() ),
-                                                          QMIN( point1.pos().y(), point2.pos().y() ) ),
-                                                  QPoint( QMAX( point1.pos().x(), point2.pos().x() ),
-                                                          QMAX( point1.pos().y(), point2.pos().y() ) ) ) );
+                    print->setPrintRange ( QRect( QPoint( qMin( point1.pos().x(), point2.pos().x() ),
+                                                          qMin( point1.pos().y(), point2.pos().y() ) ),
+                                                  QPoint( qMax( point1.pos().x(), point2.pos().x() ),
+                                                          qMax( point1.pos().y(), point2.pos().y() ) ) ) );
                 }
             }
         }
@@ -406,37 +406,37 @@ void PaperLayout::slotOk()
 
       if ( m_rScalingZoom->isChecked() )
       {
-        kdDebug() << "Zoom is selected" << endl;
+        kDebug() << "Zoom is selected" << endl;
         if( QString( "%1%" ).arg( qRound( print->zoom() * 100 ) ) != m_cZoom->currentText() )
         {
-          kdDebug() << "New zoom is different than original: " << m_cZoom->currentText() << endl;
+          kDebug() << "New zoom is different than original: " << m_cZoom->currentText() << endl;
           QString zoomtext = m_cZoom->currentText();
           zoomtext.replace("%","");
           bool convertok = false;
           double zoomvalue = zoomtext.toDouble(&convertok);
           if (!convertok)
           {
-            kdWarning() << "Could not convert zoom text to double value!!!" << endl;
+            kWarning() << "Could not convert zoom text to double value!!!" << endl;
           }
           else if( zoomvalue != 0.0 )
           {
             //reset page limits
             print->setPageLimitX(0);
             print->setPageLimitY(0);
-            kdDebug() << "Setting print zoom: " << zoomvalue*0.01 << endl;
+            kDebug() << "Setting print zoom: " << zoomvalue*0.01 << endl;
             print->setZoom( 0.01 * zoomvalue );
-            kdDebug() << "New print zoom: " << print->zoom() << endl;
+            kDebug() << "New print zoom: " << print->zoom() << endl;
           }
           else
-            kdDebug() << "Did not set print zoom" << endl;
+            kDebug() << "Did not set print zoom" << endl;
         }
         else
-          kdDebug() << "new zoom is same as original: " << m_cZoom->currentText() << endl;
+          kDebug() << "new zoom is same as original: " << m_cZoom->currentText() << endl;
       }
       else if (m_rScalingLimitPages->isChecked())
       {
-        kdDebug() << "Limit pages is selected" << endl;
-        kdDebug() << "Current zoom: " << print->zoom() << endl;
+        kDebug() << "Limit pages is selected" << endl;
+        kDebug() << "Current zoom: " << print->zoom() << endl;
         
         //reset first, otherwise setting the first limit
         //would still check against the second limit and
@@ -448,9 +448,9 @@ void PaperLayout::slotOk()
         
         if (print->zoom() < 1.0)
         {
-          kdDebug() << "Resetting zoom to 1.0" << endl;
+          kDebug() << "Resetting zoom to 1.0" << endl;
           print->setZoom(1.0,false); //don't check page limits here
-          kdDebug() << "Zoom is now: " << print->zoom() << endl;
+          kDebug() << "Zoom is now: " << print->zoom() << endl;
         }
         
         bool convertok = false;
@@ -464,15 +464,15 @@ void PaperLayout::slotOk()
         if (!convertok)  //THIS IS THE CASE WITH "No Limit"
           limitY=0;  //0 means no limit
 
-        kdDebug() << "Zoom before setting limits: " << print->zoom() << endl;
-        kdDebug() << "Chosen Limits: x: " << limitX << "; y: " << limitY << endl;
+        kDebug() << "Zoom before setting limits: " << print->zoom() << endl;
+        kDebug() << "Chosen Limits: x: " << limitX << "; y: " << limitY << endl;
         print->setPageLimitX( limitX );
-        kdDebug() << "Zoom after setting x limit: " << print->zoom() << endl;
+        kDebug() << "Zoom after setting x limit: " << print->zoom() << endl;
         print->setPageLimitY( limitY );
-        kdDebug() << "Zoom after setting y limit: " << print->zoom() << endl;
+        kDebug() << "Zoom after setting y limit: " << print->zoom() << endl;
       }
       else
-        kdWarning() << "ERROR: unknown zoom option selected" << endl;
+        kWarning() << "ERROR: unknown zoom option selected" << endl;
 
       sheet->doc()->setModified( true );
 

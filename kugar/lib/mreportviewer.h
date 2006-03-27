@@ -80,7 +80,7 @@ protected:
     QScrollView *scroller;
     MPageDisplay *display;
     MReportEngine *rptEngine;
-    QGuardedPtr<MPageCollection> report;
+    QPointer<MPageCollection> report;
     KPrinter *printer;
 
 private:

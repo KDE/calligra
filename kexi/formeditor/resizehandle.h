@@ -89,9 +89,9 @@ class KFORMEDITOR_EXPORT ResizeHandleSet: public QObject
 		void setEditingMode(bool editing);
 
 	private:
-		QGuardedPtr<ResizeHandle> m_handles[8];
-		QGuardedPtr<QWidget> m_widget;
-		QGuardedPtr<Form>   m_form;
+		QPointer<ResizeHandle> m_handles[8];
+		QPointer<QWidget> m_widget;
+		QPointer<Form>   m_form;
 		bool  m_editing;
 
 	friend class ResizeHandle;

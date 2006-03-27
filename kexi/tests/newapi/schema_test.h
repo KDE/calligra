@@ -1,7 +1,7 @@
 int schemaTest()
 {
 	if (!conn->useDatabase( db_name )) {
-		kdDebug() << conn->errorMsg() << endl;
+		kDebug() << conn->errorMsg() << endl;
 		return 1;
 	}
 
@@ -9,12 +9,12 @@ int schemaTest()
 	if (t)
 		t->debug();
 	else
-		kdDebug() << "!persons" << endl;
+		kDebug() << "!persons" << endl;
 	t = conn->tableSchema( "cars" );
 	if (t)
 		t->debug();
 	else
-		kdDebug() << "!cars" << endl;
+		kDebug() << "!cars" << endl;
 /*
 // some tests	
 	{
@@ -22,7 +22,7 @@ int schemaTest()
 		KexiDB::Field::List *lst = t->fields();
 		lst->clear();
 		for (;iter.current();++iter) {
-			kdDebug() << "FIELD=" << iter.current()->name() << endl;
+			kDebug() << "FIELD=" << iter.current()->name() << endl;
 //			iter.current()->setName("   ");
 		}
 	}*/

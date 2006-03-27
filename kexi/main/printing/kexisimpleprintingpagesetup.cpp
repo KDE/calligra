@@ -82,7 +82,7 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 //! @todo item not found
 		return false;
 	}
-	QString titleText(aTitleText.stripWhiteSpace());
+	QString titleText(aTitleText.trimmed());
 	if (titleText.isEmpty())
 		titleText = tableOrQuery.captionOrName();
 
@@ -162,7 +162,7 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 #else
 	// on !win32 print QPrinter::numCopies() times (the OS does not perform buffering)
 	pagesToPrint = printer.pageList();
-	kdDebug() << pagesToPrint << endl;
+	kDebug() << pagesToPrint << endl;
 	if (pagesToPrint.isEmpty()) {
 		fromPage = 0;
 		for (int i = 0; i<(int)engine.pagesCount(); i++) {
@@ -185,14 +185,14 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 #endif
 	// now, total number of printed pages is printer.numCopies()*printer.pageList().count()
 
-	kdDebug() << "printing..." << endl;
+	kDebug() << "printing..." << endl;
 	bool firstPage = true;
 	for (uint copy = 0;copy < loops; copy++) {
-		kdDebug() << "copy " << (copy+1) << " of " << loops << endl;
+		kDebug() << "copy " << (copy+1) << " of " << loops << endl;
 		uint pageNumber = fromPage;
 		QValueList<int>::ConstIterator pagesIt = pagesToPrint.constBegin();
 		for(;(int)pageNumber == fromPage || !engine.eof(); ++pageNumber) {
-			kdDebug() << "printing..." << endl;
+			kDebug() << "printing..." << endl;
 			if (pagesIt == pagesToPrint.constEnd()) //no more pages to print
 				break;
 			if ((int)pageNumber < *pagesIt) { //skip pages without printing (needed for computation)
@@ -208,13 +208,13 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 					printer.newPage();
 				else
 					firstPage = false;
-				kdDebug() << "page #" << pageNumber << endl;
+				kDebug() << "page #" << pageNumber << endl;
 				engine.paintPage(pageNumber, painter);
 			}
 			++pagesIt;
 		}
 	}
-	kdDebug() << "end of printing." << endl;
+	kDebug() << "end of printing." << endl;
 
 	// stop painting, this will automatically send the print data to the printer
 	if (!painter.end())
@@ -237,7 +237,7 @@ bool KexiSimplePrintingCommand::showPrintPreview(const KexiSimplePrintingSetting
 		m_printPreviewNeedsReloading = true;
 
 	bool backToPage0 = true;
-	QString titleText(aTitleText.stripWhiteSpace());
+	QString titleText(aTitleText.trimmed());
 	KexiDB::Connection *conn = m_mainWin->project()->dbConnection();
 	KexiDB::TableOrQuerySchema tableOrQuery(conn, m_objectId);
 	if (!tableOrQuery.table() && !tableOrQuery.query()) {

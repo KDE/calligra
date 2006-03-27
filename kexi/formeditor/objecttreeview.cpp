@@ -35,13 +35,13 @@
 using namespace KFormDesigner;
 
 ObjectTreeViewItem::ObjectTreeViewItem(ObjectTreeViewItem *parent, ObjectTreeItem *item)
- : KListViewItem(parent, item->name(), item->className())
+ : K3ListViewItem(parent, item->name(), item->className())
 {
 	m_item = item;
 }
 
-ObjectTreeViewItem::ObjectTreeViewItem(KListView *list, ObjectTreeItem *item)
- : KListViewItem(list, item ? item->name() : QString::null, item ? item->className() : QString::null)
+ObjectTreeViewItem::ObjectTreeViewItem(K3ListView *list, ObjectTreeItem *item)
+ : K3ListViewItem(list, item ? item->name() : QString::null, item ? item->className() : QString::null)
 {
 	m_item = item;
 }
@@ -67,7 +67,7 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 	{
 		if(!m_item)
 			return;
-		KListViewItem::paintCell(p, cg, column, width, align);
+		K3ListViewItem::paintCell(p, cg, column, width, align);
 	}
 	else
 	{
@@ -148,7 +148,7 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 void
 ObjectTreeViewItem::setup()
 {
-	KListViewItem::setup();
+	K3ListViewItem::setup();
 	if(!m_item)
 		setHeight(0);
 }
@@ -158,13 +158,13 @@ ObjectTreeViewItem::setOpen( bool o )
 {
 	//don't allow to collapse the node, user may be tricked because we're not displaying [+] marks
 	if (o)
-		KListViewItem::setOpen(o);
+		K3ListViewItem::setOpen(o);
 }
 
 // ObjectTreeView itself ----------------
 
 ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
- : KListView(parent, name)
+ : K3ListView(parent, name)
  , m_form(0)
 {
 	addColumn(i18n("Name"), 130);
@@ -177,7 +177,7 @@ ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
 	{
 		setSelectionModeExt(Extended);
 		connect(this, SIGNAL(selectionChanged()), this, SLOT(slotSelectionChanged()));
-		connect(this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(KListView*, QListViewItem*, const QPoint&)));
+		connect(this, SIGNAL(contextMenu(K3ListView *, QListViewItem *, const QPoint&)), this, SLOT(displayContextMenu(K3ListView*, QListViewItem*, const QPoint&)));
 	}
 
 	setFullWidth(true);
@@ -194,7 +194,7 @@ QSize
 ObjectTreeView::sizeHint() const
 {
 	return QSize( QFontMetrics(font()).width(columnText(0)+columnText(1)+"   "),
-		KListView::sizeHint().height());
+		K3ListView::sizeHint().height());
 }
 
 QString
@@ -210,7 +210,7 @@ ObjectTreeView::slotColumnSizeChanged(int)
 }
 
 void
-ObjectTreeView::displayContextMenu(KListView *list, QListViewItem *item, const QPoint &)
+ObjectTreeView::displayContextMenu(K3ListView *list, QListViewItem *item, const QPoint &)
 {
 	if(list != this || !m_form || !item)
 		return;

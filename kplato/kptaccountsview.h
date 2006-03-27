@@ -22,7 +22,7 @@
 
 #include <qdatetime.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 
 #include "kptaccount.h"
 #include "kptcontext.h"
@@ -37,8 +37,8 @@ class QListViewItem;
 class QLabel;
 class QPushButton;
 
-class KListView;
-class KListViewItem;
+class K3ListView;
+class K3ListViewItem;
 class KPrinter;
 
 namespace KPlato

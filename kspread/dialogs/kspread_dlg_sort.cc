@@ -68,7 +68,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   setCaption( i18n( "Sorting" ) );
   //setSizeGripEnabled( true );
 
-  QVBox *page = makeVBoxMainWidget();
+  KVBox *page = makeVBoxMainWidget();
 
   m_tabWidget = new QTabWidget( page, "m_tabWidget" );
 
@@ -513,7 +513,7 @@ void SortDialog::slotOrientationChanged(int id)
     break;
 
    default :
-    kdDebug(36001) << "Error in signal : pressed(int id)" << endl;
+    kDebug(36001) << "Error in signal : pressed(int id)" << endl;
     break;
   }
 }
@@ -639,7 +639,7 @@ void SortDialog::slotOk()
     {
       if ( list[i] == ',' )
       {
-        firstKey->append( tmp.stripWhiteSpace() );
+        firstKey->append( tmp.trimmed() );
         tmp = "";
       }
       else
@@ -681,7 +681,7 @@ void SortDialog::slotOk()
   }
   else
   {
-    kdDebug(36001) << "Err in radiobutton" << endl;
+    kDebug(36001) << "Err in radiobutton" << endl;
   }
 
   delete firstKey;

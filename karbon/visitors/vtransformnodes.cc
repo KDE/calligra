@@ -23,7 +23,7 @@
 #include "vtransformnodes.h"
 
 
-VTransformNodes::VTransformNodes( const QWMatrix& m )
+VTransformNodes::VTransformNodes( const QMatrix& m )
 	: m_matrix( m )
 {
 }
@@ -44,7 +44,7 @@ VTransformNodes::visitVSubpath( VSubpath& path )
 				path.current()->isSmooth() )
 			{
 				// Do extra reverse trafo for smooth beziers
-				QWMatrix m2( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(),
+				QMatrix m2( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(),
 							-m_matrix.dx(), -m_matrix.dy() );
 				path.current()->next()->setPoint( 0, path.current()->next()->point( 0 ).transform( m2 ) );
 			}
@@ -56,7 +56,7 @@ VTransformNodes::visitVSubpath( VSubpath& path )
 				path.current()->prev()->isSmooth() )
 			{
 				// Do extra reverse trafo for smooth beziers
-				QWMatrix m2( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(),
+				QMatrix m2( m_matrix.m11(), m_matrix.m12(), m_matrix.m21(), m_matrix.m22(),
 							-m_matrix.dx(), -m_matrix.dy() );
 				path.current()->prev()->setPoint( 1, path.current()->prev()->point( 1 ).transform( m2 ) );
 			}

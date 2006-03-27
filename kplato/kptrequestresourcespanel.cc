@@ -49,26 +49,26 @@ ResourceTableItem::ResourceTableItem(Resource *resource, ResourceRequest *reques
     m_checkitem = 0;
     m_units = 100;
     m_origUnits = 100;
-    //kdDebug()<<k_funcinfo<<"Added: '"<<resource->name()<<"' checked="<<m_checked<<endl;
+    //kDebug()<<k_funcinfo<<"Added: '"<<resource->name()<<"' checked="<<m_checked<<endl;
 }
 
 ResourceTableItem::~ResourceTableItem() {
-    //kdDebug()<<k_funcinfo<<m_resource->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_resource->name()<<endl;
 }
 
 void ResourceTableItem::update() {
     if (m_checkitem)
         m_checked = m_checkitem->isChecked();
-    //kdDebug()<<k_funcinfo<<m_resource->name()<<" checked="<<m_checked<<endl;
+    //kDebug()<<k_funcinfo<<m_resource->name()<<" checked="<<m_checked<<endl;
 }
 
 void ResourceTableItem::insert(QTable *table, int row) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_checkitem = new QCheckTableItem(table, m_resource->name());
     m_checkitem->setChecked(m_checked);
     table->setItem(row, 0, m_checkitem);
     
-    //kdDebug()<<k_funcinfo<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked<<endl;
+    //kDebug()<<k_funcinfo<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked<<endl;
 }
 
 GroupLVItem::GroupLVItem(QListView *parent, ResourceGroup *group, Task &task)
@@ -83,7 +83,7 @@ GroupLVItem::GroupLVItem(QListView *parent, ResourceGroup *group, Task &task)
     }
     QPtrListIterator<Resource> it(group->resources());
     for (; it.current(); ++it) {
-        //kdDebug()<<k_funcinfo<<"resource="<<it.current()->name()<<endl;
+        //kDebug()<<k_funcinfo<<"resource="<<it.current()->name()<<endl;
         ResourceRequest *req=0;
         if (m_request) {
             req = m_request->find(it.current());
@@ -95,7 +95,7 @@ GroupLVItem::GroupLVItem(QListView *parent, ResourceGroup *group, Task &task)
 }
 
 GroupLVItem::~GroupLVItem() {
-    //kdDebug()<<k_funcinfo<<m_group->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_group->name()<<endl;
 }
 
 void GroupLVItem::update() {
@@ -126,7 +126,7 @@ void GroupLVItem::insert(QTable *table) {
 }
 
 int GroupLVItem::numRequests() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     int value = m_units;
     QPtrListIterator<ResourceTableItem> it(m_resources);
     for (; it.current(); ++it) {
@@ -136,7 +136,7 @@ int GroupLVItem::numRequests() {
 }
 
 bool GroupLVItem::isNull() const {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceTableItem> it(m_resources);
     for (; it.current(); ++it) {
         if (it.current()->isChecked())
@@ -163,7 +163,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool b
             ResourceGroup *grp = git.current();
             GroupLVItem *grpitem = new GroupLVItem(groupList, grp, task);
             groupList->insertItem(grpitem);
-            //kdDebug()<<k_funcinfo<<" Added group: "<<grp->name()<<endl;
+            //kDebug()<<k_funcinfo<<" Added group: "<<grp->name()<<endl;
         }
     }
     QListViewItem *item = groupList->firstChild();
@@ -181,7 +181,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool b
 }
 
 void RequestResourcesPanel::groupChanged(QListViewItem *item) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     GroupLVItem *grp = dynamic_cast<GroupLVItem *>(item);
     if (grp == 0)
         return;
@@ -199,12 +199,12 @@ void RequestResourcesPanel::groupChanged(QListViewItem *item) {
 }
 
 void RequestResourcesPanel::resourceChanged(int /*r*/, int /*c*/) {
-    //kdDebug()<<k_funcinfo<<"("<<r<<","<<c<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<r<<","<<c<<")"<<endl;
     sendChanged();
 }
 
 void RequestResourcesPanel::unitsChanged(int units) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (selectedGroup) {
         selectedGroup->m_units = units;
         sendChanged();
@@ -212,7 +212,7 @@ void RequestResourcesPanel::unitsChanged(int units) {
 }
 
 KCommand *RequestResourcesPanel::buildCommand(Part *part) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     KMacroCommand *cmd = 0;
     if (selectedGroup) {
         selectedGroup->update();
@@ -239,7 +239,7 @@ KCommand *RequestResourcesPanel::buildCommand(Part *part) {
                         cmd->addCommand(new RemoveResourceGroupRequestCmd(part, m_task, grp->m_request));
                     }
                 } else {
-                    kdError()<<k_funcinfo<<"Remove failed"<<endl;
+                    kError()<<k_funcinfo<<"Remove failed"<<endl;
                 }
                 continue;
             }

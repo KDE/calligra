@@ -595,8 +595,8 @@ void KoToolDockMoveManager::doResize( QWidget* _w )
 bool KoToolDockMoveManager::check(int& x, int& y, int& w, int& h, bool change)
 {
 
-  int w1 = QMIN(QMAX(minSize.width(), w), maxSize.width());
-  int h1 = QMIN(QMAX(minSize.height(), h), maxSize.height());
+  int w1 = qMin(qMax(minSize.width(), w), maxSize.width());
+  int h1 = qMin(qMax(minSize.height(), h), maxSize.height());
 
   bool f1 = (w1-w)+(h1-h) == 0;
 

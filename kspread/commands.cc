@@ -637,7 +637,7 @@ RemoveObjectCommand::~RemoveObjectCommand()
 {
   if ( !executed )
     return;
-  //kdDebug() << "*********Deleting object..." << endl;
+  //kDebug() << "*********Deleting object..." << endl;
   if ( obj->getType() == OBJECT_CHART )
   {
     EmbeddedKOfficeObject *chart = dynamic_cast<EmbeddedKOfficeObject *>(obj);
@@ -722,7 +722,7 @@ InsertObjectCommand::~InsertObjectCommand()
 {
   if ( executed )
     return;
-  //kdDebug() << "*********Deleting object..." << endl;
+  //kDebug() << "*********Deleting object..." << endl;
   if ( obj->getType() == OBJECT_CHART )
   {
     EmbeddedKOfficeObject *chart = dynamic_cast<EmbeddedKOfficeObject *>(obj);

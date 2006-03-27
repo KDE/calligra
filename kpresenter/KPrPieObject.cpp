@@ -98,7 +98,7 @@ bool KPrPieObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
             sc.xmlWriter.addAttribute( "draw:kind", "arc" );
             break;
         default:
-            kdDebug() << " type of pie not supported" << endl;
+            kDebug() << " type of pie not supported" << endl;
     }
 
     int startangle = ( (int)p_angle / 16 );
@@ -131,7 +131,7 @@ const char * KPrPieObject::getOasisElementName() const
 
 void KPrPieObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    kdDebug()<<"void KPrPieObject::loadOasis(const QDomElement &element) ***************\n";
+    kDebug()<<"void KPrPieObject::loadOasis(const QDomElement &element) ***************\n";
     KPr2DObject::loadOasis(element, context, info);
     QString kind = element.attributeNS( KoXmlNS::draw, "kind", QString::null );
     if ( kind == "section" )
@@ -142,10 +142,10 @@ void KPrPieObject::loadOasis(const QDomElement &element, KoOasisContext & contex
         pieType =PT_ARC;
     else
     {
-        kdDebug()<<" KPrPieObject::loadOasis(const QDomElement &element) type indefined :"<<kind<<endl;
+        kDebug()<<" KPrPieObject::loadOasis(const QDomElement &element) type indefined :"<<kind<<endl;
         pieType = PT_PIE;
     }
-    kdDebug()<<" type of pie object :"<<( ( pieType == PT_PIE ) ? "pie" : ( pieType == PT_CHORD )?"cut" : "arc" )<<endl;
+    kDebug()<<" type of pie object :"<<( ( pieType == PT_PIE ) ? "pie" : ( pieType == PT_CHORD )?"cut" : "arc" )<<endl;
 
     int start = (int) ( element.attributeNS( KoXmlNS::draw, "start-angle", QString::null ).toDouble() );
     p_angle=start*16;
@@ -156,7 +156,7 @@ void KPrPieObject::loadOasis(const QDomElement &element, KoOasisContext & contex
     else
         p_len = (  ( end - start ) * 16 );
 
-    kdDebug()<<"KPrPieObject::loadOasis(const QDomElement &element) : p_angle :"<<p_angle<<" p_len :"<<p_len<<endl;
+    kDebug()<<"KPrPieObject::loadOasis(const QDomElement &element) : p_angle :"<<p_angle<<" p_len :"<<p_len<<endl;
     if ( pieType == PT_ARC )
     {
         loadOasisMarkerElement( context, "marker-start", lineBegin );

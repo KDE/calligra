@@ -20,7 +20,7 @@
 #include "KexiStartup_p.h"
 
 #include <kstandarddirs.h>
-#include <kprogress.h>
+#include <kprogressbar.h>
 #include <kprocess.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -98,12 +98,12 @@ void SQLite2ToSQLite3Migration::receivedStderr(KProcess *, char *buffer, int buf
 
 void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 {
-	kdDebug() << "EXIT " << process->name() << endl;
+	kDebug() << "EXIT " << process->name() << endl;
 
-	kdDebug() << process->isRunning() << " " << process->exitStatus() << endl;
+	kDebug() << process->isRunning() << " " << process->exitStatus() << endl;
 	m_dlg->close();
 	result = !process->isRunning() && 0==process->exitStatus();//m_process->normalExit();
-	kdDebug() << result << endl;
+	kDebug() << result << endl;
 	if (result) {
 		if (m_restoreStat) {
 			//restore permissions for m_filePath
@@ -115,7 +115,7 @@ void SQLite2ToSQLite3Migration::processExited(KProcess* process)
 
 void SQLite2ToSQLite3Migration::cancelClicked()
 {
-	kdDebug() << result << " cancelClicked() " <<m_process->isRunning() << " " 
+	kDebug() << result << " cancelClicked() " <<m_process->isRunning() << " " 
 		<< m_process->exitStatus() << endl;
 	if (!m_process->isRunning() && 0==m_process->exitStatus())
 		return;

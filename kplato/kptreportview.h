@@ -28,7 +28,7 @@
 #include <qsplitter.h>
 #include <qstring.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 
 class KAction;
 class KPrinter;
@@ -113,10 +113,10 @@ protected slots:
     void slotReportListSelectionChanged(QListViewItem* item);
     
 private:
-    class ReportItem : public KListViewItem {
+    class ReportItem : public K3ListViewItem {
     public:
-        ReportItem(KListView *p, QString name, QString _url) 
-            : KListViewItem(p, name),
+        ReportItem(K3ListView *p, QString name, QString _url) 
+            : K3ListViewItem(p, name),
               url(_url)
         {}
         QString url;
@@ -125,7 +125,7 @@ private:
     
 private:
     View *m_mainview;
-    KListView *m_reportList;
+    K3ListView *m_reportList;
     KugarReportViewer *m_reportview;
     int m_defaultFontSize;
 

@@ -58,7 +58,7 @@
 #include <kinputdialog.h>
 #include <kmessagebox.h>
 #include <knotifyclient.h>
-#include <kpassdlg.h>
+#include <kpassworddialog.h>
 #include <kprocio.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
@@ -69,7 +69,7 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <kparts/partmanager.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kpushbutton.h>
 
 // KOffice includes
@@ -87,6 +87,7 @@
 #include <kspread_toolbox.h>
 #include <KoTemplateCreateDia.h>
 #include <KoZoomAction.h>
+#include <ktoolinvocation.h>
 
 // KSpread includes
 #include "commands.h"
@@ -225,7 +226,7 @@ public:
     KoCharSelectDia* specialCharDlg;
 
     // Holds a guarded pointer to the transformation toolbox.
-    QGuardedPtr<KoTransformToolBox> transformToolBox;
+    QPointer<KoTransformToolBox> transformToolBox;
 
     // the last popup menu (may be 0).
     // Since only one popup menu can be opened at once, its pointer is stored here.
@@ -1448,7 +1449,7 @@ void KPSheetSelectPage::setOptions( const QMap<QString,QString>& opts )
   QStringList::iterator it;
   for (it = sheetlist.begin(); it != sheetlist.end(); ++it)
   {
-    kdDebug() << " adding sheet to list of printed sheets: " << *it << endl;
+    kDebug() << " adding sheet to list of printed sheets: " << *it << endl;
     this->prependSelectedSheet(*it);
   }
 }
@@ -1578,7 +1579,7 @@ void KPSheetSelectPage::moveTop()
   QValueList<QListViewItem*> newlist;
   QListViewItem* item = gui->ListViewSelected->firstChild();
   QListViewItem* nextitem = NULL;
-//   kdDebug() << "Filling new list with selected items first" << endl;
+//   kDebug() << "Filling new list with selected items first" << endl;
   while (item)
   {
     nextitem = item->nextSibling();
@@ -1589,11 +1590,11 @@ void KPSheetSelectPage::moveTop()
     }
     item = nextitem;
   }
-//   kdDebug() << "Appending the rest" << endl;
+//   kDebug() << "Appending the rest" << endl;
   item = gui->ListViewSelected->firstChild();
   while (item)
   {
-//     kdDebug() << " processing item " << item->text(0) << endl;
+//     kDebug() << " processing item " << item->text(0) << endl;
     nextitem = item->nextSibling();
     if (!item->isSelected())
     {
@@ -1603,12 +1604,12 @@ void KPSheetSelectPage::moveTop()
     item = nextitem;
   }
 
-//   kdDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
   QValueList<QListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-//     kdDebug() << " adding " << (*it)->text(0) << endl;
+//     kDebug() << " adding " << (*it)->text(0) << endl;
     gui->ListViewSelected->insertItem(*it);
   }
 }
@@ -1640,12 +1641,12 @@ void KPSheetSelectPage::moveUp()
     item = nextitem;
   }
 
-//   kdDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
   QValueList<QListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-//     kdDebug() << " adding " << (*it)->text(0) << endl;
+//     kDebug() << " adding " << (*it)->text(0) << endl;
     gui->ListViewSelected->insertItem(*it);
   }
 }
@@ -1683,10 +1684,10 @@ void KPSheetSelectPage::moveBottom()
   QValueList<QListViewItem*> newlist;
   QListViewItem* item = gui->ListViewSelected->firstChild();
   QListViewItem* nextitem = NULL;
-//   kdDebug() << "Filling new list with unselected items first" << endl;
+//   kDebug() << "Filling new list with unselected items first" << endl;
   while (item)
   {
-//     kdDebug() << " processing item " << item->text(0) << endl;
+//     kDebug() << " processing item " << item->text(0) << endl;
     nextitem = item->nextSibling();
     if (!item->isSelected())
     {
@@ -1695,7 +1696,7 @@ void KPSheetSelectPage::moveBottom()
     }
     item = nextitem;
   }
-//   kdDebug() << "Appending the rest" << endl;
+//   kDebug() << "Appending the rest" << endl;
   item = gui->ListViewSelected->firstChild();
   while (item)
   {
@@ -1708,12 +1709,12 @@ void KPSheetSelectPage::moveBottom()
     item = nextitem;
   }
 
-//   kdDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
   QValueList<QListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-//     kdDebug() << " adding " << (*it)->text(0) << endl;
+//     kDebug() << " adding " << (*it)->text(0) << endl;
     gui->ListViewSelected->insertItem(*it);
   }
 }
@@ -1730,7 +1731,7 @@ View::View( QWidget *_parent, const char *_name,
   : KoView( _doc, _parent, _name )
 {
     ElapsedTime et( "View constructor" );
-    kdDebug(36001) << "sizeof(Cell)=" << sizeof(Cell) <<endl;
+    kDebug(36001) << "sizeof(Cell)=" << sizeof(Cell) <<endl;
 
     d = new Private;
     d->view = this;
@@ -2347,7 +2348,7 @@ void View::spellCheckerReady()
 
       d->spell.currentCell = d->spell.currentCell->nextCell();
       if ( d->spell.currentCell && d->spell.currentCell->isDefault() )
-        kdDebug() << "checking default cell!!" << endl << endl;
+        kDebug() << "checking default cell!!" << endl << endl;
     }
 
     if (spellSwitchToOtherSheet())
@@ -3025,7 +3026,7 @@ void View::setSelectionBorderColor(const QColor &bdColor)
 
 void View::helpUsing()
 {
-  kapp->invokeHelp( );
+  KToolInvocation::invokeHelp( );
 }
 
 void View::enableUndo( bool _b )
@@ -3863,7 +3864,7 @@ void View::changeSheet( const QString& _name )
     Sheet *t = doc()->map()->findSheet( _name );
     if ( !t )
     {
-        kdDebug(36001) << "Unknown sheet " << _name << endl;
+        kDebug(36001) << "Unknown sheet " << _name << endl;
         return;
     }
     doc()->emitBeginOperation(false);
@@ -4099,7 +4100,7 @@ void View::paste()
 
   QMimeSource *data = QApplication::clipboard()->data( QClipboard::Clipboard );
   for ( int i=0; data->format(i) != 0; i++ )
-    kdDebug() << "format:" << data->format(i) << endl;
+    kDebug() << "format:" << data->format(i) << endl;
 
   if ( data->provides( KoStoreDrag::mimeType("application/vnd.oasis.opendocument.spreadsheet" ) ))
   {
@@ -4116,7 +4117,7 @@ void View::paste()
     QString errorMessage;
     bool ok = oasisStore.loadAndParse( "content.xml", doc, errorMessage );
     if ( !ok ) {
-      kdError(32001) << "Error parsing content.xml: " << errorMessage << endl;
+      kError(32001) << "Error parsing content.xml: " << errorMessage << endl;
       return;
     }
 
@@ -4133,14 +4134,14 @@ void View::paste()
     QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
-      kdDebug() << "Invalid OASIS OpenDocument file. No office:body tag found." << endl;
+      kDebug() << "Invalid OASIS OpenDocument file. No office:body tag found." << endl;
       return;
     }
     QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
 
     if ( body.isNull() )
     {
-      kdError(32001) << "No office:spreadsheet found!" << endl;
+      kError(32001) << "No office:spreadsheet found!" << endl;
       QDomElement childElem;
       QString localName;
       forEachElement( childElem, realBody ) {
@@ -4198,7 +4199,7 @@ void View::paste()
   doc()->emitBeginOperation( false );
   if ( !d->canvas->editor() )
   {
-      //kdDebug(36001) << "Pasting. Rect= " << d->selection->selection(false) << " bytes" << endl;
+      //kDebug(36001) << "Pasting. Rect= " << d->selection->selection(false) << " bytes" << endl;
     d->activeSheet->paste( d->selection->lastRange(), true,
                            Paste::Normal, Paste::OverWrite,
                            false, 0, true );
@@ -4474,10 +4475,10 @@ void View::initFindReplace()
     connect(findObj, SIGNAL( findNext() ),
             this, SLOT( findNext() ) );
 
-    bool bck = d->findOptions & KFindDialog::FindBackwards;
+    bool bck = d->findOptions & KFind::FindBackwards;
     Sheet* currentSheet = d->searchInSheets.currentSheet;
 
-    QRect region = ( d->findOptions & KFindDialog::SelectedText )
+    QRect region = ( d->findOptions & KFind::SelectedText )
                    ? d->selection->selection()
                    : QRect( 1, 1, currentSheet->maxColumn(), currentSheet->maxRow() ); // All cells
 
@@ -4485,7 +4486,7 @@ void View::initFindReplace()
     int colEnd = !bck ? region.right() : region.left();
     int rowStart = !bck ? region.top() :region.bottom();
     int rowEnd = !bck ? region.bottom() : region.top();
-    if ( d->findOptions & KFindDialog::FromCursor ) {
+    if ( d->findOptions & KFind::FromCursor ) {
         QPoint marker( d->selection->marker() );
         colStart = marker.x();
         rowStart = marker.y();
@@ -4494,8 +4495,8 @@ void View::initFindReplace()
     d->findRightColumn = region.right();
     d->findPos = QPoint( colStart, rowStart );
     d->findEnd = QPoint( colEnd, rowEnd );
-    //kdDebug() << k_funcinfo << d->findPos << " to " << d->findEnd << endl;
-    //kdDebug() << k_funcinfo << "leftcol=" << d->findLeftColumn << " rightcol=" << d->findRightColumn << endl;
+    //kDebug() << k_funcinfo << d->findPos << " to " << d->findEnd << endl;
+    //kDebug() << k_funcinfo << "leftcol=" << d->findLeftColumn << " rightcol=" << d->findRightColumn << endl;
 }
 
 void View::findNext()
@@ -4507,7 +4508,7 @@ void View::findNext()
     }
     KFind::Result res = KFind::NoMatch;
     Cell* cell = findNextCell();
-    bool forw = ! ( d->findOptions & KFindDialog::FindBackwards );
+    bool forw = ! ( d->findOptions & KFind::FindBackwards );
     while ( res == KFind::NoMatch && cell )
     {
         if ( findObj->needData() )
@@ -4517,7 +4518,7 @@ void View::findNext()
             else
                 findObj->setData( cell->text() );
             d->findPos = QPoint( cell->column(), cell->row() );
-            //kdDebug() << "setData(cell " << d->findPos << ")" << endl;
+            //kDebug() << "setData(cell " << d->findPos << ")" << endl;
         }
 
         // Let KFind inspect the text fragment, and display a dialog if a match is found
@@ -4551,7 +4552,7 @@ void View::findNext()
         //emitUndoRedo();
         //removeHighlight();
         if ( findObj->shouldRestart() ) {
-            d->findOptions &= ~KFindDialog::FromCursor;
+            d->findOptions &= ~KFind::FromCursor;
             findObj->resetCounts();
             findNext();
         }
@@ -4581,11 +4582,11 @@ Cell* View::findNextCell()
 
     Sheet* sheet = d->searchInSheets.currentSheet;
     Cell* cell = 0L;
-    bool forw = ! ( d->findOptions & KFindDialog::FindBackwards );
+    bool forw = ! ( d->findOptions & KFind::FindBackwards );
     int col = d->findPos.x();
     int row = d->findPos.y();
     int maxRow = sheet->maxRow();
-    //kdDebug() << "findNextCell starting at " << col << "," << row << "   forw=" << forw << endl;
+    //kDebug() << "findNextCell starting at " << col << "," << row << "   forw=" << forw << endl;
 
     if ( d->directionValue == FindOption::Row )
     {
@@ -4607,7 +4608,7 @@ Cell* View::findNextCell()
                 col = d->findRightColumn;
                 --row;
             }
-            //kdDebug() << "next row: " << col << "," << row << endl;
+            //kDebug() << "next row: " << col << "," << row << endl;
         }
     }
     else
@@ -4630,13 +4631,13 @@ Cell* View::findNextCell()
                 col = maxRow;
                 --col;
             }
-            //kdDebug() << "next row: " << col << "," << row << endl;
+            //kDebug() << "next row: " << col << "," << row << endl;
         }
     }
     // if ( !cell )
     // No more next cell - TODO go to next sheet (if not looking in a selection)
     // (and make d->findEnd (max,max) in that case...)
-    //kdDebug() << k_funcinfo << " returning " << cell << endl;
+    //kDebug() << k_funcinfo << " returning " << cell << endl;
     return cell;
 }
 
@@ -4647,13 +4648,13 @@ void View::findPrevious()
         find();
         return;
     }
-    //kdDebug() << "findPrevious" << endl;
+    //kDebug() << "findPrevious" << endl;
     int opt = d->findOptions;
-    bool forw = ! ( opt & KFindDialog::FindBackwards );
+    bool forw = ! ( opt & KFind::FindBackwards );
     if ( forw )
-        d->findOptions = ( opt | KFindDialog::FindBackwards );
+        d->findOptions = ( opt | KFind::FindBackwards );
     else
-        d->findOptions = ( opt & ~KFindDialog::FindBackwards );
+        d->findOptions = ( opt & ~KFind::FindBackwards );
 
     findNext();
 
@@ -4712,7 +4713,7 @@ void View::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*
         baseDialog = d->find->findNextDialog();
     else
         baseDialog = d->replace->replaceNextDialog();
-    kdDebug()<<" baseDialog :"<<baseDialog<<endl;
+    kDebug()<<" baseDialog :"<<baseDialog<<endl;
     QRect globalRect( d->findPos, d->findEnd );
     globalRect.moveTopLeft( canvasWidget()->mapToGlobal( globalRect.topLeft() ) );
     KDialog::avoidArea( baseDialog, QRect( d->findPos, d->findEnd ));
@@ -4894,16 +4895,16 @@ void View::setupPrinter( KPrinter &prt )
     prt.setFullPage( true );
 
     //add possibility to select the sheets to print:
-//     kdDebug() << "Adding sheet selection page." << endl;
+//     kDebug() << "Adding sheet selection page." << endl;
     KPSheetSelectPage* sheetpage = new KPSheetSelectPage();
     prt.addDialogPage(sheetpage);
 
-//     kdDebug() << "Iterating through available sheets and initializing list of available sheets." << endl;
+//     kDebug() << "Iterating through available sheets and initializing list of available sheets." << endl;
     QPtrList<Sheet> sheetlist = doc()->map()->sheetList();
     Sheet* sheet = sheetlist.last();
     while ( sheet )
     {
-      kdDebug() << "Adding " << sheet->sheetName() << endl;
+      kDebug() << "Adding " << sheet->sheetName() << endl;
       sheetpage->prependAvailableSheet(sheet->sheetName());
       sheet = sheetlist.prev();
     }
@@ -4922,7 +4923,7 @@ void View::print( KPrinter &prt )
 
     if (sheetlist.empty())
     {
-      kdDebug() << "No sheet for printing selected, printing active sheet" << endl;
+      kDebug() << "No sheet for printing selected, printing active sheet" << endl;
       sheetlist.append(d->activeSheet->sheetName());
     }
 
@@ -4934,11 +4935,11 @@ void View::print( KPrinter &prt )
     QStringList::iterator sheetlistiterator;
     for (sheetlistiterator = sheetlist.begin(); sheetlistiterator != sheetlist.end(); ++sheetlistiterator)
     {
-        kdDebug() << "  printing sheet " << *sheetlistiterator << endl;
+        kDebug() << "  printing sheet " << *sheetlistiterator << endl;
         Sheet* sheet = doc()->map()->findSheet(*sheetlistiterator);
         if (sheet == NULL)
         {
-          kdWarning() << i18n("Sheet %1 could not be found for printing").arg(*sheetlistiterator) << endl;
+          kWarning() << i18n("Sheet %1 could not be found for printing").arg(*sheetlistiterator) << endl;
           continue;
         }
 
@@ -4950,7 +4951,7 @@ void View::print( KPrinter &prt )
           firstpage=false;
         else
         {
-          kdDebug() << " inserting new page" << endl;
+          kDebug() << " inserting new page" << endl;
           prt.newPage();
         }
 
@@ -5253,7 +5254,7 @@ void View::viewZoom( const QString & s )
 
 void View::setZoom( int zoom, bool /*updateViews*/ )
 {
-  kdDebug() << "---------SetZoom: " << zoom << endl;
+  kDebug() << "---------SetZoom: " << zoom << endl;
 
   // Set the zoom in KoView (for embedded views)
   doc()->emitBeginOperation( false );
@@ -5320,7 +5321,7 @@ void View::setSelectionComment( QString comment )
   {
     doc()->emitBeginOperation( false );
 
-    d->activeSheet->setSelectionComment( selectionInfo(), comment.stripWhiteSpace() );
+    d->activeSheet->setSelectionComment( selectionInfo(), comment.trimmed() );
     updateEditWidget();
 
     markSelectionAsDirty();
@@ -5340,7 +5341,7 @@ bool View::showSheet(const QString& sheetName) {
   Sheet *t=doc()->map()->findSheet(sheetName);
   if ( !t )
   {
-    kdDebug(36001) << "Unknown sheet " <<sheetName<<  endl;
+    kDebug(36001) << "Unknown sheet " <<sheetName<<  endl;
     return false;
   }
   d->canvas->closeEditor();
@@ -5354,7 +5355,7 @@ void View::nextSheet()
   Sheet * t = doc()->map()->nextSheet( activeSheet() );
   if ( !t )
   {
-    kdDebug(36001) << "Unknown sheet " <<  endl;
+    kDebug(36001) << "Unknown sheet " <<  endl;
     return;
   }
   d->canvas->closeEditor();
@@ -5368,7 +5369,7 @@ void View::previousSheet()
   Sheet * t = doc()->map()->previousSheet( activeSheet() );
   if ( !t )
   {
-    kdDebug(36001) << "Unknown sheet "  << endl;
+    kDebug(36001) << "Unknown sheet "  << endl;
     return;
   }
   d->canvas->closeEditor();
@@ -5382,7 +5383,7 @@ void View::firstSheet()
   Sheet *t = doc()->map()->firstSheet();
   if ( !t )
   {
-    kdDebug(36001) << "Unknown sheet " <<  endl;
+    kDebug(36001) << "Unknown sheet " <<  endl;
     return;
   }
   d->canvas->closeEditor();
@@ -5396,7 +5397,7 @@ void View::lastSheet()
   Sheet *t = doc()->map()->lastSheet( );
   if ( !t )
   {
-    kdDebug(36001) << "Unknown sheet " <<  endl;
+    kDebug(36001) << "Unknown sheet " <<  endl;
     return;
   }
   d->canvas->closeEditor();
@@ -5408,15 +5409,15 @@ void View::lastSheet()
 void View::keyPressEvent ( QKeyEvent* _ev )
 {
   // Dont eat accelerators
-  if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+  if ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) )
   {
-    if ( _ev->state() & ( Qt::ControlButton ) )
+    if ( _ev->state() & ( Qt::ControlModifier ) )
     {
       switch( _ev->key() )
       {
 #ifndef NDEBUG
        case Qt::Key_V: // Ctrl+Shift+V to show debug (similar to KWord)
-        if ( _ev->state() & Qt::ShiftButton )
+        if ( _ev->state() & Qt::ShiftModifier )
           d->activeSheet->printDebug();
 #endif
        default:
@@ -5435,7 +5436,7 @@ KoDocument * View::hitTest( const QPoint& /*pos*/ )
 //     // Code copied from KoView::hitTest
 //     KoViewChild *viewChild;
 //
-//     QWMatrix m = matrix();
+//     QMatrix m = matrix();
 //     m.translate( d->canvas->xOffset() / doc()->zoomedResolutionX(),
 //                  d->canvas->yOffset() / doc()->zoomedResolutionY() );
 //
@@ -5502,7 +5503,7 @@ int View::bottomBorder() const
 
 void View::refreshView()
 {
-  kdDebug() << "refreshing view" << endl;
+  kDebug() << "refreshing view" << endl;
 
   Sheet * sheet = activeSheet();
   if ( !sheet )
@@ -5540,7 +5541,7 @@ void View::refreshView()
   Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::reverseLayout();
 
-  kdDebug()<<" sheetDir == Sheet::LeftToRight :"<<( sheetDir == Sheet::LeftToRight )<<endl;
+  kDebug()<<" sheetDir == Sheet::LeftToRight :"<<( sheetDir == Sheet::LeftToRight )<<endl;
   if ((sheetDir == Sheet::LeftToRight && !interfaceIsRTL) ||
       (sheetDir == Sheet::RightToLeft && interfaceIsRTL))
   {
@@ -5644,7 +5645,7 @@ void View::popupColumnMenu( const QPoint & _point )
       d->actions->showSelColumns->setEnabled(false);
 
       ColumnFormat* format;
-      //kdDebug(36001) << "Column: L: " << rect.left() << endl;
+      //kDebug(36001) << "Column: L: " << rect.left() << endl;
       Region::ConstIterator endOfList = d->selection->constEnd();
       for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
       {
@@ -6027,7 +6028,7 @@ void View::slotActivateTool( int _id )
   KDataTool* tool = entry->info.createTool();
   if ( !tool )
   {
-      kdDebug(36001) << "Could not create Tool" << endl;
+      kDebug(36001) << "Could not create Tool" << endl;
       return;
   }
 
@@ -6578,7 +6579,7 @@ void View::createStyleFromCell()
     if ( !ok ) // User pushed an OK button.
       return;
 
-    styleName = styleName.stripWhiteSpace();
+    styleName = styleName.trimmed();
 
     if ( styleName.length() < 1 )
     {
@@ -6800,7 +6801,7 @@ void View::slotRename()
     KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."),
       i18n("Change Sheet Name") );
 
-    newName = newName.simplifyWhiteSpace();
+    newName = newName.simplified();
     int n = newName.find('-');
     if ( n > -1 ) newName[n] = '_';
     n = newName.find('!');
@@ -6813,7 +6814,7 @@ void View::slotRename()
     if ( !ok ) return;
   }
 
-  if ( (newName.stripWhiteSpace()).isEmpty() ) // Sheet name is empty.
+  if ( (newName.trimmed()).isEmpty() ) // Sheet name is empty.
   {
     KNotifyClient::beep();
     KMessageBox::information( this, i18n("Sheet name cannot be empty."), i18n("Change Sheet Name") );
@@ -6917,7 +6918,7 @@ void View::slotUpdateView( EmbeddedObject *obj )
 
 void View::slotUpdateHBorder( Sheet * _sheet )
 {
-  // kdDebug(36001)<<"void View::slotUpdateHBorder( Sheet *_sheet )\n";
+  // kDebug(36001)<<"void View::slotUpdateHBorder( Sheet *_sheet )\n";
 
   // Do we display this sheet ?
   if ( _sheet != d->activeSheet )
@@ -6930,7 +6931,7 @@ void View::slotUpdateHBorder( Sheet * _sheet )
 
 void View::slotUpdateVBorder( Sheet *_sheet )
 {
-  // kdDebug("void View::slotUpdateVBorder( Sheet *_sheet )\n";
+  // kDebug("void View::slotUpdateVBorder( Sheet *_sheet )\n";
 
   // Do we display this sheet ?
   if ( _sheet != d->activeSheet )
@@ -6943,7 +6944,7 @@ void View::slotUpdateVBorder( Sheet *_sheet )
 
 void View::slotChangeSelection(const KSpread::Region& changedRegion)
 {
-//   kdDebug() << *selectionInfo() << endl;
+//   kDebug() << *selectionInfo() << endl;
 
   if (!changedRegion.isValid())
   {
@@ -7034,7 +7035,7 @@ void View::slotChangeChoice(const KSpread::Region& changedRegion)
   d->canvas->setSelectionChangePaintDirty( d->activeSheet, changedRegion );
   d->canvas->scrollToCell(choice()->marker());
   doc()->emitEndOperation( *choice() );
-  kdDebug() << "Choice: " << *choice() << endl;
+  kDebug() << "Choice: " << *choice() << endl;
 }
 
 void View::calcStatusBarOp()
@@ -7156,9 +7157,9 @@ void View::menuCalc( bool )
 }
 
 
-QWMatrix View::matrix() const
+QMatrix View::matrix() const
 {
-  QWMatrix m;
+  QMatrix m;
   m.scale( d->doc->zoomedResolutionX(),
            d->doc->zoomedResolutionY() );
   m.translate( - d->canvas->xOffset(), - d->canvas->yOffset() );
@@ -7422,8 +7423,8 @@ void View::saveCurrentSheetSelection()
     if (d->activeSheet != NULL)
     {
         d->savedAnchors.replace(d->activeSheet, d->selection->anchor());
-        kdDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
-        kdDebug() << "Saving marker pos: " << d->selection->marker() << endl;
+        kDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
+        kDebug() << "Saving marker pos: " << d->selection->marker() << endl;
         d->savedMarkers.replace(d->activeSheet, d->selection->marker());
     }
 }

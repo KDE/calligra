@@ -124,7 +124,7 @@ class Navigator : public KListBox
 {
     Q_OBJECT
   public:
-    Navigator(bool _selectable, KPopupMenu*, IconSidePane *, QWidget *parent = 0, const char *name = 0 );
+    Navigator(bool _selectable, KMenu*, IconSidePane *, QWidget *parent = 0, const char *name = 0 );
 
     int insertItem(const QString &_text, const QString &_pix);
 
@@ -161,7 +161,7 @@ class Navigator : public KListBox
     int mMinWidth;
     Q3ListBoxItem *executedItem;
     bool mLeftMouseButtonPressed;
-    KPopupMenu *mPopupMenu;
+    KMenu *mPopupMenu;
     bool mSelectable;
     Q3ListBoxItem* mMouseOn;
 };
@@ -208,7 +208,7 @@ class IconSidePane :public Q3VBox
     Navigator *mCurrentNavigator;
     Q3ButtonGroup *m_buttongroup;
     KActionCollection *mActionCollection;
-    KPopupMenu *mPopupMenu;
+    KMenu *mPopupMenu;
 
     IconViewMode mViewMode;
     bool mShowIcons;

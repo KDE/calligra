@@ -141,7 +141,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 	data.connectionData()->localSocketFileName = config.readEntry("localSocketFile");
 	data.connectionData()->savePassword = config.hasKey("password") || config.hasKey("encryptedPassword");
 	if (data.formatVersion >= 2) {
-		kdDebug() << config.hasKey("encryptedPassword") << endl;
+		kDebug() << config.hasKey("encryptedPassword") << endl;
 		data.connectionData()->password = config.readEntry("encryptedPassword");
 		KexiUtils::simpleDecrypt(data.connectionData()->password);
 	}

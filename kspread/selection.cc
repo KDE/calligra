@@ -98,7 +98,7 @@ Selection::Selection(View *view)
 Selection::Selection(const Selection& selection)
   : QObject(selection.d->view), Region()
 {
-/*  kdDebug() << k_funcinfo << endl;*/
+/*  kDebug() << k_funcinfo << endl;*/
   d = new Private(selection.d->view);
   d->sheet = selection.d->sheet;
   d->activeSubRegionStart = 0;
@@ -387,17 +387,17 @@ void Selection::update(const QPoint& point)
   bool newBottom = area1.bottom() != area2.bottom();
 
   /* first, calculate some numbers that we'll use a few times */
-  int farLeft = QMIN(area1.left(), area2.left());
-  int innerLeft = QMAX(area1.left(), area2.left());
+  int farLeft = qMin(area1.left(), area2.left());
+  int innerLeft = qMax(area1.left(), area2.left());
 
-  int farTop = QMIN(area1.top(), area2.top());
-  int innerTop = QMAX(area1.top(), area2.top());
+  int farTop = qMin(area1.top(), area2.top());
+  int innerTop = qMax(area1.top(), area2.top());
 
-  int farRight = QMAX(area1.right(), area2.right());
-  int innerRight = QMIN(area1.right(), area2.right());
+  int farRight = qMax(area1.right(), area2.right());
+  int innerRight = qMin(area1.right(), area2.right());
 
-  int farBottom = QMAX(area1.bottom(), area2.bottom());
-  int innerBottom = QMIN(area1.bottom(), area2.bottom());
+  int farBottom = qMax(area1.bottom(), area2.bottom());
+  int innerBottom = qMin(area1.bottom(), area2.bottom());
 
   if (newLeft)
   {
@@ -716,7 +716,7 @@ void Selection::setActiveElement(uint pos)
 {
   if (pos >= cells().count())
   {
-    kdDebug() << "Selection::setActiveElement: position exceeds list" << endl;
+    kDebug() << "Selection::setActiveElement: position exceeds list" << endl;
     d->activeElement = cells().begin();
     return;
   }
@@ -748,36 +748,36 @@ void Selection::clearSubRegion()
   {
     return;
   }
-//   kdDebug() << *this << endl;
-//   kdDebug() << d->activeSubRegionStart << endl;
-//   kdDebug() << d->activeSubRegionLength << endl;
+//   kDebug() << *this << endl;
+//   kDebug() << d->activeSubRegionStart << endl;
+//   kDebug() << d->activeSubRegionLength << endl;
 
   Iterator it = cells().begin();
   Iterator end = it += d->activeSubRegionStart;
   end += d->activeSubRegionLength;
   while (it != end)
   {
-/*    kdDebug() << (*it)->name() << endl;*/
+/*    kDebug() << (*it)->name() << endl;*/
     delete *it;
     it = cells().remove(it);
   }
   d->activeSubRegionLength = 0;
   d->activeElement = it;
-/*  kdDebug() << "ENDE" << endl;*/
+/*  kDebug() << "ENDE" << endl;*/
 }
 
 void Selection::fixSubRegionDimension()
 {
   if (d->activeSubRegionStart > cells().count())
   {
-    kdDebug() << "Selection::fixSubRegionDimension: start position exceeds list" << endl;
+    kDebug() << "Selection::fixSubRegionDimension: start position exceeds list" << endl;
     d->activeSubRegionStart = 0;
     d->activeSubRegionLength = cells().count();
     return;
   }
   if (d->activeSubRegionStart + d->activeSubRegionLength > cells().count())
   {
-    kdDebug() << "Selection::fixSubRegionDimension: length exceeds list" << endl;
+    kDebug() << "Selection::fixSubRegionDimension: length exceeds list" << endl;
     d->activeSubRegionLength = cells().count() - d->activeSubRegionStart;
     return;
   }
@@ -785,7 +785,7 @@ void Selection::fixSubRegionDimension()
 
 void Selection::setActiveSubRegion(uint start, uint length)
 {
-//   kdDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
   d->activeSubRegionStart = start;
   d->activeSubRegionLength = length;
   fixSubRegionDimension();
@@ -794,9 +794,9 @@ void Selection::setActiveSubRegion(uint start, uint length)
 
 QString Selection::activeSubRegionName() const
 {
-//   kdDebug() << k_funcinfo << endl;
-//   kdDebug() << *this << endl;
-//   kdDebug() << "start = " << d->activeSubRegionStart << ", len = " << d->activeSubRegionLength << endl;
+//   kDebug() << k_funcinfo << endl;
+//   kDebug() << *this << endl;
+//   kDebug() << "start = " << d->activeSubRegionStart << ", len = " << d->activeSubRegionLength << endl;
 
   QStringList names;
   Iterator it = cells().begin();
@@ -807,7 +807,7 @@ QString Selection::activeSubRegionName() const
   {
     names += (*it++)->name(d->sheet);
   }
-/*  kdDebug() << "ENDE" << endl;*/
+/*  kDebug() << "ENDE" << endl;*/
   return names.isEmpty() ? "" : names.join(";");
 }
 
@@ -869,16 +869,16 @@ QRect Selection::extendToMergedAreas(QRect area) const
       cell = d->view->activeSheet()->cellAt( x, y );
       if( cell->doesMergeCells())
       {
-        right=QMAX(right,cell->mergedXCells()+x);
-        bottom=QMAX(bottom,cell->mergedYCells()+y);
+        right=qMax(right,cell->mergedXCells()+x);
+        bottom=qMax(bottom,cell->mergedYCells()+y);
       }
       else if ( cell->isObscured() && cell->isPartOfMerged() )
       {
         cell = cell->obscuringCells().first();
-        left=QMIN(left,cell->column());
-        top=QMIN(top,cell->row());
-        bottom=QMAX(bottom,cell->row() + cell->mergedYCells());
-        right=QMAX(right,cell->column() + cell->mergedXCells());
+        left=qMin(left,cell->column());
+        top=qMin(top,cell->row());
+        bottom=qMax(bottom,cell->row() + cell->mergedYCells());
+        right=qMax(right,cell->column() + cell->mergedXCells());
       }
     }
 

@@ -8,7 +8,7 @@
 bool parseData(KexiDB::Parser *p, const char *data);
 typedef union {
 	char stringValue[255];
-	Q_LLONG integerValue;
+	qint64 integerValue;
 	struct realType realValue;
 	KexiDB::Field::Type colType;
 	KexiDB::Field *field;

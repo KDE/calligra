@@ -167,7 +167,7 @@ KarbonPart::createViewInstance( QWidget* parent, const char* name )
 void
 KarbonPart::removeView( KoView *view )
 {
-	kdDebug(38000) << "KarbonPart::removeView" << endl;
+	kDebug(38000) << "KarbonPart::removeView" << endl;
 	KoDocument::removeView( view );
 }
 
@@ -230,8 +230,8 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 		m_pageLayout.ptHeight = getAttribute( doc, "height", 841.891 );
 	}
 
-	kdDebug() << " ptWidth=" << m_pageLayout.ptWidth << endl;
-	kdDebug() << " ptHeight=" << m_pageLayout.ptHeight << endl;
+	kDebug() << " ptWidth=" << m_pageLayout.ptWidth << endl;
+	kDebug() << " ptHeight=" << m_pageLayout.ptHeight << endl;
         QDomElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if( !borders.isNull() )
        	{
@@ -276,18 +276,18 @@ KarbonPart::saveXML()
 bool
 KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDomDocument &settings, KoStore *store )
 {
-	kdDebug(38000) << "Start loading OASIS document..." << doc.toString() << endl;
+	kDebug(38000) << "Start loading OASIS document..." << doc.toString() << endl;
 
 	QDomElement contents = doc.documentElement();
-	kdDebug(38000) << "Start loading OASIS document..." << contents.text() << endl;
-	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName() << endl;
-	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI() << endl;
-	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement() << endl;
+	kDebug(38000) << "Start loading OASIS document..." << contents.text() << endl;
+	kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName() << endl;
+	kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI() << endl;
+	kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement() << endl;
 	QDomElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
-	kdDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
+	kDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
 	if( body.isNull() )
 	{
-		kdDebug(38000) << "No office:body found!" << endl;
+		kDebug(38000) << "No office:body found!" << endl;
 		setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
 		return false;
 	}
@@ -295,7 +295,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
 	if(body.isNull())
 	{
-		kdDebug(38000) << "No office:drawing found!" << endl;
+		kDebug(38000) << "No office:drawing found!" << endl;
 		setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
 		return false;
 	}
@@ -303,7 +303,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	QDomElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
 	if(page.isNull())
 	{
-		kdDebug(38000) << "No office:drawing found!" << endl;
+		kDebug(38000) << "No office:drawing found!" << endl;
 		setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
 		return false;
 	}
@@ -326,7 +326,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	KoOasisLoadingContext context( this, styles, store );
 	m_doc.loadOasis( page, context );
 	// do y-mirroring here
-	QWMatrix mat;
+	QMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( 0, -m_doc.height() );
 	VTransformCmd trafo( 0L, mat );
@@ -551,12 +551,12 @@ void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 						  bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
-	kdDebug(38000) << "**** part->paintContent()" << endl;
+	kDebug(38000) << "**** part->paintContent()" << endl;
 
 	KoRect r = KoRect::fromQRect( rect );
 	double zoomFactorX = double( r.width() ) / double( document().width() );
 	double zoomFactorY = double( r.height() ) / double( document().height() );
-	double zoomFactor = kMin( zoomFactorX, zoomFactorY );
+	double zoomFactor = qMin( zoomFactorX, zoomFactorY );
 
 	painter.eraseRect( rect );
 	VPainterFactory *painterFactory = new VPainterFactory;
@@ -566,17 +566,17 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
 	p->setZoomFactor( zoomFactor );
-	kdDebug(38000) << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
-	kdDebug(38000) << "painter.worldMatrix().dy() : " << painter.worldMatrix().dy() << endl;
-	kdDebug(38000) << "rect.x() : "<< rect.x() << endl;
-	kdDebug(38000) << "rect.y() : "<< rect.y() << endl;
-	kdDebug(38000) << "rect.width() : "<< rect.width() << endl;
-	kdDebug(38000) << "rect.height() : "<< rect.height() << endl;
+	kDebug(38000) << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
+	kDebug(38000) << "painter.worldMatrix().dy() : " << painter.worldMatrix().dy() << endl;
+	kDebug(38000) << "rect.x() : "<< rect.x() << endl;
+	kDebug(38000) << "rect.y() : "<< rect.y() << endl;
+	kDebug(38000) << "rect.width() : "<< rect.width() << endl;
+	kDebug(38000) << "rect.height() : "<< rect.height() << endl;
 	r = document().boundingBox();
-	QWMatrix mat = painter.worldMatrix();
+	QMatrix mat = painter.worldMatrix();
 	mat.scale( 1, -1 );
 	mat.translate( 0, -r.height() * zoomFactor );
-	p->setWorldMatrix( mat );
+	p->setMatrix( mat );
 
 	m_doc.selection()->clear();
 	QPtrListIterator<VLayer> itr( m_doc.layers() );

@@ -42,13 +42,13 @@ Duration::Duration(const Duration &d) {
 
 Duration::Duration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) {
     m_ms = ms;
-    m_ms += static_cast<Q_INT64>(s) * 1000; // cast to avoid potential overflow problem
-    m_ms += static_cast<Q_INT64>(m) * 60 * 1000;
-    m_ms += static_cast<Q_INT64>(h) * 60 * 60 * 1000;
-    m_ms += static_cast<Q_INT64>(d) * 24 * 60 * 60 * 1000;
+    m_ms += static_cast<qint64>(s) * 1000; // cast to avoid potential overflow problem
+    m_ms += static_cast<qint64>(m) * 60 * 1000;
+    m_ms += static_cast<qint64>(h) * 60 * 60 * 1000;
+    m_ms += static_cast<qint64>(d) * 24 * 60 * 60 * 1000;
 }
 
-Duration::Duration(Q_INT64 seconds) {
+Duration::Duration(qint64 seconds) {
     m_ms = seconds * 1000;
 }
 
@@ -59,10 +59,10 @@ void Duration::add(const Duration &delta) {
     m_ms += delta.m_ms;
 }
 
-void Duration::add(Q_INT64 delta) {
-    Q_INT64 tmp = m_ms + delta;
+void Duration::add(qint64 delta) {
+    qint64 tmp = m_ms + delta;
     if (tmp < 0) {
-        kdDebug()<<k_funcinfo<<"Underflow"<<(long int)delta<<" from "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Underflow"<<(long int)delta<<" from "<<this->toString()<<endl;
         m_ms = 0;
         return;
     }
@@ -71,7 +71,7 @@ void Duration::add(Q_INT64 delta) {
 
 void Duration::subtract(const Duration &delta) {
     if (m_ms < delta.m_ms) {
-        kdDebug()<<k_funcinfo<<"Underflow"<<delta.toString()<<" from "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Underflow"<<delta.toString()<<" from "<<this->toString()<<endl;
         m_ms = 0;
         return;
     }
@@ -81,7 +81,7 @@ void Duration::subtract(const Duration &delta) {
 Duration Duration::operator*(int unit) const {
     Duration dur(*this);
     if (unit < 0) {
-        kdDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
     }
     else {
         dur.m_ms = m_ms * unit; //FIXME
@@ -92,7 +92,7 @@ Duration Duration::operator*(int unit) const {
 Duration Duration::operator/(int unit) const {
     Duration dur(*this);
     if (unit <= 0) {
-        kdDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
     }
     else {
         dur.m_ms = m_ms / unit; //FIXME
@@ -102,20 +102,20 @@ Duration Duration::operator/(int unit) const {
 
 Duration Duration::operator*(const double value) const {
     Duration dur(*this);
-    dur.m_ms = QABS(m_ms * (Q_INT64)value);
+    dur.m_ms = QABS(m_ms * (qint64)value);
     return dur;
 }
 
 double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
-        kdDebug()<<k_funcinfo<<"Devide by zero: "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Devide by zero: "<<this->toString()<<endl;
         return 0.0;
     }
     return (double)(m_ms) / (double)(d.m_ms);
 }
 
 QString Duration::toString(Format format) const {
-    Q_INT64 ms;
+    qint64 ms;
     double days;
     unsigned hours;
     unsigned minutes;
@@ -127,7 +127,7 @@ QString Duration::toString(Format format) const {
         case Format_Hour:
             ms = m_ms;
             hours = ms / (1000 * 60 * 60);
-            ms -= (Q_INT64)hours * (1000 * 60 * 60);
+            ms -= (qint64)hours * (1000 * 60 * 60);
             minutes = ms / (1000 * 60);
             result = QString("%1h%2m").arg(hours).arg(minutes);
             break;
@@ -138,9 +138,9 @@ QString Duration::toString(Format format) const {
         case Format_DayTime:
             ms = m_ms;
             days = m_ms / (1000 * 60 * 60 * 24);
-            ms -= (Q_INT64)days * (1000 * 60 * 60 * 24);
+            ms -= (qint64)days * (1000 * 60 * 60 * 24);
             hours = ms / (1000 * 60 * 60);
-            ms -= (Q_INT64)hours * (1000 * 60 * 60);
+            ms -= (qint64)hours * (1000 * 60 * 60);
             minutes = ms / (1000 * 60);
             ms -= minutes * (1000 * 60);
             seconds = ms / (1000);
@@ -154,7 +154,7 @@ QString Duration::toString(Format format) const {
         case Format_i18nHour:
             ms = m_ms;
             hours = ms / (1000 * 60 * 60);
-            ms -= (Q_INT64)hours * (1000 * 60 * 60);
+            ms -= (qint64)hours * (1000 * 60 * 60);
             minutes = ms / (1000 * 60);
             result = i18n("<hours>h:<minutes>m", "%1h:%2m").arg(hours).arg(minutes);
             break;
@@ -164,9 +164,9 @@ QString Duration::toString(Format format) const {
         case Format_i18nDayTime:
             ms = m_ms;
             days = m_ms / (1000 * 60 * 60 * 24);
-            ms -= (Q_INT64)days * (1000 * 60 * 60 * 24);
+            ms -= (qint64)days * (1000 * 60 * 60 * 24);
             hours = ms / (1000 * 60 * 60);
-            ms -= (Q_INT64)hours * (1000 * 60 * 60);
+            ms -= (qint64)hours * (1000 * 60 * 60);
             minutes = ms / (1000 * 60);
             ms -= minutes * (1000 * 60);
             seconds = ms / (1000);
@@ -181,7 +181,7 @@ QString Duration::toString(Format format) const {
             result = KGlobal::locale()->formatNumber(toDouble(Unit_h), 2);
             break;
         default:
-            kdFatal()<<k_funcinfo<<"Unknown format"<<endl;
+            kFatal()<<k_funcinfo<<"Unknown format"<<endl;
             break;
     }
     return result;
@@ -221,20 +221,20 @@ Duration::Duration Duration::fromString(const QString &s, Format format, bool *o
             double f = KGlobal::locale()->readNumber(s, &res);
             if (ok) *ok = res;
             if (res) {
-                return Duration((Q_INT64)(f*3600.0));
+                return Duration((qint64)(f*3600.0));
             }
             break;
         }
         default:
-            kdFatal()<<k_funcinfo<<"Unknown format"<<endl;
+            kFatal()<<k_funcinfo<<"Unknown format"<<endl;
             break;
     }
     return tmp;
 }
 
 void Duration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds, unsigned *milliseconds) const {
-    Q_INT64 ms;
-    Q_INT64 tmp;
+    qint64 ms;
+    qint64 tmp;
 
     ms = m_ms;
     tmp = ms / (1000 * 60 * 60 * 24);

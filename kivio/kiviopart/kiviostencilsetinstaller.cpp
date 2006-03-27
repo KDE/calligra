@@ -47,7 +47,7 @@ namespace Kivio {
     QVBoxLayout* l = new QVBoxLayout(page);
     l->setAutoAdd(true);
 
-    m_url = new KURLRequester(page);
+    m_url = new KUrlRequester(page);
 
     setButtonOK(KGuiItem(i18n("&Install"), "button_ok"));
     resize(400, 10);
@@ -79,7 +79,7 @@ namespace Kivio {
     }
 
     KTar archive(urlString);
-    archive.open(IO_ReadOnly);
+    archive.open(QIODevice::ReadOnly);
     const KArchiveDirectory* rootDir = archive.directory();
 
     QStringList dirs = checkDirs(rootDir);

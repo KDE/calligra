@@ -35,7 +35,7 @@ class BoxLayout : public QBoxLayout
 		BoxLayout( KexiSectionHeader* parent, Direction d, int margin = 0, 
 			int spacing = -1, const char * name = 0 );
 		virtual void addItem( QLayoutItem * item );
-		QGuardedPtr<KexiViewBase> view;
+		QPointer<KexiViewBase> view;
 };
 
 //==========================
@@ -88,10 +88,10 @@ void KexiSectionHeader::addButton(const QString& icon, const QString& toolTip,
 	}
 
 	if (!icon.isEmpty()) {
-		QIconSet iset = SmallIconSet(icon);
+		QIcon iset = SmallIconSet(icon);
 		btn->setIconSet( iset );
 		QFontMetrics fm(d->lbl->font());
-		btn->setMaximumHeight( QMAX(fm.height(), 16) );
+		btn->setMaximumHeight( qMax(fm.height(), 16) );
 	}
 	if (!toolTip.isEmpty()) {
 		QToolTip::add(btn, toolTip);

@@ -40,7 +40,7 @@
 
 //remove debug
 #undef KexiDBDrvDbg
-#define KexiDBDrvDbg if (0) kdDebug()
+#define KexiDBDrvDbg if (0) kDebug()
 
 using namespace KexiDB;
 
@@ -182,7 +182,7 @@ bool SQLiteConnection::drv_useDatabase( const QString &dbName, bool *cancelled,
 # endif
 
 	d->res = sqlite3_open( 
-		//m_data->fileName().ucs2(), //utf16
+		//m_data->fileName().utf16(), //utf16
 		QFile::encodeName( m_data->fileName() ), 
 		&d->data,
 		exclusiveFlag,
@@ -279,9 +279,9 @@ bool SQLiteConnection::drv_executeSQL( const QString& statement )
 	return d->res==SQLITE_OK;
 }
 
-Q_ULLONG SQLiteConnection::drv_lastInsertRowID()
+quint64 SQLiteConnection::drv_lastInsertRowID()
 {
-	return (Q_ULLONG)sqlite_last_insert_rowid(d->data);
+	return (quint64)sqlite_last_insert_rowid(d->data);
 }
 
 int SQLiteConnection::serverResult()

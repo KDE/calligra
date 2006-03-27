@@ -102,7 +102,7 @@ void Account::take(Account *account) {
     } else {
         m_list->take(account);
     }
-    //kdDebug()<<k_funcinfo<<account->name()<<endl;
+    //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
 bool Account::load(QDomElement &element, const Project &project) {
@@ -125,7 +125,7 @@ bool Account::load(QDomElement &element, const Project &project) {
                     m_accountList.append(child);
                 } else {
                     // TODO: Complain about this
-                    kdWarning()<<k_funcinfo<<"Loading failed"<<endl;
+                    kWarning()<<k_funcinfo<<"Loading failed"<<endl;
                     delete child;
                 }
             }
@@ -281,15 +281,15 @@ void Account::CostPlace::setShutdown(bool on ) {
 }
 
 bool Account::CostPlace::load(QDomElement &element, const Project &project) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_nodeId = element.attribute("node-id");
     if (m_nodeId.isEmpty()) {
-        kdError()<<k_funcinfo<<"No node id"<<endl;
+        kError()<<k_funcinfo<<"No node id"<<endl;
         return false;
     }
     m_node = project.findNode(m_nodeId);
     if (m_node == 0) {
-        kdError()<<k_funcinfo<<"Cannot not find node with id: "<<m_nodeId<<endl;
+        kError()<<k_funcinfo<<"Cannot not find node with id: "<<m_nodeId<<endl;
         return false;
     }
     setRunning(element.attribute("running-cost").toInt());
@@ -299,7 +299,7 @@ bool Account::CostPlace::load(QDomElement &element, const Project &project) {
 }
 
 void Account::CostPlace::save(QDomElement &element) const {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QDomElement me = element.ownerDocument().createElement("costplace");
     element.appendChild(me);
     me.setAttribute("node-id", m_nodeId);
@@ -331,7 +331,7 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
         if (n == 0) {
             continue;
         }
-        //kdDebug()<<k_funcinfo<<"n="<<n->name()<<endl;
+        //kDebug()<<k_funcinfo<<"n="<<n->name()<<endl;
         if (it.current()->running()) {
             ec += n->plannedEffortCostPrDay(start, end);
         }
@@ -374,7 +374,7 @@ void Accounts::append(Account *account) {
     account->setList(this);
     account->setParent(0); // incase...
     insertId(account);
-    //kdDebug()<<k_funcinfo<<account->name()<<endl;
+    //kDebug()<<k_funcinfo<<account->name()<<endl;
     account->insertChildren();
 }
 
@@ -388,7 +388,7 @@ void Accounts::take(Account *account){
         return;
     }
     m_accountList.take(m_accountList.findRef(account));
-    //kdDebug()<<k_funcinfo<<account->name()<<endl;
+    //kDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
 bool Accounts::load(QDomElement &element, const Project &project) {
@@ -402,7 +402,7 @@ bool Accounts::load(QDomElement &element, const Project &project) {
                     append(child);
                 } else {
                     // TODO: Complain about this
-                    kdWarning()<<k_funcinfo<<"Loading failed"<<endl;
+                    kWarning()<<k_funcinfo<<"Loading failed"<<endl;
                     delete child;
                 }
             }
@@ -411,7 +411,7 @@ bool Accounts::load(QDomElement &element, const Project &project) {
     if (element.hasAttribute("default-account")) {
         m_defaultAccount = findAccount(element.attribute("default-account"));
         if (m_defaultAccount == 0) {
-            kdWarning()<<k_funcinfo<<"Could not find default account."<<endl;
+            kWarning()<<k_funcinfo<<"Could not find default account."<<endl;
         }
     }
     return true;
@@ -484,22 +484,22 @@ bool Accounts::insertId(const Account *account) {
     Q_ASSERT(account);
     Account *a = m_idDict.find(account->name());
     if (a == 0) {
-        //kdDebug()<<k_funcinfo<<"'"<<account->name()<<"' inserted"<<endl;
+        //kDebug()<<k_funcinfo<<"'"<<account->name()<<"' inserted"<<endl;
         m_idDict.insert(account->name(), account);
         return true;
     }
     if (a == account) {
-        kdDebug()<<k_funcinfo<<"'"<<a->name()<<"' allready exists"<<endl;
+        kDebug()<<k_funcinfo<<"'"<<a->name()<<"' allready exists"<<endl;
         return true;
     }
     //TODO: Create unique id?
-    kdWarning()<<k_funcinfo<<"Insert failed"<<endl;
+    kWarning()<<k_funcinfo<<"Insert failed"<<endl;
     return false;
 }
 
 bool Accounts::removeId(const QString &id) {
     bool res = m_idDict.remove(id);
-    //kdDebug()<<k_funcinfo<<id<<": removed="<<res<<endl;
+    //kDebug()<<k_funcinfo<<id<<": removed="<<res<<endl;
     return res;
 }
 

@@ -124,26 +124,26 @@ void DependencyList::dump()
   QMap<Point, RangeList>::const_iterator it = dependencies.begin();
   for ( ; it != dependencies.end(); ++it ) {
     Point p = it.key();
-    kdDebug() << "Cell " << p.sheetName() << " " << p.pos()
+    kDebug() << "Cell " << p.sheetName() << " " << p.pos()
               << " depends on :" << endl;
     RangeList rl = (*it);
     QValueList<Point>::const_iterator itp = rl.cells.begin();
     for ( ; itp != rl.cells.end(); ++itp )
-      kdDebug() << "  cell " << (*itp).pos() << endl;
+      kDebug() << "  cell " << (*itp).pos() << endl;
     QValueList<Range>::const_iterator itr = rl.ranges.begin();
     for ( ; itr != rl.ranges.end(); ++itr )
-      kdDebug() << "  range " << (*itr).toString() << endl;
+      kDebug() << "  range " << (*itr).toString() << endl;
   }
 
   CellDepsMap::const_iterator cit = cellDeps.begin();
   for ( ; cit != cellDeps.end(); ++cit )
   {
     Point p = cit.key();
-    kdDebug() << "The cells that depend on " << p.sheetName() << " " << p.pos()
+    kDebug() << "The cells that depend on " << p.sheetName() << " " << p.pos()
               << " are :" << endl;
     QValueList<Point>::const_iterator itp = (*cit).begin();
     for ( ; itp != (*cit).end(); ++itp )
-      kdDebug() << "  cell " << (*itp).pos() << endl;
+      kDebug() << "  cell " << (*itp).pos() << endl;
   }
 
 }
@@ -562,7 +562,7 @@ void DependencyList::updateCell (const Point &cell) const
   if (c->testFlag (Cell::Flag_Progress) ||
       c->testFlag (Cell::Flag_CircularCalculation))
   {
-    kdError(36001) << "ERROR: Circle, cell " << c->fullName() <<
+    kError(36001) << "ERROR: Circle, cell " << c->fullName() <<
         ", in dep.manager for sheet " << sheet->name() << endl;
     Value v;
     // don't set anything if the cell already has all these things set
@@ -644,7 +644,7 @@ RangeList DependencyList::computeDependencies (const Point &cell) const
   Q_ASSERT(f);
   if (f==NULL)
   {
-    kdDebug() << "Cell at row " << cell.row() << ", col " << cell.column() << " marked as formula, but formula is NULL" << endl;
+    kDebug() << "Cell at row " << cell.row() << ", col " << cell.column() << " marked as formula, but formula is NULL" << endl;
     return RangeList();
   }
 

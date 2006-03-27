@@ -70,7 +70,7 @@ class pqxxSqlConnection : public Connection
 		virtual bool drv_closeDatabase();
 		virtual bool drv_dropDatabase( const QString &dbName = QString::null );
 		virtual bool drv_executeSQL( const QString& statement );
-		virtual Q_ULLONG drv_lastInsertRowID();
+		virtual quint64 drv_lastInsertRowID();
 
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_getTablesList( QStringList &list );

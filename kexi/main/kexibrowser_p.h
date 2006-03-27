@@ -21,10 +21,10 @@
 #ifndef KEXIBROWSER_P_H
 #define KEXIBROWSER_P_H
 
-#include <klistview.h>
+#include <k3listview.h>
 
 /*! @internal */
-class KexiBrowserListView : public KListView
+class KexiBrowserListView : public K3ListView
 {
 	Q_OBJECT
 	public:

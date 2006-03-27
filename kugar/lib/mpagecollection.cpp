@@ -53,7 +53,7 @@ MPageCollection MPageCollection::operator=( const MPageCollection& mPageCollecti
 MPageCollection::~MPageCollection()
 {
     pages.clear();
-    kdDebug(31000) << k_funcinfo << endl;
+    kDebug(31000) << k_funcinfo << endl;
 }
 
 /** Clears the page collection */

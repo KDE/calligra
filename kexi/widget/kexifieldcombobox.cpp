@@ -56,7 +56,7 @@ class KexiFieldComboBox::Private
 		{
 //			delete schema;
 		}
-		QGuardedPtr<KexiProject> prj;
+		QPointer<KexiProject> prj;
 //		KexiDB::TableOrQuerySchema* schema;
 		QPixmap keyIcon, noIcon;
 		QCString tableOrQueryName;
@@ -141,7 +141,7 @@ QCString KexiFieldComboBox::setTableOrQueryName() const
 
 void KexiFieldComboBox::setFieldOrExpression(const QString& string)
 {
-	const QString name(string); //string.stripWhiteSpace().lower());
+	const QString name(string); //string.trimmed().lower());
 	const int pos = name.find('.');
 	if (pos!=-1) {
 		QCString objectName = name.left(pos).latin1();

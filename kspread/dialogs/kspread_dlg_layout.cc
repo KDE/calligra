@@ -174,7 +174,8 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   label2->setText( i18n( "Inherit style:" ) );
   groupBoxLayout->addWidget( label2, 1, 0 );
 
-  m_parentBox = new KComboBox( false, groupBox, "m_parentBox" );
+  m_parentBox = new KComboBox( false, groupBox );
+  m_parentBox->setObjectName( "m_parentBox" );
   m_parentBox->clear();
   m_parentBox->insertItem( i18n( "<None>" ) );
   QStringList tmp = m_dlg->getStyleManager()->styleNames();
@@ -221,7 +222,7 @@ void GeneralTab::slotNameChanged()
 
 void GeneralTab::slotNewParent( const QString & parentName )
 {
-  kdDebug() << "New Parent" << endl;
+  kDebug() << "New Parent" << endl;
   if ( !checkParent( parentName ) )
     return;
 
@@ -461,7 +462,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     for ( int x = left; x <= right; x++ )
     {
       cl = m_pView->activeSheet()->columnFormat( x );
-      widthSize = QMAX( cl->dblWidth(), widthSize );
+      widthSize = qMax( cl->dblWidth(), widthSize );
     }
   }
 
@@ -470,7 +471,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     for ( int y = top; y <= bottom; y++ )
     {
       rl = m_pView->activeSheet()->rowFormat(y);
-      heightSize = QMAX( rl->dblHeight(), heightSize );
+      heightSize = qMax( rl->dblHeight(), heightSize );
     }
   }
 
@@ -1973,7 +1974,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
    if ( dlg->bTextFontFamily )
    {
         selFont.setFamily( dlg->textFontFamily );
-        kdDebug(36001) << "Family = " << dlg->textFontFamily << endl;
+        kDebug(36001) << "Family = " << dlg->textFontFamily << endl;
 
         if ( !family_combo->findItem(dlg->textFontFamily))
                 {
@@ -2174,7 +2175,7 @@ void CellFormatPageFont::setCombos()
  combo = size_combo;
  if ( dlg->bTextFontSize )
  {
-     kdDebug(36001) << "SIZE=" << dlg->textFontSize << endl;
+     kDebug(36001) << "SIZE=" << dlg->textFontSize << endl;
      selFont.setPointSize( dlg->textFontSize );
      number_of_entries = size_combo->count();
      string.setNum( dlg->textFontSize );
@@ -2184,7 +2185,7 @@ void CellFormatPageFont::setCombos()
          if ( string == (QString) combo->text(i)){
              combo->setCurrentItem(i);
              found = true;
-             // kdDebug(36001) << "Found Size " << string.data() << " setting to item " i << endl;
+             // kDebug(36001) << "Found Size " << string.data() << " setting to item " i << endl;
              break;
          }
      }
@@ -2758,7 +2759,8 @@ void CellFormatPageBorder::InitializeGrids()
     */
   }
 
-  color = new KColorButton (tmpQGroupBox, "PushButton_1" );
+  color = new KColorButton ( tmpQGroupBox );
+  color->setObjectName( "PushButton_1" );
   grid2->addWidget(color,7,1);
 
   QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_6" );
@@ -2943,7 +2945,7 @@ void CellFormatPageBorder::slotChangeStyle(int)
       preview->setPattern( preview->getColor(), penSize, SolidLine );
       break;
     default:
-      kdDebug(36001)<<"Error in combobox\n";
+      kDebug(36001)<<"Error in combobox\n";
       break;
     }
   }
@@ -3620,7 +3622,8 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     grid2->addWidget(brush15,5,2);
 
     QGridLayout *grid3 = new QGridLayout( 1, 2 );
-    color = new KColorButton (tmpQGroupBox, "ColorButton_1" );
+    color = new KColorButton ( tmpQGroupBox );
+    color->setObjectName( "ColorButton_1" );
     grid3->addWidget(color,0,1);
 
     QLabel *tmpQLabel = new QLabel( tmpQGroupBox, "Label_1" );
@@ -3636,7 +3639,8 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     grid3->addWidget(tmpQLabel,0,0);
     tmpQLabel->setText( i18n("Background color:") );
 
-    bgColorButton = new KColorButton( tmpQGroupBox, "ColorButton" );
+    bgColorButton = new KColorButton( tmpQGroupBox );
+    bgColorButton->setObjectName( "ColorButton" );
     grid3->addWidget(bgColorButton,0,1);
     if ( dlg->bBgColor )
         bgColor = dlg->bgColor;
@@ -3813,7 +3817,7 @@ void CellFormatPagePattern::init()
     brush15->slotSelect();
   }
   else
-    kdDebug(36001) << "Error in brushStyle" << endl;
+    kDebug(36001) << "Error in brushStyle" << endl;
 }
 
 void CellFormatPagePattern::slotSetColorButton( const QColor &_color )

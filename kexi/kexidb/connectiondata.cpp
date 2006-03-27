@@ -85,8 +85,8 @@ ConnectionData& ConnectionData::operator=(const ConnectionData& cd)
 void ConnectionData::setFileName( const QString& fn )
 {
 	QFileInfo file(fn);
-	if (!fn.isEmpty() && m_fileName != file.absFilePath()) {
-		m_fileName = QDir::convertSeparators(file.absFilePath());
+	if (!fn.isEmpty() && m_fileName != file.absoluteFilePath()) {
+		m_fileName = QDir::convertSeparators(file.absoluteFilePath());
 		m_dbPath = QDir::convertSeparators(file.dirPath(true));
 		m_dbFileName = file.fileName();
 	}

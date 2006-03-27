@@ -30,9 +30,9 @@
 class KPrDocument;
 class KPrView;
 
-class KURLRequester;
+class KUrlRequester;
 class KColorButton;
-class KListView;
+class K3ListView;
 class KIntNumInput;
 class KLineEdit;
 class KComboBox;
@@ -177,8 +177,8 @@ protected:
     KColorButton *textColor, *titleColor, *backColor;
     KComboBox *encoding, *doctype;
     KIntNumInput *zoom, *timeBetweenSlides; // PAU
-    KURLRequester *path;
-    KListView *slideTitles;
+    KUrlRequester *path;
+    K3ListView *slideTitles;
     KLineEdit *slideTitle;
 
 protected slots:

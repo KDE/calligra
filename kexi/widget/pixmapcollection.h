@@ -28,11 +28,11 @@
 
 #include <kicontheme.h>
 #include <kdialogbase.h>
-#include <kiconview.h>
+#include <k3iconview.h>
 #include <kurl.h>
 
 class QPixmap;
-class KIconView;
+class K3IconView;
 class KIconButton;
 class KLineEdit;
 class QDomNode;
@@ -95,7 +95,7 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollectionEditor : public KDialogBase
 
 	private:
 		enum { BNewItemPath = 101, BNewItemName, BDelItem};
-		KIconView  *m_iconView;
+		K3IconView  *m_iconView;
 		QIntDict<QToolButton>  m_buttons;
 		PixmapCollection  *m_collection;
 };
@@ -119,7 +119,7 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollectionChooser : public KDialogBase
 
 	private:
 		PixmapCollection  *m_collection;
-		KIconView  *m_iconView;
+		K3IconView  *m_iconView;
 };
 
 //! A simple dialog to choose a KDE icon
@@ -144,12 +144,12 @@ class KEXIEXTWIDGETS_EXPORT LoadIconDialog : public KDialogBase
 		KIconButton *m_button;
 };
 
-//! A Special KIconViewItem that holds the name of its associated pixmap (to allow renaming)
-class KEXIEXTWIDGETS_EXPORT PixmapIconViewItem : public KIconViewItem
+//! A Special K3IconViewItem that holds the name of its associated pixmap (to allow renaming)
+class KEXIEXTWIDGETS_EXPORT PixmapIconViewItem : public K3IconViewItem
 {
 	public:
-		PixmapIconViewItem(KIconView *parent, const QString &text, const QPixmap &icon)
-		: KIconViewItem(parent, text, icon)  { m_name = text; }
+		PixmapIconViewItem(K3IconView *parent, const QString &text, const QPixmap &icon)
+		: K3IconViewItem(parent, text, icon)  { m_name = text; }
 		~PixmapIconViewItem() {;}
 
 		void setName(const QString &name) { m_name = name; }

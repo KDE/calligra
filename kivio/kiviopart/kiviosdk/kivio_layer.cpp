@@ -69,7 +69,7 @@ DCOPObject* KivioLayer::dcopObject()
 
 KivioLayer::~KivioLayer()
 {
-    kdDebug(43000)<<"KivioLayer::~KivioLayer()***************:"<<this<<endl;
+    kDebug(43000)<<"KivioLayer::~KivioLayer()***************:"<<this<<endl;
     if( m_pStencilList )
     {
         delete m_pStencilList;
@@ -128,7 +128,7 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
 {
     QString setId, _id;
 
-    kdDebug(43000) << "KivioLayer::loadSMLStencil() " << setId << " " << _id << endl;
+    kDebug(43000) << "KivioLayer::loadSMLStencil() " << setId << " " << _id << endl;
 
     setId = XmlReadString( stencilE, "setId", "" );
     _id = XmlReadString( stencilE, "id", "" );
@@ -168,7 +168,7 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
  */
 KivioStencil *KivioLayer::loadGroupStencil( const QDomElement &stencilE )
 {
-   kdDebug(43000) << "KivioLayer::loadGroupStencil()" << endl;
+   kDebug(43000) << "KivioLayer::loadGroupStencil()" << endl;
 
     KivioGroupStencil *pStencil = new KivioGroupStencil();
 
@@ -185,7 +185,7 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
 {
     QString setId, _id;
 
-    kdDebug(43000) << "KivioLayer::loadPluginStencil() " << setId.ascii() << " / " << _id << endl;
+    kDebug(43000) << "KivioLayer::loadPluginStencil() " << setId.ascii() << " / " << _id << endl;
 
 
     setId = XmlReadString( stencilE, "setId", "" );
@@ -213,7 +213,7 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
 bool KivioLayer::loadXML( const QDomElement &layerE )
 {
     m_flags = XmlReadInt( layerE, "flags", 1 );
-    kdDebug(43000) << "Flags: " << m_flags << endl;
+    kDebug(43000) << "Flags: " << m_flags << endl;
     m_name = XmlReadString( layerE, "name", "layerX" );
 
     QDomNode node;
@@ -231,7 +231,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-	       kdWarning(43000) << "KivioLayer::loadXML() - Unknown KivioSMLStencil (id=" <<
+	       kWarning(43000) << "KivioLayer::loadXML() - Unknown KivioSMLStencil (id=" <<
 		  XmlReadString( node.toElement(), "id", "" ) << " set=" <<
 		  XmlReadString( node.toElement(), "setId", "" ) << ") found." << endl;
             }
@@ -245,7 +245,7 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-	       kdWarning(43000) << "KivioLayer::loadXML() - Unable to load KivioGroupStencil" << endl;
+	       kWarning(43000) << "KivioLayer::loadXML() - Unable to load KivioGroupStencil" << endl;
             }
         }
         else if( name == "KivioPluginStencil" )
@@ -257,8 +257,8 @@ bool KivioLayer::loadXML( const QDomElement &layerE )
             }
             else
             {
-	       kdWarning(43000) << "KivioLayer - Unable to load KivioPluginStencil" << endl;
-	       kdWarning(43000) << "KivioLayer::loadXML() - Unable to load KivioPluginStencil (id=" <<
+	       kWarning(43000) << "KivioLayer - Unable to load KivioPluginStencil" << endl;
+	       kWarning(43000) << "KivioLayer::loadXML() - Unable to load KivioPluginStencil (id=" <<
 		  XmlReadString( node.toElement(), "id", "" ) << " set=" <<
 		  XmlReadString( node.toElement(), "setId", "" ) << ") found." << endl;
             }

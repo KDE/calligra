@@ -193,7 +193,7 @@ void FormulaEvalTester::checkEval( const char *file, int line, const char* msg,
   if( !result.equal( expected ) )
   {
     QString message;
-    QTextStream ts( &message, IO_WriteOnly );
+    QTextStream ts( &message, QIODevice::WriteOnly );
     ts << msg;
     ts << " Result: " << result;
     ts << " Expected: " << expected;

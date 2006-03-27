@@ -138,8 +138,8 @@ QFont Kexi::smallFont(QWidget *init)
 	if (!_int->smallFont) {
 		_int->smallFont = new QFont( init->font() );
 		const int wdth = KGlobalSettings::desktopGeometry(init).width();
-		int size = 10 + QMAX(0, wdth - 1100) / 100;
-		size = QMIN( init->fontInfo().pixelSize(), size );
+		int size = 10 + qMax(0, wdth - 1100) / 100;
+		size = qMin( init->fontInfo().pixelSize(), size );
 		_int->smallFont->setPixelSize( size );
 	}
 	return *_int->smallFont;

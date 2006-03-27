@@ -287,7 +287,7 @@ public:
   QWidget *create (const QString &amp; classname, QWidget * parent =
                    0, const char *name = 0);
   QString group (const QString &amp;) const;
-  QIconSet iconSet (const QString &amp;) const;
+  QIcon iconSet (const QString &amp;) const;
   QString includeFile (const QString &amp;) const;
   QString toolTip (const QString &amp;) const;
   QString whatsThis (const QString &amp;) const;
@@ -483,9 +483,9 @@ QString KugarWidgetPlugin::group (const QString &amp; feature) const
   return QString::null;
 }
 
-QIconSet KugarWidgetPlugin::iconSet (const QString &amp;) const
+QIcon KugarWidgetPlugin::iconSet (const QString &amp;) const
 {
-  return QIconSet (QPixmap (kugar_pixmap));
+  return QIcon (QPixmap (kugar_pixmap));
 }
 
 QString KugarWidgetPlugin::includeFile (const QString &amp; feature) const

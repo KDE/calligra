@@ -167,12 +167,12 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     lSoundEffect1->setAlignment( AlignVCenter );
     upperRow->addWidget( lSoundEffect1, 6, 0 );
 
-    requester1 = new KURLRequester( grp1 );
+    requester1 = new KUrlRequester( grp1 );
     requester1->setURL( obj->getAppearSoundEffectFileName() );
     upperRow->addWidget( requester1, 6, 1 );
 
-    connect( requester1, SIGNAL( openFileDialog( KURLRequester * ) ),
-             this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
+    connect( requester1, SIGNAL( openFileDialog( KUrlRequester * ) ),
+             this, SLOT( slotRequesterClicked( KUrlRequester * ) ) );
 
     connect( requester1, SIGNAL( textChanged( const QString& ) ),
              this, SLOT( slotAppearFileChanged( const QString& ) ) );
@@ -271,12 +271,12 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const QPtrList<KP
     lSoundEffect2->setAlignment( AlignVCenter );
     lowerRow->addWidget( lSoundEffect2, 5, 0 );
 
-    requester2 = new KURLRequester( grp2 );
+    requester2 = new KUrlRequester( grp2 );
     requester2->setURL( obj->getDisappearSoundEffectFileName() );
     lowerRow->addWidget( requester2, 5, 1 );
 
-    connect( requester2, SIGNAL( openFileDialog( KURLRequester * ) ),
-             this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
+    connect( requester2, SIGNAL( openFileDialog( KUrlRequester * ) ),
+             this, SLOT( slotRequesterClicked( KUrlRequester * ) ) );
 
     connect( requester2, SIGNAL( textChanged( const QString& ) ),
              this, SLOT( slotDisappearFileChanged( const QString& ) ) );
@@ -421,7 +421,7 @@ void KPrEffectDia::disappearSoundEffectChanged()
     }
 }
 
-void KPrEffectDia::slotRequesterClicked( KURLRequester *requester )
+void KPrEffectDia::slotRequesterClicked( KUrlRequester *requester )
 {
     QString filter = getSoundFileFilter();
     requester->fileDialog()->setFilter( filter );

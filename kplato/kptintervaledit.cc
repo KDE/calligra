@@ -37,7 +37,7 @@ namespace KPlato
 IntervalEdit::IntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Edit Interval"), Ok|Cancel, Ok, parent, name, true, true)
 {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     dia = new IntervalEditImpl(intervals, this);
 
     setMainWidget(dia);

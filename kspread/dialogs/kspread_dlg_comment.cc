@@ -74,7 +74,7 @@ void CommentDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     m_pView->activeSheet()->setSelectionComment( m_pView->selectionInfo(),
-                                                 multiLine->text().stripWhiteSpace() );
+                                                 multiLine->text().trimmed() );
     m_pView->slotUpdateView( m_pView->activeSheet(), *m_pView->selectionInfo() );
     // m_pView->doc()->emitEndOperation();
     accept();

@@ -114,7 +114,7 @@ void KexiStatusBar::cursorPositionChanged()
 
 void KexiStatusBar::setStatus(const QString &str)
 {
-	kdDebug() << "KexiStatusBar::setStatus(" << str << ")" << endl;
+	kDebug() << "KexiStatusBar::setStatus(" << str << ")" << endl;
 //	m_status->setText(str);
 	changeItem(str, m_msgID);
 

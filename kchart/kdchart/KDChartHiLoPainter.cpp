@@ -183,8 +183,8 @@ void KDChartHiLoPainter::specificPaintData( QPainter* painter,
             QVariant::Double == valueB.type() ){
             const double cellValue1 = valueA.toDouble();
             const double cellValue2 = valueB.toDouble();
-            const double lowValue  = QMIN( cellValue1, cellValue2 );
-            const double highValue = QMAX( cellValue1, cellValue2 );
+            const double lowValue  = qMin( cellValue1, cellValue2 );
+            const double highValue = qMax( cellValue1, cellValue2 );
             const double lowDrawValue = lowValue * pixelsPerUnit;
             const double highDrawValue = highValue * pixelsPerUnit;
 

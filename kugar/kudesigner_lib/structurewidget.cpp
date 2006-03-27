@@ -42,14 +42,14 @@ namespace Kudesigner
 
 using namespace KoProperty;
 
-class StructureItem: public KListViewItem
+class StructureItem: public K3ListViewItem
 {
 public:
-    StructureItem( KListView *parent, const QString &name )
-            : KListViewItem( parent, name ), m_bold( false )
+    StructureItem( K3ListView *parent, const QString &name )
+            : K3ListViewItem( parent, name ), m_bold( false )
     {}
-    StructureItem( KListViewItem *parent, const QString &name )
-            : KListViewItem( parent, name ), m_bold( false )
+    StructureItem( K3ListViewItem *parent, const QString &name )
+            : K3ListViewItem( parent, name ), m_bold( false )
     {}
     void setBold( bool b )
     {
@@ -68,7 +68,7 @@ public:
             f.setWeight( 75 );
             p->setFont( f );
         }
-        KListViewItem::paintCell( p, cg, column, width, align );
+        K3ListViewItem::paintCell( p, cg, column, width, align );
     }
 
 private:
@@ -76,7 +76,7 @@ private:
 };
 
 StructureWidget::StructureWidget( QWidget* parent, const char* name )
-        : KListView( parent, name )
+        : K3ListView( parent, name )
 {
     setFullWidth( true );
     addColumn( tr( "Report Structure" ) );

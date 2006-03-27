@@ -71,7 +71,7 @@ FormScript::execute(const QString &functionName)
 		m_script->callFunction(functionName);
 	}
 	catch(Kross::Api::Exception& e) {
-		kdDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
+		kDebug() << QString("EXCEPTION type='%1' description='%2'").arg(e.type()).arg(e.description()) << endl;
 		return false;
 	}
 	return true;

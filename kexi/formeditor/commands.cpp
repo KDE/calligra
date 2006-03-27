@@ -26,9 +26,9 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kmessagebox.h>
-#include <kaccelmanager.h>
+#include <kacceleratormanager.h>
 
 #include "formIO.h"
 #include "container.h"
@@ -143,7 +143,7 @@ PropertyCommand::name() const
 void
 PropertyCommand::debug()
 {
-	kdDebug() << "PropertyCommand: name=\"" << name() << "\" widgets=" << m_oldvalues.keys() 
+	kDebug() << "PropertyCommand: name=\"" << name() << "\" widgets=" << m_oldvalues.keys() 
 		<< " value=" << m_value << " oldValues=" << m_oldvalues.values() << endl;
 }
 
@@ -211,7 +211,7 @@ GeometryPropertyCommand::name() const
 void
 GeometryPropertyCommand::debug()
 {
-	kdDebug() << "GeometryPropertyCommand: pos=" << m_pos << " oldPos=" << m_oldPos 
+	kDebug() << "GeometryPropertyCommand: pos=" << m_pos << " oldPos=" << m_oldPos 
 		<< " widgets=" << m_names << endl;
 }
 
@@ -363,7 +363,7 @@ AlignWidgetsCommand::name() const
 void
 AlignWidgetsCommand::debug()
 {
-	kdDebug() << "AlignWidgetsCommand: name=\"" << name() << "\" form=" << m_form->widget()->name() 
+	kDebug() << "AlignWidgetsCommand: name=\"" << name() << "\" form=" << m_form->widget()->name() 
 		<< " widgets=" << m_pos.keys() << endl;
 }
 
@@ -550,8 +550,8 @@ AdjustSizeCommand::getSizeFromChildren(ObjectTreeItem *item)
 	for(ObjectTreeItem *tree = item->children()->first(); tree; tree = item->children()->next()) {
 		if(!tree->widget())
 			continue;
-		tmpw = QMAX(tmpw, tree->widget()->geometry().right());
-		tmph = QMAX(tmph, tree->widget()->geometry().bottom());
+		tmpw = qMax(tmpw, tree->widget()->geometry().right());
+		tmph = qMax(tmph, tree->widget()->geometry().bottom());
 	}
 
 	return QSize(tmpw, tmph) + QSize(10, 10);
@@ -602,7 +602,7 @@ AdjustSizeCommand::name() const
 void
 AdjustSizeCommand::debug()
 {
-	kdDebug() << "AdjustSizeCommand: name=\"" << name() << "\" form=" << m_form->widget()->name() 
+	kDebug() << "AdjustSizeCommand: name=\"" << name() << "\" form=" << m_form->widget()->name() 
 		<< " widgets=" << m_sizes.keys() << endl;
 }
 
@@ -657,7 +657,7 @@ LayoutPropertyCommand::name() const
 void
 LayoutPropertyCommand::debug()
 {
-	kdDebug() << "LayoutPropertyCommand: name=\"" << name() << "\" oldValue=" << m_oldvalues.keys()
+	kDebug() << "LayoutPropertyCommand: name=\"" << name() << "\" oldValue=" << m_oldvalues.keys()
 		<< " value=" << m_value << endl;
 }
 
@@ -736,7 +736,7 @@ InsertWidgetCommand::execute()
 		KMessageBox::sorry(FormManager::self()->activeForm() ? FormManager::self()->activeForm()->widget() : 0,
 				i18n("Could not insert widget of type \"%1\". A problem with widget's creation encountered.")
 				.arg(winfo ? winfo->name() : QString::null));
-		kdWarning() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
+		kWarning() << "InsertWidgetCommand::execute() ERROR: widget creation failed" << endl;
 		return;
 	}
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0) 
@@ -807,7 +807,7 @@ InsertWidgetCommand::execute()
 			w->className(), w, item->container() ? item->container() : m_container); // we edit the widget on creation
 	}
 //! @todo update widget's width for entered text's metrics
-	kdDebug() << "Container::eventFilter(): widget added " << this << endl;
+	kDebug() << "Container::eventFilter(): widget added " << this << endl;
 }
 
 void
@@ -833,7 +833,7 @@ InsertWidgetCommand::name() const
 void
 InsertWidgetCommand::debug()
 {
-	kdDebug() << "InsertWidgetCommand: name=\"" << name() << "\" generatedName=" << m_name 
+	kDebug() << "InsertWidgetCommand: name=\"" << name() << "\" generatedName=" << m_name 
 		<< " container=" << m_containername
 		<< " form=" << m_form->widget()->name() << " class=" << m_class 
 		<< " rect=" << m_insertRect << " pos=" << m_point << endl;
@@ -999,7 +999,7 @@ CreateLayoutCommand::name() const
 void
 CreateLayoutCommand::debug()
 {
-	kdDebug() << "CreateLayoutCommand: name=\"" << name() << "\" generatedName=" << m_name 
+	kDebug() << "CreateLayoutCommand: name=\"" << name() << "\" generatedName=" << m_name 
 		<< " widgets=" << m_pos.keys() << " container=" << m_containername
 		<< " form=" << m_form->widget()->name() << endl;
 }
@@ -1042,7 +1042,7 @@ BreakLayoutCommand::name() const
 void
 BreakLayoutCommand::debug()
 {
-	kdDebug() << "BreakLayoutCommand: name=\"" << name()
+	kDebug() << "BreakLayoutCommand: name=\"" << name()
 		<< " widgets=" << m_pos.keys() << " container=" << m_containername
 		<< " form=" << m_form->widget()->name() << endl;
 }
@@ -1104,14 +1104,14 @@ PasteWidgetCommand::execute()
 
 	if(!parsed)
 	{
-		kdDebug() << "WidgetWatcher::load(): " << errMsg << endl;
-		kdDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
+		kDebug() << "WidgetWatcher::load(): " << errMsg << endl;
+		kDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
 		return;
 	}
 
 	//FormIO::setCurrentForm(m_container->form());
 
-	kdDebug() << domDoc.toString() << endl;
+	kDebug() << domDoc.toString() << endl;
 	if(!domDoc.namedItem("UI").hasChildNodes()) // nothing in the doc
 		return;
 	if(domDoc.namedItem("UI").firstChild().nextSibling().toElement().tagName() != "widget") // only one widget, so we can paste it at cursor pos
@@ -1137,7 +1137,7 @@ PasteWidgetCommand::execute()
 			moveWidgetBy(el, container, m_point);
 		else {
 			fixPos(el, container);
-			kdDebug() << "jdkjfldfksmfkdfjmqdsklfjdkkfmsqfksdfsm" << endl;
+			kDebug() << "jdkjfldfksmfkdfjmqdsklfjdkkfmsqfksdfsm" << endl;
 		}
 
 		m_form->setInteractiveMode(false);
@@ -1293,7 +1293,7 @@ PasteWidgetCommand::moveWidgetBy(QDomElement &el, Container *container, const QP
 	int rw = wi.text().toInt();
 	int rh = h.text().toInt();
 	QRect r(rx + p.x(), ry + p.y(), rw, rh);
-	kdDebug() << "Moving widget by " << p << " from " << rx << "  " << ry << " to " << r.topLeft() << endl;
+	kDebug() << "Moving widget by " << p << " from " << rx << "  " << ry << " to " << r.topLeft() << endl;
 
 	QWidget *w = m_form->widget()->childAt(r.x() + 6, r.y() + 6, false);
 
@@ -1359,7 +1359,7 @@ PasteWidgetCommand::fixNames(QDomElement &el)
 void
 PasteWidgetCommand::debug()
 {
-	kdDebug() << "PasteWidgetCommand: pos=" << m_point
+	kDebug() << "PasteWidgetCommand: pos=" << m_point
 		<< " widgets=" << m_names << " container=" << m_containername
 		<< " form=" << m_form->widget()->name() 
 		<< " data=\"" << m_data.left(80) << "...\"" << endl;
@@ -1470,7 +1470,7 @@ DeleteWidgetCommand::name() const
 void
 DeleteWidgetCommand::debug()
 {
-	kdDebug() << "DeleteWidgetCommand: containers=" << m_containers.keys()
+	kDebug() << "DeleteWidgetCommand: containers=" << m_containers.keys()
 		<< " parents=" << m_parents.keys() << " form=" << m_form->widget()->name() << endl;
 }
 
@@ -1504,7 +1504,7 @@ CutWidgetCommand::name() const
 void
 CutWidgetCommand::debug()
 {
-	kdDebug() << "CutWidgetCommand: containers=" << m_containers.keys()
+	kDebug() << "CutWidgetCommand: containers=" << m_containers.keys()
 		<< " parents=" << m_parents.keys() << " form=" << m_form->widget()->name()
 		<< " data=\"" << m_data.left(80) << "...\"" << endl;
 }
@@ -1580,17 +1580,17 @@ void CommandGroup::resetAllowExecuteFlags()
 void
 CommandGroup::debug()
 {
-	kdDebug() << "*CommandGroup: name=\"" << name() << "\" #=" << m_subCommands->commands().count() << endl;
+	kDebug() << "*CommandGroup: name=\"" << name() << "\" #=" << m_subCommands->commands().count() << endl;
 	uint i = 1;
 	for (QPtrListIterator<KCommand> it(m_subCommands->commands()); it.current(); ++it, i++) {
-		kdDebug() << "#" << i << ":" 
+		kDebug() << "#" << i << ":" 
 			<< (m_commandsShouldntBeExecuted[it.current()] ? "!" : "") << "allowExecute:" << endl;
 		if (dynamic_cast<Command*>(it.current()))
 			dynamic_cast<Command*>(it.current())->debug();
 		else if (dynamic_cast<CommandGroup*>(it.current()))
 			dynamic_cast<CommandGroup*>(it.current())->debug();
 		else
-			kdDebug() << "(other KCommand)" << endl;
+			kDebug() << "(other KCommand)" << endl;
 	}
-	kdDebug() << "End of CommandGroup" << endl;
+	kDebug() << "End of CommandGroup" << endl;
 }

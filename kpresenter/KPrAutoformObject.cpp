@@ -77,7 +77,7 @@ void KPrAutoformObject::setFileName( const QString & _filename )
 
 bool KPrAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug(33001) << "bool KPrAutoformObject::saveOasisObjectAttributes()" << endl;
+    kDebug(33001) << "bool KPrAutoformObject::saveOasisObjectAttributes()" << endl;
     QSize size( int( ext.width() * 100 ), int( ext.height() * 100 )  );
 
     sc.xmlWriter.addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( size.width() )
@@ -114,7 +114,7 @@ bool KPrAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) cons
 
 void KPrAutoformObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    kdDebug(33001) << "KPr2DObject::fillStyle" << endl;
+    kDebug(33001) << "KPr2DObject::fillStyle" << endl;
     KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
 
     QPointArray points = const_cast<ATFInterpreter &>( atfInterp ).getPointArray( int( ext.width() * 100 ),
@@ -172,7 +172,7 @@ double KPrAutoformObject::load(const QDomElement &element)
             filename="Connections/.source/Connection1.atf";
         // workaround for a bug in the (very) old file format
         if(filename[0]=='/') {
-            kdDebug(33001) << "rubbish ahead! cleaning up..." << endl;
+            kDebug(33001) << "rubbish ahead! cleaning up..." << endl;
             // remove the leading absolute path (i.e. to create Arrow/Arrow1.atf)
             filename=filename.mid(filename.findRev('/', filename.findRev('/')-1)+1);
         }
@@ -260,7 +260,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                 {
                     if ( m_redrawGradientPix || gradient->size() != size )
                     {
-                        kdDebug(33001) << "KPrAutoformObject::draw redrawPix" << endl;
+                        kDebug(33001) << "KPrAutoformObject::draw redrawPix" << endl;
                         gradient->setSize( size );
                         m_redrawGradientPix = false;
                         QRegion clipregion( pntArray2 );

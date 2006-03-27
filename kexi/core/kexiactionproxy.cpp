@@ -132,7 +132,7 @@ int KexiActionProxy::plugSharedAction(const char *action_name, QWidget* w)
 {
 	KAction *a = sharedAction(action_name);
 	if (!a) {
-		kdWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
+		kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
 		return -1;
 	}
 	return a->plug(w);
@@ -142,7 +142,7 @@ void KexiActionProxy::unplugSharedAction(const char *action_name, QWidget* w)
 {
 	KAction *a = sharedAction(action_name);
 	if (!a) {
-		kdWarning() << "KexiActionProxy::unplugSharedAction(): NO SUCH ACTION: " << action_name << endl;
+		kWarning() << "KexiActionProxy::unplugSharedAction(): NO SUCH ACTION: " << action_name << endl;
 		return;
 	}
 	a->unplug(w);
@@ -152,7 +152,7 @@ KAction* KexiActionProxy::plugSharedAction(const char *action_name, const QStrin
 {
 	KAction *a = sharedAction(action_name);
 	if (!a) {
-		kdWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
+		kWarning() << "KexiActionProxy::plugSharedAction(): NO SUCH ACTION: " << action_name << endl;
 		return 0;
 	}
 	QCString altName = a->name();

@@ -30,7 +30,7 @@
 
 class QWidget;
 class QWorkspace;
-class KPopupMenu;
+class KMenu;
 class KActionCollection;
 class KAction;
 class KToggleAction;
@@ -435,18 +435,18 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 
 		WidgetPropertySet *m_propSet;
 //		WidgetLibrary *m_lib;
-		QGuardedPtr<KoProperty::Editor>  m_editor;
-		QGuardedPtr<ObjectTreeView>  m_treeview;
+		QPointer<KoProperty::Editor>  m_editor;
+		QPointer<ObjectTreeView>  m_treeview;
 		// Forms
 		QPtrList<Form> m_forms;
 		QPtrList<Form> m_preview;
-		QGuardedPtr<Form> m_active;
+		QPointer<Form> m_active;
 
 		// Copy/Paste
 		QDomDocument m_domDoc;
-		KPopupMenu *m_popup;
+		KMenu *m_popup;
 		QPoint m_insertPoint;
-		QGuardedPtr<QWidget> m_menuWidget;
+		QPointer<QWidget> m_menuWidget;
 
 		// Insertion
 		bool m_inserting;
@@ -455,7 +455,7 @@ class KFORMEDITOR_EXPORT FormManager : public QObject
 		// Connection stuff
 		bool m_drawingSlot;
 		Connection *m_connection;
-		KPopupMenu *m_sigSlotMenu;
+		KMenu *m_sigSlotMenu;
 
 		// Actions
 		KActionCollection *m_collection;

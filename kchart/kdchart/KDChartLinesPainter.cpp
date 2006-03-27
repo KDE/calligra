@@ -375,9 +375,9 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                     // prevent the point from being toooo far
                     // below the bottom (or above the top, resp.)
                     // of the cliprect
-                    double pY = QMIN( zeroXAxisI - drawValue,
+                    double pY = qMin( zeroXAxisI - drawValue,
                             (logHeight + axisYOffset) * 3 );
-                    pY = QMAX( pY, -(logHeight + axisYOffset) * 3 );
+                    pY = qMax( pY, -(logHeight + axisYOffset) * 3 );
                     // specify the Point
                     int myPointX = static_cast < int > ( xValue ) + xShift;
                     int myPointY = static_cast < int > ( pY );
@@ -529,7 +529,7 @@ void KDChartLinesPainter::specificPaintData( QPainter* painter,
                 ++point;
 
                 int x = mp.p.x();
-                int y = QMAX(QMIN(mp.p.y(),
+                int y = qMax(qMin(mp.p.y(),
                             static_cast < int > (logHeight +axisYOffset)),
                         0);
                 bool markerIsOutside = y != mp.p.y();

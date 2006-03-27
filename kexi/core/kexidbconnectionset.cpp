@@ -60,7 +60,7 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
 		data->id = d->maxid+1;
 	//TODO: 	check for id-duplicates
 	
-	d->maxid = QMAX(d->maxid,data->id);
+	d->maxid = qMax(d->maxid,data->id);
 //	d->list.append(data);
 
 	QString filename( _filename );

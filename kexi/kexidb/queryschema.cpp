@@ -112,7 +112,7 @@ class QuerySchemaPrivate
 		{
 			columnAliases.replace(position, new QCString(alias));
 			columnPositionsForAliases.replace(alias, new int(position));
-			maxIndexWithAlias = QMAX( maxIndexWithAlias, (int)position );
+			maxIndexWithAlias = qMax( maxIndexWithAlias, (int)position );
 		}
 
 		void setColumnAlias(uint position, const QCString& alias)
@@ -209,7 +209,7 @@ class QuerySchemaPrivate
 		
 		/*! A cache for autoIncrementSQLFieldsList(). */
 		QString autoIncrementSQLFieldsList;
-		QGuardedPtr<Driver> lastUsedDriverForAutoIncrementSQLFieldsList;
+		QPointer<Driver> lastUsedDriverForAutoIncrementSQLFieldsList;
 
 		/*! A map for fast lookup of query fields' order.
 		 This is exactly opposite information compared to vector returned 
@@ -677,7 +677,7 @@ void QuerySchema::setColumnAlias(uint position, const QCString& alias)
 			<< ") out of range!" << endl;
 		return;
 	}
-	QCString fixedAlias = alias.stripWhiteSpace();
+	QCString fixedAlias = alias.trimmed();
 	Field *f = FieldList::field(position);
 	if (f->captionOrName().isEmpty() && fixedAlias.isEmpty()) {
 		KexiDBWarn << "QuerySchema::setColumnAlias(): position ("  << position 
@@ -744,7 +744,7 @@ void QuerySchema::setTableAlias(uint position, const QCString& alias)
 			<< ") out of range!" << endl;
 		return;
 	}
-	QCString fixedAlias = alias.stripWhiteSpace();
+	QCString fixedAlias = alias.trimmed();
 	if (fixedAlias.isEmpty()) {
 		QCString *oldAlias = d->tableAliases.take(position);
 		if (oldAlias) {
@@ -756,7 +756,7 @@ void QuerySchema::setTableAlias(uint position, const QCString& alias)
 	else {
 		d->tableAliases.replace(position, new QCString(fixedAlias));
 		d->tablePositionsForAliases.replace(fixedAlias, new int(position));
-//		d->maxIndexWithTableAlias = QMAX( d->maxIndexWithTableAlias, (int)index );
+//		d->maxIndexWithTableAlias = qMax( d->maxIndexWithTableAlias, (int)index );
 	}
 }
 
@@ -1118,19 +1118,19 @@ QueryColumnInfo::Vector QuerySchema::orderByColumnList() const
 /*
 	new field1, Field *field2
 	if (!field1 || !field2) {
-		kdWarning() << "QuerySchema::addRelationship(): !masterField || !detailsField" << endl;
+		kWarning() << "QuerySchema::addRelationship(): !masterField || !detailsField" << endl;
 		return;
 	}
 	if (field1->isQueryAsterisk() || field2->isQueryAsterisk()) {
-		kdWarning() << "QuerySchema::addRelationship(): relationship's fields cannot be asterisks" << endl;
+		kWarning() << "QuerySchema::addRelationship(): relationship's fields cannot be asterisks" << endl;
 		return;
 	}
 	if (!hasField(field1) && !hasField(field2)) {
-		kdWarning() << "QuerySchema::addRelationship(): fields do not belong to this query" << endl;
+		kWarning() << "QuerySchema::addRelationship(): fields do not belong to this query" << endl;
 		return;
 	}
 	if (field1->table() == field2->table()) {
-		kdWarning() << "QuerySchema::addRelationship(): fields cannot belong to the same table" << endl;
+		kWarning() << "QuerySchema::addRelationship(): fields cannot belong to the same table" << endl;
 		return;
 	}
 //@todo: check more things: -types

@@ -82,7 +82,7 @@ bool KugarPart::openFile()
     bool ok = false;
     QFile f( m_file );
 
-    if ( f.open( IO_ReadOnly ) )
+    if ( f.open( QIODevice::ReadOnly ) )
     {
         if ( view -> setReportData( &f ) )
         {

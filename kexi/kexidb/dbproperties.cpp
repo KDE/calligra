@@ -34,7 +34,7 @@ DatabaseProperties::~DatabaseProperties()
 
 bool DatabaseProperties::setValue( const QString& _name, const QVariant& value )
 {
-	QString name(_name.stripWhiteSpace());
+	QString name(_name.trimmed());
 	bool ok;
 	//we need to know whether update or insert
 	bool exists = m_conn->resultExists(
@@ -70,7 +70,7 @@ bool DatabaseProperties::setValue( const QString& _name, const QVariant& value )
 
 bool DatabaseProperties::setCaption( const QString& _name, const QString& caption )
 {
-	QString name(_name.stripWhiteSpace());
+	QString name(_name.trimmed());
 	//captions have ' ' prefix
 	name.prepend(" ");
 	bool ok;
@@ -109,7 +109,7 @@ bool DatabaseProperties::setCaption( const QString& _name, const QString& captio
 QVariant DatabaseProperties::value( const QString& _name )
 {
 	QString result;
-	QString name(_name.stripWhiteSpace());
+	QString name(_name.trimmed());
 	if (true!=m_conn->querySingleString(
 		QString::fromLatin1("select db_value from kexi__db where db_property=")
 		+ m_conn->driver()->escapeString(name), result)) {
@@ -122,7 +122,7 @@ QVariant DatabaseProperties::value( const QString& _name )
 QString DatabaseProperties::caption( const QString& _name )
 {
 	QString result;
-	QString name(_name.stripWhiteSpace());
+	QString name(_name.trimmed());
 	//captions have ' ' prefix
 	name.prepend(" ");
 	if (true!=m_conn->querySingleString(

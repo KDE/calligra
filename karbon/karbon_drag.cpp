@@ -56,7 +56,7 @@ KarbonDrag::encodedData( const char* mimetype ) const
 		// build a xml fragment containing the selection as karbon xml
 		QDomDocument doc( "clip" );
 		QDomElement elem = doc.createElement( "clip" );
-		QTextStream ts( result, IO_WriteOnly );
+		QTextStream ts( result, QIODevice::WriteOnly );
 
 		for( ; itr.current() ; ++itr )
 			itr.current()->save( elem );

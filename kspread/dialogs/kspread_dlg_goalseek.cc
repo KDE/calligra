@@ -183,7 +183,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
 GoalSeekDialog::~GoalSeekDialog()
 {
-  kdDebug() << "~GoalSeekDialog" << endl;
+  kDebug() << "~GoalSeekDialog" << endl;
 
   if ( !m_restored )
   {
@@ -401,7 +401,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     m_sourceCell->setCalcDirtyFlag();
     m_targetCell->calc( false );
     resultA = m_targetCell->value().asFloat() - _goal;
-    //    kdDebug() << "Target A: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultA << endl;
+    //    kDebug() << "Target A: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultA << endl;
 
     m_sourceCell->setValue(startB);
     //    m_sourceCell->updateDepending();
@@ -409,9 +409,9 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     m_targetCell->calc( false );
     resultB = m_targetCell->value().asFloat() - _goal;
     /*
-      kdDebug() << "Target B: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultB << endl;
+      kDebug() << "Target B: " << m_targetCell->value().asFloat() << ", " << m_targetCell->text() << " Calc: " << resultB << endl;
 
-      kdDebug() << "Iteration: " << m_maxIter << ", StartA: " << startA
+      kDebug() << "Iteration: " << m_maxIter << ", StartA: " << startA
               << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
               << startB << ", ResultB: " << resultB << endl;
     */
@@ -422,7 +422,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     // => can't get zero.
     if ( resultB == resultA )
     {
-      //      kdDebug() << " resultA == resultB" << endl;
+      //      kDebug() << " resultA == resultB" << endl;
       if ( fabs( resultA ) < eps )
       {
         ok = true;
@@ -438,12 +438,12 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 
     if ( fabs(x) > 100000000 )
     {
-      //      kdDebug() << "fabs(x) > 100000000: " << x << endl;
+      //      kDebug() << "fabs(x) > 100000000: " << x << endl;
       ok = false;
       break;
     }
 
-    //    kdDebug() << "X: " << x << ", fabs (resultA): " << fabs(resultA) << ", Real start: " << startA << ", Real result: " << resultA << ", Iteration: " << m_maxIter << endl;
+    //    kDebug() << "X: " << x << ", fabs (resultA): " << fabs(resultA) << ", Real start: " << startA << ", Real result: " << resultA << ", Iteration: " << m_maxIter << endl;
 
     --m_maxIter;
     if ( m_maxIter % 20 == 0 )

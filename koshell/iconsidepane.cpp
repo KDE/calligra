@@ -45,7 +45,7 @@
 #include <kdialog.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kpushbutton.h>
 
 #include "iconsidepane.h"
@@ -97,7 +97,7 @@ int EntryItem::width( const Q3ListBox *listbox ) const
     if ( navigator()->viewMode() == SmallIcons )
       w += listbox->fontMetrics().width( text() );
     else
-      w = QMAX( w, listbox->fontMetrics().width( text() ) );
+      w = qMax( w, listbox->fontMetrics().width( text() ) );
   }
   return w + ( KDialog::marginHint() * 2 );
 }
@@ -109,7 +109,7 @@ int EntryItem::height( const Q3ListBox *listbox ) const
     h = (int)navigator()->viewMode() + 4;
   if ( navigator()->showText() ) {
     if ( navigator()->viewMode() == SmallIcons || !navigator()->showIcons() )
-      h = QMAX( h, listbox->fontMetrics().lineSpacing() ) + KDialog::spacingHint() * 2;
+      h = qMax( h, listbox->fontMetrics().lineSpacing() ) + KDialog::spacingHint() * 2;
     else
       h = (int)navigator()->viewMode() + listbox->fontMetrics().lineSpacing() + 4;
   }
@@ -209,7 +209,7 @@ void EntryItem::setPaintActive( bool paintActive )
 
 // ************************************************
 
-Navigator::Navigator(bool _selectable, KPopupMenu * menu, IconSidePane *_iconsidepane, QWidget *parent, const char *name )
+Navigator::Navigator(bool _selectable, KMenu * menu, IconSidePane *_iconsidepane, QWidget *parent, const char *name )
   : KListBox( parent, name ), mSidePane( _iconsidepane ), mPopupMenu( menu )
 {
   setSelectionMode( KListBox::Single );
@@ -303,7 +303,7 @@ void Navigator::calculateMinWidth()
     if (item->width( this ) > mMinWidth)
       mMinWidth = item->width( this );
   }
-  //kdDebug() << "minWidth:" << mMinWidth << endl;
+  //kDebug() << "minWidth:" << mMinWidth << endl;
   parentWidget()->setFixedWidth( mMinWidth );
   triggerUpdate(true);
 }
@@ -315,7 +315,7 @@ int Navigator::insertItem(const QString &_text, const QString & _pix)
   {
     mMinWidth = item->width( this );
     parentWidget()->setMinimumWidth( mMinWidth );
-    //kdDebug() << "minWidth:" << mMinWidth << endl;
+    //kDebug() << "minWidth:" << mMinWidth << endl;
   }
   return item->id();
 }
@@ -421,7 +421,7 @@ IconSidePane::IconSidePane(QWidget *parent, const char *name )
   mShowIcons = KoShellSettings::sidePaneShowIcons();
   mShowText = KoShellSettings::sidePaneShowText();
   mViewMode = sizeIntToEnum( KoShellSettings::sidePaneIconSize() );
-  mPopupMenu = new KPopupMenu(0);
+  mPopupMenu = new KMenu(0);
   mPopupMenu->insertTitle( i18n( "Icon Size" ) );
   mPopupMenu->insertItem( i18n( "Large" ), (int)LargeIcons );
   mPopupMenu->setItemEnabled( (int)LargeIcons, mShowIcons );
@@ -525,7 +525,7 @@ void IconSidePane::selectGroup(int group_id)
 
 void IconSidePane::itemSelected(int item)
 {
-  kdDebug() << "Item selected:" << item << endl;
+  kDebug() << "Item selected:" << item << endl;
 }
 
 Navigator * IconSidePane::group(int _grp)
@@ -581,7 +581,7 @@ IconViewMode IconSidePane::sizeIntToEnum(int size) const
     default:
       // Stick with sane values
       return NormalIcons;
-      kdDebug() << "View mode not implemented!" << endl;
+      kDebug() << "View mode not implemented!" << endl;
       break;
   }
 }

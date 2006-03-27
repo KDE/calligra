@@ -70,8 +70,8 @@
 VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bool bDrawNodes )
 : VPainter( target, w, h ), m_target( target ), m_bDrawNodes( bDrawNodes )
 {
-	//kdDebug(38000) << "w : " << w << endl;
-	//kdDebug(38000) << "h : " << h << endl;
+	//kDebug(38000) << "w : " << w << endl;
+	//kDebug(38000) << "h : " << h << endl;
 	m_width = w;//( w > 0 ) ? w : target->width();
 	m_height= h;//( h > 0 ) ? h : target->height();
 	m_buffer = 0L;
@@ -96,8 +96,8 @@ VKoPainter::VKoPainter( QPaintDevice *target, unsigned int w, unsigned int h, bo
 VKoPainter::VKoPainter( unsigned char *buffer, unsigned int w, unsigned int h, bool bDrawNodes )
 : VPainter( 0L, w, h ), m_buffer( buffer ), m_bDrawNodes( bDrawNodes )
 {
-	//kdDebug(38000) << "w : " << w << endl;
-	//kdDebug(38000) << "h : " << h << endl;
+	//kDebug(38000) << "w : " << w << endl;
+	//kDebug(38000) << "h : " << h << endl;
 	m_target = 0L;
 	m_width = w;
 	m_height= h;
@@ -166,12 +166,12 @@ VKoPainter::end()
 void
 VKoPainter::blit( const KoRect &r )
 {
-	//kdDebug(38000) << "m_width : " << m_width << endl;
-	//kdDebug(38000) << "m_height : " << m_height << endl;
-	int x		= KMAX( 0, int( r.x() ) );
-	int y		= KMAX( 0, int( r.y() ) );
-	int width	= KMIN( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
-	int height	= KMIN( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
+	//kDebug(38000) << "m_width : " << m_width << endl;
+	//kDebug(38000) << "m_height : " << m_height << endl;
+	int x		= qMax( 0, int( r.x() ) );
+	int y		= qMax( 0, int( r.y() ) );
+	int width	= qMin( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
+	int height	= qMin( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
 	xlib_draw_rgb_32_image( m_target->handle(), gc, x, y, width - x, height - y,
 							XLIB_RGB_DITHER_NONE, m_buffer + (x * 4) + (y * m_width * 4), m_width * 4 );
 }
@@ -194,10 +194,10 @@ void
 VKoPainter::clear( const KoRect &r, const QColor &c )
 {
 	unsigned int color = c.rgb();
-	int x		= KMAX( 0, int( r.x() ) );
-	int y		= KMAX( 0, int( r.y() ) );
-	int width	= KMIN( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
-	int height	= KMIN( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
+	int x		= qMax( 0, int( r.x() ) );
+	int y		= qMax( 0, int( r.y() ) );
+	int width	= qMin( m_width,	(unsigned int)KMAX( 0, int( r.x() + r.width() ) ) );
+	int height	= qMin( m_height,	(unsigned int)KMAX( 0, int( r.y() + r.height() ) ) );
 	if( m_buffer )
 	{
 		for( int i = y;i < height;i++)
@@ -207,7 +207,7 @@ VKoPainter::clear( const KoRect &r, const QColor &c )
 }
 
 void
-VKoPainter::setWorldMatrix( const QWMatrix &mat )
+VKoPainter::setMatrix( const QMatrix &mat )
 {
 	m_matrix = mat;
 }
@@ -444,14 +444,14 @@ void
 VKoPainter::clampToViewport( int &x0, int &y0, int &x1, int &y1 )
 {
 	// clamp to viewport
-	x0 = kMax( x0, 0 );
-	x0 = kMin( x0, int( m_width ) );
-	y0 = kMax( y0, 0 );
-	y0 = kMin( y0, int ( m_height ) );
-	x1 = kMax( x1, 0 );
-	x1 = kMin( x1, int( m_width ) );
-	y1 = kMax( y1, 0 );
-	y1 = kMin( y1, int( m_height ) );
+	x0 = qMax( x0, 0 );
+	x0 = qMin( x0, int( m_width ) );
+	y0 = qMax( y0, 0 );
+	y0 = qMin( y0, int ( m_height ) );
+	x1 = qMax( x1, 0 );
+	x1 = qMin( x1, int( m_width ) );
+	y1 = qMax( y1, 0 );
+	y1 = qMin( y1, int( m_height ) );
 }
 
 void
@@ -465,17 +465,17 @@ VKoPainter::clampToViewport( const ArtSVP &svp, int &x0, int &y0, int &x1, int &
 
 	// clamp to viewport
 	x0 = int( bbox.x0 );
-	x0 = kMax( x0, 0 );
-	x0 = kMin( x0, int( m_width ) );
+	x0 = qMax( x0, 0 );
+	x0 = qMin( x0, int( m_width ) );
 	y0 = int( bbox.y0 );
-	y0 = kMax( y0, 0 );
-	y0 = kMin( y0, int ( m_height ) );
+	y0 = qMax( y0, 0 );
+	y0 = qMin( y0, int ( m_height ) );
 	x1 = int( bbox.x1 ) + 1;
-	x1 = kMax( x1, 0 );
-	x1 = kMin( x1, int( m_width ) );
+	x1 = qMax( x1, 0 );
+	x1 = qMin( x1, int( m_width ) );
 	y1 = int( bbox.y1 ) + 1;
-	y1 = kMax( y1, 0 );
-	y1 = kMin( y1, int( m_height ) );
+	y1 = qMax( y1, 0 );
+	y1 = qMin( y1, int( m_height ) );
 }
 
 void
@@ -895,7 +895,7 @@ VKoPainter::drawNode( const KoPoint& p, int width )
 }
 
 void
-VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
+VKoPainter::drawImage( const QImage &image, const QMatrix &affine )
 {
 	// set up world matrix
 	double affineresult[6];
@@ -908,15 +908,15 @@ VKoPainter::drawImage( const QImage &image, const QWMatrix &affine )
 	affineresult[5] = m_matrix.dy() - affine.dy() * m_zoomFactor;
 	
 	//art_affine_scale( affineresult, m_zoomFactor, m_zoomFactor);
-	/*kdDebug(38000) << "affineresult[0] : " << affineresult[0] << endl;
-	kdDebug(38000) << "affineresult[1] : " << affineresult[1] << endl;
-	kdDebug(38000) << "affineresult[2] : " << affineresult[2] << endl;
-	kdDebug(38000) << "affineresult[3] : " << affineresult[3] << endl;
-	kdDebug(38000) << "affineresult[4] : " << affineresult[4] << endl;
-	kdDebug(38000) << "affineresult[5] : " << affineresult[5] << endl;
-	kdDebug(38000) << "m_matrix.dx() : " << m_matrix.dx() << endl;
-	kdDebug(38000) << "affine.dx() : " << affine.dx() << endl;
-	kdDebug(38000) << "image.height() : " << image.height() << endl;*/
+	/*kDebug(38000) << "affineresult[0] : " << affineresult[0] << endl;
+	kDebug(38000) << "affineresult[1] : " << affineresult[1] << endl;
+	kDebug(38000) << "affineresult[2] : " << affineresult[2] << endl;
+	kDebug(38000) << "affineresult[3] : " << affineresult[3] << endl;
+	kDebug(38000) << "affineresult[4] : " << affineresult[4] << endl;
+	kDebug(38000) << "affineresult[5] : " << affineresult[5] << endl;
+	kDebug(38000) << "m_matrix.dx() : " << m_matrix.dx() << endl;
+	kDebug(38000) << "affine.dx() : " << affine.dx() << endl;
+	kDebug(38000) << "image.height() : " << image.height() << endl;*/
 	art_rgba_affine( m_buffer, 0, 0, m_width, m_height, m_width * 4,
 					 image.bits(), image.width(), image.height(), image.width() * 4,
 					 affineresult, ART_FILTER_NEAREST, 0L );

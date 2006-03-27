@@ -111,10 +111,10 @@ void KPrLineObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) c
             y2 = -y1;
             break;
     }
-    if ( kAbs( angle ) > 1E-6 )
+    if ( qAbs( angle ) > 1E-6 )
     {
         double angInRad = -angle * M_PI / 180.0;
-        QWMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+        QMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
         double transX1 = 0.0;
         double transY1 = 0.0;
         double transX2 = 0.0;
@@ -162,9 +162,9 @@ void KPrLineObject::loadOasis(const QDomElement &element, KoOasisContext & conte
     double x2 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString::null ) );
     double y2 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString::null ) );
 
-    kdDebug()<<" KPrLineObject::loadOasis(const QDomElement &element) : x1 "<< x1 <<" y1 : "<<y1<<" x2 :"<<x2 <<" y2 "<<y2<<endl;
-    double x = QMIN( x1, x2 );
-    double y = QMIN( y1, y2 );
+    kDebug()<<" KPrLineObject::loadOasis(const QDomElement &element) : x1 "<< x1 <<" y1 : "<<y1<<" x2 :"<<x2 <<" y2 "<<y2<<endl;
+    double x = qMin( x1, x2 );
+    double y = qMin( y1, y2 );
 
     orig.setX( x );
     orig.setY( y );
@@ -191,7 +191,7 @@ void KPrLineObject::loadOasis(const QDomElement &element, KoOasisContext & conte
     else
         lineType=LT_LD_RU;
 
-    kdDebug()<<"KPrLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y "<<orig.y()<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
+    kDebug()<<"KPrLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y "<<orig.y()<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
 
     QString attr = (x1 <= x2) ?  "marker-start" : "marker-end";
     loadOasisMarkerElement( context, attr, lineBegin );

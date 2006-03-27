@@ -33,8 +33,8 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kpopupmenu.h>
-#include <klistview.h>
+#include <kmenu.h>
+#include <k3listview.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
 #include <kimageeffect.h>
@@ -50,6 +50,7 @@
 #include <kexiutils/identifier.h>
 #include <widget/utils/kexiflowlayout.h>
 #include <widget/kexismalltoolbutton.h>
+#include <kglobal.h>
 
 /*
 class KexiBrowserView : public QWidget
@@ -118,12 +119,12 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_list->renameLineEdit()->setValidator( new KexiUtils::IdentifierValidator(this) );
 	m_list->setResizeMode(QListView::LastColumn);
 
-	connect(m_list, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
-		this, SLOT(slotContextMenu(KListView*, QListViewItem *, const QPoint&)));
+	connect(m_list, SIGNAL(contextMenu(K3ListView *, QListViewItem *, const QPoint &)),
+		this, SLOT(slotContextMenu(K3ListView*, QListViewItem *, const QPoint&)));
 	connect(m_list, SIGNAL(selectionChanged(QListViewItem*)), this,
 		SLOT(slotSelectionChanged(QListViewItem*)));
 	
-	KConfig *config = kapp->config();
+	KConfig *config = KGlobal::config();
 	config->setGroup("MainWindow");
 	if (config->readBoolEntry("SingleClickOpensItem", false)) {
 		connect(m_list, SIGNAL(executed(QListViewItem*)), this,
@@ -136,7 +137,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	}
 
 	//init popups
-	m_itemPopup = new KPopupMenu(this, "itemPopup");
+	m_itemPopup = new KMenu(this, "itemPopup");
 	m_itemPopupTitle_id = m_itemPopup->insertTitle("");
 	m_openAction = new KAction(i18n("&Open"), "fileopen", Key_Enter, this, 
 		SLOT(slotOpenObject()), this, "open_object");
@@ -171,8 +172,8 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 //	m_newObjectToolbarAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
 //	m_toolbar->insertSeparator();
 //	m_newObjectToolbarAction->plug(m_toolbar);
-	m_newObjectToolButton = new KexiSmallToolButton(this, "", QIconSet(), "new_object");
-	m_newObjectPopup = new KPopupMenu(this, "newObjectPopup");
+	m_newObjectToolButton = new KexiSmallToolButton(this, "", QIcon(), "new_object");
+	m_newObjectPopup = new KMenu(this, "newObjectPopup");
 	connect(m_newObjectPopup, SIGNAL(aboutToShow()), this, SLOT(slotNewObjectPopupAboutToShow()));
 //	KexiPart::Part* part = Kexi::partManager().part("kexi/table");
 //	m_newObjectPopup->insertItem( SmallIconSet(part->info()->createItemIcon()), part->instanceName() );
@@ -226,7 +227,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_deleteAction->plug(m_itemPopup);
 //	plugSharedAction("edit_delete", m_itemPopup);
 
-	m_partPopup = new KPopupMenu(this, "partPopup");
+	m_partPopup = new KMenu(this, "partPopup");
 	m_partPopupTitle_id = m_partPopup->insertTitle("");
 	m_newObjectAction->plug(m_partPopup);
 #ifdef KEXI_SHOW_UNIMPLEMENTED
@@ -248,7 +249,7 @@ KexiBrowser::addGroup(KexiPart::Info& info)
 	KexiBrowserItem *item = new KexiBrowserItem(m_list, &info);
 	m_baseItems.insert(info.mimeType().lower(), item);
 
-//	kdDebug() << "KexiBrowser::addGroup()" << endl;
+//	kDebug() << "KexiBrowser::addGroup()" << endl;
 }
 
 void
@@ -258,7 +259,7 @@ KexiBrowser::addItem(KexiPart::Item& item)
 	KexiBrowserItem *parent = item.mimeType().isEmpty() ? 0 : m_baseItems.find(item.mimeType().lower());
 	if (!parent) //TODO: add "Other" part group for that
 		return;
-//	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
+//	kDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
 	
 	KexiBrowserItem *bitem = new KexiBrowserItem(parent, parent->info(), &item);
 	m_normalItems.insert(item.identifier(), bitem);
@@ -287,16 +288,16 @@ KexiBrowser::slotRemoveItem(const KexiPart::Item &item)
 }
 
 void
-KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPoint &pos)
+KexiBrowser::slotContextMenu(K3ListView* /*list*/, QListViewItem *item, const QPoint &pos)
 {
 	if(!item)
 		return;
 	KexiBrowserItem *bit = static_cast<KexiBrowserItem*>(item);
-	KPopupMenu *pm;
+	KMenu *pm;
 	if (bit->item()) {
 		pm = m_itemPopup;
 		//update popup title
-		QString title_text = bit->text(0).stripWhiteSpace();
+		QString title_text = bit->text(0).trimmed();
 		KexiBrowserItem *par_it = static_cast<KexiBrowserItem*>(bit->parent());
 		KexiPart::Part* par_part = 0;
 		if (par_it && par_it->info() && ((par_part = Kexi::partManager().part(par_it->info()))) && !par_part->instanceCaption().isEmpty()) {
@@ -307,7 +308,7 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 	}
 	else {
 		pm = m_partPopup;
-		QString title_text = bit->text(0).stripWhiteSpace();
+		QString title_text = bit->text(0).trimmed();
 		pm->changeTitle(m_partPopupTitle_id, *bit->pixmap(0), title_text);
 /*		KexiPart::Part* part = Kexi::partManager().part(bit->info());
 		if (part)
@@ -324,7 +325,7 @@ KexiBrowser::slotContextMenu(KListView* /*list*/, QListViewItem *item, const QPo
 void
 KexiBrowser::slotExecuteItem(QListViewItem *vitem)
 {
-//	kdDebug() << "KexiBrowser::slotExecuteItem()" << endl;
+//	kDebug() << "KexiBrowser::slotExecuteItem()" << endl;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
 
 	if (!it->item() && !m_singleClick /*annoying when in single click mode*/) {
@@ -403,7 +404,7 @@ void KexiBrowser::installEventFilter ( const QObject * filterObj )
 bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 {
 	if (o==m_list && e->type()==QEvent::Resize) {
-		kdDebug() << "resize!" << endl;
+		kDebug() << "resize!" << endl;
 	}
 	if (o==m_list->renameLineEdit()) {
 		if (e->type()==QEvent::Hide) 
@@ -510,7 +511,7 @@ void KexiBrowser::itemRenameDone()
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it)
 		return;
-	QString txt = it->text(0).stripWhiteSpace();
+	QString txt = it->text(0).trimmed();
 	bool ok = it->item()->name().lower()!=txt.lower(); //the new name must be different
 	if (ok) {
 		/* TODO */
@@ -594,7 +595,7 @@ bool KexiBrowser::actionEnabled(const QCString& actionName) const
 {
 	if (actionName=="project_export_data_table")
 		return m_itemPopup->isItemVisible(m_exportActionMenu_id);
-	kdWarning() << "KexiBrowser::actionEnabled() no such action: " << actionName << endl;
+	kWarning() << "KexiBrowser::actionEnabled() no such action: " << actionName << endl;
 	return false;
 }
 
@@ -635,7 +636,7 @@ void KexiBrowser::clear()
 
 //--------------------------------------------
 KexiBrowserListView::KexiBrowserListView(QWidget *parent)
- : KListView(parent, "KexiBrowserListView")
+ : K3ListView(parent, "KexiBrowserListView")
  , nameEndsWithAsterisk(false)
  , enableExecuteArea(true)
 {
@@ -658,14 +659,14 @@ void KexiBrowserListView::rename(QListViewItem *item, int c)
 		nameEndsWithAsterisk = item->text(0).endsWith("*");
 		if (nameEndsWithAsterisk)
 			item->setText(0, item->text(0).left(item->text(0).length()-1));
-		KListView::rename(item, c);
+		K3ListView::rename(item, c);
 		adjustColumn(0);
 	}
 }
 
 bool KexiBrowserListView::isExecuteArea( const QPoint& point )
 {
-	return enableExecuteArea && KListView::isExecuteArea(point);
+	return enableExecuteArea && K3ListView::isExecuteArea(point);
 }
 
 #include "kexibrowser.moc"

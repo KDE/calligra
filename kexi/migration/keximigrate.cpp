@@ -116,9 +116,9 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 	QStringList tables;
 
 	// Step 1 - connect
-	kdDebug() << "KexiMigrate::performImport() CONNECTING..." << endl;
+	kDebug() << "KexiMigrate::performImport() CONNECTING..." << endl;
 	if (!drv_connect()) {
-		kdDebug() << "Couldnt connect to database server" << endl;
+		kDebug() << "Couldnt connect to database server" << endl;
 		if (result)
 			result->setStatus(i18n("Could not connect to data source \"%1\".")
 				.arg(m_migrateData->source->serverInfoString()), "");
@@ -126,9 +126,9 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 	}
 
 	// Step 2 - get table names
-	kdDebug() << "KexiMigrate::performImport() GETTING TABLENAMES..." << endl;
+	kDebug() << "KexiMigrate::performImport() GETTING TABLENAMES..." << endl;
 	if (!tableNames(tables)) {
-		kdDebug() << "Couldnt get list of tables" << endl;
+		kDebug() << "Couldnt get list of tables" << endl;
 		if (result)
 			result->setStatus(
 				i18n("Could not get a list of table names for data source \"%1\".")
@@ -141,7 +141,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 
 	// Check if there are any tables
 	if (tables.isEmpty()) {
-		kdDebug() << "There were no tables to import" << endl;
+		kDebug() << "There were no tables to import" << endl;
 		if (result)
 			result->setStatus(
 				i18n("No tables to import found in data source \"%1\".")
@@ -221,18 +221,18 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 			&& tname!="kexi__objectdata" //copy this too
 		)
 		{
-			kdDebug() << "Do not copy data for system table: " << tname << endl;
+			kDebug() << "Do not copy data for system table: " << tname << endl;
 //! @todo copy kexi__db contents!
 			continue;
 		}
-		kdDebug() << "Copying data for table: " << tname << endl;
+		kDebug() << "Copying data for table: " << tname << endl;
 		ok = drv_copyTable(
 			ts.current()->caption().isEmpty() ? tname : ts.current()->caption(), //caption is equal to the original name
 			destConn, 
 			ts.current()
 		);
 		if (!ok) {
-			kdDebug() << "Failed to copy table " << tname << endl;
+			kDebug() << "Failed to copy table " << tname << endl;
 			if (result)
 				result->setStatus(destConn,
 					i18n("Could not copy table \"%1\" to destination database.").arg(tname));
@@ -250,7 +250,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 		kexi__objectsCopy->setName("kexi__objects__copy");
 		ok = destConn->createTable( kexi__objectsCopy );
 		if (!ok) {
-			kdDebug() << "Failed to create a table " << kexi__objectsCopy->name() << endl;
+			kDebug() << "Failed to create a table " << kexi__objectsCopy->name() << endl;
 			delete kexi__objectsCopy;
 			kexi__objectsCopy = 0;
 			destConn->debugError();
@@ -320,7 +320,7 @@ bool KexiMigrate::performExport(Kexi::ObjectStatus* result)
 // Create the final database project
 KexiProject *KexiMigrate::createProject(Kexi::ObjectStatus* result)
 {
-	kdDebug() << "Creating database [" << m_migrateData->destination->databaseName() 
+	kDebug() << "Creating database [" << m_migrateData->destination->databaseName() 
 		<< "]" << endl;
 
 	KexiProject *prj = new KexiProject(m_migrateData->destination,
@@ -350,7 +350,7 @@ KexiProject *KexiMigrate::createProject(Kexi::ObjectStatus* result)
 	KexiDB::TableSchema *ts;
 	for(QPtrListIterator<TableSchema> it (m_tableSchemas); (ts = it.current()) != 0;++it) {
 		if(!prj->dbConnection()->createTable( ts )) {
-			kdDebug() << "Failed to create a table " << ts->name() << endl;
+			kDebug() << "Failed to create a table " << ts->name() << endl;
 			prj->dbConnection()->debugError();
 			if (result)
 				result->setStatus(prj->dbConnection(),
@@ -361,7 +361,7 @@ KexiProject *KexiMigrate::createProject(Kexi::ObjectStatus* result)
 			//don't delete prj, otherwise eror message will be deleted			delete prj;
 			return prj;
 		}
-		updateProgress((Q_ULLONG)NUM_OF_ROWS_PER_CREATE_TABLE);
+		updateProgress((quint64)NUM_OF_ROWS_PER_CREATE_TABLE);
 	}
 	if (!tg.commit()) {
 		prj->dbConnection()->dropDatabase(m_migrateData->destination->databaseName());
@@ -376,14 +376,14 @@ KexiProject *KexiMigrate::createProject(Kexi::ObjectStatus* result)
 bool KexiMigrate::tableNames(QStringList & tn)
 {
 	//! @todo Cache list of table names
-	kdDebug() << "Reading list of tables..." << endl;
+	kDebug() << "Reading list of tables..." << endl;
 	return drv_tableNames(tn);
 }
 
 //=============================================================================
 // Progress functions
 bool KexiMigrate::progressInitialise() {
-	Q_ULLONG sum = 0, size;
+	quint64 sum = 0, size;
 	emit progressPercent(0);
 
   //! @todo Don't copy table names here
@@ -397,7 +397,7 @@ bool KexiMigrate::progressInitialise() {
 	    it != tables.end(); ++it, tableNumber++)
 	{
 		if(drv_getTableSize(*it, size)) {
-			kdDebug() << "KexiMigrate::progressInitialise() - table: " << *it 
+			kDebug() << "KexiMigrate::progressInitialise() - table: " << *it 
 			          << "size: " << (ulong)size << endl;
 			sum += size;
 			emit progressPercent(tableNumber * 5 /* 5% */ / tables.count());
@@ -406,7 +406,7 @@ bool KexiMigrate::progressInitialise() {
 		}
 	}
 
-	kdDebug() << "KexiMigrate::progressInitialise() - job size: " << (ulong)sum << endl;
+	kDebug() << "KexiMigrate::progressInitialise() - job size: " << (ulong)sum << endl;
 	m_progressTotal = sum;
 	m_progressTotal += tables.count() * NUM_OF_ROWS_PER_CREATE_TABLE;
 	m_progressTotal = m_progressTotal * 105 / 100; //add 5 percent for above task 1)
@@ -416,12 +416,12 @@ bool KexiMigrate::progressInitialise() {
 }
 
 
-void KexiMigrate::updateProgress(Q_ULLONG step) {
+void KexiMigrate::updateProgress(quint64 step) {
 	m_progressDone += step;
 	if (m_progressDone >= m_progressNextReport) {
 		int percent = (m_progressDone+1) * 100 / m_progressTotal;
 		m_progressNextReport = ((percent + 1) * m_progressTotal) / 100;
-		kdDebug() << "KexiMigrate::updateProgress(): " << (ulong)m_progressDone << "/"
+		kDebug() << "KexiMigrate::updateProgress(): " << (ulong)m_progressDone << "/"
 		          << (ulong)m_progressTotal << " (" << percent << "%) next report at " 
 		          << (ulong)m_progressNextReport << endl;
 		emit progressPercent(percent);

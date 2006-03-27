@@ -30,7 +30,7 @@ int tableViewTest()
 	KexiDB::TableSchema *persons = conn->tableSchema( "persons" );
 	if (!persons) {
 		conn->debugError();
-		kdDebug() << "tableViewTest(): !persons" <<endl;
+		kDebug() << "tableViewTest(): !persons" <<endl;
 		return 1;
 	}
 
@@ -39,7 +39,7 @@ int tableViewTest()
 	KexiDB::Cursor *cursor = conn->prepareQuery( *persons , cursor_options );//KexiDB::Cursor::Buffered );
 	if (!cursor) {
 		conn->debugError();
-		kdDebug() << "tableViewTest(): !cursor" <<endl;
+		kDebug() << "tableViewTest(): !cursor" <<endl;
 		return 1;
 	}
 

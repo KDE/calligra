@@ -47,7 +47,7 @@
                         <string>New</string>
                     </property>
                 </widget>
-                <widget class="KListView" row="0" column="0" rowspan="1" colspan="2">
+                <widget class="K3ListView" row="0" column="0" rowspan="1" colspan="2">
                     <column>
                         <property name="text">
                             <string>Calendar Name</string>

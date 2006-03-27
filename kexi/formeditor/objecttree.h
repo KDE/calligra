@@ -112,13 +112,13 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		QString m_className;
 		QString m_name;
 		ObjectTreeList	m_children;
-		QGuardedPtr<Container> m_container;
+		QPointer<Container> m_container;
 		QMap<QString, QVariant> m_props;
 		QString  m_unknownProps;
 		QMap<QCString, QString> m_pixmapNames;
 		ObjectTreeItem* m_parent;
-		QGuardedPtr<QWidget> m_widget;
-		QGuardedPtr<EventEater> m_eater;
+		QPointer<QWidget> m_widget;
+		QPointer<EventEater> m_eater;
 
 		bool  m_enabled;
 

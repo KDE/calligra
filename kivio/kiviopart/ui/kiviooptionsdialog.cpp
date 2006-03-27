@@ -49,7 +49,7 @@
 #include <qtabwidget.h>
 
 // GuidesListViewItem::GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u)
-// : KListViewItem(parent), m_data(gd)
+// : K3ListViewItem(parent), m_data(gd)
 // {
 //   setPixmap(0, BarIcon(m_data->orientation() == Qt::Vertical ?
 //     "guides_vertical":"guides_horizontal"));

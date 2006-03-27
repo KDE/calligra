@@ -19,7 +19,7 @@
 #include <qheader.h>
 #include <qlayout.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <ktabwidget.h>
 #include <klistbox.h>
 #include <kiconloader.h>
@@ -87,7 +87,7 @@ EditListViewDialog::EditListViewDialog(QWidget *parent)
 	vlayout->addStretch();
 
 	//// The listview ///////////
-	m_listview = new KListView(m_contents, "editlistview_listview");
+	m_listview = new K3ListView(m_contents, "editlistview_listview");
 	m_listview->setItemsRenameable(true);
 	m_listview->setItemsMovable(true);
 	m_listview->setDragEnabled(true);
@@ -163,7 +163,7 @@ EditListViewDialog::exec(QListView *listview)
 {
 	if(!listview)
 	{
-		kdDebug() << "EditListViewDialog ERROR: no listview " << endl;
+		kDebug() << "EditListViewDialog ERROR: no listview " << endl;
 		return 0;
 	}
 
@@ -364,12 +364,12 @@ void
 EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QListViewItem *parent)
 {
 	QListViewItem *newItem;
-	if(listview->inherits("KListView"))
+	if(listview->inherits("K3ListView"))
 	{
 		if(parent)
-			newItem = new KListViewItem(parent);
+			newItem = new K3ListViewItem(parent);
 		else
-			newItem = new KListViewItem(listview);
+			newItem = new K3ListViewItem(listview);
 	}
 	else
 	{
@@ -406,14 +406,14 @@ EditListViewDialog::loadChildNodes(QListView *listview, QListViewItem *item, QLi
 void
 EditListViewDialog::newRow()
 {
-	KListViewItem *parent = (KListViewItem*)m_listview->selectedItem();
+	K3ListViewItem *parent = (K3ListViewItem*)m_listview->selectedItem();
 	if(parent)
-		parent = (KListViewItem*)parent->parent();
-	KListViewItem *item;
+		parent = (K3ListViewItem*)parent->parent();
+	K3ListViewItem *item;
 	if(parent)
-		item = new KListViewItem(parent, m_listview->selectedItem());
+		item = new K3ListViewItem(parent, m_listview->selectedItem());
 	else
-		item = new KListViewItem(m_listview, m_listview->selectedItem());
+		item = new K3ListViewItem(m_listview, m_listview->selectedItem());
 	item->setText(0, i18n("New Item"));
 	m_listview->setCurrentItem(item);
 }
@@ -421,12 +421,12 @@ EditListViewDialog::newRow()
 void
 EditListViewDialog::newChildRow()
 {
-	KListViewItem *parent = (KListViewItem*)m_listview->currentItem();
-	KListViewItem *item;
+	K3ListViewItem *parent = (K3ListViewItem*)m_listview->currentItem();
+	K3ListViewItem *item;
 	if(parent)
-		item = new KListViewItem(parent);
+		item = new K3ListViewItem(parent);
 	else
-		item = new KListViewItem(m_listview, m_listview->currentItem());
+		item = new K3ListViewItem(m_listview, m_listview->currentItem());
 	item->setText(0, i18n("Sub Item"));
 
 	m_listview->setCurrentItem(item);

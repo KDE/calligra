@@ -70,7 +70,7 @@
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kurlrequesterdlg.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kfiledialog.h>
 #include <KoEditPath.h>
 
@@ -939,7 +939,7 @@ KPrConfigurePathPage::KPrConfigurePathPage( KPrView *_view, QWidget *parent, cha
     KPrDocument* doc = m_pView->kPresenterDoc();
     config = KPrFactory::global()->config();
 
-    m_pPathView = new KListView( this );
+    m_pPathView = new K3ListView( this );
     m_pPathView->setResizeMode(QListView::NoColumn);
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ) );
@@ -972,7 +972,7 @@ void KPrConfigurePathPage::slotModifyPath()
     {
         if ( item->text(0)==i18n("Picture Path"))
         {
-            KURLRequesterDlg * dlg = new KURLRequesterDlg( item->text(1), 0L,
+            KUrlRequesterDlg * dlg = new KUrlRequesterDlg( item->text(1), 0L,
                                                            "picture path dlg");
             dlg->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
             if ( dlg->exec() )

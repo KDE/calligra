@@ -52,7 +52,7 @@ public:
     KLineEdit* mailLink;
     QFrame* filePage;
     KLineEdit* fileText;
-    KURLRequester* fileLink;
+    KUrlRequester* fileLink;
     QFrame* cellPage;
     KLineEdit* cellText;
     KLineEdit* cellLink;
@@ -101,7 +101,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     d->fileText = new KLineEdit( d->filePage );
     fLayout->add( d->fileText );
     fLayout->add( new QLabel( i18n("File location:" ), d->filePage ) );
-    d->fileLink = new KURLRequester( d->filePage );
+    d->fileLink = new KUrlRequester( d->filePage );
     fLayout->add( d->fileLink );
     fLayout->add( new QLabel( i18n("Recent file:" ), d->filePage ) );
     QComboBox* recentFile = new QComboBox( d->filePage );

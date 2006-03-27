@@ -113,7 +113,7 @@ Value func_info (valVector args, ValueCalc *calc, FuncExtra *)
   QString type = calc->conv()->asString (args[0]).asString().lower();
 
   if (type == "directory")
-    return Value (QDir::currentDirPath());
+    return Value (QDir::currentPath());
 
   if (type == "release")
     return Value (QString (VERSION));

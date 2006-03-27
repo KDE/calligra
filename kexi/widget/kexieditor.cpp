@@ -178,7 +178,7 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 #else
         KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
         for(uint i = 0; i < hl->hlModeCount(); i++) {
-            //kdDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
+            //kDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
             if (hl->hlModeName(i).contains(highlightmodename, false))  {
                 hl->setHlMode(i);
                 return;

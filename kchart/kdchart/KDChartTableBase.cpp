@@ -129,7 +129,7 @@ bool KDChartTableDataBase::cellsHaveSeveralCoordinates(
         QVariant::Type testType = QVariant::Invalid;
         const uint r2 = (UINT_MAX == row2)
                   ? usedRows()
-                  : QMIN( row2+1, usedRows() );
+                  : qMin( row2+1, usedRows() );
         QVariant value1;
         QVariant value2;
         for ( uint row = row1; row < r2; ++row ){
@@ -166,7 +166,7 @@ QVariant::Type KDChartTableDataBase::cellsValueType(
     QVariant::Type res = QVariant::Invalid;
     const uint r2 = (UINT_MAX == row2)
               ? usedRows()
-              : QMIN( row2+1, usedRows() );
+              : qMin( row2+1, usedRows() );
     
     QVariant value;
     for ( uint row = row1; row < r2; ++row )
@@ -201,7 +201,7 @@ double KDChartTableDataBase::maxValue( int coordinate ) const
                         maxValue = dVal;
                         bStart = false;
                     } else
-                        maxValue = QMAX( maxValue, dVal );
+                        maxValue = qMax( maxValue, dVal );
                 }
             }
         }
@@ -227,7 +227,7 @@ double KDChartTableDataBase::minValue( int coordinate, bool bOnlyGTZero ) const
                         minValue = dVal;
                         bStart = false;
                     }else{
-                        minValue = QMIN( minValue, dVal );
+                        minValue = qMin( minValue, dVal );
                     }
                 }
             }
@@ -252,7 +252,7 @@ QDateTime KDChartTableDataBase::maxDtValue( int coordinate ) const
                     maxValue = dtVal;
                     bStart = false;
                 } else
-                    maxValue = QMAX(maxValue, dtVal);
+                    maxValue = qMax(maxValue, dtVal);
             }
         }
     }
@@ -276,7 +276,7 @@ QDateTime KDChartTableDataBase::minDtValue( int coordinate ) const
                     minValue = dtVal;
                     bStart = false;
                 } else
-                    minValue = QMIN(minValue, dtVal);
+                    minValue = qMin(minValue, dtVal);
             }
         }
     }
@@ -294,7 +294,7 @@ double KDChartTableDataBase::maxColSum( int coordinate ) const
             maxValue = colValue;
             bStart = false;
         } else
-            maxValue = QMAX( maxValue, colValue );
+            maxValue = qMax( maxValue, colValue );
     }
     return maxValue;
 }
@@ -310,7 +310,7 @@ double KDChartTableDataBase::minColSum( int coordinate ) const
             minValue = colValue;
             bStart = false;
         } else
-            minValue = QMIN( minValue, colValue );
+            minValue = qMin( minValue, colValue );
     }
 
     return minValue;
@@ -344,7 +344,7 @@ double KDChartTableDataBase::maxColSum( uint row, uint row2, int coordinate ) co
                 maxValue = valueValue;
                 bStart = false;
             } else
-                maxValue = QMAX( maxValue, valueValue );
+                maxValue = qMax( maxValue, valueValue );
         }
     }
     return maxValue;
@@ -378,7 +378,7 @@ double KDChartTableDataBase::minColSum( uint row, uint row2, int coordinate ) co
                 minValue = valueValue;
                 bStart = false;
             } else
-                minValue = QMIN( minValue, valueValue );
+                minValue = qMin( minValue, valueValue );
         }
     }
     return minValue;
@@ -431,7 +431,7 @@ double KDChartTableDataBase::maxRowSum( int coordinate ) const
             maxValue = rowValue;
             bStart = false;
         } else
-            maxValue = QMAX( maxValue, rowValue );
+            maxValue = qMax( maxValue, rowValue );
     }
     return maxValue;
 }
@@ -447,7 +447,7 @@ double KDChartTableDataBase::minRowSum( int coordinate ) const
             minValue = rowValue;
             bStart = false;
         } else
-            minValue = QMIN( minValue, rowValue );
+            minValue = qMin( minValue, rowValue );
     }
 
     return minValue;
@@ -503,7 +503,7 @@ double KDChartTableDataBase::maxInColumn( uint col, int coordinate ) const
                     maxValue = dVal;
                     bStart = false;
                 } else
-                    maxValue = QMAX( maxValue, dVal );
+                    maxValue = qMax( maxValue, dVal );
             }
         }
     }
@@ -527,7 +527,7 @@ double KDChartTableDataBase::minInColumn( uint col, int coordinate ) const
                     minValue = dVal;
                     bStart = false;
                 } else
-                    minValue = QMIN( minValue, dVal );
+                    minValue = qMin( minValue, dVal );
             }
         }
     }
@@ -552,7 +552,7 @@ double KDChartTableDataBase::maxInRow( uint row, int coordinate ) const
                         maxValue = dVal;
                         bStart = false;
                     } else
-                        maxValue = QMAX( maxValue, dVal );
+                        maxValue = qMax( maxValue, dVal );
                 }
             }
         }
@@ -577,7 +577,7 @@ double KDChartTableDataBase::minInRow( uint row, int coordinate ) const
                         minValue = dVal;
                         bStart = false;
                     } else
-                        minValue = QMIN( minValue, dVal );
+                        minValue = qMin( minValue, dVal );
                 }
             }
         }
@@ -611,7 +611,7 @@ double KDChartTableDataBase::maxInRows( uint row, uint row2, int coordinate ) co
                             maxValue = dVal;
                             bStart = false;
                         } else
-                            maxValue = QMAX( maxValue, dVal );
+                            maxValue = qMax( maxValue, dVal );
                     }
                 }
             }
@@ -647,7 +647,7 @@ double KDChartTableDataBase::minInRows( uint row, uint row2, int coordinate, boo
                                 minValue = dVal;
                                 bStart = false;
                             }else{
-                                minValue = QMIN( minValue, dVal );
+                                minValue = qMin( minValue, dVal );
                             }
                         }
                     }
@@ -682,7 +682,7 @@ QDateTime KDChartTableDataBase::maxDtInRows( uint row, uint row2,
                         maxValue = dtVal;
                         bStart = false;
                     } else
-                        maxValue = QMAX( maxValue, dtVal );
+                        maxValue = qMax( maxValue, dtVal );
                 }
             }
         }
@@ -714,7 +714,7 @@ QDateTime KDChartTableDataBase::minDtInRows( uint row, uint row2,
                         minValue = dtVal;
                         bStart = false;
                     } else
-                        minValue = QMIN( minValue, dtVal );
+                        minValue = qMin( minValue, dtVal );
                 }
             }
         }

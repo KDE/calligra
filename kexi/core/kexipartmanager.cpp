@@ -61,7 +61,7 @@ Manager::lookup()
 	KConfig conf("kexirc", true);
 	conf.setGroup("Parts");
 	QStringList sl_order = QStringList::split( ",", conf.readEntry("Order") );//we'll set parts in defined order
-	const int size = QMAX( tlist.count(), sl_order.count() );
+	const int size = qMax( tlist.count(), sl_order.count() );
 	QPtrVector<KService> ordered( size*2 );
 	int offset = size; //we will insert not described parts from #offset
 	
@@ -70,7 +70,7 @@ Manager::lookup()
 	{
 		KService::Ptr ptr = (*it);
 		QCString mime = ptr->property("X-Kexi-TypeMime").toCString();
-		kdDebug() << "Manager::lookup(): " << mime << endl;
+		kDebug() << "Manager::lookup(): " << mime << endl;
 //<TEMP>: disable some parts if needed
 		if (!Kexi::tempShowForms() && mime=="kexi/form")
 			continue;
@@ -94,7 +94,7 @@ Manager::lookup()
 			                                                   // to avoid duplicates
 			if (!info->mimeType().isEmpty()) {
 				m_partsByMime.insert(info->mimeType(), info);
-				kdDebug() << "Manager::lookup(): inserting info to " << info->mimeType() << endl;
+				kDebug() << "Manager::lookup(): inserting info to " << info->mimeType() << endl;
 			}
 			m_partlist.append(info);
 		}
@@ -112,7 +112,7 @@ Manager::part(Info *i)
 	if(!i)
 		return 0;
 
-	kdDebug() << "Manager::part( id = " << i->projectPartID() << " )" << endl;
+	kDebug() << "Manager::part( id = " << i->projectPartID() << " )" << endl;
 
 	if (i->isBroken()) {
 			setError(i->errorMessage());
@@ -122,13 +122,13 @@ Manager::part(Info *i)
 	Part *p = m_parts[i->projectPartID()];
 	
 	if(!p) {
-		kdDebug() << "Manager::part().." << endl;
+		kDebug() << "Manager::part().." << endl;
 		int error=0;
 		p = KParts::ComponentFactory::createInstanceFromService<Part>(i->ptr(), this, 
 			QString(i->objectName()+"_part").latin1(), QStringList(), &error);
 		if(!p) {
-			kdDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
-			kdDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
+			kDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
+			kDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
 			i->setBroken(true, i18n("Error while loading plugin \"%1\"").arg(i->objectName()));
 			setError(i->errorMessage());
 			return 0;
@@ -142,10 +142,10 @@ Manager::part(Info *i)
 		emit partLoaded(p);
 	}
 	else {
-		kdDebug() << "Manager::part(): cached: " << i->groupName() << endl;
+		kDebug() << "Manager::part(): cached: " << i->groupName() << endl;
 	}
 
-	kdDebug() << "Manager::part(): fine!" << endl;
+	kDebug() << "Manager::part(): fine!" << endl;
 	return p;
 }
 

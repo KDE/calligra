@@ -28,22 +28,22 @@ using namespace KSpread;
 
 void run( Tester* test )
 {
-  kdDebug() << test->name() << endl;
+  kDebug() << test->name() << endl;
   test->run();
   int failed = test->failed();
   if ( failed )
   {
-    kdDebug() << test->failed() << " of " << test->count() << " tests failed:" << endl;
+    kDebug() << test->failed() << " of " << test->count() << " tests failed:" << endl;
     QStringList errors = test->errors();
     QStringList::ConstIterator end = errors.end();
     for (QStringList::ConstIterator it = errors.begin(); it != end; ++it )
     {
-      kdDebug() << (*it) << endl;
+      kDebug() << (*it) << endl;
     }
   }
   else
   {
-    kdDebug() << "All " << test->count() << " tests successfully passed." << endl;
+    kDebug() << "All " << test->count() << " tests successfully passed." << endl;
   }
   delete test;
 }

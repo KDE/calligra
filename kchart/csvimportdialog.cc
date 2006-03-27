@@ -111,7 +111,7 @@ CSVImportDialog::CSVImportDialog(QWidget* parent, QByteArray& fileArray)
 
 CSVImportDialog::~CSVImportDialog()
 {
-    kapp->setOverrideCursor(Qt::waitCursor);
+    kapp->setOverrideCursor(Qt::WaitCursor);
 }
 
 
@@ -176,7 +176,7 @@ void CSVImportDialog::fillTable( )
     QChar x;
     QString field;
 
-    kapp->setOverrideCursor(Qt::waitCursor);
+    kapp->setOverrideCursor(Qt::WaitCursor);
 
     for (row = 0; row < m_dialog->m_sheet->numRows(); ++row)
         for (column = 0; column < m_dialog->m_sheet->numCols(); ++column)
@@ -185,7 +185,7 @@ void CSVImportDialog::fillTable( )
     int maxColumn = 1;
     row = column = 1;
     QTextStream inputStream(m_fileArray, QIODevice::ReadOnly);
-    kdDebug(30501) << "Encoding: " << m_codec->name() << endl;
+    kDebug(30501) << "Encoding: " << m_codec->name() << endl;
     inputStream.setCodec( m_codec );
 
     bool lastCharWasCr = false; // Last character was a Carriage Return
@@ -500,7 +500,7 @@ void CSVImportDialog::textChanged ( const QString & )
 
 void CSVImportDialog::formatChanged( const QString& newValue )
 {
-    //kdDebug(30501) << "CSVImportDialog::formatChanged:" << newValue << endl;
+    //kDebug(30501) << "CSVImportDialog::formatChanged:" << newValue << endl;
     for ( int i = 0; i < m_dialog->m_sheet->numSelections(); ++i )
     {
         Q3TableSelection select ( m_dialog->m_sheet->selection( i ) );
@@ -590,7 +590,7 @@ void CSVImportDialog::ignoreDuplicatesChanged(int)
 QTextCodec* CSVImportDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kdDebug(30502) << "Encoding: " << strCodec << endl;
+    kDebug(30502) << "Encoding: " << strCodec << endl;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
@@ -609,7 +609,7 @@ QTextCodec* CSVImportDialog::getCodec(void) const
     if ( !codec || !ok )
     {
         // Default: UTF-8
-        kdWarning(30502) << "Cannot find encoding:" << strCodec << endl;
+        kWarning(30502) << "Cannot find encoding:" << strCodec << endl;
         // ### TODO: what parent to use?
         KMessageBox::error( 0, i18n("Cannot find encoding: %1").arg( strCodec ) );
         return 0;

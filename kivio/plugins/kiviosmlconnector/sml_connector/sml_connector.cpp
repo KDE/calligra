@@ -51,7 +51,7 @@ K_EXPORT_COMPONENT_FACTORY( sml_connector, KGenericFactory<KivioSMLConnectorFact
 KivioSMLConnectorFactory::KivioSMLConnectorFactory( QObject *parent, const char* name, const QStringList& args ) :
 		KivioStencilFactory( parent, name, args )
 {
-	kdDebug(43000) << "new sml stencil factory: " << endl;
+	kDebug(43000) << "new sml stencil factory: " << endl;
 }
 
 KivioStencil *KivioSMLConnectorFactory::NewStencil( const QString& name )
@@ -311,7 +311,7 @@ void KivioSMLConnector::paintOutline( KivioIntraStencilData *pData )
 
 bool KivioSMLConnector::saveCustom( QDomElement &e, QDomDocument &doc )
 {
-	kdDebug(43000) << "Save custom " << endl;
+	kDebug(43000) << "Save custom " << endl;
 	e.appendChild( saveArrowHeads( doc ) );
 
 	//QDomElement type = m_shape->saveXML(doc);
@@ -327,7 +327,7 @@ bool KivioSMLConnector::saveCustom( QDomElement &e, QDomDocument &doc )
 
 bool KivioSMLConnector::loadCustom( const QDomElement &e )
 {
-	kdDebug(43000) << "Load custom " << endl;
+	kDebug(43000) << "Load custom " << endl;
 	QDomNode node;
 	QString name;
 
@@ -406,7 +406,7 @@ bool KivioSMLConnector::loadArrowHeads( const QDomElement &e )
 
 bool KivioSMLConnector::loadPath( const QString &file )
 {
-	kdDebug(43000) << "Loading :" << file << endl;
+	kDebug(43000) << "Loading :" << file << endl;
 
 	m_PointList.clear();
 	m_PointList.append(m_pStart);

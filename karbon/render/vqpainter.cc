@@ -80,25 +80,25 @@ VQPainter::end()
 	m_painter->end();
 }
 
-const QWMatrix
+const QMatrix
 VQPainter::worldMatrix()
 {
 	return m_painter->worldMatrix();
 }
 
 void
-VQPainter::setWorldMatrix( const QWMatrix& mat )
+VQPainter::setMatrix( const QMatrix& mat )
 {
-	m_painter->setWorldMatrix( mat );
+	m_painter->setMatrix( mat );
 }
 
 void
 VQPainter::setZoomFactor( double zoomFactor )
 {
 	m_zoomFactor = zoomFactor;
-	/*QWMatrix mat;
+	/*QMatrix mat;
 	mat.scale( zoomFactor, zoomFactor );
-	m_painter->setWorldMatrix( mat );*/
+	m_painter->setMatrix( mat );*/
 }
 
 void 
@@ -263,9 +263,9 @@ VQPainter::drawRect( const KoRect &rect )
 }
 
 void
-VQPainter::drawImage( const QImage &image, const QWMatrix &affine )
+VQPainter::drawImage( const QImage &image, const QMatrix &affine )
 {
-	QWMatrix matrix = m_painter->worldMatrix();
+	QMatrix matrix = m_painter->worldMatrix();
 	
 	double m11 = affine.m11() * matrix.m11() * m_zoomFactor + affine.m12() * matrix.m21();
 	double m12 = (affine.m11() * matrix.m12() + affine.m12() * matrix.m22() ) * m_zoomFactor;
@@ -274,11 +274,11 @@ VQPainter::drawImage( const QImage &image, const QWMatrix &affine )
 	double dx = matrix.dx() + affine.dx() * m_zoomFactor;
 	double dy = matrix.dy() - affine.dy() * m_zoomFactor;
 	
-	QWMatrix world( m11, m12, m21, m22, dx, dy );
+	QMatrix world( m11, m12, m21, m22, dx, dy );
 	
-	m_painter->setWorldMatrix( world );
+	m_painter->setMatrix( world );
 	
 	m_painter->drawImage( QPoint( 0, 0 ), image );
 	// restore old world matrix
-	m_painter->setWorldMatrix( matrix );
+	m_painter->setMatrix( matrix );
 }

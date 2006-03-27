@@ -28,7 +28,7 @@
 #include <KoRect.h>
 #include <vfillrule.h>
 
-class QWMatrix;
+class QMatrix;
 class QPaintDevice;
 class QColor;
 class QPen;
@@ -56,8 +56,8 @@ public:
 	virtual void clear( const KoRect &, const QColor & ) = 0;
 
 	// matrix manipulation
-	virtual void setWorldMatrix( const QWMatrix & ) = 0;
-	virtual const QWMatrix worldMatrix() = 0;
+	virtual void setMatrix( const QMatrix & ) = 0;
+	virtual const QMatrix worldMatrix() = 0;
 	virtual void setZoomFactor( double ) = 0;
 	virtual double zoomFactor() { return 1.0; }
 
@@ -86,7 +86,7 @@ public:
 	virtual void setBrush( const QColor & ) = 0;
 	virtual void setBrush( Qt::BrushStyle style ) = 0;
 
-	virtual void drawImage( const QImage &, const QWMatrix & ) {}
+	virtual void drawImage( const QImage &, const QMatrix & ) {}
 
 	// stack management
 	virtual void save() = 0;

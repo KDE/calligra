@@ -90,7 +90,7 @@ KPrPage::KPrPage(KPrDocument *_doc, KPrPage *masterPage )
     , m_soundFileName( QString::null )
     , m_pageTimer( 1 )
 {
-    kdDebug(33001)<<"create page : KPrPage::KPrPage(KPrDocument *_doc )"<<this<<endl;
+    kDebug(33001)<<"create page : KPrPage::KPrPage(KPrDocument *_doc )"<<this<<endl;
     m_objectList.setAutoDelete( false );
 
     m_kpbackground= new KPrBackGround( this );
@@ -101,7 +101,7 @@ KPrPage::KPrPage(KPrDocument *_doc, KPrPage *masterPage )
 
 KPrPage::~KPrPage()
 {
-    kdDebug(33001)<<"Delete page :KPrPage::~KPrPage() :"<<this<<endl;
+    kDebug(33001)<<"Delete page :KPrPage::~KPrPage() :"<<this<<endl;
     //delete object list.
     m_objectList.setAutoDelete( true );
     m_objectList.clear();
@@ -146,21 +146,21 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                  it.current()->getAppearStep() != 0 ||
                  !it.current()->getAppearSoundEffectFileName().isEmpty() )
             {
-                kdDebug(33001) << "has animation" << endl;
+                kDebug(33001) << "has animation" << endl;
                 listAnimation *lstappear = new listAnimation;
                 lstappear->obj = it.current();
                 lstappear->objIndex = indexObj;
                 lstappear->appear = true;
-                //kdDebug()<<" indexObj :"<<indexObj<<endl;
+                //kDebug()<<" indexObj :"<<indexObj<<endl;
                 lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getAppearStep() );
                 if ( tmp!= listObjectAnimation.end() )
                 {
-                    //kdDebug()<<" group already exist \n";
+                    //kDebug()<<" group already exist \n";
                     tmp.data().append( lstappear );
                 }
                 else
                 {
-                    //kdDebug()<<" create new list \n";
+                    //kDebug()<<" create new list \n";
                     QPtrList<listAnimation> tmp2;
                     tmp2.append( lstappear );
                     listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
@@ -174,16 +174,16 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                 lstappear->obj = it.current();
                 lstappear->objIndex = indexObj;
                 lstappear->appear = false;
-                //kdDebug()<<" indexObj :"<<indexObj<<endl;
+                //kDebug()<<" indexObj :"<<indexObj<<endl;
                 lstMap::Iterator tmp = listObjectAnimation.find( it.current()->getDisappearStep() );
                 if ( tmp!= listObjectAnimation.end() )
                 {
-                    //kdDebug()<<" group already exist \n";
+                    //kDebug()<<" group already exist \n";
                     tmp.data().append( lstappear );
                 }
                 else
                 {
-                    //kdDebug()<<" create new list \n";
+                    //kDebug()<<" create new list \n";
                     QPtrList<listAnimation> tmp2;
                     tmp2.append( lstappear );
                     listObjectAnimation.insert( it.current()->getDisappearStep(), tmp2 );
@@ -196,7 +196,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
 
     if ( !listObjectAnimation.isEmpty() )
     {
-        kdDebug()<<"! listObjectAnimation.isEmpty() :"<<listObjectAnimation.count()<<endl;
+        kDebug()<<"! listObjectAnimation.isEmpty() :"<<listObjectAnimation.count()<<endl;
         animationTmpWriter.startElement( "presentation:animations" );
         lstMap::Iterator it = listObjectAnimation.begin();
         lstMap::Iterator end = listObjectAnimation.end();
@@ -204,7 +204,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
         {
             if ( it.data().count() == 1 )
             {
-                kdDebug()<<" add unique element \n";
+                kDebug()<<" add unique element \n";
                 if ( it.data().at( 0 )->appear )
                     it.data().at( 0 )->obj->saveOasisObjectStyleShowAnimation( animationTmpWriter, it.data().at( 0 )->objIndex );
                 else
@@ -218,7 +218,7 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                 {
                     if ( list.at(i) )
                     {
-                        kdDebug()<<" add group element : "<<i<<endl;
+                        kDebug()<<" add group element : "<<i<<endl;
                         if ( list.at(i)->appear )
                             list.at(i)->obj->saveOasisObjectStyleShowAnimation( animationTmpWriter, list.at(i)->objIndex );
                         else
@@ -298,7 +298,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
     m_kpbackground->loadOasis( context );
 
     KoStyleStack& styleStack = context.styleStack();
-    kdDebug()<<"KPrPage::loadOasis()\n";
+    kDebug()<<"KPrPage::loadOasis()\n";
     styleStack.setTypeProperties( "drawing-page" );
 
     if ( !isMasterPage() )
@@ -327,7 +327,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
             if ( str=="hidden" )
                 slideSelected( false );
             else
-                kdDebug()<<" presentation:visibility parameter not implemented :"<<str<<endl;
+                kDebug()<<" presentation:visibility parameter not implemented :"<<str<<endl;
         }
 
         if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "transition-speed" ) )
@@ -348,7 +348,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
                 m_pageEffectSpeed = ES_FAST;
             }
             else
-                kdDebug()<<" transition-speed not defined :"<<speed<<endl;
+                kDebug()<<" transition-speed not defined :"<<speed<<endl;
         }
         if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "duration" ))
         {
@@ -358,7 +358,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
         {
             //Not defined into kpresenter
             //it's global for the moment.
-            kdDebug()<<" presentation:transition-type :"<<styleStack.attributeNS( KoXmlNS::presentation, "transition-type" )<<endl;
+            kDebug()<<" presentation:transition-type :"<<styleStack.attributeNS( KoXmlNS::presentation, "transition-type" )<<endl;
         }
         if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "display-header" ) )
         {
@@ -373,14 +373,14 @@ void KPrPage::loadOasis(KoOasisContext & context )
         //TODO presentation:display-date-time; presentation:display-page-number
         if ( styleStack.hasAttributeNS( KoXmlNS::presentation, "transition-style"))
         {
-            //kdDebug()<<" have a presentation:transition-style------------\n";
+            //kDebug()<<" have a presentation:transition-style------------\n";
             const QString effect = styleStack.attributeNS( KoXmlNS::presentation, "transition-style");
             QString additionalEffect;
             if ( styleStack.hasAttributeNS( KoXmlNS::koffice, "additional-transition-style" ) )
             {
                 additionalEffect = styleStack.attributeNS( KoXmlNS::koffice, "additional-transition-style" );
             }
-            kdDebug() << "Transition name: " << effect << "additional name: " << additionalEffect << endl;
+            kDebug() << "Transition name: " << effect << "additional name: " << additionalEffect << endl;
             PageEffect pef;
             if ( effect=="none" )
                 pef=PEF_NONE;
@@ -485,7 +485,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
         }
         if ( styleStack.hasChildNodeNS( KoXmlNS::presentation, "sound"))
         {
-            //kdDebug()<<" presentation:sound !!!!!!!!!!!!!!!!!!!!!\n";
+            //kDebug()<<" presentation:sound !!!!!!!!!!!!!!!!!!!!!\n";
             QDomElement sound = styleStack.childNodeNS( KoXmlNS::presentation, "sound");
             m_soundEffect = true;
             m_soundFileName = sound.attributeNS( KoXmlNS::xlink, "href", QString::null );
@@ -576,7 +576,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
         xmlWriter.addAttribute( "draw:master-page-name", "Standard"); //by default name of page is Standard
 
         QString styleName = saveOasisPageStyle( store, context.mainStyles() );
-        kdDebug()<<" styleName :"<<styleName<<endl;
+        kDebug()<<" styleName :"<<styleName<<endl;
         if ( !styleName.isEmpty() )
             xmlWriter.addAttribute( "draw:style-name", styleName );
 
@@ -628,7 +628,7 @@ QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
         if ( !m_soundFileName.isEmpty() && m_soundEffect )
         {
             QBuffer buffer;
-            buffer.open( IO_WriteOnly );
+            buffer.open( QIODevice::WriteOnly );
             KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
             elementWriter.startElement( "presentation:sound" );
             elementWriter.addAttribute( "xlink:href", m_soundFileName );
@@ -1022,7 +1022,7 @@ void KPrPage::pasteObjs( const QByteArray & data,int nbCopy, double angle,
             QDomDocument domDoc;
             if ( !domDoc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn ) )
             {
-                kdError (30003) << "Parsing Error! Aborting! (in KPrPage::PasteObj)" << endl
+                kError (30003) << "Parsing Error! Aborting! (in KPrPage::PasteObj)" << endl
                                 << "  Line: " << errorLine << " Column: " << errorColumn << endl
                                 << "  Message: " << errorMsg << endl;
                 delete store;
@@ -1238,7 +1238,7 @@ void KPrPage::lowerObjs(bool backward)
             createCmd = true;
             _new.take( i );
             if ( backward )
-                _new.insert(QMAX(i-1,0) ,  kpobject);
+                _new.insert(qMax(i-1,0) ,  kpobject);
             else
                 _new.insert( insertPos++, kpobject );
         }
@@ -1278,7 +1278,7 @@ void KPrPage::raiseObjs(bool forward)
             createCmd = true;
             _new.take( i );
             if ( forward )
-                _new.insert( QMIN( i+1, size - 1),  kpobject);
+                _new.insert( qMin( i+1, size - 1),  kpobject);
             else
                 _new.insert( insertPos--, kpobject );
         }
@@ -1599,14 +1599,14 @@ void KPrPage::insertPicture( const QString &filename, const KoPoint &pos )
     if ( kppixmapobject->getSize().width() > s.width() )
         fakt = (float)s.width() / (float)kppixmapobject->getSize().width();
     if ( kppixmapobject->getSize().height() > s.height() )
-        fakt = QMIN( fakt, (float)s.height() / (float)kppixmapobject->getSize().height() );
+        fakt = qMin( fakt, (float)s.height() / (float)kppixmapobject->getSize().height() );
 
-    //kdDebug(33001) << k_funcinfo << "Fakt: " << fakt << endl;
+    //kDebug(33001) << k_funcinfo << "Fakt: " << fakt << endl;
 
     if ( fakt < 1 ) {
         int w = (int)( fakt * (float)kppixmapobject->getSize().width() );
         int h = (int)( fakt * (float)kppixmapobject->getSize().height() );
-        //kdDebug(33001) << k_funcinfo << "Size: " << w << ", " << h << endl;
+        //kDebug(33001) << k_funcinfo << "Size: " << w << ", " << h << endl;
         kppixmapobject->setOrig(0,0);
         kppixmapobject->setSize(w, h);
         m_doc->repaint( false );
@@ -1913,7 +1913,7 @@ QString KPrPage::pageTitle( const QString &_title ) const
     QString txt;
     if ( textobject->textDocument()->firstParag() )
         txt = textobject->textDocument()->firstParag()->toString();
-    if ( txt.stripWhiteSpace().isEmpty() || txt=="\n" )
+    if ( txt.trimmed().isEmpty() || txt=="\n" )
         return title;
     return txt;
 }

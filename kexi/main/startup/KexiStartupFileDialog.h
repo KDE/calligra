@@ -69,7 +69,7 @@ public:
 	QString currentFileName();
 
 //#ifndef Q_WS_WIN
-//	KURLComboBox *locationWidget() const;
+//	KUrlComboBox *locationWidget() const;
 //#endif
 	//! just sets locationWidget()->setCurrentText(fn)
 	//! (and something similar on win32)

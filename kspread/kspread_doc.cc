@@ -260,7 +260,7 @@ Doc::~Doc()
   delete d->dcop;
   d->s_docs.remove( this );
 
-  kdDebug(36001) << "alive 1" << endl;
+  kDebug(36001) << "alive 1" << endl;
 
   delete d->commandHistory;
 
@@ -847,7 +847,7 @@ void Doc::loadOasisIgnoreList( const KoOasisSettings& settings )
     if ( !configurationSettings.isNull() )
     {
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        //kdDebug()<<" ignorelist :"<<ignorelist<<endl;
+        //kDebug()<<" ignorelist :"<<ignorelist<<endl;
         d->spellListIgnoreAll = QStringList::split( ',', ignorelist );
     }
 }
@@ -941,7 +941,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 
     if ( body.isNull() )
     {
-        kdError(32001) << "No office:spreadsheet found!" << endl;
+        kError(32001) << "No office:spreadsheet found!" << endl;
         QDomElement childElem;
         QString localName;
         forEachElement( childElem, realBody ) {
@@ -972,7 +972,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 	if ( it.current()->hasAttributeNS( KoXmlNS::style , "name" ) )
 	{
 		QString name = it.current()->attributeNS( KoXmlNS::style , "name" , QString::null );
-		kdDebug() << "Preloading style: " << name << endl;
+		kDebug() << "Preloading style: " << name << endl;
 		styleElements.insert( name , new Style());
 		styleElements[name]->loadOasisStyle( oasisStyles , *(it.current()) );
 	}
@@ -1006,7 +1006,7 @@ bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const 
 
 
     //display loading time
-    kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+    kDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
     deleteLoadingInfo();
     return true;
 }
@@ -1150,7 +1150,7 @@ bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
   initConfig();
   emit sigProgress(-1);
 
-   kdDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+   kDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
 
   emit sig_refreshView();
 
@@ -1229,7 +1229,7 @@ void Doc::loadPaper( QDomElement const & paper )
 
 bool Doc::completeLoading( KoStore* /* _store */ )
 {
-  kdDebug(36001) << "------------------------ COMPLETING --------------------" << endl;
+  kDebug(36001) << "------------------------ COMPLETING --------------------" << endl;
 
   d->isLoading = false;
 
@@ -1239,7 +1239,7 @@ bool Doc::completeLoading( KoStore* /* _store */ )
   for (; it.current(); ++it )
     ((View*)it.current())->initialPosition();
 
-  kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
+  kDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
   setModified( false );
   return true;
@@ -1572,10 +1572,10 @@ void Doc::enableRedo( bool _b )
 void Doc::paintContent( QPainter& painter, const QRect& rect,
                                bool transparent, double zoomX, double /*zoomY*/ )
 {
-    kdDebug(36001) << "paintContent() called on " << rect << endl;
+    kDebug(36001) << "paintContent() called on " << rect << endl;
 
   //  ElapsedTime et( "Doc::paintContent1" );
-    //kdDebug(36001) << "Doc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+    //kDebug(36001) << "Doc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
     // save current zoom
     int oldZoom = m_zoom;
@@ -1596,16 +1596,16 @@ void Doc::paintContent( QPainter& painter, const QRect& rect,
         d_zoom *= ( zoomX / m_zoomedResolutionX );
 
     // KSpread support zoom, therefore no need to scale with worldMatrix
-    QWMatrix matrix = painter.worldMatrix();
+    QMatrix matrix = painter.worldMatrix();
     matrix.setMatrix( 1, 0, 0, 1, matrix.dx(), matrix.dy() );
     QRect prect = rect;
     prect.setWidth( (int) (prect.width() * painter.worldMatrix().m11()) );
     prect.setHeight( (int) (prect.height() * painter.worldMatrix().m22()) );
     setZoomAndResolution( (int) ( d_zoom * 100 ), KoGlobal::dpiX(), KoGlobal::dpiY() );
     // paint the content, now zoom is correctly set
-    kdDebug(36001)<<"paintContent-------------------------------------\n";
+    kDebug(36001)<<"paintContent-------------------------------------\n";
     painter.save();
-    painter.setWorldMatrix( matrix );
+    painter.setMatrix( matrix );
     paintContent( painter, prect, transparent, sheet, false );
     painter.restore();
 
@@ -1677,7 +1677,7 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   if ( rgn.isEmpty() )
     rgn = QRegion( QRect( 0, 0, viewRect.width(), viewRect.height() ) );
 
-  QWMatrix matrix;
+  QMatrix matrix;
   if ( view ) {
     matrix.scale( zoomedResolutionX(),
                   zoomedResolutionY() );
@@ -1956,8 +1956,8 @@ QDomElement Doc::saveAreaName( QDomDocument& doc )
 void Doc::loadOasisCellValidation( const QDomElement&body )
 {
     QDomNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
-    kdDebug()<<"void Doc::loadOasisCellValidation( const QDomElement&body ) \n";
-    kdDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
+    kDebug()<<"void Doc::loadOasisCellValidation( const QDomElement&body ) \n";
+    kDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
     if ( !validation.isNull() )
     {
         QDomNode n = validation.firstChild();
@@ -1966,13 +1966,13 @@ void Doc::loadOasisCellValidation( const QDomElement&body )
             if ( n.isElement() )
             {
                 QDomElement element = n.toElement();
-                //kdDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
+                //kDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
                 if ( element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table ) {
                     d->m_loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString::null ), element );
-                    kdDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
+                    kDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString::null )<<endl;
                 }
                 else {
-                    kdDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+                    kDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
                 }
             }
         }
@@ -2001,18 +2001,18 @@ void Doc::saveOasisAreaName( KoXmlWriter & xmlWriter )
 
 void Doc::loadOasisAreaName( const QDomElement& body )
 {
-    kdDebug()<<"void Doc::loadOasisAreaName( const QDomElement& body ) \n";
+    kDebug()<<"void Doc::loadOasisAreaName( const QDomElement& body ) \n";
     QDomNode namedAreas = KoDom::namedItemNS( body, KoXmlNS::table, "named-expressions" );
     if ( !namedAreas.isNull() )
     {
-        kdDebug()<<" area name exist \n";
+        kDebug()<<" area name exist \n";
         QDomNode area = namedAreas.firstChild();
         while ( !area.isNull() )
         {
             QDomElement e = area.toElement();
             if ( e.isNull() || !e.hasAttributeNS( KoXmlNS::table, "name" ) || !e.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
             {
-                kdDebug() << "Reading in named area failed" << endl;
+                kDebug() << "Reading in named area failed" << endl;
                 area = area.nextSibling();
                 continue;
             }
@@ -2020,9 +2020,9 @@ void Doc::loadOasisAreaName( const QDomElement& body )
             // TODO: what is: sheet:base-cell-address
             QString name  = e.attributeNS( KoXmlNS::table, "name", QString::null );
             QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString::null );
-            kdDebug()<<"area name : "<<name<<" range :"<<range<<endl;
+            kDebug()<<"area name : "<<name<<" range :"<<range<<endl;
             d->m_loadingInfo->addWordInAreaList( name );
-            kdDebug() << "Reading in named area, name: " << name << ", area: " << range << endl;
+            kDebug() << "Reading in named area, name: " << name << ", area: " << range << endl;
 
             range = Oasis::decodeFormula( range );
 
@@ -2034,13 +2034,13 @@ void Doc::loadOasisAreaName( const QDomElement& body )
                 if ( n > 0 )
                     range = range + ":" + range.right( range.length() - n - 1);
 
-                kdDebug() << "=> Area: " << range << endl;
+                kDebug() << "=> Area: " << range << endl;
             }
 
             Range p( range );
 
             addAreaName( p.range(), name, p.sheetName() );
-            kdDebug() << "Area range: " << p.sheetName() << endl;
+            kDebug() << "Area range: " << p.sheetName() << endl;
 
             area = area.nextSibling();
         }
@@ -2116,9 +2116,9 @@ void Doc::emitBeginOperation(bool waitCursor)
     //are expected to be completed in a short time anyway.
     QCursor* activeOverride = QApplication::overrideCursor();
 
-    if (waitCursor && ( (!activeOverride) || (activeOverride->shape() != Qt::waitCursor.shape()) )  )
+    if (waitCursor && ( (!activeOverride) || (activeOverride->shape() != Qt::WaitCursor.shape()) )  )
     {
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
     }
 
 //    /* just duplicate the current cursor on the stack, then */

@@ -385,7 +385,7 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 
 		VObject::saveOasis( store, docWriter, mainStyles, index );
 
-		QWMatrix tmpMat;
+		QMatrix tmpMat;
 		tmpMat.scale( 1, -1 );
 		tmpMat.translate( 0, -document()->height() );
 	
@@ -402,7 +402,7 @@ VPath::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) co
 {
 	if( m_fill )
 	{
-		QWMatrix mat;
+		QMatrix mat;
 		mat.scale( 1, -1 );
 		mat.translate( 0, -document()->height() );
 
@@ -422,14 +422,14 @@ VPath::transformByViewbox( const QDomElement &element, QString viewbox )
 	if( ! viewbox.isEmpty() )
 	{
 		// allow for viewbox def with ',' or whitespace
-		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ' ).simplifyWhiteSpace() );
+		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ' ).simplified() );
 
 		double w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
 		double h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
 		double x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) );
 		double y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
 
-		QWMatrix mat;
+		QMatrix mat;
 		mat.translate( x-KoUnit::parseValue( points[0] ), y-KoUnit::parseValue( points[1] ) );
 		mat.scale( w / KoUnit::parseValue( points[2] ) , h / KoUnit::parseValue( points[3] ) );
 		VTransformCmd cmd( 0L, mat );
@@ -532,7 +532,7 @@ VPath::loadSvgPath( const QString &d )
 {
 	//QTime s;s.start();
 	parseSVG( d, true );
-	//kdDebug(38000) << "Parsing time : " << s.elapsed() << endl;
+	//kDebug(38000) << "Parsing time : " << s.elapsed() << endl;
 }
 
 void
@@ -591,10 +591,10 @@ VPath::transformOasis( const QString &transform )
 	cmd.visitVPath( *this );
 }
 
-QWMatrix
+QMatrix
 VPath::parseTransform( const QString &transform )
 {
-	QWMatrix result;
+	QMatrix result;
 
 	// Split string for handling 1 transform statement at a time
 	QStringList subtransforms = QStringList::split(')', transform);
@@ -604,8 +604,8 @@ VPath::parseTransform( const QString &transform )
 	{
 		QStringList subtransform = QStringList::split('(', (*it));
 
-		subtransform[0] = subtransform[0].stripWhiteSpace().lower();
-		subtransform[1] = subtransform[1].simplifyWhiteSpace();
+		subtransform[0] = subtransform[0].trimmed().lower();
+		subtransform[1] = subtransform[1].simplified();
 		QRegExp reg("[,( ]");
 		QStringList params = QStringList::split(reg, subtransform[1]);
 
@@ -656,10 +656,10 @@ VPath::parseTransform( const QString &transform )
 	return result;
 }
 
-QWMatrix
+QMatrix
 VPath::parseOasisTransform( const QString &transform )
 {
-	QWMatrix result;
+	QMatrix result;
 
 	// Split string for handling 1 transform statement at a time
 	QStringList subtransforms = QStringList::split(')', transform);
@@ -669,8 +669,8 @@ VPath::parseOasisTransform( const QString &transform )
 	{
 		QStringList subtransform = QStringList::split('(', (*it));
 
-		subtransform[0] = subtransform[0].stripWhiteSpace().lower();
-		subtransform[1] = subtransform[1].simplifyWhiteSpace();
+		subtransform[0] = subtransform[0].trimmed().lower();
+		subtransform[1] = subtransform[1].simplified();
 		QRegExp reg("[,( ]");
 		QStringList params = QStringList::split(reg, subtransform[1]);
 
@@ -737,7 +737,7 @@ VPath::buildSvgTransform() const
 }
 
 QString 
-VPath::buildSvgTransform( const QWMatrix &mat ) const
+VPath::buildSvgTransform( const QMatrix &mat ) const
 {
 	QString transform;
 	if( !mat.isIdentity() )
@@ -759,7 +759,7 @@ VPath::buildOasisTransform() const
 }
 
 QString 
-VPath::buildOasisTransform( const QWMatrix &mat ) const
+VPath::buildOasisTransform( const QMatrix &mat ) const
 {
 	QString transform;
 	if( !mat.isIdentity() )

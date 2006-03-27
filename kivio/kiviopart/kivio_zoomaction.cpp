@@ -54,7 +54,7 @@ void ZoomAction::slotActivated( const QString& text )
   regexp.search(text);
   bool ok=false;
   // Use templates, not macro to avoid to call the functiosn many times.
-  const int zoom=kMin(10000,kMax(10,regexp.cap(1).toInt(&ok)));
+  const int zoom=kMin(10000,qMax(10,regexp.cap(1).toInt(&ok)));
   insertItem(zoom);
 
   emit zoomActivated(zoom);

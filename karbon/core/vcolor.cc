@@ -91,9 +91,9 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 		}
 		else if( m_colorSpace == cmyk )
 		{
-			m_value[0] = 1.0 - kMin( 1.0f, m_value[0] + m_value[3] );
-			m_value[1] = 1.0 - kMin( 1.0f, m_value[1] + m_value[3] );
-			m_value[2] = 1.0 - kMin( 1.0f, m_value[2] + m_value[3] );
+			m_value[0] = 1.0 - qMin( 1.0f, m_value[0] + m_value[3] );
+			m_value[1] = 1.0 - qMin( 1.0f, m_value[1] + m_value[3] );
+			m_value[2] = 1.0 - qMin( 1.0f, m_value[2] + m_value[3] );
 		}
 		else if( m_colorSpace == hsb )
 		{
@@ -276,7 +276,7 @@ VColor::convertToColorSpace( const VColorSpace colorSpace )
 		else if( m_colorSpace == cmyk )
 		{
 			m_value[0] =
-				1.0 - kMin( 1.0,
+				1.0 - qMin( 1.0,
 					0.3  * m_value[0] +
 					0.59 * m_value[1] +
 					0.11 * m_value[2] +

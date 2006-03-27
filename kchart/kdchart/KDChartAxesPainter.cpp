@@ -99,9 +99,9 @@ QString dateTimeToString( const QDateTime& dt )  // ISODate is returned
 {
     QString date;
     QString month(
-            QString::number( dt.date().month() ).rightJustify( 2, '0' ) );
+            QString::number( dt.date().month() ).rightJustified( 2, '0' ) );
     QString day(
-            QString::number( dt.date().day() ).rightJustify( 2, '0' ) );
+            QString::number( dt.date().day() ).rightJustified( 2, '0' ) );
     date = QString::number( dt.date().year() ) + "-" + month + "-" + day;
     QString time;
     time.sprintf( "%.2d:%.2d:%.2d",
@@ -174,7 +174,7 @@ bool KDChartAxesPainter::calculateAllAxesLabelTextsAndCalcValues(
 {
     uint iAxis;
 
-    double averageValueP1000 = QMIN(areaWidthP1000, areaHeightP1000);//( areaWidthP1000 + areaHeightP1000 ) / 2.0;
+    double averageValueP1000 = qMin(areaWidthP1000, areaHeightP1000);//( areaWidthP1000 + areaHeightP1000 ) / 2.0;
     // length of little delimiter-marks indicating axis scaling
     delimLen = 20.0 * averageValueP1000; // per mille of area
 
@@ -376,7 +376,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
 
     double areaWidthP1000 = _logicalWidth / 1000.0;
     double areaHeightP1000 = _logicalHeight / 1000.0;
-    double averageValueP1000 = QMIN(areaWidthP1000, areaHeightP1000);//( areaWidthP1000 + areaHeightP1000 ) / 2.0;
+    double averageValueP1000 = qMin(areaWidthP1000, areaHeightP1000);//( areaWidthP1000 + areaHeightP1000 ) / 2.0;
     // length of little delimiter-marks indicating axis scaling
     double delimLen;
 
@@ -1168,7 +1168,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                     double pXYDelta = fabs( pXDelta ) + fabs( pYDelta );
 
                     if( 0.0 == para.trueAxisDeltaPixels() )
-                        ( ( KDChartAxisParams& ) para ).setTrueAxisDeltaPixels( QMIN(_logicalWidth, _logicalHeight) / 150 );
+                        ( ( KDChartAxisParams& ) para ).setTrueAxisDeltaPixels( qMin(_logicalWidth, _logicalHeight) / 150 );
 
                     bool dtGoDown = cv.dtLow > cv.dtHigh;
                     int  mult = dtGoDown ? -1 : 1;
@@ -1287,7 +1287,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                         QPoint( p1X+pXD + pXDelta, p1Y+pYD + pYDelta ) );
                         painter->drawText( p1X+pXD-orgXD, p1Y+pYD-orgYD,
                         pTextsW, pTextsH,
-                        textAlign | Qt::DontClip,
+                        textAlign | Qt::TextDontClip,
                         QString::number( dt.time().second() ) );
                         pXD += orgXD;
                         pYD += orgYD;
@@ -1512,7 +1512,7 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                            painter->setPen( oldPen );
                            fabs((0.0 == pXDelta) ? pTextsW : (p2X - pWeekX)),
                            fabs((0.0 == pYDelta) ? pTextsH : (p2Y - pWeekY)),
-                           textAlign | Qt::DontClip,
+                           textAlign | Qt::TextDontClip,
                            QString::number( dt.date().week() ) );
                            if ( para.axisShowGrid() ){
                            if( !dayPaint && 40 < pXYDelta  ){
@@ -1843,30 +1843,30 @@ void KDChartAxesPainter::paintAxes( QPainter* painter,
                         xFactor =  1.0;
                         yFactor =  0.0;
                         axisZeroLineStart = axisZeroLineStartY;
-                        minCoord = QMIN( cv.orig.y(), cv.dest.y() );
-                        maxCoord = QMAX( cv.orig.y(), cv.dest.y() );
+                        minCoord = qMin( cv.orig.y(), cv.dest.y() );
+                        maxCoord = qMax( cv.orig.y(), cv.dest.y() );
 
                         break;
                     case KDChartAxisParams::AxisPosRight:
                         xFactor = -1.0;
                         yFactor =  0.0;
                         axisZeroLineStart = axisZeroLineStartY;
-                        minCoord = QMIN( cv.orig.y(), cv.dest.y() );
-                        maxCoord = QMAX( cv.orig.y(), cv.dest.y() );
+                        minCoord = qMin( cv.orig.y(), cv.dest.y() );
+                        maxCoord = qMax( cv.orig.y(), cv.dest.y() );
                         break;
                     case KDChartAxisParams::AxisPosTop:
                         xFactor =  0.0;
                         yFactor =  1.0;
                         axisZeroLineStart = axisZeroLineStartX;
-                        minCoord = QMIN( cv.orig.x(), cv.dest.x() );
-                        maxCoord = QMAX( cv.orig.x(), cv.dest.x() );
+                        minCoord = qMin( cv.orig.x(), cv.dest.x() );
+                        maxCoord = qMax( cv.orig.x(), cv.dest.x() );
                         break;
                     case KDChartAxisParams::AxisPosBottom:
                         xFactor =  0.0;
                         yFactor = -1.0;
                         axisZeroLineStart = axisZeroLineStartX;
-                        minCoord = QMIN( cv.orig.x(), cv.dest.x() );
-                        maxCoord = QMAX( cv.orig.x(), cv.dest.x() );
+                        minCoord = qMin( cv.orig.x(), cv.dest.x() );
+                        maxCoord = qMax( cv.orig.x(), cv.dest.x() );
                         break;
                     default:
                         xFactor =  0.0;
@@ -1917,7 +1917,7 @@ cv2.orig.x(), cv2.orig.y(), pa2.axisTrueLineWidth() );
         QPen pen( QColor( (c1.red()   + c2.red())  /2,
                           (c1.green() + c2.green())/2,
                           (c1.blue()  + c2.blue()) /2 ),
-                  QMIN(pa1.axisTrueLineWidth(), pa2.axisTrueLineWidth()) );
+                  qMin(pa1.axisTrueLineWidth(), pa2.axisTrueLineWidth()) );
         pen.setJoinStyle( Qt::MiterJoin );
         painter->setPen( pen );
         QPointArray a;
@@ -2119,7 +2119,7 @@ void KDChartAxesPainter::calculateLabelTexts(
             int dds = (KDCHART_ALL_DATASETS != dataDataset)
                     ? dataDataset
                     : 0;
-            dataDataset  = QMAX( ds, dds );
+            dataDataset  = qMax( ds, dds );
         }
         if(    (    KDCHART_ALL_DATASETS != dataset2
                  && KDCHART_NO_DATASET   != dataset2 )
@@ -2131,7 +2131,7 @@ void KDChartAxesPainter::calculateLabelTexts(
             int dds2 = (KDCHART_ALL_DATASETS != dataDataset2)
                      ? dataDataset2
                      : KDCHART_MAX_AXES-1;
-            dataDataset2  = QMIN( ds2, dds2 );
+            dataDataset2  = qMin( ds2, dds2 );
         }
     }
     else {
@@ -2617,7 +2617,7 @@ void KDChartAxesPainter::calculateLabelTexts(
             if( adjustTheValues ){
                 nDelta = fabs( trueDelta );
                 pDelimDelta = trueDeltaPix;
-                nLow = QMIN( para.trueAxisLow(), para.trueAxisHigh() );
+                nLow = qMin( para.trueAxisLow(), para.trueAxisHigh() );
                 //qDebug("\nsearching: para.trueAxisLow() %f    para.trueAxisHigh() %f",para.trueAxisLow(),para.trueAxisHigh());
                 double orgLow( nLow );
                 modf( nLow / nDelta, &nLow );
@@ -2680,7 +2680,7 @@ void KDChartAxesPainter::calculateLabelTexts(
                         if ( dataDataset == KDCHART_ALL_DATASETS ) {
                             if( bIsDouble ){
                                 nLow = bStackedMode
-                                     ? QMIN( data.minColSum(), 0.0 )
+                                     ? qMin( data.minColSum(), 0.0 )
                                      : data.minValue( coordinate,
                                                       isLogarithmic );
                                 //qDebug("\n1:      nLow:  %f", nLow );
@@ -2691,7 +2691,7 @@ void KDChartAxesPainter::calculateLabelTexts(
                         } else {
                             if( bIsDouble ){
                                 nLow = bStackedMode
-                                     ? QMIN( data.minColSum( dataDataset, dataDataset2 ),
+                                     ? qMin( data.minColSum( dataDataset, dataDataset2 ),
                                              0.0 )
                                      : data.minInRows( dataDataset,dataDataset2,
                                                        coordinate,
@@ -2716,7 +2716,7 @@ void KDChartAxesPainter::calculateLabelTexts(
                         if ( dataDataset == KDCHART_ALL_DATASETS ) {
                             if( bIsDouble ){
                                 nHigh = bStackedMode
-                                      ? QMAX( data.maxColSum(), 0.0 )
+                                      ? qMax( data.maxColSum(), 0.0 )
                                       : data.maxValue( coordinate );
 //qDebug("\nnHigh %g", nHigh);
                             }else{
@@ -2725,7 +2725,7 @@ void KDChartAxesPainter::calculateLabelTexts(
                         } else {
                             if( bIsDouble )
                                 nHigh = bStackedMode
-                                      ? QMAX( data.maxColSum( dataDataset, dataDataset2 ),
+                                      ? qMax( data.maxColSum( dataDataset, dataDataset2 ),
                                               0.0 )
                                       : data.maxInRows( dataDataset,dataDataset2,
                                                         coordinate );
@@ -3601,7 +3601,7 @@ QString KDChartAxesPainter::truncateBehindComma( const double nVal,
     const bool bAutoDelta     = KDCHART_AXIS_LABELS_AUTO_DELTA == nDelta;
     QString sVal;
     sVal.setNum( nVal, 'f', bUseAutoDigits ? nTrustedPrecision
-                                           : QMIN(behindComma, nTrustedPrecision) );
+                                           : qMin(behindComma, nTrustedPrecision) );
     //qDebug("nVal: %f    sVal: "+sVal, nVal );
     //qDebug( QString("                     %1").arg(sVal));
     if ( bUseAutoDigits ) {
@@ -3965,8 +3965,8 @@ void KDChartAxesPainter::dtAddMonths( const QDateTime& org, const int months, QD
         }
         mi += md;
     }
-    // QMIN takes care for intercalary day
-    dest = QDateTime( QDate( y,m,QMIN( d, QDate( y,m,1 ).daysInMonth() ) ),
+    // qMin takes care for intercalary day
+    dest = QDateTime( QDate( y,m,qMin( d, QDate( y,m,1 ).daysInMonth() ) ),
             org.time() );
     //qDebug(".. KDChartAxesPainter::dtAddMonths() done.");
 }
@@ -3979,8 +3979,8 @@ void KDChartAxesPainter::dtAddYears( const QDateTime& org, const int years, QDat
     int m = org.date().month();
     int y = org.date().year() + years;
     dest.setTime( org.time() );
-    // QMIN takes care for intercalary day
-    dest = QDateTime( QDate( y,m,QMIN( d, QDate( y,m,d ).daysInMonth() ) ),
+    // qMin takes care for intercalary day
+    dest = QDateTime( QDate( y,m,qMin( d, QDate( y,m,d ).daysInMonth() ) ),
             org.time() );
     //qDebug(".. KDChartAxesPainter::dtAddYears() done.");
 }
@@ -4350,7 +4350,7 @@ void KDChartAxesPainter::paintData( QPainter* painter,
 
             if(    axisDatasetStart >= chartDatasetStart
                 && axisDatasetStart <= chartDatasetEnd )
-                datasetStart = QMAX( axisDatasetStart, chartDatasetStart );
+                datasetStart = qMax( axisDatasetStart, chartDatasetStart );
             else if(    axisDatasetStart <= chartDatasetStart
                      && axisDatasetEnd   >= chartDatasetStart )
                 datasetStart = chartDatasetStart;
@@ -4358,7 +4358,7 @@ void KDChartAxesPainter::paintData( QPainter* painter,
                 datasetStart = 20;
             if(    axisDatasetEnd >= chartDatasetStart
                 && axisDatasetEnd <= chartDatasetEnd )
-                datasetEnd = QMIN( axisDatasetEnd, chartDatasetEnd );
+                datasetEnd = qMin( axisDatasetEnd, chartDatasetEnd );
             else if(    axisDatasetEnd   >= chartDatasetEnd
                      && axisDatasetStart <= chartDatasetEnd )
                 datasetEnd = chartDatasetEnd;

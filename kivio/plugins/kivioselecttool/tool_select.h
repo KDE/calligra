@@ -29,7 +29,7 @@ class KivioView;
 class KivioPage;
 class QMouseEvent;
 class QKeyEvent;
-class KPopupMenu;
+class KMenu;
 class KRadioAction;
 class KAction;
 

@@ -37,7 +37,7 @@ KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
 }
 
 KexiSmallToolButton::KexiSmallToolButton(QWidget* parent, const QString& text,
-	const QIconSet& iconSet, const char* name)
+	const QIcon& iconSet, const char* name)
  : QToolButton(parent, name)
 {
 	init();
@@ -78,7 +78,7 @@ void KexiSmallToolButton::init()
 	setAutoRaise(true);
 }
 
-void KexiSmallToolButton::update(const QString& text, const QIconSet& iconSet, bool tipToo)
+void KexiSmallToolButton::update(const QString& text, const QIcon& iconSet, bool tipToo)
 {
 	int width = 0;
 	if (text.isEmpty()) {
@@ -98,7 +98,7 @@ void KexiSmallToolButton::update(const QString& text, const QIconSet& iconSet, b
 	setFixedWidth( width );
 }
 
-void KexiSmallToolButton::setIconSet( const QIconSet& iconSet )
+void KexiSmallToolButton::setIconSet( const QIcon& iconSet )
 {
 	update(textLabel(), iconSet);
 }

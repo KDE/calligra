@@ -48,9 +48,9 @@ KoGlobal::KoGlobal()
     : m_pointSize( -1 ), m_kofficeConfig( 0L )
 {
     // Install the libkoffice* translations
-    KGlobal::locale()->insertCatalogue("koffice");
+    KGlobal::locale()->insertCatalog("koffice");
 
-    KImageIO::registerFormats();
+    
 
     // Tell KStandardDirs about the koffice prefix
     KGlobal::dirs()->addPrefix(PREFIX);
@@ -87,8 +87,8 @@ QFont KoGlobal::_defaultFont()
         Q_ASSERT( m_pointSize != -1 );
         font.setPointSize( m_pointSize );
     }
-    //kdDebug()<<k_funcinfo<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize()<<endl;
-    //kdDebug()<<k_funcinfo<<"font.name() :"<<font.family ()<<endl;
+    //kDebug()<<k_funcinfo<<"QFontInfo(font).pointSize() :"<<QFontInfo(font).pointSize()<<endl;
+    //kDebug()<<k_funcinfo<<"font.name() :"<<font.family ()<<endl;
     return font;
 }
 
@@ -195,7 +195,7 @@ KConfig* KoGlobal::_kofficeConfig()
 
 void KoGlobal::setDPI( int x, int y )
 {
-    //kdDebug() << k_funcinfo << x << "," << y << endl;
+    //kDebug() << k_funcinfo << x << "," << y << endl;
     KoGlobal* s = self();
     s->m_dpiX = x;
     s->m_dpiY = y;

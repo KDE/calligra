@@ -50,7 +50,7 @@ void ValueParser::parse (const QString& str, Cell *cell)
     return;
   }
 
-  QString strStripped = str.stripWhiteSpace();
+  QString strStripped = str.trimmed();
   
   // Try parsing as various datatypes, to find the type of the cell
   
@@ -101,7 +101,7 @@ Value ValueParser::parse (const QString &str)
 
   bool ok;
   
-  QString strStripped = str.stripWhiteSpace();
+  QString strStripped = str.trimmed();
   // Try parsing as various datatypes, to find the type of the string
   
   // First as number
@@ -201,7 +201,7 @@ Value ValueParser::tryParseBool (const QString& str, bool *ok)
 
 double ValueParser::readNumber(const QString &_str, bool * ok, bool * isInt)
 {
-  QString str = _str.stripWhiteSpace();
+  QString str = _str.trimmed();
   bool neg = str.find(parserLocale->negativeSign()) == 0;
   if (neg)
 	str.remove( 0, parserLocale->negativeSign().length() );
@@ -276,7 +276,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
   QString str2;
   if( str.at(str.length()-1)=='%')
   {
-    str2 = str.left (str.length()-1).stripWhiteSpace();
+    str2 = str.left (str.length()-1).trimmed();
     percent = true;
   }
   else
@@ -300,7 +300,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
   {
     if (percent)
     {
-      //kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+      //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
       //    "' successfully parsed as percentage: " << val << "%" << endl;
       value.setValue (val / 100.0);
       value.setFormat (Value::fmt_Percent);
@@ -308,7 +308,7 @@ Value ValueParser::tryParseNumber (const QString& str, bool *ok)
     }
     else
     {
-      //kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+      //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
       //    "' successfully parsed as number: " << val << endl;
 	  if (isInt)
 		value.setValue (static_cast<long> (val));
@@ -356,7 +356,7 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
         for ( ; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos )
           fmt.remove( yearPos, 1 );
       }
-      //kdDebug(36001) << "Cell::tryParseDate short format w/o date: " << fmt << endl;
+      //kDebug(36001) << "Cell::tryParseDate short format w/o date: " << fmt << endl;
       tmpDate = parserLocale->readDate( str, fmt, &valid );
     }
   }
@@ -439,7 +439,7 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
       if((pos=str.find(stringPm))!=-1)
       {
           QString tmp=str.mid(0,str.length()-stringPm.length());
-          tmp=tmp.simplifyWhiteSpace();
+          tmp=tmp.simplified();
           tm = parserLocale->readTime(tmp+" "+stringPm, &valid);
           if (!valid)
               tm = parserLocale->readTime(tmp+":00 "+stringPm, &valid);
@@ -447,7 +447,7 @@ Value ValueParser::tryParseTime (const QString& str, bool *ok)
       else if((pos=str.find(stringAm))!=-1)
       {
           QString tmp = str.mid(0,str.length()-stringAm.length());
-          tmp = tmp.simplifyWhiteSpace();
+          tmp = tmp.simplified();
           tm = parserLocale->readTime (tmp + " " + stringAm, &valid);
           if (!valid)
               tm = parserLocale->readTime (tmp + ":00 " + stringAm, &valid);
@@ -476,8 +476,8 @@ QDateTime ValueParser::readTime (const QString & intstr, bool withSeconds,
     bool *ok, bool & duration)
 {
   duration = false;
-  QString str = intstr.simplifyWhiteSpace().lower();
-  QString format = parserLocale->timeFormat().simplifyWhiteSpace();
+  QString str = intstr.simplified().lower();
+  QString format = parserLocale->timeFormat().simplified();
   if ( !withSeconds )
   {
     int n = format.find("%S");

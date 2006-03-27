@@ -67,7 +67,7 @@ int KSpread::util_decodeColumnLabelText( const QString &_col )
         else if( _col[i] >= 'a' && _col[i] <= 'z' )
             col += counterColumn * ( _col[i].latin1() - 'A' - offset + 1 );
         else
-            kdDebug(36001) << "util_decodeColumnLabelText: Wrong characters in label text for col:'" << _col << "'" << endl;
+            kDebug(36001) << "util_decodeColumnLabelText: Wrong characters in label text for col:'" << _col << "'" << endl;
     }
     return col;
 }
@@ -237,13 +237,13 @@ void Point::init(const QString & _str)
     _columnFixed=false;
     _rowFixed=false;
 
-//    kdDebug(36001) <<"Point::init ("<<_str<<")"<<endl;
+//    kDebug(36001) <<"Point::init ("<<_str<<")"<<endl;
     _pos.setX(-1);
 
     uint len = _str.length();
     if ( !len )
     {
-  kdDebug(36001) << "Point::init: len = 0" << endl;
+  kDebug(36001) << "Point::init: len = 0" << endl;
   return;
     }
 
@@ -270,14 +270,14 @@ void Point::init(const QString & _str)
     // Malformed ?
     if ( p == len )
     {
-  kdDebug(36001) << "Point::init: no point after '$' (str: '" << str.mid( p ) << "'" << endl;
+  kDebug(36001) << "Point::init: no point after '$' (str: '" << str.mid( p ) << "'" << endl;
   return;
     }
     if ( str[p] < 'A' || str[p] > 'Z' )
     {
   if ( str[p] < 'a' || str[p] > 'z' )
   {
-      kdDebug(36001) << "Point::init: wrong first character in point (str: '" << str.mid( p ) << "'" << endl;
+      kDebug(36001) << "Point::init: wrong first character in point (str: '" << str.mid( p ) << "'" << endl;
       return;
   }
     }
@@ -291,7 +291,7 @@ void Point::init(const QString & _str)
   x = util_decodeColumnLabelText( str.mid( p, result - p ) ); // x is defined now
     else  // If there isn't any, then this is not a point -> return
     {
-  kdDebug(36001) << "Point::init: no number in string (str: '" << str.mid( p, result ) << "'" << endl;
+  kDebug(36001) << "Point::init: no number in string (str: '" << str.mid( p, result ) << "'" << endl;
   return;
     }
     p = result;
@@ -299,14 +299,14 @@ void Point::init(const QString & _str)
     //limit is KS_colMax
     if ( x > KS_colMax )
     {
-  kdDebug(36001) << "Point::init: column value too high (col: " << x << ")" << endl;
+  kDebug(36001) << "Point::init: column value too high (col: " << x << ")" << endl;
   return;
     }
 
     // Malformed ?
     if (p == len)
     {
-  kdDebug(36001) << "Point::init: p==len after cols" << endl;
+  kDebug(36001) << "Point::init: p==len after cols" << endl;
   return;
     }
 
@@ -317,7 +317,7 @@ void Point::init(const QString & _str)
   // Malformed ?
   if ( p == len )
   {
-      kdDebug(36001) << "Point::init: p==len after $ of row" << endl;
+      kDebug(36001) << "Point::init: p==len after $ of row" << endl;
       return;
   }
     }
@@ -329,7 +329,7 @@ void Point::init(const QString & _str)
     {
   if ( !isdigit( QChar(str[p++]) ) )
   {
-      kdDebug(36001) << "Point::init: no number" << endl;
+      kDebug(36001) << "Point::init: no number" << endl;
       return;
   }
     }
@@ -338,17 +338,17 @@ void Point::init(const QString & _str)
     int y = str.mid( p2, p-p2 ).toInt( &ok );
     if ( !ok )
     {
-  kdDebug(36001) << "Point::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << "'" << endl;
+  kDebug(36001) << "Point::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << "'" << endl;
   return;
     }
     if ( y > KS_rowMax )
     {
-  kdDebug(36001) << "Point::init: row value too high (row: " << y << ")" << endl;
+  kDebug(36001) << "Point::init: row value too high (row: " << y << ")" << endl;
   return;
     }
     if ( y <= 0 )
     {
-  kdDebug(36001) << "Point::init: y <= 0" << endl;
+  kDebug(36001) << "Point::init: y <= 0" << endl;
   return;
     }
     _pos = QPoint( x, y );
@@ -400,7 +400,7 @@ Point::Point( const QString & str, Map * map,
         //If the loop didn't return a sheet, better keep a string for isValid
         if ( _sheetName.isEmpty() )
         {
-            kdDebug(36001) << "Point: tableName is unknown" << endl;
+            kDebug(36001) << "Point: tableName is unknown" << endl;
             _sheetName = "unknown";
         }
     }
@@ -925,7 +925,7 @@ QString KSpread::convertRangeToRef( const QString & sheetName, const QRect & _ar
 
 QString KSpread::convertOasisPenToString( const QPen & pen )
 {
-    kdDebug()<<"convertOasisPenToString( const QPen & pen ) :"<<pen<<endl;
+    kDebug()<<"convertOasisPenToString( const QPen & pen ) :"<<pen<<endl;
     QString s = QString( "%1pt " ).arg( pen.width() );
     switch( pen.style() )
     {
@@ -948,7 +948,7 @@ QString KSpread::convertOasisPenToString( const QPen & pen )
         break;
     default: break;
     }
-    kdDebug()<<" convertOasisPenToString :"<<s<<endl;
+    kDebug()<<" convertOasisPenToString :"<<s<<endl;
     if ( pen.color().isValid() )
     {
         s+=' ';
@@ -987,7 +987,7 @@ QPen KSpread::convertOasisStringToPen( const QString &border )
     else if ( _style =="dot-dot-dash" )
         pen.setStyle( Qt::DashDotDotLine );
     else
-        kdDebug()<<" style undefined : "<<_style<<endl;
+        kDebug()<<" style undefined : "<<_style<<endl;
 
     if ( _color.isEmpty() )
         pen.setColor( QColor() );
@@ -1194,6 +1194,6 @@ QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale
   // TODO move Cell::convertFormulaToOasisFormat to this point
   //expr = "not here yet";
   //Q_UNUSED(locale);
-  kdDebug() << k_funcinfo << " not implemented"
+  kDebug() << k_funcinfo << " not implemented"
   qFatal(0);
 }*/

@@ -31,7 +31,7 @@ int tablesTest()
 		conn->debugError();
 		return 1;
 	}
-	kdDebug() << "-- PERSONS created --" << endl;
+	kDebug() << "-- PERSONS created --" << endl;
 	t_persons->debug();
 
 	if (!conn->insertRecord(*t_persons, QVariant(1), QVariant(27), QVariant("Jaroslaw"), QVariant("Staniek"))
@@ -40,10 +40,10 @@ int tablesTest()
 	  ||!conn->insertRecord(*t_persons, QVariant(4), QVariant(35), QVariant("John"), QVariant("Smith"))
 	   )
 	{
-		kdDebug() << "-- PERSONS data err. --" << endl;
+		kDebug() << "-- PERSONS data err. --" << endl;
 		return 1;
 	}
-	kdDebug() << "-- PERSONS data created --" << endl;
+	kDebug() << "-- PERSONS data created --" << endl;
 
 
 	KexiDB::TableSchema *t_cars = new KexiDB::TableSchema("cars");
@@ -58,7 +58,7 @@ int tablesTest()
 		conn->debugError();
 		return 1;
 	}
-	kdDebug() << "-- CARS created --" << endl;
+	kDebug() << "-- CARS created --" << endl;
 	if (!conn->insertRecord(*t_cars, QVariant(1), QVariant(1), QVariant("Fiat"))
 		||!conn->insertRecord(*t_cars, QVariant(2), QVariant(2), QVariant("Syrena"))
 		||!conn->insertRecord(*t_cars, QVariant(3), QVariant(3), QVariant("Chrysler"))
@@ -66,20 +66,20 @@ int tablesTest()
 		||!conn->insertRecord(*t_cars, QVariant(5), QVariant(4), QVariant("Volvo"))
 		)
 	{
-		kdDebug() << "-- CARS data err. --" << endl;
+		kDebug() << "-- CARS data err. --" << endl;
 		return 1;
 	}
-	kdDebug() << "-- CARS data created --" << endl;
+	kDebug() << "-- CARS data created --" << endl;
 
 	if (!conn->commitTransaction(t)) {
 		conn->debugError();
 		return 1;
 	}
 
-	kdDebug() << "NOW, TABLE LIST: " << endl;
+	kDebug() << "NOW, TABLE LIST: " << endl;
 	QStringList tnames = conn->tableNames();
 	for (QStringList::iterator it = tnames.begin(); it!=tnames.end(); ++it) {
-		kdDebug() << " - " << (*it) << endl;
+		kDebug() << " - " << (*it) << endl;
 	}
 
 

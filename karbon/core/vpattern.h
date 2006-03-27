@@ -49,7 +49,7 @@ public:
 	void save( QDomElement& element ) const;
 	void load( const QDomElement& element );
 
-	void transform( const QWMatrix& m );
+	void transform( const QMatrix& m );
 
 	// for KoIconItem
     QPixmap& pixmap() const ;

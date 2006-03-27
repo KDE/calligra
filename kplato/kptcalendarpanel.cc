@@ -130,8 +130,8 @@ CalendarPanel::eventFilter(QObject *o, QEvent *e )
    if ( e->type() == QEvent::KeyPress ) {
       QKeyEvent *k = (QKeyEvent *)e;
 
-      if ( (k->key() == Qt::Key_Prior) ||
-           (k->key() == Qt::Key_Next)  ||
+      if ( (k->key() == Qt::Key_PageUp) ||
+           (k->key() == Qt::Key_PageDown)  ||
            (k->key() == Qt::Key_Up)    ||
            (k->key() == Qt::Key_Down) )
        {
@@ -165,7 +165,7 @@ CalendarPanel::resizeEvent(QResizeEvent*)
     for(count=0; count<NoOfButtons; ++count) {
         if ( buttons[count] ) { // closeButton may be 0L
             sizes[count]=buttons[count]->sizeHint();
-            buttonHeight=QMAX(buttonHeight, sizes[count].height());
+            buttonHeight=qMax(buttonHeight, sizes[count].height());
         }
         else
             sizes[count] = QSize(0,0); // closeButton
@@ -175,7 +175,7 @@ CalendarPanel::resizeEvent(QResizeEvent*)
     for(count=0; count<NoOfButtons; ++count) {
         if(buttons[count]==selectMonth) {
             QSize metricBound = style().sizeFromContents(QStyle::CT_ToolButton, selectMonth, maxMonthRect);
-            sizes[count].setWidth(QMAX(metricBound.width(), maxMonthRect.width()+2*QApplication::style().pixelMetric(QStyle::PM_ButtonMargin)));
+            sizes[count].setWidth(qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style().pixelMetric(QStyle::PM_ButtonMargin)));
         }
     }
     // ----- center buttons
@@ -184,7 +184,7 @@ CalendarPanel::resizeEvent(QResizeEvent*)
     {
         w +=sizes[count].width();
     }
-    x = (QMAX(w, width())-w)/2;
+    x = (qMax(w, width())-w)/2;
 
     // ----- place the buttons:
     for(count=0; count<NoOfButtons; ++count)
@@ -207,7 +207,7 @@ CalendarPanel::resizeEvent(QResizeEvent*)
 void
 CalendarPanel::dateChangedSlot(QDate date)
 {
-    //kdDebug() << "CalendarPanel::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ")." << endl;
+    //kDebug() << "CalendarPanel::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ")." << endl;
     line->setText(KGlobal::locale()->formatDate(date, true));
     d->selectWeek->setText(i18n("Week %1").arg(weekOfYear(date)));
     selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(), false));
@@ -218,7 +218,7 @@ CalendarPanel::dateChangedSlot(QDate date)
 void
 CalendarPanel::tableClickedSlot()
 {
-  //kdDebug() << "CalendarPanel::tableClickedSlot: table clicked." << endl;
+  //kDebug() << "CalendarPanel::tableClickedSlot: table clicked." << endl;
   emit(dateSelected(table->getDate()));
   emit(tableClicked());
 }
@@ -249,7 +249,7 @@ CalendarPanel::setDate(const QDate& date)
 	line->setText(KGlobal::locale()->formatDate(date, true));
 	return true;
     } else {
-	kdDebug() << "CalendarPanel::setDate: refusing to set invalid date." << endl;
+	kDebug() << "CalendarPanel::setDate: refusing to set invalid date." << endl;
 	return false;
     }
 }
@@ -336,7 +336,7 @@ CalendarPanel::selectMonthClicked()
       day=date.day();
       // ----- construct a valid date in this month:
       date.setYMD(date.year(), month, 1);
-      date.setYMD(date.year(), month, QMIN(day, date.daysInMonth()));
+      date.setYMD(date.year(), month, qMin(day, date.daysInMonth()));
       // ----- set this month
       setDate(date);
     } else {
@@ -366,7 +366,7 @@ CalendarPanel::selectYearClicked()
       day=date.day();
       // ----- construct a valid date in this month:
       date.setYMD(year, date.month(), 1);
-      date.setYMD(year, date.month(), QMIN(day, date.daysInMonth()));
+      date.setYMD(year, date.month(), qMin(day, date.daysInMonth()));
       // ----- set this month
       setDate(date);
     } else {
@@ -399,12 +399,12 @@ CalendarPanel::lineEnterPressed()
   // -----
   if(val->date(line->text(), temp)==QValidator::Acceptable)
     {
-        //kdDebug() << "CalendarPanel::lineEnterPressed: valid date entered." << endl;
+        //kDebug() << "CalendarPanel::lineEnterPressed: valid date entered." << endl;
         emit(dateEntered(temp));
         setDate(temp);
     } else {
       KNotifyClient::beep();
-      //kdDebug() << "CalendarPanel::lineEnterPressed: invalid date entered." << endl;
+      //kDebug() << "CalendarPanel::lineEnterPressed: invalid date entered." << endl;
     }
 }
 
@@ -433,14 +433,14 @@ CalendarPanel::sizeHint() const
 
         if(buttons[count]==selectMonth) {
 	        QSize metricBound = style().sizeFromContents(QStyle::CT_ToolButton, selectMonth, maxMonthRect);
-            cx+=QMAX(metricBound.width(), maxMonthRect.width()+2*QApplication::style().pixelMetric(QStyle::PM_ButtonMargin));
+            cx+=qMax(metricBound.width(), maxMonthRect.width()+2*QApplication::style().pixelMetric(QStyle::PM_ButtonMargin));
     	} else {
 	        cx+=sizes[count].width();
 	    }
-        cy=QMAX(sizes[count].height(), cy);
+        cy=qMax(sizes[count].height(), cy);
     }
     // ----- calculate width hint:
-    cx=QMAX(cx, tableSize.width()); // line edit ignored
+    cx=qMax(cx, tableSize.width()); // line edit ignored
     // ----- calculate height hint:
     cy+=tableSize.height()+line->sizeHint().height();
     return QSize(cx, cy);
@@ -473,8 +473,8 @@ CalendarPanel::setFontSize(int s)
   for(int i=1; i <= 12; ++i)
     { // maxMonthRect is used by sizeHint()
       r=metrics.boundingRect(KGlobal::locale()->calendar()->monthName(i, false));
-      maxMonthRect.setWidth(QMAX(r.width(), maxMonthRect.width()));
-      maxMonthRect.setHeight(QMAX(r.height(),  maxMonthRect.height()));
+      maxMonthRect.setWidth(qMax(r.width(), maxMonthRect.width()));
+      maxMonthRect.setHeight(qMax(r.height(),  maxMonthRect.height()));
     }
   table->setFontSize(s);
 }
@@ -539,26 +539,26 @@ int CalendarPanel::weekOfYear(QDate date)
 }
 
 void CalendarPanel::slotWeekdaySelected(int day) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     emit weekdaySelected(day);
 }
 
 void CalendarPanel::slotWeekSelected(int week, int year) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     emit weekSelected(week, year);
 }
 
 void CalendarPanel::setCalendar(Calendar *cal) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     table->clear();
     if (cal) {
         table->setMarkedWeekdays(cal->weekdaysMap());
         QPtrListIterator<CalendarDay> it = cal->days();
-        //kdDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
+        //kDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
         for (; it.current(); ++it) {
             if (it.current()->state() != Map::None) {
                 table->addMarkedDate(it.current()->date(), it.current()->state());
-            //kdDebug()<<k_funcinfo<<"Added day: "<<it.current()->date().toString()<<"="<<it.current()->state()<<endl;
+            //kDebug()<<k_funcinfo<<"Added day: "<<it.current()->date().toString()<<"="<<it.current()->state()<<endl;
             }
         }
         setEnabled(true);

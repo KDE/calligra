@@ -51,7 +51,7 @@ VPolyline::init()
 {
 	bool bFirst = true;
 
-	QString points = m_points.simplifyWhiteSpace();
+	QString points = m_points.simplified();
 	points.replace( ',', ' ' );
 	points.remove( '\r' );
 	points.remove( '\n' );

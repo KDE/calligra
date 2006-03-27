@@ -58,7 +58,7 @@ class KIVIO_EXPORT MouseToolAction : public KRadioAction
       *  @param parent This action's parent.
       *  @param name An internal name for this action.
       */
-    MouseToolAction(const QString& text, const QIconSet& pix, const KShortcut& cut = KShortcut(),
+    MouseToolAction(const QString& text, const QIcon& pix, const KShortcut& cut = KShortcut(),
                   QObject* parent = 0, const char* name = 0);
   
     /**
@@ -80,7 +80,7 @@ class KIVIO_EXPORT MouseToolAction : public KRadioAction
       *  @param parent This action's parent.
       *  @param name An internal name for this action.
       */
-    MouseToolAction(const QString& text, const QIconSet& pix, const KShortcut& cut,
+    MouseToolAction(const QString& text, const QIcon& pix, const KShortcut& cut,
                   const QObject* receiver, const char* slot, QObject* parent, const char* name = 0);
   
     /**

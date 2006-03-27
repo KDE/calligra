@@ -44,7 +44,7 @@
 namespace KPlato
 {
 void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
-    //kdDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
+    //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
     // draw header labels
     p->save();
     QRegion r = p->clipRegion(QPainter::CoordPainter);
@@ -57,23 +57,23 @@ void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
     int hei = 0;
     for (int s = 0; s < h->count(); ++s) {
         QRect r = h->sectionRect(s);
-        //kdDebug()<<s<<": "<<h->label(s)<<" "<<r<<endl;
+        //kDebug()<<s<<": "<<h->label(s)<<" "<<r<<endl;
         int x, y;
         viewportToContents(r.x(), r.y(), x, y);
         QRect sr(x, y, r.width(), r.height());
-        //kdDebug()<<s<<": "<<h->label(s)<<" "<<sr<<endl;
+        //kDebug()<<s<<": "<<h->label(s)<<" "<<sr<<endl;
         if (sr.x()+sr.width() <= cx || sr.x() >= cx+cw) {
-            //kdDebug()<<s<<": "<<h->label(s)<<" "<<sr<<": continue"<<endl;
+            //kDebug()<<s<<": "<<h->label(s)<<" "<<sr<<": continue"<<endl;
             continue;
         }
         QRect tr = sr;
         if (sr.x() < cx) {
             tr.setX(cx);
-            //kdDebug()<<s<<": "<<h->label(s)<<" "<<tr<<endl;
+            //kDebug()<<s<<": "<<h->label(s)<<" "<<tr<<endl;
         }
         p->eraseRect(tr);
         p->drawText(tr, columnAlignment(s)|Qt::AlignVCenter, h->label(s), -1);
-        hei = QMAX(tr.height(), hei);
+        hei = qMax(tr.height(), hei);
     }
     r = p->clipRegion(QPainter::CoordPainter);
     p->restore();
@@ -89,7 +89,7 @@ void ListView::paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch) {
 }
 
 DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListItem *master, QListView *parent, QListViewItem *after, bool highlight)
-    : KListViewItem(parent, after),
+    : K3ListViewItem(parent, after),
       m_masterItem(master),
       m_value(0.0),
       m_highlight(highlight),
@@ -98,10 +98,10 @@ DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListI
     setFormat();
     setExpandable(master->isExpandable());
     setOpen(master->isOpen());
-    //kdDebug()<<"DoubleListViewBase::SlaveListItem "<<master->text(0)<<" parent="<<static_cast<DoubleListViewBase::SlaveListItem*>(parent)->m_masterItem->text(0)<<endl;
+    //kDebug()<<"DoubleListViewBase::SlaveListItem "<<master->text(0)<<" parent="<<static_cast<DoubleListViewBase::SlaveListItem*>(parent)->m_masterItem->text(0)<<endl;
 }
 DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListItem *master, QListViewItem *parent, QListViewItem *after, bool highlight)
-    : KListViewItem(parent, after),
+    : K3ListViewItem(parent, after),
       m_masterItem(master),
       m_value(0.0),
       m_highlight(highlight),
@@ -110,10 +110,10 @@ DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListI
     setFormat();
     setExpandable(master->isExpandable());
     setOpen(master->isOpen());
-    //kdDebug()<<"DoubleListViewBase::SlaveListItem "<<master->text(0)<<" parent="<<static_cast<DoubleListViewBase::SlaveListItem*>(parent)->m_masterItem->text(0)<<endl;
+    //kDebug()<<"DoubleListViewBase::SlaveListItem "<<master->text(0)<<" parent="<<static_cast<DoubleListViewBase::SlaveListItem*>(parent)->m_masterItem->text(0)<<endl;
 }
 DoubleListViewBase::SlaveListItem::~SlaveListItem() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_masterItem)
         m_masterItem->slaveItemDeleted();
 }
@@ -131,7 +131,7 @@ void DoubleListViewBase::SlaveListItem::setColumn(int col, double value) {
         //setText(col, QString("%1").arg(value, m_fieldwidth, m_fmt, m_prec));
         setText(col, KGlobal::locale()->formatNumber(value, m_prec));
         m_valueMap.replace(col, value);
-        //kdDebug()<<k_funcinfo<<m_masterItem->text(0)<<": column["<<col<<"]="<<value<<endl;
+        //kDebug()<<k_funcinfo<<m_masterItem->text(0)<<": column["<<col<<"]="<<value<<endl;
     }
 }
 
@@ -140,7 +140,7 @@ void DoubleListViewBase::SlaveListItem::setLimit(int col, double limit) {
 }
 
 void DoubleListViewBase::SlaveListItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align) {
-    //kdDebug()<<k_funcinfo<<"c="<<column<<endl;
+    //kDebug()<<k_funcinfo<<"c="<<column<<endl;
     QColorGroup g = cg;
     if (m_highlight) {
         if (m_limitMap.contains(column)) {
@@ -151,7 +151,7 @@ void DoubleListViewBase::SlaveListItem::paintCell(QPainter *p, const QColorGroup
             }
         }
     }
-    KListViewItem::paintCell(p, g, column, width, align);
+    K3ListViewItem::paintCell(p, g, column, width, align);
 }
 
 void DoubleListViewBase::SlaveListItem::setFormat(int fieldwidth, char fmt, int prec) {
@@ -162,47 +162,47 @@ void DoubleListViewBase::SlaveListItem::setFormat(int fieldwidth, char fmt, int 
 
 //----------------------------
 DoubleListViewBase::MasterListItem::MasterListItem(QListView *parent, bool highlight)
-    : KListViewItem(parent),
+    : K3ListViewItem(parent),
       m_slaveItem(0),
       m_value(0.0),
       m_limit(0.0),
       m_highlight(highlight) {
     
     setFormat();
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 DoubleListViewBase::MasterListItem::MasterListItem(QListView *parent, QString text,   bool highlight)
-    : KListViewItem(parent, text),
+    : K3ListViewItem(parent, text),
       m_slaveItem(0),
       m_value(0.0),
       m_limit(0.0),
       m_highlight(highlight) {
 
     setFormat();
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 DoubleListViewBase::MasterListItem::MasterListItem(QListViewItem *parent, bool highlight)
-    : KListViewItem(parent),
+    : K3ListViewItem(parent),
       m_slaveItem(0),
       m_value(0.0),
       m_limit(0.0),
       m_highlight(highlight) {
     
     setFormat();
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 DoubleListViewBase::MasterListItem::MasterListItem(QListViewItem *parent, QString text,   bool highlight)
-    : KListViewItem(parent, text),
+    : K3ListViewItem(parent, text),
       m_slaveItem(0),
       m_value(0.0),
       m_limit(0.0),
       m_highlight(highlight) {
 
     setFormat();
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 DoubleListViewBase::MasterListItem::~MasterListItem() {
@@ -211,9 +211,9 @@ DoubleListViewBase::MasterListItem::~MasterListItem() {
 }
 
 void DoubleListViewBase::MasterListItem::createSlaveItems(QListView *lv, QListViewItem *after) {
-    //kdDebug()<<k_funcinfo<<text(0)<<endl;
+    //kDebug()<<k_funcinfo<<text(0)<<endl;
     if (m_slaveItem) {
-        kdError()<<k_funcinfo<<"Slave item allready exists"<<endl;
+        kError()<<k_funcinfo<<"Slave item allready exists"<<endl;
     } else {
         if (parent() == 0) {
             m_slaveItem = new DoubleListViewBase::SlaveListItem(this, lv, after);
@@ -242,7 +242,7 @@ void DoubleListViewBase::MasterListItem::setTotal(double tot) {
     m_value = tot;
     //setText(1, QString("%1").arg(tot, m_fieldwidth, m_fmt, m_prec));
     setText(1, KGlobal::locale()->formatNumber(tot, m_prec));
-    //kdDebug()<<k_funcinfo<<text(0)<<"="<<tot<<endl;
+    //kDebug()<<k_funcinfo<<text(0)<<"="<<tot<<endl;
 }
 
 void DoubleListViewBase::MasterListItem::addToTotal(double v) {
@@ -277,7 +277,7 @@ void DoubleListViewBase::MasterListItem::clearColumn(int col) {
     }
     setTotal(0);
     if (m_slaveItem == 0) {
-        kdError()<<k_funcinfo<<"No m_slaveItem"<<endl;
+        kError()<<k_funcinfo<<"No m_slaveItem"<<endl;
         return;
     }
     m_slaveItem->clearColumn(0);
@@ -285,7 +285,7 @@ void DoubleListViewBase::MasterListItem::clearColumn(int col) {
 
 void DoubleListViewBase::MasterListItem::calcSlaveItems() {
     if (m_slaveItem == 0 || m_slaveItem->listView() == 0) {
-        kdError()<<k_funcinfo<<"No m_slaveItem or m_slaveItem->listView()"<<endl;
+        kError()<<k_funcinfo<<"No m_slaveItem or m_slaveItem->listView()"<<endl;
         return;
     }
     int cols = m_slaveItem->listView()->columns();
@@ -305,7 +305,7 @@ double DoubleListViewBase::MasterListItem::calcSlaveItems(int col) {
     for (; item; item = item->nextSibling()) {
         tot += static_cast<DoubleListViewBase::MasterListItem*>(item)->calcSlaveItems(col);
     }
-    //kdDebug()<<k_funcinfo<<text(0)<<" "<<col<<"="<<tot<<endl;
+    //kDebug()<<k_funcinfo<<text(0)<<" "<<col<<"="<<tot<<endl;
     setSlaveItem(col, tot);
     return tot;
 }
@@ -323,7 +323,7 @@ void DoubleListViewBase::MasterListItem::setSlaveHighlight(bool on) {
 }
 
 void DoubleListViewBase::MasterListItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align) {
-    //kdDebug()<<k_funcinfo<<"c="<<column<<" value="<<m_value<<" limit="<<m_limit<<endl;
+    //kDebug()<<k_funcinfo<<"c="<<column<<" value="<<m_value<<" limit="<<m_limit<<endl;
     QColorGroup g = cg;
     if (column == 1 && m_highlight) {
         if (m_value > m_limit) {
@@ -332,7 +332,7 @@ void DoubleListViewBase::MasterListItem::paintCell(QPainter *p, const QColorGrou
             g.setColor(QColorGroup::Text, QColor(green));
         }
     }
-    KListViewItem::paintCell(p, g, column, width, align);
+    K3ListViewItem::paintCell(p, g, column, width, align);
 }
 
 void DoubleListViewBase::MasterListItem::setFormat(int fieldwidth, char fmt, int prec) {
@@ -349,7 +349,7 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
       m_prec(0) {
     
     setOrientation(QSplitter::Horizontal);
-    setHandleWidth(QMIN(2, handleWidth()));
+    setHandleWidth(qMin(2, handleWidth()));
     
     m_masterList = new ListView(this);
     m_masterList->setSelectionMode(QListView::NoSelection);
@@ -389,7 +389,7 @@ DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
 }
 
 QSize DoubleListViewBase::sizeHint() const {
-    //kdDebug()<<k_funcinfo<<minimumSizeHint()<<endl;
+    //kDebug()<<k_funcinfo<<minimumSizeHint()<<endl;
     return minimumSizeHint();  //HACK: koshell splitter problem
 }
 
@@ -411,24 +411,24 @@ void DoubleListViewBase::createSlaveItems() {
 
 
 void DoubleListViewBase::print(KPrinter &printer) {
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     Q_UNUSED(printer);
 }
 
 void DoubleListViewBase::setOpen(QListViewItem *item, bool open) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_masterList->setOpen(item, open);
 }
 
 void DoubleListViewBase::slotExpanded(QListViewItem* item) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (item) {
         static_cast<DoubleListViewBase::MasterListItem*>(item)->setSlaveOpen(true);
     }
 }
 
 void DoubleListViewBase::slotCollapsed(QListViewItem*item) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (item) {
         static_cast<DoubleListViewBase::MasterListItem*>(item)->setSlaveOpen(false);
     }
@@ -485,7 +485,7 @@ void DoubleListViewBase::setFormat(int fieldwidth, char fmt, int prec) {
 }
 
 void DoubleListViewBase::paintContents(QPainter *p) {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     QRect cm = m_masterList->contentsRect();
     QRect cs = m_slaveList->contentsRect();
     int mx, my, sx, sy;

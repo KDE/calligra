@@ -140,7 +140,7 @@ void MySqlCursor::storeCurrentRow(RowData &data) const {
 
 	data.resize(m_fieldCount);
 	const uint fieldsExpandedCount = m_fieldsExpanded ? m_fieldsExpanded->count() : UINT_MAX;
-	const uint realCount = QMIN(fieldsExpandedCount, m_fieldCount);
+	const uint realCount = qMin(fieldsExpandedCount, m_fieldCount);
 	for( uint i=0; i<realCount; i++) {
 		Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
 		if (m_fieldsExpanded && !f)
@@ -176,7 +176,7 @@ void MySqlCursor::drv_bufferMovePointerPrev() {
 }
 
 
-void MySqlCursor::drv_bufferMovePointerTo(Q_LLONG to) {
+void MySqlCursor::drv_bufferMovePointerTo(qint64 to) {
 	//MYSQL_ROW_OFFSET ro=mysql_row_tell(d->mysqlres);
 	mysql_data_seek(d->mysqlres, to);
 	d->mysqlrow=mysql_fetch_row(d->mysqlres);

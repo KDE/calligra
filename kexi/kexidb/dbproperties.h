@@ -59,7 +59,7 @@ class KEXI_DB_EXPORT DatabaseProperties : public KexiDB::Object
 		DatabaseProperties(Connection *conn);
 		~DatabaseProperties();
 
-		QGuardedPtr<Connection> m_conn;
+		QPointer<Connection> m_conn;
 	friend class Connection;
 };
 }

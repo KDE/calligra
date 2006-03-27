@@ -64,7 +64,7 @@ VGradientTool::activate()
 	m_active = true;
 	m_state = normal;
 	view()->statusMessage()->setText( i18n( "Gradient" ) );
-	view()->setCursor( QCursor( Qt::crossCursor ) );
+	view()->setCursor( QCursor( Qt::CrossCursor ) );
 	VTool::activate();
 
 	if( view() )
@@ -492,7 +492,7 @@ VGradientTool::setCursor() const
 	if( m_origin.contains( last() ) || m_vector.contains( last() ) || m_center.contains( last() ) )
 		view()->setCursor( QCursor( Qt::SizeAllCursor ) );
 	else
-		view()->setCursor( QCursor( Qt::arrowCursor ) );
+		view()->setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
 bool 

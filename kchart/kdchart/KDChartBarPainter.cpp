@@ -363,8 +363,8 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 	      if( 0.0 <= cellValue )
 		lastValidPositiveValue = dataset;
 
-	      maxValueInThisColumn = QMAX( maxValueInThisColumn, cellValue );
-	      minValueInThisColumn = QMIN( minValueInThisColumn, cellValue );
+	      maxValueInThisColumn = qMax( maxValueInThisColumn, cellValue );
+	      minValueInThisColumn = qMin( minValueInThisColumn, cellValue );
 	      if( params()->barChartSubType() == KDChartParams::BarPercent )
 		valueTotal += cellValue;
 	      //qDebug("a");
@@ -413,7 +413,7 @@ void KDChartBarPainter::specificPaintData( QPainter* painter,
 	      barHeight = pixelsPerUnit * cellValue;
                       
 	      if( 0.0 <= barHeight ) 
-		//barHeight = QMAX(0.0, barHeight - sideBarHeight);
+		//barHeight = qMax(0.0, barHeight - sideBarHeight);
 		barHeight = barHeight - sideBarHeight;                        				       		
 	      else 
 		barHeight -= sideBarHeight;

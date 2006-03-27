@@ -188,10 +188,10 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QCString& name, b
  , m_query(table ? 0 : conn->querySchema(QString(name)))
 {
 	if (table && !m_table)
-		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
+		kWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
 			"no table specified!" << endl;
 	if (!table && !m_query)
-		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
+		kWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
 			"no query specified!" << endl;
 }
 
@@ -200,7 +200,7 @@ TableOrQuerySchema::TableOrQuerySchema(FieldList &tableOrQuery)
  , m_query(dynamic_cast<QuerySchema*>(&tableOrQuery))
 {
 	if (!m_table && !m_query)
-		kdWarning() << "TableOrQuery(FieldList &tableOrQuery) : "
+		kWarning() << "TableOrQuery(FieldList &tableOrQuery) : "
 			" tableOrQuery is nether table nor query!" << endl;
 }
 
@@ -209,7 +209,7 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, int id)
 	m_table = conn->tableSchema(id);
 	m_query = m_table ? 0 : conn->querySchema(id);
 	if (!m_table && !m_query)
-		kdWarning() << "TableOrQuery(Connection *conn, int id) : no table or query found for id==" 
+		kWarning() << "TableOrQuery(Connection *conn, int id) : no table or query found for id==" 
 			<< id << "!" << endl;
 }
 
@@ -218,7 +218,7 @@ TableOrQuerySchema::TableOrQuerySchema(TableSchema* table)
  , m_query(0)
 {
 	if (!m_table)
-		kdWarning() << "TableOrQuery(TableSchema* table) : no table specified!" << endl;
+		kWarning() << "TableOrQuery(TableSchema* table) : no table specified!" << endl;
 }
 
 TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
@@ -226,7 +226,7 @@ TableOrQuerySchema::TableOrQuerySchema(QuerySchema* query)
  , m_query(query)
 {
 	if (!m_query)
-		kdWarning() << "TableOrQuery(QuerySchema* query) : no query specified!" << endl;
+		kWarning() << "TableOrQuery(QuerySchema* query) : no query specified!" << endl;
 }
 
 const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
@@ -237,7 +237,7 @@ const QueryColumnInfo::Vector TableOrQuerySchema::columns(bool unique)
 	if (m_query)
 		return m_query->fieldsExpanded(unique);
 
-	kdWarning() << "TableOrQuery::fields() : no query or table specified!" << endl;
+	kWarning() << "TableOrQuery::fields() : no query or table specified!" << endl;
 	return QueryColumnInfo::Vector();
 }
 

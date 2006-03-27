@@ -54,7 +54,7 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     int i = 0;
     const QMap<int, WBSDefinition::CodeDef> &lev = def.levelsDef();
     levelsTable->setNumRows(lev.count());
-    kdDebug()<<"Map size="<<lev.count()<<endl;
+    kDebug()<<"Map size="<<lev.count()<<endl;
     QMap<int, WBSDefinition::CodeDef>::const_iterator it;
     for (it = lev.begin(); it != lev.end(); ++it) {
         levelsTable->verticalHeader()->setLabel(i, QString("%1").arg(it.key()));
@@ -114,7 +114,7 @@ void WBSDefinitionPanel::slotSelectionChanged() {
     }
     removeBtn->setEnabled(rowSelected);
     if (s.isEmpty()) s = "None selected";
-    kdDebug()<<k_funcinfo<<s<<endl;
+    kDebug()<<k_funcinfo<<s<<endl;
 }
 
 void WBSDefinitionPanel::slotRemoveBtnClicked() {
@@ -131,10 +131,10 @@ void WBSDefinitionPanel::slotRemoveBtnClicked() {
 }
 
 void WBSDefinitionPanel::slotAddBtnClicked() {
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     int i=levelsTable->numRows()-1;
     for (; i >= 0; --i) {
-        kdDebug()<<k_funcinfo<<"Checking row["<<i<<"]="<<levelsTable->verticalHeader()->label(i)<<" with "<<level->value()<<endl;
+        kDebug()<<k_funcinfo<<"Checking row["<<i<<"]="<<levelsTable->verticalHeader()->label(i)<<" with "<<level->value()<<endl;
         if (level->value() > levelsTable->verticalHeader()->label(i).toInt()) {
             break;
         }
@@ -150,7 +150,7 @@ void WBSDefinitionPanel::slotAddBtnClicked() {
     addBtn->setEnabled(false);
     slotChanged();
     
-    kdDebug()<<k_funcinfo<<"Added row="<<i<<" level="<<level->value()<<endl;
+    kDebug()<<k_funcinfo<<"Added row="<<i<<" level="<<level->value()<<endl;
 }
 
 void WBSDefinitionPanel::slotLevelChanged(int value) {

@@ -120,7 +120,7 @@ bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
             showLoadingErrorDialog();
     } else if (ret == KoTemplateChooseDia::File) {
         KUrl url(templateDoc);
-        kdDebug() << "Part::initDoc opening URL " << url.prettyURL() <<endl;
+        kDebug() << "Part::initDoc opening URL " << url.prettyURL() <<endl;
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
         // Make a fresh project and let the user enter some info
@@ -148,7 +148,7 @@ KoView *Part::createViewInstance(QWidget *parent, const char *name) {
     // use the m_view as parent. If the dialog will be needed again,
     // it will be made at that point
     if (m_projectDialog != 0) {
-	kdDebug() << "Deleting m_projectDialog because of new ViewInstance\n";
+	kDebug() << "Deleting m_projectDialog because of new ViewInstance\n";
 	delete m_projectDialog;
 	m_projectDialog = 0;
     }
@@ -191,12 +191,12 @@ bool Part::loadXML(QIODevice *, const QDomDocument &document) {
     // Check if this is the right app
     value = plan.attribute("mime", QString::null);
     if (value.isEmpty()) {
-        kdError() << "No mime type specified!" << endl;
+        kError() << "No mime type specified!" << endl;
         setErrorMessage(i18n("Invalid document. No mimetype specified."));
         return false;
     }
     else if (value != "application/x-vnd.kde.kplato") {
-        kdError() << "Unknown mime type " << value << endl;
+        kError() << "Unknown mime type " << value << endl;
         setErrorMessage(i18n("Invalid document. Expected mimetype application/x-vnd.kde.kplato, got %1").arg(value));
         return false;
     }
@@ -217,8 +217,8 @@ bool Part::loadXML(QIODevice *, const QDomDocument &document) {
     QDomNodeList list = plan.childNodes();
     if (list.count() > 2) {
         // TODO: Make a proper bitching about this
-        kdDebug() << "*** Error ***\n";
-        kdDebug() << "  Children count should be 1 but is " << list.count()
+        kDebug() << "*** Error ***\n";
+        kDebug() << "  Children count should be 1 but is " << list.count()
                 << "\n";
         return false;
     }
@@ -251,7 +251,7 @@ bool Part::loadXML(QIODevice *, const QDomDocument &document) {
     m_xmlLoader.stopLoad();
     emit sigProgress(100); // the rest is only processing, not loading
 
-    kdDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+    kDebug() << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
 
     // do some sanity checking on document.
     emit sigProgress(-1);
@@ -295,7 +295,7 @@ QDomDocument Part::saveXML() {
 
 
 void Part::slotDocumentRestored() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     setModified(false);
 }
 
@@ -304,7 +304,7 @@ void Part::paintContent(QPainter &painter, const QRect &rect,
 			   bool /*transparent*/,
 			   double zoomX, double /*zoomY*/)
 {
-    kdDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
+    kDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
     if (isEmbedded() && m_embeddedGanttView && m_project)
     {
         if (m_embeddedContext)
@@ -325,7 +325,7 @@ void Part::paintContent(QPainter &painter, const QRect &rect,
         }
         else
         {
-            kdWarning() << "Don't have any context to set!" << endl;
+            kWarning() << "Don't have any context to set!" << endl;
         }
         painter.setClipRect(rect, QPainter::CoordPainter);
         // We don't support zoom yet, so use the painters scaling
@@ -361,9 +361,9 @@ void Part::addCommand(KCommand * cmd, bool execute)
 }
 
 void Part::slotCommandExecuted() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     setModified(true);
-    kdDebug() << "------- KPlato, is embedded: " << isEmbedded() << endl;
+    kDebug() << "------- KPlato, is embedded: " << isEmbedded() << endl;
     if (m_view == NULL)
       return;
       
@@ -382,15 +382,15 @@ void Part::slotCopyContextFromView()
 {
     if (m_view)
     {
-//         kdDebug() << "Updating embedded context from view context." << endl;
+//         kDebug() << "Updating embedded context from view context." << endl;
         this->m_view->getContext( *m_embeddedContext );
         this->m_embeddedContextInitialized = true;
     }
 //     else
 //     {
-//         kdDebug() << "Not updating the context." << endl;
+//         kDebug() << "Not updating the context." << endl;
 //         if (m_context)
-//           kdDebug() << "Current View: " << m_context->currentView << endl;
+//           kDebug() << "Current View: " << m_context->currentView << endl;
 //     }
 }
 
@@ -400,7 +400,7 @@ void Part::slotViewDestroyed()
 }
 
 void Part::setCommandType(int type) {
-    //kdDebug()<<k_funcinfo<<"type="<<type<<endl;
+    //kDebug()<<k_funcinfo<<"type="<<type<<endl;
     if (type == 0)
         m_update = true;
     else if (type == 1)

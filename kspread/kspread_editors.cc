@@ -652,7 +652,7 @@ void CellEditor::functionAutoComplete( const QString& item )
 
 void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
 {
-//   kdDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
 
   // TODO Stefan: optimize this function!
 
@@ -680,7 +680,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
   {
     if (tokens[i].pos() >= pos - 1) // without '='
     {
-/*      kdDebug() << "token.pos >= cursor.pos" << endl;*/
+/*      kDebug() << "token.pos >= cursor.pos" << endl;*/
       type = tokens[i].type();
       if (type == Token::Cell || type == Token::Range)
       {
@@ -729,7 +729,7 @@ void CellEditor::slotCursorPositionChanged(int /* para */, int pos)
     }
   }
 
-//   kdDebug() << "regionStart = " << regionStart/* << endl*/
+//   kDebug() << "regionStart = " << regionStart/* << endl*/
 //             << ", regionEnd = " << regionEnd/* << endl*/
 //             << ", currentRange = " << currentRange << endl;
 
@@ -843,7 +843,7 @@ void CellEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completi
 
 void CellEditor::slotTextChanged()
 {
-//   kdDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
 
   //FIXME - text() may return richtext?
   QString t = text();
@@ -993,7 +993,7 @@ void CellEditor::setUpdateChoice(bool state)
 
 void CellEditor::updateChoice()
 {
-//   kdDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
 
   if (!d->updateChoice)
     return;
@@ -1037,7 +1037,7 @@ void CellEditor::updateChoice()
 
   d->length_namecell = name_cell.length();
   d->length_text = text().length();
-    //kdDebug(36001) << "updateChooseMarker2 len=" << d->length_namecell << endl;
+    //kDebug(36001) << "updateChooseMarker2 len=" << d->length_namecell << endl;
 
   QString oldText = text();
   QString newText = oldText.left(start) + name_cell + oldText.right(d->length_text - start - length);
@@ -1048,7 +1048,7 @@ void CellEditor::updateChoice()
   setCursorPosition( start + d->length_namecell );
 
   d->canvas->view()->editWidget()->setText( newText );
-    //kdDebug(36001) << "old=" << old << " len=" << d->length_namecell << " pos=" << pos << endl;
+    //kDebug(36001) << "old=" << old << " len=" << d->length_namecell << " pos=" << pos << endl;
 
 //   d->updateChoice = false;
   d->updatingChoice = false;
@@ -1173,13 +1173,13 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
     if ( e->type() == QEvent::KeyPress || e->type() == QEvent::KeyRelease )
     {
         QKeyEvent* k = (QKeyEvent*)e;
-        if ( !( k->state() & Qt::ShiftButton )|| canvas()->chooseMode())
+        if ( !( k->state() & Qt::ShiftModifier )|| canvas()->chooseMode())
         {
           //If the user presses the return key to finish editing this cell, choose mode must be turned off first
           //otherwise it will merely select a different cell
           if (k->key() == Key_Return || k->key() == Key_Enter)
           {
-            kdDebug() << "CellEditor::eventFilter: canvas()->endChoose();" << endl;
+            kDebug() << "CellEditor::eventFilter: canvas()->endChoose();" << endl;
             canvas()->endChoose();
           }
 
@@ -1217,7 +1217,7 @@ bool CellEditor::eventFilter( QObject* o, QEvent* e )
 
 void CellEditor::setCursorToRange(uint pos)
 {
-//   kdDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo << endl;
 
   d->updatingChoice = true;
   uint counter = 0;
@@ -1300,12 +1300,12 @@ LocationEditWidget::LocationEditWidget( QWidget * _parent,
 
 void LocationEditWidget::addCompletionItem( const QString &_item )
 {
-    kdDebug()<<"  LocationEditWidget::addCompletionItem add :"<<_item<<endl;
+    kDebug()<<"  LocationEditWidget::addCompletionItem add :"<<_item<<endl;
     if ( completionList.items().contains( _item) == 0 )
     {
         completionList.addItem( _item );
-        kdDebug()<<" _utem :"<<_item<<endl;
-        kdDebug()<<" completionList.items().count()"<<completionList.items().count()<<endl;
+        kDebug()<<" _utem :"<<_item<<endl;
+        kDebug()<<" completionList.items().count()"<<completionList.items().count()<<endl;
     }
 }
 
@@ -1386,7 +1386,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 {
     // Do not handle special keys and accelerators. This is
     // done by QLineEdit.
-    if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
+    if ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) )
     {
         QLineEdit::keyPressEvent( _ev );
         // Never allow that keys are passed on to the parent.
@@ -1496,8 +1496,8 @@ void EditWidget::slotDoneEdit()
 void EditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
     // Dont handle special keys and accelerators, except Enter ones
-    if (( ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
-         || ( _ev->state() & Qt::ShiftButton )
+    if (( ( _ev->state() & ( Qt::AltModifier | Qt::ControlModifier ) )
+         || ( _ev->state() & Qt::ShiftModifier )
          || ( _ev->key() == Key_Shift )
          || ( _ev->key() == Key_Control ) )
       && (_ev->key() != Key_Return) && (_ev->key() != Key_Enter))
@@ -1529,8 +1529,8 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
       // This is why we call slotDoneEdit now, instead of sending
       // to the canvas.
       //QApplication::sendEvent( m_pCanvas, _ev );
-      isArray = (_ev->state() & Qt::AltButton) &&
-          (_ev->state() & Qt::ControlButton);
+      isArray = (_ev->state() & Qt::AltModifier) &&
+          (_ev->state() & Qt::ControlModifier);
       slotDoneEdit();
       m_pCanvas->view()->updateEditWidget();
       _ev->accept();
@@ -1560,7 +1560,7 @@ void EditWidget::setEditMode( bool mode )
 
 void EditWidget::focusOutEvent( QFocusEvent* ev )
 {
-  //kdDebug(36001) << "EditWidget lost focus" << endl;
+  //kDebug(36001) << "EditWidget lost focus" << endl;
   // See comment about setLastEditorWithFocus
   m_pCanvas->setLastEditorWithFocus( Canvas::EditWidget );
 

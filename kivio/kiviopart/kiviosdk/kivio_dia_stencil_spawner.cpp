@@ -65,7 +65,7 @@ float KivioDiaStencilSpawner::diaPointToKivio(float point, bool xpoint)
 		//else
 		//	returnPoint =  (fabs(m_highesty) + fabs(m_lowesty)) - (fabs(m_highesty) + fabs(point));
 	}
-	//kdDebug () << "Point " << point << " Return point " << returnPoint << endl;
+	//kDebug () << "Point " << point << " Return point " << returnPoint << endl;
 	return returnPoint;
 }
 
@@ -77,9 +77,9 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 	m_filename = file;
 	QFile f(file);
 
-	if(f.open(IO_ReadOnly) == false)
+	if(f.open(QIODevice::ReadOnly) == false)
 	{
-		kdDebug(43000) << "KivioDiaStencilSpawner::load() - Error opening stencil: " << file << endl;
+		kDebug(43000) << "KivioDiaStencilSpawner::load() - Error opening stencil: " << file << endl;
 		return false;
 	}
 	dia.setContent(&f);
@@ -233,14 +233,14 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 
 	for( ; itx != m_xlist.end(); ++itx)
 	{
-		m_highestx = QMAX(m_highestx, *itx);
-		m_lowestx = QMIN(m_lowestx, *itx);
+		m_highestx = qMax(m_highestx, *itx);
+		m_lowestx = qMin(m_lowestx, *itx);
 	}
 
 	for( ; ity != m_ylist.end(); ++ity)
 	{
-		m_highesty = QMAX(m_highesty, *ity);
-		m_lowesty = QMIN(m_lowesty, *ity);
+		m_highesty = qMax(m_highesty, *ity);
+		m_lowesty = qMin(m_lowesty, *ity);
 	}
 
 	//if( svgElement.hasAttribute("width") && svgElement.hasAttribute("height"))
@@ -450,7 +450,7 @@ bool KivioDiaStencilSpawner::load(const QString &file)
 					QStringList styles = QStringList::split(";", svgChild.attribute("style"));
 					for( uint idx = 0; idx < styles.count(); idx++)
 					{
-						//kdDebug(43000) << "Style: " << styles[idx] << endl;
+						//kDebug(43000) << "Style: " << styles[idx] << endl;
 						if( isClosed && styles[idx].contains("fill:"))
 						{
 							QDomElement fillStyle = kivio.createElement("KivioFillStyle");

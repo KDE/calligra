@@ -173,7 +173,7 @@ void KPrGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage,
 
 void KPrGroupObject::addObjects( KPrObject * obj )
 {
-    kdDebug()<<"add object to group object:"<<obj<<endl;
+    kDebug()<<"add object to group object:"<<obj<<endl;
     objects.append( obj );
 }
 
@@ -394,7 +394,7 @@ void KPrGroupObject::setShadowDirection( ShadowDirection _direction )
 void KPrGroupObject::setShadowColor( const QColor &_color )
 {
     KPrObject::setShadowColor( _color );
-    kdDebug(33001) << "KPrGroupObject::setShadowColor"<<updateObjs << endl;
+    kDebug(33001) << "KPrGroupObject::setShadowColor"<<updateObjs << endl;
     if ( !updateObjs )
         return;
     QPtrListIterator<KPrObject> it( objects );

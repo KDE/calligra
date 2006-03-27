@@ -44,33 +44,33 @@ void NamedCommand::setCommandType(int type) {
 void NamedCommand::setSchDeleted() {
     QMap<Schedule*, bool>::Iterator it;
     for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
-        kdDebug()<<k_funcinfo<<it.key()->id()<<": "<<it.data()<<endl;
+        kDebug()<<k_funcinfo<<it.key()->id()<<": "<<it.data()<<endl;
         it.key()->setDeleted(it.data());
     }
 }
 void NamedCommand::setSchDeleted(bool state) {
     QMap<Schedule*, bool>::Iterator it;
     for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
-        kdDebug()<<k_funcinfo<<it.key()->id()<<": "<<state<<endl;
+        kDebug()<<k_funcinfo<<it.key()->id()<<": "<<state<<endl;
         it.key()->setDeleted(state);
     }
 }
 void NamedCommand::setSchScheduled() {
 QMap<Schedule*, bool>::Iterator it;
     for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
-        kdDebug()<<k_funcinfo<<it.key()->id()<<": "<<it.data()<<endl;
+        kDebug()<<k_funcinfo<<it.key()->id()<<": "<<it.data()<<endl;
         it.key()->setScheduled(it.data());
     }
 }
 void NamedCommand::setSchScheduled(bool state) {
     QMap<Schedule*, bool>::Iterator it;
     for (it = m_schedules.begin(); it != m_schedules.end(); ++it) {
-        kdDebug()<<k_funcinfo<<it.key()->id()<<": "<<state<<endl;
+        kDebug()<<k_funcinfo<<it.key()->id()<<": "<<state<<endl;
         it.key()->setScheduled(state);
     }
 }
 void NamedCommand::addSchScheduled(Schedule *sch) {
-    kdDebug()<<k_funcinfo<<sch->id()<<": "<<sch->isScheduled()<<endl;
+    kDebug()<<k_funcinfo<<sch->id()<<": "<<sch->isScheduled()<<endl;
     m_schedules.insert(sch, sch->isScheduled());
     QPtrListIterator<Appointment> it = sch->appointments();
     for (; it.current(); ++it) {
@@ -82,7 +82,7 @@ void NamedCommand::addSchScheduled(Schedule *sch) {
     }
 }
 void NamedCommand::addSchDeleted(Schedule *sch) {
-    kdDebug()<<k_funcinfo<<sch->id()<<": "<<sch->isDeleted()<<endl;
+    kDebug()<<k_funcinfo<<sch->id()<<": "<<sch->isDeleted()<<endl;
     m_schedules.insert(sch, sch->isDeleted());
     QPtrListIterator<Appointment> it = sch->appointments();
     for (; it.current(); ++it) {
@@ -101,7 +101,7 @@ CalendarAddCmd::CalendarAddCmd(Part *part, Project *project,Calendar *cal, QStri
       m_cal(cal),
       m_added(false) {
     cal->setDeleted(true);  
-    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<cal->name()<<endl;
 }
 
 void CalendarAddCmd::execute() {
@@ -112,14 +112,14 @@ void CalendarAddCmd::execute() {
     m_cal->setDeleted(false);
     
     setCommandType(0);
-    //kdDebug()<<k_funcinfo<<m_cal->name()<<" added to: "<<m_project->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_cal->name()<<" added to: "<<m_project->name()<<endl;
 }
 
 void CalendarAddCmd::unexecute() {
     m_cal->setDeleted(true);
     
     setCommandType(0);
-    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
 CalendarDeleteCmd::CalendarDeleteCmd(Part *part, Calendar *cal, QString name)
@@ -153,17 +153,17 @@ CalendarModifyNameCmd::CalendarModifyNameCmd(Part *part, Calendar *cal, QString 
       
     m_oldvalue = cal->name();
     m_newvalue = newvalue;
-    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<cal->name()<<endl;
 }
 void CalendarModifyNameCmd::execute() {
     m_cal->setName(m_newvalue);
     setCommandType(0);
-    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 void CalendarModifyNameCmd::unexecute() {
     m_cal->setName(m_oldvalue);
     setCommandType(0);
-    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
 CalendarModifyParentCmd::CalendarModifyParentCmd(Part *part, Calendar *cal, Calendar *newvalue, QString name)
@@ -172,7 +172,7 @@ CalendarModifyParentCmd::CalendarModifyParentCmd(Part *part, Calendar *cal, Cale
       
     m_oldvalue = cal->parent();
     m_newvalue = newvalue;
-    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
         QIntDictIterator<Schedule> it = part->getProject().schedules();
@@ -198,7 +198,7 @@ CalendarAddDayCmd::CalendarAddDayCmd(Part *part, Calendar *cal, CalendarDay *new
       m_mine(true) {
       
     m_newvalue = newvalue;
-    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
         QIntDictIterator<Schedule> it = part->getProject().schedules();
@@ -208,19 +208,19 @@ CalendarAddDayCmd::CalendarAddDayCmd(Part *part, Calendar *cal, CalendarDay *new
     }
 }
 CalendarAddDayCmd::~CalendarAddDayCmd() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_mine)
         delete m_newvalue;
 }
 void CalendarAddDayCmd::execute() {
-    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
     m_cal->addDay(m_newvalue);
     m_mine = false;
     setSchScheduled(false);
     setCommandType(1);
 }
 void CalendarAddDayCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
     m_cal->takeDay(m_newvalue);
     m_mine = true;
     setSchScheduled();
@@ -233,7 +233,7 @@ CalendarRemoveDayCmd::CalendarRemoveDayCmd(Part *part, Calendar *cal, const QDat
       m_mine(false) {
     
     m_value = cal->findDay(day);
-    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
         QIntDictIterator<Schedule> it = part->getProject().schedules();
@@ -243,14 +243,14 @@ CalendarRemoveDayCmd::CalendarRemoveDayCmd(Part *part, Calendar *cal, const QDat
     }
 }
 void CalendarRemoveDayCmd::execute() {
-    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
     m_cal->takeDay(m_value);
     m_mine = true;
     setSchScheduled(false);
     setCommandType(1);
 }
 void CalendarRemoveDayCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_cal->name()<<endl;
     m_cal->addDay(m_value);
     m_mine = false;
     setSchScheduled();
@@ -264,7 +264,7 @@ CalendarModifyDayCmd::CalendarModifyDayCmd(Part *part, Calendar *cal, CalendarDa
       
     m_newvalue = value;
     m_oldvalue = cal->findDay(value->date());
-    //kdDebug()<<k_funcinfo<<cal->name()<<" old:("<<m_oldvalue<<") new:("<<m_newvalue<<")"<<endl;
+    //kDebug()<<k_funcinfo<<cal->name()<<" old:("<<m_oldvalue<<") new:("<<m_newvalue<<")"<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
         QIntDictIterator<Schedule> it = part->getProject().schedules();
@@ -274,7 +274,7 @@ CalendarModifyDayCmd::CalendarModifyDayCmd(Part *part, Calendar *cal, CalendarDa
     }
 }
 CalendarModifyDayCmd::~CalendarModifyDayCmd() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_mine) {
         delete m_newvalue;
     } else {
@@ -282,7 +282,7 @@ CalendarModifyDayCmd::~CalendarModifyDayCmd() {
     }
 }
 void CalendarModifyDayCmd::execute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_cal->takeDay(m_oldvalue);
     m_cal->addDay(m_newvalue);
     m_mine = false;
@@ -290,7 +290,7 @@ void CalendarModifyDayCmd::execute() {
     setCommandType(1);
 }
 void CalendarModifyDayCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_cal->takeDay(m_newvalue);
     m_cal->addDay(m_oldvalue);
     m_mine = true;
@@ -305,7 +305,7 @@ CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd(Part *part, Calendar *cal, in
       m_mine(true) {
       
     m_value = value;
-    kdDebug()<<k_funcinfo<<cal->name()<<" ("<<value<<")"<<endl;
+    kDebug()<<k_funcinfo<<cal->name()<<" ("<<value<<")"<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
         QIntDictIterator<Schedule> it = part->getProject().schedules();
@@ -315,7 +315,7 @@ CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd(Part *part, Calendar *cal, in
     }
 }
 CalendarModifyWeekdayCmd::~CalendarModifyWeekdayCmd() {
-    kdDebug()<<k_funcinfo<<m_weekday<<": "<<m_value<<endl;
+    kDebug()<<k_funcinfo<<m_weekday<<": "<<m_value<<endl;
     delete m_value;
     
 }
@@ -359,7 +359,7 @@ NodeDeleteCmd::~NodeDeleteCmd() {
 }
 void NodeDeleteCmd::execute() {
     if (m_parent) {
-        //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
+        //kDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
         QPtrListIterator<Appointment> it = m_node->appointments();
         for (; it.current(); ++it) {
             it.current()->detach();
@@ -373,7 +373,7 @@ void NodeDeleteCmd::execute() {
 }
 void NodeDeleteCmd::unexecute() {
     if (m_parent) {
-        //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
+        //kDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
         m_parent->insertChildNode(m_index, m_node);
         Appointment *a;
         for (a = m_appointments.first(); a != 0; m_appointments.take()) {
@@ -415,7 +415,7 @@ TaskAddCmd::~TaskAddCmd() {
         delete m_node;
 }
 void TaskAddCmd::execute() {
-    //kdDebug()<<k_funcinfo<<m_node->name()<<endl;
+    //kDebug()<<k_funcinfo<<m_node->name()<<endl;
     m_project->addTask(m_node, m_after);
     m_added = true;
     
@@ -759,7 +759,7 @@ AddRelationCmd::~AddRelationCmd() {
         delete m_rel;
 }
 void AddRelationCmd::execute() {
-    //kdDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
+    //kDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
     m_taken = false;
     m_rel->parent()->addDependChildNode(m_rel);
     m_rel->child()->addDependParentNode(m_rel);
@@ -792,7 +792,7 @@ DeleteRelationCmd::~DeleteRelationCmd() {
         delete m_rel;
 }
 void DeleteRelationCmd::execute() {
-    //kdDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
+    //kDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
     m_taken = true;
     m_rel->parent()->takeDependChildNode(m_rel);
     m_rel->child()->takeDependParentNode(m_rel);
@@ -869,14 +869,14 @@ AddResourceRequestCmd::~AddResourceRequestCmd() {
         delete m_request;
 }
 void AddResourceRequestCmd::execute() {
-    //kdDebug()<<k_funcinfo<<"group="<<m_group<<" req="<<m_request<<endl;
+    //kDebug()<<k_funcinfo<<"group="<<m_group<<" req="<<m_request<<endl;
     m_group->addResourceRequest(m_request);
     m_mine = false;
     setSchScheduled(false);
     setCommandType(1);
 }
 void AddResourceRequestCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<"group="<<m_group<<" req="<<m_request<<endl;
+    //kDebug()<<k_funcinfo<<"group="<<m_group<<" req="<<m_request<<endl;
     m_group->takeResourceRequest(m_request);
     m_mine = true;
     setSchScheduled();
@@ -889,7 +889,7 @@ RemoveResourceRequestCmd::RemoveResourceRequestCmd(Part *part,  ResourceGroupReq
       m_request(request) {
     
     m_mine = false;
-    //kdDebug()<<k_funcinfo<<"group="<<group<<" req="<<request<<endl;
+    //kDebug()<<k_funcinfo<<"group="<<group<<" req="<<request<<endl;
     Task *t = request->task();
     if (t) { // safety, something is seriously wrong!
         QIntDictIterator<Schedule> it = t->schedules();
@@ -991,14 +991,14 @@ AddResourceGroupRequestCmd::AddResourceGroupRequestCmd(Part *part, Task &task, R
     m_mine = true;
 }
 void AddResourceGroupRequestCmd::execute() {
-    //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
+    //kDebug()<<k_funcinfo<<"group="<<m_request<<endl;
     m_task.addRequest(m_request);
     m_mine = false;
     
     setCommandType(1);
 }
 void AddResourceGroupRequestCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
+    //kDebug()<<k_funcinfo<<"group="<<m_request<<endl;
     m_task.takeRequest(m_request); // group should now be empty of resourceRequests
     m_mine = true;
     
@@ -1021,14 +1021,14 @@ RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd(Part *part, Task &t
     m_mine = false;
 }
 void RemoveResourceGroupRequestCmd::execute() {
-    //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
+    //kDebug()<<k_funcinfo<<"group="<<m_request<<endl;
     m_task.takeRequest(m_request); // group should now be empty of resourceRequests
     m_mine = true;
     
     setCommandType(1);
 }
 void RemoveResourceGroupRequestCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
+    //kDebug()<<k_funcinfo<<"group="<<m_request<<endl;
     m_task.addRequest(m_request);
     m_mine = false;
     
@@ -1044,19 +1044,19 @@ AddResourceCmd::AddResourceCmd(Part *part, ResourceGroup *group, Resource *resou
 }
 AddResourceCmd::~AddResourceCmd() {
     if (m_mine) {
-        //kdDebug()<<k_funcinfo<<"delete: "<<m_resource<<endl;
+        //kDebug()<<k_funcinfo<<"delete: "<<m_resource<<endl;
         delete m_resource;
     }
 }
 void AddResourceCmd::execute() {
     m_group->addResource(m_resource, 0/*risk*/); 
     m_mine = false;
-    //kdDebug()<<k_funcinfo<<"added: "<<m_resource<<endl;
+    //kDebug()<<k_funcinfo<<"added: "<<m_resource<<endl;
     setCommandType(0);
 }
 void AddResourceCmd::unexecute() {
     m_group->takeResource(m_resource);
-    //kdDebug()<<k_funcinfo<<"removed: "<<m_resource<<endl;
+    //kDebug()<<k_funcinfo<<"removed: "<<m_resource<<endl;
     m_mine = true;
     
     setCommandType(0);
@@ -1064,7 +1064,7 @@ void AddResourceCmd::unexecute() {
 
 RemoveResourceCmd::RemoveResourceCmd(Part *part, ResourceGroup *group, Resource *resource, QString name)
     : AddResourceCmd(part, group, resource, name) {
-    //kdDebug()<<k_funcinfo<<resource<<endl;
+    //kDebug()<<k_funcinfo<<resource<<endl;
     m_mine = false;
     m_requests = m_resource->requests();
     
@@ -1080,7 +1080,7 @@ void RemoveResourceCmd::execute() {
     QPtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->parent()->takeResourceRequest(it.current());
-        //kdDebug()<<"Remove request for"<<it.current()->resource()->name()<<endl;
+        //kDebug()<<"Remove request for"<<it.current()->resource()->name()<<endl;
     }
     QPtrListIterator<Appointment> ait = m_resource->appointments();
     for (; ait.current(); ++ait) {
@@ -1089,7 +1089,7 @@ void RemoveResourceCmd::execute() {
     QPtrListIterator<Appointment> mit = m_appointments;
     for (; mit.current(); ++mit) {
         mit.current()->detach(); //NOTE: removes from m_resource->appointments()
-        //kdDebug()<<k_funcinfo<<"detached: "<<mit.current()<<endl;
+        //kDebug()<<k_funcinfo<<"detached: "<<mit.current()<<endl;
     }
     AddResourceCmd::unexecute();
     setSchScheduled(false);
@@ -1097,13 +1097,13 @@ void RemoveResourceCmd::execute() {
 void RemoveResourceCmd::unexecute() {
     m_appointments.first();
     while (m_appointments.current()) {
-        //kdDebug()<<k_funcinfo<<"attach: "<<m_appointments.current()<<endl;
+        //kDebug()<<k_funcinfo<<"attach: "<<m_appointments.current()<<endl;
         m_appointments.take()->attach();
     }
     QPtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->parent()->addResourceRequest(it.current());
-        //kdDebug()<<"Add request for "<<it.current()->resource()->name()<<endl;
+        //kDebug()<<"Add request for "<<it.current()->resource()->name()<<endl;
     }
     AddResourceCmd::execute();
     setSchScheduled();
@@ -1215,7 +1215,7 @@ ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd(Part *part, Resou
             if (sch) {
                 s = sch->start();
                 e = sch->end();
-                kdDebug()<<k_funcinfo<<"old="<<m_oldvalue<<" new="<<value<<" s="<<s<<" e="<<e<<endl;
+                kDebug()<<k_funcinfo<<"old="<<m_oldvalue<<" new="<<value<<" s="<<s<<" e="<<e<<endl;
             }
             if (!s.isValid() || !e.isValid() || ((m_oldvalue > s || value > s) && (m_oldvalue < e || value < e))) {
                 addSchScheduled(it.current());
@@ -1249,7 +1249,7 @@ ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd(Part *part, Res
             if (sch) {
                 s = sch->start();
                 e = sch->end();
-                kdDebug()<<k_funcinfo<<"old="<<m_oldvalue<<" new="<<value<<" s="<<s<<" e="<<e<<endl;
+                kDebug()<<k_funcinfo<<"old="<<m_oldvalue<<" new="<<value<<" s="<<s<<" e="<<e<<endl;
             }
             if (!s.isValid() || !e.isValid() || ((m_oldvalue > s || value > s) && (m_oldvalue < e || value < e))) {
                 addSchScheduled(it.current());
@@ -1582,10 +1582,10 @@ NodeModifyRunningAccountCmd::NodeModifyRunningAccountCmd(Part *part, Node &node,
       m_node(node) {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 void NodeModifyRunningAccountCmd::execute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_oldvalue) {
         m_oldvalue->removeRunning(m_node);
     }
@@ -1595,7 +1595,7 @@ void NodeModifyRunningAccountCmd::execute() {
     setCommandType(0);
 }
 void NodeModifyRunningAccountCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_newvalue) {
         m_newvalue->removeRunning(m_node);        
     }
@@ -1610,11 +1610,11 @@ NodeModifyStartupAccountCmd::NodeModifyStartupAccountCmd(Part *part, Node &node,
       m_node(node) {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 void NodeModifyStartupAccountCmd::execute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_oldvalue) {
         m_oldvalue->removeStartup(m_node);
     }
@@ -1624,7 +1624,7 @@ void NodeModifyStartupAccountCmd::execute() {
     setCommandType(0);
 }
 void NodeModifyStartupAccountCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_newvalue) {
         m_newvalue->removeStartup(m_node);
     }
@@ -1639,11 +1639,11 @@ NodeModifyShutdownAccountCmd::NodeModifyShutdownAccountCmd(Part *part, Node &nod
       m_node(node) {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 void NodeModifyShutdownAccountCmd::execute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_oldvalue) {
         m_oldvalue->removeShutdown(m_node);
     }
@@ -1653,7 +1653,7 @@ void NodeModifyShutdownAccountCmd::execute() {
     setCommandType(0);
 }
 void NodeModifyShutdownAccountCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     if (m_newvalue) {
         m_newvalue->removeShutdown(m_node);
     }
@@ -1668,16 +1668,16 @@ ModifyDefaultAccountCmd::ModifyDefaultAccountCmd(Part *part, Accounts &acc, Acco
       m_accounts(acc) {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 }
 
 void ModifyDefaultAccountCmd::execute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_accounts.setDefaultAccount(m_newvalue);
     setCommandType(0);
 }
 void ModifyDefaultAccountCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     m_accounts.setDefaultAccount(m_oldvalue);
     setCommandType(0);
 }
@@ -1758,21 +1758,21 @@ CalculateProjectCmd::CalculateProjectCmd(Part *part, Project &node, QString tnam
       newSchedule(0) {
       
     oldCurrent = node.currentSchedule();
-    //kdDebug()<<k_funcinfo<<type<<endl;
+    //kDebug()<<k_funcinfo<<type<<endl;
 }
 void CalculateProjectCmd::execute() {
     if (newSchedule == 0) {
-        //kdDebug()<<k_funcinfo<<" create schedule"<<endl;
+        //kDebug()<<k_funcinfo<<" create schedule"<<endl;
         newSchedule = m_node.createSchedule(m_typename, (Schedule::Type)m_type);
         m_node.calculate(newSchedule);
     } else {
-        //kdDebug()<<k_funcinfo<<" redo"<<endl;
+        //kDebug()<<k_funcinfo<<" redo"<<endl;
         newSchedule->setDeleted(false);
     }
     setCommandType(0);
 }
 void CalculateProjectCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     newSchedule->setDeleted(true);
     m_node.setCurrentSchedulePtr(oldCurrent);
 
@@ -1787,7 +1787,7 @@ RecalculateProjectCmd::RecalculateProjectCmd(Part *part, Project &node, Schedule
       oldDeleted(sch.isDeleted()) {
 
     oldCurrent = node.currentSchedule();
-    //kdDebug()<<k_funcinfo<<sch.typeToString()<<"  curr="<<(oldCurrent?oldCurrent->id():-1)<<endl;
+    //kDebug()<<k_funcinfo<<sch.typeToString()<<"  curr="<<(oldCurrent?oldCurrent->id():-1)<<endl;
 }
 void RecalculateProjectCmd::execute() {
     oldSchedule.setDeleted(true);
@@ -1796,12 +1796,12 @@ void RecalculateProjectCmd::execute() {
         m_node.calculate(newSchedule);
     } else {
         newSchedule->setDeleted(false);
-        //kdDebug()<<k_funcinfo<<newSchedule->typeToString()<<" redo"<<endl;
+        //kDebug()<<k_funcinfo<<newSchedule->typeToString()<<" redo"<<endl;
     }
     setCommandType(0);
 }
 void RecalculateProjectCmd::unexecute() {
-    //kdDebug()<<k_funcinfo<<newSchedule->typeToString()<<(oldCurrent ? oldCurrent->id() : -1)<<endl;
+    //kDebug()<<k_funcinfo<<newSchedule->typeToString()<<(oldCurrent ? oldCurrent->id() : -1)<<endl;
     newSchedule->setDeleted(true);
     oldSchedule.setDeleted(oldDeleted);
     m_node.setCurrentSchedulePtr(oldCurrent);

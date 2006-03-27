@@ -199,9 +199,9 @@ public:
 	void transform( const QString &transform );
 	void transformOasis( const QString &transform );
 
-	static QWMatrix parseTransform( const QString &transform );
+	static QMatrix parseTransform( const QString &transform );
 
-	void transform( const QWMatrix &mat )
+	void transform( const QMatrix &mat )
 	{
 		m_matrix *= mat;
 	}
@@ -212,9 +212,9 @@ public:
 
 protected:
 	QString buildSvgTransform() const;
-	QString buildSvgTransform( const QWMatrix &mat ) const;
+	QString buildSvgTransform( const QMatrix &mat ) const;
 	QString buildOasisTransform() const;
-	QString buildOasisTransform( const QWMatrix &mat ) const;
+	QString buildOasisTransform( const QMatrix &mat ) const;
 
 	void transformByViewbox( const QDomElement &element, QString viewbox );
 
@@ -225,10 +225,10 @@ protected:
 	virtual void svgClosePath();
 
 	virtual void saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesojectauto ) const;
-	QWMatrix parseOasisTransform( const QString &transform );
+	QMatrix parseOasisTransform( const QString &transform );
 
 protected:
-	QWMatrix m_matrix;
+	QMatrix m_matrix;
 
 private:
 	/**

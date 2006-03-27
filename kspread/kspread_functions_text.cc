@@ -619,7 +619,7 @@ Value func_toggle (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_trim (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return Value (
-      calc->conv()->asString (args[0]).asString().simplifyWhiteSpace());
+      calc->conv()->asString (args[0]).asString().simplified());
 }
 
 // Function: UPPER

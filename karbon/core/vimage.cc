@@ -78,7 +78,7 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 		return;
 	}
 
-	//painter->setWorldMatrix( m_matrix );
+	//painter->setMatrix( m_matrix );
 
 	//*m_image = m_image->smoothScale( m_image->width() * zoomFactor, m_image->height() * zoomFactor, QImage::ScaleMin );
 	m_boundingBox = KoRect( 0, 0, m_image->width(), m_image->height() );
@@ -88,12 +88,12 @@ VImage::draw( VPainter *painter, const KoRect * ) const
 }
 
 void
-VImage::transform( const QWMatrix& m )
+VImage::transform( const QMatrix& m )
 {
-	//QWMatrix m2 = m;
+	//QMatrix m2 = m;
 	//m_matrix *= m2.scale( 1.0, -1.0 );
 	m_matrix *= m;
-	kdDebug(38000) << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
+	kDebug(38000) << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
 	m_boundingBox = m_boundingBox.transform( m );
 }
 
@@ -132,7 +132,7 @@ VImage::load( const QDomElement& element )
 						element.attribute( "m22", "1.0" ).toDouble(),
 						element.attribute( "dx", "0.0" ).toDouble(),
 						element.attribute( "dy", "0.0" ).toDouble() );
-	kdDebug(38000) << "VImage::load : " << m_fname.latin1() << endl;
+	kDebug(38000) << "VImage::load : " << m_fname.latin1() << endl;
 	delete m_image;
 	m_image = new QImage( m_fname );
 	if( m_image->depth() != 32 )

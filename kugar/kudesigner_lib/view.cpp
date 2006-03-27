@@ -64,25 +64,25 @@ void SelectionRect::draw( QPainter & painter )
         m_canvas->drawArea( m_canvas->rect(), &p );
       } */
 
-    /*  kdDebug(31000) << "creating pixmap" << endl;
+    /*  kDebug(31000) << "creating pixmap" << endl;
         QPixmap mp(rect().size());
-        kdDebug(31000) << "creating painter" << endl;
+        kDebug(31000) << "creating painter" << endl;
         QPainter p(&mp);
-        kdDebug(31000) << "filling pixmap" << endl;
+        kDebug(31000) << "filling pixmap" << endl;
         m_canvas->drawArea(m_canvas->rect(), &p);
-        kdDebug(31000) << "converting to image" << endl;
+        kDebug(31000) << "converting to image" << endl;
         QImage im = mp.convertToImage();
         if (!im.isNull())
         {
-            kdDebug(31000) << "do dither" << endl;
+            kDebug(31000) << "do dither" << endl;
             mp.convertFromImage(im,  Qt::OrderedAlphaDither);
 
-            kdDebug(31000) << "creating brush" << endl;
+            kDebug(31000) << "creating brush" << endl;
             QBrush br(KGlobalSettings::highlightColor(),Qt::CustomPattern);
             br.setPixmap(mp);
             painter.setBrush(br);
         }
-        kdDebug(31000) << "drawing" << endl;*/
+        kDebug(31000) << "drawing" << endl;*/
     //    painter.drawRect(rect());
     QPen pen( QColor( 0, 0, 0 ), 0, Qt::DotLine );
     painter.setPen( pen );
@@ -211,7 +211,7 @@ bool View::startResizing( QMouseEvent * /*e*/, QPoint &p )
         if ( resizing_type )
         {
             m_canvas->selectItem( cbx, false );
-            //kdDebug()<<"A Widget should be resized"<<endl;
+            //kDebug()<<"A Widget should be resized"<<endl;
             moving = 0;
             resizing = cbx;
             moving_start = p;
@@ -292,7 +292,7 @@ void View::startMoveOrResizeOrSelectItem( QCanvasItemList &l,
 
 void View::contentsMousePressEvent( QMouseEvent* e )
 {
-    QPoint p = inverseWorldMatrix().QWMatrix::map( e->pos() );
+    QPoint p = inverseWorldMatrix().QMatrix::map( e->pos() );
     QCanvasItemList l = m_canvas->collisions( p );
 
     //if there is a request for properties or for delete operation
@@ -357,7 +357,7 @@ void View::contentsMouseReleaseEvent( QMouseEvent* e )
     selectionRect->setY( 0 );
     selectionRect->hide();
 
-    QPoint p = inverseWorldMatrix().QWMatrix::map( e->pos() );
+    QPoint p = inverseWorldMatrix().QMatrix::map( e->pos() );
     QCanvasItemList l = m_canvas->collisions( p );
 
     switch ( e->button() )
@@ -508,12 +508,12 @@ void View::contentsMouseMoveEvent( QMouseEvent* e )
         double newYPos = r->y();
         double h = r->height();
         double w = r->width();
-        //        kdDebug()<<"resizing"<<endl;
+        //        kDebug()<<"resizing"<<endl;
 
         //vertical resizing
         if ( resizing_type & Kudesigner::Box::ResizeBottom )
         {
-            //            kdDebug()<<"Resize bottom"<<endl;
+            //            kDebug()<<"Resize bottom"<<endl;
             h = h + p.y() - moving_start.y();
             fixMaxValues( h, r->y(), resizing_constraint.bottom(), moving_offsetY );
             if ( resizing->rtti() != Rtti_Line )
@@ -522,7 +522,7 @@ void View::contentsMouseMoveEvent( QMouseEvent* e )
         else
             if ( resizing_type & Kudesigner::Box::ResizeTop )
             {
-                //                kdDebug()<<"Resize top"<<endl;
+                //                kDebug()<<"Resize top"<<endl;
                 newYPos = r->y() + p.y() - moving_start.y();
                 fixMinValues( newYPos, resizing_constraint.top(), moving_offsetY );
                 if ( resizing->rtti() != Rtti_Line )
@@ -534,7 +534,7 @@ void View::contentsMouseMoveEvent( QMouseEvent* e )
         //horizontal resizing
         if ( resizing_type & Kudesigner::Box::ResizeRight )
         {
-            //kdDebug()<<"Resize right"<<endl;
+            //kDebug()<<"Resize right"<<endl;
             w = w + p.x() - moving_start.x();
             fixMaxValues( w, r->x(), resizing_constraint.right(), moving_offsetX );
             if ( resizing->rtti() != Rtti_Line )
@@ -543,7 +543,7 @@ void View::contentsMouseMoveEvent( QMouseEvent* e )
         else
             if ( resizing_type & Kudesigner::Box::ResizeLeft )
             {
-                //    kdDebug()<<"Resize left"<<endl;
+                //    kDebug()<<"Resize left"<<endl;
                 newXPos = r->x() + p.x() - moving_start.x();
                 fixMinValues( newXPos, resizing_constraint.left(), moving_offsetX );
                 if ( resizing->rtti() != Rtti_Line )
@@ -722,7 +722,7 @@ void View::contentsDragMoveEvent( QDragMoveEvent * event )
     if ( !m_plugin )
         return ;
     QCanvasItemList l = m_canvas->collisions( event->pos() );
-    /*    kdDebug()<<l.count()<<endl;*/
+    /*    kDebug()<<l.count()<<endl;*/
     if ( l.count() < 2 )
     {
         event->ignore();
@@ -743,7 +743,7 @@ void View::contentsDragEnterEvent ( QDragEnterEvent * /*event*/ )
 
 void View::keyPressEvent( QKeyEvent *e )
 {
-    kdDebug(31000) << k_funcinfo << endl;
+    kDebug(31000) << k_funcinfo << endl;
 
     if ( m_canvas->selected.count() == 1 )
     {
@@ -752,7 +752,7 @@ void View::keyPressEvent( QKeyEvent *e )
         switch ( e->key() )
         {
         case Qt::Key_Delete:
-            kdDebug(31000) <<  "Deleting selection" << endl;
+            kDebug(31000) <<  "Deleting selection" << endl;
             /*                unselectItem(item);
                             ( (MyCanvas*) m_canvas )->templ->removeReportItem( item );
                             clearRequest();*/

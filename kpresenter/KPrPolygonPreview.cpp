@@ -40,7 +40,7 @@ KPrPolygonPreview::KPrPolygonPreview( QWidget* parent, const char* name)
 void KPrPolygonPreview::drawContents( QPainter *painter )
 {
     double angle = 2 * M_PI / nCorners;
-    double diameter = static_cast<double>( QMAX( width(), height() ) - 10 );
+    double diameter = static_cast<double>( qMax( width(), height() ) - 10 );
     double radius = diameter * 0.5;
 
     painter->setWindow( qRound( -radius ), qRound( -radius ), qRound( diameter ), qRound( diameter ) );

@@ -25,7 +25,7 @@
 #include <qwidget.h>
 
 class KComboBox;
-class KListView;
+class K3ListView;
 
 class Q3ListViewItem;
 
@@ -42,7 +42,7 @@ class StyleWidget : public QWidget
   StyleWidget( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
   ~StyleWidget();
 
-  KListView * m_styleList;
+  K3ListView * m_styleList;
   KComboBox * m_displayBox;
 signals:
     void modifyStyle();

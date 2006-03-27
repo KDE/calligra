@@ -59,10 +59,10 @@ ClipartChooser::startDrag()
 	KarbonDrag* kd = new KarbonDrag( this );
 	VObjectList objects;
 	VClipartIconItem *selectedClipart = (VClipartIconItem *)currentItem();
-	double s = kMax( selectedClipart->originalWidth(), selectedClipart->originalHeight() );
+	double s = qMax( selectedClipart->originalWidth(), selectedClipart->originalHeight() );
 	VObject *clipart = selectedClipart->clipart()->clone();
 
-	QWMatrix mat( s, 0, 0, -s, -( s / 2 ), ( s / 2 ) );
+	QMatrix mat( s, 0, 0, -s, -( s / 2 ), ( s / 2 ) );
 
 	VTransformCmd trafo( 0L, mat );
 	trafo.visit( *clipart );
@@ -105,7 +105,7 @@ void VStyleDocker::slotItemSelected( KoIconItem *item )
 {
 	VPattern *pattern = (VPattern *)item;
 	if( !pattern ) return;
-	kdDebug(38000) << "loading pattern : " << pattern->tilename().latin1() << endl;
+	kDebug(38000) << "loading pattern : " << pattern->tilename().latin1() << endl;
 	if( m_part && m_part->document().selection() )
 	{
 		VFill fill;
@@ -214,15 +214,15 @@ ClipartWidget::addClipart()
 	if( clipart )
 	{
 		KoRect clipartBox = clipart->boundingBox();
-		double scaleFactor = 1. / kMax( clipartBox.width(), clipartBox.height() );
-		QWMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
+		double scaleFactor = 1. / qMax( clipartBox.width(), clipartBox.height() );
+		QMatrix trMatrix( scaleFactor, 0, 0, scaleFactor, -clipartBox.x() * scaleFactor, -clipartBox.y() * scaleFactor );
 
 		VTransformCmd trafo( 0L, trMatrix );
 		trafo.visit( *clipart );
 
 		// center the clipart
 		trMatrix.reset();
-		double size = kMax( clipart->boundingBox().width(), clipart->boundingBox().height() );
+		double size = qMax( clipart->boundingBox().width(), clipart->boundingBox().height() );
 		trMatrix.translate( ( size - clipart->boundingBox().width() ) / 2, ( size - clipart->boundingBox().height() ) / 2 );
 
 		trafo.setMatrix( trMatrix );

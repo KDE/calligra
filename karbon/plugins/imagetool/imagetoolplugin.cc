@@ -35,7 +35,7 @@ ImageToolPlugin::ImageToolPlugin(QObject *parent, const char *name, const QStrin
 {
 	setInstance(ImageToolPluginFactory::instance());
 
-	kdDebug() << "VImageToolPlugin. Class: "
+	kDebug() << "VImageToolPlugin. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

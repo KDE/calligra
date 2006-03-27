@@ -23,7 +23,7 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <knuminput.h>
-#include <kselect.h>
+#include <kselector.h>
 
 #include "vcolorslider.h"
 

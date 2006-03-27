@@ -356,8 +356,8 @@ void KivioCanvas::updateScrollBars()
   int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
   int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
 
-  m_pScrollX = QMAX(pw - width(), 0);
-  m_pScrollY = QMAX(ph - height(), 0);
+  m_pScrollX = qMax(pw - width(), 0);
+  m_pScrollY = qMax(ph - height(), 0);
 
   m_pHorzScrollBar->setRange(0, m_pScrollX);
   if ( m_pHorzScrollBar->value() > m_pHorzScrollBar->maxValue() ||
@@ -556,7 +556,7 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
   // do so now.
   if( m_pDragStencil )
   {
-    kdDebug(43000) << "KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!" << endl;
+    kDebug(43000) << "KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!" << endl;
     delete m_pDragStencil;
     m_pDragStencil = 0L;
   }
@@ -776,25 +776,25 @@ void KivioCanvas::borderTimerTimeout()
   int hmin = m_pHorzScrollBar->minValue();
 
   if ( p.x() < 0 && hpos > hmin ) {
-    dx = QMIN(d,hpos-hmin);
+    dx = qMin(d,hpos-hmin);
     r.setRight(r.right()+dx);
     rectAnchor.setX(rectAnchor.x()+dx);
   }
 
   if ( p.y() < 0 && vpos > vmin ) {
-    dy = QMIN(d,vpos-vmin);
+    dy = qMin(d,vpos-vmin);
     r.setBottom(r.bottom()+dy);
     rectAnchor.setY(rectAnchor.y()+dy);
   }
 
   if ( p.x() > width() && hpos < hmax ) {
-    dx = -QMIN(d,hmax-hpos);
+    dx = -qMin(d,hmax-hpos);
     r.setLeft(r.left()+dx);
     rectAnchor.setX(rectAnchor.x()+dx);
   }
 
   if ( p.y() > height() && vpos < vmax  ) {
-    dy = -QMIN(d,vmax-vpos);
+    dy = -qMin(d,vmax-vpos);
     r.setTop(r.top()+dy);
     rectAnchor.setY(rectAnchor.y()+dy);
   }
@@ -1030,8 +1030,8 @@ void KivioCanvas::setViewCenterPoint(const KoPoint &p)
 
   KoRect va = visibleArea();
 
-  double x = QMAX(0.0, p.x() - (va.width() / 2.0));
-  double y = QMAX(0.0, p.y() - (va.height() / 2.0));
+  double x = qMax(0.0, p.x() - (va.width() / 2.0));
+  double y = qMax(0.0, p.y() - (va.height() / 2.0));
 
   m_pVertScrollBar->setValue(m_pView->zoomHandler()->zoomItY(y));
   m_pHorzScrollBar->setValue(m_pView->zoomHandler()->zoomItX(x));
@@ -1059,7 +1059,7 @@ void KivioCanvas::setVisibleArea(KoRect r, int margin)
 
   float zw = cw / (float)zoom.zoomItX(r.width());
   float zh = ch / (float)zoom.zoomItY(r.height());
-  float z = QMIN(zw, zh);
+  float z = qMin(zw, zh);
 
   m_pView->viewZoom(qRound(z * 100));
 

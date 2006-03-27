@@ -68,7 +68,7 @@
 
 
 #include <kstandarddirs.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kmenubar.h>
 #include <kiconloader.h>
 #include <khelpmenu.h>
@@ -413,14 +413,14 @@ void KivioDoc::saveOasisSettings( KoXmlWriter &/*settingsWriter*/ )
 
 bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
 {
-  kdDebug(43000) << "Start loading OASIS document..." << endl;
+  kDebug(43000) << "Start loading OASIS document..." << endl;
   m_bLoading = true;
 
   QDomElement contents = doc.documentElement();
   QDomElement body(KoDom::namedItemNS( contents, KoXmlNS::office, "body"));
 
   if(body.isNull()) {
-    kdDebug(43000) << "No office:body found!" << endl;
+    kDebug(43000) << "No office:body found!" << endl;
     setErrorMessage(i18n("Invalid OASIS document. No office:body tag found."));
     m_bLoading = false;
     return false;
@@ -429,7 +429,7 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
   body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
 
   if(body.isNull()) {
-    kdDebug(43000) << "No office:drawing found!" << endl;
+    kDebug(43000) << "No office:drawing found!" << endl;
     setErrorMessage(i18n("Invalid OASIS document. No office:drawing tag found."));
     m_bLoading = false;
     return false;
@@ -489,7 +489,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   if ( kivio.attribute( "mime" ) != "application/x-kivio" &&
     kivio.attribute( "mime" ) != "application/vnd.kde.kivio" )
   {
-    kdDebug(43000) << "KivioDoc::loadXML() - Invalid mime type" << endl;
+    kDebug(43000) << "KivioDoc::loadXML() - Invalid mime type" << endl;
     m_bLoading = false;
     return false;
   }
@@ -513,7 +513,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
 
         if( id.isEmpty() )
         {
-            kdDebug(43000) << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found, it contains no id!" << endl;
+            kDebug(43000) << "KivioDoc::loadXML() - Bad KivioStencilSpawnerSet found, it contains no id!" << endl;
         }
         else
         {
@@ -526,7 +526,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     }
     else
     {
-       kdDebug(43000) << "KivioDoc::loadXML() - Unknown node " <<  name << endl;
+       kDebug(43000) << "KivioDoc::loadXML() - Unknown node " <<  name << endl;
     }
 
     node = node.nextSibling();
@@ -577,7 +577,7 @@ bool KivioDoc::loadStencilSpawnerSet(const QString &id, bool hidden)
       if( fi->fileName() != "." &&
           fi->fileName() != ".." )
       {
-        QDir innerD(fi->absFilePath() );
+        QDir innerD(fi->absoluteFilePath() );
         innerD.setFilter( QDir::Dirs );
         innerD.setSorting( QDir::Name );
 
@@ -595,12 +595,12 @@ bool KivioDoc::loadStencilSpawnerSet(const QString &id, bool hidden)
             QString foundId;
 
             // TODO: use ID system here for loading
-            foundId = KivioStencilSpawnerSet::readId(innerFI->absFilePath());
+            foundId = KivioStencilSpawnerSet::readId(innerFI->absoluteFilePath());
             if( foundId == id)
             {
 
               // Load the spawner set with  rootDir + "/" + fi.fileName()
-              addSpawnerSetDuringLoad(innerFI->absFilePath(), hidden);
+              addSpawnerSetDuringLoad(innerFI->absoluteFilePath(), hidden);
               return true;
             }
           }
@@ -670,8 +670,8 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
 
   float zw = (float) rect.width() / (float)zoom.zoomItX(r.width());
   float zh = (float) rect.height() / (float)zoom.zoomItY(r.height());
-  float z = QMIN(zw, zh);
-  //kdDebug(43000) << "paintContent: w = " << rect.width() << " h = " << rect.height() << endl;
+  float z = qMin(zw, zh);
+  //kDebug(43000) << "paintContent: w = " << rect.width() << " h = " << rect.height() << endl;
 
   zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(),
     KoGlobal::dpiY());
@@ -760,7 +760,7 @@ void KivioDoc::addSpawnerSet( const QString &dirName )
 
   if(!set->loadDir(dirName))
   {
-    kdDebug(43000) << "KivioDoc::addSpawnerSet() - Error loading dir set" << endl;
+    kDebug(43000) << "KivioDoc::addSpawnerSet() - Error loading dir set" << endl;
     delete set;
     return;
   }
@@ -788,7 +788,7 @@ void KivioDoc::addSpawnerSetDuringLoad(const QString& dirName, bool hidden)
 
   if( set->loadDir(dirName)==false )
   {
-    kdDebug(43000) << "KivioDoc::addSpawnerSetDuringLoad() - Error loading dir set" << endl;
+    kDebug(43000) << "KivioDoc::addSpawnerSetDuringLoad() - Error loading dir set" << endl;
     delete set;
     return;
   }
@@ -974,7 +974,7 @@ void KivioDoc::resetLayerPanel()
 
 void KivioDoc::addCommand( KCommand * cmd )
 {
-    kdDebug(43000) << "KivioDoc::addCommand " << cmd->name() << endl;
+    kDebug(43000) << "KivioDoc::addCommand " << cmd->name() << endl;
     m_commandHistory->addCommand( cmd, false );
     setModified( true );
 }

@@ -30,7 +30,7 @@ class QHBoxLayout;
 class QTabWidget;
 class QWidgetStack;
 
-class KListView;
+class K3ListView;
 class KPrinter;
 class KAction;
 class KActionMenu;

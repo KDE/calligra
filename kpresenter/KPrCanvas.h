@@ -49,7 +49,7 @@ class QPainter;
 class KTextEdit;
 class KPrTextObject;
 class KPrObject;
-class KPopupMenu;
+class KMenu;
 class QResizeEvent;
 class QPaintEvent;
 class QDragEnterEvent;
@@ -788,7 +788,7 @@ private:
     static const int KEY_SNAP_DISTANCE;
     // variables
     /// Popup menu used in presentation mode.
-    KPopupMenu *m_presMenu;
+    KMenu *m_presMenu;
     bool showingLastSlide;
     bool mousePressed;
     bool drawContour;

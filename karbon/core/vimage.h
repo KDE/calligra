@@ -20,7 +20,7 @@ public:
 
 	virtual void draw( VPainter *painter, const KoRect *rect ) const;
 
-    virtual void transform( const QWMatrix& m );
+    virtual void transform( const QMatrix& m );
 	virtual VObject* clone() const;
 
 	virtual void save( QDomElement& element ) const;
@@ -31,7 +31,7 @@ public:
 private:
 	QImage *m_image;
 	QString m_fname;
-	QWMatrix m_matrix;
+	QMatrix m_matrix;
 };
 
 #endif

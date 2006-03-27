@@ -282,10 +282,10 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
     soundLayout->setAutoAdd( true );
 
     lSoundEffect = new QLabel( i18n( "File name:" ), soundgrp );
-    requester = new KURLRequester( soundgrp );
+    requester = new KUrlRequester( soundgrp );
     requester->setURL( soundFileName );
-    connect( requester, SIGNAL( openFileDialog( KURLRequester * ) ),
-             this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
+    connect( requester, SIGNAL( openFileDialog( KUrlRequester * ) ),
+             this, SLOT( slotRequesterClicked( KUrlRequester * ) ) );
     connect( requester, SIGNAL( textChanged( const QString& ) ),
              this, SLOT( slotSoundFileChanged( const QString& ) ) );
 
@@ -397,7 +397,7 @@ static QString getSoundFileFilter()
     return str;
 }
 
-void KPrTransEffectDia::slotRequesterClicked( KURLRequester * )
+void KPrTransEffectDia::slotRequesterClicked( KUrlRequester * )
 {
     QString filter = getSoundFileFilter();
     requester->fileDialog()->setFilter( filter );

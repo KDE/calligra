@@ -88,9 +88,9 @@ class FormPrivate
 		~FormPrivate();
 
 //		FormManager  *manager;
-		QGuardedPtr<Container>  toplevel;
+		QPointer<Container>  toplevel;
 		ObjectTree  *topTree;
-		QGuardedPtr<QWidget> widget;
+		QPointer<QWidget> widget;
 
 		WidgetList  selected;
 		ResizeHandleSet::Dict resizeHandles;

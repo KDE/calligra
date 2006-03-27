@@ -107,7 +107,7 @@ void KPrImportStyleDia::loadFile()
                         sty->format() = KPrTextObject::loadFormat( formatElem, 0L, m_doc->defaultFont(),
                                                                   m_doc->globalLanguage(), m_doc->globalHyphenation() );
                     else
-                        kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
+                        kWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
 
                     // Style created, now let's try to add it
@@ -119,7 +119,7 @@ void KPrImportStyleDia::loadFile()
                         followingStyles.append( following );
                     }
                     else
-                        kdWarning(33001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
+                        kWarning(33001) << "Found duplicate style declaration, overwriting former " << sty->name() << endl;
                 }
 
                 Q_ASSERT( m_styleList.count() >= 0 && followingStyles.count() == uint( m_styleList.count() ) );

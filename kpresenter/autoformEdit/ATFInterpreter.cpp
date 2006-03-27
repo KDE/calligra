@@ -100,12 +100,12 @@ void ATFInterpreter::load(const QString & fileName)
     coordList.clear();
     lines.clear();
 
-    if (ptA.open(IO_ReadOnly))
+    if (ptA.open(QIODevice::ReadOnly))
     {
         while (!ptA.atEnd())
         {
             ptA.readLine(line,255);
-            lines.append(line.simplifyWhiteSpace());
+            lines.append(line.simplified());
         }
         ptA.close();
         interpret();

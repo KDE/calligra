@@ -85,7 +85,7 @@ double KDChartVectorSeries::maxValue( int coordinate, bool &ok ) const
                 bStart = false;
             }
             else
-                maxValue = QMAX( maxValue, d.doubleValue( coordinate ) );
+                maxValue = qMax( maxValue, d.doubleValue( coordinate ) );
         }
     }
 
@@ -117,7 +117,7 @@ double KDChartVectorSeries::minValue( int coordinate, bool &ok ) const
                 bStart = false;
             }
             else
-                minValue = QMIN( minValue, d.doubleValue( coordinate ) );
+                minValue = qMin( minValue, d.doubleValue( coordinate ) );
         }
     }
 

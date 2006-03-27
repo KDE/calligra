@@ -217,7 +217,7 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
 
 bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 {
-    kdDebug(36001)<<"PRINTING ...."<<endl;
+    kDebug(36001)<<"PRINTING ...."<<endl;
 
     // Override the current grid pen setting, when set to disable
     QPen gridPen;
@@ -243,7 +243,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 
     //Calculate the range to be printed
     QRect cell_range = cellsPrintRange();
-    kdDebug()<<"cellsPrintRange() :"<<cellsPrintRange()<<endl;
+    kDebug()<<"cellsPrintRange() :"<<cellsPrintRange()<<endl;
     //Ensure, that our newPage lists are generated for the whole sheet to print
     //For this we add to the lists the width/height of 1 page
     updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( cell_range.right() ) + prinsheetWidthPts() ) );
@@ -263,7 +263,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
         {
             QRect page_range( QPoint( (*itX).startItem(), (*itY).startItem() ),
                               QPoint( (*itX).endItem(),   (*itY).endItem() ) );
-            kdDebug()<<" page_range :"<<page_range<<endl;
+            kDebug()<<" page_range :"<<page_range<<endl;
             //Append page when there is something to print
             if ( pageNeedsPrinting( page_range ) )
             {
@@ -281,7 +281,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
     }
 
 
-    kdDebug(36001) << "PRINTING " << page_list.count() << " pages" << endl;
+    kDebug(36001) << "PRINTING " << page_list.count() << " pages" << endl;
     m_uprintPages = page_list.count();
 
 
@@ -368,7 +368,7 @@ bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
 void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
                                    const KoRect& view, const KoPoint _childOffset )
 {
-      kdDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", r="
+      kDebug(36001) << "Rect x=" << page_range.left() << " y=" << page_range.top() << ", r="
       << page_range.right() << " b="  << page_range.bottom() << "  offsetx: "<< _childOffset.x()
       << "  offsety: " << _childOffset.y() <<"  view-x: "<<view.x()<< endl;
 
@@ -590,20 +590,20 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
 //        .arg(it.current()->contentRect().right())
 //        .arg(it.current()->contentRect().bottom())
 //        .arg(view.left()).arg(view.top()).arg(zoomedView.right()).arg(zoomedView.bottom());
-//        kdDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
+//        kDebug(36001)<<tmp<<" offset "<<_childOffset.x()<<"/"<<_childOffset.y()<<endl;
 
           KoRect const bound = obj->geometry();
           QRect zoomedBound = m_pDoc->zoomRect( KoRect(bound.left(), bound.top(),
               bound.width(), 
               bound.height() ) );
 #if 1
-//         kdDebug(36001)  << "printRect(): Bounding rect of view: " << view
+//         kDebug(36001)  << "printRect(): Bounding rect of view: " << view
 //             << endl;
-//         kdDebug(36001)  << "printRect(): Bounding rect of zoomed view: "
+//         kDebug(36001)  << "printRect(): Bounding rect of zoomed view: "
 //             << zoomedView << endl;
-//         kdDebug(36001)  << "printRect(): Bounding rect of child: " << bound
+//         kDebug(36001)  << "printRect(): Bounding rect of child: " << bound
 //             << endl;
-//         kdDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
+//         kDebug(36001)  << "printRect(): Bounding rect of zoomed child: "
 //             << zoomedBound << endl;
 #endif
     if ( obj->sheet() == m_pSheet  && zoomedBound.intersects( zoomedView ) )
@@ -1255,7 +1255,7 @@ const char* SheetPrint::orientationString() const
         return "Landscape";
     }
 
-    kdWarning(36001)<<"SheetPrint: Unknown orientation, using now portrait"<<endl;
+    kWarning(36001)<<"SheetPrint: Unknown orientation, using now portrait"<<endl;
     return 0;
 }
 
@@ -1285,7 +1285,7 @@ QString SheetPrint::completeHeading( const QString &_data, int _page, const QStr
     QString organization;
     QString tmp;
     if ( !authorPage )
-        kdWarning() << "Author information not found in Document Info !" << endl;
+        kWarning() << "Author information not found in Document Info !" << endl;
     else
     {
         full_name = authorPage->fullName();
@@ -1355,9 +1355,9 @@ void SheetPrint::setPrintRange( const QRect &_printRange )
 
     //Refresh calculation of stored page breaks, the lower one of old and new
     if ( oldLeft != _printRange.left() )
-        updateNewPageListX( QMIN( oldLeft, _printRange.left() ) );
+        updateNewPageListX( qMin( oldLeft, _printRange.left() ) );
     if ( oldTop != _printRange.top() )
-        updateNewPageListY( QMIN( oldTop, _printRange.top() ) );
+        updateNewPageListY( qMin( oldTop, _printRange.top() ) );
 
     m_pDoc->setModified( true );
 
@@ -1399,7 +1399,7 @@ void SheetPrint::setPageLimitY( int pages )
 
 void SheetPrint::calculateZoomForPageLimitX()
 {
-    kdDebug() << "Calculating zoom for X limit" << endl;
+    kDebug() << "Calculating zoom for X limit" << endl;
     if( m_iPageLimitX == 0 )
         return;
 
@@ -1418,10 +1418,10 @@ void SheetPrint::calculateZoomForPageLimitX()
     //calculating a factor for scaling the zoom down makes it lots faster
     double factor = (double)m_iPageLimitX/(double)currentPages +
                     1-(double)currentPages/((double)currentPages+1); //add possible error;
-    kdDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
+    kDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
     m_dZoom = m_dZoom*factor;
     
-    kdDebug() << "New exact zoom: " << m_dZoom << endl;
+    kDebug() << "New exact zoom: " << m_dZoom << endl;
     
     if (m_dZoom < 0.01)
         m_dZoom = 0.01;
@@ -1430,14 +1430,14 @@ void SheetPrint::calculateZoomForPageLimitX()
     
     m_dZoom = (((int)(m_dZoom*100 + 0.5))/100.0);
     
-    kdDebug() << "New rounded zoom: " << m_dZoom << endl;
+    kDebug() << "New rounded zoom: " << m_dZoom << endl;
     
     updatePrintRepeatColumnsWidth();
     updateNewPageListX( 0 );
     updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
     currentPages = pagesX( printRange );
     
-    kdDebug() << "Number of pages with this zoom: " << currentPages << endl;
+    kDebug() << "Number of pages with this zoom: " << currentPages << endl;
     
     while( ( currentPages > m_iPageLimitX ) && ( m_dZoom > 0.01 ) )
     {
@@ -1446,7 +1446,7 @@ void SheetPrint::calculateZoomForPageLimitX()
         updateNewPageListX( 0 );
         updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
         currentPages = pagesX( printRange );
-        kdDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
+        kDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
     }
 
     if ( m_dZoom < origZoom )
@@ -1461,7 +1461,7 @@ void SheetPrint::calculateZoomForPageLimitX()
 
 void SheetPrint::calculateZoomForPageLimitY()
 {
-    kdDebug() << "Calculating zoom for Y limit" << endl;
+    kDebug() << "Calculating zoom for Y limit" << endl;
     if( m_iPageLimitY == 0 )
         return;
 
@@ -1479,10 +1479,10 @@ void SheetPrint::calculateZoomForPageLimitY()
     
     double factor = (double)m_iPageLimitY/(double)currentPages +
                     1-(double)currentPages/((double)currentPages+1); //add possible error
-    kdDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
+    kDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
     m_dZoom = m_dZoom*factor;
     
-    kdDebug() << "New exact zoom: " << m_dZoom << endl;
+    kDebug() << "New exact zoom: " << m_dZoom << endl;
     
     if (m_dZoom < 0.01)
         m_dZoom = 0.01;
@@ -1491,14 +1491,14 @@ void SheetPrint::calculateZoomForPageLimitY()
     
     m_dZoom = (((int)(m_dZoom*100 + 0.5))/100.0);
     
-    kdDebug() << "New rounded zoom: " << m_dZoom << endl;
+    kDebug() << "New rounded zoom: " << m_dZoom << endl;
     
     updatePrintRepeatRowsHeight();
     updateNewPageListY( 0 );
     updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
     currentPages = pagesY( printRange );
     
-    kdDebug() << "Number of pages with this zoom: " << currentPages << endl;
+    kDebug() << "Number of pages with this zoom: " << currentPages << endl;
     
     while( ( currentPages > m_iPageLimitY ) && ( m_dZoom > 0.01 ) )
     {
@@ -1507,7 +1507,7 @@ void SheetPrint::calculateZoomForPageLimitY()
         updateNewPageListY( 0 );
         updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
         currentPages = pagesY( printRange );
-        kdDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
+        kDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
     }
 
     if ( m_dZoom < origZoom )
@@ -1619,7 +1619,7 @@ void SheetPrint::setPrintRepeatColumns( QPair<int, int> _printRepeatColumns )
     updatePrintRepeatColumnsWidth();
 
     //Refresh calculation of stored page breaks, the lower one of old and new
-    updateNewPageListX( QMIN( oldFirst, _printRepeatColumns.first ) );
+    updateNewPageListX( qMin( oldFirst, _printRepeatColumns.first ) );
 
     //Refresh view, if page borders are shown
     if ( m_pSheet->isShowPageBorders() )
@@ -1649,7 +1649,7 @@ void SheetPrint::setPrintRepeatRows( QPair<int, int> _printRepeatRows )
     updatePrintRepeatRowsHeight();
 
     //Refresh calculation of stored page breaks, the lower one of old and new
-    updateNewPageListY( QMIN( oldFirst, _printRepeatRows.first ) );
+    updateNewPageListY( qMin( oldFirst, _printRepeatRows.first ) );
 
     //Refresh view, if page borders are shown
     if ( m_pSheet->isShowPageBorders() )

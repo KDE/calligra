@@ -157,7 +157,7 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &main
 
 	VObject::saveOasis( store, docWriter, mainStyles, index );
 
-	QWMatrix tmpMat;
+	QMatrix tmpMat;
 	tmpMat.scale( 1, -1 );
 	tmpMat.translate( 0, -document()->height() );
 	

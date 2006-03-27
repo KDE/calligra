@@ -20,7 +20,7 @@
 
 #include "kiviostencilsetaction.h"
 
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
 #include <kdebug.h>
@@ -36,6 +36,7 @@
 #include <qmenubar.h>
 #include <qstringlist.h>
 #include <qvaluelist.h>
+#include <kauthorized.h>
 
 #include "kivio_stencil_spawner_set.h"
 
@@ -71,7 +72,7 @@ KivioStencilSetAction::KivioStencilSetAction(const QString &text, const QString 
 
   m_pathList.setAutoDelete(true);
 
-  m_popup = new KPopupMenu(0L,"KivioStencilSetAction::popup");
+  m_popup = new KMenu(0L,"KivioStencilSetAction::popup");
   updateMenu();
 }
 
@@ -82,7 +83,7 @@ KivioStencilSetAction::~KivioStencilSetAction()
   m_popup = 0;
 }
 
-KPopupMenu* KivioStencilSetAction::popupMenu() const
+KMenu* KivioStencilSetAction::popupMenu() const
 {
   return m_popup;
 }
@@ -95,9 +96,9 @@ void KivioStencilSetAction::popup( const QPoint& global )
 int KivioStencilSetAction::plug( QWidget* widget, int index)
 {
   // This function is copied from KActionMenu::plug
-  if (kapp && !kapp->authorizeKAction(name()))
+  if (kapp && !KAuthorized::authorizeKAction(name()))
     return -1;
-  kdDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
+  kDebug(129) << "KAction::plug( " << widget << ", " << index << " )" << endl; // remove -- ellis
   if ( widget->inherits("QPopupMenu") )
   {
     QPopupMenu* menu = static_cast<QPopupMenu*>( widget );
@@ -211,15 +212,15 @@ void KivioStencilSetAction::loadCollections( const QString& rootDirStr )
   {
     if(colFInfo->fileName() != ".." && colFInfo->fileName() != ".")
     {
-      cId = KivioStencilSpawnerSet::readId(colFInfo->absFilePath());
-      KPopupMenu* ch;
+      cId = KivioStencilSpawnerSet::readId(colFInfo->absoluteFilePath());
+      KMenu* ch;
       int index = m_collectionIdList.findIndex(cId);
       
       if(index < 0) {
-        ch = new KPopupMenu;
+        ch = new KMenu;
         connect(ch,SIGNAL(activated(int)),SLOT(slotActivated(int)));
-        m_popup->insertItem(QIconSet(dirtPixmap(colFInfo->absFilePath())),
-          KivioStencilSpawnerSet::readTitle(colFInfo->absFilePath()),ch);
+        m_popup->insertItem(QIcon(dirtPixmap(colFInfo->absoluteFilePath())),
+          KivioStencilSpawnerSet::readTitle(colFInfo->absoluteFilePath()),ch);
         m_collectionIdList.append(cId);
         m_collectionMenuList.append(ch);
       } else {
@@ -233,7 +234,7 @@ void KivioStencilSetAction::loadCollections( const QString& rootDirStr )
   }
 }
 
-void KivioStencilSetAction::loadSet( KPopupMenu* menu, const QString& rootDirStr )
+void KivioStencilSetAction::loadSet( KMenu* menu, const QString& rootDirStr )
 {
   QDir rootDir( rootDirStr );
 
@@ -248,8 +249,8 @@ void KivioStencilSetAction::loadSet( KPopupMenu* menu, const QString& rootDirStr
   {
     if( setFInfo->fileName() != ".." && setFInfo->fileName() != "." )
     {
-      menu->insertItem(QIconSet(dirtPixmap(setFInfo->absFilePath())),
-        KivioStencilSpawnerSet::readTitle(setFInfo->absFilePath()),m_ssId);
+      menu->insertItem(QIcon(dirtPixmap(setFInfo->absoluteFilePath())),
+        KivioStencilSpawnerSet::readTitle(setFInfo->absoluteFilePath()),m_ssId);
       m_pathList.insert( m_ssId, new QString(rootDirStr + "/" + setFInfo->fileName()) );
       m_ssId++;
     }
@@ -271,7 +272,7 @@ QPixmap KivioStencilSetAction::dirtPixmap( const QString& dir )
 
     QFile file( fs );
     QFileInfo finfo( file );
-    return QPixmap( finfo.absFilePath() );
+    return QPixmap( finfo.absoluteFilePath() );
 }
 
 void KivioStencilSetAction::slotActivated(int id)
@@ -286,10 +287,10 @@ void KivioStencilSetAction::slotActivated(int id)
 
 void KivioStencilSetAction::clearCollectionMenuList()
 {
-  QValueList<KPopupMenu*>::Iterator it;
+  QValueList<KMenu*>::Iterator it;
   
   for(it = m_collectionMenuList.begin(); it != m_collectionMenuList.end(); ++it) {
-    KPopupMenu* m = (*it);
+    KMenu* m = (*it);
     delete m;
   }
   

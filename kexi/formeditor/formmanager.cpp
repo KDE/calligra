@@ -33,7 +33,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kstdaction.h>
 #include <kaction.h>
 #include <kxmlguiclient.h>
@@ -116,9 +116,9 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 {
 	Q_UNUSED(options);
 #ifdef KEXI_STANDALONE
-	KGlobal::locale()->insertCatalogue("standalone_kformdesigner");
+	KGlobal::locale()->insertCatalog("standalone_kformdesigner");
 #else
-	KGlobal::locale()->insertCatalogue("kformdesigner");
+	KGlobal::locale()->insertCatalog("kformdesigner");
 #endif
 
 	connect( kapp, SIGNAL( settingsChanged(int) ), SLOT( slotSettingsChanged(int) ) );
@@ -465,7 +465,7 @@ FormManager::snapWidgetsToGrid()
 void
 FormManager::windowChanged(QWidget *w)
 {
-	kdDebug() << "FormManager::windowChanged(" 
+	kDebug() << "FormManager::windowChanged(" 
 		<< (w ? (QString(w->className())+" "+w->name()) : QString("0")) << ")" << endl;
 
 	if(!w)
@@ -492,7 +492,7 @@ FormManager::windowChanged(QWidget *w)
 			//if(m_propSet)
 			//	m_propList->setCollection(form->pixmapCollection());
 
-			kdDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
+			kDebug() << "FormManager::windowChanged() active form is " << form->objectTree()->name() << endl;
 
 			if(m_collection)
 			{
@@ -507,7 +507,7 @@ FormManager::windowChanged(QWidget *w)
 				for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 				{
 					if ((*it).lower() == currentStyle) {
-						kdDebug() << "Updating the style to " << currentStyle << endl;
+						kDebug() << "Updating the style to " << currentStyle << endl;
 						m_style->setCurrentItem(idx);
 						break;
 					}
@@ -533,9 +533,9 @@ FormManager::windowChanged(QWidget *w)
 
 	for(form = m_preview.first(); form; form = m_preview.next())
 	{
-		kdDebug() << (form->widget() ? form->widget()->name() : "") << endl;
+		kDebug() << (form->widget() ? form->widget()->name() : "") << endl;
 		if(form->toplevelContainer() && form->widget() == w) {
-			kdDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->name() << endl;
+			kDebug() << "FormManager::windowChanged() active preview form is " << form->widget()->name() << endl;
 
 			if(m_collection)
 			{
@@ -550,7 +550,7 @@ FormManager::windowChanged(QWidget *w)
 				for (QStringList::ConstIterator it = styles.constBegin(); it != endIt; ++it, ++idx)
 				{
 					if ((*it).lower() == currentStyle) {
-						kdDebug() << "Updating the style to " << currentStyle << endl;
+						kDebug() << "Updating the style to " << currentStyle << endl;
 						m_style->setCurrentItem(idx);
 						break;
 					}
@@ -686,7 +686,7 @@ FormManager::isTopLevel(QWidget *w)
 	if(!activeForm() || !activeForm()->objectTree())
 		return false;
 
-//	kdDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = "
+//	kDebug() << "FormManager::isTopLevel(): for: " << w->name() << " = "
 //		<< activeForm()->objectTree()->lookup(w->name())<< endl;
 
 	ObjectTreeItem *item = activeForm()->objectTree()->lookup(w->name());
@@ -782,7 +782,7 @@ FormManager::setInsertPoint(const QPoint &p)
 void
 FormManager::createSignalMenu(QWidget *w)
 {
-	m_sigSlotMenu = new KPopupMenu();
+	m_sigSlotMenu = new KMenu();
 	m_sigSlotMenu->insertTitle(SmallIcon("connection"), i18n("Signals"));
 
 	QStrList list = w->metaObject()->signalNames(true);
@@ -803,7 +803,7 @@ FormManager::createSignalMenu(QWidget *w)
 void
 FormManager::createSlotMenu(QWidget *w)
 {
-	m_sigSlotMenu = new KPopupMenu();
+	m_sigSlotMenu = new KMenu();
 	m_sigSlotMenu->insertTitle(SmallIcon("connection"), i18n("Slots"));
 
 	QString signalArg( m_connection->signal().remove( QRegExp(".*[(]|[)]") ) );
@@ -848,7 +848,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 //	QValueVector<int> menuIds();
 
 	if (!m_popup) {
-		m_popup = new KPopupMenu();
+		m_popup = new KMenu();
 	}
 	else {
 		m_popup->clear();
@@ -898,7 +898,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		if (separatorNeeded)
 			m_popup->insertSeparator();
 
-		KPopupMenu *sub = new KPopupMenu(w);
+		KMenu *sub = new KMenu(w);
 		QWidget *buddy = ((QLabel*)w)->buddy();
 
 		sub->insertItem(i18n("No Buddy"), MenuNoBuddy);
@@ -931,7 +931,7 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 			m_popup->insertSeparator();
 
 		// We create the signals menu
-		KPopupMenu *sigMenu = new KPopupMenu();
+		KMenu *sigMenu = new KMenu();
 		QStrList list = w->metaObject()->signalNames(true);
 		QStrListIterator it(list);
 		for(; it.current() != 0; ++it)
@@ -1022,7 +1022,7 @@ FormManager::menuSignalChoosed(int id)
 		else
 		{
 			m_connection->setSlot(m_sigSlotMenu->text(id));
-			kdDebug() << "Finished creating the connection: sender=" << m_connection->sender() << "; signal=" << m_connection->signal() <<
+			kDebug() << "Finished creating the connection: sender=" << m_connection->sender() << "; signal=" << m_connection->signal() <<
 			  "; receiver=" << m_connection->receiver() << "; slot=" << m_connection->slot() << endl;
 			emit connectionCreated(activeForm(), *m_connection);
 			stopCreatingConnection();
@@ -1092,7 +1092,7 @@ FormManager::createLayout(int layoutType)
 	WidgetList *list = m_active->selectedWidgets();
 	// if only one widget is selected (a container), we modify its layout
 	if (list->isEmpty()) {//sanity check
-		kdWarning() << "FormManager::createLayout(): list is empty!" << endl;
+		kWarning() << "FormManager::createLayout(): list is empty!" << endl;
 		return;
 	}
 	if(list->count() == 1)
@@ -1107,12 +1107,12 @@ FormManager::createLayout(int layoutType)
 	QWidget *parent = list->first()->parentWidget();
 	for(QWidget *w = list->first(); w; w = list->next())
 	{
-		kdDebug() << "comparing widget " << w->name() << " whose parent is " << w->parentWidget()->name() << " insteaed of " << parent->name() << endl;
+		kDebug() << "comparing widget " << w->name() << " whose parent is " << w->parentWidget()->name() << " insteaed of " << parent->name() << endl;
 		if(w->parentWidget() != parent)
 		{
 			KMessageBox::sorry(m_active->widget()->topLevelWidget(), i18n("<b>Cannot create the layout.</b>\n"
 		   "All selected widgets must have the same parent."));
-			kdDebug() << "FormManager::createLayout() widgets don't have the same parent widget" << endl;
+			kDebug() << "FormManager::createLayout() widgets don't have the same parent widget" << endl;
 			return;
 		}
 	}
@@ -1241,7 +1241,7 @@ FormManager::alignWidgets(int type)
 	{
 		if(w->parentWidget() != parentWidget)
 		{
-			kdDebug() << "FormManager::alignWidgets() type ==" << type <<  " widgets don't have the same parent widget" << endl;
+			kDebug() << "FormManager::alignWidgets() type ==" << type <<  " widgets don't have the same parent widget" << endl;
 			return;
 		}
 	}
@@ -1417,7 +1417,7 @@ FormManager::showFormUICode()
 		m_uiCodeDialog = new KDialogBase(0, "uiwindow", true, i18n("Form's UI Code"),
 				KDialogBase::Close,	KDialogBase::Close);
 		m_uiCodeDialog->resize(700, 600);
-		QVBox *box = m_uiCodeDialog->makeVBoxMainWidget();
+		KVBox *box = m_uiCodeDialog->makeVBoxMainWidget();
 		KTabWidget* tab = new KTabWidget(box);
 
 		m_currentUICodeDialogEditor = new KTextEdit(QString::null, QString::null, tab);

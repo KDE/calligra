@@ -351,7 +351,7 @@ void KPrPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & con
     loadOasisPictureEffect( context );
     QDomNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString::null) );
-    kdDebug()<<" href: "<<href<<endl;
+    kDebug()<<" href: "<<href<<endl;
     if ( !href.isEmpty() /*&& href[0] == '#'*/ )
     {
         QString strExtension;
@@ -369,7 +369,7 @@ void KPrPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & con
         {
             KoStoreDevice dev(store);
             if ( !image.load( &dev, strExtension ) )
-                kdWarning() << "Cannot load picture: " << filename << " " << href << endl;
+                kWarning() << "Cannot load picture: " << filename << " " << href << endl;
             store->close();
         }
         imageCollection->insertPicture( key, image );
@@ -514,7 +514,7 @@ void KPrPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandle
     _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
     _painter->setPen( QPen( shadowColor ) );
     _painter->setBrush( shadowColor );
-    if ( kAbs(angle) <= DBL_EPSILON )
+    if ( qAbs(angle) <= DBL_EPSILON )
         _painter->drawRect( _zoomHandler->zoomItX( sx ), _zoomHandler->zoomItY( sy ),
                             _zoomHandler->zoomItX( ext.width() ), _zoomHandler->zoomItY( ext.height() ) );
     else
@@ -529,13 +529,13 @@ void KPrPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandle
         br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
         rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-        QWMatrix m;
+        QMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
         m.translate( rr.left() + pixXPos + _zoomHandler->zoomItX( sx ),
                      rr.top() + pixYPos + _zoomHandler->zoomItY( sy ) );
 
-        _painter->setWorldMatrix( m, true );
+        _painter->setMatrix( m, true );
 
         _painter->drawRect( 0, 0, bs.width(), bs.height() );
     }
@@ -548,7 +548,7 @@ QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSize( ext ) );
-    //kdDebug(33001) << "KPrPixmapObject::generatePixmap size= " << size << endl;
+    //kDebug(33001) << "KPrPixmapObject::generatePixmap size= " << size << endl;
     QPixmap pixmap(size);
     QPainter paint;
 
@@ -605,7 +605,7 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 
     _painter->translate( _zoomHandler->zoomItX( ox ), _zoomHandler->zoomItY( oy ) );
 
-    if ( kAbs(angle)> DBL_EPSILON ) {
+    if ( qAbs(angle)> DBL_EPSILON ) {
         QSize bs = QSize( _zoomHandler->zoomItX( ow ), _zoomHandler->zoomItY( oh ) );
         QRect br = QRect( 0, 0, bs.width(), bs.height() );
         int pw = br.width();
@@ -616,11 +616,11 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
         br.moveTopLeft( QPoint( -br.width() / 2, -br.height() / 2 ) );
         rr.moveTopLeft( QPoint( -rr.width() / 2, -rr.height() / 2 ) );
 
-        QWMatrix m;
+        QMatrix m;
         m.translate( pw / 2, ph / 2 );
         m.rotate( angle );
         m.translate( rr.left() + pixXPos, rr.top() + pixYPos );
-        _painter->setWorldMatrix( m, true );
+        _painter->setMatrix( m, true );
     }
 
     if ( !drawContour )
@@ -657,7 +657,7 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 #endif
             )
         {
-            //kdDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
         else
         {
@@ -675,7 +675,7 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
             m_cachedPar1 = m_ie_par1;
             m_cachedPar2 = m_ie_par2;
             m_cachedPar3 = m_ie_par3;
-            //kdDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
         }
         _painter->drawPixmap( rect, m_cachedPixmap);
     }
@@ -705,7 +705,7 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 QPixmap KPrPixmapObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
-    kdDebug(33001) << "KPrPixmapObject::getOriginalPixmap size= " << _pixSize << endl;
+    kDebug(33001) << "KPrPixmapObject::getOriginalPixmap size= " << _pixSize << endl;
     QPixmap _pixmap = image.generatePixmap( _pixSize, true );
     image.clearCache(); // Release the memoy of the picture cache
 

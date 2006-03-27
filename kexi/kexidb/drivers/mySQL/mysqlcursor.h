@@ -43,7 +43,7 @@ public:
 	virtual void drv_appendCurrentRecordToBuffer();
 	virtual void drv_bufferMovePointerNext();
 	virtual void drv_bufferMovePointerPrev();
-	virtual void drv_bufferMovePointerTo(Q_LLONG to);
+	virtual void drv_bufferMovePointerTo(qint64 to);
 	virtual const char** rowData() const;
 	virtual void storeCurrentRow(RowData &data) const;
 //        virtual bool save(RowData& data, RowEditBuffer& buf);

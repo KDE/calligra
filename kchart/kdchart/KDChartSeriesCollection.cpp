@@ -176,7 +176,7 @@ double KDChartSeriesCollection::minValue( int coordinate ) const
         {
             double temp = (*i)->minValue(coordinate, ok);
             if (ok)
-                result = QMIN( result, temp );
+                result = qMin( result, temp );
         }
 
     return result;

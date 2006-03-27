@@ -25,11 +25,11 @@
 #include <qptrvector.h>
 #include <qsplitter.h>
 
-#include <klistview.h>
+#include <k3listview.h>
 
 class QListViewItem;
 
-class KListViewItem;
+class K3ListViewItem;
 class KPrinter;
 
 namespace KPlato
@@ -38,11 +38,11 @@ namespace KPlato
 class View;
 class Project;
 
-class ListView : public KListView
+class ListView : public K3ListView
 {
 public:
     ListView(QWidget *parent)
-    : KListView(parent)
+    : K3ListView(parent)
     {}
     
     virtual void paintToPrinter(QPainter * p, int cx, int cy, int cw, int ch);
@@ -85,7 +85,7 @@ public:
     virtual QSize sizeHint() const;
     
     class MasterListItem;
-    class SlaveListItem : public KListViewItem {
+    class SlaveListItem : public K3ListViewItem {
     public:
         SlaveListItem(MasterListItem *master, QListView *parent, QListViewItem *after, bool highlight=false);
         SlaveListItem(MasterListItem *master, QListViewItem *parent, QListViewItem *after, bool highlight=false);
@@ -116,7 +116,7 @@ public:
         int m_prec;
     };
 
-    class MasterListItem : public KListViewItem {
+    class MasterListItem : public K3ListViewItem {
     public:
         MasterListItem(QListView *parent, bool highlight=false);
         MasterListItem(QListView *parent, QString text, bool highlight=false);

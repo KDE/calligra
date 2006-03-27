@@ -57,7 +57,7 @@ KivioStencil::KivioStencil()
 
 KivioStencil::~KivioStencil()
 {
-    kdDebug(43000)<<" KivioStencil::~KivioStencil() !"<<this<<endl;
+    kDebug(43000)<<" KivioStencil::~KivioStencil() !"<<this<<endl;
     delete m_pProtection;
     m_pProtection = NULL;
     delete m_pCanProtect;
@@ -226,11 +226,11 @@ void KivioStencil::updateConnectorPoints(KivioConnectorPoint *, double, double)
 void KivioStencil::rotatePainter(KivioIntraStencilData *pData)
 {
   if(m_rotation != 0) {
-    QWMatrix m;
+    QMatrix m;
     m.translate(pData->zoomHandler->zoomItX(m_pinPoint.x()), pData->zoomHandler->zoomItY(m_pinPoint.y()));
     m.rotate(m_rotation);
     m.translate(pData->zoomHandler->zoomItX(-m_pinPoint.x()), pData->zoomHandler->zoomItY(-m_pinPoint.y()));
-    pData->painter->setWorldMatrix(m, true);
+    pData->painter->setMatrix(m, true);
   }
 }
 

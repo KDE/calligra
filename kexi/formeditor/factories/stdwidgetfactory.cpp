@@ -27,8 +27,8 @@
 #include <kcombobox.h>
 #include <klistbox.h>
 #include <ktextedit.h>
-#include <klistview.h>
-#include <kprogress.h>
+#include <k3listview.h>
+#include <kprogressbar.h>
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
@@ -239,7 +239,7 @@ StdWidgetFactory::StdWidgetFactory(QObject *parent, const char *, const QStringL
 
 	KFormDesigner::WidgetInfo *wListView = new KFormDesigner::WidgetInfo(this);
 	wListView->setPixmap("listview");
-	wListView->setClassName("KListView");
+	wListView->setClassName("K3ListView");
 	wListView->addAlternateClassName("QListView");
 	wListView->setIncludeFileName("klistview.h");
 	wListView->setName(i18n("List View"));
@@ -417,12 +417,12 @@ StdWidgetFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	else if(c == "KTextEdit")
 		w = new KTextEdit(/*i18n("Enter your text here")*/text, QString::null, p, n);
 
-	else if(c == "KListView")
+	else if(c == "K3ListView")
 	{
-		w = new KListView(p, n);
+		w = new K3ListView(p, n);
 		if(container->form()->interactiveMode())
-			((KListView*)w)->addColumn(i18n("Column 1"));
-		((KListView*)w)->setRootIsDecorated(true);
+			((K3ListView*)w)->addColumn(i18n("Column 1"));
+		((K3ListView*)w)->setRootIsDecorated(true);
 	}
 	else if(c == "QSlider")
 		w = new QSlider(Qt::Horizontal, p, n);
@@ -452,7 +452,7 @@ StdWidgetFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	if(w)
 		return w;
 
-	kdDebug() << "WARNING :: w == 0 "  << endl;
+	kDebug() << "WARNING :: w == 0 "  << endl;
 	return 0;
 }
 
@@ -475,7 +475,7 @@ StdWidgetFactory::createMenuActions(const QCString &classname, QWidget *, QPopup
 		menu->insertItem(SmallIconSet("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
 		return true;
 	}
-	else if(classname == "KListView")
+	else if(classname == "K3ListView")
 	{
 		menu->insertItem(SmallIconSet("edit"), i18n("Edit Listview Contents"), this, SLOT(editListContents()));
 		return true;
@@ -584,8 +584,8 @@ StdWidgetFactory::clearWidgetContent(const QCString &classname, QWidget *w)
 		((KLineEdit*)w)->clear();
 	else if(classname == "KListBox")
 		((KListBox*)w)->clear();
-	else if(classname == "KListView")
-		((KListView*)w)->clear();
+	else if(classname == "K3ListView")
+		((K3ListView*)w)->clear();
 	else if(classname == "KComboBox")
 		((KComboBox*)w)->clear();
 	else if(classname == "KTextEdit")
@@ -691,9 +691,9 @@ StdWidgetFactory::saveSpecialProperty(const QCString &classname, const QString &
 		}
 		return true;
 	}
-	else if(name == "list_contents" && classname == "KListView")
+	else if(name == "list_contents" && classname == "K3ListView")
 	{
-		KListView *listview = (KListView*)w;
+		K3ListView *listview = (K3ListView*)w;
 		// First we save the columns
 		for(int i = 0; i < listview->columns(); i++)
 		{
@@ -766,9 +766,9 @@ StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &no
 		return true;
 	}
 
-	if((tag == "column") && (classname == "KListView"))
+	if((tag == "column") && (classname == "K3ListView"))
 	{
-		KListView *listview = (KListView*)w;
+		K3ListView *listview = (K3ListView*)w;
 		int id=0;
 		for(QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling())
 		{
@@ -787,9 +787,9 @@ StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &no
 		}
 		return true;
 	}
-	else if((tag == "item") && (classname == "KListView"))
+	else if((tag == "item") && (classname == "K3ListView"))
 	{
-		KListView *listview = (KListView*)w;
+		K3ListView *listview = (K3ListView*)w;
 		readListItem(node, 0, listview);
 		return true;
 	}
@@ -798,13 +798,13 @@ StdWidgetFactory::readSpecialProperty(const QCString &classname, QDomElement &no
 }
 
 void
-StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, KListView *listview)
+StdWidgetFactory::readListItem(QDomElement &node, QListViewItem *parent, K3ListView *listview)
 {
 	QListViewItem *item;
 	if(parent)
-		item = new KListViewItem(parent);
+		item = new K3ListViewItem(parent);
 	else
-		item = new KListViewItem(listview);
+		item = new K3ListViewItem(listview);
 
 	// We need to move the item at the end of the list
 	QListViewItem *last;
@@ -921,7 +921,7 @@ StdWidgetFactory::autoSaveProperties(const QCString &classname)
 		l << "list_items";
 	else if(classname == "KListBox")
 		l << "list_items";
-	else if(classname == "KListView")
+	else if(classname == "K3ListView")
 		l << "list_contents";
 	else if(classname == "Line")
 		l << "orientation";

@@ -386,7 +386,7 @@ bool KChartBackgroundPixmapConfigPage::loadWallPaper()
 	wallFile = wallCB->text( i );
 	QString file = locate("wallpaper", wallFile);
 	if( file.isEmpty() ) {
-            kdWarning(35001) << "Couldn't locate wallpaper " << wallFile << endl;
+            kWarning(35001) << "Couldn't locate wallpaper " << wallFile << endl;
             wallPixmap.resize(0,0);
             wallFile = "";
             return false;
@@ -395,7 +395,7 @@ bool KChartBackgroundPixmapConfigPage::loadWallPaper()
 
             if( wallPixmap.isNull() )
                 return false;
-// 		kdWarning(35001) << "Could not load wallpaper " << file << endl;
+// 		kWarning(35001) << "Could not load wallpaper " << file << endl;
 	}
     }
     wallWidget->setPaletteBackgroundPixmap( wallPixmap );

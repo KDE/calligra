@@ -116,7 +116,7 @@ bool MySQLMigrate::drv_readTableSchema(
 			}
 			mysql_free_result(res);
 		} else {
-			kdDebug() << "MySQLMigrate::drv_tableNames: null result" << endl;
+			kDebug() << "MySQLMigrate::drv_tableNames: null result" << endl;
 		}
 		return true;
 	} else {
@@ -137,7 +137,7 @@ bool MySQLMigrate::drv_tableNames(QStringList& tableNames)
 			}
 			mysql_free_result(res);
 		} else {
-			kdDebug() << "MySQLMigrate::drv_tableNames: null result" << endl;
+			kDebug() << "MySQLMigrate::drv_tableNames: null result" << endl;
 		}
 		return true;
 	} else {
@@ -167,7 +167,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 			/*! @todo Check that wasn't an error, rather than end of result set */
 			mysql_free_result(res);
 		} else {
-			kdDebug() << "MySQLMigrate::drv_copyTable: null result" << endl;
+			kDebug() << "MySQLMigrate::drv_copyTable: null result" << endl;
 		}
 		return true;
 	} else {
@@ -176,7 +176,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 }
 
 
-bool MySQLMigrate::drv_getTableSize(const QString& table, Q_ULLONG& size) {
+bool MySQLMigrate::drv_getTableSize(const QString& table, quint64& size) {
 	if(d->executeSQL("SELECT COUNT(*) FROM " + d->escapeIdentifier(table))) {
 		MYSQL_RES *res = mysql_store_result(d->mysql);
 		if (res != NULL) {
@@ -187,7 +187,7 @@ bool MySQLMigrate::drv_getTableSize(const QString& table, Q_ULLONG& size) {
 			}
 			mysql_free_result(res);
 		} else {
-			kdDebug() << "MySQLMigrate::drv_getTableSize: null result" << endl;
+			kDebug() << "MySQLMigrate::drv_getTableSize: null result" << endl;
 		}
 		return true;
 	} else {
@@ -304,14 +304,14 @@ KexiDB::Field::Type MySQLMigrate::examineBlobField(const QString& table,
 			}
 			mysql_free_result(res);
 		} else {
-			kdDebug() << "MySQLMigrate::examineBlobField: null result" << endl;
+			kDebug() << "MySQLMigrate::examineBlobField: null result" << endl;
 		}
 	} else {
 		// Huh? MySQL wont tell us what kind of field it is! Lets guess.
 	  return KexiDB::Field::LongText;
 	}
 
-	kdDebug() << "MySQLMigrate::examineBlobField: considering "
+	kDebug() << "MySQLMigrate::examineBlobField: considering "
 	          << mysqlType << endl;
 	if(mysqlType.contains("blob", false) != 0) {
 		// Doesn't matter how big it is, it's binary
@@ -352,24 +352,24 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
 			}
 			mysql_free_result(res);
 		} else {
-			kdDebug() << "MySQLMigrate::examineEnumField: null result" << endl;
+			kDebug() << "MySQLMigrate::examineEnumField: null result" << endl;
 		}
 	} else {
 		// Huh? MySQL wont tell us what values it can take.
 		return QStringList();
 	}
 
-	kdDebug() << "MySQLMigrate::examineEnumField: considering " 
+	kDebug() << "MySQLMigrate::examineEnumField: considering " 
 						<< vals << endl;
 	
 	// Crash and burn if we get confused...
 	if(!vals.startsWith("enum(")) {
 		// Huh? We're supposed to be parsing an enum!
-		kdDebug() << "MySQLMigrate::examineEnumField:1 not an enum!" << endl;
+		kDebug() << "MySQLMigrate::examineEnumField:1 not an enum!" << endl;
 		return QStringList();
 	}
 	if(!vals.endsWith(")")) {
-		kdDebug() << "MySQLMigrate::examineEnumField:2 not an enum!" << endl;
+		kDebug() << "MySQLMigrate::examineEnumField:2 not an enum!" << endl;
 		return QStringList();
 	}
 	
@@ -384,15 +384,15 @@ QStringList MySQLMigrate::examineEnumField(const QString& table,
 	while ((index = rx.search(vals, index, QRegExp::CaretAtOffset)) != -1) {
 		int len = rx.matchedLength();
 		if (len != -1) {
-			kdDebug() << "MySQLMigrate::examineEnumField:3 " << rx.cap(1) << endl;
+			kDebug() << "MySQLMigrate::examineEnumField:3 " << rx.cap(1) << endl;
 			values << rx.cap(1);
 		} else {
-			kdDebug() << "MySQLMigrate::examineEnumField:4 lost" << endl;
+			kDebug() << "MySQLMigrate::examineEnumField:4 lost" << endl;
 		}
 		
 		QChar next = vals[index + len];
 		if (next != QChar(',') && next != QChar(')')) {
-			kdDebug() << "MySQLMigrate::examineEnumField:5 " << (char)next << endl;
+			kDebug() << "MySQLMigrate::examineEnumField:5 " << (char)next << endl;
 		}
 		index += len + 1;
 	}

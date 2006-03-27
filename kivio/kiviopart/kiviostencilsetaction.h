@@ -28,7 +28,7 @@
 #include <qvaluelist.h>
 #include <qstringlist.h>
 
-class KPopupMenu;
+class KMenu;
 class QPixmap;
 
 class KivioStencilSetAction : public KAction
@@ -40,7 +40,7 @@ class KivioStencilSetAction : public KAction
 
     virtual ~KivioStencilSetAction();
 
-    KPopupMenu* popupMenu() const;
+    KMenu* popupMenu() const;
     void popup( const QPoint& global );
 
     virtual int plug( QWidget* widget, int index = -1 );
@@ -58,15 +58,15 @@ class KivioStencilSetAction : public KAction
   protected:
     QPixmap dirtPixmap( const QString& dir );
     void loadCollections( const QString& rootDirStr );
-    void loadSet( KPopupMenu* menu, const QString& rootDirStr );
+    void loadSet( KMenu* menu, const QString& rootDirStr );
     void clearCollectionMenuList();
 
   protected:
-    KPopupMenu* m_popup;
+    KMenu* m_popup;
     uint m_ssId;
     QPtrList<QString> m_pathList;
     QStringList m_collectionIdList;
-    QValueList<KPopupMenu*> m_collectionMenuList;
+    QValueList<KMenu*> m_collectionMenuList;
 };
 
 #endif

@@ -160,7 +160,7 @@ class KEXICORE_EXPORT KexiActionProxy
 		void takeActionProxyChild( KexiActionProxy* child );
 
 		KexiSharedActionHost *m_host;
-		QGuardedPtr<QObject> m_receiver;
+		QPointer<QObject> m_receiver;
 		QAsciiDict< QPair<QSignal*,bool> > m_signals;
 
 		QPtrList<KexiActionProxy> m_sharedActionChildren;

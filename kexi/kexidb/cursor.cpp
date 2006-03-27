@@ -319,7 +319,7 @@ bool Cursor::bof() const
 	return m_at==0;
 }
 
-Q_LLONG Cursor::at() const
+qint64 Cursor::at() const
 {
 	if (m_readAhead)
 		return 0;

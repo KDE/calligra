@@ -119,7 +119,7 @@ VSinus::init()
 	}
 
 	// Translate and scale:
-	QWMatrix m;
+	QMatrix m;
 	m.translate( m_topLeft.x(), m_topLeft.y() - m_height * 0.5 );
 	m.scale( m_width / m_periods, m_height * 0.5 );
 

@@ -170,7 +170,7 @@ void KexiProjectSelectorWidget::setProjectSet( KexiProjectSet* prj_set )
 		return;
 //TODO: what with project set's ownership?
 	if (m_prj_set->error()) {
-		kdDebug() << "KexiProjectSelectorWidget::setProjectSet() : m_prj_set->error() !"<<endl;
+		kDebug() << "KexiProjectSelectorWidget::setProjectSet() : m_prj_set->error() !"<<endl;
 		return;
 	}
 	KexiDB::DriverManager manager;
@@ -188,7 +188,7 @@ void KexiProjectSelectorWidget::setProjectSet( KexiProjectSet* prj_set )
 				item->setPixmap( 0, d->dbicon );
 		}
 		else {
-			kdWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" 
+			kWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" 
 				<< data->constConnectionData()->driverName << "'!" << endl;
 		}
 		data=prjlist.next();

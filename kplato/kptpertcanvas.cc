@@ -43,7 +43,7 @@
 #include <kmessagebox.h>
 #include <assert.h>
 #include <kmultipledrag.h>
-#include <klistview.h>
+#include <k3listview.h>
 
 namespace KPlato
 {
@@ -66,7 +66,7 @@ PertCanvas::~PertCanvas()
 
 void PertCanvas::draw(Project& project)
 {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
     clear();
     updateContents();
 
@@ -107,7 +107,7 @@ PertNodeItem *PertCanvas::createNodeItem(Node *node)
     if (!item)
     {
         if ( node->type() == Node::Type_Project)
-            kdDebug()<<k_funcinfo<<"Project nodes should not have relations"<<endl;
+            kDebug()<<k_funcinfo<<"Project nodes should not have relations"<<endl;
         else if (node->type() == Node::Type_Subproject)
             item  = new PertProjectItem(this, *node);
         else if (node->type()== Node::Type_Summarytask)
@@ -117,7 +117,7 @@ PertNodeItem *PertCanvas::createNodeItem(Node *node)
         else if (node->type() == Node::Type_Milestone)
             item  = new PertMilestoneItem(this, *node);
         else
-            kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
+            kDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
 
         if (item)
             m_nodes.insert(node, item);
@@ -127,7 +127,7 @@ PertNodeItem *PertCanvas::createNodeItem(Node *node)
 
 void PertCanvas::createChildItems(PertNodeItem *parentItem)
 {
-    //kdDebug()<<k_funcinfo<<"parentItem="<<(parentItem ? parentItem->node().name() : "nil")<<endl;
+    //kDebug()<<k_funcinfo<<"parentItem="<<(parentItem ? parentItem->node().name() : "nil")<<endl;
     if (!parentItem)
         return;
 
@@ -149,7 +149,7 @@ void PertCanvas::createChildItems(PertNodeItem *parentItem)
 
 void PertCanvas::drawRelations()
 {
-	//kdDebug()<<k_funcinfo<<endl;
+	//kDebug()<<k_funcinfo<<endl;
     QPtrListIterator<Relation> it(m_relations);
     for (; it.current(); ++it)
     {
@@ -165,10 +165,10 @@ void PertCanvas::drawRelations()
 
 void PertCanvas::mapNode(PertNodeItem *item)
 {
-	//kdDebug()<<k_funcinfo<<endl;
+	//kDebug()<<k_funcinfo<<endl;
     if (! m_rows.at(item->row()) || (item->column() >= 0 && m_rows.at(item->row())->count() <= uint(item->column())))
     {
-        kdError()<<k_funcinfo<<item->node().name()<<": non existing map for: ("<<item->row()<<","<<item->column()<<")"<<endl;
+        kError()<<k_funcinfo<<item->node().name()<<": non existing map for: ("<<item->row()<<","<<item->column()<<")"<<endl;
         return;
     }
     m_rows.at(item->row())->at(item->column()) = true;
@@ -176,10 +176,10 @@ void PertCanvas::mapNode(PertNodeItem *item)
 
 void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem, Relation::Type type)
 {
-	//kdDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" to child: "<<(childItem ? childItem->node().name() : "None")<<endl;
+	//kDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" to child: "<<(childItem ? childItem->node().name() : "None")<<endl;
     if (!childItem)
     {   // shouldn't happen...
-        kdError()<<k_funcinfo<<"No childItem"<<endl;
+        kError()<<k_funcinfo<<"No childItem"<<endl;
         return;
     }
     int row = parentItem->row();
@@ -187,7 +187,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
     int chRow = childItem->row();
     int chCol = childItem->column();
     bool chMapped = (chRow > -1 && chCol > -1);
-	//kdDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" at ("<<row<<","<<col<<"): Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
+	//kDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" at ("<<row<<","<<col<<"): Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
 
     if (type == Relation::StartStart ||
         type == Relation::FinishFinish)
@@ -196,7 +196,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
         if (chMapped)
         {
             m_rows.at(chRow)->at(chCol) = false;
-            //kdDebug()<<k_funcinfo<<" Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
+            //kDebug()<<k_funcinfo<<" Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
             if (chRow <= row)
             {
                 chRow = row+1;
@@ -204,7 +204,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
                     m_rows.append(new QMemArray<bool>(1)); // make a new row
                     chRow = m_rows.count()-1;  // to be safe
                 }
-                //kdDebug()<<k_funcinfo<<" Moving "<<childItem->node().name()<<" to row: "<<chRow<<endl;
+                //kDebug()<<k_funcinfo<<" Moving "<<childItem->node().name()<<" to row: "<<chRow<<endl;
             }
             if (chCol < col)
             {
@@ -212,7 +212,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
                 if (chCol >= 0 && m_rows.at(chRow)->count() <= uint(chCol))  // col does not exist
                     m_rows.at(chRow)->resize(chCol+1);
                 
-                //kdDebug()<<k_funcinfo<<" Moved "<<childItem->node().name()<<" to col: "<<chCol<<endl;
+                //kDebug()<<k_funcinfo<<" Moved "<<childItem->node().name()<<" to col: "<<chCol<<endl;
             }
 
         }
@@ -259,7 +259,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
     }
     else
     {
-        kdError()<<k_funcinfo<<"Unknow relation type"<<endl;
+        kError()<<k_funcinfo<<"Unknow relation type"<<endl;
         return;
     }
     childItem->move(this, chRow, chCol);
@@ -267,15 +267,15 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
 
 QSize PertCanvas::canvasSize()
 {
-    //kdDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo<<endl;
 	QSize s(0,0);
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
     {
 	    QRect r = (*it)->boundingRect();
-		s.setWidth(QMAX(s.width(), r.right()));
-		s.setHeight(QMAX(s.height(), r.bottom()));
+		s.setWidth(qMax(s.width(), r.right()));
+		s.setHeight(qMax(s.height(), r.bottom()));
 	}
 	s.setWidth(s.width()+20);
 	s.setHeight(s.height()+20);
@@ -298,7 +298,7 @@ void PertCanvas::clear()
 
 void PertCanvas::contentsMousePressEvent ( QMouseEvent * e )
 {
-    //kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
+    //kDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
     switch (e->button())
     {
         case QEvent::LeftButton:
@@ -344,7 +344,7 @@ void PertCanvas::contentsMousePressEvent ( QMouseEvent * e )
 
 void PertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 {
-    //kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
+    //kDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
     switch (e->button())
     {
         case QEvent::LeftButton:
@@ -362,7 +362,7 @@ void PertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					PertNodeItem *par = selectedItem();
 					if ( !par)
 					{
-						//kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
+						//kDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
 						item->setSelected(true);
 						canvas()->update();
 						return;
@@ -372,7 +372,7 @@ void PertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					{
 						break;
 					}
-					//kdDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
+					//kDebug()<<k_funcinfo<<" Second node="<<item->node().name()<<endl;
 					// open relation dialog
 					if (!par->node().legalToLink(&(item->node()))) {
                         KMessageBox::sorry(this, i18n("Cannot link these nodes"));

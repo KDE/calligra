@@ -24,7 +24,7 @@
 class QCheckBox;
 class QStringList;
 class KArchiveDirectory;
-class KURLRequester;
+class KUrlRequester;
 
 namespace Kivio {
   class StencilSetInstaller : public KDialogBase
@@ -46,7 +46,7 @@ namespace Kivio {
       bool installStencilSets(const KArchiveDirectory* rootDir, const QStringList& dirs);
 
     private:
-      KURLRequester* m_url;
+      KUrlRequester* m_url;
   };
 }
 

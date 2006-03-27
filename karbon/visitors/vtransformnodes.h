@@ -31,12 +31,12 @@ class VSegment;
 class KARBONBASE_EXPORT VTransformNodes : public VVisitor
 {
 public:
-	VTransformNodes( const QWMatrix& m );
+	VTransformNodes( const QMatrix& m );
 
 	virtual void visitVSubpath( VSubpath& path );
 
 private:
-	QWMatrix m_matrix;
+	QMatrix m_matrix;
 };
 
 #endif

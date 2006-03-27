@@ -46,7 +46,7 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
       m_task(task),
       m_dayLength(24)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     m_progress = task.progress();
     started->setChecked(m_progress.started);
     finished->setChecked(m_progress.finished);
@@ -56,7 +56,7 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
     percentFinished->setValue(m_progress.percentFinished);
     
     if (workTime) {
-        kdDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours()<<endl;
+        kDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours()<<endl;
         m_dayLength = workTime->durationDay().hours();
         setEstimateScales(m_dayLength);
     }

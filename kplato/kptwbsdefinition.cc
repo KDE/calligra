@@ -147,7 +147,7 @@ QString WBSDefinition::toRoman( int n, bool upper )
         return upper ? s.upper() : s;
         
     } else { // should never happen, but better not crash if it does
-        kdWarning()<< k_funcinfo << " n=" << n << endl;
+        kWarning()<< k_funcinfo << " n=" << n << endl;
         return QString::number( n );
     }
 }

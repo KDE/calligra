@@ -34,7 +34,7 @@
 KPrTextDocument::KPrTextDocument( KPrTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textobj->kPresenterDocument()->zoomHandler(), fc, formatter, true ), m_textobj( textobj )
 {
-    //kdDebug(33001) << "KPrTextDocument constructed " << this << "  KPrTextObject:" << textobj << endl;
+    //kDebug(33001) << "KPrTextDocument constructed " << this << "  KPrTextObject:" << textobj << endl;
 }
 
 KPrTextDocument::~KPrTextDocument()
@@ -48,7 +48,7 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
 {
     const QString tagName( tag.tagName() );
     const bool textFoo = tagName.startsWith( "text:" );
-    kdDebug() << "KWTextDocument::loadSpanTag: " << tagName << endl;
+    kDebug() << "KWTextDocument::loadSpanTag: " << tagName << endl;
 
     if ( textFoo )
     {
@@ -76,7 +76,7 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
                 else {
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
                     // This allows to use the span's format for the variable.
-                    //kdDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
+                    //kDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
                     context.fillStyleStack( spanElem, KoXmlNS::text, "style-name", "text" );
                     text = spanElem.text();
                 }
@@ -92,7 +92,7 @@ bool KPrTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& conte
     }
     else // non "text:" tags
         {
-            kdDebug()<<"Extension found tagName : "<<tagName<<endl;
+            kDebug()<<"Extension found tagName : "<<tagName<<endl;
         }
     return false;
 }

@@ -36,7 +36,7 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kcommand.h>
-#include <kaccelmanager.h>
+#include <kacceleratormanager.h>
 
 #include "form.h"
 #include "container.h"
@@ -120,7 +120,7 @@ FormIO::saveFormToFile(Form *form, const QString &filename)
 		return false;
 
 	QFile file(m_filename);
-	if (!file.open(IO_WriteOnly))
+	if (!file.open(QIODevice::WriteOnly))
 		return false;
 
 	QTextStream stream(&file);
@@ -228,8 +228,8 @@ FormIO::loadFormFromByteArray(Form *form, QWidget *container, QByteArray &src, b
 
 	if(!parsed)
 	{
-		kdDebug() << "WidgetWatcher::load(): " << errMsg << endl;
-		kdDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
+		kDebug() << "WidgetWatcher::load(): " << errMsg << endl;
+		kDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
 		return false;
 	}
 
@@ -256,8 +256,8 @@ FormIO::loadFormFromString(Form *form, QWidget *container, QString &src, bool pr
 
 	if(!parsed)
 	{
-		kdDebug() << "WidgetWatcher::load(): " << errMsg << endl;
-		kdDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
+		kDebug() << "WidgetWatcher::load(): " << errMsg << endl;
+		kDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
 		return false;
 	}
 
@@ -286,9 +286,9 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 		m_filename = filename;
 
 	QFile file(m_filename);
-	if(!file.open(IO_ReadOnly))
+	if(!file.open(QIODevice::ReadOnly))
 	{
-		kdDebug() << "Cannot open the file " << filename << endl;
+		kDebug() << "Cannot open the file " << filename << endl;
 		return false;
 	}
 	QTextStream stream(&file);
@@ -299,8 +299,8 @@ FormIO::loadFormFromFile(Form *form, QWidget *container, const QString &filename
 
 	if(!parsed)
 	{
-		kdDebug() << "WidgetWatcher::load(): " << errMsg << endl;
-		kdDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
+		kDebug() << "WidgetWatcher::load(): " << errMsg << endl;
+		kDebug() << "WidgetWatcher::load(): line: " << errLine << " col: " << errCol << endl;
 		return false;
 	}
 
@@ -330,12 +330,12 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 		if (ok)
 			ver = v;
 	}
-	kdDebug() << "FormIO::loadFormFromDom(): original format version: " << ver << endl;
+	kDebug() << "FormIO::loadFormFromDom(): original format version: " << ver << endl;
 	form->setOriginalFormatVersion( ver );
 	if (ver < KFormDesigner::version()) {
 //! @todo We can either 1) convert from old format and later save in a new one or 2) keep old format.
 //!     To do this we may need to look at the original format version number.
-		kdDebug() << "FormIO::loadFormFromDom(): original format is older than current: " << KFormDesigner::version() << endl;
+		kDebug() << "FormIO::loadFormFromDom(): original format is older than current: " << KFormDesigner::version() << endl;
 		form->setFormatVersion( KFormDesigner::version() );
 	}
 	else
@@ -343,7 +343,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 
 	if (ver > KFormDesigner::version()) {
 //! @todo display information about too new format and that "some information will not be available".
-		kdDebug() << "FormIO::loadFormFromDom(): original format is newer than current: " << KFormDesigner::version() << endl;
+		kDebug() << "FormIO::loadFormFromDom(): original format is newer than current: " << KFormDesigner::version() << endl;
 	}
 
 	// Load the pixmap collection
@@ -366,7 +366,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 			ObjectTreeItem *item = form->objectTree()->lookup(name);
 			if(!item)
 			{
-				kdDebug() << "FormIO::loadFormFromDom ERROR : no ObjectTreeItem " << endl;
+				kDebug() << "FormIO::loadFormFromDom ERROR : no ObjectTreeItem " << endl;
 				continue;
 			}
 			const int index = form->tabStops()->findRef(item);
@@ -379,7 +379,7 @@ FormIO::loadFormFromDom(Form *form, QWidget *container, QDomDocument &inBuf)
 			}
 			if(index == -1) {
 				itemsNotFound++;
-				kdDebug() << "FormIO: item '" << name << "' not in list" << endl;
+				kDebug() << "FormIO: item '" << name << "' not in list" << endl;
 			}
 		}
 	}
@@ -402,11 +402,11 @@ FormIO::savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const c
 	const QVariant &value, QWidget *w, WidgetLibrary *lib)
 {
 	// Widget specific properties and attributes ///////////////
-	kdDebug() << "FormIO::savePropertyValue()  Saving the property: " << name << endl;
+	kDebug() << "FormIO::savePropertyValue()  Saving the property: " << name << endl;
 	const int propertyId = w->metaObject()->findProperty(name, true);
 	if(propertyId == -1)
 	{
-		kdDebug() << "FormIO::savePropertyValue()  The object doesn't have this property. Let's try the WidgetLibrary." << endl;
+		kDebug() << "FormIO::savePropertyValue()  The object doesn't have this property. Let's try the WidgetLibrary." << endl;
 		if(lib)
 			lib->saveSpecialProperty(w->className(), name, value, w, parentNode, parent);
 		return;
@@ -1194,7 +1194,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 			if(titem)
 				container->form()->objectTree()->addItem(titem, item);
 			else
-				kdDebug() << "FORMIO :: ERROR no parent widget "  << endl;
+				kDebug() << "FORMIO :: ERROR no parent widget "  << endl;
 		}
 		else
 			container->form()->objectTree()->addItem(container->objectTree(), item);
@@ -1278,7 +1278,7 @@ FormIO::createToplevelWidget(Form *form, QWidget *container, QDomElement &el)
 		ObjectTreeItem *item = form->objectTree()->lookup(it.currentKey());
 		if(!item || !item->widget())
 		{
-			kdDebug() << "Cannot assign buddy for widget " << it.current()->name() << " to " << it.currentKey() << endl;
+			kDebug() << "Cannot assign buddy for widget " << it.current()->name() << " to " << it.currentKey() << endl;
 			continue;
 		}
 		it.current()->setBuddy(item->widget());
@@ -1488,7 +1488,7 @@ FormIO::saveImage(QDomDocument &domDoc, const QPixmap &pixmap)
 	QImage img = pixmap.convertToImage();
 	QByteArray ba;
 	QBuffer buf(ba);
-	buf.open( IO_WriteOnly | IO_Translate );
+	buf.open( QIODevice::WriteOnly | QIODevice::Text );
 	QString format = img.depth() > 1 ? "XPM" : "XBM";
 	QImageIO iio( &buf, format.latin1() );
 	iio.setImage( img );

@@ -193,8 +193,8 @@ void SeriesDlg::slotOk()
       }
   }
 
-  //        double val_end = QMAX(dend, dstart);
-  //        double val_start = QMIN(dend, dstart);
+  //        double val_end = qMax(dend, dstart);
+  //        double val_start = qMin(dend, dstart);
   m_pView->doc()->emitBeginOperation( false );
 
   m_pSheet->setSeries( marker, dstart, dend, dstep, mode, type );

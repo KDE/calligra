@@ -5,7 +5,7 @@
 #include <qtimer.h>
 #include <qwaitcondition.h>
 
-#include <kprogress.h>
+#include <kprogressbar.h>
 
 #include "msghandler.h"
 

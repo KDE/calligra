@@ -494,10 +494,10 @@ void KPrView::print( KPrinter &prt )
     QPainter painter;
     painter.begin( &prt );
     QRect rect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
-    double zoom = QMIN( double( metrics.width() ) / double( rect.width() ),
+    double zoom = qMin( double( metrics.width() ) / double( rect.width() ),
                         double( metrics.height() ) / double( rect.height() ) );
     double newZoom = zoom * m_pKPresenterDoc->zoomHandler()->zoom();
-    kdDebug(33001) << "KPrView::print newZoom = " << newZoom << endl;
+    kDebug(33001) << "KPrView::print newZoom = " << newZoom << endl;
     setZoom( int( newZoom ), false );
     QRect paintingRect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
 
@@ -512,7 +512,7 @@ void KPrView::print( KPrinter &prt )
     }
 
     m_canvas->repaint();
-    kdDebug(33001) << "KPrView::print zoom&res reset" << endl;
+    kDebug(33001) << "KPrView::print zoom&res reset" << endl;
     m_pKPresenterDoc->getVariableCollection()->variableSetting()->setLastPrintingDate(QDateTime::currentDateTime());
     m_pKPresenterDoc->recalcVariables( VT_DATE );
 }
@@ -736,7 +736,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
         oldFile = url.fileName();
 
     QString mimetype=picture.getMimeType();
-    kdDebug(33001) << "Picture has mime type: " << mimetype << endl;
+    kDebug(33001) << "Picture has mime type: " << mimetype << endl;
     QStringList mimetypes;
     mimetypes << mimetype;
 
@@ -752,7 +752,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
                 if ( url.isLocalFile() )
                 {
                     QFile file( url.path() );
-                    if ( file.open( IO_ReadWrite ) )
+                    if ( file.open( QIODevice::ReadWrite ) )
                     {
                         picture.save( &file );
                         file.close();
@@ -771,7 +771,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
                     if ( tempFile.status() == 0 )
                     {
                         QFile file( tempFile.name() );
-                        if ( file.open( IO_ReadWrite ) )
+                        if ( file.open( QIODevice::ReadWrite ) )
                         {
                             picture.save( &file );
                             file.close();
@@ -1444,17 +1444,17 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
         if (kapp->dcopClient()->call("kdesktop", "KScreensaverIface", "isEnabled()", data, replyType, replyData)
             && replyType=="bool")
         {
-            QDataStream replyArg(replyData, IO_ReadOnly);
+            QDataStream replyArg(replyData, QIODevice::ReadOnly);
             replyArg >> m_screenSaverWasEnabled;
             if ( m_screenSaverWasEnabled )
             {
                 // disable screensaver
-                QDataStream arg(data, IO_WriteOnly);
+                QDataStream arg(data, QIODevice::WriteOnly);
                 arg << false;
                 if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
-                    kdWarning(33001) << "Couldn't disable screensaver (using dcop to kdesktop)!" << endl;
+                    kWarning(33001) << "Couldn't disable screensaver (using dcop to kdesktop)!" << endl;
                 else
-                    kdDebug(33001) << "Screensaver successfully disabled" << endl;
+                    kDebug(33001) << "Screensaver successfully disabled" << endl;
             }
         }
 
@@ -1462,13 +1462,13 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
         presStarted = true;
         m_autoPresRestart = false;
         QRect desk = KGlobalSettings::desktopGeometry(this);
-        kdDebug(33001) << "KPrView::startScreenPres desk=" << desk << endl;
+        kDebug(33001) << "KPrView::startScreenPres desk=" << desk << endl;
         QRect pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
-        kdDebug(33001) << "KPrView::startScreenPres pgRect=" << pgRect << endl;
+        kDebug(33001) << "KPrView::startScreenPres pgRect=" << pgRect << endl;
 
         double zoomX = static_cast<double>( desk.width() ) / (double)pgRect.width();
         double zoomY = static_cast<double>( desk.height() ) / (double)pgRect.height();
-        kdDebug(33001) << "KPrView::startScreenPres zoomX=" << zoomX << " zoomY=" << zoomY << endl;
+        kDebug(33001) << "KPrView::startScreenPres zoomX=" << zoomX << " zoomY=" << zoomY << endl;
 
         xOffsetSaved = canvasXOffset();
         yOffsetSaved = canvasYOffset();
@@ -1545,10 +1545,10 @@ void KPrView::screenStop()
         {
             // start screensaver again
             QByteArray data;
-            QDataStream arg(data, IO_WriteOnly);
+            QDataStream arg(data, QIODevice::WriteOnly);
             arg << true;
             if (!kapp->dcopClient()->send("kdesktop", "KScreensaverIface", "enable(bool)", data))
-                kdWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
+                kWarning(33001) << "Couldn't re-enabled screensaver (using dcop to kdesktop)" << endl;
         }
 
         actionScreenStart->setEnabled( true );
@@ -1757,7 +1757,7 @@ void KPrView::slotCounterStyleSelected()
     if ( actionName.startsWith( "counterstyle_" ) )
     {
         QString styleStr = actionName.mid(13);
-        //kdDebug(33001) << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
+        //kDebug(33001) << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
         KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
         KoParagCounter c;
         if ( style == KoParagCounter::STYLE_NONE )
@@ -2699,12 +2699,12 @@ void KPrView::setupActions()
                                      actionCollection(), "screen_first" );
 
     actionScreenPrev = new KAction( i18n( "&Previous Slide" ),
-                                    "back", Qt::Key_Prior,
+                                    "back", Qt::Key_PageUp,
                                     this, SLOT( screenPrev() ),
                                     actionCollection(), "screen_prev" );
 
     actionScreenNext = new KAction( i18n( "&Next Slide" ),
-                                    "forward", Qt::Key_Next,
+                                    "forward", Qt::Key_PageDown,
                                     this, SLOT( screenNext() ),
                                     actionCollection(), "screen_next" );
 
@@ -3272,7 +3272,7 @@ void KPrView::recalcCurrentPageNum()
     }
     else
     {
-        kdDebug(33001) << "KPrView::recalcCurrentPageNum: activePage not found" << endl;
+        kDebug(33001) << "KPrView::recalcCurrentPageNum: activePage not found" << endl;
         currPg = 0;
     }
 
@@ -3713,9 +3713,9 @@ void KPrView::setRanges()
 {
     if ( vert && horz && m_canvas && m_pKPresenterDoc ) {
         vert->setSteps( 10, m_canvas->height() );
-        vert->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().height()  - m_canvas->height() ) );
+        vert->setRange( 0, qMax( 0, m_canvas->activePage()->getZoomPageRect().height()  - m_canvas->height() ) );
         horz->setSteps( 10, m_canvas->width() );
-        horz->setRange( 0, QMAX( 0, m_canvas->activePage()->getZoomPageRect().width() + 16 - m_canvas->width() ) );
+        horz->setRange( 0, qMax( 0, m_canvas->activePage()->getZoomPageRect().width() + 16 - m_canvas->width() ) );
     }
 }
 
@@ -3930,7 +3930,7 @@ void KPrView::nextPage()
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
         return;
 
-    //kdDebug(33001)<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
+    //kDebug(33001)<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
     skipToPage( currPg+1 );
 }
 
@@ -4227,7 +4227,7 @@ void KPrView::restartAutoPresTimer()
 void KPrView::continueAutoPresTimer()
 {
     m_autoPresTime.restart();
-    //m_autoPresTimer.changeInterval( m_autoPresTimerValue - m_autoPresElapsedTime );
+    //m_autoPresTimer.start( m_autoPresTimerValue - m_autoPresElapsedTime );
     m_autoPresTimer.start( m_autoPresTimerValue - m_autoPresElapsedTime, true );
 }
 
@@ -4445,7 +4445,7 @@ void KPrView::slotSpellCheck()
     if ( edit && edit->textObject()->hasSelection() )
     {
         objects.append(edit->kpTextObject()->textObject());
-        options = KFindDialog::SelectedText;
+        options = KFind::SelectedText;
     }
     else
     {
@@ -4507,7 +4507,7 @@ void KPrView::startKSpell()
 
 void KPrView::spellCheckerCancel()
 {
-    kdDebug()<<"void KPrView::spellCheckerCancel() \n";
+    kDebug()<<"void KPrView::spellCheckerCancel() \n";
     spellCheckerRemoveHighlight();
     clearSpellChecker(true);
 }
@@ -4529,7 +4529,7 @@ void KPrView::spellCheckerRemoveHighlight()
 
 void KPrView::clearSpellChecker(bool cancelSpellCheck)
 {
-    kdDebug() << "KPrView::clearSpellChecker()" << endl;
+    kDebug() << "KPrView::clearSpellChecker()" << endl;
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
 
@@ -4558,7 +4558,7 @@ void KPrView::clearSpellChecker(bool cancelSpellCheck)
 
 void KPrView::spellCheckerMisspelling( const QString &old, int pos )
 {
-    //kdDebug(32001) << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    //kDebug(32001) << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     KoTextParag* parag = m_spell.kospell->currentParag();
     Q_ASSERT( textobj );
@@ -4569,16 +4569,16 @@ void KPrView::spellCheckerMisspelling( const QString &old, int pos )
     if ( !textdoc ) return;
     pos += m_spell.kospell->currentStartIndex();
 
-    kdDebug() << "KWView::spellCheckerMisspelling parag=" << parag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+    kDebug() << "KWView::spellCheckerMisspelling parag=" << parag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
 
     textdoc->textObject()->highlightPortion( parag, pos, old.length(), m_canvas,true/*repaint*/ );
 }
 
 void KPrView::spellCheckerCorrected( const QString &old, int pos, const QString &corr )
 {
-    //kdDebug(33001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    //kDebug(33001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
 
-    //kdDebug(32001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    //kDebug(32001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     KoTextParag* parag = m_spell.kospell->currentParag();
     Q_ASSERT( textobj );
@@ -4603,7 +4603,7 @@ void KPrView::spellCheckerCorrected( const QString &old, int pos, const QString 
 void KPrView::spellCheckerDone( const QString & )
 {
     /* See also KWView::spellCheckerDone from KWord */
-    kdDebug() << "KPrView::spellCheckerDone" << endl;
+    kDebug() << "KPrView::spellCheckerDone" << endl;
     KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( m_spell.kospell->textDocument() );
     Q_ASSERT( textdoc );
     if ( textdoc )
@@ -4616,7 +4616,7 @@ void KPrView::showCounter( KoParagCounter &c )
 {
     QString styleStr("counterstyle_");
     styleStr += QString::number( c.style() );
-    //kdDebug(33001) << "KWView::showCounter styleStr=" << styleStr << endl;
+    //kDebug(33001) << "KWView::showCounter styleStr=" << styleStr << endl;
     KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr.latin1() ) );
     Q_ASSERT( act );
     if ( act )
@@ -4672,7 +4672,7 @@ void KPrView::slotApplyParag()
     KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
     KoParagLayout newLayout = m_paragDlg->paragLayout();
     int flags = m_paragDlg->changedFlags();
-    kdDebug() << k_funcinfo << "flags=" << flags << endl;
+    kDebug() << k_funcinfo << "flags=" << flags << endl;
     if ( !flags )
         return;
     for ( ; it.current() ; ++it )
@@ -4891,7 +4891,7 @@ void KPrView::insertVariable()
         KAction * act = (KAction *)(sender());
         VariableDefMap::ConstIterator it = m_variableDefMap.find( act );
         if ( it == m_variableDefMap.end() )
-            kdWarning(33001) << "Action not found in m_variableDefMap." << endl;
+            kWarning(33001) << "Action not found in m_variableDefMap." << endl;
         else
         {
             if ( (*it).type == VT_FIELD )
@@ -5196,7 +5196,7 @@ void KPrView::viewZoom( const QString &s )
     }
     if( !ok || zoom<10 ) //zoom should be valid and >10
         zoom = zoomHandler()->zoom();
-    zoom = QMIN( zoom, 4000);
+    zoom = qMin( zoom, 4000);
     //refresh menu
     changeZoomMenu( zoom );
     //refresh menu item
@@ -5218,7 +5218,7 @@ void KPrView::setZoomRect( const KoRect & rect )
 {
     double height = zoomHandler()->resolutionY() * rect.height();
     double width = zoomHandler()->resolutionX() * rect.width();
-    int zoom = QMIN( qRound( static_cast<double>( m_canvas->visibleRect().height() * 100 ) / height ),
+    int zoom = qMin( qRound( static_cast<double>( m_canvas->visibleRect().height() * 100 ) / height ),
             qRound( static_cast<double>( m_canvas->visibleRect().width() * 100 ) / width ) );
 
     m_canvas->setUpdatesEnabled( false );
@@ -5264,7 +5264,7 @@ void KPrView::setPageDuration( int _pgNum )
 {
     if ( kPresenterDoc()->presentationDuration() )
     {
-        // kdDebug(33001) << "KPrView::setPageDuration( " << _pgNum << " )" << endl;
+        // kDebug(33001) << "KPrView::setPageDuration( " << _pgNum << " )" << endl;
         *m_presentationDurationList.at( _pgNum ) += m_duration.elapsed();
         m_duration.restart();
     }
@@ -5419,7 +5419,7 @@ void KPrView::extraStylist()
 void KPrView::slotStyleSelected()
 {
     QString actionName = QString::fromUtf8(sender()->name());
-    kdDebug(33001) << "KPrView::slotStyleSelected " << actionName << endl;
+    kDebug(33001) << "KPrView::slotStyleSelected " << actionName << endl;
     textStyleSelected( m_pKPresenterDoc->styleCollection()->findStyle( actionName ) );
 }
 
@@ -5492,7 +5492,7 @@ void KPrView::insertComment()
     KoDocumentInfo * info = m_pKPresenterDoc->documentInfo();
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     if ( !authorPage )
-        kdWarning() << "Author information not found in documentInfo !" << endl;
+        kWarning() << "Author information not found in documentInfo !" << endl;
     else
         authorName = authorPage->fullName();
 
@@ -5515,7 +5515,7 @@ void KPrView::editComment()
             KoDocumentInfo * info = m_pKPresenterDoc->documentInfo();
             KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
             if ( !authorPage )
-                kdWarning() << "Author information not found in documentInfo !" << endl;
+                kWarning() << "Author information not found in documentInfo !" << endl;
             else
                 authorName = authorPage->fullName();
             QString oldValue = var->note();
@@ -5699,7 +5699,7 @@ int KPrView::getZoomEntirePage() const
 {
     double height = zoomHandler()->resolutionY() * m_pKPresenterDoc->pageLayout().ptHeight;
     double width = zoomHandler()->resolutionX() * m_pKPresenterDoc->pageLayout().ptWidth;
-    int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+    int zoom = qMin( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
                      qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
     return zoom;
 }
@@ -5726,7 +5726,7 @@ void KPrView::zoomAllObject()
     KoRect rect = m_canvas->objectRect( true );
     double height = zoomHandler()->resolutionY() * rect.height();
     double width = zoomHandler()->resolutionX() * rect.width();
-    int zoom = QMIN( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
+    int zoom = qMin( qRound( static_cast<double>(m_canvas->visibleRect().height() * 100 ) / height ),
                      qRound( static_cast<double>(m_canvas->visibleRect().width() * 100 ) / width ) );
     viewZoom( QString::number(zoom ) );
 

@@ -1091,7 +1091,7 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 
   double oldCol = args[1]->doubleValue();
   double oldRow = args[3]->doubleValue();
-  kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
+  kDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
 
   Cell * cell;
   Sheet * sheet = ((Interpreter *) context.interpreter() )->sheet();
@@ -1105,12 +1105,12 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
   {
     cell = sheet->cellAt( point.pos.x(), point.pos.y() );
     cell->setValue( args[2]->doubleValue() );
-    kdDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x()
+    kDebug() << "Setting value " << args[2]->doubleValue() << " on cell " << point.pos.x()
               << ", " << point.pos.y() << endl;
 
     cell = sheet->cellAt( point2.pos.x(), point.pos.y() );
     cell->setValue( args[4]->doubleValue() );
-    kdDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x()
+    kDebug() << "Setting value " << args[4]->doubleValue() << " on cell " << point2.pos.x()
               << ", " << point2.pos.y() << endl;
   }
 
@@ -1118,10 +1118,10 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
   cell1->calc( false );
 
   double d = cell1->value().asFloat();
-  kdDebug() << "Cell: " << point3.pos.x() << "; " << point3.pos.y() << " with value "
+  kDebug() << "Cell: " << point3.pos.x() << "; " << point3.pos.y() << " with value "
             << d << endl;
 
-  kdDebug() << "Resetting old values" << endl;
+  kDebug() << "Resetting old values" << endl;
 
   cell = sheet->cellAt( point.pos.x(), point.pos.y() );
   cell->setValue( oldCol );

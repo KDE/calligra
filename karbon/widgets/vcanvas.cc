@@ -35,7 +35,7 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kcolordrag.h>
+#include <k3colordrag.h>
 
 int
 VCanvas::pageOffsetX() const
@@ -70,8 +70,8 @@ KoPoint VCanvas::snapToGrid( const KoPoint &point )
 	int dx = qRound( p.x() / dxy.width() );
 	int dy = qRound( p.y() / dxy.height() );
 
-	float distx = QMIN( QABS( p.x() - dxy.width() * dx ), QABS( p.x() - dxy.width() * ( dx + 1 ) ) );
-	float disty = QMIN( QABS( p.y() - dxy.height() * dy ), QABS( p.y() - dxy.height() * ( dy + 1 ) ) );
+	float distx = qMin( QABS( p.x() - dxy.width() * dx ), QABS( p.x() - dxy.width() * ( dx + 1 ) ) );
+	float disty = qMin( QABS( p.y() - dxy.height() * dy ), QABS( p.y() - dxy.height() * ( dy + 1 ) ) );
 
 	if( distx < dist.width() )
 	{
@@ -198,7 +198,7 @@ VCanvas::boundingBox() const
 void
 VCanvas::setYMirroring( VPainter *p )
 {
-	QWMatrix mat;
+	QMatrix mat;
 
 	mat.scale( 1, -1 );
 	mat.translate( pageOffsetX(), pageOffsetY() );
@@ -208,7 +208,7 @@ VCanvas::setYMirroring( VPainter *p )
 	else
 		mat.translate( 0, -visibleHeight() );
 
-	p->setWorldMatrix( mat );
+	p->setMatrix( mat );
 }
 
 void
@@ -228,8 +228,8 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	setYMirroring( p );
 	
 	// TRICK : slightly adjust the matrix so libart AA looks better
-	QWMatrix mat = p->worldMatrix();
-	p->setWorldMatrix( mat.translate( -.5, -.5 ) );
+	QMatrix mat = p->worldMatrix();
+	p->setMatrix( mat.translate( -.5, -.5 ) );
 
 	// set up clippath
 	p->newPath();
@@ -305,8 +305,8 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect&, bool drawVObjects )
 		p->setZoomFactor( m_view->zoom() );
 		setYMirroring( p );
 		// TRICK : slightly adjust the matrix so libart AA looks better
-		QWMatrix mat = p->worldMatrix();
-		p->setWorldMatrix( mat.translate( -.5, -.5 ) );
+		QMatrix mat = p->worldMatrix();
+		p->setMatrix( mat.translate( -.5, -.5 ) );
 
 		m_part->document().drawPage( p, m_part->pageLayout(), m_view->showPageMargins() );
 		KoRect r2 = boundingBox();
@@ -367,7 +367,7 @@ VCanvas::slotContentsMoving( int /*x*/, int /*y*/ )
 void
 VCanvas::dragEnterEvent( QDragEnterEvent *e )
 {
-	e->accept( KarbonDrag::canDecode( e ) || KColorDrag::canDecode( e ) );
+	e->accept( KarbonDrag::canDecode( e ) || K3ColorDrag::canDecode( e ) );
 }
 
 void

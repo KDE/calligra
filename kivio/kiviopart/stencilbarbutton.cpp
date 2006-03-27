@@ -104,7 +104,7 @@ DragBarButton::~DragBarButton()
   delete m_pClosePix;
   delete m_pIcon;
 
-  kdDebug(43000) << "DragBarButton - AHHHHHH I'M DYING!" << endl;
+  kDebug(43000) << "DragBarButton - AHHHHHH I'M DYING!" << endl;
 }
 
 void DragBarButton::drawButton( QPainter* paint )
@@ -204,7 +204,7 @@ QSize DragBarButton::sizeHint() const
     ph = m_pIcon->height();
   }
 
-  int h = QMAX(ph,th)+2*m;
+  int h = qMax(ph,th)+2*m;
   int w = m + pw + (tw!=0 && pw!=0 ?m:0) + tw + m + 22;
 
   QSize size;
@@ -254,7 +254,7 @@ void DragBarButton::mouseReleaseEvent( QMouseEvent* ev )
 
     if ( closeRect.contains(ev->pos()))
     {
-       kdDebug(43000) << "DragBarButton::mouseReleaseEvent() - Emitting closeRequest" << endl;
+       kDebug(43000) << "DragBarButton::mouseReleaseEvent() - Emitting closeRequest" << endl;
         emit closeRequired(this);
     }
     return;

@@ -57,7 +57,7 @@ namespace Kivio {
   void PluginManager::activateDefaultTool()
   {
     if(defaultTool()) {
-      kdDebug(43000) << "Default tool activated! " << defaultTool()->name() << endl;
+      kDebug(43000) << "Default tool activated! " << defaultTool()->name() << endl;
       defaultTool()->setActivated(true);
     }
   }
@@ -66,11 +66,11 @@ namespace Kivio {
   {
     if(tool != m_activeTool) {
       if(m_activeTool) {
-        kdDebug(43000) << "Deactivate tool: " << m_activeTool->name() << endl;
+        kDebug(43000) << "Deactivate tool: " << m_activeTool->name() << endl;
         m_activeTool->setActivated(false);
       }
       
-      kdDebug(43000) << "Activate new tool: " << tool->name() << endl;
+      kDebug(43000) << "Activate new tool: " << tool->name() << endl;
       m_activeTool = tool;
     }
   }
@@ -78,7 +78,7 @@ namespace Kivio {
   void PluginManager::setDefaultTool(Kivio::MouseTool* tool)
   {
     m_defaultTool = tool;
-    kdDebug(43000) << "New default tool: " << tool->name() << endl;
+    kDebug(43000) << "New default tool: " << tool->name() << endl;
   }
 
   Kivio::Plugin* PluginManager::findPlugin(const QString& name)

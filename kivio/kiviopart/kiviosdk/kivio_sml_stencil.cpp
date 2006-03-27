@@ -368,7 +368,7 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
             case KivioShapeData::kstNone:
             default:
-                kdDebug(43000) << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
+                kDebug(43000) << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
                 break;
         }
 
@@ -740,7 +740,7 @@ void KivioSMLStencil::drawOutlineTextBox( KivioShape *pShape, KivioIntraStencilD
   p.setFont( f );
   p.setPen( QColor(0, 0, 0) );
   int tf = pShapeData->vTextAlign() | pShapeData->hTextAlign();
-  p.drawText( 0, 0, _w, _h, tf | Qt::WordBreak, pShapeData->text() );
+  p.drawText( 0, 0, _w, _h, tf | Qt::TextWordWrap, pShapeData->text() );
   QBitmap mask;
   mask = pix;
   pix.setMask(mask);
@@ -1340,7 +1340,7 @@ void KivioSMLStencil::drawTextBox( KivioShape *pShape, KivioIntraStencilData *pD
   painter->setTextColor( pShapeData->textColor() );
 
   int tf = pShapeData->vTextAlign() | pShapeData->hTextAlign();
-  painter->drawText( _x, _y, _w, _h, tf | Qt::WordBreak, pShapeData->text() );
+  painter->drawText( _x, _y, _w, _h, tf | Qt::TextWordWrap, pShapeData->text() );
   // TODO Implement richtext support
 }
 
@@ -1557,9 +1557,9 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
  */
 void KivioSMLStencil::updateGeometry()
 {
-  //kdDebug(43000) << "m_x = " << m_x << " m_y = " << m_y << endl;
+  //kDebug(43000) << "m_x = " << m_x << " m_y = " << m_y << endl;
 
-  QWMatrix m;
+  QMatrix m;
   m.translate(m_x, m_y);
   m.translate(m_w / 2.0, m_h / 2.0);
   m.rotate(m_rotation);
@@ -1847,7 +1847,7 @@ KivioCollisionType KivioSMLStencil::checkForCollision( KoPoint *pPoint, double )
 {
   KivioCollisionType type = kctNone;
 
-  QWMatrix m;
+  QMatrix m;
   m.translate(m_x, m_y);
   m.translate(m_w / 2.0, m_h / 2.0);
   m.rotate(m_rotation);
@@ -2024,7 +2024,7 @@ QString KivioSMLStencil::getTextBoxName(const KoPoint& p)
   KoPoint pos = p;
   
   // Calculate the rotation...
-  QWMatrix m;
+  QMatrix m;
   m.translate(m_x, m_y);
   m.translate(m_w / 2.0, m_h / 2.0);
   m.rotate(m_rotation);

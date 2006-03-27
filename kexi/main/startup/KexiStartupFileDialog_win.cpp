@@ -111,7 +111,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //(js)    toolbar->setFlat(true);
 //TODO    qInstallMsgHandler( oldHandler );
 
-//(js)    d->pathCombo = new KURLComboBox( KURLComboBox::Directories, true,
+//(js)    d->pathCombo = new KUrlComboBox( KUrlComboBox::Directories, true,
 //(js)                                     toolbar, "path combo" );
 //(js)    QToolTip::add( d->pathCombo, i18n("Often used directories") );
 //(js)    QWhatsThis::add( d->pathCombo, "<qt>" + i18n("Commonly used locations are listed here. "
@@ -119,13 +119,13 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //(js)                                                 "locations that have been visited recently.") + autocompletionWhatsThisText);
 /*
     KUrl u;
-    u.setPath( QDir::rootDirPath() );
+    u.setPath( QDir::rootPath() );
     QString text = i18n("Root Directory: %1").arg( u.path() );
     d->pathCombo->addDefaultURL( u,
                                  KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
                                  text );
 
-    u.setPath( QDir::homeDirPath() );
+    u.setPath( QDir::homePath() );
     text = i18n("Home Directory: %1").arg( u.path( +1 ) );
     d->pathCombo->addDefaultURL( u, KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
                                  text );
@@ -279,7 +279,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 
     // the Location label/edit
     d->locationLabel = new QLabel(i18n("&Location:"), d->mainWidget);
-    locationEdit = new KURLComboBox(KURLComboBox::Files, true,
+    locationEdit = new KUrlComboBox(KUrlComboBox::Files, true,
                                     d->mainWidget, "LocationEdit");
     updateLocationWhatsThis ();
     d->locationLabel->setBuddy(locationEdit);
@@ -289,7 +289,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
     (void) locationEdit->completionBox();
 
     locationEdit->setFocus();
-//     locationEdit->setCompletionObject( new KURLCompletion() );
+//     locationEdit->setCompletionObject( new KUrlCompletion() );
 //     locationEdit->setAutoDeleteCompletionObject( true );
     locationEdit->setCompletionObject( ops->completionObject(), false );
 
@@ -460,7 +460,7 @@ QString KexiStartupFileDialogBase::realStartDir(const QString& startDir)
 	if (path.isEmpty())
 		return QString::null;
 	QFileInfo fi(path);
-	return fi.isDir() ? fi.absFilePath() : fi.dir(true).absPath();
+	return fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absPath();
 }
 
 void KexiStartupFileDialogBase::saveLastVisitedPath(const QString& path)
@@ -469,7 +469,7 @@ void KexiStartupFileDialogBase::saveLastVisitedPath(const QString& path)
 		//save last visited dir path
 //		QString dir = QDir(path).absPath();
 		QFileInfo fi(path);
-		QString dir( fi.isDir() ? fi.absFilePath() : fi.dir(true).absPath() );
+		QString dir( fi.isDir() ? fi.absoluteFilePath() : fi.dir(true).absPath() );
 		if (!dir.isEmpty())
 			KRecentDirs::add(m_lastVisitedPathsVariable, dir);
 	}

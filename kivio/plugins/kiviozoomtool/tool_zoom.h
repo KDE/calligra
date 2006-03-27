@@ -24,7 +24,7 @@
 class KivioView;
 class KivioPage;
 class KivioCanvas;
-class KPopupMenu;
+class KMenu;
 
 class KRadioAction;
 class KAction;
@@ -66,7 +66,7 @@ class ZoomTool : public Kivio::MouseTool
     KRadioAction* m_zoomAction;
     KRadioAction* m_panAction;
   
-    KPopupMenu* m_pMenu;
+    KMenu* m_pMenu;
   
     KAction* m_pMinus;
     KAction* m_pPlus;

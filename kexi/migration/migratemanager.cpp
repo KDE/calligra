@@ -36,7 +36,7 @@
 
 //remove debug
 #undef KexiDBDbg
-#define KexiDBDbg if (0) kdDebug()
+#define KexiDBDbg if (0) kDebug()
 
 using namespace KexiMigration;
 
@@ -294,17 +294,17 @@ MigrateManager::~MigrateManager()
 const QStringList MigrateManager::driverNames()
 {
 	if (!d_int->lookupDrivers()) {
-		kdDebug() << "MigrateManager::driverNames() lookupDrivers failed" << endl;
+		kDebug() << "MigrateManager::driverNames() lookupDrivers failed" << endl;
 		return QStringList();
 	}
 	
 	if (d_int->m_services.isEmpty()) {
-		kdDebug() << "MigrateManager::driverNames() MigrateManager::ServicesMap is empty" << endl;
+		kDebug() << "MigrateManager::driverNames() MigrateManager::ServicesMap is empty" << endl;
 		return QStringList();
 	}
 
 	if (d_int->error()) {
-		kdDebug() << "MigrateManager::driverNames() Error: " << d_int->errorMsg() << endl;
+		kDebug() << "MigrateManager::driverNames() Error: " << d_int->errorMsg() << endl;
 		return QStringList();
 	}
 
@@ -314,14 +314,14 @@ const QStringList MigrateManager::driverNames()
 QString MigrateManager::driverForMimeType(const QString &mimeType)
 {
 	if (!d_int->lookupDrivers()) {
-		kdDebug() << "MigrateManager::driverForMimeType() lookupDrivers() failed" << endl;
+		kDebug() << "MigrateManager::driverForMimeType() lookupDrivers() failed" << endl;
 		setError(d_int);
 		return 0;
 	}
 	
 	KService::Ptr ptr = d_int->m_services_by_mimetype[mimeType.lower()];
 	if (!ptr) {
-		kdDebug() << QString("MigrateManager::driverForMimeType(%1) No such mimetype").arg(mimeType) << endl;
+		kDebug() << QString("MigrateManager::driverForMimeType(%1) No such mimetype").arg(mimeType) << endl;
 		return QString::null;
 	}
 
@@ -332,7 +332,7 @@ KexiMigrate* MigrateManager::driver(const QString& name)
 {
 	KexiMigrate *drv = d_int->driver(name);
 	if (d_int->error()) {
-		kdDebug() << QString("MigrateManager::driver(%1) Error: %2").arg(name).arg(d_int->errorMsg()) << endl;
+		kDebug() << QString("MigrateManager::driver(%1) Error: %2").arg(name).arg(d_int->errorMsg()) << endl;
 		setError(d_int);
 	}
 	return drv;

@@ -22,7 +22,7 @@
 
 #include <kdialogbase.h>
 #include <kicondialog.h>
-#include <kiconview.h>
+#include <k3iconview.h>
 #include <kfileiconview.h>
 #include <kfiledialog.h>
 
@@ -47,7 +47,7 @@ class KEXIMAIN_EXPORT TemplatesPage : public QSplitter
 		void itemClicked(QIconViewItem *item);
 	
 	public:
-		KIconView *templates;
+		K3IconView *templates;
 		KTextBrowser *info;
 };
 

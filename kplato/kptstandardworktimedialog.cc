@@ -43,7 +43,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, cons
     : KDialogBase( Swallow, i18n("Standard Worktime"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
-    //kdDebug()<<k_funcinfo<<&p<<endl;
+    //kDebug()<<k_funcinfo<<&p<<endl;
     m_original = p.standardWorktime();
     dia = new StandardWorktimeDialogImpl(m_original, this);
 
@@ -55,7 +55,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, cons
 }
 
 KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
-    kdDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo<<endl;
     QString n = i18n("Modify Standard Worktime");
     KMacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
@@ -116,7 +116,7 @@ void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
 }
 
 void StandardWorktimeDialogImpl::slotYearChanged(double value) {
-    //kdDebug()<<k_funcinfo<<value<<endl;
+    //kDebug()<<k_funcinfo<<value<<endl;
     m_year = value;
     if (month->value() > value)
         month->setValue(value);

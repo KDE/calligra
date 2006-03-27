@@ -46,11 +46,11 @@ extern "C" int kdemain(int argc, char *argv[])
 //! @todo switch GUIenabled off when needed
 	KApplication app(true, GUIenabled);
 #ifdef KEXI_STANDALONE
-	KGlobal::locale()->removeCatalogue("kexi");
-	KGlobal::locale()->insertCatalogue("standalone_kexi");
+	KGlobal::locale()->removeCatalog("kexi");
+	KGlobal::locale()->insertCatalog("standalone_kexi");
 #endif
-	KGlobal::locale()->insertCatalogue("koffice");
-	KGlobal::locale()->insertCatalogue("koproperty");
+	KGlobal::locale()->insertCatalog("koffice");
+	KGlobal::locale()->insertCatalog("koproperty");
 
 	if (GUIenabled) {
 		dummyWidget = new QWidget();
@@ -64,7 +64,7 @@ extern "C" int kdemain(int argc, char *argv[])
 	if (~res)
 		return 0;
 	
-	kdDebug() << "startupActions OK" <<endl;
+	kDebug() << "startupActions OK" <<endl;
 
 	/* Exit requested, e.g. after database removing. */
 	if (Kexi::startupHandler().action() == KexiStartupData::Exit)

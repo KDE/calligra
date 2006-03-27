@@ -57,14 +57,14 @@ void AFChoose::getGroups()
     QString afDir = locate( "autoforms", ".autoforms", KPrFactory::global() );
 
     QFile f( afDir );
-    if ( f.open(IO_ReadOnly) ) {
+    if ( f.open(QIODevice::ReadOnly) ) {
         QTextStream t( &f );
         QString s;
         while ( !t.eof() ) {
             s = t.readLine();
             if ( !s.isEmpty() ) {
                 grpPtr = new Group;
-                QString directory=QFileInfo( afDir ).dirPath() + "/" + s.simplifyWhiteSpace();
+                QString directory=QFileInfo( afDir ).dirPath() + "/" + s.simplified();
                 grpPtr->dir.setFile(directory);
                 QDir d(directory);
                 if(d.exists(".directory")) {
@@ -89,12 +89,12 @@ void AFChoose::setupTabs()
             QWhatsThis::add(grpPtr->tab, i18n( "Choose a predefined shape by clicking on it then clicking the OK button (or just double-click on the shape). You can then insert the shape onto your slide by drawing the area with the mouse pointer." ) );
             grpPtr->loadWid = new KIconCanvas(grpPtr->tab);
             // Changes for the new KIconCanvas (Werner)
-            QDir d( grpPtr->dir.absFilePath() );
+            QDir d( grpPtr->dir.absoluteFilePath() );
             d.setNameFilter( "*.desktop" );
             if( d.exists() ) {
                 QStringList files=d.entryList( QDir::Files | QDir::Readable, QDir::Name );
                 for(unsigned int i=0; i<files.count(); ++i) {
-                    QString path=grpPtr->dir.absFilePath() + QChar('/');
+                    QString path=grpPtr->dir.absoluteFilePath() + QChar('/');
                     files[i]=path + files[i];
                     KSimpleConfig config(files[i]);
                     config.setDesktopGroup();
@@ -115,7 +115,7 @@ void AFChoose::setupTabs()
                         QImage img;
                         img.load(icon);
                         if (img.isNull()) {
-                            kdWarning() << "Couldn't find icon " << icon << endl;
+                            kWarning() << "Couldn't find icon " << icon << endl;
                             continue;
                         }
                         if (img.width() > 60 || img.height() > 60) {

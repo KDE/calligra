@@ -175,10 +175,10 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 
 			\return size of the specified table
 		*/
-		virtual bool drv_getTableSize(const QString&, Q_ULLONG&)
+		virtual bool drv_getTableSize(const QString&, quint64&)
 		{ return false; }
 
-		void updateProgress(Q_ULLONG step = 1ULL);
+		void updateProgress(quint64 step = 1ULL);
 
 //! @todo user should be asked ONCE using a convenient wizard's page, not a popup dialog
 		//! Prompt user to select a field type for unrecognized fields
@@ -224,11 +224,11 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		KexiProject *m_destPrj;
 
 		//! Size of migration job
-		Q_ULLONG m_progressTotal;
+		quint64 m_progressTotal;
 		//! Amount of migration job complete
-		Q_ULLONG m_progressDone;
+		quint64 m_progressDone;
 		//! Don't recalculate progress done until this value is reached.
-		Q_ULLONG m_progressNextReport;
+		quint64 m_progressNextReport;
 
 		friend class MigrateManager;
 };

@@ -60,7 +60,7 @@ void KivioProtectionPanel::togWidth(bool on)
       macro->addCommand(cmd);
       createMacro = true;
     } else {
-      kdDebug(43000) << "Attempt to set width-protection of a stencil which does not support it.\n";
+      kDebug(43000) << "Attempt to set width-protection of a stencil which does not support it.\n";
     }
 
     pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -87,7 +87,7 @@ void KivioProtectionPanel::togHeight(bool on)
       macro->addCommand(cmd);
       createMacro = true;
     } else {
-      kdDebug(43000) << "Attempt to set height-protection of a stencil which does not support it.\n";
+      kDebug(43000) << "Attempt to set height-protection of a stencil which does not support it.\n";
     }
 
     pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -114,7 +114,7 @@ void KivioProtectionPanel::togAspect(bool on)
       macro->addCommand(cmd);
       createMacro = true;
     } else {
-      kdDebug(43000) << "Attempt to set height-protection of a stencil which does not support it.\n";
+      kDebug(43000) << "Attempt to set height-protection of a stencil which does not support it.\n";
     }
 
     pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -141,7 +141,7 @@ void KivioProtectionPanel::togDelete(bool on)
       macro->addCommand(cmd);
       createMacro = true;
     } else {
-      kdDebug(43000) << "Attempt to set delete-protection of a stencil which does not support it.\n";
+      kDebug(43000) << "Attempt to set delete-protection of a stencil which does not support it.\n";
     }
 
     pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -168,7 +168,7 @@ void KivioProtectionPanel::togX(bool on)
       macro->addCommand(cmd);
       createMacro = true;
     } else {
-      kdDebug(43000) << "Attempt to set X-protection of a stencil which does not support it.\n";
+      kDebug(43000) << "Attempt to set X-protection of a stencil which does not support it.\n";
     }
 
     pStencil = m_pView->activePage()->selectedStencils()->next();
@@ -196,7 +196,7 @@ void KivioProtectionPanel::togY(bool on)
       macro->addCommand(cmd);
       createMacro = true;
     } else {
-      kdDebug(43000) << "Attempt to set Y-protection of a stencil which does not support it.\n";
+      kDebug(43000) << "Attempt to set Y-protection of a stencil which does not support it.\n";
     }
 
     pStencil = m_pView->activePage()->selectedStencils()->next();

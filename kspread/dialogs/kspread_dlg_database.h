@@ -47,7 +47,7 @@ class Q3TextEdit;
 class Q3VBoxLayout;
 class QWidget;
 
-class KListView;
+class K3ListView;
 class KPushButton;
 namespace KSpread
 {
@@ -106,9 +106,9 @@ class DatabaseDialog : public KWizard
   KPushButton  * m_connectButton;
   QLabel       * m_sheetStatus;
   QLabel       * m_SelectSheetLabel;
-  KListView    * m_sheetView;
+  K3ListView    * m_sheetView;
   QWidget      * m_columns;
-  KListView    * m_columnView;
+  K3ListView    * m_columnView;
   QLabel       * m_columnsStatus;
   QWidget      * m_options;
   QComboBox    * m_columns_1;

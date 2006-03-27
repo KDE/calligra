@@ -26,8 +26,8 @@
 #include <qtabwidget.h>
 #include <qvalidator.h>
 
-#include <kiconview.h>
-#include <klistview.h>
+#include <k3iconview.h>
+#include <k3listview.h>
 
 class QListViewItem;
 class KPrDocument;
@@ -63,7 +63,7 @@ protected:
     bool m_viewMasterPage;
 };
 
-class KPrThumbBar : public KIconView, public KPrSideBarBase
+class KPrThumbBar : public K3IconView, public KPrSideBarBase
 {
     Q_OBJECT
 
@@ -99,7 +99,7 @@ private:
     int m_offsetY;
 };
 
-class KPrOutline: public KListView, public KPrSideBarBase
+class KPrOutline: public K3ListView, public KPrSideBarBase
 {
     Q_OBJECT
 
@@ -107,7 +107,7 @@ public:
     KPrOutline( QWidget *parent, KPrDocument *d, KPrView *v );
     ~KPrOutline();
     void setCurrentPage( int pg );
-    QSize sizeHint() const { return QSize( 145, KListView::sizeHint().height() ); }
+    QSize sizeHint() const { return QSize( 145, K3ListView::sizeHint().height() ); }
     void updateItem( int pagenr, bool sticky = false);
     void addItem( int pos );
     void moveItem( int oldPos, int newPos );
@@ -134,7 +134,7 @@ private slots:
     void itemClicked( QListViewItem *i );
     void slotDropped( QDropEvent *e, QListViewItem *parent, QListViewItem *target );
     void rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c );
-    void slotContextMenu( KListView*, QListViewItem *item, const QPoint &p );
+    void slotContextMenu( K3ListView*, QListViewItem *item, const QPoint &p );
 
 private:
     QListViewItem *m_movedItem, *m_movedAfter;

@@ -54,7 +54,7 @@ StyleManager::~StyleManager()
 
 void StyleManager::saveOasis( KoGenStyles &mainStyles )
 {
-    kdDebug() << "Saving default oasis style" << endl;
+    kDebug() << "Saving default oasis style" << endl;
     KoGenStyle defaultStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
     m_defaultStyle->saveOasis( defaultStyle, mainStyles );
 
@@ -63,7 +63,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
 
     while ( iter != end )
     {
-        kdDebug() << "Saving style" << endl;
+        kDebug() << "Saving style" << endl;
         CustomStyle * styleData = iter.data();
 
         KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
@@ -81,7 +81,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     {
       m_defaultStyle->loadOasis( oasisStyles, *defaultStyle, "Default" );
       m_defaultStyle->setType( Style::BUILTIN );
-      kdDebug() << "StyleManager: default cell style loaded!" << endl;
+      kDebug() << "StyleManager: default cell style loaded!" << endl;
     }
     else
     {
@@ -90,7 +90,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
     }
 
     uint nStyles = oasisStyles.userStyles().count();
-    kdDebug() << " number of template style to load : " << nStyles << endl;
+    kDebug() << " number of template style to load : " << nStyles << endl;
     for (unsigned int item = 0; item < nStyles; item++) {
         QDomElement styleElem = oasisStyles.userStyles()[item];
 
@@ -114,7 +114,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
             style->loadOasis( oasisStyles, styleElem, name );
             style->setType( Style::CUSTOM );
             m_styles[name] = style;
-            kdDebug() << "Style " << name << ": " << style << endl;
+            kDebug() << "Style " << name << ": " << style << endl;
         }
     }
 
@@ -134,10 +134,10 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles )
 
 QDomElement StyleManager::save( QDomDocument & doc )
 {
-  kdDebug() << "Saving styles" << endl;
+  kDebug() << "Saving styles" << endl;
   QDomElement styles = doc.createElement( "styles" );
 
-  kdDebug() << "Saving default style" << endl;
+  kDebug() << "Saving default style" << endl;
   m_defaultStyle->save( doc, styles );
 
   Styles::iterator iter = m_styles.begin();
@@ -145,7 +145,7 @@ QDomElement StyleManager::save( QDomDocument & doc )
 
   while ( iter != end )
   {
-    kdDebug() << "Saving style" << endl;
+    kDebug() << "Saving style" << endl;
     CustomStyle * styleData = iter.data();
 
     styleData->save( doc, styles );
@@ -153,7 +153,7 @@ QDomElement StyleManager::save( QDomDocument & doc )
     ++iter;
   }
 
-  kdDebug() << "End saving styles" << endl;
+  kDebug() << "End saving styles" << endl;
   return styles;
 }
 
@@ -189,7 +189,7 @@ bool StyleManager::loadXML( QDomElement const & styles )
       if ( style->type() == Style::AUTO )
         style->setType( Style::CUSTOM );
       m_styles[name] = style;
-      kdDebug() << "Style " << name << ": " << style << endl;
+      kDebug() << "Style " << name << ": " << style << endl;
     }
 
     e = e.nextSibling().toElement();
@@ -267,7 +267,7 @@ void StyleManager::takeStyle( CustomStyle * style )
 
   if ( i != m_styles.end() )
   {
-    kdDebug() << "Erasing style entry for " << style->name() << endl;
+    kDebug() << "Erasing style entry for " << style->name() << endl;
     m_styles.erase( i );
   }
 }

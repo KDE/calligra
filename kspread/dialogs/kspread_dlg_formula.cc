@@ -248,7 +248,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
 
 FormulaDialog::~FormulaDialog()
 {
-    kdDebug(36001)<<"FormulaDialog::~FormulaDialog() \n";
+    kDebug(36001)<<"FormulaDialog::~FormulaDialog() \n";
 }
 
 void FormulaDialog::slotPressReturn()
@@ -630,7 +630,7 @@ void FormulaDialog::slotDoubleClicked( QListBoxItem* item )
 
     if( m_desc->params() > 5 )
     {
-        kdDebug(36001) << "Error in param->nb_param" << endl;
+        kDebug(36001) << "Error in param->nb_param" << endl;
     }
     refresh_result= true;
     //
@@ -738,7 +738,7 @@ void FormulaDialog::slotActivated( const QString& category )
     else
       lst = FunctionRepository::self()->functionNames( category );
 
-    kdDebug(36001)<<"category: "<<category<<" ("<<lst.count()<<"functions)" << endl;
+    kDebug(36001)<<"category: "<<category<<" ("<<lst.count()<<"functions)" << endl;
 
     functions->clear();
     functions->insertStringList( lst );

@@ -165,17 +165,17 @@ bool Style::operator == (const Style& style) const
 
 void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element )
 {
-    kdDebug()<<"void Style::loadOasisStyle( const QDomElement & element )**************: name :"<<endl;
+    kDebug()<<"void Style::loadOasisStyle( const QDomElement & element )**************: name :"<<endl;
     KoStyleStack styleStack;
     styleStack.push( element );
     styleStack.setTypeProperties( "table-cell" );
     QString str;
     if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
     {
-        //kdDebug()<<"styleStack.attribute( style:data-style-name ) :"<<element.attributeNS( KoXmlNS::style, "data-style-name", QString::null )<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
-        //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
+        //kDebug()<<"styleStack.attribute( style:data-style-name ) :"<<element.attributeNS( KoXmlNS::style, "data-style-name", QString::null )<<endl;
+        //kDebug()<< " oasisStyles.dataFormats()[...] :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].formatStr<<endl;
+        //kDebug()<< " oasisStyles.dataFormats()[...] prefix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].prefix<<endl;
+        //kDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null)].suffix<<endl;
 
         str = element.attributeNS( KoXmlNS::style, "data-style-name" , QString::null);
 
@@ -203,7 +203,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" ) )
     {
         m_fontFamily = styleStack.attributeNS( KoXmlNS::fo, "font-family" );
-        kdDebug()<<"styleStack.hasAttribute( fo:font-family ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" )<<endl;
+        kDebug()<<"styleStack.hasAttribute( fo:font-family ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "font-family" )<<endl;
         m_featuresSet |= SFontFamily;
         m_featuresSet |= SFont;
         m_featuresSet |= SFontFlag;
@@ -287,7 +287,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     {
 
         str = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
-        kdDebug()<<"str :"<<str<<endl;
+        kDebug()<<"str :"<<str<<endl;
         if ( str == "center" )
             m_alignX = Center;
         else if ( str == "end" )
@@ -303,7 +303,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
       m_formatType = Generic_format;
 
       str = styleStack.attributeNS( KoXmlNS::office, "value-type" );
-      kdDebug()<<"str :"<<str<<endl<<endl;
+      kDebug()<<"str :"<<str<<endl<<endl;
       if ( str == "float" ) // TODO
         m_formatType = Number_format;
       else if ( str == "time" ) // TODO
@@ -395,7 +395,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     {
         bool ok;
         int a = styleStack.attributeNS( KoXmlNS::style, "rotation-angle" ).toInt( &ok );
-        kdDebug()<<" rotation-angle :"<<a<<endl;
+        kDebug()<<" rotation-angle :"<<a<<endl;
         if ( a != 0 )
         {
             m_rotateAngle= ( -a  );
@@ -460,10 +460,10 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
 
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        kdDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
+        kDebug()<<" style name :"<<styleStack.attributeNS( KoXmlNS::draw, "style-name" )<<endl;
 
         const QDomElement * style = oasisStyles.findStyle( styleStack.attributeNS( KoXmlNS::draw, "style-name" ), "graphic" );
-        kdDebug()<<" style :"<<style<<endl;
+        kDebug()<<" style :"<<style<<endl;
       if ( style )
       {
         KoStyleStack drawStyleStack;
@@ -472,16 +472,16 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
         if ( drawStyleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
         {
             const QString fill = drawStyleStack.attributeNS( KoXmlNS::draw, "fill" );
-            kdDebug()<<" load object gradient fill type :"<<fill<<endl;
+            kDebug()<<" load object gradient fill type :"<<fill<<endl;
 
             if ( fill == "solid" || fill == "hatch" )
             {
-                kdDebug()<<" Style ******************************************************\n";
+                kDebug()<<" Style ******************************************************\n";
                 m_backGroundBrush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
                 m_featuresSet |= SBackgroundBrush;
             }
             else
-                kdDebug()<<" fill style not supported into kspread : "<<fill<<endl;
+                kDebug()<<" fill style not supported into kspread : "<<fill<<endl;
         }
       }
     }
@@ -500,7 +500,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
         int i = format.attribute( "precision" ).toInt( &ok );
         if ( i < -1 )
         {
-            kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
+            kDebug(36001) << "Value out of range Cell::precision=" << i << endl;
             return false;
         }
         m_precision = i;
@@ -713,7 +713,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
                                       const QString &_prefix, const QString &_postfix,
                                       int _precision, const QString& /*symbol*/ )
 {
-//  kdDebug() << k_funcinfo << endl;
+//  kDebug() << k_funcinfo << endl;
     QString styleName;
     QString valueType;
     switch( _style )
@@ -806,7 +806,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
     }
     if ( !valueType.isEmpty() )
     {
-      kdDebug() << "addProperty ParagraphType" << endl;
+      kDebug() << "addProperty ParagraphType" << endl;
       KoGenStyle::PropertyType pt = KoGenStyle::ParagraphType;
       style.addProperty( "office:value-type", valueType, pt );
     }
@@ -970,7 +970,7 @@ QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, FormatType _st
         format = "yyyy/MMM/dd";
         break;
     default:
-        kdDebug()<<"this date format is not defined ! :"<<_style<<endl;
+        kDebug()<<"this date format is not defined ! :"<<_style<<endl;
         break;
     }
     return KoOasisStyles::saveOasisDateStyle( mainStyles, format, locale );
@@ -1041,7 +1041,7 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, FormatType _s
         format = "h:mm";
         break;
     default:
-        kdDebug()<<"time format not defined :"<<_style<<endl;
+        kDebug()<<"time format not defined :"<<_style<<endl;
         break;
     }
     return KoOasisStyles::saveOasisTimeStyle( mainStyles, format, locale );
@@ -1084,7 +1084,7 @@ QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatTyp
         format = "# \?\?\?/\?\?\?";
         break;
     default:
-        kdDebug()<<" fraction format not defined :"<<_style<<endl;
+        kDebug()<<" fraction format not defined :"<<_style<<endl;
         break;
     }
 
@@ -1106,11 +1106,11 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 {
 #ifndef NDEBUG
     //if (type() == BUILTIN )
-    //  kdDebug() << "BUILTIN" << endl;
+    //  kDebug() << "BUILTIN" << endl;
     //else if (type() == CUSTOM )
-    //  kdDebug() << "CUSTOM" << endl;
+    //  kDebug() << "CUSTOM" << endl;
     //else if (type() == AUTO )
-    //  kdDebug() << "AUTO" << endl;
+    //  kDebug() << "AUTO" << endl;
 #endif
 
     // don't store parent, if it's the default style
@@ -1524,7 +1524,7 @@ bool Style::loadXML( QDomElement & format )
     int i = format.attribute( "precision" ).toInt( &ok );
     if ( i < -1 )
     {
-      kdDebug(36001) << "Value out of range Cell::precision=" << i << endl;
+      kDebug(36001) << "Value out of range Cell::precision=" << i << endl;
       return false;
     }
     m_precision = i;
@@ -1834,7 +1834,7 @@ bool Style::hasProperty( FlagsSet p ) const
     f = SVerticalText;
     break;
    default:
-    kdWarning() << "Unhandled property" << endl;
+    kWarning() << "Unhandled property" << endl;
     return ( m_properties  & (uint) p );
   }
 
@@ -2495,8 +2495,8 @@ Style * Style::setProperty( FlagsSet p )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
-    kdDebug() << k_funcinfo << endl;
-    kdDebug() << "m_type != AUTO || m_usageCount > 1" << endl;
+    kDebug() << k_funcinfo << endl;
+    kDebug() << "m_type != AUTO || m_usageCount > 1" << endl;
     Style * style = new Style( this );
     style->m_properties |= (uint) p;
     switch( p )
@@ -2523,7 +2523,7 @@ Style * Style::setProperty( FlagsSet p )
       style->m_featuresSet |= SVerticalText;
       break;
      default:
-      kdWarning() << "Unhandled property" << endl;
+      kWarning() << "Unhandled property" << endl;
     }
     return style;
   }
@@ -2538,8 +2538,8 @@ Style * Style::setProperty( FlagsSet p )
     m_featuresSet |= SCustomFormat;
     break;
    case SNotProtected:
-     kdDebug() << k_funcinfo << endl;
-     kdDebug() << "case SNotProtected" << endl;
+     kDebug() << k_funcinfo << endl;
+     kDebug() << "case SNotProtected" << endl;
      m_featuresSet |= SNotProtected;
     break;
    case SHideAll:
@@ -2555,7 +2555,7 @@ Style * Style::setProperty( FlagsSet p )
     m_featuresSet |= SVerticalText;
     break;
    default:
-    kdWarning() << "Unhandled property" << endl;
+    kWarning() << "Unhandled property" << endl;
   }
   return this;
 }
@@ -2590,7 +2590,7 @@ Style * Style::clearProperty( FlagsSet p )
       style->m_featuresSet |= SVerticalText;
       break;
      default:
-      kdWarning() << "Unhandled property" << endl;
+      kWarning() << "Unhandled property" << endl;
     }
     return style;
   }
@@ -2620,7 +2620,7 @@ Style * Style::clearProperty( FlagsSet p )
     m_featuresSet |= SVerticalText;
     break;
    default:
-    kdWarning() << "Unhandled property" << endl;
+    kWarning() << "Unhandled property" << endl;
   }
   return this;
 }
@@ -3143,7 +3143,7 @@ void CustomStyle::addProperty( FlagsSet p )
     m_featuresSet |= SVerticalText;
     break;
    default:
-    kdWarning() << "Unhandled property" << endl;
+    kWarning() << "Unhandled property" << endl;
   }
 }
 
@@ -3174,7 +3174,7 @@ void CustomStyle::removeProperty( FlagsSet p )
     m_featuresSet &= SVerticalText;
     break;
    default:
-    kdWarning() << "Unhandled property" << endl;
+    kWarning() << "Unhandled property" << endl;
   }
 }
 

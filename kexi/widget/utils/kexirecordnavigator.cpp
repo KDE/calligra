@@ -78,7 +78,7 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const 
 	d->lyr->addWidget( m_textLabel  );
 	setLabelText(i18n("Row:"));
 		
-	int bw = 6+SmallIcon("navigator_first").width(); //QMIN( horizontalScrollBar()->height(), 20);
+	int bw = 6+SmallIcon("navigator_first").width(); //qMin( horizontalScrollBar()->height(), 20);
 	QFont f = font();
 	f.setPixelSize((bw > 12) ? 12 : bw);
 	QFontMetrics fm(f);
@@ -206,7 +206,7 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 			case Qt::Key_Enter:
 			case Qt::Key_Return:
 			case Qt::Key_Tab:
-			case Qt::Key_BackTab: 
+			case Qt::Key_Backtab: 
 			{
 				recordEntered=true;
 				ke->accept(); //to avoid pressing Enter later
@@ -258,7 +258,7 @@ void KexiRecordNavigator::setCurrentRecordNumber(uint r)
 		n = " ";
 //	if (d->navRecordNumber->text().length() != n.length()) {//resize
 //		d->navRecordNumber->setFixedWidth(
-//			d->nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,d->navRecordCount->text().length()+1)+6 
+//			d->nav1DigitWidth*qMax( qMax(n.length(),2)+1,d->navRecordCount->text().length()+1)+6 
 //		);
 //	}
 
@@ -295,7 +295,7 @@ void KexiRecordNavigator::setRecordCount(uint count)
 		}
 	}
 	//update row number widget's width
-	const int w = m_nav1DigitWidth*QMAX( QMAX(n.length(),2)+1,m_navRecordNumber->text().length()+1)+6;
+	const int w = m_nav1DigitWidth*qMax( qMax(n.length(),2)+1,m_navRecordNumber->text().length()+1)+6;
 	if (m_navRecordNumber->width()!=w) //resize
 		m_navRecordNumber->setFixedWidth(w);
 

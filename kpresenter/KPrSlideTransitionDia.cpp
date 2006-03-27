@@ -150,7 +150,7 @@ KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name,
     connect( m_dialog->stopButton, SIGNAL( clicked() ), this, SLOT( stopSound() ) );
 
     connect( m_dialog->soundCheckBox, SIGNAL( clicked()), this, SLOT( soundEffectChanged() ) );
-    connect( m_dialog->soundRequester, SIGNAL( openFileDialog( KURLRequester * ) ), this, SLOT( slotRequesterClicked( KURLRequester * ) ) );
+    connect( m_dialog->soundRequester, SIGNAL( openFileDialog( KUrlRequester * ) ), this, SLOT( slotRequesterClicked( KUrlRequester * ) ) );
     connect( m_dialog->soundRequester, SIGNAL( textChanged( const QString& ) ), this, SLOT( slotSoundFileChanged( const QString& ) ) );
 
     // set up automatic tansition
@@ -233,7 +233,7 @@ void KPrSlideTransitionDia::slotDoPageEffect()
 }
 
 
-void KPrSlideTransitionDia::slotRequesterClicked( KURLRequester * )
+void KPrSlideTransitionDia::slotRequesterClicked( KUrlRequester * )
 {
     QString filter( getSoundFileFilter() );
     m_dialog->soundRequester->fileDialog()->setFilter( filter );

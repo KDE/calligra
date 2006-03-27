@@ -32,7 +32,7 @@
 class KPrPageEffects;
 class KPrView;
 class KPrSoundPlayer;
-class KURLRequester;
+class KUrlRequester;
 class SlideTransitionWidget;
 
 class KPrSlideTransitionDia : public KDialogBase
@@ -69,7 +69,7 @@ protected slots:
     void preview();
     void slotDoPageEffect();
     void slotOk();
-    void slotRequesterClicked( KURLRequester * );
+    void slotRequesterClicked( KUrlRequester * );
     void slotSoundFileChanged( const QString& text );
     void slotUser1();
     void soundEffectChanged();

@@ -403,7 +403,7 @@ Field::Type ConstExpr::type()
 //TODO ok?
 //TODO: add sign info?
 		if (value.type() == QVariant::Int || value.type() == QVariant::UInt) {
-			Q_LLONG v = value.toInt();
+			qint64 v = value.toInt();
 			if (v <= 0xff && v > -0x80)
 				return Field::Byte;
 			if (v <= 0xffff && v > -0x8000)

@@ -82,7 +82,7 @@ bool KPrRectObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
     {
         double cornerRadiusX = ext.width() / 200.0 * xRnd; 
         double cornerRadiusY = ext.height() / 200.0 * yRnd; 
-        double cornerRadius = QMIN( cornerRadiusX, cornerRadiusY );
+        double cornerRadius = qMin( cornerRadiusX, cornerRadiusY );
         sc.xmlWriter.addAttributePt( "draw:corner-radius", cornerRadius );
         if ( cornerRadiusX != cornerRadiusY )
         {
@@ -120,7 +120,7 @@ void KPrRectObject::loadOasis(const QDomElement &element, KoOasisContext&context
                     ) * 200.0 / ext.width() );
         yRnd = xRnd;
     }
-    kdDebug(33001) << " KPrRectObject : radius xRnd :" << xRnd << " yRnd :" << yRnd <<endl;
+    kDebug(33001) << " KPrRectObject : radius xRnd :" << xRnd << " yRnd :" << yRnd <<endl;
 }
 
 double KPrRectObject::load(const QDomElement &element)

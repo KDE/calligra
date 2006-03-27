@@ -47,11 +47,11 @@ DCOPRef KIvioMapIface::pageByIndex( int index )
     KivioPage* t = m_map->pageList().at( index );
     if ( !t )
     {
-        kdDebug(43000) << "+++++ No page found at index " << index << endl;
+        kDebug(43000) << "+++++ No page found at index " << index << endl;
         return DCOPRef();
     }
 
-    kdDebug(43000) << "+++++++ Returning page " << t->QObject::name() << endl;
+    kDebug(43000) << "+++++++ Returning page " << t->QObject::name() << endl;
 
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
@@ -113,7 +113,7 @@ bool KIvioMapIface::processDynamic(const QCString &fun, const QByteArray &/*data
         return false;
 
     replyType = "DCOPRef";
-    QDataStream out( replyData, IO_WriteOnly );
+    QDataStream out( replyData, QIODevice::WriteOnly );
     out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
     return true;
 }

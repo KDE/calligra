@@ -144,7 +144,7 @@ void FormatDialog::slotOk()
     }
 
     QFile file( xml );
-    file.open( IO_ReadOnly );
+    file.open( QIODevice::ReadOnly );
     QDomDocument doc;
     doc.setContent( &file );
     file.close();

@@ -80,7 +80,7 @@ void ResourceDialogImpl::slotChanged() {
 void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
     if (availableUntil->dateTime() < availableFrom->dateTime()) {
         disconnect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), this,  SLOT(slotAvailableUntilChanged(const QDateTime&)));
-        //kdDebug()<<"From: "<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString()<<endl;
+        //kDebug()<<"From: "<<availableFrom->dateTime().toString()<<" until="<<availableUntil->dateTime().toString()<<endl;
         availableUntil->setDateTime(availableFrom->dateTime());
         connect(availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableUntilChanged(const QDateTime&)));
     }
@@ -89,7 +89,7 @@ void ResourceDialogImpl::slotAvailableFromChanged(const QDateTime&) {
 void ResourceDialogImpl::slotAvailableUntilChanged(const QDateTime&) {
     if (availableFrom->dateTime() > availableUntil->dateTime()) {
         disconnect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), this,  SLOT(slotAvailableFromChanged(const QDateTime&)));
-        //kdDebug()<<"Until: "<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString()<<endl;
+        //kDebug()<<"Until: "<<availableUntil->dateTime().toString()<<" from="<<availableFrom->dateTime().toString()<<endl;
         availableFrom->setDateTime(availableUntil->dateTime());
         connect(availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(slotAvailableFromChanged(const QDateTime&)));
     }

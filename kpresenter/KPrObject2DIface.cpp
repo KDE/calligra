@@ -100,7 +100,7 @@ void KPrObject2DIface::setGradientType( const QString & type)
     else if(type=="GPYRAMID")
         obj->setGType(BCT_GPYRAMID);
     else
-        kdDebug(33001)<<"Error KPrObject2DIface::setGradientType\n";
+        kDebug(33001)<<"Error KPrObject2DIface::setGradientType\n";
 }
 
 void KPrObject2DIface::setFillType( const QString & type)
@@ -110,7 +110,7 @@ void KPrObject2DIface::setFillType( const QString & type)
     else if(type=="GRADIENT")
         obj->setFillType(FT_GRADIENT);
     else
-        kdDebug(33001)<<"Error KPrObject2DIface::setFillType\n";
+        kDebug(33001)<<"Error KPrObject2DIface::setFillType\n";
 }
 
 void KPrObject2DIface::setGradientColor1( const QColor &col )

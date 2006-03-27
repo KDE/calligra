@@ -141,7 +141,7 @@ KexiScrollView::refreshContentsSize()
 		return;
 	if (m_preview) {
 		resizeContents(m_widget->width(), m_widget->height());
-		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
+		kDebug() << "KexiScrollView::refreshContentsSize(): ( " 
 			<< m_widget->width() <<", "<< m_widget->height() << endl;
 		setVScrollBarMode(m_vsmode);
 		setHScrollBarMode(m_hsmode);
@@ -152,9 +152,9 @@ KexiScrollView::refreshContentsSize()
 		// Ensure there is always space to resize Form
 		int w = contentsWidth(), h = contentsHeight();
 		bool change = false;
-		const int delta_x = QMAX( (KexiScrollView_data ? 
+		const int delta_x = qMax( (KexiScrollView_data ? 
 			KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() : 0), 300);
-		const int delta_y = QMAX( (KexiScrollView_data ? 
+		const int delta_y = qMax( (KexiScrollView_data ? 
 			KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() : 0), 300);
 		if((m_widget->width() + delta_x * 2 / 3) > w) {
 			w = m_widget->width() + delta_x;
@@ -181,7 +181,7 @@ KexiScrollView::refreshContentsSize()
 
 			resizeContents(w, h);
 		}
-		kdDebug() << "KexiScrollView::refreshContentsSize(): ( " 
+		kDebug() << "KexiScrollView::refreshContentsSize(): ( " 
 			<< contentsWidth() <<", "<< contentsHeight() << endl;
 		updateScrollBars();
 		setVScrollBarMode(Auto);
@@ -257,8 +257,8 @@ KexiScrollView::contentsMouseMoveEvent(QMouseEvent *ev)
 		for(QObject *o = list->first(); o; o = list->next())
 		{
 			QWidget *w = (QWidget*)o;
-			tmpx = QMAX(tmpx, (w->geometry().right() + 10));
-			tmpy = QMAX(tmpy, (w->geometry().bottom() + 10));
+			tmpx = qMax(tmpx, (w->geometry().right() + 10));
+			tmpy = qMax(tmpy, (w->geometry().bottom() + 10));
 		}
 		delete list;
 
@@ -348,7 +348,7 @@ KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int
 		p->setPen(palette().active().foreground());
 		p->drawLine(wx+m_widget->width(), wy, wx+m_widget->width(), wy+m_widget->height());
 		p->drawLine(wx, wy+m_widget->height(), wx+m_widget->width(), wy+m_widget->height());
-kdDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height() << endl;
+kDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height() << endl;
 
 		if (!KexiScrollView_data) {
 			KexiScrollView_data_deleter.setObject( KexiScrollView_data, new KexiScrollViewData() );
@@ -363,14 +363,14 @@ kdDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height() << endl;
 		{
 			if (m_widget->height()>(KexiScrollView_data->verticalOuterAreaPixmapBuffer.height()+20)) {
 				p->drawPixmap( 
-					QMAX( m_widget->width(), KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() + 20 ) + 20,
-					QMAX( (m_widget->height() - KexiScrollView_data->verticalOuterAreaPixmapBuffer.height())/2, 20 ),
+					qMax( m_widget->width(), KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() + 20 ) + 20,
+					qMax( (m_widget->height() - KexiScrollView_data->verticalOuterAreaPixmapBuffer.height())/2, 20 ),
 					KexiScrollView_data->verticalOuterAreaPixmapBuffer
 				);
 			}
 			p->drawPixmap( 
-				QMAX( (m_widget->width() - KexiScrollView_data->horizontalOuterAreaPixmapBuffer.width())/2, 20 ),
-				QMAX( m_widget->height(), KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() + 20 ) + 20,
+				qMax( (m_widget->width() - KexiScrollView_data->horizontalOuterAreaPixmapBuffer.width())/2, 20 ),
+				qMax( m_widget->height(), KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() + 20 ) + 20,
 				KexiScrollView_data->horizontalOuterAreaPixmapBuffer
 			);
 		}
@@ -388,7 +388,7 @@ void
 KexiScrollView::setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h )
 {
 /*todo*/
-	kdDebug(44021)<<"KexiScrollView::setHBarGeometry"<<endl;
+	kDebug(44021)<<"KexiScrollView::setHBarGeometry"<<endl;
 	if (m_scrollViewNavPanel && m_scrollViewNavPanel->isVisible()) {
 		m_scrollViewNavPanel->setHBarGeometry( hbar, x, y, w, h );
 	}

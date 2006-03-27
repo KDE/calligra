@@ -44,54 +44,54 @@ class Duration {
         Duration();
         Duration(const Duration &d);
         Duration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
-        Duration(Q_INT64 seconds);
+        Duration(qint64 seconds);
         ~Duration();
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addMilliseconds(Q_INT64 delta)  { add(delta); }
+        void addMilliseconds(qint64 delta)  { add(delta); }
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addSeconds(Q_INT64 delta) { addMilliseconds(delta * 1000); }
+        void addSeconds(qint64 delta) { addMilliseconds(delta * 1000); }
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addMinutes(Q_INT64 delta) { addSeconds(delta * 60); }
+        void addMinutes(qint64 delta) { addSeconds(delta * 60); }
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addHours(Q_INT64 delta) { addMinutes(delta * 60); }
+        void addHours(qint64 delta) { addMinutes(delta * 60); }
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void addDays(Q_INT64 delta) { addHours(delta * 24); }
+        void addDays(qint64 delta) { addHours(delta * 24); }
 
         //FIXME: overflow problem
-        Q_INT64 milliseconds() const { return m_ms; }
-        Q_INT64 seconds() const { return m_ms / 1000; }
-        Q_INT64 minutes() const { return seconds() / 60; }
+        qint64 milliseconds() const { return m_ms; }
+        qint64 seconds() const { return m_ms / 1000; }
+        qint64 minutes() const { return seconds() / 60; }
         unsigned hours() const { return minutes() / 60; }
         unsigned days() const { return hours() / 24; }
         void get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds=0, unsigned *milliseconds=0) const;
 
         bool   operator==( const Duration &d ) const { return m_ms == d.m_ms; }
-        bool   operator==( Q_INT64 d ) const { return m_ms == d; }
+        bool   operator==( qint64 d ) const { return m_ms == d; }
         bool   operator!=( const Duration &d ) const { return m_ms != d.m_ms; }
-        bool   operator!=( Q_INT64 d ) const { return m_ms != d; }
+        bool   operator!=( qint64 d ) const { return m_ms != d; }
         bool   operator<( const Duration &d ) const { return m_ms < d.m_ms; }
-        bool   operator<( Q_INT64 d ) const { return m_ms < d; }
+        bool   operator<( qint64 d ) const { return m_ms < d; }
         bool   operator<=( const Duration &d ) const { return m_ms <= d.m_ms; }
-        bool   operator<=( Q_INT64 d ) const { return m_ms <= d; }
+        bool   operator<=( qint64 d ) const { return m_ms <= d; }
         bool   operator>( const Duration &d ) const { return m_ms > d.m_ms; }
-        bool   operator>( Q_INT64 d ) const { return m_ms > d; }
+        bool   operator>( qint64 d ) const { return m_ms > d; }
         bool   operator>=( const Duration &d ) const { return m_ms >= d.m_ms; }
-        bool   operator>=( Q_INT64 d ) const { return m_ms >= d; }
+        bool   operator>=( qint64 d ) const { return m_ms >= d; }
         Duration &operator=(const Duration &d ) { m_ms = d.m_ms; return *this;}
         Duration operator*(int unit) const; 
         Duration operator*(const double value) const;
@@ -130,9 +130,9 @@ class Duration {
 	 * Duration in milliseconds. Signed to allow for simple calculations which
 	 * might go negative for intermediate results.
 	 */
-        Q_INT64 m_ms;
+        qint64 m_ms;
 
-        void add(Q_INT64 delta);
+        void add(qint64 delta);
         void add(const Duration &delta);
 
         /**

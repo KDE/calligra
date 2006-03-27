@@ -184,11 +184,11 @@ FunctionRepository* FunctionRepository::self()
 {
   if( !s_self )
   {
-    kdDebug() << "Creating function repository" << endl;
+    kDebug() << "Creating function repository" << endl;
   
     fr_sd.setObject( s_self, new FunctionRepository() );
   
-    kdDebug() << "Registering functions" << endl;
+    kDebug() << "Registering functions" << endl;
     
     // register all existing functions
     RegisterConversionFunctions();
@@ -204,7 +204,7 @@ FunctionRepository* FunctionRepository::self()
     RegisterTextFunctions();
     RegisterTrigFunctions();
   
-    kdDebug() << "Functions registered, loading descriptions" << endl;
+    kDebug() << "Functions registered, loading descriptions" << endl;
   
     // find all XML description files
     QStringList files = Factory::global()->dirs()->findAllResources
@@ -214,7 +214,7 @@ FunctionRepository* FunctionRepository::self()
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
       s_self->loadFile (*it);
   
-    kdDebug() << "All ok, repository ready" << endl;
+    kDebug() << "All ok, repository ready" << endl;
 
   }    
   return s_self;
@@ -268,7 +268,7 @@ QStringList FunctionRepository::functionNames( const QString& group )
 void FunctionRepository::loadFile (const QString& filename)
 {
   QFile file (filename);
-  if (!file.open (IO_ReadOnly))
+  if (!file.open (QIODevice::ReadOnly))
     return;
 
   QDomDocument doc;

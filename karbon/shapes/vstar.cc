@@ -220,7 +220,7 @@ VStar::init()
 	close();
 
 	// translate path to center:
-	QWMatrix m;
+	QMatrix m;
 	m.translate( m_center.x(), m_center.y() );
 
 	// only tranform the path data

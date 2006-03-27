@@ -255,7 +255,7 @@ UndoRemoveColumn::UndoRemoveColumn( Doc *_doc, Sheet *_sheet, int _column,int _n
 
     // Save to buffer
     QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QTextStream str( &buffer, QIODevice::WriteOnly );
     str << doc;
 
     // This is a terrible hack to store unicode
@@ -374,7 +374,7 @@ UndoRemoveRow::UndoRemoveRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow) :
 
     // Save to buffer
     QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QTextStream str( &buffer, QIODevice::WriteOnly );
     str << doc;
 
     // This is a terrible hack to store unicode
@@ -1546,7 +1546,7 @@ void UndoDelete::createListCell( QCString &listCell,QValueList<columnSize> &list
     QDomDocument doc = sheet->saveCellRegion( m_region );
     // Save to buffer
     QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QTextStream str( &buffer, QIODevice::WriteOnly );
     str << doc;
 
     // This is a terrible hack to store unicode
@@ -1667,7 +1667,7 @@ void UndoDragDrop::saveCellRect( QCString & cells, Sheet * sheet,
     QDomDocument doc = sheet->saveCellRegion(region);
     // Save to buffer
     QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QTextStream str( &buffer, QIODevice::WriteOnly );
     str << doc;
 
     cells = buffer.utf8();
@@ -2209,7 +2209,7 @@ void UndoAutofill::createListCell( QCString &list, Sheet* sheet )
     QDomDocument doc = sheet->saveCellRegion( m_selection );
     // Save to buffer
     QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QTextStream str( &buffer, QIODevice::WriteOnly );
     str << doc;
 
     // This is a terrible hack to store unicode
@@ -2366,7 +2366,7 @@ UndoRemoveCellRow::UndoRemoveCellRow( Doc *_doc, Sheet *_sheet, const QRect &rec
     QDomDocument doc = _sheet->saveCellRegion( m_rect );
     // Save to buffer
     QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QTextStream str( &buffer, QIODevice::WriteOnly );
     str << doc;
 
     // This is a terrible hack to store unicode
@@ -2425,7 +2425,7 @@ UndoRemoveCellCol::UndoRemoveCellCol( Doc *_doc, Sheet *_sheet, const QRect &_re
     QDomDocument doc = _sheet->saveCellRegion( m_rect );
     // Save to buffer
     QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QTextStream str( &buffer, QIODevice::WriteOnly );
     str << doc;
 
     // This is a terrible hack to store unicode
@@ -2493,7 +2493,7 @@ void UndoConditional::createListCell( QCString &list, Sheet* sheet )
 {
     // Save to buffer
     QString buffer;
-    QTextStream str( &buffer, IO_WriteOnly );
+    QTextStream str( &buffer, QIODevice::WriteOnly );
 
     QDomDocument doc = sheet->saveCellRegion( m_region );
     str << doc;
@@ -2637,7 +2637,7 @@ void UndoCellPaste::createListCell(QCString& listCell,
   QDomDocument doc = sheet->saveCellRegion(m_region);
   // Save to buffer
   QString buffer;
-  QTextStream str( &buffer, IO_WriteOnly );
+  QTextStream str( &buffer, QIODevice::WriteOnly );
   str << doc;
 
   // This is a terrible hack to store unicode

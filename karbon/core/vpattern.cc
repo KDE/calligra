@@ -120,7 +120,7 @@ VPattern::load( const QDomElement& element )
 }
 
 void
-VPattern::transform( const QWMatrix &m )
+VPattern::transform( const QMatrix &m )
 {
 	m_origin = m_origin.transform( m );
 	m_vector = m_vector.transform( m );

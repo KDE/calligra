@@ -74,7 +74,7 @@ ObjectTreeItem::addModifiedProperty(const QCString &property, const QVariant &ol
 
 	if(!m_props.contains(property)) {
 		m_props.insert(property, oldValue);
-		kdDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " oldValue: " << oldValue << endl;
+		kDebug() << "ObjectTree::adModProperty(): Added this property in the list: " << property << " oldValue: " << oldValue << endl;
 	}
 }
 
@@ -82,7 +82,7 @@ void
 ObjectTreeItem::storeUnknownProperty(QDomElement &el)
 {
 	if(!el.isNull()) {
-		QTextStream ts(m_unknownProps, IO_WriteOnly|IO_Append );
+		QTextStream ts(m_unknownProps, QIODevice::WriteOnly|QIODevice::Append );
 		el.save(ts, 0);
 	}
 }
@@ -115,7 +115,7 @@ ObjectTreeItem::setGridPos(int row, int col, int rowspan, int colspan)
 
 ObjectTreeItem::~ObjectTreeItem()
 {
-//	kdDebug() << "ObjectTreeItem deleted: " << this->name() << endl;
+//	kDebug() << "ObjectTreeItem deleted: " << this->name() << endl;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +188,7 @@ ObjectTree::addItem(ObjectTreeItem *parent, ObjectTreeItem *c)
 	parent->addChild(c);
 	m_container->form()->emitChildAdded(c);
 
-	kdDebug() << "ObjectTree::addItem(): adding " << c->name() << " to " << parent->name() << endl;
+	kDebug() << "ObjectTree::addItem(): adding " << c->name() << " to " << parent->name() << endl;
 }
 
 void

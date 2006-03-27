@@ -415,7 +415,7 @@ protected:
     */
     uint m_bNoFallBack;
 
-    Q_UINT32 m_flagsMask;
+    quint32 m_flagsMask;
 
      /**
      * Stores a comment string.

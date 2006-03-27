@@ -98,7 +98,7 @@ void SMLConnector::setActivated(bool a)
   m_connectorAction->setChecked(a);
   
   if(a) {
-    kdDebug(43000) << "SMLConnector activate" << endl;
+    kDebug(43000) << "SMLConnector activate" << endl;
     view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
     m_pStencil = 0;
@@ -163,7 +163,7 @@ bool SMLConnector::startRubberBanding( QMouseEvent *e )
     KivioStencilSpawner* ss = doc->findInternalStencilSpawner("SML Connector");
 
   if (!ss) {
-    kdDebug(43000) << "SMLTool: Failed to find StencilSpawner!" << endl;
+    kDebug(43000) << "SMLTool: Failed to find StencilSpawner!" << endl;
     return false;
   }
 

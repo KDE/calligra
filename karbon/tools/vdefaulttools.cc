@@ -52,7 +52,7 @@ VDefaultTools::VDefaultTools(QObject *parent, const char *name, const QStringLis
 {
 	setInstance(VDefaultToolsFactory::instance());
 
-	kdDebug() << "VDefaultTools. Class: "
+	kDebug() << "VDefaultTools. Class: "
 		<< className()
 		<< ", Parent: "
 		<< parent -> className()

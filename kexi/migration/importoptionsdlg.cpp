@@ -61,7 +61,7 @@ OptionsDialog::OptionsDialog( const QString& databaseFile, const QString& select
 		"<p>In order to properly import national characters, you may need to choose a proper text encoding "
 		"if the database was created on a computer with a different character set.</p>")
 		.arg(QDir::convertSeparators(databaseFile)), plainPage());
-	lbl->setAlignment( Qt::AlignAuto | Qt::WordBreak );
+	lbl->setAlignment( Qt::AlignAuto | Qt::TextWordWrap );
 	lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	lyr->addMultiCellWidget( lbl, 0, 0, 0, 2 );
 
@@ -76,8 +76,8 @@ OptionsDialog::OptionsDialog( const QString& databaseFile, const QString& select
 	lyr->addItem( new QSpacerItem( 121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ), 1, 2 );
 
 	//read config
-	kapp->config()->setGroup("ImportExport");
-	QString defaultEncodingForMSAccessFiles = kapp->config()->readEntry("DefaultEncodingForMSAccessFiles");
+	KGlobal::config()->setGroup("ImportExport");
+	QString defaultEncodingForMSAccessFiles = KGlobal::config()->readEntry("DefaultEncodingForMSAccessFiles");
 	if (!defaultEncodingForMSAccessFiles.isEmpty()) {
 		m_encodingComboBox->setSelectedEncoding(defaultEncodingForMSAccessFiles);
 		m_chkAlwaysUseThisEncoding->setChecked(true);
@@ -98,12 +98,12 @@ KexiCharacterEncodingComboBox* OptionsDialog::encodingComboBox() const
 
 void OptionsDialog::accept()
 {
-	kapp->config()->setGroup("ImportExport");
+	KGlobal::config()->setGroup("ImportExport");
 	if (m_chkAlwaysUseThisEncoding->isChecked())
-		kapp->config()->writeEntry("defaultEncodingForMSAccessFiles", 
+		KGlobal::config()->writeEntry("defaultEncodingForMSAccessFiles", 
 			m_encodingComboBox->selectedEncoding());
 	else
-		kapp->config()->deleteEntry("defaultEncodingForMSAccessFiles");
+		KGlobal::config()->deleteEntry("defaultEncodingForMSAccessFiles");
 
 	KDialogBase::accept();
 }

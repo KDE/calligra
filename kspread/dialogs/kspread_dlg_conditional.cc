@@ -324,11 +324,11 @@ void ConditionalDialog::init()
       it1 = conditionList.begin();
       while ( it1 != conditionList.end() )
       {
-        kdDebug() << "Here" << endl;
+        kDebug() << "Here" << endl;
 	found = false;
 	for ( it2 = otherList.begin(); !found && it2 != otherList.end(); ++it2 )
 	{
-          kdDebug() << "Found: " << found << endl;
+          kDebug() << "Found: " << found << endl;
 	  found = ( (*it1).val1 == (*it2).val1 &&
                     (*it1).val2 == (*it2).val2 &&
                     (*it1).cond == (*it2).cond );
@@ -394,7 +394,7 @@ void ConditionalDialog::init()
     }
   }
 
-  kdDebug() << "Conditions: " << conditionList.size() << endl;
+  kDebug() << "Conditions: " << conditionList.size() << endl;
 
   m_dlg->m_condition_2->setEnabled( false );
   m_dlg->m_condition_3->setEnabled( false );
@@ -414,7 +414,7 @@ void ConditionalDialog::init()
 
 void ConditionalDialog::init( Conditional const & tmp, int numCondition )
 {
-  kdDebug() << "Adding " << numCondition << endl;
+  kDebug() << "Adding " << numCondition << endl;
   QComboBox * cb  = 0;
   QComboBox * sb  = 0;
   KLineEdit * kl1 = 0;
@@ -548,7 +548,7 @@ Conditional::Type ConditionalDialog::typeOfCondition( QComboBox const * const cb
      result = Conditional::DifferentTo;
     break;
    default:
-    kdDebug(36001) << "Error in list" << endl;
+    kDebug(36001) << "Error in list" << endl;
     break;
   }
 
@@ -639,12 +639,12 @@ bool ConditionalDialog::getCondition( Conditional & newCondition, const QComboBo
 
 void ConditionalDialog::slotOk()
 {
-  kdDebug() << "slotOk" << endl;
+  kDebug() << "slotOk" << endl;
 
   if ( !checkInputData() )
     return;
 
-  kdDebug() << "Input data is valid" << endl;
+  kDebug() << "Input data is valid" << endl;
 
   m_view->doc()->emitBeginOperation( false );
   StyleManager * manager = m_view->doc()->styleManager();
@@ -665,7 +665,7 @@ void ConditionalDialog::slotOk()
                      m_dlg->m_secondValue_3, m_dlg->m_style_3, manager->style( m_dlg->m_style_3->currentText() ) ) )
     newList.append( newCondition );
 
-  kdDebug() << "Setting conditional list" << endl;
+  kDebug() << "Setting conditional list" << endl;
   m_view->activeSheet()->setConditional( m_view->selectionInfo(), newList );
   m_view->slotUpdateView( m_view->activeSheet(), *m_view->selectionInfo() );
 

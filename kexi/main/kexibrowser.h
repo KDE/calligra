@@ -21,17 +21,17 @@
 #ifndef KEXIBROWSER_H
 #define KEXIBROWSER_H
 
-#include <klistview.h>
+#include <k3listview.h>
 #include <qasciidict.h>
 #include <qintdict.h>
 
 class QListViewItem;
 class KIconLoader;
-class KPopupMenu;
+class KMenu;
 class KAction;
 class KActionMenu;
 class KActionCollection;
-class KListView;
+class K3ListView;
 class KToolBar;
 class KexiBrowserItem;
 class KexiView;
@@ -105,7 +105,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 //		void actionAvailable(const char *name, bool avail);
 
 	protected slots:
-		void slotContextMenu(KListView*, QListViewItem *i, const QPoint &point);
+		void slotContextMenu(K3ListView*, QListViewItem *i, const QPoint &point);
 		void slotExecuteItem(QListViewItem *item);
 		void slotSelectionChanged(QListViewItem* i);
 		void slotSettingsChanged(int);
@@ -133,13 +133,13 @@ class KEXIMAIN_EXPORT KexiBrowser : public QWidget
 		KActionCollection *m_actions;
 		QAsciiDict<KexiBrowserItem> m_baseItems;
 		QIntDict<KexiBrowserItem> m_normalItems;
-		KPopupMenu *m_itemPopup, *m_partPopup;
+		KMenu *m_itemPopup, *m_partPopup;
 		KAction *m_deleteAction, *m_renameAction, 
 			*m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction,
 			*m_dataExportAction, *m_printAction, *m_pageSetupAction;
 		KActionMenu* m_exportActionMenu;
-		KPopupMenu* m_newObjectPopup;
+		KMenu* m_newObjectPopup;
 		int m_itemPopupTitle_id, m_partPopupTitle_id, 
 			m_openAction_id, m_designAction_id, m_editTextAction_id,
 			m_exportActionMenu_id, m_exportActionMenu_id_sep,

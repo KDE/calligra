@@ -738,8 +738,8 @@ void DlgValidity::OkPressed()
       }
       else
       {
-        result.valMin=QMIN(val_min->text().toDouble(),val_max->text().toDouble());
-        result.valMax=QMAX(val_max->text().toDouble(),val_min->text().toDouble());
+        result.valMin=qMin(val_min->text().toDouble(),val_max->text().toDouble());
+        result.valMax=qMax(val_max->text().toDouble(),val_min->text().toDouble());
       }
     }
     else if( chooseType->currentItem()==2 || chooseType->currentItem()==6)
@@ -750,8 +750,8 @@ void DlgValidity::OkPressed()
       }
       else
       {
-        result.valMin=QMIN(val_min->text().toInt(),val_max->text().toInt());
-        result.valMax=QMAX(val_max->text().toInt(),val_min->text().toInt());
+        result.valMin=qMin(val_min->text().toInt(),val_max->text().toInt());
+        result.valMax=qMax(val_max->text().toInt(),val_min->text().toInt());
       }
     }
     else  if(  chooseType->currentItem()==4)

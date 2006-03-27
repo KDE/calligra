@@ -1449,7 +1449,7 @@ void KDChartParams::setChartSourceMode( SourceMode mode,
         uint last = ( KDCHART_NO_DATASET == dataset2 ) ? dataset : dataset2;
         for ( i = dataset; i <= last; ++i )
             _dataSourceModeAndChart[ i ] = ModeAndChart( mode, chart );
-        _maxDatasetSourceMode = QMAX( _maxDatasetSourceMode, --i );
+        _maxDatasetSourceMode = qMax( _maxDatasetSourceMode, --i );
         _setChartSourceModeWasUsed = true;
     } else if ( UnknownMode == mode && dataset == KDCHART_ALL_DATASETS ) {
         _dataSourceModeAndChart.clear();
@@ -1656,9 +1656,9 @@ bool KDChartParams::findDatasets( SourceMode modeA,
             res = true;
         }else{
             if( foundA && foundB ){
-                if( QMIN(dsA2, dsB2) + 1 == QMAX(dsA1, dsB1) ){
-                    dataset  = QMIN(dsA1, dsB1);
-                    dataset2 = QMAX(dsA2, dsB2);
+                if( qMin(dsA2, dsB2) + 1 == qMax(dsA1, dsB1) ){
+                    dataset  = qMin(dsA1, dsB1);
+                    dataset2 = qMax(dsA2, dsB2);
                     res = true;
                 }else{
                     qDebug("ERROR in KDChartParams::findDatasets(): Datasets found are *not* a contiguous series.");
@@ -1699,7 +1699,7 @@ void KDChartParams::setDataColor( uint dataset, QColor color )
     _dataColors[        dataset ] = color;
     _dataColorsShadow1[ dataset ] = shadow1;
     _dataColorsShadow2[ dataset ] = shadow2;
-    _maxDatasetColor = QMAX( _maxDatasetColor, dataset );
+    _maxDatasetColor = qMax( _maxDatasetColor, dataset );
 
     emit changed();
 }
@@ -4641,7 +4641,7 @@ void KDChartParams::setThreeDBarAngle( uint angle )
 void KDChartParams::setLineMarkerStyle( uint dataset, LineMarkerStyle style )
 {
     _lineMarkerStyles[ dataset ] = style;
-    _maxDatasetLineMarkerStyle = QMAX( dataset,
+    _maxDatasetLineMarkerStyle = qMax( dataset,
             _maxDatasetLineMarkerStyle );
     emit changed();
 }
@@ -4689,7 +4689,7 @@ void KDChartParams::setLineMarkerStyles( LineMarkerStyleMap map ) {
     uint maxDataset = 0;
     for( LineMarkerStyleMap::ConstIterator it = _lineMarkerStyles.begin();
             it != _lineMarkerStyles.end(); ++it )
-        maxDataset = QMAX( maxDataset, it.key() );
+        maxDataset = qMax( maxDataset, it.key() );
     _maxDatasetLineMarkerStyle = maxDataset;
 }
 
@@ -5153,7 +5153,7 @@ Qt::PenStyle KDChartParams::lineStyle( uint dataset ) const
 void KDChartParams::setPolarMarkerStyle( uint dataset, PolarMarkerStyle style )
 {
     _polarMarkerStyles[ dataset ] = style;
-    _maxDatasetPolarMarkerStyle = QMAX( dataset,
+    _maxDatasetPolarMarkerStyle = qMax( dataset,
             _maxDatasetPolarMarkerStyle );
     emit changed();
 }
@@ -5199,7 +5199,7 @@ void KDChartParams::setPolarMarkerStyles( PolarMarkerStyleMap map ) {
     uint maxDataset = 0;
     for( PolarMarkerStyleMap::ConstIterator it = _polarMarkerStyles.begin();
             it != _polarMarkerStyles.end(); ++it )
-        maxDataset = QMAX( maxDataset, it.key() );
+        maxDataset = qMax( maxDataset, it.key() );
     _maxDatasetPolarMarkerStyle = maxDataset;
 }
 
@@ -7121,10 +7121,10 @@ void KDChartParams::setAxisDatasets( uint n, uint dataset,
 {
     uint a1 = ( KDCHART_ALL_AXES == n )
         ? 0
-        : QMIN( n, KDCHART_MAX_AXES-1 );
+        : qMin( n, KDCHART_MAX_AXES-1 );
     uint a2 = ( KDCHART_ALL_AXES == n )
         ? KDCHART_MAX_AXES-1
-        : QMIN( n, KDCHART_MAX_AXES-1 );
+        : qMin( n, KDCHART_MAX_AXES-1 );
     for( uint i = a1;  i <= a2;  ++i ) {
         _axisSettings[ i ].params.setAxisVisible( KDCHART_NO_DATASET != dataset );
         _axisSettings[ i ].dataset = dataset;
@@ -9185,7 +9185,7 @@ void KDChartParams::insertDefaultAxisTitleBox( uint n,
        titleString = "<qt><center> </center></qt>";
 
 
-    const QString stripTitleString( titleString.simplifyWhiteSpace().upper() );
+    const QString stripTitleString( titleString.simplified().upper() );
     if( setTitle ){
         if( !stripTitleString.startsWith("<QT>" ) )
             titleString.prepend("<qt><center>");
@@ -9237,7 +9237,7 @@ void KDChartParams::setAxisTitle( uint n, const QString& axisTitle )
         KDChartCustomBox* box = (KDChartCustomBox*)customBox( boxID );
         if( box ){
 	  QString title = axisTitle;
-	  const QString stripTitleString( title.simplifyWhiteSpace().upper() );
+	  const QString stripTitleString( title.simplified().upper() );
 	  if( !stripTitleString.startsWith("<QT>" ) )
 	    title.prepend("<qt><center>");
 	  if( !stripTitleString.endsWith("</QT>" ) )

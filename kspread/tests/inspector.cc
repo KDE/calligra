@@ -98,7 +98,7 @@ void Inspector::Private::handleCell()
   new QListViewItem( cellView, "Text (Displayed)", 
 		     cell->strOutText().replace( QChar('\n'), "\\n" ) );
 
-  QTextStream ts( &str, IO_WriteOnly );
+  QTextStream ts( &str, QIODevice::WriteOnly );
   ts << cell->value();
   new QListViewItem( cellView, "Value", str );
 
