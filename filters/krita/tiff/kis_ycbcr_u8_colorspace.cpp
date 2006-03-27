@@ -26,8 +26,8 @@
 #include <kis_integer_maths.h>
 
 namespace {
-    const Q_INT32 MAX_CHANNEL_YCbCr = 3;
-    const Q_INT32 MAX_CHANNEL_YCbCrA = 4;
+    const Q_INT32 MAX_CHANNEL_YCbCr_U8 = 3;
+    const Q_INT32 MAX_CHANNEL_YCbCrA_U8 = 4;
 }
 
 KisYCbCrU8ColorSpace::KisYCbCrU8ColorSpace(KisColorSpaceFactoryRegistry* parent, KisProfile* p)
@@ -169,15 +169,15 @@ QValueVector<KisChannelInfo *> KisYCbCrU8ColorSpace::channels() const {
 }
 
 Q_UINT32 KisYCbCrU8ColorSpace::nChannels() const {
-    return MAX_CHANNEL_YCbCrA;
+    return MAX_CHANNEL_YCbCrA_U8;
 }
 
 Q_UINT32 KisYCbCrU8ColorSpace::nColorChannels() const {
-    return MAX_CHANNEL_YCbCr;
+    return MAX_CHANNEL_YCbCr_U8;
 }
 
 Q_UINT32 KisYCbCrU8ColorSpace::pixelSize() const {
-    return MAX_CHANNEL_YCbCrA*sizeof(Q_UINT8);
+    return MAX_CHANNEL_YCbCrA_U8*sizeof(Q_UINT8);
 }
 
 
@@ -192,7 +192,7 @@ QImage KisYCbCrU8ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width,
     Q_INT32 i = 0;
     uchar *j = img.bits();
 
-    while ( i < width * height * MAX_CHANNEL_YCbCrA) {
+    while ( i < width * height * MAX_CHANNEL_YCbCrA_U8) {
         Q_UINT8 Y = *( data + i + PIXEL_Y );
         Q_UINT8 Cb = *( data + i + PIXEL_Cb );
         Q_UINT8 Cr = *( data + i + PIXEL_Cr );
@@ -210,8 +210,8 @@ QImage KisYCbCrU8ColorSpace::convertToQImage(const Q_UINT8 *data, Q_INT32 width,
         *( j + 1 ) = Cb;
         *( j + 0 ) = Cr;*/
 #endif
-        i += MAX_CHANNEL_YCbCrA;
-        j += MAX_CHANNEL_YCbCrA;
+        i += MAX_CHANNEL_YCbCrA_U8;
+        j += MAX_CHANNEL_YCbCrA_U8;
     }
     return img;
 }
@@ -265,7 +265,7 @@ void KisYCbCrU8ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
                 }
 
                 if (srcAlpha == OPACITY_OPAQUE) {
-                    memcpy(dst, src, MAX_CHANNEL_YCbCrA * sizeof(Q_UINT8));
+                    memcpy(dst, src, MAX_CHANNEL_YCbCrA_U8 * sizeof(Q_UINT8));
                 } else {
                     Q_UINT8 dstAlpha = dst[PIXEL_ALPHA];
 
@@ -285,7 +285,7 @@ void KisYCbCrU8ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
                     }
 
                     if (srcBlend == OPACITY_OPAQUE) {
-                        memcpy(dst, src, MAX_CHANNEL_YCbCr * sizeof(Q_UINT8));
+                        memcpy(dst, src, MAX_CHANNEL_YCbCr_U8 * sizeof(Q_UINT8));
                     } else {
                         dst[PIXEL_Y] = UINT8_BLEND(src[PIXEL_Y], dst[PIXEL_Y], srcBlend);
                         dst[PIXEL_Cb] = UINT8_BLEND(src[PIXEL_Cb], dst[PIXEL_Cb], srcBlend);
@@ -295,8 +295,8 @@ void KisYCbCrU8ColorSpace::compositeOver(Q_UINT8 *dstRowStart, Q_INT32 dstRowStr
             }
 
             columns--;
-            src += MAX_CHANNEL_YCbCrA;
-            dst += MAX_CHANNEL_YCbCrA;
+            src += MAX_CHANNEL_YCbCrA_U8;
+            dst += MAX_CHANNEL_YCbCrA_U8;
         }
 
         rows--;
