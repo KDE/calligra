@@ -76,7 +76,7 @@ public:
      * which is a bit slower because it needs to convert @p value to utf8 first.
      */
     inline void addAttribute( const char* attrName, const QString& value ) {
-        addAttribute( attrName, value.utf8() );
+        addAttribute( attrName, value );
     }
     /**
      * Add an attribute whose value is an integer
@@ -126,7 +126,7 @@ public:
      * which is a bit slower because it needs to convert @p str to utf8 first.
      */
     inline void addTextNode( const QString& str ) {
-        addTextNode( str.utf8() );
+        addTextNode( str );
     }
     /// Overloaded version of the one taking a const char* argument
     inline void addTextNode( const Q3CString& cstr ) {
