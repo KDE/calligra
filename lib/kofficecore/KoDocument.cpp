@@ -70,7 +70,7 @@
 #include <QEvent>
 #include <Q3ValueList>
 #include <QResizeEvent>
-
+#include <QDateTime>
 #include <config.h>
 #include <assert.h>
 
@@ -181,7 +181,7 @@ public:
         KGlobal::iconLoader()->addAppDir("koffice");
         m_view = 0L;
         // Avoid warning from KParts - we'll have the KoView as focus proxy anyway
-        setFocusPolicy( ClickFocus );
+        setFocusPolicy( Qt::ClickFocus );
     }
 
     virtual ~KoViewWrapperWidget() {
@@ -212,8 +212,10 @@ private:
 };
 
 KoBrowserExtension::KoBrowserExtension( KoDocument * doc, const char * name )
-    : KParts::BrowserExtension( doc, name )
+    : KParts::BrowserExtension( doc)
 {
+#warning "kde4: setObjectName needed ?"
+	setObjectName(name);
     emit enableAction( "print", true );
 }
 
@@ -231,8 +233,9 @@ void KoBrowserExtension::print()
 }
 
 KoDocument::KoDocument( QWidget * parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
-    : KParts::ReadWritePart( parent, name )
+    : KParts::ReadWritePart( parent/*, name*/ )
 {
+	setObjectName(name);
     if(s_documentList==0L)
         s_documentList=new Q3PtrList<KoDocument>;
     s_documentList->append(this);
