@@ -23,12 +23,16 @@
 
 #include <KoView.h>
 #include "kptcontext.h"
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3PopupMenu>
+#include <Q3PtrList>
 
-class QListViewItem;
-class QPopupMenu;
-class QHBoxLayout;
+class Q3ListViewItem;
+class Q3PopupMenu;
+class Q3HBoxLayout;
 class QTabWidget;
-class QWidgetStack;
+class Q3WidgetStack;
 
 class K3ListView;
 class KPrinter;
@@ -73,7 +77,7 @@ public:
     virtual void setupPrinter(KPrinter &printer);
     virtual void print(KPrinter &printer);
 
-    QPopupMenu *popupMenu(const QString& name);
+    Q3PopupMenu *popupMenu(const QString& name);
 
     void projectCalculate();
 
@@ -175,14 +179,14 @@ protected:
 
 private:
     GanttView *m_ganttview;
-    QHBoxLayout *m_ganttlayout;
+    Q3HBoxLayout *m_ganttlayout;
     PertView *m_pertview;
-    QHBoxLayout *m_pertlayout;
-    QWidgetStack *m_tab;
+    Q3HBoxLayout *m_pertlayout;
+    Q3WidgetStack *m_tab;
     ResourceView *m_resourceview;
     AccountsView *m_accountsview;
 //    ReportView *m_reportview;
-    QPtrList<QString> m_reportTemplateFiles;
+    Q3PtrList<QString> m_reportTemplateFiles;
 
     bool m_baselineMode;
     

@@ -25,12 +25,17 @@
 
 #include <qvariant.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
+#include <Q3GridLayout>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QListView;
-class QListViewItem;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
+class Q3ListView;
+class Q3ListViewItem;
 class QLineEdit;
 class QPushButton;
 class QComboBox;
@@ -45,7 +50,7 @@ class CalendarListDialogBase : public CalendarListPanel
 {
     Q_OBJECT
 public:
-    CalendarListDialogBase( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    CalendarListDialogBase( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
 
     CalendarEdit* calendar;
 

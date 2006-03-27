@@ -25,24 +25,26 @@
 
 #include <qapplication.h>
 #include <qpainter.h>
-#include <qiconset.h>
+#include <qicon.h>
 #include <qlayout.h>
 #include <qsplitter.h>
-#include <qcanvas.h>
-#include <qscrollview.h>
+#include <q3canvas.h>
+#include <q3scrollview.h>
 #include <qcolor.h>
 #include <qlabel.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvbox.h>
-#include <qgrid.h>
+#include <q3vbox.h>
+#include <q3grid.h>
 #include <qsize.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qtabwidget.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qtimer.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qpair.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <kiconloader.h>
 #include <kaction.h>
@@ -121,8 +123,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     // build the DCOP object
     dcopObject();
 
-    m_tab = new QWidgetStack(this);
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    m_tab = new Q3WidgetStack(this);
+    Q3VBoxLayout *layout = new Q3VBoxLayout(this);
     layout->add(m_tab);
 
     m_ganttview = new GanttView(m_tab, part->isReadWrite());
@@ -278,15 +280,15 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     // ------------------- Actions with a key binding and no GUI item
     // Temporary, till we get a menu entry
-    actNoInformation = new KAction("Toggle no information", CTRL+SHIFT+Key_T, this, SLOT(slotViewGanttNoInformation()), actionCollection(), "show_noinformation");
+    actNoInformation = new KAction("Toggle no information", Qt::CTRL+Qt::SHIFT+Qt::Key_T, this, SLOT(slotViewGanttNoInformation()), actionCollection(), "show_noinformation");
     
 #ifndef NDEBUG
     //new KAction("Print Debug", CTRL+SHIFT+Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
-    new KAction("Print Debug", CTRL+SHIFT+Key_P, this, SLOT(slotPrintSelectedDebug()), actionCollection(), "print_debug");
-    new KAction("Print Calendar Debug", CTRL+SHIFT+Key_C, this, SLOT(slotPrintCalendarDebug()), actionCollection(), "print_calendar_debug");
+    new KAction("Print Debug", Qt::CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT(slotPrintSelectedDebug()), actionCollection(), "print_debug");
+    new KAction("Print Calendar Debug", Qt::CTRL+Qt::SHIFT+Qt::Key_C, this, SLOT(slotPrintCalendarDebug()), actionCollection(), "print_calendar_debug");
 //     new KAction("Print Test Debug", CTRL+SHIFT+Key_T, this, SLOT(slotPrintTestDebug()), actionCollection(), "print_test_debug");
 
-    KAction* actExportGantt = new KAction( i18n( "Export Gantt" ), CTRL+SHIFT+Key_G,
+    KAction* actExportGantt = new KAction( i18n( "Export Gantt" ), Qt::CTRL+Qt::SHIFT+Qt::Key_G,
                         this, SLOT( slotExportGantt() ), actionCollection(), "export_gantt" );
 
 #endif
@@ -839,7 +841,7 @@ void View::slotDeleteTask()
     }
     KMacroCommand *cmd = new KMacroCommand(i18n("Delete Task"));
     cmd->addCommand(new NodeDeleteCmd(getPart(), node));
-    QPtrListIterator<Relation> it = node->dependChildNodes();
+    Q3PtrListIterator<Relation> it = node->dependChildNodes();
     for (; it.current(); ++it) {
         cmd->addCommand(new DeleteRelationCmd(getPart(), it.current()));
     }
@@ -1018,12 +1020,12 @@ void View::slotConnectNode() {
     }*/
 }
 
-QPopupMenu * View::popupMenu( const QString& name )
+Q3PopupMenu * View::popupMenu( const QString& name )
 {
     //kDebug()<<k_funcinfo<<endl;
     Q_ASSERT(factory());
     if ( factory() )
-        return ((QPopupMenu*)factory()->container( name, this ));
+        return ((Q3PopupMenu*)factory()->container( name, this ));
     return 0L;
 }
 
@@ -1119,7 +1121,7 @@ void View::slotRenameNode(Node *node, const QString& name) {
 
 void View::slotPopupMenu(const QString& menuname, const QPoint & pos)
 {
-    QPopupMenu* menu = this->popupMenu(menuname);
+    Q3PopupMenu* menu = this->popupMenu(menuname);
     if (menu)
       menu->exec(pos);
 }

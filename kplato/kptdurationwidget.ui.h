@@ -31,6 +31,8 @@
 #include <klocale.h>
 
 #include <cmath>
+//Added by qt3to4:
+#include <QLabel>
 
 namespace KPlato
 {

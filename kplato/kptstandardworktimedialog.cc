@@ -29,7 +29,7 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qdatetime.h>
 
 #include <kdebug.h>

@@ -75,7 +75,7 @@
                 <cstring>year</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+                <enum>Qt::WheelFocus</enum>
             </property>
             <property name="maxValue">
                 <number>8784</number>
@@ -92,7 +92,7 @@
                 <cstring>month</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+                <enum>Qt::WheelFocus</enum>
             </property>
             <property name="maxValue">
                 <number>744</number>
@@ -109,7 +109,7 @@
                 <cstring>week</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+                <enum>Qt::WheelFocus</enum>
             </property>
             <property name="maxValue">
                 <number>168</number>
@@ -126,7 +126,7 @@
                 <cstring>day</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>WheelFocus</enum>
+                <enum>Qt::WheelFocus</enum>
             </property>
             <property name="maxValue">
                 <number>24</number>

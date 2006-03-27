@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qmap.h>
 
 namespace KPlato
@@ -72,7 +72,7 @@ void NamedCommand::setSchScheduled(bool state) {
 void NamedCommand::addSchScheduled(Schedule *sch) {
     kDebug()<<k_funcinfo<<sch->id()<<": "<<sch->isScheduled()<<endl;
     m_schedules.insert(sch, sch->isScheduled());
-    QPtrListIterator<Appointment> it = sch->appointments();
+    Q3PtrListIterator<Appointment> it = sch->appointments();
     for (; it.current(); ++it) {
         if (it.current()->node() == sch) {
             m_schedules.insert(it.current()->resource(), it.current()->resource()->isScheduled());
@@ -84,7 +84,7 @@ void NamedCommand::addSchScheduled(Schedule *sch) {
 void NamedCommand::addSchDeleted(Schedule *sch) {
     kDebug()<<k_funcinfo<<sch->id()<<": "<<sch->isDeleted()<<endl;
     m_schedules.insert(sch, sch->isDeleted());
-    QPtrListIterator<Appointment> it = sch->appointments();
+    Q3PtrListIterator<Appointment> it = sch->appointments();
     for (; it.current(); ++it) {
         if (it.current()->node() == sch) {
             m_schedules.insert(it.current()->resource(), it.current()->resource()->isDeleted());
@@ -128,7 +128,7 @@ CalendarDeleteCmd::CalendarDeleteCmd(Part *part, Calendar *cal, QString name)
 
     // TODO check if any resources uses this calendar
     if (part) {
-        QIntDictIterator<Schedule> it = part->getProject().schedules();
+        Q3IntDictIterator<Schedule> it = part->getProject().schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -175,7 +175,7 @@ CalendarModifyParentCmd::CalendarModifyParentCmd(Part *part, Calendar *cal, Cale
     //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
-        QIntDictIterator<Schedule> it = part->getProject().schedules();
+        Q3IntDictIterator<Schedule> it = part->getProject().schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -201,7 +201,7 @@ CalendarAddDayCmd::CalendarAddDayCmd(Part *part, Calendar *cal, CalendarDay *new
     //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
-        QIntDictIterator<Schedule> it = part->getProject().schedules();
+        Q3IntDictIterator<Schedule> it = part->getProject().schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -236,7 +236,7 @@ CalendarRemoveDayCmd::CalendarRemoveDayCmd(Part *part, Calendar *cal, const QDat
     //kDebug()<<k_funcinfo<<cal->name()<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
-        QIntDictIterator<Schedule> it = part->getProject().schedules();
+        Q3IntDictIterator<Schedule> it = part->getProject().schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -267,7 +267,7 @@ CalendarModifyDayCmd::CalendarModifyDayCmd(Part *part, Calendar *cal, CalendarDa
     //kDebug()<<k_funcinfo<<cal->name()<<" old:("<<m_oldvalue<<") new:("<<m_newvalue<<")"<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
-        QIntDictIterator<Schedule> it = part->getProject().schedules();
+        Q3IntDictIterator<Schedule> it = part->getProject().schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -308,7 +308,7 @@ CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd(Part *part, Calendar *cal, in
     kDebug()<<k_funcinfo<<cal->name()<<" ("<<value<<")"<<endl;
     // TODO check if any resources uses this calendar
     if (part) {
-        QIntDictIterator<Schedule> it = part->getProject().schedules();
+        Q3IntDictIterator<Schedule> it = part->getProject().schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -343,7 +343,7 @@ NodeDeleteCmd::NodeDeleteCmd(Part *part, Node *node, QString name)
 
     Node *p = node->projectNode();
     if (p) {
-        QIntDictIterator<Schedule> it = p->schedules();
+        Q3IntDictIterator<Schedule> it = p->schedules();
         for (; it.current(); ++it) {
             Schedule *s = node->findSchedule(it.current()->id());
             if (s && s->isScheduled()) {
@@ -360,7 +360,7 @@ NodeDeleteCmd::~NodeDeleteCmd() {
 void NodeDeleteCmd::execute() {
     if (m_parent) {
         //kDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
-        QPtrListIterator<Appointment> it = m_node->appointments();
+        Q3PtrListIterator<Appointment> it = m_node->appointments();
         for (; it.current(); ++it) {
             it.current()->detach();
             m_appointments.append(it.current());
@@ -520,7 +520,7 @@ NodeModifyConstraintCmd::NodeModifyConstraintCmd(Part *part, Node &node, Node::C
       newConstraint(c),
       oldConstraint(static_cast<Node::ConstraintType>(node.constraint())) {
 
-    QIntDictIterator<Schedule> it = node.schedules();
+    Q3IntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -542,7 +542,7 @@ NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd(Part *part, N
       newTime(dt),
       oldTime(node.constraintStartTime()) {
 
-    QIntDictIterator<Schedule> it = node.schedules();
+    Q3IntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -564,7 +564,7 @@ NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd(Part *part, Node 
       newTime(dt),
       oldTime(node.constraintEndTime()) {
 
-    QIntDictIterator<Schedule> it = node.schedules();
+    Q3IntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -748,7 +748,7 @@ AddRelationCmd::AddRelationCmd(Part *part, Relation *rel, QString name)
     m_taken = true;
     Node *p = rel->parent()->projectNode();
     if (p) {
-        QIntDictIterator<Schedule> it = p->schedules();
+        Q3IntDictIterator<Schedule> it = p->schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -781,7 +781,7 @@ DeleteRelationCmd::DeleteRelationCmd(Part *part, Relation *rel, QString name)
     m_taken = false;
     Node *p = rel->parent()->projectNode();
     if (p) {
-        QIntDictIterator<Schedule> it = p->schedules();
+        Q3IntDictIterator<Schedule> it = p->schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -815,7 +815,7 @@ ModifyRelationTypeCmd::ModifyRelationTypeCmd(Part *part, Relation *rel, Relation
     m_oldtype = rel->type();
     Node *p = rel->parent()->projectNode();
     if (p) {
-        QIntDictIterator<Schedule> it = p->schedules();
+        Q3IntDictIterator<Schedule> it = p->schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -840,7 +840,7 @@ ModifyRelationLagCmd::ModifyRelationLagCmd(Part *part, Relation *rel, Duration l
     m_oldlag = rel->lag();
     Node *p = rel->parent()->projectNode();
     if (p) {
-        QIntDictIterator<Schedule> it = p->schedules();
+        Q3IntDictIterator<Schedule> it = p->schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -892,7 +892,7 @@ RemoveResourceRequestCmd::RemoveResourceRequestCmd(Part *part,  ResourceGroupReq
     //kDebug()<<k_funcinfo<<"group="<<group<<" req="<<request<<endl;
     Task *t = request->task();
     if (t) { // safety, something is seriously wrong!
-        QIntDictIterator<Schedule> it = t->schedules();
+        Q3IntDictIterator<Schedule> it = t->schedules();
         for (; it.current(); ++it) {
             addSchScheduled(it.current());
         }
@@ -1068,7 +1068,7 @@ RemoveResourceCmd::RemoveResourceCmd(Part *part, ResourceGroup *group, Resource 
     m_mine = false;
     m_requests = m_resource->requests();
     
-    QIntDictIterator<Schedule> it = resource->schedules();
+    Q3IntDictIterator<Schedule> it = resource->schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -1077,16 +1077,16 @@ RemoveResourceCmd::~RemoveResourceCmd() {
     m_appointments.setAutoDelete(true);
 }
 void RemoveResourceCmd::execute() {
-    QPtrListIterator<ResourceRequest> it = m_requests;
+    Q3PtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->parent()->takeResourceRequest(it.current());
         //kDebug()<<"Remove request for"<<it.current()->resource()->name()<<endl;
     }
-    QPtrListIterator<Appointment> ait = m_resource->appointments();
+    Q3PtrListIterator<Appointment> ait = m_resource->appointments();
     for (; ait.current(); ++ait) {
         m_appointments.append(ait.current());
     }
-    QPtrListIterator<Appointment> mit = m_appointments;
+    Q3PtrListIterator<Appointment> mit = m_appointments;
     for (; mit.current(); ++mit) {
         mit.current()->detach(); //NOTE: removes from m_resource->appointments()
         //kDebug()<<k_funcinfo<<"detached: "<<mit.current()<<endl;
@@ -1100,7 +1100,7 @@ void RemoveResourceCmd::unexecute() {
         //kDebug()<<k_funcinfo<<"attach: "<<m_appointments.current()<<endl;
         m_appointments.take()->attach();
     }
-    QPtrListIterator<ResourceRequest> it = m_requests;
+    Q3PtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->parent()->addResourceRequest(it.current());
         //kDebug()<<"Add request for "<<it.current()->resource()->name()<<endl;
@@ -1163,7 +1163,7 @@ ModifyResourceTypeCmd::ModifyResourceTypeCmd(Part *part, Resource *resource, int
       m_newvalue(value) {
     m_oldvalue = resource->type();
     
-    QIntDictIterator<Schedule> it = resource->schedules();
+    Q3IntDictIterator<Schedule> it = resource->schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -1184,7 +1184,7 @@ ModifyResourceUnitsCmd::ModifyResourceUnitsCmd(Part *part, Resource *resource, i
       m_newvalue(value) {
     m_oldvalue = resource->units();
     
-    QIntDictIterator<Schedule> it = resource->schedules();
+    Q3IntDictIterator<Schedule> it = resource->schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -1206,7 +1206,7 @@ ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd(Part *part, Resou
       m_newvalue(value) {
     m_oldvalue = resource->availableFrom();
 
-    QIntDictIterator<Schedule> it = resource->schedules();
+    Q3IntDictIterator<Schedule> it = resource->schedules();
     if (!it.isEmpty() && resource->project()) {
         QDateTime s;
         QDateTime e;
@@ -1240,7 +1240,7 @@ ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd(Part *part, Res
       m_newvalue(value) {
     m_oldvalue = resource->availableUntil();
     
-    QIntDictIterator<Schedule> it = resource->schedules();
+    Q3IntDictIterator<Schedule> it = resource->schedules();
     if (!it.isEmpty()) {
         QDateTime s;
         QDateTime e;
@@ -1307,7 +1307,7 @@ ModifyResourceCalendarCmd::ModifyResourceCalendarCmd(Part *part, Resource *resou
       m_newvalue(value) {
     m_oldvalue = resource->calendar(true);
     
-    QIntDictIterator<Schedule> it = resource->schedules();
+    Q3IntDictIterator<Schedule> it = resource->schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -1336,7 +1336,7 @@ RemoveResourceGroupCmd::~RemoveResourceGroupCmd() {
 void RemoveResourceGroupCmd::execute() {
     // remove all requests to this group
     int c=0;
-    QPtrListIterator<ResourceGroupRequest> it = m_group->requests();
+    Q3PtrListIterator<ResourceGroupRequest> it = m_group->requests();
     for (; it.current(); ++it) {
         if (it.current()->parent()) {
             it.current()->parent()->takeRequest(it.current());
@@ -1352,7 +1352,7 @@ void RemoveResourceGroupCmd::execute() {
 void RemoveResourceGroupCmd::unexecute() {
     // add all requests
     int c=0;
-    QPtrListIterator<ResourceGroupRequest> it = m_group->requests();
+    Q3PtrListIterator<ResourceGroupRequest> it = m_group->requests();
     for (; it.current(); ++it) {
         if (it.current()->parent()) {
             it.current()->parent()->addRequest(it.current());
@@ -1688,7 +1688,7 @@ ProjectModifyConstraintCmd::ProjectModifyConstraintCmd(Part *part, Project &node
       newConstraint(c),
       oldConstraint(static_cast<Node::ConstraintType>(node.constraint())) {
 
-    QIntDictIterator<Schedule> it = node.schedules();
+    Q3IntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -1710,7 +1710,7 @@ ProjectModifyStartTimeCmd::ProjectModifyStartTimeCmd(Part *part, Project &node, 
       newTime(dt),
       oldTime(node.startTime()) {
 
-    QIntDictIterator<Schedule> it = node.schedules();
+    Q3IntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }
@@ -1733,7 +1733,7 @@ ProjectModifyEndTimeCmd::ProjectModifyEndTimeCmd(Part *part, Project &node, QDat
       newTime(dt),
       oldTime(node.endTime()) {
 
-    QIntDictIterator<Schedule> it = node.schedules();
+    Q3IntDictIterator<Schedule> it = node.schedules();
     for (; it.current(); ++it) {
         addSchScheduled(it.current());
     }

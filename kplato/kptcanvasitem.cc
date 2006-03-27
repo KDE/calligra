@@ -25,8 +25,8 @@
 
 #include <klocale.h>
 #include <qpainter.h>
-#include <qpointarray.h>
-#include <qptrlist.h>
+#include <q3pointarray.h>
+#include <q3ptrlist.h>
 #include <qpoint.h>
 
 #include <kdebug.h>
@@ -35,7 +35,7 @@ namespace KPlato
 {
 
 PertNodeItem::PertNodeItem( PertCanvas *view, Node &node, int row, int col )
-    : QCanvasPolygon(view->canvas()),
+    : Q3CanvasPolygon(view->canvas()),
 	m_node(node),
 	m_row(row),
 	m_col(col)
@@ -46,14 +46,14 @@ PertNodeItem::PertNodeItem( PertCanvas *view, Node &node, int row, int col )
     m_width = view->itemSize().width();
     m_height = view->itemSize().height();
 
-    m_name = new QCanvasText(node.name(), view->canvas());
+    m_name = new Q3CanvasText(node.name(), view->canvas());
     m_childRelations.setAutoDelete(true);
 }
 
 PertNodeItem::~PertNodeItem()
 {
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
+    Q3CanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
     {
         if ( *it == m_name )
@@ -70,9 +70,9 @@ int PertNodeItem::RTTI = 2000;
 void PertNodeItem::setVisible(bool yes)
 {
     //kDebug()<<k_funcinfo<<m_node.name()<<endl;
-	QCanvasPolygon::setVisible(yes);
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
+	Q3CanvasPolygon::setVisible(yes);
+    Q3CanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
     {
         if ( *it == m_name )
@@ -89,7 +89,7 @@ void PertNodeItem::move(PertCanvas *view, int row, int col)
     view->mapNode(this);
 
     // Now map my children
-    QPtrListIterator<PertNodeRelation> it(m_childRelations);
+    Q3PtrListIterator<PertNodeRelation> it(m_childRelations);
     for (; it.current(); ++it)
     {
         view->mapChildNode(this, it.current()->childItem, it.current()->relation->type());
@@ -99,7 +99,7 @@ void PertNodeItem::move(PertCanvas *view, int row, int col)
     m_x = x(col); m_y = y(row);
     m_left = QPoint(m_x, m_y + m_height/2);
     m_right = QPoint(m_x + m_width, m_y + m_height/2);
-    QCanvasPolygon::move(m_x, m_y);
+    Q3CanvasPolygon::move(m_x, m_y);
     if (m_name)
         m_name->move(m_x+5, m_y+2);
 
@@ -112,7 +112,7 @@ void PertNodeItem::drawShape(QPainter &p)
     //QPen pen(pen());
 	if (isSelected())
 	    p.setPen(QPen(Qt::red, 2));
-	QPointArray a = poly;
+	Q3PointArray a = poly;
 	int size = a.size()-1;
 	for(int i = 0; i < size; ++i)
 	{
@@ -169,7 +169,7 @@ PertProjectItem::PertProjectItem(PertCanvas *view, Node &node, int row, int col)
 {
     //kDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
 
-	QPointArray a;
+	Q3PointArray a;
 	a.putPoints(0, 5,
 	    m_x+6, m_y, m_x+m_width, m_y, m_x+m_width-6, m_y+m_height, m_x, m_y+m_height, m_x+6, m_y);
 	setPoints(a);
@@ -197,7 +197,7 @@ PertTaskItem::PertTaskItem(PertCanvas *view, Node &node, int row, int col)
     : PertNodeItem(view, node, row, col)
 {
     //kDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
-	QPointArray a;
+	Q3PointArray a;
 	if (node.type() == Node::Type_Summarytask)
 	{
 	    a.putPoints(0, 5, m_x+6, m_y, m_x+m_width, m_y, m_x+m_width-6, m_y+m_height, m_x, m_y+m_height, m_x+6, m_y);
@@ -234,7 +234,7 @@ PertMilestoneItem::PertMilestoneItem(PertCanvas *view, Node &node, int row, int 
 {
     //kDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
 
-	QPointArray a;
+	Q3PointArray a;
 	a.putPoints(0, 7,
 	    m_x, m_y+m_height/2,
 	    m_x+6, m_y,
@@ -266,7 +266,7 @@ void PertMilestoneItem::printDebug( int /*info*/ )
 ////////////////////   PertRelationItem   //////////////////////////
 
 PertRelationItem::PertRelationItem( PertCanvas *view, PertNodeItem *parent, PertNodeItem *child, Relation *rel)
-    : QCanvasPolygon(view->canvas()),
+    : Q3CanvasPolygon(view->canvas()),
     m_view(view),
     m_rel(rel),
     m_parentItem(parent),
@@ -320,7 +320,7 @@ void PertRelationItem::draw()
 		    setStartStartPoints();
 		    break;
 	}
-	QPointArray a = poly;
+	Q3PointArray a = poly;
 	left = right = a[0].x();
 	top = bottom = a[0].y();
     for (uint i = 0; i < a.size(); i++)
@@ -350,7 +350,7 @@ void PertRelationItem::setFinishStartPoints()
 	QPoint parentPoint = m_parentItem->exitPoint(Relation::FinishStart);
 	QPoint childPoint = m_childItem->entryPoint(Relation::FinishStart);
 
-	QPointArray a;
+	Q3PointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
 
 	if ( parentRow == childRow )
@@ -433,7 +433,7 @@ void PertRelationItem::setFinishFinishPoints()
 	QPoint parentPoint = m_parentItem->exitPoint(Relation::FinishFinish);
 	QPoint childPoint = m_childItem->entryPoint(Relation::FinishFinish);
 
-	QPointArray a;
+	Q3PointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
 
 
@@ -517,7 +517,7 @@ void PertRelationItem::setStartStartPoints()
 	QPoint parentPoint = m_parentItem->exitPoint(Relation::StartStart);
 	QPoint childPoint = m_childItem->entryPoint(Relation::StartStart);
 
-	QPointArray a;
+	Q3PointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
 
     if ( parentRow > childRow )
@@ -588,7 +588,7 @@ void PertRelationItem::drawShape(QPainter &p)
     //kDebug()<<k_funcinfo<<" "<<m_rel->parent()->name()<<" to "<<m_rel->child()->name()<<endl;
     // cannot use polygon's drawShape() as it doesn't use the pen
 	setBrush(Qt::NoBrush);
-	QPointArray a = poly;
+	Q3PointArray a = poly;
 	int size = a.size()-1;
 	for(int i = 0; i < size; ++i)
 	{
@@ -606,12 +606,12 @@ void PertRelationItem::drawShape(QPainter &p)
 	p.drawLine(a[pos], pnt);
 }
 
-QPointArray PertRelationItem::areaPoints () const
+Q3PointArray PertRelationItem::areaPoints () const
 {
-    QPointArray pa(4);
+    Q3PointArray pa(4);
     int pw = (pen().width()+1)/2;
     if ( pw < 1 ) pw = 1;
-    if ( pen() == NoPen ) pw = 0;
+    if ( pen() == Qt::NoPen ) pw = 0;
     pa[0] = QPoint(left-pw,top-pw);
     pa[1] = pa[0] + QPoint(right-left+pw*2,0);
     pa[2] = pa[1] + QPoint(0,bottom-top+pw*2);
@@ -624,8 +624,8 @@ QPointArray PertRelationItem::areaPoints () const
 
 bool PertRelationItem::rowFree(int row, int startCol, int endCol)
 {
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
+    Q3CanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
     {
 		if ( (*it)->rtti() == PertProjectItem::RTTI ||
@@ -700,7 +700,7 @@ void GanttViewSummaryItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-    QPtrListIterator<Relation> it(m_node->dependChildNodes());
+    Q3PtrListIterator<Relation> it(m_node->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
@@ -781,7 +781,7 @@ void GanttViewTaskItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-    QPtrListIterator<Relation> it(m_task->dependChildNodes());
+    Q3PtrListIterator<Relation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
@@ -863,7 +863,7 @@ void GanttViewEventItem::insertRelations(GanttView *view)
 {
     //kDebug()<<k_funcinfo<<endl;
 
-    QPtrListIterator<Relation> it(m_task->dependChildNodes());
+    Q3PtrListIterator<Relation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());

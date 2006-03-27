@@ -22,12 +22,12 @@
 
 #include <qsplitter.h>
 #include <qdatetime.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "kptcontext.h"
 
 class QPoint;
-class QListViewItem;
+class Q3ListViewItem;
 
 class KPrinter;
 
@@ -62,7 +62,7 @@ class ResourceItemPrivate;
 
     Resource *currentResource();
 
-    QValueList<int> listOffsets(int pageHeight) const;
+    Q3ValueList<int> listOffsets(int pageHeight) const;
     void print(KPrinter &printer);
     
     Node *currentNode() const { return m_currentNode; }
@@ -80,12 +80,12 @@ signals:
     
 protected slots:
     void resSelectionChanged();
-    void resSelectionChanged(QListViewItem *item);
-    void slotItemDoubleClicked(QListViewItem*);
-    void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);
+    void resSelectionChanged(Q3ListViewItem *item);
+    void slotItemDoubleClicked(Q3ListViewItem*);
+    void popupMenuRequested(Q3ListViewItem * item, const QPoint & pos, int);
 
 private:
-    void drawResources(const Project &proj, QListViewItem *parent, ResourceGroup *group);
+    void drawResources(const Project &proj, Q3ListViewItem *parent, ResourceGroup *group);
 
 private:
 	View *m_mainview;

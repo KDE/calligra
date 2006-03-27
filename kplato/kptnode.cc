@@ -25,8 +25,10 @@
 #include "kptresource.h"
 #include "kptschedule.h"
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -168,8 +170,8 @@ int Node::findChildNode( Node* node )
 
 const Node* Node::getChildNode(int number) const {
     // Work around missing const at() method in QPtrList
-    const QPtrList<Node> &nodes = m_nodes;
-    return (const_cast<QPtrList<Node> &>(nodes)).at(number);
+    const Q3PtrList<Node> &nodes = m_nodes;
+    return (const_cast<Q3PtrList<Node> &>(nodes)).at(number);
 }
 
 Duration *Node::getDelay() {
@@ -301,7 +303,7 @@ bool Node::isParentOf(Node *node) {
     if (m_nodes.findRef(node) != -1)
 	    return true;
 
-	QPtrListIterator<Node> nit(childNodeIterator());
+	Q3PtrListIterator<Node> nit(childNodeIterator());
 	for ( ; nit.current(); ++nit ) {
 		if (nit.current()->isParentOf(node))
 		    return true;
@@ -365,25 +367,25 @@ Duration Node::duration(const DateTime &time, int use, bool backward) {
 }
 
 void Node::makeAppointments() {
-    QPtrListIterator<Node> nit(m_nodes);
+    Q3PtrListIterator<Node> nit(m_nodes);
     for ( ; nit.current(); ++nit ) {
         nit.current()->makeAppointments();
     }
 }
 
 void Node::calcResourceOverbooked() {
-    QPtrListIterator<Node> nit(m_nodes);
+    Q3PtrListIterator<Node> nit(m_nodes);
     for ( ; nit.current(); ++nit ) {
         nit.current()->calcResourceOverbooked();
     }
 }
 
 void Node::saveRelations(QDomElement &element) const {
-    QPtrListIterator<Relation> it(m_dependChildNodes);
+    Q3PtrListIterator<Relation> it(m_dependChildNodes);
     for (; it.current(); ++it) {
         it.current()->save(element);
     }
-    QPtrListIterator<Node> nodes(m_nodes);
+    Q3PtrListIterator<Node> nodes(m_nodes);
     for ( ; nodes.current(); ++nodes ) {
         nodes.current()->saveRelations(element);
     }
@@ -434,7 +436,7 @@ void Node::propagateEarliestStart(DateTime &time) {
         return;
     m_currentSchedule->earliestStart = time;
     //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->earliestStart.toString()<<endl;
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateEarliestStart(time);
     }
@@ -445,7 +447,7 @@ void Node::propagateLatestFinish(DateTime &time) {
         return;
     m_currentSchedule->latestFinish = time;
     //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->latestFinish<<endl;
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateLatestFinish(time);
     }
@@ -456,7 +458,7 @@ void Node::moveEarliestStart(DateTime &time) {
         return;
     if (m_currentSchedule->earliestStart < time)
         m_currentSchedule->earliestStart = time;
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->moveEarliestStart(time);
     }
@@ -467,14 +469,14 @@ void Node::moveLatestFinish(DateTime &time) {
         return;
     if (m_currentSchedule->latestFinish > time)
         m_currentSchedule->latestFinish = time;
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->moveLatestFinish(time);
     }
 }
 
 void Node::initiateCalculation(Schedule &sch) {
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->initiateCalculation(sch);
     }
@@ -483,7 +485,7 @@ void Node::initiateCalculation(Schedule &sch) {
 void Node::resetVisited() {
     m_visitedForward = false;
     m_visitedBackward = false;
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->resetVisited();
     }
@@ -609,14 +611,14 @@ void Node::setEndTime(DateTime endTime) {
 
 void Node::saveAppointments(QDomElement &element, long id) const {
     //kDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
-    QPtrListIterator<Node> it(m_nodes);
+    Q3PtrListIterator<Node> it(m_nodes);
     for (; it.current(); ++it ) {
         it.current()->saveAppointments(element, id);
     }
 }
 
-QPtrList<Appointment> Node::appointments() {
-    QPtrList<Appointment> lst;
+Q3PtrList<Appointment> Node::appointments() {
+    Q3PtrList<Appointment> lst;
     if (m_currentSchedule)
         lst = m_currentSchedule->appointments();
     return lst;
@@ -680,7 +682,7 @@ Schedule *Node::createSchedule(Schedule *parent) {
 }
 
 Schedule *Node::findSchedule(const QString name, const Schedule::Type type) const {
-    QIntDictIterator<Schedule> it = m_schedules;
+    Q3IntDictIterator<Schedule> it = m_schedules;
     for (; it.current(); ++it) {
         if (!it.current()->isDeleted() && 
             it.current()->name() == name && it.current()->type() == type)
@@ -691,7 +693,7 @@ Schedule *Node::findSchedule(const QString name, const Schedule::Type type) cons
 
 Schedule *Node::findSchedule(const Schedule::Type type) const {
     //kDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count()<<endl;
-    QIntDictIterator<Schedule> it = m_schedules;
+    Q3IntDictIterator<Schedule> it = m_schedules;
     for (; it.current(); ++it) {
         if (!it.current()->isDeleted() && it.current()->type() == type) {
             return it.current();
@@ -714,7 +716,7 @@ void Node::setParentSchedule(Schedule *sch) {
     if (s) {
         s->setParent(sch);
     }
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->setParentSchedule(sch);
     }
@@ -735,7 +737,7 @@ bool Node::calcCriticalPath(bool fromEnd) {
         m_currentSchedule->inCriticalPath = true;
         return true;
     }
-    QPtrListIterator<Relation> pit(m_dependParentNodes);
+    Q3PtrListIterator<Relation> pit(m_dependParentNodes);
     for (; pit.current(); ++pit) {
         if (pit.current()->parent()->calcCriticalPath(fromEnd)) {
             m_currentSchedule->inCriticalPath = true;
@@ -753,7 +755,7 @@ void Node::generateWBS(int count, WBSDefinition &def, QString wbs) {
     m_wbs = wbs + def.code(count, level());
     //kDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
     QString w = wbs + def.wbs(count, level());
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (int i=0; it.current(); ++it) {
         it.current()->generateWBS(++i, def, w);
     }
@@ -761,7 +763,7 @@ void Node::generateWBS(int count, WBSDefinition &def, QString wbs) {
 }
 
 void Node::setCurrentSchedule(long id) {
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->setCurrentSchedule(id);
     }
@@ -877,7 +879,7 @@ int Effort::pessimisticRatio() const {
 
 // Debugging
 #ifndef NDEBUG
-void Node::printDebug(bool children, QCString indent) {
+void Node::printDebug(bool children, Q3CString indent) {
     kDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
@@ -891,14 +893,14 @@ void Node::printDebug(bool children, QCString indent) {
     } else {
         kDebug()<<indent<<"  Current schedule: None"<<endl;
     }
-    QIntDictIterator<Schedule> it = m_schedules;
+    Q3IntDictIterator<Schedule> it = m_schedules;
     for (; it.current(); ++it) {
         it.current()->printDebug(indent+"  ");
     }
     kDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
     kDebug()<<indent<<"  Level: "<<level()<<endl;
     kDebug()<<indent<<"  No of predecessors: "<<m_dependParentNodes.count()<<endl;
-    QPtrListIterator<Relation> pit(m_dependParentNodes);
+    Q3PtrListIterator<Relation> pit(m_dependParentNodes);
     //kDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
     if (pit.count() > 0) {
         for ( ; pit.current(); ++pit ) {
@@ -906,7 +908,7 @@ void Node::printDebug(bool children, QCString indent) {
         }
     }
     kDebug()<<indent<<"  No of successors: "<<m_dependChildNodes.count()<<endl;
-    QPtrListIterator<Relation> cit(m_dependChildNodes);
+    Q3PtrListIterator<Relation> cit(m_dependChildNodes);
     //kDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
     if (cit.count() > 0) {
         for ( ; cit.current(); ++cit ) {
@@ -917,7 +919,7 @@ void Node::printDebug(bool children, QCString indent) {
     //kDebug()<<indent<<endl;
     indent += "  ";
     if (children) {
-        QPtrListIterator<Node> it(m_nodes);
+        Q3PtrListIterator<Node> it(m_nodes);
         for ( ; it.current(); ++it ) {
             it.current()->printDebug(true,indent);
         }
@@ -928,7 +930,7 @@ void Node::printDebug(bool children, QCString indent) {
 
 
 #ifndef NDEBUG
-void Effort::printDebug(QCString indent) {
+void Effort::printDebug(Q3CString indent) {
     kDebug()<<indent<<"  Effort:"<<endl;
     indent += "  ";
     kDebug()<<indent<<"  Expected: "<<m_expectedEffort.toString()<<endl;

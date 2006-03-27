@@ -109,8 +109,8 @@ public slots:
 	void slotLastPage();
 
 protected slots:
-    void slotReportListClicked(QListViewItem* item);
-    void slotReportListSelectionChanged(QListViewItem* item);
+    void slotReportListClicked(Q3ListViewItem* item);
+    void slotReportListSelectionChanged(Q3ListViewItem* item);
     
 private:
     class ReportItem : public K3ListViewItem {

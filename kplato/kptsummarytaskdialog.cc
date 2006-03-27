@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <kcommand.h>
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kdebug.h>
 
 namespace KPlato

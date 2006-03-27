@@ -25,7 +25,7 @@
 #include <qsplitter.h>
 
 class QLayout;
-class QListViewItem;
+class Q3ListViewItem;
 
 class KPrinter;
 

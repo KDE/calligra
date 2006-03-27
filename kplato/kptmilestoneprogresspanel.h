@@ -34,7 +34,7 @@ class StandardWorktime;
 class MilestoneProgressPanelImpl : public MilestoneProgressPanelBase {
     Q_OBJECT
 public:
-    MilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0, WFlags f=0);
+    MilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0, Qt::WFlags f=0);
     
     void enableWidgets();
 

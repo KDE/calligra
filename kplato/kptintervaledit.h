@@ -25,7 +25,7 @@
 #include <kdialogbase.h>
 
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qpair.h>
 
 namespace KPlato
@@ -34,9 +34,9 @@ namespace KPlato
 class IntervalEditImpl : public IntervalEditBase {
     Q_OBJECT
 public:
-    IntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent);
+    IntervalEditImpl(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent);
     
-    QPtrList<QPair<QTime, QTime> > intervals() const;
+    Q3PtrList<QPair<QTime, QTime> > intervals() const;
     
 private slots:
     void slotCheckAllFieldsFilled();
@@ -44,7 +44,7 @@ private slots:
     
     void slotClearClicked();
     void slotAddIntervalClicked();
-    void slotIntervalSelectionChanged(QListViewItem *item);
+    void slotIntervalSelectionChanged(Q3ListViewItem *item);
 signals:
     void obligatedFieldsFilled(bool yes);
     void enableButtonOk(bool);
@@ -54,9 +54,9 @@ signals:
 class IntervalEdit : public KDialogBase {
     Q_OBJECT
 public:
-    IntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent=0, const char *name=0);
+    IntervalEdit(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent=0, const char *name=0);
     
-    QPtrList<QPair<QTime, QTime> > intervals() const;
+    Q3PtrList<QPair<QTime, QTime> > intervals() const;
     
 private:
     IntervalEditImpl *dia;

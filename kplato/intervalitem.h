@@ -20,18 +20,18 @@
 #ifndef INTERVALITEM_H
 #define INTERVALITEM_H
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qdatetime.h>
 #include <qpair.h>
 
 namespace KPlato
 {
 
-class IntervalItem : public QListViewItem
+class IntervalItem : public Q3ListViewItem
 {
 public:
-    IntervalItem(QListView * parent, QTime start, QTime end)
-    : QListViewItem(parent, QString("%1  -  %2").arg(start.toString(), end.toString())),
+    IntervalItem(Q3ListView * parent, QTime start, QTime end)
+    : Q3ListViewItem(parent, QString("%1  -  %2").arg(start.toString(), end.toString())),
       m_start(start),
       m_end(end)
     {}

@@ -54,25 +54,25 @@ void TaskAppointmentsView::draw(Task *task)
         return;
     m_taskName->setText(task->name());
 
-    QPtrListIterator<Appointment> it(task->appointments());
+    Q3PtrListIterator<Appointment> it(task->appointments());
     for (; it.current(); ++it) {
         Resource *r = it.current()->resource();
-        QListViewItem *item = new QListViewItem(m_appList, r->name());
+        Q3ListViewItem *item = new Q3ListViewItem(m_appList, r->name());
  int i = 1;
         item->setText(i++, r->typeToString());
-        item->setText(i++, it.current()->startTime().date().toString(ISODate));
-        item->setText(i++, it.current()->endTime().date().toString(ISODate));
+        item->setText(i++, it.current()->startTime().date().toString(Qt::ISODate));
+        item->setText(i++, it.current()->endTime().date().toString(Qt::ISODate));
         item->setText(i++, it.current()->plannedEffort().toString(Duration::Format_HourFraction));
         item->setText(i++, KGlobal::locale()->formatMoney(r->normalRate()));
         item->setText(i++, KGlobal::locale()->formatMoney(r->overtimeRate()));
         item->setText(i++, KGlobal::locale()->formatMoney(r->fixedCost()));
-        QPtrListIterator<AppointmentInterval> ait = it.current()->intervals();
+        Q3PtrListIterator<AppointmentInterval> ait = it.current()->intervals();
         for (; ait.current(); ++ait) {
-            QListViewItem *sub = new QListViewItem(item, "");
+            Q3ListViewItem *sub = new Q3ListViewItem(item, "");
             i = 1;
             sub->setText(i++, "");
-            sub->setText(i++, ait.current()->startTime().date().toString(ISODate));
-            sub->setText(i++, ait.current()->endTime().date().toString(ISODate));
+            sub->setText(i++, ait.current()->startTime().date().toString(Qt::ISODate));
+            sub->setText(i++, ait.current()->endTime().date().toString(Qt::ISODate));
             sub->setText(i++, ait.current()->effort().toString(Duration::Format_HourFraction));
         }
         
@@ -83,11 +83,11 @@ void TaskAppointmentsView::draw(Task *task)
 
 void TaskAppointmentsView::init()
 {
-    m_appList->setColumnAlignment(1, AlignHCenter);
-    m_appList->setColumnAlignment(3, AlignRight);
-    m_appList->setColumnAlignment(4, AlignRight);
-    m_appList->setColumnAlignment(5, AlignRight);
-    m_appList->setColumnAlignment(6, AlignRight);
+    m_appList->setColumnAlignment(1, Qt::AlignHCenter);
+    m_appList->setColumnAlignment(3, Qt::AlignRight);
+    m_appList->setColumnAlignment(4, Qt::AlignRight);
+    m_appList->setColumnAlignment(5, Qt::AlignRight);
+    m_appList->setColumnAlignment(6, Qt::AlignRight);
     
     m_task = 0;
     m_date->setDate(QDate::currentDate());

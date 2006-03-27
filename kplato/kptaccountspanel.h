@@ -22,11 +22,11 @@
 
 #include "kptaccountspanelbase.h"
 
-#include <qptrlist.h>
-#include <qdict.h>
+#include <q3ptrlist.h>
+#include <q3dict.h>
 
-class QListView;
-class QListViewItem;
+class Q3ListView;
+class Q3ListViewItem;
 class QWidget;
 
 class KCommand;
@@ -48,15 +48,15 @@ public:
     
     KCommand *buildCommand(Part *part);
     
-    bool isUnique(QListViewItem *item);
-    void renameStopped(QListViewItem *item);
+    bool isUnique(Q3ListViewItem *item);
+    void renameStopped(Q3ListViewItem *item);
     
 signals:
     void changed(bool);
     
     // Internal
-    void renameStarted(QListViewItem *, int);
-    void startRename(QListViewItem *item, int col);
+    void renameStarted(Q3ListViewItem *, int);
+    void startRename(Q3ListViewItem *item, int col);
     void selectionChanged();
     
 public slots:
@@ -65,33 +65,33 @@ public slots:
 protected slots:
     void slotChanged();
     void slotSelectionChanged();
-    void slotItemRenamed(QListViewItem *item, int col);
+    void slotItemRenamed(Q3ListViewItem *item, int col);
     void slotRemoveBtn();
     void slotNewBtn();
     void slotSubBtn();
     void slotActivated(int);
-    void slotListDoubleClicked(QListViewItem* item, const QPoint&, int col);
-    void slotRenameStarted(QListViewItem *item, int col);
-    void slotStartRename(QListViewItem *item, int col);
-    void slotRemoveItem(QListViewItem *i);
+    void slotListDoubleClicked(Q3ListViewItem* item, const QPoint&, int col);
+    void slotRenameStarted(Q3ListViewItem *item, int col);
+    void slotStartRename(Q3ListViewItem *item, int col);
+    void slotRemoveItem(Q3ListViewItem *i);
 protected:
-    void addItems(QListView *lv, Accounts &acc);
-    void addItems(QListViewItem *item, Account *acc);
-    void addElement(const QListViewItem *item);
-    void removeElement(QListViewItem *item);
+    void addItems(Q3ListView *lv, Accounts &acc);
+    void addItems(Q3ListViewItem *item, Account *acc);
+    void addElement(const Q3ListViewItem *item);
+    void removeElement(Q3ListViewItem *item);
     void refreshDefaultAccount();
     KCommand *save(Part *part, Project &project);
-    KCommand *save(Part *part, Project &project, QListViewItem *item);
+    KCommand *save(Part *part, Project &project, Q3ListViewItem *item);
     
 private:
     Accounts &m_accounts;
     
-    QPtrList<QListViewItem> m_removedItems;
+    Q3PtrList<Q3ListViewItem> m_removedItems;
     Account *m_oldDefaultAccount;
-    QDict<QListViewItem> m_elements;
+    Q3Dict<Q3ListViewItem> m_elements;
     int m_currentIndex;
     QString m_renameText;
-    QListViewItem *m_renameItem;
+    Q3ListViewItem *m_renameItem;
 };
 
 } //namespace KPlato

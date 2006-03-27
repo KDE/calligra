@@ -30,6 +30,8 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 namespace KPlato
 {
@@ -154,14 +156,14 @@ void ResourceGroup::save(QDomElement &element)  const {
     me.setAttribute("id", m_id);
     me.setAttribute("name", m_name);
 
-    QPtrListIterator<Resource> it(m_resources);
+    Q3PtrListIterator<Resource> it(m_resources);
     for ( ; it.current(); ++it ) {
         it.current()->save(me);
     }
 }
 
 void ResourceGroup::initiateCalculation(Schedule &sch) {
-    QPtrListIterator<Resource> it(m_resources);
+    Q3PtrListIterator<Resource> it(m_resources);
     for (; it.current(); ++it) {
         it.current()->initiateCalculation(sch);
     }
@@ -170,7 +172,7 @@ void ResourceGroup::initiateCalculation(Schedule &sch) {
 
 int ResourceGroup::units() {
     int u = 0;
-    QPtrListIterator<Resource> it = m_resources;
+    Q3PtrListIterator<Resource> it = m_resources;
     for (; it.current(); ++it) {
         u += it.current()->units();
     }
@@ -192,7 +194,7 @@ void ResourceGroup::insertId(const QString &id) {
 
 Appointment ResourceGroup::appointmentIntervals() const {
     Appointment a;
-    QPtrListIterator<Resource> it = m_resources;
+    Q3PtrListIterator<Resource> it = m_resources;
     for (; it.current(); ++it) {
         a += it.current()->appointmentIntervals();
     }
@@ -225,7 +227,7 @@ Resource::~Resource() {
     if (findId() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
-    QPtrListIterator<ResourceRequest> it = m_requests;
+    Q3PtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->setResource(0); // avoid the request to mess with my list
     }
@@ -392,8 +394,8 @@ bool Resource::isAvailable(Task */*task*/) {
     return !busy;
 }
 
-QPtrList<Appointment> Resource::appointments() {
-    QPtrList<Appointment> lst;
+Q3PtrList<Appointment> Resource::appointments() {
+    Q3PtrList<Appointment> lst;
     if (m_currentSchedule)
         lst = m_currentSchedule->appointments();
     //kDebug()<<k_funcinfo<<lst.count()<<endl;
@@ -690,7 +692,7 @@ Appointment Resource::appointmentIntervals() const {
     Appointment a;
     if (m_currentSchedule == 0)
         return a;
-    QPtrListIterator<Appointment> it = m_currentSchedule->appointments();
+    Q3PtrListIterator<Appointment> it = m_currentSchedule->appointments();
     for (; it.current(); ++it) {
         a += *(it.current());
     }
@@ -791,7 +793,7 @@ ResourceRequest *ResourceGroupRequest::takeResourceRequest(ResourceRequest *requ
 }
 
 ResourceRequest *ResourceGroupRequest::find(Resource *resource) const {
-    QPtrListIterator<ResourceRequest> it(m_resourceRequests);
+    Q3PtrListIterator<ResourceRequest> it(m_resourceRequests);
     for (; it.current(); ++it)
         if (it.current()->resource() == resource)
             return it.current();
@@ -835,14 +837,14 @@ void ResourceGroupRequest::save(QDomElement &element) const {
     element.appendChild(me);
     me.setAttribute("group-id", m_group->id());
     me.setAttribute("units", m_units);
-    QPtrListIterator<ResourceRequest> it(m_resourceRequests);
+    Q3PtrListIterator<ResourceRequest> it(m_resourceRequests);
     for (; it.current(); ++it)
         it.current()->save(me);
 }
 
 int ResourceGroupRequest::units() const {
     int units = m_units;
-    QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+    Q3PtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         units += it.current()->units();
     }
@@ -854,7 +856,7 @@ int ResourceGroupRequest::workUnits() const {
     int units = 0;
     if (m_group->type() == ResourceGroup::Type_Work)
         units = m_units;
-    QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+    Q3PtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         units += it.current()->workUnits();
     }
@@ -867,7 +869,7 @@ Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &dura
     Duration e;
     bool sts=false;
     if (ok) *ok = sts;
-    QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+    Q3PtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         e += it.current()->resource()->effort(time, duration, backward, &sts);
         if (sts && ok) *ok = sts;
@@ -880,7 +882,7 @@ Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &dura
 int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
     DateTime t1, t2 = time;
     if (backward) {
-        QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+        Q3PtrListIterator<ResourceRequest> it = m_resourceRequests;
         for (; it.current(); ++it) {
             t1 = it.current()->resource()->availableFrom();
             if (!t2.isValid() || t2 > t1)
@@ -889,7 +891,7 @@ int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
         //kDebug()<<k_funcinfo<<"bw "<<time.toString()<<": "<<t2.daysTo(time)<<endl;
         return t2.daysTo(time);
     }
-    QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+    Q3PtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         t1 = it.current()->resource()->availableUntil();
         if (!t2.isValid() || t2 < t1)
@@ -1013,7 +1015,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
 
 DateTime ResourceGroupRequest::availableAfter(const DateTime &time) {
     DateTime start;
-    QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+    Q3PtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         DateTime t = it.current()->resource()->availableAfter(time);
         if (t.isValid() && (!start.isValid() || t < start))
@@ -1027,7 +1029,7 @@ DateTime ResourceGroupRequest::availableAfter(const DateTime &time) {
 
 DateTime ResourceGroupRequest::availableBefore(const DateTime &time) {
     DateTime end;
-    QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+    Q3PtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         DateTime t = it.current()->resource()->availableBefore(time);
         if (t.isValid() && (!end.isValid() || t > end))
@@ -1041,7 +1043,7 @@ DateTime ResourceGroupRequest::availableBefore(const DateTime &time) {
 
 void ResourceGroupRequest::makeAppointments(Schedule *schedule) {
     //kDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+    Q3PtrListIterator<ResourceRequest> it = m_resourceRequests;
     for (; it.current(); ++it) {
         it.current()->makeAppointment(schedule);
     }
@@ -1072,7 +1074,7 @@ ResourceRequestCollection::~ResourceRequestCollection() {
 }
 
 ResourceGroupRequest *ResourceRequestCollection::find(ResourceGroup *group) const {
-    QPtrListIterator<ResourceGroupRequest> it(m_requests);
+    Q3PtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         if (it.current()->group() == group)
             return it.current(); // we assume only one request to the same group
@@ -1083,7 +1085,7 @@ ResourceGroupRequest *ResourceRequestCollection::find(ResourceGroup *group) cons
 
 ResourceRequest *ResourceRequestCollection::find(Resource *resource) const {
     ResourceRequest *req = 0;
-    QPtrListIterator<ResourceGroupRequest> it(m_requests);
+    Q3PtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; !req && it.current(); ++it) {
         req = it.current()->find(resource);
     }
@@ -1097,7 +1099,7 @@ ResourceRequest *ResourceRequestCollection::find(Resource *resource) const {
 
 void ResourceRequestCollection::save(QDomElement &element) const {
     //kDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<ResourceGroupRequest> it(m_requests);
+    Q3PtrListIterator<ResourceGroupRequest> it(m_requests);
     for ( ; it.current(); ++it ) {
         it.current()->save(element);
     }
@@ -1106,7 +1108,7 @@ void ResourceRequestCollection::save(QDomElement &element) const {
 int ResourceRequestCollection::units() const {
     //kDebug()<<k_funcinfo<<endl;
     int units = 0;
-    QPtrListIterator<ResourceGroupRequest> it = m_requests;
+    Q3PtrListIterator<ResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         units += it.current()->units();
         //kDebug()<<k_funcinfo<<" Group: "<<it.current()->group()->name()<<" now="<<units<<endl;
@@ -1117,7 +1119,7 @@ int ResourceRequestCollection::units() const {
 int ResourceRequestCollection::workUnits() const {
     //kDebug()<<k_funcinfo<<endl;
     int units = 0;
-    QPtrListIterator<ResourceGroupRequest> it(m_requests);
+    Q3PtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         units += it.current()->workUnits();
     }
@@ -1138,7 +1140,7 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
     int units = workUnits();
     if (units == 0)
         units = 100; //hmmmm
-    QPtrListIterator<ResourceGroupRequest> it(m_requests);
+    Q3PtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         if (it.current()->isEmpty())
             continue;
@@ -1157,7 +1159,7 @@ Duration ResourceRequestCollection::duration(const DateTime &time, const Duratio
 
 DateTime ResourceRequestCollection::availableAfter(const DateTime &time) {
     DateTime start;
-    QPtrListIterator<ResourceGroupRequest> it = m_requests;
+    Q3PtrListIterator<ResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         DateTime t = it.current()->availableAfter(time);
         if (t.isValid() && (!start.isValid() || t < start))
@@ -1171,7 +1173,7 @@ DateTime ResourceRequestCollection::availableAfter(const DateTime &time) {
 
 DateTime ResourceRequestCollection::availableBefore(const DateTime &time) {
     DateTime end;
-    QPtrListIterator<ResourceGroupRequest> it = m_requests;
+    Q3PtrListIterator<ResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         DateTime t = it.current()->availableBefore(time);
         if (t.isValid() && (!end.isValid() ||t > end))
@@ -1185,7 +1187,7 @@ DateTime ResourceRequestCollection::availableBefore(const DateTime &time) {
 
 void ResourceRequestCollection::makeAppointments(Schedule *schedule) {
     //kDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<ResourceGroupRequest> it(m_requests);
+    Q3PtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         it.current()->makeAppointments(schedule);
     }
@@ -1193,14 +1195,14 @@ void ResourceRequestCollection::makeAppointments(Schedule *schedule) {
 
 void ResourceRequestCollection::reserve(const DateTime &start, const Duration &duration) {
     //kDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<ResourceGroupRequest> it(m_requests);
+    Q3PtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         it.current()->reserve(start, duration);
     }
 }
 
 bool ResourceRequestCollection::isEmpty() const {
-    QPtrListIterator<ResourceGroupRequest> it(m_requests);
+    Q3PtrListIterator<ResourceGroupRequest> it(m_requests);
     for (; it.current(); ++it) {
         if (!it.current()->isEmpty())
             return false;
@@ -1213,14 +1215,14 @@ void ResourceGroup::printDebug(QString indent)
 {
     kDebug()<<indent<<"  + Resource group: "<<m_name<<" id="<<m_id<<endl;
     indent += "   !";
-    QPtrListIterator<Resource> it(m_resources);
+    Q3PtrListIterator<Resource> it(m_resources);
     for ( ; it.current(); ++it)
         it.current()->printDebug(indent);
 }
 void Resource::printDebug(QString indent)
 {
     kDebug()<<indent<<"  + Resource: "<<m_name<<" id="<<m_id/*<<" Overbooked="<<isOverbooked()*/<<endl;
-    QIntDictIterator<Schedule> it(m_schedules);
+    Q3IntDictIterator<Schedule> it(m_schedules);
     indent += "      ";
     for (; it.current(); ++it) {
         it.current()->printDebug(indent);
@@ -1232,7 +1234,7 @@ void ResourceGroupRequest::printDebug(QString indent)
 {
     kDebug()<<indent<<"  + Request to group: "<<(m_group ? m_group->name() : "None")<<" units="<<m_units<<"%"<<endl;
     indent += "  !";
-    QPtrListIterator<ResourceRequest> it(m_resourceRequests);
+    Q3PtrListIterator<ResourceRequest> it(m_resourceRequests);
     for (; it.current(); ++it) {
         it.current()->printDebug(indent);
     }
@@ -1246,7 +1248,7 @@ void ResourceRequest::printDebug(QString indent)
 void ResourceRequestCollection::printDebug(QString indent)
 {
     kDebug()<<indent<<"  + Resource requests:"<<endl;
-    QPtrListIterator<ResourceGroupRequest> it = m_requests;
+    Q3PtrListIterator<ResourceGroupRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->printDebug(indent+"  ");
     }

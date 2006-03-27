@@ -22,18 +22,23 @@
 
 #include <qvariant.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <QLabel>
+#include <Q3GridLayout>
 
-class QVBoxLayout;
-class QHBoxLayout;
-class QGridLayout;
-class QGroupBox;
+class Q3VBoxLayout;
+class Q3HBoxLayout;
+class Q3GridLayout;
+class Q3GroupBox;
 class QLabel;
 class QComboBox;
-class QButtonGroup;
+class Q3ButtonGroup;
 class QPushButton;
-class QListView;
-class QListViewItem;
-class QTimeEdit;
+class Q3ListView;
+class Q3ListViewItem;
+class Q3TimeEdit;
 
 namespace KPlato
 {
@@ -45,30 +50,30 @@ class CalendarEditBase : public QWidget
     Q_OBJECT
 
 public:
-    CalendarEditBase( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    CalendarEditBase( QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0 );
     ~CalendarEditBase();
 
-    QGroupBox* groupBox2;
+    Q3GroupBox* groupBox2;
     CalendarPanel* calendarPanel;
-    QButtonGroup* day;
+    Q3ButtonGroup* day;
     QComboBox* state;
     QPushButton* bApply;
-    QGroupBox* groupBox4;
-    QListView* intervalList;
-    QTimeEdit* startTime;
-    QTimeEdit* endTime;
+    Q3GroupBox* groupBox4;
+    Q3ListView* intervalList;
+    Q3TimeEdit* startTime;
+    Q3TimeEdit* endTime;
     QPushButton* bClear;
     QPushButton* bAddInterval;
 
 protected:
-    QHBoxLayout* CalendarEditBaseLayout;
-    QGridLayout* groupBox2Layout;
-    QHBoxLayout* layout10;
-    QVBoxLayout* dayLayout;
-    QHBoxLayout* layout8;
-    QVBoxLayout* groupBox4Layout;
-    QHBoxLayout* layout6;
-    QHBoxLayout* layout5;
+    Q3HBoxLayout* CalendarEditBaseLayout;
+    Q3GridLayout* groupBox2Layout;
+    Q3HBoxLayout* layout10;
+    Q3VBoxLayout* dayLayout;
+    Q3HBoxLayout* layout8;
+    Q3VBoxLayout* groupBox4Layout;
+    Q3HBoxLayout* layout6;
+    Q3HBoxLayout* layout5;
 
 protected slots:
     virtual void languageChange();

@@ -42,7 +42,7 @@
                         <cstring>finishTime</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>NoFocus</enum>
+                        <enum>Qt::NoFocus</enum>
                     </property>
                 </widget>
                 <widget class="KDateTimeWidget" row="0" column="1">
@@ -50,7 +50,7 @@
                         <cstring>startTime</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>NoFocus</enum>
+                        <enum>Qt::NoFocus</enum>
                     </property>
                 </widget>
                 <widget class="QCheckBox" row="0" column="0">
@@ -80,7 +80,7 @@
                         <cstring>spacer17</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -149,7 +149,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
-                        <enum>TabFocus</enum>
+                        <enum>Qt::TabFocus</enum>
                     </property>
                 </widget>
                 <widget class="KPlato::DurationWidget" row="2" column="1" rowspan="1" colspan="2">
@@ -160,7 +160,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
-                        <enum>TabFocus</enum>
+                        <enum>Qt::TabFocus</enum>
                     </property>
                 </widget>
                 <widget class="KIntNumInput" row="0" column="1">
@@ -182,7 +182,7 @@
                         <cstring>spacer2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -199,7 +199,7 @@
                         <cstring>spacer19</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -242,7 +242,7 @@
                                 <cstring>spacer3</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
@@ -274,7 +274,7 @@
                                 <cstring>spacer4</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
@@ -315,7 +315,7 @@
                                 <cstring>spacer4_2</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>
@@ -360,7 +360,7 @@
                 <cstring>spacer2_2</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

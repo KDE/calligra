@@ -193,7 +193,7 @@ The estimation can be either effort based or duration based. If it is effort bas
                         <cstring>scheduleStartDate</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>WheelFocus</enum>
+                        <enum>Qt::WheelFocus</enum>
                     </property>
                     <property name="date">
                         <date>
@@ -213,7 +213,7 @@ The estimation can be either effort based or duration based. If it is effort bas
                         <cstring>scheduleEndDate</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>WheelFocus</enum>
+                        <enum>Qt::WheelFocus</enum>
                     </property>
                 </widget>
                 <widget class="QTimeEdit" row="1" column="3">
@@ -226,7 +226,7 @@ The estimation can be either effort based or duration based. If it is effort bas
                         <cstring>estimate</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>WheelFocus</enum>
+                        <enum>Qt::WheelFocus</enum>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget" row="3" column="2" rowspan="1" colspan="2">

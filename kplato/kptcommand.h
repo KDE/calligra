@@ -27,6 +27,8 @@
 #include "kptduration.h"
 #include "kptpart.h"
 #include "kpttask.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class QString;
 
@@ -190,7 +192,7 @@ private:
     Node *m_parent;
     int m_index;
     bool m_mine;
-    QPtrList<Appointment> m_appointments;
+    Q3PtrList<Appointment> m_appointments;
 
 };
 
@@ -580,8 +582,8 @@ public:
     void unexecute();
 
 private:
-    QPtrList<ResourceRequest> m_requests;
-    QPtrList<Appointment> m_appointments;
+    Q3PtrList<ResourceRequest> m_requests;
+    Q3PtrList<Appointment> m_appointments;
 };
 
 class ModifyResourceNameCmd : public NamedCommand

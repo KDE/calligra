@@ -24,18 +24,18 @@
 #include "kptmap.h"
 #include "intervalitem.h"
 
-#include <qbuttongroup.h>
-#include <qheader.h>
+#include <q3buttongroup.h>
+#include <q3header.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qlineedit.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <qtabwidget.h>
-#include <qtextbrowser.h>
+#include <q3textbrowser.h>
 
 #include <klocale.h>
 
@@ -122,7 +122,7 @@ void CalendarEdit::slotApplyClicked() {
         calDay->setState(state->currentItem()); //NOTE!!
         calDay->clearIntervals();
         if (calDay->state() == Map::Working) {
-            for (QListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
+            for (Q3ListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
                 //kDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
                 calDay->addInterval(static_cast<IntervalItem *>(item)->interval());
             }
@@ -136,7 +136,7 @@ void CalendarEdit::slotApplyClicked() {
         weekday->setState(state->currentItem());//NOTE!!
         weekday->clearIntervals();
         if (weekday->state() == Map::Working) {
-            for (QListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
+            for (Q3ListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
                 //kDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
                 weekday->addInterval(static_cast<IntervalItem *>(item)->interval());
             }
@@ -205,7 +205,7 @@ void CalendarEdit::slotDateSelected(QDate date) {
     CalendarDay *calDay = m_calendar->findDay(date);
     state->setEnabled(true);
     if (calDay) {
-        QPtrListIterator<QPair<QTime, QTime> > it = calDay->workingIntervals();
+        Q3PtrListIterator<QPair<QTime, QTime> > it = calDay->workingIntervals();
         for (; it.current(); ++it) {
             IntervalItem *item = new IntervalItem(intervalList, it.current()->first, it.current()->second);
             intervalList->insertItem(item);
@@ -250,7 +250,7 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
     state->insertItem(i18n("Undefined"));
     state->insertItem(i18n("Non-working"));
     state->insertItem(i18n("Working"));
-    QPtrListIterator<QPair<QTime, QTime> > it = calDay->workingIntervals();
+    Q3PtrListIterator<QPair<QTime, QTime> > it = calDay->workingIntervals();
     for (; it.current(); ++it) {
         IntervalItem *item = new IntervalItem(intervalList, it.current()->first, it.current()->second);
         intervalList->insertItem(item);

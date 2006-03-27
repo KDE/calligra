@@ -27,8 +27,11 @@
 #include "KDGanttViewTaskItem.h"
 #include "KDGanttViewEventItem.h"
 
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qrect.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3PtrList>
 
 class QPainter;
 
@@ -42,7 +45,7 @@ class PertRelationItem;
 class PertNodeItem;
 class GanttView;
 
-class PertNodeItem : public QCanvasPolygon
+class PertNodeItem : public Q3CanvasPolygon
 {
 private:
     class PertNodeRelation
@@ -97,15 +100,15 @@ protected:
 	int m_x;
 	int m_y;
 
-    QPtrList<PertNodeRelation> m_childRelations;
+    Q3PtrList<PertNodeRelation> m_childRelations;
 
 private:
     Node &m_node;
     int m_row, m_col;
 	QPoint m_right; // Entry/exit point
 	QPoint m_left;  // Entry/exit point
-	QCanvasText *m_name;
-	QCanvasText *m_leader;
+	Q3CanvasText *m_name;
+	Q3CanvasText *m_leader;
 
 #ifndef NDEBUG
     void printDebug( int );
@@ -162,7 +165,7 @@ public:
 
 /////////////////   PertRelationItem   ////////////////////
 
-class PertRelationItem : public QCanvasPolygon
+class PertRelationItem : public Q3CanvasPolygon
 {
 public:
     PertRelationItem(PertCanvas *view, PertNodeItem *parent, PertNodeItem *child, Relation *rel);
@@ -177,7 +180,7 @@ public:
 	void setFinishStartPoints();
 	void setFinishFinishPoints();
 	void setStartStartPoints();
-	QPointArray areaPoints() const;
+	Q3PointArray areaPoints() const;
 
 	bool rowFree(int row, int startCol, int endCol);
 

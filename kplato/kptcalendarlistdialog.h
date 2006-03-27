@@ -27,6 +27,8 @@
 #include <kdialogbase.h>
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class KCommand;
 
@@ -47,13 +49,13 @@ public:
     Calendar *getCalendar() { return calendar->getCalendar(); }
     void setCalendar(Calendar *cal);
 
-    QPtrList<CalendarListViewItem> &deletedItems();
+    Q3PtrList<CalendarListViewItem> &deletedItems();
 
-    void renameStopped(QListViewItem *item);
+    void renameStopped(Q3ListViewItem *item);
 
 public slots:
     void slotSelectionChanged();
-    void slotSelectionChanged(QListViewItem *listItem);
+    void slotSelectionChanged(Q3ListViewItem *listItem);
 
 private slots:
     void slotBaseCalendarActivated(int id);
@@ -61,10 +63,10 @@ private slots:
     void slotDeleteClicked();
     void slotAddClicked();
     void slotEnableButtonOk(bool on);
-    void slotItemRenamed(QListViewItem *item, int col);
-    void slotListDoubleClicked(QListViewItem *item, const QPoint&, int col);
-    void slotStartRename(QListViewItem *item, int col);
-    void slotRenameStarted(QListViewItem *item, int col);
+    void slotItemRenamed(Q3ListViewItem *item, int col);
+    void slotListDoubleClicked(Q3ListViewItem *item, const QPoint&, int col);
+    void slotStartRename(Q3ListViewItem *item, int col);
+    void slotRenameStarted(Q3ListViewItem *item, int col);
 
 signals:
     void obligatedFieldsFilled(bool yes);
@@ -73,8 +75,8 @@ signals:
     void enableButtonOk(bool on);
 
     //internal
-    void renameStarted(QListViewItem *, int);
-    void startRename(QListViewItem *item, int col);
+    void renameStarted(Q3ListViewItem *, int);
+    void startRename(Q3ListViewItem *item, int col);
     void selectionChanged();
 
 protected:
@@ -82,9 +84,9 @@ protected:
     
 private:
     Project &project;
-    QPtrList<CalendarListViewItem> m_deletedItems;
-    QPtrList<CalendarListViewItem> baseCalendarList;
-    QListViewItem *m_renameItem;
+    Q3PtrList<CalendarListViewItem> m_deletedItems;
+    Q3PtrList<CalendarListViewItem> baseCalendarList;
+    Q3ListViewItem *m_renameItem;
 };
 
 class CalendarListDialog : public KDialogBase {

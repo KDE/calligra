@@ -26,6 +26,9 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qpair.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 namespace KPlato
 {
@@ -132,10 +135,10 @@ QString WBSDefinition::code(CodeDef &def, uint index) {
 }
 
 // Nicked from koparagcounter.cc
-const QCString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
-const QCString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
-const QCString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
-const QCString RNThousands[] = {"", "m", "mm", "mmm"};
+const Q3CString RNUnits[] = {"", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"};
+const Q3CString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx", "xc"};
+const Q3CString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
+const Q3CString RNThousands[] = {"", "m", "mm", "mmm"};
 
 QString WBSDefinition::toRoman( int n, bool upper )
 {
@@ -154,7 +157,7 @@ QString WBSDefinition::toRoman( int n, bool upper )
 
 QStringList WBSDefinition::codeList() {
     QStringList cl;
-    QValueList<QPair<QString, QString> >::Iterator it;
+    Q3ValueList<QPair<QString, QString> >::Iterator it;
     for (it = m_codeLists.begin(); it != m_codeLists.end(); ++it) {
         cl.append((*it).second);
     }
@@ -162,7 +165,7 @@ QStringList WBSDefinition::codeList() {
 }
 
 int WBSDefinition::defaultCodeIndex() const {
-    QValueList<QPair<QString, QString> >::const_iterator it;
+    Q3ValueList<QPair<QString, QString> >::const_iterator it;
     int i = -1;
     for(it = m_codeLists.begin(); it != m_codeLists.end(); ++it) {
         ++i;
@@ -173,7 +176,7 @@ int WBSDefinition::defaultCodeIndex() const {
 }
 
 bool WBSDefinition::setDefaultCode(uint index) {
-    QValueList<QPair<QString, QString> >::const_iterator it = m_codeLists.at(index);
+    Q3ValueList<QPair<QString, QString> >::const_iterator it = m_codeLists.at(index);
     if (it == m_codeLists.end()) {
         return false;
     }

@@ -26,9 +26,9 @@
 #include "relationpanel.h"
 
 #include <qlayout.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlabel.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 
 #include <kmessagebox.h>

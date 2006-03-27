@@ -29,18 +29,21 @@
 #include <qapplication.h>
 #include <qcombobox.h>
 #include <qdatetime.h>
-#include <qdatetimeedit.h>
-#include <qheader.h>
+#include <q3datetimeedit.h>
+#include <q3header.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpushbutton.h>
-#include <qvaluelist.h>
-#include <qpopupmenu.h>
+#include <q3valuelist.h>
+#include <q3popupmenu.h>
 #include <qsizepolicy.h>
-#include <qhbox.h>
-#include <qpaintdevicemetrics.h>
+#include <q3hbox.h>
+#include <q3paintdevicemetrics.h>
+//Added by qt3to4:
+#include <Q3HBoxLayout>
+#include <Q3VBoxLayout>
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
@@ -64,7 +67,7 @@ public:
     }
 };
 
-AccountsView::AccountItem::AccountItem(Account *a, QListView *parent, bool highlight)
+AccountsView::AccountItem::AccountItem(Account *a, Q3ListView *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, a->name(), highlight),
       account(a) {
     if (parent->columns() >= 3) {
@@ -72,7 +75,7 @@ AccountsView::AccountItem::AccountItem(Account *a, QListView *parent, bool highl
     }
     //kDebug()<<k_funcinfo<<endl;
 }
-AccountsView::AccountItem::AccountItem(Account *a, QListViewItem *p, bool highlight)
+AccountsView::AccountItem::AccountItem(Account *a, Q3ListViewItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, a->name(), highlight),
       account(a) {
     if (listView() && listView()->columns() >= 3) {
@@ -81,7 +84,7 @@ AccountsView::AccountItem::AccountItem(Account *a, QListViewItem *p, bool highli
     //kDebug()<<k_funcinfo<<endl;
 }
 
-AccountsView::AccountItem::AccountItem(QString text, Account *a, QListViewItem *parent, bool highlight)
+AccountsView::AccountItem::AccountItem(QString text, Account *a, Q3ListViewItem *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       account(a) {
     //kDebug()<<k_funcinfo<<endl;
@@ -104,13 +107,13 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
     m_periodTexts<<i18n("Day")<<i18n("Week")<<i18n("Month");
     m_cumulative = false;
 
-    QVBoxLayout *lay1 = new QVBoxLayout(this, 0, KDialog::spacingHint());
+    Q3VBoxLayout *lay1 = new Q3VBoxLayout(this, 0, KDialog::spacingHint());
     
-    QHBoxLayout *lay2 = new QHBoxLayout(0, 0, KDialog::spacingHint());
+    Q3HBoxLayout *lay2 = new Q3HBoxLayout(0, 0, KDialog::spacingHint());
     m_label = new Label(this);
     m_label->setFrameShape(QLabel::StyledPanel);
     m_label->setFrameShadow(QLabel::Sunken);
-    m_label->setAlignment(int(QLabel::WordBreak | QLabel::AlignVCenter));
+    m_label->setAlignment(int(Qt::TextWordWrap | Qt::AlignVCenter));
     lay2->addWidget(m_label);
     m_changeBtn = new QPushButton(i18n("Configure..."), this);
     m_changeBtn->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_changeBtn->sizePolicy().hasHeightForWidth()));
@@ -127,7 +130,7 @@ AccountsView::AccountsView(Project &project, View *view, QWidget *parent)
     connect(this, SIGNAL(update()), SLOT(slotUpdate()));
     connect(m_changeBtn, SIGNAL(clicked()), SLOT(slotConfigure()));
     
-    QValueList<int> list = m_dlv->sizes();
+    Q3ValueList<int> list = m_dlv->sizes();
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
     list[1] = tot-list[0];
@@ -230,7 +233,7 @@ void AccountsView::slotUpdate() {
             QString df = locale->formatDate(dt, true);
             m_dlv->addSlaveColumn(df);
         }
-        QListViewItemIterator it(m_dlv->masterListView());
+        Q3ListViewItemIterator it(m_dlv->masterListView());
         for (;it.current(); ++it) {
             AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(it.current());
             if (!item || !item->account || !item->account->isElement()) {
@@ -272,7 +275,7 @@ void AccountsView::slotUpdate() {
             QApplication::restoreOverrideCursor();
             return;
         }
-        QListViewItemIterator it(m_dlv->masterListView());
+        Q3ListViewItemIterator it(m_dlv->masterListView());
         for (;it.current(); ++it) {
             AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(it.current());
             if (!item || !item->account || !item->account->isElement()) {
@@ -318,7 +321,7 @@ void AccountsView::slotUpdate() {
             QApplication::restoreOverrideCursor();
             return;
         }
-        QListViewItemIterator it(m_dlv->masterListView());
+        Q3ListViewItemIterator it(m_dlv->masterListView());
         for (;it.current(); ++it) {
             AccountsView::AccountItem *item = dynamic_cast<AccountsView::AccountItem*>(it.current());
             if (!item || !item->account || !item->account->isElement()) {
@@ -349,7 +352,7 @@ void AccountsView::slotUpdate() {
 
 void AccountsView::print(KPrinter &printer) {
     //kDebug()<<k_funcinfo<<endl;
-    QPaintDeviceMetrics m = QPaintDeviceMetrics ( &printer );
+    Q3PaintDeviceMetrics m = Q3PaintDeviceMetrics ( &printer );
     uint top, left, bottom, right;
     printer.margins(&top, &left, &bottom, &right);
     //kDebug()<<m.width()<<"x"<<m.height()<<" : "<<top<<", "<<left<<", "<<bottom<<", "<<right<<" : "<<size()<<endl;
@@ -373,7 +376,7 @@ void AccountsView::print(KPrinter &printer) {
 
 bool AccountsView::setContext(Context::Accountsview &context) {
     //kDebug()<<k_funcinfo<<"---->"<<endl;
-    QValueList<int> list;
+    Q3ValueList<int> list;
     list << context.accountsviewsize << context.periodviewsize;
     m_dlv->setSizes(list);
     m_date = context.date;
@@ -389,7 +392,7 @@ bool AccountsView::setContext(Context::Accountsview &context) {
 void AccountsView::setContextClosedItems(Context::Accountsview &context) {
     for (QStringList::ConstIterator it = context.closedItems.begin(); it != context.closedItems.end(); ++it) {
         if (m_accounts.findAccount(*it)) {
-            QListViewItemIterator lit(m_dlv->masterListView());
+            Q3ListViewItemIterator lit(m_dlv->masterListView());
             for (; lit.current(); ++lit) {
                 if (lit.current()->text(0) == (*it)) {
                     m_dlv->setOpen(lit.current(), false);
@@ -413,10 +416,10 @@ void AccountsView::getContext(Context::Accountsview &context) const {
 }
 
 
-void AccountsView::getContextClosedItems(Context::Accountsview &context, QListViewItem *item) const {
+void AccountsView::getContextClosedItems(Context::Accountsview &context, Q3ListViewItem *item) const {
     if (item == 0)
         return;
-    for (QListViewItem *i = item; i; i = i->nextSibling()) {
+    for (Q3ListViewItem *i = item; i; i = i->nextSibling()) {
         if (!i->isOpen()) {
             context.closedItems.append(i->text(0));
             //kDebug()<<k_funcinfo<<"add closed "<<i->text(0)<<endl;

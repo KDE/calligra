@@ -32,8 +32,10 @@
 #include <qstring.h>
 #include <qdatetime.h>
 #include <qbrush.h>
-#include <qcanvas.h>
-#include <qptrlist.h>
+#include <q3canvas.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdatetimewidget.h>
 #include <kdebug.h>
@@ -133,12 +135,12 @@ void Project::calculate() {
 bool Project::calcCriticalPath(bool fromEnd) {
     //kDebug()<<k_funcinfo<<endl;
     if (fromEnd) {
-        QPtrListIterator<Node> startnodes = m_startNodes;
+        Q3PtrListIterator<Node> startnodes = m_startNodes;
         for (; startnodes.current(); ++startnodes) {
             startnodes.current()->calcCriticalPath(fromEnd);
         }
     } else {
-        QPtrListIterator<Node> endnodes = m_endNodes;
+        Q3PtrListIterator<Node> endnodes = m_endNodes;
         for (; endnodes.current(); ++endnodes) {
             endnodes.current()->calcCriticalPath(fromEnd);
         }
@@ -178,7 +180,7 @@ DateTime Project::calculateForward(int use) {
         // calculate forwards following the child relations
         DateTime finish;
         DateTime time;
-        QPtrListIterator<Node> endnodes = m_endNodes;
+        Q3PtrListIterator<Node> endnodes = m_endNodes;
         for (; endnodes.current(); ++endnodes) {
             time = endnodes.current()->calculateForward(use);
             if (!finish.isValid() || time > finish)
@@ -199,7 +201,7 @@ DateTime Project::calculateBackward(int use) {
         // calculate backwards following parent relation
         DateTime start;
         DateTime time;
-        QPtrListIterator<Node> startnodes = m_startNodes;
+        Q3PtrListIterator<Node> startnodes = m_startNodes;
         for (; startnodes.current(); ++startnodes) {
             time = startnodes.current()->calculateBackward(use);
             if (!start.isValid() || time < start)
@@ -217,7 +219,7 @@ DateTime Project::scheduleForward(const DateTime &earliest, int use) {
     resetVisited();
     DateTime end = earliest;
     DateTime time;
-    QPtrListIterator<Node> it(m_endNodes);
+    Q3PtrListIterator<Node> it(m_endNodes);
     for (; it.current(); ++it) {
         time = it.current()->scheduleForward(earliest, use);
         if (time > end)
@@ -232,7 +234,7 @@ DateTime Project::scheduleBackward(const DateTime &latest, int use) {
     resetVisited();
     DateTime start = latest;
     DateTime time;
-    QPtrListIterator<Node> it(m_startNodes);
+    Q3PtrListIterator<Node> it(m_startNodes);
     for (; it.current(); ++it) {
         time = it.current()->scheduleBackward(latest, use);
         if (time < start)
@@ -244,7 +246,7 @@ DateTime Project::scheduleBackward(const DateTime &latest, int use) {
 }
 
 void Project::adjustSummarytask() {
-    QPtrListIterator<Node> it(m_summarytasks);
+    Q3PtrListIterator<Node> it(m_summarytasks);
     for (; it.current(); ++it) {
         it.current()->adjustSummarytask();
     }
@@ -255,7 +257,7 @@ void Project::initiateCalculation(Schedule &sch) {
     // clear all resource appointments
     m_visitedForward = false;
     m_visitedBackward = false;
-    QPtrListIterator<ResourceGroup> git(m_resourceGroups);
+    Q3PtrListIterator<ResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
         git.current()->initiateCalculation(sch);
     }
@@ -266,10 +268,10 @@ void Project::initiateCalculation(Schedule &sch) {
     initiateCalculationLists(m_startNodes, m_endNodes, m_summarytasks);
 }
 
-void Project::initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks) {
+void Project::initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks) {
     //kDebug()<<k_funcinfo<<m_name<<endl;
     if (type() == Node::Type_Project) {
-        QPtrListIterator<Node> it = childNodeIterator();
+        Q3PtrListIterator<Node> it = childNodeIterator();
         for (; it.current(); ++it) {
             it.current()->initiateCalculationLists(startnodes, endnodes, summarytasks);
         }
@@ -435,7 +437,7 @@ bool Project::load(QDomElement &element) {
     }
     //kDebug()<<k_funcinfo<<"Calendars--->"<<endl;
     // calendars references calendars in arbritary saved order
-    QPtrListIterator<Calendar> calit(m_calendars);
+    Q3PtrListIterator<Calendar> calit(m_calendars);
     for (; calit.current(); ++calit) {
         if (calit.current()->id() == calit.current()->parentId()) {
             kError()<<k_funcinfo<<"Calendar want itself as parent"<<endl;
@@ -444,7 +446,7 @@ bool Project::load(QDomElement &element) {
         calit.current()->setParent(calendar(calit.current()->parentId()));
     }
     //kDebug()<<k_funcinfo<<"Project schedules--->"<<endl;
-    QIntDictIterator<Schedule> it = m_schedules;
+    Q3IntDictIterator<Schedule> it = m_schedules;
     if (it.current()) {
         if (m_constraint == Node::MustFinishOn)
             m_constraintEndTime = it.current()->endTime;
@@ -474,7 +476,7 @@ void Project::save(QDomElement &element)  const {
     m_accounts.save(me);
     
     // save calendars
-    QPtrListIterator<Calendar> calit(m_calendars);
+    Q3PtrListIterator<Calendar> calit(m_calendars);
     for (; calit.current(); ++calit) {
         calit.current()->save(me);
     }
@@ -483,13 +485,13 @@ void Project::save(QDomElement &element)  const {
         m_standardWorktime->save(me);
     
     // save project resources, must be after calendars
-    QPtrListIterator<ResourceGroup> git(m_resourceGroups);
+    Q3PtrListIterator<ResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
         git.current()->save(me);
     }
 
     // Only save parent relations
-    QPtrListIterator<Relation> it(m_dependParentNodes);
+    Q3PtrListIterator<Relation> it(m_dependParentNodes);
     for ( ; it.current(); ++it ) {
         it.current()->save(me);
     }
@@ -499,7 +501,7 @@ void Project::save(QDomElement &element)  const {
     getChildNode(i)->save(me);
 
     // Now we can save relations assuming no tasks have relations outside the project
-    QPtrListIterator<Node> nodes(m_nodes);
+    Q3PtrListIterator<Node> nodes(m_nodes);
     for ( ; nodes.current(); ++nodes ) {
         nodes.current()->saveRelations(me);
     }
@@ -507,7 +509,7 @@ void Project::save(QDomElement &element)  const {
     if (!m_schedules.isEmpty()) {
         QDomElement el = me.ownerDocument().createElement("schedules");
         me.appendChild(el);
-        QIntDictIterator<Schedule> it = m_schedules;
+        Q3IntDictIterator<Schedule> it = m_schedules;
         for (; it.current(); ++it) {
             if (!it.current()->isDeleted() && it.current()->isScheduled()) {
                 QDomElement schs = el.ownerDocument().createElement("schedule");
@@ -521,7 +523,7 @@ void Project::save(QDomElement &element)  const {
 }
 
 void Project::setParentSchedule(Schedule *sch) {
-    QPtrListIterator<Node> it = m_nodes;
+    Q3PtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->setParentSchedule(sch);
     }
@@ -546,7 +548,7 @@ void Project::insertResourceGroup( unsigned int /* index */,
 			      ResourceGroup * /* resource */) {
 }
 
-QPtrList<ResourceGroup> &Project::resourceGroups() {
+Q3PtrList<ResourceGroup> &Project::resourceGroups() {
      return m_resourceGroups;
 }
 
@@ -773,7 +775,7 @@ EffortCostMap Project::plannedEffortCostPrDay(const QDate &/*start*/, const QDat
 Duration Project::plannedEffort() {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->plannedEffort();
     }
@@ -784,7 +786,7 @@ Duration Project::plannedEffort() {
 Duration Project::plannedEffort(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->plannedEffort(date);
     }
@@ -795,7 +797,7 @@ Duration Project::plannedEffort(const QDate &date) {
 Duration Project::plannedEffortTo(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->plannedEffortTo(date);
     }
@@ -806,7 +808,7 @@ Duration Project::plannedEffortTo(const QDate &date) {
 Duration Project::actualEffort() {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->actualEffort();
     }
@@ -817,7 +819,7 @@ Duration Project::actualEffort() {
 Duration Project::actualEffort(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->actualEffort(date);
     }
@@ -828,7 +830,7 @@ Duration Project::actualEffort(const QDate &date) {
 Duration Project::actualEffortTo(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     Duration eff;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->actualEffortTo(date);
     }
@@ -838,7 +840,7 @@ Duration Project::actualEffortTo(const QDate &date) {
 double Project::plannedCost() {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->plannedCost();
     }
@@ -849,7 +851,7 @@ double Project::plannedCost() {
 double Project::plannedCost(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->plannedCost(date);
     }
@@ -860,7 +862,7 @@ double Project::plannedCost(const QDate &date) {
 double Project::plannedCostTo(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->plannedCostTo(date);
     }
@@ -870,7 +872,7 @@ double Project::plannedCostTo(const QDate &date) {
 double Project::actualCost() {
     //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->actualCost();
     }
@@ -881,7 +883,7 @@ double Project::actualCost() {
 double Project::actualCost(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->actualCost(date);
     }
@@ -892,7 +894,7 @@ double Project::actualCost(const QDate &date) {
 double Project::actualCostTo(const QDate &date) {
    //kDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<Node> it(childNodeIterator());
+    Q3PtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->actualCostTo(date);
     }
@@ -908,9 +910,9 @@ Calendar *Project::calendar(const QString id) const {
     return findCalendar(id);
 }
 
-QPtrList<Calendar> Project::calendars() {
-    QPtrList<Calendar> list;
-    QPtrListIterator<Calendar> it = m_calendars;
+Q3PtrList<Calendar> Project::calendars() {
+    Q3PtrList<Calendar> list;
+    Q3PtrListIterator<Calendar> it = m_calendars;
     for (; it.current(); ++it) {
         if (!it.current()->isDeleted()) {
             list.append(it.current());
@@ -985,7 +987,7 @@ void Project::generateWBS(int count, WBSDefinition &def, QString wbs) {
     if (type() == Type_Subproject || def.level0Enabled()) {
         Node::generateWBS(count, def, wbs);
     } else {
-        QPtrListIterator<Node> it = m_nodes;
+        Q3PtrListIterator<Node> it = m_nodes;
         for (int i=0; it.current(); ++it) {
             it.current()->generateWBS(++i, def, m_wbs);
         }
@@ -995,7 +997,7 @@ void Project::generateWBS(int count, WBSDefinition &def, QString wbs) {
 void Project::setCurrentSchedule(long id) {
     setCurrentSchedulePtr(findSchedule(id));
     Node::setCurrentSchedule(id);
-    QDictIterator<Resource> it = resourceIdDict;
+    Q3DictIterator<Resource> it = resourceIdDict;
     for (; it.current(); ++it) {
         it.current()->setCurrentSchedule(id);
     }
@@ -1013,19 +1015,19 @@ MainSchedule *Project::createSchedule(QString name, Schedule::Type type) {
 }
 
 #ifndef NDEBUG
-void Project::printDebug(bool children, QCString indent) {
+void Project::printDebug(bool children, Q3CString indent) {
 
     kDebug()<<indent<<"+ Project node: "<<name()<<endl;
     indent += "!";
-    QPtrListIterator<ResourceGroup> it(resourceGroups());
+    Q3PtrListIterator<ResourceGroup> it(resourceGroups());
     for ( ; it.current(); ++it)
         it.current()->printDebug(indent);
 
     Node::printDebug(children, indent);
 }
-void Project::printCalendarDebug(QCString indent) {
+void Project::printCalendarDebug(Q3CString indent) {
     kDebug()<<indent<<"-------- Calendars debug printout --------"<<endl;
-    QPtrListIterator<Calendar> it = m_calendars;
+    Q3PtrListIterator<Calendar> it = m_calendars;
     for (; it.current(); ++it) {
         it.current()->printDebug(indent + "--");
         kDebug()<<endl;

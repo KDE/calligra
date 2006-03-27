@@ -23,23 +23,26 @@
 #include "kpttask.h"
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <qheader.h>
+#include <q3header.h>
 
 namespace KPlato
 {
 
-TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, QListView *parent, bool highlight)
+TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, Q3ListView *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, r->name(), highlight),
       resource(r) {
       
       setFormat(0, 'f', 1);
     //kDebug()<<k_funcinfo<<endl;
 }
-TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, QListViewItem *p, bool highlight)
+TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, Q3ListViewItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, r->name(), highlight),
       resource(r) {
       
@@ -47,7 +50,7 @@ TaskAppointmentsView::ResourceItem::ResourceItem(Resource *r, QListViewItem *p, 
     //kDebug()<<k_funcinfo<<endl;
 }
 
-TaskAppointmentsView::ResourceItem::ResourceItem(QString text, QListViewItem *parent, bool highlight)
+TaskAppointmentsView::ResourceItem::ResourceItem(QString text, Q3ListViewItem *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       resource(0) {
       
@@ -63,7 +66,7 @@ TaskAppointmentsView::TaskAppointmentsView(QWidget *parent)
     setNameHeader(i18n("Resource"));
     
     
-    QValueList<int> list = sizes();
+    Q3ValueList<int> list = sizes();
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
     list[1] = tot-list[0];
@@ -86,8 +89,8 @@ void TaskAppointmentsView::draw() {
     if (!m_task)
         return;
     
-    QPtrList<Appointment> lst = m_task->appointments();
-    QPtrListIterator<Appointment> it(lst);
+    Q3PtrList<Appointment> lst = m_task->appointments();
+    Q3PtrListIterator<Appointment> it(lst);
     for (; it.current(); ++it) {
         Resource *r = it.current()->resource()->resource();
         TaskAppointmentsView::ResourceItem *item = new TaskAppointmentsView::ResourceItem(r, masterListView());
@@ -120,7 +123,7 @@ void TaskAppointmentsView::slotUpdate() {
         QString df = locale->formatDate(dt, true);
         addSlaveColumn(df);
     }
-    QListViewItemIterator it(masterListView());
+    Q3ListViewItemIterator it(masterListView());
     for (;it.current(); ++it) {
         TaskAppointmentsView::ResourceItem *item = static_cast<TaskAppointmentsView::ResourceItem*>(it.current());
         if (!item) {

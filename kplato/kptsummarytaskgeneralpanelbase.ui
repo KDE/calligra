@@ -122,7 +122,7 @@ This is not limited to persons available in a resource group but can be anyone. 
                                         <cstring>spacer1</cstring>
                                     </property>
                                     <property name="orientation">
-                                        <enum>Horizontal</enum>
+                                        <enum>Qt::Horizontal</enum>
                                     </property>
                                     <property name="sizeType">
                                         <enum>Expanding</enum>
@@ -153,7 +153,7 @@ This is not limited to persons available in a resource group but can be anyone. 
                                         <cstring>idfield</cstring>
                                     </property>
                                     <property name="focusPolicy">
-                                        <enum>WheelFocus</enum>
+                                        <enum>Qt::WheelFocus</enum>
                                     </property>
                                 </widget>
                             </hbox>
@@ -163,7 +163,7 @@ This is not limited to persons available in a resource group but can be anyone. 
                                 <cstring>namefield</cstring>
                             </property>
                             <property name="focusPolicy">
-                                <enum>WheelFocus</enum>
+                                <enum>Qt::WheelFocus</enum>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>The name of the Task.</string>
@@ -182,7 +182,7 @@ This is not limited to persons available in a resource group but can be anyone. 
                                         <cstring>leaderfield</cstring>
                                     </property>
                                     <property name="focusPolicy">
-                                        <enum>WheelFocus</enum>
+                                        <enum>Qt::WheelFocus</enum>
                                     </property>
                                     <property name="whatsThis" stdset="0">
                                         <string>The person responsible for this task.

@@ -122,7 +122,7 @@
                                 <string>From:</string>
                             </property>
                             <property name="alignment">
-                                <set>AlignTop</set>
+                                <set>Qt::AlignTop</set>
                             </property>
                         </widget>
                         <widget class="QLabel" row="1" column="0">
@@ -141,7 +141,7 @@
                                 <string>To:</string>
                             </property>
                             <property name="alignment">
-                                <set>AlignTop</set>
+                                <set>Qt::AlignTop</set>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="1">
@@ -152,7 +152,7 @@
                                 <string>Task 1</string>
                             </property>
                             <property name="alignment">
-                                <set>WordBreak|AlignTop</set>
+                                <set>Qt::TextWordWrap|Qt::AlignTop</set>
                             </property>
                         </widget>
                         <widget class="QLabel" row="1" column="1">
@@ -163,7 +163,7 @@
                                 <string>Task 2</string>
                             </property>
                             <property name="alignment">
-                                <set>WordBreak|AlignTop</set>
+                                <set>Qt::TextWordWrap|Qt::AlignTop</set>
                             </property>
                         </widget>
                     </grid>
@@ -221,7 +221,7 @@
                                 <string>Lag:</string>
                             </property>
                             <property name="alignment">
-                                <set>AlignBottom</set>
+                                <set>Qt::AlignBottom</set>
                             </property>
                         </widget>
                         <widget class="KPlato::DurationWidget">

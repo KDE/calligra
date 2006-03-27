@@ -21,8 +21,8 @@
 #define KPTACCOUNT_H
 
 #include <qdatetime.h>
-#include <qdict.h>
-#include <qptrlist.h>
+#include <q3dict.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 
 #include "kpteffortcostmap.h"
@@ -72,7 +72,7 @@ public:
     bool load(QDomElement &element, const Project &project);
     void save(QDomElement &element) const;
     
-    const QPtrList<Account> &accountList() const { return m_accountList; }
+    const Q3PtrList<Account> &accountList() const { return m_accountList; }
     
     Account *findAccount() const { return findAccount(m_name); }
     Account *findAccount(const QString &id) const;
@@ -130,7 +130,7 @@ public:
     };
     
     void append(const CostPlace *cp) { m_costPlaces.append(cp); }
-    const QPtrList<CostPlace> &costPlaces() const {return m_costPlaces; }
+    const Q3PtrList<CostPlace> &costPlaces() const {return m_costPlaces; }
     Account::CostPlace *findCostPlace(const Node &node) const;
     CostPlace *findRunning(const Node &node) const;
     void removeRunning(const Node &node);
@@ -147,8 +147,8 @@ private:
     QString m_description;
     Accounts *m_list;
     Account *m_parent;
-    QPtrList<Account> m_accountList;
-    QPtrList<CostPlace> m_costPlaces;
+    Q3PtrList<Account> m_accountList;
+    Q3PtrList<CostPlace> m_costPlaces;
     
 #ifndef NDEBUG
 public:
@@ -156,8 +156,8 @@ public:
 #endif
 };
 
-typedef QPtrList<Account> AccountList;
-typedef QPtrListIterator<Account> AccountListIterator;
+typedef Q3PtrList<Account> AccountList;
+typedef Q3PtrListIterator<Account> AccountListIterator;
 
 /**
  *  Accounts administrates all accounts.
@@ -198,7 +198,7 @@ public:
 private:
     Project &m_project;
     AccountList m_accountList;
-    QDict<Account> m_idDict;
+    Q3Dict<Account> m_idDict;
 
     Account *m_defaultAccount;
 

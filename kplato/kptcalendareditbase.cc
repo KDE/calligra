@@ -23,17 +23,21 @@
 
 #include <qvariant.h>
 #include <qpushbutton.h>
-#include <qgroupbox.h>
+#include <q3groupbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3HBoxLayout>
+#include <Q3GridLayout>
 #include <kptcalendarpanel.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qbuttongroup.h>
-#include <qheader.h>
-#include <qlistview.h>
-#include <qdatetimeedit.h>
+#include <q3buttongroup.h>
+#include <q3header.h>
+#include <q3listview.h>
+#include <q3datetimeedit.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 
 namespace KPlato
 {
@@ -42,32 +46,32 @@ namespace KPlato
  *  Constructs a CalendarEditBase as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
-CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, WFlags fl )
+CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, Qt::WFlags fl )
     : QWidget( parent, name, fl )
 {
     if ( !name )
 	setName( "CalendarEditBase" );
-    CalendarEditBaseLayout = new QHBoxLayout( this, 0, 0, "CalendarEditBaseLayout");
+    CalendarEditBaseLayout = new Q3HBoxLayout( this, 0, 0, "CalendarEditBaseLayout");
 
-    groupBox2 = new QGroupBox( this, "groupBox2" );
+    groupBox2 = new Q3GroupBox( this, "groupBox2" );
     groupBox2->setColumnLayout(0, Qt::Vertical );
     groupBox2->layout()->setSpacing( 6 );
     groupBox2->layout()->setMargin( 6 );
-    groupBox2Layout = new QGridLayout( groupBox2->layout() );
+    groupBox2Layout = new Q3GridLayout( groupBox2->layout() );
     groupBox2Layout->setAlignment( Qt::AlignTop );
 
     calendarPanel = new CalendarPanel( groupBox2, "calendarPanel" );
 
     groupBox2Layout->addWidget( calendarPanel, 1, 0 );
 
-    day = new QButtonGroup( groupBox2, "day" );
+    day = new Q3ButtonGroup( groupBox2, "day" );
     day->setColumnLayout(0, Qt::Vertical );
     day->layout()->setSpacing( 6 );
     day->layout()->setMargin( 6 );
-    dayLayout = new QVBoxLayout( day->layout() );
+    dayLayout = new Q3VBoxLayout( day->layout() );
     dayLayout->setAlignment( Qt::AlignTop );
 
-    layout8 = new QHBoxLayout( 0, 0, 6, "layout8");
+    layout8 = new Q3HBoxLayout( 0, 0, 6, "layout8");
 
     state = new QComboBox( FALSE, day, "state" );
     layout8->addWidget( state );
@@ -76,27 +80,27 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, WFlags fl
     layout8->addWidget( bApply );
     dayLayout->addLayout( layout8 );
 
-    groupBox4 = new QGroupBox( day, "groupBox4" );
+    groupBox4 = new Q3GroupBox( day, "groupBox4" );
     groupBox4->setColumnLayout(0, Qt::Vertical );
     groupBox4->layout()->setSpacing( 6 );
     groupBox4->layout()->setMargin( 6 );
-    groupBox4Layout = new QVBoxLayout( groupBox4->layout() );
+    groupBox4Layout = new Q3VBoxLayout( groupBox4->layout() );
     groupBox4Layout->setAlignment( Qt::AlignTop );
 
-    intervalList = new QListView( groupBox4, "intervalList" );
+    intervalList = new Q3ListView( groupBox4, "intervalList" );
     intervalList->addColumn( tr2i18n( "Work Interval" ) );
     groupBox4Layout->addWidget( intervalList );
 
-    layout6 = new QHBoxLayout( 0, 0, 6, "layout6");
+    layout6 = new Q3HBoxLayout( 0, 0, 6, "layout6");
 
-    startTime = new QTimeEdit( groupBox4, "startTime" );
+    startTime = new Q3TimeEdit( groupBox4, "startTime" );
     layout6->addWidget( startTime );
 
-    endTime = new QTimeEdit( groupBox4, "endTime" );
+    endTime = new Q3TimeEdit( groupBox4, "endTime" );
     layout6->addWidget( endTime );
     groupBox4Layout->addLayout( layout6 );
 
-    layout5 = new QHBoxLayout( 0, 0, 6, "layout5");
+    layout5 = new Q3HBoxLayout( 0, 0, 6, "layout5");
 
     bClear = new QPushButton( groupBox4, "bClear" );
     layout5->addWidget( bClear );

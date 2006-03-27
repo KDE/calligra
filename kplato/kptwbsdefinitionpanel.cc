@@ -28,12 +28,12 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qmemarray.h>
+#include <q3groupbox.h>
+#include <q3memarray.h>
 #include <qpushbutton.h>
 #include <qstringlist.h>
 #include <qspinbox.h>
-#include <qtable.h>
+#include <q3table.h>
 
 namespace KPlato
 {
@@ -58,7 +58,7 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     QMap<int, WBSDefinition::CodeDef>::const_iterator it;
     for (it = lev.begin(); it != lev.end(); ++it) {
         levelsTable->verticalHeader()->setLabel(i, QString("%1").arg(it.key()));
-        QComboTableItem *item = new QComboTableItem(levelsTable, codeList, true);
+        Q3ComboTableItem *item = new Q3ComboTableItem(levelsTable, codeList, true);
         item->setCurrentItem(it.data().code);
         levelsTable->setItem(i, 0, item);
         levelsTable->setText(i, 1, it.data().separator);
@@ -118,7 +118,7 @@ void WBSDefinitionPanel::slotSelectionChanged() {
 }
 
 void WBSDefinitionPanel::slotRemoveBtnClicked() {
-    QMemArray<int> rows;
+    Q3MemArray<int> rows;
     for (int i=0; i < levelsTable->numRows(); ++i) {
         if (levelsTable->isRowSelected(i)) {
             rows.resize(rows.size()+1);
@@ -142,7 +142,7 @@ void WBSDefinitionPanel::slotAddBtnClicked() {
     i++;
     levelsTable->insertRows(i);
     levelsTable->verticalHeader()->setLabel(i, QString("%1").arg(level->value()));
-    QComboTableItem *item = new QComboTableItem(levelsTable, m_def.codeList(), true);
+    Q3ComboTableItem *item = new Q3ComboTableItem(levelsTable, m_def.codeList(), true);
     levelsTable->setItem(i, 0, item);
     levelsTable->clearSelection();
     levelsTable->selectCells(i, 0, i, 0);

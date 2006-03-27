@@ -30,11 +30,14 @@
 #include "kptdatetime.h"
 #include "kptcontext.h"
 
-#include <qheader.h>
-#include <qpopupmenu.h>
+#include <q3header.h>
+#include <q3popupmenu.h>
 #include <qpainter.h>
-#include <qpaintdevicemetrics.h>
+#include <q3paintdevicemetrics.h>
 #include <qstyle.h>
+//Added by qt3to4:
+#include <Q3PtrList>
+#include <Q3ValueList>
 
 #include <k3listview.h>
 #include <klocale.h>
@@ -61,7 +64,7 @@ public:
         QBrush bg(bgc);
         p->setBackgroundMode(Qt::OpaqueMode);
         p->setBackgroundColor(bgc);
-        QHeader *head = header();
+        Q3Header *head = header();
         int offset = 0;
         QRect sr;
         // Header shall always be at top/left on page
@@ -95,9 +98,9 @@ public:
         p->restore();
     }
     int calculateY(int ymin, int ymax) const {
-        QPtrList<ResListView::DrawableItem> drawables;
+        Q3PtrList<ResListView::DrawableItem> drawables;
         drawables.setAutoDelete(true);
-        QListViewItem *child = firstChild();
+        Q3ListViewItem *child = firstChild();
         int level = 0;
         int ypos = 0;
         for (; child; child = child->nextSibling()) {
@@ -113,13 +116,13 @@ public:
     }
     class DrawableItem {
     public:
-        DrawableItem(int level, int ypos, QListViewItem *item ) { y = ypos; l = level; i = item; };
+        DrawableItem(int level, int ypos, Q3ListViewItem *item ) { y = ypos; l = level; i = item; };
         int y;
         int l;
-        QListViewItem * i;
+        Q3ListViewItem * i;
     };
 protected:
-    int buildDrawables(QPtrList<ResListView::DrawableItem> &lst, int level, int ypos, QListViewItem *item, int ymin, int ymax) const {
+    int buildDrawables(Q3PtrList<ResListView::DrawableItem> &lst, int level, int ypos, Q3ListViewItem *item, int ymin, int ymax) const {
         int y = ypos;
         int ih = item->height();
         if (y < ymin && y+ih > ymin) {
@@ -132,7 +135,7 @@ protected:
         }
         y += ih;
         if (item->isOpen()) {
-            QListViewItem *child = item->firstChild();
+            Q3ListViewItem *child = item->firstChild();
             for (; child; child = child->nextSibling()) {
                 y = buildDrawables(lst, level+1, y, child, ymin, ymax);
             }
@@ -149,9 +152,9 @@ protected:
             return;
         }
         //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
-        QPtrList<ResListView::DrawableItem> drawables;
+        Q3PtrList<ResListView::DrawableItem> drawables;
         drawables.setAutoDelete(true);
-        QListViewItem *child = firstChild();
+        Q3ListViewItem *child = firstChild();
         int level = 0;
         int ypos = 0;
         for (; child; child = child->nextSibling()) {
@@ -160,7 +163,7 @@ protected:
         
         p->setFont( font() );
     
-        QPtrListIterator<ResListView::DrawableItem> it(drawables);
+        Q3PtrListIterator<ResListView::DrawableItem> it(drawables);
     
         QRect r;
         int fx = -1, x, fc = 0, lc = 0;
@@ -280,7 +283,7 @@ protected:
 
 class ResourceItemPrivate : public K3ListViewItem {
 public:
-    ResourceItemPrivate(Resource *r, QListViewItem *parent)
+    ResourceItemPrivate(Resource *r, Q3ListViewItem *parent)
         : K3ListViewItem(parent, r->name()),
         resource(r) {}
 
@@ -304,13 +307,13 @@ private:
 
 class NodeItemPrivate : public K3ListViewItem {
 public:
-    NodeItemPrivate(Task *n, QListView *parent)
+    NodeItemPrivate(Task *n, Q3ListView *parent)
     : K3ListViewItem(parent, n->name()),
       node(n) {
         init();
     }
 
-    NodeItemPrivate(QString name, QListView *parent)
+    NodeItemPrivate(QString name, Q3ListView *parent)
     : K3ListViewItem(parent, name),
       node(0) {
         init();
@@ -353,7 +356,7 @@ private:
 
 class AppointmentItem : public K3ListViewItem {
 public:
-    AppointmentItem(Appointment *a, QDate &d, QListViewItem *parent)
+    AppointmentItem(Appointment *a, QDate &d, Q3ListViewItem *parent)
         : K3ListViewItem(parent),
         appointment(a),
         date(d) {}
@@ -372,7 +375,7 @@ ResourceView::ResourceView(View *view, QWidget *parent)
     m_selectedItem(0),
     m_currentNode(0)
 {
-    setOrientation(QSplitter::Vertical);
+    setOrientation(Qt::Vertical);
 
     resList = new ResListView(this, "Resource list");
     resList->setItemMargin(2);
@@ -381,23 +384,23 @@ ResourceView::ResourceView(View *view, QWidget *parent)
 #endif
     resList->setRootIsDecorated(true);
     resList->addColumn(i18n("Name"));
-    resList->setColumnAlignment(1, AlignHCenter);
+    resList->setColumnAlignment(1, Qt::AlignHCenter);
     resList->addColumn(i18n("Type"));
-    resList->setColumnAlignment(2, AlignHCenter);
+    resList->setColumnAlignment(2, Qt::AlignHCenter);
     resList->addColumn(i18n("Initials"));
-    resList->setColumnAlignment(3, AlignLeft);
+    resList->setColumnAlignment(3, Qt::AlignLeft);
     resList->addColumn(i18n("Email"));
-    resList->setColumnAlignment(4, AlignHCenter);
+    resList->setColumnAlignment(4, Qt::AlignHCenter);
     resList->addColumn(i18n("Calendar Name"));
-    resList->setColumnAlignment(5, AlignRight);
+    resList->setColumnAlignment(5, Qt::AlignRight);
     resList->addColumn(i18n("Available From"));
-    resList->setColumnAlignment(6, AlignRight);
+    resList->setColumnAlignment(6, Qt::AlignRight);
     resList->addColumn(i18n("Available Until"));
-    resList->setColumnAlignment(7, AlignRight);
+    resList->setColumnAlignment(7, Qt::AlignRight);
     resList->addColumn(i18n("%"));
-    resList->setColumnAlignment(8, AlignRight);
+    resList->setColumnAlignment(8, Qt::AlignRight);
     resList->addColumn(i18n("Normal Rate"));
-    resList->setColumnAlignment(9, AlignRight);
+    resList->setColumnAlignment(9, Qt::AlignRight);
     resList->addColumn(i18n("Overtime Rate"));
 
     m_showAppointments = false;
@@ -407,9 +410,9 @@ ResourceView::ResourceView(View *view, QWidget *parent)
 
     //connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
     connect(resList, SIGNAL(selectionChanged()), SLOT(resSelectionChanged()));
-    connect(resList, SIGNAL( contextMenuRequested(QListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(QListViewItem*, const QPoint&, int)));
+    connect(resList, SIGNAL( contextMenuRequested(Q3ListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(Q3ListViewItem*, const QPoint&, int)));
     //NOTE: using doubleClicked, not executed() to be consistent with ganttview
-    connect(resList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), SLOT(slotItemDoubleClicked(QListViewItem*)));
+    connect(resList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), SLOT(slotItemDoubleClicked(Q3ListViewItem*)));
 
 }
 
@@ -430,7 +433,7 @@ void ResourceView::draw(Project &project)
     m_appview->clear();
     m_selectedItem = 0;
 
-    QPtrListIterator<ResourceGroup> it(project.resourceGroups());
+    Q3PtrListIterator<ResourceGroup> it(project.resourceGroups());
     for (; it.current(); ++it) {
         K3ListViewItem *item = new K3ListViewItem(resList, it.current()->name());
         item->setOpen(true);
@@ -444,10 +447,10 @@ void ResourceView::draw(Project &project)
 }
 
 
-void ResourceView::drawResources(const Project &proj, QListViewItem *parent, ResourceGroup *group)
+void ResourceView::drawResources(const Project &proj, Q3ListViewItem *parent, ResourceGroup *group)
 {
     //kDebug()<<k_funcinfo<<"group: "<<group->name()<<" ("<<group<<")"<<endl;
-    QPtrListIterator<Resource> it(group->resources());
+    Q3PtrListIterator<Resource> it(group->resources());
     for (; it.current(); ++it) {
         Resource *r = it.current();
         ResourceItemPrivate *item = new ResourceItemPrivate(r, parent);
@@ -509,7 +512,7 @@ void ResourceView::resSelectionChanged() {
     resSelectionChanged(resList->selectedItem());
 }
 
-void ResourceView::resSelectionChanged(QListViewItem *item) {
+void ResourceView::resSelectionChanged(Q3ListViewItem *item) {
     //kDebug()<<k_funcinfo<<item<<endl;
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
@@ -527,17 +530,17 @@ void ResourceView::resSelectionChanged(QListViewItem *item) {
 }
 
 
-void ResourceView::slotItemDoubleClicked(QListViewItem*) {
+void ResourceView::slotItemDoubleClicked(Q3ListViewItem*) {
     emit itemDoubleClicked();
 }
 
-void ResourceView::popupMenuRequested(QListViewItem* item, const QPoint & pos, int)
+void ResourceView::popupMenuRequested(Q3ListViewItem* item, const QPoint & pos, int)
 {
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
         if (ritem != m_selectedItem)
             resSelectionChanged(ritem);
-        QPopupMenu *menu = m_mainview->popupMenu("resource_popup");
+        Q3PopupMenu *menu = m_mainview->popupMenu("resource_popup");
         if (menu)
         {
             menu->exec(pos);
@@ -548,8 +551,8 @@ void ResourceView::popupMenuRequested(QListViewItem* item, const QPoint & pos, i
     }
 }
 
-QValueList<int> ResourceView::listOffsets(int pageHeight) const {
-    QValueList<int> lst;
+Q3ValueList<int> ResourceView::listOffsets(int pageHeight) const {
+    Q3ValueList<int> lst;
     int hh = resList->headerHeight();
     int ph = pageHeight-hh;
     int lh = resList->contentsHeight() - hh; // list height ex header.
@@ -565,7 +568,7 @@ QValueList<int> ResourceView::listOffsets(int pageHeight) const {
 
 void ResourceView::print(KPrinter &printer) {
     //kDebug()<<k_funcinfo<<endl;
-    QPaintDeviceMetrics m = QPaintDeviceMetrics ( &printer );
+    Q3PaintDeviceMetrics m = Q3PaintDeviceMetrics ( &printer );
     uint top, left, bottom, right;
     printer.margins(&top, &left, &bottom, &right);
     //kDebug()<<m.width()<<"x"<<m.height()<<" : "<<top<<", "<<left<<", "<<bottom<<", "<<right<<" : "<<size()<<endl;
@@ -584,7 +587,7 @@ void ResourceView::print(KPrinter &printer) {
         p.scale(scale, scale);
     }
     int ph = preg.height()-resList->headerHeight();
-    QValueList<int> lst = listOffsets(preg.height());
+    Q3ValueList<int> lst = listOffsets(preg.height());
     for (int i=0; i < lst.count(); ++i) {
         //kDebug()<<"Page "<<i+1<<": "<<"scale="<<scale<<" "<<lst[i]<<" : "<<cw<<"x"<<ch<<endl;
         if (i > 0) {

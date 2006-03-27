@@ -123,7 +123,7 @@
                                 <cstring>nameEdit</cstring>
                             </property>
                             <property name="focusPolicy">
-                                <enum>WheelFocus</enum>
+                                <enum>Qt::WheelFocus</enum>
                             </property>
                             <property name="text">
                                 <string></string>
@@ -220,7 +220,7 @@
                         <cstring>availableUntil</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>WheelFocus</enum>
+                        <enum>Qt::WheelFocus</enum>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="2">
@@ -242,7 +242,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
-                        <enum>WheelFocus</enum>
+                        <enum>Qt::WheelFocus</enum>
                     </property>
                     <property name="suffix">
                         <string>%</string>
@@ -256,7 +256,7 @@
                         <cstring>spacer2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -284,7 +284,7 @@
                         <cstring>availableFrom</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>WheelFocus</enum>
+                        <enum>Qt::WheelFocus</enum>
                     </property>
                 </widget>
             </grid>
@@ -335,7 +335,7 @@
                         <cstring>rateEdit</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>WheelFocus</enum>
+                        <enum>Qt::WheelFocus</enum>
                     </property>
                 </widget>
                 <widget class="QLineEdit" row="1" column="1">
@@ -343,7 +343,7 @@
                         <cstring>overtimeEdit</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>WheelFocus</enum>
+                        <enum>Qt::WheelFocus</enum>
                     </property>
                     <property name="text">
                         <string></string>
@@ -354,7 +354,7 @@
                         <cstring>spacer10</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

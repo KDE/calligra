@@ -20,12 +20,12 @@
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qlabel.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qlineedit.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <qtabwidget.h>
-#include <qtextbrowser.h>
+#include <q3textbrowser.h>
 
 #include <kdatepicker.h>
 #include <klocale.h>

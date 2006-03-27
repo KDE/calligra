@@ -21,6 +21,8 @@
 #define KPTACCOUNTSVIEW_H
 
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QLabel>
 
 #include <k3listview.h>
 
@@ -30,10 +32,10 @@
 #include "kptdoublelistviewbase.h"
 
 class QComboBox;
-class QDateEdit;
+class Q3DateEdit;
 class QPushButton;
 class QSplitter;
-class QListViewItem;
+class Q3ListViewItem;
 class QLabel;
 class QPushButton;
 
@@ -83,15 +85,15 @@ protected slots:
     void slotUpdate();
     
 protected:
-    void getContextClosedItems(Context::Accountsview &context, QListViewItem *item) const;
+    void getContextClosedItems(Context::Accountsview &context, Q3ListViewItem *item) const;
     void setContextClosedItems(Context::Accountsview &context);
 
 private:
     class AccountItem : public DoubleListViewBase::MasterListItem {
     public:
-        AccountItem(Account *a, QListView *parent, bool highlight=false);
-        AccountItem(Account *a, QListViewItem *parent, bool highlight=false);
-        AccountItem(QString text, Account *a, QListViewItem *parent, bool _highlight=false);
+        AccountItem(Account *a, Q3ListView *parent, bool highlight=false);
+        AccountItem(Account *a, Q3ListViewItem *parent, bool highlight=false);
+        AccountItem(QString text, Account *a, Q3ListViewItem *parent, bool _highlight=false);
         
         void add(int col, const QDate &date, const EffortCost &ec);
         

@@ -26,11 +26,13 @@
 #include "kptdatetime.h"
 #include "kptschedule.h"
 
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qrect.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
-#include <qcanvas.h>
+#include <q3canvas.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <vector>
 
@@ -100,7 +102,7 @@ public:
     // 2) cutting 3) building 4) painting.
     Node *getParent() const { return m_parent; }
 	void setParent( Node* newParent ) { m_parent = newParent;}
-    const QPtrList<Node> &childNodeIterator() const { return m_nodes; }
+    const Q3PtrList<Node> &childNodeIterator() const { return m_nodes; }
     int numChildren() const { return m_nodes.count(); }
     virtual void addChildNode(Node *node, Node *after=0);
     virtual void insertChildNode(unsigned int index, Node *node);
@@ -131,7 +133,7 @@ public:
     Relation *getDependChildNode( int number) {
 	return m_dependChildNodes.at(number);
     }
-    QPtrList<Relation> &dependChildNodes() { return m_dependChildNodes; }
+    Q3PtrList<Relation> &dependChildNodes() { return m_dependChildNodes; }
 
     /**
      * Takes the relation rel from this node only.
@@ -154,7 +156,7 @@ public:
     Relation *getDependParentNode( int number) {
 	return m_dependParentNodes.at(number);
     }
-    QPtrList<Relation> &dependParentNodes() { return m_dependParentNodes; }
+    Q3PtrList<Relation> &dependParentNodes() { return m_dependParentNodes; }
     
     /**
      * Takes the relation rel from this node only.
@@ -319,7 +321,7 @@ public:
     /// Cost performance index
     double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) { return 0.0; }
     
-    virtual void initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks) = 0;
+    virtual void initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks) = 0;
     virtual DateTime calculateForward(int /*use*/) = 0;
     virtual DateTime calculateBackward(int /*use*/) = 0;
     virtual DateTime scheduleForward(const DateTime &, int /*use*/) = 0;
@@ -375,15 +377,15 @@ public:
     /// Check if this node has any dependent parent nodes
     virtual bool isStartNode() const;
     virtual void clearProxyRelations() {}
-    virtual void addParentProxyRelations(QPtrList<Relation> &) {}
-    virtual void addChildProxyRelations(QPtrList<Relation> &) {}
+    virtual void addParentProxyRelations(Q3PtrList<Relation> &) {}
+    virtual void addChildProxyRelations(Q3PtrList<Relation> &) {}
     virtual void addParentProxyRelation(Node *, const Relation *) {}
     virtual void addChildProxyRelation(Node *, const Relation *) {}
 
     /// Save appointments for schedule with id
     virtual void saveAppointments(QDomElement &element, long id) const;
     ///Return the list of appointments for current schedule.
-    QPtrList<Appointment> appointments();
+    Q3PtrList<Appointment> appointments();
     /// Return appointment this node have with resource
 //    Appointment *findAppointment(Resource *resource);
     /// Adds appointment to this node only (not to resource)
@@ -461,7 +463,7 @@ public:
     // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
     void setCurrentSchedulePtr(Schedule *schedule) { m_currentSchedule = schedule; }
     
-    QIntDict<Schedule> &schedules() { return m_schedules; }
+    Q3IntDict<Schedule> &schedules() { return m_schedules; }
     /// Find schedule matching name and type. Does not return deleted schedule.
     Schedule *findSchedule(const QString name, const Schedule::Type type) const;
     /// Find schedule matching type.  Does not return deleted schedule.
@@ -488,9 +490,9 @@ public:
         { return m_currentSchedule ? m_currentSchedule->endTime : DateTime(); }
 
 protected:
-    QPtrList<Node> m_nodes;
-    QPtrList<Relation> m_dependChildNodes;
-    QPtrList<Relation> m_dependParentNodes;
+    Q3PtrList<Node> m_nodes;
+    Q3PtrList<Relation> m_dependChildNodes;
+    Q3PtrList<Relation> m_dependParentNodes;
     Node *m_parent;
 
     QString m_id; // unique id
@@ -523,7 +525,7 @@ protected:
     QDate m_dateOnlyEndDate;
     Duration m_dateOnlyDuration;
  
-    QIntDict<Schedule> m_schedules;
+    Q3IntDict<Schedule> m_schedules;
     Schedule *m_currentSchedule;
 
     QString m_wbs;
@@ -539,7 +541,7 @@ private:
         
 #ifndef NDEBUG
 public:
-    virtual void printDebug(bool children, QCString indent);
+    virtual void printDebug(bool children, Q3CString indent);
 #endif
 
 };
@@ -627,7 +629,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QCString indent);
+    void printDebug(Q3CString indent);
 #endif
 
 };

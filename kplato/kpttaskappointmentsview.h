@@ -23,12 +23,14 @@
 #include "kptcontext.h"
 #include "kptdoublelistviewbase.h"
 #include "kpteffortcostmap.h"
+//Added by qt3to4:
+#include <QLabel>
 
 class QComboBox;
-class QDateEdit;
+class Q3DateEdit;
 class QPushButton;
 class QSplitter;
-class QListViewItem;
+class Q3ListViewItem;
 class QLabel;
 class QPushButton;
 
@@ -75,9 +77,9 @@ protected slots:
 private:
     class ResourceItem : public DoubleListViewBase::MasterListItem {
     public:
-        ResourceItem(Resource *r, QListView *parent, bool highlight=false);
-        ResourceItem(Resource *r, QListViewItem *parent, bool highlight=false);
-        ResourceItem(QString text, QListViewItem *parent, bool highlight=false);
+        ResourceItem(Resource *r, Q3ListView *parent, bool highlight=false);
+        ResourceItem(Resource *r, Q3ListViewItem *parent, bool highlight=false);
+        ResourceItem(QString text, Q3ListViewItem *parent, bool highlight=false);
         
         Resource *resource;
         EffortCostMap effortMap;

@@ -42,8 +42,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qdatetime.h> 
-#include <qdatetimeedit.h> 
-#include <qgroupbox.h>
+#include <q3datetimeedit.h> 
+#include <q3groupbox.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
 

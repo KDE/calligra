@@ -30,8 +30,8 @@
 #include "kptresource.h"
 
 #include <qmap.h>
-#include <qptrlist.h>
-#include <qdict.h>
+#include <q3ptrlist.h>
+#include <q3dict.h>
 
 #include <k3listview.h>
 #include <klocale.h>
@@ -90,7 +90,7 @@ public:
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) const;
 
-    QPtrList<ResourceGroup> &resourceGroups();
+    Q3PtrList<ResourceGroup> &resourceGroups();
     virtual void addResourceGroup(ResourceGroup *resource);
     virtual void insertResourceGroup(unsigned int index, ResourceGroup *resource);
     void removeResourceGroup(ResourceGroup *resource);
@@ -150,7 +150,7 @@ public:
     virtual double actualCostTo(const QDate &date);
 
     Calendar *defaultCalendar() { return m_defaultCalendar; }
-    QPtrList<Calendar> calendars();
+    Q3PtrList<Calendar> calendars();
     void addCalendar(Calendar *calendar);
     /// Returns the calendar with identity id.
     Calendar *calendar(const QString id) const;
@@ -167,7 +167,7 @@ public:
     /// Check if node par can be linked to node child.
     bool legalToLink(Node *par, Node *child);
     
-    virtual const QDict<Node> &nodeDict() { return nodeIdDict; }
+    virtual const Q3Dict<Node> &nodeDict() { return nodeIdDict; }
     
     /// Find the node with identity id
     virtual Node *findNode(const QString &id) const 
@@ -231,10 +231,10 @@ public:
     
 protected:
     Accounts m_accounts;
-    QPtrList<ResourceGroup> m_resourceGroups;
+    Q3PtrList<ResourceGroup> m_resourceGroups;
 
     Calendar *m_defaultCalendar;
-    QPtrList<Calendar> m_calendars;
+    Q3PtrList<Calendar> m_calendars;
 
     StandardWorktime *m_standardWorktime;
         
@@ -245,7 +245,7 @@ protected:
     void adjustSummarytask();
 
     void initiateCalculation(Schedule &sch);
-    void initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks);
+    void initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks);
 
     bool legalParents(Node *par, Node *child);
     bool legalChildren(Node *par, Node *child);
@@ -253,22 +253,22 @@ protected:
 private:
     void init();
     
-    QPtrList<Node> m_startNodes;
-    QPtrList<Node> m_endNodes;
-    QPtrList<Node> m_summarytasks;
+    Q3PtrList<Node> m_startNodes;
+    Q3PtrList<Node> m_endNodes;
+    Q3PtrList<Node> m_summarytasks;
     
     bool m_baselined;
     
-    QDict<ResourceGroup> resourceGroupIdDict;
-    QDict<Resource> resourceIdDict;
-    QDict<Node> nodeIdDict;        
-    QDict<Calendar> calendarIdDict;
+    Q3Dict<ResourceGroup> resourceGroupIdDict;
+    Q3Dict<Resource> resourceIdDict;
+    Q3Dict<Node> nodeIdDict;        
+    Q3Dict<Calendar> calendarIdDict;
     
 #ifndef NDEBUG
-#include <qcstring.h>
+#include <q3cstring.h>
 public:
-    void printDebug(bool children, QCString indent);
-    void printCalendarDebug(QCString indent="");
+    void printDebug(bool children, Q3CString indent);
+    void printCalendarDebug(Q3CString indent="");
 #ifdef DEBUGPERT
     static void pert_test();
     static void printTree(Node *n, QString s);

@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kptcommand.h>
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qstring.h>
@@ -36,7 +36,7 @@
 #include <qvalidator.h>
 #include <qcombobox.h>
 #include <qdatetime.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 
 namespace KPlato
 {
@@ -62,17 +62,17 @@ void ResourceTableItem::update() {
     //kDebug()<<k_funcinfo<<m_resource->name()<<" checked="<<m_checked<<endl;
 }
 
-void ResourceTableItem::insert(QTable *table, int row) {
+void ResourceTableItem::insert(Q3Table *table, int row) {
     //kDebug()<<k_funcinfo<<endl;
-    m_checkitem = new QCheckTableItem(table, m_resource->name());
+    m_checkitem = new Q3CheckTableItem(table, m_resource->name());
     m_checkitem->setChecked(m_checked);
     table->setItem(row, 0, m_checkitem);
     
     //kDebug()<<k_funcinfo<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked<<endl;
 }
 
-GroupLVItem::GroupLVItem(QListView *parent, ResourceGroup *group, Task &task)
-    : QListViewItem(parent, group->name(), QString("%1").arg(group->units())),
+GroupLVItem::GroupLVItem(Q3ListView *parent, ResourceGroup *group, Task &task)
+    : Q3ListViewItem(parent, group->name(), QString("%1").arg(group->units())),
       m_group(group),
       m_units(0)
 {
@@ -81,7 +81,7 @@ GroupLVItem::GroupLVItem(QListView *parent, ResourceGroup *group, Task &task)
     if (m_request) {
         m_units = m_request->units();
     }
-    QPtrListIterator<Resource> it(group->resources());
+    Q3PtrListIterator<Resource> it(group->resources());
     for (; it.current(); ++it) {
         //kDebug()<<k_funcinfo<<"resource="<<it.current()->name()<<endl;
         ResourceRequest *req=0;
@@ -99,13 +99,13 @@ GroupLVItem::~GroupLVItem() {
 }
 
 void GroupLVItem::update() {
-    QPtrListIterator<ResourceTableItem> it(m_resources);
+    Q3PtrListIterator<ResourceTableItem> it(m_resources);
     for (; it.current(); ++it) {
         it.current()->update();
     }
 }
 
-void GroupLVItem::insert(QTable *table) {
+void GroupLVItem::insert(Q3Table *table) {
 
     // clear the table, must be a better way!
     for (int i = table->numRows(); i > 0; --i)
@@ -113,11 +113,11 @@ void GroupLVItem::insert(QTable *table) {
 
     if (m_group->numResources() == 0) {
         table->setNumRows(1);
-        table->setItem(0, 0, new QCheckTableItem(table,i18n("None")));
-        table->setItem(0, 1, new QComboTableItem(table,i18n("None")));
+        table->setItem(0, 0, new Q3CheckTableItem(table,i18n("None")));
+        table->setItem(0, 1, new Q3ComboTableItem(table,i18n("None")));
     } else {
         table->setNumRows(m_group->numResources());
-        QPtrListIterator<ResourceTableItem> it(m_resources);
+        Q3PtrListIterator<ResourceTableItem> it(m_resources);
         for (int i = 0; it.current(); ++it, ++i) {
             it.current()->insert(table, i);
         }
@@ -128,7 +128,7 @@ void GroupLVItem::insert(QTable *table) {
 int GroupLVItem::numRequests() {
     //kDebug()<<k_funcinfo<<endl;
     int value = m_units;
-    QPtrListIterator<ResourceTableItem> it(m_resources);
+    Q3PtrListIterator<ResourceTableItem> it(m_resources);
     for (; it.current(); ++it) {
         value += it.current()->numRequests();
     }
@@ -137,7 +137,7 @@ int GroupLVItem::numRequests() {
 
 bool GroupLVItem::isNull() const {
     //kDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<ResourceTableItem> it(m_resources);
+    Q3PtrListIterator<ResourceTableItem> it(m_resources);
     for (; it.current(); ++it) {
         if (it.current()->isChecked())
             return false;
@@ -158,7 +158,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool b
     if (p) {
         m_worktime = p->standardWorktime();
         
-        QPtrListIterator<ResourceGroup> git(p->resourceGroups());
+        Q3PtrListIterator<ResourceGroup> git(p->resourceGroups());
         for(int i=0; git.current(); ++git, ++i) {
             ResourceGroup *grp = git.current();
             GroupLVItem *grpitem = new GroupLVItem(groupList, grp, task);
@@ -166,7 +166,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool b
             //kDebug()<<k_funcinfo<<" Added group: "<<grp->name()<<endl;
         }
     }
-    QListViewItem *item = groupList->firstChild();
+    Q3ListViewItem *item = groupList->firstChild();
     if (item) {
         groupList->setSelected(item, true);
         groupChanged(item);
@@ -174,13 +174,13 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool b
 
     resourceTable->setReadOnly(baseline);
     
-    connect(groupList, SIGNAL(selectionChanged(QListViewItem*)),  SLOT(groupChanged(QListViewItem*)));
+    connect(groupList, SIGNAL(selectionChanged(Q3ListViewItem*)),  SLOT(groupChanged(Q3ListViewItem*)));
     connect(resourceTable, SIGNAL(valueChanged(int, int)), SLOT(resourceChanged(int, int)));
 //    connect(numUnits, SIGNAL(valueChanged(int)), SLOT(unitsChanged(int)));
 
 }
 
-void RequestResourcesPanel::groupChanged(QListViewItem *item) {
+void RequestResourcesPanel::groupChanged(Q3ListViewItem *item) {
     //kDebug()<<k_funcinfo<<endl;
     GroupLVItem *grp = dynamic_cast<GroupLVItem *>(item);
     if (grp == 0)
@@ -217,10 +217,10 @@ KCommand *RequestResourcesPanel::buildCommand(Part *part) {
     if (selectedGroup) {
         selectedGroup->update();
     }
-    QListViewItem *item = groupList->firstChild();
+    Q3ListViewItem *item = groupList->firstChild();
     for (; item; item = item->nextSibling()) {
         GroupLVItem *grp = static_cast<GroupLVItem*>(item);
-        QPtrListIterator<ResourceTableItem> it = grp->resources();
+        Q3PtrListIterator<ResourceTableItem> it = grp->resources();
         for (; it.current(); ++it) {
             if (it.current()->isChecked() != it.current()->isOrigChecked()) {
                 if (!cmd) cmd = new KMacroCommand("");

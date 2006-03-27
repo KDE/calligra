@@ -26,24 +26,27 @@
 #include "kptview.h"
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
 
 #include <qdatetime.h>
-#include <qheader.h>
+#include <q3header.h>
 
 namespace KPlato
 {
 
-ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QListView *parent, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(Node *t, Q3ListView *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, t->name(), highlight),
       node(t) {
       
       setFormat(0, 'f', 1);
     //kDebug()<<k_funcinfo<<endl;
 }
-ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QListViewItem *p, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(Node *t, Q3ListViewItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, t->name(), highlight),
       node(t) {
       
@@ -51,7 +54,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QListViewItem *p, bool hig
     //kDebug()<<k_funcinfo<<endl;
 }
 
-ResourceAppointmentsView::NodeItem::NodeItem(QString text, QListViewItem *parent, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(QString text, Q3ListViewItem *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       node(0) {
       
@@ -59,7 +62,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(QString text, QListViewItem *parent
     //kDebug()<<k_funcinfo<<endl;
 }
 
-ResourceAppointmentsView::NodeItem::NodeItem(QString text, QListView *parent, bool highlight)
+ResourceAppointmentsView::NodeItem::NodeItem(QString text, Q3ListView *parent, bool highlight)
     : DoubleListViewBase::MasterListItem(parent, text, highlight),
       node(0) {
       
@@ -78,7 +81,7 @@ ResourceAppointmentsView::ResourceAppointmentsView(View *view, QWidget *parent)
     setNameHeader(i18n("Task"));
     
     
-    QValueList<int> list = sizes();
+    Q3ValueList<int> list = sizes();
     int tot = list[0] + list[1];
     list[0] = qMin(35, tot);
     list[1] = tot-list[0];
@@ -107,9 +110,9 @@ void ResourceAppointmentsView::draw() {
     m_totalItem->setExpandable(true);
     m_totalItem->setOpen(true);
     m_availItem = new ResourceAppointmentsView::NodeItem(i18n("Available"), masterListView());
-    QPtrList<Appointment> lst = m_resource->appointments();
+    Q3PtrList<Appointment> lst = m_resource->appointments();
     //kDebug()<<k_funcinfo<<lst.count()<<endl;
-    QPtrListIterator<Appointment> it(lst);
+    Q3PtrListIterator<Appointment> it(lst);
     for (; it.current(); ++it) {
         //kDebug()<<k_funcinfo<<endl;
         Node *n = it.current()->node()->node();
@@ -142,7 +145,7 @@ void ResourceAppointmentsView::slotUpdate() {
         m_totalItem->setHighlight(true);
         m_totalItem->setSlaveHighlight(true);
     }
-    QListViewItemIterator it(masterListView());
+    Q3ListViewItemIterator it(masterListView());
     for (;it.current(); ++it) {
         ResourceAppointmentsView::NodeItem *item = static_cast<ResourceAppointmentsView::NodeItem*>(it.current());
         if (!item || item->firstChild()) {

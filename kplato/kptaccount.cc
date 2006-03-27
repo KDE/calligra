@@ -139,7 +139,7 @@ void Account::save(QDomElement &element) const {
     element.appendChild(me);
     me.setAttribute("name", m_name);
     me.setAttribute("description", m_description);
-    QPtrListIterator<Account::CostPlace> cit = m_costPlaces;
+    Q3PtrListIterator<Account::CostPlace> cit = m_costPlaces;
     for (; cit.current(); ++cit) {
         cit.current()->save(me);
     }
@@ -150,7 +150,7 @@ void Account::save(QDomElement &element) const {
 }
 
 Account::CostPlace *Account::findCostPlace(const Node &node) const {
-    QPtrListIterator<CostPlace> it = m_costPlaces;
+    Q3PtrListIterator<CostPlace> it = m_costPlaces;
     for (; it.current(); ++it) {
         if (&node == it.current()->node()) {
             return it.current();
@@ -325,7 +325,7 @@ Accounts::~Accounts() {
 
 EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, const QDate &end) {
     EffortCostMap ec;
-    QPtrListIterator<Account::CostPlace> it = account.costPlaces();
+    Q3PtrListIterator<Account::CostPlace> it = account.costPlaces();
     for (; it.current(); ++it) {
         Node *n = it.current()->node();
         if (n == 0) {
@@ -347,7 +347,7 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
         }
     }
     if (&account == m_defaultAccount) {
-        QDictIterator<Node> nit = m_project.nodeDict();
+        Q3DictIterator<Node> nit = m_project.nodeDict();
         for (; nit.current(); ++nit) {
             Node *n = nit.current();
             if (n->runningAccount() == 0) {
@@ -430,7 +430,7 @@ void Accounts::save(QDomElement &element) const {
 }
 
 QStringList Accounts::costElements() const {
-    QDictIterator<Account> it(m_idDict);
+    Q3DictIterator<Account> it(m_idDict);
     QStringList l;
     for(; it.current(); ++it) {
         if (it.current()->isElement())
@@ -441,7 +441,7 @@ QStringList Accounts::costElements() const {
     
 
 QStringList Accounts::nameList() const {
-    QDictIterator<Account> it(m_idDict);
+    Q3DictIterator<Account> it(m_idDict);
     QStringList l;
     for(; it.current(); ++it) {
         l << it.currentKey();
@@ -450,7 +450,7 @@ QStringList Accounts::nameList() const {
 }
     
 Account *Accounts::findRunningAccount(const Node &node) const {
-    QDictIterator<Account> it = m_idDict;
+    Q3DictIterator<Account> it = m_idDict;
     for (; it.current(); ++it) {
         if (it.current()->findRunning(node))
             return it.current();
@@ -459,7 +459,7 @@ Account *Accounts::findRunningAccount(const Node &node) const {
 }
 
 Account *Accounts::findStartupAccount(const Node &node) const {
-    QDictIterator<Account> it = m_idDict;
+    Q3DictIterator<Account> it = m_idDict;
     for (; it.current(); ++it) {
         if (it.current()->findStartup(node))
             return it.current();
@@ -468,7 +468,7 @@ Account *Accounts::findStartupAccount(const Node &node) const {
 }
 
 Account *Accounts::findShutdownAccount(const Node &node) const {
-    QDictIterator<Account> it = m_idDict;
+    Q3DictIterator<Account> it = m_idDict;
     for (; it.current(); ++it) {
         if (it.current()->findShutdown(node))
             return it.current();

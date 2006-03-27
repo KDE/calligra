@@ -23,7 +23,7 @@
 
 #include <kdialogbase.h>
 
-class QButtonGroup;
+class Q3ButtonGroup;
 class KCommand;
 
 namespace KPlato
@@ -52,7 +52,7 @@ protected slots:
 
 protected:
     RelationPanel *m_panel;
-    QButtonGroup *relationType;
+    Q3ButtonGroup *relationType;
     Relation *m_relation;
     DurationWidget *m_lag;
 };

@@ -28,12 +28,12 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qdatetime.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstringlist.h>
 
 #include <kabc/addressee.h>
@@ -141,8 +141,8 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     int cal = 0;
     dia->calendarList->insertItem(i18n("None"));
     m_calendars.insert(0, 0);      
-    QPtrList<Calendar> list = project.calendars();
-    QPtrListIterator<Calendar> cit = list;
+    Q3PtrList<Calendar> list = project.calendars();
+    Q3PtrListIterator<Calendar> cit = list;
     for(int i=1; cit.current(); ++cit, ++i) {
         dia->calendarList->insertItem(cit.current()->name(), i);
         m_calendars.insert(i, cit.current());

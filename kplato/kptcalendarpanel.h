@@ -27,7 +27,10 @@
 #include "kptmap.h"
 
 #include <qdatetime.h>
-#include <qframe.h>
+#include <q3frame.h>
+//Added by qt3to4:
+#include <QResizeEvent>
+#include <QEvent>
 
 class QLineEdit;
 class QToolButton;
@@ -43,7 +46,7 @@ class Calendar;
  * Provides a widget for calendar input.
  *
  **/
-class CalendarPanel: public QFrame
+class CalendarPanel: public Q3Frame
 {
     Q_OBJECT
     Q_PROPERTY( QDate date READ date WRITE setDate)
@@ -53,7 +56,7 @@ public:
     /** The usual constructor.  The given date will be displayed
     * initially.
     **/
-    CalendarPanel(QWidget *parent=0, QDate=QDate::currentDate(), const char *name=0, WFlags f=0);
+    CalendarPanel(QWidget *parent=0, QDate=QDate::currentDate(), const char *name=0, Qt::WFlags f=0);
     
     /**
     * Standard qt widget constructor. The initial date will be the

@@ -25,7 +25,7 @@
 #include <qdatetime.h>
 #include <qstring.h>
 #include <qpair.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdebug.h>
 

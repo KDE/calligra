@@ -25,9 +25,9 @@
 #include "kptdatetime.h"
 
 #include <qdom.h>
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kdebug.h>
 
@@ -101,7 +101,7 @@ class ResourceGroup {
 	      /** Get the @num resources which is available in the time frame
             * defined by @start and @duration.
             */
-          QPtrList<Resource> availableResources(const DateTime start, const Duration duration, int num);
+          Q3PtrList<Resource> availableResources(const DateTime start, const Duration duration, int num);
 	      /** Manage the dependent resources.  This is a list of the resource
 	        * groups that must have available resources for this resource to
 	        * perform the work
@@ -121,7 +121,7 @@ class ResourceGroup {
 	        */
 	      void removeRequiredResource(int);
           int numResources() const { return m_resources.count(); }
-          QPtrList<Resource> &resources() { return m_resources; }
+          Q3PtrList<Resource> &resources() { return m_resources; }
 
           bool load(QDomElement &element);
           void save(QDomElement &element) const;
@@ -139,7 +139,7 @@ class ResourceGroup {
             { m_requests.append(request); }
           void unregisterRequest(ResourceGroupRequest *request)
             { m_requests.removeRef(request); }
-          const QPtrList<ResourceGroupRequest> &requests() const
+          const Q3PtrList<ResourceGroupRequest> &requests() const
             { return m_requests; }
 
           ResourceGroup *findId() const { return findId(m_id); }
@@ -158,16 +158,16 @@ class ResourceGroup {
         Project  *m_project;
         QString m_id;   // unique id
         QString m_name;
-        QPtrList<Resource> m_resources;
-        QPtrList<Risk> m_risks;
-        QPtrList<ResourceGroup> m_requires;
+        Q3PtrList<Resource> m_resources;
+        Q3PtrList<Risk> m_risks;
+        Q3PtrList<ResourceGroup> m_requires;
 
-        QPtrList<Node> m_nodes; //The nodes that want resources from us
+        Q3PtrList<Node> m_nodes; //The nodes that want resources from us
 
         Calendar *m_defaultCalendar;
         Type m_type;
         
-        QPtrList<ResourceGroupRequest> m_requests;
+        Q3PtrList<ResourceGroupRequest> m_requests;
         
 };
 
@@ -219,7 +219,7 @@ public:
     const DateTime &availableUntil() const {return m_availableUntil;}
 
     void addWorkingHour(QTime from, QTime until);
-    QPtrList<QTime> workingHours() { return m_workingHours; }
+    Q3PtrList<QTime> workingHours() { return m_workingHours; }
 
     DateTime getFirstAvailableTime(DateTime after = DateTime());
     DateTime getBestAvailableTime(Duration duration);
@@ -229,7 +229,7 @@ public:
     void save(QDomElement &element) const;
 
     ///Return the list of appointments for current schedule.
-    QPtrList<Appointment> appointments();
+    Q3PtrList<Appointment> appointments();
     
     Appointment *findAppointment(Node *node);
     /// Adds appointment to current schedule
@@ -280,7 +280,7 @@ public:
         { m_requests.append(request); }
     void unregisterRequest(const ResourceRequest *request)
         { m_requests.removeRef(request); }
-    const QPtrList<ResourceRequest> &requests() const
+    const Q3PtrList<ResourceRequest> &requests() const
         { return m_requests; }
         
     Duration effort(const DateTime &start, const Duration &duration, bool backward, bool *ok=0) const;
@@ -311,7 +311,7 @@ public:
     void setCurrentSchedule(long id) { m_currentSchedule = findSchedule(id); }
     Schedule *currentSchedule() const { return m_currentSchedule; }
     
-    QIntDict<Schedule> &schedules() { return m_schedules; }
+    Q3IntDict<Schedule> &schedules() { return m_schedules; }
     Schedule *findSchedule(long id) { return m_schedules[id]; }
     /// Take, and delete.
     void removeSchedule(Schedule *schedule);
@@ -326,14 +326,14 @@ protected:
     
 private:
     Project *m_project;
-    QIntDict<Schedule> m_schedules;
+    Q3IntDict<Schedule> m_schedules;
     QString m_id; // unique id
     QString m_name;
     QString m_initials;
     QString m_email;
     DateTime m_availableFrom;
     DateTime m_availableUntil;
-    QPtrList<QTime> m_workingHours;
+    Q3PtrList<QTime> m_workingHours;
 
     int m_units; // avalable units in percent
 
@@ -346,7 +346,7 @@ private:
     } cost;
 
     Calendar *m_calendar;
-    QPtrList<ResourceRequest> m_requests;
+    Q3PtrList<ResourceRequest> m_requests;
     
     Schedule *m_currentSchedule;
     
@@ -439,7 +439,7 @@ class ResourceGroupRequest {
         ResourceRequestCollection *parent() const { return m_parent; }
         
         ResourceGroup *group() const { return m_group; }
-        QPtrList<ResourceRequest> &resourceRequests() { return m_resourceRequests; }
+        Q3PtrList<ResourceRequest> &resourceRequests() { return m_resourceRequests; }
         void addResourceRequest(ResourceRequest *request);
         void removeResourceRequest(ResourceRequest *request) { m_resourceRequests.removeRef(request); }
         ResourceRequest *takeResourceRequest(ResourceRequest *request);
@@ -491,7 +491,7 @@ class ResourceGroupRequest {
         int m_units;
         ResourceRequestCollection *m_parent;
         
-        QPtrList<ResourceRequest> m_resourceRequests;
+        Q3PtrList<ResourceRequest> m_resourceRequests;
         DateTime m_start;
         Duration m_duration;
 
@@ -506,7 +506,7 @@ public:
     ResourceRequestCollection(Task &task);
     ~ResourceRequestCollection();
 
-    const QPtrList<ResourceGroupRequest> &requests() const { return m_requests; }
+    const Q3PtrList<ResourceGroupRequest> &requests() const { return m_requests; }
     void addRequest(ResourceGroupRequest *request) {                 
         m_requests.append(request);
         request->setParent(this);
@@ -563,7 +563,7 @@ protected:
 
 private:
     Task &m_task;
-    QPtrList<ResourceGroupRequest> m_requests;
+    Q3PtrList<ResourceGroupRequest> m_requests;
 
 #ifndef NDEBUG
 public:

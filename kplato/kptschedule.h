@@ -23,8 +23,8 @@
 #include "kpteffortcostmap.h"
 #include "kptresource.h"
 
-#include <qintdict.h>
-#include <qptrlist.h>
+#include <q3intdict.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 
 class QDomElement;
@@ -86,7 +86,7 @@ public:
     void saveAppointments(QDomElement &element) const;
     
     /// Return the list of appointments
-    QPtrList<Appointment> &appointments() { return m_appointments; }
+    Q3PtrList<Appointment> &appointments() { return m_appointments; }
     /// Adds appointment to this schedule only
     virtual bool add(Appointment *appointment);
     /// Adds appointment to both this resource schedule and node schedule
@@ -166,7 +166,7 @@ protected:
     long m_id;
     bool m_deleted;
 
-    QPtrList<Appointment> m_appointments;
+    Q3PtrList<Appointment> m_appointments;
     Schedule *m_parent;
     
     friend class Node;

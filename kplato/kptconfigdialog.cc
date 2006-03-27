@@ -31,7 +31,9 @@
 #include <klocale.h>
 #include <kcommand.h>
 
-#include <qvbox.h>
+#include <q3vbox.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 #include <kdebug.h>
 
@@ -55,7 +57,7 @@ ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, co
 /*    QVBox *page = addVBoxPage(i18n("Behavior"), i18n("Behavior"), loadIcon("misc"));
     m_behaviorPage = new ConfigBehaviorPanel(config.behavior(), page);*/
     
-    QVBox *page = addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
+    Q3VBox *page = addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
     m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), project.standardWorktime(), page);
     
     enableButtonOK(false);

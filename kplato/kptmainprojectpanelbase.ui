@@ -47,7 +47,7 @@
                         <string>&amp;Leader:</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter</set>
+                        <set>Qt::AlignVCenter</set>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>leaderfield</cstring>
@@ -83,7 +83,7 @@
                         <cstring>spacer2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

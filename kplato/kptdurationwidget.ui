@@ -62,13 +62,13 @@
             </property>
             <property name="paletteBackgroundColor">
                 <color>
-                    <red>255</red>
-                    <green>255</green>
-                    <blue>255</blue>
+                    <Qt::red>255</Qt::red>
+                    <Qt::green>255</Qt::green>
+                    <Qt::blue>255</Qt::blue>
                 </color>
             </property>
             <property name="frameShape">
-                <enum>LineEditPanel</enum>
+                <enum>QFrame::StyledPanel</enum>
             </property>
             <property name="frameShadow">
                 <enum>Sunken</enum>
@@ -126,7 +126,7 @@
                         <bool>false</bool>
                     </property>
                     <property name="alignment">
-                        <set>AlignRight</set>
+                        <set>Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -176,7 +176,7 @@
                         <bool>false</bool>
                     </property>
                     <property name="alignment">
-                        <set>AlignRight</set>
+                        <set>Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -215,7 +215,7 @@
                         <bool>false</bool>
                     </property>
                     <property name="alignment">
-                        <set>AlignRight</set>
+                        <set>Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -265,7 +265,7 @@
                         <bool>false</bool>
                     </property>
                     <property name="alignment">
-                        <set>AlignRight</set>
+                        <set>Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -321,7 +321,7 @@
                         <bool>false</bool>
                     </property>
                     <property name="alignment">
-                        <set>AlignRight</set>
+                        <set>Qt::AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QLabel">

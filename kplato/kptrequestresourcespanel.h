@@ -23,9 +23,11 @@
 #include "kpttaskresourcespanelbase.h"
 #include "kptduration.h"
 
-#include <qlistview.h>
+#include <q3listview.h>
 #include <qstring.h>
-#include <qtable.h>
+#include <q3table.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 //class QCheckTableItem;
 
 class KCommand;
@@ -51,7 +53,7 @@ public:
     ~ResourceTableItem() ;
 
     void update();
-    void insert(QTable *table, int row);
+    void insert(Q3Table *table, int row);
     void ok(ResourceGroupRequest *group);
 
     bool isChecked() const { return m_checked; }
@@ -64,20 +66,20 @@ public:
     Resource *m_resource;
     int m_units, m_origUnits;
     bool m_checked, m_origChecked;
-    QCheckTableItem *m_checkitem;
+    Q3CheckTableItem *m_checkitem;
     ResourceRequest *m_request;
     int m_curAccountItem;
     QString m_curAccountText;
 };
 
-class GroupLVItem : public QListViewItem {
+class GroupLVItem : public Q3ListViewItem {
 public:
-    GroupLVItem(QListView *parent, ResourceGroup *group, Task &task);
+    GroupLVItem(Q3ListView *parent, ResourceGroup *group, Task &task);
     ~GroupLVItem();
 
     void update();
-    void insert(QTable *table);
-    const QPtrList<ResourceTableItem> &resources() const { return m_resources; }
+    void insert(Q3Table *table);
+    const Q3PtrList<ResourceTableItem> &resources() const { return m_resources; }
     void ok(Task &task);
 
     int numRequests();
@@ -85,7 +87,7 @@ public:
     
     ResourceGroup *m_group;
     int m_units;
-    QPtrList<ResourceTableItem> m_resources;
+    Q3PtrList<ResourceTableItem> m_resources;
     ResourceGroupRequest *m_request;
 };
 
@@ -102,7 +104,7 @@ public:
 private slots:
     void sendChanged();
 
-    void groupChanged(QListViewItem *item);
+    void groupChanged(Q3ListViewItem *item);
     void resourceChanged(int, int);
     void unitsChanged(int);
     

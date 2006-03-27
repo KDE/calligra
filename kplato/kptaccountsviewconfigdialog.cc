@@ -21,7 +21,7 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <qstring.h>
 

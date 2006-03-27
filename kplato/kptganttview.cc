@@ -44,20 +44,20 @@
 #include <kdebug.h>
 
 #include <qsplitter.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
-#include <qlistview.h>
-#include <qheader.h>
-#include <qpopupmenu.h>
+#include <q3listview.h>
+#include <q3header.h>
+#include <q3popupmenu.h>
 #include <qtabwidget.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qlineedit.h>
 #include <qwidget.h>
 #include <qlabel.h>
 #include <qspinbox.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpainter.h> 
-#include <qpaintdevicemetrics.h> 
+#include <q3paintdevicemetrics.h> 
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -86,7 +86,7 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     m_project(0)
 {
     kDebug() << " ---------------- KPlato: Creating GanttView ----------------" << endl;
-    setOrientation(QSplitter::Vertical);
+    setOrientation(Qt::Vertical);
     
     m_gantt = new MyKDGanttView(this, "Gantt view");
     
@@ -107,7 +107,7 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     m_gantt->addColumn(i18n("Work Breakdown Structure", "WBS"));
     // HACK: need changes to kdgantt
     KDGanttViewTaskItem *item = new KDGanttViewTaskItem(m_gantt);
-    QListView *lv = item->listView();
+    Q3ListView *lv = item->listView();
     lv->header()->moveSection(1, 0);
     
     m_gantt->setScale(KDGanttView::Day);
@@ -115,7 +115,7 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
     m_gantt->setShowHeaderPopupMenu();
     m_taskView = new TaskAppointmentsView(this);
     // hide TaskAppointmentsView
-    QValueList<int> list = sizes();
+    Q3ValueList<int> list = sizes();
     list[0] += list[1];
     list[1] = 0;
     setSizes(list);
@@ -129,7 +129,7 @@ GanttView::GanttView(QWidget *parent, bool readWrite, const char* name)
 	connect(m_gantt, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), this, SLOT (currentItemChanged(KDGanttViewItem*)));
 
     // HACK: kdgantt emits 2 signals for each *double* click, so we go direct to listview
-	connect(lv, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), this, SLOT (slotItemDoubleClicked(QListViewItem*)));
+	connect(lv, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), this, SLOT (slotItemDoubleClicked(Q3ListViewItem*)));
 
     m_taskLinks.setAutoDelete(true);
     
@@ -403,7 +403,7 @@ KDGanttViewItem *GanttView::correctParent(KDGanttViewItem *item, Node *node)
 void GanttView::updateChildren(Node *parentNode)
 {
     //kDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<Node> nit(parentNode->childNodeIterator());
+    Q3PtrListIterator<Node> nit(parentNode->childNodeIterator());
     for (; nit.current(); ++nit )
     {
         updateNode(nit.current());
@@ -433,7 +433,7 @@ void GanttView::updateNode(Node *node)
 void GanttView::modifyChildren(Node *node)
 {
     //kDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<Node> nit(node->childNodeIterator());
+    Q3PtrListIterator<Node> nit(node->childNodeIterator());
     for ( nit.toLast(); nit.current(); --nit ) {
         modifyNode(nit.current());
         modifyChildren(nit.current());
@@ -516,10 +516,10 @@ void GanttView::modifySummaryTask(KDGanttViewItem *item, Task *task)
         }
     }
     if (ok) {
-        QColor c(cyan);
+        QColor c(Qt::cyan);
         item->setColors(c,c,c);
     } else {
-        QColor c(yellow);
+        QColor c(Qt::yellow);
         item->setColors(c,c,c);
     }
     item->setTooltipText(w);
@@ -549,12 +549,12 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         text = task->name();
     }
     if (m_showResources && !task->notScheduled()) {
-        QPtrList<Appointment> lst = task->appointments();
+        Q3PtrList<Appointment> lst = task->appointments();
         if (lst.count() > 0) {
             if (!text.isEmpty())
                 text += ' ';
             text += '(';
-            QPtrListIterator<Appointment> it = lst;
+            Q3PtrListIterator<Appointment> it = lst;
             for (bool first=true; it.current(); ++it) {
                 if (!first)
                     text += ", ";
@@ -624,11 +624,11 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         }
     }
     if (ok) {
-        QColor c(green);
+        QColor c(Qt::green);
         item->setColors(c,c,c);
     } else {
         w += sts;
-        QColor c(yellow);
+        QColor c(Qt::yellow);
         item->setColors(c,c,c);
     }
     item->setHighlight(false);
@@ -704,10 +704,10 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
         }
     }
     if (ok) {
-        QColor c(blue);
+        QColor c(Qt::blue);
         item->setColors(c,c,c);
     } else {
-        QColor c(yellow);
+        QColor c(Qt::yellow);
         item->setColors(c,c,c);
     }
     item->setHighlight(false);
@@ -818,7 +818,7 @@ KDGanttViewItem *GanttView::addMilestone(KDGanttViewItem *parentItem, Task *task
 void GanttView::drawChildren(KDGanttViewItem *parentItem, Node &parentNode)
 {
     //kDebug()<<k_funcinfo<<endl;
-	QPtrListIterator<Node> nit(parentNode.childNodeIterator());
+	Q3PtrListIterator<Node> nit(parentNode.childNodeIterator());
 	for ( nit.toLast(); nit.current(); --nit )
 	{
 		Node *n = nit.current();
@@ -999,7 +999,7 @@ void GanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, i
     //TODO: Other nodetypes
 }
 
-void GanttView::slotItemDoubleClicked(QListViewItem* item) {
+void GanttView::slotItemDoubleClicked(Q3ListViewItem* item) {
     //kDebug()<<k_funcinfo<<endl;
     if (item == 0 || item->childCount() > 0) {
         // FIXME: How else to avoid interference wirh expanding/collapsing summary items?
@@ -1022,7 +1022,7 @@ void GanttView::print(KPrinter &prt) {
     //   anyway (it's the PS driver that takes care of the printer resolution).
     //But KSpread uses fixed 300 dpis, so we can use it.
 
-    QPaintDeviceMetrics metrics( &prt );
+    Q3PaintDeviceMetrics metrics( &prt );
     uint top, left, bottom, right;
     prt.margins(&top, &left, &bottom, &right);
     //kDebug()<<m.width()<<"x"<<m.height()<<" : "<<top<<", "<<left<<", "<<bottom<<", "<<right<<" : "<<size()<<endl;
@@ -1146,7 +1146,7 @@ void GanttView::slotModifyLink(KDGanttViewTaskLink* link) {
 bool GanttView::setContext(Context::Ganttview &context, Project& /*project*/) {
     //kDebug()<<k_funcinfo<<endl;
     
-    QValueList<int> list = sizes();
+    Q3ValueList<int> list = sizes();
     list[0] = context.ganttviewsize;
     list[1] = context.taskviewsize;
     setSizes(list);
@@ -1219,10 +1219,10 @@ void GanttView::setReadWriteMode(bool on) {
     setRenameEnabled(m_gantt->firstChild(), on);
 }
 
-void GanttView::setRenameEnabled(QListViewItem *item, bool on) {
+void GanttView::setRenameEnabled(Q3ListViewItem *item, bool on) {
     if (item == 0)
         return;
-    for (QListViewItem *i = item; i; i = i->nextSibling()) {
+    for (Q3ListViewItem *i = item; i; i = i->nextSibling()) {
         i->setRenameEnabled(0, on);
         setRenameEnabled(i->firstChild(), on);
     }

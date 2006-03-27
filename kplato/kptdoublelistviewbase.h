@@ -22,12 +22,12 @@
 
 #include <qcolor.h>
 #include <qmap.h>
-#include <qptrvector.h>
+#include <q3ptrvector.h>
 #include <qsplitter.h>
 
 #include <k3listview.h>
 
-class QListViewItem;
+class Q3ListViewItem;
 
 class K3ListViewItem;
 class KPrinter;
@@ -67,7 +67,7 @@ public:
 
     ListView *masterListView() const { return m_masterList; }
     ListView *slaveListView() const { return m_slaveList; }
-    void setOpen(QListViewItem *item, bool open);
+    void setOpen(Q3ListViewItem *item, bool open);
     
     void setNameHeader(QString text);
     void setTotalHeader(QString text);
@@ -87,8 +87,8 @@ public:
     class MasterListItem;
     class SlaveListItem : public K3ListViewItem {
     public:
-        SlaveListItem(MasterListItem *master, QListView *parent, QListViewItem *after, bool highlight=false);
-        SlaveListItem(MasterListItem *master, QListViewItem *parent, QListViewItem *after, bool highlight=false);
+        SlaveListItem(MasterListItem *master, Q3ListView *parent, Q3ListViewItem *after, bool highlight=false);
+        SlaveListItem(MasterListItem *master, Q3ListViewItem *parent, Q3ListViewItem *after, bool highlight=false);
         ~SlaveListItem();
         void masterItemDeleted() { m_masterItem = 0; }
         
@@ -118,14 +118,14 @@ public:
 
     class MasterListItem : public K3ListViewItem {
     public:
-        MasterListItem(QListView *parent, bool highlight=false);
-        MasterListItem(QListView *parent, QString text, bool highlight=false);
-        MasterListItem(QListViewItem *parent, bool highlight=false);
-        MasterListItem(QListViewItem *parent, QString text, bool highlight=false);
+        MasterListItem(Q3ListView *parent, bool highlight=false);
+        MasterListItem(Q3ListView *parent, QString text, bool highlight=false);
+        MasterListItem(Q3ListViewItem *parent, bool highlight=false);
+        MasterListItem(Q3ListViewItem *parent, QString text, bool highlight=false);
         ~MasterListItem();
         
         /// Creates slaveitems for myself and my children
-        void createSlaveItems(QListView *lv, QListViewItem *after=0);
+        void createSlaveItems(Q3ListView *lv, Q3ListViewItem *after=0);
         void slaveItemDeleted();
         void setSlaveOpen(bool on);
         SlaveListItem *slaveItem() const { return m_slaveItem; }
@@ -164,8 +164,8 @@ public:
     virtual void paintContents(QPainter *p);
     
 protected slots:
-    void slotExpanded(QListViewItem* item);
-    void slotCollapsed(QListViewItem* item);
+    void slotExpanded(Q3ListViewItem* item);
+    void slotCollapsed(Q3ListViewItem* item);
 
 private:
 

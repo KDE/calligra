@@ -24,9 +24,11 @@
 #include <qcombobox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qdatetime.h>
-#include <qlistview.h>
+#include <q3listview.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,7 +36,7 @@
 namespace KPlato
 {
 
-IntervalEdit::IntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
+IntervalEdit::IntervalEdit(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Edit Interval"), Ok|Cancel, Ok, parent, name, true, true)
 {
     //kDebug()<<k_funcinfo<<endl;
@@ -47,23 +49,23 @@ IntervalEdit::IntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWid
     connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
 }
 
-QPtrList<QPair<QTime, QTime> > IntervalEdit::intervals() const {
+Q3PtrList<QPair<QTime, QTime> > IntervalEdit::intervals() const {
     return dia->intervals();
 }
 
 
-IntervalEditImpl::IntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent)
+IntervalEditImpl::IntervalEditImpl(const Q3PtrList<QPair<QTime, QTime> > &intervals, QWidget *parent)
     : IntervalEditBase(parent) {
 
     intervalList->setSortColumn(0);
-    QPtrListIterator<QPair<QTime, QTime> > it = intervals;
+    Q3PtrListIterator<QPair<QTime, QTime> > it = intervals;
     for (; it.current(); ++it) {
         new IntervalItem(intervalList, it.current()->first, it.current()->second);
     }
 
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
-    connect(intervalList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(slotIntervalSelectionChanged(QListViewItem*)));
+    connect(intervalList, SIGNAL(selectionChanged(Q3ListViewItem*)), SLOT(slotIntervalSelectionChanged(Q3ListViewItem*)));
 
 }
 
@@ -85,7 +87,7 @@ void IntervalEditImpl::slotAddIntervalClicked() {
     slotEnableButtonOk(true);
 }
 
-void IntervalEditImpl::slotIntervalSelectionChanged(QListViewItem *item) {
+void IntervalEditImpl::slotIntervalSelectionChanged(Q3ListViewItem *item) {
     IntervalItem *ii = dynamic_cast<IntervalItem *>(item);
     if (!ii)
         return;
@@ -93,9 +95,9 @@ void IntervalEditImpl::slotIntervalSelectionChanged(QListViewItem *item) {
     endTime->setTime(ii->interval().second);
 }
 
-QPtrList<QPair<QTime, QTime> > IntervalEditImpl::intervals() const {
-    QPtrList<QPair<QTime, QTime> > l;
-    QListViewItem *i = intervalList->firstChild();
+Q3PtrList<QPair<QTime, QTime> > IntervalEditImpl::intervals() const {
+    Q3PtrList<QPair<QTime, QTime> > l;
+    Q3ListViewItem *i = intervalList->firstChild();
     for (; i; i = i->nextSibling()) {
         IntervalItem *item = dynamic_cast<IntervalItem*>(i);
         if (i)

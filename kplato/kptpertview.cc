@@ -29,11 +29,13 @@
 #include <kdebug.h>
 
 #include <qsplitter.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <qlayout.h>
-#include <qlistview.h>
-#include <qheader.h>
-#include <qpopupmenu.h>
+#include <q3listview.h>
+#include <q3header.h>
+#include <q3popupmenu.h>
+//Added by qt3to4:
+#include <Q3GridLayout>
 
 #include <kprinter.h>
 
@@ -55,7 +57,7 @@ PertView::~PertView()
 void PertView::init(QLayout */*layout*/)
 {
     //kDebug()<<k_funcinfo<<endl;
-    QGridLayout *gl = new QGridLayout(this, 1, 1, -1, -1, "Pert QGridLayout");
+    Q3GridLayout *gl = new Q3GridLayout(this, 1, 1, -1, -1, "Pert QGridLayout");
     m_canvasview = new PertCanvas(this);
         gl->addWidget(m_canvasview, 0, 0);
     draw();
@@ -78,7 +80,7 @@ void PertView::slotRMBPressed(Node *node, const QPoint & point)
     //kDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
     m_node = node;
     if (node && (node->type() == Node::Type_Task || node->type() == Node::Type_Milestone)) {
-        QPopupMenu *menu = m_mainview->popupMenu("task_popup");
+        Q3PopupMenu *menu = m_mainview->popupMenu("task_popup");
         if (menu)
         {
             /*int id =*/ menu->exec(point);
@@ -87,7 +89,7 @@ void PertView::slotRMBPressed(Node *node, const QPoint & point)
         return;
     }
     if (node && node->type() == Node::Type_Summarytask) {
-        QPopupMenu *menu = m_mainview->popupMenu("node_popup");
+        Q3PopupMenu *menu = m_mainview->popupMenu("node_popup");
         if (menu)
         {
             /*int id =*/ menu->exec(point);

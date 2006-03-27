@@ -27,14 +27,21 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include <qgridview.h>
-#include <qmemarray.h>
-#include <qdict.h>
+#include <q3gridview.h>
+#include <q3memarray.h>
+#include <q3dict.h>
 #include <qpair.h>
 
 #include <qvalidator.h>
 #include <qlineedit.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QFocusEvent>
+#include <QKeyEvent>
+#include <Q3Frame>
+#include <QResizeEvent>
+#include <QMouseEvent>
 
 namespace KPlato
 {
@@ -72,7 +79,7 @@ private:
 * @version $Id$
 * @author Tim Gilman, Mirko Boehm
 */
-class DateInternalMonthPicker : public QGridView
+class DateInternalMonthPicker : public Q3GridView
 {
   Q_OBJECT
 protected:
@@ -172,7 +179,7 @@ private:
  * @author Tim Gilman, Mirko Boehm
  * @version $Id$
  */
-class PopupFrame : public QFrame
+class PopupFrame : public Q3Frame
 {
   Q_OBJECT
 protected:
@@ -227,7 +234,7 @@ public:
 
 private:
 
-  virtual bool close(bool alsoDelete) { return QFrame::close(alsoDelete); }
+  virtual bool close(bool alsoDelete) { return Q3Frame::close(alsoDelete); }
 protected:
   virtual void virtual_hook( int id, void* data );
 private:
@@ -248,7 +255,7 @@ public:
 };
 
 
-class DateTable : public QGridView
+class DateTable : public Q3GridView
 {
     Q_OBJECT
 public:
@@ -256,7 +263,7 @@ public:
      * The constructor.
      */
     DateTable(QWidget *parent=0, QDate date=QDate::currentDate(),
-                 const char* name="DateTable", WFlags f=0);
+                 const char* name="DateTable", Qt::WFlags f=0);
 
     /**
      * Returns a recommended size for the widget.
@@ -394,7 +401,7 @@ signals:
 
 private:
 
-    QMemArray< QPair<int, int> > m_weeks;
+    Q3MemArray< QPair<int, int> > m_weeks;
 
     int m_currentRow; // row of selected date
 

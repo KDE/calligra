@@ -22,7 +22,7 @@
 
 #include "kptcalendareditbase.h"
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class QDate;
 

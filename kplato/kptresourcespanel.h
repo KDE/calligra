@@ -23,10 +23,12 @@
 #include "kptresource.h"
 #include "resourcespanelbase.h"
 
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
-class QListViewItem;
+class Q3ListViewItem;
 class KCommand;
 
 namespace KPlato
@@ -48,7 +50,7 @@ public:
 
     void sendChanged();
 
-    void renameStopped(QListViewItem* item);
+    void renameStopped(Q3ListViewItem* item);
     
 protected slots:
     void slotAddGroup();
@@ -58,31 +60,31 @@ protected slots:
     void slotEditResource();
     void slotDeleteResource();
 
-    void slotGroupChanged(QListViewItem *item);
+    void slotGroupChanged(Q3ListViewItem *item);
     void slotGroupChanged();
     void slotResourceRename(const QString &newName);
-    void slotResourceChanged( QListBoxItem*);
-    void slotCurrentChanged( QListBoxItem*);
+    void slotResourceChanged( Q3ListBoxItem*);
+    void slotCurrentChanged( Q3ListBoxItem*);
 
-    void slotListDoubleClicked(QListViewItem*, const QPoint&, int);
-    void slotItemRenamed(QListViewItem *item, int col);
-    void slotRenameStarted(QListViewItem *item, int col);
-    void slotStartRename(QListViewItem *item, int col);
+    void slotListDoubleClicked(Q3ListViewItem*, const QPoint&, int);
+    void slotItemRenamed(Q3ListViewItem *item, int col);
+    void slotRenameStarted(Q3ListViewItem *item, int col);
+    void slotStartRename(Q3ListViewItem *item, int col);
 signals:
     void changed();
     void selectionChanged();
-    void startRename(QListViewItem *item, int col);
-    void renameStarted(QListViewItem *item, int col);
+    void startRename(Q3ListViewItem *item, int col);
+    void renameStarted(Q3ListViewItem *item, int col);
     
 private:
     Project *project;
     ResourcesPanelGroupLVItem *m_groupItem;
 
-    QPtrList<GroupItem> m_groupItems;
-    QPtrList<GroupItem> m_deletedGroupItems;
+    Q3PtrList<GroupItem> m_groupItems;
+    Q3PtrList<GroupItem> m_deletedGroupItems;
 
     bool m_blockResourceRename;
-    QListViewItem *m_renameItem;
+    Q3ListViewItem *m_renameItem;
 };
 
 } //KPlato namespace

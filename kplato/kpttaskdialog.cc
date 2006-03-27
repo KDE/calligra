@@ -26,7 +26,7 @@
 #include <klocale.h>
 #include <kcommand.h>
 
-#include <qvbox.h>
+#include <q3vbox.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -35,7 +35,7 @@ namespace KPlato
 TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime, bool baseline, QWidget *p)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, "Task Settings Dialog", true, true)
 {
-    QVBox *page;
+    Q3VBox *page;
     
     // Create all the tabs.
     page = addVBoxPage(i18n("&General"));

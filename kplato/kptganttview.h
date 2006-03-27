@@ -25,11 +25,13 @@
 
 #include <qsplitter.h>
 #include <qcursor.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class QLayout;
-class QListViewItem;
+class Q3ListViewItem;
 class QPoint;
-class QListView;
+class Q3ListView;
 class QLineEdit;
 class QSpinBox;
 
@@ -127,7 +129,7 @@ public slots:
     
 private slots:
     void currentItemChanged(KDGanttViewItem *);
-    void slotItemDoubleClicked(QListViewItem*);
+    void slotItemDoubleClicked(Q3ListViewItem*);
     void slotItemRenamed(KDGanttViewItem*, int, const QString&);
     
     void slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int linkType);
@@ -138,7 +140,7 @@ private slots:
 
 protected:
     int linkTypeToRelation(int linkType);
-    void setRenameEnabled(QListViewItem *item, bool on);
+    void setRenameEnabled(Q3ListViewItem *item, bool on);
 private:
     KDGanttViewItem *findItem(Node *node);
     KDGanttViewItem *findItem(Node *node, KDGanttViewItem *item);
@@ -202,7 +204,7 @@ private:
     bool m_showNoInformation;
     bool m_showAppointments;
     bool m_firstTime;
-    QPtrList<KDGanttViewTaskLink> m_taskLinks;
+    Q3PtrList<KDGanttViewTaskLink> m_taskLinks;
     Project *m_project;
 };
 

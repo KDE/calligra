@@ -25,14 +25,16 @@
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qlabel.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include <qlineedit.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <qtabwidget.h>
-#include <qtextbrowser.h>
+#include <q3textbrowser.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <klocale.h>
 
@@ -47,7 +49,7 @@ namespace KPlato
 class CalendarListViewItem : public K3ListViewItem
 {
 public:
-    CalendarListViewItem(CalendarListDialogImpl &pan, QListView *lv, Calendar *cal,  Calendar *orig=0)
+    CalendarListViewItem(CalendarListDialogImpl &pan, Q3ListView *lv, Calendar *cal,  Calendar *orig=0)
         : K3ListViewItem(lv, cal->name()), panel(pan) {
 
         calendar = cal;
@@ -94,7 +96,7 @@ public:
             }
             
             //kDebug()<<k_funcinfo<<"Check for days deleted: "<<calendar->name()<<endl;
-            QPtrListIterator<CalendarDay> oit = original->days();
+            Q3PtrListIterator<CalendarDay> oit = original->days();
             for (; oit.current(); ++oit) {
                 if (calendar->findDay(oit.current()->date()) == 0) {
                     if (macro == 0) macro = new KMacroCommand("");
@@ -104,7 +106,7 @@ public:
             }
         
             //kDebug()<<k_funcinfo<<"Check for days added or modified: "<<calendar->name()<<endl;
-            QPtrListIterator<CalendarDay> cit = calendar->days();
+            Q3PtrListIterator<CalendarDay> cit = calendar->days();
             for (; cit.current(); ++cit) {
                 CalendarDay *day = original->findDay(cit.current()->date());
                 if (day == 0) {
@@ -169,8 +171,8 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
 {
     //kDebug()<<k_funcinfo<<&p<<endl;
     dia = new CalendarListDialogImpl(p, this);
-    QPtrList<Calendar> list = p.calendars();
-    QPtrListIterator<Calendar> it = list;
+    Q3PtrList<Calendar> list = p.calendars();
+    Q3PtrListIterator<Calendar> it = list;
     for (; it.current(); ++it) {
         Calendar *c = new Calendar(it.current());
         c->setProject(&p);
@@ -178,7 +180,7 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
     }
     dia->setBaseCalendars();
     
-    QListViewItem *f = dia->calendarList->firstChild();
+    Q3ListViewItem *f = dia->calendarList->firstChild();
     if (f) {
         dia->calendarList->setSelected(f, true);
     }
@@ -194,7 +196,7 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
 KCommand *CalendarListDialog::buildCommand(Part *part) {
     //kDebug()<<k_funcinfo<<endl;
     KMacroCommand *cmd = 0;
-    QListViewItemIterator cit(dia->calendarList);
+    Q3ListViewItemIterator cit(dia->calendarList);
     for (;cit.current(); ++cit) {
         CalendarListViewItem *item = dynamic_cast<CalendarListViewItem *>(cit.current());
         if (item) {
@@ -205,7 +207,7 @@ KCommand *CalendarListDialog::buildCommand(Part *part) {
             }
         }
     }
-    QPtrListIterator<CalendarListViewItem> it = dia->deletedItems();
+    Q3PtrListIterator<CalendarListViewItem> it = dia->deletedItems();
     for (; it.current(); ++it) {
         //kDebug()<<k_funcinfo<<"deleted: "<<it.current()->calendar->name()<<endl;
         if (it.current()->original) {
@@ -232,7 +234,7 @@ CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent)
     calendarList->header()->setStretchEnabled(true, 0);
     calendarList->setShowSortIndicator(true);
     calendarList->setSorting(0);
-    calendarList->setDefaultRenameAction(QListView::Accept);
+    calendarList->setDefaultRenameAction(Q3ListView::Accept);
 
     m_deletedItems.setAutoDelete(true);
     calendar->setEnabled(false);
@@ -247,19 +249,19 @@ CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent)
     //connect(editName, SIGNAL(returnPressed()), SLOT(slotAddClicked()));
 
     connect(calendarList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-    connect(calendarList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), SLOT(slotListDoubleClicked(QListViewItem*, const QPoint&, int)));
-    connect(calendarList, SIGNAL(itemRenamed(QListViewItem*, int)), SLOT(slotItemRenamed(QListViewItem*, int)));
+    connect(calendarList, SIGNAL(doubleClicked(Q3ListViewItem*, const QPoint&, int)), SLOT(slotListDoubleClicked(Q3ListViewItem*, const QPoint&, int)));
+    connect(calendarList, SIGNAL(itemRenamed(Q3ListViewItem*, int)), SLOT(slotItemRenamed(Q3ListViewItem*, int)));
     
     connect (baseCalendar, SIGNAL(activated(int)), SLOT(slotBaseCalendarActivated(int)));
 
     // Internal rename stuff
-    connect(this, SIGNAL(renameStarted(QListViewItem*, int)), SLOT(slotRenameStarted(QListViewItem*, int)));
-    connect(this, SIGNAL(startRename(QListViewItem*, int)), SLOT(slotStartRename(QListViewItem*, int)));
+    connect(this, SIGNAL(renameStarted(Q3ListViewItem*, int)), SLOT(slotRenameStarted(Q3ListViewItem*, int)));
+    connect(this, SIGNAL(startRename(Q3ListViewItem*, int)), SLOT(slotStartRename(Q3ListViewItem*, int)));
     connect(this, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
 }
 
 void CalendarListDialogImpl::setBaseCalendars() {
-    QListViewItemIterator it(calendarList);
+    Q3ListViewItemIterator it(calendarList);
     for (;it.current(); ++it) {
         CalendarListViewItem *item = dynamic_cast<CalendarListViewItem *>(it.current());
         if (item) {
@@ -285,13 +287,13 @@ void CalendarListDialogImpl::slotBaseCalendarActivated(int id) {
 
 void CalendarListDialogImpl::slotSelectionChanged() {
     //kDebug()<<k_funcinfo<<endl;
-    QListViewItem *item = calendarList->selectedItem();
+    Q3ListViewItem *item = calendarList->selectedItem();
     bDelete->setEnabled((bool)item);
     bAdd->setEnabled(true);
     slotSelectionChanged(item);
 }
 
-void CalendarListDialogImpl::slotSelectionChanged(QListViewItem *listItem) {
+void CalendarListDialogImpl::slotSelectionChanged(Q3ListViewItem *listItem) {
     //kDebug()<<k_funcinfo<<endl;
     baseCalendarList.clear();
     baseCalendar->clear();
@@ -302,7 +304,7 @@ void CalendarListDialogImpl::slotSelectionChanged(QListViewItem *listItem) {
         baseCalendar->insertItem(i18n("None"));
         baseCalendarList.append(0);
         int me = 0, i = 0;
-        QListViewItemIterator it(calendarList);
+        Q3ListViewItemIterator it(calendarList);
         for (; it.current(); ++it) {
             CalendarListViewItem *item = dynamic_cast<CalendarListViewItem*>(it.current());
             if (item && cal != item && !item->hasBaseCalendar(cal)) {
@@ -356,14 +358,14 @@ void CalendarListDialogImpl::slotAddClicked() {
     
 }
 
-QPtrList<CalendarListViewItem> &CalendarListDialogImpl::deletedItems() {
+Q3PtrList<CalendarListViewItem> &CalendarListDialogImpl::deletedItems() {
     return m_deletedItems;
 }
 
 CalendarListViewItem *CalendarListDialogImpl::findItem(Calendar *cal) {
     if (!cal)
         return 0;
-    QListViewItemIterator it(calendarList);
+    Q3ListViewItemIterator it(calendarList);
     for (;it.current(); ++it) {
         CalendarListViewItem *item = dynamic_cast<CalendarListViewItem *>(it.current());
         if (item && (cal == item->original || cal == item->calendar)) {
@@ -374,7 +376,7 @@ CalendarListViewItem *CalendarListDialogImpl::findItem(Calendar *cal) {
     return 0;
 }
 
-void CalendarListDialogImpl::slotItemRenamed(QListViewItem *itm, int col) {
+void CalendarListDialogImpl::slotItemRenamed(Q3ListViewItem *itm, int col) {
     //kDebug()<<k_funcinfo<<itm->text(0)<<endl;
     itm->setRenameEnabled(col, false);
     m_renameItem = 0;
@@ -397,20 +399,20 @@ void CalendarListDialogImpl::slotItemRenamed(QListViewItem *itm, int col) {
 }
 
 // We don't get notified when rename is cancelled, this is called from the item
-void CalendarListDialogImpl::renameStopped(QListViewItem */*item*/) {
+void CalendarListDialogImpl::renameStopped(Q3ListViewItem */*item*/) {
     //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     m_renameItem = 0;
     emit selectionChanged();
 }
 
-void CalendarListDialogImpl::slotListDoubleClicked(QListViewItem *item, const QPoint&, int col) {
+void CalendarListDialogImpl::slotListDoubleClicked(Q3ListViewItem *item, const QPoint&, int col) {
     //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     if (m_renameItem)
         return;
     slotStartRename(item, col);
 }
 
-void CalendarListDialogImpl::slotRenameStarted(QListViewItem */*item*/, int /*col*/) {
+void CalendarListDialogImpl::slotRenameStarted(Q3ListViewItem */*item*/, int /*col*/) {
     //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     if (calendarList->isRenaming()) {
         bDelete->setEnabled(false);
@@ -418,7 +420,7 @@ void CalendarListDialogImpl::slotRenameStarted(QListViewItem */*item*/, int /*co
     }
 }
 
-void CalendarListDialogImpl::slotStartRename(QListViewItem *item, int col) {
+void CalendarListDialogImpl::slotStartRename(Q3ListViewItem *item, int col) {
     //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
     static_cast<CalendarListViewItem*>(item)->oldText = item->text(col);
     item->setRenameEnabled(col, true);

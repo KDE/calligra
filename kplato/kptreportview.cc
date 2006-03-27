@@ -43,8 +43,8 @@
 
 #include <qfile.h>
 #include <qfileinfo.h>
-#include <qheader.h>
-#include <qpopupmenu.h>
+#include <q3header.h>
+#include <q3popupmenu.h>
 #include <qlayout.h>
 #include <qdom.h>
 #include <qstringlist.h>
@@ -188,8 +188,8 @@ ReportView::ReportView(View *view, QWidget *parent)
 
     initReportList();
     
-	connect(m_reportList, SIGNAL(clicked(QListViewItem*)), SLOT(slotReportListClicked(QListViewItem*)));
-	connect(m_reportList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(slotReportListSelectionChanged(QListViewItem*)));
+	connect(m_reportList, SIGNAL(clicked(Q3ListViewItem*)), SLOT(slotReportListClicked(Q3ListViewItem*)));
+	connect(m_reportList, SIGNAL(selectionChanged(Q3ListViewItem*)), SLOT(slotReportListSelectionChanged(Q3ListViewItem*)));
 
 	//setCentralWidget(m_reportview);
 
@@ -291,7 +291,7 @@ QString ReportView::setReportDetail() {
     
     } else if (m_reportTags->summarytasksLevel == "0") {
         // make a report that has summarytasks as starting points
-        QPtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
+        Q3PtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
         for (; it.current(); ++it) {
             if (it.current()->type() == Node::Type_Summarytask) {
                 s += setTaskDetail(it.current());
@@ -302,7 +302,7 @@ QString ReportView::setReportDetail() {
 
     } else if (m_reportTags->tasksLevel == "0") {
         // make a report that has tasks as starting points
-        QPtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
+        Q3PtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
         for (; it.current(); ++it) {
             if (it.current()->type() == Node::Type_Task) {
                 s += setTaskDetail(it.current());
@@ -319,16 +319,16 @@ QString ReportView::setReportDetail() {
 
     } else if (m_reportTags->resourcegroupsLevel == "0") {
         // make a report that has resourcegroups as starting points
-        QPtrListIterator<ResourceGroup> it(mainView()->getProject().resourceGroups());
+        Q3PtrListIterator<ResourceGroup> it(mainView()->getProject().resourceGroups());
         for (; it.current(); ++it) {
             s += setResourceGroupDetail(it.current());
         }
 
     } else if (m_reportTags->resourcesLevel == "0") {
         // make a report that has resources as starting points
-        QPtrListIterator<ResourceGroup> it(mainView()->getProject().resourceGroups());
+        Q3PtrListIterator<ResourceGroup> it(mainView()->getProject().resourceGroups());
         for (; it.current(); ++it) {
-            QPtrListIterator<Resource> rit(it.current()->resources());
+            Q3PtrListIterator<Resource> rit(it.current()->resources());
             for (; rit.current(); ++rit) {
                 s += setResourceDetail(rit.current());
             }
@@ -345,7 +345,7 @@ QString ReportView::setResourceGroupDetail(ResourceGroup *group) {
         m_reportTags->m_resourcegroup = group;
         //kDebug()<<k_funcinfo<<group->name()<<": level="<<m_reportTags->resourcegroupsLevel<<endl;
         s = setDetail("resourcegroup", m_reportTags->resourcegroupsProps, m_reportTags->resourcegroupsLevel);
-        QPtrListIterator<Resource> rit(group->resources());
+        Q3PtrListIterator<Resource> rit(group->resources());
         for (; rit.current(); ++rit) {
             s += setResourceDetail(rit.current());
         }
@@ -367,7 +367,7 @@ QString ReportView::setResourceDetail(Resource *res) {
 QString ReportView::setTaskChildren(Node *node) {
     //kDebug()<<k_funcinfo<<endl;
     QString s;
-    QPtrListIterator<Node> it(node->childNodeIterator());
+    Q3PtrListIterator<Node> it(node->childNodeIterator());
     for (; it.current(); ++it) {
         s += setTaskDetail(it.current());
         if (it.current()->type() == Node::Type_Summarytask)
@@ -714,12 +714,12 @@ void ReportView::getContext(Context::Reportview &context) const {
     //kDebug()<<k_funcinfo<<endl;
 }
 
-void ReportView::slotReportListClicked(QListViewItem* item) {
+void ReportView::slotReportListClicked(Q3ListViewItem* item) {
     if (item == m_reportList->selectedItem())
         slotReportListSelectionChanged(item);
 }
 
-void ReportView::slotReportListSelectionChanged(QListViewItem* item) {
+void ReportView::slotReportListSelectionChanged(Q3ListViewItem* item) {
     ReportItem *ri = dynamic_cast<ReportItem*>(item);
     if (ri == 0)
         return;

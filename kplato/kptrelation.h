@@ -24,8 +24,10 @@
 #include "kptduration.h"
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
-class QCanvas;
+class Q3Canvas;
 class QDomElement;
 
 namespace KPlato
@@ -95,7 +97,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QCString indent);
+    void printDebug(Q3CString indent);
 #endif
 
 };

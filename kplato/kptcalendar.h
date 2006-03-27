@@ -25,7 +25,9 @@
 
 #include <qdatetime.h>
 #include <qpair.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QDomElement;
 class QDateTime;
@@ -51,11 +53,11 @@ public:
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
 
-    const QPtrList<QPair<QTime, QTime> > &workingIntervals() const { return m_workingIntervals; }
+    const Q3PtrList<QPair<QTime, QTime> > &workingIntervals() const { return m_workingIntervals; }
     void addInterval(QPair<QTime, QTime> *interval);
     void addInterval(QPair<QTime, QTime> interval) { addInterval(new QPair<QTime, QTime>(interval)); }
     void clearIntervals() { m_workingIntervals.clear(); }
-    void setIntervals(QPtrList<QPair<QTime, QTime> > intervals) { 
+    void setIntervals(Q3PtrList<QPair<QTime, QTime> > intervals) { 
         m_workingIntervals.clear();
         m_workingIntervals = intervals;
     }
@@ -101,11 +103,11 @@ public:
 private:
     QDate m_date; //NOTE: inValid if used for weekdays
     int m_state;
-    QPtrList<QPair<QTime, QTime> > m_workingIntervals;
+    Q3PtrList<QPair<QTime, QTime> > m_workingIntervals;
 
 #ifndef NDEBUG
 public:
-    void printDebug(QCString indent="");
+    void printDebug(Q3CString indent="");
 #endif
 };
 
@@ -120,7 +122,7 @@ public:
     void save(QDomElement &element) const;
 
     void addWeekday(CalendarDay *day) { m_weekdays.append(day); }
-    const QPtrList<CalendarDay> &weekdays() const { return m_weekdays; }
+    const Q3PtrList<CalendarDay> &weekdays() const { return m_weekdays; }
     /**
      * Returns the pointer to CalendarDay for @day or 0 if not defined. 
      * day is 0..6.
@@ -140,8 +142,8 @@ public:
     int state(int weekday) const;
     void setState(int weekday, int state);
     
-    const QPtrList<QPair<QTime, QTime> > &intervals(int weekday) const;
-    void setIntervals(int weekday, QPtrList<QPair<QTime, QTime> >intervals);
+    const Q3PtrList<QPair<QTime, QTime> > &intervals(int weekday) const;
+    void setIntervals(int weekday, Q3PtrList<QPair<QTime, QTime> >intervals);
     void clearIntervals(int weekday);
     
     bool operator==(const CalendarWeekdays *weekdays) const;
@@ -174,12 +176,12 @@ public:
     const CalendarWeekdays &copy(const CalendarWeekdays &weekdays);
 
 private:
-    QPtrList<CalendarDay> m_weekdays;
+    Q3PtrList<CalendarDay> m_weekdays;
     double m_workHours;
 
 #ifndef NDEBUG
 public:
-    void printDebug(QCString indent="");
+    void printDebug(Q3CString indent="");
 #endif
 };
 
@@ -235,7 +237,7 @@ public:
     bool addDay(CalendarDay *day) { return m_days.insert(0, day); }
     bool removeDay(CalendarDay *day) { return m_days.removeRef(day); }
     CalendarDay *takeDay(CalendarDay *day) { return m_days.take(m_days.find(day)); }
-    const QPtrList<CalendarDay> &days() const { return m_days; }
+    const Q3PtrList<CalendarDay> &days() const { return m_days; }
     
     /**
      * Returns the state of definition for parents day date in it.
@@ -321,12 +323,12 @@ private:
     QString m_id;
     QString m_parentId;
 
-    QPtrList<CalendarDay> m_days;
+    Q3PtrList<CalendarDay> m_days;
     CalendarWeekdays *m_weekdays;
 
 #ifndef NDEBUG
 public:
-    void printDebug(QCString indent="");
+    void printDebug(Q3CString indent="");
 #endif
 };
 
@@ -387,7 +389,7 @@ private:
     
 #ifndef NDEBUG
 public:
-    void printDebug(QCString indent="");
+    void printDebug(Q3CString indent="");
 #endif
 };
 

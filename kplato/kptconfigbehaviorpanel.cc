@@ -35,7 +35,7 @@
 
 #include <qlayout.h>
 #include <qdatetime.h> 
-#include <qbuttongroup.h> 
+#include <q3buttongroup.h> 
 #include <qcheckbox.h> 
 
 namespace KPlato

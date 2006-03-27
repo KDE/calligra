@@ -25,7 +25,9 @@
 #include "kptduration.h"
 #include "kptresource.h"
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KPlato
 {
@@ -134,7 +136,7 @@ public:
      * This includes adding summarytasks relations to subtasks
      * and lists for start- and endnodes.
      */
-    void initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks);
+    void initiateCalculationLists(Q3PtrList<Node> &startnodes, Q3PtrList<Node> &endnodes, Q3PtrList<Node> &summarytasks);
     /**
      * Calculates @ref m_durationForward from @ref earliestStart and
      * returns the resulting end time, 
@@ -186,8 +188,8 @@ public:
     // Proxy relations are relations to/from summarytasks. 
     // These relations are distrubuted to the relevant tasks before calculation.
     void clearProxyRelations();
-    void addParentProxyRelations(QPtrList<Relation> &list);
-    void addChildProxyRelations(QPtrList<Relation> &list);
+    void addParentProxyRelations(Q3PtrList<Relation> &list);
+    void addChildProxyRelations(Q3PtrList<Relation> &list);
     void addParentProxyRelation(Node *node, const Relation *rel);
     void addChildProxyRelation(Node *node, const Relation *rel);
     
@@ -274,27 +276,27 @@ public:
     struct Progress &progress() { return m_progress; }
     
 private:
-    DateTime calculateSuccessors(const QPtrList<Relation> &list, int use);
-    DateTime calculatePredeccessors(const QPtrList<Relation> &list, int use);
-    DateTime scheduleSuccessors(const QPtrList<Relation> &list, int use);
-    DateTime schedulePredeccessors(const QPtrList<Relation> &list, int use);
+    DateTime calculateSuccessors(const Q3PtrList<Relation> &list, int use);
+    DateTime calculatePredeccessors(const Q3PtrList<Relation> &list, int use);
+    DateTime scheduleSuccessors(const Q3PtrList<Relation> &list, int use);
+    DateTime schedulePredeccessors(const Q3PtrList<Relation> &list, int use);
     
     DateTime workStartAfter(const DateTime &dt);
     DateTime workFinishBefore(const DateTime &dt);
 
 private:
-    QPtrList<ResourceGroup> m_resource;
+    Q3PtrList<ResourceGroup> m_resource;
 
     ResourceRequestCollection *m_requests;
  
-    QPtrList<Relation> m_parentProxyRelations;
-    QPtrList<Relation> m_childProxyRelations;
+    Q3PtrList<Relation> m_parentProxyRelations;
+    Q3PtrList<Relation> m_childProxyRelations;
       
     struct Progress m_progress;
     
 #ifndef NDEBUG
 public:
-    void printDebug(bool children, QCString indent);
+    void printDebug(bool children, Q3CString indent);
 #endif
 
 };

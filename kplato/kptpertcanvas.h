@@ -23,9 +23,12 @@
 #include "kptnode.h"
 #include "kptproject.h"
 
-#include <qcanvas.h>
-#include <qmemarray.h>
-#include <qptrdict.h>
+#include <q3canvas.h>
+#include <q3memarray.h>
+#include <q3ptrdict.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3PtrList>
 
 class QTimer;
 class QPainter;
@@ -37,7 +40,7 @@ namespace KPlato
 
 class PertNodeItem;
 
-class PertCanvas : public QCanvasView
+class PertCanvas : public Q3CanvasView
 {
     Q_OBJECT
 
@@ -79,7 +82,7 @@ signals:
 
 
 private:
-    QCanvas *m_canvas;
+    Q3Canvas *m_canvas;
 
     QTimer *m_scrollTimer;
     bool m_mousePressed;
@@ -89,10 +92,10 @@ private:
 	int m_horizontalGap;
 	QSize m_itemSize;
 
-    QPtrDict<PertNodeItem> m_nodes;
-    QPtrList<Relation> m_relations;
+    Q3PtrDict<PertNodeItem> m_nodes;
+    Q3PtrList<Relation> m_relations;
 
-    QPtrList<QMemArray<bool> > m_rows;
+    Q3PtrList<Q3MemArray<bool> > m_rows;
 
 #ifndef NDEBUG
     void printDebug( int );

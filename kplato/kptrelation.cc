@@ -23,8 +23,10 @@
 #include "kptproject.h"
 #include "kptcanvasitem.h"
 
-#include <qcanvas.h>
+#include <q3canvas.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 
@@ -127,7 +129,7 @@ void Relation::save(QDomElement &element) const {
 }
 
 #ifndef NDEBUG
-void Relation::printDebug(QCString indent) {
+void Relation::printDebug(Q3CString indent) {
     indent += "  ";
     kDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
     kDebug()<<indent<<"  Child: "<<m_child->name()<<endl;

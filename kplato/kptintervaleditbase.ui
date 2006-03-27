@@ -39,7 +39,7 @@
                 <cstring>intervalList</cstring>
             </property>
             <property name="focusPolicy">
-                <enum>NoFocus</enum>
+                <enum>Qt::NoFocus</enum>
             </property>
             <property name="resizeMode">
                 <enum>AllColumns</enum>
@@ -114,7 +114,7 @@
                         <cstring>spacer1</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

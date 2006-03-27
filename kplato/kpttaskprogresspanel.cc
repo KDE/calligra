@@ -19,7 +19,7 @@
 
 #include "kpttaskprogresspanel.h"
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 
@@ -124,7 +124,7 @@ void TaskProgressPanel::setEstimateScales( int day )
 
 //-------------------------------------
 
-TaskProgressPanelImpl::TaskProgressPanelImpl(QWidget *parent, const char *name, WFlags f)
+TaskProgressPanelImpl::TaskProgressPanelImpl(QWidget *parent, const char *name, Qt::WFlags f)
     : TaskProgressPanelBase(parent, name, f) {
     
     connect(started, SIGNAL(toggled(bool)), SLOT(slotStartedChanged(bool)));

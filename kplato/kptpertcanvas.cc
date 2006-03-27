@@ -26,14 +26,17 @@
 #include <qbuffer.h>
 #include <qtimer.h>
 #include <qclipboard.h>
-#include <qprogressdialog.h>
-#include <qobjectlist.h>
+#include <q3progressdialog.h>
+#include <qobject.h>
 #include <qpainter.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qcursor.h>
 #include <qrect.h>
 #include <qsize.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3MemArray>
 
 #include <KoStore.h>
 #include <ktempfile.h>
@@ -49,14 +52,14 @@ namespace KPlato
 {
 
 PertCanvas::PertCanvas( QWidget *parent )
-    : QCanvasView( parent, "Pert canvas" /*WNorthWestGravity WStaticContents| WResizeNoErase | WRepaintNoErase */),
+    : Q3CanvasView( parent, "Pert canvas" /*WNorthWestGravity WStaticContents| WResizeNoErase | WRepaintNoErase */),
 	m_verticalGap(20),
 	m_horizontalGap(10),
 	m_itemSize(100,30)
 
 {
     //setHScrollBarMode(QScrollView::AlwaysOn);
-    m_canvas = new QCanvas( this );
+    m_canvas = new Q3Canvas( this );
     setCanvas( m_canvas );
 }
 
@@ -71,18 +74,18 @@ void PertCanvas::draw(Project& project)
     updateContents();
 
     // First make node items
-    QPtrListIterator<Node> nit(project.childNodeIterator());
+    Q3PtrListIterator<Node> nit(project.childNodeIterator());
     for ( ; nit.current(); ++nit ) {
         createChildItems(createNodeItem(nit.current()));
     }
 
     // First all items with relations
-    QPtrDictIterator<PertNodeItem> it(m_nodes);
+    Q3PtrDictIterator<PertNodeItem> it(m_nodes);
     for(; it.current(); ++it)
     {
         if (!(it.current()->hasParent()) && it.current()->hasChild())
         {
-            m_rows.append(new QMemArray<bool>(1)); // New node always goes into new row, first column
+            m_rows.append(new Q3MemArray<bool>(1)); // New node always goes into new row, first column
             it.current()->move(this, m_rows.count()-1, 0); // item also moves it's children
         }
     }
@@ -91,7 +94,7 @@ void PertCanvas::draw(Project& project)
     {
         if (!(it.current()->hasParent() || it.current()->hasChild()))
         {
-            m_rows.append(new QMemArray<bool>(1)); // New node always goes into new row, first column
+            m_rows.append(new Q3MemArray<bool>(1)); // New node always goes into new row, first column
             it.current()->move(this, m_rows.count()-1, 0);
         }
     }
@@ -131,7 +134,7 @@ void PertCanvas::createChildItems(PertNodeItem *parentItem)
     if (!parentItem)
         return;
 
-    QPtrListIterator<Relation> it(parentItem->node().dependChildNodes());
+    Q3PtrListIterator<Relation> it(parentItem->node().dependChildNodes());
     for (; it.current(); ++it)
     {
         PertNodeItem *childItem = createNodeItem(it.current()->child());
@@ -141,7 +144,7 @@ void PertCanvas::createChildItems(PertNodeItem *parentItem)
     }
 
     // Now my children
-	QPtrListIterator<Node> nit(parentItem->node().childNodeIterator());
+	Q3PtrListIterator<Node> nit(parentItem->node().childNodeIterator());
     for ( ; nit.current(); ++nit ) {
         createChildItems(createNodeItem(nit.current()));
 	}
@@ -150,7 +153,7 @@ void PertCanvas::createChildItems(PertNodeItem *parentItem)
 void PertCanvas::drawRelations()
 {
 	//kDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<Relation> it(m_relations);
+    Q3PtrListIterator<Relation> it(m_relations);
     for (; it.current(); ++it)
     {
         PertNodeItem *parentItem = m_nodes.find(it.current()->parent());
@@ -201,7 +204,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
             {
                 chRow = row+1;
                 if (chRow >= 0 && m_rows.count() <= uint(chRow)) {
-                    m_rows.append(new QMemArray<bool>(1)); // make a new row
+                    m_rows.append(new Q3MemArray<bool>(1)); // make a new row
                     chRow = m_rows.count()-1;  // to be safe
                 }
                 //kDebug()<<k_funcinfo<<" Moving "<<childItem->node().name()<<" to row: "<<chRow<<endl;
@@ -221,7 +224,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
             if (!(m_rows.at(row+1)) ||                        // next row does not exists
                 m_rows.at(row+1)->at(col) == true)  // col is not free
             {
-                m_rows.append(new QMemArray<bool>(col+1)); // make a new row
+                m_rows.append(new Q3MemArray<bool>(col+1)); // make a new row
             }
             else if (col >= 0 && m_rows.at(row+1)->count() <= uint(col))  // col does not exist
                 m_rows.at(row)->resize(col+1);
@@ -251,7 +254,7 @@ void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem,
             if (col >= 0 && m_rows.at(row)->count() <= uint(col))
                 m_rows.at(row)->resize(col+1); // make new column
             else if (m_rows.at(row)->at(col) = true)
-                m_rows.append(new QMemArray<bool>(col+1)); // col not free, so make a new row
+                m_rows.append(new Q3MemArray<bool>(col+1)); // col not free, so make a new row
 
             chRow = m_rows.count() -1;
             chCol = col;
@@ -269,8 +272,8 @@ QSize PertCanvas::canvasSize()
 {
     //kDebug()<<k_funcinfo<<endl;
 	QSize s(0,0);
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
+    Q3CanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
     {
 	    QRect r = (*it)->boundingRect();
@@ -287,8 +290,8 @@ void PertCanvas::clear()
     m_nodes.clear();
     m_relations.clear();
     m_rows.clear();
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
+    Q3CanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
     {
         if ( *it )
@@ -301,19 +304,19 @@ void PertCanvas::contentsMousePressEvent ( QMouseEvent * e )
     //kDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
     switch (e->button())
     {
-        case QEvent::LeftButton:
+        case Qt::LeftButton:
         {
             break;
         }
-        case QEvent::RightButton:
+        case Qt::RightButton:
         {
             PertNodeItem *item = selectedItem();
             if (item)
                 item->setSelected(false);
             canvas()->update();
             
-            QCanvasItemList l = canvas()->collisions(e->pos());
-            for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+            Q3CanvasItemList l = canvas()->collisions(e->pos());
+            for (Q3CanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
             {
                 if ( (*it)->rtti() == PertProjectItem::RTTI ||
                      (*it)->rtti() == PertTaskItem::RTTI  ||
@@ -335,7 +338,7 @@ void PertCanvas::contentsMousePressEvent ( QMouseEvent * e )
             }
             break;
         }
-        case QEvent::MidButton:
+        case Qt::MidButton:
             break;
         default:
             break;
@@ -347,11 +350,11 @@ void PertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
     //kDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
     switch (e->button())
     {
-        case QEvent::LeftButton:
+        case Qt::LeftButton:
         {
             bool hit = false;
-            QCanvasItemList l = canvas()->collisions(e->pos());
-            for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+            Q3CanvasItemList l = canvas()->collisions(e->pos());
+            for (Q3CanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
 		    {
 	            if ( (*it)->rtti() == PertProjectItem::RTTI ||
 	                 (*it)->rtti() == PertTaskItem::RTTI  ||
@@ -393,11 +396,11 @@ void PertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
             canvas()->update();
             break;
         }
-        case QEvent::RightButton:
+        case Qt::RightButton:
         {
             break;
         }
-        case QEvent::MidButton:
+        case Qt::MidButton:
             break;
         default:
             break;
@@ -406,8 +409,8 @@ void PertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 
 PertNodeItem *PertCanvas::selectedItem()
 {
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
+    Q3CanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
     {
         if ( (*it)->isSelected() )

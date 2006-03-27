@@ -24,9 +24,9 @@
 #include "kptdatetime.h"
 
 #include <qdom.h>
-#include <qintdict.h>
+#include <q3intdict.h>
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <kdebug.h>
 
@@ -90,9 +90,9 @@ private:
  * The intervals do not overlap, an interval does not start before the
  * previous interval ends.
  */
-class AppointmentIntervalList : public QPtrList<AppointmentInterval> {
+class AppointmentIntervalList : public Q3PtrList<AppointmentInterval> {
 protected:
-    int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2) {
+    int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2) {
         AppointmentInterval *i1 = static_cast<AppointmentInterval*>(item1);
         AppointmentInterval *i2 = static_cast<AppointmentInterval*>(item2);
         if (i1->startTime() < i2->startTime()) {
@@ -110,7 +110,7 @@ protected:
         return 0;
     }
 };
-typedef QPtrListIterator<AppointmentInterval> AppointmentIntervalListIterator;
+typedef Q3PtrListIterator<AppointmentInterval> AppointmentIntervalListIterator;
 
 /**
  * A resource (@ref Resource) can be scheduled to be used at any time, 
@@ -221,8 +221,8 @@ private:
     
     Duration m_repeatInterval;
     int m_repeatCount;
-    QPtrList<Duration> m_extraRepeats;
-    QPtrList<Duration> m_skipRepeats;
+    Q3PtrList<Duration> m_extraRepeats;
+    Q3PtrList<Duration> m_skipRepeats;
 
     AppointmentIntervalList m_intervals;
     
@@ -237,7 +237,7 @@ private:
         Duration m_effort;
         bool m_overtime;
     };
-    class UsedEffort : QPtrList<UsedEffortItem> {
+    class UsedEffort : Q3PtrList<UsedEffortItem> {
     public:
         UsedEffort();
         ~UsedEffort() {}
@@ -252,7 +252,7 @@ private:
         void save(QDomElement &element) const;
     
     protected:
-        int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2);
+        int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
     };
     
     UsedEffort m_actualEffort;

@@ -31,13 +31,17 @@
 #include <klocale.h>
 #include <kcalendarsystem.h> 
 #include <kiconloader.h>
-#include <qframe.h>
+#include <q3frame.h>
 #include <qpainter.h>
 #include <qdialog.h>
 #include <qstyle.h>
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QEvent>
+#include <QResizeEvent>
 #include <klineedit.h>
 #include <qvalidator.h>
 #include <kdebug.h>
@@ -56,14 +60,14 @@ public:
 };
 
 
-CalendarPanel::CalendarPanel(QWidget *parent, QDate dt, const char *name, WFlags f)
-  : QFrame(parent,name, f)
+CalendarPanel::CalendarPanel(QWidget *parent, QDate dt, const char *name, Qt::WFlags f)
+  : Q3Frame(parent,name, f)
 {
   init( dt );
 }
 
 CalendarPanel::CalendarPanel( QWidget *parent, const char *name )
-  : QFrame(parent,name)
+  : Q3Frame(parent,name)
 {
     init( QDate::currentDate() );
 }
@@ -140,7 +144,7 @@ CalendarPanel::eventFilter(QObject *o, QEvent *e )
           return TRUE; // eat event
        }
    }
-   return QFrame::eventFilter( o, e );
+   return Q3Frame::eventFilter( o, e );
 }
 
 void
@@ -553,7 +557,7 @@ void CalendarPanel::setCalendar(Calendar *cal) {
     table->clear();
     if (cal) {
         table->setMarkedWeekdays(cal->weekdaysMap());
-        QPtrListIterator<CalendarDay> it = cal->days();
+        Q3PtrListIterator<CalendarDay> it = cal->days();
         //kDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
         for (; it.current(); ++it) {
             if (it.current()->state() != Map::None) {

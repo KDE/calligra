@@ -31,11 +31,11 @@ class KTextEdit;
 class KComboBox;
 class KDoubleNumInput;
 
-class QDateTimeEdit;
+class Q3DateTimeEdit;
 class QSpinBox;
-class QButtonGroup;
-class QListBox;
-class QTable;
+class Q3ButtonGroup;
+class Q3ListBox;
+class Q3Table;
 class QDateTime;
 
 //TODO ui files are not in the KPlato namespace!!
