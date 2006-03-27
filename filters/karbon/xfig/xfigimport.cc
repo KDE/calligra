@@ -247,7 +247,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
   fin.ignore (INT_MAX, '\n');
 
   // now read in the objects
-  while (! fin.eof ()) {
+  while (! fin.atEnd()) {
     int tag = -1;
     fin >> tag;
     if (tag == -1) {

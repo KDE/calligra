@@ -191,7 +191,7 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 		kDebug() << "copy " << (copy+1) << " of " << loops << endl;
 		uint pageNumber = fromPage;
 		QValueList<int>::ConstIterator pagesIt = pagesToPrint.constBegin();
-		for(;(int)pageNumber == fromPage || !engine.eof(); ++pageNumber) {
+		for(;(int)pageNumber == fromPage || !engine.atEnd(); ++pageNumber) {
 			kDebug() << "printing..." << endl;
 			if (pagesIt == pagesToPrint.constEnd()) //no more pages to print
 				break;

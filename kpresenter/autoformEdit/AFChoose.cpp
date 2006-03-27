@@ -60,7 +60,7 @@ void AFChoose::getGroups()
     if ( f.open(QIODevice::ReadOnly) ) {
         QTextStream t( &f );
         QString s;
-        while ( !t.eof() ) {
+        while ( !t.atEnd() ) {
             s = t.readLine();
             if ( !s.isEmpty() ) {
                 grpPtr = new Group;

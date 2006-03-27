@@ -295,7 +295,7 @@ void KexiSimplePrintPreviewWindow::goToPage(int pageNumber)
 	m_pageNumber = pageNumber;
 
 	m_view->repaint(); //this will automatically paint a new page
-//	if (m_engine.eof())
+//	if (m_engine.atEnd())
 //		m_pagesCount = pageNumber+1;
 
 	m_navToolbar->setItemEnabled(m_idNext, pageNumber < ((int)m_engine.pagesCount()-1));

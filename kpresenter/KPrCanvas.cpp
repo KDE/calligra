@@ -4030,7 +4030,7 @@ void KPrCanvas::dropEvent( QDropEvent *e )
                     QString text = QString::null, tmp;
                     kDebug()<<" filename :"<<filename<<endl;
                     if ( f.open( QIODevice::ReadOnly ) ) {
-                        while ( !t.eof() ) {
+                        while ( !t.atEnd() ) {
                             tmp = t.readLine();
                             tmp += "\n";
                             text.append( tmp );
