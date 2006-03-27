@@ -60,7 +60,7 @@ using namespace KexiMigration;
 //===========================================================
 //
 ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
- : KWizard(parent)
+ : K3Wizard(parent)
  , m_args(args)
 {
 	setCaption(i18n("Import Database"));
@@ -646,7 +646,7 @@ void ImportWizard::accept()
 			m_args->remove("destinationDatabaseName");
 		}
 	}
-	KWizard::accept();
+	K3Wizard::accept();
 }
 
 KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
@@ -865,7 +865,7 @@ tristate ImportWizard::import()
 
 void ImportWizard::reject()
 {
-	KWizard::reject();
+	K3Wizard::reject();
 }
 
 //===========================================================
@@ -944,13 +944,13 @@ void ImportWizard::next()
 	}
 
 	setAppropriate( m_srcDBPage, !fileBasedSrcSelected() && !m_predefinedConnectionData ); //skip m_srcDBPage
-	KWizard::next();
+	K3Wizard::next();
 }
 
 void ImportWizard::back()
 {
 	setAppropriate( m_srcDBPage, !fileBasedSrcSelected() && !m_predefinedConnectionData ); //skip m_srcDBPage
-	KWizard::back();
+	K3Wizard::back();
 }
 
 void ImportWizard::pageSelected(const QString &)

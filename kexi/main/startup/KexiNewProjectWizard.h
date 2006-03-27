@@ -23,7 +23,7 @@
 #include "kexidbconnectionset.h"
 #include <kexidb/connectiondata.h>
 
-#include <kwizard.h>
+#include <k3wizard.h>
 
 class QListViewItem;
 
@@ -34,7 +34,7 @@ class KexiDBTitlePage;
 class KexiServerDBNamePage;
 class KexiProjectSelectorWidget;
 
-class KEXIMAIN_EXPORT KexiNewProjectWizard : public KWizard
+class KEXIMAIN_EXPORT KexiNewProjectWizard : public K3Wizard
 {
 	Q_OBJECT
 	public:

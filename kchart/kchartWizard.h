@@ -2,7 +2,7 @@
 #define kchartWIZARD_H
 
 #include <klocale.h>
-#include "kwizard.h"
+#include "k3wizard.h"
 #include "kchart_part.h"
 
 namespace KChart
@@ -17,7 +17,7 @@ class KChartWizardSetupDataPage;
 class KChartWizardSelectChartTypePage;
 class KChartWizardSelectDataFormatPage;
 
-class KChartWizard : public KWizard
+class KChartWizard : public K3Wizard
 {
     Q_OBJECT
 public:

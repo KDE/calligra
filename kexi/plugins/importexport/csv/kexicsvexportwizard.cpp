@@ -54,7 +54,7 @@ KexiCSVExportWizard::Options::Options()
 
 KexiCSVExportWizard::KexiCSVExportWizard( const Options& options,
 	KexiMainWindow* mainWin, QWidget * parent, const char * name )
- : KWizard(parent, name)
+ : K3Wizard(parent, name)
  , m_options(options)
 // , m_mode(mode)
 // , m_itemId(itemId)
@@ -278,7 +278,7 @@ void KexiCSVExportWizard::showPage ( QWidget * page )
 			m_defaultsBtn->hide();
 	}
 
-	KWizard::showPage(page);
+	K3Wizard::showPage(page);
 }
 
 void KexiCSVExportWizard::next()
@@ -286,11 +286,11 @@ void KexiCSVExportWizard::next()
 	if (currentPage() == m_fileSavePage) {
 		if (!m_fileSavePage->checkFileName())
 			return;
-		KWizard::next();
+		K3Wizard::next();
 		finishButton()->setFocus();
 		return;
 	}
-	KWizard::next();
+	K3Wizard::next();
 }
 
 void KexiCSVExportWizard::done(int result)
@@ -329,7 +329,7 @@ void KexiCSVExportWizard::done(int result)
 	else
 		deleteEntry("AddColumnNamesForExportingCSVFiles");
 
-	KWizard::done(result);
+	K3Wizard::done(result);
 }
 
 void KexiCSVExportWizard::slotShowOptionsButtonClicked()

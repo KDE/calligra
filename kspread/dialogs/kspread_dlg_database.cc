@@ -63,7 +63,7 @@ using namespace KSpread;
  ********************************************************/
 
 DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * name, bool modal, WFlags fl )
-  : KWizard( (QWidget *) parent, name, modal, fl ),
+  : K3Wizard( (QWidget *) parent, name, modal, fl ),
     m_currentPage( eDatabase ),
     m_pView( parent ),
     m_targetRect( rect ),
@@ -687,7 +687,7 @@ void DatabaseDialog::accept()
   }
 
   m_pView->slotUpdateView( sheet );
-  KWizard::accept();
+  K3Wizard::accept();
 }
 
 bool DatabaseDialog::databaseDoNext()

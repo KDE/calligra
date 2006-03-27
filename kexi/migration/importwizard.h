@@ -22,7 +22,7 @@
 #ifndef KEXIMIGRATIONIMPORTWIZARD_H
 #define KEXIMIGRATIONIMPORTWIZARD_H
 
-#include <kwizard.h>
+#include <k3wizard.h>
 #include <kprogressbar.h>
 #include <kapplication.h>
 
@@ -59,7 +59,7 @@ namespace KexiMigration {
 class KexiMigrate;
 
 //! GUI for importing external databases (file-based and server-based)
-class KEXIMIGR_EXPORT ImportWizard : public KWizard
+class KEXIMIGR_EXPORT ImportWizard : public K3Wizard
 {
 Q_OBJECT
 public:

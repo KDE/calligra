@@ -21,7 +21,7 @@
 #ifndef webpresentation_h
 #define webpresentation_h
 
-#include <kwizard.h>
+#include <k3wizard.h>
 
 #include <qdialog.h>
 #include <qvaluelist.h>
@@ -146,7 +146,7 @@ protected:
     QString m_encoding;
 };
 
-class KPrWebPresentationWizard : public KWizard
+class KPrWebPresentationWizard : public K3Wizard
 {
     Q_OBJECT
 

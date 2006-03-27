@@ -20,7 +20,7 @@
 #ifndef KEXI_CSVEXPORTEIZARD_H
 #define KEXI_CSVEXPORTEIZARD_H
 
-#include <kwizard.h>
+#include <k3wizard.h>
 
 class QCheckBox;
 class QGroupBox;
@@ -37,7 +37,7 @@ namespace KexiDB {
 
 /*! @short Kexi CSV export wizard
  Supports exporting to a file and to a clipboard. */
-class KexiCSVExportWizard : public KWizard
+class KexiCSVExportWizard : public K3Wizard
 {
 	Q_OBJECT
 

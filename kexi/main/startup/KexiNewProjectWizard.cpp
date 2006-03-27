@@ -85,7 +85,7 @@ class KexiNewProjectWizardPrivate
 
 KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	QWidget *parent, const char *name, bool modal, WFlags f)
-: KWizard(parent, name, modal, f)
+: K3Wizard(parent, name, modal, f)
 , d(new KexiNewProjectWizardPrivate() )
 {
 	d->msgHandler = new KexiGUIMessageHandler(this);
@@ -236,7 +236,7 @@ KexiNewProjectWizard::~KexiNewProjectWizard()
 void KexiNewProjectWizard::show()
 {
 	KDialog::centerOnScreen(this);
-	KWizard::show();
+	K3Wizard::show();
 }
 
 void KexiNewProjectWizard::slotLvTypesExecuted(QListViewItem *)
@@ -299,7 +299,7 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 			m_project_selector->setProjectSet( d->project_set_to_show );
 		}
 	}
-	KWizard::showPage(page);
+	K3Wizard::showPage(page);
 }
 
 void KexiNewProjectWizard::next()
@@ -328,7 +328,7 @@ void KexiNewProjectWizard::next()
 
 		}
 	}
-	KWizard::next();
+	K3Wizard::next();
 }
 
 void KexiNewProjectWizard::accept()
@@ -373,7 +373,7 @@ void KexiNewProjectWizard::accept()
 		}
 	}
 
-	KWizard::accept();
+	K3Wizard::accept();
 }
 
 void KexiNewProjectWizard::done(int r)
@@ -388,7 +388,7 @@ void KexiNewProjectWizard::done(int r)
 		KGlobal::config()->writeEntry("DefaultStorageForNewProjects","Server");*/
 
 	KGlobal::config()->sync();
-	KWizard::done(r);
+	K3Wizard::done(r);
 }
 
 QString KexiNewProjectWizard::projectDBName() const

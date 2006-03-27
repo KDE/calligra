@@ -31,7 +31,7 @@
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
 
-#include <kwizard.h>
+#include <k3wizard.h>
 
 class QCheckBox;
 class QComboBox;
@@ -53,7 +53,7 @@ namespace KSpread
 {
 class View;
 
-class DatabaseDialog : public KWizard
+class DatabaseDialog : public K3Wizard
 {
   Q_OBJECT
 

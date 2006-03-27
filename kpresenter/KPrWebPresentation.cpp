@@ -616,7 +616,7 @@ void KPrWebPresentation::init()
 
 KPrWebPresentationWizard::KPrWebPresentationWizard( const QString &_config, KPrDocument *_doc,
                                                   KPrView *_view )
-    : KWizard( 0, "", false ), config( _config ), webPres( config, _doc, _view )
+    : K3Wizard( 0, "", false ), config( _config ), webPres( config, _doc, _view )
 {
     doc = _doc;
     view = _view;
@@ -1124,7 +1124,7 @@ void KPrWebPresentationWizard::slideTitleChanged( QListViewItem *i )
 void KPrWebPresentationWizard::closeEvent( QCloseEvent *e )
 {
     view->enableWebPres();
-    KWizard::closeEvent( e );
+    K3Wizard::closeEvent( e );
 }
 
 void KPrWebPresentationWizard::slotChoosePath(const QString &text)

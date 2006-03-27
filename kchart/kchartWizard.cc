@@ -23,7 +23,7 @@ namespace KChart
 
 KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* name,
                              bool modal, Qt::WFlags f ) :
-    KWizard( parent, name, modal, f ),
+    K3Wizard( parent, name, modal, f ),
     m_chart( _chart )
 {
     // First page: select the data range

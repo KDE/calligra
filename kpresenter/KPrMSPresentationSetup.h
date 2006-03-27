@@ -23,7 +23,7 @@
 #ifndef mspresentation_h
 #define mspresentation_h
 
-#include <kwizard.h>
+#include <k3wizard.h>
 
 #include <qdialog.h>
 #include <qvaluelist.h>
