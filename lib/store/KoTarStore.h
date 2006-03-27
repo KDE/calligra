@@ -22,7 +22,7 @@
 
 #include "KoStoreBase.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 class KTar;
 class KArchiveDirectory;
@@ -31,14 +31,14 @@ class KUrl;
 class KoTarStore : public KoStoreBase
 {
 public:
-    KoTarStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification );
-    KoTarStore( QIODevice *dev, Mode mode, const Q3CString & appIdentification );
+    KoTarStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification );
+    KoTarStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification );
     /**
      * KUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      * @since 1.4
      */
-    KoTarStore( QWidget* window, const KUrl& url, const QString & _filename, Mode _mode, const Q3CString & appIdentification );
+    KoTarStore( QWidget* window, const KUrl& url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
     ~KoTarStore();
 protected:
     virtual bool init( Mode _mode );
@@ -50,7 +50,7 @@ protected:
     virtual bool enterAbsoluteDirectory( const QString& path );
     virtual bool fileExists( const QString& absPath ) const;
 
-    static Q3CString completeMagic( const Q3CString& appMimetype );
+    static QByteArray completeMagic( const QByteArray& appMimetype );
 
     /// The tar archive
     KTar * m_pTar;

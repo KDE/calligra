@@ -23,8 +23,6 @@
 #include <qstring.h>
 #include <q3valuestack.h>
 #include <qmap.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <koffice_export.h>
 
 class QIODevice;
@@ -76,23 +74,19 @@ public:
      * which is a bit slower because it needs to convert @p value to utf8 first.
      */
     inline void addAttribute( const char* attrName, const QString& value ) {
-        addAttribute( attrName, value );
+        addAttribute( attrName, value.toUtf8() );
     }
     /**
      * Add an attribute whose value is an integer
      */
     inline void addAttribute( const char* attrName, int value ) {
-        Q3CString str;
-        str.setNum( value );
-        addAttribute( attrName, str.data() );
+        addAttribute( attrName, QByteArray::number( value ) );
     }
     /**
      * Add an attribute whose value is an unsigned integer
      */
     inline void addAttribute( const char* attrName, uint value ) {
-        Q3CString str;
-        str.setNum( value );
-        addAttribute( attrName, str.data() );
+        addAttribute( attrName, QByteArray::number( value ) );
     }
     /**
      * Add an attribute whose value is a floating point number
@@ -109,9 +103,8 @@ public:
     void addAttributePt( const char* attrName, double value );
 
     /// Overloaded version of the one taking a const char* argument, for convenience
-    inline void addAttribute( const char* attrName, const Q3CString& value ) {
-        addAttribute( attrName, value.data() );
-    }
+    void addAttribute( const char* attrName, const QByteArray& value );
+
     /**
      * Add an attribute to the current element.
      */
@@ -129,7 +122,7 @@ public:
         addTextNode( str );
     }
     /// Overloaded version of the one taking a const char* argument
-    inline void addTextNode( const Q3CString& cstr ) {
+    inline void addTextNode( const QByteArray& cstr ) {
         addTextNode( cstr.data() );
     }
     /**
@@ -247,10 +240,10 @@ private:
     //}
 
     inline void writeCString( const char* cstr ) {
-        m_dev->writeBlock( cstr, qstrlen( cstr ) );
+        m_dev->write( cstr, qstrlen( cstr ) );
     }
     inline void writeChar( char c ) {
-        m_dev->putch( c );
+        m_dev->putChar( c );
     }
     inline void closeStartElement( Tag& tag ) {
         if ( !tag.openingTagClosed ) {

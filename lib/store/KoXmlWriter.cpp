@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <qiodevice.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <float.h>
 
 static const int s_indentBufferLength = 100;
@@ -130,12 +130,13 @@ void KoXmlWriter::addCompleteElement( QIODevice* indev )
     if ( !openOk )
         return;
     static const int MAX_CHUNK_SIZE = 8*1024; // 8 KB
-    QByteArray buffer(MAX_CHUNK_SIZE);
+    QByteArray buffer;
+    buffer.resize(MAX_CHUNK_SIZE);
     while ( !indev->atEnd() ) {
-        Q_LONG len = indev->readBlock( buffer.data(), buffer.size() );
+        Q_LONG len = indev->read( buffer.data(), buffer.size() );
         if ( len <= 0 ) // e.g. on error
             break;
-        m_dev->writeBlock( buffer.data(), len );
+        m_dev->write( buffer.data(), len );
     }
 }
 
@@ -179,6 +180,19 @@ void KoXmlWriter::addProcessingInstruction( const char* cstr )
     writeCString( "?>");
 }
 
+void KoXmlWriter::addAttribute( const char* attrName, const QByteArray& value )
+{
+    // Same as the const char* one, but here we know the size
+    writeChar( ' ' );
+    writeCString( attrName );
+    writeCString("=\"");
+    char* escaped = escapeForXML( value.constData(), value.size() );
+    writeCString( escaped );
+    if(escaped != m_escapeBuffer)
+        delete[] escaped;
+    writeChar( '"' );
+}
+
 void KoXmlWriter::addAttribute( const char* attrName, const char* value )
 {
     writeChar( ' ' );
@@ -193,14 +207,14 @@ void KoXmlWriter::addAttribute( const char* attrName, const char* value )
 
 void KoXmlWriter::addAttribute( const char* attrName, double value )
 {
-    Q3CString str;
+    QByteArray str;
     str.setNum( value, 'g', DBL_DIG );
     addAttribute( attrName, str.data() );
 }
 
 void KoXmlWriter::addAttributePt( const char* attrName, double value )
 {
-    Q3CString str;
+    QByteArray str;
     str.setNum( value, 'g', DBL_DIG );
     str += "pt";
     addAttribute( attrName, str.data() );
@@ -209,15 +223,15 @@ void KoXmlWriter::addAttributePt( const char* attrName, double value )
 void KoXmlWriter::writeIndent()
 {
     // +1 because of the leading '\n'
-    m_dev->writeBlock( m_indentBuffer, qMin( indentLevel() + 1,
-                                             s_indentBufferLength ) );
+    m_dev->write( m_indentBuffer, qMin( indentLevel() + 1,
+                                        s_indentBufferLength ) );
 }
 
 void KoXmlWriter::writeString( const QString& str )
 {
     // cachegrind says .utf8() is where most of the time is spent
-    Q3CString cstr = str.utf8();
-    m_dev->writeBlock( cstr.data(), cstr.size() - 1 );
+    const QByteArray cstr = str.toUtf8();
+    m_dev->write( cstr );
 }
 
 // In case of a reallocation (ret value != m_buffer), the caller owns the return value,

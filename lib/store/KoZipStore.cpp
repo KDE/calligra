@@ -21,7 +21,7 @@
 
 #include <qbuffer.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <kzip.h>
 #include <kdebug.h>
@@ -33,7 +33,7 @@
 #include <qfileinfo.h>
 #endif
 
-KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification )
+KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
     kDebug(s_area) << "KoZipStore Constructor filename = " << _filename
                     << " mode = " << int(_mode)
@@ -59,13 +59,13 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const Q3CString &
     }
 }
 
-KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const Q3CString & appIdentification )
+KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification )
 {
     m_pZip = new KZip( dev );
     m_bGood = init( mode, appIdentification );
 }
 
-KoZipStore::KoZipStore( QWidget* window, const KUrl & _url, const QString & _filename, Mode _mode, const Q3CString & appIdentification )
+KoZipStore::KoZipStore( QWidget* window, const KUrl & _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
     kDebug(s_area) << "KoZipStore Constructor url" << _url.prettyURL()
                     << " filename = " << _filename
@@ -109,7 +109,7 @@ KoZipStore::~KoZipStore()
     }
 }
 
-bool KoZipStore::init( Mode _mode, const Q3CString& appIdentification )
+bool KoZipStore::init( Mode _mode, const QByteArray& appIdentification )
 {
     KoStore::init( _mode );
     m_currentDir = 0;

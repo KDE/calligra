@@ -28,8 +28,8 @@ KoDirectoryStore::KoDirectoryStore( const QString& path, Mode _mode )
     : m_basePath( path )
 {
     // The parameter must include "maindoc.xml"
-    int pos = m_basePath.findRev( '/' );
-    if ( pos != -1 && pos != (int)m_basePath.length()-1 )
+    int pos = m_basePath.lastIndexOf( '/' );
+    if ( pos != -1 && pos != m_basePath.length()-1 )
         m_basePath = m_basePath.left( pos );
     if ( !m_basePath.endsWith("/") )
         m_basePath += '/';
@@ -59,10 +59,10 @@ bool KoDirectoryStore::init( Mode _mode )
     return false;
 }
 
-bool KoDirectoryStore::openReadOrWrite( const QString& name, int iomode )
+bool KoDirectoryStore::openReadOrWrite( const QString& name, QIODevice::OpenModeFlag iomode )
 {
     //kDebug(s_area) << "KoDirectoryStore::openReadOrWrite m_currentPath=" << m_currentPath << " name=" << name << endl;
-    int pos = name.findRev('/');
+    int pos = name.lastIndexOf('/');
     if ( pos != -1 ) // there are subdirs in the name -> maybe need to create them, when writing
     {
         pushDirectory(); // remember where we were
@@ -74,7 +74,7 @@ bool KoDirectoryStore::openReadOrWrite( const QString& name, int iomode )
             return false;
     }
     m_stream = new QFile( m_basePath + name );
-    if ( !m_stream->open( (QIODevice::OpenModeFlag)iomode ) )
+    if ( !m_stream->open( iomode ) )
     {
         delete m_stream;
         m_stream = 0L;
@@ -97,7 +97,7 @@ bool KoDirectoryStore::enterRelativeDirectory( const QString& dirName )
         return true;
     // Dir doesn't exist. If reading -> error. If writing -> create.
     if ( mode() == Write && origDir.mkdir( dirName ) ) {
-        kDebug(s_area) << "Created " << dirName << " under " << origDir.absPath() << endl;
+        kDebug(s_area) << "Created " << dirName << " under " << origDir.absolutePath() << endl;
         return true;
     }
     return false;

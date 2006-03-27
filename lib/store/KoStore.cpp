@@ -31,8 +31,6 @@
 #include <qfileinfo.h>
 #include <qfile.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <kurl.h>
 #include <kdebug.h>
@@ -49,7 +47,7 @@ const int KoStore::s_area = 30002;
 KoStore::Backend KoStore::determineBackend( QIODevice* dev )
 {
     unsigned char buf[5];
-    if ( dev->readBlock( (char *)buf, 4 ) < 4 )
+    if ( dev->read( (char *)buf, 4 ) < 4 )
       return DefaultFormat; // will create a "bad" store (bad()==true)
     if ( buf[0] == 0037 && buf[1] == 0213 ) // gzip -> tar.gz
       return Tar;
@@ -58,7 +56,7 @@ KoStore::Backend KoStore::determineBackend( QIODevice* dev )
     return DefaultFormat; // fallback
 }
 
-KoStore* KoStore::createStore( const QString& fileName, Mode mode, const Q3CString & appIdentification, Backend backend )
+KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QByteArray & appIdentification, Backend backend )
 {
   if ( backend == Auto ) {
     if ( mode == KoStore::Write )
@@ -92,7 +90,7 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const Q3CStri
   }
 }
 
-KoStore* KoStore::createStore( QIODevice *device, Mode mode, const Q3CString & appIdentification, Backend backend )
+KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & appIdentification, Backend backend )
 {
   if ( backend == Auto )
   {
@@ -120,7 +118,7 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const Q3CString & a
   }
 }
 
-KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, const Q3CString & appIdentification, Backend backend )
+KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification, Backend backend )
 {
   if ( url.isLocalFile() )
     return createStore(url.path(), mode,  appIdentification, backend );
@@ -210,7 +208,7 @@ bool KoStore::open( const QString & _name )
   if ( m_mode == Write )
   {
     kDebug(s_area) << "KoStore: opening for writing '" << m_sName << "'" << endl;
-    if ( m_strFiles.findIndex( m_sName ) != -1 ) // just check if it's there
+    if ( m_strFiles.contains( m_sName ) )
     {
       kWarning(s_area) << "KoStore: Duplicate filename " << m_sName << endl;
       //return KIO::ERR_FILE_ALREADY_EXIST;
@@ -272,39 +270,33 @@ QIODevice* KoStore::device() const
 
 QByteArray KoStore::read( unsigned long int max )
 {
-  QByteArray data; // Data is a QArray<char>
+  QByteArray data;
 
   if ( !m_bIsOpen )
   {
     kWarning(s_area) << "KoStore: You must open before reading" << endl;
-    data.resize( 0 );
     return data;
   }
   if ( m_mode != Read )
   {
     kError(s_area) << "KoStore: Can not read from store that is opened for writing" << endl;
-    data.resize( 0 );
     return data;
   }
 
   if ( m_stream->atEnd() )
   {
-    data.resize( 0 );
     return data;
   }
 
-  if ( max > m_iSize - m_stream->at() )
-    max = m_iSize - m_stream->at();
+  if ( max > m_iSize - m_stream->pos() )
+    max = m_iSize - m_stream->pos();
   if ( max == 0 )
   {
-    data.resize( 0 );
     return data;
   }
 
-  char *p = new char[ max ];
-  m_stream->readBlock( p, max );
+  data = m_stream->read( max );
 
-  data.setRawData( p, max );
   return data;
 }
 
@@ -329,12 +321,12 @@ Q_LONG KoStore::read( char *_buffer, Q_ULONG _len )
   if ( m_stream->atEnd() )
     return 0;
 
-  if ( _len > m_iSize - m_stream->at() )
-    _len = m_iSize - m_stream->at();
+  if ( _len > m_iSize - m_stream->pos() )
+    _len = m_iSize - m_stream->pos();
   if ( _len == 0 )
     return 0;
 
-  return m_stream->readBlock( _buffer, _len );
+  return m_stream->read( _buffer, _len );
 }
 
 Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
@@ -352,7 +344,7 @@ Q_LONG KoStore::write( const char* _data, Q_ULONG _len )
     return 0L;
   }
 
-  int nwritten = m_stream->writeBlock( _data, _len );
+  int nwritten = m_stream->write( _data, _len );
   Q_ASSERT( nwritten == (int)_len );
   m_iSize += nwritten;
 
@@ -381,7 +373,7 @@ bool KoStore::enterDirectory( const QString& directory )
   bool success = true;
   QString tmp( directory );
 
-  while ( ( pos = tmp.find( '/' ) ) != -1 &&
+  while ( ( pos = tmp.indexOf( '/' ) ) != -1 &&
           ( success = enterDirectoryInternal( tmp.left( pos ) ) ) )
           tmp = tmp.mid( pos + 1 );
 
@@ -444,10 +436,11 @@ bool KoStore::addLocalFile( const QString &fileName, const QString &destName )
     return false;
   }
 
-  QByteArray data ( 8 * 1024 );
+  QByteArray data;
+  data.resize( 8 * 1024 );
 
   uint total = 0;
-  for ( int block = 0; ( block = file.readBlock ( data.data(), data.size() ) ) > 0; total += block )
+  for ( int block = 0; ( block = file.read( data.data(), data.size() ) ) > 0; total += block )
   {
     data.resize(block);
     if ( write( data ) != block )
@@ -474,12 +467,14 @@ bool KoStore::extractFile ( const QString &srcName, const QString &fileName )
     close();
     return false;
   }
+  // ### This could use KArchive::copy or something, no?
 
-  QByteArray data ( 8 * 1024 );
+  QByteArray data;
+  data.resize( 8 * 1024 );
   uint total = 0;
-  for( int block = 0; ( block = read ( data.data(), data.size() ) ) > 0; total += block )
+  for( int block = 0; ( block = read( data.data(), data.size() ) ) > 0; total += block )
   {
-    file.writeBlock ( data.data(), block );
+    file.write( data.data(), block );
   }
 
   if( size() != static_cast<qlonglong>(-1) )
@@ -528,12 +523,12 @@ QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &d
 
 bool KoStore::at( qlonglong pos )
 {
-  return m_stream->at( pos );
+  return m_stream->seek( pos );
 }
 
 qlonglong KoStore::at() const
 {
-  return m_stream->at();
+  return m_stream->pos();
 }
 
 bool KoStore::atEnd() const
@@ -564,7 +559,7 @@ QString KoStore::expandEncodedPath( QString intern ) const
   QString result;
   int pos;
 
-  if ( ( pos = intern.findRev( '/', -1 ) ) != -1 ) {
+  if ( ( pos = intern.lastIndexOf( '/', -1 ) ) != -1 ) {
     result = expandEncodedDirectory( intern.left( pos ) ) + '/';
     intern = intern.mid( pos + 1 );
   }
@@ -597,7 +592,7 @@ QString KoStore::expandEncodedDirectory( QString intern ) const
 
   QString result;
   int pos;
-  while ( ( pos = intern.find( '/' ) ) != -1 ) {
+  while ( ( pos = intern.indexOf( '/' ) ) != -1 ) {
     if ( QChar(intern.at(0)).isDigit() )
       result += "part";
     result += intern.left( pos + 1 ); // copy numbers (or "pictures") + "/"

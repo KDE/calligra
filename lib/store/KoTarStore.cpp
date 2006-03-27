@@ -21,7 +21,7 @@
 
 #include <qbuffer.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include <ktar.h>
 #include <kdebug.h>
@@ -29,7 +29,7 @@
 #include <kdeversion.h>
 #include <kio/netaccess.h>
 
-KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const Q3CString & appIdentification )
+KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
     kDebug(s_area) << "KoTarStore Constructor filename = " << _filename
                     << " mode = " << int(_mode) << endl;
@@ -42,7 +42,7 @@ KoTarStore::KoTarStore( const QString & _filename, Mode _mode, const Q3CString &
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
 
-KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const Q3CString & appIdentification )
+KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification )
 {
     m_pTar = new KTar( dev );
 
@@ -52,7 +52,7 @@ KoTarStore::KoTarStore( QIODevice *dev, Mode mode, const Q3CString & appIdentifi
         m_pTar->setOrigFileName( completeMagic( appIdentification ) );
 }
 
-KoTarStore::KoTarStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const Q3CString & appIdentification )
+KoTarStore::KoTarStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
     kDebug(s_area) << "KoTarStore Constructor url= " << _url.prettyURL()
                     << " filename = " << _filename
@@ -98,10 +98,10 @@ KoTarStore::~KoTarStore()
     }
 }
 
-Q3CString KoTarStore::completeMagic( const Q3CString& appMimetype )
+QByteArray KoTarStore::completeMagic( const QByteArray& appMimetype )
 {
     kDebug()<<"QCString KoTarStore::completeMagic( const QCString& appMimetype )********************\n";
-    Q3CString res( "KOffice " );
+    QByteArray res( "KOffice " );
     res += appMimetype;
     res += '\004'; // Two magic bytes to make the identification
     res += '\006'; // more reliable (DF)

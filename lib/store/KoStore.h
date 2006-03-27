@@ -25,8 +25,7 @@
 #include <qstringlist.h>
 #include <qiodevice.h>
 #include <q3valuestack.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <koffice_export.h>
 
 class QWidget;
@@ -60,14 +59,14 @@ public:
    * to be written in the file for "mime-magic" identification.
    * Only meaningful if mode is Write, and if backend!=Directory.
    */
-  static KoStore* createStore( const QString& fileName, Mode mode, const Q3CString & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( const QString& fileName, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
 
   /**
    * Create a store for any kind of QIODevice: file, memory buffer...
    * KoStore will take care of opening the QIODevice.
    * This method doesn't support the Directory store!
    */
-  static KoStore* createStore( QIODevice *device, Mode mode, const Q3CString & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( QIODevice *device, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
 
   /**
    * Open a store (i.e. the representation on disk of a KOffice document).
@@ -89,7 +88,7 @@ public:
    * @since 1.4
    * @bug saving not completely implemented (fixed temporary file)
    */
-  static KoStore* createStore( QWidget* window, const KUrl& url, Mode mode, const Q3CString & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)
@@ -239,8 +238,8 @@ public:
 
   //@{
   /// See QIODevice
-  bool at( qlonglong pos );
-  qlonglong at() const;
+  bool at( qlonglong pos ); // TODO: rename to seek()
+  qlonglong at() const; // TODO: rename to pos()
   bool atEnd() const;
   //@}
 
@@ -354,9 +353,6 @@ protected:
   /// The "current directory" (path)
   QStringList m_currentPath;
 
-  /// Used to push/pop directories to make it easy to save/restore the state
-  Q3ValueStack<QString> m_directoryStack;
-
   /// Current filename (between an open() and a close())
   QString m_sName;
   /// Current size of the file named m_sName
@@ -370,6 +366,10 @@ protected:
   bool m_bGood;
 
   static const int s_area;
+
+private:
+  /// Used to push/pop directories to make it easy to save/restore the state
+  Q3ValueStack<QString> m_directoryStack;
 
 private:
   KoStore( const KoStore& store );  ///< don't copy

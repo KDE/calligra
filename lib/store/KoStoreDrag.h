@@ -22,7 +22,7 @@
 
 #include <q3dragobject.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <koffice_export.h>
 /**
  * A generic drag object that holds a store (e.g. KoZipStore) in memory.
@@ -51,7 +51,7 @@ public:
      * Returns the mimetype of the clipboard data for a given application,
      * depending on the application's native mimetype.
      */
-    static Q3CString mimeType( const char* nativeMimeType );
+    static QByteArray mimeType( const char* nativeMimeType );
 };
 
 #endif

@@ -39,7 +39,7 @@ protected:
     virtual bool enterAbsoluteDirectory( const QString& path );
     virtual bool fileExists( const QString& absPath ) const;
 
-    bool openReadOrWrite( const QString& name, int iomode );
+    bool openReadOrWrite( const QString& name, QIODevice::OpenModeFlag iomode );
 private:
     // Path to base directory (== the ctor argument)
     QString m_basePath;
