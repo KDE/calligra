@@ -14,8 +14,50 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces ${CMAKE_SOURCE_DIR}/kchart/k
 
 
 ########### next target ###############
+set(libdialogs_SRCS
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_angle.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_area.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_comment.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_conditional.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_cons.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_csv.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_database.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_format.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_formula.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_goalseek.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_goto.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_insert.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_layout.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_list.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_paperlayout.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_pasteinsert.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_preference.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_reference.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_resize2.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_series.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_show.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_showColRow.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_sort.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_special.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_styles.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_subtotal.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_validity.cc 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/link.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/sheet_properties.cc
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspread_dlg_find.cc
+)
 
-set(kspreadcommon_LIB_SRCS 
+
+kde4_add_ui3_files(libdialogs_SRCS 
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/kspreadsubtotal.ui
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/sheet_properties_base.ui
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/position_cell_format.ui
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/font_cell_format.ui
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/protection_cell_format.ui
+	${CMAKE_SOURCE_DIR}/kspread/dialogs/SheetSelectWidget.ui
+	)
+
+set(kspreadcommon_LIB_SRCS ${libdialogs_SRCS}
    digest.cc 
    commands.cc 
    damages.cc 
