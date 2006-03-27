@@ -22,12 +22,12 @@
 
 /******************************************************************/
 
-#include <KoPageLayoutDia.h>
-#include <KoPageLayoutColumns.h>
-#include <KoPageLayoutSize.h>
-#include <KoPageLayoutHeader.h>
+#include "KoPageLayoutDia.h"
+#include "KoPageLayoutColumns.h"
+#include "KoPageLayoutSize.h"
+#include "KoPageLayoutHeader.h"
 #include <KoUnit.h>
-#include <KoUnitWidgets.h>
+#include "KoUnitWidgets.h"
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -402,4 +402,4 @@ void KoPageLayoutDia::slotOk()
     KDialogBase::slotOk(); // accept
 }
 
-#include <KoPageLayoutDia.moc>
+#include "KoPageLayoutDia.moc"
