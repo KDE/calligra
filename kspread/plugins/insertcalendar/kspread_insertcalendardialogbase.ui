@@ -34,7 +34,7 @@
                 <string>Start Date</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Set the start date of the calendar you want to insert.</string>
+                <string>Set the start date of the calendar you want to insert</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Here you can choose on which date your calendar should start. The selected date will be the first day of the inserted calendar. You can also choose a date from a calendar dialog by pressing Select Date.</string>
@@ -72,7 +72,7 @@
                         <string>Date Picker</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Use a graphical date picker to select a date.</string>
+                        <string>Use a graphical date picker to select a date</string>
                     </property>
                 </widget>
             </grid>
@@ -91,7 +91,7 @@
                 <string>End Date</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Set the end date of the calendar you want to insert.</string>
+                <string>Set the end date of the calendar you want to insert</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Here you can choose on which date your calendar should end. The selected date will be the last day of the inserted calendar. You can also choose a date from a calendar dialog by pressing Select Date.</string>
@@ -129,7 +129,7 @@
                         <string>Date Picker</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Use a graphical date picker to select a date.</string>
+                        <string>Use a graphical date picker to select a date</string>
                     </property>
                 </widget>
             </grid>
@@ -167,7 +167,7 @@
                 <string>&amp;Insert</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Insert the calendar at the currently selected cell.</string>
+                <string>Insert the calendar at the currently selected cell</string>
                 <comment>Tooltip for the insert button of the insert calendar plugin</comment>
             </property>
             <property name="whatsThis" stdset="0">
@@ -191,7 +191,7 @@
                 <string>&amp;Cancel</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Don't insert a calendar.</string>
+                <string>Don't insert a calendar</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>Quits the dialog and does not insert a calendar. Use this to cancel this operation.</string>

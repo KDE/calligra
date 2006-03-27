@@ -307,7 +307,7 @@ void kchartDataEditor::addDocs()
     QWhatsThis::add(m_colsSB, colwhatsthis);
 
     // The table.
-    QToolTip::add(m_table, i18n("Chart data table."));
+    QToolTip::add(m_table, i18n("Chart data table"));
     
     //GUI
     //The QWhatsThis information below is incorrect since the way that the contents of the table

@@ -1074,16 +1074,16 @@ KarbonView::initActions()
 #if KDE_IS_VERSION(3,2,90)
 	m_showRulerAction->setCheckedState(i18n("Hide Rulers"));
 #endif
-	m_showRulerAction->setToolTip( i18n( "Shows or hides rulers." ) );
+	m_showRulerAction->setToolTip( i18n( "Shows or hides rulers" ) );
 	m_showRulerAction->setChecked( false );
 	m_showGridAction = new KToggleAction( i18n( "Show Grid" ), "view_grid", this, SLOT( showGrid() ), actionCollection(), "view_show_grid" );
 #if KDE_IS_VERSION(3,2,90)
 	m_showGridAction->setCheckedState(i18n("Hide Grid"));
 #endif
-	m_showGridAction->setToolTip( i18n( "Shows or hides grid." ) );
+	m_showGridAction->setToolTip( i18n( "Shows or hides grid" ) );
 	//m_showGridAction->setChecked( true );
 	m_snapGridAction = new KToggleAction( i18n( "Snap to Grid" ), 0, this, SLOT( snapToGrid() ), actionCollection(), "view_snap_to_grid" );
-	m_snapGridAction->setToolTip( i18n( "Snaps to grid." ) );
+	m_snapGridAction->setToolTip( i18n( "Snaps to grid" ) );
 	//m_snapGridAction->setChecked( true );
 	m_groupObjects = new KAction(
 		i18n( "&Group Objects" ), "group", QKeySequence( "Ctrl+G" ), this,

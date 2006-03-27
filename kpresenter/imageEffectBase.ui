@@ -1285,7 +1285,7 @@
                                     <string>Azimuth:</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Determines the light source and direction.</string>
+                                    <string>Determines the light source and direction</string>
                                 </property>
                             </widget>
                             <widget class="KDoubleNumInput">
@@ -1304,7 +1304,7 @@
                                     <string>Elevation:</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Determines the light source and direction.</string>
+                                    <string>Determines the light source and direction</string>
                                 </property>
                             </widget>
                             <widget class="KDoubleNumInput">

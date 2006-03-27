@@ -38,7 +38,7 @@
                 <pixmap>image0</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Select all sheets.</string>
+                <string>Select all sheets</string>
             </property>
         </widget>
         <widget class="KPushButton" row="1" column="1">
@@ -52,7 +52,7 @@
                 <pixmap>image1</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Select sheets.</string>
+                <string>Select sheets</string>
             </property>
         </widget>
         <widget class="KPushButton" row="3" column="1">
@@ -66,7 +66,7 @@
                 <pixmap>image2</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Clear Selection.</string>
+                <string>Clear Selection</string>
             </property>
         </widget>
         <widget class="KPushButton" row="2" column="1">
@@ -80,7 +80,7 @@
                 <pixmap>image3</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Remove sheets.</string>
+                <string>Remove sheets</string>
             </property>
         </widget>
         <widget class="KListView" row="0" column="0" rowspan="4" colspan="1">
@@ -111,7 +111,7 @@
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Available sheets.</string>
+                <string>Available sheets</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>&lt;b&gt;List of all available sheets.&lt;/b&gt;&lt;br&gt;
@@ -130,7 +130,7 @@ You can insert a sheet as often as you like, this way it will be printed multipl
                 <pixmap>image4</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Move selected sheet to the top.</string>
+                <string>Move selected sheet to the top</string>
             </property>
         </widget>
         <widget class="KPushButton" row="1" column="3">
@@ -144,7 +144,7 @@ You can insert a sheet as often as you like, this way it will be printed multipl
                 <pixmap>image5</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Move selected sheet up.</string>
+                <string>Move selected sheet up</string>
             </property>
         </widget>
         <widget class="KPushButton" row="2" column="3">
@@ -158,7 +158,7 @@ You can insert a sheet as often as you like, this way it will be printed multipl
                 <pixmap>image6</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Move selected sheet down.</string>
+                <string>Move selected sheet down</string>
             </property>
         </widget>
         <widget class="KPushButton" row="3" column="3">
@@ -172,7 +172,7 @@ You can insert a sheet as often as you like, this way it will be printed multipl
                 <pixmap>image7</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Move selected sheet to the bottom.</string>
+                <string>Move selected sheet to the bottom</string>
             </property>
         </widget>
         <widget class="KListView" row="0" column="2" rowspan="4" colspan="1">
@@ -206,7 +206,7 @@ You can insert a sheet as often as you like, this way it will be printed multipl
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>List of sheets to print in given order.</string>
+                <string>List of sheets to print in given order</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>&lt;b&gt;List of sheets to print.&lt;/b&gt;&lt;br&gt;

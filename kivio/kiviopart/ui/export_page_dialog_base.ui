@@ -132,7 +132,7 @@ This will eliminate all blank portions of the drawing. The picture will only be 
                 <number>100</number>
             </property>
             <property name="toolTip" stdset="0">
-                <string>The higher the quality, the more space the file takes up.</string>
+                <string>The higher the quality, the more space the file takes up</string>
             </property>
             <property name="whatsThis" stdset="0">
                 <string>&lt;b&gt;Quality&lt;/b&gt;&lt;br&gt;

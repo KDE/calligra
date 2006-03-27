@@ -183,7 +183,7 @@ If end time is defined, the project is scheduled backwards from this time. When 
                         <cstring>startDate</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Define when the project shall start.</string>
+                        <string>Define when the project shall start</string>
                     </property>
                 </widget>
                 <widget class="QTimeEdit" row="0" column="2">
@@ -201,7 +201,7 @@ If end time is defined, the project is scheduled backwards from this time. When 
                         <cstring>endDate</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Define when the project shall end.</string>
+                        <string>Define when the project shall end</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
@@ -215,7 +215,7 @@ If end time is defined, the project is scheduled backwards from this time. When 
                         <number>1</number>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Select this to schedule the project backward from end time.</string>
+                        <string>Select this to schedule the project backward from end time</string>
                     </property>
                 </widget>
                 <widget class="QRadioButton" row="0" column="0">
@@ -229,7 +229,7 @@ If end time is defined, the project is scheduled backwards from this time. When 
                         <number>0</number>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Select this to schedule the project forward from start time.</string>
+                        <string>Select this to schedule the project forward from start time</string>
                     </property>
                 </widget>
             </grid>

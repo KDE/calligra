@@ -2258,7 +2258,7 @@ void KPrView::setupActions()
     actionViewFormattingChars = new KToggleAction( i18n( "&Formatting Characters" ), 0,
                                                    this, SLOT( slotViewFormattingChars() ),
                                                    actionCollection(), "view_formattingchars" );
-    actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters." ) );
+    actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters" ) );
     actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KPresenter shows you tabs, spaces, carriage returns and other non-printing characters." ) );
 
     actionViewSlideMaster = new KToggleAction( i18n( "Slide &Master" ), 0,
@@ -2600,13 +2600,13 @@ void KPrView::setupActions()
                                              this, SLOT( viewHeader() ),
                                              actionCollection(), "extra_header" );
     m_actionExtraHeader->setCheckedState( i18n( "Disable Document &Header" ) );
-    m_actionExtraHeader->setToolTip( i18n( "Shows and hides header display for the current slide." ) );
+    m_actionExtraHeader->setToolTip( i18n( "Shows and hides header display for the current slide" ) );
 
     m_actionExtraFooter = new KToggleAction( i18n( "Enable Document Foo&ter" ), 0,
                                              this, SLOT( viewFooter() ),
                                              actionCollection(), "extra_footer" );
     m_actionExtraFooter->setCheckedState( i18n( "Disable Document Foo&ter" ) );
-    m_actionExtraFooter->setToolTip( i18n( "Shows and hides footer display for the current slide." ) );
+    m_actionExtraFooter->setToolTip( i18n( "Shows and hides footer display for the current slide" ) );
 
     actionExtraConfigure = new KAction( i18n( "Configure KPresenter..." ),
                                         "configure", 0,

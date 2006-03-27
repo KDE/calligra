@@ -109,7 +109,7 @@
                 <string>&amp;Interpolate RGB as four colors</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns. </string>
+                <string>Interpolate RGB as four colors. This blurs the image a little, but it eliminates false 2x2 mesh patterns</string>
             </property>
         </widget>
         <widget class="ImageViewer" row="0" column="0" rowspan="1" colspan="4">
@@ -206,7 +206,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>Automatic color balance. The default is to use a fixed color balance based on a white card photographed in sunlight.</string>
+                                <string>Automatic color balance. The default is to use a fixed color balance based on a white card photographed in sunlight</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton">
@@ -220,8 +220,7 @@
                                 <string></string>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>
- Use the color balance specified by the camera. If this cannot be found, dcraw prints a warning and reverts to the default. </string>
+                                <string>Use the color balance specified by the camera. If this cannot be found, dcraw prints a warning and reverts to the default</string>
                             </property>
                         </widget>
                     </vbox>
@@ -376,7 +375,7 @@
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>By default, dcraw clips all colors to prevent pink hues in the highlights. Combine this option with -b 0.25 to leave the image data completely unclipped.</string>
+                <string>By default, dcraw clips all colors to prevent pink hues in the highlights. Combine this option with -b 0.25 to leave the image data completely unclipped</string>
             </property>
         </widget>
         <widget class="QCheckBox" row="5" column="2" rowspan="1" colspan="2">

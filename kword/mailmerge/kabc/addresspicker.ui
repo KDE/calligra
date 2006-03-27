@@ -96,7 +96,7 @@
                 <string>Save as &amp;Distribution List...</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Save selected single entries to a new distribution list.</string>
+                <string>Save selected single entries to a new distribution list</string>
             </property>
         </widget>
         <widget class="QLayoutWidget" row="2" column="0">
