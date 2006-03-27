@@ -67,7 +67,7 @@ void KoPalette::resetFont()
     Q_ASSERT(cfg);
     cfg->setGroup("");
     m_font  = KGlobalSettings::generalFont();
-    float ps = qMin(9, KGlobalSettings::generalFont().pointSize() * 0.8);
+    float ps = QMIN(9.0, KGlobalSettings::generalFont().pointSize() * 0.8);
     ps = cfg->readNumEntry("palettefontsize", (int)ps);
     if (ps < 6) ps = 6;
     m_font.setPointSize((int)ps);
@@ -83,7 +83,8 @@ void KoPalette::setMainWidget(QWidget * widget)
 {
     setWidget(widget);
     resize( QSize(285, 233).expandedTo(minimumSizeHint()) );
-    clearWState( WState_Polished );
+#warning "kde 4: port it"
+    //clearWState( WState_Polished );
     widget->setFont(m_font);
     m_page = widget;
 }
