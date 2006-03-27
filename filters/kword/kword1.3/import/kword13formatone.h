@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QTextStream>
 /*
    This file is part of the KDE project
    Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>

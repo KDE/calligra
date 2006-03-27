@@ -22,6 +22,8 @@
 #include <kdebug.h>		/* for kdDebug stream */
 
 #include "column.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 /*******************************************/
 /* Constructor                             */

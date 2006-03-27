@@ -22,6 +22,8 @@
 
 #include <KoFilter.h>
 #include <qpro/tablenames.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KSpread
 {
@@ -36,7 +38,7 @@ public:
     QpImport(KoFilter* parent, const char* name, const QStringList&);
     virtual ~QpImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
     void InitTableName(int pIdx, QString& pResult);
 };
 

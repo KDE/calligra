@@ -17,7 +17,7 @@ QpIStream::QpIStream(unsigned char* pBuffer, unsigned int pLen)
    cByteArray.setRawData( (char*)cBuffer, (int) cLen );
 
    cBuf.setBuffer( cByteArray );
-   cBuf.open( IO_ReadOnly );
+   cBuf.open( QIODevice::ReadOnly );
 
    setDevice( &cBuf );
    setByteOrder(QDataStream::LittleEndian);

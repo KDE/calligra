@@ -23,7 +23,7 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-#include <qcstring.h>
+#include <q3cstring.h>
 
 class HancomWordImport : public KoFilter 
 {
@@ -34,7 +34,7 @@ public:
     HancomWordImport ( QObject *parent, const char* name, const QStringList& );
     virtual ~HancomWordImport();
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 private:
   class Private;

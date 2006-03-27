@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QTextStream>
 
 #ifndef _KWORD13LAYOUT
 #define _KWORD13LAYOUT

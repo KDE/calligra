@@ -23,7 +23,7 @@
 #include <kdialogbase.h>
 
 
-class QButtonGroup;
+class Q3ButtonGroup;
 
 
 class EpsExportDlg : public KDialogBase
@@ -36,7 +36,7 @@ public:
 	uint psLevel() const;
 
 private:
-	QButtonGroup* m_psLevelButtons;
+	Q3ButtonGroup* m_psLevelButtons;
 };
 
 #endif

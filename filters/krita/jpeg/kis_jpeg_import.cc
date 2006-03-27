@@ -29,6 +29,8 @@
 #include <kis_view.h>
 
 #include "kis_jpeg_converter.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<KisJPEGImport, KoFilter> JPEGImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritajpegimport, JPEGImportFactory("kofficefilters"))
@@ -41,7 +43,7 @@ KisJPEGImport::~KisJPEGImport()
 {
 }
 
-KoFilter::ConversionStatus KisJPEGImport::convert(const QCString&, const QCString& to)
+KoFilter::ConversionStatus KisJPEGImport::convert(const Q3CString&, const Q3CString& to)
 {
     kdDebug(41008) << "Importing using JPEGImport!\n";
 

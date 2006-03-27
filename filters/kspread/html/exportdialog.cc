@@ -19,7 +19,7 @@
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qlistbox.h>
+#include <q3listbox.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
 #include <qtextcodec.h>

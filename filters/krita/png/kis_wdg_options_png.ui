@@ -38,7 +38,7 @@
                         <string>Compress:</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignTop</set>
+                        <set>Qt::AlignTop</set>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Note: the compression level does not change the quality of the result</string>
@@ -73,7 +73,7 @@
                                 <number>9</number>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="tickmarks">
                                 <enum>NoMarks</enum>
@@ -114,7 +114,7 @@
                                         <string>Small</string>
                                     </property>
                                     <property name="alignment">
-                                        <set>AlignVCenter|AlignRight</set>
+                                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                                     </property>
                                     <property name="whatsThis" stdset="0">
                                         <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
@@ -132,7 +132,7 @@
                 <cstring>spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

@@ -33,6 +33,8 @@
 #include <qtextstream.h>
 #include <qdom.h>
 #include <qfontinfo.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -195,7 +197,7 @@ void ASCIIImport::prepareDocument(QDomDocument& mainDocument, QDomElement& mainF
 
 }
 
-KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus ASCIIImport::convert( const Q3CString& from, const Q3CString& to )
 {
     if (to!="application/x-kword" || from!="text/plain")
         return KoFilter::NotImplemented;
@@ -231,7 +233,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCS
     }
 
     QFile in(m_chain->inputFile());
-    if(!in.open(IO_ReadOnly)) {
+    if(!in.open(QIODevice::ReadOnly)) {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
         return KoFilter::FileNotFound;
@@ -275,7 +277,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QCString& from, const QCS
         in.close();
         return KoFilter::StorageCreationError;
     }
-    QCString cstr=mainDocument.toCString();
+    Q3CString cstr=mainDocument.toCString();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
     out->writeBlock(cstr,cstr.length());
     in.close();

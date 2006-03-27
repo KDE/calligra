@@ -17,11 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qimage.h>
 
 #include <kgenericfactory.h>
@@ -48,7 +48,7 @@ PngExport::PngExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-PngExport::convert( const QCString& from, const QCString& to )
+PngExport::convert( const Q3CString& from, const Q3CString& to )
 {
 	if ( to != "image/png" || from != "application/x-karbon" )
 	{
@@ -88,7 +88,7 @@ PngExport::convert( const QCString& from, const QCString& to )
 	// Create painter and set up objects to draw
 	VKoPainter p( img.bits(), rect.width(), rect.height() );
 	p.clear( qRgba( 0xFF, 0xFF, 0xFF, 0xFF ) );
-	p.setWorldMatrix( QWMatrix().translate( -rect.x(), -rect.y() ) );
+	p.setWorldMatrix( QMatrix().translate( -rect.x(), -rect.y() ) );
 	VObjectList objects = doc.selection()->objects();
 	VObjectListIterator itr = objects;
 

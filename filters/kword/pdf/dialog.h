@@ -20,12 +20,12 @@
 #ifndef DIALOG_H
 #define DIALOG_H
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 #include <qpair.h>
 
 #include <kdialogbase.h>
 
-class QButtonGroup;
+class Q3ButtonGroup;
 class QRadioButton;
 class QCheckBox;
 class KLineEdit;
@@ -41,7 +41,7 @@ public:
     uint nbPages() const;
 
 private:
-    QValueVector<QPair<uint, uint> > _ranges;
+    Q3ValueVector<QPair<uint, uint> > _ranges;
 
     friend class SelectionRangeIterator;
 };
@@ -59,7 +59,7 @@ public:
 private:
     uint _index;
     int  _current;
-    const QValueVector<QPair<uint, uint> > &_ranges;
+    const Q3ValueVector<QPair<uint, uint> > &_ranges;
 };
 
 //-----------------------------------------------------------------------------
@@ -92,7 +92,7 @@ private slots:
 private:
     uint          _nbPages;
     QRadioButton *_allButton, *_rangeButton;
-    QButtonGroup *_group;
+    Q3ButtonGroup *_group;
     KLineEdit    *_range, *_owner, *_user;
     QCheckBox    *_images, *_smart;
 };

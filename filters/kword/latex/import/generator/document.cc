@@ -19,6 +19,9 @@
 
 #include <qdom.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3PtrList>
 
 #include "kdebug.h"
 #include <KoStore.h>
@@ -27,7 +30,7 @@
 #include <param.h>
 #include <command.h>
 
-bool Document::analyse(QPtrList<Element>* root)
+bool Document::analyse(Q3PtrList<Element>* root)
 {
 	bool error = true;
 	error &= analyseDocumentClass((Command*) Latex::instance()->getCommand(root, "documentclass"));
@@ -40,7 +43,7 @@ bool Document::analyse(QPtrList<Element>* root)
 bool Document::analyseDocumentClass(Command* documentclass)
 {
 	kdWarning(documentclass != NULL) << "no documentclass found !" << endl;
-	QPtrList<Param> params = documentclass->getOptions();
+	Q3PtrList<Param> params = documentclass->getOptions();
 	Param* param;
 	for ( param = params.first(); param; param = params.next() )
 	{
@@ -84,7 +87,7 @@ bool Document::generate(KoStore* store)
 
 void Document::serialize(KoStore* store, QDomDocument doc)
 {
-	QCString str = doc.toCString();
+	Q3CString str = doc.toCString();
 	qWarning(str);
 	if(store->open("root"))
 	{

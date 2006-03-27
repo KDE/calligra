@@ -24,14 +24,14 @@
 #include <kspread_map.h>
 #include <kspread_sheet.h>
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qcursor.h>
 #include <qlabel.h>
 #include <qlineedit.h>
-#include <qlistview.h>
-#include <qptrlist.h>
+#include <q3listview.h>
+#include <q3ptrlist.h>
 #include <qradiobutton.h>
 #include <qtextstream.h>
 #include <qtabwidget.h>
@@ -67,7 +67,7 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
 
   m_dialog->comboBoxEncoding->insertStringList(encodings);
 
-  setButtonBoxOrientation ( Vertical );
+  setButtonBoxOrientation ( Qt::Vertical );
 
   setMainWidget(m_dialog);
 
@@ -99,14 +99,14 @@ CSVExportDialog::~CSVExportDialog()
 void CSVExportDialog::fillSheet( Map * map )
 {
   m_dialog->m_sheetList->clear();
-  QCheckListItem * item;
+  Q3CheckListItem * item;
 
-  QPtrListIterator<Sheet> it( map->sheetList() );
+  Q3PtrListIterator<Sheet> it( map->sheetList() );
   for( ; it.current(); ++it )
   {
-    item = new QCheckListItem( m_dialog->m_sheetList,
+    item = new Q3CheckListItem( m_dialog->m_sheetList,
                                it.current()->sheetName(),
-                               QCheckListItem::CheckBox );
+                               Q3CheckListItem::CheckBox );
     item->setOn(true);
     m_dialog->m_sheetList->insertItem( item );
   }
@@ -138,11 +138,11 @@ QString CSVExportDialog::getSheetDelimiter() const
 
 bool CSVExportDialog::exportSheet(QString const & sheetName) const
 {
-  for (QListViewItem * item = m_dialog->m_sheetList->firstChild(); item; item = item->nextSibling())
+  for (Q3ListViewItem * item = m_dialog->m_sheetList->firstChild(); item; item = item->nextSibling())
   {
-    if (((QCheckListItem * ) item)->isOn())
+    if (((Q3CheckListItem * ) item)->isOn())
     {
-      if ( ((QCheckListItem * ) item)->text() == sheetName )
+      if ( ((Q3CheckListItem * ) item)->text() == sheetName )
         return true;
     }
   }

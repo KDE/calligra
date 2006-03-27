@@ -24,6 +24,8 @@
 
 #include <qdatetime.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace KSpread
 {
@@ -38,7 +40,7 @@ class GNUMERICFilter : public KoFilter
     GNUMERICFilter(KoFilter *parent, const char *name, const QStringList&);
     virtual ~GNUMERICFilter() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
  private:

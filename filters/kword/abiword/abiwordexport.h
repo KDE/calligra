@@ -33,7 +33,7 @@
 #define ABIWORDEXPORT_H
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <KoFilter.h>
 
@@ -46,6 +46,6 @@ public:
     ABIWORDExport(KoFilter *parent, const char *name, const QStringList &);
     virtual ~ABIWORDExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 #endif // ABIWORDEXPORT_H

@@ -24,6 +24,8 @@
 #include <kfiledialog.h>
 #include <KoStore.h>
 #include "xsltdialog.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 class XSLTImportDia : public XSLTDialog
 {
@@ -35,7 +37,7 @@ class XSLTImportDia : public XSLTDialog
 	KoStore* _out;
 	/** xslt file current */
 	KUrl _currentFile;
-	QCString _format;
+	Q3CString _format;
 	KConfig* _config;
 	/** List of the most recent xslt file used. */
 	QStringList _recentList;
@@ -46,7 +48,7 @@ class XSLTImportDia : public XSLTDialog
 	QStringList _namesList;
 
 public:
-    XSLTImportDia(KoStore*, const QCString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+    XSLTImportDia(KoStore*, const Q3CString &format, QWidget* parent = 0, const char* name = 0, bool modal = FALSE, Qt::WFlags fl = 0 );
     ~XSLTImportDia();
 
 	void setInputFile(QString file)  { _fileIn = file; }

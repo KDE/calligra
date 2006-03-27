@@ -22,7 +22,7 @@ DESCRIPTION
 
 #include <config.h>
 #include <qdom.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
@@ -45,7 +45,7 @@ WMFImport::~WMFImport()
 {
 }
 
-KoFilter::ConversionStatus WMFImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus WMFImport::convert( const Q3CString& from, const Q3CString& to )
 {
     if( to != "application/x-karbon" || from != "image/x-wmf" )
     return KoFilter::NotImplemented;
@@ -67,7 +67,7 @@ KoFilter::ConversionStatus WMFImport::convert( const QCString& from, const QCStr
         return KoFilter::StorageCreationError;
     }
     QDomDocument outdoc = document.saveXML();
-    QCString content = outdoc.toCString();
+    Q3CString content = outdoc.toCString();
     // kdDebug() << " content : " << content << endl;
     out->writeBlock( content , content.length() );
 

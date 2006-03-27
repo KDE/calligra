@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
  
 #include <magickimport.h>
 #include <kgenericfactory.h>
@@ -41,7 +43,7 @@ MagickImport::~MagickImport()
 {
 }
 
-KoFilter::ConversionStatus MagickImport::convert(const QCString&, const QCString& to)
+KoFilter::ConversionStatus MagickImport::convert(const Q3CString&, const Q3CString& to)
 {
     kdDebug(41008) << "Importing using MagickImport!\n";
 

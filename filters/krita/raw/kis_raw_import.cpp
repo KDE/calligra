@@ -29,16 +29,18 @@
 #include <qfile.h>
 #include <qimage.h>
 #include <qradiobutton.h>
-#include <qgroupbox.h>
-#include <qbuttongroup.h>
+#include <q3groupbox.h>
+#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qapplication.h>
 #include <qcursor.h>
 #include <qeventloop.h>
-#include <qprogressdialog.h>
+#include <q3progressdialog.h>
 #include <qtimer.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kglobal.h>
 #include <kconfig.h>
@@ -102,7 +104,7 @@ KisRawImport::~KisRawImport()
     delete m_process;
 }
 
-KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus KisRawImport::convert(const Q3CString& from, const Q3CString& to)
 {
     if (from != "image/x-raw" || to != "application/x-krita") {
         return KoFilter::NotImplemented;
@@ -176,7 +178,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
 
         QApplication::setOverrideCursor(Qt::waitCursor);
         // Create a busy indicator to show that we didn't die or so
-        m_progress = new QProgressDialog();
+        m_progress = new Q3ProgressDialog();
         m_progress -> setTotalSteps(0);
         m_progress -> setCancelButton(0);
         QTimer timer;
@@ -452,7 +454,7 @@ void KisRawImport::slotReceivedStdout(KProcess *, char *buffer, int buflen)
     //kdDebug(41008) << "stdout received " << buflen << " bytes on stdout.\n";
     //kdDebug(41008) << QString::fromAscii(buffer, buflen) << "\n";
     int oldSize = m_data->size();
-    m_data->resize(oldSize + buflen, QGArray::SpeedOptim);
+    m_data->resize(oldSize + buflen, Q3GArray::SpeedOptim);
     memcpy(m_data->data() + oldSize, buffer, buflen);
 }
 
@@ -595,8 +597,8 @@ void KisRawImport::slotFillCmbProfiles()
 
     KisColorSpaceFactory * csf = KisMetaRegistry::instance()->csRegistry() -> get(s);
     m_page -> cmbProfile -> clear();
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
-        QValueVector<KisProfile *> ::iterator it;
+    Q3ValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( csf );
+        Q3ValueVector<KisProfile *> ::iterator it;
         for ( it = profileList.begin(); it != profileList.end(); ++it ) {
         m_page -> cmbProfile -> insertItem((*it) -> productName());
     }

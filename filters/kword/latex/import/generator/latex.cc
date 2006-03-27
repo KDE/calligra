@@ -18,10 +18,12 @@
 
 #include "latex.h"
 #include <element.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 Latex* Latex::_instance = 0;
 
-Element* Latex::getEnv(QPtrList<Element>* root, const char* name)
+Element* Latex::getEnv(Q3PtrList<Element>* root, const char* name)
 {
 	Element* elt;
 	for ( elt = root->first(); elt; elt = root->next() )
@@ -32,7 +34,7 @@ Element* Latex::getEnv(QPtrList<Element>* root, const char* name)
 	return 0;
 }
 
-Element* Latex::getCommand(QPtrList<Element>* root, const char* name)
+Element* Latex::getCommand(Q3PtrList<Element>* root, const char* name)
 {
 	Element* elt;
 	for ( elt = root->first(); elt; elt = root->next() )

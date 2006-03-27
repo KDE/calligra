@@ -27,6 +27,8 @@
 #define __KWORD_LATEX_EXPORT_PIXMAPFRAME_H__
 
 #include "element.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 /***********************************************************************/
 /* Class: PixmapFrame                                                       */

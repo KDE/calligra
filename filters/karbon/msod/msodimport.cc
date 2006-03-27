@@ -26,8 +26,10 @@ DESCRIPTION
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <msodimport.h>
-#include <qpointarray.h>
+#include <q3pointarray.h>
 
 typedef KGenericFactory<MSODImport, KoFilter> MSODImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libmsodimport, MSODImportFactory( "kofficefilters" ) )
@@ -46,7 +48,7 @@ MSODImport::~MSODImport()
 {
 }
 
-KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus MSODImport::convert( const Q3CString& from, const Q3CString& to )
 {
     if (to != "application/x-karbon" || from != "image/x-msod")
         return KoFilter::NotImplemented;
@@ -106,7 +108,7 @@ KoFilter::ConversionStatus MSODImport::convert( const QCString& from, const QCSt
         kdError(s_area) << "Cannot open output file" << endl;
         return KoFilter::StorageCreationError;
     }
-    QCString cstring ( m_text.utf8() );
+    Q3CString cstring ( m_text.utf8() );
     dev->writeBlock(cstring.data(), cstring.size()-1);
 
     return KoFilter::OK;
@@ -174,7 +176,7 @@ void MSODImport::gotPicture(
             if ( srcMime == KMimeType::defaultMimeType() )
                 kdWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
 
-            QCString destMime; // intentionally empty, the filter manager will do the rest
+            Q3CString destMime; // intentionally empty, the filter manager will do the rest
             KoFilter::ConversionStatus status;
             partRef = embedPart( srcMime.latin1(), destMime, status, QString::number( key ) );
 
@@ -210,7 +212,7 @@ void MSODImport::gotPicture(
 
 void MSODImport::gotPolygon(
     const DrawContext &dc,
-    const QPointArray &points)
+    const Q3PointArray &points)
 {
     kdDebug(s_area) << "MSODImport::gotPolygon" << endl;
     kdDebug(s_area) << QString::number(dc.m_penWidth, 16) << endl;
@@ -241,7 +243,7 @@ void MSODImport::gotPolygon(
 
 void MSODImport::gotPolyline(
     const DrawContext &dc,
-    const QPointArray &points)
+    const Q3PointArray &points)
 {
 	kdDebug(s_area) << "MSODImport::gotPolyline" << endl;
 	return; // ### TODO
@@ -256,7 +258,7 @@ void MSODImport::gotPolyline(
 
 void MSODImport::gotRectangle(
     const DrawContext &dc,
-    const QPointArray &points)
+    const Q3PointArray &points)
 {
 // ### TODO
 #if 0
@@ -289,7 +291,7 @@ void MSODImport::savePartContents( QIODevice* file )
 }
 
 void MSODImport::pointArray(
-    const QPointArray &points)
+    const Q3PointArray &points)
 {
 
     m_text += "<MOVE x=\"" + QString::number(points.point(0).x()) +

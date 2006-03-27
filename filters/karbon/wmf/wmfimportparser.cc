@@ -24,6 +24,10 @@
 #include <core/vfill.h>
 
 #include "wmfimportparser.h"
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 /*
 bug : see motar.wmf
@@ -135,7 +139,7 @@ void WMFImportParser::setWindowExt( int width, int height ) {
 }
 
 
-void WMFImportParser::setWorldMatrix( const QWMatrix &, bool  ) {
+void WMFImportParser::setWorldMatrix( const QMatrix &, bool  ) {
 }
 
 
@@ -241,7 +245,7 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
 }
 
 
-void WMFImportParser::drawPolyline( const QPointArray &pa ) {
+void WMFImportParser::drawPolyline( const Q3PointArray &pa ) {
     VPath *polyline = new VPath( mDoc );
     appendPen( *polyline );
     appendPoints( *polyline, pa );
@@ -250,7 +254,7 @@ void WMFImportParser::drawPolyline( const QPointArray &pa ) {
 }
 
 
-void WMFImportParser::drawPolygon( const QPointArray &pa, bool ) {
+void WMFImportParser::drawPolygon( const Q3PointArray &pa, bool ) {
     VPath *polygon = new VPath( mDoc );
     appendPen( *polygon );
     appendBrush( *polygon );
@@ -261,7 +265,7 @@ void WMFImportParser::drawPolygon( const QPointArray &pa, bool ) {
 }
 
 
-void WMFImportParser::drawPolyPolygon( QPtrList<QPointArray>& listPa, bool ) {
+void WMFImportParser::drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool ) {
     VPath *path = new VPath( mDoc );
     
     if ( listPa.count() > 0 ) {
@@ -300,7 +304,7 @@ void WMFImportParser::appendPen( VObject& obj )
         stroke.setType( VStroke::none );
     }
     else {
-        QValueList<float> dashes;
+        Q3ValueList<float> dashes;
         stroke.setType( VStroke::solid );
         switch ( mPen.style() ) {
             case Qt::DashLine :
@@ -338,7 +342,7 @@ void WMFImportParser::appendBrush( VObject& obj )
         case Qt::SolidPattern :
         fill.setType( VFill::solid );
         break;
-        case Qt::CustomPattern :
+        case Qt::TexturePattern :
         // TODO: bitmap pattern brush
         fill.setType( VFill::solid );
         //fill.pattern().
@@ -358,7 +362,7 @@ void WMFImportParser::appendBrush( VObject& obj )
 }
 
 
-void WMFImportParser::appendPoints(VPath &path, const QPointArray& pa)
+void WMFImportParser::appendPoints(VPath &path, const Q3PointArray& pa)
 {
     // list of point array
     if ( pa.size() > 0 ) {

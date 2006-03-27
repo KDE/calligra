@@ -23,6 +23,8 @@
 #define __KWORD_LATEX_EXPORT_KEY_H__
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include "xmlparser.h"
 
@@ -68,7 +70,7 @@ class Key: public XmlParser
 		 *
 		 * The destructor must remove the list of little zones.
 		 */
-		virtual ~Key();
+		virtual ~Qt::Key();
 
 		/**
 		 * Accessors

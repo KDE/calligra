@@ -23,7 +23,7 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include "libppt.h"
 
@@ -38,8 +38,8 @@ Q_OBJECT
 public:
   PowerPointImport ( QObject *parent, const char* name, const QStringList& );
   virtual ~PowerPointImport();
-  virtual KoFilter::ConversionStatus convert( const QCString& from, 
-        const QCString& to );
+  virtual KoFilter::ConversionStatus convert( const Q3CString& from, 
+        const Q3CString& to );
 
 private:
   class Private;

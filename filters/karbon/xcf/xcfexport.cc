@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatastream.h>
 #include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kgenericfactory.h>
 #include <KoFilter.h>
@@ -53,7 +53,7 @@ XcfExport::XcfExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-XcfExport::convert( const QCString& from, const QCString& to )
+XcfExport::convert( const Q3CString& from, const Q3CString& to )
 {
 	if( to != "image/x-xcf-gimp" || from != "application/x-karbon" )
 	{
@@ -69,7 +69,7 @@ XcfExport::convert( const QCString& from, const QCString& to )
 
 	QFile fileOut( m_chain->outputFile() );
 
-	if( !fileOut.open( IO_WriteOnly ) )
+	if( !fileOut.open( QIODevice::WriteOnly ) )
 		return KoFilter::StupidError;
 
 
@@ -98,9 +98,9 @@ void
 XcfExport::visitVDocument( VDocument& document )
 {
 	// Offsets.
-	QIODevice::Offset current = 0;
-	QIODevice::Offset start = 0;
-	QIODevice::Offset end = 0;
+	qlonglong current = 0;
+	qlonglong start = 0;
+	qlonglong end = 0;
 
 	// Save width and height for layer saving.
 	m_width  = static_cast<unsigned>( document.width()  * m_zoomX );
@@ -274,9 +274,9 @@ XcfExport::visitVLayer( VLayer& layer )
 
 
 	// Offsets.
-	QIODevice::Offset current = 0;
-	QIODevice::Offset start = 0;
-	QIODevice::Offset end = 0;
+	qlonglong current = 0;
+	qlonglong start = 0;
+	qlonglong end = 0;
 
 	// Save current offset.
 	current = m_stream->device()->at();
@@ -310,9 +310,9 @@ void
 XcfExport::writeHierarchy()
 {
 	// Offsets.
-	QIODevice::Offset current = 0;
-	QIODevice::Offset start = 0;
-	QIODevice::Offset end = 0;
+	qlonglong current = 0;
+	qlonglong start = 0;
+	qlonglong end = 0;
 
 	// Width (again?).
 	*m_stream << m_width;
@@ -386,9 +386,9 @@ void
 XcfExport::writeLevel()
 {
 	// Offsets.
-	QIODevice::Offset current = 0;
-	QIODevice::Offset start = 0;
-	QIODevice::Offset end = 0;
+	qlonglong current = 0;
+	qlonglong start = 0;
+	qlonglong end = 0;
 
 	*m_stream << static_cast<Q_UINT32>( m_width );
 	*m_stream << static_cast<Q_UINT32>( m_height );

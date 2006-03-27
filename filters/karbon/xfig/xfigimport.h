@@ -25,8 +25,8 @@ DESCRIPTION
 #ifndef XFIGIMPORT_H
 #define XFIGIMPORT_H
 
-#include <qintdict.h>
-#include <qvaluelist.h>
+#include <q3intdict.h>
+#include <q3valuelist.h>
 #include <iostream.h>
 
 class GDocument;
@@ -65,7 +65,7 @@ private:
   float fig_resolution;
   int coordinate_system;
   int version;
-  QIntDict<QColor> colorTable;
+  Q3IntDict<QColor> colorTable;
 
   // An object and the depth. Used for sorting objects
   // in the object list
@@ -88,7 +88,7 @@ private:
           return depth == item.depth;
       }
   };
-  QValueList<GObjectListItem> objList;
+  Q3ValueList<GObjectListItem> objList;
 };
 
 #endif

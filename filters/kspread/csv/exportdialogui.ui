@@ -61,7 +61,7 @@
                                     <string>E&amp;ncoding:</string>
                                 </property>
                                 <property name="textFormat">
-                                    <enum>PlainText</enum>
+                                    <enum>Qt::PlainText</enum>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>comboBoxEncoding</cstring>
@@ -80,7 +80,7 @@
                                     <cstring>Spacer2</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                    <enum>Qt::Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -151,7 +151,7 @@
                             <cstring>Spacer3</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -255,7 +255,7 @@
                                     <string>&lt;SHEETNAME&gt; gets replaced by the name of the next sheet.</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>WordBreak|AlignVCenter</set>
+                                    <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
                                 </property>
                             </widget>
                             <widget class="QCheckBox" row="2" column="0">
@@ -464,7 +464,7 @@
                             <cstring>Spacer5</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>

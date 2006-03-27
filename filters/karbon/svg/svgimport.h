@@ -23,7 +23,9 @@
 #include <KoFilter.h>
 #include <qdom.h>
 #include <qmap.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <core/vdocument.h>
 #include <core/vgradient.h>
 #include <core/vfill.h>
@@ -44,7 +46,7 @@ public:
 	SvgImport(KoFilter *parent, const char *name, const QStringList&);
 	virtual ~SvgImport();
 
-	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+	virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 
 protected:
 	class GradientHelper
@@ -56,7 +58,7 @@ protected:
 		}
 		VGradient	gradient;
 		bool		bbox;
-		QWMatrix	gradientTransform;
+		QMatrix	gradientTransform;
 	};
 
 	void parseGroup( VGroup *, const QDomElement & );
@@ -87,13 +89,13 @@ protected:
 	GradientHelper* findGradient( const QString &id, const QString &href = 0 );
 
 	// Determine scaling factor from given matrix
-	double getScalingFromMatrix( QWMatrix &matrix );
+	double getScalingFromMatrix( QMatrix &matrix );
 
 	QDomElement mergeStyles( const QDomElement &, const QDomElement & );
 
 private:
 	VDocument						m_document;
-	QPtrStack<SvgGraphicsContext>	m_gc;
+	Q3PtrStack<SvgGraphicsContext>	m_gc;
 	QMap<QString, GradientHelper>	m_gradients;
 	QMap<QString, QDomElement>		m_defs;
 	KoRect							m_outerRect;

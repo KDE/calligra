@@ -45,6 +45,8 @@
 
 #include <rtfexport.h>
 #include <rtfexport.moc>
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<RTFExport, KoFilter> RTFExportFactory;
 K_EXPORT_COMPONENT_FACTORY( librtfexport, RTFExportFactory( "kofficefilters" ) )
@@ -57,7 +59,7 @@ RTFExport::RTFExport(KoFilter *, const char *, const QStringList &) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus RTFExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus RTFExport::convert( const Q3CString& from, const Q3CString& to )
 {
     if ((from != "application/x-kword") || (to != "text/rtf"))
     {

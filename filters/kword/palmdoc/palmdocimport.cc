@@ -26,6 +26,8 @@
 #include <qfileinfo.h>
 #include <qstringlist.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -46,7 +48,7 @@ PalmDocImport::PalmDocImport( KoFilter *, const char *, const QStringList& ):
 {
 }
 
-KoFilter::ConversionStatus PalmDocImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus PalmDocImport::convert( const Q3CString& from, const Q3CString& to )
 {
   // check for proper conversion
   if( to!= "application/x-kword" || from != "application/vnd.palm" )
@@ -68,7 +70,7 @@ KoFilter::ConversionStatus PalmDocImport::convert( const QCString& from, const Q
 
   if( out )
     {
-      QCString cstring = root.utf8();
+      Q3CString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->writeBlock( (const char*) cstring, cstring.length() );
     }
@@ -86,7 +88,7 @@ KoFilter::ConversionStatus PalmDocImport::convert( const QCString& from, const Q
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
   if( out )
     {
-       QCString cstring = documentInfo.utf8();
+       Q3CString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
        out->writeBlock( (const char*) cstring, cstring.length() );
      }

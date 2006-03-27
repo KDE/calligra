@@ -22,6 +22,8 @@
 #define CSVEXPORT_H
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <KoFilter.h>
 
 namespace KSpread
@@ -37,7 +39,7 @@ class CSVExport : public KoFilter
   CSVExport(KoFilter * parent, const char * name, const QStringList &);
   virtual ~CSVExport() {}
 
-  virtual KoFilter::ConversionStatus convert( const QCString & from, const QCString & to );
+  virtual KoFilter::ConversionStatus convert( const Q3CString & from, const Q3CString & to );
 
   private:
   QString exportCSVCell( KSpread::Sheet const * const sheet, int col, int row, QChar const & textQuote );

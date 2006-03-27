@@ -36,6 +36,8 @@
 #include <qstring.h>
 #include <qfile.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KoFilter.h>
 #include <KoStore.h>
@@ -49,6 +51,6 @@ public:
     ABIWORDImport();
     virtual ~ABIWORDImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 #endif // ABIWORDIMPORT_H

@@ -29,6 +29,8 @@
 #include <qstring.h>
 #include <qtextcodec.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -280,7 +282,7 @@ private:
 
 	bool delayOutputFlush (void)
 	{
-		QCString strUtf8 = m_heldOutput.utf8 ();
+		Q3CString strUtf8 = m_heldOutput.utf8 ();
 		int strLength = strUtf8.length ();
 
 		if (m_outfile->writeBlock (strUtf8, strLength) != strLength)
@@ -1227,7 +1229,7 @@ public:
 		}
 		else
 		{
-			QCString strUtf8 = str.utf8 ();
+			Q3CString strUtf8 = str.utf8 ();
 			int strLength = strUtf8.length ();
 
 			if (m_outfile->writeBlock (strUtf8, strLength) != strLength)
@@ -1345,7 +1347,7 @@ MSWriteImport::~MSWriteImport ()
 	delete m_device;
 }
 
-KoFilter::ConversionStatus MSWriteImport::convert (const QCString &from, const QCString &to)
+KoFilter::ConversionStatus MSWriteImport::convert (const Q3CString &from, const Q3CString &to)
 {
 	kdDebug (30509) << "MSWriteImport $Date$ using LibMSWrite "
 			  				<< MSWrite::Version << endl;

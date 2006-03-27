@@ -3,9 +3,11 @@
 
 #include <fstream.h>
 #include <iostream.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 //extern void yylex();
-extern QPtrList<Element>* _root;
+extern Q3PtrList<Element>* _root;
 extern bool texparse(QString);
 
 LatexParser::LatexParser()
@@ -21,7 +23,7 @@ LatexParser::~LatexParser()
 {
 }
 
-QPtrList<Element>* LatexParser::parse()
+Q3PtrList<Element>* LatexParser::parse()
 {
 	texparse(_filename);
 	return _root;

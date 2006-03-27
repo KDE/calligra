@@ -40,7 +40,7 @@ class KWordLatexExportDia : public LatexExportDia
 
 	public:
     KWordLatexExportDia( KoStore*, QWidget* parent = 0,
-				const char* name = 0, bool modal = true, WFlags fl = 0 );
+				const char* name = 0, bool modal = true, Qt::WFlags fl = 0 );
     virtual ~KWordLatexExportDia();
 
     void setOutputFile(QString file) { _fileOut = file; }

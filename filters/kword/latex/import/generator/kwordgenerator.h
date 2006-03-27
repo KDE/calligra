@@ -24,10 +24,12 @@
 
 //#include "document.h"
 #include "element.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 class KwordGenerator
 {
-	QPtrList<Element>* _root;
+	Q3PtrList<Element>* _root;
 	//Document _doc;
 
 	public:
@@ -35,7 +37,7 @@ class KwordGenerator
 		{
 		}
 
-		KwordGenerator(QPtrList<Element>* root)
+		KwordGenerator(Q3PtrList<Element>* root)
 		{
 			_root = root;
 		}

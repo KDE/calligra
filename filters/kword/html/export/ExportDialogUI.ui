@@ -43,7 +43,7 @@
                         <string>E&amp;ncoding:</string>
                     </property>
                     <property name="textFormat">
-                        <enum>PlainText</enum>
+                        <enum>Qt::PlainText</enum>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>comboBoxEncoding</cstring>
@@ -62,7 +62,7 @@
                         <cstring>Spacer2</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>
@@ -98,7 +98,7 @@
                         <cstring>radioDocType1</cstring>
                     </property>
                     <property name="focusPolicy">
-                        <enum>NoFocus</enum>
+                        <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="text">
                         <string>&amp;HTML 4.01</string>
@@ -151,7 +151,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
-                        <enum>NoFocus</enum>
+                        <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="text">
                         <string>L&amp;ight: Convert to strict (X)HTML</string>
@@ -168,7 +168,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="focusPolicy">
-                        <enum>NoFocus</enum>
+                        <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="text">
                         <string>&amp;Basic: Convert to transitional (X)HTML</string>
@@ -207,7 +207,7 @@
                                 <cstring>spacer7</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Fixed</enum>
@@ -257,7 +257,7 @@
                 <cstring>Spacer1</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

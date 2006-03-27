@@ -21,6 +21,8 @@
 
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "key.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 /*******************************************/
 /* Constructor                             */
@@ -34,7 +36,7 @@ Key::Key(eKeyType type): _type(type)
 /*******************************************/
 /* Destructor                              */
 /*******************************************/
-Key::~Key()
+Key::~Qt::Key()
 {
 	kdDebug(30522) << "Destruction of a key." << endl;
 }

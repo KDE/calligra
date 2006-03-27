@@ -25,6 +25,9 @@
 #include <qpen.h>
 #include <qregexp.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3MemArray>
 
 #include "oowriterimport.h"
 #include <ooutils.h>
@@ -69,7 +72,7 @@ OoWriterImport::~OoWriterImport()
 {
 }
 
-KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCString const & to )
+KoFilter::ConversionStatus OoWriterImport::convert( Q3CString const & from, Q3CString const & to )
 {
     kdDebug(30518) << "Entering Oowriter Import filter: " << from << " - " << to << endl;
 
@@ -86,7 +89,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
 
     kdDebug(30518) << "Store created" << endl;
 
-    if ( !m_zip->open(IO_ReadOnly) )
+    if ( !m_zip->open(QIODevice::ReadOnly) )
     {
         kdError(30518) << "Couldn't open the requested file "<< m_chain->inputFile() << endl;
         return KoFilter::FileNotFound;
@@ -150,7 +153,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     }
     else
     {
-        QCString cstr = mainDocument.toCString();
+        Q3CString cstr = mainDocument.toCString();
         kdDebug(30518)<<" maindoc: " << cstr << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( cstr, cstr.length() );
@@ -163,7 +166,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QCString const & from, QCStr
     out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if( out )
     {
-        QCString info = docinfo.toCString();
+        Q3CString info = docinfo.toCString();
         kdDebug(30518)<<" info :"<<info<<endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( info , info.length() );
@@ -1256,9 +1259,9 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
     if ( m_styleStack.hasAttributeNS( ooNS::fo, "color" ) ) { // 3.10.3
         QColor color( m_styleStack.attributeNS( ooNS::fo, "color" ) ); // #rrggbb format
         QDomElement colorElem( doc.createElement( "COLOR" ) );
-        colorElem.setAttribute( "red", color.red() );
-        colorElem.setAttribute( "blue", color.blue() );
-        colorElem.setAttribute( "green", color.green() );
+        colorElem.setAttribute( "red", color.Qt::red() );
+        colorElem.setAttribute( "blue", color.Qt::blue() );
+        colorElem.setAttribute( "green", color.Qt::green() );
         format.appendChild( colorElem );
     }
     if ( m_styleStack.hasAttributeNS( ooNS::fo, "font-family" )  // 3.10.9
@@ -1402,9 +1405,9 @@ void OoWriterImport::writeFormat( QDomDocument& doc, QDomElement& formats, int i
         QColor tmp = m_styleStack.attributeNS( ooNS::style, "text-background-color");
         if (tmp != "transparent")
         {
-            bgCol.setAttribute("red", tmp.red());
-            bgCol.setAttribute("green", tmp.green());
-            bgCol.setAttribute("blue", tmp.blue());
+            bgCol.setAttribute("red", tmp.Qt::red());
+            bgCol.setAttribute("green", tmp.Qt::green());
+            bgCol.setAttribute("blue", tmp.Qt::blue());
             format.appendChild(bgCol);
         }
     }
@@ -1866,7 +1869,7 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& obje
     KoStoreDevice* out = m_chain->storageFile( strStoreName , KoStore::Write );
     if (out)
     {
-        if (!out->open(IO_WriteOnly))
+        if (!out->open(QIODevice::WriteOnly))
         {
             kdWarning(30518) << "Cannot open for saving picture: " << frameName << " " << href << endl;
             return frameName;
@@ -2109,7 +2112,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
     else if ( localName.startsWith( "sender-" ) )
     {
         int subtype = -1;
-        const QCString afterText( localName.latin1() + 5 );
+        const Q3CString afterText( localName.latin1() + 5 );
         if ( afterText == "sender-company" )
             subtype = 4; //VST_COMPANYNAME;
         else if ( afterText == "sender-firstname" )
@@ -2219,7 +2222,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
 
 
     // Left position of the cell/column (similar to RTF's \cellx). The last one defined is the right position of the last cell/column
-    QMemArray<double> columnLefts(4);
+    Q3MemArray<double> columnLefts(4);
     uint maxColumns=columnLefts.size() - 1;
 
     uint col=0;
@@ -2265,7 +2268,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
                 {
                     // We need more columns
                     maxColumns+=4;
-                    columnLefts.resize(maxColumns+1, QGArray::SpeedOptim);
+                    columnLefts.resize(maxColumns+1, Q3GArray::SpeedOptim);
                 }
                 columnLefts.at(col) = width + columnLefts.at(col-1);
                 kdDebug(30518) << "Cell column " << col-1 << " left " << columnLefts.at(col-1) << " right " << columnLefts.at(col) << endl;
@@ -2279,7 +2282,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
 }
 
 void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
-    const QString& tableName, const QMemArray<double> & columnLefts, uint& row, uint& column )
+    const QString& tableName, const Q3MemArray<double> & columnLefts, uint& row, uint& column )
 {
     kdDebug(30518) << "parseInsideOfTable: columnLefts.size()=" << columnLefts.size() << endl;
     QDomElement framesetsPluralElement (doc.documentElement().namedItem("FRAMESETS").toElement());

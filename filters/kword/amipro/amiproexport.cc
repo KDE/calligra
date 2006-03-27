@@ -27,6 +27,8 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -69,7 +71,7 @@ bool AmiProWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 bool AmiProWorker::doCloseFile(void)
 {
   QFile out( filename );
-  if( !out.open( IO_WriteOnly ) )
+  if( !out.open( QIODevice::WriteOnly ) )
     return FALSE;
   QTextStream stream;
   stream.setDevice( &out );
@@ -181,8 +183,8 @@ AmiProExport::AmiProExport( KoFilter *, const char *, const QStringList& ):
 }
 
 KoFilter::ConversionStatus 
-AmiProExport::convert( const QCString& from, 
-  const QCString& to )
+AmiProExport::convert( const Q3CString& from, 
+  const Q3CString& to )
 {
   // check for proper conversion
   if( to!= "application/x-amipro" || from != "application/x-kword" )

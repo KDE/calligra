@@ -20,7 +20,7 @@
 #include <qstring.h>
 #include <qxml.h>
 #include <qfile.h>
-#include <qvaluestack.h>
+#include <q3valuestack.h>
 
 #include <wmlparser.h>
 
@@ -87,7 +87,7 @@ class WMLHandler: public QXmlDefaultHandler
     QString m_href;
 
     WMLParseState m_state;
-    QValueStack<WMLParseState> m_stateStack;
+    Q3ValueStack<WMLParseState> m_stateStack;
     
     bool flushParagraph();
     void pushState();
@@ -406,7 +406,7 @@ WMLFormat& WMLFormat::operator=( const WMLFormat& f )
 // paragraph layout info
 WMLLayout::WMLLayout()
 {
-  align = Left;
+  align = Qt::DockLeft;
 }
 
 void WMLLayout::assign( const WMLLayout& l )

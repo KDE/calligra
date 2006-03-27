@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <xcfimport.h>
 #include <kgenericfactory.h>
@@ -39,7 +41,7 @@ XCFImport::~XCFImport()
 {
 }
 
-KoFilter::ConversionStatus XCFImport::convert(const QCString&, const QCString& to)
+KoFilter::ConversionStatus XCFImport::convert(const Q3CString&, const Q3CString& to)
 {
     kdDebug(41008) << "Importing using XCFImport!\n";
 

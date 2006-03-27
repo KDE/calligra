@@ -21,6 +21,8 @@
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -46,7 +48,7 @@ PNGExport::PNGExport( KoFilter */*parent*/, const char */*name*/, const QStringL
 }
 
 
-KoFilter::ConversionStatus PNGExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus PNGExport::convert( const Q3CString& from, const Q3CString& to )
 {
     if ( to != "image/png" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;

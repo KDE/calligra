@@ -21,6 +21,8 @@
 
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "config.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 /* Static variable */
 const char Config::SPACE_CHAR = ' ';

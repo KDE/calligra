@@ -21,12 +21,14 @@
 #define KIS_RAW_IMPORT_H_
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KProcess;
 class KDialogBase;
 class WdgRawImport;
 class KisProfile;
-class QProgressDialog;
+class Q3ProgressDialog;
 
 class KisRawImport : public KoFilter {
     Q_OBJECT
@@ -36,7 +38,7 @@ public:
     virtual ~KisRawImport();
 
 public:
-    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 
 
 private slots:
@@ -62,7 +64,7 @@ private:
     WdgRawImport * m_page;
     KisProfile * m_monitorProfile;
     KProcess * m_process;
-    QProgressDialog* m_progress;
+    Q3ProgressDialog* m_progress;
 };
 
 #endif // KIS_RAW_IMPORT_H_

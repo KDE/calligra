@@ -19,6 +19,8 @@
 #include "kwdwriter.h"
 #include <stdlib.h>
 #include "qrect.h"
+//Added by qt3to4:
+#include <Q3CString>
 #include <KoTextZoomHandler.h>
 #include <qpaintdevice.h>
 
@@ -531,7 +533,7 @@ QDomElement KWDWriter::docroot() {
 }
 
 bool KWDWriter::writeDoc() {
-	QCString str=_doc->toCString();
+	Q3CString str=_doc->toCString();
 	kdWarning(30503) << str << endl;
 
 	if (!_store->open("root")) {

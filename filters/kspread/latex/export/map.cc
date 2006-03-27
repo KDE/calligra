@@ -22,6 +22,8 @@
 #include <stdlib.h>		/* for atoi function    */
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "map.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 /*******************************************/
 /* Constructor                             */
@@ -67,7 +69,7 @@ void Map::generate(QTextStream &out)
 {
 	Table *table = NULL;
 	kdDebug(30522) << "  MAP GENERATION" << endl;
-	QPtrListIterator<Table> it(_tables);
+	Q3PtrListIterator<Table> it(_tables);
 	while ( (table = it.current()) != 0 )
 	{
 		++it;

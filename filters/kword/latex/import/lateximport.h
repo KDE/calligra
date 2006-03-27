@@ -24,6 +24,8 @@
 #include <qtextstream.h>
 #include <qfile.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KoFilter.h>
 #include <KoStore.h>
@@ -37,7 +39,7 @@ class LATEXImport : public KoFilter
 		LATEXImport(KoFilter *parent, const char *name, const QStringList&);
 		virtual ~LATEXImport() {}
 
-		virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+		virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 
 #endif /* __LATEXIMPORT_H__ */

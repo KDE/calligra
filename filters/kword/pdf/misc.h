@@ -25,8 +25,8 @@
 #include <qcolor.h>
 #include <qdom.h>
 #include <qsize.h>
-#include <qvaluevector.h>
-#include <qdict.h>
+#include <q3valuevector.h>
+#include <q3dict.h>
 #include <qmap.h>
 
 class LinkAction;
@@ -120,7 +120,7 @@ struct DPoint {
     double x, y;
 };
 
-class DPath : public QValueVector<DPoint>
+class DPath : public Q3ValueVector<DPoint>
 {
 public:
     DPath() {}
@@ -136,7 +136,7 @@ public:
     DRect boundingRect() const;
 };
 
-typedef QValueVector<DPath> DPathVector;
+typedef Q3ValueVector<DPath> DPathVector;
 
 //-----------------------------------------------------------------------------
 class Font
@@ -173,7 +173,7 @@ private:
     };
     Data *_data;
 
-    static QDict<Data> *_dict;
+    static Q3Dict<Data> *_dict;
     static const char *FAMILY_DATA[PDFImport::Nb_Family];
 };
 

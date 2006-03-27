@@ -21,10 +21,12 @@
 #define AIELEMENT_H
 
 // #include <qvaluelist.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QString;
-class QCString;
+class Q3CString;
 
 /**
   *@author 
@@ -53,10 +55,10 @@ public:
     ~AIElement();
     AIElement( const AIElement& );
     AIElement( const QString&, Type type = String );
-    AIElement( const QCString& );
+    AIElement( const Q3CString& );
     AIElement( const char* );
 //    AIElement( const QValueList<AIElement>& );
-    AIElement( const QValueVector<AIElement>&, Type type = ElementArray);
+    AIElement( const Q3ValueVector<AIElement>&, Type type = ElementArray);
     AIElement( int );
     AIElement( uint );
     AIElement( double );
@@ -78,13 +80,13 @@ public:
     void clear();
 
     const QString toString() const;
-    const QCString toCString() const;
+    const Q3CString toCString() const;
     int toInt( bool * ok=0 ) const;
     uint toUInt( bool * ok=0 ) const;
     double toDouble( bool * ok=0 ) const;
 //    const QValueList<AIElement> toList() const;
-    const QValueVector<AIElement> toElementArray() const;
-    const QValueVector<AIElement> toBlock() const;
+    const Q3ValueVector<AIElement> toElementArray() const;
+    const Q3ValueVector<AIElement> toBlock() const;
 
     // Custom types
     const QString toReference() const;
@@ -95,13 +97,13 @@ public:
 //    QValueListConstIterator<AIElement> listBegin() const;
 //    QValueListConstIterator<AIElement> listEnd() const;
     QString& asString();
-    QCString& asCString();
+    Q3CString& asCString();
     int& asInt();
     uint& asUInt();
     double& asDouble();
 //    QValueList<AIElement>& asList();
-    QValueVector<AIElement>& asElementArray();
-    QValueVector<AIElement>& asBlock();
+    Q3ValueVector<AIElement>& asElementArray();
+    Q3ValueVector<AIElement>& asBlock();
 
     // Custom types
     QString& asReference();
@@ -115,7 +117,7 @@ public:
 private:
     void detach();
 
-    class Private : public QShared
+    class Private : public Q3Shared
     {
     public:
         Private();

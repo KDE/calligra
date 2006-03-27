@@ -27,7 +27,7 @@
 #include <powerpointimport.moc>
 
 #include <qbuffer.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qtextstream.h>
@@ -80,7 +80,7 @@ PowerPointImport::~PowerPointImport()
   delete d;
 }
 
-KoFilter::ConversionStatus PowerPointImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus PowerPointImport::convert( const Q3CString& from, const Q3CString& to )
 {
   if ( from != "application/mspowerpoint" )
     return KoFilter::NotImplemented; 
@@ -159,7 +159,7 @@ QByteArray PowerPointImport::createStyles()
   QString pageWidth = QString("%1pt").arg( d->presentation->masterSlide()->pageWidth() );
   QString pageHeight = QString("%1pt").arg( d->presentation->masterSlide()->pageHeight() );
   
-  stylesBuffer.open( IO_WriteOnly );
+  stylesBuffer.open( QIODevice::WriteOnly );
   stylesWriter = new KoXmlWriter( &stylesBuffer );
 
   stylesWriter->startDocument( "office:document-styles" );
@@ -262,7 +262,7 @@ QByteArray PowerPointImport::createContent()
   QByteArray contentData;
   QBuffer contentBuffer( contentData );
 
-  contentBuffer.open( IO_WriteOnly );
+  contentBuffer.open( QIODevice::WriteOnly );
   contentWriter = new KoXmlWriter( &contentBuffer );
 
   contentWriter->startDocument( "office:document-content" );
@@ -322,7 +322,7 @@ QByteArray PowerPointImport::createManifest()
   QByteArray manifestData;
   QBuffer manifestBuffer( manifestData );
 
-  manifestBuffer.open( IO_WriteOnly );
+  manifestBuffer.open( QIODevice::WriteOnly );
   manifestWriter = new KoXmlWriter( &manifestBuffer );
 
   manifestWriter->startDocument( "manifest:manifest" );
@@ -1441,7 +1441,7 @@ void PowerPointImport::processGroupObjectForStyle( GroupObject* groupObject, KoX
 
 QString hexname( const Color &c )
 {
-  QColor qc( c.red, c.green, c.blue );
+  QColor qc( c.Qt::red, c.Qt::green, c.Qt::blue );
   return qc.name();
 }
 

@@ -27,6 +27,8 @@
 #include "data.h"
 #include "transform.h"
 #include "dialog.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #define TIME_START(str) { \
     kdDebug(30516) << str << endl; \
@@ -228,7 +230,7 @@ void Page::initParagraph(Paragraph &par) const
     const double pright = _rects[par.type].right();
     const double pmean = (pleft + pright) / 2;
 
-    QValueList<TextLine *>::const_iterator it;
+    Q3ValueList<TextLine *>::const_iterator it;
     for (it = par.lines().begin(); it!=par.lines().end(); ++it) {
 
         // compute tabulations
@@ -302,7 +304,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
 //                   << " paroffset=" << par.offset << endl;
     if ( par.offset>0 ) offset += par.offset;
 
-    QValueList<TextLine *>::const_iterator it;
+    Q3ValueList<TextLine *>::const_iterator it;
     for (it = par.lines().begin(); it!=par.lines().end(); ++it) {
         // end of previous line (inside a paragraph)
         if ( !par.isFirst(*it) ) {
@@ -314,7 +316,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
                 Q_ASSERT( si>=0 );
                 QChar c = par.blocks[bi].text[si];
                 int psi = par.charFromEnd(1, pbi);
-                QChar prev = (psi<0 ? QChar::null : par.blocks[pbi].text[psi]);
+                QChar prev = (psi<0 ? QChar::Null : par.blocks[pbi].text[psi]);
                 if ( !prev.isNull() && type(c.unicode())==Hyphen )
                     kdDebug(30516) << "hyphen ? " << QString(prev)
                                    << " type=" << type(prev.unicode())
@@ -358,7 +360,7 @@ void Page::fillParagraph(Paragraph &par, double &offset) const
                 // no tabs for first block in AlignCenter and AlignRight
                 // if smart mode
                 if ( prevBlk || !_data.options().smart
-                     || (par.align!=AlignCenter && par.align!=AlignRight) ) {
+                     || (par.align!=Qt::AlignCenter && par.align!=Qt::AlignRight) ) {
                     Block b;
                     b.font = static_cast<String *>(blk->strings)->font();
                     for (uint k=0; k<(uint)res; k++) b.text += '\t';
@@ -417,7 +419,7 @@ FontFamily Page::checkSpecial(QChar &c, const Font &font) const
 
 void Page::checkSpecialChars(Paragraph &par) const
 {
-    QValueList<Block> blocks;
+    Q3ValueList<Block> blocks;
     for (uint k=0; k<par.blocks.size(); k++) {
         const Block &b = par.blocks[k];
         QString res;
@@ -447,7 +449,7 @@ void Page::checkSpecialChars(Paragraph &par) const
 
 void Page::coalesce(Paragraph &par) const
 {
-    QValueList<Block> blocks;
+    Q3ValueList<Block> blocks;
     blocks.push_back(par.blocks[0]);
     for (uint k=1; k<par.blocks.size(); k++) {
         const Block &b = par.blocks[k];
@@ -530,8 +532,8 @@ void Page::prepare()
 
 void Page::dump(const Paragraph &par)
 {
-    QValueVector<QDomElement> layouts;
-    QValueVector<QDomElement> formats;
+    Q3ValueVector<QDomElement> layouts;
+    Q3ValueVector<QDomElement> formats;
 
     // tabulations
     for (uint k=0; k<par.tabs.size(); k++) {
@@ -540,7 +542,7 @@ void Page::dump(const Paragraph &par)
     }
 
     // indents
-    if ( !_data.options().smart || par.align!=AlignCenter ) {
+    if ( !_data.options().smart || par.align!=Qt::AlignCenter ) {
         QDomElement element = _data.createElement("INDENTS");
         element.setAttribute("left", par.leftIndent);
         double delta = par.firstIndent - par.leftIndent;
@@ -560,9 +562,9 @@ void Page::dump(const Paragraph &par)
         QString flow;
 //        kdDebug(30516) << "flow=" << par.align << endl;
         switch (par.align) {
-        case AlignLeft: break;
-        case AlignRight: flow = "right"; break;
-        case AlignCenter: flow = "center"; break;
+        case Qt::AlignLeft: break;
+        case Qt::AlignRight: flow = "right"; break;
+        case Qt::AlignCenter: flow = "center"; break;
         case AlignBlock: flow = "justify"; break;
         }
         if ( !flow.isEmpty() ) {

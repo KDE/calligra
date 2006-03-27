@@ -22,13 +22,13 @@
 #include <string.h>
 
 #include <qbuffer.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 #include <qfont.h>
 #include <qimage.h>
 #include <qtextcodec.h>
-#include <qvaluelist.h>
-#include <qvaluestack.h>
+#include <q3valuelist.h>
+#include <q3valuestack.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -235,8 +235,8 @@ private:
 	QTextCodec *m_codec;
 	QTextEncoder *m_encoder;
 
-	QValueList <HeaderData> m_headerData;
-	QValueList <FooterData> m_footerData;
+	Q3ValueList <HeaderData> m_headerData;
+	Q3ValueList <FooterData> m_footerData;
 
 	int m_headerType, m_footerType;
 	bool m_hasHeader, m_isHeaderOnFirstPage;
@@ -456,7 +456,7 @@ public:
 		return true;
 	}
 
-	bool isParaListEmpty (const QValueList <ParaData> &para)
+	bool isParaListEmpty (const Q3ValueList <ParaData> &para)
 	{
 		if (para.count () == 1)
 		{
@@ -560,7 +560,7 @@ public:
 		bool wroteFooter = false;
 		m_inWhat = Footer;
 
-		for (QValueList <FooterData>::Iterator it = m_footerData.begin ();
+		for (Q3ValueList <FooterData>::Iterator it = m_footerData.begin ();
 				it != m_footerData.end ();
 				it++)
 		{
@@ -582,7 +582,7 @@ public:
 		bool wroteHeader = false;
 		m_inWhat = Header;
 
-		for (QValueList <HeaderData>::Iterator it = m_headerData.begin ();
+		for (Q3ValueList <HeaderData>::Iterator it = m_headerData.begin ();
 			it != m_headerData.end ();
 			it++)
 		{
@@ -614,7 +614,7 @@ public:
 
 #if 0
 		// dump remaining header paragraphs at the start of the body
-		for (QValueList <HeaderData>::Iterator it = m_headerData.begin ();
+		for (Q3ValueList <HeaderData>::Iterator it = m_headerData.begin ();
 				it != m_headerData.end ();
 				it++)
 		{
@@ -624,7 +624,7 @@ public:
 		}
 
 		// dump remaining footer paragraphs too
-		for (QValueList <FooterData>::Iterator it = m_footerData.begin ();
+		for (Q3ValueList <FooterData>::Iterator it = m_footerData.begin ();
 				it != m_footerData.end ();
 				it++)
 		{
@@ -1129,12 +1129,12 @@ public:
 				QByteArray imageWMF;
 					// input device
 					QBuffer inBuffer (imageData);
-					inBuffer.open (IO_ReadOnly);
+					inBuffer.open (QIODevice::ReadOnly);
 					QBufferDevice inDevice (&inBuffer);
 
 					// output device
 					QBuffer outBuffer (imageWMF);
-					outBuffer.open (IO_WriteOnly);
+					outBuffer.open (QIODevice::WriteOnly);
 					QBufferDevice outDevice (&outBuffer);
 
 					// BMP --> WMF
@@ -1173,7 +1173,7 @@ public:
 				QByteArray imageBMP;
 					// input device
 					QBuffer inBuffer (imageData);
-					inBuffer.open (IO_ReadOnly);
+					inBuffer.open (QIODevice::ReadOnly);
 
 					// read foreign image
 					QImageIO imageIO (&inBuffer, NULL);
@@ -1185,7 +1185,7 @@ public:
 
 					// output device
 					QBuffer outBuffer (imageBMP);
-					outBuffer.open (IO_WriteOnly);
+					outBuffer.open (QIODevice::WriteOnly);
 
 					// write BMP
 					imageIO.setIODevice (&outBuffer);
@@ -1287,7 +1287,7 @@ public:
 	bool processTable (const Table &table)
 	{
 		// just dump the table out for now (no layout)
-		for (QValueList <TableCell>::ConstIterator it = table.cellList.begin ();
+		for (Q3ValueList <TableCell>::ConstIterator it = table.cellList.begin ();
 				it != table.cellList.end ();
 				it++)
 		{
@@ -1402,9 +1402,9 @@ public:
 	#endif
 	}
 
-	bool doFullParagraphList (const QValueList <ParaData> &paraList)
+	bool doFullParagraphList (const Q3ValueList <ParaData> &paraList)
 	{
-		for (QValueList <ParaData>::ConstIterator it = paraList.begin ();
+		for (Q3ValueList <ParaData>::ConstIterator it = paraList.begin ();
 				it != paraList.end ();
 				it ++)
 		{
@@ -1820,7 +1820,7 @@ public:
 			// convert substring to windows-1251
 			//
 
-			QCString stringWin;
+			Q3CString stringWin;
 
 			// there is a codec, therefore there is an encoder...
 			if (m_codec)
@@ -1903,7 +1903,7 @@ MSWriteExport::~MSWriteExport ()
 {
 }
 
-KoFilter::ConversionStatus MSWriteExport::convert (const QCString &from, const QCString &to)
+KoFilter::ConversionStatus MSWriteExport::convert (const Q3CString &from, const Q3CString &to)
 {
 	kdDebug (30509) << "MSWriteExport $Date$ using LibMSWrite "
 			  				<< MSWrite::Version << endl;

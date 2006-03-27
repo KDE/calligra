@@ -23,7 +23,9 @@
 #include "TextOutputDev.h"
 
 #include <qdatetime.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "fstring.h"
 
@@ -39,7 +41,7 @@ class Page : public TextPage
 public:
     Page(Data &data);
 
-    QValueVector<DRect> &rects() { return _rects; }
+    Q3ValueVector<DRect> &rects() { return _rects; }
     bool hasHeader() const;
     bool hasFooter() const;
 
@@ -56,7 +58,7 @@ public:
     void dump();
 
 public:
-    QValueList<QDomElement> pictures;
+    Q3ValueList<QDomElement> pictures;
 
 private:
     FontFamily checkSpecial(QChar &, const Font &) const;
@@ -78,11 +80,11 @@ private:
 
 private:
     Data &_data;
-    QValueList<Paragraph> _pars;
-    QPtrList<Link> _links;
+    Q3ValueList<Paragraph> _pars;
+    Q3PtrList<Link> _links;
     String *_lastStr;
     QTime _time; // debug
-    QValueVector<DRect> _rects;
+    Q3ValueVector<DRect> _rects;
 };
 
 } // namespace

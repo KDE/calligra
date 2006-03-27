@@ -21,6 +21,9 @@
 
 #include <kdebug.h>		/* for kdDebug stream */
 #include <qbitarray.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3PtrList>
 #include "listtable.h"
 #include "textFrame.h"
 
@@ -113,7 +116,7 @@ void Table::append(Element* elt)
 	if(elt->getCol() > getMaxCol())
 		setMaxCol(elt->getCol());
 
-	QPtrList<Element>::append(elt);
+	Q3PtrList<Element>::append(elt);
 }
 
 /*******************************************/

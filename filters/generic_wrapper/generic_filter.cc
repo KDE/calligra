@@ -21,6 +21,8 @@
 
 #include <qtextcodec.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -41,7 +43,7 @@ GenericFilter::GenericFilter(KoFilter *, const char *, const QStringList&) :
     KoFilter() {
 }
 
-KoFilter::ConversionStatus GenericFilter::convert( const QCString &from, const QCString &to )
+KoFilter::ConversionStatus GenericFilter::convert( const Q3CString &from, const Q3CString &to )
 {
 
     //find the right script to use
@@ -104,7 +106,7 @@ KoFilter::ConversionStatus GenericFilter::doImport()
         kdDebug() << "Executing: " << exec << endl;
 
         QFile outFile(m_chain->outputFile());
-        outFile.open(IO_ReadOnly);
+        outFile.open(QIODevice::ReadOnly);
         QByteArray outData = outFile.readAll();
         if (outData.size()==0) {
             m_out->close();

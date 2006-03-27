@@ -29,6 +29,8 @@
 
 #include "FilterDevice.h"
 #include "misc.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 
 namespace PDFImport
@@ -45,7 +47,7 @@ Document::init(const QString &name, const QString &ownerPassword,
     clear();
 
     _file = new QFile(name);
-    if( !_file->open(IO_ReadOnly) ) return KoFilter::FileNotFound;
+    if( !_file->open(QIODevice::ReadOnly) ) return KoFilter::FileNotFound;
 
     FILE *fd = fdopen(_file->handle(), "r");
     if ( fd==0 ) return KoFilter::InternalError;
@@ -87,7 +89,7 @@ void Document::clear()
     _imageIndex = 1;
 }
 
-QString Document::info(const QCString &key) const
+QString Document::info(const Q3CString &key) const
 {
     QString res;
     Object info;

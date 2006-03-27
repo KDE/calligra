@@ -28,6 +28,8 @@
 #include "variablezone.h"
 #include "para.h"
 #include "document.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 /*******************************************/
 /* VariableZone                            */

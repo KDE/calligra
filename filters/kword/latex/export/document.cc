@@ -26,6 +26,8 @@
 #include <KoStore.h>
 
 #include <qdir.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include "fileheader.h"
 #include "document.h"
@@ -399,7 +401,7 @@ Element* Document::searchFootnote(QString footnote)
 
 }
 
-Key* Document::searchKey(QString keyName)
+Qt::Key* Document::searchKey(QString keyName)
 {
 	Key* key = _keys.first();
 	while(key != 0)

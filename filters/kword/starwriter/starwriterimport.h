@@ -24,7 +24,7 @@
 
 #include <KoFilter.h>
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 class StarWriterImport: public KoFilter
 {
@@ -33,7 +33,7 @@ class StarWriterImport: public KoFilter
 public:
     StarWriterImport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~StarWriterImport();
-    KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 
 private:
     // most important OLE streams

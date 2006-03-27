@@ -20,6 +20,8 @@
 #include "command.h"
 #include <iostream.h>
 #include "kdebug.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 Command::Command()
 {
@@ -37,7 +39,7 @@ Command::Command(const char* name)
 	_name = _name.stripWhiteSpace();
 }
 
-Command::Command(const char* name, QPtrList<QPtrList<Element> >* groups)
+Command::Command(const char* name, Q3PtrList<Q3PtrList<Element> >* groups)
 {
 	setType(Element::LATEX_COMMAND);
 	_options.setAutoDelete(true);
@@ -48,8 +50,8 @@ Command::Command(const char* name, QPtrList<QPtrList<Element> >* groups)
 	_name = _name.stripWhiteSpace();
 }
 
-Command::Command(const char* name, QPtrList<QPtrList<Param> >* params,
-		QPtrList<QPtrList<Element> >* groups)
+Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params,
+		Q3PtrList<Q3PtrList<Element> >* groups)
 {
 	setType(Element::LATEX_COMMAND);
 	_options.setAutoDelete(true);
@@ -62,8 +64,8 @@ Command::Command(const char* name, QPtrList<QPtrList<Param> >* params,
 	_name = _name.stripWhiteSpace();
 }
 
-Command::Command(const char* name, QPtrList<QPtrList<Param> >* params, QPtrList<Param>* options,
-		QPtrList<QPtrList<Element> >* groups)
+Command::Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params, Q3PtrList<Param>* options,
+		Q3PtrList<Q3PtrList<Element> >* groups)
 {
 	setType(Element::LATEX_COMMAND);
 	_options.setAutoDelete(true);
@@ -102,7 +104,7 @@ void Command::addOption(const char* )
 void Command::print(int tab)
 {
 	cout << _name.latin1();
-	QPtrList<Param>* params;
+	Q3PtrList<Param>* params;
 	for ( params = _params.first(); params; params = _params.next() )
 	{
 		cout << "[";
@@ -128,7 +130,7 @@ void Command::print(int tab)
 		cout << "]";
 	}
 	
-	QPtrList<Element>* group;
+	Q3PtrList<Element>* group;
 	for(group = _elements.first(); group; group = _elements.next() )
 	{
 		cout << " {";

@@ -23,6 +23,8 @@
 
 #include <qdir.h>
 #include <qcombobox.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kglobal.h>
@@ -48,7 +50,7 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
-XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QCString &format, QWidget* parent,  const char* name_, bool modal, WFlags fl )
+XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const Q3CString &format, QWidget* parent,  const char* name_, bool modal, Qt::WFlags fl )
     : XSLTDialog( parent, name_, modal, fl )
 {
 	int i = 0;

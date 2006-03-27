@@ -22,6 +22,8 @@
 #define __KSPREAD_LATEX_COLUMN_H__
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include "config.h"
 #include "format.h"

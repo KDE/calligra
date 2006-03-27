@@ -21,6 +21,8 @@
 #define _KIS_TIFF_EXPORT_H_
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KisTIFFExport : public KoFilter {
     Q_OBJECT
@@ -28,7 +30,7 @@ class KisTIFFExport : public KoFilter {
         KisTIFFExport(KoFilter *parent, const char *name, const QStringList&);
         virtual ~KisTIFFExport();
     public:
-        virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+        virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 };
 
 #endif

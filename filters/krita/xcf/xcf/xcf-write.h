@@ -22,6 +22,8 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 // Write count integers to the file
 Q_UINT32 xcf_write_int32 (QFile *fp, Q_INT32 *data, Q_INT32 count);
@@ -33,7 +35,7 @@ Q_UINT32 xcf_write_float (QFile *fp, float *data, Q_INT32 count);
 Q_UINT32 xcf_write_int8 (QFile *fp, Q_UINT8 *data, Q_INT32 count);
 
 // Write count zero-terminated strings to the file, each string preceded by its length as an integer
-Q_UINT32 xcf_write_string (QFile *fp, QCString *data, Q_INT32 count);
+Q_UINT32 xcf_write_string (QFile *fp, Q3CString *data, Q_INT32 count);
 
 
 #endif  /* __XCF_WRITE_H__ */

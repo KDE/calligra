@@ -21,7 +21,7 @@
 #define DOCBOOKEXPORT_H
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 #include <qobject.h>
 
@@ -37,6 +37,6 @@ public:
     DocBookExport (KoFilter *parent, const char *name, const QStringList & );
     virtual ~DocBookExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 #endif // DOCBOOKEXPORT_H

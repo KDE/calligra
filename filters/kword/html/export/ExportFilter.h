@@ -21,7 +21,9 @@
 #ifndef EXPORTFILTERFULLPOWER_H
 #define EXPORTFILTERFULLPOWER_H
 
-#include <qvaluestack.h>
+#include <q3valuestack.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <KWEFBaseWorker.h>
 
@@ -97,7 +99,7 @@ protected:
     QString m_fileName; ///< Name of the output file
     QString m_strFileDir; ///< Directory of the output file
     QString m_strSubDirectoryName; ///< Name of the sub directory for the additional files
-    QValueStack<ListInfo> m_listStack; ///< Stack for list information
+    Q3ValueStack<ListInfo> m_listStack; ///< Stack for list information
     bool m_xml;
 };
 

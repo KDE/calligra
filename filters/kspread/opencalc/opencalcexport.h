@@ -24,7 +24,9 @@
 #include "opencalcstyleexport.h"
 
 #include <KoFilter.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QDomDocument;
 class QDomElement;
@@ -45,8 +47,8 @@ class OpenCalcExport : public KoFilter
   OpenCalcExport( KoFilter * parent, const char * name, const QStringList & );
   virtual ~OpenCalcExport() {}
 
-  virtual KoFilter::ConversionStatus convert( const QCString & from,
-                                              const QCString & to );
+  virtual KoFilter::ConversionStatus convert( const Q3CString & from,
+                                              const Q3CString & to );
 
  private:
   enum files { metaXML = 0x01, contentXML = 0x02, stylesXML = 0x04, settingsXML = 0x08 };

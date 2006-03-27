@@ -30,9 +30,12 @@
 #include "variablezone.h"
 #include "footnote.h"
 #include "anchor.h"
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3PtrList>
 
 /* static data */
-QPtrStack<EType> Para::_historicList;
+Q3PtrStack<EType> Para::_historicList;
 int Para::_tabulation = 0;
 
 /*******************************************/
@@ -233,7 +236,7 @@ void Para::analyseLayoutPara(const QDomNode balise)
 				((TextZone*) zone)->setLength(_currentPos - _text.length());
 				((TextZone*) zone)->analyse();
 				if(_lines == 0)
-					_lines = new QPtrList<Format>;
+					_lines = new Q3PtrList<Format>;
 				/* add the text */
 				_lines->append(zone);
 				_currentPos = _currentPos + ((TextZone*) zone)->getLength();
@@ -291,7 +294,7 @@ void Para::analyseFormat(const QDomNode balise)
 					if(zone->getPos() != _currentPos)
 					{
 						if(_lines == 0)
-							_lines = new QPtrList<Format>;
+							_lines = new Q3PtrList<Format>;
 							/* Create first a default format */
 						zoneFirst = new TextZone(_text, this);
 						zoneFirst->setPos(_currentPos);
@@ -327,7 +330,7 @@ void Para::analyseFormat(const QDomNode balise)
 	if(zone->getPos() != _currentPos)
 	{
 		if(_lines == 0)
-			_lines = new QPtrList<Format>;
+			_lines = new Q3PtrList<Format>;
 			/* Create first a default format */
 		zoneFirst = new TextZone(_text, this);
 		zoneFirst->setPos(_currentPos);
@@ -342,7 +345,7 @@ void Para::analyseFormat(const QDomNode balise)
 	if(zone != 0)
 	{
 		if(_lines == 0)
-			_lines = new QPtrList<Format>;
+			_lines = new Q3PtrList<Format>;
 
 		/* add the text */
 		_lines->append(zone);

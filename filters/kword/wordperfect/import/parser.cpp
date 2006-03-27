@@ -19,10 +19,10 @@
 
 #include "parser.h"
 
-#include <qmemarray.h>
+#include <q3memarray.h>
 #include <qdatastream.h>
 #include <qfile.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 
 using namespace WP;
@@ -106,7 +106,7 @@ Parser::parse (const QString & filename)
   // open input file and assign the stream
   QDataStream stream;
   QFile in (filename);
-  if (!in.open (IO_ReadOnly))
+  if (!in.open (QIODevice::ReadOnly))
     return FALSE;
   stream.setDevice (&in);
 
@@ -168,7 +168,7 @@ Parser::parsePacketWP5( const QString & filename )
   // open input file and assign the stream
   QDataStream stream;
   QFile in (filename);
-  if (!in.open (IO_ReadOnly))
+  if (!in.open (QIODevice::ReadOnly))
     return;
   stream.setDevice (&in);
 
@@ -179,7 +179,7 @@ Parser::parsePacketWP5( const QString & filename )
 
   for( unsigned next_block=16; next_block>0; )
   {
-    QMemArray<Q_UINT8> buf( 10 );
+    Q3MemArray<Q_UINT8> buf( 10 );
     stream.device()->at( next_block );
     for( int c=0; c<10; c++ )
       stream >> buf.at( c );
@@ -215,7 +215,7 @@ Parser::parsePacketWP5( const QString & filename )
   }
 
   // load all packets
-  for( QPtrListIterator<Packet> it(packets); it; ++it )
+  for( Q3PtrListIterator<Packet> it(packets); it; ++it )
   {
       Packet* p = it.current();
       stream.device()->at( p->pos );
@@ -227,7 +227,7 @@ Parser::parsePacketWP5( const QString & filename )
   in.close();
 
   // process all known packets
-  for( QPtrListIterator<Packet> i(packets); i; ++i )
+  for( Q3PtrListIterator<Packet> i(packets); i; ++i )
   {
     Packet* p = i.current();
     if( p->data.size()==0 ) continue;
@@ -270,7 +270,7 @@ Parser::parsePacketWP6( const QString & filename )
   // open input file and assign the stream
   QDataStream stream;
   QFile in (filename);
-  if (!in.open (IO_ReadOnly))
+  if (!in.open (QIODevice::ReadOnly))
     return;
   stream.setDevice (&in);
 
@@ -309,7 +309,7 @@ Parser::parsePacketWP6( const QString & filename )
   }
 
   // load all packets
-  for( QPtrListIterator<Packet> it(packets); it; ++it )
+  for( Q3PtrListIterator<Packet> it(packets); it; ++it )
   {
     Packet* p = it.current();
     stream.device()->at( p->pos );
@@ -321,7 +321,7 @@ Parser::parsePacketWP6( const QString & filename )
   in.close();
 
   // process all known packets
-  for( QPtrListIterator<Packet> i(packets); i; ++i )
+  for( Q3PtrListIterator<Packet> i(packets); i; ++i )
   {
     Packet* p = i.current();
     if( p->data.size()==0 ) continue;
@@ -359,7 +359,7 @@ Parser::parseDocWP5( const QString & filename, int start )
   // open input file and assign the stream
   QDataStream stream;
   QFile in (filename);
-  if (!in.open (IO_ReadOnly))
+  if (!in.open (QIODevice::ReadOnly))
     return;
   stream.setDevice (&in);
 
@@ -389,8 +389,8 @@ Parser::parseDocWP5( const QString & filename, int start )
         {
           // either fixed-length or variable-length function
 
-          QMemArray < Q_UINT8 > data;
-          QMemArray < Q_UINT16 > pid;
+          Q3MemArray < Q_UINT8 > data;
+          Q3MemArray < Q_UINT16 > pid;
           Q_UINT8 subfunction = 0;
 
           if ((code >= 0xC0) && (code <= 0xCF))
@@ -568,7 +568,7 @@ Parser::parseDocWP6 (const QString & filename, int start)
   // open input file and assign the stream
   QDataStream stream;
   QFile in (filename);
-  if (!in.open (IO_ReadOnly))
+  if (!in.open (QIODevice::ReadOnly))
     return;
   stream.setDevice (&in);
 
@@ -617,8 +617,8 @@ Parser::parseDocWP6 (const QString & filename, int start)
         {
           // either fixed-length or variable-length function
 
-          QMemArray < Q_UINT8 > data;
-          QMemArray < Q_UINT16 > pid;
+          Q3MemArray < Q_UINT8 > data;
+          Q3MemArray < Q_UINT16 > pid;
           Q_UINT8 subfunction = 0;
 
           if ((code >= 0xF0) && (code <= 0xFF))
@@ -959,9 +959,9 @@ mapToTabType (int t)
 }
 
 void
-Parser::handleTab (QMemArray < Q_UINT8 > data)
+Parser::handleTab (Q3MemArray < Q_UINT8 > data)
 {
-  QPtrList < Token::Tab > tabs;
+  Q3PtrList < Token::Tab > tabs;
   bool relative = data[0];
   int adjust = data[1] + (data[2] << 8);
   int num = data[3];

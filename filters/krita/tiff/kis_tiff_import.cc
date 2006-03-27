@@ -29,6 +29,8 @@
 #include <kis_view.h>
 
 #include "kis_tiff_converter.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<KisTIFFImport, KoFilter> TIFFImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritatiffimport, TIFFImportFactory("kofficefilters"))
@@ -41,7 +43,7 @@ KisTIFFImport::~KisTIFFImport()
 {
 }
 
-KoFilter::ConversionStatus KisTIFFImport::convert(const QCString&, const QCString& to)
+KoFilter::ConversionStatus KisTIFFImport::convert(const Q3CString&, const Q3CString& to)
 {
     kdDebug(41008) << "Importing using TIFFImport!\n";
 

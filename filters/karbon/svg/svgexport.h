@@ -27,7 +27,10 @@
 
 #include "svggraphiccontext.h"
 
-#include <qptrstack.h>
+#include <q3ptrstack.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 class QTextStream;
 class VColor;
@@ -51,7 +54,7 @@ public:
 	SvgExport( KoFilter* parent, const char* name, const QStringList& );
 	virtual ~SvgExport() {}
 
-	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+	virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 private:
 	virtual void visitVPath( VPath& composite );
@@ -63,7 +66,7 @@ private:
 	virtual void visitVText( VText& text );
 
 	void getStroke( const VStroke& stroke, QTextStream *stream );
-	void getColorStops( const QPtrVector<VColorStop> &colorStops );
+	void getColorStops( const Q3PtrVector<VColorStop> &colorStops );
 	void getFill( const VFill& fill, QTextStream *stream );
 	void getGradient( const VGradient& grad );
 	void getPattern( const VPattern& patt );
@@ -76,7 +79,7 @@ private:
 	QTextStream* m_defs;
 	QTextStream* m_body;
 
-	QPtrStack<SvgGraphicsContext>	m_gc;
+	Q3PtrStack<SvgGraphicsContext>	m_gc;
 
 	unsigned int m_indent;
 	unsigned int m_indent2;

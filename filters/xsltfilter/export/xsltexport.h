@@ -21,6 +21,8 @@
 #define __XSLTEXPORT_H__
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class XSLTExport : public KoFilter
 {
@@ -31,6 +33,6 @@ public:
     XSLTExport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~XSLTExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 #endif /* __XSLTEXPORT_H__ */

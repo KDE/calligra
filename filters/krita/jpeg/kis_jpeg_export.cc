@@ -21,6 +21,8 @@
 
 #include <qcheckbox.h>
 #include <qslider.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kdialogbase.h>
@@ -85,7 +87,7 @@ KisJPEGExport::~KisJPEGExport()
 {
 }
 
-KoFilter::ConversionStatus KisJPEGExport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus KisJPEGExport::convert(const Q3CString& from, const Q3CString& to)
 {
     kdDebug(41008) << "JPEG export! From: " << from << ", To: " << to << "\n";
     

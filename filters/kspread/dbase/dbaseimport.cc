@@ -31,6 +31,8 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -48,7 +50,7 @@ DBaseImport::DBaseImport ( QObject*, const char*, const QStringList& )
 {
 }
 
-KoFilter::ConversionStatus DBaseImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus DBaseImport::convert( const Q3CString& from, const Q3CString& to )
 {
   if (to != "application/x-kspread" || from != "application/x-dbase")
     return KoFilter::NotImplemented;
@@ -162,7 +164,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QCString& from, const QCS
   // store output document
   if( out )
     {
-      QCString cstring = root.utf8();
+      Q3CString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->writeBlock( (const char*) cstring, cstring.length() );
     }
@@ -171,7 +173,7 @@ KoFilter::ConversionStatus DBaseImport::convert( const QCString& from, const QCS
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
   if ( out ) 
     {
-       QCString cstring = documentInfo.utf8();
+       Q3CString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
        out->writeBlock( (const char*) cstring, cstring.length() );

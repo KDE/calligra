@@ -37,6 +37,9 @@
 #include <core/vlayer.h>
 #include <qcolor.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 #include <kfilterdev.h>
 
 typedef KGenericFactory<SvgImport, KoFilter> SvgImportFactory;
@@ -53,7 +56,7 @@ SvgImport::~SvgImport()
 {
 }
 
-KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus SvgImport::convert(const Q3CString& from, const Q3CString& to)
 {
 	// check for proper conversion
 	if( to != "application/x-karbon" || from != "image/svg+xml" )
@@ -79,7 +82,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 
 	QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
-	if (!in->open(IO_ReadOnly))
+	if (!in->open(QIODevice::ReadOnly))
 	{
 		kdError(30514) << "Cannot open file! Aborting!" << endl;
 		delete in;
@@ -118,7 +121,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 		kdError(30514) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
 	}
-	QCString cstring = outdoc.toCString(); // utf-8 already
+	Q3CString cstring = outdoc.toCString(); // utf-8 already
 	out->writeBlock( cstring.data(), cstring.length() );
 
 	return KoFilter::OK; // was successful
@@ -152,7 +155,7 @@ void SvgImport::convert()
 	m_gc.push( gc );
 	parseGroup( 0L, docElem );
 	
-	QWMatrix mat;
+	QMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( 0, -m_document.height() );
 	VTransformCmd trafo( 0L, mat );
@@ -181,7 +184,7 @@ double SvgImport::fromPercentage( QString s )
 		return s.toDouble();
 }
 
-double SvgImport::getScalingFromMatrix( QWMatrix &matrix )
+double SvgImport::getScalingFromMatrix( QMatrix &matrix )
 {
 	double xscale = matrix.m11() + matrix.m12();
 	double yscale = matrix.m22() + matrix.m21();
@@ -261,7 +264,7 @@ void SvgImport::setupTransform( const QDomElement &e )
 {
 	SvgGraphicsContext *gc = m_gc.current();
 
-	QWMatrix mat = VPath::parseTransform( e.attribute( "transform" ) );
+	QMatrix mat = VPath::parseTransform( e.attribute( "transform" ) );
 	gc->matrix = mat * gc->matrix;
 }
 
@@ -291,7 +294,7 @@ VObject* SvgImport::findObject( const QString &name, VGroup* group )
 
 VObject* SvgImport::findObject( const QString &name )
 {
-	QPtrVector<VLayer> vector;
+	Q3PtrVector<VLayer> vector;
 	m_document.layers().toVector( &vector );
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{
@@ -474,7 +477,7 @@ void SvgImport::parseColor( VColor &color, const QString &s )
 		}
 
 		QColor c( r.toInt(), g.toInt(), b.toInt() );
-		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+		color.set( c.Qt::red() / 255.0, c.Qt::green() / 255.0, c.Qt::blue() / 255.0 );
 	}
 	else if( s == "currentColor" )
 	{
@@ -489,7 +492,7 @@ void SvgImport::parseColor( VColor &color, const QString &s )
 			c.setNamedColor( rgbColor );
 		else
 			c = parseColor( rgbColor );
-		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
+		color.set( c.Qt::red() / 255.0, c.Qt::green() / 255.0, c.Qt::blue() / 255.0 );
 	}
 }
 
@@ -783,7 +786,7 @@ void SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &co
 		gc->stroke.setMiterLimit( params.toFloat() );
 	else if( command == "stroke-dasharray" )
 	{
-		QValueList<float> array;
+		Q3ValueList<float> array;
 		if(params != "none")
 		{
 			QStringList dashes = QStringList::split( ' ', params );

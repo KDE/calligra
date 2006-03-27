@@ -22,6 +22,9 @@
 #define KWEF_KWORDLEADER_H
 
 #include <qiodevice.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <KoFilterChain.h>
 
@@ -39,7 +42,7 @@ class KOFFICEFILTER_EXPORT KWEFKWordLeader
         void setWorker ( KWEFBaseWorker *newWorker );
         KWEFBaseWorker *getWorker(void) const;
         KoFilter::ConversionStatus convert( KoFilterChain* chain,
-            const QCString& from, const QCString& to);
+            const Q3CString& from, const Q3CString& to);
     public: // ### TODO: where to put in the end?
         void createBookmarkFormatData( ParaData& paraData );
     public: // callbacks
@@ -48,7 +51,7 @@ class KOFFICEFILTER_EXPORT KWEFKWordLeader
     public: // public leader/worker functions (DO NOT use in your own code!)
         bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
 	bool doVariableSettings (const VariableSettingsData &varSettings);
-        bool doFullDocument (const QValueList<ParaData> &);
+        bool doFullDocument (const Q3ValueList<ParaData> &);
 	bool doPageInfo (const int headerType, const int footerType);
         bool doFullPaperFormat (const int format, const double width, const double height, const int orientation);
         bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
@@ -69,9 +72,9 @@ class KOFFICEFILTER_EXPORT KWEFKWordLeader
         bool doFullSpellCheckIgnoreWord (const QString& ignoreword);
         bool doHeader(const HeaderData&);
         bool doFooter(const FooterData&);
-        bool doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
+        bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
 
-        QValueList<FootnoteData> footnoteList;
+        Q3ValueList<FootnoteData> footnoteList;
 
         void setHeaderType(int hType) { m_hType = hType; }
         void setFooterType(int fType) { m_fType = fType; }
@@ -94,10 +97,10 @@ class KOFFICEFILTER_EXPORT KWEFKWordLeader
         /// Number of paragraph in each frameset (for bookmarks)
         QMap<QString,int> m_paraCountMap;
         /// List of bookmarks
-        QValueList<Bookmark> m_bookmarkList;
+        Q3ValueList<Bookmark> m_bookmarkList;
         QStringList m_unanchoredFramesets; ///< List of framesets where an anchor was searched but not found (DEBUG) @since 1.4
-        QValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors @since 1.4
-        QValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables @since 1.4
+        Q3ValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors @since 1.4
+        Q3ValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables @since 1.4
     private:
         KWEFBaseWorker *m_worker;
         KoFilterChain* m_chain;

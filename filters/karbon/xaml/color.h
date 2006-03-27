@@ -1,9 +1,9 @@
 
-#define TORGB( red, green, blue ) \
+#define TORGB( Qt::red, Qt::green, Qt::blue ) \
 { \
-	r = red; \
-	b = blue; \
-	g = green; \
+	r = Qt::red; \
+	b = Qt::blue; \
+	g = Qt::green; \
 }
 
 void keywordToRGB( QString rgbColor, int &r, int &g, int &b )

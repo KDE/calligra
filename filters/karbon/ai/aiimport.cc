@@ -18,7 +18,7 @@
 */
 
 #include <qdom.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 #include <qstring.h>
 
@@ -57,14 +57,14 @@ AiImport::~AiImport()
 }
 
 KoFilter::ConversionStatus
-AiImport::convert( const QCString& from, const QCString& to )
+AiImport::convert( const Q3CString& from, const Q3CString& to )
 {
 	if ( from != "application/illustrator" || to != "application/x-karbon" )
 	{
 		return KoFilter::NotImplemented;
 	}
 	QFile fileIn( m_chain->inputFile() );
-	if( !fileIn.open( IO_ReadOnly ) )
+	if( !fileIn.open( QIODevice::ReadOnly ) )
 	{
 		fileIn.close();
 		return KoFilter::FileNotFound;
@@ -88,7 +88,7 @@ AiImport::convert( const QCString& from, const QCString& to )
 		return KoFilter::StorageCreationError;
 	}
 
-	QCString cStr = result.latin1();
+	Q3CString cStr = result.latin1();
 	storeOut->writeBlock( cStr, cStr.size() - 1 );
 
 	return KoFilter::OK;

@@ -20,7 +20,7 @@
 #ifndef __GENERICFILTER_H__
 #define __GENERICFILTER_H__
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstringlist.h>
 
 #include <kprocess.h>
@@ -35,8 +35,8 @@ public:
     GenericFilter(KoFilter *parent, const char *name, const QStringList&);
     virtual ~GenericFilter() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from,
-                                                const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from,
+                                                const Q3CString& to );
 private:
     KoFilter::ConversionStatus doImport();
     KoFilter::ConversionStatus doExport();

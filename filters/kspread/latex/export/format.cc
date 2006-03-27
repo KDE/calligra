@@ -27,6 +27,8 @@
 #include "fileheader.h"	/* for the use of _header (color and underlined) */
 #include "format.h"
 #include "row.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 Format::Format()
 {

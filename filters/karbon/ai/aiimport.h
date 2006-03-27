@@ -23,6 +23,9 @@
 #include <KoFilter.h>
 
 #include "karbonaiparserbase.h"
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 class QDomElement;
 class QTextStream;
@@ -35,7 +38,7 @@ public:
 	AiImport( KoFilter* parent, const char* name, const QStringList& );
 	virtual ~AiImport();
 
-	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+	virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 /* private:
    QString m_result; */
 

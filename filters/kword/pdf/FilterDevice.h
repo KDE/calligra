@@ -21,6 +21,9 @@
 #define FILTERDEVICE_H
 
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
 
 class Object;
 class Stream;
@@ -105,7 +108,7 @@ private:
 
 private:
     Data &_data;
-    QPtrList<Page> _pages;
+    Q3PtrList<Page> _pages;
     QColor _fillColor, _strokeColor;
 
     class Image {
@@ -115,7 +118,7 @@ private:
         bool   mask;
     };
     Image _currentImage;
-    typedef QValueList<Image> ImageList;
+    typedef Q3ValueList<Image> ImageList;
     ImageList _images;
 };
 

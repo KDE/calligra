@@ -21,6 +21,8 @@
 #define _KIS_JPEG_EXPORT_H_
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KisJPEGExport : public KoFilter {
     Q_OBJECT
@@ -28,7 +30,7 @@ class KisJPEGExport : public KoFilter {
         KisJPEGExport(KoFilter *parent, const char *name, const QStringList&);
         virtual ~KisJPEGExport();
     public:
-        virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+        virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 };
 
 #endif

@@ -18,6 +18,9 @@
  */
 
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3MemArray>
 
 #include <kmessagebox.h>
 
@@ -57,7 +60,7 @@ KisOpenEXRExport::~KisOpenEXRExport()
 {
 }
 
-KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus KisOpenEXRExport::convert(const Q3CString& from, const Q3CString& to)
 {
     if (to != "image/x-exr" || from != "application/x-krita") {
         return KoFilter::NotImplemented;
@@ -118,7 +121,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
 
     RgbaOutputFile file(QFile::encodeName(filename), displayWindow, dataWindow, WRITE_RGBA);
 
-    QMemArray<Rgba> pixels(dataWidth);
+    Q3MemArray<Rgba> pixels(dataWidth);
 
     for (int y = 0; y < dataHeight; ++y) {
 

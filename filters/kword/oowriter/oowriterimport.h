@@ -23,8 +23,11 @@
 
 #include <KoFilter.h>
 
-#include <qdict.h>
+#include <q3dict.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3MemArray>
 #include <KoStyleStack.h>
 #include <liststylestack.h>
 
@@ -37,7 +40,7 @@ public:
     OoWriterImport( KoFilter * parent, const char * name, const QStringList & );
     virtual ~OoWriterImport();
 
-    virtual KoFilter::ConversionStatus convert( QCString const & from, QCString const & to );
+    virtual KoFilter::ConversionStatus convert( Q3CString const & from, Q3CString const & to );
 
 private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
@@ -83,7 +86,7 @@ private:
     void appendBookmark( QDomDocument& doc, int paragId, int pos, int endParagId, int endPos, const QString& name );
     void parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
     void parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
-        const QString& tableName, const QMemArray<double> & columnLefts, uint& row, uint& column );
+        const QString& tableName, const Q3MemArray<double> & columnLefts, uint& row, uint& column );
     static QString kWordStyleName(  const QString& ooStyleName );
 
     QDomDocument    m_content;
@@ -91,9 +94,9 @@ private:
     QDomDocument    m_settings;
     QDomDocument    m_stylesDoc;
 
-    QDict<QDomElement>   m_styles;
-    QDict<QDomElement>   m_masterPages;
-    QDict<QDomElement>   m_listStyles;
+    Q3Dict<QDomElement>   m_styles;
+    Q3Dict<QDomElement>   m_masterPages;
+    Q3Dict<QDomElement>   m_listStyles;
 
     KoStyleStack m_styleStack;
     QDomElement m_defaultStyle;

@@ -23,8 +23,8 @@ DESCRIPTION
 #include <kdebug.h>
 #include <qdatastream.h>
 #include <qfile.h>
-#include <qptrlist.h>
-#include <qpointarray.h>
+#include <q3ptrlist.h>
+#include <q3pointarray.h>
 #include <qrect.h>
 #include <qsize.h>
 #include <msod.h>
@@ -329,7 +329,7 @@ void Msod::drawShape(
             size = normaliseSize(operands);
 
             QRect rect(topLeft, size);
-            QPointArray points(4);
+            Q3PointArray points(4);
 
             points.setPoint(0, topLeft);
             points.setPoint(1, rect.topRight());
@@ -345,7 +345,7 @@ void Msod::drawShape(
 
             lineTo = normalisePoint(operands);
 
-            QPointArray points(2);
+            Q3PointArray points(2);
 
             points.setPoint(0, lineFrom);
             points.setPoint(1, lineTo);
@@ -456,7 +456,7 @@ void Msod::invokeHandler(
             QDataStream *body;
 
             operands.readRawBytes(record->data(), bytes);
-            body = new QDataStream(*record, IO_ReadOnly);
+            body = new QDataStream(*record, QIODevice::ReadOnly);
             body->setByteOrder(QDataStream::LittleEndian);
             (this->*result)(op, bytes, *body);
             delete body;
@@ -498,7 +498,7 @@ bool Msod::parse(
     const char *delayStream)
 {
     QFile in(file);
-    if (!in.open(IO_ReadOnly))
+    if (!in.open(QIODevice::ReadOnly))
     {
         kdError(s_area) << "Unable to open input file!" << endl;
         in.close();
@@ -745,7 +745,7 @@ void Msod::opBse(Header &op, Q_UINT32, QDataStream &operands)
         {
             QByteArray bytes;
             bytes.setRawData(m_delayStream + data.foDelay, data.size);
-            QDataStream stream(bytes, IO_ReadOnly);
+            QDataStream stream(bytes, QIODevice::ReadOnly);
             stream.setByteOrder(QDataStream::LittleEndian);
             walk(data.size, stream);
             bytes.resetRawData(m_delayStream + data.foDelay, data.size);
@@ -962,7 +962,7 @@ void Msod::opSpcontainer(Header &, Q_UINT32 bytes, QDataStream &operands)
     QByteArray  a;
 
     a.setRawData(m_shape.data, m_shape.length);
-    QDataStream s(a, IO_ReadOnly);
+    QDataStream s(a, QIODevice::ReadOnly);
     s.setByteOrder(QDataStream::LittleEndian); // Great, I love Qt !
     drawShape(m_shape.type, m_shape.length, s);
     a.resetRawData(m_shape.data, m_shape.length);
@@ -1145,7 +1145,7 @@ void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
 
     // First process all simple options, and add all complex options to a list.
 
-    QPtrList<Header> complexOpts;
+    Q3PtrList<Header> complexOpts;
     complexOpts.setAutoDelete(true);
     bool unsupported;
     while (length + complexLength < (int)bytes)
@@ -1189,7 +1189,7 @@ void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
                     {
                         QByteArray  a;
                         a.setRawData(image->data, image->length);
-                        QDataStream s(a, IO_ReadOnly);
+                        QDataStream s(a, QIODevice::ReadOnly);
                         m_parent.KWmf::parse(s, image->length);
                         a.resetRawData(image->data, image->length);
                     }
@@ -1312,7 +1312,7 @@ void Msod::Options::walk(Q_UINT32 bytes, QDataStream &operands)
             };
             break;
         case 325:
-            m_pVertices = new QPointArray(op.value / 4);
+            m_pVertices = new Q3PointArray(op.value / 4);
             for (i = 0; i < m_pVertices->count(); i++)
             {
                 m_pVertices->setPoint(i, m_parent.normalisePoint(operands));

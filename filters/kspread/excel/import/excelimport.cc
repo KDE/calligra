@@ -28,7 +28,7 @@
 #include <excelimport.moc>
 
 #include <qbuffer.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatetime.h>
 #include <qfile.h>
 #include <qstring.h>
@@ -103,7 +103,7 @@ ExcelImport::~ExcelImport()
   delete d;
 }
 
-KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus ExcelImport::convert( const Q3CString& from, const Q3CString& to )
 {
   if ( from != "application/msexcel" )
     return KoFilter::NotImplemented; 

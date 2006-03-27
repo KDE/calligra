@@ -18,8 +18,10 @@
    Boston, MA  02110-1301  USA.
 */
 
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kmessagebox.h>
 
@@ -49,7 +51,7 @@ SvgExport::~SvgExport()
 
 
 KoFilter::ConversionStatus
-SvgExport::convert(const QCString& from, const QCString& to)
+SvgExport::convert(const Q3CString& from, const Q3CString& to)
 {
     KoDocument * document = m_chain->inputDocument();
 
@@ -80,7 +82,7 @@ SvgExport::convert(const QCString& from, const QCString& to)
     int width =  int( layoutPage.ptWidth );
     int height = int( layoutPage.ptHeight );
     
-    QPicture  picture;
+    Q3Picture  picture;
     QPainter  painter(&picture);
     QRect     rect(QPoint(0, 0), QPoint(width, height));
     kpresenterdoc->paintContent(painter, rect, false);

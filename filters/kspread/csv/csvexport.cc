@@ -22,6 +22,9 @@
 
 #include <qfile.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -107,7 +110,7 @@ QString CSVExport::exportCSVCell( Sheet const * const sheet, int col, int row, Q
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCString & to )
+KoFilter::ConversionStatus CSVExport::convert( const Q3CString & from, const Q3CString & to )
 {
   kdDebug(30501) << "CSVExport::convert" << endl;
   KoDocument* document = m_chain->inputDocument();
@@ -245,7 +248,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   else
   {
     kdDebug(30501) << "Export as full mode" << endl;
-    QPtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
+    Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
     for( ; it.current(); ++it )
     {
       Sheet const * const sheet = it.current();
@@ -340,7 +343,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   emit sigProgress(100);
 
   QFile out(m_chain->outputFile());
-  if ( !out.open( IO_WriteOnly ) )
+  if ( !out.open( QIODevice::WriteOnly ) )
   {
     kdError(30501) << "Unable to open output file!" << endl;
     out.close();

@@ -27,6 +27,8 @@
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_image_magick_converter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<MagickExport, KoFilter> MagickExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritamagickexport, MagickExportFactory("kofficefilters"))
@@ -39,7 +41,7 @@ MagickExport::~MagickExport()
 {
 }
 
-KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus MagickExport::convert(const Q3CString& from, const Q3CString& to)
 {
     kdDebug(41008) << "magick export! From: " << from << ", To: " << to << "\n";
     

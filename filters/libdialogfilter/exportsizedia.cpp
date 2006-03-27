@@ -26,6 +26,9 @@
 #include <qrect.h>
 #include <qvbuttongroup.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -70,11 +73,11 @@ void ExportSizeDia::setupGUI()
     setMainWidget(page);
 
 #if 0
-    QBoxLayout* mainLayout = new QVBoxLayout( page, 
+    Q3BoxLayout* mainLayout = new Q3VBoxLayout( page, 
 					      KDialog::marginHint(), 
 					      KDialog::spacingHint() );
 #else
-    QGridLayout *mainLayout = new QGridLayout( page, 5, 2,
+    Q3GridLayout *mainLayout = new Q3GridLayout( page, 5, 2,
 					       KDialog::marginHint(), 
 					       KDialog::spacingHint() );
 #endif

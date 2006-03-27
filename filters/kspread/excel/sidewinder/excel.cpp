@@ -3369,10 +3369,10 @@ void PaletteRecord::setData( unsigned size, const unsigned char* data )
   unsigned p = 2;
   for( unsigned i = 0; i < num; i++, p+=4 )
   {
-    unsigned red = data[ p ];
-    unsigned green = data[ p+1 ];
-    unsigned blue = data[ p+2 ];
-    d->colors.push_back( Color( red, green, blue ) );
+    unsigned Qt::red = data[ p ];
+    unsigned Qt::green = data[ p+1 ];
+    unsigned Qt::blue = data[ p+2 ];
+    d->colors.push_back( Color( Qt::red, Qt::green, Qt::blue ) );
   }
 }
 
@@ -3384,9 +3384,9 @@ void PaletteRecord::dump( std::ostream& out ) const
   {
     out << "         Color #" << std::setw(2) << i << " : ";
     Color c = color( i );
-    out << "R:" << std::setw(3) << c.red;
-    out << "   G:" << std::setw(3) << c.green;
-    out << "   B:" << std::setw(3) << c.blue << std::endl;
+    out << "R:" << std::setw(3) << c.Qt::red;
+    out << "   G:" << std::setw(3) << c.Qt::green;
+    out << "   B:" << std::setw(3) << c.Qt::blue << std::endl;
   }
 }
 
@@ -3910,7 +3910,7 @@ XFRecord::XFRecord():  Record()
   d->locked              = false;
   d->formulaHidden       = false;
   d->parentStyle         = 0;
-  d->horizontalAlignment = Left;
+  d->horizontalAlignment = Qt::DockLeft;
   d->verticalAlignment   = VCentered;
   d->textWrap            = false;
   d->rotationAngle       = 0;
@@ -4043,9 +4043,9 @@ const char* XFRecord::horizontalAlignmentAsString() const
   switch( horizontalAlignment() )
   {
     case General:   result = "General"; break;
-    case Left:      result = "Left"; break;
+    case Qt::DockLeft:      result = "Left"; break;
     case Centered:  result = "Centered"; break;
-    case Right:     result = "Right"; break;
+    case Qt::DockRight:     result = "Right"; break;
     case Justified: result = "Justified"; break;
     case Filled:    result = "Filled"; break;
     default: break;
@@ -4068,9 +4068,9 @@ const char* XFRecord::verticalAlignmentAsString() const
   const char *result = "Unknown";
   switch( verticalAlignment() )
   {
-    case Top:          result = "Top"; break;
+    case Qt::DockTop:          result = "Top"; break;
     case VCentered:    result = "Centered"; break;
-    case Bottom:       result = "Bottom"; break;
+    case Qt::DockBottom:       result = "Bottom"; break;
     case VJustified:   result = "Justified"; break;
     case VDistributed: result = "Distributed"; break;
     default: break;
@@ -4310,7 +4310,7 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
     setShrinkContent( options & 0x10 );
   
     unsigned linestyle = readU16( data + 10 );
-    unsigned color1 = readU16( data + 12 );
+    unsigned Qt::color1 = readU16( data + 12 );
     // unsigned color2 = readU16( data + 14 );
     unsigned flag = readU16( data + 16 );
     unsigned fill = readU16( data + 18 );
@@ -4320,15 +4320,15 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
     setTopBorderStyle( ( linestyle >> 8 ) & 0xf );
     setBottomBorderStyle( ( linestyle >> 12 ) & 0xf );
   
-    setLeftBorderColor( color1 & 0x7f );
-    setRightBorderColor( ( color1 >> 7 ) & 0x7f );
-    setTopBorderColor( color1 & 0x7f );
-    setBottomBorderColor( ( color1 >> 7 ) & 0x7f );
+    setLeftBorderColor( Qt::color1 & 0x7f );
+    setRightBorderColor( ( Qt::color1 >> 7 ) & 0x7f );
+    setTopBorderColor( Qt::color1 & 0x7f );
+    setBottomBorderColor( ( Qt::color1 >> 7 ) & 0x7f );
   
-    setDiagonalTopLeft( color1 & 0x40 );
-    setDiagonalBottomLeft( color1 & 0x40 );
+    setDiagonalTopLeft( Qt::color1 & 0x40 );
+    setDiagonalBottomLeft( Qt::color1 & 0x40 );
     setDiagonalStyle( ( flag >> 4 ) & 0x1e  );
-    setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( color1 >> 14 ) & 3 ));
+    setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( Qt::color1 >> 14 ) & 3 ));
     
     setFillPattern( ( flag >> 10 ) & 0x3f );
     setPatternForeColor( fill & 0x7f );

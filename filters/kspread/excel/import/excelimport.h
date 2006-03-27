@@ -23,7 +23,7 @@
 #include <KoFilter.h>
 #include <KoStore.h>
 
-#include <qcstring.h>
+#include <q3cstring.h>
 
 class ExcelImport : public KoFilter {
 
@@ -34,7 +34,7 @@ public:
     ExcelImport ( QObject *parent, const char* name, const QStringList& );
     virtual ~ExcelImport();
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 private:
   class Private;

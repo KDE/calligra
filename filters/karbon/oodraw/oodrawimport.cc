@@ -24,6 +24,9 @@
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kzip.h>
 #include <karchive.h>
@@ -62,7 +65,7 @@ OoDrawImport::~OoDrawImport()
 {
 }
 
-KoFilter::ConversionStatus OoDrawImport::convert( QCString const & from, QCString const & to )
+KoFilter::ConversionStatus OoDrawImport::convert( Q3CString const & from, Q3CString const & to )
 {
     kdDebug() << "Entering Oodraw Import filter: " << from << " - " << to << endl;
 
@@ -74,7 +77,7 @@ KoFilter::ConversionStatus OoDrawImport::convert( QCString const & from, QCStrin
 
     m_zip = new KZip(  m_chain->inputFile() );
 
-    if ( !m_zip->open( IO_ReadOnly ) )
+    if ( !m_zip->open( QIODevice::ReadOnly ) )
     {
         kdError(30518) << "Couldn't open the requested file "<< m_chain->inputFile() << endl;
         delete m_zip;
@@ -107,7 +110,7 @@ out->writeBlock( info , info.length() );
     KoStoreDevice* out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if( out )
     {
-        QCString info = docinfo.toCString();
+        Q3CString info = docinfo.toCString();
         //kdDebug(30518) << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( info , info.length() );
@@ -126,7 +129,7 @@ out->writeBlock( info , info.length() );
     out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
     if( out )
     {
-        QCString content = outdoc.toCString();
+        Q3CString content = outdoc.toCString();
         kdDebug() << " content :" << content << endl;
         out->writeBlock( content , content.length() );
     }
@@ -333,7 +336,7 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 			double y = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y", QString::null ) ) );
 			double w = KoUnit::parseValue( o.attributeNS( ooNS::svg, "width", QString::null ) );
 			double h = KoUnit::parseValue( o.attributeNS( ooNS::svg, "height", QString::null ) );
-			QWMatrix mat;
+			QMatrix mat;
 			mat.translate( x, y );
 			mat.scale( w / rect.width(), -h / rect.height() );
 			path->transform( mat );
@@ -373,7 +376,7 @@ OoDrawImport::appendPen( VObject &obj )
 			stroke.setType( VStroke::solid );
 		else if( m_styleStack.attributeNS( ooNS::draw, "stroke" ) == "dash" )
 		{
-			QValueList<float> dashes;
+			Q3ValueList<float> dashes;
 			stroke.setType( VStroke::solid );
 			QString style = m_styleStack.attributeNS( ooNS::draw, "stroke-dash" );
 			if( style == "Ultrafine Dashed" ||

@@ -21,6 +21,8 @@
 #define MSWORDIMPORT_H
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QDomDocument;
 class QDomElement;
@@ -32,7 +34,7 @@ public:
     MSWordImport( KoFilter* parent, const char* name, const QStringList& );
     virtual ~MSWordImport();
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );

@@ -29,6 +29,8 @@
 
 #include <khtmlreader.h>
 #include <kwdwriter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<HTMLImport, KoFilter> HTMLImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libhtmlimport, HTMLImportFactory( "kofficefilters" ) )
@@ -39,7 +41,7 @@ HTMLImport::HTMLImport(KoFilter *, const char*, const QStringList &) :
 // 123
 }
 
-KoFilter::ConversionStatus HTMLImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus HTMLImport::convert( const Q3CString& from, const Q3CString& to )
 {
 	if(to!="application/x-kword" || from!="text/html")
 		return KoFilter::NotImplemented;

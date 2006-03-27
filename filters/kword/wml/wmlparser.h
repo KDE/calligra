@@ -20,7 +20,7 @@
 #ifndef __WMLPARSER_H
 #define __WMLPARSER_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 
 class WMLFormat
@@ -39,14 +39,14 @@ class WMLFormat
 class WMLLayout
 {
   public:
-    enum { Left, Center, Right } align;
+    enum { Qt::DockLeft, Center, Qt::DockRight } align;
     WMLLayout();
     WMLLayout( const WMLLayout& );
     WMLLayout& operator=( const WMLLayout& );
     void assign( const WMLLayout& );
 };
 
-typedef QValueList<WMLFormat> WMLFormatList;
+typedef Q3ValueList<WMLFormat> WMLFormatList;
 
 class WMLParser
 {

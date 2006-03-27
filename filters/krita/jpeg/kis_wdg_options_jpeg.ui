@@ -32,7 +32,7 @@
                         <string>Quality:</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignTop</set>
+                        <set>Qt::AlignTop</set>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -63,7 +63,7 @@
                                 <number>80</number>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="tickmarks">
                                 <enum>Both</enum>
@@ -99,7 +99,7 @@
                                         <string>Best</string>
                                     </property>
                                     <property name="alignment">
-                                        <set>AlignVCenter|AlignRight</set>
+                                        <set>Qt::AlignVCenter|Qt::AlignRight</set>
                                     </property>
                                 </widget>
                             </hbox>

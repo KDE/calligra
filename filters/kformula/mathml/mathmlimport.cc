@@ -26,6 +26,8 @@
 #include <KoFilterChain.h>
 
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kformuladocument.h>
 #include <kformulacontainer.h>
@@ -44,7 +46,7 @@ MathMLImport::MathMLImport(KoFilter *, const char *, const QStringList&)
 {
 }
 
-KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus MathMLImport::convert( const Q3CString& from, const Q3CString& to )
 {
     kdDebug( KFormula::DEBUGID ) << "From: " << from << endl;
     kdDebug( KFormula::DEBUGID ) << "To:   " << to << endl;
@@ -67,7 +69,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
     //formula->loadMathML( m_chain->inputFile() );
     const QString filename( m_chain->inputFile() );
     QFile f( filename );
-    if ( !f.open( IO_ReadOnly ) ) {
+    if ( !f.open( QIODevice::ReadOnly ) ) {
         KMessageBox::error( 0, i18n( "Failed to open input file: %1" ).arg( filename ), i18n( "MathML Import Error" ) );
         delete wrapper;
         return KoFilter::FileNotFound;
@@ -95,7 +97,7 @@ KoFilter::ConversionStatus MathMLImport::convert( const QCString& from, const QC
 
     // taken from KoDocument::saveToStore
     KoStoreDevice dev( out );
-    const QCString s = doc->saveXML().toCString(); // utf8 already
+    const Q3CString s = doc->saveXML().toCString(); // utf8 already
     const int nwritten = dev.writeBlock( s.data(), s.size()-1 );
     if ( nwritten != (int)s.size()-1 ) {
         kdWarning() << "wrote " << nwritten << "   - expected " << s.size()-1 << endl;

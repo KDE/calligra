@@ -36,7 +36,7 @@ XmlParser::XmlParser(Config* config, QString filename):_config(config)
 {
 	//_filename = filename;
 	QFile f(filename);
-	if(!f.open(IO_ReadOnly))
+	if(!f.open(QIODevice::ReadOnly))
 		return;
 	if(!_document.setContent(&f))
 	{

@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <tiffio.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <kio/job.h>
 

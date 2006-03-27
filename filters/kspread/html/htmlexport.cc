@@ -24,6 +24,9 @@
 
 #include <qfile.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -76,7 +79,7 @@ const QString strGt  ("&gt;");
 
 // The reason why we use the KoDocument* approach and not the QDomDocument
 // approach is because we don't want to export formulas but values !
-KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3CString& to )
 {
     if(to!="text/html" || from!="application/x-kspread")
     {
@@ -148,7 +151,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
       {
         closePage( str );
         QFile out(file);
-        if(!out.open(IO_WriteOnly)) {
+        if(!out.open(QIODevice::WriteOnly)) {
           kdError(30501) << "Unable to open output file!" << endl;
           out.close();
           return KoFilter::FileNotFound;

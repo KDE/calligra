@@ -26,6 +26,9 @@
 #include <qfont.h>
 #include <qpen.h>
 #include <qxml.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include "opencalcimport.h"
 
@@ -771,7 +774,7 @@ void OpenCalcImport::loadOasisCondition(Cell*cell,const QDomElement &property )
     QDomElement elementItem( property );
     StyleManager * manager = cell->sheet()->doc()->styleManager();
 
-    QValueList<Conditional> cond;
+    Q3ValueList<Conditional> cond;
     while ( !elementItem.isNull() )
     {
         kdDebug(30518)<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
@@ -1539,11 +1542,11 @@ bool OpenCalcImport::parseBody( int numOfTables )
 
     if ( t.hasAttributeNS( ooNS::table, "protected" ) )
     {
-      QCString passwd( "" );
+      Q3CString passwd( "" );
       if ( t.hasAttributeNS( ooNS::table, "protection-key" ) )
       {
         QString p = t.attributeNS( ooNS::table, "protection-key", QString::null );
-        QCString str( p.latin1() );
+        Q3CString str( p.latin1() );
         kdDebug(30518) << "Decoding password: " << str << endl;
         passwd = KCodecs::base64Decode( str );
       }
@@ -1559,11 +1562,11 @@ bool OpenCalcImport::parseBody( int numOfTables )
   QDomElement b = body.toElement();
   if ( b.hasAttributeNS( ooNS::table, "structure-protected" ) )
   {
-    QCString passwd( "" );
+    Q3CString passwd( "" );
     if ( b.hasAttributeNS( ooNS::table, "protection-key" ) )
     {
       QString p = b.attributeNS( ooNS::table, "protection-key", QString::null );
-      QCString str( p.latin1() );
+      Q3CString str( p.latin1() );
       kdDebug(30518) << "Decoding password: " << str << endl;
       passwd = KCodecs::base64Decode( str );
     }
@@ -2036,13 +2039,13 @@ void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPo
 
   pen.setColor( QColor( borderDef.right( p - p2 ) ) );
 
-  if ( pos == Left )
+  if ( pos == Qt::DockLeft )
     layout->setLeftBorderPen( pen );
-  else if ( pos == Top )
+  else if ( pos == Qt::DockTop )
     layout->setTopBorderPen( pen );
-  else if ( pos == Right )
+  else if ( pos == Qt::DockRight )
     layout->setRightBorderPen( pen );
-  else if ( pos == Bottom )
+  else if ( pos == Qt::DockBottom )
     layout->setBottomBorderPen( pen );
   else if ( pos == Border )
   {
@@ -2186,25 +2189,25 @@ void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & p
 
   if ( property.hasAttributeNS( ooNS::fo, "border-bottom" ) )
   {
-    loadBorder( layout, property.attributeNS( ooNS::fo, "border-bottom", QString::null ), Bottom );
+    loadBorder( layout, property.attributeNS( ooNS::fo, "border-bottom", QString::null ), Qt::DockBottom );
     // TODO: style:border-line-width-bottom if double!
   }
 
   if ( property.hasAttributeNS( ooNS::fo, "border-right" ) )
   {
-    loadBorder( layout, property.attributeNS( ooNS::fo, "border-right", QString::null ), Right );
+    loadBorder( layout, property.attributeNS( ooNS::fo, "border-right", QString::null ), Qt::DockRight );
     // TODO: style:border-line-width-right
   }
 
   if ( property.hasAttributeNS( ooNS::fo, "border-top" ) )
   {
-    loadBorder( layout, property.attributeNS( ooNS::fo, "border-top", QString::null ), Top );
+    loadBorder( layout, property.attributeNS( ooNS::fo, "border-top", QString::null ), Qt::DockTop );
     // TODO: style:border-line-width-top
   }
 
   if ( property.hasAttributeNS( ooNS::fo, "border-left" ) )
   {
-    loadBorder( layout, property.attributeNS( ooNS::fo, "border-left", QString::null ), Left );
+    loadBorder( layout, property.attributeNS( ooNS::fo, "border-left", QString::null ), Qt::DockLeft );
     // TODO: style:border-line-width-left
   }
 
@@ -2734,7 +2737,7 @@ int OpenCalcImport::readMetaData()
   return result;
 }
 
-KoFilter::ConversionStatus OpenCalcImport::convert( QCString const & from, QCString const & to )
+KoFilter::ConversionStatus OpenCalcImport::convert( Q3CString const & from, Q3CString const & to )
 {
   kdDebug(30518) << "Entering OpenCalc Import filter: " << from << " - " << to << endl;
 

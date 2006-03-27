@@ -24,6 +24,8 @@
 #include <KoFilter.h>
 
 #include "vvisitor.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 
 class QDataStream;
@@ -39,7 +41,7 @@ public:
 	XcfExport( KoFilter* parent, const char* name, const QStringList& );
 	virtual ~XcfExport() {}
 
-	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+	virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 	virtual void visitVDocument( VDocument& document );
 	virtual void visitVLayer( VLayer& layer );

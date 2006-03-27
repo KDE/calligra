@@ -22,7 +22,7 @@
 
 #include <png.h>
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <kio/job.h>
 

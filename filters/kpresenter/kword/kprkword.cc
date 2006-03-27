@@ -26,8 +26,10 @@
 #include <kprkword.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <qsortedlist.h>
+#include <q3sortedlist.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<KprKword, KoFilter> KprKwordFactory;
 K_EXPORT_COMPONENT_FACTORY( libkprkword, KprKwordFactory( "kofficefilters" ) )
@@ -41,7 +43,7 @@ KprKword::KprKword(KoFilter *, const char *, const QStringList&) :
 // This filter can act as an import filter for KWord and as an export
 // filter for KPresenter (isn't our architecture really nice ? :)
 // This is why we use the file-to-file method, not a QDomDoc one.
-KoFilter::ConversionStatus KprKword::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus KprKword::convert( const Q3CString& from, const Q3CString& to )
 {
     if(to!="application/x-kword" || from!="application/x-kpresenter")
         return KoFilter::NotImplemented;
@@ -147,7 +149,7 @@ KoFilter::ConversionStatus KprKword::convert( const QCString& from, const QCStri
         kdError(30502) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-    QCString cstring = outdoc.toCString(); // utf-8 already
+    Q3CString cstring = outdoc.toCString(); // utf-8 already
     out->writeBlock( cstring.data(), cstring.length() );
     return KoFilter::OK;
 }
@@ -177,7 +179,7 @@ void KprKword::convert()
     if ( objects.isNull() )
         return;
 
-    QSortedList< KprObject > objList;
+    Q3SortedList< KprObject > objList;
     objList.setAutoDelete( true );
 
     QDomNodeList lst = objects.elementsByTagName( "OBJECT" );
@@ -201,7 +203,7 @@ void KprKword::convert()
     int curPage = -1;
     //kdDebug() << "found " << objList.count() << " objects" << endl;
 
-    for ( QPtrListIterator<KprObject> it(objList); it.current(); ++it )
+    for ( Q3PtrListIterator<KprObject> it(objList); it.current(); ++it )
     {
         QDomElement elem = it.current()->elem;
         // Detect the first object of each page
@@ -325,9 +327,9 @@ void KprKword::convert()
                     QColor col;
                     col.setNamedColor(textElem.attribute( "color" ));
                     QDomElement e = outdoc.createElement("COLOR");
-                    e.setAttribute( "red", col.red() );
-                    e.setAttribute( "green", col.green() );
-                    e.setAttribute( "blue", col.blue() );
+                    e.setAttribute( "red", col.Qt::red() );
+                    e.setAttribute( "green", col.Qt::green() );
+                    e.setAttribute( "blue", col.Qt::blue() );
                     outFormatElem.appendChild( e );
                 }
                 if ( !textElem.attribute("textbackcolor").isEmpty())
@@ -335,9 +337,9 @@ void KprKword::convert()
                     QColor col;
                     col.setNamedColor(textElem.attribute( "textbackcolor" ));
                     QDomElement e = outdoc.createElement("TEXTBACKGROUNDCOLOR");
-                    e.setAttribute( "red", col.red() );
-                    e.setAttribute( "green", col.green() );
-                    e.setAttribute( "blue", col.blue() );
+                    e.setAttribute( "red", col.Qt::red() );
+                    e.setAttribute( "green", col.Qt::green() );
+                    e.setAttribute( "blue", col.Qt::blue() );
                     outFormatElem.appendChild( e );
                 }
 

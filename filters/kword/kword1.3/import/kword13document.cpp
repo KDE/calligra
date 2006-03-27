@@ -19,6 +19,9 @@
 */
 
 #include <qiodevice.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -124,7 +127,7 @@ void KWord13Document::xmldump( QIODevice* io )
     
     iostream << " <styles>\n";
     
-    for ( QValueList<KWord13Layout>::Iterator it2 = m_styles.begin();
+    for ( Q3ValueList<KWord13Layout>::Iterator it2 = m_styles.begin();
         it2 != m_styles.end();
         ++it2)
     {
@@ -135,7 +138,7 @@ void KWord13Document::xmldump( QIODevice* io )
     
     iostream << " <pictures>\n";
     
-    for ( QDictIterator<KWord13Picture> it3( m_pictureDict ) ; it3.current(); ++it3 )
+    for ( Q3DictIterator<KWord13Picture> it3( m_pictureDict ) ; it3.current(); ++it3 )
     {
         iostream << "  <key>" << it3.currentKey() << "</key>" << endl;
     }

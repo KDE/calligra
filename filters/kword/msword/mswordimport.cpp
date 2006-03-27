@@ -22,6 +22,8 @@
 #include <qdom.h>
 #include <qfontinfo.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -41,7 +43,7 @@ MSWordImport::~MSWordImport()
 {
 }
 
-KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus MSWordImport::convert( const Q3CString& from, const Q3CString& to )
 {
     // check for proper conversion
     if ( to != "application/x-kword" || from != "application/msword" )
@@ -72,7 +74,7 @@ KoFilter::ConversionStatus MSWordImport::convert( const QCString& from, const QC
         kdError(30502) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-    QCString cstr = mainDocument.toCString();
+    Q3CString cstr = mainDocument.toCString();
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
     out->writeBlock( cstr, cstr.length() );
     out->close();

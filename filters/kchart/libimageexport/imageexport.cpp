@@ -19,6 +19,8 @@
 
 #include <qpixmap.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kmessagebox.h>
 
@@ -41,7 +43,7 @@ ImageExport::~ImageExport()
 
 
 KoFilter::ConversionStatus
-ImageExport::convert(const QCString& from, const QCString& to)
+ImageExport::convert(const Q3CString& from, const Q3CString& to)
 {
     // Check for proper conversion.
     if ( from != "application/x-kchart" || to != exportFormat() )

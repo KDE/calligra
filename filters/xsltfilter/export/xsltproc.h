@@ -21,6 +21,8 @@
 #define __XSLTPROC_H__
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <libexslt/exslt.h>
 #include <libxslt/xsltconfig.h>
@@ -34,9 +36,9 @@
 
 class XSLTProc
 {
-	QCString    _fileIn;
-	QCString    _fileOut;
-	QCString    _stylesheet;
+	Q3CString    _fileIn;
+	Q3CString    _fileOut;
+	Q3CString    _stylesheet;
 
 	const char *params[NB_PARAMETER_MAX + 1];
 	int nbparams;

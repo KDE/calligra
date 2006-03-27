@@ -588,7 +588,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
     QIODevice* io=f->device();
     kdDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
 
-    if ( ! io->open( IO_ReadOnly ) )
+    if ( ! io->open( QIODevice::ReadOnly ) )
     {
         kdWarning(30519) << "Thumbnail could not be opened!" <<endl;
         delete io;

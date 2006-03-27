@@ -25,8 +25,10 @@
 
 #include <qregexp.h>
 #include <qfileinfo.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qfont.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -319,7 +321,7 @@ bool AmiProConverter::doParagraph( const QString& text, AmiProFormatList formatL
   return true;
 }
 
-KoFilter::ConversionStatus AmiProImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus AmiProImport::convert( const Q3CString& from, const Q3CString& to )
 {
   // check for proper conversion
   if( to!= "application/x-kword" || from != "application/x-amipro" )
@@ -347,7 +349,7 @@ KoFilter::ConversionStatus AmiProImport::convert( const QCString& from, const QC
   // store output document
   if( out )
     {
-      QCString cstring = root.utf8();
+      Q3CString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       out->writeBlock( (const char*) cstring, cstring.length() );
     }
@@ -356,7 +358,7 @@ KoFilter::ConversionStatus AmiProImport::convert( const QCString& from, const QC
   out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
   if ( out )
     {
-       QCString cstring = documentInfo.utf8();
+       Q3CString cstring = documentInfo.utf8();
        cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
 
        out->writeBlock( (const char*) cstring, cstring.length() );

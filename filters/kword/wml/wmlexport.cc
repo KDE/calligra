@@ -27,6 +27,8 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -68,7 +70,7 @@ bool WMLWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 bool WMLWorker::doCloseFile(void)
 {
   QFile out( filename );
-  if( !out.open( IO_WriteOnly ) )
+  if( !out.open( QIODevice::WriteOnly ) )
     return FALSE;
   QTextStream stream;
   stream.setDevice( &out );
@@ -145,8 +147,8 @@ WMLExport::WMLExport( KoFilter *, const char *, const QStringList& ):
 {
 }
 
-KoFilter::ConversionStatus WMLExport::convert( const QCString& from, 
-  const QCString& to )
+KoFilter::ConversionStatus WMLExport::convert( const Q3CString& from, 
+  const Q3CString& to )
 {
   // check for proper conversion
   if( to!= "text/vnd.wap.wml" || from != "application/x-kword" )

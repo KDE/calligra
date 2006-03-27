@@ -24,6 +24,8 @@
 #include <qdatastream.h>
 #include <qiodevice.h>
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
@@ -58,7 +60,7 @@ StarWriterImport::~StarWriterImport()
 {
 }
 
-KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus StarWriterImport::convert(const Q3CString& from, const Q3CString& to)
 {
     // Check for proper conversion
     // When 4.x is supported, use also: || (from != "application/x-starwriter")
@@ -99,7 +101,7 @@ KoFilter::ConversionStatus StarWriterImport::convert(const QCString& from, const
     // Prepare storage device and return
     KoStoreDevice *out = m_chain->storageFile("maindoc.xml", KoStore::Write);
     if (out) {
-        QCString cstring = maindoc.utf8();
+        Q3CString cstring = maindoc.utf8();
         cstring.prepend("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         out->writeBlock((const char*) cstring, cstring.length());
     }

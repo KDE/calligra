@@ -22,9 +22,11 @@
 /*                        phillipezolt@hotmail.com  */
 /* additions: Norbert Andres nandres@web.de         */
 
-#include <qdict.h>
+#include <q3dict.h>
 #include <qfile.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <gnumericimport.h>
 #include <kmessagebox.h>
@@ -570,25 +572,25 @@ void GNUMERICFilter::ParseBorder( QDomElement & gmr_styleborder, Cell * kspread_
   if ( !gmr_left.isNull() )
   {
     QDomElement e = gmr_left.toElement(); // try to convert the node to an element.
-    importBorder( e, Left, kspread_cell);
+    importBorder( e, Qt::DockLeft, kspread_cell);
    }
 
   if ( !gmr_right.isNull() )
   {
     QDomElement e = gmr_right.toElement(); // try to convert the node to an element.
-    importBorder( e, Right, kspread_cell);
+    importBorder( e, Qt::DockRight, kspread_cell);
   }
 
   if ( !gmr_top.isNull() )
   {
     QDomElement e = gmr_top.toElement(); // try to convert the node to an element.
-    importBorder( e, Top,  kspread_cell);
+    importBorder( e, Qt::DockTop,  kspread_cell);
   }
 
   if ( !gmr_bottom.isNull() )
   {
     QDomElement e = gmr_bottom.toElement(); // try to convert the node to an element.
-    importBorder( e, Bottom, kspread_cell);
+    importBorder( e, Qt::DockBottom, kspread_cell);
   }
 
   if ( !gmr_diagonal.isNull() )
@@ -623,16 +625,16 @@ void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style,  Cell
             {
                 switch( _style )
                 {
-                case Left:
+                case Qt::DockLeft:
                     cell->setLeftBorderPen( pen );
                     break;
-                case Right:
+                case Qt::DockRight:
                     cell->setRightBorderPen( pen );
                     break;
-                case Top:
+                case Qt::DockTop:
                     cell->setTopBorderPen( pen );
                     break;
-                case Bottom:
+                case Qt::DockBottom:
                     cell->setBottomBorderPen( pen );
                     break;
                 case Diagonal:
@@ -651,16 +653,16 @@ void GNUMERICFilter::importBorder( QDomElement border, borderStyle _style,  Cell
                 {
                     switch( _style )
                     {
-                    case Left:
+                    case Qt::DockLeft:
                         cell->format()->setLeftBorderColor( color );
                         break;
-                    case Right:
+                    case Qt::DockRight:
                         cell->format()->setRightBorderColor( color );
                         break;
-                    case Top:
+                    case Qt::DockTop:
                         cell->format()->setTopBorderColor( color );
                         break;
-                    case Bottom:
+                    case Qt::DockBottom:
                         cell->format()->setBottomBorderColor( color );
                         break;
                     case Diagonal:
@@ -1050,15 +1052,15 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
     kspread_cell->format()->setPrecision( precision );
   }
 
-  bool red = false;
+  bool Qt::red = false;
   if (formatString.find("[RED]", lastPos) != -1)
   {
-    red = true;
+    Qt::red = true;
     kspread_cell->format()->setFloatColor( Style::NegRed );
   }
   if ( formatString.find('(', lastPos) != -1 )
   {
-    if ( red )
+    if ( Qt::red )
       kspread_cell->format()->setFloatColor( Style::NegRedBrackets );
     else
       kspread_cell->format()->setFloatColor( Style::NegBrackets );
@@ -1822,7 +1824,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
   */
 
 
-KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const QCString & to )
+KoFilter::ConversionStatus GNUMERICFilter::convert( const Q3CString & from, const Q3CString & to )
 {
     dateInit();
     bool bSuccess=true;
@@ -1866,7 +1868,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         return KoFilter::FileNotFound;
     }
 
-    if (!in->open(IO_ReadOnly))
+    if (!in->open(QIODevice::ReadOnly))
     {
         kdError(30521) << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
@@ -1930,7 +1932,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
     // This is a mapping of exprID to expressions.
 
-    QDict<char> exprID_dict( 17, FALSE );
+    Q3Dict<char> exprID_dict( 17, FALSE );
     int num = 1;
 
     while (!sheet.isNull())

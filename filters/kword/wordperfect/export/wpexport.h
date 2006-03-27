@@ -22,6 +22,8 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class WPExport : public KoFilter
 {
@@ -34,7 +36,7 @@ class WPExport : public KoFilter
 
     virtual ~WPExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 
 #endif // __WPEXPORT_H

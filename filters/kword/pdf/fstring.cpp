@@ -24,6 +24,8 @@
 
 #include "data.h"
 #include "transform.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 namespace PDFImport {
@@ -42,11 +44,11 @@ QDomElement Tabulator::createElement(Data &data) const
 
 //-----------------------------------------------------------------------------
 Paragraph::Paragraph()
-    : type(Body), firstIndent(0), leftIndent(0), align(AlignLeft)
+    : type(Body), firstIndent(0), leftIndent(0), align(Qt::AlignLeft)
 {}
 
 Paragraph::Paragraph(TextLine *first, uint nbLines)
-    :  type(Body), firstIndent(0), leftIndent(0), align(AlignLeft)
+    :  type(Body), firstIndent(0), leftIndent(0), align(Qt::AlignLeft)
 {
     // fill line list
     TextLine *line = first;
@@ -57,7 +59,7 @@ Paragraph::Paragraph(TextLine *first, uint nbLines)
     }
 
     // compute rectangle
-    QValueList<TextLine *>::const_iterator it;
+    Q3ValueList<TextLine *>::const_iterator it;
     for (it = _lines.begin(); it!=_lines.end(); ++it)
         for (TextBlock *block = (*it)->blocks; block; block = block->next) {
             DRect br(block->xMin, block->xMax, block->yMin, block->yMax);

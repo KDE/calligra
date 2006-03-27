@@ -32,6 +32,8 @@
 */
 
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -61,7 +63,7 @@ HTMLExport::HTMLExport(KoFilter *, const char *, const QStringList &) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus HTMLExport::convert( const Q3CString& from, const Q3CString& to )
 {
     if ((from != "application/x-kword") || (to != "text/html"))
     {

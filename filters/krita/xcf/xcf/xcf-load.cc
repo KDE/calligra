@@ -62,6 +62,8 @@
 #include "xcf-load.h"
 #include "xcf-read.h"
 #include "xcf-seek.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 //#include "gimp-intl.h"
 
@@ -445,7 +447,7 @@ xcf_load_image_props (XcfInfo * info, KisImage * gimage)
 
 	case PROP_USER_UNIT:
         {
-	    QCString *unit_strings[5];
+	    Q3CString *unit_strings[5];
 	    float factor;
 	    Q_INT32 digits;
 	    GimpUnit unit;
@@ -844,7 +846,7 @@ xcf_load_layer (XcfInfo * info, KisImage * gimage)
     Q_INT32 height;
     Q_INT32 type;
     bool is_fs_drawable;
-    QCString *name;
+    Q3CString *name;
 
     /* check and see if this is the drawable the floating selection
      *  is attached to. if it is then we'll do the attachment in our caller.
@@ -932,7 +934,7 @@ xcf_load_channel (XcfInfo * info, KisImage * gimage)
     Q_INT32 width;
     Q_INT32 height;
     bool is_fs_drawable;
-    QCString *name;
+    Q3CString *name;
     GimpRGB color = { 0.0, 0.0, 0.0, GIMP_OPACITY_OPAQUE };
 
     /* check and see if this is the drawable the floating selection
@@ -984,7 +986,7 @@ xcf_load_layer_mask (XcfInfo * info, KisImage * gimage)
     Q_INT32 width;
     Q_INT32 height;
     bool is_fs_drawable;
-    QCString *name;
+    Q3CString *name;
     GimpRGB color = { 0.0, 0.0, 0.0, GIMP_OPACITY_OPAQUE };
 
     /* check and see if this is the drawable the floating selection
@@ -1267,7 +1269,7 @@ xcf_load_tile_rle (XcfInfo * info, Tile * tile, int data_length)
 
     /* we have to use fread instead of xcf_read_* because we may be
        reading past the end of the file here */
-    nmemb_read_successfully = fread ((QCString *) xcfdata, sizeof (QCString),
+    nmemb_read_successfully = fread ((Q3CString *) xcfdata, sizeof (Q3CString),
                                      data_length, info->fp);
     info->cp += nmemb_read_successfully;
 
@@ -1377,7 +1379,7 @@ xcf_load_parasite (XcfInfo * info)
     info->cp += xcf_read_string (info->fp, &p->name, 1);
     info->cp += xcf_read_int32 (info->fp, &p->flags, 1);
     info->cp += xcf_read_int32 (info->fp, &p->size, 1);
-    p->data = g_new (QCString, p->size);
+    p->data = g_new (Q3CString, p->size);
     info->cp += xcf_read_int8 (info->fp, p->data, p->size);
 
     return p;
@@ -1408,7 +1410,7 @@ xcf_load_old_paths (XcfInfo * info, KisImage * gimage)
 static bool
 xcf_load_old_path (XcfInfo * info, KisImage * gimage)
 {
-    QCString *name;
+    Q3CString *name;
     Q_INT32 locked;
     Q_UINT8 state;
     Q_INT32 closed;
@@ -1548,7 +1550,7 @@ xcf_load_vectors (XcfInfo * info, KisImage * gimage)
 static bool
 xcf_load_vector (XcfInfo * info, KisImage * gimage)
 {
-    QCString *name;
+    Q3CString *name;
     GimpTattoo tattoo = 0;
     Q_INT32 visible;
     Q_INT32 linked;

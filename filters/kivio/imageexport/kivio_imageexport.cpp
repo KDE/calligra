@@ -20,11 +20,13 @@
 #include "kivio_imageexport.h"
 
 #include <qdom.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qsize.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3PtrList>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -53,7 +55,7 @@ ImageExport::ImageExport(KoFilter *, const char *, const QStringList&)
 {
 }
 
-KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus ImageExport::convert(const Q3CString& from, const Q3CString& to)
 {
   if(from != "application/x-kivio") {
     return KoFilter::BadMimeType;
@@ -106,8 +108,8 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
   ImageExportDialog dlg;
 
   QStringList pageNames;
-  QPtrList<KivioPage> pageList = doc.map()->pageList();
-  QPtrListIterator<KivioPage> it(pageList);
+  Q3PtrList<KivioPage> pageList = doc.map()->pageList();
+  Q3PtrListIterator<KivioPage> it(pageList);
 
   for(; it.current() != 0; ++it) {
     pageNames.append(it.current()->pageName());

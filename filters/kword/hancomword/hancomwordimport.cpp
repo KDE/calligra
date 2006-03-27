@@ -27,7 +27,7 @@
 #include <hancomwordimport.moc>
 
 #include <qbuffer.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -82,7 +82,7 @@ static inline unsigned long readU16( const void* p )
 
 }
 
-KoFilter::ConversionStatus HancomWordImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus HancomWordImport::convert( const Q3CString& from, const Q3CString& to )
 {
   if ( from != "application/x-hancomword" )
     return KoFilter::NotImplemented; 
@@ -171,7 +171,7 @@ QByteArray HancomWordImport::Private::createContent()
   QByteArray contentData;
   QBuffer contentBuffer( contentData );
 
-  contentBuffer.open( IO_WriteOnly );
+  contentBuffer.open( QIODevice::WriteOnly );
   contentWriter = new KoXmlWriter( &contentBuffer );
 
   contentWriter->startDocument( "office:document-content" );
@@ -223,7 +223,7 @@ QByteArray HancomWordImport::Private::createStyles()
   QByteArray stylesData;
   QBuffer stylesBuffer( stylesData );
 
-  stylesBuffer.open( IO_WriteOnly );
+  stylesBuffer.open( QIODevice::WriteOnly );
   stylesWriter = new KoXmlWriter( &stylesBuffer );
 
   stylesWriter->startDocument( "office:document-styles" );
@@ -279,7 +279,7 @@ QByteArray HancomWordImport::Private::createManifest()
   QByteArray manifestData;
   QBuffer manifestBuffer( manifestData );
 
-  manifestBuffer.open( IO_WriteOnly );
+  manifestBuffer.open( QIODevice::WriteOnly );
   manifestWriter = new KoXmlWriter( &manifestBuffer );
   
   manifestWriter->startDocument( "manifest:manifest" );

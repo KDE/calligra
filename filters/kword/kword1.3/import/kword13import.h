@@ -22,7 +22,7 @@
 #define KWORD_1_3_IMPORT_H
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <KoFilter.h>
 
@@ -38,7 +38,7 @@ public:
     KWord13Import(KoFilter *parent, const char *name, const QStringList &);
     virtual ~KWord13Import() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 protected:
     bool parseInfo( QIODevice* io, KWord13Document& kwordDocument );
     bool parseRoot( QIODevice* io, KWord13Document& kwordDocument );

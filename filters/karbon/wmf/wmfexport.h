@@ -21,8 +21,10 @@
 
 #include <qpen.h>
 #include <qbrush.h>
-#include <qptrlist.h>
-#include <qpointarray.h>
+#include <q3ptrlist.h>
+#include <q3pointarray.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <KoFilter.h>
 #include "vvisitor.h"
 
@@ -40,7 +42,7 @@ public:
     WmfExport( KoFilter *parent, const char *name, const QStringList&);
     virtual ~WmfExport();
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 private:
     void visitVPath( VPath& composite );
@@ -65,7 +67,7 @@ private:
     int       mDpi;
     double    mScaleX;
     double    mScaleY;
-    QPtrList<QPointArray> mListPa;
+    Q3PtrList<Q3PointArray> mListPa;
 };
 
 #endif

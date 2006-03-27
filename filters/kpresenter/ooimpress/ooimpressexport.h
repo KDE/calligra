@@ -23,6 +23,8 @@
 #include "stylefactory.h"
 
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KoFilter.h>
 
@@ -36,8 +38,8 @@ public:
     OoImpressExport( KoFilter * parent, const char * name, const QStringList & );
     virtual ~OoImpressExport();
 
-    virtual KoFilter::ConversionStatus convert( const QCString & from,
-                                                const QCString & to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString & from,
+                                                const Q3CString & to );
 
 private:
     KoFilter::ConversionStatus openFile();

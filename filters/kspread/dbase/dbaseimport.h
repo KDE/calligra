@@ -22,6 +22,8 @@
 
 #include <KoFilter.h>
 #include <KoStore.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class DBaseImport : public KoFilter {
 
@@ -32,7 +34,7 @@ public:
     DBaseImport ( QObject *parent, const char* name, const QStringList& );
     virtual ~DBaseImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 
 #endif // __DBASEIMPORT_H

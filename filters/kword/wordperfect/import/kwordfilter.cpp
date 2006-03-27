@@ -22,7 +22,7 @@
 #include "parser.h"
 
 #include <qfileinfo.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 #include <qregexp.h>
 
@@ -150,7 +150,7 @@ KWordFilter::parse (const QString & filename)
   format_pos = 0;
   fmt = flag.asXML();
 
-  for (QPtrListIterator < Token > it (tokens); it; ++it)
+  for (Q3PtrListIterator < Token > it (tokens); it; ++it)
     {
       unsigned int ucode;
       int attr;
@@ -185,25 +185,25 @@ KWordFilter::parse (const QString & filename)
           if( type == Token::FontColor )
           {
             flag.color = true;
-            flag.red = t->red();
-            flag.green = t->green();
-            flag.blue= t->blue();
+            flag.Qt::red = t->Qt::red();
+            flag.Qt::green = t->Qt::green();
+            flag.Qt::blue= t->Qt::blue();
           }
           else if( type == Token::HighlightOn )
           {
             flag.highlight = true;
-            flag.bgred = t->red();
-            flag.bggreen = t->green();
-            flag.bgblue = t->blue();
+            flag.bgred = t->Qt::red();
+            flag.bggreen = t->Qt::green();
+            flag.bgblue = t->Qt::blue();
           }
           else if( type == Token::HighlightOff )
           {
             // RGB in the data is last used highlight color
             // to go back to normal color, simply XOR would do the trick
             flag.highlight = false;
-            flag.bgred ^= t->red();
-            flag.bggreen ^= t->green();
-            flag.bgblue ^= t->blue();
+            flag.bgred ^= t->Qt::red();
+            flag.bggreen ^= t->Qt::green();
+            flag.bgblue ^= t->Qt::blue();
           }
           else if( type == Token::FontSize )
           {

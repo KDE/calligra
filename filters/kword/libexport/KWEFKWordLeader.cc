@@ -35,6 +35,9 @@
 
 #include <qfile.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -65,10 +68,10 @@ KWEFKWordLeader::~KWEFKWordLeader(void)
 }
 
 static FrameAnchor *findAnchor ( const KoPictureKey& key,
-                                 QValueList<ParaData>& paraList )
+                                 Q3ValueList<ParaData>& paraList )
 {
     kdDebug(30508) << "findAnchor " << key.toString() << endl;
-    QValueList<ParaData>::Iterator paraIt;
+    Q3ValueList<ParaData>::Iterator paraIt;
 
     for ( paraIt = paraList.begin (); paraIt != paraList.end (); ++paraIt )
     {
@@ -95,7 +98,7 @@ static void ProcessHardBrkTag ( QDomNode myNode, void* tagData, KWEFKWordLeader*
 {
     // <HARDBRK>
     bool* flag = (bool*) tagData;
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "frame", *flag );
     ProcessAttributes (myNode, attrProcessingList);
     if (*flag)
@@ -143,7 +146,7 @@ void KWEFKWordLeader::createBookmarkFormatData( ParaData& paraData )
 {
     const int paraCount = m_paraCountMap[ m_currentFramesetName ];
 
-    QValueList<Bookmark>::ConstIterator it;
+    Q3ValueList<Bookmark>::ConstIterator it;
     for (it = m_bookmarkList.begin(); it != m_bookmarkList.end(); ++it )
     {
         if ( (*(it)).m_frameset != m_currentFramesetName )
@@ -173,7 +176,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     kdDebug (30508) << "ProcessParagraphTag () - Begin" << endl;
 #endif
 
-    QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
+    Q3ValueList<ParaData> *paraList = (Q3ValueList<ParaData> *) tagData;
 
     AllowNoAttributes (myNode);
 
@@ -186,7 +189,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
     
     ParaData paraData;
 
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "TEXT",    ProcessTextTag,     &paraData.text           )
                       << TagProcessing ( "FORMATS", ProcessFormatsTag,  &paraData.formattingList )
                       << TagProcessing ( "LAYOUT",  ProcessLayoutTag,   &paraData.layout         );
@@ -238,7 +241,7 @@ static void ProcessFrameTag ( QDomNode myNode, void *tagData,
     frameAnchor->frame.tWidth=0.0;
     frameAnchor->frame.bWidth=0.0;
 
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList
         << AttrProcessing ( "right",        frameAnchor->frame.right  )
         << AttrProcessing ( "left",         frameAnchor->frame.left   )
@@ -325,7 +328,7 @@ static void ProcessPictureAnchor( QDomNode myNode, KWEFKWordLeader *leader, Fram
 {
     frameAnchor->type = frameType;
  
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList
         << TagProcessing ( "FRAME",   ProcessFrameTag, frameAnchor )
         << TagProcessing ( "PICTURE", ProcessImageTag, &frameAnchor->picture.key )
@@ -344,8 +347,8 @@ static void ProcessTableAnchor( QDomNode myNode, KWEFKWordLeader *leader, FrameA
 {
     frameAnchor->type = 6; // Table
 
-    QValueList<ParaData> cellParaList;
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<ParaData> cellParaList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FRAME",     ProcessFrameTag,     frameAnchor   )
                         << TagProcessing ( "PARAGRAPH", ProcessParagraphTag, &cellParaList );
     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -361,7 +364,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
     kdDebug (30508) << "ProcessFramesetTag () - Begin" << endl;
 #endif
 
-    QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
+    Q3ValueList<ParaData> *paraList = (Q3ValueList<ParaData> *) tagData;
 
     int     frameType = -1;
     int     frameInfo = -1;
@@ -373,7 +376,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 
     const QString oldName ( leader->m_currentFramesetName );
     
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "name",        leader->m_currentFramesetName      )
                        << AttrProcessing ( "frameType",   frameType )
                        << AttrProcessing ( "frameInfo",   frameInfo )
@@ -399,7 +402,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                 {
                     // Normal Text
                     kdDebug(30508) << "Processing Frameset: " << leader->m_currentFramesetName << endl;
-                    QValueList<TagProcessing> tagProcessingList;
+                    Q3ValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  paraList ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -409,7 +412,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     // header for first page
                     HeaderData header;
                     header.page = HeaderData::PAGE_FIRST;
-                    QValueList<TagProcessing> tagProcessingList;
+                    Q3ValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  &header.para ));
 
@@ -421,7 +424,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     // header for even page
                     HeaderData header;
                     header.page = HeaderData::PAGE_EVEN;
-                    QValueList<TagProcessing> tagProcessingList;
+                    Q3ValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  &header.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -432,7 +435,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     // header for odd page (or all page, if hType=0)
                     HeaderData header;
                     header.page = (leader->headerType() != 0 ) ? HeaderData::PAGE_ODD : HeaderData::PAGE_ALL;
-                    QValueList<TagProcessing> tagProcessingList;
+                    Q3ValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  &header.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -443,7 +446,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     // footer for first page
                     FooterData footer;
                     footer.page = FooterData::PAGE_FIRST;
-                    QValueList<TagProcessing> tagProcessingList;
+                    Q3ValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  &footer.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -454,7 +457,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     // footer for even page
                     FooterData footer;
                     footer.page = FooterData::PAGE_EVEN;
-                    QValueList<TagProcessing> tagProcessingList;
+                    Q3ValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  &footer.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -465,7 +468,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                     // footer for odd page (or all page, if fType=0)
                     FooterData footer;
                     footer.page = (leader->footerType() != 0) ? FooterData::PAGE_ODD : FooterData::PAGE_ALL;
-                    QValueList<TagProcessing> tagProcessingList;
+                    Q3ValueList<TagProcessing> tagProcessingList;
                     tagProcessingList.append(TagProcessing ( "FRAME" ));
                     tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  &footer.para ));
                     ProcessSubtags (myNode, tagProcessingList, leader);
@@ -491,7 +494,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                         {
                             bool found = false;
                             KoPictureKey key( grpMgr );
-                            QValueList<FrameAnchor>::Iterator it;
+                            Q3ValueList<FrameAnchor>::Iterator it;
                             for ( it = leader->m_nonInlinedTableAnchors.begin(); it !=  leader->m_nonInlinedTableAnchors.end(); ++it )
                             {
                                 if ( (*it).key == key )
@@ -583,7 +586,7 @@ static void ProcessFramesetsTag ( QDomNode        myNode,
                                   KWEFKWordLeader *leader )
 {
     AllowNoAttributes (myNode);
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FRAMESET", ProcessFramesetTag, tagData );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
@@ -605,7 +608,7 @@ static void ProcessStylesPluralTag (QDomNode myNode, void *, KWEFKWordLeader *le
 
     leader->doOpenStyles ();
 
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "STYLE", ProcessStyleTag, leader );
     ProcessSubtags (myNode, tagProcessingList, leader);
 
@@ -621,7 +624,7 @@ static void ProcessPaperBordersTag (QDomNode myNode, void*, KWEFKWordLeader* lea
     double top    = 0.0;
     double bottom = 0.0;
 
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     if ( leader->m_oldSyntax )
     {
         attrProcessingList
@@ -668,7 +671,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
     double columnspacing = 36.0; // Half-inch
     int numPages = -1;
 
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "format",              format      )
                        << AttrProcessing ( "width",               width       )
                        << AttrProcessing ( "height",              height      )
@@ -711,7 +714,7 @@ static void ProcessPaperTag (QDomNode myNode, void *, KWEFKWordLeader *leader)
     leader->doFullPaperFormat (format, width, height, orientation);
     leader->doFullPaperFormatOther( columns, columnspacing, numPages );
 
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList
         << TagProcessing ( "PAPERBORDERS", ProcessPaperBordersTag, NULL )
         ;
@@ -730,7 +733,7 @@ static void ProcessVariableSettingsTag (QDomNode myNode, void *, KWEFKWordLeader
     int modificationMonth = -1;
     int modificationDay = -1;
 
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList << AttrProcessing ( "startingPageNumber", vs.startingPageNumber )
                        << AttrProcessing ( "displaylink", vs.displaylink )
                        << AttrProcessing ( "underlinelink", vs.underlinelink )
@@ -792,7 +795,7 @@ static void ProcessSpellCheckIgnoreWordTag (QDomNode myNode, void *, KWEFKWordLe
 {
     QString ignoreword;
 
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList
         << AttrProcessing ( "word", ignoreword )
         ;
@@ -810,7 +813,7 @@ static void ProcessSpellCheckIgnoreListTag (QDomNode myNode, void *, KWEFKWordLe
 
     leader->doOpenSpellCheckIgnoreList ();
 
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "SPELLCHECKIGNOREWORD", ProcessSpellCheckIgnoreWordTag, leader );
     ProcessSubtags (myNode, tagProcessingList, leader);
 
@@ -822,7 +825,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
                                    void            *tagData,
                                    KWEFKWordLeader *leader )
 {
-    QValueList<ParaData> *paraList = (QValueList<ParaData> *) tagData;
+    Q3ValueList<ParaData> *paraList = (Q3ValueList<ParaData> *) tagData;
 
     KoPictureKey key;
 
@@ -836,7 +839,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     // NOTE: we must always search in both inlined and non-inlined pictures. A picture can be used in both ways and a few times in each!
     
     // Process inlined pictures
-    QValueList<ParaData>::Iterator paraIt;
+    Q3ValueList<ParaData>::Iterator paraIt;
 
     for ( paraIt = paraList->begin(); paraIt != paraList->end(); ++paraIt )
     {
@@ -855,7 +858,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
         }
     }
     // Process non-inline pictures
-    QValueList<FrameAnchor>::Iterator it;
+    Q3ValueList<FrameAnchor>::Iterator it;
     for ( it = leader->m_nonInlinedPictureAnchors.begin(); it !=  leader->m_nonInlinedPictureAnchors.end(); ++it )
     {
         if ( (*it).key == key )
@@ -881,15 +884,15 @@ static void ProcessPixmapsTag ( QDomNode         myNode,
 {
     AllowNoAttributes (myNode);
 
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "KEY", ProcessPixmapsKeyTag, tagData );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 
-static void FreeCellParaLists ( QValueList<ParaData> &paraList )
+static void FreeCellParaLists ( Q3ValueList<ParaData> &paraList )
 {
-    QValueList<ParaData>::Iterator paraIt;
+    Q3ValueList<ParaData>::Iterator paraIt;
 
     for ( paraIt = paraList.begin (); paraIt != paraList.end (); ++paraIt )
     {
@@ -901,7 +904,7 @@ static void FreeCellParaLists ( QValueList<ParaData> &paraList )
         {
             if ( (*formattingIt).id == 6 && (*formattingIt).frameAnchor.type == 6 )
             {
-                QValueList<TableCell>::Iterator cellIt;
+                Q3ValueList<TableCell>::Iterator cellIt;
 
                 for ( cellIt = (*formattingIt).frameAnchor.table.cellList.begin ();
                       cellIt != (*formattingIt).frameAnchor.table.cellList.end ();
@@ -922,7 +925,7 @@ static void ProcessFootnoteFramesetTag ( QDomNode myNode, void *tagData, KWEFKWo
     int frameType = -1, frameInfo = -1;
     bool visible = false;
 
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList
         << AttrProcessing ( "name",        frameName      )
         << AttrProcessing ( "frameType",   frameType )
@@ -943,7 +946,7 @@ static void ProcessFootnoteFramesetTag ( QDomNode myNode, void *tagData, KWEFKWo
     {
         FootnoteData footnote;
         footnote.frameName = frameName;
-        QValueList<TagProcessing> tagProcessingList;
+        Q3ValueList<TagProcessing> tagProcessingList;
         tagProcessingList.append(TagProcessing ( "FRAME" ));
         tagProcessingList.append(TagProcessing ( "PARAGRAPH", ProcessParagraphTag,  &footnote.para ));
         ProcessSubtags (myNode, tagProcessingList, leader);
@@ -956,18 +959,18 @@ static void ProcessFootnoteFramesetsTag ( QDomNode myNode, void *tagData, KWEFKW
 {
     AllowNoAttributes (myNode);
 
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "FRAMESET", ProcessFootnoteFramesetTag, tagData );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
 
 static void ProcessBookmarkItemTag ( QDomNode myNode, void* tag, KWEFKWordLeader *leader )
 {
-    QValueList<Bookmark> * bookmarkList = static_cast< QValueList<Bookmark> * > ( tag );
+    Q3ValueList<Bookmark> * bookmarkList = static_cast< Q3ValueList<Bookmark> * > ( tag );
 
     Bookmark bookmark;
 
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
     attrProcessingList
         << AttrProcessing ( "name", bookmark.m_name )
         << AttrProcessing ( "cursorIndexStart", bookmark.m_cursorIndexStart )
@@ -992,7 +995,7 @@ static void ProcessBookmarksTag ( QDomNode myNode, void* tag, KWEFKWordLeader *l
 {
     AllowNoAttributes (myNode);
 
-    QValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<TagProcessing> tagProcessingList;
     tagProcessingList << TagProcessing ( "BOOKMARKITEM", ProcessBookmarkItemTag, tag );
     ProcessSubtags (myNode, tagProcessingList, leader);
 }
@@ -1004,7 +1007,7 @@ void ProcessDocTag ( QDomNode         myNode,
 
     QString editor, author;
     
-    QValueList<AttrProcessing> attrProcessingList;
+    Q3ValueList<AttrProcessing> attrProcessingList;
 
     attrProcessingList
         << AttrProcessing ( "xmlns" )
@@ -1070,14 +1073,14 @@ void ProcessDocTag ( QDomNode         myNode,
         ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
     // Process framesets, but only to find and extract footnotes (also endnotes)
-    QValueList<FootnoteData> footnotes;
+    Q3ValueList<FootnoteData> footnotes;
     QDomNode nodeFramesets=myNode.namedItem("FRAMESETS");
     if ( !nodeFramesets.isNull() )
         ProcessFootnoteFramesetsTag(nodeFramesets, &footnotes, leader );
 
     // Process all framesets and pictures
-    QValueList<TagProcessing> tagProcessingList;
-    QValueList<ParaData> paraList;
+    Q3ValueList<TagProcessing> tagProcessingList;
+    Q3ValueList<ParaData> paraList;
 
     tagProcessingList
         << TagProcessing ( "PAPER" ) // Already done
@@ -1187,7 +1190,7 @@ bool KWEFKWordLeader::doVariableSettings (const VariableSettingsData &varSetting
 }
 
 
-bool KWEFKWordLeader::doFullDocument (const QValueList<ParaData> &paraList)
+bool KWEFKWordLeader::doFullDocument (const Q3ValueList<ParaData> &paraList)
 {
     if ( m_worker )
         return m_worker->doFullDocument (paraList);
@@ -1259,7 +1262,7 @@ bool KWEFKWordLeader::doFooter ( const FooterData& footer )
     return false;
 }
 
-bool KWEFKWordLeader::doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors )
+bool KWEFKWordLeader::doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors )
 {
     if ( m_worker )
         return m_worker->doDeclareNonInlinedFramesets( pictureAnchors, tableAnchors );
@@ -1295,7 +1298,7 @@ static bool ProcessStoreFile ( QIODevice* subFile,
     {
         kdWarning(30508) << "Could not get a device for the document!" << endl;
     }
-    else if ( subFile->open ( IO_ReadOnly ) )
+    else if ( subFile->open ( QIODevice::ReadOnly ) )
     {
         kdDebug (30508) << "Processing Document..." << endl;
         QDomDocument doc;
@@ -1347,7 +1350,7 @@ bool KWEFKWordLeader::loadSubFile(const QString& fileName, QByteArray& array)
         kdError(30508) << "Could not get a device for sub-file: " << fileName << endl;
         return false;
     }
-    else if ( subFile->open ( IO_ReadOnly ) )
+    else if ( subFile->open ( QIODevice::ReadOnly ) )
     {
         array = subFile->readAll();
         subFile->close ();
@@ -1362,7 +1365,7 @@ bool KWEFKWordLeader::loadSubFile(const QString& fileName, QByteArray& array)
 }
 
 KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
-    const QCString& from, const QCString& to)
+    const Q3CString& from, const Q3CString& to)
 {
     if ( from != "application/x-kword" )
     {

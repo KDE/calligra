@@ -23,7 +23,9 @@
 #include <KoFilter.h>
 #include <qdom.h>
 #include <qmap.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <core/vdocument.h>
 #include <core/vgradient.h>
 #include <core/vfill.h>
@@ -42,7 +44,7 @@ public:
 	XAMLImport(KoFilter *parent, const char *name, const QStringList&);
 	virtual ~XAMLImport();
 
-	virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+	virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 
 protected:
 	class GradientHelper
@@ -54,7 +56,7 @@ protected:
 		}
 		VGradient	gradient;
 		bool		bbox;
-		QWMatrix	gradientTransform;
+		QMatrix	gradientTransform;
 	};
 
 	void parseGroup( VGroup *, const QDomElement & );
@@ -82,7 +84,7 @@ protected:
 
 private:
 	VDocument						m_document;
-	QPtrStack<XAMLGraphicsContext>	m_gc;
+	Q3PtrStack<XAMLGraphicsContext>	m_gc;
 	QMap<QString, GradientHelper>	m_gradients;
 	QMap<QString, QDomElement>		m_paths;
 	KoRect							m_outerRect;

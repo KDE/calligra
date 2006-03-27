@@ -21,6 +21,8 @@
 #define __WMLIMPORT_H
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KoFilter.h>
 #include <KoStore.h>
@@ -36,7 +38,7 @@ class WMLImport : public KoFilter
 
     virtual ~WMLImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 
 #endif // __WMLIMPORT_H

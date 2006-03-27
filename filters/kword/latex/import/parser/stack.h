@@ -22,8 +22,8 @@
 
 
 
-#include <qptrlist.h>
-#include <qptrstack.h>
+#include <q3ptrlist.h>
+#include <q3ptrstack.h>
 
 #define GROUP_STACK_SIZE 10
 

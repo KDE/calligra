@@ -21,6 +21,8 @@
 #define __AMIPROIMPORT_H
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KoFilter.h>
 #include <KoStore.h>
@@ -36,7 +38,7 @@ class AmiProImport : public KoFilter
 
     virtual ~AmiProImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 
 #endif // __AMIPROIMPORT_H

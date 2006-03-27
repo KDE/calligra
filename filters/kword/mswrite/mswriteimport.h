@@ -21,6 +21,8 @@
 #define MSWRITEIMPORT_H
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class WRIDevice;
 class MSWrite::InternalParser;
@@ -39,7 +41,7 @@ public:
 	MSWriteImport (KoFilter *parent, const char *name, const QStringList &);
 	virtual ~MSWriteImport ();
 
-	KoFilter::ConversionStatus convert (const QCString &from, const QCString &to);
+	KoFilter::ConversionStatus convert (const Q3CString &from, const Q3CString &to);
 	
 	void sigProgress (const int value)
 	{

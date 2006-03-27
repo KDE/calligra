@@ -3,6 +3,8 @@
 #include <excelexport.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 
 typedef KGenericFactory<ExcelExport, KoFilter> ExcelExportFactory;
@@ -13,7 +15,7 @@ ExcelExport::ExcelExport(KoFilter *, const char *, const QStringList&) : KoFilte
 }
 
 
-KoFilter::ConversionStatus ExcelExport::convert(const QCString& from, const QCString& to) {
+KoFilter::ConversionStatus ExcelExport::convert(const Q3CString& from, const Q3CString& to) {
 	// Double check that's we really what we want to do
 	if ( ( (to != "application/excel") && (to != "application/msexcel") ) || from != "application/x-kspread") {
 		kdWarning(0) << "Invalid mimetypes " << to << ", " << from << endl;

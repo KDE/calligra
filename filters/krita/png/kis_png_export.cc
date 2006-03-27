@@ -21,6 +21,8 @@
 
 #include <qcheckbox.h>
 #include <qslider.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kdialogbase.h>
@@ -47,7 +49,7 @@ KisPNGExport::~KisPNGExport()
 {
 }
 
-KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus KisPNGExport::convert(const Q3CString& from, const Q3CString& to)
 {
     kdDebug(41008) << "Png export! From: " << from << ", To: " << to << "\n";
     

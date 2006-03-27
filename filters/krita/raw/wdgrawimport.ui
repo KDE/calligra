@@ -144,7 +144,7 @@
                 <cstring>spacer3</cstring>
             </property>
             <property name="orientation">
-                <enum>Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>
@@ -197,7 +197,7 @@
                                 <cstring>radioAutomatic</cstring>
                             </property>
                             <property name="text">
-                                <string>Automatic white balance</string>
+                                <string>Automatic Qt::white balance</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -206,7 +206,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>Automatic color balance. The default is to use a fixed color balance based on a white card photographed in sunlight</string>
+                                <string>Automatic color balance. The default is to use a fixed color balance based on a Qt::white card photographed in sunlight</string>
                             </property>
                         </widget>
                         <widget class="QRadioButton">
@@ -214,7 +214,7 @@
                                 <cstring>radioCamera</cstring>
                             </property>
                             <property name="text">
-                                <string>Camera white balance</string>
+                                <string>Camera Qt::white balance</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -347,7 +347,7 @@
                         <cstring>spacer6</cstring>
                     </property>
                     <property name="orientation">
-                        <enum>Horizontal</enum>
+                        <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeType">
                         <enum>Expanding</enum>

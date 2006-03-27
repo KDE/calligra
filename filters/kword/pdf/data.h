@@ -23,7 +23,9 @@
 #include <math.h>
 
 #include <qdom.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <KoPageLayout.h>
 
@@ -45,8 +47,8 @@ public:
     QDomElement createElement(const QString &name)
         { return _document.createElement(name); }
     void createParagraph(const QString &text, ParagraphType type,
-                         const QValueVector<QDomElement> &layouts,
-                         const QValueVector<QDomElement> &formats);
+                         const Q3ValueVector<QDomElement> &layouts,
+                         const Q3ValueVector<QDomElement> &formats);
 
     KoFilterChain *chain() const { return _chain; }
     const Options &options() const { return _options; }
@@ -59,8 +61,8 @@ public:
 
     QDomElement pictureFrameset(const DRect &);
 
-    void initPage(const QValueVector<DRect> &,
-                  const QValueList<QDomElement> &pictures);
+    void initPage(const Q3ValueVector<DRect> &,
+                  const Q3ValueList<QDomElement> &pictures);
     void endDump();
 
 public:
@@ -77,7 +79,7 @@ private:
     QDomDocument   _document;
     uint           _imageIndex, _textIndex;
     QDomElement    _mainElement, _framesets, _pictures, _bookmarks, _paper;
-    QValueVector<QDomElement> _textFramesets;
+    Q3ValueVector<QDomElement> _textFramesets;
     DRect          _pageRect, _marginRect;
     const Options &_options;
 };

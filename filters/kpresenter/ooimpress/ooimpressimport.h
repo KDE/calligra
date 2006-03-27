@@ -25,8 +25,10 @@
 #include <KoStore.h>
 
 #include <qdom.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <KoStyleStack.h>
 #include <liststylestack.h>
 
@@ -45,7 +47,7 @@ public:
     OoImpressImport( KoFilter * parent, const char * name, const QStringList & );
     virtual ~OoImpressImport();
 
-    virtual KoFilter::ConversionStatus convert( QCString const & from, QCString const & to );
+    virtual KoFilter::ConversionStatus convert( Q3CString const & from, Q3CString const & to );
 
 private:
     void createDocumentInfo( QDomDocument &docinfo );
@@ -103,9 +105,9 @@ private:
     QDomDocument    m_content;
     QDomDocument    m_meta;
     QDomDocument    m_settings;
-    QDict<QDomElement> m_styles, m_draws, m_stylesPresentation;
-    QDict<QDomElement>   m_listStyles;
-    QDict<animationList> m_animations;
+    Q3Dict<QDomElement> m_styles, m_draws, m_stylesPresentation;
+    Q3Dict<QDomElement>   m_listStyles;
+    Q3Dict<animationList> m_animations;
 
     bool m_insideOrderedList;
     bool m_nextItemIsListItem; // only the first elem inside list-item is numbered

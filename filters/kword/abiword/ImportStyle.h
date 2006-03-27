@@ -20,7 +20,7 @@
 #ifndef _IMPORT_STYLE_H
 #define _IMPORT_STYLE_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 #include <qmap.h>
 

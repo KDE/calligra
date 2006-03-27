@@ -32,6 +32,9 @@
 #include <core/vstroke.h>
 #include <qcolor.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #define DPI 90
 
@@ -49,7 +52,7 @@ KontourImport::~KontourImport()
 
 }
 
-KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus KontourImport::convert(const Q3CString& from, const Q3CString& to)
 {
 	// check for proper conversion
 	if ( to != "application/x-karbon" || ( from != "application/x-kontour" && from != "application/x-killustrator") )
@@ -74,7 +77,7 @@ KoFilter::ConversionStatus KontourImport::convert(const QCString& from, const QC
 		kdError(30502) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
 	}
-	QCString cstring = outdoc.toCString(); // utf-8 already
+	Q3CString cstring = outdoc.toCString(); // utf-8 already
 	out->writeBlock( cstring.data(), cstring.length() );
 
 	return KoFilter::OK; // was successful
@@ -145,7 +148,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 				VColor color( c );
 				stroke.setColor( color );
 				VDashPattern dash;
-				QValueList<float> list;
+				Q3ValueList<float> list;
 				switch ( strokestyle )
 				{
 					case 2: // dashed line
@@ -173,7 +176,7 @@ KontourImport::parseGObject( VObject *object, const QDomElement &e )
 	}
 	// handle matrix
 	QDomElement matrix = e.namedItem( "matrix" ).toElement();
-	QWMatrix mat( matrix.attribute( "m11" ).toDouble(),
+	QMatrix mat( matrix.attribute( "m11" ).toDouble(),
 				  matrix.attribute( "m12" ).toDouble(),
 				  matrix.attribute( "m21" ).toDouble(),
 				  matrix.attribute( "m22" ).toDouble(),

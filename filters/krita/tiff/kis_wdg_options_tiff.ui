@@ -141,12 +141,12 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Horizontal Differencing</string>
+                                    <string>Qt::Horizontal Differencing</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Floating Point Horizontal Differencing</string>
+                                    <string>Floating Point Qt::Horizontal Differencing</string>
                                 </property>
                             </item>
                             <property name="name">
@@ -284,7 +284,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                     <string>Quality:</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignTop</set>
+                                    <set>Qt::AlignTop</set>
                                 </property>
                             </widget>
                             <widget class="QLayoutWidget">
@@ -315,7 +315,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                             <number>80</number>
                                         </property>
                                         <property name="orientation">
-                                            <enum>Horizontal</enum>
+                                            <enum>Qt::Horizontal</enum>
                                         </property>
                                         <property name="tickmarks">
                                             <enum>Both</enum>
@@ -351,7 +351,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                                     <string>Best</string>
                                                 </property>
                                                 <property name="alignment">
-                                                    <set>AlignVCenter|AlignRight</set>
+                                                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
                                                 </property>
                                             </widget>
                                         </hbox>
@@ -406,7 +406,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                     <string>Compress:</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignTop</set>
+                                    <set>Qt::AlignTop</set>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Note: the compression level does not change the quality of the result</string>
@@ -441,7 +441,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                             <number>6</number>
                                         </property>
                                         <property name="orientation">
-                                            <enum>Horizontal</enum>
+                                            <enum>Qt::Horizontal</enum>
                                         </property>
                                         <property name="tickmarks">
                                             <enum>Both</enum>
@@ -482,7 +482,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                                     <string>Small</string>
                                                 </property>
                                                 <property name="alignment">
-                                                    <set>AlignVCenter|AlignRight</set>
+                                                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
@@ -609,7 +609,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                     <string>Compress:</string>
                                 </property>
                                 <property name="alignment">
-                                    <set>AlignTop</set>
+                                    <set>Qt::AlignTop</set>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Note: the compression level does not change the quality of the result</string>
@@ -644,7 +644,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                             <number>6</number>
                                         </property>
                                         <property name="orientation">
-                                            <enum>Horizontal</enum>
+                                            <enum>Qt::Horizontal</enum>
                                         </property>
                                         <property name="tickmarks">
                                             <enum>Both</enum>
@@ -685,7 +685,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                                                     <string>Small</string>
                                                 </property>
                                                 <property name="alignment">
-                                                    <set>AlignVCenter|AlignRight</set>
+                                                    <set>Qt::AlignVCenter|Qt::AlignRight</set>
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
@@ -706,7 +706,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                 <cstring>spacer3</cstring>
             </property>
             <property name="orientation">
-                <enum>Vertical</enum>
+                <enum>Qt::Vertical</enum>
             </property>
             <property name="sizeType">
                 <enum>Expanding</enum>

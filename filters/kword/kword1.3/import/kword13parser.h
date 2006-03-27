@@ -22,7 +22,7 @@
 #define KWORD_1_3_PARSER_H
 
 #include <qxml.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 
 class KWord13Paragraph;
 class KWord13Document;
@@ -69,7 +69,7 @@ public:
     KWord13Frameset* m_currentFrameset;
 };
 
-class KWord13StackItemStack : public QPtrStack<KWord13StackItem>
+class KWord13StackItemStack : public Q3PtrStack<KWord13StackItem>
 {
 public:
         KWord13StackItemStack(void) { }

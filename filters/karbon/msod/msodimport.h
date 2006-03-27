@@ -25,6 +25,9 @@ DESCRIPTION
 
 #include <KoFilter.h>
 #include <msod.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3CString>
 
 class MSODImport :
     public KoEmbeddingFilter, protected Msod
@@ -38,7 +41,7 @@ public:
         const QStringList&);
     virtual ~MSODImport();
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 protected:
 
@@ -56,13 +59,13 @@ protected:
         const char *data);
     virtual void gotPolygon(
         const DrawContext &dc,
-        const QPointArray &points);
+        const Q3PointArray &points);
     virtual void gotPolyline(
         const DrawContext &dc,
-        const QPointArray &points);
+        const Q3PointArray &points);
     virtual void gotRectangle(
         const DrawContext &dc,
-        const QPointArray &points);
+        const Q3PointArray &points);
 
 signals:
     // Communication signals to the parent filters
@@ -76,7 +79,7 @@ private:
     static const int s_area;
 
     void pointArray(
-        const QPointArray &points);
+        const Q3PointArray &points);
     QString m_text;
 
     // Embedded objects.

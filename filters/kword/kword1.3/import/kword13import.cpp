@@ -19,6 +19,8 @@
 
 #include <qxml.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -104,7 +106,7 @@ bool KWord13Import::postParse( KoStore* store, KWord13Document& doc )
     return post.postParse( store, doc );
 }
 
-KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus KWord13Import::convert( const Q3CString& from, const Q3CString& to )
 {
     if ( to != "application/vnd.oasis.opendocument.text"
         || from != "application/x-kword" )
@@ -132,7 +134,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
         // We do not really care about errors while reading/parsing documentinfo
         store->open( "documentinfo.xml" );
         KoStoreDevice ioInfo( store );
-        ioInfo.open( IO_ReadOnly );
+        ioInfo.open( QIODevice::ReadOnly );
         kdDebug (30520) << "Processing document info... " <<  endl;
         if ( ! parseInfo ( &ioInfo, kwordDocument ) )
         {
@@ -149,7 +151,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
             return KoFilter::StupidError;
         }
         KoStoreDevice ioMain( store );
-        ioMain.open( IO_ReadOnly );
+        ioMain.open( QIODevice::ReadOnly );
         kdDebug (30520) << "Processing root... " <<  endl;
         if ( ! parseRoot ( &ioMain, kwordDocument ) )
         {
@@ -165,7 +167,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
             
             kdDebug(30520) << "Preview found!" << endl;
             KoStoreDevice ioPreview( store );
-            ioPreview.open( IO_ReadOnly );
+            ioPreview.open( QIODevice::ReadOnly );
             const QByteArray image ( ioPreview.readAll() );
             if ( image.isNull() )
             {
@@ -178,7 +180,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
                 kwordDocument.m_previewFile->setAutoDelete( true );
                 QFile file( kwordDocument.m_previewFile->name() );
                 // ### TODO: check if file is correctly written
-                file.open( IO_WriteOnly );
+                file.open( QIODevice::WriteOnly );
                 file.writeBlock( image );
                 file.close();
             }
@@ -198,7 +200,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QCString& from, const Q
         store = 0;
 
         QFile file( fileName );
-        file.open( IO_ReadOnly );
+        file.open( QIODevice::ReadOnly );
         if ( ! parseRoot( &file, kwordDocument ) )
         {
             kdError(30520) << "Could not process document! Aborting!" << endl;

@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qstring.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -31,9 +31,9 @@
 EpsExportDlg::EpsExportDlg( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n( "EPS Export" ), Ok | Cancel )
 {
-	QVBox* page = makeVBoxMainWidget();
+	Q3VBox* page = makeVBoxMainWidget();
 
-	m_psLevelButtons = new QButtonGroup( 1, QGroupBox::Horizontal,
+	m_psLevelButtons = new Q3ButtonGroup( 1, Qt::Horizontal,
 		i18n( "Options" ), page );
 
 	QRadioButton* radio;

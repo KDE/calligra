@@ -21,14 +21,14 @@
 #include <dialogui.h>
 #include <csvdialog.h>
 
-#include <qtable.h>
+#include <q3table.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
 #include <qlineedit.h>
 #include <qcombobox.h>
 #include <qspinbox.h>
 #include <qtextstream.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qtextcodec.h>
@@ -85,7 +85,7 @@ CSVDialog::CSVDialog(QWidget* parent, QByteArray& fileArray, const QString /*sep
     resize( 600, 400 ); // Try to show as much as possible of the table view
     setMainWidget(m_dialog);
 
-    m_dialog->m_sheet->setSelectionMode( QTable::Multi );
+    m_dialog->m_sheet->setSelectionMode( Q3Table::Multi );
 
     connect(m_dialog->m_formatComboBox, SIGNAL(activated( const QString& )),
             this, SLOT(formatChanged( const QString& )));
@@ -130,7 +130,7 @@ void CSVDialog::fillTable( )
 
     int maxColumn = 1;
     row = column = 1;
-    QTextStream inputStream(m_fileArray, IO_ReadOnly);
+    QTextStream inputStream(m_fileArray, QIODevice::ReadOnly);
     kdDebug(30501) << "Encoding: " << m_codec->name() << endl;
     inputStream.setCodec( m_codec );
 
@@ -462,7 +462,7 @@ void CSVDialog::formatChanged( const QString& newValue )
     //kdDebug(30501) << "CSVDialog::formatChanged:" << newValue << endl;
     for ( int i = 0; i < m_dialog->m_sheet->numSelections(); ++i )
     {
-        QTableSelection select ( m_dialog->m_sheet->selection( i ) );
+        Q3TableSelection select ( m_dialog->m_sheet->selection( i ) );
         for ( int j = select.leftCol(); j <= select.rightCol() ; ++j )
         {
             m_dialog->m_sheet->horizontalHeader()->setLabel( j, newValue );

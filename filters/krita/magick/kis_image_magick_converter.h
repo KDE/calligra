@@ -20,7 +20,7 @@
 #define KIS_IMAGE_MAGICK_CONVERTER_H_
 
 #include <qobject.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <kio/job.h>
 
@@ -93,7 +93,7 @@ private:
     KisImageSP m_img;
     KisDoc *m_doc;
     KisUndoAdapter *m_adapter;
-    QValueVector<Q_UINT8> m_data;
+    Q3ValueVector<Q_UINT8> m_data;
     KIO::TransferJob *m_job;
     KIO::filesize_t m_size;
     bool m_stop;

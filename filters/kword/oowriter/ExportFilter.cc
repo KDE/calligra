@@ -35,6 +35,10 @@
 #include <qbuffer.h>
 #include <qtextstream.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
+#include <Q3MemArray>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -217,7 +221,7 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
 
     m_zip=new KZip(filenameOut); // How to check failure?
 
-    if (!m_zip->open(IO_WriteOnly))
+    if (!m_zip->open(QIODevice::WriteOnly))
     {
         kdError(30518) << "Could not open ZIP file for writing! Aborting!" << endl;
         delete m_zip;
@@ -228,13 +232,13 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
     m_zip->setCompression( KZip::NoCompression );
     m_zip->setExtraField( KZip::NoExtraField );
 
-    const QCString appId( "application/vnd.sun.xml.writer" );
+    const Q3CString appId( "application/vnd.sun.xml.writer" );
 
     m_zip->writeFile( "mimetype", QString::null, QString::null, appId.length(), appId.data() );
 
     m_zip->setCompression( KZip::DeflateCompression );
 
-    m_streamOut=new QTextStream(m_contentBody, IO_WriteOnly);
+    m_streamOut=new QTextStream(m_contentBody, QIODevice::WriteOnly);
 
     m_streamOut->setEncoding( QTextStream::UnicodeUTF8 );
 
@@ -274,7 +278,7 @@ bool OOWriterWorker::zipWriteData(const QByteArray& array)
     return m_zip->writeData(array.data(),size);
 }
 
-bool OOWriterWorker::zipWriteData(const QCString& cstr)
+bool OOWriterWorker::zipWriteData(const Q3CString& cstr)
 {
     if (!m_zip)
         return false;
@@ -596,7 +600,7 @@ bool OOWriterWorker::doCloseDocument(void)
 
 bool OOWriterWorker::doOpenBody(void)
 {
-    QValueList<FrameAnchor>::Iterator it;
+    Q3ValueList<FrameAnchor>::Iterator it;
 
     // We have to process all non-inline pictures
     kdDebug(30518) << "=== Processing non-inlined pictures ===" << endl;
@@ -1040,7 +1044,7 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
 
     QMap<QString,QString> mapCellStyleKeys;
 
-    for ( QValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
+    for ( Q3ValueList<TableCell>::ConstIterator itCell ( table.cellList.begin() );
         itCell != table.cellList.end(); ++itCell)
     {
         if ( rowCurrent != (*itCell).row )
@@ -1111,12 +1115,12 @@ bool OOWriterWorker::makeTableRows( const QString& tableName, const Table& table
 }
 
 #ifdef ALLOW_TABLE
-static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, int firstRowNumber )
+static uint getColumnWidths( const Table& table, Q3MemArray<double>& widthArray, int firstRowNumber )
 {
     bool uniqueColumns = true; // We have not found any horizontally spanned cells yet.
     uint currentColumn = 0;
     int tryingRow = firstRowNumber; // We are trying the first row
-    QValueList<TableCell>::ConstIterator itCell;
+    Q3ValueList<TableCell>::ConstIterator itCell;
 
     for ( itCell = table.cellList.begin();
         itCell != table.cellList.end(); ++itCell )
@@ -1150,7 +1154,7 @@ static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, 
         const double width = ( (*itCell).frame.right - (*itCell).frame.left );
 
         if ( currentColumn >= widthArray.size() )
-            widthArray.resize( currentColumn + 4, QGArray::SpeedOptim);
+            widthArray.resize( currentColumn + 4, Q3GArray::SpeedOptim);
 
         widthArray.at( currentColumn ) = width;
         ++currentColumn;
@@ -1165,12 +1169,12 @@ static uint getColumnWidths( const Table& table, QMemArray<double>& widthArray, 
 #endif
 
 #ifdef ALLOW_TABLE
-static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widthArray, int firstRowNumber )
+static uint getFirstRowColumnWidths( const Table& table, Q3MemArray<double>& widthArray, int firstRowNumber )
 // Get the column widths only by the first row.
 // This is used when all table rows have horizontally spanned cells.
 {
     uint currentColumn = 0;
-    QValueList<TableCell>::ConstIterator itCell;
+    Q3ValueList<TableCell>::ConstIterator itCell;
 
     for ( itCell = table.cellList.begin();
         itCell != table.cellList.end(); ++itCell )
@@ -1187,7 +1191,7 @@ static uint getFirstRowColumnWidths( const Table& table, QMemArray<double>& widt
         const double width = ( (*itCell).frame.right - (*itCell).frame.left ) / cols;
 
         if ( currentColumn + cols > widthArray.size() )
-            widthArray.resize( currentColumn + 4, QGArray::SpeedOptim);
+            widthArray.resize( currentColumn + 4, Q3GArray::SpeedOptim);
 
         for ( int i = 0; i < cols; ++i )
         {
@@ -1212,7 +1216,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
 
     kdDebug(30518) << "Processing table " << anchor.key.toString() << " => " << tableName << endl;
 
-    const QValueList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
+    const Q3ValueList<TableCell>::ConstIterator firstCell ( anchor.table.cellList.begin() );
 
     if ( firstCell == anchor.table.cellList.end() )
     {
@@ -1223,7 +1227,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     const int firstRowNumber = (*firstCell).row;
     kdDebug(30518) << "First row: " << firstRowNumber << endl;
 
-    QMemArray<double> widthArray(4);
+    Q3MemArray<double> widthArray(4);
 
     uint numberColumns = getColumnWidths( anchor.table, widthArray, firstRowNumber );
 
@@ -1303,7 +1307,7 @@ bool OOWriterWorker::makeTable( const FrameAnchor& anchor, const AnchorType anch
     m_contentAutomaticStyles += "/>\n";
     m_contentAutomaticStyles += "  </style:style>\n";
 
-    QValueList<TableCell>::ConstIterator itCell;
+    Q3ValueList<TableCell>::ConstIterator itCell;
 
     ulong columnNumber = 0L;
 
@@ -1399,7 +1403,7 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
         // Text image have no frameset, so the only size information is in the picture itself.
         QBuffer buffer( image.copy() ); // Be more safe than sorry and do not allow shallow copy
         KoPicture pic;
-        buffer.open( IO_ReadOnly );
+        buffer.open( QIODevice::ReadOnly );
         if ( pic.load( &buffer, strExtension ) )
         {
             const QSize size ( pic.getOriginalSize() );
@@ -1531,7 +1535,7 @@ void OOWriterWorker::processNormalText ( const QString &paraText,
 void OOWriterWorker::processFootnote( const VariableData& variable )
 {
     // Footnote
-    const QValueList<ParaData> *paraList = variable.getFootnotePara();
+    const Q3ValueList<ParaData> *paraList = variable.getFootnotePara();
     if( paraList )
     {
         const QString value ( variable.getFootnoteValue() );
@@ -2144,7 +2148,7 @@ bool OOWriterWorker::doVariableSettings(const VariableSettingsData& vs)
     return true;
 }
 
-bool OOWriterWorker::doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors )
+bool OOWriterWorker::doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors )
 {
     m_nonInlinedPictureAnchors = pictureAnchors;
     m_nonInlinedTableAnchors = tableAnchors;

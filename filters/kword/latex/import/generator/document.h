@@ -21,7 +21,7 @@
 #define __KWORD_LATEX_IMPORT_DOCUMENT__
 
 #include <element.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include "body.h"
 
 class KoStore;
@@ -46,7 +46,7 @@ class Document
 		 * 
 		 * @return <code>false/code> if the analyse failed.
 		 */
-		bool analyse(QPtrList<Element>* elt);
+		bool analyse(Q3PtrList<Element>* elt);
 
 		/**
 		 * Analyse and get all information in a documentclass command.

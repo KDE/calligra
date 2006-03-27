@@ -36,6 +36,9 @@
 #include <core/vlayer.h>
 #include <qcolor.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 #include <kfilterdev.h>
 
 typedef KGenericFactory<XAMLImport, KoFilter> XAMLImportFactory;
@@ -52,7 +55,7 @@ XAMLImport::~XAMLImport()
 {
 }
 
-KoFilter::ConversionStatus XAMLImport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus XAMLImport::convert(const Q3CString& from, const Q3CString& to)
 {
 	// check for proper conversion
 	if( to != "application/x-karbon" || from != "image/wvg+xml" )
@@ -80,7 +83,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const QCString& from, const QCStr
 
         QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
-        if (!in->open(IO_ReadOnly))
+        if (!in->open(QIODevice::ReadOnly))
         {
                 kdError(30514) << "Cannot open file! Aborting!" << endl;
                 delete in;
@@ -110,7 +113,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const QCString& from, const QCStr
 		kdError(30514) << "Unable to open output file!" << endl;
 		return KoFilter::StorageCreationError;
 	}
-	QCString cstring = outdoc.toCString(); // utf-8 already
+	Q3CString cstring = outdoc.toCString(); // utf-8 already
 	out->writeBlock( cstring.data(), cstring.length() );
 
 	return KoFilter::OK; // was successful
@@ -142,7 +145,7 @@ XAMLImport::convert()
 	m_gc.push( gc );
 	parseGroup( 0L, docElem );
 
-	QWMatrix mat;
+	QMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( 0, -m_document.height() );
 	VTransformCmd trafo( 0L, mat );
@@ -543,7 +546,7 @@ XAMLImport::parsePA( VObject *obj, XAMLGraphicsContext *gc, const QString &comma
 		gc->stroke.setMiterLimit( params.toFloat() );
 	else if( command == "stroke-dasharray" )
 	{
-		QValueList<float> array;
+		Q3ValueList<float> array;
 		if(params != "none")
 		{
 			QStringList dashes = QStringList::split( ' ', params );
@@ -604,7 +607,7 @@ XAMLImport::setupTransform( const QDomElement &e )
 {
 	XAMLGraphicsContext *gc = m_gc.current();
 
-	QWMatrix mat = VPath::parseTransform( e.attribute( "transform" ) );
+	QMatrix mat = VPath::parseTransform( e.attribute( "transform" ) );
 	gc->matrix = mat * gc->matrix;
 }
 
@@ -803,7 +806,7 @@ VObject* XAMLImport::findObject( const QString &name, VGroup* group )
 
 VObject* XAMLImport::findObject( const QString &name )
 {
-	QPtrVector<VLayer> vector;
+	Q3PtrVector<VLayer> vector;
 	m_document.layers().toVector( &vector );
 	for( int i = vector.count() - 1; i >= 0; i-- )
 	{

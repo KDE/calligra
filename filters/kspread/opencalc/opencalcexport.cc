@@ -28,7 +28,9 @@
 #include <qdom.h>
 #include <qfile.h>
 #include <qregexp.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -55,7 +57,7 @@
 
 using namespace KSpread;
 
-typedef QValueList<Reference> AreaList;
+typedef Q3ValueList<Reference> AreaList;
 
 class OpenCalcExportFactory : KGenericFactory<OpenCalcExport, KoFilter>
 {
@@ -83,8 +85,8 @@ OpenCalcExport::OpenCalcExport( KoFilter *, const char *, const QStringList & )
 {
 }
 
-KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
-                                                    const QCString & to )
+KoFilter::ConversionStatus OpenCalcExport::convert( const Q3CString & from,
+                                                    const Q3CString & to )
 {
   /* later...
      KSpreadLeader  * leader = new KSpreadLeader( m_chain );
@@ -252,7 +254,7 @@ bool OpenCalcExport::exportDocInfo( KoStore * store, const Doc* ksdoc )
   content.appendChild( officeMeta );
   meta.appendChild( content );
 
-  QCString doc( meta.toCString() );
+  Q3CString doc( meta.toCString() );
   kdDebug(30518) << "Meta: " << doc << endl;
 
   store->write( doc, doc.length() );
@@ -307,7 +309,7 @@ bool OpenCalcExport::exportSettings( KoStore * store, const Doc * ksdoc )
   QDomElement configmaped = doc.createElement( "config:config-item-map-named" );
   configmaped.setAttribute( "config:name","Tables" );
 
-  QPtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
+  Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
   for( ; it.current(); ++it )
   {
       QPoint marker;
@@ -344,7 +346,7 @@ bool OpenCalcExport::exportSettings( KoStore * store, const Doc * ksdoc )
 
   doc.appendChild( settings );
 
-  QCString f( doc.toCString() );
+  Q3CString f( doc.toCString() );
   kdDebug(30518) << "Settings: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
@@ -391,7 +393,7 @@ bool OpenCalcExport::exportContent( KoStore * store, const Doc * ksdoc )
 
   doc.appendChild( content );
 
-  QCString f( doc.toCString() );
+  Q3CString f( doc.toCString() );
   kdDebug(30518) << "Content: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
@@ -434,18 +436,18 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
   {
     body.setAttribute( "table:structure-protected", "true" );
 
-    QCString passwd;
+    Q3CString passwd;
     ksdoc->map()->password( passwd );
     if ( passwd.length() > 0 )
     {
-      QCString str( KCodecs::base64Encode( passwd ) );
+      Q3CString str( KCodecs::base64Encode( passwd ) );
       body.setAttribute( "table:protection-key", QString( str.data() ) );
     }
   }
 
 
 
-  QPtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
+  Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
 
   for( it.toFirst(); it.current(); ++it )
   {
@@ -463,11 +465,11 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     {
       tabElem.setAttribute( "table:protected", "true" );
 
-      QCString passwd;
+      Q3CString passwd;
       sheet->password( passwd );
       if ( passwd.length() > 0 )
       {
-        QCString str( KCodecs::base64Encode( passwd ) );
+        Q3CString str( KCodecs::base64Encode( passwd ) );
         tabElem.setAttribute( "table:protection-key", QString( str.data() ) );
       }
     }
@@ -812,7 +814,7 @@ bool OpenCalcExport::exportStyles( KoStore * store, const Doc *ksdoc )
 
   doc.appendChild( content );
 
-  QCString f( doc.toCString() );
+  Q3CString f( doc.toCString() );
   kdDebug(30518) << "Content: " << (char const * ) f << endl;
 
   store->write( f, f.length() );
@@ -869,7 +871,7 @@ void OpenCalcExport::createDefaultStyles()
 void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & autoStyles,
                                            const Doc *ksdoc )
 {
-  QPtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
+  Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
   const Sheet * sheet = it.toFirst();
 
   float width  = 20.999;
@@ -927,7 +929,7 @@ void OpenCalcExport::exportMasterStyles( QDomDocument & doc, QDomElement & maste
   masterPage.setAttribute( "style:name", "Default" );
   masterPage.setAttribute( "style:page-master-name", "pm1" );
 
-  QPtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
+  Q3PtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
   const Sheet * sheet = it.toFirst();
 
   QString headerLeft;
@@ -1315,7 +1317,7 @@ bool OpenCalcExport::writeMetaFile( KoStore * store, uint filesWritten )
 
   meta.appendChild( content );
 
-  QCString doc( meta.toCString() );
+  Q3CString doc( meta.toCString() );
   kdDebug(30518) << "Manifest: " << doc << endl;
 
   store->write( doc, doc.length() );

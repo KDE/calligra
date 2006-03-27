@@ -12,7 +12,7 @@
 #ifndef __RTFIMPORT_TOKENIZER_H__
 #define __RTFIMPORT_TOKENIZER_H__
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 
 
@@ -54,7 +54,7 @@ private:
 
     QFile *infile;
     QByteArray fileBuffer;
-    QCString tokenText;
+    Q3CString tokenText;
     uchar *fileBufferPtr;
     uchar *fileBufferEnd;
 };

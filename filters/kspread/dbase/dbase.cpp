@@ -24,7 +24,7 @@
 #include <qfile.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 #include <dbase.h>
 
@@ -55,7 +55,7 @@ bool DBase::load( const QString& filename )
 {
 
   m_file.setName( filename );
-  if( !m_file.open(IO_ReadOnly) )
+  if( !m_file.open(QIODevice::ReadOnly) )
     return false;
 
   m_stream.setDevice( &m_file );

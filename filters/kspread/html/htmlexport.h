@@ -23,6 +23,8 @@
 #define HTMLEXPORT_TEST_H
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class ExportDialog;
 class KoDocument;
@@ -38,7 +40,7 @@ public:
     HTMLExport(KoFilter *parent, const char*name, const QStringList&);
     virtual ~HTMLExport();
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
   private:
     /** Writes the top of the page in HTML to @par str */
     void openPage( KSpread::Sheet *sheet,KoDocument *document, QString &str);

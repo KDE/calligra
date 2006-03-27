@@ -22,6 +22,8 @@
 
 #include <qdom.h>
 #include <qdatetime.h> // debug
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
@@ -55,8 +57,8 @@ K_EXPORT_COMPONENT_FACTORY(libpdfimport, PdfImportFactory())
 PdfImport::PdfImport(KoFilter *, const char *, const QStringList&)
 {}
 
-KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
-                                              const QCString& to)
+KoFilter::ConversionStatus PdfImport::convert(const Q3CString& from,
+                                              const Q3CString& to)
 {
     // check for proper conversion
     if ( to!="application/x-kword" || from!="application/pdf" )
@@ -133,7 +135,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
         return KoFilter::StorageCreationError;
     }
 //    kdDebug(30516) << data.document().toCString() << endl;
-    QCString cstr = data.document().toCString();
+    Q3CString cstr = data.document().toCString();
     out->writeBlock(cstr, cstr.length());
     out->close();
 
@@ -172,7 +174,7 @@ void PdfImport::treatInfoDocument()
     if ( !out )
         kdWarning(30516) << "unable to open doc info. continuing anyway\n";
 	else {
-		QCString cstr = infoDocument.toCString();
+		Q3CString cstr = infoDocument.toCString();
 		out->writeBlock(cstr, cstr.length());
 		out->close();
 	}

@@ -14,6 +14,8 @@
 #include <qdatetime.h>
 #include <qtextcodec.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 
@@ -317,7 +319,7 @@ void DomNode::append( const QString& _str)
     str += _str;
 }
 
-void DomNode::append( const QCString& cstr)
+void DomNode::append( const Q3CString& cstr)
 {
     str += QString::fromUtf8(cstr);
 }

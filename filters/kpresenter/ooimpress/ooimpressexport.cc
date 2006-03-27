@@ -22,6 +22,8 @@
 #include <qdom.h>
 #include <qfile.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -54,8 +56,8 @@ OoImpressExport::~OoImpressExport()
     delete m_storeinp;
 }
 
-KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
-                                                     const QCString & to )
+KoFilter::ConversionStatus OoImpressExport::convert( const Q3CString & from,
+                                                     const Q3CString & to )
 {
     kdDebug(30518) << "Entering Ooimpress Export filter: " << from << " - " << to << endl;
 
@@ -93,7 +95,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
         return KoFilter::CreationError;
     }
 
-    QCString metaString = meta.toCString();
+    Q3CString metaString = meta.toCString();
     //kdDebug(30518) << "meta :" << metaString << endl;
     m_storeout->write( metaString , metaString.length() );
     m_storeout->close();
@@ -114,7 +116,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
         return KoFilter::CreationError;
     }
 
-    QCString contentString = content.toCString();
+    Q3CString contentString = content.toCString();
     //kdDebug(30518) << "content :" << contentString << endl;
     m_storeout->write( contentString , contentString.length() );
     m_storeout->close();
@@ -132,7 +134,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
         return KoFilter::CreationError;
     }
 
-    QCString settingsString = settings.toCString();
+    Q3CString settingsString = settings.toCString();
     //kdDebug(30518) << "content :" << settingsString << endl;
     m_storeout->write( settingsString , settingsString.length() );
     m_storeout->close();
@@ -151,7 +153,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
         return KoFilter::CreationError;
     }
 
-    QCString stylesString = styles.toCString();
+    Q3CString stylesString = styles.toCString();
     //kdDebug(30518) << "styles :" << stylesString << endl;
     m_storeout->write( stylesString , stylesString.length() );
     m_storeout->close();
@@ -170,7 +172,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QCString & from,
         return KoFilter::CreationError;
     }
 
-    QCString manifestString = manifest.toCString();
+    Q3CString manifestString = manifest.toCString();
     //kdDebug(30518) << "manifest :" << manifestString << endl;
     m_storeout->write( manifestString , manifestString.length() );
     m_storeout->close();

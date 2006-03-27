@@ -355,9 +355,9 @@ GBool T1Font::drawChar(Drawable d, int w, int h, GC gc,
     // compute the colors
     xcolor.pixel = XGetPixel(image, x1 + w0/2, y1 + h0/2);
     XQueryColor(engine->display, engine->colormap, &xcolor);
-    bgR = xcolor.red;
-    bgG = xcolor.green;
-    bgB = xcolor.blue;
+    bgR = xcolor.Qt::red;
+    bgG = xcolor.Qt::green;
+    bgB = xcolor.Qt::blue;
     if (engine->aaHigh) {
       mPix = 16;
       for (i = 1; i <= 16; ++i) {

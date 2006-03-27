@@ -22,7 +22,7 @@
 #ifndef __KWORD_LATEX_DOCUMENT_H__
 #define __KWORD_LATEX_DOCUMENT_H__
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qtextstream.h>
 
 #include "listtable.h"		/* list of tables (another kind of list of elements). */
@@ -43,13 +43,13 @@ class Document: public XmlParser
 		enum EGenerate { E_LATEX, E_KWORD, E_CONFIG };
 
 	private:
-		QPtrList<Element> _headers;
-		QPtrList<Element> _footers;
-		QPtrList<Element> _footnotes;
-		QPtrList<Element> _formulas;
-		QPtrList<Element> _corps;
-		QPtrList<Element> _pixmaps;
-		QPtrList<Key> _keys;
+		Q3PtrList<Element> _headers;
+		Q3PtrList<Element> _footers;
+		Q3PtrList<Element> _footnotes;
+		Q3PtrList<Element> _formulas;
+		Q3PtrList<Element> _corps;
+		Q3PtrList<Element> _pixmaps;
+		Q3PtrList<Qt::Key> _keys;
 
 		ListTable      _tables;
 		//QPtrList<Element> _parts;

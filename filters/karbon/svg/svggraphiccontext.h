@@ -40,7 +40,7 @@ public:
 	VFill		fill;
 	VFillRule	fillRule;
 	VStroke		stroke;
-	QWMatrix	matrix;
+	QMatrix	matrix;
 	QFont		font;
 	QColor		color;
 };

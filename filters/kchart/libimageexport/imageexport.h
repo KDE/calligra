@@ -21,6 +21,9 @@
 #define __IMAGEEXPORT_H__
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <QPixmap>
+#include <Q3CString>
 
 class QPixmap;
 class ImageExport : public KoFilter
@@ -31,7 +34,7 @@ public:
     ImageExport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~ImageExport();
 
-    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
     virtual void extraImageAttribute() {};
     virtual bool saveImage( QString fileName) = 0;
     virtual const char* exportFormat() = 0;

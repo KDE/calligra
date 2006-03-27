@@ -17,11 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <kgenericfactory.h>
 #include <KoFilter.h>
@@ -68,7 +70,7 @@ SvgExport::SvgExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-SvgExport::convert( const QCString& from, const QCString& to )
+SvgExport::convert( const Q3CString& from, const Q3CString& to )
 {
 	if ( to != "image/svg+xml" || from != "application/x-karbon" )
 	{
@@ -80,7 +82,7 @@ SvgExport::convert( const QCString& from, const QCString& to )
 		return KoFilter::StupidError;
 
 	QFile fileOut( m_chain->outputFile() );
-	if( !fileOut.open( IO_WriteOnly ) )
+	if( !fileOut.open( QIODevice::WriteOnly ) )
 	{
 		delete storeIn;
 		return KoFilter::StupidError;
@@ -92,9 +94,9 @@ SvgExport::convert( const QCString& from, const QCString& to )
 
 	m_stream = new QTextStream( &fileOut );
 	QString body;
-	m_body = new QTextStream( &body, IO_ReadWrite );
+	m_body = new QTextStream( &body, QIODevice::ReadWrite );
 	QString defs;
-	m_defs = new QTextStream( &defs, IO_ReadWrite );
+	m_defs = new QTextStream( &defs, QIODevice::ReadWrite );
 
 	// load the document and export it:
 	VDocument doc;
@@ -149,7 +151,7 @@ SvgExport::visitVDocument( VDocument& document )
 	SvgGraphicsContext *gc = new SvgGraphicsContext;
 	m_gc.push( gc );
 
-	QWMatrix mat;
+	QMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( 0, -document.height() );
 
@@ -262,7 +264,7 @@ QString createUID()
 }
 
 void
-SvgExport::getColorStops( const QPtrVector<VColorStop> &colorStops )
+SvgExport::getColorStops( const Q3PtrVector<VColorStop> &colorStops )
 {
 	m_indent2++;
 	for( unsigned int i = 0; i < colorStops.count() ; i++ )
@@ -443,7 +445,7 @@ SvgExport::getStroke( const VStroke& stroke, QTextStream *stream )
 		*stream << " stroke-dashoffset=\"" << stroke.dashPattern().offset() << "\"";
 		*stream << " stroke-dasharray=\" ";
 
-		QValueListConstIterator<float> itr;
+		Q3ValueListConstIterator<float> itr;
 		for(itr = stroke.dashPattern().array().begin(); itr != stroke.dashPattern().array().end(); ++itr )
 		{
 			*stream << *itr << " ";

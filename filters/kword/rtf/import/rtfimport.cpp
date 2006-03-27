@@ -15,17 +15,19 @@
 
 #include <kdebug.h>
 #include <qfontinfo.h>
+//Added by qt3to4:
+#include <QTextStream>
 #include <stddef.h>
 #include <string.h>
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstringlist.h>
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qregexp.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kurl.h>
 #include <kmessagebox.h>
@@ -97,7 +99,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"ansicpg",	setCodepage,		0L, 0 ),
 	MEMBER(	0L,		"b",		setToggleProperty,	state.format.bold, 0 ),
         // \bin is handled in the tokenizer
-	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	blue, 0 ),
+	MEMBER(	"@colortbl",	"blue",		setNumericProperty,	Qt::blue, 0 ),
 	MEMBER(	0L,		"box",		setEnumProperty,	state.layout.border, 0 ),
 	PROP(	0L,		"brdrb",	selectLayoutBorder,	0L, 3 ),
 	PROP(	0L,		"brdrcf",	setBorderColor,           0L, 0 ),
@@ -159,7 +161,7 @@ static RTFProperty propertyTable[] =
 	PROP(	"@fonttbl",	"fscript",	setFontStyleHint,	0L, QFont::AnyStyle ),
 	PROP(	"@fonttbl",	"fswiss",	setFontStyleHint,	0L, QFont::SansSerif ),
 	PROP(	"@fonttbl",	"ftech",	setFontStyleHint,	0L, QFont::AnyStyle ),
-	MEMBER(	"@colortbl",	"green",	setNumericProperty,	green, 0 ),
+	MEMBER(	"@colortbl",	"green",	setNumericProperty,	Qt::green, 0 ),
 	MEMBER(	0L,		"headery",	setNumericProperty,	state.section.headerMargin, 0 ),
 	MEMBER(	0L,		"i",		setToggleProperty,	state.format.italic, 0 ),
 	MEMBER(	0L,		"intbl",	setFlagProperty,	state.layout.inTable, true ),
@@ -208,7 +210,7 @@ static RTFProperty propertyTable[] =
 	PROP(	0L,		"qmspace",	insertSymbol,		0L, 0x2004 ),
 	MEMBER(	0L,		"qr",		setEnumProperty,	state.layout.alignment, RTFLayout::Right ),
 	PROP(	0L,		"rdblquote",	insertSymbol,		0L, 0x201d ),
-	MEMBER(	"@colortbl",	"red",		setNumericProperty,	red, 0 ),
+	MEMBER(	"@colortbl",	"red",		setNumericProperty,	Qt::red, 0 ),
 	MEMBER(	0L,		"ri",		setNumericProperty,	state.layout.rightIndent, 0 ),
 	PROP(	"Text",		"row",		insertTableRow,		0L, 0 ),
 	PROP(	0L,		"rquote",	insertSymbol,		0L, 0x2019 ),
@@ -309,7 +311,7 @@ RTFImport::RTFImport( KoFilter *, const char *, const QStringList& )
     fnnum=0;
 }
 
-KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus RTFImport::convert( const Q3CString& from, const Q3CString& to )
 {
     // This filter only supports RTF to KWord conversion
     if ((from != "text/rtf") || (to != "application/x-kword"))
@@ -327,7 +329,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
     inFileName = m_chain->inputFile();
     QFile in( inFileName );
 
-    if (!in.open( IO_ReadOnly ))
+    if (!in.open( QIODevice::ReadOnly ))
     {
 	kdError(30515) << "Unable to open input file!" << endl;
 	in.close();
@@ -700,7 +702,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	int num=1;
 	for(RTFTextState* i=footnotes.first();i;i=footnotes.next())
 	{
-	    QCString str;
+	    Q3CString str;
 	    str.setNum(num);
 	    str.prepend("Footnote ");
 	    num++;
@@ -722,14 +724,14 @@ KoFilter::ConversionStatus RTFImport::convert( const QCString& from, const QCStr
 	kwFormat.len = 0;
 
 	// Process all styles in the style sheet
-        const QValueList<RTFStyle>::ConstIterator endStyleSheet=styleSheet.end();
-        for (QValueList<RTFStyle>::ConstIterator it=styleSheet.begin();it!=endStyleSheet;++it)
+        const Q3ValueList<RTFStyle>::ConstIterator endStyleSheet=styleSheet.end();
+        for (Q3ValueList<RTFStyle>::ConstIterator it=styleSheet.begin();it!=endStyleSheet;++it)
 	{
 	    mainDoc.addNode( "STYLE" );
 	    kwFormat.fmt = (*it).format;
 
 	    // Search for 'following' style
-            for (QValueList<RTFStyle>::ConstIterator it2=styleSheet.begin();it2!=endStyleSheet;++it2)
+            for (Q3ValueList<RTFStyle>::ConstIterator it2=styleSheet.begin();it2!=endStyleSheet;++it2)
 	    {
 		if ((*it2).layout.style == (*it).next)
 		{
@@ -805,7 +807,7 @@ void RTFImport::ignoreKeyword( RTFProperty * )
 void RTFImport::setCodepage( RTFProperty * )
 {
     QTextCodec* oldCodec = textCodec;
-    QCString cp;
+    Q3CString cp;
     if ( token.value == 10000 )
     {
     	cp = "Apple Roman"; // ### TODO: how to support the other ones (Qt does not know them!)
@@ -869,7 +871,7 @@ void RTFImport::setFlagProperty( RTFProperty *property )
 
 void RTFImport::setCharset( RTFProperty *property )
 {
-    QCString cp;
+    Q3CString cp;
     switch(token.value) {
         case 0: cp = "CP1252"; break; // ANSI_CHARSET
         case 1: cp = "CP1252"; break; // DEFAULT_CHARSET
@@ -1510,7 +1512,7 @@ void RTFImport::parsePicture( RTFProperty * )
         pictName += QString::number(id);
         pictName += ext;
 
-        QCString frameName;
+        Q3CString frameName;
         frameName.setNum(id);
         frameName.prepend("Picture ");
 
@@ -1597,7 +1599,7 @@ void RTFImport::addImportedPicture( const QString& rawFileName )
     pictName += '.';
     pictName += pic.getExtension();
 
-    QCString frameName;
+    Q3CString frameName;
     frameName.setNum(id);
     frameName.prepend("Picture ");
 
@@ -1899,7 +1901,7 @@ void RTFImport::parseFootNote( RTFProperty * property)
         fnnum++;
         destination.target = newTextState;
 
-        QCString str;
+        Q3CString str;
         str.setNum(fnnum);
         str.prepend("Footnote ");
 
@@ -2137,7 +2139,7 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
         if (!baseFormat || format.fmt.underline != baseFormat->underline )
 	{
 	    node.addNode( "UNDERLINE" );
-            QCString st,styleline,wordbyword("0");
+            Q3CString st,styleline,wordbyword("0");
             st.setNum(format.fmt.underline);
             int underlinecolor = format.fmt.underlinecolor;
 
@@ -2219,7 +2221,7 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
 	if (!baseFormat || format.fmt.strike != baseFormat->strike || format.fmt.striked != baseFormat->striked)
 	{
 	    node.addNode( "STRIKEOUT" );
-	    QCString st;
+	    Q3CString st;
 	    st.setNum(format.fmt.strike);
 	    if(format.fmt.striked)
 		st="double";
@@ -2235,7 +2237,7 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
 	if (!baseFormat || format.fmt.caps != baseFormat->caps || format.fmt.smallCaps != baseFormat->smallCaps)
 	{
 	    node.addNode( "FONTATTRIBUTE" );
-            QCString fontattr;
+            Q3CString fontattr;
             if ( format.fmt.caps )
                 fontattr="uppercase";
             else if ( format.fmt.smallCaps )
@@ -2424,8 +2426,8 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     const RTFFormat* format = &state.format;
     const int styleNum = state.layout.style;
 
-    const QValueList<RTFStyle>::ConstIterator endStyleSheet = styleSheet.end();
-    for ( QValueList<RTFStyle>::ConstIterator it=styleSheet.begin(); it!=endStyleSheet; ++it )
+    const Q3ValueList<RTFStyle>::ConstIterator endStyleSheet = styleSheet.end();
+    for ( Q3ValueList<RTFStyle>::ConstIterator it=styleSheet.begin(); it!=endStyleSheet; ++it )
     {
 	if ( (*it).layout.style == styleNum )
 	{
@@ -2451,7 +2453,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
     // Insert character formatting
     bool hasFormats = false;
 
-    for ( QValueList<KWFormat>::ConstIterator it = textState->formats.begin(); it != textState->formats.end(); ++it )
+    for ( Q3ValueList<KWFormat>::ConstIterator it = textState->formats.begin(); it != textState->formats.end(); ++it )
     {
 	if ( (*it).id != 1 || (*it).fmt != *format )
 	{
@@ -2484,8 +2486,8 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
 void RTFImport::finishTable()
 {
     kdDebug(30515) << "Starting TFImport::finishTable..." << endl;
-    QCString emptyArray;
-    QValueList<int> cellx;
+    Q3CString emptyArray;
+    Q3ValueList<int> cellx;
     int left = 0, right = 0;
 
     insertTableRow();

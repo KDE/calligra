@@ -1,5 +1,8 @@
 
 #include "kword13paragraph.h"
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
 
 KWord13Paragraph::KWord13Paragraph( void )
 {
@@ -38,7 +41,7 @@ void KWord13ParagraphGroup::xmldump( QTextStream& iostream )
 {
     iostream << "   <paragraphgroup>\n";
     
-    for( QValueList <KWord13Paragraph>::Iterator it = begin();
+    for( Q3ValueList <KWord13Paragraph>::Iterator it = begin();
         it != end(); ++it )
     {
         (*it).xmldump( iostream );

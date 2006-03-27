@@ -20,7 +20,7 @@
 
 #include <qtextcodec.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 
 #include <kdebug.h>
 #include <klocale.h>

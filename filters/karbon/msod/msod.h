@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3PointArray>
 /*
     Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
     This file is part of the KDE project
@@ -29,9 +31,9 @@ DESCRIPTION
 #define MSOD_H
 
 class QString;
-class QPointArray;
+class Q3PointArray;
 #include <kwmf.h>
-#include <qptrvector.h>
+#include <q3ptrvector.h>
 
 class Msod :
     private KWmf
@@ -86,13 +88,13 @@ protected:
         const char *data) = 0;
     virtual void gotPolygon(
         const DrawContext &dc,
-        const QPointArray &points) = 0;
+        const Q3PointArray &points) = 0;
     virtual void gotPolyline(
         const DrawContext &dc,
-        const QPointArray &points) = 0;
+        const Q3PointArray &points) = 0;
     virtual void gotRectangle(
         const DrawContext &dc,
-        const QPointArray &points) = 0;
+        const Q3PointArray &points) = 0;
 
 private:
     Msod(const Msod &);
@@ -169,7 +171,7 @@ private:
         Image() { data = 0L; }
         ~Image() { delete [] data; }
     };
-    QPtrVector<Image> m_images;
+    Q3PtrVector<Image> m_images;
 
     // Opcode handling and painter methods.
 
@@ -245,7 +247,7 @@ private:
         Q_UINT32 m_geoRight;
         Q_UINT32 m_geoBottom;
         Q_UINT32 m_shapePath;
-        QPointArray *m_pVertices;
+        Q3PointArray *m_pVertices;
         bool m_fShadowOK;
         bool m_f3DOK;
         bool m_fLineOK;

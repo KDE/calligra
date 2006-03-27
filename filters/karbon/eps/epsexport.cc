@@ -18,12 +18,14 @@
 */
 
 #include <qapplication.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatetime.h>	// For creation date/time.
 #include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -88,7 +90,7 @@ EpsExport::EpsExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-EpsExport::convert( const QCString& from, const QCString& to )
+EpsExport::convert( const Q3CString& from, const Q3CString& to )
 {
 	if ( to != "image/x-eps" || from != "application/x-karbon" )
 	{
@@ -115,7 +117,7 @@ EpsExport::convert( const QCString& from, const QCString& to )
 		m_psLevel = dialog->psLevel() + 1;
 
 		QFile fileOut( m_chain->outputFile() );
-		if( !fileOut.open( IO_WriteOnly ) )
+		if( !fileOut.open( QIODevice::WriteOnly ) )
 		{
 			QApplication::restoreOverrideCursor();
 			delete( dialog );
@@ -305,10 +307,10 @@ EpsExport::getStroke( const VStroke& stroke )
 		// Dash pattern.
 		*m_stream << "[";
 
-		const QValueList<float>&
+		const Q3ValueList<float>&
 			array( stroke.dashPattern().array() );
 
-		QValueListConstIterator<float> itr = array.begin();
+		Q3ValueListConstIterator<float> itr = array.begin();
 		for( ; itr != array.end(); ++itr )
 			 *m_stream << *itr << " ";
 
@@ -357,7 +359,7 @@ EpsExport::getFill( const VFill& fill )
 			*m_stream << l1_gsave << " ";
 
 			VGradient grad = fill.gradient();
-			QPtrVector<VColorStop> ramp = grad.colorStops();
+			Q3PtrVector<VColorStop> ramp = grad.colorStops();
 			if( ramp.size() < 2 )
 			{
 				if( ramp.size() == 1 )

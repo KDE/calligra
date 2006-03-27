@@ -23,9 +23,9 @@
 #include <qstring.h>
 #include <qdatastream.h>
 #include <qobject.h>
-#include <qptrlist.h>
-#include <qcstring.h>
-#include <qmemarray.h>
+#include <q3ptrlist.h>
+#include <q3cstring.h>
+#include <q3memarray.h>
 #include <qdom.h>
 
 #include <KoFilter.h>
@@ -47,7 +47,7 @@ class WPImport : public KoFilter
 
     virtual ~WPImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 };
 #endif // __WPIMPORT_H

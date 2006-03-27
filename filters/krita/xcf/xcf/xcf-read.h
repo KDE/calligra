@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3CString>
 /* The GIMP -- an image manipulation program
  * Copyright (C) 1995 Spencer Kimball and Peter Mattis
  *
@@ -30,7 +32,7 @@ Q_UINT32   xcf_read_int8   (FILE     *fp,
 			 Q_UINT8   *data,
 			 Q_INT32      count);
 Q_UINT32   xcf_read_string (FILE     *fp,
-			 QCString   **data,
+			 Q3CString   **data,
 			 Q_INT32      count);
 
 

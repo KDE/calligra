@@ -21,7 +21,7 @@
 
 #include <khtml_part.h> // fixme speedup compile time by moving these into the cpp file.
 #include <qdom.h>
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 #include <kwdwriter.h>
 
 //#include <qstack.h>
@@ -71,7 +71,7 @@ private:
         void stateSetLayout(QDomElement l);
         void stateSetParagraph(QDomElement p);*/
 
-        QPtrStack<HTMLReader_state> _state;
+        Q3PtrStack<HTMLReader_state> _state;
         KHTMLPart *_html;
         KWDWriter *_writer;
 

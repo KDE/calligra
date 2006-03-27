@@ -22,7 +22,9 @@
 
 #include "TextOutputDev.h"
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include "misc.h"
 
@@ -39,7 +41,7 @@ public:
     enum Alignment { Left = 0, Center, Right, Character };
     enum Filling { Blank = 0, Dots, Line, Dash, DashDot, DashDotDot };
 
-    Tabulator() : alignment(Left) {}
+    Tabulator() : alignment(Qt::DockLeft) {}
 
     QDomElement createElement(Data &data) const;
 
@@ -77,7 +79,7 @@ public:
     const DRect &rect() const { return _rect; }
 
     bool hasOneLine() const { return _lines.count()==1; }
-    const QValueList<TextLine *> lines() const { return _lines; }
+    const Q3ValueList<TextLine *> lines() const { return _lines; }
     bool isFirst(const TextLine *line) const { return line==_lines.first();}
     bool isSecond(const TextLine* line) const
         { return (_lines.count()>1 && line==_lines.first()->next); }
@@ -92,11 +94,11 @@ public:
     uint          frameIndex;
     double        firstIndent, leftIndent, offset;
     Align         align;
-    QValueVector<Tabulator> tabs;
-    QValueList<Block>       blocks;
+    Q3ValueVector<Tabulator> tabs;
+    Q3ValueList<Block>       blocks;
 
 private:
-    QValueList<TextLine *> _lines;
+    Q3ValueList<TextLine *> _lines;
     DRect                  _rect;
 };
 

@@ -27,7 +27,9 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
@@ -39,7 +41,7 @@ bool WPSixWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
   filename = filenameOut;
   outfile.setName( filename );
-  if( !outfile.open( IO_WriteOnly ) )
+  if( !outfile.open( QIODevice::WriteOnly ) )
     return false;
 
   output.setDevice( &outfile );
@@ -56,7 +58,7 @@ bool WPSixWorker::doCloseFile(void)
   outfile.close();
 
   // reopen for read and write
-  if( !outfile.open( IO_ReadWrite ) )
+  if( !outfile.open( QIODevice::ReadWrite ) )
     return false;
   output.setDevice( &outfile );
 
@@ -138,9 +140,9 @@ bool WPSixWorker::doCloseDocument(void)
 // this helper functions "escape" plain Unicode string to WP-compliance string
 // what it does: converting spaces and tabs to hard-spaces and hard-tabs
 // TODO handle Unicode characters using WP charsets
-static QCString WPSixEscape( const QString& text )
+static Q3CString WPSixEscape( const QString& text )
 {
-  QCString result;
+  Q3CString result;
 
   for( unsigned int i=0; i < text.length(); i++ )
   {
@@ -201,9 +203,9 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        if( fgColor.isValid() )
        {
          Q_UINT8 wp_color[] = { 0xd4, 0x18, 16, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0xd4 }; 
-         wp_color[7] = (Q_UINT8) fgColor.red();
-         wp_color[8] = (Q_UINT8) fgColor.green();
-         wp_color[9] = (Q_UINT8) fgColor.blue();
+         wp_color[7] = (Q_UINT8) fgColor.Qt::red();
+         wp_color[8] = (Q_UINT8) fgColor.Qt::green();
+         wp_color[9] = (Q_UINT8) fgColor.Qt::blue();
          output.writeRawBytes( (const char*)wp_color, 16 );
        }
 
@@ -211,12 +213,12 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        if( bgColor.isValid() )
        {
          output << (Q_UINT8) 0xfb;
-         output << (Q_UINT8)bgColor.red() << (Q_UINT8)bgColor.green() << (Q_UINT8)bgColor.blue();
+         output << (Q_UINT8)bgColor.Qt::red() << (Q_UINT8)bgColor.Qt::green() << (Q_UINT8)bgColor.Qt::blue();
          output << (Q_UINT8) 100 << (Q_UINT8) 0xfb;
        }
 
        // the text itself, "escape" it first 
-       QCString out = WPSixEscape( paraText.mid( formatData.pos, formatData.len ) );
+       Q3CString out = WPSixEscape( paraText.mid( formatData.pos, formatData.len ) );
        output.writeRawBytes( (const char*)out, out.length() );
 
        // attribute off
@@ -226,7 +228,7 @@ bool WPSixWorker::doFullParagraph(const QString& paraText,
        if( bgColor.isValid() )
        {
          output << (Q_UINT8) 0xfc;
-         output << (Q_UINT8)bgColor.red() << (Q_UINT8)bgColor.green() << (Q_UINT8)bgColor.blue();
+         output << (Q_UINT8)bgColor.Qt::red() << (Q_UINT8)bgColor.Qt::green() << (Q_UINT8)bgColor.Qt::blue();
          output << (Q_UINT8) 100 << (Q_UINT8) 0xfc;
        }
     }

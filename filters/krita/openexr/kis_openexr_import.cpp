@@ -19,6 +19,9 @@
 
 #include <qstring.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3MemArray>
 
 #include <kgenericfactory.h>
 #include <KoDocument.h>
@@ -62,7 +65,7 @@ KisOpenEXRImport::~KisOpenEXRImport()
 {
 }
 
-KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus KisOpenEXRImport::convert(const Q3CString& from, const Q3CString& to)
 {
     if (from != "image/x-exr" || to != "application/x-krita") {
         return KoFilter::NotImplemented;
@@ -118,7 +121,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
         return KoFilter::CreationError;
     }
 
-    QMemArray<Rgba> pixels(dataWidth);
+    Q3MemArray<Rgba> pixels(dataWidth);
 
     for (int y = 0; y < dataHeight; ++y) {
 

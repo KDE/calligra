@@ -27,6 +27,8 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
@@ -38,7 +40,7 @@ bool WPFiveWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 {
   filename = filenameOut;
   outfile.setName( filename );
-  if( !outfile.open( IO_WriteOnly ) )
+  if( !outfile.open( QIODevice::WriteOnly ) )
     return false;
 
   output.setDevice( &outfile );
@@ -55,7 +57,7 @@ bool WPFiveWorker::doCloseFile(void)
   outfile.close();
 
   // reopen for read and write
-  if( !outfile.open( IO_ReadWrite ) )
+  if( !outfile.open( QIODevice::ReadWrite ) )
     return false;
   output.setDevice( &outfile );
   output.setByteOrder (QDataStream::LittleEndian);
@@ -137,9 +139,9 @@ bool WPFiveWorker::doCloseDocument(void)
 
 // quick-and-dirty escape function for WP 5.x chars
 // TODO fix it !
-static QCString WPFiveEscape( const QString& text )
+static Q3CString WPFiveEscape( const QString& text )
 {
-  QCString result;
+  Q3CString result;
 
   for( unsigned int i=0; i < text.length(); i++ )
   {
@@ -191,14 +193,14 @@ bool WPFiveWorker::doFullParagraph(const QString& paraText,
        if( fgColor.isValid() )
        {
          Q_UINT8 wp_color[] = { 0xd1, 0, 10, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0xd1 };
-         wp_color[7] = (Q_UINT8) fgColor.red();
-         wp_color[8] = (Q_UINT8) fgColor.green();
-         wp_color[9] = (Q_UINT8) fgColor.blue();
+         wp_color[7] = (Q_UINT8) fgColor.Qt::red();
+         wp_color[8] = (Q_UINT8) fgColor.Qt::green();
+         wp_color[9] = (Q_UINT8) fgColor.Qt::blue();
          output.writeRawBytes( (const char*)wp_color, 14 );
        }
 
        // the text itself, "escape" it first
-       QCString out = WPFiveEscape( paraText.mid( formatData.pos, formatData.len ) );
+       Q3CString out = WPFiveEscape( paraText.mid( formatData.pos, formatData.len ) );
        output.writeRawBytes( (const char*)out, out.length() );
 
        // attribute off

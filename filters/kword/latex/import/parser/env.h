@@ -23,11 +23,11 @@
 #include "element.h"
 
 #include <qstring.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class Env: public Element
 {
-	QPtrList<Element> _children;
+	Q3PtrList<Element> _children;
 	QString _name;
 
 	public:
@@ -42,7 +42,7 @@ class Env: public Element
 		QString getName() const { return _name; }
 
 		void setName(QString name) { _name = name; }
-		void setChildren(QPtrList<Element>*);
+		void setChildren(Q3PtrList<Element>*);
 	
 		void print(int tab = 0);
 };

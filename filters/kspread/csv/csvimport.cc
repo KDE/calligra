@@ -22,6 +22,9 @@
 
 #include <qfile.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3MemArray>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -57,7 +60,7 @@ CSVFilter::CSVFilter(KoFilter *, const char*, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus CSVFilter::convert( const Q3CString& from, const Q3CString& to )
 {
     QString file( m_chain->inputFile() );
     KoDocument* document = m_chain->outputDocument();
@@ -89,7 +92,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     }
 
     QFile in(file);
-    if(!in.open(IO_ReadOnly)) {
+    if(!in.open(QIODevice::ReadOnly)) {
         KMessageBox::sorry( 0L, i18n("CSV filter cannot open input file - please report.") );
         in.close();
         return KoFilter::FileNotFound;
@@ -127,7 +130,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     int i;
     double init = sheet->nonDefaultColumnFormat( 1 )->dblWidth();
-    QMemArray<double> widths( numCols );
+    Q3MemArray<double> widths( numCols );
     for ( i = 0; i < numCols; ++i )
       widths[i] = init;
 

@@ -2693,9 +2693,9 @@ public:
 
   enum { 
     General = 0, 
-    Left, 
+    Qt::DockLeft, 
     Centered, 
-    Right, 
+    Qt::DockRight, 
     Filled, 
     Justified,
     CenteredSelection,
@@ -2718,9 +2718,9 @@ public:
   const char* horizontalAlignmentAsString() const; 
   
   enum { 
-    Top = 0, 
+    Qt::DockTop = 0, 
     VCentered = 1, 
-    Bottom = 2, 
+    Qt::DockBottom = 2, 
     VJustified = 3, 
     VDistributed = 4 };
   

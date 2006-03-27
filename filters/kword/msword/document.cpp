@@ -38,6 +38,8 @@
 #include <klocale.h>
 #include <KoStore.h>
 #include <KoFilterChain.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 Document::Document( const std::string& fileName, QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement, KoFilterChain* chain )
@@ -472,8 +474,8 @@ void Document::processSubDocQueue()
         {
             KWord::Table& table = m_tableQueue.front();
             m_tableHandler->tableStart( &table );
-            QValueList<KWord::Row> &rows = table.rows;
-            for( QValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+            Q3ValueList<KWord::Row> &rows = table.rows;
+            for( Q3ValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
                 KWord::TableRowFunctorPtr f = (*it).functorPtr;
                 Q_ASSERT( f );
                 (*f)(); // call it

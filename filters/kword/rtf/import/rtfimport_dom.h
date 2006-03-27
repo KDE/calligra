@@ -13,6 +13,8 @@
 #define __RTFIMPORT_DOM_H__
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class QColor;
 class QDateTime;
@@ -107,7 +109,7 @@ public:
     /**
      * Appends XML text to node
      */
-    void append( const QCString& cstr);
+    void append( const Q3CString& cstr);
     void append( const QString& _str);
     void append( const char ch);
     /**

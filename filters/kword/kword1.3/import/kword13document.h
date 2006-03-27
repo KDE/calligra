@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3ValueList>
 /*
    This file is part of the KDE project
    Copyright (C) 2004 Nicolas GOUTTE <goutte@kde.org>
@@ -27,9 +29,9 @@ class KWord13Picture;
 
 #include <qstring.h>
 #include <qmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qdatetime.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qstringlist.h>
 
 #include "kword13frameset.h"
@@ -65,14 +67,14 @@ protected:
 public:
     QMap<QString, QString> m_documentProperties;
     QMap<QString, QString> m_documentInfo; ///< From documentinfo.xml
-    QValueList<KWord13Layout> m_styles;
-    QPtrList<KWordTextFrameset> m_normalTextFramesetList; ///< List of \<FRAMESET\> having normal text
-    QPtrList<KWordTextFrameset> m_tableFramesetList; ///< List of \<FRAMESET\> being part of tables
-    QPtrList<KWordTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
-    QPtrList<KWordTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
-    QPtrList<KWord13PictureFrameset> m_pictureFramesetList; ///< List of \<FRAMESET\> having pictures
-    QPtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
-    QDict<KWord13Picture> m_pictureDict; ///< "Dictionnary" of all pictures' data
+    Q3ValueList<KWord13Layout> m_styles;
+    Q3PtrList<KWordTextFrameset> m_normalTextFramesetList; ///< List of \<FRAMESET\> having normal text
+    Q3PtrList<KWordTextFrameset> m_tableFramesetList; ///< List of \<FRAMESET\> being part of tables
+    Q3PtrList<KWordTextFrameset> m_headerFooterFramesetList; ///< List of \<FRAMESET\> having footer/header
+    Q3PtrList<KWordTextFrameset> m_footEndNoteFramesetList; ///< List of \<FRAMESET\> having footnotes or endnotes
+    Q3PtrList<KWord13PictureFrameset> m_pictureFramesetList; ///< List of \<FRAMESET\> having pictures
+    Q3PtrList<KWord13Frameset> m_otherFramesetList; ///< List of \<FRAMESET\> of other types
+    Q3Dict<KWord13Picture> m_pictureDict; ///< "Dictionnary" of all pictures' data
     KTempFile* m_previewFile;
     QStringList m_anchoredFramesetNames; ///< List of framesets that are anchored
 };

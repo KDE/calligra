@@ -25,10 +25,12 @@
 
 #include <qmap.h>
 #include <qbuffer.h>
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qxml.h>
 #include <qdom.h>
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kmdcodec.h>
@@ -707,7 +709,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
         // Unknown text format!
         kdDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
         // We strip the white space in front to avoid white space before a XML declaration
-        QCString strOut=stackItem->strTemp2.stripWhiteSpace().utf8();
+        Q3CString strOut=stackItem->strTemp2.stripWhiteSpace().utf8();
         out->writeBlock(strOut,strOut.length());
     }
 
@@ -1206,7 +1208,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
         // We do not know the right position of this column, so improvise. (### TODO)
         // We play on the fact that QByteArray uses shallow copies by default.
         //  (We do want that the change is known at <table> level)
-        stackItem->m_doubleArray.resize( stackItem->m_doubleArray.size() + 1, QGArray::SpeedOptim );
+        stackItem->m_doubleArray.resize( stackItem->m_doubleArray.size() + 1, Q3GArray::SpeedOptim );
         stackItem->m_doubleArray[col+1] = stackItem->m_doubleArray[col] + 72; // Try 1 inch
     }
 
@@ -1757,7 +1759,7 @@ ABIWORDImport::ABIWORDImport(KoFilter */*parent*/, const char */*name*/, const Q
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus ABIWORDImport::convert( const Q3CString& from, const Q3CString& to )
 {
     if ((to != "application/x-kword") || (from != "application/x-abiword"))
         return KoFilter::NotImplemented;
@@ -1807,7 +1809,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
         return KoFilter::FileNotFound; // ### TODO: better error?
     }
 
-    if (!in->open(IO_ReadOnly))
+    if (!in->open(QIODevice::ReadOnly))
     {
         kdError(30506) << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
@@ -1832,7 +1834,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QCString& from, const Q
     }
     delete in;
 
-    QCString strOut;
+    Q3CString strOut;
     KoStoreDevice* out;
 
     kdDebug(30506) << "Creating documentinfo.xml" << endl;

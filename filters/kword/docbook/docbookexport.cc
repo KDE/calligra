@@ -28,6 +28,9 @@
 #include <kgenericfactory.h>
 #include <qdir.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <KoFilterChain.h>
 #include <KWEFStructures.h>
@@ -79,7 +82,7 @@ class DocBookWorker : public KWEFBaseWorker
 
         bool doFullDocumentInfo ( const KWEFDocumentInfo & );
 
-        bool doFullDocument ( const QValueList<ParaData> &paraList );
+        bool doFullDocument ( const Q3ValueList<ParaData> &paraList );
 
     private:
         void ProcessPictureData ( const Picture  &picture );
@@ -138,7 +141,7 @@ void DocBookWorker::ProcessPictureData ( const Picture  &picture )
 
         QFile pictureFile (pictureFileName);
 
-        if ( pictureFile.open (IO_WriteOnly) )
+        if ( pictureFile.open (QIODevice::WriteOnly) )
         {
             pictureFile.writeBlock ( byteArray, byteArray.size () );
 
@@ -210,7 +213,7 @@ void DocBookWorker::ProcessTableData ( const Table &table )
 
     int currentRow = -1;
 
-    QValueList<TableCell>::ConstIterator cellIt;
+    Q3ValueList<TableCell>::ConstIterator cellIt;
 
     for ( cellIt = table.cellList.begin ();
           cellIt != table.cellList.end ();
@@ -269,7 +272,7 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
                                            QString         tag )
 {
 #if !INSERT_TABLE_IN_PARA
-    QValueList<AnchoredInsert> tmpAnchoredInsertList;
+    Q3ValueList<AnchoredInsert> tmpAnchoredInsertList;
 #endif
 
     outputText += "<" + tag + ">";
@@ -391,7 +394,7 @@ void DocBookWorker::ProcessParagraphData ( const ParaData &para,
     outputText += "</" + tag + ">\n";
 
 #if !INSERT_TABLE_IN_PARA
-    QValueList<AnchoredInsert>::Iterator anchoredInsert;
+    Q3ValueList<AnchoredInsert>::Iterator anchoredInsert;
 
     for ( anchoredInsert = tmpAnchoredInsertList.begin ();
           anchoredInsert != tmpAnchoredInsertList.end ();
@@ -506,14 +509,14 @@ void DocBookWorker::OpenArticleUnlessHead1 ( void )
 }
 
 
-bool DocBookWorker::doFullDocument ( const QValueList<ParaData> &paraList )
+bool DocBookWorker::doFullDocument ( const Q3ValueList<ParaData> &paraList )
 {
 #if 0
     kdError (30507) << "doFullDocument () - Begin" << endl;
 #endif
 
-    QValueList<ParaData>::ConstIterator paraIt;
-	QValueList<ParaData>::ConstIterator end(paraList.end ());
+    Q3ValueList<ParaData>::ConstIterator paraIt;
+	Q3ValueList<ParaData>::ConstIterator end(paraList.end ());
     for ( paraIt = paraList.begin (); paraIt != end ; ++paraIt )
     {
         switch ( (*paraIt).layout.counter.numbering )
@@ -701,7 +704,7 @@ bool DocBookWorker::doOpenFile ( const QString &filenameOut, const QString & /*t
         return false;
     }
 
-    if ( !fileOut->open (IO_WriteOnly) )
+    if ( !fileOut->open (QIODevice::WriteOnly) )
     {
         kdError(30507) << "Unable to open output file!" << endl;
 
@@ -724,7 +727,7 @@ bool DocBookWorker::doCloseFile ( void )
 
     // As a QChar can be transformed into many bytes,
     //  we need to use QCString::length instead of QString::length
-    QCString cstr = outputText.local8Bit ();
+    Q3CString cstr = outputText.local8Bit ();
     fileOut->writeBlock ( cstr, cstr.length () );
 
     fileOut->close ();
@@ -782,7 +785,7 @@ bool DocBookWorker::doFullDocumentInfo ( const KWEFDocumentInfo &docInfo )
 }
 
 
-KoFilter::ConversionStatus DocBookExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus DocBookExport::convert( const Q3CString& from, const Q3CString& to )
 {
 #if 0
     kdError (30507) << "to = " << to << ", from = " << from << endl;

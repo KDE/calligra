@@ -23,6 +23,9 @@
 #define ASCIIIMPORT_H
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 class QString;
 class QTextStream;
@@ -64,7 +67,7 @@ public:
     ASCIIImport();
     virtual ~ASCIIImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 private: // not yet changed
 #if 0
     void WriteOutTableCell( int table_no, int row, int col, Position *pos,

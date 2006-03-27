@@ -34,6 +34,9 @@
 #include <qiodevice.h>
 #include <qtextstream.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <kmdcodec.h>
@@ -189,7 +192,7 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         return false;
     }
 
-    if ( !m_ioDevice->open (IO_WriteOnly) )
+    if ( !m_ioDevice->open (QIODevice::WriteOnly) )
     {
         kdError(30506) << "Unable to open output file! Aborting!" << endl;
         return false;
@@ -278,7 +281,7 @@ void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& 
             << " base64=\"yes\""
             << " mime=\"image/png\">\n";
 
-        QCString base64=KCodecs::base64Encode(image,true);
+        Q3CString base64=KCodecs::base64Encode(image,true);
 
         *m_streamOut << base64 << "\n"; // QCString is taken as Latin1 by QTextStream
 
@@ -488,7 +491,7 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
     *m_streamOut << "<table>\n";
 #endif
 
-    QValueList<TableCell>::ConstIterator itCell;
+    Q3ValueList<TableCell>::ConstIterator itCell;
     for (itCell=anchor.table.cellList.begin();
         itCell!=anchor.table.cellList.end(); itCell++)
     {
@@ -643,11 +646,11 @@ void AbiWordWorker::processVariable ( const QString&,
                     // Footnote
                     QString value = (*paraFormatDataIt).variable.getFootnoteValue();
                     bool automatic = (*paraFormatDataIt).variable.getFootnoteAuto();
-                    QValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
+                    Q3ValueList<ParaData> *paraList = (*paraFormatDataIt).variable.getFootnotePara();
                     if( paraList )
                     {
                         QString fstr;
-                        QValueList<ParaData>::ConstIterator it;
+                        Q3ValueList<ParaData>::ConstIterator it;
                         for (it=paraList->begin();it!=paraList->end();it++)
                             fstr += ProcessParagraphData( (*it).text, (*it).layout,(*it).formattingList);
                         str += "{\\super ";
@@ -1225,7 +1228,7 @@ ABIWORDExport::ABIWORDExport(KoFilter */*parent*/, const char */*name*/, const Q
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus ABIWORDExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus ABIWORDExport::convert( const Q3CString& from, const Q3CString& to )
 {
     if ( to != "application/x-abiword" || from != "application/x-kword" )
     {

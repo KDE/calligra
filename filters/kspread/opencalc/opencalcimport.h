@@ -24,8 +24,10 @@
 #include <KoFilter.h>
 #include "kspread_format.h"
 
-#include <qdict.h>
+#include <q3dict.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KoStyleStack;
 class KoStore;
@@ -46,7 +48,7 @@ class OpenCalcImport : public KoFilter
   OpenCalcImport( KoFilter * parent, const char * name, const QStringList & );
   virtual ~OpenCalcImport();
 
-  virtual KoFilter::ConversionStatus convert( QCString const & from, QCString const & to );
+  virtual KoFilter::ConversionStatus convert( Q3CString const & from, Q3CString const & to );
 
 
  private:
@@ -72,9 +74,9 @@ class OpenCalcImport : public KoFilter
   QDomDocument    m_meta;
   QDomDocument    m_settings;
 
-  QDict<QDomElement>   m_styles;
-  QDict<KSpread::Format> m_defaultStyles;
-  QDict<QString>       m_formats;
+  Q3Dict<QDomElement>   m_styles;
+  Q3Dict<KSpread::Format> m_defaultStyles;
+  Q3Dict<QString>       m_formats;
   QMap<QString,QDomElement> m_validationList;
 
   QStringList          m_namedAreas;

@@ -26,7 +26,7 @@
 
 #include <qstring.h>
 #include <qmap.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class Command: public Element
 {
@@ -40,50 +40,50 @@ class Command: public Element
 		/**
 		 * Create a command which match to \\renewcommand{\\headrulewidth}{opt}
 		 */
-		Command(const char* name, QPtrList<QPtrList<Element> >* groups);
+		Command(const char* name, Q3PtrList<Q3PtrList<Element> >* groups);
 
 		/**
 		 * Create a command which match to  
 		 * \\put(1,1){\\circle[}}.
 		 */
-		Command(const char* name, QPtrList<QPtrList<Param> >* options,
-				QPtrList<QPtrList<Element> >* groups);
+		Command(const char* name, Q3PtrList<Q3PtrList<Param> >* options,
+				Q3PtrList<Q3PtrList<Element> >* groups);
 
 		/**
 		 * Create a command which match to \\parpic(3cm,3cm)[f]{text} or
 		 * \\documentclass[11pt]{guidepra}
 		 */
-		Command(const char* name, QPtrList<QPtrList<Param> >* params, QPtrList<Param>* options, QPtrList<QPtrList<Element> >* groups);
+		Command(const char* name, Q3PtrList<Q3PtrList<Param> >* params, Q3PtrList<Param>* options, Q3PtrList<Q3PtrList<Element> >* groups);
 
 		~Command();
 
 		QString getName() const { return _name; }
 
-		QPtrList<QPtrList<Param> > getParams() const { return _params; }
+		Q3PtrList<Q3PtrList<Param> > getParams() const { return _params; }
 		
-		QPtrList<Param> getOptions() const { return _options; }
+		Q3PtrList<Param> getOptions() const { return _options; }
 		
-		QPtrList<QPtrList<Element> > getChildren() const { return _elements; }
+		Q3PtrList<Q3PtrList<Element> > getChildren() const { return _elements; }
 
 		void setName(const char* name) { _name = name; }
 		void addParam(const char* param);
 		//void addParam(QString key, QString value) { _params.append(new Param(key, value)); }
 		//void addParams(QPtrList<Param> params) { _params = params; }
-		void addGroups(QPtrList<QPtrList<Element> >* elts) { _elements = *elts; }
+		void addGroups(Q3PtrList<Q3PtrList<Element> >* elts) { _elements = *elts; }
 
 		void addOption(const char* option);
 		void addOption(QString key, QString value) { _options.append(new Param(key, value)); }
 	
-		void addChild(QPtrList<Element>* elt) { _elements.append(elt); }
+		void addChild(Q3PtrList<Element>* elt) { _elements.append(elt); }
 
 		/* useful method */
 		void print(int tab = 0);
 
 	private:
 		QString _name;
-		QPtrList<QPtrList<Param> > _params;
-		QPtrList<Param> _options;
-		QPtrList<QPtrList<Element> > _elements;
+		Q3PtrList<Q3PtrList<Param> > _params;
+		Q3PtrList<Param> _options;
+		Q3PtrList<Q3PtrList<Element> > _elements;
 
 };
 

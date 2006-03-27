@@ -74,9 +74,9 @@ void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 *dstU8, KisProfil
         KisU8BaseColorSpace::fromQColor(c, dstU8, profile);
     } else {
         Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
-        dst->Y = computeY( c.red(), c.green(), c.blue());
-        dst->Cb = computeCb( c.red(), c.green(), c.blue());
-        dst->Cr = computeCr( c.red(), c.green(), c.blue());
+        dst->Y = computeY( c.Qt::red(), c.Qt::green(), c.Qt::blue());
+        dst->Cb = computeCb( c.Qt::red(), c.Qt::green(), c.Qt::blue());
+        dst->Cr = computeCr( c.Qt::red(), c.Qt::green(), c.Qt::blue());
     }
 }
 
@@ -87,9 +87,9 @@ void KisYCbCrU8ColorSpace::fromQColor(const QColor& c, Q_UINT8 opacity, Q_UINT8 
         KisU8BaseColorSpace::fromQColor(c, opacity, dstU8, profile);
     } else {
         Pixel *dst = reinterpret_cast<Pixel *>(dstU8);
-        dst->Y = computeY( c.red(), c.green(), c.blue());
-        dst->Cb = computeCb( c.red(), c.green(), c.blue());
-        dst->Cr = computeCr( c.red(), c.green(), c.blue());
+        dst->Y = computeY( c.Qt::red(), c.Qt::green(), c.Qt::blue());
+        dst->Cb = computeCb( c.Qt::red(), c.Qt::green(), c.Qt::blue());
+        dst->Cr = computeCr( c.Qt::red(), c.Qt::green(), c.Qt::blue());
         dst->alpha = opacity;
     }
 }
@@ -164,7 +164,7 @@ void KisYCbCrU8ColorSpace::mixColors(const Q_UINT8 **colors, const Q_UINT8 *weig
     dstPixel->Cr = totalCr;
 }
 
-QValueVector<KisChannelInfo *> KisYCbCrU8ColorSpace::channels() const {
+Q3ValueVector<KisChannelInfo *> KisYCbCrU8ColorSpace::channels() const {
     return m_channels;
 }
 

@@ -25,6 +25,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include "xsltimportdia.h"
 
 
@@ -36,7 +38,7 @@ XSLTImport::XSLTImport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus XSLTImport::convert( const QCString&, const QCString& to )
+KoFilter::ConversionStatus XSLTImport::convert( const Q3CString&, const Q3CString& to )
 {
     QString config;
 

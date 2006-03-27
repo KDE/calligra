@@ -36,6 +36,8 @@
 #include <qpro/stream.h>
 #include <qpro/record_factory.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 using namespace KSpread;
 
@@ -96,7 +98,7 @@ QpImport::InitTableName(int pIdx, QString& pResult)
    }
 }
 
-KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus QpImport::convert( const Q3CString& from, const Q3CString& to )
 {
     bool bSuccess=true;
 

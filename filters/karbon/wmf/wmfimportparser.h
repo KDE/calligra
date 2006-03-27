@@ -20,6 +20,9 @@
 
 #include <qpainter.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3PointArray>
+#include <Q3PtrList>
 #include <core/vdocument.h>
 #include <core/vcomposite.h>
 #include <kowmfread.h>
@@ -87,13 +90,13 @@ private:
     void  drawArc( int x, int y, int w, int h, int a, int alen );
     void  drawPie( int x, int y, int w, int h, int a, int alen );
     void  drawChord( int x, int y, int w, int h, int a, int alen );
-    void  drawPolyline( const QPointArray &pa );
-    void  drawPolygon( const QPointArray &pa, bool winding=FALSE );
+    void  drawPolyline( const Q3PointArray &pa );
+    void  drawPolygon( const Q3PointArray &pa, bool winding=FALSE );
     /**
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon( QPtrList<QPointArray>& listPa, bool winding=FALSE );
+    void  drawPolyPolygon( Q3PtrList<Q3PointArray>& listPa, bool winding=FALSE );
     void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing 
@@ -102,14 +105,14 @@ private:
     void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation );
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setWorldMatrix( const QWMatrix &, bool combine=FALSE );
+    void  setWorldMatrix( const QMatrix &, bool combine=FALSE );
 
     //-----------------------------------------------------------------------------
     // Utilities 
     // Add pen, brush and points to a path
     void appendPen( VObject& obj );
     void appendBrush( VObject& obj );
-    void appendPoints(VPath& path, const QPointArray& pa);
+    void appendPoints(VPath& path, const Q3PointArray& pa);
     // coordinate transformation
     // translate wmf to (0,0) -> scale to document size -> translate to karbon (0,0)
     // Wmf origin is (left,top) corner

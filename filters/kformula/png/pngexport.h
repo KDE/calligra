@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3CString>
 /* This file is part of the KDE project
    Copyright (C) 2002 Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
 
@@ -20,7 +22,7 @@
 #ifndef PNGEXPORT_H
 #define PNGEXPORT_H
 
-class QCString;
+class Q3CString;
 class QStringList;
 
 #include <KoFilter.h>
@@ -32,7 +34,7 @@ public:
     PNGExport( KoFilter *parent, const char *name, const QStringList& );
     virtual ~PNGExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 
 #endif // PNGEXPORT_H

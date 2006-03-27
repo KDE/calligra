@@ -22,7 +22,7 @@
 
 #include <qdir.h>
 #include <qcombobox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 
@@ -57,7 +57,7 @@
  *  TRUE to construct a modal dialog.
  */
 KWordLatexExportDia::KWordLatexExportDia(KoStore* in, QWidget* parent, 
-		const char* name_, bool modal, WFlags fl )
+		const char* name_, bool modal, Qt::WFlags fl )
     : LatexExportDia( parent, name_, modal, fl ),_in( in )
 {
 	int i = 0;

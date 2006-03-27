@@ -24,7 +24,10 @@
 #endif
 
 #include <qmessagebox.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 #include <applixwordimport.h>
 #include <applixwordimport.moc>
 #include <kdebug.h>
@@ -85,14 +88,14 @@ APPLIXWORDImport::nextLine (QTextStream & stream)
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-KoFilter::ConversionStatus APPLIXWORDImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus APPLIXWORDImport::convert( const Q3CString& from, const Q3CString& to )
 {
 
     if (to!="application/x-kword" || from!="application/x-applixword")
         return KoFilter::NotImplemented;
 
     QFile in(m_chain->inputFile());
-    if (!in.open (IO_ReadOnly))
+    if (!in.open (QIODevice::ReadOnly))
     {
         kdError(30517) << "Unable to open input file!" << endl;
         in.close();
@@ -123,7 +126,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QCString& from, cons
     int  pos, ok;
     char stylename[100];
     QString           mystr, textstr;
-    QPtrList<t_mycolor>  mcol;
+    Q3PtrList<t_mycolor>  mcol;
     QStringList       mcoltxt;
 
     /**************************************************************************
@@ -427,7 +430,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QCString& from, cons
         return KoFilter::StorageCreationError;
     }
 
-    QCString cstring = str.utf8 ();
+    Q3CString cstring = str.utf8 ();
 
     out->writeBlock ((const char*) cstring, cstring.length());
 

@@ -20,6 +20,8 @@
 #define XCFEXPORT_H_
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class XCFExport : public KoFilter {
     Q_OBJECT
@@ -29,7 +31,7 @@ public:
     virtual ~XCFExport();
 
 public:
-    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 };
 
 #endif // XCFEXPORT_H_

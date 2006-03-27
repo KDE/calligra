@@ -24,12 +24,14 @@
 
 #include <limits.h>
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 #include <qiodevice.h>
 #include <qstring.h>
 #include <qtextcodec.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -83,7 +85,7 @@ public:
     virtual bool doOpenDocument(void);
     virtual bool doCloseDocument(void);
 
-    virtual bool doFullParagraphList(const QValueList<ParaData>& paraList);
+    virtual bool doFullParagraphList(const Q3ValueList<ParaData>& paraList);
     virtual bool doFullParagraph(const ParaData& para);
     virtual bool doFullParagraph(const QString& paraText,
         const LayoutData& layout,
@@ -126,7 +128,7 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
         return false;
     }
 
-    if (!m_ioDevice->open(IO_WriteOnly))
+    if (!m_ioDevice->open(QIODevice::WriteOnly))
     {
         kdError(30502) << "Unable to open output file!" << endl;
         return false;
@@ -174,9 +176,9 @@ bool ASCIIWorker::doCloseDocument(void)
     return true;
 }
 
-bool ASCIIWorker::doFullParagraphList(const QValueList<ParaData>& paraList)
+bool ASCIIWorker::doFullParagraphList(const Q3ValueList<ParaData>& paraList)
 {
-    for (QValueList<ParaData>::ConstIterator it = paraList.begin();
+    for (Q3ValueList<ParaData>::ConstIterator it = paraList.begin();
          it != paraList.end();
          it++)
     {
@@ -342,7 +344,7 @@ bool ASCIIWorker::ProcessTable(const Table& table)
     kdDebug(30502) << "processTable CALLED!" << endl;
 
     // just dump the table out (no layout for now)
-    for (QValueList<TableCell>::ConstIterator it = table.cellList.begin();
+    for (Q3ValueList<TableCell>::ConstIterator it = table.cellList.begin();
          it != table.cellList.end();
          it++)
     {
@@ -435,7 +437,7 @@ ASCIIExport::ASCIIExport(KoFilter*, const char*, const QStringList&)
 {
 }
 
-KoFilter::ConversionStatus ASCIIExport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus ASCIIExport::convert(const Q3CString& from, const Q3CString& to)
 {
     if (to != "text/plain" || from != "application/x-kword")
     {

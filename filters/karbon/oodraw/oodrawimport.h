@@ -24,8 +24,10 @@
 #include <KoStore.h>
 
 #include <qdom.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qcolor.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <KoStyleStack.h>
 #include <core/vdocument.h>
 #include <core/vcomposite.h>
@@ -42,7 +44,7 @@ public:
     OoDrawImport( KoFilter *parent, const char *name, const QStringList & );
     virtual ~OoDrawImport();
 
-    virtual KoFilter::ConversionStatus convert( QCString const & from, QCString const & to );
+    virtual KoFilter::ConversionStatus convert( Q3CString const & from, Q3CString const & to );
 
 private:
 	void createDocumentInfo( QDomDocument &docinfo );
@@ -69,7 +71,7 @@ private:
 	QDomDocument			m_content;
 	QDomDocument			m_meta;
 	QDomDocument			m_settings;
-	QDict<QDomElement>		m_styles, m_draws;
+	Q3Dict<QDomElement>		m_styles, m_draws;
 	KoStyleStack			m_styleStack;
 	KZip * m_zip;
 

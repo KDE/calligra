@@ -344,9 +344,9 @@ void Device::drawImageMask(GfxState *state, Object *, Stream *str,
     // read pixels
     GfxRGB rgb;
     state->getFillRGB(&rgb);
-    int red = qRound(rgb.r * 255);
-    int green = qRound(rgb.g * 255);
-    int blue = qRound(rgb.b * 255);
+    int Qt::red = qRound(rgb.r * 255);
+    int Qt::green = qRound(rgb.g * 255);
+    int Qt::blue = qRound(rgb.b * 255);
 
     ImageStream *istr = new ImageStream(str, width, 1, 1);
     str->reset();
@@ -354,7 +354,7 @@ void Device::drawImageMask(GfxState *state, Object *, Stream *str,
         Guchar *p = istr->getLine();
         QRgb *pix = (QRgb *)_currentImage.image.scanLine(offset + j);
         for (int i=0; i<width; i++)
-            pix[i] = qRgba(red, green, blue, 255 * p[i]);
+            pix[i] = qRgba(Qt::red, Qt::green, Qt::blue, 255 * p[i]);
     }
     delete istr;
 

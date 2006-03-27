@@ -27,6 +27,8 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextstream.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kdebug.h>
 #include <KoFilterChain.h>
@@ -48,8 +50,8 @@ WPExport::WPExport( KoFilter *, const char *, const QStringList& ):
 }
 
 KoFilter::ConversionStatus 
-WPExport::convert( const QCString& from, 
-  const QCString& to )
+WPExport::convert( const Q3CString& from, 
+  const Q3CString& to )
 {
   // check for proper conversion
   if( to!= "application/wordperfect" || from != "application/x-kword" )

@@ -18,8 +18,10 @@
    Boston, MA  02110-1301  USA.
 */
 
-#include <qpicture.h>
+#include <q3picture.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
@@ -49,7 +51,7 @@ SvgExport::~SvgExport()
 
 
 KoFilter::ConversionStatus
-SvgExport::convert(const QCString& from, const QCString& to)
+SvgExport::convert(const Q3CString& from, const Q3CString& to)
 {
     // Check for proper conversion.
     if ( from != "application/x-kformula" || to != "image/svg+xml" )
@@ -81,7 +83,7 @@ SvgExport::convert(const QCString& from, const QCString& to)
     }
 
     // Draw the actual bitmap.
-    QPicture  picture;
+    Q3Picture  picture;
     QPainter  painter(&picture);
     QRect     rect(QPoint(0, 0), QPoint(500, 400));
     formula->draw( painter, rect, false );

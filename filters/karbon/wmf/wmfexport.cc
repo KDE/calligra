@@ -18,7 +18,9 @@
 
 #include <config.h>
 #include <qdom.h>
-#include <qcstring.h>
+#include <q3cstring.h>
+//Added by qt3to4:
+#include <Q3PointArray>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
@@ -57,7 +59,7 @@ WmfExport::~WmfExport()
 {
 }
 
-KoFilter::ConversionStatus WmfExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus WmfExport::convert( const Q3CString& from, const Q3CString& to )
 {
     if( to != "image/x-wmf" || from != "application/x-karbon" ) {
         return KoFilter::NotImplemented;
@@ -158,7 +160,7 @@ void WmfExport::visitVSubpath( VSubpath& path ) {
     VSubpath *newPath;
     VSubpathIterator itr( path );
     VFlattenCmd cmd( 0L, INCH_TO_POINT(0.3 / (double)mDpi) );
-    QPointArray *pa = new QPointArray( path.count() );
+    Q3PointArray *pa = new Q3PointArray( path.count() );
     int  nbrPoint=0;      // number of points in the path
 
     for( ; itr.current(); ++itr ) {

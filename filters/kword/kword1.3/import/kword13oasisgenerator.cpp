@@ -18,11 +18,13 @@
 */
 
 #include <qstring.h>
-#include <qdict.h>
+#include <q3dict.h>
 #include <qfile.h>
 #include <qbuffer.h>
 #include <qcolor.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <ktempfile.h>
@@ -57,7 +59,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
         return;
     }
 
-    for ( QValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
+    for ( Q3ValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
         it != frameset->m_paragraphGroup.end(); ++it)
     {
         declareLayout( (*it).m_layout );
@@ -106,7 +108,7 @@ void KWord13OasisGenerator::preparePageLayout( void )
     {
         // ### TODO: test
         QBuffer buffer;
-        buffer.open( IO_WriteOnly );
+        buffer.open( QIODevice::WriteOnly );
         KoXmlWriter element ( &buffer );
         element.startElement("style:columns");
         element.addAttribute( "fo:column-count", columns );
@@ -143,7 +145,7 @@ bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
     preparePageLayout();
 
     // Declare styles
-    for ( QValueList<KWord13Layout>::Iterator it = m_kwordDocument->m_styles.begin();
+    for ( Q3ValueList<KWord13Layout>::Iterator it = m_kwordDocument->m_styles.begin();
         it != m_kwordDocument->m_styles.end(); ++it)
     {
         declareStyle( *it );
@@ -406,7 +408,7 @@ void KWord13OasisGenerator::fillGenStyleWithLayout( const KWord13Layout& layout,
 
 #if 0
     QBuffer buffer;
-    buffer.open( IO_WriteOnly );
+    buffer.open( QIODevice::WriteOnly );
     KoXmlWriter tabsWriter( &buffer, 4 ); // indent==4: root,autostyle,style,parag-props
     tabsWriter.startElement( "style:tab-stops" );
     KoTabulatorList::ConstIterator it = m_tabList.begin();
@@ -516,7 +518,7 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
         return;
     }
 
-    for ( QValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
+    for ( Q3ValueList<KWord13Paragraph>::Iterator it = frameset->m_paragraphGroup.begin();
         it != frameset->m_paragraphGroup.end(); ++it)
     {
         // Write rawly the paragrapgh (see KoTextParag::saveOasis)
@@ -588,13 +590,13 @@ void KWord13OasisGenerator::writeStylesXml( void )
 
     m_store->open("styles.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
-    io.open( IO_WriteOnly );  // ### TODO: check error!
+    io.open( QIODevice::WriteOnly );  // ### TODO: check error!
 
     KoXmlWriter *stylesWriter = KoDocument::createOasisXmlWriter( &io, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_USER );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_USER );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -657,15 +659,15 @@ void KWord13OasisGenerator::writeContentXml(void)
 
     m_store->open("content.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
-    io.open( IO_WriteOnly );  // ### TODO: check error!
+    io.open( QIODevice::WriteOnly );  // ### TODO: check error!
 
     KoXmlWriter *writer = KoDocument::createOasisXmlWriter( &io, "office:document-content" );
 
 
     // Automatic styles
     writer->startElement( "office:automatic-styles" );
-    QValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_AUTO );
-    QValueList<KoGenStyles::NamedStyle>::const_iterator it;
+    Q3ValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_AUTO );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it;
     for ( it = styles.begin(); it != styles.end() ; ++it ) {
         (*it).style->writeStyle( writer, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -709,7 +711,7 @@ void KWord13OasisGenerator::writeMetaXml(void)
 
     m_store->open("meta.xml"); // ### TODO: check error!
     KoStoreDevice io ( m_store );
-    io.open( IO_WriteOnly );  // ### TODO: check error!
+    io.open( QIODevice::WriteOnly );  // ### TODO: check error!
 
     KoXmlWriter *writer = KoDocument::createOasisXmlWriter( &io, "office:document-meta" );
 
@@ -851,7 +853,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
     }
     m_store->open("Thumbnails/thumbnail.png");
     KoStoreDevice io ( m_store );
-    io.open( IO_WriteOnly );  // ### TODO: check error!
+    io.open( QIODevice::WriteOnly );  // ### TODO: check error!
     preview.save( &io, "PNG", 0 );
     io.close();
     m_store->close();
@@ -867,7 +869,7 @@ void KWord13OasisGenerator::writePictures( void )
         return;
     }
 
-    for ( QDictIterator<KWord13Picture> it( m_kwordDocument->m_pictureDict ) ; it.current(); ++it )
+    for ( Q3DictIterator<KWord13Picture> it( m_kwordDocument->m_pictureDict ) ; it.current(); ++it )
     {
         if ( !it.current()->m_valid || !it.current()->m_tempFile )
         {
@@ -878,7 +880,7 @@ void KWord13OasisGenerator::writePictures( void )
         const QString oasisName( it.current()->getOasisPictureName() );
         kdDebug(30520) << "Copying... " << it.currentKey() << endl << " => " << oasisName << endl;
         QFile file( fileName );
-        if ( !file.open( IO_ReadOnly ) )
+        if ( !file.open( QIODevice::ReadOnly ) )
         {
             kdWarning(30520) << "Cannot open: " << fileName << endl;
             continue;
@@ -931,7 +933,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     // Prepare manifest file - in memory (inspired by KoDocument::saveNativeFormat)
     QByteArray manifestData;
     QBuffer manifestBuffer( manifestData );
-    manifestBuffer.open( IO_WriteOnly );
+    manifestBuffer.open( QIODevice::WriteOnly );
     m_manifestWriter = new KoXmlWriter( &manifestBuffer );
     m_manifestWriter->startDocument( "manifest:manifest" );
     m_manifestWriter->startElement( "manifest:manifest" );
@@ -970,7 +972,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     if ( m_store->open("Debug/debug.xml") )
     {
         KoStoreDevice io ( m_store );
-        io.open( IO_WriteOnly );  // ### TODO: check error!
+        io.open( QIODevice::WriteOnly );  // ### TODO: check error!
         kwordDocument.xmldump( &io );
         io.close();
         m_store->close();

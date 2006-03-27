@@ -21,6 +21,8 @@
 #define KIVIO_IMAGEEXPORT_H
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 namespace Kivio
 {
@@ -31,7 +33,7 @@ class ImageExport : public KoFilter
   public:
     ImageExport(KoFilter *, const char *, const QStringList&);
 
-    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 };
 
 }

@@ -23,6 +23,8 @@
 
 #include <qstring.h>
 #include <qiodevice.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <KWEFStructures.h>
 #include <koffice_export.h>
@@ -55,8 +57,8 @@ class KOFFICEFILTER_EXPORT KWEFBaseWorker
         virtual bool doCloseTextFrameSet (void); // Like AbiWord's </section>
         virtual bool doFullDocumentInfo (const KWEFDocumentInfo &docInfo);
 	virtual bool doVariableSettings (const VariableSettingsData &varSettings);
-        virtual bool doFullDocument (const QValueList<ParaData> &);
-        virtual bool doFullAllParagraphs (const QValueList<ParaData>& paraList);
+        virtual bool doFullDocument (const Q3ValueList<ParaData> &);
+        virtual bool doFullAllParagraphs (const Q3ValueList<ParaData>& paraList);
         virtual bool doFullParagraph(const QString& paraText, const LayoutData& layout,
             const ValueListFormatData& paraFormatDataList);
         virtual bool doFullPaperFormat (const int format,
@@ -81,7 +83,7 @@ class KOFFICEFILTER_EXPORT KWEFBaseWorker
         virtual bool doOpenSpellCheckIgnoreList (void); ///< like AbiWord's \<ignorewords\> and KWord's \<SPELLCHECKIGNORELIST\>
         virtual bool doCloseSpellCheckIgnoreList (void); ///< like AbiWord's \</ignorewords\> and Kwords \</SPELLCHECKIGNORELIST\>
         virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); ///< like AbiWord's \<iw\> and Kwords \</SPELLCHECKIGNOREWORD\>
-        virtual bool doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
+        virtual bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
     protected:
         KWEFKWordLeader* m_kwordLeader;
 };

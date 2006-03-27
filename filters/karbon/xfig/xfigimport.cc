@@ -37,7 +37,9 @@ DESCRIPTION
 #include <xfigimport.h>
 #include <xfigimport.moc>
 
-#include <qtl.h>
+#include <q3tl.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 #include <kdebug.h>
 
 #include <core/vdocument.h>
@@ -298,7 +300,7 @@ bool XFIGImport::filterImport( const QString &file, KoDocument *doc,
 
 
 void XFIGImport::parseColorObject (istream& fin) {
-    int number, red, green, blue;
+    int number, Qt::red, Qt::green, Qt::blue;
     char buf[20], red_str[3], green_str[3], blue_str[3];
 
     fin >> number >> buf;
@@ -306,11 +308,11 @@ void XFIGImport::parseColorObject (istream& fin) {
     strncpy (green_str, &buf[3], 2); green_str[2] = '\0';
     strncpy (blue_str, &buf[5], 2); blue_str[2] = '\0';
 
-    red = hexstrToInt (red_str);
-    green = hexstrToInt (green_str);
-    blue = hexstrToInt (blue_str);
+    Qt::red = hexstrToInt (red_str);
+    Qt::green = hexstrToInt (green_str);
+    Qt::blue = hexstrToInt (blue_str);
 
-    colorTable.insert (number, new QColor (red, green, blue));
+    colorTable.insert (number, new QColor (Qt::red, Qt::green, Qt::blue));
 }
 
 void XFIGImport::parseArc (istream& fin, GDocument* doc) {
@@ -670,7 +672,7 @@ void XFIGImport::parseText (istream& fin, GDocument* doc)
   if (angle != 0) {
     // rotate the text
     float nangle = angle * RAD_FACTOR;
-    QWMatrix m1, m2, m3;
+    QMatrix m1, m2, m3;
     Coord rotCenter;
 
     if (sub_type == 0) {
@@ -713,7 +715,7 @@ void XFIGImport::buildDocument (GDocument *doc) {
   qBubbleSort(objList);
 
   // Now all we need to do is insert them in the document, in that order
-  QValueList<GObjectListItem>::Iterator it=objList.begin();
+  Q3ValueList<GObjectListItem>::Iterator it=objList.begin();
   for ( ; it != objList.end() ; ++it )
   {
       //kdDebug() << "Inserting object with depth=" << (*it).depth << endl;

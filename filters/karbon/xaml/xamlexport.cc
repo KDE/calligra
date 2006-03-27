@@ -20,11 +20,13 @@
 // based on the SVG exporter.  Not intended for public release
 // Microsoft WVG renamed to XAML Graphics.  Worry about that later.  
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdom.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <kgenericfactory.h>
 #include <KoFilter.h>
@@ -61,7 +63,7 @@ XAMLExport::XAMLExport( KoFilter*, const char*, const QStringList& )
 }
 
 KoFilter::ConversionStatus
-XAMLExport::convert( const QCString& from, const QCString& to )
+XAMLExport::convert( const Q3CString& from, const Q3CString& to )
 {
 	// TODO: ???
 	if ( to != "image/wvg+xml" || from != "application/x-karbon" )
@@ -74,7 +76,7 @@ XAMLExport::convert( const QCString& from, const QCString& to )
 		return KoFilter::StupidError;
 
 	QFile fileOut( m_chain->outputFile() );
-	if( !fileOut.open( IO_WriteOnly ) )
+	if( !fileOut.open( QIODevice::WriteOnly ) )
 	{
 		delete storeIn;
 		return KoFilter::StupidError;
@@ -86,9 +88,9 @@ XAMLExport::convert( const QCString& from, const QCString& to )
 
 	m_stream = new QTextStream( &fileOut );
 	QString body;
-	m_body = new QTextStream( &body, IO_ReadWrite );
+	m_body = new QTextStream( &body, QIODevice::ReadWrite );
 	QString defs;
-	m_defs = new QTextStream( &defs, IO_ReadWrite );
+	m_defs = new QTextStream( &defs, QIODevice::ReadWrite );
 
 
 	// load the document and export it:
@@ -213,7 +215,7 @@ QString createUID()
 }
 
 void
-XAMLExport::getColorStops( const QPtrVector<VColorStop> &colorStops )
+XAMLExport::getColorStops( const Q3PtrVector<VColorStop> &colorStops )
 {
 	for( unsigned int i = 0; i < colorStops.count() ; i++ )
 	{
@@ -343,7 +345,7 @@ XAMLExport::getStroke( const VStroke& stroke )
 		*m_body << " StrokeDashOffset=\"" << stroke.dashPattern().offset() << "\"";
 		*m_body << " StrokeDashArray=\" ";
 
-		QValueListConstIterator<float> itr;
+		Q3ValueListConstIterator<float> itr;
 		for(itr = stroke.dashPattern().array().begin(); itr != stroke.dashPattern().array().end(); ++itr )
 		{
 			*m_body << *itr << " ";

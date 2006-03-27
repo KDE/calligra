@@ -22,6 +22,8 @@
 
 #include "kword13utils.h"
 #include "kword13frameset.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 
 KWord13Frameset::KWord13Frameset( int frameType, int frameInfo, const QString& name )

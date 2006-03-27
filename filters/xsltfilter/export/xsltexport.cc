@@ -24,6 +24,8 @@
 #include <kgenericfactory.h>
 
 #include <xsltexportdia.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<XSLTExport, KoFilter> XSLTExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libxsltexport, XSLTExportFactory( "kofficefilters" ) )
@@ -40,7 +42,7 @@ XSLTExport::XSLTExport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus XSLTExport::convert( const QCString& from, const QCString&)
+KoFilter::ConversionStatus XSLTExport::convert( const Q3CString& from, const Q3CString&)
 {
     if(from != "application/x-kword" &&
        from != "application/x-kontour" && from != "application/x-kspread" &&

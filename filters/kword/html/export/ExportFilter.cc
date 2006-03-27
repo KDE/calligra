@@ -23,7 +23,10 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qpicture.h>
+#include <q3picture.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,7 +48,7 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
     *m_streamOut << "<table>\n";
     *m_streamOut << "<tbody>\n";
 
-    QValueList<TableCell>::ConstIterator itCell;
+    Q3ValueList<TableCell>::ConstIterator itCell;
 
     int rowCurrent=0;
     *m_streamOut << "<tr>\n";
@@ -166,7 +169,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         else if ( extension == "qpic" )
         {
 
-            QPicture picture;
+            Q3Picture picture;
 
             QIODevice* io=getSubFileDevice(anchor.picture.koStoreName);
             if (!io)
@@ -217,7 +220,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
         {
             QFile file(strImagePath);
 
-            if ( !file.open (IO_WriteOnly) )
+            if ( !file.open (QIODevice::WriteOnly) )
             {
                 kdError(30503) << "Unable to open image output file!" << endl;
                 return false;
@@ -480,7 +483,7 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
         return false;
     }
 
-    if ( !m_ioDevice->open (IO_WriteOnly) )
+    if ( !m_ioDevice->open (QIODevice::WriteOnly) )
     {
         kdError(30503) << "Unable to open output file!" << endl;
         return false;

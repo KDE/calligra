@@ -60,6 +60,8 @@
 #include "xcf-write.h"
 
 #include "gimp-intl.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 
 static bool xcf_save_image_props   (XcfInfo           *info,
@@ -265,7 +267,7 @@ xcf_save_image (XcfInfo   *info,
     GList       *list;
     bool     have_selection;
     Q_INT32         t1, t2, t3, t4;
-    QCString        version_tag[14];
+    Q3CString        version_tag[14];
     GError      *error = NULL;
 
     floating_layer = gimp_image_floating_sel (gimage);
@@ -986,7 +988,7 @@ xcf_save_prop (XcfInfo   *info,
     case PROP_USER_UNIT:
     {
 	GimpUnit     unit;
-	const QCString *unit_strings[5];
+	const Q3CString *unit_strings[5];
 	float       factor;
 	Q_INT32      digits;
 
@@ -1013,7 +1015,7 @@ xcf_save_prop (XcfInfo   *info,
 	xcf_write_int32_check_error (info, &size, 1);
 	xcf_write_float_check_error (info, &factor, 1);
 	xcf_write_int32_check_error (info, &digits, 1);
-	xcf_write_string_check_error (info, (QCString **) unit_strings, 5);
+	xcf_write_string_check_error (info, (Q3CString **) unit_strings, 5);
     }
     break;
 
@@ -1533,7 +1535,7 @@ typedef struct
 } XcfParasiteData;
 
 static void
-xcf_save_parasite_func (QCString           *key,
+xcf_save_parasite_func (Q3CString           *key,
                         KisAnnotation    *parasite,
                         XcfParasiteData *data)
 {
@@ -1597,7 +1599,7 @@ xcf_save_old_paths (XcfInfo    *info,
          list = g_list_next (list))
     {
         GimpVectors            *vectors = list->data;
-        QCString                  *name;
+        Q3CString                  *name;
         Q_INT32                 locked;
         Q_UINT8                  state;
         Q_INT32                 version;
@@ -1627,7 +1629,7 @@ xcf_save_old_paths (XcfInfo    *info,
          * we already saved the number of paths and I wont start seeking
          * around to fix that cruft  */
 
-        name     = (QCString *) gimp_object_get_name (GIMP_OBJECT (vectors));
+        name     = (Q3CString *) gimp_object_get_name (GIMP_OBJECT (vectors));
         locked   = gimp_item_get_linked (GIMP_ITEM (vectors));
         state    = closed ? 4 : 2;  /* EDIT : ADD  (editing state, 1.2 compat) */
         version  = 3;
@@ -1708,7 +1710,7 @@ xcf_save_vectors (XcfInfo    *info,
     {
         GimpVectors      *vectors = list->data;
         KisAnnotationList *parasites;
-        QCString            *name;
+        Q3CString            *name;
         Q_INT32           tattoo;
         Q_INT32           visible;
         Q_INT32           linked;
@@ -1729,7 +1731,7 @@ xcf_save_vectors (XcfInfo    *info,
 
         parasites = GIMP_ITEM (vectors)->parasites;
 
-        name          = (QCString *) gimp_object_get_name (GIMP_OBJECT (vectors));
+        name          = (Q3CString *) gimp_object_get_name (GIMP_OBJECT (vectors));
         visible       = gimp_item_get_visible (GIMP_ITEM (vectors));
         linked        = gimp_item_get_linked (GIMP_ITEM (vectors));
         tattoo        = gimp_item_get_tattoo (GIMP_ITEM (vectors));

@@ -40,7 +40,7 @@
 #ifndef EXPORTFILTERSSTRUCTURES_H
 #define EXPORTFILTERSSTRUCTURES_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qstring.h>
 #include <qmap.h>
 #include <qcolor.h>
@@ -165,7 +165,7 @@ class KOFFICEFILTER_EXPORT TableCell
       TableCell (): col( 0 ), row( 0 ), m_cols( 0 ), m_rows( 0 ), paraList( 0 ) {}
 
       /// \since 1.4 (changes of parameters)
-      TableCell ( int c, int r, int _cols, int _rows, QValueList<ParaData> *p, FrameData &frameData  )
+      TableCell ( int c, int r, int _cols, int _rows, Q3ValueList<ParaData> *p, FrameData &frameData  )
          : col (c), row (r), m_cols( _cols ), m_rows( _rows ), paraList (p), frame (frameData) {}
 
       ~TableCell ();
@@ -174,7 +174,7 @@ class KOFFICEFILTER_EXPORT TableCell
       int                   row;
       int m_cols; ///< \since 1.4
       int m_rows; ///< \since 1.4
-      QValueList<ParaData> *paraList;
+      Q3ValueList<ParaData> *paraList;
       FrameData   frame;
 };
 
@@ -185,10 +185,10 @@ class Table
       Table () : cols (0) {}
 
       /// \since 1.4 (change of parameters)
-      void addCell ( int c, int r, int _cols, int _rows, QValueList<ParaData> &p, FrameData &frameData );
+      void addCell ( int c, int r, int _cols, int _rows, Q3ValueList<ParaData> &p, FrameData &frameData );
 
       int                   cols;
-      QValueList<TableCell> cellList;
+      Q3ValueList<TableCell> cellList;
 };
 
 
@@ -244,7 +244,7 @@ public:
      * Set parameters of a \<FOOTNOTE\> element
      * @since 1.4 (change of parameters)
      */
-    void setFootnote( const QString& notetype, const QString& automatic, const QString& value, QValueList<ParaData>* para );
+    void setFootnote( const QString& notetype, const QString& automatic, const QString& value, Q3ValueList<ParaData>* para );
     /**
      * Is the footnote an automatic one?
      * @return true for an automatical foornote, false for a manual footnote
@@ -259,7 +259,7 @@ public:
      */
     bool getFootnoteType( void ) const;
     /// Paragrapgh of the footnote
-    QValueList<ParaData>* getFootnotePara(void) const;
+    Q3ValueList<ParaData>* getFootnotePara(void) const;
 
     /**
      * Set generic variable data
@@ -278,7 +278,7 @@ public:
 
 protected:
     QMap<QString,QString> propertyMap;
-    QValueList<ParaData>* footnotePara;
+    Q3ValueList<ParaData>* footnotePara;
 };
 
 class FormatData
@@ -310,7 +310,7 @@ public:
 };
 
 
-class ValueListFormatData : public QValueList<FormatData>
+class ValueListFormatData : public Q3ValueList<FormatData>
 {
 public:
     ValueListFormatData (void) { }
@@ -405,7 +405,7 @@ public:
 /**
   * List of tabulators
   */
-class TabulatorList : public QValueList<TabulatorData>
+class TabulatorList : public Q3ValueList<TabulatorData>
 {
 public:
     TabulatorList(void) {}
@@ -473,7 +473,7 @@ struct HeaderFooterData
     };
 
     HeaderFooterPage page;
-    QValueList<ParaData> para;
+    Q3ValueList<ParaData> para;
 };
 
 typedef HeaderFooterData HeaderData;
@@ -483,7 +483,7 @@ typedef HeaderFooterData FooterData;
 struct FootnoteData
 {
     QString frameName;
-    QValueList<ParaData> para;
+    Q3ValueList<ParaData> para;
 };
 
 /// see \<VARIABLESETTINGS\> in the KWord DTD

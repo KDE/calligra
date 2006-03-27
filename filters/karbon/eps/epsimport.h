@@ -21,6 +21,9 @@
 #define __EPSIMPORT_H__
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 
 #include <KoFilter.h>
 
@@ -35,7 +38,7 @@ public:
 	EpsImport( KoFilter* parent, const char* name, const QStringList& );
 	virtual ~EpsImport();
 
-	virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+	virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 
 #endif

@@ -27,6 +27,8 @@
 #include "xcf-read.h"
 
 #include "gimp-intl.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 
 Q_UINT32
@@ -82,7 +84,7 @@ xcf_read_int8 (FILE   *fp,
 
 Q_UINT32
 xcf_read_string (FILE   *fp,
-		 QCString **data,
+		 Q3CString **data,
 		 Q_INT32    count)
 {
   Q_INT32 tmp;
@@ -95,9 +97,9 @@ xcf_read_string (FILE   *fp,
       total += xcf_read_int32 (fp, &tmp, 1);
       if (tmp > 0)
         {
-          QCString *str;
+          Q3CString *str;
 
-          str = g_new (QCString, tmp);
+          str = g_new (Q3CString, tmp);
           total += xcf_read_int8 (fp, (Q_UINT8*) str, tmp);
 
           if (str[tmp - 1] != '\0')

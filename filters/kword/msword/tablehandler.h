@@ -24,8 +24,10 @@
 #include <wv2/word97_generated.h> // for TAP
 #include <wv2/handlers.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 #include <deque>
 
 namespace wvWare {
@@ -58,7 +60,7 @@ namespace KWord
     struct Table
     {
         QString name; // kword's grpMgr attribute
-        QValueList<Row> rows; // need to use QValueList to benefit from implicit sharing
+        Q3ValueList<Row> rows; // need to use QValueList to benefit from implicit sharing
 
         // Word has a very flexible concept of columns: each row can vary the
         // edges of each column. We must map this onto a set of fixed-width columns
@@ -66,7 +68,7 @@ namespace KWord
         // the original Word cells. We accumulate all the known edges for a given
         // table in an array.
         // Important: don't use unsigned int. Value can be negative (relative to margin...).
-        QMemArray<int> m_cellEdges;
+        Q3MemArray<int> m_cellEdges;
 
         void cacheCellEdge( int cellEdge );
         int columnNumber( int cellEdge ) const;

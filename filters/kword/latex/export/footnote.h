@@ -26,6 +26,8 @@
 #define __KWORD_LATEX_FOOTNOTE_H__
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <QTextStream>
 #include "format.h"
 
 /***********************************************************************/

@@ -23,7 +23,9 @@
 
 #include <kdebug.h>
 #include <KoRect.h>
-#include <qtl.h>
+#include <q3tl.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 KWordTableHandler::KWordTableHandler()
 {
@@ -112,7 +114,7 @@ void KWordTableHandler::tableCellStart()
         //kdDebug(30513) << "fVertRestart is set!" << endl;
         // This cell is the first one of a series of vertically merged cells ->
         // we want to find out its size.
-        QValueList<KWord::Row>::Iterator it = m_currentTable->rows.at( m_row + 1 );
+        Q3ValueList<KWord::Row>::Iterator it = m_currentTable->rows.at( m_row + 1 );
         for( ; it != m_currentTable->rows.end(); ++it )  {
             // Find cell right below us in row (*it), if any
             KWord::TAPptr tapBelow = (*it).tap;
@@ -201,7 +203,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     }
 
     // Add the edge to the array.
-    m_cellEdges.resize(size + 1, QGArray::SpeedOptim);
+    m_cellEdges.resize(size + 1, Q3GArray::SpeedOptim);
     m_cellEdges[size] = cellEdge;
     kdDebug(30513) << k_funcinfo << cellEdge << " -> added. Size=" << size+1 << endl;
 }

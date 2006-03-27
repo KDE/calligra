@@ -20,17 +20,19 @@
 #include "dialog.h"
 #include "dialog.moc"
 
-#include <qhbox.h>
+#include <q3hbox.h>
 #include <qvgroupbox.h>
 #include <qregexp.h>
 #include <qapplication.h>
-#include <qgrid.h>
+#include <q3grid.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
 #include <qradiobutton.h>
-#include <qwhatsthis.h>
+#include <q3whatsthis.h>
 #include <qcheckbox.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -41,7 +43,7 @@
 SelectionRange::SelectionRange(const QString &s)
 {
     // fill
-    QValueVector<QPair<uint, uint> > r;
+    Q3ValueVector<QPair<uint, uint> > r;
     QStringList list = QStringList::split(',', s);
     QRegExp range("^([0-9]+)\\-([0-9]+)$");
     QRegExp one("^[0-9]+$");
@@ -120,18 +122,18 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
 {
     QApplication::restoreOverrideCursor();
 
-    QVBoxLayout *top = new QVBoxLayout(plainPage(), KDialogBase::marginHint(),
+    Q3VBoxLayout *top = new Q3VBoxLayout(plainPage(), KDialogBase::marginHint(),
                                        KDialogBase::spacingHint());
 
     // page selection
     QVGroupBox *gbox = new QVGroupBox(i18n("Page Selection"), plainPage());
     gbox->setInsideSpacing(KDialogBase::spacingHint());
     top->addWidget(gbox);
-    _group = new QButtonGroup;
+    _group = new Q3ButtonGroup;
     _allButton = new QRadioButton(i18n("All (%1 pages)").arg(nbPages), gbox);
     _allButton->setChecked(true);
     _group->insert(_allButton);
-    QHBox *hbox = new QHBox(gbox);
+    Q3HBox *hbox = new Q3HBox(gbox);
     _rangeButton = new QRadioButton(i18n("Range:"), hbox);
     _group->insert(_rangeButton);
     _range = new KLineEdit(hbox);
@@ -145,7 +147,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     top->addWidget(_images);
     _smart = new QCheckBox(i18n("\"Smart\" mode"), plainPage());
     _smart->setChecked(true);
-    QWhatsThis::add(_smart,
+    Q3WhatsThis::add(_smart,
                     i18n("Removes returns and hyphens at end of line. "
                          "Also tries to compute the paragraph alignment. "
                          "Note that the layout of some pages can "
@@ -155,7 +157,7 @@ Dialog::Dialog(uint nbPages, bool isEncrypted, QWidget *widget)
     // passwords
     gbox = new QVGroupBox(i18n("Passwords"), plainPage());
     top->addWidget(gbox);
-    QGrid *grid = new QGrid(2, gbox);
+    Q3Grid *grid = new Q3Grid(2, gbox);
     grid->setSpacing(KDialogBase::spacingHint());
     (void)new QLabel(i18n("Owner:"), grid);
     _owner = new KLineEdit(grid);

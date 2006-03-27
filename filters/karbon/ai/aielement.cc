@@ -19,6 +19,8 @@
 
 #include "aielement.h"
 #include <qglobal.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 AIElement::Private::Private()
 {
@@ -38,16 +40,16 @@ AIElement::Private::Private( Private* d )
 	    break;
 		case AIElement::CString:
 	    // QCString is explicit shared
-	    value.ptr = new QCString( *((QCString*)d->value.ptr) );
+	    value.ptr = new Q3CString( *((Q3CString*)d->value.ptr) );
 	    break;
 /*		case AIElement::List:
 	    value.ptr = new QValueList<AIElement>( *((QValueList<AIElement>*)d->value.ptr) );
 	    break; */
 		case AIElement::ElementArray:
-	    value.ptr = new QValueVector<AIElement>( *((QValueVector<AIElement>*)d->value.ptr) );
+	    value.ptr = new Q3ValueVector<AIElement>( *((Q3ValueVector<AIElement>*)d->value.ptr) );
 	    break;
 		case AIElement::Block:
-	    value.ptr = new QValueVector<AIElement>( *((QValueVector<AIElement>*)d->value.ptr) );
+	    value.ptr = new Q3ValueVector<AIElement>( *((Q3ValueVector<AIElement>*)d->value.ptr) );
 	    break;
 		case AIElement::ByteArray:
 	    value.ptr = new QByteArray( *((QByteArray*)d->value.ptr) );
@@ -86,16 +88,16 @@ void AIElement::Private::clear()
 	    delete (QString*)value.ptr;
 	    break;
 		case AIElement::CString:
-	    delete (QCString*)value.ptr;
+	    delete (Q3CString*)value.ptr;
 	    break;
 /*		case AIElement::List:
 	    delete (QValueList<AIElement>*)value.ptr;
 	    break; */
 		case AIElement::ElementArray:
-	    delete (QValueVector<AIElement>*)value.ptr;
+	    delete (Q3ValueVector<AIElement>*)value.ptr;
 	    break;
 		case AIElement::Block:
-	    delete (QValueVector<AIElement>*)value.ptr;
+	    delete (Q3ValueVector<AIElement>*)value.ptr;
 	    break;
 		case AIElement::ByteArray:
 	    delete (QByteArray*)value.ptr;
@@ -161,11 +163,11 @@ AIElement::AIElement( const QString& val, Type type )
   constructor, we recommend passing a deep copy (see
   QCString::copy()).
 */
-AIElement::AIElement( const QCString& val )
+AIElement::AIElement( const Q3CString& val )
 {
   d = new Private;
   d->typ = CString;
-  d->value.ptr = new QCString( val );
+  d->value.ptr = new Q3CString( val );
 }
 
 /*!
@@ -180,7 +182,7 @@ AIElement::AIElement( const char* val )
   if ( val == 0 )
 	  return;
   d->typ = CString;
-  d->value.ptr = new QCString( val );
+  d->value.ptr = new Q3CString( val );
 }
 
 /*!
@@ -234,11 +236,11 @@ AIElement::AIElement( double val )
   d->value.ptr = new QValueList<AIElement>( val );
 }  */
 
-AIElement::AIElement( const QValueVector<AIElement>& val, Type type )
+AIElement::AIElement( const Q3ValueVector<AIElement>& val, Type type )
 {
   d = new Private;
   d->typ = type;
-  d->value.ptr = new QValueVector<AIElement>( val );
+  d->value.ptr = new Q3ValueVector<AIElement>( val );
 }
 
 AIElement::AIElement( const QByteArray& val )
@@ -394,10 +396,10 @@ const QString AIElement::toOperator() const
 
   \sa asCString()
 */
-const QCString AIElement::toCString() const
+const Q3CString AIElement::toCString() const
 {
   if ( d->typ == CString )
-	  return *((QCString*)d->value.ptr);
+	  return *((Q3CString*)d->value.ptr);
   if ( d->typ == String )
 	  return ((QString*)d->value.ptr)->latin1();
   if ( d->typ == Operator )
@@ -423,7 +425,7 @@ int AIElement::toInt( bool * ok ) const
   if( d->typ == String )
 	  return ((QString*)d->value.ptr)->toInt( ok );
   if ( d->typ == CString )
-	  return ((QCString*)d->value.ptr)->toInt( ok );
+	  return ((Q3CString*)d->value.ptr)->toInt( ok );
   if ( ok )
 	  *ok = canCast( UInt );
   if( d->typ == Int )
@@ -442,7 +444,7 @@ uchar AIElement::toByte( bool * ok ) const
   if( d->typ == String )
 	  return ((QString*)d->value.ptr)->toShort( ok );
   if ( d->typ == CString )
-	  return ((QCString*)d->value.ptr)->toShort( ok );
+	  return ((Q3CString*)d->value.ptr)->toShort( ok );
   if ( ok )
 	  *ok = canCast( UInt );
   if( d->typ == Byte )
@@ -471,7 +473,7 @@ uint AIElement::toUInt( bool * ok ) const
   if( d->typ == String )
 	  return ((QString*)d->value.ptr)->toUInt( ok );
   if ( d->typ == CString )
-	  return ((QCString*)d->value.ptr)->toUInt( ok );
+	  return ((Q3CString*)d->value.ptr)->toUInt( ok );
   if ( ok )
 	  *ok = canCast( UInt );
   if( d->typ == Int )
@@ -500,7 +502,7 @@ double AIElement::toDouble( bool * ok ) const
   if( d->typ == String )
 	  return ((QString*)d->value.ptr)->toDouble( ok );
   if ( d->typ == CString )
-	  return ((QCString*)d->value.ptr)->toDouble( ok );
+	  return ((Q3CString*)d->value.ptr)->toDouble( ok );
   if ( ok )
 	  *ok = canCast( Double );
   if ( d->typ == Double )
@@ -538,18 +540,18 @@ double AIElement::toDouble( bool * ok ) const
   return QValueList<AIElement>();
 } */
 
-const QValueVector<AIElement> AIElement::toElementArray() const
+const Q3ValueVector<AIElement> AIElement::toElementArray() const
 {
   if ( d->typ == ElementArray )
-	  return *((QValueVector<AIElement>*)d->value.ptr);
-  return QValueVector<AIElement>();
+	  return *((Q3ValueVector<AIElement>*)d->value.ptr);
+  return Q3ValueVector<AIElement>();
 }
 
-const QValueVector<AIElement> AIElement::toBlock() const
+const Q3ValueVector<AIElement> AIElement::toBlock() const
 {
   if ( d->typ == Block )
-	  return *((QValueVector<AIElement>*)d->value.ptr);
-  return QValueVector<AIElement>();
+	  return *((Q3ValueVector<AIElement>*)d->value.ptr);
+  return Q3ValueVector<AIElement>();
 }
 
 
@@ -647,18 +649,18 @@ uchar& AIElement::asByte()
   return *((QValueList<AIElement>*)d->value.ptr);
 }  */
 
-QValueVector<AIElement>& AIElement::asElementArray()
+Q3ValueVector<AIElement>& AIElement::asElementArray()
 {
   if ( d->typ != ElementArray )
 	  *this = AIElement( toElementArray() );
-  return *((QValueVector<AIElement>*)d->value.ptr);
+  return *((Q3ValueVector<AIElement>*)d->value.ptr);
 }
 
-QValueVector<AIElement>& AIElement::asBlock()
+Q3ValueVector<AIElement>& AIElement::asBlock()
 {
   if ( d->typ != Block )
 	  *this = AIElement( toBlock() );
-  return *((QValueVector<AIElement>*)d->value.ptr);
+  return *((Q3ValueVector<AIElement>*)d->value.ptr);
 }
 
 

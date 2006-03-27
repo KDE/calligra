@@ -22,6 +22,8 @@
 #define __SVGEXPORT_H__
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class SvgExport : public KoFilter
 {
@@ -31,7 +33,7 @@ public:
     SvgExport(KoFilter *parent, const char *name, const QStringList&);
     virtual ~SvgExport();
 
-    virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+    virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 };
 
 #endif // __SVGEXPORT_H__

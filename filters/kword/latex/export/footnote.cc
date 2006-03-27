@@ -24,6 +24,8 @@
 #include "footnote.h"
 #include "textFrame.h"		/* for generate function (catch text footnote) */
 #include "document.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 Footnote::Footnote(Para* para): Format(para)
 {

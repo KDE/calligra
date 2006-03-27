@@ -17,7 +17,7 @@
 #define __KUGARNOPIMPORT_H__
 
 #include <KoFilter.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstringlist.h>
 
 class KugarNOPImport : public KoFilter
@@ -27,7 +27,7 @@ class KugarNOPImport : public KoFilter
 public:
     KugarNOPImport( KoFilter *parent, const char *name, const QStringList& );
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 };
 

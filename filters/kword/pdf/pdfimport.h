@@ -24,6 +24,8 @@
 
 #include "pdfdocument.h"
 #include "dialog.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 
 class PdfImport : public KoFilter
@@ -33,7 +35,7 @@ public:
     PdfImport(KoFilter *parent, const char *name, const QStringList&);
 
     KoFilter::ConversionStatus
-    convert(const QCString& from, const QCString& to);
+    convert(const Q3CString& from, const Q3CString& to);
 
 private:
     void treatInfoDocument();

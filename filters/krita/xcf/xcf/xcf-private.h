@@ -19,7 +19,7 @@
 #ifndef __XCF_PRIVATE_H__
 #define __XCF_PRIVATE_H__
 
-#include <qcstring.h>
+#include <q3cstring.h>
 
 typedef enum
 {
@@ -78,7 +78,7 @@ struct _XcfInfo
 {
   FILE               *fp;
   Q_UINT32           cp;
-  const QCString     filename;
+  const Q3CString     filename;
   //GimpTattoo         tattoo_state;
   KisLayer           *active_layer;
   //GimpChannel        *active_channel;

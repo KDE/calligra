@@ -26,7 +26,7 @@ extern "C" {
 #include <jpeglib.h>
 }
 
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 #include <kio/job.h>
 

@@ -104,7 +104,7 @@ class TextFormat: public Format
 		 * The destructor must remove the list of little zones.
 		 *
 		 */
-		virtual ~TextFormat() {}
+		virtual ~Qt::TextFormat() {}
 
 		/* ==== Getters ==== */
 		unsigned int getSize      () const { return _size;      }

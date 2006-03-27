@@ -20,6 +20,8 @@
 #define _KIS_TIFF_IMPORT_H_
 
 #include <KoFilter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 class KisTIFFImport : public KoFilter {
     Q_OBJECT
@@ -27,7 +29,7 @@ class KisTIFFImport : public KoFilter {
         KisTIFFImport(KoFilter *parent, const char *name, const QStringList&);
         virtual ~KisTIFFImport();
     public:
-        virtual KoFilter::ConversionStatus convert(const QCString& from, const QCString& to);
+        virtual KoFilter::ConversionStatus convert(const Q3CString& from, const Q3CString& to);
 };
 
 #endif

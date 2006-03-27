@@ -19,9 +19,9 @@
 
 #include "palmdoc.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatetime.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 
 PalmDoc::PalmDoc(): PalmDB()

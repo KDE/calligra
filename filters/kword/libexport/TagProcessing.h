@@ -35,7 +35,7 @@
 #define EXPORTTAGPROCESSING_H
 
 #include <qdom.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include <kdemacros.h>
 #include <kdebug.h>
@@ -77,7 +77,7 @@ class TagProcessing
 };
 
 void ProcessSubtags     ( const QDomNode             &parentNode,
-                          QValueList<TagProcessing>  &tagProcessingList,
+                          Q3ValueList<TagProcessing>  &tagProcessingList,
                           KWEFKWordLeader            *leader);
 
 void AllowNoSubtags ( const QDomNode& myNode, KWEFKWordLeader *leader );
@@ -160,7 +160,7 @@ public:
 };
 
 void ProcessAttributes ( const QDomNode              &myNode,
-                         QValueList<AttrProcessing>  &attrProcessingList );
+                         Q3ValueList<AttrProcessing>  &attrProcessingList );
 
 void AllowNoAttributes ( const QDomNode& myNode );
 

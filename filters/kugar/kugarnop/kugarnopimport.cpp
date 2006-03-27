@@ -19,6 +19,8 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include "KoDocument.h"
 #include <qdom.h>
 
@@ -31,11 +33,11 @@ KugarNOPImport::KugarNOPImport( KoFilter *, const char *, const QStringList& )
 {
 }
 
-KoFilter::ConversionStatus KugarNOPImport::convert( const QCString& /*from*/, const QCString& /*to*/ )
+KoFilter::ConversionStatus KugarNOPImport::convert( const Q3CString& /*from*/, const Q3CString& /*to*/ )
 {
 
 	QFile in( m_chain->inputFile());
-	if (!in.open( IO_ReadOnly ))
+	if (!in.open( QIODevice::ReadOnly ))
 	{
 	        kdError() << "Unable to open input file!" << endl;
 	        in.close();

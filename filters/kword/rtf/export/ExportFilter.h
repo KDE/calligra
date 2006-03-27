@@ -21,9 +21,11 @@
 #ifndef EXPORTFILTERFULLPOWER_H
 #define EXPORTFILTERFULLPOWER_H
 
-#include <qvaluestack.h>
-#include <qvaluelist.h>
+#include <q3valuestack.h>
+#include <q3valuelist.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QTextStream>
 
 #include <KWEFBaseWorker.h>
 
@@ -95,10 +97,10 @@ protected:
     QString m_textPage;
     QString m_textBody;
     QString m_fileName; ///< Name of the output file
-    QValueStack<ListInfo> m_listStack; ///< Stack for list information
+    Q3ValueStack<ListInfo> m_listStack; ///< Stack for list information
     QStringList m_fontList;
-    QValueList<QColor> m_colorList;
-    QValueList<LayoutData> m_styleList;
+    Q3ValueList<QColor> m_colorList;
+    Q3ValueList<LayoutData> m_styleList;
     bool m_inTable;
     bool m_paperOrientation;
     double m_paperWidth, m_paperHeight;

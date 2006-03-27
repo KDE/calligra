@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <QTextStream>
 /* A TEXT IS A SET OF TITLES, A (SET OF) PARAGRAPHS OR LISTS */
 /*
 ** Header file for inclusion with kword_xml2latex.c

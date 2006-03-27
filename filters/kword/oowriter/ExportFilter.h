@@ -37,6 +37,10 @@
 #include <KWEFUtil.h>
 #include <KWEFBaseWorker.h>
 #include <KWEFKWordLeader.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QTextStream>
+#include <Q3CString>
 
 #define STRICT_OOWRITER_VERSION_1
 
@@ -85,7 +89,7 @@ public:
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
     virtual bool doOpenBody (void);
-    virtual bool doDeclareNonInlinedFramesets( QValueList<FrameAnchor>& pictureAnchors, QValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
+    virtual bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,
@@ -131,7 +135,7 @@ private: // ZIP methods
     bool zipDoneWriting(void);
     bool zipWriteData(const char* str);
     bool zipWriteData(const QByteArray& array);
-    bool zipWriteData(const QCString& cstr);
+    bool zipWriteData(const Q3CString& cstr);
     bool zipWriteData(const QString& str); ///< Assumes UTF-8
 private:
     QTextStream* m_streamOut;
@@ -167,8 +171,8 @@ private:
     double m_columnspacing; ///< Spacing between columns
     int m_columns; ///< Number of columns
 private: // Variable that would need a link/glue from libexport
-    QValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors  \todo: connection to libexport
-    QValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables  \todo: connection to libexport
+    Q3ValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors  \todo: connection to libexport
+    Q3ValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables  \todo: connection to libexport
 
 };
 #endif // _EXPORTFILTER_H

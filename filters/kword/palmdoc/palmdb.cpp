@@ -24,12 +24,12 @@
 
 #include "palmdb.h"
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qdatastream.h>
 #include <qdatetime.h>
 #include <qfile.h>
-#include <qmemarray.h>
-#include <qptrlist.h>
+#include <q3memarray.h>
+#include <q3ptrlist.h>
 #include <qstring.h>
 
 PalmDB::PalmDB()
@@ -57,7 +57,7 @@ bool PalmDB::load( const char* filename )
 {
   // open input file
   QFile in (filename);
-  if (!in.open (IO_ReadOnly))
+  if (!in.open (QIODevice::ReadOnly))
     return FALSE;
 
   QDataStream stream;
@@ -146,8 +146,8 @@ bool PalmDB::load( const char* filename )
 
   // read entries in record list
   // find out location and size of each record
-  QMemArray<unsigned> recpos( numrec );
-  QMemArray<int> recsize( numrec );
+  Q3MemArray<unsigned> recpos( numrec );
+  Q3MemArray<int> recsize( numrec );
 
   // FIXME any other better way to find record size ?
   for( int r = 0; r < numrec; r++ )
@@ -201,7 +201,7 @@ bool PalmDB::save( const char* filename )
 {
   // open output file
   QFile out( filename );
-  if( !out.open( IO_WriteOnly ) )
+  if( !out.open( QIODevice::WriteOnly ) )
     return FALSE;
 
   QDataStream stream;

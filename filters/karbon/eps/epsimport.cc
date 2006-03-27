@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qstring.h>
 #include <qfile.h>
 
@@ -58,7 +58,7 @@ EpsImport::~EpsImport()
 }
 
 KoFilter::ConversionStatus
-EpsImport::convert( const QCString& from, const QCString& to )
+EpsImport::convert( const Q3CString& from, const Q3CString& to )
 {
 	if(
 		to != "application/illustrator" ||
@@ -79,7 +79,7 @@ EpsImport::convert( const QCString& from, const QCString& to )
 
 	QFile file (input);
 
-	if ( file.open(IO_ReadOnly) )
+	if ( file.open(QIODevice::ReadOnly) )
 	{
 		extractor.parse (file);
 		llx = extractor.llx();

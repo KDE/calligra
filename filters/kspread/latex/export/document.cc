@@ -53,7 +53,7 @@ void Document::analyse()
 
 void Document::generate()
 {
-	if(_file.open(IO_WriteOnly))
+	if(_file.open(QIODevice::WriteOnly))
 	{
 		kdDebug(30522) << "GENERATION" << endl;
 		_out.setDevice(&_file);

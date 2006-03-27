@@ -20,11 +20,13 @@
 #ifndef _IMPORT_FORMATTING_H
 #define _IMPORT_FORMATTING_H
 
-#include <qptrstack.h>
+#include <q3ptrstack.h>
 #include <qstring.h>
 #include <qcolor.h>
 #include <qxml.h>
 #include <qdom.h>
+//Added by qt3to4:
+#include <Q3MemArray>
 
 #include "ImportHelpers.h"
 
@@ -105,10 +107,10 @@ public:
      * for tables (\<table\>, \<cell\>): defines the widths of the columns.
      * Be careful: we are using the shallow copy mechanism of Qt. Use QMemArray::detach when needed to avoid modifying the parents
      */
-    QMemArray<double> m_doubleArray;
+    Q3MemArray<double> m_doubleArray;
 };
 
-class StackItemStack : public QPtrStack<StackItem>
+class StackItemStack : public Q3PtrStack<StackItem>
 {
 public:
         StackItemStack(void) { }

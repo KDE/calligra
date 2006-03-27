@@ -21,6 +21,8 @@
 
 #include <kdebug.h>		/* for kdDebug stream */
 #include <qbitarray.h>
+//Added by qt3to4:
+#include <QTextStream>
 #include "cell.h"
 #include "column.h"
 #include "row.h"
@@ -130,7 +132,7 @@ void Table::analysePaper(const QDomNode balise)
 
 Cell* Table::searchCell(int col, int row)
 {
-	QPtrListIterator<Cell> it(_cells);
+	Q3PtrListIterator<Cell> it(_cells);
 
 	kdDebug(30522) << "search in list of " << _cells.count() << " cells" << endl;
 	Cell *cell = 0;
@@ -146,7 +148,7 @@ Cell* Table::searchCell(int col, int row)
 
 Column* Table::searchColumn(int col)
 {
-	QPtrListIterator<Column> it(_columns);
+	Q3PtrListIterator<Column> it(_columns);
 
 	Column *column;
 	while ( (column = it.current()) != 0 )
@@ -160,7 +162,7 @@ Column* Table::searchColumn(int col)
 
 Row* Table::searchRow(int rowNumber)
 {
-	QPtrListIterator<Row> it(_rows);
+	Q3PtrListIterator<Row> it(_rows);
 
 	Row *row;
 	while ( (row = it.current()) != 0 )

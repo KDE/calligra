@@ -69,7 +69,7 @@ class LATEXImportDia : public KDialogBase, public DCOPObject
 		//void setOutputFile(QString file) { _fileOut = file; }
 
 	private:
-		QVButtonGroup* styleBox,       *langBox,        *docBox;
+		Q3VButtonGroup* styleBox,       *langBox,        *docBox;
 		QRadioButton*  latexStyleRBtn, *kwordStyleRBtn;	/* Document style */
 		QRadioButton*  unicodeRBtn,    *latin1RBtn;		/* Language       */
 		QRadioButton*  newDocRBtn,     *embededRBtn;	/* Latex file     */

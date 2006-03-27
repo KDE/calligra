@@ -30,6 +30,8 @@
 #include <wpimport.h>
 
 #include <stdio.h> // debug
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<WPImport, KoFilter> WPImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwpimport, WPImportFactory( "kofficefilters" ) )
@@ -265,7 +267,7 @@ WPImport::WPImport( KoFilter *, const char *, const QStringList& ):  KoFilter()
 {
 }
 
-KoFilter::ConversionStatus WPImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus WPImport::convert( const Q3CString& from, const Q3CString& to )
 {
   // check for proper conversion
   if( to!= "application/x-kword" || from != "application/wordperfect" )
@@ -306,7 +308,7 @@ KoFilter::ConversionStatus WPImport::convert( const QCString& from, const QCStri
 
   if( out )
     {
-      QCString cstring = root.utf8();
+      Q3CString cstring = root.utf8();
       cstring.prepend( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" );
       //qDebug("RESULT:\n%s", (const char*)cstring );
       out->writeBlock( (const char*) cstring, cstring.length() );

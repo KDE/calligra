@@ -23,12 +23,14 @@
 #define __KWORD_LISTTABLE_H__
 
 #include "table.h"
+//Added by qt3to4:
+#include <Q3PtrList>
 
 /**
  * This class hold a list of tables. It just a wrapper for \verbatim QPtrList<Table> \endverbatim
  * to add a frame in a table if the table exists else to create a new table.
  */
-class ListTable: public QPtrList<Table>
+class ListTable: public Q3PtrList<Table>
 {
 	public:
 		/**

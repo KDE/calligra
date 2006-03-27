@@ -33,7 +33,7 @@
 #define OOWRITEREXPORT_H
 
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 
 #include <KoFilter.h>
 
@@ -46,6 +46,6 @@ public:
     OOWRITERExport(KoFilter *parent, const char *name, const QStringList &);
     virtual ~OOWRITERExport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 };
 #endif // OOWRITEREXPORT_H

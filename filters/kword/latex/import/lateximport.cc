@@ -25,6 +25,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <qtextcodec.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include "lateximportdia.h"
 
 typedef KGenericFactory<LATEXImport, KoFilter> LATEXImportFactory;
@@ -35,7 +37,7 @@ LATEXImport::LATEXImport(KoFilter *, const char *, const QStringList&) :
                      KoFilter() {
 }
 
-KoFilter::ConversionStatus LATEXImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus LATEXImport::convert( const Q3CString& from, const Q3CString& to )
 {
     QString config;
 

@@ -24,7 +24,9 @@
 #include <qfile.h>
 #include <qobject.h>
 #include <qtextstream.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <KoFilter.h>
 #include <KoStore.h>
@@ -56,7 +58,7 @@ public:
     APPLIXSPREADImport ( QObject *parent, const char* name, const QStringList& );
     virtual ~APPLIXSPREADImport() {}
 
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
 protected:
     QString nextLine           (QTextStream &);
@@ -64,7 +66,7 @@ protected:
     void    writePen           (QString &, int, int, QString);
     QString writeColor         (t_mycolor *);
     void    readTypefaceTable  (QTextStream &, QStringList &);
-    void    readColormap       (QTextStream &, QPtrList<t_mycolor> &);
+    void    readColormap       (QTextStream &, Q3PtrList<t_mycolor> &);
     void    readView           (QTextStream &, QString, t_rc &);
     void    filterSHFGBG       (QString, int *, int *, int *);
     void    transPenFormat     (QString, int *, int *);

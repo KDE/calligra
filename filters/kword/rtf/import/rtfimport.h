@@ -16,19 +16,19 @@
 #define __RTFIMPORT_H__
 
 #include <KoFilter.h>
-#include <qasciidict.h>
+#include <q3asciidict.h>
 #include <qcolor.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qfile.h>
 #include <qfont.h>
 #include <qmap.h>
 #include <qstring.h>
-#include <qvaluelist.h>
-#include <qvaluestack.h>
+#include <q3valuelist.h>
+#include <q3valuestack.h>
 #include <qtextcodec.h>
 #include "rtfimport_dom.h"
 #include "rtfimport_tokenizer.h"
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 
 class DomNode;
@@ -120,7 +120,7 @@ struct RTFLayout
 {
     enum Alignment { Left, Right, Justified, Centered };
 
-    QValueStack<RTFTab> tablist;
+    Q3ValueStack<RTFTab> tablist;
     RTFTab tab;
     RTFBorder borders[4];
     RTFBorder *border;
@@ -196,7 +196,7 @@ struct RTFTableCell
 /// Table-formatting properties
 struct RTFTableRow
 {
-    QValueList<RTFTableCell> cells;
+    Q3ValueList<RTFTableCell> cells;
     QStringList frameSets;
     RTFLayout::Alignment alignment;
     int height;
@@ -220,9 +220,9 @@ struct RTFTextState
     DomNode cell;
     /// plain text (for paragraph or table cell)
     DomNode text;
-    QValueList<KWFormat> formats;
+    Q3ValueList<KWFormat> formats;
     QStringList frameSets;
-    QValueList<RTFTableRow> rows;
+    Q3ValueList<RTFTableRow> rows;
     uint table, length;
 };
 
@@ -254,7 +254,7 @@ public:
      * @param to the mimetype for KWord
      * @return true if the document was successfully converted
      */
-    virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
+    virtual KoFilter::ConversionStatus convert( const Q3CString& from, const Q3CString& to );
 
     /**
      * Skip the keyword, as we do not need to do anything with it
@@ -526,7 +526,7 @@ public:
     DomNode pictures;
     DomNode author, company, title, doccomm;
     RTFTextState bodyText;
-    QPtrList<RTFTextState> footnotes; ///< list of footnotes
+    Q3PtrList<RTFTextState> footnotes; ///< list of footnotes
     int fnnum; ///< number of last footnote
     RTFTextState firstPageHeader, oddPagesHeader, evenPagesHeader;
     RTFTextState firstPageFooter, oddPagesFooter, evenPagesFooter;
@@ -536,10 +536,10 @@ public:
      */
     RTFTextState m_dummyTextState;
     QMap<int,QString> fontTable;
-    QValueList<RTFStyle> styleSheet;
-    QValueList<QColor> colorTable;
-    QValueStack<RTFGroupState> stateStack;
-    QValueStack<RTFDestination> destinationStack;
+    Q3ValueList<RTFStyle> styleSheet;
+    Q3ValueList<QColor> colorTable;
+    Q3ValueStack<RTFGroupState> stateStack;
+    Q3ValueStack<RTFDestination> destinationStack;
     RTFGroupState state;
     RTFDestination destination;
     RTFTextState *textState;
@@ -548,8 +548,8 @@ public:
     RTFPicture picture;
     RTFTableCell emptyCell;
     KWFormat kwFormat;
-    QAsciiDict<RTFProperty> properties;
-    QAsciiDict<RTFProperty> destinationProperties;
+    Q3AsciiDict<RTFProperty> properties;
+    Q3AsciiDict<RTFProperty> destinationProperties;
     uint table;
     uint pictureNumber; ///< Picture number; increase *before* use!
 
@@ -561,7 +561,7 @@ public:
     bool landscape, facingPages;
 
     // Field support
-    QCString fldinst, fldrslt;
+    Q3CString fldinst, fldrslt;
     RTFFormat fldfmt;
     int flddst; ///< support for recursive fields
     QString inFileName; ///< File name of the source file.

@@ -22,7 +22,7 @@
 
 class QString;
 class QStringList;
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qcolor.h>
 
 class AmiPro
@@ -43,7 +43,7 @@ class AmiProFormat
     QString fontFamily;
     float fontSize;
     QColor fontColor;
-    enum { Left, Right, Center, Justified } align;
+    enum { Qt::DockLeft, Qt::DockRight, Center, Justified } align;
     AmiProFormat();
     AmiProFormat( const AmiProFormat& );
     AmiProFormat& operator=( const AmiProFormat& );
@@ -51,7 +51,7 @@ class AmiProFormat
     void applyStyle( const AmiProStyle& );
 };
 
-typedef QValueList<AmiProFormat> AmiProFormatList;
+typedef Q3ValueList<AmiProFormat> AmiProFormatList;
 
 
 class AmiProLayout
@@ -93,7 +93,7 @@ class AmiProStyle
     void assign( const AmiProStyle& );
 };
 
-typedef QValueList<AmiProStyle> AmiProStyleList;
+typedef Q3ValueList<AmiProStyle> AmiProStyleList;
 
 class AmiProListener
 {

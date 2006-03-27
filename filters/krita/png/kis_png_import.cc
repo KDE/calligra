@@ -29,6 +29,8 @@
 #include <kis_view.h>
 
 #include "kis_png_converter.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<KisPNGImport, KoFilter> PNGImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngimport, PNGImportFactory("kofficefilters"))
@@ -41,7 +43,7 @@ KisPNGImport::~KisPNGImport()
 {
 }
 
-KoFilter::ConversionStatus KisPNGImport::convert(const QCString&, const QCString& to)
+KoFilter::ConversionStatus KisPNGImport::convert(const Q3CString&, const Q3CString& to)
 {
     kdDebug(41008) << "Importing using PNGImport!\n";
 

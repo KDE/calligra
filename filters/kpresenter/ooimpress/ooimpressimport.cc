@@ -27,6 +27,8 @@
 #include <qdatetime.h>
 #include <qfileinfo.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kzip.h>
 #include <karchive.h>
@@ -59,7 +61,7 @@ OoImpressImport::OoImpressImport( KoFilter *, const char *, const QStringList & 
 
 OoImpressImport::~OoImpressImport()
 {
-    QDictIterator<animationList> it( m_animations ); // See QDictIterator
+    Q3DictIterator<animationList> it( m_animations ); // See QDictIterator
     for( ; it.current(); ++it )
     {
         delete it.current()->element;
@@ -67,7 +69,7 @@ OoImpressImport::~OoImpressImport()
     m_animations.clear();
 }
 
-KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCString const & to )
+KoFilter::ConversionStatus OoImpressImport::convert( Q3CString const & from, Q3CString const & to )
 {
     kdDebug(30518) << "Entering Ooimpress Import filter: " << from << " - " << to << endl;
 
@@ -80,7 +82,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
 
     m_zip = new KZip( m_chain->inputFile() );
 
-    if ( !m_zip->open( IO_ReadOnly ) )
+    if ( !m_zip->open( QIODevice::ReadOnly ) )
     {
         kdError(30518) << "Couldn't open the requested file "<< m_chain->inputFile() << endl;
         delete m_zip;
@@ -103,7 +105,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
     KoStoreDevice* out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if( out )
     {
-        QCString info = docinfo.toCString();
+        Q3CString info = docinfo.toCString();
         //kdDebug(30518) << " info :" << info << endl;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->writeBlock( info , info.length() );
@@ -116,7 +118,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QCString const & from, QCSt
     out = m_chain->storageFile( "maindoc.xml", KoStore::Write );
     if( out )
     {
-        QCString content = doccontent.toCString();
+        Q3CString content = doccontent.toCString();
         kdDebug(30518) << " content :" << content << endl;
         out->writeBlock( content , content.length() );
     }
@@ -2071,7 +2073,7 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
 
     if (out)
     {
-        if (!file.open(IO_ReadOnly))
+        if (!file.open(QIODevice::ReadOnly))
             return QString::null;
 
         QByteArray data(8*1024);

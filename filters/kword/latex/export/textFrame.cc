@@ -22,6 +22,9 @@
 #include <stdlib.h>		/* for atoi function */
 #include <kdebug.h>		/* for kdDebug() stream */
 #include "textFrame.h"
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3PtrList>
 
 /*******************************************/
 /* Constructor                             */
@@ -238,7 +241,7 @@ void TextFrame::generate(QTextStream &out)
 	}
 }
 
-EEnv TextFrame::getNextEnv(QPtrList<Para> liste, const int pos)
+EEnv TextFrame::getNextEnv(Q3PtrList<Para> liste, const int pos)
 {
 	if ( pos < 0 )
 		return ENV_NONE;

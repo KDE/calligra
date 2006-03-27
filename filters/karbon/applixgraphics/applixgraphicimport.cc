@@ -28,6 +28,8 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qmessagebox.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <KoFilterChain.h>
 #include <kgenericfactory.h>
 #include <math.h>
@@ -133,7 +135,7 @@ APPLIXGRAPHICImport::APPLIXGRAPHICImport (KoFilter *, const char *, const QStrin
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
-KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const Q3CString& from, const Q3CString& to )
 {
 
     // Check MIME Types
@@ -142,7 +144,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
 
     // Open Inputfile
     QFile in (m_chain->inputFile());
-    if (!in.open (IO_ReadOnly) )
+    if (!in.open (QIODevice::ReadOnly) )
     {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close ();
@@ -818,7 +820,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QCString& from, c
         return KoFilter::StorageCreationError;
     }
 
-    QCString cstring = str.utf8();
+    Q3CString cstring = str.utf8();
     out->writeBlock ( (const char*)cstring, cstring.size() - 1 );
 
     in.close  ();

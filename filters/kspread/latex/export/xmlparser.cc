@@ -33,7 +33,7 @@ KoStore* XmlParser::_in = NULL;
 XmlParser::XmlParser(QString filename): _filename(filename)
 {
 	QFile f(filename);
-	if(!f.open(IO_ReadOnly))
+	if(!f.open(QIODevice::ReadOnly))
 		return;
 	if(!_document.setContent(&f))
 	{

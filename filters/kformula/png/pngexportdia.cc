@@ -26,6 +26,9 @@
 #include <qrect.h>
 #include <qvbuttongroup.h>
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3VBoxLayout>
+#include <Q3GridLayout>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -176,7 +179,7 @@ void PNGExportDia::setupGUI()
     QWidget *page = new QWidget( this );
     setMainWidget(page);
 
-    QBoxLayout* mainLayout = new QVBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
+    Q3BoxLayout* mainLayout = new Q3VBoxLayout( page, KDialog::marginHint(), KDialog::spacingHint() );
 
     proportional = new QCheckBox( page, "proportional" );
     proportional->setText( i18n( "Keep ratio" ) );
@@ -190,7 +193,7 @@ void PNGExportDia::setupGUI()
     width->setText( i18n( "Width" ) );
     heightEdit = new KIntNumInput( page, "heightEdit" );
 
-    QGridLayout* layout1 = new QGridLayout;
+    Q3GridLayout* layout1 = new Q3GridLayout;
     layout1->addWidget( height, 1, 0 );
     layout1->addWidget( widthEdit, 0, 1 );
     layout1->addWidget( width, 0, 0 );
@@ -205,7 +208,7 @@ void PNGExportDia::setupGUI()
     percWidthEdit = new KDoubleNumInput( page, "percWidthEdit" );
     percHeightEdit = new KDoubleNumInput( page, "percHeightEdit" );
 
-    QGridLayout* layout2 = new QGridLayout;
+    Q3GridLayout* layout2 = new Q3GridLayout;
     layout2->addWidget( percWidthEdit, 0, 1 );
     layout2->addWidget( percHeightEdit, 1, 1 );
     layout2->addWidget( percentHeight, 1, 0 );

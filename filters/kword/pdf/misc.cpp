@@ -98,7 +98,7 @@ DRect DPath::boundingRect() const
 
 
 //-----------------------------------------------------------------------------
-QDict<Font::Data> *Font::_dict = 0;
+Q3Dict<Font::Data> *Font::_dict = 0;
 const char *Font::FAMILY_DATA[Nb_Family] = {
     "Times", "Helvetica", "Courier", "Symbol"
 };
@@ -106,7 +106,7 @@ const char *Font::FAMILY_DATA[Nb_Family] = {
 void Font::init()
 {
     Q_ASSERT( _dict==0 );
-    _dict = new QDict<Data>(100, false); // case insensitive
+    _dict = new Q3Dict<Data>(100, false); // case insensitive
     _dict->setAutoDelete(true);
 }
 
@@ -303,9 +303,9 @@ bool Font::format(QDomDocument &doc, QDomElement &f,
 
     if ( all || _color!=def._color ) {
         element = doc.createElement("COLOR");
-        element.setAttribute("red", _color.red());
-        element.setAttribute("green", _color.green());
-        element.setAttribute("blue", _color.blue());
+        element.setAttribute("red", _color.Qt::red());
+        element.setAttribute("green", _color.Qt::green());
+        element.setAttribute("blue", _color.Qt::blue());
         f.appendChild(element);
     }
 

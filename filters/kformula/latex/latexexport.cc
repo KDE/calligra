@@ -20,6 +20,8 @@
 #include <qstring.h>
 #include <qtextstream.h>
 #include <qfile.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kapplication.h>
 #include <kdebug.h>
@@ -46,7 +48,7 @@ LATEXExport::LATEXExport( KoFilter */*parent*/, const char */*name*/, const QStr
 }
 
 
-KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus LATEXExport::convert( const Q3CString& from, const Q3CString& to )
 {
     if ( to != "text/x-tex" || from != "application/x-kformula" )
         return KoFilter::NotImplemented;
@@ -66,7 +68,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QCString& from, const QCS
     }
 
     QFile f( m_chain->outputFile() );
-    if( !f.open( IO_Truncate | IO_ReadWrite ) ) {
+    if( !f.open( QIODevice::Truncate | QIODevice::ReadWrite ) ) {
         QApplication::restoreOverrideCursor();
         KMessageBox::error( 0, i18n( "Failed to write file." ), i18n( "LaTeX Export Error" ) );
         return KoFilter::FileNotFound;

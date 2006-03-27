@@ -25,6 +25,8 @@
 #include "anchor.h"
 #include "element.h"
 #include "document.h"
+//Added by qt3to4:
+#include <QTextStream>
 
 Anchor::Anchor(Para* para): Format(para)
 {

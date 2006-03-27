@@ -22,6 +22,8 @@
 #include <kglobal.h>
 #include <kdebug.h>
 #include <klocale.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 
 using namespace PDFImport;
@@ -147,8 +149,8 @@ QDomElement Data::createFrame(FramesetType type, const DRect &r,
     return frame;
 }
 
-void Data::initPage(const QValueVector<DRect> &rects,
-                    const QValueList<QDomElement> &pictures)
+void Data::initPage(const Q3ValueVector<DRect> &rects,
+                    const Q3ValueList<QDomElement> &pictures)
 {
     for (uint i=0; i<Nb_ParagraphTypes; i++) {
 //        kdDebug(30516) << "page #" << pageIndex << " rect #" << i
@@ -161,7 +163,7 @@ void Data::initPage(const QValueVector<DRect> &rects,
         _textFramesets[i].appendChild(frame);
     }
 
-    QValueList<QDomElement>::const_iterator it;
+    Q3ValueList<QDomElement>::const_iterator it;
     for (it = pictures.begin(); it!=pictures.end(); ++it)
         _framesets.appendChild(*it);
 
@@ -179,8 +181,8 @@ void Data::initPage(const QValueVector<DRect> &rects,
 }
 
 void Data::createParagraph(const QString &text, ParagraphType type,
-                           const QValueVector<QDomElement> &layouts,
-                           const QValueVector<QDomElement> &formats)
+                           const Q3ValueVector<QDomElement> &layouts,
+                           const Q3ValueVector<QDomElement> &formats)
 {
     QDomElement paragraph = _document.createElement("PARAGRAPH");
     _textFramesets[type].appendChild(paragraph);

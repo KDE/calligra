@@ -26,7 +26,10 @@
 #include <qmessagebox.h>
 #include <qstringlist.h>
 #include <qregexp.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
+//Added by qt3to4:
+#include <QTextStream>
+#include <Q3CString>
 #include <applixspreadimport.h>
 #include <kdebug.h>
 #include <math.h>
@@ -55,14 +58,14 @@ QString APPLIXSPREADImport::nextLine( QTextStream & stream )
     return s;
 }
 
-KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, const QCString& to )
+KoFilter::ConversionStatus APPLIXSPREADImport::convert( const Q3CString& from, const Q3CString& to )
 {
 
     if (to != "application/x-kspread" || from != "application/x-applixspread")
         return KoFilter::NotImplemented;
 
     QFile in (m_chain->inputFile());
-    if (!in.open(IO_ReadOnly))
+    if (!in.open(QIODevice::ReadOnly))
     {
         kdError(30502) << "Unable to open input file!" << endl;
         in.close();
@@ -70,7 +73,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
     }
 
     QString str;
-    QPtrList<t_mycolor> mcol;
+    Q3PtrList<t_mycolor> mcol;
 
     str += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     str += "<!DOCTYPE spreadsheet>\n";
@@ -643,7 +646,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QCString& from, co
         return KoFilter::StorageCreationError;
     }
 
-    QCString cstring = str.utf8();
+    Q3CString cstring = str.utf8();
     out->writeBlock ( cstring, cstring.length() );
 
     in.close  ();
@@ -915,7 +918,7 @@ APPLIXSPREADImport::readTypefaceTable  (QTextStream &stream, QStringList &typefa
  *  function:   readColormap                                                  *
  ******************************************************************************/
 void
-APPLIXSPREADImport::readColormap (QTextStream &stream,  QPtrList<t_mycolor> &mcol)
+APPLIXSPREADImport::readColormap (QTextStream &stream,  Q3PtrList<t_mycolor> &mcol)
 {
   int contcount, ok, pos;
 
@@ -1208,34 +1211,34 @@ APPLIXSPREADImport::transPenFormat (QString it, int *PenWidth, int *PenStyle)
    if       ( it[1] == '1' )
    {
      *PenWidth = 1;
-     *PenStyle = 1;
+     *Qt::PenStyle = 1;
    }
 
    else if  ( it[1] == '2' )
    {
      *PenWidth = 2;
-     *PenStyle = 1;
+     *Qt::PenStyle = 1;
    }
 
    else if  ( it[1] == '3' )
    {
      *PenWidth = 3;
-     *PenStyle = 1;
+     *Qt::PenStyle = 1;
    }
 
    else if  ( it[1] == '4' )
    {
      *PenWidth = 1;
-     *PenStyle = 3;
+     *Qt::PenStyle = 3;
    }
 
    else if  ( it[1] == '5' )
    {
      *PenWidth = 5;
-     *PenStyle = 1;
+     *Qt::PenStyle = 1;
    }
 
-   printf ("frame (w:%d - s:%d) \n", *PenWidth, *PenStyle);
+   printf ("frame (w:%d - s:%d) \n", *PenWidth, *Qt::PenStyle);
 }
 
 

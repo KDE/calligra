@@ -91,14 +91,14 @@ public:
   
   enum {
     NoLine,         // no line at all
-    SolidLine,      // a simple solid line
-    DashLine,       // dashes separated by a few pixels
-    DotLine,        // dots separated by a few pixels
-    DashDotLine,    // alternate dots and dashes
-    DashDotDotLine  // one dash, two dots, one dash, two dots
+    Qt::SolidLine,      // a simple solid line
+    Qt::DashLine,       // dashes separated by a few pixels
+    Qt::DotLine,        // dots separated by a few pixels
+    Qt::DashDotLine,    // alternate dots and dashes
+    Qt::DashDotDotLine  // one dash, two dots, one dash, two dots
   };
   
-  Pen(): style( SolidLine ), width( 0 ){}
+  Pen(): style( Qt::SolidLine ), width( 0 ){}
 
   friend inline bool operator==(const Pen&, const Pen&);
   friend inline bool operator!=(const Pen&, const Pen&);
@@ -432,20 +432,20 @@ public:
   bool isNull() const;
   
   enum {
-    SolidPattern,
-    Dense1Pattern,
-    Dense2Pattern,
-    Dense3Pattern,
-    Dense4Pattern,
-    Dense5Pattern,
-    Dense6Pattern,
-    Dense7Pattern,
-    HorPattern,		// Horizonatal lines
-    VerPattern,		// Vertical lines
-    CrossPattern,	// Horizontal and Vertical lines
-    BDiagPattern,	// Left-bottom to right-top diagonal lines
-    FDiagPattern,	// Left-top to right-bottom diagonal lines
-    DiagCrossPattern,	// Crossing diagonal lines
+    Qt::SolidPattern,
+    Qt::Dense1Pattern,
+    Qt::Dense2Pattern,
+    Qt::Dense3Pattern,
+    Qt::Dense4Pattern,
+    Qt::Dense5Pattern,
+    Qt::Dense6Pattern,
+    Qt::Dense7Pattern,
+    Qt::HorPattern,		// Horizonatal lines
+    Qt::VerPattern,		// Vertical lines
+    Qt::CrossPattern,	// Horizontal and Vertical lines
+    Qt::BDiagPattern,	// Left-bottom to right-top diagonal lines
+    Qt::FDiagPattern,	// Left-top to right-bottom diagonal lines
+    Qt::DiagCrossPattern,	// Crossing diagonal lines
     EmptyPattern
   };
   
@@ -722,9 +722,9 @@ public:
    */
   void setValueFormat( const UString& valueFormat ); 
   
-  enum { Left, Center, Right };
+  enum { Qt::DockLeft, Center, Qt::DockRight };
   
-  enum { Top, Middle, Bottom };
+  enum { Qt::DockTop, Middle, Qt::DockBottom };
   
   /**
    * Applies another format to this format. Basically this will merge

@@ -20,7 +20,7 @@
 #ifndef __KWORD_LATEX_IMPORT_PARAGRAPH_H__
 #define __KWORD_LATEX_IMPORT_PARAGRAPH_H__
 
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 
 class Element;
 class QDomDocument;
@@ -47,7 +47,7 @@ class Paragraph
 		 * 
 		 * @return <code>false/code> if the analyse failed.
 		 */
-		bool analyse(QPtrList<Element>* elt);
+		bool analyse(Q3PtrList<Element>* elt);
 
 		/**
 		 * Generate a kword document.

@@ -29,6 +29,8 @@
 #include <kis_annotation.h>
 #include <kis_types.h>
 #include <kis_xcf_converter.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 typedef KGenericFactory<XCFExport, KoFilter> XCFExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritaxcfexport, XCFExportFactory("kofficefilters"))
@@ -41,7 +43,7 @@ XCFExport::~XCFExport()
 {
 }
 
-KoFilter::ConversionStatus XCFExport::convert(const QCString& from, const QCString& to)
+KoFilter::ConversionStatus XCFExport::convert(const Q3CString& from, const Q3CString& to)
 {
     kdDebug(41008) << "xcf export! From: " << from << ", To: " << to << "\n";
     

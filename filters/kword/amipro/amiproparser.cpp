@@ -130,7 +130,7 @@ bool AmiProParser::process( const QString& filename )
 
   // open input file
   QFile in( filename );
-  if( !in.open( IO_ReadOnly))
+  if( !in.open( QIODevice::ReadOnly))
     return setResult( FileError );
 
   QTextStream stream;

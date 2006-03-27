@@ -32,6 +32,8 @@
 #include <cfloat>
 
 #include "xcf-write.h"
+//Added by qt3to4:
+#include <Q3CString>
 
 Q_UINT32 xcf_write_int32  (FILE *fp, Q_INT32 *data, Q_INT32 count);
 {
@@ -67,7 +69,7 @@ Q_UINT32 xcf_write_int8 (FILE *fp, Q_UINT8 *data, Q_INT32 count);
     return bytes;
 }
 
-Q_UINT32 xcf_write_string (FILE *fp, QCString *data, Q_INT32 count);
+Q_UINT32 xcf_write_string (FILE *fp, Q3CString *data, Q_INT32 count);
 {
     GError  *tmp_error = NULL;
     Q_INT32  tmp;
